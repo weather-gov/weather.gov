@@ -1,3 +1,5 @@
+import log from "./log.js";
+
 export class PermissionDeniedLocationError extends Error {
   constructor() {
     super("Permission to retrieve location was denied.");
@@ -28,24 +30,29 @@ export default class Location {
 
   #_getSuccess(resolve) {
     return (o) => {
+      log("[loc] got location");
       resolve(o);
     };
   }
 
   #_getFailure(reject) {
     return ({ code }) => {
-      console.log(code);
+      log(`[loc] Error. Code: ${code}`);
       switch (code) {
         case 1:
+          log(`[loc] Error: permission denied`);
           return reject(new PermissionDeniedLocationError());
 
         case 2:
+          log(`[loc] Error: location unavailable`);
           return reject(new UnavailableLocationError());
 
         case 3:
+          log(`[loc] Error: location timed out`);
           return reject(new TimeoutLocationError());
 
         default:
+          log(`[loc] Error: unknown error`);
           return reject(new UnknownLocationError());
       }
     };
@@ -61,6 +68,7 @@ export default class Location {
   }
 
   static async get() {
+    log("[loc] getting location");
     const L = new Location();
     return L.get();
   }

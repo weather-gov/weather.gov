@@ -1,6 +1,6 @@
 import Location, { PermissionDeniedLocationError } from "./lib/location.js";
 import log from "./lib/log.js";
-import { getValue } from "./lib/convert.js";
+import getObservations from "./lib/observations.js";
 
 const main = async () => {
   try {
@@ -11,41 +11,15 @@ const main = async () => {
     } = location;
     log(`> got ${latitude}, ${longitude}`);
 
-    const r = (n) => Math.round(n * 1000) / 1000;
-
-    log("Fetching location metadata...");
-    const metaUrl = `https://api.weather.gov/points/${r(latitude)},${r(
-      longitude
-    )}`;
-    const meta = await fetch(metaUrl).then((r) => r.json());
-    log(`> WFO: ${meta.properties.cwa}`);
+    const observations = await getObservations(latitude, longitude);
     log(
-      `> place: ${meta.properties.relativeLocation.properties.city}, ${meta.properties.relativeLocation.properties.state}`
+      `> got observations from ${observations.wfo} (${observations.stationName})`
     );
 
-    log("Fetching observation stations...");
-    const stations = await fetch(meta.properties.observationStations).then(
-      (r) => r.json()
-    );
-    const station = stations.observationStations[0];
-    log(`> ${station.split("/").pop()} is first`);
-
-    log("Getting station metadata...");
-    await fetch(station)
-      .then((r) => r.json())
-      .then((meta) => log(`> station: ${meta.properties.name}`));
-
-    log("Fetching observations...");
-    const observations = await fetch(`${station}/observations`).then((r) =>
-      r.json()
-    );
-    log("> got observations");
-    console.log(observations);
-
-    const mostRecent = observations.features[0].properties;
-    log(`> ${Math.round(getValue(mostRecent.temperature))}°F`);
+    log(`> ${observations.timestamp.toLocaleString()}`);
+    log(`> ${observations.temperature}°F`);
   } catch (e) {
-    log(e.message);
+    log(`ERROR: ${e.message}`);
     switch (true) {
       case e instanceof PermissionDeniedLocationError:
         // The user has turned location services off or did not permit it
