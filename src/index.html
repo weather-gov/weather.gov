@@ -2,26 +2,51 @@
 <html lang="en-US">
   <head>
     <style>
-      #console {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        font-family: fixed;
-        background-color: #333;
-        color: white;
-        padding: 1em;
+      * {
+        font-family: sans-serif;
       }
 
-      #console pre {
-        margin: 0;
-        padding: 0;
+      .hidden {
+        display: none;
+      }
+
+      #api_counter {
+        position: fixed;
+        top: 0;
+        right: 0;
+        min-width: 10vw;
+        background: #d83933;
+        color: white;
+        padding: 1em;
+        white-space: nowrap;
+      }
+
+      .indent {
+        margin-left: 3rem;
+      }
+
+      #obs_time {
+        font-style: italic;
       }
     </style>
   </head>
   <body>
-    <div id="console">
-      <pre></pre>
-    </div>
+    <preload>Getting your location...</preload>
+    <main class="hidden">
+      <div id="api_counter">0 calls to api.weather.gov</div>
+      <h1 id="place_name"></h1>
+      <h3>Current conditions:</h3>
+      <div class="indent">
+        <div id="obs_text"></div>
+        <div id="obs_temperature"></div>
+        <div id="obs_time"></div>
+      </div>
+
+      <h3>Forecast</h3>
+      <div id="hourly_temp">
+        <canvas id="hourly_temp_canvas"></canvas>
+      </div>
+    </main>
     <script type="module" src="main.js"></script>
   </body>
 </html>
