@@ -60,6 +60,7 @@ export default class Location {
   }
 
   static async get() {
+    return { coords: { latitude: 38.9842483, longitude: -94.5789786 } };
     const L = new Location();
     return L.get();
   }
