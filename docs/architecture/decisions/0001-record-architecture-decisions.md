@@ -1,5 +1,3 @@
-0001-record-architecture-decisions.md
-
 # 1. Record architecture decisions
 
 Date: 2023-05-24
