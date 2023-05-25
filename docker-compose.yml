@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  database:
+    image: mariadb:10
+    networks:
+      - weather.gov
+    environment:
+      MYSQL_DATABASE: weathergov
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+      MYSQL_ROOT_PASSWORD: drupal
+
+  drupal:
+    image: drupal:10
+    networks:
+      - weather.gov
+    ports:
+      - 8080:80
+    links:
+      - database:database
+
+networks:
+  weather.gov: 
