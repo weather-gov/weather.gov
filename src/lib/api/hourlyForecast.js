@@ -31,16 +31,22 @@ const getValueInExpectedUnits = (prop) => {
 };
 
 class HourlyForecastHour {
+  #hourlyData;
   #temperature = { value: 0, unitCode: "F" };
   #timeEnd;
   #timeStart;
 
   constructor(hourlyData) {
+    this.#hourlyData = hourlyData;
     this.#temperature.value = hourlyData.temperature;
     this.#temperature.unitCode = hourlyData.temperatureUnit;
 
     this.#timeEnd = new Date(Date.parse(hourlyData.endTime));
     this.#timeStart = new Date(Date.parse(hourlyData.startTime));
+  }
+
+  get precipitationProbability() {
+    return getValueInExpectedUnits(this.#hourlyData.probabilityOfPrecipitation);
   }
 
   get temperature() {

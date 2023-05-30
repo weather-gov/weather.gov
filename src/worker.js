@@ -1,4 +1,4 @@
-const CACHE_KEY = "2023-05-10: counting API calls";
+const CACHE_KEY = "2023-05-30: add precip chance";
 
 const populateCache = async () => {
   const cache = await caches.open(CACHE_KEY);
