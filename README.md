@@ -2,6 +2,8 @@
 
 It's very early days. Don't expect to see much interesting stuff in here yet!
 
+Work in process [documentation](https://docs.google.com/document/d/1JIagnghg3xYNm4zdr_BtxWOwmifUaxjSCeybsaoqExE/edit#heading=h.z9f0u3roste8)
+
 ## Public domain
 
 This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
