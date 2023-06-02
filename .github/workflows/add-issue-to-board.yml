@@ -1,0 +1,26 @@
+name: add new issue to project board
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-issue:
+    name: add issue to project board
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: get token
+        uses: tibdex/github-app-token@v1
+        id: get_token
+        with:
+          app_id: ${{ secrets.PROJECT_APP_ID }}
+          installation_id: ${{ secrets.PROJECT_INSTALLATION_ID }}
+          private_key: ${{ secrets.PROJECT_PRIVATE_KEY }}
+      # Now we can add the issue to the project board.
+      - name: add to project board
+        uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/orgs/18F/projects/49
+          github-token: ${{ steps.get_token.outputs.token }}
