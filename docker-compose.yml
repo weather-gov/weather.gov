@@ -19,6 +19,7 @@ services:
       - 8080:80
     links:
       - database:database
-
+    volumes:
+      - ./themes:/var/www/html/themes
 networks:
   weather.gov: 
