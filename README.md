@@ -54,13 +54,13 @@ Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect the
   - Continuously get feedback on working code, over memos and proposals
 
 ### We will fail if 
-  - The site mandated, instead of organically adopted
-  - We do a big rollout
+  - The site is mandated, instead of organically adopted
+  - We do a big splash rollout
   - A single miss is considered a failure of the project instead of a learning experience to inform the next version
-  - Decisions are informed perceptions, over observations and data
-  - Everyone’s commitment is required to begin development
+  - Decisions are informed by opinions and perceptions, over observations and data
+  - Everyone’s explicit commitment is required to begin development
   - Everyone’s feedback has to be factored into the solution
-  - NWS and the product team work in isolation from each other
+  - The product team works in isolation from the rest of the NWS
 
 ## Public domain
 
