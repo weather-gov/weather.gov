@@ -44,6 +44,8 @@ Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect the
 | Later - Expand | <ul><li>“Unhappy paths” for forecasters and public users</li><li>Multiple locations, geographies, or specialized services</li><li>More comprehensive governance</li><li>User validation</li></ul> |
 | Beyond | <ul><li>Transition and migration</li><li>Continuous improvement</li></ul> |
 
+![happy path journey map](/docs/img/happy-path.png)
+
 ## How will we ultimately succeed or fail
 
 ### We will succeed if 
