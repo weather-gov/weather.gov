@@ -10,6 +10,8 @@ _coming soon_
 
 **There are 4 general levels of ownership**
 
+![diagram of the four levels of ownership and their authority](/docs/img/weathergov-authority-levels.png)
+
 ### Executive Champions
   - **Led by:** Ken Graham, NWS Director and Michelle Mainelli, NWS Acting Deputy Director
   - **They are responsible for** setting organizational priorities and allocating funds, attention, and people across many initiatives in order to maintain its critical services, maximize its impact, and support its people.
