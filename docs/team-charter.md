@@ -1,10 +1,26 @@
 # Weather.gov 2.0 Team Charter
 
 ## Working agreements
-_coming soon_
+- No ownership or ego, but continuously clarify expectations on responsibility and collaborate with each other.
+- “It’s important to be collaborative, but also knowing what is my responsibility makes me feel empowered”
+- Don’t let conflict fester. Say it out loud, bring it to the group or if it’s interpersonal, have a 1:1. We are all open to those conversations.
+- Humor = safety. If a team doesn’t feel safe, there’s not humor
+- Empathy reigns supreme. Care for each other and our users - it trickles down to our work.
+- Strong opinions, loosely held. Come with an opinion and an open mind for disagreement and changes.
+- By default, trust the integrity of each other’s work
+- Respect everyone’s expertise. Each other, our partners, our users.
+- We’re planting seeds. You might think you’re failing, you’re actually not. People might not take our advice, even if they don’t do that - we’re planting seeds.
 
-## How we work
-_coming soon_
+**To do our best work**
+- Freedom to share early and often for quick feedback or a gut check. 
+  - Create time and space for people to think, especially big things: 5-10 min in meetings to review docs before discussing or share 24 hours ahead
+  - if you disagree do so in a respectful and kind way: provide feedback, bring up risks, rooted in an open mind
+- Some of us want heads down time, some of us want think out loud time. We can’t set a standard so instead be conscious about this and ask for what people prefer. 
+- Lean on each other for help, but clarify what you need help with, who might be a good person.
+- Don’t let devs make design decisions. Let’s collaborate on this stuff, identify possibilities and limitations, but don’t let the tech determine the UX.
+- Use time estimates and deadlines to communicate priorities and align expectations, not to micromanage delivery
+- When discussing a topic or making decisions in a meeting, be prepared to dive into the details while being mindful of time
+- This is a new team with people in new roles, feel free to explicitly ask “what I need from you, what do you need from me?”
 
 ## Who's involved
 
