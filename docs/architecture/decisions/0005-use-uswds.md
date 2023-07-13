@@ -23,8 +23,8 @@ requires that all federal websites comply with the [standards defined by the US 
 
 We have chosen to use the US Web Design System (USWDS). USWDS satisfies the
 legal requirement of the 21st Century IDEA act, is well-known to our team, and
-has a significant focus on acccessibility.
+has a significant focus on accessibility.
 
-## Consquences
+## Consequences
 
 We may have to layer some customizations on top of USWDS, but that's normal.
