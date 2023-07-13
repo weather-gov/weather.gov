@@ -46,7 +46,7 @@ are many decisions to be made in this respect. One of them is how we'll run the
 We have chosen to use containers across all environments. We believe the risks
 created by using containers are outweighed by the risks they mitigate.
 
-## Consquences
+## Consequences
 
 For CI/CD and hosting, we are limited to providers that support containers. In
 2023, that is basically all of them, so not much of a consequence.
