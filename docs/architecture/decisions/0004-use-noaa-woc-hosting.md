@@ -19,7 +19,7 @@ We have chosen to use the NOAA WOC as our hosting provider. It is already
 approved and supported within NOAA, and it is built on a large-scale commercial
 cloud provider that gives us a lot of freedom with what we build.
 
-## Consquences
+## Consequences
 
 The WOC introduces another relationship and that could sometimes result in
 delays getting something done because we need their support or approval.
