@@ -32,4 +32,4 @@ services:
       - ./drupal-volume/default-site:/opt/drupal/web/sites/default/
 
 networks:
-  weather.gov: 
+  weather.gov:
