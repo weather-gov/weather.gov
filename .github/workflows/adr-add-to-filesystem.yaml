@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Only run this workflow if the closed issue has
-    if: ${{ contains(github.event.issue.labels.*.name, 'ADR') && contains(github.event.issue.labels.*.name, 'ADR: approved') }}
+    if: "${{ contains(github.event.issue.labels.*.name, 'ADR') && contains(github.event.issue.labels.*.name, 'ADR: approved') }}"
 
     steps:
       - run: echo "bob"
