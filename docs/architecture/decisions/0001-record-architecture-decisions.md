@@ -1,10 +1,10 @@
 # 1. Record architecture decisions
 
-Date: 2023-05-24
+Date: 2023-07-18
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
