@@ -1,10 +1,10 @@
-# 5. We will use the US Web Design System
+# 2. We will use the US Web Design System
 
-Date: 2023-07-13
+Date: 2023-07-18
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
