@@ -1,0 +1,65 @@
+name: ADR created
+on:
+  issues:
+    types:
+      - closed
+
+jobs:
+  main:
+    name: ADR created
+    runs-on: ubuntu-latest
+
+    # Only run this workflow if the closed issue has the "ADR: accepted" label
+    if: "${{ contains(github.event.issue.labels.*.name, 'ADR: accepted') }}"
+
+    steps:
+      - name: checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: get ADR number
+        id: next
+        run: |
+          LAST_ADR=$(ls docs/architecture/decisions/*.md | grep -Eo "decisions/[0-9]+-" | sort | tail -n1 | grep -Eo "[0-9]+")
+          LAST_ADR=$(echo "$LAST_ADR" | sed -E 's/^0+//')
+          NEXT_ADR=$(($LAST_ADR + 1))
+          NEXT_ADR=$(printf "%04i" "$NEXT_ADR")
+          echo "number=$NEXT_ADR" >> "$GITHUB_OUTPUT"
+
+      - name: write the ADR
+        run: |
+          SLUG=$(echo "${{ github.event.issue.title }}" | tr A-Z a-z)
+          SLUG=$(echo "$SLUG" | iconv -c -t ascii//TRANSLIT)
+          SLUG=$(echo "$SLUG" | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/-+/-/g' | sed -E 's/^-+|-+$//g')
+
+          FILENAME="docs/architecture/decisions/${{ steps.next.outputs.number }}-$SLUG.md"
+
+          DATE=$(date -I)
+
+          echo "# ${{ github.event.issue.title }}" > $FILENAME
+          echo "" >> $FILENAME
+          echo "Date: $DATE" >> $FILENAME
+          echo "" >> $FILENAME
+          echo "### Status" >> $FILENAME
+          echo "" >> $FILENAME
+          echo "Accepted" >> $FILENAME
+          echo "" >> $FILENAME
+          echo "${{ github.event.issue.body  }}" >> $FILENAME
+
+      - name: branch, commit, and open PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="adr/auto/${{ steps.next.outputs.number }}"
+          git config --global user.email "tts@gsa.gov"
+          git config --global user.name "weather.gov ADR automation"
+          git checkout -b $BRANCH
+          git add docs/architecture/decisions/*.md
+          git commit -m "add ADR ${{ steps.next.outputs.number }}: ${{ github.event.issue.title }}"
+          git push -f origin $BRANCH
+          gh pr create \
+            --title "Add ADR ${{ steps.next.outputs.number }} to the repo" \
+            --label "ADR" \
+            --body "This pull request was opened automatically because #${{ github.event.issue.number }} was closed after being marked as an approved ADR. It contains a markdown file capturing the ADR body at the time the issue was closed. Please verify that the markdown is correct before merging!" || true
+          gh pr merge $BRANCH --auto --squash
