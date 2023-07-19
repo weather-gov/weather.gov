@@ -40,7 +40,7 @@ jobs:
           echo "" >> $FILENAME
           echo "Date: $DATE" >> $FILENAME
           echo "" >> $FILENAME
-          echo "## Status" >> $FILENAME
+          echo "### Status" >> $FILENAME
           echo "" >> $FILENAME
           echo "Accepted" >> $FILENAME
           echo "" >> $FILENAME
@@ -61,4 +61,4 @@ jobs:
             --title "Add ADR ${{ steps.next.outputs.number }} to the repo" \
             --label "ADR" \
             --body "This pull request was opened automatically because #${{ github.event.issue.number }} was closed after being marked as an approved ADR. It contains a markdown file capturing the ADR body at the time the issue was closed. Please verify that the markdown is correct before merging!" || true
-          gh pr merge adr/$BRANCH --auto --squash
+          gh pr merge $BRANCH --auto --squash
