@@ -24,6 +24,7 @@ jobs:
           LAST_ADR=$(ls docs/architecture/decisions/*.md | grep -Eo "decisions/[0-9]+-" | sort | tail -n1 | grep -Eo "[0-9]+")
           LAST_ADR=$(echo "$LAST_ADR" | sed -E 's/^0+//')
           NEXT_ADR=$(($LAST_ADR + 1))
+          NEXT_ADR=$(printf "%04i" "$NEXT_ADR")
           echo "number=$NEXT_ADR" >> "$GITHUB_OUTPUT"
 
       - name: write the ADR
