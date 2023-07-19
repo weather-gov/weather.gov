@@ -24,6 +24,8 @@ jobs:
               issue_number: context.issue.number
             });
 
+            console.log(comments);
+
             const botHasCommented = comments.some(({ user: { login }}) => login === 'github-actions[bot]');
 
             if(!botHasCommented) {
