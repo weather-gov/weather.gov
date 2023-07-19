@@ -1,0 +1,36 @@
+name: ADR proposed
+on:
+  issues:
+    types:
+      - opened
+      - labeled
+
+jobs:
+  main:
+    name: ADR created
+    runs-on: ubuntu-latest
+
+    # Only run this workflow if the issue is open and has the "ADR" label
+    if: "${{github.event.issue.state == 'open' && contains(github.event.issue.labels.*.name, 'ADR') }}"
+
+    steps:
+      - name: add comment if appropriate
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+
+            const botHasCommented = comments.some(({ user: { login }}) => login === 'github-actions[bot]');
+
+            if(!botHasCommented) {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: 'This issue appears to be a draft or in-progress ADR. When it is completed and accepted, add the `ADR: Accepted` label and close the issue. This will start a process to create the ADR document and add it to the repo automatically. If you close the issue before adding the label, simply re-open and re-close it.'
+              });
+            }
