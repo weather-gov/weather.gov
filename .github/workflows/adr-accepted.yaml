@@ -22,7 +22,7 @@ jobs:
         id: next
         run: |
           LAST_ADR=$(ls docs/architecture/decisions/*.md | grep -Eo "decisions/[0-9]+-" | sort | tail -n1 | grep -Eo "[0-9]+")
-          NEXT_ADR=$(printf "%04i" "$result + 1")
+          NEXT_ADR=$(printf "%04i" "$LAST_ADR + 1")
           echo "number=$NEXT_ADR" >> "$GITHUB_OUTPUT"
 
       - name: write the ADR
