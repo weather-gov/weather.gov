@@ -12,13 +12,24 @@ services:
       MYSQL_ROOT_PASSWORD: drupal
 
   drupal:
-    image: drupal:10
+    image: drupal:10-apache
     networks:
       - weather.gov
     ports:
       - 8080:80
     links:
       - database:database
+    environment:
+      - DRUPAL_DB_NAME=weathergov
+      - DRUPAL_DB_USERNAME=drupal
+      - DRUPAL_DB_PASSWORD=drupal
+      - DRUPAL_DB_HOST=database
+      - DRUPAL_DB_PORT=3306
+    volumes:
+      - ./drupal-volume/modules:/var/www/html/modules
+      - ./drupal-volume/profiles:/var/www/html/profiles
+      - ./drupal-volume/themes:/var/www/html/themes
+      - ./drupal-volume/default-site:/opt/drupal/web/sites/default/
 
 networks:
-  weather.gov: 
+  weather.gov:
