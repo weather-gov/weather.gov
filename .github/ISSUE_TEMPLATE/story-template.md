@@ -9,7 +9,7 @@ assignees: ''
 
 ### Description
 
-**Related Boulder: [Epic]**
+**Related Epic: [#Epic]**
 
 ### Questions and Considerations
 
