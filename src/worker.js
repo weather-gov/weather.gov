@@ -73,7 +73,7 @@ self.addEventListener("fetch", async (event) => {
 
         return Promise.resolve(new Response(blob));
       } else {
-        return fromCache(event.reqeust);
+        return fromCache(event.request);
       }
     } else {
       return fromCache(event.request);
