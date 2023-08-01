@@ -7,10 +7,9 @@ const main = async () => {
   setupServiceWorker();
 
   try {
-    const location = await Location.get();
     const {
       coords: { latitude, longitude },
-    } = location;
+    } = await Location.get();
     document.querySelector("preload").innerText =
       "Got your location. Fetching weather...";
 
@@ -24,14 +23,20 @@ const main = async () => {
 
     loc.observations.then((o) => {
       document.getElementById("obs_text").innerText = o.text;
+
       document.getElementById(
         "obs_temperature"
       ).innerText = `${o.temperature}°F`;
+
       document.getElementById(
         "obs_time"
       ).innerText = `Last updated at ${o.timestamp.toLocaleTimeString("en-US", {
         timeStyle: "short",
       })}`;
+
+      document.getElementById("obs_loc").innerText = `at ${
+        o.stationName
+      } (about ${Math.round(o.distanceFrom(latitude, longitude))} miles away)`;
     });
 
     loc.hourlyForecast.then((forecast) => {

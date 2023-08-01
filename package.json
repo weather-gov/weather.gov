@@ -1,3 +1,27 @@
 {
-  "prettier": {}
+  "name": "weather.gov",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "contributors": [
+    "Claire Annan",
+    "Stacy Dion",
+    "Shad Keene",
+    "Sarah MH",
+    "Colin Murphy",
+    "Katrina Ranjo",
+    "Kari Sheets",
+    "Greg Walker",
+    "Janel Yamashiro"
+  ],
+  "license": "CC0-1.0",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  },
+  "prettier": {},
+  "scripts": {}
 }

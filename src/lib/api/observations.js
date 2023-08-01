@@ -1,5 +1,26 @@
 import convert from "https://cdn.jsdelivr.net/npm/convert@4";
 
+// equatorial mean radius of Earth (in miles)
+const R = 3_963.19;
+
+function toRad(x) {
+  return (x * Math.PI) / 180.0;
+}
+function hav(x) {
+  return Math.sin(x / 2) ** 2;
+}
+
+function haversineDistance(a, b) {
+  const aLat = toRad(a.latitude);
+  const bLat = toRad(b.latitude);
+  const aLng = toRad(a.longitude);
+  const bLng = toRad(b.longitude);
+
+  const ht =
+    hav(bLat - aLat) + Math.cos(aLat) * Math.cos(bLat) * hav(bLng - aLng);
+  return 2 * R * Math.asin(Math.sqrt(ht));
+}
+
 const wmoToLib = new Map([
   ["wmoUnit:degC", "celsius"],
   ["wmoUnit:degree_(angle)", "degrees"],
@@ -22,12 +43,21 @@ export class Observation {
   #stationName;
   #obs;
   #timestamp;
+  #lat;
+  #lng;
+  #elevation;
 
-  constructor(station, stationName, obs) {
+  constructor(
+    { code: station, name: stationName, coords: [lng, lat, elevation] },
+    obs
+  ) {
     this.#station = station;
     this.#stationName = stationName;
     this.#obs = obs;
     this.#timestamp = new Date(Date.parse(obs.timestamp));
+    this.#lat = lat;
+    this.#lng = lng;
+    this.elevation = elevation;
   }
 
   /**
@@ -62,6 +92,16 @@ export class Observation {
     return this.#timestamp;
   }
 
+  distanceFrom(lat, lng, elevation) {
+    return haversineDistance(
+      { latitude: lat, longitude: lng },
+      {
+        latitude: this.#lat,
+        longitude: this.#lng,
+      }
+    );
+  }
+
   //////////////////////////////////////////////////////////////////////////////
   // The observations themselves
   get temperature() {
@@ -79,19 +119,24 @@ export class Observation {
 
     const stationCode = stationUrl.split("/").pop();
 
-    const stationNamePromise = fetch(stationUrl)
+    const stationMetadataPromise = fetch(stationUrl)
       .then((r) => r.json())
-      .then((meta) => meta.properties.name);
+      .then((meta) => ({
+        name: meta.properties.name,
+        coords: [...meta.geometry.coordinates, meta.properties.elevation.value],
+      }));
 
     const observationsPromise = fetch(`${stationUrl}/observations/latest`)
       .then((r) => r.json())
       .then((meta) => meta.properties);
 
-    const [stationName, observations] = await Promise.all([
-      stationNamePromise,
+    const [stationMetadata, observations] = await Promise.all([
+      stationMetadataPromise,
       observationsPromise,
     ]);
 
-    return new Observation(stationCode, stationName, observations);
+    const station = { ...stationMetadata, code: stationCode };
+
+    return new Observation(station, observations);
   }
 }
