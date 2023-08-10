@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# from https://gist.github.com/jddonovan/c423c7e5bc008df3c4b8e1424fefd504/30ee0d38055b7ff4e3d7ff2a62695ba6a15ebe44
+
 #### Default Configuration
 
 CONCURRENCY=8
