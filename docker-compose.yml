@@ -12,7 +12,8 @@ services:
       MYSQL_ROOT_PASSWORD: drupal
 
   drupal:
-    image: drupal:10-apache
+    image: 18f-zscaler-drupal:10-apache
+    build: .
     networks:
       - weather.gov
     ports:
