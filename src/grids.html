@@ -53,7 +53,7 @@
           forecastOffice,
         ).then((r) => r.json());
 
-        approvedObservationStations.map(async (stationUrl) => {
+        approvedObservationStations.forEach(async (stationUrl) => {
           const {
             features: [
               {
@@ -67,7 +67,6 @@
             r.json(),
           );
 
-          console.log([coordinates[1], coordinates[0]], temperature);
           new L.marker([coordinates[1], coordinates[0]])
             .bindTooltip(`${Math.round(32 + (temperature * 9) / 5)}°F`, {
               permanent: true,
