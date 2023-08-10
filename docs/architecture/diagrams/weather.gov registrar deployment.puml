@@ -1,0 +1,55 @@
+@startuml weather.gov deployment
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+LAYOUT_WITH_LEGEND()
+title weather.gov deployment
+skinparam linetype polyline
+
+Person(team, "weather.gov developer", "Code Writer")
+
+Deployment_Node(aws, "AWS GovCloud WOC", "Amazon Web Services Region") {
+    System(aws_codebuild, "AWS CodeBuild", "continuous integration")
+    System(aws_iam, "IAM", "AWS authentication for access to API/Dashboard")
+    System(aws_ecr, "ECR", "AWS container registry")
+    Deployment_Node(vpc, "VPC", "AWS Virtual Private Cloud") {
+        Boundary(atob, "ATO boundary") {
+            Deployment_Node(az, "AZ-1", "AWS Availability Zone, private subnet") {
+                Deployment_Node(ecs_cluster, "ECS cluster", "fargate") {
+                    Container(application, "CMS application running in ECS task")
+                }
+                ContainerDb(rds, "AWS RDS Aurora", "stores persisent relational data")
+                ContainerDb(efs, "AWS EFS", "stores persisent files")
+
+            }
+        }
+    }
+}
+
+
+Rel(team, aws_iam, "authenticates with", "https (443)")
+
+' Github
+Boundary(deploymentservices, "Source control management") {
+    Deployment_Node(github, "Github", "open source source control management"){
+        System(github_repo, "weathergov/weather.gov", "Code repository")
+        System(github_actions, "github actions", "test suite (lint, unit, security)")
+    }
+    Deployment_Node(vlab, "vLab", "NOAA's 'golden copy' of source code") {
+        System(vlab_code_repo, "code repo", "'golden copy' of weather.gov source code")
+        System(vlab_config, "config", "secrets and environment varaibles")
+    }
+}
+Rel(github_repo, github_actions, "runs test suite")
+Rel(github_repo, vlab, "tagged releases from `main` trigger copy sent to vlab")
+Rel(vlab, aws_iam, "authenticates with", "https (443)")
+Rel(vlab_code_repo, aws_codebuild, "event triggers")
+Rel(vlab_config, aws_codebuild, "event triggers")
+Rel(team, github_repo, "commits code, makes pull-request, approves PRs", "https (443), ssh (22)")
+Rel(aws_codebuild, aws_ecr, "build container from Dockerfile and scan using Amazon Inspector")
+Rel(aws_ecr, aws_codebuild, "update image tag in ECS task definition")
+Rel(aws_codebuild, ecs_cluster, "deploy via updated ECS task definition")
+Rel(application, rds, "reads/writes relational data, ", "postgres (5432)")
+Rel(application, efs, "EFS mount target", "nfs (2049)")
+
+
+@enduml
