@@ -1,4 +1,4 @@
-const CACHE_KEY = "2023-05-30: add precip chance";
+const CACHE_KEY = "2023-06-26: only latest obs";
 
 const populateCache = async () => {
   const cache = await caches.open(CACHE_KEY);
@@ -73,7 +73,7 @@ self.addEventListener("fetch", async (event) => {
 
         return Promise.resolve(new Response(blob));
       } else {
-        return fromCache(event.reqeust);
+        return fromCache(event.request);
       }
     } else {
       return fromCache(event.request);

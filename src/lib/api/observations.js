@@ -83,9 +83,9 @@ export class Observation {
       .then((r) => r.json())
       .then((meta) => meta.properties.name);
 
-    const observationsPromise = fetch(`${stationUrl}/observations?limit=1`)
+    const observationsPromise = fetch(`${stationUrl}/observations/latest`)
       .then((r) => r.json())
-      .then((meta) => meta.features[0].properties);
+      .then((meta) => meta.properties);
 
     const [stationName, observations] = await Promise.all([
       stationNamePromise,

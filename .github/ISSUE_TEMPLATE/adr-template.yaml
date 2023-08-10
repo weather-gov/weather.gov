@@ -1,0 +1,33 @@
+name: Architecure decision record (ADR)
+description: Open a new draft ADR
+labels: ["ADR"]
+body:
+  - type: textarea
+    id: context
+    validations:
+      required: true
+    attributes:
+      label: Context
+      description: >
+        Describe the motivating factors behind this decision: social, politlcal,
+        technical, etc. Why does this decision need to be made? This section should
+        be a statement of facts.
+  - type: textarea
+    id: decision
+    validations:
+      required: true
+    attributes:
+      label: Decision
+      description: >
+        What was decided? This should be an active-voice statement. For example,
+        "We will use the US Web Design System."
+  - type: textarea
+    id: consequences
+    validations:
+      required: true
+    attributes:
+      label: Consequences
+      description: >
+        What are the consequences of this decision? Consequences can be
+        positive, negative, or neutral, but all known consequences of this
+        decision should be listed here.
