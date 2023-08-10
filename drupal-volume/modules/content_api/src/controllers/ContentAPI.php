@@ -9,8 +9,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ContentAPI extends ControllerBase {
   public function get() {
+    $terms = \Drupal::entityTypeManager()->getStorage("taxonomy_term")->loadTree("test");
     return new JsonResponse(
-      (object)[ 'hello' => 'world', 'now' => (int)(microtime(true) * 1000) ]
+      (object)[ 'hello' => 'world', 'now' => (int)(microtime(true) * 1000), 'terms' => $terms ]
     );
   }
 }
