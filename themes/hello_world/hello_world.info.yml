@@ -1,0 +1,22 @@
+name: Hello World
+type: theme
+'base theme': stable9
+starterkit: true
+version: VERSION
+libraries:
+  - hello_world/base
+  - hello_world/messages
+  - core/normalize
+libraries-extend:
+  user/drupal.user:
+    - hello_world/user
+  core/drupal.dropbutton:
+    - hello_world/dropbutton
+  core/drupal.dialog:
+    - hello_world/dialog
+  file/drupal.file:
+    - hello_world/file
+  core/drupal.progress:
+    - hello_world/progress
+core_version_requirement: ^10
+generator: 'starterkit_theme:10.0.9'

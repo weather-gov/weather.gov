@@ -1,0 +1,14 @@
+_core:
+  default_config_hash: VDJxTZtQR21qB4lvOq8zszJZLvLKrSPQpdn2E3T71Ww
+langcode: en
+uuid: a8610938-ba2d-4f34-a473-bac1d92b4311
+name: 'National Weather Service'
+mail: admin@noaa.gov
+slogan: 'National Oceanic and Atmospheric Administration'
+page:
+  403: ''
+  404: ''
+  front: /
+admin_compact_mode: false
+weight_select_max: 100
+default_langcode: en

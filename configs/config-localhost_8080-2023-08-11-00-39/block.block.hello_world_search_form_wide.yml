@@ -1,0 +1,23 @@
+uuid: c44a61b4-81c5-44cf-9028-73e1d9f0aa36
+langcode: en
+status: true
+dependencies:
+  module:
+    - search
+  theme:
+    - hello_world
+_core:
+  default_config_hash: imMyHD6LYci0gtXq56qr9ZKGHzbEG9uFydrN5EhKtSU
+id: hello_world_search_form_wide
+theme: hello_world
+region: secondary_menu
+weight: -5
+provider: null
+plugin: search_form_block
+settings:
+  id: search_form_block
+  label: 'Search form (wide)'
+  label_display: '0'
+  provider: search
+  page_id: ''
+visibility: {  }

@@ -1,0 +1,22 @@
+uuid: b1b7f30e-2fb8-40d9-884e-37c2d8ed5db1
+langcode: en
+status: true
+dependencies:
+  theme:
+    - hello_world
+_core:
+  default_config_hash: ydSxdq7R66I8UMC460rOzlfzvlUL4VRbdwc6z9DWaUI
+id: hello_world_secondary_local_tasks
+theme: hello_world
+region: highlighted
+weight: -2
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Secondary tabs'
+  label_display: '0'
+  provider: core
+  primary: false
+  secondary: true
+visibility: {  }

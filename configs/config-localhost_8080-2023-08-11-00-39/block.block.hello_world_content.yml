@@ -1,0 +1,22 @@
+uuid: d7f55d5c-a780-42d1-bc3b-ce3532ac1737
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - hello_world
+_core:
+  default_config_hash: erQSEZF2XUjNmgTl0uNRBzmg18ZGXwUcw2FhApoeuHk
+id: hello_world_content
+theme: hello_world
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

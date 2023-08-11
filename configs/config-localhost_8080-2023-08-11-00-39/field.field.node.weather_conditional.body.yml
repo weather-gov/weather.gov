@@ -1,0 +1,24 @@
+uuid: 7f1fb215-4dea-46ec-b2c8-4ecd70a8591e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.weather_conditional
+  module:
+    - text
+id: node.weather_conditional.body
+field_name: body
+entity_type: node
+bundle: weather_conditional
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

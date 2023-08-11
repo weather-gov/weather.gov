@@ -29,8 +29,8 @@ services:
     volumes:
       - ./drupal-volume/modules:/var/www/html/modules
       - ./drupal-volume/profiles:/var/www/html/profiles
-      - ./drupal-volume/themes:/var/www/html/themes
+      # - ./drupal-volume/themes:/var/www/html/themes
+      - ./themes:/var/www/html/themes
       - ./drupal-volume/default-site:/opt/drupal/web/sites/default/
-
 networks:
   weather.gov:
