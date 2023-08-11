@@ -1,0 +1,32 @@
+uuid: 3cef9b5b-2d87-4a44-b06d-91fc190b1f45
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.weather_conditional.body
+    - field.field.node.weather_conditional.field_weather_condition
+    - node.type.weather_conditional
+  module:
+    - text
+    - user
+id: node.weather_conditional.teaser
+targetEntityType: node
+bundle: weather_conditional
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_weather_condition: true

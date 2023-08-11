@@ -1,0 +1,20 @@
+uuid: 6c43c39f-17df-4d80-8448-dc571c2f0332
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_weather_tags
+field_name: field_weather_tags
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 5
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

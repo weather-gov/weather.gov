@@ -1,0 +1,21 @@
+uuid: fbbf9642-2150-4324-a28d-81f8097b7102
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_office
+    - node.type.location
+id: node.location.field_office
+field_name: field_office
+entity_type: node
+bundle: location
+label: Office
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: OHX
+default_value_callback: ''
+settings: {  }
+field_type: string
