@@ -90,7 +90,8 @@ Docker does all the heavy lifting for set up and configurations. It's a cinch to
    [Docker plugin](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
    in VSCode, then right click on the docker-compose.yml and select **Compose
    Up**.
-3. Install our site configuration by running `docker compose run --rm install-site`.
+3. Install our site configuration by running `make install-site` or
+   `docker compose run --rm install-site`.
    > [!IMPORTANT]  
    > VSCode offers a way to run these kinds of one-off Docker Compose tools;
    > however, it does not work correctly for this particular service. Dunno why

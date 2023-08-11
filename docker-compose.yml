@@ -19,12 +19,19 @@ services:
     ports:
       - 8080:80
 
-  install-site:
-    profiles: ["install site"]
+  clear-cache:
+    profiles: ["clear cache"]
     extends:
       file: docker-compose.cms-config.yml
       service: common
-    entrypoint: bash -c "composer require drush/drush && drush site-install minimal --existing-config --account-pass=root -y"
+    entrypoint: bash -c "composer require drush/drush && drush cache:rebuild"
+
+  export-config:
+    profiles: ["export config"]
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
+    entrypoint: bash -c "composer require drush/drush && drush config:export -y"
 
   import-config:
     profiles: ["import config"]
@@ -33,12 +40,12 @@ services:
       service: common
     entrypoint: bash -c "composer require drush/drush && drush config:import -y"
 
-  export-config:
-    profiles: ["export config"]
+  install-site:
+    profiles: ["install site"]
     extends:
       file: docker-compose.cms-config.yml
       service: common
-    entrypoint: bash -c "composer require drush/drush && drush config:export -y"
+    entrypoint: bash -c "composer require drush/drush && drush site-install minimal --existing-config --account-pass=root -y"
 
 networks:
   weather.gov:
