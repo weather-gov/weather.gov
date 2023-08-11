@@ -12,84 +12,32 @@ services:
       MYSQL_ROOT_PASSWORD: drupal
 
   drupal:
-    image: 18f-zscaler-drupal:10-apache
     build: .
-    networks:
-      - weather.gov
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
     ports:
       - 8080:80
-    links:
-      - database:database
-    environment:
-      - DRUPAL_DB_NAME=weathergov
-      - DRUPAL_DB_USERNAME=drupal
-      - DRUPAL_DB_PASSWORD=drupal
-      - DRUPAL_DB_HOST=database
-      - DRUPAL_DB_PORT=3306
-    volumes:
-      - ./modules:/opt/drupal/web/modules
-      - ./themes:/opt/drupal/web/themes
-      - ./default-site:/opt/drupal/web/sites/default/
-      - ./config:/config
 
   install-site:
     profiles: ["install site"]
-    image: 18f-zscaler-drupal:10-apache
-    networks:
-      - weather.gov
-    links:
-      - database:database
-    environment:
-      - DRUPAL_DB_NAME=weathergov
-      - DRUPAL_DB_USERNAME=drupal
-      - DRUPAL_DB_PASSWORD=drupal
-      - DRUPAL_DB_HOST=database
-      - DRUPAL_DB_PORT=3306
-    volumes:
-      - ./modules:/opt/drupal/web/modules
-      - ./themes:/opt/drupal/web/themes
-      - ./default-site:/opt/drupal/web/sites/default/
-      - ./config:/config
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
     entrypoint: bash -c "composer require drush/drush && drush site-install minimal --existing-config --account-pass=root -y"
 
   import-config:
     profiles: ["import config"]
-    image: 18f-zscaler-drupal:10-apache
-    networks:
-      - weather.gov
-    links:
-      - database:database
-    environment:
-      - DRUPAL_DB_NAME=weathergov
-      - DRUPAL_DB_USERNAME=drupal
-      - DRUPAL_DB_PASSWORD=drupal
-      - DRUPAL_DB_HOST=database
-      - DRUPAL_DB_PORT=3306
-    volumes:
-      - ./modules:/opt/drupal/web/modules
-      - ./themes:/opt/drupal/web/themes
-      - ./default-site:/opt/drupal/web/sites/default/
-      - ./config:/config
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
     entrypoint: bash -c "composer require drush/drush && drush config:import -y"
 
   export-config:
     profiles: ["export config"]
-    image: 18f-zscaler-drupal:10-apache
-    networks:
-      - weather.gov
-    links:
-      - database:database
-    environment:
-      - DRUPAL_DB_NAME=weathergov
-      - DRUPAL_DB_USERNAME=drupal
-      - DRUPAL_DB_PASSWORD=drupal
-      - DRUPAL_DB_HOST=database
-      - DRUPAL_DB_PORT=3306
-    volumes:
-      - ./modules:/opt/drupal/web/modules
-      - ./themes:/opt/drupal/web/themes
-      - ./default-site:/opt/drupal/web/sites/default/
-      - ./config:/config
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
     entrypoint: bash -c "composer require drush/drush && drush config:export -y"
 
 networks:
