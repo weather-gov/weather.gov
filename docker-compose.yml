@@ -27,10 +27,10 @@ services:
       - DRUPAL_DB_HOST=database
       - DRUPAL_DB_PORT=3306
     volumes:
-      - ./drupal-volume/modules:/var/www/html/modules
-      - ./drupal-volume/profiles:/var/www/html/profiles
-      # - ./drupal-volume/themes:/var/www/html/themes
       - ./themes:/var/www/html/themes
+      - ./drupal-volume/modules:/opt/drupal/web/modules
+      - ./drupal-volume/profiles:/opt/drupal/web/profiles
+      - ./drupal-volume/themes:/opt/drupal/web/themes
       - ./drupal-volume/default-site:/opt/drupal/web/sites/default/
 networks:
   weather.gov:

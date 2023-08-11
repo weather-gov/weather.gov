@@ -1,0 +1,6 @@
+name: Content API
+type: module
+description: "The content API for weather.gov, responsible for making CMS content accessible via REST API."
+package: weather.gov
+
+core_version_requirement: ^10
