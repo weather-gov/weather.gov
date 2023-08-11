@@ -4,6 +4,3 @@ description: "The content API for weather.gov, responsible for making CMS conten
 package: weather.gov
 
 core_version_requirement: ^10
-
-dependencies:
-  - drupal:rest
