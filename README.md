@@ -91,10 +91,10 @@ Docker does all the heavy lifting for set up and configurations. It's a cinch to
    in VSCode, then right click on the docker-compose.yml and select **Compose
    Up**.
 3. Install our site configuration by running `docker compose run --rm install-site`.
-   Alternatively, from VSCode, right click on docker-compose..yml and select
-   **Compose Up - Select Services**. A drop down will appear at the top of the
-   VSCode window; select **Profiles**. Another drop down will appear. Uncheck
-   everything except **install site** and then click the blue OK button.
+   > [!IMPORTANT]  
+   > VSCode offers a way to run these kinds of one-off Docker Compose tools;
+   > however, it does not work correctly for this particular service. Dunno why
+   > not.
 4. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
    should see the default Drupal 10 landing page. From here, you can log in as
    the site administrator with username `admin` and password `root`.

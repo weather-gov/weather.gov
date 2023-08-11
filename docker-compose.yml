@@ -37,8 +37,6 @@ services:
     image: 18f-zscaler-drupal:10-apache
     networks:
       - weather.gov
-    ports:
-      - 8080:80
     links:
       - database:database
     environment:
@@ -59,8 +57,6 @@ services:
     image: 18f-zscaler-drupal:10-apache
     networks:
       - weather.gov
-    ports:
-      - 8080:80
     links:
       - database:database
     environment:
@@ -81,8 +77,6 @@ services:
     image: 18f-zscaler-drupal:10-apache
     networks:
       - weather.gov
-    ports:
-      - 8080:80
     links:
       - database:database
     environment:
