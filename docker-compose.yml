@@ -24,28 +24,28 @@ services:
     extends:
       file: docker-compose.cms-config.yml
       service: common
-    entrypoint: bash -c "composer require drush/drush && drush cache:rebuild"
+    entrypoint: bash -c "drush cache:rebuild"
 
   export-config:
     profiles: ["export config"]
     extends:
       file: docker-compose.cms-config.yml
       service: common
-    entrypoint: bash -c "composer require drush/drush && drush config:export -y"
+    entrypoint: bash -c "drush config:export -y"
 
   import-config:
     profiles: ["import config"]
     extends:
       file: docker-compose.cms-config.yml
       service: common
-    entrypoint: bash -c "composer require drush/drush && drush config:import -y"
+    entrypoint: bash -c "drush config:import -y"
 
   install-site:
     profiles: ["install site"]
     extends:
       file: docker-compose.cms-config.yml
       service: common
-    entrypoint: bash -c "composer require drush/drush && drush site-install minimal --existing-config --account-pass=root -y"
+    entrypoint: bash -c "drush site:install minimal --existing-config --account-pass=root -y"
 
 networks:
   weather.gov:
