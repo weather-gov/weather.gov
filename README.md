@@ -86,11 +86,19 @@ Languages and frameworks: PHP, Symfony, Twig
 Docker does all the heavy lifting for set up and configurations. It's a cinch to get up and running. Make sure you have Docker installed locally.
 
 1. Clone this repository into a new directory and `cd` into it.
-2. Run the follow command `docker compose up` from the command line. Alternatively, from VSCode, right click on the docker-compose.yml and select __Compose Up__.
-3. Check your localhost in your broswer. `localhost:8080` is the default URL. You should see the default Drupal 10 install page. Complete each field using the docker-compose values. Make sure to set the __database__ value to the MariaDB Docker container, which in this case is named `database`.
-4. Complete installation.
-5. Review your new Drupal 10 site!
-
+2. Run `docker compose up` from the command line. Alternatively, install the
+   [Docker plugin](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
+   in VSCode, then right click on the docker-compose.yml and select **Compose
+   Up**.
+3. Install our site configuration by running `make install-site` or
+   `docker compose run --rm install-site`.
+   > [!IMPORTANT]  
+   > VSCode offers a way to run these kinds of one-off Docker Compose tools;
+   > however, it does not work correctly for this particular service. Dunno why
+   > not.
+4. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
+   should see the default Drupal 10 landing page. From here, you can log in as
+   the site administrator with username `admin` and password `root`.
 
 ## Editing and adding themes
 
@@ -105,6 +113,3 @@ We [bind-mount](https://docs.docker.com/storage/bind-mounts/) the __themes__ fol
 6. Change title of the theme in `new_weather_theme.info.yml` file to a reader-friendly one, such as `New Weather`.
 
 That's it! Now when you make changes to theme files, they will sync to the Docker instance. Don't forget to commit your changes to `git`!
-
-
-

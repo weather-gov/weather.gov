@@ -3,6 +3,6 @@ node_modules
 vendor
 /.editorconfig
 /.gitattributes
-drupal-volume/*/README.txt
-drupal-volume/default-site/files
-drupal-volume/modules/contrib
+default-site/files
+modules/contrib
+modules/README.txt

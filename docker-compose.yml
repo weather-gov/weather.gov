@@ -12,25 +12,40 @@ services:
       MYSQL_ROOT_PASSWORD: drupal
 
   drupal:
-    image: 18f-zscaler-drupal:10-apache
     build: .
-    networks:
-      - weather.gov
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
     ports:
       - 8080:80
-    links:
-      - database:database
-    environment:
-      - DRUPAL_DB_NAME=weathergov
-      - DRUPAL_DB_USERNAME=drupal
-      - DRUPAL_DB_PASSWORD=drupal
-      - DRUPAL_DB_HOST=database
-      - DRUPAL_DB_PORT=3306
-    volumes:
-      - ./themes:/var/www/html/themes
-      - ./drupal-volume/modules:/opt/drupal/web/modules
-      - ./drupal-volume/profiles:/opt/drupal/web/profiles
-      - ./drupal-volume/themes:/opt/drupal/web/themes
-      - ./drupal-volume/default-site:/opt/drupal/web/sites/default/
+
+  clear-cache:
+    profiles: ["clear cache"]
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
+    entrypoint: bash -c "drush cache:rebuild"
+
+  export-config:
+    profiles: ["export config"]
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
+    entrypoint: bash -c "drush config:export -y"
+
+  import-config:
+    profiles: ["import config"]
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
+    entrypoint: bash -c "drush config:import -y"
+
+  install-site:
+    profiles: ["install site"]
+    extends:
+      file: docker-compose.cms-config.yml
+      service: common
+    entrypoint: bash -c "drush site:install minimal --existing-config --account-pass=root -y"
+
 networks:
   weather.gov:
