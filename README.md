@@ -97,8 +97,9 @@ Docker does all the heavy lifting for set up and configurations. It's a cinch to
    > however, it does not work correctly for this particular service. Dunno why
    > not.
 4. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
-   should see the default Drupal 10 landing page. From here, you can log in as
+   should see the default Drupal 10 installation page. From here, you can log in as
    the site administrator with username `admin` and password `root`.
+5. If for some reason you're not automatically logged in, browse to [http://localhost:8080/user/login](http://localhost:8080/user/login).
 
 ## Editing and adding themes
 
@@ -112,4 +113,4 @@ We [bind-mount](https://docs.docker.com/storage/bind-mounts/) the __themes__ fol
 5. Refresh the Appearance page and notice new_weather_theme is now installed.
 6. Change title of the theme in `new_weather_theme.info.yml` file to a reader-friendly one, such as `New Weather`.
 
-That's it! Now when you make changes to theme files, they will sync to the Docker instance. Don't forget to commit your changes to `git`!
+That's it! Now when you make changes to theme files, they will sync to the Docker instance. Whenever you make a change to a __.twig__ template, make sure to __CLEAR ALL CACHES__ from the [Performance](http://localhost:8080/admin/config/development/performance) page.  *Configuration > Development > Performance*.
