@@ -11,7 +11,7 @@ _core:
 id: hello_world_syndicate
 theme: hello_world
 region: sidebar_first
-weight: 0
+weight: -8
 provider: null
 plugin: node_syndicate_block
 settings:
