@@ -32,10 +32,23 @@
   ]
 %}
 <!DOCTYPE html>
-<html{{ html_attributes }}>
+<html {{ html_attributes }}>
   <head>
-    <head-placeholder token="{{ placeholder_token }}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/themes/hello_world/assets/css/styles.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/themes/hello_world/assets/uswds/img/favicons/favicon.ico"
+    />
+    <script
+      type="text/javascript"
+      async=""
+      src="/themes/hello_world/assets/uswds/js/uswds-init.min.js"
+    ></script>
     <title>{{ head_title|safe_join(' | ') }}</title>
+        <head-placeholder token="{{ placeholder_token }}"> 
     <css-placeholder token="{{ placeholder_token }}">
     <js-placeholder token="{{ placeholder_token }}">
   </head>
@@ -44,6 +57,7 @@
       Keyboard navigation/accessibility link to main content section in
       page.html.twig.
     #}
+    <a class="usa-skipnav" href="#main-content">{{ 'Skip to main content'|t }}</a>
     <a href="#main-content" class="visually-hidden focusable skip-link">
       {{ 'Skip to main content'|t }}
     </a>
@@ -51,5 +65,11 @@
     {{ page }}
     {{ page_bottom }}
     <js-bottom-placeholder token="{{ placeholder_token }}">
+    <!-- USWDS JS -->
+    <script
+      type="text/javascript"
+      async=""
+      src="/themes/hello_world/assets/uswds/js/uswds.min.js"
+    ></script>
   </body>
 </html>
