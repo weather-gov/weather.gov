@@ -340,7 +340,7 @@ display:
           title: ''
           default_argument_type: raw
           default_argument_options:
-            index: 0
+            index: 1
             use_alias: false
           default_argument_skip_url: false
           summary_options:
