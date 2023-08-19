@@ -1,6 +1,6 @@
 uuid: d5a96b4c-bea8-4d71-96cf-8eead84c4517
 langcode: en
-status: false
+status: true
 dependencies:
   module:
     - system
@@ -23,4 +23,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: /home
+    pages: "/home\r\n/forecast"
