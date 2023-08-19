@@ -15,6 +15,18 @@ settings:
       value: Nashville
       label: Nashville
     -
+      value: Knoxville
+      label: Knoxville
+    -
+      value: Memphis
+      label: Memphis
+    -
+      value: Paducah
+      label: Paducah
+    -
+      value: Huntsville
+      label: Huntsville
+    -
       value: 'Not Nashville'
       label: 'Not Nashville'
   allowed_values_function: ''

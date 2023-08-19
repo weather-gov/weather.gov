@@ -49,7 +49,11 @@
 <main id="main-content" class="grid-container padding-y-6" role="main">
   <!-- Page title -->
   <section id="page-title">
-    <h1 class="margin-y-0">Nashville, TN</h1>
+    {% set url = url('<current>') %}
+    {% if 'nashville' in url|render|render %}
+    <h1 class="margin-y-0">Nashville, TN</h1>{% else %}
+    <h1 class="margin-y-0">Not Nashville, TN</h1>
+    {% endif %}
     <span>as of today </span><time>Wednesday, 11:11AM EST</time>
   </section>
   <div class="grid-row grid-gap-lg padding-y-6">
