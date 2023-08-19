@@ -33,8 +33,8 @@
  * - page.highlighted: Items for the highlighted content region.
  * - page.help: Dynamic help text, mostly for admin pages.
  * - page.content: The main content of the current page.
- * - page.sidebar_first: Items for the first sidebar.
- * - page.sidebar_second: Items for the second sidebar.
+ * - page.two_col_first: Items for the first column.
+ * - page.two_col_second: Items for the second column.
  * - page.footer: Items for the footer region.
  * - page.breadcrumb: Items for the breadcrumb region.
  *
@@ -45,7 +45,8 @@
 {% if page.header %}
     {{ page.header }}
 {% endif %}
-<main id="main-content" class="grid-container padding-y-6">
+ 
+<main id="main-content" class="grid-container padding-y-6" role="main">
   <!-- Page title -->
   <section id="page-title">
     <h1 class="margin-y-0">Nashville, TN</h1>
@@ -71,12 +72,10 @@
       </div>
       <!-- Area-relevant component based on location id -->
       <div id="area-relevant">
-        <h2 class="padding-top-2">Area-relevant content</h2>
-        <ul class="usa-list--unstyled maxw-mobile">
-          <li class="border padding-2 minh-mobile">Content 1</li>
-          <li class="border padding-2 minh-mobile">Content 2</li>
-          <li class="border padding-2 minh-mobile">Content 3</li>
-        </ul>
+        <h2 class="padding-top-2 padding">Area relevant content</h2>
+        <section class="maxw-mobile">
+        {{ page.two_col_first }}
+        </section>
       </div>
     </div>
     <div class="tablet:grid-col-6">
@@ -93,7 +92,7 @@
               alt="Gears of Government Awards - President's Award"
             />
             <div class="usa-collection__body">
-              {{ page.content }}
+              {{ page.two_col_second }}
               <ul
                 class="usa-collection__meta"
                 aria-label="More information"
@@ -238,30 +237,8 @@
     </div>
   </div>
 </main>
-<!-- Responsive image -->
-<section id="responsive-image">
-  <h2>Responsive image</h2>
-  <picture>
-    <source media="" srcset="" />
-    <source media="" srcset="" />
-    <img
-      src="/themes/hello_world/assets/noaa/noaa-ieWHXjjAEwY-unsplash.jpg"
-      alt="Photo by NOAA on Unsplash"
-    />
-  </picture>
-  <span
-    >Photo by
-    <a
-      href="https://unsplash.com/@noaa?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-      >NOAA</a
-    >
-    on
-    <a
-      href="https://unsplash.com/photos/ieWHXjjAEwY?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-      >Unsplash</a
-    >
-  </span>
-</section>
+
 {% if page.footer %}
-    {{ page.footer }}
+  {{ page.footer }}
 {% endif %}
+

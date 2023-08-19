@@ -20,3 +20,15 @@ libraries-extend:
     - hello_world/progress
 core_version_requirement: ^10
 generator: 'starterkit_theme:10.0.9'
+regions:
+  header: 'Header'
+  primary_menu: 'Primary menu'
+  secondary_menu: 'Secondary menu'
+  help: 'Help'
+  content: 'Content'
+  footer: 'Footer'
+  breadcrumb: 'Breadcrumb'
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+  two_col_first: 'First Column'
+  two_col_second: 'Second Column'
