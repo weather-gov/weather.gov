@@ -1,36 +1,32 @@
-uuid: 2ac6f027-9829-4b5c-9a36-77be3a18b1d2
+uuid: 562d84cb-6c6a-417f-8781-1c4713b2b5c3
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.location.field_id
-    - field.field.node.location.field_type
-    - field.field.node.location.field_wfo
-    - node.type.location
+    - field.field.node.area_relevant.body
+    - field.field.node.area_relevant.field_wfo
+    - node.type.area_relevant
   module:
     - path
-id: node.location.default
+    - text
+id: node.area_relevant.default
 targetEntityType: node
-bundle: location
+bundle: area_relevant
 mode: default
 content:
+  body:
+    type: text_textarea_with_summary
+    weight: 121
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
   created:
     type: datetime_timestamp
     weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_id:
-    type: string_textfield
-    weight: 125
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_type:
-    type: options_select
-    weight: 126
     region: content
     settings: {  }
     third_party_settings: {  }

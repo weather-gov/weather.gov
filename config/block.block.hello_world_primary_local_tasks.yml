@@ -1,6 +1,6 @@
 uuid: 75a82dcf-cf7f-4b20-98fb-1e0f23ba977a
 langcode: en
-status: true
+status: false
 dependencies:
   theme:
     - hello_world
@@ -8,7 +8,7 @@ _core:
   default_config_hash: nGE3EoPQQaQCuqTUtZgw0-KIzmrqdKDzdNQf2JyPUt4
 id: hello_world_primary_local_tasks
 theme: hello_world
-region: highlighted
+region: header
 weight: -4
 provider: null
 plugin: local_tasks_block

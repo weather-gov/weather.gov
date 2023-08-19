@@ -5,8 +5,8 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.location.field_id
-    - field.field.node.location.field_office
     - field.field.node.location.field_type
+    - field.field.node.location.field_wfo
     - node.type.location
   module:
     - user
@@ -22,5 +22,5 @@ content:
     region: content
 hidden:
   field_id: true
-  field_office: true
   field_type: true
+  field_wfo: true

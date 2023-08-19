@@ -1,18 +1,16 @@
-uuid: ae8452a2-21d6-4750-9c44-82cb70e22f37
+uuid: 6d1e272e-a068-495c-854f-3bc95e8fe0a0
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.body
-    - filter.format.basic_html
-    - filter.format.plain_text
-    - node.type.weather_narrative
+    - node.type.area_relevant
   module:
     - text
-id: node.weather_narrative.body
+id: node.area_relevant.body
 field_name: body
 entity_type: node
-bundle: weather_narrative
+bundle: area_relevant
 label: Body
 description: ''
 required: false
@@ -22,7 +20,5 @@ default_value_callback: ''
 settings:
   display_summary: true
   required_summary: false
-  allowed_formats:
-    - basic_html
-    - plain_text
+  allowed_formats: {  }
 field_type: text_with_summary

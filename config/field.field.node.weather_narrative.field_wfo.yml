@@ -1,0 +1,21 @@
+uuid: 60d0079c-a3d4-446b-b481-3a40a014fa4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_wfo
+    - node.type.weather_narrative
+  module:
+    - options
+id: node.weather_narrative.field_wfo
+field_name: field_wfo
+entity_type: node
+bundle: weather_narrative
+label: WFO
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

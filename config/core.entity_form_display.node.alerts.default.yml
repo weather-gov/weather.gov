@@ -1,36 +1,39 @@
-uuid: 2ac6f027-9829-4b5c-9a36-77be3a18b1d2
+uuid: 5cedbba4-cfa4-4ed5-8436-2cf023e23cb7
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.location.field_id
-    - field.field.node.location.field_type
-    - field.field.node.location.field_wfo
-    - node.type.location
+    - field.field.node.alerts.body
+    - field.field.node.alerts.field_alert_type
+    - field.field.node.alerts.field_wfo
+    - node.type.alerts
   module:
     - path
-id: node.location.default
+    - text
+id: node.alerts.default
 targetEntityType: node
-bundle: location
+bundle: alerts
 mode: default
 content:
+  body:
+    type: text_textarea_with_summary
+    weight: 8
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_id:
-    type: string_textfield
-    weight: 125
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_type:
-    type: options_select
-    weight: 126
+  field_alert_type:
+    type: options_buttons
+    weight: 0
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -42,34 +45,34 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 15
+    weight: 4
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 120
+    weight: 7
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 16
+    weight: 5
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: -5
+    weight: 1
     region: content
     settings:
       size: 60
@@ -77,7 +80,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS

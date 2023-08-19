@@ -1,6 +1,6 @@
 uuid: 33e97687-7dab-45cc-8367-d7c447f83470
 langcode: en
-status: true
+status: false
 dependencies:
   theme:
     - hello_world
@@ -8,7 +8,7 @@ _core:
   default_config_hash: Q9_2whdOj1YIomfvsIfopROW4FT_X5pY0DjdOiOaQ5U
 id: hello_world_primary_admin_actions
 theme: hello_world
-region: highlighted
+region: header
 weight: -5
 provider: null
 plugin: local_actions_block

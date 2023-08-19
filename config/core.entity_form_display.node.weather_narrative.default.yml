@@ -4,13 +4,12 @@ status: true
 dependencies:
   config:
     - field.field.node.weather_narrative.body
-    - field.field.node.weather_narrative.field_date
     - field.field.node.weather_narrative.field_forecaster_image
     - field.field.node.weather_narrative.field_weather_tags
+    - field.field.node.weather_narrative.field_wfo
     - image.style.thumbnail
     - node.type.weather_narrative
   module:
-    - datetime
     - image
     - path
     - text
@@ -35,12 +34,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_date:
-    type: datetime_default
-    weight: 123
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_forecaster_image:
     type: image_image
     weight: 122
@@ -58,6 +51,12 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_wfo:
+    type: options_select
+    weight: 122
+    region: content
+    settings: {  }
     third_party_settings: {  }
   path:
     type: path
