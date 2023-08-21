@@ -69,10 +69,15 @@ RUN echo "openssl.cafile=/var/certs/zscaler-root.pem" >> /usr/local/etc/php/php.
 # https://www.drupal.org/node/3060/release
 ENV DRUPAL_VERSION 10.1.2
 
+# Copy in our composer files to start with.
+COPY composer.json /opt/drupal/composer.json
+COPY composer.lock /opt/drupal/composer.lock
+
 WORKDIR /opt/drupal
+
 RUN set -eux; \
   export COMPOSER_HOME="$(mktemp -d)"; \
-  composer create-project --no-interaction "drupal-composer/drupal-project:10.x-dev" ./; \
+  composer install --dev; \
   chown -R www-data:www-data web/sites web/modules web/themes; \
   rmdir /var/www/html; \
   ln -sf /opt/drupal/web /var/www/html; \

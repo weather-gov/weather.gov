@@ -14,55 +14,59 @@ We will know that we are progressing forward on this problem if people find the 
 
 ### Our vision is that anyone can understand the impact of impending weather. When it comes to making decisions to save life and property, every word and every minute matters.
 
-**Our mission** is to rebuild weather.gov to reflect the integrity and care NWS has for the people you serve. 
+**Our mission** is to rebuild weather.gov to reflect the integrity and care NWS has for the people you serve.
 
-Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect their values, much like the agency. Because the mission and culture at NWS is built around serving, preparing, and protecting people, the site must do the same. 
+Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect their values, much like the agency. Because the mission and culture at NWS is built around serving, preparing, and protecting people, the site must do the same.
 
 **Our strategy** for our Minimal Viable Product (MVP) is to make it easier to communicate forecasts and conditions for regular and hazardous weather in a way that anyone can find, understand, and use to take action.
 
 **Our primary outcomes** for MVP include:
 
-  - Make it easier to communicate the impact of impending, regular and hazardous weather
-  - Anyone can find, understand, and use the information take action
-  - A sustainable and compliant system
+- Make it easier to communicate the impact of impending, regular and hazardous weather
+- Anyone can find, understand, and use the information take action
+- A sustainable and compliant system
 
 **Our primary users** for MVP include:
-  - Internal - NWS Meteorologists 
-  - External - The Public and Emergency Managers
+
+- Internal - NWS Meteorologists
+- External - The Public and Emergency Managers
 
 ## Roadmap
 
 **Strategy for prioritization**
-  - Now - Prototype individual parts to inform key decisions and evaluate risk
-  - Next - Start building the simplest thing possible
-  - Later - Add complexity, ASAP
 
-| Phase      | Priorities |
-| :----------- | :----------- |
-| **Now - Prototype** | <ul><li>Partners / gen public view weather basics</li><li>CMS requirements and viable options</li><li>Critical data integrations</li><li>BONUS: Critical third party integrations</li><li>User validation</li></ul> |
-| Next - Build MVP | <ul><li>A “happy path” for NWS forecasters and public users</li><li>1 location</li><li>Core architecture - CMS, Admin experience, User experience, data integrations, CI/CD pipeline</li><li>Initial governance</li><li>User validation</li></ul> |
-| Later - Expand | <ul><li>“Unhappy paths” for forecasters and public users</li><li>Multiple locations, geographies, or specialized services</li><li>More comprehensive governance</li><li>User validation</li></ul> |
-| Beyond | <ul><li>Transition and migration</li><li>Continuous improvement</li></ul> |
+- Now - Prototype individual parts to inform key decisions and evaluate risk
+- Next - Start building the simplest thing possible
+- Later - Add complexity, ASAP
+
+| Phase               | Priorities                                                                                                                                                                                                                                        |
+| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Now - Prototype** | <ul><li>Partners / gen public view weather basics</li><li>CMS requirements and viable options</li><li>Critical data integrations</li><li>BONUS: Critical third party integrations</li><li>User validation</li></ul>                               |
+| Next - Build MVP    | <ul><li>A “happy path” for NWS forecasters and public users</li><li>1 location</li><li>Core architecture - CMS, Admin experience, User experience, data integrations, CI/CD pipeline</li><li>Initial governance</li><li>User validation</li></ul> |
+| Later - Expand      | <ul><li>“Unhappy paths” for forecasters and public users</li><li>Multiple locations, geographies, or specialized services</li><li>More comprehensive governance</li><li>User validation</li></ul>                                                 |
+| Beyond              | <ul><li>Transition and migration</li><li>Continuous improvement</li></ul>                                                                                                                                                                         |
 
 ![happy path journey map](/docs/img/happy-path.png)
 
 ## How will we ultimately succeed or fail
 
-### We will succeed if 
-  - all regions and programs work in good faith with the team when the site is ready to expand and cover their needs
-  - decisions are made by those closest to the work, backed by data
-  - we start small with a small group and bring it to more and more people
-  - having the space to test and iteratively improve
-  - Continuously get feedback on working code, over memos and proposals
+### We will succeed if
 
-### We will fail if 
-  - The site is mandated, instead of organically adopted
-  - We do a big splash rollout
-  - A single miss is considered a failure of the project instead of a learning experience to inform the next version
-  - Decisions are informed by opinions and perceptions, over observations and data
-  - Everyone’s explicit commitment is required to begin development
-  - Everyone’s feedback has to be factored into the solution
-  - The product team works in isolation from the rest of the NWS
+- all regions and programs work in good faith with the team when the site is ready to expand and cover their needs
+- decisions are made by those closest to the work, backed by data
+- we start small with a small group and bring it to more and more people
+- having the space to test and iteratively improve
+- Continuously get feedback on working code, over memos and proposals
+
+### We will fail if
+
+- The site is mandated, instead of organically adopted
+- We do a big splash rollout
+- A single miss is considered a failure of the project instead of a learning experience to inform the next version
+- Decisions are informed by opinions and perceptions, over observations and data
+- Everyone’s explicit commitment is required to begin development
+- Everyone’s feedback has to be factored into the solution
+- The product team works in isolation from the rest of the NWS
 
 ## Public domain
 
@@ -103,14 +107,25 @@ Docker does all the heavy lifting for set up and configurations. It's a cinch to
 
 ## Editing and adding themes
 
-We [bind-mount](https://docs.docker.com/storage/bind-mounts/) the __themes__ folder so we can test adding a new theme. So changes made in the themes folder are reflected in the host folder.
+We [bind-mount](https://docs.docker.com/storage/bind-mounts/) the **themes**
+folder so we can test adding a new theme. So changes made in the themes folder
+are reflected in the host folder.
 
 1. Navigate to the Drupal Appearance page `http://localhost:8080/admin/appearance`
 2. Notice the Hello World theme already there.
-3. To create a new theme, run the following command from the root directory:
-`php core/scripts/drupal generate-theme new_weather_theme`
-4. Make sure your new theme has __underscores__ (_) as a delimiter. Dashes and spaces WILL NOT WORK.
-5. Refresh the Appearance page and notice new_weather_theme is now installed.
-6. Change title of the theme in `new_weather_theme.info.yml` file to a reader-friendly one, such as `New Weather`.
+3. To create a new theme, run the following commands:
+   - `make shell` to get a shell in the container
+   - `cd web` to get to the Drupal root folder
+   - `php core/scripts/drupal generate-theme new_weather_theme`
+     > [!WARNING]  
+     > Make sure your new theme has **underscores** (\_) as a delimiter. Dashes
+     > and spaces WILL NOT WORK.
+   - `exit` to leave the container
+4. Refresh the Appearance page and notice new_weather_theme is now installed.
+5. Change title of the theme in `themes/new_weather_theme/new_weather_theme.info.yml`
+   file to a reader-friendly one, such as `New Weather`.
 
-That's it! Now when you make changes to theme files, they will sync to the Docker instance. Whenever you make a change to a __.twig__ template, make sure to __CLEAR ALL CACHES__ from the [Performance](http://localhost:8080/admin/config/development/performance) page.  *Configuration > Development > Performance*.
+That's it! Now when you make changes to theme files, they will sync to the
+Docker instance. Whenever you make a change to a **.twig** template, make sure
+to **CLEAR ALL CACHES** from the
+[Performance](http://localhost:8080/admin/config/development/performance) page. _Configuration > Development > Performance_.

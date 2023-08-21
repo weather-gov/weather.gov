@@ -4,5 +4,4 @@ vendor
 /.editorconfig
 /.gitattributes
 default-site/files
-modules/contrib
 modules/README.txt

@@ -12,7 +12,24 @@ services:
       - DRUPAL_DB_HOST=database
       - DRUPAL_DB_PORT=3306
     volumes:
+      # Map in our composer files. That way if we make changes inside the
+      # container, they'll be persisted out here in the real world.
+      - ./composer.json:/opt/drupal/composer.json
+      - ./composer.lock:/opt/drupal/composer.lock
+
+      # Map in our settings.php.
+      - ./settings.php:/opt/drupal/web/sites/default/settings.php
+
+      # Map in our modules, themes, and site settings. But be sure not to map in
+      # any contrib directories, since those are 3rd-party installs from
+      # composer. If we map them in, we'll overwrite what's in the container,
+      # and we don't really want that.
       - ./modules:/opt/drupal/web/modules
       - ./themes:/opt/drupal/web/themes
-      - ./default-site:/opt/drupal/web/sites/default/
+      - /opt/drupal/web/modules/contrib
+
+      # Map in saved configuration. This is used to import configuration and it
+      # is also where configuration gets exported to. The target/container
+      # directory needs to match the value of $settings['config_sync_directory']
+      # in settings.php
       - ./config:/config
