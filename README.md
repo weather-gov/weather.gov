@@ -117,7 +117,7 @@ are reflected in the host folder.
    - `make shell` to get a shell in the container
    - `cd web` to get to the Drupal root folder
    - `php core/scripts/drupal generate-theme new_weather_theme`
-     > [WARNING]  
+     > [!WARNING]  
      > Make sure your new theme has **underscores** (\_) as a delimiter. Dashes
      > and spaces WILL NOT WORK.
    - `exit` to leave the container
