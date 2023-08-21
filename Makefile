@@ -15,10 +15,10 @@ import-config: ## Import the Drupal configuration from the config directory into
 install-site: ## Install a minimal Drupal site using the configuration in the config directory
 	docker compose run --rm install-site
 
-own-settings: ## Make the default files directory and its contents writable
-	chmod -R 775 default-site
+own-settings: ## Make the settings.php file writable
+	chmod -R 775 settings.php
 
-rebuild: ## Delete the current Drupal container and rebuild from the Dockerfile
+rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose stop drupal
 	docker compose rm drupal -f
 	docker compose build drupal
