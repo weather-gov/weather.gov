@@ -11,7 +11,7 @@ _core:
 id: hello_world_content
 theme: hello_world
 region: content
-weight: 0
+weight: -5
 provider: null
 plugin: system_main_block
 settings:

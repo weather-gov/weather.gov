@@ -1,0 +1,49 @@
+site_uuid: a8610938-ba2d-4f34-a473-bac1d92b4311
+uuid: 51babb8d-ff33-46c8-8050-1969a3197267
+entity_type: node
+bundle: weather_narrative
+base_fields:
+  title: 'Fri Aug 18'
+  status: true
+  langcode: en
+  created: '1692398694'
+  author: admin@noaa.gov
+  url: null
+  revision_log_message: null
+  revision_uid: '1'
+custom_fields:
+  body:
+    -
+      value: "<p>Temperatures will climb to the upper 80s today. After this morning's round of rain and storms, skies will clear which will help bring the chance for severe weather this afternoon and evening.Slight risk for severe storms late in the day for a vast area of the state and Wisconsin. A slight chance is a 2 out of 5 chance for severe weather. A few of these could be on the strong to severe side. Pay more attention to the weather later in the day. The main threats are hail and gusty wind.We will see the mercury hover near and above our seasonal norms for the second half of the week with lots of sunshine. A warming trend persists through the weekend, with a few isolated storms expected on Saturday.</p>"
+      summary: ''
+      format: basic_html
+  field_forecaster_image:
+    -
+      uri: 'public://2023-08/Colin-2.png'
+      url: 'http://localhost:8080/sites/default/files/2023-08/Colin-2.png'
+      alt: 'Forecaster Colin Two'
+      title: ''
+  field_weather_tags:
+    -
+      uuid: 40187b96-b9e4-41aa-9f92-4ab22d055b8a
+      entity_type: taxonomy_term
+      bundle: tags
+      base_fields:
+        name: tag1
+        weight: 0
+        langcode: en
+        description: null
+        parent: 0
+      custom_fields: {  }
+    -
+      uuid: 37f8c3c1-e0d7-466e-8913-80ec923705e3
+      entity_type: taxonomy_term
+      bundle: tags
+      base_fields:
+        name: tag2
+        weight: 0
+        langcode: en
+        description: null
+        parent: 0
+      custom_fields: {  }
+  field_wfo: null

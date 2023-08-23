@@ -10,8 +10,8 @@ _core:
   default_config_hash: VfPFqqxfkomud5CO8DUijw85QIl9GIxh_nIxLOYESxg
 id: hello_world_help
 theme: hello_world
-region: sidebar_first
-weight: 0
+region: content
+weight: -6
 provider: null
 plugin: help_block
 settings:

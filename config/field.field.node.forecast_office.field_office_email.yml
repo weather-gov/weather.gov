@@ -1,0 +1,19 @@
+uuid: 49b281c4-929c-4e4d-aba1-dd6f1d732a4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_office_email
+    - node.type.forecast_office
+id: node.forecast_office.field_office_email
+field_name: field_office_email
+entity_type: node
+bundle: forecast_office
+label: 'Office email'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

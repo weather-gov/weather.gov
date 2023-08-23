@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.location.field_id
-    - field.field.node.location.field_office
     - field.field.node.location.field_type
+    - field.field.node.location.field_wfo
     - node.type.location
   module:
     - path
@@ -28,17 +28,15 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_office:
-    type: string_textfield
-    weight: 124
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_type:
     type: options_select
     weight: 126
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_wfo:
+    type: options_select
+    weight: 122
     region: content
     settings: {  }
     third_party_settings: {  }

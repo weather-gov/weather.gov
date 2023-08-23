@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.location.field_id
-    - field.field.node.location.field_office
     - field.field.node.location.field_type
+    - field.field.node.location.field_wfo
     - node.type.location
   module:
     - options
@@ -23,20 +23,19 @@ content:
     third_party_settings: {  }
     weight: 105
     region: content
-  field_office:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 104
-    region: content
   field_type:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
     weight: 106
+    region: content
+  field_wfo:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
     region: content
   links:
     settings: {  }

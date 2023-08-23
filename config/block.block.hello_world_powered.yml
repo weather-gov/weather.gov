@@ -1,6 +1,6 @@
 uuid: ac285142-72c4-4481-acb5-85a80b833da2
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - system
@@ -10,7 +10,7 @@ _core:
   default_config_hash: eYL19CLDyinGTWYQfBD1DswWzglEotE_kHnHx3AxTXM
 id: hello_world_powered
 theme: hello_world
-region: sidebar_first
+region: header
 weight: 0
 provider: null
 plugin: system_powered_by_block

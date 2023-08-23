@@ -5,9 +5,9 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.weather_narrative.body
-    - field.field.node.weather_narrative.field_date
     - field.field.node.weather_narrative.field_forecaster_image
     - field.field.node.weather_narrative.field_weather_tags
+    - field.field.node.weather_narrative.field_wfo
     - node.type.weather_narrative
   module:
     - text
@@ -31,6 +31,6 @@ content:
     weight: 100
     region: content
 hidden:
-  field_date: true
   field_forecaster_image: true
   field_weather_tags: true
+  field_wfo: true

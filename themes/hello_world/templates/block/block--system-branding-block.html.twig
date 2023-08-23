@@ -14,17 +14,239 @@
  */
 #}
 {% block content %}
-  {% if site_logo %}
+<section
+  class="usa-banner"
+  aria-label="Official website of the United States government"
+>
+  <div class="usa-accordion">
+    <header class="usa-banner__header">
+      <div class="usa-banner__inner">
+        <div class="grid-col-auto">
+          <img
+            aria-hidden="true"
+            class="usa-banner__header-flag"
+            src="/themes/hello_world/assets/uswds/img/us_flag_small.png"
+            alt=""
+          />
+        </div>
+        <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+          <p class="usa-banner__header-text">
+            An official website of the United States government
+          </p>
+          <p class="usa-banner__header-action">Here’s how you know</p>
+        </div>
+        <button
+          type="button"
+          class="usa-accordion__button usa-banner__button"
+          aria-expanded="false"
+          aria-controls="gov-banner-default-default"
+        >
+          <span class="usa-banner__button-text">Here’s how you know</span>
+        </button>
+      </div>
+    </header>
+    <div
+      class="usa-banner__content usa-accordion__content"
+      id="gov-banner-default-default"
+    >
+      <div class="grid-row grid-gap-lg">
+        <div class="usa-banner__guidance tablet:grid-col-6">
+          <img
+            class="usa-banner__icon usa-media-block__img"
+            src="/themes/hello_world/assets/uswds/img/icon-dot-gov.svg"
+            role="img"
+            alt=""
+            aria-hidden="true"
+          />
+          <div class="usa-media-block__body">
+            <p>
+              <strong>Official websites use .gov</strong><br />A
+              <strong>.gov</strong> website belongs to an official
+              government organization in the United States.
+            </p>
+          </div>
+        </div>
+        <div class="usa-banner__guidance tablet:grid-col-6">
+          <img
+            class="usa-banner__icon usa-media-block__img"
+            src="/themes/hello_world/assets/uswds/img/icon-https.svg"
+            role="img"
+            alt=""
+            aria-hidden="true"
+          />
+          <div class="usa-media-block__body">
+            <p>
+              <strong>Secure .gov websites use HTTPS</strong><br />A
+              <strong>lock</strong> (
+              <span class="icon-lock"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="52"
+                  height="64"
+                  viewBox="0 0 52 64"
+                  class="usa-banner__lock-image"
+                  role="img"
+                  aria-labelledby="banner-lock-description-default"
+                  focusable="false"
+                >
+                  <title id="banner-lock-title-default">Lock</title>
+                  <desc id="banner-lock-description-default">
+                    Locked padlock icon
+                  </desc>
+                  <path
+                    fill="#000000"
+                    fill-rule="evenodd"
+                    d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z"
+                  />
+                </svg> </span
+              >) or <strong>https://</strong> means you’ve safely connected
+              to the .gov website. Share sensitive information only on
+              official, secure websites.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- USWDS alert component -->
+<section
+  class="usa-site-alert usa-site-alert--emergency position-relative z-bottom top-neg-2 overflow-hidden"
+  aria-label="Site alert,,"
+>
+  <div class="usa-alert">
+    <div class="usa-alert__body">
+      <h3 class="usa-alert__heading">Emergency alert message</h3>
+      <p class="usa-alert__text">
+        Additional context and followup information including
+        <a class="usa-link" href="javascript:void(0);">a link</a>.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- USWDS extended header -->
+<header class="usa-header usa-header--extended">
+  <!-- USWDS language pattern -->
+  <div class="usa-language-container grid-container usa-language--small">
+    <ul class="usa-language__primary usa-accordion">
+      <li class="usa-language__primary-item">
+        <button
+          class="usa-button usa-language__link"
+          role="button"
+          aria-expanded="false"
+          aria-controls="language-options"
+        >
+          Languages
+        </button>
+        <ul
+          id="language-options"
+          class="usa-language__submenu"
+          hidden="true"
+        >
+          <li class="usa-language__submenu-item">
+            <a href="javascript:void()" title="العربية | Arabic"
+              ><span lang="ar" xml:lang="ar"
+                ><strong>العربية</strong></span
+              ></a
+            >
+          </li>
+          <li class="usa-language__submenu-item">
+            <a
+              href="javascript:void()"
+              title="简体字 | Chinese (Simplified)"
+              ><span lang="zh" xml:lang="zh"
+                ><strong>简体字</strong></span
+              ></a
+            >
+          </li>
+          <li class="usa-language__submenu-item">
+            <a href="javascript:void()" title="English | English"
+              ><span lang="en" xml:lang="en"
+                ><strong>English</strong></span
+              ></a
+            >
+          </li>
+          <li class="usa-language__submenu-item">
+            <a href="javascript:void()" title="Español | Spanish"
+              ><span lang="es" xml:lang="es"
+                ><strong>Español</strong></span
+              ></a
+            >
+          </li>
+          <li class="usa-language__submenu-item">
+            <a href="javascript:void()" title="Français | French"
+              ><span lang="fr" xml:lang="fr"
+                ><strong>Français</strong></span
+              ></a
+            >
+          </li>
+          <li class="usa-language__submenu-item">
+            <a href="javascript:void()" title="Italiano | Italian"
+              ><span lang="it" xml:lang="it"
+                ><strong>Italiano</strong></span
+              ></a
+            >
+          </li>
+          <li class="usa-language__submenu-item">
+            <a href="javascript:void()" title="Pусский | Russian"
+              ><span lang="ru" xml:lang="ru"
+                ><strong>Pусский</strong></span
+              ></a
+            >
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <!-- Logo and Site title -->
+  <div class="usa-navbar padding-y-6">
+    <div class="display-flex">
+      {% if site_logo %}
     <a href="{{ path('<front>') }}" rel="home" class="site-logo">
-      <img src="{{ site_logo }}" alt="{{ 'Home'|t }}" />
+      <img src="{{ site_logo }}" class="usa-icon usa-icon--size-9"
+        aria-hidden="true"
+        focusable="false"
+        role="img"
+        alt="{{ 'Home'|t }}" />
     </a>
   {% endif %}
-  {% if site_name %}
-    <div class="site-name">
-      <a href="{{ path('<front>') }}" rel="home">{{ site_name }}</a>
+      <p class="usa-logo__text">
+        {% if site_name %}
+        <span class="font-body-lg">{{ site_name }}</span>
+        {% endif %}
+        {% if site_slogan %}
+        <span class="display-block"
+          >{{ site_slogan }}</span
+        >
+        {% endif %}
+      </p>
     </div>
-  {% endif %}
-  {% if site_slogan %}
-    <div class="site-slogan">{{ site_slogan }}</div>
-  {% endif %}
+  </div>
+  <!-- Site search -->
+  <nav aria-label="Primary navigation" class="usa-nav">
+    <div class="usa-nav__inner">
+      <div class="usa-nav__secondary">
+        <ul class="usa-nav__secondary-links"></ul>
+        <section aria-label="Search component">
+          <form class="usa-search usa-search--small" role="search">
+            <label class="usa-sr-only" for="search-field">Search</label>
+            <input
+              class="usa-input"
+              id="search-field"
+              type="search"
+              name="search"
+            />
+            <button class="usa-button" type="submit">
+              <img
+                src="/themes/hello_world/assets/uswds/img/usa-icons-bg/search--white.svg"
+                class="usa-search__submit-icon"
+                alt="Search"
+              />
+            </button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </nav>
+</header>
 {% endblock %}

@@ -14,3 +14,22 @@ import-config: ## Import the Drupal configuration from the config directory into
 
 install-site: ## Install a minimal Drupal site using the configuration in the config directory
 	docker compose run --rm install-site
+
+own-settings: ## Make the settings.php file writable
+	chmod -R 775 settings.php
+
+rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
+	docker compose stop drupal
+	docker compose rm drupal -f
+	docker compose build drupal
+	docker compose up -d
+
+shell: ## Get a shell inside the Drupal container
+	docker compose exec drupal bash
+
+zap: ## Delete the entire Docker environment and start from scratch.
+	docker compose stop
+	docker compose rm -f
+	docker compose build
+	docker compose up -d
+	

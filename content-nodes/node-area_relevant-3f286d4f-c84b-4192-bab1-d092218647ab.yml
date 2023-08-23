@@ -1,0 +1,22 @@
+site_uuid: a8610938-ba2d-4f34-a473-bac1d92b4311
+uuid: 3f286d4f-c84b-4192-bab1-d092218647ab
+entity_type: node
+bundle: area_relevant
+base_fields:
+  title: 'Content 2'
+  status: true
+  langcode: en
+  created: '1692408319'
+  author: admin@noaa.gov
+  url: null
+  revision_log_message: null
+  revision_uid: '1'
+custom_fields:
+  body:
+    -
+      value: '<p>Volutpat maecenas volutpat blandit aliquam etiam erat velit. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Nunc faucibus a pellentesque sit amet porttitor eget dolor morbi. Pharetra diam sit amet nisl suscipit adipiscing. Massa ultricies mi quis hendrerit. Nulla porttitor massa id neque aliquam. Egestas quis ipsum suspendisse ultrices gravida dictum fusce ut placerat. Eros in cursus turpis massa tincidunt dui ut. Magna fermentum iaculis eu non diam phasellus vestibulum lorem sed. Luctus venenatis lectus magna fringilla urna porttitor rhoncus. Et netus et malesuada fames ac turpis egestas sed. Tristique senectus et netus et malesuada fames ac. Etiam non quam lacus suspendisse faucibus interdum posuere. Laoreet non curabitur gravida arcu ac. Sed velit dignissim sodales ut eu sem integer vitae.</p><p><br>&nbsp;</p>'
+      summary: ''
+      format: basic_html
+  field_wfo:
+    -
+      value: 'Not Nashville'

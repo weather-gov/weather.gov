@@ -1,0 +1,19 @@
+uuid: 025d6357-8164-436e-8c50-17b2bdddeaf3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_office_address
+    - node.type.forecast_office
+id: node.forecast_office.field_office_address
+field_name: field_office_address
+entity_type: node
+bundle: forecast_office
+label: 'Office address'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

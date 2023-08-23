@@ -1,0 +1,22 @@
+site_uuid: a8610938-ba2d-4f34-a473-bac1d92b4311
+uuid: 9bc87b9c-e141-4735-80d0-607bdb15ce90
+entity_type: node
+bundle: area_relevant
+base_fields:
+  title: 'Content 4'
+  status: true
+  langcode: en
+  created: '1692408395'
+  author: admin@noaa.gov
+  url: null
+  revision_log_message: null
+  revision_uid: '1'
+custom_fields:
+  body:
+    -
+      value: '<p>Tristique senectus et netus et malesuada fames ac turpis egestas. Morbi enim nunc faucibus a pellentesque. Pellentesque elit eget gravida cum sociis natoque. Orci a scelerisque purus semper eget duis at tellus at. Viverra accumsan in nisl nisi scelerisque. Luctus accumsan tortor posuere ac ut consequat semper viverra nam. Pharetra et ultrices neque ornare aenean. Nec ullamcorper sit amet risus. Id consectetur purus ut faucibus pulvinar elementum. Sem fringilla ut morbi tincidunt augue interdum. Aliquet nec ullamcorper sit amet risus nullam eget felis. Ultrices neque ornare aenean euismod elementum.</p><p><br>&nbsp;</p>'
+      summary: ''
+      format: basic_html
+  field_wfo:
+    -
+      value: 'Not Nashville'

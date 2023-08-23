@@ -1,0 +1,19 @@
+site_uuid: a8610938-ba2d-4f34-a473-bac1d92b4311
+uuid: 57383d7e-edd0-4fbc-af85-1c3cf1b8822b
+entity_type: node
+bundle: page
+base_fields:
+  title: 'Welcome page'
+  status: true
+  langcode: en
+  created: '1692402399'
+  author: admin@noaa.gov
+  url: null
+  revision_log_message: null
+  revision_uid: '1'
+custom_fields:
+  body:
+    -
+      value: "<p>Please go to <code>/home</code> for today's forecast.</p>"
+      summary: ''
+      format: basic_html
