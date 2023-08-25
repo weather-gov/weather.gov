@@ -126,6 +126,5 @@ are reflected in the host folder.
    file to a reader-friendly one, such as `New Weather`.
 
 That's it! Now when you make changes to theme files, they will sync to the
-Docker instance. Whenever you make a change to a **.twig** template, make sure
-to **CLEAR ALL CACHES** from the
-[Performance](http://localhost:8080/admin/config/development/performance) page. _Configuration > Development > Performance_.
+Docker instance. Whenever you make a change to a .twig template, make sure
+to **rebuild the cache** using the `make clear-cache` command.
