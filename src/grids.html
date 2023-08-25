@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <style type="text/css">
+      #map {
+        height: 600px;
+        width: 900px;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""
+    ></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="text/javascript">
+      const nashville = [36.15, -86.77];
+
+      const metadata = fetch(
+        `https://api.weather.gov/points/${nashville[0]},${nashville[1]}`,
+      ).then((response) => response.json());
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        const map = L.map("map", { zoomControl: false }).setView(nashville, 12);
+
+        L.tileLayer(
+          "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
+          {
+            attribution:
+              "Map data &copy; OpenStreetMap contributors, Imagery &copy; Mapbox",
+            maxZoom: 18,
+            id: "mapbox/streets-v11",
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken:
+              "pk.eyJ1IjoibWd3YWxrZXIiLCJhIjoiY2tzdjYxcHI3MW11cDJva3R3YzRkYWUxYSJ9.sp1YDg1pBjrarmenwWpQDg",
+          },
+        ).addTo(map);
+
+        const {
+          properties: { cwa, forecastOffice },
+        } = await metadata;
+
+        const { approvedObservationStations } = await fetch(
+          forecastOffice,
+        ).then((r) => r.json());
+
+        approvedObservationStations.forEach(async (stationUrl) => {
+          const {
+            features: [
+              {
+                geometry: { coordinates },
+                properties: {
+                  temperature: { value: temperature },
+                },
+              },
+            ],
+          } = await fetch(`${stationUrl}/observations/?limit=1`).then((r) =>
+            r.json(),
+          );
+
+          new L.marker([coordinates[1], coordinates[0]])
+            .bindTooltip(`${Math.round(32 + (temperature * 9) / 5)}°F`, {
+              permanent: true,
+            })
+            .addTo(map);
+        });
+      });
+    </script>
+  </body>
+</html>
