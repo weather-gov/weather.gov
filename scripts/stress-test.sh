@@ -5,7 +5,7 @@
 #### Default Configuration
 
 CONCURRENCY=8
-REQUESTS=100
+REQUESTS=10
 ADDRESS="http://localhost:8080/"
 
 show_help() {
