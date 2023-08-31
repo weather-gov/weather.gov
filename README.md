@@ -128,3 +128,29 @@ are reflected in the host folder.
 That's it! Now when you make changes to theme files, they will sync to the
 Docker instance. Whenever you make a change to a .twig template, make sure
 to **rebuild the cache** using the `make clear-cache` command.
+
+## Installing Drupal core updates
+
+### Development
+When a new version of Drupal core is available, use Composer to intall the latest updates. See [Updating core](https://www.drupal.org/docs/updating-drupal/updating-drupal-core-via-composer#s-update-drupal-core-code) docs.
+
+Run `composer show drupal/core-recommended` to see the latest Drupal core version. Then run:  
+
+```
+composer update "drupal/core-*" --with-all-dependencies
+```
+
+This will update the required projects: `drupal/core-recommended drupal/core-composer-scaffold drupal/core-project-message`
+
+The update the db using drush 
+
+```
+make shell
+drush updatedb
+drush cache:rebuild
+```
+
+### Production
+1. Push the changed composer.json and composer.lock files to production.
+1. run `composer install --no-dev` on production, rather than composer update.
+1. run `drush updatedb` or visit update.php
