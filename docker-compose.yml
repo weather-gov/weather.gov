@@ -12,40 +12,44 @@ services:
       MYSQL_ROOT_PASSWORD: drupal
 
   drupal:
-    build: .
-    extends:
-      file: docker-compose.cms-config.yml
-      service: common
+    build: 
+      context: ./drupal
+      dockerfile: Dockerfile.dev
+    image: 18f-zscaler-drupal:10-apache
     ports:
       - 8080:80
+    networks:
+      - weather.gov
+    links:
+      - database:database
+    environment:
+      - DRUPAL_DB_NAME=weathergov
+      - DRUPAL_DB_USERNAME=drupal
+      - DRUPAL_DB_PASSWORD=drupal
+      - DRUPAL_DB_HOST=database
+      - DRUPAL_DB_PORT=3306
+    volumes:
+      # Map in our composer files. That way if we make changes inside the
+      # container, they'll be persisted out here in the real world.
+      - ./drupal/composer.json:/opt/drupal/composer.json
+      - ./drupal/composer.lock:/opt/drupal/composer.lock
 
-  clear-cache:
-    profiles: ["clear cache"]
-    extends:
-      file: docker-compose.cms-config.yml
-      service: common
-    entrypoint: bash -c "drush cache:rebuild"
+      # Map in our settings.php.
+      - ./drupal/settings.dev.php:/opt/drupal/web/sites/default/settings.php
 
-  export-config:
-    profiles: ["export config"]
-    extends:
-      file: docker-compose.cms-config.yml
-      service: common
-    entrypoint: bash -c "drush config:export -y"
+      # Map in our modules, themes, and site settings. But be sure not to map in
+      # any contrib directories, since those are 3rd-party installs from
+      # composer. If we map them in, we'll overwrite what's in the container,
+      # and we don't really want that.
+      - ./src/modules:/opt/drupal/web/modules
+      - ./src/themes:/opt/drupal/web/themes
+      - /opt/drupal/web/modules/contrib
 
-  import-config:
-    profiles: ["import config"]
-    extends:
-      file: docker-compose.cms-config.yml
-      service: common
-    entrypoint: bash -c "drush config:import -y"
-
-  install-site:
-    profiles: ["install site"]
-    extends:
-      file: docker-compose.cms-config.yml
-      service: common
-    entrypoint: bash -c "drush site:install minimal --existing-config --account-pass=root -y"
+      # Map in saved configuration. This is used to import configuration and it
+      # is also where configuration gets exported to. The target/container
+      # directory needs to match the value of $settings['config_sync_directory']
+      # in settings.php
+      - ./drupal/config:/config
 
 networks:
   weather.gov:

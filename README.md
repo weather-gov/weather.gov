@@ -94,13 +94,12 @@ Docker does all the heavy lifting for set up and configurations. It's a cinch to
    [Docker plugin](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
    in VSCode, then right click on the docker-compose.yml and select **Compose
    Up**.
-3. Install our site configuration by running `make install-site` or
-   `docker compose run --rm install-site`.
+3. Install our site configuration by running `make install-site`.
    > [!IMPORTANT]  
    > VSCode offers a way to run these kinds of one-off Docker Compose tools;
    > however, it does not work correctly for this particular service. Dunno why
    > not.
-4. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
+4. ---> The default page is not correct. Update this!!! Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
    should see the default Drupal 10 installation page. From here, you can log in as
    the site administrator with username `admin` and password `root`.
 5. If for some reason you're not automatically logged in, browse to [http://localhost:8080/user/login](http://localhost:8080/user/login).
@@ -132,9 +131,10 @@ to **rebuild the cache** using the `make clear-cache` command.
 ## Installing Drupal core updates
 
 ### Development
+
 When a new version of Drupal core is available, use Composer to intall the latest updates. See [Updating core](https://www.drupal.org/docs/updating-drupal/updating-drupal-core-via-composer#s-update-drupal-core-code) docs.
 
-Run `composer show drupal/core-recommended` to see the latest Drupal core version. Then run:  
+Run `composer show drupal/core-recommended` to see the latest Drupal core version. Then run:
 
 ```
 composer update "drupal/core-*" --with-all-dependencies
@@ -142,7 +142,7 @@ composer update "drupal/core-*" --with-all-dependencies
 
 This will update the required projects: `drupal/core-recommended drupal/core-composer-scaffold drupal/core-project-message`
 
-The update the db using drush 
+The update the db using drush
 
 ```
 make shell
@@ -151,6 +151,7 @@ drush cache:rebuild
 ```
 
 ### Production
+
 1. Push the changed composer.json and composer.lock files to production.
 1. run `composer install --no-dev` on production, rather than composer update.
 1. run `drush updatedb` or visit update.php

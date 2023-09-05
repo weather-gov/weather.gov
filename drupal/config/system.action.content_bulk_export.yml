@@ -11,5 +11,5 @@ label: 'Export content'
 type: node
 plugin: content_bulk_export
 configuration:
-  assets: true
-  translation: true
+  assets: '1'
+  translation: '1'

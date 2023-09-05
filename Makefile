@@ -1,22 +1,23 @@
 .PHONY: help clear-cache export-config import-config install-site
 
-help: ## Show this help
+help:
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-clear-cache: ## Clear and rebuild all Drupal caches
-	docker compose run --rm clear-cache
+cc: clear-cache
+clear-cache: ## Clear and rebuild all Drupal caches (alias cc)
+	docker compose exec drupal drush cache:rebuild
 
 export-config: ## Export your current Drupal site's configuration to the config directory
-	docker compose run --rm export-config
+	docker compose exec drupal drush config:export -y
 
 import-config: ## Import the Drupal configuration from the config directory into your site
-	docker compose run --rm import-config
+	docker compose exec drupal drush config:import -y
 
 install-site: ## Install a minimal Drupal site using the configuration in the config directory
-	docker compose run --rm install-site
+	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
 
 own-settings: ## Make the settings.php file writable
-	chmod -R 775 settings.php
+	chmod -R 775 drupal/settings.dev.php
 
 rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose stop drupal
