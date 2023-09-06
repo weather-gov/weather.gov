@@ -32,7 +32,7 @@ assignees: ''
 ```[tasklist]
 ### Review: design, function and flow:
 - [ ] POs - org alignment and vision review
-- [ ] Eng - feasibility review
+- [ ] Eng - feasibility and right-size
 - [ ] UX - what and how to test
 ```
 
