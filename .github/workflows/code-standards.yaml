@@ -1,0 +1,13 @@
+name: code standards
+on: [pull_request]
+
+jobs:
+  php-lint:
+    name: Drupal code standards lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: run phpcs
+        uses: guix77/phpcs-drupal-action@v1.0.1

@@ -2,7 +2,6 @@ name: Hello World
 type: theme
 'base theme': stable9
 starterkit: true
-version: VERSION
 libraries:
   - hello_world/base
   - hello_world/messages
