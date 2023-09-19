@@ -17,7 +17,8 @@ install-site: ## Install a minimal Drupal site using the configuration in the co
 	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
 
 own-settings: ## Make the settings.php file writable
-	chmod -R 775 drupal/settings.dev.php
+	chmod -R 775 web/sites/default/settings.dev.php
+	chmod -R 775 web/sites/default/settings.prod.php
 
 rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose stop drupal
