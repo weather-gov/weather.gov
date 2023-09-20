@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="drupal">
+  <description>PHP CodeSniffer configuration for Drupal coding standards.</description>
+  <file>./web/modules</file>
+  <file>./web/themes</file>
+  <exclude-pattern>*/themes/*/assets/*</exclude-pattern>
+  <exclude-pattern>*/contrib/*</exclude-pattern>
+  <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,md,yml" />
+  <config name="drupal_core_version" value="10" />
+  <rule ref="Drupal" />
+</ruleset>

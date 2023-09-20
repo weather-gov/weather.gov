@@ -10,11 +10,17 @@ clear-cache: ## Clear and rebuild all Drupal caches (alias cc)
 export-config: ## Export your current Drupal site's configuration to the config directory
 	docker compose exec drupal drush config:export -y
 
+format: ## Format your code according to the Drupal PHP language standard
+	docker compose exec drupal phpcbf
+
 import-config: ## Import the Drupal configuration from the config directory into your site
 	docker compose exec drupal drush config:import -y
 
 install-site: ## Install a minimal Drupal site using the configuration in the config directory
 	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
+
+lint: ## Run PHP_CodeSniffer on our custom modules and themes
+	docker compose exec drupal phpcs
 
 own-settings: ## Make the settings.php file writable
 	chmod -R 775 web/sites/default/settings.dev.php

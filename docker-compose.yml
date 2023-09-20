@@ -52,5 +52,9 @@ services:
       # in settings.php
       - ./web/config:/opt/drupal/web/config
 
+      # And finally map in our phpcs file, so we can run php-codesniffer inside
+      # the container.
+      - ./phpcs.xml:/opt/drupal/phpcs.xml
+
 networks:
   weather.gov:
