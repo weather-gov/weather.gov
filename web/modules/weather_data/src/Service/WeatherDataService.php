@@ -34,21 +34,26 @@ class WeatherDataService {
     $obsResponse = $client->get($observationStation->id . "/observations?limit=1");
     $obs = json_decode($obsResponse->getBody())->features[0]->properties;
 
+    $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
+
     return [
       'conditions' => [
         'long' => $obs->textDescription,
         'short' => $obs->textDescription,
       ],
+      // C to F.
       'feels_like' => round(32 + (9 * $obs->heatIndex->value / 5)),
       'humidity' => round($obs->relativeHumidity->value),
       'icon' => 'showers_scattered_rain.svg',
       'location' => $location,
+      // C to F.
       'temperature' => round(32 + (9 * $obs->temperature->value / 5)),
       'timestamp' => [
-        'formatted' => date("l g:i A T"),
-        'utc' => time(),
+        'formatted' => $timestamp->format("l g:i A T"),
+        'utc' => (int) $timestamp->format("U"),
       ],
       'wind' => [
+        // Kph to mph.
         'speed' => round($obs->windSpeed->value * 0.6213712),
         'direction' => $obs->windDirection->value,
       ],
