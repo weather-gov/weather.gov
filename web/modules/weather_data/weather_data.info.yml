@@ -1,0 +1,6 @@
+name: Weather data
+type: module
+description: A service to abstract fetching weather data
+package: weather.gov
+
+core_version_requirement: ^10
