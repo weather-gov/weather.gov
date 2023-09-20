@@ -1,0 +1,22 @@
+name: Weather.gov
+type: theme
+'base theme': stable9
+starterkit: true
+version: VERSION
+libraries:
+  - new_weather_theme/base
+  - new_weather_theme/messages
+  - core/normalize
+libraries-extend:
+  user/drupal.user:
+    - new_weather_theme/user
+  core/drupal.dropbutton:
+    - new_weather_theme/dropbutton
+  core/drupal.dialog:
+    - new_weather_theme/dialog
+  file/drupal.file:
+    - new_weather_theme/file
+  core/drupal.progress:
+    - new_weather_theme/progress
+core_version_requirement: ^10
+generator: 'starterkit_theme:10.1.2'
