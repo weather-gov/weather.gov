@@ -68,13 +68,16 @@ The acceptable standards for this element are:
 
 Users will be able to use the product easily with temporarily or permanent
 disabilities. Section 508 provides minimum standards, and Web Content
-Accessibility Guidelines 2.1 AA standards supply best practices beyond those.
+Accessibility Guidelines (WCAG) 2.1 AA standards supply best practices beyond
+those.
 
 The acceptable standards for this element are:
 
 - Accessibility is ensured throughout development
-- Accessibility of machine-readable elements is assessed automatically, with
-  results available to all members of the team
+- Automated accessibility scanning tools based on WCAG 2.1 AA produce zero
+  errors and any permitted warnings are documented
+- At least one team member manually tests the accessibility of each change,
+  including keyboard and screen reader navigation
 
 ### 4. Deployment is simple
 
