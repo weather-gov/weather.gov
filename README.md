@@ -31,7 +31,7 @@ Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect the
 - Internal - NWS Meteorologists
 - External - The Public and Emergency Managers
 
-## Roadmap
+## Strategy and plan
 
 **Strategy for prioritization**
 
@@ -41,12 +41,15 @@ Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect the
 
 | Phase               | Priorities                                                                                                                                                                                                                                        |
 | :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Now - Prototype** | <ul><li>Partners / gen public view weather basics</li><li>CMS requirements and viable options</li><li>Critical data integrations</li><li>BONUS: Critical third party integrations</li><li>User validation</li></ul>                               |
-| Next - Build MVP    | <ul><li>A “happy path” for NWS forecasters and public users</li><li>1 location</li><li>Core architecture - CMS, Admin experience, User experience, data integrations, CI/CD pipeline</li><li>Initial governance</li><li>User validation</li></ul> |
-| Later - Expand      | <ul><li>“Unhappy paths” for forecasters and public users</li><li>Multiple locations, geographies, or specialized services</li><li>More comprehensive governance</li><li>User validation</li></ul>                                                 |
-| Beyond              | <ul><li>Transition and migration</li><li>Continuous improvement</li></ul>                                                                                                                                                                         |
+| Done - Prototype | <ul><li>Partners / gen public view weather basics</li><li>CMS requirements and viable options</li><li>Critical data integrations</li><li>BONUS: Critical third party integrations</li><li>User validation</li></ul>                               |
+| **Now - Build MVP**    | <ul><li>A “happy path” for NWS forecasters and public users</li><li>Core needs across locations</li><li>Core architecture - CMS, Admin experience, User experience, data integrations, CI/CD pipeline</li><li>Initial governance</li><li>User validation</li></ul> |
+| Next - Expand      | <ul><li>“Unhappy paths” for forecasters and public users</li><li>Multiple locations, geographies, or specialized services</li><li>More comprehensive governance</li><li>User validation</li></ul>                                                 |
+| Later              | <ul><li>Transition and migration</li><li>Continuous improvement</li></ul>|
 
-![happy path journey map](/docs/img/happy-path.png)
+
+**Initial roadmap can be viewed [here](/doc/product/mvp-roadmap.md)**
+
+![happy path journey map](/docs/img/happy-path-v2.png)
 
 ## How will we ultimately succeed or fail
 
