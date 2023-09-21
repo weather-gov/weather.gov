@@ -16,11 +16,33 @@ The roadmap below outlines our Now, Next, and Later priorities for Weather.gov 2
 
 ### Our focus
 
-The features below scope out what we believe are the core features needed to share forecasts and conditions for regular and hazardous weather in a way that anyone can find, understand, and use to take action. This is the first step of getting alignment on MVP. 
+**The features below scope out what we believe are the core features** needed to share forecasts and conditions for regular and hazardous weather in a way that anyone can find, understand, and use to take action. This is the first step of getting alignment on MVP. 
 
 A reminder that our focus for MVP will be on simplified weather use cases – postponing fire, marine, aviation, climate, space, water, and tropical for now. 
 
-A new goal for MVP is to build something that all WFOs could use, not just Nashville. Nashville will be our partner for testing what we build (from a data and people perspective) however we think it’s realistic that we could meet the basic needs of all locations (and WFOs). Each office will have unique challenges and needs, so we will note and prioritize them as we test this across offices.
+**A new goal for MVP is to build something that all WFOs could use, not just Nashville.** Nashville will be our partner for testing what we build (from a data and people perspective) however we think it’s realistic that we could meet the basic needs of all locations (and WFOs). Each office will have unique challenges and needs, so we will note and prioritize them as we test this across offices.
+
+### Risks
+
+As we transition from prototyping and begin building MVP, we have greater confidence in our core architecture and have identified some of the fundamental product challenges we will have to resolve, including:
+
+- Integration with disparate applications hosted across the NWS network and data latency 
+- A cloud-based architecture and the WOC are both fairly new for NWS
+- CI/CD and agile development are new methods for delivery
+- The complexity of hazards, how they’re communicated, and the impact on people
+- New tools and processes have the potential to create confusion for the public and more work for WFOs
+
+### Timing and rollout
+
+**May 2024 is a milestone, not a deadline or launch date.** Waiting till May to show you and our users the site will create unnecessary risk and inevitable failure. The best method for delivery is continuous and gradual, so we intend to design, develop, and deploy these core features from now until May 2024, and beyond.
+
+As we build, we will inevitably uncover functionality we couldn’t foresee and have to resolve the challenges listed above. The only way to manage this successfully is to keep communication lines open as we prioritize and deliver.
+
+**The MVP for weather.gov 2.0 won’t fulfill everyone’s needs in May 2024.** So rollout will have to be done strategically to get user feedback while managing risk (integrity and effort). There are strategies for doing this, but we should focus on building the site now and then determine how and when to roll it out.
+
+## Now - MVP
+
+![happy path journey map](/docs/img/happy-path-v2.png)
 
 **For MVP**, we will focus on designing and building the following:
 - **🟢 Ready:** As a member of the public or a partner (external user), weather.gov MVP must answer the most common questions for a hazard or common weather.
@@ -88,7 +110,5 @@ For the future we will also research and scope the following:
 | As a weather researcher, I have unique needs the MVP won’t satisfy | Need to research further |
 | As a WFO, there are unique pages that we believe are valuable to our community | Need research, inventory, and analysis |
 | As an external user, there are unique pages or products that are important to me | Need research, inventory, and analysis |
-
-![happy path journey map](/docs/img/happy-path.png)
 
 
