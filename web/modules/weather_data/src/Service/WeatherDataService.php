@@ -150,7 +150,6 @@ class WeatherDataService {
       // C to F.
       'feels_like' => round(32 + (9 * $obs->heatIndex->value / 5)),
       'humidity' => round($obs->relativeHumidity->value),
-      // 'showers_scattered_rain.svg',
       'icon' => get_noaa_icon($obs->icon) ,
       'location' => $location,
       // C to F.
