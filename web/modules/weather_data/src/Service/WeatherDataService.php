@@ -2,6 +2,8 @@
 
 namespace Drupal\weather_data\Service;
 
+use Drupal\httpClient;
+
 /**
  * A service class for fetching weather data.
  */
@@ -19,7 +21,7 @@ class WeatherDataService {
     $lat = 44.98;
     $lon = -93.27;
 
-    $client = \Drupal::httpClient();
+    $client = httpClient();
 
     $locationResponse = $client->get("https://api.weather.gov/points/$lat,$lon");
     $locationMetadata = json_decode($locationResponse->getBody());

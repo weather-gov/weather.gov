@@ -1,4 +1,5 @@
 name: Hello World
+description: 'blah blah'
 type: theme
 'base theme': stable9
 starterkit: true
