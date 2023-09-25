@@ -87,10 +87,10 @@ function get_noaa_icon($apiIconPath) {
   ];
 
   /* The icon path from the API is of the form:
-     https://api.weather.gov/icons/land/day/skc
+  https://api.weather.gov/icons/land/day/skc
 
-     The last two path segments are the ones we need.
-  */
+  The last two path segments are the ones we need.
+   */
   $url = parse_url($apiIconPath);
   $apiIconName = implode("/", array_slice(explode("/", $url["path"]), -2));
 
