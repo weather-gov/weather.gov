@@ -2,12 +2,25 @@
 
 namespace Drupal\weather_data\Service;
 
-use Drupal\httpClient;
+use GuzzleHttp\ClientInterface;
 
 /**
  * A service class for fetching weather data.
  */
 class WeatherDataService {
+  /**
+   * HTTP client.
+   *
+   * @var \GuzzleHttp\ClientInterface client
+   */
+  private $client;
+
+  /**
+   * Constructor.
+   */
+  public function __construct(ClientInterface $httpClient) {
+    $this->client = $httpClient;
+  }
 
   /**
    * Get the current weather conditions at a location.
@@ -21,19 +34,17 @@ class WeatherDataService {
     $lat = 44.98;
     $lon = -93.27;
 
-    $client = httpClient();
-
-    $locationResponse = $client->get("https://api.weather.gov/points/$lat,$lon");
+    $locationResponse = $this->client->get("https://api.weather.gov/points/$lat,$lon");
     $locationMetadata = json_decode($locationResponse->getBody());
     $location = $locationMetadata->properties->relativeLocation->properties->city;
 
     $observationStations = $locationMetadata->properties->observationStations;
-    $obsStationsResponse = $client->get($observationStations);
+    $obsStationsResponse = $this->client->get($observationStations);
     $obsStationsMetadata = json_decode($obsStationsResponse->getBody());
 
     $observationStation = $obsStationsMetadata->features[0];
 
-    $obsResponse = $client->get($observationStation->id . "/observations?limit=1");
+    $obsResponse = $this->client->get($observationStation->id . "/observations?limit=1");
     $obs = json_decode($obsResponse->getBody())->features[0]->properties;
 
     $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
