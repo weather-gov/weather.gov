@@ -5,16 +5,38 @@ namespace Drupal\weather_data\Service;
 use GuzzleHttp\ClientInterface;
 
 /**
- * Converts an api.weather.gov icon path to a NOAA weather icon filename.
+ * Gets a unique key identifying the conditions described in an observation.
  *
- * @param string $apiIconPath
- *   The path returned by api.weather.gov.
+ * @param object $observation
+ *   An observation from api.weather.gov.
+ *
+ * @return string
+ *   A key uniquely identifying the current conditions.
+ */
+function get_api_condition_key($observation) {
+  /* The icon path from the API is of the form:
+  https://api.weather.gov/icons/land/day/skc
+
+  The last two path segments are the ones we need to identify the current
+  conditions.
+   */
+
+  $url = parse_url($observation->icon);
+  $apiConditionKey = implode("/", array_slice(explode("/", $url["path"]), -2));
+  return $apiConditionKey;
+}
+
+/**
+ * Gets a NOAA weather icon filename from a current observation.
+ *
+ * @param object $observation
+ *   An observation from api.weather.gov.
  *
  * @return string
  *   The filename for the associated NOAA weather icon.
  */
-function get_noaa_icon($apiIconPath) {
-  $apiIconToNoaaMapping = [
+function get_noaa_icon($observation) {
+  $apiKeyToNoaaIconMapping = [
     "day/bkn" => "mostly_cloudy-day.svg",
     "night/bkn" => "mostly_cloudy-night.svg",
     "day/blizzard" => "blizzard_winter_storm.svg",
@@ -86,15 +108,94 @@ function get_noaa_icon($apiIconPath) {
     "night/wind_skc" => "windy.svg",
   ];
 
-  /* The icon path from the API is of the form:
-  https://api.weather.gov/icons/land/day/skc
+  $conditionKey = get_api_condition_key($observation);
+  return $apiIconToNoaaMapping[$conditionKey];
+}
 
-  The last two path segments are the ones we need.
-   */
-  $url = parse_url($apiIconPath);
-  $apiIconName = implode("/", array_slice(explode("/", $url["path"]), -2));
+/**
+ * Gets a short weather description from a current observation.
+ *
+ * @param object $observation
+ *   An observation from api.weather.gov.
+ *
+ * @return string
+ *   The short description of the weather described in the observation.
+ */
+function get_short_description($observation) {
+  $apiKeyToConditionMapping = [
+    "day/bkn" => "Mostly cloudy",
+    "night/bkn" => "Mostly cloudy",
+    "day/blizzard" => "Blizzard",
+    "night/blizzard" => "Blizzard",
+    "day/cold" => "Cold",
+    "night/cold" => "Cold",
+    "day/dust" => "Dust",
+    "night/dust" => "Dust",
+    "day/few" => "A few clouds",
+    "night/few" => "A few clouds",
+    "day/fog" => "Fog/mist",
+    "night/fog" => "Fog/mist",
+    "day/fzra" => "Freezing rain",
+    "night/fzra" => "Freezing rain",
+    "day/haze" => "Haze",
+    "night/haze" => "Haze",
+    "day/hot" => "Hot",
+    "night/hot" => "Hot",
+    "day/hurricane" => "Hurricane conditions",
+    "night/hurricane" => "Hurricane conditions",
+    "no data" => "No data",
+    "day/ovc" => "Overcast",
+    "night/ovc" => "Overcast",
+    "day/rain" => "Rain",
+    "day/rain_fzra" => "Rain/freezing rain",
+    "night/rain_fzra" => "Rain/freezing rain",
+    "night/rain" => "Rain",
+    "day/rain_showers" => "Rain showers (high cloud cover)",
+    "day/rain_showers_hi" => "Rain showers (low cloud cover)",
+    "night/rain_showers_hi" => "Rain showers (low cloud cover)",
+    "night/rain_showers" => "Rain showers (high cloud cover)",
+    "day/rain_sleet" => "Rain/sleet",
+    "night/rain_sleet" => "Rain/sleet",
+    "day/rain_snow" => "Rain/snow",
+    "night/rain_snow" => "Rain/sleet",
+    "day/sct" => "Partly cloudy",
+    "night/sct" => "Partly cloudy",
+    "day/skc" => "Fair/clear",
+    "night/skc" => "Fair/clear",
+    "day/sleet" => "Sleet",
+    "night/sleet" => "Sleet",
+    "day/smoke" => "Smoke",
+    "night/smoke" => "Smoke",
+    "day/snow" => "Snow",
+    "day/snow_fzra" => "Freezing rain/snow",
+    "night/snow_fzra" => "Freezing rain/snow",
+    "night/snow" => "Snow",
+    "day/snow_sleet" => "Snow/sleet",
+    "night/snow_sleet" => "Snow/sleet",
+    "day/tornado" => "Tornado",
+    "night/tornado" => "Tornado",
+    "day/tropical_storm" => "Tropical storm conditions",
+    "night/tropical_storm" => "Tropical storm conditions",
+    "day/tsra" => "Thunderstorm (high cloud cover)",
+    "day/tsra_hi" => "Thunderstorm (low cloud cover)",
+    "night/tsra_hi" => "Thunderstorm (low cloud cover)",
+    "night/tsra" => "Thunderstorm (high cloud cover)",
+    "day/tsra_sct" => "Thunderstorm (medium cloud cover)",
+    "night/tsra_sct" => "Thunderstorm (medium cloud cover)",
+    "day/wind_bkn" => "Mostly cloudy and windy",
+    "night/wind_bkn" => "Mostly cloudy and windy",
+    "day/wind_few" => "A few clouds and windy",
+    "night/wind_few" => "A few clouds and windy",
+    "day/wind_ovc" => "Overcast and windy",
+    "night/wind_ovc" => "Overcast and windy",
+    "day/wind_sct" => "Partly cloudy and windy",
+    "night/wind_sct" => "Partly cloudy and windy",
+    "day/wind_skc" => "Fair/clear and windy",
+    "night/wind_skc" => "Fair/clear and windy",
+  ];
 
-  return $apiIconToNoaaMapping[$apiIconName];
+  $key = get_api_condition_key($observation);
+  return $apiKeyToConditionMapping[$key];
 }
 
 /**
@@ -231,15 +332,17 @@ class WeatherDataService {
 
     $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
 
+    $description = get_short_description($obs);
+
     return [
       'conditions' => [
-        'long' => $obs->textDescription,
-        'short' => $obs->textDescription,
+        'long' => $description,
+        'short' => $description,
       ],
       // C to F.
       'feels_like' => round(32 + (9 * $obs->heatIndex->value / 5)),
       'humidity' => round($obs->relativeHumidity->value),
-      'icon' => get_noaa_icon($obs->icon) ,
+      'icon' => get_noaa_icon($obs) ,
       'location' => $location,
       // C to F.
       'temperature' => round(32 + (9 * $obs->temperature->value / 5)),
