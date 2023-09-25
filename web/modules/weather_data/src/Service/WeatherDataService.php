@@ -142,13 +142,22 @@ class WeatherDataService {
 
     $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
 
+    $feelsLike = $obs->heatIndex->value;
+    if ($feelsLike == NULL) {
+      $feelsLike = $obs->windChill->value;
+    }
+    if ($feelsLike == NULL) {
+      $feelsLike = $obs->temperature->value;
+    }
+    $feelsLike = 32 + (9 * $feelsLike / 5);
+
     return [
       'conditions' => [
         'long' => $obs->textDescription,
         'short' => $obs->textDescription,
       ],
       // C to F.
-      'feels_like' => round(32 + (9 * $obs->heatIndex->value / 5)),
+      'feels_like' => round($feelsLike),
       'humidity' => round($obs->relativeHumidity->value),
       'icon' => get_noaa_icon($obs->icon) ,
       'location' => $location,
