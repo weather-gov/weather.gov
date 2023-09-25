@@ -1,6 +1,0 @@
-content_api.get:
-  path: 'content/api/testing'
-  defaults: { _controller: '\Drupal\content_api\controllers\ContentAPI::get' }
-  methods: [GET]
-  requirements:
-    _access: 'TRUE'
