@@ -42,7 +42,7 @@
  * @see html.html.twig
  */
 #}
-<div class="layout-container bg-base-lightest">
+<div class="layout-container">
   <section
     class="usa-banner"
     aria-label="Official website of the United States government"
@@ -136,9 +136,9 @@
       </div>
     </div>
   </section>
-  <hr/>
+
   <header role="banner">
-    <div class="grid-container bg-white">
+    <div class="grid-container">
       {% if page.header %}
       <div class="grid-row">
         {{ page.header }}
@@ -171,7 +171,7 @@
       {% endif %}
     </div>
   </header>
-  <hr/>
+
 
   <main role="main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
@@ -181,7 +181,7 @@
       </div>
     </div>
   </main>
-  <hr/>
+
 {% if page.footer %}
   <footer role="contentinfo">
     <div class="usa-identifier">
@@ -263,15 +263,12 @@
       >
         <div class="usa-identifier__container">
           <div class="usa-identifier__usagov-description">
-            <code>Agency identification links</code>
+           Looking for U.S. government information and services?
           </div>
+          <a href="https://www.usa.gov/" class="usa-link">Visit USA.gov</a>
         </div>
       </section>
     </div>
-    <div class="grid-container">
-      <div class="grid-row">
-        <code>Secondary footer</code>
-      </div>
   </footer>
 {% endif %}
 
