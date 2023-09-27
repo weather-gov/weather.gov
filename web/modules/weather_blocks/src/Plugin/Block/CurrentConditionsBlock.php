@@ -4,6 +4,7 @@ namespace Drupal\weather_blocks\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\weather_data\Service\WeatherDataService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,14 +21,14 @@ class CurrentConditionsBlock extends BlockBase implements ContainerFactoryPlugin
   /**
    * A service for fetching weather data.
    *
-   * @var WeatherDataService weatherData
+   * @var \Drupal\weather_data\Service\WeatherDataService weatherData
    */
   private $weatherData;
 
   /**
    * Constructor for dependency injection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, $weatherDataService) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, WeatherDataService $weatherDataService) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->weatherData = $weatherDataService;
   }
