@@ -109,7 +109,7 @@ function get_noaa_icon($observation) {
   ];
 
   $conditionKey = get_api_condition_key($observation);
-  return $apiIconToNoaaMapping[$conditionKey];
+  return $apiKeyToNoaaIconMapping[$conditionKey];
 }
 
 /**
