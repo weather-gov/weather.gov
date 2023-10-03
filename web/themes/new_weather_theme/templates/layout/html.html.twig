@@ -38,9 +38,9 @@
     <title>{{ head_title|safe_join(' | ') }}</title>
     <css-placeholder token="{{ placeholder_token }}">
     <js-placeholder token="{{ placeholder_token }}">
-    <link rel="stylesheet" href="/{{ directory }}/assets/uswds/css/styles.css" />
-    <link rel="icon" type="image/png" href="/{{ directory }}/assets/uswds/img/favicons/favicon.ico" />
-    <script type="text/javascript" async="" src="/{{ directory }}/assets/uswds/js/uswds-init.min.js"></script>
+    <link rel="stylesheet" href="/{{ directory }}/assets/css/styles.css" />
+    <link rel="icon" type="image/png" href="/{{ directory }}/assets/images/weather/favicons/noaa-favicon.ico" />
+    <script type="text/javascript" async="" src="/{{ directory }}/assets/js/uswds-init.min.js"></script>
   </head>
   <body{{ attributes.addClass(body_classes) }}>
     {#
@@ -54,6 +54,6 @@
     {{ page }}
     {{ page_bottom }}
     <js-bottom-placeholder token="{{ placeholder_token }}">
-     <script type="text/javascript" async="" src="/{{ directory }}/assets/uswds/js/uswds.min.js"></script>
+     <script type="text/javascript" async="" src="/{{ directory }}/assets/js/uswds.min.js"></script>
   </body>
 </html>

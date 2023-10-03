@@ -1,0 +1,33 @@
+name: Hello World
+type: theme
+'base theme': stable9
+starterkit: true
+libraries:
+  - hello_world/base
+  - hello_world/messages
+  - core/normalize
+libraries-extend:
+  user/drupal.user:
+    - hello_world/user
+  core/drupal.dropbutton:
+    - hello_world/dropbutton
+  core/drupal.dialog:
+    - hello_world/dialog
+  file/drupal.file:
+    - hello_world/file
+  core/drupal.progress:
+    - hello_world/progress
+core_version_requirement: ^10
+generator: 'starterkit_theme:10.0.9'
+regions:
+  header: 'Header'
+  primary_menu: 'Primary menu'
+  secondary_menu: 'Secondary menu'
+  help: 'Help'
+  content: 'Content'
+  footer: 'Footer'
+  breadcrumb: 'Breadcrumb'
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+  two_col_first: 'First Column'
+  two_col_second: 'Second Column'
