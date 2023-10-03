@@ -1,8 +1,0 @@
-_core:
-  default_config_hash: F--1EKAki5zF_jdKTc4ZLmgN89WJ2SDrMOkwbqj06-Y
-allowed_entity_types:
-  block_content: {  }
-  menu_link_content: {  }
-  node: {  }
-  taxonomy_term: {  }
-site_uuid_check: true
