@@ -5,6 +5,7 @@
   <file>./web/themes</file>
   <exclude-pattern>*/themes/*/assets/*</exclude-pattern>
   <exclude-pattern>*/contrib/*</exclude-pattern>
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
   <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,md,yml" />
   <config name="drupal_core_version" value="10" />
   <rule ref="Drupal" />
