@@ -9,7 +9,7 @@ dependencies:
 id: new_weather_theme_sitebranding
 theme: new_weather_theme
 region: header
-weight: 0
+weight: -2
 provider: null
 plugin: system_branding_block
 settings:

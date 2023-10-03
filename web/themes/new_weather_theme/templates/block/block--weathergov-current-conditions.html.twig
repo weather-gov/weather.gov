@@ -1,0 +1,105 @@
+<weather-gov-current-conditions style="display:block;max-width: 50%;">
+  <style type="text/css">
+    .weather-gov-current-conditions 
+    {
+      & .grid-row p {
+        margin: 0;
+      }
+
+      & .timestamp {
+        color: #7F7F7F;
+        font-size: 0.7rem;
+      }
+
+      & .icon svg {
+        height: 64px;
+
+        & path.st0 {
+          fill: black;
+        }
+      }
+
+      & .temperature {
+        font-size: 3rem;
+        & .unit {
+          font-size: 1.5rem;
+        }
+      }
+
+      & .feels-like {
+        font-size: 1.5rem;
+        & .unit {
+          font-size: 0.75rem;
+        }
+
+        & br {
+          line-height: 1rem;
+        }
+      }
+
+      & div sub {
+        font-size: 0.75rem;
+        color: #7f7f7f;
+      }
+
+      & .item {
+        & svg {
+          height: 16px;
+          width: 16px;
+        }
+      }
+    }
+  </style>
+
+  <section class="weather-gov-current-conditions">
+    <h1>{{ content["#data"]["location"] }}</h1>
+
+    <p class="timestamp">
+      Weather as of
+      <weather-timestamp data-utc="{{ content["#data"]["timestamp"]["utc"] }}">
+        {{ content["#data"]["timestamp"]["formatted"] }}
+      </weather-timestamp>
+    </p>
+    
+    <div class="grid-container">
+      <div class="grid-row">
+        <div class="grid-col-2 icon">
+          {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content['#data']["icon"] )}}
+        </div>
+        <div class="grid-col-5">
+          <p class="temperature">
+            {{ content["#data"]["temperature"] }}
+            <span class="unit">&deg;F</span>
+          </p>
+          <p class="conditions-narrative short">
+            {{ content["#data"]["conditions"]["short"]}}
+          </p>
+        </div>
+
+        <div class="grid-col-5">
+          <p class="feels-like">
+            {{ content["#data"]["feels_like" ]}}
+            <span class="unit">&deg;F</span>
+          </p>
+          <p><sub>Feels like</sub></p>
+          <p class="item">
+            {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }} Humidity: {{ content["#data"]["humidity"] }}%
+          </p>
+          <p class="item">
+            {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}Wind: {{ content["#data"]["wind"]["speed"] }} mph {{ content["#data"]["wind"]["direction"] }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <p class="conditions-narrative long">
+      The weather in <strong>{{ content["#data"]["location"] }}</strong> is
+      <strong>{{ content["#data"]["conditions"]["long"] | lower }}</strong>.
+      Temperature is <strong>{{ content["#data"]["temperature"] }}
+      &deg;F</strong>. Humidity is <strong>
+      {{ content["#data"]["humidity"] }}%</strong> with
+      <strong>{{ content["#data"]["wind"]["speed"] }}mph winds</strong> from
+      the {{ content["#data"]["wind"]["direction"] }}.
+    </p>
+  </section>
+</weather-gov-current-conditions>
