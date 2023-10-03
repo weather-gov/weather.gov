@@ -1,0 +1,22 @@
+uuid: 904eed41-c88e-4d4a-b0a4-fd31d5a6758b
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - new_weather_theme
+_core:
+  default_config_hash: VhBzWb7lMRtIOg9G7VSw_0uopi-7zXeHq4vXqqV1HFE
+id: new_weather_theme_breadcrumbs
+theme: new_weather_theme
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

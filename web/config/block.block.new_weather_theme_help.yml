@@ -1,0 +1,22 @@
+uuid: 3ead0931-046a-4f8d-9329-ffdb7269ea81
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - new_weather_theme
+_core:
+  default_config_hash: VfPFqqxfkomud5CO8DUijw85QIl9GIxh_nIxLOYESxg
+id: new_weather_theme_help
+theme: new_weather_theme
+region: content
+weight: -6
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

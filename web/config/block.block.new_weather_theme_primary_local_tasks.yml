@@ -1,0 +1,22 @@
+uuid: 2013e97b-95a1-45f2-9d6c-26cc9c3ce4a0
+langcode: en
+status: false
+dependencies:
+  theme:
+    - new_weather_theme
+_core:
+  default_config_hash: nGE3EoPQQaQCuqTUtZgw0-KIzmrqdKDzdNQf2JyPUt4
+id: new_weather_theme_primary_local_tasks
+theme: new_weather_theme
+region: header
+weight: -4
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Primary tabs'
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: false
+visibility: {  }

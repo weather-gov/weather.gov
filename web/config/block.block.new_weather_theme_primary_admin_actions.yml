@@ -1,0 +1,20 @@
+uuid: 60ea7a06-3701-40e5-b93b-33a14a0567c3
+langcode: en
+status: false
+dependencies:
+  theme:
+    - new_weather_theme
+_core:
+  default_config_hash: Q9_2whdOj1YIomfvsIfopROW4FT_X5pY0DjdOiOaQ5U
+id: new_weather_theme_primary_admin_actions
+theme: new_weather_theme
+region: header
+weight: -5
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

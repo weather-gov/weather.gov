@@ -1,0 +1,25 @@
+uuid: da6a0403-76bb-4694-8f54-fd88747b46e9
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - new_weather_theme
+_core:
+  default_config_hash: n_nlgjggHVfQt2H__zvLOKB2YtjPDbQ5tHijF9LE1aM
+id: new_weather_theme_site_branding
+theme: new_weather_theme
+region: header
+weight: 0
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: true
+visibility: {  }

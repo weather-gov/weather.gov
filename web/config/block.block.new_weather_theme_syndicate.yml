@@ -1,0 +1,23 @@
+uuid: bccb3bbd-f3ad-43c9-ad0d-b1f2eac586ec
+langcode: en
+status: false
+dependencies:
+  module:
+    - node
+  theme:
+    - new_weather_theme
+_core:
+  default_config_hash: 0gq3VPg-_UM69FCCWurLFIrrnIjC2HLKhwo9iQNtcUo
+id: new_weather_theme_syndicate
+theme: new_weather_theme
+region: header
+weight: -8
+provider: null
+plugin: node_syndicate_block
+settings:
+  id: node_syndicate_block
+  label: 'RSS feed'
+  label_display: '0'
+  provider: node
+  block_count: 10
+visibility: {  }
