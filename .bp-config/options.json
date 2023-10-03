@@ -1,0 +1,11 @@
+{
+  "COMPOSER_INSTALL_OPTIONS": [
+    "--no-dev --optimize-autoloader --no-progress --no-interaction"
+  ],
+  "COMPOSER_VENDOR_DIR": "vendor",
+  "WEBDIR": "web",
+  "PHP_VERSION": "{PHP_82_LATEST}",
+  "ADDITIONAL_PREPROCESS_CMDS": [
+    "source $HOME/bootstrap.sh"
+  ]
+}

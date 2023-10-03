@@ -1,0 +1,6 @@
+name: Weather blocks
+type: module
+description: Various blocks used by weather.gov
+package: weather.gov
+
+core_version_requirement: ^10

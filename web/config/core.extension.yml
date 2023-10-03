@@ -10,7 +10,6 @@ module:
   comment: 0
   config: 0
   contact: 0
-  content_api: 0
   contextual: 0
   datetime: 0
   dblog: 0
@@ -45,6 +44,8 @@ module:
   update: 0
   user: 0
   views_ui: 0
+  weather_blocks: 0
+  weather_data: 0
   views: 10
   minimal: 1000
 theme:
