@@ -1,0 +1,32 @@
+uuid: 72e9134b-7f7c-4258-9838-380a4e9a516d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.area_relevant.body
+    - field.field.node.area_relevant.field_wfo
+    - node.type.area_relevant
+  module:
+    - text
+    - user
+id: node.area_relevant.teaser
+targetEntityType: node
+bundle: area_relevant
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_wfo: true

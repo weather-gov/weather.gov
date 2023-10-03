@@ -1,0 +1,36 @@
+uuid: 9e3d4e9e-ec13-4167-9961-a7fcd6f96718
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.weather_narrative.body
+    - field.field.node.weather_narrative.field_forecaster_image
+    - field.field.node.weather_narrative.field_weather_tags
+    - field.field.node.weather_narrative.field_wfo
+    - node.type.weather_narrative
+  module:
+    - text
+    - user
+id: node.weather_narrative.teaser
+targetEntityType: node
+bundle: weather_narrative
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_forecaster_image: true
+  field_weather_tags: true
+  field_wfo: true

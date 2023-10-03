@@ -1,0 +1,24 @@
+uuid: 38bcbb2d-aa77-4f86-a493-226f11d9cd3b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.forecast_office
+  module:
+    - text
+id: node.forecast_office.body
+field_name: body
+entity_type: node
+bundle: forecast_office
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

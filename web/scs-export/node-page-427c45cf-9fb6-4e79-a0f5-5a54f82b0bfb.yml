@@ -8,7 +8,7 @@ base_fields:
   langcode: en
   created: '1696339197'
   author: admin@example.com
-  url: null
+  url: /home
   revision_log_message: null
   revision_uid: '1'
 custom_fields:

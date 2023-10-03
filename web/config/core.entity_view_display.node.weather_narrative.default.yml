@@ -1,0 +1,59 @@
+uuid: 7255ad52-b48f-458a-9f49-5357a833a11a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.weather_narrative.body
+    - field.field.node.weather_narrative.field_forecaster_image
+    - field.field.node.weather_narrative.field_weather_tags
+    - field.field.node.weather_narrative.field_wfo
+    - node.type.weather_narrative
+  module:
+    - image
+    - options
+    - text
+    - user
+id: node.weather_narrative.default
+targetEntityType: node
+bundle: weather_narrative
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_forecaster_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_weather_tags:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_wfo:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

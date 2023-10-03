@@ -1,0 +1,18 @@
+uuid: ec1af969-c999-469f-bd15-3c6dd2ef2ba0
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'Forecast office'
+type: forecast_office
+description: 'Dedicated WFO pages'
+help: ''
+new_revision: true
+preview_mode: 2
+display_submitted: true

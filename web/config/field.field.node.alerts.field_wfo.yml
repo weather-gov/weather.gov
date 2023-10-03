@@ -1,0 +1,21 @@
+uuid: 4881602d-a1a2-4fb1-b251-ab21f1692518
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_wfo
+    - node.type.alerts
+  module:
+    - options
+id: node.alerts.field_wfo
+field_name: field_wfo
+entity_type: node
+bundle: alerts
+label: WFO
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

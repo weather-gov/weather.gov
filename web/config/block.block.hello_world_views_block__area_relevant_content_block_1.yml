@@ -1,0 +1,25 @@
+uuid: 94933f91-842e-4505-8316-1e9cc87c536f
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.area_relevant_content
+  module:
+    - views
+  theme:
+    - hello_world
+id: hello_world_views_block__area_relevant_content_block_1
+theme: hello_world
+region: two_col_first
+weight: 0
+provider: null
+plugin: 'views_block:area_relevant_content-block_1'
+settings:
+  id: 'views_block:area_relevant_content-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility: {  }

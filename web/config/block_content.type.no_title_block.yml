@@ -1,0 +1,8 @@
+uuid: 6733a348-8f57-431a-8edc-00eecfb715c9
+langcode: en
+status: true
+dependencies: {  }
+id: no_title_block
+label: 'No title block'
+revision: 0
+description: 'Block only has a body.'

@@ -1,0 +1,42 @@
+uuid: fff2deb7-092e-4e26-add6-4e752d6fc7f1
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_type
+field_name: field_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: Place
+      label: Place
+    -
+      value: City
+      label: City
+    -
+      value: County
+      label: County
+    -
+      value: Airport
+      label: Airport
+    -
+      value: Park
+      label: Park
+    -
+      value: Lake
+      label: Lake
+    -
+      value: Mountain
+      label: Mountain
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
