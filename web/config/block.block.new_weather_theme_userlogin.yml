@@ -1,0 +1,27 @@
+uuid: 8faa0735-3a65-4caa-915a-ffcb8b97e737
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+  theme:
+    - new_weather_theme
+id: new_weather_theme_userlogin
+theme: new_weather_theme
+region: content
+weight: 0
+provider: null
+plugin: user_login_block
+settings:
+  id: user_login_block
+  label: 'User login'
+  label_display: '0'
+  provider: user
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous

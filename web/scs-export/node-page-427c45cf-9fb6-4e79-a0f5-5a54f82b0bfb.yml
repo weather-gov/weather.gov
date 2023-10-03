@@ -1,0 +1,19 @@
+site_uuid: a8610938-ba2d-4f34-a473-bac1d92b4311
+uuid: 427c45cf-9fb6-4e79-a0f5-5a54f82b0bfb
+entity_type: node
+bundle: page
+base_fields:
+  title: 'Welcome to Weather 2.0'
+  status: true
+  langcode: en
+  created: '1696339197'
+  author: admin@example.com
+  url: /home
+  revision_log_message: null
+  revision_uid: '1'
+custom_fields:
+  body:
+    -
+      value: '<p>This is a beta site.</p>'
+      summary: ''
+      format: basic_html

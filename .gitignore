@@ -55,8 +55,8 @@ Thumbs.db
 ._*
 
 # Ignore Local Development files
-/web/sites/services.local.yml
-/web/sites/settings.local.php
+/web/sites/services.dev.yml
+/web/sites/settings.dev.php
 node_modules
 .lando.local.yml
 

@@ -51,6 +51,7 @@ services:
       # directory needs to match the value of $settings['config_sync_directory']
       # in settings.php
       - ./web/config:/opt/drupal/web/config
+      - ./web/scs-export:/opt/drupal/web/scs-export
 
       # And finally map in our phpcs file, so we can run php-codesniffer inside
       # the container.

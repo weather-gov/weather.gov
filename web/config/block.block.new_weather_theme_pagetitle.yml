@@ -1,0 +1,18 @@
+uuid: 65cc34f3-934c-4963-9342-14f59fda65a6
+langcode: en
+status: true
+dependencies:
+  theme:
+    - new_weather_theme
+id: new_weather_theme_pagetitle
+theme: new_weather_theme
+region: content
+weight: 0
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility: {  }
