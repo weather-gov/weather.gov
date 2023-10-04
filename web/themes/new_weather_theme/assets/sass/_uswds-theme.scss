@@ -13,3 +13,19 @@ in the form $setting: value,
 //    $setting: value
 //  );
 //
+
+@use "uswds-core" with (
+    $theme-typeface-tokens: (
+        "Nunito": (
+          "display-name": "Nunito",  
+          "cap-height": 364px,         // the default, leave it for now
+          "stack": "Open Sans, Helvetica Neue, sans-serif",
+        ),
+      ),
+    $theme-font-type-sans:   'Nunito',
+    $theme-font-role-heading:  'sans',
+    $theme-font-role-body:     'sans',
+    $theme-font-role-code:     'mono',
+    $theme-show-compile-warnings: true,
+    $theme-show-notifications: false,
+  )
