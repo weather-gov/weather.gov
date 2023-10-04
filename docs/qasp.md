@@ -25,14 +25,19 @@ a) relevant and b) pass.
 > satisfy all of the required standards immediately. In fact, we will not even
 > attempt to measure them all from the start.
 
+> [!NOTE]
+> The QASP only intends to address the code and pipeline **_quality_**, not
+> processes. We will document our processes separately.
+
 ## Elements
 
-### 1. Code is tested
+### 1. Code is functionally tested
 
 As part of a robust software development practice, the development team will
-ensure that code is working properly. Testing provides feedback to developers
-in real time, reduces the risk of breaking changes or errors in production,
-and provides a rough metric to non-technical stakeholders of code quality.
+ensure that code is working properly. Funcntional testing provides feedback to
+developers in real time, reduces the risk of breaking changes or errors in
+production, and provides a rough metric to non-technical stakeholders of code
+quality.
 
 The acceptable standards for this element are:
 
@@ -40,6 +45,8 @@ The acceptable standards for this element are:
   coverage, and all tests are reviewed for relevance and correctness
 - Tests run automatically before code is deployed, with results available to all
   members of the team
+- Simulated data is stored in test fixtures to the extent practical, so it can
+  be reviewed and version-controlled.
 - Tests simulate variation in data without using production data
 - Tests simulate the conditions of the production environment
 
@@ -78,6 +85,7 @@ The acceptable standards for this element are:
   errors and any permitted warnings are documented
 - At least one team member manually tests the accessibility of each change,
   including keyboard and screen reader navigation
+- Text shown or read to users is marked for translation
 
 ### 4. Deployment is simple
 
@@ -174,3 +182,15 @@ The acceptable standards for this element are:
 
 - Tools necessary for development and maintenances are accessible by NWS
 - Code is available and usable by NWS
+
+### 10. Code changes are traceable to stories
+
+In order to ensure the team is meeting the product needs, we need to be able to
+quickly get back to the story that drives a code change. There are a few ways
+to accomplish this.
+
+The acceptable standards for this element are one of:
+
+- Development branches include the story number in their branch name
+- Development branches include at least one commit with the story number
+- Pull requests include a reference to the story
