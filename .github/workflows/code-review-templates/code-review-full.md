@@ -27,7 +27,7 @@ This is an automated comment on every pull request requiring a review. A checked
 ## Infrastructure
 - [ ] all changes are auditable and documented via a script
 - [ ] it is clear who can and should run the script
-- [ ] (if applicable) diagrams been updated or added in PlantUML
+- [ ] (if applicable) diagrams have been updated or added in PlantUML
 
 ## Accessibility
 - [ ] New pages have been added to cypress-axe file so that they will be tested with our automated accessibility testing
