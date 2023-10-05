@@ -37,7 +37,7 @@ This is an automated comment on every pull request requiring a review. A checked
     - [ ] All form inputs have explicit labels
     - [ ] Form instructions are associated with inputs
     - [ ] All relevant images use an img tag
-    - [ ] All images have alt attributes
+    - [ ] All images have appropriate alt attributes
     - [ ] Multimedia is tagged. All multimedia has appropriate captioning and audio description
     - [ ] Text has sufficient color contrast. All text has a contrast ratio of 4.5:1 with the background
     - [ ] Site never loses focus. Focus is always visible when moving through the page with the keyboard
