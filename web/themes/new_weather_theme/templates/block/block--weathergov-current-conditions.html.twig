@@ -97,9 +97,9 @@
       <strong>{{ content["#data"]["conditions"]["long"] | lower }}</strong>.
       Temperature is <strong>{{ content["#data"]["temperature"] }}
       &deg;F</strong>. Humidity is <strong>
-      {{ content["#data"]["humidity"] }}%</strong> with
+      {{ content["#data"]["humidity"] }}%</strong>{% if content["#data"]["wind"]["speed"] > 0  %} with
       <strong>{{ content["#data"]["wind"]["speed"] }}mph winds</strong> from
-      the {{ content["#data"]["wind"]["direction"] }}.
+      the {{ content["#data"]["wind"]["direction"] }}{% endif %}.
     </p>
   </section>
 </weather-gov-current-conditions>
