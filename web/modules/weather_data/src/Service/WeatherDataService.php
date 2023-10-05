@@ -123,8 +123,6 @@ class WeatherDataService {
   public function getCurrentConditions() {
     date_default_timezone_set('America/New_York');
 
-    // 36°09′44″N 86°46′28″W
-
     // Roughly Nashville.
     $lat = 36.16;
     $lon = -86.77;
