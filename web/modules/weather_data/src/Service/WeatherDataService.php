@@ -123,9 +123,9 @@ class WeatherDataService {
   public function getCurrentConditions() {
     date_default_timezone_set('America/New_York');
 
-    // Roughly Minneapolis.
-    $lat = 44.98;
-    $lon = -93.27;
+    // Roughly Nashville.
+    $lat = 36.16;
+    $lon = -86.77;
 
     $locationResponse = $this->client->get("https://api.weather.gov/points/$lat,$lon");
     $locationMetadata = json_decode($locationResponse->getBody());
