@@ -27,8 +27,9 @@ in the form $setting: value,
     $theme-font-role-body:     'sans',
     $theme-font-role-code:     'mono',
     $theme-image-path:  '../images/uswds',
-    $theme-color-primary: #003087,
-    $theme-color-primary-light: #0085CA,
+    $theme-color-primary: #003087, // sky blue
+    $theme-color-primary-light: #0085CA, // water blue
+    $theme-color-base-dark: #333333, // dark gray
     $theme-show-compile-warnings: true,
     $theme-show-notifications: false,
   
