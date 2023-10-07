@@ -14,20 +14,20 @@
  */
 #}
 {% block content %}
-<div class="display-flex">
+<div class="display-flex margin-y-4">
   {% if site_logo %}
     <a href="{{ path('<front>') }}" rel="home" class="site-logo display-block">
-      <img class="height-8 margin-2" src="{{ site_logo }}" alt="{{ 'Home'|t }}" />
+      <img class="height-9" src="{{ site_logo }}" alt="{{ 'Home'|t }}" />
     </a>
   {% endif %}
-  <div class="site-info">
+  <div class="site-info padding-x-2 padding-y-1">
   {% if site_name %}
     <div class="site-name">
-      <a href="{{ path('<front>') }}" class="font-title-sky-blue" rel="home">{{ site_name }}</a>
+      <a href="{{ path('<front>') }}" class="font-heading-lg desktop:font-heading-xl text-primary text-no-underline text-bold" rel="home">{{ site_name }}</a>
     </div>
   {% endif %}
   {% if site_slogan %}
-    <div class="site-slogan">{{ site_slogan }}</div>
+    <div class="site-slogan font-sans-2xs desktop:font-sans-xs text-base-dark">{{ site_slogan }}</div>
   {% endif %}
   </div>
 </div>
