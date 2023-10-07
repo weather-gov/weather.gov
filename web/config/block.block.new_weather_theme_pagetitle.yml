@@ -2,6 +2,8 @@ uuid: 65cc34f3-934c-4963-9342-14f59fda65a6
 langcode: en
 status: true
 dependencies:
+  module:
+    - system
   theme:
     - new_weather_theme
 id: new_weather_theme_pagetitle
@@ -15,4 +17,8 @@ settings:
   label: 'Page title'
   label_display: '0'
   provider: core
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '<front>'
