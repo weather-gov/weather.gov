@@ -17,7 +17,7 @@
 <div class="display-flex margin-y-4">
   {% if site_logo %}
     <a href="{{ path('<front>') }}" rel="home" class="site-logo display-block">
-      <img class="height-9" src="{{ site_logo }}" alt="{{ 'Home'|t }}" />
+      <img class="height-9" src="{{ site_logo }}" alt="{{ site_slogan}} {{ 'logo'|t }}" />
     </a>
   {% endif %}
   <div class="site-info padding-x-2 padding-y-1">
@@ -27,7 +27,7 @@
     </div>
   {% endif %}
   {% if site_slogan %}
-    <div class="site-slogan font-sans-2xs desktop:font-sans-xs text-base-dark">{{ site_slogan }}</div>
+    <a class="site-slogan font-sans-2xs desktop:font-sans-xs text-base-dark text-no-underline hover:text-underline" href="https://www.noaa.gov/">{{ site_slogan }}</a>
   {% endif %}
   </div>
 </div>
