@@ -1,0 +1,9 @@
+features:
+  node_user_picture: 0
+  comment_user_picture: 1
+  comment_user_verification: 1
+  favicon: 1
+logo:
+  use_default: 1
+favicon:
+  use_default: 1
