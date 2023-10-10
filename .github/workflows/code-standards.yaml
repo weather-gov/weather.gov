@@ -44,7 +44,7 @@ jobs:
       - name: run phpcs
         run: |
           echo "::add-matcher::${{ github.workspace }}/.github/workflows/phpcs-problem-matcher.json"
-          vendor/bin/phpcs -v
+          vendor/bin/phpcs --report=checkstyle
 
   unit-tests:
     name: PHP unit tests
