@@ -31,7 +31,7 @@ This is an automated comment on every pull request requiring a review. A checked
 
 ## Accessibility
 - [ ] New pages have been added to cypress-axe file so that they will be tested with our automated accessibility testing
-- Meets WCAG 2.0 AA or 2.1 AA for Section 508 compliance
+- [ ] Meets WCAG 2.0 AA or 2.1 AA for Section 508 compliance
     - [ ] Site is keyboard accessible. All interactions can be accessed with a keyboard
     - [ ] Site is free of keyboard traps. The keyboard focus is never trapped in a loop
     - [ ] All form inputs have explicit labels
@@ -52,6 +52,6 @@ This is an automated comment on every pull request requiring a review. A checked
 ## Device Matrix
 - [ ] firefox (renders correctly and user interactions work)
 - [ ] chrome/chromium/edge (renders correctly and user interactions work)
-- web page is readable and usable 
+- [ ] web page is readable and usable 
     - [ ] at 480px
     - [ ] at 1024px
