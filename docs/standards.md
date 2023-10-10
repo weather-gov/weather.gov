@@ -98,7 +98,15 @@ rules:
 - All PRs must be reviewed and approved by at least one other person.
 - All PRs must pass all required automated checks. The list of required checks
   will evolved over time.
-- All commits in a PR must be cryptographically signed by their authors.
+- Any code that is exempted from automated tests must be documented and
+  explained in code itself as well as the pull request. Code my be exempted due
+  to false positives that cannot be resolved in other ways; true positives that
+  will be resolved in a future fix; or similar scenarios.
+- All commits in a PR must be
+  [cryptographically signed](https://calebhearth.com/sign-git-with-ssh)
+  by their authors.
+  ([GPG signatures](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits)
+  are also allowed, though SSH is easier to configure and thus encouraged.)
 - All merges into `main` will be pushed into a merge queue. Merge queues help
   reduce the friction of merging PRs where multiple need to be done at once. PRs
   go into the queue and get batched up, tested, and merged all at once. There's
@@ -106,19 +114,20 @@ rules:
 
 ### Merging strategy
 
-We use squash merging.
+We use squash merging in the merge queue. PR authors do not need to select
+anything as this is handled automatically.
 
 ### Deployment strategy
 
 Deployments into preview and/or staging environments happen automatically from
 the appropriate branches.
 
-Deployments into production will be managed via tags. When a new tag is created
-in the form `v1.3`, a new production deployment will be triggered from that tag.
-We will create tags via GitHub releases rather than creating them manually so we
-can associate them with release notes, documenting what is changing. Using tags
-also allows us an opportunity to review an entire release candidate as a whole
-before deployhing it.
+Deployments into production will be managed via tagged releases. When a new tag
+is created in the form `v1.3`, a new production deployment will be triggered
+from that tag. We will create tags via GitHub releases rather than creating them
+manually so we can associate them with release notes, documenting what is
+changing. Using tags also allows us an opportunity to review an entire release
+candidate as a whole before deploying it.
 
 > [!WARNING]  
 > Even though pushing to the `main` branch is disabled, tags applied to commits
