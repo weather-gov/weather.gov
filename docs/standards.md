@@ -77,6 +77,7 @@ time. The process for reviewing PRs is outlined here.
      > not allow remote pushes.
 
 ```mermaid
+%%{ init: { "flowchart": { "curve": "linear" }}}%%
 graph TD;
   A[Open pull<br>request]-->B{Ready to<br>review?};
   B--no-->A
