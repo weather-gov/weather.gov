@@ -1,5 +1,7 @@
 name: code standards
-on: [pull_request]
+on:
+  pull_request:
+  merge_group:
 
 jobs:
   php-lint:
@@ -29,6 +31,3 @@ jobs:
           composer global config allow-plugins true
           composer global require drupal/coder
           phpcs
-
-      # - name: run phpcs
-      #   uses: guix77/phpcs-drupal-action@v1.0.1
