@@ -7,15 +7,15 @@ namespace Drupal\starterkit_theme;
 use PHPUnit\Framework\TestCase;
 
 /**
- *
+ * Tester for the StarterKit.php file.
  */
 final class StarterKitTest extends TestCase {
 
   /**
-   *
+   * Tests that true is true.
    */
   public function testDoThing(): void {
-    $this->assertSame(1, 1);
+    $this->assertSame(1, 2);
   }
 
 }
