@@ -1,0 +1,70 @@
+@startuml weather.gov system deployment
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+LAYOUT_WITH_LEGEND()
+title weather.gov system deployment
+skinparam linetype polyline
+
+Person(team, "weather.gov developer", "code writer")
+
+Deployment_Node(aws, "AWS GovCloud", "Amazon Web Services Region") {
+    Deployment_Node(cloudgov, "cloud.gov", "cloud foundary PaaS") {
+        System_Ext(cloudgov_router, "cloud.gov router", "cloud foundary service")
+        System_Ext(cloudgov_uaa, "cloud.gov authentication", "cloud foundary service")
+        System_Ext(cloudgov_controller, "cloud.gov controller", "cloud foundary orchestration")
+        System_Ext(cloudgov_dashboard, "cloud.gov dashboard", "cloud foundary web UI")
+        System_Ext(cloudgov_logdrain, "logs.fr.cloud.gov", "ELK")
+        Boundary(atob, "system boundary") {
+            Deployment_Node(organization, "weather.gov cloud.gov organization") {
+                Deployment_Node(sandbox, "sandbox space") {
+                    System_Boundary(dashboard_sandbox, "weather.gov system") {
+                        Container(weathergov_app_sandbox, "drupal application", "PHP, Drupal 10", "Delivers pages")
+                        ContainerDb(dashboard_db_sandbox, "sandbox mysql database", "AWS RDS", "CMS content")
+                        ContainerDb(dashboard_storage_sandbox, "sandbox s3 file storage", "AWS S3", "User-uploaded files")
+                    }
+                }
+                Deployment_Node(beta, "beta space") {
+                    System_Boundary(dashboard_beta, "weather.gov system") {
+                        Container(weathergov_app_beta, "drupal application", "PHP, Drupal 10", "Delivers pages")
+                        ContainerDb(dashboard_db_beta, "beta mysql database", "AWS RDS", "CMS content")
+                        ContainerDb(dashboard_storage_beta, "beta s3 file storage", "AWS S3", "User-uploaded files")
+                    }
+                }
+            }
+        }
+    }
+}
+
+' Logs flow
+Rel(beta, cloudgov_logdrain, "logs to", "stdout/stderr")
+Rel(sandbox, cloudgov_logdrain, "logs to", "stdout/stderr")
+Rel(team, cloudgov_logdrain, "reviews logs", "https (443)")
+
+Rel(team, cloudgov_uaa, "authenticates with", "https (443)")
+Rel(team, cloudgov_dashboard, "inspects", "https (443)")
+Rel(cloudgov_dashboard, cloudgov_controller, "inspects and manipulates state", "https (443)")
+
+' Deployment
+Boundary(deploymentservices, "Deployment services") {
+    Deployment_Node(github, "CI/CD pipeline", "open source"){
+        System(github_repo, "weather.gov/weathergov", "Code repository")
+        System_Ext(github_actions_deploy, "github actions", "cg deploy")
+        System_Ext(github_actions_test, "github actions", "code standards, security check")
+    }
+}
+Rel(github_repo, github_actions_test, "pushes to all branches trigger test suite")
+Rel(github_repo, github_actions_deploy, "pushes to main trigger deployment")
+Rel(team, github_repo, "commits code, makes pull-request, approves PRs", "https (443)")
+Rel(github_actions_deploy, cloudgov_controller, "pushes code, invokes tasks", "https (443)")
+Rel(github_actions_deploy, cloudgov_router, "runs smoke tests on URLs", "https (443)")
+Rel(cloudgov_controller, beta, "provisions/operates apps and services", "admin access limited")
+Rel(cloudgov_controller, sandbox, "provisions/operates apps and services")
+
+Rel(weathergov_app_beta, dashboard_db_beta, "reads/writes CMS content", "postgres (5432)")
+Rel(weathergov_app_sandbox, dashboard_db_sandbox, "reads/writes CMS content", "postgres (5432)")
+Rel(weathergov_app_beta, dashboard_storage_beta, "reads/writes CMS content", "postgres (5432)")
+Rel(weathergov_app_sandbox, dashboard_storage_sandbox, "reads/writes CMS content", "postgres (5432)")
+
+Rel(cloudgov_router, weathergov_app_beta, "proxies to", "https GET/POST (443)")
+
+@enduml
