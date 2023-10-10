@@ -16,18 +16,73 @@ jobs:
         with:
           php-version: "8.2"
 
-      - name: get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: get composer paths
+        id: composer-paths
+        run: |
+          echo "cache-dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo "bin-dir=${{ github.workspace }}/$(composer config bin-dir)" >> $GITHUB_OUTPUT
 
       - name: cache
         uses: actions/cache@v3
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: phpcs-cache
+          path: ${{ steps.composer-paths.outputs.cache-dir }}
+          key: composer-cache-${{ hashFiles('composer.lock') }}
+
+      - name: cache
+        uses: actions/cache@v3
+        id: bin-cache
+        with:
+          path: ${{ steps.composer-paths.outputs.bin-dir }}
+          key: composer-bin-${{ hashFiles('composer.lock') }}
+
+      - name: install dependencies
+        if: ${{ steps.bin-cache.outputs.cache-hit }} != 'true'
+        env:
+          COMPOSER_NO_DEV: 0
+        run: composer install
 
       - name: run phpcs
         run: |
-          composer global config allow-plugins true
-          composer global require drupal/coder
-          phpcs
+          echo "::add-matcher::${{ github.workspace }}/.github/workflows/phpcs-problem-matcher.json"
+          vendor/bin/phpcs -v
+
+  unit-tests:
+    name: PHP unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: xdebug
+
+      - name: get composer paths
+        id: composer-paths
+        run: |
+          echo "cache-dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo "bin-dir=${{ github.workspace }}/$(composer config bin-dir)" >> $GITHUB_OUTPUT
+
+      - name: cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-paths.outputs.cache-dir }}
+          key: composer-cache-${{ hashFiles('composer.lock') }}
+
+      - name: cache
+        uses: actions/cache@v3
+        id: bin-cache
+        with:
+          path: ${{ steps.composer-paths.outputs.bin-dir }}
+          key: composer-bin-${{ hashFiles('composer.lock') }}
+
+      - name: install dependencies
+        if: ${{ steps.bin-cache.outputs.cache-hit }} != 'true'
+        env:
+          COMPOSER_NO_DEV: 0
+        run: composer install
+
+      - name: run unit tests
+        run: vendor/bin/phpunit
