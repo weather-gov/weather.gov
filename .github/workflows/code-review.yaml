@@ -17,7 +17,7 @@ jobs:
             cat .github/workflows/code-review-templates/code-review-full.md
             echo EOF
           } >> "$GITHUB_OUTPUT"
-      - name: Comment on PR
+      - name: Comment on pull request
         uses: actions/github-script@v6
         with:
           script: |
