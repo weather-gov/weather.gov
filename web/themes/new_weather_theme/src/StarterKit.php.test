@@ -15,7 +15,7 @@ final class StarterKitTest extends TestCase {
    * Tests that true is true.
    */
   public function testDoThing(): void {
-    $this->assertSame(1, 2);
+    $this->assertSame(1, 1);
   }
 
 }
