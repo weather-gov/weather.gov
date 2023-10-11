@@ -7,12 +7,10 @@ in the form $setting: value,
 ----------------------------------------
 */
 
-//
 //  @use "uswds-core" with (
 //    $setting: value,
 //    $setting: value
 //  );
-//
 
 @use "uswds-core" with (
     $theme-font-path: "../fonts",
