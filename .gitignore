@@ -12,6 +12,21 @@
 /drush/Commands/contrib/
 /web/profiles/contrib/
 /web/libraries/
+/web/.csslintrc
+/web/.eslintignore
+/web/.eslintrc.json
+/web/.ht.router.php
+/web/.htaccess
+/web/INSTALL.txt
+/web/README.md
+/web/autoload.php
+/web/example.gitignore
+/web/index.php
+/web/robots.txt
+/web/sites/default.settings.php
+/web/sites/default/.gitignore
+/web/update.php
+/web/web.config
 
 # Ignore configuration files that may contain sensitive information.
 /web/sites/*/settings*.php
