@@ -23,10 +23,13 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "stylelint": "^15.10.3",
+    "stylelint-config-standard-scss": "^11.0.0"
   },
   "prettier": {},
   "scripts": {
-    "lint": "eslint web/**/assets/**/*.js"
+    "lint": "eslint web/**/assets/**/*.js",
+    "style-lint": "stylelint **/*.scss"
   }
 }
