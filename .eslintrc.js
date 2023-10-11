@@ -3,6 +3,7 @@ module.exports = {
   ignorePatterns: ["uswds*.js"],
   rules: {
     "prefer-destructuring": [0],
+    "no-param-reassign": ["error", { props: false }],
   },
   env: {
     es6: true,
