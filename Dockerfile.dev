@@ -87,3 +87,9 @@ RUN set -eux; \
 ENV PATH=${PATH}:/opt/drupal/vendor/bin
 
 # vim:set ft=dockerfile:
+
+# - create a CI version of the Dockerfile
+# - in the workflow, build the CI Dockerfile
+# - run the image, map port 8080 out, daemonize it so it doesn't block
+# - wait a few seconds, import config and content
+# - okay, now you can run cypress tests against it
