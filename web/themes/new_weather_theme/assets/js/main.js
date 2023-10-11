@@ -17,13 +17,14 @@ const main = () => {
   });
 
   const timestamps = document.querySelectorAll("weather-timestamp");
-  timestamps.forEach((timestamp) => {
+  for (let i = 0; i < timestamps.length; i += 1) {
+    const timestamp = timestamps[i];
     const date = new Date(
       Number.parseInt(timestamp.getAttribute("data-utc"), 10) * 1_000,
     );
 
     timestamp.innerText = formatter.format(date);
-  });
+  }
 };
 
 if (document.readyState !== "loading") {
