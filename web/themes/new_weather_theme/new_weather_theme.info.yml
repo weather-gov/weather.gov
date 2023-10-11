@@ -20,3 +20,16 @@ libraries-extend:
     - new_weather_theme/progress
 core_version_requirement: ^10
 generator: 'starterkit_theme:10.1.2'
+regions:
+  banner: 'USWDS Banner'
+  header: 'Header'
+  primary_menu: 'Primary menu'
+  secondary_menu: 'Secondary menu'
+  breadcrumb: 'Breadcrumb'
+  highlighted: 'Highlight'
+  help: 'Help'
+  content: 'Content'
+  prefooter: 'Prefooter'
+  primary_footer: "Primary footer"
+  secondary_footer: "Secondary footer"
+  footer: 'Footer'

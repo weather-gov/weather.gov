@@ -159,7 +159,7 @@
         {{ page.breadcrumb }}
       </div>
       {% endif %}
-      {% if page.breadcrumb %}
+      {% if page.highlighted %}
       <div class="grid-row">
         {{ page.highlighted }}
       </div>
@@ -181,6 +181,13 @@
       </div>
     </div>
   </main>
+{% if page.prefooter %}
+  <section id="prefooter" class="bg-primary-lighter">
+    <div class="grid-container">
+      {{ page.prefooter }}
+    </div>
+  </section> 
+{% endif %}
 
 {% if page.footer %}
   <footer role="contentinfo">
@@ -214,60 +221,15 @@
         class="usa-identifier__section usa-identifier__section--required-links"
         aria-label="Important links,"
       >
-        <div class="usa-identifier__container">
-          <ul class="usa-identifier__required-links-list">
-            <li class="usa-identifier__required-links-item">
-              <a
-                href="javascript:void(0)"
-                class="usa-identifier__required-link usa-link"
-                >About &lt;Parent shortname&gt;</a
-              >
-            </li>
-            <li class="usa-identifier__required-links-item">
-              <a href="" class="usa-identifier__required-link usa-link"
-                >Accessibility statement</a
-              >
-            </li>
-            <li class="usa-identifier__required-links-item">
-              <a href="" class="usa-identifier__required-link usa-link"
-                >FOIA requests</a
-              >
-            </li>
-            <li class="usa-identifier__required-links-item">
-              <a href="" class="usa-identifier__required-link usa-link"
-                >No FEAR Act data</a
-              >
-            </li>
-            <li class="usa-identifier__required-links-item">
-              <a href="" class="usa-identifier__required-link usa-link"
-                >Office of the Inspector General</a
-              >
-            </li>
-            <li class="usa-identifier__required-links-item">
-              <a href="" class="usa-identifier__required-link usa-link"
-                >Performance reports</a
-              >
-            </li>
-            <li class="usa-identifier__required-links-item">
-              <a href="" class="usa-identifier__required-link usa-link"
-                >Privacy policy</a
-              >
-            </li>
-          </ul>
-          {{ page.footer }}
+        <div class="grid-container">
+        <div class="grid-row">
+          <div class="grid-col">{{ page.site_logo }}</div>
+          <div class="grid-col">{{ page.primary_footer }}</div>
+          <div class="grid-col">{{ page.secondary_footer }}</div>
+          </div>
         </div>
       </nav>
-      <section
-        class="usa-identifier__section usa-identifier__section--usagov"
-        aria-label="U.S. government information and services,"
-      >
-        <div class="usa-identifier__container">
-          <div class="usa-identifier__usagov-description">
-           Looking for U.S. government information and services?
-          </div>
-          <a href="https://www.usa.gov/" class="usa-link">Visit USA.gov</a>
-        </div>
-      </section>
+      {{ page.footer }}
     </div>
   </footer>
 {% endif %}
