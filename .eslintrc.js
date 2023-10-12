@@ -1,6 +1,6 @@
 module.exports = {
   extends: ["airbnb-base", "prettier"],
-  ignorePatterns: ["uswds*.js", "cypress.config.js"],
+  ignorePatterns: ["uswds*.js"],
   rules: {
     "prefer-destructuring": [0],
     "no-param-reassign": ["error", { props: false }],
@@ -12,7 +12,7 @@ module.exports = {
   parserOptions: { ecmaVersion: 2021 },
   overrides: [
     {
-      files: ["cypress/e2e/**/*.js"],
+      files: ["cypress.config.js", "cypress/e2e/**/*.js"],
       extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
       env: {
         jest: true,
