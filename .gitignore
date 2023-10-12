@@ -83,3 +83,6 @@ node_modules
 
 # Allow exported content file.
 !web/scs-export/*.zip
+
+# Code coverage
+/.coverage

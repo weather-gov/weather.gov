@@ -44,28 +44,34 @@ final class WeatherDataServiceTest extends TestCase {
   }
 
   /**
-   * Tests the happy path.
-   *
-   * Given nominal results from the API, we know what the WeatherDataService
-   * should return, so let's test for that.
+   * Sets up the HTTP mock for a happy-path of API data for an observation.
    */
-  public function happyPath(): void {
+  public function setupHappyPath($whichObservation) {
     $this->httpClientMock->append(
-      new Response(200, ['Content-type' => 'application/geo+json'], "{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"https://api.weather.gov/ontology#\",\"s\":\"https://schema.org/\",\"geo\":\"http://www.opengis.net/ont/geosparql#\",\"unit\":\"http://codes.wmo.int/common/unit/\",\"@vocab\":\"https://api.weather.gov/ontology#\",\"geometry\":{\"@id\":\"s:GeoCoordinates\",\"@type\":\"geo:wktLiteral\"},\"city\":\"s:addressLocality\",\"state\":\"s:addressRegion\",\"distance\":{\"@id\":\"s:Distance\",\"@type\":\"s:QuantitativeValue\"},\"bearing\":{\"@type\":\"s:QuantitativeValue\"},\"value\":{\"@id\":\"s:value\"},\"unitCode\":{\"@id\":\"s:unitCode\",\"@type\":\"@id\"},\"forecastOffice\":{\"@type\":\"@id\"},\"forecastGridData\":{\"@type\":\"@id\"},\"publicZone\":{\"@type\":\"@id\"},\"county\":{\"@type\":\"@id\"}}],\"id\":\"https://api.weather.gov/points/LAT,LNG\",\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0,0]},\"properties\":{\"@id\":\"https://api.weather.gov/points/LAT,LNG\",\"@type\":\"wx:Point\",\"cwa\":\"NWS\",\"forecastOffice\":\"https://api.weather.gov/offices/NWS\",\"gridId\":\"NWS\",\"gridX\":180,\"gridY\":17,\"forecast\":\"https://forecast\",\"forecastHourly\":\"https://forecast/hourly\",\"forecastGridData\":\"https://gridpoints/NWS/180,17\",\"observationStations\":\"https://gridpoints/NWS/180,17/stations\",\"relativeLocation\":{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0,0]},\"properties\":{\"city\":\"National Weather Service\",\"state\":\"National Oceanographic and Atmospheric Administration\",\"distance\":{\"unitCode\":\"wmoUnit:m\",\"value\":0},\"bearing\":{\"unitCode\":\"wmoUnit:degree_(angle)\",\"value\":90}}},\"forecastZone\":\"https://api.weather.gov/zones/forecast/\",\"county\":\"https://api.weather.gov/zones/county/\",\"fireWeatherZone\":\"https://api.weather.gov/zones/fire/\",\"timeZone\":\"America/Denver\",\"radarStation\":\"KNWS\"}}")
+      new Response(200,
+        ['Content-type' => 'application/geo+json'],
+        file_get_contents(__DIR__ . "/test_data/points.good.json")
+      )
     );
     $this->httpClientMock->append(
-      new Response(200, ['Content-type' => 'application/geo+json'], "{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"https://api.weather.gov/ontology#\",\"s\":\"https://schema.org/\",\"geo\":\"http://www.opengis.net/ont/geosparql#\",\"unit\":\"http://codes.wmo.int/common/unit/\",\"@vocab\":\"https://api.weather.gov/ontology#\",\"geometry\":{\"@id\":\"s:GeoCoordinates\",\"@type\":\"geo:wktLiteral\"},\"city\":\"s:addressLocality\",\"state\":\"s:addressRegion\",\"distance\":{\"@id\":\"s:Distance\",\"@type\":\"s:QuantitativeValue\"},\"bearing\":{\"@type\":\"s:QuantitativeValue\"},\"value\":{\"@id\":\"s:value\"},\"unitCode\":{\"@id\":\"s:unitCode\",\"@type\":\"@id\"},\"forecastOffice\":{\"@type\":\"@id\"},\"forecastGridData\":{\"@type\":\"@id\"},\"publicZone\":{\"@type\":\"@id\"},\"county\":{\"@type\":\"@id\"},\"observationStations\":{\"@container\":\"@list\",\"@type\":\"@id\"}}],\"type\":\"FeatureCollection\",\"features\":[{\"id\":\"https://observation-station-1\",\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0,0]},\"properties\":{\"@id\":\"https://observation-station-1\",\"@type\":\"wx:ObservationStation\",\"elevation\":{\"unitCode\":\"wmoUnit:m\",\"value\":0},\"stationIdentifier\":\"KNWS\",\"name\":\"NWS Test Obs Station\",\"timeZone\":\"America/Denver\",\"forecast\":\"https://api.weather.gov/zones/forecast/\",\"county\":\"https://api.weather.gov/zones/county/\",\"fireWeatherZone\":\"https://api.weather.gov/zones/fire/\"}}],\"observationStations\":[\"https://obs-list-station-1\",\"https://obs-list-station-2\",\"https://obs-list-station-3\"],\"pagination\":{\"next\":\"https://pagination/etc\"}}")
+      new Response(200,
+        ['Content-type' => 'application/geo+json'],
+        file_get_contents(__DIR__ . "/test_data/observation-stations.good.json")
+      )
     );
     $this->httpClientMock->append(
-      new Response(200, ['Content-type' => 'application/geo+json'], "{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"https://api.weather.gov/ontology#\",\"s\":\"https://schema.org/\",\"geo\":\"http://www.opengis.net/ont/geosparql#\",\"unit\":\"http://codes.wmo.int/common/unit/\",\"@vocab\":\"https://api.weather.gov/ontology#\",\"geometry\":{\"@id\":\"s:GeoCoordinates\",\"@type\":\"geo:wktLiteral\"},\"city\":\"s:addressLocality\",\"state\":\"s:addressRegion\",\"distance\":{\"@id\":\"s:Distance\",\"@type\":\"s:QuantitativeValue\"},\"bearing\":{\"@type\":\"s:QuantitativeValue\"},\"value\":{\"@id\":\"s:value\"},\"unitCode\":{\"@id\":\"s:unitCode\",\"@type\":\"@id\"},\"forecastOffice\":{\"@type\":\"@id\"},\"forecastGridData\":{\"@type\":\"@id\"},\"publicZone\":{\"@type\":\"@id\"},\"county\":{\"@type\":\"@id\"}}],\"type\":\"FeatureCollection\",\"features\":[{\"id\":\"https://observation\",\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0,0]},\"properties\":{\"@id\":\"https://observation\",\"@type\":\"wx:ObservationStation\",\"elevation\":{\"unitCode\":\"wmoUnit:m\",\"value\":0},\"station\":\"https://observation-station-1\",\"timestamp\":\"2023-10-12T20:00:00+00:00\",\"rawMessage\":\"ARGLE BARGLE FLARGLE FLARGLE\",\"textDescription\":\"It's really coming down out there\",\"icon\":\"https://api.weather.gov/icons/land/day/snow?size=medium\",\"presentWeather\":[{\"intensity\":\"light\",\"modifier\":null,\"weather\":\"snow\",\"rawString\":\"-SN\"},{\"intensity\":null,\"modifier\":null,\"weather\":\"fog_mist\",\"rawString\":\"BR\"}],\"temperature\":{\"unitCode\":\"wmoUnit:degC\",\"value\":7,\"qualityControl\":\"V\"},\"dewpoint\":{\"unitCode\":\"wmoUnit:degC\",\"value\":0,\"qualityControl\":\"V\"},\"windDirection\":{\"unitCode\":\"wmoUnit:degree_(angle)\",\"value\":310,\"qualityControl\":\"V\"},\"windSpeed\":{\"unitCode\":\"wmoUnit:km_h-1\",\"value\":21,\"qualityControl\":\"V\"},\"windGust\":{\"unitCode\":\"wmoUnit:km_h-1\",\"value\":null,\"qualityControl\":\"Z\"},\"barometricPressure\":{\"unitCode\":\"wmoUnit:Pa\",\"value\":100920,\"qualityControl\":\"V\"},\"seaLevelPressure\":{\"unitCode\":\"wmoUnit:Pa\",\"value\":100780,\"qualityControl\":\"V\"},\"visibility\":{\"unitCode\":\"wmoUnit:m\",\"value\":1610,\"qualityControl\":\"C\"},\"maxTemperatureLast24Hours\":{\"unitCode\":\"wmoUnit:degC\",\"value\":null},\"minTemperatureLast24Hours\":{\"unitCode\":\"wmoUnit:degC\",\"value\":null},\"precipitationLastHour\":{\"unitCode\":\"wmoUnit:mm\",\"value\":3,\"qualityControl\":\"C\"},\"precipitationLast3Hours\":{\"unitCode\":\"wmoUnit:mm\",\"value\":6,\"qualityControl\":\"C\"},\"precipitationLast6Hours\":{\"unitCode\":\"wmoUnit:mm\",\"value\":9,\"qualityControl\":\"Z\"},\"relativeHumidity\":{\"unitCode\":\"wmoUnit:percent\",\"value\":88,\"qualityControl\":\"V\"},\"windChill\":{\"unitCode\":\"wmoUnit:degC\",\"value\":-9,\"qualityControl\":\"V\"},\"heatIndex\":{\"unitCode\":\"wmoUnit:degC\",\"value\":null,\"qualityControl\":\"V\"},\"cloudLayers\":[{\"base\":{\"unitCode\":\"wmoUnit:m\",\"value\":370},\"amount\":\"VV\"}]}}]}"),
+      new Response(200,
+        ['Content-type' => 'application/geo+json'],
+        file_get_contents(__DIR__ . "/test_data/" . $whichObservation)
+      ),
     );
 
-    $expected = [
+    return [
       "conditions" => [
         "long" => "Snow",
         "short" => "Snow",
       ],
-      "feels_like" => 16.0,
+      "feels_like" => 45.0,
       "humidity" => 88.0,
       "icon" => "snow.svg",
       "location" => "National Weather Service",
@@ -79,6 +85,50 @@ final class WeatherDataServiceTest extends TestCase {
         "direction" => 310,
       ],
     ];
+  }
+
+  /**
+   * Tests the happy path with no "feels like" temperature.
+   */
+  public function testHappyPathWithNoFeelsLike(): void {
+    $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
+    $expected["feels_like"] = 45.0;
+
+    $actual = $this->weatherDataService->getCurrentConditions();
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Tests the happy path with a heat index.
+   */
+  public function testHappyPathWithHeatIndex(): void {
+    $expected = $this->setupHappyPath("observation.good-heatindex.json");
+    $expected["feels_like"] = 117.0;
+
+    $actual = $this->weatherDataService->getCurrentConditions();
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Tests the happy path with a wind chill.
+   */
+  public function testHappyPathWithWindChill(): void {
+    $expected = $this->setupHappyPath("observation.good-windchill.json");
+    $expected["feels_like"] = 16.0;
+
+    $actual = $this->weatherDataService->getCurrentConditions();
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Tests the happy path with both heat index and wind chill.
+   */
+  public function testHappyPathWithHeatIndexAndWindChill(): void {
+    $expected = $this->setupHappyPath("observation.good-both.json");
+    $expected["feels_like"] = 194.0;
 
     $actual = $this->weatherDataService->getCurrentConditions();
 

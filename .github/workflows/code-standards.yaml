@@ -177,6 +177,7 @@ jobs:
         with:
           percentage: 90
           filename: coverage.xml
+          metric: statements
 
   end-to-end-tests:
     name: end-to-end tests

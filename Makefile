@@ -50,7 +50,7 @@ shell: ## Get a shell inside the Drupal container
 
 u: unit-test
 unit-test: ## Run PHP unit tests
-	docker compose exec drupal phpunit
+	docker compose exec drupal phpunit --coverage-html /coverage
 
 zap: zap-containers rebuild install-site ## Delete the entire Docker environment and start from scratch.
 zap-containers:
