@@ -160,7 +160,6 @@ jobs:
           tags: 18f-zscaler-drupal:10-apache
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          push: true
 
       - name: bring up server
         env:
