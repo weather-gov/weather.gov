@@ -138,40 +138,22 @@ jobs:
     name: end-to-end tests
     runs-on: ubuntu-latest
 
-    services:
-      database:
-        image: mariadb:10
-        env:
-          MYSQL_DATABASE: weathergov
-          MYSQL_USER: drupal
-          MYSQL_PASSWORD: drupal
-          MYSQL_ROOT_PASSWORD: drupal
-
     steps:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - uses: docker/build-push-action@v5
+      - name: start the site
+        uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
-          context: .
-          file: ./Dockerfile.dev
-          tags: 18f-zscaler-drupal:10-apache
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          file: docker-compose.yml
+          cache-key: docker-compose-cache-${{ hashFiles('composer.lock', 'Dockerfile.dev') }}
+          push: false
+          up: true
+          up-opts: "-d"
 
-      - name: bring up server
-        env:
-          DRUPAL_DB_NAME: weathergov
-          DRUPAL_DB_USERNAME: drupal
-          DRUPAL_DB_PASSWORD: drupal
-          DRUPAL_DB_HOST: database
-          DRUPAL_DB_PORT: 3306
-        run: |
-          docker run -p 8080:8080 -d 18f-zscaler-drupal:10-apache
-          sleep 10
-          make install-site
+      # Give the containers a moment to settle.
+      - name: wait a tick
+        run: sleep 10
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
