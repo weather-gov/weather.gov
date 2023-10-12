@@ -1,0 +1,25 @@
+uuid: 6c0a6983-73dc-4271-92b8-f41cd9c0b4fb
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.agency-identification-links
+  module:
+    - system
+  theme:
+    - new_weather_theme
+id: new_weather_theme_agencyidentificationlinks
+theme: new_weather_theme
+region: footer
+weight: -3
+provider: null
+plugin: 'system_menu_block:agency-identification-links'
+settings:
+  id: 'system_menu_block:agency-identification-links'
+  label: 'Agency identification links'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

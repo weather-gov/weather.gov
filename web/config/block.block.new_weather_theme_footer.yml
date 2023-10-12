@@ -10,13 +10,13 @@ dependencies:
     - new_weather_theme
 id: new_weather_theme_footer
 theme: new_weather_theme
-region: footer
-weight: 0
+region: primary_footer
+weight: -3
 provider: null
 plugin: 'system_menu_block:footer'
 settings:
   id: 'system_menu_block:footer'
-  label: Footer
+  label: 'Footer primary links'
   label_display: '0'
   provider: system
   level: 1
