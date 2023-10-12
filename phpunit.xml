@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit>
+  <testsuites>
+    <testsuite name="unit tests">
+      <directory suffix=".php.test">web/themes/new_weather_theme</directory>
+      <directory suffix=".php.test">web/modules/weather_blocks</directory>
+      <directory suffix=".php.test">web/modules/weather_data</directory>
+    </testsuite>
+  </testsuites>
+  <coverage
+    includeUncoveredFiles="true"
+    processUncoveredFiles="true"
+  >
+    <include>
+      <directory>web/themes/new_weather_theme</directory>
+      <directory>web/modules/weather_blocks</directory>
+      <directory>web/modules/weather_data</directory>
+    </include>
+  </coverage>
+</phpunit>

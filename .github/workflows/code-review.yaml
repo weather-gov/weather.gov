@@ -1,0 +1,54 @@
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - main
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Github Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Check modified files
+        id: check_files
+        run: |
+          echo "=============== list modified files ==============="
+          git diff --name-only -r HEAD^1 HEAD
+          
+          echo "========== check paths of modified files =========="
+          git diff --name-only -r HEAD^1 HEAD > files.txt
+          # Start with generic CR template
+          template_name='.github/workflows/code-review-templates/code-review-generic.md'
+          while read -r file; do
+            # If any of the files are in web, do a full CR
+            if [[ $file == web/* ]]; then
+              template_name='.github/workflows/code-review-templates/code-review-web.md'
+              break
+            # Change the file from generic to document if any docs changes
+            elif [[ $file == docs/* ]]; then
+              template_name='.github/workflows/code-review-templates/code-review-docs.md'
+            fi
+          done < "files.txt"
+          echo $template_name
+          echo "filename=$template_name" >> "$GITHUB_OUTPUT"
+      - name: Read template file
+        id: get_template_content
+        run: |
+          {
+            echo 'template<<EOF'
+            cat ${{ steps.check_files.outputs.filename }}
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+      - name: Comment on pull request
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${{ steps.get_template_content.outputs.template }}`
+            })
