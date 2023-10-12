@@ -138,14 +138,38 @@ jobs:
     name: end-to-end tests
     runs-on: ubuntu-latest
 
+    services:
+      database:
+        image: mariadb:10
+        env:
+          MYSQL_DATABASE: weathergov
+          MYSQL_USER: drupal
+          MYSQL_PASSWORD: drupal
+          MYSQL_ROOT_PASSWORD: drupal
+
     steps:
       - name: checkout
         uses: actions/checkout@v3
 
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.dev
+          tags: 18f-zscaler-drupal:10-apache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: true
+
       - name: bring up server
+        env:
+          DRUPAL_DB_NAME: weathergov
+          DRUPAL_DB_USERNAME: drupal
+          DRUPAL_DB_PASSWORD: drupal
+          DRUPAL_DB_HOST: database
+          DRUPAL_DB_PORT: 3306
         run: |
-          docker compose up -d
-          sleep 5
+          docker run -p 8080:8080 -d 18f-zscaler-drupal:10-apache
+          sleep 10
           make install-site
 
       - name: Cypress run
