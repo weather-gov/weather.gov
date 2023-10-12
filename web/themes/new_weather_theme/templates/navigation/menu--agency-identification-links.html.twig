@@ -1,36 +1,11 @@
-{% import _self as menus %}
-
-{#
-  We call a macro which calls itself to render the full tree.
-  @see https://twig.symfony.com/doc/3.x/tags/macro.html
-#}
-{{ menus.menu_links(items, attributes, 0) }}
 <section class="usa-identifier__section usa-identifier__section--usagov" aria-label="U.S. government information and services,">
 	<div class="usa-identifier__container">
-
-		{% macro menu_links(items, attributes, menu_level) %}
-			{% import _self as menus %}
-			{% if items %}
-				{% if menu_level == 0 %}
-					<ul{{attributes.addClass('menu usa-list--unstyled desktop:display-flex flex-justify')}}>
-					{% else %}
-						<ul class="menu">
-						{% endif %}
-						{% for item in items %}
-							{%
-        set classes = [
-          'menu-item',
-          'text-base-lightest',
-          'text-bold',
-        ]
-      %}
-							<li{{item.attributes.addClass(classes)}}>
-								{{ link(item.title, item.url) }}
-							</li>
-						{% endfor %}
-					</ul>
-				{% endif %}
-			{% endmacro %}
-
-		</div>
-	</section>
+		<ul class="usa-list--unstyled desktop:display-flex flex-row flex-justify">
+			{% for item in items %}
+				<li>
+					<a class="usa-link text-bold" href="{{ item.url }}">{{ item.title }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+</section>
