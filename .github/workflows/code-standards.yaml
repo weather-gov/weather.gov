@@ -137,9 +137,16 @@ jobs:
   end-to-end-tests:
     name: end-to-end tests
     runs-on: ubuntu-latest
+
     steps:
       - name: checkout
         uses: actions/checkout@v3
+
+      - name: bring up server
+        run: |
+          docker comopse up -d
+          sleep 5
+          make install-site
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
