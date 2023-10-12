@@ -67,7 +67,7 @@ jobs:
         run: echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-eslint.json"
 
       - name: run eslint
-        run: npm run lint
+        run: npm run js-lint
 
   style-lint:
     name: SCSS lint
@@ -93,7 +93,7 @@ jobs:
       - name: run stylelint
         run: npm run style-lint -- -f github
 
-  unit-tests:
+  php-unit-tests:
     name: PHP unit tests
     runs-on: ubuntu-latest
     steps:
@@ -133,3 +133,26 @@ jobs:
 
       - name: run unit tests
         run: vendor/bin/phpunit
+
+  end-to-end-tests:
+    name: end-to-end tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: start the site
+        run: docker compose up -d
+
+      # Give the containers a moment to settle.
+      - name: wait a tick
+        run: sleep 10
+
+      - name: populate the site
+        run: |
+          cp web/sites/example.settings.dev.php web/sites/settings.dev.php
+          make install-site
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
