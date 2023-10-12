@@ -13,14 +13,25 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tester for the StarterKit.php file.
+ * Tests for the WeatherDataService.
  */
 final class WeatherDataServiceTest extends TestCase {
+  /**
+   * The mocked HTTP client.
+   *
+   * @var httpClientMock
+   */
   protected $httpClientMock;
+
+  /**
+   * The WeatherDataService object under test.
+   *
+   * @var weatherDataService
+   */
   protected $weatherDataService;
 
   /**
-   *
+   * Common setup for all component tests.
    */
   protected function setUp() : void {
     parent::setUp();
@@ -33,9 +44,12 @@ final class WeatherDataServiceTest extends TestCase {
   }
 
   /**
-   * Tests that true is true.
+   * Tests the happy path.
+   *
+   * Given nominal results from the API, we know what the WeatherDataService
+   * should return, so let's test for that.
    */
-  public function testDoThing(): void {
+  public function happyPath(): void {
     $this->httpClientMock->append(
       new Response(200, ['Content-type' => 'application/geo+json'], "{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"https://api.weather.gov/ontology#\",\"s\":\"https://schema.org/\",\"geo\":\"http://www.opengis.net/ont/geosparql#\",\"unit\":\"http://codes.wmo.int/common/unit/\",\"@vocab\":\"https://api.weather.gov/ontology#\",\"geometry\":{\"@id\":\"s:GeoCoordinates\",\"@type\":\"geo:wktLiteral\"},\"city\":\"s:addressLocality\",\"state\":\"s:addressRegion\",\"distance\":{\"@id\":\"s:Distance\",\"@type\":\"s:QuantitativeValue\"},\"bearing\":{\"@type\":\"s:QuantitativeValue\"},\"value\":{\"@id\":\"s:value\"},\"unitCode\":{\"@id\":\"s:unitCode\",\"@type\":\"@id\"},\"forecastOffice\":{\"@type\":\"@id\"},\"forecastGridData\":{\"@type\":\"@id\"},\"publicZone\":{\"@type\":\"@id\"},\"county\":{\"@type\":\"@id\"}}],\"id\":\"https://api.weather.gov/points/LAT,LNG\",\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0,0]},\"properties\":{\"@id\":\"https://api.weather.gov/points/LAT,LNG\",\"@type\":\"wx:Point\",\"cwa\":\"NWS\",\"forecastOffice\":\"https://api.weather.gov/offices/NWS\",\"gridId\":\"NWS\",\"gridX\":180,\"gridY\":17,\"forecast\":\"https://forecast\",\"forecastHourly\":\"https://forecast/hourly\",\"forecastGridData\":\"https://gridpoints/NWS/180,17\",\"observationStations\":\"https://gridpoints/NWS/180,17/stations\",\"relativeLocation\":{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0,0]},\"properties\":{\"city\":\"National Weather Service\",\"state\":\"National Oceanographic and Atmospheric Administration\",\"distance\":{\"unitCode\":\"wmoUnit:m\",\"value\":0},\"bearing\":{\"unitCode\":\"wmoUnit:degree_(angle)\",\"value\":90}}},\"forecastZone\":\"https://api.weather.gov/zones/forecast/\",\"county\":\"https://api.weather.gov/zones/county/\",\"fireWeatherZone\":\"https://api.weather.gov/zones/fire/\",\"timeZone\":\"America/Denver\",\"radarStation\":\"KNWS\"}}")
     );
@@ -49,7 +63,7 @@ final class WeatherDataServiceTest extends TestCase {
     $expected = [
       "conditions" => [
         "long" => "Snow",
-        "short" => "Snow"
+        "short" => "Snow",
       ],
       "feels_like" => 16.0,
       "humidity" => 88.0,
@@ -58,19 +72,17 @@ final class WeatherDataServiceTest extends TestCase {
       "temperature" => 45.0,
       "timestamp" => [
         "formatted" => "Thursday 8:00 PM GMT+0000",
-        "utc" => "1697140800"
+        "utc" => "1697140800",
       ],
       "wind" => [
         "speed" => 13,
-        "direction" => 310
-      ]
+        "direction" => 310,
+      ],
     ];
-
 
     $actual = $this->weatherDataService->getCurrentConditions();
 
-
-    $this->assertEquals((object)$expected, (object)$actual);
+    $this->assertEquals((object) $expected, (object) $actual);
   }
 
 }

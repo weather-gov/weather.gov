@@ -48,6 +48,10 @@ reset-site-database:
 shell: ## Get a shell inside the Drupal container
 	docker compose exec drupal bash
 
+u: unit-test
+unit-test: ## Run PHP unit tests
+	docker compose exec drupal phpunit
+
 zap: zap-containers rebuild install-site ## Delete the entire Docker environment and start from scratch.
 zap-containers:
 	docker compose stop
