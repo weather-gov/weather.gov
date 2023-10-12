@@ -20,6 +20,10 @@ describe("main script", () => {
             const utc = timestamp.getAttribute("data-utc");
             const actual = timestamp.innerText;
 
+            // [TODO]
+            // Eventually we should replace API calls with fixtures so we don't
+            // need to rely on this formatter. If the expected date is fixed,
+            // the expected string representations should also be fixed.
             const formatter = new Intl.DateTimeFormat(locale, {
               weekday: "long",
               hour: "numeric",
