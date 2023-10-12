@@ -67,7 +67,7 @@ jobs:
         run: echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-eslint.json"
 
       - name: run eslint
-        run: npm run lint
+        run: npm run js-lint
 
   style-lint:
     name: SCSS lint
