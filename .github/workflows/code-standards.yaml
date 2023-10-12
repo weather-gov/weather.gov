@@ -155,5 +155,10 @@ jobs:
       - name: wait a tick
         run: sleep 10
 
+      - name: populate the site
+        run: |
+          make install-site
+          docker compose exec drupal drush content:import scs-export/node-page-427c45cf-9fb6-4e79-a0f5-5a54f82b0bfb.yml
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
