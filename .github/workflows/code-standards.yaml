@@ -143,13 +143,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: start the site
-        uses: yu-ichiro/spin-up-docker-compose-action@v1
-        with:
-          file: docker-compose.yml
-          cache-key: docker-compose-cache-${{ hashFiles('composer.lock', 'Dockerfile.dev') }}
-          push: false
-          up: true
-          up-opts: "-d"
+        run: docker compose up -d
 
       # Give the containers a moment to settle.
       - name: wait a tick
