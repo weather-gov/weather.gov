@@ -1,0 +1,21 @@
+@startuml weather.gov software stack
+
+
+package "CMS" {
+  [USWDS theme] as m1
+  [Weather blocks module] as m2
+  [Weather data module] as m3
+  [Drupal]
+  [MySQL]
+}
+
+m1 --> Drupal
+m2 --> Drupal
+m3 --> Drupal
+
+[Apache]
+Drupal <--> Apache
+
+Drupal <--> MySQL
+
+@enduml
