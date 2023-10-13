@@ -1,5 +1,9 @@
 @startuml weather.gov software stack
 
+# Make this more about user flows than actual software stack. User comes in via
+# browser, hits Apache, gets handed off to Drupal, uses modules, etc. to figure
+# out what to render, pulls data from the database, assembles it all back
+# together, and pushes it back out to the browser.
 
 package "CMS" {
   [USWDS theme] as m1
