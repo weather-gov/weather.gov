@@ -1,12 +1,8 @@
 FROM php:8.2-apache-bookworm
 
-# Copy the zscaler root CA into the container, and configure both cURL and PHP
-# to use it. This allows composer inside the container to access the package
-# registry.
-COPY zscaler-root.pem /var/certs/zscaler-root.pem
-ENV CURL_CA_BUNDLE=/var/certs/zscaler-root.pem
-RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini 
-RUN echo "openssl.cafile=/var/certs/zscaler-root.pem" >> /usr/local/etc/php/php.ini
+# Copy the zscaler root CA into the container and add it to the list of OpenSSL
+# root certificates.
+COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
 
 # install the PHP extensions we need
 RUN set -eux; \
@@ -26,8 +22,8 @@ RUN set -eux; \
   libwebp-dev \
   libzip-dev \
   ; \
-  pecl install xdebug \
-  ; \
+  pecl install xdebug; \
+  docker-php-ext-enable xdebug; \
   \
   docker-php-ext-configure gd \
   --with-freetype \
@@ -41,9 +37,6 @@ RUN set -eux; \
   pdo_mysql \
   pdo_pgsql \
   zip \
-  ; \
-  \
-  docker-php-ext-enable xdebug \
   ; \
   # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
   apt-mark auto '.*' > /dev/null; \
