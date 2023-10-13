@@ -186,6 +186,12 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: cache docker lib
+        uses: actions/cache@v3
+        with:
+          path: /var/lib/docker
+          key: ${{ hashFiles('composer.lock', 'Dockerfile.dev') }}
+
       - name: start the site
         run: docker compose up -d
 
