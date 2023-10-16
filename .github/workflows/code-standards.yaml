@@ -199,8 +199,8 @@ jobs:
           tags: 18f-zscaler-drupal:10-apache
           file: ./Dockerfile.dev
           context: .
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type-local,dest=/tmp/.buildx-cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: start the site
         run: docker compose up -d
