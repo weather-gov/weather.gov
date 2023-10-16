@@ -35,7 +35,7 @@
   "prettier": {},
   "scripts": {
     "cypress:open": "cypress open",
-    "js-lint": "eslint web/**/assets/**/*.js cypress/**/*.js *.js",
+    "js-lint": "eslint web/**/assets/**/*.js tests/**/*.js *.js",
     "style-lint": "stylelint **/*.scss"
   }
 }
