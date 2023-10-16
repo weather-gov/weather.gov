@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Drupal\weather_data\Service;
 
 include_once "WeatherDataService.php";
