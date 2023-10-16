@@ -3,13 +3,17 @@
 help:
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
+a11y: accessibility-test
+accessibility-test: ## Run accessibility tests (alias a11y)
+	npx cypress run --project tests/a11y
+
 cc: clear-cache
 clear-cache: ## Clear and rebuild all Drupal caches (alias cc)
 	docker compose exec drupal drush cache:rebuild
 
 ee: end-to-end-test
 end-to-end-test: ## Run end-to-end tests in Cypress. (alias ee)
-	npx cypress run
+	npx cypress run --project tests/e2e
 
 export-config: ## Export your current Drupal site's configuration to the config directory
 	docker compose exec drupal drush config:export -y
