@@ -7,6 +7,10 @@ cc: clear-cache
 clear-cache: ## Clear and rebuild all Drupal caches (alias cc)
 	docker compose exec drupal drush cache:rebuild
 
+ee: end-to-end-test
+end-to-end-test: ## Run end-to-end tests in Cypress. (alias ee)
+	npx cypress run
+
 export-config: ## Export your current Drupal site's configuration to the config directory
 	docker compose exec drupal drush config:export -y
 
