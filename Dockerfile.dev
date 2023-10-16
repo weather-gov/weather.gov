@@ -3,6 +3,11 @@ FROM php:8.2-apache-bookworm
 # Copy the zscaler root CA into the container and add it to the list of OpenSSL
 # root certificates.
 COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
+# Rebuild the CA cache. Otherwise the prior step is useless.
+RUN c_rehash
+# Tell PHP where to look for CAs. I dunno why it doesn't look here by default.
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+RUN echo "openssl.capath=/etc/ssl/certs/" >> /usr/local/etc/php/php.ini
 
 # install the PHP extensions we need
 RUN set -eux; \
