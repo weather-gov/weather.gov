@@ -1,0 +1,16 @@
+.weather-gov-current-conditions {
+  & .icon svg {
+    height: 64px;
+
+    & path.st0 {
+      fill: black;
+    }
+  }
+
+  & .item {
+    & svg {
+      height: 16px;
+      width: 16px;
+    }
+  }
+}
