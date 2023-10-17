@@ -7,7 +7,6 @@
       }
 
       & .timestamp {
-        color: #7F7F7F;
         font-size: 0.7rem;
       }
 
@@ -39,7 +38,6 @@
 
       & div sub {
         font-size: 0.75rem;
-        color: #7f7f7f;
       }
 
       & .item {
@@ -54,7 +52,7 @@
   <section class="weather-gov-current-conditions">
     <h1>{{ content["#data"]["location"] }}</h1>
 
-    <p class="timestamp">
+    <p class="timestamp text-gray-50">
       Weather as of
       <weather-timestamp data-utc="{{ content["#data"]["timestamp"]["utc"] }}">
         {{ content["#data"]["timestamp"]["formatted"] }}
@@ -81,7 +79,7 @@
             {{ content["#data"]["feels_like" ]}}
             <span class="unit">&deg;F</span>
           </p>
-          <p><sub>Feels like</sub></p>
+          <p><sub class="text-gray-50">Feels like</sub></p>
           <p class="item">
             {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }} Humidity: {{ content["#data"]["humidity"] }}%
           </p>
