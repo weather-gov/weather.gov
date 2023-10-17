@@ -5,5 +5,5 @@ definitions:
     weight: -38
     menu_name: footer
     parent: ''
-    expanded: false
     enabled: false
+    expanded: false
