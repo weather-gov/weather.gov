@@ -2,7 +2,7 @@ _core:
   default_config_hash: jdY7AU0tU-QsjmiOw3W8vwpYMb-By--_MSFgbqKUTYM
 definitions:
   contact__site_page:
-    weight: -46
+    weight: -38
     menu_name: footer
     parent: ''
     expanded: false

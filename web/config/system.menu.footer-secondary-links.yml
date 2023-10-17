@@ -1,8 +1,0 @@
-uuid: f5797357-2df5-48bc-a7d7-eb85d7bd9d9d
-langcode: en
-status: true
-dependencies: {  }
-id: footer-secondary-links
-label: 'Footer secondary links'
-description: 'Footer secondary links'
-locked: false
