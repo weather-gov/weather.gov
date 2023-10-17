@@ -9,6 +9,8 @@ weather_routes.point:
 
 weather_routes.grid:
   path: '/local/{wfo}/{gridX}/{gridY}/{location}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::noop
   requirements:
     # Public endpoint
     _access: 'TRUE'

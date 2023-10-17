@@ -37,6 +37,10 @@ final class LocationAndGridRouteController extends ControllerBase {
     );
   }
 
+  public function noop() { 
+    return [];
+  }
+
   /**
    * Redirect the user from a point to a grid cell.
    *
