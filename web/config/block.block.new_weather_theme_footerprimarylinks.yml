@@ -1,4 +1,4 @@
-uuid: 3c41d3db-4260-4461-ac3d-faa6dcdfe901
+uuid: 53149b56-872a-4f14-ab22-b651760ce3dd
 langcode: en
 status: true
 dependencies:
@@ -8,15 +8,15 @@ dependencies:
     - system
   theme:
     - new_weather_theme
-id: new_weather_theme_footer
+id: new_weather_theme_footerprimarylinks
 theme: new_weather_theme
-region: footer
-weight: 0
+region: primary_footer
+weight: -3
 provider: null
 plugin: 'system_menu_block:footer'
 settings:
   id: 'system_menu_block:footer'
-  label: Footer
+  label: 'Footer primary links'
   label_display: '0'
   provider: system
   level: 1

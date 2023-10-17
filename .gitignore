@@ -80,3 +80,6 @@ node_modules
 
 # Allow cloud.gov settings file.
 !web/sites/default/settings.cloudgov.php
+
+# Allow exported content file.
+!web/scs-export/*.zip
