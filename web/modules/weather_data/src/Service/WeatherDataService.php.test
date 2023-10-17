@@ -81,18 +81,20 @@ final class WeatherDataServiceTest extends TestCase {
         "long" => "Snow",
         "short" => "Snow",
       ],
-      "feels_like" => 45.0,
-      "humidity" => 88.0,
+      "feels_like" => 45,
+      "humidity" => 88,
       "icon" => "snow.svg",
       "location" => "National Weather Service",
-      "temperature" => 45.0,
+      "temperature" => 45,
       "timestamp" => [
         "formatted" => "Thursday 8:00 PM GMT+0000",
         "utc" => "1697140800",
       ],
       "wind" => [
         "speed" => 13,
-        "direction" => 310,
+        "angle" => 310,
+        "direction" => "northwest",
+        "shortDirection" => "NW",
       ],
     ];
   }
@@ -102,7 +104,6 @@ final class WeatherDataServiceTest extends TestCase {
    */
   public function testHappyPathWithNoFeelsLike(): void {
     $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
-    $expected["feels_like"] = 45.0;
 
     $actual = $this->weatherDataService->getCurrentConditions();
 
@@ -114,7 +115,7 @@ final class WeatherDataServiceTest extends TestCase {
    */
   public function testHappyPathWithHeatIndex(): void {
     $expected = $this->setupHappyPath("observation.good-heatindex.json");
-    $expected["feels_like"] = 117.0;
+    $expected["feels_like"] = 117;
 
     $actual = $this->weatherDataService->getCurrentConditions();
 
@@ -126,7 +127,7 @@ final class WeatherDataServiceTest extends TestCase {
    */
   public function testHappyPathWithWindChill(): void {
     $expected = $this->setupHappyPath("observation.good-windchill.json");
-    $expected["feels_like"] = 16.0;
+    $expected["feels_like"] = 16;
 
     $actual = $this->weatherDataService->getCurrentConditions();
 
@@ -138,11 +139,85 @@ final class WeatherDataServiceTest extends TestCase {
    */
   public function testHappyPathWithHeatIndexAndWindChill(): void {
     $expected = $this->setupHappyPath("observation.good-both.json");
-    $expected["feels_like"] = 194.0;
+    $expected["feels_like"] = 194;
 
     $actual = $this->weatherDataService->getCurrentConditions();
 
     $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Tests that the wind direction is populated correctly.
+   *
+   * This tests the 8 cardinal and ordinal directions.
+   */
+  public function testWindDirections(): void {
+    $scenarios = [
+      [0, "north", "N"],
+      [45, "northeast", "NE"],
+      [90, "east", "E"],
+      [135, "southeast", "SE"],
+      [180, "south", "S"],
+      [225, "southwest", "SW"],
+      [270, "west", "W"],
+      [315, "northwest", "NW"],
+      [360, "north", "N"],
+    ];
+
+    $observationResponse = json_decode(file_get_contents(__DIR__ . "/test_data/observation.good-no-feelslike.json"));
+
+    $expected = [
+      "conditions" => [
+        "long" => "Snow",
+        "short" => "Snow",
+      ],
+      "feels_like" => 45,
+      "humidity" => 88,
+      "icon" => "snow.svg",
+      "location" => "National Weather Service",
+      "temperature" => 45,
+      "timestamp" => [
+        "formatted" => "Thursday 8:00 PM GMT+0000",
+        "utc" => "1697140800",
+      ],
+      "wind" => [
+        "speed" => 13,
+        "angle" => 310,
+        "direction" => "northwest",
+        "shortDirection" => "NW",
+      ],
+    ];
+
+    foreach ($scenarios as $scenario) {
+      $observationResponse->features[0]->properties->windDirection->value = $scenario[0];
+
+      $expected["wind"]["angle"] = $scenario[0];
+      $expected["wind"]["direction"] = $scenario[1];
+      $expected["wind"]["shortDirection"] = $scenario[2];
+
+      $this->httpClientMock->append(
+        new Response(200,
+          ['Content-type' => 'application/geo+json'],
+          file_get_contents(__DIR__ . "/test_data/points.good.json")
+        )
+      );
+      $this->httpClientMock->append(
+        new Response(200,
+          ['Content-type' => 'application/geo+json'],
+          file_get_contents(__DIR__ . "/test_data/observation-stations.good.json")
+        )
+      );
+      $this->httpClientMock->append(
+        new Response(200,
+          ['Content-type' => 'application/geo+json'],
+          json_encode($observationResponse)
+        ),
+      );
+
+      $actual = $this->weatherDataService->getCurrentConditions();
+
+      $this->assertEquals((object) $expected, (object) $actual);
+    }
   }
 
 }
