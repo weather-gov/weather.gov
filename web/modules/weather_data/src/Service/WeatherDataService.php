@@ -231,23 +231,53 @@ class WeatherDataService {
   }
 
   /**
+   * Get a WFO grid from a latitude and longitude.
+   */
+  public function getGridFromLatLon($lat, $lon) {
+    try {
+      $locationResponse = $this->client->get("https://api.weather.gov/points/$lat,$lon");
+      $locationMetadata = json_decode($locationResponse->getBody());
+
+      return [
+        "wfo" => $locationMetadata->properties->gridId,
+        "gridX" => $locationMetadata->properties->gridX,
+        "gridY" => $locationMetadata->properties->gridY,
+        "location" => $locationMetadata->properties->relativeLocation->properties->city,
+      ];
+
+    }
+    catch (\Throwable $e) {
+      // Need to check the error so we know whether we ought to log something.
+      // But not yet. I am too excited about this location stuff right now.
+      return NULL;
+    }
+  }
+
+  /**
    * Get the current weather conditions at a location.
    *
-   * LOCATION TBD.
+   * The location is taken from the provided route.
+   *
+   * @return array
+   *   The current conditions as an associative array, or
+   *   NULL if no route is provided, or the provided route is not on the grid.
    */
-  public function getCurrentConditions() {
+  public function getCurrentConditions($route) {
+    // If this isn't a grid route, don't do anything. We can only respond to
+    // requests on the grid.
+    if ($route->getRouteName() != "weather_routes.grid") {
+      return NULL;
+    }
+
+    // Since we're on the right kind of route, pull out the data we need.
+    $wfo = $route->getParameter("wfo");
+    $gridX = $route->getParameter("gridX");
+    $gridY = $route->getParameter("gridY");
+    $location = $route->getParameter("location");
+
     date_default_timezone_set('America/New_York');
 
-    // Roughly Nashville.
-    $lat = 36.16;
-    $lon = -86.77;
-
-    $locationResponse = $this->client->get("https://api.weather.gov/points/$lat,$lon");
-    $locationMetadata = json_decode($locationResponse->getBody());
-    $location = $locationMetadata->properties->relativeLocation->properties->city;
-
-    $observationStations = $locationMetadata->properties->observationStations;
-    $obsStationsResponse = $this->client->get($observationStations);
+    $obsStationsResponse = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
     $obsStationsMetadata = json_decode($obsStationsResponse->getBody());
 
     $observationStation = $obsStationsMetadata->features[0];

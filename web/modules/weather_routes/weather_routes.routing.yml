@@ -1,0 +1,14 @@
+weather_routes.point:
+  path: '/point/{lat}/{lon}'
+  defaults:
+    _title: Point forecast redirect
+    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::redirectToGrid
+  requirements:
+    # Public endpoint
+    _access: 'TRUE'
+
+weather_routes.grid:
+  path: '/local/{wfo}/{gridX}/{gridY}/{location}'
+  requirements:
+    # Public endpoint
+    _access: 'TRUE'

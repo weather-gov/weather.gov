@@ -1,0 +1,6 @@
+name: Weather.gov routing
+type: module
+description: Routing controller for weather.gov
+package: weather.gov
+
+core_version_requirement: ^10
