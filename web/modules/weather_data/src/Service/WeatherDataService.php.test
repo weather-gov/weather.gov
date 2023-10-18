@@ -5,6 +5,7 @@ namespace Drupal\weather_data\Service;
 include_once "WeatherDataService.php";
 
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -21,6 +22,13 @@ final class WeatherDataServiceTest extends TestCase {
    * @var httpClientMock
    */
   protected $httpClientMock;
+
+  /**
+   * The mocked route object.
+   *
+   * @var routeMock
+   */
+  protected $routeMock;
 
   /**
    * The WeatherDataService object under test.
@@ -51,18 +59,21 @@ final class WeatherDataServiceTest extends TestCase {
     );
 
     $this->weatherDataService = new WeatherDataService($client, $translationManager);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn('weather_routes.grid');
+    $this->routeMock->method('getParameter')->WillReturnMap([
+      ['wfo', 'NWS'],
+      ['gridX', 10],
+      ['gridY', 10],
+      ['location', 'National Weather Service'],
+    ]);
   }
 
   /**
    * Sets up the HTTP mock for a happy-path of API data for an observation.
    */
   public function setupHappyPath($whichObservation) {
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/points.good.json")
-      )
-    );
     $this->httpClientMock->append(
       new Response(200,
         ['Content-type' => 'application/geo+json'],
@@ -105,7 +116,7 @@ final class WeatherDataServiceTest extends TestCase {
   public function testHappyPathWithNoFeelsLike(): void {
     $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
 
-    $actual = $this->weatherDataService->getCurrentConditions();
+    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -117,7 +128,7 @@ final class WeatherDataServiceTest extends TestCase {
     $expected = $this->setupHappyPath("observation.good-heatindex.json");
     $expected["feels_like"] = 117;
 
-    $actual = $this->weatherDataService->getCurrentConditions();
+    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -129,7 +140,7 @@ final class WeatherDataServiceTest extends TestCase {
     $expected = $this->setupHappyPath("observation.good-windchill.json");
     $expected["feels_like"] = 16;
 
-    $actual = $this->weatherDataService->getCurrentConditions();
+    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -141,7 +152,7 @@ final class WeatherDataServiceTest extends TestCase {
     $expected = $this->setupHappyPath("observation.good-both.json");
     $expected["feels_like"] = 194;
 
-    $actual = $this->weatherDataService->getCurrentConditions();
+    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
