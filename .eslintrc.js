@@ -2,6 +2,8 @@ module.exports = {
   extends: ["airbnb-base", "prettier"],
   ignorePatterns: ["uswds*.js"],
   rules: {
+    // For imports in the browser, file extensions are always required.
+    "import/extensions": ["error", "always"],
     "prefer-destructuring": [0],
     "no-param-reassign": ["error", { props: false }],
   },
@@ -9,7 +11,7 @@ module.exports = {
     es6: true,
     browser: true,
   },
-  parserOptions: { ecmaVersion: 2021 },
+  parserOptions: { ecmaVersion: 2024 },
   overrides: [
     {
       files: ["tests/**/*.js"],
@@ -18,6 +20,9 @@ module.exports = {
         jest: true,
       },
       rules: {
+        // For imports in Node, file extensions are optional and discouraged as
+        // a matter of practice.
+        "import/extensions": ["error", "never"],
         // This rule disallows using require() on files in devDependencies. But
         // for test code, we'll rely on that heavily so we can disable the rule
         // in here.

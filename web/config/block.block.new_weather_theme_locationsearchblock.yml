@@ -1,0 +1,20 @@
+uuid: eae3b5ef-a738-4e02-a026-8784f70e83c0
+langcode: en
+status: true
+dependencies:
+  module:
+    - weather_blocks
+  theme:
+    - new_weather_theme
+id: new_weather_theme_locationsearchblock
+theme: new_weather_theme
+region: content
+weight: -3
+provider: null
+plugin: weathergov_location_search
+settings:
+  id: weathergov_location_search
+  label: 'Location search block'
+  label_display: '0'
+  provider: weather_blocks
+visibility: {  }
