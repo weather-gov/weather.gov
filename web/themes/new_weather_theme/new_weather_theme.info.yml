@@ -2,7 +2,6 @@ name: Weather.gov
 type: theme
 description: The weather.gov theme.
 'base theme': stable9
-starterkit: true
 libraries:
   - new_weather_theme/base
   - new_weather_theme/messages

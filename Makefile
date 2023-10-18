@@ -27,11 +27,13 @@ import-content: web/scs-export/* ## Import content from web/scs-export
 
 install-site: install-site-config import-content ## Install a minimal Drupal site using the configuration in the config directory and exported content
 install-site-config:
-	sleep 5
 	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
 
 lint: ## Run PHP_CodeSniffer on our custom modules and themes
 	docker compose exec drupal phpcs
+
+pause:
+	sleep 5
 
 rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose stop drupal
@@ -39,7 +41,7 @@ rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose build drupal
 	docker compose up -d
 
-reset-site: reset-site-database install-site ## Delete the database and rebuild it from configuration and exported content
+reset-site: reset-site-database pause install-site ## Delete the database and rebuild it from configuration and exported content
 reset-site-database:
 	docker compose stop database
 	docker compose rm database -f
@@ -48,7 +50,11 @@ reset-site-database:
 shell: ## Get a shell inside the Drupal container
 	docker compose exec drupal bash
 
-zap: zap-containers rebuild install-site ## Delete the entire Docker environment and start from scratch.
+u: unit-test
+unit-test: ## Run PHP unit tests
+	docker compose exec drupal phpunit --coverage-html /coverage
+
+zap: zap-containers rebuild pause install-site ## Delete the entire Docker environment and start from scratch.
 zap-containers:
 	docker compose stop
 	docker compose rm -f

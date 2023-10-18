@@ -1,5 +1,14 @@
 FROM php:8.2-apache-bookworm
 
+# Copy the zscaler root CA into the container and add it to the list of OpenSSL
+# root certificates.
+COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
+# Rebuild the CA cache. Otherwise the prior step is useless.
+RUN c_rehash
+# Tell PHP where to look for CAs. I dunno why it doesn't look here by default.
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+RUN echo "openssl.capath=/etc/ssl/certs/" >> /usr/local/etc/php/php.ini
+
 # install the PHP extensions we need
 RUN set -eux; \
   \
@@ -18,6 +27,8 @@ RUN set -eux; \
   libwebp-dev \
   libzip-dev \
   ; \
+  pecl install xdebug; \
+  docker-php-ext-enable xdebug; \
   \
   docker-php-ext-configure gd \
   --with-freetype \
@@ -32,7 +43,6 @@ RUN set -eux; \
   pdo_pgsql \
   zip \
   ; \
-  \
   # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
   apt-mark auto '.*' > /dev/null; \
   apt-mark manual $savedAptMark; \
@@ -54,17 +64,10 @@ RUN { \
   echo 'opcache.interned_strings_buffer=8'; \
   echo 'opcache.max_accelerated_files=4000'; \
   echo 'opcache.revalidate_freq=60'; \
+  echo 'xdebug.mode=coverage'; \
   } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/
-
-# Copy the zscaler root CA into the container, and configure both cURL and PHP
-# to use it. This allows composer inside the container to access the package
-# registry.
-COPY zscaler-root.pem /var/certs/zscaler-root.pem
-ENV CURL_CA_BUNDLE=/var/certs/zscaler-root.pem
-RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini 
-RUN echo "openssl.cafile=/var/certs/zscaler-root.pem" >> /usr/local/etc/php/php.ini
 
 # https://www.drupal.org/node/3060/release
 ENV DRUPAL_VERSION 10.1.2

@@ -58,5 +58,8 @@ services:
       - ./phpcs.xml:/opt/drupal/phpcs.xml
       - ./phpunit.xml:/opt/drupal/phpunit.xml
 
+      # Map in our test coverage directory so we can have those pretty outputs.
+      - ./.coverage:/coverage
+
 networks:
   weather.gov:

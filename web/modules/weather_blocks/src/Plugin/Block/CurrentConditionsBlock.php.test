@@ -1,0 +1,83 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block;
+
+include_once "CurrentConditionsBlock.php";
+
+use Drupal\weather_data\Service\WeatherDataService;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+/**
+ * Tests for the WeatherDataService.
+ */
+final class CurrentConditionsBlockTest extends TestCase {
+  /**
+   * A ready-to-use current conditions block object.
+   *
+   * @var currentConditionsBlock
+   */
+  protected $currentConditionsBlock;
+
+  /**
+   * A mocked WeatherData service object.
+   *
+   * @var weatherData
+   *
+   * This is injected into the current conditions block object being tested with
+   * dependency injection.
+   */
+  protected $weatherData;
+
+  /**
+   * Common setup for all component tests.
+   *
+   * Creates a mock of a weather data service and injects it into a new current
+   * conditions block object.
+   */
+  protected function setUp() : void {
+    $definition = [
+      "provider" => "weather_blocks",
+    ];
+
+    $this->weatherData = $this->createStub(WeatherDataService::class);
+    $this->currentConditionsBlock = new CurrentConditionsBlock([], '', $definition, $this->weatherData);
+  }
+
+  /**
+   * Test that the create() static method gives us back a block object.
+   */
+  public function testCreation() : void {
+    $container = $this->createStub(ContainerInterface::class);
+    $container->method('get')->with("weather_data")->willReturn($this->weatherData);
+
+    $actual = CurrentConditionsBlock::create($container, [], '', ["provider" => "weather_blocks"]);
+    $this->assertEquals(CurrentConditionsBlock::class, $actual::class);
+  }
+
+  /**
+   * Test that block cacheing is disabled.
+   */
+  public function testCache() : void {
+    $expected = 0;
+    $actual = $this->currentConditionsBlock->getCacheMaxAge();
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Test that the block returns the expected data.
+   */
+  public function testBuild() : void {
+    $this->weatherData->method('getCurrentConditions')->willReturn('this is weather data');
+
+    $expected = [
+      "#theme" => "weather_blocks_current_conditions",
+      "#data" => "this is weather data",
+    ];
+    $actual = $this->currentConditionsBlock->build();
+
+    $this->assertEquals($expected, $actual);
+  }
+
+}

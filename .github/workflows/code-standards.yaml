@@ -131,15 +131,16 @@ jobs:
           COMPOSER_NO_DEV: 0
         run: composer install
 
-      - name: cache coverage output
-        uses: actions/cache@v3
-        with:
-          path: coverage.xml
-          key: coverage-output
-
       - name: run unit tests
         run: |
           vendor/bin/phpunit --coverage-clover coverage.xml
+
+      - name: store coverage output
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 1
 
   report-code-coverage:
     name: report code coverage
@@ -147,11 +148,10 @@ jobs:
     needs: [php-unit-tests]
 
     steps:
-      - name: cache coverage output
-        uses: actions/cache@v3
+      - name: get coverage output
+        uses: actions/download-artifact@v3
         with:
-          path: coverage.xml
-          key: coverage-output
+          name: coverage-report
 
       - name: report coverage
         uses: lucassabreu/comment-coverage-clover@v0.10.2
@@ -165,11 +165,10 @@ jobs:
     needs: [php-unit-tests]
 
     steps:
-      - name: cache coverage output
-        uses: actions/cache@v3
+      - name: get coverage output
+        uses: actions/download-artifact@v3
         with:
-          path: coverage.xml
-          key: coverage-output
+          name: coverage-report
 
       - name: 90% code coverage
         id: test-coverage
@@ -177,6 +176,7 @@ jobs:
         with:
           percentage: 90
           filename: coverage.xml
+          metric: statements
 
   end-to-end-tests:
     name: end-to-end tests

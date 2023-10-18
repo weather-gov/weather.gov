@@ -1,0 +1,136 @@
+<?php
+
+namespace Drupal\weather_data\Service;
+
+include_once "WeatherDataService.php";
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the WeatherDataService.
+ */
+final class WeatherDataServiceTest extends TestCase {
+  /**
+   * The mocked HTTP client.
+   *
+   * @var httpClientMock
+   */
+  protected $httpClientMock;
+
+  /**
+   * The WeatherDataService object under test.
+   *
+   * @var weatherDataService
+   */
+  protected $weatherDataService;
+
+  /**
+   * Common setup for all component tests.
+   */
+  protected function setUp() : void {
+    parent::setUp();
+
+    $this->httpClientMock = new MockHandler([]);
+    $stack = HandlerStack::create($this->httpClientMock);
+    $client = new Client(['handler' => $stack]);
+
+    $this->weatherDataService = new WeatherDataService($client);
+  }
+
+  /**
+   * Sets up the HTTP mock for a happy-path of API data for an observation.
+   */
+  public function setupHappyPath($whichObservation) {
+    $this->httpClientMock->append(
+      new Response(200,
+        ['Content-type' => 'application/geo+json'],
+        file_get_contents(__DIR__ . "/test_data/points.good.json")
+      )
+    );
+    $this->httpClientMock->append(
+      new Response(200,
+        ['Content-type' => 'application/geo+json'],
+        file_get_contents(__DIR__ . "/test_data/observation-stations.good.json")
+      )
+    );
+    $this->httpClientMock->append(
+      new Response(200,
+        ['Content-type' => 'application/geo+json'],
+        file_get_contents(__DIR__ . "/test_data/" . $whichObservation)
+      ),
+    );
+
+    return [
+      "conditions" => [
+        "long" => "Snow",
+        "short" => "Snow",
+      ],
+      "feels_like" => 45.0,
+      "humidity" => 88.0,
+      "icon" => "snow.svg",
+      "location" => "National Weather Service",
+      "temperature" => 45.0,
+      "timestamp" => [
+        "formatted" => "Thursday 8:00 PM GMT+0000",
+        "utc" => "1697140800",
+      ],
+      "wind" => [
+        "speed" => 13,
+        "direction" => 310,
+      ],
+    ];
+  }
+
+  /**
+   * Tests the happy path with no "feels like" temperature.
+   */
+  public function testHappyPathWithNoFeelsLike(): void {
+    $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
+    $expected["feels_like"] = 45.0;
+
+    $actual = $this->weatherDataService->getCurrentConditions();
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Tests the happy path with a heat index.
+   */
+  public function testHappyPathWithHeatIndex(): void {
+    $expected = $this->setupHappyPath("observation.good-heatindex.json");
+    $expected["feels_like"] = 117.0;
+
+    $actual = $this->weatherDataService->getCurrentConditions();
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Tests the happy path with a wind chill.
+   */
+  public function testHappyPathWithWindChill(): void {
+    $expected = $this->setupHappyPath("observation.good-windchill.json");
+    $expected["feels_like"] = 16.0;
+
+    $actual = $this->weatherDataService->getCurrentConditions();
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Tests the happy path with both heat index and wind chill.
+   */
+  public function testHappyPathWithHeatIndexAndWindChill(): void {
+    $expected = $this->setupHappyPath("observation.good-both.json");
+    $expected["feels_like"] = 194.0;
+
+    $actual = $this->weatherDataService->getCurrentConditions();
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+}

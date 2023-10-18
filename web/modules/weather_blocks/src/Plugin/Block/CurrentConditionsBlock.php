@@ -48,9 +48,8 @@ class CurrentConditionsBlock extends BlockBase implements ContainerFactoryPlugin
   /**
    * Disable cacheing on this block.
    *
-   * Because this is displayed to anonymous
-   * users and it is location-based (or will be), we can't really rely on any
-   * cacheing here right now.
+   * Because this is displayed to anonymous users and it is location-based (or
+   * will be), we can't really rely on any cacheing here right now.
    *
    * Once we hook up location data, it may be the case that Drupal can cache
    * responses based on that location, in which case a short cache could work
