@@ -1,3 +1,5 @@
+@use "uswds-core" as *;
+
 .weather-gov-current-conditions {
   & .icon svg {
     @include u-height(8);
