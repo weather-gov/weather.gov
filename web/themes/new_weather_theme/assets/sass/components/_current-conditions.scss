@@ -1,0 +1,18 @@
+@use "uswds-core" as *;
+
+.weather-gov-current-conditions {
+  & .icon svg {
+    @include u-height(8);
+
+    & path.st0 {
+      fill: color('black');
+    }
+  }
+
+  & .item {
+    & svg {
+      @include u-height(2);
+      @include u-height(2);
+    }
+  }
+}
