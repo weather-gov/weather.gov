@@ -12,7 +12,7 @@ module.exports = {
   parserOptions: { ecmaVersion: 2021 },
   overrides: [
     {
-      files: ["cypress.config.js", "cypress/e2e/**/*.js"],
+      files: ["tests/**/*.js"],
       extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
       env: {
         jest: true,
