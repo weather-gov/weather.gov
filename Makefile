@@ -11,6 +11,25 @@ cc: clear-cache
 clear-cache: ## Clear and rebuild all Drupal caches (alias cc)
 	docker compose exec drupal drush cache:rebuild
 
+dd: database-dump
+database-dump: ## Dump the current Drupal database to a the dump.sql file. (alias dd)
+	mkdir -p web/config/database
+	docker compose exec drupal bash -c '\
+	  mysqldump \
+	    -h $$DRUPAL_DB_HOST \
+	    -u $$DRUPAL_DB_USERNAME \
+	    -p$$DRUPAL_DB_PASSWORD \
+	    $$DRUPAL_DB_NAME ' > web/config/database/dump.sql
+
+dr: database-restore
+database-restore: ## Restore the Drupal database from the dump.sql file (alias dr)
+	docker compose exec -it drupal bash -c '\
+	  mysql \
+	    -h $$DRUPAL_DB_HOST \
+	    -u $$DRUPAL_DB_USERNAME \
+			-p$$DRUPAL_DB_PASSWORD \
+			$$DRUPAL_DB_NAME < web/config/database/dump.sql'
+
 ee: end-to-end-test
 end-to-end-test: ## Run end-to-end tests in Cypress. (alias ee)
 	npx cypress run --project tests/e2e
