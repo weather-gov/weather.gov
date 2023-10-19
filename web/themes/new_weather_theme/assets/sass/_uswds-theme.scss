@@ -13,49 +13,55 @@ in the form $setting: value,
 //  );
 
 @use "uswds-core" with (
-    $theme-font-path: "../fonts",
-    $theme-font-browser-compatibility: true,
-    $theme-typeface-tokens: (
-        "Nunito Sans": (
-          "display-name": 'Nunito Sans',  
-          "cap-height": 364px,         // the default, leave it for now
-          "stack": "'Open Sans', 'Helvetica Neue', sans-serif",
-        ),
-      ),
-    $theme-font-sans-custom-src: (
-        dir: "Nunito_Sans/static", // the name of your font family directory
-        roman: (
-            100: false,
-            200: false,
-            300: false,
-            400: "NunitoSans_10pt-Regular", // the font file name, without the extension
-            500: "NunitoSans_10pt-Medium",
-            600: "NunitoSans_10pt-SemiBold",
-            700: "NunitoSans_10pt-Bold",
-            800: false,
-            900: false,
-        ),
-        italic: (
-            100: false,
-            200: false,
-            300: false,
-            400: "NunitoSans_10pt-Italic",
-            500: "NunitoSans_10pt-MediumItalic",
-            600: false,
-            700: "NunitoSans_10pt-BoldItalic",
-            800: false,
-            900: false,
-        ),
+  $theme-font-path: "../fonts",
+  $theme-font-browser-compatibility: true,
+  $theme-typeface-tokens: (
+    "Nunito Sans": (
+      "display-name": "Nunito Sans",
+      "cap-height": 364px,
+      // the default, leave it for now
+      "stack": "'Open Sans', 'Helvetica Neue', sans-serif",
     ),
-    $theme-font-type-sans:   "Nunito Sans",
-    $theme-font-role-heading:  'sans',
-    $theme-font-role-body:     'sans',
-    $theme-font-role-code:     'mono',
-    $theme-image-path:  '../images/uswds',
-    $theme-color-primary: #003087, // sky blue
-    $theme-color-primary-light: #0085CA, // water blue
-    $theme-color-base-dark: #333333, // dark gray
-    $theme-show-compile-warnings: true,
-    $theme-show-notifications: false,
-  
-  )
+  ),
+  $theme-font-sans-custom-src: (
+    dir: "Nunito_Sans/static",
+    // the name of your font family directory
+    roman:
+      (
+        100: false,
+        200: false,
+        300: false,
+        400: "NunitoSans_10pt-Regular",
+        // the font file name, without the extension
+        500: "NunitoSans_10pt-Medium",
+        600: "NunitoSans_10pt-SemiBold",
+        700: "NunitoSans_10pt-Bold",
+        800: false,
+        900: false,
+      ),
+    italic: (
+      100: false,
+      200: false,
+      300: false,
+      400: "NunitoSans_10pt-Italic",
+      500: "NunitoSans_10pt-MediumItalic",
+      600: false,
+      700: "NunitoSans_10pt-BoldItalic",
+      800: false,
+      900: false,
+    ),
+  ),
+  $theme-font-type-sans: "Nunito Sans",
+  $theme-font-role-heading: "sans",
+  $theme-font-role-body: "sans",
+  $theme-font-role-code: "mono",
+  $theme-image-path: "../images/uswds",
+  $theme-color-primary: #003087,
+  // sky blue
+  $theme-color-primary-light: #0085ca,
+  // water blue
+  $theme-color-base-dark: #333333,
+  // dark gray
+  $theme-show-compile-warnings: true,
+  $theme-show-notifications: false
+);
