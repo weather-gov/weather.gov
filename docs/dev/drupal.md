@@ -37,6 +37,38 @@ truly custom styles.
 
 ## Modules
 
+#### Routes
+
+The routes module (`weather_routes`) defines some routes that we want to handle
+dynaimcally. For example, the route `/point/{latitude}/{longitude}` will attempt
+to find the correct WFO grid cell for the specified point and redirect the user
+to a route for that grid.
+
+This route also defines route parameters so the parameters can be queried
+elsewhere. For exaple, defining the `/local/{wfo}/{gridX}/{gridY}/{location}`
+route makes it possible for other modules and blocks to query the route for
+parameters, something like:
+
+```php
+$route->getParameter('wfo');
+```
+
+This module should do very little business logic and instead should focus on
+directing users to their desired location and making sure route-appropriate data
+is available to the more logic-focused modules.
+
+#### Weather data
+
+The data module (`weather_data`) acts as a wrapper around the api.weather.gov
+REST API. It also handles data normalization (e.g., ensuring that everything is
+in Fahrenheit, converting wind angles into ordinal/cardinal names, etc.).
+
+#### Weather blocks
+
+The blocks module (`weather_blocks`) provides the code-defined blocks that we
+use. This module is essentially responsible for mapping weather data into
+content types on the page.
+
 ## Diagram
 
 ![weather.gov software stack diagram](../architecture/diagrams/weather.gov%20software%20stack.png)
