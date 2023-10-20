@@ -29,7 +29,7 @@ then:
 
 1. Make sure you have [git commit signing configured](git-signing.md) for this
    repo or globally.
-2. Read up on how we've structured our Drupal code.
+2. Read up on how we've [structured our Drupal code](drupal.md).
 3. Check out our [expectations around code quality](qasp.md).
 4. Look at [how we do testing](testing.md).
 5. Look at our [process for submitting, reviewing, and merging new code](review-standards.md).

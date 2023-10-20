@@ -5,6 +5,11 @@ the behavior of our code and product in a way that we can then verify. There are
 a whole bunch of different kinds of tests we can run, but these are the ones
 we've chosen.
 
+> [!NOTE]  
+> Our decision to use a automated tools for testing and code quality is
+> documented in
+> [architectural decision record #9](../architecture/decisions/0009-we-will-use-a-content-management-system.md).
+
 ## PHP unit testing
 
 For our Drupal modules, we test the PHP code with unit tests. These allow us to
