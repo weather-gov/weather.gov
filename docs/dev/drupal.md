@@ -14,10 +14,11 @@ our pages with the correct markup and styles.
 
 ## Theme
 
-Ultimately, our theme is the heart and soul of our custom development. Our theme
-adds the [US Web Design System](https://designsystem.digital.gov) as the
-foundation that we then build upon. This theme takes care of adding the correct
-stylesheets and Javascript to pages.
+Ultimately, [our theme](../../web/themes/new_weather_theme/README.md) is the
+heart and soul of our custom development. Our theme adds the
+[US Web Design System](https://designsystem.digital.gov) as the foundation that
+we then build upon. This theme takes care of adding the correct stylesheets and
+Javascript to pages.
 
 > [!NOTE]  
 > Our decision to use USWDS is documented in
