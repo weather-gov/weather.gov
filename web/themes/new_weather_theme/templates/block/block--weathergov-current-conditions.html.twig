@@ -7,7 +7,8 @@
     <h1>{{ content["#data"]["location"] }}</h1>
 
     <p class="margin-0 font-body-3xs text-gray-50">
-      Weather as of
+      {{ 'Weather as of' | t }}
+      {# Datetimes are localized in client-side Javascript. #}
       <weather-timestamp data-utc="{{ content["#data"]["timestamp"]["utc"] }}">
         {{ content["#data"]["timestamp"]["formatted"] }}
       </weather-timestamp>
@@ -33,25 +34,40 @@
             {{ content["#data"]["feels_like" ]}}
             <span class="font-body-3xs">&deg;F</span>
           </p>
-          <p class="margin-0 font-body-3xs text-gray-50">Feels like</p>
+          <p class="margin-0 font-body-3xs text-gray-50">{{ "Feels like" | t }}</p>
           <p class="margin-0 item">
-            {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }} Humidity: {{ content["#data"]["humidity"] }}%
+            {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
+            {{ "Humidity: @humidity%" | t({ "@humidity": content["#data"]["humidity"] }) }}
           </p>
           <p class="margin-0 item">
-            {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}Wind: {{ content["#data"]["wind"]["speed"] }} mph {{ content["#data"]["wind"]["direction"] }}
+            {#  #}
+            {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
+            {{ "Wind: @windSpeed mph" | t({ "@windSpeed": content["#data"]["wind"]["speed"] }) }}
           </p>
         </div>
       </div>
     </div>
 
     <p class="conditions-narrative long">
-      The weather in <strong>{{ content["#data"]["location"] }}</strong> is
-      <strong>{{ content["#data"]["conditions"]["long"] | lower }}</strong>.
-      Temperature is <strong>{{ content["#data"]["temperature"] }}
-      &deg;F</strong>. Humidity is <strong>
-      {{ content["#data"]["humidity"] }}%</strong>{% if content["#data"]["wind"]["speed"] > 0  %} with
-      <strong>{{ content["#data"]["wind"]["speed"] }}mph winds</strong> from
-      the {{ content["#data"]["wind"]["direction"] }}{% endif %}.
+      {{ "The weather in <strong>@place</strong> is <strong>@conditions</strong>.
+          Temperature is <strong>@temperature&deg;F</strong>.
+          Humidity is <strong>@humidity%</strong>"
+          |
+          t({
+            "@place": content["#data"]["location"],
+            "@conditions": content["#data"]["conditions"]["long"] | lower,
+            "@temperature": content["#data"]["temperature"],
+            "@humidity": content["#data"]["humidity"]
+          })
+      }}{% if content["#data"]["wind"]["speed"] > 0 %}
+      {{
+        "with <strong>@windSpeed mph winds</strong> from the @windDirection"
+        |
+        t({
+          "@windSpeed": content["#data"]["speed"],
+          "@windDirection": content["#data"]["direction"]
+        })
+      }}{% endif %}.
     </p>
   </section>
 </weather-gov-current-conditions>
