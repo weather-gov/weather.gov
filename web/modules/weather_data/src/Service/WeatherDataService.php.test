@@ -4,18 +4,20 @@ namespace Drupal\weather_data\Service;
 
 include_once "WeatherDataService.php";
 
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for the WeatherDataService.
+ * Tests for the WeatherDataService getCurrentConditions method.
  */
-final class WeatherDataServiceTest extends TestCase {
+final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
   /**
    * The mocked HTTP client.
    *
@@ -237,12 +239,6 @@ final class WeatherDataServiceTest extends TestCase {
       $this->httpClientMock->append(
         new Response(200,
           ['Content-type' => 'application/geo+json'],
-          file_get_contents(__DIR__ . "/test_data/points.good.json")
-        )
-      );
-      $this->httpClientMock->append(
-        new Response(200,
-          ['Content-type' => 'application/geo+json'],
           file_get_contents(__DIR__ . "/test_data/observation-stations.good.json")
         )
       );
@@ -253,10 +249,109 @@ final class WeatherDataServiceTest extends TestCase {
         ),
       );
 
-      $actual = $this->weatherDataService->getCurrentConditions();
+      $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
 
       $this->assertEquals((object) $expected, (object) $actual);
     }
+  }
+
+  /*
+   * Tests asking for current conditions when not on a grid route.
+   */
+  public function testNotGridRoute(): void {
+    // Create a one-off stub because phpunit doesn't allow overriding a return
+    // value from a stub once it's set. It's just set forever. And rather than
+    // changing the setup() method that works for most of these tests, we'll
+    // just work around it.
+    // https://github.com/sebastianbergmann/phpunit-mock-objects/issues/260
+    $routeMock = $this->createStub(RouteMatchInterface::class);
+    $routeMock->method('getRouteName')->willReturn('weather_routes.not-grid');
+
+    $actual = $this->weatherDataService->getCurrentConditions($routeMock);
+
+    $this->assertEquals(NULL, $actual);
+  }
+
+}
+
+/**
+ * Tests for the WeatherDataService getGridFromLatLon method.
+ */
+final class WeatherDataServiceGetGridFromLatLon extends TestCase {
+  /**
+   * The mocked HTTP client.
+   *
+   * @var httpClientMock
+   */
+  protected $httpClientMock;
+
+  /**
+   * The WeatherDataService object under test.
+   *
+   * @var weatherDataService
+   */
+  protected $weatherDataService;
+
+  /**
+   * Common setup for all component tests.
+   */
+  protected function setUp() : void {
+    parent::setUp();
+
+    $this->httpClientMock = new MockHandler([]);
+    $stack = HandlerStack::create($this->httpClientMock);
+    $client = new Client(['handler' => $stack]);
+
+    $translationManager = $this->createStub(TranslationInterface::class);
+
+    $this->weatherDataService = new WeatherDataService($client, $translationManager);
+  }
+
+  /**
+   * Tests the happy path.
+   */
+  public function testHappyPath(): void {
+    $this->httpClientMock->append(
+      new Response(200,
+        ['Content-type' => 'application/geo+json'],
+        json_encode([
+          "properties" => [
+            "gridId" => "the wfo",
+            "gridX" => "an x",
+            "gridY" => "a y",
+            "relativeLocation" => [
+              "properties" => [
+                "city" => "place",
+              ],
+            ],
+          ],
+        ]),
+      ),
+    );
+
+    $expected = [
+      "wfo" => "the wfo",
+      "gridX" => "an x",
+      "gridY" => "a y",
+      "location" => "place",
+    ];
+
+    $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Tests when we get a request error.
+   */
+  public function testErrorCondition(): void {
+    $this->httpClientMock->append(
+      new RequestException('', new Request('GET', ''))
+    );
+
+    $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
+
+    $this->assertEquals(NULL, $actual);
   }
 
 }
