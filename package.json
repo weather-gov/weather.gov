@@ -35,7 +35,9 @@
   "prettier": {},
   "scripts": {
     "cypress:open": "cypress open",
+    "js-format": "npx prettier -w web/themes/**/assets/**/*.js tests/**/*.js *.js",
     "js-lint": "eslint web/**/assets/**/*.js tests/**/*.js *.js",
+    "style-format": "npx prettier -w web/themes/**/*.scss",
     "style-lint": "stylelint **/*.scss"
   }
 }

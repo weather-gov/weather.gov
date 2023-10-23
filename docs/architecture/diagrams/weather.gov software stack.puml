@@ -1,0 +1,45 @@
+@startuml weather.gov software stack
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!include DEVICONS/drupal.puml
+!include DEVICONS/mysql.puml
+!include DEVICONS2/apache.puml
+
+LAYOUT_WITH_LEGEND()
+title weather.gov software stack
+skinparam linetype polyline
+
+
+Person_Ext(anon, "Public user")
+
+System_Boundary(web, "weather.gov") {
+  Container(apache, "Apache", $sprite="apache")
+
+  System_Boundary(cms, "CMS") {
+    System(drupal, "Drupal", $sprite="drupal")
+    ComponentDb(db, "MariaDB", $sprite="mysql")
+
+    Component(routes, "Weather routes module")
+    Component(data, "Weather data module")
+    Component(blocks, "Weather blocks module")
+    Component(theme, "Weather USWDS theme")
+  }
+}
+
+System_Ext(api, "api.weather.gov")
+
+BiRel(drupal, db, "Stores configuration and content")
+
+Rel(anon, apache, "visits the site")
+Rel(apache, drupal, "passes the request along to Drupal")
+
+Rel(drupal, routes, "1. Redirects or adds context data")
+Rel(drupal, blocks, "2. Populates the appropriate blocks, based on the route")
+Rel(blocks, data, "Gets the data it needs")
+Rel(data, api, "Fetches data from api.weather.gov")
+Rel(drupal, theme, "3. Assembles the page, including all appropriate blocks")
+
+
+@enduml
