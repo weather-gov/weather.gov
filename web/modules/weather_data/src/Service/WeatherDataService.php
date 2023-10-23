@@ -2,6 +2,7 @@
 
 namespace Drupal\weather_data\Service;
 
+use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\ClientInterface;
 
 /**
@@ -210,10 +211,18 @@ class WeatherDataService {
   private $client;
 
   /**
+   * Translation provider.
+   *
+   * @var \Drupal\Core\StringTranslation\TranslationInterface t
+   */
+  private $t;
+
+  /**
    * Constructor.
    */
-  public function __construct(ClientInterface $httpClient) {
+  public function __construct(ClientInterface $httpClient, TranslationInterface $t) {
     $this->client = $httpClient;
+    $this->t = $t;
   }
 
   /**
@@ -256,12 +265,12 @@ class WeatherDataService {
 
     return [
       'conditions' => [
-        'long' => $description,
-        'short' => $description,
+        'long' => $this->t->translate($description),
+        'short' => $this->t->translate($description),
       ],
       // C to F.
       'feels_like' => round($feelsLike),
-      'humidity' => round($obs->relativeHumidity->value),
+      'humidity' => round($obs->relativeHumidity->value ?? 0),
       'icon' => get_noaa_icon($obs) ,
       'location' => $location,
       // C to F.

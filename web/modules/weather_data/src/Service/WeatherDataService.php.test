@@ -4,6 +4,7 @@ namespace Drupal\weather_data\Service;
 
 include_once "WeatherDataService.php";
 
+use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -38,7 +39,18 @@ final class WeatherDataServiceTest extends TestCase {
     $stack = HandlerStack::create($this->httpClientMock);
     $client = new Client(['handler' => $stack]);
 
-    $this->weatherDataService = new WeatherDataService($client);
+    // Just return the input string. The translation manager is tested by Drupal
+    // so we don't need to.
+    $translationManager = $this->createStub(TranslationInterface::class);
+    $translationManager->method('translate')->will(
+      $this->returnCallback(
+        function ($str) {
+          return $str;
+        }
+      )
+    );
+
+    $this->weatherDataService = new WeatherDataService($client, $translationManager);
   }
 
   /**
