@@ -1,72 +1,104 @@
-<weather-gov-current-conditions style="display:block;max-width: 50%;">
-  <style type="text/css">
-    
-  </style>
+{# these first three should go away when we put this into a region #}
+<div class="grid-container weather-gov-current-conditions padding-0 margin-0">
+  <div class="grid-row">
+    <div class="grid-col-6">
+{#=======================================#}
 
-  <section class="weather-gov-current-conditions">
-    <h1>{{ content["#data"]["location"] }}</h1>
-
-    <p class="margin-0 font-body-3xs text-gray-50">
-      {{ 'Weather as of' | t }}
-      {# Datetimes are localized in client-side Javascript. #}
-      <weather-timestamp data-utc="{{ content["#data"]["timestamp"]["utc"] }}">
-        {{ content["#data"]["timestamp"]["formatted"] }}
-      </weather-timestamp>
-    </p>
-    
-    <div class="grid-container">
-      <div class="grid-row">
-        <div class="grid-col-2 icon">
-          {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content['#data']["icon"] )}}
-        </div>
-        <div class="grid-col-5">
-          <p class="margin-0 font-body-3xl">
-            {{ content["#data"]["temperature"] }}
-            <span class="font-body-lg">&deg;F</span>
-          </p>
-          <p class="margin-0 conditions-narrative short">
-            {{ content["#data"]["conditions"]["short"]}}
-          </p>
+      <div class="grid-container padding-0 margin-0">
+        {# First row: place name and timestamp #}
+        <div class="grid-row">
+          <div class="grid-col-12">
+            <h1>{{ content["#data"]["location"] }}</h1>
+            <p class="margin-0 font-body-3xs text-gray-50">
+              {{ 'Weather as of' | t }}
+              {# Datetimes are localized in client-side Javascript. #}
+              <weather-timestamp data-utc="{{ content["#data"]["timestamp"]["utc"] }}">
+                {{ content["#data"]["timestamp"]["formatted"] }}
+              </weather-timestamp>
+            </p>
+          </div>
         </div>
 
-        <div class="grid-col-5">
-          <p class="margin-0 font-body-lg">
-            {{ content["#data"]["feels_like" ]}}
-            <span class="font-body-3xs">&deg;F</span>
-          </p>
-          <p class="margin-0 font-body-3xs text-gray-50">{{ "Feels like" | t }}</p>
-          <p class="margin-0 item">
-            {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
-            {{ "Humidity: @humidity%" | t({ "@humidity": content["#data"]["humidity"] }) }}
-          </p>
-          <p class="item">
-            {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
-            {{ "Wind: @windSpeed mph @windDirection" | t({ "@windSpeed": content["#data"]["wind"]["speed"], "@windDirection": content["#data"]["wind"]["shortDirection"] }) }}
-          </p>
+        {# Second row: widget-type interface #}
+        <div class="grid-row">
+          {# First half: icon, current temperature, and conditions text #}
+          <div class="grid-col-6 display-flex">
+            <div class="icon flex-align-center margin-right-1">
+              {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content['#data']["icon"] )}}
+            </div>
+            <div class="flex-align-center">
+              <div class="font-body-3xl display-flex flex-fill">
+                {{ content["#data"]["temperature"] }}
+                <div class="margin-top-1 display-flex flex-align-start font-body-lg">
+                  &deg;F
+                </div>
+              </div>
+              <p class="margin-0 conditions-narrative short">
+                {{ content["#data"]["conditions"]["short"]}}
+              </p>
+            </div>
+          </div>
+
+          {# Second half: feels like, humidity, and wind #}
+          <div class="grid-col-6 margin-top-05">
+            <div class="font-body-lg display-flex flex-fill">
+              {{ content["#data"]["feels_like"] }}
+              <div class="margin-top-2px display-flex flex-align-start font-body-3xs">
+                &deg;F
+              </div>
+            </div>
+            <p class="margin-0 font-body-3xs text-gray-50">{{ "Feels like" | t }}</p>
+            <div class="display-flex flex-fill margin-top-2">
+              <div class="flex-auto flex-align-center item margin-right-1">
+                {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
+              </div>
+              <div class="flex-fill flex-align-center">
+                {{ "Humidity: @humidity%" | t({ "@humidity": content["#data"]["humidity"] }) }}
+              </div>
+            </div>
+            <div class="display-flex flex-fill">
+              <div class="flex-auto flex-align-center item margin-right-1">
+                {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
+              </div>
+              <div class="flex-align-center flex-auto">
+                {{ "Wind: @windSpeed mph @windDirection" | t({
+                  "@windSpeed": content["#data"]["wind"]["speed"],
+                  "@windDirection": content["#data"]["wind"]["shortDirection"]
+                  })
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# Third row: generated narrative #}
+        <div class="grid-row margin-top-2">
+          <div class="grid-col-12">
+            {{ "The weather in <strong>@place</strong> is <strong>@conditions</strong>.
+                Temperature is <strong>@temperature&deg;F</strong>.
+                Humidity is <strong>@humidity%</strong>"
+                |
+                t({
+                  "@place": content["#data"]["location"],
+                  "@conditions": content["#data"]["conditions"]["long"] | lower,
+                  "@temperature": content["#data"]["temperature"],
+                  "@humidity": content["#data"]["humidity"]
+                })
+            }}{% if content["#data"]["wind"]["speed"] > 0 %}
+            {{
+              "with <strong>@windSpeed mph winds</strong> from the @windDirection"
+              |
+              t({
+                "@windSpeed": content["#data"]["wind"]["speed"],
+                "@windDirection": content["#data"]["wind"]["direction"]
+              })
+            }}{% endif %}.
+          </div>
         </div>
       </div>
-    </div>
 
-    <p class="conditions-narrative long">
-      {{ "The weather in <strong>@place</strong> is <strong>@conditions</strong>.
-          Temperature is <strong>@temperature&deg;F</strong>.
-          Humidity is <strong>@humidity%</strong>"
-          |
-          t({
-            "@place": content["#data"]["location"],
-            "@conditions": content["#data"]["conditions"]["long"] | lower,
-            "@temperature": content["#data"]["temperature"],
-            "@humidity": content["#data"]["humidity"]
-          })
-      }}{% if content["#data"]["wind"]["speed"] > 0 %}
-      {{
-        "with <strong>@windSpeed mph winds</strong> from the @windDirection"
-        |
-        t({
-          "@windSpeed": content["#data"]["wind"]["speed"],
-          "@windDirection": content["#data"]["wind"]["direction"]
-        })
-      }}{% endif %}.
-    </p>
-  </section>
-</weather-gov-current-conditions>
+{# these next three should also go away when we put this into a region #}
+    </div>
+  </div>
+</div>
+{#=======================================#}
