@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Tests for the WeatherDataService.
+ * Tests for the CurrentConditions block.
  */
 final class CurrentConditionsBlockTest extends TestCase {
   /**
@@ -91,7 +91,7 @@ final class CurrentConditionsBlockTest extends TestCase {
   }
 
   /**
-   * Test that the block returns the expected data.
+   * Test that the block returns the expected data if we're on a grid route.
    */
   public function testBuild() : void {
     $this->weatherData->method('getCurrentConditions')->willReturn('this is weather data');
@@ -103,6 +103,26 @@ final class CurrentConditionsBlockTest extends TestCase {
     $actual = $this->currentConditionsBlock->build();
 
     $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Test that the block returns null if we're not on a grid route.
+   */
+  public function testBuildNotGridRoute(): void {
+    $definition = [
+      "provider" => "weather_blocks",
+    ];
+
+    $this->weatherData = $this->createStub(WeatherDataService::class);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn("weather_routes.not-grid");
+
+    $this->currentConditionsBlock = new CurrentConditionsBlock([], '', $definition, $this->weatherData, $this->routeMock);
+
+    $actual = $this->currentConditionsBlock->build();
+
+    $this->assertEquals(NULL, $actual);
   }
 
 }

@@ -1,0 +1,46 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block;
+
+include_once "LocationSearchBlock.php";
+
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the LocationSearch block.
+ */
+final class LocationSearchBlockTest extends TestCase {
+  /**
+   * A ready-to-use location search block object.
+   *
+   * @var locationSearchBlock
+   */
+  protected $locationSearchBlock;
+
+  /**
+   * Common setup for all component tests.
+   *
+   * Creates a new location search block.
+   */
+  protected function setUp() : void {
+    $definition = [
+      "provider" => "weather_blocks",
+    ];
+
+    $this->locationSearchBlock = new LocationSearchBlock([], '', $definition);
+  }
+
+  /**
+   * Test that the build method returns the expected results.
+   */
+  public function testBuild() : void {
+    $expected = [
+      "#theme" => "weather_blocks_location_search",
+    ];
+
+    $actual = $this->locationSearchBlock->build();
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+}
