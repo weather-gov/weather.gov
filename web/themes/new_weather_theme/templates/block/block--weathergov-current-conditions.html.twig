@@ -39,10 +39,9 @@
             {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
             {{ "Humidity: @humidity%" | t({ "@humidity": content["#data"]["humidity"] }) }}
           </p>
-          <p class="margin-0 item">
-            {#  #}
+          <p class="item">
             {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
-            {{ "Wind: @windSpeed mph" | t({ "@windSpeed": content["#data"]["wind"]["speed"] }) }}
+            {{ "Wind: @windSpeed mph @windDirection" | t({ "@windSpeed": content["#data"]["wind"]["speed"], "@windDirection": content["#data"]["wind"]["shortDirection"] }) }}
           </p>
         </div>
       </div>
@@ -64,8 +63,8 @@
         "with <strong>@windSpeed mph winds</strong> from the @windDirection"
         |
         t({
-          "@windSpeed": content["#data"]["speed"],
-          "@windDirection": content["#data"]["direction"]
+          "@windSpeed": content["#data"]["wind"]["speed"],
+          "@windDirection": content["#data"]["wind"]["direction"]
         })
       }}{% endif %}.
     </p>

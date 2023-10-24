@@ -263,26 +263,41 @@ class WeatherDataService {
 
     $description = get_short_description($obs);
 
+    // The cardinal and ordinal directions. North goes in twice because it sits
+    // in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
+    $directions = ["north", "northeast", "east", "southeast", "south",
+      "southwest", "west", "northwest", "north",
+    ];
+    $shortDirections = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
+
+    // 1. Whatever degrees we got from the API, constrain it to 0°-360°.
+    // 2. Add 22.5° to it. This accounts for north starting at -22.5°
+    // 3. Use integer division by 45° to see which direction index this is.
+    // This indexes into the two direction name arrays above.
+    $directionIndex = (int) (($obs->windDirection->value % 360) + 22.5) / 45;
+
     return [
       'conditions' => [
         'long' => $this->t->translate($description),
         'short' => $this->t->translate($description),
       ],
       // C to F.
-      'feels_like' => round($feelsLike),
-      'humidity' => round($obs->relativeHumidity->value ?? 0),
+      'feels_like' => (int) round($feelsLike),
+      'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
       'icon' => get_noaa_icon($obs) ,
       'location' => $location,
       // C to F.
-      'temperature' => round(32 + (9 * $obs->temperature->value / 5)),
+      'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
       'timestamp' => [
         'formatted' => $timestamp->format("l g:i A T"),
         'utc' => (int) $timestamp->format("U"),
       ],
       'wind' => [
         // Kph to mph.
-        'speed' => round($obs->windSpeed->value * 0.6213712),
-        'direction' => $obs->windDirection->value,
+        'speed' => (int) round($obs->windSpeed->value * 0.6213712),
+        'angle' => $obs->windDirection->value,
+        'direction' => $directions[$directionIndex],
+        'shortDirection' => $shortDirections[$directionIndex],
       ],
     ];
   }
