@@ -28,24 +28,42 @@ jobs:
           echo "number=$NEXT_ADR" >> "$GITHUB_OUTPUT"
 
       - name: write the ADR
-        run: |
-          SLUG=$(echo "${{ github.event.issue.title }}" | tr A-Z a-z)
-          SLUG=$(echo "$SLUG" | iconv -c -t ascii//TRANSLIT)
-          SLUG=$(echo "$SLUG" | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/-+/-/g' | sed -E 's/^-+|-+$//g')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require("fs/promises");
 
-          FILENAME="docs/architecture/decisions/${{ steps.next.outputs.number }}-$SLUG.md"
+            // Use the GitHub toJSON expression to get these as escaped strings.
+            // In Javascript, this will preserve line breaks, and using template
+            // strings further down will preserve all the kinds of quotes.
+            const title = ${{ toJSON(github.event.issue.title) }};
+            const body = ${{ toJSON(github.event.issue.body )}};
 
-          DATE=$(date -I)
+            const slug = title
+              .toLowerCase()
+              .trim()
+              .replace(/[^\w\s-]/g, "") // get rid of non-ascii characters
+              .replace(/[\s_-]+/g, "-") // convert whitespace and underscore to dash
+              .replace(/^-+|-+$/g, "");  // git rid of leading/trailing dashes
 
-          echo "# ${{ github.event.issue.title }}" > $FILENAME
-          echo "" >> $FILENAME
-          echo "Date: $DATE" >> $FILENAME
-          echo "" >> $FILENAME
-          echo "### Status" >> $FILENAME
-          echo "" >> $FILENAME
-          echo "Accepted" >> $FILENAME
-          echo "" >> $FILENAME
-          echo "${{ github.event.issue.body  }}" >> $FILENAME
+            const filename = `docs/architecture/decisions/${{ steps.next.outputs.number }}-${slug}.md`;
+
+            // Get the current date as an ISO8601 string, split at the timestamp,
+            // and only keep the date portion.
+            const [date] = new Date().toISOString().split("T");
+
+            const adr = `# ${ title }
+
+            Date: ${ date }
+
+            ### Status
+
+            Accepted
+
+            ${ body }
+            `;
+
+            await fs.writeFile(filename, adr, { encoding: 'utf-8' });
 
       - name: branch, commit, and open PR
         env:
