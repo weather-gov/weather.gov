@@ -174,7 +174,8 @@ final class WeatherDataServiceTest extends TestCase {
     $this->assertEquals((object) $expected, (object) $actual);
   }
 
-  /* Tests that the wind direction is populated correctly.
+  /**
+   * Tests that the wind direction is populated correctly.
    *
    * This tests the 8 cardinal and ordinal directions.
    */
