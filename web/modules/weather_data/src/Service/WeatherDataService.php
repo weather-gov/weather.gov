@@ -23,7 +23,7 @@ function get_api_condition_key($observation) {
    */
   $icon = $observation->icon;
 
-  if($icon == NULL or strlen($icon) == 0) {
+  if ($icon == NULL or strlen($icon) == 0) {
     return "no data";
   }
 

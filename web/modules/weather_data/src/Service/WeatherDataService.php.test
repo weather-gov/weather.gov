@@ -145,7 +145,7 @@ final class WeatherDataServiceTest extends TestCase {
     $this->assertEquals((object) $expected, (object) $actual);
   }
 
-    /**
+  /**
    * Tests the case where the icon is null.
    */
   public function testIconIsNull(): void {
