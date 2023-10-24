@@ -21,6 +21,11 @@ function get_api_condition_key($observation) {
   The last two path segments are the ones we need to identify the current
   conditions.
    */
+  $icon = $observation->icon;
+
+  if ($icon == NULL or strlen($icon) == 0) {
+    return "no data";
+  }
 
   $url = parse_url($observation->icon);
   $apiConditionKey = implode("/", array_slice(explode("/", $url["path"]), -2));
