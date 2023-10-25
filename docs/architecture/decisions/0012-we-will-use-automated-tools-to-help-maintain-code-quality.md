@@ -10,7 +10,7 @@ Accepted
 
 Maintainable code should be consistent, readable, functionally correct, and tested. Automated tools can help tremendously with all of these maintainability concerns.
 
-Supersedes ADR 0009.
+Supersedes [ADR 0009](0009-we-will-use-automated-tools-to-help-maintain-code-quality.md).
 
 ### Decision
 
