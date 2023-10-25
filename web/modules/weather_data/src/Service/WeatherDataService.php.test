@@ -168,7 +168,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     $expected["conditions"]["short"] = "No data";
     $expected["conditions"]["long"] = "No data";
 
-    $actual = $this->weatherDataService->getCurrentConditions();
+    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -182,7 +182,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     $expected["conditions"]["short"] = "No data";
     $expected["conditions"]["long"] = "No data";
 
-    $actual = $this->weatherDataService->getCurrentConditions();
+    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -255,7 +255,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     }
   }
 
-  /*
+  /**
    * Tests asking for current conditions when not on a grid route.
    */
   public function testNotGridRoute(): void {
