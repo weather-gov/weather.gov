@@ -86,16 +86,18 @@ As we build, we will inevitably uncover functionality we couldn’t foresee and 
 | 7.2 | … I want to share a link to the hazard’s forecast |
 | **E.8** | **As a partner or ROC, I can find and understand weather information and hazards across the area I’m responsible for (county and state)** |
 | **E.9** | **As an NWS forecaster, ITO, comms lead (internal user), weather.gov MVP must support the ability to create, update, and manage this information consistently and easily.** |
-| NEW - 9.1 | … I want to log into weather.gov with my noaa account |
-| NEW - 9.2 | … I want to view the area, content, and pages that I'm responsible for |
+| 9.1^ | … I want to log into weather.gov with my noaa account |
+| 9.2^ | … I want to view the area, content, and pages that I'm responsible for |
 | **E.10** | **As an admin or ITO, I can manage weather.gov to maintain consistency, availability, and compliance standards** |
-| **NEW - E.11** | **As an Authorizing Official, I can authorize weather.gov to operate** |
-| NEW - 11.1 | … I need to understand the architecture |
-| NEW - 11.2 | … I need to understand the categorization |
-| NEW - 11.3 | … I need to understand the controls and owners |
-| NEW - 11.4 | … I need to understand how the controls have been implmented |
-| NEW - 11.5 | … I need the controls to be validated |
+| **E.11^** | **As an Authorizing Official, I can authorize weather.gov to operate** |
+| 11.1^ | … I need to understand the architecture |
+| 11.2^ | … I need to understand the categorization |
+| 11.3^ | … I need to understand the controls and owners |
+| 11.4^ | … I need to understand how the controls have been implemented |
+| 11.5^ | … I need the controls to be validated |
 | **R.1** | **As a member of the public or a partner, I want to be proactively notified of important weather and directed to relevant information** |
+
+^ notes that it was added on 10/25/24
 
 ## Next - Expand core user experience and support unique needs
 
