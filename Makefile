@@ -34,6 +34,7 @@ export-config: ## Export your current Drupal site's configuration to the config 
 	docker compose exec drupal drush config:export -y
 
 export-content: ## Export all content to web/scs-export
+	rm web/scs-export/*.zip
 	docker compose exec drupal drush content:export node scs-export --all-content
 
 import-config: ## Import the Drupal configuration from the config directory into your site
