@@ -4,7 +4,7 @@ Date: 2023-10-10
 
 ### Status
 
-Accepted
+Superseded by [ADR 0012](0012-we-will-use-automated-tools-to-help-maintain-code-quality.md).
 
 ### Context
 
