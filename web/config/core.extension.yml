@@ -46,6 +46,7 @@ module:
   views_ui: 0
   weather_blocks: 0
   weather_data: 0
+  weather_routes: 0
   views: 10
   minimal: 1000
 theme:

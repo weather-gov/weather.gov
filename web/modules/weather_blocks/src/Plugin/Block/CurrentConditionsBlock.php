@@ -4,6 +4,7 @@ namespace Drupal\weather_blocks\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -26,11 +27,19 @@ class CurrentConditionsBlock extends BlockBase implements ContainerFactoryPlugin
   private $weatherData;
 
   /**
+   * The current route.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface route
+   */
+  private $route;
+
+  /**
    * Constructor for dependency injection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, WeatherDataService $weatherDataService) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, WeatherDataService $weatherDataService, RouteMatchInterface $route) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->weatherData = $weatherDataService;
+    $this->route = $route;
   }
 
   /**
@@ -41,7 +50,8 @@ class CurrentConditionsBlock extends BlockBase implements ContainerFactoryPlugin
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('weather_data')
+      $container->get('weather_data'),
+      $container->get('current_route_match')
     );
   }
 
@@ -64,10 +74,15 @@ class CurrentConditionsBlock extends BlockBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function build() {
-    return [
-      '#theme' => "weather_blocks_current_conditions",
-      '#data' => $this->weatherData->getCurrentConditions(),
-    ];
+    $routeName = $this->route->getRouteName();
+
+    if ($routeName == "weather_routes.grid") {
+      return [
+        '#theme' => "weather_blocks_current_conditions",
+        '#data' => $this->weatherData->getCurrentConditions($this->route),
+      ];
+    }
+    return NULL;
   }
 
 }
