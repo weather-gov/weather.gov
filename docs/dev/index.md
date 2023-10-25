@@ -38,3 +38,4 @@ then:
 4. Look at [how we do testing](testing.md).
 5. Look at our [process for submitting, reviewing, and merging new code](review-standards.md).
 6. Get familiar with [our Makefile](makefile.md). It'll be helpful!
+7. Add our [code review templates](code_review_templates) to your [saved replies](saved-replies.md). 
