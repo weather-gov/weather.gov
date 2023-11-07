@@ -41,7 +41,7 @@ service_exists()
 if service_exists "database" ; then
   echo database already created
 else
-  if [ "$1" = "prod" ] ; then
+  if [ "$1" = "beta" ] ; then
     cf create-service aws-rds medium-mysql-redundant database
   else
     cf create-service aws-rds small-mysql database
@@ -75,16 +75,7 @@ cf create-service-key storage storagekey
 S3INFO=$(cf service-key storage storagekey)
 S3_BUCKET=$(echo "$S3INFO" | grep '"bucket":' | sed 's/.*"bucket": "\(.*\)",/\1/')
 S3_REGION=$(echo "$S3INFO" | grep '"region":' | sed 's/.*"region": "\(.*\)",/\1/')
-cf set-env weather S3_BUCKET "$S3_BUCKET"
-cf set-env weather S3_REGION "$S3_REGION"
+cf set-env weathergov-beta S3_BUCKET "$S3_BUCKET"
+cf set-env weathergov-beta S3_REGION "$S3_REGION"
 cf delete-service-key storage storagekey -f
-cf restart weather
-
-# tell people where to go
-ROUTE=$(cf apps | grep weather | awk '{print $6}')
-echo
-echo
-echo "  to log into the drupal site, you will want to go to https://${ROUTE}/user/login and get the username/password from the output of these commands:"
-echo "USERNAME:  cf e weather | grep ROOT_USER_NAME | sed 's/.*: \"\(.*\)\".*/\1/'"
-echo "PASSWORD:  cf e weather | grep ROOT_USER_PASS | sed 's/.*: \"\(.*\)\".*/\1/'"
-echo "  to get in.  Have fun!"
+cf restart weathergov-beta
