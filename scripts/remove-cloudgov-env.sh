@@ -20,9 +20,9 @@ then
     git checkout -b remove-dev-sandbox-$1
 fi
 
-cf target -o cisa-dotgov -s $1
+cf target -o nws-weathergov -s $1
 
-read -p "Are you logged in to the cisa-dotgov CF org above? (y/n) " -n 1 -r
+read -p "Are you logged in to the nws-weathergov CF org above? (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
@@ -30,7 +30,7 @@ then
 fi
 
 gh auth status
-read -p "Are you logged into a Github account with access to cisagov/getgov? (y/n) " -n 1 -r
+read -p "Are you logged into a Github account with access to weather-gov/weather.gov? (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
@@ -40,56 +40,31 @@ fi
 echo "Removing Github keys and service account..."
 cf delete-service-key github-cd-account github-cd-key
 cf delete-service github-cd-account
-gh secret --repo cisagov/getgov remove CF_${upcase_name}_USERNAME 
-gh secret --repo cisagov/getgov remove CF_${upcase_name}_PASSWORD 
+gh secret --repo weather-gov/weather.gov remove CF_${upcase_name}_USERNAME 
+gh secret --repo weather-gov/weather.gov remove CF_${upcase_name}_PASSWORD 
 
 echo "Removing files used for $1..."
-rm .github/workflows/deploy-$1.yaml
-rm ops/manifests/manifest-$1.yaml
-sed -i '' "/getgov-$1.app.cloud.gov/d" src/registrar/config/settings.py
-sed -i '' "/- $1/d" .github/workflows/reset-db.yaml
-sed -i '' "/- $1/d" .github/workflows/migrate.yaml
+rm manifests/manifest-$1.yaml
+sed -i '' "/- $1/d" .github/workflows/deploy_sandbox.yaml
 
 echo "Cleaning up services, applications, and the Cloud.gov space for $1..."
-cf delete getgov-$1
-cf delete-service getgov-$1-database
-cf delete-service getgov-credentials
-cf delete-space $1
-
-echo "Now you will need to update some things for Login. Please sign-in to https://dashboard.int.identitysandbox.gov/."
-echo "Navigate to our application config: https://dashboard.int.identitysandbox.gov/service_providers/2640/edit?"
-echo "There are two things to update."
-echo "1. You need to remove the public-$1.crt file."
-echo "2. You need to remove two redirect URIs: https://getgov-$1.app.cloud.gov/openid/callback/login/ and
-https://getgov-$1.app.cloud.gov/openid/callback/logout/ from the list of URIs."
-read -p "Please confirm when this is done (y/n) " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-    exit 1
-fi
-
-read -p "All done! Should we open a PR with these changes? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    git add ops/manifests/manifest-$1.yaml .github/workflows/deploy-$1.yaml src/registrar/config/settings.py 
-    git commit -m "Remove developer sandbox '"$1"' infrastructure"
-    gh pr create
-fi
-
-
-#!/bin/sh
-#
-# This script will attempt to clean up the drupal install in cloud.gov
-#
-
 # delete apps
 cf delete cronish
-cf delete weather
+cf delete weathergov-$1
 
 # delete services
 cf delete-service database
 cf delete-service secrets
 cf delete-service storage
 
+# delete space
+cf delete-space $1
+
+read -p "All done! Should we open a PR with these changes? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    git add ops/manifests/manifest-$1.yaml .github/workflows/deploy_sandbox.yaml
+    git commit -m "Remove developer sandbox '"$1"' infrastructure"
+    gh pr create
+fi
