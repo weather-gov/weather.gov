@@ -1,0 +1,36 @@
+# This workflow runs on pushes of tagged commits.
+# "Releases" of tagged commits will deploy selected branch to staging.
+
+name: Build and deploy staging for tagged release
+
+on:
+  push:
+    tags:
+      - beta-*
+
+jobs:
+  deploy-beta:
+    if: ${{ github.ref_type == 'tag' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to cloud.gov sandbox
+        uses: 18f/cg-deploy-action@main
+        env:
+          DEPLOY_NOW: thanks
+        with:
+          cf_username: ${{ secrets.CF_BETA_USERNAME }}
+          cf_password: ${{ secrets.CF_BETA_PASSWORD }}
+          cf_org: nws-weathergov
+          cf_space: prod
+          push_arguments: "-f ops/manifests/manifest-beta.yaml"
+
+      - name: Run post-deploy steps in beta
+        uses: 18f/cg-deploy-action@main
+        with:
+          cf_username: ${{ secrets.CF_BETA_USERNAME }}
+          cf_password: ${{ secrets.CF_BETA_PASSWORD }}
+          cf_org: nws-weathergov
+          cf_space: prod
+          full_command: "cf run-task weathergov-beta --command './scripts/post-deploy.sh' --name 'weathergov-beta-deploy' -k '1G' -m '128M'"

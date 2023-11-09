@@ -1,0 +1,39 @@
+# This workflow can be run with local CF commands or from the CLI
+#     gh workflow run deploy-sandbox.yaml -f environment=<your environment>
+
+name: Deploy sandbox
+run-name: Deploy sandbox in ${{ github.event.inputs.environment }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Which environment should we deploy to?
+        options:
+          - test
+
+jobs:
+  deploy-sandbox:
+    runs-on: ubuntu-latest
+    env:
+      CF_USERNAME: CF_${{ github.event.inputs.environment }}_USERNAME
+      CF_PASSWORD: CF_${{ github.event.inputs.environment }}_PASSWORD
+    steps:
+      - name: Deploy application in ${{ github.event.inputs.environment }} space
+        uses: 18f/cg-deploy-action@main
+        with:
+          cf_username: ${{ secrets[env.CF_USERNAME] }}
+          cf_password: ${{ secrets[env.CF_PASSWORD] }}
+          cf_org: nws-weathergov
+          cf_space: ${{ github.event.inputs.environment }}
+          push_arguments: "-f ops/manifests/manifest-${{ github.event.inputs.environment }}.yaml"
+
+      - name: Run post-deploy steps in ${{ github.event.inputs.environment }} space
+        uses: 18f/cg-deploy-action@main
+        with:
+          cf_username: ${{ secrets[env.CF_USERNAME] }}
+          cf_password: ${{ secrets[env.CF_PASSWORD] }}
+          cf_org: nws-weathergov
+          cf_space: ${{ github.event.inputs.environment }}
+          full_command: "cf run-task weathergov-${{ github.event.inputs.environment }} --command './scripts/post-deploy.sh' --name 'weathergov-${{ github.event.inputs.environment }}-deploy' -k '1G' -m '128M'"
