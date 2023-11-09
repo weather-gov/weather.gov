@@ -10,7 +10,7 @@ $settings['entity_update_backup'] = TRUE;
 $settings['migrate_node_migrate_type_classic'] = FALSE;
 $settings['config_sync_directory'] = dirname(DRUPAL_ROOT) . '/web/config';
 
-$applicaiton_fqdn_regex = "^.+\.(app\.cloud\.gov)$";
+$applicaiton_fqdn_regex = "^.+\.(app\.cloud\.gov|weather\.gov)$";
 $settings['trusted_host_patterns'][] = $applicaiton_fqdn_regex;
 
 $cf_application_data = json_decode(getenv('VCAP_APPLICATION') ?? '{}', TRUE);
