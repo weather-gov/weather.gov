@@ -1,0 +1,27 @@
+---
+default_config: &defaults
+  buildpacks:
+    # We need the "apt" buildpack to install a MySQL client for Drush; see apt.yml
+    - https://github.com/cloudfoundry/apt-buildpack.git
+    - php_buildpack
+  disk_quota: 2G
+  timeout: 180
+  env:
+    PHP_INI_SCAN_DIR: /home/vcap/app/php/etc/:/home/vcap/app/php/etc/php.ini.d/
+  services:
+    - database
+    - storage
+    - secrets
+
+applications:
+- name: weathergov-staging
+  <<: *defaults
+  memory: 256M
+  instances: 1
+  random-route: false
+- name: cronish
+  <<: *defaults
+  no-route: true
+  command: ./cronish.sh
+  health-check-type: process
+  memory: 128M

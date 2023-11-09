@@ -17,7 +17,7 @@ applications:
 - name: weathergov-beta
   <<: *defaults
   memory: 256M
-  instances: 2
+  instances: 1
   random-route: false
 - name: cronish
   <<: *defaults
