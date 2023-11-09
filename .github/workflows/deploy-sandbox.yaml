@@ -20,6 +20,7 @@ jobs:
       CF_USERNAME: CF_${{ github.event.inputs.environment }}_USERNAME
       CF_PASSWORD: CF_${{ github.event.inputs.environment }}_PASSWORD
     steps:
+      - uses: actions/checkout@v3
       - name: Deploy application in ${{ github.event.inputs.environment }} space
         uses: 18f/cg-deploy-action@main
         with:
