@@ -53,8 +53,8 @@ then
 fi
 
 echo "Creating manifest for $1..."
-cp manifests/manifest.template.yaml ops/manifests/manifest-$1.yaml
-sed -i '' "s/ENVIRONMENT/$1/" "ops/manifests/manifest-$1.yaml"
+cp manifests/manifest.template.yaml manifests/manifest-$1.yaml
+sed -i '' "s/ENVIRONMENT/$1/" "manifests/manifest-$1.yaml"
 
 echo "Creating new cloud.gov space for $1..."
 cf create-space $1
@@ -85,7 +85,7 @@ ROOT_USER_NAME=${ROOT_USER_NAME:-root}
 cf create-user-provided-service secrets -p "{\"CRON_KEY\": \"$CRON_KEY\", \"HASH_SALT\": \"$HASH_SALT\", \"ROOT_USER_NAME\": \"$ROOT_USER_NAME\", \"ROOT_USER_PASS\": \"$ROOT_USER_PASS\"}"
 
 echo "Database create succeeded and credentials created. Deploying the get.gov application to the new space $1..."
-cf push -f ops/manifests/manifest-$1.yaml
+cf push -f manifests/manifest-$1.yaml
 
 echo "Creating credentials to talk to storage in $1..."
 cf create-service-key storage storagekey
@@ -133,7 +133,7 @@ read -p "All done! Should we open a PR with these changes? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    git add ops/manifests/manifest-$1.yaml .github/workflows/
+    git add manifests/manifest-$1.yaml .github/workflows/
     git commit -m "Add new developer sandbox '"$1"' infrastructure"
     gh pr create
 fi

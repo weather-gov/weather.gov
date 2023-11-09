@@ -24,7 +24,7 @@ jobs:
             cf_password: ${{ secrets.CF_STAGING_PASSWORD }}
             cf_org: nws-weathergov
             cf_space: staging
-            push_arguments: "-f ops/manifests/manifest-staging.yaml"
+            push_arguments: "-f manifests/manifest-staging.yaml"
         - name: Run post deploy steps
           uses: 18f/cg-deploy-action@main
           with:

@@ -64,7 +64,7 @@ read -p "All done! Should we open a PR with these changes? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    git add ops/manifests/manifest-$1.yaml .github/workflows/deploy_sandbox.yaml
+    git add manifests/manifest-$1.yaml .github/workflows/deploy_sandbox.yaml
     git commit -m "Remove developer sandbox '"$1"' infrastructure"
     gh pr create
 fi
