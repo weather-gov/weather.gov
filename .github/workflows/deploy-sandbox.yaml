@@ -12,6 +12,7 @@ on:
         description: Which environment should we deploy to?
         options:
           - test
+          - test
 
 jobs:
   deploy-sandbox:

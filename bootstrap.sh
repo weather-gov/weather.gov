@@ -28,10 +28,5 @@ install_drupal() {
       --existing-config
 }
 
-if [ "${CF_INSTANCE_INDEX:-''}" == "0" ] && [ "${APP_NAME}" == "weathergov-beta" ]; then
-  # If there is no "config:import" command, Drupal needs to be installed
-  drush list | grep "config:import" > /dev/null || install_drupal
-  
-  # Clear the cache
-  drush cache:rebuild --no-interaction
-fi
+# If there is no "config:import" command, Drupal needs to be installed
+drush list | grep "config:import" > /dev/null || install_drupal
