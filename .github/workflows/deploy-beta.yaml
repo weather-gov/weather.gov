@@ -1,7 +1,7 @@
 # This workflow runs on pushes of tagged commits.
 # "Releases" of tagged commits will deploy selected branch to staging.
 
-name: Build and deploy staging for tagged release
+name: Build and deploy beta for tagged release
 
 on:
   push:
