@@ -1,5 +1,5 @@
 # This script sets up a completely new Cloud.gov CF Space with all the corresponding
-# infrastructure needed to run weahter.gov. It can serve for documentation for running
+# infrastructure needed to run weather.gov. It can serve for documentation for running
 # NOTE: This script was written for MacOS and to be run at the root directory. 
 
 # A function to generate a random string, used for cron key, password, etc.
@@ -84,7 +84,7 @@ ROOT_USER_PASS=${ROOT_USER_PASS:-$NEW_STRING}
 ROOT_USER_NAME=${ROOT_USER_NAME:-root}
 cf create-user-provided-service secrets -p "{\"CRON_KEY\": \"$CRON_KEY\", \"HASH_SALT\": \"$HASH_SALT\", \"ROOT_USER_NAME\": \"$ROOT_USER_NAME\", \"ROOT_USER_PASS\": \"$ROOT_USER_PASS\"}"
 
-echo "Database create succeeded and credentials created. Deploying the get.gov application to the new space $1..."
+echo "Database create succeeded and credentials created. Deploying the weather.gov application to the new space $1..."
 cf push -f manifests/manifest-$1.yaml
 
 echo "Creating credentials to talk to storage in $1..."

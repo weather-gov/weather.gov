@@ -33,4 +33,4 @@ jobs:
           cf_password: ${{ secrets.CF_BETA_PASSWORD }}
           cf_org: nws-weathergov
           cf_space: prod
-          full_command: "cf run-task weathergov-beta --command './scripts/post-deploy.sh' --name 'weathergov-beta-deploy' -k '1G' -m '256M'"
+          full_command: "cf run-task weathergov-beta --command './scripts/post-deploy.sh' --name 'weathergov-beta-deploy' -k '2G' -m '256M'"

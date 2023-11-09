@@ -1,6 +1,6 @@
 # Deploying
 
-We usually deploy using the Github Actions provided. You can see more about how deploys with in each environment [here](../environments.md).
+We usually deploy using the Github Actions provided. You can see more about how deployments work within each environment [here](../environments.md).
 
 Deploys require a post-deploy step. This is automatically done in the Github Action, but if you are manually pushing with `cf` then it will need to be done with a task. Deploying just the weathergov app locally would look like: 
 
