@@ -26,12 +26,13 @@ There are several tools we use locally that you will need to have.
 ```bash
 cf login -a api.fr.cloud.gov  --sso
 ```
-- [ ] Have an admin add you to cloud.gov org and set up your [sandbox developer space](#setting-up-developer-sandbox). Ensure you can deploy to your sandbox space.
+- [ ] Have an admin add you to cloud.gov org and set up your sandbox developer space. Ensure you can deploy to your sandbox space.
 
 ### Steps for the onboarder
 - [ ] Ask an admin to add the onboardee to our [GitHub organization](https://github.com/orgs/weather-gov).
 - [ ] Add the onboardee to our [GitHub repository](https://github.com/weather-gov/weather.gov).
 - [ ] Add the onboardee to our cloud.gov org
+- [ ] Setup the developer sandbox space with [sandbox script](./scripts/create_cloudgov_env.md).
 
 ## Documents to Review
 
