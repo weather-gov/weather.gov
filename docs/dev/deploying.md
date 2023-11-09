@@ -7,7 +7,7 @@ Deploys require a post-deploy step. This is automatically done in the Github Act
 ```bash
 cf target -o nws-weathergov -s YOURSPACE
 cf push weathergov-YOURSPACE -f manifests/manifest-YOURSPACE.yml
-cf run-task weathergov --command "./scripts/post-deploy.sh" --name "weathergov-YOURSPACE-deploy" -k "1G" -m "128M"
+cf run-task weathergov --command "./scripts/post-deploy.sh" --name "weathergov-YOURSPACE-deploy" -k "1G" -m "32M"
 ```
 
 You can rotate our deploy keys in Github at any time with the [rotation script](../../scripts/rotate-gh-deploy-keys.sh). 

@@ -45,7 +45,7 @@ gh secret --repo weather-gov/weather.gov remove CF_${upcase_name}_PASSWORD
 
 echo "Removing files used for $1..."
 rm manifests/manifest-$1.yaml
-sed -i '' "/- $1/d" .github/workflows/deploy_sandbox.yaml
+sed -i '' "/- $1/d" .github/workflows/deploy-sandbox.yaml
 
 echo "Cleaning up services, applications, and the Cloud.gov space for $1..."
 # delete apps
@@ -64,7 +64,7 @@ read -p "All done! Should we open a PR with these changes? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    git add manifests/manifest-$1.yaml .github/workflows/deploy_sandbox.yaml
+    git add manifests/manifest-$1.yaml .github/workflows/deploy-sandbox.yaml
     git commit -m "Remove developer sandbox '"$1"' infrastructure"
     gh pr create
 fi
