@@ -1,0 +1,11 @@
+# Deploying
+
+We usually deploy using the Github Actions provided. 
+
+Deploys require a post-deploy step. This is automatically done in the Github Action, but if you are manually pushing with `cf` then it will need to be done with a task. Deploying just the weathergov app locally would look like: 
+
+```bash
+cf target -o nws-weathergov -s YOURSPACE
+cf push weathergov-YOURSPACE -f manifests/manifest-YOURSPACE.yml
+cf run-task weathergov --command "./scripts/post-deploy.sh" --name "weathergov-YOURSPACE-deploy" -k "1G" -m "128M"
+```
