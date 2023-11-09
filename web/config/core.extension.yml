@@ -24,6 +24,8 @@ module:
   help: 0
   history: 0
   image: 0
+  key: 0
+  key_asymmetric: 0
   link: 0
   menu_link_content: 0
   menu_ui: 0
@@ -33,6 +35,8 @@ module:
   page_cache: 0
   path: 0
   path_alias: 0
+  s3fs: 0
+  samlauth: 0
   search: 0
   shortcut: 0
   single_content_sync: 0
@@ -47,6 +51,7 @@ module:
   weather_blocks: 0
   weather_data: 0
   weather_routes: 0
+  externalauth: 10
   views: 10
   minimal: 1000
 theme:
