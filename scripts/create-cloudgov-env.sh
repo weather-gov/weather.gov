@@ -101,7 +101,7 @@ read -p "Please provide the email of the space developer: " -r
 cf set-space-role $REPLY nws-weathergov $1 SpaceDeveloper
 
 echo "Running post-deploy script in $1..."
-cf run-task weathergov-$1 --command "./scripts/post-deploy.sh" --name "weathergov-$1-deploy" -k "2G" -m "32M"
+cf run-task weathergov-$1 --command "./scripts/post-deploy.sh" --name "weathergov-$1-deploy" -k "2G" -m "256M"
 
 echo "Alright, your app is up and running at https://weathergov-$1.app.cloud.gov!"
 echo
