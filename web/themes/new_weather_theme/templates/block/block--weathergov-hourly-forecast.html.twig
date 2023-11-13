@@ -12,11 +12,10 @@
 	{% endif %}
 	{{ title_suffix }}
 	{# Forecast:  hour, icon, condition desc (short), change of precip, temp degree, temp scale #}
-	<div
-		class="grid-row tablet:display-flex">
-		{# @TODO: maxItems value should come from block settings. Hard code an integer for now. #}
-		{% set maxItems = 5 %}
-		{% for i in 1..maxItems %}
+	<div class="grid-row tablet:display-flex">
+
+		{% set max_items = content["#data"]["max_items"] %}
+		{% for i in 1..max_items %}
 			<div class="tablet:grid-col border border-base-lightest padding-4">
 				<time class="display-block width-full text-uppercase text-bold font-heading-md" datetime="2011-11-18T0{{ i }}:00-05:00">{{ i }}am</time>
 				<div class="display-flex flex-row flex-justify flex-align-center">
@@ -29,7 +28,7 @@
 					</div>
 					<div class="display-flex flex-row">
 						<span class="font-body-xl">61</span>
-						<span class="font-body-3xs">&#x2109;</span>
+						<span class="font-body-3xs margin-top-05">&#x2109;</span>
 						{# use HTML entity that reads "degree farenheit" to screen readers #}
 					</div>
 				</div>
