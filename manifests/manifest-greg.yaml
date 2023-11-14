@@ -14,7 +14,7 @@ default_config: &defaults
     - secrets
 
 applications:
-- name: weathergov-test
+- name: weathergov-greg
   <<: *defaults
   memory: 256M
   instances: 1
