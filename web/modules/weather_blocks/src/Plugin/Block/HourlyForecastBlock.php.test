@@ -4,6 +4,7 @@ namespace Drupal\weather_blocks\Plugin\Block;
 
 include_once "HourlyForecastBlock.php";
 
+use Drupal\Core\Form\FormStateInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,14 +29,74 @@ final class HourlyForecastBlockTest extends TestCase {
       "provider" => "weather_blocks",
     ];
 
-    $this->hourlyForecastBlock = new HourlyForecastBlock([], '', $definition);
+    $this->hourlyForecastBlock = new HourlyForecastBlock(
+      [],
+      '',
+      $definition
+    );
 
   }
 
   /**
-   * Test that the block returns hardcoded data for now.
+   * Tests that the block returns the correct form with default configuration.
    */
-  public function testBuild() : void {
+  public function testDefaultForm() : void {
+    $expected = [
+      "max_items" => [
+        "#type" => "textfield",
+        "#title" => "Maximum items to display",
+        "#default_value" => "4",
+      ],
+    ];
+
+    $formState = $this->createStub(FormStateInterface::class);
+
+    $actual = $this->hourlyForecastBlock->blockForm([], $formState);
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Test that the block returns the correct form based on prior configuration.
+   */
+  public function testFormUsingExistingConfig() : void {
+    $this->hourlyForecastBlock->setConfigurationValue("max_items", "17");
+
+    $expected = [
+      "max_items" => [
+        "#type" => "textfield",
+        "#title" => "Maximum items to display",
+        "#default_value" => "17",
+      ],
+    ];
+
+    $formState = $this->createStub(FormStateInterface::class);
+
+    $actual = $this->hourlyForecastBlock->blockForm([], $formState);
+
+    $this->assertEquals($expected, $actual);
+
+  }
+
+  /**
+   * Test that the block properly persists configuration changes.
+   */
+  public function testBlockSubmit() : void {
+    $expected = '9';
+
+    $formState = $this->createStub(FormStateInterface::class);
+    $formState->method('getValue')->willReturn($expected);
+    $this->hourlyForecastBlock->blockSubmit([], $formState);
+
+    $actual = $this->hourlyForecastBlock->getConfiguration()["max_items"];
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Test that the block returns default data if unconfigured.
+   */
+  public function testBuildWithDefaultConfiguration() : void {
     $expected = [
       "#theme" => "weather_blocks_hourly_forecast",
       "#data" => ['max_items' => '4'],
@@ -43,6 +104,22 @@ final class HourlyForecastBlockTest extends TestCase {
     $actual = $this->hourlyForecastBlock->build();
 
     $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Test that the block returns data according to saved configuration.
+   */
+  public function testBuildWithModifiedConfigured() : void {
+    $this->hourlyForecastBlock->setConfigurationValue("max_items", "57");
+
+    $expected = [
+      "#theme" => "weather_blocks_hourly_forecast",
+      "#data" => ['max_items' => '57'],
+    ];
+    $actual = $this->hourlyForecastBlock->build();
+
+    $this->assertEquals($expected, $actual);
+
   }
 
 }
