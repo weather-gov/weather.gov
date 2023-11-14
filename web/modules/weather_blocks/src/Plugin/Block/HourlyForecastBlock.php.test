@@ -16,7 +16,6 @@ final class HourlyForecastBlockTest extends BlockTest {
    */
   protected $hourlyForecastBlock;
 
-
   /**
    * Common setup for all component tests.
    *
