@@ -37,4 +37,4 @@ jobs:
           cf_password: ${{ secrets[env.CF_PASSWORD] }}
           cf_org: nws-weathergov
           cf_space: ${{ github.event.inputs.environment }}
-          full_command: "cf run-task weathergov-${{ github.event.inputs.environment }} --command './scripts/post-deploy.sh' --name 'weathergov-${{ github.event.inputs.environment }}-deploy' -k '2G' -m '128M'"
+          full_command: "cf run-task weathergov-${{ github.event.inputs.environment }} --command './scripts/post-deploy.sh' --name 'weathergov-${{ github.event.inputs.environment }}-deploy' -k '2G' -m '256M'"
