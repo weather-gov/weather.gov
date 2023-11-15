@@ -23,19 +23,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy application in ${{ github.event.inputs.environment }} space
-        uses: 18f/cg-deploy-action@main
+        uses: cloud-gov/cg-cli-tools@main
         with:
           cf_username: ${{ secrets[env.CF_USERNAME] }}
           cf_password: ${{ secrets[env.CF_PASSWORD] }}
           cf_org: nws-weathergov
           cf_space: ${{ github.event.inputs.environment }}
-          push_arguments: "-f manifests/manifest-${{ github.event.inputs.environment }}.yaml"
+          cf_manifest: "manifests/manifest-${{ github.event.inputs.environment }}.yaml"
 
       - name: Run post-deploy steps in ${{ github.event.inputs.environment }} space
-        uses: 18f/cg-deploy-action@main
+        uses: cloud-gov/cg-cli-tools@main
         with:
           cf_username: ${{ secrets[env.CF_USERNAME] }}
           cf_password: ${{ secrets[env.CF_PASSWORD] }}
           cf_org: nws-weathergov
           cf_space: ${{ github.event.inputs.environment }}
-          full_command: "cf run-task weathergov-${{ github.event.inputs.environment }} --command './scripts/post-deploy.sh' --name 'weathergov-${{ github.event.inputs.environment }}-deploy' -k '2G' -m '256M'"
+          cf_command: "run-task weathergov-${{ github.event.inputs.environment }} --command './scripts/post-deploy.sh' --name 'weathergov-${{ github.event.inputs.environment }}-deploy' -k '2G' -m '256M'"
