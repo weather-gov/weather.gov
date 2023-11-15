@@ -58,6 +58,9 @@ class LocationSearch {
       const lat = Math.round(geometry.y * 1_000) / 1_000;
       const long = Math.round(geometry.x * 1_000) / 1_000;
 
+      // Push the next URL into the history to preserve the current URL in the
+      // browser history stack.
+      window.history.pushState(null, null, `/point/${lat}/${long}`);
       window.location.href = `/point/${lat}/${long}`;
     }
   }
