@@ -388,3 +388,84 @@ final class WeatherDataLegacyIconMapping extends TestCase {
   }
 
 }
+
+/**
+ * Tests for the WeatherDataService getHourlyForecast method.
+ */
+final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
+  /**
+   * The mocked HTTP client.
+   *
+   * @var httpClientMock
+   */
+  protected $httpClientMock;
+
+  /**
+   * The mocked route object.
+   *
+   * @var routeMock
+   */
+  protected $routeMock;
+
+  /**
+   * The WeatherDataService object under test.
+   *
+   * @var weatherDataService
+   */
+  protected $weatherDataService;
+
+  /**
+   * Common setup for all component tests.
+   */
+  protected function setUp() : void {
+    parent::setUp();
+
+    $this->httpClientMock = new MockHandler([]);
+    $stack = HandlerStack::create($this->httpClientMock);
+    $client = new Client(['handler' => $stack]);
+
+    // Just return the input string. The translation manager is tested by Drupal
+    // so we don't need to.
+    $translationManager = $this->createStub(TranslationInterface::class);
+    $translationManager->method('translate')->will(
+      $this->returnCallback(
+        function ($str) {
+          return $str;
+        }
+      )
+    );
+
+    $this->weatherDataService = new WeatherDataService($client, $translationManager);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn('weather_routes.grid');
+    $this->routeMock->method('getParameter')->WillReturnMap([
+      ['wfo', 'NWS'],
+      ['gridX', 10],
+      ['gridY', 10],
+      ['location', 'National Weather Service'],
+    ]);
+  }
+
+  // Happy path
+  // Icon is null
+  // Icon is empty string
+  // 
+
+    /**
+   * Tests asking for current conditions when not on a grid route.
+   */
+  public function testNotGridRoute(): void {
+    // Create a one-off stub because phpunit doesn't allow overriding a return
+    // value from a stub once it's set. It's just set forever. And rather than
+    // changing the setup() method that works for most of these tests, we'll
+    // just work around it.
+    // https://github.com/sebastianbergmann/phpunit-mock-objects/issues/260
+    $routeMock = $this->createStub(RouteMatchInterface::class);
+    $routeMock->method('getRouteName')->willReturn('weather_routes.not-grid');
+
+    $actual = $this->weatherDataService->getHourlyForecast($routeMock);
+
+    $this->assertEquals(NULL, $actual);
+  }
+}

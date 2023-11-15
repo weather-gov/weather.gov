@@ -4,7 +4,10 @@ namespace Drupal\weather_blocks\Plugin\Block;
 
 include_once "HourlyForecastBlock.php";
 
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Tests for the HourlyForecast block.
@@ -18,6 +21,23 @@ final class HourlyForecastBlockTest extends TestCase {
   protected $hourlyForecastBlock;
 
   /**
+   * A mock of the route object.
+   *
+   * @var routeMock
+   */
+  protected $routeMock;
+
+  /**
+   * A mocked WeatherData service object.
+   *
+   * @var weatherData
+   *
+   * This is injected into the current conditions block object being tested with
+   * dependency injection.
+   */
+  protected $weatherData;
+
+  /**
    * Common setup for all component tests.
    *
    * Creates a mock of a weather data service and injects it into a new current
@@ -28,21 +48,83 @@ final class HourlyForecastBlockTest extends TestCase {
       "provider" => "weather_blocks",
     ];
 
-    $this->hourlyForecastBlock = new HourlyForecastBlock([], '', $definition);
+    $this->weatherData = $this->createStub(WeatherDataService::class);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn("weather_routes.grid");
+
+    $this->hourlyForecastBlock = new HourlyForecastBlock([], '', $definition, $this->weatherData, $this->routeMock);
 
   }
 
   /**
-   * Test that the block returns hardcoded data for now.
+   * Test that the create() static method gives us back a block object.
+   */
+  public function testCreation() : void {
+    $container = $this->createStub(ContainerInterface::class);
+    $container->method('get')->will($this->returnCallback(function () {
+      $args = func_get_args();
+      switch ($args[0]) {
+        case 'weather_data':
+          return $this->weatherData;
+
+        case 'current_route_match':
+          return $this->routeMock;
+
+        default:
+          return NULL;
+      }
+    }));
+
+    $actual = HourlyForecastBlock::create($container, [], '', ["provider" => "weather_blocks"]);
+    $this->assertEquals(HourlyForecastBlock::class, $actual::class);
+  }
+
+  /**
+   * Test that block cacheing is disabled.
+   */
+  public function testCache() : void {
+    $expected = 0;
+    $actual = $this->hourlyForecastBlock->getCacheMaxAge();
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Test that the block returns the expected data if we're on a grid route.
    */
   public function testBuild() : void {
+    $this->weatherData
+      ->method('getHourlyForecast')
+      ->willReturn([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
     $expected = [
       "#theme" => "weather_blocks_hourly_forecast",
-      "#data" => ['max_items' => '4'],
+      "#data" => [1, 2, 3, 4],
     ];
     $actual = $this->hourlyForecastBlock->build();
 
     $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Test that the block returns null if we're not on a grid route.
+   */
+  public function testBuildNotGridRoute(): void {
+    $definition = [
+      "provider" => "weather_blocks",
+    ];
+
+    $this->weatherData = $this->createStub(WeatherDataService::class);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn("weather_routes.not-grid");
+
+    $this->hourlyForecastBlock = new HourlyForecastBlock([], '', $definition, $this->weatherData, $this->routeMock);
+
+    $actual = $this->hourlyForecastBlock->build();
+
+    $this->assertEquals(NULL, $actual);
   }
 
 }
