@@ -47,11 +47,9 @@ As we build, we will inevitably uncover functionality we couldn’t foresee and 
 **For MVP**, we will focus on designing and building the following:
 - **🟢 Ready:** As a member of the public or a partner (external user), weather.gov MVP must answer the most common questions for a hazard or common weather.
 - **🟡 WIP:** As an NWS forecaster, ITO, comms lead (internal user), weather.gov MVP must support the ability to create, update, and manage this information consistently and easily. 
-- **🟡 WIP:** As an NWS administrator of the website / part of the website, I am able to manage user permissions, access, configurations, etc.
-- **🟡 WIP:** As a partner or ROC, weather.gov MVP should support an end-to-end experience covering a geographic area larger than a single location, e.g. county and state-wide views.
-
-For the future we will also research and scope the following:
-- **🟠 Backlog for this phase:** As a member of the public or a partner, I would like proactive notifications.
+- **🟡 WIP:** As an admin or ITO, I can manage weather.gov to maintain consistency, availability, and compliance standards
+- **🟠 Research targeted for Q2:** As a partner or ROC, weather.gov MVP should support an end-to-end experience covering a geographic area larger than a single location, e.g. county and state-wide views.
+- **🟠 Research targeted for Q3:** As a member of the public or a partner, I would like proactive notifications.
 
 | ID | Story |
 | :----------- | :-------------|
@@ -87,7 +85,19 @@ For the future we will also research and scope the following:
 | 7.1 | … I want to share a link to the location page I’m looking at, in any channel |
 | 7.2 | … I want to share a link to the hazard’s forecast |
 | **E.8** | **As a partner or ROC, I can find and understand weather information and hazards across the area I’m responsible for (county and state)** |
+| **E.9** | **As an NWS forecaster, ITO, comms lead (internal user), weather.gov MVP must support the ability to create, update, and manage this information consistently and easily.** |
+| 9.1^ | … I want to log into weather.gov with my noaa account |
+| 9.2^ | … I want to view the area, content, and pages that I'm responsible for |
+| **E.10** | **As an admin or ITO, I can manage weather.gov to maintain consistency, availability, and compliance standards** |
+| **E.11^** | **As an Authorizing Official, I can authorize weather.gov to operate** |
+| 11.1^ | … I need to understand the architecture |
+| 11.2^ | … I need to understand the categorization |
+| 11.3^ | … I need to understand the controls and owners |
+| 11.4^ | … I need to understand how the controls have been implemented |
+| 11.5^ | … I need the controls to be validated |
 | **R.1** | **As a member of the public or a partner, I want to be proactively notified of important weather and directed to relevant information** |
+
+^ notes that it was added on 10/25/24
 
 ## Next - Expand core user experience and support unique needs
 
