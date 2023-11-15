@@ -14,14 +14,14 @@ default_config: &defaults
     - secrets
 
 applications:
-- name: weather
+- name: weathergov-beta
   <<: *defaults
   memory: 256M
-  instances: 2
+  instances: 1
   random-route: false
-- name: cronish
-  <<: *defaults
-  no-route: true
-  command: ./cronish.sh
-  health-check-type: process
-  memory: 128M
+# - name: cronish
+#   <<: *defaults
+#   no-route: true
+#   command: ./cronish.sh
+#   health-check-type: process
+#   memory: 128M

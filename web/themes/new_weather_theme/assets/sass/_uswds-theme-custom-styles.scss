@@ -31,3 +31,11 @@ i.e.
     column-count: 2; // default is 4
   }
 }
+
+.icon svg {
+  @include u-height(8);
+
+  path.st0 {
+    fill: color("black");
+  }
+}

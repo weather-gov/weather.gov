@@ -11,8 +11,7 @@
 
   & .item {
     & svg {
-      @include u-height(2);
-      @include u-height(2);
+      @include u-width(1.5);
     }
   }
 }

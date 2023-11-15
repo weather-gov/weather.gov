@@ -63,5 +63,14 @@ in the form $setting: value,
   $theme-color-base-dark: #333333,
   // dark gray
   $theme-show-compile-warnings: true,
-  $theme-show-notifications: false
+  $theme-show-notifications: false,
+  $flex-direction-settings: (
+    responsive: true
+  ),
+  $text-align-settings: (
+    responsive: true
+  ),
+  $min-height-settings: (
+    responsive:true
+  )
 );

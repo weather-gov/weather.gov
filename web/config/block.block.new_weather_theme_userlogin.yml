@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - system
     - user
   theme:
     - new_weather_theme
@@ -14,7 +15,7 @@ provider: null
 plugin: user_login_block
 settings:
   id: user_login_block
-  label: 'User login'
+  label: Login
   label_display: '0'
   provider: user
 visibility:
@@ -25,3 +26,7 @@ visibility:
       user: '@user.current_user_context:current_user'
     roles:
       anonymous: anonymous
+  request_path:
+    id: request_path
+    negate: false
+    pages: /user/login

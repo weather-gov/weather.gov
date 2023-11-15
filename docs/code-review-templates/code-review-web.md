@@ -50,8 +50,10 @@ This is an automated comment on every pull request requiring a review. A checked
     - [ ] Page titles are descriptive
 
 ## Device Matrix
-- [ ] firefox (renders correctly and user interactions work)
+- [ ] firefox/gecko (renders correctly and user interactions work)
 - [ ] chrome/chromium/edge (renders correctly and user interactions work)
+- [ ] safari/webkit (renders correctly and user interactions work)
 - [ ] web page is readable and usable 
-    - [ ] at 480px
-    - [ ] at 1024px
+    - [ ] at 480px     (mobile)
+    - [ ] at 640px     (tablet)
+    - [ ] at 1024px    (desktop)

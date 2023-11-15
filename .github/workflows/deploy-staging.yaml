@@ -1,0 +1,34 @@
+# This workflow runs on pushes of commits to main.
+
+name: Build and deploy staging
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+    branches:
+      - main
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v3
+        - name: Deploy to cloud.gov weathergov-staging space
+          uses: 18f/cg-deploy-action@main
+          env:
+            DEPLOY_NOW: thanks
+          with:
+            cf_username: ${{ secrets.CF_STAGING_USERNAME }}
+            cf_password: ${{ secrets.CF_STAGING_PASSWORD }}
+            cf_org: nws-weathergov
+            cf_space: staging
+            push_arguments: "-f manifests/manifest-staging.yaml"
+        - name: Run post deploy steps
+          uses: 18f/cg-deploy-action@main
+          with:
+            cf_username: ${{ secrets.CF_STAGING_USERNAME }}
+            cf_password: ${{ secrets.CF_STAGING_PASSWORD }}
+            cf_org: nws-weathergov
+            cf_space: staging
+            full_command: "cf run-task weathergov-staging --command './scripts/post-deploy.sh' --name 'weathergov-staging-deploy' -k '2G' -m '256M'"
