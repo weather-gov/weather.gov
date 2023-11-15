@@ -106,3 +106,8 @@ php-format: ## Format your PHP code according to the Drupal PHP language standar
 
 style-format: ## Format your Sass code according to our style code.
 	npm run style-format
+
+### Composer management
+ci: composer-install
+composer-install: ## Installs dependencies from lock file
+	docker compose exec drupal composer install 
