@@ -1,11 +1,11 @@
 <section class="usa-identifier__section usa-identifier__section--usagov" aria-label="U.S. government information and services,">
-	<div class="usa-identifier__container">
-		<ul class="usa-list--unstyled desktop:display-flex flex-row flex-justify">
-			{% for item in items %}
-				<li>
-					<a class="usa-link text-bold" href="{{ item.url }}">{{ item.title }}</a>
-				</li>
-			{% endfor %}
-		</ul>
-	</div>
+  <div class="usa-identifier__container">
+    <ul class="usa-list--unstyled desktop:display-flex flex-row flex-justify">
+      {% for item in items %}
+        <li>
+          <a class="usa-link text-bold" href="{{ item.url }}">{{ item.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 </section>
