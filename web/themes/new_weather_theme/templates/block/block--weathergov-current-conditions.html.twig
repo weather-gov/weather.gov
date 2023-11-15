@@ -30,7 +30,7 @@
               <div class="font-body-3xl display-flex flex-fill">
                 {{ content["#data"]["temperature"] }}
                 <div class="margin-top-1 display-flex flex-align-start font-body-lg">
-                  &deg;F
+                  ℉
                 </div>
               </div>
               <p class="margin-0 conditions-narrative short">
@@ -44,7 +44,7 @@
             <div class="font-body-lg display-flex flex-fill">
               {{ content["#data"]["feels_like"] }}
               <div class="margin-top-2px display-flex flex-align-start font-body-3xs">
-                &deg;F
+                ℉
               </div>
             </div>
             <p class="margin-0 font-body-3xs text-gray-50">{{ "Feels like" | t }}</p>
@@ -75,7 +75,7 @@
         <div class="grid-row margin-top-2">
           <div class="grid-col-12">
             {{ "The weather in <strong>@place</strong> is <strong>@conditions</strong>.
-                Temperature is <strong>@temperature&deg;F</strong>.
+                Temperature is <strong>@temperature℉</strong>.
                 Humidity is <strong>@humidity%</strong>"
                 |
                 t({

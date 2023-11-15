@@ -54,7 +54,7 @@
       {% endif %}
       {# Add an ellipsis if there are further previous pages. #}
       {% if ellipses.previous %}
-        <li class="pager__item pager__item--ellipsis" role="presentation">&hellip;</li>
+        <li class="pager__item pager__item--ellipsis" role="presentation">…</li>
       {% endif %}
       {# Now generate the actual pager piece. #}
       {% for key, item in items.pages %}
@@ -74,7 +74,7 @@
       {% endfor %}
       {# Add an ellipsis if there are further next pages. #}
       {% if ellipses.next %}
-        <li class="pager__item pager__item--ellipsis" role="presentation">&hellip;</li>
+        <li class="pager__item pager__item--ellipsis" role="presentation">…</li>
       {% endif %}
       {# Print next item if we are not on the last page. #}
       {% if items.next %}
