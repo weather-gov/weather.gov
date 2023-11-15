@@ -144,6 +144,30 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         run: npm run style-lint -- -f github
 
+  twig-lint:
+    name: Twig lint
+    runs-on: ubuntu-latest
+    needs: [should-test]
+    if: needs.should-test.outputs.yes == 'true'
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3
+
+      - name: add problem matcher
+        run: echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-djlint.json"
+
+      - name: install linter
+        run: pip install djlint
+
+      - name: lint Twig
+        run: djlint ./web -e twig --lint --linter-output-format "{filename}:{line}:{message} | {match}"
+
   php-unit-tests:
     name: PHP unit tests
     runs-on: ubuntu-latest
