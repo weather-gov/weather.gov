@@ -28,11 +28,33 @@ class LocationSearch {
   #select;
 
   constructor(node) {
-    this.#input = node.querySelector("input");
-    this.#select = node.querySelector("select");
+    // USWDS adds the input element for us. We can't be certain about when it
+    // will do that, so we need to check if the input element exists before we
+    // start hooking up event listeners to it. If it doesn't exist yet, wait a
+    // bit and try again. Only do it a few times, though, because if it doesn't
+    // show up within a second or so, there's likely another issue preventing it
+    // from getting added to the DOM and we don't want to just sit and waste
+    // CPU cycles forever.
+    let attempts = 0;
+    const addListeners = () => {
+      attempts += 1;
+      this.#input = node.querySelector("input");
+      this.#select = node.querySelector("select");
 
-    this.#input.addEventListener("input", this.searchChanged.bind(this));
-    this.#select.addEventListener("change", this.locationSelected.bind(this));
+      if (!this.#input || !this.#select) {
+        if (attempts < 20) {
+          setTimeout(addListeners, 50);
+        }
+      } else {
+        this.#input.addEventListener("input", this.searchChanged.bind(this));
+        this.#select.addEventListener(
+          "change",
+          this.locationSelected.bind(this),
+        );
+      }
+    };
+
+    addListeners();
   }
 
   async locationSelected() {
