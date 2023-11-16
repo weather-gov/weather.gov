@@ -1,0 +1,1259 @@
+{
+  "geometry": {
+    "coordinates": [[["X", "Y"]]]
+  },
+  "properties": {
+    "periods": [
+      {
+        "comment": "Time is in the past, and in a different timezone",
+        "startTime": "2023-11-16T02:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 30
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,30?size=small"
+      },
+      {
+        "comment": "Time is in the future, and in a different timezone",
+        "startTime": "2023-11-16T09:00:00-04:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 10
+        },
+        "icon": "https://api.weather.gov/icons/land/day/skc,40?size=medium"
+      },
+      {
+        "startTime": "2023-11-16T10:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sleet,60?size=huge"
+      },
+      {
+        "startTime": "2023-11-16T11:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 90
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain_snow,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T12:00:00-08:00",
+        "temperature": 66,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T13:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T14:00:00-08:00",
+        "temperature": 68,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T15:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T16:00:00-08:00",
+        "temperature": 66,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T17:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T18:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T19:00:00-08:00",
+        "temperature": 61,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T20:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T21:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 60
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,60?size=small"
+      },
+      {
+        "startTime": "2023-11-16T22:00:00-08:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 34
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,34?size=small"
+      },
+      {
+        "startTime": "2023-11-16T23:00:00-08:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 34
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,34?size=small"
+      },
+      {
+        "startTime": "2023-11-17T00:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 34
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,34?size=small"
+      },
+      {
+        "startTime": "2023-11-17T01:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 34
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,34?size=small"
+      },
+      {
+        "startTime": "2023-11-17T02:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 34
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,34?size=small"
+      },
+      {
+        "startTime": "2023-11-17T03:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 34
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,34?size=small"
+      },
+      {
+        "startTime": "2023-11-17T04:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 45
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,45?size=small"
+      },
+      {
+        "startTime": "2023-11-17T05:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 45
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,45?size=small"
+      },
+      {
+        "startTime": "2023-11-17T06:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 45
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,45?size=small"
+      },
+      {
+        "startTime": "2023-11-17T07:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 45
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,45?size=small"
+      },
+      {
+        "startTime": "2023-11-17T08:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 45
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,45?size=small"
+      },
+      {
+        "startTime": "2023-11-17T09:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 45
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,45?size=small"
+      },
+      {
+        "startTime": "2023-11-17T10:00:00-08:00",
+        "temperature": 63,
+        "probabilityOfPrecipitation": {
+          "value": 83
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,83?size=small"
+      },
+      {
+        "startTime": "2023-11-17T11:00:00-08:00",
+        "temperature": 66,
+        "probabilityOfPrecipitation": {
+          "value": 83
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,83?size=small"
+      },
+      {
+        "startTime": "2023-11-17T12:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 83
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,83?size=small"
+      },
+      {
+        "startTime": "2023-11-17T13:00:00-08:00",
+        "temperature": 68,
+        "probabilityOfPrecipitation": {
+          "value": 83
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,83?size=small"
+      },
+      {
+        "startTime": "2023-11-17T14:00:00-08:00",
+        "temperature": 68,
+        "probabilityOfPrecipitation": {
+          "value": 83
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,83?size=small"
+      },
+      {
+        "startTime": "2023-11-17T15:00:00-08:00",
+        "temperature": 66,
+        "probabilityOfPrecipitation": {
+          "value": 83
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,83?size=small"
+      },
+      {
+        "startTime": "2023-11-17T16:00:00-08:00",
+        "temperature": 65,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/day/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-17T17:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/day/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-17T18:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-17T19:00:00-08:00",
+        "temperature": 61,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-17T20:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-17T21:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-17T22:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-17T23:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-18T00:00:00-08:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-18T01:00:00-08:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-18T02:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-18T03:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 98
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,98?size=small"
+      },
+      {
+        "startTime": "2023-11-18T04:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 87
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,87?size=small"
+      },
+      {
+        "startTime": "2023-11-18T05:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 87
+        },
+        "icon": "https://api.weather.gov/icons/land/night/tsra,87?size=small"
+      },
+      {
+        "startTime": "2023-11-18T06:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 87
+        },
+        "icon": "https://api.weather.gov/icons/land/day/tsra,87?size=small"
+      },
+      {
+        "startTime": "2023-11-18T07:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 87
+        },
+        "icon": "https://api.weather.gov/icons/land/day/tsra,87?size=small"
+      },
+      {
+        "startTime": "2023-11-18T08:00:00-08:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 87
+        },
+        "icon": "https://api.weather.gov/icons/land/day/tsra,87?size=small"
+      },
+      {
+        "startTime": "2023-11-18T09:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 87
+        },
+        "icon": "https://api.weather.gov/icons/land/day/tsra,87?size=small"
+      },
+      {
+        "startTime": "2023-11-18T10:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 72
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,72?size=small"
+      },
+      {
+        "startTime": "2023-11-18T11:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 72
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,72?size=small"
+      },
+      {
+        "startTime": "2023-11-18T12:00:00-08:00",
+        "temperature": 65,
+        "probabilityOfPrecipitation": {
+          "value": 72
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,72?size=small"
+      },
+      {
+        "startTime": "2023-11-18T13:00:00-08:00",
+        "temperature": 66,
+        "probabilityOfPrecipitation": {
+          "value": 72
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,72?size=small"
+      },
+      {
+        "startTime": "2023-11-18T14:00:00-08:00",
+        "temperature": 66,
+        "probabilityOfPrecipitation": {
+          "value": 72
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,72?size=small"
+      },
+      {
+        "startTime": "2023-11-18T15:00:00-08:00",
+        "temperature": 65,
+        "probabilityOfPrecipitation": {
+          "value": 72
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,72?size=small"
+      },
+      {
+        "startTime": "2023-11-18T16:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 33
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,33?size=small"
+      },
+      {
+        "startTime": "2023-11-18T17:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 33
+        },
+        "icon": "https://api.weather.gov/icons/land/day/rain,33?size=small"
+      },
+      {
+        "startTime": "2023-11-18T18:00:00-08:00",
+        "temperature": 61,
+        "probabilityOfPrecipitation": {
+          "value": 33
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,33?size=small"
+      },
+      {
+        "startTime": "2023-11-18T19:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 33
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,33?size=small"
+      },
+      {
+        "startTime": "2023-11-18T20:00:00-08:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 33
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,33?size=small"
+      },
+      {
+        "startTime": "2023-11-18T21:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 33
+        },
+        "icon": "https://api.weather.gov/icons/land/night/rain,33?size=small"
+      },
+      {
+        "startTime": "2023-11-18T22:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 9
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,9?size=small"
+      },
+      {
+        "startTime": "2023-11-18T23:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 9
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,9?size=small"
+      },
+      {
+        "startTime": "2023-11-19T00:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 9
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,9?size=small"
+      },
+      {
+        "startTime": "2023-11-19T01:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 9
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,9?size=small"
+      },
+      {
+        "startTime": "2023-11-19T02:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 9
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,9?size=small"
+      },
+      {
+        "startTime": "2023-11-19T03:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 9
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,9?size=small"
+      },
+      {
+        "startTime": "2023-11-19T04:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T05:00:00-08:00",
+        "temperature": 54,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T06:00:00-08:00",
+        "temperature": 53,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T07:00:00-08:00",
+        "temperature": 54,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T08:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T09:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T10:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T11:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T12:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T13:00:00-08:00",
+        "temperature": 65,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T14:00:00-08:00",
+        "temperature": 65,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T15:00:00-08:00",
+        "temperature": 65,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,3?size=small"
+      },
+      {
+        "startTime": "2023-11-19T16:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-19T17:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-19T18:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-19T19:00:00-08:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-19T20:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-19T21:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-19T22:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-19T23:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T00:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T01:00:00-08:00",
+        "temperature": 54,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T02:00:00-08:00",
+        "temperature": 54,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T03:00:00-08:00",
+        "temperature": 53,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T04:00:00-08:00",
+        "temperature": 53,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T05:00:00-08:00",
+        "temperature": 52,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T06:00:00-08:00",
+        "temperature": 52,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T07:00:00-08:00",
+        "temperature": 52,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T08:00:00-08:00",
+        "temperature": 54,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T09:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T10:00:00-08:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T11:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T12:00:00-08:00",
+        "temperature": 65,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T13:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T14:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T15:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/few,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T16:00:00-08:00",
+        "temperature": 66,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T17:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T18:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T19:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T20:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T21:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T22:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-20T23:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-21T00:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,0?size=small"
+      },
+      {
+        "startTime": "2023-11-21T01:00:00-08:00",
+        "temperature": 54,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/bkn,0?size=small"
+      },
+      {
+        "startTime": "2023-11-21T02:00:00-08:00",
+        "temperature": 53,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/bkn,0?size=small"
+      },
+      {
+        "startTime": "2023-11-21T03:00:00-08:00",
+        "temperature": 53,
+        "probabilityOfPrecipitation": {
+          "value": 0
+        },
+        "icon": "https://api.weather.gov/icons/land/night/bkn,0?size=small"
+      },
+      {
+        "startTime": "2023-11-21T04:00:00-08:00",
+        "temperature": 52,
+        "probabilityOfPrecipitation": {
+          "value": 1
+        },
+        "icon": "https://api.weather.gov/icons/land/night/bkn,1?size=small"
+      },
+      {
+        "startTime": "2023-11-21T05:00:00-08:00",
+        "temperature": 52,
+        "probabilityOfPrecipitation": {
+          "value": 1
+        },
+        "icon": "https://api.weather.gov/icons/land/night/bkn,1?size=small"
+      },
+      {
+        "startTime": "2023-11-21T06:00:00-08:00",
+        "temperature": 52,
+        "probabilityOfPrecipitation": {
+          "value": 1
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,1?size=small"
+      },
+      {
+        "startTime": "2023-11-21T07:00:00-08:00",
+        "temperature": 53,
+        "probabilityOfPrecipitation": {
+          "value": 1
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,1?size=small"
+      },
+      {
+        "startTime": "2023-11-21T08:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 1
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,1?size=small"
+      },
+      {
+        "startTime": "2023-11-21T09:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 1
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,1?size=small"
+      },
+      {
+        "startTime": "2023-11-21T10:00:00-08:00",
+        "temperature": 61,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-21T11:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-21T12:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-21T13:00:00-08:00",
+        "temperature": 68,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-21T14:00:00-08:00",
+        "temperature": 69,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-21T15:00:00-08:00",
+        "temperature": 68,
+        "probabilityOfPrecipitation": {
+          "value": 3
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,3?size=small"
+      },
+      {
+        "startTime": "2023-11-21T16:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 5
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,5?size=small"
+      },
+      {
+        "startTime": "2023-11-21T17:00:00-08:00",
+        "temperature": 65,
+        "probabilityOfPrecipitation": {
+          "value": 5
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,5?size=small"
+      },
+      {
+        "startTime": "2023-11-21T18:00:00-08:00",
+        "temperature": 63,
+        "probabilityOfPrecipitation": {
+          "value": 5
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,5?size=small"
+      },
+      {
+        "startTime": "2023-11-21T19:00:00-08:00",
+        "temperature": 61,
+        "probabilityOfPrecipitation": {
+          "value": 5
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,5?size=small"
+      },
+      {
+        "startTime": "2023-11-21T20:00:00-08:00",
+        "temperature": 59,
+        "probabilityOfPrecipitation": {
+          "value": 5
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,5?size=small"
+      },
+      {
+        "startTime": "2023-11-21T21:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 5
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,5?size=small"
+      },
+      {
+        "startTime": "2023-11-21T22:00:00-08:00",
+        "temperature": 57,
+        "probabilityOfPrecipitation": {
+          "value": 7
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,7?size=small"
+      },
+      {
+        "startTime": "2023-11-21T23:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 7
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,7?size=small"
+      },
+      {
+        "startTime": "2023-11-22T00:00:00-08:00",
+        "temperature": 56,
+        "probabilityOfPrecipitation": {
+          "value": 7
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,7?size=small"
+      },
+      {
+        "startTime": "2023-11-22T01:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 7
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,7?size=small"
+      },
+      {
+        "startTime": "2023-11-22T02:00:00-08:00",
+        "temperature": 54,
+        "probabilityOfPrecipitation": {
+          "value": 7
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,7?size=small"
+      },
+      {
+        "startTime": "2023-11-22T03:00:00-08:00",
+        "temperature": 54,
+        "probabilityOfPrecipitation": {
+          "value": 7
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,7?size=small"
+      },
+      {
+        "startTime": "2023-11-22T04:00:00-08:00",
+        "temperature": 53,
+        "probabilityOfPrecipitation": {
+          "value": 8
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,8?size=small"
+      },
+      {
+        "startTime": "2023-11-22T05:00:00-08:00",
+        "temperature": 52,
+        "probabilityOfPrecipitation": {
+          "value": 8
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,8?size=small"
+      },
+      {
+        "startTime": "2023-11-22T06:00:00-08:00",
+        "temperature": 52,
+        "probabilityOfPrecipitation": {
+          "value": 8
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,8?size=small"
+      },
+      {
+        "startTime": "2023-11-22T07:00:00-08:00",
+        "temperature": 52,
+        "probabilityOfPrecipitation": {
+          "value": 8
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,8?size=small"
+      },
+      {
+        "startTime": "2023-11-22T08:00:00-08:00",
+        "temperature": 55,
+        "probabilityOfPrecipitation": {
+          "value": 8
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,8?size=small"
+      },
+      {
+        "startTime": "2023-11-22T09:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 8
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,8?size=small"
+      },
+      {
+        "startTime": "2023-11-22T10:00:00-08:00",
+        "temperature": 61,
+        "probabilityOfPrecipitation": {
+          "value": 11
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,11?size=small"
+      },
+      {
+        "startTime": "2023-11-22T11:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 11
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,11?size=small"
+      },
+      {
+        "startTime": "2023-11-22T12:00:00-08:00",
+        "temperature": 66,
+        "probabilityOfPrecipitation": {
+          "value": 11
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,11?size=small"
+      },
+      {
+        "startTime": "2023-11-22T13:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 11
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,11?size=small"
+      },
+      {
+        "startTime": "2023-11-22T14:00:00-08:00",
+        "temperature": 67,
+        "probabilityOfPrecipitation": {
+          "value": 11
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,11?size=small"
+      },
+      {
+        "startTime": "2023-11-22T15:00:00-08:00",
+        "temperature": 66,
+        "probabilityOfPrecipitation": {
+          "value": 11
+        },
+        "icon": "https://api.weather.gov/icons/land/day/bkn,11?size=small"
+      },
+      {
+        "startTime": "2023-11-22T16:00:00-08:00",
+        "temperature": 64,
+        "probabilityOfPrecipitation": {
+          "value": 10
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,10?size=small"
+      },
+      {
+        "startTime": "2023-11-22T17:00:00-08:00",
+        "temperature": 62,
+        "probabilityOfPrecipitation": {
+          "value": 10
+        },
+        "icon": "https://api.weather.gov/icons/land/day/sct,10?size=small"
+      },
+      {
+        "startTime": "2023-11-22T18:00:00-08:00",
+        "temperature": 60,
+        "probabilityOfPrecipitation": {
+          "value": 10
+        },
+        "icon": "https://api.weather.gov/icons/land/night/sct,10?size=small"
+      },
+      {
+        "startTime": "2023-11-22T19:00:00-08:00",
+        "temperature": 58,
+        "probabilityOfPrecipitation": {
+          "value": 10
+        },
+        "icon": "https://api.weather.gov/icons/land/night/bkn,10?size=small"
+      }
+    ]
+  }
+}

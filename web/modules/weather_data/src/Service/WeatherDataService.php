@@ -191,17 +191,23 @@ class WeatherDataService {
   /**
    * Get the hourly forecast for a location.
    *
-   * The location is taken from the provided route.
+   * The location is taken from the provided route. Note that the $now object
+   * should *NOT* be set. It's a dependency injection hack so we can mock the
+   * current date/time.
    *
    * @return array
    *   The hourly forecast as an associative array, or NULL if no route is
    *   provided, or the provided route is not on the grid.
    */
-  public function getHourlyForecast($route) {
+  public function getHourlyForecast($route, $now = FALSE) {
     // If this isn't a grid route, don't do anything. We can only respond to
     // requests on the grid.
     if ($route->getRouteName() != "weather_routes.grid") {
       return NULL;
+    }
+
+    if (!($now instanceof \DateTimeImmutable)) {
+      $now = new \DateTimeImmutable();
     }
 
     // Since we're on the right kind of route, pull out the data we need.
@@ -224,9 +230,7 @@ class WeatherDataService {
     $forecast = $forecast->properties->periods;
 
     // Toss out any time periods in the past.
-    $forecast = array_filter($forecast, function ($period) {
-
-      $now = new \DateTimeImmutable();
+    $forecast = array_filter($forecast, function ($period) use (&$now) {
       $then = \DateTimeImmutable::createFromFormat(
         \DateTimeInterface::ISO8601_EXPANDED,
         $period->startTime
@@ -260,7 +264,9 @@ class WeatherDataService {
       ];
     }, $forecast);
 
-    return $forecast;
+    // Reindex the array. array_filter maintains indices, so it can result in
+    // holes in the array. Bizarre behavior choice, but okay...
+    return array_values($forecast);
   }
 
 }
