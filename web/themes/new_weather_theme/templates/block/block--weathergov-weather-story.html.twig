@@ -1,0 +1,12 @@
+{%
+  set body = {
+    '#type': 'processed_text',
+    '#text': content.node.body.value,
+    '#format': content.node.body.format
+  }
+%}
+
+<div>
+<h2>{{ content.title }}</h2>
+{{ body }}
+</div>
