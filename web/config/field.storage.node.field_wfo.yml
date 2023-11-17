@@ -12,27 +12,24 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: Nashville
+      value: OHX
       label: Nashville
     -
-      value: Knoxville
+      value: MRX
       label: Knoxville
     -
-      value: Memphis
+      value: MEG
       label: Memphis
     -
-      value: Paducah
+      value: PAH
       label: Paducah
     -
-      value: Huntsville
+      value: HUN
       label: Huntsville
-    -
-      value: 'Not Nashville'
-      label: 'Not Nashville'
   allowed_values_function: ''
 module: options
 locked: false
-cardinality: -1
+cardinality: 1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false

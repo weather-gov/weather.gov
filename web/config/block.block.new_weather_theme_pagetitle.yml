@@ -9,7 +9,7 @@ dependencies:
 id: new_weather_theme_pagetitle
 theme: new_weather_theme
 region: content
-weight: -3
+weight: -4
 provider: null
 plugin: page_title_block
 settings:
