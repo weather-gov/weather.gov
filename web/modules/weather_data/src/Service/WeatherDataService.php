@@ -67,7 +67,15 @@ class WeatherDataService {
     }
 
     $url = parse_url($observation->icon);
-    $apiConditionKey = implode("/", array_slice(explode("/", $url["path"]), -2));
+    $path = $url["path"];
+    $path = explode("/", $path);
+    $path = array_slice($path, -2);
+    $path = array_map(function ($piece) {
+      return preg_replace("/,.*$/", "", $piece);
+    }, $path);
+
+    $apiConditionKey = implode("/", $path);
+
     return $apiConditionKey;
   }
 
@@ -152,7 +160,7 @@ class WeatherDataService {
     // 2. Add 22.5° to it. This accounts for north starting at -22.5°
     // 3. Use integer division by 45° to see which direction index this is.
     // This indexes into the two direction name arrays above.
-    $directionIndex = (int) (($obs->windDirection->value % 360) + 22.5) / 45;
+    $directionIndex = intdiv(intval(($obs->windDirection->value % 360) + 22.5, 10), 45);
 
     return [
       'conditions' => [
@@ -178,6 +186,87 @@ class WeatherDataService {
         'shortDirection' => $shortDirections[$directionIndex],
       ],
     ];
+  }
+
+  /**
+   * Get the hourly forecast for a location.
+   *
+   * The location is taken from the provided route. Note that the $now object
+   * should *NOT* be set. It's a dependency injection hack so we can mock the
+   * current date/time.
+   *
+   * @return array
+   *   The hourly forecast as an associative array, or NULL if no route is
+   *   provided, or the provided route is not on the grid.
+   */
+  public function getHourlyForecast($route, $now = FALSE) {
+    // If this isn't a grid route, don't do anything. We can only respond to
+    // requests on the grid.
+    if ($route->getRouteName() != "weather_routes.grid") {
+      return NULL;
+    }
+
+    if (!($now instanceof \DateTimeImmutable)) {
+      $now = new \DateTimeImmutable();
+    }
+
+    // Since we're on the right kind of route, pull out the data we need.
+    $wfo = $route->getParameter("wfo");
+    $gridX = $route->getParameter("gridX");
+    $gridY = $route->getParameter("gridY");
+
+    date_default_timezone_set('America/New_York');
+
+    $forecast = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast/hourly");
+    $forecast = json_decode($forecast->getBody());
+
+    // Get a point from the WFO grid. Any will do. We will use that to fetch the
+    // appropriate timezone from the /points API endpoint.
+    $point = $forecast->geometry->coordinates[0][0];
+    $timezone = $this->client->get("https://api.weather.gov/points/$point[1],$point[0]");
+    $timezone = json_decode($timezone->getBody());
+    $timezone = $timezone->properties->timeZone;
+
+    $forecast = $forecast->properties->periods;
+
+    // Toss out any time periods in the past.
+    $forecast = array_filter($forecast, function ($period) use (&$now) {
+      $then = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601_EXPANDED,
+        $period->startTime
+      );
+      $diff = $now->diff($then, FALSE);
+
+      return $diff->invert != 1;
+    });
+
+    // Now map all those forecast periods into the structure we want.
+    $forecast = array_map(function ($period) use (&$timezone) {
+
+      // This closure needs access to the $timezone variable about. The easiest
+      // way I found to do it was using it by reference.
+      // From the start period of the time, parse it as an ISO8601 string and
+      // then format it into just the "Hour AM/PM" format (e.g., "8 PM")
+      $timestamp = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601_EXPANDED,
+        $period->startTime
+      )->setTimeZone(new \DateTimeZone($timezone))
+        ->format("g A");
+
+      $obsKey = $this->getApiObservationKey($period);
+
+      return [
+        "conditions" => $this->legacyMapping->$obsKey->conditions,
+        "icon" => $this->legacyMapping->$obsKey->icon,
+        "probabilityOfPrecipitation" => $period->probabilityOfPrecipitation->value,
+        "time" => $timestamp,
+        "temperature" => $period->temperature,
+      ];
+    }, $forecast);
+
+    // Reindex the array. array_filter maintains indices, so it can result in
+    // holes in the array. Bizarre behavior choice, but okay...
+    return array_values($forecast);
   }
 
 }

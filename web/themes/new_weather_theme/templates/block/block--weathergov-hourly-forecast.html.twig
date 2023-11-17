@@ -14,20 +14,20 @@
   {# Forecast:  hour, icon, condition desc (short), change of precip, temp degree, temp scale #}
   <div class="grid-row flex-row minh-card">
 
-    {% set max_items = content["#data"]["max_items"] %}
-    {% for i in 1..max_items %}
+    {% set hours = content["#data"] %}
+    {% for hour in hours %}
       <div class="tablet:grid-col border border-base-lightest padding-4">
-        <time class="display-block text-uppercase text-bold tablet:text-center font-heading-md" datetime="2011-11-18T03:00-05:00">3am</time>
+        <time class="display-block text-uppercase text-bold tablet:text-center font-heading-md" datetime="2011-11-18T03:00-05:00">{{ hour.time }}</time>
         <div class="display-flex tablet:flex-column flex-justify flex-align-center tablet:minh-card">
           <div class="icon">
-            {{ source(directory ~ "/assets/images/weather/icons/conditions/showers_scattered_rain.svg" )}}
+            {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ hour.icon )}}
           </div>
           <div class="text-center">
-            <p class="margin-0 conditions-narrative short">rain showers</p>
-            <span class="font-body-3xs text-gray-50 conditions__chance">20% chance</span>
+            <p class="margin-0 conditions-narrative short">{{ hour.conditions }}</p>
+            <span class="font-body-3xs text-gray-50 conditions__chance">{{ hour.probabilityOfPrecipitation }}% chance</span>
           </div>
           <div class="display-flex flex-row">
-            <span class="font-body-xl">61</span>
+            <span class="font-body-xl">{{ hour.temperature }}</span>
             <span class="font-body-3xs margin-top-05">&#x2109;</span>
             {# use HTML entity that reads "degree farenheit" to screen readers #}
           </div>
