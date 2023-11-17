@@ -29,7 +29,7 @@ const locationSelected = async (event) => {
   // name.
   // Note that we cannot use the id here, because USWDS strips it,
   // giving the input element it inserts that id value instead
-  if(!event.target.getAttribute('name') == "weather location"){
+  if(!event.target.getAttribute('name') === "weather location"){
     return;
   }
   const { value } = event.target;
@@ -64,7 +64,7 @@ const locationSelected = async (event) => {
 const searchChanged = async (event) => {
   // We only care about input elements with the
   // id that we've specified in the template.
-  if(!event.target.id == "weather-location-search"){
+  if(!event.target.id === "weather-location-search"){
     return;
   }
   const { value } = event.target;
