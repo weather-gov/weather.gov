@@ -1,9 +1,9 @@
 {%
-  set classes = [
+set classes = [
     'block',
     'block-' ~ configuration.provider|clean_class,
     'block-' ~ plugin_id|clean_class
-  ]
+]
 %}
 <div{{sttributes.addClass(classes)}}>
   {{ title_prefix }}
@@ -12,27 +12,35 @@
   {% endif %}
   {{ title_suffix }}
   <div class="grid-row flex-row minh-card">
+  {%  for data in content["#data"] %}
     <div class="tablet:grid-col border border-base-lightest padding-4">
-      <time class="display-block text-bold tablet:text-center font-heading-md" datetime="2011-11-18T03:00-05:00">Mon</time>
+      <time class="display-block text-bold tablet:text-center font-heading-md" datetime="{{ data.daytime.startTime }}">
+        {{ data.daytime.shortDayName }}
+      </time>
       <div class="display-flex tablet:flex-column flex-justify flex-align-center tablet:minh-card">
-          <div class="icon">
-            {{ source(directory ~ "/assets/images/weather/icons/conditions/showers_scattered_rain.svg" )}}
-          </div>
-          <div class="text-center">
-            <p class="margin-0 conditions-narrative short">rain showers</p>
-            <span class="font-body-3xs text-gray-50 conditions__chance">20% chance</span>
-          </div>
-          <div class="display-flex flex-row">
-            <span class="font-body-xl">61</span>
-            <span class="font-body-3xs margin-top-05">&#x2109;</span>
-            {# use HTML entity that reads "degree farenheit" to screen readers #}
-          </div>
-          <div class="display-flex flex-row">
-            <span></span>
-            <span class="font-body-lg text-gray-50">55</span>
-            <span class="font-body-3xs margin-top-05">&#x2109</span>
-          </div>
+        <div class="icon">
+          {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ data.daytime.icon )}}
+        </div>
+        <div class="text-center">
+          <p class="margin-0 conditions-narrative short">
+            {{ data.daytime.shortForecast }}
+          </p>
+          <span class="font-body-3xs text-gray-50 conditions__chance">
+            {{ data.daytime.probabilityOfPrecipitation }}% chance
+          </span>
+        </div>
+        <div class="display-flex flex-row">
+          <span class="font-body-xl">{{ data.daytime.temperature }}</span>
+          <span class="font-body-3xs margin-top-05">&#x2109;</span>
+          {# use HTML entity that reads "degree farenheit" to screen readers #}
+        </div>
+        <div class="display-flex flex-row">
+          <span></span>
+          <span class="font-body-lg text-gray-50">{{ data.overnight.temperature }}</span>
+          <span class="font-body-3xs margin-top-05">&#x2109</span>
+        </div>
       </div>
     </div>
+  {%  endfor %}
   </div>
 </div>
