@@ -22,7 +22,7 @@ set classes = [
           <div class="icon">
             {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ data.daytime.icon )}}
           </div>
-          <div class="text-center">
+          <div class="text-center minh-8">
             <p class="margin-0 conditions-narrative short {% if not hasPrecipitation %} tablet:margin-bottom-1em{% endif %}">
               {{ data.daytime.shortForecast }}
             </p>
@@ -36,7 +36,7 @@ set classes = [
             <div class="display-flex flex-row">
               <span class="font-body-xl position-relative">
                 {{ data.daytime.temperature }}
-                <span class="font-body-3xs position-absolute display-inline-block left-full">&#x2109;</span>
+                <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-05">&#x2109;</span>
               </span>
               {# use HTML entity that reads "degree farenheit" to screen readers #}
             </div>
