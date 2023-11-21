@@ -119,9 +119,15 @@ class WeatherDataService {
   private function getApiObservationKey($observation) {
     /* The icon path from the API is of the form:
     https://api.weather.gov/icons/land/day/skc
+    - OR -
+    https://api.weather.gov/icons/land/day/skc/hurricane
 
-    The last two path segments are the ones we need to identify the current
-    conditions.
+    The last two or three path segments are the ones we need to identify the current
+    conditions. This is because there can be two simultaneous conditions in the legacy
+    icon system.
+
+    For now, we use the _first_ condition given in the path as the canonical
+    condition for the key.
      */
     $icon = $observation->icon;
 
@@ -132,53 +138,24 @@ class WeatherDataService {
     $url = parse_url($observation->icon);
     $path = $url["path"];
     $path = explode("/", $path);
-    $path = array_slice($path, -2);
+
+    // An icon url, when split to path parts,
+    // with have either 5 or 6 parts.
+    // Thus we need to trim from the end by
+    // either 2 or 3 each time
+    if(count($path) == 6){
+      $path = array_slice($path, -3, 2);
+    } else {
+      $path = array_slice($path, -2);
+    }
+
     $path = array_map(function ($piece) {
       return preg_replace("/,.*$/", "", $piece);
     }, $path);
 
     $apiConditionKey = implode("/", $path);
-
+    
     return $apiConditionKey;
-  }
-
-  /**
-   * Gets the corresponding icon for an observation key
-   *
-   * @return string
-   *    A string corresponding to the icon name for
-   *    the given observation key. Will return the
-   *    default icon if the key is absent from the
-   *    icon mapping.
-   */
-  private function getIconForKey($obsKey){
-    if(property_exists($this->legacyMapping, $obsKey)){
-      return $this->legacyMapping->$obsKey->icon;
-    }
-    return $this->defaultIcon;
-  }
-
-  /**
-   * Gets the corresponding condition for an observation key
-   *
-   * If the key is not found, we attempt to use a provided
-   * default. If that is not present, we use the class
-   * default.
-   *
-   * @return string
-   *    The condtion corresponding to the observation or
-   *    a catch-all default condition
-   */
-  private function getConditionsForKey($obsKey, $default=NULL){
-    if(property_exists($this->legacyMapping, $obsKey)){
-      return $this->legacyMapping->$obsKey->conditions;
-    }
-
-    if($default){
-      return $default;
-    }
-
-    return $this->defaultConditions;
   }
 
   /**
@@ -250,7 +227,7 @@ class WeatherDataService {
 
     $obsKey = $this->getApiObservationKey($obs);
 
-    $description = $this->getConditionsForKey($obsKey);
+    $description = $this->legacyMapping->$obsKey->conditions;
 
     // The cardinal and ordinal directions. North goes in twice because it sits
     // in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
@@ -273,7 +250,7 @@ class WeatherDataService {
       // C to F.
       'feels_like' => (int) round($feelsLike),
       'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
-      'icon' => $this->getIconForKey($obsKey),
+      'icon' => $this->legacyMapping->$obsKey->icon,
       'location' => $location,
       // C to F.
       'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
@@ -359,8 +336,8 @@ class WeatherDataService {
       $obsKey = $this->getApiObservationKey($period);
 
       return [
-        "conditions" => $this->getConditionsForKey($obsKey),
-        "icon" => $this->getIconForKey($obsKey),
+        "conditions" => $this->legacyMapping->$obsKey->conditions,
+        "icon" => $this->legacyMapping->$obsKey->icon,
         "probabilityOfPrecipitation" => $period->probabilityOfPrecipitation->value,
         "time" => $timestamp,
         "temperature" => $period->temperature,
@@ -428,11 +405,15 @@ class WeatherDataService {
       // Get any mapped condition and/or icon values
       $obsKey = $this->getApiObservationKey($daytime);
 
+      // The short forecast name should be mapped to
+      // the legacyMapping and translated
+      $shortForecast = $this->legacyMapping->$obsKey->conditions;
+
       $daytimeForecast = [
         'shortDayName' => $shortDayName,
         'startTime' => $daytime->startTime,
-        'shortForecast' => $this->getConditionsForKey($obsKey, $daytime->shortForecast),
-        'icon' => $this->getIconForKey($obsKey),
+        'shortForecast' => $this->t->translate($shortForecast),
+        'icon' => $this->legacyMapping->$obsKey->icon,
         'temperature' => $daytime->temperature,
         'probabilityOfPrecipitation' => $daytime->probabilityOfPrecipitation->value
       ];
