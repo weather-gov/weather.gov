@@ -20,7 +20,7 @@ libraries-extend:
 core_version_requirement: ^10
 generator: 'starterkit_theme:10.1.2'
 regions:
-  banner: 'USWDS Banner'
+  beta: 'Beta banner'
   header: 'Header'
   primary_menu: 'Primary menu'
   secondary_menu: 'Secondary menu'
@@ -28,6 +28,7 @@ regions:
   highlighted: 'Highlight'
   help: 'Help'
   content: 'Content'
+  wfo_local_content: 'WFO Local Content'
   prefooter: 'Prefooter'
   primary_footer: "Primary footer"
   secondary_footer: "Secondary footer"

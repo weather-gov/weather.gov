@@ -1,0 +1,19 @@
+uuid: f98e54d6-0576-4142-86eb-f0df89b9dea8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_office_address
+    - node.type.wfo_blurb
+id: node.wfo_blurb.field_office_address
+field_name: field_office_address
+entity_type: node
+bundle: wfo_blurb
+label: 'Office address'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

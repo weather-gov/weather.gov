@@ -1,0 +1,7 @@
+@use "uswds-core" as *;
+
+section.beta-banner {
+  p {
+    @include u-margin-y(0);
+  }
+}
