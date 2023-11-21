@@ -1,8 +1,8 @@
 {%
 set classes = [
-    'block',
-    'block-' ~ configuration.provider|clean_class,
-    'block-' ~ plugin_id|clean_class
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class
 ]
 %}
 <div{{sttributes.addClass(classes)}}>
@@ -14,7 +14,7 @@ set classes = [
   <div class="grid-row flex-row minh-card">
     {%  for data in content["#data"] %}
       {%  set hasPrecipitation = data.daytime.probabilityOfPrecipitation %}
-      <div class="tablet:grid-col padding-4">
+      <div class="tablet:grid-col padding-4 margin-right-2">
         <time class="display-block text-bold tablet:text-center font-heading-md" datetime="{{ data.daytime.startTime }}">
           {{ data.daytime.shortDayName }}
         </time>
@@ -23,7 +23,7 @@ set classes = [
             {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ data.daytime.icon )}}
           </div>
           <div class="text-center">
-            <p class="margin-0 conditions-narrative short {% if not hasPrecipitation %} margin-bottom-1em{% endif %}">
+            <p class="margin-0 conditions-narrative short {% if not hasPrecipitation %} tablet:margin-bottom-1em{% endif %}">
               {{ data.daytime.shortForecast }}
             </p>
             {%  if hasPrecipitation %}
@@ -32,19 +32,24 @@ set classes = [
               </span>
             {%  endif %}
           </div>
-          <div class="display-flex flex-row">
-            <span class="font-body-xl">{{ data.daytime.temperature }}</span>
-            <span class="font-body-3xs margin-top-05">&#x2109;</span>
-            {# use HTML entity that reads "degree farenheit" to screen readers #}
-          </div>
-          <div class="display-flex flex-row">
-            <span class="font-body-lg text-gray-50 position-relative">
-              <div class="font-body-3xs position-absolute margin-left-neg-105">
-                {{ source(directory ~ "/assets/images/weather/icons/overnight.svg" )}}
-              </div>
-              {{ data.overnight.temperature }}
-            </span>
-            <span class="font-body-3xs margin-top-05">&#x2109</span>
+          <div class="display-flex flex-column flex-align-center">
+            <div class="display-flex flex-row">
+              <span class="font-body-xl position-relative">
+                {{ data.daytime.temperature }}
+                <span class="font-body-3xs position-absolute display-inline-block left-full">&#x2109;</span>
+              </span>
+              {# use HTML entity that reads "degree farenheit" to screen readers #}
+            </div>
+            <div class="display-flex flex-row">
+              <span class="position-relative font-body-lg text-gray-50">
+                <div class="font-body-3xs position-absolute margin-left-neg-105">
+                  {{ source(directory ~ "/assets/images/weather/icons/overnight.svg" )}}
+                </div>
+                {{ data.overnight.temperature }}
+                <div class="font-body-3xs display-inline-block position-absolute left-full">&#x2109</div>
+                {# use HTML entity that reads "degree farenheit" to screen readers #}
+              </span>
+            </div>
           </div>
         </div>
       </div>
