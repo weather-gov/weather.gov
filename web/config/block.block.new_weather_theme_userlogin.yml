@@ -10,7 +10,7 @@ dependencies:
 id: new_weather_theme_userlogin
 theme: new_weather_theme
 region: content
-weight: 1
+weight: -5
 provider: null
 plugin: user_login_block
 settings:

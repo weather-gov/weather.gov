@@ -50,6 +50,9 @@ install-site: install-site-config import-content ## Install a minimal Drupal sit
 install-site-config:
 	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
 
+log: ## Tail the log for the Drupal container
+	docker compose logs --follow drupal
+
 rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose stop drupal
 	docker compose rm drupal -f
