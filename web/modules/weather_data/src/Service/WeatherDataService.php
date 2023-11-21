@@ -61,6 +61,18 @@ class WeatherDataService {
   }
 
   /**
+   * Return a condition stripped of any parentheticals
+   *
+   * @return string
+   *    A condition text with any parenthetical
+   *    statements removed
+   */
+  private function removeParenthetical($str){
+    $parts = explode("(", $str);
+    return $parts[0];
+  }
+  
+  /**
    * Return only the periods that are after today
    *
    * This private method will filter the forecast periods
@@ -408,6 +420,7 @@ class WeatherDataService {
       // The short forecast name should be mapped to
       // the legacyMapping and translated
       $shortForecast = $this->legacyMapping->$obsKey->conditions;
+      $shortForecast = $this->removeParenthetical($shortForecast);
 
       $daytimeForecast = [
         'shortDayName' => $shortDayName,
