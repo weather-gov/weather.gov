@@ -17,6 +17,20 @@ class WeatherDataService {
   private $legacyMapping;
 
   /**
+   * A catch-all default icon to show
+   *
+   * @var string
+   */
+  private $defaultIcon;
+
+  /**
+   * A catch-all conditions label to display
+   *
+   * @var defaultConditions
+   */
+  private $defaultConditions;
+
+  /**
    * HTTP client.
    *
    * @var \GuzzleHttp\ClientInterface client
@@ -36,6 +50,8 @@ class WeatherDataService {
   public function __construct(ClientInterface $httpClient, TranslationInterface $t) {
     $this->client = $httpClient;
     $this->t = $t;
+    $this->defaultIcon = "nodata.svg";
+    $this->defaultConditions = "No data";
 
     $this->legacyMapping = json_decode(
       file_get_contents(
@@ -127,6 +143,45 @@ class WeatherDataService {
   }
 
   /**
+   * Gets the corresponding icon for an observation key
+   *
+   * @return string
+   *    A string corresponding to the icon name for
+   *    the given observation key. Will return the
+   *    default icon if the key is absent from the
+   *    icon mapping.
+   */
+  private function getIconForKey($obsKey){
+    if(property_exists($this->legacyMapping, $obsKey)){
+      return $this->legacyMapping->$obsKey->icon;
+    }
+    return $this->defaultIcon;
+  }
+
+  /**
+   * Gets the corresponding condition for an observation key
+   *
+   * If the key is not found, we attempt to use a provided
+   * default. If that is not present, we use the class
+   * default.
+   *
+   * @return string
+   *    The condtion corresponding to the observation or
+   *    a catch-all default condition
+   */
+  private function getConditionsForKey($obsKey, $default=NULL){
+    if(property_exists($this->legacyMapping, $obsKey)){
+      return $this->legacyMapping->$obsKey->conditions;
+    }
+
+    if($default){
+      return $default;
+    }
+
+    return $this->defaultConditions;
+  }
+
+  /**
    * Get a WFO grid from a latitude and longitude.
    */
   public function getGridFromLatLon($lat, $lon) {
@@ -195,7 +250,7 @@ class WeatherDataService {
 
     $obsKey = $this->getApiObservationKey($obs);
 
-    $description = $this->legacyMapping->$obsKey->conditions;
+    $description = $this->getConditionsForKey($obsKey);
 
     // The cardinal and ordinal directions. North goes in twice because it sits
     // in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
@@ -218,7 +273,7 @@ class WeatherDataService {
       // C to F.
       'feels_like' => (int) round($feelsLike),
       'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
-      'icon' => $this->legacyMapping->$obsKey->icon,
+      'icon' => $this->getIconForKey($obsKey),
       'location' => $location,
       // C to F.
       'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
@@ -304,8 +359,8 @@ class WeatherDataService {
       $obsKey = $this->getApiObservationKey($period);
 
       return [
-        "conditions" => $this->legacyMapping->$obsKey->conditions,
-        "icon" => $this->legacyMapping->$obsKey->icon,
+        "conditions" => $this->getConditionsForKey($obsKey),
+        "icon" => $this->getIconForKey($obsKey),
         "probabilityOfPrecipitation" => $period->probabilityOfPrecipitation->value,
         "time" => $timestamp,
         "temperature" => $period->temperature,
@@ -373,16 +428,13 @@ class WeatherDataService {
       // Get any mapped condition and/or icon values
       $obsKey = $this->getApiObservationKey($daytime);
 
-      var_dump($obsKey);
-      var_dump($daytime->icon);
-
       $daytimeForecast = [
         'shortDayName' => $shortDayName,
         'startTime' => $daytime->startTime,
-        'shortForecast' => $this->legacyMapping->$obsKey->conditions,
-        'icon' => $this->legacyMapping->$obsKey->icon,
+        'shortForecast' => $this->getConditionsForKey($obsKey, $daytime->shortForecast),
+        'icon' => $this->getIconForKey($obsKey),
         'temperature' => $daytime->temperature,
-        'probabilityOfPrecipitation' => $daytime->propabilityOfPrecipitation->value
+        'probabilityOfPrecipitation' => $daytime->probabilityOfPrecipitation->value
       ];
 
       $overnightForecast = [
