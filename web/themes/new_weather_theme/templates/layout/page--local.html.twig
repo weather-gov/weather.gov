@@ -149,11 +149,10 @@ template_preprocess_page() * @see html.html.twig */ #}
     {# link is in html.html.twig #}
     <div class="grid-container">
       <div class="grid-row">{{ page.content }}</div>
-      {% if page.wfo_local_content %}
-      <div class="grid-row">
-        {{ page.wfo_local_content }}
-      </div>
-      {% endif %}
+      {% if page.location %}{{ page.location }}{% endif %}
+      {% if page.current_conditions %}{{ page.current_conditions }}{% endif %}
+      {% if page.forecast %}{{ page.forecast }}{% endif %}
+      {% if page.wfo_local_content %}{{ page.wfo_local_content }}{% endif %}
     </div>
   </main>
   {% if page.prefooter %}

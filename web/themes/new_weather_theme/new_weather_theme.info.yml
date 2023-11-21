@@ -28,6 +28,9 @@ regions:
   highlighted: 'Highlight'
   help: 'Help'
   content: 'Content'
+  location: 'Location'
+  current_conditions: 'Current conditions'
+  forecast: 'Forecast'
   wfo_local_content: 'WFO Local Content'
   prefooter: 'Prefooter'
   primary_footer: "Primary footer"

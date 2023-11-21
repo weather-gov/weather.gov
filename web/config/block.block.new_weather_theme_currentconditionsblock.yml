@@ -9,8 +9,8 @@ dependencies:
     - new_weather_theme
 id: new_weather_theme_currentconditionsblock
 theme: new_weather_theme
-region: content
-weight: -2
+region: current_conditions
+weight: -5
 provider: null
 plugin: weathergov_current_conditions
 settings:
