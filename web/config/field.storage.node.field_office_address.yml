@@ -9,7 +9,7 @@ field_name: field_office_address
 entity_type: node
 type: string
 settings:
-  max_length: 20
+  max_length: 500
   case_sensitive: false
   is_ascii: false
 module: core

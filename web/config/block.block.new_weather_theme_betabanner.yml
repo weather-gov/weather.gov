@@ -1,0 +1,25 @@
+uuid: 5b0420da-13cf-448c-b0a9-fd5324e58ec4
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:no_title_block:7faecf5a-0b52-4a91-8c34-83defcf42eba'
+  module:
+    - block_content
+  theme:
+    - new_weather_theme
+id: new_weather_theme_betabanner
+theme: new_weather_theme
+region: beta
+weight: 0
+provider: null
+plugin: 'block_content:7faecf5a-0b52-4a91-8c34-83defcf42eba'
+settings:
+  id: 'block_content:7faecf5a-0b52-4a91-8c34-83defcf42eba'
+  label: 'Beta banner'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }
