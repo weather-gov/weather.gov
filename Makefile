@@ -73,6 +73,10 @@ zap-containers:
 	docker compose stop
 	docker compose rm -f
 
+### CSS
+build-css: # Build CSS
+	cd web/themes/new_weather_theme && npx gulp compile
+
 ### Testing
 a11y: accessibility-test
 accessibility-test: ## Run accessibility tests (alias a11y)
