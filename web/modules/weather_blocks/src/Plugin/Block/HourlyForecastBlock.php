@@ -78,7 +78,7 @@ class HourlyForecastBlock extends BlockBase implements ContainerFactoryPluginInt
     $routeName = $this->route->getRouteName();
 
     if ($routeName == "weather_routes.grid") {
-      $max = 4;
+      $max = 12;
       $data = $this->weatherData->getHourlyForecast($this->route);
       $data = array_slice($data, 0, $max);
 
