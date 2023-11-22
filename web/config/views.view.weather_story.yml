@@ -130,8 +130,8 @@ display:
             trim: false
             preserve_tags: ''
             html: false
-          element_type: ''
-          element_class: ''
+          element_type: div
+          element_class: text-gray-50
           element_label_type: ''
           element_label_class: ''
           element_label_colon: false
@@ -154,7 +154,7 @@ display:
             time_diff:
               enabled: true
               future_format: '@interval hence'
-              past_format: '@interval ago'
+              past_format: 'Last updated @interval ago'
               granularity: 2
               refresh: 60
               description: ''
