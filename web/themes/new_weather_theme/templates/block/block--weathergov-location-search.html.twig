@@ -1,5 +1,6 @@
 <div>
 
+  {% if content["location"] %}
   <h1 class="margin-bottom-0">{{ content["location"] }}</h1>
 
   <div>
@@ -16,6 +17,7 @@
     </svg>
     change location
   </div>
+  {% endif %}
 
   <form class="usa-form" data-location-search>
     <label class="usa-label" for="weather-location-search">Search for a location</label>
