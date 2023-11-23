@@ -17,8 +17,8 @@
     {% set hours = content["#data"] %}
     {% for hour in hours %}
       <div class="tablet:grid-col padding-x-4">
-        <time class="display-block text-uppercase text-bold tablet:text-center font-heading-md" datetime="2011-11-18T03:00-05:00">{{ hour.time }}</time>
         <div class="display-flex tablet:flex-column flex-justify flex-align-center tablet:minh-card">
+          <time class="display-block text-uppercase text-bold tablet:text-center font-heading-md" datetime="2011-11-18T03:00-05:00">{{ hour.time }}</time>
           <div class="icon margin-y-1">
             {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ hour.icon )}}
           </div>
@@ -26,7 +26,7 @@
             <p class="margin-0 conditions-narrative short">{{ hour.conditions | lower }}</p>
             <span class="font-body-3xs text-gray-50 conditions__chance">{{ hour.probabilityOfPrecipitation }}% chance</span>
           </div>
-          <div class="display-flex flex-row margin-top-2">
+          <div class="display-flex flex-row tablet:margin-top-2">
             <span class="font-body-xl">{{ hour.temperature }}</span>
             <span class="font-body-3xs margin-top-05">&#x2109;</span>
             {# use HTML entity that reads "degree farenheit" to screen readers #}
