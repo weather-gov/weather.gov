@@ -120,7 +120,7 @@ class WeatherDataService {
 
     $data = &drupal_static(__FUNCTION__);
 
-    if(!isset($data)){
+    if (!isset($data)) {
       // Since we're on the right kind of route, pull out the data we need.
       $wfo = $route->getParameter("wfo");
       $gridX = $route->getParameter("gridX");
@@ -152,8 +152,8 @@ class WeatherDataService {
 
       $description = $this->legacyMapping->$obsKey->conditions;
 
-      // The cardinal and ordinal directions. North goes in twice because it sits
-      // in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
+      // The cardinal and ordinal directions. North goes in twice because it
+      // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
       $directions = ["north", "northeast", "east", "southeast", "south",
         "southwest", "west", "northwest", "north",
       ];
@@ -165,7 +165,6 @@ class WeatherDataService {
       // This indexes into the two direction name arrays above.
       $directionIndex = intdiv(intval(($obs->windDirection->value % 360) + 22.5, 10), 45);
 
-        
       $data = [
         'conditions' => [
           'long' => $this->t->translate($description),

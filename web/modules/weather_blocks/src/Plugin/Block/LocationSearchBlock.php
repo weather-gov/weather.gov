@@ -77,13 +77,13 @@ class LocationSearchBlock extends BlockBase implements ContainerFactoryPluginInt
     $location = NULL;
     $data = $this->weatherData->getCurrentConditions($this->route);
 
-    if($data) {
+    if ($data) {
       $location = $data["location"];
     }
 
     return [
       '#theme' => "weather_blocks_location_search",
-      'location' => $location
+      'location' => $location,
     ];
   }
 
