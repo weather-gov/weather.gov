@@ -61,5 +61,15 @@ services:
       # Map in our test coverage directory so we can have those pretty outputs.
       - ./.coverage:/coverage
 
+  plantuml:
+    build:
+      context: ./
+      dockerfile: Dockerfile.plantuml
+    image: 18f-zscaler-plantum:jetty
+    ports:
+      - 8180:8080
+    profiles: ["utilities"]
+    
+
 networks:
   weather.gov:
