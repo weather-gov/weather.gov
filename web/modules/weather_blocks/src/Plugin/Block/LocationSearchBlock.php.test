@@ -2,8 +2,8 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
-include_once "LocationSearchBlock.php";
-
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +27,12 @@ final class LocationSearchBlockTest extends TestCase {
       "provider" => "weather_blocks",
     ];
 
-    $this->locationSearchBlock = new LocationSearchBlock([], '', $definition);
+    $this->weatherData = $this->createStub(WeatherDataService::class);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn("weather_routes.grid");
+
+    $this->locationSearchBlock = new LocationSearchBlock([], '', $definition, $this->weatherData, $this->routeMock);
   }
 
   /**

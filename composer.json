@@ -41,6 +41,11 @@
         },
         "sort-packages": true
     },
+    "autoload": {
+        "psr-4": {
+            "Drupal\\weather_blocks\\": "web/modules/weather_blocks/src/"
+        }
+    },
     "extra": {
         "drupal-scaffold": {
             "locations": {

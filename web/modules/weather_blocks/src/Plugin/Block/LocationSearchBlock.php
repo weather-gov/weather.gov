@@ -2,8 +2,6 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
-use Drupal\Core\Block\BlockBase;
-
 /**
  * Provides a block for searching for locations.
  *
@@ -13,7 +11,7 @@ use Drupal\Core\Block\BlockBase;
  *   category = @Translation("weather.gov"),
  * )
  */
-class LocationSearchBlock extends BlockBase {
+class LocationSearchBlock extends WeatherBlockBase {
 
   /**
    * {@inheritdoc}
