@@ -5,6 +5,7 @@ namespace Drupal\weather_blocks\Plugin\Block;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Tests for the LocationSearch block.
@@ -16,6 +17,23 @@ final class LocationSearchBlockTest extends TestCase {
    * @var locationSearchBlock
    */
   protected $locationSearchBlock;
+
+  /**
+   * A mock of the route object.
+   *
+   * @var routeMock
+   */
+  protected $routeMock;
+
+  /**
+   * A mocked WeatherData service object.
+   *
+   * @var weatherData
+   *
+   * This is injected into the current conditions block object being tested with
+   * dependency injection.
+   */
+  protected $weatherData;
 
   /**
    * Common setup for all component tests.
@@ -39,8 +57,14 @@ final class LocationSearchBlockTest extends TestCase {
    * Test that the build method returns the expected results.
    */
   public function testBuild() : void {
+
+    $this->weatherData
+      ->method('getCurrentConditions')
+      ->willReturn(["location" => "The Place We Are"]);
+
     $expected = [
       "#theme" => "weather_blocks_location_search",
+      "location" => "The Place We Are",
     ];
 
     $actual = $this->locationSearchBlock->build();

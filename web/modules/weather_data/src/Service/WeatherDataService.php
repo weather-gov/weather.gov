@@ -45,6 +45,13 @@ class WeatherDataService {
   private $t;
 
   /**
+   * Cache of current conditions.
+   *
+   * @var currentConditions
+   */
+  private $currentConditions;
+
+  /**
    * Constructor.
    */
   public function __construct(ClientInterface $httpClient, TranslationInterface $t) {
@@ -52,6 +59,8 @@ class WeatherDataService {
     $this->t = $t;
     $this->defaultIcon = "nodata.svg";
     $this->defaultConditions = "No data";
+
+    $this->currentConditions = FALSE;
 
     $this->legacyMapping = json_decode(
       file_get_contents(
@@ -201,9 +210,11 @@ class WeatherDataService {
       return NULL;
     }
 
-    $data = &drupal_static(__FUNCTION__);
-
-    if (!isset($data)) {
+    // This object is only created once per request, so we can store the
+    // results of the API call in a member variable. If the variable is false,
+    // we haven't fetched data yet so do that. Otherwise, just return what's in
+    // the variable already.
+    if ($this->currentConditions == FALSE) {
       // Since we're on the right kind of route, pull out the data we need.
       $wfo = $route->getParameter("wfo");
       $gridX = $route->getParameter("gridX");
@@ -248,7 +259,7 @@ class WeatherDataService {
       // This indexes into the two direction name arrays above.
       $directionIndex = intdiv(intval(($obs->windDirection->value % 360) + 22.5, 10), 45);
 
-      $data = [
+      $this->currentConditions = [
         'conditions' => [
           'long' => $this->t->translate($description),
           'short' => $this->t->translate($description),
@@ -274,7 +285,7 @@ class WeatherDataService {
       ];
     }
 
-    return $data;
+    return $this->currentConditions;
   }
 
   /**
