@@ -15,12 +15,14 @@
         xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#location_on"
       ></use>
     </svg>
-    change location
+    {{ 'change location' | t }}
   </div>
   {% endif %}
 
   <form class="usa-form" data-location-search>
-    <label class="usa-label" for="weather-location-search">Search for a location</label>
+    <label class="usa-label" for="weather-location-search">
+      {{ 'Search for a location' | t }}
+    </label>
     <div class="usa-combo-box" data-filter=".*">
       <select class="usa-select" name="weather location" id="weather-location-search">
 
