@@ -66,7 +66,7 @@ display:
             preserve_tags: ''
             html: false
           element_type: h2
-          element_class: bob
+          element_class: ''
           element_label_type: ''
           element_label_class: ''
           element_label_colon: false
