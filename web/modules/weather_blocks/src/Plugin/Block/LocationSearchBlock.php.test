@@ -4,7 +4,10 @@ namespace Drupal\weather_blocks\Plugin\Block;
 
 include_once "LocationSearchBlock.php";
 
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Tests for the LocationSearch block.
@@ -18,6 +21,23 @@ final class LocationSearchBlockTest extends TestCase {
   protected $locationSearchBlock;
 
   /**
+   * A mock of the route object.
+   *
+   * @var routeMock
+   */
+  protected $routeMock;
+
+  /**
+   * A mocked WeatherData service object.
+   *
+   * @var weatherData
+   *
+   * This is injected into the current conditions block object being tested with
+   * dependency injection.
+   */
+  protected $weatherData;
+
+  /**
    * Common setup for all component tests.
    *
    * Creates a new location search block.
@@ -27,15 +47,59 @@ final class LocationSearchBlockTest extends TestCase {
       "provider" => "weather_blocks",
     ];
 
-    $this->locationSearchBlock = new LocationSearchBlock([], '', $definition);
+    $this->weatherData = $this->createStub(WeatherDataService::class);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn("weather_routes.grid");
+
+    $this->locationSearchBlock = new LocationSearchBlock([], '', $definition, $this->weatherData, $this->routeMock);
+  }
+
+  /**
+   * Test that the create() static method gives us back a block object.
+   */
+  public function testCreation() : void {
+    $container = $this->createStub(ContainerInterface::class);
+    $container->method('get')->will($this->returnCallback(function () {
+      $args = func_get_args();
+      switch ($args[0]) {
+        case 'weather_data':
+          return $this->weatherData;
+
+        case 'current_route_match':
+          return $this->routeMock;
+
+        default:
+          return NULL;
+      }
+    }));
+
+    $actual = LocationSearchBlock::create($container, [], '', ["provider" => "weather_blocks"]);
+    $this->assertEquals(LocationSearchBlock::class, $actual::class);
+  }
+
+  /**
+   * Test that block cacheing is disabled.
+   */
+  public function testCache() : void {
+    $expected = 0;
+    $actual = $this->locationSearchBlock->getCacheMaxAge();
+
+    $this->assertEquals($expected, $actual);
   }
 
   /**
    * Test that the build method returns the expected results.
    */
   public function testBuild() : void {
+
+    $this->weatherData
+      ->method('getCurrentConditions')
+      ->willReturn(["location" => "The Place We Are"]);
+
     $expected = [
       "#theme" => "weather_blocks_location_search",
+      "location" => "The Place We Are",
     ];
 
     $actual = $this->locationSearchBlock->build();

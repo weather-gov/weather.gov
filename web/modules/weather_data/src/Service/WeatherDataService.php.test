@@ -231,6 +231,9 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     ];
 
     foreach ($scenarios as $scenario) {
+      // Re-create the WeatherDataService object so we don't get cached results.
+      $this->setUp();
+
       $observationResponse->features[0]->properties->windDirection->value = $scenario[0];
 
       $expected["wind"]["angle"] = $scenario[0];
@@ -254,6 +257,26 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
 
       $this->assertEquals((object) $expected, (object) $actual);
     }
+  }
+
+  /**
+   * Tests that curent conditions results are cached.
+   */
+  public function testCaching(): void {
+    // First setup the API to return no feels-like temperature and get the
+    // conditions accordingly.
+    $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
+    $this->weatherDataService->getCurrentConditions($this->routeMock);
+
+    // Now setup the API to return both heat index and wind chill and get the
+    // conditions again.
+    $this->setupHappyPath("observation.good-both.json");
+    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+
+    // The output from the second call should be the based on the no-feels-like
+    // setup because the results should be cached. The API should not be called
+    // again.
+    $this->assertEquals((object) $expected, (object) $actual);
   }
 
   /**
