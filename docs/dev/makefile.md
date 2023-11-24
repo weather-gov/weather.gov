@@ -16,6 +16,7 @@ recalling a specific command. The commands are also listed here:
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `help`                     | Shows the list of make commands.                                                                                                                                               |
 | `a11y`                     | Runs our accessibility tests using Cypress and Axe. Configured for WCAG2 AA.                                                                                                   |
+| `build-css`                | Builds our CSS.                                                                                                                                                                |
 | `cc` or `clear-cache`      | Runs `drush cache:rebuild` to rebuild Drupal caches.                                                                                                                           |
 | `ci` or `composer-install` | Runs `composer install` in the container.                                                                                                                                      |
 | `dd` or `database-dump`    | Dumps your current Drupal database to a dump.sql file.                                                                                                                         |
@@ -28,6 +29,7 @@ recalling a specific command. The commands are also listed here:
 | `import-content`           | Imports content using the single_content_sync module, from a bunch of Yaml or zip files produced in a previous export.                                                         |
 | `install-site`             | Installs a new minimal Drupal site using our previously-exported configuration and populated with previously-exported content.                                                 |
 | `lint`                     | Runs `phpcs` to scan all of our PHP code for conformance to our code style guide                                                                                               |
+| `log`                      | Outputs and follows the logs from the Drupal container                                                                                                                         |
 | `rebuild`                  | Destroy and rebuild the Drupal container, but leaves the database intact                                                                                                       |
 | `reset-site`               | Destroys and rebuilds the database but leaves Drupal intact                                                                                                                    |
 | `shell`                    | Get a shell inside the Drupal container. This allows running `drush` commands.                                                                                                 |
