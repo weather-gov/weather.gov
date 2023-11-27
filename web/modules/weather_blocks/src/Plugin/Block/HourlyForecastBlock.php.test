@@ -96,11 +96,11 @@ final class HourlyForecastBlockTest extends TestCase {
   public function testBuild() : void {
     $this->weatherData
       ->method('getHourlyForecast')
-      ->willReturn([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      ->willReturn([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
 
     $expected = [
       "#theme" => "weather_blocks_hourly_forecast",
-      "#data" => [1, 2, 3, 4],
+      "#data" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     ];
     $actual = $this->hourlyForecastBlock->build();
 
