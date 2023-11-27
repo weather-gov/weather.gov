@@ -23,11 +23,11 @@ services:
     links:
       - database:database
     environment:
-      - DRUPAL_DB_NAME=weathergov
-      - DRUPAL_DB_USERNAME=drupal
-      - DRUPAL_DB_PASSWORD=drupal
-      - DRUPAL_DB_HOST=database
-      - DRUPAL_DB_PORT=3306
+      DRUPAL_DB_NAME: weathergov
+      DRUPAL_DB_USERNAME: drupal
+      DRUPAL_DB_PASSWORD: drupal
+      DRUPAL_DB_HOST: database
+      DRUPAL_DB_PORT: 3306
     volumes:
       # Map in our composer files. That way if we make changes inside the
       # container, they'll be persisted out here in the real world.

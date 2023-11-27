@@ -58,16 +58,6 @@ RUN set -eux; \
   apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
   rm -rf /var/lib/apt/lists/*
 
-# set recommended PHP.ini settings
-# see https://secure.php.net/manual/en/opcache.installation.php
-RUN { \
-  echo 'opcache.memory_consumption=128'; \
-  echo 'opcache.interned_strings_buffer=8'; \
-  echo 'opcache.max_accelerated_files=4000'; \
-  echo 'opcache.revalidate_freq=60'; \
-  echo 'xdebug.mode=coverage'; \
-  } > /usr/local/etc/php/conf.d/opcache-recommended.ini
-
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/
 
 # https://www.drupal.org/node/3060/release
@@ -87,6 +77,19 @@ RUN set -eux; \
   ln -sf /opt/drupal/web /var/www/html; \
   # delete composer cache
   rm -rf "$COMPOSER_HOME"
+
+# set recommended PHP.ini settings
+# see https://secure.php.net/manual/en/opcache.installation.php
+RUN { \
+  echo 'opcache.memory_consumption=128'; \
+  echo 'opcache.interned_strings_buffer=8'; \
+  echo 'opcache.max_accelerated_files=4000'; \
+  echo 'opcache.revalidate_freq=60'; \
+  echo 'xdebug.mode=coverage,develop,debug'; \
+  echo 'xdebug.client_port=9003'; \
+  echo 'xdebug.start_with_request=yes'; \
+  echo 'xdebug.client_host=host.docker.internal'; \
+  } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 ENV PATH=${PATH}:/opt/drupal/vendor/bin
 
