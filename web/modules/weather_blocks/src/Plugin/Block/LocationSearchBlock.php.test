@@ -5,7 +5,6 @@ namespace Drupal\weather_blocks\Plugin\Block;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Tests for the LocationSearch block.
