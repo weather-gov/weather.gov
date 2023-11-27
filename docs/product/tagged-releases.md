@@ -16,6 +16,6 @@ As part of a release you may follow the following checklist:
 
 - [ ] Compare [staging](https://weathergov-staging.app.cloud.gov/) and [beta](https://beta.weather.gov/) for differences in configuration, content, and functionality
 - [ ] Look at [commits to main](https://github.com/weather-gov/weather.gov/commits/main) and check what has been merged since the previous release
-- [ ] Write comprehensive release notes making sure to reference relevant pull requests
+- [ ] Write comprehensive release notes (what's changed and what's new) making sure to reference relevant pull requests
 - [ ] Do an accessibility review of what is on staging if anything functional or visual has been changed
 - [ ] Check with other product owners about a release
