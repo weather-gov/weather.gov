@@ -17,14 +17,14 @@ class WeatherDataService {
   private $legacyMapping;
 
   /**
-   * A catch-all default icon to show
+   * A catch-all default icon to show.
    *
    * @var string
    */
   private $defaultIcon;
 
   /**
-   * A catch-all conditions label to display
+   * A catch-all conditions label to display.
    *
    * @var defaultConditions
    */
@@ -61,31 +61,35 @@ class WeatherDataService {
   }
 
   /**
-   * Return a condition stripped of any parentheticals
+   * Return a condition stripped of any parentheticals.
    *
    * @return string
-   *    A condition text with any parenthetical
+   *   A condition text with any parenthetical
    *    statements removed
    */
-  private function removeParenthetical($str){
+  private function removeParenthetical($str) {
     $parts = explode("(", $str);
     return $parts[0];
   }
-  
+
   /**
-   * Return only the periods that are after today
+   * Return only the periods that are after today.
    *
    * This private method will filter the forecast periods
    * to only include periods whose startTime corresponds to
    * "tomorrow" or later.
+   *
    * @return array
-   *  An array of forecast period data filtered as described
+   *   An array of forecast period data filtered as described
    */
-  private function filterToFutureDays($data, $limitDays = 5){
+  public function filterToFutureDays($data, $limitDays = 5, $tomorrow = NULL) {
     date_default_timezone_set('America/New_York');
 
-    $result = array_filter($data, function($period){
-      $tomorrow = new \DateTimeImmutable('tomorrow');
+    $result = array_filter($data, function ($period) use (&$tomorrow) {
+      if (!$tomorrow) {
+        $tomorrow = new \DateTimeImmutable('tomorrow');
+      }
+
       $startTime = \DateTimeImmutable::createFromFormat(
         \DateTimeInterface::ISO8601,
         $period->startTime
@@ -95,21 +99,21 @@ class WeatherDataService {
 
     // Each period here is half a day
     // (the morning or the night), so
-    // we need double the limit periods
+    // we need double the limit periods.
     return array_slice($result, 0, $limitDays * 2);
   }
 
   /**
-   * Add three-letter day names to each period
+   * Add three-letter day names to each period.
    *
    * @return array
-   *  An associative array corresponding to a forecast
-   *  period, with an additional key 'shortDayName'
-   *  corresponding to the three-letter day name of
-   *  the startTime.
+   *   An associative array corresponding to a forecast
+   *   period, with an additional key 'shortDayName'
+   *   corresponding to the three-letter day name of
+   *   the startTime.
    */
-  private function mapWithAbbrevDayNames($periods){
-    return array_map(function($period){
+  private function mapWithAbbrevDayNames($periods) {
+    return array_map(function ($period) {
       $startTime = \DateTimeImmutable::createFromFormat(
         \DateTimeInterface::ISO8601,
         $period->startTime
@@ -128,7 +132,7 @@ class WeatherDataService {
    * @return string
    *   A key uniquely identifying the current conditions.
    */
-  private function getApiObservationKey($observation) {
+  public function getApiObservationKey($observation) {
     /* The icon path from the API is of the form:
     https://api.weather.gov/icons/land/day/skc
     - OR -
@@ -154,10 +158,11 @@ class WeatherDataService {
     // An icon url, when split to path parts,
     // with have either 5 or 6 parts.
     // Thus we need to trim from the end by
-    // either 2 or 3 each time
-    if(count($path) == 6){
+    // either 2 or 3 each time.
+    if (count($path) == 6) {
       $path = array_slice($path, -3, 2);
-    } else {
+    }
+    else {
       $path = array_slice($path, -2);
     }
 
@@ -166,7 +171,7 @@ class WeatherDataService {
     }, $path);
 
     $apiConditionKey = implode("/", $path);
-    
+
     return $apiConditionKey;
   }
 
@@ -203,7 +208,7 @@ class WeatherDataService {
    *   NULL if no route is provided, or the provided route is not on the grid.
    */
   public function getCurrentConditions($route) {
-    
+
     // If this isn't a grid route, don't do anything. We can only respond to
     // requests on the grid.
     if ($route->getRouteName() != "weather_routes.grid") {
@@ -372,7 +377,7 @@ class WeatherDataService {
    *   The daily forecast as an associative array, or NULL if no route is
    *   provided, or the provided route is not on the grid.
    */
-  public function getDailyForecast($route, $now = FALSE){
+  public function getDailyForecast($route, $now = FALSE, $defaultDays = 5) {
     // If this isn't a grid route, don't do anything. We can only respond to
     // requests on the grid.
     if ($route->getRouteName() != "weather_routes.grid") {
@@ -384,10 +389,8 @@ class WeatherDataService {
     }
     date_default_timezone_set('America/New_York');
 
-    // Get grid and station information
-    // TODO: maybe pull this out into a helper method
-    // slash assoc array, since it's used in multiple
-    // places?
+    // We pull the grid information from the
+    // route URI.
     $wfo = $route->getParameter("wfo");
     $gridX = $route->getParameter("gridX");
     $gridY = $route->getParameter("gridY");
@@ -396,16 +399,16 @@ class WeatherDataService {
     $forecast = json_decode($forecast->getBody());
 
     $periods = $forecast->properties->periods;
-    $periods = $this->filterToFutureDays($periods);
+    $periods = $this->filterToFutureDays($periods, $defaultDays, $now->modify('tomorrow'));
 
-    // periods are either daytime or nighttime
-    // We can zip them together as pairs
+    // Periods are either daytime or nighttime
+    // We can zip them together as pairs.
     $dayNightPairs = array_chunk($periods, 2);
 
-    $periods = array_map(function($periodPair){
+    $periods = array_map(function ($periodPair) {
       $daytime = $periodPair[0];
       $overnight = $periodPair[1];
-      
+
       // Daily forecast cards require the three-letter
       // abrreviated form of the day name.
       $startTime = \DateTimeImmutable::createFromFormat(
@@ -414,11 +417,11 @@ class WeatherDataService {
       );
       $shortDayName = $startTime->format('D');
 
-      // Get any mapped condition and/or icon values
+      // Get any mapped condition and/or icon values.
       $obsKey = $this->getApiObservationKey($daytime);
 
       // The short forecast name should be mapped to
-      // the legacyMapping and translated
+      // the legacyMapping and translated.
       $shortForecast = $this->legacyMapping->$obsKey->conditions;
       $shortForecast = $this->removeParenthetical($shortForecast);
 
@@ -428,20 +431,21 @@ class WeatherDataService {
         'shortForecast' => $this->t->translate($shortForecast),
         'icon' => $this->legacyMapping->$obsKey->icon,
         'temperature' => $daytime->temperature,
-        'probabilityOfPrecipitation' => $daytime->probabilityOfPrecipitation->value
+        'probabilityOfPrecipitation' => $daytime->probabilityOfPrecipitation->value,
       ];
 
       $overnightForecast = [
-        'temperature' => $overnight->temperature
+        'temperature' => $overnight->temperature,
       ];
 
       return [
         'daytime' => $daytimeForecast,
-        'overnight' => $overnightForecast
+        'overnight' => $overnightForecast,
       ];
-      
+
     }, $dayNightPairs);
 
     return array_values($periods);
   }
+
 }

@@ -9,7 +9,8 @@ use Drupal\weather_data\Service\WeatherDataService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a block of the daily forecast for the next 5 days
+ * Provides a block of the daily forecast for the next 5 days.
+ *
  * @Block(
  *   id = "weathergov_daily_forecast",
  *   admin_label = @Translation("Daily forecast block"),
@@ -68,20 +69,21 @@ class DailyForecastBlock extends BlockBase implements ContainerFactoryPluginInte
   public function getCacheMaxAge() {
     return 0;
   }
-  
+
   /**
    * {@inheritdoc}
    */
-  public function build(){
+  public function build() {
     $routeName = $this->route->getRouteName();
 
-    if($routeName == "weather_routes.grid"){
+    if ($routeName == "weather_routes.grid") {
       $data = $this->weatherData->getDailyForecast($this->route);
       return [
         '#theme' => "weather_blocks_daily_forecast",
-        '#data' => $data
+        '#data' => $data,
       ];
     }
     return NULL;
   }
+
 }

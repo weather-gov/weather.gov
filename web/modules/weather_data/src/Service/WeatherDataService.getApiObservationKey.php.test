@@ -4,16 +4,14 @@ namespace Drupal\weather_data\Service;
 
 include_once "WeatherDataService.php";
 
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests parsing of legacyMapping keys from icon URLs
+ * Tests parsing of legacyMapping keys from icon URLs.
  */
 final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
   /**
@@ -24,20 +22,20 @@ final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
   protected $weatherDataService;
 
   /**
-   * The static time used for testing
+   * The static time used for testing.
    *
    * @var now
    */
   protected $now;
 
   /**
-   * test case setup
+   * Test case setup.
    */
   protected function setUp(): void {
     parent::setUp();
 
     // Following the other testing conventions,
-    // we use an established timestamp for 'now'
+    // we use an established timestamp for 'now'.
     date_default_timezone_set('America/New_York');
     $this->now = \DateTimeImmutable::createFromFormat(
       \DateTimeInterface::ISO8601_EXPANDED,
@@ -46,7 +44,7 @@ final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
 
     // Set up the mocks. These allow us to pass
     // the correct objects to the WeatherDataService
-    // constructor
+    // constructor.
     $stack = HandlerStack::create(
       new MockHandler([])
     );
@@ -54,12 +52,12 @@ final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
 
     $translationManager = $this->createStub(TranslationInterface::class);
 
-    // The WeatherDataService instance we will be testing
+    // The WeatherDataService instance we will be testing.
     $this->weatherDataService = new WeatherDataService($client, $translationManager);
   }
 
   /**
-   * Tests that we can map a two part icon url to a legacy key
+   * Tests that we can map a two part icon url to a legacy key.
    */
   public function testTwoPaths(): void {
     $path = 'https://api.weather.gov/icons/land/day/snow,20?size=medium';
@@ -71,13 +69,13 @@ final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
   }
 
   /**
-   * Tests that we can map a three part icon url to legacy key
-   * 
-   * We expect to use just the first condition part
+   * Tests that we can map a three part icon url to legacy key.
+   *
+   * We expect to use just the first condition part.
    */
   public function testThreePaths(): void {
     $path = 'https://api.weather.gov/icons/land/day/snow/rain,20?size=medium';
-    $observation = (object)['icon' => $path];
+    $observation = (object) ['icon' => $path];
     $actual = $this->weatherDataService->getApiObservationKey($observation);
     $expected = 'day/snow';
 
@@ -85,7 +83,7 @@ final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
   }
 
   /**
-   * Tests that we return 'no data' for an empty icon value
+   * Tests that we return 'no data' for an empty icon value.
    */
   public function testUnknownPath(): void {
     $observation = (object) ['icon' => ''];
@@ -94,4 +92,5 @@ final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
 
     $this->assertEquals($expected, $actual);
   }
+
 }

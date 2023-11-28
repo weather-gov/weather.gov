@@ -4,20 +4,18 @@ namespace Drupal\weather_data\Service;
 
 include_once "WeatherDataService.php";
 
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for WeatherDataService filterToFutureDays
+ * Tests for WeatherDataService filterToFutureDays.
  *
  * This method filters regular (non-hourly, but half-day)
  * forecast periods to future days, in other words periods
- * that exclude the current day/night
+ * that exclude the current day/night.
  */
 final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
   /**
@@ -28,20 +26,20 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
   protected $weatherDataService;
 
   /**
-   * The static time used for testing
+   * The static time used for testing.
    *
    * @var now
    */
   protected $now;
 
   /**
-   * test case setup
+   * Test case setup.
    */
   protected function setUp(): void {
     parent::setUp();
 
     // Following the other testing conventions,
-    // we use an established timestamp for 'now'
+    // we use an established timestamp for 'now'.
     date_default_timezone_set('America/New_York');
     $this->now = \DateTimeImmutable::createFromFormat(
       \DateTimeInterface::ISO8601_EXPANDED,
@@ -50,7 +48,7 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
 
     // Set up the mocks. These allow us to pass
     // the correct objects to the WeatherDataService
-    // constructor
+    // constructor.
     $stack = HandlerStack::create(
       new MockHandler([])
     );
@@ -58,10 +56,13 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
 
     $translationManager = $this->createStub(TranslationInterface::class);
 
-    // The WeatherDataService instance we will be testing
+    // The WeatherDataService instance we will be testing.
     $this->weatherDataService = new WeatherDataService($client, $translationManager);
   }
 
+  /**
+   *
+   */
   public function testRemovingTodaysPeriods(): void {
     date_default_timezone_set('America/New_York');
     $tomorrow = $this->now->modify('tomorrow');
@@ -69,7 +70,7 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
     $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, 5, $tomorrow);
     $this->assertEquals(10, count($filteredPeriods));
 
-    // Ensure that all periods returned are GTE tomorrow
+    // Ensure that all periods returned are GTE tomorrow.
     foreach ($filteredPeriods as $period) {
       $startTime = \DateTimeImmutable::createFromFormat(
         \DateTimeInterface::ISO8601_EXPANDED,
@@ -77,8 +78,9 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
       );
 
       // Note: the arguments here are the opposite of what
-      // you might think given the method name
+      // you might think given the method name.
       $this->assertGreaterThanOrEqual($tomorrow, $startTime);
     }
   }
+
 }
