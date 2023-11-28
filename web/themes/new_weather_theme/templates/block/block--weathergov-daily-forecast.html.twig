@@ -33,6 +33,10 @@ set classes = [
             {%  endif %}
           </div>
           <div class="display-flex flex-column flex-align-center">
+            {#  TODO: we will need to provide translation for this alt text #}
+            <span class="usa-sr-only">
+              day will be high of "{{  data.daytime.temperature }}" degrees
+            </span>
             <div class="display-flex flex-row">
               <span class="font-body-xl position-relative">
                 {{ data.daytime.temperature }}
@@ -41,6 +45,10 @@ set classes = [
               {# use HTML entity that reads "degree farenheit" to screen readers #}
             </div>
             <div class="display-flex flex-row">
+              {#  TODO: we will need to provide translation for this alt text #}
+              <span class="usa-sr-only">
+                night will be low of "{{  data.overnight.temperature }}" degrees
+              </span>
               <span class="position-relative font-body-lg text-gray-50">
                 <div class="font-body-3xs position-absolute margin-left-neg-105">
                   {{ source(directory ~ "/assets/images/weather/icons/overnight.svg" )}}
