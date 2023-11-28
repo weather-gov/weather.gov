@@ -1,4 +1,4 @@
-uuid: a6f352dc-4c78-47af-b0a3-2a3283a9dcf6
+uuid: ba6af0da-b5f5-4c6c-b2b9-98935cd5e4d2
 langcode: en
 status: true
 dependencies:
@@ -7,16 +7,16 @@ dependencies:
     - weather_blocks
   theme:
     - new_weather_theme
-id: new_weather_theme_currentconditionsblock
+id: new_weather_theme_dailyforecastblock
 theme: new_weather_theme
 region: content
-weight: -2
+weight: 0
 provider: null
-plugin: weathergov_current_conditions
+plugin: weathergov_daily_forecast
 settings:
-  id: weathergov_current_conditions
-  label: 'Current conditions block'
-  label_display: '0'
+  id: weathergov_daily_forecast
+  label: 'Daily forecast'
+  label_display: visible
   provider: weather_blocks
 visibility:
   request_path:
