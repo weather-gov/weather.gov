@@ -104,26 +104,6 @@ class WeatherDataService {
   }
 
   /**
-   * Add three-letter day names to each period.
-   *
-   * @return array
-   *   An associative array corresponding to a forecast
-   *   period, with an additional key 'shortDayName'
-   *   corresponding to the three-letter day name of
-   *   the startTime.
-   */
-  private function mapWithAbbrevDayNames($periods) {
-    return array_map(function ($period) {
-      $startTime = \DateTimeImmutable::createFromFormat(
-        \DateTimeInterface::ISO8601,
-        $period->startTime
-      );
-      $period->{'shortDayName'} = $startTime->format('D');
-      return $period;
-    }, $periods);
-  }
-
-  /**
    * Gets a unique key identifying the conditions described in an observation.
    *
    * @param object $observation
@@ -138,9 +118,9 @@ class WeatherDataService {
     - OR -
     https://api.weather.gov/icons/land/day/skc/hurricane
 
-    The last two or three path segments are the ones we need to identify the current
-    conditions. This is because there can be two simultaneous conditions in the legacy
-    icon system.
+    The last two or three path segments are the ones we need
+    to identify the current conditions. This is because there can be
+    two simultaneous conditions in the legacy icon system.
 
     For now, we use the _first_ condition given in the path as the canonical
     condition for the key.

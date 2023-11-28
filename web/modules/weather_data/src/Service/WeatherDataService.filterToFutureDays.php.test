@@ -61,7 +61,7 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
   }
 
   /**
-   *
+   * Ensure we are removing any periods corresponding to 'today'.
    */
   public function testRemovingTodaysPeriods(): void {
     date_default_timezone_set('America/New_York');

@@ -105,8 +105,7 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
   }
 
   /**
-   * Test that the method returns the default
-   * number of days (5)
+   * Test that the method returns the default number of days (5).
    */
   public function testNumberOfDaysDefault(): void {
     $this->setupHappyPath();
@@ -122,8 +121,7 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
   }
 
   /**
-   * Test that the method returns a shorter
-   * number of days (2)
+   * Test that the method returns a shorter  number of days (2).
    */
   public function testNumberOfDaysTwo(): void {
     $this->setupHappyPath();
@@ -140,8 +138,7 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
   }
 
   /**
-   * Test that we return the correct short day names
-   * for each daily forecast
+   * Test that we return the correct short day names.
    */
   public function testShortDayNames(): void {
     $this->setupHappyPath();
@@ -164,7 +161,7 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
   }
 
   /**
-   *
+   * Test that we return  the correct daily startTime values.
    */
   public function testDaytimeStartTimes(): void {
     $this->setupHappyPath();
@@ -189,7 +186,7 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
   }
 
   /**
-   *
+   * Test that we return the correct daytime temps (highs).
    */
   public function testDaytimeTemps(): void {
     $this->setupHappyPath();
@@ -212,7 +209,7 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
   }
 
   /**
-   *
+   * Test that we return the correct overnight temps (lows).
    */
   public function testOvernightTemps(): void {
     $this->setupHappyPath();
@@ -235,7 +232,7 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
   }
 
   /**
-   *
+   * Test that we return the correct condition labels.
    */
   public function testDaytimeShortForecast(): void {
     $this->setupHappyPath();
@@ -261,7 +258,7 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
   }
 
   /**
-   *
+   * Test that we return the correct daytime chance of precip.
    */
   public function testPrecipitation(): void {
     $this->setupHappyPath();
