@@ -40,7 +40,7 @@
     <js-placeholder token="{{ placeholder_token }}">
     <link rel="stylesheet" href="/{{ directory }}/assets/css/styles.css" />
     <link rel="icon" type="image/png" href="/{{ directory }}/assets/images/weather/favicons/noaa-favicon.ico" />
-    <script type="text/javascript" async="" src="/{{ directory }}/assets/js/uswds-init.min.js"></script>
+    <script type="text/javascript" src="/{{ directory }}/assets/js/uswds-init.min.js"></script>
   </head>
   <body{{ attributes.addClass(body_classes) }}>
     {#
@@ -54,11 +54,8 @@
     {{ page }}
     {{ page_bottom }}
     <js-bottom-placeholder token="{{ placeholder_token }}">
-     <script type="text/javascript" async="" src="/{{ directory }}/assets/js/uswds.min.js"></script>
-     <script
-      type="module"
-      async=""
-      src="/{{ directory }}/assets/js/main.js"
+     <script type="text/javascript" defer src="/{{ directory }}/assets/js/uswds.min.js"></script>
+     <script type="module" async src="/{{ directory }}/assets/js/main.js"
     ></script>
   </body>
 </html>
