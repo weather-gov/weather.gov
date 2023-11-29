@@ -10,7 +10,7 @@ dependencies:
 id: new_weather_theme_locationsearchblock
 theme: new_weather_theme
 region: content
-weight: -2
+weight: -3
 provider: null
 plugin: weathergov_location_search
 settings:

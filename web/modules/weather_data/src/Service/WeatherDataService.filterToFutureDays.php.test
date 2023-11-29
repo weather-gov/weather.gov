@@ -1,0 +1,103 @@
+<?php
+
+namespace Drupal\weather_data\Service;
+
+include_once "WeatherDataService.php";
+
+use Drupal\Core\StringTranslation\TranslationInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for WeatherDataService filterToFutureDays.
+ *
+ * This method filters regular (non-hourly, but half-day)
+ * forecast periods to future days, in other words periods
+ * that exclude the current day/night.
+ */
+final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
+  /**
+   * The WeatherDataService object under test.
+   *
+   * @var weatherDataService
+   */
+  protected $weatherDataService;
+
+  /**
+   * The static time used for testing.
+   *
+   * @var now
+   */
+  protected $now;
+
+  /**
+   * Test case setup.
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    // Following the other testing conventions,
+    // we use an established timestamp for 'now'.
+    date_default_timezone_set('America/New_York');
+    $this->now = \DateTimeImmutable::createFromFormat(
+      \DateTimeInterface::ISO8601_EXPANDED,
+      '2023-11-27T12:00:00-7:00'
+    );
+
+    // Set up the mocks. These allow us to pass
+    // the correct objects to the WeatherDataService
+    // constructor.
+    $stack = HandlerStack::create(
+      new MockHandler([])
+    );
+    $client = new Client(['handler' => $stack]);
+
+    $translationManager = $this->createStub(TranslationInterface::class);
+
+    // The WeatherDataService instance we will be testing.
+    $this->weatherDataService = new WeatherDataService($client, $translationManager);
+  }
+
+  /**
+   * Ensure we are removing any periods corresponding to 'today'.
+   *
+   * Here 'today' means the day of the first forecast period
+   * in the data.
+   */
+  public function testRemovingTodaysPeriods(): void {
+    $periods = json_decode(file_get_contents(__DIR__ . "/test_data/daily.forecast.periods.good.json"));
+    $now = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601_EXPANDED,
+        $periods[0]->startTime
+    );
+    $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, $now);
+    $expectedPeriods = array_slice($periods, 2);
+
+    // The last element of the periods has a different
+    // timezone (Hawaii). We expect that to be
+    // filtered out as well.
+    array_pop($expectedPeriods);
+
+    $this->assertEquals($expectedPeriods, $filteredPeriods);
+  }
+
+  /**
+   * Ensure that we are limiting the results to the correct number of "days".
+   *
+   * "Days" here means a _pair_ of periods (daytime/overnight)
+   */
+  public function testRemovingTodaysPeriodsWithLimitThree(): void {
+    $periods = json_decode(file_get_contents(__DIR__ . "/test_data/daily.forecast.periods.good.json"));
+    $now = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601_EXPANDED,
+        $periods[0]->startTime
+    );
+    $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, $now, 3);
+    $expectedPeriods = array_slice($periods, 2, 6);
+
+    $this->assertEquals($expectedPeriods, $filteredPeriods);
+  }
+
+}

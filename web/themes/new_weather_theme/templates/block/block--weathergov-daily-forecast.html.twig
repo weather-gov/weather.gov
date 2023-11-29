@@ -1,0 +1,66 @@
+{%
+set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class
+]
+%}
+<div{{sttributes.addClass(classes)}}>
+  {{ title_prefix }}
+  {% if label %}
+    <h2{{title_attributes }}>{{ label }}</h2>
+  {% endif %}
+  {{ title_suffix }}
+  <div class="grid-row flex-row minh-card">
+    {%  for data in content["#data"] %}
+      {%  set hasPrecipitation = data.daytime.probabilityOfPrecipitation %}
+      <div class="tablet:grid-col padding-4 margin-right-2">
+        <time class="display-block text-bold tablet:text-center font-heading-md" datetime="{{ data.daytime.startTime }}">
+          {{ data.daytime.shortDayName }}
+        </time>
+        <div class="display-flex tablet:flex-column flex-justify flex-align-center tablet:minh-card">
+          <div class="icon maxh-8 maxw-9">
+            {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ data.daytime.icon )}}
+          </div>
+          <div class="text-center minh-8">
+            <p class="margin-0 conditions-narrative short {% if not hasPrecipitation %} tablet:margin-bottom-1em{% endif %}">
+              {{ data.daytime.shortForecast }}
+            </p>
+            {%  if hasPrecipitation %}
+              <span class="font-body-3xs text-gray-50 conditions__chance">
+                {{ data.daytime.probabilityOfPrecipitation }}% chance
+              </span>
+            {%  endif %}
+          </div>
+          <div class="display-flex flex-column flex-align-center">
+            {#  TODO: we will need to provide translation for this alt text #}
+            <span class="usa-sr-only">
+              day will be high of "{{  data.daytime.temperature }}" degrees
+            </span>
+            <div class="display-flex flex-row">
+              <span class="font-body-xl position-relative">
+                {{ data.daytime.temperature }}
+                <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-05">&#x2109;</span>
+              </span>
+              {# use HTML entity that reads "degree farenheit" to screen readers #}
+            </div>
+            <div class="display-flex flex-row">
+              {#  TODO: we will need to provide translation for this alt text #}
+              <span class="usa-sr-only">
+                night will be low of "{{  data.overnight.temperature }}" degrees
+              </span>
+              <span class="position-relative font-body-lg text-gray-50">
+                <div class="font-body-3xs position-absolute margin-left-neg-105">
+                  {{ source(directory ~ "/assets/images/weather/icons/overnight.svg" )}}
+                </div>
+                {{ data.overnight.temperature }}
+                <div class="font-body-3xs display-inline-block position-absolute left-full">&#x2109</div>
+                {# use HTML entity that reads "degree farenheit" to screen readers #}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%  endfor %}
+  </div>
+</div>
