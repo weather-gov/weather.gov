@@ -353,8 +353,9 @@
   {
     "number": 14,
     "name": "Sunday Night",
-    "startTime": "2023-12-03T18:00:00-07:00",
-    "endTime": "2023-12-04T06:00:00-07:00",
+    "comment": "8pm in Hawaii on the same calendar day as our test date. This period should be filtered out.",
+    "startTime": "2023-11-27T20:00:00-10:00",
+    "endTime": "2023-11-28T08:00:00-10:00",
     "isDaytime": false,
     "temperature": 26,
     "temperatureUnit": "F",
