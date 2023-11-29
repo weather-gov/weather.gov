@@ -2,7 +2,6 @@
 
 namespace Drupal\weather_data\Service;
 
-include_once "WeatherDataService.php";
 
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\Client;
