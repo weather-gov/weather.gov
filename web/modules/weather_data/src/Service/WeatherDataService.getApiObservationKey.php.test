@@ -26,14 +26,6 @@ final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
   protected function setUp(): void {
     parent::setUp();
 
-    // Following the other testing conventions,
-    // we use an established timestamp for 'now'.
-    date_default_timezone_set('America/New_York');
-    $this->now = \DateTimeImmutable::createFromFormat(
-      \DateTimeInterface::ISO8601_EXPANDED,
-      '2023-11-27T12:00:00-7:00'
-    );
-
     // Set up the mocks. These allow us to pass
     // the correct objects to the WeatherDataService
     // constructor.
