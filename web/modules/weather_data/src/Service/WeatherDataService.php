@@ -79,17 +79,17 @@ class WeatherDataService {
    * to only include periods whose startTime corresponds to
    * "tomorrow" or later.
    *
+   * The optional argument $limitDays, if set,
+   * should be an integer specifying the max number
+   * of days to return. Note that a day is two periods
+   * (daytime and overnight) combined.
+   *
    * @return array
    *   An array of forecast period data filtered as described
    */
-  public function filterToFutureDays($data, $limitDays = 5, $tomorrow = NULL) {
-    date_default_timezone_set('America/New_York');
-
+  public function filterToFutureDays($data, $now, $limitDays = NULL) {
+    $tomorrow = $now->modify('tomorrow');
     $result = array_filter($data, function ($period) use (&$tomorrow) {
-      if (!$tomorrow) {
-        $tomorrow = new \DateTimeImmutable('tomorrow');
-      }
-
       $startTime = \DateTimeImmutable::createFromFormat(
         \DateTimeInterface::ISO8601,
         $period->startTime
@@ -100,7 +100,13 @@ class WeatherDataService {
     // Each period here is half a day
     // (the morning or the night), so
     // we need double the limit periods.
-    return array_slice($result, 0, $limitDays * 2);
+    if($limitDays != NULL){
+      return array_values(
+        array_slice($result, 0, $limitDays * 2)
+      );
+    }
+
+    return array_values($result);
   }
 
   /**
@@ -364,11 +370,6 @@ class WeatherDataService {
       return NULL;
     }
 
-    if (!($now instanceof \DateTimeImmutable)) {
-      $now = new \DateTimeImmutable();
-    }
-    date_default_timezone_set('America/New_York');
-
     // We pull the grid information from the
     // route URI.
     $wfo = $route->getParameter("wfo");
@@ -379,7 +380,17 @@ class WeatherDataService {
     $forecast = json_decode($forecast->getBody());
 
     $periods = $forecast->properties->periods;
-    $periods = $this->filterToFutureDays($periods, $defaultDays, $now->modify('tomorrow'));
+
+    // In order to keep the time zones straight,
+    // we set the "current" (now) time to be
+    // the startTime of the first period
+    if (!($now instanceof \DateTimeImmutable)) {
+      $now = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601_EXPANDED,
+        $periods[0]->startTime
+      );
+    }
+    $periods = $this->filterToFutureDays($periods, $now, $defaultDays);
 
     // Periods are either daytime or nighttime
     // We can zip them together as pairs.

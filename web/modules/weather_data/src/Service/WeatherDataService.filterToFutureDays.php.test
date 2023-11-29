@@ -62,25 +62,36 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
 
   /**
    * Ensure we are removing any periods corresponding to 'today'.
+   *
+   * Here 'today' means the day of the first forecast period
+   * in the data
    */
   public function testRemovingTodaysPeriods(): void {
-    date_default_timezone_set('America/New_York');
-    $tomorrow = $this->now->modify('tomorrow');
     $periods = json_decode(file_get_contents(__DIR__ . "/test_data/daily.forecast.periods.good.json"));
-    $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, count($periods), $tomorrow);
-    $this->assertEquals(10, count($filteredPeriods));
-
-    // Ensure that all periods returned are GTE tomorrow.
-    foreach ($filteredPeriods as $period) {
-      $startTime = \DateTimeImmutable::createFromFormat(
+    $now = \DateTimeImmutable::createFromFormat(
         \DateTimeInterface::ISO8601_EXPANDED,
-        $period->startTime
-      );
+        $periods[0]->startTime
+    );
+    $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, $now);
+    $expectedPeriods = array_slice($periods, 2);
 
-      // Note: the arguments here are the opposite of what
-      // you might think given the method name.
-      $this->assertGreaterThanOrEqual($tomorrow, $startTime);
-    }
+    // The last element of the periods has a different
+    // timezone (Hawaii). We expect that to be
+    // filtered out as well
+    array_pop($expectedPeriods);
+
+    $this->assertEquals($expectedPeriods, $filteredPeriods);
   }
 
+  public function testRemovingTodaysPeriodsWithLimitThree(): void {
+    $periods = json_decode(file_get_contents(__DIR__ . "/test_data/daily.forecast.periods.good.json"));
+    $now = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601_EXPANDED,
+        $periods[0]->startTime
+    );
+    $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, $now, 3);
+    $expectedPeriods = array_slice($periods, 2, 6);
+
+    $this->assertEquals($expectedPeriods, $filteredPeriods);
+  }
 }
