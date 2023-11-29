@@ -1,8 +1,32 @@
-<form class="usa-form" data-location-search>
-  <label class="usa-label" for="weather-location-search">Search for a location</label>
-  <div class="usa-combo-box" data-filter=".*">
-    <select class="usa-select" name="weather location" id="weather-location-search">
+<div>
 
-    </select>
+  {% if content["location"] %}
+  <h1 class="margin-bottom-0">{{ content["location"] }}</h1>
+
+  <div>
+    <svg
+      class="usa-icon height-3 width-3"
+      aria-hidden="true"
+      focusable="false"
+      role="img"
+      style="vertical-align: middle;"
+    >
+      <use
+        xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#location_on"
+      ></use>
+    </svg>
+    {{ 'change location' | t }}
   </div>
-</form>
+  {% endif %}
+
+  <form class="usa-form" data-location-search>
+    <label class="usa-label" for="weather-location-search">
+      {{ 'Search for a location' | t }}
+    </label>
+    <div class="usa-combo-box" data-filter=".*">
+      <select class="usa-select" name="weather location" id="weather-location-search">
+
+      </select>
+    </div>
+  </form>
+</div>

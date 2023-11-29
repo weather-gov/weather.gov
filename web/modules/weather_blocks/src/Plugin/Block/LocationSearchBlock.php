@@ -17,8 +17,16 @@ class LocationSearchBlock extends WeatherBlockBase {
    * {@inheritdoc}
    */
   public function build() {
+    $location = NULL;
+    $data = $this->weatherData->getCurrentConditions($this->route);
+
+    if ($data) {
+      $location = $data["location"];
+    }
+
     return [
       '#theme' => "weather_blocks_location_search",
+      'location' => $location,
     ];
   }
 

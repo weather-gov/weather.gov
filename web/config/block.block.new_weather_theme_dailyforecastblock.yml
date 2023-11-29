@@ -9,8 +9,8 @@ dependencies:
     - new_weather_theme
 id: new_weather_theme_dailyforecastblock
 theme: new_weather_theme
-region: content
-weight: 0
+region: forecast
+weight: -4
 provider: null
 plugin: weathergov_daily_forecast
 settings:

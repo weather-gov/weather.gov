@@ -45,6 +45,13 @@ class WeatherDataService {
   private $t;
 
   /**
+   * Cache of current conditions.
+   *
+   * @var currentConditions
+   */
+  private $currentConditions;
+
+  /**
    * Constructor.
    */
   public function __construct(ClientInterface $httpClient, TranslationInterface $t) {
@@ -52,6 +59,8 @@ class WeatherDataService {
     $this->t = $t;
     $this->defaultIcon = "nodata.svg";
     $this->defaultConditions = "No data";
+
+    $this->currentConditions = FALSE;
 
     $this->legacyMapping = json_decode(
       file_get_contents(
@@ -201,74 +210,82 @@ class WeatherDataService {
       return NULL;
     }
 
-    // Since we're on the right kind of route, pull out the data we need.
-    $wfo = $route->getParameter("wfo");
-    $gridX = $route->getParameter("gridX");
-    $gridY = $route->getParameter("gridY");
-    $location = $route->getParameter("location");
+    // This object is only created once per request, so we can store the
+    // results of the API call in a member variable. If the variable is false,
+    // we haven't fetched data yet so do that. Otherwise, just return what's in
+    // the variable already.
+    if ($this->currentConditions == FALSE) {
+      // Since we're on the right kind of route, pull out the data we need.
+      $wfo = $route->getParameter("wfo");
+      $gridX = $route->getParameter("gridX");
+      $gridY = $route->getParameter("gridY");
+      $location = $route->getParameter("location");
 
-    date_default_timezone_set('America/New_York');
+      date_default_timezone_set('America/New_York');
 
-    $obsStationsResponse = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
-    $obsStationsMetadata = json_decode($obsStationsResponse->getBody());
+      $obsStationsResponse = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
+      $obsStationsMetadata = json_decode($obsStationsResponse->getBody());
 
-    $observationStation = $obsStationsMetadata->features[0];
+      $observationStation = $obsStationsMetadata->features[0];
 
-    $obsResponse = $this->client->get($observationStation->id . "/observations?limit=1");
-    $obs = json_decode($obsResponse->getBody())->features[0]->properties;
+      $obsResponse = $this->client->get($observationStation->id . "/observations?limit=1");
+      $obs = json_decode($obsResponse->getBody())->features[0]->properties;
 
-    $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
+      $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
 
-    $feelsLike = $obs->heatIndex->value;
-    if ($feelsLike == NULL) {
-      $feelsLike = $obs->windChill->value;
+      $feelsLike = $obs->heatIndex->value;
+      if ($feelsLike == NULL) {
+        $feelsLike = $obs->windChill->value;
+      }
+      if ($feelsLike == NULL) {
+        $feelsLike = $obs->temperature->value;
+      }
+      $feelsLike = 32 + (9 * $feelsLike / 5);
+
+      $obsKey = $this->getApiObservationKey($obs);
+
+      $description = $this->legacyMapping->$obsKey->conditions;
+
+      // The cardinal and ordinal directions. North goes in twice because it
+      // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
+      $directions = ["north", "northeast", "east", "southeast", "south",
+        "southwest", "west", "northwest", "north",
+      ];
+      $shortDirections = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
+
+      // 1. Whatever degrees we got from the API, constrain it to 0°-360°.
+      // 2. Add 22.5° to it. This accounts for north starting at -22.5°
+      // 3. Use integer division by 45° to see which direction index this is.
+      // This indexes into the two direction name arrays above.
+      $directionIndex = intdiv(intval(($obs->windDirection->value % 360) + 22.5, 10), 45);
+
+      $this->currentConditions = [
+        'conditions' => [
+          'long' => $this->t->translate($description),
+          'short' => $this->t->translate($description),
+        ],
+        // C to F.
+        'feels_like' => (int) round($feelsLike),
+        'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
+        'icon' => $this->legacyMapping->$obsKey->icon,
+        'location' => $location,
+        // C to F.
+        'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
+        'timestamp' => [
+          'formatted' => $timestamp->format("l g:i A T"),
+          'utc' => (int) $timestamp->format("U"),
+        ],
+        'wind' => [
+          // Kph to mph.
+          'speed' => (int) round($obs->windSpeed->value * 0.6213712),
+          'angle' => $obs->windDirection->value,
+          'direction' => $directions[$directionIndex],
+          'shortDirection' => $shortDirections[$directionIndex],
+        ],
+      ];
     }
-    if ($feelsLike == NULL) {
-      $feelsLike = $obs->temperature->value;
-    }
-    $feelsLike = 32 + (9 * $feelsLike / 5);
 
-    $obsKey = $this->getApiObservationKey($obs);
-
-    $description = $this->legacyMapping->$obsKey->conditions;
-
-    // The cardinal and ordinal directions. North goes in twice because it sits
-    // in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
-    $directions = ["north", "northeast", "east", "southeast", "south",
-      "southwest", "west", "northwest", "north",
-    ];
-    $shortDirections = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
-
-    // 1. Whatever degrees we got from the API, constrain it to 0°-360°.
-    // 2. Add 22.5° to it. This accounts for north starting at -22.5°
-    // 3. Use integer division by 45° to see which direction index this is.
-    // This indexes into the two direction name arrays above.
-    $directionIndex = intdiv(intval(($obs->windDirection->value % 360) + 22.5, 10), 45);
-
-    return [
-      'conditions' => [
-        'long' => $this->t->translate($description),
-        'short' => $this->t->translate($description),
-      ],
-      // C to F.
-      'feels_like' => (int) round($feelsLike),
-      'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
-      'icon' => $this->legacyMapping->$obsKey->icon,
-      'location' => $location,
-      // C to F.
-      'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
-      'timestamp' => [
-        'formatted' => $timestamp->format("l g:i A T"),
-        'utc' => (int) $timestamp->format("U"),
-      ],
-      'wind' => [
-        // Kph to mph.
-        'speed' => (int) round($obs->windSpeed->value * 0.6213712),
-        'angle' => $obs->windDirection->value,
-        'direction' => $directions[$directionIndex],
-        'shortDirection' => $shortDirections[$directionIndex],
-      ],
-    ];
+    return $this->currentConditions;
   }
 
   /**

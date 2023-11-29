@@ -1,0 +1,48 @@
+uuid: dee6acf8-3099-4143-99cd-87ddfaa9928c
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.wfo_blurb.body
+    - field.field.node.wfo_blurb.field_image
+    - field.field.node.wfo_blurb.field_office_address
+    - field.field.node.wfo_blurb.field_wfo
+    - image.style.medium
+    - node.type.wfo_blurb
+  module:
+    - image
+    - text
+    - user
+id: node.wfo_blurb.teaser
+targetEntityType: node
+bundle: wfo_blurb
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: medium
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: -1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_office_address: true
+  field_wfo: true

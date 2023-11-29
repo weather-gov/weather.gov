@@ -1,0 +1,30 @@
+<section
+  class="usa-banner bg-accent-cool-lighter beta-banner"
+  aria-label="This is a beta website."
+>
+  <div>
+    <header
+      class="usa-banner__header usa-alert usa-alert--warning usa-alert__body"
+    >
+      <div class="usa-banner__inner">
+        <div class="grid-col-auto margin-right-1">
+          <svg
+            class="usa-icon height-3 width-3"
+            aria-hidden="true"
+            focusable="false"
+            role="img"
+          >
+            <use
+              xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#announcement"
+            ></use>
+          </svg>
+        </div>
+        <div class="grid-col-11 tablet:grid-col-11">
+          <div class="usa-banner__header-text font-sans-xs">
+            {{ content }}
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+</section>

@@ -50,6 +50,9 @@ install-site: install-site-config import-content ## Install a minimal Drupal sit
 install-site-config:
 	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
 
+log: ## Tail the log for the Drupal container
+	docker compose logs --follow drupal
+
 rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose stop drupal
 	docker compose rm drupal -f
@@ -69,6 +72,10 @@ zap: zap-containers rebuild pause install-site ## Delete the entire Docker envir
 zap-containers:
 	docker compose stop
 	docker compose rm -f
+
+### CSS
+build-css: # Build CSS
+	cd web/themes/new_weather_theme && npx gulp compile
 
 ### Testing
 a11y: accessibility-test
