@@ -100,7 +100,7 @@ class WeatherDataService {
     // Each period here is half a day
     // (the morning or the night), so
     // we need double the limit periods.
-    if($limitDays != NULL){
+    if ($limitDays != NULL) {
       return array_values(
         array_slice($result, 0, $limitDays * 2)
       );
@@ -383,7 +383,7 @@ class WeatherDataService {
 
     // In order to keep the time zones straight,
     // we set the "current" (now) time to be
-    // the startTime of the first period
+    // the startTime of the first period.
     if (!($now instanceof \DateTimeImmutable)) {
       $now = \DateTimeImmutable::createFromFormat(
         \DateTimeInterface::ISO8601_EXPANDED,

@@ -64,7 +64,7 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
    * Ensure we are removing any periods corresponding to 'today'.
    *
    * Here 'today' means the day of the first forecast period
-   * in the data
+   * in the data.
    */
   public function testRemovingTodaysPeriods(): void {
     $periods = json_decode(file_get_contents(__DIR__ . "/test_data/daily.forecast.periods.good.json"));
@@ -77,12 +77,17 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
 
     // The last element of the periods has a different
     // timezone (Hawaii). We expect that to be
-    // filtered out as well
+    // filtered out as well.
     array_pop($expectedPeriods);
 
     $this->assertEquals($expectedPeriods, $filteredPeriods);
   }
 
+  /**
+   * Ensure that we are limiting the results to the correct number of "days".
+   *
+   * "Days" here means a _pair_ of periods (daytime/overnight)
+   */
   public function testRemovingTodaysPeriodsWithLimitThree(): void {
     $periods = json_decode(file_get_contents(__DIR__ . "/test_data/daily.forecast.periods.good.json"));
     $now = \DateTimeImmutable::createFromFormat(
@@ -94,4 +99,5 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
 
     $this->assertEquals($expectedPeriods, $filteredPeriods);
   }
+
 }
