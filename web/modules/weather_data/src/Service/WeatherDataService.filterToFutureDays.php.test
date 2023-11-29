@@ -67,7 +67,7 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
     date_default_timezone_set('America/New_York');
     $tomorrow = $this->now->modify('tomorrow');
     $periods = json_decode(file_get_contents(__DIR__ . "/test_data/daily.forecast.periods.good.json"));
-    $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, 5, $tomorrow);
+    $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, count($periods), $tomorrow);
     $this->assertEquals(10, count($filteredPeriods));
 
     // Ensure that all periods returned are GTE tomorrow.
