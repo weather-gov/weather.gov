@@ -22,13 +22,6 @@ final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
   protected $weatherDataService;
 
   /**
-   * The static time used for testing.
-   *
-   * @var now
-   */
-  protected $now;
-
-  /**
    * Test case setup.
    */
   protected function setUp(): void {
