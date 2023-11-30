@@ -1,0 +1,25 @@
+uuid: ba6af0da-b5f5-4c6c-b2b9-98935cd5e4d2
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+    - weather_blocks
+  theme:
+    - new_weather_theme
+id: new_weather_theme_dailyforecastblock
+theme: new_weather_theme
+region: forecast
+weight: -4
+provider: null
+plugin: weathergov_daily_forecast
+settings:
+  id: weathergov_daily_forecast
+  label: 'Daily forecast'
+  label_display: visible
+  provider: weather_blocks
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/local/*'

@@ -12,6 +12,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -230,6 +231,9 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     ];
 
     foreach ($scenarios as $scenario) {
+      // Re-create the WeatherDataService object so we don't get cached results.
+      $this->setUp();
+
       $observationResponse->features[0]->properties->windDirection->value = $scenario[0];
 
       $expected["wind"]["angle"] = $scenario[0];
@@ -253,6 +257,26 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
 
       $this->assertEquals((object) $expected, (object) $actual);
     }
+  }
+
+  /**
+   * Tests that curent conditions results are cached.
+   */
+  public function testCaching(): void {
+    // First setup the API to return no feels-like temperature and get the
+    // conditions accordingly.
+    $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
+    $this->weatherDataService->getCurrentConditions($this->routeMock);
+
+    // Now setup the API to return both heat index and wind chill and get the
+    // conditions again.
+    $this->setupHappyPath("observation.good-both.json");
+    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+
+    // The output from the second call should be the based on the no-feels-like
+    // setup because the results should be cached. The API should not be called
+    // again.
+    $this->assertEquals((object) $expected, (object) $actual);
   }
 
   /**
@@ -352,6 +376,38 @@ final class WeatherDataServiceGetGridFromLatLon extends TestCase {
     $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
 
     $this->assertEquals(NULL, $actual);
+  }
+
+}
+
+/**
+ * Tests that the legacy mapping only returns icons that we actually have.
+ */
+final class WeatherDataLegacyIconMapping extends TestCase {
+
+  /**
+   * Asdf.
+   */
+  public function testIconMapping() : void {
+    $path = realpath(__DIR__ . "/../../../../themes/new_weather_theme/assets/images/weather/icons/conditions/");
+
+    $failures = [];
+
+    $mappings = json_decode(file_get_contents(__DIR__ . "/legacyMapping.json"));
+    foreach ($mappings as $condition) {
+      try {
+        $this->assertFileExists($path . "/" . $condition->icon);
+      }
+      catch (ExpectationFailedException $e) {
+        $failures[] = $e->getMessage();
+      }
+    }
+
+    if (!empty($failures)) {
+      throw new ExpectationFailedException(
+        count($failures) . " assertions failed:\n\t" . implode("\n\t", $failures)
+      );
+    }
   }
 
 }

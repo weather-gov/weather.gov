@@ -9,8 +9,8 @@ dependencies:
     - new_weather_theme
 id: new_weather_theme_hourlyforecastblock
 theme: new_weather_theme
-region: content
-weight: 0
+region: forecast
+weight: -5
 provider: null
 plugin: weathergov_hourly_forecast
 settings:
@@ -22,4 +22,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: '<front>'
+    pages: '/local/*'

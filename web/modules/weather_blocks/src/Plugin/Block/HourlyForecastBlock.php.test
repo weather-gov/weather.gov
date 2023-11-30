@@ -2,9 +2,9 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
-include_once "HourlyForecastBlock.php";
-
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,6 +19,23 @@ final class HourlyForecastBlockTest extends TestCase {
   protected $hourlyForecastBlock;
 
   /**
+   * A mock of the route object.
+   *
+   * @var routeMock
+   */
+  protected $routeMock;
+
+  /**
+   * A mocked WeatherData service object.
+   *
+   * @var weatherData
+   *
+   * This is injected into the current conditions block object being tested with
+   * dependency injection.
+   */
+  protected $weatherData;
+
+  /**
    * Common setup for all component tests.
    *
    * Creates a mock of a weather data service and injects it into a new current
@@ -29,11 +46,12 @@ final class HourlyForecastBlockTest extends TestCase {
       "provider" => "weather_blocks",
     ];
 
-    $this->hourlyForecastBlock = new HourlyForecastBlock(
-      [],
-      '',
-      $definition
-    );
+    $this->weatherData = $this->createStub(WeatherDataService::class);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn("weather_routes.grid");
+
+    $this->hourlyForecastBlock = new HourlyForecastBlock([], '', $definition, $this->weatherData, $this->routeMock);
 
   }
 
@@ -45,7 +63,7 @@ final class HourlyForecastBlockTest extends TestCase {
       "max_items" => [
         "#type" => "textfield",
         "#title" => "Maximum items to display",
-        "#default_value" => "4",
+        "#default_value" => "12",
       ],
     ];
 
@@ -60,13 +78,13 @@ final class HourlyForecastBlockTest extends TestCase {
    * Test that the block returns the correct form based on prior configuration.
    */
   public function testFormUsingExistingConfig() : void {
-    $this->hourlyForecastBlock->setConfigurationValue("max_items", "17");
+    $this->hourlyForecastBlock->setConfigurationValue("max_items", "6");
 
     $expected = [
       "max_items" => [
         "#type" => "textfield",
         "#title" => "Maximum items to display",
-        "#default_value" => "17",
+        "#default_value" => "6",
       ],
     ];
 
@@ -97,9 +115,13 @@ final class HourlyForecastBlockTest extends TestCase {
    * Test that the block returns default data if unconfigured.
    */
   public function testBuildWithDefaultConfiguration() : void {
+    $this->weatherData
+      ->method('getHourlyForecast')
+      ->willReturn([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+
     $expected = [
       "#theme" => "weather_blocks_hourly_forecast",
-      "#data" => ['max_items' => '4'],
+      "#data" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     ];
     $actual = $this->hourlyForecastBlock->build();
 
@@ -110,16 +132,39 @@ final class HourlyForecastBlockTest extends TestCase {
    * Test that the block returns data according to saved configuration.
    */
   public function testBuildWithModifiedConfigured() : void {
-    $this->hourlyForecastBlock->setConfigurationValue("max_items", "57");
+    $this->hourlyForecastBlock->setConfigurationValue("max_items", "7");
+
+    $this->weatherData
+      ->method('getHourlyForecast')
+      ->willReturn([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
 
     $expected = [
       "#theme" => "weather_blocks_hourly_forecast",
-      "#data" => ['max_items' => '57'],
+      "#data" => [1, 2, 3, 4, 5, 6, 7],
     ];
     $actual = $this->hourlyForecastBlock->build();
 
     $this->assertEquals($expected, $actual);
+  }
 
+  /**
+   * Test that the block returns null if we're not on a grid route.
+   */
+  public function testBuildNotGridRoute(): void {
+    $definition = [
+      "provider" => "weather_blocks",
+    ];
+
+    $this->weatherData = $this->createStub(WeatherDataService::class);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn("weather_routes.not-grid");
+
+    $this->hourlyForecastBlock = new HourlyForecastBlock([], '', $definition, $this->weatherData, $this->routeMock);
+
+    $actual = $this->hourlyForecastBlock->build();
+
+    $this->assertEquals(NULL, $actual);
   }
 
 }

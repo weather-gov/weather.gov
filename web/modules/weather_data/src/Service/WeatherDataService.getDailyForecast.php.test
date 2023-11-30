@@ -1,0 +1,284 @@
+<?php
+
+namespace Drupal\weather_data\Service;
+
+include_once "WeatherDataService.php";
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the WeatherDataService getHourlyForecast method.
+ */
+final class WeatherDataServiceGetDailyForecastTest extends TestCase {
+  /**
+   * The mocked HTTP client.
+   *
+   * @var httpClientMock
+   */
+  protected $httpClientMock;
+
+  /**
+   * The mocked route object.
+   *
+   * @var routeMock
+   */
+  protected $routeMock;
+
+  /**
+   * The WeatherDataService object under test.
+   *
+   * @var weatherDataService
+   */
+  protected $weatherDataService;
+
+  /**
+   * The static time used for testing.
+   *
+   * @var now
+   */
+  protected $now;
+
+  /**
+   * Common setup for all component tests.
+   */
+  protected function setUp() : void {
+    parent::setUp();
+
+    // Our test date. This was chosen to match the test data.
+    $this->now = \DateTimeImmutable::createFromFormat(
+      \DateTimeInterface::ISO8601_EXPANDED,
+      '2023-11-27T12:00:00-7:00'
+    );
+
+    $this->httpClientMock = new MockHandler([]);
+    $stack = HandlerStack::create($this->httpClientMock);
+    $client = new Client(['handler' => $stack]);
+
+    // Just return the input string. The translation manager is tested by Drupal
+    // so we don't need to.
+    $translationManager = $this->createStub(TranslationInterface::class);
+    $translationManager->method('translate')->will(
+      $this->returnCallback(
+        function ($str) {
+          return $str;
+        }
+      )
+    );
+
+    $this->weatherDataService = new WeatherDataService($client, $translationManager);
+
+    $this->routeMock = $this->createStub(RouteMatchInterface::class);
+    $this->routeMock->method('getRouteName')->willReturn('weather_routes.grid');
+    $this->routeMock->method('getParameter')->WillReturnMap([
+      ['wfo', 'BOU'],
+      ['gridX', 63],
+      ['gridY', 62],
+      ['location', 'Boulder'],
+    ]);
+  }
+
+  /**
+   * Happy path for network requests.
+   *
+   * Respond with an array of _half-day_ forecast points,
+   * set up for the mocks.
+   *
+   * Following other method tests for this service,
+   * we set the timezone to America/Denver
+   */
+  protected function setupHappyPath(): void {
+    // Respond to the first request with the "daily"
+    // (half-day chunks) forecast periods.
+    $this->httpClientMock->append(
+      new Response(
+        200,
+        ['Content-Type' => 'application/geo+json'],
+        file_get_contents(__DIR__ . "/test_data/daily.forecast.good.json")
+      )
+    );
+  }
+
+  /**
+   * Test that the method returns the default number of days (5).
+   */
+  public function testNumberOfDaysDefault(): void {
+    $this->setupHappyPath();
+    $expected = 5;
+
+    $forecastDays = $this->weatherDataService->getDailyForecast(
+      $this->routeMock,
+      $this->now
+    );
+    $actual = count($forecastDays);
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Test that the method returns a shorter  number of days (2).
+   */
+  public function testNumberOfDaysTwo(): void {
+    $this->setupHappyPath();
+    $expected = 2;
+
+    $forecastDays = $this->weatherDataService->getDailyForecast(
+      $this->routeMock,
+      $this->now,
+      2
+    );
+    $actual = count($forecastDays);
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Test that we return the correct short day names.
+   */
+  public function testShortDayNames(): void {
+    $this->setupHappyPath();
+    $expected = [
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+    ];
+    $forecastDays = $this->weatherDataService->getDailyForecast(
+      $this->routeMock,
+      $this->now
+    );
+    $actual = array_map(function ($day) {
+      return $day['daytime']['shortDayName'];
+    }, $forecastDays);
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Test that we return  the correct daily startTime values.
+   */
+  public function testDaytimeStartTimes(): void {
+    $this->setupHappyPath();
+    $expected = [
+      "2023-11-28T06:00:00-07:00",
+      "2023-11-29T06:00:00-07:00",
+      "2023-11-30T06:00:00-07:00",
+      "2023-12-01T06:00:00-07:00",
+      "2023-12-02T06:00:00-07:00",
+    ];
+    $forecastDays = $this->weatherDataService->getDailyForecast(
+      $this->routeMock,
+      $this->now
+    );
+
+    $actual = array_map(function ($day) {
+      return $day['daytime']['startTime'];
+    }, $forecastDays);
+
+    $this->assertEquals((object) $expected, (object) $actual);
+
+  }
+
+  /**
+   * Test that we return the correct daytime temps (highs).
+   */
+  public function testDaytimeTemps(): void {
+    $this->setupHappyPath();
+    $expected = [
+      53,
+      54,
+      38,
+      42,
+      48,
+    ];
+    $forecastDays = $this->weatherDataService->getDailyForecast(
+      $this->routeMock,
+      $this->now
+    );
+    $actual = array_map(function ($forecast) {
+      return $forecast['daytime']['temperature'];
+    }, $forecastDays);
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Test that we return the correct overnight temps (lows).
+   */
+  public function testOvernightTemps(): void {
+    $this->setupHappyPath();
+    $expected = [
+      22,
+      23,
+      18,
+      22,
+      23,
+    ];
+    $forecastDays = $this->weatherDataService->getDailyForecast(
+      $this->routeMock,
+      $this->now
+    );
+    $actual = array_map(function ($forecast) {
+      return $forecast['overnight']['temperature'];
+    }, $forecastDays);
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Test that we return the correct condition labels.
+   */
+  public function testDaytimeShortForecast(): void {
+    $this->setupHappyPath();
+    // Note: We are explicity expecting the mapped
+    // legacy condition values here for now,
+    // rather than the shortForecast values.
+    $expected = [
+      'A few clouds',
+      'Partly cloudy',
+      'Snow',
+      'Partly cloudy',
+      'Partly cloudy',
+    ];
+    $forecastDays = $this->weatherDataService->getDailyForecast(
+      $this->routeMock,
+      $this->now
+    );
+    $actual = array_map(function ($forecast) {
+      return $forecast['daytime']['shortForecast'];
+    }, $forecastDays);
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Test that we return the correct daytime chance of precip.
+   */
+  public function testPrecipitation(): void {
+    $this->setupHappyPath();
+
+    $expected = [
+      NULL,
+      NULL,
+      20,
+      NULL,
+      NULL,
+    ];
+    $forecastDays = $this->weatherDataService->getDailyForecast(
+      $this->routeMock,
+      $this->now
+    );
+    $actual = array_map(function ($forecast) {
+      return $forecast['daytime']['probabilityOfPrecipitation'];
+    }, $forecastDays);
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+}

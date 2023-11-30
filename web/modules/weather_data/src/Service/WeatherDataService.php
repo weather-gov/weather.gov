@@ -6,208 +6,30 @@ use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\ClientInterface;
 
 /**
- * Gets a unique key identifying the conditions described in an observation.
- *
- * @param object $observation
- *   An observation from api.weather.gov.
- *
- * @return string
- *   A key uniquely identifying the current conditions.
- */
-function get_api_condition_key($observation) {
-  /* The icon path from the API is of the form:
-  https://api.weather.gov/icons/land/day/skc
-
-  The last two path segments are the ones we need to identify the current
-  conditions.
-   */
-  $icon = $observation->icon;
-
-  if ($icon == NULL or strlen($icon) == 0) {
-    return "no data";
-  }
-
-  $url = parse_url($observation->icon);
-  $apiConditionKey = implode("/", array_slice(explode("/", $url["path"]), -2));
-  return $apiConditionKey;
-}
-
-/**
- * Gets a NOAA weather icon filename from a current observation.
- *
- * @param object $observation
- *   An observation from api.weather.gov.
- *
- * @return string
- *   The filename for the associated NOAA weather icon.
- */
-function get_noaa_icon($observation) {
-  $apiKeyToNoaaIconMapping = [
-    "day/bkn" => "mostly_cloudy-day.svg",
-    "night/bkn" => "mostly_cloudy-night.svg",
-    "day/blizzard" => "blizzard_winter_storm.svg",
-    "night/blizzard" => "blizzard_winter_storm.svg",
-    "day/cold" => "cold.svg",
-    "night/cold" => "cold.svg",
-    "day/dust" => "new_dust.svg",
-    "night/dust" => "new_dust.svg",
-    "day/few" => "mostly_clear-day.svg",
-    "night/few" => "mostly_clear-night.svg",
-    "day/fog" => "fog.svg",
-    "night/fog" => "fog.svg",
-    "day/fzra" => "cold.svg",
-    "night/fzra" => "cold.svg",
-    "day/haze" => "hazy_smoke-day.svg",
-    "night/haze" => "fog.svg",
-    "day/hot" => "hot.svg",
-    "night/hot" => "hot.svg",
-    "day/hurricane" => "hurricane.svg",
-    "night/hurricane" => "hurricane.svg",
-    "no data" => "nodata.svg",
-    "day/ovc" => "cloudy_overcast.svg",
-    "night/ovc" => "cloudy_overcast.svg",
-    "day/rain" => "rain.svg",
-    "day/rain_fzra" => "freezing_rain_sleet.svg",
-    "night/rain_fzra" => "freezing_rain_sleet.svg",
-    "night/rain" => "rain.svg",
-    "day/rain_showers" => "showers_scattered_rain.svg",
-    "day/rain_showers_hi" => "showers_scattered_rain.svg",
-    "night/rain_showers_hi" => "showers_scattered_rain.svg",
-    "night/rain_showers" => "rain_showers.svg",
-    "day/rain_sleet" => "freezing_rain_sleet.svg",
-    "night/rain_sleet" => "freezing_rain_sleet.svg",
-    "day/rain_snow" => "mixed_precip.svg",
-    "night/rain_snow" => "mixed_precip.svg",
-    "day/sct" => "mostly_clear-day.svg",
-    "night/sct" => "mostly_clear-night.svg",
-    "day/skc" => "clear-day.svg",
-    "night/skc" => "clear-night.svg",
-    "day/sleet" => "freezing_rain_sleet.svg",
-    "night/sleet" => "freezing_rain_sleet.svg",
-    "day/smoke" => "hazy_smoke-day.svg",
-    "night/smoke" => "hazy_smoke-day.svg",
-    "day/snow" => "snow.svg",
-    "day/snow_fzra" => "mixed_precip.svg",
-    "night/snow_fzra" => "mixed_precip.svg",
-    "night/snow" => "snow.svg",
-    "day/snow_sleet" => "new_snow_sleet.svg",
-    "night/snow_sleet" => "new_snow_sleet.svg",
-    "day/tornado" => "tornado.svg",
-    "night/tornado" => "tornado.svg",
-    "day/tropical_storm" => "hurricane.svg",
-    "night/tropical_storm" => "hurricane.svg",
-    "day/tsra" => "thunderstorm.svg",
-    "day/tsra_hi" => "thunderstorm.svg",
-    "night/tsra_hi" => "thunderstorm.svg",
-    "night/tsra" => "thunderstorm.svg",
-    "day/tsra_sct" => "thunderstorm.svg",
-    "night/tsra_sct" => "thunderstorm.svg",
-    "day/wind_bkn" => "new_windy_cloudy.svg",
-    "night/wind_bkn" => "new_windy_cloudy.svg",
-    "day/wind_few" => "new_windy_cloudy.svg",
-    "night/wind_few" => "new_windy_cloudy.svg",
-    "day/wind_ovc" => "new_windy_cloudy.svg",
-    "night/wind_ovc" => "new_windy_cloudy.svg",
-    "day/wind_sct" => "new_windy_cloudy.svg",
-    "night/wind_sct" => "new_windy_cloudy.svg",
-    "day/wind_skc" => "windy.svg",
-    "night/wind_skc" => "windy.svg",
-  ];
-
-  $conditionKey = get_api_condition_key($observation);
-  return $apiKeyToNoaaIconMapping[$conditionKey];
-}
-
-/**
- * Gets a short weather description from a current observation.
- *
- * @param object $observation
- *   An observation from api.weather.gov.
- *
- * @return string
- *   The short description of the weather described in the observation.
- */
-function get_short_description($observation) {
-  $apiKeyToConditionMapping = [
-    "day/bkn" => "Mostly cloudy",
-    "night/bkn" => "Mostly cloudy",
-    "day/blizzard" => "Blizzard",
-    "night/blizzard" => "Blizzard",
-    "day/cold" => "Cold",
-    "night/cold" => "Cold",
-    "day/dust" => "Dust",
-    "night/dust" => "Dust",
-    "day/few" => "A few clouds",
-    "night/few" => "A few clouds",
-    "day/fog" => "Fog/mist",
-    "night/fog" => "Fog/mist",
-    "day/fzra" => "Freezing rain",
-    "night/fzra" => "Freezing rain",
-    "day/haze" => "Haze",
-    "night/haze" => "Haze",
-    "day/hot" => "Hot",
-    "night/hot" => "Hot",
-    "day/hurricane" => "Hurricane conditions",
-    "night/hurricane" => "Hurricane conditions",
-    "no data" => "No data",
-    "day/ovc" => "Overcast",
-    "night/ovc" => "Overcast",
-    "day/rain" => "Rain",
-    "day/rain_fzra" => "Rain/freezing rain",
-    "night/rain_fzra" => "Rain/freezing rain",
-    "night/rain" => "Rain",
-    "day/rain_showers" => "Rain showers (high cloud cover)",
-    "day/rain_showers_hi" => "Rain showers (low cloud cover)",
-    "night/rain_showers_hi" => "Rain showers (low cloud cover)",
-    "night/rain_showers" => "Rain showers (high cloud cover)",
-    "day/rain_sleet" => "Rain/sleet",
-    "night/rain_sleet" => "Rain/sleet",
-    "day/rain_snow" => "Rain/snow",
-    "night/rain_snow" => "Rain/sleet",
-    "day/sct" => "Partly cloudy",
-    "night/sct" => "Partly cloudy",
-    "day/skc" => "Fair/clear",
-    "night/skc" => "Fair/clear",
-    "day/sleet" => "Sleet",
-    "night/sleet" => "Sleet",
-    "day/smoke" => "Smoke",
-    "night/smoke" => "Smoke",
-    "day/snow" => "Snow",
-    "day/snow_fzra" => "Freezing rain/snow",
-    "night/snow_fzra" => "Freezing rain/snow",
-    "night/snow" => "Snow",
-    "day/snow_sleet" => "Snow/sleet",
-    "night/snow_sleet" => "Snow/sleet",
-    "day/tornado" => "Tornado",
-    "night/tornado" => "Tornado",
-    "day/tropical_storm" => "Tropical storm conditions",
-    "night/tropical_storm" => "Tropical storm conditions",
-    "day/tsra" => "Thunderstorm (high cloud cover)",
-    "day/tsra_hi" => "Thunderstorm (low cloud cover)",
-    "night/tsra_hi" => "Thunderstorm (low cloud cover)",
-    "night/tsra" => "Thunderstorm (high cloud cover)",
-    "day/tsra_sct" => "Thunderstorm (medium cloud cover)",
-    "night/tsra_sct" => "Thunderstorm (medium cloud cover)",
-    "day/wind_bkn" => "Mostly cloudy and windy",
-    "night/wind_bkn" => "Mostly cloudy and windy",
-    "day/wind_few" => "A few clouds and windy",
-    "night/wind_few" => "A few clouds and windy",
-    "day/wind_ovc" => "Overcast and windy",
-    "night/wind_ovc" => "Overcast and windy",
-    "day/wind_sct" => "Partly cloudy and windy",
-    "night/wind_sct" => "Partly cloudy and windy",
-    "day/wind_skc" => "Fair/clear and windy",
-    "night/wind_skc" => "Fair/clear and windy",
-  ];
-
-  $key = get_api_condition_key($observation);
-  return $apiKeyToConditionMapping[$key];
-}
-
-/**
  * A service class for fetching weather data.
  */
 class WeatherDataService {
+  /**
+   * Mapping of legacy API icon paths to new icons and conditions text.
+   *
+   * @var legacyMapping
+   */
+  private $legacyMapping;
+
+  /**
+   * A catch-all default icon to show.
+   *
+   * @var string
+   */
+  private $defaultIcon;
+
+  /**
+   * A catch-all conditions label to display.
+   *
+   * @var defaultConditions
+   */
+  private $defaultConditions;
+
   /**
    * HTTP client.
    *
@@ -223,11 +45,129 @@ class WeatherDataService {
   private $t;
 
   /**
+   * Cache of current conditions.
+   *
+   * @var currentConditions
+   */
+  private $currentConditions;
+
+  /**
    * Constructor.
    */
   public function __construct(ClientInterface $httpClient, TranslationInterface $t) {
     $this->client = $httpClient;
     $this->t = $t;
+    $this->defaultIcon = "nodata.svg";
+    $this->defaultConditions = "No data";
+
+    $this->currentConditions = FALSE;
+
+    $this->legacyMapping = json_decode(
+      file_get_contents(
+        __DIR__ . "/legacyMapping.json"
+      )
+    );
+  }
+
+  /**
+   * Return a condition stripped of any parentheticals.
+   *
+   * @return string
+   *   A condition text with any parenthetical
+   *    statements removed
+   */
+  private function removeParenthetical($str) {
+    $parts = explode("(", $str);
+    return $parts[0];
+  }
+
+  /**
+   * Return only the periods that are after today.
+   *
+   * This private method will filter the forecast periods
+   * to only include periods whose startTime corresponds to
+   * "tomorrow" or later.
+   *
+   * The optional argument $limitDays, if set,
+   * should be an integer specifying the max number
+   * of days to return. Note that a day is two periods
+   * (daytime and overnight) combined.
+   *
+   * @return array
+   *   An array of forecast period data filtered as described
+   */
+  public function filterToFutureDays($data, $now, $limitDays = NULL) {
+    $tomorrow = $now->modify('tomorrow');
+    $result = array_filter($data, function ($period) use (&$tomorrow) {
+      $startTime = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601,
+        $period->startTime
+      );
+      return $startTime > $tomorrow;
+    });
+
+    // Each period here is half a day
+    // (the morning or the night), so
+    // we need double the limit periods.
+    if ($limitDays != NULL) {
+      return array_values(
+        array_slice($result, 0, $limitDays * 2)
+      );
+    }
+
+    return array_values($result);
+  }
+
+  /**
+   * Gets a unique key identifying the conditions described in an observation.
+   *
+   * @param object $observation
+   *   An observation from api.weather.gov.
+   *
+   * @return string
+   *   A key uniquely identifying the current conditions.
+   */
+  public function getApiObservationKey($observation) {
+    /* The icon path from the API is of the form:
+    https://api.weather.gov/icons/land/day/skc
+    - OR -
+    https://api.weather.gov/icons/land/day/skc/hurricane
+
+    The last two or three path segments are the ones we need
+    to identify the current conditions. This is because there can be
+    two simultaneous conditions in the legacy icon system.
+
+    For now, we use the _first_ condition given in the path as the canonical
+    condition for the key.
+     */
+    $icon = $observation->icon;
+
+    if ($icon == NULL or strlen($icon) == 0) {
+      return "no data";
+    }
+
+    $url = parse_url($observation->icon);
+    $path = $url["path"];
+    $path = explode("/", $path);
+
+    // An icon url, when split to path parts,
+    // with have either 5 or 6 parts.
+    // Thus we need to trim from the end by
+    // either 2 or 3 each time.
+    if (count($path) == 6) {
+      $path = array_slice($path, -3, 2);
+    }
+    else {
+      $path = array_slice($path, -2);
+    }
+
+    $path = array_map(function ($piece) {
+      return preg_replace("/,.*$/", "", $piece);
+    }, $path);
+
+    $apiConditionKey = implode("/", $path);
+
+    return $apiConditionKey;
   }
 
   /**
@@ -263,78 +203,257 @@ class WeatherDataService {
    *   NULL if no route is provided, or the provided route is not on the grid.
    */
   public function getCurrentConditions($route) {
+
     // If this isn't a grid route, don't do anything. We can only respond to
     // requests on the grid.
     if ($route->getRouteName() != "weather_routes.grid") {
       return NULL;
     }
 
+    // This object is only created once per request, so we can store the
+    // results of the API call in a member variable. If the variable is false,
+    // we haven't fetched data yet so do that. Otherwise, just return what's in
+    // the variable already.
+    if ($this->currentConditions == FALSE) {
+      // Since we're on the right kind of route, pull out the data we need.
+      $wfo = $route->getParameter("wfo");
+      $gridX = $route->getParameter("gridX");
+      $gridY = $route->getParameter("gridY");
+      $location = $route->getParameter("location");
+
+      date_default_timezone_set('America/New_York');
+
+      $obsStationsResponse = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
+      $obsStationsMetadata = json_decode($obsStationsResponse->getBody());
+
+      $observationStation = $obsStationsMetadata->features[0];
+
+      $obsResponse = $this->client->get($observationStation->id . "/observations?limit=1");
+      $obs = json_decode($obsResponse->getBody())->features[0]->properties;
+
+      $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
+
+      $feelsLike = $obs->heatIndex->value;
+      if ($feelsLike == NULL) {
+        $feelsLike = $obs->windChill->value;
+      }
+      if ($feelsLike == NULL) {
+        $feelsLike = $obs->temperature->value;
+      }
+      $feelsLike = 32 + (9 * $feelsLike / 5);
+
+      $obsKey = $this->getApiObservationKey($obs);
+
+      $description = $this->legacyMapping->$obsKey->conditions;
+
+      // The cardinal and ordinal directions. North goes in twice because it
+      // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
+      $directions = ["north", "northeast", "east", "southeast", "south",
+        "southwest", "west", "northwest", "north",
+      ];
+      $shortDirections = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
+
+      // 1. Whatever degrees we got from the API, constrain it to 0°-360°.
+      // 2. Add 22.5° to it. This accounts for north starting at -22.5°
+      // 3. Use integer division by 45° to see which direction index this is.
+      // This indexes into the two direction name arrays above.
+      $directionIndex = intdiv(intval(($obs->windDirection->value % 360) + 22.5, 10), 45);
+
+      $this->currentConditions = [
+        'conditions' => [
+          'long' => $this->t->translate($description),
+          'short' => $this->t->translate($description),
+        ],
+        // C to F.
+        'feels_like' => (int) round($feelsLike),
+        'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
+        'icon' => $this->legacyMapping->$obsKey->icon,
+        'location' => $location,
+        // C to F.
+        'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
+        'timestamp' => [
+          'formatted' => $timestamp->format("l g:i A T"),
+          'utc' => (int) $timestamp->format("U"),
+        ],
+        'wind' => [
+          // Kph to mph.
+          'speed' => (int) round($obs->windSpeed->value * 0.6213712),
+          'angle' => $obs->windDirection->value,
+          'direction' => $directions[$directionIndex],
+          'shortDirection' => $shortDirections[$directionIndex],
+        ],
+      ];
+    }
+
+    return $this->currentConditions;
+  }
+
+  /**
+   * Get the hourly forecast for a location.
+   *
+   * The location is taken from the provided route. Note that the $now object
+   * should *NOT* be set. It's a dependency injection hack so we can mock the
+   * current date/time.
+   *
+   * @return array
+   *   The hourly forecast as an associative array, or NULL if no route is
+   *   provided, or the provided route is not on the grid.
+   */
+  public function getHourlyForecast($route, $now = FALSE) {
+    // If this isn't a grid route, don't do anything. We can only respond to
+    // requests on the grid.
+    if ($route->getRouteName() != "weather_routes.grid") {
+      return NULL;
+    }
+
+    if (!($now instanceof \DateTimeImmutable)) {
+      $now = new \DateTimeImmutable();
+    }
+
     // Since we're on the right kind of route, pull out the data we need.
     $wfo = $route->getParameter("wfo");
     $gridX = $route->getParameter("gridX");
     $gridY = $route->getParameter("gridY");
-    $location = $route->getParameter("location");
 
     date_default_timezone_set('America/New_York');
 
-    $obsStationsResponse = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
-    $obsStationsMetadata = json_decode($obsStationsResponse->getBody());
+    $forecast = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast/hourly");
+    $forecast = json_decode($forecast->getBody());
 
-    $observationStation = $obsStationsMetadata->features[0];
+    // Get a point from the WFO grid. Any will do. We will use that to fetch the
+    // appropriate timezone from the /points API endpoint.
+    $point = $forecast->geometry->coordinates[0][0];
+    $timezone = $this->client->get("https://api.weather.gov/points/$point[1],$point[0]");
+    $timezone = json_decode($timezone->getBody());
+    $timezone = $timezone->properties->timeZone;
 
-    $obsResponse = $this->client->get($observationStation->id . "/observations?limit=1");
-    $obs = json_decode($obsResponse->getBody())->features[0]->properties;
+    $forecast = $forecast->properties->periods;
 
-    $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
+    // Toss out any time periods in the past.
+    $forecast = array_filter($forecast, function ($period) use (&$now) {
+      $then = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601_EXPANDED,
+        $period->startTime
+      );
+      $diff = $now->diff($then, FALSE);
 
-    $feelsLike = $obs->heatIndex->value;
-    if ($feelsLike == NULL) {
-      $feelsLike = $obs->windChill->value;
+      return $diff->invert != 1;
+    });
+
+    // Now map all those forecast periods into the structure we want.
+    $forecast = array_map(function ($period) use (&$timezone) {
+
+      // This closure needs access to the $timezone variable about. The easiest
+      // way I found to do it was using it by reference.
+      // From the start period of the time, parse it as an ISO8601 string and
+      // then format it into just the "Hour AM/PM" format (e.g., "8 PM")
+      $timestamp = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601_EXPANDED,
+        $period->startTime
+      )->setTimeZone(new \DateTimeZone($timezone))
+        ->format("g A");
+
+      $obsKey = $this->getApiObservationKey($period);
+
+      return [
+        "conditions" => $this->legacyMapping->$obsKey->conditions,
+        "icon" => $this->legacyMapping->$obsKey->icon,
+        "probabilityOfPrecipitation" => $period->probabilityOfPrecipitation->value,
+        "time" => $timestamp,
+        "temperature" => $period->temperature,
+      ];
+    }, $forecast);
+
+    // Reindex the array. array_filter maintains indices, so it can result in
+    // holes in the array. Bizarre behavior choice, but okay...
+    return array_values($forecast);
+  }
+
+  /**
+   * Get the daily forecast for a location.
+   *
+   * The location is taken from the provided route. Note that the $now object
+   * should *NOT* be set. It's a dependency injection hack so we can mock the
+   * current date/time.
+   *
+   * @return array
+   *   The daily forecast as an associative array, or NULL if no route is
+   *   provided, or the provided route is not on the grid.
+   */
+  public function getDailyForecast($route, $now = FALSE, $defaultDays = 5) {
+    // If this isn't a grid route, don't do anything. We can only respond to
+    // requests on the grid.
+    if ($route->getRouteName() != "weather_routes.grid") {
+      return NULL;
     }
-    if ($feelsLike == NULL) {
-      $feelsLike = $obs->temperature->value;
+
+    // We pull the grid information from the
+    // route URI.
+    $wfo = $route->getParameter("wfo");
+    $gridX = $route->getParameter("gridX");
+    $gridY = $route->getParameter("gridY");
+
+    $forecast = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast");
+    $forecast = json_decode($forecast->getBody());
+
+    $periods = $forecast->properties->periods;
+
+    // In order to keep the time zones straight,
+    // we set the "current" (now) time to be
+    // the startTime of the first period.
+    if (!($now instanceof \DateTimeImmutable)) {
+      $now = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601_EXPANDED,
+        $periods[0]->startTime
+      );
     }
-    $feelsLike = 32 + (9 * $feelsLike / 5);
+    $periods = $this->filterToFutureDays($periods, $now, $defaultDays);
 
-    $description = get_short_description($obs);
+    // Periods are either daytime or nighttime
+    // We can zip them together as pairs.
+    $dayNightPairs = array_chunk($periods, 2);
 
-    // The cardinal and ordinal directions. North goes in twice because it sits
-    // in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
-    $directions = ["north", "northeast", "east", "southeast", "south",
-      "southwest", "west", "northwest", "north",
-    ];
-    $shortDirections = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
+    $periods = array_map(function ($periodPair) {
+      $daytime = $periodPair[0];
+      $overnight = $periodPair[1];
 
-    // 1. Whatever degrees we got from the API, constrain it to 0°-360°.
-    // 2. Add 22.5° to it. This accounts for north starting at -22.5°
-    // 3. Use integer division by 45° to see which direction index this is.
-    // This indexes into the two direction name arrays above.
-    $directionIndex = (int) (($obs->windDirection->value % 360) + 22.5) / 45;
+      // Daily forecast cards require the three-letter
+      // abrreviated form of the day name.
+      $startTime = \DateTimeImmutable::createFromFormat(
+        \DateTimeInterface::ISO8601,
+        $daytime->startTime
+      );
+      $shortDayName = $startTime->format('D');
 
-    return [
-      'conditions' => [
-        'long' => $this->t->translate($description),
-        'short' => $this->t->translate($description),
-      ],
-      // C to F.
-      'feels_like' => (int) round($feelsLike),
-      'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
-      'icon' => get_noaa_icon($obs) ,
-      'location' => $location,
-      // C to F.
-      'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
-      'timestamp' => [
-        'formatted' => $timestamp->format("l g:i A T"),
-        'utc' => (int) $timestamp->format("U"),
-      ],
-      'wind' => [
-        // Kph to mph.
-        'speed' => (int) round($obs->windSpeed->value * 0.6213712),
-        'angle' => $obs->windDirection->value,
-        'direction' => $directions[$directionIndex],
-        'shortDirection' => $shortDirections[$directionIndex],
-      ],
-    ];
+      // Get any mapped condition and/or icon values.
+      $obsKey = $this->getApiObservationKey($daytime);
+
+      // The short forecast name should be mapped to
+      // the legacyMapping and translated.
+      $shortForecast = $this->legacyMapping->$obsKey->conditions;
+      $shortForecast = $this->removeParenthetical($shortForecast);
+
+      $daytimeForecast = [
+        'shortDayName' => $shortDayName,
+        'startTime' => $daytime->startTime,
+        'shortForecast' => $this->t->translate($shortForecast),
+        'icon' => $this->legacyMapping->$obsKey->icon,
+        'temperature' => $daytime->temperature,
+        'probabilityOfPrecipitation' => $daytime->probabilityOfPrecipitation->value,
+      ];
+
+      $overnightForecast = [
+        'temperature' => $overnight->temperature,
+      ];
+
+      return [
+        'daytime' => $daytimeForecast,
+        'overnight' => $overnightForecast,
+      ];
+
+    }, $dayNightPairs);
+
+    return array_values($periods);
   }
 
 }

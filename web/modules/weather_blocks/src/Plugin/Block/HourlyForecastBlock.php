@@ -2,7 +2,6 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
-use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -14,7 +13,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   category = @Translation("weather.gov"),
  * )
  */
-class HourlyForecastBlock extends BlockBase {
+class HourlyForecastBlock extends WeatherBlockBase {
 
   /**
    * {@inheritdoc}
@@ -22,7 +21,7 @@ class HourlyForecastBlock extends BlockBase {
   public function blockForm($form, FormStateInterface $form_state) {
     $form = parent::blockForm($form, $form_state);
     $config = $this->getConfiguration();
-    $max = $config["max_items"] ?? "4";
+    $max = $config["max_items"] ?? "12";
 
     $form["max_items"] = [
       "#type" => "textfield",
@@ -46,13 +45,20 @@ class HourlyForecastBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    $config = $this->getConfiguration();
-    $max = $config["max_items"] ?? "4";
+    $routeName = $this->route->getRouteName();
 
-    return [
-      '#theme' => "weather_blocks_hourly_forecast",
-      '#data' => ['max_items' => $max],
-    ];
+    if ($routeName == "weather_routes.grid") {
+      $config = $this->getConfiguration();
+      $max = $config["max_items"] ?? "12";
+      $data = $this->weatherData->getHourlyForecast($this->route);
+      $data = array_slice($data, 0, $max);
+
+      return [
+        '#theme' => "weather_blocks_hourly_forecast",
+        '#data' => $data,
+      ];
+    }
+    return NULL;
   }
 
 }

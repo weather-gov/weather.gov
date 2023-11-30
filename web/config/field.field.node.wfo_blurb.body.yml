@@ -1,0 +1,24 @@
+uuid: 27064734-d3d6-4ad4-b5b9-30249011e956
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.wfo_blurb
+  module:
+    - text
+id: node.wfo_blurb.body
+field_name: body
+entity_type: node
+bundle: wfo_blurb
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary
