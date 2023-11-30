@@ -279,6 +279,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           project: tests/e2e
+          cache-key: cypress-e2e-${{ hashFiles('package-lock.json') }}
 
   accessibility-tests:
     name: accessibility tests
@@ -328,3 +329,4 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           project: tests/a11y
+          cache-key: cypress-a11y-${{ hashFiles('package-lock.json') }}
