@@ -223,11 +223,11 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
     // legacy condition values here for now,
     // rather than the shortForecast values.
     $expected = [
-      'A few clouds',
-      'Partly cloudy',
-      'Snow',
-      'Partly cloudy',
-      'Partly cloudy',
+      'Sunny',
+      'Mostly sunny',
+      'Slight snow',
+      'Mostly sunny',
+      'Cats and dogs!',
     ];
     $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
       'wfo', 'x', 'y',

@@ -438,10 +438,8 @@ class WeatherDataService {
       // Get any mapped condition and/or icon values.
       $obsKey = $this->getApiObservationKey($daytime);
 
-      // The short forecast name should be mapped to
-      // the legacyMapping and translated.
-      $shortForecast = $this->legacyMapping->$obsKey->conditions;
-      $shortForecast = $this->removeParenthetical($shortForecast);
+      // Sentence-case the forecast description
+      $shortForecast = ucfirst(strtolower($daytime->shortForecast));
 
       $daytimeForecast = [
         'shortDayName' => $shortDayName,
