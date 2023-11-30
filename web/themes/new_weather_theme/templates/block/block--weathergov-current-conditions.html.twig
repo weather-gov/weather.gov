@@ -1,51 +1,60 @@
-{# First row: widget-type interface #}
-<div class="grid-row margin-left-8 margin-y-4 weather-gov-current-conditions">
-  {# First half: icon, current temperature, and conditions text #}
-  <div class="tablet:grid-col-3 display-flex">
-    <div class="icon flex-align-center margin-right-1">
-      {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content['#data']["icon"] )}}
-    </div>
-    <div class="flex-align-center">
-      <div class="font-body-3xl display-flex flex-fill">
-        {{ content["#data"]["temperature"] }}
-        <div class="margin-top-1 display-flex flex-align-start font-body-lg">
-          ℉
-        </div>
-      </div>
-      <p class="margin-0 conditions-narrative short">
-        {{ content["#data"]["conditions"]["short"]}}
-      </p>
-    </div>
+{# Widgets and stuff. This is presented as a row of columns. #}
+<div class="grid-row flex-row margin-y-4 tablet:margin-left-4 weather-gov-current-conditions">
+  {# First column: weather icon #}
+  <div class="icon margin-right-1">
+    {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content['#data']["icon"] )}}
   </div>
-
-  {# Second half: feels like, humidity, and wind #}
-  <div class="tablet:grid-col-3 margin-top-05">
-    <div class="font-body-lg display-flex flex-fill">
-      {{ content["#data"]["feels_like"] }}
-      <div class="margin-top-2px display-flex flex-align-start font-body-3xs">
+  
+  {# Second column: temperature and conditions #}
+  <div>
+    {# Layout the temperature as a row within this column. That way we can align
+       the numeric value and the degree unit the way we want to. #}
+    <div class="display-flex flex-row">
+      {# First column of the temp row is the numeric value #}
+      <div class="font-body-3xl">
+        {{ content["#data"]["temperature"] }}
+      </div>
+      {# Second column is the superscript unit notation #}
+      <div class="margin-top-05 font-body-lg">
         ℉
       </div>
     </div>
-    <p class="margin-0 font-body-3xs text-gray-50">{{ "Feels like" | t }}</p>
-    <div class="display-flex flex-fill margin-top-2">
-      <div class="flex-auto flex-align-center item margin-right-1">
-        {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
+
+    {# Second row of the column is just the conditions text #}
+    <div>
+      {{ content["#data"]["conditions"]["short"]}}
+    </div>
+  </div>
+
+  {# Third column is feels like, humidity, and wind #}
+  <div class="display-flex flex-column margin-left-6">
+
+    {# Same as above re: temperature #}
+    <div class="display-flex flex-row margin-top-05">
+      <div class="font-body-lg">
+        {{ content["#data"]["feels_like"] }}
       </div>
-      <div class="flex-fill flex-align-center">
-        {{ "Humidity: @humidity%" | t({ "@humidity": content["#data"]["humidity"] }) }}
+      <div class="margin-top-2px font-body-3xs">
+        ℉
       </div>
     </div>
-    <div class="display-flex flex-fill">
-      <div class="flex-auto flex-align-center item margin-right-1">
-        {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
-      </div>
-      <div class="flex-align-center flex-auto">
-        {{ "Wind: @windSpeed mph @windDirection" | t({
-          "@windSpeed": content["#data"]["wind"]["speed"],
-          "@windDirection": content["#data"]["wind"]["shortDirection"]
-          })
-        }}
-      </div>
+
+    <div class="font-body-3xs text-gray-50">
+      {{ "Feels like" |t }}
+    </div>
+
+    <div class="item margin-top-2">
+      {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
+      {{ "Humidity: @humidity%" | t({ "@humidity": content["#data"]["humidity"] }) }}
+    </div>
+
+    <div class="item">
+      {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
+      {{ "Wind: @windSpeed mph @windDirection" | t({
+        "@windSpeed": content["#data"]["wind"]["speed"],
+        "@windDirection": content["#data"]["wind"]["shortDirection"]
+        })
+      }}
     </div>
   </div>
 </div>
