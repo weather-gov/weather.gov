@@ -381,7 +381,7 @@ class WeatherDataService {
       $obsKey = $this->getApiObservationKey($period);
 
       return [
-        "conditions" => $this->legacyMapping->$obsKey->conditions,
+        "conditions" => $this->t->translate(ucfirst(strtolower($period->shortForecast))),
         "icon" => $this->legacyMapping->$obsKey->icon,
         "probabilityOfPrecipitation" => $period->probabilityOfPrecipitation->value,
         "time" => $timestamp,

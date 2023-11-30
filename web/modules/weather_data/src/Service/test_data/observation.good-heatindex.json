@@ -61,7 +61,7 @@
         "station": "https://observation-station-1",
         "timestamp": "2023-10-12T20:00:00+00:00",
         "rawMessage": "ARGLE BARGLE FLARGLE FLARGLE",
-        "textDescription": "It's really coming down out there",
+        "textDescription": "Not snow",
         "icon": "https://api.weather.gov/icons/land/day/snow?size=medium",
         "presentWeather": [
           {
