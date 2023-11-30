@@ -177,7 +177,8 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
 
     $expected = [
       [
-        "conditions" => "Thunderbolt", // Conditions should be sentence-cased
+        // Conditions should be sentence-cased.
+        "conditions" => "Thunderbolt",
         "icon" => "nodata.svg",
         "probabilityOfPrecipitation" => 11,
         "time" => "12 PM",

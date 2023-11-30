@@ -79,6 +79,7 @@ class WeatherDataService {
   }
 
   /**
+<<<<<<< HEAD
    * Get data from the weather API.
    *
    * The results for any given URL are cached for the duration of the current
@@ -110,6 +111,8 @@ class WeatherDataService {
   }
 
   /**
+=======
+>>>>>>> 925a7fc (lint fixes)
    * Return only the periods that are after today.
    *
    * This private method will filter the forecast periods
@@ -438,7 +441,7 @@ class WeatherDataService {
       // Get any mapped condition and/or icon values.
       $obsKey = $this->getApiObservationKey($daytime);
 
-      // Sentence-case the forecast description
+      // Sentence-case the forecast description.
       $shortForecast = ucfirst(strtolower($daytime->shortForecast));
 
       $daytimeForecast = [
