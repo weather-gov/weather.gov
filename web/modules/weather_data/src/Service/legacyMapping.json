@@ -1,278 +1,209 @@
 {
   "day/bkn": {
-    "icon": "mostly_cloudy-day.svg",
-    "conditions": "Mostly cloudy"
+    "icon": "mostly_cloudy-day.svg"
   },
   "night/bkn": {
-    "icon": "mostly_cloudy-night.svg",
-    "conditions": "Mostly cloudy"
+    "icon": "mostly_cloudy-night.svg"
   },
   "day/blizzard": {
-    "icon": "blizzard_winter_storm.svg",
-    "conditions": "Blizzard"
+    "icon": "blizzard_winter_storm.svg"
   },
   "night/blizzard": {
-    "icon": "blizzard_winter_storm.svg",
-    "conditions": "Blizzard"
+    "icon": "blizzard_winter_storm.svg"
   },
   "day/cold": {
-    "icon": "cold.svg",
-    "conditions": "Cold"
+    "icon": "cold.svg"
   },
   "night/cold": {
-    "icon": "cold.svg",
-    "conditions": "Cold"
+    "icon": "cold.svg"
   },
   "day/dust": {
-    "icon": "new_dust.svg",
-    "conditions": "Dust"
+    "icon": "new_dust.svg"
   },
   "night/dust": {
-    "icon": "new_dust.svg",
-    "conditions": "Dust"
+    "icon": "new_dust.svg"
   },
   "day/few": {
-    "icon": "mostly_clear-day.svg",
-    "conditions": "A few clouds"
+    "icon": "mostly_clear-day.svg"
   },
   "night/few": {
-    "icon": "mostly_clear-night.svg",
-    "conditions": "A few clouds"
+    "icon": "mostly_clear-night.svg"
   },
   "day/fog": {
-    "icon": "fog.svg",
-    "conditions": "Fog/mist"
+    "icon": "fog.svg"
   },
   "night/fog": {
-    "icon": "fog.svg",
-    "conditions": "Fog/mist"
+    "icon": "fog.svg"
   },
   "day/fzra": {
-    "icon": "cold.svg",
-    "conditions": "Freezing rain"
+    "icon": "cold.svg"
   },
   "night/fzra": {
-    "icon": "cold.svg",
-    "conditions": "Freezing rain"
+    "icon": "cold.svg"
   },
   "day/haze": {
-    "icon": "hazy_smoke-day.svg",
-    "conditions": "Haze"
+    "icon": "hazy_smoke-day.svg"
   },
   "night/haze": {
-    "icon": "fog.svg",
-    "conditions": "Haze"
+    "icon": "fog.svg"
   },
   "day/hot": {
-    "icon": "hot.svg",
-    "conditions": "Hot"
+    "icon": "hot.svg"
   },
   "night/hot": {
-    "icon": "hot.svg",
-    "conditions": "Hot"
+    "icon": "hot.svg"
   },
   "day/hurricane": {
-    "icon": "hurricane.svg",
-    "conditions": "Hurricane conditions"
+    "icon": "hurricane.svg"
   },
   "night/hurricane": {
-    "icon": "hurricane.svg",
-    "conditions": "Hurricane conditions"
+    "icon": "hurricane.svg"
   },
   "no data": {
-    "icon": "nodata.svg",
-    "conditions": "No data"
+    "icon": "nodata.svg"
   },
   "day/ovc": {
-    "icon": "cloudy_overcast.svg",
-    "conditions": "Overcast"
+    "icon": "cloudy_overcast.svg"
   },
   "night/ovc": {
-    "icon": "cloudy_overcast.svg",
-    "conditions": "Overcast"
+    "icon": "cloudy_overcast.svg"
   },
   "day/rain": {
-    "icon": "rain.svg",
-    "conditions": "Rain"
+    "icon": "rain.svg"
   },
   "day/rain_fzra": {
-    "icon": "freezing_rain_sleet.svg",
-    "conditions": "Rain/freezing rain"
+    "icon": "freezing_rain_sleet.svg"
   },
   "night/rain_fzra": {
-    "icon": "freezing_rain_sleet.svg",
-    "conditions": "Rain/freezing rain"
+    "icon": "freezing_rain_sleet.svg"
   },
   "night/rain": {
-    "icon": "rain.svg",
-    "conditions": "Rain"
+    "icon": "rain.svg"
   },
   "day/rain_showers": {
-    "icon": "showers_scattered_rain.svg",
-    "conditions": "Rain showers (high cloud cover)"
+    "icon": "showers_scattered_rain.svg"
   },
   "day/rain_showers_hi": {
-    "icon": "showers_scattered_rain.svg",
-    "conditions": "Rain showers (low cloud cover)"
+    "icon": "showers_scattered_rain.svg"
   },
   "night/rain_showers_hi": {
-    "icon": "showers_scattered_rain.svg",
-    "conditions": "Rain showers (low cloud cover)"
+    "icon": "showers_scattered_rain.svg"
   },
   "night/rain_showers": {
-    "icon": "showers_scattered_rain.svg",
-    "conditions": "Rain showers (high cloud cover)"
+    "icon": "showers_scattered_rain.svg"
   },
   "day/rain_sleet": {
-    "icon": "freezing_rain_sleet.svg",
-    "conditions": "Rain/sleet"
+    "icon": "freezing_rain_sleet.svg"
   },
   "night/rain_sleet": {
-    "icon": "freezing_rain_sleet.svg",
-    "conditions": "Rain/sleet"
+    "icon": "freezing_rain_sleet.svg"
   },
   "day/rain_snow": {
-    "icon": "mixed_precip.svg",
-    "conditions": "Rain/snow"
+    "icon": "mixed_precip.svg"
   },
   "night/rain_snow": {
-    "icon": "mixed_precip.svg",
-    "conditions": "Rain/sleet"
+    "icon": "mixed_precip.svg"
   },
   "day/sct": {
-    "icon": "mostly_clear-day.svg",
-    "conditions": "Partly cloudy"
+    "icon": "mostly_clear-day.svg"
   },
   "night/sct": {
-    "icon": "mostly_clear-night.svg",
-    "conditions": "Partly cloudy"
+    "icon": "mostly_clear-night.svg"
   },
   "day/skc": {
-    "icon": "clear-day.svg",
-    "conditions": "Fair/clear"
+    "icon": "clear-day.svg"
   },
   "night/skc": {
-    "icon": "clear-night.svg",
-    "conditions": "Fair/clear"
+    "icon": "clear-night.svg"
   },
   "day/sleet": {
-    "icon": "freezing_rain_sleet.svg",
-    "conditions": "Sleet"
+    "icon": "freezing_rain_sleet.svg"
   },
   "night/sleet": {
-    "icon": "freezing_rain_sleet.svg",
-    "conditions": "Sleet"
+    "icon": "freezing_rain_sleet.svg"
   },
   "day/smoke": {
-    "icon": "hazy_smoke-day.svg",
-    "conditions": "Smoke"
+    "icon": "hazy_smoke-day.svg"
   },
   "night/smoke": {
-    "icon": "hazy_smoke-day.svg",
-    "conditions": "Smoke"
+    "icon": "hazy_smoke-day.svg"
   },
   "day/snow": {
-    "icon": "snow.svg",
-    "conditions": "Snow"
+    "icon": "snow.svg"
   },
   "day/snow_fzra": {
-    "icon": "mixed_precip.svg",
-    "conditions": "Freezing rain/snow"
+    "icon": "mixed_precip.svg"
   },
   "night/snow_fzra": {
-    "icon": "mixed_precip.svg",
-    "conditions": "Freezing rain/snow"
+    "icon": "mixed_precip.svg"
   },
   "night/snow": {
-    "icon": "snow.svg",
-    "conditions": "Snow"
+    "icon": "snow.svg"
   },
   "day/snow_sleet": {
-    "icon": "new_snow_sleet.svg",
-    "conditions": "Snow/sleet"
+    "icon": "new_snow_sleet.svg"
   },
   "night/snow_sleet": {
-    "icon": "new_snow_sleet.svg",
-    "conditions": "Snow/sleet"
+    "icon": "new_snow_sleet.svg"
   },
   "day/tornado": {
-    "icon": "tornado.svg",
-    "conditions": "Tornado"
+    "icon": "tornado.svg"
   },
   "night/tornado": {
-    "icon": "tornado.svg",
-    "conditions": "Tornado"
+    "icon": "tornado.svg"
   },
   "day/tropical_storm": {
-    "icon": "hurricane.svg",
-    "conditions": "Tropical storm conditions"
+    "icon": "hurricane.svg"
   },
   "night/tropical_storm": {
-    "icon": "hurricane.svg",
-    "conditions": "Tropical storm conditions"
+    "icon": "hurricane.svg"
   },
   "day/tsra": {
-    "icon": "thunderstorm.svg",
-    "conditions": "Thunderstorm (high cloud cover)"
+    "icon": "thunderstorm.svg"
   },
   "day/tsra_hi": {
-    "icon": "thunderstorm.svg",
-    "conditions": "Thunderstorm (low cloud cover)"
+    "icon": "thunderstorm.svg"
   },
   "night/tsra_hi": {
-    "icon": "thunderstorm.svg",
-    "conditions": "Thunderstorm (low cloud cover)"
+    "icon": "thunderstorm.svg"
   },
   "night/tsra": {
-    "icon": "thunderstorm.svg",
-    "conditions": "Thunderstorm (high cloud cover)"
+    "icon": "thunderstorm.svg"
   },
   "day/tsra_sct": {
-    "icon": "thunderstorm.svg",
-    "conditions": "Thunderstorm (medium cloud cover)"
+    "icon": "thunderstorm.svg"
   },
   "night/tsra_sct": {
-    "icon": "thunderstorm.svg",
-    "conditions": "Thunderstorm (medium cloud cover)"
+    "icon": "thunderstorm.svg"
   },
   "day/wind_bkn": {
-    "icon": "new_windy_cloudy.svg",
-    "conditions": "Mostly cloudy and windy"
+    "icon": "new_windy_cloudy.svg"
   },
   "night/wind_bkn": {
-    "icon": "new_windy_cloudy.svg",
-    "conditions": "Mostly cloudy and windy"
+    "icon": "new_windy_cloudy.svg"
   },
   "day/wind_few": {
-    "icon": "new_windy_cloudy.svg",
-    "conditions": "A few clouds and windy"
+    "icon": "new_windy_cloudy.svg"
   },
   "night/wind_few": {
-    "icon": "new_windy_cloudy.svg",
-    "conditions": "A few clouds and windy"
+    "icon": "new_windy_cloudy.svg"
   },
   "day/wind_ovc": {
-    "icon": "new_windy_cloudy.svg",
-    "conditions": "Overcast and windy"
+    "icon": "new_windy_cloudy.svg"
   },
   "night/wind_ovc": {
-    "icon": "new_windy_cloudy.svg",
-    "conditions": "Overcast and windy"
+    "icon": "new_windy_cloudy.svg"
   },
   "day/wind_sct": {
-    "icon": "new_windy_cloudy.svg",
-    "conditions": "Partly cloudy and windy"
+    "icon": "new_windy_cloudy.svg"
   },
   "night/wind_sct": {
-    "icon": "new_windy_cloudy.svg",
-    "conditions": "Partly cloudy and windy"
+    "icon": "new_windy_cloudy.svg"
   },
   "day/wind_skc": {
-    "icon": "windy.svg",
-    "conditions": "Fair/clear and windy"
+    "icon": "windy.svg"
   },
   "night/wind_skc": {
-    "icon": "windy.svg",
-    "conditions": "Fair/clear and windy"
+    "icon": "windy.svg"
   }
 }
