@@ -324,7 +324,7 @@ jobs:
           make install-site
 
       - name: Cypress run
-        if: needs.should-test.outputs.skip == 'false'
+        if: needs.should-test.outputs.yes == 'true'
         uses: cypress-io/github-action@v6
         with:
           project: tests/a11y
