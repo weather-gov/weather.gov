@@ -7,17 +7,10 @@
   
   {# Second column: temperature and conditions #}
   <div>
-    {# Layout the temperature as a row within this column. That way we can align
-       the numeric value and the degree unit the way we want to. #}
-    <div class="display-flex flex-row">
-      {# First column of the temp row is the numeric value #}
-      <div class="font-body-3xl">
-        {{ content["#data"]["temperature"] }}
-      </div>
-      {# Second column is the superscript unit notation #}
-      <div class="margin-top-05 font-body-lg">
-        ℉
-      </div>
+    {# First row is temperature #}
+    <div class="font-body-3xl">
+      {{ content["#data"]["temperature"] }}
+      <span class="font-body-lg position-absolute display-inline-block left-full margin-top-05">℉</span>
     </div>
 
     {# Second row of the column is just the conditions text #}
@@ -29,14 +22,9 @@
   {# Third column is feels like, humidity, and wind #}
   <div class="display-flex flex-column margin-left-6">
 
-    {# Same as above re: temperature #}
-    <div class="display-flex flex-row margin-top-05">
-      <div class="font-body-lg">
-        {{ content["#data"]["feels_like"] }}
-      </div>
-      <div class="margin-top-2px font-body-3xs">
-        ℉
-      </div>
+    <div class="font-body-lg margin-top-05">
+      {{ content["#data"]["feels_like"] }}
+      <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-2px">℉</span>
     </div>
 
     <div class="font-body-3xs text-gray-50">
