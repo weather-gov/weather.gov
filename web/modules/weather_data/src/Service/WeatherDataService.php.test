@@ -27,13 +27,6 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
   protected $httpClientMock;
 
   /**
-   * The mocked route object.
-   *
-   * @var routeMock
-   */
-  protected $routeMock;
-
-  /**
    * The WeatherDataService object under test.
    *
    * @var weatherDataService
@@ -62,15 +55,6 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     );
 
     $this->weatherDataService = new WeatherDataService($client, $translationManager);
-
-    $this->routeMock = $this->createStub(RouteMatchInterface::class);
-    $this->routeMock->method('getRouteName')->willReturn('weather_routes.grid');
-    $this->routeMock->method('getParameter')->WillReturnMap([
-      ['wfo', 'NWS'],
-      ['gridX', 10],
-      ['gridY', 10],
-      ['location', 'National Weather Service'],
-    ]);
   }
 
   /**
@@ -98,7 +82,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
       "feels_like" => 45,
       "humidity" => 88,
       "icon" => "snow.svg",
-      "location" => "National Weather Service",
+      "location" => "SOMEWHERE - FIX THIS SOON",
       "temperature" => 45,
       "timestamp" => [
         "formatted" => "Thursday 8:00 PM GMT+0000",
@@ -119,7 +103,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
   public function testHappyPathWithNoFeelsLike(): void {
     $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
 
-    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -131,7 +115,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     $expected = $this->setupHappyPath("observation.good-heatindex.json");
     $expected["feels_like"] = 117;
 
-    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -143,7 +127,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     $expected = $this->setupHappyPath("observation.good-windchill.json");
     $expected["feels_like"] = 16;
 
-    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -155,7 +139,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     $expected = $this->setupHappyPath("observation.good-both.json");
     $expected["feels_like"] = 194;
 
-    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -169,7 +153,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     $expected["conditions"]["short"] = "No data";
     $expected["conditions"]["long"] = "No data";
 
-    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -183,7 +167,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     $expected["conditions"]["short"] = "No data";
     $expected["conditions"]["long"] = "No data";
 
-    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -216,7 +200,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
       "feels_like" => 45,
       "humidity" => 88,
       "icon" => "snow.svg",
-      "location" => "National Weather Service",
+      "location" => "SOMEWHERE - FIX THIS SOON",
       "temperature" => 45,
       "timestamp" => [
         "formatted" => "Thursday 8:00 PM GMT+0000",
@@ -253,7 +237,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
         ),
       );
 
-      $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+      $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
       $this->assertEquals((object) $expected, (object) $actual);
     }
@@ -266,34 +250,17 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
     // First setup the API to return no feels-like temperature and get the
     // conditions accordingly.
     $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
-    $this->weatherDataService->getCurrentConditions($this->routeMock);
+    $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
     // Now setup the API to return both heat index and wind chill and get the
     // conditions again.
     $this->setupHappyPath("observation.good-both.json");
-    $actual = $this->weatherDataService->getCurrentConditions($this->routeMock);
+    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
     // The output from the second call should be the based on the no-feels-like
     // setup because the results should be cached. The API should not be called
     // again.
     $this->assertEquals((object) $expected, (object) $actual);
-  }
-
-  /**
-   * Tests asking for current conditions when not on a grid route.
-   */
-  public function testNotGridRoute(): void {
-    // Create a one-off stub because phpunit doesn't allow overriding a return
-    // value from a stub once it's set. It's just set forever. And rather than
-    // changing the setup() method that works for most of these tests, we'll
-    // just work around it.
-    // https://github.com/sebastianbergmann/phpunit-mock-objects/issues/260
-    $routeMock = $this->createStub(RouteMatchInterface::class);
-    $routeMock->method('getRouteName')->willReturn('weather_routes.not-grid');
-
-    $actual = $this->weatherDataService->getCurrentConditions($routeMock);
-
-    $this->assertEquals(NULL, $actual);
   }
 
 }

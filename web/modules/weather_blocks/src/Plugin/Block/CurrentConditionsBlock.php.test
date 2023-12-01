@@ -58,7 +58,7 @@ final class CurrentConditionsBlockTest extends TestCase {
    * Test that the block returns the expected data if we're on a grid route.
    */
   public function testBuild() : void {
-    $this->weatherData->method('getCurrentConditions')->willReturn('this is weather data');
+    $this->weatherData->method('getCurrentConditionsFromGrid')->willReturn('this is weather data');
 
     $expected = [
       "#theme" => "weather_blocks_current_conditions",
