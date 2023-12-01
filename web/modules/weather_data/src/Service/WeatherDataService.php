@@ -203,7 +203,6 @@ class WeatherDataService {
     // the variable already.
     if ($this->currentConditions == FALSE) {
       // Since we're on the right kind of route, pull out the data we need.
-
       date_default_timezone_set('America/New_York');
 
       $obsStationsResponse = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
