@@ -20,10 +20,8 @@ class CurrentConditionsBlock extends WeatherBlockBase {
     $routeName = $this->route->getRouteName();
 
     if ($routeName == "weather_routes.grid") {
-      return [
-        '#theme' => "weather_blocks_current_conditions",
-        '#data' => $this->weatherData->getCurrentConditions($this->route),
-      ];
+      $data = $this->weatherData->getCurrentConditions($this->route);
+      return $data;
     }
     return NULL;
   }

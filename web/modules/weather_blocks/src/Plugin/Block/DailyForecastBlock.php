@@ -21,10 +21,7 @@ class DailyForecastBlock extends WeatherBlockBase {
 
     if ($routeName == "weather_routes.grid") {
       $data = $this->weatherData->getDailyForecast($this->route);
-      return [
-        '#theme' => "weather_blocks_daily_forecast",
-        '#data' => $data,
-      ];
+      return ["days" => $data];
     }
     return NULL;
   }
