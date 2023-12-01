@@ -4,7 +4,6 @@ namespace Drupal\weather_data\Service;
 
 include_once "WeatherDataService.php";
 
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -22,13 +21,6 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
    * @var httpClientMock
    */
   protected $httpClientMock;
-
-  /**
-   * The mocked route object.
-   *
-   * @var routeMock
-   */
-  protected $routeMock;
 
   /**
    * The WeatherDataService object under test.
@@ -75,15 +67,6 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
     );
 
     $this->weatherDataService = new WeatherDataService($client, $translationManager);
-
-    $this->routeMock = $this->createStub(RouteMatchInterface::class);
-    $this->routeMock->method('getRouteName')->willReturn('weather_routes.grid');
-    $this->routeMock->method('getParameter')->WillReturnMap([
-      ['wfo', 'NWS'],
-      ['gridX', 10],
-      ['gridY', 10],
-      ['location', 'National Weather Service'],
-    ]);
   }
 
   /**
@@ -159,7 +142,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
     $this->setupHappyPath($response);
 
     $expected = [];
-    $actual = $this->weatherDataService->getHourlyForecast($this->routeMock, $this->now);
+    $actual = $this->weatherDataService->getHourlyForecastFromGrid('wfo', 'x', 'y', $this->now);
     $this->assertEquals((object) $expected, (object) $actual);
   }
 
@@ -204,7 +187,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
       ],
     ];
 
-    $actual = $this->weatherDataService->getHourlyForecast($this->routeMock, $this->now);
+    $actual = $this->weatherDataService->getHourlyForecastFromGrid('wfo', 'x', 'y', $this->now);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -259,7 +242,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
       ],
     ];
 
-    $actual = $this->weatherDataService->getHourlyForecast($this->routeMock, $this->now);
+    $actual = $this->weatherDataService->getHourlyForecastFromGrid('wfo', 'x', 'y', $this->now);
 
     $this->assertEquals((object) $expected, (object) $actual);
   }
@@ -282,25 +265,8 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
     $this->setupHappyPath($response);
 
     $expected = [];
-    $actual = $this->weatherDataService->getHourlyForecast($this->routeMock);
+    $actual = $this->weatherDataService->getHourlyForecastFromGrid('wfo', 'x', 'y');
     $this->assertEquals((object) $expected, (object) $actual);
-  }
-
-  /**
-   * Tests asking for current conditions when not on a grid route.
-   */
-  public function testNotGridRoute(): void {
-    // Create a one-off stub because phpunit doesn't allow overriding a return
-    // value from a stub once it's set. It's just set forever. And rather than
-    // changing the setup() method that works for most of these tests, we'll
-    // just work around it.
-    // https://github.com/sebastianbergmann/phpunit-mock-objects/issues/260
-    $routeMock = $this->createStub(RouteMatchInterface::class);
-    $routeMock->method('getRouteName')->willReturn('weather_routes.not-grid');
-
-    $actual = $this->weatherDataService->getHourlyForecast($routeMock);
-
-    $this->assertEquals(NULL, $actual);
   }
 
 }

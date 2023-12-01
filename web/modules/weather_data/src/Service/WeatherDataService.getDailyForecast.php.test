@@ -4,7 +4,6 @@ namespace Drupal\weather_data\Service;
 
 include_once "WeatherDataService.php";
 
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -22,13 +21,6 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
    * @var httpClientMock
    */
   protected $httpClientMock;
-
-  /**
-   * The mocked route object.
-   *
-   * @var routeMock
-   */
-  protected $routeMock;
 
   /**
    * The WeatherDataService object under test.
@@ -72,15 +64,6 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
     );
 
     $this->weatherDataService = new WeatherDataService($client, $translationManager);
-
-    $this->routeMock = $this->createStub(RouteMatchInterface::class);
-    $this->routeMock->method('getRouteName')->willReturn('weather_routes.grid');
-    $this->routeMock->method('getParameter')->WillReturnMap([
-      ['wfo', 'BOU'],
-      ['gridX', 63],
-      ['gridY', 62],
-      ['location', 'Boulder'],
-    ]);
   }
 
   /**
@@ -111,8 +94,8 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
     $this->setupHappyPath();
     $expected = 5;
 
-    $forecastDays = $this->weatherDataService->getDailyForecast(
-      $this->routeMock,
+    $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
+      'wfo', 'x', 'y',
       $this->now
     );
     $actual = count($forecastDays);
@@ -127,8 +110,8 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
     $this->setupHappyPath();
     $expected = 2;
 
-    $forecastDays = $this->weatherDataService->getDailyForecast(
-      $this->routeMock,
+    $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
+      'wfo', 'x', 'y',
       $this->now,
       2
     );
@@ -149,8 +132,8 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
       'Fri',
       'Sat',
     ];
-    $forecastDays = $this->weatherDataService->getDailyForecast(
-      $this->routeMock,
+    $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
+      'wfo', 'x', 'y',
       $this->now
     );
     $actual = array_map(function ($day) {
@@ -172,8 +155,8 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
       "2023-12-01T06:00:00-07:00",
       "2023-12-02T06:00:00-07:00",
     ];
-    $forecastDays = $this->weatherDataService->getDailyForecast(
-      $this->routeMock,
+    $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
+      'wfo', 'x', 'y',
       $this->now
     );
 
@@ -197,8 +180,8 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
       42,
       48,
     ];
-    $forecastDays = $this->weatherDataService->getDailyForecast(
-      $this->routeMock,
+    $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
+      'wfo', 'x', 'y',
       $this->now
     );
     $actual = array_map(function ($forecast) {
@@ -220,8 +203,8 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
       22,
       23,
     ];
-    $forecastDays = $this->weatherDataService->getDailyForecast(
-      $this->routeMock,
+    $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
+      'wfo', 'x', 'y',
       $this->now
     );
     $actual = array_map(function ($forecast) {
@@ -246,8 +229,8 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
       'Partly cloudy',
       'Partly cloudy',
     ];
-    $forecastDays = $this->weatherDataService->getDailyForecast(
-      $this->routeMock,
+    $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
+      'wfo', 'x', 'y',
       $this->now
     );
     $actual = array_map(function ($forecast) {
@@ -270,8 +253,8 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
       NULL,
       NULL,
     ];
-    $forecastDays = $this->weatherDataService->getDailyForecast(
-      $this->routeMock,
+    $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
+      'wfo', 'x', 'y',
       $this->now
     );
     $actual = array_map(function ($forecast) {
