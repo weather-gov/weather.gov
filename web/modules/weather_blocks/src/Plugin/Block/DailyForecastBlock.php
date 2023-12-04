@@ -17,10 +17,16 @@ class DailyForecastBlock extends WeatherBlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    $routeName = $this->route->getRouteName();
+    $location = $this->getLocation();
 
-    if ($routeName == "weather_routes.grid") {
-      $data = $this->weatherData->getDailyForecast($this->route);
+    if ($location->grid) {
+      $grid = $location->grid;
+
+      $data = $this->weatherData->getDailyForecastFromGrid(
+        $grid->wfo,
+        $grid->x,
+        $grid->y
+      );
       return ["days" => $data];
     }
     return NULL;

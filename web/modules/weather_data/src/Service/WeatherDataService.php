@@ -291,29 +291,16 @@ class WeatherDataService {
   /**
    * Get the hourly forecast for a location.
    *
-   * The location is taken from the provided route. Note that the $now object
-   * should *NOT* be set. It's a dependency injection hack so we can mock the
-   * current date/time.
+   * Note that the $now object should *NOT* be set. It's a dependency injection
+   * hack so we can mock the current date/time.
    *
    * @return array
-   *   The hourly forecast as an associative array, or NULL if no route is
-   *   provided, or the provided route is not on the grid.
+   *   The hourly forecast as an associative array.
    */
-  public function getHourlyForecast($route, $now = FALSE) {
-    // If this isn't a grid route, don't do anything. We can only respond to
-    // requests on the grid.
-    if ($route->getRouteName() != "weather_routes.grid") {
-      return NULL;
-    }
-
+  public function getHourlyForecastFromGrid($wfo, $gridX, $gridY, $now = FALSE) {
     if (!($now instanceof \DateTimeImmutable)) {
       $now = new \DateTimeImmutable();
     }
-
-    // Since we're on the right kind of route, pull out the data we need.
-    $wfo = $route->getParameter("wfo");
-    $gridX = $route->getParameter("gridX");
-    $gridY = $route->getParameter("gridY");
 
     date_default_timezone_set('America/New_York');
 
@@ -370,27 +357,13 @@ class WeatherDataService {
   /**
    * Get the daily forecast for a location.
    *
-   * The location is taken from the provided route. Note that the $now object
-   * should *NOT* be set. It's a dependency injection hack so we can mock the
-   * current date/time.
+   * Note that the $now object should *NOT* be set. It's a dependency injection
+   * hack so we can mock the current date/time.
    *
    * @return array
-   *   The daily forecast as an associative array, or NULL if no route is
-   *   provided, or the provided route is not on the grid.
+   *   The daily forecast as an associative array.
    */
-  public function getDailyForecast($route, $now = FALSE, $defaultDays = 5) {
-    // If this isn't a grid route, don't do anything. We can only respond to
-    // requests on the grid.
-    if ($route->getRouteName() != "weather_routes.grid") {
-      return NULL;
-    }
-
-    // We pull the grid information from the
-    // route URI.
-    $wfo = $route->getParameter("wfo");
-    $gridX = $route->getParameter("gridX");
-    $gridY = $route->getParameter("gridY");
-
+  public function getDailyForecastFromGrid($wfo, $gridX, $gridY, $now = FALSE, $defaultDays = 5) {
     $forecast = $this->getFromWeatherAPI("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast");
 
     $periods = $forecast->properties->periods;

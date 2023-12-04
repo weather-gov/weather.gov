@@ -45,12 +45,18 @@ class HourlyForecastBlock extends WeatherBlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    $routeName = $this->route->getRouteName();
+    $location = $this->getLocation();
 
-    if ($routeName == "weather_routes.grid") {
+    if ($location->grid) {
+      $grid = $location->grid;
+
       $config = $this->getConfiguration();
       $max = $config["max_items"] ?? "12";
-      $data = $this->weatherData->getHourlyForecast($this->route);
+      $data = $this->weatherData->getHourlyForecastFromGrid(
+        $grid->wfo,
+        $grid->x,
+        $grid->y
+      );
       $data = array_slice($data, 0, $max);
 
       return ["hours" => $data];
