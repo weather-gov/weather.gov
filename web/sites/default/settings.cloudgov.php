@@ -46,7 +46,7 @@ foreach ($cf_service_data as $service_list) {
       $config['s3fs.settings']['public_folder'] = 'public';
       $config['s3fs.settings']['private_folder'] = 'private';
 
-      $config['s3fs.settings']['use_cname'] = TRUE;
+      $config['s3fs.settings']['use_cname'] = FALSE;
       $config['s3fs.settings']['domain'] = $server_http_host . $s3_proxy_path_cms;
       $config['s3fs.settings']['domain_root'] = 'public';
 
@@ -58,7 +58,7 @@ foreach ($cf_service_data as $service_list) {
       $config['s3fs.settings']['cssjs_host'] = '';
 
       $config['s3fs.settings']['use_https'] = TRUE;
-      $settings['s3fs.upload_as_private'] = FALSE;
+      $settings['s3fs.upload_as_private'] = TRUE;
       $settings['s3fs.use_s3_for_public'] = TRUE;
       $settings['s3fs.use_s3_for_private'] = TRUE;
     }
