@@ -58,7 +58,7 @@ final class LocationSearchBlockTest extends TestCase {
   public function testBuild() : void {
 
     $this->weatherData
-      ->method('getCurrentConditions')
+      ->method('getCurrentConditionsFromGrid')
       ->willReturn(["location" => "The Place We Are"]);
 
     $expected = [

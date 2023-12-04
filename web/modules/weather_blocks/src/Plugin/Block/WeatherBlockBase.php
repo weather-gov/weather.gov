@@ -67,4 +67,38 @@ abstract class WeatherBlockBase extends BlockBase implements ContainerFactoryPlu
     return 0;
   }
 
+  /**
+   * Get the current location that the block should be associated with.
+   *
+   * If the current route is on the grid, pulls the WFO grid information from
+   * the URL.
+   *
+   * @returns array $location An array with location info in the following
+   * structure:
+   *     array['grid'] An NWS API grid response
+   *                        ['wfo'] The NWS WFO code for the location
+   *                       ['gridX'] The X value of the grid coordinate
+   *                       ['gridY'] The Y value of the grid coordinate
+   */
+  public function getLocation() {
+    $location = (object) [
+      "grid" => FALSE,
+    ];
+
+    if ($this->route->getRouteName() === "weather_routes.grid") {
+
+      $wfo = $this->route->getParameter("wfo");
+      $x = $this->route->getParameter("gridX");
+      $y = $this->route->getParameter("gridY");
+
+      $location->grid = (object) [
+        "wfo" => $wfo,
+        "x" => $x,
+        "y" => $y,
+      ];
+    }
+
+    return $location;
+  }
+
 }

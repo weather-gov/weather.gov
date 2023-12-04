@@ -91,4 +91,28 @@ final class WeatherBlockBaseTest extends TestCase {
     $this->assertEquals($expected, $actual);
   }
 
+  /**
+   * Test that the base block can get the relevant location.
+   */
+  public function testGetLocation() : void {
+    $this->routeMock->method("getParameter")->will($this->returnValueMap([
+      ["wfo", "wfo code"],
+      ["gridX", "grid x"],
+      ["gridY", "grid y"],
+    ]));
+
+    $expected = (object) [
+      "grid" => (object) [
+        "wfo" => "wfo code",
+        "x" => "grid x",
+        "y" => "grid y",
+      ],
+    ];
+
+    $actual = $this->currentConditionsBlock->getLocation();
+
+    $this->assertEquals($expected, $actual);
+
+  }
+
 }

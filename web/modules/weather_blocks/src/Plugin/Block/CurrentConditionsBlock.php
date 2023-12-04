@@ -17,10 +17,14 @@ class CurrentConditionsBlock extends WeatherBlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    $routeName = $this->route->getRouteName();
+    $location = $this->getLocation();
 
-    if ($routeName == "weather_routes.grid") {
-      $data = $this->weatherData->getCurrentConditions($this->route);
+    if ($location->grid) {
+      $grid = $location->grid;
+      $data = $this->weatherData->getCurrentConditionsFromGrid(
+        $grid->wfo,
+        $grid->x,
+        $grid->y);
       return $data;
     }
     return NULL;

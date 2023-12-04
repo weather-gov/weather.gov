@@ -221,27 +221,9 @@ class WeatherDataService {
   }
 
   /**
-   * Get the current weather conditions at a location.
-   *
-   * The location is taken from the provided route.
-   *
-   * @return array
-   *   The current conditions as an associative array, or
-   *   NULL if no route is provided, or the provided route is not on the grid.
+   * Get the current weather conditions at a WFO grid location.
    */
-  public function getCurrentConditions($route) {
-
-    // If this isn't a grid route, don't do anything. We can only respond to
-    // requests on the grid.
-    if ($route->getRouteName() != "weather_routes.grid") {
-      return NULL;
-    }
-
-    // Since we're on the right kind of route, pull out the data we need.
-    $wfo = $route->getParameter("wfo");
-    $gridX = $route->getParameter("gridX");
-    $gridY = $route->getParameter("gridY");
-    $location = $route->getParameter("location");
+  public function getCurrentConditionsFromGrid($wfo, $gridX, $gridY) {
 
     date_default_timezone_set('America/New_York');
 
@@ -288,7 +270,7 @@ class WeatherDataService {
       'feels_like' => (int) round($feelsLike),
       'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
       'icon' => $this->legacyMapping->$obsKey->icon,
-      'location' => $location,
+      'location' => "SOMEWHERE - FIX THIS SOON",
       // C to F.
       'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
       'timestamp' => [
