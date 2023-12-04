@@ -27,9 +27,9 @@ class LocationSearchBlock extends WeatherBlockBase {
         $grid->y
       );
 
-      if($data) {
+      if ($data) {
         return [
-          'location' => $data["location"]
+          'location' => $data["location"],
         ];
       }
     }
