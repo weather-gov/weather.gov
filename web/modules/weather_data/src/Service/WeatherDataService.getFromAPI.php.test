@@ -1,0 +1,80 @@
+<?php
+
+namespace Drupal\weather_data\Service;
+
+use Drupal\Core\StringTranslation\TranslationInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the WeatherDataService getCurrentConditions method.
+ */
+final class WeatherDataServiceGetFromApiTest extends TestCase {
+  /**
+   * The mocked HTTP client.
+   *
+   * @var httpClientMock
+   */
+  protected $httpClientMock;
+
+  /**
+   * The WeatherDataService object under test.
+   *
+   * @var weatherDataService
+   */
+  protected $weatherDataService;
+
+  /**
+   * Common setup for all component tests.
+   */
+  protected function setUp() : void {
+    parent::setUp();
+
+    $this->httpClientMock = new MockHandler([]);
+    $stack = HandlerStack::create($this->httpClientMock);
+    $client = new Client(['handler' => $stack]);
+
+    // Just return the input string. The translation manager is tested by Drupal
+    // so we don't need to.
+    $translationManager = $this->createStub(TranslationInterface::class);
+    $translationManager->method('translate')->will(
+      $this->returnCallback(
+        function ($str) {
+          return $str;
+        }
+      )
+    );
+
+    $this->weatherDataService = new WeatherDataService($client, $translationManager);
+  }
+
+  /**
+   * Tests that the method fetches and parses whatever the API returns.
+   */
+  public function testGetsApiData(): void {
+    $expected = (object) ["response" => "here"];
+    $this->httpClientMock->append(new Response(200, ['Content-type' => 'application/json'], '{"response":"here"}'));
+
+    $actual = $this->weatherDataService->getFromWeatherAPI("my url");
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Tests that the method caches results.
+   */
+  public function testCachesApiData(): void {
+    $this->httpClientMock->append(new Response(200, ['Content-type' => 'application/json'], '{"response":"here"}'));
+    $first = $this->weatherDataService->getFromWeatherAPI("my url");
+
+    // Change the response and call it again. We should get the same response.
+    $this->httpClientMock->append(new Response(200, ['Content-type' => 'application/json'], '{"here":"response"}'));
+    $second = $this->weatherDataService->getFromWeatherAPI("my url");
+
+    $this->assertEquals($second, $first);
+  }
+
+}
