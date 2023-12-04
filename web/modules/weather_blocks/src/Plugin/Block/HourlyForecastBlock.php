@@ -53,10 +53,7 @@ class HourlyForecastBlock extends WeatherBlockBase {
       $data = $this->weatherData->getHourlyForecast($this->route);
       $data = array_slice($data, 0, $max);
 
-      return [
-        '#theme' => "weather_blocks_hourly_forecast",
-        '#data' => $data,
-      ];
+      return ["hours" => $data];
     }
     return NULL;
   }

@@ -60,10 +60,7 @@ final class CurrentConditionsBlockTest extends TestCase {
   public function testBuild() : void {
     $this->weatherData->method('getCurrentConditionsFromGrid')->willReturn('this is weather data');
 
-    $expected = [
-      "#theme" => "weather_blocks_current_conditions",
-      "#data" => "this is weather data",
-    ];
+    $expected = "this is weather data";
     $actual = $this->currentConditionsBlock->build();
 
     $this->assertEquals($expected, $actual);

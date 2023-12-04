@@ -52,6 +52,13 @@ class WeatherDataService {
   private $currentConditions;
 
   /**
+   * Cache of API calls for this request.
+   *
+   * @var apiCache
+   */
+  private $apiCache;
+
+  /**
    * Constructor.
    */
   public function __construct(ClientInterface $httpClient, TranslationInterface $t) {
@@ -62,11 +69,32 @@ class WeatherDataService {
 
     $this->currentConditions = FALSE;
 
+    $this->apiCache = [];
+
     $this->legacyMapping = json_decode(
       file_get_contents(
         __DIR__ . "/legacyMapping.json"
       )
     );
+  }
+
+  /**
+   * Get data from the weather API.
+   *
+   * The results for any given URL are cached for the duration of the current
+   * response. The cache is not persisted across responses.
+   *
+   * Disable phpcs on the next line because it does not like method names with
+   * sequential uppercase characters, but... I'm not camel-casing "API".
+   */
+  public function getFromWeatherAPI($url) { // phpcs:ignore
+    if (!array_key_exists($url, $this->apiCache)) {
+      $response = $this->client->get($url);
+      $response = json_decode($response->getBody());
+      $this->apiCache[$url] = $response;
+    }
+
+    return $this->apiCache[$url];
   }
 
   /**
@@ -175,8 +203,7 @@ class WeatherDataService {
    */
   public function getGridFromLatLon($lat, $lon) {
     try {
-      $locationResponse = $this->client->get("https://api.weather.gov/points/$lat,$lon");
-      $locationMetadata = json_decode($locationResponse->getBody());
+      $locationMetadata = $this->getFromWeatherAPI("https://api.weather.gov/points/$lat,$lon");
 
       return [
         "wfo" => $locationMetadata->properties->gridId,
@@ -197,77 +224,68 @@ class WeatherDataService {
    * Get the current weather conditions at a WFO grid location.
    */
   public function getCurrentConditionsFromGrid($wfo, $gridX, $gridY) {
-    // This object is only created once per request, so we can store the
-    // results of the API call in a member variable. If the variable is false,
-    // we haven't fetched data yet so do that. Otherwise, just return what's in
-    // the variable already.
-    if ($this->currentConditions == FALSE) {
-      // Since we're on the right kind of route, pull out the data we need.
-      date_default_timezone_set('America/New_York');
 
-      $obsStationsResponse = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
-      $obsStationsMetadata = json_decode($obsStationsResponse->getBody());
+    date_default_timezone_set('America/New_York');
 
-      $observationStation = $obsStationsMetadata->features[0];
+    $obsStationsMetadata = $this->getFromWeatherAPI("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
 
-      $obsResponse = $this->client->get($observationStation->id . "/observations?limit=1");
-      $obs = json_decode($obsResponse->getBody())->features[0]->properties;
+    $observationStation = $obsStationsMetadata->features[0];
 
-      $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
+    $obs = $this->getFromWeatherAPI($observationStation->id . "/observations?limit=1")->features[0]->properties;
 
-      $feelsLike = $obs->heatIndex->value;
-      if ($feelsLike == NULL) {
-        $feelsLike = $obs->windChill->value;
-      }
-      if ($feelsLike == NULL) {
-        $feelsLike = $obs->temperature->value;
-      }
-      $feelsLike = 32 + (9 * $feelsLike / 5);
+    $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
 
-      $obsKey = $this->getApiObservationKey($obs);
-
-      $description = $this->legacyMapping->$obsKey->conditions;
-
-      // The cardinal and ordinal directions. North goes in twice because it
-      // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
-      $directions = ["north", "northeast", "east", "southeast", "south",
-        "southwest", "west", "northwest", "north",
-      ];
-      $shortDirections = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
-
-      // 1. Whatever degrees we got from the API, constrain it to 0°-360°.
-      // 2. Add 22.5° to it. This accounts for north starting at -22.5°
-      // 3. Use integer division by 45° to see which direction index this is.
-      // This indexes into the two direction name arrays above.
-      $directionIndex = intdiv(intval(($obs->windDirection->value % 360) + 22.5, 10), 45);
-
-      $this->currentConditions = [
-        'conditions' => [
-          'long' => $this->t->translate($description),
-          'short' => $this->t->translate($description),
-        ],
-        // C to F.
-        'feels_like' => (int) round($feelsLike),
-        'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
-        'icon' => $this->legacyMapping->$obsKey->icon,
-        'location' => "SOMEWHERE - FIX THIS SOON",
-        // C to F.
-        'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
-        'timestamp' => [
-          'formatted' => $timestamp->format("l g:i A T"),
-          'utc' => (int) $timestamp->format("U"),
-        ],
-        'wind' => [
-          // Kph to mph.
-          'speed' => (int) round($obs->windSpeed->value * 0.6213712),
-          'angle' => $obs->windDirection->value,
-          'direction' => $directions[$directionIndex],
-          'shortDirection' => $shortDirections[$directionIndex],
-        ],
-      ];
+    $feelsLike = $obs->heatIndex->value;
+    if ($feelsLike == NULL) {
+      $feelsLike = $obs->windChill->value;
     }
+    if ($feelsLike == NULL) {
+      $feelsLike = $obs->temperature->value;
+    }
+    $feelsLike = 32 + (9 * $feelsLike / 5);
 
-    return $this->currentConditions;
+    $obsKey = $this->getApiObservationKey($obs);
+
+    $description = $this->legacyMapping->$obsKey->conditions;
+
+    // The cardinal and ordinal directions. North goes in twice because it
+    // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
+    $directions = ["north", "northeast", "east", "southeast", "south",
+      "southwest", "west", "northwest", "north",
+    ];
+    $shortDirections = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
+
+    // 1. Whatever degrees we got from the API, constrain it to 0°-360°.
+    // 2. Add 22.5° to it. This accounts for north starting at -22.5°
+    // 3. Use integer division by 45° to see which direction index this is.
+    // This indexes into the two direction name arrays above.
+    $directionIndex = intdiv(intval(($obs->windDirection->value % 360) + 22.5, 10), 45);
+
+    return [
+      'conditions' => [
+        'long' => $this->t->translate($description),
+        'short' => $this->t->translate($description),
+      ],
+      // C to F.
+      'feels_like' => (int) round($feelsLike),
+      'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
+      'icon' => $this->legacyMapping->$obsKey->icon,
+      'location' => "SOMEWHERE - FIX THIS SOON",
+      // C to F.
+      'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
+      'timestamp' => [
+        'formatted' => $timestamp->format("l g:i A T"),
+        'utc' => (int) $timestamp->format("U"),
+      ],
+      'wind' => [
+        // Kph to mph.
+        'speed' => (int) round($obs->windSpeed->value * 0.6213712),
+        'angle' => $obs->windDirection->value,
+        'direction' => $directions[$directionIndex],
+        'shortDirection' => $shortDirections[$directionIndex],
+      ],
+    ];
+
   }
 
   /**
@@ -299,14 +317,12 @@ class WeatherDataService {
 
     date_default_timezone_set('America/New_York');
 
-    $forecast = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast/hourly");
-    $forecast = json_decode($forecast->getBody());
+    $forecast = $this->getFromWeatherAPI("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast/hourly");
 
     // Get a point from the WFO grid. Any will do. We will use that to fetch the
     // appropriate timezone from the /points API endpoint.
     $point = $forecast->geometry->coordinates[0][0];
-    $timezone = $this->client->get("https://api.weather.gov/points/$point[1],$point[0]");
-    $timezone = json_decode($timezone->getBody());
+    $timezone = $this->getFromWeatherAPI("https://api.weather.gov/points/$point[1],$point[0]");
     $timezone = $timezone->properties->timeZone;
 
     $forecast = $forecast->properties->periods;
@@ -375,8 +391,7 @@ class WeatherDataService {
     $gridX = $route->getParameter("gridX");
     $gridY = $route->getParameter("gridY");
 
-    $forecast = $this->client->get("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast");
-    $forecast = json_decode($forecast->getBody());
+    $forecast = $this->getFromWeatherAPI("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast");
 
     $periods = $forecast->properties->periods;
 

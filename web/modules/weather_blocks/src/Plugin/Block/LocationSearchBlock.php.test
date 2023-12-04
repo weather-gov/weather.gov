@@ -62,7 +62,6 @@ final class LocationSearchBlockTest extends TestCase {
       ->willReturn(["location" => "The Place We Are"]);
 
     $expected = [
-      "#theme" => "weather_blocks_location_search",
       "location" => "The Place We Are",
     ];
 

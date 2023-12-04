@@ -72,10 +72,11 @@ abstract class WeatherBlockBase extends BlockBase implements ContainerFactoryPlu
    *
    * If the current route is on the grid, pulls the WFO grid information from
    * the URL.
+   *
    * @returns array $location An array with location info in the following
    * structure:
    *     array['grid'] An NWS API grid response
-   *.                       ['wfo'] The NWS WFO code for the location
+   *                        ['wfo'] The NWS WFO code for the location
    *                       ['gridX'] The X value of the grid coordinate
    *                       ['gridY'] The Y value of the grid coordinate
    */

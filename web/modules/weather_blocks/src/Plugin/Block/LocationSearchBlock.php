@@ -31,7 +31,6 @@ class LocationSearchBlock extends WeatherBlockBase {
     }
 
     return [
-      '#theme' => "weather_blocks_location_search",
       'location' => $location,
     ];
   }

@@ -240,26 +240,7 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
 
       $this->assertEquals((object) $expected, (object) $actual);
     }
-  }
 
-  /**
-   * Tests that curent conditions results are cached.
-   */
-  public function testCaching(): void {
-    // First setup the API to return no feels-like temperature and get the
-    // conditions accordingly.
-    $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
-    $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-    // Now setup the API to return both heat index and wind chill and get the
-    // conditions again.
-    $this->setupHappyPath("observation.good-both.json");
-    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-    // The output from the second call should be the based on the no-feels-like
-    // setup because the results should be cached. The API should not be called
-    // again.
-    $this->assertEquals((object) $expected, (object) $actual);
   }
 
 }

@@ -21,13 +21,11 @@ class CurrentConditionsBlock extends WeatherBlockBase {
 
     if ($location->grid) {
       $grid = $location->grid;
-      return [
-        '#theme' => "weather_blocks_current_conditions",
-        '#data' => $this->weatherData->getCurrentConditionsFromGrid(
-          $grid->wfo,
-          $grid->x,
-          $grid->y),
-      ];
+      $data = $this->weatherData->getCurrentConditionsFromGrid(
+        $grid->wfo,
+        $grid->x,
+        $grid->y);
+      return $data;
     }
     return NULL;
   }
