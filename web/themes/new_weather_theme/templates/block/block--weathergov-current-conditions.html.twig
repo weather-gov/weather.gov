@@ -2,20 +2,20 @@
 <div class="grid-row flex-row margin-y-4 tablet:margin-left-4 weather-gov-current-conditions">
   {# First column: weather icon #}
   <div class="icon margin-right-1">
-    {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content['#data']["icon"] )}}
+    {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon )}}
   </div>
   
   {# Second column: temperature and conditions #}
   <div>
     {# First row is temperature #}
     <div class="font-body-3xl">
-      {{ content["#data"]["temperature"] }}
+      {{ content.temperature }}
       <span class="font-body-lg position-absolute display-inline-block left-full margin-top-05">℉</span>
     </div>
 
     {# Second row of the column is just the conditions text #}
     <div>
-      {{ content["#data"]["conditions"]["short"]}}
+      {{ content.conditions.short }}
     </div>
   </div>
 
@@ -23,7 +23,7 @@
   <div class="display-flex flex-column margin-left-6">
 
     <div class="font-body-lg margin-top-05">
-      {{ content["#data"]["feels_like"] }}
+      {{ content.feels_like }}
       <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-2px">℉</span>
     </div>
 
@@ -33,14 +33,14 @@
 
     <div class="item margin-top-2">
       {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
-      {{ "Humidity: @humidity%" | t({ "@humidity": content["#data"]["humidity"] }) }}
+      {{ "Humidity: @humidity%" | t({ "@humidity": content.humidity }) }}
     </div>
 
     <div class="item">
       {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
       {{ "Wind: @windSpeed mph @windDirection" | t({
-        "@windSpeed": content["#data"]["wind"]["speed"],
-        "@windDirection": content["#data"]["wind"]["shortDirection"]
+        "@windSpeed": content.wind.speed,
+        "@windDirection": content.wind.shortDirection
         })
       }}
     </div>
@@ -52,8 +52,8 @@
     <p class="margin-0 font-body-3xs text-gray-50">
       {{ 'Weather as of' | t }}
       {# Datetimes are localized in client-side Javascript. #}
-      <weather-timestamp data-utc="{{ content["#data"]["timestamp"]["utc"] }}">
-        {{ content["#data"]["timestamp"]["formatted"] }}
+      <weather-timestamp data-utc="{{ content.timestamp.utc }}">
+        {{ content.timestamp.formatted }}
       </weather-timestamp>
     </p>
     <p class="margin-0 margin-top-05">
@@ -62,18 +62,18 @@
           Humidity is <strong>@humidity%</strong>"
           |
           t({
-            "@place": content["#data"]["location"],
-            "@conditions": content["#data"]["conditions"]["long"] | lower,
-            "@temperature": content["#data"]["temperature"],
-            "@humidity": content["#data"]["humidity"]
+            "@place": content.location,
+            "@conditions": content.conditions.long | lower,
+            "@temperature": content.temperature,
+            "@humidity": content.humidity
           })
-      }}{% if content["#data"]["wind"]["speed"] > 0 %}
+      }}{% if content.wind.speed > 0 %}
       {{
         "with <strong>@windSpeed mph winds</strong> from the @windDirection"
         |
         t({
-          "@windSpeed": content["#data"]["wind"]["speed"],
-          "@windDirection": content["#data"]["wind"]["direction"]
+          "@windSpeed": content.wind.speed,
+          "@windDirection": content.wind.direction
         })
       }}{% endif %}.
     </p>

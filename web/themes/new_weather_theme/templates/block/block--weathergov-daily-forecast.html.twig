@@ -12,7 +12,7 @@ set classes = [
   {% endif %}
   {{ title_suffix }}
   <div class="grid-row flex-row minh-card">
-    {%  for data in content["#data"] %}
+    {%  for data in content.days %}
       {%  set hasPrecipitation = data.daytime.probabilityOfPrecipitation %}
       <div class="tablet:grid-col padding-4 margin-right-2">
         <time class="display-block text-bold tablet:text-center font-heading-md" datetime="{{ data.daytime.startTime }}">
