@@ -58,11 +58,29 @@ final class LocationSearchBlockTest extends TestCase {
   public function testBuild() : void {
 
     $this->weatherData
-      ->method('getCurrentConditionsFromGrid')
-      ->willReturn(["location" => "The Place We Are"]);
+      ->method('getPlaceFromGrid')
+      ->willReturn("hiya");
 
     $expected = [
-      "location" => "The Place We Are",
+      "place" => "hiya",
+    ];
+
+    $actual = $this->locationSearchBlock->build();
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+  /**
+   * Test that the build method returns NULL if there is no location.
+   */
+  public function testWithNoLocation() : void {
+
+    $this->routeMock
+      ->method('getRouteName')
+      ->willReturn("not grid");
+
+    $expected = [
+      "place" => NULL,
     ];
 
     $actual = $this->locationSearchBlock->build();

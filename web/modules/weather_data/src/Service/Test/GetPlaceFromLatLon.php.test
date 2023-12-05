@@ -1,0 +1,78 @@
+<?php
+
+namespace Drupal\weather_data\Service;
+
+include_once realpath(__DIR__ . "/../WeatherDataService.php");
+
+use Drupal\Core\StringTranslation\TranslationInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test getting place information from the grid.
+ */
+final class GetPlaceFromLatLonTest extends TestCase {
+  /**
+   * The mocked HTTP client.
+   *
+   * @var httpClientMock
+   */
+  protected $httpClientMock;
+
+  /**
+   * The WeatherDataService object under test.
+   *
+   * @var weatherDataService
+   */
+  protected $weatherDataService;
+
+  /**
+   * Common setup for all component tests.
+   */
+  protected function setUp() : void {
+    parent::setUp();
+
+    $this->httpClientMock = new MockHandler([]);
+    $stack = HandlerStack::create($this->httpClientMock);
+    $client = new Client(['handler' => $stack]);
+
+    // Just return the input string. The translation manager is tested by Drupal
+    // so we don't need to.
+    $translationManager = $this->createStub(TranslationInterface::class);
+    $translationManager->method('translate')->will(
+      $this->returnCallback(
+        function ($str) {
+          return $str;
+        }
+      )
+    );
+
+    $this->weatherDataService = new WeatherDataService($client, $translationManager);
+  }
+
+  /**
+   * Tests the happy path.
+   */
+  public function testHappyPath(): void {
+
+    $expected = [
+      "city" => "City",
+      "state" => "Not City, but State",
+    ];
+
+    $this->httpClientMock->append(
+      new Response(200,
+        ['Content-type' => 'application/geo+json'],
+        '{"properties":{"relativeLocation":{"properties":{"city":"City","state":"Not City, but State"}}}}'
+      ),
+    );
+
+    $actual = $this->weatherDataService->getPlaceFromLatLon(32, -93);
+
+    $this->assertEquals((object) $expected, (object) $actual);
+  }
+
+}

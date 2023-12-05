@@ -81,7 +81,6 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
       "feels_like" => 45,
       "humidity" => 88,
       "icon" => "snow.svg",
-      "location" => "SOMEWHERE - FIX THIS SOON",
       "temperature" => 45,
       "timestamp" => [
         "formatted" => "Thursday 8:00 PM GMT+0000",
@@ -199,7 +198,6 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
       "feels_like" => 45,
       "humidity" => 88,
       "icon" => "snow.svg",
-      "location" => "SOMEWHERE - FIX THIS SOON",
       "temperature" => 45,
       "timestamp" => [
         "formatted" => "Thursday 8:00 PM GMT+0000",
