@@ -191,25 +191,6 @@ jobs:
           path: coverage.xml
           retention-days: 1
 
-  report-code-coverage:
-    name: report code coverage
-    runs-on: ubuntu-latest
-    needs: [php-unit-tests, should-test]
-
-    steps:
-      - name: get coverage output
-        if: needs.should-test.outputs.yes == 'true'
-        uses: actions/download-artifact@v3
-        with:
-          name: coverage-report
-
-      - name: report coverage
-        if: needs.should-test.outputs.yes == 'true'
-        uses: lucassabreu/comment-coverage-clover@v0.10.2
-        with:
-          file: coverage.xml
-          signature: "code coverage report"
-
   min-code-coverage:
     name: "90% code coverage"
     runs-on: ubuntu-latest
