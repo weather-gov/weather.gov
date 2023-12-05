@@ -2,10 +2,6 @@
 
 namespace Drupal\weather_data\Service\Test;
 
-use Drupal\Core\StringTranslation\TranslationInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 
 /**
