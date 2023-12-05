@@ -1,14 +1,6 @@
 <?php
 
-namespace Drupal\weather_data\Service;
-
-include_once "WeatherDataService.php";
-
-use Drupal\Core\StringTranslation\TranslationInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use PHPUnit\Framework\TestCase;
+namespace Drupal\weather_data\Service\Test;
 
 /**
  * Tests for WeatherDataService filterToFutureDays.
@@ -17,14 +9,7 @@ use PHPUnit\Framework\TestCase;
  * forecast periods to future days, in other words periods
  * that exclude the current day/night.
  */
-final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
-  /**
-   * The WeatherDataService object under test.
-   *
-   * @var weatherDataService
-   */
-  protected $weatherDataService;
-
+final class FilterToFutureDaysTest extends Base {
   /**
    * The static time used for testing.
    *
@@ -45,19 +30,6 @@ final class WeatherDataServiceFilterToFutureDaysTest extends TestCase {
       \DateTimeInterface::ISO8601_EXPANDED,
       '2023-11-27T12:00:00-7:00'
     );
-
-    // Set up the mocks. These allow us to pass
-    // the correct objects to the WeatherDataService
-    // constructor.
-    $stack = HandlerStack::create(
-      new MockHandler([])
-    );
-    $client = new Client(['handler' => $stack]);
-
-    $translationManager = $this->createStub(TranslationInterface::class);
-
-    // The WeatherDataService instance we will be testing.
-    $this->weatherDataService = new WeatherDataService($client, $translationManager);
   }
 
   /**

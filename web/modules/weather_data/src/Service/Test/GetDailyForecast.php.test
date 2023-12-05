@@ -1,34 +1,13 @@
 <?php
 
-namespace Drupal\weather_data\Service;
+namespace Drupal\weather_data\Service\Test;
 
-include_once "WeatherDataService.php";
-
-use Drupal\Core\StringTranslation\TranslationInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the WeatherDataService getHourlyForecast method.
  */
-final class WeatherDataServiceGetDailyForecastTest extends TestCase {
-  /**
-   * The mocked HTTP client.
-   *
-   * @var httpClientMock
-   */
-  protected $httpClientMock;
-
-  /**
-   * The WeatherDataService object under test.
-   *
-   * @var weatherDataService
-   */
-  protected $weatherDataService;
-
+final class GetDailyForecastTest extends Base {
   /**
    * The static time used for testing.
    *
@@ -47,23 +26,6 @@ final class WeatherDataServiceGetDailyForecastTest extends TestCase {
       \DateTimeInterface::ISO8601_EXPANDED,
       '2023-11-27T12:00:00-7:00'
     );
-
-    $this->httpClientMock = new MockHandler([]);
-    $stack = HandlerStack::create($this->httpClientMock);
-    $client = new Client(['handler' => $stack]);
-
-    // Just return the input string. The translation manager is tested by Drupal
-    // so we don't need to.
-    $translationManager = $this->createStub(TranslationInterface::class);
-    $translationManager->method('translate')->will(
-      $this->returnCallback(
-        function ($str) {
-          return $str;
-        }
-      )
-    );
-
-    $this->weatherDataService = new WeatherDataService($client, $translationManager);
   }
 
   /**
