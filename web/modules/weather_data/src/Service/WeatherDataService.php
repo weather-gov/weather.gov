@@ -79,7 +79,6 @@ class WeatherDataService {
   }
 
   /**
-<<<<<<< HEAD
    * Get data from the weather API.
    *
    * The results for any given URL are cached for the duration of the current
@@ -99,20 +98,6 @@ class WeatherDataService {
   }
 
   /**
-   * Return a condition stripped of any parentheticals.
-   *
-   * @return string
-   *   A condition text with any parenthetical
-   *    statements removed
-   */
-  private function removeParenthetical($str) {
-    $parts = explode("(", $str);
-    return $parts[0];
-  }
-
-  /**
-=======
->>>>>>> 925a7fc (lint fixes)
    * Return only the periods that are after today.
    *
    * This private method will filter the forecast periods
@@ -290,7 +275,7 @@ class WeatherDataService {
 
     $obsKey = $this->getApiObservationKey($obs);
 
-    $description = $this->legacyMapping->$obsKey->conditions;
+    $description = ucfirst(strtolower($obs->textDescription));
 
     // The cardinal and ordinal directions. North goes in twice because it
     // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
