@@ -21,7 +21,7 @@ class LocationSearchBlock extends WeatherBlockBase {
 
     if ($location->grid) {
       $grid = $location->grid;
-      $data = $this->weatherData->getCurrentConditionsFromGrid(
+      $data = $this->weatherData->getPlaceFromGrid(
         $grid->wfo,
         $grid->x,
         $grid->y
@@ -29,13 +29,13 @@ class LocationSearchBlock extends WeatherBlockBase {
 
       if ($data) {
         return [
-          'location' => $data["location"],
+          'place' => $data,
         ];
       }
     }
 
     return [
-      'location' => NULL,
+      'place' => NULL,
     ];
   }
 

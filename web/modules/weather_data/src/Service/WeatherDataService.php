@@ -221,6 +221,47 @@ class WeatherDataService {
   }
 
   /**
+   * Get a place from a WFO grid.
+   */
+  public function getPlaceFromGrid($wfo, $x, $y) {
+    $geometry = $this->getGeometryFromGrid($wfo, $x, $y);
+    $point = $geometry[0];
+
+    return $this->getPlaceFromLatLon($point->lat, $point->lon);
+  }
+
+  /**
+   * Get a place from a latitude and longitude.
+   */
+  public function getPlaceFromLatLon($lat, $lon) {
+    $point = $this->getFromWeatherAPI("https://api.weather.gov/points/$lat,$lon");
+    $place = $point->properties->relativeLocation->properties;
+
+    return (object) [
+      "city" => $place->city,
+      "state" => $place->state,
+    ];
+  }
+
+  /**
+   * Get a geometry from a WFO grid.
+   *
+   * @return stdClass
+   *   An array of points representing the vertices of the WFO grid polygon.
+   */
+  public function getGeometryFromGrid($wfo, $x, $y) {
+    $gridpoint = $this->getFromWeatherAPI("https://api.weather.gov/gridpoints/$wfo/$x,$y");
+    $geometry = $gridpoint->geometry->coordinates[0];
+
+    return array_map(function ($geo) {
+      return (object) [
+        "lat" => $geo[1],
+        "lon" => $geo[0],
+      ];
+    }, $geometry);
+  }
+
+  /**
    * Get the current weather conditions at a WFO grid location.
    */
   public function getCurrentConditionsFromGrid($wfo, $gridX, $gridY) {
@@ -270,7 +311,6 @@ class WeatherDataService {
       'feels_like' => (int) round($feelsLike),
       'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
       'icon' => $this->legacyMapping->$obsKey->icon,
-      'location' => "SOMEWHERE - FIX THIS SOON",
       // C to F.
       'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
       'timestamp' => [
