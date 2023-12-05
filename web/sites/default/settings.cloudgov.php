@@ -54,6 +54,7 @@ foreach ($cf_service_data as $service_list) {
       $settings['s3fs.disable_cert_verify'] = FALSE;
 
       $settings['s3fs.use_s3_for_public'] = TRUE;
+      $settings['s3fs.upload_as_private'] = TRUE;
       // Twig templates _shouldn't_ be in the public dir (lest they be very slow)
       $settings['php_storage']['twig']['directory'] = '../storage/php';
     }
