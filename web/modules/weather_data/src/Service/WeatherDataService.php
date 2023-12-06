@@ -2,13 +2,17 @@
 
 namespace Drupal\weather_data\Service;
 
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ServerException;
 
 /**
  * A service class for fetching weather data.
  */
 class WeatherDataService {
+  use LoggerChannelTrait;
+
   /**
    * Mapping of legacy API icon paths to new icons and conditions text.
    *
@@ -87,11 +91,29 @@ class WeatherDataService {
    * Disable phpcs on the next line because it does not like method names with
    * sequential uppercase characters, but... I'm not camel-casing "API".
    */
-  public function getFromWeatherAPI($url) { // phpcs:ignore
+  public function getFromWeatherAPI($url, $attempt = 1, $delay = 75) { // phpcs:ignore
     if (!array_key_exists($url, $this->apiCache)) {
-      $response = $this->client->get($url);
-      $response = json_decode($response->getBody());
-      $this->apiCache[$url] = $response;
+      try {
+        $response = $this->client->get($url);
+        $response = json_decode($response->getBody());
+        $this->apiCache[$url] = $response;
+      }
+      catch (ServerException $e) {
+
+        $logger = $this->getLogger("Weather.gov data service");
+        $logger->notice("got 500 error on attempt $attempt for: $url");
+
+        // Back off and try again.
+        if ($attempt < 5) {
+          // Sleep is in microseconds, so scale it up to milliseconds.
+          usleep($delay * 1000);
+          return $this->getFromWeatherAPI($url, $attempt + 1, $delay * 1.65);
+        }
+
+        $logger->error("giving up on: $url");
+        throw $e;
+      }
+
     }
 
     return $this->apiCache[$url];
