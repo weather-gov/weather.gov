@@ -3,6 +3,7 @@
 namespace Drupal\weather_blocks\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
@@ -53,6 +54,55 @@ abstract class WeatherBlockBase extends BlockBase implements ContainerFactoryPlu
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $form = parent::blockForm($form, $form_state);
+    $config = $this->getConfiguration();
+    $grid = $config["grid"] ?? ",,";
+
+    $grid = explode(",", $grid);
+
+    $form["grid"] = [
+      "#type" => "fieldset",
+      "#title" => "Manual location - for testing",
+      "wfo" => [
+        "#type" => "textfield",
+        "#title" => "WFO",
+        "#default_value" => $grid[0],
+      ],
+      "gridX" => [
+        "#type" => "textfield",
+        "#title" => "Grid X coordinate",
+        "#default_value" => $grid[1],
+      ],
+      "gridY" => [
+        "#type" => "textfield",
+        "#title" => "Grid Y coordinate",
+        "#default_value" => $grid[2],
+      ],
+    ];
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    parent::blockSubmit($form, $form_state);
+
+    $grid = $form_state->getValue("grid");
+    if ($grid) {
+      $grid = $grid["wfo"] . "," . $grid["gridX"] . "," . $grid["gridY"];
+
+      $this->setConfigurationValue(
+        "grid",
+        $grid
+      );
+    }
+  }
+
+  /**
    * Disable cacheing on this block.
    *
    * Because this is displayed to anonymous users and it is location-based (or
@@ -92,10 +142,22 @@ abstract class WeatherBlockBase extends BlockBase implements ContainerFactoryPlu
       $y = $this->route->getParameter("gridY");
 
       $location->grid = (object) [
-        "wfo" => $wfo,
+        "wfo" => strtoupper($wfo),
         "x" => $x,
         "y" => $y,
       ];
+    }
+    else {
+      $configuredGrid = $this->getConfiguration()["grid"] ?? FALSE;
+      if ($configuredGrid) {
+        $parts = explode(",", $configuredGrid);
+
+        $location->grid = (object) [
+          "wfo" => strtoupper($parts[0]),
+          "x" => $parts[1],
+          "y" => $parts[2],
+        ];
+      }
     }
 
     return $location;

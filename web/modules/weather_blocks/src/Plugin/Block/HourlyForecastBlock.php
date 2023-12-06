@@ -28,6 +28,7 @@ class HourlyForecastBlock extends WeatherBlockBase {
       "#title" => "Maximum items to display",
       "#default_value" => $max,
     ];
+
     return $form;
   }
 
@@ -35,6 +36,8 @@ class HourlyForecastBlock extends WeatherBlockBase {
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
+    parent::blockSubmit($form, $form_state);
+
     $this->setConfigurationValue(
       "max_items",
       $form_state->getValue("max_items")
