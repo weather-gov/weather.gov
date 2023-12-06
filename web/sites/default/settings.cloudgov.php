@@ -7,6 +7,11 @@ $settings['file_scan_ignore_directories'] = [
 $settings['entity_update_batch_size'] = 50;
 $settings['entity_update_backup'] = TRUE;
 
+// Creating a Drupal 'private' file folder is required
+// to expose 'private' s3fs bucket upload/download for
+// images.
+$settings['file_private_path'] = dirname(DRUPAL_ROOT) . '/private';
+
 $settings['migrate_node_migrate_type_classic'] = FALSE;
 $settings['config_sync_directory'] = dirname(DRUPAL_ROOT) . '/web/config';
 
@@ -53,7 +58,8 @@ foreach ($cf_service_data as $service_list) {
       $settings['s3fs.use_https'] = TRUE;
       $settings['s3fs.disable_cert_verify'] = FALSE;
 
-      $settings['s3fs.use_s3_for_public'] = TRUE;
+      $settings['s3fs.use_s3_for_public'] = FALSE;
+      $settings['s3fs.use_s3_for_private'] = TRUE;
       $settings['s3fs.upload_as_private'] = TRUE;
       // Twig templates _shouldn't_ be in the public dir (lest they be very slow)
       $settings['php_storage']['twig']['directory'] = '../storage/php';
