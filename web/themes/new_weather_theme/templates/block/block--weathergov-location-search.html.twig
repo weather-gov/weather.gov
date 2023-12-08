@@ -20,9 +20,15 @@
   {% endif %}
 
   <form class="usa-form" data-location-search>
-    <label class="usa-label" for="weather-location-search">
-      {{ 'Search for a location' | t }}
-    </label>
+    <div class="display-flex flex-align-end">
+      <label class="usa-label" for="weather-location-search">
+        {{ 'Search for a location' | t }}
+      </label>
+      <div class="margin-x-1">|</div>
+      <div class="">
+        <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
+      </div>
+    </div>
     <div class="usa-combo-box" data-filter=".*">
       <select class="usa-select" name="weather location" id="weather-location-search">
 
