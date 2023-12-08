@@ -1,9 +1,10 @@
 ---
 name: Bug template
 about: Use this template for describing a bug that needs to be addressed
-title: ""
+title: ''
 labels: Bug
-assignees: ""
+assignees: ''
+
 ---
 
 ### Description

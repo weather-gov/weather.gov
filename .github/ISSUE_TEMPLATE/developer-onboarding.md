@@ -3,6 +3,7 @@ name: Developer Onboarding
 about: Onboarding steps for developers.
 title: 'Developer Onboarding: GH_HANDLE'
 labels: Eng
+assignees: ''
 
 ---
 
