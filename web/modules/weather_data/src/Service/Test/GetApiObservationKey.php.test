@@ -1,43 +1,11 @@
 <?php
 
-namespace Drupal\weather_data\Service;
-
-use Drupal\Core\StringTranslation\TranslationInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use PHPUnit\Framework\TestCase;
+namespace Drupal\weather_data\Service\Test;
 
 /**
  * Tests parsing of legacyMapping keys from icon URLs.
  */
-final class WeatherDataServiceGetApiObservationKeyTest extends TestCase {
-  /**
-   * The WeatherDataService object under test.
-   *
-   * @var weatherDataService
-   */
-  protected $weatherDataService;
-
-  /**
-   * Test case setup.
-   */
-  protected function setUp(): void {
-    parent::setUp();
-
-    // Set up the mocks. These allow us to pass
-    // the correct objects to the WeatherDataService
-    // constructor.
-    $stack = HandlerStack::create(
-      new MockHandler([])
-    );
-    $client = new Client(['handler' => $stack]);
-
-    $translationManager = $this->createStub(TranslationInterface::class);
-
-    // The WeatherDataService instance we will be testing.
-    $this->weatherDataService = new WeatherDataService($client, $translationManager);
-  }
+final class GetApiObservationKey extends Base {
 
   /**
    * Tests that we can map a two part icon url to a legacy key.
