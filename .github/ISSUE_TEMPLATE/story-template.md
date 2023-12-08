@@ -2,21 +2,16 @@
 name: Story template
 about: Use this template to create a story and track in our sprint board.
 title: ''
-labels: 'Feature, :rock: Story'
+labels: ''
 assignees: ''
 
 ---
 
 ### Description
 
-**Related Epic: [#Epic]**
-
 ### Questions and Considerations
 
 ### Acceptance Criteria
 - [ ]
 
-```[tasklist]
-### Tasks
-- [ ] 
-```
+` Tag the related milestone to this story`
