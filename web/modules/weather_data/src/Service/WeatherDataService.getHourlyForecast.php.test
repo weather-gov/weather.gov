@@ -115,6 +115,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
         // One minute before noon UTC, but not using UTC or America/Denver tz.
         "startTime" => "2023-11-16T03:59:59-08:00",
         "temperature" => 1,
+        "shortForecast" => "blah",
         "probabilityOfPrecipitation" => [
           "value" => 11,
         ],
@@ -124,6 +125,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
         // One hour before noon UTC, and in America/Denver tz.
         "startTime" => "2023-11-16T03:00:00-07:00",
         "temperature" => 2,
+        "shortForecast" => "bleh",
         "probabilityOfPrecipitation" => [
           "value" => 22,
         ],
@@ -133,6 +135,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
         // One hour before noon UTC.
         "startTime" => "2023-11-16T11:00:00Z",
         "temperature" => 3,
+        "shortForecast" => "bluh",
         "probabilityOfPrecipitation" => [
           "value" => 33,
         ],
@@ -154,6 +157,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
       [
         "startTime" => "2023-11-16T12:00:00-07:00",
         "temperature" => 1,
+        "shortForecast" => "thunderBOLT",
         "probabilityOfPrecipitation" => [
           "value" => 11,
         ],
@@ -162,6 +166,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
       [
         "startTime" => "2023-11-16T13:00:00-07:00",
         "temperature" => 2,
+        "shortForecast" => "lightning",
         "probabilityOfPrecipitation" => [
           "value" => 22,
         ],
@@ -172,14 +177,15 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
 
     $expected = [
       [
-        "conditions" => "No data",
+        // Conditions should be sentence-cased.
+        "conditions" => "Thunderbolt",
         "icon" => "nodata.svg",
         "probabilityOfPrecipitation" => 11,
         "time" => "12 PM",
         "temperature" => 1,
       ],
       [
-        "conditions" => "No data",
+        "conditions" => "Lightning",
         "icon" => "nodata.svg",
         "probabilityOfPrecipitation" => 22,
         "time" => "1 PM",
@@ -201,6 +207,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
         // One minute before noon UTC. This should be filtered out.
         "startTime" => "2023-11-16T03:59:59-08:00",
         "temperature" => 1,
+        "shortForecast" => "Very Very",
         "probabilityOfPrecipitation" => [
           "value" => 11,
         ],
@@ -209,6 +216,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
       [
         "startTime" => "2023-11-16T12:00:00-07:00",
         "temperature" => 2,
+        "shortForecast" => "FRIGHTENING",
         "probabilityOfPrecipitation" => [
           "value" => 22,
         ],
@@ -217,6 +225,7 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
       [
         "startTime" => "2023-11-16T13:00:00-07:00",
         "temperature" => 3,
+        "shortForecast" => "Mama mia!",
         "probabilityOfPrecipitation" => [
           "value" => 33,
         ],
@@ -227,14 +236,14 @@ final class WeatherDataServiceGetHourlyForecastTest extends TestCase {
 
     $expected = [
       [
-        "conditions" => "Rain",
+        "conditions" => "Frightening",
         "icon" => "rain.svg",
         "probabilityOfPrecipitation" => 22,
         "time" => "12 PM",
         "temperature" => 2,
       ],
       [
-        "conditions" => "Snow",
+        "conditions" => "Mama mia!",
         "icon" => "snow.svg",
         "probabilityOfPrecipitation" => 33,
         "time" => "1 PM",

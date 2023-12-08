@@ -14,26 +14,11 @@
     "type": "Polygon",
     "coordinates": [
       [
-        [
-          -105.0066349,
-          39.7603119
-        ],
-        [
-          -105.00451969999999,
-          39.738315799999995
-        ],
-        [
-          -104.97595569999999,
-          39.739937299999994
-        ],
-        [
-          -104.97806499999999,
-          39.76193359999999
-        ],
-        [
-          -105.0066349,
-          39.7603119
-        ]
+        [-105.0066349, 39.7603119],
+        [-105.00451969999999, 39.738315799999995],
+        [-104.97595569999999, 39.739937299999994],
+        [-104.97806499999999, 39.76193359999999],
+        [-105.0066349, 39.7603119]
       ]
     ]
   },
@@ -235,7 +220,7 @@
         "windSpeed": "6 to 9 mph",
         "windDirection": "NE",
         "icon": "https://api.weather.gov/icons/land/day/snow,20?size=medium",
-        "shortForecast": "Slight Chance Snow Showers (Low Cloud Cover)",
+        "shortForecast": "SLIGHT SNOW",
         "detailedForecast": "A slight chance of snow showers between 11am and 5pm. Mostly cloudy, with a high near 38. Chance of precipitation is 20%."
       },
       {
@@ -343,7 +328,7 @@
         "windSpeed": "9 mph",
         "windDirection": "W",
         "icon": "https://api.weather.gov/icons/land/day/sct?size=medium",
-        "shortForecast": "Mostly Sunny",
+        "shortForecast": "Cats And Dogs!",
         "detailedForecast": "Mostly sunny, with a high near 48."
       },
       {

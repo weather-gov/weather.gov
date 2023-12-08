@@ -75,8 +75,8 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
 
     return [
       "conditions" => [
-        "long" => "Snow",
-        "short" => "Snow",
+        "long" => "Not snow",
+        "short" => "Not snow",
       ],
       "feels_like" => 45,
       "humidity" => 88,
@@ -148,8 +148,6 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
   public function testIconIsNull(): void {
     $expected = $this->setupHappyPath("observation.bad-null-icon.json");
     $expected["icon"] = "nodata.svg";
-    $expected["conditions"]["short"] = "No data";
-    $expected["conditions"]["long"] = "No data";
 
     $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
@@ -162,8 +160,6 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
   public function testIconIsEmptyString(): void {
     $expected = $this->setupHappyPath("observation.bad-empty-icon.json");
     $expected["icon"] = "nodata.svg";
-    $expected["conditions"]["short"] = "No data";
-    $expected["conditions"]["long"] = "No data";
 
     $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
 
@@ -192,8 +188,8 @@ final class WeatherDataServiceGetCurrentConditionsTest extends TestCase {
 
     $expected = [
       "conditions" => [
-        "long" => "Snow",
-        "short" => "Snow",
+        "long" => "Not snow",
+        "short" => "Not snow",
       ],
       "feels_like" => 45,
       "humidity" => 88,

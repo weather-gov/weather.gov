@@ -98,18 +98,6 @@ class WeatherDataService {
   }
 
   /**
-   * Return a condition stripped of any parentheticals.
-   *
-   * @return string
-   *   A condition text with any parenthetical
-   *    statements removed
-   */
-  private function removeParenthetical($str) {
-    $parts = explode("(", $str);
-    return $parts[0];
-  }
-
-  /**
    * Return only the periods that are after today.
    *
    * This private method will filter the forecast periods
@@ -287,7 +275,7 @@ class WeatherDataService {
 
     $obsKey = $this->getApiObservationKey($obs);
 
-    $description = $this->legacyMapping->$obsKey->conditions;
+    $description = ucfirst(strtolower($obs->textDescription));
 
     // The cardinal and ordinal directions. North goes in twice because it
     // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
@@ -381,7 +369,7 @@ class WeatherDataService {
       $obsKey = $this->getApiObservationKey($period);
 
       return [
-        "conditions" => $this->legacyMapping->$obsKey->conditions,
+        "conditions" => $this->t->translate(ucfirst(strtolower($period->shortForecast))),
         "icon" => $this->legacyMapping->$obsKey->icon,
         "probabilityOfPrecipitation" => $period->probabilityOfPrecipitation->value,
         "time" => $timestamp,
@@ -438,10 +426,8 @@ class WeatherDataService {
       // Get any mapped condition and/or icon values.
       $obsKey = $this->getApiObservationKey($daytime);
 
-      // The short forecast name should be mapped to
-      // the legacyMapping and translated.
-      $shortForecast = $this->legacyMapping->$obsKey->conditions;
-      $shortForecast = $this->removeParenthetical($shortForecast);
+      // Sentence-case the forecast description.
+      $shortForecast = ucfirst(strtolower($daytime->shortForecast));
 
       $daytimeForecast = [
         'shortDayName' => $shortDayName,
