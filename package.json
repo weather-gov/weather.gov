@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "axe-core": "^4.8.2",
-    "cypress": "^13.3.0",
+    "cypress": "^13.6.1",
     "cypress-axe": "^1.5.0",
     "dayjs": "^1.11.10",
     "eslint": "^8.55.0",
