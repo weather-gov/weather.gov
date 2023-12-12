@@ -105,12 +105,17 @@ const setupBrowserGeolocation = async () => {
           goToLocationPage(lat, long);
         },
         // Error callback
-        ({ code }) => {
+        ({ code, message }) => {
           if (code > 1) {
             // There was a problem getting the user's location. They allowed it,
             // but the browser gave us an error.
             // (Error code 1 is for when the user denies access to location, so
             // for our purposes, that is not an error.)
+
+            // eslint-disable-next-line no-alert
+            alert(
+              `There was a problem getting your location. Here's what your browser told us: ${message}`,
+            );
           }
         },
       );
