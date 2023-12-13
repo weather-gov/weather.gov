@@ -262,6 +262,13 @@ jobs:
           project: tests/e2e
           cache-key: cypress-e2e-${{ hashFiles('package-lock.json') }}
 
+      - name: save screenshots
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: tests/e2e/cypress/screenshots/screenshots.cy.js/
+
   accessibility-tests:
     name: accessibility tests
     runs-on: ubuntu-latest
