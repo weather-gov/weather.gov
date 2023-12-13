@@ -66,3 +66,23 @@ foreach ($cf_service_data as $service_list) {
     }
   }
 }
+
+$application_environment = $cf_application_data['space_name'];
+switch ($application_environment) {
+  case "greg":
+    $config['samlauth.authentication']['sp_entity_id'] = 'https://weathergov-greg.app.cloud.gov';
+    break;
+
+  case "eric":
+    $config['config_split.config_split.production']['status'] = TRUE;
+    $config['samlauth.authentication']['sp_entity_id'] = 'https://weathergov-eric.app.cloud.gov';
+    break;
+
+  case "staging":
+    $config['samlauth.authentication']['sp_entity_id'] = 'https://weathergov-staging.app.cloud.gov';
+    break;
+
+  case "prod":
+    $config['samlauth.authentication']['sp_entity_id'] = 'https://beta.weather.gov';
+    break;
+}

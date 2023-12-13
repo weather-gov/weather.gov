@@ -86,3 +86,8 @@ node_modules
 
 # Code coverage
 /.coverage
+
+*.pem
+*.crt
+credentials-*.json
+.env

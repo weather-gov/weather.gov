@@ -33,3 +33,6 @@
 /.coverage
 
 .DS_Store
+
+credentials-*.json
+*.pem
