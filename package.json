@@ -30,7 +30,8 @@
     "eslint-plugin-import": "^2.29.0",
     "prettier": "^3.1.1",
     "stylelint": "^15.11.0",
-    "stylelint-config-standard-scss": "^11.1.0"
+    "stylelint-config-standard-scss": "^11.1.0",
+    "xml-parse": "^0.4.0"
   },
   "prettier": {},
   "scripts": {
@@ -38,6 +39,7 @@
     "js-format": "npx prettier -w web/themes/**/assets/**/*.js tests/**/*.js *.js",
     "js-lint": "eslint web/**/assets/**/*.js tests/**/*.js *.js",
     "style-format": "npx prettier -w web/themes/**/*.scss",
-    "style-lint": "stylelint **/*.scss"
+    "style-lint": "stylelint **/*.scss",
+    "svg-templates": "node ./scripts/svg-to-twig.js ./web/themes/new_weather_theme/assets/images/weather/icons/*.svg ./web/themes/new_weather_theme/assets/images/weather/icons/conditions/*.svg"
   }
 }
