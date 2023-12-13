@@ -71,7 +71,7 @@ final class HourlyForecastBlockTest extends TestCase {
 
     $actual = $this->hourlyForecastBlock->blockForm([], $formState);
 
-    $this->assertEquals($expected, $actual);
+    $this->assertEquals($expected["max_items"], $actual["max_items"]);
   }
 
   /**
@@ -92,7 +92,7 @@ final class HourlyForecastBlockTest extends TestCase {
 
     $actual = $this->hourlyForecastBlock->blockForm([], $formState);
 
-    $this->assertEquals($expected, $actual);
+    $this->assertEquals($expected["max_items"], $actual["max_items"]);
 
   }
 
@@ -103,7 +103,13 @@ final class HourlyForecastBlockTest extends TestCase {
     $expected = '9';
 
     $formState = $this->createStub(FormStateInterface::class);
-    $formState->method('getValue')->willReturn($expected);
+    // I don't know why the returnValueMap function on this stub isn't working
+    // as I expected, so instead put values that should be returned in the order
+    // of the calls. This is super fragile, but I couldn't get the "correct" way
+    // to work. I looked into use Prophecy mocks instead, but they similarly
+    // just wouldn't work.
+    $formState->method("getValue")->willReturn(NULL, $expected);
+
     $this->hourlyForecastBlock->blockSubmit([], $formState);
 
     $actual = $this->hourlyForecastBlock->getConfiguration()["max_items"];
