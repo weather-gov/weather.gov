@@ -135,6 +135,7 @@ abstract class WeatherBlockBase extends BlockBase implements ContainerFactoryPlu
       "grid" => FALSE,
     ];
 
+    // If we're on a grid route, pull location from the URL.
     if ($this->route->getRouteName() === "weather_routes.grid") {
 
       $wfo = $this->route->getParameter("wfo");
@@ -147,6 +148,7 @@ abstract class WeatherBlockBase extends BlockBase implements ContainerFactoryPlu
         "y" => $y,
       ];
     }
+    // Otherwise, attempt to get it from configuration.
     else {
       $configuredGrid = $this->getConfiguration()["grid"] ?? FALSE;
       if ($configuredGrid) {
