@@ -7,12 +7,18 @@ use Drupal\weather_data\Service\WeatherDataService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the WeatherDataService getCurrentConditions method.
  */
 abstract class Base extends TestCase {
+  /**
+   * History of HTTP calls made during a test.
+   */
+  protected $httpCallStack;
+
   /**
    * The mocked HTTP client.
    *
@@ -33,8 +39,12 @@ abstract class Base extends TestCase {
   protected function setUp() : void {
     parent::setUp();
 
+    $this->httpCallStack = [];
+    $history = Middleware::history($this->httpCallStack);
+
     $this->httpClientMock = new MockHandler([]);
     $stack = HandlerStack::create($this->httpClientMock);
+    $stack->push($history);
     $client = new Client(['handler' => $stack]);
 
     // Just return the input string. The translation manager is tested by Drupal

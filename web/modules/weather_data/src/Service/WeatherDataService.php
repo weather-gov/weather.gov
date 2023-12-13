@@ -91,7 +91,7 @@ class WeatherDataService {
    * Disable phpcs on the next line because it does not like method names with
    * sequential uppercase characters, but... I'm not camel-casing "API".
    */
-  public function getFromWeatherAPI($url, $attempt = 1, $delay = 75) { // phpcs:ignore
+  public function getFromWeatherAPI($url, $attempt = 1, $delay = 75) {
     if (!array_key_exists($url, $this->apiCache)) {
       try {
         $response = $this->client->get($url);
@@ -278,11 +278,24 @@ class WeatherDataService {
 
     date_default_timezone_set('America/New_York');
 
-    $obsStationsMetadata = $this->getFromWeatherAPI("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
+    $obsStations = $this->getFromWeatherAPI("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations");
+    $obsStations = $obsStations->features;
 
-    $observationStation = $obsStationsMetadata->features[0];
+    $obsStationIndex = 0;
+    $observationStation = $obsStations[$obsStationIndex];
 
     $obs = $this->getFromWeatherAPI($observationStation->id . "/observations?limit=1")->features[0]->properties;
+
+    // If the temperature is not available from this observation station, try
+    // the next one. Continue through the first 3 stations and then give up.
+    while ($obs->temperature->value == NULL && $obsStationIndex < count($obsStations) - 1 && $obsStationIndex < 2) {
+      $obsStationIndex += 1;
+      $observationStation = $obsStations[$obsStationIndex];
+      $obs = $this->getFromWeatherAPI($observationStation->id . "/observations?limit=1")->features[0]->properties;
+    }
+    if($obs->temperature->value == NULL) {
+      return NULL;
+    }
 
     $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
 

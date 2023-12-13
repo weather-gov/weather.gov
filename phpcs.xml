@@ -8,6 +8,8 @@
   <exclude-pattern>*/node_modules/*</exclude-pattern>
   <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,md,yml" />
   <config name="drupal_core_version" value="10" />
-  <rule ref="Drupal" />
+  <rule ref="Drupal">
+    <exclude name="Drupal.NamingConventions.ValidFunctionName.ScopeNotCamelCaps" />
+  </rule>
   <rule ref="DrupalPractice" />
 </ruleset>
