@@ -11,7 +11,7 @@ set classes = [
     <h2{{title_attributes }}>{{ label }}</h2>
   {% endif %}
   {{ title_suffix }}
-  <ul class="grid-row flex-row minh-card usa-list--unstyled">
+  <ol class="grid-row flex-row minh-card usa-list--unstyled">
     {%  for data in content.days %}
       {%  set hasPrecipitation = data.daytime.probabilityOfPrecipitation %}
       <li class="tablet:grid-col padding-4 margin-right-2">
@@ -62,5 +62,5 @@ set classes = [
         </div>
       </li>
     {%  endfor %}
-  </ul>
+  </ol>
 </div>

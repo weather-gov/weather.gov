@@ -12,7 +12,7 @@
   {% endif %}
   {{ title_suffix }}
   {# Forecast:  hour, icon, condition desc (short), change of precip, temp degree, temp scale #}
-  <ul class="grid-row flex-row minh-card usa-list--unstyled">
+  <ol class="grid-row flex-row minh-card usa-list--unstyled">
 
     {% for hour in content.hours %}
       <li class="tablet:grid-col padding-x-4">
@@ -33,5 +33,5 @@
         </div>
       </li>
     {% endfor %}
-  </ul>
+  </ol>
 </div>
