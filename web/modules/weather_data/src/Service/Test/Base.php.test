@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 abstract class Base extends TestCase {
   /**
    * History of HTTP calls made during a test.
+   *
+   * @var httpCallStack
    */
   protected $httpCallStack;
 

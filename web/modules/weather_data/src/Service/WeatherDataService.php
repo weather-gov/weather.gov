@@ -293,7 +293,7 @@ class WeatherDataService {
       $observationStation = $obsStations[$obsStationIndex];
       $obs = $this->getFromWeatherAPI($observationStation->id . "/observations?limit=1")->features[0]->properties;
     }
-    if($obs->temperature->value == NULL) {
+    if ($obs->temperature->value == NULL) {
       return NULL;
     }
 

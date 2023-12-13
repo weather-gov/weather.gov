@@ -2,7 +2,6 @@
 
 namespace Drupal\weather_data\Service\Test;
 
-use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 
 /**
@@ -96,6 +95,9 @@ final class GetCurrentConditionsFromGridTest extends Base {
     $this->assertEquals((object) $expected, (object) $actual);
   }
 
+  /**
+   * Tests where the first observation station is not reporting a temperature.
+   */
   public function testOneObservationStationWithNoTemperature(): void {
     $this->httpClientMock->append(
       new Response(200,
@@ -127,10 +129,13 @@ final class GetCurrentConditionsFromGridTest extends Base {
 
     $this->assertEquals($expected, $actual);
 
-    // Expected calls: list observation stations, station 1, station 2
+    // Expected calls: list observation stations, station 1, station 2.
     $this->assertEquals(3, count($this->httpCallStack));
   }
 
+  /**
+   * Tests where the first 3 observation stations are not reporting temperature.
+   */
   public function testThreeObservationStationsWithTemperature(): void {
     $this->httpClientMock->append(
       new Response(200,
@@ -173,8 +178,9 @@ final class GetCurrentConditionsFromGridTest extends Base {
 
     $this->assertEquals($expected, $actual);
 
-    // Expected calls: list observation stations, station 1, station 2, station 3
-    $this->assertEquals(4, count($this->httpCallStack));  }
+    // Expected calls: list stations, station 1, station 2, station 3.
+    $this->assertEquals(4, count($this->httpCallStack));
+  }
 
   /**
    * Tests the case where the icon is null.
