@@ -18,14 +18,14 @@
   {% if site_logo %}
   <img class="height-9" src="{{ site_logo }}" alt=""/>
   {% endif %}
-  <div class="site-info padding-x-2 display-flex flex-column flex-align-center">
+  <div class="site-info padding-x-2 display-flex flex-column flex-align-start">
     {% if site_name %}
     <span class="site-name display-block font-heading-lg desktop:font-heading-xl text-primary text-bold">
       {{ site_name }}
     </span>
     {% endif %}
     {% if site_slogan %}
-    <span class="site-slogan display-block font-sans-2xs desktop:font-sans-xs text-base-dark">
+    <span class="site-slogan display-block font-sans-2xs desktop:font-sans-xs text-base-dark padding-left-05">
       {{ site_slogan  }}
     </span>
     {% endif %} 
