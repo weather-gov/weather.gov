@@ -33,6 +33,7 @@ cf login -a api.fr.cloud.gov  --sso
 - [ ] Ask an admin to add the onboardee to our [GitHub organization](https://github.com/orgs/weather-gov).
 - [ ] Add the onboardee to our [GitHub repository](https://github.com/weather-gov/weather.gov).
 - [ ] Add the onboardee to our cloud.gov org
+- [ ] Before you finalize the developer sandbox setup, [generate new metadata](../../docs/dev/authentication.md) for SAML communication
 - [ ] Setup the developer sandbox space with [sandbox script](./scripts/create_cloudgov_env.md).
 
 ## Documents to Review
