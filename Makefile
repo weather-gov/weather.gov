@@ -39,6 +39,8 @@ export-content: ## Export all content to web/scs-export
 
 import-config: ## Import the Drupal configuration from the config directory into your site
 	docker compose exec drupal drush config:import -y
+	docker compose exec drupal drush twig:debug on
+	docker compose exec drupal drush state:set disable_rendered_output_cache_bins 1
 
 import-content: web/scs-export/* ## Import content from web/scs-export
 	for file in $^; do \
@@ -49,6 +51,8 @@ import-content: web/scs-export/* ## Import content from web/scs-export
 install-site: install-site-config import-content ## Install a minimal Drupal site using the configuration in the config directory and exported content
 install-site-config:
 	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
+	docker compose exec drupal drush twig:debug on
+	docker compose exec drupal drush state:set disable_rendered_output_cache_bins 1
 
 log: ## Tail the log for the Drupal container
 	docker compose logs --follow drupal
