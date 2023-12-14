@@ -272,11 +272,12 @@ class WeatherDataService {
   }
 
   /**
-   * Get an icon template filename from legacyMapped key
-   * 
+   * Get an icon template filename from legacyMapped key.
+   *
    * @return string
+   *   An icon template filename
    */
-  private function getIconTemplateFilename($obsKey){
+  private function getIconTemplateFilename($obsKey) {
     return basename(
       $this->legacyMapping->$obsKey->icon,
       '.svg'
@@ -464,8 +465,6 @@ class WeatherDataService {
       // Sentence-case the forecast description.
       $shortForecast = ucfirst(strtolower($daytime->shortForecast));
 
-      
-      
       $daytimeForecast = [
         'shortDayName' => $shortDayName,
         'startTime' => $daytime->startTime,
