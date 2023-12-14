@@ -1,82 +1,83 @@
 {# Widgets and stuff. This is presented as a row of columns. #}
-<div class="grid-row flex-row margin-y-4 tablet:margin-left-4 weather-gov-current-conditions">
-  {# First column: weather icon #}
-  <div class="icon margin-right-1">
-    {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon )}}
-  </div>
-  
-  {# Second column: temperature and conditions #}
-  <div>
-    {# First row is temperature #}
-    <div class="font-body-3xl">
-      {{ content.temperature }}
-      <span class="font-body-lg position-absolute display-inline-block left-full margin-top-05">℉</span>
+<div class="grid-row weather-gov-current-conditions">
+  <h2 class="use-sr-only">{{ label }}</h2>
+  <div class="grid-row flex-row margin-y-4 tablet:margin-left-4">
+    {# First column: weather icon #}
+    <div class="icon margin-right-1">
+      {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon )}}
     </div>
 
-    {# Second row of the column is just the conditions text #}
+    {# Second column: temperature and conditions #}
     <div>
-      {{ content.conditions.short }}
-    </div>
-  </div>
+      {# First row is temperature #}
+      <div class="font-body-3xl">
+        {{ content.temperature }}
+        <span class="font-body-lg position-absolute display-inline-block left-full margin-top-05">℉</span>
+      </div>
 
-  {# Third column is feels like, humidity, and wind #}
-  <div class="display-flex flex-column margin-left-6">
-
-    <div class="font-body-lg margin-top-05">
-      {{ content.feels_like }}
-      <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-2px">℉</span>
-    </div>
-
-    <div class="font-body-3xs text-gray-50">
-      {{ "Feels like" |t }}
+      {# Second row of the column is just the conditions text #}
+      <div>
+        {{ content.conditions.short }}
+      </div>
     </div>
 
-    <div class="item margin-top-2">
-      {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
-      {{ "Humidity: @humidity%" | t({ "@humidity": content.humidity }) }}
-    </div>
+    {# Third column is feels like, humidity, and wind #}
+    <div class="display-flex flex-column margin-left-6">
 
-    <div class="item">
-      {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
-      {{ "Wind: @windSpeed mph @windDirection" | t({
-        "@windSpeed": content.wind.speed,
-        "@windDirection": content.wind.shortDirection
+      <div class="font-body-lg margin-top-05">
+        {{ content.feels_like }}
+        <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-2px">℉</span>
+      </div>
+
+      <div class="font-body-3xs text-gray-50">
+        {{ "Feels like" |t }}
+      </div>
+
+      <div class="item margin-top-2">
+        {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
+        {{ "Humidity: @humidity%" | t({ "@humidity": content.humidity }) }}
+      </div>
+
+      <div class="item">
+        {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
+        {{ "Wind: @windSpeed mph @windDirection" | t({
+          "@windSpeed": content.wind.speed,
+          "@windDirection": content.wind.shortDirection
         })
-      }}
+        }}
+      </div>
     </div>
   </div>
-</div>
 
-<div class="grid-row">
-  <div class="tablet:grid-col-12">
-    <p class="margin-0 font-body-3xs text-gray-50">
-      {{ 'Weather as of' | t }}
-      {# Datetimes are localized in client-side Javascript. #}
-      <weather-timestamp data-utc="{{ content.timestamp.utc }}">
-        {{ content.timestamp.formatted }}
-      </weather-timestamp>
-    </p>
-    <p class="margin-0 margin-top-05">
-      {{ "The weather in <strong>@place</strong> is <strong>@conditions</strong>.
+  <div class="grid-row">
+    <div class="tablet:grid-col-12">
+      <p class="margin-0 font-body-3xs text-gray-50">
+        {{ 'Weather as of' | t }}
+        {# Datetimes are localized in client-side Javascript. #}
+        <weather-timestamp data-utc="{{ content.timestamp.utc }}">
+          {{ content.timestamp.formatted }}
+        </weather-timestamp>
+      </p>
+      <p class="margin-0 margin-top-05">
+        {{ "The weather in <strong>@place</strong> is <strong>@conditions</strong>.
           Temperature is <strong>@temperature℉</strong>.
           Humidity is <strong>@humidity%</strong>"
-          |
-          t({
-            "@place": content.location,
-            "@conditions": content.conditions.long | lower,
-            "@temperature": content.temperature,
-            "@humidity": content.humidity
-          })
-      }}{% if content.wind.speed > 0 %}
-      {{
+        |
+        t({
+          "@place": content.location,
+          "@conditions": content.conditions.long | lower,
+          "@temperature": content.temperature,
+          "@humidity": content.humidity
+        })
+        }}{% if content.wind.speed > 0 %}
+        {{
         "with <strong>@windSpeed mph winds</strong> from the @windDirection"
         |
         t({
           "@windSpeed": content.wind.speed,
           "@windDirection": content.wind.direction
         })
-      }}{% endif %}.
-    </p>
+        }}{% endif %}.
+      </p>
+    </div>
   </div>
-</div>
-
