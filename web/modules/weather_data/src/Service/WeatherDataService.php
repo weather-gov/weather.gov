@@ -277,11 +277,11 @@ class WeatherDataService {
    * @return string
    *   An icon template filename
    */
-  private function getIconTemplateFilename($obsKey) {
+  private function getIconFileBasename($obsKey) {
     return basename(
       $this->legacyMapping->$obsKey->icon,
       '.svg'
-    ) . '.html.twig';
+    );
   }
 
   /**
@@ -406,7 +406,7 @@ class WeatherDataService {
       return [
         "conditions" => $this->t->translate(ucfirst(strtolower($period->shortForecast))),
         "icon" => $this->legacyMapping->$obsKey->icon,
-        "iconTemplate" => $this->getIconTemplateFilename($obsKey),
+        "iconBasename" => $this->getIconFileBasename($obsKey),
         "probabilityOfPrecipitation" => $period->probabilityOfPrecipitation->value,
         "time" => $timestamp,
         "temperature" => $period->temperature,
@@ -470,7 +470,7 @@ class WeatherDataService {
         'startTime' => $daytime->startTime,
         'shortForecast' => $this->t->translate($shortForecast),
         'icon' => $this->legacyMapping->$obsKey->icon,
-        'iconTemplate' => $this->getIconTemplateFilename($obsKey),
+        'iconBasename' => $this->getIconFileBasename($obsKey),
         'temperature' => $daytime->temperature,
         'probabilityOfPrecipitation' => $daytime->probabilityOfPrecipitation->value,
       ];

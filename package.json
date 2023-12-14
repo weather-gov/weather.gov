@@ -28,6 +28,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-import": "^2.29.0",
+    "jsdom": "^23.0.1",
     "prettier": "^3.1.1",
     "stylelint": "^15.11.0",
     "stylelint-config-standard-scss": "^11.1.0",
@@ -40,6 +41,6 @@
     "js-lint": "eslint web/**/assets/**/*.js tests/**/*.js *.js",
     "style-format": "npx prettier -w web/themes/**/*.scss",
     "style-lint": "stylelint **/*.scss",
-    "svg-templates": "node ./scripts/svg-to-twig.js ./web/themes/new_weather_theme/assets/images/weather/icons/*.svg ./web/themes/new_weather_theme/assets/images/weather/icons/conditions/*.svg"
+    "compile-svg": "node ./scripts/compile-svg-sprite.js ./web/themes/new_weather_theme/assets/images/weather/icons/*.svg ./web/themes/new_weather_theme/assets/images/weather/icons/conditions/*.svg"
   }
 }
