@@ -1,0 +1,18 @@
+uuid: 646fcc28-d637-415a-9b99-03926080521b
+langcode: en
+status: true
+dependencies:
+  theme:
+    - weathergov_admin
+id: weathergov_admin_primaryadminactions
+theme: weathergov_admin
+region: content
+weight: -3
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

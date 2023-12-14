@@ -1,0 +1,20 @@
+uuid: 0973755f-7b76-42e1-8252-66ac8e9f31c4
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - weathergov_admin
+id: weathergov_admin_breadcrumbs
+theme: weathergov_admin
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

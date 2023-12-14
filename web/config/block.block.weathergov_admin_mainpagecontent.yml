@@ -1,0 +1,20 @@
+uuid: ce08fadd-dda3-4a39-91b2-111fce76d407
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - weathergov_admin
+id: weathergov_admin_mainpagecontent
+theme: weathergov_admin
+region: content
+weight: -2
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }
