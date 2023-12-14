@@ -74,7 +74,6 @@ switch ($application_environment) {
     break;
 
   case "eric":
-    $config['config_split.config_split.production']['status'] = TRUE;
     $config['samlauth.authentication']['sp_entity_id'] = 'https://weathergov-eric.app.cloud.gov';
     break;
 
