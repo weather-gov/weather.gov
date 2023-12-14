@@ -142,6 +142,7 @@ final class GetHourlyForecastTest extends Base {
         // Conditions should be sentence-cased.
         "conditions" => "Thunderbolt",
         "icon" => "nodata.svg",
+        "iconTemplate" => "nodata.html.twig",
         "probabilityOfPrecipitation" => 11,
         "time" => "12 PM",
         "temperature" => 1,
@@ -149,6 +150,7 @@ final class GetHourlyForecastTest extends Base {
       [
         "conditions" => "Lightning",
         "icon" => "nodata.svg",
+        "iconTemplate" => "nodata.html.twig",
         "probabilityOfPrecipitation" => 22,
         "time" => "1 PM",
         "temperature" => 2,
@@ -200,6 +202,7 @@ final class GetHourlyForecastTest extends Base {
       [
         "conditions" => "Frightening",
         "icon" => "rain.svg",
+        "iconTemplate" => "rain.html.twig",
         "probabilityOfPrecipitation" => 22,
         "time" => "12 PM",
         "temperature" => 2,
@@ -207,6 +210,7 @@ final class GetHourlyForecastTest extends Base {
       [
         "conditions" => "Mama mia!",
         "icon" => "snow.svg",
+        "iconTemplate" => "snow.html.twig",
         "probabilityOfPrecipitation" => 33,
         "time" => "1 PM",
         "temperature" => 3,
