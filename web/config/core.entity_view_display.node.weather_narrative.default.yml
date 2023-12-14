@@ -23,7 +23,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 101
+    weight: 0
     region: content
   field_forecaster_image:
     type: image
@@ -34,26 +34,15 @@ content:
       image_loading:
         attribute: lazy
     third_party_settings: {  }
-    weight: 102
-    region: content
-  field_weather_tags:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 104
+    weight: 1
     region: content
   field_wfo:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 102
+    weight: 2
     region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
-hidden: {  }
+hidden:
+  field_weather_tags: true
+  links: true
