@@ -1,0 +1,14 @@
+uuid: ebb82243-aab8-4abb-b4f1-ffdbd0021da0
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.forecaster
+  module:
+    - user
+id: user_remove_role_action.forecaster
+label: 'Remove the Forecaster role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: forecaster

@@ -3,6 +3,7 @@
   <testsuites>
     <testsuite name="unit tests">
       <directory suffix=".php.test">web/themes/new_weather_theme</directory>
+      <directory suffix=".php.test">web/themes/weathergov_admin</directory>
       <directory suffix=".php.test">web/modules/weather_blocks</directory>
       <directory suffix=".php.test">web/modules/weather_data</directory>
     </testsuite>
@@ -12,7 +13,8 @@
     processUncoveredFiles="true"
   >
     <include>
-      <directory>web/themes/new_weather_theme</directory>
+      <directory suffix=".theme">web/themes/new_weather_theme</directory>
+      <directory suffix=".theme">web/themes/weathergov_admin</directory>
       <directory>web/modules/weather_blocks</directory>
       <directory>web/modules/weather_data</directory>
     </include>

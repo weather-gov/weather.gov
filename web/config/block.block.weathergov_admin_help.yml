@@ -1,0 +1,20 @@
+uuid: b8011e6d-4e31-4787-aea0-14d26211d122
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - weathergov_admin
+id: weathergov_admin_help
+theme: weathergov_admin
+region: help
+weight: 0
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }
