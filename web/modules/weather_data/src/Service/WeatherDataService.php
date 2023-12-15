@@ -13,6 +13,8 @@ use GuzzleHttp\Exception\ServerException;
 class WeatherDataService {
   use LoggerChannelTrait;
 
+  const NUMBER_OF_OBS_STATIONS_TO_TRY = 3;
+
   /**
    * Mapping of legacy API icon paths to new icons and conditions text.
    *
@@ -117,6 +119,13 @@ class WeatherDataService {
     }
 
     return $this->apiCache[$url];
+  }
+
+  protected function isValidObservation($obs) {
+    if($obs->temperature->value == NULL) {
+      return FALSE;
+    }
+    return TRUE;
   }
 
   /**
@@ -282,17 +291,13 @@ class WeatherDataService {
     $obsStations = $obsStations->features;
 
     $obsStationIndex = 0;
-    $observationStation = $obsStations[$obsStationIndex];
-
-    $obs = $this->getFromWeatherAPI($observationStation->id . "/observations?limit=1")->features[0]->properties;
-
-    // If the temperature is not available from this observation station, try
-    // the next one. Continue through the first 3 stations and then give up.
-    while ($obs->temperature->value == NULL && $obsStationIndex < count($obsStations) - 1 && $obsStationIndex < 2) {
-      $obsStationIndex += 1;
+    do {
+      // If the temperature is not available from this observation station, try
+      // the next one. Continue through the first 3 stations and then give up.
       $observationStation = $obsStations[$obsStationIndex];
       $obs = $this->getFromWeatherAPI($observationStation->id . "/observations?limit=1")->features[0]->properties;
-    }
+      $obsStationIndex += 1;
+    } while (!$this->isValidObservation($obs) && $obsStationIndex < count($obsStations) - 1 && $obsStationIndex < self::NUMBER_OF_OBS_STATIONS_TO_TRY);
     if ($obs->temperature->value == NULL) {
       return NULL;
     }
