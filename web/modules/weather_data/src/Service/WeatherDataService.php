@@ -12,6 +12,7 @@ use GuzzleHttp\Exception\ServerException;
  */
 class WeatherDataService {
   use LoggerChannelTrait;
+  use UnitConversionTrait;
 
   /**
    * Mapping of legacy API icon paths to new icons and conditions text.
@@ -286,14 +287,13 @@ class WeatherDataService {
 
     $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $obs->timestamp);
 
-    $feelsLike = $obs->heatIndex->value;
+    $feelsLike = $this->getTemperatureScalar($obs->heatIndex);
     if ($feelsLike == NULL) {
-      $feelsLike = $obs->windChill->value;
+      $feelsLike = $this->getTemperatureScalar($obs->windChill);
     }
     if ($feelsLike == NULL) {
-      $feelsLike = $obs->temperature->value;
+      $feelsLike = $this->getTemperatureScalar($obs->temperature);
     }
-    $feelsLike = 32 + (9 * $feelsLike / 5);
 
     $obsKey = $this->getApiObservationKey($obs);
 
@@ -318,11 +318,11 @@ class WeatherDataService {
         'short' => $this->t->translate($description),
       ],
       // C to F.
-      'feels_like' => (int) round($feelsLike),
+      'feels_like' => $feelsLike,
       'humidity' => (int) round($obs->relativeHumidity->value ?? 0),
       'icon' => $this->legacyMapping->$obsKey->icon,
       // C to F.
-      'temperature' => (int) round(32 + (9 * $obs->temperature->value / 5)),
+      'temperature' => $this->getTemperatureScalar($obs->temperature),
       'timestamp' => [
         'formatted' => $timestamp->format("l g:i A T"),
         'utc' => (int) $timestamp->format("U"),
