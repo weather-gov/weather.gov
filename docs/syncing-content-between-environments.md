@@ -87,3 +87,5 @@ documentation](index.md).
    directory of our repo.
 7. Commit the new files, push them to GitHub, and open a pull request to have
    them reviewed, merged, and deployed.
+
+The configuration will automatically be imported when we deploy.
