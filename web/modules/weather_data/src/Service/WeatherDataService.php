@@ -121,8 +121,11 @@ class WeatherDataService {
     return $this->apiCache[$url];
   }
 
+  /**
+   * Check if an observation is valid.
+   */
   protected function isValidObservation($obs) {
-    if($obs->temperature->value == NULL) {
+    if ($obs->temperature->value == NULL) {
       return FALSE;
     }
     return TRUE;
