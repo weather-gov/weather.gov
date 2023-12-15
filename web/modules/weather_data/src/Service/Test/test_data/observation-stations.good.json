@@ -69,12 +69,79 @@
         "county": "https://api.weather.gov/zones/county/",
         "fireWeatherZone": "https://api.weather.gov/zones/fire/"
       }
+    },
+    {
+      "id": "https://observation-station-2",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1, 1]
+      },
+      "properties": {
+        "@id": "https://observation-station-2",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 0
+        },
+        "stationIdentifier": "JNWS",
+        "name": "NWS Test Obs Station #2",
+        "timeZone": "America/Chicago",
+        "forecast": "https://api.weather.gov/zones/forecast/",
+        "county": "https://api.weather.gov/zones/county/",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/"
+      }
+    },
+    {
+      "id": "https://observation-station-3",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2, 2]
+      },
+      "properties": {
+        "@id": "https://observation-station-3",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 0
+        },
+        "stationIdentifier": "QNWS",
+        "name": "NWS Test Obs Station #3",
+        "timeZone": "America/New_York",
+        "forecast": "https://api.weather.gov/zones/forecast/",
+        "county": "https://api.weather.gov/zones/county/",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/"
+      }
+    },
+    {
+      "id": "https://observation-station-4",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1, 1]
+      },
+      "properties": {
+        "@id": "https://observation-station-4",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 0
+        },
+        "stationIdentifier": "QNWS",
+        "name": "NWS Test Obs Station #4",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/",
+        "county": "https://api.weather.gov/zones/county/",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/"
+      }
     }
   ],
   "observationStations": [
     "https://obs-list-station-1",
     "https://obs-list-station-2",
-    "https://obs-list-station-3"
+    "https://obs-list-station-3",
+    "https://obs-list-station-4"
   ],
   "pagination": {
     "next": "https://pagination/etc"
