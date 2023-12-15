@@ -57,6 +57,17 @@ const cleanupWhitespace = (str) => {
 };
 
 /**
+ * Removes any inline style tags
+ *
+ * @param str string The source string
+ * @return string A string with any inline style
+ * tags removed from the SVG XML.
+ */
+const removeStyleTags = (str) => {
+  return str.replace(/<style[\w\W]*?<\/style>\n/gm, '');
+};
+
+/**
  * Removes the XML header from the string
  *
  * @param str string The source xml string
@@ -64,6 +75,10 @@ const cleanupWhitespace = (str) => {
  */
 const removeXMLDeclaration = str => {
  return str.replace(/\n<?xml[^\n]*/gm, "");
+};
+
+const removeInlineFills = str => {
+  return str.replace(/fill=\"[^"]*\"/g, "");
 };
 
 /**
@@ -96,6 +111,8 @@ const getSymbolDefsFromPaths = inputPaths => {
     outputStr = outputStr.replace(/viewbox/g, "viewBox");
     outputStr = cleanupWhitespace(outputStr);
     outputStr = removeXMLDeclaration(outputStr);
+    outputStr = removeStyleTags(outputStr);
+    // outputStr = removeInlineFills(outputStr);
     return outputStr;
   });
 };
