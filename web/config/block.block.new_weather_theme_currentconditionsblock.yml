@@ -15,9 +15,10 @@ provider: null
 plugin: weathergov_current_conditions
 settings:
   id: weathergov_current_conditions
-  label: 'Current conditions block'
-  label_display: '0'
+  label: 'Current conditions'
+  label_display: visible
   provider: weather_blocks
+  grid: ',,'
 visibility:
   request_path:
     id: request_path
