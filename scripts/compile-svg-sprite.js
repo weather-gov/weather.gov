@@ -63,10 +63,7 @@ const cleanupWhitespace = (str) => {
  * @return string The cleaned output xml string
  */
 const removeXMLDeclaration = str => {
-  const lines = str.split("\n");
-  return lines.filter(line => {
-    return !line.startsWith("<?xml");
-  }).join("\n");
+ return str.replace(/\n<?xml[^\n]*/gm, "");
 };
 
 /**
