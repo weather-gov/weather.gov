@@ -74,11 +74,21 @@ const removeStyleTags = (str) => {
  * @return string The cleaned output xml string
  */
 const removeXMLDeclaration = str => {
- return str.replace(/\n<?xml[^\n]*/gm, "");
+  return str.replace(/\n<?xml[^\n]*/gm, "");
 };
 
-const removeInlineFills = str => {
-  return str.replace(/fill=\"[^"]*\"/g, "");
+/**
+ * Remove class attributes from elements
+ *
+ * Class references can leak out into other
+ * parts of the DOM without indication in the
+ * devtools, which is annoying.
+ *
+ * @param str string The source XML string
+ * @return string The cleaned output XML string
+ */
+const removeClassAttributes = str => {
+  return str.replace(/class="st0"/g, "");
 };
 
 /**
@@ -112,7 +122,7 @@ const getSymbolDefsFromPaths = inputPaths => {
     outputStr = cleanupWhitespace(outputStr);
     outputStr = removeXMLDeclaration(outputStr);
     outputStr = removeStyleTags(outputStr);
-    // outputStr = removeInlineFills(outputStr);
+    outputStr = removeClassAttributes(outputStr);
     return outputStr;
   });
 };
