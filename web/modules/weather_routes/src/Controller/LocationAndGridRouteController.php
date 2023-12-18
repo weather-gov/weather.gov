@@ -61,6 +61,14 @@ final class LocationAndGridRouteController extends ControllerBase {
       // If we don't get a corresponding grid location, throw a 404.
       throw new NotFoundHttpException();
     }
+
+    if ($grid["wfo"] == NULL) {
+      $logger = $this->getLogger("Weather.gov data service");
+      $logger->notice("location has no grid: $lat / $lon");
+
+      return new RedirectResponse("/not-implemented");
+    }
+
     $url = Url::fromRoute("weather_routes.grid", $grid);
     return new RedirectResponse($url->toString());
   }
