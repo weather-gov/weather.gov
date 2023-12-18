@@ -37,29 +37,27 @@ set classes = [
           <div class="display-flex flex-column flex-align-center">
             {#  TODO: we will need to provide translation for this alt text #}
             <span class="usa-sr-only">
-              day will be high of "{{  data.daytime.temperature }}" degrees
+              day will be high of "{{  data.daytime.temperature }}" degrees Fahrenheit
             </span>
             <div class="display-flex flex-row">
-              <span class="font-body-xl position-relative">
+              <span class="font-body-xl position-relative" aria-hidden="true">
                 {{ data.daytime.temperature }}
-                <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-05">&#x2109;</span>
+                <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-05">℉</span>
               </span>
-              {# use HTML entity that reads "degree farenheit" to screen readers #}
             </div>
             <div class="display-flex flex-row">
               {#  TODO: we will need to provide translation for this alt text #}
               <span class="usa-sr-only">
-                night will be low of "{{  data.overnight.temperature }}" degrees
+                night will be low of "{{  data.overnight.temperature }}" degrees Fahrenheit
               </span>
-              <span class="position-relative font-body-lg text-gray-50">
+              <span class="position-relative font-body-lg text-gray-50" aria-hidden="true">
                 <div class="font-body-3xs position-absolute margin-left-neg-105">
                   <svg aria-hidden="true" role="img" style="width:9px;height:9px;">
                     <use xlink:href="{{ "/" ~ directory ~ '/assets/images/spritesheet.svg#overnight' }}"></use>
                   </svg>
                 </div>
                 {{ data.overnight.temperature }}
-                <div class="font-body-3xs display-inline-block position-absolute left-full">&#x2109</div>
-                {# use HTML entity that reads "degree farenheit" to screen readers #}
+                <div class="font-body-3xs display-inline-block position-absolute left-full">℉</div>
               </span>
             </div>
           </div>
