@@ -20,8 +20,8 @@ sp_private_key: 'key:sp_private_key'
 metadata_valid_secs: 60
 metadata_cache_http: false
 idp_entity_id: noaa-online-idp
-idp_single_sign_on_service: 'https://sso-dev.noaa.gov:443/openam/SSORedirect/metaAlias/noaa-online/noaa-online-idp'
-idp_single_log_out_service: 'https://sso-dev.noaa.gov:443/openam/IDPSloRedirect/metaAlias/noaa-online/noaa-online-idp'
+idp_single_sign_on_service: 'https://sso.noaa.gov:443/openam/SSORedirect/metaAlias/noaa-online/idp'
+idp_single_log_out_service: 'https://sso.noaa.gov:443/openam/IDPSloRedirect/metaAlias/noaa-online/idp'
 idp_change_password_service: ''
 idp_certs:
   - 'key:idp_public_key'
