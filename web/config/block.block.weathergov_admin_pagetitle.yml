@@ -1,0 +1,18 @@
+uuid: 34be14d5-7c2d-46ef-953d-6805967e09c7
+langcode: en
+status: true
+dependencies:
+  theme:
+    - weathergov_admin
+id: weathergov_admin_pagetitle
+theme: weathergov_admin
+region: header
+weight: 0
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility: {  }

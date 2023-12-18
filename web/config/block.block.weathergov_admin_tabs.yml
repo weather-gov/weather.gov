@@ -1,0 +1,20 @@
+uuid: f84473ae-a8b3-4d36-ac6a-01a89f6b4f98
+langcode: en
+status: true
+dependencies:
+  theme:
+    - weathergov_admin
+id: weathergov_admin_tabs
+theme: weathergov_admin
+region: header
+weight: 0
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Primary Tabs'
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: false
+visibility: {  }

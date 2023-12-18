@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.node.body
     - filter.format.basic_html
-    - filter.format.plain_text
     - node.type.weather_narrative
   module:
     - text
@@ -24,5 +23,4 @@ settings:
   required_summary: false
   allowed_formats:
     - basic_html
-    - plain_text
 field_type: text_with_summary

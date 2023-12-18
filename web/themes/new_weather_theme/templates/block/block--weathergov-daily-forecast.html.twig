@@ -11,10 +11,10 @@ set classes = [
     <h2{{title_attributes }}>{{ label }}</h2>
   {% endif %}
   {{ title_suffix }}
-  <div class="grid-row flex-row minh-card">
+  <ol class="grid-row flex-row minh-card usa-list--unstyled">
     {%  for data in content.days %}
       {%  set hasPrecipitation = data.daytime.probabilityOfPrecipitation %}
-      <div class="tablet:grid-col padding-4 margin-right-2">
+      <li class="tablet:grid-col padding-4 margin-right-2">
         <time class="display-block text-bold tablet:text-center font-heading-md" datetime="{{ data.daytime.startTime }}">
           {{ data.daytime.shortDayName }}
         </time>
@@ -60,7 +60,7 @@ set classes = [
             </div>
           </div>
         </div>
-      </div>
+      </li>
     {%  endfor %}
-  </div>
+  </ol>
 </div>

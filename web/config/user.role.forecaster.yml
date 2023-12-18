@@ -1,0 +1,19 @@
+uuid: e2a8bcf5-f6a5-49e1-b0a2-1b0660e3a1a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.weather_narrative
+  module:
+    - node
+id: forecaster
+label: Forecaster
+weight: 4
+is_admin: null
+permissions:
+  - 'create weather_narrative content'
+  - 'delete any weather_narrative content'
+  - 'delete weather_narrative revisions'
+  - 'edit any weather_narrative content'
+  - 'revert weather_narrative revisions'
+  - 'view weather_narrative revisions'

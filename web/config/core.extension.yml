@@ -58,4 +58,5 @@ theme:
   claro: 0
   stable9: 0
   new_weather_theme: 0
+  weathergov_admin: 0
 profile: minimal

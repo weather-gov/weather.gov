@@ -90,4 +90,7 @@ node_modules
 *.pem
 *.crt
 credentials-*.json
-.env
+
+# Test screenshots
+/tests/**/screenshots/**
+

@@ -1,0 +1,58 @@
+<?php
+
+use PHPUnit\Framework\TestCase;
+
+require dirname(__DIR__, 1) . "/new_weather_theme.theme";
+
+/**
+ * Test the new_weather_theme hooks.
+ */
+final class NewWeatherThemeHooksTest extends TestCase {
+
+  /**
+   * Test that if the form allows previewing images, it is not modified.
+   */
+  public function testImageWidgetPreprocessorHookDoesNothingIfAccessIsPermitted(): void {
+    $variables = [
+      "data" => [
+        "preview" => [
+          "#access" => TRUE,
+        ],
+      ],
+    ];
+
+    new_weather_theme_preprocess_image_widget($variables);
+
+    $expected = [
+      "data" => [
+        "preview" => [
+          "#access" => TRUE,
+        ],
+      ],
+    ];
+
+    $this->assertEquals($expected, $variables);
+  }
+
+  /**
+   * Test that if preview access is disabled, the setting is removed entirely.
+   */
+  public function testImageWidgetPreprocessorHookUnsetsIfAccessIsDenied(): void {
+    $variables = [
+      "data" => [
+        "preview" => [
+          "#access" => FALSE,
+        ],
+      ],
+    ];
+
+    new_weather_theme_preprocess_image_widget($variables);
+
+    $expected = [
+      "data" => [],
+    ];
+
+    $this->assertEquals($expected, $variables);
+  }
+
+}
