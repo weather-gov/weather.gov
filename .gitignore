@@ -87,5 +87,10 @@ node_modules
 # Code coverage
 /.coverage
 
+*.pem
+*.crt
+credentials-*.json
+
 # Test screenshots
 /tests/**/screenshots/**
+

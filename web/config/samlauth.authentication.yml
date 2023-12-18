@@ -1,15 +1,66 @@
 _core:
   default_config_hash: oDGEkhP0h5rXXqlDplxeBDre0goLigOJupHKMDMwcqM
-metadata_cache_http: false
-metadata_valid_secs: 60
+login_menu_item_title: ''
+logout_menu_item_title: ''
+login_redirect_url: ''
+logout_redirect_url: ''
+error_redirect_url: ''
+error_throw: false
 local_login_saml_error: false
+logout_different_user: false
+drupal_login_roles:
+  authenticated: '0'
+  content_editor: '0'
+  administrator: '0'
+sp_entity_id: ''
+sp_name_id_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
+sp_x509_certificate: 'key:sp_public_key'
+sp_new_certificate: ''
+sp_private_key: 'key:sp_private_key'
+metadata_valid_secs: 60
+metadata_cache_http: false
+idp_entity_id: noaa-online-idp
+idp_single_sign_on_service: 'https://sso-dev.noaa.gov:443/openam/SSORedirect/metaAlias/noaa-online/noaa-online-idp'
+idp_single_log_out_service: 'https://sso-dev.noaa.gov:443/openam/IDPSloRedirect/metaAlias/noaa-online/noaa-online-idp'
+idp_change_password_service: ''
+idp_certs:
+  - 'key:idp_public_key'
+idp_cert_encryption: ''
+unique_id_attribute: mail
+map_users: false
+map_users_name: false
+map_users_mail: false
+map_users_roles:
+  content_editor: '0'
+  administrator: '0'
+create_users: true
+sync_name: true
+sync_mail: true
+user_name_attribute: uid
+user_mail_attribute: mail
+request_set_name_id_policy: true
+strict: true
+security_metadata_sign: true
 security_authn_requests_sign: true
 security_logout_requests_sign: true
 security_logout_responses_sign: true
-strict: true
-security_messages_sign: true
-security_lowercase_url_encoding: true
-request_set_name_id_policy: true
+security_nameid_encrypt: false
+security_signature_algorithm: ''
+security_encryption_algorithm: ''
+security_messages_sign: false
+security_assertions_signed: true
+security_assertions_encrypt: false
+security_nameid_encrypted: false
 security_want_name_id: true
 security_request_authn_context: true
+security_lowercase_url_encoding: true
+security_logout_reuse_sigs: false
+security_allow_repeat_attribute_name: false
+debug_display_error_details: false
+debug_log_in: false
+debug_log_saml_in: false
+debug_log_saml_out: false
+debug_phpsaml: false
+use_proxy_headers: false
 use_base_url: true
+bypass_relay_state_check: false
