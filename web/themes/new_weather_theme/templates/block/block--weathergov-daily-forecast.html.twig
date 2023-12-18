@@ -20,7 +20,9 @@ set classes = [
         </time>
         <div class="display-flex tablet:flex-column flex-justify flex-align-center tablet:minh-card">
           <div class="icon maxh-8 maxw-9">
-            {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ data.daytime.icon )}}
+            <svg role="img" aria-hidden="true" class="width-6">
+              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ data.daytime.iconBasename }}"></use>
+            </svg>  
           </div>
           <div class="text-center minh-8">
             <p class="margin-0 conditions-narrative short {% if not hasPrecipitation %} tablet:margin-bottom-1em{% endif %}">
@@ -51,7 +53,9 @@ set classes = [
               </span>
               <span class="position-relative font-body-lg text-gray-50">
                 <div class="font-body-3xs position-absolute margin-left-neg-105">
-                  {{ source(directory ~ "/assets/images/weather/icons/overnight.svg" )}}
+                  <svg aria-hidden="true" role="img" style="width:9px;height:9px;">
+                    <use xlink:href="{{ "/" ~ directory ~ '/assets/images/spritesheet.svg#overnight' }}"></use>
+                  </svg>
                 </div>
                 {{ data.overnight.temperature }}
                 <div class="font-body-3xs display-inline-block position-absolute left-full">&#x2109</div>

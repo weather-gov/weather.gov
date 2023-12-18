@@ -284,6 +284,19 @@ class WeatherDataService {
   }
 
   /**
+   * Get an icon template filename from legacyMapped key.
+   *
+   * @return string
+   *   An icon template filename
+   */
+  private function getIconFileBasename($obsKey) {
+    return basename(
+      $this->legacyMapping->$obsKey->icon,
+      '.svg'
+    );
+  }
+
+  /**
    * Get the current weather conditions at a WFO grid location.
    */
   public function getCurrentConditionsFromGrid($wfo, $gridX, $gridY) {
@@ -414,6 +427,7 @@ class WeatherDataService {
       return [
         "conditions" => $this->t->translate(ucfirst(strtolower($period->shortForecast))),
         "icon" => $this->legacyMapping->$obsKey->icon,
+        "iconBasename" => $this->getIconFileBasename($obsKey),
         "probabilityOfPrecipitation" => $period->probabilityOfPrecipitation->value,
         "time" => $timestamp,
         "temperature" => $period->temperature,
@@ -477,6 +491,7 @@ class WeatherDataService {
         'startTime' => $daytime->startTime,
         'shortForecast' => $this->t->translate($shortForecast),
         'icon' => $this->legacyMapping->$obsKey->icon,
+        'iconBasename' => $this->getIconFileBasename($obsKey),
         'temperature' => $daytime->temperature,
         'probabilityOfPrecipitation' => $daytime->probabilityOfPrecipitation->value,
       ];
