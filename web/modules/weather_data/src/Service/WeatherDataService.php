@@ -5,7 +5,6 @@ namespace Drupal\weather_data\Service;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ResponseException;
 use GuzzleHttp\Exception\ServerException;
 
 /**
