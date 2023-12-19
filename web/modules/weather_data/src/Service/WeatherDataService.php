@@ -5,6 +5,7 @@ namespace Drupal\weather_data\Service;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ResponseException;
 use GuzzleHttp\Exception\ServerException;
 
 /**
@@ -232,7 +233,6 @@ class WeatherDataService {
         "wfo" => $locationMetadata->properties->gridId,
         "gridX" => $locationMetadata->properties->gridX,
         "gridY" => $locationMetadata->properties->gridY,
-        "location" => $locationMetadata->properties->relativeLocation->properties->city,
       ];
 
     }
@@ -247,6 +247,7 @@ class WeatherDataService {
    * Get a place from a WFO grid.
    */
   public function getPlaceFromGrid($wfo, $x, $y) {
+    $wfo = strtoupper($wfo);
     $geometry = $this->getGeometryFromGrid($wfo, $x, $y);
     $point = $geometry[0];
 
@@ -273,6 +274,7 @@ class WeatherDataService {
    *   An array of points representing the vertices of the WFO grid polygon.
    */
   public function getGeometryFromGrid($wfo, $x, $y) {
+    $wfo = strtoupper($wfo);
     $gridpoint = $this->getFromWeatherAPI("https://api.weather.gov/gridpoints/$wfo/$x,$y");
     $geometry = $gridpoint->geometry->coordinates[0];
 
@@ -301,6 +303,7 @@ class WeatherDataService {
    * Get the current weather conditions at a WFO grid location.
    */
   public function getCurrentConditionsFromGrid($wfo, $gridX, $gridY) {
+    $wfo = strtoupper($wfo);
 
     date_default_timezone_set('America/New_York');
 
@@ -382,6 +385,8 @@ class WeatherDataService {
    *   The hourly forecast as an associative array.
    */
   public function getHourlyForecastFromGrid($wfo, $gridX, $gridY, $now = FALSE) {
+    $wfo = strtoupper($wfo);
+
     if (!($now instanceof \DateTimeImmutable)) {
       $now = new \DateTimeImmutable();
     }
@@ -449,6 +454,7 @@ class WeatherDataService {
    *   The daily forecast as an associative array.
    */
   public function getDailyForecastFromGrid($wfo, $gridX, $gridY, $now = FALSE, $defaultDays = 5) {
+    $wfo = strtoupper($wfo);
     $forecast = $this->getFromWeatherAPI("https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast");
 
     $periods = $forecast->properties->periods;

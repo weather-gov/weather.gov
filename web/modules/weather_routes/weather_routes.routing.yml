@@ -6,11 +6,18 @@ weather_routes.point:
   requirements:
     # Public endpoint
     _access: 'TRUE'
+    # Validate path parameters
+    lat: '^-?[0-9]+\.?[0-9]*$'
+    lon: '^-?[0-9]+\.?[0-9]*$'
 
 weather_routes.grid:
-  path: '/local/{wfo}/{gridX}/{gridY}/{location}'
+  path: '/local/{wfo}/{gridX}/{gridY}'
   defaults:
     _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::noop
   requirements:
     # Public endpoint
     _access: 'TRUE'
+    # Validate path parameters
+    wfo: '^[A-Za-z][A-Za-z][A-Za-z]$'
+    gridX: '^[1-9][0-9]*$'
+    gridY: '^[1-9][0-9]*$'
