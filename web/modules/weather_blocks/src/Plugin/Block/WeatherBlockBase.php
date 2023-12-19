@@ -136,7 +136,7 @@ abstract class WeatherBlockBase extends BlockBase implements ContainerFactoryPlu
     ];
 
     // If we're on a grid route, pull location from the URL.
-    if ($this->route->getRouteName() === "weather_routes.grid") {
+    if (str_starts_with($this->route->getRouteName(), "weather_routes.grid")) {
 
       $wfo = $this->route->getParameter("wfo");
       $x = $this->route->getParameter("gridX");

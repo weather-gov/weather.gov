@@ -1,6 +1,6 @@
 describe("location search", () => {
   it("properly handles browser history", () => {
-    const start = "/local/OHX/50/57/Nashville";
+    const start = "/local/OHX/50/57";
 
     cy.visit(start);
     cy.get("form[data-location-search] input").type("Atlanta", { delay: 200 });

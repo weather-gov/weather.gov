@@ -2,7 +2,7 @@ describe("collect screenshots", () => {
   it("is not a test, is just a utility", () => {
     const pages = [
       { name: "front page", url: "/" },
-      { name: "location page", url: "/local/OHX/50/57/Nashville" },
+      { name: "location page", url: "/local/OHX/50/57" },
       { name: "login page", url: "/user/login" },
     ];
 
