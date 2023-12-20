@@ -6,6 +6,7 @@ dependencies:
     - node.type.weather_narrative
   module:
     - node
+    - system
 id: forecaster
 label: Forecaster
 weight: 4
@@ -16,4 +17,5 @@ permissions:
   - 'delete weather_narrative revisions'
   - 'edit any weather_narrative content'
   - 'revert weather_narrative revisions'
+  - 'view the administration theme'
   - 'view weather_narrative revisions'
