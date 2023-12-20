@@ -264,7 +264,8 @@ $databases = [];
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = 'bQxfHu3DvQrom6_zyl9lncicvDN6uoOpqiQZhwYpSYLimSLERTTbuUA-bfcd0KHTb3xgJpOyCw';
+$settings["hash_salt"] =
+    "bQxfHu3DvQrom6_zyl9lncicvDN6uoOpqiQZhwYpSYLimSLERTTbuUA-bfcd0KHTb3xgJpOyCw";
 
 /**
  * Deployment identifier.
@@ -287,7 +288,7 @@ $settings['hash_salt'] = 'bQxfHu3DvQrom6_zyl9lncicvDN6uoOpqiQZhwYpSYLimSLERTTbuU
  * After finishing the upgrade, be sure to open this file again and change the
  * TRUE back to a FALSE!
  */
-$settings['update_free_access'] = FALSE;
+$settings["update_free_access"] = false;
 
 /**
  * Fallback to HTTP for Update Manager and for fetching security advisories.
@@ -402,7 +403,6 @@ $settings['update_free_access'] = FALSE;
  */
 # $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_HOST | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO | \Symfony\Component\HttpFoundation\Request::HEADER_FORWARDED;
 
-
 /**
  * Page caching:
  *
@@ -420,7 +420,6 @@ $settings['update_free_access'] = FALSE;
  * getting cached pages from the proxy.
  */
 # $settings['omit_vary_cookie'] = TRUE;
-
 
 /**
  * Cache TTL for client error (4xx) responses.
@@ -666,7 +665,7 @@ $settings['update_free_access'] = FALSE;
 /**
  * Load services definition file.
  */
-$settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.yml';
+$settings["container_yamls"][] = $app_root . "/" . $site_path . "/services.yml";
 
 /**
  * Override the default service container class.
@@ -735,9 +734,9 @@ $settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.yml';
  * @see \Drupal\Core\File\FileSystemInterface::scanDirectory()
  * @see \Drupal\Core\Extension\ExtensionDiscovery::scanDirectory()
  */
-$settings['file_scan_ignore_directories'] = [
-  'node_modules',
-  'bower_components',
+$settings["file_scan_ignore_directories"] = [
+    "node_modules",
+    "bower_components",
 ];
 
 /**
@@ -748,7 +747,7 @@ $settings['file_scan_ignore_directories'] = [
  * if your hosting configuration (i.e. RAM allocation, CPU speed) allows for a
  * larger number of entities to be processed in a single batch run.
  */
-$settings['entity_update_batch_size'] = 50;
+$settings["entity_update_batch_size"] = 50;
 
 /**
  * Entity update backup.
@@ -757,7 +756,7 @@ $settings['entity_update_batch_size'] = 50;
  * well as the original entity type and field storage definitions should be
  * retained after a successful entity update process.
  */
-$settings['entity_update_backup'] = TRUE;
+$settings["entity_update_backup"] = true;
 
 /**
  * Node migration type.
@@ -770,7 +769,7 @@ $settings['entity_update_backup'] = TRUE;
  * complete node migrations. Set this to TRUE to force the use of the classic
  * node migrations.
  */
-$settings['migrate_node_migrate_type_classic'] = FALSE;
+$settings["migrate_node_migrate_type_classic"] = false;
 
 /**
  * The default settings for migration sources.
@@ -832,16 +831,16 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 # if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
 #   include $app_root . '/' . $site_path . '/settings.local.php';
 # }
-$databases['default']['default'] = array (
-  'database' => getenv('DRUPAL_DB_NAME'),
-  'username' => getenv('DRUPAL_DB_USERNAME'),
-  'password' => getenv('DRUPAL_DB_PASSWORD'),
-  'prefix' => '',
-  'host' => getenv('DRUPAL_DB_HOST'),
-  'port' => getenv('DRUPAL_DB_PORT'),
-  'isolation_level' => 'READ COMMITTED',
-  'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
-  'driver' => 'mysql',
-  'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
-);
-$settings['config_sync_directory'] = '/opt/drupal/web/config/';
+$databases["default"]["default"] = [
+    "database" => getenv("DRUPAL_DB_NAME"),
+    "username" => getenv("DRUPAL_DB_USERNAME"),
+    "password" => getenv("DRUPAL_DB_PASSWORD"),
+    "prefix" => "",
+    "host" => getenv("DRUPAL_DB_HOST"),
+    "port" => getenv("DRUPAL_DB_PORT"),
+    "isolation_level" => "READ COMMITTED",
+    "namespace" => "Drupal\\mysql\\Driver\\Database\\mysql",
+    "driver" => "mysql",
+    "autoload" => "core/modules/mysql/src/Driver/Database/mysql/",
+];
+$settings["config_sync_directory"] = "/opt/drupal/web/config/";

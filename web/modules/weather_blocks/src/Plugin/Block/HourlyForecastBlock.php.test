@@ -10,165 +10,220 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for the HourlyForecast block.
  */
-final class HourlyForecastBlockTest extends TestCase {
-  /**
-   * A ready-to-use hourly forecast block.
-   *
-   * @var hourlyForecastBlock
-   */
-  protected $hourlyForecastBlock;
+final class HourlyForecastBlockTest extends TestCase
+{
+    /**
+     * A ready-to-use hourly forecast block.
+     *
+     * @var hourlyForecastBlock
+     */
+    protected $hourlyForecastBlock;
 
-  /**
-   * A mock of the route object.
-   *
-   * @var routeMock
-   */
-  protected $routeMock;
+    /**
+     * A mock of the route object.
+     *
+     * @var routeMock
+     */
+    protected $routeMock;
 
-  /**
-   * A mocked WeatherData service object.
-   *
-   * @var weatherData
-   *
-   * This is injected into the current conditions block object being tested with
-   * dependency injection.
-   */
-  protected $weatherData;
+    /**
+     * A mocked WeatherData service object.
+     *
+     * @var weatherData
+     *
+     * This is injected into the current conditions block object being tested with
+     * dependency injection.
+     */
+    protected $weatherData;
 
-  /**
-   * Common setup for all component tests.
-   *
-   * Creates a mock of a weather data service and injects it into a new current
-   * conditions block object.
-   */
-  protected function setUp() : void {
-    $definition = [
-      "provider" => "weather_blocks",
-    ];
+    /**
+     * Common setup for all component tests.
+     *
+     * Creates a mock of a weather data service and injects it into a new current
+     * conditions block object.
+     */
+    protected function setUp(): void
+    {
+        $definition = [
+            "provider" => "weather_blocks",
+        ];
 
-    $this->weatherData = $this->createStub(WeatherDataService::class);
+        $this->weatherData = $this->createStub(WeatherDataService::class);
 
-    $this->routeMock = $this->createStub(RouteMatchInterface::class);
-    $this->routeMock->method('getRouteName')->willReturn("weather_routes.grid");
+        $this->routeMock = $this->createStub(RouteMatchInterface::class);
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.grid");
 
-    $this->hourlyForecastBlock = new HourlyForecastBlock([], '', $definition, $this->weatherData, $this->routeMock);
+        $this->hourlyForecastBlock = new HourlyForecastBlock(
+            [],
+            "",
+            $definition,
+            $this->weatherData,
+            $this->routeMock,
+        );
+    }
 
-  }
+    /**
+     * Tests that the block returns the correct form with default configuration.
+     */
+    public function testDefaultForm(): void
+    {
+        $expected = [
+            "max_items" => [
+                "#type" => "textfield",
+                "#title" => "Maximum items to display",
+                "#default_value" => "12",
+            ],
+        ];
 
-  /**
-   * Tests that the block returns the correct form with default configuration.
-   */
-  public function testDefaultForm() : void {
-    $expected = [
-      "max_items" => [
-        "#type" => "textfield",
-        "#title" => "Maximum items to display",
-        "#default_value" => "12",
-      ],
-    ];
+        $formState = $this->createStub(FormStateInterface::class);
 
-    $formState = $this->createStub(FormStateInterface::class);
+        $actual = $this->hourlyForecastBlock->blockForm([], $formState);
 
-    $actual = $this->hourlyForecastBlock->blockForm([], $formState);
+        $this->assertEquals($expected["max_items"], $actual["max_items"]);
+    }
 
-    $this->assertEquals($expected["max_items"], $actual["max_items"]);
-  }
+    /**
+     * Test that the block returns the correct form based on prior configuration.
+     */
+    public function testFormUsingExistingConfig(): void
+    {
+        $this->hourlyForecastBlock->setConfigurationValue("max_items", "6");
 
-  /**
-   * Test that the block returns the correct form based on prior configuration.
-   */
-  public function testFormUsingExistingConfig() : void {
-    $this->hourlyForecastBlock->setConfigurationValue("max_items", "6");
+        $expected = [
+            "max_items" => [
+                "#type" => "textfield",
+                "#title" => "Maximum items to display",
+                "#default_value" => "6",
+            ],
+        ];
 
-    $expected = [
-      "max_items" => [
-        "#type" => "textfield",
-        "#title" => "Maximum items to display",
-        "#default_value" => "6",
-      ],
-    ];
+        $formState = $this->createStub(FormStateInterface::class);
 
-    $formState = $this->createStub(FormStateInterface::class);
+        $actual = $this->hourlyForecastBlock->blockForm([], $formState);
 
-    $actual = $this->hourlyForecastBlock->blockForm([], $formState);
+        $this->assertEquals($expected["max_items"], $actual["max_items"]);
+    }
 
-    $this->assertEquals($expected["max_items"], $actual["max_items"]);
+    /**
+     * Test that the block properly persists configuration changes.
+     */
+    public function testBlockSubmit(): void
+    {
+        $expected = "9";
 
-  }
+        $formState = $this->createStub(FormStateInterface::class);
+        // I don't know why the returnValueMap function on this stub isn't working
+        // as I expected, so instead put values that should be returned in the order
+        // of the calls. This is super fragile, but I couldn't get the "correct" way
+        // to work. I looked into use Prophecy mocks instead, but they similarly
+        // just wouldn't work.
+        $formState->method("getValue")->willReturn(null, $expected);
 
-  /**
-   * Test that the block properly persists configuration changes.
-   */
-  public function testBlockSubmit() : void {
-    $expected = '9';
+        $this->hourlyForecastBlock->blockSubmit([], $formState);
 
-    $formState = $this->createStub(FormStateInterface::class);
-    // I don't know why the returnValueMap function on this stub isn't working
-    // as I expected, so instead put values that should be returned in the order
-    // of the calls. This is super fragile, but I couldn't get the "correct" way
-    // to work. I looked into use Prophecy mocks instead, but they similarly
-    // just wouldn't work.
-    $formState->method("getValue")->willReturn(NULL, $expected);
+        $actual = $this->hourlyForecastBlock->getConfiguration()["max_items"];
 
-    $this->hourlyForecastBlock->blockSubmit([], $formState);
+        $this->assertEquals($expected, $actual);
+    }
 
-    $actual = $this->hourlyForecastBlock->getConfiguration()["max_items"];
+    /**
+     * Test that the block returns default data if unconfigured.
+     */
+    public function testBuildWithDefaultConfiguration(): void
+    {
+        $this->weatherData
+            ->method("getHourlyForecastFromGrid")
+            ->willReturn([
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+            ]);
 
-    $this->assertEquals($expected, $actual);
-  }
+        $expected = [
+            "hours" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        ];
+        $actual = $this->hourlyForecastBlock->build();
 
-  /**
-   * Test that the block returns default data if unconfigured.
-   */
-  public function testBuildWithDefaultConfiguration() : void {
-    $this->weatherData
-      ->method('getHourlyForecastFromGrid')
-      ->willReturn([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        $this->assertEquals($expected, $actual);
+    }
 
-    $expected = [
-      "hours" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    ];
-    $actual = $this->hourlyForecastBlock->build();
+    /**
+     * Test that the block returns data according to saved configuration.
+     */
+    public function testBuildWithModifiedConfigured(): void
+    {
+        $this->hourlyForecastBlock->setConfigurationValue("max_items", "7");
 
-    $this->assertEquals($expected, $actual);
-  }
+        $this->weatherData
+            ->method("getHourlyForecastFromGrid")
+            ->willReturn([
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+            ]);
 
-  /**
-   * Test that the block returns data according to saved configuration.
-   */
-  public function testBuildWithModifiedConfigured() : void {
-    $this->hourlyForecastBlock->setConfigurationValue("max_items", "7");
+        $expected = [
+            "hours" => [1, 2, 3, 4, 5, 6, 7],
+        ];
+        $actual = $this->hourlyForecastBlock->build();
 
-    $this->weatherData
-      ->method('getHourlyForecastFromGrid')
-      ->willReturn([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        $this->assertEquals($expected, $actual);
+    }
 
-    $expected = [
-      "hours" => [1, 2, 3, 4, 5, 6, 7],
-    ];
-    $actual = $this->hourlyForecastBlock->build();
+    /**
+     * Test that the block returns null if we're not on a grid route.
+     */
+    public function testBuildNotGridRoute(): void
+    {
+        $definition = [
+            "provider" => "weather_blocks",
+        ];
 
-    $this->assertEquals($expected, $actual);
-  }
+        $this->weatherData = $this->createStub(WeatherDataService::class);
 
-  /**
-   * Test that the block returns null if we're not on a grid route.
-   */
-  public function testBuildNotGridRoute(): void {
-    $definition = [
-      "provider" => "weather_blocks",
-    ];
+        $this->routeMock = $this->createStub(RouteMatchInterface::class);
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.not-grid");
 
-    $this->weatherData = $this->createStub(WeatherDataService::class);
+        $this->hourlyForecastBlock = new HourlyForecastBlock(
+            [],
+            "",
+            $definition,
+            $this->weatherData,
+            $this->routeMock,
+        );
 
-    $this->routeMock = $this->createStub(RouteMatchInterface::class);
-    $this->routeMock->method('getRouteName')->willReturn("weather_routes.not-grid");
+        $actual = $this->hourlyForecastBlock->build();
 
-    $this->hourlyForecastBlock = new HourlyForecastBlock([], '', $definition, $this->weatherData, $this->routeMock);
-
-    $actual = $this->hourlyForecastBlock->build();
-
-    $this->assertEquals(NULL, $actual);
-  }
-
+        $this->assertEquals(null, $actual);
+    }
 }

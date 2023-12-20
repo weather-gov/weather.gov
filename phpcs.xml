@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="drupal">
-  <description>PHP CodeSniffer configuration for Drupal coding standards.</description>
+  <description>weather.gov coding standards configuration</description>
   <file>./web/modules</file>
   <file>./web/themes</file>
+  <arg name="extensions" value="php,module,inc,install,test,profile,theme" />
+  <rule ref="PSR12" />
+  <!-- Don't look at our compiled assets or 3rd-party stuff -->
   <exclude-pattern>*/themes/*/assets/*</exclude-pattern>
   <exclude-pattern>*/contrib/*</exclude-pattern>
   <exclude-pattern>*/node_modules/*</exclude-pattern>
-  <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,md,yml" />
-  <config name="drupal_core_version" value="10" />
-  <rule ref="Drupal">
-    <exclude name="Drupal.NamingConventions.ValidFunctionName.ScopeNotCamelCaps" />
-  </rule>
-  <rule ref="DrupalPractice" />
 </ruleset>

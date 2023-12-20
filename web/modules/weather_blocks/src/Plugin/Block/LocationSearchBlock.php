@@ -11,32 +11,32 @@ namespace Drupal\weather_blocks\Plugin\Block;
  *   category = @Translation("weather.gov"),
  * )
  */
-class LocationSearchBlock extends WeatherBlockBase {
+class LocationSearchBlock extends WeatherBlockBase
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function build()
+    {
+        $location = $this->getLocation();
 
-  /**
-   * {@inheritdoc}
-   */
-  public function build() {
-    $location = $this->getLocation();
+        if ($location->grid) {
+            $grid = $location->grid;
+            $data = $this->weatherData->getPlaceFromGrid(
+                $grid->wfo,
+                $grid->x,
+                $grid->y,
+            );
 
-    if ($location->grid) {
-      $grid = $location->grid;
-      $data = $this->weatherData->getPlaceFromGrid(
-        $grid->wfo,
-        $grid->x,
-        $grid->y
-      );
+            if ($data) {
+                return [
+                    "place" => $data,
+                ];
+            }
+        }
 
-      if ($data) {
         return [
-          'place' => $data,
+            "place" => null,
         ];
-      }
     }
-
-    return [
-      'place' => NULL,
-    ];
-  }
-
 }

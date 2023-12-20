@@ -113,7 +113,7 @@ js-format: ## Format JS code according to our style guide.
 	npm run js-format
 
 php-format: ## Format your PHP code according to the Drupal PHP language standard
-	docker compose exec drupal phpcbf
+	npm run php-format
 
 style-format: ## Format your Sass code according to our style code.
 	npm run style-format
