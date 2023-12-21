@@ -22,13 +22,22 @@ class CurrentConditionsBlock extends WeatherBlockBase
 
         if ($location->grid) {
             $grid = $location->grid;
+
+            $place = $this->weatherData->getPlaceFromGrid(
+                $grid->wfo,
+                $grid->x,
+                $grid->y,
+            );
+
             $data = $this->weatherData->getCurrentConditionsFromGrid(
                 $grid->wfo,
                 $grid->x,
                 $grid->y,
             );
+
+            $data["place"] = $place->city . ", " . $place->state;
+
             return $data;
         }
-        return null;
     }
 }

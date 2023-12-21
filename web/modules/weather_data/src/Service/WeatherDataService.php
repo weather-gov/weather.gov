@@ -14,6 +14,7 @@ class WeatherDataService
 {
     use LoggerChannelTrait;
     use UnitConversionTrait;
+    use WeatherAlertTrait;
 
     protected const NUMBER_OF_OBS_STATIONS_TO_TRY = 3;
 

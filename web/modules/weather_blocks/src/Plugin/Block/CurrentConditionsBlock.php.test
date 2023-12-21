@@ -68,11 +68,20 @@ final class CurrentConditionsBlockTest extends TestCase
      */
     public function testBuild(): void
     {
+        $this->weatherData->method("getPlaceFromGrid")->willReturn(
+            (object) [
+                "city" => "Placeville",
+                "state" => "Statesylvania",
+            ],
+        );
         $this->weatherData
             ->method("getCurrentConditionsFromGrid")
-            ->willReturn("this is weather data");
+            ->willReturn(["info" => "this is weather data"]);
 
-        $expected = "this is weather data";
+        $expected = [
+            "info" => "this is weather data",
+            "place" => "Placeville, Statesylvania",
+        ];
         $actual = $this->currentConditionsBlock->build();
 
         $this->assertEquals($expected, $actual);
