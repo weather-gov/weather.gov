@@ -7,16 +7,16 @@ use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for the CurrentConditions block.
+ * Tests for the LocalAlerts block.
  */
-final class CurrentConditionsBlockTest extends TestCase
+final class LocalAlertsBlockTest extends TestCase
 {
     /**
-     * A ready-to-use current conditions block object.
+     * A ready-to-use local alerts block object.
      *
      * @var currentConditionsBlock
      */
-    protected $currentConditionsBlock;
+    protected $localAlertsBlock;
 
     /**
      * A mock of the route object.
@@ -38,8 +38,8 @@ final class CurrentConditionsBlockTest extends TestCase
     /**
      * Common setup for all component tests.
      *
-     * Creates a mock of a weather data service and injects it into a new current
-     * conditions block object.
+     * Creates a mock of a weather data service and injects it into a new local
+     * alert block object.
      */
     protected function setUp(): void
     {
@@ -54,7 +54,7 @@ final class CurrentConditionsBlockTest extends TestCase
             ->method("getRouteName")
             ->willReturn("weather_routes.grid");
 
-        $this->currentConditionsBlock = new CurrentConditionsBlock(
+        $this->currentConditionsBlock = new LocalAlertsBlock(
             [],
             "",
             $definition,
@@ -68,20 +68,11 @@ final class CurrentConditionsBlockTest extends TestCase
      */
     public function testBuild(): void
     {
-        $this->weatherData->method("getPlaceFromGrid")->willReturn(
-            (object) [
-                "city" => "Placeville",
-                "state" => "Statesylvania",
-            ],
-        );
         $this->weatherData
-            ->method("getCurrentConditionsFromGrid")
-            ->willReturn(["info" => "this is weather data"]);
+            ->method("getAlertsForGrid")
+            ->willReturn("here be alerts");
 
-        $expected = [
-            "info" => "this is weather data",
-            "place" => "Placeville, Statesylvania",
-        ];
+        $expected = ["alerts" => "here be alerts"];
         $actual = $this->currentConditionsBlock->build();
 
         $this->assertEquals($expected, $actual);
@@ -103,7 +94,7 @@ final class CurrentConditionsBlockTest extends TestCase
             ->method("getRouteName")
             ->willReturn("weather_routes.not-grid");
 
-        $this->currentConditionsBlock = new CurrentConditionsBlock(
+        $this->currentConditionsBlock = new LocalAlertsBlock(
             [],
             "",
             $definition,

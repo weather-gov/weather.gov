@@ -7,32 +7,51 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Tests for the WeatherDataService getCurrentConditions method.
  */
-final class GetFromApiTest extends Base {
+final class GetFromApiTest extends Base
+{
+    /**
+     * Tests that the method fetches and parses whatever the API returns.
+     */
+    public function testGetsApiData(): void
+    {
+        $expected = (object) ["response" => "here"];
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/json"],
+                '{"response":"here"}',
+            ),
+        );
 
-  /**
-   * Tests that the method fetches and parses whatever the API returns.
-   */
-  public function testGetsApiData(): void {
-    $expected = (object) ["response" => "here"];
-    $this->httpClientMock->append(new Response(200, ['Content-type' => 'application/json'], '{"response":"here"}'));
+        $actual = $this->weatherDataService->getFromWeatherAPI("my url");
 
-    $actual = $this->weatherDataService->getFromWeatherAPI("my url");
+        $this->assertEquals($expected, $actual);
+    }
 
-    $this->assertEquals($expected, $actual);
-  }
+    /**
+     * Tests that the method caches results.
+     */
+    public function testCachesApiData(): void
+    {
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/json"],
+                '{"response":"here"}',
+            ),
+        );
+        $first = $this->weatherDataService->getFromWeatherAPI("my url");
 
-  /**
-   * Tests that the method caches results.
-   */
-  public function testCachesApiData(): void {
-    $this->httpClientMock->append(new Response(200, ['Content-type' => 'application/json'], '{"response":"here"}'));
-    $first = $this->weatherDataService->getFromWeatherAPI("my url");
+        // Change the response and call it again. We should get the same response.
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/json"],
+                '{"here":"response"}',
+            ),
+        );
+        $second = $this->weatherDataService->getFromWeatherAPI("my url");
 
-    // Change the response and call it again. We should get the same response.
-    $this->httpClientMock->append(new Response(200, ['Content-type' => 'application/json'], '{"here":"response"}'));
-    $second = $this->weatherDataService->getFromWeatherAPI("my url");
-
-    $this->assertEquals($second, $first);
-  }
-
+        $this->assertEquals($second, $first);
+    }
 }

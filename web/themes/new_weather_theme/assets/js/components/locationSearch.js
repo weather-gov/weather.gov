@@ -185,7 +185,7 @@ const locationSelected = async (event) => {
 const searchChanged = async (event) => {
   // We only care about input elements with the
   // id that we've specified in the template.
-  if (!event.target.id === "weather-location-search") {
+  if (event.target.id !== "weather-location-search") {
     return;
   }
   const { value } = event.target;

@@ -3,15 +3,15 @@
 namespace Drupal\weather_blocks\Plugin\Block;
 
 /**
- * Provides a block of the daily forecast for the next 5 days.
+ * Provides a block of active alerts for a location.
  *
  * @Block(
- *   id = "weathergov_daily_forecast",
- *   admin_label = @Translation("Daily forecast block"),
+ *   id = "weathergov_local_alerts",
+ *   admin_label = @Translation("Local alerts block"),
  *   category = @Translation("weather.gov"),
  * )
  */
-class DailyForecastBlock extends WeatherBlockBase
+class LocalAlertsBlock extends WeatherBlockBase
 {
     /**
      * {@inheritdoc}
@@ -23,12 +23,12 @@ class DailyForecastBlock extends WeatherBlockBase
         if ($location->grid) {
             $grid = $location->grid;
 
-            $data = $this->weatherData->getDailyForecastFromGrid(
+            $data = $this->weatherData->getAlertsForGrid(
                 $grid->wfo,
                 $grid->x,
                 $grid->y,
             );
-            return ["days" => $data];
+            return ["alerts" => $data];
         }
         return null;
     }

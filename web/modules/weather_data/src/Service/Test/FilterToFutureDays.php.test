@@ -9,67 +9,85 @@ namespace Drupal\weather_data\Service\Test;
  * forecast periods to future days, in other words periods
  * that exclude the current day/night.
  */
-final class FilterToFutureDaysTest extends Base {
-  /**
-   * The static time used for testing.
-   *
-   * @var now
-   */
-  protected $now;
+final class FilterToFutureDaysTest extends Base
+{
+    /**
+     * The static time used for testing.
+     *
+     * @var now
+     */
+    protected $now;
 
-  /**
-   * Test case setup.
-   */
-  protected function setUp(): void {
-    parent::setUp();
+    /**
+     * Test case setup.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    // Following the other testing conventions,
-    // we use an established timestamp for 'now'.
-    date_default_timezone_set('America/New_York');
-    $this->now = \DateTimeImmutable::createFromFormat(
-      \DateTimeInterface::ISO8601_EXPANDED,
-      '2023-11-27T12:00:00-7:00'
-    );
-  }
+        // Following the other testing conventions,
+        // we use an established timestamp for 'now'.
+        date_default_timezone_set("America/New_York");
+        $this->now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2023-11-27T12:00:00-7:00",
+        );
+    }
 
-  /**
-   * Ensure we are removing any periods corresponding to 'today'.
-   *
-   * Here 'today' means the day of the first forecast period
-   * in the data.
-   */
-  public function testRemovingTodaysPeriods(): void {
-    $periods = json_decode(file_get_contents(__DIR__ . "/test_data/daily.forecast.periods.good.json"));
-    $now = \DateTimeImmutable::createFromFormat(
-        \DateTimeInterface::ISO8601_EXPANDED,
-        $periods[0]->startTime
-    );
-    $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, $now);
-    $expectedPeriods = array_slice($periods, 2);
+    /**
+     * Ensure we are removing any periods corresponding to 'today'.
+     *
+     * Here 'today' means the day of the first forecast period
+     * in the data.
+     */
+    public function testRemovingTodaysPeriods(): void
+    {
+        $periods = json_decode(
+            file_get_contents(
+                __DIR__ . "/test_data/daily.forecast.periods.good.json",
+            ),
+        );
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $periods[0]->startTime,
+        );
+        $filteredPeriods = $this->weatherDataService->filterToFutureDays(
+            $periods,
+            $now,
+        );
+        $expectedPeriods = array_slice($periods, 2);
 
-    // The last element of the periods has a different
-    // timezone (Hawaii). We expect that to be
-    // filtered out as well.
-    array_pop($expectedPeriods);
+        // The last element of the periods has a different
+        // timezone (Hawaii). We expect that to be
+        // filtered out as well.
+        array_pop($expectedPeriods);
 
-    $this->assertEquals($expectedPeriods, $filteredPeriods);
-  }
+        $this->assertEquals($expectedPeriods, $filteredPeriods);
+    }
 
-  /**
-   * Ensure that we are limiting the results to the correct number of "days".
-   *
-   * "Days" here means a _pair_ of periods (daytime/overnight)
-   */
-  public function testRemovingTodaysPeriodsWithLimitThree(): void {
-    $periods = json_decode(file_get_contents(__DIR__ . "/test_data/daily.forecast.periods.good.json"));
-    $now = \DateTimeImmutable::createFromFormat(
-        \DateTimeInterface::ISO8601_EXPANDED,
-        $periods[0]->startTime
-    );
-    $filteredPeriods = $this->weatherDataService->filterToFutureDays($periods, $now, 3);
-    $expectedPeriods = array_slice($periods, 2, 6);
+    /**
+     * Ensure that we are limiting the results to the correct number of "days".
+     *
+     * "Days" here means a _pair_ of periods (daytime/overnight)
+     */
+    public function testRemovingTodaysPeriodsWithLimitThree(): void
+    {
+        $periods = json_decode(
+            file_get_contents(
+                __DIR__ . "/test_data/daily.forecast.periods.good.json",
+            ),
+        );
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $periods[0]->startTime,
+        );
+        $filteredPeriods = $this->weatherDataService->filterToFutureDays(
+            $periods,
+            $now,
+            3,
+        );
+        $expectedPeriods = array_slice($periods, 2, 6);
 
-    $this->assertEquals($expectedPeriods, $filteredPeriods);
-  }
-
+        $this->assertEquals($expectedPeriods, $filteredPeriods);
+    }
 }

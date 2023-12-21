@@ -1,7 +1,7 @@
 {# Widgets and stuff. This is presented as a row of columns. #}
 <div class="grid-row weather-gov-current-conditions">
   <h2 class="usa-sr-only">{{ label }}</h2>
-  <div class="grid-row flex-row margin-y-4 tablet:margin-left-4">
+  <div class="grid-row flex-row margin-y-4 tablet:margin-left-4" aria-hidden="true">
     {# First column: weather icon #}
     <div class="icon margin-right-1">
       {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon )}}
@@ -59,14 +59,24 @@
         </weather-timestamp>
       </p>
       <p class="margin-0 margin-top-05">
-        {{ "The weather in <strong>@place</strong> is <strong>@conditions</strong>.
-          Temperature is <strong>@temperature℉</strong>.
-          Humidity is <strong>@humidity%</strong>"
+        {{ "The weather in <strong>@place</strong>, is <strong>@conditions</strong>.
+          Temperature is <strong>@temperature℉</strong>." |
+          t({
+            "@place": content.place,
+            "@conditions": content.conditions.long | lower,
+            "@temperature": content.temperature,
+          })
+        }}
+        {% if content.feels_like != content.temperature %}
+        {{ " It feels like <strong>@feelsLike℉</strong>." |
+          t({
+            "@feelsLike": content.feels_like
+          })
+        }}
+        {% endif %}
+        {{ " Humidity is <strong>@humidity%</strong>"
         |
         t({
-          "@place": content.location,
-          "@conditions": content.conditions.long | lower,
-          "@temperature": content.temperature,
           "@humidity": content.humidity
         })
         }}{% if content.wind.speed > 0 %}

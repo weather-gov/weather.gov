@@ -7,241 +7,267 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Tests for the WeatherDataService getHourlyForecast method.
  */
-final class GetHourlyForecastTest extends Base {
-  /**
-   * The static time used for testing.
-   *
-   * @var now
-   */
-  protected $now;
+final class GetHourlyForecastTest extends Base
+{
+    /**
+     * The static time used for testing.
+     *
+     * @var now
+     */
+    protected $now;
 
-  /**
-   * Common setup for all component tests.
-   */
-  protected function setUp() : void {
-    parent::setUp();
+    /**
+     * Common setup for all component tests.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    // Our test date. It's set to the date this test was first created because
-    // it has to be something and I was too lazy to be creative that day. And
-    // I made it noon because I was hungry. But also it's UTC, so I wouldn't
-    // actually get to eat for several hours anyway. :sigh:
-    $this->now = \DateTimeImmutable::createFromFormat(
-      \DateTimeInterface::ISO8601_EXPANDED,
-      "2023-11-16T12:00:00Z"
-    );
-  }
+        // Our test date. It's set to the date this test was first created because
+        // it has to be something and I was too lazy to be creative that day. And
+        // I made it noon because I was hungry. But also it's UTC, so I wouldn't
+        // actually get to eat for several hours anyway. :sigh:
+        $this->now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2023-11-16T12:00:00Z",
+        );
+    }
 
-  /**
-   * Sets up the happy path for network traffic.
-   *
-   * Given a forecast, which should be an array of hourly forecast points, sets
-   * up the network mocks to return that correctly. Sets the forecast location's
-   * timezone to America/Denver.
-   */
-  protected function setupHappyPath($forecast): void {
-    // First call is to get the hourly forecast, so return that.
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        json_encode([
-          "geometry" => [
-            "coordinates" => [[["X", "Y"]]],
-          ],
-          "properties" => [
-            "periods" => $forecast,
-          ],
-        ])
-      )
-    );
+    /**
+     * Sets up the happy path for network traffic.
+     *
+     * Given a forecast, which should be an array of hourly forecast points, sets
+     * up the network mocks to return that correctly. Sets the forecast location's
+     * timezone to America/Denver.
+     */
+    protected function setupHappyPath($forecast): void
+    {
+        // First call is to get the hourly forecast, so return that.
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                json_encode([
+                    "geometry" => [
+                        "coordinates" => [[["X", "Y"]]],
+                    ],
+                    "properties" => [
+                        "periods" => $forecast,
+                    ],
+                ]),
+            ),
+        );
 
-    // Next call is to the points API so we can get the timezone.
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        json_encode([
-          "properties" => [
-            "timeZone" => "America/Denver",
-          ],
-        ])
-      )
-    );
+        // Next call is to the points API so we can get the timezone.
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                json_encode([
+                    "properties" => [
+                        "timeZone" => "America/Denver",
+                    ],
+                ]),
+            ),
+        );
+    }
 
-  }
+    /**
+     * Test that past hours are removed.
+     */
+    public function testRemovingPastHourlyPeriods(): void
+    {
+        $response = [
+            [
+                // One minute before noon UTC, but not using UTC or America/Denver tz.
+                "startTime" => "2023-11-16T03:59:59-08:00",
+                "temperature" => 1,
+                "shortForecast" => "blah",
+                "probabilityOfPrecipitation" => [
+                    "value" => 11,
+                ],
+                "icon" => "https://blah/day/rain,30?size=small",
+            ],
+            [
+                // One hour before noon UTC, and in America/Denver tz.
+                "startTime" => "2023-11-16T03:00:00-07:00",
+                "temperature" => 2,
+                "shortForecast" => "bleh",
+                "probabilityOfPrecipitation" => [
+                    "value" => 22,
+                ],
+                "icon" => "https://blah/day/rain,30?size=small",
+            ],
+            [
+                // One hour before noon UTC.
+                "startTime" => "2023-11-16T11:00:00Z",
+                "temperature" => 3,
+                "shortForecast" => "bluh",
+                "probabilityOfPrecipitation" => [
+                    "value" => 33,
+                ],
+                "icon" => "https://blah/day/rain,30?size=small",
+            ],
+        ];
+        $this->setupHappyPath($response);
 
-  /**
-   * Test that past hours are removed.
-   */
-  public function testRemovingPastHourlyPeriods(): void {
-    $response = [
-      [
-        // One minute before noon UTC, but not using UTC or America/Denver tz.
-        "startTime" => "2023-11-16T03:59:59-08:00",
-        "temperature" => 1,
-        "shortForecast" => "blah",
-        "probabilityOfPrecipitation" => [
-          "value" => 11,
-        ],
-        "icon" => "https://blah/day/rain,30?size=small",
-      ],
-      [
-        // One hour before noon UTC, and in America/Denver tz.
-        "startTime" => "2023-11-16T03:00:00-07:00",
-        "temperature" => 2,
-        "shortForecast" => "bleh",
-        "probabilityOfPrecipitation" => [
-          "value" => 22,
-        ],
-        "icon" => "https://blah/day/rain,30?size=small",
-      ],
-      [
-        // One hour before noon UTC.
-        "startTime" => "2023-11-16T11:00:00Z",
-        "temperature" => 3,
-        "shortForecast" => "bluh",
-        "probabilityOfPrecipitation" => [
-          "value" => 33,
-        ],
-        "icon" => "https://blah/day/rain,30?size=small",
-      ],
-    ];
-    $this->setupHappyPath($response);
+        $expected = [];
+        $actual = $this->weatherDataService->getHourlyForecastFromGrid(
+            "wfo",
+            "x",
+            "y",
+            $this->now,
+        );
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
 
-    $expected = [];
-    $actual = $this->weatherDataService->getHourlyForecastFromGrid('wfo', 'x', 'y', $this->now);
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
+    /**
+     * Test that empty or null icons are handled properly.
+     */
+    public function testEmptyAndNullIcon(): void
+    {
+        $response = [
+            [
+                "startTime" => "2023-11-16T12:00:00-07:00",
+                "temperature" => 1,
+                "shortForecast" => "thunderBOLT",
+                "probabilityOfPrecipitation" => [
+                    "value" => 11,
+                ],
+                "icon" => "",
+            ],
+            [
+                "startTime" => "2023-11-16T13:00:00-07:00",
+                "temperature" => 2,
+                "shortForecast" => "lightning",
+                "probabilityOfPrecipitation" => [
+                    "value" => 22,
+                ],
+                "icon" => null,
+            ],
+        ];
+        $this->setupHappyPath($response);
 
-  /**
-   * Test that empty or null icons are handled properly.
-   */
-  public function testEmptyAndNullIcon(): void {
-    $response = [
-      [
-        "startTime" => "2023-11-16T12:00:00-07:00",
-        "temperature" => 1,
-        "shortForecast" => "thunderBOLT",
-        "probabilityOfPrecipitation" => [
-          "value" => 11,
-        ],
-        "icon" => "",
-      ],
-      [
-        "startTime" => "2023-11-16T13:00:00-07:00",
-        "temperature" => 2,
-        "shortForecast" => "lightning",
-        "probabilityOfPrecipitation" => [
-          "value" => 22,
-        ],
-        "icon" => NULL,
-      ],
-    ];
-    $this->setupHappyPath($response);
+        $expected = [
+            [
+                // Conditions should be sentence-cased.
+                "conditions" => "Thunderbolt",
+                "icon" => "nodata.svg",
+                "iconBasename" => "nodata",
+                "probabilityOfPrecipitation" => 11,
+                "time" => "12 PM",
+                "temperature" => 1,
+            ],
+            [
+                "conditions" => "Lightning",
+                "icon" => "nodata.svg",
+                "iconBasename" => "nodata",
+                "probabilityOfPrecipitation" => 22,
+                "time" => "1 PM",
+                "temperature" => 2,
+            ],
+        ];
 
-    $expected = [
-      [
-        // Conditions should be sentence-cased.
-        "conditions" => "Thunderbolt",
-        "icon" => "nodata.svg",
-        "iconBasename" => "nodata",
-        "probabilityOfPrecipitation" => 11,
-        "time" => "12 PM",
-        "temperature" => 1,
-      ],
-      [
-        "conditions" => "Lightning",
-        "icon" => "nodata.svg",
-        "iconBasename" => "nodata",
-        "probabilityOfPrecipitation" => 22,
-        "time" => "1 PM",
-        "temperature" => 2,
-      ],
-    ];
+        $actual = $this->weatherDataService->getHourlyForecastFromGrid(
+            "wfo",
+            "x",
+            "y",
+            $this->now,
+        );
 
-    $actual = $this->weatherDataService->getHourlyForecastFromGrid('wfo', 'x', 'y', $this->now);
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
 
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
+    /**
+     * Test the happiest of happy paths.
+     */
+    public function testHappyPath(): void
+    {
+        $response = [
+            [
+                // One minute before noon UTC. This should be filtered out.
+                "startTime" => "2023-11-16T03:59:59-08:00",
+                "temperature" => 1,
+                "shortForecast" => "Very Very",
+                "probabilityOfPrecipitation" => [
+                    "value" => 11,
+                ],
+                "icon" => "https://blah/day/rain,30?size=small",
+            ],
+            [
+                "startTime" => "2023-11-16T12:00:00-07:00",
+                "temperature" => 2,
+                "shortForecast" => "FRIGHTENING",
+                "probabilityOfPrecipitation" => [
+                    "value" => 22,
+                ],
+                "icon" => "https://blah/night/rain,30?size=medium",
+            ],
+            [
+                "startTime" => "2023-11-16T13:00:00-07:00",
+                "temperature" => 3,
+                "shortForecast" => "Mama mia!",
+                "probabilityOfPrecipitation" => [
+                    "value" => 33,
+                ],
+                "icon" => "https://blah/day/snow,40?size=huge",
+            ],
+        ];
+        $this->setupHappyPath($response);
 
-  /**
-   * Test the happiest of happy paths.
-   */
-  public function testHappyPath(): void {
-    $response = [
-      [
-        // One minute before noon UTC. This should be filtered out.
-        "startTime" => "2023-11-16T03:59:59-08:00",
-        "temperature" => 1,
-        "shortForecast" => "Very Very",
-        "probabilityOfPrecipitation" => [
-          "value" => 11,
-        ],
-        "icon" => "https://blah/day/rain,30?size=small",
-      ],
-      [
-        "startTime" => "2023-11-16T12:00:00-07:00",
-        "temperature" => 2,
-        "shortForecast" => "FRIGHTENING",
-        "probabilityOfPrecipitation" => [
-          "value" => 22,
-        ],
-        "icon" => "https://blah/night/rain,30?size=medium",
-      ],
-      [
-        "startTime" => "2023-11-16T13:00:00-07:00",
-        "temperature" => 3,
-        "shortForecast" => "Mama mia!",
-        "probabilityOfPrecipitation" => [
-          "value" => 33,
-        ],
-        "icon" => "https://blah/day/snow,40?size=huge",
-      ],
-    ];
-    $this->setupHappyPath($response);
+        $expected = [
+            [
+                "conditions" => "Frightening",
+                "icon" => "rain.svg",
+                "iconBasename" => "rain",
+                "probabilityOfPrecipitation" => 22,
+                "time" => "12 PM",
+                "temperature" => 2,
+            ],
+            [
+                "conditions" => "Mama mia!",
+                "icon" => "snow.svg",
+                "iconBasename" => "snow",
+                "probabilityOfPrecipitation" => 33,
+                "time" => "1 PM",
+                "temperature" => 3,
+            ],
+        ];
 
-    $expected = [
-      [
-        "conditions" => "Frightening",
-        "icon" => "rain.svg",
-        "iconBasename" => "rain",
-        "probabilityOfPrecipitation" => 22,
-        "time" => "12 PM",
-        "temperature" => 2,
-      ],
-      [
-        "conditions" => "Mama mia!",
-        "icon" => "snow.svg",
-        "iconBasename" => "snow",
-        "probabilityOfPrecipitation" => 33,
-        "time" => "1 PM",
-        "temperature" => 3,
-      ],
-    ];
+        $actual = $this->weatherDataService->getHourlyForecastFromGrid(
+            "wfo",
+            "x",
+            "y",
+            $this->now,
+        );
 
-    $actual = $this->weatherDataService->getHourlyForecastFromGrid('wfo', 'x', 'y', $this->now);
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
 
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
+    /**
+     * Test that if we don't pass a "now", everything still works.
+     */
+    public function testDefaultNow(): void
+    {
+        $response = [
+            [
+                // The past. Any time in the past will do.
+                "startTime" => "1994-01-01T03:59:59-08:00",
+                "temperature" => 1,
+                "probabilityOfPrecipitation" => [
+                    "value" => 11,
+                ],
+                "icon" => "https://blah/day/rain,30?size=small",
+            ],
+        ];
+        $this->setupHappyPath($response);
 
-  /**
-   * Test that if we don't pass a "now", everything still works.
-   */
-  public function testDefaultNow(): void {
-    $response = [
-      [
-        // The past. Any time in the past will do.
-        "startTime" => "1994-01-01T03:59:59-08:00",
-        "temperature" => 1,
-        "probabilityOfPrecipitation" => [
-          "value" => 11,
-        ],
-        "icon" => "https://blah/day/rain,30?size=small",
-      ],
-    ];
-    $this->setupHappyPath($response);
-
-    $expected = [];
-    $actual = $this->weatherDataService->getHourlyForecastFromGrid('wfo', 'x', 'y');
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
+        $expected = [];
+        $actual = $this->weatherDataService->getHourlyForecastFromGrid(
+            "wfo",
+            "x",
+            "y",
+        );
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
 }

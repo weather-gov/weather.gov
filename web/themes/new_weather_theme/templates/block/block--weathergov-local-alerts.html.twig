@@ -1,0 +1,21 @@
+{% for alert in content.alerts %}
+<div class="usa-alert usa-alert--error" role="alert">
+  <div class="usa-alert__body">
+    <h4 class="usa-alert__heading">{{ alert.event }}</h4>
+    {% if alert.whatWhereWhen | length > 0 %}
+      <ul>
+      {% for item in alert.whatWhereWhen %}
+        <li><strong>{{ item.name }}:</strong> {{ item.value }}</li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      {% for paragraph in alert.description %}
+      <p>{{ paragraph }}</p>
+      {% endfor %}
+    {% endif %}
+    <p class="margin-bottom-0">
+      {{ alert.instruction }}
+    </p>
+  </div>
+</div>
+{% endfor %}

@@ -79,15 +79,14 @@ make format
 #### PHP code quality
 
 We use [PHP_CodeSniffer (phpcs)](https://github.com/squizlabs/PHP_CodeSniffer)
-to test our PHP code styles. We have adopted the Drupal standard style as our
-style guide. We also use PHP_CodeSniffer's formatter tool, `phpcbf`, to help us
-maintain consistent code. This tool can automatically format your code according
-to our style guide, though it cannot fix all errors.
+to test our PHP code styles. We have adopted the PSR12 standard style as our
+style guide. We also prettier to format our code. This tool can automatically
+format your code according to our style guide, though it cannot fix all errors.
 
 To format the project's PHP code:
 
 ```sh
-make format
+make php-format
 ```
 
 To test your PHP code's style:
@@ -95,6 +94,20 @@ To test your PHP code's style:
 ```sh
 make php-lint
 ```
+
+> [!NOTE]
+> If you are using VS Code, you will need to update its prettier configuration
+> in order for it to run on save for PHP files. You can add this to your global
+> settings, or you can add it to your local settings in `.vscode/settings.json`.
+> The local settings are the recommended approach.
+>
+> ```json
+> {
+>   "prettier.documentSelectors": [
+>     "**/*.{js,html,css,scss,json,md,yaml,yml,php,test,theme,module}"
+>   ]
+> }
+> ```
 
 #### Javascript code quality
 

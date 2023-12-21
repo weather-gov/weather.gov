@@ -7,28 +7,28 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Test getting place information from the grid.
  */
-final class GetPlaceFromLatLonTest extends Base {
+final class GetPlaceFromLatLonTest extends Base
+{
+    /**
+     * Tests the happy path.
+     */
+    public function testHappyPath(): void
+    {
+        $expected = [
+            "city" => "City",
+            "state" => "Not City, but State",
+        ];
 
-  /**
-   * Tests the happy path.
-   */
-  public function testHappyPath(): void {
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                '{"properties":{"relativeLocation":{"properties":{"city":"City","state":"Not City, but State"}}}}',
+            ),
+        );
 
-    $expected = [
-      "city" => "City",
-      "state" => "Not City, but State",
-    ];
+        $actual = $this->weatherDataService->getPlaceFromLatLon(32, -93);
 
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        '{"properties":{"relativeLocation":{"properties":{"city":"City","state":"Not City, but State"}}}}'
-      ),
-    );
-
-    $actual = $this->weatherDataService->getPlaceFromLatLon(32, -93);
-
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
 }

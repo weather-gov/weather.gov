@@ -1,35 +1,43 @@
 <?php
 
+namespace WeatherGovAdminTheme;
+
 use Drupal\Core\Form\FormStateInterface;
 use PHPUnit\Framework\TestCase;
-
-require dirname(__DIR__, 1) . "/weathergov_admin.theme";
 
 /**
  * Test the weathergov_admin theme hooks.
  */
-final class WeatherGovAdminThemeHooksTest extends TestCase {
+final class WeatherGovAdminThemeHooksTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        require_once dirname(__DIR__, 1) . "/weathergov_admin.theme";
+    }
 
-  /**
-   * Test that form elements are disabled.
-   */
-  public function testWeatherNarrativeFormAlterHook(): void {
-    $form = [];
+    /**
+     * Test that form elements are disabled.
+     */
+    public function testWeatherNarrativeFormAlterHook(): void
+    {
+        $form = [];
 
-    $formState = $this->createStub(FormStateInterface::class);
+        $formState = $this->createStub(FormStateInterface::class);
 
-    weathergov_admin_form_node_weather_narrative_form_alter($form, $formState);
+        weathergov_admin_form_node_weather_narrative_form_alter(
+            $form,
+            $formState,
+        );
 
-    $expected = [
-      "revision_information" => [
-        "#access" => FALSE,
-      ],
-      "menu" => [
-        "#access" => FALSE,
-      ],
-    ];
+        $expected = [
+            "revision_information" => [
+                "#access" => false,
+            ],
+            "menu" => [
+                "#access" => false,
+            ],
+        ];
 
-    $this->assertEquals($expected, $form);
-  }
-
+        $this->assertEquals($expected, $form);
+    }
 }

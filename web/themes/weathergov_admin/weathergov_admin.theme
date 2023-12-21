@@ -15,10 +15,13 @@ use Drupal\Core\Form\FormStateInterface;
  * To find a form ID, the easiest thing seem to be to use the generic form alter
  * hook to inspect the ID. The generic editor hook is below, commented out.
  */
-function weathergov_admin_form_node_weather_narrative_form_alter(array &$form, FormStateInterface $formState) {
-  // Global submission logging should always be disabled and never changed.
-  $form['revision_information']['#access'] = FALSE;
-  $form['menu']['#access'] = FALSE;
+function weathergov_admin_form_node_weather_narrative_form_alter(
+    array &$form,
+    FormStateInterface $formState,
+) {
+    // Global submission logging should always be disabled and never changed.
+    $form["revision_information"]["#access"] = false;
+    $form["menu"]["#access"] = false;
 }
 
 /* function weathergov_admin_form_alter(array &$form, $formState, $formId) { } */

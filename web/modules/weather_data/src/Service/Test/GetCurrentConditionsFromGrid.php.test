@@ -7,274 +7,355 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Tests for the WeatherDataService getCurrentConditionsFromGrid method.
  */
-final class GetCurrentConditionsFromGridTest extends Base {
+final class GetCurrentConditionsFromGridTest extends Base
+{
+    /**
+     * Sets up the HTTP mock for a happy-path of API data for an observation.
+     */
+    public function setupHappyPath($whichObservation)
+    {
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(
+                    __DIR__ . "/test_data/observation-stations.good.json",
+                ),
+            ),
+        );
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(__DIR__ . "/test_data/" . $whichObservation),
+            ),
+        );
 
-  /**
-   * Sets up the HTTP mock for a happy-path of API data for an observation.
-   */
-  public function setupHappyPath($whichObservation) {
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/observation-stations.good.json")
-      )
-    );
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/" . $whichObservation)
-      ),
-    );
-
-    return [
-      "conditions" => [
-        "long" => "Not snow",
-        "short" => "Not snow",
-      ],
-      "feels_like" => 45,
-      "humidity" => 88,
-      "icon" => "snow.svg",
-      "temperature" => 45,
-      "timestamp" => [
-        "formatted" => "Thursday 8:00 PM GMT+0000",
-        "utc" => "1697140800",
-      ],
-      "wind" => [
-        "speed" => 13,
-        "angle" => 310,
-        "direction" => "northwest",
-        "shortDirection" => "NW",
-      ],
-    ];
-  }
-
-  /**
-   * Tests the happy path with no "feels like" temperature.
-   */
-  public function testHappyPathWithNoFeelsLike(): void {
-    $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
-
-    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
-  /**
-   * Tests the happy path with a heat index.
-   */
-  public function testHappyPathWithHeatIndex(): void {
-    $expected = $this->setupHappyPath("observation.good-heatindex.json");
-    $expected["feels_like"] = 117;
-
-    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
-  /**
-   * Tests the happy path with a wind chill.
-   */
-  public function testHappyPathWithWindChill(): void {
-    $expected = $this->setupHappyPath("observation.good-windchill.json");
-    $expected["feels_like"] = 16;
-
-    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
-  /**
-   * Tests the happy path with both heat index and wind chill.
-   */
-  public function testHappyPathWithHeatIndexAndWindChill(): void {
-    $expected = $this->setupHappyPath("observation.good-both.json");
-    $expected["feels_like"] = 194;
-
-    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
-  /**
-   * Tests where the first observation station is not reporting a temperature.
-   */
-  public function testOneObservationStationWithNoTemperature(): void {
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/observation-stations.good.json")
-      )
-    );
-
-    // First observation station we check has no temperature.
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/observation.bad-no-temperature.json")
-      ),
-    );
-
-    // Next one does, so we should use that.
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/observation.good-both.json")
-      ),
-    );
-
-    $expected = 45;
-
-    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-    $actual = $actual["temperature"];
-
-    $this->assertEquals($expected, $actual);
-
-    // Expected calls: list observation stations, station 1, station 2.
-    $this->assertEquals(3, count($this->httpCallStack));
-  }
-
-  /**
-   * Tests where the first 3 observation stations are not reporting temperature.
-   */
-  public function testThreeObservationStationsWithTemperature(): void {
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/observation-stations.good.json")
-      )
-    );
-
-    // First three stations we check have no temperature.
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/observation.bad-no-temperature.json")
-      ),
-    );
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/observation.bad-no-temperature.json")
-      ),
-    );
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/observation.bad-no-temperature.json")
-      ),
-    );
-
-    // Next one does, so we should use that.
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/observation.good-both.json")
-      ),
-    );
-
-    $expected = NULL;
-
-    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-    $this->assertEquals($expected, $actual);
-
-    // Expected calls: list stations, station 1, station 2, station 3.
-    $this->assertEquals(4, count($this->httpCallStack));
-  }
-
-  /**
-   * Tests the case where the icon is null.
-   */
-  public function testIconIsNull(): void {
-    $expected = $this->setupHappyPath("observation.bad-null-icon.json");
-    $expected["icon"] = "nodata.svg";
-
-    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
-  /**
-   * Tests the case where the icon is an empty string.
-   */
-  public function testIconIsEmptyString(): void {
-    $expected = $this->setupHappyPath("observation.bad-empty-icon.json");
-    $expected["icon"] = "nodata.svg";
-
-    $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
-  /**
-   * Tests that the wind direction is populated correctly.
-   *
-   * This tests the 8 cardinal and ordinal directions.
-   */
-  public function testWindDirections(): void {
-    $scenarios = [
-      [0, "north", "N"],
-      [45, "northeast", "NE"],
-      [90, "east", "E"],
-      [135, "southeast", "SE"],
-      [180, "south", "S"],
-      [225, "southwest", "SW"],
-      [270, "west", "W"],
-      [315, "northwest", "NW"],
-      [360, "north", "N"],
-    ];
-
-    $observationResponse = json_decode(file_get_contents(__DIR__ . "/test_data/observation.good-no-feelslike.json"));
-
-    $expected = [
-      "conditions" => [
-        "long" => "Not snow",
-        "short" => "Not snow",
-      ],
-      "feels_like" => 45,
-      "humidity" => 88,
-      "icon" => "snow.svg",
-      "temperature" => 45,
-      "timestamp" => [
-        "formatted" => "Thursday 8:00 PM GMT+0000",
-        "utc" => "1697140800",
-      ],
-      "wind" => [
-        "speed" => 13,
-        "angle" => 310,
-        "direction" => "northwest",
-        "shortDirection" => "NW",
-      ],
-    ];
-
-    foreach ($scenarios as $scenario) {
-      // Re-create the WeatherDataService object so we don't get cached results.
-      $this->setUp();
-
-      $observationResponse->features[0]->properties->windDirection->value = $scenario[0];
-
-      $expected["wind"]["angle"] = $scenario[0];
-      $expected["wind"]["direction"] = $scenario[1];
-      $expected["wind"]["shortDirection"] = $scenario[2];
-
-      $this->httpClientMock->append(
-        new Response(200,
-          ['Content-type' => 'application/geo+json'],
-          file_get_contents(__DIR__ . "/test_data/observation-stations.good.json")
-        )
-      );
-      $this->httpClientMock->append(
-        new Response(200,
-          ['Content-type' => 'application/geo+json'],
-          json_encode($observationResponse)
-        ),
-      );
-
-      $actual = $this->weatherDataService->getCurrentConditionsFromGrid("wfo", 1, 2);
-
-      $this->assertEquals((object) $expected, (object) $actual);
+        return [
+            "conditions" => [
+                "long" => "Not snow",
+                "short" => "Not snow",
+            ],
+            "feels_like" => 45,
+            "humidity" => 88,
+            "icon" => "snow.svg",
+            "temperature" => 45,
+            "timestamp" => [
+                "formatted" => "Thursday 8:00 PM GMT+0000",
+                "utc" => "1697140800",
+            ],
+            "wind" => [
+                "speed" => 13,
+                "angle" => 310,
+                "direction" => "northwest",
+                "shortDirection" => "NW",
+            ],
+        ];
     }
 
-  }
+    /**
+     * Tests the happy path with no "feels like" temperature.
+     */
+    public function testHappyPathWithNoFeelsLike(): void
+    {
+        $expected = $this->setupHappyPath("observation.good-no-feelslike.json");
 
+        $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
+            "wfo",
+            1,
+            2,
+        );
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Tests the happy path with a heat index.
+     */
+    public function testHappyPathWithHeatIndex(): void
+    {
+        $expected = $this->setupHappyPath("observation.good-heatindex.json");
+        $expected["feels_like"] = 117;
+
+        $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
+            "wfo",
+            1,
+            2,
+        );
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Tests the happy path with a wind chill.
+     */
+    public function testHappyPathWithWindChill(): void
+    {
+        $expected = $this->setupHappyPath("observation.good-windchill.json");
+        $expected["feels_like"] = 16;
+
+        $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
+            "wfo",
+            1,
+            2,
+        );
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Tests the happy path with both heat index and wind chill.
+     */
+    public function testHappyPathWithHeatIndexAndWindChill(): void
+    {
+        $expected = $this->setupHappyPath("observation.good-both.json");
+        $expected["feels_like"] = 194;
+
+        $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
+            "wfo",
+            1,
+            2,
+        );
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Tests where the first observation station is not reporting a temperature.
+     */
+    public function testOneObservationStationWithNoTemperature(): void
+    {
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(
+                    __DIR__ . "/test_data/observation-stations.good.json",
+                ),
+            ),
+        );
+
+        // First observation station we check has no temperature.
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(
+                    __DIR__ . "/test_data/observation.bad-no-temperature.json",
+                ),
+            ),
+        );
+
+        // Next one does, so we should use that.
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(
+                    __DIR__ . "/test_data/observation.good-both.json",
+                ),
+            ),
+        );
+
+        $expected = 45;
+
+        $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
+            "wfo",
+            1,
+            2,
+        );
+        $actual = $actual["temperature"];
+
+        $this->assertEquals($expected, $actual);
+
+        // Expected calls: list observation stations, station 1, station 2.
+        $this->assertEquals(3, count($this->httpCallStack));
+    }
+
+    /**
+     * Tests where the first 3 observation stations are not reporting temperature.
+     */
+    public function testThreeObservationStationsWithTemperature(): void
+    {
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(
+                    __DIR__ . "/test_data/observation-stations.good.json",
+                ),
+            ),
+        );
+
+        // First three stations we check have no temperature.
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(
+                    __DIR__ . "/test_data/observation.bad-no-temperature.json",
+                ),
+            ),
+        );
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(
+                    __DIR__ . "/test_data/observation.bad-no-temperature.json",
+                ),
+            ),
+        );
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(
+                    __DIR__ . "/test_data/observation.bad-no-temperature.json",
+                ),
+            ),
+        );
+
+        // Next one does, so we should use that.
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                file_get_contents(
+                    __DIR__ . "/test_data/observation.good-both.json",
+                ),
+            ),
+        );
+
+        $expected = null;
+
+        $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
+            "wfo",
+            1,
+            2,
+        );
+
+        $this->assertEquals($expected, $actual);
+
+        // Expected calls: list stations, station 1, station 2, station 3.
+        $this->assertEquals(4, count($this->httpCallStack));
+    }
+
+    /**
+     * Tests the case where the icon is null.
+     */
+    public function testIconIsNull(): void
+    {
+        $expected = $this->setupHappyPath("observation.bad-null-icon.json");
+        $expected["icon"] = "nodata.svg";
+
+        $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
+            "wfo",
+            1,
+            2,
+        );
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Tests the case where the icon is an empty string.
+     */
+    public function testIconIsEmptyString(): void
+    {
+        $expected = $this->setupHappyPath("observation.bad-empty-icon.json");
+        $expected["icon"] = "nodata.svg";
+
+        $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
+            "wfo",
+            1,
+            2,
+        );
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Tests that the wind direction is populated correctly.
+     *
+     * This tests the 8 cardinal and ordinal directions.
+     */
+    public function testWindDirections(): void
+    {
+        $scenarios = [
+            [0, "north", "N"],
+            [45, "northeast", "NE"],
+            [90, "east", "E"],
+            [135, "southeast", "SE"],
+            [180, "south", "S"],
+            [225, "southwest", "SW"],
+            [270, "west", "W"],
+            [315, "northwest", "NW"],
+            [360, "north", "N"],
+        ];
+
+        $observationResponse = json_decode(
+            file_get_contents(
+                __DIR__ . "/test_data/observation.good-no-feelslike.json",
+            ),
+        );
+
+        $expected = [
+            "conditions" => [
+                "long" => "Not snow",
+                "short" => "Not snow",
+            ],
+            "feels_like" => 45,
+            "humidity" => 88,
+            "icon" => "snow.svg",
+            "temperature" => 45,
+            "timestamp" => [
+                "formatted" => "Thursday 8:00 PM GMT+0000",
+                "utc" => "1697140800",
+            ],
+            "wind" => [
+                "speed" => 13,
+                "angle" => 310,
+                "direction" => "northwest",
+                "shortDirection" => "NW",
+            ],
+        ];
+
+        foreach ($scenarios as $scenario) {
+            // Re-create the WeatherDataService object so we don't get cached results.
+            $this->setUp();
+
+            $observationResponse->features[0]->properties->windDirection->value =
+                $scenario[0];
+
+            $expected["wind"]["angle"] = $scenario[0];
+            $expected["wind"]["direction"] = $scenario[1];
+            $expected["wind"]["shortDirection"] = $scenario[2];
+
+            $this->httpClientMock->append(
+                new Response(
+                    200,
+                    ["Content-type" => "application/geo+json"],
+                    file_get_contents(
+                        __DIR__ . "/test_data/observation-stations.good.json",
+                    ),
+                ),
+            );
+            $this->httpClientMock->append(
+                new Response(
+                    200,
+                    ["Content-type" => "application/geo+json"],
+                    json_encode($observationResponse),
+                ),
+            );
+
+            $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
+                "wfo",
+                1,
+                2,
+            );
+
+            $this->assertEquals((object) $expected, (object) $actual);
+        }
+    }
 }

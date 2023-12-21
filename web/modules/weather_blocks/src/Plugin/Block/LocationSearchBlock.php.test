@@ -9,83 +9,88 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for the LocationSearch block.
  */
-final class LocationSearchBlockTest extends TestCase {
-  /**
-   * A ready-to-use location search block object.
-   *
-   * @var locationSearchBlock
-   */
-  protected $locationSearchBlock;
+final class LocationSearchBlockTest extends TestCase
+{
+    /**
+     * A ready-to-use location search block object.
+     *
+     * @var locationSearchBlock
+     */
+    protected $locationSearchBlock;
 
-  /**
-   * A mock of the route object.
-   *
-   * @var routeMock
-   */
-  protected $routeMock;
+    /**
+     * A mock of the route object.
+     *
+     * @var routeMock
+     */
+    protected $routeMock;
 
-  /**
-   * A mocked WeatherData service object.
-   *
-   * @var weatherData
-   *
-   * This is injected into the current conditions block object being tested with
-   * dependency injection.
-   */
-  protected $weatherData;
+    /**
+     * A mocked WeatherData service object.
+     *
+     * @var weatherData
+     *
+     * This is injected into the current conditions block object being tested with
+     * dependency injection.
+     */
+    protected $weatherData;
 
-  /**
-   * Common setup for all component tests.
-   *
-   * Creates a new location search block.
-   */
-  protected function setUp() : void {
-    $definition = [
-      "provider" => "weather_blocks",
-    ];
+    /**
+     * Common setup for all component tests.
+     *
+     * Creates a new location search block.
+     */
+    protected function setUp(): void
+    {
+        $definition = [
+            "provider" => "weather_blocks",
+        ];
 
-    $this->weatherData = $this->createStub(WeatherDataService::class);
+        $this->weatherData = $this->createStub(WeatherDataService::class);
 
-    $this->routeMock = $this->createStub(RouteMatchInterface::class);
-    $this->routeMock->method('getRouteName')->willReturn("weather_routes.grid");
+        $this->routeMock = $this->createStub(RouteMatchInterface::class);
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.grid");
 
-    $this->locationSearchBlock = new LocationSearchBlock([], '', $definition, $this->weatherData, $this->routeMock);
-  }
+        $this->locationSearchBlock = new LocationSearchBlock(
+            [],
+            "",
+            $definition,
+            $this->weatherData,
+            $this->routeMock,
+        );
+    }
 
-  /**
-   * Test that the build method returns the expected results.
-   */
-  public function testBuild() : void {
+    /**
+     * Test that the build method returns the expected results.
+     */
+    public function testBuild(): void
+    {
+        $this->weatherData->method("getPlaceFromGrid")->willReturn("hiya");
 
-    $this->weatherData
-      ->method('getPlaceFromGrid')
-      ->willReturn("hiya");
+        $expected = [
+            "place" => "hiya",
+        ];
 
-    $expected = [
-      "place" => "hiya",
-    ];
+        $actual = $this->locationSearchBlock->build();
 
-    $actual = $this->locationSearchBlock->build();
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
 
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
+    /**
+     * Test that the build method returns NULL if there is no location.
+     */
+    public function testWithNoLocation(): void
+    {
+        $this->routeMock->method("getRouteName")->willReturn("not grid");
 
-  /**
-   * Test that the build method returns NULL if there is no location.
-   */
-  public function testWithNoLocation() : void {
+        $expected = [
+            "place" => null,
+        ];
 
-    $this->routeMock
-      ->method('getRouteName')
-      ->willReturn("not grid");
+        $actual = $this->locationSearchBlock->build();
 
-    $expected = [
-      "place" => NULL,
-    ];
-
-    $actual = $this->locationSearchBlock->build();
-
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
 }
