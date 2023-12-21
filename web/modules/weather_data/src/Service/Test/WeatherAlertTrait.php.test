@@ -7,113 +7,122 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Tests for WeatherAlertTrait.
  */
-final class WeatherAlertTraitTest extends Base {
+final class WeatherAlertTraitTest extends Base
+{
+    /**
+     * The expected results of the happy path.
+     *
+     * @var expected
+     */
+    protected $expected;
 
-  /**
-   * The expected results of the happy path.
-   *
-   * @var expected
-   */
-  protected $expected;
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
+        $this->expected = [
+            (object) [
+                "areaDesc" => "place 1",
+                "event" => "Weather Warning",
+                "description" => [
+                    "There is a warning for:",
+                    "Places listed",
+                    "You should prepare.",
+                ],
+                "geometry" => [[-71.89, 43.64], [-71.91, 44.14]],
+                "whatWhereWhen" => [],
+            ],
+            (object) [
+                "areaDesc" => "place 2",
+                "event" => "Weather Watch",
+                "description" => [
+                    "* WHAT...Bad weather",
+                    "* WHERE...Places",
+                    "* WHEN...Until it stops.",
+                    "* IMPACTS...Badness.",
+                ],
+                "geometry" => [],
+                "whatWhereWhen" => [
+                    ["name" => "what", "value" => "Bad weather"],
+                    ["name" => "where", "value" => "Places"],
+                    ["name" => "when", "value" => "Until it stops."],
+                    ["name" => "impacts", "value" => "Badness."],
+                ],
+            ],
+            (object) [
+                "event" => "Weather Advisory",
+                "description" => [
+                    "* WHAT...Bad weather",
+                    "* WHERE...Places",
+                    "* FAKE...This goes away",
+                ],
+                "geometry" => [],
+                "whatWhereWhen" => [
+                    ["name" => "what", "value" => "Bad weather"],
+                    ["name" => "where", "value" => "Places"],
+                ],
+            ],
+        ];
+    }
 
-    $this->expected = [
-      (object) [
-        "areaDesc" => "place 1",
-        "event" => "Weather Warning",
-        "description" => [
-          "There is a warning for:",
-          "Places listed",
-          "You should prepare.",
-        ],
-        "geometry" => [
-          [-71.89, 43.64],
-          [-71.91, 44.14],
-        ],
-        "whatWhereWhen" => [],
-      ],
-      (object) [
-        "areaDesc" => "place 2",
-        "event" => "Weather Watch",
-        "description" => [
-          "* WHAT...Bad weather",
-          "* WHERE...Places",
-          "* WHEN...Until it stops.",
-          "* IMPACTS...Badness.",
-        ],
-        "geometry" => [],
-        "whatWhereWhen" => [
-          ["name" => "what", "value" => "Bad weather"],
-          ["name" => "where", "value" => "Places"],
-          ["name" => "when", "value" => "Until it stops."],
-          ["name" => "impacts", "value" => "Badness."],
-        ],
-      ],
-      (object) [
-        "event" => "Weather Advisory",
-        "description" => [
-          "* WHAT...Bad weather",
-          "* WHERE...Places",
-          "* FAKE...This goes away",
-        ],
-        "geometry" => [],
-        "whatWhereWhen" => [
-          ["name" => "what", "value" => "Bad weather"],
-          ["name" => "where", "value" => "Places"],
-        ],
-      ],
-    ];
-  }
+    /**
+     * Test the getAlertsForLatLon method.
+     */
+    public function testGetAlertsForLatLon(): void
+    {
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-Type" => "application/geo+json"],
+                file_get_contents(__DIR__ . "/test_data/alerts.good.json"),
+            ),
+        );
 
-  /**
-   * Test the getAlertsForLatLon method.
-   */
-  public function testGetAlertsForLatLon(): void {
-    $this->httpClientMock->append(
-      new Response(
-        200,
-        ['Content-Type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/alerts.good.json")
-      )
-    );
+        $actual = $this->weatherDataService->getAlertsForLatLon(20, 30);
 
-    $actual = $this->weatherDataService->getAlertsForLatLon(20, 30);
+        $this->assertEquals($this->expected, $actual);
+    }
 
-    $this->assertEquals($this->expected, $actual);
-  }
+    /**
+     * Test the getAlertsForGrid method.
+     */
+    public function testGetAlertsForGrid(): void
+    {
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                '{"geometry":{"coordinates":[[[4,3],[5,9],[3,9]]]}}',
+            ),
+        );
 
-  /**
-   * Test the getAlertsForGrid method.
-   */
-  public function testGetAlertsForGrid(): void {
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        '{"geometry":{"coordinates":[[[4,3],[5,9],[3,9]]]}}'
-      ),
-    );
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-Type" => "application/geo+json"],
+                file_get_contents(__DIR__ . "/test_data/alerts.good.json"),
+            ),
+        );
 
-    $this->httpClientMock->append(
-      new Response(
-        200,
-        ['Content-Type' => 'application/geo+json'],
-        file_get_contents(__DIR__ . "/test_data/alerts.good.json")
-      )
-    );
+        $actual = $this->weatherDataService->getAlertsForGrid("abc", 20, 30);
 
-    $actual = $this->weatherDataService->getAlertsForGrid("abc", 20, 30);
+        $this->assertEquals($this->expected, $actual);
 
-    $this->assertEquals($this->expected, $actual);
-
-    $this->assertEquals(2, count($this->httpCallStack), 2);
-    $this->assertEquals("/gridpoints/abc/20,30", $this->httpCallStack[0]["request"]->getUri()->getPath());
-    $this->assertEquals("/alerts/active", $this->httpCallStack[1]["request"]->getUri()->getPath());
-    $this->assertEquals("status=actual&point=3,4", $this->httpCallStack[1]["request"]->getUri()->getQuery());
-  }
-
+        $this->assertEquals(2, count($this->httpCallStack), 2);
+        $this->assertEquals(
+            "/gridpoints/abc/20,30",
+            $this->httpCallStack[0]["request"]->getUri()->getPath(),
+        );
+        $this->assertEquals(
+            "/alerts/active",
+            $this->httpCallStack[1]["request"]->getUri()->getPath(),
+        );
+        $this->assertEquals(
+            "status=actual&point=3,4",
+            $this->httpCallStack[1]["request"]->getUri()->getQuery(),
+        );
+    }
 }
