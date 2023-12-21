@@ -162,7 +162,7 @@ abstract class WeatherBlockBase extends BlockBase implements
         } else {
             // Otherwise, attempt to get it from configuration.
             $configuredGrid = $this->getConfiguration()["grid"] ?? false;
-            if ($configuredGrid) {
+            if ($configuredGrid != false && $configuredGrid != ",,") {
                 $parts = explode(",", $configuredGrid);
 
                 $location->grid = (object) [

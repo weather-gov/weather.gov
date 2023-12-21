@@ -35,7 +35,8 @@
     "xml-parse": "^0.4.0"
   },
   "scripts": {
-    "cypress:open": "cypress open",
+    "cypress:a11y": "cypress open --project tests/a11y",
+    "cypress:e2e": "cypress open --project tests/e2e",
     "js-format": "npx prettier -w 'web/themes/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
     "js-lint": "eslint 'web/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
     "php-format": "npx prettier -w 'web/**/*.php' 'web/**/*.php.test' 'web/**/*.theme' 'web/**/*.module'",
