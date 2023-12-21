@@ -161,4 +161,36 @@ final class WeatherBlockBaseTest extends TestCase {
 
   }
 
+  /**
+   * Tests that the location is empty if not on a grid route and not configured.
+   */
+  public function testGetsNoLocationWhenConfiguredFalse() : void {
+    $this->routeMock->method('getRouteName')->willReturn("not grid");
+    $this->currentConditionsBlock->setConfigurationValue("grid", FALSE);
+
+    $expected = (object) [
+      "grid" => FALSE,
+    ];
+
+    $actual = $this->currentConditionsBlock->getLocation();
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Tests that the location is empty if not on a grid route and empty config.
+   */
+  public function testGetsNoLocationWhenConfiguredEmpty() : void {
+    $this->routeMock->method('getRouteName')->willReturn("not grid");
+    $this->currentConditionsBlock->setConfigurationValue("grid", ",,");
+
+    $expected = (object) [
+      "grid" => FALSE,
+    ];
+
+    $actual = $this->currentConditionsBlock->getLocation();
+
+    $this->assertEquals($expected, $actual);
+  }
+
 }

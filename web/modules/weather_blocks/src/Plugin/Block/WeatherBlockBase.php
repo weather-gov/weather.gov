@@ -151,7 +151,7 @@ abstract class WeatherBlockBase extends BlockBase implements ContainerFactoryPlu
     // Otherwise, attempt to get it from configuration.
     else {
       $configuredGrid = $this->getConfiguration()["grid"] ?? FALSE;
-      if ($configuredGrid) {
+      if ($configuredGrid != FALSE && $configuredGrid != ",,") {
         $parts = explode(",", $configuredGrid);
 
         $location->grid = (object) [
