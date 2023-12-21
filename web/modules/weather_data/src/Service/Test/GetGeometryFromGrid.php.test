@@ -7,28 +7,29 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Test getting geometry from the grid.
  */
-final class GetGeometryFromGridTest extends Base {
+final class GetGeometryFromGridTest extends Base
+{
+    /**
+     * Tests the happy path.
+     */
+    public function testHappyPath(): void
+    {
+        $expected = [
+            (object) ["lat" => 3, "lon" => 4],
+            (object) ["lat" => 9, "lon" => 5],
+            (object) ["lat" => 9, "lon" => 3],
+        ];
 
-  /**
-   * Tests the happy path.
-   */
-  public function testHappyPath(): void {
-    $expected = [
-      (object) ["lat" => 3, "lon" => 4],
-      (object) ["lat" => 9, "lon" => 5],
-      (object) ["lat" => 9, "lon" => 3],
-    ];
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                '{"geometry":{"coordinates":[[[4,3],[5,9],[3,9]]]}}',
+            ),
+        );
 
-    $this->httpClientMock->append(
-      new Response(200,
-        ['Content-type' => 'application/geo+json'],
-        '{"geometry":{"coordinates":[[[4,3],[5,9],[3,9]]]}}'
-      ),
-    );
+        $actual = $this->weatherDataService->getGeometryFromGrid("wfo", 1, 2);
 
-    $actual = $this->weatherDataService->getGeometryFromGrid("wfo", 1, 2);
-
-    $this->assertEquals((object) $expected, (object) $actual);
-  }
-
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
 }

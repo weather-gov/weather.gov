@@ -9,88 +9,110 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for the CurrentConditions block.
  */
-final class CurrentConditionsBlockTest extends TestCase {
-  /**
-   * A ready-to-use current conditions block object.
-   *
-   * @var currentConditionsBlock
-   */
-  protected $currentConditionsBlock;
+final class CurrentConditionsBlockTest extends TestCase
+{
+    /**
+     * A ready-to-use current conditions block object.
+     *
+     * @var currentConditionsBlock
+     */
+    protected $currentConditionsBlock;
 
-  /**
-   * A mock of the route object.
-   *
-   * @var routeMock
-   */
-  protected $routeMock;
+    /**
+     * A mock of the route object.
+     *
+     * @var routeMock
+     */
+    protected $routeMock;
 
-  /**
-   * A mocked WeatherData service object.
-   *
-   * @var weatherData
-   *
-   * This is injected into the current conditions block object being tested with
-   * dependency injection.
-   */
-  protected $weatherData;
+    /**
+     * A mocked WeatherData service object.
+     *
+     * @var weatherData
+     *
+     * This is injected into the current conditions block object being tested with
+     * dependency injection.
+     */
+    protected $weatherData;
 
-  /**
-   * Common setup for all component tests.
-   *
-   * Creates a mock of a weather data service and injects it into a new current
-   * conditions block object.
-   */
-  protected function setUp() : void {
-    $definition = [
-      "provider" => "weather_blocks",
-    ];
+    /**
+     * Common setup for all component tests.
+     *
+     * Creates a mock of a weather data service and injects it into a new current
+     * conditions block object.
+     */
+    protected function setUp(): void
+    {
+        $definition = [
+            "provider" => "weather_blocks",
+        ];
 
-    $this->weatherData = $this->createStub(WeatherDataService::class);
+        $this->weatherData = $this->createStub(WeatherDataService::class);
 
-    $this->routeMock = $this->createStub(RouteMatchInterface::class);
-    $this->routeMock->method('getRouteName')->willReturn("weather_routes.grid");
+        $this->routeMock = $this->createStub(RouteMatchInterface::class);
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.grid");
 
-    $this->currentConditionsBlock = new CurrentConditionsBlock([], '', $definition, $this->weatherData, $this->routeMock);
+        $this->currentConditionsBlock = new CurrentConditionsBlock(
+            [],
+            "",
+            $definition,
+            $this->weatherData,
+            $this->routeMock,
+        );
+    }
 
-  }
+    /**
+     * Test that the block returns the expected data if we're on a grid route.
+     */
+    public function testBuild(): void
+    {
+        $this->weatherData->method("getPlaceFromGrid")->willReturn(
+            (object) [
+                "city" => "Placeville",
+                "state" => "Statesylvania",
+            ],
+        );
+        $this->weatherData
+            ->method("getCurrentConditionsFromGrid")
+            ->willReturn(["info" => "this is weather data"]);
 
-  /**
-   * Test that the block returns the expected data if we're on a grid route.
-   */
-  public function testBuild() : void {
-    $this->weatherData->method('getPlaceFromGrid')->willReturn((object) [
-      "city" => "Placeville",
-      "state" => "Statesylvania",
-    ]);
-    $this->weatherData->method('getCurrentConditionsFromGrid')->willReturn(["info" => "this is weather data"]);
+        $expected = [
+            "info" => "this is weather data",
+            "place" => "Placeville, Statesylvania",
+        ];
+        $actual = $this->currentConditionsBlock->build();
 
-    $expected = [
-      "info" => "this is weather data",
-      "place" => "Placeville, Statesylvania",
-    ];
-    $actual = $this->currentConditionsBlock->build();
+        $this->assertEquals($expected, $actual);
+    }
 
-    $this->assertEquals($expected, $actual);
-  }
+    /**
+     * Test that the block returns null if we're not on a grid route.
+     */
+    public function testBuildNotGridRoute(): void
+    {
+        $definition = [
+            "provider" => "weather_blocks",
+        ];
 
-  /**
-   * Test that the block returns null if we're not on a grid route.
-   */
-  public function testBuildNotGridRoute(): void {
-    $definition = [
-      "provider" => "weather_blocks",
-    ];
+        $this->weatherData = $this->createStub(WeatherDataService::class);
 
-    $this->weatherData = $this->createStub(WeatherDataService::class);
+        $this->routeMock = $this->createStub(RouteMatchInterface::class);
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.not-grid");
 
-    $this->routeMock = $this->createStub(RouteMatchInterface::class);
-    $this->routeMock->method('getRouteName')->willReturn("weather_routes.not-grid");
+        $this->currentConditionsBlock = new CurrentConditionsBlock(
+            [],
+            "",
+            $definition,
+            $this->weatherData,
+            $this->routeMock,
+        );
 
-    $this->currentConditionsBlock = new CurrentConditionsBlock([], '', $definition, $this->weatherData, $this->routeMock);
+        $actual = $this->currentConditionsBlock->build();
 
-    $actual = $this->currentConditionsBlock->build();
-
-    $this->assertEquals(NULL, $actual);
-  }
-
+        $this->assertEquals(null, $actual);
+    }
 }

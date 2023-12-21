@@ -11,25 +11,25 @@ namespace Drupal\weather_blocks\Plugin\Block;
  *   category = @Translation("weather.gov"),
  * )
  */
-class DailyForecastBlock extends WeatherBlockBase {
+class DailyForecastBlock extends WeatherBlockBase
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function build()
+    {
+        $location = $this->getLocation();
 
-  /**
-   * {@inheritdoc}
-   */
-  public function build() {
-    $location = $this->getLocation();
+        if ($location->grid) {
+            $grid = $location->grid;
 
-    if ($location->grid) {
-      $grid = $location->grid;
-
-      $data = $this->weatherData->getDailyForecastFromGrid(
-        $grid->wfo,
-        $grid->x,
-        $grid->y
-      );
-      return ["days" => $data];
+            $data = $this->weatherData->getDailyForecastFromGrid(
+                $grid->wfo,
+                $grid->x,
+                $grid->y,
+            );
+            return ["days" => $data];
+        }
+        return null;
     }
-    return NULL;
-  }
-
 }

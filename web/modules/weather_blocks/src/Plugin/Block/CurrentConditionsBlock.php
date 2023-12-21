@@ -11,33 +11,33 @@ namespace Drupal\weather_blocks\Plugin\Block;
  *   category = @Translation("weather.gov"),
  * )
  */
-class CurrentConditionsBlock extends WeatherBlockBase {
+class CurrentConditionsBlock extends WeatherBlockBase
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function build()
+    {
+        $location = $this->getLocation();
 
-  /**
-   * {@inheritdoc}
-   */
-  public function build() {
-    $location = $this->getLocation();
+        if ($location->grid) {
+            $grid = $location->grid;
 
-    if ($location->grid) {
-      $grid = $location->grid;
+            $place = $this->weatherData->getPlaceFromGrid(
+                $grid->wfo,
+                $grid->x,
+                $grid->y,
+            );
 
-      $place = $this->weatherData->getPlaceFromGrid(
-        $grid->wfo,
-        $grid->x,
-        $grid->y
-      );
+            $data = $this->weatherData->getCurrentConditionsFromGrid(
+                $grid->wfo,
+                $grid->x,
+                $grid->y,
+            );
 
-      $data = $this->weatherData->getCurrentConditionsFromGrid(
-        $grid->wfo,
-        $grid->x,
-        $grid->y);
+            $data["place"] = $place->city . ", " . $place->state;
 
-      $data["place"] = $place->city . ", " . $place->state;
-
-      return $data;
+            return $data;
+        }
     }
-    return NULL;
-  }
-
 }

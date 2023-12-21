@@ -8,73 +8,78 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for the WeatherDataService getCurrentConditions method.
  */
-final class UnitConversionTraitTest extends TestCase {
-  use UnitConversionTrait;
+final class UnitConversionTraitTest extends TestCase
+{
+    use UnitConversionTrait;
 
-  /**
-   * Test when the temperature value is null.
-   */
-  public function testNullTemperature(): void {
-    $expected = NULL;
-    $actual = $this->getTemperatureScalar((object) ["value" => NULL]);
+    /**
+     * Test when the temperature value is null.
+     */
+    public function testNullTemperature(): void
+    {
+        $expected = null;
+        $actual = $this->getTemperatureScalar((object) ["value" => null]);
 
-    $this->assertEquals($expected, $actual);
-  }
+        $this->assertEquals($expected, $actual);
+    }
 
-  /**
-   * Test converting from Fahrenheit to celsius.
-   */
-  public function testFahrenheitToCelsius(): void {
-    $expected = 17;
-    $temperature = (object) [
-      "unitCode" => "wmoUnit:degF",
-      "value" => 63,
-    ];
-    $actual = $this->getTemperatureScalar($temperature, FALSE);
+    /**
+     * Test converting from Fahrenheit to celsius.
+     */
+    public function testFahrenheitToCelsius(): void
+    {
+        $expected = 17;
+        $temperature = (object) [
+            "unitCode" => "wmoUnit:degF",
+            "value" => 63,
+        ];
+        $actual = $this->getTemperatureScalar($temperature, false);
 
-    $this->assertEquals($expected, $actual);
-  }
+        $this->assertEquals($expected, $actual);
+    }
 
-  /**
-   * Test converting from Fahrenheit to Fahrenheit.
-   */
-  public function testFahrenheitToFahrenheit(): void {
-    $expected = 44;
-    $temperature = (object) [
-      "unitCode" => "wmoUnit:degF",
-      "value" => 44,
-    ];
-    $actual = $this->getTemperatureScalar($temperature);
+    /**
+     * Test converting from Fahrenheit to Fahrenheit.
+     */
+    public function testFahrenheitToFahrenheit(): void
+    {
+        $expected = 44;
+        $temperature = (object) [
+            "unitCode" => "wmoUnit:degF",
+            "value" => 44,
+        ];
+        $actual = $this->getTemperatureScalar($temperature);
 
-    $this->assertEquals($expected, $actual);
-  }
+        $this->assertEquals($expected, $actual);
+    }
 
-  /**
-   * Test converting from celsius to Fahrenheit.
-   */
-  public function testCelsiusToFahrenheit(): void {
-    $expected = 63;
-    $temperature = (object) [
-      "unitCode" => "wmoUnit:degC",
-      "value" => 17,
-    ];
-    $actual = $this->getTemperatureScalar($temperature);
+    /**
+     * Test converting from celsius to Fahrenheit.
+     */
+    public function testCelsiusToFahrenheit(): void
+    {
+        $expected = 63;
+        $temperature = (object) [
+            "unitCode" => "wmoUnit:degC",
+            "value" => 17,
+        ];
+        $actual = $this->getTemperatureScalar($temperature);
 
-    $this->assertEquals($expected, $actual);
-  }
+        $this->assertEquals($expected, $actual);
+    }
 
-  /**
-   * Test converting from Fahrenheit to Fahrenheit.
-   */
-  public function testCelsiusToCelsius(): void {
-    $expected = 12;
-    $temperature = (object) [
-      "unitCode" => "wmoUnit:degC",
-      "value" => 12,
-    ];
-    $actual = $this->getTemperatureScalar($temperature, FALSE);
+    /**
+     * Test converting from Fahrenheit to Fahrenheit.
+     */
+    public function testCelsiusToCelsius(): void
+    {
+        $expected = 12;
+        $temperature = (object) [
+            "unitCode" => "wmoUnit:degC",
+            "value" => 12,
+        ];
+        $actual = $this->getTemperatureScalar($temperature, false);
 
-    $this->assertEquals($expected, $actual);
-  }
-
+        $this->assertEquals($expected, $actual);
+    }
 }

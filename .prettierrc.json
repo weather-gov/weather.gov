@@ -1,0 +1,12 @@
+{
+  "plugins": ["@prettier/plugin-php"],
+  "overrides": [
+    {
+      "files": ["*.php", "*.php.test", "web/**/*.theme", "web/**/*.module"],
+      "options": {
+        "parser": "php",
+        "phpVersion": "8.0"
+      }
+    }
+  ]
+}

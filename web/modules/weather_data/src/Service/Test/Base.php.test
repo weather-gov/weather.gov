@@ -13,54 +13,56 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for the WeatherDataService getCurrentConditions method.
  */
-abstract class Base extends TestCase {
-  /**
-   * History of HTTP calls made during a test.
-   *
-   * @var httpCallStack
-   */
-  protected $httpCallStack;
+abstract class Base extends TestCase
+{
+    /**
+     * History of HTTP calls made during a test.
+     *
+     * @var httpCallStack
+     */
+    protected $httpCallStack;
 
-  /**
-   * The mocked HTTP client.
-   *
-   * @var httpClientMock
-   */
-  protected $httpClientMock;
+    /**
+     * The mocked HTTP client.
+     *
+     * @var httpClientMock
+     */
+    protected $httpClientMock;
 
-  /**
-   * The WeatherDataService object under test.
-   *
-   * @var weatherDataService
-   */
-  protected $weatherDataService;
+    /**
+     * The WeatherDataService object under test.
+     *
+     * @var weatherDataService
+     */
+    protected $weatherDataService;
 
-  /**
-   * Common setup for all component tests.
-   */
-  protected function setUp() : void {
-    parent::setUp();
+    /**
+     * Common setup for all component tests.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    $this->httpCallStack = [];
-    $history = Middleware::history($this->httpCallStack);
+        $this->httpCallStack = [];
+        $history = Middleware::history($this->httpCallStack);
 
-    $this->httpClientMock = new MockHandler([]);
-    $stack = HandlerStack::create($this->httpClientMock);
-    $stack->push($history);
-    $client = new Client(['handler' => $stack]);
+        $this->httpClientMock = new MockHandler([]);
+        $stack = HandlerStack::create($this->httpClientMock);
+        $stack->push($history);
+        $client = new Client(["handler" => $stack]);
 
-    // Just return the input string. The translation manager is tested by Drupal
-    // so we don't need to.
-    $translationManager = $this->createStub(TranslationInterface::class);
-    $translationManager->method('translate')->will(
-      $this->returnCallback(
-        function ($str) {
-          return $str;
-        }
-      )
-    );
+        // Just return the input string. The translation manager is tested by Drupal
+        // so we don't need to.
+        $translationManager = $this->createStub(TranslationInterface::class);
+        $translationManager->method("translate")->will(
+            $this->returnCallback(function ($str) {
+                return $str;
+            }),
+        );
 
-    $this->weatherDataService = new WeatherDataService($client, $translationManager);
-  }
-
+        $this->weatherDataService = new WeatherDataService(
+            $client,
+            $translationManager,
+        );
+    }
 }
