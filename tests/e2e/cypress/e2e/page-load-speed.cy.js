@@ -19,7 +19,7 @@ describe("load pages", () => {
         })
       }
 
-      cy.log(`average time: ${totalTime / pages.length}`)
+      cy.log(`average time: ${totalTime / pages.length} milliseconds.`)
     });
   });
   
