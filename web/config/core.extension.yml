@@ -8,6 +8,7 @@ module:
   breakpoint: 0
   ckeditor5: 0
   config: 0
+  contextual: 0
   datetime: 0
   dblog: 0
   devel: 0
@@ -22,6 +23,8 @@ module:
   image: 0
   key: 0
   key_asymmetric: 0
+  layout_builder: 0
+  layout_discovery: 0
   link: 0
   menu_link_content: 0
   menu_ui: 0

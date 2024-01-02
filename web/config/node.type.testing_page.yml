@@ -1,0 +1,18 @@
+uuid: 63963719-3dc2-4fb9-aa04-bda244ca1ced
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - admin
+    parent: 'admin:'
+name: 'Testing Page'
+type: testing_page
+description: 'Custom pages used for site development and testing'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true
