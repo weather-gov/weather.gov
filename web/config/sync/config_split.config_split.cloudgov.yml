@@ -7,9 +7,14 @@ label: cloudgov
 description: 'Configuration for cloudgov environments.'
 weight: 0
 stackable: false
+no_patching: false
 storage: folder
 folder: config/cloudgov
-module: {  }
+module:
+  samlauth: 0
+  s3fs: 0
+  key: 0
+  asymmetric_key: 0
 theme: {  }
 complete_list:
   - s3fs.settings
@@ -17,5 +22,5 @@ complete_list:
   - views.view.samlauth_map
   - key.key.idp_public_key.yml
   - key.key.sp_private_key.yml
-  - key.key.sp_public_key.yml  
-  
+  - key.key.sp_public_key.yml
+partial_list: {  }
