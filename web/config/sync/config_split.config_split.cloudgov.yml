@@ -1,0 +1,21 @@
+uuid: ddc32ce5-101d-422e-99c6-f3fcfdc698db
+langcode: en
+status: false
+dependencies: {  }
+id: cloudgov
+label: cloudgov
+description: 'Configuration for cloudgov environments.'
+weight: 0
+stackable: false
+storage: folder
+folder: config/cloudgov
+module: {  }
+theme: {  }
+complete_list:
+  - s3fs.settings
+  - samlauth.authentication
+  - views.view.samlauth_map
+  - key.key.idp_public_key.yml
+  - key.key.sp_private_key.yml
+  - key.key.sp_public_key.yml  
+  
