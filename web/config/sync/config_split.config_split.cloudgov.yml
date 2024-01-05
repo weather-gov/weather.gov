@@ -14,7 +14,7 @@ module:
   samlauth: 0
   s3fs: 0
   key: 0
-  asymmetric_key: 0
+  key_asymmetric: 0
 theme: {  }
 complete_list:
   - s3fs.settings
