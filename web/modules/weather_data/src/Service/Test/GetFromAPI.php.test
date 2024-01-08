@@ -33,6 +33,12 @@ final class GetFromApiTest extends Base
      */
     public function testCachesApiData(): void
     {
+        $expected = "cached value";
+        $this->cacheMock
+            ->method("get")
+            ->willReturn((object) ["data" => $expected]);
+
+        // Mock an API response. This should not be called.
         $this->httpClientMock->append(
             new Response(
                 200,
@@ -40,18 +46,9 @@ final class GetFromApiTest extends Base
                 '{"response":"here"}',
             ),
         );
-        $first = $this->weatherDataService->getFromWeatherAPI("my url");
 
-        // Change the response and call it again. We should get the same response.
-        $this->httpClientMock->append(
-            new Response(
-                200,
-                ["Content-type" => "application/json"],
-                '{"here":"response"}',
-            ),
-        );
-        $second = $this->weatherDataService->getFromWeatherAPI("my url");
+        $actual = $this->weatherDataService->getFromWeatherAPI("my url");
 
-        $this->assertEquals($second, $first);
+        $this->assertEquals($expected, $actual);
     }
 }

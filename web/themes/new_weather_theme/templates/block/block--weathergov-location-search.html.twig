@@ -1,7 +1,9 @@
 <div>
 
   {% if content.place %}
-  <h1 class="margin-bottom-0">{{ content.place.city }}, {{ content.place.state }}</h1>
+  <h1 class="margin-bottom-0">
+    {{ content.place.city }}{% if content.place.state %}, {{ content.place.state }}{% endif %}
+  </h1>
 
   <div>
     <svg
@@ -19,7 +21,7 @@
   </div>
   {% endif %}
 
-  <form class="usa-form" data-location-search>
+  <form class="usa-form" data-location-search method="post">
     <div class="display-flex flex-align-end">
       <label class="usa-label" for="weather-location-search">
         {{ 'Search for a location' | t }}
@@ -34,5 +36,6 @@
 
       </select>
     </div>
+    <input type="hidden" name="suggestedPlaceName" value="">
   </form>
 </div>

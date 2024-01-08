@@ -1,7 +1,7 @@
 {% for alert in content.alerts %}
 <div class="usa-alert usa-alert--error" role="alert">
   <div class="usa-alert__body">
-    <h4 class="usa-alert__heading">{{ alert.event }}</h4>
+    <p class="usa-alert__heading text-bold">{{ alert.event }}</p>
     {% if alert.whatWhereWhen | length > 0 %}
       <ul>
       {% for item in alert.whatWhereWhen %}
