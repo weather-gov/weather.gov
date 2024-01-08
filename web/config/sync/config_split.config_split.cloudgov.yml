@@ -15,6 +15,7 @@ module:
   s3fs: 0
   key: 0
   key_asymmetric: 0
+  autologout: 0
 theme: {  }
 complete_list:
   - s3fs.settings
@@ -23,4 +24,5 @@ complete_list:
   - key.key.idp_public_key.yml
   - key.key.sp_private_key.yml
   - key.key.sp_public_key.yml
+  - autologout.settings.yml
 partial_list: {  }
