@@ -35,7 +35,16 @@ class CurrentConditionsBlock extends WeatherBlockBase
                 $grid->y,
             );
 
-            $data["place"] = $place->city . ", " . $place->state;
+            // We generally expect our internal places to be objects with city
+            // and state keys. However, if the user arrived here using location
+            // search, we may have gotten a suggested place name that cannot be
+            // cleanly parsed into just city and state. In that case, the entire
+            // place name is stuffed into the city. So we only want to combine
+            // these two if they both actually exist.
+            $data["place"] = $place->city;
+            if ($place->state) {
+                $data["place"] .= ", " . $place->state;
+            }
 
             return $data;
         }

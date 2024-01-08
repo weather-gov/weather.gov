@@ -1,8 +1,16 @@
-const goToLocationPage = (latitude, longitude) => {
-  // Push the next URL into the history to preserve the current URL in the
-  // browser history stack.
-  window.history.pushState(null, null, `/point/${latitude}/${longitude}`);
-  window.location.href = `/point/${latitude}/${longitude}`;
+const goToLocationPage = (latitude, longitude, placename) => {
+  // We want to redirect the user via a POST. We already have the form ready to
+  // go, we just need to set its action so the browser knows where to go.
+  const form = document.querySelector("form[data-location-search]");
+  form.setAttribute("action", `/point/${latitude}/${longitude}`);
+
+  // If we also have a suggested place name, add that to the form.
+  if (placename) {
+    const suggestion = form.querySelector(`input[name="suggestedPlaceName"]`);
+    suggestion.setAttribute("value", placename);
+  }
+
+  form.submit();
 };
 
 const setupBrowserGeolocation = async () => {
@@ -176,9 +184,11 @@ const locationSelected = async (event) => {
     } = results;
 
     const lat = Math.round(geometry.y * 1_000) / 1_000;
-    const long = Math.round(geometry.x * 1_000) / 1_000;
+    const lon = Math.round(geometry.x * 1_000) / 1_000;
 
-    goToLocationPage(lat, long);
+    const placeName = event.target.selectedOptions[0].innerText;
+
+    goToLocationPage(lat, lon, placeName);
   }
 };
 
