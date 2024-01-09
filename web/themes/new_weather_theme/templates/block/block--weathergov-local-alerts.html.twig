@@ -1,4 +1,5 @@
 {% for alert in content.alerts %}
+<a id="alert_{{ loop.index }}"></a>
 <div class="usa-alert usa-alert" role="alert">
   <div class="usa-alert__body">
     <h2 class="usa-alert__heading">{{ alert.event }}</h2>

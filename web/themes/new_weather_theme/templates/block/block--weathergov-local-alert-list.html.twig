@@ -1,0 +1,11 @@
+{% for alert in content.alerts %}
+<div class="usa-alert usa-alert--info usa-alert--slim margin-top-0" role="alert">
+  <div class="usa-alert__body">
+    <a href="#alert_{{ loop.index }}">
+      {{ alert.event }}
+      in effect {{ alert.onset | date("l, m/d, g:i A T") }}
+      {% if alert.ends %} - {{ alert.ends | date("l, m/d, g:i A T") }}{% endif %}
+    </a>
+  </div>
+</div>
+{% endfor %}
