@@ -1,0 +1,88 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "/ontology#",
+      "geometry": {
+        "@id": "s:GeoCoordinates",
+        "@type": "geo:wktLiteral"
+      },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": {
+        "@id": "s:Distance",
+        "@type": "s:QuantitativeValue"
+      },
+      "bearing": {
+        "@type": "s:QuantitativeValue"
+      },
+      "value": {
+        "@id": "s:value"
+      },
+      "unitCode": {
+        "@id": "s:unitCode",
+        "@type": "@id"
+      },
+      "forecastOffice": {
+        "@type": "@id"
+      },
+      "forecastGridData": {
+        "@type": "@id"
+      },
+      "publicZone": {
+        "@type": "@id"
+      },
+      "county": {
+        "@type": "@id"
+      }
+    }
+  ],
+  "id": "/points/0,0",
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [0, 0]
+  },
+  "properties": {
+    "@id": "/points/0,0",
+    "@type": "wx:Point",
+    "cwa": "TST",
+    "forecastOffice": "/offices/TST",
+    "gridId": "TST",
+    "gridX": 1,
+    "gridY": 1,
+    "forecast": "/gridpoints/TST/1,1/forecast",
+    "forecastHourly": "/gridpoints/TST/1,1/forecast/hourly",
+    "forecastGridData": "/gridpoints/TST/1,1",
+    "observationStations": "/gridpoints/TST/1,1/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0, 0]
+      },
+      "properties": {
+        "city": "Nashville (with alerts)",
+        "state": "TN",
+        "distance": {
+          "unitCode": "wmoUnit:m",
+          "value": 1800
+        },
+        "bearing": {
+          "unitCode": "wmoUnit:degree_(angle)",
+          "value": 134
+        }
+      }
+    },
+    "forecastZone": "/zones/forecast/TST1000",
+    "county": "/zones/county/TST1001",
+    "fireWeatherZone": "/zones/fire/TST1001",
+    "timeZone": "America/Chicago",
+    "radarStation": "KTST"
+  }
+}

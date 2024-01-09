@@ -1,0 +1,6 @@
+[
+  { "name": "front page", "url": "/" },
+  { "name": "login page", "url": "/user/login" },
+  { "name": "location page with alerts", "url": "/local/TST/0/0" },
+  { "name": "location page without alerts", "url": "/local/TST/1/1" }
+]

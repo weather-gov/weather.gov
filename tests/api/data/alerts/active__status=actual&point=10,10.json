@@ -1,0 +1,444 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.550760f4ae698a45e239ca34a1ad97353d170175.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.550760f4ae698a45e239ca34a1ad97353d170175.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.550760f4ae698a45e239ca34a1ad97353d170175.001.1",
+        "areaDesc": "Eastern San Juan Mountains Above 10000 Ft",
+        "geocode": {
+          "SAME": ["008021", "008079", "008105"],
+          "UGC": ["COZ068"]
+        },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/COZ068"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.1afb9e8030b0ed3aac216a52624965e145929bc4.003.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.1afb9e8030b0ed3aac216a52624965e145929bc4.003.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-03T03:56:00-07:00"
+          }
+        ],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Pueblo CO",
+        "headline": "Winter Weather Advisory issued January 3 at 11:17AM MST until January 4 at 11:00PM MST by NWS Pueblo CO",
+        "description": "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n* WHERE...Eastern San Juan Mountains Above 10000 Feet.\n\n* WHEN...From 11 PM this evening to 11 PM MST Thursday.\n\n* IMPACTS...Travel could be very difficult. The hazardous\nconditions may impact travel over Wolf Creek Pass.",
+        "instruction": "Slow down and use caution while traveling.\n\nThe latest road conditions for the state you are calling from can\nbe obtained by calling 5 1 1.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWPUB"],
+          "WMOidentifier": ["WWUS45 KPUB 031817"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT FROM 11 PM THIS EVENING TO 11 PM MST THURSDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KPUB.WW.Y.0001.240104T0600Z-240105T0600Z/"],
+          "eventEndingTime": ["2024-01-05T06:00:00+00:00"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.b778110db1af5f40a8941e2f58ad74e033cbf27b.001.1,2024-01-02T19:48:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.df9e2a81f18490efe7432abe79ef415af0e251b2.001.1,2024-01-02T13:50:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.8760a86c78e313ccfc42aa4eb5166572a0e26e9d.003.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.8760a86c78e313ccfc42aa4eb5166572a0e26e9d.003.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.8760a86c78e313ccfc42aa4eb5166572a0e26e9d.003.1",
+        "areaDesc": "Eastern Beaufort Sea Coast",
+        "geocode": {
+          "SAME": ["002185"],
+          "UGC": ["AKZ805"]
+        },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/AKZ805"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.50186263db80dd3a37b9a35b4106434dbb236843.003.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.50186263db80dd3a37b9a35b4106434dbb236843.003.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-03T02:50:00-09:00"
+          }
+        ],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Extreme",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Blizzard Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Fairbanks AK",
+        "headline": "Blizzard Warning issued January 3 at 9:16AM AKST until January 5 at 3:00PM AKST by NWS Fairbanks AK",
+        "description": "* WHAT...Blizzard conditions occuring. Winds gusting as high as\n60 mph.\n\n* WHERE...Eastern Beaufort Sea Coast.\n\n* WHEN...Until 3 PM AKST Friday.\n\n* IMPACTS...Travel will be difficult. Blowing snow will cause\nwhiteout conditions. Large snow drifts will form. Wind chills\nto 50 below zero could cause frostbite on exposed skin in as\nlittle as 10 minutes.\n\n* ADDITIONAL DETAILS...East winds will increase today. The\nstrongest winds and lowest visibility are expected today into\nThursday.",
+        "instruction": "A Blizzard Warning means severe winter weather conditions are\nexpected or occurring. Falling and blowing snow with strong winds\nand poor visibilities are likely. This will lead to whiteout\nconditions, making travel extremely difficult.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": ["WSWNSB"],
+          "WMOidentifier": ["WWAK41 PAFG 031816"],
+          "NWSheadline": [
+            "BLIZZARD WARNING REMAINS IN EFFECT UNTIL 3 PM AKST FRIDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "EAS-ORG": ["WXR"],
+          "VTEC": ["/O.CON.PAFG.BZ.W.0027.000000T0000Z-240106T0000Z/"],
+          "eventEndingTime": ["2024-01-06T00:00:00+00:00"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.68a432c4b84fb77d2ef4265291d4890fa93f87de.004.1,2024-01-02T15:08:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.4f266b4453e74c6e026c6094e432e45c271e43a5.003.1,2024-01-02T04:55:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.40c0cd80cc652428b57c4b88a9491784caafc662.001.1,2024-01-01T15:21:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.68519a444b9c4fe151b7a4212ef0683fcaf40695.001.1,2024-01-01T05:38:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.bc83b741ef6bcec961b826c0dc76241a32664ede.001.2,2024-01-01T05:33:00-09:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.dd9d1725a9e11197c2487f4272c175c43049330c.001.2",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.dd9d1725a9e11197c2487f4272c175c43049330c.001.2",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.dd9d1725a9e11197c2487f4272c175c43049330c.001.2",
+        "areaDesc": "Santa Ynez Mountains Eastern Range",
+        "geocode": {
+          "SAME": ["006083", "006111"],
+          "UGC": ["CAZ352"]
+        },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/CAZ352"],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "High Wind Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Los Angeles/Oxnard CA",
+        "headline": "High Wind Warning issued January 3 at 9:50AM PST until January 5 at 1:00AM PST by NWS Los Angeles/Oxnard CA",
+        "description": "* WHAT...North winds 25 to 35 mph with gusts up to 60 to 65 mph\nexpected.\n\n* WHERE...Santa Ynez Mountains Eastern Range.\n\n* WHEN...Until 1 AM PST Friday.\n\n* IMPACTS...Damaging winds will blow down large objects such as\ntrees and power lines. Power outages are expected. Travel will\nbe difficult, especially for high profile vehicles.",
+        "instruction": "People should avoid being outside in forested areas and around\ntrees and branches. If possible, remain in the lower levels of\nyour home during the windstorm, and avoid windows. Use caution if\nyou must drive.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": ["NPWLOX"],
+          "WMOidentifier": ["WWUS76 KLOX 031750"],
+          "NWSheadline": ["HIGH WIND WARNING IN EFFECT UNTIL 1 AM PST FRIDAY"],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "EAS-ORG": ["WXR"],
+          "VTEC": ["/O.NEW.KLOX.HW.W.0001.240103T1800Z-240105T0900Z/"],
+          "eventEndingTime": ["2024-01-05T09:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e26a87da6e5d02d88e85d7d5b7a62b2fc1d84889.001.1",
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-102.34999999999999, 41.359999999999999],
+            [-102.34999999999999, 41.399999999999999],
+            [-101.9599999, 41.299999999999997],
+            [-101.97, 41.259999999999998],
+            [-102.34999999999999, 41.359999999999999]
+          ]
+        ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e26a87da6e5d02d88e85d7d5b7a62b2fc1d84889.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.e26a87da6e5d02d88e85d7d5b7a62b2fc1d84889.001.1",
+        "areaDesc": "Garden, NE; Keith, NE",
+        "geocode": {
+          "SAME": ["031069", "031101"],
+          "UGC": ["NEC069", "NEC101"]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/county/NEC069",
+          "https://api.weather.gov/zones/county/NEC101"
+        ],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Minor",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Flood Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS North Platte NE",
+        "headline": "Flood Advisory issued January 3 at 10:44AM MST by NWS North Platte NE",
+        "description": "* WHAT...Flooding caused by an ice jam continues.\n\n* WHERE...North Platte River at Lewellen.\n\n* WHEN...Until further notice.\n\n* IMPACTS...At 8.0 feet, Minor flood stage. Overflow and high water\ntable levels may cause seepage and flooding of basements and crawl\nspaces near and along the river.\n\n* ADDITIONAL DETAILS...\n- At 9:45 AM MST Wednesday the stage was 8.0 feet.\n- Bankfull stage is 7.5 feet.\n- Recent Activity...The maximum river stage in the 24 hours\nending at 9:45 AM MST Wednesday was 8.3 feet.\n- Forecast...The river is expected to remain near flood stage\nand minor fluctuations in the river level are likely.\n- Action stage is 7.0 feet.\n- Flood stage is 8.0 feet.\n- http://www.weather.gov/safety/flood",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": ["FLSLBF"],
+          "WMOidentifier": ["WGUS83 KLBF 031744"],
+          "NWSheadline": [
+            "FLOOD ADVISORY FOR AN ICE JAM REMAINS IN EFFECT UNTIL FURTHER NOTICE"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KLBF.FL.Y.0009.000000T0000Z-000000T0000Z/"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.076daa69ff6b16c1ae8bedd8d7fbd09a96eb5f3e.001.1,2024-01-02T10:48:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.f0f1a07926f6eeb4cb5f39e3af04860ea944b064.001.1,2024-01-01T09:02:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.faf9c1b569fccf4e4d9bb56daf2b1a4f6b784e3d.001.1,2023-12-31T09:03:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.1c9d844414dad17a73e684b27600c6c4e6d3be34.001.1,2023-12-30T10:07:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.85f85635117741c6790d0cc06052ebbda4b4bb18.001.1,2023-12-29T08:56:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65.001.1",
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-80.849999999999994, 34.5],
+            [-80.629999999999995, 34.32],
+            [-80.75, 34.280000000000001],
+            [-80.980000000000004, 34.469999999999999],
+            [-80.849999999999994, 34.5]
+          ]
+        ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65.001.1",
+        "areaDesc": "Fairfield, SC; Kershaw, SC; Lancaster, SC",
+        "geocode": {
+          "SAME": ["045039", "045055", "045057"],
+          "UGC": ["SCC039", "SCC055", "SCC057"]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/county/SCC039",
+          "https://api.weather.gov/zones/county/SCC055",
+          "https://api.weather.gov/zones/county/SCC057"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c5ee31a96a4e5c19f2b67a2c82f32ab0a48256ed.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.c5ee31a96a4e5c19f2b67a2c82f32ab0a48256ed.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-02T21:38:00-05:00"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e0746a0feb45013ca9881692c837c84471564f6b.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.e0746a0feb45013ca9881692c837c84471564f6b.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-03T04:25:00-05:00"
+          }
+        ],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Observed",
+        "urgency": "Immediate",
+        "event": "Flood Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Columbia SC",
+        "headline": "Flood Warning issued January 3 at 8:56AM EST by NWS Columbia SC",
+        "description": "* WHAT...Minor flooding is occurring and minor flooding is forecast.\n\n* WHERE...Wateree River at Lake Wateree.\n\n* WHEN...Until further notice.\n\n* IMPACTS...At 100.4 feet, The piers on the Wildlife Road bridge\nover Singleton Creek become submerged.\n\n\n* ADDITIONAL DETAILS...\n- At 7:00 AM EST Wednesday the stage was 101.0 feet.\n- Bankfull stage is 100.0 feet.\n- Forecast...The river is expected to remain steady above flood\nstage at 101.0 feet.\n- Flood stage is 100.0 feet.\n- http://www.weather.gov/safety/flood",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": ["FLSCAE"],
+          "WMOidentifier": ["WGUS82 KCAE 031356"],
+          "NWSheadline": [
+            "FLOOD WARNING REMAINS IN EFFECT UNTIL FURTHER NOTICE"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "EAS-ORG": ["WXR"],
+          "VTEC": ["/O.CON.KCAE.FL.W.0046.000000T0000Z-000000T0000Z/"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.77d902efff6435261bde05ec816b97fc92556b76.001.1,2024-01-02T08:55:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.25b367e05a5cea1e6e5c573fb87302a3a2789646.001.1,2024-01-02T04:41:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.ab37ca9257852da2c8c0e87dcdf8158bfc601a1b.001.1,2024-01-01T21:31:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.0322cd04616a9119041756fe67d9d6d3a4fba1c1.001.1,2024-01-01T10:44:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.2e3afe997e332f09d72d10935b405670675ef1a4.001.1,2024-01-01T04:16:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.5a44befa765e0cd22a6fbe1706b0f07ad24842b9.001.1,2023-12-31T22:27:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.cdff9c843b1b679b3e093186f016f206a600289c.001.1,2023-12-31T10:13:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.49b2fadfca725e5498c478571334b19ae7ea241a.002.1,2023-12-31T06:21:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.3e8593dea119a5966d18cad23efcdf06563538c7.002.1,2023-12-30T22:27:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.3124af14a559414767d9a1ee8cd59e249d6e9e7d.002.1,2023-12-30T14:47:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.9233cfd46aa5f4021f162fff0f3b0b4ae67dc360.001.1,2023-12-30T11:00:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.0f13769e338b6800f27e1343def1939c0cb58405.001.1,2023-12-29T21:29:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.f6fdb65a8c7da2afe44cd95c961da5904f4498fe.001.1,2023-12-29T09:40:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.58fe35f72e59baa472222c1555427d910a4f0667.001.1,2023-12-29T06:33:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.68e31bac7e504af5dbf5dad2cd28976f714ac565.004.1,2023-12-28T22:36:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.014838d9fa5c229c85d604d8bad4a9ad073c21b4.004.1,2023-12-28T10:13:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.817bd04cd34f9bf286a272573a4b6e51f1acd168.001.1,2023-12-28T04:10:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.d18b658366cff918ccdb6de1d160da27bbcc76e8.001.1,2023-12-27T21:48:00-05:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.036.2",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.036.2",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.036.2",
+        "areaDesc": "Saint Matthew Island Waters",
+        "geocode": {
+          "SAME": ["058767"],
+          "UGC": ["PKZ767"]
+        },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/PKZ767"],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Heavy Freezing Spray Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Anchorage AK",
+        "headline": "Heavy Freezing Spray Warning issued January 3 at 7:05AM AKST until January 4 at 5:00PM AKST by NWS Anchorage AK",
+        "description": "AAA\n\n.TODAY...NE wind 40 kt. Seas 17 ft. Freezing spray. Snow.\n.TONIGHT...NE wind 35 kt. Seas 15 ft. Heavy freezing spray near\nthe ice edge.\n.THU...NE wind 35 kt. Seas 15 ft. Heavy freezing spray near the\nice edge.\n.THU NIGHT...N wind 25 kt. Seas 11 ft.\n.FRI...N wind 20 kt. Seas 8 ft.\n.SAT...NE wind 35 kt. Seas 17 ft.\n.SUN...W wind 35 kt. Seas 17 ft.",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": ["CWFALU"],
+          "WMOidentifier": ["FZAK52 PAFC 031605 AAA"],
+          "NWSheadline": [
+            "GALE WARNING THROUGH THURSDAY... ...HEAVY FREEZING SPRAY WARNING TONIGHT AND THURSDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.NEW.PAFC.UP.W.3097.240104T0200Z-240105T0200Z/"],
+          "eventEndingTime": ["2024-01-05T02:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.007.2",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.007.2",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.007.2",
+        "areaDesc": "Cape Tolstoi to Cape Sarichef from 15 to 100 NM",
+        "geocode": {
+          "SAME": ["058755"],
+          "UGC": ["PKZ755"]
+        },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/PKZ755"],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Gale Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Anchorage AK",
+        "headline": "Gale Warning issued January 3 at 7:05AM AKST until January 4 at 5:00PM AKST by NWS Anchorage AK",
+        "description": "AAA\n\n.TODAY...S wind 35 kt. Seas 36 ft. Rain showers.\n.TONIGHT...SW wind 30 kt. Seas 30 ft. Rain showers.\n.THU...SW wind 35 kt. Seas 27 ft. Rain showers and snow showers.\n.THU NIGHT...SW wind 35 kt. Seas 24 ft.\n.FRI...SW wind 35 kt. Seas 21 ft.\n.SAT...S wind 40 kt. Seas 31 ft.\n.SUN...SW wind 40 kt. Seas 31 ft.",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": ["CWFALU"],
+          "WMOidentifier": ["FZAK52 PAFC 031605 AAA"],
+          "NWSheadline": ["GALE WARNING TODAY AND THURSDAY"],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.NEW.PAFC.GL.W.3066.240104T1400Z-240105T0200Z/"],
+          "eventEndingTime": ["2024-01-05T02:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.82d03a893a84390fbc5217471cd259eaa41a4135.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.82d03a893a84390fbc5217471cd259eaa41a4135.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.82d03a893a84390fbc5217471cd259eaa41a4135.001.1",
+        "areaDesc": "Eastern Glacier, Western Toole, and Central Pondera; Eastern Toole and Liberty; Hill County; Northern Blaine County",
+        "geocode": {
+          "SAME": ["030035", "030073", "030101", "030051", "030041", "030005"],
+          "UGC": ["MTZ303", "MTZ304", "MTZ305", "MTZ306"]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/MTZ303",
+          "https://api.weather.gov/zones/forecast/MTZ304",
+          "https://api.weather.gov/zones/forecast/MTZ305",
+          "https://api.weather.gov/zones/forecast/MTZ306"
+        ],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Great Falls MT",
+        "headline": "Special Weather Statement issued January 3 at 11:19AM MST by NWS Great Falls MT",
+        "description": "Patchy dense fog will continue to impact the US highway 2\ncorridor heading into the afternoon hours. Visibilities will be\nvariable and may fall as low as a half mile or less across short\ndistances. In addition to that, frost deposition may result in\nslippery roads.\n\nAnyone traveling should be prepared for variable visibility\nreductions across short distances and potential slippery road\nconditions. Use extra caution while driving by slowing down and\nleaving plenty of distance ahead of you.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["SPSTFX"],
+          "WMOidentifier": ["WWUS85 KTFX 031819"],
+          "NWSheadline": [
+            "Patchy dense fog along the Hi-line will continue into the afternoon hours"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "EAS-ORG": ["WXR"]
+        }
+      }
+    }
+  ],
+  "title": "Current watches, warnings, and advisories for 44.9869 N, 93.2926 W",
+  "updated": "2024-01-11T17:10:45+00:00"
+}

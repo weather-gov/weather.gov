@@ -111,6 +111,9 @@ jobs:
       - name: install dependencies
         run: npm ci
 
+      - name: install proxy dependencies
+        run: cd tests/api && npm ci
+
       - name: add problem matcher
         run: echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-eslint.json"
 

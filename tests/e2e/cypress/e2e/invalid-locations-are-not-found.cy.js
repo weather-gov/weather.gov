@@ -1,4 +1,8 @@
 describe("invalid location-based routes return 404", () => {
+  before(() => {
+    cy.request("http://localhost:8081/local");
+  });
+
   describe("for non-numeric points", () => {
     [
       ["with non-numeric latitude", "abc", "123"],
@@ -32,14 +36,12 @@ describe("invalid location-based routes return 404", () => {
     [
       ["with non-numeric X", "a", "1"],
       ["with non-numeric Y", "1", "a"],
-      ["with X starting with 0", "01", "1"],
-      ["with Y starting with 0", "1", "01"],
     ].forEach(([test, x, y]) => {
       it(test, () => {
-        cy.request({ url: `/local/abc/${x}/${y}`, failOnStatusCode: false })
+        cy.request({ url: `/local/TST/${x}/${y}`, failOnStatusCode: false })
           .its("status")
           .should("equal", 404);
-        cy.visit(`/local/abc/${x}/${y}`, { failOnStatusCode: false });
+        cy.visit(`/local/TST/${x}/${y}`, { failOnStatusCode: false });
       });
     });
   });

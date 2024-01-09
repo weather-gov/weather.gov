@@ -105,6 +105,12 @@ class WeatherDataService
      */
     public function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
     {
+        if (!str_starts_with($url, "https://")) {
+            $baseUrl = getEnv("API_URL");
+            $baseUrl = $baseUrl == false ? "https://api.weather.gov" : $baseUrl;
+            $url = $baseUrl . $url;
+        }
+
         $cacheHit = $this->cache->get($url);
         if (!$cacheHit) {
             try {
@@ -240,9 +246,9 @@ class WeatherDataService
     public function getGridFromLatLon($lat, $lon)
     {
         try {
-            $locationMetadata = $this->getFromWeatherAPI(
-                "https://api.weather.gov/points/$lat,$lon",
-            );
+            $lat = round($lat, 4);
+            $lon = round($lon, 4);
+            $locationMetadata = $this->getFromWeatherAPI("/points/$lat,$lon");
 
             $wfo = $locationMetadata->properties->gridId;
             $gridX = $locationMetadata->properties->gridX;
@@ -335,9 +341,9 @@ class WeatherDataService
      */
     public function getPlaceFromLatLon($lat, $lon)
     {
-        $point = $this->getFromWeatherAPI(
-            "https://api.weather.gov/points/$lat,$lon",
-        );
+        $lat = round($lat, 4);
+        $lon = round($lon, 4);
+        $point = $this->getFromWeatherAPI("/points/$lat,$lon");
         $place = $point->properties->relativeLocation->properties;
 
         return (object) [
@@ -355,9 +361,7 @@ class WeatherDataService
     public function getGeometryFromGrid($wfo, $x, $y)
     {
         $wfo = strtoupper($wfo);
-        $gridpoint = $this->getFromWeatherAPI(
-            "https://api.weather.gov/gridpoints/$wfo/$x,$y",
-        );
+        $gridpoint = $this->getFromWeatherAPI("/gridpoints/$wfo/$x,$y");
         $geometry = $gridpoint->geometry->coordinates[0];
 
         return array_map(function ($geo) {
@@ -388,7 +392,7 @@ class WeatherDataService
         date_default_timezone_set("America/New_York");
 
         $obsStations = $this->getFromWeatherAPI(
-            "https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/stations",
+            "/gridpoints/$wfo/$gridX,$gridY/stations",
         );
         $obsStations = $obsStations->features;
 
@@ -398,7 +402,9 @@ class WeatherDataService
             // the next one. Continue through the first 3 stations and then give up.
             $observationStation = $obsStations[$obsStationIndex];
             $obs = $this->getFromWeatherAPI(
-                $observationStation->id . "/observations?limit=1",
+                "/stations/" .
+                    $observationStation->properties->stationIdentifier .
+                    "/observations?limit=1",
             )->features[0]->properties;
             $obsStationIndex += 1;
         } while (
@@ -499,15 +505,15 @@ class WeatherDataService
         date_default_timezone_set("America/New_York");
 
         $forecast = $this->getFromWeatherAPI(
-            "https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
+            "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
         );
 
         // Get a point from the WFO grid. Any will do. We will use that to fetch the
         // appropriate timezone from the /points API endpoint.
         $point = $forecast->geometry->coordinates[0][0];
-        $timezone = $this->getFromWeatherAPI(
-            "https://api.weather.gov/points/$point[1],$point[0]",
-        );
+        $lat = round($point[1], 4);
+        $lon = round($point[0], 4);
+        $timezone = $this->getFromWeatherAPI("/points/$lat,$lon");
         $timezone = $timezone->properties->timeZone;
 
         $forecast = $forecast->properties->periods;
@@ -574,7 +580,7 @@ class WeatherDataService
     ) {
         $wfo = strtoupper($wfo);
         $forecast = $this->getFromWeatherAPI(
-            "https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast",
+            "/gridpoints/$wfo/$gridX,$gridY/forecast",
         );
 
         $periods = $forecast->properties->periods;

@@ -49,7 +49,7 @@ final class GetHourlyForecastTest extends Base
                 ["Content-type" => "application/geo+json"],
                 json_encode([
                     "geometry" => [
-                        "coordinates" => [[["X", "Y"]]],
+                        "coordinates" => [[[0, 1]]],
                     ],
                     "properties" => [
                         "periods" => $forecast,

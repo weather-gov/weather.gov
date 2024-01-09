@@ -11,6 +11,18 @@ services:
       MYSQL_PASSWORD: drupal
       MYSQL_ROOT_PASSWORD: drupal
 
+  api-proxy:
+    build:
+      context: ./tests/api
+      dockerfile: Dockerfile
+    networks:
+      - weather.gov
+    ports:
+      - 8081:8081
+    volumes:
+      - ./tests/api:/app
+      - /app/node_modules
+
   drupal:
     build:
       context: ./
@@ -21,8 +33,10 @@ services:
     networks:
       - weather.gov
     links:
-      - database:database
+      - database
+      - api-proxy
     environment:
+      API_URL: http://api-proxy:8081
       DRUPAL_DB_NAME: weathergov
       DRUPAL_DB_USERNAME: drupal
       DRUPAL_DB_PASSWORD: drupal

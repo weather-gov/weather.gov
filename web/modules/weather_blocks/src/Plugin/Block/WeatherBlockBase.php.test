@@ -145,16 +145,16 @@ final class WeatherBlockBaseTest extends TestCase
             ->will(
                 $this->returnValueMap([
                     ["wfo", "wfo code"],
-                    ["gridX", "grid x"],
-                    ["gridY", "grid y"],
+                    ["gridX", "372"],
+                    ["gridY", "004"],
                 ]),
             );
 
         $expected = (object) [
             "grid" => (object) [
                 "wfo" => "WFO CODE",
-                "x" => "grid x",
-                "y" => "grid y",
+                "x" => 372,
+                "y" => 4,
             ],
         ];
 

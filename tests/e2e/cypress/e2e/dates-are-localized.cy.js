@@ -1,12 +1,16 @@
 const dayjs = require("dayjs");
 
 describe("main script", () => {
+  before(() => {
+    cy.request("http://localhost:8081/local");
+  });
+
   describe("formats the timestamp according to the browser's locale settings", () => {
     // US English, Mexican Spanish, Puerto Rican Spanish, and US Spanish. Just
     // some representative test cases. If these pass, others should too.
     ["en-US", "es-MX", "es-PR", "es-US"].forEach((locale) => {
       it(`for the ${locale} locale`, () => {
-        cy.visit("/local/OHX/50/57/Nashville", {
+        cy.visit("/local/TST/0/0/", {
           onBeforeLoad: (win) => {
             Object.defineProperty(win.navigator, "languages", {
               value: [locale],

@@ -19,8 +19,8 @@ weather_routes.grid:
     _access: 'TRUE'
     # Validate path parameters
     wfo: '^[A-Za-z][A-Za-z][A-Za-z]$'
-    gridX: '^[1-9][0-9]*$'
-    gridY: '^[1-9][0-9]*$'
+    gridX: '^[0-9]*$'
+    gridY: '^[0-9]*$'
 
 weather_routes.grid.legacy:
   path: '/local/{wfo}/{gridX}/{gridY}/{location}'
@@ -31,5 +31,5 @@ weather_routes.grid.legacy:
     _access: 'TRUE'
     # Validate path parameters
     wfo: '^[A-Za-z][A-Za-z][A-Za-z]$'
-    gridX: '^[1-9][0-9]*$'
-    gridY: '^[1-9][0-9]*$'
+    gridX: '^[0-9]*$'
+    gridY: '^[0-9]*$'

@@ -35,8 +35,11 @@ then:
    repo or globally.
 2. Read up on how we've [structured our Drupal code](drupal.md).
 3. Learn about [setting up debugging](debugging.md).
-4. Check out our [expectations around code quality](qasp.md).
-5. Look at [how we do testing](testing.md).
-6. Look at our [process for submitting, reviewing, and merging new code](review-standards.md).
-7. Get familiar with [our Makefile](makefile.md). It'll be helpful!
-8. Add our [code review templates](code_review_templates) to your [saved replies](saved-replies.md).
+4. Learn about [replacing API calls with well-known data](intercepting-the-api.md)
+   to see how we reproduce particular weather scenarios without needing to rely
+   on the actual weather.
+5. Check out our [expectations around code quality](qasp.md).
+6. Look at [how we do testing](testing.md).
+7. Look at our [process for submitting, reviewing, and merging new code](review-standards.md).
+8. Get familiar with [our Makefile](makefile.md). It'll be helpful!
+9. Add our [code review templates](code_review_templates) to your [saved replies](saved-replies.md).

@@ -1,24 +1,27 @@
-describe("collect screenshots", () => {
-  it("is not a test, is just a utility", () => {
-    const pages = [
-      { name: "front page", url: "/" },
-      { name: "location page", url: "/local/OHX/50/57" },
-      { name: "login page", url: "/user/login" },
-    ];
+// eslint-disable-next-line import/extensions
+const pages = require("../../../pages.json");
 
+const viewports = [
+  ["phone", 480, 500],
+  ["tablet", 640, 500],
+  ["desktop", 1024, 500],
+];
+
+describe("collect screenshots", () => {
+  before(() => {
+    cy.request("http://localhost:8081/local");
+  });
+
+  it("is not a test, is just a utility", () => {
     for (const { name, url } of pages) {
       cy.visit(url);
       cy.get("html").invoke("css", "height", "initial");
       cy.get("body").invoke("css", "height", "initial");
 
-      cy.viewport(480, 500);
-      cy.screenshot(`phone/${name}`, { capture: "fullPage" });
-
-      cy.viewport(640, 500);
-      cy.screenshot(`tablet/${name}`, { capture: "fullPage" });
-
-      cy.viewport(1024, 500);
-      cy.screenshot(`desktop/${name}`, { capture: "fullPage" });
+      viewports.forEach(([viewport, width, height]) => {
+        cy.viewport(width, height);
+        cy.screenshot(`${viewport}/${name}`, { capture: "fullPage" });
+      });
     }
   });
 });
