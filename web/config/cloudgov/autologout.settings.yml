@@ -1,0 +1,22 @@
+_core:
+  default_config_hash: kwGGKvKSU7cPTEgTMWrbW0o9Jwe6FSDmpgdUWmIXCdg
+enabled: true
+timeout: 1800
+max_timeout: 172800
+padding: 20
+logout_regardless_of_activity: false
+no_individual_logout_threshold: false
+role_logout: false
+role_logout_max: false
+redirect_url: /user/saml
+no_dialog: false
+message: 'Your session is about to expire. Do you want to reset it?'
+inactivity_message: 'You have been logged out due to inactivity.'
+inactivity_message_type: status
+modal_width: 450
+enforce_admin: false
+jstimer_format: '%hours%:%mins%:%secs%'
+jstimer_js_load_option: false
+use_alt_logout_method: false
+use_watchdog: true
+whitelisted_ip_addresses: ''

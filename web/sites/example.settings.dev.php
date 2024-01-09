@@ -843,4 +843,6 @@ $databases["default"]["default"] = [
     "driver" => "mysql",
     "autoload" => "core/modules/mysql/src/Driver/Database/mysql/",
 ];
-$settings["config_sync_directory"] = "/opt/drupal/web/config/";
+$settings["config_sync_directory"] = "/opt/drupal/web/config/sync/";
+$config["config_split.config_split.local"]["status"] = True;
+
