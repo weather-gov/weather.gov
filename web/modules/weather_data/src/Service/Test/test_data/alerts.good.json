@@ -1,6 +1,17 @@
 {
   "features": [
     {
+      "geometry": null,
+      "properties": {
+        "areaDesc": "place 2",
+        "event": "Tsunami Warning",
+        "description": "There is a very\nbig wave and lots\nof water.\n\nTsunamis are very dangerous.",
+        "onset": "2023-10-01T14:32:19-06:00",
+        "ends": "2023-10-01T16:32:19-06:00",
+        "expires": "2023-10-01T18:32:19-06:00"
+      }
+    },
+    {
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -12,23 +23,45 @@
       },
       "properties": {
         "areaDesc": "place 1",
-        "event": "Weather Warning",
-        "description": "There is a warning for:\n\nPlaces listed\n\nYou should prepare."
+        "event": "Wind advisory",
+        "description": "There is a warning for:\n\nPlaces listed\n\nYou should prepare.",
+        "onset": "2023-10-01T14:32:19-06:00"
       }
     },
     {
       "geometry": null,
       "properties": {
-        "areaDesc": "place 2",
-        "event": "Weather Watch",
-        "description": "* WHAT...Bad weather\n\n* WHERE...Places\n\n* WHEN...Until it stops.\n\n* IMPACTS...Badness."
+        "event": "volcano warning",
+        "description": "* WHAT...Bad weather\n\n* WHERE...Places\n\n* FAKE...This goes away",
+        "instruction": "Duck!\nAnd coooover!\n\nJust duck!\nAnd cooooover!"
       }
     },
     {
-      "geometry": null,
       "properties": {
-        "event": "Weather Advisory",
-        "description": "* WHAT...Bad weather\n\n* WHERE...Places\n\n* FAKE...This goes away"
+        "event": "air quality alert",
+        "onset": "2024-01-09T12:00:00-06:00",
+        "description": "earliest"
+      }
+    },
+    {
+      "properties": {
+        "event": "air quality alert",
+        "onset": "2024-01-09T14:00:00-06:00",
+        "description": "latest"
+      }
+    },
+    {
+      "properties": {
+        "event": "air quality alert",
+        "onset": "2024-01-09T13:00:00-06:00",
+        "description": "middle 1"
+      }
+    },
+    {
+      "properties": {
+        "event": "air quality alert",
+        "onset": "2024-01-09T13:00:00-06:00",
+        "description": "middle 2"
       }
     }
   ]

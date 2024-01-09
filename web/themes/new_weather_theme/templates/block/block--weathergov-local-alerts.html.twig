@@ -1,20 +1,26 @@
 {% for alert in content.alerts %}
-<div class="usa-alert usa-alert--error" role="alert">
+<div class="usa-alert usa-alert" role="alert">
   <div class="usa-alert__body">
-    <p class="usa-alert__heading text-bold">{{ alert.event }}</p>
-    {% if alert.whatWhereWhen | length > 0 %}
-      <ul>
-      {% for item in alert.whatWhereWhen %}
-        <li><strong>{{ item.name }}:</strong> {{ item.value }}</li>
-      {% endfor %}
-      </ul>
-    {% else %}
-      {% for paragraph in alert.description %}
-      <p>{{ paragraph }}</p>
-      {% endfor %}
+    <h2 class="usa-alert__heading">{{ alert.event }}</h2>
+    <p>
+      In effect from {{ alert.onset | date("l, m/d, g:i A T") }}
+      {% if alert.ends %} - {{ alert.ends | date("l, m/d, g:i A T") }}{% endif %}
+    </p>
+    <p>
+      Issued by {{ alert.senderName }}
+    </p>
+    <p>
+      {{ alert.description | nl2br }}
+    </p>
+    {% if alert.instruction %}
+    <h3>What to do</h3>
+    <p>
+      {{ alert.instruction | nl2br }}
+    </p>
     {% endif %}
-    <p class="margin-bottom-0">
-      {{ alert.instruction }}
+    <h3>Areas impacted</h3>
+    <p>
+      {{ alert.areaDesc | nl2br }}
     </p>
   </div>
 </div>

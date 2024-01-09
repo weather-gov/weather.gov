@@ -1,0 +1,43 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use GuzzleHttp\Psr7\Response;
+
+/**
+ * Test getting timezone information from the grid.
+ */
+final class GetTimezoneForGridTest extends Base
+{
+    /**
+     * Tests the happy path.
+     */
+    public function testHappyPath(): void
+    {
+        $expected = "America/Denver";
+
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                '{"geometry":{"coordinates":[[[4,3],[5,9],[3,9]]]}}',
+            ),
+        );
+
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-Type" => "application/geo+json"],
+                '{"properties":{"timeZone":"America/Denver"}}',
+            ),
+        );
+
+        $actual = $this->weatherDataService->getTimezoneForGrid("bob", 32, 93);
+
+        $this->assertEquals((object) $expected, (object) $actual);
+        $this->assertEquals(
+            "/points/3,4",
+            $this->httpCallStack[1]["request"]->getUri()->getPath(),
+        );
+    }
+}
