@@ -2,10 +2,12 @@
 
 namespace Drupal\weather_data\Service;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ServerException;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * A service class for fetching weather data.
@@ -54,18 +56,18 @@ class WeatherDataService
     private $t;
 
     /**
-     * Cache of current conditions.
+     * The request currently being responded to.
      *
-     * @var currentConditions
+     * @var request
      */
-    private $currentConditions;
+    private $request;
 
     /**
      * Cache of API calls for this request.
      *
-     * @var apiCache
+     * @var cache
      */
-    private $apiCache;
+    private $cache;
 
     /**
      * Constructor.
@@ -73,15 +75,18 @@ class WeatherDataService
     public function __construct(
         ClientInterface $httpClient,
         TranslationInterface $t,
+        RequestStack $r,
+        CacheBackendInterface $cache,
     ) {
         $this->client = $httpClient;
         $this->t = $t;
+        $this->request = $r->getCurrentRequest();
+        $this->cache = $cache;
+
         $this->defaultIcon = "nodata.svg";
         $this->defaultConditions = "No data";
 
         $this->currentConditions = false;
-
-        $this->apiCache = [];
 
         $this->legacyMapping = json_decode(
             file_get_contents(__DIR__ . "/legacyMapping.json"),
@@ -99,11 +104,13 @@ class WeatherDataService
      */
     public function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
     {
-        if (!array_key_exists($url, $this->apiCache)) {
+        $cacheHit = $this->cache->get($url);
+        if (!$cacheHit) {
             try {
                 $response = $this->client->get($url);
                 $response = json_decode($response->getBody());
-                $this->apiCache[$url] = $response;
+                $this->cache->set($url, $response, time() + 60);
+                return $response;
             } catch (ServerException $e) {
                 $logger = $this->getLogger("Weather.gov data service");
                 $logger->notice("got 500 error on attempt $attempt for: $url");
@@ -122,9 +129,9 @@ class WeatherDataService
                 $logger->error("giving up on: $url");
                 throw $e;
             }
+        } else {
+            return $cacheHit->data;
         }
-
-        return $this->apiCache[$url];
     }
 
     /**
@@ -236,13 +243,64 @@ class WeatherDataService
                 "https://api.weather.gov/points/$lat,$lon",
             );
 
-            return [
-                "wfo" => $locationMetadata->properties->gridId,
-                "gridX" => $locationMetadata->properties->gridX,
-                "gridY" => $locationMetadata->properties->gridY,
-                "location" =>
+            $wfo = $locationMetadata->properties->gridId;
+            $gridX = $locationMetadata->properties->gridX;
+            $gridY = $locationMetadata->properties->gridY;
+
+            $place = [
+                "city" =>
                     $locationMetadata->properties->relativeLocation->properties
                         ->city,
+                "state" =>
+                    $locationMetadata->properties->relativeLocation->properties
+                        ->state,
+            ];
+
+            // We could get a POST parameter supplied by location search
+            // representing the place name our user selected. If we get that,
+            // we should use it. That way the place name we show them is the
+            // same as the one they selected. A little less cognitively jarring.
+            $suggestedPlaceName = $this->request->get("suggestedPlaceName");
+
+            if ($suggestedPlaceName) {
+                // Initially assume that the place name can't be parsed into
+                // anything else, so just stuff it all into the city.
+                $place["city"] = $suggestedPlaceName;
+                $place["state"] = null;
+
+                // I swear, chainable functions would be such a godsend...
+                // Anyway, this splits the string on commas and then trims all
+                // the resutling values.
+                $maybeParts = array_map(function ($item) {
+                    return trim($item);
+                }, explode(",", $suggestedPlaceName));
+
+                // If our string is of the form "Reston, VA, USA", then we can
+                // split it into city and state.
+                if (
+                    count($maybeParts) == 3 &&
+                    strlen($maybeParts[1]) == 2 &&
+                    $maybeParts[2] == "USA"
+                ) {
+                    $place["city"] = $maybeParts[0];
+                    $place["state"] = $maybeParts[1];
+                }
+            }
+
+            // Cache whatever place name we end up with. Because we're about to
+            // redirect the user, we probably don't need to cache it for very
+            // long – they should be right back.
+            $this->cache->set(
+                "placename $wfo/$gridX/$gridY",
+                (object) $place,
+                time() + 3, // Expiration is a Unix timestamp in seconds
+            );
+
+            return [
+                "wfo" => $wfo,
+                "gridX" => $gridX,
+                "gridY" => $gridY,
+                "location" => $place["city"],
             ];
         } catch (\Throwable $e) {
             // Need to check the error so we know whether we ought to log something.
@@ -256,6 +314,14 @@ class WeatherDataService
      */
     public function getPlaceFromGrid($wfo, $x, $y)
     {
+        // If the place is in the cache, use it. This way if the user arrived
+        // via location search and we got a suggested place name, we will use
+        // that instead of whatever we'd get from looking it up.
+        $cached = $this->cache->get("placename $wfo/$x/$y");
+        if ($cached != false) {
+            return $cached->data;
+        }
+
         $geometry = $this->getGeometryFromGrid($wfo, $x, $y);
         $point = $geometry[0];
 

@@ -19,7 +19,7 @@
     "doc": "docs"
   },
   "devDependencies": {
-    "axe-core": "^4.8.2",
+    "axe-core": "^4.8.3",
     "cypress": "^13.6.2",
     "cypress-axe": "^1.5.0",
     "dayjs": "^1.11.10",
@@ -28,7 +28,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-import": "^2.29.1",
-    "jsdom": "^23.0.1",
+    "jsdom": "^23.2.0",
     "prettier": "^3.1.1",
     "stylelint": "^15.11.0",
     "stylelint-config-standard-scss": "^11.1.0",

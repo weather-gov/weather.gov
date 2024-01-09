@@ -10,15 +10,10 @@ use GuzzleHttp\Psr7\Response;
 final class GetPlaceFromGridTest extends Base
 {
     /**
-     * Tests the happy path.
+     * Utility to quickly setup the happy path routes for this method.
      */
-    public function testHappyPath(): void
+    private function setupHappyPathRoutes()
     {
-        $expected = [
-            "city" => "City",
-            "state" => "Not City, but State",
-        ];
-
         $this->httpClientMock->append(
             new Response(
                 200,
@@ -34,9 +29,39 @@ final class GetPlaceFromGridTest extends Base
                 '{"properties":{"relativeLocation":{"properties":{"city":"City","state":"Not City, but State"}}}}',
             ),
         );
+    }
+    /**
+     * Tests the happy path.
+     */
+    public function testHappyPath(): void
+    {
+        $expected = (object) [
+            "city" => "City",
+            "state" => "Not City, but State",
+        ];
+
+        $this->setupHappyPathRoutes();
 
         $actual = $this->weatherDataService->getPlaceFromGrid("wfo", 1, 2);
 
-        $this->assertEquals((object) $expected, (object) $actual);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * If the place is cached, we should use it.
+     */
+    public function testsUsesCacheIfAvailable(): void
+    {
+        $expected = "yay it worked";
+
+        $this->setupHappyPathRoutes();
+
+        $this->cacheMock
+            ->method("get")
+            ->willReturn((object) ["data" => $expected]);
+
+        $actual = $this->weatherDataService->getPlaceFromGrid("wfo", 1, 2);
+
+        $this->assertEquals($expected, $actual);
     }
 }

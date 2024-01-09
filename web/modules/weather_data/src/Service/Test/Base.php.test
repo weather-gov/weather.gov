@@ -2,6 +2,7 @@
 
 namespace Drupal\weather_data\Service\Test;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use GuzzleHttp\Client;
@@ -9,12 +10,21 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Tests for the WeatherDataService getCurrentConditions method.
  */
 abstract class Base extends TestCase
 {
+    /**
+     * Mocked Drupal cache object.
+     *
+     * @var cacheMock
+     */
+    protected $cacheMock;
+
     /**
      * History of HTTP calls made during a test.
      *
@@ -28,6 +38,13 @@ abstract class Base extends TestCase
      * @var httpClientMock
      */
     protected $httpClientMock;
+
+    /**
+     * Mocked Drupal request object.
+     *
+     * @var requestMock
+     */
+    protected $requestMock;
 
     /**
      * The WeatherDataService object under test.
@@ -60,9 +77,23 @@ abstract class Base extends TestCase
             }),
         );
 
+        $this->cacheMock = $this->createStub(CacheBackendInterface::class);
+        $this->requestMock = $this->createStub(Request::class);
+
+        // The WeatherDataService ingests this RequestStack service, but it
+        // immediately uses it to get an instance of the current request and
+        // saves the request object. So our mock should be prepped to supply
+        // the current request object.
+        $requestStack = $this->createStub(RequestStack::class);
+        $requestStack
+            ->method("getCurrentRequest")
+            ->willReturn($this->requestMock);
+
         $this->weatherDataService = new WeatherDataService(
             $client,
             $translationManager,
+            $requestStack,
+            $this->cacheMock,
         );
     }
 }

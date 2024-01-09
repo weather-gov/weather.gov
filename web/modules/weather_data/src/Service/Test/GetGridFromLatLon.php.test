@@ -16,41 +16,8 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for the WeatherDataService getGridFromLatLon method.
  */
-final class WeatherDataServiceGetGridFromLatLon extends TestCase
+final class WeatherDataServiceGetGridFromLatLon extends Base
 {
-    /**
-     * The mocked HTTP client.
-     *
-     * @var httpClientMock
-     */
-    protected $httpClientMock;
-
-    /**
-     * The WeatherDataService object under test.
-     *
-     * @var weatherDataService
-     */
-    protected $weatherDataService;
-
-    /**
-     * Common setup for all component tests.
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->httpClientMock = new MockHandler([]);
-        $stack = HandlerStack::create($this->httpClientMock);
-        $client = new Client(["handler" => $stack]);
-
-        $translationManager = $this->createStub(TranslationInterface::class);
-
-        $this->weatherDataService = new WeatherDataService(
-            $client,
-            $translationManager,
-        );
-    }
-
     /**
      * Tests the happy path.
      */
@@ -68,6 +35,7 @@ final class WeatherDataServiceGetGridFromLatLon extends TestCase
                         "relativeLocation" => [
                             "properties" => [
                                 "city" => "place",
+                                "state" => "placestate",
                             ],
                         ],
                     ],
@@ -80,6 +48,86 @@ final class WeatherDataServiceGetGridFromLatLon extends TestCase
             "gridX" => "an x",
             "gridY" => "a y",
             "location" => "place",
+        ];
+
+        $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Tests using the suggested place name when it can't be broken up.
+     */
+    public function testUsingSuggestedPlaceNameAsOneBlob(): void
+    {
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                json_encode([
+                    "properties" => [
+                        "gridId" => "the wfo",
+                        "gridX" => "an x",
+                        "gridY" => "a y",
+                        "relativeLocation" => [
+                            "properties" => [
+                                "city" => "place",
+                                "state" => "placestate",
+                            ],
+                        ],
+                    ],
+                ]),
+            ),
+        );
+
+        $this->requestMock->method("get")->willReturn("suggested place");
+
+        $expected = [
+            "wfo" => "the wfo",
+            "gridX" => "an x",
+            "gridY" => "a y",
+            "location" => "suggested place",
+        ];
+
+        $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Tests using the suggested place name when it can be split up.
+     */
+    public function testUsingSuggestedPlaceNameAsCityState(): void
+    {
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                json_encode([
+                    "properties" => [
+                        "gridId" => "the wfo",
+                        "gridX" => "an x",
+                        "gridY" => "a y",
+                        "relativeLocation" => [
+                            "properties" => [
+                                "city" => "place",
+                                "state" => "placestate",
+                            ],
+                        ],
+                    ],
+                ]),
+            ),
+        );
+
+        $this->requestMock
+            ->method("get")
+            ->willReturn("suggested place, ST, USA");
+
+        $expected = [
+            "wfo" => "the wfo",
+            "gridX" => "an x",
+            "gridY" => "a y",
+            "location" => "suggested place",
         ];
 
         $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
