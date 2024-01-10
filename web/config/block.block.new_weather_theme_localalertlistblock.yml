@@ -1,0 +1,26 @@
+uuid: cb7400a0-29a4-43b8-bc1e-5d5b6a6e5a1e
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+    - weather_blocks
+  theme:
+    - new_weather_theme
+id: new_weather_theme_localalertlistblock
+theme: new_weather_theme
+region: content
+weight: 0
+provider: null
+plugin: weathergov_local_alert_list
+settings:
+  id: weathergov_local_alert_list
+  label: 'Local alert list block'
+  label_display: '0'
+  provider: weather_blocks
+  grid: ',,'
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/local/*'
