@@ -38,6 +38,13 @@
     },
     {
       "properties": {
+        "event": "small craft advisory",
+        "description": "a marine alert, should get filtered out",
+        "instruction": "You're gonna need a bigger boat."
+      }
+    },
+    {
+      "properties": {
         "event": "air quality alert",
         "onset": "2024-01-09T12:00:00-07:00",
         "description": "earliest"

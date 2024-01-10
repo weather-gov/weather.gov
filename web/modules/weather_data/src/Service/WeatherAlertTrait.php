@@ -85,6 +85,7 @@ trait WeatherAlertTrait
             return $output;
         }, $alerts->features);
 
+        $alerts = AlertPriority::removeMarineAlerts($alerts);
         $alerts = AlertPriority::sort($alerts);
 
         // For some reason, Twig is unreliable in how it formats the dates.
