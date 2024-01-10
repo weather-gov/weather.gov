@@ -22,11 +22,13 @@ trait WeatherAlertTrait
     protected static function turnToDate($str, $timezone)
     {
         if ($str) {
-            return \DateTimeImmutable::createFromFormat(
+            $datestamp = \DateTimeImmutable::createFromFormat(
                 \DateTimeInterface::ISO8601_EXPANDED,
                 $str,
-                new \DateTimeZone($timezone),
             );
+            $datestamp = $datestamp->setTimeZone(new \DateTimeZone($timezone));
+
+            return $datestamp;
         }
         return $str;
     }
@@ -83,6 +85,25 @@ trait WeatherAlertTrait
             return $output;
         }, $alerts->features);
 
-        return AlertPriority::sort($alerts);
+        $alerts = AlertPriority::sort($alerts);
+
+        // For some reason, Twig is unreliable in how it formats the dates.
+        // Sometimes they are done in the timezone-local time, other times it
+        // reverts to UTC. However, when we do it here, it's consistently
+        // correct. So... while it'd be nice to put the formatting logic in
+        // Twig, that's just not reliable enough.
+        foreach ($alerts as $alert) {
+            if ($alert->onset) {
+                $alert->onset = $alert->onset->format("l, m/d, g:i A T");
+            }
+            if ($alert->ends) {
+                $alert->ends = $alert->ends->format("l, m/d, g:i A T");
+            }
+            if ($alert->expires) {
+                $alert->expires = $alert->expires->format("l, m/d, g:i A T");
+            }
+        }
+
+        return $alerts;
     }
 }

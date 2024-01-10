@@ -3,8 +3,8 @@
   <div class="usa-alert__body">
     <h2 class="usa-alert__heading">{{ alert.event }}</h2>
     <p>
-      In effect from {{ alert.onset | date("l, m/d, g:i A T") }}
-      {% if alert.ends %} - {{ alert.ends | date("l, m/d, g:i A T") }}{% endif %}
+      In effect from {{ alert.onset }}
+      {% if alert.ends %} - {{ alert.ends }}{% endif %}
     </p>
     <p>
       Issued by {{ alert.senderName }}

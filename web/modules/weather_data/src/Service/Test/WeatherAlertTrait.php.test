@@ -31,21 +31,9 @@ final class WeatherAlertTraitTest extends Base
                 "description" =>
                     "There is a very big wave and lots of water.\n\nTsunamis are very dangerous.",
                 "instruction" => false,
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2023-10-01T14:32:19-06:00",
-                    new \DateTimeZone("America/Denver"),
-                ),
-                "ends" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2023-10-01T16:32:19-06:00",
-                    new \DateTimeZone("America/Denver"),
-                ),
-                "expires" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2023-10-01T18:32:19-06:00",
-                    new \DateTimeZone("America/Denver"),
-                ),
+                "onset" => "Sunday, 10/01, 2:32 PM MDT",
+                "ends" => "Sunday, 10/01, 4:32 PM MDT",
+                "expires" => "Sunday, 10/01, 6:32 PM MDT",
             ],
             (object) [
                 "areaDesc" => false,
@@ -65,11 +53,7 @@ final class WeatherAlertTraitTest extends Base
                 "description" =>
                     "There is a warning for:\n\nPlaces listed\n\nYou should prepare.",
                 "geometry" => [[-71.89, 43.64], [-71.91, 44.14]],
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2023-10-01T14:32:19-06:00",
-                    new \DateTimeZone("America/Denver"),
-                ),
+                "onset" => "Sunday, 10/01, 2:32 PM MDT",
                 "instruction" => false,
                 "ends" => false,
                 "expires" => false,
@@ -82,11 +66,7 @@ final class WeatherAlertTraitTest extends Base
                 "areaDesc" => false,
                 "ends" => false,
                 "expires" => false,
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2024-01-09T12:00:00-06:00",
-                    new \DateTimeZone("America/Denver"),
-                ),
+                "onset" => "Tuesday, 01/09, 12:00 PM MST",
             ],
             (object) [
                 "event" => "air quality alert",
@@ -96,11 +76,7 @@ final class WeatherAlertTraitTest extends Base
                 "areaDesc" => false,
                 "ends" => false,
                 "expires" => false,
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2024-01-09T13:00:00-06:00",
-                    new \DateTimeZone("America/Denver"),
-                ),
+                "onset" => "Tuesday, 01/09, 1:00 PM MST",
             ],
             (object) [
                 "event" => "air quality alert",
@@ -110,11 +86,7 @@ final class WeatherAlertTraitTest extends Base
                 "areaDesc" => false,
                 "ends" => false,
                 "expires" => false,
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2024-01-09T13:00:00-06:00",
-                    new \DateTimeZone("America/Denver"),
-                ),
+                "onset" => "Tuesday, 01/09, 1:00 PM MST",
             ],
             (object) [
                 "event" => "air quality alert",
@@ -124,11 +96,7 @@ final class WeatherAlertTraitTest extends Base
                 "areaDesc" => false,
                 "ends" => false,
                 "expires" => false,
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2024-01-09T14:00:00-06:00",
-                    new \DateTimeZone("America/Denver"),
-                ),
+                "onset" => "Tuesday, 01/09, 2:00 PM MST",
             ],
         ];
     }

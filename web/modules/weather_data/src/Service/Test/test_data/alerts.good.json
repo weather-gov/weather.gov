@@ -39,28 +39,28 @@
     {
       "properties": {
         "event": "air quality alert",
-        "onset": "2024-01-09T12:00:00-06:00",
+        "onset": "2024-01-09T12:00:00-07:00",
         "description": "earliest"
       }
     },
     {
       "properties": {
         "event": "air quality alert",
-        "onset": "2024-01-09T14:00:00-06:00",
+        "onset": "2024-01-09T14:00:00-07:00",
         "description": "latest"
       }
     },
     {
       "properties": {
         "event": "air quality alert",
-        "onset": "2024-01-09T13:00:00-06:00",
+        "onset": "2024-01-09T13:00:00-07:00",
         "description": "middle 1"
       }
     },
     {
       "properties": {
         "event": "air quality alert",
-        "onset": "2024-01-09T13:00:00-06:00",
+        "onset": "2024-01-09T13:00:00-07:00",
         "description": "middle 2"
       }
     }
