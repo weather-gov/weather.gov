@@ -1,0 +1,21 @@
+uuid: ff8ba8eb-b05e-4cfc-b285-820f9a8f3a1b
+langcode: en
+status: false
+dependencies: {  }
+id: local
+label: local
+description: 'Configuration for local environments.'
+weight: 2
+stackable: false
+no_patching: false
+storage: folder
+folder: config/local
+module:
+  devel: 0
+  devel_generate: 0
+theme: {  }
+complete_list:
+  - devel.settings
+  - devel.toolbar.settings
+  - system.menu.devel
+partial_list: {  }

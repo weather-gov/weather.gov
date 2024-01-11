@@ -17,7 +17,7 @@
 #
 # Ignore sensitive information [This is a `composer` default]
 # /web/sites/*/settings.php
-# /web/sites/*/settings.local.php
+/web/sites/settings.dev.php
 
 
 # Ignore Drupal's file directory
