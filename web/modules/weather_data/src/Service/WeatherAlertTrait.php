@@ -7,6 +7,32 @@ namespace Drupal\weather_data\Service;
  */
 trait WeatherAlertTrait
 {
+    protected static function fixupNewlines($str)
+    {
+        if ($str) {
+            // Remove individual newline characters. Leave pairs. Pairs of
+            // newlines are equivalent to paragraph breaks and we want to keep
+            // those, but within a paragraph, we want to let the text break on
+            // its own.
+            return preg_replace("/([^\n])\n([^\n])/m", "$1 $2", $str);
+        }
+        return $str;
+    }
+
+    protected static function turnToDate($str, $timezone)
+    {
+        if ($str) {
+            $datestamp = \DateTimeImmutable::createFromFormat(
+                \DateTimeInterface::ISO8601_EXPANDED,
+                $str,
+            );
+            $datestamp = $datestamp->setTimeZone(new \DateTimeZone($timezone));
+
+            return $datestamp;
+        }
+        return $str;
+    }
+
     /**
      * Get active alerts for a WFO grid cell.
      */
@@ -27,43 +53,57 @@ trait WeatherAlertTrait
             "https://api.weather.gov/alerts/active?status=actual&point=$lat,$lon",
         );
 
-        $alerts = array_map(function ($alert) {
+        $timezone = $this->getTimezoneForLatLon($lat, $lon);
+
+        $alerts = array_map(function ($alert) use ($timezone) {
             $output = clone $alert->properties;
 
-            if ($alert->geometry != null) {
+            if ($alert->geometry ?? false) {
                 $output->geometry = $alert->geometry->coordinates[0];
             } else {
                 $output->geometry = [];
             }
 
-            $www = explode("\n\n", $alert->properties->description);
-
-            $www = array_map(function ($line) {
-                $parts = explode("...", $line);
-                if (count($parts) > 1) {
-                    $name = strtolower(substr($parts[0], 2));
-                    return [
-                        "name" => $name,
-                        "value" => str_replace("\n", " ", $parts[1]),
-                    ];
-                }
-                return ["name" => false];
-            }, $www);
-
-            $www = array_filter($www, function ($item) {
-                $expected = ["what", "when", "where", "impacts"];
-                return in_array($item["name"], $expected);
-            });
-
-            $output->description = explode(
-                "\n\n",
-                $alert->properties->description,
+            $output->description = self::fixupNewlines(
+                $output->description ?? false,
             );
+            $output->instruction = self::fixupNewlines(
+                $output->instruction ?? false,
+            );
+            $output->areaDesc = self::fixupNewlines($output->areaDesc ?? false);
 
-            $output->whatWhereWhen = $www;
+            $output->onset = self::turnToDate(
+                $output->onset ?? false,
+                $timezone,
+            );
+            $output->ends = self::turnToDate($output->ends ?? false, $timezone);
+            $output->expires = self::turnToDate(
+                $output->expires ?? false,
+                $timezone,
+            );
 
             return $output;
         }, $alerts->features);
+
+        $alerts = AlertPriority::removeMarineAlerts($alerts);
+        $alerts = AlertPriority::sort($alerts);
+
+        // For some reason, Twig is unreliable in how it formats the dates.
+        // Sometimes they are done in the timezone-local time, other times it
+        // reverts to UTC. However, when we do it here, it's consistently
+        // correct. So... while it'd be nice to put the formatting logic in
+        // Twig, that's just not reliable enough.
+        foreach ($alerts as $alert) {
+            if ($alert->onset) {
+                $alert->onset = $alert->onset->format("l, m/d, g:i A T");
+            }
+            if ($alert->ends) {
+                $alert->ends = $alert->ends->format("l, m/d, g:i A T");
+            }
+            if ($alert->expires) {
+                $alert->expires = $alert->expires->format("l, m/d, g:i A T");
+            }
+        }
 
         return $alerts;
     }
