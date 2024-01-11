@@ -77,7 +77,7 @@ abstract class Base extends TestCase
             }),
         );
 
-        $this->cacheMock = $this->createStub(CacheBackendInterface::class);
+        $this->cacheMock = $this->createMock(CacheBackendInterface::class);
         $this->requestMock = $this->createStub(Request::class);
 
         // The WeatherDataService ingests this RequestStack service, but it

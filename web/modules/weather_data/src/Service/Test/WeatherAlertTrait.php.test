@@ -159,9 +159,11 @@ final class WeatherAlertTraitTest extends Base
 
         $this->assertEquals($this->expected, $actual);
 
-        $this->assertEquals(3, count($this->httpCallStack));
+        $this->assertEquals(3, count($this->httpCallStack), 2);
+
+        // WFO should get capitalized
         $this->assertEquals(
-            "/gridpoints/abc/20,30",
+            "/gridpoints/ABC/20,30",
             $this->httpCallStack[0]["request"]->getUri()->getPath(),
         );
         $this->assertEquals(

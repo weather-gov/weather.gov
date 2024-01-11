@@ -301,7 +301,6 @@ class WeatherDataService
                 "wfo" => $wfo,
                 "gridX" => $gridX,
                 "gridY" => $gridY,
-                "location" => $place["city"],
             ];
         } catch (\Throwable $e) {
             // Need to check the error so we know whether we ought to log something.
@@ -315,6 +314,8 @@ class WeatherDataService
      */
     public function getPlaceFromGrid($wfo, $x, $y)
     {
+        $wfo = strtoupper($wfo);
+
         // If the place is in the cache, use it. This way if the user arrived
         // via location search and we got a suggested place name, we will use
         // that instead of whatever we'd get from looking it up.
@@ -353,6 +354,7 @@ class WeatherDataService
      */
     public function getGeometryFromGrid($wfo, $x, $y)
     {
+        $wfo = strtoupper($wfo);
         $gridpoint = $this->getFromWeatherAPI(
             "https://api.weather.gov/gridpoints/$wfo/$x,$y",
         );
@@ -382,6 +384,7 @@ class WeatherDataService
      */
     public function getCurrentConditionsFromGrid($wfo, $gridX, $gridY)
     {
+        $wfo = strtoupper($wfo);
         date_default_timezone_set("America/New_York");
 
         $obsStations = $this->getFromWeatherAPI(
@@ -488,6 +491,7 @@ class WeatherDataService
         $gridY,
         $now = false,
     ) {
+        $wfo = strtoupper($wfo);
         if (!($now instanceof \DateTimeImmutable)) {
             $now = new \DateTimeImmutable();
         }
@@ -568,6 +572,7 @@ class WeatherDataService
         $now = false,
         $defaultDays = 5,
     ) {
+        $wfo = strtoupper($wfo);
         $forecast = $this->getFromWeatherAPI(
             "https://api.weather.gov/gridpoints/$wfo/$gridX,$gridY/forecast",
         );

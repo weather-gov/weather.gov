@@ -1,6 +1,6 @@
 describe("location page", () => {
   it("passes automated accessibility checks", () => {
-    cy.visit("/local/OHX/50/57/Nashville", {});
+    cy.visit("/local/OHX/50/57", {});
     cy.injectAxe();
     cy.configureAxe({ runOnly: { values: ["wcag2aa"] } });
     cy.checkA11y(null, null, (violations) => {

@@ -43,11 +43,31 @@ final class WeatherDataServiceGetGridFromLatLon extends Base
             ),
         );
 
+        $matcher = $this->exactly(2);
+        $this->cacheMock
+            ->expects($matcher)
+            ->method("set")
+            ->willReturnCallback(function (string $key, $value) use ($matcher) {
+                match ($matcher->getInvocationCount()) {
+                    2 => $this->assertEquals(
+                        $key,
+                        "placename the wfo/an x/a y",
+                    ) &&
+                        $this->assertEquals(
+                            $value,
+                            (object) [
+                                "city" => "place",
+                                "state" => "placestate",
+                            ],
+                        ),
+                    default => true,
+                };
+            });
+
         $expected = [
             "wfo" => "the wfo",
             "gridX" => "an x",
             "gridY" => "a y",
-            "location" => "place",
         ];
 
         $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
@@ -82,11 +102,31 @@ final class WeatherDataServiceGetGridFromLatLon extends Base
 
         $this->requestMock->method("get")->willReturn("suggested place");
 
+        $matcher = $this->exactly(2);
+        $this->cacheMock
+            ->expects($matcher)
+            ->method("set")
+            ->willReturnCallback(function (string $key, $value) use ($matcher) {
+                match ($matcher->getInvocationCount()) {
+                    2 => $this->assertEquals(
+                        $key,
+                        "placename the wfo/an x/a y",
+                    ) &&
+                        $this->assertEquals(
+                            $value,
+                            (object) [
+                                "city" => "suggested place",
+                                "state" => null,
+                            ],
+                        ),
+                    default => true,
+                };
+            });
+
         $expected = [
             "wfo" => "the wfo",
             "gridX" => "an x",
             "gridY" => "a y",
-            "location" => "suggested place",
         ];
 
         $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
@@ -123,11 +163,30 @@ final class WeatherDataServiceGetGridFromLatLon extends Base
             ->method("get")
             ->willReturn("suggested place, ST, USA");
 
+        $matcher = $this->exactly(2);
+        $this->cacheMock
+            ->expects($matcher)
+            ->method("set")
+            ->willReturnCallback(function (string $key, $value) use ($matcher) {
+                match ($matcher->getInvocationCount()) {
+                    2 => $this->assertEquals(
+                        $key,
+                        "placename the wfo/an x/a y",
+                    ) &&
+                        $this->assertEquals(
+                            $value,
+                            (object) [
+                                "city" => "suggested place",
+                                "state" => "ST",
+                            ],
+                        ),
+                    default => true,
+                };
+            });
         $expected = [
             "wfo" => "the wfo",
             "gridX" => "an x",
             "gridY" => "a y",
-            "location" => "suggested place",
         ];
 
         $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
