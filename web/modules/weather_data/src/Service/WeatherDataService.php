@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class WeatherDataService
 {
     use LoggerChannelTrait;
+    use TimezoneTrait;
     use UnitConversionTrait;
     use WeatherAlertTrait;
 

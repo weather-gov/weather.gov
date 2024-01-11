@@ -1,0 +1,31 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use GuzzleHttp\Psr7\Response;
+
+/**
+ * Test getting timezone information from a point.
+ */
+final class GetTimezoneForLatLonTest extends Base
+{
+    /**
+     * Tests the happy path.
+     */
+    public function testHappyPath(): void
+    {
+        $expected = "America/Denver";
+
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-Type" => "application/geo+json"],
+                '{"properties":{"timeZone":"America/Denver"}}',
+            ),
+        );
+
+        $actual = $this->weatherDataService->getTimezoneForLatLon(-47, 62);
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+}
