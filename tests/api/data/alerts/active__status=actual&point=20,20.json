@@ -1,0 +1,112 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.3cf3c3316c2e34fe7ce8f6af92539effd9d6c01f.011.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.3cf3c3316c2e34fe7ce8f6af92539effd9d6c01f.011.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.3cf3c3316c2e34fe7ce8f6af92539effd9d6c01f.011.1",
+        "areaDesc": "Sherburne; Isanti; Chisago; Wright; Hennepin; Anoka; Ramsey; Washington; Carver; Scott; Dakota",
+        "geocode": {
+          "SAME": [
+            "027141",
+            "027059",
+            "027025",
+            "027171",
+            "027053",
+            "027003",
+            "027123",
+            "027163",
+            "027019",
+            "027139",
+            "027037"
+          ],
+          "UGC": [
+            "MNZ051",
+            "MNZ052",
+            "MNZ053",
+            "MNZ059",
+            "MNZ060",
+            "MNZ061",
+            "MNZ062",
+            "MNZ063",
+            "MNZ068",
+            "MNZ069",
+            "MNZ070"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/MNZ051",
+          "https://api.weather.gov/zones/forecast/MNZ052",
+          "https://api.weather.gov/zones/forecast/MNZ053",
+          "https://api.weather.gov/zones/forecast/MNZ059",
+          "https://api.weather.gov/zones/forecast/MNZ060",
+          "https://api.weather.gov/zones/forecast/MNZ061",
+          "https://api.weather.gov/zones/forecast/MNZ062",
+          "https://api.weather.gov/zones/forecast/MNZ063",
+          "https://api.weather.gov/zones/forecast/MNZ068",
+          "https://api.weather.gov/zones/forecast/MNZ069",
+          "https://api.weather.gov/zones/forecast/MNZ070"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.a9b0168968276be115b0972cbad265be0a817ded.001.2",
+            "identifier": "urn:oid:2.49.0.1.840.0.a9b0168968276be115b0972cbad265be0a817ded.001.2",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-12T10:10:00-06:00"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.a9b0168968276be115b0972cbad265be0a817ded.012.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.a9b0168968276be115b0972cbad265be0a817ded.012.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-12T10:10:00-06:00"
+          }
+        ],
+        "sent": "2024-01-12T14:05:00-06:00",
+        "effective": "2024-01-12T14:05:00-06:00",
+        "onset": "2024-01-12T14:05:00-06:00",
+        "expires": "2024-01-12T22:15:00-06:00",
+        "ends": "2024-01-13T06:00:00-06:00",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Twin Cities/Chanhassen MN",
+        "headline": "Winter Weather Advisory issued January 12 at 2:05PM CST until January 13 at 6:00AM CST by NWS Twin Cities/Chanhassen MN",
+        "description": "* WHAT...Snow expected. Additional snow accumulations of 1 to 4\ninches locally southeast of the metro.\n\n* WHERE...Portions of central and east central Minnesota.\n\n* WHEN...Until 6 AM CST Saturday.\n\n* IMPACTS...Plan on slippery road conditions. The hazardous\nconditions could impact the evening commute.",
+        "instruction": "Slow down and use caution while traveling.\n\nThe latest road conditions for the state you are calling from can\nbe obtained by calling 5 1 1. Road conditions can also be found\nat 511mn.org for Minnesota or 511wi.gov for Wisconsin.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWMPX"],
+          "WMOidentifier": ["WWUS43 KMPX 122005"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 6 AM CST SATURDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KMPX.WW.Y.0005.000000T0000Z-240113T1200Z/"],
+          "eventEndingTime": ["2024-01-13T12:00:00+00:00"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.4066fbadccd3698239620a33f10a60449a0ffd5b.009.1,2024-01-12T02:36:00-06:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.4066fbadccd3698239620a33f10a60449a0ffd5b.003.2,2024-01-12T02:36:00-06:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.04783efd0084f71c37873eb35ede691ca3f84cc8.006.1,2024-01-11T21:12:00-06:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.16dbf388d87ee1ce9cb8846f7e076412151cd7b3.013.1,2024-01-11T15:09:00-06:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.16dbf388d87ee1ce9cb8846f7e076412151cd7b3.010.2,2024-01-11T15:09:00-06:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.16dbf388d87ee1ce9cb8846f7e076412151cd7b3.009.2,2024-01-11T15:09:00-06:00"
+          ]
+        }
+      }
+    }
+  ],
+  "title": "Current watches, warnings, and advisories for 44.9869 N, 93.2926 W",
+  "updated": "2024-01-12T20:06:13+00:00"
+}
