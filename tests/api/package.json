@@ -1,0 +1,15 @@
+{
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon -e js main.js"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.10",
+    "express": "^4.18.2",
+    "prettier": "^3.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

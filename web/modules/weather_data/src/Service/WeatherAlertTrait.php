@@ -49,8 +49,11 @@ trait WeatherAlertTrait
      */
     public function getAlertsForLatLon($lat, $lon)
     {
+        $lat = round($lat, 4);
+        $lon = round($lon, 4);
+
         $alerts = $this->getFromWeatherAPI(
-            "https://api.weather.gov/alerts/active?status=actual&point=$lat,$lon",
+            "/alerts/active?status=actual&point=$lat,$lon",
         );
 
         $timezone = $this->getTimezoneForLatLon($lat, $lon);

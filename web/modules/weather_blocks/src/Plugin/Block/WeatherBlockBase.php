@@ -153,8 +153,11 @@ abstract class WeatherBlockBase extends BlockBase implements
             str_starts_with($this->route->getRouteName(), "weather_routes.grid")
         ) {
             $wfo = $this->route->getParameter("wfo");
-            $x = $this->route->getParameter("gridX");
-            $y = $this->route->getParameter("gridY");
+
+            // Cast to integers to take care of any leading zeros in the string.
+            // The API wouldn't be happy about that.
+            $x = (int) $this->route->getParameter("gridX");
+            $y = (int) $this->route->getParameter("gridY");
 
             $location->grid = (object) [
                 "wfo" => strtoupper($wfo),

@@ -1,4 +1,8 @@
 describe("location search", () => {
+  before(() => {
+    cy.request("http://localhost:8081/no-local");
+  });
+
   it("properly handles browser history", () => {
     const start = "/local/OHX/50/57";
 

@@ -23,7 +23,7 @@ final class GetFromApiTest extends Base
             ),
         );
 
-        $actual = $this->weatherDataService->getFromWeatherAPI("my url");
+        $actual = $this->weatherDataService->getFromWeatherAPI("/my url");
 
         $this->assertEquals($expected, $actual);
     }
@@ -47,7 +47,7 @@ final class GetFromApiTest extends Base
             ),
         );
 
-        $actual = $this->weatherDataService->getFromWeatherAPI("my url");
+        $actual = $this->weatherDataService->getFromWeatherAPI("/my url");
 
         $this->assertEquals($expected, $actual);
     }

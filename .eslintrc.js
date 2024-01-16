@@ -15,6 +15,12 @@ module.exports = {
   overrides: [
     {
       files: ["tests/**/*.js"],
+      rules: {
+        "no-console": 0,
+      },
+    },
+    {
+      files: ["tests/a11y/**/*.js", "tests/e2e/**/*.js"],
       extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
       env: {
         jest: true,

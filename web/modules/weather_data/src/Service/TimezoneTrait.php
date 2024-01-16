@@ -14,9 +14,7 @@ trait TimezoneTrait
 
     public function getTimezoneForLatLon($lat, $lon)
     {
-        $timezone = $this->getFromWeatherAPI(
-            "https://api.weather.gov/points/$lat,$lon",
-        );
+        $timezone = $this->getFromWeatherAPI("/points/$lat,$lon");
         $timezone = $timezone->properties->timeZone;
 
         return $timezone;
