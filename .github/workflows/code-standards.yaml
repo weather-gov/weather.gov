@@ -273,7 +273,7 @@ jobs:
           path: tests/e2e/cypress/snapshots/**/__diff_output__/
 
       - name: save screenshots
-        if: needs.should-test.outputs.yes == 'true'
+        if: always() && needs.should-test.outputs.yes == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: screenshots
