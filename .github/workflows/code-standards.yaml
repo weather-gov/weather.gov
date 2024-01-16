@@ -265,15 +265,8 @@ jobs:
           project: tests/e2e
           cache-key: cypress-e2e-${{ hashFiles('package-lock.json') }}
 
-      - name: save diffs
-        if: always() && needs.should-test.outputs.yes == 'true'
-        uses: actions/upload-artifact@v3
-        with:
-          name: diffs
-          path: tests/e2e/cypress/snapshots/**/__diff_output__/
-
       - name: save screenshots
-        if: always() && needs.should-test.outputs.yes == 'true'
+        if: needs.should-test.outputs.yes == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: screenshots

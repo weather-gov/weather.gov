@@ -49,45 +49,43 @@
     </div>
   </div>
 
-  <div class="grid-row">
-    <div class="tablet:grid-col-12">
-      <p class="margin-0 font-body-3xs text-gray-50">
-        {{ 'Weather as of' | t }}
-        {# Datetimes are localized in client-side Javascript. #}
-        <weather-timestamp data-utc="{{ content.timestamp.utc }}">
-          {{ content.timestamp.formatted }}
-        </weather-timestamp>
-      </p>
-      <p class="margin-0 margin-top-05">
-        {{ "The weather in <strong>@place</strong>, is <strong>@conditions</strong>.
-          Temperature is <strong>@temperature℉</strong>." |
-          t({
-            "@place": content.place,
-            "@conditions": content.conditions.long | lower,
-            "@temperature": content.temperature,
-          })
-        }}
-        {% if content.feels_like != content.temperature %}
-        {{ " It feels like <strong>@feelsLike℉</strong>." |
-          t({
-            "@feelsLike": content.feels_like
-          })
-        }}
-        {% endif %}
-        {{ " Humidity is <strong>@humidity%</strong>"
-        |
+  <div data-wx-current-conditions-narrative class="grid-row tablet:grid-col-12">
+    <p class="margin-0 font-body-3xs text-gray-50">
+      {{ 'Weather as of' | t }}
+      {# Datetimes are localized in client-side Javascript. #}
+      <weather-timestamp data-utc="{{ content.timestamp.utc }}">
+        {{ content.timestamp.formatted }}
+      </weather-timestamp>
+    </p>
+    <p class="margin-0 margin-top-05">
+      {{ "The weather in <strong>@place</strong>, is <strong>@conditions</strong>.
+        Temperature is <strong>@temperature℉</strong>." |
         t({
-          "@humidity": content.humidity
+          "@place": content.place,
+          "@conditions": content.conditions.long | lower,
+          "@temperature": content.temperature,
         })
-        }}{% if content.wind.speed > 0 %}
-        {{
-        "with <strong>@windSpeed mph winds</strong> from the @windDirection"
-        |
+      }}
+      {% if content.feels_like != content.temperature %}
+      {{ " It feels like <strong>@feelsLike℉</strong>." |
         t({
-          "@windSpeed": content.wind.speed,
-          "@windDirection": content.wind.direction
+          "@feelsLike": content.feels_like
         })
-        }}{% endif %}.
-      </p>
-    </div>
+      }}
+      {% endif %}
+      {{ " Humidity is <strong>@humidity%</strong>"
+      |
+      t({
+        "@humidity": content.humidity
+      })
+      }}{% if content.wind.speed > 0 %}
+      {{
+      "with <strong>@windSpeed mph winds</strong> from the @windDirection"
+      |
+      t({
+        "@windSpeed": content.wind.speed,
+        "@windDirection": content.wind.direction
+      })
+      }}{% endif %}.
+    </p>
   </div>
