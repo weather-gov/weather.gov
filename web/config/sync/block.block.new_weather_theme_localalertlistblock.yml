@@ -1,4 +1,4 @@
-uuid: cb7400a0-29a4-43b8-bc1e-5d5b6a6e5a1e
+uuid: 36f80582-b647-4352-af81-aec94c1b5f03
 langcode: en
 status: true
 dependencies:
@@ -10,7 +10,7 @@ dependencies:
 id: new_weather_theme_localalertlistblock
 theme: new_weather_theme
 region: content
-weight: 0
+weight: -6
 provider: null
 plugin: weathergov_local_alert_list
 settings:

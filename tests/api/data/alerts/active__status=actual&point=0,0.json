@@ -189,6 +189,70 @@
           "eventEndingTime": ["2024-01-10T06:00:00+00:00"]
         }
       }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.21973bd423ae0db39e5260d08fa31bb6eba8b288.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.21973bd423ae0db39e5260d08fa31bb6eba8b288.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.21973bd423ae0db39e5260d08fa31bb6eba8b288.001.1",
+        "areaDesc": "All over. Just... just everywhere.",
+        "geocode": {
+          "SAME": ["047161"],
+          "UGC": ["TNZ005"]
+        },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/TNZ005"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.afcd34b4302cf9180226182fb6ce02cae67c88c5.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.afcd34b4302cf9180226182fb6ce02cae67c88c5.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-08T01:25:00-06:00"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.7802fd1de0bf82a1dce4d005b5b72cb099b94766.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.7802fd1de0bf82a1dce4d005b5b72cb099b94766.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-08T08:24:00-06:00"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.3f75dc0fcc5146ce6b90b8cda2e8c565c7f4e2ad.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.3f75dc0fcc5146ce6b90b8cda2e8c565c7f4e2ad.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-07T13:21:00-06:00"
+          }
+        ],
+        "sent": "2024-01-08T13:48:00-06:00",
+        "effective": "2024-01-08T13:48:00-06:00",
+        "onset": "date:now +2 days",
+        "expires": "date:now 52 hours",
+        "ends": "date:now 3 days",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Small Craft Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Nashville TN",
+        "headline": "Wind Advisory issued January 8 at 1:48PM CST until January 10 at 12:00AM CST by NWS Nashville TN",
+        "description": "If you see this, something is broken.",
+        "instruction": "Tell someone. You have seen something, now you must tell someone. It's in the rules.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["NPWOHX"],
+          "WMOidentifier": ["WWUS74 KOHX 081948"],
+          "NWSheadline": [
+            "WIND ADVISORY REMAINS IN EFFECT FROM 6 PM THIS EVENING TO MIDNIGHT CST TUESDAY NIGHT"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KOHX.WI.Y.0001.240109T0000Z-240110T0600Z/"],
+          "eventEndingTime": ["2024-01-10T06:00:00+00:00"]
+        }
+      }
     }
   ],
   "title": "Current watches, warnings, and advisories for 36.1806849 N, 87.798023 W",
