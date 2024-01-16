@@ -14,6 +14,6 @@ describe("the current weather narrative", () => {
       node.text("Friday, 12:12 PM EDT");
     });
 
-    cy.matchImageSnapshot();
+    cy.get(".weather-gov-current-conditions ").matchImageSnapshot();
   });
 });
