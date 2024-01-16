@@ -4,6 +4,15 @@ describe("the current weather narrative", () => {
   });
 
   it("is full width", () => {
+    // The narrative portion of the current conditions is meant to be the full
+    // internal width of its parent. There was a bug where its sibling's width
+    // was not set and as a result at certain viewport widths, the narrative
+    // would jump into the same row as the sibling.
+    //
+    // This test is meant to capture that behavior and prevent regressions. If
+    // the narrative is as wide as its parent, then it must be on its own line
+    // and everything is hunky-dory.
+    //
     // https://github.com/weather-gov/weather.gov/issues/644
     cy.viewport(1020, 500);
 
