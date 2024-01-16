@@ -266,7 +266,7 @@ jobs:
           cache-key: cypress-e2e-${{ hashFiles('package-lock.json') }}
 
       - name: save diffs
-        if: needs.should-test.outputs.yes == 'true'
+        if: always() && needs.should-test.outputs.yes == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: diffs
