@@ -41,7 +41,7 @@ export default (req, res, { record = false, filePath = false } = {}) => {
           res.end();
 
           // If we're supposed to record and we have a file path...
-          if (record && !!filePath) {
+          if (record && !!filePath && proxyResponse.statusCode >= 200) {
             console.log(`record this to ${filePath}`);
 
             // Make the directory structure if necessary, then write out the
