@@ -10,10 +10,20 @@ describe("pages load", () => {
 
     const measurements = [];
 
+    // Measures the first page in the list of pages. When it's done, if there
+    // are any pages left in the list, does it again. This helps ensure our
+    // tests are running synchronously rather than in parallel so our timers
+    // will be a little more accurate.
     const measurePage = () => {
       const { name, url } = pages.shift();
       performance.mark(name);
       cy.visit(url);
+
+      // We want to wait until the current conditions are found on the page.
+      // Note that this can inflate the timing numbers a bit because Cypress
+      // will retry a few times with a short wait in between. Return the result
+      // because it's a Cypress chainable object and the caller can use it to
+      // know when we're all finished.
       return cy.get(".weather-gov-current-conditions").then(() => {
         const measurement = performance.measure(name, { start: name });
         measurements.push({
@@ -22,12 +32,16 @@ describe("pages load", () => {
           measurement: Math.round(measurement.duration),
         });
 
+        // Whether there are more pages or not, return a Cypress chainable.
         if (pages.length > 0) {
-          measurePage();
+          return measurePage();
         }
+        return cy.wrap();
       });
     };
 
+    // Meaure the pages. When they're completely finished, then we can get the
+    // max and average and make our assertions.
     measurePage().then(() => {
       const times = measurements.map(({ measurement }) => measurement);
       const total = times.reduce((prev, now) => prev + now, 0);
