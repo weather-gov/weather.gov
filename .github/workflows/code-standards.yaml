@@ -58,6 +58,7 @@ jobs:
     name: PHP lint
     runs-on: ubuntu-latest
     needs: [should-test]
+    if: needs.should-test.outputs.yes == 'true'
 
     steps:
       - name: checkout
@@ -75,20 +76,17 @@ jobs:
           echo "bin-dir=${{ github.workspace }}/$(composer config bin-dir)" >> $GITHUB_OUTPUT
 
       - name: cache composer caches
-        if: needs.should-test.outputs.yes == 'true'
         uses: actions/cache@v3
         with:
           path: ${{ steps.composer-paths.outputs.cache-dir }}
           key: composer-cache-${{ hashFiles('composer.lock') }}
 
       - name: install dependencies
-        if: needs.should-test.outputs.yes == 'true'
         env:
           COMPOSER_NO_DEV: 0
         run: composer install
 
       - name: run phpcs
-        if: needs.should-test.outputs.yes == 'true'
         run: |
           echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-phpcs.json"
           vendor/bin/phpcs --report=checkstyle
@@ -97,6 +95,7 @@ jobs:
     name: JS lint
     runs-on: ubuntu-latest
     needs: [should-test]
+    if: needs.should-test.outputs.yes == 'true'
 
     steps:
       - name: checkout
@@ -118,13 +117,13 @@ jobs:
         run: echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-eslint.json"
 
       - name: run eslint
-        if: needs.should-test.outputs.yes == 'true'
         run: npm run js-lint
 
   style-lint:
     name: SCSS lint
     runs-on: ubuntu-latest
     needs: [should-test]
+    if: needs.should-test.outputs.yes == 'true'
 
     steps:
       - name: checkout
@@ -144,13 +143,13 @@ jobs:
         # https://stylelint.io/user-guide/options#formatter
         # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
       - name: run stylelint
-        if: needs.should-test.outputs.yes == 'true'
         run: npm run style-lint -- -f github
 
   php-unit-tests:
     name: PHP unit tests
     runs-on: ubuntu-latest
     needs: [should-test]
+    if: needs.should-test.outputs.yes == 'true'
 
     steps:
       - name: checkout
@@ -169,25 +168,21 @@ jobs:
           echo "bin-dir=${{ github.workspace }}/$(composer config bin-dir)" >> $GITHUB_OUTPUT
 
       - name: cache composer caches
-        if: needs.should-test.outputs.yes == 'true'
         uses: actions/cache@v3
         with:
           path: ${{ steps.composer-paths.outputs.cache-dir }}
           key: composer-cache-${{ hashFiles('composer.lock') }}
 
       - name: install dependencies
-        if: needs.should-test.outputs.yes == 'true'
         env:
           COMPOSER_NO_DEV: 0
         run: composer install
 
       - name: run unit tests
-        if: needs.should-test.outputs.yes == 'true'
         run: |
           vendor/bin/phpunit --coverage-clover coverage.xml
 
       - name: store coverage output
-        if: needs.should-test.outputs.yes == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
@@ -197,17 +192,15 @@ jobs:
   min-code-coverage:
     name: "90% code coverage"
     runs-on: ubuntu-latest
-    needs: [php-unit-tests, should-test]
+    needs: [php-unit-tests]
 
     steps:
       - name: get coverage output
-        if: needs.should-test.outputs.yes == 'true'
         uses: actions/download-artifact@v3
         with:
           name: coverage-report
 
       - name: 90% code coverage
-        if: needs.should-test.outputs.yes == 'true'
         id: test-coverage
         uses: johanvanhelden/gha-clover-test-coverage-check@v1
         with:
