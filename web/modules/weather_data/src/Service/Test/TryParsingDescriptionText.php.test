@@ -17,7 +17,11 @@ final class TryParsingDescriptionTextTest extends Base
     public function testBasic(): void
     {
         $rawDescription =
-            "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n* WHERE...Eastern San Juan Mountains Above 10000 Feet.\n\n* WHEN...From 11 PM this evening to 11 PM MST Thursday.\n\n* IMPACTS...Travel could be very difficult. The hazardous\nconditions may impact travel over Wolf Creek Pass.";
+            "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
+        $rawDescription .= "* WHERE...Eastern San Juan Mountains Above 10000 Feet.\n\n"
+        $rawDescription .= "* WHEN...From 11 PM this evening to 11 PM MST Thursday.\n\n"
+        $rawDescription .= "* IMPACTS...Travel could be very difficult. The hazardous
+conditions may impact travel over Wolf Creek Pass."
         $parsedDescription = WeatherAlertTrait::tryParsingDescriptionText(
             $rawDescription,
         );
@@ -36,7 +40,8 @@ final class TryParsingDescriptionTextTest extends Base
     public function testNotMatching(): void
     {
         $rawDescription =
-            "* This is an alert with\n\nmultiple newlines, but it has nothing to do with the what WHERE WHEN\n format we are concerned with.";
+            "* This is an alert with\n\nmultiple newlines, but it has nothing ";
+        $rawDescription .= "to do with the what WHERE WHEN\n format we are concerned with.";
         $parsedDescription = WeatherAlertTrait::tryParsingDescriptionText(
             $rawDescription,
         );

@@ -33,7 +33,7 @@ trait WeatherAlertTrait
         return $str;
     }
 
-    static function tryParsingDescriptionText($str)
+    public static function tryParsingDescriptionText($str)
     {
         $regex = "/\*\s+(?<label>[A-Za-z\s]+)\.\.\.(?<content>.*)(\n{2}|$)/sU";
         if (preg_match_all($regex, $str, $matches)) {
