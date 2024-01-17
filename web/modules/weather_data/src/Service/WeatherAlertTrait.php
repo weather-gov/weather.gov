@@ -36,11 +36,11 @@ trait WeatherAlertTrait
     static function tryParsingDescriptionText($str)
     {
         $regex = "/\*\s+(?<label>[A-Za-z\s]+)\.\.\.(?<content>.*)(\n{2}|$)/sU";
-        if(preg_match_all($regex, $str, $matches)){
+        if (preg_match_all($regex, $str, $matches)) {
             $result = [];
-            for($i = 0; $i < count($matches['label']); $i++){
-                $label = strtolower($matches['label'][$i]);
-                $content = $matches['content'][$i];
+            for ($i = 0; $i < count($matches["label"]); $i++) {
+                $label = strtolower($matches["label"][$i]);
+                $content = $matches["content"][$i];
                 $result[$label] = $content;
             }
 
@@ -84,8 +84,10 @@ trait WeatherAlertTrait
                 $output->geometry = [];
             }
 
-            $alertDescription = self::tryParsingDescriptionText($output->description);
-            if(!is_array($alertDescription)){
+            $alertDescription = self::tryParsingDescriptionText(
+                $output->description,
+            );
+            if (!is_array($alertDescription)) {
                 $output->description = self::fixupNewlines(
                     $alertDescription ?? false,
                 );
@@ -94,7 +96,7 @@ trait WeatherAlertTrait
                 $output->description = $alertDescription;
                 $output->usesParsedDescription = true;
             }
-            
+
             $output->instruction = self::fixupNewlines(
                 $output->instruction ?? false,
             );
@@ -135,6 +137,4 @@ trait WeatherAlertTrait
 
         return $alerts;
     }
-
-    
 }

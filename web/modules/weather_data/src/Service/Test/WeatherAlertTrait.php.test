@@ -42,7 +42,7 @@ final class WeatherAlertTraitTest extends Base
                 "description" => [
                     "what" => "Bad weather",
                     "where" => "Places",
-                    "fake" => "This goes away"
+                    "fake" => "This goes away",
                 ],
                 "geometry" => [],
                 "instruction" =>
