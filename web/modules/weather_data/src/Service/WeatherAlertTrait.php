@@ -84,9 +84,17 @@ trait WeatherAlertTrait
                 $output->geometry = [];
             }
 
-            $output->description = self::fixupNewlines(
-                $output->description ?? false,
-            );
+            $alertDescription = self::tryParsingDescriptionText($output->description);
+            if(!is_array($alertDescription)){
+                $output->description = self::fixupNewlines(
+                    $alertDescription ?? false,
+                );
+                $output->usesParsedDescription = false;
+            } else {
+                $output->description = $alertDescription;
+                $output->usesParsedDescription = true;
+            }
+            
             $output->instruction = self::fixupNewlines(
                 $output->instruction ?? false,
             );

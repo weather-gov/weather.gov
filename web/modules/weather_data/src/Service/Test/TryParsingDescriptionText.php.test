@@ -11,6 +11,9 @@ final class TryParsingDescriptionTextTest extends Base
         parent::setUp();
     }
 
+    /**
+     * Test the tryParsingDescriptionText static method
+     */
     public function testBasic(): void
     {
         $rawDescription = "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n* WHERE...Eastern San Juan Mountains Above 10000 Feet.\n\n* WHEN...From 11 PM this evening to 11 PM MST Thursday.\n\n* IMPACTS...Travel could be very difficult. The hazardous\nconditions may impact travel over Wolf Creek Pass.";
@@ -24,5 +27,14 @@ final class TryParsingDescriptionTextTest extends Base
         ];
         $this->assertEquals($expected, $parsedDescription);
         
+    }
+
+    public function testNotMatching(): void
+    {
+        $rawDescription = "* This is an alert with\n\nmultiple newlines, but it has nothing to do with the what WHERE WHEN\n format we are concerned with.";
+        $parsedDescription = WeatherAlertTrait::tryParsingDescriptionText($rawDescription);
+        $expected = $rawDescription;
+
+        $this->assertEquals($expected, $parsedDescription);
     }
 }
