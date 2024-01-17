@@ -33,6 +33,23 @@ trait WeatherAlertTrait
         return $str;
     }
 
+    static function tryParsingDescriptionText($str)
+    {
+        $regex = "/\*\s*(?<label>[A-Z]+)\.\.\.(?<content>.*)(\n{2}|$)/sU";
+        if(preg_match_all($regex, $str, $matches)){
+            $result = [];
+            for($i = 0; $i < count($matches['label']); $i++){
+                $label = strtolower($matches['label'][$i]);
+                $content = $matches['content'][$i];
+                $result[$label] = $content;
+            }
+
+            return $result;
+        }
+
+        return $str;
+    }
+
     /**
      * Get active alerts for a WFO grid cell.
      */
@@ -110,4 +127,6 @@ trait WeatherAlertTrait
 
         return $alerts;
     }
+
+    
 }
