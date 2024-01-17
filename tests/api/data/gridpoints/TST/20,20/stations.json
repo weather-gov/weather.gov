@@ -1,0 +1,78 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": {
+        "@id": "s:GeoCoordinates",
+        "@type": "geo:wktLiteral"
+      },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": {
+        "@id": "s:Distance",
+        "@type": "s:QuantitativeValue"
+      },
+      "bearing": {
+        "@type": "s:QuantitativeValue"
+      },
+      "value": {
+        "@id": "s:value"
+      },
+      "unitCode": {
+        "@id": "s:unitCode",
+        "@type": "@id"
+      },
+      "forecastOffice": {
+        "@type": "@id"
+      },
+      "forecastGridData": {
+        "@type": "@id"
+      },
+      "publicZone": {
+        "@type": "@id"
+      },
+      "county": {
+        "@type": "@id"
+      },
+      "observationStations": {
+        "@container": "@list",
+        "@type": "@id"
+      }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/TEST_NO_WIND",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-93.228890000000007, 44.88306]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/TEST_NO_WIND",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 256.03199999999998
+        },
+        "stationIdentifier": "TEST_NO_WIND",
+        "name": "Minneapolis, Minneapolis-St. Paul International Airport",
+        "timeZone": "America/Chicago",
+        "forecast": "https://api.weather.gov/zones/forecast/MNZ060",
+        "county": "https://api.weather.gov/zones/county/MNC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MNZ060"
+      }
+    }
+  ],
+  "observationStations": ["https://api.weather.gov/stations/TEST_NO_WIND"],
+  "pagination": {
+    "next": "https://api.weather.gov/stations?id%5B0%5D=K04W&id%5B1%5D=K14Y&id%5B2%5D=K21D&id%5B3%5D=KACQ&id%5B4%5D=KADC&id%5B5%5D=KAEL&id%5B6%5D=KAIT&id%5B7%5D=KANE&id%5B8%5D=KAQP&id%5B9%5D=KASX&id%5B10%5D=KAUM&id%5B11%5D=KAXN&id%5B12%5D=KBBB&id%5B13%5D=KBDH&id%5B14%5D=KBKX&id%5B15%5D=KBRD&id%5B16%5D=KCBG&id%5B17%5D=KCFE&id%5B18%5D=KCMY&id%5B19%5D=KCNB&id%5B20%5D=KCOQ&id%5B21%5D=KD39&id%5B22%5D=KDEH&id%5B23%5D=KDLH&id%5B24%5D=KDTL&id%5B25%5D=KDXX&id%5B26%5D=KDYT&id%5B27%5D=KEAU&id%5B28%5D=KEST&id%5B29%5D=KETH&id%5B30%5D=KFBL&id%5B31%5D=KFCM&id%5B32%5D=KFFM&id%5B33%5D=KFKA&id%5B34%5D=KFRM&id%5B35%5D=KFSD&id%5B36%5D=KGDB&id%5B37%5D=KGHW&id%5B38%5D=KGYL&id%5B39%5D=KHCD&id%5B40%5D=KHYR&id%5B41%5D=KJKJ&id%5B42%5D=KJMR&id%5B43%5D=KJYG&id%5B44%5D=KLJF&id%5B45%5D=KLSE&id%5B46%5D=KLVN&id%5B47%5D=KLXL&id%5B48%5D=KMCW&id%5B49%5D=KMGG&id%5B50%5D=KMIC&id%5B51%5D=KMJQ&id%5B52%5D=KMKT&id%5B53%5D=KMML&id%5B54%5D=KMOX&id%5B55%5D=KMSP&id%5B56%5D=KMVE&id%5B57%5D=KMWM&id%5B58%5D=KOEO&id%5B59%5D=KONA&id%5B60%5D=KOTG&id%5B61%5D=KOVL&id%5B62%5D=KOVS&id%5B63%5D=KOWA&id%5B64%5D=KPEX&id%5B65%5D=KPNM&id%5B66%5D=KPQN&id%5B67%5D=KPWC&id%5B68%5D=KRCX&id%5B69%5D=KRGK&id%5B70%5D=KRNH&id%5B71%5D=KROS&id%5B72%5D=KRPD&id%5B73%5D=KRST&id%5B74%5D=KRWF&id%5B75%5D=KRZN&id%5B76%5D=KSAZ&id%5B77%5D=KSGS&id%5B78%5D=KSHL&id%5B79%5D=KSPW&id%5B80%5D=KSTC&id%5B81%5D=KSTP&id%5B82%5D=KSUW&id%5B83%5D=KSYN&id%5B84%5D=KTOB&id%5B85%5D=KUBE&id%5B86%5D=KULM&id%5B87%5D=KVVV&id%5B88%5D=KY63&cursor=eyJzIjo1MDB9"
+  }
+}
