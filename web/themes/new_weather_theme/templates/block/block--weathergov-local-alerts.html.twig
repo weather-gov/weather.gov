@@ -14,9 +14,9 @@
       {{ alert.description | nl2br }}
     </p>
 
-    {% if usesParsedDescription %}
+    {% if alert.usesParsedDescription %}
       {% for label, infoText in alert.description %}
-        <h3>{{ label }}</h3>
+        <h3>{{ label | capitalize }}</h3>
         <p>{{ infoText }}</p>
       {% endfor %}
     {% else %}
