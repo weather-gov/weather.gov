@@ -35,6 +35,7 @@ module:
   taxonomy: 0
   text: 0
   toolbar: 0
+  twig_tweak: 0
   update: 0
   user: 0
   views_ui: 0
