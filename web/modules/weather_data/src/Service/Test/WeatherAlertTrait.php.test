@@ -34,18 +34,23 @@ final class WeatherAlertTraitTest extends Base
                 "onset" => "Sunday, 10/01, 2:32 PM MDT",
                 "ends" => "Sunday, 10/01, 4:32 PM MDT",
                 "expires" => "Sunday, 10/01, 6:32 PM MDT",
+                "usesParsedDescription" => false,
             ],
             (object) [
                 "areaDesc" => false,
                 "event" => "volcano warning",
-                "description" =>
-                    "* WHAT...Bad weather\n\n* WHERE...Places\n\n* FAKE...This goes away",
+                "description" => [
+                    "what" => "Bad weather",
+                    "where" => "Places",
+                    "fake" => "This goes away",
+                ],
                 "geometry" => [],
                 "instruction" =>
                     "Duck! And coooover!\n\nJust duck! And cooooover!",
                 "onset" => false,
                 "ends" => false,
                 "expires" => false,
+                "usesParsedDescription" => true,
             ],
             (object) [
                 "areaDesc" => "place 1",
@@ -57,6 +62,7 @@ final class WeatherAlertTraitTest extends Base
                 "instruction" => false,
                 "ends" => false,
                 "expires" => false,
+                "usesParsedDescription" => false,
             ],
             (object) [
                 "event" => "air quality alert",
@@ -67,6 +73,7 @@ final class WeatherAlertTraitTest extends Base
                 "ends" => false,
                 "expires" => false,
                 "onset" => "Tuesday, 01/09, 12:00 PM MST",
+                "usesParsedDescription" => false,
             ],
             (object) [
                 "event" => "air quality alert",
@@ -77,6 +84,7 @@ final class WeatherAlertTraitTest extends Base
                 "ends" => false,
                 "expires" => false,
                 "onset" => "Tuesday, 01/09, 1:00 PM MST",
+                "usesParsedDescription" => false,
             ],
             (object) [
                 "event" => "air quality alert",
@@ -87,6 +95,7 @@ final class WeatherAlertTraitTest extends Base
                 "ends" => false,
                 "expires" => false,
                 "onset" => "Tuesday, 01/09, 1:00 PM MST",
+                "usesParsedDescription" => false,
             ],
             (object) [
                 "event" => "air quality alert",
@@ -97,6 +106,7 @@ final class WeatherAlertTraitTest extends Base
                 "ends" => false,
                 "expires" => false,
                 "onset" => "Tuesday, 01/09, 2:00 PM MST",
+                "usesParsedDescription" => false,
             ],
         ];
     }
