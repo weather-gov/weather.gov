@@ -35,6 +35,10 @@ trait WeatherAlertTrait
 
     public static function tryParsingDescriptionText($str)
     {
+        // look for any word in all caps followed by ellipses, and use that as the label, and
+        // all text until the next pair of newlines is the content
+        //
+        // https://regexper.com/#%2F%5C*%5Cs%2B%28%5BA-Za-z%5Cs%5D%2B%29%5C.%5C.%5C.%28.*%29%28%5Cn%7B2%7D%7C%24%29%2F
         $regex = "/\*\s+(?<label>[A-Za-z\s]+)\.\.\.(?<content>.*)(\n{2}|$)/sU";
         if (preg_match_all($regex, $str, $matches)) {
             $result = [];
