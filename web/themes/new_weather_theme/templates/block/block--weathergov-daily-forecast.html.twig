@@ -1,16 +1,5 @@
-{%
-set classes = [
-  'block',
-  'block-' ~ configuration.provider|clean_class,
-  'block-' ~ plugin_id|clean_class
-]
-%}
-<div{{sttributes.addClass(classes)}}>
-  {{ title_prefix }}
-  {% if label %}
-    <h2{{title_attributes }}>{{ label }}</h2>
-  {% endif %}
-  {{ title_suffix }}
+<div class="tablet:grid-col-12">
+  <h2>Daily forecast</h2>
   <ol class="grid-row flex-row minh-card usa-list--unstyled">
     {%  for data in content.days %}
       {%  set hasPrecipitation = data.daytime.probabilityOfPrecipitation %}

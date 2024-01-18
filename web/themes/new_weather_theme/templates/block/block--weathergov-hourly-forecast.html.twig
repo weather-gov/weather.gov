@@ -1,16 +1,5 @@
-{%
-  set classes = [
-    'block',
-    'block-' ~ configuration.provider|clean_class,
-    'block-' ~ plugin_id|clean_class,
-  ]
-%}
-<div{{attributes.addClass(classes)}}>
-  {{ title_prefix }}
-  {% if label %}
-    <h2{{title_attributes}}>{{ label }}</h2>
-  {% endif %}
-  {{ title_suffix }}
+<div class="tablet:grid-col-12">
+  <h2>Hourly forecast</h2>
   {# Forecast:  hour, icon, condition desc (short), change of precip, temp degree, temp scale #}
   <ol class="grid-row flex-row minh-card usa-list--unstyled">
 

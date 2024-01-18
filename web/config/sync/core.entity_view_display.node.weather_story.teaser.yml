@@ -1,0 +1,34 @@
+uuid: daf5b960-2b4c-4488-b348-89fc6dd87dde
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.weather_story.body
+    - field.field.node.weather_story.field_image
+    - field.field.node.weather_story.field_wfo
+    - node.type.weather_story
+  module:
+    - text
+    - user
+id: node.weather_story.teaser
+targetEntityType: node
+bundle: weather_story
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_image: true
+  field_wfo: true

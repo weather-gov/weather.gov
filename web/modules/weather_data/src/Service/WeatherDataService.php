@@ -94,6 +94,11 @@ class WeatherDataService
         );
     }
 
+    public function getEverythingEverywhereAllAtOnce($wfo, $x, $y)
+    {
+        echo "honk yeah!";
+    }
+
     /**
      * Get data from the weather API.
      *

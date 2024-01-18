@@ -1,0 +1,21 @@
+uuid: ee0169c6-3c93-4585-9c3b-9a7dedf0edec
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_wfo_code
+field_name: field_wfo_code
+entity_type: taxonomy_term
+type: string
+settings:
+  max_length: 3
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

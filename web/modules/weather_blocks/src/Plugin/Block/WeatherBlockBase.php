@@ -164,6 +164,12 @@ abstract class WeatherBlockBase extends BlockBase implements
                 "x" => $x,
                 "y" => $y,
             ];
+
+            // $this->weatherData->getEverythingEverywhereAllAtOnce(
+            //     strtoupper($wfo),
+            //     $x,
+            //     $y,
+            // );
         } else {
             // Otherwise, attempt to get it from configuration.
             $configuredGrid = $this->getConfiguration()["grid"] ?? false;
