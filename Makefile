@@ -90,6 +90,10 @@ ee: end-to-end-test
 end-to-end-test: ## Run end-to-end tests in Cypress. (alias ee)
 	npx cypress run --project tests/e2e
 
+lt: load-time-test
+load-time-test: ## Run page load time tests in Cypress (alias lt)
+	npx cypress run --project tests/load-times
+
 u: unit-test
 unit-test: ## Run PHP unit tests
 	docker compose exec drupal phpunit --coverage-html /coverage

@@ -20,7 +20,11 @@ module.exports = {
       },
     },
     {
-      files: ["tests/a11y/**/*.js", "tests/e2e/**/*.js"],
+      files: [
+        "tests/a11y/**/*.js",
+        "tests/e2e/**/*.js",
+        "tests/load-times/**/*.js",
+      ],
       extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
       env: {
         jest: true,
