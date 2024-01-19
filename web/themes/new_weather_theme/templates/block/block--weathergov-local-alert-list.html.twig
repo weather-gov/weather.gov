@@ -1,6 +1,6 @@
 <weathergov-alert-list>
 {% for alert in content.alerts %}
-<div class="usa-alert usa-alert--info usa-alert--slim margin-top-0" role="alert">
+<div class="usa-alert usa-alert--warning usa-alert--slim margin-top-0 padding-y-05" role="alert">
   <div class="usa-alert__body">
     <a href="#alert_{{ loop.index }}">
       {{ alert.event }}
