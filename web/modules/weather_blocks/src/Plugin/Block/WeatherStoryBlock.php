@@ -90,11 +90,13 @@ class WeatherStoryBlock extends WeatherBlockBase
                 }
 
                 // And return the stuff that's available to our block template.
+                $body = $story->get("body")->getValue();
+                $body = array_pop($body);
+                $body = $body["value"];
+
                 return [
                     "title" => $story->get("title")->getString(),
-                    "body" => array_pop($story->get("body")->getValue())[
-                        "value"
-                    ],
+                    "body" => $body,
                     "image" => $image,
                 ];
             }

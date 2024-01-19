@@ -1,0 +1,278 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block;
+
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Entity\Query\QueryInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\weather_data\Service\WeatherDataService;
+
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the LocalAlerts block.
+ */
+final class WeatherStoryBlockTest extends TestCase
+{
+    /**
+     * A ready-to-use weather story block object.
+     *
+     * @var weatherStoryBlock
+     */
+    protected $weatherStoryBlock;
+
+    /**
+     * A mock entity type manager.
+     *
+     * @var entityTypeManagerMock
+     */
+    protected $entityTypeManagerMock;
+
+    /**
+     * A mock of the route object.
+     *
+     * @var routeMock
+     */
+    protected $routeMock;
+
+    /**
+     * A mocked WeatherData service object.
+     *
+     * @var weatherData
+     *
+     * This is injected into the current conditions block object being tested with
+     * dependency injection.
+     */
+    protected $weatherData;
+
+    /**
+     * Common setup for all component tests.
+     *
+     * Creates a mock of a weather data service and injects it into a new local
+     * alert block object.
+     */
+    protected function setUp(): void
+    {
+        $definition = [
+            "provider" => "weather_blocks",
+        ];
+
+        $this->weatherData = $this->createStub(WeatherDataService::class);
+
+        $this->entityTypeManagerMock = $this->createStub(
+            EntityTypeManagerInterface::class,
+        );
+
+        $this->routeMock = $this->createStub(RouteMatchInterface::class);
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.grid");
+
+        $this->routeMock
+            ->method("getParameter")
+            ->will(
+                $this->returnValueMap([
+                    ["wfo", "wfo"],
+                    ["gridX", "1"],
+                    ["gridY", "1"],
+                ]),
+            );
+
+        $this->weatherStoryBlock = new WeatherStoryBlock(
+            [],
+            "",
+            $definition,
+            $this->routeMock,
+            $this->entityTypeManagerMock,
+            $this->weatherData,
+        );
+    }
+
+    protected function setupEntityAPIMocksForGoodStory($withImage)
+    {
+        $taxonomyStore = $this->createStub(EntityStorageInterface::class);
+        $nodeStore = $this->createStub(EntityStorageInterface::class);
+        $taxonomyTermEntity = $this->createStub(
+            FieldableEntityInterface::class,
+        );
+        $taxonomyIDField = $this->createStub(FieldItemListInterface::class);
+        $query = $this->createStub(QueryInterface::class);
+
+        $this->entityTypeManagerMock
+            ->method("getStorage")
+            ->will(
+                $this->returnValueMap([
+                    ["taxonomy_term", $taxonomyStore],
+                    ["node", $nodeStore],
+                ]),
+            );
+
+        // Set up fetching the taxonomy term ID. Use return value maps so we can
+        // also assert that things are being called with our expected values.
+        $taxonomyStore
+            ->method("loadByProperties")
+            ->will(
+                $this->returnValueMap([
+                    [["field_wfo_code" => "WFO"], [$taxonomyTermEntity]],
+                ]),
+            );
+
+        $taxonomyTermEntity
+            ->method("get")
+            ->will($this->returnValueMap([["tid", $taxonomyIDField]]));
+        $taxonomyIDField->method("getString")->willReturn("100");
+
+        // Now setup fetching the weather story node ID.
+        $nodeStore->method("getQuery")->willReturn($query);
+        $query
+            ->method("accessCheck")
+            ->will($this->returnValueMap([[false, $query]]));
+        $query
+            ->method("condition")
+            ->will(
+                $this->returnValueMap([
+                    ["type", "weather_story", null, null, $query],
+                    ["field_wfo", "100", null, null, $query],
+                ]),
+            );
+        $query
+            ->method("sort")
+            ->will($this->returnValueMap([["changed", "DESC", null, $query]]));
+        $query->method("range")->will($this->returnValueMap([[0, 1, $query]]));
+        $query->method("execute")->willReturn([200]);
+
+        // And finally, setup fetching the actual node.
+        $story = $this->createStub(FieldItemListInterface::class);
+        $imageField = $this->createStub(FieldItemListInterface::class);
+        $titleField = $this->createStub(FieldItemListInterface::class);
+        $bodyField = $this->createStub(FieldItemListInterface::class);
+
+        $nodeStore
+            ->method("load")
+            ->will($this->returnValueMap([[200, $story]]));
+
+        $story
+            ->method("get")
+            ->will(
+                $this->returnValueMap([
+                    ["field_image", $imageField],
+                    ["title", $titleField],
+                    ["body", $bodyField],
+                ]),
+            );
+
+        $altTextField = $this->createStub(FieldItemListInterface::class);
+        $uriField = $this->createStub(FieldItemListInterface::class);
+
+        $imageField
+            ->method("get")
+            ->will(
+                $this->returnValueMap([
+                    [0, $withImage ? $imageField : null],
+                    ["alt", $altTextField],
+                    ["uri", $uriField],
+                ]),
+            );
+        $imageField
+            ->method("__get")
+            ->will($this->returnValueMap([["entity", $imageField]]));
+
+        $altTextField->method("getString")->willReturn("image alt text");
+        $uriField->method("getString")->willReturn("image url");
+
+        $titleField->method("getString")->willReturn("Weather Story Title");
+        $bodyField
+            ->method("getValue")
+            ->willReturn([["value" => "Weather story body"]]);
+    }
+
+    /**
+     * Test that the block returns the expected data if we're on a grid route.
+     */
+    public function testReturnsAWeatherStory(): void
+    {
+        $this->setupEntityAPIMocksForGoodStory(true);
+
+        $expected = [
+            "title" => "Weather Story Title",
+            "body" => "Weather story body",
+            "image" => [
+                "alt" => "image alt text",
+                "uri" => "image url",
+            ],
+        ];
+
+        $actual = $this->weatherStoryBlock->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test that the block returns the expected data if we're on a grid route.
+     */
+    public function testReturnsAWeatherStoryWithNoImage(): void
+    {
+        $this->setupEntityAPIMocksForGoodStory(false);
+
+        $expected = [
+            "title" => "Weather Story Title",
+            "body" => "Weather story body",
+            "image" => null,
+        ];
+
+        $actual = $this->weatherStoryBlock->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testRequestedWFODoesNotExist(): void
+    {
+        $taxonomyStore = $this->createStub(EntityStorageInterface::class);
+
+        $this->entityTypeManagerMock
+            ->method("getStorage")
+            ->will($this->returnValueMap([["taxonomy_term", $taxonomyStore]]));
+
+        // An empty array of WFO taxonomy terms should result in a null output.
+        $taxonomyStore
+            ->method("loadByProperties")
+            ->will($this->returnValueMap([[["field_wfo_code" => "WFO"], []]]));
+
+        $actual = $this->weatherStoryBlock->build();
+
+        $this->assertEquals(null, $actual);
+    }
+
+    /**
+     * Test that the block returns null if we're not on a grid route.
+     */
+    public function testBuildNotGridRoute(): void
+    {
+        $definition = [
+            "provider" => "weather_blocks",
+        ];
+
+        $this->weatherData = $this->createStub(WeatherDataService::class);
+
+        $this->routeMock = $this->createStub(RouteMatchInterface::class);
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.not-grid");
+
+        $this->weatherStoryBlock = new WeatherStoryBlock(
+            [],
+            "",
+            $definition,
+            $this->routeMock,
+            $this->entityTypeManagerMock,
+            $this->weatherData,
+        );
+
+        $actual = $this->weatherStoryBlock->build();
+
+        $this->assertEquals(null, $actual);
+    }
+}
