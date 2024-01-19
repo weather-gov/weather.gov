@@ -19,9 +19,6 @@
     <p>
       Issued by {{ alert.senderName }}
     </p>
-    <p>
-      {{ alert.description | nl2br }}
-    </p>
 
     {% if alert.usesParsedDescription %}
       {% for label, infoText in alert.description %}
