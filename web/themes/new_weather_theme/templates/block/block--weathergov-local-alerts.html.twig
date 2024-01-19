@@ -1,18 +1,23 @@
-<weathergov-alerts>
+<weathergov-alerts class="display-block">
 {% for alert in content.alerts %}
 <a id="alert_{{ loop.index }}"></a>
-<div class="usa-alert usa-alert" role="alert">
-  <div class="usa-alert__body">
-    <h2 class="usa-alert__heading">{{ alert.event }}</h2>
+<div class="usa-accordion usa-accordion--bordered margin-top-1">
+  <h2 class="usa-accordion__heading">
+    <button
+      type="button"
+      class="usa-accordion__button"
+      aria-expanded="{{ (loop.index == 1) ? 'true' : 'false' }}"
+      aria-controls="a{{ loop.index }}">
+      {{ alert.event }}
+    </button>
+  </h2>
+  <div id="a{{loop.index}}" class="usa-accordion__content usa-prose">
     <p>
       In effect from {{ alert.onset }}
       {% if alert.ends %} - {{ alert.ends }}{% endif %}
     </p>
     <p>
       Issued by {{ alert.senderName }}
-    </p>
-    <p>
-      {{ alert.description | nl2br }}
     </p>
 
     {% if alert.usesParsedDescription %}
