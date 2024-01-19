@@ -2,6 +2,7 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,13 @@ final class CurrentConditionsBlockTest extends TestCase
      * @var currentConditionsBlock
      */
     protected $currentConditionsBlock;
+
+    /**
+     * A mock entity type manager.
+     *
+     * @var entityTypeManagerMock
+     */
+    protected $entityTypeManagerMock;
 
     /**
      * A mock of the route object.
@@ -49,6 +57,10 @@ final class CurrentConditionsBlockTest extends TestCase
 
         $this->weatherData = $this->createStub(WeatherDataService::class);
 
+        $this->entityTypeManagerMock = $this->createStub(
+            EntityTypeManagerInterface::class,
+        );
+
         $this->routeMock = $this->createStub(RouteMatchInterface::class);
         $this->routeMock
             ->method("getRouteName")
@@ -58,8 +70,9 @@ final class CurrentConditionsBlockTest extends TestCase
             [],
             "",
             $definition,
-            $this->weatherData,
             $this->routeMock,
+            $this->entityTypeManagerMock,
+            $this->weatherData,
         );
     }
 
@@ -107,8 +120,9 @@ final class CurrentConditionsBlockTest extends TestCase
             [],
             "",
             $definition,
-            $this->weatherData,
             $this->routeMock,
+            $this->entityTypeManagerMock,
+            $this->weatherData,
         );
 
         $actual = $this->currentConditionsBlock->build();

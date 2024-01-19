@@ -2,6 +2,7 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,13 @@ final class LocationSearchBlockTest extends TestCase
      * @var locationSearchBlock
      */
     protected $locationSearchBlock;
+
+    /**
+     * A mock entity type manager.
+     *
+     * @var entityTypeManagerMock
+     */
+    protected $entityTypeManagerMock;
 
     /**
      * A mock of the route object.
@@ -53,12 +61,17 @@ final class LocationSearchBlockTest extends TestCase
             ->method("getRouteName")
             ->willReturn("weather_routes.grid");
 
+        $this->entityTypeManagerMock = $this->createStub(
+            EntityTypeManagerInterface::class,
+        );
+
         $this->locationSearchBlock = new LocationSearchBlock(
             [],
             "",
             $definition,
-            $this->weatherData,
             $this->routeMock,
+            $this->entityTypeManagerMock,
+            $this->weatherData,
         );
     }
 

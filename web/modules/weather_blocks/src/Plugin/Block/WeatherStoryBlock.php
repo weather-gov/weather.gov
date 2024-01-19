@@ -2,9 +2,6 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
-use Drupal;
-use Drupal\node\Entity\Node;
-
 /**
  * Provides a block of the active weather story for a WFO.
  *
@@ -26,51 +23,55 @@ class WeatherStoryBlock extends WeatherBlockBase
         if ($location->grid) {
             $grid = $location->grid;
 
-            $nodes = Node::loadMultiple(
-                Drupal::entityTypeManager()
-                    ->getStorage("node")
-                    ->getQuery()
-                    ->accessCheck(false)
-                    ->condition("type", "weather_story")
-                    ->sort("changed", "ASC")
-                    ->execute(),
-            );
+            // Get the ID for the WFO taxonomy term that matches our grid WFO.
+            $termID = $this->entityTypeManager
+                ->getStorage("taxonomy_term")
+                ->loadByProperties(["field_wfo_code" => $grid->wfo]);
 
-            $filtered = array_filter($nodes, function ($node) use ($grid) {
-                $wfo = $node->get("field_wfo");
-                if ($wfo) {
-                    // There should only be one WFO associated with the node, so
-                    // just pop it off the array. Don't try to grab it by index
-                    // because only the Drupal gods (and maybe not even they)
-                    // know what the index might be.
-                    $wfo = array_pop($wfo->referencedEntities());
+            // If we don't get any results, that means we don't have a WFO
+            // taxonomy code for this WFO. By definition, we also can't have any
+            // weather stories for it, so we can bail out now.
+            if (count($termID) === 0) {
+                return null;
+            }
 
-                    if ($wfo) {
-                        // At this point, $wfo should be a taxonomy object. We
-                        // are only interested in the name. getValue() here
-                        // returns another object, but we only care about the
-                        // stringy value, so go straight to that.
-                        $wfo = $wfo->get("field_wfo_code")->getString();
+            // loadByProperties returns an associative array where the indices
+            // are actually the term IDs, so we can't just take the 0th index
+            // here. Sigh. Instead, pop the single element out of the array.
+            $termID = array_pop($termID)
+                ->get("tid")
+                ->getString();
 
-                        // Only keep this weather story if it's for the same WFO
-                        // as our grid location.
-                        return strtoupper($wfo) == strtoupper($grid->wfo);
-                    }
-                }
+            // The entity manager interface doesn't have convenience methods for
+            // the kind of filtering we want to do, but the entity query
+            // interface lets us get really specific. The result of this query
+            // is all node ID for the most recent weather story tagged with our
+            // target WFO.
+            $nodeID = $this->entityTypeManager
+                ->getStorage("node")
+                ->getQuery()
+                ->accessCheck(false)
+                ->condition("type", "weather_story")
+                ->condition("field_wfo", $termID)
+                ->sort("changed", "DESC")
+                // Only get the first one.
+                ->range(0, 1)
+                ->execute();
+            // It's still returned as an associated array, though, so pop.
+            // Always be popping.
+            $nodeID = array_pop($nodeID);
 
-                // If any of the prior checks fail, just filter this one out. It
-                // clearly isn't one we're interested in.
-                return false;
-            });
+            // Then we can use the convenience method to actually load the
+            // weather story node.
+            $story = $this->entityTypeManager
+                ->getStorage("node")
+                ->load($nodeID);
 
-            $story = array_pop($filtered);
+            // If we actually have a story, now we can go about pulling data
+            // from it to pass along to the template.
             if ($story) {
-                $story = Drupal::entityTypeManager()
-                    ->getViewBuilder("node")
-                    ->view($story);
-
-                $story = $story["#node"];
-
+                // If there's an image, get its alt text and file URI. Twig will
+                // handle turning that into a proper web URL for us.
                 $image = $story->get("field_image");
                 if ($image->get(0)) {
                     $image = [
@@ -88,6 +89,7 @@ class WeatherStoryBlock extends WeatherBlockBase
                     $image = null;
                 }
 
+                // And return the stuff that's available to our block template.
                 return [
                     "title" => $story->get("title")->getString(),
                     "body" => array_pop($story->get("body")->getValue())[
