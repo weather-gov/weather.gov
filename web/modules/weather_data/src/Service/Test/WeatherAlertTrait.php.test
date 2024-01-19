@@ -25,7 +25,7 @@ final class WeatherAlertTraitTest extends Base
 
         $this->expected = [
             (object) [
-                "areaDesc" => "place 2",
+                "areaDesc" => ["place 2"],
                 "event" => "Tsunami Warning",
                 "geometry" => [],
                 "description" =>
@@ -53,7 +53,7 @@ final class WeatherAlertTraitTest extends Base
                 "usesParsedDescription" => true,
             ],
             (object) [
-                "areaDesc" => "place 1",
+                "areaDesc" => ["place 1"],
                 "event" => "Wind advisory",
                 "description" =>
                     "There is a warning for:\n\nPlaces listed\n\nYou should prepare.",

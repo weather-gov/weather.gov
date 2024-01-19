@@ -31,9 +31,11 @@
     </p>
     {% endif %}
     <h3>Areas impacted</h3>
-    <p>
-      {{ alert.areaDesc | nl2br }}
-    </p>
+      <ul class="usa-list" style="columns:2;">
+        {%  for areaName in alert.areaDesc %}
+          <li class="">{{ areaName }}</li>
+        {% endfor %}
+      </ul>
   </div>
 </div>
 {% endfor %}

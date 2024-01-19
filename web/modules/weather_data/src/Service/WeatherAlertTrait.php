@@ -104,7 +104,13 @@ trait WeatherAlertTrait
             $output->instruction = self::fixupNewlines(
                 $output->instruction ?? false,
             );
+
             $output->areaDesc = self::fixupNewlines($output->areaDesc ?? false);
+            if ($output->areaDesc) {
+                $output->areaDesc = array_map(function ($description) {
+                    return trim($description);
+                }, explode(";", $output->areaDesc));
+            }
 
             $output->onset = self::turnToDate(
                 $output->onset ?? false,
