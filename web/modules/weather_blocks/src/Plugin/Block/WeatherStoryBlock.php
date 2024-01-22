@@ -13,6 +13,8 @@ namespace Drupal\weather_blocks\Plugin\Block;
  */
 class WeatherStoryBlock extends WeatherBlockBase
 {
+    use GetNodeFromTaxonomyTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -23,49 +25,7 @@ class WeatherStoryBlock extends WeatherBlockBase
         if ($location->grid) {
             $grid = $location->grid;
 
-            // Get the ID for the WFO taxonomy term that matches our grid WFO.
-            $termID = $this->entityTypeManager
-                ->getStorage("taxonomy_term")
-                ->loadByProperties(["field_wfo_code" => $grid->wfo]);
-
-            // If we don't get any results, that means we don't have a WFO
-            // taxonomy code for this WFO. By definition, we also can't have any
-            // weather stories for it, so we can bail out now.
-            if (count($termID) === 0) {
-                return [];
-            }
-
-            // loadByProperties returns an associative array where the indices
-            // are actually the term IDs, so we can't just take the 0th index
-            // here. Sigh. Instead, pop the single element out of the array.
-            $termID = array_pop($termID)
-                ->get("tid")
-                ->getString();
-
-            // The entity manager interface doesn't have convenience methods for
-            // the kind of filtering we want to do, but the entity query
-            // interface lets us get really specific. The result of this query
-            // is all node ID for the most recent weather story tagged with our
-            // target WFO.
-            $nodeID = $this->entityTypeManager
-                ->getStorage("node")
-                ->getQuery()
-                ->accessCheck(false)
-                ->condition("type", "weather_story")
-                ->condition("field_wfo", $termID)
-                ->sort("changed", "DESC")
-                // Only get the first one.
-                ->range(0, 1)
-                ->execute();
-            // It's still returned as an associated array, though, so pop.
-            // Always be popping.
-            $nodeID = array_pop($nodeID);
-
-            // Then we can use the convenience method to actually load the
-            // weather story node.
-            $story = $this->entityTypeManager
-                ->getStorage("node")
-                ->load($nodeID);
+            $story = $this->getLatestNodeFromWFO($grid->wfo, "weather_story");
 
             // If we actually have a story, now we can go about pulling data
             // from it to pass along to the template.

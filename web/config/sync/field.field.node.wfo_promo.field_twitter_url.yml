@@ -1,0 +1,19 @@
+uuid: 404b1d17-84ea-40be-8ff1-a6b486dfb65c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_twitter_url
+    - node.type.wfo_promo
+id: node.wfo_promo.field_twitter_url
+field_name: field_twitter_url
+entity_type: node
+bundle: wfo_promo
+label: 'Twitter URL (optional)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

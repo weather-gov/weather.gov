@@ -1,0 +1,44 @@
+<div>
+  <h3><a href="/office/{{ content.code }}/">{{ content.name }}</a></h3>
+  {{ content.shortIntro }}
+
+  {% if content.phone %}
+  <p>
+    Phone: {{ content.phone }}
+  </p>
+  {% endif %}
+
+  {% if content.social %}
+  <p>
+    Find us on:
+    <br>
+
+    {% if content.social.facebook %}
+    <a href="{{ content.social.facebook }}" class="text-no-underline">
+    <svg class="usa-icon usa-icon--size-5" aria-hidden="true" focusable="false" role="img">
+      <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#facebook"></use>
+    </svg>
+    <span class="usa-sr-only">Facebook</span>
+    </a>
+    {% endif %}
+
+    {% if content.social.twitter %}
+    <a href="{{ content.social.twitter }}" class="margin-left-2 text-no-underline">
+    <svg class="usa-icon usa-icon--size-5" aria-hidden="true" focusable="false" role="img">
+      <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#twitter"></use>
+    </svg>
+    <span class="usa-sr-only">Twitter</span>
+    </a>
+    {% endif %}
+
+    {% if content.social.youtube %}
+    <a href="{{ content.social.youtube }}" class="margin-left-2 text-no-underline">
+    <svg class="usa-icon usa-icon--size-5" aria-hidden="true" focusable="false" role="img">
+      <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#youtube"></use>
+    </svg>
+    <span class="usa-sr-only">YouTube</span>
+    </a>
+    {% endif %}
+  </p>
+  {% endif %}
+</div>

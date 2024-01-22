@@ -1,0 +1,19 @@
+uuid: 53a9088b-fb9a-404a-97d1-25e23309a3b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_wfo_name
+    - node.type.wfo_promo
+id: node.wfo_promo.field_wfo_name
+field_name: field_wfo_name
+entity_type: node
+bundle: wfo_promo
+label: 'WFO name'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

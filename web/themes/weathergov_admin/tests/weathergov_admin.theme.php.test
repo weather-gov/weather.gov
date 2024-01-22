@@ -24,16 +24,10 @@ final class WeatherGovAdminThemeHooksTest extends TestCase
 
         $formState = $this->createStub(FormStateInterface::class);
 
-        weathergov_admin_form_node_weather_narrative_form_alter(
-            $form,
-            $formState,
-        );
+        weathergov_admin_form_node_weather_story_form_alter($form, $formState);
 
         $expected = [
             "revision_information" => [
-                "#access" => false,
-            ],
-            "menu" => [
                 "#access" => false,
             ],
         ];

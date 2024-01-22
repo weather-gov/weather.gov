@@ -1,0 +1,29 @@
+uuid: 99b5397a-de6e-433a-a5f2-154d34b01af1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_wfo
+    - node.type.wfo_promo
+    - taxonomy.vocabulary.weather_forecast_offices
+id: node.wfo_promo.field_wfo
+field_name: field_wfo
+entity_type: node
+bundle: wfo_promo
+label: WFO
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      weather_forecast_offices: weather_forecast_offices
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

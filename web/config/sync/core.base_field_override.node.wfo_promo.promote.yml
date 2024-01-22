@@ -1,0 +1,22 @@
+uuid: 333db78f-1bad-4c43-b4b2-f0b9e97a616d
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_promo
+id: node.wfo_promo.promote
+field_name: promote
+entity_type: node
+bundle: wfo_promo
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
