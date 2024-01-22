@@ -245,7 +245,7 @@ final class WeatherStoryBlockTest extends TestCase
 
         $actual = $this->weatherStoryBlock->build();
 
-        $this->assertEquals(null, $actual);
+        $this->assertEquals([], $actual);
     }
 
     /**
@@ -275,6 +275,6 @@ final class WeatherStoryBlockTest extends TestCase
 
         $actual = $this->weatherStoryBlock->build();
 
-        $this->assertEquals(null, $actual);
+        $this->assertEquals([], $actual);
     }
 }

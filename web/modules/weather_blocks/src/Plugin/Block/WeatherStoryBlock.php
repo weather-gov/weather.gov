@@ -32,7 +32,7 @@ class WeatherStoryBlock extends WeatherBlockBase
             // taxonomy code for this WFO. By definition, we also can't have any
             // weather stories for it, so we can bail out now.
             if (count($termID) === 0) {
-                return null;
+                return [];
             }
 
             // loadByProperties returns an associative array where the indices
@@ -102,6 +102,6 @@ class WeatherStoryBlock extends WeatherBlockBase
             }
         }
 
-        return null;
+        return [];
     }
 }

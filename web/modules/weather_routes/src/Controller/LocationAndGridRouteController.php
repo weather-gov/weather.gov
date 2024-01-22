@@ -47,13 +47,6 @@ final class LocationAndGridRouteController extends ControllerBase
      */
     public function noop()
     {
-        // $block = \Drupal::entityTypeManager()
-        //     ->getStorage("block")
-        //     ->load("new_weather_theme_currentconditionsblock");
-        // $block = \Drupal::entityTypeManager()
-        //     ->getViewBuilder("block")
-        //     ->view($block);
-        // return [$block];
         return [];
     }
 
