@@ -105,7 +105,8 @@ class WeatherDataService
      */
     public function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
     {
-        if (!str_starts_with($url, "https://")) {
+        // if (!str_starts_with($url, "https://")) {
+        if (!preg_match("/^https?:\/\//", $url)) {
             $baseUrl = getEnv("API_URL");
             $baseUrl = $baseUrl == false ? "https://api.weather.gov" : $baseUrl;
             $url = $baseUrl . $url;

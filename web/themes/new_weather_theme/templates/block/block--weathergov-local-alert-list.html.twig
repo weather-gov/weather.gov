@@ -1,4 +1,6 @@
+{% if content.alerts %}
 <weathergov-alert-list>
+<div class="margin-top-2">
 {% for alert in content.alerts %}
 <div class="usa-alert usa-alert--warning usa-alert--slim margin-top-0 padding-y-05" role="alert">
   <div class="usa-alert__body">
@@ -10,4 +12,6 @@
   </div>
 </div>
 {% endfor %}
+</div>
 </weathergov-alert-list>
+{% endif %}

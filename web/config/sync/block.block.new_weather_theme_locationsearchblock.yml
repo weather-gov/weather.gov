@@ -3,14 +3,13 @@ langcode: en
 status: true
 dependencies:
   module:
-    - system
     - weather_blocks
   theme:
     - new_weather_theme
 id: new_weather_theme_locationsearchblock
 theme: new_weather_theme
-region: location
-weight: -5
+region: content
+weight: -2
 provider: null
 plugin: weathergov_location_search
 settings:
@@ -18,8 +17,5 @@ settings:
   label: 'Location search block'
   label_display: '0'
   provider: weather_blocks
-visibility:
-  request_path:
-    id: request_path
-    negate: true
-    pages: '/user/*'
+  grid: ',,'
+visibility: {  }

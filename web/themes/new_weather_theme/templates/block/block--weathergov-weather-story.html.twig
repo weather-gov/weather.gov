@@ -1,0 +1,8 @@
+<div class="tablet:grid-col-6">
+<div>
+  <h3>{{ content.title }}</h3>
+  {{ content.body | raw }}
+  {% if content.image %}
+  <img src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
+  {% endif %}
+</div>

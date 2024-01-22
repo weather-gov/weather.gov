@@ -1,0 +1,50 @@
+uuid: c07c6692-06a0-4c72-a526-f3c7efeda7b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.weather_story.body
+    - field.field.node.weather_story.field_image
+    - field.field.node.weather_story.field_wfo
+    - node.type.weather_story
+  module:
+    - image
+    - text
+    - user
+id: node.weather_story.default
+targetEntityType: node
+bundle: weather_story
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  field_wfo:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

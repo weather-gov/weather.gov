@@ -1,6 +1,6 @@
 uuid: 1582cd09-26ee-4df5-9d31-c4665c198d4f
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - dblog

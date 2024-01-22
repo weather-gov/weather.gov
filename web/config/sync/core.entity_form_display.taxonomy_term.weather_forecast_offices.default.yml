@@ -1,0 +1,32 @@
+uuid: 871f215c-4002-4bba-bb28-5ffa973ddd93
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.weather_forecast_offices.field_wfo_code
+    - taxonomy.vocabulary.weather_forecast_offices
+id: taxonomy_term.weather_forecast_offices.default
+targetEntityType: taxonomy_term
+bundle: weather_forecast_offices
+mode: default
+content:
+  field_wfo_code:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  description: true
+  path: true
+  status: true

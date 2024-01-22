@@ -3,9 +3,11 @@
 namespace Drupal\weather_blocks\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\node\NodeInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -26,6 +28,13 @@ abstract class WeatherBlockBase extends BlockBase implements
     protected $weatherData;
 
     /**
+     * An entity type manager.
+     *
+     * @var \Drupal\Core\Entity\EntityTypeManagerInterface entityTypeManager
+     */
+    protected $entityTypeManager;
+
+    /**
      * The current route.
      *
      * @var \Drupal\Core\Routing\RouteMatchInterface route
@@ -39,11 +48,13 @@ abstract class WeatherBlockBase extends BlockBase implements
         array $configuration,
         $plugin_id,
         $plugin_definition,
-        WeatherDataService $weatherDataService,
         RouteMatchInterface $route,
+        EntityTypeManagerInterface $entityTypeManager,
+        WeatherDataService $weatherDataService,
     ) {
         parent::__construct($configuration, $plugin_id, $plugin_definition);
         $this->weatherData = $weatherDataService;
+        $this->entityTypeManager = $entityTypeManager;
         $this->route = $route;
     }
 
@@ -60,8 +71,9 @@ abstract class WeatherBlockBase extends BlockBase implements
             $configuration,
             $plugin_id,
             $plugin_definition,
-            $container->get("weather_data"),
             $container->get("current_route_match"),
+            $container->get("entity_type.manager"),
+            $container->get("weather_data"),
         );
     }
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
@@ -18,6 +19,13 @@ final class HourlyForecastBlockTest extends TestCase
      * @var hourlyForecastBlock
      */
     protected $hourlyForecastBlock;
+
+    /**
+     * A mock entity type manager.
+     *
+     * @var entityTypeManagerMock
+     */
+    protected $entityTypeManagerMock;
 
     /**
      * A mock of the route object.
@@ -50,6 +58,10 @@ final class HourlyForecastBlockTest extends TestCase
 
         $this->weatherData = $this->createStub(WeatherDataService::class);
 
+        $this->entityTypeManagerMock = $this->createStub(
+            EntityTypeManagerInterface::class,
+        );
+
         $this->routeMock = $this->createStub(RouteMatchInterface::class);
         $this->routeMock
             ->method("getRouteName")
@@ -59,8 +71,9 @@ final class HourlyForecastBlockTest extends TestCase
             [],
             "",
             $definition,
-            $this->weatherData,
             $this->routeMock,
+            $this->entityTypeManagerMock,
+            $this->weatherData,
         );
     }
 
@@ -218,8 +231,9 @@ final class HourlyForecastBlockTest extends TestCase
             [],
             "",
             $definition,
-            $this->weatherData,
             $this->routeMock,
+            $this->entityTypeManagerMock,
+            $this->weatherData,
         );
 
         $actual = $this->hourlyForecastBlock->build();

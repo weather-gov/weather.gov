@@ -1,0 +1,19 @@
+uuid: a2b7a648-62b8-4b09-8e2c-8188bf390455
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_wfo_code
+    - taxonomy.vocabulary.weather_forecast_offices
+id: taxonomy_term.weather_forecast_offices.field_wfo_code
+field_name: field_wfo_code
+entity_type: taxonomy_term
+bundle: weather_forecast_offices
+label: Code
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

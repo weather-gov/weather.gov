@@ -1,0 +1,8 @@
+uuid: cd60a61d-d301-4d64-b83a-20c9e15b597c
+langcode: en
+status: true
+dependencies: {  }
+name: 'Weather Forecast Offices'
+vid: weather_forecast_offices
+description: ''
+weight: 0
