@@ -55,7 +55,7 @@ final class GetCurrentConditionsFromGridTest extends Base
                 "identifier" => "JNWS",
                 "lat" => 1,
                 "lon" => 1,
-                "elevation" => 6.56,
+                "elevation" => 6.6,
             ],
         ];
     }
@@ -331,7 +331,7 @@ final class GetCurrentConditionsFromGridTest extends Base
                 "identifier" => "JNWS",
                 "lat" => 1,
                 "lon" => 1,
-                "elevation" => 6.56,
+                "elevation" => 6.6,
             ],
         ];
 
