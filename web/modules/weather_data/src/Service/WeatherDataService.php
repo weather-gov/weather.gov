@@ -397,8 +397,8 @@ class WeatherDataService
         );
         $obsStations = $obsStations->features;
 
-      $obsStationIndex = 0;
-      $observationStation = $obsStations[$obsStationIndex];
+        $obsStationIndex = 0;
+        $observationStation = $obsStations[$obsStationIndex];
         do {
             // If the temperature is not available from this observation station, try
             // the next one. Continue through the first 3 stations and then give up.
@@ -484,16 +484,12 @@ class WeatherDataService
             "stationInfo" => [
                 "name" => $observationStation->properties->name,
                 "identifier" =>
-                    $observationStation->properties
-                        ->stationIdentifier,
-                "lat" =>
-                    $observationStation->geometry->coordinates[1],
-                "lon" =>
-                    $observationStation->geometry->coordinates[0],
+                    $observationStation->properties->stationIdentifier,
+                "lat" => $observationStation->geometry->coordinates[1],
+                "lon" => $observationStation->geometry->coordinates[0],
                 // M to Feet
                 "elevation" => round(
-                    $observationStation->properties->elevation
-                        ->value * 3.28,
+                    $observationStation->properties->elevation->value * 3.28,
                     1,
                 ),
             ],
