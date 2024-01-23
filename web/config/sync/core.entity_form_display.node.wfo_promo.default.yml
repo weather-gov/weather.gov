@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.wfo_promo.field_phone_number
     - field.field.node.wfo_promo.field_twitter_url
     - field.field.node.wfo_promo.field_wfo
-    - field.field.node.wfo_promo.field_wfo_name
     - field.field.node.wfo_promo.field_youtube_url
     - node.type.wfo_promo
   module:
@@ -65,14 +64,6 @@ content:
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_wfo_name:
-    type: string_textfield
-    weight: 5
-    region: content
-    settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }

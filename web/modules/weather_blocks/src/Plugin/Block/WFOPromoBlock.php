@@ -35,7 +35,7 @@ class WFOPromoBlock extends WeatherBlockBase
                 $shortIntro = array_pop($shortIntro);
                 $shortIntro = $shortIntro["value"];
 
-                $wfoName = $promo->get("field_wfo_name")->getString();
+                $wfoName = $promo->get("title")->getString();
                 $phone = $promo->get("field_phone_number")->getString();
 
                 $social = [];

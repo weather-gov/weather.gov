@@ -9,7 +9,6 @@ dependencies:
     - field.field.node.wfo_promo.field_phone_number
     - field.field.node.wfo_promo.field_twitter_url
     - field.field.node.wfo_promo.field_wfo
-    - field.field.node.wfo_promo.field_wfo_name
     - field.field.node.wfo_promo.field_youtube_url
     - node.type.wfo_promo
   module:
@@ -38,5 +37,4 @@ hidden:
   field_phone_number: true
   field_twitter_url: true
   field_wfo: true
-  field_wfo_name: true
   field_youtube_url: true
