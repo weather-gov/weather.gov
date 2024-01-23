@@ -156,6 +156,7 @@ final class GetHourlyForecastTest extends Base
                 "iconBasename" => "nodata",
                 "probabilityOfPrecipitation" => 11,
                 "time" => "12 PM",
+                "timestamp" => "2023-11-16T12:00:00-07:00",
                 "temperature" => 1,
             ],
             [
@@ -164,6 +165,7 @@ final class GetHourlyForecastTest extends Base
                 "iconBasename" => "nodata",
                 "probabilityOfPrecipitation" => 22,
                 "time" => "1 PM",
+                "timestamp" => "2023-11-16T13:00:00-07:00",
                 "temperature" => 2,
             ],
         ];
@@ -222,6 +224,7 @@ final class GetHourlyForecastTest extends Base
                 "iconBasename" => "rain",
                 "probabilityOfPrecipitation" => 22,
                 "time" => "12 PM",
+                "timestamp" => "2023-11-16T12:00:00-07:00",
                 "temperature" => 2,
             ],
             [
@@ -230,6 +233,7 @@ final class GetHourlyForecastTest extends Base
                 "iconBasename" => "snow",
                 "probabilityOfPrecipitation" => 33,
                 "time" => "1 PM",
+                "timestamp" => "2023-11-16T13:00:00-07:00",
                 "temperature" => 3,
             ],
         ];
