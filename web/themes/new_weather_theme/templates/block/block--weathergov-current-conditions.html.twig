@@ -74,14 +74,12 @@
         }}{% endif %}.
   </div>
 
-  {# Third column is feels like, humidity, and wind #}
-
-  <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05">
+  <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05" aria-hidden="true">
     <div class="margin-right-05">{{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}</div>
     {{ "Humidity: @humidity%" | t({ "@humidity": content.humidity }) }}
   </div>
 
-  <div class="item display-flex flex-row flex-align-center margin-right-05">
+  <div class="item display-flex flex-row flex-align-center margin-right-05" aria-hidden="true">
     <div class="margin-right-05">{{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}</div>
     {{ "Wind: @windSpeed mph @windDirection" | t({
       "@windSpeed": content.wind.speed,
