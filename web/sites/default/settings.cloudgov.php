@@ -14,7 +14,7 @@ $settings["file_private_path"] = dirname(DRUPAL_ROOT) . "/private";
 
 $settings["migrate_node_migrate_type_classic"] = false;
 $settings["config_sync_directory"] = dirname(DRUPAL_ROOT) . "/web/config/sync";
-$config["config_split.config_split.cloudgov"]["status"] = True;
+$config["config_split.config_split.cloudgov"]["status"] = true;
 
 $applicaiton_fqdn_regex = "^.+\.(app\.cloud\.gov|weather\.gov)$";
 $settings["trusted_host_patterns"][] = $applicaiton_fqdn_regex;

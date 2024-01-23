@@ -13,8 +13,6 @@ namespace Drupal\weather_blocks\Plugin\Block;
  */
 class WFOPromoBlock extends WeatherBlockBase
 {
-    use GetNodeFromTaxonomyTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -25,7 +23,10 @@ class WFOPromoBlock extends WeatherBlockBase
         if ($location->grid) {
             $grid = $location->grid;
 
-            $promo = $this->getLatestNodeFromWFO($grid->wfo, "wfo_promo");
+            $promo = $this->entityTypeService->getLatestNodeFromWFO(
+                $grid->wfo,
+                "wfo_promo",
+            );
 
             // If we actually have a story, now we can go about pulling data
             // from it to pass along to the template.

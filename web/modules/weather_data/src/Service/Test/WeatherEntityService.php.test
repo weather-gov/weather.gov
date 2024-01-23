@@ -1,0 +1,139 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\weather_data\Service\WeatherEntityService;
+use PHPUnit\Framework\TestCase;
+use Drupal\Core\Entity\Query\QueryInterface;
+
+/**
+ * Tests for the WeatherEntityService.
+ */
+final class WeatherEntityServiceTest extends TestCase
+{
+    protected $entityService;
+
+    protected $entityTypeManager;
+
+    /**
+     * Common setup for all component tests.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->entityTypeManager = $this->createStub(
+            EntityTypeManagerInterface::class,
+        );
+
+        $this->entityService = new WeatherEntityService(
+            $this->entityTypeManager,
+        );
+
+        $this->taxonomyStore = $this->createStub(EntityStorageInterface::class);
+        $this->nodeStore = $this->createStub(EntityStorageInterface::class);
+
+        $this->entityTypeManager
+            ->method("getStorage")
+            ->will(
+                $this->returnValueMap([
+                    ["taxonomy_term", $this->taxonomyStore],
+                    ["node", $this->nodeStore],
+                ]),
+            );
+    }
+
+    public function testGetLatestNodeWithNoWFO(): void
+    {
+        $this->taxonomyStore->method("loadByProperties")->willReturn([]);
+
+        $expected = false;
+
+        $actual = $this->entityService->getLatestNodeFromWFO("wfo", "1", "2");
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    protected function setupTaxonomyID($id = "100")
+    {
+        $taxonomyTermEntity = $this->createStub(
+            FieldableEntityInterface::class,
+        );
+        $taxonomyIDField = $this->createStub(FieldItemListInterface::class);
+        $taxonomyTermEntity
+            ->method("get")
+            ->will($this->returnValueMap([["tid", $taxonomyIDField]]));
+        $taxonomyIDField->method("getString")->willReturn("$id");
+
+        $this->taxonomyStore
+            ->method("loadByProperties")
+            ->willReturn([$taxonomyTermEntity]);
+    }
+
+    protected function setupFetchNodeWithTaxonomyID(
+        $taxonomyID,
+        $nodeID = "node1",
+    ) {
+        // Setup fetching the weather story node ID.
+        $query = $this->createStub(QueryInterface::class);
+        $this->nodeStore->method("getQuery")->willReturn($query);
+        $query
+            ->method("accessCheck")
+            ->will($this->returnValueMap([[false, $query]]));
+        $query
+            ->method("condition")
+            ->will(
+                $this->returnValueMap([
+                    ["type", "node type", null, null, $query],
+                    ["field_wfo", "$taxonomyID", null, null, $query],
+                ]),
+            );
+        $query
+            ->method("sort")
+            ->will($this->returnValueMap([["changed", "DESC", null, $query]]));
+        $query->method("range")->will($this->returnValueMap([[0, 1, $query]]));
+        $query->method("execute")->willReturn(["$nodeID"]);
+    }
+
+    public function testGetWithNoNodes(): void
+    {
+        $this->setupTaxonomyID("100");
+
+        $this->setupFetchNodeWithTaxonomyID("100", "node1");
+
+        $this->nodeStore
+            ->method("load")
+            ->will($this->returnValueMap([["node1", null]]));
+
+        $actual = $this->entityService->getLatestNodeFromWFO(
+            "wfo",
+            "node type",
+        );
+
+        $this->assertEquals(false, $actual);
+    }
+
+    public function testGetWithANode(): void
+    {
+        $this->setupTaxonomyID("100");
+
+        $this->setupFetchNodeWithTaxonomyID("100", "node1");
+
+        $node = $this->createStub(FieldItemListInterface::class);
+
+        $this->nodeStore
+            ->method("load")
+            ->will($this->returnValueMap([["node1", $node]]));
+
+        $actual = $this->entityService->getLatestNodeFromWFO(
+            "wfo",
+            "node type",
+        );
+
+        $this->assertEquals($node, $actual);
+    }
+}
