@@ -22,66 +22,11 @@ final class WeatherStoryBlockTest extends Base
 
     protected function setupEntityAPIMocksForGoodStory($withImage)
     {
-        $taxonomyStore = $this->createStub(EntityStorageInterface::class);
-        $nodeStore = $this->createStub(EntityStorageInterface::class);
-        $taxonomyTermEntity = $this->createStub(
-            FieldableEntityInterface::class,
-        );
-        $taxonomyIDField = $this->createStub(FieldItemListInterface::class);
-        $query = $this->createStub(QueryInterface::class);
-
-        $this->entityTypeManagerMock
-            ->method("getStorage")
-            ->will(
-                $this->returnValueMap([
-                    ["taxonomy_term", $taxonomyStore],
-                    ["node", $nodeStore],
-                ]),
-            );
-
-        // Set up fetching the taxonomy term ID. Use return value maps so we can
-        // also assert that things are being called with our expected values.
-        $taxonomyStore
-            ->method("loadByProperties")
-            ->will(
-                $this->returnValueMap([
-                    [["field_wfo_code" => "WFO"], [$taxonomyTermEntity]],
-                ]),
-            );
-
-        $taxonomyTermEntity
-            ->method("get")
-            ->will($this->returnValueMap([["tid", $taxonomyIDField]]));
-        $taxonomyIDField->method("getString")->willReturn("100");
-
-        // Now setup fetching the weather story node ID.
-        $nodeStore->method("getQuery")->willReturn($query);
-        $query
-            ->method("accessCheck")
-            ->will($this->returnValueMap([[false, $query]]));
-        $query
-            ->method("condition")
-            ->will(
-                $this->returnValueMap([
-                    ["type", "weather_story", null, null, $query],
-                    ["field_wfo", "100", null, null, $query],
-                ]),
-            );
-        $query
-            ->method("sort")
-            ->will($this->returnValueMap([["changed", "DESC", null, $query]]));
-        $query->method("range")->will($this->returnValueMap([[0, 1, $query]]));
-        $query->method("execute")->willReturn([200]);
-
-        // And finally, setup fetching the actual node.
+        // Setup fetching the actual node.
         $story = $this->createStub(FieldItemListInterface::class);
         $imageField = $this->createStub(FieldItemListInterface::class);
         $titleField = $this->createStub(FieldItemListInterface::class);
         $bodyField = $this->createStub(FieldItemListInterface::class);
-
-        $nodeStore
-            ->method("load")
-            ->will($this->returnValueMap([[200, $story]]));
 
         $story
             ->method("get")
@@ -116,6 +61,10 @@ final class WeatherStoryBlockTest extends Base
         $bodyField
             ->method("getValue")
             ->willReturn([["value" => "Weather story body"]]);
+
+        $this->entityService
+            ->method("getLatestNodeFromWFO")
+            ->willReturn($story);
     }
 
     /**

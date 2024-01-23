@@ -1,12 +1,24 @@
 <?php
 
-namespace Drupal\weather_blocks\Plugin\Block;
+namespace Drupal\weather_data\Service;
+
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * Helper for getting nodes that are related to a taxonomy
+ * A service class for fetching weather data.
  */
-trait GetNodeFromTaxonomyTrait
+class WeatherEntityService
 {
+    protected $entityTypeManager;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(EntityTypeManagerInterface $entityTypeManager)
+    {
+        $this->entityTypeManager = $entityTypeManager;
+    }
+
     public function getLatestNodeFromWFO($wfo, $nodeType)
     {
         // Get the ID for the WFO taxonomy term that matches our grid WFO.

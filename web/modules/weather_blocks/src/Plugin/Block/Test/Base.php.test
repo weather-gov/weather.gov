@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
+use Drupal\weather_data\Service\WeatherEntityService;
 use PHPUnit\Framework\TestCase;
 use Drupal\weather_blocks\Plugin\Block\WeatherBlockBase;
 use Drupal\weather_blocks\Plugin\Block\WeatherStoryBlock;
@@ -27,7 +28,7 @@ abstract class Base extends TestCase
      *
      * @var entityTypeManagerMock
      */
-    protected $entityTypeManagerMock;
+    protected $entityServie;
 
     /**
      * A mock of the route object.
@@ -58,6 +59,7 @@ abstract class Base extends TestCase
         ];
 
         $this->weatherData = $this->createStub(WeatherDataService::class);
+        $this->entityService = $this->createStub(WeatherEntityService::class);
 
         $this->entityTypeManagerMock = $this->createStub(
             EntityTypeManagerInterface::class,
@@ -70,8 +72,8 @@ abstract class Base extends TestCase
             "",
             $definition,
             $this->routeMock,
-            $this->entityTypeManagerMock,
             $this->weatherData,
+            $this->entityService,
         );
     }
 

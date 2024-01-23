@@ -2,7 +2,6 @@
 
 namespace Drupal\weather_blocks\Plugin\Block\Test;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_blocks\Plugin\Block\CurrentConditionsBlock;
@@ -43,8 +42,8 @@ final class WeatherBlockBaseTest extends Base
                     case "current_route_match":
                         return $this->routeMock;
 
-                    case "entity_type.manager":
-                        return $this->entityTypeManagerMock;
+                    case "weather_entity":
+                        return $this->entityService;
 
                     default:
                         return null;
