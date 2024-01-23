@@ -22,7 +22,7 @@
         <span class="font-body-lg display-inline-block left-full margin-top-05">℉</span>
       </div>
       <div class="margin-top-05">
-        <span class="font-body-xs text-gray-50">{{ "Feels like" |t }}</span>
+        <span class="font-body-xs text-gray-50">{{ "Feels like" | t }}</span>
         <span>{{ content.feels_like }}</span>
         <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-2px">℉</span>
       </div>
@@ -76,7 +76,7 @@
 
   {# Third column is feels like, humidity, and wind #}
 
-  <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center">
+  <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05">
     <div class="margin-right-05">{{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}</div>
     {{ "Humidity: @humidity%" | t({ "@humidity": content.humidity }) }}
   </div>
@@ -88,5 +88,28 @@
       "@windDirection": content.wind.shortDirection
     })
     }}
+  </div>
+
+  <div class="margin-y-3">
+    <span class="text-gray-50 margin-bottom-105 display-block">{{ "Observation station" | t }}:</span>
+    <span class="text-bold display-block margin-y-105 display-block">
+      Klamath Falls International Airport
+    </span>
+    <div class="geo-location-info display-flex flex-row font-body-3xs">
+      <div class="geo-location-lat margin-right-1">
+        <span class="text-bold">Lat:</span>
+        42.14073°N
+      </div>
+      <div class="geo-location-lon">
+        <span class="text-bold">Lon:</span>
+        121.72548°W
+      </div>
+    </div>
+    <div class="geo-location-elev font-body-3xs margin-top-05">
+      <span class="text-bold">
+        Elev:
+      </span>
+      4081.0 ft
+    </div>
   </div>
 </div>
