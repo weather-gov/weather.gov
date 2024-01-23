@@ -201,16 +201,16 @@ class WeatherDataService
     public function getApiObservationKey($observation)
     {
         /* The icon path from the API is of the form:
-    https://api.weather.gov/icons/land/day/skc
-    - OR -
-    https://api.weather.gov/icons/land/day/skc/hurricane
+       https://api.weather.gov/icons/land/day/skc
+       - OR -
+       https://api.weather.gov/icons/land/day/skc/hurricane
 
-    The last two or three path segments are the ones we need
-    to identify the current conditions. This is because there can be
-    two simultaneous conditions in the legacy icon system.
+       The last two or three path segments are the ones we need
+       to identify the current conditions. This is because there can be
+       two simultaneous conditions in the legacy icon system.
 
-    For now, we use the _first_ condition given in the path as the canonical
-    condition for the key.
+       For now, we use the _first_ condition given in the path as the canonical
+       condition for the key.
      */
         $icon = $observation->icon;
 
@@ -479,6 +479,20 @@ class WeatherDataService
                 "angle" => $obs->windDirection->value,
                 "direction" => $directions[$directionIndex],
                 "shortDirection" => $shortDirections[$directionIndex],
+            ],
+            "stationInfo" => [
+                "name" => $obsStations[$obsStationIndex]->properties->name,
+                "identifier" =>
+                    $obsStations[$obsStationIndex]->properties
+                        ->stationIdentifier,
+                "lat" =>
+                    $obsStations[$obsStationIndex]->geometry->coordinates[1],
+                "lon" =>
+                    $obsStations[$obsStationIndex]->geometry->coordinates[0],
+                // M to Feet
+                "elevation" =>
+                    $obsStations[$obsStationIndex]->properties->elevation
+                        ->value * 3.28,
             ],
         ];
     }

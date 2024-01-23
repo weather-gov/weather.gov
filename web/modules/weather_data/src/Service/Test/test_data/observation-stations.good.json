@@ -60,7 +60,7 @@
         "@type": "wx:ObservationStation",
         "elevation": {
           "unitCode": "wmoUnit:m",
-          "value": 0
+          "value": 1
         },
         "stationIdentifier": "KNWS",
         "name": "NWS Test Obs Station",
@@ -82,7 +82,7 @@
         "@type": "wx:ObservationStation",
         "elevation": {
           "unitCode": "wmoUnit:m",
-          "value": 0
+          "value": 2
         },
         "stationIdentifier": "JNWS",
         "name": "NWS Test Obs Station #2",
