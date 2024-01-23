@@ -1,92 +1,113 @@
 {# Widgets and stuff. This is presented as a row of columns. #}
-<div class="grid-row weather-gov-current-conditions">
-  <h2 class="usa-sr-only">Current conditions</h2>
-  <div class="grid-row tablet:grid-col-12 flex-row margin-y-4 tablet:margin-left-4" aria-hidden="true">
-    {# First column: weather icon #}
-    <div class="icon margin-right-1">
-      {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon )}}
-    </div>
+<div class="weather-gov-current-conditions">
+  <h2>Current Conditions</h2>
 
-    {# Second column: temperature and conditions #}
-    <div>
-      {# First row is temperature #}
-      <div class="font-body-3xl">
+  {# We hide from screenreaders and use the weather narrative (below) instead #}
+  <div data-wx-current-conditions-narrative aria-hidden="true">
+    <p class="usa-prose margin-0 font-body-xs text-gray-50">
+      {{ 'Weather as of' | t }}
+    </p>
+    {# Datetimes are localized in client-side Javascript. #}
+    <weather-timestamp class="display-block text-bold" data-utc="{{ content.timestamp.utc }}">
+      {{ content.timestamp.formatted }}
+    </weather-timestamp>
+  </div>
+
+  {# We hide from screenreaders and use the weather narrative (below) instead #}
+  <div class="display-flex flex-align-start margin-y-205" aria-hidden="true">
+    {# First row is temperature #}
+    <div class="display-flex flex-column">
+      <div class="current-conditions-temp display-flex flex-row flex-align-start margin-right-6">
         {{ content.temperature }}
-        <span class="font-body-lg position-absolute display-inline-block left-full margin-top-05">℉</span>
+        <span class="font-body-lg display-inline-block left-full margin-top-05">℉</span>
       </div>
-
-      {# Second row of the column is just the conditions text #}
-      <div>
-        {{ content.conditions.short }}
-      </div>
-    </div>
-
-    {# Third column is feels like, humidity, and wind #}
-    <div class="display-flex flex-column margin-left-6">
-
-      <div class="font-body-lg margin-top-05">
-        {{ content.feels_like }}
+      <div class="margin-top-05">
+        <span class="font-body-xs text-gray-50">{{ "Feels like" | t }}</span>
+        <span>{{ content.feels_like }}</span>
         <span class="font-body-3xs position-absolute display-inline-block left-full margin-top-2px">℉</span>
       </div>
+    </div>
 
-      <div class="font-body-3xs text-gray-50">
-        {{ "Feels like" |t }}
+    <div class="display-flex flex-column flex-align-center">
+      <div class="icon">
+        {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon )}}
       </div>
-
-      <div class="item margin-top-2">
-        {{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}
-        {{ "Humidity: @humidity%" | t({ "@humidity": content.humidity }) }}
-      </div>
-
-      <div class="item">
-        {{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}
-        {{ "Wind: @windSpeed mph @windDirection" | t({
-          "@windSpeed": content.wind.speed,
-          "@windDirection": content.wind.shortDirection
-        })
-        }}
-      </div>
+      <span class="font-body-xs text-center">{{ content.conditions.short }}</span>
     </div>
   </div>
 
-  <div data-wx-current-conditions-narrative class="tablet:grid-col-12">
-    <p class="margin-0 font-body-3xs text-gray-50">
+  {# Weather narrative is for screen readers only #}
+  <div data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
       {{ 'Weather as of' | t }}
       {# Datetimes are localized in client-side Javascript. #}
       <weather-timestamp data-utc="{{ content.timestamp.utc }}">
         {{ content.timestamp.formatted }}
       </weather-timestamp>
-    </p>
-    <p class="margin-0 margin-top-05">
-      {{ "The weather in <strong>@place</strong>, is <strong>@conditions</strong>.
-        Temperature is <strong>@temperature℉</strong>." |
-        t({
-          "@place": content.place,
-          "@conditions": content.conditions.long | lower,
-          "@temperature": content.temperature,
-        })
+      {{ "The weather in @place, is @conditions.
+        Temperature is @temperature ℉." |
+      t({
+        "@place": content.place,
+        "@conditions": content.conditions.long | lower,
+        "@temperature": content.temperature,
+      })
       }}
       {% if content.feels_like != content.temperature %}
-      {{ " It feels like <strong>@feelsLike℉</strong>." |
+        {{ " It feels like @feelsLike ℉." |
         t({
           "@feelsLike": content.feels_like
         })
-      }}
+        }}
       {% endif %}
-      {{ " Humidity is <strong>@humidity%</strong>"
+      {{ " Humidity is @humidity%"
       |
       t({
         "@humidity": content.humidity
       })
       }}{% if content.wind.speed > 0 %}
-      {{
-      "with <strong>@windSpeed mph winds</strong> from the @windDirection"
-      |
-      t({
-        "@windSpeed": content.wind.speed,
-        "@windDirection": content.wind.direction
-      })
-      }}{% endif %}.
-    </p>
+        {{
+        "with @windSpeed mph winds from the @windDirection"
+        |
+        t({
+          "@windSpeed": content.wind.speed,
+          "@windDirection": content.wind.direction
+        })
+        }}{% endif %}.
+  </div>
+
+  <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05" aria-hidden="true">
+    <div class="margin-right-05">{{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}</div>
+    {{ "Humidity: @humidity%" | t({ "@humidity": content.humidity }) }}
+  </div>
+
+  <div class="item display-flex flex-row flex-align-center margin-right-05" aria-hidden="true">
+    <div class="margin-right-05">{{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}</div>
+    {{ "Wind: @windSpeed mph @windDirection" | t({
+      "@windSpeed": content.wind.speed,
+      "@windDirection": content.wind.shortDirection
+    })
+    }}
+  </div>
+
+  <div class="margin-y-3">
+    <span class="text-gray-50 margin-bottom-105 display-block">{{ "Observation station" | t }}:</span>
+    <span class="text-bold display-block margin-y-105 display-block">
+      {{ content.stationInfo.name }} ({{ content.stationInfo.identifier }})
+    </span>
+    <div class="geo-location-info display-flex flex-row font-body-3xs">
+      <div class="geo-location-lat margin-right-1">
+        <span class="text-bold">Lat:</span>
+        {{content.stationInfo.lat}}°N
+      </div>
+      <div class="geo-location-lon">
+        <span class="text-bold">Lon:</span>
+        {{content.stationInfo.lon}}°W
+      </div>
+    </div>
+    <div class="geo-location-elev font-body-3xs margin-top-05">
+      <span class="text-bold">
+        Elev:
+      </span>
+      {{content.stationInfo.elevation}} ft
+    </div>
   </div>
 </div>
