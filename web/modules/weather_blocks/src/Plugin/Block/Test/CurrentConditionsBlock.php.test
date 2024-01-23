@@ -1,0 +1,66 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test;
+
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\weather_data\Service\WeatherDataService;
+use Drupal\weather_blocks\Plugin\Block\CurrentConditionsBlock;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the CurrentConditions block.
+ */
+final class CurrentConditionsBlockTest extends Base
+{
+    /**
+     * Common setup for all component tests.
+     *
+     * Creates a mock of a weather data service and injects it into a new current
+     * conditions block object.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(CurrentConditionsBlock::class);
+    }
+
+    /**
+     * Test that the block returns the expected data if we're on a grid route.
+     */
+    public function testBuild(): void
+    {
+        $this->onGridRoute();
+
+        $this->weatherData->method("getPlaceFromGrid")->willReturn(
+            (object) [
+                "city" => "Placeville",
+                "state" => "Statesylvania",
+            ],
+        );
+        $this->weatherData
+            ->method("getCurrentConditionsFromGrid")
+            ->willReturn(["info" => "this is weather data"]);
+
+        $expected = [
+            "info" => "this is weather data",
+            "place" => "Placeville, Statesylvania",
+        ];
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test that the block returns null if we're not on a grid route.
+     */
+    public function testBuildNotGridRoute(): void
+    {
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.not-grid");
+
+        $actual = $this->block->build();
+
+        $this->assertEquals(null, $actual);
+    }
+}

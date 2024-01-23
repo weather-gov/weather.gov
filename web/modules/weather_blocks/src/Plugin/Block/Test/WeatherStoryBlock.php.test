@@ -1,93 +1,23 @@
 <?php
 
-namespace Drupal\weather_blocks\Plugin\Block;
-
+namespace Drupal\weather_blocks\Plugin\Block\Test;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\weather_blocks\Plugin\Block\WeatherStoryBlock;
 use Drupal\weather_data\Service\WeatherDataService;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the WeatherStory block.
  */
-final class WeatherStoryBlockTest extends TestCase
+final class WeatherStoryBlockTest extends Base
 {
-    /**
-     * A ready-to-use weather story block object.
-     *
-     * @var weatherStoryBlock
-     */
-    protected $weatherStoryBlock;
-
-    /**
-     * A mock entity type manager.
-     *
-     * @var entityTypeManagerMock
-     */
-    protected $entityTypeManagerMock;
-
-    /**
-     * A mock of the route object.
-     *
-     * @var routeMock
-     */
-    protected $routeMock;
-
-    /**
-     * A mocked WeatherData service object.
-     *
-     * @var weatherData
-     *
-     * This is injected into the current conditions block object being tested with
-     * dependency injection.
-     */
-    protected $weatherData;
-
-    /**
-     * Common setup for all component tests.
-     *
-     * Creates a mock of a weather data service and injects it into a new
-     * weather story block object.
-     */
-    protected function setUp(): void
+    protected function setUp($type = null): void
     {
-        $definition = [
-            "provider" => "weather_blocks",
-        ];
-
-        $this->weatherData = $this->createStub(WeatherDataService::class);
-
-        $this->entityTypeManagerMock = $this->createStub(
-            EntityTypeManagerInterface::class,
-        );
-
-        $this->routeMock = $this->createStub(RouteMatchInterface::class);
-        $this->routeMock
-            ->method("getRouteName")
-            ->willReturn("weather_routes.grid");
-
-        $this->routeMock
-            ->method("getParameter")
-            ->will(
-                $this->returnValueMap([
-                    ["wfo", "wfo"],
-                    ["gridX", "1"],
-                    ["gridY", "1"],
-                ]),
-            );
-
-        $this->weatherStoryBlock = new WeatherStoryBlock(
-            [],
-            "",
-            $definition,
-            $this->routeMock,
-            $this->entityTypeManagerMock,
-            $this->weatherData,
-        );
+        parent::setUp(WeatherStoryBlock::class);
     }
 
     protected function setupEntityAPIMocksForGoodStory($withImage)
@@ -193,6 +123,8 @@ final class WeatherStoryBlockTest extends TestCase
      */
     public function testReturnsAWeatherStory(): void
     {
+        $this->onGridRoute();
+
         $this->setupEntityAPIMocksForGoodStory(true);
 
         $expected = [
@@ -204,7 +136,7 @@ final class WeatherStoryBlockTest extends TestCase
             ],
         ];
 
-        $actual = $this->weatherStoryBlock->build();
+        $actual = $this->block->build();
 
         $this->assertEquals($expected, $actual);
     }
@@ -214,6 +146,8 @@ final class WeatherStoryBlockTest extends TestCase
      */
     public function testReturnsAWeatherStoryWithNoImage(): void
     {
+        $this->onGridRoute();
+
         $this->setupEntityAPIMocksForGoodStory(false);
 
         $expected = [
@@ -222,7 +156,7 @@ final class WeatherStoryBlockTest extends TestCase
             "image" => null,
         ];
 
-        $actual = $this->weatherStoryBlock->build();
+        $actual = $this->block->build();
 
         $this->assertEquals($expected, $actual);
     }
@@ -232,6 +166,8 @@ final class WeatherStoryBlockTest extends TestCase
      */
     public function testRequestedWFODoesNotExist(): void
     {
+        $this->onGridRoute();
+
         $taxonomyStore = $this->createStub(EntityStorageInterface::class);
 
         $this->entityTypeManagerMock
@@ -243,7 +179,7 @@ final class WeatherStoryBlockTest extends TestCase
             ->method("loadByProperties")
             ->will($this->returnValueMap([[["field_wfo_code" => "WFO"], []]]));
 
-        $actual = $this->weatherStoryBlock->build();
+        $actual = $this->block->build();
 
         $this->assertEquals([], $actual);
     }
@@ -253,27 +189,11 @@ final class WeatherStoryBlockTest extends TestCase
      */
     public function testBuildNotGridRoute(): void
     {
-        $definition = [
-            "provider" => "weather_blocks",
-        ];
-
-        $this->weatherData = $this->createStub(WeatherDataService::class);
-
-        $this->routeMock = $this->createStub(RouteMatchInterface::class);
         $this->routeMock
             ->method("getRouteName")
             ->willReturn("weather_routes.not-grid");
 
-        $this->weatherStoryBlock = new WeatherStoryBlock(
-            [],
-            "",
-            $definition,
-            $this->routeMock,
-            $this->entityTypeManagerMock,
-            $this->weatherData,
-        );
-
-        $actual = $this->weatherStoryBlock->build();
+        $actual = $this->block->build();
 
         $this->assertEquals([], $actual);
     }

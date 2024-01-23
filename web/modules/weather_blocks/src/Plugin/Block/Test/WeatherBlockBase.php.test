@@ -1,10 +1,11 @@
 <?php
 
-namespace Drupal\weather_blocks\Plugin\Block;
+namespace Drupal\weather_blocks\Plugin\Block\Test;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\weather_blocks\Plugin\Block\CurrentConditionsBlock;
 use Drupal\weather_data\Service\WeatherDataService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -12,70 +13,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Tests for the WeatherBlockBaseTest block.
  */
-final class WeatherBlockBaseTest extends TestCase
+final class WeatherBlockBaseTest extends Base
 {
-    /**
-     * A ready-to-use current conditions block object.
-     *
-     * We use this block for our tests because the WeatherBlockBase class is
-     * abstract and cannot be directly instantiated. So, we'll test by proxy.
-     *
-     * @var currentConditionsBlock
-     */
-    protected $currentConditionsBlock;
-
-    /**
-     * A mock entity type manager.
-     *
-     * @var entityTypeManagerMock
-     */
-    protected $entityTypeManagerMock;
-
-    /**
-     * A mock of the route object.
-     *
-     * @var routeMock
-     */
-    protected $routeMock;
-
-    /**
-     * A mocked WeatherData service object.
-     *
-     * @var weatherData
-     *
-     * This is injected into the current conditions block object being tested with
-     * dependency injection.
-     */
-    protected $weatherData;
-
     /**
      * Common setup for all component tests.
      *
      * Creates a mock of a weather data service and injects it into a new current
      * conditions block object.
      */
-    protected function setUp(): void
+    protected function setUp($type = null): void
     {
-        $definition = [
-            "provider" => "weather_blocks",
-        ];
-
-        $this->weatherData = $this->createStub(WeatherDataService::class);
-
-        $this->entityTypeManagerMock = $this->createStub(
-            EntityTypeManagerInterface::class,
-        );
-
-        $this->routeMock = $this->createStub(RouteMatchInterface::class);
-
-        $this->currentConditionsBlock = new CurrentConditionsBlock(
-            [],
-            "",
-            $definition,
-            $this->routeMock,
-            $this->entityTypeManagerMock,
-            $this->weatherData,
-        );
+        // Instantiate a real object because the base class is abstract.
+        parent::setUp(CurrentConditionsBlock::class);
     }
 
     /**
@@ -115,7 +64,7 @@ final class WeatherBlockBaseTest extends TestCase
     public function testCache(): void
     {
         $expected = 0;
-        $actual = $this->currentConditionsBlock->getCacheMaxAge();
+        $actual = $this->block->getCacheMaxAge();
 
         $this->assertEquals($expected, $actual);
     }
@@ -134,9 +83,9 @@ final class WeatherBlockBaseTest extends TestCase
             "gridY" => "y",
         ]);
 
-        $this->currentConditionsBlock->blockSubmit([], $formState);
+        $this->block->blockSubmit([], $formState);
 
-        $actual = $this->currentConditionsBlock->getConfiguration()["grid"];
+        $actual = $this->block->getConfiguration()["grid"];
 
         $this->assertEquals($expected, $actual);
     }
@@ -151,10 +100,7 @@ final class WeatherBlockBaseTest extends TestCase
             ->willReturn("weather_routes.grid");
         // Also configure the block. This will ensure that we test that the location
         // only comes from the URL and not configuration.
-        $this->currentConditionsBlock->setConfigurationValue(
-            "grid",
-            "wrong,wrong,wrong",
-        );
+        $this->block->setConfigurationValue("grid", "wrong,wrong,wrong");
 
         $this->routeMock
             ->method("getParameter")
@@ -174,7 +120,7 @@ final class WeatherBlockBaseTest extends TestCase
             ],
         ];
 
-        $actual = $this->currentConditionsBlock->getLocation();
+        $actual = $this->block->getLocation();
 
         $this->assertEquals($expected, $actual);
     }
@@ -185,10 +131,7 @@ final class WeatherBlockBaseTest extends TestCase
     public function testGetLocationFromConfiguration(): void
     {
         $this->routeMock->method("getRouteName")->willReturn("not grid");
-        $this->currentConditionsBlock->setConfigurationValue(
-            "grid",
-            "wiffo,ex,why",
-        );
+        $this->block->setConfigurationValue("grid", "wiffo,ex,why");
 
         $expected = (object) [
             "grid" => (object) [
@@ -198,7 +141,7 @@ final class WeatherBlockBaseTest extends TestCase
             ],
         ];
 
-        $actual = $this->currentConditionsBlock->getLocation();
+        $actual = $this->block->getLocation();
 
         $this->assertEquals($expected, $actual);
     }
@@ -209,13 +152,13 @@ final class WeatherBlockBaseTest extends TestCase
     public function testGetsNoLocationWhenConfiguredFalse(): void
     {
         $this->routeMock->method("getRouteName")->willReturn("not grid");
-        $this->currentConditionsBlock->setConfigurationValue("grid", false);
+        $this->block->setConfigurationValue("grid", false);
 
         $expected = (object) [
             "grid" => false,
         ];
 
-        $actual = $this->currentConditionsBlock->getLocation();
+        $actual = $this->block->getLocation();
 
         $this->assertEquals($expected, $actual);
     }
@@ -226,13 +169,13 @@ final class WeatherBlockBaseTest extends TestCase
     public function testGetsNoLocationWhenConfiguredEmpty(): void
     {
         $this->routeMock->method("getRouteName")->willReturn("not grid");
-        $this->currentConditionsBlock->setConfigurationValue("grid", ",,");
+        $this->block->setConfigurationValue("grid", ",,");
 
         $expected = (object) [
             "grid" => false,
         ];
 
-        $actual = $this->currentConditionsBlock->getLocation();
+        $actual = $this->block->getLocation();
 
         $this->assertEquals($expected, $actual);
     }

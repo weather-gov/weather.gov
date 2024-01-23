@@ -1,0 +1,59 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test;
+
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\weather_blocks\Plugin\Block\LocationSearchBlock;
+use Drupal\weather_data\Service\WeatherDataService;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the LocationSearch block.
+ */
+final class LocationSearchBlockTest extends Base
+{
+    /**
+     * Common setup for all component tests.
+     *
+     * Creates a new location search block.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(LocationSearchBlock::class);
+    }
+
+    /**
+     * Test that the build method returns the expected results.
+     */
+    public function testBuild(): void
+    {
+        $this->onGridRoute();
+
+        $this->weatherData->method("getPlaceFromGrid")->willReturn("hiya");
+
+        $expected = [
+            "place" => "hiya",
+        ];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Test that the build method returns NULL if there is no location.
+     */
+    public function testWithNoLocation(): void
+    {
+        $this->routeMock->method("getRouteName")->willReturn("not grid");
+
+        $expected = [
+            "place" => null,
+        ];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals((object) $expected, (object) $actual);
+    }
+}
