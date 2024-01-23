@@ -327,11 +327,11 @@ final class GetCurrentConditionsFromGridTest extends Base
                 "shortDirection" => "NW",
             ],
             "stationInfo" => [
-                "name" => "NWS Test Obs Station #2",
-                "identifier" => "JNWS",
-                "lat" => 1,
-                "lon" => 1,
-                "elevation" => 6.6,
+                "name" => "NWS Test Obs Station",
+                "identifier" => "KNWS",
+                "lat" => 0,
+                "lon" => 0,
+                "elevation" => 3.3,
             ],
         ];
 
