@@ -2,11 +2,7 @@
 
 namespace Drupal\weather_blocks\Plugin\Block\Test;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_blocks\Plugin\Block\LocalAlertListBlock;
-use Drupal\weather_data\Service\WeatherDataService;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the LocalAlertList block.

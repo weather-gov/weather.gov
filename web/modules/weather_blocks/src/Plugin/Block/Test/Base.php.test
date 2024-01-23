@@ -6,8 +6,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use Drupal\weather_data\Service\WeatherEntityService;
 use PHPUnit\Framework\TestCase;
-use Drupal\weather_blocks\Plugin\Block\WeatherBlockBase;
-use Drupal\weather_blocks\Plugin\Block\WeatherStoryBlock;
 
 /**
  * Base setup for weather blocks tests.
