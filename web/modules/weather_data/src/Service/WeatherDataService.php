@@ -201,16 +201,16 @@ class WeatherDataService
     public function getApiObservationKey($observation)
     {
         /* The icon path from the API is of the form:
-    https://api.weather.gov/icons/land/day/skc
-    - OR -
-    https://api.weather.gov/icons/land/day/skc/hurricane
+       https://api.weather.gov/icons/land/day/skc
+       - OR -
+       https://api.weather.gov/icons/land/day/skc/hurricane
 
-    The last two or three path segments are the ones we need
-    to identify the current conditions. This is because there can be
-    two simultaneous conditions in the legacy icon system.
+       The last two or three path segments are the ones we need
+       to identify the current conditions. This is because there can be
+       two simultaneous conditions in the legacy icon system.
 
-    For now, we use the _first_ condition given in the path as the canonical
-    condition for the key.
+       For now, we use the _first_ condition given in the path as the canonical
+       condition for the key.
      */
         $icon = $observation->icon;
 
@@ -398,6 +398,7 @@ class WeatherDataService
         $obsStations = $obsStations->features;
 
         $obsStationIndex = 0;
+        $observationStation = $obsStations[$obsStationIndex];
         do {
             // If the temperature is not available from this observation station, try
             // the next one. Continue through the first 3 stations and then give up.
@@ -479,6 +480,18 @@ class WeatherDataService
                 "angle" => $obs->windDirection->value,
                 "direction" => $directions[$directionIndex],
                 "shortDirection" => $shortDirections[$directionIndex],
+            ],
+            "stationInfo" => [
+                "name" => $observationStation->properties->name,
+                "identifier" =>
+                    $observationStation->properties->stationIdentifier,
+                "lat" => $observationStation->geometry->coordinates[1],
+                "lon" => $observationStation->geometry->coordinates[0],
+                // M to Feet
+                "elevation" => round(
+                    $observationStation->properties->elevation->value * 3.28,
+                    1,
+                ),
             ],
         ];
     }
