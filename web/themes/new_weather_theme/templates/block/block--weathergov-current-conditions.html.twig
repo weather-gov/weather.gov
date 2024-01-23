@@ -93,23 +93,23 @@
   <div class="margin-y-3">
     <span class="text-gray-50 margin-bottom-105 display-block">{{ "Observation station" | t }}:</span>
     <span class="text-bold display-block margin-y-105 display-block">
-      Klamath Falls International Airport
+      {{ content.stationInfo.name }} ({{ content.stationInfo.identifier }})
     </span>
     <div class="geo-location-info display-flex flex-row font-body-3xs">
       <div class="geo-location-lat margin-right-1">
         <span class="text-bold">Lat:</span>
-        42.14073°N
+        {{content.stationInfo.lat}}°N
       </div>
       <div class="geo-location-lon">
         <span class="text-bold">Lon:</span>
-        121.72548°W
+        {{content.stationInfo.lon}}°W
       </div>
     </div>
     <div class="geo-location-elev font-body-3xs margin-top-05">
       <span class="text-bold">
         Elev:
       </span>
-      4081.0 ft
+      {{content.stationInfo.elevation}} ft
     </div>
   </div>
 </div>

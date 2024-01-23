@@ -490,9 +490,11 @@ class WeatherDataService
                 "lon" =>
                     $obsStations[$obsStationIndex]->geometry->coordinates[0],
                 // M to Feet
-                "elevation" =>
+                "elevation" => round(
                     $obsStations[$obsStationIndex]->properties->elevation
                         ->value * 3.28,
+                    1,
+                ),
             ],
         ];
     }
