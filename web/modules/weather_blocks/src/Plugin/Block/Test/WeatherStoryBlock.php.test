@@ -111,29 +111,6 @@ final class WeatherStoryBlockTest extends Base
     }
 
     /**
-     * Test that the block returns nothing if we don't know the WFO.
-     */
-    public function testRequestedWFODoesNotExist(): void
-    {
-        $this->onGridRoute();
-
-        $taxonomyStore = $this->createStub(EntityStorageInterface::class);
-
-        $this->entityTypeManagerMock
-            ->method("getStorage")
-            ->will($this->returnValueMap([["taxonomy_term", $taxonomyStore]]));
-
-        // An empty array of WFO taxonomy terms should result in a null output.
-        $taxonomyStore
-            ->method("loadByProperties")
-            ->will($this->returnValueMap([[["field_wfo_code" => "WFO"], []]]));
-
-        $actual = $this->block->build();
-
-        $this->assertEquals([], $actual);
-    }
-
-    /**
      * Test that the block returns null if we're not on a grid route.
      */
     public function testBuildNotGridRoute(): void

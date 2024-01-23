@@ -2,8 +2,6 @@
 
 namespace Drupal\weather_blocks\Plugin\Block\Test;
 
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use Drupal\weather_data\Service\WeatherEntityService;
@@ -60,10 +58,6 @@ abstract class Base extends TestCase
 
         $this->weatherData = $this->createStub(WeatherDataService::class);
         $this->entityService = $this->createStub(WeatherEntityService::class);
-
-        $this->entityTypeManagerMock = $this->createStub(
-            EntityTypeManagerInterface::class,
-        );
 
         $this->routeMock = $this->createStub(RouteMatchInterface::class);
 
