@@ -1,0 +1,134 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test;
+
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\weather_blocks\Plugin\Block\WFOPromoBlock;
+
+/**
+ * Tests for the WeatherStory block.
+ */
+final class WFOPromoBlockTest extends Base
+{
+    protected $bodyField;
+    protected $titleField;
+    protected $phoneField;
+    protected $facebookField;
+    protected $twitterField;
+    protected $youtubeField;
+
+    protected function setUp($type = null): void
+    {
+        parent::setUp(WFOPromoBlock::class);
+
+        $this->bodyField = $this->createStub(FieldItemListInterface::class);
+        $this->titleField = $this->createStub(FieldItemListInterface::class);
+        $this->phoneField = $this->createStub(FieldItemListInterface::class);
+        $this->facebookField = $this->createStub(FieldItemListInterface::class);
+        $this->twitterField = $this->createStub(FieldItemListInterface::class);
+        $this->youtubeField = $this->createStub(FieldItemListInterface::class);
+
+        $this->bodyField
+            ->method("getValue")
+            ->willReturn([["value" => "WFO promo body"]]);
+
+        $this->titleField
+            ->method("getString")
+            ->willReturn("wfo descriptive name");
+
+        $this->phoneField->method("getString")->willReturn("beep boop");
+    }
+
+    protected function setupEntityAPIMocksForGoodStory()
+    {
+        // Setup fetching the actual node.
+        $story = $this->createStub(FieldItemListInterface::class);
+
+        $story
+            ->method("get")
+            ->will(
+                $this->returnValueMap([
+                    ["body", $this->bodyField],
+                    ["title", $this->titleField],
+                    ["field_phone_number", $this->phoneField],
+                    ["field_facebook_url", $this->facebookField],
+                    ["field_twitter_url", $this->twitterField],
+                    ["field_youtube_url", $this->youtubeField],
+                ]),
+            );
+
+        $this->entityService
+            ->method("getLatestNodeFromWFO")
+            ->willReturn($story);
+    }
+
+    /**
+     * Test that the block returns a block without social media links.
+     */
+    public function testReturnsAWFOPromotWithNoSocial(): void
+    {
+        $this->onGridRoute();
+
+        $this->setupEntityAPIMocksForGoodStory(true);
+
+        $expected = [
+            "name" => "wfo descriptive name",
+            "shortIntro" => "WFO promo body",
+            "code" => "WFO",
+            "phone" => "beep boop",
+            "social" => false,
+        ];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test that the block returns a block with social media links.
+     */
+    public function testReturnsAWFOPromotWithYesSocial(): void
+    {
+        $this->onGridRoute();
+
+        $this->setupEntityAPIMocksForGoodStory(true);
+
+        $this->facebookField->method("getString")->willReturn("book-in-face");
+        $this->twitterField
+            ->method("getString")
+            ->willReturn("birds aren't real");
+        $this->youtubeField
+            ->method("getString")
+            ->willReturn("internet VHS tapes");
+
+        $expected = [
+            "name" => "wfo descriptive name",
+            "shortIntro" => "WFO promo body",
+            "code" => "WFO",
+            "phone" => "beep boop",
+            "social" => [
+                "facebook" => "book-in-face",
+                "twitter" => "birds aren't real",
+                "youtube" => "internet VHS tapes",
+            ],
+        ];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test that the block returns null if we're not on a grid route.
+     */
+    public function testBuildNotGridRoute(): void
+    {
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.not-grid");
+
+        $actual = $this->block->build();
+
+        $this->assertEquals([], $actual);
+    }
+}

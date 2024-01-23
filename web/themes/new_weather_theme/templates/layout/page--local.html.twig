@@ -137,7 +137,12 @@
       {{ drupal_block("weathergov_daily_forecast") }}
 
       <div class="grid-row tablet:grid-col-12 margin-top-4">
-        {{ drupal_block("weathergov_weather_story") }}
+        <div class="tablet:grid-col-6 padding-right-2">
+          {{ drupal_block("weathergov_weather_story") }}
+        </div>
+        <div class="tablet:grid-col-6 padding-left-2">
+          {{ drupal_block("weathergov_wfo_promo") }}
+        </div>
       </div>
     </div>
   </main>

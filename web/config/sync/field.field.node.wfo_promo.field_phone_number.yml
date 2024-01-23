@@ -1,0 +1,19 @@
+uuid: 4ae63cde-5a60-4a28-8535-ad5c620dce68
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_phone_number
+    - node.type.wfo_promo
+id: node.wfo_promo.field_phone_number
+field_name: field_phone_number
+entity_type: node
+bundle: wfo_promo
+label: 'Phone number (optional)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

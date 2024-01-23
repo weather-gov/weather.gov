@@ -1,0 +1,121 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test;
+
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\weather_blocks\Plugin\Block\WeatherStoryBlock;
+
+/**
+ * Tests for the WeatherStory block.
+ */
+final class WeatherStoryBlockTest extends Base
+{
+    protected function setUp($type = null): void
+    {
+        parent::setUp(WeatherStoryBlock::class);
+    }
+
+    protected function setupEntityAPIMocksForGoodStory($withImage)
+    {
+        // Setup fetching the actual node.
+        $story = $this->createStub(FieldItemListInterface::class);
+        $imageField = $this->createStub(FieldItemListInterface::class);
+        $titleField = $this->createStub(FieldItemListInterface::class);
+        $bodyField = $this->createStub(FieldItemListInterface::class);
+
+        $story
+            ->method("get")
+            ->will(
+                $this->returnValueMap([
+                    ["field_image", $imageField],
+                    ["title", $titleField],
+                    ["body", $bodyField],
+                ]),
+            );
+
+        $altTextField = $this->createStub(FieldItemListInterface::class);
+        $uriField = $this->createStub(FieldItemListInterface::class);
+
+        $imageField
+            ->method("get")
+            ->will(
+                $this->returnValueMap([
+                    [0, $withImage ? $imageField : null],
+                    ["alt", $altTextField],
+                    ["uri", $uriField],
+                ]),
+            );
+        $imageField
+            ->method("__get")
+            ->will($this->returnValueMap([["entity", $imageField]]));
+
+        $altTextField->method("getString")->willReturn("image alt text");
+        $uriField->method("getString")->willReturn("image url");
+
+        $titleField->method("getString")->willReturn("Weather Story Title");
+        $bodyField
+            ->method("getValue")
+            ->willReturn([["value" => "Weather story body"]]);
+
+        $this->entityService
+            ->method("getLatestNodeFromWFO")
+            ->willReturn($story);
+    }
+
+    /**
+     * Test that the block returns the expected data if we're on a grid route.
+     */
+    public function testReturnsAWeatherStory(): void
+    {
+        $this->onGridRoute();
+
+        $this->setupEntityAPIMocksForGoodStory(true);
+
+        $expected = [
+            "title" => "Weather Story Title",
+            "body" => "Weather story body",
+            "image" => [
+                "alt" => "image alt text",
+                "uri" => "image url",
+            ],
+        ];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test that the block returns the expected data if there's no image.
+     */
+    public function testReturnsAWeatherStoryWithNoImage(): void
+    {
+        $this->onGridRoute();
+
+        $this->setupEntityAPIMocksForGoodStory(false);
+
+        $expected = [
+            "title" => "Weather Story Title",
+            "body" => "Weather story body",
+            "image" => null,
+        ];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test that the block returns null if we're not on a grid route.
+     */
+    public function testBuildNotGridRoute(): void
+    {
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.not-grid");
+
+        $actual = $this->block->build();
+
+        $this->assertEquals([], $actual);
+    }
+}

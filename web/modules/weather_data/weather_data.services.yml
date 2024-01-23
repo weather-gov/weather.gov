@@ -1,4 +1,7 @@
 services:
+  weather_entity:
+    class: Drupal\weather_data\Service\WeatherEntityService
+    arguments: ['@entity_type.manager', '@string_translation', '@request_stack', '@cache.default']
   weather_data:
     class: Drupal\weather_data\Service\WeatherDataService
     arguments: ['@http_client', '@string_translation', '@request_stack', '@cache.default']

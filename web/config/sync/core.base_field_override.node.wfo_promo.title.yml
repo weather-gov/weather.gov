@@ -1,0 +1,18 @@
+uuid: 8ce38dde-e4ed-4d3c-80ea-d5229d559089
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_promo
+id: node.wfo_promo.title
+field_name: title
+entity_type: node
+bundle: wfo_promo
+label: 'WFO Name'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
