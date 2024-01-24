@@ -625,7 +625,8 @@ class WeatherDataService
                 \DateTimeInterface::ISO8601,
                 $daytime->startTime,
             );
-            $shortDayName = $startTime->format("D");
+            $shortDayName = $startTime->format("l");
+            $monthAndDay = $startTime->format("M j");
 
             // Get any mapped condition and/or icon values.
             $obsKey = $this->getApiObservationKey($daytime);
@@ -635,6 +636,7 @@ class WeatherDataService
 
             $daytimeForecast = [
                 "shortDayName" => $shortDayName,
+                "monthAndDay" => $monthAndDay,
                 "startTime" => $daytime->startTime,
                 "shortForecast" => $this->t->translate($shortForecast),
                 "icon" => $this->legacyMapping->$obsKey->icon,

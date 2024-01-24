@@ -27,6 +27,8 @@ class DailyForecastBlock extends WeatherBlockBase
                 $grid->wfo,
                 $grid->x,
                 $grid->y,
+                false,
+                3,
             );
             return ["days" => $data];
         }
