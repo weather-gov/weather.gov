@@ -27,6 +27,7 @@
 /web/sites/default/.gitignore
 /web/update.php
 /web/web.config
+/web/profiles/
 
 # Ignore configuration files that may contain sensitive information.
 /web/sites/*/settings*.php
