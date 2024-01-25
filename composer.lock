@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "adb91946c6c0d39af32708e62cecf267",
+    "content-hash": "a0a841de73986cd85179a397194943dc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2298,6 +2298,81 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/key_asymmetric",
                 "issues": "https://www.drupal.org/project/issues/key_asymmetric"
+            }
+        },
+        {
+            "name": "drupal/new_relic_rpm",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/new_relic_rpm.git",
+                "reference": "2.1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/new_relic_rpm-2.1.1.zip",
+                "reference": "2.1.1",
+                "shasum": "751f1d91793dfa6bc0da627fbb90b651a64e95aa"
+            },
+            "require": {
+                "drupal/core": "^9.1 || ^10",
+                "php": ">=8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.1",
+                    "datestamp": "1675887846",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9 || ^10"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "Chris Charlton",
+                    "homepage": "https://www.drupal.org/user/17089"
+                },
+                {
+                    "name": "hosef",
+                    "homepage": "https://www.drupal.org/user/1203298"
+                },
+                {
+                    "name": "Jonathan Webb",
+                    "homepage": "https://www.drupal.org/user/61512"
+                },
+                {
+                    "name": "neclimdul",
+                    "homepage": "https://www.drupal.org/user/48673"
+                },
+                {
+                    "name": "nterbogt",
+                    "homepage": "https://www.drupal.org/user/102218"
+                },
+                {
+                    "name": "soyarma",
+                    "homepage": "https://www.drupal.org/user/286273"
+                }
+            ],
+            "description": "Provides additional newrelic integration with Drupal.",
+            "homepage": "https://drupal.org/project/new_relic_rpm",
+            "support": {
+                "source": "https://git.drupalcode.org/project/new_relic_rpm",
+                "issues": "https://drupal.org/project/issues/new_relic_rpm"
             }
         },
         {

@@ -1,1 +1,5 @@
 files/
+/README.txt
+/development.services.yml
+/example.settings.local.php
+/example.sites.php

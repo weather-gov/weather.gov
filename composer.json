@@ -23,6 +23,7 @@
         "drupal/core-recommended": "^10.1",
         "drupal/devel": "^5.1.2",
         "drupal/key_asymmetric": "^1.1",
+        "drupal/new_relic_rpm": "^2.1",
         "drupal/s3fs": "^3.1",
         "drupal/samlauth": "^3.9",
         "drupal/single_content_sync": "^1.3",
