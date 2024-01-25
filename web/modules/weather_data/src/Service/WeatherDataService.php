@@ -567,6 +567,7 @@ class WeatherDataService
                 "probabilityOfPrecipitation" =>
                     $period->probabilityOfPrecipitation->value,
                 "time" => $timestamp,
+                "timestamp" => $period->startTime,
                 "temperature" => $period->temperature,
             ];
         }, $forecast);

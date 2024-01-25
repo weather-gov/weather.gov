@@ -45,8 +45,17 @@ body {
   height: 100%;
 }
 
+
 /* Current Conditions
-------------------------------------- */
+-------------------------------------
+*/
 .current-conditions-temp {
   font-size: 56px;
+}
+  
+/* Hourly Forecast Block Overrides
+--------------------------------------
+*/
+.hourly-forecast-block ol > li {
+  @include u-margin-bottom(3);
 }

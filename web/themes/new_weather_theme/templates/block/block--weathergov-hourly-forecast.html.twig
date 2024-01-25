@@ -1,27 +1,25 @@
-<div class="tablet:grid-col-12">
+<div class="hourly-forecast-block tablet:grid-col-12 desktop:grid-col-6">
   <h2>Hourly forecast</h2>
-  {# Forecast:  hour, icon, condition desc (short), change of precip, temp degree, temp scale #}
-  <ol class="grid-row flex-row minh-card usa-list--unstyled">
-
+  <ol class="grid-row flex-column minh-card usa-list--unstyled">
     {% for hour in content.hours %}
-      <li class="tablet:grid-col padding-x-4">
-        <div class="display-flex tablet:flex-column flex-justify flex-align-center tablet:minh-card">
-          <time class="display-block text-uppercase text-bold tablet:text-center font-heading-md" datetime="2011-11-18T03:00-05:00">{{ hour.time }}</time>
-          <div class="icon margin-y-1">
-            <svg role="img" aria-hidden="true" class="width-6">
+      <li class="tablet:grid-col margin-bottom-3">
+        <time class="display-block text-uppercase text-bold font-heading-md margin-bottom-1" datetime="{{hour.timestamp}}">{{ hour.time }}</time>
+        <div class="display-flex flex-row flex-align-center flex-justify margin-bottom-2">
+          <div class="width-5 height-5">
+            <svg role="img" aria-hidden="true" class="height-full width-full">
               <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ hour.iconBasename }}"></use>
             </svg>
           </div>
-          <div class="text-center">
-            <p class="margin-0 conditions-narrative short">{{ hour.conditions | lower }}</p>
-            <span class="font-body-3xs text-gray-50 conditions__chance">{{ hour.probabilityOfPrecipitation }}% chance</span>
-          </div>
-          <div class="display-flex flex-row tablet:margin-top-2">
+          <div class="display-flex flex-row">
             <span class="font-body-xl">{{ hour.temperature }}</span>
             <span class="font-body-3xs margin-top-05">℉</span>
             {# use HTML entity that reads "degree farenheit" to screen readers #}
           </div>
         </div>
+        <p class="margin-0 margin-bottom-1 conditions-narrative short">{{ hour.conditions | lower | capitalize }}</p>
+        <span class="font-body-3xs text-gray-50 conditions__chance">
+          {{ hour.probabilityOfPrecipitation }}% {{"chance of precipitation" | t}}
+        </span>
       </li>
     {% endfor %}
   </ol>
