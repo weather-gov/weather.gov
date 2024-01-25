@@ -1,0 +1,88 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+final class FilterToTodayTest extends Base
+{
+    /**
+     * The static time used for testing
+     *
+     * @var now
+     */
+    protected $now;
+
+    /**
+     * Basic test case setup
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Following the other testing conventions,
+        // we use an established timestamp for 'now'.
+        date_default_timezone_set("America/New_York");
+        $this->now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2023-11-27T12:00:00-7:00",
+        );
+    }
+
+    /**
+     * Ensure we filter to two periods for "today"
+     *
+     * In this example dataset, there are both
+     * "this afternoon" and "tonight" periods that
+     * should be captured as the "today" portion
+     */
+    public function testTwoTodayPeriods(): void
+    {
+        $periods = json_decode(
+            file_get_contents(
+                __DIR__ . "/test_data/daily.forecast.today.two.good.json",
+            ),
+        );
+
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $periods[0]->startTime,
+        );
+
+        $filteredPeriods = $this->weatherDataService->filterToToday(
+            $periods,
+            $now,
+        );
+
+        $expectedPeriods = array_slice($periods, null, 2);
+
+        $this->assertEquals($expectedPeriods, $filteredPeriods);
+    }
+
+    /**
+     * Ensure we filter to one period for "today"
+     *
+     * In this example dataset, there is only
+     * one period ("tonight") that corresponds to "today"
+     */
+    public function testOneTodayPeriod(): void
+    {
+        $periods = json_decode(
+            file_get_contents(
+                __DIR__ . "/test_data/daily.forecast.today.one.good.json",
+            ),
+        );
+
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $periods[0]->startTime,
+        );
+
+        $filteredPeriods = $this->weatherDataService->filterToToday(
+            $periods,
+            $now,
+        );
+
+        $expectedPeriods = array_slice($periods, null, 1);
+
+        $this->assertEquals($expectedPeriods, $filteredPeriods);
+    }
+}

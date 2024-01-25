@@ -71,6 +71,13 @@ class WeatherDataService
     private $cache;
 
     /**
+     * Cache of the current conditions
+     *
+     * @var $currentConditions
+     */
+    private $currentConditions;
+
+    /**
      * Constructor.
      */
     public function __construct(
@@ -154,6 +161,94 @@ class WeatherDataService
     }
 
     /**
+     * Return only periods that are today/tonight
+     * This private method will filter the forecast periods
+     * to only include periods whose startTime corresponds
+     * to "today" "tonight" or "overnight"
+     *
+     * The response will be a new assoc array that
+     * is formatted correctly
+     */
+    public function filterToToday($data, $now)
+    {
+        $tomorrow = $now->modify("tomorrow");
+        $result = array_filter($data, function ($period) use (&$tomorrow) {
+            $startTime = \DateTimeImmutable::createFromFormat(
+                \DateTimeInterface::ISO8601_EXPANDED,
+                $period->startTime,
+            );
+            return $startTime < $tomorrow;
+        });
+
+        $periods = array_values($result);
+
+        // Determine whether we have both the
+        // "Today/This Afernoon" *and* "Tonight/Overnight"
+        // periods. If there is only one period, it means
+        // we only have the "Tonight/Overnight"
+        // if(count($periods) == 0){
+        //   throw new \Exception('Period count was zero for today??');
+        // }
+        // if (count($periods) == 1) {
+        //     // Then we only have a tonight/overnight period
+        //     $tonightPeriod = $periods[0];
+        //     $todayPeriod = null;
+        // } else {
+        //     $tonightPeriod = $periods[1];
+        //     $todayPeriod = $periods[0];
+        // }
+
+        // $result = [];
+        // if ($todayPeriod) {
+        //     $result["daytime"] = $this->formatDailyPeriod($todayPeriod);
+        // }
+        // $result["overnight"] = $this->formatDailyPeriod($tonightPeriod);
+
+        return $periods;
+    }
+
+    public function formatDailyPeriod($period)
+    {
+        // Early return if we haven't passed in anything
+        if (!$period) {
+            return null;
+        }
+
+        // Daily forecast cards require the three-letter
+        // abrreviated form of the day name.
+        $startTime = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $period->startTime,
+        );
+
+        $shortDayName = $startTime->format("D");
+        $dayName = $startTime->format("l");
+        $monthAndDay = $startTime->format("M j");
+
+        // Get any mapped condition and/or icon values.
+        $obsKey = $this->getApiObservationKey($period);
+
+        // Sentence-case the forecast description.
+        $shortForecast = ucfirst(strtolower($period->shortForecast));
+
+        // Return a formatted assoc array that can be
+        // used by the templates
+        return [
+            "shortDayName" => $shortDayName,
+            "dayName" => $dayName,
+            "monthAndDay" => $monthAndDay,
+            "startTime" => $period->startTime,
+            "shortForecast" => $this->t->translate($shortForecast),
+            "icon" => $this->legacyMapping->$obsKey->icon,
+            "iconBasename" => $this->getIconFileBasename($obsKey),
+            "temperature" => $period->temperature,
+            "probabilityOfPrecipitation" =>
+                $period->probabilityOfPrecipitation->value,
+            "isDaytime" => $period->isDaytime,
+        ];
+    }
+
+    /**
      * Return only the periods that are after today.
      *
      * This private method will filter the forecast periods
@@ -187,6 +282,37 @@ class WeatherDataService
         }
 
         return array_values($result);
+    }
+
+    /**
+     * Return only periods that are in the "extended" daily
+     *
+     * "Extended" would be all the periods after the
+     * limited number of days to forecast in detail in
+     * a daily forecast, as returned by the API.
+     *
+     * @return array
+     *   An array of daily periods filtered as described
+     */
+    public function filterToExtendedPeriods(
+        $data,
+        $now,
+        $numDetailedDays = null,
+    ) {
+        // First, get all future periods in an array,
+        // but do not yet skip over the number of detailed days
+        $futurePeriods = $this->filterToFutureDays($data, $now);
+
+        // Now we return a sliced version of the array that
+        // starts after the index of the last number of detailed
+        // days (ie the "extended" periods).
+        // Note that because a "day" is two periods, we double the
+        // start index number
+        if ($numDetailedDays) {
+            return array_slice($futurePeriods, $numDetailedDays * 2);
+        }
+
+        return $futurePeriods;
     }
 
     /**
@@ -609,53 +735,76 @@ class WeatherDataService
                 $periods[0]->startTime,
             );
         }
-        $periods = $this->filterToFutureDays($periods, $now, $defaultDays);
 
+        // $periods = $this->filterToFutureDays($periods, $now, $defaultDays);
+
+        // These are the periods that correspond to "today".
+        // Usually they are 1 or two periods, depending on when
+        // during the day the call is made to the API.
+        // Examples of period names here include "Today"
+        // "This Afternoon" "Tonight" "Overnight" etc
+        $todayPeriods = $this->filterToToday($periods, $now);
+
+        // Detailed periods are the periods for which
+        // we want to show a detailed daily forecast.
         // Periods are either daytime or nighttime
-        // We can zip them together as pairs.
-        $dayNightPairs = array_chunk($periods, 2);
+        // periods, as told by the isDaytime property
+        $detailedPeriods = $this->filterToFutureDays(
+            $periods,
+            $now,
+            $defaultDays,
+        );
 
-        $periods = array_map(function ($periodPair) {
-            $daytime = $periodPair[0];
-            $overnight = $periodPair[1];
+        // The extended periods are all the periods
+        // returned by the API that come after the
+        // detailed periods.
+        // In the UI, we will show less detailed
+        // information for these periods
+        $extendedPeriods = $this->filterToExtendedPeriods(
+            $periods,
+            $now,
+            $defaultDays, // The number of detailed days to skip over
+        );
 
-            // Daily forecast cards require the three-letter
-            // abrreviated form of the day name.
-            $startTime = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601,
-                $daytime->startTime,
-            );
-            $shortDayName = $startTime->format("l");
-            $monthAndDay = $startTime->format("M j");
+        // Format each of the today periods
+        // as assoc arrays that can be used
+        // by the templates
+        $todayPeriodsFormatted = array_map(function ($period) {
+            return $this->formatDailyPeriod($period);
+        }, $todayPeriods);
 
-            // Get any mapped condition and/or icon values.
-            $obsKey = $this->getApiObservationKey($daytime);
-
-            // Sentence-case the forecast description.
-            $shortForecast = ucfirst(strtolower($daytime->shortForecast));
-
-            $daytimeForecast = [
-                "shortDayName" => $shortDayName,
-                "monthAndDay" => $monthAndDay,
-                "startTime" => $daytime->startTime,
-                "shortForecast" => $this->t->translate($shortForecast),
-                "icon" => $this->legacyMapping->$obsKey->icon,
-                "iconBasename" => $this->getIconFileBasename($obsKey),
-                "temperature" => $daytime->temperature,
-                "probabilityOfPrecipitation" =>
-                    $daytime->probabilityOfPrecipitation->value,
-            ];
-
-            $overnightForecast = [
-                "temperature" => $overnight->temperature,
-            ];
+        // Format each of the detailed periods
+        // as assoc arrays that can be used by
+        // the templates. Also group the periods
+        // into daytime and nighttime pairs
+        $detailedPeriodsFormatted = array_map(function ($periodPair) {
+            $day = $periodPair[0];
+            $night = $periodPair[1];
 
             return [
-                "daytime" => $daytimeForecast,
-                "overnight" => $overnightForecast,
+                "daytime" => $this->formatDailyPeriod($day),
+                "overnight" => $this->formatDailyPeriod($night),
             ];
-        }, $dayNightPairs);
+        }, array_chunk($detailedPeriods, 2));
 
-        return array_values($periods);
+        // Format each of the extended periods as
+        // assoc arrays that can be used by the
+        // templates. Also group the periods
+        // into daytime and nighttime pairs
+        $extendedPeriodsFormatted = array_map(function ($periodPair) {
+            $day = $periodPair[0];
+            $night = $periodPair[1];
+
+            return [
+                "daytime" => $this->formatDailyPeriod($day),
+                "overnight" => $this->formatDailyPeriod($night),
+            ];
+        }, array_chunk($extendedPeriods, 2));
+
+        return [
+            "today" => array_values($todayPeriodsFormatted),
+            "detailed" => array_values($detailedPeriodsFormatted),
+            "extended" => array_values($extendedPeriodsFormatted),
+        ];
     }
 }
