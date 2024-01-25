@@ -60,3 +60,7 @@ This is the base64 encoded public key used in the SAML authentication flow with 
 These are the login credentials for the root account that can be used for basic authentication for an admin user here: https://weathergov-<environment>.app.cloud.gov/user/login. If you need to rotate these, you will also need to reset the password with Drupal: 
 
 `drush upwd --password="NewPassword" <root_user_name>`
+
+## NEWRELIC_KEY
+
+We need to set the New Relic license in two places. We need it in VCAP_SERVICES so that the Drupal New Relic APM module can pick it up. And we need to set it as an environment variable so the PHP Buildpack knows to install the APM as well. These steps are included in the cloudgov env create script. 

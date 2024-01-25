@@ -5,9 +5,6 @@ if [ -z "${VCAP_SERVICES:-}" ]; then
     exit 1;
 fi
 
-# NewRelic configuration
-export NEWRELIC_LICENSE=$(echo $VCAP_SERVICES | jq -r '."user-provided"[].credentials.NEWRELIC_KEY')
-
 # Create files for SAML auth
 export home="/home/vcap"
 export app_path="${home}/app"
