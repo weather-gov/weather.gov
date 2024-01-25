@@ -1,8 +1,7 @@
 <div class="daily-forecast-block desktop:grid-col-6 tablet:grid-col-12">
   <h2>Daily forecast</h2>
   <h3>Next {{(content.detailed | length) + 1}} days</h3>
-  <ol class="grid-row flex-row minh-card usa-list--unstyled">
-
+  <ol class="usa-list--unstyled">
     {# Attempt to render the period(s) associated with the current day #}
     {% if content.today %}
       {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': content.today, 'dayLabel': "Today" | t } %}
@@ -12,5 +11,31 @@
     {%  for data in content.detailed %}
       {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': [data.daytime, data.overnight]} %}
     {%  endfor %}
+  </ol>
+
+  {# Render the extended periods #}
+  <ol class="usa-list--unstyled">
+    <h3>{{ "Extended forecast" | t }}</h3>
+    {% for periods in content.extended %}
+      <li class="display-block tablet:grid-col margin-bottom-5">
+        <time class="display-block flex-1 text-bold font-heading-md margin-bottom-2" datetime="{{ periods['daytime'].startTime }}">
+          <span>{{ periods["daytime"].dayName }}, {{ periods["daytime"].monthAndDay }}</span>
+        </time>
+        <div class="display-flex flex-row flex-justify flex-align-center margin-bottom-2">
+          <div class="flex-1">
+            <div class="width-5 height-5 margin-right-105">
+              <svg role="img" aria-hidden="true" class="width-full height-full">
+                <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ periods["daytime"].iconBasename }}"></use>
+              </svg>
+            </div>
+          </div>
+          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': periods["daytime"]} %}
+          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': periods["overnight"]} %}
+        </div>
+        <p class="daily-short-forecast font-body-xs margin-y-0">
+          {{ periods["daytime"].shortForecast }}
+        </p>
+      </li>
+    {% endfor %}
   </ol>
 </div>
