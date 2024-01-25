@@ -222,7 +222,7 @@ jobs:
         uses: actions/cache@v3
         id: cache
         with:
-          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php') }}
+          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
           path: /tmp/image.tar
 
       - name: Set up Docker Buildx
@@ -251,7 +251,7 @@ jobs:
         uses: actions/cache@v3
         id: cache
         with:
-          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php') }}
+          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
           path: /tmp/image.tar
 
       - name: start the site
@@ -293,7 +293,7 @@ jobs:
         uses: actions/cache@v3
         id: cache
         with:
-          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php') }}
+          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
           path: /tmp/image.tar
 
       - name: start the site
@@ -329,7 +329,7 @@ jobs:
         uses: actions/cache@v3
         id: cache
         with:
-          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php') }}
+          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
           path: /tmp/image.tar
 
       - name: start the site
