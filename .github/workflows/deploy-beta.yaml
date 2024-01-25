@@ -33,3 +33,11 @@ jobs:
           cf_org: nws-weathergov
           cf_space: prod
           cf_command: "run-task weathergov-beta --command './scripts/post-deploy.sh' --name 'weathergov-beta-deploy' -k '2G' -m '256M'"
+  new-relic-record:
+    name: Record deployment to New Relic
+    needs:
+      - deploy-beta
+    uses: ./.github/workflows/new-relic-deployment.yml
+    with:
+      environment: "beta"
+    secrets: inherit

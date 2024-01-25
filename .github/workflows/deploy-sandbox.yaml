@@ -39,3 +39,11 @@ jobs:
           cf_org: nws-weathergov
           cf_space: ${{ github.event.inputs.environment }}
           cf_command: "run-task weathergov-${{ github.event.inputs.environment }} --command './scripts/post-deploy.sh' --name 'weathergov-${{ github.event.inputs.environment }}-deploy' -k '2G' -m '256M'"
+  new-relic-record:
+    name: Record deployment to New Relic
+    needs:
+      - deploy-sandbox
+    uses: ./.github/workflows/new-relic-deployment.yml
+    with:
+      environment: ${{ github.event.inputs.environment }}
+    secrets: inherit
