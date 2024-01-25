@@ -28,6 +28,7 @@ RUN set -eux; \
   libwebp-dev \
   libzip-dev \
   ; \
+  # xdebug is being pinned to 3.2.2 because of an issue with Drupal 10.2, see: https://git.drupalcode.org/project/drupal/-/merge_requests/5774
   pecl install xdebug-3.2.2; \
   docker-php-ext-enable xdebug; \
   \
