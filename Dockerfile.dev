@@ -28,8 +28,8 @@ RUN set -eux; \
   libwebp-dev \
   libzip-dev \
   ; \
-  pecl install xdebug; \
-  docker-php-ext-enable xdebug; \
+  # pecl install xdebug; \
+  # docker-php-ext-enable xdebug; \
   \
   docker-php-ext-configure gd \
   --with-freetype \
@@ -85,10 +85,10 @@ RUN { \
   echo 'opcache.interned_strings_buffer=8'; \
   echo 'opcache.max_accelerated_files=4000'; \
   echo 'opcache.revalidate_freq=60'; \
-  echo 'xdebug.mode=coverage,develop,debug'; \
-  echo 'xdebug.client_port=9003'; \
-  echo 'xdebug.start_with_request=yes'; \
-  echo 'xdebug.client_host=host.docker.internal'; \
+  # echo 'xdebug.mode=coverage,develop,debug'; \
+  # echo 'xdebug.client_port=9003'; \
+  # echo 'xdebug.start_with_request=yes'; \
+  # echo 'xdebug.client_host=host.docker.internal'; \
   } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 ENV PATH=${PATH}:/opt/drupal/vendor/bin
