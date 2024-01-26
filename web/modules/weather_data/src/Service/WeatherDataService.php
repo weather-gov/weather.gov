@@ -182,27 +182,6 @@ class WeatherDataService
 
         $periods = array_values($result);
 
-        // Determine whether we have both the
-        // "Today/This Afernoon" *and* "Tonight/Overnight"
-        // periods. If there is only one period, it means
-        // we only have the "Tonight/Overnight"
-        // if(count($periods) == 0){
-        //   throw new \Exception('Period count was zero for today??');
-        // }
-        // if (count($periods) == 1) {
-        //     // Then we only have a tonight/overnight period
-        //     $tonightPeriod = $periods[0];
-        //     $todayPeriod = null;
-        // } else {
-        //     $tonightPeriod = $periods[1];
-        //     $todayPeriod = $periods[0];
-        // }
-
-        // $result = [];
-        // if ($todayPeriod) {
-        //     $result["daytime"] = $this->formatDailyPeriod($todayPeriod);
-        // }
-        // $result["overnight"] = $this->formatDailyPeriod($tonightPeriod);
 
         return $periods;
     }
