@@ -1,4 +1,4 @@
-<div class="daily-forecast-block desktop:grid-col-6 tablet:grid-col-12">
+<div class="daily-forecast-block tablet:grid-col-6 mobile-lg:grid-col-8">
   <h2>Daily forecast</h2>
   <h3>Next {{(content.detailed | length) + 1}} days</h3>
   <ol class="usa-list--unstyled">
@@ -17,7 +17,7 @@
   <h3>{{ "Extended forecast" | t }}</h3>
   <ol class="usa-list--unstyled">
     {% for periods in content.extended %}
-      <li class="display-block tablet:grid-col margin-bottom-5">
+      <li class="display-block margin-bottom-5">
         <time class="display-block flex-1 text-bold font-heading-md margin-bottom-2" datetime="{{ periods['daytime'].startTime }}">
           <span>{{ periods["daytime"].dayName }}, {{ periods["daytime"].monthAndDay }}</span>
         </time>
