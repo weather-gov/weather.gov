@@ -715,7 +715,6 @@ class WeatherDataService
             );
         }
 
-        // $periods = $this->filterToFutureDays($periods, $now, $defaultDays);
 
         // These are the periods that correspond to "today".
         // Usually they are 1 or two periods, depending on when
