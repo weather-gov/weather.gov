@@ -1,0 +1,8 @@
+uuid: bb29ee96-9df9-440d-801a-62eceacb1eb3
+langcode: en
+status: true
+dependencies: {  }
+name: 'Weather Event Types'
+vid: weather_event_types
+description: 'The list of weather events understood by weather.gov.'
+weight: 0
