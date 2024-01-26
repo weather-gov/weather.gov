@@ -1,0 +1,130 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+final class FilterToExtendedPeriodsTest extends Base
+{
+    /**
+     * The static value we are using for "now"
+     *
+     * @var now
+     */
+    protected $now;
+
+    /**
+     * Basic test case setup
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Following the other testing conventions,
+        // we use an established timestamp for 'now'.
+        date_default_timezone_set("America/New_York");
+        $this->now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2023-11-27T12:00:00-7:00",
+        );
+    }
+
+    /**
+     * Return all periods after the first full future day
+     *
+     * This test assumes that the number of "detailed"
+     * daily forecast days is only 1, and that all periods
+     * after that are considered the "extended" periods
+     */
+    public function testExtendedAfterOneDay(): void
+    {
+        $data = json_decode(
+            file_get_contents(__DIR__ . "/test_data/daily.forecast.good.json"),
+        );
+
+        $periods = $data->properties->periods;
+
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $periods[0]->startTime,
+        );
+
+        // Expected is takes into account the "today" periods
+        // (there are 2) plus periods corresponding to a single day
+        // (also 2, because it's day and night periods)
+        $expected = array_slice($periods, 4);
+        $actual = $this->weatherDataService->filterToExtendedPeriods(
+            $periods,
+            $now,
+            1, // number of detailed days
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Return all periods after the third full future day
+     *
+     * This test assumes that the number of "detailed"
+     * daily forecast days is 3, and that all periods
+     * after that are considered the "extended" periods
+     */
+    public function textExtendedAfterThreeDays(): void
+    {
+        $data = json_decode(
+            file_get_contents(__DIR__ . "/test_data/daily.forecast.good.json"),
+        );
+
+        $periods = $data->properties->periods;
+
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $periods[0]->startTime,
+        );
+
+        // Expected takes into account the "today" periods
+        // (there are 2) plus periods corresponding to three days
+        // (6, because days are two periods each), for a total of 8
+        // skipped
+        $expected = array_slice($periods, 8);
+
+        $actual = $this->weatherDataService->filterToExtendedPeriods(
+            $periods,
+            $now,
+            3, // number of detailed days
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Return all periods after the first 5 full future days
+     *
+     * This test assumes that the number of "detailed"
+     * daily forecast days is 5, and that all periods
+     * after that are considered the "extended" periods
+     */
+    public function testExtendedAfterFiveDays(): void
+    {
+        $data = json_decode(
+            file_get_contents(__DIR__ . "/test_data/daily.forecast.good.json"),
+        );
+
+        $periods = $data->properties->periods;
+
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $periods[0]->startTime,
+        );
+
+        // Expected is takes into account the "today" periods
+        // (there are 2) plus periods corresponding to 5 days
+        // (10, because a full day is 2 periods)
+        $expected = array_slice($periods, 12);
+        $actual = $this->weatherDataService->filterToExtendedPeriods(
+            $periods,
+            $now,
+            5, // number of detailed days
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+}

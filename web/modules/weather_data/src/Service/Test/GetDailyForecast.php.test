@@ -57,18 +57,19 @@ final class GetDailyForecastTest extends Base
     /**
      * Test that the method returns the default number of days (5).
      */
-    public function testNumberOfDaysDefault(): void
+    public function testNumberOfDetailedDaysDefault(): void
     {
         $this->setupHappyPath();
         $expected = 5;
 
-        $forecastDays = $this->weatherDataService->getDailyForecastFromGrid(
+        $forecast = $this->weatherDataService->getDailyForecastFromGrid(
             "wfo",
             "x",
             "y",
             $this->now,
         );
-        $actual = count($forecastDays);
+        $detailedDays = $forecast["detailed"];
+        $actual = count($detailedDays);
 
         $this->assertEquals($expected, $actual);
     }
@@ -88,7 +89,7 @@ final class GetDailyForecastTest extends Base
             $this->now,
             2,
         );
-        $actual = count($forecastDays);
+        $actual = count($forecastDays["detailed"]);
 
         $this->assertEquals($expected, $actual);
     }
@@ -108,7 +109,7 @@ final class GetDailyForecastTest extends Base
         );
         $actual = array_map(function ($day) {
             return $day["daytime"]["shortDayName"];
-        }, $forecastDays);
+        }, $forecastDays["detailed"]);
 
         $this->assertEquals((object) $expected, (object) $actual);
     }
@@ -135,7 +136,7 @@ final class GetDailyForecastTest extends Base
 
         $actual = array_map(function ($day) {
             return $day["daytime"]["startTime"];
-        }, $forecastDays);
+        }, $forecastDays["detailed"]);
 
         $this->assertEquals((object) $expected, (object) $actual);
     }
@@ -155,7 +156,7 @@ final class GetDailyForecastTest extends Base
         );
         $actual = array_map(function ($forecast) {
             return $forecast["daytime"]["temperature"];
-        }, $forecastDays);
+        }, $forecastDays["detailed"]);
 
         $this->assertEquals((object) $expected, (object) $actual);
     }
@@ -175,7 +176,7 @@ final class GetDailyForecastTest extends Base
         );
         $actual = array_map(function ($forecast) {
             return $forecast["overnight"]["temperature"];
-        }, $forecastDays);
+        }, $forecastDays["detailed"]);
 
         $this->assertEquals((object) $expected, (object) $actual);
     }
@@ -204,7 +205,7 @@ final class GetDailyForecastTest extends Base
         );
         $actual = array_map(function ($forecast) {
             return $forecast["daytime"]["shortForecast"];
-        }, $forecastDays);
+        }, $forecastDays["detailed"]);
 
         $this->assertEquals((object) $expected, (object) $actual);
     }
@@ -225,7 +226,7 @@ final class GetDailyForecastTest extends Base
         );
         $actual = array_map(function ($forecast) {
             return $forecast["daytime"]["probabilityOfPrecipitation"];
-        }, $forecastDays);
+        }, $forecastDays["detailed"]);
 
         $this->assertEquals((object) $expected, (object) $actual);
     }

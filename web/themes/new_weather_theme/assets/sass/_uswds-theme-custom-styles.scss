@@ -59,3 +59,9 @@ body {
 .hourly-forecast-block ol > li {
   @include u-margin-bottom(3);
 }
+
+/* Daily Forecast Block Overrides
+------------------------------------- */
+.daily-forecast-block ol > li {
+  @include u-margin-bottom(5);
+}

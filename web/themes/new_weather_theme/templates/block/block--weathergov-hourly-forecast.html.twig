@@ -1,8 +1,8 @@
-<div class="hourly-forecast-block tablet:grid-col-12 desktop:grid-col-6">
+<div class="hourly-forecast-block tablet:grid-col-6 mobile-lg:grid-col-8">
   <h2>Hourly forecast</h2>
   <ol class="grid-row flex-column minh-card usa-list--unstyled">
     {% for hour in content.hours %}
-      <li class="tablet:grid-col margin-bottom-3">
+      <li class="margin-bottom-3">
         <time class="display-block text-uppercase text-bold font-heading-md margin-bottom-1" datetime="{{hour.timestamp}}">{{ hour.time }}</time>
         <div class="display-flex flex-row flex-align-center flex-justify margin-bottom-2">
           <div class="width-5 height-5">

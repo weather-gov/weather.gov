@@ -8,10 +8,15 @@ module.exports = defineConfig({
       on("task", {
         a11yViolation: ({ node, url, description }) => {
           const instances = [...node.any, ...node.all];
-          for (const violation of instances) {
-            // eslint-disable-next-line no-console
+          if (instances.length) {
+            for (const violation of instances) {
+              console.log(
+                `::error Accessibility error.::${violation.message} at ${node.html} (${description}: ${url}) [selector: ${node.target[0]}]`,
+              );
+            }
+          } else {
             console.log(
-              `::error Accessibility error.::${violation.message} at ${node.html} (${description}: ${url}) [selector: ${node.target[0]}]`,
+              `::error Accessibility error.::${node.failureSummary.replace(/\n/g, " *")} at ${node.html} (${description}): ${url}) [selector: ${node.target[0]}]`,
             );
           }
           return null;
