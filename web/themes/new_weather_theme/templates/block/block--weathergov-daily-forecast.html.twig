@@ -14,8 +14,8 @@
   </ol>
 
   {# Render the extended periods #}
+  <h3>{{ "Extended forecast" | t }}</h3>
   <ol class="usa-list--unstyled">
-    <h3>{{ "Extended forecast" | t }}</h3>
     {% for periods in content.extended %}
       <li class="display-block tablet:grid-col margin-bottom-5">
         <time class="display-block flex-1 text-bold font-heading-md margin-bottom-2" datetime="{{ periods['daytime'].startTime }}">
