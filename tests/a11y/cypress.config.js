@@ -16,7 +16,7 @@ module.exports = defineConfig({
             }
           } else {
             console.log(
-              `:error Accessibility error.::${node.failureSummary} at ${node.html} (${description}): ${url}) [selector: ${node.target[0]}]`,
+              `:error Accessibility error.::${node.failureSummary.replace(/\n/g, " *")} at ${node.html} (${description}): ${url}) [selector: ${node.target[0]}]`,
             );
           }
           return null;
