@@ -30,6 +30,7 @@ module.exports = {
         jest: true,
       },
       rules: {
+        "no-console": 0,
         // For imports in Node, file extensions are optional and discouraged as
         // a matter of practice.
         "import/extensions": ["error", "never"],
