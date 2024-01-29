@@ -1,9 +1,10 @@
-
 <div class="layout-container grid-row height-full flex-column flex-no-wrap">
   {% if page.beta %}
   {{ page.beta }}
   {% endif %}
 
+  {{ attach_library('new_weather_theme/tabbed_nav') }}
+  
   <section
     class="usa-banner"
     aria-label="Official website of the United States government"
@@ -126,15 +127,28 @@
     <div class="grid-container">
       {{ drupal_block("weathergov_local_alert_list") }}
 
-      <div class="grid-row">
-        {{ page.content }}
-      </div>
+        <div class="grid-row">
+            {{ page.content }}
+        </div>
 
-      {{ drupal_block("weathergov_local_alerts") }}
+        {{ drupal_block("weathergov_current_conditions") }}
 
-      {{ drupal_block("weathergov_current_conditions") }}
-      {{ drupal_block("weathergov_hourly_forecast") }}
-      {{ drupal_block("weathergov_daily_forecast") }}
+      <tabbed-nav>
+          <ul class="usa-list--unstyled" slot="tabs">
+              <a class="tab-link" data-tab-name="alerts" href="#alerts">{{ "Alerts" | t }}</a>
+              <a class="tab-link" data-tab-name="hourly" href="#hourly">{{ "Hourly" | t }}</a>
+              <a class="tab-link" data-tab-name="daily" href="#daily">{{ "Daily" | t }}</a>
+          </ul>
+          <div class="tab-container" id="alerts">
+              {{ drupal_block("weathergov_local_alerts") }}
+          </div>
+          <div class="tab-container" id="hourly">
+              {{ drupal_block("weathergov_hourly_forecast") }}
+          </div>
+          <div class="tab-container" id="daily">
+              {{ drupal_block("weathergov_daily_forecast") }}
+          </div>
+      </tabbed-nav>
 
       <div class="grid-row tablet:grid-col-12 margin-top-4">
         <div class="desktop:grid-col-6 tablet:grid-col-8">
