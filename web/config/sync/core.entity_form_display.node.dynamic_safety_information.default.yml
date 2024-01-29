@@ -1,0 +1,50 @@
+uuid: aa19dce2-8827-4b54-8366-40e3fada1592
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.dynamic_safety_information.body
+    - field.field.node.dynamic_safety_information.field_weather_event_type
+    - node.type.dynamic_safety_information
+  module:
+    - text
+id: node.dynamic_safety_information.default
+targetEntityType: node
+bundle: dynamic_safety_information
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 2
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_weather_event_type:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

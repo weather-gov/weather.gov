@@ -1,0 +1,22 @@
+uuid: 54a92aa5-9f3d-4add-97df-fa96d17c3311
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.dynamic_safety_information
+id: node.dynamic_safety_information.status
+field_name: status
+entity_type: node
+bundle: dynamic_safety_information
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
