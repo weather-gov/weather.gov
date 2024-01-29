@@ -22,6 +22,7 @@ final class WeatherStoryBlockTest extends Base
         $imageField = $this->createStub(FieldItemListInterface::class);
         $titleField = $this->createStub(FieldItemListInterface::class);
         $bodyField = $this->createStub(FieldItemListInterface::class);
+        $changedField = (object) ["value" => 235984600];
 
         $story
             ->method("get")
@@ -30,6 +31,7 @@ final class WeatherStoryBlockTest extends Base
                     ["field_image", $imageField],
                     ["title", $titleField],
                     ["body", $bodyField],
+                    ["changed", $changedField],
                 ]),
             );
 
@@ -78,6 +80,10 @@ final class WeatherStoryBlockTest extends Base
                 "alt" => "image alt text",
                 "uri" => "image url",
             ],
+            "updated" => [
+                "formatted" => "Jun 24, 1977, 7:16 AM",
+                "utc" => "235984600",
+            ],
         ];
 
         $actual = $this->block->build();
@@ -98,6 +104,10 @@ final class WeatherStoryBlockTest extends Base
             "title" => "Weather Story Title",
             "body" => "Weather story body",
             "image" => null,
+            "updated" => [
+                "formatted" => "Jun 24, 1977, 7:16 AM",
+                "utc" => "235984600",
+            ],
         ];
 
         $actual = $this->block->build();

@@ -57,7 +57,7 @@ class WeatherStoryBlock extends WeatherBlockBase
 
                 $changed = \DateTime::createFromFormat(
                     "U",
-                    $story->changed->value,
+                    $story->get("changed")->value,
                 );
 
                 return [
@@ -65,7 +65,7 @@ class WeatherStoryBlock extends WeatherBlockBase
                     "body" => $body,
                     "image" => $image,
                     "updated" => [
-                        "formatted" => $changed->format("M. j, Y \a\\t g:i A"),
+                        "formatted" => $changed->format("M j, Y, g:i A"),
                         "utc" => $changed->format("U"),
                     ],
                 ];
