@@ -42,15 +42,23 @@ export default (req, res, { record = false, filePath = false } = {}) => {
 
           // If we're supposed to record and we have a file path...
           if (record && !!filePath && proxyResponse.statusCode >= 200) {
-            console.log(`record this to ${filePath}`);
+            const contentType = proxyResponse.headers["content-type"];
 
-            // Make the directory structure if necessary, then write out the
-            // formatted JSON.
-            await fs.mkdir(path.dirname(filePath), { recursive: true });
-            const json = await format(output.join(""), { parser: "json" });
-            await fs.writeFile(filePath, json, {
-              encoding: "utf-8",
-            });
+            // Only capture JSON responses.
+            if (
+              contentType === "application/json" ||
+              contentType === "application/geo+json"
+            ) {
+              console.log(`record this to ${filePath}`);
+
+              // Make the directory structure if necessary, then write out the
+              // formatted JSON.
+              await fs.mkdir(path.dirname(filePath), { recursive: true });
+              const json = await format(output.join(""), { parser: "json" });
+              await fs.writeFile(filePath, json, {
+                encoding: "utf-8",
+              });
+            }
           }
         };
 
