@@ -28,14 +28,34 @@ describe("main script", () => {
             // Eventually we should replace API calls with fixtures so we don't
             // need to rely on this formatter. If the expected date is fixed,
             // the expected string representations should also be fixed.
-            const formatter = new Intl.DateTimeFormat(locale, {
-              weekday: "long",
-              hour: "numeric",
-              minute: "2-digit",
-              timeZoneName: "short",
-            });
+            const formatters = new Map([
+              [
+                "basic",
+                new Intl.DateTimeFormat(locale, {
+                  weekday: "long",
+                  hour: "numeric",
+                  minute: "2-digit",
+                  timeZoneName: "short",
+                }),
+              ],
+              [
+                "M d Y T",
+                new Intl.DateTimeFormat("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                }),
+              ],
+            ]);
 
-            const expected = formatter.format(dayjs.unix(utc).toDate());
+            const format =
+              timestamp.getAttribute("data-date-format") || "basic";
+
+            const expected = formatters
+              .get(format)
+              .format(dayjs.unix(utc).toDate());
             expect(actual).to.equal(expected);
           }
         });
