@@ -133,12 +133,12 @@
 
         {{ drupal_block("weathergov_current_conditions") }}
 
-      <tabbed-nav>
-          <ul class="usa-list--unstyled" slot="tabs">
-              <a class="tab-link" data-tab-name="alerts" href="#alerts">{{ "Alerts" | t }}</a>
-              <a class="tab-link" data-tab-name="hourly" href="#hourly">{{ "Hourly" | t }}</a>
-              <a class="tab-link" data-tab-name="daily" href="#daily">{{ "Daily" | t }}</a>
-          </ul>
+      <tabbed-nav class="display-block position-relative">
+          <div class="tab-buttons padding-bottom-4 padding-top-4 top-0 z-top display-flex flex-row flex-justify position-sticky bg-white top-4 mobile-lg:grid-col-8 desktop:grid-col-6">
+              <button role="button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</a>
+              <button role="button" class="tab-button" data-tab-name="hourly" aria-controls="hourly">{{ "Hourly" | t }}</a>
+              <button role="button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "Daily" | t }}</a>
+          </div>
           <div class="tab-container" id="alerts">
               {{ drupal_block("weathergov_local_alerts") }}
           </div>

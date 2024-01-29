@@ -1,0 +1,26 @@
+@use "uswds-core" as *;
+
+tabbed-nav {
+    button.tab-button {
+      outline: none;
+      background-color: white;
+      border: none;
+      border-bottom: 2px solid transparent;
+      display: inline-block;
+      padding: 0;
+      color: rgba(0, 133, 202, 1);
+      @include u-font("body", "sm");
+
+      &[data-selected] {
+        border-bottom: 2px solid rgba(0, 133, 202, 1);
+      }
+    }
+
+    .tab-container {
+      display: none;
+
+      &[data-selected] {
+        display: block;
+      }
+    }
+}

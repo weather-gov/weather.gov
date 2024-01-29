@@ -1,12 +1,6 @@
 const templateString = `
-<style>
-
-</style>
-<div id="tab-area">
-<slot name="tabs"></slot>
-</div>
 <slot></slot>
-`
+`;
 
 class TabbedNavigator extends HTMLElement {
     constructor(){
@@ -21,34 +15,62 @@ class TabbedNavigator extends HTMLElement {
 
         // Bind this context to methods that need it
         this.handleHashChange = this.handleHashChange.bind(this);
+        this.handleTabButtonClick = this.handleTabButtonClick.bind(this);
+        this.switchToTab = this.switchToTab.bind(this);
     }
     
     connectedCallback(){
+        // If no tabs are selected by default, then select the first one
+        const selected = Array.from(this.querySelectorAll('.tab-button[data-selected]'));
+        if(!selected.length){
+            this.switchToTab(this.querySelector('button').dataset.tabName);
+        }
+
+        // Add needed event listeners
         window.addEventListener('hashchange', this.handleHashChange);
+        Array.from(this.querySelectorAll('button')).forEach(button => {
+            button.addEventListener('click', this.handleTabButtonClick);
+        });
     }
 
     disconnectedCallback(){
+        // Remove any event listeners
         window.removeEventListener('hashchange', this.handleHashChange);
+        Array.from(this.querySelectorAll('button')).forEach(button => {
+            button.removeEventListener('click', this.handleTabButtonClick);
+        });
+    }
+
+    switchToTab(tabId){
+        const activeElements = this.querySelectorAll('[data-selected]');
+        Array.from(activeElements).forEach(activeElement => {
+            activeElement.removeAttribute('data-selected');
+            if(activeElement.hasAttribute('aria-expanded')){
+                activeElement.setAttribute('aria-expanded', 'false');
+            }
+        });
+        const tabButton = this.querySelector(`[data-tab-name="${tabId}"]`);
+        tabButton.setAttribute('data-selected', '');
+        tabButton.setAttribute('aria-expanded', 'true');
+        const tabContainer = this.querySelector(`#${tabId}`);
+        tabContainer.setAttribute('data-selected', '');
+    }
+
+    handleTabButtonClick(event){
+        this.switchToTab(event.target.dataset.tabName);
     }
 
     handleHashChange(event){
         const hash = new URL(window.location).hash;
-        // If the hash is itself the alerts section, then
-        // early return
-        if(hash == "#alerts"){
-            return;
-        }
-        const foundAlertElement = document.querySelector(hash);
-        const foundAlertAccordionButton = foundAlertElement.querySelector('button.usa-accordion__button');
-        const alertTabButtonElement = this.querySelector('.tab-link[data-tab-name="alerts"]');
-        if(foundAlertElement && alertTabButtonElement){
-            alertTabButtonElement.click();
-            // Collapse all other alert accordions
-            // and ensure that the one we care about is opened
-            const accordionEl = foundAlertElement.closest('.usa-accordion');
-            this.toggleAccordion(accordionEl, true);
-            foundAlertElement.scrollIntoView();
-            foundAlertAccordionButton.focus();
+        const childElement = this.querySelector(`${hash}`);
+        if(childElement){
+            // If we get here, then the element referred to
+            // by the document hash fragment is a child of
+            // this tabbed navigator.
+            // We need to toggle to the correct tab pane
+            // to properly display that element.
+            const tabContainer = childElement.closest('.tab-container');
+            this.switchToTab(tabContainer.id);
             
         }
     }
