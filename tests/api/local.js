@@ -70,7 +70,7 @@ export default async (request, response, { record }) => {
   );
 
   if (!fileExists) {
-    await proxy(request, response, { record, filePath });
+    await proxy(request, response, { record });
   } else {
     const output = JSON.parse(await fs.readFile(filePath));
     processDates(output);

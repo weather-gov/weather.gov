@@ -7,6 +7,8 @@ const port = process.env.PORT ?? 8081;
 
 let serveLocalFiles = true;
 let record = false;
+let bundle = false;
+let bundleTimer = false;
 
 app.get("*", (req, res) => {
   if (req.path === "/no-local") {
@@ -33,10 +35,25 @@ app.get("*", (req, res) => {
     return;
   }
 
-  if (serveLocalFiles) {
-    serveLocally(req, res, { record });
+  if (req.path === "/bundle") {
+    bundle = true;
+    res.write("The next sequence of requests will be recorded and bundled");
+    console.log("The next sequence of requests will be recorded and bundled");
+    res.end();
+    return;
+  }
+
+  if (bundle) {
+    clearTimeout(bundleTimer);
+    bundleTimer = setTimeout(() => {
+      bundle = false;
+    }, 3_000);
+  }
+
+  if (bundle || !serveLocalFiles) {
+    proxyToApi(req, res, { bundle });
   } else {
-    proxyToApi(req, res, { record });
+    serveLocally(req, res, { bundle, record });
   }
 });
 

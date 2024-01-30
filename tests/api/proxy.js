@@ -1,14 +1,7 @@
-import fs from "fs/promises";
 import https from "https";
-import path from "path";
+import save from "./save.js";
 
-// For some reason, eslint is seeing prettier as a devDependency in the parent
-// package.json, but not as a direct dependency of this one. It's causing a lint
-// false-positive.
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { format } from "prettier";
-
-export default (req, res, { record = false, filePath = false } = {}) => {
+export default (req, res, { bundle = false, record = false } = {}) => {
   // Reassemble the query string, if any.
   const qs = Object.entries(req.query)
     .map(([key, value]) => `${key}=${value}`)
@@ -37,29 +30,12 @@ export default (req, res, { record = false, filePath = false } = {}) => {
           // Write out the response.
           if (!res.writableEnded) {
             res.write(output.join(""));
-          }
-          res.end();
 
-          // If we're supposed to record and we have a file path...
-          if (record && !!filePath && proxyResponse.statusCode >= 200) {
-            const contentType = proxyResponse.headers["content-type"];
-
-            // Only capture JSON responses.
-            if (
-              contentType === "application/json" ||
-              contentType === "application/geo+json"
-            ) {
-              console.log(`record this to ${filePath}`);
-
-              // Make the directory structure if necessary, then write out the
-              // formatted JSON.
-              await fs.mkdir(path.dirname(filePath), { recursive: true });
-              const json = await format(output.join(""), { parser: "json" });
-              await fs.writeFile(filePath, json, {
-                encoding: "utf-8",
-              });
+            if (bundle || record) {
+              save(req, proxyResponse, output.join(""), { bundle });
             }
           }
+          res.end();
         };
 
         proxyResponse.on("data", (chunk) => {
