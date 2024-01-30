@@ -99,7 +99,7 @@ As we build, we will inevitably uncover functionality we couldn’t foresee and 
 
 ^ notes that it was added on 10/25/24
 
-Our milestones for MVP can be viewed in [our repo's milestones](https://github.com/weather-gov/weather.gov/milestones?direction=asc&sort=due_date&state=open) and laid out over a timeline in [our project board](https://github.com/orgs/weather-gov/projects/2/views/18).
+Our milestones for MVP can be viewed in [our repo's milestones](weather-gov/weather.gov/milestones?direction=asc&sort=due_date&state=open) and laid out over a timeline in [our project board](weather-gov/projects/2/views/18).
 
 ## Next - Expand core user experience and support unique needs
 
