@@ -142,9 +142,18 @@ class WeatherDataService
                 }
 
                 $logger->error("giving up on: $url");
+
+                // Cache errors too. If we've already tried and failed on an
+                // endpoint the maximum number of retries, don't try again on
+                // subsequent calls to the same endpoint.
+                $this->cache->set($url, (object) ["error" => $e]);
                 throw $e;
             }
         } else {
+            // If we cached an exception, throw it. Otherwise return the data.
+            if (is_object($cacheHit->data) && $cacheHit->data->error) {
+                throw $cacheHit->data->error;
+            }
             return $cacheHit->data;
         }
     }
@@ -181,7 +190,6 @@ class WeatherDataService
         });
 
         $periods = array_values($result);
-
 
         return $periods;
     }
@@ -714,7 +722,6 @@ class WeatherDataService
                 $periods[0]->startTime,
             );
         }
-
 
         // These are the periods that correspond to "today".
         // Usually they are 1 or two periods, depending on when

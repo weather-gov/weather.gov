@@ -1,6 +1,9 @@
 {# Widgets and stuff. This is presented as a row of columns. #}
 <div class="weather-gov-current-conditions">
   <h2>Current Conditions</h2>
+  {% if content.error %}
+  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: "There was an error loading the current conditions." } %}
+  {% else %}
 
   {# We hide from screenreaders and use the weather narrative (below) instead #}
   <div data-wx-current-conditions-narrative aria-hidden="true">
@@ -110,4 +113,5 @@
       {{content.stationInfo.elevation}} ft
     </div>
   </div>
+{% endif %}
 </div>

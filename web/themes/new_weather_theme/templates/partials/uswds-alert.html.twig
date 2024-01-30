@@ -1,0 +1,6 @@
+<div class="usa-alert usa-alert--{{ level | default('info') }}">
+  <div class="usa-alert__body">
+    {% if heading %}<h3 class="usa-alert__heading">{{ heading }}</h3>{% endif %}
+    {% if body %}<div class="usa-alert__text">{{ body }}</div>{% endif %}
+  </div>
+</div>
