@@ -1,27 +1,5 @@
 # How we manage our work
 
-## Definitions
-**We are not a scrum team. We are an agile team** that uses a mix of scrum and kanban project management practices. These are fairly common practices across other agile teams, tweaked to fit our team and to easily onboard others onto the project. 
-
-Everything should be based on **outcomes > outputs**. Outcomes are goals we need to achieve in order to be successful.
-
-These outcomes are correlated to work that can be broken down into **3 different “sizes”** from big to small, strategic to tactical:
-
-| Big and Strategic | | Small and Tactical |
-| :----------- | :-------------| :-------------|
-| **Epics** identify a large user need or area of work. **Stories** specify the value we need to provide. | **Spikes > Flows > Layouts > Components** clearly define solutions and capabilities. | **Tasks** are tactical to-dos that an individual can use to track their work. |
-
-**Additional definitions**
-- We write features using a user story format to remind us that everything we build is to serve a user need – As a [user + context], I need to do [x] in order to achieve [y].
-- We use a backlog to list and track our work across phases.
-- A sprint is a two week increment of work that’s planned out
-- A spike is a timeboxed (< 1 sprint) exploration to evaluate opportunities, risks, and limitations of a new technology or idea
-- Git terminology
-  - Tickets (aka Github issues) track our work
-  - Branches
-  - Pull requests
-  - Releases
-
 ## Breaking down strategic priorities into tactical work
 
 Linear flow of the phases and how our work is broken down 
