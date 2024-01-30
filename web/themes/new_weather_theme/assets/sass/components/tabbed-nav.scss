@@ -9,10 +9,14 @@ tabbed-nav {
       display: inline-block;
       padding: 0;
       color: rgba(0, 133, 202, 1);
-      @include u-font("body", "sm");
+      @include u-font("body", "md");
 
       &[data-selected] {
         border-bottom: 2px solid rgba(0, 133, 202, 1);
+      }
+
+      &:focus {
+        outline-offset: units(1.0);  
       }
     }
 
