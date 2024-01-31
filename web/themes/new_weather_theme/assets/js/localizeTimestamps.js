@@ -1,8 +1,4 @@
-import setupComponents from "./components/index.js";
-
-const main = () => {
-  setupComponents();
-
+(() => {
   const locale = (() => {
     if (Array.isArray(navigator.languages) && navigator.languages.length > 0) {
       return navigator.languages[0];
@@ -45,10 +41,4 @@ const main = () => {
 
     timestamp.innerText = formatters.get(formatter).format(date);
   }
-};
-
-if (document.readyState !== "loading") {
-  main();
-} else {
-  document.addEventListener("DOMContentLoaded", main);
-}
+})();
