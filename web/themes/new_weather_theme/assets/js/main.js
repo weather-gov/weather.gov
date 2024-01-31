@@ -13,21 +13,37 @@ const main = () => {
     return "en-US";
   })();
 
-  const formatter = new Intl.DateTimeFormat(locale, {
-    weekday: "long",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZoneName: "short",
-  });
+  const formatters = new Map([
+    [
+      "basic",
+      new Intl.DateTimeFormat(locale, {
+        weekday: "long",
+        hour: "numeric",
+        minute: "2-digit",
+        timeZoneName: "short",
+      }),
+    ],
+    [
+      "M d Y T",
+      new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      }),
+    ],
+  ]);
 
-  const timestamps = document.querySelectorAll("weather-timestamp");
+  const timestamps = document.querySelectorAll("time[data-wx-local-time]");
   for (let i = 0; i < timestamps.length; i += 1) {
     const timestamp = timestamps[i];
     const date = new Date(
-      Number.parseInt(timestamp.getAttribute("data-utc"), 10) * 1_000,
+      Number.parseInt(timestamp.getAttribute("datetime"), 10) * 1_000,
     );
+    const formatter = timestamp.getAttribute("data-date-format") || "basic";
 
-    timestamp.innerText = formatter.format(date);
+    timestamp.innerText = formatters.get(formatter).format(date);
   }
 };
 

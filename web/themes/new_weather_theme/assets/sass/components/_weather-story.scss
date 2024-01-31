@@ -1,0 +1,10 @@
+@use "uswds-core" as *;
+
+@include at-media-max("tablet") {
+  // Below the tablet breakpoint, weather story images should be the full width
+  // of the screen. The image's container has 2 units of padding on each side,
+  // so the image's max width needs to be 100% + 4 units to overcome that.
+  [data-wx-weather-story] img {
+    max-width: calc(100% + units(4));
+  }
+}

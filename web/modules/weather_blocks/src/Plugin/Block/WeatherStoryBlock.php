@@ -55,10 +55,19 @@ class WeatherStoryBlock extends WeatherBlockBase
                 $body = array_pop($body);
                 $body = $body["value"];
 
+                $changed = \DateTime::createFromFormat(
+                    "U",
+                    $story->get("changed")->value,
+                );
+
                 return [
                     "title" => $story->get("title")->getString(),
                     "body" => $body,
                     "image" => $image,
+                    "updated" => [
+                        "formatted" => $changed->format("M j, Y, g:i A"),
+                        "utc" => $changed->format("U"),
+                    ],
                 ];
             }
         }
