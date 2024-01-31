@@ -17,11 +17,11 @@ describe("main script", () => {
             });
           },
         });
-        cy.get("weather-timestamp").then((timestamps) => {
+        cy.get("time[data-wx-local-time]").then((timestamps) => {
           expect(timestamps.length).to.be.greaterThan(0);
 
           for (const timestamp of timestamps) {
-            const utc = timestamp.getAttribute("data-utc");
+            const utc = timestamp.getAttribute("datetime");
             const actual = timestamp.innerText;
 
             // [TODO]

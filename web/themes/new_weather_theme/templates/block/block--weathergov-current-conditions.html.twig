@@ -8,9 +8,9 @@
       {{ 'Weather as of' | t }}
     </p>
     {# Datetimes are localized in client-side Javascript. #}
-    <weather-timestamp class="display-block text-bold" data-utc="{{ content.timestamp.utc }}">
+    <time class="display-block text-bold" datetime="{{ content.timestamp.utc }}" data-wx-local-time>
       {{ content.timestamp.formatted }}
-    </weather-timestamp>
+    </time>
   </div>
 
   {# We hide from screenreaders and use the weather narrative (below) instead #}
