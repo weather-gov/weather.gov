@@ -23,13 +23,17 @@ class DailyForecastBlock extends WeatherBlockBase
         if ($location->grid) {
             $grid = $location->grid;
 
-            return $this->weatherData->getDailyForecastFromGrid(
-                $grid->wfo,
-                $grid->x,
-                $grid->y,
-                false,
-                3,
-            );
+            try {
+                return $this->weatherData->getDailyForecastFromGrid(
+                    $grid->wfo,
+                    $grid->x,
+                    $grid->y,
+                    false,
+                    3,
+                );
+            } catch (\Throwable $e) {
+                return ["error" => true];
+            }
         }
         return null;
     }

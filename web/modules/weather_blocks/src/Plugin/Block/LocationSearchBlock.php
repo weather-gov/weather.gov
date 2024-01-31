@@ -22,16 +22,20 @@ class LocationSearchBlock extends WeatherBlockBase
 
         if ($location->grid) {
             $grid = $location->grid;
-            $data = $this->weatherData->getPlaceFromGrid(
-                $grid->wfo,
-                $grid->x,
-                $grid->y,
-            );
+            try {
+                $data = $this->weatherData->getPlaceFromGrid(
+                    $grid->wfo,
+                    $grid->x,
+                    $grid->y,
+                );
 
-            if ($data) {
-                return [
-                    "place" => $data,
-                ];
+                if ($data) {
+                    return [
+                        "place" => $data,
+                    ];
+                }
+            } catch (\Throwable $e) {
+                return ["error" => true];
             }
         }
 

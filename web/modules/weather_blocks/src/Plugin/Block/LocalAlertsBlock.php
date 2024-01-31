@@ -23,12 +23,16 @@ class LocalAlertsBlock extends WeatherBlockBase
         if ($location->grid) {
             $grid = $location->grid;
 
-            $data = $this->weatherData->getAlertsForGrid(
-                $grid->wfo,
-                $grid->x,
-                $grid->y,
-            );
-            return ["alerts" => $data];
+            try {
+                $data = $this->weatherData->getAlertsForGrid(
+                    $grid->wfo,
+                    $grid->x,
+                    $grid->y,
+                );
+                return ["alerts" => $data];
+            } catch (\Throwable $e) {
+                return ["error" => true];
+            }
         }
         return null;
     }

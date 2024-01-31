@@ -58,14 +58,19 @@ class HourlyForecastBlock extends WeatherBlockBase
 
             $config = $this->getConfiguration();
             $max = $config["max_items"] ?? "12";
-            $data = $this->weatherData->getHourlyForecastFromGrid(
-                $grid->wfo,
-                $grid->x,
-                $grid->y,
-            );
-            $data = array_slice($data, 0, $max);
 
-            return ["hours" => $data];
+            try {
+                $data = $this->weatherData->getHourlyForecastFromGrid(
+                    $grid->wfo,
+                    $grid->x,
+                    $grid->y,
+                );
+                $data = array_slice($data, 0, $max);
+
+                return ["hours" => $data];
+            } catch (\Throwable $e) {
+                return ["error" => true];
+            }
         }
         return null;
     }
