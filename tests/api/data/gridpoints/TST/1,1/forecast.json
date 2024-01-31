@@ -411,6 +411,33 @@
         "icon": "/icons/land/night/cold?size=medium",
         "shortForecast": "Mostly Cloudy",
         "detailedForecast": "Mostly cloudy, with a low around -6. West northwest wind around 15 mph."
+      },
+      {
+        "number": 15,
+        "name": "Monday",
+        "startTime": "date:now +168 hour",
+        "endTime": "date:now +180 hour",
+        "isDaytime": true,
+        "temperature": 32,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -20
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 91
+        },
+        "windSpeed": "15 mph",
+        "windDirection": "WNW",
+        "icon": "/icons/land/night/cold?size=medium",
+        "shortForecast": "Mostly Cloudy",
+        "detailedForecast": "Mostly cloudy, with a low around -6. West northwest wind around 15 mph."
       }
     ]
   }
