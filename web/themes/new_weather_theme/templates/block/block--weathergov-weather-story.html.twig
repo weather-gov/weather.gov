@@ -2,9 +2,9 @@
 <div data-wx-weather-story>
   <h2>Weather story</h2>
   <p class="text-gray-50">Last updated:
-    <weather-timestamp data-utc="{{ content.updated.utc }}" data-date-format="M d Y T">
+    <time datetime="{{ content.updated.utc }}" data-wx-local-time data-date-format="M d Y T">
       {{ content.updated.formatted }}
-    </weather-timestamp>
+    </time>
   </p>
   {% if content.image %}
   <img class="margin-left-neg-2 tablet:margin-left-0" src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
