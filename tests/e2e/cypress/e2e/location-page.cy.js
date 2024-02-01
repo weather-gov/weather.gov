@@ -24,4 +24,23 @@ describe("the location page", () => {
       "Small Craft Advisory",
     );
   });
+
+  it("expands the first alert accordion and collapses the rest", () => {
+    // 10/10 has 6 alerts. That should be enough for us.
+    cy.visit("/local/TST/10/10/");
+    cy.get(
+      "weathergov-alerts div.usa-accordion div.usa-accordion__content",
+    ).each(($node, i) => {
+      // The first alert node should not have the hidden attribute at all. The
+      // rest should.
+      const assertion = i === 0 ? "not.have.attr" : "have.attr";
+      cy.wrap($node).should(assertion, "hidden");
+    });
+  });
+
+  it("expands and collapses alerts", () => {
+    // Per the above test, 0/0 should only have 1 alert.
+    cy.visit("/local/TST/0/0");
+    cy.get("weathergov-alerts div.usa-accordion");
+  });
 });
