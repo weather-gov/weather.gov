@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: off */
 describe("<tabbed-nav> component tests", () => {
   describe("Alert link interaction", () => {
     beforeEach(() => {
@@ -47,18 +48,15 @@ describe("<tabbed-nav> component tests", () => {
       });
 
       it("Clicking an unselected tab should show it", () => {
-        cy.get("tabbed-nav .tab-button:last")
-          .as("lastBtn")
-          .click()
-          .get("@lastBtn")
-          .then((btn) => {
-            const tabName = btn.attr("data-tab-name");
-            cy.get(`#${tabName}`)
-              .should("be.visible")
-              .invoke("attr", "data-selected")
-              .should("exist");
-          })
-          .get("@lastBtn")
+        cy.get("tabbed-nav .tab-button:last").as("lastBtn").click();
+        cy.get("@lastBtn").then((btn) => {
+          const tabName = btn.attr("data-tab-name");
+          cy.get(`#${tabName}`)
+            .should("be.visible")
+            .invoke("attr", "data-selected")
+            .should("exist");
+        });
+        cy.get("@lastBtn")
           .invoke("attr", "data-selected")
           .should("exist")
           .get("@lastBtn")
@@ -83,9 +81,8 @@ describe("<tabbed-nav> component tests", () => {
       it("Clicking an alert link opens the accordion for that link and scrolls to it", () => {
         cy.get("weathergov-alert-list a").each((anchorEl) => {
           const alertId = anchorEl.attr("href").split("#")[1];
-          const alertEl = cy.get(`#${alertId}`).as("alertEl").click();
-          cy.wait(20)
-            .get("@alertEl")
+          cy.get(`#${alertId}`).as("alertEl").click();
+          cy.get("@alertEl")
             .find(".usa-accordion__content")
             .invoke("attr", "hidden")
             .should("not.exist")
@@ -103,13 +100,12 @@ describe("<tabbed-nav> component tests", () => {
           // Click on another tab that is not the alerts
           // tab button
           .get('tabbed-nav .tab-button:not([data-tab-name="alerts"]):first')
-          .click()
-          // Get the third alert link and click it
-          .get("weathergov-alert-list a:last")
-          .click()
-          // Get the alerts tab button and make sure it's now
-          // selected
-          .get('tabbed-nav .tab-button[data-tab-name="alerts"]')
+          .click();
+        // Get the third alert link and click it
+        cy.get("weathergov-alert-list a:last").click();
+        // Get the alerts tab button and make sure it's now
+        // selected
+        cy.get('tabbed-nav .tab-button[data-tab-name="alerts"]')
           .as("alertsTabBtn")
           .invoke("attr", "aria-expanded")
           .should("eq", "true")

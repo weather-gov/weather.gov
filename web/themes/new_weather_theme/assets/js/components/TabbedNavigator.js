@@ -1,15 +1,6 @@
-const templateString = `
-<slot></slot>
-`;
-
 class TabbedNavigator extends HTMLElement {
   constructor() {
     super();
-
-    this.template = document.createElement("template");
-    this.template.innerHTML = templateString;
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.append(this.template.content.cloneNode(true));
 
     // Bind this context to methods that need it
     this.handleAlertAnchorClick = this.handleAlertAnchorClick.bind(this);
@@ -56,7 +47,7 @@ class TabbedNavigator extends HTMLElement {
 
   navigateWithInitialHash() {
     const hash = new URL(window.location).hash;
-    if (!hash || hash == "") {
+    if (!hash || hash === "") {
       return;
     }
 
@@ -78,7 +69,6 @@ class TabbedNavigator extends HTMLElement {
         document.addEventListener("DOMContentLoaded", () => {
           this.scrollToAccordion(childElement);
         });
-        return;
       }
     }
   }
@@ -149,10 +139,8 @@ class TabbedNavigator extends HTMLElement {
     const buttonArea = this.querySelector(".tab-buttons");
     const buttonAreaHeight = buttonArea.getBoundingClientRect().height;
     const scrollY = accordionTop + window.scrollY - buttonAreaHeight;
-    console.log(scrollY);
     window.scrollTo(0, scrollY);
   }
 }
 
 window.customElements.define("tabbed-nav", TabbedNavigator);
-console.log("Loaded TabbedNavigator here");
