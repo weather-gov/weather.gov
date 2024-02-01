@@ -19,23 +19,27 @@ describe("<tabbed-nav> component tests", () => {
           .then(win => {
             const customEl = win.customElements.get("tabbed-nav");
             expect(customEl).to.exist;
+            expect(tabbedNav.get(0).isConnected).to.be.true;
           });
       });
 
-      it("Intercepts the click handlers for alert links", () => {
-        let handler;
-        cy.log("hello");
+      it("Clicking an alert link opens the accordion for that link ans scrolls to it", () => {
         cy
-          .get("tabbed-nav").then(element => {
-            tabbedNav = element;
-            expect(tabbedNav).to.exist;
-            handler = cy.stub(tabbedNav.get(0), "handleAlertAnchorClick");
-          })
           .get("weathergov-alert-list a")
-          .click({multiple: true})
-          .wait(200)
-          .then(() => {
-            expect(handler).to.be.called;
+          .each(anchorEl => {
+            const alertId = anchorEl.attr("href").split("#")[1];
+            const alertEl = cy.get(`#${alertId}`).as("alertEl").click();
+            cy
+              .wait(20)
+              .get("@alertEl").find(".usa-accordion__content")
+              .invoke("attr", "hidden")
+              .should("not.exist")
+              .get("@alertEl")
+              .find("button.usa-accordion__button")
+              .invoke("attr", "aria-expanded")
+              .should("eq", "true")
+              .get("@alertEl")
+              .should("be.visible"); 
           });
       });
     });
