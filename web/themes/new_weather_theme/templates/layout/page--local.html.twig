@@ -135,12 +135,21 @@
 
       <tabbed-nav class="display-block position-relative">
           <div class="tab-buttons padding-bottom-4 padding-top-4 top-0 z-top display-flex flex-row flex-justify position-sticky bg-white top-4 mobile-lg:grid-col-8 desktop:grid-col-6">
-              <button role="button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</a>
-              <button role="button" class="tab-button" data-tab-name="hourly" aria-controls="hourly">{{ "Hourly" | t }}</a>
-              <button role="button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "Daily" | t }}</a>
+              <button role="button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
+                  <button role="button" class="tab-button" data-tab-name="outlook" aria-controls="outlook">{{ "Outlook" | t}}</button>
+              <button role="button" class="tab-button" data-tab-name="hourly" aria-controls="hourly">{{ "Hourly" | t }}</button>
+              <button role="button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "Daily" | t }}</button>
           </div>
           <div class="tab-container" id="alerts">
               {{ drupal_block("weathergov_local_alerts") }}
+          </div>
+          <div class="tab-container" id="outlook">
+              <div class="tablet:grid-col-6 padding-right-2">
+          {{ drupal_block("weathergov_weather_story") }}
+        </div>
+        <div class="tablet:grid-col-6 padding-left-2">
+            {{ drupal_block("weathergov_wfo_promo") }}
+        </div>
           </div>
           <div class="tab-container" id="hourly">
               {{ drupal_block("weathergov_hourly_forecast") }}
@@ -149,15 +158,6 @@
               {{ drupal_block("weathergov_daily_forecast") }}
           </div>
       </tabbed-nav>
-
-      <div class="grid-row tablet:grid-col-12 margin-top-4">
-        <div class="desktop:grid-col-6 tablet:grid-col-8">
-          {{ drupal_block("weathergov_weather_story") }}
-        </div>
-        <div class="desktop:grid-col-6 tablet:grid-col-8">
-          {{ drupal_block("weathergov_wfo_promo") }}
-        </div>
-      </div>
     </div>
   </main>
 
