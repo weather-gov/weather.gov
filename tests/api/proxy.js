@@ -1,7 +1,8 @@
 import https from "https";
 import save from "./save.js";
+import config from "./config.js";
 
-export default (req, res, { bundle = false, record = false } = {}) => {
+export default (req, res) => {
   // Reassemble the query string, if any.
   const qs = Object.entries(req.query)
     .map(([key, value]) => `${key}=${value}`)
@@ -30,9 +31,10 @@ export default (req, res, { bundle = false, record = false } = {}) => {
           // Write out the response.
           if (!res.writableEnded) {
             res.write(output.join(""));
+            console.log("PROXY:    response finished");
 
-            if (bundle || record) {
-              save(req, proxyResponse, output.join(""), { bundle });
+            if (config.recording || config.bundling) {
+              save(req, proxyResponse, output.join(""));
             }
           }
           res.end();

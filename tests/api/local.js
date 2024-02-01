@@ -50,7 +50,7 @@ const processDates = (obj) => {
   });
 };
 
-export default async (request, response, { record }) => {
+export default async (request, response) => {
   // Put the query string back together.
   const query = Object.entries(request.query)
     .map(([key, value]) => `${key}=${value}`)
@@ -63,15 +63,11 @@ export default async (request, response, { record }) => {
 
   const fileExists = await exists(filePath);
 
-  console.log(
-    `request for ${request.path}; target file ${
-      fileExists ? "exists" : "DOES NOT exist"
-    } at ${filePath}`,
-  );
-
   if (!fileExists) {
-    await proxy(request, response, { record });
+    console.log(`LOCAL:    local file does not exist; proxying`);
+    await proxy(request, response);
   } else {
+    console.log(`LOCAL:    serving local file: ${filePath}`);
     const output = JSON.parse(await fs.readFile(filePath));
     processDates(output);
 
