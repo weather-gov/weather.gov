@@ -8,11 +8,12 @@ tabbed-nav {
     border-bottom: 2px solid transparent;
     display: inline-block;
     padding: 0;
-    color: rgba(0, 133, 202, 1);
+    color: rgb(0 133 202 / 100%);
+
     @include u-font("body", "md");
 
     &[data-selected] {
-      border-bottom: 2px solid rgba(0, 133, 202, 1);
+      border-bottom: 2px solid rgb(0 133 202 / 100%);
     }
 
     &:focus {
