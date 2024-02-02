@@ -81,8 +81,8 @@ describe("<tabbed-nav> component tests", () => {
       it("Clicking an alert link opens the accordion for that link and scrolls to it", () => {
         cy.get("weathergov-alert-list a").each((anchorEl) => {
           const alertId = anchorEl.attr("href").split("#")[1];
-          cy.get(`#${alertId}`).as("alertEl").click();
-          cy.get("@alertEl")
+          cy.wrap(anchorEl).click();
+          cy.get(`#${alertId}`).as("alertEl")
             .find(".usa-accordion__content")
             .invoke("attr", "hidden")
             .should("not.exist")
