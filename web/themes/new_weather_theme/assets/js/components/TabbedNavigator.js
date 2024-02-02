@@ -60,7 +60,7 @@ class TabbedNavigator extends HTMLElement {
       return;
     }
 
-    const childElement = this.querySelector(`${hash}`);
+    const childElement = this.querySelector(`${hash},tab-container, .tab-container ${hash}`);
     if (childElement) {
       const tabContainer = childElement.closest(".tab-container");
       this.switchToTab(tabContainer.id);

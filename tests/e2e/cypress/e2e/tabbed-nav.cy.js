@@ -121,4 +121,39 @@ describe("<tabbed-nav> component tests", () => {
       });
     });
   });
+
+  describe("Initial page load with hash", () => {
+    it("Navigates to the correct alert accordion and opens it if hash present", () => {
+      const alertId = "alert_2";
+      cy.visit(`/local/TST/10/10#${alertId}`);
+      cy
+        .get(`#${alertId}`).as("alertEl")
+        .find(".usa-accordion__content")
+        .invoke("attr", "hidden")
+        .should("not.exist")
+        .get("@alertEl")
+        .find("button.usa-accordion__button")
+        .invoke("attr", "aria-expanded")
+        .should("eq", "true")
+        .get("@alertEl")
+        .should("be.visible");
+    });
+
+    ["hourly", "daily"].forEach(tabName => {
+      it(`Acticates the ${tabName} tab if the hash for it is present`, () => {
+        cy.visit(`/local/TST/10/10#${tabName}`);
+        cy
+          .get(`.tab-button[data-tab-name="${tabName}"]`).as("tabButton")
+          .invoke("attr", "data-selected")
+          .should("exist")
+          .get("@tabButton")
+          .invoke("attr", "aria-expanded")
+          .should("eq", "true")
+          .get(`#${tabName}`)
+          .should("be.visible")
+          .invoke("attr", "data-selected")
+          .should("exist");
+      });
+    });
+  });
 });
