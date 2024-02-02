@@ -16,7 +16,7 @@ default_config: &defaults
 applications:
 - name: weathergov-greg
   <<: *defaults
-  memory: 256M
+  memory: 512M
   instances: 1
   random-route: false
 # - name: cronish
