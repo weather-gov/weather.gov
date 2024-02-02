@@ -82,7 +82,8 @@ describe("<tabbed-nav> component tests", () => {
         cy.get("weathergov-alert-list a").each((anchorEl) => {
           const alertId = anchorEl.attr("href").split("#")[1];
           cy.wrap(anchorEl).click();
-          cy.get(`#${alertId}`).as("alertEl")
+          cy.get(`#${alertId}`)
+            .as("alertEl")
             .find(".usa-accordion__content")
             .invoke("attr", "hidden")
             .should("not.exist")
@@ -126,8 +127,8 @@ describe("<tabbed-nav> component tests", () => {
     it("Navigates to the correct alert accordion and opens it if hash present", () => {
       const alertId = "alert_2";
       cy.visit(`/local/TST/10/10#${alertId}`);
-      cy
-        .get(`#${alertId}`).as("alertEl")
+      cy.get(`#${alertId}`)
+        .as("alertEl")
         .find(".usa-accordion__content")
         .invoke("attr", "hidden")
         .should("not.exist")
@@ -139,11 +140,11 @@ describe("<tabbed-nav> component tests", () => {
         .should("be.visible");
     });
 
-    ["hourly", "daily"].forEach(tabName => {
+    ["hourly", "daily"].forEach((tabName) => {
       it(`Acticates the ${tabName} tab if the hash for it is present`, () => {
         cy.visit(`/local/TST/10/10#${tabName}`);
-        cy
-          .get(`.tab-button[data-tab-name="${tabName}"]`).as("tabButton")
+        cy.get(`.tab-button[data-tab-name="${tabName}"]`)
+          .as("tabButton")
           .invoke("attr", "data-selected")
           .should("exist")
           .get("@tabButton")
@@ -154,6 +155,15 @@ describe("<tabbed-nav> component tests", () => {
           .invoke("attr", "data-selected")
           .should("exist");
       });
+    });
+  });
+
+  describe("Conditional tabs", () => {
+    it("Should not display an alerts tab or area if there are no alerts", () => {
+      cy.visit("local/TST/1/1");
+      cy.get('.tab-button[data-tab-name="alerts"]')
+        .should("not.exist");
+      cy.get('#alerts').should("not.exist");
     });
   });
 });
