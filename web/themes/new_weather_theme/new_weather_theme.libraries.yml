@@ -29,3 +29,7 @@ localize-timestamps:
     assets/js/localizeTimestamps.js:
       attributes:
         async: true
+tabbed_nav:
+  version: VERSION
+  js:
+    assets/js/components/TabbedNavigator.js: { preprocess: false }

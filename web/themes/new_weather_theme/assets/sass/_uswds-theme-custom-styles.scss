@@ -45,6 +45,14 @@ body {
   height: 100%;
 }
 
+body {
+  /* the normalize.css we use sets
+   *  this value to 'hidden', which will
+   *  prevent the use of position sticky
+   *  anywhere in the body
+   */
+  overflow-x: clip;
+}
 
 /* Current Conditions
 -------------------------------------
@@ -52,7 +60,7 @@ body {
 .current-conditions-temp {
   font-size: 56px;
 }
-  
+
 /* Hourly Forecast Block Overrides
 --------------------------------------
 */

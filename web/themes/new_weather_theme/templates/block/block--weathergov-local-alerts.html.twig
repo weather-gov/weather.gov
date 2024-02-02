@@ -1,13 +1,13 @@
-<weathergov-alerts class="display-block margin-top-4 desktop:grid-col-6">
+<weathergov-alerts class="display-block desktop:grid-col-6">
 {% for alert in content.alerts %}
-<a id="alert_{{ loop.index }}"></a>
-<div class="usa-accordion usa-accordion--bordered margin-bottom-1">
+<div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ loop.index }}">
   <h2 class="usa-accordion__heading">
     <button
       type="button"
       class="usa-accordion__button"
       aria-expanded="{{ (loop.index == 1) ? 'true' : 'false' }}"
-      aria-controls="a{{ loop.index }}">
+      aria-controls="a{{ loop.index }}"
+      data-button-for="#alert_{{loop.index}}">
       {{ alert.event }}
     </button>
   </h2>

@@ -20,6 +20,12 @@ module.exports = {
       },
     },
     {
+      files: ["web/themes/new_weather_theme/assets/js/components/**/*.js"],
+      rules: {
+        "class-methods-use-this": 0,
+      },
+    },
+    {
       files: [
         "tests/a11y/**/*.js",
         "tests/e2e/**/*.js",
