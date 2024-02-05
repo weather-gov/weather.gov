@@ -2,22 +2,14 @@
 
 namespace Drupal\weather_data\Service;
 
+use Drupal\weather_data\Service\WeatherAlertParser;
+
 /**
  * Add weather alert methods.
  */
 trait WeatherAlertTrait
 {
-    protected static function fixupNewlines($str)
-    {
-        if ($str) {
-            // Remove individual newline characters. Leave pairs. Pairs of
-            // newlines are equivalent to paragraph breaks and we want to keep
-            // those, but within a paragraph, we want to let the text break on
-            // its own.
-            return preg_replace("/([^\n])\n([^\n])/m", "$1 $2", $str);
-        }
-        return $str;
-    }
+    
 
     protected static function turnToDate($str, $timezone)
     {
@@ -92,7 +84,7 @@ trait WeatherAlertTrait
                 $output->description,
             );
             if (!is_array($alertDescription)) {
-                $output->description = self::fixupNewlines(
+                $output->description = WeatherAlertParser::fixupNewlines(
                     $alertDescription ?? false,
                 );
                 $output->usesParsedDescription = false;
@@ -101,11 +93,11 @@ trait WeatherAlertTrait
                 $output->usesParsedDescription = true;
             }
 
-            $output->instruction = self::fixupNewlines(
+            $output->instruction = WeatherAlertParser::fixupNewlines(
                 $output->instruction ?? false,
             );
 
-            $output->areaDesc = self::fixupNewlines($output->areaDesc ?? false);
+            $output->areaDesc = WeatherAlertParser::fixupNewlines($output->areaDesc ?? false);
             if ($output->areaDesc) {
                 $output->areaDesc = array_map(function ($description) {
                     return trim($description);

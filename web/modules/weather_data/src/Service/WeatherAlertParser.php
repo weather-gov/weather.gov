@@ -10,6 +10,19 @@ class WeatherAlertParser {
    */
   private $descriptionString;
 
+
+  public static function fixupNewlines($str)
+  {
+    if ($str) {
+      // Remove individual newline characters. Leave pairs. Pairs of
+      // newlines are equivalent to paragraph breaks and we want to keep
+      // those, but within a paragraph, we want to let the text break on
+      // its own.
+      return preg_replace("/([^\n])\n([^\n])/m", "$1 $2", $str);
+    }
+    return $str;
+  }
+
   public function __construct(
     string $descriptionString
   ){
@@ -18,7 +31,10 @@ class WeatherAlertParser {
 
   public function parse()
   {
-    $paragraphs = preg_split("/\r\n|\n|\r/", $this->descriptionString);
+    $cleanedDescriptionString = self::fixupNewlines(
+      $this->descriptionString
+    );
+    $paragraphs = preg_split("/\r\n|\n|\r/", $cleanedDescriptionString);
     // Remove blank strings
     $paragraphs = array_filter(
       $paragraphs,
@@ -64,13 +80,13 @@ class WeatherAlertParser {
    */
   public function parseOverview($str, &$nodes)
   {
-    $regex = "/\.\.\.([A-Za-z\s]+)\.\.\./";
+    $regex = "/\.\.\.([^\.]+)\.\.\./";
     if(preg_match($regex, $str, $matches)){
       array_push(
         $nodes,
         [
           "type" => "heading",
-          "text" => $matches[0]
+          "text" => $matches[1]
         ]
       );
 
