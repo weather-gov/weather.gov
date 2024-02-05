@@ -134,15 +134,20 @@
         {{ drupal_block("weathergov_current_conditions") }}
 
       <tabbed-nav class="display-block position-relative">
-          <div class="tab-buttons padding-bottom-4 padding-top-4 top-0 z-top display-flex flex-row flex-justify position-sticky bg-white top-4 mobile-lg:grid-col-8 desktop:grid-col-6">
-              <button role="button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
+        <div class="tab-buttons padding-bottom-4 padding-top-4 top-0 z-top display-flex flex-row flex-justify position-sticky bg-white top-4 mobile-lg:grid-col-8 desktop:grid-col-6">
+          {% if weather.alerts %}
+          <button role="button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
+          {% endif %}
                   <button role="button" class="tab-button" data-tab-name="outlook" aria-controls="outlook">{{ "Outlook" | t}}</button>
               <button role="button" class="tab-button" data-tab-name="hourly" aria-controls="hourly">{{ "Hourly" | t }}</button>
               <button role="button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "Daily" | t }}</button>
-          </div>
+        </div>
+
+        {% if weather.alerts %}
           <div class="tab-container" id="alerts">
               {{ drupal_block("weathergov_local_alerts") }}
           </div>
+          {% endif %}
           <div class="tab-container" id="outlook">
               <div class="tablet:grid-col-6 padding-right-2">
           {{ drupal_block("weathergov_weather_story") }}
