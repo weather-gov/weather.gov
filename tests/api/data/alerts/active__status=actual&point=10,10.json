@@ -10,6 +10,52 @@
   "type": "FeatureCollection",
   "features": [
     {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9d4c165ba78d483386032a89941dfa46b470b69c.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9d4c165ba78d483386032a89941dfa46b470b69c.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.9d4c165ba78d483386032a89941dfa46b470b69c.001.1",
+        "areaDesc": "Lassen-Eastern Plumas-Eastern Sierra Counties",
+        "geocode": {
+          "SAME": ["006035", "006063", "006091"],
+          "UGC": ["CAZ071"]
+        },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/CAZ071"],
+        "references": [],
+        "sent": "2024-01-29T13:16:00-08:00",
+        "effective": "2024-01-29T13:16:00-08:00",
+        "onset": "2024-01-31T10:00:00-08:00",
+        "expires": "2024-01-30T13:30:00-08:00",
+        "ends": "2024-02-02T10:00:00-08:00",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Winter Storm Watch",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Reno NV",
+        "headline": "Winter Storm Watch issued January 29 at 1:16PM PST until February 2 at 10:00AM PST by NWS Reno NV",
+        "description": "...WINTER CONDITIONS RETURN TO THE SIERRA AND NORTHEAST CALIFORNIA\nFOR MID-LATE WEEK...\n\n.After a few days of warm weather, a potent winter storm will bring\nwindy and colder conditions with periods of heavy snow to the Sierra\nand higher elevations of northeast California later this week. While\nweather-related travel impacts aren't expected through Wednesday\nmorning, conditions will begin to worsen Wednesday afternoon and\nevening, with the most widespread winter travel impacts likely from\nWednesday evening through much of Thursday.\n\n* WHAT...Heavy snow possible. Snow accumulations of 4 to 10 inches\nabove 5000 feet west of US-395, with 10 to 20 inches possible for\nhigher passes such as Fredonyer Summit and Yuba Pass. Winds\ngusting as high as 50 mph.\n\n* WHERE...Lassen-Eastern Plumas-Eastern Sierra Counties.\n\n* WHEN...From late Wednesday morning through Friday morning.\nHeaviest snow is most likely from late Wednesday afternoon through\nThursday morning.\n\n* IMPACTS...Travel could be very difficult at times, with hazardous\nconditions impacting the commutes from Wednesday evening through\nFriday morning. Strong winds may blow down some tree limbs and a\nfew power outages may result.\n\n* ADDITIONAL DETAILS...Snow levels will start near 6500 feet on\nWednesday, then drop to near 5500 feet Wednesday night and near\n5000 feet by Thursday morning.",
+        "instruction": "Take advantage of the current warm days to ensure your winter\nsupplies are in place. Monitor the latest forecasts for updates on\nthis situation.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": ["WSWREV"],
+          "WMOidentifier": ["WWUS45 KREV 292116"],
+          "NWSheadline": [
+            "WINTER STORM WATCH IN EFFECT FROM WEDNESDAY MORNING THROUGH FRIDAY MORNING ABOVE 5000 FEET"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "EAS-ORG": ["WXR"],
+          "VTEC": ["/O.NEW.KREV.WS.A.0005.240131T1800Z-240202T1800Z/"],
+          "eventEndingTime": ["2024-02-02T18:00:00+00:00"]
+        }
+      }
+    },
+    {
       "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.550760f4ae698a45e239ca34a1ad97353d170175.001.1",
       "type": "Feature",
       "geometry": null,
