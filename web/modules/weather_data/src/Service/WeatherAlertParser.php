@@ -79,7 +79,7 @@ class WeatherAlertParser
         $regex = "/\.\.\.([^\.]+)\.\.\./";
         if (preg_match($regex, $str, $matches)) {
             array_push($nodes, [
-                "type" => "heading",
+                "type" => "paragraph",
                 "text" => $matches[1],
             ]);
 

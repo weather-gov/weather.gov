@@ -91,7 +91,7 @@ final class WeatherAlertParserTest extends TestCase
         );
         $expected = [
             [
-                "type" => "heading",
+                "type" => "paragraph",
                 "text" =>
                     "WINTER CONDITIONS RETURN TO THE SIERRA AND NORTHEAST CALIFORNIA FOR MID-LATE WEEK",
             ],
