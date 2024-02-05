@@ -5,136 +5,150 @@ namespace Drupal\weather_data\Service\Test;
 use PHPUnit\Framework\TestCase;
 use Drupal\weather_data\Service\WeatherAlertParser;
 
-final class WeatherAlertParserTest extends TestCase {
-  public function testFullWhatWhereWhen(): void
-  {
-    $rawDescription =
-      "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
-    $rawDescription .=
-      "* WHERE...Eastern San Juan Mountains Above 10000 Feet.\n\n";
-    $rawDescription .=
-      "* WHEN...From 11 PM this evening to 11 PM MST Thursday.\n\n";
-    $rawDescription .= "* IMPACTS...Travel could be very difficult. The hazardous conditions may impact travel over Wolf Creek Pass.";
+final class WeatherAlertParserTest extends TestCase
+{
+    public function testFullWhatWhereWhen(): void
+    {
+        $rawDescription =
+            "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
+        $rawDescription .=
+            "* WHERE...Eastern San Juan Mountains Above 10000 Feet.\n\n";
+        $rawDescription .=
+            "* WHEN...From 11 PM this evening to 11 PM MST Thursday.\n\n";
+        $rawDescription .=
+            "* IMPACTS...Travel could be very difficult. The hazardous conditions may impact travel over Wolf Creek Pass.";
 
-    $expected = [
-      [
-        "type" => "heading",
-        "text" => "what"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "Snow expected. Total snow accumulations of 5 to 10 inches." 
-      ],
-      [
-        "type" => "heading",
-        "text" => "where"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "Eastern San Juan Mountains Above 10000 Feet."
-      ],
-      [
-        "type" => "heading",
-        "text" => "when"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "From 11 PM this evening to 11 PM MST Thursday."
-      ],
-      [
-        "type" => "heading",
-        "text" => "impacts"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "Travel could be very difficult. The hazardous conditions may impact travel over Wolf Creek Pass."
-      ]
-    ];
+        $expected = [
+            [
+                "type" => "heading",
+                "text" => "what",
+            ],
+            [
+                "type" => "paragraph",
+                "text" =>
+                    "Snow expected. Total snow accumulations of 5 to 10 inches.",
+            ],
+            [
+                "type" => "heading",
+                "text" => "where",
+            ],
+            [
+                "type" => "paragraph",
+                "text" => "Eastern San Juan Mountains Above 10000 Feet.",
+            ],
+            [
+                "type" => "heading",
+                "text" => "when",
+            ],
+            [
+                "type" => "paragraph",
+                "text" => "From 11 PM this evening to 11 PM MST Thursday.",
+            ],
+            [
+                "type" => "heading",
+                "text" => "impacts",
+            ],
+            [
+                "type" => "paragraph",
+                "text" =>
+                    "Travel could be very difficult. The hazardous conditions may impact travel over Wolf Creek Pass.",
+            ],
+        ];
 
-    $parser = new WeatherAlertParser($rawDescription);
-    $parsedDescription = $parser->parse();
+        $parser = new WeatherAlertParser($rawDescription);
+        $parsedDescription = $parser->parse();
 
-    $this->assertEquals($expected, $parsedDescription);
-  }
+        $this->assertEquals($expected, $parsedDescription);
+    }
 
-  public function testBasicWhatWhereWhen(): void
-  {
-    $rawDescription = "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
+    public function testBasicWhatWhereWhen(): void
+    {
+        $rawDescription =
+            "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
 
-    $expected = [
-      [
-        "type" => "heading",
-        "text" => "what"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "Snow expected. Total snow accumulations of 5 to 10 inches."
-      ]
-    ];
+        $expected = [
+            [
+                "type" => "heading",
+                "text" => "what",
+            ],
+            [
+                "type" => "paragraph",
+                "text" =>
+                    "Snow expected. Total snow accumulations of 5 to 10 inches.",
+            ],
+        ];
 
-    $parser = new WeatherAlertParser($rawDescription);
-    $parsedDescription = $parser->parse();
+        $parser = new WeatherAlertParser($rawDescription);
+        $parsedDescription = $parser->parse();
 
-    $this->assertEquals($expected, $parsedDescription);
-  }
+        $this->assertEquals($expected, $parsedDescription);
+    }
 
-  public function testAlertDescriptionOverviewExample(): void
-  {
-    $rawDescription = file_get_contents(__DIR__ . "/test_data/alert.description.overview.txt");
-    $expected = [
-      [
-        "type" => "heading",
-        "text" => "WINTER CONDITIONS RETURN TO THE SIERRA AND NORTHEAST CALIFORNIA FOR MID-LATE WEEK"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => ".After a few days of warm weather, a potent winter storm will bring windy and colder conditions with periods of heavy snow to the Sierra and higher elevations of northeast California later this week. While weather-related travel impacts aren't expected through Wednesday morning, conditions will begin to worsen Wednesday afternoon and evening, with the most widespread winter travel impacts likely from Wednesday evening through much of Thursday."
-      ],
-      [
-        "type" => "heading",
-        "text" => "what"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "Heavy snow possible. Snow accumulations of 4 to 10 inches above 5000 feet west of US-395, with 10 to 20 inches possible for higher passes such as Fredonyer Summit and Yuba Pass. Winds gusting as high as 50 mph."
-      ],
-      [
-        "type" => "heading",
-        "text" => "where"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "Lassen-Eastern Plumas-Eastern Sierra Counties."
-      ],
-      [
-        "type" => "heading",
-        "text" => "when"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "From late Wednesday morning through Friday morning. Heaviest snow is most likely from late Wednesday afternoon through Thursday morning."
-      ],
-      [
-        "type" => "heading",
-        "text" => "impacts"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "Travel could be very difficult at times, with hazardous conditions impacting the commutes from Wednesday evening through Friday morning. Strong winds may blow down some tree limbs and a few power outages may result."
-      ],
-      [
-        "type" => "heading",
-        "text" => "additional details"
-      ],
-      [
-        "type" => "paragraph",
-        "text" => "Snow levels will start near 6500 feet on Wednesday, then drop to near 5500 feet Wednesday night and near 5000 feet by Thursday morning."
-      ]
-    ];
+    public function testAlertDescriptionOverviewExample(): void
+    {
+        $rawDescription = file_get_contents(
+            __DIR__ . "/test_data/alert.description.overview.txt",
+        );
+        $expected = [
+            [
+                "type" => "heading",
+                "text" =>
+                    "WINTER CONDITIONS RETURN TO THE SIERRA AND NORTHEAST CALIFORNIA FOR MID-LATE WEEK",
+            ],
+            [
+                "type" => "paragraph",
+                "text" =>
+                    ".After a few days of warm weather, a potent winter storm will bring windy and colder conditions with periods of heavy snow to the Sierra and higher elevations of northeast California later this week. While weather-related travel impacts aren't expected through Wednesday morning, conditions will begin to worsen Wednesday afternoon and evening, with the most widespread winter travel impacts likely from Wednesday evening through much of Thursday.",
+            ],
+            [
+                "type" => "heading",
+                "text" => "what",
+            ],
+            [
+                "type" => "paragraph",
+                "text" =>
+                    "Heavy snow possible. Snow accumulations of 4 to 10 inches above 5000 feet west of US-395, with 10 to 20 inches possible for higher passes such as Fredonyer Summit and Yuba Pass. Winds gusting as high as 50 mph.",
+            ],
+            [
+                "type" => "heading",
+                "text" => "where",
+            ],
+            [
+                "type" => "paragraph",
+                "text" => "Lassen-Eastern Plumas-Eastern Sierra Counties.",
+            ],
+            [
+                "type" => "heading",
+                "text" => "when",
+            ],
+            [
+                "type" => "paragraph",
+                "text" =>
+                    "From late Wednesday morning through Friday morning. Heaviest snow is most likely from late Wednesday afternoon through Thursday morning.",
+            ],
+            [
+                "type" => "heading",
+                "text" => "impacts",
+            ],
+            [
+                "type" => "paragraph",
+                "text" =>
+                    "Travel could be very difficult at times, with hazardous conditions impacting the commutes from Wednesday evening through Friday morning. Strong winds may blow down some tree limbs and a few power outages may result.",
+            ],
+            [
+                "type" => "heading",
+                "text" => "additional details",
+            ],
+            [
+                "type" => "paragraph",
+                "text" =>
+                    "Snow levels will start near 6500 feet on Wednesday, then drop to near 5500 feet Wednesday night and near 5000 feet by Thursday morning.",
+            ],
+        ];
 
-    $parser = new WeatherAlertParser($rawDescription);
-    $actual = $parser->parse();
+        $parser = new WeatherAlertParser($rawDescription);
+        $actual = $parser->parse();
 
-    $this->assertEquals($expected, $actual);
-  }
+        $this->assertEquals($expected, $actual);
+    }
 }

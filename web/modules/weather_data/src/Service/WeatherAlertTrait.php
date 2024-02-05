@@ -9,8 +9,6 @@ use Drupal\weather_data\Service\WeatherAlertParser;
  */
 trait WeatherAlertTrait
 {
-    
-
     protected static function turnToDate($str, $timezone)
     {
         if ($str) {
@@ -27,23 +25,8 @@ trait WeatherAlertTrait
 
     public static function tryParsingDescriptionText($str)
     {
-        // look for any word in all caps followed by ellipses, and use that as the label, and
-        // all text until the next pair of newlines is the content
-        //
-        // https://regexper.com/#%2F%5C*%5Cs%2B%28%5BA-Za-z%5Cs%5D%2B%29%5C.%5C.%5C.%28.*%29%28%5Cn%7B2%7D%7C%24%29%2F
-        $regex = "/\*\s+(?<label>[A-Za-z\s]+)\.\.\.(?<content>.*)(\n{2}|$)/sU";
-        if (preg_match_all($regex, $str, $matches)) {
-            $result = [];
-            for ($i = 0; $i < count($matches["label"]); $i++) {
-                $label = strtolower($matches["label"][$i]);
-                $content = $matches["content"][$i];
-                $result[$label] = $content;
-            }
-
-            return $result;
-        }
-
-        return $str;
+        $parser = new WeatherAlertParser($str);
+        return $parser->parse();
     }
 
     /**
@@ -87,17 +70,17 @@ trait WeatherAlertTrait
                 $output->description = WeatherAlertParser::fixupNewlines(
                     $alertDescription ?? false,
                 );
-                $output->usesParsedDescription = false;
             } else {
                 $output->description = $alertDescription;
-                $output->usesParsedDescription = true;
             }
 
             $output->instruction = WeatherAlertParser::fixupNewlines(
                 $output->instruction ?? false,
             );
 
-            $output->areaDesc = WeatherAlertParser::fixupNewlines($output->areaDesc ?? false);
+            $output->areaDesc = WeatherAlertParser::fixupNewlines(
+                $output->areaDesc ?? false,
+            );
             if ($output->areaDesc) {
                 $output->areaDesc = array_map(function ($description) {
                     return trim($description);
