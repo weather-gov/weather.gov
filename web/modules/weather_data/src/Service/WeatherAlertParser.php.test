@@ -1,0 +1,88 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use PHPUnit\Framework\TestCase;
+use Drupal\weather_data\Service\WeatherAlertParser;
+
+final class WeatherAlertParserTest extends TestCase {
+  public function testFullWhatWhereWhen(): void
+  {
+    $rawDescription =
+      "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
+    $rawDescription .=
+      "* WHERE...Eastern San Juan Mountains Above 10000 Feet.\n\n";
+    $rawDescription .=
+      "* WHEN...From 11 PM this evening to 11 PM MST Thursday.\n\n";
+    $rawDescription .= "* IMPACTS...Travel could be very difficult. The hazardous conditions may impact travel over Wolf Creek Pass.";
+
+    $expected = [
+      [
+        "type" => "heading",
+        "text" => "what"
+      ],
+      [
+        "type" => "paragraph",
+        "text" => "Snow expected. Total snow accumulations of 5 to 10" 
+      ],
+      [
+        "type" => "paragraph",
+        "text" => "inches."
+      ],
+      [
+        "type" => "heading",
+        "text" => "where"
+      ],
+      [
+        "type" => "paragraph",
+        "text" => "Eastern San Juan Mountains Above 10000 Feet."
+      ],
+      [
+        "type" => "heading",
+        "text" => "when"
+      ],
+      [
+        "type" => "paragraph",
+        "text" => "From 11 PM this evening to 11 PM MST Thursday."
+      ],
+      [
+        "type" => "heading",
+        "text" => "impacts"
+      ],
+      [
+        "type" => "paragraph",
+        "text" => "Travel could be very difficult. The hazardous conditions may impact travel over Wolf Creek Pass."
+      ]
+    ];
+
+    $parser = new WeatherAlertParser($rawDescription);
+    $parsedDescription = $parser->parse();
+
+    $this->assertEquals($expected, $parsedDescription);
+  }
+
+  public function testBasicWhatWhereWhen(): void
+  {
+    $rawDescription = "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
+
+    $expected = [
+      [
+        "type" => "heading",
+        "text" => "what"
+      ],
+      [
+        "type" => "paragraph",
+        "text" => "Snow expected. Total snow accumulations of 5 to 10"
+      ],
+      [
+        "type" => "paragraph",
+        "text" => "inches."
+      ]
+    ];
+
+    $parser = new WeatherAlertParser($rawDescription);
+    $parsedDescription = $parser->parse();
+
+    $this->assertEquals($expected, $parsedDescription);
+  }
+}
