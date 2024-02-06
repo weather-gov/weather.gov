@@ -23,9 +23,10 @@ then:
 4. Run `npm ci` from the command line.  
    This installs our Javascript and Sass code linters and formatters, as well as
    Cypress, which is necessary for end-to-end and accessibility testing.
-5. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
+5. [Load necessary geospatial data](spatial-data.md) into your database.
+6. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
    should see our front page! Congrats!
-6. Browse to [http://localhost:8080/user/login](http://localhost:8080/user/login)
+7. Browse to [http://localhost:8080/user/login](http://localhost:8080/user/login)
    to log in. Your username is `admin` and your password is `root`. Then you can
    do stuff!
 
