@@ -32,27 +32,65 @@ trait WeatherAlertTrait
     /**
      * Get active alerts for a WFO grid cell.
      */
-    public function getAlertsForGrid($wfo, $x, $y)
+    public function getAlertsForGrid($wfo, $x, $y, $self = false)
     {
-        $geometry = $this->getGeometryFromGrid($wfo, $x, $y);
-        $point = $geometry[0];
+        if (!$self) {
+            $self = $this;
+        }
 
-        return $this->getAlertsForLatLon($point->lat, $point->lon);
-    }
+        $CACHE_KEY = "alerts $wfo/$x/$y";
+        $cache = $this->cache->get($CACHE_KEY);
+        if ($cache) {
+            return $cache->data;
+        }
 
-    /**
-     * Get active alerts for a latitude and longitude.
-     */
-    public function getAlertsForLatLon($lat, $lon)
-    {
-        $lat = round($lat, 4);
-        $lon = round($lon, 4);
+        $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
+        $place = $self->getPlaceFromGrid($wfo, $x, $y);
+        $timezone = $place->timezone;
 
-        $alerts = $this->getFromWeatherAPI(
-            "/alerts/active?status=actual&point=$lat,$lon",
-        );
+        $alerts = $self->getFromWeatherAPI(
+            "/alerts/active?status=actual&area=$place->state",
+        )->features;
 
-        $timezone = $this->getTimezoneForLatLon($lat, $lon);
+        $geometry = array_map(function ($point) {
+            return $point->lon . " " . $point->lat;
+        }, $geometry);
+        $geometry = implode(",", $geometry);
+
+        $alerts = array_filter($alerts, function ($alert) use (
+            $place,
+            $geometry,
+        ) {
+            if (AlertPriority::isMarineAlert($alert->properties->event)) {
+                return false;
+            }
+
+            if ($alert->geometry == null) {
+                return in_array(
+                    // SAME codes are FIPS codes with a leading 0
+                    "0$place->countyFIPS",
+                    $alert->properties->geocode->SAME,
+                );
+            }
+
+            $alertGeometry = array_map(function ($point) {
+                return $point[0] . " " . $point[1];
+            }, $alert->geometry->coordinates[0]);
+            $alertGeometry = implode(",", $alertGeometry);
+
+            $sql = "SELECT ST_INTERSECTS(
+                ST_POLYGONFROMTEXT(
+                    'POLYGON(($geometry))'
+                ),
+                ST_POLYGONFROMTEXT(
+                    'POLYGON(($alertGeometry))'
+                )
+            ) as yes";
+
+            $intersects = $this->database->query($sql)->fetch()->yes;
+
+            return $intersects > 0;
+        });
 
         $alerts = array_map(function ($alert) use ($timezone) {
             $output = clone $alert->properties;
@@ -98,9 +136,8 @@ trait WeatherAlertTrait
             );
 
             return $output;
-        }, $alerts->features);
+        }, $alerts);
 
-        $alerts = AlertPriority::removeMarineAlerts($alerts);
         $alerts = AlertPriority::sort($alerts);
 
         // For some reason, Twig is unreliable in how it formats the dates.
@@ -119,6 +156,8 @@ trait WeatherAlertTrait
                 $alert->expires = $alert->expires->format("l, m/d, g:i A T");
             }
         }
+
+        $this->cache->set($CACHE_KEY, $alerts, time() + 30);
 
         return $alerts;
     }
