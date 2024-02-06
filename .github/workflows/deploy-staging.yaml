@@ -37,7 +37,7 @@ jobs:
     name: Record deployment to New Relic
     needs:
       - deploy-staging
-    uses: ./.github/workflows/new-relic-deployment.yml
+    uses: ./.github/workflows/new-relic-deployment.yaml
     with:
       environment: "staging"
     secrets: inherit

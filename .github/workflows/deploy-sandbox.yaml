@@ -43,7 +43,7 @@ jobs:
     name: Record deployment to New Relic
     needs:
       - deploy-sandbox
-    uses: ./.github/workflows/new-relic-deployment.yml
+    uses: ./.github/workflows/new-relic-deployment.yaml
     with:
       environment: ${{ github.event.inputs.environment }}
     secrets: inherit
