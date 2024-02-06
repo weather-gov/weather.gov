@@ -8,7 +8,7 @@ default_config: &defaults
   timeout: 180
   env:
     PHP_INI_SCAN_DIR: /home/vcap/app/php/etc/:/home/vcap/app/php/etc/php.ini.d/
-    NEWRELIC_LICENSE: ${newrelic_key}
+    NEWRELIC_LICENSE: ((newrelic-license))
   services:
     - database
     - storage

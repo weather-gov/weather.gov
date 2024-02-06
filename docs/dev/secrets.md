@@ -61,6 +61,6 @@ These are the login credentials for the root account that can be used for basic 
 
 `drush upwd --password="NewPassword" <root_user_name>`
 
-## NEWRELIC_KEY
+## NEWRELIC_LICENSE
 
 We need to set the New Relic license in two places. We need it in VCAP_SERVICES so that the Drupal New Relic APM module can pick it up. And we need to set it as an environment variable so the PHP Buildpack knows to install the APM as well. These steps are included in the cloudgov env create script. 
