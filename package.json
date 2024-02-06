@@ -34,7 +34,7 @@
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^24.0.0",
-    "prettier": "^3.2.4",
+    "prettier": "^3.2.5",
     "stylelint": "^15.11.0",
     "stylelint-config-standard-scss": "^11.1.0",
     "xml-parse": "^0.4.0"
