@@ -6,7 +6,7 @@ use Drupal\weather_data\Service\AlertPriority;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for the WeatherEntityService.
+ * Tests for the AlertPriority helper class.
  */
 final class AlertPriorityTest extends TestCase
 {
