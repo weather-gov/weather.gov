@@ -88,16 +88,14 @@ cf target -o nws-weathergov -s prod
 SP_PUBLIC_KEY=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.SP_PUBLIC_KEY')
 SP_PRIVATE_KEY=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.SP_PRIVATE_KEY')
 IDP_PUBLIC_KEY=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.IDP_PUBLIC_KEY')
-NEWRELIC_LICENSE=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.NEWRELIC_KEY')
+NEWRELIC_LICENSE=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.NEWRELIC_LICENSE')
 cf target -o nws-weathergov -s $1
 
 jq -n --arg cron_key "$CRON_KEY" --arg hash_salt "$HASH_SALT" --arg root_user_name "$ROOT_USER_NAME" --arg root_user_pass "$ROOT_USER_PASS" --arg sp_public_key "$SP_PUBLIC_KEY" --arg sp_private_key "$SP_PRIVATE_KEY" --arg idp_public_key "$IDP_PUBLIC_KEY" '{"CRON_KEY":$cron_key,"HASH_SALT":$hash_salt,"SP_PUBLIC_KEY":$sp_public_key,"SP_PRIVATE_KEY":$sp_private_key,"IDP_PUBLIC_KEY":$idp_public_key,"ROOT_USER_PASS":$root_user_pass,"ROOT_USER_NAME":$root_user_name}' > credentials-$1.json
 cf cups secrets -p credentials-$1.json
 
-cf set-env weathergov-$1 "$NEWRELIC_LICENSE"
-
 echo "Database create succeeded and credentials created. Deploying the weather.gov application to the new space $1..."
-cf push -f manifests/manifest-$1.yaml
+cf push -f manifests/manifest-$1.yaml -var newrelic-license="$NEWRELIC_LICENSE"
 
 echo "Creating credentials to talk to storage in $1..."
 cf create-service-key storage storagekey
