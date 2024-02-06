@@ -10,6 +10,8 @@ services:
       MYSQL_USER: drupal
       MYSQL_PASSWORD: drupal
       MYSQL_ROOT_PASSWORD: drupal
+    ports:
+      - 3306:3306
 
   api-proxy:
     build:
