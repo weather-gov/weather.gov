@@ -95,3 +95,9 @@ credentials-*.json
 # Test screenshots
 /tests/**/screenshots/**
 
+# Ignore geospatial data files
+*.dbf
+*.prj
+*.shp
+*.shx
+cities500.txt
