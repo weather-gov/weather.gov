@@ -443,22 +443,10 @@ class WeatherDataService
             return $cache->data;
         }
 
-        $gridPolygon = $self->getGeometryFromGrid($wfo, $x, $y);
-
-        $place = $self->getPlaceNear($gridPolygon);
-        $this->cache->set($CACHE_KEY, $place, time() + 600);
-
-        return $place;
-    }
-
-    /**
-     * Get the place nearest to a polygon
-     */
-    public function getPlaceNear($polygon)
-    {
+        $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
         $geometry = array_map(function ($point) {
             return $point->lon . " " . $point->lat;
-        }, $polygon);
+        }, $geometry);
 
         $geometry = implode(",", $geometry);
 
@@ -470,7 +458,7 @@ class WeatherDataService
 
         $place = $this->database->query($sql)->fetch();
 
-        return (object) [
+        $place = (object) [
             "city" => $place->name,
             "state" => $place->state,
             "stateName" => $place->stateName,
@@ -479,22 +467,10 @@ class WeatherDataService
             "countyFIPS" => $place->countyFIPS,
             "timezone" => $place->timezone,
         ];
-    }
 
-    /**
-     * Get a place from a latitude and longitude.
-     */
-    public function getPlaceFromLatLon($lat, $lon)
-    {
-        $lat = round($lat, 4);
-        $lon = round($lon, 4);
-        $point = $this->getFromWeatherAPI("/points/$lat,$lon");
-        $place = $point->properties->relativeLocation->properties;
+        $this->cache->set($CACHE_KEY, $place, time() + 600);
 
-        return (object) [
-            "city" => $place->city,
-            "state" => $place->state,
-        ];
+        return $place;
     }
 
     /**
