@@ -28,9 +28,7 @@ class WeatherEntityService
             // loadByProperties returns an associative array where the indices
             // are actually the term IDs, so we can't just take the 0th index
             // here. Sigh. Instead, pop the single element out of the array.
-            $termID = array_pop($termID)
-                ->get("tid")
-                ->getString();
+            $termID = array_pop($termID)->get("tid")->getString();
 
             // The entity manager interface doesn't have convenience methods for
             // the kind of filtering we want to do, but the entity query

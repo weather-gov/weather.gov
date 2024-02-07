@@ -2,23 +2,13 @@
 
 namespace Drupal\weather_data\Service;
 
+use Drupal\weather_data\Service\WeatherAlertParser;
+
 /**
  * Add weather alert methods.
  */
 trait WeatherAlertTrait
 {
-    protected static function fixupNewlines($str)
-    {
-        if ($str) {
-            // Remove individual newline characters. Leave pairs. Pairs of
-            // newlines are equivalent to paragraph breaks and we want to keep
-            // those, but within a paragraph, we want to let the text break on
-            // its own.
-            return preg_replace("/([^\n])\n([^\n])/m", "$1 $2", $str);
-        }
-        return $str;
-    }
-
     protected static function turnToDate($str, $timezone)
     {
         if ($str) {
@@ -35,23 +25,8 @@ trait WeatherAlertTrait
 
     public static function tryParsingDescriptionText($str)
     {
-        // look for any word in all caps followed by ellipses, and use that as the label, and
-        // all text until the next pair of newlines is the content
-        //
-        // https://regexper.com/#%2F%5C*%5Cs%2B%28%5BA-Za-z%5Cs%5D%2B%29%5C.%5C.%5C.%28.*%29%28%5Cn%7B2%7D%7C%24%29%2F
-        $regex = "/\*\s+(?<label>[A-Za-z\s]+)\.\.\.(?<content>.*)(\n{2}|$)/sU";
-        if (preg_match_all($regex, $str, $matches)) {
-            $result = [];
-            for ($i = 0; $i < count($matches["label"]); $i++) {
-                $label = strtolower($matches["label"][$i]);
-                $content = $matches["content"][$i];
-                $result[$label] = $content;
-            }
-
-            return $result;
-        }
-
-        return $str;
+        $parser = new WeatherAlertParser($str);
+        return $parser->parse();
     }
 
     /**
@@ -92,20 +67,20 @@ trait WeatherAlertTrait
                 $output->description,
             );
             if (!is_array($alertDescription)) {
-                $output->description = self::fixupNewlines(
+                $output->description = WeatherAlertParser::fixupNewlines(
                     $alertDescription ?? false,
                 );
-                $output->usesParsedDescription = false;
             } else {
                 $output->description = $alertDescription;
-                $output->usesParsedDescription = true;
             }
 
-            $output->instruction = self::fixupNewlines(
+            $output->instruction = WeatherAlertParser::fixupNewlines(
                 $output->instruction ?? false,
             );
 
-            $output->areaDesc = self::fixupNewlines($output->areaDesc ?? false);
+            $output->areaDesc = WeatherAlertParser::fixupNewlines(
+                $output->areaDesc ?? false,
+            );
             if ($output->areaDesc) {
                 $output->areaDesc = array_map(function ($description) {
                     return trim($description);

@@ -28,21 +28,50 @@ final class WeatherAlertTraitTest extends Base
                 "areaDesc" => ["place 2"],
                 "event" => "Tsunami Warning",
                 "geometry" => [],
-                "description" =>
-                    "There is a very big wave and lots of water.\n\nTsunamis are very dangerous.",
+                "description" => [
+                    [
+                        "type" => "paragraph",
+                        "text" => "There is a very big wave and lots of water.",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "text" => "Tsunamis are very dangerous.",
+                    ],
+                ],
+
                 "instruction" => false,
                 "onset" => "Sunday, 10/01, 2:32 PM MDT",
                 "ends" => "Sunday, 10/01, 4:32 PM MDT",
                 "expires" => "Sunday, 10/01, 6:32 PM MDT",
-                "usesParsedDescription" => false,
             ],
             (object) [
                 "areaDesc" => false,
                 "event" => "volcano warning",
                 "description" => [
-                    "what" => "Bad weather",
-                    "where" => "Places",
-                    "fake" => "This goes away",
+                    [
+                        "type" => "heading",
+                        "text" => "what",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "text" => "Bad weather",
+                    ],
+                    [
+                        "type" => "heading",
+                        "text" => "where",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "text" => "Places",
+                    ],
+                    [
+                        "type" => "heading",
+                        "text" => "fake",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "text" => "This does not go away",
+                    ],
                 ],
                 "geometry" => [],
                 "instruction" =>
@@ -50,63 +79,89 @@ final class WeatherAlertTraitTest extends Base
                 "onset" => false,
                 "ends" => false,
                 "expires" => false,
-                "usesParsedDescription" => true,
             ],
             (object) [
                 "areaDesc" => ["place 1"],
                 "event" => "Wind advisory",
-                "description" =>
-                    "There is a warning for:\n\nPlaces listed\n\nYou should prepare.",
+                "description" => [
+                    [
+                        "type" => "paragraph",
+                        "text" => "There is a warning for:",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "text" => "Places listed",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "text" => "You should prepare.",
+                    ],
+                ],
                 "geometry" => [[-71.89, 43.64], [-71.91, 44.14]],
                 "onset" => "Sunday, 10/01, 2:32 PM MDT",
                 "instruction" => false,
                 "ends" => false,
                 "expires" => false,
-                "usesParsedDescription" => false,
             ],
             (object) [
                 "event" => "air quality alert",
-                "description" => "earliest",
+                "description" => [
+                    [
+                        "type" => "paragraph",
+                        "text" => "earliest",
+                    ],
+                ],
                 "geometry" => [],
                 "instruction" => false,
                 "areaDesc" => false,
                 "ends" => false,
                 "expires" => false,
                 "onset" => "Tuesday, 01/09, 12:00 PM MST",
-                "usesParsedDescription" => false,
             ],
             (object) [
                 "event" => "air quality alert",
-                "description" => "middle 1",
+                "description" => [
+                    [
+                        "type" => "paragraph",
+                        "text" => "middle 1",
+                    ],
+                ],
                 "geometry" => [],
                 "instruction" => false,
                 "areaDesc" => false,
                 "ends" => false,
                 "expires" => false,
                 "onset" => "Tuesday, 01/09, 1:00 PM MST",
-                "usesParsedDescription" => false,
             ],
             (object) [
                 "event" => "air quality alert",
-                "description" => "middle 2",
+                "description" => [
+                    [
+                        "type" => "paragraph",
+                        "text" => "middle 2",
+                    ],
+                ],
                 "geometry" => [],
                 "instruction" => false,
                 "areaDesc" => false,
                 "ends" => false,
                 "expires" => false,
                 "onset" => "Tuesday, 01/09, 1:00 PM MST",
-                "usesParsedDescription" => false,
             ],
             (object) [
                 "event" => "air quality alert",
-                "description" => "latest",
+                "description" => [
+                    [
+                        "type" => "paragraph",
+                        "text" => "latest",
+                    ],
+                ],
                 "geometry" => [],
                 "instruction" => false,
                 "areaDesc" => false,
                 "ends" => false,
                 "expires" => false,
                 "onset" => "Tuesday, 01/09, 2:00 PM MST",
-                "usesParsedDescription" => false,
             ],
         ];
     }
