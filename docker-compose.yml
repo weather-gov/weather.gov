@@ -85,7 +85,20 @@ services:
     ports:
       - 8180:8080
     profiles: ["utilities"]
-    
+
+  spatial:
+      build:
+        context: ./spatial-data
+        dockerfile: Dockerfile.spatial
+      image: 18f-spatial-node:20
+      profiles: ["spatial"]
+      networks:
+        - weather.gov
+      links:
+        - database
+      volumes:
+        - ./spatial-data/:/app
+        - /app/node_modules
 
 networks:
   weather.gov:

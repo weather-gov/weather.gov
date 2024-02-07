@@ -15,7 +15,7 @@ const connectionDetails = {
   user: args[3] ?? "drupal",
   password: args[4] ?? "drupal",
   database: args[5] ?? "weathergov",
-  host: args[6] ?? "localhost",
+  host: args[6] ?? "database",
   port: args[7] ?? 3306,
 };
 
@@ -37,7 +37,7 @@ const loadStates = async () => {
   console.log("loading states...");
   const db = await mariadb.createConnection(connectionDetails);
 
-  const file = await shapefile.open(`spatial-data/${files.state}.shp`);
+  const file = await shapefile.open(`./${files.state}.shp`);
 
   await db.query(
     `CREATE TABLE IF NOT EXISTS
@@ -98,7 +98,7 @@ const loadCounties = async () => {
   console.log("loading counties...");
   const db = await mariadb.createConnection(connectionDetails);
 
-  const file = await shapefile.open(`spatial-data/${files.county}.shp`);
+  const file = await shapefile.open(`./${files.county}.shp`);
 
   await db.query(
     `CREATE TABLE IF NOT EXISTS
@@ -215,7 +215,7 @@ const loadPlaces = async () => {
   ];
 
   const places = await fs
-    .readFile(`spatial-data/${files.city}`, { encoding: "utf-8" })
+    .readFile(`./${files.city}`, { encoding: "utf-8" })
     .then((str) =>
       str
         .split("\n")

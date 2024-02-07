@@ -72,7 +72,7 @@ reset-site-database:
 shell: ## Get a shell inside the Drupal container
 	docker compose exec drupal bash
 
-zap: zap-containers rebuild pause install-site ## Delete the entire Docker environment and start from scratch.
+zap: zap-containers rebuild pause install-site load-spatial ## Delete the entire Docker environment and start from scratch.
 zap-containers:
 	docker compose stop
 	docker compose rm -f
@@ -80,6 +80,10 @@ zap-containers:
 ### CSS
 build-css: # Build CSS
 	cd web/themes/new_weather_theme && npx gulp compile
+
+### Spatial data
+load-spatial: # Load spatial data into the database
+	docker compose run spatial node load-shapefiles.js
 
 ### Testing
 a11y: accessibility-test

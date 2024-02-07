@@ -21,9 +21,15 @@ needs to be loaded first. The spatial data is stored in our repo using
    git lfs install
    ```
 
-3. Load the spatial data into your local database by running
+3. Ensure your Docker containers are already running. The script to load spatial
+   data expects our database container to be available
+   ```
+   docker compose up -d
+   ```
+
+4. Load the spatial data into your local database by running
    ```sh
-   node load-shapefiles.js
+   make load-spatial
    ```
 
 ## Loading data into cloud environments
