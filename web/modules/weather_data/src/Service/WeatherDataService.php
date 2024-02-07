@@ -630,7 +630,12 @@ class WeatherDataService
         $gridX,
         $gridY,
         $now = false,
+        $self = false,
     ) {
+        if (!$self) {
+            $self = $this;
+        }
+
         $wfo = strtoupper($wfo);
         if (!($now instanceof \DateTimeImmutable)) {
             $now = new \DateTimeImmutable();
@@ -642,13 +647,8 @@ class WeatherDataService
             "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
         );
 
-        // Get a point from the WFO grid. Any will do. We will use that to fetch the
-        // appropriate timezone from the /points API endpoint.
-        $point = $forecast->geometry->coordinates[0][0];
-        $lat = round($point[1], 4);
-        $lon = round($point[0], 4);
-        $timezone = $this->getFromWeatherAPI("/points/$lat,$lon");
-        $timezone = $timezone->properties->timeZone;
+        $place = $self->getPlaceFromGrid($wfo, $gridX, $gridY);
+        $timezone = $place->timezone;
 
         $forecast = $forecast->properties->periods;
 
