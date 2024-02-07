@@ -9,7 +9,14 @@ class WeatherAlertParser
      *
      * @var descriptionString
      */
-    private $descriptionString;
+  private $descriptionString;
+
+  /**
+   * The compiled parse tree (array of nodes)
+   *
+   * @var parsedNodes
+   */
+  private $parsedNodes;
 
     public static function fixupNewlines($str)
     {
@@ -39,27 +46,26 @@ class WeatherAlertParser
             return $paragraph != "";
         });
 
-        $parsedNodes = [];
+        $this->parsedNodes = [];
 
         foreach ($paragraphs as $paragraph) {
-            $parsedOverview = $this->parseOverview($paragraph, $parsedNodes);
+            $parsedOverview = $this->parseOverview($paragraph);
             $parsedWhatWhereWhen = $this->parseWhatWhereWhen(
-                $paragraph,
-                $parsedNodes,
+                $paragraph
             );
 
             // If nothing was able to be parsed from the
             // paragraph, simply append a paragraph node
             // with the source as the text content
             if (!$parsedOverview && !$parsedWhatWhereWhen) {
-                array_push($parsedNodes, [
+                array_push($this->parsedNodes, [
                     "type" => "paragraph",
                     "text" => $paragraph,
                 ]);
             }
         }
 
-        return $parsedNodes;
+        return $this->parsedNodes;
     }
 
     /**
@@ -74,11 +80,11 @@ class WeatherAlertParser
      * Return false otherwise.
      *
      */
-    public function parseOverview($str, &$nodes)
+    public function parseOverview($str)
     {
         $regex = "/\.\.\.([^\.]+)\.\.\./";
         if (preg_match($regex, $str, $matches)) {
-            array_push($nodes, [
+            array_push($this->parsedNodes, [
                 "type" => "paragraph",
                 "text" => $matches[1],
             ]);
@@ -102,15 +108,15 @@ class WeatherAlertParser
      * the nodes array if matched and return true.
      * Otherwise, return false.
      */
-    public function parseWhatWhereWhen($str, &$nodes)
+    public function parseWhatWhereWhen($str)
     {
         $regex = "/^\*\s+(?<heading>[A-Z\s]+)\.\.\.(?<text>.*)$/";
         if (preg_match($regex, $str, $matches)) {
-            array_push($nodes, [
+            array_push($this->parsedNodes, [
                 "type" => "heading",
                 "text" => strtolower($matches["heading"]),
             ]);
-            array_push($nodes, [
+            array_push($this->parsedNodes, [
                 "type" => "paragraph",
                 "text" => $matches["text"],
             ]);
