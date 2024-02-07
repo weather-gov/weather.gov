@@ -14,7 +14,7 @@ module.exports = {
   parserOptions: { ecmaVersion: 2024 },
   overrides: [
     {
-      files: ["tests/**/*.js"],
+      files: ["./*.js", "tests/**/*.js"],
       rules: {
         "no-console": 0,
       },
