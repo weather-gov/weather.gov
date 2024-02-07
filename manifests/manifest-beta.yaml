@@ -17,7 +17,7 @@ default_config: &defaults
 applications:
 - name: weathergov-beta
   <<: *defaults
-  memory: 512M
+  memory: 1G
   instances: 1
   random-route: false
 # - name: cronish
