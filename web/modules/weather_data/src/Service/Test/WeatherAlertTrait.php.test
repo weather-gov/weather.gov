@@ -120,7 +120,8 @@ final class WeatherAlertTraitTest extends Base
             ],
             "properties" => (object) [
                 "event" => "Severe Thunderstorm Watch",
-                "description" => "* Choppy waters...There are waves everywhere",
+                "description" =>
+                    "* CHOPPY WATERS...There are waves everywhere\n\n* Lowercase Heading...Is not parsed.\n\n* OH NO...It's too bad.",
                 "areaDesc" => "Here, there, and everywhere",
                 "onset" => "2024-01-08T13:48:00-06:00",
             ],
@@ -184,15 +185,24 @@ final class WeatherAlertTraitTest extends Base
 
         $expectedZone = clone $alert2ZoneMineLand->properties;
         $expectedZone->areaDesc = ["Here, there, and everywhere"];
+        $expectedZone->description = [
+            ["type" => "paragraph", "text" => "The weather was hopeful"],
+        ];
         $expectedZone->onset = "Monday, 01/08, 2:48 PM EST";
         $expectedZone->ends = "Wednesday, 01/10, 2:48 PM EST";
         $expectedZone->expires = "Tuesday, 01/09, 2:48 PM EST";
         $expectedZone->geometry = [];
-        $expectedZone->usesParsedDescription = false;
 
         $expectedPolygon = clone $alert5GeometryMine->properties;
         $expectedPolygon->description = [
-            "choppy waters" => "There are waves everywhere",
+            ["type" => "heading", "text" => "choppy waters"],
+            ["type" => "paragraph", "text" => "There are waves everywhere"],
+            [
+                "type" => "paragraph",
+                "text" => "* Lowercase Heading...Is not parsed.",
+            ],
+            ["type" => "heading", "text" => "oh no"],
+            ["type" => "paragraph", "text" => "It's too bad."],
         ];
         $expectedPolygon->areaDesc = ["Here, there, and everywhere"];
         $expectedPolygon->onset = "Monday, 01/08, 2:48 PM EST";
@@ -206,7 +216,6 @@ final class WeatherAlertTraitTest extends Base
             [20, 30],
             [20, 20],
         ];
-        $expectedPolygon->usesParsedDescription = true;
 
         // The polygon one is a higher-priority event (severe thunderstorm
         // watch) than the zone one (hydrologic advisory), so they should be
