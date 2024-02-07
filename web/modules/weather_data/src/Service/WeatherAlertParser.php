@@ -104,7 +104,7 @@ class WeatherAlertParser
      */
     public function parseWhatWhereWhen($str, &$nodes)
     {
-        $regex = "/^\*\s+(?<heading>[A-Za-z\s]+)\.\.\.(?<text>.*)$/";
+        $regex = "/^\*\s+(?<heading>[A-Z\s]+)\.\.\.(?<text>.*)$/";
         if (preg_match($regex, $str, $matches)) {
             array_push($nodes, [
                 "type" => "heading",
