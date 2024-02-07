@@ -37,7 +37,7 @@ const loadStates = async () => {
   console.log("loading states...");
   const db = await mariadb.createConnection(connectionDetails);
 
-  const file = await shapefile.open(`${files.state}.shp`);
+  const file = await shapefile.open(`spatial-data/${files.state}.shp`);
 
   await db.query(
     `CREATE TABLE IF NOT EXISTS
@@ -98,7 +98,7 @@ const loadCounties = async () => {
   console.log("loading counties...");
   const db = await mariadb.createConnection(connectionDetails);
 
-  const file = await shapefile.open(`${files.county}.shp`);
+  const file = await shapefile.open(`spatial-data/${files.county}.shp`);
 
   await db.query(
     `CREATE TABLE IF NOT EXISTS
@@ -215,7 +215,7 @@ const loadPlaces = async () => {
   ];
 
   const places = await fs
-    .readFile(`./${files.city}`, { encoding: "utf-8" })
+    .readFile(`spatial-data/${files.city}`, { encoding: "utf-8" })
     .then((str) =>
       str
         .split("\n")
