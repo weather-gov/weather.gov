@@ -23,7 +23,7 @@ jobs:
           cf_password: ${{ secrets.CF_BETA_PASSWORD }}
           cf_org: nws-weathergov
           cf_space: prod
-          cf_manifest: "manifests/manifest-beta.yaml"
+          cf_command: "push -f manifests/manifest-beta.yaml --var newrelic-license=${{ secrets.NEWRELIC_LICENSE }} --strategy rolling"
 
       - name: Run post-deploy steps in beta
         uses: cloud-gov/cg-cli-tools@main
@@ -33,3 +33,11 @@ jobs:
           cf_org: nws-weathergov
           cf_space: prod
           cf_command: "run-task weathergov-beta --command './scripts/post-deploy.sh' --name 'weathergov-beta-deploy' -k '2G' -m '256M'"
+  new-relic-record:
+    name: Record deployment to New Relic
+    needs:
+      - deploy-beta
+    uses: ./.github/workflows/new-relic-deployment.yaml
+    with:
+      environment: "beta"
+    secrets: inherit
