@@ -9,14 +9,14 @@ class WeatherAlertParser
      *
      * @var descriptionString
      */
-  private $descriptionString;
+    private $descriptionString;
 
-  /**
-   * The compiled parse tree (array of nodes)
-   *
-   * @var parsedNodes
-   */
-  private $parsedNodes;
+    /**
+     * The compiled parse tree (array of nodes)
+     *
+     * @var parsedNodes
+     */
+    private $parsedNodes;
 
     public static function fixupNewlines($str)
     {
@@ -50,9 +50,7 @@ class WeatherAlertParser
 
         foreach ($paragraphs as $paragraph) {
             $parsedOverview = $this->parseOverview($paragraph);
-            $parsedWhatWhereWhen = $this->parseWhatWhereWhen(
-                $paragraph
-            );
+            $parsedWhatWhereWhen = $this->parseWhatWhereWhen($paragraph);
 
             // If nothing was able to be parsed from the
             // paragraph, simply append a paragraph node
