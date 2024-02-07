@@ -9,24 +9,27 @@ caches, importing/exporting, configuration, etc.
 To get up and running quickly with Docker, ensure you have Docker installed and
 then:
 
-1. Clone this repository into a new directory and `cd` into it.
-2. Copy the file at `web/sites/example.settings.dev.php` to
+1. [Install git LFS](spatial-data.md). We use LFS to store large geospatial
+   files. If you clone the repo before installing LFS, you can get your repo
+   up-to-date by running `git lfs pull` after installing.
+2. Clone this repository into a new directory and `cd` into it.
+3. Copy the file at `web/sites/example.settings.dev.php` to
    `web/sites/settings.dev.php` and make any necessary changes.
    > [!NOTE]  
    > As of this writing, no changes are necessary.
-3. Run `make zap` from the command line.  
+4. Run `make zap` from the command line.  
    This command will first attempt to destroy any weather.gov 2.0 containers you
    have, so you may notice some warnings on the command line. It is safe to
    ignore those warnings. After the warnings, it will build all of the necessary
    containers, create a Drupal site with our configuration, and populate the
    site with our content.
-4. Run `npm ci` from the command line.  
+5. Run `npm ci` from the command line.  
    This installs our Javascript and Sass code linters and formatters, as well as
    Cypress, which is necessary for end-to-end and accessibility testing.
-5. [Load necessary geospatial data](spatial-data.md) into your database.
-6. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
+6. [Load necessary geospatial data](spatial-data.md) into your database.
+7. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
    should see our front page! Congrats!
-7. Browse to [http://localhost:8080/user/login](http://localhost:8080/user/login)
+8. Browse to [http://localhost:8080/user/login](http://localhost:8080/user/login)
    to log in. Your username is `admin` and your password is `root`. Then you can
    do stuff!
 
