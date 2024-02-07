@@ -1,0 +1,9 @@
+spatial-data/c_05mr24.prj filter=lfs diff=lfs merge=lfs -text
+spatial-data/c_05mr24.shp filter=lfs diff=lfs merge=lfs -text
+spatial-data/c_05mr24.shx filter=lfs diff=lfs merge=lfs -text
+spatial-data/s_05mr24.dbf filter=lfs diff=lfs merge=lfs -text
+spatial-data/s_05mr24.prj filter=lfs diff=lfs merge=lfs -text
+spatial-data/s_05mr24.shx filter=lfs diff=lfs merge=lfs -text
+spatial-data/c_05mr24.dbf filter=lfs diff=lfs merge=lfs -text
+spatial-data/s_05mr24.shp filter=lfs diff=lfs merge=lfs -text
+spatial-data/cities500.txt filter=lfs diff=lfs merge=lfs -text

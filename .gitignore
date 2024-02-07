@@ -1,5 +1,4 @@
 /.editorconfig
-/.gitattributes
 
 # Ignore dependencies that are managed with Composer.
 # Generally you should only ignore the root vendor directory. It's important
@@ -94,10 +93,3 @@ credentials-*.json
 
 # Test screenshots
 /tests/**/screenshots/**
-
-# Ignore geospatial data files
-*.dbf
-*.prj
-*.shp
-*.shx
-cities500.txt
