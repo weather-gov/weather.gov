@@ -39,8 +39,45 @@ final class WeatherAlertTraitTest extends Base
             ],
         );
 
-        // Alert 1. Zone-based, does not impact us.
-        $alert1ZoneNotMine = (object) [
+        // Zone-based, does not impact us.
+        $alertZoneNotMine = (object) [
+            "geometry" => null,
+            "properties" => (object) [
+                "event" => "extreme cold warning",
+                "affectedZones" => ["ZONE200"],
+            ],
+        ];
+
+        // Zone-based, does not impact us, but has the same county – should be
+        // excluded
+        $alertZoneNotMineSameCounty = (object) [
+            "geometry" => null,
+            "properties" => (object) [
+                "event" => "typhoon warning",
+                "geocode" => (object) [
+                    "SAME" => ["1954"],
+                ],
+                "affectedZones" => ["ZONE200"],
+            ],
+        ];
+
+        // Zone-based, does impact us.
+        $alertZoneMine = (object) [
+            "geometry" => null,
+            "properties" => (object) [
+                "event" => "red flag warning",
+                "affectedZones" => ["ZONE100"],
+                "description" => "Colorful flags",
+                "instruction" => "Spin 'em around",
+                "areaDesc" => "Whoosh, spinny flags!",
+                "onset" => "2024-01-08T13:48:00-06:00",
+                "ends" => "2024-01-10T13:48:00-06:00",
+                "expires" => "2024-01-09T13:48:00-06:00",
+            ],
+        ];
+
+        // County-based, does not impact us.
+        $alertCountyNotMine = (object) [
             "geometry" => null,
             "properties" => (object) [
                 "event" => "high surf advisory",
@@ -50,11 +87,12 @@ final class WeatherAlertTraitTest extends Base
                         "1960", // Woolworth's lunch counter sit-in
                     ],
                 ],
+                "affectedZones" => [],
             ],
         ];
 
-        // Alert 2. Zone-based DOES impact us. Land hazard.
-        $alert2ZoneMineLand = (object) [
+        // County-based DOES impact us. Land hazard.
+        $alertCountyMineLand = (object) [
             "geometry" => null,
             "properties" => (object) [
                 "event" => "hydrologic advisory",
@@ -74,11 +112,12 @@ final class WeatherAlertTraitTest extends Base
                         // on interstate transportation.
                     ],
                 ],
+                "affectedZones" => [],
             ],
         ];
 
-        // Alert 3. Zone-based, does impact us, marine hazard.
-        $alert3ZoneMineMarine = (object) [
+        // County-based, does impact us, marine hazard.
+        $alertCountyMineMarine = (object) [
             "geometry" => null,
             "properties" => (object) [
                 "event" => "storm watch",
@@ -95,11 +134,12 @@ final class WeatherAlertTraitTest extends Base
                         // on interstate transportation.
                     ],
                 ],
+                "affectedZones" => [],
             ],
         ];
 
-        // Alert 4. Polygon-based, does not impact us.
-        $alert4GeometryNotMine = (object) [
+        // Polygon-based, does not impact us.
+        $alertGeometryNotMine = (object) [
             "geometry" => (object) [
                 "coordinates" => [[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]],
             ],
@@ -111,8 +151,8 @@ final class WeatherAlertTraitTest extends Base
             ],
         ];
 
-        // Alert 5. Polygon-based, does impact us.
-        $alert5GeometryMine = (object) [
+        // Polygon-based, does impact us.
+        $alertGeometrMine = (object) [
             "geometry" => (object) [
                 "coordinates" => [
                     [[20, 20], [30, 20], [30, 30], [20, 30], [20, 20]],
@@ -120,46 +160,65 @@ final class WeatherAlertTraitTest extends Base
             ],
             "properties" => (object) [
                 "event" => "Severe Thunderstorm Watch",
-                "description" =>
-                    "* CHOPPY WATERS...There are waves everywhere\n\n* Lowercase Heading...Is not parsed.\n\n* OH NO...It's too bad.",
+                "description" => "* CHOPPY WATERS...There are waves everywhere
+
+* Lowercase Heading...Is not parsed.
+
+* OH NO...It's too bad.",
                 "areaDesc" => "Here, there, and everywhere",
                 "onset" => "2024-01-08T13:48:00-06:00",
             ],
         ];
 
-        $statement4 = $this->createStub(StatementInterface::class);
-        $statement4->method("fetch")->willReturn((object) ["yes" => 0]);
+        // No polygon, counties, or zones.
+        $alert6Nobody = (object) [
+            "geometry" => null,
+            "properties" => (object) [
+                "event" => "high surf advisory",
+                "geocode" => (object) [
+                    "SAME" => [],
+                ],
+                "affectedZones" => [],
+            ],
+        ];
 
-        $statement5 = $this->createStub(StatementInterface::class);
-        $statement5->method("fetch")->willReturn((object) ["yes" => 1]);
+        $statementNoIntersection = $this->createStub(StatementInterface::class);
+        $statementNoIntersection
+            ->method("fetch")
+            ->willReturn((object) ["yes" => 0]);
+
+        $statementIntersection = $this->createStub(StatementInterface::class);
+        $statementIntersection
+            ->method("fetch")
+            ->willReturn((object) ["yes" => 1]);
 
         $this->databaseMock->method("query")->will(
             $this->returnValueMap([
                 [
                     "SELECT ST_INTERSECTS(
-                ST_POLYGONFROMTEXT(
-                    'POLYGON((-80 40,-75 40,-75 30,-80 30,-80 40))'
-                ),
-                ST_POLYGONFROMTEXT(
-                    'POLYGON((0 0,10 0,10 10,0 10,0 0))'
-                )
-            ) as yes",
+                    ST_POLYGONFROMTEXT(
+                        'POLYGON((-80 40,-75 40,-75 30,-80 30,-80 40))'
+                    ),
+                    ST_POLYGONFROMTEXT(
+                        'POLYGON((0 0,10 0,10 10,0 10,0 0))'
+                    )
+                ) as yes",
                     [],
                     [],
-                    $statement4,
+                    $statementNoIntersection,
                 ],
                 [
                     "SELECT ST_INTERSECTS(
-                ST_POLYGONFROMTEXT(
-                    'POLYGON((-80 40,-75 40,-75 30,-80 30,-80 40))'
-                ),
-                ST_POLYGONFROMTEXT(
-                    'POLYGON((20 20,30 20,30 30,20 30,20 20))'
-                )
-            ) as yes",
+                    ST_POLYGONFROMTEXT(
+                        'POLYGON((-80 40,-75 40,-75 30,-80 30,-80 40))'
+                    ),
+                    ST_POLYGONFROMTEXT(
+                        'POLYGON((20 20,30 20,30 30,20 30,20 20))'
+                    )
+                ) as yes",
                     [],
                     [],
-                    $statement5,
+                    $statementIntersection,
                 ],
             ]),
         );
@@ -167,33 +226,55 @@ final class WeatherAlertTraitTest extends Base
         $this->selfMock->method("getFromWeatherAPI")->will(
             $this->returnValueMap([
                 [
+                    "/points/40,-80",
+                    1,
+                    75,
+                    (object) [
+                        "properties" => (object) ["forecastZone" => "ZONE100"],
+                    ],
+                ],
+                [
                     "/alerts/active?status=actual&area=Oregon",
                     1, // must include default args
                     75, // must include default args
                     (object) [
                         "features" => [
-                            $alert1ZoneNotMine,
-                            $alert2ZoneMineLand,
-                            $alert3ZoneMineMarine,
-                            $alert4GeometryNotMine,
-                            $alert5GeometryMine,
+                            $alertZoneNotMine,
+                            $alertZoneNotMineSameCounty,
+                            $alertZoneMine,
+                            $alertCountyNotMine,
+                            $alertCountyMineLand,
+                            $alertCountyMineMarine,
+                            $alertGeometryNotMine,
+                            $alertGeometrMine,
+                            $alert6Nobody,
                         ],
                     ],
                 ],
             ]),
         );
 
-        $expectedZone = clone $alert2ZoneMineLand->properties;
-        $expectedZone->areaDesc = ["Here, there, and everywhere"];
+        $expectedZone = clone $alertZoneMine->properties;
+        $expectedZone->areaDesc = ["Whoosh, spinny flags!"];
         $expectedZone->description = [
-            ["type" => "paragraph", "text" => "The weather was hopeful"],
+            ["type" => "paragraph", "text" => "Colorful flags"],
         ];
         $expectedZone->onset = "Monday, 01/08, 2:48 PM EST";
         $expectedZone->ends = "Wednesday, 01/10, 2:48 PM EST";
         $expectedZone->expires = "Tuesday, 01/09, 2:48 PM EST";
         $expectedZone->geometry = [];
 
-        $expectedPolygon = clone $alert5GeometryMine->properties;
+        $expectedCounty = clone $alertCountyMineLand->properties;
+        $expectedCounty->areaDesc = ["Here, there, and everywhere"];
+        $expectedCounty->description = [
+            ["type" => "paragraph", "text" => "The weather was hopeful"],
+        ];
+        $expectedCounty->onset = "Monday, 01/08, 2:48 PM EST";
+        $expectedCounty->ends = "Wednesday, 01/10, 2:48 PM EST";
+        $expectedCounty->expires = "Tuesday, 01/09, 2:48 PM EST";
+        $expectedCounty->geometry = [];
+
+        $expectedPolygon = clone $alertGeometrMine->properties;
         $expectedPolygon->description = [
             ["type" => "heading", "text" => "choppy waters"],
             ["type" => "paragraph", "text" => "There are waves everywhere"],
@@ -218,9 +299,9 @@ final class WeatherAlertTraitTest extends Base
         ];
 
         // The polygon one is a higher-priority event (severe thunderstorm
-        // watch) than the zone one (hydrologic advisory), so they should be
-        // sorted.
-        $expected = [$expectedPolygon, $expectedZone];
+        // watch) than the zone one (red flag warning), than the county one
+        // (hydrologic advisory) so they should be sorted.
+        $expected = [$expectedPolygon, $expectedZone, $expectedCounty];
 
         $actual = $this->weatherDataService->getAlertsForGrid(
             "abc",
