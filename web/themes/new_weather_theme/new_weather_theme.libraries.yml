@@ -39,4 +39,6 @@ digital-analytics-program:
   header: true
   version: VERSION
   js:
-    https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety: {}
+    https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety: {
+      attributes: { id: "_fed_an_ua_tag" }
+    }
