@@ -1,7 +1,8 @@
 <div class="hourly-forecast-block tablet:grid-col-6 mobile-lg:grid-col-8">
-  <h2>Hourly forecast</h2>
+  <h2>{{ "Hourly forecast" | t }}</h2>
   {% if content.error %}
-  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: "There was an error loading the hourly forecast." } %}
+  {% set message = "There was an error loading the hourly forecast." | t %}
+  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
   <ol class="grid-row flex-column minh-card usa-list--unstyled">
     {% for hour in content.hours %}

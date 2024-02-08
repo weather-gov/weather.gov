@@ -2,9 +2,10 @@
 
 {# Widgets and stuff. This is presented as a row of columns. #}
 <div class="weather-gov-current-conditions">
-  <h2>Current Conditions</h2>
+  <h2>{{ "Current Conditions" | t }}</h2>
   {% if content.error %}
-  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: "There was an error loading the current conditions." } %}
+  {% set message = "There was an error loading the current conditions." | t %}
+  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
 
   {# We hide from screenreaders and use the weather narrative (below) instead #}
@@ -110,7 +111,7 @@
     </div>
     <div class="geo-location-elev font-body-3xs margin-top-05">
       <span class="text-bold">
-        Elev:
+        {{ "Elev" | t }}:
       </span>
       {{content.stationInfo.elevation}} ft
     </div>

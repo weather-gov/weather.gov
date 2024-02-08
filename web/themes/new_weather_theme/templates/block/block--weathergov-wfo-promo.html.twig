@@ -4,13 +4,13 @@
 
   {% if content.phone %}
   <p>
-    Phone: {{ content.phone }}
+    {{ "Phone" | t }}: {{ content.phone }}
   </p>
   {% endif %}
 
   {% if content.social %}
   <p>
-    Find us on:
+    {{ "Find us on" | t }}:
     <br>
 
     {% if content.social.facebook %}
@@ -18,7 +18,7 @@
     <svg class="usa-icon usa-icon--size-5" aria-hidden="true" focusable="false" role="img">
       <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#facebook"></use>
     </svg>
-    <span class="usa-sr-only">Facebook</span>
+    <span class="usa-sr-only">{{ "Facebook" | t }}</span>
     </a>
     {% endif %}
 
@@ -27,7 +27,7 @@
     <svg class="usa-icon usa-icon--size-5" aria-hidden="true" focusable="false" role="img">
       <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#x"></use>
     </svg>
-    <span class="usa-sr-only">Twitter</span>
+    <span class="usa-sr-only">{{ "X / Twitter" | t }}</span>
     </a>
     {% endif %}
 
@@ -36,7 +36,7 @@
     <svg class="usa-icon usa-icon--size-5" aria-hidden="true" focusable="false" role="img">
       <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#youtube"></use>
     </svg>
-    <span class="usa-sr-only">YouTube</span>
+    <span class="usa-sr-only">{{ "YouTube" | t }}</span>
     </a>
     {% endif %}
   </p>

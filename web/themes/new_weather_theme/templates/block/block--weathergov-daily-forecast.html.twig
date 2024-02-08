@@ -1,10 +1,11 @@
 <div class="daily-forecast-block tablet:grid-col-6 mobile-lg:grid-col-8">
-  <h2>Daily forecast</h2>
+  <h2>{{ "Daily forecast" | t}}</h2>
   {% if content.error %}
-  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: "There was an error loading the daily forecast." } %}
+  {% set message = "There was an error loading the daily forecast." | t %}
+  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
 
-  <h3>Next {{(content.detailed | length) + 1}} days</h3>
+  <h3>{{ "Next @count days" | t({ "@count": (content.detailed | length) + 1 }) }}</h3>
   <ol class="usa-list--unstyled">
     {# Attempt to render the period(s) associated with the current day #}
     {% if content.today %}
