@@ -5,6 +5,7 @@ base theme: stable9
 libraries:
   - new_weather_theme/uswds-init
   - new_weather_theme/uswds-customized
+  - new_weather_theme/digital-analytics-program
 core_version_requirement: ^10
 generator: 'starterkit_theme:10.1.2'
 regions:
