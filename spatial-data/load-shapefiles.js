@@ -9,6 +9,7 @@ const files = {
   state: args[0] ?? "s_05mr24",
   county: args[1] ?? "c_05mr24",
   city: args[2] ?? "cities500.txt",
+  cwa: args[3] ?? "w_05mr24",
 };
 
 const connectionDetails = {
@@ -31,6 +32,77 @@ const dropIndexIfExists = async (db, name, table) => {
   );
   await db.query(`PREPARE stmt FROM @sqlstmt`);
   await db.query(`EXECUTE stmt`);
+};
+
+const loadCWAs = async () => {
+  console.log("loading WFOs...");
+  const db = await mariadb.createConnection(connectionDetails);
+
+  const file = await shapefile.open(`./${files.cwa}.shp`);
+
+  await db.query(`
+CREATE TABLE IF NOT EXISTS
+ weathergov_geo_cwas
+ (
+   wfo VARCHAR(3),
+   cwa VARCHAR(3),
+   region VARCHAR(2),
+   city VARCHAR(50),
+   state VARCHAR(50),
+   st VARCHAR(2),
+   shape MULTIPOLYGON NOT NULL
+)`,
+                );
+
+  await dropIndexIfExists(db, "cwas_spatial_idx", "weathergov_geo_cwas");
+  await db.query("TRUNCATE TABLE weathergov_geo_cwas");
+
+  const getSqlForShape = async ({done, value}) => {
+    if(done){
+      return null;
+    }
+
+    const {
+      properties: {
+        WFO: wfo,
+        CWA: cwa,
+        REGION: region,
+        CITY: city,
+        STATE: state,
+        ST: st
+      }, geometry
+    } = value;
+
+    if(geometry.type === "Polygon"){
+      geometry.type = "Multipolygon";
+      geometry.coordinates = [geometry.coordinates];
+    }
+
+    // These shapefiles are in NAD83, whose SRID is 4269.
+    geometry.crs = { type: "name", properties: { name: "EPSG:4269" } };
+    
+    await db.query(`INSERT INTO weathergov_geo_cwas
+            (wfo, cwa, region, city, state, st, shape)
+            VALUES(
+              '${wfo}',
+              '${cwa}',
+              '${region}',
+              '${city}',
+              '${state}',
+              '${st}',
+              ST_GeomFromGeoJSON('${JSON.stringify(geometry)}'));`);
+
+    return file.read().then(getSqlForShape);
+  };
+
+  await file.read().then(getSqlForShape);
+
+  await db.query(
+    "CREATE SPATIAL INDEX cwas_spatial_idx ON weathergov_geo_cwas(shape)",
+  );
+
+  db.end();
+  
 };
 
 const loadStates = async () => {
@@ -308,4 +380,5 @@ const loadPlaces = async () => {
 
 loadStates()
   .then(() => loadCounties())
-  .then(() => loadPlaces());
+  .then(() => loadPlaces())
+  .then(() => loadCWAs());
