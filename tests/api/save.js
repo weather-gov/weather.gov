@@ -9,6 +9,10 @@ let endOfBundleTimer = false;
 export default async (request, response, output) => {
   const requestID = request.headers["wx-gov-response-id"];
 
+  if(config.bundling && !requestID){
+    return;
+  }
+
   // If we're supposed to capture a bundle and we haven't yet, this is the one
   // to capture. Save off the request ID.
   if (config.bundling) {
