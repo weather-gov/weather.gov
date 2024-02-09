@@ -93,26 +93,34 @@ final class WeatherBlockBaseTest extends Base
     {
         $this->routeMock
             ->method("getRouteName")
-            ->willReturn("weather_routes.grid");
+            ->willReturn("weather_routes.point");
         // Also configure the block. This will ensure that we test that the location
         // only comes from the URL and not configuration.
         $this->block->setConfigurationValue("grid", "wrong,wrong,wrong");
 
         $this->routeMock
             ->method("getParameter")
-            ->will(
-                $this->returnValueMap([
-                    ["wfo", "wfo code"],
-                    ["gridX", "372"],
-                    ["gridY", "004"],
-                ]),
-            );
+            ->will($this->returnValueMap([["lat", 42.9], ["lon", 37.2]]));
+
+        $this->weatherData->method("getGridFromLatLon")->will(
+            $this->returnValueMap([
+                [
+                    42.9,
+                    37.2,
+                    (object) [
+                        "wfo" => "WFO CODE",
+                        "x" => "ex",
+                        "y" => "why",
+                    ],
+                ],
+            ]),
+        );
 
         $expected = (object) [
             "grid" => (object) [
                 "wfo" => "WFO CODE",
-                "x" => 372,
-                "y" => 4,
+                "x" => "ex",
+                "y" => "why",
             ],
         ];
 

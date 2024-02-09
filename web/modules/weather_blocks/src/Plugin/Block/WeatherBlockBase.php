@@ -161,22 +161,12 @@ abstract class WeatherBlockBase extends BlockBase implements
             "grid" => false,
         ];
 
-        // If we're on a grid route, pull location from the URL.
-        if (
-            str_starts_with($this->route->getRouteName(), "weather_routes.grid")
-        ) {
-            $wfo = $this->route->getParameter("wfo");
+        // If we're on a location route, pull location from the URL.
+        if ($this->route->getRouteName() == "weather_routes.point") {
+            $lat = floatval($this->route->getParameter("lat"));
+            $lon = floatval($this->route->getParameter("lon"));
 
-            // Cast to integers to take care of any leading zeros in the string.
-            // The API wouldn't be happy about that.
-            $x = (int) $this->route->getParameter("gridX");
-            $y = (int) $this->route->getParameter("gridY");
-
-            $location->grid = (object) [
-                "wfo" => strtoupper($wfo),
-                "x" => $x,
-                "y" => $y,
-            ];
+            $location->grid = $this->weatherData->getGridFromLatLon($lat, $lon);
         } else {
             // Otherwise, attempt to get it from configuration.
             $configuredGrid = $this->getConfiguration()["grid"] ?? false;

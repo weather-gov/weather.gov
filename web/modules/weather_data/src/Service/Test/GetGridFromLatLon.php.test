@@ -51,7 +51,7 @@ final class WeatherDataServiceGetGridFromLatLon extends Base
                 match ($matcher->getInvocationCount()) {
                     2 => $this->assertEquals(
                         $key,
-                        "placename the wfo/an x/a y",
+                        "placename THE WFO/an x/a y",
                     ) &&
                         $this->assertEquals(
                             $value,
@@ -64,15 +64,15 @@ final class WeatherDataServiceGetGridFromLatLon extends Base
                 };
             });
 
-        $expected = [
-            "wfo" => "the wfo",
-            "gridX" => "an x",
-            "gridY" => "a y",
+        $expected = (object) [
+            "wfo" => "THE WFO",
+            "x" => "an x",
+            "y" => "a y",
         ];
 
         $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
 
-        $this->assertEquals((object) $expected, (object) $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -110,7 +110,7 @@ final class WeatherDataServiceGetGridFromLatLon extends Base
                 match ($matcher->getInvocationCount()) {
                     2 => $this->assertEquals(
                         $key,
-                        "placename the wfo/an x/a y",
+                        "placename THE WFO/an x/a y",
                     ) &&
                         $this->assertEquals(
                             $value,
@@ -123,15 +123,15 @@ final class WeatherDataServiceGetGridFromLatLon extends Base
                 };
             });
 
-        $expected = [
-            "wfo" => "the wfo",
-            "gridX" => "an x",
-            "gridY" => "a y",
+        $expected = (object) [
+            "wfo" => "THE WFO",
+            "x" => "an x",
+            "y" => "a y",
         ];
 
         $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
 
-        $this->assertEquals((object) $expected, (object) $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -171,7 +171,7 @@ final class WeatherDataServiceGetGridFromLatLon extends Base
                 match ($matcher->getInvocationCount()) {
                     2 => $this->assertEquals(
                         $key,
-                        "placename the wfo/an x/a y",
+                        "placename THE WFO/an x/a y",
                     ) &&
                         $this->assertEquals(
                             $value,
@@ -183,15 +183,15 @@ final class WeatherDataServiceGetGridFromLatLon extends Base
                     default => true,
                 };
             });
-        $expected = [
-            "wfo" => "the wfo",
-            "gridX" => "an x",
-            "gridY" => "a y",
+        $expected = (object) [
+            "wfo" => "THE WFO",
+            "x" => "an x",
+            "y" => "a y",
         ];
 
         $actual = $this->weatherDataService->getGridFromLatLon(1, 2);
 
-        $this->assertEquals((object) $expected, (object) $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**

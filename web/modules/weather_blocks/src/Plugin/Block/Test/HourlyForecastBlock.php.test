@@ -90,7 +90,7 @@ final class HourlyForecastBlockTest extends Base
      */
     public function testBuildWithDefaultConfiguration(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
 
         $this->weatherData
             ->method("getHourlyForecastFromGrid")
@@ -126,7 +126,7 @@ final class HourlyForecastBlockTest extends Base
      */
     public function testBuildWithModifiedConfigured(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
         $this->block->setConfigurationValue("max_items", "7");
 
         $this->weatherData

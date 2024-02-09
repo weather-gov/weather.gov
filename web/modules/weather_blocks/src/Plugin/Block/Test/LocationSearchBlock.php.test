@@ -24,7 +24,7 @@ final class LocationSearchBlockTest extends Base
      */
     public function testBuild(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
 
         $this->weatherData->method("getPlaceFromGrid")->willReturn("hiya");
 

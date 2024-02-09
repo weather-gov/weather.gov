@@ -378,7 +378,7 @@ class WeatherDataService
             $lon = round($lon, 4);
             $locationMetadata = $this->getFromWeatherAPI("/points/$lat,$lon");
 
-            $wfo = $locationMetadata->properties->gridId;
+            $wfo = strtoupper($locationMetadata->properties->gridId);
             $gridX = $locationMetadata->properties->gridX;
             $gridY = $locationMetadata->properties->gridY;
 
@@ -431,10 +431,10 @@ class WeatherDataService
                 time() + 3, // Expiration is a Unix timestamp in seconds
             );
 
-            return [
+            return (object) [
                 "wfo" => $wfo,
-                "gridX" => $gridX,
-                "gridY" => $gridY,
+                "x" => $gridX,
+                "y" => $gridY,
             ];
         } catch (\Throwable $e) {
             // Need to check the error so we know whether we ought to log something.

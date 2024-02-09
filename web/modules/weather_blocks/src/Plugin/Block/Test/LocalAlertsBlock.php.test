@@ -25,7 +25,7 @@ final class LocalAlertsBlockTest extends Base
      */
     public function testBuild(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
 
         $this->weatherData
             ->method("getAlertsForGrid")

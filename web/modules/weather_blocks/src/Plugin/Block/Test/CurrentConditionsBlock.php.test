@@ -25,7 +25,7 @@ final class CurrentConditionsBlockTest extends Base
      */
     public function testBuild(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
 
         $this->weatherData->method("getPlaceFromGrid")->willReturn(
             (object) [

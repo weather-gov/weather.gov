@@ -69,19 +69,25 @@ abstract class Base extends TestCase
         );
     }
 
-    protected function onGridRoute($wfo = "wfo", $x = "1", $y = "1")
+    protected function onLocationRoute($lat = "40", $lon = "-90")
     {
         $this->routeMock
             ->method("getRouteName")
-            ->willReturn("weather_routes.grid");
+            ->willReturn("weather_routes.point");
 
         $this->routeMock
             ->method("getParameter")
+            ->will($this->returnValueMap([["lat", $lat], ["lon", $lon]]));
+
+        $this->weatherData
+            ->method("getGridFromLatLon")
             ->will(
                 $this->returnValueMap([
-                    ["wfo", $wfo],
-                    ["gridX", $x],
-                    ["gridY", $y],
+                    [
+                        floatval($lat),
+                        floatval($lon),
+                        (object) ["wfo" => "WFO", "x" => 1, "y" => 1],
+                    ],
                 ]),
             );
     }

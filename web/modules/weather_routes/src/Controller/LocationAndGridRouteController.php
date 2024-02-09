@@ -50,14 +50,41 @@ final class LocationAndGridRouteController extends ControllerBase
         return [];
     }
 
-    /**
-     * Redirect the user from a point to a grid cell.
-     *
-     * This route resolves a lat/long into a WFO grid point and then redirects the
-     * user to the correct grid route. If there's no grid point, throws a 404.
-     */
-    public function redirectToGrid($lat, $lon)
+    public function serveLocationPage($lat, $lon)
     {
+        $grid = $this->weatherData->getGridFromLatLon($lat, $lon);
+
+        if ($grid == null) {
+            // If we don't get a corresponding grid location, throw a 404.
+            throw new NotFoundHttpException();
+        }
+
+        return [];
+    }
+
+    /**
+     * Redirect the user from a grid to a lat/lon.
+     *
+     * This route resolves a WFO grid point to a lat/lon and redirects. If the
+     * WFO grid is unknown, returns a 404 immediately.
+     */
+    public function redirectFromGrid($wfo, $gridX, $gridY)
+    {
+        $geometry = $this->weatherData->getGeometryFromGrid(
+            $wfo,
+            $gridX,
+            $gridY,
+        );
+        $point = $geometry[0];
+
+        $url = Url::fromRoute("weather_routes.point", [
+            "lat" => round($point->lat, 4),
+            "lon" => round($point->lon, 4),
+        ]);
+        return new RedirectResponse($url->toString());
+
+        return new NotFoundHttpException();
+
         $grid = $this->weatherData->getGridFromLatLon($lat, $lon);
 
         if ($grid == null) {
