@@ -1,5 +1,5 @@
 let bundling = false;
-let play = false;
+let play = "testing";
 
 export default {
   get bundling() {
