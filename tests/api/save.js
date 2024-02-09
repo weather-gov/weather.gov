@@ -1,49 +1,17 @@
-import archiver from "archiver";
-import { createWriteStream, promises as fs } from "fs";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { format } from "prettier";
-import config from "./config.js";
-
-let endOfBundleTimer = false;
 
 export default async (request, response, output) => {
   const requestID = request.headers["wx-gov-response-id"];
 
-  if(config.bundling && !requestID){
+  if (!requestID) {
     return;
-  }
-
-  // If we're supposed to capture a bundle and we haven't yet, this is the one
-  // to capture. Save off the request ID.
-  if (config.bundling) {
-    config.bundleID = requestID;
-
-    // Stop bundling after 3 seconds of silence on this request ID.
-    clearTimeout(endOfBundleTimer);
-    endOfBundleTimer = setTimeout(() => {
-      const bundlePath = `./data/bundle_${config.bundleID}`;
-      const outPath = `./data/bundle_${config.bundleID}.zip`;
-
-      const archive = archiver("zip");
-      const outStream = createWriteStream(outPath);
-
-      archive.directory(bundlePath, false).pipe(outStream);
-
-      outStream.on("close", async () => {
-        await fs.rm(bundlePath, { recursive: true });
-        config.bundling = false;
-      });
-
-      archive.finalize();
-    }, 3_000);
   }
 
   // If we are bundling and this request ID is the same as our bundle ID, then
   // save it to the bundle folder. Otherwise put it in the normal place.
-  const dataPath =
-    config.bundleID === requestID
-      ? `./data/bundle_${config.bundleID}`
-      : "./data";
+  const dataPath = `./data/bundle_${requestID}`;
 
   // Put the query string back together.
   const query = Object.entries(request.query)

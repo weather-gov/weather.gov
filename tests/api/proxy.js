@@ -33,7 +33,7 @@ export default (req, res) => {
             res.write(output.join(""));
             console.log("PROXY:    response finished");
 
-            if (config.recording || config.bundling) {
+            if (config.bundling) {
               save(req, proxyResponse, output.join(""));
             }
           }

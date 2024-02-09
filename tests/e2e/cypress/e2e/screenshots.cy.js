@@ -9,7 +9,7 @@ const viewports = [
 
 describe("collect screenshots", () => {
   before(() => {
-    cy.request("http://localhost:8081/local");
+    cy.request("http://localhost:8081/play/testing");
   });
 
   it("is not a test, is just a utility", () => {

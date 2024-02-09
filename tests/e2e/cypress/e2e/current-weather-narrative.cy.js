@@ -1,6 +1,6 @@
 describe("the current weather narrative", () => {
   before(() => {
-    cy.request("http://localhost:8081/local");
+    cy.request("http://localhost:8081/play/testing");
   });
 
   it("is full width", () => {
