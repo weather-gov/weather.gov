@@ -53,6 +53,8 @@ app.get("*", (req, res) => {
 
 app.listen(port, () => {
   console.log(`Now listening on ${port}`);
-  console.log(`Locally-served files is ${serveLocalFiles ? "en" : "dis"}abled`);
-  console.log(`Recording is ${record ? "en" : "dis"}abled`);
+  console.log(
+    `Locally-served files is ${config.localService ? "en" : "dis"}abled`,
+  );
+  console.log(`Recording is ${config.recording ? "en" : "dis"}abled`);
 });
