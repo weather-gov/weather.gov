@@ -29,7 +29,14 @@ localize-timestamps:
     assets/js/localizeTimestamps.js:
       attributes:
         async: true
+
 tabbed_nav:
   version: VERSION
   js:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
+
+digital-analytics-program:
+  header: true
+  version: VERSION
+  js:
+    https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety: {}

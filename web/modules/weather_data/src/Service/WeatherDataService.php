@@ -57,6 +57,15 @@ class WeatherDataService
     private $t;
 
     /**
+     * Response ID.
+     *
+     * Used to identify which response we're handling with our API calls.
+     *
+     * @var String responseId
+     */
+    private $responseId;
+
+    /**
      * The request currently being responded to.
      *
      * @var request
@@ -99,6 +108,11 @@ class WeatherDataService
         $this->legacyMapping = json_decode(
             file_get_contents(__DIR__ . "/legacyMapping.json"),
         );
+
+        // For a given request, assign it a response ID. We'll send this in the
+        // headers to the API. If we've already gotten an ID for this response,
+        // keep it.
+        $this->responseId = uniqid();
     }
 
     /**
@@ -118,7 +132,11 @@ class WeatherDataService
         $cacheHit = $this->cache->get($url);
         if (!$cacheHit) {
             try {
-                $response = $this->client->get($url);
+                $response = $this->client->get($url, [
+                    // Add our response ID as a header to the API so we can
+                    // track sequences of API calls for this one response.
+                    "headers" => ["wx-gov-response-id" => $this->responseId],
+                ]);
                 $response = json_decode($response->getBody());
                 $this->cache->set($url, $response, time() + 60);
                 return $response;
