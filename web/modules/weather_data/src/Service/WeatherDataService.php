@@ -3,6 +3,7 @@
 namespace Drupal\weather_data\Service;
 
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use GuzzleHttp\ClientInterface;
@@ -15,7 +16,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class WeatherDataService
 {
     use LoggerChannelTrait;
-    use TimezoneTrait;
     use UnitConversionTrait;
     use WeatherAlertTrait;
 
@@ -80,11 +80,9 @@ class WeatherDataService
     private $cache;
 
     /**
-     * Cache of the current conditions
-     *
-     * @var $currentConditions
+     * Connection to the Drupal database.
      */
-    private $currentConditions;
+    private $database;
 
     /**
      * Constructor.
@@ -94,11 +92,13 @@ class WeatherDataService
         TranslationInterface $t,
         RequestStack $r,
         CacheBackendInterface $cache,
+        Connection $database,
     ) {
         $this->client = $httpClient;
         $this->t = $t;
         $this->request = $r->getCurrentRequest();
         $this->cache = $cache;
+        $this->database = $database;
 
         $this->defaultIcon = "nodata.svg";
         $this->defaultConditions = "No data";
@@ -120,9 +120,6 @@ class WeatherDataService
      *
      * The results for any given URL are cached for the duration of the current
      * response. The cache is not persisted across responses.
-     *
-     * Disable phpcs on the next line because it does not like method names with
-     * sequential uppercase characters, but... I'm not camel-casing "API".
      */
     public function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
     {
@@ -168,7 +165,7 @@ class WeatherDataService
             }
         } else {
             // If we cached an exception, throw it. Otherwise return the data.
-            if (is_object($cacheHit->data) && $cacheHit->data->error) {
+            if (is_object($cacheHit->data) && isset($cacheHit->data->error)) {
                 throw $cacheHit->data->error;
             }
             return $cacheHit->data;
@@ -449,38 +446,49 @@ class WeatherDataService
     /**
      * Get a place from a WFO grid.
      */
-    public function getPlaceFromGrid($wfo, $x, $y)
+    public function getPlaceFromGrid($wfo, $x, $y, $self = false)
     {
-        $wfo = strtoupper($wfo);
-
-        // If the place is in the cache, use it. This way if the user arrived
-        // via location search and we got a suggested place name, we will use
-        // that instead of whatever we'd get from looking it up.
-        $cached = $this->cache->get("placename $wfo/$x/$y");
-        if ($cached != false) {
-            return $cached->data;
+        if (!$self) {
+            $self = $this;
         }
 
-        $geometry = $this->getGeometryFromGrid($wfo, $x, $y);
-        $point = $geometry[0];
+        $wfo = strtoupper($wfo);
 
-        return $this->getPlaceFromLatLon($point->lat, $point->lon);
-    }
+        $CACHE_KEY = "place name $wfo/$x/$y";
+        $cache = $this->cache->get($CACHE_KEY);
 
-    /**
-     * Get a place from a latitude and longitude.
-     */
-    public function getPlaceFromLatLon($lat, $lon)
-    {
-        $lat = round($lat, 4);
-        $lon = round($lon, 4);
-        $point = $this->getFromWeatherAPI("/points/$lat,$lon");
-        $place = $point->properties->relativeLocation->properties;
+        if ($cache) {
+            return $cache->data;
+        }
 
-        return (object) [
-            "city" => $place->city,
+        $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
+        $geometry = array_map(function ($point) {
+            return $point->lon . " " . $point->lat;
+        }, $geometry);
+
+        $geometry = implode(",", $geometry);
+
+        $sql = "SELECT
+                name,state,stateName,county,timezone,stateFIPS,countyFIPS
+                FROM weathergov_geo_places
+                ORDER BY ST_DISTANCE(point,ST_POLYGONFROMTEXT('POLYGON(($geometry))'))
+                LIMIT 1";
+
+        $place = $this->database->query($sql)->fetch();
+
+        $place = (object) [
+            "city" => $place->name,
             "state" => $place->state,
+            "stateName" => $place->stateName,
+            "stateFIPS" => $place->stateFIPS,
+            "county" => $place->county,
+            "countyFIPS" => $place->countyFIPS,
+            "timezone" => $place->timezone,
         ];
+
+        $this->cache->set($CACHE_KEY, $place, time() + 600);
+
+        return $place;
     }
 
     /**
@@ -640,7 +648,12 @@ class WeatherDataService
         $gridX,
         $gridY,
         $now = false,
+        $self = false,
     ) {
+        if (!$self) {
+            $self = $this;
+        }
+
         $wfo = strtoupper($wfo);
         if (!($now instanceof \DateTimeImmutable)) {
             $now = new \DateTimeImmutable();
@@ -652,13 +665,8 @@ class WeatherDataService
             "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
         );
 
-        // Get a point from the WFO grid. Any will do. We will use that to fetch the
-        // appropriate timezone from the /points API endpoint.
-        $point = $forecast->geometry->coordinates[0][0];
-        $lat = round($point[1], 4);
-        $lon = round($point[0], 4);
-        $timezone = $this->getFromWeatherAPI("/points/$lat,$lon");
-        $timezone = $timezone->properties->timeZone;
+        $place = $self->getPlaceFromGrid($wfo, $gridX, $gridY);
+        $timezone = $place->timezone;
 
         $forecast = $forecast->properties->periods;
 
