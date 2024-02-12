@@ -48,6 +48,13 @@
     <a href="#main-content" class="visually-hidden focusable skip-link">
       {{ 'Skip to main content'|t }}
     </a>
+
+    {% if page.beta %}
+    {{ page.beta }}
+    {% endif %}
+
+    {% include '@new_weather_theme/partials/gov-banner.html.twig' %}
+
     {{ page_top }}
     {{ page }}
     {{ page_bottom }}

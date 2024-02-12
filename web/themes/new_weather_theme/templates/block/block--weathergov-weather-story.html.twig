@@ -1,8 +1,8 @@
 {% if content.title %}
 {{ attach_library("new_weather_theme/localize-timestamps") }}
 <div data-wx-weather-story>
-  <h2>Weather story</h2>
-  <p class="text-gray-50">Last updated:
+  <h2>{{ "Weather story" | t }}</h2>
+  <p class="text-gray-50">{{ "Last updated" | t }}:
     <time datetime="{{ content.updated.utc }}" data-wx-local-time data-date-format="M d Y T">
       {{ content.updated.formatted }}
     </time>

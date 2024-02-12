@@ -8,18 +8,23 @@
       aria-expanded="{{ (loop.index == 1) ? 'true' : 'false' }}"
       aria-controls="a{{ loop.index }}"
       data-button-for="#alert_{{loop.index}}">
-      {{ alert.event }}
+      {{ alert.event | t }}
     </button>
   </h2>
   <div id="a{{loop.index}}" class="usa-accordion__content usa-prose">
     <p>
-      In effect from {{ alert.onset }}
+      {{ "In effect from" | t }} {{ alert.onset }}
       {% if alert.ends %} - {{ alert.ends }}{% endif %}
     </p>
     <p>
-      Issued by {{ alert.senderName }}
+      {{ "Issued by @sender" | t({ "@sender": alert.senderName }) }}
     </p>
 
+    <!--
+    We don't translate alert descriptions for now. There is a larger effort to
+    do those translations in realtime and we will try to hook into that when the
+    time comes. For now... we can't really do anything.
+    -->
     {% for element in alert.description %}
       {% if element.type == "heading" %}
         <h3>{{ element.text | capitalize }}</h3>
@@ -29,12 +34,12 @@
     {% endfor %}
 
     {% if alert.instruction %}
-    <h3>What to do</h3>
+    <h3>{{ "What to do" | t }}</h3>
     <p>
       {{ alert.instruction | nl2br }}
     </p>
     {% endif %}
-    <h3>Areas impacted</h3>
+    <h3>{{ "Areas impacted" |t }}</h3>
       <ul class="usa-list" style="columns:2;">
         {%  for areaName in alert.areaDesc %}
           <li class="">{{ areaName }}</li>
