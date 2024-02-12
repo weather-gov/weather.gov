@@ -13,17 +13,17 @@ const fileExists = async (file) =>
     .catch(() => false);
 
 const files = {
-  state: args[0] ?? "s_05mr24",
-  county: args[1] ?? "c_05mr24",
-  city: args[2] ?? "us.cities500.txt",
+  state: "s_05mr24",
+  county: "c_05mr24",
+  city: "us.cities500.txt",
 };
 
 const connectionDetails = {
-  user: args[3] ?? "drupal",
-  password: args[4] ?? "drupal",
-  database: args[5] ?? "weathergov",
-  host: args[6] ?? "database",
-  port: args[7] ?? 3306,
+  user: args[0] ?? "drupal",
+  password: args[1] ?? "drupal",
+  database: args[2] ?? "weathergov",
+  host: args[3] ?? "database",
+  port: args[4] ?? 3306,
 };
 
 // MariaDB supports IF EXISTS with indices but MySQL does not, so use this more
