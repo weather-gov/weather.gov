@@ -6,8 +6,8 @@
   <div class="usa-alert__body">
     <a href="#alert_{{ loop.index }}">
       {{ alert.event | t}} {{ "in effect" | t }}
-      {{ alert.onset | date("l, m/d, g:i A T") }}
-      {% if alert.ends %} - {{ alert.ends | date("l, m/d, g:i A T") }}{% endif %}
+      {{ alert.onset }}
+      {% if alert.ends %} - {{ alert.ends }}{% endif %}
     </a>
   </div>
 </div>

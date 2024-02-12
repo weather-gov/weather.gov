@@ -163,10 +163,10 @@
         "id": "urn:oid:2.49.0.1.840.0.550760f4ae698a45e239ca34a1ad97353d170175.001.1",
         "areaDesc": "Eastern San Juan Mountains Above 10000 Ft",
         "geocode": {
-          "SAME": ["008021", "008079", "008105"],
-          "UGC": ["COZ068"]
+          "SAME": ["005119"],
+          "UGC": []
         },
-        "affectedZones": ["https://api.weather.gov/zones/forecast/COZ068"],
+        "affectedZones": [],
         "references": [
           {
             "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.1afb9e8030b0ed3aac216a52624965e145929bc4.003.1",
@@ -218,10 +218,10 @@
         "id": "urn:oid:2.49.0.1.840.0.8760a86c78e313ccfc42aa4eb5166572a0e26e9d.003.1",
         "areaDesc": "Eastern Beaufort Sea Coast",
         "geocode": {
-          "SAME": ["002185"],
-          "UGC": ["AKZ805"]
+          "SAME": ["005119"],
+          "UGC": []
         },
-        "affectedZones": ["https://api.weather.gov/zones/forecast/AKZ805"],
+        "affectedZones": [],
         "references": [
           {
             "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.50186263db80dd3a37b9a35b4106434dbb236843.003.1",
@@ -274,10 +274,10 @@
         "id": "urn:oid:2.49.0.1.840.0.dd9d1725a9e11197c2487f4272c175c43049330c.001.2",
         "areaDesc": "Santa Ynez Mountains Eastern Range",
         "geocode": {
-          "SAME": ["006083", "006111"],
-          "UGC": ["CAZ352"]
+          "SAME": ["005119"],
+          "UGC": []
         },
-        "affectedZones": ["https://api.weather.gov/zones/forecast/CAZ352"],
+        "affectedZones": [],
         "references": [],
         "sent": "date:now -1 hour",
         "effective": "date:now -1 hour",
@@ -311,31 +311,17 @@
     {
       "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e26a87da6e5d02d88e85d7d5b7a62b2fc1d84889.001.1",
       "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [-102.34999999999999, 41.359999999999999],
-            [-102.34999999999999, 41.399999999999999],
-            [-101.9599999, 41.299999999999997],
-            [-101.97, 41.259999999999998],
-            [-102.34999999999999, 41.359999999999999]
-          ]
-        ]
-      },
+      "geometry": null,
       "properties": {
         "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e26a87da6e5d02d88e85d7d5b7a62b2fc1d84889.001.1",
         "@type": "wx:Alert",
         "id": "urn:oid:2.49.0.1.840.0.e26a87da6e5d02d88e85d7d5b7a62b2fc1d84889.001.1",
         "areaDesc": "Garden, NE; Keith, NE",
         "geocode": {
-          "SAME": ["031069", "031101"],
-          "UGC": ["NEC069", "NEC101"]
+          "SAME": ["005119"],
+          "UGC": []
         },
-        "affectedZones": [
-          "https://api.weather.gov/zones/county/NEC069",
-          "https://api.weather.gov/zones/county/NEC101"
-        ],
+        "affectedZones": [],
         "references": [],
         "sent": "date:now -1 hour",
         "effective": "date:now -1 hour",
@@ -372,32 +358,17 @@
     {
       "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65.001.1",
       "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [-80.849999999999994, 34.5],
-            [-80.629999999999995, 34.32],
-            [-80.75, 34.280000000000001],
-            [-80.980000000000004, 34.469999999999999],
-            [-80.849999999999994, 34.5]
-          ]
-        ]
-      },
+      "geometry": null,
       "properties": {
         "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65.001.1",
         "@type": "wx:Alert",
         "id": "urn:oid:2.49.0.1.840.0.aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65.001.1",
         "areaDesc": "Fairfield, SC; Kershaw, SC; Lancaster, SC",
         "geocode": {
-          "SAME": ["045039", "045055", "045057"],
-          "UGC": ["SCC039", "SCC055", "SCC057"]
+          "SAME": ["005119"],
+          "UGC": []
         },
-        "affectedZones": [
-          "https://api.weather.gov/zones/county/SCC039",
-          "https://api.weather.gov/zones/county/SCC055",
-          "https://api.weather.gov/zones/county/SCC057"
-        ],
+        "affectedZones": [],
         "references": [
           {
             "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c5ee31a96a4e5c19f2b67a2c82f32ab0a48256ed.001.1",
@@ -455,10 +426,10 @@
         "id": "urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.036.2",
         "areaDesc": "Saint Matthew Island Waters",
         "geocode": {
-          "SAME": ["058767"],
-          "UGC": ["PKZ767"]
+          "SAME": ["005119"],
+          "UGC": []
         },
-        "affectedZones": ["https://api.weather.gov/zones/forecast/PKZ767"],
+        "affectedZones": [],
         "references": [],
         "sent": "date:now -1 hour",
         "effective": "date:now -1 hour",
@@ -500,10 +471,10 @@
         "id": "urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.007.2",
         "areaDesc": "Cape Tolstoi to Cape Sarichef from 15 to 100 NM",
         "geocode": {
-          "SAME": ["058755"],
-          "UGC": ["PKZ755"]
+          "SAME": ["005119"],
+          "UGC": []
         },
-        "affectedZones": ["https://api.weather.gov/zones/forecast/PKZ755"],
+        "affectedZones": [],
         "references": [],
         "sent": "date:now -1 hour",
         "effective": "date:now -1 hour",
@@ -543,15 +514,10 @@
         "id": "urn:oid:2.49.0.1.840.0.82d03a893a84390fbc5217471cd259eaa41a4135.001.1",
         "areaDesc": "Eastern Glacier, Western Toole, and Central Pondera; Eastern Toole and Liberty; Hill County; Northern Blaine County",
         "geocode": {
-          "SAME": ["030035", "030073", "030101", "030051", "030041", "030005"],
-          "UGC": ["MTZ303", "MTZ304", "MTZ305", "MTZ306"]
+          "SAME": ["005119"],
+          "UGC": []
         },
-        "affectedZones": [
-          "https://api.weather.gov/zones/forecast/MTZ303",
-          "https://api.weather.gov/zones/forecast/MTZ304",
-          "https://api.weather.gov/zones/forecast/MTZ305",
-          "https://api.weather.gov/zones/forecast/MTZ306"
-        ],
+        "affectedZones": [],
         "references": [],
         "sent": "date:now -1 hour",
         "effective": "date:now -1 hour",

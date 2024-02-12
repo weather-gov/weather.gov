@@ -70,3 +70,16 @@ from the current time by adding a value and unit: `date:now +1 hour`. The value
 and unit are passed directly into
 [Day.js's `.add` method](https://day.js.org/docs/en/manipulate/add), so use that
 documentation to know what units are available.
+
+## Recording a whole transaction
+
+Sometimes it's easier to capture a whole series of API calls related to a single
+page load so we can attach it to a bug report or issue for future investigation.
+To help with this, the proxy server has another utility that will capture all
+of those calls and produce a zip file with the results.
+
+To enable this, visit [localhost:8081/bundle](http://localhost:8081/bundle). The
+proxy will capture all API calls associated with the next location page load.
+Once that location response is finished, the proxy will revert back to its
+previous behavior (recording, passing through, etc.). The produced zip file will
+be located in the `tests/api/data` directory.

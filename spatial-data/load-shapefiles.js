@@ -1,3 +1,4 @@
+const { exec } = require("node:child_process");
 const fs = require("node:fs/promises");
 const mariadb = require("mariadb");
 const shapefile = require("shapefile");
@@ -5,18 +6,25 @@ const shapefile = require("shapefile");
 // Slice off Node executable and script, keep just the args.
 const args = process.argv.slice(2);
 
+const fileExists = async (file) =>
+  fs
+    .access(file, fs.constants.F_OK)
+    .then(() => true)
+    .catch(() => false);
+
 const files = {
-  state: args[0] ?? "s_05mr24",
-  county: args[1] ?? "c_05mr24",
-  city: args[2] ?? "cities500.txt",
+  state: "s_05mr24",
+  county: "c_05mr24",
+  city: "us.cities500.txt",
+  cwa: "w_05mr24",
 };
 
 const connectionDetails = {
-  user: args[3] ?? "drupal",
-  password: args[4] ?? "drupal",
-  database: args[5] ?? "weathergov",
-  host: args[6] ?? "database",
-  port: args[7] ?? 3306,
+  user: args[0] ?? "drupal",
+  password: args[1] ?? "drupal",
+  database: args[2] ?? "weathergov",
+  host: args[3] ?? "database",
+  port: args[4] ?? 3306,
 };
 
 // MariaDB supports IF EXISTS with indices but MySQL does not, so use this more
@@ -31,6 +39,76 @@ const dropIndexIfExists = async (db, name, table) => {
   );
   await db.query(`PREPARE stmt FROM @sqlstmt`);
   await db.query(`EXECUTE stmt`);
+};
+
+const loadCWAs = async () => {
+  console.log("loading WFOs...");
+  const db = await mariadb.createConnection(connectionDetails);
+
+  const file = await shapefile.open(`./${files.cwa}.shp`);
+
+  await db.query(`
+CREATE TABLE IF NOT EXISTS
+ weathergov_geo_cwas
+ (
+   wfo VARCHAR(3),
+   cwa VARCHAR(3),
+   region VARCHAR(2),
+   city VARCHAR(50),
+   state VARCHAR(50),
+   st VARCHAR(2),
+   shape MULTIPOLYGON NOT NULL
+)`);
+
+  await dropIndexIfExists(db, "cwas_spatial_idx", "weathergov_geo_cwas");
+  await db.query("TRUNCATE TABLE weathergov_geo_cwas");
+
+  const getSqlForShape = async ({ done, value }) => {
+    if (done) {
+      return null;
+    }
+
+    const {
+      properties: {
+        WFO: wfo,
+        CWA: cwa,
+        REGION: region,
+        CITY: city,
+        STATE: state,
+        ST: st,
+      },
+      geometry,
+    } = value;
+
+    if (geometry.type === "Polygon") {
+      geometry.type = "Multipolygon";
+      geometry.coordinates = [geometry.coordinates];
+    }
+
+    // These shapefiles are in NAD83, whose SRID is 4269.
+    geometry.crs = { type: "name", properties: { name: "EPSG:4269" } };
+
+    await db.query(`INSERT INTO weathergov_geo_cwas
+            (wfo, cwa, region, city, state, st, shape)
+            VALUES(
+              '${wfo}',
+              '${cwa}',
+              '${region}',
+              '${city}',
+              '${state}',
+              '${st}',
+              ST_GeomFromGeoJSON('${JSON.stringify(geometry)}'));`);
+
+    return file.read().then(getSqlForShape);
+  };
+
+  await file.read().then(getSqlForShape);
+
+  await db.query(
+    "CREATE SPATIAL INDEX cwas_spatial_idx ON weathergov_geo_cwas(shape)",
+  );
+
+  db.end();
 };
 
 const loadStates = async () => {
@@ -306,6 +384,49 @@ const loadPlaces = async () => {
   db.end();
 };
 
-loadStates()
-  .then(() => loadCounties())
-  .then(() => loadPlaces());
+const unzip = (path) =>
+  new Promise((resolve) => {
+    console.log(`   [${path}] decompressing...`);
+    exec(`unzip -u ${path}`, () => {
+      resolve();
+    });
+  });
+
+const downloadAndUnzip = async (url) => {
+  const filename = url.split("/").pop();
+
+  if (!(await fileExists(filename))) {
+    console.log(`Downloading ${filename}...`);
+    const data = await fetch(url)
+      .then((r) => r.blob())
+      .then((blob) => blob.arrayBuffer());
+    await fs.writeFile(filename, Buffer.from(data));
+  } else {
+    console.log(`${filename} is already present`);
+  }
+
+  await unzip(filename);
+
+  console.log(`   [${filename}] done`);
+};
+
+
+async function main(){
+  await downloadAndUnzip(
+  "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
+  );
+  await downloadAndUnzip(
+    "https://www.weather.gov/source/gis/Shapefiles/County/s_05mr24.zip",
+  );
+  await downloadAndUnzip(
+    "https://www.weather.gov/source/gis/Shapefiles/WSOM/w_05mr24.zip",
+  );
+
+  await unzip("us.cities500.txt.zip");
+  await loadStates();
+  await loadCounties();
+  await loadPlaces();
+  await loadCWAs();
+}
+
+main();

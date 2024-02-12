@@ -6,6 +6,7 @@ module.exports = {
     "import/extensions": ["error", "always"],
     "prefer-destructuring": [0],
     "no-param-reassign": ["error", { props: false }],
+    "no-console": "error",
   },
   env: {
     es6: true,
@@ -14,7 +15,7 @@ module.exports = {
   parserOptions: { ecmaVersion: 2024 },
   overrides: [
     {
-      files: ["./*.js", "tests/**/*.js"],
+      files: ["spatial-data/*.js", "tests/**/*.js"],
       rules: {
         "no-console": 0,
       },
