@@ -273,10 +273,18 @@ jobs:
       - name: setup image cacheing
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/cache@v4
-        id: cache
         with:
           key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
           path: /tmp/image.tar
+
+      - name: cache spatial data
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/cache@v4
+        with:
+          key: spatial-data-05mr24
+          path: |
+            spatial-data/c_05mr24.zip
+            spatial-data/s_05mr24.zip
 
       - name: start the site
         if: needs.should-test.outputs.yes == 'true'
@@ -294,6 +302,7 @@ jobs:
         run: |
           cp web/sites/example.settings.dev.php web/sites/settings.dev.php
           make install-site
+          make load-spatial
 
       - name: Cypress run
         if: needs.should-test.outputs.yes == 'true'
@@ -318,6 +327,8 @@ jobs:
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: setup image cacheing
         if: needs.should-test.outputs.yes == 'true'
@@ -343,6 +354,7 @@ jobs:
         run: |
           cp web/sites/example.settings.dev.php web/sites/settings.dev.php
           make install-site
+          make load-spatial
 
       - name: Cypress run
         if: needs.should-test.outputs.yes == 'true'

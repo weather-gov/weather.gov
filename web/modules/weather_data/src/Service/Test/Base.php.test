@@ -3,6 +3,7 @@
 namespace Drupal\weather_data\Service\Test;
 
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\weather_data\Service\WeatherDataService;
 use GuzzleHttp\Client;
@@ -26,6 +27,13 @@ abstract class Base extends TestCase
     protected $cacheMock;
 
     /**
+     * Mocked Drupal database connection.
+     *
+     * @var databaseMock;
+     */
+    protected $databaseMock;
+
+    /**
      * History of HTTP calls made during a test.
      *
      * @var httpCallStack
@@ -45,6 +53,13 @@ abstract class Base extends TestCase
      * @var requestMock
      */
     protected $requestMock;
+
+    /**
+     * WeatherDataService mock object, to be used as $self.
+     *
+     * @var selfMock
+     */
+    protected $selfMock;
 
     /**
      * The WeatherDataService object under test.
@@ -79,6 +94,10 @@ abstract class Base extends TestCase
 
         $this->cacheMock = $this->createMock(CacheBackendInterface::class);
         $this->requestMock = $this->createStub(Request::class);
+        $this->databaseMock = $this->createStub(Connection::class);
+        $this->selfMock = $this->getMockBuilder(WeatherDataService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         // The WeatherDataService ingests this RequestStack service, but it
         // immediately uses it to get an instance of the current request and
@@ -94,6 +113,7 @@ abstract class Base extends TestCase
             $translationManager,
             $requestStack,
             $this->cacheMock,
+            $this->databaseMock,
         );
     }
 }

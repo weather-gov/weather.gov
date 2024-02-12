@@ -1,0 +1,89 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use Drupal\weather_data\Service\AlertPriority;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the AlertPriority helper class.
+ */
+final class AlertPriorityTest extends TestCase
+{
+    public function testKnowsMarineAlerts(): void
+    {
+        $actual = AlertPriority::isMarineAlert("storm watch");
+        $this->assertEquals(true, $actual);
+    }
+
+    public function testKnowsNotMarineAlerts(): void
+    {
+        $actual = AlertPriority::isMarineAlert("severe thunderstorm WARNING");
+        $this->assertEquals(false, $actual);
+    }
+
+    public function testSortsAlertsCorrectly(): void
+    {
+        $alerts = [
+            (object) [
+                "event" => "flood watch",
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => \DateTimeImmutable::createFromFormat(
+                    \DateTimeInterface::ISO8601_EXPANDED,
+                    "2000-01-01T00:00:00Z",
+                ),
+            ],
+            (object) [
+                "event" => "volcano warning",
+                "onset" => \DateTimeImmutable::createFromFormat(
+                    \DateTimeInterface::ISO8601_EXPANDED,
+                    "2012-12-21T00:00:00Z",
+                ),
+            ],
+            (object) [
+                "event" => "tornado warning",
+            ],
+            (object) [
+                "event" => "dust storm warning",
+            ],
+            (object) [
+                "event" => "volcano warning",
+                "onset" => \DateTimeImmutable::createFromFormat(
+                    \DateTimeInterface::ISO8601_EXPANDED,
+                    "2000-01-01T00:00:00Z",
+                ),
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => \DateTimeImmutable::createFromFormat(
+                    \DateTimeInterface::ISO8601_EXPANDED,
+                    "2020-01-01T00:00:00Z",
+                ),
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => \DateTimeImmutable::createFromFormat(
+                    \DateTimeInterface::ISO8601_EXPANDED,
+                    "2020-01-01T00:00:00Z",
+                ),
+            ],
+        ];
+
+        $expected = [
+            $alerts[3],
+            $alerts[5],
+            $alerts[2],
+            $alerts[4],
+            $alerts[0],
+            $alerts[1],
+            $alerts[6],
+            $alerts[7],
+        ];
+
+        $actual = AlertPriority::sort($alerts);
+
+        $this->assertEquals($expected, $actual);
+    }
+}

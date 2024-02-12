@@ -1,3 +1,4 @@
+const { exec } = require("node:child_process");
 const fs = require("node:fs/promises");
 const mariadb = require("mariadb");
 const shapefile = require("shapefile");
@@ -5,18 +6,24 @@ const shapefile = require("shapefile");
 // Slice off Node executable and script, keep just the args.
 const args = process.argv.slice(2);
 
+const fileExists = async (file) =>
+  fs
+    .access(file, fs.constants.F_OK)
+    .then(() => true)
+    .catch(() => false);
+
 const files = {
-  state: args[0] ?? "s_05mr24",
-  county: args[1] ?? "c_05mr24",
-  city: args[2] ?? "cities500.txt",
+  state: "s_05mr24",
+  county: "c_05mr24",
+  city: "us.cities500.txt",
 };
 
 const connectionDetails = {
-  user: args[3] ?? "drupal",
-  password: args[4] ?? "drupal",
-  database: args[5] ?? "weathergov",
-  host: args[6] ?? "database",
-  port: args[7] ?? 3306,
+  user: args[0] ?? "drupal",
+  password: args[1] ?? "drupal",
+  database: args[2] ?? "weathergov",
+  host: args[3] ?? "database",
+  port: args[4] ?? 3306,
 };
 
 // MariaDB supports IF EXISTS with indices but MySQL does not, so use this more
@@ -306,6 +313,41 @@ const loadPlaces = async () => {
   db.end();
 };
 
-loadStates()
+const unzip = async (path) =>
+  new Promise((resolve) => {
+    console.log(`   [${path}] decompressing...`);
+    exec(`unzip -u ${path}`, () => {
+      resolve();
+    });
+  });
+
+const downloadAndUnzip = async (url) => {
+  const filename = url.split("/").pop();
+
+  if (!(await fileExists(filename))) {
+    console.log(`Downloading ${filename}...`);
+    const data = await fetch(url)
+      .then((r) => r.blob())
+      .then((blob) => blob.arrayBuffer());
+    await fs.writeFile(filename, Buffer.from(data));
+  } else {
+    console.log(`${filename} is already present`);
+  }
+
+  await unzip(filename);
+
+  console.log(`   [${filename}] done`);
+};
+
+downloadAndUnzip(
+  "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
+)
+  .then(
+    downloadAndUnzip(
+      "https://www.weather.gov/source/gis/Shapefiles/County/s_05mr24.zip",
+    ),
+  )
+  .then(unzip("us.cities500.txt.zip"))
+  .then(() => loadStates())
   .then(() => loadCounties())
   .then(() => loadPlaces());

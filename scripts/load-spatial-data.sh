@@ -41,5 +41,5 @@ while read -r host port db username password; do
   sleep 5
 
   # load
-  docker compose run --rm -T spatial node load-shapefiles.js s_05mr24 c_05mr24 cities500.txt $username $password $db host.docker.internal $LOCAL_PORT
+  docker compose run --rm -T spatial node load-shapefiles.js $username $password $db host.docker.internal $LOCAL_PORT
 done
