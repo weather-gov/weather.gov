@@ -1,1 +1,46 @@
 <?php
+
+// This hook lets us alter the variables at the page level. These variables are
+// available globally to all templates.
+function weather_blocks_template_preprocess_default_variables_alter(
+    &$variables,
+    $hook,
+) {
+    // Let's create a single global that contains all of our stuff, rather than
+    // scattering them around. Yay, namespaces!
+    $weatherMetadata = [
+        "alerts" => false,
+        "place" => false,
+    ];
+
+    // First, get our grid information, if we have it.
+    $container = \Drupal::getContainer();
+    $route = $container->get("current_route_match");
+
+    $wfo = $route->getParameter("wfo");
+    $x = $route->getParameter("gridX");
+    $y = $route->getParameter("gridY");
+
+    // If we do, then we can start populating globals.
+    if ($wfo != null && $x != null && $y != null) {
+        $weatherData = $container->get("weather_data");
+
+        try {
+            $alerts = $weatherData->getAlertsForGrid($wfo, $x, $y);
+            $weatherMetadata["alerts"] = count($alerts) > 0;
+        } catch (Throwable $e) {
+        }
+
+        try {
+            $place = $weatherData->getPlaceFromGrid($wfo, $x, $y);
+            if ($place) {
+                $weatherMetadata["place"] = trim(
+                    $place->city . ", " . $place->state,
+                );
+            }
+        } catch (Throwable $e) {
+        }
+    }
+
+    $variables["weather"] = $weatherMetadata;
+}

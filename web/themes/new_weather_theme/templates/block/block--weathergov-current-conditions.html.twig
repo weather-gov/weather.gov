@@ -1,6 +1,11 @@
+{{ attach_library("new_weather_theme/localize-timestamps") }}
+
 {# Widgets and stuff. This is presented as a row of columns. #}
 <div class="weather-gov-current-conditions">
   <h2>Current Conditions</h2>
+  {% if content.error %}
+  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: "There was an error loading the current conditions." } %}
+  {% else %}
 
   {# We hide from screenreaders and use the weather narrative (below) instead #}
   <div data-wx-current-conditions-narrative aria-hidden="true">
@@ -8,9 +13,9 @@
       {{ 'Weather as of' | t }}
     </p>
     {# Datetimes are localized in client-side Javascript. #}
-    <weather-timestamp class="display-block text-bold" data-utc="{{ content.timestamp.utc }}">
+    <time class="display-block text-bold" datetime="{{ content.timestamp.utc }}" data-wx-local-time>
       {{ content.timestamp.formatted }}
-    </weather-timestamp>
+    </time>
   </div>
 
   {# We hide from screenreaders and use the weather narrative (below) instead #}
@@ -88,7 +93,7 @@
     }}
   </div>
 
-  <div class="margin-y-3">
+  <div class="margin-top-3">
     <span class="text-gray-50 margin-bottom-105 display-block">{{ "Observation station" | t }}:</span>
     <span class="text-bold display-block margin-y-105 display-block">
       {{ content.stationInfo.name }} ({{ content.stationInfo.identifier }})
@@ -110,4 +115,5 @@
       {{content.stationInfo.elevation}} ft
     </div>
   </div>
+{% endif %}
 </div>

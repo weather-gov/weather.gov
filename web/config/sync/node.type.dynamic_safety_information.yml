@@ -1,0 +1,17 @@
+uuid: b2e9ea39-5357-4c17-b7c1-98f6779498dc
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Dynamic Safety Information'
+type: dynamic_safety_information
+description: 'Safety information to show in addition to hazard text.'
+help: ''
+new_revision: false
+preview_mode: 0
+display_submitted: false

@@ -14,9 +14,15 @@ module.exports = {
   parserOptions: { ecmaVersion: 2024 },
   overrides: [
     {
-      files: ["tests/**/*.js"],
+      files: ["./*.js", "tests/**/*.js"],
       rules: {
         "no-console": 0,
+      },
+    },
+    {
+      files: ["web/themes/new_weather_theme/assets/js/components/**/*.js"],
+      rules: {
+        "class-methods-use-this": 0,
       },
     },
     {

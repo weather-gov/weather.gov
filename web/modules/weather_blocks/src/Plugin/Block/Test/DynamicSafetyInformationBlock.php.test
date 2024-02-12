@@ -1,0 +1,76 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test;
+
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\weather_blocks\Plugin\Block\DynamicSafetyInformationBlock;
+
+/**
+ * Tests for the DynamicSafetyInformation block.
+ */
+final class DynamicSafetyInformationBlockTest extends Base
+{
+    protected function setUp($type = null): void
+    {
+        parent::setUp(DynamicSafetyInformationBlock::class);
+    }
+
+    protected function setupEntityAPIMocksForHazard()
+    {
+        // Setup fetching the actual node.
+        $hazard = $this->createStub(FieldItemListInterface::class);
+        $bodyField = $this->createStub(FieldItemListInterface::class);
+
+        $hazard
+            ->method("get")
+            ->will($this->returnValueMap([["body", $bodyField]]));
+
+        $bodyField
+            ->method("getValue")
+            ->willReturn([["value" => "Extra safety info"]]);
+
+        $this->entityService
+            ->method("getLatestNodeFromWeatherEvent")
+            ->will(
+                $this->returnValueMap([
+                    ["Ternayda", "dynamic_safety_information", $hazard],
+                ]),
+            );
+    }
+
+    /**
+     * Test that the block returns the expected data if there's additional
+     * information for the requested hazard type ("Ternayda", here).
+     */
+    public function testReturnsAHazard(): void
+    {
+        $this->block->setConfigurationValue("weather_event", "Ternayda");
+
+        $this->setupEntityAPIMocksForHazard();
+
+        $expected = [
+            "body" => "Extra safety info",
+        ];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test that the block returns an empty array if there's no additional
+     * safety information for the requested hazard type ("Herkin," here).
+     */
+    public function testReturnsNoHazard(): void
+    {
+        $this->block->setConfigurationValue("weather_event", "Herkin");
+
+        $this->setupEntityAPIMocksForHazard();
+
+        $expected = [];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+}

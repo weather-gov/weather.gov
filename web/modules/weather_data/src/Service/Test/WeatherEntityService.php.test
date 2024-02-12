@@ -47,17 +47,6 @@ final class WeatherEntityServiceTest extends TestCase
             );
     }
 
-    public function testGetLatestNodeWithNoWFO(): void
-    {
-        $this->taxonomyStore->method("loadByProperties")->willReturn([]);
-
-        $expected = false;
-
-        $actual = $this->entityService->getLatestNodeFromWFO("wfo", "1", "2");
-
-        $this->assertEquals($expected, $actual);
-    }
-
     protected function setupTaxonomyID($id = "100")
     {
         $taxonomyTermEntity = $this->createStub(
@@ -76,6 +65,7 @@ final class WeatherEntityServiceTest extends TestCase
 
     protected function setupFetchNodeWithTaxonomyID(
         $taxonomyID,
+        $taxonomyFieldMachineName,
         $nodeID = "node1",
     ) {
         // Setup fetching the weather story node ID.
@@ -89,7 +79,13 @@ final class WeatherEntityServiceTest extends TestCase
             ->will(
                 $this->returnValueMap([
                     ["type", "node type", null, null, $query],
-                    ["field_wfo", "$taxonomyID", null, null, $query],
+                    [
+                        $taxonomyFieldMachineName,
+                        "$taxonomyID",
+                        null,
+                        null,
+                        $query,
+                    ],
                 ]),
             );
         $query
@@ -99,11 +95,25 @@ final class WeatherEntityServiceTest extends TestCase
         $query->method("execute")->willReturn(["$nodeID"]);
     }
 
-    public function testGetWithNoNodes(): void
+    public function testGetLatestNodeWithNoWFOTaxonomyTerm(): void
+    {
+        $this->taxonomyStore->method("loadByProperties")->willReturn([]);
+
+        $expected = false;
+
+        $actual = $this->entityService->getLatestNodeFromWFO(
+            "wfo",
+            "node type",
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testGetWithNoWFONodes(): void
     {
         $this->setupTaxonomyID("100");
 
-        $this->setupFetchNodeWithTaxonomyID("100", "node1");
+        $this->setupFetchNodeWithTaxonomyID("100", "field_wfo", "node1");
 
         $this->nodeStore
             ->method("load")
@@ -117,11 +127,11 @@ final class WeatherEntityServiceTest extends TestCase
         $this->assertEquals(false, $actual);
     }
 
-    public function testGetWithANode(): void
+    public function testGetWithAWFONode(): void
     {
         $this->setupTaxonomyID("100");
 
-        $this->setupFetchNodeWithTaxonomyID("100", "node1");
+        $this->setupFetchNodeWithTaxonomyID("100", "field_wfo", "node1");
 
         $node = $this->createStub(FieldItemListInterface::class);
 
@@ -131,6 +141,67 @@ final class WeatherEntityServiceTest extends TestCase
 
         $actual = $this->entityService->getLatestNodeFromWFO(
             "wfo",
+            "node type",
+        );
+
+        $this->assertEquals($node, $actual);
+    }
+
+    public function testGetLatestNodeWithNoHazardTypeTaxonomyTerm(): void
+    {
+        $this->taxonomyStore->method("loadByProperties")->willReturn([]);
+
+        $expected = false;
+
+        $actual = $this->entityService->getLatestNodeFromWeatherEvent(
+            "wfo",
+            "1",
+            "2",
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testGetWithNoHazardInfoNodes(): void
+    {
+        $this->setupTaxonomyID("100");
+
+        $this->setupFetchNodeWithTaxonomyID(
+            "100",
+            "field_weather_event_type",
+            "node1",
+        );
+
+        $this->nodeStore
+            ->method("load")
+            ->will($this->returnValueMap([["node1", null]]));
+
+        $actual = $this->entityService->getLatestNodeFromWeatherEvent(
+            "heriken",
+            "node type",
+        );
+
+        $this->assertEquals(false, $actual);
+    }
+
+    public function testGetWithAHazardInfoNode(): void
+    {
+        $this->setupTaxonomyID("100");
+
+        $this->setupFetchNodeWithTaxonomyID(
+            "100",
+            "field_weather_event_type",
+            "node1",
+        );
+
+        $node = $this->createStub(FieldItemListInterface::class);
+
+        $this->nodeStore
+            ->method("load")
+            ->will($this->returnValueMap([["node1", $node]]));
+
+        $actual = $this->entityService->getLatestNodeFromWeatherEvent(
+            "ternayda",
             "node type",
         );
 

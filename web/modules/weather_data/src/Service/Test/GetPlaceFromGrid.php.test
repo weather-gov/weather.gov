@@ -2,7 +2,7 @@
 
 namespace Drupal\weather_data\Service\Test;
 
-use GuzzleHttp\Psr7\Response;
+use Drupal\Core\Database\StatementInterface;
 
 /**
  * Test getting place information from the grid.
@@ -10,39 +10,70 @@ use GuzzleHttp\Psr7\Response;
 final class GetPlaceFromGridTest extends Base
 {
     /**
-     * Utility to quickly setup the happy path routes for this method.
-     */
-    private function setupHappyPathRoutes()
-    {
-        $this->httpClientMock->append(
-            new Response(
-                200,
-                ["Content-type" => "application/geo+json"],
-                '{"geometry":{"coordinates":[[[4,3],[5,9],[3,9]]]}}',
-            ),
-        );
-
-        $this->httpClientMock->append(
-            new Response(
-                200,
-                ["Content-type" => "application/geo+json"],
-                '{"properties":{"relativeLocation":{"properties":{"city":"City","state":"Not City, but State"}}}}',
-            ),
-        );
-    }
-    /**
      * Tests the happy path.
      */
     public function testHappyPath(): void
     {
+        $this->selfMock
+            ->method("getGeometryFromGrid")
+            ->will(
+                $this->returnValueMap([
+                    [
+                        "WFO",
+                        1,
+                        2,
+                        [
+                            (object) ["lat" => 7, "lon" => 8],
+                            (object) ["lat" => 9, "lon" => 10],
+                        ],
+                    ],
+                ]),
+            );
+
+        $statement = $this->createStub(StatementInterface::class);
+
+        // Multiline string needs to have the same indentation here as in the
+        // actual code. The whitespace is preserved in the string, so if we want
+        // to assert the query is built correctly, we need to keep it too.
+        $expectedQuery = "SELECT
+                name,state,stateName,county,timezone,stateFIPS,countyFIPS
+                FROM weathergov_geo_places
+                ORDER BY ST_DISTANCE(point,ST_POLYGONFROMTEXT('POLYGON((8 7,10 9))'))
+                LIMIT 1";
+
+        $this->databaseMock->method("query")->will(
+            // Empty arrays are default values
+            $this->returnValueMap([[$expectedQuery, [], [], $statement]]),
+        );
+
+        $statement->method("fetch")->willReturn(
+            (object) [
+                "name" => "Cityville",
+                "stateName" => "Statesylvania",
+                "state" => "ST",
+                "stateFIPS" => "fipsy fips",
+                "county" => "Political subdivision",
+                "countyFIPS" => "fopsy fops",
+                "timezone" => "over there",
+            ],
+        );
+
         $expected = (object) [
-            "city" => "City",
-            "state" => "Not City, but State",
+            "city" => "Cityville",
+            "state" => "ST",
+            "stateName" => "Statesylvania",
+            "stateFIPS" => "fipsy fips",
+            "county" => "Political subdivision",
+            "countyFIPS" => "fopsy fops",
+            "timezone" => "over there",
         ];
 
-        $this->setupHappyPathRoutes();
-
-        $actual = $this->weatherDataService->getPlaceFromGrid("wfo", 1, 2);
+        $actual = $this->weatherDataService->getPlaceFromGrid(
+            "wfo",
+            1,
+            2,
+            $this->selfMock,
+        );
 
         $this->assertEquals($expected, $actual);
     }
@@ -53,8 +84,6 @@ final class GetPlaceFromGridTest extends Base
     public function testsUsesCacheIfAvailable(): void
     {
         $expected = "yay it worked";
-
-        $this->setupHappyPathRoutes();
 
         $this->cacheMock
             ->method("get")

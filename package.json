@@ -6,12 +6,17 @@
   "contributors": [
     "Claire Annan",
     "Stacy Dion",
+    "Eric Gade",
     "Shad Keene",
+    "Igor Korenfeld",
+    "Logan McDonald",
     "Sarah MH",
     "Colin Murphy",
+    "Corey Pieper",
     "Katrina Ranjo",
     "Kari Sheets",
     "Greg Walker",
+    "Elijah Wright",
     "Janel Yamashiro"
   ],
   "license": "CC0-1.0",
@@ -20,7 +25,7 @@
   },
   "devDependencies": {
     "axe-core": "^4.8.3",
-    "cypress": "^13.6.3",
+    "cypress": "^13.6.4",
     "cypress-axe": "^1.5.0",
     "dayjs": "^1.11.10",
     "eslint": "^8.56.0",
@@ -29,7 +34,7 @@
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^24.0.0",
-    "prettier": "^3.2.4",
+    "prettier": "^3.2.5",
     "stylelint": "^15.11.0",
     "stylelint-config-standard-scss": "^11.1.0",
     "xml-parse": "^0.4.0"
@@ -45,6 +50,8 @@
     "compile-svg": "node ./scripts/compile-svg-sprite.js ./web/themes/new_weather_theme/assets/images/weather/icons/*.svg ./web/themes/new_weather_theme/assets/images/weather/icons/conditions/*.svg"
   },
   "dependencies": {
-    "@prettier/plugin-php": "^0.22.1"
+    "@prettier/plugin-php": "^0.22.2",
+    "mariadb": "^3.2.3",
+    "shapefile": "^0.6.6"
   }
 }

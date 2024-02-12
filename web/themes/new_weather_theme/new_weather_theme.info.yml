@@ -3,20 +3,9 @@ type: theme
 description: The weather.gov theme.
 base theme: stable9
 libraries:
-  - new_weather_theme/base
-  - new_weather_theme/messages
-  - core/normalize
-libraries-extend:
-  user/drupal.user:
-    - new_weather_theme/user
-  core/drupal.dropbutton:
-    - new_weather_theme/dropbutton
-  core/drupal.dialog:
-    - new_weather_theme/dialog
-  file/drupal.file:
-    - new_weather_theme/file
-  core/drupal.progress:
-    - new_weather_theme/progress
+  - new_weather_theme/uswds-init
+  - new_weather_theme/uswds-customized
+  - new_weather_theme/digital-analytics-program
 core_version_requirement: ^10
 generator: 'starterkit_theme:10.1.2'
 regions:

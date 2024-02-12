@@ -19,13 +19,8 @@ class WeatherEntityService
         $this->entityTypeManager = $entityTypeManager;
     }
 
-    public function getLatestNodeFromWFO($wfo, $nodeType)
+    private function getLatestNodeByTerm($termID, $termField, $nodeType)
     {
-        // Get the ID for the WFO taxonomy term that matches our grid WFO.
-        $termID = $this->entityTypeManager
-            ->getStorage("taxonomy_term")
-            ->loadByProperties(["field_wfo_code" => $wfo]);
-
         // If we don't get any results, that means we don't have a WFO
         // taxonomy code for this WFO. By definition, we also can't have any
         // nodes for it, so we can bail out now. Otherwise, continue processing.
@@ -33,9 +28,7 @@ class WeatherEntityService
             // loadByProperties returns an associative array where the indices
             // are actually the term IDs, so we can't just take the 0th index
             // here. Sigh. Instead, pop the single element out of the array.
-            $termID = array_pop($termID)
-                ->get("tid")
-                ->getString();
+            $termID = array_pop($termID)->get("tid")->getString();
 
             // The entity manager interface doesn't have convenience methods for
             // the kind of filtering we want to do, but the entity query
@@ -47,7 +40,7 @@ class WeatherEntityService
                 ->getQuery()
                 ->accessCheck(false)
                 ->condition("type", $nodeType)
-                ->condition("field_wfo", $termID)
+                ->condition($termField, $termID)
                 ->sort("changed", "DESC")
                 // Only get the first one.
                 ->range(0, 1)
@@ -66,5 +59,29 @@ class WeatherEntityService
         }
 
         return false;
+    }
+
+    public function getLatestNodeFromWeatherEvent($eventType, $nodeType)
+    {
+        // Get the ID for the WFO taxonomy term that matches our event type.
+        $termID = $this->entityTypeManager
+            ->getStorage("taxonomy_term")
+            ->loadByProperties(["name" => $eventType]);
+
+        return $this->getLatestNodeByTerm(
+            $termID,
+            "field_weather_event_type",
+            $nodeType,
+        );
+    }
+
+    public function getLatestNodeFromWFO($wfo, $nodeType)
+    {
+        // Get the ID for the WFO taxonomy term that matches our grid WFO.
+        $termID = $this->entityTypeManager
+            ->getStorage("taxonomy_term")
+            ->loadByProperties(["field_wfo_code" => $wfo]);
+
+        return $this->getLatestNodeByTerm($termID, "field_wfo", $nodeType);
     }
 }

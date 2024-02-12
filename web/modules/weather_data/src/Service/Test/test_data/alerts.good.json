@@ -32,7 +32,7 @@
       "geometry": null,
       "properties": {
         "event": "volcano warning",
-        "description": "* WHAT...Bad weather\n\n* WHERE...Places\n\n* FAKE...This goes away",
+        "description": "* WHAT...Bad weather\n\n* WHERE...Places\n\n* FAKE...This does not go away",
         "instruction": "Duck!\nAnd coooover!\n\nJust duck!\nAnd cooooover!"
       }
     },

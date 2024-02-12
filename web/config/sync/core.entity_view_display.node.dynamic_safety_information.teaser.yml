@@ -1,0 +1,32 @@
+uuid: 69d9f7ff-9cfe-4b24-a8bd-4cdcedbe69e1
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.dynamic_safety_information.body
+    - field.field.node.dynamic_safety_information.field_weather_event_type
+    - node.type.dynamic_safety_information
+  module:
+    - text
+    - user
+id: node.dynamic_safety_information.teaser
+targetEntityType: node
+bundle: dynamic_safety_information
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_weather_event_type: true

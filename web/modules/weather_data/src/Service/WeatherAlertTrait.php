@@ -2,23 +2,13 @@
 
 namespace Drupal\weather_data\Service;
 
+use Drupal\weather_data\Service\WeatherAlertParser;
+
 /**
  * Add weather alert methods.
  */
 trait WeatherAlertTrait
 {
-    protected static function fixupNewlines($str)
-    {
-        if ($str) {
-            // Remove individual newline characters. Leave pairs. Pairs of
-            // newlines are equivalent to paragraph breaks and we want to keep
-            // those, but within a paragraph, we want to let the text break on
-            // its own.
-            return preg_replace("/([^\n])\n([^\n])/m", "$1 $2", $str);
-        }
-        return $str;
-    }
-
     protected static function turnToDate($str, $timezone)
     {
         if ($str) {
@@ -35,49 +25,97 @@ trait WeatherAlertTrait
 
     public static function tryParsingDescriptionText($str)
     {
-        // look for any word in all caps followed by ellipses, and use that as the label, and
-        // all text until the next pair of newlines is the content
-        //
-        // https://regexper.com/#%2F%5C*%5Cs%2B%28%5BA-Za-z%5Cs%5D%2B%29%5C.%5C.%5C.%28.*%29%28%5Cn%7B2%7D%7C%24%29%2F
-        $regex = "/\*\s+(?<label>[A-Za-z\s]+)\.\.\.(?<content>.*)(\n{2}|$)/sU";
-        if (preg_match_all($regex, $str, $matches)) {
-            $result = [];
-            for ($i = 0; $i < count($matches["label"]); $i++) {
-                $label = strtolower($matches["label"][$i]);
-                $content = $matches["content"][$i];
-                $result[$label] = $content;
-            }
-
-            return $result;
-        }
-
-        return $str;
+        $parser = new WeatherAlertParser($str);
+        return $parser->parse();
     }
 
     /**
      * Get active alerts for a WFO grid cell.
      */
-    public function getAlertsForGrid($wfo, $x, $y)
+    public function getAlertsForGrid($wfo, $x, $y, $self = false)
     {
-        $geometry = $this->getGeometryFromGrid($wfo, $x, $y);
+        if (!$self) {
+            $self = $this;
+        }
+
+        $CACHE_KEY = "alerts $wfo/$x/$y";
+        $cache = $this->cache->get($CACHE_KEY);
+        if ($cache) {
+            return $cache->data;
+        }
+
+        $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
+        $place = $self->getPlaceFromGrid($wfo, $x, $y);
+        $timezone = $place->timezone;
+
+        $alerts = $self->getFromWeatherAPI(
+            "/alerts/active?status=actual&area=$place->state",
+        )->features;
+
         $point = $geometry[0];
+        $zone = $self->getFromWeatherAPI("/points/$point->lat,$point->lon");
+        $zone = $zone->properties->forecastZone;
 
-        return $this->getAlertsForLatLon($point->lat, $point->lon);
-    }
+        $geometry = array_map(function ($point) {
+            return $point->lon . " " . $point->lat;
+        }, $geometry);
+        $geometry = implode(",", $geometry);
 
-    /**
-     * Get active alerts for a latitude and longitude.
-     */
-    public function getAlertsForLatLon($lat, $lon)
-    {
-        $lat = round($lat, 4);
-        $lon = round($lon, 4);
+        $alerts = array_filter($alerts, function ($alert) use (
+            $place,
+            $geometry,
+            $zone,
+        ) {
+            if (AlertPriority::isMarineAlert($alert->properties->event)) {
+                return false;
+            }
 
-        $alerts = $this->getFromWeatherAPI(
-            "/alerts/active?status=actual&point=$lat,$lon",
-        );
+            // If there's a geometry for this alert, use that to determine
+            // whether it's relevant for our location.
+            if ($alert->geometry) {
+                $alertGeometry = array_map(function ($point) {
+                    return $point[0] . " " . $point[1];
+                }, $alert->geometry->coordinates[0]);
+                $alertGeometry = implode(",", $alertGeometry);
 
-        $timezone = $this->getTimezoneForLatLon($lat, $lon);
+                $sql = "SELECT ST_INTERSECTS(
+                    ST_POLYGONFROMTEXT(
+                        'POLYGON(($geometry))'
+                    ),
+                    ST_POLYGONFROMTEXT(
+                        'POLYGON(($alertGeometry))'
+                    )
+                ) as yes";
+
+                $intersects = $this->database->query($sql)->fetch()->yes;
+
+                return $intersects > 0;
+            }
+
+            // If there's no geometry, then we first need to check if there
+            // are zones.
+            if (sizeof($alert->properties->affectedZones) > 0) {
+                return in_array(
+                    // SAME codes are FIPS codes with a leading 0
+                    $zone,
+                    $alert->properties->affectedZones,
+                );
+            }
+
+            // If there are no zones, check if there are counties.
+            if (sizeof($alert->properties->geocode->SAME) > 0) {
+                return in_array(
+                    // SAME codes are FIPS codes with a leading 0
+                    "0$place->countyFIPS",
+                    $alert->properties->geocode->SAME,
+                );
+            }
+
+            // If there's no geometry, zone, or county information, then we
+            // just... skip this one. But we should totally log this
+            // situation because something is wrong.
+            return false;
+        });
 
         $alerts = array_map(function ($alert) use ($timezone) {
             $output = clone $alert->properties;
@@ -88,24 +126,17 @@ trait WeatherAlertTrait
                 $output->geometry = [];
             }
 
-            $alertDescription = self::tryParsingDescriptionText(
+            $output->description = self::tryParsingDescriptionText(
                 $output->description,
             );
-            if (!is_array($alertDescription)) {
-                $output->description = self::fixupNewlines(
-                    $alertDescription ?? false,
-                );
-                $output->usesParsedDescription = false;
-            } else {
-                $output->description = $alertDescription;
-                $output->usesParsedDescription = true;
-            }
 
-            $output->instruction = self::fixupNewlines(
+            $output->instruction = WeatherAlertParser::fixupNewlines(
                 $output->instruction ?? false,
             );
 
-            $output->areaDesc = self::fixupNewlines($output->areaDesc ?? false);
+            $output->areaDesc = WeatherAlertParser::fixupNewlines(
+                $output->areaDesc ?? false,
+            );
             if ($output->areaDesc) {
                 $output->areaDesc = array_map(function ($description) {
                     return trim($description);
@@ -123,9 +154,8 @@ trait WeatherAlertTrait
             );
 
             return $output;
-        }, $alerts->features);
+        }, $alerts);
 
-        $alerts = AlertPriority::removeMarineAlerts($alerts);
         $alerts = AlertPriority::sort($alerts);
 
         // For some reason, Twig is unreliable in how it formats the dates.
@@ -144,6 +174,8 @@ trait WeatherAlertTrait
                 $alert->expires = $alert->expires->format("l, m/d, g:i A T");
             }
         }
+
+        $this->cache->set($CACHE_KEY, $alerts, time() + 30);
 
         return $alerts;
     }

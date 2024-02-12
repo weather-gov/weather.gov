@@ -1,13 +1,13 @@
-<weathergov-alerts class="display-block margin-top-4 desktop:grid-col-6">
+<weathergov-alerts class="display-block desktop:grid-col-6">
 {% for alert in content.alerts %}
-<a id="alert_{{ loop.index }}"></a>
-<div class="usa-accordion usa-accordion--bordered margin-bottom-1">
+<div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ loop.index }}">
   <h2 class="usa-accordion__heading">
     <button
       type="button"
       class="usa-accordion__button"
       aria-expanded="{{ (loop.index == 1) ? 'true' : 'false' }}"
-      aria-controls="a{{ loop.index }}">
+      aria-controls="a{{ loop.index }}"
+      data-button-for="#alert_{{loop.index}}">
       {{ alert.event }}
     </button>
   </h2>
@@ -20,14 +20,13 @@
       Issued by {{ alert.senderName }}
     </p>
 
-    {% if alert.usesParsedDescription %}
-      {% for label, infoText in alert.description %}
-        <h3>{{ label | capitalize }}</h3>
-        <p>{{ infoText }}</p>
-      {% endfor %}
-    {% else %}
-      <p>{{ alert.description }}</p>
-    {% endif %}
+    {% for element in alert.description %}
+      {% if element.type == "heading" %}
+        <h3>{{ element.text | capitalize }}</h3>
+      {% else %}
+        <p>{{ element.text }}</p>
+      {% endif %}
+    {% endfor %}
 
     {% if alert.instruction %}
     <h3>What to do</h3>
@@ -41,6 +40,8 @@
           <li class="">{{ areaName }}</li>
         {% endfor %}
       </ul>
+
+    {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
   </div>
 </div>
 {% endfor %}

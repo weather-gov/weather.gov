@@ -18,3 +18,7 @@ import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// Ignore uncaught script errors. We can't control what happens with external
+// scripts, so...
+Cypress.on("uncaught:exception", () => false);

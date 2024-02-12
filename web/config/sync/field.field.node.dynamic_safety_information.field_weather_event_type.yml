@@ -1,0 +1,29 @@
+uuid: 17b1fe22-3a47-4656-a9c4-11be69850f09
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_weather_event_type
+    - node.type.dynamic_safety_information
+    - taxonomy.vocabulary.weather_event_types
+id: node.dynamic_safety_information.field_weather_event_type
+field_name: field_weather_event_type
+entity_type: node
+bundle: dynamic_safety_information
+label: 'Event type'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      weather_event_types: weather_event_types
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

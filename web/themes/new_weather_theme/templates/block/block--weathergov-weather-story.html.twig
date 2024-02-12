@@ -1,7 +1,18 @@
-<div>
-  <h3>{{ content.title }}</h3>
-  {{ content.body | raw }}
+{% if content.title %}
+{{ attach_library("new_weather_theme/localize-timestamps") }}
+<div data-wx-weather-story>
+  <h2>Weather story</h2>
+  <p class="text-gray-50">Last updated:
+    <time datetime="{{ content.updated.utc }}" data-wx-local-time data-date-format="M d Y T">
+      {{ content.updated.formatted }}
+    </time>
+  </p>
   {% if content.image %}
-  <img src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
+  <img class="margin-left-neg-2 tablet:margin-left-0" src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
   {% endif %}
+  <h3>{{ content.title }}</h3>
+  <div class="line-height-sans-4">
+    {{ content.body | raw }}
+  </div>
 </div>
+{% endif %}

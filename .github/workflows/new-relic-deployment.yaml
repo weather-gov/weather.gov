@@ -1,0 +1,72 @@
+name: Record Deployment And Add New Relic Monitor
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  newrelic-eric:
+    if: ${{ inputs.environment == 'eric' }}
+    runs-on: ubuntu-latest
+    name: New Relic Record Deployment
+    steps:
+      - name: Set Release Version from Tag
+        run: echo "RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Add New Relic Application Deployment Marker
+        uses: newrelic/deployment-marker-action@v2.5.0
+        with:
+          apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
+          guid: ${{ secrets.NEW_RELIC_ERIC_DEPLOYMENT_ENTITY_GUID }}
+          version: "${{ env.RELEASE_VERSION }}"
+          user: "${{ github.actor }}"
+
+  newrelic-greg:
+    if: ${{ inputs.environment == 'greg' }}
+    runs-on: ubuntu-latest
+    name: New Relic Record Deployment
+    steps:
+      - name: Set Release Version from Tag
+        run: echo "RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Add New Relic Application Deployment Marker
+        uses: newrelic/deployment-marker-action@v2.5.0
+        with:
+          apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
+          guid: ${{ secrets.NEW_RELIC_GREG_DEPLOYMENT_ENTITY_GUID }}
+          version: "${{ env.RELEASE_VERSION }}"
+          user: "${{ github.actor }}"
+
+  newrelic-staging:
+    if: ${{ inputs.environment == 'staging' }}
+    runs-on: ubuntu-latest
+    name: New Relic Record Deployment
+    steps:
+      - name: Set Release Version from Tag
+        run: echo "RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Add New Relic Application Deployment Marker
+        uses: newrelic/deployment-marker-action@v2.5.0
+        with:
+          apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
+          guid: ${{ secrets.NEW_RELIC_STAGING_DEPLOYMENT_ENTITY_GUID }}
+          version: "${{ env.RELEASE_VERSION }}"
+          user: "${{ github.actor }}"
+
+  newrelic-beta:
+    if: ${{ inputs.environment == 'beta' }}
+    runs-on: ubuntu-latest
+    name: New Relic Record Deployment
+    steps:
+      - name: Set Release Version from Tag
+        run: echo "RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Add New Relic Application Deployment Marker
+        uses: newrelic/deployment-marker-action@v2.5.0
+        with:
+          apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
+          guid: ${{ secrets.NEW_RELIC_BETA_DEPLOYMENT_ENTITY_GUID }}
+          version: "${{ env.RELEASE_VERSION }}"
+          user: "${{ github.actor }}"
