@@ -14,7 +14,7 @@ module.exports = {
   parserOptions: { ecmaVersion: 2024 },
   overrides: [
     {
-      files: ["./*.js", "tests/**/*.js"],
+      files: ["spatial-data/*.js", "tests/**/*.js"],
       rules: {
         "no-console": 0,
       },

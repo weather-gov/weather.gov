@@ -1,3 +1,4 @@
+const { exec } = require("node:child_process");
 const fs = require("node:fs/promises");
 const mariadb = require("mariadb");
 const shapefile = require("shapefile");
@@ -5,10 +6,16 @@ const shapefile = require("shapefile");
 // Slice off Node executable and script, keep just the args.
 const args = process.argv.slice(2);
 
+const fileExists = async (file) =>
+  fs
+    .access(file, fs.constants.F_OK)
+    .then(() => true)
+    .catch(() => false);
+
 const files = {
   state: args[0] ?? "s_05mr24",
   county: args[1] ?? "c_05mr24",
-  city: args[2] ?? "cities500.txt",
+  city: args[2] ?? "us.cities500.txt",
 };
 
 const connectionDetails = {
@@ -306,6 +313,41 @@ const loadPlaces = async () => {
   db.end();
 };
 
-loadStates()
+const unzip = async (path) =>
+  new Promise((resolve) => {
+    console.log(`   [${path}] decompressing...`);
+    exec(`unzip -u ${path}`, () => {
+      resolve();
+    });
+  });
+
+const downloadAndUnzip = async (url) => {
+  const filename = url.split("/").pop();
+
+  if (!(await fileExists(filename))) {
+    console.log(`Downloading ${filename}...`);
+    const data = await fetch(url)
+      .then((r) => r.blob())
+      .then((blob) => blob.arrayBuffer());
+    await fs.writeFile(filename, Buffer.from(data));
+  } else {
+    console.log(`${filename} is already present`);
+  }
+
+  await unzip(filename);
+
+  console.log(`   [${filename}] done`);
+};
+
+downloadAndUnzip(
+  "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
+)
+  .then(
+    downloadAndUnzip(
+      "https://www.weather.gov/source/gis/Shapefiles/County/s_05mr24.zip",
+    ),
+  )
+  .then(unzip("us.cities500.txt.zip"))
+  .then(() => loadStates())
   .then(() => loadCounties())
   .then(() => loadPlaces());
