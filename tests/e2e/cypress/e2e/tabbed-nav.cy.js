@@ -161,9 +161,75 @@ describe("<tabbed-nav> component tests", () => {
   describe("Conditional tabs", () => {
     it("Should not display an alerts tab or area if there are no alerts", () => {
       cy.visit("local/TST/1/1");
-      cy.get('.tab-button[data-tab-name="alerts"]')
-        .should("not.exist");
-      cy.get('#alerts').should("not.exist");
+      cy.get('.tab-button[data-tab-name="alerts"]').should("not.exist");
+      cy.get("#alerts").should("not.exist");
+    });
+  });
+
+  describe("a11y tablist/tabpanel guidelines tests", () => {
+    beforeEach(() => {
+      cy.visit("/local/TST/10/10");
+    });
+
+    it("puts focus on the corresponding tabpanel when tab is pushed from a focussed tab button", () => {
+      cy.get('[role="tab"][data-selected]').as("selectedTab").focus();
+      cy.get("@selectedTab").tab();
+
+      cy.get(":focus")
+        .should("have.class", "tab-container")
+        .invoke("attr", "id")
+        .should("equal", "alerts");
+    });
+
+    it("can navigate to the next (right) element when right arrow key is pressed", () => {
+      cy.get('.tab-button[data-tab-name="alerts"]').as("selectedTab").focus();
+      cy.get("@selectedTab")
+        .type("{rightArrow}");
+      cy
+        .get(".tab-button:focus")
+        .should("have.class", "tab-button")
+        .invoke("attr", "data-tab-name")
+        .should("equal", "outlook");
+    });
+
+    it("If current tab is the first one, pressing left will cycle to the _last_ button in the list", () => {
+      cy.get(".tab-button:first-child").as("selectedTab").focus();
+
+      cy.get("@selectedTab")
+        .type("{leftArrow}");
+      cy
+        .get(".tab-button:focus")
+        .should("match", ":last-child");
+    });
+
+    it("If current tab is the last one, pressing right will cycle to the _first_ button in the list", () => {
+      cy.get(".tab-button:last-child").as("selectedTab").focus();
+
+      cy.get("@selectedTab")
+        .type("{rightArrow}");
+      cy
+        .get(".tab-button:focus")
+        .should("match", ":first-child");
+    });
+
+    it("Home key puts focus on the first tab button in the tablist", () => {
+      cy.get(".tab-button:last-child").as("selectedTab").focus();
+
+      cy.get("@selectedTab")
+        .type("{home}");
+      cy
+        .get(".tab-button:focus")
+        .should("match", ":first-child");
+    });
+
+    it("End key puts the focus on the last tab button in the tablist", () => {
+      cy.get(".tab-button:nth-child(2)").as("selectedTab").focus();
+
+      cy.get("@selectedTab")
+        .type("{end}");
+      cy
+        .get(".tab-button:focus")
+        .should("match", ":last-child");
     });
   });
 });

@@ -35,6 +35,7 @@ class TabbedNavigator extends HTMLElement {
     // Add needed event listeners
     Array.from(this.querySelectorAll("button.tab-button")).forEach((button) => {
       button.addEventListener("click", this.handleTabButtonClick);
+      button.addEventListener("keydown", this.handleTabListKeydown);
     });
   }
 
@@ -42,6 +43,7 @@ class TabbedNavigator extends HTMLElement {
     // Remove any event listeners
     Array.from(this.querySelectorAll("button.tab-button")).forEach((button) => {
       button.removeEventListener("click", this.handleTabButtonClick);
+      button.removeEventListener("keydown", this.handleTabListKeydown);
     });
   }
 
@@ -60,7 +62,9 @@ class TabbedNavigator extends HTMLElement {
       return;
     }
 
-    const childElement = this.querySelector(`${hash},tab-container, .tab-container ${hash}`);
+    const childElement = this.querySelector(
+      `${hash},tab-container, .tab-container ${hash}`,
+    );
     if (childElement) {
       const tabContainer = childElement.closest(".tab-container");
       this.switchToTab(tabContainer.id);
@@ -74,16 +78,24 @@ class TabbedNavigator extends HTMLElement {
   }
 
   switchToTab(tabId) {
-    const activeElements = this.querySelectorAll("[data-selected]");
-    Array.from(activeElements).forEach((activeElement) => {
-      activeElement.removeAttribute("data-selected");
-      if (activeElement.hasAttribute("aria-expanded")) {
-        activeElement.setAttribute("aria-expanded", "false");
-      }
-    });
+    // First, deactivate all tabs
+    Array.from(this.querySelectorAll(".tab-button, .tab-container")).forEach(
+      (element) => {
+        element.removeAttribute("data-selected");
+        if (element.matches(".tab-button")) {
+          element.setAttribute("aria-expanded", "false");
+          element.setAttribute("tabindex", "-1");
+        }
+      },
+    );
+
+    // Active the tab button
     const tabButton = this.querySelector(`[data-tab-name="${tabId}"]`);
     tabButton.setAttribute("data-selected", "");
     tabButton.setAttribute("aria-expanded", "true");
+    tabButton.removeAttribute("tabindex");
+
+    // Activate the corresponding container
     const tabContainer = this.querySelector(`#${tabId}`);
     tabContainer.setAttribute("data-selected", "");
   }
@@ -131,6 +143,45 @@ class TabbedNavigator extends HTMLElement {
     } else {
       button.setAttribute("aria-expanded", "false");
       content.addAttribute("hidden", "");
+    }
+  }
+
+  handleTabListKeydown(event) {
+    // Per W3C guidelines, arrow keys and other navigation
+    // keys should be used (instead of tab) to navigate the
+    // focus of tab buttons.
+    // See (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/examples/tabs-manual/)
+    const currentElement = event.target;
+    const isFirst = currentElement.matches(":first-child");
+    const isLast = currentElement.matches(":last-child");
+    if (event.key ==="ArrowRight") {
+      if (isLast) {
+        event.target.parentElement
+          .querySelector(".tab-button:first-child")
+          .focus();
+      } else {
+        currentElement.nextElementSibling.focus();
+      }
+      event.preventDefault();
+    } else if (event.key ==="ArrowLeft") {
+      if (isFirst) {
+        event.target.parentElement
+          .querySelector(".tab-button:last-child")
+          .focus();
+      } else {
+        currentElement.previousElementSibling.focus();
+      }
+      event.preventDefault();
+    } else if (event.key ==="Home") {
+      event.target.parentElement
+        .querySelector(".tab-button:first-child")
+        .focus();
+      event.preventDefault();
+    } else if (event.key ==="End") {
+      event.target.parentElement
+        .querySelector(".tab-button:last-child")
+        .focus();
+      event.preventDefault();
     }
   }
 
