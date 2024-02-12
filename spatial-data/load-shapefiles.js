@@ -384,7 +384,7 @@ const loadPlaces = async () => {
   db.end();
 };
 
-const unzip = async (path) =>
+const unzip = (path) =>
   new Promise((resolve) => {
     console.log(`   [${path}] decompressing...`);
     exec(`unzip -u ${path}`, () => {
@@ -410,21 +410,23 @@ const downloadAndUnzip = async (url) => {
   console.log(`   [${filename}] done`);
 };
 
-downloadAndUnzip(
+
+async function main(){
+  await downloadAndUnzip(
   "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
-)
-  .then(
-    downloadAndUnzip(
-      "https://www.weather.gov/source/gis/Shapefiles/County/s_05mr24.zip",
-    ),
-  )
-  .then(
-    downloadAndUnzip(
-      "https://www.weather.gov/source/gis/Shapefiles/WSOM/w_05mr24.zip",
-    ),
-  )
-  .then(unzip("us.cities500.txt.zip"))
-  .then(() => loadStates())
-  .then(() => loadCounties())
-  .then(() => loadPlaces())
-  .then(() => loadCWAs());
+  );
+  await downloadAndUnzip(
+    "https://www.weather.gov/source/gis/Shapefiles/County/s_05mr24.zip",
+  );
+  await downloadAndUnzip(
+    "https://www.weather.gov/source/gis/Shapefiles/WSOM/w_05mr24.zip",
+  );
+
+  await unzip("us.cities500.txt.zip");
+  await loadStates();
+  await loadCounties();
+  await loadPlaces();
+  await loadCWAs();
+}
+
+main();
