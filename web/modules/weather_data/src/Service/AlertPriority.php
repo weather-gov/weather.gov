@@ -237,14 +237,9 @@ class AlertPriority
         "test",
     ];
 
-    public static function removeMarineAlerts($alerts)
+    public static function isMarineAlert($event)
     {
-        return array_filter($alerts, function ($alert) {
-            return array_search(
-                strtolower($alert->event),
-                self::$landAlerts,
-            ) !== false;
-        });
+        return array_search(strtolower($event), self::$landAlerts) === false;
     }
 
     public static function sort($alerts)
