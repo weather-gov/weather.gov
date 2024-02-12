@@ -6,6 +6,7 @@ module.exports = {
     "import/extensions": ["error", "always"],
     "prefer-destructuring": [0],
     "no-param-reassign": ["error", { props: false }],
+    "no-console": "error",
   },
   env: {
     es6: true,
