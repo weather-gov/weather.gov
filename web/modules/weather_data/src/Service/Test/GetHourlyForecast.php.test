@@ -58,18 +58,9 @@ final class GetHourlyForecastTest extends Base
             ),
         );
 
-        // Next call is to the points API so we can get the timezone.
-        $this->httpClientMock->append(
-            new Response(
-                200,
-                ["Content-type" => "application/geo+json"],
-                json_encode([
-                    "properties" => [
-                        "timeZone" => "America/Denver",
-                    ],
-                ]),
-            ),
-        );
+        $this->selfMock
+            ->method("getPlaceFromGrid")
+            ->willReturn((object) ["timezone" => "America/Denver"]);
     }
 
     /**
@@ -117,6 +108,7 @@ final class GetHourlyForecastTest extends Base
             "x",
             "y",
             $this->now,
+            $this->selfMock,
         );
         $this->assertEquals((object) $expected, (object) $actual);
     }
@@ -175,6 +167,7 @@ final class GetHourlyForecastTest extends Base
             "x",
             "y",
             $this->now,
+            $this->selfMock,
         );
 
         $this->assertEquals((object) $expected, (object) $actual);
@@ -243,6 +236,7 @@ final class GetHourlyForecastTest extends Base
             "x",
             "y",
             $this->now,
+            $this->selfMock,
         );
 
         $this->assertEquals((object) $expected, (object) $actual);
@@ -271,6 +265,8 @@ final class GetHourlyForecastTest extends Base
             "wfo",
             "x",
             "y",
+            false,
+            $this->selfMock,
         );
         $this->assertEquals((object) $expected, (object) $actual);
     }
