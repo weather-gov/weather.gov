@@ -520,6 +520,51 @@ class WeatherDataService
     }
 
     /**
+     * Compute the distance between a source point and an obs station
+     *
+     * Returns the distance in meters
+     */
+    public function logObservationDistance($sourcePoint, $obs, $index = 0)
+    {
+        $logger = $this->getLogger("Weather.gov data service");
+        $serialized = [
+            "sourcePoint" => [
+                "lon" => $sourcePoint[0],
+                "lat" => $sourcePoint[1],
+            ],
+            "obsPoint" => [
+                "lon" => $obs->geometry->coordinates[0],
+                "lat" => $obs->geometry->coordinates[1],
+            ],
+            "obsStation" => $obs->properties->station,
+            "stationIndex" => $index,
+        ];
+
+        $sourceText =
+            'POINT("' . $sourcePoint[0] . " " . $sourcePoint[1] . '")';
+        $obsText =
+            'POINT("' .
+            $obs->geometry->coordinates[0] .
+            " " .
+            $obs->geometry->coordinates[1] .
+            '")';
+
+        $sql =
+            'SELECT ST_DISTANCE_SPHERE(GeomFromText("' .
+            $sourceText .
+            '"), GeomFromText("' .
+            $obsText .
+            '"))';
+
+        $result = $this->database->query($sql)->fetch();
+
+        $serialized["distance"] = $result;
+        $serialized = json_encode($serialized);
+
+        logger->notice("[OBSERVATION][" . $index . "]" . $serialized);
+    }
+
+    /**
      * Get a geometry from a WFO grid.
      *
      * @return stdClass
