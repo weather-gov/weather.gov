@@ -59,10 +59,10 @@ RUN set -eux; \
   apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
   rm -rf /var/lib/apt/lists/*
 
-COPY --from=composer:2 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:lts /usr/bin/composer /usr/local/bin/
 
 # https://www.drupal.org/node/3060/release
-ENV DRUPAL_VERSION 10.1.2
+ENV DRUPAL_VERSION 10.2.2
 
 # Copy in our composer files to start with.
 COPY composer.json /opt/drupal/composer.json
