@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS
     } = value;
 
     if (geometry.type === "Polygon") {
-      geometry.type = "Multipolygon";
+      geometry.type = "MultiPolygon";
       geometry.coordinates = [geometry.coordinates];
     }
 
