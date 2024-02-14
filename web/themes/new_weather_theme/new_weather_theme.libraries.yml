@@ -1,12 +1,12 @@
 uswds-init:
-  version: 3
+  version: 3.7.1
   header: true
   js:
     assets/js/uswds-init.js:
       minified: true
 
 uswds-customized:
-  version: 3
+  version: 2024-02-14
   css:
     theme:
       assets/css/styles.css: {}
@@ -17,27 +17,27 @@ uswds-customized:
       minified: true
 
 location-search:
-  version: 1
+  version: 2024-02-14
   js:
     assets/js/locationSearch.js:
       attributes:
         async: true
 
 localize-timestamps:
-  version: 1
+  version: 2024-02-14
   js:
     assets/js/localizeTimestamps.js:
       attributes:
         async: true
 
 tabbed_nav:
-  version: VERSION
+  version: 2024-02-14
   js:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
 
 digital-analytics-program:
   header: true
-  version: VERSION
+  version: 2024-02-14
   js:
     https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety: {
       attributes: { id: "_fed_an_ua_tag" }

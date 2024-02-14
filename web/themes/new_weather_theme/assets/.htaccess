@@ -1,0 +1,19 @@
+# Setup caching for our local theme assets.
+
+<FilesMatch "\.(js|css)$">
+# ~30 days, intermediary caching, allow revalidating.
+# This one can be longer because our JS and CSS are either compiled into unique
+# filenames by Drupal or they have version information added as HTTP query
+# parameters, which will also miss the cache, so we can let these linger longer.
+
+Header set Cache-Control "max-age=2592000, public, must-revalidate"
+</FilesMatch>
+
+<FilesMatch "\.(svg|png|jpg|jpeg|gif|woff2)$">
+# ~1 day, intermediary caching, allow revalidating
+# This one is shorter because we don't have version tags on these, but as long
+# as they don't change, Drupal should mostly just send back 304 Not Modified
+# responses and the total network traffic should be pretty low.
+
+Header set Cache-Control "max-age=86400, public, must-revalidate"
+</FilesMatch>
