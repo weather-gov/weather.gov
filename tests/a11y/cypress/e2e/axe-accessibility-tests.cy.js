@@ -9,7 +9,7 @@ const viewports = [
 
 describe("accessibility tests", () => {
   before(() => {
-    cy.request("http://localhost:8081/local");
+    cy.request("http://localhost:8081/play/testing");
   });
 
   pages.forEach(({ name, url }) => {

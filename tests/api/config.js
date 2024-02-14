@@ -1,7 +1,5 @@
 let bundling = false;
-let bundleID = false;
-let localService = true;
-let recording = false;
+let play = "testing";
 
 export default {
   get bundling() {
@@ -9,33 +7,12 @@ export default {
   },
   set bundling(v) {
     bundling = v;
-    if (v === false) {
-      console.log(`CONFIG:   bundle ${bundleID} finished`);
-      bundleID = false;
-    }
   },
 
-  get bundleID() {
-    return bundleID;
+  get play() {
+    return play;
   },
-  set bundleID(v) {
-    if (bundling && !bundleID) {
-      bundleID = v;
-      console.log(`CONFIG:   starting bundle ${bundleID}`);
-    }
-  },
-
-  get localService() {
-    return localService;
-  },
-  set localService(v) {
-    localService = v;
-  },
-
-  get recording() {
-    return recording;
-  },
-  toggleRecording() {
-    recording = !recording;
+  set play(v) {
+    play = v;
   },
 };

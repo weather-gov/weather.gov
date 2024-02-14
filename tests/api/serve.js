@@ -3,6 +3,7 @@ import path from "path";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 
+import config from "./config.js";
 import proxy from "./proxy.js";
 
 dayjs.extend(utc);
@@ -57,14 +58,14 @@ export default async (request, response) => {
     .join("&");
 
   // The file path is the request path plus the query string, if any.
-  const filePath = `${path.join(dataPath, request.path)}${
+  const filePath = `${path.join(dataPath, config.play, request.path)}${
     query.length > 0 ? "__" : ""
   }${query}.json`;
 
   const fileExists = await exists(filePath);
 
   if (!fileExists) {
-    console.log(`LOCAL:    local file does not exist; proxying`);
+    console.log(`LOCAL:    local file does not exist; proxying [${filePath}]`);
     await proxy(request, response);
   } else {
     console.log(`LOCAL:    serving local file: ${filePath}`);

@@ -1,6 +1,6 @@
 describe("location search", () => {
   before(() => {
-    cy.request("http://localhost:8081/no-local");
+    cy.request("http://localhost:8081/stop");
   });
 
   it("properly handles browser history", () => {
