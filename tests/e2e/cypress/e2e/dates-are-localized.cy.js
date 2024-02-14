@@ -2,7 +2,7 @@ const dayjs = require("dayjs");
 
 describe("main script", () => {
   before(() => {
-    cy.request("http://localhost:8081/local");
+    cy.request("http://localhost:8081/play/testing");
   });
 
   describe("formats the timestamp according to the browser's locale settings", () => {

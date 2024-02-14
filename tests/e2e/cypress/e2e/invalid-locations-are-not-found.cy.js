@@ -1,6 +1,6 @@
 describe("invalid location-based routes return 404", () => {
   before(() => {
-    cy.request("http://localhost:8081/local");
+    cy.request("http://localhost:8081/play/testing");
   });
 
   describe("for non-numeric points", () => {
