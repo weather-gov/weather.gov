@@ -51,6 +51,7 @@ const loadCWAs = async () => {
 CREATE TABLE IF NOT EXISTS
  weathergov_geo_cwas
  (
+    id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
    wfo VARCHAR(3),
    cwa VARCHAR(3),
    region VARCHAR(2),
@@ -62,6 +63,7 @@ CREATE TABLE IF NOT EXISTS
 
   await dropIndexIfExists(db, "cwas_spatial_idx", "weathergov_geo_cwas");
   await db.query("TRUNCATE TABLE weathergov_geo_cwas");
+  await db.query("ALTER TABLE weathergov_geo_cwas AUTO_INCREMENT=0");
 
   const getSqlForShape = async ({ done, value }) => {
     if (done) {
@@ -121,6 +123,7 @@ const loadStates = async () => {
     `CREATE TABLE IF NOT EXISTS
       weathergov_geo_states
       (
+        id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
         state VARCHAR(2),
         name TEXT,
         fips VARCHAR(2),
@@ -131,6 +134,7 @@ const loadStates = async () => {
   await dropIndexIfExists(db, "states_spatial_idx", "weathergov_geo_states");
 
   await db.query("TRUNCATE TABLE weathergov_geo_states");
+  await db.query("ALTER TABLE weathergov_geo_states AUTO_INCREMENT=0");
 
   const getSqlForShape = async ({ done, value }) => {
     if (done) {
@@ -182,6 +186,7 @@ const loadCounties = async () => {
     `CREATE TABLE IF NOT EXISTS
       weathergov_geo_counties
       (
+        id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
         state VARCHAR(2),
         stateName TEXT,
         stateFips VARCHAR(2),
@@ -212,6 +217,7 @@ const loadCounties = async () => {
   ]);
 
   await db.query("TRUNCATE TABLE weathergov_geo_counties");
+  await db.query("ALTER TABLE weathergov_geo_counties AUTO_INCREMENT=0");
 
   const getSqlForShape = async ({ done, value }) => {
     if (done) {
@@ -319,6 +325,7 @@ const loadPlaces = async () => {
     `CREATE TABLE IF NOT EXISTS
       weathergov_geo_places
         (
+          id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
           name TEXT,
           state TEXT,
           stateName TEXT,
@@ -330,8 +337,8 @@ const loadPlaces = async () => {
         )`,
   );
   await dropIndexIfExists(db, "places_spatial_idx", "weathergov_geo_places");
-
   await db.query("TRUNCATE TABLE weathergov_geo_places");
+  await db.query("ALTER TABLE weathergov_geo_places AUTO_INCREMENT=0");
 
   await Promise.all(
     places.map((place) =>
@@ -410,10 +417,9 @@ const downloadAndUnzip = async (url) => {
   console.log(`   [${filename}] done`);
 };
 
-
-async function main(){
+async function main() {
   await downloadAndUnzip(
-  "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
+    "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
   );
   await downloadAndUnzip(
     "https://www.weather.gov/source/gis/Shapefiles/County/s_05mr24.zip",
