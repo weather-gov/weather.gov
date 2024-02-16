@@ -141,7 +141,7 @@ describe("<tabbed-nav> component tests", () => {
         .should("be.visible");
     });
 
-    ["hourly", "daily"].forEach((tabName) => {
+    ["today", "daily"].forEach((tabName) => {
       it(`Acticates the ${tabName} tab if the hash for it is present`, () => {
         cy.visit(`/local/TST/10/10#${tabName}`);
         cy.get(`.tab-button[data-tab-name="${tabName}"]`)
