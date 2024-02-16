@@ -188,7 +188,7 @@ describe("<tabbed-nav> component tests", () => {
       cy.get(".tab-button:focus")
         .should("have.class", "tab-button")
         .invoke("attr", "data-tab-name")
-        .should("equal", "outlook");
+        .should("equal", "current");
     });
 
     it("If current tab is the first one, pressing left will cycle to the _last_ button in the list", () => {
