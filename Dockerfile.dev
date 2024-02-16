@@ -13,7 +13,7 @@ RUN echo "openssl.capath=/etc/ssl/certs/" >> /usr/local/etc/php/php.ini
 RUN set -eux; \
   \
   if command -v a2enmod; then \
-  a2enmod rewrite; \
+  a2enmod rewrite headers; \
   fi; \
   \
   savedAptMark="$(apt-mark showmanual)"; \

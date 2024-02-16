@@ -1,0 +1,28 @@
+name: update library theme versions
+on:
+  pull_request:
+    paths:
+      - web/themes/new_weather_theme/assets/**/*.js
+      - web/themes/new_weather_theme/assets/**/*.css
+
+jobs:
+  should-test:
+    name: check if we should run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: was the library file updated?
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          git diff --exit-code origin/main web/themes/new_weather_theme/new_weather_theme.libraries.yml > /dev/null
+          if [ "$?" -ne 0 ]
+          then
+            gh pr comment ${{ github.event.number }} -b "This PR modifies theme Javascript or CSS assets but does not update the theme libraries file. Did you mean to update the appropriate version information in the libraries file?"
+          fi
