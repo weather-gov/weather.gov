@@ -208,6 +208,17 @@ final class GetCurrentConditionsFromGridTest extends Base
 
         $expected = 45;
 
+        // We expect the observation API to have
+        // been called twice (index 1)
+        $this->selfMock
+            ->expects($this->once())
+            ->method("getObsDistanceInfo")
+            ->will(
+                $this->returnCallback(function ($geo, $obs, $idx) {
+                    $this->assertEquals(1, $idx);
+                }),
+            );
+
         $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
             "wfo",
             1,
@@ -287,6 +298,10 @@ final class GetCurrentConditionsFromGridTest extends Base
         );
 
         $expected = null;
+
+        // For now, we do not expect calls that exceed the
+        // maximum observation station call size to be logged.
+        $this->selfMock->expects($this->never())->method("getObsDistanceInfo");
 
         $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
             "wfo",

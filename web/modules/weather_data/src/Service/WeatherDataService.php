@@ -692,7 +692,7 @@ class WeatherDataService
 
         $obsStationIndex = 0;
         $observationStation = $obsStations[$obsStationIndex];
-        $obsDistanceInfoList = [];
+
         do {
             // If the temperature is not available from this observation station, try
             // the next one. Continue through the first 3 stations and then give up.
@@ -704,15 +704,6 @@ class WeatherDataService
             )->features[0];
             $obs = $obsData->properties;
 
-            // Log observation information, including
-            // distance from the WFO
-            $distanceInfo = $self->getObsDistanceInfo(
-                $gridGeometry,
-                $obsData,
-                $obsStationIndex,
-            );
-            $obsDistanceInfoList[] = $distanceInfo;
-
             $obsStationIndex += 1;
         } while (
             !$this->isValidObservation($obs) &&
@@ -722,6 +713,15 @@ class WeatherDataService
         if ($obs->temperature->value == null) {
             return null;
         }
+
+        // Log observation information, including
+        // distance from the WFO
+        $distanceInfo = $self->getObsDistanceInfo(
+            $gridGeometry,
+            $obsData,
+            $obsStationIndex - 1,
+        );
+        $self->logObservationDistanceInfo($distanceInfo);
 
         $timestamp = \DateTime::createFromFormat(
             \DateTimeInterface::ISO8601,
@@ -763,13 +763,6 @@ class WeatherDataService
             intval(($obs->windDirection->value % 360) + 22.5, 10),
             45,
         );
-
-        // Log all observation distance information
-        // arrays. There will be one for each time
-        // the obs station lookup cycled
-        foreach ($obsDistanceInfoList as $distInfo) {
-            $self->logObservationDistanceInfo($distInfo);
-        }
 
         return [
             "conditions" => [
