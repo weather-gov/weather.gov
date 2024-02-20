@@ -122,6 +122,7 @@ final class WeatherBlockBaseTest extends Base
                 "x" => "ex",
                 "y" => "why",
             ],
+            "point" => (object) ["lat" => 42.9, "lon" => 37.2],
         ];
 
         $actual = $this->block->getLocation();
@@ -137,12 +138,19 @@ final class WeatherBlockBaseTest extends Base
         $this->routeMock->method("getRouteName")->willReturn("not grid");
         $this->block->setConfigurationValue("grid", "wiffo,ex,why");
 
+        $this->weatherData
+            ->method("getGeometryFromGrid")
+            ->will(
+                $this->returnValueMap([["WIFFO", "ex", "why", ["ppooiiiint"]]]),
+            );
+
         $expected = (object) [
             "grid" => (object) [
                 "wfo" => "WIFFO",
                 "x" => "ex",
                 "y" => "why",
             ],
+            "point" => "ppooiiiint",
         ];
 
         $actual = $this->block->getLocation();
@@ -160,6 +168,7 @@ final class WeatherBlockBaseTest extends Base
 
         $expected = (object) [
             "grid" => false,
+            "point" => false,
         ];
 
         $actual = $this->block->getLocation();
@@ -177,6 +186,7 @@ final class WeatherBlockBaseTest extends Base
 
         $expected = (object) [
             "grid" => false,
+            "point" => false,
         ];
 
         $actual = $this->block->getLocation();

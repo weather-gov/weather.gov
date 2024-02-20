@@ -177,8 +177,8 @@ abstract class WeatherBlockBase extends BlockBase implements
                 $parts = explode(",", $configuredGrid);
 
                 $wfo = strtoupper($parts[0]);
-                $x = intval($parts[1]);
-                $y = intval($parts[2]);
+                $x = $parts[1];
+                $y = $parts[2];
 
                 $location->grid = (object) [
                     "wfo" => $wfo,

@@ -27,9 +27,7 @@ final class LocalAlertListBlockTest extends Base
     {
         $this->onLocationRoute();
 
-        $this->weatherData
-            ->method("getAlertsForGrid")
-            ->willReturn("here be alerts");
+        $this->weatherData->method("getAlerts")->willReturn("here be alerts");
 
         $expected = ["alerts" => "here be alerts"];
         $actual = $this->block->build();

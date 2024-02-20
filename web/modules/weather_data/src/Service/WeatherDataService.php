@@ -463,8 +463,6 @@ class WeatherDataService
             "timezone" => $place->timezone,
         ];
 
-        $this->cache->set($CACHE_KEY, $place, time() + 600);
-
         return $place;
     }
 
