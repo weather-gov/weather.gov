@@ -1,11 +1,11 @@
 describe("pages load", () => {
   it("average less than 3 seconds, max less than 5 seconds", () => {
     const pages = [
-      { name: "location page 1", url: "/local/OKX/33/35/Hoboken" },
-      { name: "location page 2", url: "/local/LOX/155/45/Vernon" },
-      { name: "location page 3", url: "/local/LOT/75/73/Chicago" },
-      { name: "location page 4", url: "/local/HGX/65/97/Houston" },
-      { name: "location page 5", url: "/local/PSR/159/58/Guadalupe" },
+      { name: "Hoboken, NJ", url: "/point/40.737/-74.031" },
+      { name: "Huntington Park, CA", url: "/point/34.005/-118.23" },
+      { name: "Chicago, IL", url: "/point/41.884/-87.632" },
+      { name: "Houston, TX", url: "/point/29.7819/-95.3805" },
+      { name: "Guadalupe, AZ", url: "/point/33.365/-111.963" },
     ];
 
     const measurements = [];
