@@ -20,14 +20,11 @@ class LocalAlertListBlock extends WeatherBlockBase
     {
         $location = $this->getLocation();
 
-        if ($location->grid) {
-            $grid = $location->grid;
-
+        if ($location->grid && $location->point) {
             try {
-                $data = $this->weatherData->getAlertsForGrid(
-                    $grid->wfo,
-                    $grid->x,
-                    $grid->y,
+                $data = $this->weatherData->getAlerts(
+                    $location->grid,
+                    $location->point,
                 );
                 return ["alerts" => $data];
             } catch (\Throwable $e) {

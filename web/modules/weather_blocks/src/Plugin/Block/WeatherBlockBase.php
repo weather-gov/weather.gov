@@ -159,12 +159,15 @@ abstract class WeatherBlockBase extends BlockBase implements
     {
         $location = (object) [
             "grid" => false,
+            "point" => false,
         ];
 
         // If we're on a location route, pull location from the URL.
         if ($this->route->getRouteName() == "weather_routes.point") {
             $lat = floatval($this->route->getParameter("lat"));
             $lon = floatval($this->route->getParameter("lon"));
+
+            $location->point = (object) ["lat" => $lat, "lon" => $lon];
 
             $location->grid = $this->weatherData->getGridFromLatLon($lat, $lon);
         } else {
@@ -173,11 +176,23 @@ abstract class WeatherBlockBase extends BlockBase implements
             if ($configuredGrid != false && $configuredGrid != ",,") {
                 $parts = explode(",", $configuredGrid);
 
+                $wfo = strtoupper($parts[0]);
+                $x = intval($parts[1]);
+                $y = intval($parts[2]);
+
                 $location->grid = (object) [
-                    "wfo" => strtoupper($parts[0]),
-                    "x" => $parts[1],
-                    "y" => $parts[2],
+                    "wfo" => $wfo,
+                    "x" => $x,
+                    "y" => $y,
                 ];
+
+                $geometry = $this->weatherData->getGeometryFromGrid(
+                    $wfo,
+                    $x,
+                    $y,
+                );
+
+                $location->point = $geometry[0];
             }
         }
 

@@ -4,9 +4,9 @@ describe("the location page", () => {
   });
 
   it("does not display marine laerts", () => {
-    // The 0/0 alerts include a wind advisory and a small craft advisory. We
+    // This point include a wind advisory and a small craft advisory. We
     // should only get the wind advisory.
-    cy.visit("/local/TST/0/0/");
+    cy.visit("/point/33.521/-86.812");
     cy.get("weathergov-alert-list > div").should("have.length", 1);
     cy.get("weathergov-alert-list > div").should(
       "include.text",

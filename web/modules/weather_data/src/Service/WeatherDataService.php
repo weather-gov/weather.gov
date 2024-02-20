@@ -443,6 +443,31 @@ class WeatherDataService
         }
     }
 
+    public function getPlaceNear($lat, $lon)
+    {
+        $sql = "SELECT
+        name,state,stateName,county,timezone,stateFIPS,countyFIPS
+        FROM weathergov_geo_places
+        ORDER BY ST_DISTANCE(point,ST_GEOMFROMTEXT('POINT($lon $lat)'))
+        LIMIT 1";
+
+        $place = $this->database->query($sql)->fetch();
+
+        $place = (object) [
+            "city" => $place->name,
+            "state" => $place->state,
+            "stateName" => $place->stateName,
+            "stateFIPS" => $place->stateFIPS,
+            "county" => $place->county,
+            "countyFIPS" => $place->countyFIPS,
+            "timezone" => $place->timezone,
+        ];
+
+        $this->cache->set($CACHE_KEY, $place, time() + 600);
+
+        return $place;
+    }
+
     /**
      * Get a place from a WFO grid.
      */

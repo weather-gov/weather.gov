@@ -14,7 +14,7 @@ const fsExists = async (filePath) =>
     .then(() => true)
     .catch(() => false);
 
-const ui = async (error = false) => {
+const ui = async ({ error = false } = {}) => {
   const lines = ["<html>"];
 
   if (error) {
@@ -26,7 +26,29 @@ const ui = async (error = false) => {
     lines.push(`<br><a href="/stop">Stop recording</a>`);
     lines.push("<br><br>");
   } else if (config.play) {
+    const points = await fs.readdir(path.join("./data", config.play, "points"));
+    const targets = await Promise.all(
+      points.map(async (p) => {
+        const target = JSON.parse(
+          await fs.readFile(path.join("./data", config.play, "points", p)),
+        );
+        const name = target["@bundle"]?.name ?? p;
+
+        const link = `http://localhost:8080/point/${path.basename(p, ".json").split(",").join("/")}`;
+
+        return { name, link };
+      }),
+    );
+
     lines.push(`Currently playing bundle <strong>${config.play}</strong>`);
+    if (targets.length) {
+      lines.push("<br><br>Points in the bundle:");
+      lines.push("<ul>");
+      targets.forEach(({ name, link }) => {
+        lines.push(`<li><a href="${link}">${name}</a></li>`);
+      });
+      lines.push("</ul>");
+    }
     lines.push(`<br><a href="/stop">Stop playing</a>`);
     lines.push("<br><br>");
   } else {
@@ -86,7 +108,7 @@ app.get("*", async (req, res) => {
       return;
     }
 
-    res.write(await ui(`I don't have a bundle ${bundle}`));
+    res.write(await ui({ error: `I don't have a bundle ${bundle}` }));
     res.end();
     return;
   }

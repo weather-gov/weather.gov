@@ -22,7 +22,7 @@
           "SAME": ["001073"],
           "UGC": []
         },
-        "affectedZones": [],
+        "affectedZones": ["https://api.weather.gov/zones/forecast/ALZ024"],
         "references": [
           {
             "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.afcd34b4302cf9180226182fb6ce02cae67c88c5.001.1",
@@ -86,7 +86,7 @@
           "SAME": ["001073"],
           "UGC": []
         },
-        "affectedZones": [],
+        "affectedZones": ["https://api.weather.gov/zones/forecast/ALZ024"],
         "references": [
           {
             "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.afcd34b4302cf9180226182fb6ce02cae67c88c5.001.1",

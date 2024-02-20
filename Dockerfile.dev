@@ -90,6 +90,10 @@ RUN { \
   echo 'xdebug.client_port=9003'; \
   echo 'xdebug.start_with_request=yes'; \
   echo 'xdebug.client_host=host.docker.internal'; \
+  # Only log critical configuration errors. This way we don't see a flood of
+  # messages about the debugger not being able to connect when we don't have a
+  # listener running yet.
+  echo 'xdebug.log_level=0'; \
   } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 ENV PATH=${PATH}:/opt/drupal/vendor/bin

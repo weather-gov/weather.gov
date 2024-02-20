@@ -10,7 +10,7 @@ describe("main script", () => {
     // some representative test cases. If these pass, others should too.
     ["en-US", "es-MX", "es-PR", "es-US"].forEach((locale) => {
       it(`for the ${locale} locale`, () => {
-        cy.visit("/local/TST/0/0/", {
+        cy.visit("/point/33.521/-86.812", {
           onBeforeLoad: (win) => {
             Object.defineProperty(win.navigator, "languages", {
               value: [locale],

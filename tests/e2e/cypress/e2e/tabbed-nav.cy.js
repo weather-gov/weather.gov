@@ -3,7 +3,7 @@ describe("<tabbed-nav> component tests", () => {
   describe("Alert link interaction", () => {
     beforeEach(() => {
       cy.request("http://localhost:8081/play/testing");
-      cy.visit("/local/TST/10/10");
+      cy.visit("/point/34.749/-92.275");
     });
 
     describe("Basic tabbed nav tests", () => {
@@ -127,7 +127,7 @@ describe("<tabbed-nav> component tests", () => {
   describe("Initial page load with hash", () => {
     it("Navigates to the correct alert accordion and opens it if hash present", () => {
       const alertId = "alert_2";
-      cy.visit(`/local/TST/10/10#${alertId}`);
+      cy.visit(`/point/34.749/-92.275#${alertId}`);
       cy.get(`#${alertId}`)
         .as("alertEl")
         .find(".usa-accordion__content")
@@ -143,7 +143,7 @@ describe("<tabbed-nav> component tests", () => {
 
     ["today", "daily"].forEach((tabName) => {
       it(`Acticates the ${tabName} tab if the hash for it is present`, () => {
-        cy.visit(`/local/TST/10/10#${tabName}`);
+        cy.visit(`/point/34.749/-92.275#${tabName}`);
         cy.get(`.tab-button[data-tab-name="${tabName}"]`)
           .as("tabButton")
           .invoke("attr", "data-selected")
@@ -161,7 +161,7 @@ describe("<tabbed-nav> component tests", () => {
 
   describe("Conditional tabs", () => {
     it("Should not display an alerts tab or area if there are no alerts", () => {
-      cy.visit("local/TST/1/1");
+      cy.visit("/point/35.198/-111.651");
       cy.get('.tab-button[data-tab-name="alerts"]').should("not.exist");
       cy.get("#alerts").should("not.exist");
     });
@@ -169,7 +169,7 @@ describe("<tabbed-nav> component tests", () => {
 
   describe("a11y tablist/tabpanel guidelines tests", () => {
     beforeEach(() => {
-      cy.visit("/local/TST/10/10");
+      cy.visit("/point/34.749/-92.275");
     });
 
     it("puts focus on the corresponding tabpanel when tab is pushed from a focussed tab button", () => {
