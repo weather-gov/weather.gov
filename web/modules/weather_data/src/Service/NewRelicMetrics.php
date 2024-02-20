@@ -90,6 +90,7 @@ class NewRelicMetrics
     {
         $logger = $this->getLogger("NEWRELIC");
         $logger->info($response->getStatusCode());
+        return $response;
     }
 
     private function handleError($err)
