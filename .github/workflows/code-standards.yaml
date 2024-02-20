@@ -393,6 +393,7 @@ jobs:
         run: |
           cp web/sites/example.settings.dev.php web/sites/settings.dev.php
           make install-site
+          make load-spatial
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
