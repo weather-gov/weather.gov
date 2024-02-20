@@ -643,22 +643,18 @@ class WeatherDataService
     public function getGeometryFromGrid($wfo, $x, $y)
     {
         $wfo = strtoupper($wfo);
-        $gridpoint = $this->getFromWeatherAPI("/gridpoints/$wfo/$x,$y");
-        if ($this->stashedGridGeometry) {
-            $geometry = $this->stashedGridGeometry;
-            $logger = $this->getLogger("Weather.gov data service");
-            $logger->notice("Used stashed geometry: " . json_encode($geometry));
-        } else {
-            $geometry = $gridpoint->geometry->coordinates[0];
+        if (!$this->stashedGridGeometry) {
+            $gridpoint = $this->getFromWeatherAPI("/gridpoints/$wfo/$x,$y");
+            $geometry = array_map(function ($geo) {
+                return (object) [
+                    "lat" => $geo[1],
+                    "lon" => $geo[0],
+                ];
+            }, $gridpoint->geometry->coordinates[0]);
             $this->stashedGridGeometry = $geometry;
         }
 
-        return array_map(function ($geo) {
-            return (object) [
-                "lat" => $geo[1],
-                "lon" => $geo[0],
-            ];
-        }, $geometry);
+        return $this->stashedGridGeometry;
     }
 
     /**
@@ -675,8 +671,15 @@ class WeatherDataService
     /**
      * Get the current weather conditions at a WFO grid location.
      */
-    public function getCurrentConditionsFromGrid($wfo, $gridX, $gridY)
-    {
+    public function getCurrentConditionsFromGrid(
+        $wfo,
+        $gridX,
+        $gridY,
+        $self = null,
+    ) {
+        if (!$self) {
+            $self = $this;
+        }
         $wfo = strtoupper($wfo);
         date_default_timezone_set("America/New_York");
 
@@ -703,7 +706,7 @@ class WeatherDataService
 
             // Log observation information, including
             // distance from the WFO
-            $distanceInfo = $this->getObsDistanceInfo(
+            $distanceInfo = $self->getObsDistanceInfo(
                 $gridGeometry,
                 $obsData,
                 $obsStationIndex,
@@ -765,7 +768,7 @@ class WeatherDataService
         // arrays. There will be one for each time
         // the obs station lookup cycled
         foreach ($obsDistanceInfoList as $distInfo) {
-            $this->logObservationDistanceInfo($distInfo);
+            $self->logObservationDistanceInfo($distInfo);
         }
 
         return [
@@ -805,7 +808,6 @@ class WeatherDataService
                     1,
                 ),
             ],
-            "distanceInfo" => $obsDistanceInfoList,
         ];
     }
 

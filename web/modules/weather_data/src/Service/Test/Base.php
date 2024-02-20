@@ -6,10 +6,12 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\weather_data\Service\WeatherDataService;
+use Drupal\weather_data\Service\NewRelicMetrics;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\Promise\Promise;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,6 +55,13 @@ abstract class Base extends TestCase
      * @var requestMock
      */
     protected $requestMock;
+
+    /**
+     * Mocked NewRelicMetric object
+     *
+     * @var newRelicMock
+     */
+    protected $newRelicMock;
 
     /**
      * WeatherDataService mock object, to be used as $self.
@@ -99,6 +108,10 @@ abstract class Base extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->newRelicMock = $this->getMockBuilder(NewRelicMetrics::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         // The WeatherDataService ingests this RequestStack service, but it
         // immediately uses it to get an instance of the current request and
         // saves the request object. So our mock should be prepped to supply
@@ -114,6 +127,12 @@ abstract class Base extends TestCase
             $requestStack,
             $this->cacheMock,
             $this->databaseMock,
+            $this->newRelicMock,
         );
+    }
+
+    protected function setUpNewRelicMock(): void
+    {
+        $promise = new Promise();
     }
 }
