@@ -107,3 +107,5 @@ switch ($application_environment) {
             "https://beta.weather.gov";
         break;
 }
+
+$settings["new_relic_rpm.api_key"] = "HELLO ERIC!";
