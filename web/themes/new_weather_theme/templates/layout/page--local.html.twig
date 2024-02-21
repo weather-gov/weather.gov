@@ -29,14 +29,13 @@
             {{ page.content }}
         </div>
 
-        {{ drupal_block("weathergov_current_conditions") }}
-
         <tabbed-nav class="display-block position-relative">
           <div id="tablist-label" class="usa-sr-only">{{ "Weather information sections" | t }}</div>
-          <div role="tablist" class="tab-buttons padding-bottom-4 padding-top-4 top-0 z-top display-flex flex-row flex-justify position-sticky bg-white top-4 mobile-lg:grid-col-8 desktop:grid-col-6" aria-labelledby="tablist-label">
+          <div role="tablist" class="tab-buttons padding-bottom-4 padding-top-4 top-0 z-500 display-flex flex-row flex-justify position-sticky bg-white top-4 mobile-lg:grid-col-8 desktop:grid-col-6" aria-labelledby="tablist-label">
           {% if weather.alerts %}
             <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
           {% endif %}
+          <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="current" aria-controls="current">{{ "Current" | t }}</button>
           <button role="tab" id="outlook-tab-button" class="tab-button" data-tab-name="outlook" aria-controls="outlook">{{ "Outlook" | t}}</button>
           <button role="tab" id="hourly-tab-button" class="tab-button" data-tab-name="hourly" aria-controls="hourly">{{ "Hourly" | t }}</button>
           <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "Daily" | t }}</button>
@@ -47,6 +46,9 @@
               {{ drupal_block("weathergov_local_alerts") }}
           </div>
         {% endif %}
+        <div class="tab-container" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
+          {{ drupal_block("weathergov_current_conditions") }}
+        </div>
         <div class="tab-container" id="outlook"  role="tabpanel" aria-labelledby="outlook-tab-button" tabindex="0">
           <div class="tablet:grid-col-6 padding-right-2">
             {{ drupal_block("weathergov_weather_story") }}
