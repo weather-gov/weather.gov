@@ -40,12 +40,10 @@ foreach ($cf_service_data as $service_list) {
                 "sha256",
                 $service["credentials"]["hash_salt"],
             );
-            if (!empty($service["credentials"]["newrelic_license"])) {
-                $settings["new_relic_rpm.api_key"] = 
-                    $service["credentials"]["newrelic_license"];
-                $config["new_relic_rpm.settings"]["api_key"] = 
-                    $service["credentials"]["newrelic_license"];
-            };
+            $settings["new_relic_rpm.api_key"] = 
+                $service["credentials"]["newrelic_license"];
+            $config["new_relic_rpm.settings"]["api_key"] = 
+                $service["credentials"]["newrelic_license"];
         } elseif (stristr($service["name"], "storage")) {
             $config["s3fs.settings"]["access_key"] =
                 $service["credentials"]["access_key_id"];
@@ -107,5 +105,3 @@ switch ($application_environment) {
             "https://beta.weather.gov";
         break;
 }
-
-$settings["new_relic_rpm.api_key"] = "HELLO ERIC!";
