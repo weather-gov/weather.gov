@@ -50,7 +50,11 @@
         </div>
         <div class="tab-container" id="today"  role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
           {{ drupal_block("weathergov_weather_story") }}
+
+          <h2 class="margin-0">{{ "Hourly forecast" | t }}</h2>
+          {{ drupal_block("weathergov_hourly_precipitation") }}
           {{ drupal_block("weathergov_hourly_forecast") }}
+
           {{ drupal_block("weathergov_wfo_promo") }}
         </div>
         <div class="tab-container" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
