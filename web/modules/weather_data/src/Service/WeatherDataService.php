@@ -785,6 +785,10 @@ class WeatherDataService
                 "time" => $timestamp,
                 "timestamp" => $period->startTime,
                 "temperature" => $period->temperature,
+                "humidity" => $period->relativeHumidity->value,
+                "windSpeed" => $period->windSpeed,
+                "windDirection" => $period->windDirection,
+                "dewpoint" => $period->dewpoint->value
             ];
         }, $forecast);
 

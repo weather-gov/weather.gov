@@ -3,28 +3,66 @@
   {% set message = "There was an error loading the hourly forecast." | t %}
   {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
-  <ol class="grid-row flex-column minh-card usa-list--unstyled">
-    {% for hour in content.hours %}
-      <li class="margin-bottom-3">
-        <time class="display-block text-uppercase text-bold font-heading-md margin-bottom-1" datetime="{{hour.timestamp}}">{{ hour.time }}</time>
-        <div class="display-flex flex-row flex-align-center flex-justify margin-bottom-2">
-          <div class="width-5 height-5">
-            <svg role="img" aria-hidden="true" class="height-full width-full">
-              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ hour.iconBasename }}"></use>
-            </svg>
-          </div>
-          <div class="display-flex flex-row">
-            <span class="font-body-xl">{{ hour.temperature }}</span>
-            <span class="font-body-3xs margin-top-05">℉</span>
-            {# use HTML entity that reads "degree farenheit" to screen readers #}
-          </div>
-        </div>
-        <p class="margin-0 margin-bottom-1 conditions-narrative short">{{ hour.conditions | lower | capitalize }}</p>
-        <span class="font-body-3xs text-gray-50 conditions__chance">
-          {{ hour.probabilityOfPrecipitation }}% {{"chance of precipitation" | t}}
-        </span>
-      </li>
-    {% endfor %}
-  </ol>
+    <div class="usa-table-container--scrollable" tabindex="0">
+    <table class="usa-table usa-table--borderless">
+      <tr>
+        <th scope="row" style="position:sticky;left:0;">{{ "Time" | t }}</th>
+      {% for period in content.hours %}
+        <th scope="col">{{period.time}}</th>
+      {% endfor %}
+      </tr>
+      <tr>
+        <th scope="row" style="position:sticky;left:0;">
+          {{"Temp" | t}}
+        </th>
+        {% for period in content.hours %}
+          <td>
+            {{period.temperature}}
+          </td>
+        {% endfor %}
+      </tr>
+      <tr>
+        <th scope="row" style="position:sticky;left:0;">
+          {{"Condition" | t}}
+        </th>
+        {% for period in content.hours %}
+          <td>
+            {{period.conditions}}
+          </td>
+        {% endfor %}
+      </tr>
+      <tr>
+        <th scope="row" style="position:sticky;left:0;">
+          {{"Wind speed" | t}}
+        </th>
+        {% for period in content.hours %}
+          <td>
+            <span>{{period.windSpeed}}</span>
+            <span>{{period.windDirection}}</span>
+          </td>
+        {% endfor %}
+      </tr>
+      <tr>
+        <th scope="row" style="position:sticky;left:0;">
+          {{"Humidity" | t}}
+        </th>
+        {% for period in content.hours %}
+          <td>
+            {{period.humidity}}%
+          </td>
+        {% endfor %}
+      </tr>
+      <tr>
+        <th scope="row" style="position:sticky;left:0;">
+          {{"Dewpoint" | t}}
+        </th>
+        {% for period in content.hours %}
+          <td>
+            {{period.dewpoint}}
+          </td>
+        {% endfor %}
+      </tr>
+    </table>
   {% endif %}
+    </div>
 </div>
