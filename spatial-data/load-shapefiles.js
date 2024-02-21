@@ -215,22 +215,6 @@ const loadCounties = async () => {
 
   const getSqlForShape = async ({ done, value }) => {
     if (done) {
-      // Once we've got all the counties loaded, grab the associated full state
-      // names and state FIPS codes from the states table.
-      await db.query(
-        `UPDATE weathergov_geo_counties c
-          SET
-          stateName=(
-            SELECT name FROM weathergov_geo_states s
-            WHERE
-              s.state=c.state
-          ),
-          stateFips=(
-            SELECT fips FROM weathergov_geo_states s
-            WHERE
-              s.state=c.state
-          )`,
-      );
       return null;
     }
 
@@ -267,6 +251,23 @@ const loadCounties = async () => {
 
   await file.read().then(getSqlForShape);
 
+  // Once we've got all the counties loaded, grab the associated full state
+  // names and state FIPS codes from the states table.
+  await db.query(
+    `UPDATE weathergov_geo_counties c
+          SET
+          stateName=(
+            SELECT name FROM weathergov_geo_states s
+            WHERE
+              s.state=c.state
+          ),
+          stateFips=(
+            SELECT fips FROM weathergov_geo_states s
+            WHERE
+              s.state=c.state
+          )`,
+  );
+
   await db.query(
     "CREATE SPATIAL INDEX counties_spatial_idx ON weathergov_geo_counties(shape)",
   );
@@ -288,8 +289,14 @@ const loadPlaces = async () => {
     "code",
     "country",
     "undefined",
-    "state",
+    "state", // 10
     "county",
+    "undefined",
+    "undefined",
+    "undefined",
+    "undefined",
+    "undefined",
+    "timezone", // 17
   ];
 
   const places = await fs
@@ -348,7 +355,7 @@ const loadPlaces = async () => {
             stateFips,
             countyName,
             countyFips,
-            timezone,
+            '${place.timezone}',
             ST_GeomFromText('POINT(${place.lon} ${place.lat})') as geom
           FROM
             weathergov_geo_counties
@@ -410,10 +417,9 @@ const downloadAndUnzip = async (url) => {
   console.log(`   [${filename}] done`);
 };
 
-
-async function main(){
+async function main() {
   await downloadAndUnzip(
-  "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
+    "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
   );
   await downloadAndUnzip(
     "https://www.weather.gov/source/gis/Shapefiles/County/s_05mr24.zip",
