@@ -38,7 +38,7 @@ foreach ($cf_service_data as $service_list) {
         } elseif (stristr($service["name"], "secrets")) {
             $settings["hash_salt"] = hash(
                 "sha256",
-                $service["credentials"]["hash_salt"],
+                $service["credentials"]["HASH_SALT"],
             );
             if (!empty($service["credentials"]["NEWRELIC_LICENSE"])) {
                 $settings["new_relic_rpm.api_key"] = 
