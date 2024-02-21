@@ -36,8 +36,7 @@
             <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
           {% endif %}
           <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="current" aria-controls="current">{{ "Current" | t }}</button>
-          <button role="tab" id="outlook-tab-button" class="tab-button" data-tab-name="outlook" aria-controls="outlook">{{ "Outlook" | t}}</button>
-          <button role="tab" id="hourly-tab-button" class="tab-button" data-tab-name="hourly" aria-controls="hourly">{{ "Hourly" | t }}</button>
+          <button role="tab" id="today-tab-button" class="tab-button" data-tab-name="today" aria-controls="today">{{ "Today" | t}}</button>
           <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "Daily" | t }}</button>
         </div>
 
@@ -49,16 +48,10 @@
         <div class="tab-container" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
           {{ drupal_block("weathergov_current_conditions") }}
         </div>
-        <div class="tab-container" id="outlook"  role="tabpanel" aria-labelledby="outlook-tab-button" tabindex="0">
-          <div class="tablet:grid-col-6 padding-right-2">
-            {{ drupal_block("weathergov_weather_story") }}
-          </div>
-          <div class="tablet:grid-col-6 padding-left-2">
-            {{ drupal_block("weathergov_wfo_promo") }}
-          </div>
-        </div>
-        <div class="tab-container" id="hourly" role="tabpanel" aria-labelledby="hourly-tab-button" tabindex="0">
+        <div class="tab-container" id="today"  role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
+          {{ drupal_block("weathergov_weather_story") }}
           {{ drupal_block("weathergov_hourly_forecast") }}
+          {{ drupal_block("weathergov_wfo_promo") }}
         </div>
         <div class="tab-container" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
           {{ drupal_block("weathergov_daily_forecast") }}
