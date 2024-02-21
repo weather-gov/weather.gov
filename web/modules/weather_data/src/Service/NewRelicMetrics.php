@@ -70,32 +70,12 @@ class NewRelicMetrics
 
         $promise = $this->client->sendAsync($request);
 
-        $promise
-            ->then(
-                function ($resp) {
-                    $this->handleResponse($resp);
-                },
-                function ($err) {
-                    $this->handleError($err);
-                },
-            )
-            ->then(null, function ($err) {
-                $this->handleError($err);
-            });
-
-        return $promise;
-    }
-
-    private function handleResponse($response)
-    {
-        $logger = $this->getLogger("NEWRELIC");
-        $logger->info($response->getStatusCode());
-        return $response;
-    }
-
-    private function handleError($err)
-    {
-        $logger = $this->getLogger("NEWRELIC");
-        $logger->error($err->getMessage());
+        return $promise->then(
+            null, // success
+            function ($err) {
+                $logger = $this->getLogger("NEWRELIC");
+                $logger->error($err->getMessage());
+            },
+        );
     }
 }

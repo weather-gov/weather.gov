@@ -626,12 +626,7 @@ class WeatherDataService
             ],
         );
 
-        try {
-            $promise->wait();
-        } catch (Exception $e) {
-            $logger = $this->getLogger("NEWRELIC");
-            $logger->error($e->getMessage());
-        }
+        $promise->wait();
     }
 
     /**
