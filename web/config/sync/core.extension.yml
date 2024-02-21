@@ -42,6 +42,8 @@ module:
   weather_blocks: 0
   weather_data: 0
   weather_routes: 0
+  workbench: 0
+  workbench_access: 0
   externalauth: 10
   views: 10
   minimal: 1000

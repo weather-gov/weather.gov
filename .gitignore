@@ -101,3 +101,4 @@ spatial-data/*.shx
 spatial-data/*.shp
 spatial-data/*.txt
 !spatial-data/us.cities500.txt.zip
+/.gitattributes

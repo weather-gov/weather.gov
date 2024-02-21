@@ -1,0 +1,24 @@
+uuid: 509b51af-11cd-4bc7-8d00-222690533a20
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.weather_story.field_wfo
+    - field.field.node.wfo_promo.field_wfo
+    - taxonomy.vocabulary.weather_forecast_offices
+id: wfo
+plural_label: WFOs
+label: WFO
+scheme: taxonomy
+scheme_settings:
+  vocabularies:
+    - weather_forecast_offices
+  fields:
+    -
+      entity_type: node
+      bundle: wfo_promo
+      field: field_wfo
+    -
+      entity_type: node
+      bundle: weather_story
+      field: field_wfo
