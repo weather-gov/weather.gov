@@ -40,10 +40,12 @@ foreach ($cf_service_data as $service_list) {
                 "sha256",
                 $service["credentials"]["hash_salt"],
             );
-            $settings["new_relic_rpm.api_key"] = 
-                $service["credentials"]["newrelic_license"];
-            $config["new_relic_rpm.settings"]["api_key"] = 
-                $service["credentials"]["newrelic_license"];
+            if (!empty($service["credentials"]["NEWRELIC_LICENSE"])) {
+                $settings["new_relic_rpm.api_key"] = 
+                    $service["credentials"]["NEWRELIC_LICENSE"];
+                $config["new_relic_rpm.settings"]["api_key"] = 
+                    $service["credentials"]["NEWRELIC_LICENSE"];
+            };
         } elseif (stristr($service["name"], "storage")) {
             $config["s3fs.settings"]["access_key"] =
                 $service["credentials"]["access_key_id"];
