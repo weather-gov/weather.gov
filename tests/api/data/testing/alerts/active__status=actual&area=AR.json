@@ -547,6 +547,87 @@
           "EAS-ORG": ["WXR"]
         }
       }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
+        "areaDesc": "Northeast Plains; Middle Rio Grande Valley; Northeast Highlands; Sandia and Manzano Mountains; Central Highlands; East Central Plains",
+        "geocode": {
+          "SAME": [
+            "035021",
+            "035047",
+            "035059",
+            "035001",
+            "035006",
+            "035043",
+            "035049",
+            "035053",
+            "035057",
+            "035061",
+            "035007",
+            "035033",
+            "035027",
+            "035019",
+            "035037",
+            "035009",
+            "035011",
+            "035041"
+          ],
+          "UGC": ["NMZ104", "NMZ106", "NMZ123", "NMZ124", "NMZ125", "NMZ126"]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/fire/MNZ060",
+          "https://api.weather.gov/zones/fire/NMZ106",
+          "https://api.weather.gov/zones/fire/NMZ123",
+          "https://api.weather.gov/zones/fire/NMZ124",
+          "https://api.weather.gov/zones/fire/NMZ125",
+          "https://api.weather.gov/zones/fire/NMZ126"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-02-21T05:06:00-07:00"
+          }
+        ],
+        "sent": "2024-02-21T05:19:00-07:00",
+        "effective": "2024-02-21T05:19:00-07:00",
+        "onset": "2024-02-21T11:00:00-07:00",
+        "expires": "2024-02-21T19:00:00-07:00",
+        "ends": "2024-02-21T19:00:00-07:00",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Red Flag Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Albuquerque NM",
+        "headline": "Red Flag Warning issued February 21 at 5:19AM MST until February 21 at 7:00PM MST by NWS Albuquerque NM",
+        "description": "...RED FLAG WARNING IN EFFECT TODAY BETWEEN 11 AM MST AND 7 PM\nMST ACROSS NORTHEASTERN, EAST CENTRAL, AND CENTRAL NEW MEXICO DUE\nTO LOW HUMIDITY, STRONG WINDS, AND ABOVE NORMAL TEMPERATURES...\n\n.An upper level disturbance will bring strong southwesterly to\nwesterly winds this afternoon and early evening that will combine\nwith above normal temperatures, an unstable atmosphere, and very\nlow relative humidity in the low double to single digits to\nproduce widespread critical fire weather conditions. Rapid fire\nspread is possible in receptive fuel beds.\n\n* AREA AND TIMING...Northeast Plains (Zone 104), Northeast\nHighlands (Zone 123), East Central Plains (Zone 126), Central\nHighlands (Zone 125), Sandia and Manzano Mountains (Zone 124),\nand Middle Rio Grande Valley (Zone 106) from 11 AM through 7 PM\nMST today.\n\n\n* 20 FOOT WINDS...West to southwest 25 to 35 mph with gusts up\nto 55 mph.\n\n* RELATIVE HUMIDITY...6 to 15 percent\n\n* IMPACTS...Any fires that develop will likely spread rapidly.\nOutdoor burning is not recommended.",
+        "instruction": "Please advise the appropriate officials or fire crews in the\nfield of this Red Flag Warning.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": ["RFWABQ"],
+          "WMOidentifier": ["WWUS85 KABQ 211219"],
+          "NWSheadline": [
+            "RED FLAG WARNING REMAINS IN EFFECT FROM 11 AM THIS MORNING TO 7 PM MST THIS EVENING"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KABQ.FW.W.0001.240221T1800Z-240222T0200Z/"],
+          "eventEndingTime": ["2024-02-22T02:00:00+00:00"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.009cb1d92c051da3ecf8ae561dde07f5fcee9c74.002.2,2024-02-20T13:27:00-07:00"
+          ]
+        }
+      }
     }
   ],
   "title": "Current watches, warnings, and advisories for 44.9869 N, 93.2926 W",
