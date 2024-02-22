@@ -99,7 +99,14 @@ class WeatherDataService
      *
      * @var stashedGridGeometry
      */
-    private $stashedGridGeometry;
+    public $stashedGridGeometry;
+
+    /**
+     * A lat/lon pair as an array (stashed per request)
+     *
+     * @var stashedPoint
+     */
+    public $stashedPoint;
 
 
     /**
@@ -124,6 +131,7 @@ class WeatherDataService
         $this->defaultConditions = "No data";
 
         $this->stashedGridGeometry = null;
+        $this->stashedPoint = null;
 
         $this->legacyMapping = json_decode(
             file_get_contents(__DIR__ . "/legacyMapping.json"),
@@ -548,33 +556,50 @@ class WeatherDataService
      * a WFO cell.
      *
      */
-    public function getObsDistanceInfo($sourceGeometry, $obs, $index = 0)
-    {
-        // We need to find the closest point in the sourceGeometry
-        // to the observation point
-        $distance = INF;
-        $closest = null;
-        foreach ($sourceGeometry as $sourcePoint) {
-            $lonDiff = $obs->geometry->coordinates[0] - $sourcePoint->lon;
-            $latDiff = $obs->geometry->coordinates[1] - $sourcePoint->lat;
-            $hyp = hypot($lonDiff, $latDiff);
-            if ($hyp < $distance) {
-                $distance = $hyp;
-                $closest = $sourcePoint;
-            }
-        }
-
+    public function getObsDistanceInfo(
+        $referencePoint,
+        $obs,
+        $wfoGeometry,
+        $index = 0,
+    ) {
         $obsText =
             "POINT(" .
             $obs->geometry->coordinates[0] .
             " " .
             $obs->geometry->coordinates[1] .
             ")";
-        $sourcePointText = "POINT(" . $closest->lon . " " . $closest->lat . ")";
+
+        // If we have a reference point, we use that.
+        // Otherwise, use the closest point from the WFO
+        // geometry
+        if ($referencePoint) {
+            $sourcePointText =
+                "POINT(" .
+                $referencePoint->lon .
+                " " .
+                $referencePoint->lat .
+                ")";
+        } else {
+            // We need to find the closest point in the wfoGeometry
+            // to the observation point
+            $distance = INF;
+            $closest = null;
+            foreach ($wfoGeometry as $sourcePoint) {
+                $lonDiff = $obs->geometry->coordinates[0] - $sourcePoint->lon;
+                $latDiff = $obs->geometry->coordinates[1] - $sourcePoint->lat;
+                $hyp = hypot($lonDiff, $latDiff);
+                if ($hyp < $distance) {
+                    $distance = $hyp;
+                    $closest = $sourcePoint;
+                }
+            }
+            $sourcePointText =
+                "POINT(" . $closest->lon . " " . $closest->lat . ")";
+        }
 
         $sourceGeomPoints = array_map(function ($point) {
             return $point->lon . " " . $point->lat;
-        }, $sourceGeometry);
+        }, $wfoGeometry);
         $sourceGeomPoints = implode(", ", $sourceGeomPoints);
         $sourceGeomText = "POLYGON((" . $sourceGeomPoints . "))";
 
@@ -597,6 +622,7 @@ class WeatherDataService
         $distanceInfo = [
             "distance" => (float) $result->distance,
             "withinGridCell" => !!(int) $result->within,
+            "usesReferencePoint" => !!$referencePoint,
             "obsPoint" => [
                 "lon" => $obs->geometry->coordinates[0],
                 "lat" => $obs->geometry->coordinates[1],
@@ -623,6 +649,7 @@ class WeatherDataService
                 "stationIndex" => $obsDistanceInfo["stationIndex"],
                 "obsStation" => $obsDistanceInfo["obsStation"],
                 "distance" => $obsDistanceInfo["distance"],
+                "usesReferencePoint" => $obsDistanceInfo["usesReferencePoint"],
             ],
         );
 
@@ -709,11 +736,13 @@ class WeatherDataService
             return null;
         }
 
-        // Log observation information, including
-        // distance from the WFO
+        // Log observation distance information,
+        // including the WFO grid and a reference point,
+        // if available
         $distanceInfo = $self->getObsDistanceInfo(
-            $gridGeometry,
+            $this->stashedPoint,
             $obsData,
+            $gridGeometry,
             $obsStationIndex - 1,
         );
         $self->logObservationDistanceInfo($distanceInfo);
