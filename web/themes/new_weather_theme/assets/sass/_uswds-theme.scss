@@ -23,19 +23,21 @@ $nws-red: #FF0000;
 
 
 @use "uswds-core" with (
+  /*----------------------------------------
+   Typography settings
+  ----------------------------------------*/
   $theme-font-path: "../fonts",
   $theme-font-browser-compatibility: true,
   $theme-typeface-tokens: (
     "Nunito Sans": (
       "display-name": "Nunito Sans",
-      "cap-height": 364px,
-      // the default, leave it for now
+      // Cap-height is the px size of a capital "N" at size 500 in Figma
+      "cap-height": 353px,
       "stack": "'Open Sans', 'Helvetica Neue', sans-serif",
     ),
     "DM Mono": (
       "display-name": "DM Mono",
-      "cap-height": 364px,
-      // the default, leave it for now
+      "cap-height": 350px,
       "stack": "'Roboto Mono Web', 'Courier New', monospace, serif",
     ),
   ),
@@ -96,14 +98,20 @@ $nws-red: #FF0000;
   ),
   $theme-font-type-sans: "Nunito Sans",
   $theme-font-type-mono: "DM Mono",
+
   $theme-font-role-heading: "sans",
   $theme-font-role-body: "sans",
   $theme-font-role-code: "mono",
-  $theme-image-path: "../images/uswds",
 
-  //----------------------------------------
-  // COLOR SETTINGS
-  //----------------------------------------
+  $theme-type-scale-sm: 4,
+  $theme-type-scale-md: 7,
+  $theme-type-scale-lg: 9,
+  $theme-type-scale-xl: 11,
+  $theme-type-scale-2xl: 12,
+
+  /*----------------------------------------
+  COLOR SETTINGS
+  ----------------------------------------*/
   $theme-color-primary-lightest: "blue-5",
   $theme-color-primary-lighter: "blue-20",
   $theme-color-primary-light: "blue-30",
@@ -147,6 +155,9 @@ $nws-red: #FF0000;
 
   $theme-show-compile-warnings: true,
   $theme-show-notifications: false,
+
+  $theme-image-path: "../images/uswds",
+
   $flex-direction-settings: (
     responsive: true,
   ),
