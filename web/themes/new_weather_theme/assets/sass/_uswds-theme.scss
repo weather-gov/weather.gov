@@ -12,6 +12,16 @@ in the form $setting: value,
 //    $setting: value
 //  );
 
+/*---------------------------------------
+The following colors are brand colors taken from the NWS and NOAA logos
+and styleguides. The NWS color names are unoffical.
+----------------------------------------*/
+$noaa-water-blue: #0085CA;
+$nws-indigo: #0000A4;
+$nws-sky-blue: #33B0E1;
+$nws-red: #FF0000;
+
+
 @use "uswds-core" with (
   $theme-font-path: "../fonts",
   $theme-font-browser-compatibility: true,
@@ -56,12 +66,51 @@ in the form $setting: value,
   $theme-font-role-body: "sans",
   $theme-font-role-code: "mono",
   $theme-image-path: "../images/uswds",
-  $theme-color-primary: #003087,
-  // sky blue
-  $theme-color-primary-light: #0085ca,
-  // water blue
-  $theme-color-base-dark: #333333,
-  // dark gray
+
+  //----------------------------------------
+  // COLOR SETTINGS
+  //----------------------------------------
+  $theme-color-primary-lightest: "blue-5",
+  $theme-color-primary-lighter: "blue-20",
+  $theme-color-primary-light: "blue-30",
+  $theme-color-primary: $noaa-water-blue,
+  $theme-color-primary-dark: "blue-60v",
+  $theme-color-primary-darker: "blue-70v",
+  $theme-color-primary-darkest: "blue-80v",
+
+  $theme-color-secondary-lightest: "indigo-5v",
+  $theme-color-secondary-lighter: "indigo-20v",
+  $theme-color-secondary-light: "indigo-30v",
+  $theme-color-secondary: "indigo-50v",
+  $theme-color-secondary-dark: "indigo-60v",
+  $theme-color-secondary-darker: "indigo-70v",
+  $theme-color-secondary-darkest: $nws-indigo,
+
+  $theme-color-accent-cool-lightest: "blue-cool-5v",
+  $theme-color-accent-cool-lighter: "blue-cool-20v",
+  $theme-color-accent-cool-light: "blue-cool-30v",
+  $theme-color-accent-cool: $noaa-water-blue,
+  $theme-color-accent-cool-dark: "blue-cool-60v",
+  $theme-color-accent-cool-darker: "blue-cool-70v",
+  $theme-color-accent-cool-darkest: "blue-cool-80v",
+
+  $theme-color-accent-warm-lightest: "red-20",
+  $theme-color-accent-warm-lighter: "red-30",
+  $theme-color-accent-warm-light: "red-40",
+  $theme-color-accent-warm: $nws-red,
+  $theme-color-accent-warm-dark: "red-60",
+  $theme-color-accent-warm-darker: "red-70",
+  $theme-color-accent-warm-darkest: "red-80",
+
+  $theme-color-base-lightest: "gray-cool-3",
+  $theme-color-base-lighter: "gray-cool-10",
+  $theme-color-base-light: "gray-cool-40",
+  $theme-color-base: "gray-cool-50",
+  $theme-color-base-dark: "gray-cool-60",
+  $theme-color-base-darker: "gray-cool-70",
+  $theme-color-base-darkest: "gray-cool-90",
+  $theme-color-base-ink: "gray-cool-90",
+
   $theme-show-compile-warnings: true,
   $theme-show-notifications: false,
   $flex-direction-settings: (
