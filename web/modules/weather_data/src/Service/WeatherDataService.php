@@ -788,7 +788,7 @@ class WeatherDataService
                 "humidity" => $period->relativeHumidity->value,
                 "windSpeed" => $period->windSpeed,
                 "windDirection" => $period->windDirection,
-                "dewpoint" => $period->dewpoint->value
+                "dewpoint" => $this->celciusToFahrenheit($period->dewpoint->value)
             ];
         }, $forecast);
 
@@ -898,5 +898,12 @@ class WeatherDataService
             "detailed" => array_values($detailedPeriodsFormatted),
             "extended" => array_values($extendedPeriodsFormatted),
         ];
+    }
+
+    /**
+     * Convert C to F
+     */
+    private function celciusToFahrenheit(Float $degreesC){
+        return ($degreesC * 1.8) + 32;
     }
 }
