@@ -18,7 +18,7 @@ and styleguides. The NWS color names are unoffical.
 ----------------------------------------*/
 $noaa-water-blue: #0085CA;
 $nws-indigo: #0000A4;
-$nws-sky-blue: #33B0E1;
+$nws-light-blue: #33B0E1;
 $nws-red: #FF0000;
 
 
@@ -123,7 +123,7 @@ $nws-red: #FF0000;
   $theme-color-accent-cool-lightest: "blue-cool-5v",
   $theme-color-accent-cool-lighter: "blue-cool-20v",
   $theme-color-accent-cool-light: "blue-cool-30v",
-  $theme-color-accent-cool: $noaa-water-blue,
+  $theme-color-accent-cool: $nws-light-blue,
   $theme-color-accent-cool-dark: "blue-cool-60v",
   $theme-color-accent-cool-darker: "blue-cool-70v",
   $theme-color-accent-cool-darkest: "blue-cool-80v",
