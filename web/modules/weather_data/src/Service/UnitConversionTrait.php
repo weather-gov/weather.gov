@@ -7,11 +7,6 @@ namespace Drupal\weather_data\Service;
  */
 trait UnitConversionTrait
 {
-    public function getLengthScalar($length, bool $inInches = true)
-    {
-        return 17;
-    }
-
     /**
      * Get a temperature scalar from a wmoUnit temperature object.
      */
