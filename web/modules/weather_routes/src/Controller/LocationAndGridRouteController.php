@@ -50,13 +50,7 @@ final class LocationAndGridRouteController extends ControllerBase
         return [];
     }
 
-    /**
-     * Redirect the user from a point to a grid cell.
-     *
-     * This route resolves a lat/long into a WFO grid point and then redirects the
-     * user to the correct grid route. If there's no grid point, throws a 404.
-     */
-    public function redirectToGrid($lat, $lon)
+    public function serveLocationPage($lat, $lon)
     {
         $grid = $this->weatherData->getGridFromLatLon($lat, $lon);
 
@@ -65,14 +59,32 @@ final class LocationAndGridRouteController extends ControllerBase
             throw new NotFoundHttpException();
         }
 
-        if ($grid["wfo"] == null) {
-            $logger = $this->getLogger("Weather.gov data service");
-            $logger->notice("location has no grid: $lat / $lon");
+        return [];
+    }
 
-            return new RedirectResponse("/not-implemented");
+    /**
+     * Redirect the user from a grid to a lat/lon.
+     *
+     * This route resolves a WFO grid point to a lat/lon and redirects. If the
+     * WFO grid is unknown, returns a 404 immediately.
+     */
+    public function redirectFromGrid($wfo, $gridX, $gridY)
+    {
+        try {
+            $geometry = $this->weatherData->getGeometryFromGrid(
+                $wfo,
+                $gridX,
+                $gridY,
+            );
+            $point = $geometry[0];
+
+            $url = Url::fromRoute("weather_routes.point", [
+                "lat" => round($point->lat, 4),
+                "lon" => round($point->lon, 4),
+            ]);
+            return new RedirectResponse($url->toString());
+        } catch (\Throwable $e) {
+            throw new NotFoundHttpException();
         }
-
-        $url = Url::fromRoute("weather_routes.grid", $grid);
-        return new RedirectResponse($url->toString());
     }
 }

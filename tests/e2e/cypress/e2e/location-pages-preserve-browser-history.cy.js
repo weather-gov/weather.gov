@@ -4,7 +4,7 @@ describe("location search", () => {
   });
 
   it("properly handles browser history", () => {
-    const start = "/local/OHX/50/57";
+    const start = "/point/36.168/-86.778";
 
     cy.visit(start);
     cy.get(`form[data-location-search] input[type="text"]`).type("Atlanta", {

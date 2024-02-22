@@ -31,7 +31,7 @@ final class WeatherAlertTraitTest extends Base
                 (object) ["lat" => 40, "lon" => -80],
             ]);
 
-        $this->selfMock->method("getPlaceFromGrid")->willReturn(
+        $this->selfMock->method("getPlaceNear")->willReturn(
             (object) [
                 "countyFIPS" => "1954", // Brown v. Board of Education
                 "state" => "Oregon",
@@ -303,10 +303,9 @@ final class WeatherAlertTraitTest extends Base
         // (hydrologic advisory) so they should be sorted.
         $expected = [$expectedPolygon, $expectedZone, $expectedCounty];
 
-        $actual = $this->weatherDataService->getAlertsForGrid(
-            "abc",
-            20,
-            30,
+        $actual = $this->weatherDataService->getAlerts(
+            (object) ["wfo" => "abc", "x" => 20, "y" => 30],
+            (object) ["lat" => 40, "lon" => -80],
             $this->selfMock,
         );
 
@@ -326,7 +325,10 @@ final class WeatherAlertTraitTest extends Base
                     ],
                 ]),
             );
-        $actual = $this->weatherDataService->getAlertsForGrid("abc", 20, 30);
+        $actual = $this->weatherDataService->getAlerts(
+            (object) ["wfo" => "abc", "x" => 20, "y" => 30],
+            (object) ["lat" => 40, "lon" => -80],
+        );
 
         $this->assertEquals("Yay there is some data", $actual);
     }

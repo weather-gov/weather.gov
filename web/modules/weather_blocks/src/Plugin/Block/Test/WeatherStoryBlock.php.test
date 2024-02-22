@@ -69,7 +69,7 @@ final class WeatherStoryBlockTest extends Base
      */
     public function testReturnsAWeatherStory(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
 
         $this->setupEntityAPIMocksForGoodStory(true);
 
@@ -96,7 +96,7 @@ final class WeatherStoryBlockTest extends Base
      */
     public function testReturnsAWeatherStoryWithNoImage(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
 
         $this->setupEntityAPIMocksForGoodStory(false);
 

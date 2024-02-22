@@ -13,26 +13,30 @@ function weather_blocks_template_preprocess_default_variables_alter(
         "place" => false,
     ];
 
-    // First, get our grid information, if we have it.
+    // First, get our route information.
     $container = \Drupal::getContainer();
     $route = $container->get("current_route_match");
 
-    $wfo = $route->getParameter("wfo");
-    $x = $route->getParameter("gridX");
-    $y = $route->getParameter("gridY");
+    // We only need to populate globals if we're on a point route.
+    if ($route->getRouteName() == "weather_routes.point") {
+        $lat = $route->getParameter("lat");
+        $lon = $route->getParameter("lon");
 
-    // If we do, then we can start populating globals.
-    if ($wfo != null && $x != null && $y != null) {
         $weatherData = $container->get("weather_data");
 
         try {
-            $alerts = $weatherData->getAlertsForGrid($wfo, $x, $y);
+            $grid = $weatherData->getGridFromLatLon($lat, $lon);
+
+            $alerts = $weatherData->getAlerts(
+                $grid,
+                (object) ["lat" => $lat, "lon" => $lon],
+            );
             $weatherMetadata["alerts"] = count($alerts) > 0;
         } catch (Throwable $e) {
         }
 
         try {
-            $place = $weatherData->getPlaceFromGrid($wfo, $x, $y);
+            $place = $weatherData->getPlaceNear($lat, $lon);
             if ($place) {
                 $weatherMetadata["place"] = trim(
                     $place->city . ", " . $place->state,

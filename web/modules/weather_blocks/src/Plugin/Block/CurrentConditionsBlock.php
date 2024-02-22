@@ -24,11 +24,18 @@ class CurrentConditionsBlock extends WeatherBlockBase
             $grid = $location->grid;
 
             try {
-                $place = $this->weatherData->getPlaceFromGrid(
-                    $grid->wfo,
-                    $grid->x,
-                    $grid->y,
-                );
+                if ($location->point) {
+                    $place = $this->weatherData->getPlaceNear(
+                        $location->point->lat,
+                        $location->point->lon,
+                    );
+                } else {
+                    $place = $this->weatherData->getPlaceFromGrid(
+                        $grid->wfo,
+                        $grid->x,
+                        $grid->y,
+                    );
+                }
 
                 $data = $this->weatherData->getCurrentConditionsFromGrid(
                     $grid->wfo,

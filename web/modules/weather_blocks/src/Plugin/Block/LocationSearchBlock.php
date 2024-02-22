@@ -18,9 +18,15 @@ class LocationSearchBlock extends WeatherBlockBase
      */
     public function build()
     {
+        $data = false;
         $location = $this->getLocation();
 
-        if ($location->grid) {
+        if ($location->point) {
+            $data = $this->weatherData->getPlaceNear(
+                $location->point->lat,
+                $location->point->lon,
+            );
+        } elseif ($location->grid) {
             $grid = $location->grid;
             try {
                 $data = $this->weatherData->getPlaceFromGrid(
@@ -28,15 +34,15 @@ class LocationSearchBlock extends WeatherBlockBase
                     $grid->x,
                     $grid->y,
                 );
-
-                if ($data) {
-                    return [
-                        "place" => $data,
-                    ];
-                }
             } catch (\Throwable $e) {
                 return ["error" => true];
             }
+        }
+
+        if ($data) {
+            return [
+                "place" => $data,
+            ];
         }
 
         return [

@@ -67,7 +67,7 @@ final class WFOPromoBlockTest extends Base
      */
     public function testReturnsAWFOPromotWithNoSocial(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
 
         $this->setupEntityAPIMocksForGoodStory(true);
 
@@ -89,7 +89,7 @@ final class WFOPromoBlockTest extends Base
      */
     public function testReturnsAWFOPromotWithYesSocial(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
 
         $this->setupEntityAPIMocksForGoodStory(true);
 

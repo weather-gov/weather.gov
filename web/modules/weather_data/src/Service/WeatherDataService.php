@@ -378,7 +378,7 @@ class WeatherDataService
             $lon = round($lon, 4);
             $locationMetadata = $this->getFromWeatherAPI("/points/$lat,$lon");
 
-            $wfo = $locationMetadata->properties->gridId;
+            $wfo = strtoupper($locationMetadata->properties->gridId);
             $gridX = $locationMetadata->properties->gridX;
             $gridY = $locationMetadata->properties->gridY;
 
@@ -431,16 +431,39 @@ class WeatherDataService
                 time() + 3, // Expiration is a Unix timestamp in seconds
             );
 
-            return [
+            return (object) [
                 "wfo" => $wfo,
-                "gridX" => $gridX,
-                "gridY" => $gridY,
+                "x" => $gridX,
+                "y" => $gridY,
             ];
         } catch (\Throwable $e) {
             // Need to check the error so we know whether we ought to log something.
             // But not yet. I am too excited about this location stuff right now.
             return null;
         }
+    }
+
+    public function getPlaceNear($lat, $lon)
+    {
+        $sql = "SELECT
+        name,state,stateName,county,timezone,stateFIPS,countyFIPS
+        FROM weathergov_geo_places
+        ORDER BY ST_DISTANCE(point,ST_GEOMFROMTEXT('POINT($lon $lat)'))
+        LIMIT 1";
+
+        $place = $this->database->query($sql)->fetch();
+
+        $place = (object) [
+            "city" => $place->name,
+            "state" => $place->state,
+            "stateName" => $place->stateName,
+            "stateFIPS" => $place->stateFIPS,
+            "county" => $place->county,
+            "countyFIPS" => $place->countyFIPS,
+            "timezone" => $place->timezone,
+        ];
+
+        return $place;
     }
 
     /**

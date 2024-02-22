@@ -16,7 +16,7 @@ describe("the current weather narrative", () => {
     // https://github.com/weather-gov/weather.gov/issues/644
     cy.viewport(1020, 500);
 
-    cy.visit("/local/TST/20/20");
+    cy.visit("/point/35.198/-111.651");
     cy.get("html").invoke("css", "height", "initial");
     cy.get("body").invoke("css", "height", "initial");
 

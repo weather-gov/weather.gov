@@ -25,11 +25,9 @@ final class LocalAlertsBlockTest extends Base
      */
     public function testBuild(): void
     {
-        $this->onGridRoute();
+        $this->onLocationRoute();
 
-        $this->weatherData
-            ->method("getAlertsForGrid")
-            ->willReturn("here be alerts");
+        $this->weatherData->method("getAlerts")->willReturn("here be alerts");
 
         $expected = ["alerts" => "here be alerts"];
         $actual = $this->block->build();

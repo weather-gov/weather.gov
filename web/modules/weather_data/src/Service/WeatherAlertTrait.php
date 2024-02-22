@@ -32,11 +32,15 @@ trait WeatherAlertTrait
     /**
      * Get active alerts for a WFO grid cell.
      */
-    public function getAlertsForGrid($wfo, $x, $y, $self = false)
+    public function getAlerts($grid, $point, $self = false)
     {
         if (!$self) {
             $self = $this;
         }
+
+        $wfo = $grid->wfo;
+        $x = $grid->x;
+        $y = $grid->y;
 
         $CACHE_KEY = "alerts $wfo/$x/$y";
         $cache = $this->cache->get($CACHE_KEY);
@@ -45,14 +49,13 @@ trait WeatherAlertTrait
         }
 
         $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
-        $place = $self->getPlaceFromGrid($wfo, $x, $y);
+        $place = $self->getPlaceNear($point->lat, $point->lon);
         $timezone = $place->timezone;
 
         $alerts = $self->getFromWeatherAPI(
             "/alerts/active?status=actual&area=$place->state",
         )->features;
 
-        $point = $geometry[0];
         $zone = $self->getFromWeatherAPI("/points/$point->lat,$point->lon");
         $zone = $zone->properties->forecastZone;
 
@@ -73,8 +76,8 @@ trait WeatherAlertTrait
             // If there's a geometry for this alert, use that to determine
             // whether it's relevant for our location.
             if ($alert->geometry) {
-                $alertGeometry = array_map(function ($point) {
-                    return $point[0] . " " . $point[1];
+                $alertGeometry = array_map(function ($alertGeomPoint) {
+                    return $alertGeomPoint[0] . " " . $alertGeomPoint[1];
                 }, $alert->geometry->coordinates[0]);
                 $alertGeometry = implode(",", $alertGeometry);
 
@@ -95,11 +98,7 @@ trait WeatherAlertTrait
             // If there's no geometry, then we first need to check if there
             // are zones.
             if (sizeof($alert->properties->affectedZones) > 0) {
-                return in_array(
-                    // SAME codes are FIPS codes with a leading 0
-                    $zone,
-                    $alert->properties->affectedZones,
-                );
+                return in_array($zone, $alert->properties->affectedZones);
             }
 
             // If there are no zones, check if there are counties.

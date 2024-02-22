@@ -1,8 +1,7 @@
 weather_routes.point:
   path: '/point/{lat}/{lon}'
   defaults:
-    _title: Point forecast redirect
-    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::redirectToGrid
+    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::serveLocationPage
   requirements:
     # Public endpoint
     _access: 'TRUE'
@@ -13,7 +12,7 @@ weather_routes.point:
 weather_routes.grid:
   path: '/local/{wfo}/{gridX}/{gridY}'
   defaults:
-    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::noop
+    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::redirectFromGrid
   requirements:
     # Public endpoint
     _access: 'TRUE'
@@ -25,7 +24,7 @@ weather_routes.grid:
 weather_routes.grid.legacy:
   path: '/local/{wfo}/{gridX}/{gridY}/{location}'
   defaults:
-    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::noop
+    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::redirectFromGrid
   requirements:
     # Public endpoint
     _access: 'TRUE'

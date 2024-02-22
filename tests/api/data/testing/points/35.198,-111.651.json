@@ -1,4 +1,5 @@
 {
+  "@bundle": { "name": "no alerts" },
   "@context": [
     "https://geojson.org/geojson-ld/geojson-context.jsonld",
     {
@@ -42,47 +43,47 @@
       }
     }
   ],
-  "id": "https://api.weather.gov/points/44.9869,-93.2925999",
+  "id": "https://api.weather.gov/points/35.198,-111.651",
   "type": "Feature",
   "geometry": {
     "type": "Point",
-    "coordinates": [-93.292599899999999, 44.986899999999999]
+    "coordinates": [-111.651, 35.198]
   },
   "properties": {
-    "@id": "https://api.weather.gov/points/44.9869,-93.2925999",
+    "@id": "https://api.weather.gov/points/35.198,-111.651",
     "@type": "wx:Point",
-    "cwa": "MPX",
-    "forecastOffice": "https://api.weather.gov/offices/MPX",
-    "gridId": "MPX",
-    "gridX": 107,
-    "gridY": 72,
-    "forecast": "https://api.weather.gov/gridpoints/MPX/107,72/forecast",
-    "forecastHourly": "https://api.weather.gov/gridpoints/MPX/107,72/forecast/hourly",
-    "forecastGridData": "https://api.weather.gov/gridpoints/MPX/107,72",
-    "observationStations": "https://api.weather.gov/gridpoints/MPX/107,72/stations",
+    "cwa": "FGZ",
+    "forecastOffice": "https://api.weather.gov/offices/FGZ",
+    "gridId": "FGZ",
+    "gridX": 74,
+    "gridY": 89,
+    "forecast": "https://api.weather.gov/gridpoints/FGZ/74,89/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/FGZ/74,89/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/FGZ/74,89",
+    "observationStations": "https://api.weather.gov/gridpoints/FGZ/74,89/stations",
     "relativeLocation": {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-93.268320000000003, 44.963324]
+        "coordinates": [-111.620698, 35.185212]
       },
       "properties": {
-        "city": "Minneapolis",
-        "state": "MN",
+        "city": "Flagstaff",
+        "state": "AZ",
         "distance": {
           "unitCode": "wmoUnit:m",
-          "value": 3243.4685330337002
+          "value": 3099.0788969673999
         },
         "bearing": {
           "unitCode": "wmoUnit:degree_(angle)",
-          "value": 323
+          "value": 297
         }
       }
     },
-    "forecastZone": "https://api.weather.gov/zones/forecast/MNZ060",
-    "county": "https://api.weather.gov/zones/county/MNC053",
-    "fireWeatherZone": "https://api.weather.gov/zones/fire/MNZ060",
-    "timeZone": "America/Chicago",
-    "radarStation": "KMPX"
+    "forecastZone": "https://api.weather.gov/zones/forecast/AZZ015",
+    "county": "https://api.weather.gov/zones/county/AZC005",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ115",
+    "timeZone": "America/Phoenix",
+    "radarStation": "KFSX"
   }
 }
