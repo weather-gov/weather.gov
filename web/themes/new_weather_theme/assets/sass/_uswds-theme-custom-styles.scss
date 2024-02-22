@@ -68,6 +68,11 @@ body {
   @include u-margin-bottom(3);
 }
 
+table tr:first-child th,
+table tr:nth-child(2) th{
+  border-top: none;
+}
+
 /* Daily Forecast Block Overrides
 ------------------------------------- */
 .daily-forecast-block ol > li {
