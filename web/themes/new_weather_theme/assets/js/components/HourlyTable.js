@@ -79,7 +79,7 @@ class HourlyTable extends HTMLElement {
     });
     
     if(cellsToRight.length){
-      wrapper.scrollTo({left: cellsToRight[0].offsetLeft - 16});
+      wrapper.scrollTo({left: cellsToRight[0].offsetLeft - 16, behavior: "smooth"});
     }
   }
 
@@ -90,9 +90,9 @@ class HourlyTable extends HTMLElement {
     });
     
     if(cellsToLeft.length){
-      wrapper.scrollTo({left: cellsToLeft.at(-1).offsetLeft - 16});
+      wrapper.scrollTo({left: cellsToLeft.at(-1).offsetLeft - 16, behavior: "smooth"});
     } else {
-      wrapper.scrollTo({left: 0});
+      wrapper.scrollTo({left: 0, behavior: "smooth"});
     }
   }
 };
