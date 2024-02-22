@@ -32,6 +32,12 @@ $nws-red: #FF0000;
       // the default, leave it for now
       "stack": "'Open Sans', 'Helvetica Neue', sans-serif",
     ),
+    "DM Mono": (
+      "display-name": "DM Mono",
+      "cap-height": 364px,
+      // the default, leave it for now
+      "stack": "'Roboto Mono Web', 'Courier New', monospace, serif",
+    ),
   ),
   $theme-font-sans-custom-src: (
     dir: "Nunito_Sans/static",
@@ -61,7 +67,35 @@ $nws-red: #FF0000;
       900: false,
     ),
   ),
+
+  $theme-font-mono-custom-src: (
+    dir: "DM_Mono",
+    // the name of your font family directory
+    roman: (
+      100: false,
+      200: false,
+      300: "DMMono-Light",
+      400: false,
+      500: "DMMono-Regular",
+      600: "DMMono-Medium",
+      700: false,
+      800: false,
+      900: false,
+    ),
+    italic: (
+      100: false,
+      200: false,
+      300: "DMMono-LightItalic",
+      400: false,
+      500: "DMMono-RegularItalic",
+      600: "DMMono-MediumItalic",
+      700: false,
+      800: false,
+      900: false,
+    ),
+  ),
   $theme-font-type-sans: "Nunito Sans",
+  $theme-font-type-mono: "DM Mono",
   $theme-font-role-heading: "sans",
   $theme-font-role-body: "sans",
   $theme-font-role-code: "mono",
