@@ -1,0 +1,10 @@
+uuid: 9e7e6918-3a8c-41ca-afd0-af532a41d06f
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: Uk5hyWhkNv7DHmWKBBnOc-W05llRdbXe19rUxCsSt8Y
+id: workbench
+label: Workbench
+description: 'The editorial workbench.'
+locked: true
