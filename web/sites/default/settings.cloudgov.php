@@ -107,3 +107,6 @@ switch ($application_environment) {
             "https://beta.weather.gov";
         break;
 }
+
+// Add the application name so that it can be used in NewRelic reporting
+$settings["wx.application_name"] = $cf_application_data["application_name"];

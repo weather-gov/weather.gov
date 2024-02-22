@@ -34,15 +34,28 @@ class NewRelicMetrics
      */
     private $baseUrl;
 
+    /**
+     * The CF or local application name
+     *
+     * @var applicationName
+     */
+    private $applicationName;
+
     public function __construct(ClientInterface $httpClient)
     {
         $this->client = $httpClient;
         $this->apiKey = Settings::get("new_relic_rpm.api_key");
         $this->baseUrl = Settings::get("new_relic_rpm.metrics.base_url");
+        $this->applicationName = Settings::get("wx.application_name");
+        if (!$this->applicationName) {
+            $this->applicationName = "local";
+        }
     }
 
     public function sendMetric($name, $num, $attributes, $type = "gauge")
     {
+        $attributes["applicationName"] = $this->applicationName;
+
         $headers = [
             "Content-Type" => "application/json",
             "Api-Key" => $this->apiKey,
