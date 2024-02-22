@@ -44,3 +44,11 @@ git config --global user.signingkey "<your key ID >"
 > If you only want to configure commit signing on this repo and not globally for
 > all of your repos, replace `--global` with `--local` in the above commands.
 > This note pplies to all `git config` commands.
+
+Finally, you'll need to add this key to your GitHub profile so that GitHub can verify
+your commits. To add the key to your profile on GitHub, open the "Settings" page
+(you can access this by clicking on your profile icon), and then select the "SSH and
+GPG keys" in the left-hand sidebar. Next, click "New SSH key". On this page give
+your key a unique title so you can distinguish it from other keys you might use.
+Under `Key Type` select, "Signing Key", and paste the public key you added to your
+git config into the `Key` input field.
