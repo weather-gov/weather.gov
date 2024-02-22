@@ -581,7 +581,7 @@
           "UGC": ["NMZ104", "NMZ106", "NMZ123", "NMZ124", "NMZ125", "NMZ126"]
         },
         "affectedZones": [
-          "https://api.weather.gov/zones/fire/MNZ060",
+          "https://api.weather.gov/zones/fire/ARZ044",
           "https://api.weather.gov/zones/fire/NMZ106",
           "https://api.weather.gov/zones/fire/NMZ123",
           "https://api.weather.gov/zones/fire/NMZ124",
@@ -596,11 +596,11 @@
             "sent": "2024-02-21T05:06:00-07:00"
           }
         ],
-        "sent": "2024-02-21T05:19:00-07:00",
-        "effective": "2024-02-21T05:19:00-07:00",
-        "onset": "2024-02-21T11:00:00-07:00",
-        "expires": "2024-02-21T19:00:00-07:00",
-        "ends": "2024-02-21T19:00:00-07:00",
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +3 hour",
         "status": "Actual",
         "messageType": "Update",
         "category": "Met",

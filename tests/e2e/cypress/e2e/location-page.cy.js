@@ -26,7 +26,7 @@ describe("the location page", () => {
   });
 
   it("does include alerts based on fire zone", () => {
-    cy.visit("/local/TST/10/10/");
+    cy.visit("/point/34.749/-92.275");
     cy.get("weathergov-alert-list > div").should(
       "include.text",
       "Red Flag Warning",
