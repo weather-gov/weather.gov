@@ -130,9 +130,4 @@ abstract class Base extends TestCase
             $this->newRelicMock,
         );
     }
-
-    protected function setUpNewRelicMock(): void
-    {
-        $promise = new Promise();
-    }
 }
