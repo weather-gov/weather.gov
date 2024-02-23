@@ -637,7 +637,10 @@ class WeatherDataService
             ],
             "wind" => [
                 // Kph to mph.
-                "speed" => (int) round($obs->windSpeed->value * 0.6213712),
+                "speed" =>
+                    $obs->windSpeed->value == null
+                        ? null
+                        : (int) round($obs->windSpeed->value * 0.6213712),
                 "angle" => $obs->windDirection->value,
                 "direction" => $directions[$directionIndex],
                 "shortDirection" => $shortDirections[$directionIndex],
