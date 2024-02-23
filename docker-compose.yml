@@ -76,6 +76,7 @@ services:
 
       # Map in our test coverage directory so we can have those pretty outputs.
       - ./.coverage:/coverage
+      - ./tests/coverage:/opt/drupal/web/coverage
 
   plantuml:
     build:

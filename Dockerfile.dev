@@ -40,7 +40,6 @@ RUN set -eux; \
   \
   docker-php-ext-install -j "$(nproc)" \
   gd \
-  opcache \
   pdo_mysql \
   pdo_pgsql \
   zip \
@@ -80,12 +79,7 @@ RUN set -eux; \
   rm -rf "$COMPOSER_HOME"
 
 # set recommended PHP.ini settings
-# see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
-  echo 'opcache.memory_consumption=128'; \
-  echo 'opcache.interned_strings_buffer=8'; \
-  echo 'opcache.max_accelerated_files=4000'; \
-  echo 'opcache.revalidate_freq=60'; \
   echo 'xdebug.mode=coverage,develop,debug'; \
   echo 'xdebug.client_port=9003'; \
   echo 'xdebug.start_with_request=yes'; \
@@ -95,6 +89,10 @@ RUN { \
   # listener running yet.
   echo 'xdebug.log_level=0'; \
   } > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+COPY ./tests/coverage/.htaccess /tmp/coverage-htaccess
+RUN cat /tmp/coverage-htaccess >> /opt/drupal/web/.htaccess
+RUN rm /tmp/coverage-htaccess
 
 ENV PATH=${PATH}:/opt/drupal/vendor/bin
 

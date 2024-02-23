@@ -85,7 +85,7 @@ node_modules
 !web/scs-export/*.zip
 
 # Code coverage
-/.coverage
+.coverage
 
 *.pem
 *.crt

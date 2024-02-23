@@ -1,0 +1,4 @@
+<If "%{QUERY_STRING} =~ /coverage/">
+  php_value auto_prepend_file "/opt/drupal/web/coverage/prepend.php"
+  php_flag opcache.enable Off
+</If>

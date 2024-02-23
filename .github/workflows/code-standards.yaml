@@ -198,8 +198,11 @@ jobs:
 
       - name: run unit tests
         if: needs.should-test.outputs.yes == 'true'
+        # Temporarily disabling coverage on unit tests.
+        #run: |
+        #  vendor/bin/phpunit --coverage-clover coverage.xml
         run: |
-          vendor/bin/phpunit --coverage-clover coverage.xml
+          vendor/bin/phpunit
 
       - name: store coverage output
         if: needs.should-test.outputs.yes == 'true'
@@ -208,27 +211,6 @@ jobs:
           name: coverage-report
           path: coverage.xml
           retention-days: 1
-
-  min-code-coverage:
-    name: "90% code coverage"
-    runs-on: ubuntu-latest
-    needs: [php-unit-tests, should-test]
-
-    steps:
-      - name: get coverage output
-        if: false
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-report
-
-      - name: 90% code coverage
-        if: false
-        id: test-coverage
-        uses: johanvanhelden/gha-clover-test-coverage-check@v1
-        with:
-          percentage: 90
-          filename: coverage.xml
-          metric: statements
 
   build-drupal-image:
     name: build Drupal image
@@ -290,6 +272,8 @@ jobs:
       - name: start the site
         if: needs.should-test.outputs.yes == 'true'
         run: |
+          mkdir .coverage
+          chmod a+rwx -R .coverage
           docker load --input /tmp/image.tar
           docker compose up -d
 
@@ -305,12 +289,18 @@ jobs:
           make install-site
           make load-spatial
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: install Node dependencies
+        if: needs.should-test.outputs.yes=='true'
+        run: npm ci
+
       - name: Cypress run
         if: needs.should-test.outputs.yes == 'true'
-        uses: cypress-io/github-action@v6
-        with:
-          project: tests/e2e
-          cache-key: cypress-e2e-${{ hashFiles('package-lock.json') }}
+        run: make ee
 
       - name: save screenshots
         if: needs.should-test.outputs.yes == 'true'
@@ -318,6 +308,14 @@ jobs:
         with:
           name: screenshots
           path: tests/e2e/cypress/screenshots/screenshots.cy.js/
+
+      - name: store coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-coverage
+          path: .coverage/*.cov
+          retention-days: 1
 
   accessibility-tests:
     name: accessibility tests
@@ -401,3 +399,72 @@ jobs:
         with:
           project: tests/load-times
           cache-key: cypress-a11y-${{ hashFiles('package-lock.json') }}
+
+  build-coverage-report:
+    name: "build coverage report"
+    runs-on: ubuntu-latest
+    needs: [end-to-end-tests, should-test]
+
+    steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
+
+      - name: make coverage directory?
+        run: |
+          mkdir .coverage
+
+      - name: get coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-coverage
+          path: .coverage
+
+      - name: setup image cacheing
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/cache@v4
+        with:
+          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
+          path: /tmp/image.tar
+
+      - name: start the PHP container
+        if: needs.should-test.outputs.yes == 'true'
+        run: |
+          chmod a+rwx -R .coverage
+          docker load --input /tmp/image.tar
+          docker compose up -d
+
+      - name: create coverage report
+        run: |
+          make build-coverage
+          cat .coverage/coverage.xml
+
+      - name: store coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: .coverage/coverage.xml
+          retention-days: 1
+
+  min-code-coverage:
+    name: "90% code coverage"
+    runs-on: ubuntu-latest
+    needs: [build-coverage-report, should-test]
+
+    steps:
+      - name: get coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+
+      - name: 90% code coverage
+        if: needs.should-test.outputs.yes == 'true'
+        id: test-coverage
+        uses: johanvanhelden/gha-clover-test-coverage-check@v1
+        with:
+          percentage: 90
+          filename: coverage.xml
+          metric: statements

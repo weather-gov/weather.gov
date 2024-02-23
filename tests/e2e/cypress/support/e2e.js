@@ -18,3 +18,25 @@ import "./commands";
 import "cypress-plugin-tab";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.Commands.overwrite("visit", (originalFn, url, options) => {
+  const opts = { ...options };
+  opts.qs = { ...opts.qs, coverage: true };
+
+  return originalFn(url, opts);
+});
+
+Cypress.Commands.overwrite("request", (originalFn, url, options) => {
+  const opts = (() => {
+    if (options) {
+      return { url, ...options };
+    }
+    if (typeof url === "object") {
+      return { ...url };
+    }
+    return { url };
+  })();
+  opts.qs = { ...opts.qs, coverage: true };
+
+  return originalFn(opts);
+});
