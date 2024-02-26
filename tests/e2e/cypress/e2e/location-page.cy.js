@@ -24,4 +24,18 @@ describe("the location page", () => {
       "Small Craft Advisory",
     );
   });
+
+  describe("shows n/a for unavailable data", () => {
+    it("wind is null", () => {
+      cy.visit("/point/33.211/-87.566");
+      cy.get(".weather-gov-current-conditions .item").should(
+        "include.text",
+        "Wind: N/A",
+      );
+      cy.get("[data-wx-current-conditions-narrative]").should(
+        "include.text",
+        "Wind information is unavailable.",
+      );
+    });
+  });
 });
