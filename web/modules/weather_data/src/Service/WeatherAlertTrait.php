@@ -34,6 +34,9 @@ trait WeatherAlertTrait
      */
     public function getAlerts($grid, $point, $self = false)
     {
+        if ($this->stashedAlerts) {
+            return $this->stashedAlerts;
+        }
         if (!$self) {
             $self = $this;
         }
@@ -190,6 +193,74 @@ trait WeatherAlertTrait
 
         $this->cache->set($CACHE_KEY, $alerts, time() + 30);
 
+        $this->stashedAlerts = $alerts;
+
         return $alerts;
+    }
+
+    /**
+     * Align alerts to hourly periods for display purposes
+     *
+     * The alerts need to be displayed in the hourly table,
+     * often across multiple hourly columns. We use this
+     * method to process the alert information for display
+     * within those columns.
+     */
+    public function alertsToHourlyPeriods($alerts, $periods)
+    {
+        $relevantAlerts = array_filter($alerts, function ($alert) use (
+            &$periods,
+        ) {
+            return $alert->onset <
+                $periods[array_key_last($periods)]["timestamp"];
+        });
+
+        // Scratch
+        $alertPeriods = [];
+        foreach ($periods as $periodIndex => $period) {
+            while ($currentAlert = array_unshift($relevantAlerts)) {
+                $periodStartTime = \DateTimeImmutable::createFromFormat(
+                    \DateTimeInterface::ISO8601_EXPANDED,
+                    $period["timestamp"],
+                );
+                if (
+                    $currentAlert->onset <= $periodStartTime &&
+                    $currentAlert->end > $periodStartTime
+                ) {
+                    $onsetTime = \DateTimeImmutable::createFromFormat(
+                        \DateTimeInterface::ISO8601_EXPANDED,
+                        $currentAlert->onset,
+                    );
+                    $endTime = \DateTimeImmutable::createFromFormat(
+                        \DateTimeInterface::ISO8601_EXPANDED,
+                        $currentAlert->end,
+                    );
+
+                    // Get the number of hours the alert is
+                    // supposed to last
+                    $alertDiff = $endTime->diff($onsetTime, true);
+                    $alertDuration = $alertDiff->h;
+                    if ($alertDiff->m) {
+                        $alertDuration += 1;
+                    }
+
+                    // If the duration plus the current index
+                    // is greater than the count of the periods,
+                    // trim duration to end at the period length
+                    $alertDuration = min(
+                        count($periods) - $periodIndex - 1,
+                        $alertDuration,
+                    );
+
+                    array_push($alertPeriods, [
+                        "duration" => $alertDuration,
+                        "periodIndex" => $periodIndex,
+                        "alert" => $currentAlert,
+                    ]);
+                }
+            }
+        }
+
+        return $alertPeriods;
     }
 }

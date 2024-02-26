@@ -24,9 +24,9 @@
               <th scope="col">{{period.time}}</th>
             {% endfor %}
           </tr>
-          <tr>
-            <th scope="row" class="usa-sr-only">{{ "Alerts" | t }}</th>
-          </tr>
+          {%  if content.alertPeriods | length > 0 %}
+              {% include '@new_weather_theme/partials/alerts-in-hourly-table.html.twig' with { 'periods': content.hours, 'alertPeriods': content.alertPeriods } %}
+          {% endif %}
           <tr>
             <th scope="row" class="position-sticky left-0">
               {{"Temp" | t}}

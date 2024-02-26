@@ -1,0 +1,15 @@
+{% for period in periods %}
+  {% set periodIndex = loop.index0 %}
+  {% for alertInfo in alertPeriods %}
+    <tr>
+      <th scope="row" class="usa-sr-only">{{ "Alert" | t }}</th>
+      {% if periodIndex == alertInfo.periodIndex %}
+        <td colspan="{{alertInfo.duration}}" style="background-color:yellow;">
+          {{alertInfo.alert.event}}
+        </td>
+      {%  else %}
+        <td></td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+{% endfor %}

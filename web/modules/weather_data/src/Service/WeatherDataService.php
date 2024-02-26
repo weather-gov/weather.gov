@@ -85,6 +85,11 @@ class WeatherDataService
     private $database;
 
     /**
+     * A cached version of any fetched alerts
+     */
+    private $stashedAlerts;
+
+    /**
      * Constructor.
      */
     public function __construct(
@@ -103,11 +108,11 @@ class WeatherDataService
         $this->defaultIcon = "nodata.svg";
         $this->defaultConditions = "No data";
 
-        $this->currentConditions = false;
-
         $this->legacyMapping = json_decode(
             file_get_contents(__DIR__ . "/legacyMapping.json"),
         );
+
+        $this->stashedAlerts = null;
 
         // For a given request, assign it a response ID. We'll send this in the
         // headers to the API. If we've already gotten an ID for this response,
@@ -788,7 +793,9 @@ class WeatherDataService
                 "humidity" => $period->relativeHumidity->value,
                 "windSpeed" => $period->windSpeed,
                 "windDirection" => $period->windDirection,
-                "dewpoint" => $this->celciusToFahrenheit($period->dewpoint->value)
+                "dewpoint" => $this->celciusToFahrenheit(
+                    $period->dewpoint->value,
+                ),
             ];
         }, $forecast);
 
@@ -903,7 +910,8 @@ class WeatherDataService
     /**
      * Convert C to F
      */
-    private function celciusToFahrenheit(Float $degreesC){
-        return ($degreesC * 1.8) + 32;
+    private function celciusToFahrenheit(float $degreesC)
+    {
+        return $degreesC * 1.8 + 32;
     }
 }
