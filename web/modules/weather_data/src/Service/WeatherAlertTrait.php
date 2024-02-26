@@ -181,12 +181,15 @@ trait WeatherAlertTrait
         // Twig, that's just not reliable enough.
         foreach ($alerts as $alert) {
             if ($alert->onset) {
+                $alert->onsetDateTime = clone $alert->onset;
                 $alert->onset = $alert->onset->format("l, m/d, g:i A T");
             }
             if ($alert->ends) {
+                $alert->endsDateTime = clone $alert->ends;
                 $alert->ends = $alert->ends->format("l, m/d, g:i A T");
             }
             if ($alert->expires) {
+                $alert->expiresDateTime = clone $alert->expires;
                 $alert->expires = $alert->expires->format("l, m/d, g:i A T");
             }
         }
@@ -208,34 +211,35 @@ trait WeatherAlertTrait
      */
     public function alertsToHourlyPeriods($alerts, $periods)
     {
+        // Pull out alerts that are relevant to the range
+        // of the current periods
+        $lastPeriodStartTime = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $periods[array_key_last($periods)]["timestamp"],
+        );
         $relevantAlerts = array_filter($alerts, function ($alert) use (
             &$periods,
+            &$lastPeriodStartTime,
         ) {
-            return $alert->onset <
-                $periods[array_key_last($periods)]["timestamp"];
+            return $alert->onset < $lastPeriodStartTime;
         });
 
-        // Scratch
         $alertPeriods = [];
         foreach ($periods as $periodIndex => $period) {
-            while ($currentAlert = array_unshift($relevantAlerts)) {
+            $currentAlert = array_shift($relevantAlerts);
+            while ($currentAlert) {
                 $periodStartTime = \DateTimeImmutable::createFromFormat(
                     \DateTimeInterface::ISO8601_EXPANDED,
                     $period["timestamp"],
                 );
-                if (
-                    $currentAlert->onset <= $periodStartTime &&
-                    $currentAlert->end > $periodStartTime
-                ) {
-                    $onsetTime = \DateTimeImmutable::createFromFormat(
-                        \DateTimeInterface::ISO8601_EXPANDED,
-                        $currentAlert->onset,
-                    );
-                    $endTime = \DateTimeImmutable::createFromFormat(
-                        \DateTimeInterface::ISO8601_EXPANDED,
-                        $currentAlert->end,
-                    );
 
+                $onsetTime = $currentAlert->onsetDateTime;
+                $endTime = $currentAlert->endsDateTime;
+
+                if (
+                    $onsetTime <= $periodStartTime &&
+                    $endTime > $periodStartTime
+                ) {
                     // Get the number of hours the alert is
                     // supposed to last
                     $alertDiff = $endTime->diff($onsetTime, true);
@@ -258,6 +262,8 @@ trait WeatherAlertTrait
                         "alert" => $currentAlert,
                     ]);
                 }
+
+                $currentAlert = array_shift($relevantAlerts);
             }
         }
 

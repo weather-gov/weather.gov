@@ -71,10 +71,9 @@ class HourlyForecastBlock extends WeatherBlockBase
 
                 // Also retrieve any alerts that overlap with
                 // the given hourly periods
-                $alerts = $this->weatherData->getAlertsForGrid(
-                    $grid->wfo,
-                    $grid->x,
-                    $grid->y,
+                $alerts = $this->weatherData->getAlerts(
+                    $location->grid,
+                    $location->point,
                 );
 
                 $alertPeriods = $this->weatherData->alertsToHourlyPeriods(

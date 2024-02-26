@@ -1,15 +1,20 @@
-{% for period in periods %}
-  {% set periodIndex = loop.index0 %}
-  {% for alertInfo in alertPeriods %}
-    <tr>
-      <th scope="row" class="usa-sr-only">{{ "Alert" | t }}</th>
-      {% if periodIndex == alertInfo.periodIndex %}
-        <td colspan="{{alertInfo.duration}}" style="background-color:yellow;">
-          {{alertInfo.alert.event}}
-        </td>
-      {%  else %}
-        <td></td>
-      {% endif %}
-    </tr>
-  {% endfor %}
+{% set periodLength = periods | length %}
+{% for alertInfo in alertPeriods %}
+  {% set remainingCount = periodLength - alertInfo.duration %}
+  <tr data-period-length="{{periodLength}}">
+    <th scope="row" class="usa-sr-only">{{ "Alert" | t }}</th>
+    {% if periodIndex > 0 %}      
+      {% for i in 1..periodIndex %}
+        <td data-alert-span="before" data-index="{{i}}"></td>
+      {% endfor %}
+    {% endif %}
+    <td colspan="{{alertInfo.duration}}" style="background-color:yellow;" data-alert-span="during">
+      {{alertInfo.alert.event}}
+    </td>
+    {% if remainingCount > 0 %}
+      {% for i in 1..remainingCount%}
+        <td data-alert-span="after" data-index="{{i}}"></td>
+      {% endfor %}
+    {% endif %}
+  </tr>
 {% endfor %}
