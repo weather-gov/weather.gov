@@ -58,7 +58,8 @@ body {
 -------------------------------------
 */
 .current-conditions-temp {
-  font-size: 56px;
+  // Custom size not in typecale
+  font-size: units(5) + units(0.5); 
 }
 
 /* Hourly Forecast Block Overrides
