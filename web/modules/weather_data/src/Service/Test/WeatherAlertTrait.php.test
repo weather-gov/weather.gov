@@ -39,7 +39,7 @@ final class WeatherAlertTraitTest extends Base
             ],
         );
 
-        // Zone-based, does not impact us.
+        // Forecast-zone-based, does not impact us.
         $alertZoneNotMine = (object) [
             "geometry" => null,
             "properties" => (object) [
@@ -48,8 +48,8 @@ final class WeatherAlertTraitTest extends Base
             ],
         ];
 
-        // Zone-based, does not impact us, but has the same county – should be
-        // excluded
+        // Forecast-zone-based, does not impact us, but has the same county –
+        // should be excluded
         $alertZoneNotMineSameCounty = (object) [
             "geometry" => null,
             "properties" => (object) [
@@ -61,7 +61,7 @@ final class WeatherAlertTraitTest extends Base
             ],
         ];
 
-        // Zone-based, does impact us.
+        // Forecast-zone-based, does impact us.
         $alertZoneMine = (object) [
             "geometry" => null,
             "properties" => (object) [
@@ -70,6 +70,21 @@ final class WeatherAlertTraitTest extends Base
                 "description" => "Colorful flags",
                 "instruction" => "Spin 'em around",
                 "areaDesc" => "Whoosh, spinny flags!",
+                "onset" => "2024-01-08T13:48:00-06:00",
+                "ends" => "2024-01-10T13:48:00-06:00",
+                "expires" => "2024-01-09T13:48:00-06:00",
+            ],
+        ];
+
+        // Fire-zone based
+        $alertFireZoneMine = (object) [
+            "geometry" => null,
+            "properties" => (object) [
+                "event" => "ashfall advisory",
+                "affectedZones" => ["FIRE ZONE"],
+                "description" => "There was a fire somewhere",
+                "instruction" => "Wear a mask",
+                "areaDesc" => "Ashy",
                 "onset" => "2024-01-08T13:48:00-06:00",
                 "ends" => "2024-01-10T13:48:00-06:00",
                 "expires" => "2024-01-09T13:48:00-06:00",
@@ -230,7 +245,10 @@ final class WeatherAlertTraitTest extends Base
                     1,
                     75,
                     (object) [
-                        "properties" => (object) ["forecastZone" => "ZONE100"],
+                        "properties" => (object) [
+                            "forecastZone" => "ZONE100",
+                            "fireWeatherZone" => "FIRE ZONE",
+                        ],
                     ],
                 ],
                 [
@@ -242,6 +260,7 @@ final class WeatherAlertTraitTest extends Base
                             $alertZoneNotMine,
                             $alertZoneNotMineSameCounty,
                             $alertZoneMine,
+                            $alertFireZoneMine,
                             $alertCountyNotMine,
                             $alertCountyMineLand,
                             $alertCountyMineMarine,
@@ -263,6 +282,16 @@ final class WeatherAlertTraitTest extends Base
         $expectedZone->ends = "Wednesday, 01/10, 2:48 PM EST";
         $expectedZone->expires = "Tuesday, 01/09, 2:48 PM EST";
         $expectedZone->geometry = [];
+
+        $expectedFireZone = clone $alertFireZoneMine->properties;
+        $expectedFireZone->areaDesc = ["Ashy"];
+        $expectedFireZone->description = [
+            ["type" => "paragraph", "text" => "There was a fire somewhere"],
+        ];
+        $expectedFireZone->onset = "Monday, 01/08, 2:48 PM EST";
+        $expectedFireZone->ends = "Wednesday, 01/10, 2:48 PM EST";
+        $expectedFireZone->expires = "Tuesday, 01/09, 2:48 PM EST";
+        $expectedFireZone->geometry = [];
 
         $expectedCounty = clone $alertCountyMineLand->properties;
         $expectedCounty->areaDesc = ["Here, there, and everywhere"];
@@ -301,7 +330,12 @@ final class WeatherAlertTraitTest extends Base
         // The polygon one is a higher-priority event (severe thunderstorm
         // watch) than the zone one (red flag warning), than the county one
         // (hydrologic advisory) so they should be sorted.
-        $expected = [$expectedPolygon, $expectedZone, $expectedCounty];
+        $expected = [
+            $expectedPolygon,
+            $expectedZone,
+            $expectedCounty,
+            $expectedFireZone,
+        ];
 
         $actual = $this->weatherDataService->getAlerts(
             (object) ["wfo" => "abc", "x" => 20, "y" => 30],
