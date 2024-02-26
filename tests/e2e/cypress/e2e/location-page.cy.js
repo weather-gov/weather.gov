@@ -24,4 +24,12 @@ describe("the location page", () => {
       "Small Craft Advisory",
     );
   });
+
+  it("does include alerts based on fire zone", () => {
+    cy.visit("/point/34.749/-92.275");
+    cy.get("weathergov-alert-list > div").should(
+      "include.text",
+      "Red Flag Warning",
+    );
+  });
 });
