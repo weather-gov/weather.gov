@@ -103,6 +103,9 @@ $nws-red: #FF0000;
   $theme-font-role-body: "sans",
   $theme-font-role-code: "mono",
 
+  $theme-type-scale-3xs: 1,
+  $theme-type-scale-2xs: 2,
+  $theme-type-scale-xs: 3,
   $theme-type-scale-sm: 4,
   $theme-type-scale-md: 7,
   $theme-type-scale-lg: 9,
@@ -152,6 +155,10 @@ $nws-red: #FF0000;
   $theme-color-base-darker: "gray-cool-70",
   $theme-color-base-darkest: "gray-cool-90",
   $theme-color-base-ink: "gray-cool-90",
+
+  $theme-link-color: "primary-dark",
+  $theme-link-hover-color: "primary-darker",
+  $theme-link-active-color: "primary-darkest",
 
   $theme-show-compile-warnings: true,
   $theme-show-notifications: false,
