@@ -6,24 +6,24 @@ final class AlertsToHourlyPeriodsTest extends Base
 {
     public static $periods = [
         [
-            "timestamp" => "2024-02-26T11:00:00-07:00",
-            "endTime" => "2024-02-26T12:00:00-07:00",
+            "timestamp" => "2024-02-26T11:00:00-05:00",
+            "endTime" => "2024-02-26T12:00:00-05:00",
         ],
         [
-            "timestamp" => "2024-02-26T12:00:00-07:00",
-            "endTime" => "2024-02-26T13:00:00-07:00",
+            "timestamp" => "2024-02-26T12:00:00-05:00",
+            "endTime" => "2024-02-26T13:00:00-05:00",
         ],
         [
-            "timestamp" => "2024-02-26T13:00:00-07:00",
-            "endTime" => "2024-02-26T14:00:00-07:00",
+            "timestamp" => "2024-02-26T13:00:00-05:00",
+            "endTime" => "2024-02-26T14:00:00-05:00",
         ],
         [
-            "timestamp" => "2024-02-26T14:00:00-07:00",
-            "endTime" => "2024-02-26T15:00:00-07:00",
+            "timestamp" => "2024-02-26T14:00:00-05:00",
+            "endTime" => "2024-02-26T15:00:00-05:00",
         ],
         [
-            "timestamp" => "2024-02-26T15:00:00-07:00",
-            "endTime" => "2024-02-26T16:00:00-07:00",
+            "timestamp" => "2024-02-26T15:00:00-05:00",
+            "endTime" => "2024-02-26T16:00:00-05:00",
         ],
     ];
 
@@ -36,18 +36,18 @@ final class AlertsToHourlyPeriodsTest extends Base
     {
         $alerts = [
             (object) [
-                "onsetRaw" => "2024-02-26T11:00:00-07:00",
-                "endsRaw" => "2024-02-26T13:00:00-07:00",
+                "onsetRaw" => "2024-02-26T11:00:00-05:00",
+                "endsRaw" => "2024-02-26T13:00:00-05:00",
                 "timezone" => "America/New_York",
             ],
             (object) [
-                "onsetRaw" => "2024-02-26T14:00:00-07:00",
-                "endsRaw" => "2024-02-26T15:00:00-07:00",
+                "onsetRaw" => "2024-02-26T14:00:00-05:00",
+                "endsRaw" => "2024-02-26T15:00:00-05:00",
                 "timezone" => "America/New_York",
             ],
             (object) [
-                "onsetRaw" => "2024-02-26T15:00:00-07:00",
-                "endsRaw" => "2024-02-26T16:00:00-07:00",
+                "onsetRaw" => "2024-02-26T15:00:00-05:00",
+                "endsRaw" => "2024-02-26T16:00:00-05:00",
                 "timezone" => "America/New_York",
             ],
         ];
@@ -75,8 +75,49 @@ final class AlertsToHourlyPeriodsTest extends Base
             self::$periods,
         );
 
-        foreach ($actual as $index => $actualVal) {
-            $this->assertEquals($expected[$index], $actualVal);
-        }
+        $this->assertEquals(3, count($actual));
+        $this->assertEquals($expected, $actual);
     }
+
+  /**
+   * Test overlapping alert periods
+   *
+   * In this case, two alerts overlap
+   * partially over a given set of periods.
+   */
+  public function testOverlapping(){
+    $alerts = [
+      (object)[
+        "onsetRaw" => "2024-02-26T12:00:00-05:00",
+        "endsRaw" => "2024-02-26T15:00:00-05:00",
+        "timezone" => "America/New_York",
+      ],
+      (object) [
+        "onsetRaw" => "2024-02-26T13:00:00-05:00",
+        "endsRaw" => "2024-02-26T16:00:00-05:00",
+        "timezone" => "America/New_York",
+      ],
+    ];
+
+    $expected = [
+      [
+        "periodIndex" => 1,
+        "duration" => 3,
+        "alert" => $alerts[0],
+      ],
+      [
+        "periodIndex" => 2,
+        "duration" => 3,
+        "alert" => $alerts[1],
+      ]
+    ];
+
+    $actual = $this->weatherDataService->alertsToHourlyPeriods(
+      $alerts,
+      self::$periods
+    );
+    
+    $this->assertEquals($expected[0], $actual[0]);
+    $this->assertEquals($expected[1], $actual[1]);
+  }
 }

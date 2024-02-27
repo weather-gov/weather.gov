@@ -215,67 +215,76 @@ trait WeatherAlertTrait
     {
         // Pull out alerts that are relevant to the range
         // of the current periods
-        $lastPeriodStartTime = \DateTimeImmutable::createFromFormat(
+        $lastPeriodEndTime = \DateTimeImmutable::createFromFormat(
             \DateTimeInterface::ISO8601_EXPANDED,
             $periods[array_key_last($periods)]["timestamp"],
         );
+        $lastPeriodEndTime = $lastPeriodEndTime->modify("+ 1 hour");
+
+        // Initially weed out any alerts that to not fall
+        // within the overall period range
         $relevantAlerts = array_filter($alerts, function ($alert) use (
             &$periods,
-            &$lastPeriodStartTime,
+            &$lastPeriodEndTime,
         ) {
             $onsetDateTime = self::turnToDate(
                 $alert->onsetRaw,
                 $alert->timezone,
             );
-            return $onsetDateTime < $lastPeriodStartTime;
+            return $onsetDateTime < $lastPeriodEndTime;
         });
 
+        // We will  respond with a list of alerts from the
+        // incoming alerts that fall within the period range,
+        // annotated with extra information about how
+        // they should be displayed
         $alertPeriods = [];
-        foreach ($periods as $periodIndex => $period) {
-            $currentAlert = array_shift($relevantAlerts);
-            while ($currentAlert) {
-                $periodStartTime = \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    $period["timestamp"],
-                );
-                $onsetTime = self::turnToDate(
-                    $currentAlert->onsetRaw,
-                    $currentAlert->timezone,
-                );
-                $endTime = self::turnToDate(
-                    $currentAlert->endsRaw,
-                    $currentAlert->timezone,
-                );
 
-                if (
-                    $onsetTime <= $periodStartTime &&
-                    $endTime > $periodStartTime
-                ) {
-                    // Get the number of hours the alert is
-                    // supposed to last
-                    $alertDiff = $endTime->diff($onsetTime, true);
-                    $alertDuration = $alertDiff->h;
-                    if ($alertDiff->m) {
-                        $alertDuration += 1;
-                    }
 
-                    // If the duration plus the current index
-                    // is greater than the count of the periods,
-                    // trim duration to end at the period length
-                    $alertDuration = min(
-                        count($periods) - $periodIndex - 1,
-                        $alertDuration,
-                    );
+        foreach($relevantAlerts as $currentAlert){
+          foreach($periods as $periodIndex => $period){
+            $periodStartTime = \DateTimeImmutable::createFromFormat(
+              \DateTimeInterface::ISO8601_EXPANDED,
+              $period["timestamp"],
+            );
+            $onsetTime = self::turnToDate(
+              $currentAlert->onsetRaw,
+              $currentAlert->timezone,
+            );
+            $endTime = self::turnToDate(
+              $currentAlert->endsRaw,
+              $currentAlert->timezone,
+            );
 
-                    array_push($alertPeriods, [
-                        "duration" => $alertDuration,
-                        "periodIndex" => $periodIndex,
-                        "alert" => $currentAlert,
-                    ]);
-                }
+            if(
+              $onsetTime <= $periodStartTime &&
+                $endTime > $periodStartTime
+            ) {
+              // Get the number of hours the alert is
+              // supposed to last
+              $alertDiff = $endTime->diff($onsetTime, true);
+              $alertDuration = $alertDiff->h;
+              if ($alertDiff->m) {
+                $alertDuration += 1;
+              }
 
-                $currentAlert = array_shift($relevantAlerts);
+              // If the duration plus the current index
+              // is greater than the count of the periods,
+              // trim duration to end at the period length
+              $alertDuration = min(
+                count($periods) - $periodIndex,
+                $alertDuration,
+              );
+
+              array_push($alertPeriods, [
+                "duration" => $alertDuration,
+                "periodIndex" => $periodIndex,
+                "alert" => $currentAlert,
+              ]);
+
+              break;
             }
+          }
         }
 
         return $alertPeriods;
