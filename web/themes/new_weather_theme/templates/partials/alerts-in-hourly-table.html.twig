@@ -2,7 +2,7 @@
 {% for alertInfo in alertPeriods %}
   {% set remainingCount = periodLength - alertInfo.duration %}
   <tr data-period-length="{{periodLength}}">
-    <th scope="row" class="usa-sr-only">{{ "Alert" | t }}</th>
+    <th scope="row" class="position-sticky left-0"><span class="usa-sr-only">{{ "Alert" | t }}</span></th>
     {% if periodIndex > 0 %}      
       {% for i in 1..periodIndex %}
         <td data-alert-span="before" data-index="{{i}}"></td>
