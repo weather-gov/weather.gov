@@ -1,7 +1,7 @@
 {{ attach_library("new_weather_theme/localize-timestamps") }}
 
 {# Widgets and stuff. This is presented as a row of columns. #}
-<div class="weather-gov-current-conditions bg-white grid-row grid-gap">
+<div class="weather-gov-current-conditions grid-row grid-gap">
   {% if content.error %}
   {% set message = "There was an error loading the current conditions." | t %}
   {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
@@ -29,7 +29,7 @@
       <div class="icon margin-right-105 maxw-5 maxh-5">
         {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon )}}
       </div>
-      <p class="font-body-sm margin-top-2px">{{ content.conditions.short }}</p>
+      <p class="font-body-md margin-top-2px">{{ content.conditions.short }}</p>
     </div>
     <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05 border-top-1px border-base-light padding-top-1" aria-hidden="true">
       <div class="margin-right-4">
