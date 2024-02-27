@@ -25,7 +25,7 @@
 <div class="bg-primary-darkest">
   {% if content.place %}
   <div class="grid-container">
-    <div class="grid-row flex-laign-top flex-no-wrap">
+    <div class="grid-row flex-no-wrap flex-justify-center">
       <svg
         class="usa-icon height-4 width-4 margin-top-2 margin-right-05 text-accent-cool"
         aria-hidden="true"
@@ -37,7 +37,7 @@
           xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#location_on"
         ></use>
       </svg>
-      <h1 class="text-white font-heading-xl flex-1">
+      <h1 class="text-white font-heading-xl tablet:flex-1">
         {{ content.place.city }}{% if content.place.state %}, {{ content.place.state }}{% endif %}
       </h1>
     </div>

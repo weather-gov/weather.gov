@@ -11,8 +11,6 @@ tabbed-nav {
     display: inline-block;
     flex: 1 auto;
     margin-right: units(2);
-    // alignment to container, doesn't fall on 8px grid 
-    margin-left: calc(units(1) + units("2px"));
     padding: 0 0 units(2) 0;
 
     @include u-font("body", "md");
@@ -24,13 +22,20 @@ tabbed-nav {
       margin-bottom: -2px;
     }
 
-    // alignment to container, doesn't fall on 8px grid 
     &:last-of-type {
-      margin-right: calc(units(1) + units("2px"));
+      margin-right: 0;
     }
 
     &:focus {
       outline-offset: units(1);
+    }
+
+    @include at-media("tablet") {
+      margin-left: units(2);
+
+      &:last-of-type {
+        margin-right: units(2);
+      }
     }
   }
 
