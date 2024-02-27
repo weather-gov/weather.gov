@@ -11,14 +11,14 @@ tabbed-nav {
     display: inline-block;
     flex: 1 auto;
     margin-right: units(2);
-    padding: 0 0 units(2) 0;
+    padding: units(2) 0;
 
     @include u-font("body", "md");
 
     &[data-selected] {
       @include u-text("bold");
-      color: color("accent-warm");
-      border-bottom: 2px solid color("accent-warm");
+      color: color("accent-warm-dark");
+      border-bottom: 2px solid color("accent-warm-dark");
       margin-bottom: -2px;
     }
 
@@ -26,8 +26,19 @@ tabbed-nav {
       margin-right: 0;
     }
 
+
+    &:focus,
+    &:hover {
+      background-color: color("base-lightest");
+    }
+
+
     &:focus {
       outline-offset: units(1);
+    }
+
+    &:active {
+      color: color("accent-warm-darker");
     }
 
     @include at-media("tablet") {

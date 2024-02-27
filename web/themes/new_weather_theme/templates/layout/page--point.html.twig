@@ -30,7 +30,7 @@
     <tabbed-nav class="display-block position-relative">
       <div id="tablist-label" class="usa-sr-only">{{ "Weather information sections" | t }}</div>
       <div class="grid-container position-sticky top-0 z-500 bg-white padding-x-0">
-       <div role="tablist" class="tab-buttons padding-top-4 display-flex flex-row top-4 grid-col-12" aria-labelledby="tablist-label">
+       <div role="tablist" class="tab-buttons display-flex flex-row top-4 grid-col-12" aria-labelledby="tablist-label">
         {% if weather.alerts %}
           <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
         {% endif %}
