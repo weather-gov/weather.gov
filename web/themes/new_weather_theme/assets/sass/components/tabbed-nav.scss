@@ -37,6 +37,14 @@ tabbed-nav {
         margin-right: units(2);
       }
     }
+
+    @include at-media("desktop") {
+      margin-left: units(4);
+
+      &:last-of-type {
+        margin-right: units(4);
+      }
+    }
   }
 
   .tab-container {
