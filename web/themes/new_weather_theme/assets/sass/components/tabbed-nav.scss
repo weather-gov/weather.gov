@@ -6,14 +6,23 @@ tabbed-nav {
     background-color: white;
     border: none;
     border-bottom: 2px solid transparent;
+    color: color("base-dark");
     display: inline-block;
-    padding: 0;
-    color: rgb(0 133 202 / 100%);
+    flex: 1 auto;
+    margin-right: units(2);
+    padding: 0 0 units(2) 0;
 
     @include u-font("body", "md");
 
     &[data-selected] {
-      border-bottom: 2px solid rgb(0 133 202 / 100%);
+      @include u-text("bold");
+      color: color("accent-warm");
+      border-bottom: 2px solid color("accent-warm");
+      margin-bottom: -2px;
+    }
+
+    &:last-of-type {
+      margin-right: 0;
     }
 
     &:focus {
