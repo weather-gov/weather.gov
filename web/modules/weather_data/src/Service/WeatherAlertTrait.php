@@ -159,15 +159,20 @@ trait WeatherAlertTrait
                 }, explode(";", $output->areaDesc));
             }
 
+            $output->onsetRaw = $output->onset;
             $output->onset = self::turnToDate(
                 $output->onset ?? false,
                 $timezone,
             );
+            $output->endsRaw = $output->ends ?? null;
             $output->ends = self::turnToDate($output->ends ?? false, $timezone);
+            $output->expiresRaw = $output->expires ?? null;
             $output->expires = self::turnToDate(
                 $output->expires ?? false,
                 $timezone,
             );
+
+            $output->timezone = $timezone;
 
             return $output;
         }, $alerts);
@@ -181,15 +186,12 @@ trait WeatherAlertTrait
         // Twig, that's just not reliable enough.
         foreach ($alerts as $alert) {
             if ($alert->onset) {
-                $alert->onsetDateTime = clone $alert->onset;
                 $alert->onset = $alert->onset->format("l, m/d, g:i A T");
             }
             if ($alert->ends) {
-                $alert->endsDateTime = clone $alert->ends;
                 $alert->ends = $alert->ends->format("l, m/d, g:i A T");
             }
             if ($alert->expires) {
-                $alert->expiresDateTime = clone $alert->expires;
                 $alert->expires = $alert->expires->format("l, m/d, g:i A T");
             }
         }
@@ -221,7 +223,11 @@ trait WeatherAlertTrait
             &$periods,
             &$lastPeriodStartTime,
         ) {
-            return $alert->onset < $lastPeriodStartTime;
+            $onsetDateTime = self::turnToDate(
+                $alert->onsetRaw,
+                $alert->timezone,
+            );
+            return $onsetDateTime < $lastPeriodStartTime;
         });
 
         $alertPeriods = [];
@@ -232,9 +238,14 @@ trait WeatherAlertTrait
                     \DateTimeInterface::ISO8601_EXPANDED,
                     $period["timestamp"],
                 );
-
-                $onsetTime = $currentAlert->onsetDateTime;
-                $endTime = $currentAlert->endsDateTime;
+                $onsetTime = self::turnToDate(
+                    $currentAlert->onsetRaw,
+                    $currentAlert->timezone,
+                );
+                $endTime = self::turnToDate(
+                    $currentAlert->endsRaw,
+                    $currentAlert->timezone,
+                );
 
                 if (
                     $onsetTime <= $periodStartTime &&

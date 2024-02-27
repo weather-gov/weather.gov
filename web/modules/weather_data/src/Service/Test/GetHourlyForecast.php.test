@@ -123,8 +123,16 @@ final class GetHourlyForecastTest extends Base
                 "startTime" => "2023-11-16T12:00:00-07:00",
                 "temperature" => 1,
                 "shortForecast" => "thunderBOLT",
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
                 "probabilityOfPrecipitation" => [
                     "value" => 11,
+                ],
+                "relativeHumidity" => [
+                    "value" => 12,
+                ],
+                "dewpoint" => [
+                    "value" => -9.4444444444444446,
                 ],
                 "icon" => "",
             ],
@@ -132,8 +140,16 @@ final class GetHourlyForecastTest extends Base
                 "startTime" => "2023-11-16T13:00:00-07:00",
                 "temperature" => 2,
                 "shortForecast" => "lightning",
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
                 "probabilityOfPrecipitation" => [
                     "value" => 22,
+                ],
+                "relativeHumidity" => [
+                    "value" => 12,
+                ],
+                "dewpoint" => [
+                    "value" => -9.4444444444444446,
                 ],
                 "icon" => null,
             ],
@@ -150,6 +166,10 @@ final class GetHourlyForecastTest extends Base
                 "time" => "12 PM",
                 "timestamp" => "2023-11-16T12:00:00-07:00",
                 "temperature" => 1,
+                "relativeHumidity" => 12,
+                "dewpoint" => 15.0,
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
             ],
             [
                 "conditions" => "Lightning",
@@ -159,6 +179,10 @@ final class GetHourlyForecastTest extends Base
                 "time" => "1 PM",
                 "timestamp" => "2023-11-16T13:00:00-07:00",
                 "temperature" => 2,
+                "relativeHumidity" => 12,
+                "dewpoint" => 15.0,
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
             ],
         ];
 
@@ -184,8 +208,16 @@ final class GetHourlyForecastTest extends Base
                 "startTime" => "2023-11-16T03:59:59-08:00",
                 "temperature" => 1,
                 "shortForecast" => "Very Very",
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
                 "probabilityOfPrecipitation" => [
                     "value" => 11,
+                ],
+                "relativeHumidity" => [
+                    "value" => 12,
+                ],
+                "dewpoint" => [
+                    "value" => -9.4444444444444446,
                 ],
                 "icon" => "https://blah/day/rain,30?size=small",
             ],
@@ -193,8 +225,16 @@ final class GetHourlyForecastTest extends Base
                 "startTime" => "2023-11-16T12:00:00-07:00",
                 "temperature" => 2,
                 "shortForecast" => "FRIGHTENING",
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
                 "probabilityOfPrecipitation" => [
                     "value" => 22,
+                ],
+                "relativeHumidity" => [
+                    "value" => 12,
+                ],
+                "dewpoint" => [
+                    "value" => -9.4444444444444446,
                 ],
                 "icon" => "https://blah/night/rain,30?size=medium",
             ],
@@ -202,8 +242,16 @@ final class GetHourlyForecastTest extends Base
                 "startTime" => "2023-11-16T13:00:00-07:00",
                 "temperature" => 3,
                 "shortForecast" => "Mama mia!",
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
                 "probabilityOfPrecipitation" => [
                     "value" => 33,
+                ],
+                "relativeHumidity" => [
+                    "value" => 12,
+                ],
+                "dewpoint" => [
+                    "value" => -9.4444444444444446,
                 ],
                 "icon" => "https://blah/day/snow,40?size=huge",
             ],
@@ -219,6 +267,10 @@ final class GetHourlyForecastTest extends Base
                 "time" => "12 PM",
                 "timestamp" => "2023-11-16T12:00:00-07:00",
                 "temperature" => 2,
+                "relativeHumidity" => 12,
+                "dewpoint" => 15.0,
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
             ],
             [
                 "conditions" => "Mama mia!",
@@ -228,6 +280,10 @@ final class GetHourlyForecastTest extends Base
                 "time" => "1 PM",
                 "timestamp" => "2023-11-16T13:00:00-07:00",
                 "temperature" => 3,
+                "relativeHumidity" => 12,
+                "dewpoint" => 15.0,
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
             ],
         ];
 
@@ -254,6 +310,11 @@ final class GetHourlyForecastTest extends Base
                 "temperature" => 1,
                 "probabilityOfPrecipitation" => [
                     "value" => 11,
+                ],
+                "windSpeed" => "26 mph",
+                "windDirection" => "W",
+                "dewpoint" => [
+                    "value" => -9.4444444444444446,
                 ],
                 "icon" => "https://blah/day/rain,30?size=small",
             ],
