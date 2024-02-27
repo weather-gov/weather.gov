@@ -17,6 +17,7 @@ The following colors are brand colors taken from the NWS and NOAA logos
 and styleguides. The NWS color names are unoffical.
 ----------------------------------------*/
 $noaa-water-blue: #0085CA;
+$noaa-sky-blue: #003087;
 $nws-indigo: #0000A4;
 $nws-light-blue: #33B0E1;
 $nws-red: #FF0000;
@@ -128,8 +129,8 @@ $nws-red: #FF0000;
   $theme-color-secondary-light: "indigo-30v",
   $theme-color-secondary: "indigo-50v",
   $theme-color-secondary-dark: "indigo-60v",
-  $theme-color-secondary-darker: "indigo-70v",
-  $theme-color-secondary-darkest: $nws-indigo,
+  $theme-color-secondary-darker: $nws-indigo,
+  $theme-color-secondary-darkest: $noaa-sky-blue,
 
   $theme-color-accent-cool-lightest: "blue-cool-5v",
   $theme-color-accent-cool-lighter: "blue-cool-20v",
