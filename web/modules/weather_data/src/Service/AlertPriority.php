@@ -151,6 +151,7 @@ class AlertPriority
         "hurricane warning",
         "typhoon warning",
         "blizzard warning",
+        "snow squall warning",
         "ice storm warning",
         "winter storm warning",
         "high wind warning",
