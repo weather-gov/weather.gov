@@ -294,41 +294,14 @@ trait WeatherAlertTrait
             } else {
                 // Otherwise, we need to cycle through the periods and see
                 // if the times align at all, either at the start or the end.
-                foreach ($periods as $periodIndex => $period) {
-                    $periodStartTime = \DateTimeImmutable::createFromFormat(
-                        \DateTimeInterface::ISO8601_EXPANDED,
-                        $period["timestamp"],
-                    );
-                    $periodEndTime = $periodStartTime->modify("+ 1 hour");
-
-                    $onsetIsWithinPeriod = $this->dateTimeIsWithin(
-                        $onsetTime,
-                        $periodStartTime,
-                        $periodEndTime,
-                    );
-                    $endIsWithinPeriod = $this->dateTimeIsWithin(
-                        $endTime,
-                        $periodStartTime,
-                        $periodEndTime,
-                    );
-
-                    if ($onsetIsWithinPeriod) {
-                        // Get the number of hours the alert is
-                        // supposed to last
-                        $alertDuration = $this->calculateAlertDuration(
-                            $onsetTime,
-                            $endTime,
-                            count($periods) - $periodIndex,
-                        );
-
-                        array_push($alertPeriods, [
-                            "duration" => $alertDuration,
-                            "periodIndex" => $periodIndex,
-                            "alert" => $currentAlert,
-                        ]);
-
-                        break;
-                    }
+                $alertInfo = $this->getAlertInfoInPeriods(
+                    $currentAlert,
+                    $onsetTime,
+                    $endTime,
+                    $periods,
+                );
+                if ($alertInfo) {
+                    array_push($alertPeriods, $alertInfo);
                 }
             }
         }
@@ -392,5 +365,57 @@ trait WeatherAlertTrait
         }
 
         return min($max, $alertDuration);
+    }
+
+    /**
+     * Find relevant alert info in a list of hourly periods
+     *
+     * Given a list of hourly forecast periods and an alert,
+     * attempt to find alert alignment info within any of
+     * those periods.
+     * Return false if nothing is found
+     */
+    private function getAlertInfoInPeriods(
+        $alert,
+        $alertOnset,
+        $alertEnd,
+        $periods,
+    ) {
+        foreach ($periods as $periodIndex => $period) {
+            $periodStartTime = \DateTimeImmutable::createFromFormat(
+                \DateTimeInterface::ISO8601_EXPANDED,
+                $period["timestamp"],
+            );
+            $periodEndTime = $periodStartTime->modify("+ 1 hour");
+
+            $onsetIsWithinPeriod = $this->dateTimeIsWithin(
+                $alertOnset,
+                $periodStartTime,
+                $periodEndTime,
+            );
+            $endIsWithinPeriod = $this->dateTimeIsWithin(
+                $alertEnd,
+                $periodStartTime,
+                $periodEndTime,
+            );
+
+            if ($onsetIsWithinPeriod) {
+                // Get the number of hours the alert is
+                // supposed to last
+                $alertDuration = $this->calculateAlertDuration(
+                    $alertOnset,
+                    $alertEnd,
+                    count($periods) - $periodIndex,
+                );
+
+                return [
+                    "duration" => $alertDuration,
+                    "periodIndex" => $periodIndex,
+                    "alert" => $alert,
+                ];
+            }
+        }
+
+        return false;
     }
 }
