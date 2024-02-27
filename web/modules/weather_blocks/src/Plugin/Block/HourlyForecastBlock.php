@@ -17,6 +17,7 @@ use Drupal\Core\Logger\LoggerChannelTrait;
 class HourlyForecastBlock extends WeatherBlockBase
 {
     use LoggerChannelTrait;
+
     /**
      * {@inheritdoc}
      */

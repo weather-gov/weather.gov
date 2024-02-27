@@ -240,53 +240,68 @@ trait WeatherAlertTrait
         // they should be displayed
         $alertPeriods = [];
 
+        foreach ($relevantAlerts as $currentAlert) {
+            foreach ($periods as $periodIndex => $period) {
+                $periodStartTime = \DateTimeImmutable::createFromFormat(
+                    \DateTimeInterface::ISO8601_EXPANDED,
+                    $period["timestamp"],
+                );
+                $onsetTime = self::turnToDate(
+                    $currentAlert->onsetRaw,
+                    $currentAlert->timezone,
+                );
+                $endTime = self::turnToDate(
+                    $currentAlert->endsRaw,
+                    $currentAlert->timezone,
+                );
 
-        foreach($relevantAlerts as $currentAlert){
-          foreach($periods as $periodIndex => $period){
-            $periodStartTime = \DateTimeImmutable::createFromFormat(
-              \DateTimeInterface::ISO8601_EXPANDED,
-              $period["timestamp"],
-            );
-            $onsetTime = self::turnToDate(
-              $currentAlert->onsetRaw,
-              $currentAlert->timezone,
-            );
-            $endTime = self::turnToDate(
-              $currentAlert->endsRaw,
-              $currentAlert->timezone,
-            );
+                if (
+                    $onsetTime <= $periodStartTime &&
+                    $endTime > $periodStartTime
+                ) {
+                    // Get the number of hours the alert is
+                    // supposed to last
+                    $diffStartTime = $onsetTime;
+                    if ($onsetTime < $periodStartTime) {
+                        $diffStartTime = $periodStartTime;
+                    }
+                    $alertDiff = $endTime->diff($diffStartTime, true);
+                    $alertDuration = $this->dateDiffInHours($alertDiff);
+                    if ($alertDiff->m) {
+                        $alertDuration += 1;
+                    }
 
-            if(
-              $onsetTime <= $periodStartTime &&
-                $endTime > $periodStartTime
-            ) {
-              // Get the number of hours the alert is
-              // supposed to last
-              $alertDiff = $endTime->diff($onsetTime, true);
-              $alertDuration = $alertDiff->h;
-              if ($alertDiff->m) {
-                $alertDuration += 1;
-              }
+                    // If the duration plus the current index
+                    // is greater than the count of the periods,
+                    // trim duration to end at the period length
+                    $alertDuration = min(
+                        count($periods) - $periodIndex,
+                        $alertDuration,
+                    );
 
-              // If the duration plus the current index
-              // is greater than the count of the periods,
-              // trim duration to end at the period length
-              $alertDuration = min(
-                count($periods) - $periodIndex,
-                $alertDuration,
-              );
+                    array_push($alertPeriods, [
+                        "duration" => $alertDuration,
+                        "periodIndex" => $periodIndex,
+                        "alert" => $currentAlert,
+                    ]);
 
-              array_push($alertPeriods, [
-                "duration" => $alertDuration,
-                "periodIndex" => $periodIndex,
-                "alert" => $currentAlert,
-              ]);
-
-              break;
+                    break;
+                }
             }
-          }
         }
 
         return $alertPeriods;
+    }
+
+    /**
+     * Compute a DateInterval in hours
+     *
+     * For now, we do not take months or
+     * years into account in the diff.
+     */
+    private function dateDiffInHours(\DateInterval $diff)
+    {
+        $days = $diff->d * 24;
+        return $diff->h + $days;
     }
 }

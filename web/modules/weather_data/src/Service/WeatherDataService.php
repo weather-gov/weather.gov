@@ -746,7 +746,7 @@ class WeatherDataService
 
         $forecast = $this->getFromWeatherAPI(
             "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
-        );
+        ); 
 
         $place = $self->getPlaceFromGrid($wfo, $gridX, $gridY);
         $timezone = $place->timezone;
