@@ -773,9 +773,8 @@ class WeatherDataService
             $timestamp = \DateTimeImmutable::createFromFormat(
                 \DateTimeInterface::ISO8601_EXPANDED,
                 $period->startTime,
-            )
-                ->setTimeZone(new \DateTimeZone($timezone))
-                ->format("g A");
+            )->setTimeZone(new \DateTimeZone($timezone));
+            $timeString = $timestamp->format("g A");
 
             $obsKey = $this->getApiObservationKey($period);
 
@@ -787,8 +786,8 @@ class WeatherDataService
                 "iconBasename" => $this->getIconFileBasename($obsKey),
                 "probabilityOfPrecipitation" =>
                     $period->probabilityOfPrecipitation->value,
-                "time" => $timestamp,
-                "timestamp" => $period->startTime,
+                "time" => $timeString,
+                "timestamp" => $timestamp->format("c"),
                 "temperature" => $period->temperature,
                 "relativeHumidity" => $period->relativeHumidity->value,
                 "windSpeed" => $period->windSpeed,

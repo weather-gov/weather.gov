@@ -305,4 +305,49 @@ final class AlertsToHourlyPeriodsTest extends Base
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * Edge case 1
+     *
+     */
+    public function testEdgeCase1()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-27T20:44:03-05:00",
+                "endsRaw" => "2024-02-27T22:44:03-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $periods = [
+            [
+                "timestamp" => "2024-02-27T21:44:19-05:00",
+                "endTime" => "2024-02-27T22:44:19-05:00",
+            ],
+            [
+                "timestamp" => "2024-02-27T22:44:19-05:00",
+                "endTime" => "2024-02-27T23:44:19-05:00",
+            ],
+            [
+                "timestamp" => "2024-02-27T23:44:19-05:00",
+                "endTime" => "2024-02-28T00:44:19-05:00",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 0,
+                "duration" => 1,
+                "alert" => $alerts[0],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            $periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
 }

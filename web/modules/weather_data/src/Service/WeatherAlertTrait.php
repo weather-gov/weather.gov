@@ -219,9 +219,12 @@ trait WeatherAlertTrait
             \DateTimeInterface::ISO8601_EXPANDED,
             $periods[0]["timestamp"],
         );
-        $lastPeriodEndTime = \DateTimeImmutable::createFromFormat(
-            \DateTimeInterface::ISO8601_EXPANDED,
+
+        $timezone = $firstPeriodStartTime->getTimezone()->getName();
+
+        $lastPeriodEndTime = self::turnToDate(
             $periods[array_key_last($periods)]["timestamp"],
+            $timezone,
         );
         $lastPeriodEndTime = $lastPeriodEndTime->modify("+ 1 hour");
 
@@ -299,6 +302,7 @@ trait WeatherAlertTrait
                     $onsetTime,
                     $endTime,
                     $periods,
+                    $timezone,
                 );
                 if ($alertInfo) {
                     array_push($alertPeriods, $alertInfo);
@@ -380,11 +384,12 @@ trait WeatherAlertTrait
         $alertOnset,
         $alertEnd,
         $periods,
+        $timezone,
     ) {
         foreach ($periods as $periodIndex => $period) {
-            $periodStartTime = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601_EXPANDED,
+            $periodStartTime = self::turnToDate(
                 $period["timestamp"],
+                $timezone,
             );
             $periodEndTime = $periodStartTime->modify("+ 1 hour");
 
