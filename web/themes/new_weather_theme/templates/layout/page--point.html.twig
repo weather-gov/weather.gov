@@ -29,8 +29,8 @@
 
     <tabbed-nav class="display-block position-relative">
       <div id="tablist-label" class="usa-sr-only">{{ "Weather information sections" | t }}</div>
-      <div class="grid-container position-sticky top-0 z-500 bg-white padding-x-0 border-base-light border-bottom-2px">
-       <div role="tablist" class="tab-buttons padding-top-4 display-flex flex-row top-4 mobile-lg:grid-col-12 desktop:grid-col-8" aria-labelledby="tablist-label">
+      <div class="grid-container position-sticky top-0 z-500 bg-white padding-x-0">
+       <div role="tablist" class="tab-buttons padding-top-4 display-flex flex-row top-4 grid-col-12 tablet:grid-offset-2 tablet:grid-col-8" aria-labelledby="tablist-label">
         {% if weather.alerts %}
           <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
         {% endif %}
@@ -39,24 +39,27 @@
           <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "Daily" | t }}</button>
         </div>
       </div>
+      <hr class="border-base-light border-top-0 border-bottom-2px margin-y-0">
 
       <div class="bg-base-lightest padding-top-3 padding-bottom-8">
-        <div class="grid-container bg-white padding-y-2 shadow-1">
-          {% if weather.alerts %}
-          <div class="tab-container" id="alerts"  role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
-            {{ drupal_block("weathergov_local_alerts") }}
-          </div>
-          {% endif %}
-          <div class="tab-container" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
-            {{ drupal_block("weathergov_current_conditions") }}
-          </div>
-          <div class="tab-container" id="today"  role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
-            {{ drupal_block("weathergov_weather_story") }}
-            {{ drupal_block("weathergov_hourly_forecast") }}
-            {{ drupal_block("weathergov_wfo_promo") }}
-          </div>
-          <div class="tab-container" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
-            {{ drupal_block("weathergov_daily_forecast") }}
+        <div class="grid-container padding-x-0 tablet:padding-x-2">
+          <div class="grid-container bg-white padding-y-2 shadow-1 grid-col-12 tablet:grid-offset-2 tablet:grid-col-8">
+            {% if weather.alerts %}
+            <div class="tab-container" id="alerts"  role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
+              {{ drupal_block("weathergov_local_alerts") }}
+            </div>
+            {% endif %}
+            <div class="tab-container" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
+              {{ drupal_block("weathergov_current_conditions") }}
+            </div>
+            <div class="tab-container" id="today"  role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
+              {{ drupal_block("weathergov_weather_story") }}
+              {{ drupal_block("weathergov_hourly_forecast") }}
+              {{ drupal_block("weathergov_wfo_promo") }}
+            </div>
+            <div class="tab-container" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
+              {{ drupal_block("weathergov_daily_forecast") }}
+            </div>
           </div>
         </div>
       </div>
