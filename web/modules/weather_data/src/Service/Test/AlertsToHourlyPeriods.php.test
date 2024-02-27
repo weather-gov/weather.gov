@@ -1,0 +1,82 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+final class AlertsToHourlyPeriodsTest extends Base
+{
+    public static $periods = [
+        [
+            "timestamp" => "2024-02-26T11:00:00-07:00",
+            "endTime" => "2024-02-26T12:00:00-07:00",
+        ],
+        [
+            "timestamp" => "2024-02-26T12:00:00-07:00",
+            "endTime" => "2024-02-26T13:00:00-07:00",
+        ],
+        [
+            "timestamp" => "2024-02-26T13:00:00-07:00",
+            "endTime" => "2024-02-26T14:00:00-07:00",
+        ],
+        [
+            "timestamp" => "2024-02-26T14:00:00-07:00",
+            "endTime" => "2024-02-26T15:00:00-07:00",
+        ],
+        [
+            "timestamp" => "2024-02-26T15:00:00-07:00",
+            "endTime" => "2024-02-26T16:00:00-07:00",
+        ],
+    ];
+
+    /**
+     * Test that 3 alerts that start and end
+     * at actual period times are correctly
+     * aligned
+     */
+    public function testPerfectlyAligned()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T11:00:00-07:00",
+                "endsRaw" => "2024-02-26T13:00:00-07:00",
+                "timezone" => "America/New_York",
+            ],
+            (object) [
+                "onsetRaw" => "2024-02-26T14:00:00-07:00",
+                "endsRaw" => "2024-02-26T15:00:00-07:00",
+                "timezone" => "America/New_York",
+            ],
+            (object) [
+                "onsetRaw" => "2024-02-26T15:00:00-07:00",
+                "endsRaw" => "2024-02-26T16:00:00-07:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 0,
+                "duration" => 2,
+                "alert" => $alerts[0],
+            ],
+            [
+                "periodIndex" => 3,
+                "duration" => 1,
+                "alert" => $alerts[1],
+            ],
+            [
+                "periodIndex" => 4,
+                "duration" => 1,
+                "alert" => $alerts[2],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        foreach ($actual as $index => $actualVal) {
+            $this->assertEquals($expected[$index], $actualVal);
+        }
+    }
+}
