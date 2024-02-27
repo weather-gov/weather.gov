@@ -215,6 +215,10 @@ trait WeatherAlertTrait
     {
         // Pull out alerts that are relevant to the range
         // of the current periods
+        $firstPeriodStartTime = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            $periods[0]["timestamp"],
+        );
         $lastPeriodEndTime = \DateTimeImmutable::createFromFormat(
             \DateTimeInterface::ISO8601_EXPANDED,
             $periods[array_key_last($periods)]["timestamp"],
@@ -241,51 +245,90 @@ trait WeatherAlertTrait
         $alertPeriods = [];
 
         foreach ($relevantAlerts as $currentAlert) {
-            foreach ($periods as $periodIndex => $period) {
-                $periodStartTime = \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    $period["timestamp"],
-                );
-                $onsetTime = self::turnToDate(
-                    $currentAlert->onsetRaw,
-                    $currentAlert->timezone,
-                );
-                $endTime = self::turnToDate(
-                    $currentAlert->endsRaw,
-                    $currentAlert->timezone,
-                );
+            $onsetTime = self::turnToDate(
+                $currentAlert->onsetRaw,
+                $currentAlert->timezone,
+            );
+            $endTime = self::turnToDate(
+                $currentAlert->endsRaw,
+                $currentAlert->timezone,
+            );
+            $alertEncompassesPeriods = $this->dateTimeEncompasses(
+                $onsetTime,
+                $endTime,
+                $firstPeriodStartTime,
+                $lastPeriodEndTime,
+            );
+            $alertStartsInPeriodRange = $this->dateTimeIsWithin(
+                $onsetTime,
+                $firstPeriodStartTime,
+                $lastPeriodEndTime,
+            );
+            $alertEndsInPeriodRange = $this->dateTimeIsWithin(
+                $endTime,
+                $firstPeriodStartTime,
+                $lastPeriodEndTime,
+            );
 
-                if (
-                    $onsetTime <= $periodStartTime &&
-                    $endTime > $periodStartTime
-                ) {
-                    // Get the number of hours the alert is
-                    // supposed to last
-                    $diffStartTime = $onsetTime;
-                    if ($onsetTime < $periodStartTime) {
-                        $diffStartTime = $periodStartTime;
-                    }
-                    $alertDiff = $endTime->diff($diffStartTime, true);
-                    $alertDuration = $this->dateDiffInHours($alertDiff);
-                    if ($alertDiff->m) {
-                        $alertDuration += 1;
-                    }
+            if ($alertEncompassesPeriods) {
+                // If the current alert fully encompasses the
+                // duration of the period range, we know the
+                // index and duration already
+                array_push($alertPeriods, [
+                    "periodIndex" => 0,
+                    "duration" => count($periods),
+                    "alert" => $currentAlert,
+                ]);
+            } elseif (!$alertStartsInPeriodRange && $alertEndsInPeriodRange) {
+                // If the alert does not start within the overall period range,
+                // but ends within it, the alert must precede these periods
+                array_push($alertPeriods, [
+                    "periodIndex" => 0,
+                    "duration" => $this->calculateAlertDuration(
+                        $firstPeriodStartTime,
+                        $endTime,
+                        count($periods),
+                    ),
+                    "alert" => $currentAlert,
+                ]);
+            } else {
+                // Otherwise, we need to cycle through the periods and see
+                // if the times align at all, either at the start or the end.
+                foreach ($periods as $periodIndex => $period) {
+                    $periodStartTime = \DateTimeImmutable::createFromFormat(
+                        \DateTimeInterface::ISO8601_EXPANDED,
+                        $period["timestamp"],
+                    );
+                    $periodEndTime = $periodStartTime->modify("+ 1 hour");
 
-                    // If the duration plus the current index
-                    // is greater than the count of the periods,
-                    // trim duration to end at the period length
-                    $alertDuration = min(
-                        count($periods) - $periodIndex,
-                        $alertDuration,
+                    $onsetIsWithinPeriod = $this->dateTimeIsWithin(
+                        $onsetTime,
+                        $periodStartTime,
+                        $periodEndTime,
+                    );
+                    $endIsWithinPeriod = $this->dateTimeIsWithin(
+                        $endTime,
+                        $periodStartTime,
+                        $periodEndTime,
                     );
 
-                    array_push($alertPeriods, [
-                        "duration" => $alertDuration,
-                        "periodIndex" => $periodIndex,
-                        "alert" => $currentAlert,
-                    ]);
+                    if ($onsetIsWithinPeriod) {
+                        // Get the number of hours the alert is
+                        // supposed to last
+                        $alertDuration = $this->calculateAlertDuration(
+                            $onsetTime,
+                            $endTime,
+                            count($periods) - $periodIndex,
+                        );
 
-                    break;
+                        array_push($alertPeriods, [
+                            "duration" => $alertDuration,
+                            "periodIndex" => $periodIndex,
+                            "alert" => $currentAlert,
+                        ]);
+
+                        break;
+                    }
                 }
             }
         }
@@ -303,5 +346,51 @@ trait WeatherAlertTrait
     {
         $days = $diff->d * 24;
         return $diff->h + $days;
+    }
+
+    /**
+     * Determine whether a given DateTime is within two others
+     */
+    private function dateTimeIsWithin($subject, $beginning, $end)
+    {
+        return $beginning <= $subject && $subject < $end;
+    }
+
+    /**
+     * Determine if a subject beginning and end datetime
+     * encompasses (both starts before and ends after)
+     * a comparison beginning and end datetime
+     */
+    private function dateTimeEncompasses(
+        $subjectStart,
+        $subjectEnd,
+        $comparisonStart,
+        $comparisonEnd,
+    ) {
+        return $subjectStart <= $comparisonStart &&
+            $subjectEnd >= $comparisonEnd;
+    }
+
+    /**
+     * Compute the duration of the alert
+     *
+     * The duration is a function of the DateTime
+     * diff, but adjusted for the overall period
+     * range.
+     * Note that DateInterval is "special"
+     * about how it computes diffs
+     */
+    private function calculateAlertDuration($onsetTime, $endTime, $max)
+    {
+        $alertDiff = $endTime->diff($onsetTime, true);
+        $alertDuration = $this->dateDiffInHours($alertDiff);
+
+        // If there are leftover minutes, we add
+        // an hour for coverage purposes
+        if ($alertDiff->m) {
+            $alertDuration += 1;
+        }
+
+        return min($max, $alertDuration);
     }
 }

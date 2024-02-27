@@ -272,4 +272,37 @@ final class AlertsToHourlyPeriodsTest extends Base
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * Alert of partial hour coverage
+     *
+     * Ensure that we are capturing alerts that
+     * do not fall perfectly on period hours, either
+     * at the start or at the end
+     */
+    public function testPeriodNonHourAlignment()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T12:23:44-05:00",
+                "endsRaw" => "2024-02-26T13:23:44-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 1,
+                "duration" => 1,
+                "alert" => $alerts[0],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
 }
