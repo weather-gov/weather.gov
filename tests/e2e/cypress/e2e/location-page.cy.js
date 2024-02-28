@@ -45,4 +45,5 @@ describe("the location page", () => {
         "Wind information is unavailable.",
       );
     });
+  });
 });
