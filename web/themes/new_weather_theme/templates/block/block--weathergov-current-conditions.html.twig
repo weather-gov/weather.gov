@@ -45,7 +45,8 @@
           "@windDirection": content.wind.shortDirection
         })
         }}
-        {{ "Wind: N/A" | t() }}
+        {% else %}
+        {{ "N/A" | t() }}
         {% endif %}
       </div>
     </div>
