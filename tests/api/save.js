@@ -6,14 +6,20 @@ import { format } from "prettier";
 const getRelativeTimestamp = (str) => {
   const now = dayjs();
 
+  // Timestamps can be in ISO8601 duration format which Dayjs can't parse, so
+  // preemptively split them up.
   const [timestamp, duration] = str.split("/");
+
   const time = dayjs(timestamp);
   if (time.isValid()) {
     const relativeStr = ["date:now"];
 
+    // Get the number of seconds difference between the timestamp and now, and
+    // tack that on to the magic timestamp we end up saving
     const secondsDiff = time.diff(now, "seconds");
     relativeStr.push(`${secondsDiff >= 0 ? "+" : ""}${secondsDiff} seconds`);
 
+    // If we had a duration, put it back now.
     if (duration) {
       relativeStr.push(`/ ${duration}`);
     }
@@ -30,6 +36,7 @@ const replaceTimestamps = (obj) => {
     return obj;
   }
 
+  // These are the time properties that we want to update.
   const timeProperties = new Set([
     "effective",
     "ends",

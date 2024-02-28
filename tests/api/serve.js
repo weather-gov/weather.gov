@@ -54,6 +54,8 @@ const processDates = (obj) => {
         obj[key] = now.format();
       }
 
+      // If there's a duration component, smoosh it on to the end of our
+      // generated timestamp so it'll match the ISO8601 time+duration format.
       const [, duration] = value.split(" / ");
       if (duration) {
         obj[key] = `${obj[key]}/${duration}`;
