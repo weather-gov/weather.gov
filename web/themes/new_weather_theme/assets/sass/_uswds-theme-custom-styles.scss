@@ -54,6 +54,18 @@ body {
   overflow-x: clip;
 }
 
+/* AlertList Overrides 
+--------------------------------------
+*/
+.usa-alert__body a {
+  color: color("primary-dark");
+
+  &:focus,
+  &:hover {
+    color: color("primary-darker");
+  }
+}
+
 /* Current Conditions
 -------------------------------------
 */

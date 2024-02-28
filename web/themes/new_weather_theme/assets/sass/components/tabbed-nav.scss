@@ -26,12 +26,9 @@ tabbed-nav {
       margin-right: 0;
     }
 
-
-    &:focus,
     &:hover {
       background-color: color("base-lightest");
     }
-
 
     &:focus {
       outline-offset: units(1);

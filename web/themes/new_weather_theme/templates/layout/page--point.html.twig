@@ -22,10 +22,13 @@
 
   <main role="main" class="flex-1">
     <a id="main-content" tabindex="-1"></a>
-    <div class="grid-container">
-      {{ drupal_block("weathergov_local_alert_list") }}
-    </div>
     {{ page.content }}
+
+    <div class="bg-primary-darkest padding-bottom-105">
+      <div class="grid-container margin-top-0">
+        {{ drupal_block("weathergov_local_alert_list") }}
+      </div>
+    </div>
 
     <tabbed-nav class="display-block position-relative">
       <div id="tablist-label" class="usa-sr-only">{{ "Weather information sections" | t }}</div>
