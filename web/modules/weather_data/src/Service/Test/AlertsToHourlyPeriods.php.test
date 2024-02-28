@@ -347,4 +347,59 @@ final class AlertsToHourlyPeriodsTest extends Base
 
         $this->assertEquals($expected, $actual);
     }
+
+  /**
+   * Ensure that we capture alerts without ends
+   * 
+   * But that have an expires field, using that instead
+   */
+  public function testNullEndsExpiresField(){
+    $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T12:23:44-05:00",
+                "endsRaw" => null,
+                "expiresRaw" => "2024-02-26T13:23:44-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 1,
+                "duration" => 1,
+                "alert" => $alerts[0],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * Should return empty list if both ends and expires missing
+   *
+   */
+  public function testNullEndsNullExpires(){
+     $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T12:23:44-05:00",
+                "endsRaw" => null,
+                "expiresRaw" => null,
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+  }
 }
