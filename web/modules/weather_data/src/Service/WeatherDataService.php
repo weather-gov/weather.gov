@@ -686,6 +686,7 @@ class WeatherDataService
         foreach ($forecast->quantitativePrecipitation->values as $quantPrecip) {
             $valid = $quantPrecip->validTime;
             $value = $quantPrecip->value;
+            $value = $this->millimetersToInches($value);
 
             $valid = explode("/", $valid);
             $start = \DateTimeImmutable::createFromFormat(
@@ -700,7 +701,7 @@ class WeatherDataService
                 $periods[] = (object) [
                     "start" => $start->format("g A"),
                     "end" => $end->format("g A"),
-                    "value" => round($value * 0.03937008, 1),
+                    "value" => round($value, 1),
                 ];
             }
         }
