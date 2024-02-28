@@ -162,6 +162,13 @@ $nws-red: #FF0000;
   $theme-link-active-color: "primary-darkest",
 
   /*----------------------------------------
+  UTILITIES SETTINGS
+  ----------------------------------------*/
+  $theme-utility-breakpoints: (
+    "tablet-lg": true, // 880px
+  ),
+
+  /*----------------------------------------
   META SETTINGS
   ----------------------------------------*/
   $theme-show-compile-warnings: true,
