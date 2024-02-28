@@ -33,21 +33,25 @@
     </div>
     <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05 border-top-1px border-base-light padding-top-1" aria-hidden="true">
       <div class="margin-right-4">
-        <span class="font-mono-xs font-family-mono text-uppercase text-base">Humidity</span>
-        {{ "@humidity%" | t({ "@humidity": content.humidity }) }}
+        <p class="margin-y-0">
+          <span class="font-mono-xs font-family-mono text-uppercase text-base">Humidity </span>
+          {{ "@humidity%" | t({ "@humidity": content.humidity }) }}
+        </p>
       </div>
 
       <div class="margin-right-05">
-        <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind</span>
-        {% if content.wind.speed != null %}
-        {{ "@windSpeed mph @windDirection" | t({
-          "@windSpeed": content.wind.speed,
-          "@windDirection": content.wind.shortDirection
-        })
-        }}
-        {% else %}
-        {{ "N/A" | t() }}
-        {% endif %}
+        <p class="margin-y-0">
+          {%- if content.wind.speed != null -%}
+            {% set windString = "@windSpeed mph @windDirection" | t({
+                "@windSpeed": content.wind.speed,
+                "@windDirection": content.wind.shortDirection
+              }) 
+            %}
+          {%- else -%}
+            {%- set windString = "N/A" | t() -%}
+          {%- endif -%}
+          <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>{{- windString -}}
+        </p>
       </div>
     </div>
   </div>
