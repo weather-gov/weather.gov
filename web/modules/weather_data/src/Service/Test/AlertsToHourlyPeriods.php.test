@@ -307,10 +307,13 @@ final class AlertsToHourlyPeriodsTest extends Base
     }
 
     /**
-     * Edge case 1
+     * Alert diff only in seconds
      *
+     * In some rare cases, the diff between a period
+     * start and an alert end could be only seconds.
+     * We want to make sure we are _not_ capturing these.
      */
-    public function testEdgeCase1()
+    public function testAlertDiffOnlySeconds()
     {
         $alerts = [
             (object) [
@@ -335,13 +338,7 @@ final class AlertsToHourlyPeriodsTest extends Base
             ],
         ];
 
-        $expected = [
-            [
-                "periodIndex" => 0,
-                "duration" => 1,
-                "alert" => $alerts[0],
-            ],
-        ];
+        $expected = [];
 
         $actual = $this->weatherDataService->alertsToHourlyPeriods(
             $alerts,

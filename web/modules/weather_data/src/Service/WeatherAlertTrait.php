@@ -248,7 +248,7 @@ trait WeatherAlertTrait
         $alertPeriods = [];
 
         foreach ($relevantAlerts as $currentAlert) {
-            $onsetTime = self::turnToDate(
+                        $onsetTime = self::turnToDate(
                 $currentAlert->onsetRaw,
                 $currentAlert->timezone,
             );
@@ -310,18 +310,23 @@ trait WeatherAlertTrait
             }
         }
 
-        return $alertPeriods;
+        // Filter out any periods whose duration was
+        // computed to zero. This can happen when
+        // the diff between a period start and an old
+        // alert end time is only in seconds (ie zero minutes
+        // and zero days)
+        return array_filter($alertPeriods, function($alertPeriod){
+            return $alertPeriod["duration"] > 0;
+        });
     }
 
     /**
      * Compute a DateInterval in hours
      *
-     * For now, we do not take months or
-     * years into account in the diff.
      */
     private function dateDiffInHours(\DateInterval $diff)
     {
-        $days = $diff->d * 24;
+        $days = $diff->days * 24;
         return $diff->h + $days;
     }
 
@@ -408,7 +413,7 @@ trait WeatherAlertTrait
                 // Get the number of hours the alert is
                 // supposed to last
                 $alertDuration = $this->calculateAlertDuration(
-                    $alertOnset,
+                    $periodStartTime,
                     $alertEnd,
                     count($periods) - $periodIndex,
                 );
