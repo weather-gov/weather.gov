@@ -52,16 +52,12 @@ trait WeatherAlertTrait
         }
 
         $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
-        $place = $self->getPlaceNear($point->lat, $point->lon);
+        $place = $this->dataLayer->getPlaceNearPoint($point->lat, $point->lon);
         $timezone = $place->timezone;
 
-        $alerts = $self->getFromWeatherAPI(
-            "/alerts/active?status=actual&area=$place->state",
-        )->features;
+        $alerts = $this->dataLayer->getAlertsForState($play->state);
 
-        $forecastZone = $self->getFromWeatherAPI(
-            "/points/$point->lat,$point->lon",
-        );
+        $forecastZone = $this->dataLayer->getPoint($lat, $lon);
         $fireZone = $forecastZone->properties->fireWeatherZone;
         $forecastZone = $forecastZone->properties->forecastZone;
 
