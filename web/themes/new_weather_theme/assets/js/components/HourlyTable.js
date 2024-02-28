@@ -20,7 +20,6 @@ class HourlyTable extends HTMLElement {
 
   handleArrowButtonClick(event){
     const wrapper = this.querySelector(".usa-table-container--scrollable");
-    console.log(event.currentTarget.dataset.direction);
 
     if(event.currentTarget.dataset.direction === "right"){
       this.clickScrollRight(wrapper);
@@ -30,7 +29,7 @@ class HourlyTable extends HTMLElement {
   }
 
   clickScrollRight(wrapper){
-    const cellsToRight = Array.from(this.querySelectorAll("table tr:nth-child(3) td")).filter(cell => {
+    const cellsToRight = Array.from(this.querySelectorAll("table tr:last-child td")).filter(cell => {
       const diff = (cell.offsetLeft - wrapper.scrollLeft);
       return diff > 16;
     });
@@ -41,7 +40,7 @@ class HourlyTable extends HTMLElement {
   }
 
   clickScrollLeft(wrapper){
-    const cellsToLeft = Array.from(this.querySelectorAll("table tr:nth-child(3) td")).filter(cell => {
+    const cellsToLeft = Array.from(this.querySelectorAll("table tr:last-child td")).filter(cell => {
       const diff = cell.offsetLeft - wrapper.scrollLeft;
       return diff < 16;
     });
