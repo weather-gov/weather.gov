@@ -18,7 +18,7 @@
       </button>
       <div id="hourly-table-container" class="usa-table-container--scrollable">
         <table class="usa-table usa-table--borderless">
-          <tr>
+          <tr data-row-name="time">
             <th scope="row" class="position-sticky left-0">{{ "Time" | t }}</th>
             {% for period in content.hours %}
               <th scope="col">{{period.time}}</th>
@@ -27,7 +27,7 @@
           {%  if content.alertPeriods | length > 0 %}
               {% include '@new_weather_theme/partials/alerts-in-hourly-table.html.twig' with { 'periods': content.hours, 'alertPeriods': content.alertPeriods } %}
           {% endif %}
-          <tr>
+          <tr data-row-name="temp">
             <th scope="row" class="position-sticky left-0">
               {{"Temp" | t}}
             </th>
@@ -37,7 +37,7 @@
               </td>
             {% endfor %}
           </tr>
-          <tr>
+          <tr data-row-name="condition">
             <th scope="row" class="position-sticky left-0">
               {{"Condition" | t}}
             </th>
@@ -47,7 +47,7 @@
               </td>
             {% endfor %}
           </tr>
-          <tr>
+          <tr data-row-name="wind-speed">
             <th scope="row" class="position-sticky left-0">
               {{"Wind speed" | t}}
             </th>
@@ -62,7 +62,7 @@
               </td>
             {% endfor %}
           </tr>
-          <tr>
+          <tr data-row-name="humidity">
             <th scope="row" class="position-sticky left-0">
               {{"Humidity" | t}}
             </th>
@@ -72,7 +72,7 @@
               </td>
             {% endfor %}
           </tr>
-          <tr>
+          <tr data-row-name="dewpoint">
             <th scope="row" class="position-sticky left-0">
               {{"Dewpoint" | t}}
             </th>

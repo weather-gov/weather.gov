@@ -1,10 +1,10 @@
 {% set periodLength = periods | length %}
 {% for alertInfo in alertPeriods %}
-  {% set remainingCount = periodLength - alertInfo.duration %}
-  <tr data-period-length="{{periodLength}}">
+  {% set remainingCount = periodLength - alertInfo.duration - alertInfo.periodIndex %}
+  <tr data-period-length="{{periodLength}}" data-remaining={{remainingCount}} data-row-name="alert">
     <th scope="row" class="position-sticky left-0"><span class="usa-sr-only">{{ "Alert" | t }}</span></th>
-    {% if periodIndex > 0 %}      
-      {% for i in 1..periodIndex %}
+    {% if alertInfo.periodIndex > 0 %}      
+      {% for i in 1..alertInfo.periodIndex %}
         <td data-alert-span="before" data-index="{{i}}"></td>
       {% endfor %}
     {% endif %}
