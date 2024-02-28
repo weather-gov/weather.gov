@@ -1,68 +1,70 @@
 <div class="hourly-forecast-block tablet:grid-col-6 mobile-lg:grid-col-8">
+  {{ attach_library('new_weather_theme/hourly_table') }}
+  <h2>{{ "Hourly forecast" | t }}</h2>
   {% if content.error %}
-  {% set message = "There was an error loading the hourly forecast." | t %}
-  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+    {% set message = "There was an error loading the hourly forecast." | t %}
+    {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
-    <div class="usa-table-container--scrollable" tabindex="0">
-    <table class="usa-table usa-table--borderless">
-      <tr>
-        <th scope="row" style="position:sticky;left:0;">{{ "Time" | t }}</th>
-      {% for period in content.hours %}
-        <th scope="col">{{period.time}}</th>
-      {% endfor %}
-      </tr>
-      <tr>
-        <th scope="row" style="position:sticky;left:0;">
-          {{"Temp" | t}}
-        </th>
-        {% for period in content.hours %}
-          <td>
-            {{period.temperature}}
-          </td>
-        {% endfor %}
-      </tr>
-      <tr>
-        <th scope="row" style="position:sticky;left:0;">
-          {{"Condition" | t}}
-        </th>
-        {% for period in content.hours %}
-          <td>
-            {{period.conditions}}
-          </td>
-        {% endfor %}
-      </tr>
-      <tr>
-        <th scope="row" style="position:sticky;left:0;">
-          {{"Wind speed" | t}}
-        </th>
-        {% for period in content.hours %}
-          <td>
-            <span>{{period.windSpeed}}</span>
-            <span>{{period.windDirection}}</span>
-          </td>
-        {% endfor %}
-      </tr>
-      <tr>
-        <th scope="row" style="position:sticky;left:0;">
-          {{"Humidity" | t}}
-        </th>
-        {% for period in content.hours %}
-          <td>
-            {{period.humidity}}%
-          </td>
-        {% endfor %}
-      </tr>
-      <tr>
-        <th scope="row" style="position:sticky;left:0;">
-          {{"Dewpoint" | t}}
-        </th>
-        {% for period in content.hours %}
-          <td>
-            {{period.dewpoint}}
-          </td>
-        {% endfor %}
-      </tr>
-    </table>
+    <hourly-table class="display-block position-relative padding-top-3" tabindex="0">
+      <table class="usa-table usa-table--borderless">
+        <tr>
+          <th scope="row" style="position:sticky;left:0;">{{ "Time" | t }}</th>
+          {% for period in content.hours %}
+            <th scope="col">{{period.time}}</th>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="row" style="position:sticky;left:0;">
+            {{"Temp" | t}}
+          </th>
+          {% for period in content.hours %}
+            <td>
+              {{period.temperature}}
+            </td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="row" style="position:sticky;left:0;">
+            {{"Condition" | t}}
+          </th>
+          {% for period in content.hours %}
+            <td>
+              {{period.conditions}}
+            </td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="row" style="position:sticky;left:0;">
+            {{"Wind speed" | t}}
+          </th>
+          {% for period in content.hours %}
+            <td>
+              <span>{{period.windSpeed}}</span>
+              <span>{{period.windDirection}}</span>
+            </td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="row" style="position:sticky;left:0;">
+            {{"Humidity" | t}}
+          </th>
+          {% for period in content.hours %}
+            <td>
+              {{period.humidity}}%
+            </td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th scope="row" style="position:sticky;left:0;">
+            {{"Dewpoint" | t}}
+          </th>
+          {% for period in content.hours %}
+            <td>
+              {{period.dewpoint}}
+            </td>
+          {% endfor %}
+        </tr>
+      </table>
   {% endif %}
-    </div>
+    </hourly-table>
 </div>

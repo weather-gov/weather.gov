@@ -35,6 +35,11 @@ tabbed_nav:
   js:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
 
+hourly_table:
+  version: 2024-2-14
+  js:
+    assets/js/components/HourlyTable.js: { preprocess: false }
+
 digital-analytics-program:
   header: true
   version: 2024-02-14
