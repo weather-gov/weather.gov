@@ -348,13 +348,14 @@ final class AlertsToHourlyPeriodsTest extends Base
         $this->assertEquals($expected, $actual);
     }
 
-  /**
-   * Ensure that we capture alerts without ends
-   * 
-   * But that have an expires field, using that instead
-   */
-  public function testNullEndsExpiresField(){
-    $alerts = [
+    /**
+     * Ensure that we capture alerts without ends
+     *
+     * But that have an expires field, using that instead
+     */
+    public function testNullEndsExpiresField()
+    {
+        $alerts = [
             (object) [
                 "onsetRaw" => "2024-02-26T12:23:44-05:00",
                 "endsRaw" => null,
@@ -377,14 +378,15 @@ final class AlertsToHourlyPeriodsTest extends Base
         );
 
         $this->assertEquals($expected, $actual);
-  }
+    }
 
-  /**
-   * Should return empty list if both ends and expires missing
-   *
-   */
-  public function testNullEndsNullExpires(){
-     $alerts = [
+    /**
+     * Should return empty list if both ends and expires missing
+     *
+     */
+    public function testNullEndsNullExpires()
+    {
+        $alerts = [
             (object) [
                 "onsetRaw" => "2024-02-26T12:23:44-05:00",
                 "endsRaw" => null,
@@ -401,5 +403,5 @@ final class AlertsToHourlyPeriodsTest extends Base
         );
 
         $this->assertEquals($expected, $actual);
-  }
+    }
 }

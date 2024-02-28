@@ -69,7 +69,7 @@ body {
 }
 
 table tr:first-child th,
-table tr:nth-child(2) th{
+table tr:nth-child(2) th {
   border-top: none;
 }
 
@@ -85,26 +85,26 @@ svg[data-wind-direction] {
   transform-origin: center;
 }
 
-svg[data-wind-direction="N"]{
+svg[data-wind-direction="N"] {
   transform: rotate(180deg);
 }
 
-svg[data-wind-direction="NE"]{
+svg[data-wind-direction="NE"] {
   transform: rotate(225deg);
 }
 
-svg[data-wind-direction="E"]{
+svg[data-wind-direction="E"] {
   transform: rotate(270deg);
 }
 
-svg[data-wind-direction="SE"]{
+svg[data-wind-direction="SE"] {
   transform: rotate(315deg);
 }
 
-svg[data-wind-direction="SW"]{
+svg[data-wind-direction="SW"] {
   transform: rotate(45deg);
 }
 
-svg[data-wind-direction="W"]{
+svg[data-wind-direction="W"] {
   transform: rotate(90deg);
 }

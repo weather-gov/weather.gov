@@ -7,14 +7,15 @@ describe("Hourly forecast table tests", () => {
     });
 
     it("Should have 2 alert rows", () => {
-      cy.get(`hourly-table tr[data-row-name="alert"]`)
-        .should("have.length", 2);
+      cy.get(`hourly-table tr[data-row-name="alert"]`).should("have.length", 2);
     });
 
     it("There is a Red Flag alert of the correct displayed duration", () => {
       // We expect there to be a red-flag alert that spans two hours
       // and that contains the correct event label
-      cy.get(`hourly-table tr[data-row-name="alert"]:nth-child(2) td[colspan]:nth-child(2)`)
+      cy.get(
+        `hourly-table tr[data-row-name="alert"]:nth-child(2) td[colspan]:nth-child(2)`,
+      )
         .as("redFlag")
         .contains("Red Flag Warning")
         .invoke("attr", "colspan")

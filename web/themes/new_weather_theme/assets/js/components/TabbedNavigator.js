@@ -154,7 +154,7 @@ class TabbedNavigator extends HTMLElement {
     const currentElement = event.target;
     const isFirst = currentElement.matches(":first-child");
     const isLast = currentElement.matches(":last-child");
-    if (event.key ==="ArrowRight") {
+    if (event.key === "ArrowRight") {
       if (isLast) {
         event.target.parentElement
           .querySelector(".tab-button:first-child")
@@ -163,7 +163,7 @@ class TabbedNavigator extends HTMLElement {
         currentElement.nextElementSibling.focus();
       }
       event.preventDefault();
-    } else if (event.key ==="ArrowLeft") {
+    } else if (event.key === "ArrowLeft") {
       if (isFirst) {
         event.target.parentElement
           .querySelector(".tab-button:last-child")
@@ -172,12 +172,12 @@ class TabbedNavigator extends HTMLElement {
         currentElement.previousElementSibling.focus();
       }
       event.preventDefault();
-    } else if (event.key ==="Home") {
+    } else if (event.key === "Home") {
       event.target.parentElement
         .querySelector(".tab-button:first-child")
         .focus();
       event.preventDefault();
-    } else if (event.key ==="End") {
+    } else if (event.key === "End") {
       event.target.parentElement
         .querySelector(".tab-button:last-child")
         .focus();
