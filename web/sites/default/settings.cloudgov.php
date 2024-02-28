@@ -83,6 +83,10 @@ foreach ($cf_service_data as $service_list) {
 
 $application_environment = $cf_application_data["space_name"];
 switch ($application_environment) {
+    case "design":
+        $config["samlauth.authentication"]["sp_entity_id"] =
+            "https://weathergov-design.app.cloud.gov";
+        break;
     case "greg":
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-greg.app.cloud.gov";

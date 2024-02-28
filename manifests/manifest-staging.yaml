@@ -17,7 +17,7 @@ default_config: &defaults
 applications:
 - name: weathergov-staging
   <<: *defaults
-  memory: 512M
+  memory: 256M
   instances: 1
   random-route: false
 # - name: cronish

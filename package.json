@@ -25,19 +25,19 @@
   },
   "devDependencies": {
     "axe-core": "^4.8.4",
-    "cypress": "^13.6.4",
+    "cypress": "^13.6.6",
     "cypress-axe": "^1.5.0",
     "cypress-plugin-tab": "^1.0.5",
     "dayjs": "^1.11.10",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^24.0.0",
     "prettier": "^3.2.5",
-    "stylelint": "^15.11.0",
-    "stylelint-config-standard-scss": "^11.1.0",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard-scss": "^13.0.0",
     "xml-parse": "^0.4.0"
   },
   "scripts": {

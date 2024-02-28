@@ -83,7 +83,8 @@ generate_string "$ROOT_USER_PASS"
 ROOT_USER_PASS=${ROOT_USER_PASS:-$NEW_STRING}
 ROOT_USER_NAME=${ROOT_USER_NAME:-root}
 
-echo "Grabbing cert from beta..."
+# Note: SAML will not actually work until the new domain is added to the cert, but setting up everything else regardless...
+echo "Grabbing SAML cert from beta..."
 cf target -o nws-weathergov -s prod
 SP_PUBLIC_KEY=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.SP_PUBLIC_KEY')
 SP_PRIVATE_KEY=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.SP_PRIVATE_KEY')
@@ -91,11 +92,11 @@ IDP_PUBLIC_KEY=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICAT
 NEWRELIC_LICENSE=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.NEWRELIC_LICENSE')
 cf target -o nws-weathergov -s $1
 
-jq -n --arg cron_key "$CRON_KEY" --arg hash_salt "$HASH_SALT" --arg root_user_name "$ROOT_USER_NAME" --arg root_user_pass "$ROOT_USER_PASS" --arg sp_public_key "$SP_PUBLIC_KEY" --arg sp_private_key "$SP_PRIVATE_KEY" --arg idp_public_key "$IDP_PUBLIC_KEY" '{"CRON_KEY":$cron_key,"HASH_SALT":$hash_salt,"SP_PUBLIC_KEY":$sp_public_key,"SP_PRIVATE_KEY":$sp_private_key,"IDP_PUBLIC_KEY":$idp_public_key,"ROOT_USER_PASS":$root_user_pass,"ROOT_USER_NAME":$root_user_name}' > credentials-$1.json
+jq -n --arg cron_key "$CRON_KEY" --arg hash_salt "$HASH_SALT" --arg root_user_name "$ROOT_USER_NAME" --arg root_user_pass "$ROOT_USER_PASS" --arg sp_public_key "$SP_PUBLIC_KEY" --arg sp_private_key "$SP_PRIVATE_KEY" --arg idp_public_key "$IDP_PUBLIC_KEY" --arg newrelic_license "$NEWRELIC_LICENSE" '{"CRON_KEY":$cron_key,"HASH_SALT":$hash_salt,"SP_PUBLIC_KEY":$sp_public_key,"SP_PRIVATE_KEY":$sp_private_key,"IDP_PUBLIC_KEY":$idp_public_key,"ROOT_USER_PASS":$root_user_pass,"ROOT_USER_NAME":$root_user_name,"NEWRELIC_LICENSE":$newrelic_license}' > credentials-$1.json
 cf cups secrets -p credentials-$1.json
 
 echo "Database create succeeded and credentials created. Deploying the weather.gov application to the new space $1..."
-cf push -f manifests/manifest-$1.yaml -var newrelic-license="$NEWRELIC_LICENSE"
+cf push -f manifests/manifest-$1.yaml --var newrelic-license="$NEWRELIC_LICENSE"
 
 echo "Creating credentials to talk to storage in $1..."
 cf create-service-key storage storagekey
@@ -113,6 +114,12 @@ cf set-space-role $REPLY nws-weathergov $1 SpaceDeveloper
 echo "Running post-deploy script in $1..."
 cf run-task weathergov-$1 --command "./scripts/post-deploy.sh" --name "weathergov-$1-deploy" -k "2G" -m "256M"
 
+echo "Doing initial content import in $1..."
+cf run-task weathergov-$1 --command "./scripts/import-content.sh" --name "weathergov-$1-content-import" -k "2G" -m "256M"
+
+echo "Running spatial scripts in $1..." 
+./scripts/load-spatial-data.sh $1
+
 echo "Alright, your app is up and running at https://weathergov-$1.app.cloud.gov!"
 echo
 echo "Moving on to setup Github automation..."
@@ -121,6 +128,25 @@ echo "Adding new environment to Github Actions..."
 sed -i '' '/        options:/ {a\
           - '"$1"'
 }' .github/workflows/deploy-sandbox.yaml
+
+cat >> .github/workflows/new-relic-deployment.yaml << EOF
+
+  newrelic-$1:
+    if: \${{ inputs.environment == '$1' }}
+    runs-on: ubuntu-latest
+    name: New Relic Record Deployment
+    steps:
+      - name: Set Release Version from Tag
+        run: echo "RELEASE_VERSION=\${{ github.ref_name }}" >> \$GITHUB_ENV
+
+      - name: Add New Relic Application Deployment Marker
+        uses: newrelic/deployment-marker-action@v2.5.0
+        with:
+          apiKey: \${{ secrets.NEW_RELIC_API_KEY }}
+          guid: \${{ secrets.NEW_RELIC_${upcase_name}_DEPLOYMENT_ENTITY_GUID }}
+          version: "\${{ env.RELEASE_VERSION }}"
+          user: "\${{ github.actor }}"
+EOF
 
 echo "Creating space deployer for Github deploys..."
 cf create-service cloud-gov-service-account space-deployer github-cd-account
@@ -138,6 +164,9 @@ while read -r username password; do
     gh secret --repo weather-gov/weather.gov set CF_${upcase_name}_USERNAME --body $username
     gh secret --repo weather-gov/weather.gov set CF_${upcase_name}_PASSWORD --body $password
 done
+
+read -p "Please provide the GUID for the $1 application from New Relic: " -r
+gh secret --repo weather-gov/weather.gov set NEW_RELIC_${upcase_name}_DEPLOYMENT_ENTITY_GUID --body $REPLY
 
 read -p "All done! Should we open a PR with these changes? (y/n) " -n 1 -r
 echo

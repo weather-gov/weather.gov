@@ -39,11 +39,14 @@
 
       <div class="margin-right-05">
         <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind</span>
+        {% if content.wind.speed != null %}
         {{ "@windSpeed mph @windDirection" | t({
           "@windSpeed": content.wind.speed,
           "@windDirection": content.wind.shortDirection
         })
         }}
+        {{ "Wind: N/A" | t() }}
+        {% endif %}
       </div>
     </div>
   </div>
@@ -95,7 +98,7 @@
       t({
         "@humidity": content.humidity
       })
-      }}{% if content.wind.speed > 0 %}
+      }}{% if content.wind.speed != null %}
         {{
         "with @windSpeed mph winds from the @windDirection"
         |
@@ -103,7 +106,7 @@
           "@windSpeed": content.wind.speed,
           "@windDirection": content.wind.direction
         })
-        }}{% endif %}.
+        }}{% else %}{{ ". Wind information is unavailable" | t() }}{% endif %}.
   </div>
   {% endif %}
 </div>

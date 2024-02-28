@@ -47,6 +47,13 @@ const processDates = (obj) => {
       } else {
         obj[key] = now.format();
       }
+
+      const [, duration] = value.split(" / ");
+      if (duration) {
+        obj[key] = `${obj[key]}/${duration}`;
+
+        console.log(`modified time for ${key}: ${obj[key]}`);
+      }
     }
   });
 };

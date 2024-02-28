@@ -637,7 +637,10 @@ class WeatherDataService
             ],
             "wind" => [
                 // Kph to mph.
-                "speed" => (int) round($obs->windSpeed->value * 0.6213712),
+                "speed" =>
+                    $obs->windSpeed->value == null
+                        ? null
+                        : (int) round($obs->windSpeed->value * 0.6213712),
                 "angle" => $obs->windDirection->value,
                 "direction" => $directions[$directionIndex],
                 "shortDirection" => $shortDirections[$directionIndex],
@@ -655,6 +658,58 @@ class WeatherDataService
                 ),
             ],
         ];
+    }
+
+    public function getHourlyPrecipitation(
+        $wfo,
+        $gridX,
+        $gridY,
+        $now = false,
+        $self = false,
+    ) {
+        date_default_timezone_set("America/New_York");
+
+        if (!$self) {
+            $self = $this;
+        }
+
+        $wfo = strtoupper($wfo);
+        if (!($now instanceof \DateTimeImmutable)) {
+            $now = new \DateTimeImmutable();
+        }
+
+        $place = $self->getPlaceFromGrid($wfo, $gridX, $gridY);
+        $timezone = $place->timezone;
+
+        $forecast = $self->getFromWeatherAPI("/gridpoints/$wfo/$gridX,$gridY")
+            ->properties;
+
+        $periods = [];
+
+        foreach ($forecast->quantitativePrecipitation->values as $quantPrecip) {
+            $valid = $quantPrecip->validTime;
+            $value = $quantPrecip->value;
+            $value = $this->millimetersToInches($value);
+
+            $valid = explode("/", $valid);
+            $start = \DateTimeImmutable::createFromFormat(
+                \DateTimeInterface::ISO8601_EXPANDED,
+                $valid[0],
+            )->setTimeZone(new \DateTimeZone($timezone));
+
+            $duration = new \DateInterval($valid[1]);
+            $end = $start->add($duration);
+
+            if ($end >= $now) {
+                $periods[] = (object) [
+                    "start" => $start->format("g A"),
+                    "end" => $end->format("g A"),
+                    "value" => round($value, 1),
+                ];
+            }
+        }
+
+        return $periods;
     }
 
     /**

@@ -24,4 +24,26 @@ describe("the location page", () => {
       "Small Craft Advisory",
     );
   });
+
+  it("does include alerts based on fire zone", () => {
+    cy.visit("/point/34.749/-92.275");
+    cy.get("weathergov-alert-list > div").should(
+      "include.text",
+      "Red Flag Warning",
+    );
+  });
+
+  describe("shows n/a for unavailable data", () => {
+    it("wind is null", () => {
+      cy.visit("/point/33.211/-87.566");
+      cy.get(".weather-gov-current-conditions .item").should(
+        "include.text",
+        "Wind: N/A",
+      );
+      cy.get("[data-wx-current-conditions-narrative]").should(
+        "include.text",
+        "Wind information is unavailable.",
+      );
+    });
+  });
 });
