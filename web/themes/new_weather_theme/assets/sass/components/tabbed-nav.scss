@@ -17,6 +17,7 @@ tabbed-nav {
 
     &[data-selected] {
       @include u-text("bold");
+
       color: color("accent-warm-dark");
       border-bottom: 2px solid color("accent-warm-dark");
       margin-bottom: -2px;
