@@ -56,8 +56,11 @@ trait WeatherAlertTrait
             "/alerts/active?status=actual&area=$place->state",
         )->features;
 
-        $zone = $self->getFromWeatherAPI("/points/$point->lat,$point->lon");
-        $zone = $zone->properties->forecastZone;
+        $forecastZone = $self->getFromWeatherAPI(
+            "/points/$point->lat,$point->lon",
+        );
+        $fireZone = $forecastZone->properties->fireWeatherZone;
+        $forecastZone = $forecastZone->properties->forecastZone;
 
         $geometry = array_map(function ($point) {
             return $point->lon . " " . $point->lat;
@@ -67,7 +70,8 @@ trait WeatherAlertTrait
         $alerts = array_filter($alerts, function ($alert) use (
             $place,
             $geometry,
-            $zone,
+            $forecastZone,
+            $fireZone,
         ) {
             if (AlertPriority::isMarineAlert($alert->properties->event)) {
                 return false;
@@ -98,7 +102,17 @@ trait WeatherAlertTrait
             // If there's no geometry, then we first need to check if there
             // are zones.
             if (sizeof($alert->properties->affectedZones) > 0) {
-                return in_array($zone, $alert->properties->affectedZones);
+                $inForecastZone = in_array(
+                    $forecastZone,
+                    $alert->properties->affectedZones,
+                );
+
+                $inFireZone = in_array(
+                    $fireZone,
+                    $alert->properties->affectedZones,
+                );
+
+                return $inForecastZone || $inFireZone;
             }
 
             // If there are no zones, check if there are counties.

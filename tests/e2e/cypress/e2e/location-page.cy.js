@@ -25,6 +25,14 @@ describe("the location page", () => {
     );
   });
 
+  it("does include alerts based on fire zone", () => {
+    cy.visit("/point/34.749/-92.275");
+    cy.get("weathergov-alert-list > div").should(
+      "include.text",
+      "Red Flag Warning",
+    );
+  });
+
   describe("shows n/a for unavailable data", () => {
     it("wind is null", () => {
       cy.visit("/point/33.211/-87.566");
@@ -37,5 +45,4 @@ describe("the location page", () => {
         "Wind information is unavailable.",
       );
     });
-  });
 });

@@ -15,7 +15,7 @@ default_config: &defaults
     - secrets
 
 applications:
-- name: weathergov-eric
+- name: weathergov-design
   <<: *defaults
   memory: 256M
   instances: 1
