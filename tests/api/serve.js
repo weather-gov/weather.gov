@@ -20,6 +20,12 @@ const exists = async (file) => {
 };
 
 const processDates = (obj) => {
+  // If the input is null, just bail out. Otherwise we'll accidentally turn it
+  // into an object.
+  if (obj === null) {
+    return;
+  }
+
   const now = dayjs();
 
   // Recursively search through the object to find all values that have the
@@ -28,12 +34,12 @@ const processDates = (obj) => {
     // For arrays and objects, recurse into them
     if (Array.isArray(value)) {
       value.forEach(processDates);
-    } else if (typeof value === "object") {
+    } else if (typeof value === "object" && value !== null) {
       processDates(value);
     }
     // But if the value has a startsWith function and it starts with the token,
     // we've got a thing that needs parsing.
-    else if (value.startsWith?.("date:now")) {
+    else if (value?.startsWith?.("date:now")) {
       // Splitting on date:now results in ['', <modifiers>]. Trim it and split
       // on spaces to get the offset and unit.
       const [amount, unit] = value.split("date:now")[1].trim().split(" ");
@@ -51,8 +57,6 @@ const processDates = (obj) => {
       const [, duration] = value.split(" / ");
       if (duration) {
         obj[key] = `${obj[key]}/${duration}`;
-
-        console.log(`modified time for ${key}: ${obj[key]}`);
       }
     }
   });

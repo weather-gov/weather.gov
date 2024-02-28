@@ -1,6 +1,63 @@
+import dayjs from "dayjs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { format } from "prettier";
+
+const getRelativeTimestamp = (str) => {
+  const now = dayjs();
+
+  const [timestamp, duration] = str.split("/");
+  const time = dayjs(timestamp);
+  if (time.isValid()) {
+    const relativeStr = ["date:now"];
+
+    const secondsDiff = time.diff(now, "seconds");
+    relativeStr.push(`${secondsDiff >= 0 ? "+" : ""}${secondsDiff} seconds`);
+
+    if (duration) {
+      relativeStr.push(`/ ${duration}`);
+    }
+
+    return relativeStr.join(" ");
+  }
+
+  return str;
+};
+
+const replaceTimestamps = (obj) => {
+  const replaced = JSON.parse(JSON.stringify(obj ?? {}));
+  if (typeof replaced !== "object") {
+    return obj;
+  }
+
+  const timeProperties = new Set([
+    "effective",
+    "ends",
+    "endTime",
+    "expires",
+    "onset",
+    "sent",
+    "startTime",
+    "timestamp",
+    "generatedAt",
+    "updated",
+    "updateTime",
+    "validTime",
+    "validTimes",
+  ]);
+
+  Object.entries(replaced).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      replaced[key] = value.map((v) => replaceTimestamps(v));
+    } else if (typeof value === "object" && value !== null) {
+      replaced[key] = replaceTimestamps(value);
+    } else if (timeProperties.has(key)) {
+      replaced[key] = getRelativeTimestamp(value);
+    }
+  });
+
+  return replaced;
+};
 
 export default async (request, response, output) => {
   const requestID = request.headers["wx-gov-response-id"];
@@ -31,7 +88,10 @@ export default async (request, response, output) => {
     // Make the directory structure if necessary, then write out the
     // formatted JSON.
     await fs.mkdir(path.dirname(filePath), { recursive: true });
-    const json = await format(output, { parser: "json" });
+
+    const fixedUp = replaceTimestamps(JSON.parse(output));
+
+    const json = await format(JSON.stringify(fixedUp), { parser: "json" });
     await fs.writeFile(filePath, json, {
       encoding: "utf-8",
     });
