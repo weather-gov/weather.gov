@@ -7,6 +7,12 @@ namespace Drupal\weather_data\Service;
  */
 trait UnitConversionTrait
 {
+    public function millimetersToInches($mm)
+    {
+        // 1 mm = 0.03937008 inches
+        return $mm * 0.03937008;
+    }
+
     /**
      * Get a temperature scalar from a wmoUnit temperature object.
      */
