@@ -12,21 +12,21 @@ in the form $setting: value,
 //    $setting: value
 //  );
 
-/*---------------------------------------
+/* ---------------------------------------
 The following colors are brand colors taken from the NWS and NOAA logos
 and styleguides. The NWS color names are unoffical.
-----------------------------------------*/
+---------------------------------------- */
 $noaa-water-blue: #0085CA;
 $noaa-sky-blue: #003087;
 $nws-indigo: #0000A4;
 $nws-light-blue: #33B0E1;
-$nws-red: #FF0000;
+$nws-red: #F00;
 
 
 @use "uswds-core" with (
-  /*----------------------------------------
+  /* ----------------------------------------
    Typography settings
-  ----------------------------------------*/
+  ---------------------------------------- */
   $theme-font-path: "../fonts",
   $theme-font-browser-compatibility: true,
   $theme-typeface-tokens: (
@@ -113,9 +113,9 @@ $nws-red: #FF0000;
   $theme-type-scale-xl: 11,
   $theme-type-scale-2xl: 12,
 
-  /*----------------------------------------
+  /* ----------------------------------------
   COLOR SETTINGS
-  ----------------------------------------*/
+  ---------------------------------------- */
   $theme-color-primary-lightest: "blue-5",
   $theme-color-primary-lighter: "blue-20",
   $theme-color-primary-light: "blue-30",
@@ -161,16 +161,16 @@ $nws-red: #FF0000;
   $theme-link-hover-color: "primary-darker",
   $theme-link-active-color: "primary-darkest",
 
-  /*----------------------------------------
+  /* ----------------------------------------
   UTILITIES SETTINGS
-  ----------------------------------------*/
+  ---------------------------------------- */
   $theme-utility-breakpoints: (
     "tablet-lg": true, // 880px
   ),
 
-  /*----------------------------------------
+  /* ----------------------------------------
   META SETTINGS
-  ----------------------------------------*/
+  ---------------------------------------- */
   $theme-show-compile-warnings: true,
   $theme-show-notifications: false,
 
