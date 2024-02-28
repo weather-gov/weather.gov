@@ -45,17 +45,11 @@ trait WeatherAlertTrait
         $x = $grid->x;
         $y = $grid->y;
 
-        $CACHE_KEY = "alerts $wfo/$x/$y";
-        $cache = $this->cache->get($CACHE_KEY);
-        if ($cache) {
-            return $cache->data;
-        }
-
         $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
         $place = $this->dataLayer->getPlaceNearPoint($point->lat, $point->lon);
         $timezone = $place->timezone;
 
-        $alerts = $this->dataLayer->getAlertsForState($play->state);
+        $alerts = $this->dataLayer->getAlertsForState($place->state);
 
         $forecastZone = $this->dataLayer->getPoint($lat, $lon);
         $fireZone = $forecastZone->properties->fireWeatherZone;
@@ -191,8 +185,6 @@ trait WeatherAlertTrait
                 $alert->expires = $alert->expires->format("l, m/d, g:i A T");
             }
         }
-
-        $this->cache->set($CACHE_KEY, $alerts, time() + 30);
 
         $this->stashedAlerts = $alerts;
 
