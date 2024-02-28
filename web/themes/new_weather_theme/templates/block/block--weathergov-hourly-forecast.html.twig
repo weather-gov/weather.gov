@@ -5,19 +5,21 @@
     {% set message = "There was an error loading the hourly forecast." | t %}
     {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
-    <hourly-table class="display-block position-relative border-top" tabindex="0">
-      <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 left-2 display-flex flex-align-center flex-justify-center" data-direction="left" type="button" role="button">
-        <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
+    <hourly-table class="display-block position-relative border-top">
+        <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 left-2 display-flex flex-align-center flex-justify-center" data-direction="left" type="button" role="button">
+            <span class="usa-sr-only">{{ "scroll left" | t }}</span>
+            <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
           <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#arrow_back"></use>
         </svg>
       </button>
       <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 right-2 display-flex flex-align-center flex-justify-center" data-direction="right" type="button" role="button">
-        <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
+          <span class="usa-sr-only">{{ "scroll right" | t }}</span>
+          <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
           <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#arrow_forward"></use>
         </svg>
       </button>
       <div id="hourly-table-container" class="usa-table-container--scrollable">
-        <table class="usa-table usa-table--borderless">
+        <table class="usa-table usa-table--borderless" tabindex="0">
           <tr data-row-name="time">
             <th scope="row" class="position-sticky left-0">{{ "Time" | t }}</th>
             {% for period in content.hours %}
