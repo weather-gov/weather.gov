@@ -23,7 +23,11 @@
           <tr data-row-name="time">
             <th scope="row" class="position-sticky left-0">{{ "Time" | t }}</th>
             {% for period in content.hours %}
-              <th scope="col">{{period.time}}</th>
+            <th scope="col">
+              <time datetime="{{period.timestamp}}">
+                {{ period.time }}
+              </time>
+              </th>
             {% endfor %}
           </tr>
           {%  if content.alertPeriods | length > 0 %}
