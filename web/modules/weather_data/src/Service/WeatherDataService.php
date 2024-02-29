@@ -85,12 +85,16 @@ class WeatherDataService
     private $database;
 
     /**
-
      * A cached version of any fetched alerts
      */
     private $stashedAlerts;
 
   /**
+     * NewRelic API handler
+     */
+    private $newRelic;
+
+    /**
      * Geometry of a WFO grid cell (stashed per request)
      *
      * @var stashedGridGeometry
@@ -107,12 +111,14 @@ class WeatherDataService
         RequestStack $r,
         CacheBackendInterface $cache,
         Connection $database,
+        NewRelicMetrics $newRelic,
     ) {
         $this->client = $httpClient;
         $this->t = $t;
         $this->request = $r->getCurrentRequest();
         $this->cache = $cache;
         $this->database = $database;
+        $this->newRelic = $newRelic;
 
         $this->defaultIcon = "nodata.svg";
         $this->defaultConditions = "No data";
@@ -609,9 +615,23 @@ class WeatherDataService
      */
     public function logObservationDistanceInfo($obsDistanceInfo)
     {
-        $logger = $this->getLogger("Weather.gov data service");
-        $serialized = json_encode($obsDistanceInfo);
-        $logger->info("[OBSERVATION]  " . $serialized);
+        $promise = $this->newRelic->sendMetric(
+            "wx.observation",
+            $obsDistanceInfo["distance"],
+            [
+                "withinGridCell" => $obsDistanceInfo["withinGridCell"],
+                "stationIndex" => $obsDistanceInfo["stationIndex"],
+                "obsStation" => $obsDistanceInfo["obsStation"],
+                "distance" => $obsDistanceInfo["distance"],
+            ],
+        );
+
+        try {
+            $promise->wait();
+        } catch (Exception $e) {
+            $logger = $this->getLogger("NEWRELIC");
+            $logger->error($e->getMessage());
+        }
     }
 
     /**
