@@ -4,9 +4,7 @@
   <tr data-row-name="alert">
     <th scope="row" class="position-sticky left-0"><span class="usa-sr-only">{{ "Alert" | t }}</span></th>
     {% if alertInfo.periodIndex > 0 %}      
-      {% for i in 1..alertInfo.periodIndex %}
-        <td></td>
-      {% endfor %}
+      <td colspan="{{ alertInfo.periodIndex }}"></td>
     {% endif %}
     <td colspan="{{alertInfo.duration}}" style="background-color:yellow;">
       {{alertInfo.alert.event}}
