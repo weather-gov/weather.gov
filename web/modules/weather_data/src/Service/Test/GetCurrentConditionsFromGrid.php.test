@@ -214,7 +214,12 @@ final class GetCurrentConditionsFromGridTest extends Base
             ->expects($this->once())
             ->method("getObsDistanceInfo")
             ->will(
-                $this->returnCallback(function ($geo, $obs, $idx) {
+                $this->returnCallback(function (
+                    $refPoint,
+                    $obs,
+                    $wfoGeom,
+                    $idx,
+                ) {
                     $this->assertEquals(1, $idx);
                 }),
             );

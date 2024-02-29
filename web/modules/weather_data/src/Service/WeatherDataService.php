@@ -89,7 +89,7 @@ class WeatherDataService
      */
     private $stashedAlerts;
 
-  /**
+    /**
      * NewRelic API handler
      */
     private $newRelic;
@@ -107,7 +107,6 @@ class WeatherDataService
      * @var stashedPoint
      */
     public $stashedPoint;
-
 
     /**
      * Constructor.
