@@ -51,7 +51,10 @@ final class GetObsDistanceInfoTest extends Base
         ];
 
         $expectedQuery =
-            "SELECT ST_DISTANCE_SPHERE(ST_GEOMFROMTEXT('POINT(2 2)'), ST_GEOMFROMTEXT('POINT(5 5)')) as distance, ST_WITHIN(ST_GEOMFROMTEXT('POINT(2 2)'), ST_GEOMFROMTEXT('POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))')) as within;";
+            "SELECT ST_DISTANCE_SPHERE(ST_GEOMFROMTEXT('POINT(2 2)'), " .
+            "ST_GEOMFROMTEXT('POINT(5 5)')) as distance, ST_W" .
+            "ITHIN(ST_GEOMFROMTEXT('POINT(2 2)'), ST_GEOMFRO" .
+            "MTEXT('POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))')) as within;";
 
         $this->databaseMock
             ->method("query")
@@ -130,7 +133,10 @@ final class GetObsDistanceInfoTest extends Base
         ];
 
         $expectedQuery =
-            "SELECT ST_DISTANCE_SPHERE(ST_GEOMFROMTEXT('POINT(2 2)'), ST_GEOMFROMTEXT('POINT(0 0)')) as distance, ST_WITHIN(ST_GEOMFROMTEXT('POINT(2 2)'), ST_GEOMFROMTEXT('POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))')) as within;";
+            "SELECT ST_DISTANCE_SPHERE(ST_GEOMFROMTEXT('POINT(2 2)')" .
+            ", ST_GEOMFROMTEXT('POINT(0 0)')) as distance, " .
+            "ST_WITHIN(ST_GEOMFROMTEXT('POINT(2 2)'), ST_G" .
+            "EOMFROMTEXT('POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))')) as within;";
 
         $this->databaseMock
             ->method("query")
