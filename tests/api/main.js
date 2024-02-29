@@ -33,8 +33,11 @@ const ui = async ({ error = false } = {}) => {
           await fs.readFile(path.join("./data", config.play, "points", p)),
         );
         const name = target["@bundle"]?.name ?? p;
-
-        const link = `http://localhost:8080/point/${path.basename(p, ".json").split(",").join("/")}`;
+        let hostName = "http://localhost:8080"
+        if (process.env.CLOUDGOV_PROXY) {
+          hostName = "https://weathergov-design.app.cloud.gov"
+        };
+        const link = `${hostName}/point/${path.basename(p, ".json").split(",").join("/")}`;
 
         return { name, link };
       }),
@@ -74,7 +77,7 @@ const ui = async ({ error = false } = {}) => {
     `<ul><li>${bundles.map((p) => `<a href="/play/${p}">${p}</a>`).join("</li><li>")}</li></ul>`,
   );
 
-  if (!config.bundling) {
+  if (!config.bundling && !process.env.CLOUDGOV_PROXY) {
     lines.push(`<a href="/bundle">record bundles</a>`);
   }
 
@@ -83,6 +86,7 @@ const ui = async ({ error = false } = {}) => {
 };
 
 app.get("*", async (req, res) => {
+  res.setHeader("Content-Type", "text/html");
   if (req.path === "/") {
     res.write(await ui());
     res.end();
@@ -113,7 +117,7 @@ app.get("*", async (req, res) => {
     return;
   }
 
-  if (/^\/bundle\/?$/.test(req.path)) {
+  if (/^\/bundle\/?$/.test(req.path) && !process.env.CLOUDGOV_PROXY) {
     config.play = false;
     config.bundling = true;
     // res.write("The next sequence of requests will be recorded and bundled");

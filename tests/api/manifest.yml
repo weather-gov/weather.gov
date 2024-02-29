@@ -1,0 +1,11 @@
+---
+applications:
+- name: weathergov-api-proxy
+  # routes:
+  # - route: weathergov-api-proxy.apps.internal
+  buildpacks:
+    - nodejs_buildpack
+  memory: 256M
+  stack: cflinuxfs4
+  env:
+    CLOUDGOV_PROXY: true
