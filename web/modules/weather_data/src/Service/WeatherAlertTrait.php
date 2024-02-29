@@ -228,17 +228,20 @@ trait WeatherAlertTrait
         );
         $lastPeriodEndTime = $lastPeriodEndTime->modify("+ 1 hour");
 
-        // Initially weed out any alerts that to not fall
-        // within the overall period range
+        // Filter out alerts that begin after the end of our
+        // hourly forecast period
         $relevantAlerts = array_filter($alerts, function ($alert) use (
             &$periods,
             &$lastPeriodEndTime,
+            &$firstPeriodStartTime,
         ) {
             $onsetDateTime = self::turnToDate(
                 $alert->onsetRaw,
                 $alert->timezone,
             );
-            return $onsetDateTime < $lastPeriodEndTime;
+            $endsDateTime = $this->getEndTimeForAlert($alert);
+            return $onsetDateTime < $lastPeriodEndTime &&
+                $endsDateTime > $firstPeriodStartTime;
         });
 
         // We will  respond with a list of alerts from the
@@ -400,11 +403,6 @@ trait WeatherAlertTrait
 
             $onsetIsWithinPeriod = $this->dateTimeIsWithin(
                 $alertOnset,
-                $periodStartTime,
-                $periodEndTime,
-            );
-            $endIsWithinPeriod = $this->dateTimeIsWithin(
-                $alertEnd,
                 $periodStartTime,
                 $periodEndTime,
             );
