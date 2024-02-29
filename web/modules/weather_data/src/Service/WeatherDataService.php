@@ -85,9 +85,18 @@ class WeatherDataService
     private $database;
 
     /**
+
      * A cached version of any fetched alerts
      */
     private $stashedAlerts;
+
+  /**
+     * Geometry of a WFO grid cell (stashed per request)
+     *
+     * @var stashedGridGeometry
+     */
+    private $stashedGridGeometry;
+
 
     /**
      * Constructor.
@@ -107,6 +116,8 @@ class WeatherDataService
 
         $this->defaultIcon = "nodata.svg";
         $this->defaultConditions = "No data";
+
+        $this->stashedGridGeometry = null;
 
         $this->legacyMapping = json_decode(
             file_get_contents(__DIR__ . "/legacyMapping.json"),
@@ -333,17 +344,17 @@ class WeatherDataService
     public function getApiObservationKey($observation)
     {
         /* The icon path from the API is of the form:
-       https://api.weather.gov/icons/land/day/skc
-       - OR -
-       https://api.weather.gov/icons/land/day/skc/hurricane
+           https://api.weather.gov/icons/land/day/skc
+           - OR -
+           https://api.weather.gov/icons/land/day/skc/hurricane
 
-       The last two or three path segments are the ones we need
-       to identify the current conditions. This is because there can be
-       two simultaneous conditions in the legacy icon system.
+           The last two or three path segments are the ones we need
+           to identify the current conditions. This is because there can be
+           two simultaneous conditions in the legacy icon system.
 
-       For now, we use the _first_ condition given in the path as the canonical
-       condition for the key.
-     */
+           For now, we use the _first_ condition given in the path as the canonical
+           condition for the key.
+         */
         $icon = $observation->icon;
 
         if ($icon == null or strlen($icon) == 0) {
@@ -381,6 +392,7 @@ class WeatherDataService
         try {
             $lat = round($lat, 4);
             $lon = round($lon, 4);
+
             $locationMetadata = $this->getFromWeatherAPI("/points/$lat,$lon");
 
             $wfo = strtoupper($locationMetadata->properties->gridId);
@@ -520,18 +532,65 @@ class WeatherDataService
     }
 
     /**
-     * Compute the distance between a source point and an obs station
+     * Compute and get distance information about observation
      *
-     * Returns the distance in meters
+     * Returns an assoc array with information about the distance
+     * of a given observation station to a specified reference
+     * geometry.
+     *
+     * For now the reference geometry is the polygon of
+     * a WFO cell.
+     *
      */
-    public function logObservationDistance($sourcePoint, $obs, $index = 0)
+    public function getObsDistanceInfo($sourceGeometry, $obs, $index = 0)
     {
-        $logger = $this->getLogger("Weather.gov data service");
-        $serialized = [
-            "sourcePoint" => [
-                "lon" => $sourcePoint[0],
-                "lat" => $sourcePoint[1],
-            ],
+        // We need to find the closest point in the sourceGeometry
+        // to the observation point
+        $distance = INF;
+        $closest = null;
+        foreach ($sourceGeometry as $sourcePoint) {
+            $lonDiff = $obs->geometry->coordinates[0] - $sourcePoint->lon;
+            $latDiff = $obs->geometry->coordinates[1] - $sourcePoint->lat;
+            $hyp = hypot($lonDiff, $latDiff);
+            if ($hyp < $distance) {
+                $distance = $hyp;
+                $closest = $sourcePoint;
+            }
+        }
+
+        $obsText =
+            "POINT(" .
+            $obs->geometry->coordinates[0] .
+            " " .
+            $obs->geometry->coordinates[1] .
+            ")";
+        $sourcePointText = "POINT(" . $closest->lon . " " . $closest->lat . ")";
+
+        $sourceGeomPoints = array_map(function ($point) {
+            return $point->lon . " " . $point->lat;
+        }, $sourceGeometry);
+        $sourceGeomPoints = implode(", ", $sourceGeomPoints);
+        $sourceGeomText = "POLYGON((" . $sourceGeomPoints . "))";
+
+        $sql =
+            "SELECT ST_DISTANCE_SPHERE(" .
+            "ST_GEOMFROMTEXT('" .
+            $obsText .
+            "'), " .
+            "ST_GEOMFROMTEXT('" .
+            $sourcePointText .
+            "')) as distance, " .
+            "ST_WITHIN(ST_GEOMFROMTEXT('" .
+            $obsText .
+            "'), " .
+            "ST_GEOMFROMTEXT('" .
+            $sourceGeomText .
+            "')) as within;";
+
+        $result = $this->database->query($sql)->fetch();
+        $distanceInfo = [
+            "distance" => (float) $result->distance,
+            "withinGridCell" => !!(int) $result->within,
             "obsPoint" => [
                 "lon" => $obs->geometry->coordinates[0],
                 "lat" => $obs->geometry->coordinates[1],
@@ -540,28 +599,19 @@ class WeatherDataService
             "stationIndex" => $index,
         ];
 
-        $sourceText =
-            'POINT("' . $sourcePoint[0] . " " . $sourcePoint[1] . '")';
-        $obsText =
-            'POINT("' .
-            $obs->geometry->coordinates[0] .
-            " " .
-            $obs->geometry->coordinates[1] .
-            '")';
+        return $distanceInfo;
+    }
 
-        $sql =
-            'SELECT ST_DISTANCE_SPHERE(GeomFromText("' .
-            $sourceText .
-            '"), GeomFromText("' .
-            $obsText .
-            '"))';
-
-        $result = $this->database->query($sql)->fetch();
-
-        $serialized["distance"] = $result;
-        $serialized = json_encode($serialized);
-
-        logger->notice("[OBSERVATION][" . $index . "]" . $serialized);
+    /**
+     * Logs a serialized version of an obsDistanceInfo array
+     *
+     * (See getObsDistanceInfo() for how this array is produced)
+     */
+    public function logObservationDistanceInfo($obsDistanceInfo)
+    {
+        $logger = $this->getLogger("Weather.gov data service");
+        $serialized = json_encode($obsDistanceInfo);
+        $logger->info("[OBSERVATION]  " . $serialized);
     }
 
     /**
@@ -574,7 +624,14 @@ class WeatherDataService
     {
         $wfo = strtoupper($wfo);
         $gridpoint = $this->getFromWeatherAPI("/gridpoints/$wfo/$x,$y");
-        $geometry = $gridpoint->geometry->coordinates[0];
+        if ($this->stashedGridGeometry) {
+            $geometry = $this->stashedGridGeometry;
+            $logger = $this->getLogger("Weather.gov data service");
+            $logger->notice("Used stashed geometry: " . json_encode($geometry));
+        } else {
+            $geometry = $gridpoint->geometry->coordinates[0];
+            $this->stashedGridGeometry = $geometry;
+        }
 
         return array_map(function ($geo) {
             return (object) [
@@ -608,17 +665,31 @@ class WeatherDataService
         );
         $obsStations = $obsStations->features;
 
+        $gridGeometry = $this->getGeometryFromGrid($wfo, $gridX, $gridY);
+
         $obsStationIndex = 0;
         $observationStation = $obsStations[$obsStationIndex];
+        $obsDistanceInfoList = [];
         do {
             // If the temperature is not available from this observation station, try
             // the next one. Continue through the first 3 stations and then give up.
             $observationStation = $obsStations[$obsStationIndex];
-            $obs = $this->getFromWeatherAPI(
+            $obsData = $this->getFromWeatherAPI(
                 "/stations/" .
                     $observationStation->properties->stationIdentifier .
                     "/observations?limit=1",
-            )->features[0]->properties;
+            )->features[0];
+            $obs = $obsData->properties;
+
+            // Log observation information, including
+            // distance from the WFO
+            $distanceInfo = $this->getObsDistanceInfo(
+                $gridGeometry,
+                $obsData,
+                $obsStationIndex,
+            );
+            $obsDistanceInfoList[] = $distanceInfo;
+
             $obsStationIndex += 1;
         } while (
             !$this->isValidObservation($obs) &&
@@ -670,6 +741,13 @@ class WeatherDataService
             45,
         );
 
+        // Log all observation distance information
+        // arrays. There will be one for each time
+        // the obs station lookup cycled
+        foreach ($obsDistanceInfoList as $distInfo) {
+            $this->logObservationDistanceInfo($distInfo);
+        }
+
         return [
             "conditions" => [
                 "long" => $this->t->translate($description),
@@ -707,6 +785,7 @@ class WeatherDataService
                     1,
                 ),
             ],
+            "distanceInfo" => $obsDistanceInfoList,
         ];
     }
 
