@@ -19,7 +19,7 @@ const exists = async (file) => {
   }
 };
 
-const processDates = (obj) => {
+const processDates = (obj, usingHourly = false) => {
   // If the input is null, just bail out. Otherwise we'll accidentally turn it
   // into an object.
   if (obj === null) {
@@ -33,10 +33,11 @@ const processDates = (obj) => {
   Object.entries(obj ?? {}).forEach(([key, value]) => {
     // For arrays and objects, recurse into them
     if (Array.isArray(value)) {
-      value.forEach(processDates);
+      value.forEach((item) => processDates(item, usingHourly));
     } else if (typeof value === "object" && value !== null) {
-      processDates(value);
+      processDates(value, usingHourly);
     }
+    //
     // But if the value has a startsWith function and it starts with the token,
     // we've got a thing that needs parsing.
     else if (value?.startsWith?.("date:now")) {
@@ -48,11 +49,19 @@ const processDates = (obj) => {
       // but PHP fails to parse ISO 8601 strings with milliseconds. :sigh:
       // Thankfully the regular .format() function returns an ISO 8601 string
       // but without milliseconds.
+      let updatedTime = now;
       if (amount && unit) {
-        obj[key] = now.add(Number.parseInt(amount, 10), unit).format();
-      } else {
-        obj[key] = now.format();
+        updatedTime = now.add(Number.parseInt(amount, 10), unit);
       }
+
+      // If we are parsing hourly forcast data, and the key is either the
+      // start or end time, then align the output to the start of the given
+      // hour.
+      if (usingHourly && ["startTime", "endTime"].includes(key)) {
+        updatedTime = updatedTime.startOf("hour");
+      }
+
+      obj[key] = updatedTime.format();
 
       // If there's a duration component, smoosh it on to the end of our
       // generated timestamp so it'll match the ISO8601 time+duration format.
@@ -81,9 +90,10 @@ export default async (request, response) => {
     console.log(`LOCAL:    local file does not exist; proxying [${filePath}]`);
     await proxy(request, response);
   } else {
+    const isHourlyForecast = filePath.toString().includes("hourly");
     console.log(`LOCAL:    serving local file: ${filePath}`);
     const output = JSON.parse(await fs.readFile(filePath));
-    processDates(output);
+    processDates(output, isHourlyForecast);
 
     response.writeHead(200, {
       server: "weather.gov dev proxy",
