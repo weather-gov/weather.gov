@@ -58,7 +58,6 @@ body {
 /* AlertDetails Overrides 
 -------------------------------------- */
 weathergov-alerts {
-
  .usa-prose h3 {
    font-weight: normal;
    margin-top: units(3);
@@ -69,7 +68,7 @@ weathergov-alerts {
  }
 
  .usa-prose>ul {
-   //align bullet with the text
+   // align bullet with the text
    padding-left: 2ch;
  }
 }
@@ -85,6 +84,17 @@ weathergov-alerts {
     color: color("primary-darker");
   }
 }
+
+/* Column utility 
+------------------------------------- */
+ .wx-col-2 {
+  column-count: 2;
+  column-gap: units(4);
+
+  li {
+    break-inside: avoid-column;
+  }
+ }
 
 /* Current Conditions
 ------------------------------------- */
@@ -141,14 +151,4 @@ svg[data-wind-direction="W"] {
 }
 
 
-/* Column utility 
-------------------------------------- */
- .wx-col-2 {
-  column-count: 2;
-  column-gap: units(4);
-
-  li {
-    break-inside: avoid-column;
-  }
- }
 
