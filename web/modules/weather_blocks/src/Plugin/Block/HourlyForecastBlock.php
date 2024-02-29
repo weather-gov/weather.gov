@@ -3,6 +3,7 @@
 namespace Drupal\weather_blocks\Plugin\Block;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 
 /**
  * Provides a block of the hourly (short term) weather conditions.
@@ -15,6 +16,8 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class HourlyForecastBlock extends WeatherBlockBase
 {
+    use LoggerChannelTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -67,8 +70,22 @@ class HourlyForecastBlock extends WeatherBlockBase
                 );
                 $data = array_slice($data, 0, $max);
 
-                return ["hours" => $data];
+                // Also retrieve any alerts that overlap with
+                // the given hourly periods
+                $alerts = $this->weatherData->getAlerts(
+                    $location->grid,
+                    $location->point,
+                );
+
+                $alertPeriods = $this->weatherData->alertsToHourlyPeriods(
+                    $alerts,
+                    $data,
+                );
+
+                return ["hours" => $data, "alertPeriods" => $alertPeriods];
             } catch (\Throwable $e) {
+                $logger = $this->getLogger("HOURLYFORECAST");
+                $logger->error($e->getMessage());
                 return ["error" => true];
             }
         }

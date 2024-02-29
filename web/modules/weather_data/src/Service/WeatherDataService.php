@@ -85,6 +85,11 @@ class WeatherDataService
     private $database;
 
     /**
+     * A cached version of any fetched alerts
+     */
+    private $stashedAlerts;
+
+    /**
      * Constructor.
      */
     public function __construct(
@@ -103,11 +108,11 @@ class WeatherDataService
         $this->defaultIcon = "nodata.svg";
         $this->defaultConditions = "No data";
 
-        $this->currentConditions = false;
-
         $this->legacyMapping = json_decode(
             file_get_contents(__DIR__ . "/legacyMapping.json"),
         );
+
+        $this->stashedAlerts = null;
 
         // For a given request, assign it a response ID. We'll send this in the
         // headers to the API. If we've already gotten an ID for this response,
@@ -768,9 +773,8 @@ class WeatherDataService
             $timestamp = \DateTimeImmutable::createFromFormat(
                 \DateTimeInterface::ISO8601_EXPANDED,
                 $period->startTime,
-            )
-                ->setTimeZone(new \DateTimeZone($timezone))
-                ->format("g A");
+            )->setTimeZone(new \DateTimeZone($timezone));
+            $timeString = $timestamp->format("g A");
 
             $obsKey = $this->getApiObservationKey($period);
 
@@ -782,9 +786,13 @@ class WeatherDataService
                 "iconBasename" => $this->getIconFileBasename($obsKey),
                 "probabilityOfPrecipitation" =>
                     $period->probabilityOfPrecipitation->value,
-                "time" => $timestamp,
-                "timestamp" => $period->startTime,
+                "time" => $timeString,
+                "timestamp" => $timestamp->format("c"),
                 "temperature" => $period->temperature,
+                "relativeHumidity" => $period->relativeHumidity->value,
+                "windSpeed" => $period->windSpeed,
+                "windDirection" => $period->windDirection,
+                "dewpoint" => $this->getTemperatureScalar($period->dewpoint),
             ];
         }, $forecast);
 

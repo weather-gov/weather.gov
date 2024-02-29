@@ -1,0 +1,407 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+final class AlertsToHourlyPeriodsTest extends Base
+{
+    public static $periods = [
+        [
+            "timestamp" => "2024-02-26T11:00:00-05:00",
+            "endTime" => "2024-02-26T12:00:00-05:00",
+        ],
+        [
+            "timestamp" => "2024-02-26T12:00:00-05:00",
+            "endTime" => "2024-02-26T13:00:00-05:00",
+        ],
+        [
+            "timestamp" => "2024-02-26T13:00:00-05:00",
+            "endTime" => "2024-02-26T14:00:00-05:00",
+        ],
+        [
+            "timestamp" => "2024-02-26T14:00:00-05:00",
+            "endTime" => "2024-02-26T15:00:00-05:00",
+        ],
+        [
+            "timestamp" => "2024-02-26T15:00:00-05:00",
+            "endTime" => "2024-02-26T16:00:00-05:00",
+        ],
+    ];
+
+    /**
+     * Test that 3 alerts that start and end
+     * at actual period times are correctly
+     * aligned
+     */
+    public function testPerfectlyAligned()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T11:00:00-05:00",
+                "endsRaw" => "2024-02-26T13:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+            (object) [
+                "onsetRaw" => "2024-02-26T14:00:00-05:00",
+                "endsRaw" => "2024-02-26T15:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+            (object) [
+                "onsetRaw" => "2024-02-26T15:00:00-05:00",
+                "endsRaw" => "2024-02-26T16:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 0,
+                "duration" => 2,
+                "alert" => $alerts[0],
+            ],
+            [
+                "periodIndex" => 3,
+                "duration" => 1,
+                "alert" => $alerts[1],
+            ],
+            [
+                "periodIndex" => 4,
+                "duration" => 1,
+                "alert" => $alerts[2],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals(3, count($actual));
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test overlapping alert periods
+     *
+     * In this case, two alerts overlap
+     * partially over a given set of periods.
+     */
+    public function testOverlapping()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T12:00:00-05:00",
+                "endsRaw" => "2024-02-26T15:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+            (object) [
+                "onsetRaw" => "2024-02-26T13:00:00-05:00",
+                "endsRaw" => "2024-02-26T16:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 1,
+                "duration" => 3,
+                "alert" => $alerts[0],
+            ],
+            [
+                "periodIndex" => 2,
+                "duration" => 3,
+                "alert" => $alerts[1],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Alert spans more than the whole period range
+     *
+     * Test that a given alert that starts before the period
+     * range and after the end of the period range is still
+     * captured
+     */
+    public function testEnclosingAlertRange()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-25T12:00:00-05:00",
+                "endsRaw" => "2024-02-27T12:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 0,
+                "duration" => count(self::$periods),
+                "alert" => $alerts[0],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Alert is out of range (before)
+     *
+     * Ensure we _do not_ capture an alert
+     * that begins and ends before the beginning
+     * of our period range
+     */
+    public function testEarlierAlertRange()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-25T12:00:00-05:00",
+                "endsRaw" => "2024-02-25T13:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Alert is out of range (after)
+     *
+     * Ensure we _do not_ capture an alert
+     * that begins and ends before the beginning
+     * of our period range
+     */
+    public function testLaterAlertRange()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-28T12:00:00-05:00",
+                "endsRaw" => "2024-02-29T13:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Alert begins earlier but ends within
+     *
+     * Ensure we capture an alert that begins
+     * before the period range but ends within it
+     */
+    public function testEarlierStartWithinEnd()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-25T12:00:00-05:00",
+                "endsRaw" => "2024-02-26T14:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 0,
+                "duration" => 3,
+                "alert" => $alerts[0],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Alert begins within but ends after
+     *
+     * Ensure that we capture an alert that
+     * begins within the period range but ends
+     * after the period range
+     */
+    public function testWithinStartLaterEnd()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T13:00:00-05:00",
+                "endsRaw" => "2024-02-27T14:00:00-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 2,
+                "duration" => 3,
+                "alert" => $alerts[0],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Alert of partial hour coverage
+     *
+     * Ensure that we are capturing alerts that
+     * do not fall perfectly on period hours, either
+     * at the start or at the end
+     */
+    public function testPeriodNonHourAlignment()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T12:23:44-05:00",
+                "endsRaw" => "2024-02-26T13:23:44-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 1,
+                "duration" => 1,
+                "alert" => $alerts[0],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Alert diff only in seconds
+     *
+     * In some rare cases, the diff between a period
+     * start and an alert end could be only seconds.
+     * We want to make sure we are _not_ capturing these.
+     */
+    public function testAlertDiffOnlySeconds()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-27T20:44:03-05:00",
+                "endsRaw" => "2024-02-27T22:44:03-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $periods = [
+            [
+                "timestamp" => "2024-02-27T21:44:19-05:00",
+                "endTime" => "2024-02-27T22:44:19-05:00",
+            ],
+            [
+                "timestamp" => "2024-02-27T22:44:19-05:00",
+                "endTime" => "2024-02-27T23:44:19-05:00",
+            ],
+            [
+                "timestamp" => "2024-02-27T23:44:19-05:00",
+                "endTime" => "2024-02-28T00:44:19-05:00",
+            ],
+        ];
+
+        $expected = [];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            $periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Ensure that we capture alerts without ends
+     *
+     * But that have an expires field, using that instead
+     */
+    public function testNullEndsExpiresField()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T12:23:44-05:00",
+                "endsRaw" => null,
+                "expiresRaw" => "2024-02-26T13:23:44-05:00",
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [
+            [
+                "periodIndex" => 1,
+                "duration" => 1,
+                "alert" => $alerts[0],
+            ],
+        ];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Should return empty list if both ends and expires missing
+     *
+     */
+    public function testNullEndsNullExpires()
+    {
+        $alerts = [
+            (object) [
+                "onsetRaw" => "2024-02-26T12:23:44-05:00",
+                "endsRaw" => null,
+                "expiresRaw" => null,
+                "timezone" => "America/New_York",
+            ],
+        ];
+
+        $expected = [];
+
+        $actual = $this->weatherDataService->alertsToHourlyPeriods(
+            $alerts,
+            self::$periods,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+}

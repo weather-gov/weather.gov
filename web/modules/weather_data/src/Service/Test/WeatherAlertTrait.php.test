@@ -134,6 +134,67 @@ final class WeatherAlertTraitTest extends Base
         // County-based, does impact us, marine hazard.
         $alertCountyMineMarine = (object) [
             "geometry" => null,
+            "properties" => (object) [],
+        ];
+
+        // Fire-zone based
+        $alertFireZoneMine = (object) [
+            "geometry" => null,
+            "properties" => (object) [
+                "event" => "ashfall advisory",
+                "affectedZones" => ["FIRE ZONE"],
+                "description" => "There was a fire somewhere",
+                "instruction" => "Wear a mask",
+                "areaDesc" => "Ashy",
+                "onset" => "2024-01-08T13:48:00-06:00",
+                "ends" => "2024-01-10T13:48:00-06:00",
+                "expires" => "2024-01-09T13:48:00-06:00",
+            ],
+        ];
+
+        // County-based, does not impact us.
+        $alertCountyNotMine = (object) [
+            "geometry" => null,
+            "properties" => (object) [
+                "event" => "high surf advisory",
+                "geocode" => (object) [
+                    "SAME" => [
+                        "1957", // Little Rock Nine integrate Central High School
+                        "1960", // Woolworth's lunch counter sit-in
+                    ],
+                ],
+                "affectedZones" => [],
+            ],
+        ];
+
+        // County-based DOES impact us. Land hazard.
+        $alertCountyMineLand = (object) [
+            "geometry" => null,
+            "properties" => (object) [
+                "event" => "hydrologic advisory",
+                "description" => "The weather was hopeful",
+                "instruction" => "Do the right thing",
+                "areaDesc" => "Here, there, and everywhere",
+                "onset" => "2024-01-08T13:48:00-06:00",
+                "ends" => "2024-01-10T13:48:00-06:00",
+                "expires" => "2024-01-09T13:48:00-06:00",
+                "geocode" => (object) [
+                    "SAME" => [
+                        "1954",
+                        "1961", // Freedom Riders take a
+                        // Greyhound bus from Washington DC
+                        // to Jackson, MS, testing a court
+                        // decision that barred segregation
+                        // on interstate transportation.
+                    ],
+                ],
+                "affectedZones" => [],
+            ],
+        ];
+
+        // County-based, does impact us, marine hazard.
+        $alertCountyMineMarine = (object) [
+            "geometry" => null,
             "properties" => (object) [
                 "event" => "storm watch",
                 "description" => "* Choppy waters...There are waves everywhere",
@@ -281,7 +342,11 @@ final class WeatherAlertTraitTest extends Base
         $expectedZone->onset = "Monday, 01/08, 2:48 PM EST";
         $expectedZone->ends = "Wednesday, 01/10, 2:48 PM EST";
         $expectedZone->expires = "Tuesday, 01/09, 2:48 PM EST";
+        $expectedZone->onsetRaw = "2024-01-08T13:48:00-06:00";
+        $expectedZone->endsRaw = "2024-01-10T13:48:00-06:00";
+        $expectedZone->expiresRaw = "2024-01-09T13:48:00-06:00";
         $expectedZone->geometry = [];
+        $expectedZone->timezone = "America/New_York";
 
         $expectedFireZone = clone $alertFireZoneMine->properties;
         $expectedFireZone->areaDesc = ["Ashy"];
@@ -291,7 +356,11 @@ final class WeatherAlertTraitTest extends Base
         $expectedFireZone->onset = "Monday, 01/08, 2:48 PM EST";
         $expectedFireZone->ends = "Wednesday, 01/10, 2:48 PM EST";
         $expectedFireZone->expires = "Tuesday, 01/09, 2:48 PM EST";
+        $expectedFireZone->onsetRaw = "2024-01-08T13:48:00-06:00";
+        $expectedFireZone->endsRaw = "2024-01-10T13:48:00-06:00";
+        $expectedFireZone->expiresRaw = "2024-01-09T13:48:00-06:00";
         $expectedFireZone->geometry = [];
+        $expectedFireZone->timezone = "America/New_York";
 
         $expectedCounty = clone $alertCountyMineLand->properties;
         $expectedCounty->areaDesc = ["Here, there, and everywhere"];
@@ -301,7 +370,11 @@ final class WeatherAlertTraitTest extends Base
         $expectedCounty->onset = "Monday, 01/08, 2:48 PM EST";
         $expectedCounty->ends = "Wednesday, 01/10, 2:48 PM EST";
         $expectedCounty->expires = "Tuesday, 01/09, 2:48 PM EST";
+        $expectedCounty->onsetRaw = "2024-01-08T13:48:00-06:00";
+        $expectedCounty->endsRaw = "2024-01-10T13:48:00-06:00";
+        $expectedCounty->expiresRaw = "2024-01-09T13:48:00-06:00";
         $expectedCounty->geometry = [];
+        $expectedCounty->timezone = "America/New_York";
 
         $expectedPolygon = clone $alertGeometrMine->properties;
         $expectedPolygon->description = [
@@ -318,6 +391,9 @@ final class WeatherAlertTraitTest extends Base
         $expectedPolygon->onset = "Monday, 01/08, 2:48 PM EST";
         $expectedPolygon->ends = false;
         $expectedPolygon->expires = false;
+        $expectedPolygon->onsetRaw = "2024-01-08T13:48:00-06:00";
+        $expectedPolygon->endsRaw = null;
+        $expectedPolygon->expiresRaw = null;
         $expectedPolygon->instruction = false;
         $expectedPolygon->geometry = [
             [20, 20],
@@ -326,6 +402,7 @@ final class WeatherAlertTraitTest extends Base
             [20, 30],
             [20, 20],
         ];
+        $expectedPolygon->timezone = "America/New_York";
 
         // The polygon one is a higher-priority event (severe thunderstorm
         // watch) than the zone one (red flag warning), than the county one
