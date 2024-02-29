@@ -38,7 +38,7 @@ describe("the location page", () => {
       cy.visit("/point/33.211/-87.566");
       cy.get(".weather-gov-current-conditions .item").should(
         "include.text",
-        "Wind: N/A",
+        "Wind N/A",
       );
       cy.get("[data-wx-current-conditions-narrative]").should(
         "include.text",

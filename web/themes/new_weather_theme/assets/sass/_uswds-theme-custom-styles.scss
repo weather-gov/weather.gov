@@ -54,11 +54,24 @@ body {
   overflow-x: clip;
 }
 
+/* AlertList Overrides 
+--------------------------------------
+*/
+.usa-alert__body a {
+  color: color("primary-dark");
+
+  &:focus,
+  &:hover {
+    color: color("primary-darker");
+  }
+}
+
 /* Current Conditions
 -------------------------------------
 */
 .current-conditions-temp {
-  font-size: 56px;
+  // Custom size not in typecale
+  font-size: units(5) + units(0.5); 
 }
 
 /* Hourly Forecast Block Overrides
