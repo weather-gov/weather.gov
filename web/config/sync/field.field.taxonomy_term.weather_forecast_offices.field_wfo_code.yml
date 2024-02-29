@@ -11,7 +11,7 @@ entity_type: taxonomy_term
 bundle: weather_forecast_offices
 label: Code
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
