@@ -22,7 +22,7 @@ jobs:
         run: |
           set +e
           git diff --exit-code origin/main web/themes/new_weather_theme/new_weather_theme.libraries.yml > /dev/null
-          if [ "$?" -ne 0 ]
+          if [ "$?" -eq 0 ]
           then
             gh pr comment ${{ github.event.number }} -b "This PR modifies theme Javascript or CSS assets but does not update the theme libraries file. Did you mean to update the appropriate version information in the libraries file?"
           fi
