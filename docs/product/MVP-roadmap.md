@@ -48,7 +48,7 @@ As we build, we will inevitably uncover functionality we couldn’t foresee and 
 - **🟢 Ready:** As a member of the public or a partner (external user), weather.gov MVP must answer the most common questions for a hazard or common weather.
 - **🟡 WIP:** As an NWS forecaster, ITO, comms lead (internal user), weather.gov MVP must support the ability to create, update, and manage this information consistently and easily. 
 - **🟡 WIP:** As an admin or ITO, I can manage weather.gov to maintain consistency, availability, and compliance standards
-- **🟠 Research targeted for Q2:** As a partner or ROC, weather.gov MVP should support an end-to-end experience covering a geographic area larger than a single location, e.g. county and state-wide views.
+- **🟡 WIP:** As a partner or ROC, weather.gov MVP should support an end-to-end experience covering a geographic area larger than a single location, e.g. county and state-wide views.
 - **🟠 Research targeted for Q3:** As a member of the public or a partner, I would like proactive notifications.
 
 | ID | Story |
@@ -98,6 +98,8 @@ As we build, we will inevitably uncover functionality we couldn’t foresee and 
 | **R.1** | **As a member of the public or a partner, I want to be proactively notified of important weather and directed to relevant information** |
 
 ^ notes that it was added on 10/25/24
+
+Our milestones for MVP can be viewed in [our repo's milestones](weather-gov/weather.gov/milestones?direction=asc&sort=due_date&state=open) and laid out over a timeline in [our project board](weather-gov/projects/2/views/18).
 
 ## Next - Expand core user experience and support unique needs
 
