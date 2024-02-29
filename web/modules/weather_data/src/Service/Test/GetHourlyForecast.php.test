@@ -132,6 +132,7 @@ final class GetHourlyForecastTest extends Base
                     "value" => 12,
                 ],
                 "dewpoint" => [
+                    "unitCode" => "wmoUnit:degC",
                     "value" => -9.4444444444444446,
                 ],
                 "icon" => "",
@@ -149,6 +150,7 @@ final class GetHourlyForecastTest extends Base
                     "value" => 12,
                 ],
                 "dewpoint" => [
+                    "unitCode" => "wmoUnit:degC",
                     "value" => -9.4444444444444446,
                 ],
                 "icon" => null,
@@ -217,6 +219,7 @@ final class GetHourlyForecastTest extends Base
                     "value" => 12,
                 ],
                 "dewpoint" => [
+                    "unitCode" => "wmoUnit:degC",
                     "value" => -9.4444444444444446,
                 ],
                 "icon" => "https://blah/day/rain,30?size=small",
@@ -234,6 +237,7 @@ final class GetHourlyForecastTest extends Base
                     "value" => 12,
                 ],
                 "dewpoint" => [
+                    "unitCode" => "wmoUnit:degC",
                     "value" => -9.4444444444444446,
                 ],
                 "icon" => "https://blah/night/rain,30?size=medium",
@@ -251,6 +255,7 @@ final class GetHourlyForecastTest extends Base
                     "value" => 12,
                 ],
                 "dewpoint" => [
+                    "unitCode" => "wmoUnit:degC",
                     "value" => -9.4444444444444446,
                 ],
                 "icon" => "https://blah/day/snow,40?size=huge",

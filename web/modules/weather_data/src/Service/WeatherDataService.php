@@ -792,9 +792,7 @@ class WeatherDataService
                 "relativeHumidity" => $period->relativeHumidity->value,
                 "windSpeed" => $period->windSpeed,
                 "windDirection" => $period->windDirection,
-                "dewpoint" => $this->getTemperatureScalar(
-                  $period->dewpoint
-                )
+                "dewpoint" => $this->getTemperatureScalar($period->dewpoint),
             ];
         }, $forecast);
 
