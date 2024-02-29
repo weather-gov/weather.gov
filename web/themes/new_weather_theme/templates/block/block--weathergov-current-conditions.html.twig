@@ -1,44 +1,78 @@
 {{ attach_library("new_weather_theme/localize-timestamps") }}
 
 {# Widgets and stuff. This is presented as a row of columns. #}
-<div class="weather-gov-current-conditions">
-  <h2>{{ "Current Conditions" | t }}</h2>
+<div class="weather-gov-current-conditions grid-row grid-gap">
   {% if content.error %}
   {% set message = "There was an error loading the current conditions." | t %}
   {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
 
   {# We hide from screenreaders and use the weather narrative (below) instead #}
-  <div data-wx-current-conditions-narrative aria-hidden="true">
-    <p class="usa-prose margin-0 font-body-xs text-gray-50">
-      {{ 'Weather as of' | t }}
-    </p>
-    {# Datetimes are localized in client-side Javascript. #}
-    <time class="display-block text-bold" datetime="{{ content.timestamp.utc }}" data-wx-local-time>
-      {{ content.timestamp.formatted }}
-    </time>
-  </div>
-
-  {# We hide from screenreaders and use the weather narrative (below) instead #}
-  <div class="display-flex flex-align-start margin-y-205" aria-hidden="true">
+  <div class="grid-col-12 tablet:grid-col-6" aria-hidden="true">
     {# First row is temperature #}
-    <div class="display-flex flex-column">
-      <div class="current-conditions-temp display-flex flex-row flex-align-start margin-right-6">
+    <div class="display-flex">
+      <div class="current-conditions-temp display-flex flex-row flex-align-start margin-right-2 text-primary-darker">
         {{ content.temperature }}
-        <span class="font-body-lg display-inline-block left-full margin-top-05">℉</span>
+        <span class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">℉</span>
       </div>
       <div class="margin-top-05 position-relative">
-        <span class="font-body-xs text-gray-50">{{ "Feels like" | t }}</span>
-        <span>{{ content.feels_like }}</span>
-        <span class="font-body-3xs position-absolute margin-top">℉</span>
+        <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
+        <div class="text-primary-darker">
+          <p class="margin-top-2px font-body-md">{{ content.feels_like }}
+            <span class="font-body-3xs position-absolute margin-top text-primary-darkerP">℉</span>
+          </p>
+        </div>
       </div>
     </div>
 
-    <div class="display-flex flex-column flex-align-center">
-      <div class="icon">
+    <div class="display-flex margin-bottom-2">
+      <div class="icon margin-right-105 maxw-5 maxh-5">
         {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon )}}
       </div>
-      <span class="font-body-xs text-center">{{ content.conditions.short }}</span>
+      <p class="font-body-md margin-top-2px">{{ content.conditions.short }}</p>
+    </div>
+    <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05 border-top-1px border-base-light padding-top-1" aria-hidden="true">
+      <div class="margin-right-4">
+        <p class="margin-y-0">
+          <span class="font-mono-xs font-family-mono text-uppercase text-base">Humidity </span>
+          {{ "@humidity%" | t({ "@humidity": content.humidity }) }}
+        </p>
+      </div>
+
+      <div class="margin-right-05">
+        <p class="margin-y-0">
+          {%- if content.wind.speed != null -%}
+            {% set windString = "@windSpeed mph @windDirection" | t({
+                "@windSpeed": content.wind.speed,
+                "@windDirection": content.wind.shortDirection
+              }) 
+            %}
+          {%- else -%}
+            {%- set windString = "N/A" | t() -%}
+          {%- endif -%}
+          <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>{{- windString -}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="grid-col-12 tablet:grid-col-6">
+    <div class="margin-top-3 tablet:margin-top-0 border-top-1px border-base-light padding-top-1">
+      <span class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-1 display-block">{{ "Observation station" | t }}</span>
+      <span class="display-block margin-y-1 display-block">
+        {{ content.stationInfo.name }} ({{ content.stationInfo.identifier }})
+      </span>
+      <a class="usa-link" href="#">Learn more about observation stations</a>
+    </div>
+
+    {# We hide from screenreaders and use the weather narrative (below) instead #}
+    <div data-wx-current-conditions-narrative aria-hidden="true">
+      <p class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-0">
+        {{ 'Last updated' | t }}
+      </p>
+      {# Datetimes are localized in client-side Javascript. #}
+      <time class="display-block font-family-mono font-mono-xs text-bold" datetime="{{ content.timestamp.utc }}" data-wx-local-time>
+        {{ content.timestamp.formatted }}
+      </time>
     </div>
   </div>
 
@@ -79,31 +113,5 @@
         })
         }}{% else %}{{ ". Wind information is unavailable" | t() }}{% endif %}.
   </div>
-
-  <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05" aria-hidden="true">
-    <div class="margin-right-05">{{ source(directory ~ "/assets/images/weather/icons/humidity.svg") }}</div>
-    {{ "Humidity: @humidity%" | t({ "@humidity": content.humidity }) }}
-  </div>
-
-  <div class="item display-flex flex-row flex-align-center margin-right-05" aria-hidden="true">
-    <div class="margin-right-05">{{ source(directory ~ "/assets/images/weather/icons/wind.svg") }}</div>
-    {% if content.wind.speed != null %}
-    {{ "Wind: @windSpeed mph @windDirection" | t({
-      "@windSpeed": content.wind.speed,
-      "@windDirection": content.wind.shortDirection
-    })
-    }}
-    {% else %}
-    {{ "Wind: N/A" | t() }}
-    {% endif %}
-  </div>
-
-  <div class="margin-top-3">
-    <span class="text-gray-50 margin-bottom-105 display-block">{{ "Observation station" | t }}:</span>
-    <span class="text-bold display-block margin-y-105 display-block">
-      {{ content.stationInfo.name }} ({{ content.stationInfo.identifier }})
-    </span>
-    <a href="#">Learn more about observation stations</a>
-  </div>
-{% endif %}
+  {% endif %}
 </div>

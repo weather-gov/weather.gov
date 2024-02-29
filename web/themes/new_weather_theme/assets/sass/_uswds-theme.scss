@@ -12,15 +12,34 @@ in the form $setting: value,
 //    $setting: value
 //  );
 
+/* ---------------------------------------
+The following colors are brand colors taken from the NWS and NOAA logos
+and styleguides. The NWS color names are unoffical.
+---------------------------------------- */
+$noaa-water-blue: #0085CA;
+$noaa-sky-blue: #003087;
+$nws-indigo: #0000A4;
+$nws-light-blue: #33B0E1;
+$nws-red: #F00;
+
+
 @use "uswds-core" with (
+  /* ----------------------------------------
+   Typography settings
+  ---------------------------------------- */
   $theme-font-path: "../fonts",
   $theme-font-browser-compatibility: true,
   $theme-typeface-tokens: (
     "Nunito Sans": (
       "display-name": "Nunito Sans",
-      "cap-height": 364px,
-      // the default, leave it for now
+      // Cap-height is the px size of a capital "N" at size 500 in Figma
+      "cap-height": 353px,
       "stack": "'Open Sans', 'Helvetica Neue', sans-serif",
+    ),
+    "DM Mono": (
+      "display-name": "DM Mono",
+      "cap-height": 350px,
+      "stack": "'Roboto Mono Web', 'Courier New', monospace, serif",
     ),
   ),
   $theme-font-sans-custom-src: (
@@ -51,19 +70,112 @@ in the form $setting: value,
       900: false,
     ),
   ),
+
+  $theme-font-mono-custom-src: (
+    dir: "DM_Mono",
+    // the name of your font family directory
+    roman: (
+      100: false,
+      200: false,
+      300: "DMMono-Light",
+      400: false,
+      500: "DMMono-Regular",
+      600: "DMMono-Medium",
+      700: false,
+      800: false,
+      900: false,
+    ),
+    italic: (
+      100: false,
+      200: false,
+      300: "DMMono-LightItalic",
+      400: false,
+      500: "DMMono-RegularItalic",
+      600: "DMMono-MediumItalic",
+      700: false,
+      800: false,
+      900: false,
+    ),
+  ),
   $theme-font-type-sans: "Nunito Sans",
+  $theme-font-type-mono: "DM Mono",
+
   $theme-font-role-heading: "sans",
   $theme-font-role-body: "sans",
   $theme-font-role-code: "mono",
-  $theme-image-path: "../images/uswds",
-  $theme-color-primary: #003087,
-  // sky blue
-  $theme-color-primary-light: #0085ca,
-  // water blue
-  $theme-color-base-dark: #333333,
-  // dark gray
+
+  $theme-type-scale-3xs: 1,
+  $theme-type-scale-2xs: 2,
+  $theme-type-scale-xs: 3,
+  $theme-type-scale-sm: 5,
+  $theme-type-scale-md: 7,
+  $theme-type-scale-lg: 9,
+  $theme-type-scale-xl: 11,
+  $theme-type-scale-2xl: 12,
+
+  /* ----------------------------------------
+  COLOR SETTINGS
+  ---------------------------------------- */
+  $theme-color-primary-lightest: "blue-5",
+  $theme-color-primary-lighter: "blue-20",
+  $theme-color-primary-light: "blue-30",
+  $theme-color-primary: $noaa-water-blue,
+  $theme-color-primary-dark: "blue-60v",
+  $theme-color-primary-darker: "blue-70v",
+  $theme-color-primary-darkest: "blue-80v",
+
+  $theme-color-secondary-lightest: "indigo-5v",
+  $theme-color-secondary-lighter: "indigo-20v",
+  $theme-color-secondary-light: "indigo-30v",
+  $theme-color-secondary: "indigo-50v",
+  $theme-color-secondary-dark: "indigo-60v",
+  $theme-color-secondary-darker: $nws-indigo,
+  $theme-color-secondary-darkest: $noaa-sky-blue,
+
+  $theme-color-accent-cool-lightest: "blue-cool-5v",
+  $theme-color-accent-cool-lighter: "blue-cool-20v",
+  $theme-color-accent-cool-light: "blue-cool-30v",
+  $theme-color-accent-cool: $nws-light-blue,
+  $theme-color-accent-cool-dark: "blue-cool-60v",
+  $theme-color-accent-cool-darker: "blue-cool-70v",
+  $theme-color-accent-cool-darkest: "blue-cool-80v",
+
+  $theme-color-accent-warm-lightest: "red-20",
+  $theme-color-accent-warm-lighter: "red-30",
+  $theme-color-accent-warm-light: "red-40",
+  $theme-color-accent-warm: $nws-red,
+  $theme-color-accent-warm-dark: "red-50v",
+  $theme-color-accent-warm-darker: "red-70v",
+  $theme-color-accent-warm-darkest: "red-80v",
+
+  $theme-color-base-lightest: "gray-cool-3",
+  $theme-color-base-lighter: "gray-cool-10",
+  $theme-color-base-light: "gray-cool-20",
+  $theme-color-base: "gray-cool-50",
+  $theme-color-base-dark: "gray-cool-60",
+  $theme-color-base-darker: "gray-cool-70",
+  $theme-color-base-darkest: "gray-cool-90",
+  $theme-color-base-ink: "gray-cool-90",
+
+  $theme-link-color: "primary-dark",
+  $theme-link-hover-color: "primary-darker",
+  $theme-link-active-color: "primary-darkest",
+
+  /* ----------------------------------------
+  UTILITIES SETTINGS
+  ---------------------------------------- */
+  $theme-utility-breakpoints: (
+    "tablet-lg": true, // 880px
+  ),
+
+  /* ----------------------------------------
+  META SETTINGS
+  ---------------------------------------- */
   $theme-show-compile-warnings: true,
   $theme-show-notifications: false,
+
+  $theme-image-path: "../images/uswds",
+
   $flex-direction-settings: (
     responsive: true,
   ),

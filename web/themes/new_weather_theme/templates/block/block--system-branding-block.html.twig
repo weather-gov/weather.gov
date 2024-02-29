@@ -14,13 +14,13 @@
 */
 #}
 {% block content %}
-<a href="{{ path('<front>') }}" class="display-flex flex-align-center text-no-underline margin-y-4" rel="home">
+<a href="{{ path('<front>') }}" class="display-flex flex-align-center text-no-underline margin-top-2 margin-bottom-05" rel="home">
   {% if site_logo %}
   <img class="height-9" src="{{ site_logo }}" alt=""/>
   {% endif %}
   <div class="site-info padding-x-2 display-flex flex-column flex-align-start">
     {% if site_name %}
-    <span class="site-name display-block font-heading-lg desktop:font-heading-xl text-primary text-bold">
+    <span class="site-name display-block font-heading-lg desktop:font-heading-xl text-secondary-darkest text-bold">
       {{ site_name }}
     </span>
     {% endif %}

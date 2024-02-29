@@ -1,41 +1,46 @@
 {{ attach_library("new_weather_theme/location-search") }}
-<div>
-  {% if content.place %}
-  <h1 class="margin-bottom-0">
-    {{ content.place.city }}{% if content.place.state %}, {{ content.place.state }}{% endif %}
-  </h1>
 
-  <div>
-    <svg
-      class="usa-icon height-3 width-3"
-      aria-hidden="true"
-      focusable="false"
-      role="img"
-      style="vertical-align: middle;"
-    >
-      <use
-        xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#location_on"
-      ></use>
-    </svg>
-    {{ 'change location' | t }}
+<div class="grid-container">
+  <div class="grid-row">
+    <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3" data-location-search method="post">
+      <div class="display-flex flex-align-end">
+        <label class="usa-label" for="weather-location-search">
+          {{ 'Search for a location' | t }}
+        </label>
+        <div class="margin-x-1">|</div>
+        <div class="">
+          <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
+        </div>
+      </div>
+      <div class="usa-combo-box z-top" data-filter=".*">
+        <select class="usa-select" name="weather location" id="weather-location-search">
+        </select>
+      </div>
+      <input type="hidden" name="suggestedPlaceName" value="">
+    </form>
+  </div>
+</div>
+
+
+<div class="bg-primary-darkest">
+  {% if content.place %}
+  <div class="grid-container">
+    <div class="grid-row flex-no-wrap">
+      <svg
+        class="usa-icon height-4 width-4 margin-top-2 margin-right-05 text-accent-cool"
+        aria-hidden="true"
+        focusable="false"
+        role="img"
+        style="vertical-align: middle;"
+      >
+        <use
+          xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#location_on"
+        ></use>
+      </svg>
+      <h1 class="text-white font-heading-xl tablet:flex-1">
+        {{ content.place.city }}{% if content.place.state %}, {{ content.place.state }}{% endif %}
+      </h1>
+    </div>
   </div>
   {% endif %}
-
-  <form class="usa-form" data-location-search method="post">
-    <div class="display-flex flex-align-end">
-      <label class="usa-label" for="weather-location-search">
-        {{ 'Search for a location' | t }}
-      </label>
-      <div class="margin-x-1">|</div>
-      <div class="">
-        <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
-      </div>
-    </div>
-    <div class="usa-combo-box z-top" data-filter=".*">
-      <select class="usa-select" name="weather location" id="weather-location-search">
-
-      </select>
-    </div>
-    <input type="hidden" name="suggestedPlaceName" value="">
-  </form>
 </div>
