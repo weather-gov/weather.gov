@@ -10,9 +10,7 @@
       {{alertInfo.alert.event}}
     </td>
     {% if remainingCount > 0 %}
-      {% for i in 1..remainingCount%}
-        <td></td>
-      {% endfor %}
+      <td colspan="{{ remainingCount }}"></td>
     {% endif %}
   </tr>
 {% endfor %}
