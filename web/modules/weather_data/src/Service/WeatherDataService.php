@@ -906,55 +906,139 @@ class WeatherDataService
 
         date_default_timezone_set("America/New_York");
 
-        $forecast = $this->getFromWeatherAPI(
-            "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
-        );
-
         $place = $self->getPlaceFromGrid($wfo, $gridX, $gridY);
         $timezone = $place->timezone;
 
-        $forecast = $forecast->properties->periods;
+        $forecast = $this->getFromWeatherAPI("/gridpoints/$wfo/$gridX,$gridY")
+            ->properties;
+
+        function getForecastPropertiesAsHourlyPeriods($all, $propertyName)
+        {
+            $periods = [];
+            $property = $all->$propertyName;
+
+            foreach ($property->values as $value) {
+                $time = explode("/", $value->validTime);
+                $date = \DateTimeImmutable::createFromFormat(
+                    \DateTimeInterface::ISO8601_EXPANDED,
+                    $time[0],
+                );
+                $interval = new \DateInterval($time[1]);
+
+                $period = new \DatePeriod(
+                    $date,
+                    \DateInterval::createFromDateString("1 hour"),
+                    $date->add($interval),
+                );
+
+                foreach ($period as $hour) {
+                    $periods[] = [
+                        $propertyName => $value->value,
+
+                        // Set to the start of the hour.
+                        "timestamp" => $hour->setTime(
+                            (int) $hour->format("H"),
+                            0,
+                            0,
+                            0,
+                        ),
+                    ];
+                }
+            }
+
+            return $periods;
+        }
+
+        $getTimestamp = function ($period) {
+            return $period["timestamp"];
+        };
+
+        $units = ["temperature" => $forecast->temperature->uom];
+
+        $properties = ["temperature", "probabilityOfPrecipitation"];
+
+        $units = array_map(function ($property) use ($forecast) {
+            return [$property => $forecast->$property->uom];
+        }, $properties);
+        $units = array_merge(...$units);
+
+        $properties = array_map(function ($property) use ($forecast) {
+            return getForecastPropertiesAsHourlyPeriods($forecast, $property);
+        }, $properties);
+
+        $timestamps = array_map(function ($property) use ($getTimestamp) {
+            return array_map($getTimestamp, $property);
+        }, $properties);
+
+        $periods = array_unique(array_merge(...$timestamps), \SORT_REGULAR);
 
         // Toss out any time periods in the past.
-        $forecast = array_filter($forecast, function ($period) use (&$now) {
-            $then = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601_EXPANDED,
-                $period->startTime,
-            );
-            $diff = $now->diff($then, false);
+        $periods = array_filter($periods, function ($period) use (&$now) {
+            $diff = $now->diff($period, false);
 
             return $diff->invert != 1;
         });
 
-        // Now map all those forecast periods into the structure we want.
+        $forecast = array_map(function ($period) use ($properties) {
+            $matches = array_map(function ($property) use ($period) {
+                $index = array_search(
+                    $period,
+                    array_column($property, "timestamp"),
+                );
+                if ($index !== false) {
+                    return $property[$index];
+                }
+                return false;
+            }, $properties);
+
+            $matches = array_filter($matches, function ($match) {
+                return $match !== false;
+            });
+
+            if (count($matches) == count($properties)) {
+                return array_merge(...$matches);
+            }
+            return false;
+        }, $periods);
+
+        $forecast = array_filter($forecast, function ($period) {
+            return $period !== false;
+        });
+
+        // // Now map all those forecast periods into the structure we want.
         $forecast = array_map(function ($period) use (&$timezone) {
             // This closure needs access to the $timezone variable about. The easiest
             // way I found to do it was using it by reference.
             // From the start period of the time, parse it as an ISO8601 string and
             // then format it into just the "Hour AM/PM" format (e.g., "8 PM")
-            $timestamp = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601_EXPANDED,
-                $period->startTime,
-            )->setTimeZone(new \DateTimeZone($timezone));
+            $timestamp = $period["timestamp"]->setTimeZone(
+                new \DateTimeZone($timezone),
+            );
             $timeString = $timestamp->format("g A");
 
-            $obsKey = $this->getApiObservationKey($period);
+            // $obsKey = $this->getApiObservationKey($period);
+
+            // "relativeHumidity" => $period->relativeHumidity->value,
+            // "windSpeed" => $period->windSpeed,
+            // "windDirection" => $period->windDirection,
+            // "dewpoint" => $this->getTemperatureScalar($period->dewpoint),
 
             return [
-                "conditions" => $this->t->translate(
-                    ucfirst(strtolower($period->shortForecast)),
-                ),
-                "icon" => $this->legacyMapping->$obsKey->icon,
-                "iconBasename" => $this->getIconFileBasename($obsKey),
+                // "conditions" => $this->t->translate(
+                //     ucfirst(strtolower($period->shortForecast)),
+                // ),
+                // "icon" => $this->legacyMapping->$obsKey->icon,
+                // "iconBasename" => $this->getIconFileBasename($obsKey),
                 "probabilityOfPrecipitation" =>
-                    $period->probabilityOfPrecipitation->value,
+                    $period["probabilityOfPrecipitation"],
                 "time" => $timeString,
-                "timestamp" => $timestamp->format("c"),
-                "temperature" => $period->temperature,
-                "relativeHumidity" => $period->relativeHumidity->value,
-                "windSpeed" => $period->windSpeed,
-                "windDirection" => $period->windDirection,
-                "dewpoint" => $this->getTemperatureScalar($period->dewpoint),
+                "timestamp" => $period["timestamp"]->format("c"),
+                "temperature" => $this->getTemperatureScalar(
+                    (object) [
+                        "uom" => $units["temperature"],
+                        "value" => $period["temperature"],
+                    ],
+                ),
             ];
         }, $forecast);
 
