@@ -38,13 +38,13 @@ foreach ($cf_service_data as $service_list) {
         } elseif (stristr($service["name"], "secrets")) {
             $settings["hash_salt"] = hash(
                 "sha256",
-                $service["credentials"]["hash_salt"],
+                $service["credentials"]["HASH_SALT"],
             );
-            if (!empty($service["credentials"]["newrelic_license"])) {
+            if (!empty($service["credentials"]["NEWRELIC_LICENSE"])) {
                 $settings["new_relic_rpm.api_key"] = 
-                    $service["credentials"]["newrelic_license"];
+                    $service["credentials"]["NEWRELIC_LICENSE"];
                 $config["new_relic_rpm.settings"]["api_key"] = 
-                    $service["credentials"]["newrelic_license"];
+                    $service["credentials"]["NEWRELIC_LICENSE"];
             };
         } elseif (stristr($service["name"], "storage")) {
             $config["s3fs.settings"]["access_key"] =
@@ -107,3 +107,6 @@ switch ($application_environment) {
             "https://beta.weather.gov";
         break;
 }
+
+// Add the application name so that it can be used in NewRelic reporting
+$settings["wx.application_name"] = $cf_application_data["application_name"];

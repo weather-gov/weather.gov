@@ -90,6 +90,25 @@ class WeatherDataService
     private $stashedAlerts;
 
     /**
+     * NewRelic API handler
+     */
+    private $newRelic;
+
+    /**
+     * Geometry of a WFO grid cell (stashed per request)
+     *
+     * @var stashedGridGeometry
+     */
+    public $stashedGridGeometry;
+
+    /**
+     * A lat/lon pair as an array (stashed per request)
+     *
+     * @var stashedPoint
+     */
+    public $stashedPoint;
+
+    /**
      * Constructor.
      */
     public function __construct(
@@ -98,15 +117,20 @@ class WeatherDataService
         RequestStack $r,
         CacheBackendInterface $cache,
         Connection $database,
+        NewRelicMetrics $newRelic,
     ) {
         $this->client = $httpClient;
         $this->t = $t;
         $this->request = $r->getCurrentRequest();
         $this->cache = $cache;
         $this->database = $database;
+        $this->newRelic = $newRelic;
 
         $this->defaultIcon = "nodata.svg";
         $this->defaultConditions = "No data";
+
+        $this->stashedGridGeometry = null;
+        $this->stashedPoint = null;
 
         $this->legacyMapping = json_decode(
             file_get_contents(__DIR__ . "/legacyMapping.json"),
@@ -333,17 +357,17 @@ class WeatherDataService
     public function getApiObservationKey($observation)
     {
         /* The icon path from the API is of the form:
-       https://api.weather.gov/icons/land/day/skc
-       - OR -
-       https://api.weather.gov/icons/land/day/skc/hurricane
+           https://api.weather.gov/icons/land/day/skc
+           - OR -
+           https://api.weather.gov/icons/land/day/skc/hurricane
 
-       The last two or three path segments are the ones we need
-       to identify the current conditions. This is because there can be
-       two simultaneous conditions in the legacy icon system.
+           The last two or three path segments are the ones we need
+           to identify the current conditions. This is because there can be
+           two simultaneous conditions in the legacy icon system.
 
-       For now, we use the _first_ condition given in the path as the canonical
-       condition for the key.
-     */
+           For now, we use the _first_ condition given in the path as the canonical
+           condition for the key.
+         */
         $icon = $observation->icon;
 
         if ($icon == null or strlen($icon) == 0) {
@@ -381,6 +405,7 @@ class WeatherDataService
         try {
             $lat = round($lat, 4);
             $lon = round($lon, 4);
+
             $locationMetadata = $this->getFromWeatherAPI("/points/$lat,$lon");
 
             $wfo = strtoupper($locationMetadata->properties->gridId);
@@ -520,6 +545,117 @@ class WeatherDataService
     }
 
     /**
+     * Compute and get distance information about observation
+     *
+     * Returns an assoc array with information about the distance
+     * of a given observation station to a specified reference
+     * geometry.
+     *
+     * For now the reference geometry is the polygon of
+     * a WFO cell.
+     *
+     */
+    public function getObsDistanceInfo(
+        $referencePoint,
+        $obs,
+        $wfoGeometry,
+        $index = 0,
+    ) {
+        $obsText =
+            "POINT(" .
+            $obs->geometry->coordinates[0] .
+            " " .
+            $obs->geometry->coordinates[1] .
+            ")";
+
+        // If we have a reference point, we use that.
+        // Otherwise, use the closest point from the WFO
+        // geometry
+        if ($referencePoint) {
+            $sourcePointText =
+                "POINT(" .
+                $referencePoint->lon .
+                " " .
+                $referencePoint->lat .
+                ")";
+        } else {
+            // We need to find the closest point in the wfoGeometry
+            // to the observation point
+            $distance = INF;
+            $closest = null;
+            foreach ($wfoGeometry as $sourcePoint) {
+                $lonDiff = $obs->geometry->coordinates[0] - $sourcePoint->lon;
+                $latDiff = $obs->geometry->coordinates[1] - $sourcePoint->lat;
+                $hyp = hypot($lonDiff, $latDiff);
+                if ($hyp < $distance) {
+                    $distance = $hyp;
+                    $closest = $sourcePoint;
+                }
+            }
+            $sourcePointText =
+                "POINT(" . $closest->lon . " " . $closest->lat . ")";
+        }
+
+        $sourceGeomPoints = array_map(function ($point) {
+            return $point->lon . " " . $point->lat;
+        }, $wfoGeometry);
+        $sourceGeomPoints = implode(", ", $sourceGeomPoints);
+        $sourceGeomText = "POLYGON((" . $sourceGeomPoints . "))";
+
+        $sql =
+            "SELECT ST_DISTANCE_SPHERE(" .
+            "ST_GEOMFROMTEXT('" .
+            $obsText .
+            "'), " .
+            "ST_GEOMFROMTEXT('" .
+            $sourcePointText .
+            "')) as distance, " .
+            "ST_WITHIN(ST_GEOMFROMTEXT('" .
+            $obsText .
+            "'), " .
+            "ST_GEOMFROMTEXT('" .
+            $sourceGeomText .
+            "')) as within;";
+
+        $result = $this->database->query($sql)->fetch();
+        $distanceInfo = [
+            "distance" => (float) $result->distance,
+            "withinGridCell" => !!(int) $result->within,
+            "usesReferencePoint" => !!$referencePoint,
+            "obsPoint" => [
+                "lon" => $obs->geometry->coordinates[0],
+                "lat" => $obs->geometry->coordinates[1],
+            ],
+            "obsStation" => $obs->properties->station,
+            "stationIndex" => $index,
+        ];
+
+        return $distanceInfo;
+    }
+
+    /**
+     * Logs a serialized version of an obsDistanceInfo array
+     *
+     * (See getObsDistanceInfo() for how this array is produced)
+     */
+    public function logObservationDistanceInfo($obsDistanceInfo)
+    {
+        $promise = $this->newRelic->sendMetric(
+            "wx.observation",
+            $obsDistanceInfo["distance"],
+            [
+                "withinGridCell" => $obsDistanceInfo["withinGridCell"],
+                "stationIndex" => $obsDistanceInfo["stationIndex"],
+                "obsStation" => $obsDistanceInfo["obsStation"],
+                "distance" => $obsDistanceInfo["distance"],
+                "usesReferencePoint" => $obsDistanceInfo["usesReferencePoint"],
+            ],
+        );
+
+        $promise->wait();
+    }
+
+    /**
      * Get a geometry from a WFO grid.
      *
      * @return stdClass
@@ -528,15 +664,18 @@ class WeatherDataService
     public function getGeometryFromGrid($wfo, $x, $y)
     {
         $wfo = strtoupper($wfo);
-        $gridpoint = $this->getFromWeatherAPI("/gridpoints/$wfo/$x,$y");
-        $geometry = $gridpoint->geometry->coordinates[0];
+        if (!$this->stashedGridGeometry) {
+            $gridpoint = $this->getFromWeatherAPI("/gridpoints/$wfo/$x,$y");
+            $geometry = array_map(function ($geo) {
+                return (object) [
+                    "lat" => $geo[1],
+                    "lon" => $geo[0],
+                ];
+            }, $gridpoint->geometry->coordinates[0]);
+            $this->stashedGridGeometry = $geometry;
+        }
 
-        return array_map(function ($geo) {
-            return (object) [
-                "lat" => $geo[1],
-                "lon" => $geo[0],
-            ];
-        }, $geometry);
+        return $this->stashedGridGeometry;
     }
 
     /**
@@ -553,8 +692,15 @@ class WeatherDataService
     /**
      * Get the current weather conditions at a WFO grid location.
      */
-    public function getCurrentConditionsFromGrid($wfo, $gridX, $gridY)
-    {
+    public function getCurrentConditionsFromGrid(
+        $wfo,
+        $gridX,
+        $gridY,
+        $self = null,
+    ) {
+        if (!$self) {
+            $self = $this;
+        }
         $wfo = strtoupper($wfo);
         date_default_timezone_set("America/New_York");
 
@@ -563,17 +709,22 @@ class WeatherDataService
         );
         $obsStations = $obsStations->features;
 
+        $gridGeometry = $this->getGeometryFromGrid($wfo, $gridX, $gridY);
+
         $obsStationIndex = 0;
         $observationStation = $obsStations[$obsStationIndex];
+
         do {
             // If the temperature is not available from this observation station, try
             // the next one. Continue through the first 3 stations and then give up.
             $observationStation = $obsStations[$obsStationIndex];
-            $obs = $this->getFromWeatherAPI(
+            $obsData = $this->getFromWeatherAPI(
                 "/stations/" .
                     $observationStation->properties->stationIdentifier .
                     "/observations?limit=1",
-            )->features[0]->properties;
+            )->features[0];
+            $obs = $obsData->properties;
+
             $obsStationIndex += 1;
         } while (
             !$this->isValidObservation($obs) &&
@@ -583,6 +734,17 @@ class WeatherDataService
         if ($obs->temperature->value == null) {
             return null;
         }
+
+        // Log observation distance information,
+        // including the WFO grid and a reference point,
+        // if available
+        $distanceInfo = $self->getObsDistanceInfo(
+            $this->stashedPoint,
+            $obsData,
+            $gridGeometry,
+            $obsStationIndex - 1,
+        );
+        $self->logObservationDistanceInfo($distanceInfo);
 
         $timestamp = \DateTime::createFromFormat(
             \DateTimeInterface::ISO8601,

@@ -57,6 +57,9 @@ install-site-config:
 log: ## Tail the log for the Drupal container
 	docker compose logs --follow drupal
 
+log-ws: ## tail the Drupal Watchdog logs
+	docker compose exec drupal drush watchdog:tail
+
 rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose stop drupal
 	docker compose rm drupal -f

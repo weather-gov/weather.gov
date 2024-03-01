@@ -54,6 +54,12 @@ final class LocationAndGridRouteController extends ControllerBase
     {
         $grid = $this->weatherData->getGridFromLatLon($lat, $lon);
 
+        // Stash the reference point in the data service
+        $this->weatherData->stashedPoint = (object) [
+            "lat" => $lat,
+            "lon" => $lon,
+        ];
+
         if ($grid == null) {
             // If we don't get a corresponding grid location, throw a 404.
             throw new NotFoundHttpException();

@@ -761,6 +761,9 @@ $settings['file_scan_ignore_directories'] = [
   'bower_components',
 ];
 
+// Add the newrelic endpoint for the Metrics API
+$settings["new_relic_rpm.metrics.base_url"] = "https://metric-api.newrelic.com/metric/v1";
+
 // Pull in anything special for local developement
 if (file_exists(DRUPAL_ROOT . '/sites/settings.dev.php')) {
   include DRUPAL_ROOT . '/sites/settings.dev.php';
