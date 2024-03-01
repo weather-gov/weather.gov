@@ -51,9 +51,7 @@ final class GetHourlyForecastTest extends Base
                     "geometry" => [
                         "coordinates" => [[[0, 1]]],
                     ],
-                    "properties" => [
-                        "periods" => $forecast,
-                    ],
+                    "properties" => $forecast,
                 ]),
             ),
         );
@@ -68,126 +66,110 @@ final class GetHourlyForecastTest extends Base
      */
     public function testRemovingPastHourlyPeriods(): void
     {
-        $response = [
-            [
-                // One minute before noon UTC, but not using UTC or America/Denver tz.
-                "startTime" => "2023-11-16T03:59:59-08:00",
-                "temperature" => 1,
-                "shortForecast" => "blah",
-                "probabilityOfPrecipitation" => [
-                    "value" => 11,
+        // For this test, "now" is noon UTC, or 04:00 in the Denver time this
+        // test is using.
+
+        $response = (object) [
+            "dewpoint" => (object) [
+                "uom" => "wmoUnit:degC",
+                "values" => [
+                    (object) [
+                        // This one spans time before "now" and after any other
+                        // property.
+                        "validTime" => "2023-11-16T01:00:00-08:00/PT6H",
+                        "value" => 19,
+                    ],
                 ],
-                "icon" => "https://blah/day/rain,30?size=small",
             ],
-            [
-                // One hour before noon UTC, and in America/Denver tz.
-                "startTime" => "2023-11-16T03:00:00-07:00",
-                "temperature" => 2,
-                "shortForecast" => "bleh",
-                "probabilityOfPrecipitation" => [
-                    "value" => 22,
+            "probabilityOfPrecipitation" => (object) [
+                "uom" => "wmoUnit:percent",
+                "values" => [
+                    (object) [
+                        // This one is not aligned to an hour, but it should be
+                        // when it gets processed back to us.
+                        "validTime" => "2023-11-16T03:30:00-08:00/PT2H",
+                        "value" => 4,
+                    ],
+                    (object) [
+                        "validTime" => "2023-11-16T05:00:00-08:00/PT4H",
+                        "value" => 34,
+                    ],
                 ],
-                "icon" => "https://blah/day/rain,30?size=small",
             ],
-            [
-                // One hour before noon UTC.
-                "startTime" => "2023-11-16T11:00:00Z",
-                "temperature" => 3,
-                "shortForecast" => "bluh",
-                "probabilityOfPrecipitation" => [
-                    "value" => 33,
+            "relativeHumidity" => (object) [
+                "uom" => "wmoUnit:percent",
+                "values" => [
+                    (object) [
+                        "validTime" => "2023-11-16T03:30:00-08:00/PT1H",
+                        "value" => 4,
+                    ],
+                    (object) [
+                        "validTime" => "2023-11-16T04:00:00-08:00/PT1H",
+                        "value" => 34,
+                    ],
+                    (object) [
+                        "validTime" => "2023-11-16T05:00:00-08:00/PT8H",
+                        "value" => 0,
+                    ],
                 ],
-                "icon" => "https://blah/day/rain,30?size=small",
+            ],
+            "temperature" => (object) [
+                "uom" => "wmoUnit:degC",
+                "values" => [
+                    (object) [
+                        // This one is the shortest period, starting one hour
+                        // before "now" and ending two hours after it. As a
+                        // result, our output should be just two periods – the
+                        // two after now.
+                        "validTime" => "2023-11-16T03:00:00-08:00/PT3H",
+                        "value" => 97,
+                    ],
+                ],
+            ],
+            "windDirection" => (object) [
+                "uom" => "wmoUnit:degree_(angle)",
+                "values" => [
+                    (object) [
+                        "validTime" => "2023-11-16T03:00:00-08:00/PT3H",
+                        "value" => 97,
+                    ],
+                ],
+            ],
+            "windSpeed" => (object) [
+                "uom" => "wmoUnit:km_h-1",
+                "values" => [
+                    (object) [
+                        "validTime" => "2023-11-16T03:00:00-08:00/PT3H",
+                        "value" => 3,
+                    ],
+                ],
             ],
         ];
-        $this->setupHappyPath($response);
 
-        $expected = [];
-        $actual = $this->weatherDataService->getHourlyForecastFromGrid(
-            "wfo",
-            "x",
-            "y",
-            $this->now,
-            $this->selfMock,
-        );
-        $this->assertEquals((object) $expected, (object) $actual);
-    }
-
-    /**
-     * Test that empty or null icons are handled properly.
-     */
-    public function testEmptyAndNullIcon(): void
-    {
-        $response = [
-            [
-                "startTime" => "2023-11-16T12:00:00-07:00",
-                "temperature" => 1,
-                "shortForecast" => "thunderBOLT",
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
-                "probabilityOfPrecipitation" => [
-                    "value" => 11,
-                ],
-                "relativeHumidity" => [
-                    "value" => 12,
-                ],
-                "dewpoint" => [
-                    "unitCode" => "wmoUnit:degC",
-                    "value" => -9.4444444444444446,
-                ],
-                "icon" => "",
-            ],
-            [
-                "startTime" => "2023-11-16T13:00:00-07:00",
-                "temperature" => 2,
-                "shortForecast" => "lightning",
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
-                "probabilityOfPrecipitation" => [
-                    "value" => 22,
-                ],
-                "relativeHumidity" => [
-                    "value" => 12,
-                ],
-                "dewpoint" => [
-                    "unitCode" => "wmoUnit:degC",
-                    "value" => -9.4444444444444446,
-                ],
-                "icon" => null,
-            ],
-        ];
         $this->setupHappyPath($response);
 
         $expected = [
             [
-                // Conditions should be sentence-cased.
-                "conditions" => "Thunderbolt",
-                "icon" => "nodata.svg",
-                "iconBasename" => "nodata",
-                "probabilityOfPrecipitation" => 11,
-                "time" => "12 PM",
-                "timestamp" => "2023-11-16T12:00:00-07:00",
-                "temperature" => 1,
-                "relativeHumidity" => 12,
-                "dewpoint" => 15.0,
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
+                "dewpoint" => 66,
+                "probabilityOfPrecipitation" => 4,
+                "relativeHumidity" => 34,
+                "time" => "5 AM",
+                "timestamp" => "2023-11-16T04:00:00-08:00",
+                "temperature" => 207,
+                "windDirection" => 97,
+                "windSpeed" => 2,
             ],
             [
-                "conditions" => "Lightning",
-                "icon" => "nodata.svg",
-                "iconBasename" => "nodata",
-                "probabilityOfPrecipitation" => 22,
-                "time" => "1 PM",
-                "timestamp" => "2023-11-16T13:00:00-07:00",
-                "temperature" => 2,
-                "relativeHumidity" => 12,
-                "dewpoint" => 15.0,
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
+                "dewpoint" => 66,
+                "probabilityOfPrecipitation" => 34,
+                "relativeHumidity" => 0,
+                "time" => "6 AM",
+                "timestamp" => "2023-11-16T05:00:00-08:00",
+                "temperature" => 207,
+                "windDirection" => 97,
+                "windSpeed" => 2,
             ],
         ];
-
         $actual = $this->weatherDataService->getHourlyForecastFromGrid(
             "wfo",
             "x",
@@ -195,135 +177,158 @@ final class GetHourlyForecastTest extends Base
             $this->now,
             $this->selfMock,
         );
-
         $this->assertEquals((object) $expected, (object) $actual);
     }
 
-    /**
-     * Test the happiest of happy paths.
-     */
-    public function testHappyPath(): void
-    {
-        $response = [
-            [
-                // One minute before noon UTC. This should be filtered out.
-                "startTime" => "2023-11-16T03:59:59-08:00",
-                "temperature" => 1,
-                "shortForecast" => "Very Very",
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
-                "probabilityOfPrecipitation" => [
-                    "value" => 11,
-                ],
-                "relativeHumidity" => [
-                    "value" => 12,
-                ],
-                "dewpoint" => [
-                    "unitCode" => "wmoUnit:degC",
-                    "value" => -9.4444444444444446,
-                ],
-                "icon" => "https://blah/day/rain,30?size=small",
-            ],
-            [
-                "startTime" => "2023-11-16T12:00:00-07:00",
-                "temperature" => 2,
-                "shortForecast" => "FRIGHTENING",
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
-                "probabilityOfPrecipitation" => [
-                    "value" => 22,
-                ],
-                "relativeHumidity" => [
-                    "value" => 12,
-                ],
-                "dewpoint" => [
-                    "unitCode" => "wmoUnit:degC",
-                    "value" => -9.4444444444444446,
-                ],
-                "icon" => "https://blah/night/rain,30?size=medium",
-            ],
-            [
-                "startTime" => "2023-11-16T13:00:00-07:00",
-                "temperature" => 3,
-                "shortForecast" => "Mama mia!",
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
-                "probabilityOfPrecipitation" => [
-                    "value" => 33,
-                ],
-                "relativeHumidity" => [
-                    "value" => 12,
-                ],
-                "dewpoint" => [
-                    "unitCode" => "wmoUnit:degC",
-                    "value" => -9.4444444444444446,
-                ],
-                "icon" => "https://blah/day/snow,40?size=huge",
-            ],
-        ];
-        $this->setupHappyPath($response);
+    // /**
+    //  * Test that empty or null icons are handled properly.
+    //  */
+    // public function testEmptyAndNullIcon(): void
+    // {
+    //     $response = [
+    //         [
+    //             "startTime" => "2023-11-16T12:00:00-07:00",
+    //             "temperature" => 1,
+    //             "shortForecast" => "thunderBOLT",
+    //             "windSpeed" => "26 mph",
+    //             "windDirection" => "W",
+    //             "probabilityOfPrecipitation" => [
+    //                 "value" => 11,
+    //             ],
+    //             "relativeHumidity" => [
+    //                 "value" => 12,
+    //             ],
+    //             "dewpoint" => [
+    //                 "unitCode" => "wmoUnit:degC",
+    //                 "value" => -9.4444444444444446,
+    //             ],
+    //             "icon" => "",
+    //         ],
+    //         [
+    //             "startTime" => "2023-11-16T13:00:00-07:00",
+    //             "temperature" => 2,
+    //             "shortForecast" => "lightning",
+    //             "windSpeed" => "26 mph",
+    //             "windDirection" => "W",
+    //             "probabilityOfPrecipitation" => [
+    //                 "value" => 22,
+    //             ],
+    //             "relativeHumidity" => [
+    //                 "value" => 12,
+    //             ],
+    //             "dewpoint" => [
+    //                 "unitCode" => "wmoUnit:degC",
+    //                 "value" => -9.4444444444444446,
+    //             ],
+    //             "icon" => null,
+    //         ],
+    //     ];
+    //     $this->setupHappyPath($response);
 
-        $expected = [
-            [
-                "conditions" => "Frightening",
-                "icon" => "rain.svg",
-                "iconBasename" => "rain",
-                "probabilityOfPrecipitation" => 22,
-                "time" => "12 PM",
-                "timestamp" => "2023-11-16T12:00:00-07:00",
-                "temperature" => 2,
-                "relativeHumidity" => 12,
-                "dewpoint" => 15.0,
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
-            ],
-            [
-                "conditions" => "Mama mia!",
-                "icon" => "snow.svg",
-                "iconBasename" => "snow",
-                "probabilityOfPrecipitation" => 33,
-                "time" => "1 PM",
-                "timestamp" => "2023-11-16T13:00:00-07:00",
-                "temperature" => 3,
-                "relativeHumidity" => 12,
-                "dewpoint" => 15.0,
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
-            ],
-        ];
+    //     $expected = [
+    //         [
+    //             // Conditions should be sentence-cased.
+    //             "conditions" => "Thunderbolt",
+    //             "icon" => "nodata.svg",
+    //             "iconBasename" => "nodata",
+    //             "probabilityOfPrecipitation" => 11,
+    //             "time" => "12 PM",
+    //             "timestamp" => "2023-11-16T12:00:00-07:00",
+    //             "temperature" => 1,
+    //             "relativeHumidity" => 12,
+    //             "dewpoint" => 15.0,
+    //             "windSpeed" => "26 mph",
+    //             "windDirection" => "W",
+    //         ],
+    //         [
+    //             "conditions" => "Lightning",
+    //             "icon" => "nodata.svg",
+    //             "iconBasename" => "nodata",
+    //             "probabilityOfPrecipitation" => 22,
+    //             "time" => "1 PM",
+    //             "timestamp" => "2023-11-16T13:00:00-07:00",
+    //             "temperature" => 2,
+    //             "relativeHumidity" => 12,
+    //             "dewpoint" => 15.0,
+    //             "windSpeed" => "26 mph",
+    //             "windDirection" => "W",
+    //         ],
+    //     ];
 
-        $actual = $this->weatherDataService->getHourlyForecastFromGrid(
-            "wfo",
-            "x",
-            "y",
-            $this->now,
-            $this->selfMock,
-        );
+    //     $actual = $this->weatherDataService->getHourlyForecastFromGrid(
+    //         "wfo",
+    //         "x",
+    //         "y",
+    //         $this->now,
+    //         $this->selfMock,
+    //     );
 
-        $this->assertEquals((object) $expected, (object) $actual);
-    }
+    //     $this->assertEquals((object) $expected, (object) $actual);
+    // }
 
     /**
      * Test that if we don't pass a "now", everything still works.
      */
     public function testDefaultNow(): void
     {
-        $response = [
-            [
-                // The past. Any time in the past will do.
-                "startTime" => "1994-01-01T03:59:59-08:00",
-                "temperature" => 1,
-                "probabilityOfPrecipitation" => [
-                    "value" => 11,
+        // The past. Any time in the past will do.
+        $response = (object) [
+            "dewpoint" => (object) [
+                "uom" => "wmoUnit:degC",
+                "values" => [
+                    (object) [
+                        "validTime" => "1994-01-01T03:00:00-08:00/PT10H",
+                        "value" => 19,
+                    ],
                 ],
-                "windSpeed" => "26 mph",
-                "windDirection" => "W",
-                "dewpoint" => [
-                    "value" => -9.4444444444444446,
+            ],
+            "probabilityOfPrecipitation" => (object) [
+                "uom" => "wmoUnit:percent",
+                "values" => [
+                    (object) [
+                        "validTime" => "1994-01-01T03:00:00-08:00/PT10H",
+                        "value" => 4,
+                    ],
                 ],
-                "icon" => "https://blah/day/rain,30?size=small",
+            ],
+            "relativeHumidity" => (object) [
+                "uom" => "wmoUnit:percent",
+                "values" => [
+                    (object) [
+                        "validTime" => "1994-01-01T03:00:00-08:00/PT10H",
+                        "value" => 4,
+                    ],
+                ],
+            ],
+            "temperature" => (object) [
+                "uom" => "wmoUnit:degC",
+                "values" => [
+                    (object) [
+                        "validTime" => "1994-01-01T03:00:00-08:00/PT10H",
+                        "value" => 97,
+                    ],
+                ],
+            ],
+            "windDirection" => (object) [
+                "uom" => "wmoUnit:degree_(angle)",
+                "values" => [
+                    (object) [
+                        "validTime" => "1994-01-01T03:00:00-08:00/PT10H",
+                        "value" => 97,
+                    ],
+                ],
+            ],
+            "windSpeed" => (object) [
+                "uom" => "wmoUnit:km_h-1",
+                "values" => [
+                    (object) [
+                        "validTime" => "1994-01-01T03:00:00-08:00/PT10H",
+                        "value" => 3,
+                    ],
+                ],
             ],
         ];
+
         $this->setupHappyPath($response);
 
         $expected = [];

@@ -60,7 +60,7 @@
             {% for period in content.hours %}
               <td style="white-space:pre;">
                 <div class="display-flex flex-row flex-align-center">
-                  <span>{{period.windSpeed}}</span>
+                  <span>{{period.windSpeed}} {{ "mph" | t }}</span>
                   <svg role="img" aria-hidden="true" class="width-2 height-2 margin-left-05 padding-2px" data-wind-direction="{{period.windDirection}}">
                     <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#wind_arrow_s" }}"></use>
                   </svg>
