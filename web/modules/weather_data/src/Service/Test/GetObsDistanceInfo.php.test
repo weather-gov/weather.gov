@@ -1,0 +1,175 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use Drupal\Core\Database\StatementInterface;
+
+final class GetObsDistanceInfoTest extends Base
+{
+    public function testWithReferencePoint()
+    {
+        $statement = $this->createStub(StatementInterface::class);
+
+        $referencePoint = (object) [
+            "lat" => 5,
+            "lon" => 5,
+        ];
+
+        $wfoGeometry = [
+            (object) [
+                "lat" => 0,
+                "lon" => 0,
+            ],
+            (object) [
+                "lat" => 10,
+                "lon" => 0,
+            ],
+            (object) [
+                "lat" => 10,
+                "lon" => 10,
+            ],
+            (object) [
+                "lat" => 0,
+                "lon" => 10,
+            ],
+            (object) [
+                "lat" => 0,
+                "lon" => 0,
+            ],
+        ];
+
+        $obs = (object) [
+            "geometry" => (object) [
+                "coordinates" => [
+                    2, //lon
+                    2, //lat
+                ],
+            ],
+            "properties" => (object) [
+                "station" => "FAKE",
+            ],
+        ];
+
+        $expectedQuery =
+            "SELECT ST_DISTANCE_SPHERE(ST_GEOMFROMTEXT('POINT(2 2)'), " .
+            "ST_GEOMFROMTEXT('POINT(5 5)')) as distance, ST_W" .
+            "ITHIN(ST_GEOMFROMTEXT('POINT(2 2)'), ST_GEOMFRO" .
+            "MTEXT('POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))')) as within;";
+
+        $this->databaseMock
+            ->method("query")
+            ->will(
+                $this->returnValueMap([[$expectedQuery, [], [], $statement]]),
+            );
+
+        $expected = [
+            "distance" => 1,
+            "withinGridCell" => true,
+            "usesReferencePoint" => true,
+            "obsPoint" => [
+                "lat" => 2,
+                "lon" => 2,
+            ],
+            "obsStation" => "FAKE",
+            "stationIndex" => 0,
+        ];
+
+        $statement->method("fetch")->willReturn(
+            (object) [
+                "distance" => 1,
+                "within" => true,
+            ],
+        );
+
+        $actual = $this->weatherDataService->getObsDistanceInfo(
+            $referencePoint,
+            $obs,
+            $wfoGeometry,
+            0,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testWithoutReferencePoint()
+    {
+        $statement = $this->createStub(StatementInterface::class);
+
+        $referencePoint = null;
+
+        $wfoGeometry = [
+            (object) [
+                "lat" => 0,
+                "lon" => 0,
+            ],
+            (object) [
+                "lat" => 10,
+                "lon" => 0,
+            ],
+            (object) [
+                "lat" => 10,
+                "lon" => 10,
+            ],
+            (object) [
+                "lat" => 0,
+                "lon" => 10,
+            ],
+            (object) [
+                "lat" => 0,
+                "lon" => 0,
+            ],
+        ];
+
+        $obs = (object) [
+            "geometry" => (object) [
+                "coordinates" => [
+                    2, //lon
+                    2, //lat
+                ],
+            ],
+            "properties" => (object) [
+                "station" => "FAKE",
+            ],
+        ];
+
+        $expectedQuery =
+            "SELECT ST_DISTANCE_SPHERE(ST_GEOMFROMTEXT('POINT(2 2)')" .
+            ", ST_GEOMFROMTEXT('POINT(0 0)')) as distance, " .
+            "ST_WITHIN(ST_GEOMFROMTEXT('POINT(2 2)'), ST_G" .
+            "EOMFROMTEXT('POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))')) as within;";
+
+        $this->databaseMock
+            ->method("query")
+            ->will(
+                $this->returnValueMap([[$expectedQuery, [], [], $statement]]),
+            );
+
+        $expected = [
+            "distance" => 1,
+            "withinGridCell" => true,
+            "usesReferencePoint" => false,
+            "obsPoint" => [
+                "lat" => 2,
+                "lon" => 2,
+            ],
+            "obsStation" => "FAKE",
+            "stationIndex" => 0,
+        ];
+
+        $statement->method("fetch")->willReturn(
+            (object) [
+                "distance" => 1,
+                "within" => true,
+            ],
+        );
+
+        $actual = $this->weatherDataService->getObsDistanceInfo(
+            $referencePoint,
+            $obs,
+            $wfoGeometry,
+            0,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+}

@@ -1,0 +1,35 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use GuzzleHttp\Promise\Promise;
+
+final class LogObservationDistanceInfoTest extends Base
+{
+    /**
+     * Ensure that logging obs data sends metrics
+     *
+     * We use a stubbed promise and ensure that
+     * we attempt to resolve it once.
+     */
+    public function testSendingMetric()
+    {
+        $obsDistanceInfo = [
+            "withinGridCell" => true,
+            "stationIndex" => 1,
+            "obsStation" => "FAKE",
+            "distance" => 1000,
+            "usesReferencePoint" => true,
+        ];
+
+        $mockPromise = $this->createMock(Promise::class);
+        $mockPromise
+            ->expects($this->once())
+            ->method("wait")
+            ->willReturn($mockPromise);
+
+        $this->newRelicMock->method("sendMetric")->willReturn($mockPromise);
+
+        $this->weatherDataService->logObservationDistanceInfo($obsDistanceInfo);
+    }
+}
