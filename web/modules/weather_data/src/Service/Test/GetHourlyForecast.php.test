@@ -162,8 +162,7 @@ final class GetHourlyForecastTest extends Base
             [
                 // Conditions should be sentence-cased.
                 "conditions" => "Thunderbolt",
-                "icon" => "nodata.svg",
-                "iconBasename" => "nodata",
+                "icon" => (object) ["icon" => null, "base" => null],
                 "probabilityOfPrecipitation" => 11,
                 "time" => "12 PM",
                 "timestamp" => "2023-11-16T12:00:00-07:00",
@@ -175,8 +174,7 @@ final class GetHourlyForecastTest extends Base
             ],
             [
                 "conditions" => "Lightning",
-                "icon" => "nodata.svg",
-                "iconBasename" => "nodata",
+                "icon" => (object) ["icon" => null, "base" => null],
                 "probabilityOfPrecipitation" => 22,
                 "time" => "1 PM",
                 "timestamp" => "2023-11-16T13:00:00-07:00",
@@ -266,8 +264,10 @@ final class GetHourlyForecastTest extends Base
         $expected = [
             [
                 "conditions" => "Frightening",
-                "icon" => "rain.svg",
-                "iconBasename" => "rain",
+                "icon" => (object) [
+                    "icon" => "rain.svg",
+                    "base" => "rain",
+                ],
                 "probabilityOfPrecipitation" => 22,
                 "time" => "12 PM",
                 "timestamp" => "2023-11-16T12:00:00-07:00",
@@ -279,8 +279,7 @@ final class GetHourlyForecastTest extends Base
             ],
             [
                 "conditions" => "Mama mia!",
-                "icon" => "snow.svg",
-                "iconBasename" => "snow",
+                "icon" => (object) ["icon" => "snow.svg", "base" => "snow"],
                 "probabilityOfPrecipitation" => 33,
                 "time" => "1 PM",
                 "timestamp" => "2023-11-16T13:00:00-07:00",

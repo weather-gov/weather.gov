@@ -5,7 +5,7 @@ namespace Drupal\weather_data\Service\Test;
 /**
  * Tests parsing of legacyMapping keys from icon URLs.
  */
-final class GetApiObservationKey extends Base
+final class GetIcon extends Base
 {
     /**
      * Tests that we can map a two part icon url to a legacy key.
@@ -14,8 +14,8 @@ final class GetApiObservationKey extends Base
     {
         $path = "https://api.weather.gov/icons/land/day/snow,20?size=medium";
         $observation = (object) ["icon" => $path];
-        $actual = $this->weatherDataService->getApiObservationKey($observation);
-        $expected = "day/snow";
+        $actual = $this->weatherDataService->getIcon($observation);
+        $expected = (object) ["icon" => "snow.svg", "base" => "snow"];
 
         $this->assertEquals($expected, $actual);
     }
@@ -30,20 +30,20 @@ final class GetApiObservationKey extends Base
         $path =
             "https://api.weather.gov/icons/land/day/snow/rain,20?size=medium";
         $observation = (object) ["icon" => $path];
-        $actual = $this->weatherDataService->getApiObservationKey($observation);
-        $expected = "day/snow";
+        $actual = $this->weatherDataService->getIcon($observation);
+        $expected = (object) ["icon" => "snow.svg", "base" => "snow"];
 
         $this->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests that we return 'no data' for an empty icon value.
+     * Tests that we return null for an empty icon value.
      */
     public function testUnknownPath(): void
     {
         $observation = (object) ["icon" => ""];
-        $actual = $this->weatherDataService->getApiObservationKey($observation);
-        $expected = "no data";
+        $actual = $this->weatherDataService->getIcon($observation);
+        $expected = (object) ["icon" => null, "base" => null];
 
         $this->assertEquals($expected, $actual);
     }
