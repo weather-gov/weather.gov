@@ -61,7 +61,7 @@
               <td style="white-space:pre;">
                 <div class="display-flex flex-row flex-align-center">
                   <span>{{period.windSpeed}} {{ "mph" | t }}</span>
-                  <svg role="img" aria-hidden="true" class="width-2 height-2 margin-left-05 padding-2px" data-wind-direction="{{period.windDirection}}">
+                  <svg role="img" aria-hidden="true" class="width-2 height-2 margin-left-05 padding-2px" style="transform: rotate({{ period.windDirection.angle + 180 }}deg);">
                     <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#wind_arrow_s" }}"></use>
                   </svg>
                 </div>

@@ -64,7 +64,7 @@ final class GetHourlyForecastTest extends Base
     /**
      * Test that past hours are removed.
      */
-    public function testRemovingPastHourlyPeriods(): void
+    public function testHappyPath(): void
     {
         // For this test, "now" is noon UTC, or 04:00 in the Denver time this
         // test is using.
@@ -156,7 +156,11 @@ final class GetHourlyForecastTest extends Base
                 "time" => "5 AM",
                 "timestamp" => "2023-11-16T04:00:00-08:00",
                 "temperature" => 207,
-                "windDirection" => 97,
+                "windDirection" => (object) [
+                    "angle" => 97,
+                    "long" => "east",
+                    "short" => "E",
+                ],
                 "windSpeed" => 2,
             ],
             [
@@ -166,7 +170,11 @@ final class GetHourlyForecastTest extends Base
                 "time" => "6 AM",
                 "timestamp" => "2023-11-16T05:00:00-08:00",
                 "temperature" => 207,
-                "windDirection" => 97,
+                "windDirection" => (object) [
+                    "angle" => 97,
+                    "long" => "east",
+                    "short" => "E",
+                ],
                 "windSpeed" => 2,
             ],
         ];

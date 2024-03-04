@@ -13,6 +13,36 @@ trait UnitConversionTrait
         return $mm * 0.03937008;
     }
 
+    public function getDirectionOrdinal($angle, $reverse = false)
+    {
+        // The cardinal and ordinal directions. North goes in twice because it
+        // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
+        $directions = [
+            "north",
+            "northeast",
+            "east",
+            "southeast",
+            "south",
+            "southwest",
+            "west",
+            "northwest",
+            "north",
+        ];
+        $shortDirections = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
+
+        // 1. Whatever degrees we got from the API, constrain it to 0°-360°.
+        // 2. Add 22.5° to it. This accounts for north starting at -22.5°
+        // 3. Use integer division by 45° to see which direction index this is.
+        // This indexes into the two direction name arrays above.
+        $directionIndex = intdiv(intval(($angle % 360) + 22.5, 10), 45);
+
+        return (object) [
+            "long" => $directions[$directionIndex],
+            "short" => $shortDirections[$directionIndex],
+            "angle" => $angle,
+        ];
+    }
+
     public function getSpeedScalar(\stdClass $speed, bool $inMph = true)
     {
         $rawValue = $speed->value;

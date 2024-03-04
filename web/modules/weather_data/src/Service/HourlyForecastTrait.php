@@ -204,7 +204,9 @@ trait HourlyForecastTrait
                         "value" => $period["temperature"],
                     ],
                 ),
-                "windDirection" => $period["windDirection"],
+                "windDirection" => $this->getDirectionOrdinal(
+                    $period["windDirection"],
+                ),
                 "windSpeed" => $this->getSpeedScalar(
                     (object) [
                         "unitCode" => $units["windSpeed"],
