@@ -7,39 +7,46 @@ nighttime periods.
 In some cases -- like the case of the current day -- there might
 only be a nighttime period.
 #}
-<li class="display-block margin-bottom-5">
-  <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center margin-bottom-2">
-    <time class="display-block flex-1 text-bold font-heading-md" datetime="{{ periods[0].startTime }}">
-      {% if dayLabel %}
-        <span>{{ dayLabel }}, </span>
-      {% else %}
-        <span>{{ periods[0].dayName }}, </span>
-      {% endif %}
-      <span class="display-block desktop:display-inline">{{ periods[0].monthAndDay }}</span>
-    </time>
+<li class="display-block">
+  <div class="grid-container bg-white padding-y-2 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+    <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center margin-bottom-3">
+      <time class="display-block flex-1 text-bold font-heading-md text-primary-darker" datetime="{{ periods[0].startTime }}">
+        {% if dayLabel %}
+          <span>{{ dayLabel }}, </span>
+        {% else %}
+          <span>{{ periods[0].dayName }}, </span>
+        {% endif %}
+        <span class="display-block desktop:display-inline">{{ periods[0].monthAndDay }}</span>
+      </time>
 
-    {% for period in periods %}
-      {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': period } %}
-    {% endfor %}
-  </div>
+      {% for period in periods %}
+        {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': period } %}
+      {% endfor %}
+    </div>
   {% for period in periods %}
-    {% set label =  period.isDaytime ? "Day" | t : "Night" | t %}
-    <div class="daily-forecast-summary-area margin-bottom-2">
-      <span class="display-block text-bold font-body-xs margin-bottom-1">
+    {% if period.isDaytime %}
+      {% set label = "Day" | t %}
+      {% set lineColor = "yellow" %}
+    {% else %}
+      {% set label = "Night" | t %}
+      {% set lineColor = "indigo" %}
+    {% endif %}
+    <div class="daily-forecast-summary-area margin-bottom-3">
+      <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-before line-before--{{ lineColor }}">
         {{label}}
       </span>
-      <div class="display-flex flex-row flex-align-center">
+      <div class="display-flex flex-row flex-align-start">
         <div class="width-5 height-5 margin-right-105">
           <svg role="img" aria-hidden="true" class="width-full height-full">
             <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.iconBasename }}"></use>
           </svg>
         </div>
         <div class="flex-1">
-          <p class="daily-short-forecast font-body-xs margin-y-0">
+          <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 line-height-sans-3">
             {{period.shortForecast}}
           </p>
           {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
-            <p class="text-gray-50 font-body-3xs margin-bottom-0 margin-top-1">
+            <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
               {{period.probabilityOfPrecipitation}}% {{ "chance of precipitation" | t }}
             </p>
           {% endif %}
@@ -47,4 +54,5 @@ only be a nighttime period.
       </div>
     </div>
   {% endfor %}
+  </div>
 </li>

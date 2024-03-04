@@ -54,7 +54,6 @@ body {
   overflow-x: clip;
 }
 
-
 /* AlertDetails Overrides 
 -------------------------------------- */
 weathergov-alerts {
@@ -72,7 +71,6 @@ weathergov-alerts {
    padding-left: 2ch;
  }
 }
-
 
 /* AlertList Overrides 
 -------------------------------------- */
@@ -117,7 +115,31 @@ table tr:nth-child(2) th {
 /* Daily Forecast Block Overrides
 ------------------------------------- */
 .daily-forecast-block ol > li {
-  @include u-margin-bottom(5);
+  @include u-margin-bottom(3);
+}
+
+/* Day/Night marker line utility
+------------------------------------- */
+.line-before{
+  &:before {
+    content: "";
+    top: units(-1);
+    width: units(5);
+    position: relative;
+    display: block;
+  }
+}
+
+.line-before--yellow {
+  &:before {
+    border-top: 2px solid color("yellow-20");
+  }
+}
+
+.line-before--indigo {
+  &:before {
+    border-top: 2px solid color("secondary-darkest");
+  }
 }
 
 /* Wind direction icon transformations
