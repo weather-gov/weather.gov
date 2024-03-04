@@ -113,6 +113,12 @@ $nws-red: #F00;
   $theme-type-scale-xl: 11,
   $theme-type-scale-2xl: 12,
 
+  $theme-h1-font-size: "2xl",
+  $theme-h2-font-size: "xl",
+  $theme-h3-font-size: "lg",
+  $theme-h4-font-size: "md",
+  $theme-h5-font-size: "sm",
+
   /* ----------------------------------------
   COLOR SETTINGS
   ---------------------------------------- */
@@ -167,6 +173,12 @@ $nws-red: #F00;
   $theme-utility-breakpoints: (
     "tablet-lg": true, // 880px
   ),
+
+  /* ----------------------------------------
+  COMPONENT SETTINGS
+  ---------------------------------------- */
+  $theme-accordion-border-color: "primary-darker",
+  $theme-accordion-button-background-color: "primary-darker",
 
   /* ----------------------------------------
   META SETTINGS
