@@ -54,9 +54,28 @@ body {
   overflow-x: clip;
 }
 
+
+/* AlertDetails Overrides 
+-------------------------------------- */
+weathergov-alerts {
+ .usa-prose h3 {
+   font-weight: normal;
+   margin-top: units(3);
+ }
+
+ .usa-prose h3+p {
+  margin-top: units(0.5);  
+ }
+
+ .usa-prose>ul {
+   // align bullet with the text
+   padding-left: 2ch;
+ }
+}
+
+
 /* AlertList Overrides 
---------------------------------------
-*/
+-------------------------------------- */
 .usa-alert__body a {
   color: color("primary-dark");
 
@@ -66,17 +85,26 @@ body {
   }
 }
 
+/* Column utility 
+------------------------------------- */
+ .wx-col-2 {
+  column-count: 2;
+  column-gap: units(4);
+
+  li {
+    break-inside: avoid-column;
+  }
+ }
+
 /* Current Conditions
--------------------------------------
-*/
+------------------------------------- */
 .current-conditions-temp {
   // Custom size not in typecale
   font-size: units(5) + units(0.5); 
 }
 
 /* Hourly Forecast Block Overrides
---------------------------------------
-*/
+-------------------------------------- */
 .hourly-forecast-block ol > li {
   @include u-margin-bottom(3);
 }
@@ -121,3 +149,6 @@ svg[data-wind-direction="SW"] {
 svg[data-wind-direction="W"] {
   transform: rotate(90deg);
 }
+
+
+
