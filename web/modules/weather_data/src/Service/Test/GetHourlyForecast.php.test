@@ -40,9 +40,9 @@ final class GetHourlyForecastTest extends Base
      * up the network mocks to return that correctly. Sets the forecast location's
      * timezone to America/Denver.
      */
-    protected function setupHappyPath($forecast): void
+    protected function setupHappyPath($forecast, $extra): void
     {
-        // First call is to get the hourly forecast, so return that.
+        // First call is to get the gridpoint forecast.
         $this->httpClientMock->append(
             new Response(
                 200,
@@ -52,6 +52,20 @@ final class GetHourlyForecastTest extends Base
                         "coordinates" => [[[0, 1]]],
                     ],
                     "properties" => $forecast,
+                ]),
+            ),
+        );
+
+        // Second call is to get the hourly "extra" forecast.
+        $this->httpClientMock->append(
+            new Response(
+                200,
+                ["Content-type" => "application/geo+json"],
+                json_encode([
+                    "geometry" => [
+                        "coordinates" => [[[0, 1]]],
+                    ],
+                    "properties" => ["periods" => $extra],
                 ]),
             ),
         );
@@ -68,8 +82,7 @@ final class GetHourlyForecastTest extends Base
     {
         // For this test, "now" is noon UTC, or 04:00 in the Denver time this
         // test is using.
-
-        $response = (object) [
+        $forecast = (object) [
             "dewpoint" => (object) [
                 "uom" => "wmoUnit:degC",
                 "values" => [
@@ -146,10 +159,20 @@ final class GetHourlyForecastTest extends Base
             ],
         ];
 
-        $this->setupHappyPath($response);
+        $extra = [
+            (object) [
+                // This start time should align with the second period in the
+                // gridpoint forecast.
+                "startTime" => "2023-11-16T05:00:00-08:00",
+                "shortForecast" => "It's gonna rain sideways",
+            ],
+        ];
+
+        $this->setupHappyPath($forecast, $extra);
 
         $expected = [
             [
+                "conditions" => "",
                 "dewpoint" => 66,
                 "probabilityOfPrecipitation" => 4,
                 "relativeHumidity" => 34,
@@ -164,6 +187,7 @@ final class GetHourlyForecastTest extends Base
                 "windSpeed" => 2,
             ],
             [
+                "conditions" => "It's gonna rain sideways",
                 "dewpoint" => 66,
                 "probabilityOfPrecipitation" => 34,
                 "relativeHumidity" => 0,
@@ -280,7 +304,7 @@ final class GetHourlyForecastTest extends Base
     public function testDefaultNow(): void
     {
         // The past. Any time in the past will do.
-        $response = (object) [
+        $forecast = (object) [
             "dewpoint" => (object) [
                 "uom" => "wmoUnit:degC",
                 "values" => [
@@ -337,7 +361,16 @@ final class GetHourlyForecastTest extends Base
             ],
         ];
 
-        $this->setupHappyPath($response);
+        $extra = [
+            (object) [
+                // This start time should align with the second period in the
+                // gridpoint forecast.
+                "startTime" => "1994-11-16T05:00:00-08:00",
+                "shortForecast" => "Not a forecast. More of a pastcast.",
+            ],
+        ];
+
+        $this->setupHappyPath($forecast, $extra);
 
         $expected = [];
         $actual = $this->weatherDataService->getHourlyForecastFromGrid(

@@ -91,6 +91,10 @@ trait HourlyForecastTrait
         $forecast = $this->getFromWeatherAPI("/gridpoints/$wfo/$gridX,$gridY")
             ->properties;
 
+        $extraForecast = $this->getFromWeatherAPI(
+            "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
+        )->properties->periods;
+
         $properties = [
             "dewpoint",
             "probabilityOfPrecipitation",
@@ -155,7 +159,9 @@ trait HourlyForecastTrait
             });
 
             if (count($matches) == count($properties)) {
-                return array_merge(...$matches);
+                $period = array_merge(...$matches);
+                $period["shortForecast"] = "";
+                return $period;
             }
             return false;
         }, $periods);
@@ -164,7 +170,28 @@ trait HourlyForecastTrait
             return $period !== false;
         });
 
+        // Reindex the array. array_filter maintains indices, so it can result in
+        // holes in the array. Bizarre behavior choice, but okay...
+        $forecast = array_values($forecast);
+
+        // And then smoosh in the stuff we can only get from the
+        // /forecast/hourly endpoint.
+        $timestamps = array_column($forecast, "timestamp");
+        foreach ($extraForecast as $period) {
+            $start = \DateTimeImmutable::createFromFormat(
+                \DateTimeInterface::ISO8601_EXPANDED,
+                $period->startTime,
+            );
+            $start = $start->setTime((int) $start->format("H"), 0, 0, 0);
+
+            $index = array_search($start, $timestamps);
+            if ($index !== false) {
+                $forecast[$index]["shortForecast"] = $period->shortForecast;
+            }
+        }
+
         // // Now map all those forecast periods into the structure we want.
+
         $forecast = array_map(function ($period) use (&$timezone, $units) {
             // This closure needs access to the $timezone variable about. The easiest
             // way I found to do it was using it by reference.
@@ -175,16 +202,11 @@ trait HourlyForecastTrait
             );
             $timeString = $timestamp->format("g A");
 
-            // Leaving these comments in here for now. We're eventually going to
-            // have to figure out what to do about getting the icon and
-            // conditions text, since they're not in the /gridpoints endpoint.
-
-            // $obsKey = $this->getApiObservationKey($period);
-
             return [
-                // "conditions" => $this->t->translate(
-                //     ucfirst(strtolower($period->shortForecast)),
-                // ),
+                "conditions" => $this->t->translate(
+                    ucfirst(strtolower($period["shortForecast"])),
+                ),
+                // Hold on icons until PR #863 resolves icons more thoroughly
                 // "icon" => $this->legacyMapping->$obsKey->icon,
                 // "iconBasename" => $this->getIconFileBasename($obsKey),
                 "dewpoint" => $this->getTemperatureScalar(
@@ -216,8 +238,6 @@ trait HourlyForecastTrait
             ];
         }, $forecast);
 
-        // Reindex the array. array_filter maintains indices, so it can result in
-        // holes in the array. Bizarre behavior choice, but okay...
-        return array_values($forecast);
+        return $forecast;
     }
 }
