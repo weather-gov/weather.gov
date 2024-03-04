@@ -142,6 +142,27 @@ table tr:nth-child(2) th {
   }
 }
 
+/* Extended forecast description width
+------------------------------------- */
+.flex-basis-auto {
+  flex-basis: auto;
+}
+
+.flex-basis-100 {
+  flex-basis: 100%;
+}
+
+@include at-media("tablet") {
+  .tablet-flex-basis-100 {
+      flex-basis: 100%;
+    }
+
+  .tablet-flex-basis-auto {
+      flex-basis: auto;
+  }
+}
+
+
 /* Wind direction icon transformations
 ------------------------------------- */
 svg[data-wind-direction] {
