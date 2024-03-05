@@ -106,11 +106,24 @@ const validateBundle = (bundleRoot) => {
   );
   if(!fs.existsSync(hourlyFilePath)){
     console.error(`Invalid hourly forecast file for bundle: ${hourlyFilePath}`);
+    process.exit(-1);
+  }
+  const dailyFilePath = resolve(
+    bundleRoot,
+    "gridpoints",
+    wfoCode,
+    gridCoords,
+    "forecast.json"
+  );
+  if(!fs.existsSync(dailyFilePath)){
+    console.error(`Invalid daily forecast file for bundle: ${dailyFilePath}`);
+    process.exit(-1);
   }
 
   return [
     gridpointsFilePath,
-    hourlyFilePath
+    hourlyFilePath,
+    dailyFilePath
   ];
 };
 
