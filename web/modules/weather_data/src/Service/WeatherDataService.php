@@ -256,9 +256,6 @@ class WeatherDataService
         $dayName = $startTime->format("l");
         $monthAndDay = $startTime->format("M j");
 
-        // Get any mapped condition and/or icon values.
-        $obsKey = $this->getApiObservationKey($period);
-
         // Sentence-case the forecast description.
         $shortForecast = ucfirst(strtolower($period->shortForecast));
 
@@ -270,8 +267,7 @@ class WeatherDataService
             "monthAndDay" => $monthAndDay,
             "startTime" => $period->startTime,
             "shortForecast" => $this->t->translate($shortForecast),
-            "icon" => $this->legacyMapping->$obsKey->icon,
-            "iconBasename" => $this->getIconFileBasename($obsKey),
+            "icon" => $this->getIcon($period),
             "temperature" => $period->temperature,
             "probabilityOfPrecipitation" =>
                 $period->probabilityOfPrecipitation->value,
@@ -347,15 +343,9 @@ class WeatherDataService
     }
 
     /**
-     * Gets a unique key identifying the conditions described in an observation.
-     *
-     * @param object $observation
-     *   An observation from api.weather.gov.
-     *
-     * @return string
-     *   A key uniquely identifying the current conditions.
+     * Gets weather.gov icon information from api.weather.gov icon.
      */
-    public function getApiObservationKey($observation)
+    public function getIcon($observation)
     {
         /* The icon path from the API is of the form:
            https://api.weather.gov/icons/land/day/skc
@@ -369,33 +359,33 @@ class WeatherDataService
            For now, we use the _first_ condition given in the path as the canonical
            condition for the key.
          */
-        $icon = $observation->icon;
+        $icon = (object) ["icon" => null, "base" => null];
 
-        if ($icon == null or strlen($icon) == 0) {
-            return "no data";
+        if ($observation->icon != null && strlen($observation->icon) > 0) {
+            $url = parse_url($observation->icon);
+            $path = $url["path"];
+            $path = explode("/", $path);
+
+            // An icon url, when split to path parts,
+            // with have either 5 or 6 parts.
+            // Thus we need to trim from the end by
+            // either 2 or 3 each time.
+            if (count($path) == 6) {
+                $path = array_slice($path, -3, 2);
+            } else {
+                $path = array_slice($path, -2);
+            }
+
+            $path = array_map(function ($piece) {
+                return preg_replace("/,.*$/", "", $piece);
+            }, $path);
+
+            $key = implode("/", $path);
+            $icon->icon = $this->legacyMapping->$key->icon;
+
+            $icon->base = basename($icon->icon, ".svg");
         }
-
-        $url = parse_url($observation->icon);
-        $path = $url["path"];
-        $path = explode("/", $path);
-
-        // An icon url, when split to path parts,
-        // with have either 5 or 6 parts.
-        // Thus we need to trim from the end by
-        // either 2 or 3 each time.
-        if (count($path) == 6) {
-            $path = array_slice($path, -3, 2);
-        } else {
-            $path = array_slice($path, -2);
-        }
-
-        $path = array_map(function ($piece) {
-            return preg_replace("/,.*$/", "", $piece);
-        }, $path);
-
-        $apiConditionKey = implode("/", $path);
-
-        return $apiConditionKey;
+        return $icon;
     }
 
     /**
@@ -680,17 +670,6 @@ class WeatherDataService
     }
 
     /**
-     * Get an icon template filename from legacyMapped key.
-     *
-     * @return string
-     *   An icon template filename
-     */
-    private function getIconFileBasename($obsKey)
-    {
-        return basename($this->legacyMapping->$obsKey->icon, ".svg");
-    }
-
-    /**
      * Get the current weather conditions at a WFO grid location.
      */
     public function getCurrentConditionsFromGrid(
@@ -760,8 +739,6 @@ class WeatherDataService
             $feelsLike = $this->getTemperatureScalar($obs->temperature);
         }
 
-        $obsKey = $this->getApiObservationKey($obs);
-
         $description = ucfirst(strtolower($obs->textDescription));
 
         return [
@@ -772,7 +749,7 @@ class WeatherDataService
             // C to F.
             "feels_like" => $feelsLike,
             "humidity" => (int) round($obs->relativeHumidity->value ?? 0),
-            "icon" => $this->legacyMapping->$obsKey->icon,
+            "icon" => $this->getIcon($obs),
             // C to F.
             "temperature" => $this->getTemperatureScalar($obs->temperature),
             "timestamp" => [

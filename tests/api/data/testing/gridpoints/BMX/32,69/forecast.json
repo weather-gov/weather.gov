@@ -14,11 +14,11 @@
     "type": "Polygon",
     "coordinates": [
       [
-        [-87.581288599999993, 33.219117099999998],
-        [-87.582765499999994, 33.196555199999999],
-        [-87.555798199999998, 33.195317099999997],
+        [-87.5812886, 33.2191171],
+        [-87.5827655, 33.1965552],
+        [-87.5557982, 33.1953171],
         [-87.554316, 33.217878799999994],
-        [-87.581288599999993, 33.219117099999998]
+        [-87.5812886, 33.2191171]
       ]
     ]
   },
@@ -29,16 +29,13 @@
     "generatedAt": "2024-02-23T19:28:40+00:00",
     "updateTime": "2024-02-23T18:40:54+00:00",
     "validTimes": "2024-02-23T12:00:00+00:00/P8DT1H",
-    "elevation": {
-      "unitCode": "wmoUnit:m",
-      "value": 71.0184
-    },
+    "elevation": { "unitCode": "wmoUnit:m", "value": 71.0184 },
     "periods": [
       {
         "number": 1,
         "name": "This Afternoon",
-        "startTime": "2024-02-23T13:00:00-06:00",
-        "endTime": "2024-02-23T18:00:00-06:00",
+        "startTime": "date:now +0 hours",
+        "endTime": "date:now +5 hours",
         "isDaytime": true,
         "temperature": 69,
         "temperatureUnit": "F",
@@ -47,14 +44,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 6.666666666666667
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 43
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 6.666666666666667 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 43 },
         "windSpeed": "10 to 15 mph",
         "windDirection": "NW",
         "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
@@ -64,8 +55,8 @@
       {
         "number": 2,
         "name": "Tonight",
-        "startTime": "2024-02-23T18:00:00-06:00",
-        "endTime": "2024-02-24T06:00:00-06:00",
+        "startTime": "date:now +5 hours",
+        "endTime": "date:now +17 hours",
         "isDaytime": false,
         "temperature": 44,
         "temperatureUnit": "F",
@@ -74,14 +65,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 6.1111111111111107
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 79
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 6.111111111111111 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 79 },
         "windSpeed": "5 to 10 mph",
         "windDirection": "W",
         "icon": "https://api.weather.gov/icons/land/night/skc?size=medium",
@@ -91,8 +76,8 @@
       {
         "number": 3,
         "name": "Saturday",
-        "startTime": "2024-02-24T06:00:00-06:00",
-        "endTime": "2024-02-24T18:00:00-06:00",
+        "startTime": "date:now +17 hours",
+        "endTime": "date:now +29 hours",
         "isDaytime": true,
         "temperature": 66,
         "temperatureUnit": "F",
@@ -101,14 +86,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 4.4444444444444446
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 79
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 4.444444444444445 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 79 },
         "windSpeed": "5 to 15 mph",
         "windDirection": "NW",
         "icon": "https://api.weather.gov/icons/land/day/skc?size=medium",
@@ -118,8 +97,8 @@
       {
         "number": 4,
         "name": "Saturday Night",
-        "startTime": "2024-02-24T18:00:00-06:00",
-        "endTime": "2024-02-25T06:00:00-06:00",
+        "startTime": "date:now +29 hours",
+        "endTime": "date:now +41 hours",
         "isDaytime": false,
         "temperature": 35,
         "temperatureUnit": "F",
@@ -128,14 +107,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 1.1111111111111112
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 80
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 1.1111111111111112 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 80 },
         "windSpeed": "5 to 10 mph",
         "windDirection": "NE",
         "icon": "https://api.weather.gov/icons/land/night/skc?size=medium",
@@ -145,8 +118,8 @@
       {
         "number": 5,
         "name": "Sunday",
-        "startTime": "2024-02-25T06:00:00-06:00",
-        "endTime": "2024-02-25T18:00:00-06:00",
+        "startTime": "date:now +41 hours",
+        "endTime": "date:now +53 hours",
         "isDaytime": true,
         "temperature": 69,
         "temperatureUnit": "F",
@@ -155,14 +128,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 3.8888888888888888
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 82
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 3.888888888888889 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 82 },
         "windSpeed": "5 to 10 mph",
         "windDirection": "S",
         "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
@@ -172,8 +139,8 @@
       {
         "number": 6,
         "name": "Sunday Night",
-        "startTime": "2024-02-25T18:00:00-06:00",
-        "endTime": "2024-02-26T06:00:00-06:00",
+        "startTime": "date:now +53 hours",
+        "endTime": "date:now +65 hours",
         "isDaytime": false,
         "temperature": 48,
         "temperatureUnit": "F",
@@ -182,14 +149,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 5
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 73
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 5 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 73 },
         "windSpeed": "5 to 10 mph",
         "windDirection": "S",
         "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
@@ -199,8 +160,8 @@
       {
         "number": 7,
         "name": "Monday",
-        "startTime": "2024-02-26T06:00:00-06:00",
-        "endTime": "2024-02-26T18:00:00-06:00",
+        "startTime": "date:now +65 hours",
+        "endTime": "date:now +77 hours",
         "isDaytime": true,
         "temperature": 77,
         "temperatureUnit": "F",
@@ -209,14 +170,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 9.4444444444444446
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 77
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 9.444444444444445 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 77 },
         "windSpeed": "5 to 15 mph",
         "windDirection": "S",
         "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
@@ -226,8 +181,8 @@
       {
         "number": 8,
         "name": "Monday Night",
-        "startTime": "2024-02-26T18:00:00-06:00",
-        "endTime": "2024-02-27T06:00:00-06:00",
+        "startTime": "date:now +77 hours",
+        "endTime": "date:now +89 hours",
         "isDaytime": false,
         "temperature": 59,
         "temperatureUnit": "F",
@@ -236,14 +191,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 13.333333333333334
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 89
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 13.333333333333334 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 89 },
         "windSpeed": "10 to 15 mph",
         "windDirection": "S",
         "icon": "https://api.weather.gov/icons/land/night/sct?size=medium",
@@ -253,8 +202,8 @@
       {
         "number": 9,
         "name": "Tuesday",
-        "startTime": "2024-02-27T06:00:00-06:00",
-        "endTime": "2024-02-27T18:00:00-06:00",
+        "startTime": "date:now +89 hours",
+        "endTime": "date:now +101 hours",
         "isDaytime": true,
         "temperature": 80,
         "temperatureUnit": "F",
@@ -263,14 +212,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 14.444444444444445
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 90
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 14.444444444444445 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 90 },
         "windSpeed": "15 mph",
         "windDirection": "S",
         "icon": "https://api.weather.gov/icons/land/day/bkn?size=medium",
@@ -280,8 +223,8 @@
       {
         "number": 10,
         "name": "Tuesday Night",
-        "startTime": "2024-02-27T18:00:00-06:00",
-        "endTime": "2024-02-28T06:00:00-06:00",
+        "startTime": "date:now +101 hours",
+        "endTime": "date:now +113 hours",
         "isDaytime": false,
         "temperature": 63,
         "temperatureUnit": "F",
@@ -290,14 +233,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 20
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 15.555555555555555
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 84
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 15.555555555555555 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 84 },
         "windSpeed": "15 mph",
         "windDirection": "S",
         "icon": "https://api.weather.gov/icons/land/night/bkn/rain_showers,20?size=medium",
@@ -307,8 +244,8 @@
       {
         "number": 11,
         "name": "Wednesday",
-        "startTime": "2024-02-28T06:00:00-06:00",
-        "endTime": "2024-02-28T18:00:00-06:00",
+        "startTime": "date:now +113 hours",
+        "endTime": "date:now +125 hours",
         "isDaytime": true,
         "temperature": 73,
         "temperatureUnit": "F",
@@ -317,14 +254,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 50
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 15
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 84
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 15 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 84 },
         "windSpeed": "10 to 15 mph",
         "windDirection": "SW",
         "icon": "https://api.weather.gov/icons/land/day/tsra_sct,30/tsra_sct,50?size=medium",
@@ -334,8 +265,8 @@
       {
         "number": 12,
         "name": "Wednesday Night",
-        "startTime": "2024-02-28T18:00:00-06:00",
-        "endTime": "2024-02-29T06:00:00-06:00",
+        "startTime": "date:now +125 hours",
+        "endTime": "date:now +137 hours",
         "isDaytime": false,
         "temperature": 46,
         "temperatureUnit": "F",
@@ -344,14 +275,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 40
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 10
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 78
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 10 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 78 },
         "windSpeed": "10 mph",
         "windDirection": "N",
         "icon": "https://api.weather.gov/icons/land/night/tsra,40/tsra,30?size=medium",
@@ -361,8 +286,8 @@
       {
         "number": 13,
         "name": "Thursday",
-        "startTime": "2024-02-29T06:00:00-06:00",
-        "endTime": "2024-02-29T18:00:00-06:00",
+        "startTime": "date:now +137 hours",
+        "endTime": "date:now +149 hours",
         "isDaytime": true,
         "temperature": 61,
         "temperatureUnit": "F",
@@ -371,14 +296,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 20
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 4.4444444444444446
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 79
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 4.444444444444445 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 79 },
         "windSpeed": "10 mph",
         "windDirection": "NE",
         "icon": "https://api.weather.gov/icons/land/day/tsra_hi,20?size=medium",
@@ -388,8 +307,8 @@
       {
         "number": 14,
         "name": "Thursday Night",
-        "startTime": "2024-02-29T18:00:00-06:00",
-        "endTime": "2024-03-01T06:00:00-06:00",
+        "startTime": "date:now +149 hours",
+        "endTime": "date:now +161 hours",
         "isDaytime": false,
         "temperature": 46,
         "temperatureUnit": "F",
@@ -398,14 +317,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 50
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": 6.1111111111111107
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 85
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 6.111111111111111 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 85 },
         "windSpeed": "10 mph",
         "windDirection": "E",
         "icon": "https://api.weather.gov/icons/land/night/tsra_hi,30/tsra_hi,50?size=medium",

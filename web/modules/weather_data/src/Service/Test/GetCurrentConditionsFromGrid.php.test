@@ -67,7 +67,10 @@ final class GetCurrentConditionsFromGridTest extends Base
             ],
             "feels_like" => 45,
             "humidity" => 88,
-            "icon" => "snow.svg",
+            "icon" => (object) [
+                "icon" => "snow.svg",
+                "base" => "snow",
+            ],
             "temperature" => 45,
             "timestamp" => [
                 "formatted" => "Thursday 8:00 PM GMT+0000",
@@ -329,7 +332,7 @@ final class GetCurrentConditionsFromGridTest extends Base
     public function testIconIsNull(): void
     {
         $expected = $this->setupHappyPath("observation.bad-null-icon.json");
-        $expected["icon"] = "nodata.svg";
+        $expected["icon"] = (object) ["icon" => null, "base" => null];
 
         $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
             "wfo",
@@ -347,7 +350,7 @@ final class GetCurrentConditionsFromGridTest extends Base
     public function testIconIsEmptyString(): void
     {
         $expected = $this->setupHappyPath("observation.bad-empty-icon.json");
-        $expected["icon"] = "nodata.svg";
+        $expected["icon"] = (object) ["icon" => null, "base" => null];
 
         $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
             "wfo",

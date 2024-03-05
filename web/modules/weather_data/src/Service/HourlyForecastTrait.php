@@ -161,6 +161,7 @@ trait HourlyForecastTrait
             if (count($matches) == count($properties)) {
                 $period = array_merge(...$matches);
                 $period["shortForecast"] = "";
+                $period["icon"] = null;
                 return $period;
             }
             return false;
@@ -187,6 +188,7 @@ trait HourlyForecastTrait
             $index = array_search($start, $timestamps);
             if ($index !== false) {
                 $forecast[$index]["shortForecast"] = $period->shortForecast;
+                $forecast[$index]["icon"] = $period->icon;
             }
         }
 
@@ -206,9 +208,7 @@ trait HourlyForecastTrait
                 "conditions" => $this->t->translate(
                     ucfirst(strtolower($period["shortForecast"])),
                 ),
-                // Hold on icons until PR #863 resolves icons more thoroughly
-                // "icon" => $this->legacyMapping->$obsKey->icon,
-                // "iconBasename" => $this->getIconFileBasename($obsKey),
+                "icon" => $this->getIcon((object) $period),
                 "dewpoint" => $this->getTemperatureScalar(
                     (object) [
                         "unitCode" => $units["dewpoint"],
