@@ -237,4 +237,9 @@ class DataLayer
         }
         return $this->iPlaceNearPolygon[$wktPoints];
     }
+
+    public function databaseFetch($sql)
+    {
+        return $this->database->query($sql)->fetch();
+    }
 }

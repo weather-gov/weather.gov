@@ -407,7 +407,7 @@ class WeatherDataService
             $sourceGeomText .
             "')) as within;";
 
-        $result = $this->database->query($sql)->fetch();
+        $result = $this->dataLayer->databaseFetch($sql);
         $distanceInfo = [
             "distance" => (float) $result->distance,
             "withinGridCell" => !!(int) $result->within,
@@ -464,8 +464,11 @@ class WeatherDataService
     /**
      * Get the current weather conditions at a WFO grid location.
      */
-    public function getCurrentConditionsFromGrid($wfo, $x, $y)
+    public function getCurrentConditionsFromGrid($wfo, $x, $y, $self = false)
     {
+        if (!$self) {
+            $self = $this;
+        }
         date_default_timezone_set("America/New_York");
 
         $obsStations = $this->dataLayer->getObservationStations($wfo, $x, $y);
@@ -577,12 +580,10 @@ class WeatherDataService
 
         date_default_timezone_set("America/New_York");
 
-        $forecast = $this->dataLayer->getHourlyForecast($wfo, $x, $y);
+        $forecast = $this->dataLayer->getGridpoint($wfo, $x, $y)->properties;
 
         $place = $this->getPlaceFromGrid($wfo, $x, $y);
         $timezone = $place->timezone;
-
-        $forecast = $forecast->periods;
 
         $periods = [];
 

@@ -88,12 +88,14 @@ trait HourlyForecastTrait
         $place = $self->getPlaceFromGrid($wfo, $gridX, $gridY);
         $timezone = $place->timezone;
 
-        $forecast = $this->getFromWeatherAPI("/gridpoints/$wfo/$gridX,$gridY")
+        $forecast = $this->dataLayer->getGridpoint($wfo, $gridX, $gridY)
             ->properties;
 
-        $extraForecast = $this->getFromWeatherAPI(
-            "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
-        )->properties->periods;
+        $extraForecast = $this->dataLayer->getHourlyForecast(
+            $wfo,
+            $gridX,
+            $gridY,
+        )->periods;
 
         $properties = [
             "dewpoint",
