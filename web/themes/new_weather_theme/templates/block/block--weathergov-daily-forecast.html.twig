@@ -4,12 +4,12 @@
   {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
 
-<div class="grid-container padding-x-0 tablet:padding-x-2">
-  <div class="grid-row">
-    <div class="grid-col tablet-lg:grid-offset-2"> 
-      <h2 class="padding-x-2 tablet:padding-x-0 text-normal">{{ "Next @count days" | t({ "@count": (content.detailed | length) + 1 }) }}</h2>
+  <div class="grid-container padding-x-0 tablet:padding-x-2">
+    <div class="grid-row">
+      <div class="grid-col tablet-lg:grid-offset-2"> 
+        <h2 class="padding-x-2 tablet:padding-x-0 text-normal">{{ "Next @count days" | t({ "@count": (content.detailed | length) + 1 }) }}</h2>
+      </div>
     </div>
-  </div>
     <ol class="usa-list--unstyled">
       {# Attempt to render the period(s) associated with the current day #}
       {% if content.today %}
@@ -33,7 +33,7 @@
     <ol class="usa-list--unstyled">
       {% for periods in content.extended %}
         <li class="display-block margin-bottom-5">
-          <div class="grid-container bg-white padding-top-2 padding-bottom-3 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+          <div class="bg-white padding-top-2 padding-bottom-3 padding-x-2 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet:grid-col-6">
             <time class="display-block flex-1 text-bold font-heading-md margin-bottom-2" datetime="{{ periods['daytime'].startTime }}">
               <span class="text-primary-darker">{{ periods["daytime"].dayName }}, {{ periods["daytime"].monthAndDay }}</span>
             </time>

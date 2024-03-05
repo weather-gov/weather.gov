@@ -16,7 +16,7 @@ only be a nighttime period.
         {% else %}
           <span>{{ periods[0].dayName }}, </span>
         {% endif %}
-        <span class="display-block desktop:display-inline">{{ periods[0].monthAndDay }}</span>
+        <span class="display-block">{{ periods[0].monthAndDay }}</span>
       </time>
 
       {% for period in periods %}
@@ -28,11 +28,13 @@ only be a nighttime period.
         {% if period.isDaytime %}
           {% set label = "Day" | t %}
           {% set lineColor = "yellow" %}
+          {% set marginUnit = 3 %}
         {% else %}
           {% set label = "Night" | t %}
           {% set lineColor = "indigo" %}
+          {% set marginUnit = 1 %}
         {% endif %}
-      <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-6 margin-bottom-3">
+        <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-6 margin-bottom-{{ marginUnit }} tablet:margin-bottom-1">
         <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-before line-before--{{ lineColor }}">
           {{label}}
         </span>
