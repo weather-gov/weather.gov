@@ -23,36 +23,38 @@ only be a nighttime period.
         {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': period } %}
       {% endfor %}
     </div>
-  {% for period in periods %}
-    {% if period.isDaytime %}
-      {% set label = "Day" | t %}
-      {% set lineColor = "yellow" %}
-    {% else %}
-      {% set label = "Night" | t %}
-      {% set lineColor = "indigo" %}
-    {% endif %}
-    <div class="daily-forecast-summary-area margin-bottom-3">
-      <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-after line-after--{{ lineColor }}">
-        {{label}}
-      </span>
-      <div class="display-flex flex-row flex-align-start">
-        <div class="width-5 height-5 margin-right-105">
-          <svg role="img" aria-hidden="true" class="width-full height-full">
-            <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.iconBasename }}"></use>
-          </svg>
-        </div>
-        <div class="flex-1">
-          <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 line-height-sans-3">
+    <div class="grid-row grid-gap">
+      {% for period in periods %}
+        {% if period.isDaytime %}
+          {% set label = "Day" | t %}
+          {% set lineColor = "yellow" %}
+        {% else %}
+          {% set label = "Night" | t %}
+          {% set lineColor = "indigo" %}
+        {% endif %}
+      <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-6 margin-bottom-3">
+        <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-after line-after--{{ lineColor }}">
+          {{label}}
+        </span>
+        <div class="display-flex flex-row flex-align-start">
+          <div class="width-5 height-5 margin-right-105">
+            <svg role="img" aria-hidden="true" class="width-full height-full">
+              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.iconBasename }}"></use>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 line-height-sans-3">
             {{period.shortForecast}}
-          </p>
-          {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
-            <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-              {{period.probabilityOfPrecipitation}}% {{ "chance of precipitation" | t }}
             </p>
-          {% endif %}
+            {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
+            <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
+            {{period.probabilityOfPrecipitation}}% {{ "chance of precipitation" | t }}
+            </p>
+            {% endif %}
+          </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-  {% endfor %}
   </div>
 </li>
