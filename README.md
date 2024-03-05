@@ -47,7 +47,7 @@ Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect the
 | Later              | <ul><li>Transition and migration</li><li>Continuous improvement</li></ul>|
 
 
-**Initial roadmap can be viewed [here](/doc/product/mvp-roadmap.md)**
+**Initial roadmap can be viewed [here](/docs/product/MVP-roadmap.md)**
 
 ![happy path journey map](/docs/img/happy-path-v2.png)
 
