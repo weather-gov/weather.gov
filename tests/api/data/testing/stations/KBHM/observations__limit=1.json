@@ -62,7 +62,7 @@
         "timestamp": "2024-02-20T15:53:00+00:00",
         "rawMessage": "KBHM 201553Z 25003KT 10SM FEW095 FEW140 FEW250 14/M06 A3030 RMK AO2 SLP260 T01391056",
         "textDescription": "Mostly Clear",
-        "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
+        "icon": null,
         "presentWeather": [],
         "temperature": {
           "unitCode": "wmoUnit:degC",

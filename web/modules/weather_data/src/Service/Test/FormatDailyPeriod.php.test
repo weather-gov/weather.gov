@@ -41,8 +41,10 @@ final class FormatDailyPeriodTest extends Base
             "monthAndDay" => "Nov 28",
             "startTime" => "2023-11-28T06:00:00-07:00",
             "shortForecast" => "Sunny",
-            "icon" => "mostly_clear-day.svg",
-            "iconBasename" => "mostly_clear-day",
+            "icon" => (object) [
+                "icon" => "mostly_clear-day.svg",
+                "base" => "mostly_clear-day",
+            ],
             "temperature" => 53,
             "probabilityOfPrecipitation" => null,
             "isDaytime" => true,

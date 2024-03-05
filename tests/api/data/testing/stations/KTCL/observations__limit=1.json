@@ -62,7 +62,7 @@
         "timestamp": "2024-02-23T18:53:00+00:00",
         "rawMessage": "KTCL 231853Z 31013KT 10SM CLR 21/02 A2981 RMK AO2 SLP091 T02110022",
         "textDescription": "Clear",
-        "icon": "https://api.weather.gov/icons/land/day/skc?size=medium",
+        "icon": null,
         "presentWeather": [],
         "temperature": {
           "unitCode": "wmoUnit:degC",
