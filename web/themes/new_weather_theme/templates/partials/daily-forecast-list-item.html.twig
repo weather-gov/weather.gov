@@ -9,7 +9,7 @@ only be a nighttime period.
 #}
 <li class="display-block">
   <div class="grid-container bg-white padding-y-2 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-    <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center margin-bottom-3">
+    <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center margin-bottom-3 tablet:margin-bottom-4 tablet:grid-col-6">
       <time class="display-block flex-1 text-bold font-heading-md text-primary-darker" datetime="{{ periods[0].startTime }}">
         {% if dayLabel %}
           <span>{{ dayLabel }}, </span>
@@ -33,7 +33,7 @@ only be a nighttime period.
           {% set lineColor = "indigo" %}
         {% endif %}
       <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-6 margin-bottom-3">
-        <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-after line-after--{{ lineColor }}">
+        <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-before line-before--{{ lineColor }}">
           {{label}}
         </span>
         <div class="display-flex flex-row flex-align-start">

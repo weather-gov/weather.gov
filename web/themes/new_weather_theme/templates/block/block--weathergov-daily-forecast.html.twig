@@ -37,27 +37,22 @@
             <time class="display-block flex-1 text-bold font-heading-md margin-bottom-2" datetime="{{ periods['daytime'].startTime }}">
               <span class="text-primary-darker">{{ periods["daytime"].dayName }}, {{ periods["daytime"].monthAndDay }}</span>
             </time>
-            <!-- start -->
             <div class="display-flex flex-row flex-wrap flex-justify flex-align-center">
-              <!-- icon -->
               <div class="order-first width-5 height-5 margin-right-105">
                 <svg role="img" aria-hidden="true" class="width-full height-full">
                   <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ periods["daytime"].iconBasename }}"></use>
                 </svg>
               </div>
-              <!-- forecast description -->
               <div class="order-last mobile-lg:order-2 flex-basis-100 mobile-lg__flex-basis-auto margin-top-105 tablet:margin-top-0">
                 <p class="daily-short-forecast font-body-sm margin-y-0">
                 {{ periods["daytime"].shortForecast }}
                 </p>
               </div>
-              <!-- temps -->
               <div class="display-flex flex-justify-end order-3 flex-1">
                 {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': periods["daytime"]} %}
                 {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': periods["overnight"]} %}
               </div>
             </div>
-            <!-- end -->
           </div>
         </li>
       {% endfor %}
