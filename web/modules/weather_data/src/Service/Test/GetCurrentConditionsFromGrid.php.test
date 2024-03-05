@@ -78,9 +78,11 @@ final class GetCurrentConditionsFromGridTest extends Base
             ],
             "wind" => [
                 "speed" => 13,
-                "angle" => 310,
-                "direction" => "northwest",
-                "shortDirection" => "NW",
+                "direction" => (object) [
+                    "angle" => 310,
+                    "long" => "northwest",
+                    "short" => "NW",
+                ],
             ],
             "stationInfo" => [
                 "name" => "NWS Test Obs Station",
@@ -358,108 +360,5 @@ final class GetCurrentConditionsFromGridTest extends Base
         );
 
         $this->assertEquals((object) $expected, (object) $actual);
-    }
-
-    /**
-     * Tests that the wind direction is populated correctly.
-     *
-     * This tests the 8 cardinal and ordinal directions.
-     */
-    public function testWindDirections(): void
-    {
-        $scenarios = [
-            [0, "north", "N"],
-            [45, "northeast", "NE"],
-            [90, "east", "E"],
-            [135, "southeast", "SE"],
-            [180, "south", "S"],
-            [225, "southwest", "SW"],
-            [270, "west", "W"],
-            [315, "northwest", "NW"],
-            [360, "north", "N"],
-        ];
-
-        $observationResponse = json_decode(
-            file_get_contents(
-                __DIR__ . "/test_data/observation.good-no-feelslike.json",
-            ),
-        );
-
-        $expected = [
-            "conditions" => [
-                "long" => "Not snow",
-                "short" => "Not snow",
-            ],
-            "feels_like" => 45,
-            "humidity" => 88,
-            "icon" => (object) ["icon" => "snow.svg", "base" => "snow"],
-            "temperature" => 45,
-            "timestamp" => [
-                "formatted" => "Thursday 8:00 PM GMT+0000",
-                "utc" => "1697140800",
-            ],
-            "wind" => [
-                "speed" => 13,
-                "angle" => 310,
-                "direction" => "northwest",
-                "shortDirection" => "NW",
-            ],
-            "stationInfo" => [
-                "name" => "NWS Test Obs Station",
-                "identifier" => "KNWS",
-                "lat" => 0,
-                "lon" => 0,
-                "elevation" => 3.3,
-            ],
-        ];
-
-        foreach ($scenarios as $scenario) {
-            // Re-create the WeatherDataService object so we don't get cached results.
-            $this->setUp();
-
-            $observationResponse->features[0]->properties->windDirection->value =
-                $scenario[0];
-
-            $expected["wind"]["angle"] = $scenario[0];
-            $expected["wind"]["direction"] = $scenario[1];
-            $expected["wind"]["shortDirection"] = $scenario[2];
-
-            $this->setupDistanceLogging();
-
-            $this->httpClientMock->append(
-                new Response(
-                    200,
-                    ["Content-type" => "application/geo+json"],
-                    file_get_contents(
-                        __DIR__ . "/test_data/observation-stations.good.json",
-                    ),
-                ),
-            );
-
-            $this->httpClientMock->append(
-                new Response(
-                    200,
-                    ["Content-type" => "application/geo+json"],
-                    '{"geometry":{"coordinates":[[[4,3],[5,9],[3,9]]]}}',
-                ),
-            );
-
-            $this->httpClientMock->append(
-                new Response(
-                    200,
-                    ["Content-type" => "application/geo+json"],
-                    json_encode($observationResponse),
-                ),
-            );
-
-            $actual = $this->weatherDataService->getCurrentConditionsFromGrid(
-                "wfo",
-                1,
-                2,
-                $this->selfMock,
-            );
-
-            $this->assertEquals((object) $expected, (object) $actual);
-        }
     }
 }

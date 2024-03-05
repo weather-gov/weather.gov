@@ -48,7 +48,7 @@
             {%- if content.wind.speed != null -%}
               {% set windString = "@windSpeed mph @windDirection" | t({
                   "@windSpeed": content.wind.speed,
-                  "@windDirection": content.wind.shortDirection
+                  "@windDirection": content.wind.direction.short
                 }) 
               %}
             {%- else -%}
@@ -113,7 +113,7 @@
           |
           t({
             "@windSpeed": content.wind.speed,
-            "@windDirection": content.wind.direction
+            "@windDirection": content.wind.direction.long
           })
           }}{% else %}{{ ". Wind information is unavailable" | t() }}{% endif %}.
     </div>

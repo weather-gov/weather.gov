@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class WeatherDataService
 {
+    use HourlyForecastTrait;
     use LoggerChannelTrait;
     use UnitConversionTrait;
     use WeatherAlertTrait;
@@ -358,8 +359,6 @@ class WeatherDataService
            For now, we use the _first_ condition given in the path as the canonical
            condition for the key.
          */
-        $icon = $observation->icon;
-
         $icon = (object) ["icon" => null, "base" => null];
 
         if ($observation->icon != null && strlen($observation->icon) > 0) {
@@ -742,30 +741,6 @@ class WeatherDataService
 
         $description = ucfirst(strtolower($obs->textDescription));
 
-        // The cardinal and ordinal directions. North goes in twice because it
-        // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
-        $directions = [
-            "north",
-            "northeast",
-            "east",
-            "southeast",
-            "south",
-            "southwest",
-            "west",
-            "northwest",
-            "north",
-        ];
-        $shortDirections = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
-
-        // 1. Whatever degrees we got from the API, constrain it to 0°-360°.
-        // 2. Add 22.5° to it. This accounts for north starting at -22.5°
-        // 3. Use integer division by 45° to see which direction index this is.
-        // This indexes into the two direction name arrays above.
-        $directionIndex = intdiv(
-            intval(($obs->windDirection->value % 360) + 22.5, 10),
-            45,
-        );
-
         return [
             "conditions" => [
                 "long" => $this->t->translate($description),
@@ -787,9 +762,9 @@ class WeatherDataService
                     $obs->windSpeed->value == null
                         ? null
                         : (int) round($obs->windSpeed->value * 0.6213712),
-                "angle" => $obs->windDirection->value,
-                "direction" => $directions[$directionIndex],
-                "shortDirection" => $shortDirections[$directionIndex],
+                "direction" => $this->getDirectionOrdinal(
+                    $obs->windDirection->value,
+                ),
             ],
             "stationInfo" => [
                 "name" => $observationStation->properties->name,
@@ -856,87 +831,6 @@ class WeatherDataService
         }
 
         return $periods;
-    }
-
-    /**
-     * Get the hourly forecast for a location.
-     *
-     * Note that the $now object should *NOT* be set. It's a dependency injection
-     * hack so we can mock the current date/time.
-     *
-     * @return array
-     *   The hourly forecast as an associative array.
-     */
-    public function getHourlyForecastFromGrid(
-        $wfo,
-        $gridX,
-        $gridY,
-        $now = false,
-        $self = false,
-    ) {
-        if (!$self) {
-            $self = $this;
-        }
-
-        $wfo = strtoupper($wfo);
-        if (!($now instanceof \DateTimeImmutable)) {
-            $now = new \DateTimeImmutable();
-        }
-
-        date_default_timezone_set("America/New_York");
-
-        $forecast = $this->getFromWeatherAPI(
-            "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
-        );
-
-        $place = $self->getPlaceFromGrid($wfo, $gridX, $gridY);
-        $timezone = $place->timezone;
-
-        $forecast = $forecast->properties->periods;
-
-        // Toss out any time periods in the past.
-        $forecast = array_filter($forecast, function ($period) use (&$now) {
-            $then = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601_EXPANDED,
-                $period->startTime,
-            );
-            $diff = $now->diff($then, false);
-
-            return $diff->invert != 1;
-        });
-
-        // Now map all those forecast periods into the structure we want.
-        $forecast = array_map(function ($period) use (&$timezone) {
-            // This closure needs access to the $timezone variable about. The easiest
-            // way I found to do it was using it by reference.
-            // From the start period of the time, parse it as an ISO8601 string and
-            // then format it into just the "Hour AM/PM" format (e.g., "8 PM")
-            $timestamp = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601_EXPANDED,
-                $period->startTime,
-            )->setTimeZone(new \DateTimeZone($timezone));
-            $timeString = $timestamp->format("g A");
-
-            return [
-                "conditions" => $this->t->translate(
-                    ucfirst(strtolower($period->shortForecast)),
-                ),
-                "icon" => $this->getIcon($period),
-                "probabilityOfPrecipitation" =>
-                    $period->probabilityOfPrecipitation->value,
-                "time" => $timeString,
-                "timestamp" => $timestamp->format("c"),
-                "temperature" => $period->temperature,
-                "relativeHumidity" => $period->relativeHumidity->value,
-                "windSpeed" => $period->windSpeed,
-                "windDirection" => $period->windDirection,
-                "dewpoint" => $this->getTemperatureScalar($period->dewpoint),
-            ];
-        }, $forecast);
-
-        // Reindex the array. array_filter maintains indices, so it can result in
-        // holes in the array. Bizarre behavior choice, but okay...
-        return array_values($forecast);
     }
 
     /**
