@@ -33,7 +33,7 @@ i.e.
 }
 
 .icon svg {
-  @include u-height(8);
+  @include u-height(5);
 
   path.st0 {
     fill: color("black");
@@ -123,8 +123,9 @@ table tr:nth-child(2) th {
 .line-before{
   &:before {
     content: "";
-    top: units(-1);
-    width: units(5);
+    top: units(1);
+    left: units(-4); 
+    width: units(3);
     position: relative;
     display: block;
   }
@@ -142,6 +143,30 @@ table tr:nth-child(2) th {
   }
 }
 
+.line-after{
+  &:after {
+    content: "";
+    top: calc(units(-1) - units("2px")); // align with word center
+    left: units(5) + units(1.5);  // icon size + margin-right
+    width: calc(100% - units(8)); // width - margins
+    position: relative;
+    display: block;
+  }
+}
+
+.line-after--yellow {
+  &:after {
+    border-top: 2px solid color("yellow-20");
+  }
+}
+
+.line-after--indigo {
+  &:after {
+    border-top: 2px solid color("secondary-darkest");
+  }
+}
+
+
 /* Extended forecast description width
 ------------------------------------- */
 .flex-basis-auto {
@@ -152,12 +177,12 @@ table tr:nth-child(2) th {
   flex-basis: 100%;
 }
 
-@include at-media("tablet") {
-  .tablet-flex-basis-100 {
+@include at-media(mobile-lg) {
+  .mobile-lg__flex-basis-100 {
       flex-basis: 100%;
     }
 
-  .tablet-flex-basis-auto {
+  .mobile-lg__flex-basis-auto {
       flex-basis: auto;
   }
 }
