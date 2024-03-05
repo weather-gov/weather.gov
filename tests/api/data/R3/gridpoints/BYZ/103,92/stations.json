@@ -1,0 +1,203 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" },
+      "observationStations": { "@container": "@list", "@type": "@id" }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/KBIL",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-108.54222, 45.80694] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KBIL",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 1111.9104 },
+        "stationIdentifier": "KBIL",
+        "name": "Billings, Billings Logan International Airport",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/MTZ235",
+        "county": "https://api.weather.gov/zones/county/MTC111",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MTZ128"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/K6S8",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-108.76077, 45.70517] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/K6S8",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 1079.9064 },
+        "stationIdentifier": "K6S8",
+        "name": "Laurel Municipal Airport",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/MTZ235",
+        "county": "https://api.weather.gov/zones/county/MTC111",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MTZ128"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KRPX",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-108.54339, 46.47499] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KRPX",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 1064.0568 },
+        "stationIdentifier": "KRPX",
+        "name": "ROUNDUP",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/MTZ029",
+        "county": "https://api.weather.gov/zones/county/MTC065",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MTZ127"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/TCTM8",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-109.36056, 45.15694] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/TCTM8",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 1950.72 },
+        "stationIdentifier": "TCTM8",
+        "name": "TIMBERCREST",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/MTZ067",
+        "county": "https://api.weather.gov/zones/county/MTC009",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MTZ126"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KU68",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-108.4455, 44.91167] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KU68",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 1246.632 },
+        "stationIdentifier": "KU68",
+        "name": "Cowley WY",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/WYZ004",
+        "county": "https://api.weather.gov/zones/county/WYC003",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/WYZ275"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KPOY",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-108.7934, 44.8671999] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KPOY",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 1552.0416 },
+        "stationIdentifier": "KPOY",
+        "name": "Powell Municipal Airport",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/WYZ004",
+        "county": "https://api.weather.gov/zones/county/WYC029",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/WYZ275"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KLVM",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-110.44833, 45.69944] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KLVM",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 1419.1488 },
+        "stationIdentifier": "KLVM",
+        "name": "Livingston, Mission Field Airport",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/MTZ065",
+        "county": "https://api.weather.gov/zones/county/MTC067",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MTZ123"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KSHR",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-106.97411, 44.7603099] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KSHR",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 1210.056 },
+        "stationIdentifier": "KSHR",
+        "name": "Sheridan County Airport",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/WYZ199",
+        "county": "https://api.weather.gov/zones/county/WYC033",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/WYZ274"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KMLS",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-105.88639, 46.42806] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KMLS",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 801.0144 },
+        "stationIdentifier": "KMLS",
+        "name": "Miles City, Frank Wiley Field Airport",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/MTZ032",
+        "county": "https://api.weather.gov/zones/county/MTC017",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MTZ132"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KBHK",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-104.2574999, 46.34778] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KBHK",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 904.9512 },
+        "stationIdentifier": "KBHK",
+        "name": "Baker, Baker Municipal Airport",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/MTZ033",
+        "county": "https://api.weather.gov/zones/county/MTC025",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MTZ133"
+      }
+    }
+  ],
+  "observationStations": [
+    "https://api.weather.gov/stations/KBIL",
+    "https://api.weather.gov/stations/K6S8",
+    "https://api.weather.gov/stations/KRPX",
+    "https://api.weather.gov/stations/TCTM8",
+    "https://api.weather.gov/stations/KU68",
+    "https://api.weather.gov/stations/KPOY",
+    "https://api.weather.gov/stations/KLVM",
+    "https://api.weather.gov/stations/KSHR",
+    "https://api.weather.gov/stations/KMLS",
+    "https://api.weather.gov/stations/KBHK"
+  ],
+  "pagination": {
+    "next": "https://api.weather.gov/stations?id%5B0%5D=K6S8&id%5B1%5D=K97M&id%5B2%5D=KBHK&id%5B3%5D=KBIL&id%5B4%5D=KLVM&id%5B5%5D=KMLS&id%5B6%5D=KPOY&id%5B7%5D=KRPX&id%5B8%5D=KSHR&id%5B9%5D=KU68&id%5B10%5D=TCTM8&cursor=eyJzIjo1MDB9"
+  }
+}

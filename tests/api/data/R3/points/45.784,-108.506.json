@@ -1,0 +1,55 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/45.784,-108.506",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-108.506, 45.784] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/45.784,-108.506",
+    "@type": "wx:Point",
+    "cwa": "BYZ",
+    "forecastOffice": "https://api.weather.gov/offices/BYZ",
+    "gridId": "BYZ",
+    "gridX": 103,
+    "gridY": 92,
+    "forecast": "https://api.weather.gov/gridpoints/BYZ/103,92/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/BYZ/103,92/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/BYZ/103,92",
+    "observationStations": "https://api.weather.gov/gridpoints/BYZ/103,92/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-108.549891, 45.789518] },
+      "properties": {
+        "city": "Billings",
+        "state": "MT",
+        "distance": { "unitCode": "wmoUnit:m", "value": 3458.165067725 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 100 }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/MTZ235",
+    "county": "https://api.weather.gov/zones/county/MTC111",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/MTZ128",
+    "timeZone": "America/Denver",
+    "radarStation": "KBLX"
+  }
+}

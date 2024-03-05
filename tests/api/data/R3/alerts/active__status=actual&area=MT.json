@@ -1,0 +1,140 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bf98b304860d4e4b416bfd7f67d088cd5f34a0c2.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bf98b304860d4e4b416bfd7f67d088cd5f34a0c2.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.bf98b304860d4e4b416bfd7f67d088cd5f34a0c2.001.1",
+        "areaDesc": "Gallatin and Madison County Mountains and Centennial Mountains",
+        "geocode": {
+          "SAME": ["030001", "030057", "030031"],
+          "UGC": ["MTZ330"]
+        },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/MTZ330"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.eec2555413194e7271da2b7ecef1a519c644cc50.002.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.eec2555413194e7271da2b7ecef1a519c644cc50.002.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -28704 seconds"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.02fda3eb4496a728375dfdfd8856eebb32b155bd.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.02fda3eb4496a728375dfdfd8856eebb32b155bd.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -11124 seconds"
+          }
+        ],
+        "sent": "date:now -3564 seconds",
+        "effective": "date:now -3564 seconds",
+        "onset": "date:now -3564 seconds",
+        "expires": "date:now +39395 seconds",
+        "ends": "date:now +125795 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Great Falls MT",
+        "headline": "Winter Weather Advisory issued March 4 at 5:04PM MST until March 6 at 5:00AM MST by NWS Great Falls MT",
+        "description": "* WHAT...Periods of snow. The snow could be heavy at times. Snow\naccumulations up to 5 inches tonight and then additional 4 to 8\ninches Tuesday through Tuesday night.\n\n* WHERE...Gallatin and Madison County Mountains and Centennial\nMountains.\n\n* WHEN...Until 5 AM MST Wednesday.\n\n* IMPACTS...Roads, and especially bridges and overpasses, will\nlikely become slick and hazardous.\n\n* ADDITIONAL DETAILS...Areas of blowing snow could significantly\nreduce visibility.",
+        "instruction": "Slow down and use caution while traveling. The latest road\nconditions can be obtained by calling 5 1 1 or visiting the MDT Road\nReport website.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWTFX"],
+          "WMOidentifier": ["WWUS45 KTFX 050004"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY NOW IN EFFECT UNTIL 5 AM MST WEDNESDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.EXT.KTFX.WW.Y.0016.240305T0004Z-240306T1200Z/"],
+          "eventEndingTime": ["2024-03-06T12:00:00+00:00"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.c178790837950e5bedf3909fa8ff8c8f34ca814a.001.1,2024-03-04T02:18:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bf98b304860d4e4b416bfd7f67d088cd5f34a0c2.002.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bf98b304860d4e4b416bfd7f67d088cd5f34a0c2.002.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.bf98b304860d4e4b416bfd7f67d088cd5f34a0c2.002.1",
+        "areaDesc": "Madison River Valley; Ruby Mountains and Southern Beaverhead Mountains",
+        "geocode": {
+          "SAME": ["030057", "030001"],
+          "UGC": ["MTZ325", "MTZ329"]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/MTZ325",
+          "https://api.weather.gov/zones/forecast/MTZ329"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.eec2555413194e7271da2b7ecef1a519c644cc50.002.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.eec2555413194e7271da2b7ecef1a519c644cc50.002.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -28704 seconds"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.02fda3eb4496a728375dfdfd8856eebb32b155bd.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.02fda3eb4496a728375dfdfd8856eebb32b155bd.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -11124 seconds"
+          }
+        ],
+        "sent": "date:now -3564 seconds",
+        "effective": "date:now -3564 seconds",
+        "onset": "date:now +39395 seconds",
+        "expires": "date:now +39395 seconds",
+        "ends": "date:now +125795 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Great Falls MT",
+        "headline": "Winter Weather Advisory issued March 4 at 5:04PM MST until March 6 at 5:00AM MST by NWS Great Falls MT",
+        "description": "* WHAT...Snow expected. Total snow accumulations between 1 and 3\ninches at lower elevations and 4 to 8 inches at higher elevations.\nWinds gusting as high as 40 mph.\n\n* WHERE...Madison River Valley, Ruby Mountains and Southern\nBeaverhead Mountains.\n\n* WHEN...From 5 AM Tuesday to 5 AM MST Wednesday.\n\n* IMPACTS...Plan on slippery road conditions. Widespread blowing\nsnow could significantly reduce visibility.",
+        "instruction": "Slow down and use caution while traveling. The latest road\nconditions can be obtained by calling 5 1 1 or visiting the MDT Road\nReport website.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWTFX"],
+          "WMOidentifier": ["WWUS45 KTFX 050004"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT FROM 5 AM TUESDAY TO 5 AM MST WEDNESDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KTFX.WW.Y.0016.240305T1200Z-240306T1200Z/"],
+          "eventEndingTime": ["2024-03-06T12:00:00+00:00"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.c178790837950e5bedf3909fa8ff8c8f34ca814a.001.1,2024-03-04T02:18:00-07:00"
+          ]
+        }
+      }
+    }
+  ],
+  "title": "Current watches, warnings, and advisories for Montana",
+  "updated": "date:now -2904 seconds"
+}
