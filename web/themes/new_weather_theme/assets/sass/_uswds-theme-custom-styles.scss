@@ -192,3 +192,28 @@ table tr:nth-child(2) th {
 svg[data-wind-direction] {
   transform-origin: center;
 }
+
+/* Hourly precipitation table overrides
+------------------------------------- */
+
+.precip-table {
+  td:first-of-type {
+    padding-left: 0; 
+  }
+
+  td:last-child {
+    padding-right: 0; 
+  }
+
+  tr:first-of-type td {
+    border-top: 0;
+    // visually even out top and bottom table padding, accounting for font bounding box
+    padding-top: units(0.5); 
+  }
+
+  tr:last-of-type td {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
