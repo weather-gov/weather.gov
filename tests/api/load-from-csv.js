@@ -414,10 +414,11 @@ const parsedRowData = rowData.map((row) => {
     icon: row["Icon"],
     windSpeed,
     windDirection
-  };
+b  };
 });
 
 const modifiedGridPointData = getModifiedGridPointData(
+
   gridpointData,
   parsedRowData
 );
