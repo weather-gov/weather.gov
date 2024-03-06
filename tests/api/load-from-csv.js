@@ -139,11 +139,15 @@ const parseTimestamp = (row, dateFieldName="Original Date", timeFieldName="Origi
   );
   const time = dayjs(
     row[timeFieldName],
-    "H:MM A"
+    "H:mm A"
   );
   date = date.hour(time.hour());
   date = date.minute(time.minute());
   date = date.tz(gridTimezone, true);
+  if(date.format() === undefined){
+    console.log(row[dateFieldName], row[timeFieldName]);
+  }
+
   return date.format();
 };
 
@@ -227,7 +231,7 @@ const getGridPointPrecipitation = (rows) => {
     uom: "wmoUnit:percent",
     values: rows.map(row => {
       return {
-        validTime: `${rows.timestamp}/PT1H`,
+        validTime: `${row.timestamp}/PT1H`,
         value: row.probabilityOfPrecipitation
       };
     })
@@ -262,7 +266,7 @@ const getGridPointWindSpeed = (rows, unit="m_h") => {
     values: rows.map(row => {
       return {
         validTime: `${row.timestamp}/PT1H`,
-        value: row.windSpeec
+        value: row.windSpeed
       };
     })
   };
@@ -303,6 +307,22 @@ const getGridPointFeelsLike = (rows, unit="F") => {
 };
 
 /**
+ * Output the relative humidity with the
+ * correct timestamps and values
+ */
+const getGridPointRelativeHumidity = (rows) => {
+  return {
+    uom: "wmoUnit:percent",
+    values: rows.map(row => {
+      return {
+        validTime: `${row.timestamp}/PT1H`,
+        value: row.relativeHumidity
+      };
+    })
+  };
+};
+
+/**
  * For a given object representing raw gridpoint
  * API data, use parsed row data to modify the relevant
  * values.
@@ -318,7 +338,8 @@ const getModifiedGridPointData = (gridpointData, parsedRows) => {
       windChill: getGridPointFeelsLike(parsedRows),
       dewpoint: getGridPointDewpoint(parsedRows),
       probabilityOfPrecipitation: getGridPointPrecipitation(parsedRows),
-      temperature: getGridPointTemperature(parsedRows)
+      temperature: getGridPointTemperature(parsedRows),
+      relativeHumidity: getGridPointRelativeHumidity(parsedRows)
     }
   );
   return Object.assign({}, gridpointData, {properties: updatedProperties});
