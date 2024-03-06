@@ -25,7 +25,7 @@ if(!wfoCode){
 if(!gridCoords){
   argErrors.push("You must provide a set of grid coordinates in the format X,Y as the fourth argument");
 }
-if(!timezone){
+if(!gridTimezone){
   argErrors.push("You must provide a timezone string as the fifth argument, in a format like America/Denver");
 }
 if(argErrors.length){
