@@ -121,7 +121,7 @@ table tr:nth-child(2) th {
 /* Day/Night marker line utility
 ------------------------------------- */
 .line-before{
-  &:before {
+  &::before {
     content: "";
     top: units(-1);
     width: units(5);
@@ -131,20 +131,20 @@ table tr:nth-child(2) th {
 }
 
 .line-before--yellow {
-  &:before {
+  &::before {
     border-top: 2px solid color("yellow-20");
   }
 }
 
 .line-before--indigo {
-  &:before {
+  &::before {
     border-top: 2px solid color("secondary-darkest");
   }
 }
 
 // TODO: Remove `line-after`s if stays unused, testing out different visual markers
 .line-after{
-  &:after {
+  &::after {
     content: "";
     top: calc(units(-1) - units("2px")); // align with word center
     left: units(5) + units(1.5);  // icon size + margin-right
@@ -155,13 +155,13 @@ table tr:nth-child(2) th {
 }
 
 .line-after--yellow {
-  &:after {
+  &::after {
     border-top: 2px solid color("yellow-20");
   }
 }
 
 .line-after--indigo {
-  &:after {
+  &::after {
     border-top: 2px solid color("secondary-darkest");
   }
 }
