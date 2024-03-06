@@ -28,9 +28,11 @@
       </div>
 
       <div class="display-flex flex-align-center margin-bottom-2">
+        {% if content.icon.icon %}
         <div class="icon margin-right-105 maxw-5 maxh-5">
-          {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon )}}
+          {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon.icon )}}
         </div>
+        {% endif %}
         <p class="font-body-md margin-top-2px margin-bottom-0">{{ content.conditions.short }}</p>
       </div>
       <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05 border-top-1px border-base-light padding-top-1" aria-hidden="true">
@@ -46,7 +48,7 @@
             {%- if content.wind.speed != null -%}
               {% set windString = "@windSpeed mph @windDirection" | t({
                   "@windSpeed": content.wind.speed,
-                  "@windDirection": content.wind.shortDirection
+                  "@windDirection": content.wind.direction.short
                 }) 
               %}
             {%- else -%}
@@ -111,7 +113,7 @@
           |
           t({
             "@windSpeed": content.wind.speed,
-            "@windDirection": content.wind.direction
+            "@windDirection": content.wind.direction.long
           })
           }}{% else %}{{ ". Wind information is unavailable" | t() }}{% endif %}.
     </div>
