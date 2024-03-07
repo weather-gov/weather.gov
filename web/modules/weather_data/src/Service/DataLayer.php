@@ -52,8 +52,8 @@ class DataLayer
     /**
      * Get data from the weather API.
      *
-     * The results for any given URL are cached for the duration of the current
-     * response. The cache is not persisted across responses.
+     * The results for any given URL are cached for 60 seconds. Exceptions after
+     * the maximum retries are cached for 1 second.
      */
     private function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
     {
@@ -95,7 +95,7 @@ class DataLayer
                 // Cache errors too. If we've already tried and failed on an
                 // endpoint the maximum number of retries, don't try again on
                 // subsequent calls to the same endpoint.
-                $this->cache->set($url, (object) ["error" => $e]);
+                $this->cache->set($url, (object) ["error" => $e], 1);
                 throw $e;
             }
         } else {
