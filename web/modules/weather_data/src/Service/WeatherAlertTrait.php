@@ -45,23 +45,13 @@ trait WeatherAlertTrait
         $x = $grid->x;
         $y = $grid->y;
 
-        $CACHE_KEY = "alerts $wfo/$x/$y";
-        $cache = $this->cache->get($CACHE_KEY);
-        if ($cache) {
-            return $cache->data;
-        }
-
         $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
-        $place = $self->getPlaceNear($point->lat, $point->lon);
+        $place = $this->dataLayer->getPlaceNearPoint($point->lat, $point->lon);
         $timezone = $place->timezone;
 
-        $alerts = $self->getFromWeatherAPI(
-            "/alerts/active?status=actual&area=$place->state",
-        )->features;
+        $alerts = $this->dataLayer->getAlertsForState($place->state);
 
-        $forecastZone = $self->getFromWeatherAPI(
-            "/points/$point->lat,$point->lon",
-        );
+        $forecastZone = $this->dataLayer->getPoint($lat, $lon);
         $fireZone = $forecastZone->properties->fireWeatherZone;
         $forecastZone = $forecastZone->properties->forecastZone;
 
@@ -97,7 +87,7 @@ trait WeatherAlertTrait
                     )
                 ) as yes";
 
-                $intersects = $this->database->query($sql)->fetch()->yes;
+                $intersects = $this->dataLayer->databaseFetch($sql)->yes;
 
                 return $intersects > 0;
             }
@@ -195,8 +185,6 @@ trait WeatherAlertTrait
                 $alert->expires = $alert->expires->format("l, m/d, g:i A T");
             }
         }
-
-        $this->cache->set($CACHE_KEY, $alerts, time() + 30);
 
         $this->stashedAlerts = $alerts;
 

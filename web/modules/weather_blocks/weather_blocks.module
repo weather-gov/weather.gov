@@ -36,7 +36,7 @@ function weather_blocks_template_preprocess_default_variables_alter(
         }
 
         try {
-            $place = $weatherData->getPlaceNear($lat, $lon);
+            $place = $weatherData->getPlaceNearPoint($lat, $lon);
             if ($place) {
                 $weatherMetadata["place"] = trim(
                     $place->city . ", " . $place->state,

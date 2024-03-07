@@ -2,12 +2,8 @@
 
 namespace Drupal\weather_data\Service;
 
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ServerException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -44,13 +40,6 @@ class WeatherDataService
     private $defaultConditions;
 
     /**
-     * HTTP client.
-     *
-     * @var \GuzzleHttp\ClientInterface client
-     */
-    private $client;
-
-    /**
      * Translation provider.
      *
      * @var \Drupal\Core\StringTranslation\TranslationInterface t
@@ -58,32 +47,11 @@ class WeatherDataService
     private $t;
 
     /**
-     * Response ID.
-     *
-     * Used to identify which response we're handling with our API calls.
-     *
-     * @var String responseId
-     */
-    private $responseId;
-
-    /**
      * The request currently being responded to.
      *
      * @var request
      */
     private $request;
-
-    /**
-     * Cache of API calls for this request.
-     *
-     * @var cache
-     */
-    private $cache;
-
-    /**
-     * Connection to the Drupal database.
-     */
-    private $database;
 
     /**
      * A cached version of any fetched alerts
@@ -113,18 +81,14 @@ class WeatherDataService
      * Constructor.
      */
     public function __construct(
-        ClientInterface $httpClient,
         TranslationInterface $t,
         RequestStack $r,
-        CacheBackendInterface $cache,
-        Connection $database,
         NewRelicMetrics $newRelic,
+        DataLayer $dataLayer,
     ) {
-        $this->client = $httpClient;
+        $this->dataLayer = $dataLayer;
         $this->t = $t;
         $this->request = $r->getCurrentRequest();
-        $this->cache = $cache;
-        $this->database = $database;
         $this->newRelic = $newRelic;
 
         $this->defaultIcon = "nodata.svg";
@@ -143,63 +107,6 @@ class WeatherDataService
         // headers to the API. If we've already gotten an ID for this response,
         // keep it.
         $this->responseId = uniqid();
-    }
-
-    /**
-     * Get data from the weather API.
-     *
-     * The results for any given URL are cached for the duration of the current
-     * response. The cache is not persisted across responses.
-     */
-    public function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
-    {
-        if (!preg_match("/^https?:\/\//", $url)) {
-            $baseUrl = getEnv("API_URL");
-            $baseUrl = $baseUrl == false ? "https://api.weather.gov" : $baseUrl;
-            $url = $baseUrl . $url;
-        }
-
-        $cacheHit = $this->cache->get($url);
-        if (!$cacheHit) {
-            try {
-                $response = $this->client->get($url, [
-                    // Add our response ID as a header to the API so we can
-                    // track sequences of API calls for this one response.
-                    "headers" => ["wx-gov-response-id" => $this->responseId],
-                ]);
-                $response = json_decode($response->getBody());
-                $this->cache->set($url, $response, time() + 60);
-                return $response;
-            } catch (ServerException $e) {
-                $logger = $this->getLogger("Weather.gov data service");
-                $logger->notice("got 500 error on attempt $attempt for: $url");
-
-                // Back off and try again.
-                if ($attempt < 5) {
-                    // Sleep is in microseconds, so scale it up to milliseconds.
-                    usleep($delay * 1000);
-                    return $this->getFromWeatherAPI(
-                        $url,
-                        $attempt + 1,
-                        $delay * 1.65,
-                    );
-                }
-
-                $logger->error("giving up on: $url");
-
-                // Cache errors too. If we've already tried and failed on an
-                // endpoint the maximum number of retries, don't try again on
-                // subsequent calls to the same endpoint.
-                $this->cache->set($url, (object) ["error" => $e]);
-                throw $e;
-            }
-        } else {
-            // If we cached an exception, throw it. Otherwise return the data.
-            if (is_object($cacheHit->data) && isset($cacheHit->data->error)) {
-                throw $cacheHit->data->error;
-            }
-            return $cacheHit->data;
-        }
     }
 
     /**
@@ -394,63 +301,11 @@ class WeatherDataService
     public function getGridFromLatLon($lat, $lon)
     {
         try {
-            $lat = round($lat, 4);
-            $lon = round($lon, 4);
-
-            $locationMetadata = $this->getFromWeatherAPI("/points/$lat,$lon");
+            $locationMetadata = $this->dataLayer->getPoint($lat, $lon);
 
             $wfo = strtoupper($locationMetadata->properties->gridId);
             $gridX = $locationMetadata->properties->gridX;
             $gridY = $locationMetadata->properties->gridY;
-
-            $place = [
-                "city" =>
-                    $locationMetadata->properties->relativeLocation->properties
-                        ->city,
-                "state" =>
-                    $locationMetadata->properties->relativeLocation->properties
-                        ->state,
-            ];
-
-            // We could get a POST parameter supplied by location search
-            // representing the place name our user selected. If we get that,
-            // we should use it. That way the place name we show them is the
-            // same as the one they selected. A little less cognitively jarring.
-            $suggestedPlaceName = $this->request->get("suggestedPlaceName");
-
-            if ($suggestedPlaceName) {
-                // Initially assume that the place name can't be parsed into
-                // anything else, so just stuff it all into the city.
-                $place["city"] = $suggestedPlaceName;
-                $place["state"] = null;
-
-                // I swear, chainable functions would be such a godsend...
-                // Anyway, this splits the string on commas and then trims all
-                // the resutling values.
-                $maybeParts = array_map(function ($item) {
-                    return trim($item);
-                }, explode(",", $suggestedPlaceName));
-
-                // If our string is of the form "Reston, VA, USA", then we can
-                // split it into city and state.
-                if (
-                    count($maybeParts) == 3 &&
-                    strlen($maybeParts[1]) == 2 &&
-                    $maybeParts[2] == "USA"
-                ) {
-                    $place["city"] = $maybeParts[0];
-                    $place["state"] = $maybeParts[1];
-                }
-            }
-
-            // Cache whatever place name we end up with. Because we're about to
-            // redirect the user, we probably don't need to cache it for very
-            // long – they should be right back.
-            $this->cache->set(
-                "placename $wfo/$gridX/$gridY",
-                (object) $place,
-                time() + 3, // Expiration is a Unix timestamp in seconds
-            );
 
             return (object) [
                 "wfo" => $wfo,
@@ -464,29 +319,6 @@ class WeatherDataService
         }
     }
 
-    public function getPlaceNear($lat, $lon)
-    {
-        $sql = "SELECT
-        name,state,stateName,county,timezone,stateFIPS,countyFIPS
-        FROM weathergov_geo_places
-        ORDER BY ST_DISTANCE(point,ST_GEOMFROMTEXT('POINT($lon $lat)'))
-        LIMIT 1";
-
-        $place = $this->database->query($sql)->fetch();
-
-        $place = (object) [
-            "city" => $place->name,
-            "state" => $place->state,
-            "stateName" => $place->stateName,
-            "stateFIPS" => $place->stateFIPS,
-            "county" => $place->county,
-            "countyFIPS" => $place->countyFIPS,
-            "timezone" => $place->timezone,
-        ];
-
-        return $place;
-    }
-
     /**
      * Get a place from a WFO grid.
      */
@@ -496,43 +328,10 @@ class WeatherDataService
             $self = $this;
         }
 
-        $wfo = strtoupper($wfo);
+        $gridpoint = $this->dataLayer->getGridpoint($wfo, $x, $y);
+        $geometry = $gridpoint->geometry->coordinates[0];
 
-        $CACHE_KEY = "place name $wfo/$x/$y";
-        $cache = $this->cache->get($CACHE_KEY);
-
-        if ($cache) {
-            return $cache->data;
-        }
-
-        $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
-        $geometry = array_map(function ($point) {
-            return $point->lon . " " . $point->lat;
-        }, $geometry);
-
-        $geometry = implode(",", $geometry);
-
-        $sql = "SELECT
-                name,state,stateName,county,timezone,stateFIPS,countyFIPS
-                FROM weathergov_geo_places
-                ORDER BY ST_DISTANCE(point,ST_POLYGONFROMTEXT('POLYGON(($geometry))'))
-                LIMIT 1";
-
-        $place = $this->database->query($sql)->fetch();
-
-        $place = (object) [
-            "city" => $place->name,
-            "state" => $place->state,
-            "stateName" => $place->stateName,
-            "stateFIPS" => $place->stateFIPS,
-            "county" => $place->county,
-            "countyFIPS" => $place->countyFIPS,
-            "timezone" => $place->timezone,
-        ];
-
-        $this->cache->set($CACHE_KEY, $place, time() + 600);
-
-        return $place;
+        return $this->dataLayer->getPlaceNearPolygon($geometry);
     }
 
     /**
@@ -608,7 +407,7 @@ class WeatherDataService
             $sourceGeomText .
             "')) as within;";
 
-        $result = $this->database->query($sql)->fetch();
+        $result = $this->dataLayer->databaseFetch($sql);
         $distanceInfo = [
             "distance" => (float) $result->distance,
             "withinGridCell" => !!(int) $result->within,
@@ -654,16 +453,9 @@ class WeatherDataService
      */
     public function getGeometryFromGrid($wfo, $x, $y)
     {
-        $wfo = strtoupper($wfo);
         if (!$this->stashedGridGeometry) {
-            $gridpoint = $this->getFromWeatherAPI("/gridpoints/$wfo/$x,$y");
-            $geometry = array_map(function ($geo) {
-                return (object) [
-                    "lat" => $geo[1],
-                    "lon" => $geo[0],
-                ];
-            }, $gridpoint->geometry->coordinates[0]);
-            $this->stashedGridGeometry = $geometry;
+            $gridpoint = $this->dataLayer->getGridpoint($wfo, $x, $y);
+            $this->stashedGridGeometry = $gridpoint->geometry->coordinates[0];
         }
 
         return $this->stashedGridGeometry;
@@ -672,22 +464,14 @@ class WeatherDataService
     /**
      * Get the current weather conditions at a WFO grid location.
      */
-    public function getCurrentConditionsFromGrid(
-        $wfo,
-        $gridX,
-        $gridY,
-        $self = null,
-    ) {
+    public function getCurrentConditionsFromGrid($wfo, $x, $y, $self = false)
+    {
         if (!$self) {
             $self = $this;
         }
-        $wfo = strtoupper($wfo);
         date_default_timezone_set("America/New_York");
 
-        $obsStations = $this->getFromWeatherAPI(
-            "/gridpoints/$wfo/$gridX,$gridY/stations",
-        );
-        $obsStations = $obsStations->features;
+        $obsStations = $this->dataLayer->getObservationStations($wfo, $x, $y);
 
         $gridGeometry = $this->getGeometryFromGrid($wfo, $gridX, $gridY);
 
@@ -698,13 +482,9 @@ class WeatherDataService
             // If the temperature is not available from this observation station, try
             // the next one. Continue through the first 3 stations and then give up.
             $observationStation = $obsStations[$obsStationIndex];
-            $obsData = $this->getFromWeatherAPI(
-                "/stations/" .
-                    $observationStation->properties->stationIdentifier .
-                    "/observations?limit=1",
-            )->features[0];
-            $obs = $obsData->properties;
-
+            $obs = $this->dataLayer->getCurrentObservation(
+                $observationStation->properties->stationIdentifier,
+            );
             $obsStationIndex += 1;
         } while (
             !$this->isValidObservation($obs) &&
@@ -783,8 +563,8 @@ class WeatherDataService
 
     public function getHourlyPrecipitation(
         $wfo,
-        $gridX,
-        $gridY,
+        $x,
+        $y,
         $now = false,
         $self = false,
     ) {
@@ -794,16 +574,16 @@ class WeatherDataService
             $self = $this;
         }
 
-        $wfo = strtoupper($wfo);
         if (!($now instanceof \DateTimeImmutable)) {
             $now = new \DateTimeImmutable();
         }
 
-        $place = $self->getPlaceFromGrid($wfo, $gridX, $gridY);
-        $timezone = $place->timezone;
+        date_default_timezone_set("America/New_York");
 
-        $forecast = $self->getFromWeatherAPI("/gridpoints/$wfo/$gridX,$gridY")
-            ->properties;
+        $forecast = $this->dataLayer->getGridpoint($wfo, $x, $y)->properties;
+
+        $place = $this->getPlaceFromGrid($wfo, $x, $y);
+        $timezone = $place->timezone;
 
         $periods = [];
 
@@ -844,17 +624,14 @@ class WeatherDataService
      */
     public function getDailyForecastFromGrid(
         $wfo,
-        $gridX,
-        $gridY,
+        $x,
+        $y,
         $now = false,
         $defaultDays = 5,
     ) {
-        $wfo = strtoupper($wfo);
-        $forecast = $this->getFromWeatherAPI(
-            "/gridpoints/$wfo/$gridX,$gridY/forecast",
-        );
+        $forecast = $this->dataLayer->getDailyForecast($wfo, $x, $y);
 
-        $periods = $forecast->properties->periods;
+        $periods = $forecast->periods;
 
         // In order to keep the time zones straight,
         // we set the "current" (now) time to be
@@ -934,5 +711,10 @@ class WeatherDataService
             "detailed" => array_values($detailedPeriodsFormatted),
             "extended" => array_values($extendedPeriodsFormatted),
         ];
+    }
+
+    public function getPlaceNearPoint($lat, $lon)
+    {
+        return $this->dataLayer->getPlaceNearPoint($lat, $lon);
     }
 }
