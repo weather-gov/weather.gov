@@ -87,7 +87,7 @@ trait WeatherAlertTrait
                     )
                 ) as yes";
 
-                $intersects = $this->database->query($sql)->fetch()->yes;
+                $intersects = $this->dataLayer->databaseFetch($sql)->yes;
 
                 return $intersects > 0;
             }
