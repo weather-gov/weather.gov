@@ -20,14 +20,14 @@ final class LocationAndGridRouteController extends ControllerBase
      *
      * @var WeatherDataService weatherData
      */
-    private $weatherData;
+    private $dataLayer;
 
     /**
      * Constructor for dependency injection.
      */
-    public function __construct($weatherDataService)
+    public function __construct($dataLayer)
     {
-        $this->weatherData = $weatherDataService;
+        $this->dataLayer = $dataLayer;
     }
 
     /**
@@ -35,7 +35,7 @@ final class LocationAndGridRouteController extends ControllerBase
      */
     public static function create(ContainerInterface $container)
     {
-        return new static($container->get("weather_data"));
+        return new static($container->get("weather_data_layer"));
     }
 
     /**
@@ -52,20 +52,13 @@ final class LocationAndGridRouteController extends ControllerBase
 
     public function serveLocationPage($lat, $lon)
     {
-        $grid = $this->weatherData->getGridFromLatLon($lat, $lon);
-
-        // Stash the reference point in the data service
-        $this->weatherData->stashedPoint = (object) [
-            "lat" => $lat,
-            "lon" => $lon,
-        ];
-
-        if ($grid == null) {
+        try {
+            $this->dataLayer->getPoint($lat, $lon);
+            return [];
+        } catch (\Throwable $e) {
             // If we don't get a corresponding grid location, throw a 404.
             throw new NotFoundHttpException();
         }
-
-        return [];
     }
 
     /**
@@ -77,16 +70,12 @@ final class LocationAndGridRouteController extends ControllerBase
     public function redirectFromGrid($wfo, $gridX, $gridY)
     {
         try {
-            $geometry = $this->weatherData->getGeometryFromGrid(
-                $wfo,
-                $gridX,
-                $gridY,
-            );
-            $point = $geometry[0];
+            $gridpoint = $this->dataLayer->getGridpoint($wfo, $gridX, $gridY);
+            $point = $gridpoint->geometry->coordinates[0][0];
 
             $url = Url::fromRoute("weather_routes.point", [
-                "lat" => round($point->lat, 4),
-                "lon" => round($point->lon, 4),
+                "lat" => round($point[1], 4),
+                "lon" => round($point[0], 4),
             ]);
             return new RedirectResponse($url->toString());
         } catch (\Throwable $e) {
