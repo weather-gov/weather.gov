@@ -9,6 +9,11 @@ use Drupal\weather_data\Service\WeatherAlertParser;
  */
 trait AlertTrait
 {
+    /**
+     * A cached version of any fetched alerts
+     */
+    private $stashedAlerts = null;
+
     public static function tryParsingDescriptionText($str)
     {
         $parser = new WeatherAlertParser($str);
@@ -201,8 +206,7 @@ trait AlertTrait
         );
         $lastPeriodEndTime = $lastPeriodEndTime->modify("+ 1 hour");
 
-        // Filter out alerts that begin after the end of our
-        // hourly forecast period
+        // Filter out alerts that do not overlap our hourly forecast periods.
         $relevantAlerts = array_filter($alerts, function ($alert) use (
             &$periods,
             &$lastPeriodEndTime,

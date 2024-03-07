@@ -55,11 +55,6 @@ class WeatherDataService
     private $request;
 
     /**
-     * A cached version of any fetched alerts
-     */
-    private $stashedAlerts;
-
-    /**
      * NewRelic API handler
      */
     private $newRelic;
@@ -101,8 +96,6 @@ class WeatherDataService
         $this->legacyMapping = json_decode(
             file_get_contents(__DIR__ . "/legacyMapping.json"),
         );
-
-        $this->stashedAlerts = null;
     }
 
     /**
