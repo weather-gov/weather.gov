@@ -5,15 +5,15 @@ namespace Drupal\weather_data\Service;
 /**
  * A service class for fetching weather data.
  */
-trait UnitConversionTrait
+class UnitConversion
 {
-    public function millimetersToInches($mm)
+    public static function millimetersToInches($mm)
     {
         // 1 mm = 0.03937008 inches
         return $mm * 0.03937008;
     }
 
-    public function getDirectionOrdinal($angle, $reverse = false)
+    public static function getDirectionOrdinal($angle, $reverse = false)
     {
         // The cardinal and ordinal directions. North goes in twice because it
         // sits in two "segments": -22.5° to 22.5°, and 337.5° to 382.5°.
@@ -43,7 +43,37 @@ trait UnitConversionTrait
         ];
     }
 
-    public function getSpeedScalar(\stdClass $speed, bool $inMph = true)
+    public static function getLengthScalar(
+        \stdClass $length,
+        bool $inFeet = true,
+    ) {
+        $rawValue = $length->value;
+
+        if ($rawValue == null) {
+            return null;
+        }
+
+        $isMeters = $speed->unitCode == "wmoUnit:m";
+
+        $out = null;
+        if ($isMeters) {
+            if ($inFeet) {
+                $out = $rawValue * 3.28;
+            } else {
+                $out = $rawValue;
+            }
+        } else {
+            if ($inFeet) {
+                $out = $rawValue;
+            } else {
+                $out = $rawValue / 3.28;
+            }
+        }
+
+        return (int) round($out);
+    }
+
+    public static function getSpeedScalar(\stdClass $speed, bool $inMph = true)
     {
         $rawValue = $speed->value;
 
@@ -74,7 +104,7 @@ trait UnitConversionTrait
     /**
      * Get a temperature scalar from a wmoUnit temperature object.
      */
-    public function getTemperatureScalar(
+    public static function getTemperatureScalar(
         \stdClass $temperature,
         bool $inFahrenheit = true,
     ) {

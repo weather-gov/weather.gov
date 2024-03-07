@@ -13,10 +13,7 @@ trait HourlyForecastTrait
         // Split into datetime and duration strings
         $time = explode("/", $timeDurationString);
 
-        $date = \DateTimeImmutable::createFromFormat(
-            \DateTimeInterface::ISO8601_EXPANDED,
-            $time[0],
-        );
+        $date = DateTimeUtility::stringToDate($time[0]);
         $interval = new \DateInterval($time[1]);
 
         // Create an hourly date period. This will result in an iterable for
@@ -136,9 +133,7 @@ trait HourlyForecastTrait
 
         // Toss out any time periods in the past.
         $periods = array_filter($periods, function ($period) use (&$now) {
-            $diff = $now->diff($period, false);
-
-            return $diff->invert != 1;
+            return $period > $now;
         });
 
         // Now combine all the periods for each property into a single long list
@@ -181,10 +176,7 @@ trait HourlyForecastTrait
         // /forecast/hourly endpoint.
         $timestamps = array_column($forecast, "timestamp");
         foreach ($extraForecast as $period) {
-            $start = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601_EXPANDED,
-                $period->startTime,
-            );
+            $start = DateTimeUtility::stringToDate($period->startTime);
             $start = $start->setTime((int) $start->format("H"), 0, 0, 0);
 
             $index = array_search($start, $timestamps);
@@ -195,7 +187,6 @@ trait HourlyForecastTrait
         }
 
         // // Now map all those forecast periods into the structure we want.
-
         $forecast = array_map(function ($period) use (&$timezone, $units) {
             // This closure needs access to the $timezone variable about. The easiest
             // way I found to do it was using it by reference.
@@ -211,7 +202,7 @@ trait HourlyForecastTrait
                     ucfirst(strtolower($period["shortForecast"])),
                 ),
                 "icon" => $this->getIcon((object) $period),
-                "dewpoint" => $this->getTemperatureScalar(
+                "dewpoint" => UnitConversion::getTemperatureScalar(
                     (object) [
                         "unitCode" => $units["dewpoint"],
                         "value" => $period["dewpoint"],
@@ -222,16 +213,16 @@ trait HourlyForecastTrait
                 "relativeHumidity" => $period["relativeHumidity"],
                 "time" => $timeString,
                 "timestamp" => $period["timestamp"]->format("c"),
-                "temperature" => $this->getTemperatureScalar(
+                "temperature" => UnitConversion::getTemperatureScalar(
                     (object) [
                         "unitCode" => $units["temperature"],
                         "value" => $period["temperature"],
                     ],
                 ),
-                "windDirection" => $this->getDirectionOrdinal(
+                "windDirection" => UnitConversion::getDirectionOrdinal(
                     $period["windDirection"],
                 ),
-                "windSpeed" => $this->getSpeedScalar(
+                "windSpeed" => UnitConversion::getSpeedScalar(
                     (object) [
                         "unitCode" => $units["windSpeed"],
                         "value" => $period["windSpeed"],
@@ -241,5 +232,52 @@ trait HourlyForecastTrait
         }, $forecast);
 
         return $forecast;
+    }
+
+    public function getHourlyPrecipitation(
+        $wfo,
+        $x,
+        $y,
+        $now = false,
+        $self = false,
+    ) {
+        if (!$self) {
+            $self = $this;
+        }
+
+        if (!($now instanceof \DateTimeImmutable)) {
+            $now = new \DateTimeImmutable();
+        }
+
+        date_default_timezone_set("America/New_York");
+
+        $forecast = $this->dataLayer->getGridpoint($wfo, $x, $y)->properties;
+
+        $place = $this->getPlaceFromGrid($wfo, $x, $y);
+        $timezone = $place->timezone;
+
+        $periods = [];
+
+        foreach ($forecast->quantitativePrecipitation->values as $quantPrecip) {
+            $valid = $quantPrecip->validTime;
+            $value = $quantPrecip->value;
+            $value = UnitConversion::millimetersToInches($value);
+
+            $valid = explode("/", $valid);
+            $start = DateTimeUtility::stringToDate($valid[0], $timezone);
+
+            $duration = new \DateInterval($valid[1]);
+            $end = $start->add($duration);
+
+            if ($end >= $now) {
+                $periods[] = (object) [
+                    "start" => $start->format("g A"),
+                    "end" => $end->format("g A"),
+                    "value" => round($value, 1),
+                ];
+            }
+        }
+
+        return $periods;
     }
 }

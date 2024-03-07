@@ -7,22 +7,8 @@ use Drupal\weather_data\Service\WeatherAlertParser;
 /**
  * Add weather alert methods.
  */
-trait WeatherAlertTrait
+trait AlertTrait
 {
-    protected static function turnToDate($str, $timezone)
-    {
-        if ($str) {
-            $datestamp = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601_EXPANDED,
-                $str,
-            );
-            $datestamp = $datestamp->setTimeZone(new \DateTimeZone($timezone));
-
-            return $datestamp;
-        }
-        return $str;
-    }
-
     public static function tryParsingDescriptionText($str)
     {
         $parser = new WeatherAlertParser($str);
@@ -66,7 +52,7 @@ trait WeatherAlertTrait
             $forecastZone,
             $fireZone,
         ) {
-            if (AlertPriority::isMarineAlert($alert->properties->event)) {
+            if (AlertUtility::isMarineAlert($alert->properties->event)) {
                 return false;
             }
 
@@ -150,14 +136,17 @@ trait WeatherAlertTrait
             }
 
             $output->onsetRaw = $output->onset;
-            $output->onset = self::turnToDate(
+            $output->onset = DateTimeUtility::stringToDate(
                 $output->onset ?? false,
                 $timezone,
             );
             $output->endsRaw = $output->ends ?? null;
-            $output->ends = self::turnToDate($output->ends ?? false, $timezone);
+            $output->ends = DateTimeUtility::stringToDate(
+                $output->ends ?? false,
+                $timezone,
+            );
             $output->expiresRaw = $output->expires ?? null;
-            $output->expires = self::turnToDate(
+            $output->expires = DateTimeUtility::stringToDate(
                 $output->expires ?? false,
                 $timezone,
             );
@@ -167,7 +156,7 @@ trait WeatherAlertTrait
             return $output;
         }, $alerts);
 
-        $alerts = AlertPriority::sort($alerts);
+        $alerts = AlertUtility::sort($alerts);
 
         // For some reason, Twig is unreliable in how it formats the dates.
         // Sometimes they are done in the timezone-local time, other times it
@@ -203,16 +192,12 @@ trait WeatherAlertTrait
     {
         // Pull out alerts that are relevant to the range
         // of the current periods
-        $firstPeriodStartTime = \DateTimeImmutable::createFromFormat(
-            \DateTimeInterface::ISO8601_EXPANDED,
+        $firstPeriodStartTime = DateTimeUtility::stringToDate(
             $periods[0]["timestamp"],
         );
 
-        $timezone = $firstPeriodStartTime->getTimezone()->getName();
-
-        $lastPeriodEndTime = self::turnToDate(
+        $lastPeriodEndTime = DateTimeUtility::stringToDate(
             $periods[array_key_last($periods)]["timestamp"],
-            $timezone,
         );
         $lastPeriodEndTime = $lastPeriodEndTime->modify("+ 1 hour");
 
@@ -223,10 +208,7 @@ trait WeatherAlertTrait
             &$lastPeriodEndTime,
             &$firstPeriodStartTime,
         ) {
-            $onsetDateTime = self::turnToDate(
-                $alert->onsetRaw,
-                $alert->timezone,
-            );
+            $onsetDateTime = DateTimeUtility::stringToDate($alert->onsetRaw);
             $endsDateTime = $this->getEndTimeForAlert($alert);
             return $onsetDateTime < $lastPeriodEndTime &&
                 $endsDateTime > $firstPeriodStartTime;
@@ -239,10 +221,7 @@ trait WeatherAlertTrait
         $alertPeriods = [];
 
         foreach ($relevantAlerts as $currentAlert) {
-            $onsetTime = self::turnToDate(
-                $currentAlert->onsetRaw,
-                $currentAlert->timezone,
-            );
+            $onsetTime = DateTimeUtility::stringToDate($currentAlert->onsetRaw);
             $endTime = $this->getEndTimeForAlert($currentAlert);
             if (!$endTime) {
                 continue; // pass to the next alert, ignoring this one
@@ -293,7 +272,6 @@ trait WeatherAlertTrait
                     $onsetTime,
                     $endTime,
                     $periods,
-                    $timezone,
                 );
                 if ($alertInfo) {
                     array_push($alertPeriods, $alertInfo);
@@ -380,12 +358,10 @@ trait WeatherAlertTrait
         $alertOnset,
         $alertEnd,
         $periods,
-        $timezone,
     ) {
         foreach ($periods as $periodIndex => $period) {
-            $periodStartTime = self::turnToDate(
+            $periodStartTime = DateTimeUtility::stringToDate(
                 $period["timestamp"],
-                $timezone,
             );
             $periodEndTime = $periodStartTime->modify("+ 1 hour");
 
@@ -437,6 +413,6 @@ trait WeatherAlertTrait
             return false;
         }
 
-        return self::turnToDate($field, $alert->timezone);
+        return DateTimeUtility::stringToDate($field, $alert->timezone);
     }
 }

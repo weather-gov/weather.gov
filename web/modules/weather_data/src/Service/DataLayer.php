@@ -107,49 +107,49 @@ class DataLayer
         }
     }
 
-    private $i_alertsState = false;
+    private static $i_alertsState = false;
     public function getAlertsForState($state)
     {
-        if (!$this->i_alertsState) {
-            $this->i_alertsState = $this->getFromWeatherAPI(
+        if (!self::$i_alertsState) {
+            self::$i_alertsState = $this->getFromWeatherAPI(
                 "/alerts/active?status=actual&area=$state",
             )->features;
         }
-        return $this->i_alertsState;
+        return self::$i_alertsState;
     }
 
-    private $i_dailyForecast = false;
+    private static $i_dailyForecast = false;
     public function getDailyForecast($wfo, $x, $y)
     {
         $wfo = strtoupper($wfo);
-        if (!$this->i_dailyForecast) {
-            $this->i_dailyForecast = $this->getFromWeatherAPI(
+        if (!self::$i_dailyForecast) {
+            self::$i_dailyForecast = $this->getFromWeatherAPI(
                 "/gridpoints/$wfo/$x,$y/forecast",
             )->properties;
         }
-        return $this->i_dailyForecast;
+        return self::$i_dailyForecast;
     }
 
-    private $i_grid = false;
+    private static $i_grid = false;
     public function getGridpoint($wfo, $x, $y)
     {
         $wfo = strtoupper($wfo);
-        if (!$this->i_grid) {
-            $this->i_grid = $this->getFromWeatherAPI("/gridpoints/$wfo/$x,$y");
+        if (!self::$i_grid) {
+            self::$i_grid = $this->getFromWeatherAPI("/gridpoints/$wfo/$x,$y");
         }
-        return $this->i_grid;
+        return self::$i_grid;
     }
 
-    private $i_hourlyForecast = false;
+    private static $i_hourlyForecast = false;
     public function getHourlyForecast($wfo, $x, $y)
     {
         $wfo = strtoupper($wfo);
-        if (!$this->i_hourlyForecast) {
-            $this->i_hourlyForecast = $this->getFromWeatherAPI(
+        if (!self::$i_hourlyForecast) {
+            self::$i_hourlyForecast = $this->getFromWeatherAPI(
                 "/gridpoints/$wfo/$x,$y/forecast/hourly",
             )->properties;
         }
-        return $this->i_hourlyForecast;
+        return self::$i_hourlyForecast;
     }
 
     public function getCurrentObservation($station)
@@ -163,28 +163,28 @@ class DataLayer
         )->features[0]->properties;
     }
 
-    private $i_obsStations = false;
+    private static $i_obsStations = false;
     public function getObservationStations($wfo, $x, $y)
     {
         $wfo = strtoupper($wfo);
-        if (!$this->i_obsStations) {
-            $this->i_obsStations = $this->getFromWeatherAPI(
+        if (!self::$i_obsStations) {
+            self::$i_obsStations = $this->getFromWeatherAPI(
                 "/gridpoints/$wfo/$x,$y/stations",
             )->features;
         }
-        return $this->i_obsStations;
+        return self::$i_obsStations;
     }
 
-    private $i_point = false;
+    private static $i_point = false;
     public function getPoint($lat, $lon)
     {
-        if (!$this->i_point) {
+        if (!self::$i_point) {
             $lat = round($lat, 4);
             $lon = round($lon, 4);
 
-            $this->i_point = $this->getFromWeatherAPI("/points/$lat,$lon");
+            self::$i_point = $this->getFromWeatherAPI("/points/$lat,$lon");
         }
-        return $this->i_point;
+        return self::$i_point;
     }
 
     private function getPlaceNear($wktGeometry)
@@ -210,19 +210,19 @@ class DataLayer
         return $place;
     }
 
-    private $i_placeNearPoint = [];
+    private static $i_placeNearPoint = [];
     public function getPlaceNearPoint($lat, $lon)
     {
         $key = "$lat $lon";
-        if (!$this->i_placeNearPoint[$key]) {
-            $this->i_placeNearPoint[$key] = $this->getPlaceNear(
+        if (!self::$i_placeNearPoint[$key]) {
+            self::$i_placeNearPoint[$key] = $this->getPlaceNear(
                 "POINT($lon $lat)",
             );
         }
-        return $this->i_placeNearPoint[$key];
+        return self::$i_placeNearPoint[$key];
     }
 
-    private $i_placeNearPolygon = [];
+    private static $i_placeNearPolygon = [];
     public function getPlaceNearPolygon($points)
     {
         $wktPoints = array_map(function ($point) {
@@ -230,7 +230,7 @@ class DataLayer
         }, $points);
         $wktPoints = implode(",", $wktPoints);
 
-        if (!$this->i_placeNearPolygon[$wktPoints]) {
+        if (!self::$i_placeNearPolygon[$wktPoints]) {
             $this->iPlaceNearPolygon[$wktPoints] = $this->getPlaceNear(
                 "POLYGON(($wktPoints))",
             );
