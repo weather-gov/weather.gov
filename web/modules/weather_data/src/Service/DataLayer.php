@@ -4,8 +4,11 @@ namespace Drupal\weather_data\Service;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Routing\RouteMatchInterface;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Data layer methods
@@ -31,6 +34,8 @@ class DataLayer
      */
     private $database;
 
+    private static $INITIALIZED = false;
+
     /**
      * Constructor.
      */
@@ -38,6 +43,7 @@ class DataLayer
         ClientInterface $httpClient,
         CacheBackendInterface $cache,
         Connection $database,
+        RouteMatchInterface $route,
     ) {
         $this->client = $httpClient;
         $this->cache = $cache;
@@ -47,6 +53,76 @@ class DataLayer
         // headers to the API. If we've already gotten an ID for this response,
         // keep it.
         $this->responseId = uniqid();
+
+        // If we are on a location page route...
+        if ($route->getRouteName() == "weather_routes.point") {
+            $lat = floatval($route->getParameter("lat"));
+            $lon = floatval($route->getParameter("lon"));
+
+            // And we have not already initialized...
+            // Using a static variable here so it persists across constructions.
+            // Two different data layer objects are constructed, and we don't
+            // really want to fetch the data twice.
+            if (!self::$INITIALIZED) {
+                self::$INITIALIZED = true;
+
+                $baseUrl = getEnv("API_URL");
+                $baseUrl =
+                    $baseUrl == false ? "https://api.weather.gov" : $baseUrl;
+
+                // First thing we need to do is get the WFO information for this
+                // lat/lon.
+                $url = "$baseUrl/points/$lat,$lon";
+                if ($this->cache->get($url)) {
+                    $response = $this->cache->get($url)->data;
+                } else {
+                    $response = $this->client->get($url);
+                    $response = json_decode($response->getBody());
+
+                    $this->cache->set($url, $response, time() + 60);
+                }
+
+                $wfo = strtoupper($response->properties->gridId);
+                $gridX = $response->properties->gridX;
+                $gridY = $response->properties->gridY;
+
+                // Then we can go get gridpoint info, forecasts, and list of
+                // observation stations. These can happen concurrently.
+                $urls = [
+                    "gridpoint" => "$baseUrl/gridpoints/$wfo/$gridX,$gridY",
+                    "daily" => "$baseUrl/gridpoints/$wfo/$gridX,$gridY/forecast",
+                    "hourly" => "$baseUrl/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
+                    "stations" => "$baseUrl/gridpoints/$wfo/$gridX,$gridY/stations",
+                ];
+
+                // Fire off a async requests for any of the URLs that aren't
+                // already in our cache.
+                $responses = [];
+                foreach ($urls as $key => $url) {
+                    if ($this->cache->get($url) == false) {
+                        $responses[$key] = $this->client->getAsync($url);
+                    }
+                }
+
+                try {
+                    // Now wait for all of the responses to come back. This will
+                    // allow them to run concurrently. None of them actually go
+                    // until we wait for them, which is weird, but since what
+                    // we really want is concurrency anyway, that's fine.
+                    $responses = Utils::unwrap($responses);
+
+                    // Cache the responses. Use the requested URL as a key.
+                    foreach ($responses as $key => $response) {
+                        $this->cache->set(
+                            $urls[$key], // $urls[$key] is the URL we fetched
+                            json_decode($response->getBody()),
+                            time() + 60,
+                        );
+                    }
+                } catch (\Throwable $e) {
+                }
+            }
+        }
     }
 
     /**

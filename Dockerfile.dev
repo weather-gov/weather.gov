@@ -87,6 +87,8 @@ RUN { \
   echo 'opcache.max_accelerated_files=4000'; \
   echo 'opcache.revalidate_freq=60'; \
   echo 'xdebug.mode=coverage,develop,debug'; \
+  #  echo 'xdebug.mode=coverage,develop,debug,profile'; \
+  #  echo 'xdebug.output_dir=/opt/drupal/web/config/profiling'; \
   echo 'xdebug.client_port=9003'; \
   echo 'xdebug.start_with_request=yes'; \
   echo 'xdebug.client_host=host.docker.internal'; \
