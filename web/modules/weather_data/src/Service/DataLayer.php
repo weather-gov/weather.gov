@@ -76,7 +76,11 @@ class DataLayer
                 if ($this->cache->get($url)) {
                     $response = $this->cache->get($url)->data;
                 } else {
-                    $response = $this->client->get($url);
+                    $response = $this->client->get($url, [
+                        "headers" => [
+                            "wx-gov-response-id" => $this->responseId,
+                        ],
+                    ]);
                     $response = json_decode($response->getBody());
 
                     $this->cache->set($url, $response, time() + 60);
@@ -100,7 +104,11 @@ class DataLayer
                 $responses = [];
                 foreach ($urls as $key => $url) {
                     if ($this->cache->get($url) == false) {
-                        $responses[$key] = $this->client->getAsync($url);
+                        $responses[$key] = $this->client->getAsync($url, [
+                            "headers" => [
+                                "wx-gov-response-id" => $this->responseId,
+                            ],
+                        ]);
                     }
                 }
 
