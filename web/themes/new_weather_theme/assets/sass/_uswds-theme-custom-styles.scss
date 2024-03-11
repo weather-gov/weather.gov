@@ -54,7 +54,7 @@ body {
   overflow-x: clip;
 }
 
-/* AlertDetails Overrides 
+/* AlertDetails Overrides
 -------------------------------------- */
 weathergov-alerts {
   .usa-prose h3 {
@@ -72,7 +72,7 @@ weathergov-alerts {
   }
 }
 
-/* AlertList Overrides 
+/* AlertList Overrides
 -------------------------------------- */
 .usa-alert__body a {
   color: color("primary-dark");
@@ -83,7 +83,7 @@ weathergov-alerts {
   }
 }
 
-/* Column utility 
+/* Column utility
 ------------------------------------- */
 .wx-col-2 {
   column-count: 2;
@@ -197,17 +197,17 @@ svg[data-wind-direction] {
 ------------------------------------- */
 .precip-table {
   td:first-of-type {
-    padding-left: 0; 
+    padding-left: 0;
   }
 
   td:last-child {
-    padding-right: 0; 
+    padding-right: 0;
   }
 
   tr:first-of-type td {
     border-top: 0;
     // visually even out top and bottom table padding, accounting for font bounding box
-    padding-top: units(0.5); 
+    padding-top: units(0.5);
   }
 
   tr:last-of-type td {
@@ -217,6 +217,20 @@ svg[data-wind-direction] {
 }
 
 .usa-table.hourly-table {
+  td, th {
+    padding-left: 0;
+    padding-right: units(3);
+
+    &:first-of-type {
+      padding-left: units(2);
+    }
+  }
+
+  // Fighting specificity
+  tr[data-row-name="time"] th:nth-child(2) {
+    padding-left: units(2);
+  }
+
   th:first-of-type {
     &::after {
       content: '';
@@ -237,17 +251,20 @@ svg[data-wind-direction] {
     background-color: color("accent-warm-lightest");
     border: 1px solid color("accent-warm-lighter");
     display: block;
-    padding: units(1.5);
+    padding: units(1) units(1.5);
   }
 
+  tr[data-row-name="alert"] td,
   tr[data-row-name="alert"] th {
     border: 0;
   }
 
   tr[data-row-name="alert"] td {
-    padding: 0 0 0 units(2);
+    padding: 0;
+
+    &:first-of-type {
+      padding-left: units(2);
+    }
   }
 }
-
-
 
