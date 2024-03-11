@@ -261,6 +261,10 @@ svg[data-wind-direction] {
     border: 1px solid color("accent-warm-lighter");
     display: block;
     padding: units(1) units(1.5);
+
+    svg {
+      fill: color("accent-warm-dark");
+    }
   }
 
   tr[data-row-name="alert"] td,
@@ -269,7 +273,7 @@ svg[data-wind-direction] {
   }
 
   tr[data-row-name="alert"] td {
-    padding: 0  0 units(0.5) 0;
+    padding: units(1) 0;
 
     &:first-of-type {
       padding-left: units(2);
@@ -277,7 +281,7 @@ svg[data-wind-direction] {
   }
 
   tr[data-row-name="alert"]:last-of-type td {
-    padding-bottom: 0;
+     padding-bottom: 0 !important;
   }
 
 }

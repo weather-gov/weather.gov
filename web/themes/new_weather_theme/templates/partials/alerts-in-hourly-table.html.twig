@@ -7,7 +7,16 @@
       <td colspan="{{ alertInfo.periodIndex }}"></td>
     {% endif %}
     <td colspan="{{alertInfo.duration}}">
-      <span class="hourly-table__alert">{{alertInfo.alert.event}}</span>
+      <div class="hourly-table__alert">
+        <div class="display-flex">
+          <div class="width-3 height-3 margin-right-05">
+            <svg role="img" aria-hidden="true" class="width-full height-full">
+              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/uswds/sprite.svg#warning" }}"></use>
+            </svg>
+          </div>
+          {{alertInfo.alert.event}}
+        </div>
+      </div>
     </td>
     {% if remainingCount > 0 %}
       <td colspan="{{ remainingCount }}"></td>
