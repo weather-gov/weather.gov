@@ -55,7 +55,19 @@
             </th>
             {% for period in content.hours %}
               <td>
-                {{period.conditions}}
+                {% if period.icon.icon %}
+                <div class="display-flex flex-align-start">
+                  <div class="icon margin-right-1 width-3 margin-top-05">
+                    {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ period.icon.icon )}}
+                  </div>
+                  <div>
+                    <p class="margin-y-0">{{period.conditions}}</p>
+                    {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
+                    <p class="text-base text-ls-neg-3 font-family-mono font-mono-xs margin-y-0"> {{period.probabilityOfPrecipitation}}% {{ "chance" | t }}<span class="usa-sr-only"> {{ "of precipitation" | t }}</span></p>
+                    {% endif%}
+                  </div>
+                </div>
+                {% endif %}
               </td>
             {% endfor %}
           </tr>
@@ -95,7 +107,11 @@
             </th>
             {% for period in content.hours %}
               <td>
-                {{period.dewpoint}}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
+                {% if period.dewpoint %}
+                  {{period.dewpoint}}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
+                {% else %}
+                <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+                {% endif %}
               </td>
             {% endfor %}
           </tr>

@@ -33,7 +33,8 @@ i.e.
 }
 
 .icon svg {
-  @include u-height(5);
+  height: 100%;
+  width: 100%;
 
   path.st0 {
     fill: color("black");
@@ -260,11 +261,16 @@ svg[data-wind-direction] {
   }
 
   tr[data-row-name="alert"] td {
-    padding: 0;
+    padding: 0  0 units(0.5) 0;
 
     &:first-of-type {
       padding-left: units(2);
     }
   }
+
+  tr[data-row-name="alert"]:last-of-type td {
+    padding-bottom: 0;
+  }
+
 }
 
