@@ -56,14 +56,14 @@
             {% for period in content.hours %}
               <td>
                 {% if period.icon.icon %}
-                <div class="display-flex flex-align-start">
+                <div class="line-height-sans-3">
                   <div class="icon margin-right-1 width-3 margin-top-05">
                     {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ period.icon.icon )}}
                   </div>
                   <div>
                     <p class="margin-y-0">{{period.conditions}}</p>
                     {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
-                    <p class="text-base text-ls-neg-3 font-family-mono font-mono-xs margin-y-0"> {{period.probabilityOfPrecipitation}}% {{ "chance" | t }}<span class="usa-sr-only"> {{ "of precipitation" | t }}</span></p>
+                    <p class="text-base text-ls-neg-3 font-family-mono font-mono-xs margin-top-05 margin-bottom-0"> {{period.probabilityOfPrecipitation}}% {{ "chance" | t }}<span class="usa-sr-only"> {{ "of precipitation" | t }}</span></p>
                     {% endif%}
                   </div>
                 </div>
@@ -72,7 +72,7 @@
             {% endfor %}
           </tr>
           <tr data-row-name="wind-speed">
-            <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-top">
+            <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker bg-primary-lightest font-mono-xs text-uppercase z-top">
               {{"Wind speed" | t}}
             </th>
             {% for period in content.hours %}

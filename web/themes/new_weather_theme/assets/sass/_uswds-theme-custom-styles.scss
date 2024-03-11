@@ -218,14 +218,22 @@ svg[data-wind-direction] {
 }
 
 .usa-table.hourly-table {
+
   td, th {
     padding-left: 0;
     padding-right: units(3);
+    white-space: normal;
+    vertical-align: text-top;
 
     &:first-of-type {
       padding-left: units(2);
     }
   }
+
+  td {
+    min-width: units('card');
+  }
+
 
   // Fighting specificity
   tr[data-row-name="time"] th:nth-child(2) {
@@ -246,7 +254,7 @@ svg[data-wind-direction] {
       background-repeat: no-repeat;
     }
   }
-  
+
   // Using class to overide usa-table styles
   .hourly-table__alert {
     background-color: color("accent-warm-lightest");
