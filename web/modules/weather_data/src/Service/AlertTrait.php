@@ -43,6 +43,7 @@ trait AlertTrait
         $alerts = $this->dataLayer->getAlertsForState($place->state);
 
         $forecastZone = $this->dataLayer->getPoint($lat, $lon);
+        $countyZone = $forecastZone->properties->county;
         $fireZone = $forecastZone->properties->fireWeatherZone;
         $forecastZone = $forecastZone->properties->forecastZone;
 
@@ -55,6 +56,7 @@ trait AlertTrait
             $place,
             $geometry,
             $forecastZone,
+            $countyZone,
             $fireZone,
         ) {
             if (AlertUtility::isMarineAlert($alert->properties->event)) {
@@ -91,16 +93,22 @@ trait AlertTrait
                     $alert->properties->affectedZones,
                 );
 
+                $inCountyZone = in_array(
+                    $countyZone,
+                    $alert->properties->affectedZones,
+                );
+
                 $inFireZone = in_array(
                     $fireZone,
                     $alert->properties->affectedZones,
                 );
 
-                return $inForecastZone || $inFireZone;
+                return $inForecastZone || $inCountyZone || $inFireZone;
             }
 
-            // If there are no zones, check if there are counties.
-            if (sizeof($alert->properties->geocode->SAME) > 0) {
+            // If there are no zones, check if there are counties. Note that the
+            // SAME property is not always present, so coalesce an empty list.
+            if (sizeof($alert->properties->geocode->SAME ?? []) > 0) {
                 return in_array(
                     // SAME codes are FIPS codes with a leading 0
                     "0$place->countyFIPS",
