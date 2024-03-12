@@ -1,0 +1,19 @@
+@use "uswds-core" as *;
+  
+wx-hourly-toggle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+wx-hourly-toggle:hover {
+  cursor: pointer;
+}
+
+wx-hourly-toggle[aria-expanded="false"] + hourly-table {
+  display: none;
+}
+
+wx-hourly-toggle[aria-expanded="true"] {
+  margin-bottom: units(3);
+}

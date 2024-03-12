@@ -40,6 +40,11 @@ hourly_table:
   js:
     assets/js/components/HourlyTable.js: { preprocess: false }
 
+hourly_toggle:
+  version: 2024-03-08
+  js:
+    assets/js/components/HourlyToggle.js: { preprocess: false }
+
 digital-analytics-program:
   header: true
   version: 2024-02-14
