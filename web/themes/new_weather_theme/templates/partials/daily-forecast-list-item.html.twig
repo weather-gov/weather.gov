@@ -61,4 +61,5 @@ only be a nighttime period.
       {% endfor %}
     </div>
   </div>
+  {%  include '@new_weather_theme/partials/hourly-table.html.twig' with { 'hours': dayHours, 'alertPeriods': alertPeriods } %}
 </li>

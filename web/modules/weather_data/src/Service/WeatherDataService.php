@@ -2,9 +2,11 @@
 
 namespace Drupal\weather_data\Service;
 
+use Drupal\weather_data\Service\HourlyTableTrait;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+
 
 /**
  * A service class for fetching weather data.
@@ -16,6 +18,7 @@ class WeatherDataService
     use HourlyForecastTrait;
     use LoggerChannelTrait;
     use ObservationsTrait;
+    use HourlyTableTrait;
 
     protected const NUMBER_OF_OBS_STATIONS_TO_TRY = 3;
 
