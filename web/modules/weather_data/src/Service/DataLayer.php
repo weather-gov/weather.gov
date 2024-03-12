@@ -106,7 +106,12 @@ class DataLayer
                 //
                 // We also don't have to catch anything because our fetch()
                 // method never rejects. Hooray?
-                Utils::unwrap($responses);
+                $responses = Utils::unwrap($responses);
+
+                $station =
+                    $responses["stations"]->features[0]->properties
+                        ->stationIdentifier;
+                $this->fetch("/stations/$station/observations?limit=1")->wait();
             }
         }
     }
