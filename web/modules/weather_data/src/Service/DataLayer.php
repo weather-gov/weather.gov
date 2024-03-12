@@ -8,7 +8,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\Utils;
-use GuzzleHttp\Exception\RequestException;
 
 /**
  * Data layer methods
