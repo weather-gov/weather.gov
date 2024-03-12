@@ -4,6 +4,7 @@ namespace Drupal\weather_data\Service;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Routing\RouteMatchInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\Promise;
@@ -14,6 +15,8 @@ use GuzzleHttp\Promise\Utils;
  */
 class DataLayer
 {
+    use LoggerChannelTrait;
+
     /**
      * Cache of API calls for this request.
      *
@@ -103,7 +106,7 @@ class DataLayer
                 //
                 // We also don't have to catch anything because our fetch()
                 // method never rejects. Hooray?
-                $responses = Utils::unwrap($responses);
+                Utils::unwrap($responses);
             }
         }
     }
