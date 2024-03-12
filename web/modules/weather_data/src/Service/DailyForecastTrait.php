@@ -4,7 +4,7 @@ namespace Drupal\weather_data\Service;
 
 trait DailyForecastTrait
 {
-    private function formatDailyPeriod($period)
+  private function formatDailyPeriod($period, $timezone=null)
     {
         // Early return if we haven't passed in anything
         if (!$period) {
@@ -13,7 +13,7 @@ trait DailyForecastTrait
 
         // Daily forecast cards require the three-letter
         // abrreviated form of the day name.
-        $startTime = DateTimeUtility::stringToDate($period->startTime);
+        $startTime = DateTimeUtility::stringToDate($period->startTime, $timezone);
 
         $shortDayName = $startTime->format("D");
         $dayName = $startTime->format("l");
@@ -28,7 +28,7 @@ trait DailyForecastTrait
             "shortDayName" => $shortDayName,
             "dayName" => $dayName,
             "monthAndDay" => $monthAndDay,
-            "startTime" => $period->startTime,
+            "startTime" => $startTime->format("c"),
             "shortForecast" => $this->t->translate($shortForecast),
             "icon" => $this->getIcon($period),
             "temperature" => $period->temperature,
@@ -60,6 +60,28 @@ trait DailyForecastTrait
         $timezone = $place->timezone;
 
         $periods = $forecast->periods;
+
+        // Grab the hourly forecast period information
+        // and any relevant alerts so we can use them
+        // in the hourly details table for each day
+        $hourlyPeriods = $this->getHourlyForecastFromGrid(
+          $wfo,
+          $x,
+          $y
+        );
+        $point = $this->stashedPoint;
+        if(!$point){
+          $point = $this->getGeometryFromGrid(
+            $wfo,
+            $x,
+            $y
+          );
+        }
+        $grid = $this->getGridFromLatLon(
+          $point->lat,
+          $point->lon
+        );
+        $alerts = $this->getAlerts($grid, $point);
 
         // In order to keep the time zones straight,
         // we set the "current" (now) time to be
@@ -97,9 +119,58 @@ trait DailyForecastTrait
         // Format each of the today periods
         // as assoc arrays that can be used
         // by the templates
-        $todayPeriodsFormatted = array_map(function ($period) {
-            return $this->formatDailyPeriod($period);
+        $todayPeriodsFormatted = array_map(function ($period) use (&$timezone) {
+          return $this->formatDailyPeriod($period, $timezone);
         }, $todayPeriods);
+
+        // Format each of the detailed periods
+        // as assoc arrays that can be used by
+        // the templates. Also group the periods
+        // into daytime and nighttime pairs
+        $detailedPeriodsFormatted = array_map(function ($periodPair) use (&$timezone) {
+            $day = $periodPair[0];
+            $night = $periodPair[1];
+
+            return [
+              "daytime" => $this->formatDailyPeriod($day, $timezone),
+              "overnight" => $this->formatDailyPeriod($night, $timezone),
+            ];
+        }, array_chunk($detailedPeriods, 2));
+
+        // Format each of the extended periods as
+        // assoc arrays that can be used by the
+        // templates. Also group the periods
+        // into daytime and nighttime pairs
+        $extendedPeriodsFormatted = array_map(function ($periodPair) use (&$timezone){
+            $day = $periodPair[0];
+            $night = $periodPair[1];
+
+            return [
+              "daytime" => $this->formatDailyPeriod($day, $timezone),
+              "overnight" => $this->formatDailyPeriod($night, $timezone),
+            ];
+        }, array_chunk($extendedPeriods, 2));
+
+        // Get detailed hourly data for the today
+        // daily period (for display)
+        $this->getHourlyDetailsForDay(
+          $todayPeriodsFormatted,
+          $hourlyPeriods,
+          $alerts,
+          true
+        );
+        if(count($todayPeriodsFormatted) > 1){
+          $todayHourlyDetails = array_merge(
+            $todayPeriodsFormatted[0]["hourlyPeriods"],
+            $todayPeriodsFormatted[1]["hourlyPeriods"]
+          );
+          $todayHourlyDetails = array_unique(
+            $todayHourlyDetails,
+            \SORT_REGULAR
+          );
+        } else {
+          $todayHourlyDetails = $todayPeriodsFormatted[0]["hourlyPeriods"];
+        }
 
         // Format each of the detailed periods
         // as assoc arrays that can be used by
@@ -115,22 +186,17 @@ trait DailyForecastTrait
             ];
         }, array_chunk($detailedPeriods, 2));
 
-        // Format each of the extended periods as
-        // assoc arrays that can be used by the
-        // templates. Also group the periods
-        // into daytime and nighttime pairs
-        $extendedPeriodsFormatted = array_map(function ($periodPair) {
-            $day = $periodPair[0];
-            $night = $periodPair[1];
-
-            return [
-                "daytime" => $this->formatDailyPeriod($day),
-                "overnight" => $this->formatDailyPeriod($night),
-            ];
-        }, array_chunk($extendedPeriods, 2));
+        // Get detailed hourly data for the
+        // detailed forecast days
+        $this->getHourlyDetailsForDay(
+          $detailedPeriodsFormatted,
+          $hourlyPeriods,
+          $alerts,
+        );
 
         return [
             "today" => array_values($todayPeriodsFormatted),
+            "todayHourly" => $todayHourlyDetails,
             "detailed" => array_values($detailedPeriodsFormatted),
             "extended" => array_values($extendedPeriodsFormatted),
         ];

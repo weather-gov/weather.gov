@@ -35,9 +35,20 @@ trait HourlyTableTrait {
             $startTime = \DateTimeImmutable::createFromFormat(
                 \DateTimeInterface::ISO8601_EXPANDED,
                 $startTimeString,
-            )->setTime(6, 0);
+            );
 
-            $endTime = $startTime->add(\DateInterval::createFromDateString("1 day"));
+            if(!$isTodayPeriod){
+              // We want to start the daily period at 6am
+              // for any day that is not the current day.
+              // For current days, we start at the day period's
+              // startTime.
+              $startTime = $startTime->setTime(6, 0);
+              $endTime = $startTime->add(\DateInterval::createFromDateString("1 day"));
+            } else {
+              // Otherwise, the endTime should be 6am the following day
+              // from the original (today) startTime
+              $endTime = $startTime->setTime(6, 0)->add(\DateInterval::createFromDateString("1 day"));
+            }
 
             $dayHourlyPeriods = array_filter($hourlyPeriods, function (
                 $hourlyPeriod,

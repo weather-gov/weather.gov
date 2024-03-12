@@ -24,6 +24,73 @@ class HourlyTableTraitTest extends TestCase {
   /**
    * @group units
    *
+   * Test that most hours are filtered out
+   * for the Today/Tonight current period
+   */
+  public function testTodayTonightHappyPath(): void {
+    $dayPeriods = [
+      [
+        "startTime" => "2024-03-10T12:31:00-04:00",
+        "endTime" => "2024-03-10T18:00:00-4:00"
+      ],
+      [
+        "startTime" => "2024-03-10T18:00:00-4:00",
+        "endTime" => "2024-03-11T06:00:00-4:00"
+      ]
+    ];
+
+    $alerts = [];
+
+    // Generate an array of hourly periods of
+    // length 100. Most of these should get filtered
+    // out.
+    $hourlyTimestamp = "2024-03-DDTHH:00:00-04:00";
+    $hourlyDay = 10;
+    $hourlyPeriods = [];
+    for($i = 3; $i < 100; $i++){
+      $hour = $i % 24;
+      $hourStr = sprintf("%02d", $hour);
+      if($hour == 0){
+        $hourlyDay++;
+      }
+
+      $timestamp = str_replace("HH", $hourStr, $hourlyTimestamp);
+      $timestamp = str_replace("DD", sprintf("%02d", $hourlyDay), $timestamp);
+      array_push($hourlyPeriods, [
+        "timestamp" => $timestamp
+      ]);
+    }
+
+    $result = $this->testClass->getHourlyDetailsForDay(
+      $dayPeriods,
+      $hourlyPeriods,
+      $alerts,
+      true // isToday periods
+    );
+
+    $dayResultItem = $result[0]["hourlyPeriods"];
+    $overnightResultItem = $result[1]["hourlyPeriods"];
+
+    // We expect 24 hours of coverage, since
+    // we forward the current day's start time
+    // to 6am the following day
+    $dayExpected = 18;
+    $dayActual = count($dayResultItem);
+
+    // We expect 13 hours, since we start
+    // at 6pm and expect to go to 6am
+    // the following day, with the first hour
+    // being inclusive
+    $overnightExpected = 13;
+    $overnightActual = count($overnightResultItem);
+    
+    $this->assertEquals($dayExpected, $dayActual);
+    $this->assertEquals($overnightExpected, $overnightActual);
+  }
+
+  /**
+   * @group units
+   *
    * Test that most hours are filtered out for
    * a one day period
    */
