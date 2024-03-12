@@ -1,12 +1,13 @@
 {% if content.periods %}
 
-<div class="grid-container padding-x-0 tablet:padding-x-2">
+<div class="grid-container">
   <div class="grid-row"> 
-    <div class="grid-col-12 tablet:grid-offset-2 tablet:grid-col-6"> 
-      <h3 class="padding-x-2 tablet:padding-x-0 text-normal text-primary-darkest margin-top-1">{{ "Precipitation amounts" |t }}</h3>
+    <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-6"> 
+      <h3 class="text-normal text-primary-darkest margin-top-1">{{ "Precipitation amounts" |t }}</h3>
     </div>
   </div>
-  <div class="grid-container bg-white padding-y-2 padding-x-3 shadow-1 grid-col-12 tablet:grid-offset-2 tablet:grid-col-6 margin-bottom-2">
+  <div class="grid-row margin-x-neg-2 tablet:margin-x-0">
+    <div class="bg-white padding-y-2 padding-x-3 shadow-1 bg-white grid-col-12 tablet-lg:grid-offset-2 tablet:grid-col-8 tablet-lg:grid-col-6">
       <table class="usa-table usa-table--borderless precip-table margin-y-0 width-full">
         <caption class="usa-sr-only">{{ "precipitation amounts for the coming hours" | t }}
         <thead class="usa-sr-only">
@@ -25,11 +26,14 @@
         </tbody>
       </table>
     </div>
-    <div class="grid-row"> 
-      <div class="grid-col-12 tablet:grid-offset-2 tablet:grid-col-6"> 
-        <a class="padding-x-2 tablet:padding-x-0 usa-link" href="#">{{ "What do these amounts mean?" | t }} </a>
-      </div>
+  </div>
+  <div class="grid-row margin-top-2"> 
+    <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-6"> 
+      <a class="tablet-lg:padding-x-0 usa-link" href="#">
+        {{ "What do these amounts mean?" | t }} 
+      </a>
     </div>
+  </div>
 </div>
 
 

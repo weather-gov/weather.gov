@@ -1,18 +1,18 @@
 <div class="grid-container margin-top-2 tablet:margin-top-3 padding-x-2">
   {{ attach_library('new_weather_theme/hourly_table') }}
   <div class="grid-row">
-    <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-      <h2 class="text-normal text-primary-darkest">{{ "Forecast" | t }}</h2>
+    <div class="grid-col tablet-lg:grid-offset-2">
+      <h3 class="text-normal text-primary-darkest">{{ "Forecast" | t }}</h3>
     </div>
   </div>
 </div>
-<div class="grid-container padding-x-0 tablet:padding-x-2"> 
-  <div class="hourly-forecast-block tablet:padding-x-2">
+<div class="grid-container"> 
+  <div class="hourly-forecast-block margin-x-neg-2 tablet:margin-x-0">
     {% if content.error %}
       {% set message = "There was an error loading the hourly forecast." | t %}
       {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
     {% else %}
-      <hourly-table class="display-block position-relative margin-top-2  padding-top-1 bg-white">
+      <hourly-table class="display-block position-relative margin-top-2 padding-top-1 bg-white">
           <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 left-2 display-flex flex-align-center flex-justify-center" data-direction="left" type="button" role="button">
               <span class="usa-sr-only">{{ "scroll left" | t }}</span>
               <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
