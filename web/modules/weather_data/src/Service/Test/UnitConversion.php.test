@@ -2,20 +2,18 @@
 
 namespace Drupal\weather_data\Service\Test;
 
-use Drupal\weather_data\Service\UnitConversionTrait;
+use Drupal\weather_data\Service\UnitConversion;
 use PHPUnit\Framework\TestCase;
 
-final class UnitConversionTraitTest extends TestCase
+final class UnitConversionTest extends TestCase
 {
-    use UnitConversionTrait;
-
     /**
      * Test when the temperature value is null.
      */
     public function testNullTemperature(): void
     {
         $expected = null;
-        $actual = $this->getTemperatureScalar((object) ["value" => null]);
+        $actual = UnitConversion::getTemperatureScalar((object) ["value" => null]);
 
         $this->assertEquals($expected, $actual);
     }
@@ -30,7 +28,7 @@ final class UnitConversionTraitTest extends TestCase
             "unitCode" => "wmoUnit:degF",
             "value" => 63,
         ];
-        $actual = $this->getTemperatureScalar($temperature, false);
+        $actual = UnitConversion::getTemperatureScalar($temperature, false);
 
         $this->assertEquals($expected, $actual);
     }
@@ -45,7 +43,7 @@ final class UnitConversionTraitTest extends TestCase
             "unitCode" => "wmoUnit:degF",
             "value" => 44,
         ];
-        $actual = $this->getTemperatureScalar($temperature);
+        $actual = UnitConversion::getTemperatureScalar($temperature);
 
         $this->assertEquals($expected, $actual);
     }
@@ -60,7 +58,7 @@ final class UnitConversionTraitTest extends TestCase
             "unitCode" => "wmoUnit:degC",
             "value" => 17,
         ];
-        $actual = $this->getTemperatureScalar($temperature);
+        $actual = UnitConversion::getTemperatureScalar($temperature);
 
         $this->assertEquals($expected, $actual);
     }
@@ -75,7 +73,7 @@ final class UnitConversionTraitTest extends TestCase
             "unitCode" => "wmoUnit:degC",
             "value" => 12,
         ];
-        $actual = $this->getTemperatureScalar($temperature, false);
+        $actual = UnitConversion::getTemperatureScalar($temperature, false);
 
         $this->assertEquals($expected, $actual);
     }
@@ -101,7 +99,7 @@ final class UnitConversionTraitTest extends TestCase
                 "short" => $scenario[2],
             ];
 
-            $actual = $this->getDirectionOrdinal($scenario[0]);
+            $actual = UnitConversion::getDirectionOrdinal($scenario[0]);
 
             $this->assertEquals($expected, $actual);
         }
