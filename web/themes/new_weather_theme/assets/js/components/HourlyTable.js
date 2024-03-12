@@ -4,6 +4,7 @@ class HourlyTable extends HTMLElement {
 
     // Bound component methods
     this.handleArrowButtonClick = this.handleArrowButtonClick.bind(this);
+    this.handleScrollEvent = this.handleScrollEvent.bind(this);
   }
 
   connectedCallback() {
@@ -12,6 +13,10 @@ class HourlyTable extends HTMLElement {
         arrowButton.addEventListener("click", this.handleArrowButtonClick);
       },
     );
+    const wrapper = this.querySelector(".usa-table-container--scrollable");
+    if(wrapper){
+      wrapper.addEventListener("scroll", this.handleScrollEvent);
+    }
   }
 
   disconnectedCallback() {
@@ -20,6 +25,10 @@ class HourlyTable extends HTMLElement {
         arrowButton.removeEventListener("click", this.handleArrowButtonClick);
       },
     );
+    const wrapper = this.querySelector(".usa-table-container--scrollable");
+    if(wrapper){
+      wrapper.removeEventListener("scroll", this.handleScrollEvent);
+    }
   }
 
   handleArrowButtonClick(event) {
@@ -63,6 +72,14 @@ class HourlyTable extends HTMLElement {
       });
     } else {
       wrapper.scrollTo({ left: 0, behavior: "smooth" });
+    }
+  }
+
+  handleScrollEvent(event){
+    if(event.target.scrollLeft > 0){
+      this.setAttribute("data-scrolled", "true");
+    } else {
+      this.setAttribute("data-scrolled", "false");
     }
   }
 }
