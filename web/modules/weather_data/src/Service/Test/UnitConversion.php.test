@@ -13,7 +13,9 @@ final class UnitConversionTest extends TestCase
     public function testNullTemperature(): void
     {
         $expected = null;
-        $actual = UnitConversion::getTemperatureScalar((object) ["value" => null]);
+        $actual = UnitConversion::getTemperatureScalar(
+            (object) ["value" => null],
+        );
 
         $this->assertEquals($expected, $actual);
     }

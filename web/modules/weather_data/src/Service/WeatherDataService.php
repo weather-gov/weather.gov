@@ -7,7 +7,6 @@ use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-
 /**
  * A service class for fetching weather data.
  */
