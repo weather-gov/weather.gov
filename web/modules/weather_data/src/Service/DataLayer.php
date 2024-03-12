@@ -66,80 +66,61 @@ class DataLayer
             if (!self::$INITIALIZED) {
                 self::$INITIALIZED = true;
 
-                $baseUrl = getEnv("API_URL");
-                $baseUrl =
-                    $baseUrl == false ? "https://api.weather.gov" : $baseUrl;
-
                 // First thing we need to do is get the WFO information for this
                 // lat/lon.
-                $url = "$baseUrl/points/$lat,$lon";
-                if ($this->cache->get($url)) {
-                    $response = $this->cache->get($url)->data;
-                } else {
-                    $response = $this->client->get($url, [
-                        "headers" => [
-                            "wx-gov-response-id" => $this->responseId,
-                        ],
-                    ]);
-                    $response = json_decode($response->getBody());
-
-                    $this->cache->set($url, $response, time() + 60);
+                $url = "/points/$lat,$lon";
+                $response = $this->fetch($url)->wait();
+                if ($response->error) {
+                    return;
                 }
 
                 $wfo = strtoupper($response->properties->gridId);
                 $gridX = $response->properties->gridX;
                 $gridY = $response->properties->gridY;
+                $state =
+                    $response->properties->relativeLocation->properties->state;
 
                 // Then we can go get gridpoint info, forecasts, and list of
                 // observation stations. These can happen concurrently.
                 $urls = [
-                    "gridpoint" => "$baseUrl/gridpoints/$wfo/$gridX,$gridY",
-                    "daily" => "$baseUrl/gridpoints/$wfo/$gridX,$gridY/forecast",
-                    "hourly" => "$baseUrl/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
-                    "stations" => "$baseUrl/gridpoints/$wfo/$gridX,$gridY/stations",
+                    "gridpoint" => "/gridpoints/$wfo/$gridX,$gridY",
+                    "daily" => "/gridpoints/$wfo/$gridX,$gridY/forecast",
+                    "hourly" => "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
+                    "stations" => "/gridpoints/$wfo/$gridX,$gridY/stations",
+                    "alerts" => "/alerts/active?status=actual&area=$state",
                 ];
 
                 // Fire off a async requests for any of the URLs that aren't
                 // already in our cache.
                 $responses = [];
                 foreach ($urls as $key => $url) {
-                    if ($this->cache->get($url) == false) {
-                        $responses[$key] = $this->client->getAsync($url, [
-                            "headers" => [
-                                "wx-gov-response-id" => $this->responseId,
-                            ],
-                        ]);
-                    }
+                    $responses[$key] = $this->fetch($url);
                 }
 
-                try {
-                    // Now wait for all of the responses to come back. This will
-                    // allow them to run concurrently. None of them actually go
-                    // until we wait for them, which is weird, but since what
-                    // we really want is concurrency anyway, that's fine.
-                    $responses = Utils::unwrap($responses);
-
-                    // Cache the responses. Use the requested URL as a key.
-                    foreach ($responses as $key => $response) {
-                        $this->cache->set(
-                            $urls[$key], // $urls[$key] is the URL we fetched
-                            json_decode($response->getBody()),
-                            time() + 60,
-                        );
-                    }
-                } catch (\Throwable $e) {
-                }
+                // Now wait for all of the responses to come back. This will
+                // allow them to run concurrently. None of them actually go
+                // until we wait for them, which is weird, but since what
+                // we really want is concurrency anyway, that's fine.
+                //
+                // We also don't have to catch anything because our fetch()
+                // method never rejects. Hooray?
+                $responses = Utils::unwrap($responses);
             }
         }
     }
 
     /**
-     * Get data from the weather API.
+     * Get a promise for the result of querying a URL.
+     *
+     * If the URL is already in cache, resolves that. Otherwise, makes an HTTP
+     * request and resolves the result. In the event of a server error, will
+     * retry up to 5 times before failing. The resolved data will contain an
+     * error property if the endpoint was ultimately unsucessful.
      *
      * The results for any given URL are cached for 60 seconds. Exceptions after
-     * the maximum retries are cached for 1 second.
+     * the maximum retries are cached for 5 seconds.
      */
-    private function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
+    private function fetch($url, $attempt = 1, $delay = 75)
     {
         if (!preg_match("/^https?:\/\//", $url)) {
             $baseUrl = getEnv("API_URL");
@@ -147,48 +128,67 @@ class DataLayer
             $url = $baseUrl . $url;
         }
 
+        $promise = new Promise();
+
         $cacheHit = $this->cache->get($url);
 
-        if (!$cacheHit) {
-            try {
-                $response = $this->client->get($url, [
-                    // Add our response ID as a header to the API so we can
-                    // track sequences of API calls for this one response.
-                    "headers" => ["wx-gov-response-id" => $this->responseId],
-                ]);
-                $response = json_decode($response->getBody());
-                $this->cache->set($url, $response, time() + 60);
-                return $response;
-            } catch (ServerException $e) {
-                $logger = $this->getLogger("Weather.gov data service");
-                $logger->notice("got 500 error on attempt $attempt for: $url");
-
-                // Back off and try again.
-                if ($attempt < 5) {
-                    // Sleep is in microseconds, so scale it up to milliseconds.
-                    usleep($delay * 1000);
-                    return $this->getFromWeatherAPI(
-                        $url,
-                        $attempt + 1,
-                        $delay * 1.65,
-                    );
-                }
-
-                $logger->error("giving up on: $url");
-
-                // Cache errors too. If we've already tried and failed on an
-                // endpoint the maximum number of retries, don't try again on
-                // subsequent calls to the same endpoint.
-                $this->cache->set($url, (object) ["error" => $e], 1);
-                throw $e;
-            }
+        if ($cacheHit) {
+            $promise->resolve($cacheHit->data);
         } else {
-            // If we cached an exception, throw it. Otherwise return the data.
-            if (is_object($cacheHit->data) && isset($cacheHit->data->error)) {
-                throw $cacheHit->data->error;
-            }
-            return $cacheHit->data;
+            $promise->resolve(
+                $this->client
+                    ->getAsync($url, [
+                        "headers" => [
+                            "wx-gov-response-id" => $this->responseId,
+                        ],
+                    ])
+                    ->then(
+                        function ($response) use ($url) {
+                            $response = json_decode($response->getBody());
+                            $this->cache->set($url, $response, time() + 60);
+                            return $response;
+                        },
+                        function ($error) use ($url, $attempt, $delay) {
+                            $logger = $this->getLogger(
+                                "Weather.gov data service",
+                            );
+                            $logger->notice(
+                                "got 500 error on attempt $attempt for: $url",
+                            );
+
+                            if ($attempt < 5) {
+                                usleep($delay * 1000);
+                                return $this->fetch(
+                                    $url,
+                                    $attempt + 1,
+                                    $delay * 1.65,
+                                );
+                            }
+
+                            $logger->error("giving up on: $url");
+                            $response = (object) ["error" => $error];
+                            $this->cache->set($url, $response, time() + 5);
+                            return $response;
+                        },
+                    ),
+            );
         }
+
+        return $promise;
+    }
+
+    /**
+     * Synchronous wrapper around async fetch.
+     */
+    private function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
+    {
+        $response = $this->fetch($url)->wait();
+
+        if ($response->error) {
+            throw $response->error;
+        }
+
+        return $response;
     }
 
     private static $i_alertsState = false;
