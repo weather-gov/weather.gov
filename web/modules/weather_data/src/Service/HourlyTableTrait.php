@@ -53,7 +53,7 @@ trait HourlyTableTrait
                     ->setTime(6, 0)
                     ->add(\DateInterval::createFromDateString("1 day"));
             }
-
+            // phpcs:disable
             $dayHourlyPeriods = array_filter($hourlyPeriods, function (
                 $hourlyPeriod,
             ) use (&$startTime, &$endTime) {
@@ -65,6 +65,7 @@ trait HourlyTableTrait
                 return $hourlyStartTime >= $startTime &&
                     $hourlyStartTime <= $endTime;
             });
+            //phpcs:enable
 
             $dayHourlyPeriods = array_values($dayHourlyPeriods);
 
