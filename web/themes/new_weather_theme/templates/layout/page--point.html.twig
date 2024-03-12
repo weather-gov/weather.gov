@@ -58,25 +58,16 @@
         </div>
         <div class="tab-container" id="today"  role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
           {{ drupal_block("weathergov_weather_story") }}
-
-
           <div class="grid-container padding-x-2">
             <div class="grid-row">
               <div class="grid-col tablet:grid-offset-2">
                 <h2 class="text-normal text-primary-darkest margin-top-0 margin-bottom-2">{{ "Hourly" | t }}</h2>
               </div>
-
             </div>
           </div>
-
           {{ drupal_block("weathergov_hourly_precipitation") }}
           {{ drupal_block("weathergov_hourly_forecast") }}
-
           {{ drupal_block("weathergov_wfo_promo") }}
-          <div class="grid-container padding-x-0 tablet:padding-x-2">
-            <div class="grid-container bg-white padding-y-2 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-            </div>
-          </div>
         </div>
         <div class="tab-container" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
             {{ drupal_block("weathergov_daily_forecast") }}

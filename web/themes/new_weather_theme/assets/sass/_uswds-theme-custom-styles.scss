@@ -222,7 +222,6 @@ svg[data-wind-direction] {
   td, th {
     padding-left: 0;
     padding-right: units(3);
-    white-space: normal;
     vertical-align: text-top;
 
     &:first-of-type {
@@ -232,15 +231,18 @@ svg[data-wind-direction] {
 
   td {
     min-width: units('card');
+    white-space: normal;
   }
 
+  th[scope="row"] {
+    white-space: nowrap;
+  }
 
   // Fighting specificity
   tr[data-row-name="time"] th:nth-child(2) {
     padding-left: units(2);
   }
 
- 
 
   // Using class to overide usa-table styles
   .hourly-table__alert {
@@ -273,6 +275,7 @@ svg[data-wind-direction] {
 
 }
 
+// Table shadow only shows on scroll
 hourly-table[data-scrolled="true"] th:first-of-type {
   &::after {
     content: '';
