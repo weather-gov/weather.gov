@@ -164,8 +164,17 @@ trait DailyForecastTrait
                 $todayHourlyDetails,
                 \SORT_REGULAR,
             );
+            $todayAlerts = array_merge(
+                $todayPeriodsFormatted[0]["alertPeriods"],
+                $todayPeriodsFormatted[1]["alertPeriods"],
+            )
+            $todayAlertDetails = array_unique(
+                $todayAlertDetails,
+                \SORT_REGULAR,
+            );
         } else {
             $todayHourlyDetails = $todayPeriodsFormatted[0]["hourlyPeriods"];
+            $todayAlertDetails = $todayPeriodsFormatted[0]["alertPeriods"];
         }
 
         // Format each of the detailed periods
@@ -193,6 +202,7 @@ trait DailyForecastTrait
         return [
             "today" => array_values($todayPeriodsFormatted),
             "todayHourly" => $todayHourlyDetails,
+            "todayAlerts" => $todayAlertDetails,
             "detailed" => array_values($detailedPeriodsFormatted),
             "extended" => array_values($extendedPeriodsFormatted),
         ];
