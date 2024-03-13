@@ -28,7 +28,7 @@
         <div id="hourly-table-container" class="usa-table-container--scrollable">
           <table class="usa-table usa-table--borderless hourly-table" tabindex="0">
             <tr data-row-name="time">
-              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-top">{{ "Time" | t }}</th>
+              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
               {% for period in content.hours %}
               <th scope="col">
                 <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-primary-darkest">
@@ -41,7 +41,7 @@
                 {% include '@new_weather_theme/partials/alerts-in-hourly-table.html.twig' with { 'periods': content.hours, 'alertPeriods': content.alertPeriods } %}
             {% endif %}
             <tr data-row-name="temp">
-              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-top">
+              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
                 {{"Temp" | t}}
               </th>
               {% for period in content.hours %}
@@ -51,7 +51,7 @@
               {% endfor %}
             </tr>
             <tr data-row-name="condition">
-              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-top">
+              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
                 {{"Condition" | t}}
               </th>
               {% for period in content.hours %}
@@ -73,7 +73,7 @@
               {% endfor %}
             </tr>
             <tr data-row-name="wind-speed">
-              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker bg-primary-lightest font-mono-xs text-uppercase z-top">
+              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker bg-primary-lightest font-mono-xs text-uppercase z-400">
                 {{"Wind speed" | t}}
               </th>
               {% for period in content.hours %}
@@ -93,7 +93,7 @@
               {% endfor %}
             </tr>
             <tr data-row-name="humidity">
-              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-top">
+              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
                 {{"Humidity" | t}}
               </th>
               {% for period in content.hours %}
@@ -103,7 +103,7 @@
               {% endfor %}
             </tr>
             <tr data-row-name="dewpoint">
-              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-top">
+              <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
                 {{"Dewpoint" | t}}
               </th>
               {% for period in content.hours %}
