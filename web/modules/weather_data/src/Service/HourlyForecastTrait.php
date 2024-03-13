@@ -212,7 +212,7 @@ trait HourlyForecastTrait
                     $period["probabilityOfPrecipitation"],
                 "relativeHumidity" => $period["relativeHumidity"],
                 "time" => $timeString,
-                "timestamp" => $period["timestamp"]->format("c"),
+                "timestamp" => $timestamp->format("c"),
                 "temperature" => UnitConversion::getTemperatureScalar(
                     (object) [
                         "unitCode" => $units["temperature"],
