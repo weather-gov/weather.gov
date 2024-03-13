@@ -205,7 +205,7 @@ trait ObservationsTrait
             "wind" => [
                 // Kph to mph.
                 "speed" =>
-                    $obs->windSpeed->value == null
+                    $obs->windSpeed->value === null
                         ? null
                         : (int) round($obs->windSpeed->value * 0.6213712),
                 "direction" => UnitConversion::getDirectionOrdinal(
