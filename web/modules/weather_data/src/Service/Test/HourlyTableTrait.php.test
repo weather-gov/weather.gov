@@ -80,8 +80,8 @@ class HourlyTableTraitTest extends TestCase
         $dayResultItem = $result[0]["hourlyPeriods"];
         $overnightResultItem = $result[1]["hourlyPeriods"];
 
-        // We expect 24 hours of coverage, since
-        // we forward the current day's start time
+        // We expect 18 hours of coverage, since
+        // the current day is from 1pm today
         // to 6am the following day
         $dayExpected = 18;
         $dayActual = count($dayResultItem);
