@@ -217,6 +217,8 @@ svg[data-wind-direction] {
   }
 }
 
+/* Hourly forecast table overrides
+------------------------------------- */
 .usa-table.hourly-table {
 
   td, th {
@@ -289,4 +291,11 @@ hourly-table[data-scrolled="true"] th:first-of-type {
     background-size: 50%;
     background-repeat: no-repeat;
   }
+}
+
+
+/* Unstyle list utilities 
+------------------------------------- */
+.usa-list--unstyled .li-margin-bottom-1 {
+  margin-bottom: units(1);
 }
