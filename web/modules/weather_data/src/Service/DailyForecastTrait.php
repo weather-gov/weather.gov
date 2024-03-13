@@ -170,7 +170,7 @@ trait DailyForecastTrait
 
         $todayAlerts = $this->alertsToHourlyPeriods(
             $alerts,
-            $todayHourlyDetails
+            $todayHourlyDetails,
         );
 
         // Format each of the detailed periods
