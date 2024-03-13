@@ -1,3 +1,4 @@
+{{dump(content)}}
 <hourly-table class="display-block position-relative margin-top-2 padding-top-1 bg-white">
   <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 left-2 display-flex flex-align-center flex-justify-center" data-direction="left" type="button" role="button">
     <span class="usa-sr-only">{{ "scroll left" | t }}</span>
@@ -15,7 +16,7 @@
     <table class="usa-table usa-table--borderless hourly-table" tabindex="0">
       <tr data-row-name="time">
         <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
-        {% for period in content.hours %}
+        {% for period in hours %}
         <th scope="col">
           <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-primary-darkest">
             {{ period.time }}
@@ -23,14 +24,14 @@
         </th>
         {% endfor %}
       </tr>
-      {%  if content.alertPeriods | length > 0 %}
-      {% include '@new_weather_theme/partials/alerts-in-hourly-table.html.twig' with { 'periods': content.hours, 'alertPeriods': content.alertPeriods } %}
+      {%  if alertPeriods | length > 0 %}
+      {% include '@new_weather_theme/partials/alerts-in-hourly-table.html.twig' with { 'periods': hours, 'alertPeriods': alertPeriods } %}
       {% endif %}
       <tr data-row-name="temp">
         <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
           {{"Temp" | t}}
         </th>
-        {% for period in content.hours %}
+        {% for period in hours %}
         <td>
           {{ period.temperature }}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
         </td>
@@ -40,7 +41,7 @@
         <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
           {{"Condition" | t}}
         </th>
-        {% for period in content.hours %}
+        {% for period in hours %}
         <td>
           {% if period.icon.icon %}
           <div class="line-height-sans-3">
@@ -64,7 +65,7 @@
         <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker bg-primary-lightest font-mono-xs text-uppercase z-400">
           {{"Wind speed" | t}}
         </th>
-        {% for period in content.hours %}
+        {% for period in hours %}
         <td style="">
           <div class="display-flex flex-row flex-align-center">
             <span>{{period.windSpeed}} {{ "mph" | t }}</span>
@@ -84,7 +85,7 @@
         <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
           {{"Humidity" | t}}
         </th>
-        {% for period in content.hours %}
+        {% for period in hours %}
         <td>
           {{period.relativeHumidity}}%
         </td>
@@ -94,7 +95,7 @@
         <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
           {{"Dewpoint" | t}}
         </th>
-        {% for period in content.hours %}
+        {% for period in hours %}
         <td>
           {% if period.dewpoint %}
           {{period.dewpoint}}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
