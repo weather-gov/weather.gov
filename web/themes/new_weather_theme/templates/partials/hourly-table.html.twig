@@ -1,0 +1,109 @@
+<hourly-table class="display-block position-relative margin-top-2 padding-top-1 bg-white">
+  <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 left-2 display-flex flex-align-center flex-justify-center" data-direction="left" type="button" role="button">
+    <span class="usa-sr-only">{{ "scroll left" | t }}</span>
+    <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
+      <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#arrow_back"></use>
+    </svg>
+  </button>
+  <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 right-2 display-flex flex-align-center flex-justify-center" data-direction="right" type="button" role="button">
+    <span class="usa-sr-only">{{ "scroll right" | t }}</span>
+    <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
+      <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#arrow_forward"></use>
+    </svg>
+  </button>
+  <div id="hourly-table-container" class="usa-table-container--scrollable">
+    <table class="usa-table usa-table--borderless hourly-table" tabindex="0">
+      <tr data-row-name="time">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
+        {% for period in content.hours %}
+        <th scope="col">
+          <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-primary-darkest">
+            {{ period.time }}
+          </time>
+        </th>
+        {% endfor %}
+      </tr>
+      {%  if content.alertPeriods | length > 0 %}
+      {% include '@new_weather_theme/partials/alerts-in-hourly-table.html.twig' with { 'periods': content.hours, 'alertPeriods': content.alertPeriods } %}
+      {% endif %}
+      <tr data-row-name="temp">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+          {{"Temp" | t}}
+        </th>
+        {% for period in content.hours %}
+        <td>
+          {{ period.temperature }}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
+        </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="condition">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+          {{"Condition" | t}}
+        </th>
+        {% for period in content.hours %}
+        <td>
+          {% if period.icon.icon %}
+          <div class="line-height-sans-3">
+            <div class="icon margin-right-1 width-3 margin-top-05">
+              <svg role="img" aria-hidden="true" class="maxh-3 maxw-3">
+                <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.icon.base }}"></use>
+              </svg>
+            </div>
+            <div>
+              <p class="margin-y-0">{{period.conditions}}</p>
+              {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
+              <p class="text-base text-ls-neg-3 font-family-mono font-mono-xs margin-top-05 margin-bottom-0"> {{period.probabilityOfPrecipitation}}% {{ "chance" | t }}<span class="usa-sr-only"> {{ "of precipitation" | t }}</span></p>
+              {% endif%}
+            </div>
+          </div>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="wind-speed">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker bg-primary-lightest font-mono-xs text-uppercase z-400">
+          {{"Wind speed" | t}}
+        </th>
+        {% for period in content.hours %}
+        <td style="">
+          <div class="display-flex flex-row flex-align-center">
+            <span>{{period.windSpeed}} {{ "mph" | t }}</span>
+            {#
+            The +180 here is to account for the fact that wind direction
+            is reported as a FROM direction, but our arrow points in the
+            TO direction. So we just need to spin it 'round.
+            #}
+            <svg role="img" aria-hidden="true" data-wind-direction class="width-2 height-2 margin-left-05 padding-2px" style="transform: rotate({{ period.windDirection.angle + 180 }}deg);">
+              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#wind_arrow_s" }}"></use>
+            </svg>
+          </div>
+        </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="humidity">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+          {{"Humidity" | t}}
+        </th>
+        {% for period in content.hours %}
+        <td>
+          {{period.relativeHumidity}}%
+        </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="dewpoint">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+          {{"Dewpoint" | t}}
+        </th>
+        {% for period in content.hours %}
+        <td>
+          {% if period.dewpoint %}
+          {{period.dewpoint}}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
+          {% else %}
+          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+    </table>
+  </div>
+</hourly-table>

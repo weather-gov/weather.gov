@@ -29,7 +29,7 @@ class CurrentConditionsBlock extends WeatherBlockBase
 
             try {
                 if ($location->point) {
-                    $place = $this->weatherData->getPlaceNear(
+                    $place = $this->weatherData->getPlaceNearPoint(
                         $location->point->lat,
                         $location->point->lon,
                     );

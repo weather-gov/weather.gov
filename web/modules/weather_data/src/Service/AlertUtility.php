@@ -2,7 +2,7 @@
 
 namespace Drupal\weather_data\Service;
 
-class AlertPriority
+class AlertUtility
 {
     private static $priorities = [
         "tsunami warning",
