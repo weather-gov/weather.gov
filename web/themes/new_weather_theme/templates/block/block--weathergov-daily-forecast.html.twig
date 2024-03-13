@@ -14,7 +14,7 @@
     <ol class="usa-list--unstyled">
       {# Attempt to render the period(s) associated with the current day #}
       {% if content.today %}
-      {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': content.today, 'dayHours': content.todayHourly, 'alertPeriods': content.todayAlertDetails, 'dayLabel': "Today" | t } %}
+      {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': content.today, 'dayHours': content.todayHourly, 'alertPeriods': content.todayAlerts, 'dayLabel': "Today" | t } %}
       {% endif %}
 
       {#  Render periods associated with future days, in detail #}

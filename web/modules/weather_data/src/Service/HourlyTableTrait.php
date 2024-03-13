@@ -70,10 +70,13 @@ trait HourlyTableTrait
             $dayHourlyPeriods = array_values($dayHourlyPeriods);
 
             $dayPeriod["hourlyPeriods"] = $dayHourlyPeriods;
-            $dayPeriod["alertPeriods"] = $this->alertsToHourlyPeriods(
-                $alerts,
-                $dayHourlyPeriods,
-            );
+            
+            if(!$isTodayPeriod){
+                $dayPeriod["alertPeriods"] = $this->alertsToHourlyPeriods(
+                    $alerts,
+                    $dayHourlyPeriods,
+                );
+            }
         }
 
         return $dayPeriods;
