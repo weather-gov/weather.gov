@@ -194,43 +194,9 @@ svg[data-wind-direction] {
   transform-origin: center;
 }
 
-/* Hourly precipitation table overrides
-------------------------------------- */
-.precip-table {
-  td:first-of-type {
-    padding-left: 0;
-  }
-
-  td:last-child {
-    padding-right: 0;
-  }
-
-  tr:first-of-type td {
-    border-top: 0;
-    // visually even out top and bottom table padding, accounting for font bounding box
-    padding-top: units(0.5);
-  }
-
-  tr:last-of-type td {
-    border-bottom: 0;
-    padding-bottom: 0;
-  }
-}
-
 /* Hourly forecast table overrides
 ------------------------------------- */
 .usa-table.hourly-table {
-
-  td, th {
-    padding-left: 0;
-    padding-right: units(3);
-    vertical-align: text-top;
-
-    &:first-of-type {
-      padding-left: units(2);
-    }
-  }
-
   td {
     min-width: units('card');
     white-space: normal;
@@ -240,9 +206,14 @@ svg[data-wind-direction] {
     white-space: nowrap;
   }
 
-  // Fighting specificity
-  tr[data-row-name="time"] th:nth-child(2) {
-    padding-left: units(2);
+  td, th {
+    padding-left: 0;
+    padding-right: units(3);
+    vertical-align: text-top;
+
+    &:first-of-type {
+      padding-left: units(2);
+    }
   }
 
 
@@ -275,10 +246,15 @@ svg[data-wind-direction] {
      padding-bottom: 0 !important;
   }
 
+  // Fighting specificity
+  tr[data-row-name="time"] th:nth-child(2) {
+    padding-left: units(2);
+  }
+
 }
 
 // Table shadow only shows on scroll
-hourly-table[data-scrolled="true"] th:first-of-type {
+hourly-table[data-scrolled="true"] .usa-table.hourly-table th:first-of-type {
   &::after {
     content: '';
     top:0;
@@ -287,12 +263,35 @@ hourly-table[data-scrolled="true"] th:first-of-type {
     position:absolute;
     height:100%;
     width: units(2);
-    background-image: linear-gradient(90deg, rgba(0,0,0,0.1), transparent);
+    background-image: linear-gradient(90deg, rgba(0 0 0 / 10%), transparent);
     background-size: 50%;
     background-repeat: no-repeat;
   }
 }
 
+/* Hourly precipitation table overrides
+------------------------------------- */
+.precip-table {
+  td:first-of-type {
+    padding-left: 0;
+  }
+
+  td:last-child {
+    padding-right: 0;
+  }
+
+  tr:first-of-type td {
+    border-top: 0;
+
+    // visually even out top and bottom table padding, accounting for font bounding box
+    padding-top: units(0.5);
+  }
+
+  tr:last-of-type td {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+}
 
 /* Unstyle list utilities 
 ------------------------------------- */
