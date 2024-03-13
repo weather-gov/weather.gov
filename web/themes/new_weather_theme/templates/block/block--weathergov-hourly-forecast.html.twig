@@ -59,7 +59,9 @@
                   {% if period.icon.icon %}
                   <div class="line-height-sans-3">
                     <div class="icon margin-right-1 width-3 margin-top-05">
-                      {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ period.icon.icon )}}
+                      <svg role="img" aria-hidden="true" class="maxh-3 maxw-3">
+                        <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.icon.base }}"></use>
+                      </svg>
                     </div>
                     <div>
                       <p class="margin-y-0">{{period.conditions}}</p>
