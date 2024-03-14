@@ -17,6 +17,7 @@
         hour: "numeric",
         minute: "2-digit",
         timeZoneName: "short",
+        timeZone: "America/Denver",
       }),
     ],
     [
@@ -27,6 +28,7 @@
         year: "numeric",
         hour: "numeric",
         minute: "numeric",
+        timeZone: "America/Denver",
       }),
     ],
   ]);
