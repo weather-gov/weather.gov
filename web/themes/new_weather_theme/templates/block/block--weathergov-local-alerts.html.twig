@@ -50,6 +50,8 @@
             </ul>
 
           {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
+
+          <img src="/{{ base_path ~ directory }}/assets/r3/alert_graphic_{{ loop.index }}.png" alt="">
         </div>
       </div>
       {% endfor %}
