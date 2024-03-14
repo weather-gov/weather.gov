@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { parse } from "csv-parse/sync";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
@@ -414,7 +416,7 @@ const parsedRowData = rowData.map((row) => {
     icon: row["Icon"],
     windSpeed,
     windDirection
-b  };
+   };
 });
 
 const modifiedGridPointData = getModifiedGridPointData(
