@@ -168,6 +168,11 @@ trait DailyForecastTrait
             $todayHourlyDetails = $todayPeriodsFormatted[0]["hourlyPeriods"];
         }
 
+        $todayAlerts = $this->alertsToHourlyPeriods(
+            $alerts,
+            $todayHourlyDetails,
+        );
+
         // Format each of the detailed periods
         // as assoc arrays that can be used by
         // the templates. Also group the periods
@@ -193,6 +198,7 @@ trait DailyForecastTrait
         return [
             "today" => array_values($todayPeriodsFormatted),
             "todayHourly" => $todayHourlyDetails,
+            "todayAlerts" => $todayAlerts,
             "detailed" => array_values($detailedPeriodsFormatted),
             "extended" => array_values($extendedPeriodsFormatted),
         ];
