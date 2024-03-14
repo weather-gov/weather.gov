@@ -22,32 +22,21 @@ final class CurrentConditionsBlockTest extends Base
 
     /**
      * Test that the block returns the expected data if we're on a grid route.
+     * @group blocks
+     * @group data
      */
-    public function testBuild(): void
+    public function testWindIsNull(): void
     {
-        $this->onLocationRoute();
+        $this->onLocationRoute(33.211, -87.566);
 
-        $this->weatherData->method("getPlaceNear")->willReturn(
-            (object) [
-                "city" => "Placeville",
-                "state" => "Statesylvania",
-            ],
-        );
-        $this->weatherData
-            ->method("getCurrentConditionsFromGrid")
-            ->willReturn(["info" => "this is weather data"]);
+        $data = $this->block->build();
 
-        $expected = [
-            "info" => "this is weather data",
-            "place" => "Placeville, Statesylvania",
-        ];
-        $actual = $this->block->build();
-
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(null, $data["wind"]["speed"]);
     }
 
     /**
      * Test that the block returns null if we're not on a grid route.
+     * @group blocks
      */
     public function testBuildNotGridRoute(): void
     {

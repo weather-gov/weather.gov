@@ -81,7 +81,7 @@ trait ObservationsTrait
                 "lon" => $obs->geometry->coordinates[0],
                 "lat" => $obs->geometry->coordinates[1],
             ],
-            "obsStation" => $obs->properties->station,
+            "obsStation" => $obs->properties->stationIdentifier,
             "stationIndex" => $index,
         ];
 
@@ -122,7 +122,7 @@ trait ObservationsTrait
 
         $obsStations = $this->dataLayer->getObservationStations($wfo, $x, $y);
 
-        $gridGeometry = $this->getGeometryFromGrid($wfo, $gridX, $gridY);
+        $gridGeometry = $this->getGeometryFromGrid($wfo, $x, $y);
 
         $obsStationIndex = 0;
         $observationStation = $obsStations[$obsStationIndex];
@@ -191,7 +191,7 @@ trait ObservationsTrait
                 "speed" =>
                     $obs->windSpeed->value === null
                         ? null
-                        : (int) round($obs->windSpeed->value * 0.6213712),
+                        : UnitConversion::getSpeedScalar($obs->windSpeed),
                 "direction" => UnitConversion::getDirectionOrdinal(
                     $obs->windDirection->value,
                 ),

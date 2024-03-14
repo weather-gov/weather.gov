@@ -305,7 +305,7 @@ class DataLayer
     public function getPlaceNearPoint($lat, $lon)
     {
         $key = "$lat $lon";
-        if (!self::$i_placeNearPoint[$key]) {
+        if (!array_key_exists($key, self::$i_placeNearPoint)) {
             self::$i_placeNearPoint[$key] = $this->getPlaceNear(
                 SpatialUtility::pointArrayToWKT([$lon, $lat]),
             );

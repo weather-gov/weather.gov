@@ -47,6 +47,10 @@ class CurrentConditionsBlock extends WeatherBlockBase
                     $grid->y,
                 );
 
+                if (!$data) {
+                    throw new Exception("Invalid current observations");
+                }
+
                 // We generally expect our internal places to be objects with city
                 // and state keys. However, if the user arrived here using location
                 // search, we may have gotten a suggested place name that cannot be

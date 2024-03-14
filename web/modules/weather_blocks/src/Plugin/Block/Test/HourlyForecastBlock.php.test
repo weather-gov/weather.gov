@@ -23,6 +23,7 @@ final class HourlyForecastBlockTest extends Base
 
     /**
      * Tests that the block returns the correct form with default configuration.
+     * @group blocks
      */
     public function testDefaultForm(): void
     {
@@ -43,6 +44,7 @@ final class HourlyForecastBlockTest extends Base
 
     /**
      * Test that the block returns the correct form based on prior configuration.
+     * @group blocks
      */
     public function testFormUsingExistingConfig(): void
     {
@@ -65,6 +67,7 @@ final class HourlyForecastBlockTest extends Base
 
     /**
      * Test that the block properly persists configuration changes.
+     * @group blocks
      */
     public function testBlockSubmit(): void
     {
@@ -87,6 +90,8 @@ final class HourlyForecastBlockTest extends Base
 
     /**
      * Test that the block returns default data if unconfigured.
+     * @group blocks
+     * @group data
      */
     public function testBuildWithDefaultConfiguration(): void
     {
@@ -124,6 +129,8 @@ final class HourlyForecastBlockTest extends Base
 
     /**
      * Test that the block returns data according to saved configuration.
+     * @group blocks
+     * @group data
      */
     public function testBuildWithModifiedConfigured(): void
     {
@@ -162,6 +169,7 @@ final class HourlyForecastBlockTest extends Base
 
     /**
      * Test that the block returns null if we're not on a grid route.
+     * @group blocks
      */
     public function testBuildNotGridRoute(): void
     {

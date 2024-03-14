@@ -50,13 +50,6 @@ class WeatherDataService
     private $t;
 
     /**
-     * The request currently being responded to.
-     *
-     * @var request
-     */
-    private $request;
-
-    /**
      * NewRelic API handler
      */
     private $newRelic;
@@ -80,13 +73,11 @@ class WeatherDataService
      */
     public function __construct(
         TranslationInterface $t,
-        RequestStack $r,
         NewRelicMetrics $newRelic,
         DataLayer $dataLayer,
     ) {
         $this->dataLayer = $dataLayer;
         $this->t = $t;
-        $this->request = $r->getCurrentRequest();
         $this->newRelic = $newRelic;
 
         $this->defaultIcon = "nodata.svg";
