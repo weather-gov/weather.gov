@@ -55,20 +55,19 @@ trait ObservationsTrait
             $distance = INF;
             $closest = null;
             foreach ($wfoGeometry as $sourcePoint) {
-                $lonDiff = $obs->geometry->coordinates[0] - $sourcePoint->lon;
-                $latDiff = $obs->geometry->coordinates[1] - $sourcePoint->lat;
+                $lonDiff = $obs->geometry->coordinates[0] - $sourcePoint[0];
+                $latDiff = $obs->geometry->coordinates[1] - $sourcePoint[1];
                 $hyp = hypot($lonDiff, $latDiff);
                 if ($hyp < $distance) {
                     $distance = $hyp;
                     $closest = $sourcePoint;
                 }
             }
-            $sourcePointText =
-                "POINT(" . $closest->lon . " " . $closest->lat . ")";
+            $sourcePointText = "POINT(" . $closest[0] . " " . $closest[1] . ")";
         }
 
         $sourceGeomPoints = array_map(function ($point) {
-            return $point->lon . " " . $point->lat;
+            return $point[0] . " " . $point[1];
         }, $wfoGeometry);
         $sourceGeomPoints = implode(", ", $sourceGeomPoints);
         $sourceGeomText = "POLYGON((" . $sourceGeomPoints . "))";
@@ -165,7 +164,7 @@ trait ObservationsTrait
         // if available
         $distanceInfo = $self->getObsDistanceInfo(
             $this->stashedPoint,
-            $obsData,
+            $observationStation,
             $gridGeometry,
             $obsStationIndex - 1,
         );

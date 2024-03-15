@@ -42,7 +42,7 @@ trait AlertTrait
         $y = $grid->y;
 
         $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
-        $place = $this->dataLayer->getPlaceNearPoint($point->lat, $point->lon);
+        $place = $this->dataLayer->getPlaceNearPoint($point[1], $point[0]);
         $timezone = $place->timezone;
 
         $alerts = $this->dataLayer->getAlertsForState($place->state);
@@ -52,7 +52,7 @@ trait AlertTrait
         $forecastZone = $forecastZone->properties->forecastZone;
 
         $geometry = array_map(function ($point) {
-            return $point->lon . " " . $point->lat;
+            return $point[0] . " " . $point[1];
         }, $geometry);
         $geometry = implode(",", $geometry);
 
