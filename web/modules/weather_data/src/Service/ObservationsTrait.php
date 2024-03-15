@@ -164,7 +164,7 @@ trait ObservationsTrait
         // if available
         $distanceInfo = $self->getObsDistanceInfo(
             $this->stashedPoint,
-            $obsData,
+            $observationStation,
             $gridGeometry,
             $obsStationIndex - 1,
         );
