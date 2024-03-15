@@ -31,8 +31,8 @@ class DailyForecastBlock extends WeatherBlockBase
                     false,
                     3,
                 );
-            } catch (\Throwable $e) {
-                return ["error" => true];
+                // } catch (\Throwable $e) {
+                //     return ["error" => true];
             }
         }
         return null;
