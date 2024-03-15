@@ -52,7 +52,7 @@ trait AlertTrait
         $forecastZone = $forecastZone->properties->forecastZone;
 
         $geometry = array_map(function ($point) {
-            return $point->lon . " " . $point->lat;
+            return $point[0] . " " . $point[1];
         }, $geometry);
         $geometry = implode(",", $geometry);
 

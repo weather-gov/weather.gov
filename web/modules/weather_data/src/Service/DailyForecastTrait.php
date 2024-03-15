@@ -70,9 +70,9 @@ trait DailyForecastTrait
         $hourlyPeriods = $this->getHourlyForecastFromGrid($wfo, $x, $y);
         $point = $this->stashedPoint;
         if (!$point) {
-            $point = $this->getGeometryFromGrid($wfo, $x, $y);
+            $point = $this->getGeometryFromGrid($wfo, $x, $y)[0];
         }
-        $grid = $this->getGridFromLatLon($point->lat, $point->lon);
+        $grid = $this->getGridFromLatLon($point[1], $point[0]);
         $alerts = $this->getAlerts($grid, $point);
 
         // In order to keep the time zones straight,
