@@ -42,7 +42,7 @@ trait AlertTrait
         $y = $grid->y;
 
         $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
-        $place = $this->dataLayer->getPlaceNearPoint($point->lat, $point->lon);
+        $place = $this->dataLayer->getPlaceNearPoint($point[1], $point[0]);
         $timezone = $place->timezone;
 
         $alerts = $this->dataLayer->getAlertsForState($place->state);
