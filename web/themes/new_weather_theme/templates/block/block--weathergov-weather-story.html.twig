@@ -13,9 +13,12 @@
         <div class="line-height-sans-4"> 
           {{ content.body | raw }}
         </div>
+        <img class="margin-left-neg-2 tablet:margin-left-0 maxw-mobile-lg" src="/{{ base_path ~ directory }}/assets/r3/R3_WS_01.png" alt="Map of expected snowfall">
+        {# TODO: Uncomment to re-enable dynamic images, hard coding an image for R3
         {% if content.image %}
         <img class="margin-left-neg-2 tablet:margin-left-0 maxw-mobile-lg" src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
         {% endif %}
+         #}
       </div>
     </div>
   </div>
