@@ -24,16 +24,16 @@ class DailyForecastBlock extends WeatherBlockBase
             $grid = $location->grid;
 
             // try {
-                return $this->weatherData->getDailyForecastFromGrid(
-                    $grid->wfo,
-                    $grid->x,
-                    $grid->y,
-                    false,
-                    3,
-                );
-                // } catch (\Throwable $e) {
-                //     return ["error" => true];
-            }
+            return $this->weatherData->getDailyForecastFromGrid(
+                $grid->wfo,
+                $grid->x,
+                $grid->y,
+                false,
+                3,
+            );
+            // } catch (\Throwable $e) {
+            //     return ["error" => true];
+            // }
         }
         return null;
     }
