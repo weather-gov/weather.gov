@@ -4,6 +4,7 @@ namespace Drupal\weather_data\Service;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ServerException;
 
@@ -12,6 +13,8 @@ use GuzzleHttp\Exception\ServerException;
  */
 class DataLayer
 {
+    use LoggerChannelTrait;
+
     /**
      * Cache of API calls for this request.
      *
