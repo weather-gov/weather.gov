@@ -5,9 +5,8 @@
 <div class="usa-alert usa-alert--warning usa-alert--slim margin-top-0 padding-y-05" role="alert">
   <div class="usa-alert__body">
     <a href="#alert_{{ loop.index }}">
-      {{ alert.event | t}} {{ "in effect" | t }}
-      {{ alert.onset }}
-      {% if alert.ends %} - {{ alert.ends }}{% endif %}
+      {{ alert.event | t}} {{ alert.durationText }}
+
     </a>
   </div>
 </div>
