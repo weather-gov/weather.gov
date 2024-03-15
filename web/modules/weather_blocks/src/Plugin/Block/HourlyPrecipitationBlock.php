@@ -30,7 +30,7 @@ class HourlyPrecipitationBlock extends WeatherBlockBase
                     $grid->y,
                 );
 
-                return ["periods" => array_slice($data, 0, 3)];
+                return ["periods" => array_slice($data, 0, 4)];
             } catch (\Throwable $e) {
                 return ["error" => true];
             }

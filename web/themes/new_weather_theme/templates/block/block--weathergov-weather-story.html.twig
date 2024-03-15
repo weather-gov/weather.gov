@@ -1,18 +1,24 @@
 {% if content.title %}
 {{ attach_library("new_weather_theme/localize-timestamps") }}
-<div data-wx-weather-story class="margin-bottom-4">
-  <h2>{{ "Weather story" | t }}</h2>
-  <p class="text-gray-50">{{ "Last updated" | t }}:
-    <time datetime="{{ content.updated.utc }}" data-wx-local-time data-date-format="M d Y T">
-      {{ content.updated.formatted }}
-    </time>
-  </p>
-  {% if content.image %}
-  <img class="margin-left-neg-2 tablet:margin-left-0" src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
-  {% endif %}
-  <h3>{{ content.title }}</h3>
-  <div class="line-height-sans-4">
-    {{ content.body | raw }}
+<div class="grid-container"> 
+  <div class="grid-row"> 
+    <div class="grid-col tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+      <div data-wx-weather-story class="margin-bottom-4">
+        <h2 class="text-primary-darkest text-normal margin-top-0 margin-bottom-2"> {{  content.title | t }} </h2>
+        <p class="text-base margin-top-2"><span class="font-family-mono text-ls-neg-3">{{ "Last updated" | t }}:</span>
+        <time datetime="{{ content.updated.utc }}" data-wx-local-time data-date-format="M d Y T">
+          {{ content.updated.formatted }}
+        </time>
+        </p>
+        <div class="line-height-sans-4"> 
+          {{ content.body | raw }}
+        </div>
+        {% if content.image %}
+        <img class="margin-left-neg-2 tablet:margin-left-0 maxw-mobile-lg" src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
+        {% endif %}
+      </div>
+    </div>
   </div>
-</div>
+</div> 
+
 {% endif %}

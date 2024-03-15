@@ -22,7 +22,7 @@ class LocationSearchBlock extends WeatherBlockBase
         $location = $this->getLocation();
 
         if ($location->point) {
-            $data = $this->weatherData->getPlaceNear(
+            $data = $this->weatherData->getPlaceNearPoint(
                 $location->point->lat,
                 $location->point->lon,
             );

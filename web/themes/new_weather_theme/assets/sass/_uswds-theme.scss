@@ -16,12 +16,11 @@ in the form $setting: value,
 The following colors are brand colors taken from the NWS and NOAA logos
 and styleguides. The NWS color names are unoffical.
 ---------------------------------------- */
-$noaa-water-blue: #0085CA;
+$noaa-water-blue: #0085ca;
 $noaa-sky-blue: #003087;
-$nws-indigo: #0000A4;
-$nws-light-blue: #33B0E1;
-$nws-red: #F00;
-
+$nws-indigo: #0000a4;
+$nws-light-blue: #33b0e1;
+$nws-red: #f00;
 
 @use "uswds-core" with (
   /* ----------------------------------------
@@ -40,7 +39,7 @@ $nws-red: #F00;
       "display-name": "DM Mono",
       "cap-height": 350px,
       "stack": "'Roboto Mono Web', 'Courier New', monospace, serif",
-    ),
+    )
   ),
   $theme-font-sans-custom-src: (
     dir: "Nunito_Sans/static",
@@ -68,23 +67,24 @@ $nws-red: #F00;
       700: "NunitoSans_10pt-BoldItalic",
       800: false,
       900: false,
-    ),
+    )
   ),
 
   $theme-font-mono-custom-src: (
     dir: "DM_Mono",
     // the name of your font family directory
-    roman: (
-      100: false,
-      200: false,
-      300: "DMMono-Light",
-      400: false,
-      500: "DMMono-Regular",
-      600: "DMMono-Medium",
-      700: false,
-      800: false,
-      900: false,
-    ),
+    roman:
+      (
+        100: false,
+        200: false,
+        300: "DMMono-Light",
+        400: false,
+        500: "DMMono-Regular",
+        600: "DMMono-Medium",
+        700: false,
+        800: false,
+        900: false,
+      ),
     italic: (
       100: false,
       200: false,
@@ -95,7 +95,7 @@ $nws-red: #F00;
       700: false,
       800: false,
       900: false,
-    ),
+    )
   ),
   $theme-font-type-sans: "Nunito Sans",
   $theme-font-type-mono: "DM Mono",
@@ -104,7 +104,7 @@ $nws-red: #F00;
   $theme-font-role-body: "sans",
   $theme-font-role-code: "mono",
 
-  $theme-type-scale-3xs: 1,
+  $theme-type-scale-3xs: "micro",
   $theme-type-scale-2xs: 2,
   $theme-type-scale-xs: 3,
   $theme-type-scale-sm: 5,
@@ -146,7 +146,7 @@ $nws-red: #F00;
   $theme-color-accent-cool-darker: "blue-cool-70v",
   $theme-color-accent-cool-darkest: "blue-cool-80v",
 
-  $theme-color-accent-warm-lightest: "red-20",
+  $theme-color-accent-warm-lightest: "red-5",
   $theme-color-accent-warm-lighter: "red-30",
   $theme-color-accent-warm-light: "red-40",
   $theme-color-accent-warm: $nws-red,
@@ -170,9 +170,7 @@ $nws-red: #F00;
   /* ----------------------------------------
   UTILITIES SETTINGS
   ---------------------------------------- */
-  $theme-utility-breakpoints: (
-    "tablet-lg": true, // 880px
-  ),
+  $theme-utility-breakpoints: ("tablet-lg": true,), // 880px)
 
   /* ----------------------------------------
   COMPONENT SETTINGS
@@ -180,6 +178,9 @@ $nws-red: #F00;
   $theme-accordion-border-color: "primary-darker",
   $theme-accordion-button-background-color: "primary-darker",
 
+
+  $theme-table-border-color: "base-lighter",
+  
   /* ----------------------------------------
   META SETTINGS
   ---------------------------------------- */
@@ -188,16 +189,8 @@ $nws-red: #F00;
 
   $theme-image-path: "../images/uswds",
 
-  $flex-direction-settings: (
-    responsive: true,
-  ),
-  $text-align-settings: (
-    responsive: true,
-  ),
-  $min-height-settings: (
-    responsive: true,
-  ),
-  $margin-settings: (
-    responsive: true,
-  )
+  $flex-direction-settings: (responsive: true),
+  $text-align-settings: (responsive: true),
+  $min-height-settings: (responsive: true),
+  $margin-settings: (responsive: true)
 );

@@ -7,21 +7,12 @@ use Drupal\weather_data\Service\WeatherAlertParser;
 /**
  * Add weather alert methods.
  */
-trait WeatherAlertTrait
+trait AlertTrait
 {
-    protected static function turnToDate($str, $timezone)
-    {
-        if ($str) {
-            $datestamp = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601_EXPANDED,
-                $str,
-            );
-            $datestamp = $datestamp->setTimeZone(new \DateTimeZone($timezone));
-
-            return $datestamp;
-        }
-        return $str;
-    }
+    /**
+     * A cached version of any fetched alerts
+     */
+    private $stashedAlerts = null;
 
     public static function tryParsingDescriptionText($str)
     {
@@ -32,7 +23,7 @@ trait WeatherAlertTrait
     /**
      * Get active alerts for a WFO grid cell.
      */
-    public function getAlerts($grid, $point, $self = false)
+    public function getAlerts($grid, $point, $self = false, $now = false)
     {
         if ($this->stashedAlerts) {
             return $this->stashedAlerts;
@@ -40,28 +31,23 @@ trait WeatherAlertTrait
         if (!$self) {
             $self = $this;
         }
+        if (!($now instanceof \DateTimeImmutable)) {
+            $now = new \DateTimeImmutable();
+        }
+        $tomorrow = $now->modify("+1 day")->setTime(0, 0, 0);
+        $later = $tomorrow->modify("+1 day")->setTime(0, 0, 0);
 
         $wfo = $grid->wfo;
         $x = $grid->x;
         $y = $grid->y;
 
-        $CACHE_KEY = "alerts $wfo/$x/$y";
-        $cache = $this->cache->get($CACHE_KEY);
-        if ($cache) {
-            return $cache->data;
-        }
-
         $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
-        $place = $self->getPlaceNear($point->lat, $point->lon);
+        $place = $this->dataLayer->getPlaceNearPoint($point->lat, $point->lon);
         $timezone = $place->timezone;
 
-        $alerts = $self->getFromWeatherAPI(
-            "/alerts/active?status=actual&area=$place->state",
-        )->features;
+        $alerts = $this->dataLayer->getAlertsForState($place->state);
 
-        $forecastZone = $self->getFromWeatherAPI(
-            "/points/$point->lat,$point->lon",
-        );
+        $forecastZone = $this->dataLayer->getPoint($lat, $lon);
         $fireZone = $forecastZone->properties->fireWeatherZone;
         $forecastZone = $forecastZone->properties->forecastZone;
 
@@ -76,7 +62,7 @@ trait WeatherAlertTrait
             $forecastZone,
             $fireZone,
         ) {
-            if (AlertPriority::isMarineAlert($alert->properties->event)) {
+            if (AlertUtility::isMarineAlert($alert->properties->event)) {
                 return false;
             }
 
@@ -97,7 +83,7 @@ trait WeatherAlertTrait
                     )
                 ) as yes";
 
-                $intersects = $this->database->query($sql)->fetch()->yes;
+                $intersects = $this->dataLayer->databaseFetch($sql)->yes;
 
                 return $intersects > 0;
             }
@@ -133,7 +119,12 @@ trait WeatherAlertTrait
             return false;
         });
 
-        $alerts = array_map(function ($alert) use ($timezone) {
+        $alerts = array_map(function ($alert) use (
+            $timezone,
+            $now,
+            $tomorrow,
+            $later,
+        ) {
             $output = clone $alert->properties;
 
             if ($alert->geometry ?? false) {
@@ -160,24 +151,81 @@ trait WeatherAlertTrait
             }
 
             $output->onsetRaw = $output->onset;
-            $output->onset = self::turnToDate(
+            $output->onset = DateTimeUtility::stringToDate(
                 $output->onset ?? false,
                 $timezone,
             );
             $output->endsRaw = $output->ends ?? null;
-            $output->ends = self::turnToDate($output->ends ?? false, $timezone);
+            $output->ends = DateTimeUtility::stringToDate(
+                $output->ends ?? false,
+                $timezone,
+            );
             $output->expiresRaw = $output->expires ?? null;
-            $output->expires = self::turnToDate(
+            $output->expires = DateTimeUtility::stringToDate(
                 $output->expires ?? false,
                 $timezone,
             );
 
             $output->timezone = $timezone;
 
+            if ($output->onset <= $now) {
+                // The event has already begun. Now we need to see if we know
+                // when it ends.
+                $ends = $this->getEndTimeForAlert($output);
+                if ($ends) {
+                    if ($ends >= $now) {
+                        // We are currently in the middle of the event.
+                        if ($ends < $tomorrow) {
+                            // It ends today
+                            $output->durationText =
+                                "until " . $ends->format("g:i A") . " today";
+                        } else {
+                            $output->durationText =
+                                "until " . $ends->format("l m/d g:i A T");
+                        }
+                    } else {
+                        // The event has already concluded. We shouldn't be
+                        // showing this alert at all.
+                        $output->durationText = "has concluded";
+                    }
+                } else {
+                    // This alert has no ending or expiration time. This is a
+                    // weird scenario, but we should handle it just in case.
+                    $output->durationText = "is in effect";
+                }
+            } elseif ($output->onset > $now) {
+                // The event is in the future.
+                $onsetHour = $output->onset->format("H");
+
+                if ($output->onset < $tomorrow) {
+                    // The event starts later today.
+                    if ($onsetHour < 12) {
+                        $output->durationText = "this morning";
+                    } elseif ($onsetHour < 18) {
+                        $output->durationText = "this afternoon";
+                    } else {
+                        $output->durationText = "tonight";
+                    }
+                } elseif ($output->onset < $later) {
+                    // The event starts tomorrow
+                    if ($onsetHour < 12) {
+                        $output->durationText = "tomorrow morning";
+                    } elseif ($onsetHour < 18) {
+                        $output->durationText = "tomorrow afternoon";
+                    } else {
+                        $output->durationText = "tomorrow night";
+                    }
+                } else {
+                    $output->durationText = $output->onset->format("l");
+                    // The event starts in the further future
+                }
+            }
+            $output->durationText = $this->t->translate($output->durationText);
+
             return $output;
         }, $alerts);
 
-        $alerts = AlertPriority::sort($alerts);
+        $alerts = AlertUtility::sort($alerts);
 
         // For some reason, Twig is unreliable in how it formats the dates.
         // Sometimes they are done in the timezone-local time, other times it
@@ -196,8 +244,6 @@ trait WeatherAlertTrait
             }
         }
 
-        $this->cache->set($CACHE_KEY, $alerts, time() + 30);
-
         $this->stashedAlerts = $alerts;
 
         return $alerts;
@@ -215,30 +261,22 @@ trait WeatherAlertTrait
     {
         // Pull out alerts that are relevant to the range
         // of the current periods
-        $firstPeriodStartTime = \DateTimeImmutable::createFromFormat(
-            \DateTimeInterface::ISO8601_EXPANDED,
+        $firstPeriodStartTime = DateTimeUtility::stringToDate(
             $periods[0]["timestamp"],
         );
 
-        $timezone = $firstPeriodStartTime->getTimezone()->getName();
-
-        $lastPeriodEndTime = self::turnToDate(
+        $lastPeriodEndTime = DateTimeUtility::stringToDate(
             $periods[array_key_last($periods)]["timestamp"],
-            $timezone,
         );
         $lastPeriodEndTime = $lastPeriodEndTime->modify("+ 1 hour");
 
-        // Filter out alerts that begin after the end of our
-        // hourly forecast period
+        // Filter out alerts that do not overlap our hourly forecast periods.
         $relevantAlerts = array_filter($alerts, function ($alert) use (
             &$periods,
             &$lastPeriodEndTime,
             &$firstPeriodStartTime,
         ) {
-            $onsetDateTime = self::turnToDate(
-                $alert->onsetRaw,
-                $alert->timezone,
-            );
+            $onsetDateTime = DateTimeUtility::stringToDate($alert->onsetRaw);
             $endsDateTime = $this->getEndTimeForAlert($alert);
             return $onsetDateTime < $lastPeriodEndTime &&
                 $endsDateTime > $firstPeriodStartTime;
@@ -251,10 +289,7 @@ trait WeatherAlertTrait
         $alertPeriods = [];
 
         foreach ($relevantAlerts as $currentAlert) {
-            $onsetTime = self::turnToDate(
-                $currentAlert->onsetRaw,
-                $currentAlert->timezone,
-            );
+            $onsetTime = DateTimeUtility::stringToDate($currentAlert->onsetRaw);
             $endTime = $this->getEndTimeForAlert($currentAlert);
             if (!$endTime) {
                 continue; // pass to the next alert, ignoring this one
@@ -305,7 +340,6 @@ trait WeatherAlertTrait
                     $onsetTime,
                     $endTime,
                     $periods,
-                    $timezone,
                 );
                 if ($alertInfo) {
                     array_push($alertPeriods, $alertInfo);
@@ -392,12 +426,10 @@ trait WeatherAlertTrait
         $alertOnset,
         $alertEnd,
         $periods,
-        $timezone,
     ) {
         foreach ($periods as $periodIndex => $period) {
-            $periodStartTime = self::turnToDate(
+            $periodStartTime = DateTimeUtility::stringToDate(
                 $period["timestamp"],
-                $timezone,
             );
             $periodEndTime = $periodStartTime->modify("+ 1 hour");
 
@@ -449,6 +481,6 @@ trait WeatherAlertTrait
             return false;
         }
 
-        return self::turnToDate($field, $alert->timezone);
+        return DateTimeUtility::stringToDate($field, $alert->timezone);
     }
 }

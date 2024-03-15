@@ -21,19 +21,19 @@
           <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
           <div class="text-primary-darker">
             <p class="margin-top-2px font-body-md">{{ content.feels_like }}
-              <span class="font-body-3xs position-absolute margin-top text-primary-darkerP">℉</span>
+              <span class="font-body-3xs position-absolute margin-top">℉</span>
             </p>
           </div>
         </div>
       </div>
 
-      <div class="display-flex margin-bottom-2">
+      <div class="display-flex flex-align-center margin-bottom-2">
         {% if content.icon.icon %}
         <div class="icon margin-right-105 maxw-5 maxh-5">
           {{ source(directory ~ "/assets/images/weather/icons/conditions/" ~ content.icon.icon )}}
         </div>
         {% endif %}
-        <p class="font-body-md margin-top-2px">{{ content.conditions.short }}</p>
+        <p class="font-body-md margin-top-2px margin-bottom-0">{{ content.conditions.short }}</p>
       </div>
       <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05 border-top-1px border-base-light padding-top-1" aria-hidden="true">
         <div class="margin-right-4">
@@ -45,14 +45,21 @@
 
         <div class="margin-right-05">
           <p class="margin-y-0">
-            {%- if content.wind.speed != null -%}
+            {%- if content.wind.speed is same as(null) -%}
+              {%- set windString = "N/A" | t() -%}
+            {%- else -%}
+              {% if content.wind.speed > 0 %}
               {% set windString = "@windSpeed mph @windDirection" | t({
                   "@windSpeed": content.wind.speed,
                   "@windDirection": content.wind.direction.short
                 }) 
               %}
-            {%- else -%}
-              {%- set windString = "N/A" | t() -%}
+              {% else %}
+                {% set windString = "@windSpeed mph" | t({
+                    "@windSpeed": content.wind.speed,
+                  })
+                %}
+              {% endif %}
             {%- endif -%}
             <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>{{- windString -}}
           </p>

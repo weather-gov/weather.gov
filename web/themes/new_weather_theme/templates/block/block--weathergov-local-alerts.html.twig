@@ -49,8 +49,6 @@
               {% endfor %}
             </ul>
 
-          {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
-
           <img src="/{{ base_path ~ directory }}/assets/r3/alert_graphic_{{ loop.index }}.png" alt="">
         </div>
       </div>
@@ -60,8 +58,20 @@
   </div>
   <div class="row"> 
     <div class="grid-col tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-        <h2 class="text-darker text-normal"> Radar </h2>
+        <h2 class="text-primary-darkest text-normal"> Radar </h2>
           <img src="/{{ base_path ~ directory }}/assets/r3/R3_Radar_01.gif" alt="Looping animation of RADAR near Red Lodge, MT.">
     </div>
   </div> 
+  <div class="grid-row">
+    <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+      <h2 class="text-primary-darkest text-normal margin-bottom-1">{{ "Tips to stay safe" | t }}</h2>
+    </div>
+  </div>
+  {% for alert in content.alerts %}
+  <div class="grid-row">
+    <div class="grid-col tablet-lg:grid-offset-2 talbet-lg:grid-col-8">
+      {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event , other: "other"})}}
+    </div>
+  </div>
+  {% endfor %}
 </div>

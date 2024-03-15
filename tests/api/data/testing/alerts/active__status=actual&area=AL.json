@@ -47,7 +47,7 @@
         "effective": "2024-01-08T13:48:00-06:00",
         "onset": "date:now -1 hour",
         "expires": "date:now +1 hour",
-        "ends": "date:now +0 hour",
+        "ends": "date:now +10 minutes",
         "status": "Actual",
         "messageType": "Update",
         "category": "Met",

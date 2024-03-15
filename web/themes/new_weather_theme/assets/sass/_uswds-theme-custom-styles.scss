@@ -33,7 +33,8 @@ i.e.
 }
 
 .icon svg {
-  @include u-height(8);
+  height: 100%;
+  width: 100%;
 
   path.st0 {
     fill: color("black");
@@ -54,7 +55,7 @@ body {
   overflow-x: clip;
 }
 
-/* AlertDetails Overrides 
+/* AlertDetails Overrides
 -------------------------------------- */
 weathergov-alerts {
   .usa-prose h3 {
@@ -72,7 +73,7 @@ weathergov-alerts {
   }
 }
 
-/* AlertList Overrides 
+/* AlertList Overrides
 -------------------------------------- */
 .usa-alert__body a {
   color: color("primary-dark");
@@ -83,7 +84,7 @@ weathergov-alerts {
   }
 }
 
-/* Column utility 
+/* Column utility
 ------------------------------------- */
 .wx-col-2 {
   column-count: 2;
@@ -115,11 +116,85 @@ table tr:nth-child(2) th {
 /* Daily Forecast Block Overrides
 ------------------------------------- */
 .daily-forecast-block ol > li {
-  @include u-margin-bottom(5);
+  @include u-margin-bottom(3);
+}
+
+/* Day/Night marker line utility
+------------------------------------- */
+.line-before {
+  &::before {
+    content: "";
+    top: units(-1);
+    width: units(5);
+    position: relative;
+    display: block;
+  }
+}
+
+.line-before--yellow {
+  &::before {
+    border-top: 2px solid color("yellow-20");
+  }
+}
+
+.line-before--indigo {
+  &::before {
+    border-top: 2px solid color("secondary-darkest");
+  }
+}
+
+// TODO: Remove `line-after`s if stays unused, testing out different visual markers
+.line-after {
+  &::after {
+    content: "";
+    top: calc(units(-1) - units("2px")); // align with word center
+    left: units(5) + units(1.5); // icon size + margin-right
+    width: calc(100% - units(8)); // width - margins
+    position: relative;
+    display: block;
+  }
+}
+
+.line-after--yellow {
+  &::after {
+    border-top: 2px solid color("yellow-20");
+  }
+}
+
+.line-after--indigo {
+  &::after {
+    border-top: 2px solid color("secondary-darkest");
+  }
+}
+
+/* Extended forecast description width
+------------------------------------- */
+.flex-basis-auto {
+  flex-basis: auto;
+}
+
+.flex-basis-100 {
+  flex-basis: 100%;
+}
+
+@include at-media(mobile-lg) {
+  .mobile-lg__flex-basis-100 {
+    flex-basis: 100%;
+  }
+
+  .mobile-lg__flex-basis-auto {
+    flex-basis: auto;
+  }
 }
 
 /* Wind direction icon transformations
 ------------------------------------- */
 svg[data-wind-direction] {
   transform-origin: center;
+}
+
+/* Unstyle list utilities 
+------------------------------------- */
+.usa-list--unstyled .li-margin-bottom-1 {
+  margin-bottom: units(1);
 }
