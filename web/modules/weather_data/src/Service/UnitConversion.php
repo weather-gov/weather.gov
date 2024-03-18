@@ -49,7 +49,7 @@ class UnitConversion
     ) {
         $rawValue = $length->value;
 
-        if ($rawValue == null) {
+        if ($rawValue === null) {
             return null;
         }
 
@@ -77,7 +77,7 @@ class UnitConversion
     {
         $rawValue = $speed->value;
 
-        if ($rawValue == null) {
+        if ($rawValue === null) {
             return null;
         }
 
@@ -110,7 +110,7 @@ class UnitConversion
     ) {
         $rawValue = $temperature->value;
 
-        if ($rawValue == null) {
+        if ($rawValue === null) {
             return null;
         }
 
