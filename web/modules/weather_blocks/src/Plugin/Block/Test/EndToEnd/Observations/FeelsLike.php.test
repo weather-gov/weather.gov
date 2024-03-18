@@ -24,7 +24,7 @@ final class FeelsLikeTest extends EndToEndBase
      */
     public function testNoHeatIndexAndNoWindChilld(): void
     {
-        $this->onLocationRoute(35.521, -86.812);
+        $this->onLocationRoute(33.521, -86.812);
 
         $data = $this->block->build();
 
