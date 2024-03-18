@@ -19,6 +19,14 @@ const exists = async (file) => {
   }
 };
 
+const adjust = (time, adjustment) => {
+  const [amount, unit] = adjustment.trim().split(" ");
+  if (amount && unit) {
+    return time.add(Number.parseInt(amount, 10), unit);
+  }
+  return time;
+};
+
 const processDates = (obj, usingHourly = false) => {
   // If the input is null, just bail out. Otherwise we'll accidentally turn it
   // into an object.
@@ -40,25 +48,38 @@ const processDates = (obj, usingHourly = false) => {
     //
     // But if the value has a startsWith function and it starts with the token,
     // we've got a thing that needs parsing.
-    else if (value?.startsWith?.("date:now")) {
-      // Splitting on date:now results in ['', <modifiers>]. Trim it and split
-      // on spaces to get the offset and unit.
-      const [amount, unit] = value.split("date:now")[1].trim().split(" ");
-      // Modify (or not) the date and format it. We can't use Day.js's
-      // toISOString() function because it includes milliseconds, which is fine,
-      // but PHP fails to parse ISO 8601 strings with milliseconds. :sigh:
-      // Thankfully the regular .format() function returns an ISO 8601 string
-      // but without milliseconds.
-      let updatedTime = now;
-      if (amount && unit) {
-        updatedTime = now.add(Number.parseInt(amount, 10), unit);
-      }
+    else if (/^date:\S+/.test(value)) {
+      const [, start, modifier] = value.match(/^date:(\S+)\s(.*)/);
 
-      // If we are parsing hourly forcast data, and the key is either the
-      // start or end time, then align the output to the start of the given
-      // hour.
-      if (usingHourly && ["startTime", "endTime"].includes(key)) {
-        updatedTime = updatedTime.startOf("hour");
+      let updatedTime = now;
+
+      if (start === "now" && modifier) {
+        updatedTime = adjust(updatedTime, modifier);
+
+        // If we are parsing hourly forcast data, and the key is either the
+        // start or end time, then align the output to the start of the given
+        // hour.
+        if (
+          usingHourly &&
+          ["startTime", "endTime", "validTime"].includes(key)
+        ) {
+          updatedTime = updatedTime.startOf("hour");
+        }
+      } else if (start === "today") {
+        const [, hour, minute, offset, adjustment] = modifier.match(
+          /^(\d{2}):(\d{2}):([-+]?\d{1,2})(.*)/,
+        );
+
+        updatedTime = updatedTime
+          .utcOffset(+offset, true)
+          .hour(+hour)
+          .minute(+minute)
+          .second(0)
+          .millisecond(0);
+
+        if (adjustment.trim()) {
+          updatedTime = adjust(updatedTime, adjustment);
+        }
       }
 
       obj[key] = updatedTime.format();
