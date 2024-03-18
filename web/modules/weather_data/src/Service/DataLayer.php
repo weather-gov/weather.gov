@@ -316,9 +316,11 @@ class DataLayer
     private static $i_placeNearPolygon = [];
     public function getPlaceNearPolygon($points)
     {
-        if (!self::$i_placeNearPolygon[$wktPoints]) {
+        $wktPoints = SpatialUtility::geometryObjectToWKT($points);
+
+        if (!array_key_exists($wktPoints, self::$i_placeNearPolygon)) {
             $this->iPlaceNearPolygon[$wktPoints] = $this->getPlaceNear(
-                SpatialUtility::geometryObjectToWKT($points),
+                $wktPoints,
             );
         }
         return $this->iPlaceNearPolygon[$wktPoints];

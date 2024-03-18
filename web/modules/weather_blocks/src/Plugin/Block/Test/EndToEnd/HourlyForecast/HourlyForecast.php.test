@@ -1,0 +1,254 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\weather_blocks\Plugin\Block\HourlyForecastBlock;
+
+/**
+ * Tests for hourly forecast data structure.
+ */
+final class HourlyForecastStructureTest extends EndToEndBase
+{
+    /**
+     * Create the block under test.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(HourlyForecastBlock::class);
+    }
+
+    /**
+     * Simply validate the data structure.
+     * @group e2e
+     */
+    public function testDataStructure(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+
+        $expected = [
+            "hours" => [
+                [
+                    "conditions" => "Day mostly cloudy",
+                    "icon" => (object) [
+                        "icon" => "mostly_cloudy-day.svg",
+                        "base" => "mostly_cloudy-day",
+                    ],
+                    "dewpoint" => 28,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 75,
+                    "time" => "11 AM",
+                    "timestamp" => "2024-03-18T11:00:00-05:00",
+                    "temperature" => 35,
+                    "windDirection" => (object) [
+                        "long" => "south",
+                        "short" => "S",
+                        "angle" => 200,
+                    ],
+                    "windSpeed" => 0,
+                ],
+                [
+                    "conditions" => "Night mostly cloudy",
+                    "icon" => (object) [
+                        "icon" => "mostly_cloudy-night.svg",
+                        "base" => "mostly_cloudy-night",
+                    ],
+                    "dewpoint" => 26,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 57,
+                    "time" => "12 PM",
+                    "timestamp" => "2024-03-18T12:00:00-05:00",
+                    "temperature" => 40,
+                    "windDirection" => (object) [
+                        "long" => "east",
+                        "short" => "E",
+                        "angle" => 100,
+                    ],
+                    "windSpeed" => 0,
+                ],
+                [
+                    "conditions" => "Day blizzard",
+                    "icon" => (object) [
+                        "icon" => "blizzard_winter_storm.svg",
+                        "base" => "blizzard_winter_storm",
+                    ],
+                    "dewpoint" => 29,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 82,
+                    "time" => "1 PM",
+                    "timestamp" => "2024-03-18T13:00:00-05:00",
+                    "temperature" => 34,
+                    "windDirection" => (object) [
+                        "long" => "southeast",
+                        "short" => "SE",
+                        "angle" => 150,
+                    ],
+                    "windSpeed" => 2,
+                ],
+                [
+                    "conditions" => "Night blizzard",
+                    "icon" => (object) [
+                        "icon" => "blizzard_winter_storm.svg",
+                        "base" => "blizzard_winter_storm",
+                    ],
+                    "dewpoint" => 26,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 69,
+                    "time" => "2 PM",
+                    "timestamp" => "2024-03-18T14:00:00-05:00",
+                    "temperature" => 35,
+                    "windDirection" => (object) [
+                        "long" => "southeast",
+                        "short" => "SE",
+                        "angle" => 140,
+                    ],
+                    "windSpeed" => 2,
+                ],
+                [
+                    "conditions" => "Day cold",
+                    "icon" => (object) ["icon" => "cold.svg", "base" => "cold"],
+                    "dewpoint" => 26,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 55,
+                    "time" => "3 PM",
+                    "timestamp" => "2024-03-18T15:00:00-05:00",
+                    "temperature" => 41,
+                    "windDirection" => (object) [
+                        "long" => "southeast",
+                        "short" => "SE",
+                        "angle" => 140,
+                    ],
+                    "windSpeed" => 2,
+                ],
+                [
+                    "conditions" => "Night cold",
+                    "icon" => (object) ["icon" => "cold.svg", "base" => "cold"],
+                    "dewpoint" => 21,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 29,
+                    "time" => "4 PM",
+                    "timestamp" => "2024-03-18T16:00:00-05:00",
+                    "temperature" => 52,
+                    "windDirection" => (object) [
+                        "long" => "south",
+                        "short" => "S",
+                        "angle" => 190,
+                    ],
+                    "windSpeed" => 3,
+                ],
+                [
+                    "conditions" => "Day dust",
+                    "icon" => (object) [
+                        "icon" => "new_dust.svg",
+                        "base" => "new_dust",
+                    ],
+                    "dewpoint" => 20,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 24,
+                    "time" => "5 PM",
+                    "timestamp" => "2024-03-18T17:00:00-05:00",
+                    "temperature" => 56,
+                    "windDirection" => (object) [
+                        "long" => "southwest",
+                        "short" => "SW",
+                        "angle" => 230,
+                    ],
+                    "windSpeed" => 3,
+                ],
+                [
+                    "conditions" => "Night dust",
+                    "icon" => (object) [
+                        "icon" => "new_dust.svg",
+                        "base" => "new_dust",
+                    ],
+                    "dewpoint" => 19,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 22,
+                    "time" => "6 PM",
+                    "timestamp" => "2024-03-18T18:00:00-05:00",
+                    "temperature" => 58,
+                    "windDirection" => (object) [
+                        "long" => "southwest",
+                        "short" => "SW",
+                        "angle" => 240,
+                    ],
+                    "windSpeed" => 3,
+                ],
+                [
+                    "conditions" => "Day mostly clear",
+                    "icon" => (object) [
+                        "icon" => "mostly_clear-day.svg",
+                        "base" => "mostly_clear-day",
+                    ],
+                    "dewpoint" => 29,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 29,
+                    "time" => "7 PM",
+                    "timestamp" => "2024-03-18T19:00:00-05:00",
+                    "temperature" => 61,
+                    "windDirection" => (object) [
+                        "long" => "southwest",
+                        "short" => "SW",
+                        "angle" => 240,
+                    ],
+                    "windSpeed" => 3,
+                ],
+                [
+                    "conditions" => "Night mostly clear",
+                    "icon" => (object) [
+                        "icon" => "mostly_clear-night.svg",
+                        "base" => "mostly_clear-night",
+                    ],
+                    "dewpoint" => 29,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 28,
+                    "time" => "8 PM",
+                    "timestamp" => "2024-03-18T20:00:00-05:00",
+                    "temperature" => 62,
+                    "windDirection" => (object) [
+                        "long" => "west",
+                        "short" => "W",
+                        "angle" => 260,
+                    ],
+                    "windSpeed" => 3,
+                ],
+                [
+                    "conditions" => "Day fog",
+                    "icon" => (object) ["icon" => "fog.svg", "base" => "fog"],
+                    "dewpoint" => 29,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 28,
+                    "time" => "9 PM",
+                    "timestamp" => "2024-03-18T21:00:00-05:00",
+                    "temperature" => 62,
+                    "windDirection" => (object) [
+                        "long" => "west",
+                        "short" => "W",
+                        "angle" => 260,
+                    ],
+                    "windSpeed" => 3,
+                ],
+                [
+                    "conditions" => "Night fog",
+                    "icon" => (object) ["icon" => "fog.svg", "base" => "fog"],
+                    "dewpoint" => 30,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 29,
+                    "time" => "10 PM",
+                    "timestamp" => "2024-03-18T22:00:00-05:00",
+                    "temperature" => 63,
+                    "windDirection" => (object) [
+                        "long" => "west",
+                        "short" => "W",
+                        "angle" => 270,
+                    ],
+                    "windSpeed" => 3,
+                ],
+            ],
+            "alertPeriods" => [],
+        ];
+
+        $data = $this->block->build();
+
+        $this->assertEquals($expected, $data);
+    }
+}
