@@ -1,6 +1,6 @@
 {
   "@bundle": {
-    "name": "wind is zero<br>no heat index or wind chill<br>concluded alert"
+    "name": "wind is zero<br>no heat index or wind chill<br>concluded alert<br>hourly data starts in the past"
   },
   "@context": [
     "https://geojson.org/geojson-ld/geojson-context.jsonld",

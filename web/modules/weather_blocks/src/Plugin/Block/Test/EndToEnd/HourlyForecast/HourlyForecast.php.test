@@ -57,6 +57,35 @@ final class HourlyForecastStructureTest extends EndToEndBase
     }
 
     /**
+     * Test that hourly results are in the timezone of the point.
+     * @group e2e
+     */
+    public function testHourlyForecastTimezone(): void
+    {
+        // This test could fail for a bit around the daylight savings and
+        // standard time transitions, but that seems acceptable...
+
+        $this->onLocationRoute(33.521, -86.812);
+
+        $timezone = new \DateTimeZone("America/Chicago");
+        $now = new \DateTimeImmutable();
+        $offset = $timezone->getOffset($now);
+
+        $data = $this->block->build();
+
+        foreach ($data["hours"] as $period) {
+            $time = \DateTimeImmutable::createFromFormat(
+                \DateTimeInterface::ISO8601_EXPANDED,
+                $period["timestamp"],
+            );
+
+            // The time from the timestamp should have offset information
+            // embedded in it. So we'll just compare the two.
+            $this->assertEquals($offset, $time->getOffset());
+        }
+    }
+
+    /**
      * Simply validate the data structure.
      * @group e2e
      */
