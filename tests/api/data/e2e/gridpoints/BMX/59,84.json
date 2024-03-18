@@ -38,6 +38,14 @@
       "uom": "wmoUnit:degC",
       "values": [
         {
+          "validTime": "date:now -8 hours / PT3H",
+          "value": 9
+        },
+        {
+          "validTime": "date:now -5 hours / PT5H",
+          "value": 17
+        },
+        {
           "validTime": "date:now +0 hours / PT1H",
           "value": 2.2222222222222223
         },

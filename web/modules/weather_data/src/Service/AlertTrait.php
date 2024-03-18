@@ -356,9 +356,11 @@ trait AlertTrait
         // the diff between a period start and an old
         // alert end time is only in seconds (ie zero minutes
         // and zero days)
-        return array_filter($alertPeriods, function ($alertPeriod) {
-            return $alertPeriod["duration"] > 0;
-        });
+        return array_values(
+            array_filter($alertPeriods, function ($alertPeriod) {
+                return $alertPeriod["duration"] > 0;
+            }),
+        );
     }
 
     /**

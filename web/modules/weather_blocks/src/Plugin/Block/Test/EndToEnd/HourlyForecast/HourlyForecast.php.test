@@ -21,234 +21,216 @@ final class HourlyForecastStructureTest extends EndToEndBase
      * Simply validate the data structure.
      * @group e2e
      */
-    public function testDataStructure(): void
+    public function testHourlyForecastDataStructure(): void
     {
         $this->onLocationRoute(33.521, -86.812);
 
-        $expected = [
-            "hours" => [
-                [
-                    "conditions" => "Day mostly cloudy",
-                    "icon" => (object) [
-                        "icon" => "mostly_cloudy-day.svg",
-                        "base" => "mostly_cloudy-day",
-                    ],
-                    "dewpoint" => 28,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 75,
-                    "time" => "11 AM",
-                    "timestamp" => "2024-03-18T11:00:00-05:00",
-                    "temperature" => 35,
-                    "windDirection" => (object) [
-                        "long" => "south",
-                        "short" => "S",
-                        "angle" => 200,
-                    ],
-                    "windSpeed" => 0,
-                ],
-                [
-                    "conditions" => "Night mostly cloudy",
-                    "icon" => (object) [
-                        "icon" => "mostly_cloudy-night.svg",
-                        "base" => "mostly_cloudy-night",
-                    ],
-                    "dewpoint" => 26,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 57,
-                    "time" => "12 PM",
-                    "timestamp" => "2024-03-18T12:00:00-05:00",
-                    "temperature" => 40,
-                    "windDirection" => (object) [
-                        "long" => "east",
-                        "short" => "E",
-                        "angle" => 100,
-                    ],
-                    "windSpeed" => 0,
-                ],
-                [
-                    "conditions" => "Day blizzard",
-                    "icon" => (object) [
-                        "icon" => "blizzard_winter_storm.svg",
-                        "base" => "blizzard_winter_storm",
-                    ],
-                    "dewpoint" => 29,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 82,
-                    "time" => "1 PM",
-                    "timestamp" => "2024-03-18T13:00:00-05:00",
-                    "temperature" => 34,
-                    "windDirection" => (object) [
-                        "long" => "southeast",
-                        "short" => "SE",
-                        "angle" => 150,
-                    ],
-                    "windSpeed" => 2,
-                ],
-                [
-                    "conditions" => "Night blizzard",
-                    "icon" => (object) [
-                        "icon" => "blizzard_winter_storm.svg",
-                        "base" => "blizzard_winter_storm",
-                    ],
-                    "dewpoint" => 26,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 69,
-                    "time" => "2 PM",
-                    "timestamp" => "2024-03-18T14:00:00-05:00",
-                    "temperature" => 35,
-                    "windDirection" => (object) [
-                        "long" => "southeast",
-                        "short" => "SE",
-                        "angle" => 140,
-                    ],
-                    "windSpeed" => 2,
-                ],
-                [
-                    "conditions" => "Day cold",
-                    "icon" => (object) ["icon" => "cold.svg", "base" => "cold"],
-                    "dewpoint" => 26,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 55,
-                    "time" => "3 PM",
-                    "timestamp" => "2024-03-18T15:00:00-05:00",
-                    "temperature" => 41,
-                    "windDirection" => (object) [
-                        "long" => "southeast",
-                        "short" => "SE",
-                        "angle" => 140,
-                    ],
-                    "windSpeed" => 2,
-                ],
-                [
-                    "conditions" => "Night cold",
-                    "icon" => (object) ["icon" => "cold.svg", "base" => "cold"],
-                    "dewpoint" => 21,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 29,
-                    "time" => "4 PM",
-                    "timestamp" => "2024-03-18T16:00:00-05:00",
-                    "temperature" => 52,
-                    "windDirection" => (object) [
-                        "long" => "south",
-                        "short" => "S",
-                        "angle" => 190,
-                    ],
-                    "windSpeed" => 3,
-                ],
-                [
-                    "conditions" => "Day dust",
-                    "icon" => (object) [
-                        "icon" => "new_dust.svg",
-                        "base" => "new_dust",
-                    ],
-                    "dewpoint" => 20,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 24,
-                    "time" => "5 PM",
-                    "timestamp" => "2024-03-18T17:00:00-05:00",
-                    "temperature" => 56,
-                    "windDirection" => (object) [
-                        "long" => "southwest",
-                        "short" => "SW",
-                        "angle" => 230,
-                    ],
-                    "windSpeed" => 3,
-                ],
-                [
-                    "conditions" => "Night dust",
-                    "icon" => (object) [
-                        "icon" => "new_dust.svg",
-                        "base" => "new_dust",
-                    ],
-                    "dewpoint" => 19,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 22,
-                    "time" => "6 PM",
-                    "timestamp" => "2024-03-18T18:00:00-05:00",
-                    "temperature" => 58,
-                    "windDirection" => (object) [
-                        "long" => "southwest",
-                        "short" => "SW",
-                        "angle" => 240,
-                    ],
-                    "windSpeed" => 3,
-                ],
-                [
-                    "conditions" => "Day mostly clear",
-                    "icon" => (object) [
-                        "icon" => "mostly_clear-day.svg",
-                        "base" => "mostly_clear-day",
-                    ],
-                    "dewpoint" => 29,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 29,
-                    "time" => "7 PM",
-                    "timestamp" => "2024-03-18T19:00:00-05:00",
-                    "temperature" => 61,
-                    "windDirection" => (object) [
-                        "long" => "southwest",
-                        "short" => "SW",
-                        "angle" => 240,
-                    ],
-                    "windSpeed" => 3,
-                ],
-                [
-                    "conditions" => "Night mostly clear",
-                    "icon" => (object) [
-                        "icon" => "mostly_clear-night.svg",
-                        "base" => "mostly_clear-night",
-                    ],
-                    "dewpoint" => 29,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 28,
-                    "time" => "8 PM",
-                    "timestamp" => "2024-03-18T20:00:00-05:00",
-                    "temperature" => 62,
-                    "windDirection" => (object) [
-                        "long" => "west",
-                        "short" => "W",
-                        "angle" => 260,
-                    ],
-                    "windSpeed" => 3,
-                ],
-                [
-                    "conditions" => "Day fog",
-                    "icon" => (object) ["icon" => "fog.svg", "base" => "fog"],
-                    "dewpoint" => 29,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 28,
-                    "time" => "9 PM",
-                    "timestamp" => "2024-03-18T21:00:00-05:00",
-                    "temperature" => 62,
-                    "windDirection" => (object) [
-                        "long" => "west",
-                        "short" => "W",
-                        "angle" => 260,
-                    ],
-                    "windSpeed" => 3,
-                ],
-                [
-                    "conditions" => "Night fog",
-                    "icon" => (object) ["icon" => "fog.svg", "base" => "fog"],
-                    "dewpoint" => 30,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 29,
-                    "time" => "10 PM",
-                    "timestamp" => "2024-03-18T22:00:00-05:00",
-                    "temperature" => 63,
-                    "windDirection" => (object) [
-                        "long" => "west",
-                        "short" => "W",
-                        "angle" => 270,
-                    ],
-                    "windSpeed" => 3,
-                ],
+        $start = new \DateTimeImmutable();
+        $start = $start
+            ->setTimezone(new \DateTimeZone("America/Chicago"))
+            ->modify("+1 hour");
+        $start = $start->setTime((int) $start->format("H"), 0, 0, 0);
+
+        $expectedHourStructure = [
+            "conditions" => "Day mostly cloudy",
+            "icon" => (object) [
+                "icon" => "mostly_cloudy-day.svg",
+                "base" => "mostly_cloudy-day",
             ],
-            "alertPeriods" => [],
+            "dewpoint" => 28,
+            "probabilityOfPrecipitation" => 0,
+            "relativeHumidity" => 75,
+            "time" => $start->format("g A"),
+            "timestamp" => $start->format("c"),
+            "temperature" => 35,
+            "windDirection" => (object) [
+                "long" => "south",
+                "short" => "S",
+                "angle" => 200,
+            ],
+            "windSpeed" => 0,
         ];
 
         $data = $this->block->build();
 
-        $this->assertEquals($expected, $data);
+        $this->assertEquals($expectedHourStructure, $data["hours"][0]);
+    }
+
+    /**
+     * Simply validate the data structure.
+     * @group e2e
+     */
+    public function testHourlyAlertDataStructure(): void
+    {
+        $this->onLocationRoute(34.749, -92.275);
+
+        // Build up expected times, based on the contents of the test data.
+        $now = new \DateTimeImmutable();
+
+        $sent = $now->modify("-1 hour");
+        $effective = $now->modify("-1 hour");
+        $onset = $now->modify("-1 hour");
+        $expires = $now->modify("+1 hour");
+        $ends = $now->modify("+3 hours");
+
+        $expectedAlertStructure = [
+            "periodIndex" => 0,
+            "duration" => 2,
+            "alert" => (object) [
+                "@id" =>
+                    "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
+                "@type" => "wx:Alert",
+                "id" =>
+                    "urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
+                "areaDesc" => [
+                    "Northeast Plains",
+                    "Middle Rio Grande Valley",
+                    "Northeast Highlands",
+                    "Sandia and Manzano Mountains",
+                    "Central Highlands",
+                    "East Central Plains",
+                ],
+                "geocode" => (object) [
+                    "SAME" => [
+                        "035021",
+                        "035047",
+                        "035059",
+                        "035001",
+                        "035006",
+                        "035043",
+                        "035049",
+                        "035053",
+                        "035057",
+                        "035061",
+                        "035007",
+                        "035033",
+                        "035027",
+                        "035019",
+                        "035037",
+                        "035009",
+                        "035011",
+                        "035041",
+                    ],
+                    "UGC" => [
+                        "NMZ104",
+                        "NMZ106",
+                        "NMZ123",
+                        "NMZ124",
+                        "NMZ125",
+                        "NMZ126",
+                    ],
+                ],
+                "affectedZones" => [
+                    "https://api.weather.gov/zones/fire/ARZ044",
+                    "https://api.weather.gov/zones/fire/NMZ106",
+                    "https://api.weather.gov/zones/fire/NMZ123",
+                    "https://api.weather.gov/zones/fire/NMZ124",
+                    "https://api.weather.gov/zones/fire/NMZ125",
+                    "https://api.weather.gov/zones/fire/NMZ126",
+                ],
+                "references" => [
+                    (object) [
+                        "@id" =>
+                            "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
+                        "identifier" =>
+                            "urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
+                        "sender" => "w-nws.webmaster@noaa.gov",
+                        "sent" => "2024-02-21T05:06:00-07:00",
+                    ],
+                ],
+                "sent" => $sent->format("c"),
+                "effective" => $effective->format("c"),
+                "onset" => $onset
+                    ->setTimezone(new \DateTimeZone("America/Chicago"))
+                    ->format("l, m/d, g:i A T"),
+                "expires" => $expires
+                    ->setTimezone(new \DateTimeZone("America/Chicago"))
+                    ->format("l, m/d, g:i A T"),
+                "ends" => $ends
+                    ->setTimezone(new \DateTimeZone("America/Chicago"))
+                    ->format("l, m/d, g:i A T"),
+                "onsetRaw" => $onset->format("c"),
+                "expiresRaw" => $expires->format("c"),
+                "endsRaw" => $ends->format("c"),
+                "status" => "Actual",
+                "messageType" => "Update",
+                "category" => "Met",
+                "severity" => "Severe",
+                "certainty" => "Likely",
+                "urgency" => "Expected",
+                "event" => "Red Flag Warning",
+                "sender" => "w-nws.webmaster@noaa.gov",
+                "senderName" => "NWS Albuquerque NM",
+                "headline" =>
+                    "Red Flag Warning issued February 21 at 5:19AM MST until February 21 at 7:00PM MST by NWS Albuquerque NM",
+                "description" => [
+                    [
+                        "type" => "paragraph",
+                        "text" =>
+                            "RED FLAG WARNING IN EFFECT TODAY BETWEEN 11 AM MST AND 7 PM MST ACROSS NORTHEASTERN, EAST CENTRAL, AND CENTRAL NEW MEXICO DUE TO LOW HUMIDITY, STRONG WINDS, AND ABOVE NORMAL TEMPERATURES",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "text" =>
+                            ".An upper level disturbance will bring strong southwesterly to westerly winds this afternoon and early evening that will combine with above normal temperatures, an unstable atmosphere, and very low relative humidity in the low double to single digits to produce widespread critical fire weather conditions. Rapid fire spread is possible in receptive fuel beds.",
+                    ],
+                    ["type" => "heading", "text" => "area and timing"],
+                    [
+                        "type" => "paragraph",
+                        "text" =>
+                            "Northeast Plains (Zone 104), Northeast Highlands (Zone 123), East Central Plains (Zone 126), Central Highlands (Zone 125), Sandia and Manzano Mountains (Zone 124), and Middle Rio Grande Valley (Zone 106) from 11 AM through 7 PM MST today.",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "text" =>
+                            "* 20 FOOT WINDS...West to southwest 25 to 35 mph with gusts up to 55 mph.",
+                    ],
+                    [
+                        "type" => "heading",
+                        "text" => "relative humidity",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "text" => "6 to 15 percent",
+                    ],
+                    ["type" => "heading", "text" => "impacts"],
+                    [
+                        "type" => "paragraph",
+                        "text" =>
+                            "Any fires that develop will likely spread rapidly. Outdoor burning is not recommended.",
+                    ],
+                ],
+                "instruction" =>
+                    "Please advise the appropriate officials or fire crews in the field of this Red Flag Warning.",
+                "response" => "Prepare",
+                "parameters" => (object) [
+                    "AWIPSidentifier" => ["RFWABQ"],
+                    "WMOidentifier" => ["WWUS85 KABQ 211219"],
+                    "NWSheadline" => [
+                        "RED FLAG WARNING REMAINS IN EFFECT FROM 11 AM THIS MORNING TO 7 PM MST THIS EVENING",
+                    ],
+                    "BLOCKCHANNEL" => ["EAS", "NWEM", "CMAS"],
+                    "VTEC" => [
+                        "/O.CON.KABQ.FW.W.0001.240221T1800Z-240222T0200Z/",
+                    ],
+                    "eventEndingTime" => ["2024-02-22T02:00:00+00:00"],
+                    "expiredReferences" => [
+                        "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.009cb1d92c051da3ecf8ae561dde07f5fcee9c74.002.2,2024-02-20T13:27:00-07:00",
+                    ],
+                ],
+                "timezone" => "America/Chicago",
+                "durationText" =>
+                    "until " .
+                    $ends
+                        ->setTimezone(new \DateTimeZone("America/Chicago"))
+                        ->format("g:i A") .
+                    " today",
+                "geometry" => [],
+            ],
+        ];
+
+        $data = $this->block->build();
+
+        $this->assertEquals($expectedAlertStructure, $data["alertPeriods"][0]);
     }
 }
