@@ -9,7 +9,7 @@ trait ObservationsTrait
      */
     protected function isValidObservation($obs)
     {
-        if ($obs->temperature->value == null) {
+        if ($obs->temperature->value === null) {
             return false;
         }
         return true;
@@ -155,7 +155,7 @@ trait ObservationsTrait
             $obsStationIndex < count($obsStations) - 1 &&
             $obsStationIndex < self::NUMBER_OF_OBS_STATIONS_TO_TRY
         );
-        if ($obs->temperature->value == null) {
+        if ($obs->temperature->value === null) {
             return null;
         }
 
@@ -173,10 +173,10 @@ trait ObservationsTrait
         $timestamp = DateTimeUtility::stringToDate($obs->timestamp);
 
         $feelsLike = UnitConversion::getTemperatureScalar($obs->heatIndex);
-        if ($feelsLike == null) {
+        if ($feelsLike === null) {
             $feelsLike = UnitConversion::getTemperatureScalar($obs->windChill);
         }
-        if ($feelsLike == null) {
+        if ($feelsLike === null) {
             $feelsLike = UnitConversion::getTemperatureScalar(
                 $obs->temperature,
             );
