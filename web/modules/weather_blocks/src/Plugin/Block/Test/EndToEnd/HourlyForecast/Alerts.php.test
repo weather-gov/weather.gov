@@ -196,7 +196,7 @@ final class HourlyForecastAlertTest extends EndToEndBase
 
     /**
      * Test that alerts align correctly to hourly periods.
-     * @group e2e2
+     * @group e2e
      */
     public function testAlertsAlignToHourlyPeriods(): void
     {
@@ -210,7 +210,7 @@ final class HourlyForecastAlertTest extends EndToEndBase
 
     /**
      * Test that alerts have the correct duration, relative to the current time.
-     * @group e2e2
+     * @group e2e
      */
     public function testAlertDurationsAreCorrect(): void
     {
