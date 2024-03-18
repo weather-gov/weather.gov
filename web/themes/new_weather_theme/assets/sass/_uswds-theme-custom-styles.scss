@@ -33,7 +33,8 @@ i.e.
 }
 
 .icon svg {
-  @include u-height(5);
+  height: 100%;
+  width: 100%;
 
   path.st0 {
     fill: color("black");
@@ -54,7 +55,7 @@ body {
   overflow-x: clip;
 }
 
-/* AlertDetails Overrides 
+/* AlertDetails Overrides
 -------------------------------------- */
 weathergov-alerts {
   .usa-prose h3 {
@@ -72,7 +73,7 @@ weathergov-alerts {
   }
 }
 
-/* AlertList Overrides 
+/* AlertList Overrides
 -------------------------------------- */
 .usa-alert__body a {
   color: color("primary-dark");
@@ -83,7 +84,7 @@ weathergov-alerts {
   }
 }
 
-/* Column utility 
+/* Column utility
 ------------------------------------- */
 .wx-col-2 {
   column-count: 2;
@@ -120,7 +121,7 @@ table tr:nth-child(2) th {
 
 /* Day/Night marker line utility
 ------------------------------------- */
-.line-before{
+.line-before {
   &::before {
     content: "";
     top: units(-1);
@@ -143,11 +144,11 @@ table tr:nth-child(2) th {
 }
 
 // TODO: Remove `line-after`s if stays unused, testing out different visual markers
-.line-after{
+.line-after {
   &::after {
     content: "";
     top: calc(units(-1) - units("2px")); // align with word center
-    left: units(5) + units(1.5);  // icon size + margin-right
+    left: units(5) + units(1.5); // icon size + margin-right
     width: calc(100% - units(8)); // width - margins
     position: relative;
     display: block;
@@ -166,7 +167,6 @@ table tr:nth-child(2) th {
   }
 }
 
-
 /* Extended forecast description width
 ------------------------------------- */
 .flex-basis-auto {
@@ -179,11 +179,11 @@ table tr:nth-child(2) th {
 
 @include at-media(mobile-lg) {
   .mobile-lg__flex-basis-100 {
-      flex-basis: 100%;
-    }
+    flex-basis: 100%;
+  }
 
   .mobile-lg__flex-basis-auto {
-      flex-basis: auto;
+    flex-basis: auto;
   }
 }
 
@@ -191,4 +191,10 @@ table tr:nth-child(2) th {
 ------------------------------------- */
 svg[data-wind-direction] {
   transform-origin: center;
+}
+
+/* Unstyle list utilities 
+------------------------------------- */
+.usa-list--unstyled .li-margin-bottom-1 {
+  margin-bottom: units(1);
 }

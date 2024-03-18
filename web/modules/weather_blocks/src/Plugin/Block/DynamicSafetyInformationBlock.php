@@ -33,13 +33,16 @@ class DynamicSafetyInformationBlock extends WeatherBlockBase
                 $body = $info->get("body")->getValue();
                 $body = array_pop($body);
                 $body = $body["value"];
+                $title = $info->get("title")->getValue();
+                $title = array_pop($title);
+                $title = $title["value"];
 
                 return [
                     "body" => $body,
+                    "title" => $title,
                 ];
             }
         }
-
         return [];
     }
 }

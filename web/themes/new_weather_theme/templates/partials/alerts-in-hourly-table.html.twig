@@ -3,11 +3,20 @@
   {% set remainingCount = periodLength - alertInfo.duration - alertInfo.periodIndex %}
   <tr data-row-name="alert">
     <th scope="row" class="position-sticky left-0"><span class="usa-sr-only">{{ "Alert" | t }}</span></th>
-    {% if alertInfo.periodIndex > 0 %}      
+    {% if alertInfo.periodIndex > 0 %}
       <td colspan="{{ alertInfo.periodIndex }}"></td>
     {% endif %}
-    <td colspan="{{alertInfo.duration}}" style="background-color:yellow;">
-      {{alertInfo.alert.event}}
+    <td colspan="{{alertInfo.duration}}">
+      <div class="hourly-table__alert">
+        <div class="display-flex">
+          <div class="width-3 height-3 margin-right-05">
+            <svg role="img" aria-hidden="true" class="width-full height-full">
+              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/uswds/sprite.svg#warning" }}"></use>
+            </svg>
+          </div>
+          {{alertInfo.alert.event}}
+        </div>
+      </div>
     </td>
     {% if remainingCount > 0 %}
       <td colspan="{{ remainingCount }}"></td>

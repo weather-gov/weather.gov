@@ -1,44 +1,48 @@
-<div>
-  <h3><a href="/office/{{ content.code }}/">{{ content.name }}</a></h3>
-  {{ content.shortIntro }}
+<div class="grid-container">
+  <div class="grid-row">
+    <div class="grid-col tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+      <h2 class="text-normal text-primary-darkest"> Your Local Forecast Office </h2>
+      <h3 class="margin-bottom-1"><a href="/office/{{ content.code }}/" class="usa-link">{{ content.name }}</a></h3>
+      <p class="line-height-sans-4 margin-top-0">
+        {{ content.shortIntro }}
+      </p>
 
-  {% if content.phone %}
-  <p>
-    {{ "Phone" | t }}: {{ content.phone }}
-  </p>
-  {% endif %}
+      {% if content.phone %}
+      <p>
+        <span class="font-family-mono font-mono-sm text-bold text-primary-darkest text-uppercase"> {{ "Phone" | t }}: </span> {{ content.phone }}
+      </p>
+      {% endif %}
 
-  {% if content.social %}
-  <p>
-    {{ "Find us on" | t }}:
-    <br>
+      {% if content.social %}
+      <p class="font-family-mono font-mono-sm text-bold text-primary-darkest text-uppercase margin-bottom-1">
+        {{ "Find us on" | t }}
+      </p>
+        {% if content.social | length > 1 %}
+        <ul class="usa-list usa-list--unstyled"> 
+          {% for platform, link in content.social %}
+          <li class="li-margin-bottom-1">
+            <a href="{{ link }}" class="usa-link display-flex flex-align-center text-no-underline">
+              <svg class="usa-icon usa-icon--size-3 text-primary-darkest margin-right-1 margin-top-neg-2px" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="{{ "/themes/new_weather_theme/assets/images/uswds/sprite.svg#" ~ platform}}"></use>
+              </svg>
+                <span class="">{{ platform | title | t }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>
+          <a href="{{- content.social | first -}}" class="usa-link display-flex flex-align-center text-no-underline">
+            <svg class="usa-icon usa-icon--size-3 text-primary-darkest margin-right-1 margin-top-neg-2px" aria-hidden="true" focusable="false" role="img">
+              <use xlink:href="{{ "/themes/new_weather_theme/assets/images/uswds/sprite.svg#" ~ content.social | keys | first }}"></use>
+            </svg>
+              <span class="">{{ content.social | keys | first | title | t }}</span>
+          </a>
+        </p>
+        {% endif %}
 
-    {% if content.social.facebook %}
-    <a href="{{ content.social.facebook }}" class="text-no-underline">
-    <svg class="usa-icon usa-icon--size-5" aria-hidden="true" focusable="false" role="img">
-      <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#facebook"></use>
-    </svg>
-    <span class="usa-sr-only">{{ "Facebook" | t }}</span>
-    </a>
-    {% endif %}
-
-    {% if content.social.twitter %}
-    <a href="{{ content.social.twitter }}" class="margin-left-2 text-no-underline">
-    <svg class="usa-icon usa-icon--size-5" aria-hidden="true" focusable="false" role="img">
-      <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#x"></use>
-    </svg>
-    <span class="usa-sr-only">{{ "X / Twitter" | t }}</span>
-    </a>
-    {% endif %}
-
-    {% if content.social.youtube %}
-    <a href="{{ content.social.youtube }}" class="margin-left-2 text-no-underline">
-    <svg class="usa-icon usa-icon--size-5" aria-hidden="true" focusable="false" role="img">
-      <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#youtube"></use>
-    </svg>
-    <span class="usa-sr-only">{{ "YouTube" | t }}</span>
-    </a>
-    {% endif %}
-  </p>
-  {% endif %}
+      {% endif %}
+    </div>
+  </div>
 </div>
+
