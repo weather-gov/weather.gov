@@ -30,19 +30,20 @@ final class DailyForecastStructureTest extends EndToEndBase
 
         $hour = (int) $start->format("H");
         // If we are between 6am and 6pm point-local time, then our daily
-        // forecast begins at 6am. Otherwise it begins at 6pm.
+        // forecast should begin at 6am. Otherwise it should begin at 6pm.
         if ($hour >= 6 && $hour < 18) {
             $start = $start->setTime(6, 0, 0, 0);
         } else {
             $start = $start->setTime(18, 0, 0, 0);
 
-            // If we're before 6am, then this daily period began at 6pm the
-            // previous day.
+            // If we're before 6am, then the first daily period should have
+            // begun at 6pm the previous day.
             if ($hour < 6) {
                 $start = $start->modify("-1 day");
             }
         }
 
+        // The first hourly period should be at the top of the next hour.
         $now = new \DateTimeImmutable();
         $now = $now->setTimezone(new \DateTimeZone("America/Chicago"));
         $now = $now->setTime((int) $now->format("H") + 1, 0, 0);
