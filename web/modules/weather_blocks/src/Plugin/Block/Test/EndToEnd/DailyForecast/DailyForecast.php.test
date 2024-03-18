@@ -1,0 +1,96 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\weather_blocks\Plugin\Block\DailyForecastBlock;
+
+/**
+ * Tests for daily forecast data structure.
+ */
+final class DailyForecastStructureTest extends EndToEndBase
+{
+    /**
+     * Create the block under test.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(DailyForecastBlock::class);
+    }
+
+    /**
+     * Simply validate the data structure.
+     * @group e2e2
+     */
+    public function testDailyForecastDataStructure(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+
+        $start = new \DateTimeImmutable();
+        $start = $start->setTimezone(new \DateTimeZone("America/Chicago"));
+
+        $hour = (int) $start->format("H");
+        // If we are between 6am and 6pm point-local time, then our daily
+        // forecast begins at 6am. Otherwise it begins at 6pm.
+        if ($hour >= 6 && $hour < 18) {
+            $start = $start->setTime(6, 0, 0, 0);
+        } else {
+            $start = $start->setTime(18, 0, 0, 0);
+
+            // If we're before 6am, then this daily period began at 6pm the
+            // previous day.
+            if ($hour < 6) {
+                $start = $start->modify("-1 day");
+            }
+        }
+
+        $now = new \DateTimeImmutable();
+        $now = $now->setTimezone(new \DateTimeZone("America/Chicago"));
+        $now = $now->setTime((int) $now->format("H") + 1, 0, 0);
+
+        $expectedStructure = [
+            "shortDayName" => $start->format("D"),
+            "dayName" => $start->format("l"),
+            "monthAndDay" => $start->format("M j"),
+            "startTime" => $start->format("c"),
+            "shortForecast" => "Cloudy",
+            "icon" => (object) [
+                "icon" => "cloudy_overcast.svg",
+                "base" => "cloudy_overcast",
+            ],
+            "temperature" => 31,
+            "probabilityOfPrecipitation" => null,
+            "isDaytime" => true,
+            "hourlyPeriods" => [
+                [
+                    "conditions" => "Day mostly cloudy",
+                    "icon" => (object) [
+                        "icon" => "mostly_cloudy-day.svg",
+                        "base" => "mostly_cloudy-day",
+                    ],
+                    "dewpoint" => 28,
+                    "probabilityOfPrecipitation" => 0,
+                    "relativeHumidity" => 75,
+                    "time" => $now->format("g A"),
+                    "timestamp" => $now->format("c"),
+                    "temperature" => 35,
+                    "windDirection" => (object) [
+                        "long" => "south",
+                        "short" => "S",
+                        "angle" => 200,
+                    ],
+                    "windSpeed" => 0,
+                ],
+            ],
+        ];
+
+        $data = $this->block->build();
+
+        $data["today"][0]["hourlyPeriods"] = array_slice(
+            $data["today"][0]["hourlyPeriods"],
+            0,
+            1,
+        );
+
+        $this->assertEquals($expectedStructure, $data["today"][0]);
+    }
+}
