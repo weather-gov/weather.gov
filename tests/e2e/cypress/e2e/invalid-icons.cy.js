@@ -22,22 +22,38 @@ describe("Invalid icon URL tests", () => {
   });
 
   it("Doesn't render icon for first day condition in daily (unknown icon name)", () => {
-    cy.get("#daily .daily-forecast-block ol li:first-child .daily-forecast-summary-area:first-child").as("area").should("exist");
+    cy.get(
+      "#daily .daily-forecast-block ol li:first-child .daily-forecast-summary-area:first-child",
+    )
+      .as("area")
+      .should("exist");
     cy.get("@area").find("svg").should("not.exist");
   });
 
   it("Doesn't render icon for first night condition in daily (invalid icon url)", () => {
-    cy.get("#daily .daily-forecast-block ol li:first-child .daily-forecast-summary-area:nth-child(2)").as("area").should("exist");
+    cy.get(
+      "#daily .daily-forecast-block ol li:first-child .daily-forecast-summary-area:nth-child(2)",
+    )
+      .as("area")
+      .should("exist");
     cy.get("@area").find("svg").should("not.exist");
   });
 
   it("Doesn't render icon for second day condition in daily (icon value is null)", () => {
-    cy.get("#daily .daily-forecast-block ol li:nth-child(2) .daily-forecast-summary-area:first-child").as("area").should("exist");
+    cy.get(
+      "#daily .daily-forecast-block ol li:nth-child(2) .daily-forecast-summary-area:first-child",
+    )
+      .as("area")
+      .should("exist");
     cy.get("@area").find("svg").should("not.exist");
   });
 
   it("Does render icon for second night condition in daily", () => {
-    cy.get("#daily .daily-forecast-block ol li:nth-child(2) .daily-forecast-summary-area:nth-child(2)").as("area").should("exist");
+    cy.get(
+      "#daily .daily-forecast-block ol li:nth-child(2) .daily-forecast-summary-area:nth-child(2)",
+    )
+      .as("area")
+      .should("exist");
     cy.get("@area").find("svg").should("exist");
   });
 });
@@ -49,6 +65,8 @@ describe("Valid icon rendering double-checks", () => {
   });
 
   it("Should render an icon in the current conditions", () => {
-    cy.get("#current .weather-gov-current-conditions .wx-icon > svg").should("exist");
+    cy.get("#current .weather-gov-current-conditions .wx-icon > svg").should(
+      "exist",
+    );
   });
 });

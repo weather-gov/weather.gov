@@ -4,7 +4,7 @@ import path from "node:path";
 import { format } from "prettier";
 
 const getRelativeTimestamp = (str) => {
-  if(!str){
+  if (!str) {
     return str;
   }
   const now = dayjs();
