@@ -38,6 +38,7 @@ final class HourlyForecastAlertTest extends EndToEndBase
             "duration" => 2,
             "alert" => (object) [
                 "@id" =>
+                    // phpcs:ignore Generic.Files.LineLength.TooLong
                     "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
                 "@type" => "wx:Alert",
                 "id" =>
@@ -91,6 +92,7 @@ final class HourlyForecastAlertTest extends EndToEndBase
                 "references" => [
                     (object) [
                         "@id" =>
+                            // phpcs:ignore Generic.Files.LineLength.TooLong
                             "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
                         "identifier" =>
                             "urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
@@ -122,22 +124,26 @@ final class HourlyForecastAlertTest extends EndToEndBase
                 "sender" => "w-nws.webmaster@noaa.gov",
                 "senderName" => "NWS Albuquerque NM",
                 "headline" =>
+                    // phpcs:ignore Generic.Files.LineLength.TooLong
                     "Red Flag Warning issued February 21 at 5:19AM MST until February 21 at 7:00PM MST by NWS Albuquerque NM",
                 "description" => [
                     [
                         "type" => "paragraph",
                         "text" =>
+                            // phpcs:ignore Generic.Files.LineLength.TooLong
                             "RED FLAG WARNING IN EFFECT TODAY BETWEEN 11 AM MST AND 7 PM MST ACROSS NORTHEASTERN, EAST CENTRAL, AND CENTRAL NEW MEXICO DUE TO LOW HUMIDITY, STRONG WINDS, AND ABOVE NORMAL TEMPERATURES",
                     ],
                     [
                         "type" => "paragraph",
                         "text" =>
+                            // phpcs:ignore Generic.Files.LineLength.TooLong
                             ".An upper level disturbance will bring strong southwesterly to westerly winds this afternoon and early evening that will combine with above normal temperatures, an unstable atmosphere, and very low relative humidity in the low double to single digits to produce widespread critical fire weather conditions. Rapid fire spread is possible in receptive fuel beds.",
                     ],
                     ["type" => "heading", "text" => "area and timing"],
                     [
                         "type" => "paragraph",
                         "text" =>
+                            // phpcs:ignore Generic.Files.LineLength.TooLong
                             "Northeast Plains (Zone 104), Northeast Highlands (Zone 123), East Central Plains (Zone 126), Central Highlands (Zone 125), Sandia and Manzano Mountains (Zone 124), and Middle Rio Grande Valley (Zone 106) from 11 AM through 7 PM MST today.",
                     ],
                     [
@@ -175,6 +181,7 @@ final class HourlyForecastAlertTest extends EndToEndBase
                     ],
                     "eventEndingTime" => ["2024-02-22T02:00:00+00:00"],
                     "expiredReferences" => [
+                        // phpcs:ignore Generic.Files.LineLength.TooLong
                         "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.009cb1d92c051da3ecf8ae561dde07f5fcee9c74.002.2,2024-02-20T13:27:00-07:00",
                     ],
                 ],
