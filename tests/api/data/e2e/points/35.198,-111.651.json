@@ -1,5 +1,8 @@
 {
-  "@bundle": { "name": "first observation is invalid, second is valid" },
+  "@bundle": {
+    "name": "Flagstaff, AZ (#1)",
+    "attributes": ["first observation is invalid, second is valid"]
+  },
   "@context": [
     "https://geojson.org/geojson-ld/geojson-context.jsonld",
     {

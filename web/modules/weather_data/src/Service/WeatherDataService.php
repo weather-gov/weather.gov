@@ -146,23 +146,17 @@ class WeatherDataService
      */
     public function getGridFromLatLon($lat, $lon)
     {
-        try {
-            $locationMetadata = $this->dataLayer->getPoint($lat, $lon);
+        $locationMetadata = $this->dataLayer->getPoint($lat, $lon);
 
-            $wfo = strtoupper($locationMetadata->properties->gridId);
-            $gridX = $locationMetadata->properties->gridX;
-            $gridY = $locationMetadata->properties->gridY;
+        $wfo = strtoupper($locationMetadata->properties->gridId);
+        $gridX = $locationMetadata->properties->gridX;
+        $gridY = $locationMetadata->properties->gridY;
 
-            return (object) [
-                "wfo" => $wfo,
-                "x" => $gridX,
-                "y" => $gridY,
-            ];
-        } catch (\Throwable $e) {
-            // Need to check the error so we know whether we ought to log something.
-            // But not yet. I am too excited about this location stuff right now.
-            return null;
-        }
+        return (object) [
+            "wfo" => $wfo,
+            "x" => $gridX,
+            "y" => $gridY,
+        ];
     }
 
     /**

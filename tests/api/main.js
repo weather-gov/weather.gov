@@ -33,13 +33,21 @@ const ui = async ({ error = false } = {}) => {
           await fs.readFile(path.join("./data", config.play, "points", p)),
         );
         const name = target["@bundle"]?.name ?? p;
-        let hostName = "http://localhost:8080"
-        if (process.env.CLOUDGOV_PROXY) {
-          hostName = "https://weathergov-design.app.cloud.gov"
+        const attributes = target["@bundle"]?.attributes ?? [];
+
+        const grid = {
+          wfo: target.properties.cwa,
+          x: target.properties.gridX,
+          y: target.properties.gridY,
         };
+
+        let hostName = "http://localhost:8080";
+        if (process.env.CLOUDGOV_PROXY) {
+          hostName = "https://weathergov-design.app.cloud.gov";
+        }
         const link = `${hostName}/point/${path.basename(p, ".json").split(",").join("/")}`;
 
-        return { name, link };
+        return { name, attributes, grid, link };
       }),
     );
 
@@ -47,8 +55,17 @@ const ui = async ({ error = false } = {}) => {
     if (targets.length) {
       lines.push("<br><br>Points in the bundle:");
       lines.push("<ul>");
-      targets.forEach(({ name, link }) => {
-        lines.push(`<li><a href="${link}">${name}</a></li>`);
+      targets.forEach(({ name, attributes, grid, link }) => {
+        lines.push(
+          `<li><a href="${link}">${name}</a> (${grid.wfo} / ${grid.x}, ${grid.y})`,
+        );
+
+        if (Array.isArray(attributes) && attributes.length > 0) {
+          lines.push("<ul>");
+          lines.push(attributes.map((v) => `<li>${v}</li>`).join(""));
+          lines.push("</ul>");
+        }
+        lines.push(`</li>`);
       });
       lines.push("</ul>");
     }

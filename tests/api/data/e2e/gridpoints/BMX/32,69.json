@@ -3006,7 +3006,7 @@
     "quantitativePrecipitation": {
       "uom": "wmoUnit:mm",
       "values": [
-        { "validTime": "date:now +0 hours / PT6H", "value": 0 },
+        { "validTime": "date:now +0 hours / PT6H", "value": 32.426 },
         { "validTime": "date:now +6 hours / PT6H", "value": 0 },
         { "validTime": "date:now +12 hours / PT6H", "value": 0 },
         { "validTime": "date:now +18 hours / PT6H", "value": 0 },

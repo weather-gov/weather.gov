@@ -38,4 +38,17 @@ final class HourlyPrecipitationTests extends EndToEndBase
             $this->assertEquals(true, $end > $now);
         }
     }
+
+    /**
+     * Validate that precipitation amounts are rounded to 100ths of an inch.
+     * @group e2e
+     */
+    public function testPrecipitationIsRoundedToHundredths(): void
+    {
+        $this->onLocationRoute(33.211, -87.566);
+
+        $data = $this->block->build();
+
+        $this->assertEquals(1.28, $data["periods"][0]->value);
+    }
 }

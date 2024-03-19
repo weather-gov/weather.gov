@@ -1,6 +1,11 @@
 {
   "@bundle": {
-    "name": "wind is non-zero<br>no heat index, yes wind chill<br>many alerts"
+    "name": "Little Rock, AR",
+    "attributes": [
+      "wind is non-zero",
+      "no heat index, yes wind chill",
+      "many alerts"
+    ]
   },
   "@context": [
     "https://geojson.org/geojson-ld/geojson-context.jsonld",

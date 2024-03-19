@@ -1,6 +1,12 @@
 {
   "@bundle": {
-    "name": "wind is null<br>heat index is set<br>no alerts"
+    "name": "Tuscaloosa, AL",
+    "attributes": [
+      "wind is null",
+      "heat index is set",
+      "no alerts",
+      "precip rounds to hundredths"
+    ]
   },
   "@context": [
     "https://geojson.org/geojson-ld/geojson-context.jsonld",

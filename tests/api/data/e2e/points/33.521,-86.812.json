@@ -1,6 +1,12 @@
 {
   "@bundle": {
-    "name": "wind is zero<br>no heat index or wind chill<br>concluded alert<br>hourly data starts in the past"
+    "name": "Birmingham, AL",
+    "attributes": [
+      "wind is zero",
+      "no heat index or wind chill",
+      "concluded alert",
+      "hourly data starts in the past"
+    ]
   },
   "@context": [
     "https://geojson.org/geojson-ld/geojson-context.jsonld",

@@ -7,6 +7,10 @@ use Drupal\weather_data\Service\WeatherAlertParser;
 
 final class WeatherAlertParserTest extends TestCase
 {
+    /**
+     * @group unit
+     * @group alert-parser
+     */
     public function testFullWhatWhereWhen(): void
     {
         $rawDescription =
@@ -62,6 +66,10 @@ final class WeatherAlertParserTest extends TestCase
         $this->assertEquals($expected, $parsedDescription);
     }
 
+    /**
+     * @group unit
+     * @group alert-parser
+     */
     public function testBasicWhatWhereWhen(): void
     {
         $rawDescription =
@@ -85,6 +93,10 @@ final class WeatherAlertParserTest extends TestCase
         $this->assertEquals($expected, $parsedDescription);
     }
 
+    /**
+     * @group unit
+     * @group alert-parser
+     */
     public function testAlertDescriptionOverviewExample(): void
     {
         $rawDescription = file_get_contents(
