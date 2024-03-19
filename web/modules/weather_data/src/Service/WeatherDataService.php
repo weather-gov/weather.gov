@@ -73,7 +73,7 @@ class WeatherDataService
      *
      * @var stashedPoint
      */
-    public $stashedPoint;
+    protected static $stashedPoint = null;
 
     /**
      * Constructor.
@@ -93,11 +93,15 @@ class WeatherDataService
         $this->defaultConditions = "No data";
 
         $this->stashedGridGeometry = null;
-        $this->stashedPoint = null;
 
         $this->legacyMapping = json_decode(
             file_get_contents(__DIR__ . "/legacyMapping.json"),
         );
+    }
+
+    public static function setPoint($point)
+    {
+        self::$stashedPoint = $point;
     }
 
     /**
@@ -179,8 +183,7 @@ class WeatherDataService
             $self = $this;
         }
 
-        $gridpoint = $this->dataLayer->getGridpoint($wfo, $x, $y);
-        $geometry = $gridpoint->geometry->coordinates[0];
+        $geometry = $this->getGeometryFromGrid($wfo, $x, $y);
 
         return $this->dataLayer->getPlaceNearPolygon($geometry);
     }
@@ -195,7 +198,9 @@ class WeatherDataService
     {
         if (!$this->stashedGridGeometry) {
             $gridpoint = $this->dataLayer->getGridpoint($wfo, $x, $y);
-            $this->stashedGridGeometry = $gridpoint->geometry->coordinates[0];
+            $this->stashedGridGeometry = SpatialUtility::geometryArrayToObject(
+                $gridpoint->geometry->coordinates[0],
+            );
         }
 
         return $this->stashedGridGeometry;

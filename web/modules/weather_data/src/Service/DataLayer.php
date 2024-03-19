@@ -283,7 +283,7 @@ class DataLayer
         $sql = "SELECT
           name,state,stateName,county,timezone,stateFIPS,countyFIPS
           FROM weathergov_geo_places
-          ORDER BY ST_DISTANCE(point,ST_GEOMFROMTEXT('$wktGeometry'))
+          ORDER BY ST_DISTANCE(point,$wktGeometry)
           LIMIT 1";
 
         $place = $this->database->query($sql)->fetch();
@@ -307,7 +307,7 @@ class DataLayer
         $key = "$lat $lon";
         if (!self::$i_placeNearPoint[$key]) {
             self::$i_placeNearPoint[$key] = $this->getPlaceNear(
-                "POINT($lon $lat)",
+                SpatialUtility::pointArrayToWKT([$lon, $lat]),
             );
         }
         return self::$i_placeNearPoint[$key];
@@ -316,14 +316,9 @@ class DataLayer
     private static $i_placeNearPolygon = [];
     public function getPlaceNearPolygon($points)
     {
-        $wktPoints = array_map(function ($point) {
-            return $point[0] . " " . $point[1];
-        }, $points);
-        $wktPoints = implode(",", $wktPoints);
-
         if (!self::$i_placeNearPolygon[$wktPoints]) {
             $this->iPlaceNearPolygon[$wktPoints] = $this->getPlaceNear(
-                "POLYGON(($wktPoints))",
+                SpatialUtility::geometryObjectToWKT($points),
             );
         }
         return $this->iPlaceNearPolygon[$wktPoints];

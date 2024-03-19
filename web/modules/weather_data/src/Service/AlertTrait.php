@@ -42,7 +42,7 @@ trait AlertTrait
         $y = $grid->y;
 
         $geometry = $self->getGeometryFromGrid($wfo, $x, $y);
-        $place = $this->dataLayer->getPlaceNearPoint($point[1], $point[0]);
+        $place = $this->dataLayer->getPlaceNearPoint($point->lat, $point->lon);
         $timezone = $place->timezone;
 
         $alerts = $this->dataLayer->getAlertsForState($place->state);
@@ -52,14 +52,11 @@ trait AlertTrait
         $fireZone = $forecastZone->properties->fireWeatherZone;
         $forecastZone = $forecastZone->properties->forecastZone;
 
-        $geometry = array_map(function ($point) {
-            return $point[0] . " " . $point[1];
-        }, $geometry);
-        $geometry = implode(",", $geometry);
+        $gridWKT = SpatialUtility::geometryObjectToWKT($geometry);
 
         $alerts = array_filter($alerts, function ($alert) use (
             $place,
-            $geometry,
+            $gridWKT,
             $forecastZone,
             $countyZone,
             $fireZone,
@@ -71,18 +68,13 @@ trait AlertTrait
             // If there's a geometry for this alert, use that to determine
             // whether it's relevant for our location.
             if ($alert->geometry) {
-                $alertGeometry = array_map(function ($alertGeomPoint) {
-                    return $alertGeomPoint[0] . " " . $alertGeomPoint[1];
-                }, $alert->geometry->coordinates[0]);
-                $alertGeometry = implode(",", $alertGeometry);
+                $alertWKT = SpatialUtility::geometryArrayToWKT(
+                    $alert->geometry->coordinates[0],
+                );
 
                 $sql = "SELECT ST_INTERSECTS(
-                    ST_POLYGONFROMTEXT(
-                        'POLYGON(($geometry))'
-                    ),
-                    ST_POLYGONFROMTEXT(
-                        'POLYGON(($alertGeometry))'
-                    )
+                    $gridWKT,
+                    $alertWKT
                 ) as yes";
 
                 $intersects = $this->dataLayer->databaseFetch($sql)->yes;
@@ -267,6 +259,10 @@ trait AlertTrait
      */
     public function alertsToHourlyPeriods($alerts, $periods)
     {
+        if (count($alerts) === 0 || count($periods) === 0) {
+            return [];
+        }
+
         // Pull out alerts that are relevant to the range
         // of the current periods
         $firstPeriodStartTime = DateTimeUtility::stringToDate(

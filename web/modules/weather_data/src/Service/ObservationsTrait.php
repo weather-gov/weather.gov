@@ -32,60 +32,45 @@ trait ObservationsTrait
         $wfoGeometry,
         $index = 0,
     ) {
-        $obsText =
-            "POINT(" .
-            $obs->geometry->coordinates[0] .
-            " " .
-            $obs->geometry->coordinates[1] .
-            ")";
+        $obsText = SpatialUtility::pointArrayToWKT($obs->geometry->coordinates);
 
         // If we have a reference point, we use that.
         // Otherwise, use the closest point from the WFO
         // geometry
         if ($referencePoint) {
-            $sourcePointText =
-                "POINT(" .
-                $referencePoint->lon .
-                " " .
-                $referencePoint->lat .
-                ")";
+            $sourcePointText = SpatialUtility::pointObjectToWKT(
+                $referencePoint,
+            );
         } else {
             // We need to find the closest point in the wfoGeometry
             // to the observation point
             $distance = INF;
             $closest = null;
             foreach ($wfoGeometry as $sourcePoint) {
-                $lonDiff = $obs->geometry->coordinates[0] - $sourcePoint[0];
-                $latDiff = $obs->geometry->coordinates[1] - $sourcePoint[1];
+                $lonDiff = $obs->geometry->coordinates[0] - $sourcePoint->lon;
+                $latDiff = $obs->geometry->coordinates[1] - $sourcePoint->lat;
                 $hyp = hypot($lonDiff, $latDiff);
                 if ($hyp < $distance) {
                     $distance = $hyp;
                     $closest = $sourcePoint;
                 }
             }
-            $sourcePointText = "POINT(" . $closest[0] . " " . $closest[1] . ")";
+            $sourcePointText = SpatialUtility::pointArrayToWKT($closest[0]);
         }
 
-        $sourceGeomPoints = array_map(function ($point) {
-            return $point[0] . " " . $point[1];
-        }, $wfoGeometry);
-        $sourceGeomPoints = implode(", ", $sourceGeomPoints);
-        $sourceGeomText = "POLYGON((" . $sourceGeomPoints . "))";
+        $sourceGeomText = SpatialUtility::geometryObjectToWKT($wfoGeometry);
 
         $sql =
             "SELECT ST_DISTANCE_SPHERE(" .
-            "ST_GEOMFROMTEXT('" .
             $obsText .
-            "'), " .
-            "ST_GEOMFROMTEXT('" .
+            ", " .
             $sourcePointText .
-            "')) as distance, " .
-            "ST_WITHIN(ST_GEOMFROMTEXT('" .
+            ") as distance, " .
+            "ST_WITHIN(" .
             $obsText .
-            "'), " .
-            "ST_GEOMFROMTEXT('" .
+            ", " .
             $sourceGeomText .
-            "')) as within;";
+            ") as within;";
 
         $result = $this->dataLayer->databaseFetch($sql);
         $distanceInfo = [
@@ -163,7 +148,7 @@ trait ObservationsTrait
         // including the WFO grid and a reference point,
         // if available
         $distanceInfo = $self->getObsDistanceInfo(
-            $this->stashedPoint,
+            self::$stashedPoint,
             $observationStation,
             $gridGeometry,
             $obsStationIndex - 1,
