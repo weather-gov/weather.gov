@@ -47,7 +47,7 @@ trait AlertTrait
 
         $alerts = $this->dataLayer->getAlertsForState($place->state);
 
-        $forecastZone = $this->dataLayer->getPoint($lat, $lon);
+        $forecastZone = $this->dataLayer->getPoint($point[1], $point[0]);
         $countyZone = $forecastZone->properties->county;
         $fireZone = $forecastZone->properties->fireWeatherZone;
         $forecastZone = $forecastZone->properties->forecastZone;

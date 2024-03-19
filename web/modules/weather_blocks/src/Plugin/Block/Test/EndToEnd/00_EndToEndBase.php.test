@@ -93,7 +93,15 @@ abstract class EndToEndBase extends TestCase
         );
         $database = Database::getConnection("default", "default");
 
-        $dataLayer = new DataLayer($httpClient, $cache, $database);
+        $this->routeMock = $this->createStub(RouteMatchInterface::class);
+
+        $dataLayer = new DataLayer(
+            $httpClient,
+            $cache,
+            $database,
+            $this->routeMock,
+            false,
+        );
 
         $nrPromise = new Promise();
         $nrPromise->resolve(true);
@@ -113,8 +121,6 @@ abstract class EndToEndBase extends TestCase
             $dataLayer,
         );
         $this->entityService = $this->createStub(WeatherEntityService::class);
-
-        $this->routeMock = $this->createStub(RouteMatchInterface::class);
 
         $this->block = $this->getMockBuilder($type)
             ->setConstructorArgs([

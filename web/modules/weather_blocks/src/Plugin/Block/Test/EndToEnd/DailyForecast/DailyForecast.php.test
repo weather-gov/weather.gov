@@ -19,7 +19,7 @@ final class DailyForecastStructureTest extends EndToEndBase
 
     /**
      * Simply validate the data structure.
-     * @group e2e2
+     * @group e2e
      */
     public function testDailyForecastDataStructure(): void
     {

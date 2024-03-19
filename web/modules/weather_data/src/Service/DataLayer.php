@@ -46,6 +46,7 @@ class DataLayer
         CacheBackendInterface $cache,
         Connection $database,
         RouteMatchInterface $route,
+        $preload = true,
     ) {
         $this->client = $httpClient;
         $this->cache = $cache;
@@ -57,7 +58,7 @@ class DataLayer
         $this->responseId = uniqid();
 
         // If we are on a location page route...
-        if ($route->getRouteName() == "weather_routes.point") {
+        if ($route->getRouteName() == "weather_routes.point" && $preload) {
             $lat = floatval($route->getParameter("lat"));
             $lon = floatval($route->getParameter("lon"));
 
@@ -191,7 +192,7 @@ class DataLayer
     {
         $response = $this->fetch($url)->wait();
 
-        if ($response->error) {
+        if (property_exists($response, "error")) {
             throw $response->error;
         }
 
