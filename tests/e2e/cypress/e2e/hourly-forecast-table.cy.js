@@ -41,7 +41,7 @@ describe("Hourly forecast table tests", () => {
       cy.get(`hourly-table tr[data-row-name="alert"]:nth-child(2) .hourly-table__alert`).click();
 
       cy.get("#alerts").should("be.visible");
-      cy.get("#alerts button").contains("Red Flag Alert").invoke("attr", "aria-expanded").should("equal", "true");
+      cy.get("#alerts button").contains("Red Flag Warning").invoke("attr", "aria-expanded").should("equal", "true");
       cy.get("#a4").should("be.visible");
     });
   });
