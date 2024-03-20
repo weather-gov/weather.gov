@@ -46,4 +46,23 @@ describe("the location page", () => {
       );
     });
   });
+
+  describe("Page load error messages", () => {
+    it("should load the default tabbed view without any error messages", () => {
+      cy.visit("/point/34.749/-92.275");
+      cy.get(".usa-alert--error").should("not.exist");
+    });
+    it("should load without any error messages in the today tab", () => {
+      cy.visit("/point/34.749/-92.275#today");
+      cy.get(".usa-alert--error").should("not.exist");
+    });
+    it("should load without any error messages in the daily tab", () => {
+      cy.visit("/point/34.749/-92.275#daily");
+      cy.get(".usa-alert--error").should("not.exist");
+    });
+    it("should load without any error messages in the current conditions tab", () => {
+      cy.visit("/point/34.749/-92.275#current");
+      cy.get(".usa-alert--error").should("not.exist");
+    });
+  });
 });

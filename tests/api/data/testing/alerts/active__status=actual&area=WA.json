@@ -1,0 +1,515 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.47fd7fa2786b2d161bf5867891635cb5d0e794a4.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.47fd7fa2786b2d161bf5867891635cb5d0e794a4.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.47fd7fa2786b2d161bf5867891635cb5d0e794a4.001.1",
+        "areaDesc": "Upper Slopes of the Eastern Washington Cascades Crest",
+        "geocode": { "SAME": ["053037", "053077"], "UGC": ["WAZ522"] },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/WAZ522"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9dccbed176f0b09b9ca781bcf7e0424f6191094f.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.9dccbed176f0b09b9ca781bcf7e0424f6191094f.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -47634 seconds"
+          }
+        ],
+        "sent": "date:now -22254 seconds",
+        "effective": "date:now -22254 seconds",
+        "onset": "date:now -22254 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Pendleton OR",
+        "headline": "Winter Weather Advisory issued March 11 at 4:30AM PDT until March 12 at 11:00PM PDT by NWS Pendleton OR",
+        "description": "* WHAT...Snow above 3000 feet. Additional snow accumulations of 6\nto 18 inches. Winds gusting as high as 40 mph, mainly on the\nhigher exposed ridges.\n\n* WHERE...Upper Slopes of the Eastern Washington Cascades Crest.\n\n* WHEN...Until 11 PM PDT Tuesday. There will be a lull in the snow\nthis morning before additional snow develops this afternoon.\nHowever, little daytime accumulation is expected today, except\nat the higher elevations.\n\n* IMPACTS...Travel could be very difficult to impossible.",
+        "instruction": "Slow down and use caution while traveling.\n\nThe latest road conditions can be obtained for Oregon by calling\n5 1 1 or by visiting online at https://tripcheck.com, or for\nWashington by visiting online at https://wsdot.com/travel.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWPDT"],
+          "WMOidentifier": ["WWUS46 KPDT 111130"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 11 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KPDT.WW.Y.0019.000000T0000Z-240313T0600Z/"],
+          "eventEndingTime": ["2024-03-13T06:00:00+00:00"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.b201c1197c1d346fb1e941707e884c22b38e5ab7.001.1,2024-03-10T13:08:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.f8ec459990f34734ec707e692a50d819325be49a.001.1,2024-03-10T07:37:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c0e91a5ec4050ea3102c04d92fba0330b674098e.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c0e91a5ec4050ea3102c04d92fba0330b674098e.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.c0e91a5ec4050ea3102c04d92fba0330b674098e.001.1",
+        "areaDesc": "Mason, WA",
+        "geocode": { "SAME": ["053045"], "UGC": ["WAC045"] },
+        "affectedZones": ["https://api.weather.gov/zones/county/WAC045"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.92873eb172f266ad6f13bfbaa2aceaa8acceb71f.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.92873eb172f266ad6f13bfbaa2aceaa8acceb71f.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -66114 seconds"
+          }
+        ],
+        "sent": "date:now -22914 seconds",
+        "effective": "date:now -22914 seconds",
+        "onset": "date:now -22914 seconds",
+        "expires": "date:now +20945 seconds",
+        "ends": "date:now +109145 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Flood Watch",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Flood Watch issued March 11 at 4:19AM PDT until March 12 at 5:00PM PDT by NWS Seattle WA",
+        "description": "A strong front will bring heavy rainfall to lower elevations of the\nOlympics this afternoon into early Tuesday morning increasing the\npotential for flooding on the Skokomish River in Mason County.\n\n* WHAT...Flooding caused by excessive rainfall continues to be\npossible.\n\n* WHERE...A portion of northwest Washington, including the following\ncounty, Mason.\n\n* WHEN...Through Tuesday afternoon.\n\n* IMPACTS...Excessive runoff may result in flooding of rivers,\ncreeks, streams, and other low-lying and flood-prone locations.\n\n* ADDITIONAL DETAILS...\n- Heavy rain over the south slopes of the Olympics this\nafternoon through early Tuesday morning could push the\nSkokomish river above flood stage as early as tonight.\n- http://www.weather.gov/safety/flood",
+        "instruction": "You should monitor later forecasts and be alert for possible Flood\nWarnings. Those living in areas prone to flooding should be prepared\nto take action should flooding develop.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": ["FFASEW"],
+          "WMOidentifier": ["WGUS66 KSEW 111119"],
+          "NWSheadline": [
+            "FLOOD WATCH REMAINS IN EFFECT THROUGH TUESDAY AFTERNOON"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "EAS-ORG": ["WXR"],
+          "VTEC": ["/O.CON.KSEW.FA.A.0006.000000T0000Z-240313T0000Z/"],
+          "eventEndingTime": ["2024-03-13T00:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.004.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.004.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.004.1",
+        "areaDesc": "Olympics",
+        "geocode": {
+          "SAME": ["053009", "053027", "053031", "053045"],
+          "UGC": ["WAZ513"]
+        },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/WAZ513"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.003.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.003.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -68634 seconds"
+          }
+        ],
+        "sent": "date:now -23574 seconds",
+        "effective": "date:now -23574 seconds",
+        "onset": "date:now -20454 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +109145 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Winter Weather Advisory issued March 11 at 4:08AM PDT until March 12 at 5:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...Snow expected above 3000 feet. Total snow accumulations\nof 8 to 12 inches. Winds gusting as high as 50 mph.\n\n* WHERE...Olympic mountains including Hurricane Ridge.\n\n* WHEN...Until 5 PM PDT Tuesday.\n\n* IMPACTS...Travel could be very difficult. Gusty winds could\nbring down tree branches.",
+        "instruction": "Slow down and use caution while traveling.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWSEW"],
+          "WMOidentifier": ["WWUS46 KSEW 111108"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 5 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KSEW.WW.Y.0012.240311T1200Z-240313T0000Z/"],
+          "eventEndingTime": ["2024-03-13T00:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.001.1",
+        "areaDesc": "West Slopes North Cascades and Passes",
+        "geocode": { "SAME": ["053057", "053073"], "UGC": ["WAZ567"] },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/WAZ567"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -68634 seconds"
+          }
+        ],
+        "sent": "date:now -23574 seconds",
+        "effective": "date:now -23574 seconds",
+        "onset": "date:now -23574 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Storm Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Winter Storm Warning issued March 11 at 4:08AM PDT until March 12 at 11:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...Heavy snow above 3000 feet. Additional snow accumulations\nof 15 to 30 inches. Winds gusting as high as 40 mph.\n\n* WHERE...Cascade mountains of Whatcom and Skagit Counties,\nincluding the Mount Baker Ski Area.\n\n* WHEN...Until 11 PM PDT Tuesday.\n\n* IMPACTS...Travel could be very difficult.",
+        "instruction": "If you must travel, keep an extra flashlight, food, and water in\nyour vehicle in case of an emergency.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": ["WSWSEW"],
+          "WMOidentifier": ["WWUS46 KSEW 111108"],
+          "NWSheadline": [
+            "WINTER STORM WARNING REMAINS IN EFFECT UNTIL 11 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "EAS-ORG": ["WXR"],
+          "VTEC": ["/O.CON.KSEW.WS.W.0008.000000T0000Z-240313T0600Z/"],
+          "eventEndingTime": ["2024-03-13T06:00:00+00:00"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.b949012818b3c3c2abc735dbc2640d711efc388b.001.2,2024-03-10T04:02:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.003.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.003.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.003.1",
+        "areaDesc": "West Slopes North Central Cascades and Passes",
+        "geocode": { "SAME": ["053033", "053061"], "UGC": ["WAZ568"] },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/WAZ568"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.002.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.002.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -68634 seconds"
+          }
+        ],
+        "sent": "date:now -23574 seconds",
+        "effective": "date:now -23574 seconds",
+        "onset": "date:now -20454 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Winter Weather Advisory issued March 11 at 4:08AM PDT until March 12 at 11:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...Snow expected above 3000 feet. Total snow accumulations\nof 5 to 15 inches.\n\n* WHERE...Cascade mountains of Snohomish and King Counties,\nincluding Stevens Pass and Snoqualmie Pass.\n\n* WHEN...Until 11 PM PDT Tuesday.\n\n* IMPACTS...Plan on very difficult travel.",
+        "instruction": "Slow down and use caution while traveling.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWSEW"],
+          "WMOidentifier": ["WWUS46 KSEW 111108"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 11 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KSEW.WW.Y.0012.240311T1200Z-240313T0600Z/"],
+          "eventEndingTime": ["2024-03-13T06:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.002.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.002.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.002.1",
+        "areaDesc": "West Slopes South Central Cascades and Passes",
+        "geocode": { "SAME": ["053041", "053053"], "UGC": ["WAZ569"] },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/WAZ569"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.004.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.004.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -68634 seconds"
+          }
+        ],
+        "sent": "date:now -23574 seconds",
+        "effective": "date:now -23574 seconds",
+        "onset": "date:now -23574 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Winter Weather Advisory issued March 11 at 4:08AM PDT until March 12 at 11:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...Snow above 3000 feet. Additional snow accumulations of 12\nto 24 inches. Winds gusting as high as 40 mph.\n\n* WHERE...Cascade mountains of Pierce and Lewis Counties,\nincluding the Crystal Mountain Ski Area and Paradise on Mount\nRainier.\n\n* WHEN...Until 11 PM PDT Tuesday.\n\n* IMPACTS...Plan on very difficult travel.",
+        "instruction": "Slow down and use caution while traveling.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWSEW"],
+          "WMOidentifier": ["WWUS46 KSEW 111108"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 11 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KSEW.WW.Y.0012.000000T0000Z-240313T0600Z/"],
+          "eventEndingTime": ["2024-03-13T06:00:00+00:00"],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.b949012818b3c3c2abc735dbc2640d711efc388b.002.1,2024-03-10T04:02:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.001.1",
+        "areaDesc": "North Coast; Central Coast",
+        "geocode": {
+          "SAME": ["053009", "053031", "053027"],
+          "UGC": ["WAZ516", "WAZ517"]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ516",
+          "https://api.weather.gov/zones/forecast/WAZ517"
+        ],
+        "references": [],
+        "sent": "date:now -23934 seconds",
+        "effective": "date:now -23934 seconds",
+        "onset": "date:now +11945 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +44345 seconds",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Wind Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Wind Advisory issued March 11 at 4:02AM PDT until March 11 at 11:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...South winds 20 to 35 mph with gusts up to 45 mph\nexpected.\n\n* WHERE...North Coast and Central Coast.\n\n* WHEN...From 2 PM this afternoon to 11 PM PDT this evening.\n\n* IMPACTS...Gusty winds could blow around unsecured objects.\nTree limbs could be blown down and a few power outages may\nresult.",
+        "instruction": "Use extra caution when driving, especially if operating a high\nprofile vehicle. Secure outdoor objects.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["NPWSEW"],
+          "WMOidentifier": ["WWUS76 KSEW 111102"],
+          "NWSheadline": [
+            "WIND ADVISORY IN EFFECT FROM 2 PM THIS AFTERNOON TO 11 PM PDT THIS EVENING"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.NEW.KSEW.WI.Y.0010.240311T2100Z-240312T0600Z/"],
+          "eventEndingTime": ["2024-03-12T06:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.002.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.002.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.002.1",
+        "areaDesc": "San Juan County; Western Whatcom County; Western Skagit County; Admiralty Inlet Area",
+        "geocode": {
+          "SAME": ["053055", "053073", "053057", "053029", "053031"],
+          "UGC": ["WAZ001", "WAZ503", "WAZ506", "WAZ510"]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ001",
+          "https://api.weather.gov/zones/forecast/WAZ503",
+          "https://api.weather.gov/zones/forecast/WAZ506",
+          "https://api.weather.gov/zones/forecast/WAZ510"
+        ],
+        "references": [],
+        "sent": "date:now -23934 seconds",
+        "effective": "date:now -23934 seconds",
+        "onset": "date:now +26345 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +55145 seconds",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Wind Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Wind Advisory issued March 11 at 4:02AM PDT until March 12 at 2:00AM PDT by NWS Seattle WA",
+        "description": "* WHAT...Southeast winds 20 to 35 with gusts 45 to 50 mph\nexpected.\n\n* WHERE...San Juan County, Western Whatcom County, Western\nSkagit County and Admiralty Inlet Area.\n\n* WHEN...From 6 PM this evening to 2 AM PDT Tuesday.\n\n* IMPACTS...Gusty winds could blow around unsecured objects.\nTree limbs could be blown down and a few power outages may\nresult.",
+        "instruction": "Use extra caution when driving, especially if operating a high\nprofile vehicle. Secure outdoor objects.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["NPWSEW"],
+          "WMOidentifier": ["WWUS76 KSEW 111102"],
+          "NWSheadline": [
+            "WIND ADVISORY IN EFFECT FROM 6 PM THIS EVENING TO 2 AM PDT TUESDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.NEW.KSEW.WI.Y.0010.240312T0100Z-240312T0900Z/"],
+          "eventEndingTime": ["2024-03-12T09:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.5e739d6a36383e527303a3b1a2f2c438824c0b13.002.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.5e739d6a36383e527303a3b1a2f2c438824c0b13.002.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.5e739d6a36383e527303a3b1a2f2c438824c0b13.002.1",
+        "areaDesc": "Western Chelan County",
+        "geocode": { "SAME": ["053007"], "UGC": ["WAZ048"] },
+        "affectedZones": ["https://api.weather.gov/zones/forecast/WAZ048"],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.85f2f5558de067fa95f696fcd3e6fb092c4620ac.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.85f2f5558de067fa95f696fcd3e6fb092c4620ac.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -74094 seconds"
+          }
+        ],
+        "sent": "date:now -32334 seconds",
+        "effective": "date:now -32334 seconds",
+        "onset": "date:now +22745 seconds",
+        "expires": "date:now +22745 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Spokane WA",
+        "headline": "Winter Weather Advisory issued March 11 at 1:42AM PDT until March 12 at 11:00PM PDT by NWS Spokane WA",
+        "description": "* WHAT...Snow expected above 3000 ft. Total snow accumulation 5 to\n10 inches above 3000 ft with heavier accumulations of 12 to 18\ninches above 4000 ft.\n\n* WHERE...Stevens Pass and Holden Village.\n\n* WHEN...From 5 PM this afternoon to 11 PM PDT Tuesday.\n\n* IMPACTS...Travel could be difficult. The hazardous conditions\ncould impact the Tuesday morning commute.",
+        "instruction": "Slow down and use caution while traveling. For the latest travel\ninformation in Washington, go to https://wsdot.wa.gov/travel",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWOTX"],
+          "WMOidentifier": ["WWUS46 KOTX 110842"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT FROM 5 PM THIS AFTERNOON TO 11 PM PDT TUESDAY ABOVE 3000 FT"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.KOTX.WW.Y.0019.240312T0000Z-240313T0600Z/"],
+          "eventEndingTime": ["2024-03-13T06:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.f1fc8d9313d48ef6c13df00b804dbda2c17aae8f.001.2",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.f1fc8d9313d48ef6c13df00b804dbda2c17aae8f.001.2",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.f1fc8d9313d48ef6c13df00b804dbda2c17aae8f.001.2",
+        "areaDesc": "North Oregon Cascades; South Washington Cascades",
+        "geocode": { "UGC": ["ORZ126", "WAZ211"] },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/ORZ126",
+          "https://api.weather.gov/zones/forecast/WAZ211"
+        ],
+        "references": [],
+        "sent": "date:now -36294 seconds",
+        "effective": "date:now -36294 seconds",
+        "onset": "date:now +4745 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +112745 seconds",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Portland OR",
+        "headline": "Winter Weather Advisory issued March 11 at 12:36AM PDT until March 12 at 6:00PM PDT by NWS Portland OR",
+        "description": "* WHAT...Snow expected above 2500 feet. Total snow accumulations\nof 6 to 10 inches, but 12 to 18 inches above 3500 feet. Winds\ngusting up to 45 mph tonight into Tuesday.\n\n* WHERE...In Oregon, North Oregon Cascades. In Washington, South\nWashington Cascades.\n\n* WHEN...From noon today to 6 PM PDT Tuesday.\n\n* IMPACTS...Travel could difficult at times.\n\n* ADDITIONAL DETAILS...Snow levels will hold around 3000 to 3500\nfeet today into this evening, then lower to 2500 feet Monday\nnight.",
+        "instruction": "Slow down and use caution while traveling.\n\nFor the latest road conditions call 5 1 1, or visit\nfor Oregon: https://www.tripcheck.com\nand for Washington: https://wsdot.com/travel/real-time/map",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": ["WSWPQR"],
+          "WMOidentifier": ["WWUS46 KPQR 110736"],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY IN EFFECT FOR THIS AFTERNOON THROUGH TUESDAY AFTERNOON FOR AREAS ABOVE 2500 FEET"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.NEW.KPQR.WW.Y.0018.240311T1900Z-240313T0100Z/"],
+          "eventEndingTime": ["2024-03-13T01:00:00+00:00"]
+        }
+      }
+    }
+  ],
+  "title": "Current watches, warnings, and advisories for Washington",
+  "updated": "date:now -22134 seconds"
+}
