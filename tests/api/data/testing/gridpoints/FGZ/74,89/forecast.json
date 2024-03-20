@@ -29,16 +29,13 @@
     "generatedAt": "date:now -4 hours",
     "updateTime": "date:now -4 hours",
     "validTimes": "2024-01-08T16:00:00+00:00/P7DT9H",
-    "elevation": {
-      "unitCode": "wmoUnit:m",
-      "value": 259.08
-    },
+    "elevation": { "unitCode": "wmoUnit:m", "value": 259.08 },
     "periods": [
       {
         "number": 1,
         "name": "This Afternoon",
-        "startTime": "date:now +0 hour",
-        "endTime": "date:now +12 hour",
+        "startTime": "date:today 06:00:-7 +0 days",
+        "endTime": "date:today 18:00:-7 +0 days",
         "isDaytime": true,
         "temperature": 31,
         "temperatureUnit": "F",
@@ -51,10 +48,7 @@
           "unitCode": "wmoUnit:degC",
           "value": -3.3333333333333335
         },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 83
-        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 83 },
         "windSpeed": "10 mph",
         "windDirection": "E",
         "icon": "/icons/land/day/ovc?size=medium",
@@ -64,8 +58,8 @@
       {
         "number": 2,
         "name": "Tonight",
-        "startTime": "date:now +12 hour",
-        "endTime": "date:now +24 hour",
+        "startTime": "date:today 18:00:-7 +0 days",
+        "endTime": "date:today 06:00:-7 +1 days",
         "isDaytime": false,
         "temperature": 27,
         "temperatureUnit": "F",
@@ -78,10 +72,7 @@
           "unitCode": "wmoUnit:degC",
           "value": -2.7777777777777777
         },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 96
-        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 96 },
         "windSpeed": "5 to 10 mph",
         "windDirection": "ENE",
         "icon": "/icons/land/night/snow,70/snow,80?size=medium",
@@ -91,8 +82,8 @@
       {
         "number": 3,
         "name": "Tuesday",
-        "startTime": "date:now +24 hour",
-        "endTime": "date:now +36 hour",
+        "startTime": "date:today 06:00:-7 +1 days",
+        "endTime": "date:today 18:00:-7 +1 days",
         "isDaytime": true,
         "temperature": 30,
         "temperatureUnit": "F",
@@ -105,10 +96,7 @@
           "unitCode": "wmoUnit:degC",
           "value": -2.7777777777777777
         },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 100
-        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 100 },
         "windSpeed": "10 to 15 mph",
         "windDirection": "N",
         "icon": "/icons/land/day/snow,40/ovc?size=medium",
@@ -118,8 +106,8 @@
       {
         "number": 4,
         "name": "Tuesday Night",
-        "startTime": "date:now +36 hour",
-        "endTime": "date:now +48 hour",
+        "startTime": "date:today 18:00:-7 +1 days",
+        "endTime": "date:today 06:00:-7 +2 days",
         "isDaytime": false,
         "temperature": 20,
         "temperatureUnit": "F",
@@ -128,14 +116,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": -5
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 85
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -5 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 85 },
         "windSpeed": "5 to 15 mph",
         "windDirection": "NW",
         "icon": "/icons/land/night/bkn?size=medium",
@@ -145,8 +127,8 @@
       {
         "number": 5,
         "name": "Wednesday",
-        "startTime": "date:now +48 hour",
-        "endTime": "date:now +60 hour",
+        "startTime": "date:today 06:00:-7 +2 days",
+        "endTime": "date:today 18:00:-7 +2 days",
         "isDaytime": true,
         "temperature": 27,
         "temperatureUnit": "F",
@@ -155,14 +137,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 50
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": -6.111111111111111
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 84
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -6.111111111111111 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 84 },
         "windSpeed": "5 mph",
         "windDirection": "SW",
         "icon": "/icons/land/day/ovc/snow,50?size=medium",
@@ -172,8 +148,8 @@
       {
         "number": 6,
         "name": "Wednesday Night",
-        "startTime": "date:now +60 hour",
-        "endTime": "date:now +72 hour",
+        "startTime": "date:today 18:00:-7 +2 days",
+        "endTime": "date:today 06:00:-7 +3 days",
         "isDaytime": false,
         "temperature": 17,
         "temperatureUnit": "F",
@@ -182,14 +158,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 60
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": -5.555555555555555
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 92
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -5.555555555555555 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 92 },
         "windSpeed": "5 mph",
         "windDirection": "SW",
         "icon": "/icons/land/night/snow,60/bkn?size=medium",
@@ -199,8 +169,8 @@
       {
         "number": 7,
         "name": "Thursday",
-        "startTime": "date:now +72 hour",
-        "endTime": "date:now +84 hour",
+        "startTime": "date:today 06:00:-7 +3 days",
+        "endTime": "date:today 18:00:-7 +3 days",
         "isDaytime": true,
         "temperature": 21,
         "temperatureUnit": "F",
@@ -209,14 +179,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": -8.333333333333334
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 88
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -8.333333333333334 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 88 },
         "windSpeed": "10 to 15 mph",
         "windDirection": "WNW",
         "icon": "/icons/land/day/bkn?size=medium",
@@ -226,8 +190,8 @@
       {
         "number": 8,
         "name": "Thursday Night",
-        "startTime": "date:now +84 hour",
-        "endTime": "date:now +96 hour",
+        "startTime": "date:today 18:00:-7 +3 days",
+        "endTime": "date:today 06:00:-7 +4 days",
         "isDaytime": false,
         "temperature": 11,
         "temperatureUnit": "F",
@@ -240,10 +204,7 @@
           "unitCode": "wmoUnit:degC",
           "value": -12.222222222222221
         },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 87
-        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 87 },
         "windSpeed": "10 mph",
         "windDirection": "NNW",
         "icon": "/icons/land/night/bkn?size=medium",
@@ -253,8 +214,8 @@
       {
         "number": 9,
         "name": "Friday",
-        "startTime": "date:now +96 hour",
-        "endTime": "date:now +108 hour",
+        "startTime": "date:today 06:00:-7 +4 days",
+        "endTime": "date:today 18:00:-7 +4 days",
         "isDaytime": true,
         "temperature": 22,
         "temperatureUnit": "F",
@@ -263,14 +224,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 30
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": -9.444444444444445
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 88
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -9.444444444444445 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 88 },
         "windSpeed": "10 to 15 mph",
         "windDirection": "N",
         "icon": "/icons/land/day/snow,20/snow,30?size=medium",
@@ -280,8 +235,8 @@
       {
         "number": 10,
         "name": "Friday Night",
-        "startTime": "date:now +108 hour",
-        "endTime": "date:now +120 hour",
+        "startTime": "date:today 18:00:-7 +4 days",
+        "endTime": "date:today 06:00:-7 +5 days",
         "isDaytime": false,
         "temperature": 7,
         "temperatureUnit": "F",
@@ -290,14 +245,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 40
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": -9.444444444444445
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 87
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -9.444444444444445 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 87 },
         "windSpeed": "20 mph",
         "windDirection": "NNW",
         "icon": "/icons/land/night/snow,40?size=medium",
@@ -307,8 +256,8 @@
       {
         "number": 11,
         "name": "Saturday",
-        "startTime": "date:now +120 hour",
-        "endTime": "date:now +132 hour",
+        "startTime": "date:today 06:00:-7 +5 days",
+        "endTime": "date:today 18:00:-7 +5 days",
         "isDaytime": true,
         "temperature": 12,
         "temperatureUnit": "F",
@@ -321,10 +270,7 @@
           "unitCode": "wmoUnit:degC",
           "value": -14.444444444444445
         },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 91
-        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 91 },
         "windSpeed": "20 mph",
         "windDirection": "NW",
         "icon": "/icons/land/day/snow,30/blizzard,30?size=medium",
@@ -334,8 +280,8 @@
       {
         "number": 12,
         "name": "Saturday Night",
-        "startTime": "date:now +132 hour",
-        "endTime": "date:now +144 hour",
+        "startTime": "date:today 18:00:-7 +5 days",
+        "endTime": "date:today 06:00:-7 +6 days",
         "isDaytime": false,
         "temperature": -4,
         "temperatureUnit": "F",
@@ -344,14 +290,8 @@
           "unitCode": "wmoUnit:percent",
           "value": 20
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": -16.11111111111111
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 91
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -16.11111111111111 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 91 },
         "windSpeed": "15 to 20 mph",
         "windDirection": "NW",
         "icon": "/icons/land/night/snow,20/cold?size=medium",
@@ -361,8 +301,8 @@
       {
         "number": 13,
         "name": "Sunday",
-        "startTime": "date:now +144 hour",
-        "endTime": "date:now +156 hour",
+        "startTime": "date:today 06:00:-7 +6 days",
+        "endTime": "date:today 18:00:-7 +6 days",
         "isDaytime": true,
         "temperature": 6,
         "temperatureUnit": "F",
@@ -375,10 +315,7 @@
           "unitCode": "wmoUnit:degC",
           "value": -19.444444444444443
         },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 91
-        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 91 },
         "windSpeed": "15 mph",
         "windDirection": "WNW",
         "icon": "/icons/land/day/bkn?size=medium",
@@ -388,8 +325,8 @@
       {
         "number": 14,
         "name": "Sunday Night",
-        "startTime": "date:now +156 hour",
-        "endTime": "date:now +168 hour",
+        "startTime": "date:today 18:00:-7 +6 days",
+        "endTime": "date:today 06:00:-7 +7 days",
         "isDaytime": false,
         "temperature": -6,
         "temperatureUnit": "F",
@@ -398,14 +335,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": -20
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 91
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -20 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 91 },
         "windSpeed": "15 mph",
         "windDirection": "WNW",
         "icon": "/icons/land/night/cold?size=medium",
@@ -415,8 +346,8 @@
       {
         "number": 15,
         "name": "Monday",
-        "startTime": "date:now +168 hour",
-        "endTime": "date:now +180 hour",
+        "startTime": "date:today 06:00:-7 +7 days",
+        "endTime": "date:today 18:00:-7 +7 days",
         "isDaytime": true,
         "temperature": 32,
         "temperatureUnit": "F",
@@ -425,14 +356,8 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": {
-          "unitCode": "wmoUnit:degC",
-          "value": -20
-        },
-        "relativeHumidity": {
-          "unitCode": "wmoUnit:percent",
-          "value": 91
-        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -20 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 91 },
         "windSpeed": "15 mph",
         "windDirection": "WNW",
         "icon": "/icons/land/night/cold?size=medium",
