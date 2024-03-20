@@ -1,0 +1,96 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\weather_blocks\Plugin\Block\LocalAlertsBlock;
+
+/**
+ * Tests for different ways of filtering alerts - forecast zone, fire zone,
+ * county zone ,SAME county code, and geometry.
+ */
+final class AlertFilterTest extends EndToEndBase
+{
+    /**
+     * Create the block under test.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(LocalAlertsBlock::class);
+    }
+
+    /**
+     * Test that we match forecast zone.
+     * @group e2e
+     */
+    public function testForecastZone(): void
+    {
+        $this->onLocationRoute(34.749, -92.675);
+
+        $data = $this->block->build();
+
+        $this->assertEquals("Flood Watch", $data["alerts"][0]->event);
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+
+    /**
+     * Test that we match fire zone.
+     * @group e2e
+     */
+    public function testFireZone(): void
+    {
+        $this->onLocationRoute(34.749, -92.676);
+
+        $data = $this->block->build();
+
+        $this->assertEquals("Winter Storm Watch", $data["alerts"][0]->event);
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+
+    /**
+     * Test that we match county zone.
+     * @group e2e
+     */
+    public function testCountyZone(): void
+    {
+        $this->onLocationRoute(34.749, -92.677);
+
+        $data = $this->block->build();
+
+        $this->assertEquals(
+            "Winter Weather Advisory",
+            $data["alerts"][0]->event,
+        );
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+
+    /**
+     * Test that we match county SAME code.
+     * @group e2e
+     */
+    public function testCountySAMECode(): void
+    {
+        $this->onLocationRoute(35.749, -92.677);
+
+        $data = $this->block->build();
+
+        $this->assertEquals("Blizzard Warning", $data["alerts"][0]->event);
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+
+    /**
+     * Test that we match geometry.
+     * @group e2e
+     */
+    public function testGeometry(): void
+    {
+        $this->onLocationRoute(34.749, -92.678);
+
+        $data = $this->block->build();
+
+        $this->assertEquals(
+            "Severe Thunderstorm Warning",
+            $data["alerts"][0]->event,
+        );
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+}

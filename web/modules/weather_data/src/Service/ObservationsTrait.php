@@ -55,7 +55,7 @@ trait ObservationsTrait
                     $closest = $sourcePoint;
                 }
             }
-            $sourcePointText = SpatialUtility::pointArrayToWKT($closest[0]);
+            $sourcePointText = SpatialUtility::pointObjectToWKT($closest);
         }
 
         $sourceGeomText = SpatialUtility::geometryObjectToWKT($wfoGeometry);

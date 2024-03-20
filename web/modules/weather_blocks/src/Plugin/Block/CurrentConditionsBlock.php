@@ -48,7 +48,7 @@ class CurrentConditionsBlock extends WeatherBlockBase
                 );
 
                 if (!$data) {
-                    throw new Exception("Invalid current observations");
+                    throw new \Exception("Invalid current observations");
                 }
 
                 // We generally expect our internal places to be objects with city

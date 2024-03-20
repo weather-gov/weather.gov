@@ -47,7 +47,7 @@ const ui = async ({ error = false } = {}) => {
         }
         const link = `${hostName}/point/${path.basename(p, ".json").split(",").join("/")}`;
 
-        return { name, attributes, grid, link };
+        return { name, attributes, grid, point: p.replace(".json", ""), link };
       }),
     );
 
@@ -55,9 +55,9 @@ const ui = async ({ error = false } = {}) => {
     if (targets.length) {
       lines.push("<br><br>Points in the bundle:");
       lines.push("<ul>");
-      targets.forEach(({ name, attributes, grid, link }) => {
+      targets.forEach(({ name, attributes, grid, point, link }) => {
         lines.push(
-          `<li><a href="${link}">${name}</a> (${grid.wfo} / ${grid.x}, ${grid.y})`,
+          `<li><a href="${link}">${name}</a> (${point} | ${grid.wfo} / ${grid.x}, ${grid.y})`,
         );
 
         if (Array.isArray(attributes) && attributes.length > 0) {
