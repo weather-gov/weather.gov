@@ -4,6 +4,9 @@ import path from "node:path";
 import { format } from "prettier";
 
 const getRelativeTimestamp = (str) => {
+  if (!str) {
+    return str;
+  }
   const now = dayjs();
 
   // Timestamps can be in ISO8601 duration format which Dayjs can't parse, so
