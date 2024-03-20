@@ -38,7 +38,17 @@ describe("Hourly forecast table tests", () => {
 
     it("works when clicking an alert in the today tab's hourly table", () => {
       cy.visit("/point/34.749/-92.275#today");
-      cy.get(`hourly-table tr[data-row-name="alert"]:nth-child(2) .hourly-table__alert`).click();
+      cy.get(`#today hourly-table tr[data-row-name="alert"]:nth-child(2) .hourly-table__alert`).click();
+
+      cy.get("#alerts").should("be.visible");
+      cy.get("#alerts button").contains("Red Flag Warning").invoke("attr", "aria-expanded").should("equal", "true");
+      cy.get("#a4").should("be.visible");
+    });
+
+    it("works when clicking an alert in one of the daily tab's hourly tables", () => {
+      cy.visit("/point/34.749/-92.275#daily");
+      cy.get("#daily ol li:first-child wx-hourly-toggle").click();
+      cy.get(`#daily ol li:first-child hourly-table tr[data-row-name="alert"]:nth-child(2) .hourly-table__alert`).click();
 
       cy.get("#alerts").should("be.visible");
       cy.get("#alerts button").contains("Red Flag Warning").invoke("attr", "aria-expanded").should("equal", "true");
