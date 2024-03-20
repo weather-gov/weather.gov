@@ -2,8 +2,8 @@
 
 namespace Drupal\weather_data\Service\Test;
 
-use PHPUnit\Framework\TestCase;
 use Drupal\weather_data\Service\WeatherAlertParser;
+use PHPUnit\Framework\TestCase;
 
 final class WeatherAlertParserTest extends TestCase
 {
