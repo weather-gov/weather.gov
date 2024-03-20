@@ -30,4 +30,19 @@ describe("Hourly forecast table tests", () => {
         .should("equal", "5");
     });
   });
+
+  describe("Alert span clicking behavior", () => {
+    beforeEach(() => {
+      cy.request("http://localhost:8081/play/testing");
+    });
+
+    it("works when clicking an alert in the today tab's hourly table", () => {
+      cy.visit("/point/34.749/-92.275#today");
+      cy.get(`hourly-table tr[data-row-name="alert"]:nth-child(2) .hourly-table__alert`).click();
+
+      cy.get("#alerts").should("be.visible");
+      cy.get("#alerts button").contains("Red Flag Alert").invoke("attr", "aria-expanded").should("equal", "true");
+      cy.get("#a4").should("be.visible");
+    });
+  });
 });
