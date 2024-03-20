@@ -34,8 +34,6 @@ trait AlertTrait
         if (!($now instanceof \DateTimeImmutable)) {
             $now = new \DateTimeImmutable();
         }
-        $tomorrow = $now->modify("+1 day")->setTime(0, 0, 0);
-        $later = $tomorrow->modify("+1 day")->setTime(0, 0, 0);
 
         $wfo = $grid->wfo;
         $x = $grid->x;
@@ -119,12 +117,7 @@ trait AlertTrait
             return false;
         });
 
-        $alerts = array_map(function ($alert) use (
-            $timezone,
-            $now,
-            $tomorrow,
-            $later,
-        ) {
+        $alerts = array_map(function ($alert) use ($timezone, $now) {
             $output = clone $alert->properties;
 
             if ($alert->geometry ?? false) {
@@ -168,59 +161,9 @@ trait AlertTrait
 
             $output->timezone = $timezone;
 
-            if ($output->onset <= $now) {
-                // The event has already begun. Now we need to see if we know
-                // when it ends.
-                $ends = $this->getEndTimeForAlert($output);
-                if ($ends) {
-                    if ($ends >= $now) {
-                        // We are currently in the middle of the event.
-                        if ($ends < $tomorrow) {
-                            // It ends today
-                            $output->durationText =
-                                "until " . $ends->format("g:i A") . " today";
-                        } else {
-                            $output->durationText =
-                                "until " . $ends->format("l m/d g:i A T");
-                        }
-                    } else {
-                        // The event has already concluded. We shouldn't be
-                        // showing this alert at all.
-                        $output->durationText = "has concluded";
-                    }
-                } else {
-                    // This alert has no ending or expiration time. This is a
-                    // weird scenario, but we should handle it just in case.
-                    $output->durationText = "is in effect";
-                }
-            } elseif ($output->onset > $now) {
-                // The event is in the future.
-                $onsetHour = $output->onset->format("H");
-
-                if ($output->onset < $tomorrow) {
-                    // The event starts later today.
-                    if ($onsetHour < 12) {
-                        $output->durationText = "this morning";
-                    } elseif ($onsetHour < 18) {
-                        $output->durationText = "this afternoon";
-                    } else {
-                        $output->durationText = "tonight";
-                    }
-                } elseif ($output->onset < $later) {
-                    // The event starts tomorrow
-                    if ($onsetHour < 12) {
-                        $output->durationText = "tomorrow morning";
-                    } elseif ($onsetHour < 18) {
-                        $output->durationText = "tomorrow afternoon";
-                    } else {
-                        $output->durationText = "tomorrow night";
-                    }
-                } else {
-                    $output->durationText = $output->onset->format("l");
-                    // The event starts in the further future
-                }
-            }
-            $output->durationText = $this->t->translate($output->durationText);
+            $output->durationText = $this->t->translate(
+                AlertUtility::getDurationText($output, $now),
+            );
 
             return $output;
         }, $alerts);
@@ -281,7 +224,7 @@ trait AlertTrait
             &$firstPeriodStartTime,
         ) {
             $onsetDateTime = DateTimeUtility::stringToDate($alert->onsetRaw);
-            $endsDateTime = $this->getEndTimeForAlert($alert);
+            $endsDateTime = AlertUtility::getEndTime($alert);
             return $onsetDateTime < $lastPeriodEndTime &&
                 $endsDateTime > $firstPeriodStartTime;
         });
@@ -294,7 +237,7 @@ trait AlertTrait
 
         foreach ($relevantAlerts as $currentAlert) {
             $onsetTime = DateTimeUtility::stringToDate($currentAlert->onsetRaw);
-            $endTime = $this->getEndTimeForAlert($currentAlert);
+            $endTime = AlertUtility::getEndTime($currentAlert);
             if (!$endTime) {
                 continue; // pass to the next alert, ignoring this one
             }
@@ -463,30 +406,5 @@ trait AlertTrait
         }
 
         return false;
-    }
-
-    /**
-     * Given an alert object, compute the endTime.
-     *
-     * Note that we select the `ends` field first.
-     * If null, we try the `expires` field.
-     * If both are null, return false.
-     */
-    private function getEndTimeForAlert($alert)
-    {
-        // We need to determine the correct ends field.
-        // If there is no value for the ends, then we use
-        // expires. If there is in that case no value for expires,
-        // then we do nothing and continue to the next alert,
-        // ignoring this one.
-        $field = $alert->endsRaw;
-        if (!$field) {
-            $field = $alert->expiresRaw;
-        }
-        if (!$field) {
-            return false;
-        }
-
-        return DateTimeUtility::stringToDate($field, $alert->timezone);
     }
 }
