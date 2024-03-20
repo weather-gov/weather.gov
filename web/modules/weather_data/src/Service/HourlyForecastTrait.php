@@ -273,7 +273,7 @@ trait HourlyForecastTrait
                 $periods[] = (object) [
                     "start" => $start->format("g A"),
                     "end" => $end->format("g A"),
-                    "value" => round($value, 1),
+                    "value" => round($value, 2),
                 ];
             }
         }

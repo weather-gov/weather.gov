@@ -92,11 +92,11 @@ final class GetHourlyPrecipitationTest extends Base
         );
 
         $expected = [
-            (object) ["start" => "11 AM", "end" => "5 PM", "value" => 1.5],
-            (object) ["start" => "5 PM", "end" => "8 PM", "value" => 36.7],
+            (object) ["start" => "11 AM", "end" => "5 PM", "value" => 1.46],
+            (object) ["start" => "5 PM", "end" => "8 PM", "value" => 36.69],
             (object) ["start" => "8 PM", "end" => "12 AM", "value" => 0],
-            (object) ["start" => "12 AM", "end" => "6 AM", "value" => 0.8],
-            (object) ["start" => "6 AM", "end" => "12 PM", "value" => 0],
+            (object) ["start" => "12 AM", "end" => "6 AM", "value" => 0.76],
+            (object) ["start" => "6 AM", "end" => "12 PM", "value" => 0.01],
         ];
 
         $actual = $this->weatherDataService->getHourlyPrecipitation(
