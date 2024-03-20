@@ -221,7 +221,7 @@ trait AlertTrait
                 }
             }
             $output->durationText = $this->t->translate($output->durationText);
-            
+
             return $output;
         }, $alerts);
 
@@ -230,8 +230,8 @@ trait AlertTrait
         // The API's alert ids are just too long for use
         // in the DOM. Let's loop through and simply
         // assign an index value
-        for($i = 0; $i < count($alerts); $i++){
-          $alerts[$i]->alertId = $i + 1;
+        for ($i = 0; $i < count($alerts); $i++) {
+            $alerts[$i]->alertId = $i + 1;
         }
 
         // For some reason, Twig is unreliable in how it formats the dates.

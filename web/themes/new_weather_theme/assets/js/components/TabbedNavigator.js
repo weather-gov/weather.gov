@@ -118,7 +118,7 @@ class TabbedNavigator extends HTMLElement {
   handleAlertAnchorClick(event) {
     const hash = new URL(event.currentTarget.href).hash;
     const accordionEl = this.querySelector(`${hash}.usa-accordion`);
-    debugger;
+
     if (accordionEl) {
       // If we get here, then the element referred
       // to by the href is a child of this tabbed
