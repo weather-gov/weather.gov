@@ -32,6 +32,14 @@ class TabbedNavigator extends HTMLElement {
       },
     );
 
+    // Intercept click events on Alert spans in
+    // any hourly detail tables
+    Array.from(this.querySelectorAll("a.hourly-table__alert")).forEach(
+      (alertSpan) => {
+        alertSpan.addEventListener("click", this.handleAlertAnchorClick);
+      }
+    );
+
     // Add needed event listeners
     Array.from(this.querySelectorAll("button.tab-button")).forEach((button) => {
       button.addEventListener("click", this.handleTabButtonClick);
@@ -108,8 +116,9 @@ class TabbedNavigator extends HTMLElement {
   }
 
   handleAlertAnchorClick(event) {
-    const hash = new URL(event.target.href).hash;
+    const hash = new URL(event.currentTarget.href).hash;
     const accordionEl = this.querySelector(`${hash}.usa-accordion`);
+    debugger;
     if (accordionEl) {
       // If we get here, then the element referred
       // to by the href is a child of this tabbed
