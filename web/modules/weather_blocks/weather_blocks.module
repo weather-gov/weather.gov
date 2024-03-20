@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\weather_data\Service\SpatialUtility;
+
 // This hook lets us alter the variables at the page level. These variables are
 // available globally to all templates.
 function weather_blocks_template_preprocess_default_variables_alter(
@@ -29,7 +31,7 @@ function weather_blocks_template_preprocess_default_variables_alter(
 
             $alerts = $weatherData->getAlerts(
                 $grid,
-                [$lon, $lat],
+                SpatialUtility::pointArrayToObject([$lon, $lat]),
             );
             $weatherMetadata["alerts"] = count($alerts) > 0;
         } catch (Throwable $e) {
