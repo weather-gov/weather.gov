@@ -32,7 +32,7 @@
         </th>
         {% for period in hours %}
         <td>
-          {% if period.temperature %}
+          {% if period.temperature is not same as (null) %}
           {{ period.temperature }}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
           {% else %}
           <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
@@ -75,7 +75,7 @@
         {% for period in hours %}
         <td style="">
           <div class="display-flex flex-row flex-align-center">
-            {% if period.windSpeed %}
+            {% if period.windSpeed is not same as (null) %}
             <span>{{period.windSpeed}} {{ "mph" | t }}</span>
             {#
             The +180 here is to account for the fact that wind direction
@@ -98,7 +98,7 @@
         </th>
         {% for period in hours %}
         <td>
-          {% if period.relativeHumidity %}
+          {% if period.relativeHumidity is not same as (null) %}
           {{period.relativeHumidity}}%
           {% else %}
           <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
@@ -112,7 +112,7 @@
         </th>
         {% for period in hours %}
         <td>
-          {% if period.dewpoint %}
+          {% if period.dewpoint is not same as (null) %}
           {{period.dewpoint}}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
           {% else %}
           <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
