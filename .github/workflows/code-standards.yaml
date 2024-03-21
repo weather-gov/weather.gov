@@ -239,7 +239,7 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         run: |
           curl http://localhost:8081/play/e2e
-          make uc
+          make unit-test
 
       - name: store coverage output
         if: needs.should-test.outputs.yes == 'true'
