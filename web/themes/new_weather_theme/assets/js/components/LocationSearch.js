@@ -7,13 +7,14 @@ class LocationSearch extends HTMLElement {
     // in particular when users are typing
     // quickly in the search box.
     this._timeout = null;
-    this.INPUT_WAIT_MS = 100;
+    this.INPUT_WAIT_MS = 300;
 
     // Bind component methods
     this.handleInput = this.handleInput.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSearchChanged = this.handleSearchChanged.bind(this);
     this.goToLocationPage = this.goToLocationPage.bind(this);
+    this.updateLiveDescriptionArea = this.updateLiveDescriptionArea.bind(this);
   }
 
   connectedCallback(){
@@ -67,6 +68,8 @@ class LocationSearch extends HTMLElement {
         option.setAttribute("value", magicKey);
         selectElement.append(option);
       });
+
+      this.updateLiveDescriptionArea(suggestions.length);
     }
   }
 
@@ -125,6 +128,20 @@ class LocationSearch extends HTMLElement {
     }
 
     form.submit();
+  }
+
+  updateLiveDescriptionArea(){
+    if(!this.liveDescriptionArea){
+      this.liveDescriptionArea = document.createElement("div");
+      this.liveDescriptionArea.classList.add("usa-sr-only");
+      this.liveDescriptionArea.setAttribute("aria-live", "polite");
+      this.append(this.liveDescriptionArea);
+    }
+    window.setTimeout(() => {
+      const numberOfResults = Array.from(this.querySelectorAll("ul li")).length;
+      this.liveDescriptionArea.innerHTML = `<span>Search updated: ${numberOfResults} results</span>`;
+      console.log(`Updated with ${numberOfResults} results`);
+    }, 1000);
   }
 }
 
