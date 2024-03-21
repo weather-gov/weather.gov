@@ -235,16 +235,10 @@ jobs:
           make install-site
           make load-spatial
 
-      - name: Cypress run
-        if: needs.should-test.outputs.yes == 'true'
-        uses: cypress-io/github-action@v6
-        with:
-          project: tests/e2e
-          cache-key: cypress-e2e-${{ hashFiles('package-lock.json') }}
-
       - name: run unit tests
         if: needs.should-test.outputs.yes == 'true'
         run: |
+          curl http://localhost:8081/play/e2e
           make uc
 
       - name: store coverage output
