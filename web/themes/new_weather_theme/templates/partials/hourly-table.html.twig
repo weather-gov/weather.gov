@@ -32,7 +32,11 @@
         </th>
         {% for period in hours %}
         <td>
+          {% if period.temperature %}
           {{ period.temperature }}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
+          {% else %}
+          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+          {% endif %}
         </td>
         {% endfor %}
       </tr>
@@ -50,7 +54,11 @@
               </svg>
             </div>
             <div>
+              {% if period.conditions | length %}
               <p class="margin-y-0">{{period.conditions}}</p>
+              {% else %}
+              <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+              {% endif %}
               {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
               <p class="text-base text-ls-neg-3 font-family-mono font-mono-xs margin-top-05 margin-bottom-0"> {{period.probabilityOfPrecipitation}}% {{ "chance" | t }}<span class="usa-sr-only"> {{ "of precipitation" | t }}</span></p>
               {% endif%}
@@ -67,6 +75,7 @@
         {% for period in hours %}
         <td style="">
           <div class="display-flex flex-row flex-align-center">
+            {% if period.windSpeed %}
             <span>{{period.windSpeed}} {{ "mph" | t }}</span>
             {#
             The +180 here is to account for the fact that wind direction
@@ -76,6 +85,9 @@
             <svg role="img" aria-hidden="true" data-wind-direction class="width-2 height-2 margin-left-05 padding-2px" style="transform: rotate({{ period.windDirection.angle + 180 }}deg);">
               <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#wind_arrow_s" }}"></use>
             </svg>
+          {% else %}
+          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+          {% endif %}
           </div>
         </td>
         {% endfor %}
@@ -86,7 +98,11 @@
         </th>
         {% for period in hours %}
         <td>
+          {% if period.relativeHumidity %}
           {{period.relativeHumidity}}%
+          {% else %}
+          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+          {% endif %}
         </td>
         {% endfor %}
       </tr>
