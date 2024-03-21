@@ -256,6 +256,7 @@ jobs:
 
     steps:
       - name: get coverage output
+        id: download
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/download-artifact@v4
         with:
@@ -267,7 +268,7 @@ jobs:
         uses: johanvanhelden/gha-clover-test-coverage-check@v1
         with:
           percentage: 90
-          filename: coverage.xml
+          filename: ${{ steps.download.outputs.download-path }}/coverage.xml
           metric: statements
 
   end-to-end-tests:
