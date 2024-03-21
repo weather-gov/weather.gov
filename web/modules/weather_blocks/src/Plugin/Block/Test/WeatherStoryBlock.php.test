@@ -66,8 +66,9 @@ final class WeatherStoryBlockTest extends Base
 
     /**
      * Test that the block returns the expected data if we're on a grid route.
-     * @group blocks
-     * @group data
+     * @group unit
+     * @group block
+     * @group weather-story-block
      */
     public function testReturnsAWeatherStory(): void
     {
@@ -95,8 +96,9 @@ final class WeatherStoryBlockTest extends Base
 
     /**
      * Test that the block returns the expected data if there's no image.
-     * @group blocks
-     * @group data
+     * @group unit
+     * @group block
+     * @group weather-story-block
      */
     public function testReturnsAWeatherStoryWithNoImage(): void
     {
@@ -121,7 +123,9 @@ final class WeatherStoryBlockTest extends Base
 
     /**
      * Test that the block returns null if we're not on a grid route.
-     * @group blocks
+     * @group unit
+     * @group block
+     * @group weather-story-block
      */
     public function testBuildNotGridRoute(): void
     {

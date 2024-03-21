@@ -21,8 +21,9 @@ final class LocationSearchBlockTest extends Base
 
     /**
      * Test that the build method returns the expected results.
-     * @group blocks
-     * @group data
+     * @group unit
+     * @group block
+     * @group location-search
      */
     public function testBuild(): void
     {
@@ -41,7 +42,9 @@ final class LocationSearchBlockTest extends Base
 
     /**
      * Test that the build method returns NULL if there is no location.
-     * @group blocks
+     * @group unit
+     * @group block
+     * @group location-search
      */
     public function testWithNoLocation(): void
     {

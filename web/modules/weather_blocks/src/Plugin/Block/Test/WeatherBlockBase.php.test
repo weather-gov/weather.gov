@@ -25,7 +25,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Test that the create() static method gives us back a block object.
-     * @group blocks
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testCreation(): void
     {
@@ -57,7 +59,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Test that block cacheing is disabled.
-     * @group blocks
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testCache(): void
     {
@@ -69,7 +73,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Test that the block properly persists configuration changes.
-     * @group blocks
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testBlockSubmit(): void
     {
@@ -91,7 +97,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Test that the base block can get the relevant location from the URL.
-     * @group blocks
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testGetLocationFromRoute(): void
     {
@@ -136,7 +144,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Test that the base block gets location from configuration if not in URL.
-     * @group blocks
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testGetLocationFromConfiguration(): void
     {
@@ -165,7 +175,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Tests that the location is empty if not on a grid route and not configured.
-     * @group blocks
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testGetsNoLocationWhenConfiguredFalse(): void
     {
@@ -184,7 +196,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Tests that the location is empty if not on a grid route and empty config.
-     * @group blocks
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testGetsNoLocationWhenConfiguredEmpty(): void
     {

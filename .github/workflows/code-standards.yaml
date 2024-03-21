@@ -162,7 +162,6 @@ jobs:
     name: PHP unit tests
     runs-on: ubuntu-latest
     needs: [should-test]
-    if: false
 
     steps:
       - name: checkout
@@ -199,7 +198,7 @@ jobs:
       - name: run unit tests
         if: needs.should-test.outputs.yes == 'true'
         run: |
-          vendor/bin/phpunit --coverage-clover coverage.xml
+          vendor/bin/phpunit --group unit,e2e --coverage-clover coverage.xml
 
       - name: store coverage output
         if: needs.should-test.outputs.yes == 'true'
@@ -216,13 +215,13 @@ jobs:
 
     steps:
       - name: get coverage output
-        if: false
+        if: needs.should-test.outputs.yes == 'true'
         uses: actions/download-artifact@v4
         with:
           name: coverage-report
 
       - name: 90% code coverage
-        if: false
+        if: needs.should-test.outputs.yes == 'true'
         id: test-coverage
         uses: johanvanhelden/gha-clover-test-coverage-check@v1
         with:

@@ -298,7 +298,10 @@ class AlertUtility
 
     public static function getDurationText($alert, $now)
     {
-        $tomorrow = $now->modify("+1 day")->setTime(0, 0, 0);
+        $tomorrow = $now
+            ->setTimezone(new \DateTimeZone($alert->timezone))
+            ->modify("+1 day")
+            ->setTime(0, 0, 0);
         $later = $tomorrow->modify("+1 day")->setTime(0, 0, 0);
 
         if ($alert->onset <= $now) {
