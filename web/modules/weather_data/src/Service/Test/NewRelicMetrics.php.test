@@ -44,6 +44,7 @@ final class NewRelicMetricsTest extends TestCase
                                 "Api-Key" => null,
                             ],
                             "json" =>
+                                // phpcs:ignore Generic.Files.LineLength.TooLong
                                 '[{"metrics":[{"name":"metric name","type":"bloop","value":3235,"timestamp":17,"attributes":{"one":1,"two":2,"applicationName":"local"}}]}]',
                         ],
                         $promise,

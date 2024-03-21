@@ -104,7 +104,7 @@ load-time-test: ## Run page load time tests in Cypress (alias lt)
 
 u: unit-test
 unit-test: ## Run PHP unit tests
-	docker compose exec drupal phpunit --group unit,e2e --process-isolation --coverage-html /coverage
+	docker compose exec drupal phpunit --group unit,e2e --process-isolation --coverage-html /coverage  --coverage-clover /coverage/clover.xml
 
 ### Linting
 js-lint: ## Run eslint on our Javascript
