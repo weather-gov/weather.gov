@@ -68,9 +68,9 @@ trait DailyForecastTrait
         // and any relevant alerts so we can use them
         // in the hourly details table for each day
         $hourlyPeriods = $this->getHourlyForecastFromGrid($wfo, $x, $y);
-        $point = $this->stashedPoint;
+        $point = self::$stashedPoint;
         if (!$point) {
-            $point = $this->getGeometryFromGrid($wfo, $x, $y);
+            $point = $this->getGeometryFromGrid($wfo, $x, $y)[0];
         }
         $grid = $this->getGridFromLatLon($point->lat, $point->lon);
         $alerts = $this->getAlerts($grid, $point);

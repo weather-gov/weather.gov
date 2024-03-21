@@ -48,18 +48,17 @@ trait AlertTrait
         $alerts = $this->dataLayer->getAlertsForState($place->state);
 
         $forecastZone = $this->dataLayer->getPoint($lat, $lon);
+        $countyZone = $forecastZone->properties->county;
         $fireZone = $forecastZone->properties->fireWeatherZone;
         $forecastZone = $forecastZone->properties->forecastZone;
 
-        $geometry = array_map(function ($point) {
-            return $point->lon . " " . $point->lat;
-        }, $geometry);
-        $geometry = implode(",", $geometry);
+        $gridWKT = SpatialUtility::geometryObjectToWKT($geometry);
 
         $alerts = array_filter($alerts, function ($alert) use (
             $place,
-            $geometry,
+            $gridWKT,
             $forecastZone,
+            $countyZone,
             $fireZone,
         ) {
             if (AlertUtility::isMarineAlert($alert->properties->event)) {
@@ -69,18 +68,13 @@ trait AlertTrait
             // If there's a geometry for this alert, use that to determine
             // whether it's relevant for our location.
             if ($alert->geometry) {
-                $alertGeometry = array_map(function ($alertGeomPoint) {
-                    return $alertGeomPoint[0] . " " . $alertGeomPoint[1];
-                }, $alert->geometry->coordinates[0]);
-                $alertGeometry = implode(",", $alertGeometry);
+                $alertWKT = SpatialUtility::geometryArrayToWKT(
+                    $alert->geometry->coordinates[0],
+                );
 
                 $sql = "SELECT ST_INTERSECTS(
-                    ST_POLYGONFROMTEXT(
-                        'POLYGON(($geometry))'
-                    ),
-                    ST_POLYGONFROMTEXT(
-                        'POLYGON(($alertGeometry))'
-                    )
+                    $gridWKT,
+                    $alertWKT
                 ) as yes";
 
                 $intersects = $this->dataLayer->databaseFetch($sql)->yes;
@@ -96,16 +90,22 @@ trait AlertTrait
                     $alert->properties->affectedZones,
                 );
 
+                $inCountyZone = in_array(
+                    $countyZone,
+                    $alert->properties->affectedZones,
+                );
+
                 $inFireZone = in_array(
                     $fireZone,
                     $alert->properties->affectedZones,
                 );
 
-                return $inForecastZone || $inFireZone;
+                return $inForecastZone || $inCountyZone || $inFireZone;
             }
 
-            // If there are no zones, check if there are counties.
-            if (sizeof($alert->properties->geocode->SAME) > 0) {
+            // If there are no zones, check if there are counties. Note that the
+            // SAME property is not always present, so coalesce an empty list.
+            if (sizeof($alert->properties->geocode->SAME ?? []) > 0) {
                 return in_array(
                     // SAME codes are FIPS codes with a leading 0
                     "0$place->countyFIPS",
@@ -259,6 +259,10 @@ trait AlertTrait
      */
     public function alertsToHourlyPeriods($alerts, $periods)
     {
+        if (count($alerts) === 0 || count($periods) === 0) {
+            return [];
+        }
+
         // Pull out alerts that are relevant to the range
         // of the current periods
         $firstPeriodStartTime = DateTimeUtility::stringToDate(

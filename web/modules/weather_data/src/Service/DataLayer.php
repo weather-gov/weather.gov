@@ -4,14 +4,19 @@ namespace Drupal\weather_data\Service;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Logger\LoggerChannelTrait;
+use Drupal\Core\Routing\RouteMatchInterface;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\Utils;
 
 /**
  * Data layer methods
  */
 class DataLayer
 {
+    use LoggerChannelTrait;
+
     /**
      * Cache of API calls for this request.
      *
@@ -31,6 +36,8 @@ class DataLayer
      */
     private $database;
 
+    private static $INITIALIZED = false;
+
     /**
      * Constructor.
      */
@@ -38,6 +45,7 @@ class DataLayer
         ClientInterface $httpClient,
         CacheBackendInterface $cache,
         Connection $database,
+        RouteMatchInterface $route,
     ) {
         $this->client = $httpClient;
         $this->cache = $cache;
@@ -47,15 +55,79 @@ class DataLayer
         // headers to the API. If we've already gotten an ID for this response,
         // keep it.
         $this->responseId = uniqid();
+
+        // If we are on a location page route...
+        if ($route->getRouteName() == "weather_routes.point") {
+            $lat = floatval($route->getParameter("lat"));
+            $lon = floatval($route->getParameter("lon"));
+
+            // And we have not already initialized...
+            // Using a static variable here so it persists across constructions.
+            // Two different data layer objects are constructed, and we don't
+            // really want to fetch the data twice.
+            if (!self::$INITIALIZED) {
+                self::$INITIALIZED = true;
+
+                // First thing we need to do is get the WFO information for this
+                // lat/lon.
+                $url = "/points/$lat,$lon";
+                $response = $this->fetch($url)->wait();
+                if ($response->error) {
+                    return;
+                }
+
+                $wfo = strtoupper($response->properties->gridId);
+                $gridX = $response->properties->gridX;
+                $gridY = $response->properties->gridY;
+                $state =
+                    $response->properties->relativeLocation->properties->state;
+
+                // Then we can go get gridpoint info, forecasts, and list of
+                // observation stations. These can happen concurrently.
+                $urls = [
+                    "gridpoint" => "/gridpoints/$wfo/$gridX,$gridY",
+                    "daily" => "/gridpoints/$wfo/$gridX,$gridY/forecast",
+                    "hourly" => "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
+                    "stations" => "/gridpoints/$wfo/$gridX,$gridY/stations",
+                    "alerts" => "/alerts/active?status=actual&area=$state",
+                ];
+
+                // Fire off a async requests for any of the URLs that aren't
+                // already in our cache.
+                $responses = [];
+                foreach ($urls as $key => $url) {
+                    $responses[$key] = $this->fetch($url);
+                }
+
+                // Now wait for all of the responses to come back. This will
+                // allow them to run concurrently. None of them actually go
+                // until we wait for them, which is weird, but since what
+                // we really want is concurrency anyway, that's fine.
+                //
+                // We also don't have to catch anything because our fetch()
+                // method never rejects. Hooray?
+                $responses = Utils::unwrap($responses);
+
+                $station =
+                    $responses["stations"]->features[0]->properties
+                        ->stationIdentifier;
+                $this->fetch("/stations/$station/observations?limit=1")->wait();
+            }
+        }
     }
 
     /**
-     * Get data from the weather API.
+     * Get a promise for the result of querying a URL.
+     *
+     * If the URL is already in cache, resolves that. Otherwise, makes an HTTP
+     * request and resolves the result. In the event of a server error, will
+     * retry up to 5 times before failing. The resolved data will contain an
+     * error property if the endpoint was ultimately unsucessful.
      *
      * The results for any given URL are cached for 60 seconds. Exceptions after
-     * the maximum retries are cached for 1 second.
+     * the maximum retries are cached for 5 seconds.
      */
-    private function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
+    private function fetch($url, $attempt = 1, $delay = 75)
     {
         if (!preg_match("/^https?:\/\//", $url)) {
             $baseUrl = getEnv("API_URL");
@@ -63,48 +135,67 @@ class DataLayer
             $url = $baseUrl . $url;
         }
 
+        $promise = new Promise();
+
         $cacheHit = $this->cache->get($url);
 
-        if (!$cacheHit) {
-            try {
-                $response = $this->client->get($url, [
-                    // Add our response ID as a header to the API so we can
-                    // track sequences of API calls for this one response.
-                    "headers" => ["wx-gov-response-id" => $this->responseId],
-                ]);
-                $response = json_decode($response->getBody());
-                $this->cache->set($url, $response, time() + 60);
-                return $response;
-            } catch (ServerException $e) {
-                $logger = $this->getLogger("Weather.gov data service");
-                $logger->notice("got 500 error on attempt $attempt for: $url");
-
-                // Back off and try again.
-                if ($attempt < 5) {
-                    // Sleep is in microseconds, so scale it up to milliseconds.
-                    usleep($delay * 1000);
-                    return $this->getFromWeatherAPI(
-                        $url,
-                        $attempt + 1,
-                        $delay * 1.65,
-                    );
-                }
-
-                $logger->error("giving up on: $url");
-
-                // Cache errors too. If we've already tried and failed on an
-                // endpoint the maximum number of retries, don't try again on
-                // subsequent calls to the same endpoint.
-                $this->cache->set($url, (object) ["error" => $e], 1);
-                throw $e;
-            }
+        if ($cacheHit) {
+            $promise->resolve($cacheHit->data);
         } else {
-            // If we cached an exception, throw it. Otherwise return the data.
-            if (is_object($cacheHit->data) && isset($cacheHit->data->error)) {
-                throw $cacheHit->data->error;
-            }
-            return $cacheHit->data;
+            $promise->resolve(
+                $this->client
+                    ->getAsync($url, [
+                        "headers" => [
+                            "wx-gov-response-id" => $this->responseId,
+                        ],
+                    ])
+                    ->then(
+                        function ($response) use ($url) {
+                            $response = json_decode($response->getBody());
+                            $this->cache->set($url, $response, time() + 60);
+                            return $response;
+                        },
+                        function ($error) use ($url, $attempt, $delay) {
+                            $logger = $this->getLogger(
+                                "Weather.gov data service",
+                            );
+                            $logger->notice(
+                                "got 500 error on attempt $attempt for: $url",
+                            );
+
+                            if ($attempt < 5) {
+                                usleep($delay * 1000);
+                                return $this->fetch(
+                                    $url,
+                                    $attempt + 1,
+                                    $delay * 1.65,
+                                );
+                            }
+
+                            $logger->error("giving up on: $url");
+                            $response = (object) ["error" => $error];
+                            $this->cache->set($url, $response, time() + 5);
+                            return $response;
+                        },
+                    ),
+            );
         }
+
+        return $promise;
+    }
+
+    /**
+     * Synchronous wrapper around async fetch.
+     */
+    private function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
+    {
+        $response = $this->fetch($url)->wait();
+
+        if ($response->error) {
+            throw $response->error;
+        }
+
+        return $response;
     }
 
     private static $i_alertsState = false;
@@ -192,7 +283,7 @@ class DataLayer
         $sql = "SELECT
           name,state,stateName,county,timezone,stateFIPS,countyFIPS
           FROM weathergov_geo_places
-          ORDER BY ST_DISTANCE(point,ST_GEOMFROMTEXT('$wktGeometry'))
+          ORDER BY ST_DISTANCE(point,$wktGeometry)
           LIMIT 1";
 
         $place = $this->database->query($sql)->fetch();
@@ -216,7 +307,7 @@ class DataLayer
         $key = "$lat $lon";
         if (!self::$i_placeNearPoint[$key]) {
             self::$i_placeNearPoint[$key] = $this->getPlaceNear(
-                "POINT($lon $lat)",
+                SpatialUtility::pointArrayToWKT([$lon, $lat]),
             );
         }
         return self::$i_placeNearPoint[$key];
@@ -225,14 +316,9 @@ class DataLayer
     private static $i_placeNearPolygon = [];
     public function getPlaceNearPolygon($points)
     {
-        $wktPoints = array_map(function ($point) {
-            return $point[0] . " " . $point[1];
-        }, $points);
-        $wktPoints = implode(",", $wktPoints);
-
         if (!self::$i_placeNearPolygon[$wktPoints]) {
             $this->iPlaceNearPolygon[$wktPoints] = $this->getPlaceNear(
-                "POLYGON(($wktPoints))",
+                SpatialUtility::geometryObjectToWKT($points),
             );
         }
         return $this->iPlaceNearPolygon[$wktPoints];

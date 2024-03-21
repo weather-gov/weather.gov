@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
+use Drupal\weather_data\Service\SpatialUtility;
 use Drupal\weather_data\Service\WeatherDataService;
 use Drupal\weather_data\Service\WeatherEntityService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -167,7 +168,7 @@ abstract class WeatherBlockBase extends BlockBase implements
             $lat = floatval($this->route->getParameter("lat"));
             $lon = floatval($this->route->getParameter("lon"));
 
-            $location->point = (object) ["lat" => $lat, "lon" => $lon];
+            $location->point = SpatialUtility::pointArrayToObject([$lon, $lat]);
 
             $location->grid = $this->weatherData->getGridFromLatLon($lat, $lon);
         } else {

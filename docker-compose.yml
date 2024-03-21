@@ -2,7 +2,8 @@ version: '3'
 
 services:
   database:
-    image: mariadb:10
+    # 8.0.35 in prod
+    image: mysql:8.0
     networks:
       - weather.gov
     environment:

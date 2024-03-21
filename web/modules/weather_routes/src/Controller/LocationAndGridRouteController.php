@@ -6,6 +6,8 @@ namespace Drupal\weather_routes\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
+use Drupal\weather_data\Service\SpatialUtility;
+use Drupal\weather_data\Service\WeatherDataService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -54,6 +56,9 @@ final class LocationAndGridRouteController extends ControllerBase
     {
         try {
             $this->dataLayer->getPoint($lat, $lon);
+            WeatherDataService::setPoint(
+                SpatialUtility::pointArrayToObject([$lon, $lat]),
+            );
             return [];
         } catch (\Throwable $e) {
             // If we don't get a corresponding grid location, throw a 404.

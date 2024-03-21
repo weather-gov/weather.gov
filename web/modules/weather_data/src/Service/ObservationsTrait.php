@@ -9,7 +9,7 @@ trait ObservationsTrait
      */
     protected function isValidObservation($obs)
     {
-        if ($obs->temperature->value == null) {
+        if ($obs->temperature->value === null) {
             return false;
         }
         return true;
@@ -32,23 +32,15 @@ trait ObservationsTrait
         $wfoGeometry,
         $index = 0,
     ) {
-        $obsText =
-            "POINT(" .
-            $obs->geometry->coordinates[0] .
-            " " .
-            $obs->geometry->coordinates[1] .
-            ")";
+        $obsText = SpatialUtility::pointArrayToWKT($obs->geometry->coordinates);
 
         // If we have a reference point, we use that.
         // Otherwise, use the closest point from the WFO
         // geometry
         if ($referencePoint) {
-            $sourcePointText =
-                "POINT(" .
-                $referencePoint->lon .
-                " " .
-                $referencePoint->lat .
-                ")";
+            $sourcePointText = SpatialUtility::pointObjectToWKT(
+                $referencePoint,
+            );
         } else {
             // We need to find the closest point in the wfoGeometry
             // to the observation point
@@ -63,30 +55,22 @@ trait ObservationsTrait
                     $closest = $sourcePoint;
                 }
             }
-            $sourcePointText =
-                "POINT(" . $closest->lon . " " . $closest->lat . ")";
+            $sourcePointText = SpatialUtility::pointArrayToWKT($closest[0]);
         }
 
-        $sourceGeomPoints = array_map(function ($point) {
-            return $point->lon . " " . $point->lat;
-        }, $wfoGeometry);
-        $sourceGeomPoints = implode(", ", $sourceGeomPoints);
-        $sourceGeomText = "POLYGON((" . $sourceGeomPoints . "))";
+        $sourceGeomText = SpatialUtility::geometryObjectToWKT($wfoGeometry);
 
         $sql =
             "SELECT ST_DISTANCE_SPHERE(" .
-            "ST_GEOMFROMTEXT('" .
             $obsText .
-            "'), " .
-            "ST_GEOMFROMTEXT('" .
+            ", " .
             $sourcePointText .
-            "')) as distance, " .
-            "ST_WITHIN(ST_GEOMFROMTEXT('" .
+            ") as distance, " .
+            "ST_WITHIN(" .
             $obsText .
-            "'), " .
-            "ST_GEOMFROMTEXT('" .
+            ", " .
             $sourceGeomText .
-            "')) as within;";
+            ") as within;";
 
         $result = $this->dataLayer->databaseFetch($sql);
         $distanceInfo = [
@@ -156,7 +140,7 @@ trait ObservationsTrait
             $obsStationIndex < count($obsStations) - 1 &&
             $obsStationIndex < self::NUMBER_OF_OBS_STATIONS_TO_TRY
         );
-        if ($obs->temperature->value == null) {
+        if ($obs->temperature->value === null) {
             return null;
         }
 
@@ -164,8 +148,8 @@ trait ObservationsTrait
         // including the WFO grid and a reference point,
         // if available
         $distanceInfo = $self->getObsDistanceInfo(
-            $this->stashedPoint,
-            $obsData,
+            self::$stashedPoint,
+            $observationStation,
             $gridGeometry,
             $obsStationIndex - 1,
         );
@@ -174,10 +158,10 @@ trait ObservationsTrait
         $timestamp = DateTimeUtility::stringToDate($obs->timestamp);
 
         $feelsLike = UnitConversion::getTemperatureScalar($obs->heatIndex);
-        if ($feelsLike == null) {
+        if ($feelsLike === null) {
             $feelsLike = UnitConversion::getTemperatureScalar($obs->windChill);
         }
-        if ($feelsLike == null) {
+        if ($feelsLike === null) {
             $feelsLike = UnitConversion::getTemperatureScalar(
                 $obs->temperature,
             );

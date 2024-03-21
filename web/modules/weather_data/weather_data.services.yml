@@ -4,7 +4,7 @@ services:
     arguments: ['@entity_type.manager', '@string_translation', '@request_stack', '@cache.default']
   weather_data_layer:
     class: Drupal\weather_data\Service\DataLayer
-    arguments: ['@http_client','@cache.default','@database']
+    arguments: ['@http_client','@cache.default','@database', '@current_route_match']
   weather_data:
     class: Drupal\weather_data\Service\WeatherDataService
     arguments: ['@string_translation', '@request_stack', '@newrelic_metrics', '@weather_data_layer']
