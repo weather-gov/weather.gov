@@ -3,7 +3,6 @@
 namespace Drupal\weather_data\Service;
 
 use Drupal\weather_data\Service\HourlyTableTrait;
-use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -15,7 +14,6 @@ class WeatherDataService
     use AlertTrait;
     use DailyForecastTrait;
     use HourlyForecastTrait;
-    use LoggerChannelTrait;
     use ObservationsTrait;
     use HourlyTableTrait;
 

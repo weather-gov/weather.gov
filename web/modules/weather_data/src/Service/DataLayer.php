@@ -73,7 +73,7 @@ class DataLayer
                 // lat/lon.
                 $url = "/points/$lat,$lon";
                 $response = $this->fetch($url)->wait();
-                if ($response->error) {
+                if (property_exists($response, "error")) {
                     return;
                 }
 
@@ -86,11 +86,11 @@ class DataLayer
                 // Then we can go get gridpoint info, forecasts, and list of
                 // observation stations. These can happen concurrently.
                 $urls = [
-                    "gridpoint" => "/gridpoints/$wfo/$gridX,$gridY",
+                    "alerts" => "/alerts/active?status=actual&area=$state",
                     "daily" => "/gridpoints/$wfo/$gridX,$gridY/forecast",
+                    "gridpoint" => "/gridpoints/$wfo/$gridX,$gridY",
                     "hourly" => "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
                     "stations" => "/gridpoints/$wfo/$gridX,$gridY/stations",
-                    "alerts" => "/alerts/active?status=actual&area=$state",
                 ];
 
                 // Fire off a async requests for any of the URLs that aren't
@@ -203,6 +203,7 @@ class DataLayer
     public function getAlertsForState($state)
     {
         if (!self::$i_alertsState) {
+            $state = strtoupper($state);
             self::$i_alertsState = $this->getFromWeatherAPI(
                 "/alerts/active?status=actual&area=$state",
             )->features;

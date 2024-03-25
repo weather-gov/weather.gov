@@ -2,8 +2,6 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
-use Drupal\Core\Logger\LoggerChannelTrait;
-
 /**
  * Provides a block of the current weather conditions.
  *
@@ -15,8 +13,6 @@ use Drupal\Core\Logger\LoggerChannelTrait;
  */
 class CurrentConditionsBlock extends WeatherBlockBase
 {
-    use LoggerChannelTrait;
-
     /**
      * {@inheritdoc}
      */

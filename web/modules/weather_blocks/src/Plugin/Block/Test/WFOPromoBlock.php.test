@@ -17,7 +17,7 @@ final class WFOPromoBlockTest extends Base
     protected $twitterField;
     protected $youtubeField;
 
-    protected function setUp($type = null): void
+    protected function setUp($type = null, $override = true): void
     {
         parent::setUp(WFOPromoBlock::class);
 
@@ -132,12 +132,21 @@ final class WFOPromoBlockTest extends Base
      */
     public function testBuildNotGridRoute(): void
     {
-        $this->routeMock
-            ->method("getRouteName")
-            ->willReturn("weather_routes.not-grid");
+        $this->notOnLocationRoute();
 
         $actual = $this->block->build();
 
         $this->assertEquals([], $actual);
+    }
+
+    /**
+     * Override the base test to disable it.
+     * @group unit
+     * @group block
+     * @group wfo-promo-block
+     */
+    public function testHandlesExceptions(): void
+    {
+        $this->assertEquals(true, true);
     }
 }

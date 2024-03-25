@@ -136,6 +136,8 @@ abstract class EndToEndBase extends TestCase
 
         $logger = $this->createStub(LoggerInterface::class);
         $this->block->method("getLogger")->willReturn($logger);
+
+        $httpClient->get("http://api-proxy:8081/play/e2e");
     }
 
     protected function onLocationRoute($lat = "40", $lon = "-90")

@@ -240,6 +240,7 @@ jobs:
         run: |
           curl http://localhost:8081/play/e2e
           make unit-test
+          cat .coverage/clover.xml
 
       - name: store coverage output
         if: needs.should-test.outputs.yes == 'true'
@@ -262,13 +263,19 @@ jobs:
         with:
           name: coverage-report
 
+      - name: check
+        if: needs.should-test.outputs.yes == 'true'
+        run: |
+          echo "${{ steps.download.outputs.download-path }}"
+          cat ${{ steps.download.outputs.download-path }}/clover.xml
+
       - name: 90% code coverage
         if: needs.should-test.outputs.yes == 'true'
         id: test-coverage
         uses: johanvanhelden/gha-clover-test-coverage-check@v1
         with:
           percentage: 90
-          filename: ${{ steps.download.outputs.download-path }}/coverage.xml
+          filename: ${{ steps.download.outputs.download-path }}/clover.xml
           metric: statements
 
   end-to-end-tests:

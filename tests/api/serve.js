@@ -71,14 +71,6 @@ const processDates = (obj, usingHourly = false) => {
         const [, hour, minute, offset, adjustment] = modifier.match(
           /^(\d{2}):(\d{2}):([-+]?\d{1,2})(.*)/,
         );
-        console.log(hour, minute, offset, adjustment);
-
-        // console.log(updatedTime.toISOString());
-        // console.log(Number.parseInt(offset, 10));
-        // console.log(
-        //   updatedTime.utcOffset(Number.parseInt(offset, 10)).toISOString(),
-        // );
-        // console.log("=========");
 
         updatedTime = updatedTime
           .utcOffset(Number.parseInt(offset, 10))

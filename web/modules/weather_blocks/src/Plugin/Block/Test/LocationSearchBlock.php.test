@@ -14,7 +14,7 @@ final class LocationSearchBlockTest extends Base
      *
      * Creates a new location search block.
      */
-    protected function setUp($type = null): void
+    protected function setUp($type = null, $override = true): void
     {
         parent::setUp(LocationSearchBlock::class);
     }
@@ -25,7 +25,7 @@ final class LocationSearchBlockTest extends Base
      * @group block
      * @group location-search
      */
-    public function testBuild(): void
+    public function testBuildWithPoint(): void
     {
         $this->onLocationRoute();
 
@@ -41,6 +41,36 @@ final class LocationSearchBlockTest extends Base
     }
 
     /**
+     * Test that the build method returns the expected results.
+     * @group unit
+     * @group block
+     * @group location-search
+     */
+    public function testBuildWithOnlyGrid(): void
+    {
+        $this->block->method("getLocation")->willReturn(
+            (object) [
+                "point" => false,
+                "grid" => (object) [
+                    "wfo" => "bob",
+                    "x" => 17,
+                    "y" => 93,
+                ],
+            ],
+        );
+
+        $this->weatherData
+            ->method("getPlaceFromGrid")
+            ->will($this->returnValueMap([["bob", 17, 93, false, "data"]]));
+
+        $expected = ["place" => "data"];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
      * Test that the build method returns NULL if there is no location.
      * @group unit
      * @group block
@@ -48,7 +78,7 @@ final class LocationSearchBlockTest extends Base
      */
     public function testWithNoLocation(): void
     {
-        $this->routeMock->method("getRouteName")->willReturn("not grid");
+        $this->notOnLocationRoute();
 
         $expected = [
             "place" => null,
@@ -57,5 +87,35 @@ final class LocationSearchBlockTest extends Base
         $actual = $this->block->build();
 
         $this->assertEquals((object) $expected, (object) $actual);
+    }
+
+    /**
+     * Test that we handle exceptions. Overrides the base test because this one
+     * needs a little extra setup.
+     * @group unit
+     * @group block
+     */
+    public function testHandlesExceptions(): void
+    {
+        $this->block->method("getLocation")->willReturn(
+            (object) [
+                "point" => false,
+                "grid" => (object) [
+                    "wfo" => "bob",
+                    "x" => 17,
+                    "y" => 93,
+                ],
+            ],
+        );
+
+        $this->weatherData
+            ->method("getPlaceFromGrid")
+            ->willThrowException(new \Exception());
+
+        $expected = ["error" => true];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
     }
 }

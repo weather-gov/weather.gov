@@ -15,7 +15,7 @@ final class LocalAlertsBlockTest extends Base
      * Creates a mock of a weather data service and injects it into a new local
      * alert block object.
      */
-    protected function setUp($type = null): void
+    protected function setUp($type = null, $override = true): void
     {
         parent::setUp(LocalAlertsBlock::class);
     }
@@ -46,9 +46,7 @@ final class LocalAlertsBlockTest extends Base
      */
     public function testBuildNotGridRoute(): void
     {
-        $this->routeMock
-            ->method("getRouteName")
-            ->willReturn("weather_routes.not-grid");
+        $this->notOnLocationRoute();
 
         $actual = $this->block->build();
 
