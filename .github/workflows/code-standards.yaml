@@ -262,12 +262,6 @@ jobs:
         with:
           name: coverage-report
 
-      - name: check
-        if: needs.should-test.outputs.yes == 'true'
-        run: |
-          echo "${{ steps.download.outputs.download-path }}"
-          echo "$(pwd)"
-
       - name: 90% code coverage
         if: needs.should-test.outputs.yes == 'true'
         id: test-coverage
