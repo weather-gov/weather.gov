@@ -295,16 +295,17 @@ class ComboBox extends HTMLElement {
         // we make that the current selection
         const selectEl = this.shadowRoot.querySelector("select");
         const inputEl = this.querySelector("input");
-        const currentFocus = this.querySelector("li:focus");
+        const currentFocus = this.querySelector('li:focus');
         if(currentFocus){
-            const selectedIndex = this.selectListItem(currentFocus);
-            const option = Array.from(this.shadowRoot.querySelectorAll("option"))[selectedIndex];
-            if(option){
-                selectEl.setAttribute("value", option.value);
-                inputEl.value = option.textContent;
-                this.hideList();
-                this.submit();
-            }
+            this.selectListItem(currentFocus);
+        }
+        const selectedItem = this.querySelector('li[aria-selected="true"]');
+        const option = this.shadowRoot.querySelector(`option[value="${selectedItem.dataset.value}"]`);
+        if(option){
+            selectEl.value = option.value;
+            inputEl.value = option.textContent;
+            this.hideList();
+            this.submit();
         }
     }
 
@@ -315,6 +316,7 @@ class ComboBox extends HTMLElement {
             const coordinates = await this.getGeodataForKey(selectEl.value);
             if(coordinates){
                 formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
+                console.log(selectEl.value);
                 formEl.submit();
             }
         }
