@@ -3,6 +3,32 @@ const searchLocation = async (text) => {
     return fetch(url, {headers: {'Content-Type': "application/json"}});
 };
 
+const getLocationGeodata = async (magicKey) => {
+    const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?magicKey=${magicKey}&f=json&_=1695666335115`;
+    const response = await fetch(url, { headers: {'Content-Type': "application/json"}});
+    const results = await response.json();
+
+    if (
+        !results.error &&
+        Array.isArray(results.locations) &&
+        results.locations.length > 0
+    ) {
+        const {
+            locations: [
+                {
+                    feature: { geometry },
+                },
+            ],
+        } = results;
+
+        const lat = Math.round(geometry.y * 1_000) / 1_000;
+        const lon = Math.round(geometry.x * 1_000) / 1_000;
+        return {lat, lon};
+    } else {
+        return null;
+    }
+};
+
 
 const comboTemplate = `
     <style>
@@ -15,7 +41,7 @@ const comboTemplate = `
          top: 100%;
          left: 0;
          min-width: 100%;
-height: 300px;
+         height: 300px;
          overflow-y: auto;
      }
      #listbox-wrapper,
@@ -47,15 +73,28 @@ class ComboBox extends HTMLElement {
 
         // Private property defaults
         this.inputDelay = 250;
+        this._geoDataCache = {};
 
         // Bound component methods
         this.handleInput = this.handleInput.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
         this.updateSearch = this.updateSearch.bind(this);
+        this.showList = this.showList.bind(this);
+        this.hideList = this.hideList.bind(this);
+        this.navigateDown = this.navigateDown.bind(this);
+        this.navigateUp = this.navigateUp.bind(this);
+        this.focusListItem = this.focusListItem.bind(this);
+        this.selectListItem = this.selectListItem.bind(this);
+        this.makeSelection = this.makeSelection.bind(this);
+        this.submit = this.submit.bind(this);
         this.handleSelectChanged = this.handleSelectChanged.bind(this);
+        this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
+        this.getGeodataForKey = this.getGeodataForKey.bind(this);
     }
 
     connectedCallback(){
         this.addEventListener("input", this.handleInput);
+        this.addEventListener("keydown", this.handleKeyDown);
         this.shadowRoot.querySelector("select").addEventListener("change", this.handleSelectChanged);
 
         // Initial attributes
@@ -66,8 +105,8 @@ class ComboBox extends HTMLElement {
         if(!this.querySelector('[slot="input"]')){
             let input = document.createElement("input");
             input.setAttribute("type", "text");
-          input.setAttribute("slot", "input");
-          input.setAttribute("role", "combobox");
+            input.setAttribute("slot", "input");
+            input.setAttribute("role", "combobox");
             input.classList.add(...[
                 "usa-combo-box__input"
             ]);
@@ -78,7 +117,7 @@ class ComboBox extends HTMLElement {
             list.setAttribute("role", "listbox");
             list.setAttribute("slot", "listbox");
             list.classList.add(...[
-              "usa-combo-box__list",
+                "usa-combo-box__list",
             ]);
             this.append(list);
         }
@@ -110,7 +149,7 @@ class ComboBox extends HTMLElement {
             Array.from(this.querySelectorAll('ul[role="listbox"] > li')).forEach(optionEl => {
                 optionEl.remove();
             });
-          this.shadowRoot.querySelector("select").innerHTML = "";
+            this.shadowRoot.querySelector("select").innerHTML = "";
             // Create new options
             const options = data.suggestions.map(suggestion => {
                 const option = document.createElement("option");
@@ -124,10 +163,17 @@ class ComboBox extends HTMLElement {
                 li.innerText = suggestion.text;
                 li.setAttribute("role", "option");
                 li.setAttribute("aria-setsize", data.suggestions.length);
-              li.setAttribute("aria-posinset", idx + 1);
-              li.classList.add(...[
-                "usa-combo-box__list-option"
-              ]);
+                li.setAttribute("aria-posinset", idx + 1);
+                li.setAttribute("aria-selected", "false");
+                li.setAttribute("data-value", suggestion.magicKey);
+                li.classList.add(...[
+                    "usa-combo-box__list-option"
+                ]);
+
+                li.addEventListener("focus", (e) => {
+                    this.cacheLocationGeodata(e.target.dataset.value);
+                });
+                
                 return li;
             });
             // Append to shadow select element
@@ -136,10 +182,159 @@ class ComboBox extends HTMLElement {
 
             // If there are results, show the area
             if(data.suggestions.length){
-                this.setAttribute("aria-expanded", "true");
+                this.showList();
             } else {
-                this.setAttribute("aria-expanded", "false");
+                this.hideList();
             }
+        }
+    }
+
+    handleKeyDown(event){
+        let handled = true;
+        if(event.key === "ArrowDown" || event.key === "Down"){
+            this.navigateDown(event.target);
+        } else if(event.key === "ArrowUp" || event.key === "Up"){
+            this.navigateUp(event.target);
+        } else if(event.key === "Escape"){
+            this.hideList();
+        } else if(event.key === "Enter"){
+            this.makeSelection();
+        } else {
+            handled = false;
+        }
+
+        if(handled){
+            event.preventDefault();
+        }
+    }
+
+    showList(){
+        this.setAttribute("aria-expanded", "true");
+        const listIsEmpty = this.querySelector("ul:empty");
+        if(!listIsEmpty){
+            // We want to give the artificial focus,
+            // which means temporary selection both
+            // in aria and in visual styling,
+            // to the first element in the dropdown
+            const firstListItem = this.querySelector("ul li:first-child");
+            this.selectListItem(firstListItem);
+        }
+    }
+
+    hideList(){
+        this.setAttribute("aria-expanded", "false");
+    }
+
+    navigateDown(targetEl){
+        // If we are not already showing the list,
+        // then we should now show it and focus
+        // on the first item in the list
+        if(!this.isShowingList){
+            this.showList();
+            return;
+        }
+        
+        let nextItem;
+        if(targetEl.matches("input:focus")){
+            nextItem = this.querySelector("li:first-child");
+        } else {
+            nextItem = this.querySelector('li:focus + li');
+        }
+        
+        if(nextItem){
+            this.focusListItem(nextItem);
+        }
+    }
+
+    navigateUp(targetEl){
+        const listItems = Array.from(this.querySelectorAll("li"));
+        const currentFocus = this.querySelector('li:focus');
+        const currentFocusIndex = listItems.indexOf(currentFocus);
+        const nextItem = listItems[currentFocusIndex - 1];
+        if(nextItem){
+            this.focusListItem(nextItem);
+        } else {
+            this.querySelector("input").focus();
+            this.hideList();
+        }
+    }
+
+    selectListItem(anElement){
+        const listItems = Array.from(this.querySelectorAll("ul li"));
+        listItems.forEach(listEl => {
+            if(anElement === listEl){
+                listEl.classList.add("usa-combo-box__list-option--selected");
+                listEl.setAttribute("aria-selected", "true");
+            } else {
+                listEl.classList.remove("usa-combo-box__list-option--selected");
+                listEl.setAttribute("aria-selected", "false");
+            }
+        });
+
+        return listItems.indexOf(anElement);
+    }
+
+    focusListItem(anElement){
+        Array.from(this.querySelectorAll("ul li")).forEach(listEl => {
+            if(anElement === listEl){
+                listEl.classList.add("usa-combox-box__list-option--focused");
+                listEl.setAttribute("tabindex", "0");
+                listEl.focus();
+            } else {
+                listEl.classList.remove("usa-combox-box__list-option--focused");
+                listEl.setAttribute("tabindex", "-1");
+            }
+        });
+    }
+
+    makeSelection(){
+        // If there is a currently focused list item,
+        // we make that the current selection
+        const selectEl = this.shadowRoot.querySelector("select");
+        const inputEl = this.querySelector("input");
+        const currentFocus = this.querySelector("li:focus");
+        if(currentFocus){
+            const selectedIndex = this.selectListItem(currentFocus);
+            const option = Array.from(this.shadowRoot.querySelectorAll("option"))[selectedIndex];
+            if(option){
+                selectEl.setAttribute("value", option.value);
+                inputEl.value = option.textContent;
+                this.hideList();
+                this.submit();
+            }
+        }
+    }
+
+    async submit(){
+        const formEl = this.closest("form[data-location-search]");
+        if(formEl){
+            const selectEl = this.shadowRoot.querySelector("select")
+            const coordinates = await this.getGeodataForKey(selectEl.value);
+            if(coordinates){
+                formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
+                formEl.submit();
+            }
+        }
+    }
+
+    async cacheLocationGeodata(magicKey){
+        if(!window.sessionStorage.getItem(magicKey)){
+            const result = await getLocationGeodata(magicKey);
+            if(result){
+                window.sessionStorage.setItem(
+                    magicKey,
+                    JSON.stringify(result)
+                );
+            }
+        }
+    }
+
+    async getGeodataForKey(magicKey){
+        const cached = window.sessionStorage.getItem(magicKey);
+        if(cached){
+            return JSON.parse(cached);
+        } else {
+            return await getLocationGeodata(magicKey);
         }
     }
 
@@ -149,6 +344,10 @@ class ComboBox extends HTMLElement {
         }
     }
 
+    get isShowingList(){
+        return this.getAttribute("aria-expanded") === "true";
+    }
+
     static get observedAttributes(){
         return [
             "input-delay"
@@ -156,5 +355,5 @@ class ComboBox extends HTMLElement {
     }
 };
 
-window.customElements.define("combo-box", ComboBox);
+window.customElements.define("wx-combo-box", ComboBox);
 
