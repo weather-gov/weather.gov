@@ -34,6 +34,8 @@ const comboTemplate = `
     <style>
      :host {
          position: relative;
+         display: inline-block;
+         box-sizing: border-box;
      }
      :host([aria-expanded="true"]) #listbox-wrapper {
          display: block;
@@ -43,6 +45,7 @@ const comboTemplate = `
          min-width: 100%;
          height: 300px;
          overflow-y: auto;
+         box-sizing: border-box;
      }
      #listbox-wrapper,
      :host select {
