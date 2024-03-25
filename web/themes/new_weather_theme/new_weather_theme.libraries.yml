@@ -34,6 +34,11 @@ location-search:
   version: 2024-03-21
   js:
     assets/js/components/LocationSearch.js: { preprocess: false }
+
+location-combo-box:
+  version: 2024-03-25
+  js:
+    assets/js/components/combo-box.js: { preprocess: false }
         
 tabbed-nav:
   version: 2024-03-21
