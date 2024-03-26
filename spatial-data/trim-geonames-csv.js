@@ -29,6 +29,28 @@ const US_CODES = [
 const FILENAME = "cities500.txt";
 const OUTFILE_NAME = "us.cities500.txt";
 
+const COLUMN_NAMES = [
+  "geonameId",
+  "name",
+  "asciiName",
+  "alternateNames",
+  "lat",
+  "lon",
+  "featureClass",
+  "featureCode",
+  "countryCode",
+  "cc2",
+  "admin1",
+  "admin2",
+  "admin3",
+  "admin4",
+  "population",
+  "elevation",
+  "dem",
+  "timezone",
+  "modified"
+];
+
 async function main(){
   const fileText = await fs.readFile(FILENAME, { encoding: "utf-8"} );
   const rows = fileText.split("\n")
