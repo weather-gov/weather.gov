@@ -19,6 +19,24 @@ const files = {
   cwa: "w_05mr24",
 };
 
+/**
+ * The following is a list of the
+ * two-letter (ISO-3166-alpha2) country
+ * codes for the USA and its overseas
+ * territories.
+ * Note that the territories have their
+ * own codes
+ */
+const US_CODES = [
+  "US",
+  "GU", // Guam
+  "PR", // Puerto Rico
+  "AS", // American Samoa
+  "MP", // Northern Mariana Islands
+  "VI", // US Virgin Islands
+  "UM" // US Minor Outlying Islands
+];
+
 const connectionDetails = {
   user: args[0] ?? "drupal",
   password: args[1] ?? "drupal",
@@ -312,7 +330,7 @@ const loadPlaces = async () => {
         .split("\n")
         .map((v) => v.trim().split("\t"))
         // Remove non-US, non-populated-places before we do anything else
-        .filter((place) => place[8] === "US" && place[7].startsWith("PPL"))
+        .filter((place) => US_CODES.includes(place[8]) && place[7].startsWith("PPL"))
         .map((place) => {
           const placeObj = {};
           place.forEach((prop, i) => {
@@ -333,6 +351,7 @@ const loadPlaces = async () => {
       weathergov_geo_places
         (
           id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          countryCode TEXT,
           name TEXT,
           state TEXT,
           stateName TEXT,
@@ -354,8 +373,9 @@ const loadPlaces = async () => {
         // refactored into an insertion and a couple of updates. But... I don't
         // want to break something that works right now.
         `INSERT INTO weathergov_geo_places
-          (name,state,stateName,stateFIPS,county,countyFIPS,timezone,point)
+          (countryCode,name,state,stateName,stateFIPS,county,countyFIPS,timezone,point)
           SELECT
+            '${place.country.replace(/'/g, "''")}' as country,
             '${place.name.replace(/'/g, "''")}' as place,
             '${place.state}' as state,
             stateName,
