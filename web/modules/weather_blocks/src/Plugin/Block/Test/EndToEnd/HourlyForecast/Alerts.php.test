@@ -186,19 +186,24 @@ final class HourlyForecastAlertTest extends EndToEndBase
                     ],
                 ],
                 "timezone" => "America/Chicago",
-                "durationText" =>
-                    "until " .
-                    $ends
-                        ->setTimezone(new \DateTimeZone("America/Chicago"))
-                        ->format("g:i A") .
-                    " today",
                 "geometry" => [],
             ],
         ];
 
         $data = $this->block->build();
 
-        $this->assertEquals($expectedAlertStructure, $data["alertPeriods"][0]);
+        $actual = $data["alertPeriods"][0];
+
+        // The duration text is conditional based on the time of day of the
+        // alert. Because our test alert's times are relative to when the test
+        // is run, the duration text is nondeterministic. So instead of
+        // asserting it directly, we'll assert its type and otherwise remove it
+        // from the structural test.
+        $durationText = $actual["alert"]->durationText;
+        unset($actual["alert"]->durationText);
+
+        $this->assertEquals("string", gettype($durationText));
+        $this->assertEquals($expectedAlertStructure, $actual);
     }
 
     /**
