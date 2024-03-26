@@ -351,7 +351,6 @@ const loadPlaces = async () => {
       weathergov_geo_places
         (
           id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-          countryCode TEXT,
           name TEXT,
           state TEXT,
           stateName TEXT,
@@ -367,17 +366,24 @@ const loadPlaces = async () => {
   await db.query("ALTER TABLE weathergov_geo_places AUTO_INCREMENT=0");
 
   await Promise.all(
-    places.map((place) =>
-      db.query(
+    places.map((place) => {
+
+      // If the place is in one of the US
+      // territories, we use the country code
+      // for that territory as the state
+      let state = place.state;
+      if(place.country !== "US"){
+        state = place.country;
+      }
+      return db.query(
         // This query is probably over-complicated. It should likely be
         // refactored into an insertion and a couple of updates. But... I don't
         // want to break something that works right now.
         `INSERT INTO weathergov_geo_places
-          (countryCode,name,state,stateName,stateFIPS,county,countyFIPS,timezone,point)
+          (name,state,stateName,stateFIPS,county,countyFIPS,timezone,point)
           SELECT
-            '${place.country.replace(/'/g, "''")}' as country,
             '${place.name.replace(/'/g, "''")}' as place,
-            '${place.state}' as state,
+            '${state}' as state,
             stateName,
             stateFips,
             countyName,
@@ -392,8 +398,8 @@ const loadPlaces = async () => {
             )
             AND
             countyFips LIKE '%${place.county}'`,
-      ),
-    ),
+      );
+    }),
   );
 
   // We know of a few places that shouldn't be included, so let's drop those.
