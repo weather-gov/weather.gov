@@ -377,10 +377,10 @@
         "id": "urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.036.2",
         "areaDesc": "Saint Matthew Island Waters",
         "geocode": {
-          "SAME": ["005119"],
+          "SAME": [],
           "UGC": []
         },
-        "affectedZones": [],
+        "affectedZones": ["https://api.weather.gov/zones/forecast/AR-MARINE"],
         "references": [],
         "sent": "date:now -1 hour",
         "effective": "date:now -1 hour",

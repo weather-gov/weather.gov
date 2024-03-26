@@ -140,7 +140,7 @@ class AlertUtility
         "flash flood statement",
         "severe weather statement",
         "shelter in place warning",
-        "evacuation - immediate",
+        "evacuation immediate",
         "civil danger warning",
         "nuclear power plant warning",
         "radiological hazard warning",
