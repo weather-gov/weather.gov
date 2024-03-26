@@ -42,6 +42,7 @@ cf delete-service-key github-cd-account github-cd-key
 cf delete-service github-cd-account
 gh secret --repo weather-gov/weather.gov remove CF_${upcase_name}_USERNAME 
 gh secret --repo weather-gov/weather.gov remove CF_${upcase_name}_PASSWORD 
+gh secret --repo weather-gov/weather.gov remove NEW_RELIC_${upcase_name}_DEPLOYMENT_ENTITY_GUID
 
 echo "Removing files used for $1..."
 rm manifests/manifest-$1.yaml

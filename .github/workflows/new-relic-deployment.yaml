@@ -7,22 +7,6 @@ on:
         type: string
 
 jobs:
-  newrelic-design:
-    if: ${{ inputs.environment == 'design' }}
-    runs-on: ubuntu-latest
-    name: New Relic Record Deployment
-    steps:
-      - name: Set Release Version from Tag
-        run: echo "RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
-
-      - name: Add New Relic Application Deployment Marker
-        uses: newrelic/deployment-marker-action@v2.5.0
-        with:
-          apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
-          guid: ${{ secrets.NEW_RELIC_DESIGN_DEPLOYMENT_ENTITY_GUID }}
-          version: "${{ env.RELEASE_VERSION }}"
-          user: "${{ github.actor }}"
-
   newrelic-eric:
     if: ${{ inputs.environment == 'eric' }}
     runs-on: ubuntu-latest

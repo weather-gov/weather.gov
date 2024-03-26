@@ -34,6 +34,7 @@ const ui = async ({ error = false } = {}) => {
         );
         const name = target["@bundle"]?.name ?? p;
         let hostName = "http://localhost:8080"
+        // Note: Only needed when we are running our design environment for user testing
         if (process.env.CLOUDGOV_PROXY) {
           hostName = "https://weathergov-design.app.cloud.gov"
         };
