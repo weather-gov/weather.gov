@@ -46,6 +46,7 @@ class DataLayer
         CacheBackendInterface $cache,
         Connection $database,
         RouteMatchInterface $route,
+        $preload = true,
     ) {
         $this->client = $httpClient;
         $this->cache = $cache;
@@ -57,7 +58,7 @@ class DataLayer
         $this->responseId = uniqid();
 
         // If we are on a location page route...
-        if ($route->getRouteName() == "weather_routes.point") {
+        if ($route->getRouteName() == "weather_routes.point" && $preload) {
             $lat = floatval($route->getParameter("lat"));
             $lon = floatval($route->getParameter("lon"));
 
@@ -72,7 +73,7 @@ class DataLayer
                 // lat/lon.
                 $url = "/points/$lat,$lon";
                 $response = $this->fetch($url)->wait();
-                if ($response->error) {
+                if (property_exists($response, "error")) {
                     return;
                 }
 
@@ -85,11 +86,11 @@ class DataLayer
                 // Then we can go get gridpoint info, forecasts, and list of
                 // observation stations. These can happen concurrently.
                 $urls = [
-                    "gridpoint" => "/gridpoints/$wfo/$gridX,$gridY",
+                    "alerts" => "/alerts/active?status=actual&area=$state",
                     "daily" => "/gridpoints/$wfo/$gridX,$gridY/forecast",
+                    "gridpoint" => "/gridpoints/$wfo/$gridX,$gridY",
                     "hourly" => "/gridpoints/$wfo/$gridX,$gridY/forecast/hourly",
                     "stations" => "/gridpoints/$wfo/$gridX,$gridY/stations",
-                    "alerts" => "/alerts/active?status=actual&area=$state",
                 ];
 
                 // Fire off a async requests for any of the URLs that aren't
@@ -191,7 +192,7 @@ class DataLayer
     {
         $response = $this->fetch($url)->wait();
 
-        if ($response->error) {
+        if (property_exists($response, "error")) {
             throw $response->error;
         }
 
@@ -202,6 +203,7 @@ class DataLayer
     public function getAlertsForState($state)
     {
         if (!self::$i_alertsState) {
+            $state = strtoupper($state);
             self::$i_alertsState = $this->getFromWeatherAPI(
                 "/alerts/active?status=actual&area=$state",
             )->features;
@@ -305,7 +307,7 @@ class DataLayer
     public function getPlaceNearPoint($lat, $lon)
     {
         $key = "$lat $lon";
-        if (!self::$i_placeNearPoint[$key]) {
+        if (!array_key_exists($key, self::$i_placeNearPoint)) {
             self::$i_placeNearPoint[$key] = $this->getPlaceNear(
                 SpatialUtility::pointArrayToWKT([$lon, $lat]),
             );
@@ -316,9 +318,11 @@ class DataLayer
     private static $i_placeNearPolygon = [];
     public function getPlaceNearPolygon($points)
     {
-        if (!self::$i_placeNearPolygon[$wktPoints]) {
+        $wktPoints = SpatialUtility::geometryObjectToWKT($points);
+
+        if (!array_key_exists($wktPoints, self::$i_placeNearPolygon)) {
             $this->iPlaceNearPolygon[$wktPoints] = $this->getPlaceNear(
-                SpatialUtility::geometryObjectToWKT($points),
+                $wktPoints,
             );
         }
         return $this->iPlaceNearPolygon[$wktPoints];

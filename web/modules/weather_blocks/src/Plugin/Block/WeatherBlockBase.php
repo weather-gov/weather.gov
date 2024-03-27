@@ -5,6 +5,7 @@ namespace Drupal\weather_blocks\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
@@ -22,6 +23,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class WeatherBlockBase extends BlockBase implements
     ContainerFactoryPluginInterface
 {
+    use LoggerChannelTrait;
+
     /**
      * A service for fetching weather data.
      *

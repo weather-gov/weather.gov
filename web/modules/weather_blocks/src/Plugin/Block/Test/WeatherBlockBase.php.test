@@ -17,14 +17,17 @@ final class WeatherBlockBaseTest extends Base
      * Creates a mock of a weather data service and injects it into a new current
      * conditions block object.
      */
-    protected function setUp($type = null): void
+    protected function setUp($type = null, $override = true): void
     {
         // Instantiate a real object because the base class is abstract.
-        parent::setUp(CurrentConditionsBlock::class);
+        parent::setUp(CurrentConditionsBlock::class, false);
     }
 
     /**
      * Test that the create() static method gives us back a block object.
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testCreation(): void
     {
@@ -56,6 +59,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Test that block cacheing is disabled.
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testCache(): void
     {
@@ -67,6 +73,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Test that the block properly persists configuration changes.
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testBlockSubmit(): void
     {
@@ -88,6 +97,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Test that the base block can get the relevant location from the URL.
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testGetLocationFromRoute(): void
     {
@@ -132,6 +144,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Test that the base block gets location from configuration if not in URL.
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testGetLocationFromConfiguration(): void
     {
@@ -160,6 +175,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Tests that the location is empty if not on a grid route and not configured.
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testGetsNoLocationWhenConfiguredFalse(): void
     {
@@ -178,6 +196,9 @@ final class WeatherBlockBaseTest extends Base
 
     /**
      * Tests that the location is empty if not on a grid route and empty config.
+     * @group unit
+     * @group block
+     * @group base-block
      */
     public function testGetsNoLocationWhenConfiguredEmpty(): void
     {
@@ -192,5 +213,92 @@ final class WeatherBlockBaseTest extends Base
         $actual = $this->block->getLocation();
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group block
+     * @group base-block
+     */
+    public function testGetsFormWithNoConfig(): void
+    {
+        $expected = [
+            "grid" => [
+                "#type" => "fieldset",
+                "#title" => "Manual location - for testing",
+                "wfo" => [
+                    "#type" => "textfield",
+                    "#title" => "WFO",
+                    "#default_value" => "",
+                ],
+                "gridX" => [
+                    "#type" => "textfield",
+                    "#title" => "Grid X coordinate",
+                    "#default_value" => "",
+                ],
+                "gridY" => [
+                    "#type" => "textfield",
+                    "#title" => "Grid Y coordinate",
+                    "#default_value" => "",
+                ],
+            ],
+        ];
+
+        $actual = $this->block->blockForm(
+            [],
+            $this->createStub(FormStateInterface::class),
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group block
+     * @group base-block
+     */
+    public function testGetsFormWithExistingConfig(): void
+    {
+        $this->block->setConfigurationValue("grid", "bob,37,38");
+
+        $expected = [
+            "grid" => [
+                "#type" => "fieldset",
+                "#title" => "Manual location - for testing",
+                "wfo" => [
+                    "#type" => "textfield",
+                    "#title" => "WFO",
+                    "#default_value" => "bob",
+                ],
+                "gridX" => [
+                    "#type" => "textfield",
+                    "#title" => "Grid X coordinate",
+                    "#default_value" => "37",
+                ],
+                "gridY" => [
+                    "#type" => "textfield",
+                    "#title" => "Grid Y coordinate",
+                    "#default_value" => "38",
+                ],
+            ],
+        ];
+
+        $actual = $this->block->blockForm(
+            [],
+            $this->createStub(FormStateInterface::class),
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Override the base test to disable it.
+     * @group unit
+     * @group block
+     * @group base-block
+     */
+    public function testHandlesExceptions(): void
+    {
+        $this->assertEquals(true, true);
     }
 }

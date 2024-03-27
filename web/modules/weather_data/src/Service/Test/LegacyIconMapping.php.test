@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 final class WeatherDataLegacyIconMapping extends TestCase
 {
     /**
-     * Asdf.
+     * @group unit
      */
     public function testIconMapping(): void
     {

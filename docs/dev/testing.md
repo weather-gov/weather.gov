@@ -10,22 +10,80 @@ we've chosen.
 > documented in
 > [architectural decision record #9](../architecture/decisions/0009-we-will-use-a-content-management-system.md).
 
-## PHP unit testing
+## PHP testing
 
-For our Drupal modules, we test the PHP code with unit tests. These allow us to
-test the code in isolation and independently. We use
-[PHPUnit](https://phpunit.de/) for these tests, and we rely on PHPUnit's
-built-in "[test doubles](https://docs.phpunit.de/en/9.6/test-doubles.html)"
-feature to mock dependencies and Drupal's
-[dependency
-injection system](https://www.drupal.org/docs/drupal-apis/services-and-dependency-injection/services-and-dependency-injection-in-drupal-8)
-to get our mocks into the code under test.
+### Unit tests
 
-To run unit tests locally, the Makefile command is:
+We use [PHPUnit](https://phpunit.de/) for unit testing utility classes and
+custom block types. These particular classes are relatively isolated so don't
+require extensive mocking.
 
-```sh
+For blocks in particular, there is a base test class that handles creating the
+block under test and setting up the appropriate mocks that are
+dependency-injected. It also provides a couple of helpful behaviors:
+
+1. By default, it makes the `getLocation` method mockable. Calling
+   `$this->onLocationRoute()` in a block test will configure the `getLocation`
+   mock to return an appropriate location object with grid and point properties
+   already set. Similarly, `$this->notOnLocationRoute()` will mock `getLocation`
+   to return a location with the grid and point set to `false`.
+
+2. Automatically adds a test that mocks all of the WeatherDataService methods to
+   throw exceptions and tests that the block returns `["error" => true]` in
+   those cases.
+   > [!NOTE]  
+   > If your block doesn't need this test, you can override it:
+   >
+   > ```php
+   > public function testHandlesExceptions(): void
+   > {
+   >   $this->assertEquals(true, true);
+   > }
+   > ```
+
+To run just these unit tests, run:
+
+```shell
+make unit-test
+...or...
 make u
 ```
+
+### "API" end-to-end testing
+
+Our Drupal services are largely concerned with fetching data from external
+sources (such as the API or the database) and formatting it to our needs. Unit
+testing them would require a lot of complex and fragile mocking. (We did this
+initially and it was a nightmare to maintain). Instead, we have opted to test
+our services against live data using our API proxy tool.
+
+We essentially treat our blocks as API endpoints. We load a block, point it at
+a particular location with known data, and then ensure the data comes back as
+expected. This is much like end-to-end testing.
+
+These tests are also implemented using [PHPUnit](https://phpunit.de/). They are
+stored alongside our blocks code, since they are executing blocks. They should
+extend the `EndToEndBase` class, which handles setting up autoloading and
+creating all of the necessary services and mocks to run the tests.
+
+It also provides an `onLocationRoute` helper method like the block unit test
+base class. However, instead of mocking the base `getLocation` method, it
+mocks the RouteMatchInterface object to identify the route as being at a given
+location. This ensures more thorough testing.
+
+To defeat caching, these tests are run in process isolation mode, meaning each
+test runs in its own process. This results in somewhat slower tests, but it
+also means we don't have to deal with trying to bypass caches in testing.
+
+To run these tests locally, the Makefile command is:
+
+```sh
+make backend-test
+...or...
+make be
+```
+
+Note that backend tests include unit tests.
 
 ## End-to-end testing
 
