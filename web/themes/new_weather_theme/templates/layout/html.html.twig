@@ -38,7 +38,6 @@
     <title>{% if weather.place %}{{ weather.place }} | {% endif %}{{ head_title|safe_join(' | ') }}</title>
     <css-placeholder token="{{ placeholder_token }}">
     <js-placeholder token="{{ placeholder_token }}">
-     <script src="https://touchpoints.app.cloud.gov/touchpoints/22acf675.js" async></script>
     <link rel="icon" type="image/png" href="/{{ directory }}/assets/images/weather/favicons/noaa-favicon.ico" />
   </head>
   <body{{ attributes.addClass(body_classes) }}>
@@ -59,6 +58,7 @@
     {{ page_top }}
     {{ page }}
     {{ page_bottom }}
+
     <js-bottom-placeholder token="{{ placeholder_token }}">
   </body>
 </html>
