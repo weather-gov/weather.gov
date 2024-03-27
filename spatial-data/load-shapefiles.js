@@ -388,6 +388,13 @@ const loadPlaces = async () => {
 
         // For all other cases, find the FIPS county that contains the place's
         // point and use those state and FIPS code values.
+        //
+        // Do these lat/lon look reversed from everywhere else? Why yes, they
+        // sure are! It's a quirk of MySQL. For geographic coordinate systems
+        // (such as 4269), they interpret the X coordinate of WKTs as latitude
+        // and the Y coordinate as longitude. For no apparent reason, they just
+        // up and switch them. Anyway, knowing that, we swap them from the way
+        // we do it literally everywhere else.
         const sql = `
           SELECT state,countyFips as county
           FROM weathergov_geo_counties
@@ -439,6 +446,11 @@ const loadPlaces = async () => {
         // This query is probably over-complicated. It should likely be
         // refactored into an insertion and a couple of updates. But... I don't
         // want to break something that works right now.
+        //
+        // Note that here, our point WKT is lon/lat. This works because we do
+        // not specify a coordinate system and it is therefore not geographic.
+        // We may want to change this in the future, but for now our Drupal code
+        // also does not expect a geographic coordinate system.
         `INSERT INTO weathergov_geo_places
           (name,state,stateName,stateFIPS,county,countyFIPS,timezone,point)
           SELECT
