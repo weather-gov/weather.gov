@@ -1,5 +1,18 @@
 @use "uswds-core" as *;
 
+/* Scroll button states
+------------------------------------- */
+.wx-scroll-button {
+  &:hover {
+    cursor: pointer;
+    background-color: color("base");
+  }
+
+  &:active {
+    background-color: color("base-darker");
+  }
+}
+
 /* Hourly forecast table overrides
 ------------------------------------- */
 .usa-table.hourly-table {
@@ -15,7 +28,7 @@
   td, th {
     padding-left: 0;
     padding-right: units(3);
-    vertical-align: text-top;
+    vertical-align: top;
 
     &:first-of-type {
       padding-left: units(2);
