@@ -74,13 +74,32 @@ const comboTemplate = `
          height: 1px;
          width: 1px;
      }
+
+     #input-area {
+         display: flex;
+         flex-direction: row;
+     }
+
+     ::slotted(input){
+         flex: 1;
+     }
+
+     .hidden {
+         display: none;
+     }
     </style>
     <div id="input-area">
         <slot name="input"></slot>
+        <select>
+            <slot name="option"></slot>
+        </select>
+        <span id="clear-button-wrapper" class="hidden">
+            <slot name="clear-button"></slot>
+        </span>
+        <span id="toggle-button-wrapper">
+            <slot name="toggle-button"></slot>
+        </span>
     </div>
-    <select>
-        <slot name="option"></slot>
-    </select>
     <div id="listbox-wrapper">
         <slot name="listbox"></slot>
     </div>
@@ -107,6 +126,7 @@ class ComboBox extends HTMLElement {
         this.handleInput = this.handleInput.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleEnterKey = this.handleEnterKey.bind(this);
+        this.handleSelectChanged = this.handleSelectChanged.bind(this);
         this.updateSearch = this.updateSearch.bind(this);
         this.showList = this.showList.bind(this);
         this.hideList = this.hideList.bind(this);
@@ -117,9 +137,11 @@ class ComboBox extends HTMLElement {
         this.selectWithKeyboard = this.selectWithKeyboard.bind(this);
         this.selectWithMouse = this.selectWithMouse.bind(this);
         this.submit = this.submit.bind(this);
+        this.clear = this.clear.bind(this);
         this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
         this.getGeodataForKey = this.getGeodataForKey.bind(this);
         this.updateAriaLive = this.updateAriaLive.bind(this);
+        this._setSelectToOption = this._setSelectToOption.bind(this);
     }
 
     connectedCallback(){
@@ -150,6 +172,41 @@ class ComboBox extends HTMLElement {
                 "usa-combo-box__list",
             ]);
             this.append(list);
+        }
+        if(!this.querySelector('[slot="toggle-button"]')){
+            `<button type="button" class="usa-combo-box__clear-input" aria-label="Clear the select contents">&nbsp;</button>`;
+            let toggleButton = document.createElement("button");
+            toggleButton.setAttribute("type", "button");
+            toggleButton.setAttribute("aria-label", "Toggle the dropdown list");
+            toggleButton.innerHTML = "&nbsp;";
+            toggleButton.classList.add(...[
+                "usa-combo-box__toggle-list",
+                "display-block"
+            ]);
+            toggleButton.setAttribute("slot", "toggle-button");
+            toggleButton.addEventListener("click", event => {
+                if(this.isShowingList){
+                    this.hideList();
+                } else {
+                    this.showList();
+                }
+            });
+            this.append(toggleButton);
+        }
+        if(!this.querySelector('[slot="clear-button"]')){
+            let clearButton = document.createElement("button");
+            clearButton.setAttribute("type", "button");
+            clearButton.setAttribute("tabindex", "-1");
+            clearButton.setAttribute("slot", "clear-button");
+            clearButton.classList.add(...[
+                "usa-combo-box__clear-input",
+                "display-block"
+            ]);
+            clearButton.innerHTML = "&nbsp;";
+            clearButton.addEventListener("click", e => {
+                this.clear();
+            });
+            this.append(clearButton);
         }
     }
 
@@ -240,6 +297,18 @@ class ComboBox extends HTMLElement {
         }
     }
 
+    handleSelectChanged(event){
+        console.log(event);
+        const wrapper = this.shadowRoot.getElementById("clear-button-wrapper");
+        if(event.target.selectedIndex >= 0){
+            // In this case, something is currently selected,
+            // so we should show the clear button
+            wrapper.classList.remove("hidden");
+        } else {
+            wrapper.classList.add("hidden");
+        }
+    }
+
     showList(){
         this.setAttribute("aria-expanded", "true");
         const listIsEmpty = this.querySelector("ul:empty");
@@ -325,7 +394,7 @@ class ComboBox extends HTMLElement {
             this.selectWithKeyboard(event);
         } else if(event.target.matches('input[role="combobox"]')) {
             const selectEl = this.shadowRoot.querySelector("select");
-            if(selectEl.value && selectEl.value !== ""){
+            if(selectEl.selectedIndex > -1){
                 this.submit();
             }
         }
@@ -339,7 +408,7 @@ class ComboBox extends HTMLElement {
         const selectedItem = event.target;
         const option = this.shadowRoot.querySelector(`option[value="${selectedItem.dataset.value}"]`);
         if(option){
-            selectEl.value = option.value;
+            this._setSelectToOption(option);
             inputEl.value = option.textContent;
             this.hideList();
             this.updateAriaLive(
@@ -354,13 +423,20 @@ class ComboBox extends HTMLElement {
         this.selectListItem(event.target);
         const option = this.shadowRoot.querySelector(`option[value="${event.target.dataset.value}"]`);
         if(option){
+            this._setSelectToOption(option);
             selectEl.value = option.value;
             inputEl.value = option.textContent;
             this.hideList();
             this.updateAriaLive(
-                `You have selected ${inputEl.value}. Do see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
+                `You have selected ${inputEl.value}. To see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
             );
         }
+    }
+
+    clear(){
+        const input = this.querySelector("input");
+        input.value = null;
+        this._setSelectToOption(null);
     }
 
     async submit(){
@@ -425,6 +501,18 @@ class ComboBox extends HTMLElement {
 
     get isShowingList(){
         return this.getAttribute("aria-expanded") === "true";
+    }
+
+    _setSelectToOption(option=null){
+        const selectEl = this.shadowRoot.querySelector("select");
+        if(!option){
+            selectEl.selectedIndex = -1;
+        } else {
+            selectEl.selectedIndex = Array.from(selectEl.children).indexOf(option);
+        }
+
+        const event = new Event("change", { bubbles: true });
+        selectEl.dispatchEvent(event);
     }
 
     static get observedAttributes(){
