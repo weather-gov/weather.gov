@@ -91,7 +91,7 @@ Languages and frameworks: PHP, Symfony, Twig
 ## Vulnerability Disclosure Policy
 
 *.weather.gov sites are covered by the [Department of Commerce Vulnerability Disclosure Policy](https://www.commerce.gov/vulnerability-disclosure-policy). If you would like to disclose a vulnerability with our Beta site or any of the testing sites, there are two options: 
-- Use the [DOC VDP Portal](https://www.commerce.gov/vulnerability-disclosure-policy) to submit your vulnerability
+- Use the [DOC VDP Portal](https://doc.responsibledisclosure.com/hc/en-us/requests/new) to submit your vulnerability
 - Report a new vulnerability as a [Github security advisory](https://github.com/weather-gov/weather.gov/security/advisories/new)
 
 ## Getting Drupal 10 running in Docker
