@@ -3,7 +3,6 @@
 namespace Drupal\weather_data\Service;
 
 use Drupal\weather_data\Service\HourlyTableTrait;
-use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -15,7 +14,6 @@ class WeatherDataService
     use AlertTrait;
     use DailyForecastTrait;
     use HourlyForecastTrait;
-    use LoggerChannelTrait;
     use ObservationsTrait;
     use HourlyTableTrait;
 
@@ -50,13 +48,6 @@ class WeatherDataService
     private $t;
 
     /**
-     * The request currently being responded to.
-     *
-     * @var request
-     */
-    private $request;
-
-    /**
      * NewRelic API handler
      */
     private $newRelic;
@@ -80,13 +71,11 @@ class WeatherDataService
      */
     public function __construct(
         TranslationInterface $t,
-        RequestStack $r,
         NewRelicMetrics $newRelic,
         DataLayer $dataLayer,
     ) {
         $this->dataLayer = $dataLayer;
         $this->t = $t;
-        $this->request = $r->getCurrentRequest();
         $this->newRelic = $newRelic;
 
         $this->defaultIcon = "nodata.svg";
@@ -155,23 +144,17 @@ class WeatherDataService
      */
     public function getGridFromLatLon($lat, $lon)
     {
-        try {
-            $locationMetadata = $this->dataLayer->getPoint($lat, $lon);
+        $locationMetadata = $this->dataLayer->getPoint($lat, $lon);
 
-            $wfo = strtoupper($locationMetadata->properties->gridId);
-            $gridX = $locationMetadata->properties->gridX;
-            $gridY = $locationMetadata->properties->gridY;
+        $wfo = strtoupper($locationMetadata->properties->gridId);
+        $gridX = $locationMetadata->properties->gridX;
+        $gridY = $locationMetadata->properties->gridY;
 
-            return (object) [
-                "wfo" => $wfo,
-                "x" => $gridX,
-                "y" => $gridY,
-            ];
-        } catch (\Throwable $e) {
-            // Need to check the error so we know whether we ought to log something.
-            // But not yet. I am too excited about this location stuff right now.
-            return null;
-        }
+        return (object) [
+            "wfo" => $wfo,
+            "x" => $gridX,
+            "y" => $gridY,
+        ];
     }
 
     /**

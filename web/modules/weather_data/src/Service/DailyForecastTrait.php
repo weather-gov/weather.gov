@@ -62,7 +62,11 @@ trait DailyForecastTrait
         $place = $this->getPlaceFromGrid($wfo, $x, $y);
         $timezone = $place->timezone;
 
-        $periods = $forecast->periods;
+        $periods = DateTimeUtility::filterToAfter(
+            $forecast->periods,
+            new \DateTimeImmutable(),
+            "endTime",
+        );
 
         // Grab the hourly forecast period information
         // and any relevant alerts so we can use them

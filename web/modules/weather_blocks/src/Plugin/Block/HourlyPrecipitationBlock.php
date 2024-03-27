@@ -35,5 +35,7 @@ class HourlyPrecipitationBlock extends WeatherBlockBase
                 return ["error" => true];
             }
         }
+
+        return null;
     }
 }

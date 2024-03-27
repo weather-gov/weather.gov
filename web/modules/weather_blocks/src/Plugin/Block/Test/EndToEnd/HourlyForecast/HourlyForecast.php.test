@@ -1,0 +1,87 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\weather_blocks\Plugin\Block\HourlyForecastBlock;
+
+/**
+ * Tests for hourly forecast data structure.
+ */
+final class HourlyForecastStructureTest extends EndToEndBase
+{
+    /**
+     * Create the block under test.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(HourlyForecastBlock::class);
+    }
+
+    /**
+     * Simply validate the data structure.
+     * @group e2e
+     */
+    public function testHourlyForecastDataStructure(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+
+        $start = new \DateTimeImmutable();
+        $start = $start
+            ->setTimezone(new \DateTimeZone("America/Chicago"))
+            ->modify("+1 hour");
+        $start = $start->setTime((int) $start->format("H"), 0, 0, 0);
+
+        $expectedHourStructure = [
+            "conditions" => "Day mostly cloudy",
+            "icon" => (object) [
+                "icon" => "mostly_cloudy-day.svg",
+                "base" => "mostly_cloudy-day",
+            ],
+            "dewpoint" => 28,
+            "probabilityOfPrecipitation" => 0,
+            "relativeHumidity" => 75,
+            "time" => $start->format("g A"),
+            "timestamp" => $start->format("c"),
+            "temperature" => 35,
+            "windDirection" => (object) [
+                "long" => "south",
+                "short" => "S",
+                "angle" => 200,
+            ],
+            "windSpeed" => 0,
+        ];
+
+        $data = $this->block->build();
+
+        $this->assertEquals($expectedHourStructure, $data["hours"][0]);
+    }
+
+    /**
+     * Test that hourly results are in the timezone of the point.
+     * @group e2e
+     */
+    public function testHourlyForecastTimezone(): void
+    {
+        // This test could fail for a bit around the daylight savings and
+        // standard time transitions, but that seems acceptable...
+
+        $this->onLocationRoute(33.521, -86.812);
+
+        $timezone = new \DateTimeZone("America/Chicago");
+        $now = new \DateTimeImmutable();
+        $offset = $timezone->getOffset($now);
+
+        $data = $this->block->build();
+
+        foreach ($data["hours"] as $period) {
+            $time = \DateTimeImmutable::createFromFormat(
+                \DateTimeInterface::ISO8601_EXPANDED,
+                $period["timestamp"],
+            );
+
+            // The time from the timestamp should have offset information
+            // embedded in it. So we'll just compare the two.
+            $this->assertEquals($offset, $time->getOffset());
+        }
+    }
+}

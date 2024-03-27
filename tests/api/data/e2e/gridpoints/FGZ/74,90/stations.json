@@ -1,0 +1,265 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": {
+        "@id": "s:GeoCoordinates",
+        "@type": "geo:wktLiteral"
+      },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": {
+        "@id": "s:Distance",
+        "@type": "s:QuantitativeValue"
+      },
+      "bearing": {
+        "@type": "s:QuantitativeValue"
+      },
+      "value": {
+        "@id": "s:value"
+      },
+      "unitCode": {
+        "@id": "s:unitCode",
+        "@type": "@id"
+      },
+      "forecastOffice": {
+        "@type": "@id"
+      },
+      "forecastGridData": {
+        "@type": "@id"
+      },
+      "publicZone": {
+        "@type": "@id"
+      },
+      "county": {
+        "@type": "@id"
+      },
+      "observationStations": {
+        "@container": "@list",
+        "@type": "@id"
+      }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/KFLG",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-111.66637, 35.144329900000002]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KFLG",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 2131.7712000000001
+        },
+        "stationIdentifier": "KFLG",
+        "name": "Flagstaff Pulliam Airport",
+        "timeZone": "America/Phoenix",
+        "forecast": "https://api.weather.gov/zones/forecast/AZZ015",
+        "county": "https://api.weather.gov/zones/county/AZC005",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ115"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KCMR",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-112.19438890000001, 35.305472100000003]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KCMR",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 2036.0640000000001
+        },
+        "stationIdentifier": "KCMR",
+        "name": "Williams/Clark Memorial Airport",
+        "timeZone": "America/Phoenix",
+        "forecast": "https://api.weather.gov/zones/forecast/AZZ015",
+        "county": "https://api.weather.gov/zones/county/AZC005",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ115"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KINW",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-110.72083000000001, 35.028060000000004]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KINW",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 1505.1024
+        },
+        "stationIdentifier": "KINW",
+        "name": "Winslow, Winslow Municipal Airport",
+        "timeZone": "America/Phoenix",
+        "forecast": "https://api.weather.gov/zones/forecast/AZZ013",
+        "county": "https://api.weather.gov/zones/county/AZC017",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ113"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KPRC",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-112.42222, 34.649169999999998]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KPRC",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 1537.1063999999999
+        },
+        "stationIdentifier": "KPRC",
+        "name": "Prescott, Love Field",
+        "timeZone": "America/Phoenix",
+        "forecast": "https://api.weather.gov/zones/forecast/AZZ008",
+        "county": "https://api.weather.gov/zones/county/AZC025",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ108"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KGCN",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-112.15537999999999, 35.945819999999998]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KGCN",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 2011.0704000000001
+        },
+        "stationIdentifier": "KGCN",
+        "name": "Grand Canyon National Park Airport",
+        "timeZone": "America/Phoenix",
+        "forecast": "https://api.weather.gov/zones/forecast/AZZ006",
+        "county": "https://api.weather.gov/zones/county/AZC005",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ106"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KPAN",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-111.3392558, 34.256836399999997]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KPAN",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 1571.8535999999999
+        },
+        "stationIdentifier": "KPAN",
+        "name": "Payson Airport",
+        "timeZone": "America/Phoenix",
+        "forecast": "https://api.weather.gov/zones/forecast/AZZ018",
+        "county": "https://api.weather.gov/zones/county/AZC007",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ118"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KSOW",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-110.00556, 34.265279999999997]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KSOW",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 1954.9872
+        },
+        "stationIdentifier": "KSOW",
+        "name": "Show Low, Show Low Regional Airport",
+        "timeZone": "America/Phoenix",
+        "forecast": "https://api.weather.gov/zones/forecast/AZZ017",
+        "county": "https://api.weather.gov/zones/county/AZC017",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ117"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KPGA",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-111.44806, 36.920560000000002]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KPGA",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 1313.9928
+        },
+        "stationIdentifier": "KPGA",
+        "name": "Page, Page Municipal Airport",
+        "timeZone": "America/Phoenix",
+        "forecast": "https://api.weather.gov/zones/forecast/AZZ005",
+        "county": "https://api.weather.gov/zones/county/AZC005",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ105"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KRQE",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-109.06667, 35.649999999999999]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KRQE",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 2054.9616000000001
+        },
+        "stationIdentifier": "KRQE",
+        "name": "Window Rock, Window Rock Airport",
+        "timeZone": "America/Denver",
+        "forecast": "https://api.weather.gov/zones/forecast/AZZ011",
+        "county": "https://api.weather.gov/zones/county/AZC001",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ111"
+      }
+    }
+  ],
+  "observationStations": [
+    "https://api.weather.gov/stations/KFLG",
+    "https://api.weather.gov/stations/KSEZ",
+    "https://api.weather.gov/stations/KCMR",
+    "https://api.weather.gov/stations/KINW",
+    "https://api.weather.gov/stations/KPRC",
+    "https://api.weather.gov/stations/KGCN",
+    "https://api.weather.gov/stations/KPAN",
+    "https://api.weather.gov/stations/KSOW",
+    "https://api.weather.gov/stations/KPGA",
+    "https://api.weather.gov/stations/KRQE"
+  ],
+  "pagination": {
+    "next": "https://api.weather.gov/stations?id%5B0%5D=KCMR&id%5B1%5D=KFLG&id%5B2%5D=KGCN&id%5B3%5D=KINW&id%5B4%5D=KPAN&id%5B5%5D=KPGA&id%5B6%5D=KPRC&id%5B7%5D=KRQE&id%5B8%5D=KSEZ&id%5B9%5D=KSJN&id%5B10%5D=KSOW&cursor=eyJzIjo1MDB9"
+  }
+}
