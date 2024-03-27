@@ -227,6 +227,13 @@ trait AlertTrait
 
         $alerts = AlertUtility::sort($alerts);
 
+        // The API's alert ids are just too long for use
+        // in the DOM. Let's loop through and simply
+        // assign an index value
+        for ($i = 0; $i < count($alerts); $i++) {
+            $alerts[$i]->alertId = $i + 1;
+        }
+
         // For some reason, Twig is unreliable in how it formats the dates.
         // Sometimes they are done in the timezone-local time, other times it
         // reverts to UTC. However, when we do it here, it's consistently

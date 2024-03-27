@@ -7,7 +7,7 @@
       <td colspan="{{ alertInfo.periodIndex }}"></td>
     {% endif %}
     <td colspan="{{alertInfo.duration}}">
-      <div class="hourly-table__alert">
+      <a class="hourly-table__alert" href="#alert_{{alertInfo.alert.alertId}}">
         <div class="display-flex">
           <div class="width-3 height-3 margin-right-05">
             <svg role="img" aria-hidden="true" class="width-full height-full">
@@ -16,7 +16,7 @@
           </div>
           {{alertInfo.alert.event}}
         </div>
-      </div>
+      </a>
     </td>
     {% if remainingCount > 0 %}
       <td colspan="{{ remainingCount }}"></td>
