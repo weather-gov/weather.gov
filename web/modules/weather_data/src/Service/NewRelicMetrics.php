@@ -4,7 +4,6 @@ namespace Drupal\weather_data\Service;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Psr7\Request;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Logger\LoggerChannelTrait;
 

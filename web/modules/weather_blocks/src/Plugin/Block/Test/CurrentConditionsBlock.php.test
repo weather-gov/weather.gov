@@ -12,8 +12,8 @@ final class CurrentConditionsBlockTest extends Base
     /**
      * Common setup for all component tests.
      *
-     * Creates a mock of a weather data service and injects it into a new local
-     * alert block object.
+     * Creates a mock of a weather data service and injects it into a new
+     * current conditions block object.
      */
     protected function setUp($type = null, $override = true): void
     {

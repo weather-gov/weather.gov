@@ -11,7 +11,7 @@ use Drupal\weather_data\Service\NewRelicMetrics;
 use Drupal\weather_data\Service\WeatherDataService;
 use Drupal\weather_data\Service\WeatherEntityService;
 use GuzzleHttp\Client;
-use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\FulfilledPromise;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -103,8 +103,7 @@ abstract class EndToEndBase extends TestCase
             false,
         );
 
-        $nrPromise = new Promise();
-        $nrPromise->resolve(true);
+        $nrPromise = new FulfilledPromise(true);
         $newRelic = $this->createStub(NewRelicMetrics::class);
         $newRelic->method("sendMetric")->willReturn($nrPromise);
 
