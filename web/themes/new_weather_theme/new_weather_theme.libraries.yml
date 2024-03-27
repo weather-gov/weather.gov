@@ -31,7 +31,7 @@ localize-timestamps:
         async: true
 
 tabbed_nav:
-  version: 2024-02-14
+  version: 2024-03-20
   js:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
 
