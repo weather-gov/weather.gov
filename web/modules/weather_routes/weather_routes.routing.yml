@@ -1,3 +1,11 @@
+weather_routes.security:
+  path: '/security.txt'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\SecuritytxtController::securitytxtFile
+  requirements:
+    # Public endpoint
+    _access: 'TRUE'
+    
 weather_routes.point:
   path: '/point/{lat}/{lon}'
   defaults:
