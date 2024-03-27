@@ -129,6 +129,7 @@ final class AlertsStructureTest extends EndToEndBase
             "expiresRaw" => $expires->format("c"),
             "timezone" => "America/Chicago",
             "durationText" => "tomorrow afternoon",
+            "alertId" => 1,
         ];
 
         $data = $this->block->build();

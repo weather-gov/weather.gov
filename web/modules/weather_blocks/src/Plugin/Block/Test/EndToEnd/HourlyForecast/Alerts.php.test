@@ -187,6 +187,7 @@ final class HourlyForecastAlertTest extends EndToEndBase
                 ],
                 "timezone" => "America/Chicago",
                 "geometry" => [],
+                "alertId" => 4,
             ],
         ];
 

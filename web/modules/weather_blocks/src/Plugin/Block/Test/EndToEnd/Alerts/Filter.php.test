@@ -115,7 +115,6 @@ final class AlertFilterTest extends EndToEndBase
     /**
      * Test that alerts are sorted correctly.
      * @group e2e
-     * @group e2e2
      */
     public function testAlertSorting(): void
     {
