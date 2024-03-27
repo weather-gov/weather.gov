@@ -30,6 +30,21 @@ const getLocationGeodata = async (magicKey) => {
 };
 
 
+const ArcCache = {
+    get: function(magicKey){
+        const found = window.sessionStorage.getItem(magicKey);
+        if(found){
+            return JSON.parse(found);
+        }
+        return null;
+    },
+    set: function(magicKey, obj){
+        const serialized = JSON.stringify(obj);
+        window.sessionStorage.setItem(magicKey, serialized);
+    }
+};
+
+
 const comboTemplate = `
     <style>
      :host {
@@ -51,6 +66,14 @@ const comboTemplate = `
      :host select {
          display: none;
      }
+
+     #sr-only {
+         display: block;
+         position: absolute;
+         left: -1000%;
+         height: 1px;
+         width: 1px;
+     }
     </style>
     <div id="input-area">
         <slot name="input"></slot>
@@ -60,6 +83,9 @@ const comboTemplate = `
     </select>
     <div id="listbox-wrapper">
         <slot name="listbox"></slot>
+    </div>
+    <div id="sr-only" aria-live="polite">
+        <slot name="sr-only"></slot>
     </div>
 `;
 
@@ -76,11 +102,11 @@ class ComboBox extends HTMLElement {
 
         // Private property defaults
         this.inputDelay = 250;
-        this._geoDataCache = {};
 
         // Bound component methods
         this.handleInput = this.handleInput.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.handleEnterKey = this.handleEnterKey.bind(this);
         this.updateSearch = this.updateSearch.bind(this);
         this.showList = this.showList.bind(this);
         this.hideList = this.hideList.bind(this);
@@ -88,11 +114,12 @@ class ComboBox extends HTMLElement {
         this.navigateUp = this.navigateUp.bind(this);
         this.focusListItem = this.focusListItem.bind(this);
         this.selectListItem = this.selectListItem.bind(this);
-        this.makeSelection = this.makeSelection.bind(this);
+        this.selectWithKeyboard = this.selectWithKeyboard.bind(this);
+        this.selectWithMouse = this.selectWithMouse.bind(this);
         this.submit = this.submit.bind(this);
-        this.handleSelectChanged = this.handleSelectChanged.bind(this);
         this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
         this.getGeodataForKey = this.getGeodataForKey.bind(this);
+        this.updateAriaLive = this.updateAriaLive.bind(this);
     }
 
     connectedCallback(){
@@ -136,12 +163,13 @@ class ComboBox extends HTMLElement {
             window.clearTimeout(this._timeout);
         }
         this._timeout = window.setTimeout(() => {
-            this.updateSearch(event.target.value);
+            this.updateSearch(event.target.value)
+                .then(() => {
+                    this.updateAriaLive(
+                        `Search updated. ${this.querySelectorAll("li").length} results available`
+                    );
+                });
         }, this.inputDelay);
-    }
-
-    handleSelectChanged(event){
-        // Nothing for now
     }
 
     async updateSearch(text){
@@ -176,7 +204,7 @@ class ComboBox extends HTMLElement {
                 li.addEventListener("focus", (e) => {
                     this.cacheLocationGeodata(e.target.dataset.value);
                 });
-                
+                li.addEventListener("click", this.selectWithMouse);
                 return li;
             });
             // Append to shadow select element
@@ -194,6 +222,7 @@ class ComboBox extends HTMLElement {
 
     handleKeyDown(event){
         let handled = true;
+        const inputEl = this.querySelector("input");
         if(event.key === "ArrowDown" || event.key === "Down"){
             this.navigateDown(event.target);
         } else if(event.key === "ArrowUp" || event.key === "Up"){
@@ -201,7 +230,7 @@ class ComboBox extends HTMLElement {
         } else if(event.key === "Escape"){
             this.hideList();
         } else if(event.key === "Enter"){
-            this.makeSelection();
+            this.handleEnterKey(event);
         } else {
             handled = false;
         }
@@ -226,6 +255,7 @@ class ComboBox extends HTMLElement {
 
     hideList(){
         this.setAttribute("aria-expanded", "false");
+        this.querySelector("input").focus();
     }
 
     navigateDown(targetEl){
@@ -290,29 +320,59 @@ class ComboBox extends HTMLElement {
         });
     }
 
-    makeSelection(){
+    handleEnterKey(event){
+        if(event.target.matches('li[role="option"]')){
+            this.selectWithKeyboard(event);
+        } else if(event.target.matches('input[role="combobox"]')) {
+            const selectEl = this.shadowRoot.querySelector("select");
+            if(selectEl.value && selectEl.value !== ""){
+                this.submit();
+            }
+        }
+    }
+
+    selectWithKeyboard(event){
         // If there is a currently focused list item,
         // we make that the current selection
         const selectEl = this.shadowRoot.querySelector("select");
         const inputEl = this.querySelector("input");
-        const currentFocus = this.querySelector('li:focus');
-        if(currentFocus){
-            this.selectListItem(currentFocus);
-        }
-        const selectedItem = this.querySelector('li[aria-selected="true"]');
+        const selectedItem = event.target;
         const option = this.shadowRoot.querySelector(`option[value="${selectedItem.dataset.value}"]`);
         if(option){
             selectEl.value = option.value;
             inputEl.value = option.textContent;
             this.hideList();
-            this.submit();
+            this.updateAriaLive(
+                `You have selected ${inputEl.value}. To see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
+            );
+        }
+    }
+
+    selectWithMouse(event){
+        const selectEl = this.shadowRoot.querySelector("select");
+        const inputEl = this.querySelector("input");
+        this.selectListItem(event.target);
+        const option = this.shadowRoot.querySelector(`option[value="${event.target.dataset.value}"]`);
+        if(option){
+            selectEl.value = option.value;
+            inputEl.value = option.textContent;
+            this.hideList();
+            this.updateAriaLive(
+                `You have selected ${inputEl.value}. Do see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
+            );
         }
     }
 
     async submit(){
         const formEl = this.closest("form[data-location-search]");
+        const textInput = document.createElement("input");
+        textInput.setAttribute("type", "hidden");
+        textInput.setAttribute("name", "placeName");
+        this.append(textInput);
         if(formEl){
             const selectEl = this.shadowRoot.querySelector("select")
+            const optionText = this.shadowRoot.querySelector(`option[value="${selectEl.value}"]`).textContent;
+            textInput.value = optionText;
             const coordinates = await this.getGeodataForKey(selectEl.value);
             if(coordinates){
                 formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
@@ -325,22 +385,36 @@ class ComboBox extends HTMLElement {
     async cacheLocationGeodata(magicKey){
         if(!window.sessionStorage.getItem(magicKey)){
             const result = await getLocationGeodata(magicKey);
-            if(result){
-                window.sessionStorage.setItem(
-                    magicKey,
-                    JSON.stringify(result)
-                );
-            }
+            /* if(result){
+             *     window.sessionStorage.setItem(
+             *         magicKey,
+             *         JSON.stringify(result)
+             *     );
+             * } */
+            ArcCache.set(magicKey, result);
         }
     }
 
     async getGeodataForKey(magicKey){
-        const cached = window.sessionStorage.getItem(magicKey);
-        if(cached){
-            return JSON.parse(cached);
-        } else {
+        /* const cached = window.sessionStorage.getItem(magicKey);
+         * if(cached){
+         *     return JSON.parse(cached);
+         * } else { */
+        const cached = ArcCache.get(magicKey);
+        if(!cached){
             return await getLocationGeodata(magicKey);
         }
+
+        return cached;
+    }
+
+    updateAriaLive(text){
+        window.setTimeout(() => {
+            const span = document.createElement("span");
+            span.setAttribute("slot", "sr-only");
+            span.innerText = text;
+            this.append(span);
+        }, 1000);
     }
 
     attributeChangedCallback(name, oldVal, newVal){
