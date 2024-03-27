@@ -198,3 +198,11 @@ svg[data-wind-direction] {
 .usa-list--unstyled .li-margin-bottom-1 {
   margin-bottom: units(1);
 }
+
+/* Focus ring offset utility
+------------------------------------- */
+.focus-offset-205 {
+  &:focus {
+    outline-offset: units(2.5);
+  }
+}
