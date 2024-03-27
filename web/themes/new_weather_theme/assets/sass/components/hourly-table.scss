@@ -87,3 +87,13 @@ hourly-table[data-scrolled="true"] .usa-table.hourly-table th:first-of-type {
   }
 }
 
+// Text decoration for spanned alert links
+.hourly-table__alert {
+  text-decoration: none;
+  &:visited,
+  &:active
+  &:link {
+    color: initial;
+  }
+}
+
