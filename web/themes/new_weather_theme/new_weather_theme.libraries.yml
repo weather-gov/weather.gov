@@ -45,6 +45,19 @@ hourly_toggle:
   js:
     assets/js/components/HourlyToggle.js: { preprocess: false }
 
+radar:
+  version: 2024-03-28
+  css:
+    theme:
+      assets/css/radar/cmi-radar.1185c3ee.css:
+  js:
+    assets/js/radar.js:
+      attributes:
+        async: true
+    https://radar.weather.gov/cmi-radar/cmi-radar.1185c3ee.js:
+      attributes:
+        data-wx-radar-cmi: true
+
 digital-analytics-program:
   header: true
   version: 2024-02-14
