@@ -1,4 +1,4 @@
-/* * /
+/*
 agenda: {
   id: 'national', 'weather', 'local' // sets the initial view, default undefined
   center: [lat, lon] // set the intitial center, default center of Conus
@@ -16,7 +16,7 @@ animating: true/false // if radar should enable play-back, default false
 basemap: 'standard', 'topographic', 'satallite', 'ocean', 'darkcanvas' // what basemap to display, default 'standard'
 artcc/cwa/county/state/rfc: true/false // if overlay should display, default false
 }
-//*/
+*/
 
 const setupRadar = () => {
   const container = document.querySelector("wx-radar");
