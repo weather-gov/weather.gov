@@ -1,3 +1,23 @@
+/* * /
+agenda: {
+  id: 'national', 'weather', 'local' // sets the initial view, default undefined
+  center: [lat, lon] // set the intitial center, default center of Conus
+  location: [lat, lon] // set the initial selected location (only applies to weather view), default undefined
+  layer: {radar product options by view} // the selected product, default to Super Resolution Base Reflectivity
+  filter: 'WSR-88D', 'TDWR', undefined (all) // type of radar stations to display, default to undefined
+  station: {any station id}, undefined // The selected station, default undefined
+}
+opacity: {
+  local/national/local/localStations: 0 to 1 // opacity for each layer, not the if layer is visible (which is set by view)
+}
+menu: true/false // display the top-right menu, default true
+shortFuseOnly: true/false // if only short-fused alerts (vs all hazards) should display (if visible), default false
+animating: true/false // if radar should enable play-back, default false
+basemap: 'standard', 'topographic', 'satallite', 'ocean', 'darkcanvas' // what basemap to display, default 'standard'
+artcc/cwa/county/state/rfc: true/false // if overlay should display, default false
+}
+//*/
+
 const setupRadar = () => {
   const container = document.querySelector("wx-radar");
 
@@ -5,6 +25,11 @@ const setupRadar = () => {
   const lon = Number.parseFloat(container.getAttribute("lon"));
 
   const point = [lon, lat];
+
+  // no alerts;
+  // different heights on different breakpoints
+  // explore customizing the controls
+  // for a11y, describe that it's a radar map and otherwise hide it
 
   const options = {
     settings: {
@@ -29,7 +54,7 @@ const setupRadar = () => {
       layers: {
         alerts: {
           filter: "hazards",
-          opacity: 0.8,
+          opacity: 0,
         },
         local: {
           opacity: 0.6,
