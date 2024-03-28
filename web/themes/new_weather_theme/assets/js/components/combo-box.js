@@ -87,6 +87,7 @@ const comboTemplate = `
      #input-area {
          display: flex;
          flex-direction: row;
+         align-items: center;
      }
 
      ::slotted(input){
@@ -485,9 +486,12 @@ class ComboBox extends HTMLElement {
      * as the current selection.
      * Updates both the value of the combobox input and
      * the hidden select element to the corresponding option.
-     * When complete, will hide the result list and also
+     * When complete, if this is a keyboard event, it will
+     * hide the result list and also
      * update the aria-live region with text about what was
      * selected.
+     * If it was a mouse/click event, it will not update the
+     * aria-live region, and instead will directly call submit()
      */
     selectOption(event){
         // If there is a currently focused list item,
@@ -499,10 +503,17 @@ class ComboBox extends HTMLElement {
         if(option){
             this._setSelectToOption(option);
             inputEl.value = option.textContent;
-            this.hideList();
-            this.updateAriaLive(
-                `You have selected ${inputEl.value}. To see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
+            this.selectListItem(
+              this.querySelector(`li[data-value="${option.value}"]`)  
             );
+            this.hideList();
+            if(event.type !== "click"){
+                this.updateAriaLive(
+                    `You have selected ${inputEl.value}. To see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
+                );
+            } else {
+                this.submit();
+            }
         }
     }
 
