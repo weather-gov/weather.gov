@@ -1,0 +1,54 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\weather_blocks\Plugin\Block\HourlyPrecipitationBlock;
+
+/**
+ * Tests that hourly forecast data is filtered to the future.
+ */
+final class HourlyPrecipitationTests extends EndToEndBase
+{
+    /**
+     * Create the block under test.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(HourlyPrecipitationBlock::class);
+    }
+
+    /**
+     * Validate that no future hours are returned.
+     * @group e2e
+     */
+    public function testPastHoursAreRemoved(): void
+    {
+        // This endpoint has past hours
+        $this->onLocationRoute(33.521, -86.812);
+
+        $now = new \DateTimeImmutable();
+
+        $data = $this->block->build();
+
+        foreach ($data["periods"] as $period) {
+            $end = \DateTimeImmutable::createFromFormat(
+                \DateTimeInterface::ISO8601_EXPANDED,
+                $period->endRaw,
+            );
+            $this->assertEquals(true, $end > $now);
+        }
+    }
+
+    /**
+     * Validate that precipitation amounts are rounded to 100ths of an inch.
+     * @group e2e
+     */
+    public function testPrecipitationIsRoundedToHundredths(): void
+    {
+        $this->onLocationRoute(33.211, -87.566);
+
+        $data = $this->block->build();
+
+        $this->assertEquals(1.28, $data["periods"][0]->value);
+    }
+}

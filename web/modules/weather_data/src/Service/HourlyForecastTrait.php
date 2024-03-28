@@ -272,8 +272,10 @@ trait HourlyForecastTrait
             if ($end >= $now) {
                 $periods[] = (object) [
                     "start" => $start->format("g A"),
+                    "startRaw" => $start->format("c"),
                     "end" => $end->format("g A"),
                     "value" => round($value, 2),
+                    "endRaw" => $end->format("c"),
                 ];
             }
         }

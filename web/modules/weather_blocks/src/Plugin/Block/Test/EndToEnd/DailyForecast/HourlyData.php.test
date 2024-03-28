@@ -1,0 +1,94 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\weather_blocks\Plugin\Block\DailyForecastBlock;
+
+/**
+ * Tests for daily forecast data structure.
+ */
+final class DailyForecastWithHourlyDataTest extends EndToEndBase
+{
+    /**
+     * Create the block under test.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(DailyForecastBlock::class);
+    }
+
+    /**
+     * Validate that today's hours start at the top of the hour.
+     * @group e2e
+     */
+    public function testTodayHoursBeginNextHour(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+
+        $start = new \DateTimeImmutable();
+        $start = $start->setTimezone(new \DateTimeZone("America/Chicago"));
+
+        $hour = (int) $start->format("H");
+        $start = $start->setTime($hour + 1, 0, 0, 0);
+
+        $data = $this->block->build();
+
+        $this->assertEquals(
+            $start->format("c"),
+            $data["todayHourly"][0]["timestamp"],
+        );
+    }
+
+    /**
+     * Validate that today's hours end at the upcoming 6am.
+     * @group e2e
+     */
+    public function testTodayHoursEnd6am(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+
+        $start = new \DateTimeImmutable();
+        $start = $start->setTimezone(new \DateTimeZone("America/Chicago"));
+
+        $hour = (int) $start->format("H");
+
+        $end = $start->setTime(6, 0, 0, 0);
+        if ($hour >= 6) {
+            $end = $end->modify("+1 day");
+        }
+
+        $data = $this->block->build();
+
+        $this->assertEquals(
+            $end->format("c"),
+            end($data["todayHourly"])["timestamp"],
+        );
+    }
+
+    /**
+     * Validates that extended hourly periods are 6am to 6am.
+     * @group e2e
+     */
+    public function testDetailedHourlyPeriods(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+
+        $start = new \DateTimeImmutable();
+        $start = $start->setTimezone(new \DateTimeZone("America/Chicago"));
+        $start = $start->setTime(6, 0, 0, 0);
+
+        $data = $this->block->build();
+
+        $extended = $data["detailed"];
+        foreach ($extended as $period) {
+            $start = $start->modify("+1 day");
+            $hourly = $period["hourlyPeriods"];
+
+            $this->assertEquals($start->format("c"), $hourly[0]["timestamp"]);
+            $this->assertEquals(
+                $start->modify("+1 day")->format("c"),
+                end($hourly)["timestamp"],
+            );
+        }
+    }
+}
