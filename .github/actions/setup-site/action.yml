@@ -1,0 +1,51 @@
+runs:
+  using: composite
+  steps:
+    - name: setup image cacheing
+      if: needs.should-test.outputs.yes == 'true'
+      uses: actions/cache@v4
+      with:
+        key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
+        path: /tmp/image.tar
+
+    - name: database dump cache
+      if: needs.should-test.outputs.yes == 'true'
+      uses: actions/cache@v4
+      id: db-cache
+      with:
+        key: drupal-database-${{ hashFiles('web/config/**/*.yml', 'web/scs-export/**/*') }}
+        path: weathergov.sql
+
+    - name: start the site
+      if: needs.should-test.outputs.yes == 'true'
+      shell: bash
+      run: |
+        mkdir .coverage
+        chmod a+rwx -R .coverage
+        docker load --input /tmp/image.tar
+        docker compose up -d
+
+    # Give the containers a moment to settle.
+    - name: wait a tick
+      if: needs.should-test.outputs.yes == 'true'
+      shell: bash
+      run: sleep 10
+
+    - name: populate the site
+      if: needs.should-test.outputs.yes == 'true'
+      shell: bash
+      run: |
+        cp web/sites/example.settings.dev.php web/sites/settings.dev.php
+        mysql \
+          --host=127.0.0.1 \
+          --port=3306 \
+          --password=drupal \
+          --user=root \
+          weathergov < weathergov.sql
+
+        echo "UPDATE users SET uid=0 WHERE uid=2;" | mysql \
+          --host=127.0.0.1 \
+          --port=3306 \
+          --password=drupal \
+          --user=root \
+          weathergov
