@@ -15,13 +15,15 @@
       <div class="display-flex">
         <div class="current-conditions-temp display-flex flex-row flex-align-start margin-right-2 text-primary-darker">
           {{ content.temperature }}
-          <span class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">℉</span>
+          <span class="usa-sr-only">℉</span>
+          <span aria-hidden="true" class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">&deg;F</span>
         </div>
         <div class="margin-top-05 position-relative">
           <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
           <div class="text-primary-darker">
             <p class="margin-top-2px font-body-md">{{ content.feels_like }}
-              <span class="font-body-3xs position-absolute margin-top">℉</span>
+              <span class="usa-sr-only">℉</span>
+              <span aria-hidden="true" class="font-body-3xs position-absolute margin-top">&deg;F</span>
             </p>
           </div>
         </div>

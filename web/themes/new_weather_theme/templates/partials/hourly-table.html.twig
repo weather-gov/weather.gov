@@ -33,7 +33,9 @@
         {% for period in hours %}
         <td>
           {% if period.temperature is not same as (null) %}
-          {{ period.temperature }}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
+          {{ period.temperature }}
+          <span class="usa-sr-only">℉</span>
+          <span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
           {% else %}
           <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
           {% endif %}
@@ -113,7 +115,9 @@
         {% for period in hours %}
         <td>
           {% if period.dewpoint is not same as (null) %}
-          {{period.dewpoint}}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
+          {{period.dewpoint}}
+          <span class="usa-sr-only">℉</span>
+          <span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
           {% else %}
           <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
           {% endif %}
