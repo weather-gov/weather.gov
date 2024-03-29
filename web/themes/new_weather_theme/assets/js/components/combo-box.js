@@ -122,13 +122,24 @@ const comboTemplate = `
     <div id="listbox-wrapper">
         <slot name="listbox"></slot>
     </div>
-    <select>
-        <slot name="option"></slot>
-    </select>
     <div id="sr-only" aria-live="polite">
         <slot name="sr-only"></slot>
     </div>
 `;
+
+/**
+ * A note on terminology:
+ * Due to how the WCAG recommendations discuss
+ * listbox and combobox components, there can be some
+ * confusion about what 'focus'means. So in this
+ * component we will distinguish between actual
+ * browser 'focus' in the traditional sense, and the
+ * WCAG concept of 'focus', which is really a set of
+ * attributes and styling for accessibility recommendations,
+ * an corresponds to an item being 'currently selected'
+ * (but not 'chosen') in our context.
+ * We call this new type of focus pseudo-focus
+ */
 
 class ComboBox extends HTMLElement {
     constructor(){
@@ -143,32 +154,37 @@ class ComboBox extends HTMLElement {
 
         // Private property defaults
         this.inputDelay = 250;
+        this.selectedIndex = -1;
+        this.value = null;
 
         // Bound component methods
         this.handleInput = this.handleInput.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleEnterKey = this.handleEnterKey.bind(this);
-        this.handleSelectChanged = this.handleSelectChanged.bind(this);
+        this.handleChanged = this.handleChanged.bind(this);
         this.updateSearch = this.updateSearch.bind(this);
         this.showList = this.showList.bind(this);
         this.hideList = this.hideList.bind(this);
         this.navigateDown = this.navigateDown.bind(this);
         this.navigateUp = this.navigateUp.bind(this);
-        this.focusListItem = this.focusListItem.bind(this);
-        this.selectListItem = this.selectListItem.bind(this);
-        this.selectOption = this.selectOption.bind(this);
+        this.pseudoFocusListItem = this.pseudoFocusListItem.bind(this);
+        this.pseudoBlurItems = this.pseudoBlurItems.bind(this);
+        this.chooseOption = this.chooseOption.bind(this);
         this.submit = this.submit.bind(this);
         this.clear = this.clear.bind(this);
         this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
         this.getGeodataForKey = this.getGeodataForKey.bind(this);
         this.updateAriaLive = this.updateAriaLive.bind(this);
-        this._setSelectToOption = this._setSelectToOption.bind(this);
+        this.initInput = this.initInput.bind(this);
+        this.initListbox = this.initListbox.bind(this);
+        this.initToggleButton = this.initToggleButton.bind(this);
+        this.initClearButton = this.initClearButton.bind(this);
     }
 
     connectedCallback(){
         this.addEventListener("input", this.handleInput);
         this.addEventListener("keydown", this.handleKeyDown);
-        this.shadowRoot.querySelector("select").addEventListener("change", this.handleSelectChanged);
+        this.addEventListener("change", this.handleChanged);
 
         // Initial attributes
         this.setAttribute("aria-expanded", "false");
@@ -181,78 +197,101 @@ class ComboBox extends HTMLElement {
         }
 
         // Initial live dom elements, if not already present
-        if(!this.querySelector('[slot="input"]')){
-            let input = document.createElement("input");
-            input.setAttribute("type", "text");
-            input.setAttribute("slot", "input");
-            input.setAttribute("role", "combobox");
-            input.setAttribute("aria-owns", `${this.id}--list`);
-            input.setAttribute("aria-controls", `${this.id}--list`);
-            input.setAttribute("aria-autocomplete", "list");
-            input.setAttribute("autocapitalize", "off");
-            input.setAttribute("autocomplete", "off");
-            input.setAttribute("aria-activedescendant", true);
-            input.classList.add(...[
-                "wx-combo-box__input"
-            ]);
-            this.append(input);
-        }
-        if(!this.querySelector('[slot="listbox"]')){
-            let list = document.createElement("ul");
-            list.setAttribute("role", "listbox");
-            list.setAttribute("slot", "listbox");
-            list.id = `${this.id}--list`;
-            list.classList.add(...[
-                "wx-combo-box__list",
-            ]);
-            this.append(list);
-        }
-        if(!this.querySelector('[slot="separator"]')){
-            let separator = document.createElement("span");
-            separator.classList.add("wx-combo-box__input-button-separator");
-            separator.setAttribute("slot", "separator");
-            separator.innerHTML = "&nbsp;";
-            this.append(separator);
-        }
-        if(!this.querySelector('[slot="toggle-button"]')){
-            let toggleButton = document.createElement("button");
-            toggleButton.setAttribute("type", "button");
-            toggleButton.setAttribute("aria-label", "Toggle the dropdown list");
-            toggleButton.innerHTML = "&nbsp;";
-            toggleButton.classList.add(...[
-                "wx-combo-box__toggle-list",
-                "display-block"
-            ]);
-            toggleButton.setAttribute("slot", "toggle-button");
-            toggleButton.addEventListener("click", event => {
-                if(this.isShowingList){
-                    this.hideList();
-                } else {
-                    this.showList();
-                }
-            });
-            this.append(toggleButton);
-        }
-        if(!this.querySelector('[slot="clear-button"]')){
-            let clearButton = document.createElement("button");
-            clearButton.setAttribute("type", "button");
-            clearButton.setAttribute("tabindex", "-1");
-            clearButton.setAttribute("slot", "clear-button");
-            clearButton.classList.add(...[
-                "wx-combo-box__clear-input",
-                "display-block"
-            ]);
-            clearButton.innerHTML = "&nbsp;";
-            clearButton.addEventListener("click", e => {
-                this.clear();
-            });
-            this.append(clearButton);
-        }
+        this.initInput();
+        this.initListbox();
+        this.initClearButton();
+        this.initToggleButton();
+        
     }
 
     disconnectedCallback(){
         this.removeEventListener("input", this.handleInput);
-        this.shadowRoot.querySelector("select").removeEventListener("change", this.handleSelectChanged);
+        this.removeEventListener("change", this.handleChanged);
+    }
+
+    /**
+     * Set the required attributes and classes on the
+     * input element.
+     * If there is no valid input element, create it
+     */
+    initInput(){
+        let input = this.querySelector('input[slot="input"]');
+        if(!input){
+            input = document.createElement("input");
+        }
+        input.setAttribute("type", "text");
+        input.setAttribute("slot", "input");
+        input.setAttribute("role", "combobox");
+        input.setAttribute("aria-owns", `${this.id}--list`);
+        input.setAttribute("aria-controls", `${this.id}--list`);
+        input.setAttribute("aria-autocomplete", "list");
+        input.setAttribute("autocapitalize", "off");
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("aria-activedescendant", "");
+        input.classList.add(...[
+            "wx-combo-box__input"
+        ]);
+        this.append(input);
+        this.input = input;
+    }
+
+    initListbox(){
+        let listbox = this.querySelector('[slot="listbox"]');
+        if(!listbox){
+            listbox = document.createElement("ul");
+        }
+        listbox.setAttribute("role", "listbox");
+        listbox.setAttribute("slot", "listbox");
+        listbox.id = `${this.id}--list`;
+        listbox.classList.add(...[
+            "wx-combo-box__list",
+        ]);
+        this.append(listbox);
+        this.listbox = listbox;
+    }
+
+    initToggleButton(){
+        let toggleButton = this.querySelector('[slot="toggle-button"]');
+        if(!toggleButton){
+            toggleButton = document.createElement("button");
+        }
+        toggleButton.setAttribute("type", "button");
+        toggleButton.setAttribute("aria-label", "Toggle the dropdown list");
+        toggleButton.innerHTML = "&nbsp;";
+        toggleButton.classList.add(...[
+            "wx-combo-box__toggle-list",
+            "display-block"
+        ]);
+        toggleButton.setAttribute("slot", "toggle-button");
+        toggleButton.addEventListener("click", event => {
+            if(this.isShowingList){
+                this.hideList();
+            } else {
+                this.showList();
+            }
+        });
+        this.append(toggleButton);
+        this.toggleButton = toggleButton;
+    }
+
+    initClearButton(){
+        let clearButton = this.querySelector('[slot="clear-button"]');
+        if(!clearButton){
+            clearButton = document.createElement("button");
+        }
+        clearButton.setAttribute("type", "button");
+        clearButton.setAttribute("tabindex", "-1");
+        clearButton.setAttribute("slot", "clear-button");
+        clearButton.classList.add(...[
+            "wx-combo-box__clear-input",
+            "display-block"
+        ]);
+        clearButton.innerHTML = "&nbsp;";
+        clearButton.addEventListener("click", e => {
+            this.clear();
+        });
+        this.append(clearButton);
+        this.clearButton = clearButton;
     }
 
     /**
@@ -287,19 +326,13 @@ class ComboBox extends HTMLElement {
         const response = await searchLocation(text);
         if(response.ok){
             const data = await response.json();
+
             // Clear the existing options
             Array.from(this.querySelectorAll('ul[role="listbox"] > li')).forEach(optionEl => {
                 optionEl.remove();
             });
-            this.shadowRoot.querySelector("select").innerHTML = "";
+
             // Create new options
-            const options = data.suggestions.map(suggestion => {
-                const option = document.createElement("option");
-                option.innerText = suggestion.text;
-                option.setAttribute("value", suggestion.magicKey);
-                option.setAttribute("slot", "option");
-                return option;
-            });
             const items = data.suggestions.map((suggestion, idx) => {
                 const li = document.createElement("li");
                 li.innerText = suggestion.text;
@@ -311,15 +344,15 @@ class ComboBox extends HTMLElement {
                 li.classList.add(...[
                     "wx-combo-box__list-option"
                 ]);
+                li.id = `${this.id}--item-${idx + 1}`;
 
                 li.addEventListener("focus", (e) => {
                     this.cacheLocationGeodata(e.target.dataset.value);
                 });
-                li.addEventListener("click", this.selectOption);
+                li.addEventListener("click", this.chooseOption);
                 return li;
             });
             // Append to shadow select element
-            this.shadowRoot.querySelector("select").append(...options);
             this.querySelector('[slot="listbox"]').append(...items);
 
             // If there are results, show the area
@@ -337,7 +370,6 @@ class ComboBox extends HTMLElement {
      */
     handleKeyDown(event){
         let handled = true;
-        const inputEl = this.querySelector("input");
         if(event.key === "ArrowDown" || event.key === "Down"){
             this.navigateDown(event.target);
         } else if(event.key === "ArrowUp" || event.key === "Up"){
@@ -356,17 +388,18 @@ class ComboBox extends HTMLElement {
     }
 
     /**
-     * Handler for change events on the shadow dom's
-     * select element. Note that due to how these
-     * element's getters/setters work, we are forced to
-     * trigger the change event manually.
-     * See _setSelectToOption()
+     * Handler for a change event triggered on
+     * this component.
+     * The event will be dispatched when a value
+     * has been _chosen_ (as opposed to 'selected')
+     * and the corresponding `value` property has been
+     * changed.
+     * In this handler, we determine whether or not
+     * to show the clear button.
      */
-    handleSelectChanged(event){
+    handleChanged(event){
         const wrapper = this.shadowRoot.getElementById("clear-button-wrapper");
-        if(event.target.selectedIndex >= 0){
-            // In this case, something is currently selected,
-            // so we should show the clear button
+        if(event.target.value){
             wrapper.classList.remove("hidden");
         } else {
             wrapper.classList.add("hidden");
@@ -387,7 +420,9 @@ class ComboBox extends HTMLElement {
             // in aria and in visual styling,
             // to the first element in the dropdown
             const firstListItem = this.querySelector("ul li:first-child");
-            this.selectListItem(firstListItem);
+            if(firstListItem){
+                this.pseudoFocusListItem(firstListItem);
+            }
         }
     }
 
@@ -398,7 +433,20 @@ class ComboBox extends HTMLElement {
      */
     hideList(){
         this.setAttribute("aria-expanded", "false");
-        this.querySelector("input").focus();
+        this.input.setAttribute("aria-activedescendant", "");
+    }
+
+    /**
+     * Remove the pseudo-focus from all
+     * items in the listbox
+     */
+    pseudoBlurItems(){
+        Array.from(this.listbox.querySelectorAll("li")).forEach(li => {
+            li.setAttribute("aria-selected", "false");
+            li.classList.remove("wx-combox-box__list-option--focused");
+            li.classList.remove("wx-combox-box__list-option--selected");
+        });
+        this.input.setAttribute("aria-activedescendant", "");
     }
 
     /**
@@ -418,16 +466,19 @@ class ComboBox extends HTMLElement {
             this.showList();
             return;
         }
-        
+
         let nextItem;
-        if(targetEl.matches("input:focus")){
+        const currentSelection = this.querySelector('li[aria-selected="true"]');
+        if(!currentSelection){
             nextItem = this.querySelector("li:first-child");
         } else {
-            nextItem = this.querySelector('li:focus + li');
+            nextItem = this.querySelector('li[aria-selected="true"] + li');
         }
-        
+
+        // Per WCAG guidelines, we can do nothing
+        // if the pseudo-focus is on the last item.
         if(nextItem){
-            this.focusListItem(nextItem);
+            this.pseudoFocusListItem(nextItem);
         }
     }
 
@@ -442,55 +493,49 @@ class ComboBox extends HTMLElement {
      * originating keyboard event. 
      */
     navigateUp(targetEl){
-        const listItems = Array.from(this.querySelectorAll("li"));
-        const currentFocus = this.querySelector('li:focus');
-        const currentFocusIndex = listItems.indexOf(currentFocus);
-        const nextItem = listItems[currentFocusIndex - 1];
+        if(!this.isShowingList){
+            return;
+        }
+        
+        const currentSelection = this.listbox.querySelector('li[aria-selected="true"]');
+        if(!currentSelection){
+            this.hideList();
+        }
+
+        // If the selected item matches the first item in the list
+        // then we close the list;
+        const listItems = Array.from(this.listbox.querySelectorAll("li"));
+        const currentItemIndex = listItems.indexOf(currentSelection);
+        if(currentItemIndex <= 0){
+            this.hideList();
+        }
+
+        // Otherwise, we navigate to the previous item in the list
+        const nextItem = listItems[currentItemIndex - 1];
+
         if(nextItem){
-            this.focusListItem(nextItem);
+            this.pseudoFocusListItem(nextItem);
         } else {
-            this.querySelector("input").focus();
             this.hideList();
         }
     }
 
     /**
-     * Visually selects a list item for display and
-     * accessibility purposes.
-     * Updates the classes and aria attributes.
-     * @var anElement HTMLElement - A list item element
-     */
-    selectListItem(anElement){
-        const listItems = Array.from(this.querySelectorAll("ul li"));
-        listItems.forEach(listEl => {
-            if(anElement === listEl){
-                listEl.classList.add("wx-combo-box__list-option--selected");
-                listEl.setAttribute("aria-selected", "true");
-            } else {
-                listEl.classList.remove("wx-combo-box__list-option--selected");
-                listEl.setAttribute("aria-selected", "false");
-            }
-        });
-
-        return listItems.indexOf(anElement);
-    }
-
-    /**
-     * Gives focus to the passed list item element,
+     * Gives pseudo-focus to the passed list item element,
      * blurring all the others accordingly.
      * @var anElement HTMLElement - A list item element
      */
-    focusListItem(anElement){
-        Array.from(this.querySelectorAll("ul li")).forEach(listEl => {
-            if(anElement === listEl){
-                listEl.classList.add("wx-combox-box__list-option--focused");
-                listEl.setAttribute("tabindex", "0");
-                listEl.focus();
-            } else {
-                listEl.classList.remove("wx-combox-box__list-option--focused");
-                listEl.setAttribute("tabindex", "-1");
-            }
-        });
+    pseudoFocusListItem(anElement){
+        this.pseudoBlurItems();
+        anElement.setAttribute("aria-selected", "true");
+        anElement.classList.add(
+            "wx-combox-box__list-option--focused",
+            "wx-combox-box__list-option--selected"
+        );
+
+        // Update the input's activedescendant attribute
+        // to refer to this list item's id
+        this.input.setAttribute("aria-activedescendant", anElement.id);
     }
 
     /**
@@ -503,60 +548,71 @@ class ComboBox extends HTMLElement {
      * method simply chooses/selects that list item
      */
     handleEnterKey(event){
-        if(event.target.matches('li[role="option"]')){
-            this.selectOption(event);
-        } else if(event.target.matches('input[role="combobox"]')) {
-            const selectEl = this.shadowRoot.querySelector("select");
-            if(selectEl.selectedIndex > -1){
-                this.submit();
-            }
+        if(!this.isShowingList && this.value){
+            this.submit();
+        } else {
+            this.chooseOption(event);
         }
     }
 
     /**
-     * Selects the currently highlighted option/list-item
-     * as the current selection.
-     * Updates both the value of the combobox input and
-     * the hidden select element to the corresponding option.
-     * When complete, if this is a keyboard event, it will
-     * hide the result list and also
-     * update the aria-live region with text about what was
-     * selected.
-     * If it was a mouse/click event, it will not update the
-     * aria-live region, and instead will directly call submit()
+     * Choses one of the list item options,
+     * determined based on the originating event
+     * object that is passed in.
+     * This handler can be triggered either by a
+     * click event or pressing Enter while on
+     * a pseudo-focused list item.
      */
-    selectOption(event){
-        // If there is a currently focused list item,
-        // we make that the current selection
-        const selectEl = this.shadowRoot.querySelector("select");
-        const inputEl = this.querySelector("input");
-        const selectedItem = event.target;
-        const option = this.shadowRoot.querySelector(`option[value="${selectedItem.dataset.value}"]`);
-        if(option){
-            this._setSelectToOption(option);
-            inputEl.value = option.textContent;
-            this.selectListItem(
-              this.querySelector(`li[data-value="${option.value}"]`)  
+    chooseOption(event){
+        let selectedItem = this.listbox.querySelector('li[aria-selected="true"]');
+        if(event.type === "click"){
+            // If the event was a click, then
+            // the actual item we want isn't the current
+            // pseudo-focus/selection, but instead the
+            // target of the mouse event itself
+            selectedItem = event.target;
+        }
+
+        // Set this component's selectedIndex and
+        // value to the corresponding properties
+        this.selectedIndex = Array.from(this.listbox.querySelectorAll("li")).indexOf(selectedItem); 
+        this.value = selectedItem.getAttribute("data-value");
+
+        // Display the text of the selected item
+        // in the input field
+        this.input.value = selectedItem.textContent;
+
+        // Hide list and trigger change event
+        this.hideList();
+        this.dispatchEvent(
+            new Event("change", {bubbles: true})
+        );
+
+
+        // If the keyboard was used to make a selection,
+        // we _do not submit_ right away. Instead, update
+        // the aria-live reporting with information about
+        // pressing Enter again
+        if(event.type !== "click"){
+            this.updateAriaLive(
+                `You have selected ${this.input.value}. To see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
             );
-            this.hideList();
-            if(event.type !== "click"){
-                this.updateAriaLive(
-                    `You have selected ${inputEl.value}. To see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
-                );
-            } else {
-                this.submit();
-            }
+        } else {
+            this.submit();
         }
     }
 
     /**
-     * Clears the input and the shadow select
-     * element values
+     * Clear all chosen information from this component
      */
     clear(){
-        const input = this.querySelector("input");
-        input.value = null;
-        this._setSelectToOption(null);
+        this.input.value = null;
+        this.selectedItemIndex = -1;
+        this.value = null;
+        this.input.setAttribute("aria-activedescendant", "");
+        this.dispatchEvent(
+            new Event("change", {bubbles: true})
+        );
     }
 
     /**
@@ -570,10 +626,9 @@ class ComboBox extends HTMLElement {
         textInput.setAttribute("name", "placeName");
         this.append(textInput);
         if(formEl){
-            const selectEl = this.shadowRoot.querySelector("select")
-            const optionText = this.shadowRoot.querySelector(`option[value="${selectEl.value}"]`).textContent;
+            const optionText = this.input.value;
             textInput.value = optionText;
-            const coordinates = await this.getGeodataForKey(selectEl.value);
+            const coordinates = await this.getGeodataForKey(this.value);
             if(coordinates){
                 formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
                 formEl.submit();
@@ -633,27 +688,6 @@ class ComboBox extends HTMLElement {
 
     get isShowingList(){
         return this.getAttribute("aria-expanded") === "true";
-    }
-
-    /**
-     * Because the select element is just special in so many ways,
-     * updating the selectedIndex or value programmatically will
-     * _not_ trigger a change event from the element. So, we
-     * have to do it ourselves manually.
-     * This private method is a convenience wrapper for
-     * setting a select to one of its constituent option elements,
-     * then dispatching a change event.
-     */
-    _setSelectToOption(option=null){
-        const selectEl = this.shadowRoot.querySelector("select");
-        if(!option){
-            selectEl.selectedIndex = -1;
-        } else {
-            selectEl.selectedIndex = Array.from(selectEl.children).indexOf(option);
-        }
-
-        const event = new Event("change", { bubbles: true });
-        selectEl.dispatchEvent(event);
     }
 
     static get observedAttributes(){

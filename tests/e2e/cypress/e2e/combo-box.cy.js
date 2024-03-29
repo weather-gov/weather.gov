@@ -54,12 +54,12 @@ describe("wx-combo-box tests", () => {
     it("typing the down key focuses the first element", () => {
       cy.get("wx-combo-box input").type("{downArrow}");
       cy.wait(100);
-      cy.get("wx-combo-box ul").find("li:first-child:focus").should("exist");
+      cy.get("wx-combo-box ul").find('li:first-child[aria-selected="true"]').should("exist");
     });
     it("typing the down arrow twice focuses the second element", () => {
       cy.get("wx-combo-box input").as("input").type("{downArrow}{downArrow}");
       cy.wait(100);
-      cy.get("wx-combo-box ul").find("li:nth-child(2):focus").should("exist");
+      cy.get("wx-combo-box ul").find('li:nth-child(2)[aria-selected="true"]').should("exist");
     });
     it("up arrow collapses the search list", () => {
       cy.get("wx-combo-box input").type("{upArrow}");
