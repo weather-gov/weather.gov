@@ -18,17 +18,21 @@
 .usa-table.hourly-table {
   td {
     min-width: units("card");
+    padding-right: units(2);
     white-space: normal;
   }
 
-  th[scope="row"] {
-    white-space: nowrap;
+  // th[scope="row"] {
+  //   white-space: nowrap;
+  // }
+
+  th {
+    padding-right: units(1.5);
   }
 
   td,
   th {
     padding-left: 0;
-    padding-right: units(3);
     vertical-align: top;
 
     &:first-of-type {

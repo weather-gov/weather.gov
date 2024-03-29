@@ -60,11 +60,22 @@
               {% else %}
               <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
               {% endif %}
-              {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
-              <p class="text-base text-ls-neg-3 font-family-mono font-mono-xs margin-top-05 margin-bottom-0"> {{period.probabilityOfPrecipitation}}% {{ "chance" | t }}<span class="usa-sr-only"> {{ "of precipitation" | t }}</span></p>
-              {% endif%}
             </div>
           </div>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="chance-precipitation">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker bg-primary-lightest font-mono-xs text-uppercase z-400">
+          {{"Chance of precipitation" | t}}
+        </th>
+        {% for period in hours %}
+        <td> 
+          {% if period.probabilityOfPrecipitation is not same as (null) %}
+          <p class="margin-y-0"> {{period.probabilityOfPrecipitation}}% </p>
+          {% else %}
+          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
           {% endif %}
         </td>
         {% endfor %}
