@@ -19,12 +19,18 @@ final class HourlyForecastAlertTest extends EndToEndBase
     /**
      * Simply validate the data structure.
      * @group e2e
+     * @group e2e2
      */
     public function testHourlyAlertDataStructure(): void
     {
         $this->onLocationRoute(34.749, -92.275);
 
-        // Build up expected times, based on the contents of the test data.
+        $data = $this->block->build();
+
+        // Build up expected times, based on the contents of the test data. Do
+        // this after fetching the data so we don't get a timestamp that's off
+        // by a second due to processing inside the build() method.
+        date_default_timezone_set("UTC");
         $now = new \DateTimeImmutable();
 
         $sent = $now->modify("-1 hour");
@@ -190,8 +196,6 @@ final class HourlyForecastAlertTest extends EndToEndBase
                 "alertId" => 4,
             ],
         ];
-
-        $data = $this->block->build();
 
         $actual = $data["alertPeriods"][0];
 
