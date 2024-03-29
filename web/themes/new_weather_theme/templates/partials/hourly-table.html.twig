@@ -71,7 +71,7 @@
         </th>
         {% for period in hours %}
         <td> 
-          {% if period.probabilityOfPrecipitation %}
+          {% if period.probabilityOfPrecipitation is not same as (null) %}
           <p class="margin-y-0"> {{period.probabilityOfPrecipitation}}% </p>
           {% else %}
           <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
