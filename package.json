@@ -36,7 +36,7 @@
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^24.0.0",
     "prettier": "^3.2.5",
-    "stylelint": "^16.3.0",
+    "stylelint": "^16.3.1",
     "stylelint-config-standard-scss": "^13.0.0",
     "xml-parse": "^0.4.0"
   },
