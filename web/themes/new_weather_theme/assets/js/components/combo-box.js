@@ -67,7 +67,7 @@ const comboTemplate = `
          top: 100%;
          left: 0;
          min-width: 100%;
-         max-height: 300px;
+         height: 300px;
          overflow-y: auto;
          box-sizing: border-box;
      }
@@ -517,6 +517,11 @@ class ComboBox extends HTMLElement {
             "wx-combo-box__list-option--focused",
             "wx-combo-box__list-option--selected"
         );
+
+        // Scroll the list item into view if it is
+        // not currently visible in the list. This is to
+        // help users with difficult vision
+        anElement.scrollIntoView({block: 'nearest', inline: 'start'});
 
         // Update the input's activedescendant attribute
         // to refer to this list item's id
