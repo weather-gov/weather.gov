@@ -67,16 +67,14 @@ const comboTemplate = `
          top: 100%;
          left: 0;
          min-width: 100%;
-         height: 300px;
+         max-height: 300px;
          overflow-y: auto;
          box-sizing: border-box;
      }
      #listbox-wrapper,
      :host select {
          display: none;
-     }
-
-     
+     } 
 
      #sr-only {
          display: block;
@@ -90,35 +88,15 @@ const comboTemplate = `
          display: flex;
          flex-direction: row;
          align-items: center;
-     }
-
-     #input-area > div:first-child {
-         flex: 1;
-     }
-
-     .hidden {
-         display: none;
-     }
-
-     .button-wrapper {
-         box-sizing: inherit;
-         font-size: 1.03rem;
-         line-height: 1.3;
+         width: 100%;
      }
      
     </style>
     <div id="input-area">
-        <div>
-            <slot name="input-label"></slot>
-            <slot name="input"></slot>
-        </div>        
-        <div id="clear-button-wrapper" class="button-wrapper hidden">
-            <slot name="clear-button"></slot>
-        </div>
-        <div><slot name="separator"></slot></div>
-        <div id="toggle-button-wrapper" class="button-wrapper">
-            <slot name="toggle-button"></slot>
-        </div>
+        <slot name="input"></slot>        
+        <slot name="clear-button"></slot>
+        <slot name="separator"></slot>
+        <slot name="toggle-button"></slot>
     </div>
     <div id="listbox-wrapper">
         <slot name="listbox"></slot>
@@ -290,7 +268,7 @@ class ComboBox extends HTMLElement {
         clearButton.setAttribute("slot", "clear-button");
         clearButton.classList.add(
             "wx-combo-box__clear-input",
-            "display-block"
+            "display-none"
         );
         clearButton.innerHTML = "&nbsp;";
         clearButton.addEventListener("click", () => {
@@ -406,11 +384,12 @@ class ComboBox extends HTMLElement {
      * to show the clear button.
      */
     handleChanged(event){
-        const wrapper = this.shadowRoot.getElementById("clear-button-wrapper");
         if(event.target.value){
-            wrapper.classList.remove("hidden");
+            this.clearButton.classList.remove("display-none");
+            this.clearButton.classList.add("display-block");
         } else {
-            wrapper.classList.add("hidden");
+            this.clearButton.classList.add("display-none");
+            this.clearButton.classList.remove("display-block");
         }
     }
 
