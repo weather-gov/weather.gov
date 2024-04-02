@@ -101,9 +101,10 @@ const comboTemplate = `
     <div id="listbox-wrapper">
         <slot name="listbox"></slot>
     </div>
-    <div id="sr-only" aria-live="polite">
+    <div id="live-sr-only" aria-live="polite">
         <slot name="sr-only"></slot>
     </div>
+    <slot></slot>
 `;
 
 /**
@@ -144,6 +145,7 @@ class ComboBox extends HTMLElement {
         this.updateSearch = this.updateSearch.bind(this);
         this.showList = this.showList.bind(this);
         this.hideList = this.hideList.bind(this);
+        this.toggleList = this.toggleList.bind(this);
         this.navigateDown = this.navigateDown.bind(this);
         this.navigateUp = this.navigateUp.bind(this);
         this.pseudoFocusListItem = this.pseudoFocusListItem.bind(this);
@@ -209,6 +211,7 @@ class ComboBox extends HTMLElement {
         input.setAttribute("autocapitalize", "off");
         input.setAttribute("autocomplete", "off");
         input.setAttribute("aria-activedescendant", "");
+        input.setAttribute("aria-describedby", `${this.id}--input--description`);
         input.setAttribute("placeholder", "");
         input.id = `${this.id}--search-input`;
         input.classList.add(
@@ -247,11 +250,12 @@ class ComboBox extends HTMLElement {
             "display-block"
         );
         toggleButton.setAttribute("slot", "toggle-button");
-        toggleButton.addEventListener("click", () => {
-            if(this.isShowingList){
-                this.hideList();
-            } else {
-                this.showList();
+        toggleButton.addEventListener("click", this.toggleList);
+        toggleButton.addEventListener("keydown", (e) => {
+            if(e.key === "Enter"){
+                this.toggleList();
+                e.stopPropagation();
+                e.preventDefault();
             }
         });
         this.append(toggleButton);
@@ -384,7 +388,7 @@ class ComboBox extends HTMLElement {
      * to show the clear button.
      */
     handleChanged(event){
-        if(event.target.value){
+        if(event.target === this && event.target.value){
             this.clearButton.classList.remove("display-none");
             this.clearButton.classList.add("display-block");
         } else {
@@ -423,6 +427,17 @@ class ComboBox extends HTMLElement {
         this.setAttribute("expanded", "false");
         this.input.setAttribute("aria-expanded", "false");
         this.input.setAttribute("aria-activedescendant", "");
+    }
+
+    /**
+     * Toggles the display of the list
+     */
+    toggleList(){
+        if(this.isShowingList){
+            this.hideList();
+        } else {
+            this.showList();
+        }
     }
 
     /**

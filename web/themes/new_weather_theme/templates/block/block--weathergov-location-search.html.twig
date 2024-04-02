@@ -18,11 +18,9 @@
       <!--   </select> -->
         <!-- </wx-location-search> -->
       <wx-combo-box class="z-top">
-        <button slot="toggle-button">
-          <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
-            <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#arrow_back"></use>
-          </svg>
-        </button>
+          <span id="combo-box-1--input--description" class="sr-only usa-sr-only">
+              {{"Combobox input field. Search for a zipcode, city, or county name. Use the up and down arrow keys to navigate the results list. Push enter to select one of the results from the list" | t}}
+          </span>
       </wx-combo-box>
       <input type="hidden" name="suggestedPlaceName" value="">
     </form>
