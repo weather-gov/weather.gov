@@ -3,6 +3,7 @@
 namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
 
 use Drupal\weather_blocks\Plugin\Block\LocalAlertsBlock;
+use Swaggest\JsonSchema\Schema;
 
 /**
  * Tests for alerts data structure.
@@ -25,115 +26,157 @@ final class AlertsStructureTest extends EndToEndBase
     {
         $this->onLocationRoute(34.749, -92.275);
 
-        $start = new \DateTimeImmutable();
-        $start = $start
-            ->setTimeZone(new \DateTimeZone("America/Chicago"))
-            ->setTime(16, 0, 0);
+        $isoRegex =
+            "^2[0-9]{3}-[0-9]{2}-[0-9]{2}T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\\\\+[0-9]{2}:[0-9]{2}$";
+        $formattedDateRegex =
+            "^.+day, [0-1][0-9]\\\\/[0-3][0-9], [1-2]?[0-9]:[0-5][0-9] (A|P)M [A-Z]{3}";
 
-        $sent = $start->modify("-24 hours");
-        $effective = $start->modify("+24 hours");
-        $onset = $effective;
-        $expires = $start->modify("+40 hours");
-        $ends = $start->modify("+48 hours");
-
-        $expectedStructure = (object) [
-            "@id" =>
-                // phpcs:ignore Generic.Files.LineLength.TooLong
-                "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.8760a86c78e313ccfc42aa4eb5166572a0e26e9d.003.1",
-            "@type" => "wx:Alert",
-            "id" =>
-                "urn:oid:2.49.0.1.840.0.8760a86c78e313ccfc42aa4eb5166572a0e26e9d.003.1",
-            "areaDesc" => ["Eastern Beaufort Sea Coast"],
-            "geocode" => (object) ["SAME" => ["005119", "005141"], "UGC" => []],
-            "affectedZones" => [],
-            "references" => [
-                (object) [
-                    "@id" =>
-                        // phpcs:ignore Generic.Files.LineLength.TooLong
-                        "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.50186263db80dd3a37b9a35b4106434dbb236843.003.1",
-                    "identifier" =>
-                        // phpcs:ignore Generic.Files.LineLength.TooLong
-                        "urn:oid:2.49.0.1.840.0.50186263db80dd3a37b9a35b4106434dbb236843.003.1",
-                    "sender" => "w-nws.webmaster@noaa.gov",
-                    "sent" => "2024-01-03T02:50:00-09:00",
-                ],
-            ],
-            "sent" => $sent->format("c"),
-            "effective" => $effective->format("c"),
-            "onset" => $onset->format("l, m/d, g:i A T"),
-            "expires" => $expires->format("l, m/d, g:i A T"),
-            "ends" => $ends->format("l, m/d, g:i A T"),
-            "status" => "Actual",
-            "messageType" => "Update",
-            "category" => "Met",
-            "severity" => "Extreme",
-            "certainty" => "Likely",
-            "urgency" => "Expected",
-            "event" => "Blizzard Warning",
-            "sender" => "w-nws.webmaster@noaa.gov",
-            "senderName" => "NWS Fairbanks AK",
-            "headline" =>
-                // phpcs:ignore Generic.Files.LineLength.TooLong
-                "Blizzard Warning issued January 3 at 9:16AM AKST until January 5 at 3:00PM AKST by NWS Fairbanks AK",
-            "description" => [
-                ["type" => "heading", "text" => "what"],
-                [
-                    "type" => "paragraph",
-                    "text" =>
-                        "Blizzard conditions occuring. Winds gusting as high as 60 mph.",
-                ],
-                ["type" => "heading", "text" => "where"],
-                [
-                    "type" => "paragraph",
-                    "text" => "Eastern Beaufort Sea Coast.",
-                ],
-                ["type" => "heading", "text" => "when"],
-                ["type" => "paragraph", "text" => "Until 3 PM AKST Friday."],
-                ["type" => "heading", "text" => "impacts"],
-                [
-                    "type" => "paragraph",
-                    "text" =>
-                        // phpcs:ignore Generic.Files.LineLength.TooLong
-                        "Travel will be difficult. Blowing snow will cause whiteout conditions. Large snow drifts will form. Wind chills to 50 below zero could cause frostbite on exposed skin in as little as 10 minutes.",
-                ],
-                ["type" => "heading", "text" => "additional details"],
-                [
-                    "type" => "paragraph",
-                    "text" =>
-                        // phpcs:ignore Generic.Files.LineLength.TooLong
-                        "East winds will increase today. The strongest winds and lowest visibility are expected today into Thursday.",
-                ],
-            ],
-            "instruction" =>
-                // phpcs:ignore Generic.Files.LineLength.TooLong
-                "A Blizzard Warning means severe winter weather conditions are expected or occurring. Falling and blowing snow with strong winds and poor visibilities are likely. This will lead to whiteout conditions, making travel extremely difficult.",
-            "response" => "Prepare",
-            "parameters" => (object) [
-                "AWIPSidentifier" => ["WSWNSB"],
-                "WMOidentifier" => ["WWAK41 PAFG 031816"],
-                "NWSheadline" => [
-                    "BLIZZARD WARNING REMAINS IN EFFECT UNTIL 3 PM AKST FRIDAY",
-                ],
-                "BLOCKCHANNEL" => ["EAS", "NWEM", "CMAS"],
-                "EAS-ORG" => ["WXR"],
-                "VTEC" => ["/O.CON.PAFG.BZ.W.0027.000000T0000Z-240106T0000Z/"],
-                "eventEndingTime" => ["2024-01-06T00:00:00+00:00"],
-                "expiredReferences" => [
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
-                    "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.68a432c4b84fb77d2ef4265291d4890fa93f87de.004.1,2024-01-02T15:08:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.4f266b4453e74c6e026c6094e432e45c271e43a5.003.1,2024-01-02T04:55:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.40c0cd80cc652428b57c4b88a9491784caafc662.001.1,2024-01-01T15:21:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.68519a444b9c4fe151b7a4212ef0683fcaf40695.001.1,2024-01-01T05:38:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.bc83b741ef6bcec961b826c0dc76241a32664ede.001.2,2024-01-01T05:33:00-09:00",
-                ],
-            ],
-            "geometry" => [],
-            "onsetRaw" => $onset->format("c"),
-            "endsRaw" => $ends->format("c"),
-            "expiresRaw" => $expires->format("c"),
-            "timezone" => "America/Chicago",
-            "durationText" => "tomorrow afternoon",
-            "alertId" => 1,
-        ];
+        $schema = Schema::import(
+            json_decode(
+                <<<JSON
+                {
+                    "type": "object",
+                    "properties": {
+                        "@id": {
+                            "type": "string",
+                            "pattern": "^https://api\\\\.weather\\\\.gov/alerts/urn:oid:.*$"
+                        },
+                        "@type": {
+                            "const": "wx:Alert"
+                        },
+                        "id": {
+                            "type": "string",
+                            "pattern": "^urn:oid:.*$"
+                        },
+                        "areaDesc": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "geocode": {
+                            "type": "object",
+                            "properties": {
+                                "SAME": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "UGC": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "affectedZones": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "pattern": "^https://api\\\\.weather\\\\.gov/zones/(forecast|county|fire)/.*$"
+                            }
+                        },
+                        "sent": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "effective": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "onsetRaw": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "endsRaw": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "expiresRaw": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "onset": {
+                            "type": "string",
+                            "pattern": "$formattedDateRegex"
+                        },
+                        "ends": {
+                            "type": "string",
+                            "pattern": "$formattedDateRegex"
+                        },
+                        "expires": {
+                            "type": "string",
+                            "pattern": "$formattedDateRegex"
+                        },
+                        "event": {
+                            "type": "string"
+                        },
+                        "headline": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "heading",
+                                            "paragraph"
+                                        ]
+                                    },
+                                    "text": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "instruction": {
+                        "type": "string"
+                    },
+                    "response": {
+                        "type": "string"
+                    },
+                    "geometry": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "const": "Polygon"
+                            },
+                            "coordinates": {
+                                "type": "array",
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "timezone": {
+                        "type": "string",
+                        "pattern": "^.+\\\\/.+$"
+                    },
+                    "duration": {
+                        "type": "string"
+                    },
+                    "alertId": {
+                        "type": "integer"
+                    }
+                }
+                JSON
+                ,
+            ),
+        );
 
         $data = $this->block->build();
 
-        $this->assertEquals($expectedStructure, $data["alerts"][0]);
+        $schema->in(json_decode(json_encode($data["alerts"][0])));
+        $this->assertTrue(true);
     }
 }

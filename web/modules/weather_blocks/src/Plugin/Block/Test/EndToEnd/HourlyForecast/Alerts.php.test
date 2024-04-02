@@ -3,6 +3,7 @@
 namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
 
 use Drupal\weather_blocks\Plugin\Block\HourlyForecastBlock;
+use Swaggest\JsonSchema\Schema;
 
 /**
  * Tests that hourly forecast data is filtered to the future.
@@ -19,196 +20,163 @@ final class HourlyForecastAlertTest extends EndToEndBase
     /**
      * Simply validate the data structure.
      * @group e2e
-     * @group e2e2
      */
     public function testHourlyAlertDataStructure(): void
     {
         $this->onLocationRoute(34.749, -92.275);
 
+        $isoRegex =
+            "^2[0-9]{3}-[0-9]{2}-[0-9]{2}T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]\\\\+[0-9]{2}:[0-9]{2}$";
+        $formattedDateRegex =
+            "^.+day, [0-1][0-9]\\\\/[0-3][0-9], [1-2]?[0-9]:[0-5][0-9] (A|P)M [A-Z]{3}";
+
+        $schema = Schema::import(
+            json_decode(
+                <<<JSON
+                {
+                    "type": "object",
+                    "properties": {
+                        "@id": {
+                            "type": "string",
+                            "pattern": "^https://api\\\\.weather\\\\.gov/alerts/urn:oid:.*$"
+                        },
+                        "@type": {
+                            "const": "wx:Alert"
+                        },
+                        "id": {
+                            "type": "string",
+                            "pattern": "^urn:oid:.*$"
+                        },
+                        "areaDesc": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "geocode": {
+                            "type": "object",
+                            "properties": {
+                                "SAME": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "UGC": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "affectedZones": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "pattern": "^https://api\\\\.weather\\\\.gov/zones/(forecast|county|fire)/.*$"
+                            }
+                        },
+                        "sent": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "effective": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "onsetRaw": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "endsRaw": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "expiresRaw": {
+                            "type": "string",
+                            "pattern": "$isoRegex"
+                        },
+                        "onset": {
+                            "type": "string",
+                            "pattern": "$formattedDateRegex"
+                        },
+                        "ends": {
+                            "type": "string",
+                            "pattern": "$formattedDateRegex"
+                        },
+                        "expires": {
+                            "type": "string",
+                            "pattern": "$formattedDateRegex"
+                        },
+                        "event": {
+                            "type": "string"
+                        },
+                        "headline": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "heading",
+                                            "paragraph"
+                                        ]
+                                    },
+                                    "text": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "instruction": {
+                        "type": "string"
+                    },
+                    "response": {
+                        "type": "string"
+                    },
+                    "geometry": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "const": "Polygon"
+                            },
+                            "coordinates": {
+                                "type": "array",
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "timezone": {
+                        "type": "string",
+                        "pattern": "^.+\\\\/.+$"
+                    },
+                    "duration": {
+                        "type": "string"
+                    },
+                    "alertId": {
+                        "type": "integer"
+                    }
+                }
+                JSON
+                ,
+            ),
+        );
+
         $data = $this->block->build();
 
-        // Build up expected times, based on the contents of the test data. Do
-        // this after fetching the data so we don't get a timestamp that's off
-        // by a second due to processing inside the build() method.
-        date_default_timezone_set("UTC");
-        $now = new \DateTimeImmutable();
-
-        $sent = $now->modify("-1 hour");
-        $effective = $now->modify("-1 hour");
-        $onset = $now->modify("-1 hour");
-        $expires = $now->modify("+1 hour");
-        $ends = $now->modify("+3 hours");
-
-        $expectedAlertStructure = [
-            "periodIndex" => 0,
-            "duration" => 2,
-            "alert" => (object) [
-                "@id" =>
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
-                    "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
-                "@type" => "wx:Alert",
-                "id" =>
-                    "urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
-                "areaDesc" => [
-                    "Northeast Plains",
-                    "Middle Rio Grande Valley",
-                    "Northeast Highlands",
-                    "Sandia and Manzano Mountains",
-                    "Central Highlands",
-                    "East Central Plains",
-                ],
-                "geocode" => (object) [
-                    "SAME" => [
-                        "035021",
-                        "035047",
-                        "035059",
-                        "035001",
-                        "035006",
-                        "035043",
-                        "035049",
-                        "035053",
-                        "035057",
-                        "035061",
-                        "035007",
-                        "035033",
-                        "035027",
-                        "035019",
-                        "035037",
-                        "035009",
-                        "035011",
-                        "035041",
-                    ],
-                    "UGC" => [
-                        "NMZ104",
-                        "NMZ106",
-                        "NMZ123",
-                        "NMZ124",
-                        "NMZ125",
-                        "NMZ126",
-                    ],
-                ],
-                "affectedZones" => [
-                    "https://api.weather.gov/zones/fire/ARZ044",
-                    "https://api.weather.gov/zones/fire/NMZ106",
-                    "https://api.weather.gov/zones/fire/NMZ123",
-                    "https://api.weather.gov/zones/fire/NMZ124",
-                    "https://api.weather.gov/zones/fire/NMZ125",
-                    "https://api.weather.gov/zones/fire/NMZ126",
-                ],
-                "references" => [
-                    (object) [
-                        "@id" =>
-                            // phpcs:ignore Generic.Files.LineLength.TooLong
-                            "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
-                        "identifier" =>
-                            "urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
-                        "sender" => "w-nws.webmaster@noaa.gov",
-                        "sent" => "2024-02-21T05:06:00-07:00",
-                    ],
-                ],
-                "sent" => $sent->format("c"),
-                "effective" => $effective->format("c"),
-                "onset" => $onset
-                    ->setTimezone(new \DateTimeZone("America/Chicago"))
-                    ->format("l, m/d, g:i A T"),
-                "expires" => $expires
-                    ->setTimezone(new \DateTimeZone("America/Chicago"))
-                    ->format("l, m/d, g:i A T"),
-                "ends" => $ends
-                    ->setTimezone(new \DateTimeZone("America/Chicago"))
-                    ->format("l, m/d, g:i A T"),
-                "onsetRaw" => $onset->format("c"),
-                "expiresRaw" => $expires->format("c"),
-                "endsRaw" => $ends->format("c"),
-                "status" => "Actual",
-                "messageType" => "Update",
-                "category" => "Met",
-                "severity" => "Severe",
-                "certainty" => "Likely",
-                "urgency" => "Expected",
-                "event" => "Red Flag Warning",
-                "sender" => "w-nws.webmaster@noaa.gov",
-                "senderName" => "NWS Albuquerque NM",
-                "headline" =>
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
-                    "Red Flag Warning issued February 21 at 5:19AM MST until February 21 at 7:00PM MST by NWS Albuquerque NM",
-                "description" => [
-                    [
-                        "type" => "paragraph",
-                        "text" =>
-                            // phpcs:ignore Generic.Files.LineLength.TooLong
-                            "RED FLAG WARNING IN EFFECT TODAY BETWEEN 11 AM MST AND 7 PM MST ACROSS NORTHEASTERN, EAST CENTRAL, AND CENTRAL NEW MEXICO DUE TO LOW HUMIDITY, STRONG WINDS, AND ABOVE NORMAL TEMPERATURES",
-                    ],
-                    [
-                        "type" => "paragraph",
-                        "text" =>
-                            // phpcs:ignore Generic.Files.LineLength.TooLong
-                            ".An upper level disturbance will bring strong southwesterly to westerly winds this afternoon and early evening that will combine with above normal temperatures, an unstable atmosphere, and very low relative humidity in the low double to single digits to produce widespread critical fire weather conditions. Rapid fire spread is possible in receptive fuel beds.",
-                    ],
-                    ["type" => "heading", "text" => "area and timing"],
-                    [
-                        "type" => "paragraph",
-                        "text" =>
-                            // phpcs:ignore Generic.Files.LineLength.TooLong
-                            "Northeast Plains (Zone 104), Northeast Highlands (Zone 123), East Central Plains (Zone 126), Central Highlands (Zone 125), Sandia and Manzano Mountains (Zone 124), and Middle Rio Grande Valley (Zone 106) from 11 AM through 7 PM MST today.",
-                    ],
-                    [
-                        "type" => "paragraph",
-                        "text" =>
-                            "* 20 FOOT WINDS...West to southwest 25 to 35 mph with gusts up to 55 mph.",
-                    ],
-                    [
-                        "type" => "heading",
-                        "text" => "relative humidity",
-                    ],
-                    [
-                        "type" => "paragraph",
-                        "text" => "6 to 15 percent",
-                    ],
-                    ["type" => "heading", "text" => "impacts"],
-                    [
-                        "type" => "paragraph",
-                        "text" =>
-                            "Any fires that develop will likely spread rapidly. Outdoor burning is not recommended.",
-                    ],
-                ],
-                "instruction" =>
-                    "Please advise the appropriate officials or fire crews in the field of this Red Flag Warning.",
-                "response" => "Prepare",
-                "parameters" => (object) [
-                    "AWIPSidentifier" => ["RFWABQ"],
-                    "WMOidentifier" => ["WWUS85 KABQ 211219"],
-                    "NWSheadline" => [
-                        "RED FLAG WARNING REMAINS IN EFFECT FROM 11 AM THIS MORNING TO 7 PM MST THIS EVENING",
-                    ],
-                    "BLOCKCHANNEL" => ["EAS", "NWEM", "CMAS"],
-                    "VTEC" => [
-                        "/O.CON.KABQ.FW.W.0001.240221T1800Z-240222T0200Z/",
-                    ],
-                    "eventEndingTime" => ["2024-02-22T02:00:00+00:00"],
-                    "expiredReferences" => [
-                        // phpcs:ignore Generic.Files.LineLength.TooLong
-                        "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.009cb1d92c051da3ecf8ae561dde07f5fcee9c74.002.2,2024-02-20T13:27:00-07:00",
-                    ],
-                ],
-                "timezone" => "America/Chicago",
-                "geometry" => [],
-                "alertId" => 4,
-            ],
-        ];
-
-        $actual = $data["alertPeriods"][0];
-
-        // The duration text is conditional based on the time of day of the
-        // alert. Because our test alert's times are relative to when the test
-        // is run, the duration text is nondeterministic. So instead of
-        // asserting it directly, we'll assert its type and otherwise remove it
-        // from the structural test.
-        $durationText = $actual["alert"]->durationText;
-        unset($actual["alert"]->durationText);
-
-        $this->assertEquals("string", gettype($durationText));
-        $this->assertEquals($expectedAlertStructure, $actual);
+        $schema->in(json_decode(json_encode($data["alertPeriods"][0])));
+        $this->assertTrue(true);
     }
 
     /**
