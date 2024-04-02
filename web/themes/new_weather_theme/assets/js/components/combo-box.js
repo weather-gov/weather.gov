@@ -308,9 +308,9 @@ class ComboBox extends HTMLElement {
             await this.updateSearch(event.target.value)
                       .then(() => {
                           this.updateAriaLive(
-                        `Search updated. ${this.querySelectorAll("li").length} results available`
-                    );
-                });
+                              `Search updated. ${this.querySelectorAll("li").length} results available`
+                          );
+                      });
         }, this.inputDelay);
     }
 
@@ -362,7 +362,9 @@ class ComboBox extends HTMLElement {
             } else {
                 this.hideList();
             }
+            return true;
         }
+        return false;
     }
 
     /**

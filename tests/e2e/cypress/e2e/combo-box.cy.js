@@ -2,7 +2,7 @@
 
 const WAIT_TIME = 2000;
 
-describe.skip("wx-combo-box tests", () => {
+describe("wx-combo-box tests", () => {
   before(() => {
     // Stub the ArcGIS API requests to use
     // saved data
@@ -40,7 +40,7 @@ describe.skip("wx-combo-box tests", () => {
       // Go to landing page
       cy.visit("http://localhost:8080/");
       cy.wait(200);
-      cy.get("wx-combo-box > input").as("componentInput").focus();
+      cy.get("wx-combo-box > input[slot='input']").as("componentInput").focus();
       cy.get("@componentInput").type("Arlin");
       cy.wait("@arcSearch");
     });
@@ -59,22 +59,22 @@ describe.skip("wx-combo-box tests", () => {
       cy.get('wx-combo-box ul > li[aria-selected="true"]:nth-child(2)').should("exist");
     });
     it("typing the down arrow twice pseudo-focuses the third element", () => {
-      cy.get("wx-combo-box input").as("input").type("{downArrow}{downArrow}");
+      cy.get("wx-combo-box input[slot='input']").as("input").type("{downArrow}{downArrow}");
       cy.wait(WAIT_TIME);
       cy.get('wx-combo-box ul > li[aria-selected="true"]:nth-child(3)').should("exist");
     });
     it("up arrow collapses the search list", () => {
-      cy.get("wx-combo-box input").type("{upArrow}");
+      cy.get("wx-combo-box input[slot='input']").type("{upArrow}");
       cy.wait(WAIT_TIME);
       cy.get("wx-combo-box ul").should("not.be.visible");
     });
     it("pressing Enter selects an item, closing the list from view", () => {
-      cy.get("wx-combo-box input").as("input").type("{downArrow}{downArrow}{enter}");
+      cy.get("wx-combo-box input[slot='input']").as("input").type("{downArrow}{downArrow}{enter}");
       cy.wait(WAIT_TIME);
       cy.get("wx-combo-box ul").should("not.be.visible");
     });
     it("pressing Enter selects the second item, but does not submit it", () => {
-      cy.get("wx-combo-box input").type("{downArrow}{downArrow}{enter}{enter}");
+      cy.get("wx-combo-box input[slot='input']").type("{downArrow}{downArrow}{enter}{enter}");
 
       cy.location('pathname').should("eq", "/");
     });

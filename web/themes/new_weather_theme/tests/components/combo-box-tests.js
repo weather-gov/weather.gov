@@ -154,9 +154,9 @@ const SEARCH_RESULT_ITEMS = {
 
 global.fetch = mockFetch = url => {
   const parsedUrl = new URL(url);
-  if(url.path.includes("suggest")){
+  if(parsedUrl.pathname.includes("suggest")){
     return window.Promise.resolve(
-      new window.Response(
+      new Response(
         JSON.stringify(SEARCH_RESULTS),
         {
           status: 200,
@@ -180,7 +180,6 @@ global.fetch = mockFetch = url => {
 };
 
 
-
 describe("Combo box unit tests", () => {
   before(function(done){
     import("../../assets/js/components/combo-box.js")
@@ -190,7 +189,6 @@ describe("Combo box unit tests", () => {
         done();
       });
   });
-
   beforeEach(() => {
     window.document.body.innerHTML = "";
     const box = document.querySelector("wx-combo-box");
@@ -200,7 +198,6 @@ describe("Combo box unit tests", () => {
       );
     }
   });
-  
 
   it("Has the element", () => {
     assert.exists(window.document.querySelector("wx-combo-box"));
@@ -269,7 +266,7 @@ describe("Combo box unit tests", () => {
     });
   });
 
-  describe("List item navigation tests", () => {
+  describe("Input event and search update tests", () => {
 
     let sandbox;
     beforeEach(function(){
@@ -298,30 +295,90 @@ describe("Combo box unit tests", () => {
       expect(component.updateSearch.calledWith("Arlin")).to.be.true;
     });
 
-    it.skip("Expects the list to be expanded when the input event is triggered", async () => {
+    it("Expects showList to have been called when updateSearch completes", async () => {
       const event = new Event("input", { bubbles: true });
       const component = document.querySelector("wx-combo-box");
-      const input = component.querySelector("input");
-      input.focus();
-      input.value = "Arlin";
-      component.dispatchEvent(event);
+      sandbox.spy(component, 'showList');
+      await component.updateSearch("Arlin");
 
-      await wait(300);
+      expect(component.showList.calledOnce).to.be.true;
 
-      expect(component.getAttribute("aria-expanded")).to.equal("true");
     });
-    
-    it.skip("Expects the component's handleInput callback to be called once during an input event", async () => {
-      const event = new window.InputEvent("input", { bubbles: true });
+
+    it("Expects showList / hideList to toggle aria-expanded", async () => {
       const component = document.querySelector("wx-combo-box");
-      const input = component.querySelector("input");
+      component.showList();
+      expect(component.getAttribute("aria-expanded")).to.equal("true");
+      component.hideList();
+      expect(component.getAttribute("aria-expanded")).to.equal("false");
+    });
+  });
+
+  describe("List navigation tests", () => {
+    let sandbox;
+    beforeEach(async () => {
+      sandbox = createSandbox();
+      window.document.body.innerHTML = "";
+      const box = document.createElement("wx-combo-box");
+      document.body.append(box);
+      assert.exists(window.customElements.get("wx-combo-box"));
+      const responseOK = await box.updateSearch("Arlin");
+      expect(responseOK).to.be.true;
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    it("Selects the first element in the dropdown automatically", () => {
+      const component = document.querySelector("wx-combo-box");
+      const listbox = component.querySelector("ul");
+      const firstItem = listbox.querySelector("li:first-child");
+      const actual = firstItem.getAttribute("aria-selected");
+
+      expect(actual).to.equal("true");
+    });
+
+    it("Selects the second element in the list when the down arrow is pushed", () => {
+      const event = new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true });
+      const component = document.querySelector("wx-combo-box");
+      const listbox = component.querySelector("ul");
+      const input = component.querySelector("input[slot='input']");
       input.focus();
-      const spied = sandbox.spy(component.handleInput);
+      input.dispatchEvent(event);
+      const selectedItemCount = listbox.querySelectorAll("li[aria-selected='true']").length;
+      const secondItem = listbox.querySelector("li:nth-child(2)");
+      const actual = secondItem.getAttribute("aria-selected");
+      
+      expect(actual).to.equal("true");
+      expect(selectedItemCount).to.equal(1);
+    });
+
+    it("Hides the result list if up is pressed while on the first item", () => {
+      const event = new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true });
+      const component = document.querySelector("wx-combo-box");
+      const listbox = component.querySelector("ul");
+      const input = component.querySelector("input[slot='input']");
+      input.focus();
+
+      expect(component.isShowingList).to.be.true;
+      input.dispatchEvent(event);
+      expect(component.isShowingList).to.be.false;
+    });
+
+    it("Does nothing when pushing down arrow when the last item is selected", () => {
+      const event = new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true });
+      const component = document.querySelector("wx-combo-box");
+      const listbox = component.querySelector("ul");
+      const input = component.querySelector("input[slot='input']");
+      listbox.querySelector("li[aria-selected='true']").setAttribute("aria-selected", "false");
+      const lastItem = listbox.querySelector("li:last-child");
+      lastItem.setAttribute("aria-selected", "true");
+      input.focus();
       input.dispatchEvent(event);
 
-      await wait(300);
-
-      expect(spied.calledOnce).to.be.true;
+      expect(component.isShowingList).to.be.true;
+      expect(lastItem.getAttribute("aria-selected")).to.equal("true");
     });
   });
 });
