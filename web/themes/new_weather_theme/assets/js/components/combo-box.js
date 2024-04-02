@@ -101,7 +101,7 @@ const comboTemplate = `
     <div id="listbox-wrapper">
         <slot name="listbox"></slot>
     </div>
-    <div id="live-sr-only" aria-live="polite">
+    <div id="sr-only" aria-live="polite">
         <slot name="sr-only"></slot>
     </div>
     <slot></slot>
