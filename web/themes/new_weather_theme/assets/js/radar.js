@@ -99,7 +99,7 @@ const setupRadar = () => {
           self.disconnect();
         }
       },
-      { root: document.body, rootMartin: "0px", threshold: 1 },
+      { root: document.body, rootMargin: "0px", threshold: 1 },
     );
     observer.observe(container);
   }
