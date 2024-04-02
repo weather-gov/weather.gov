@@ -61,7 +61,7 @@ const comboTemplate = `
          display: block;
          box-sizing: border-box;
      }
-     :host([aria-expanded="true"]) #listbox-wrapper {
+     :host([expanded="true"]) #listbox-wrapper {
          display: block;
          position: absolute;
          top: 100%;
@@ -109,6 +109,7 @@ const comboTemplate = `
     </style>
     <div id="input-area">
         <div>
+            <slot name="input-label"></slot>
             <slot name="input"></slot>
         </div>        
         <div id="clear-button-wrapper" class="button-wrapper hidden">
@@ -187,8 +188,8 @@ class ComboBox extends HTMLElement {
         this.addEventListener("change", this.handleChanged);
 
         // Initial attributes
-        this.setAttribute("aria-expanded", "false");
         this.classList.add("wx-combo-box");
+        this.setAttribute("expanded", "false");
 
         // If we have not provided an id, set a default value
         if(!this.id){
@@ -222,15 +223,19 @@ class ComboBox extends HTMLElement {
         input.setAttribute("type", "text");
         input.setAttribute("slot", "input");
         input.setAttribute("role", "combobox");
+        input.setAttribute("aria-label", "Location search input field");
         input.setAttribute("aria-owns", `${this.id}--list`);
         input.setAttribute("aria-controls", `${this.id}--list`);
+        input.setAttribute("aria-expanded", "false");
         input.setAttribute("aria-autocomplete", "list");
         input.setAttribute("autocapitalize", "off");
         input.setAttribute("autocomplete", "off");
         input.setAttribute("aria-activedescendant", "");
-        input.classList.add(...[
+        input.setAttribute("placeholder", "");
+        input.id = `${this.id}--search-input`;
+        input.classList.add(
             "wx-combo-box__input"
-        ]);
+        );
         input.addEventListener("blur", this.hideList);
         this.append(input);
         this.input = input;
@@ -244,9 +249,9 @@ class ComboBox extends HTMLElement {
         listbox.setAttribute("role", "listbox");
         listbox.setAttribute("slot", "listbox");
         listbox.id = `${this.id}--list`;
-        listbox.classList.add(...[
+        listbox.classList.add(
             "wx-combo-box__list",
-        ]);
+        );
         this.append(listbox);
         this.listbox = listbox;
     }
@@ -259,10 +264,10 @@ class ComboBox extends HTMLElement {
         toggleButton.setAttribute("type", "button");
         toggleButton.setAttribute("aria-label", "Toggle the dropdown list");
         toggleButton.innerHTML = "&nbsp;";
-        toggleButton.classList.add(...[
+        toggleButton.classList.add(
             "wx-combo-box__toggle-list",
             "display-block"
-        ]);
+        );
         toggleButton.setAttribute("slot", "toggle-button");
         toggleButton.addEventListener("click", () => {
             if(this.isShowingList){
@@ -283,10 +288,10 @@ class ComboBox extends HTMLElement {
         clearButton.setAttribute("type", "button");
         clearButton.setAttribute("tabindex", "-1");
         clearButton.setAttribute("slot", "clear-button");
-        clearButton.classList.add(...[
+        clearButton.classList.add(
             "wx-combo-box__clear-input",
             "display-block"
-        ]);
+        );
         clearButton.innerHTML = "&nbsp;";
         clearButton.addEventListener("click", () => {
             this.clear();
@@ -415,7 +420,8 @@ class ComboBox extends HTMLElement {
      * items in the list
      */
     showList(){
-        this.setAttribute("aria-expanded", "true");
+        this.input.setAttribute("aria-expanded", "true");
+        this.setAttribute("expanded", "true");
         const listIsEmpty = this.querySelector("ul:empty");
         if(!listIsEmpty){
             // We want to give the artificial focus,
@@ -435,7 +441,8 @@ class ComboBox extends HTMLElement {
      * combobox input element
      */
     hideList(){
-        this.setAttribute("aria-expanded", "false");
+        this.setAttribute("expanded", "false");
+        this.input.setAttribute("aria-expanded", "false");
         this.input.setAttribute("aria-activedescendant", "");
     }
 
@@ -688,7 +695,7 @@ class ComboBox extends HTMLElement {
     }
 
     get isShowingList(){
-        return this.getAttribute("aria-expanded") === "true";
+        return this.input.getAttribute("aria-expanded") === "true";
     }
 
     static get observedAttributes(){
