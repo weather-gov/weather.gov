@@ -17,11 +17,11 @@ function new_weather_theme_form_user_login_form_alter(
     $moduleHandler = \Drupal::service('module_handler');
     if ($moduleHandler->moduleExists('samlauth')) {
         $form['samlauth_login_link'] = array(
-            '#title' => 'SAML login',
+            '#title' => 'Login with your NOAA account',
             '#type' => 'link',
             '#url' => Url::fromRoute('samlauth.saml_controller_login'),
             '#attributes' => [
-                'title' => 'SAML login',
+                'title' => 'NOAA account login',
                 'class' => ['usa-button'],
             ],
             '#weight' => -1000,
