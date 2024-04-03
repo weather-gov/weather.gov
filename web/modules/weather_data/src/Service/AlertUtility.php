@@ -245,12 +245,34 @@ class AlertUtility
 
     public static function sort($alerts)
     {
-        usort($alerts, function ($a, $b) {
+        $now = new \DateTimeImmutable();
+
+        usort($alerts, function ($a, $b) use ($now) {
             $priorityA = array_search(strtolower($a->event), self::$priorities);
             $priorityB = array_search(strtolower($b->event), self::$priorities);
 
-            // If the two alerts are of different types, we sort them according
-            // to NWS priorities.
+            // If both alerts are currently active, sort them by priority.
+            if ($a->onset < $now && $b->onset < $now) {
+                // If the two alerts are of different types, we sort them according
+                // to NWS priorities.
+                if ($priorityA < $priorityB) {
+                    return -1;
+                }
+                if ($priorityB < $priorityA) {
+                    return 1;
+                }
+            }
+
+            // If they start in the future, sort them by onset.
+            if ($a->onset < $b->onset) {
+                return -1;
+            }
+            if ($b->onset < $a->onset) {
+                return 1;
+            }
+
+            // But if they start at the same time in the future, sort by
+            // priority.
             if ($priorityA < $priorityB) {
                 return -1;
             }
@@ -258,13 +280,9 @@ class AlertUtility
                 return 1;
             }
 
-            // If they are of the same type, then we sort them by onset.
-            if ($a->onset < $b->onset) {
-                return -1;
-            }
-            if ($b->onset < $a->onset) {
-                return 1;
-            }
+            // This covers the weird, extremely unlikely case that two of the
+            // same alert start at the same time, and there's nothing to sort
+            // them by.
             return 0;
         });
 
