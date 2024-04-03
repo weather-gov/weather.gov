@@ -18,7 +18,9 @@ use PHPUnit\Framework\TestCase;
  */
 final class WeatherDataLegacyIconMapping extends TestCase
 {
-    #[Group(unit)]
+    /**
+     * @group unit
+     */
     public function testIconMapping(): void
     {
         $path = realpath(
