@@ -207,9 +207,11 @@ class ComboBox extends HTMLElement {
         input.setAttribute("aria-owns", `${this.id}--list`);
         input.setAttribute("aria-controls", `${this.id}--list`);
         input.setAttribute("aria-expanded", "false");
-        input.setAttribute("aria-autocomplete", "list");
+        input.setAttribute("aria-autocomplete", "none");
         input.setAttribute("autocapitalize", "off");
         input.setAttribute("autocomplete", "off");
+        input.setAttribute("autocorrect", "off");
+        input.setAttribute("spellcheck", "false");
         input.setAttribute("aria-activedescendant", "");
         input.setAttribute("aria-describedby", `${this.id}--input--description`);
         input.setAttribute("placeholder", "");
@@ -679,7 +681,12 @@ class ComboBox extends HTMLElement {
      * based on convos with USWDS.
      */
     updateAriaLive(text){
-        window.setTimeout(() => {
+        if(this._ariaLiveTimeout){
+            window.clearTimeout(this._ariaLiveTimeout);
+        }
+        this._ariaLiveTimeout = window.setTimeout(() => {
+            Array.from(this.querySelectorAll("[slot='sr-only']"))
+                 .forEach(span => span.remove());
             const span = document.createElement("span");
             span.setAttribute("slot", "sr-only");
             span.innerText = text;
