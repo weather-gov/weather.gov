@@ -36,62 +36,52 @@ final class AlertUtilityTest extends TestCase
      */
     public function testSortsAlertsCorrectly(): void
     {
+        $now = new \DateTimeImmutable();
+
         $alerts = [
             (object) [
                 "event" => "flood watch",
+                "onset" => $now->modify("-1 hour"),
             ],
             (object) [
                 "event" => "air quality alert",
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2000-01-01T00:00:00Z",
-                ),
+                "onset" => $now->modify("+1 hour"),
             ],
             (object) [
                 "event" => "volcano warning",
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2012-12-21T00:00:00Z",
-                ),
+                "onset" => $now->modify("-1 hour"),
             ],
             (object) [
                 "event" => "tornado warning",
+                "onset" => $now->modify("-1 hour"),
             ],
             (object) [
                 "event" => "dust storm warning",
+                "onset" => $now->modify("-1 hour"),
             ],
             (object) [
                 "event" => "volcano warning",
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2000-01-01T00:00:00Z",
-                ),
+                "onset" => $now->modify("+2 hour"),
             ],
             (object) [
                 "event" => "air quality alert",
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2020-01-01T00:00:00Z",
-                ),
+                "onset" => $now->modify("+2 hours"),
             ],
             (object) [
                 "event" => "air quality alert",
-                "onset" => \DateTimeImmutable::createFromFormat(
-                    \DateTimeInterface::ISO8601_EXPANDED,
-                    "2020-01-01T00:00:00Z",
-                ),
+                "onset" => $now->modify("+3 hour"),
             ],
         ];
 
         $expected = [
-            $alerts[3],
-            $alerts[5],
-            $alerts[2],
-            $alerts[4],
-            $alerts[0],
-            $alerts[1],
-            $alerts[6],
-            $alerts[7],
+            $alerts[3], // active tornado warning
+            $alerts[2], // active volcano warning
+            $alerts[4], // active dust storm warning
+            $alerts[0], // active flood watch
+            $alerts[1], // next hour air quality alert
+            $alerts[5], // in two hours volcano warning
+            $alerts[6], // in two hours air quality alert
+            $alerts[7], // in three hours air quality alert
         ];
 
         $actual = AlertUtility::sort($alerts);

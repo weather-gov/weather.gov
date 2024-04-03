@@ -113,6 +113,7 @@
     "require-dev": {
         "drupal/coder": "^8.3",
         "drupal/devel": "^5.1.2",
-        "phpunit/phpunit": "^9.6"
+        "phpunit/phpunit": "^9.6",
+        "swaggest/json-schema": "^0.12.42"
     }
 }
