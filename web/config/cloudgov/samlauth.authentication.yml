@@ -2,8 +2,8 @@ _core:
   default_config_hash: oDGEkhP0h5rXXqlDplxeBDre0goLigOJupHKMDMwcqM
 login_menu_item_title: ''
 logout_menu_item_title: ''
-login_redirect_url: ''
-logout_redirect_url: ''
+login_redirect_url: '/admin/workbench'
+logout_redirect_url: '/user/login'
 error_redirect_url: ''
 error_throw: false
 local_login_saml_error: false

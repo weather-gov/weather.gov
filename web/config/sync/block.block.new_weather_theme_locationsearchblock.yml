@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - system
     - weather_blocks
   theme:
     - new_weather_theme
@@ -18,4 +19,8 @@ settings:
   label_display: '0'
   provider: weather_blocks
   grid: ',,'
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/user/*'

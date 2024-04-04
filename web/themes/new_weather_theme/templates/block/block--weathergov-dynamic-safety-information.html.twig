@@ -1,6 +1,6 @@
 {% if content.body %}
-<h3 class="text-primary-darkest text-normal"> {{ content.title | split('\(') | first | t }} </h3>
+<h3 class="text-primary-darker text-normal"> {{ "Tips to stay safe" | t } </h3>
 <div class="usa-prose saftey-tips">
-{{ content.body | raw }}
+{{- content.body | raw -}}
 </div>
 {% endif %}
