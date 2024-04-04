@@ -4,9 +4,9 @@ description: The weather.gov admin theme.
 base theme: claro
 core_version_requirement: ^10
 package: weather.gov
-libraries:
-  - new_weather_theme/uswds-init
-  - new_weather_theme/uswds-customized
+#libraries:
+#  - new_weather_theme/uswds-init
+#  - new_weather_theme/uswds-customized
 
 regions:
   header: 'Header'
