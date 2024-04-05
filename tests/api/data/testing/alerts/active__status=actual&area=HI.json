@@ -1,0 +1,91 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.da15faeb96096c40ce57f2797c363dd16efffcc0.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.da15faeb96096c40ce57f2797c363dd16efffcc0.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.da15faeb96096c40ce57f2797c363dd16efffcc0.001.1",
+        "areaDesc": "Niihau; Kauai Southwest; Waianae Coast; Oahu North Shore; Maui Windward West; Kauai North; Molokai Windward; Molokai North; Molokai West; Maui Central Valley North; Windward Haleakala",
+        "geocode": {
+          "SAME": ["015007", "015003", "015009"],
+          "UGC": [
+            "HIZ001",
+            "HIZ003",
+            "HIZ006",
+            "HIZ007",
+            "HIZ017",
+            "HIZ029",
+            "HIZ037",
+            "HIZ039",
+            "HIZ040",
+            "HIZ045",
+            "HIZ047"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/HIZ001",
+          "https://api.weather.gov/zones/forecast/HIZ003",
+          "https://api.weather.gov/zones/forecast/HIZ006",
+          "https://api.weather.gov/zones/forecast/HIZ007",
+          "https://api.weather.gov/zones/forecast/HIZ017",
+          "https://api.weather.gov/zones/forecast/HIZ029",
+          "https://api.weather.gov/zones/forecast/HIZ037",
+          "https://api.weather.gov/zones/forecast/HIZ039",
+          "https://api.weather.gov/zones/forecast/HIZ040",
+          "https://api.weather.gov/zones/forecast/HIZ045",
+          "https://api.weather.gov/zones/forecast/HIZ047"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.d78b460b396e7b0a1fb3844dc1010c08772f0fb6.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.d78b460b396e7b0a1fb3844dc1010c08772f0fb6.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -43391 seconds"
+          }
+        ],
+        "sent": "date:now -1631 seconds",
+        "effective": "date:now -1631 seconds",
+        "onset": "date:now +9168 seconds",
+        "expires": "date:now +52368 seconds",
+        "ends": "date:now +138768 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "High Surf Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Honolulu HI",
+        "headline": "High Surf Warning issued March 14 at 3:00AM HST until March 15 at 6:00PM HST by NWS Honolulu HI",
+        "description": "...HIGH SURF WARNING REMAINS IN EFFECT FOR NORTH AND WEST FACING\nSHORES OF NIIHAU KAUAI OAHU MOLOKAI AND NORTH FACING SHORES OF\nMAUI...\n\n.A large northwest (320 degrees) swell will rapidly build from\nnorthwest to southeast down the island chain today. This swell\nwill produce warning level surf along the north- and west- facing\nshores of the smaller islands.\n\n* WHAT...Surf building to 25 to 35 feet along north-facing\nshores, and 18 to 24 feet along west-facing shores.\n\n* WHERE...North and west facing shores of Niihau, Kauai, Oahu,\nMolokai, and north facing shores of Maui.\n\n* WHEN...From 6 AM this morning to 6 PM HST Friday.\n\n* IMPACTS...High. Expect very strong breaking waves and powerful\ncurrents. Waves breaking in channel entrances may make\nnavigating the channels dangerous.",
+        "instruction": "Stay away from the shoreline along the affected coasts. Be\nprepared for road closures. Postpone entering or leaving channels\naffected by the high surf until the surf subsides.",
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": ["CFWHFO"],
+          "WMOidentifier": ["WHHW40 PHFO 141300"],
+          "NWSheadline": [
+            "HIGH SURF WARNING REMAINS IN EFFECT FROM 6 AM THIS MORNING TO 6 PM HST FRIDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.CON.PHFO.SU.W.0006.240314T1600Z-240316T0400Z/"],
+          "eventEndingTime": ["2024-03-16T04:00:00+00:00"]
+        }
+      }
+    }
+  ],
+  "title": "Current watches, warnings, and advisories for Hawaii",
+  "updated": "date:now -1573 seconds"
+}

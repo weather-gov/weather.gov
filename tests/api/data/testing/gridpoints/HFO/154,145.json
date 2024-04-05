@@ -1,0 +1,2345 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wmoUnit": "https://codes.wmo.int/common/unit/",
+      "nwsUnit": "https://api.weather.gov/ontology/unit/"
+    }
+  ],
+  "id": "https://api.weather.gov/gridpoints/HFO/154,145",
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [-157.8763961, 21.3269262],
+        [-157.8763961, 21.304634999999998],
+        [-157.8523941, 21.304634999999998],
+        [-157.8523941, 21.3269262],
+        [-157.8763961, 21.3269262]
+      ]
+    ]
+  },
+  "properties": {
+    "@id": "https://api.weather.gov/gridpoints/HFO/154,145",
+    "@type": "wx:Gridpoint",
+    "updateTime": "date:now -4056 seconds",
+    "validTimes": "date:now -26831 seconds / P8DT6H",
+    "elevation": { "unitCode": "wmoUnit:m", "value": 17.9832 },
+    "forecastOffice": "https://api.weather.gov/offices/HFO",
+    "gridId": "HFO",
+    "gridX": "154",
+    "gridY": "145",
+    "temperature": {
+      "uom": "wmoUnit:degC",
+      "values": [
+        {
+          "validTime": "date:now -26831 seconds / PT4H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now -12431 seconds / PT3H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now -1631 seconds / PT5H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +16368 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +19968 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +23568 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        { "validTime": "date:now +27168 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +30768 seconds / PT4H",
+          "value": 25.555555555555557
+        },
+        { "validTime": "date:now +45168 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +48768 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +52368 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +55968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +59568 seconds / PT4H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +73968 seconds / PT3H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +84768 seconds / PT5H", "value": 20 },
+        {
+          "validTime": "date:now +102768 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +106368 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +109968 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +113568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        { "validTime": "date:now +117168 seconds / PT4H", "value": 25 },
+        {
+          "validTime": "date:now +131568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +135168 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +138768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +142368 seconds / PT5H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +160368 seconds / PT3H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +171168 seconds / PT5H", "value": 20 },
+        {
+          "validTime": "date:now +189168 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +192768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +196368 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        { "validTime": "date:now +199968 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +203568 seconds / PT4H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +217968 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +221568 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +225168 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        { "validTime": "date:now +228768 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +232368 seconds / PT4H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +246768 seconds / PT3H",
+          "value": 18.88888888888889
+        },
+        {
+          "validTime": "date:now +257568 seconds / PT5H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +275568 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +279168 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +282768 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        { "validTime": "date:now +286368 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +289968 seconds / PT4H",
+          "value": 26.11111111111111
+        },
+        { "validTime": "date:now +304368 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +307968 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +311568 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +315168 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +318768 seconds / PT4H", "value": 20 },
+        {
+          "validTime": "date:now +333168 seconds / PT3H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +343968 seconds / PT5H",
+          "value": 18.88888888888889
+        },
+        { "validTime": "date:now +361968 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +365568 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +369168 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        { "validTime": "date:now +372768 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +376368 seconds / PT4H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +390768 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +394368 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +397968 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +401568 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +405168 seconds / PT4H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +419568 seconds / PT3H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +430368 seconds / PT5H", "value": 20 },
+        {
+          "validTime": "date:now +448368 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +451968 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +455568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +459168 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +462768 seconds / PT4H",
+          "value": 26.666666666666668
+        },
+        {
+          "validTime": "date:now +477168 seconds / PT1H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +480768 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +484368 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +487968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +491568 seconds / PT4H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +505968 seconds / PT3H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +516768 seconds / PT5H", "value": 20 },
+        {
+          "validTime": "date:now +534768 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +538368 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +541968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +545568 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +549168 seconds / PT5H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +567168 seconds / PT7H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +592368 seconds / PT3H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +603168 seconds / PT5H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +621168 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +624768 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +628368 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +631968 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +635568 seconds / PT4H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +649968 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +653568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +657168 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +660768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +664368 seconds / PT4H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +678768 seconds / PT2H",
+          "value": 21.11111111111111
+        }
+      ]
+    },
+    "dewpoint": {
+      "uom": "wmoUnit:degC",
+      "values": [
+        {
+          "validTime": "date:now -26831 seconds / PT8H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +1968 seconds / PT2H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +9168 seconds / PT2H",
+          "value": 17.22222222222222
+        },
+        {
+          "validTime": "date:now +16368 seconds / PT1H",
+          "value": 16.666666666666668
+        },
+        {
+          "validTime": "date:now +19968 seconds / PT2H",
+          "value": 16.11111111111111
+        },
+        {
+          "validTime": "date:now +27168 seconds / PT1H",
+          "value": 15.555555555555555
+        },
+        { "validTime": "date:now +30768 seconds / PT1H", "value": 15 },
+        {
+          "validTime": "date:now +34368 seconds / PT3H",
+          "value": 14.444444444444445
+        },
+        { "validTime": "date:now +45168 seconds / PT6H", "value": 15 },
+        {
+          "validTime": "date:now +66768 seconds / PT3H",
+          "value": 14.444444444444445
+        },
+        {
+          "validTime": "date:now +77568 seconds / PT3H",
+          "value": 13.88888888888889
+        },
+        {
+          "validTime": "date:now +88368 seconds / PT4H",
+          "value": 14.444444444444445
+        },
+        {
+          "validTime": "date:now +102768 seconds / PT1H",
+          "value": 13.88888888888889
+        },
+        {
+          "validTime": "date:now +106368 seconds / PT2H",
+          "value": 13.333333333333334
+        },
+        {
+          "validTime": "date:now +113568 seconds / PT5H",
+          "value": 12.777777777777779
+        },
+        {
+          "validTime": "date:now +131568 seconds / PT3H",
+          "value": 12.222222222222221
+        },
+        {
+          "validTime": "date:now +142368 seconds / PT5H",
+          "value": 12.777777777777779
+        },
+        {
+          "validTime": "date:now +160368 seconds / PT4H",
+          "value": 12.222222222222221
+        },
+        {
+          "validTime": "date:now +174768 seconds / PT3H",
+          "value": 12.777777777777779
+        },
+        {
+          "validTime": "date:now +185568 seconds / PT10H",
+          "value": 13.333333333333334
+        },
+        {
+          "validTime": "date:now +221568 seconds / PT1H",
+          "value": 13.88888888888889
+        },
+        {
+          "validTime": "date:now +225168 seconds / PT1H",
+          "value": 14.444444444444445
+        },
+        { "validTime": "date:now +228768 seconds / PT1H", "value": 15 },
+        {
+          "validTime": "date:now +232368 seconds / PT1H",
+          "value": 15.555555555555555
+        },
+        {
+          "validTime": "date:now +235968 seconds / PT2H",
+          "value": 16.11111111111111
+        },
+        {
+          "validTime": "date:now +243168 seconds / PT8H",
+          "value": 16.666666666666668
+        },
+        {
+          "validTime": "date:now +271968 seconds / PT4H",
+          "value": 16.11111111111111
+        },
+        {
+          "validTime": "date:now +286368 seconds / PT6H",
+          "value": 15.555555555555555
+        },
+        {
+          "validTime": "date:now +307968 seconds / PT5H",
+          "value": 16.11111111111111
+        },
+        {
+          "validTime": "date:now +325968 seconds / PT2H",
+          "value": 15.555555555555555
+        },
+        { "validTime": "date:now +333168 seconds / PT4H", "value": 15 },
+        {
+          "validTime": "date:now +347568 seconds / PT2H",
+          "value": 15.555555555555555
+        },
+        {
+          "validTime": "date:now +354768 seconds / PT1H",
+          "value": 16.11111111111111
+        },
+        {
+          "validTime": "date:now +358368 seconds / PT5H",
+          "value": 16.666666666666668
+        },
+        {
+          "validTime": "date:now +376368 seconds / PT13H",
+          "value": 16.11111111111111
+        },
+        {
+          "validTime": "date:now +423168 seconds / PT11H",
+          "value": 15.555555555555555
+        },
+        {
+          "validTime": "date:now +462768 seconds / PT5H",
+          "value": 16.11111111111111
+        },
+        {
+          "validTime": "date:now +480768 seconds / PT7H",
+          "value": 16.666666666666668
+        },
+        {
+          "validTime": "date:now +505968 seconds / PT6H",
+          "value": 16.11111111111111
+        },
+        {
+          "validTime": "date:now +527568 seconds / PT7H",
+          "value": 15.555555555555555
+        },
+        { "validTime": "date:now +552768 seconds / PT6H", "value": 15 },
+        {
+          "validTime": "date:now +574368 seconds / PT3H",
+          "value": 14.444444444444445
+        },
+        {
+          "validTime": "date:now +585168 seconds / PT1H",
+          "value": 13.88888888888889
+        },
+        {
+          "validTime": "date:now +588768 seconds / PT2H",
+          "value": 13.333333333333334
+        },
+        {
+          "validTime": "date:now +595968 seconds / PT3H",
+          "value": 12.777777777777779
+        },
+        {
+          "validTime": "date:now +606768 seconds / PT7H",
+          "value": 12.222222222222221
+        },
+        {
+          "validTime": "date:now +631968 seconds / PT2H",
+          "value": 12.777777777777779
+        },
+        {
+          "validTime": "date:now +639168 seconds / PT3H",
+          "value": 13.333333333333334
+        },
+        {
+          "validTime": "date:now +649968 seconds / PT3H",
+          "value": 13.88888888888889
+        },
+        {
+          "validTime": "date:now +660768 seconds / PT7H",
+          "value": 14.444444444444445
+        }
+      ]
+    },
+    "maxTemperature": {
+      "uom": "wmoUnit:degC",
+      "values": [
+        {
+          "validTime": "date:now +12768 seconds / PT13H",
+          "value": 25.555555555555557
+        },
+        { "validTime": "date:now +99168 seconds / PT13H", "value": 25 },
+        {
+          "validTime": "date:now +185568 seconds / PT13H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +271968 seconds / PT13H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +358368 seconds / PT13H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +444768 seconds / PT13H",
+          "value": 26.666666666666668
+        },
+        {
+          "validTime": "date:now +531168 seconds / PT13H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +617568 seconds / PT13H",
+          "value": 26.11111111111111
+        }
+      ]
+    },
+    "minTemperature": {
+      "uom": "wmoUnit:degC",
+      "values": [
+        {
+          "validTime": "date:now -26831 seconds / PT13H",
+          "value": 21.666666666666668
+        },
+        { "validTime": "date:now +55968 seconds / PT14H", "value": 20 },
+        { "validTime": "date:now +142368 seconds / PT14H", "value": 20 },
+        {
+          "validTime": "date:now +228768 seconds / PT14H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +315168 seconds / PT14H",
+          "value": 18.88888888888889
+        },
+        { "validTime": "date:now +401568 seconds / PT14H", "value": 20 },
+        { "validTime": "date:now +487968 seconds / PT14H", "value": 20 },
+        {
+          "validTime": "date:now +574368 seconds / PT14H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +660768 seconds / PT7H",
+          "value": 20.555555555555557
+        }
+      ]
+    },
+    "relativeHumidity": {
+      "uom": "wmoUnit:percent",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT4H", "value": 76 },
+        { "validTime": "date:now -12431 seconds / PT3H", "value": 79 },
+        { "validTime": "date:now -1631 seconds / PT1H", "value": 81 },
+        { "validTime": "date:now +1968 seconds / PT2H", "value": 79 },
+        { "validTime": "date:now +9168 seconds / PT1H", "value": 77 },
+        { "validTime": "date:now +12768 seconds / PT1H", "value": 75 },
+        { "validTime": "date:now +16368 seconds / PT1H", "value": 71 },
+        { "validTime": "date:now +19968 seconds / PT1H", "value": 66 },
+        { "validTime": "date:now +23568 seconds / PT1H", "value": 60 },
+        { "validTime": "date:now +27168 seconds / PT1H", "value": 56 },
+        { "validTime": "date:now +30768 seconds / PT1H", "value": 52 },
+        { "validTime": "date:now +34368 seconds / PT1H", "value": 51 },
+        { "validTime": "date:now +37968 seconds / PT1H", "value": 50 },
+        { "validTime": "date:now +41568 seconds / PT1H", "value": 51 },
+        { "validTime": "date:now +45168 seconds / PT1H", "value": 53 },
+        { "validTime": "date:now +48768 seconds / PT1H", "value": 58 },
+        { "validTime": "date:now +52368 seconds / PT1H", "value": 63 },
+        { "validTime": "date:now +55968 seconds / PT1H", "value": 67 },
+        { "validTime": "date:now +59568 seconds / PT2H", "value": 69 },
+        { "validTime": "date:now +66768 seconds / PT1H", "value": 68 },
+        { "validTime": "date:now +70368 seconds / PT1H", "value": 67 },
+        { "validTime": "date:now +73968 seconds / PT3H", "value": 66 },
+        { "validTime": "date:now +84768 seconds / PT1H", "value": 68 },
+        { "validTime": "date:now +88368 seconds / PT1H", "value": 69 },
+        { "validTime": "date:now +91968 seconds / PT2H", "value": 70 },
+        { "validTime": "date:now +99168 seconds / PT1H", "value": 69 },
+        { "validTime": "date:now +102768 seconds / PT1H", "value": 65 },
+        { "validTime": "date:now +106368 seconds / PT1H", "value": 59 },
+        { "validTime": "date:now +109968 seconds / PT1H", "value": 53 },
+        { "validTime": "date:now +113568 seconds / PT1H", "value": 48 },
+        { "validTime": "date:now +117168 seconds / PT1H", "value": 46 },
+        { "validTime": "date:now +120768 seconds / PT2H", "value": 47 },
+        { "validTime": "date:now +127968 seconds / PT1H", "value": 46 },
+        { "validTime": "date:now +131568 seconds / PT1H", "value": 47 },
+        { "validTime": "date:now +135168 seconds / PT1H", "value": 49 },
+        { "validTime": "date:now +138768 seconds / PT1H", "value": 53 },
+        { "validTime": "date:now +142368 seconds / PT1H", "value": 57 },
+        { "validTime": "date:now +145968 seconds / PT2H", "value": 60 },
+        { "validTime": "date:now +153168 seconds / PT5H", "value": 59 },
+        { "validTime": "date:now +171168 seconds / PT1H", "value": 61 },
+        { "validTime": "date:now +174768 seconds / PT1H", "value": 62 },
+        { "validTime": "date:now +178368 seconds / PT1H", "value": 63 },
+        { "validTime": "date:now +181968 seconds / PT1H", "value": 64 },
+        { "validTime": "date:now +185568 seconds / PT1H", "value": 65 },
+        { "validTime": "date:now +189168 seconds / PT1H", "value": 63 },
+        { "validTime": "date:now +192768 seconds / PT1H", "value": 58 },
+        { "validTime": "date:now +196368 seconds / PT1H", "value": 53 },
+        { "validTime": "date:now +199968 seconds / PT1H", "value": 49 },
+        { "validTime": "date:now +203568 seconds / PT4H", "value": 47 },
+        { "validTime": "date:now +217968 seconds / PT1H", "value": 50 },
+        { "validTime": "date:now +221568 seconds / PT1H", "value": 56 },
+        { "validTime": "date:now +225168 seconds / PT1H", "value": 64 },
+        { "validTime": "date:now +228768 seconds / PT1H", "value": 73 },
+        { "validTime": "date:now +232368 seconds / PT1H", "value": 80 },
+        { "validTime": "date:now +235968 seconds / PT1H", "value": 82 },
+        { "validTime": "date:now +239568 seconds / PT1H", "value": 83 },
+        { "validTime": "date:now +243168 seconds / PT1H", "value": 85 },
+        { "validTime": "date:now +246768 seconds / PT1H", "value": 86 },
+        { "validTime": "date:now +250368 seconds / PT1H", "value": 87 },
+        { "validTime": "date:now +253968 seconds / PT1H", "value": 88 },
+        { "validTime": "date:now +257568 seconds / PT1H", "value": 89 },
+        { "validTime": "date:now +261168 seconds / PT2H", "value": 90 },
+        { "validTime": "date:now +268368 seconds / PT1H", "value": 89 },
+        { "validTime": "date:now +271968 seconds / PT1H", "value": 88 },
+        { "validTime": "date:now +275568 seconds / PT1H", "value": 82 },
+        { "validTime": "date:now +279168 seconds / PT1H", "value": 72 },
+        { "validTime": "date:now +282768 seconds / PT1H", "value": 63 },
+        { "validTime": "date:now +286368 seconds / PT1H", "value": 56 },
+        { "validTime": "date:now +289968 seconds / PT1H", "value": 53 },
+        { "validTime": "date:now +293568 seconds / PT2H", "value": 52 },
+        { "validTime": "date:now +300768 seconds / PT1H", "value": 53 },
+        { "validTime": "date:now +304368 seconds / PT1H", "value": 56 },
+        { "validTime": "date:now +307968 seconds / PT1H", "value": 62 },
+        { "validTime": "date:now +311568 seconds / PT1H", "value": 69 },
+        { "validTime": "date:now +315168 seconds / PT1H", "value": 76 },
+        { "validTime": "date:now +318768 seconds / PT1H", "value": 80 },
+        { "validTime": "date:now +322368 seconds / PT1H", "value": 79 },
+        { "validTime": "date:now +325968 seconds / PT1H", "value": 78 },
+        { "validTime": "date:now +329568 seconds / PT4H", "value": 76 },
+        { "validTime": "date:now +343968 seconds / PT1H", "value": 78 },
+        { "validTime": "date:now +347568 seconds / PT1H", "value": 80 },
+        { "validTime": "date:now +351168 seconds / PT1H", "value": 82 },
+        { "validTime": "date:now +354768 seconds / PT1H", "value": 84 },
+        { "validTime": "date:now +358368 seconds / PT1H", "value": 86 },
+        { "validTime": "date:now +361968 seconds / PT1H", "value": 82 },
+        { "validTime": "date:now +365568 seconds / PT1H", "value": 74 },
+        { "validTime": "date:now +369168 seconds / PT1H", "value": 65 },
+        { "validTime": "date:now +372768 seconds / PT1H", "value": 59 },
+        { "validTime": "date:now +376368 seconds / PT2H", "value": 55 },
+        { "validTime": "date:now +383568 seconds / PT2H", "value": 54 },
+        { "validTime": "date:now +390768 seconds / PT1H", "value": 56 },
+        { "validTime": "date:now +394368 seconds / PT1H", "value": 61 },
+        { "validTime": "date:now +397968 seconds / PT1H", "value": 66 },
+        { "validTime": "date:now +401568 seconds / PT1H", "value": 71 },
+        { "validTime": "date:now +405168 seconds / PT7H", "value": 74 },
+        { "validTime": "date:now +430368 seconds / PT2H", "value": 75 },
+        { "validTime": "date:now +437568 seconds / PT1H", "value": 76 },
+        { "validTime": "date:now +441168 seconds / PT2H", "value": 75 },
+        { "validTime": "date:now +448368 seconds / PT1H", "value": 72 },
+        { "validTime": "date:now +451968 seconds / PT1H", "value": 65 },
+        { "validTime": "date:now +455568 seconds / PT1H", "value": 59 },
+        { "validTime": "date:now +459168 seconds / PT1H", "value": 54 },
+        { "validTime": "date:now +462768 seconds / PT3H", "value": 52 },
+        { "validTime": "date:now +473568 seconds / PT1H", "value": 53 },
+        { "validTime": "date:now +477168 seconds / PT1H", "value": 56 },
+        { "validTime": "date:now +480768 seconds / PT1H", "value": 61 },
+        { "validTime": "date:now +484368 seconds / PT1H", "value": 67 },
+        { "validTime": "date:now +487968 seconds / PT1H", "value": 73 },
+        { "validTime": "date:now +491568 seconds / PT3H", "value": 77 },
+        { "validTime": "date:now +502368 seconds / PT4H", "value": 76 },
+        { "validTime": "date:now +516768 seconds / PT3H", "value": 77 },
+        { "validTime": "date:now +527568 seconds / PT2H", "value": 76 },
+        { "validTime": "date:now +534768 seconds / PT1H", "value": 74 },
+        { "validTime": "date:now +538368 seconds / PT1H", "value": 71 },
+        { "validTime": "date:now +541968 seconds / PT1H", "value": 67 },
+        { "validTime": "date:now +545568 seconds / PT1H", "value": 64 },
+        { "validTime": "date:now +549168 seconds / PT2H", "value": 63 },
+        { "validTime": "date:now +556368 seconds / PT4H", "value": 62 },
+        { "validTime": "date:now +570768 seconds / PT2H", "value": 63 },
+        { "validTime": "date:now +577968 seconds / PT1H", "value": 62 },
+        { "validTime": "date:now +581568 seconds / PT1H", "value": 61 },
+        { "validTime": "date:now +585168 seconds / PT1H", "value": 60 },
+        { "validTime": "date:now +588768 seconds / PT1H", "value": 59 },
+        { "validTime": "date:now +592368 seconds / PT2H", "value": 58 },
+        { "validTime": "date:now +599568 seconds / PT6H", "value": 57 },
+        { "validTime": "date:now +621168 seconds / PT1H", "value": 55 },
+        { "validTime": "date:now +624768 seconds / PT1H", "value": 51 },
+        { "validTime": "date:now +628368 seconds / PT1H", "value": 48 },
+        { "validTime": "date:now +631968 seconds / PT1H", "value": 45 },
+        { "validTime": "date:now +635568 seconds / PT1H", "value": 44 },
+        { "validTime": "date:now +639168 seconds / PT2H", "value": 45 },
+        { "validTime": "date:now +646368 seconds / PT1H", "value": 46 },
+        { "validTime": "date:now +649968 seconds / PT1H", "value": 48 },
+        { "validTime": "date:now +653568 seconds / PT1H", "value": 52 },
+        { "validTime": "date:now +657168 seconds / PT1H", "value": 57 },
+        { "validTime": "date:now +660768 seconds / PT1H", "value": 62 },
+        { "validTime": "date:now +664368 seconds / PT4H", "value": 65 },
+        { "validTime": "date:now +678768 seconds / PT2H", "value": 66 }
+      ]
+    },
+    "apparentTemperature": {
+      "uom": "wmoUnit:degC",
+      "values": [
+        {
+          "validTime": "date:now -26831 seconds / PT4H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now -12431 seconds / PT3H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now -1631 seconds / PT5H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +16368 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +19968 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +23568 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        { "validTime": "date:now +27168 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +30768 seconds / PT4H",
+          "value": 25.555555555555557
+        },
+        { "validTime": "date:now +45168 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +48768 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +52368 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +55968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +59568 seconds / PT4H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +73968 seconds / PT3H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +84768 seconds / PT5H", "value": 20 },
+        {
+          "validTime": "date:now +102768 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +106368 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +109968 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +113568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        { "validTime": "date:now +117168 seconds / PT4H", "value": 25 },
+        {
+          "validTime": "date:now +131568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +135168 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +138768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +142368 seconds / PT5H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +160368 seconds / PT3H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +171168 seconds / PT5H", "value": 20 },
+        {
+          "validTime": "date:now +189168 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +192768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +196368 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        { "validTime": "date:now +199968 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +203568 seconds / PT4H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +217968 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +221568 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +225168 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        { "validTime": "date:now +228768 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +232368 seconds / PT4H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +246768 seconds / PT3H",
+          "value": 18.88888888888889
+        },
+        {
+          "validTime": "date:now +257568 seconds / PT5H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +275568 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +279168 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +282768 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        { "validTime": "date:now +286368 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +289968 seconds / PT4H",
+          "value": 26.11111111111111
+        },
+        { "validTime": "date:now +304368 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +307968 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +311568 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +315168 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +318768 seconds / PT4H", "value": 20 },
+        {
+          "validTime": "date:now +333168 seconds / PT3H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +343968 seconds / PT5H",
+          "value": 18.88888888888889
+        },
+        { "validTime": "date:now +361968 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +365568 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +369168 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        { "validTime": "date:now +372768 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +376368 seconds / PT4H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +390768 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +394368 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +397968 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +401568 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +405168 seconds / PT4H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +419568 seconds / PT3H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +430368 seconds / PT5H", "value": 20 },
+        {
+          "validTime": "date:now +448368 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +451968 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +455568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +459168 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +462768 seconds / PT4H",
+          "value": 27.22222222222222
+        },
+        {
+          "validTime": "date:now +477168 seconds / PT1H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +480768 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +484368 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +487968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +491568 seconds / PT4H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +505968 seconds / PT3H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now +516768 seconds / PT5H", "value": 20 },
+        {
+          "validTime": "date:now +534768 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +538368 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +541968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +545568 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +549168 seconds / PT5H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +567168 seconds / PT7H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +592368 seconds / PT3H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +603168 seconds / PT5H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +621168 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +624768 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +628368 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +631968 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +635568 seconds / PT4H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +649968 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +653568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +657168 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +660768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +664368 seconds / PT4H",
+          "value": 21.666666666666668
+        }
+      ]
+    },
+    "wetBulbGlobeTemperature": {
+      "uom": "wmoUnit:degC",
+      "values": [
+        {
+          "validTime": "date:now -26831 seconds / PT3H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now -16031 seconds / PT4H",
+          "value": 20.555555555555557
+        },
+        { "validTime": "date:now -1631 seconds / PT6H", "value": 20 },
+        {
+          "validTime": "date:now +19968 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +23568 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +27168 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +30768 seconds / PT3H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +41568 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +45168 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +48768 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +52368 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +55968 seconds / PT1H",
+          "value": 18.88888888888889
+        },
+        {
+          "validTime": "date:now +59568 seconds / PT4H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +73968 seconds / PT3H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +84768 seconds / PT2H",
+          "value": 17.22222222222222
+        },
+        {
+          "validTime": "date:now +91968 seconds / PT2H",
+          "value": 16.666666666666668
+        },
+        {
+          "validTime": "date:now +99168 seconds / PT2H",
+          "value": 17.22222222222222
+        },
+        {
+          "validTime": "date:now +106368 seconds / PT1H",
+          "value": 18.333333333333332
+        },
+        { "validTime": "date:now +109968 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +113568 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +117168 seconds / PT3H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +127968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +131568 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +135168 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +138768 seconds / PT1H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +142368 seconds / PT5H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +160368 seconds / PT1H",
+          "value": 17.22222222222222
+        },
+        {
+          "validTime": "date:now +163968 seconds / PT2H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +171168 seconds / PT1H",
+          "value": 17.22222222222222
+        },
+        {
+          "validTime": "date:now +174768 seconds / PT4H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +189168 seconds / PT1H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +192768 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +196368 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +199968 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +203568 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +207168 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +210768 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +214368 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +217968 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        { "validTime": "date:now +221568 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +225168 seconds / PT1H",
+          "value": 18.88888888888889
+        },
+        {
+          "validTime": "date:now +228768 seconds / PT5H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +246768 seconds / PT3H",
+          "value": 17.22222222222222
+        },
+        {
+          "validTime": "date:now +257568 seconds / PT4H",
+          "value": 16.666666666666668
+        },
+        {
+          "validTime": "date:now +271968 seconds / PT1H",
+          "value": 17.22222222222222
+        },
+        {
+          "validTime": "date:now +275568 seconds / PT1H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +279168 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +282768 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +286368 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +289968 seconds / PT2H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +297168 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +300768 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +304368 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +307968 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +311568 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +315168 seconds / PT5H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +333168 seconds / PT3H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +343968 seconds / PT2H",
+          "value": 17.22222222222222
+        },
+        {
+          "validTime": "date:now +351168 seconds / PT2H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +358368 seconds / PT1H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +361968 seconds / PT1H",
+          "value": 18.88888888888889
+        },
+        { "validTime": "date:now +365568 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +369168 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +372768 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        { "validTime": "date:now +376368 seconds / PT2H", "value": 25 },
+        {
+          "validTime": "date:now +383568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +387168 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +390768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +394368 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        { "validTime": "date:now +397968 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +401568 seconds / PT1H",
+          "value": 18.88888888888889
+        },
+        {
+          "validTime": "date:now +405168 seconds / PT2H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +412368 seconds / PT5H",
+          "value": 18.88888888888889
+        },
+        {
+          "validTime": "date:now +430368 seconds / PT3H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +441168 seconds / PT2H",
+          "value": 17.77777777777778
+        },
+        {
+          "validTime": "date:now +448368 seconds / PT1H",
+          "value": 18.88888888888889
+        },
+        { "validTime": "date:now +451968 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +455568 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +459168 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +462768 seconds / PT3H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +473568 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +477168 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +480768 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +484368 seconds / PT1H",
+          "value": 20.555555555555557
+        },
+        {
+          "validTime": "date:now +487968 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +491568 seconds / PT9H",
+          "value": 18.88888888888889
+        },
+        {
+          "validTime": "date:now +523968 seconds / PT2H",
+          "value": 18.333333333333332
+        },
+        {
+          "validTime": "date:now +531168 seconds / PT1H",
+          "value": 18.88888888888889
+        },
+        {
+          "validTime": "date:now +534768 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        { "validTime": "date:now +538368 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +541968 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +545568 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +549168 seconds / PT2H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +556368 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +559968 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +563568 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +567168 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        { "validTime": "date:now +570768 seconds / PT1H", "value": 20 },
+        {
+          "validTime": "date:now +574368 seconds / PT1H",
+          "value": 19.444444444444443
+        },
+        {
+          "validTime": "date:now +577968 seconds / PT4H",
+          "value": 18.88888888888889
+        }
+      ]
+    },
+    "heatIndex": {
+      "uom": "wmoUnit:degC",
+      "values": [
+        {
+          "validTime": "date:now -26831 seconds / PT4H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now -12431 seconds / PT3H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now -1631 seconds / PT5H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +16368 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +19968 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +23568 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        { "validTime": "date:now +27168 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +30768 seconds / PT4H",
+          "value": 25.555555555555557
+        },
+        { "validTime": "date:now +45168 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +48768 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +52368 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +55968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +59568 seconds / PT4H",
+          "value": 21.11111111111111
+        },
+        { "validTime": "date:now +73968 seconds / PT9H", "value": null },
+        {
+          "validTime": "date:now +106368 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +109968 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +113568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        { "validTime": "date:now +117168 seconds / PT4H", "value": 25 },
+        {
+          "validTime": "date:now +131568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +135168 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +138768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +142368 seconds / PT5H",
+          "value": 21.11111111111111
+        },
+        { "validTime": "date:now +160368 seconds / PT9H", "value": null },
+        {
+          "validTime": "date:now +192768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +196368 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        { "validTime": "date:now +199968 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +203568 seconds / PT4H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +217968 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +221568 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +225168 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        { "validTime": "date:now +228768 seconds / PT14H", "value": null },
+        {
+          "validTime": "date:now +279168 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +282768 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        { "validTime": "date:now +286368 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +289968 seconds / PT4H",
+          "value": 26.11111111111111
+        },
+        { "validTime": "date:now +304368 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +307968 seconds / PT1H",
+          "value": 23.88888888888889
+        },
+        {
+          "validTime": "date:now +311568 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        { "validTime": "date:now +315168 seconds / PT14H", "value": null },
+        {
+          "validTime": "date:now +365568 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +369168 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        { "validTime": "date:now +372768 seconds / PT1H", "value": 25 },
+        {
+          "validTime": "date:now +376368 seconds / PT4H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +390768 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +394368 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +397968 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +401568 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +405168 seconds / PT4H",
+          "value": 21.11111111111111
+        },
+        { "validTime": "date:now +419568 seconds / PT8H", "value": null },
+        {
+          "validTime": "date:now +448368 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +451968 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +455568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +459168 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +462768 seconds / PT4H",
+          "value": 27.22222222222222
+        },
+        {
+          "validTime": "date:now +477168 seconds / PT1H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +480768 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +484368 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +487968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +491568 seconds / PT4H",
+          "value": 21.11111111111111
+        },
+        { "validTime": "date:now +505968 seconds / PT9H", "value": null },
+        {
+          "validTime": "date:now +538368 seconds / PT1H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +541968 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +545568 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +549168 seconds / PT5H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +567168 seconds / PT7H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +592368 seconds / PT3H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +603168 seconds / PT5H",
+          "value": 21.11111111111111
+        },
+        {
+          "validTime": "date:now +621168 seconds / PT1H",
+          "value": 21.666666666666668
+        },
+        {
+          "validTime": "date:now +624768 seconds / PT1H",
+          "value": 22.77777777777778
+        },
+        {
+          "validTime": "date:now +628368 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +631968 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +635568 seconds / PT4H",
+          "value": 26.11111111111111
+        },
+        {
+          "validTime": "date:now +649968 seconds / PT1H",
+          "value": 25.555555555555557
+        },
+        {
+          "validTime": "date:now +653568 seconds / PT1H",
+          "value": 24.444444444444443
+        },
+        {
+          "validTime": "date:now +657168 seconds / PT1H",
+          "value": 23.333333333333332
+        },
+        {
+          "validTime": "date:now +660768 seconds / PT1H",
+          "value": 22.22222222222222
+        },
+        {
+          "validTime": "date:now +664368 seconds / PT4H",
+          "value": 21.666666666666668
+        }
+      ]
+    },
+    "windChill": {
+      "uom": "wmoUnit:degC",
+      "values": [
+        { "validTime": "date:now -26831 seconds / P8DT4H", "value": null }
+      ]
+    },
+    "skyCover": {
+      "uom": "wmoUnit:percent",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT4H", "value": 70 },
+        { "validTime": "date:now -12431 seconds / PT6H", "value": 56 },
+        { "validTime": "date:now +9168 seconds / PT6H", "value": 52 },
+        { "validTime": "date:now +30768 seconds / PT6H", "value": 18 },
+        { "validTime": "date:now +52368 seconds / PT6H", "value": 16 },
+        { "validTime": "date:now +73968 seconds / PT6H", "value": 18 },
+        { "validTime": "date:now +95568 seconds / PT6H", "value": 34 },
+        { "validTime": "date:now +117168 seconds / PT6H", "value": 31 },
+        { "validTime": "date:now +138768 seconds / PT6H", "value": 24 },
+        { "validTime": "date:now +160368 seconds / PT6H", "value": 23 },
+        { "validTime": "date:now +181968 seconds / PT6H", "value": 29 },
+        { "validTime": "date:now +203568 seconds / PT6H", "value": 30 },
+        { "validTime": "date:now +225168 seconds / PT6H", "value": 25 },
+        { "validTime": "date:now +246768 seconds / PT12H", "value": 21 },
+        { "validTime": "date:now +289968 seconds / PT6H", "value": 30 },
+        { "validTime": "date:now +311568 seconds / PT6H", "value": 25 },
+        { "validTime": "date:now +333168 seconds / PT6H", "value": 27 },
+        { "validTime": "date:now +354768 seconds / PT6H", "value": 31 },
+        { "validTime": "date:now +376368 seconds / PT6H", "value": 26 },
+        { "validTime": "date:now +397968 seconds / PT6H", "value": 29 },
+        { "validTime": "date:now +419568 seconds / PT6H", "value": 40 },
+        { "validTime": "date:now +441168 seconds / PT6H", "value": 62 },
+        { "validTime": "date:now +462768 seconds / PT6H", "value": 70 },
+        { "validTime": "date:now +484368 seconds / PT6H", "value": 55 },
+        { "validTime": "date:now +505968 seconds / PT6H", "value": 62 },
+        { "validTime": "date:now +527568 seconds / PT6H", "value": 52 },
+        { "validTime": "date:now +549168 seconds / PT6H", "value": 55 },
+        { "validTime": "date:now +570768 seconds / PT6H", "value": 41 },
+        { "validTime": "date:now +592368 seconds / PT6H", "value": 53 },
+        { "validTime": "date:now +613968 seconds / PT6H", "value": 46 },
+        { "validTime": "date:now +635568 seconds / PT6H", "value": 45 },
+        { "validTime": "date:now +657168 seconds / PT6H", "value": 39 }
+      ]
+    },
+    "windDirection": {
+      "uom": "wmoUnit:degree_(angle)",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT3H", "value": 120 },
+        { "validTime": "date:now -16031 seconds / PT6H", "value": 10 },
+        { "validTime": "date:now +5568 seconds / PT15H", "value": 20 },
+        { "validTime": "date:now +59568 seconds / PT21H", "value": 30 },
+        { "validTime": "date:now +135168 seconds / PT12H", "value": 40 },
+        { "validTime": "date:now +178368 seconds / PT6H", "value": 50 },
+        { "validTime": "date:now +199968 seconds / PT6H", "value": 60 },
+        { "validTime": "date:now +221568 seconds / PT18H", "value": 50 },
+        { "validTime": "date:now +286368 seconds / PT18H", "value": 60 },
+        { "validTime": "date:now +351168 seconds / PT12H", "value": 70 },
+        { "validTime": "date:now +394368 seconds / P1DT18H", "value": 60 },
+        { "validTime": "date:now +545568 seconds / PT18H", "value": 50 },
+        { "validTime": "date:now +610368 seconds / PT12H", "value": 60 },
+        { "validTime": "date:now +653568 seconds / PT7H", "value": 50 }
+      ]
+    },
+    "windSpeed": {
+      "uom": "wmoUnit:km_h-1",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT3H", "value": 1.852 },
+        { "validTime": "date:now -16031 seconds / PT3H", "value": 9.26 },
+        { "validTime": "date:now -5231 seconds / PT3H", "value": 18.52 },
+        { "validTime": "date:now +5568 seconds / PT3H", "value": 16.668 },
+        { "validTime": "date:now +16368 seconds / PT12H", "value": 24.076 },
+        { "validTime": "date:now +59568 seconds / PT3H", "value": 22.224 },
+        { "validTime": "date:now +70368 seconds / PT3H", "value": 20.372 },
+        { "validTime": "date:now +81168 seconds / PT6H", "value": 14.816 },
+        { "validTime": "date:now +102768 seconds / PT3H", "value": 16.668 },
+        { "validTime": "date:now +113568 seconds / PT3H", "value": 22.224 },
+        { "validTime": "date:now +124368 seconds / PT3H", "value": 20.372 },
+        { "validTime": "date:now +135168 seconds / PT6H", "value": 18.52 },
+        { "validTime": "date:now +156768 seconds / PT12H", "value": 16.668 },
+        { "validTime": "date:now +199968 seconds / PT18H", "value": 18.52 },
+        { "validTime": "date:now +264768 seconds / PT6H", "value": 20.372 },
+        { "validTime": "date:now +286368 seconds / PT6H", "value": 22.224 },
+        { "validTime": "date:now +307968 seconds / PT6H", "value": 24.076 },
+        { "validTime": "date:now +329568 seconds / PT12H", "value": 27.78 },
+        { "validTime": "date:now +372768 seconds / PT6H", "value": 24.076 },
+        { "validTime": "date:now +394368 seconds / PT6H", "value": 22.224 },
+        { "validTime": "date:now +415968 seconds / PT6H", "value": 20.372 },
+        { "validTime": "date:now +437568 seconds / PT6H", "value": 22.224 },
+        { "validTime": "date:now +459168 seconds / PT6H", "value": 24.076 },
+        { "validTime": "date:now +480768 seconds / PT6H", "value": 29.632 },
+        { "validTime": "date:now +502368 seconds / PT6H", "value": 27.78 },
+        { "validTime": "date:now +523968 seconds / PT6H", "value": 35.188 },
+        { "validTime": "date:now +545568 seconds / PT6H", "value": 29.632 },
+        { "validTime": "date:now +567168 seconds / PT6H", "value": 27.78 },
+        { "validTime": "date:now +588768 seconds / PT6H", "value": 24.076 },
+        { "validTime": "date:now +610368 seconds / PT6H", "value": 29.632 },
+        { "validTime": "date:now +631968 seconds / PT6H", "value": 27.78 },
+        { "validTime": "date:now +653568 seconds / PT7H", "value": 25.928 }
+      ]
+    },
+    "windGust": {
+      "uom": "wmoUnit:km_h-1",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT6H", "value": 12.964 },
+        { "validTime": "date:now -5231 seconds / PT3H", "value": 24.076 },
+        { "validTime": "date:now +5568 seconds / PT3H", "value": 22.224 },
+        { "validTime": "date:now +16368 seconds / PT3H", "value": 31.484 },
+        { "validTime": "date:now +27168 seconds / PT9H", "value": 33.336 },
+        { "validTime": "date:now +59568 seconds / PT3H", "value": 29.632 },
+        { "validTime": "date:now +70368 seconds / PT3H", "value": 25.928 },
+        { "validTime": "date:now +81168 seconds / PT3H", "value": 20.372 },
+        { "validTime": "date:now +91968 seconds / PT3H", "value": 16.668 },
+        { "validTime": "date:now +102768 seconds / PT3H", "value": 22.224 },
+        { "validTime": "date:now +113568 seconds / PT3H", "value": 29.632 },
+        { "validTime": "date:now +124368 seconds / PT3H", "value": 25.928 },
+        { "validTime": "date:now +135168 seconds / PT6H", "value": 24.076 },
+        { "validTime": "date:now +156768 seconds / PT12H", "value": 22.224 },
+        { "validTime": "date:now +199968 seconds / PT18H", "value": 24.076 },
+        { "validTime": "date:now +264768 seconds / PT6H", "value": 27.78 },
+        { "validTime": "date:now +286368 seconds / PT6H", "value": 29.632 },
+        { "validTime": "date:now +307968 seconds / PT6H", "value": 33.336 },
+        { "validTime": "date:now +329568 seconds / PT12H", "value": 38.892 },
+        { "validTime": "date:now +372768 seconds / PT6H", "value": 33.336 },
+        { "validTime": "date:now +394368 seconds / PT6H", "value": 29.632 },
+        { "validTime": "date:now +415968 seconds / PT6H", "value": 27.78 },
+        { "validTime": "date:now +437568 seconds / PT6H", "value": 29.632 },
+        { "validTime": "date:now +459168 seconds / PT6H", "value": 33.336 },
+        { "validTime": "date:now +480768 seconds / PT6H", "value": 40.744 },
+        { "validTime": "date:now +502368 seconds / PT6H", "value": 38.892 },
+        { "validTime": "date:now +523968 seconds / PT6H", "value": 50.004 },
+        { "validTime": "date:now +545568 seconds / PT6H", "value": 40.744 },
+        { "validTime": "date:now +567168 seconds / PT6H", "value": 38.892 },
+        { "validTime": "date:now +588768 seconds / PT6H", "value": 33.336 },
+        { "validTime": "date:now +610368 seconds / PT6H", "value": 40.744 },
+        { "validTime": "date:now +631968 seconds / PT6H", "value": 38.892 },
+        { "validTime": "date:now +653568 seconds / PT7H", "value": 35.188 }
+      ]
+    },
+    "weather": {
+      "values": [
+        {
+          "validTime": "date:now -26831 seconds / PT4H",
+          "value": [
+            {
+              "coverage": "numerous",
+              "weather": "rain_showers",
+              "intensity": "moderate",
+              "visibility": { "unitCode": "wmoUnit:km", "value": null },
+              "attributes": []
+            }
+          ]
+        },
+        {
+          "validTime": "date:now -12431 seconds / PT12H",
+          "value": [
+            {
+              "coverage": "scattered",
+              "weather": "rain_showers",
+              "intensity": "moderate",
+              "visibility": { "unitCode": "wmoUnit:km", "value": null },
+              "attributes": []
+            }
+          ]
+        },
+        {
+          "validTime": "date:now +30768 seconds / P4DT6H",
+          "value": [
+            {
+              "coverage": null,
+              "weather": null,
+              "intensity": null,
+              "visibility": { "unitCode": "wmoUnit:km", "value": null },
+              "attributes": []
+            }
+          ]
+        },
+        {
+          "validTime": "date:now +397968 seconds / PT18H",
+          "value": [
+            {
+              "coverage": "scattered",
+              "weather": "rain_showers",
+              "intensity": "moderate",
+              "visibility": { "unitCode": "wmoUnit:km", "value": null },
+              "attributes": []
+            }
+          ]
+        },
+        {
+          "validTime": "date:now +462768 seconds / PT6H",
+          "value": [
+            {
+              "coverage": "isolated",
+              "weather": "rain_showers",
+              "intensity": "moderate",
+              "visibility": { "unitCode": "wmoUnit:km", "value": null },
+              "attributes": []
+            }
+          ]
+        },
+        {
+          "validTime": "date:now +484368 seconds / PT18H",
+          "value": [
+            {
+              "coverage": "scattered",
+              "weather": "rain_showers",
+              "intensity": "moderate",
+              "visibility": { "unitCode": "wmoUnit:km", "value": null },
+              "attributes": []
+            }
+          ]
+        },
+        {
+          "validTime": "date:now +549168 seconds / PT18H",
+          "value": [
+            {
+              "coverage": "isolated",
+              "weather": "rain_showers",
+              "intensity": "moderate",
+              "visibility": { "unitCode": "wmoUnit:km", "value": null },
+              "attributes": []
+            }
+          ]
+        },
+        {
+          "validTime": "date:now +613968 seconds / PT6H",
+          "value": [
+            {
+              "coverage": "scattered",
+              "weather": "rain_showers",
+              "intensity": "moderate",
+              "visibility": { "unitCode": "wmoUnit:km", "value": null },
+              "attributes": []
+            }
+          ]
+        },
+        {
+          "validTime": "date:now +635568 seconds / PT12H",
+          "value": [
+            {
+              "coverage": "isolated",
+              "weather": "rain_showers",
+              "intensity": "moderate",
+              "visibility": { "unitCode": "wmoUnit:km", "value": null },
+              "attributes": []
+            }
+          ]
+        }
+      ]
+    },
+    "hazards": {
+      "values": [
+        { "validTime": "date:now -16031 seconds / P1DT19H", "value": [] }
+      ]
+    },
+    "probabilityOfPrecipitation": {
+      "uom": "wmoUnit:percent",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT4H", "value": 55 },
+        { "validTime": "date:now -12431 seconds / PT6H", "value": 33 },
+        { "validTime": "date:now +9168 seconds / PT6H", "value": 27 },
+        { "validTime": "date:now +30768 seconds / PT6H", "value": 10 },
+        { "validTime": "date:now +52368 seconds / PT6H", "value": 9 },
+        { "validTime": "date:now +73968 seconds / PT6H", "value": 10 },
+        { "validTime": "date:now +95568 seconds / PT6H", "value": 8 },
+        { "validTime": "date:now +117168 seconds / PT6H", "value": 6 },
+        { "validTime": "date:now +138768 seconds / PT6H", "value": 8 },
+        { "validTime": "date:now +160368 seconds / PT6H", "value": 10 },
+        { "validTime": "date:now +181968 seconds / PT6H", "value": 8 },
+        { "validTime": "date:now +203568 seconds / PT6H", "value": 6 },
+        { "validTime": "date:now +225168 seconds / PT6H", "value": 8 },
+        { "validTime": "date:now +246768 seconds / PT6H", "value": 10 },
+        { "validTime": "date:now +268368 seconds / PT6H", "value": 8 },
+        { "validTime": "date:now +289968 seconds / PT6H", "value": 6 },
+        { "validTime": "date:now +311568 seconds / PT6H", "value": 8 },
+        { "validTime": "date:now +333168 seconds / PT6H", "value": 10 },
+        { "validTime": "date:now +354768 seconds / PT6H", "value": 8 },
+        { "validTime": "date:now +376368 seconds / PT6H", "value": 6 },
+        { "validTime": "date:now +397968 seconds / PT6H", "value": 25 },
+        { "validTime": "date:now +419568 seconds / PT6H", "value": 34 },
+        { "validTime": "date:now +441168 seconds / PT6H", "value": 28 },
+        { "validTime": "date:now +462768 seconds / PT6H", "value": 17 },
+        { "validTime": "date:now +484368 seconds / PT6H", "value": 25 },
+        { "validTime": "date:now +505968 seconds / PT6H", "value": 34 },
+        { "validTime": "date:now +527568 seconds / PT6H", "value": 28 },
+        { "validTime": "date:now +549168 seconds / PT6H", "value": 20 },
+        { "validTime": "date:now +570768 seconds / PT6H", "value": 22 },
+        { "validTime": "date:now +592368 seconds / PT6H", "value": 24 },
+        { "validTime": "date:now +613968 seconds / PT6H", "value": 25 },
+        { "validTime": "date:now +635568 seconds / PT6H", "value": 22 },
+        { "validTime": "date:now +657168 seconds / PT6H", "value": 20 }
+      ]
+    },
+    "quantitativePrecipitation": {
+      "uom": "wmoUnit:mm",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT4H", "value": 0.508 },
+        { "validTime": "date:now -12431 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +9168 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +30768 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +52368 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +73968 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +95568 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +117168 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +138768 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +160368 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +181968 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +203568 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +225168 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +246768 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +268368 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +289968 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +311568 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +333168 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +354768 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +376368 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +397968 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +419568 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +441168 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +462768 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +484368 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +505968 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +527568 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +549168 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +570768 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +592368 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +613968 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +635568 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +657168 seconds / PT6H", "value": 0 }
+      ]
+    },
+    "iceAccumulation": {
+      "uom": "wmoUnit:mm",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +16368 seconds / P1D", "value": 0 },
+        { "validTime": "date:now +102768 seconds / P1D", "value": 0 },
+        { "validTime": "date:now +189168 seconds / P1D", "value": 0 },
+        { "validTime": "date:now +275568 seconds / P1D", "value": 0 },
+        { "validTime": "date:now +361968 seconds / P1D", "value": 0 },
+        { "validTime": "date:now +448368 seconds / P1D", "value": 0 },
+        { "validTime": "date:now +534768 seconds / P1D", "value": 0 },
+        { "validTime": "date:now +621168 seconds / PT18H", "value": 0 }
+      ]
+    },
+    "snowfallAmount": {
+      "uom": "wmoUnit:mm",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT10H", "value": 0 },
+        { "validTime": "date:now +9168 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +52368 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +95568 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +138768 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +181968 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +225168 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +268368 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +311568 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +354768 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +397968 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +441168 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +484368 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +527568 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +570768 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +613968 seconds / PT12H", "value": 0 },
+        { "validTime": "date:now +657168 seconds / PT8H", "value": 0 }
+      ]
+    },
+    "snowLevel": { "values": [] },
+    "ceilingHeight": { "values": [] },
+    "visibility": { "values": [] },
+    "transportWindSpeed": {
+      "uom": "wmoUnit:km_h-1",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT3H", "value": 11.112 },
+        { "validTime": "date:now -16031 seconds / PT3H", "value": 9.26 },
+        { "validTime": "date:now -5231 seconds / PT3H", "value": 12.964 },
+        { "validTime": "date:now +5568 seconds / PT3H", "value": 20.372 },
+        { "validTime": "date:now +16368 seconds / PT3H", "value": 22.224 },
+        { "validTime": "date:now +27168 seconds / PT3H", "value": 18.52 },
+        { "validTime": "date:now +37968 seconds / PT3H", "value": 14.816 },
+        { "validTime": "date:now +48768 seconds / PT3H", "value": 20.372 },
+        { "validTime": "date:now +59568 seconds / PT3H", "value": 22.224 },
+        { "validTime": "date:now +70368 seconds / PT3H", "value": 20.372 },
+        { "validTime": "date:now +81168 seconds / PT3H", "value": 18.52 },
+        { "validTime": "date:now +91968 seconds / PT3H", "value": 16.668 },
+        { "validTime": "date:now +102768 seconds / PT3H", "value": 12.964 },
+        { "validTime": "date:now +113568 seconds / PT6H", "value": 11.112 },
+        { "validTime": "date:now +135168 seconds / PT3H", "value": 12.964 },
+        { "validTime": "date:now +145968 seconds / PT3H", "value": 16.668 },
+        { "validTime": "date:now +156768 seconds / PT9H", "value": 18.52 },
+        { "validTime": "date:now +189168 seconds / PT3H", "value": 20.372 },
+        { "validTime": "date:now +199968 seconds / PT3H", "value": 16.668 },
+        { "validTime": "date:now +210768 seconds / PT3H", "value": 14.816 },
+        { "validTime": "date:now +221568 seconds / PT3H", "value": 20.372 },
+        { "validTime": "date:now +232368 seconds / PT3H", "value": 27.78 },
+        { "validTime": "date:now +243168 seconds / PT6H", "value": 31.484 },
+        { "validTime": "date:now +264768 seconds / PT3H", "value": 29.632 },
+        { "validTime": "date:now +275568 seconds / PT3H", "value": 27.78 },
+        { "validTime": "date:now +286368 seconds / PT3H", "value": 24.076 },
+        { "validTime": "date:now +297168 seconds / PT6H", "value": 22.224 },
+        { "validTime": "date:now +318768 seconds / PT3H", "value": 25.928 },
+        { "validTime": "date:now +329568 seconds / PT3H", "value": 29.632 },
+        { "validTime": "date:now +340368 seconds / PT3H", "value": 31.484 },
+        { "validTime": "date:now +351168 seconds / PT6H", "value": 33.336 },
+        { "validTime": "date:now +372768 seconds / PT3H", "value": 27.78 },
+        { "validTime": "date:now +383568 seconds / PT3H", "value": 24.076 },
+        { "validTime": "date:now +394368 seconds / PT3H", "value": 27.78 },
+        { "validTime": "date:now +405168 seconds / PT3H", "value": 33.336 },
+        { "validTime": "date:now +415968 seconds / PT3H", "value": 35.188 },
+        { "validTime": "date:now +426768 seconds / PT3H", "value": 33.336 },
+        { "validTime": "date:now +437568 seconds / PT9H", "value": 31.484 },
+        { "validTime": "date:now +469968 seconds / PT3H", "value": 33.336 },
+        { "validTime": "date:now +480768 seconds / PT3H", "value": 35.188 },
+        { "validTime": "date:now +491568 seconds / PT3H", "value": 38.892 },
+        { "validTime": "date:now +502368 seconds / PT12H", "value": 40.744 },
+        { "validTime": "date:now +545568 seconds / PT3H", "value": 42.596 },
+        { "validTime": "date:now +556368 seconds / PT6H", "value": 44.448 },
+        { "validTime": "date:now +577968 seconds / PT3H", "value": 42.596 },
+        { "validTime": "date:now +588768 seconds / PT3H", "value": 38.892 },
+        { "validTime": "date:now +599568 seconds / PT3H", "value": 33.336 },
+        { "validTime": "date:now +610368 seconds / PT3H", "value": 31.484 },
+        { "validTime": "date:now +621168 seconds / PT12H", "value": 29.632 },
+        { "validTime": "date:now +664368 seconds / PT3H", "value": 27.78 },
+        { "validTime": "date:now +675168 seconds / PT3H", "value": 25.928 }
+      ]
+    },
+    "transportWindDirection": {
+      "uom": "wmoUnit:degree_(angle)",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT3H", "value": 320 },
+        { "validTime": "date:now -16031 seconds / PT3H", "value": 330 },
+        { "validTime": "date:now -5231 seconds / PT3H", "value": 350 },
+        { "validTime": "date:now +5568 seconds / PT6H", "value": 10 },
+        { "validTime": "date:now +27168 seconds / PT6H", "value": 0 },
+        { "validTime": "date:now +48768 seconds / PT15H", "value": 20 },
+        { "validTime": "date:now +102768 seconds / PT3H", "value": 30 },
+        { "validTime": "date:now +113568 seconds / PT3H", "value": 20 },
+        { "validTime": "date:now +124368 seconds / PT6H", "value": 10 },
+        { "validTime": "date:now +145968 seconds / PT3H", "value": 20 },
+        { "validTime": "date:now +156768 seconds / PT3H", "value": 30 },
+        { "validTime": "date:now +167568 seconds / PT6H", "value": 40 },
+        { "validTime": "date:now +189168 seconds / PT18H", "value": 50 },
+        { "validTime": "date:now +253968 seconds / PT18H", "value": 60 },
+        { "validTime": "date:now +318768 seconds / PT9H", "value": 70 },
+        { "validTime": "date:now +351168 seconds / PT6H", "value": 80 },
+        { "validTime": "date:now +372768 seconds / PT6H", "value": 70 },
+        { "validTime": "date:now +394368 seconds / P1DT3H", "value": 60 },
+        { "validTime": "date:now +491568 seconds / PT6H", "value": 70 },
+        { "validTime": "date:now +513168 seconds / PT15H", "value": 60 },
+        { "validTime": "date:now +567168 seconds / P1D", "value": 50 },
+        { "validTime": "date:now +653568 seconds / PT6H", "value": 40 },
+        { "validTime": "date:now +675168 seconds / PT3H", "value": 50 }
+      ]
+    },
+    "mixingHeight": {
+      "uom": "wmoUnit:m",
+      "values": [
+        { "validTime": "date:now -26831 seconds / PT3H", "value": 1132.9416 },
+        { "validTime": "date:now -16031 seconds / PT3H", "value": 1108.2528 },
+        { "validTime": "date:now -5231 seconds / PT3H", "value": 1097.28 },
+        { "validTime": "date:now +5568 seconds / PT1H", "value": 895.1976 },
+        { "validTime": "date:now +9168 seconds / PT5H", "value": 933.6024 },
+        { "validTime": "date:now +27168 seconds / PT3H", "value": 1150.62 },
+        { "validTime": "date:now +37968 seconds / PT3H", "value": 1313.3832 },
+        { "validTime": "date:now +48768 seconds / PT3H", "value": 1222.248 },
+        { "validTime": "date:now +59568 seconds / PT3H", "value": 1083.564 },
+        { "validTime": "date:now +70368 seconds / PT3H", "value": 982.0656 },
+        { "validTime": "date:now +81168 seconds / PT3H", "value": 1035.4056 },
+        { "validTime": "date:now +91968 seconds / PT3H", "value": 1296.3144 },
+        { "validTime": "date:now +102768 seconds / PT3H", "value": 1613.3064 },
+        { "validTime": "date:now +113568 seconds / PT3H", "value": 1651.4064 },
+        { "validTime": "date:now +124368 seconds / PT3H", "value": 1582.2168 },
+        { "validTime": "date:now +135168 seconds / PT3H", "value": 1504.4928 },
+        { "validTime": "date:now +145968 seconds / PT3H", "value": 1316.4312 },
+        { "validTime": "date:now +156768 seconds / PT3H", "value": 1272.54 },
+        { "validTime": "date:now +167568 seconds / PT3H", "value": 1259.1288 },
+        { "validTime": "date:now +178368 seconds / PT3H", "value": 1152.144 },
+        { "validTime": "date:now +189168 seconds / PT3H", "value": 1165.5552 },
+        { "validTime": "date:now +199968 seconds / PT3H", "value": 1538.0208 },
+        { "validTime": "date:now +210768 seconds / PT3H", "value": 1541.6784 },
+        { "validTime": "date:now +221568 seconds / PT3H", "value": 1548.6888 },
+        { "validTime": "date:now +232368 seconds / PT3H", "value": 1007.9736 },
+        { "validTime": "date:now +243168 seconds / PT6H", "value": 848.868 },
+        { "validTime": "date:now +264768 seconds / PT3H", "value": 1168.908 },
+        { "validTime": "date:now +275568 seconds / PT3H", "value": 1376.4768 },
+        { "validTime": "date:now +286368 seconds / PT3H", "value": 1396.2888 },
+        { "validTime": "date:now +297168 seconds / PT3H", "value": 1391.1072 },
+        { "validTime": "date:now +307968 seconds / PT6H", "value": 1342.0344 },
+        { "validTime": "date:now +329568 seconds / PT6H", "value": 1242.3648 },
+        { "validTime": "date:now +351168 seconds / PT3H", "value": 1199.0832 },
+        { "validTime": "date:now +361968 seconds / PT3H", "value": 1210.056 },
+        { "validTime": "date:now +372768 seconds / PT3H", "value": 1296.6192 },
+        { "validTime": "date:now +383568 seconds / PT3H", "value": 1337.1576 },
+        { "validTime": "date:now +394368 seconds / PT3H", "value": 1240.8408 },
+        { "validTime": "date:now +405168 seconds / PT3H", "value": 1113.4344 },
+        { "validTime": "date:now +415968 seconds / PT6H", "value": 1064.6664 },
+        { "validTime": "date:now +437568 seconds / PT3H", "value": 1118.3112 },
+        { "validTime": "date:now +448368 seconds / PT3H", "value": 1196.9496 },
+        { "validTime": "date:now +459168 seconds / PT3H", "value": 1343.8632 },
+        { "validTime": "date:now +469968 seconds / PT3H", "value": 1413.6624 },
+        { "validTime": "date:now +480768 seconds / PT3H", "value": 1238.4024 },
+        { "validTime": "date:now +491568 seconds / PT3H", "value": 1053.6936 },
+        { "validTime": "date:now +502368 seconds / PT3H", "value": 1099.7184 },
+        { "validTime": "date:now +513168 seconds / PT3H", "value": 1205.7888 },
+        { "validTime": "date:now +523968 seconds / PT3H", "value": 1234.1352 },
+        { "validTime": "date:now +534768 seconds / PT3H", "value": 1246.3272 },
+        { "validTime": "date:now +545568 seconds / PT6H", "value": 1284.732 },
+        { "validTime": "date:now +567168 seconds / PT3H", "value": 1332.8904 },
+        { "validTime": "date:now +577968 seconds / PT3H", "value": 1370.9904 },
+        { "validTime": "date:now +588768 seconds / PT3H", "value": 1421.892 },
+        { "validTime": "date:now +599568 seconds / PT3H", "value": 1459.0776 },
+        { "validTime": "date:now +610368 seconds / PT3H", "value": 1450.2384 },
+        { "validTime": "date:now +621168 seconds / PT3H", "value": 1447.1904 },
+        { "validTime": "date:now +631968 seconds / PT3H", "value": 1527.6576 },
+        { "validTime": "date:now +642768 seconds / PT3H", "value": 1573.0728 },
+        { "validTime": "date:now +653568 seconds / PT3H", "value": 1470.66 },
+        { "validTime": "date:now +664368 seconds / PT3H", "value": 1325.88 },
+        { "validTime": "date:now +675168 seconds / PT3H", "value": 1229.868 }
+      ]
+    },
+    "hainesIndex": { "values": [] },
+    "lightningActivityLevel": {
+      "values": [
+        { "validTime": "date:now -26831 seconds / P8DT6H", "value": 1 }
+      ]
+    },
+    "twentyFootWindSpeed": { "values": [] },
+    "twentyFootWindDirection": { "values": [] },
+    "waveHeight": {
+      "uom": "wmoUnit:m",
+      "values": [
+        { "validTime": "date:now -26831 seconds / P7DT6H", "value": 0 }
+      ]
+    },
+    "wavePeriod": {
+      "uom": "nwsUnit:s",
+      "values": [
+        { "validTime": "date:now -26831 seconds / P7DT6H", "value": 0 }
+      ]
+    },
+    "waveDirection": { "values": [] },
+    "primarySwellHeight": {
+      "uom": "wmoUnit:m",
+      "values": [
+        { "validTime": "date:now -26831 seconds / P7DT6H", "value": 0 }
+      ]
+    },
+    "primarySwellDirection": {
+      "uom": "wmoUnit:degree_(angle)",
+      "values": [
+        { "validTime": "date:now -26831 seconds / P7DT6H", "value": 0 }
+      ]
+    },
+    "secondarySwellHeight": {
+      "uom": "wmoUnit:m",
+      "values": [
+        { "validTime": "date:now -26831 seconds / P7DT6H", "value": 0 }
+      ]
+    },
+    "secondarySwellDirection": {
+      "uom": "wmoUnit:degree_(angle)",
+      "values": [
+        { "validTime": "date:now -26831 seconds / P7DT6H", "value": 0 }
+      ]
+    },
+    "wavePeriod2": {
+      "uom": "nwsUnit:s",
+      "values": [
+        { "validTime": "date:now -26831 seconds / P7DT6H", "value": 0 }
+      ]
+    },
+    "windWaveHeight": {
+      "uom": "wmoUnit:m",
+      "values": [
+        { "validTime": "date:now -26831 seconds / P7DT6H", "value": 0 }
+      ]
+    },
+    "dispersionIndex": { "values": [] },
+    "pressure": { "values": [] },
+    "probabilityOfTropicalStormWinds": { "values": [] },
+    "probabilityOfHurricaneWinds": { "values": [] },
+    "potentialOf15mphWinds": { "values": [] },
+    "potentialOf25mphWinds": { "values": [] },
+    "potentialOf35mphWinds": { "values": [] },
+    "potentialOf45mphWinds": { "values": [] },
+    "potentialOf20mphWindGusts": { "values": [] },
+    "potentialOf30mphWindGusts": { "values": [] },
+    "potentialOf40mphWindGusts": { "values": [] },
+    "potentialOf50mphWindGusts": { "values": [] },
+    "potentialOf60mphWindGusts": { "values": [] },
+    "grasslandFireDangerIndex": { "values": [] },
+    "probabilityOfThunder": { "values": [] },
+    "davisStabilityIndex": { "values": [] },
+    "atmosphericDispersionIndex": { "values": [] },
+    "lowVisibilityOccurrenceRiskIndex": { "values": [] },
+    "stability": { "values": [] },
+    "redFlagThreatIndex": { "values": [] }
+  }
+}
