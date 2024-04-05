@@ -103,9 +103,19 @@ trait DailyForecastTrait
         $place = $this->getPlaceFromGrid($wfo, $x, $y);
         $timezone = $place->timezone;
 
+        // In order to keep the time zones straight,
+        // we set the "current" (now) time to be
+        // the startTime of the first period.
+        if (!($now instanceof \DateTimeImmutable)) {
+            $now = new \DateTimeImmutable(
+                "now",
+                new \DateTimeZone($timezone)
+            );
+        }
+
         $periods = DateTimeUtility::filterToAfter(
             $forecast->periods,
-            new \DateTimeImmutable(),
+            $now,
             "endTime",
         );
 
@@ -119,16 +129,6 @@ trait DailyForecastTrait
         }
         $grid = $this->getGridFromLatLon($point->lat, $point->lon);
         $alerts = $this->getAlerts($grid, $point);
-
-        // In order to keep the time zones straight,
-        // we set the "current" (now) time to be
-        // the startTime of the first period.
-        if (!($now instanceof \DateTimeImmutable)) {
-            $now = DateTimeUtility::stringToDate(
-                $periods[0]->startTime,
-                $timezone,
-            );
-        }
 
         $tomorrow = $now->modify("tomorrow");
 
@@ -184,7 +184,11 @@ trait DailyForecastTrait
             &$timezone,
         ) {
             $day = $periodPair[0];
-            $night = $periodPair[1];
+            $night = null;
+
+            if(count($periodPair) == 2){
+                $night = $periodPair[1];
+            }
 
             return [
                 "daytime" => $this->formatDailyPeriod($day, $timezone),
