@@ -50,8 +50,7 @@
                 </p>
               </div>
               <div class="display-flex flex-justify-end order-3 flex-1">
-                {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': periods["daytime"]} %}
-                {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': periods["nighttime"]} %}
+                {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods} %}
               </div>
             </div>
           </div>

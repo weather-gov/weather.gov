@@ -10,6 +10,7 @@
     <span class="usa-sr-only">℉</span>
   </span>
 </div>
+{% if low != null %}
 <div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">
   <span class="display-block text-bold margin-bottom-05 font-mono-3xs font-family-mono text-base-dark text-bold">
     {{ "Low" | t | upper }}
@@ -19,3 +20,4 @@
     <span class="usa-sr-only">℉</span>
   </span>
 </div>
+{% endif %}
