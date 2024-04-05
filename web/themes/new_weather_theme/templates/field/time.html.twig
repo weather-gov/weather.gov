@@ -19,4 +19,5 @@
  * @see http://www.w3.org/TR/html5-author/the-time-element.html#attr-time-datetime
  */
 #}
-<time{{ attributes.addClass('datetime') }}>{{ text }}</time>
+
+<time datetime="{{ attributes.datetime }}" data-wx-local-time data-date-format="M d Y T">{{ text }}</time>
