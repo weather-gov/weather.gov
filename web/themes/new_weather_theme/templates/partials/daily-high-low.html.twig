@@ -1,9 +1,21 @@
+{% set temps = periods | map(p => p.temperature) %}
+{% set low = min(temps) %}
+{% set high = max(temps) %}
 <div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">
   <span class="display-block text-bold margin-bottom-05 font-mono-3xs font-family-mono text-base-dark text-bold">
-    {{period.isDaytime ? "High" | t | upper : "Low" | t | upper}}
+    {{ "High" | t | upper }}
   </span>
   <span class="font-ui-lg display-flex flex-row flex-align-start">
-    {{ period.temperature  }}<span aria-hidden="true" class="font-body-3xs margin-top-2px padding-left-1px">&deg;F</span>
+    {{ high  }}<span aria-hidden="true" class="font-body-3xs margin-top-2px padding-left-1px">&deg;F</span>
+    <span class="usa-sr-only">℉</span>
+  </span>
+</div>
+<div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">
+  <span class="display-block text-bold margin-bottom-05 font-mono-3xs font-family-mono text-base-dark text-bold">
+    {{ "Low" | t | upper }}
+  </span>
+  <span class="font-ui-lg display-flex flex-row flex-align-start">
+    {{ low  }}<span aria-hidden="true" class="font-body-3xs margin-top-2px padding-left-1px">&deg;F</span>
     <span class="usa-sr-only">℉</span>
   </span>
 </div>

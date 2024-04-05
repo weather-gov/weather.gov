@@ -20,9 +20,7 @@ only be a nighttime period.
         <span class="display-block">{{ periods[0].monthAndDay }}</span>
       </time>
 
-      {% for period in periods %}
-        {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': period } %}
-      {% endfor %}
+      {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods } %}
     </div>
     <div class="grid-row grid-gap">
         {% for period in periods %}
@@ -42,7 +40,7 @@ only be a nighttime period.
             {% endif %}
         <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-1">
         <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-before line-before--{{ lineColor }}">
-            {{label}} <span class="daily-period-time-label">{{period.timeLabel}}</span>
+            {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
         </span>
         <div class="display-flex flex-row flex-align-start">
           {% if period.icon.base %}
