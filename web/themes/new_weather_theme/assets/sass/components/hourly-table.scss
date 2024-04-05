@@ -15,6 +15,17 @@
 
 /* Hourly forecast table overrides
 ------------------------------------- */
+$expand-duration: 250ms; 
+
+.expand-transition {
+  transition: width ease-in $expand-duration, max-width ease-in $expand-duration, margin-left ease-in $expand-duration, margin-right ease-in $expand-duration,;
+
+
+  @media (prefers-reduced-motion) {
+    transition: none;
+  }
+}
+
 .usa-table.hourly-table {
   td {
     min-width: units("card");
