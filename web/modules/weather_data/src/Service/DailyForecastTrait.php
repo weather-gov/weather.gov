@@ -46,7 +46,7 @@ trait DailyForecastTrait
         $formattedPeriod = $this->formatDailyPeriod($period);
 
         // Early return if no period was passed
-        if(!$formattedPeriod){
+        if (!$formattedPeriod) {
             return null;
         }
 
@@ -56,29 +56,27 @@ trait DailyForecastTrait
         // 6am of the current day
         $startTime = DateTimeUtility::stringToDate(
             $period->startTime,
-            $timezone
+            $timezone,
         );
-        $endTime = DateTimeUtility::stringToDate(
-            $period->endTime,
-            $timezone
-        );
+        $endTime = DateTimeUtility::stringToDate($period->endTime, $timezone);
         $midnight = $startTime->setTime(0, 0);
-        $overnightEnd = $startTime->setTime(6,0);
-        $isOvernightPeriod = ($startTime >= $midnight) && ($endTime <= $overnightEnd);
+        $overnightEnd = $startTime->setTime(6, 0);
+        $isOvernightPeriod =
+            $startTime >= $midnight && $endTime <= $overnightEnd;
 
         $formattedPeriod["isOvernight"] = $isOvernightPeriod;
 
         // Provide formatted parentheticals about the coverage
         // of each time period (in text form)
         // These are only present on the "today" time periods
-        if($isOvernightPeriod){
+        if ($isOvernightPeriod) {
             $formattedPeriod["timeLabel"] = "NOW-6AM";
-        } else if($formattedPeriod["isDaytime"]){
+        } elseif ($formattedPeriod["isDaytime"]) {
             $formattedPeriod["timeLabel"] = "6AM-6PM";
         } else {
             $formattedPeriod["timeLabel"] = "6PM-6AM";
         }
-        
+
         return $formattedPeriod;
     }
 
@@ -107,10 +105,7 @@ trait DailyForecastTrait
         // we set the "current" (now) time to be
         // the startTime of the first period.
         if (!($now instanceof \DateTimeImmutable)) {
-            $now = new \DateTimeImmutable(
-                "now",
-                new \DateTimeZone($timezone)
-            );
+            $now = new \DateTimeImmutable("now", new \DateTimeZone($timezone));
         }
 
         $periods = DateTimeUtility::filterToAfter(
@@ -186,7 +181,7 @@ trait DailyForecastTrait
             $day = $periodPair[0];
             $night = null;
 
-            if(count($periodPair) == 2){
+            if (count($periodPair) == 2) {
                 $night = $periodPair[1];
             }
 

@@ -112,7 +112,7 @@ final class DailyForecastStructureTest extends EndToEndBase
         $now = $now->setTime(2, 0, 0);
 
         // Honolulu
-        $this->onLocationRoute(21.305,-157.858);
+        $this->onLocationRoute(21.305, -157.858);
 
         // Expected start and end
         $expectedStart = $now->setTime(0, 0, 0);
@@ -126,14 +126,14 @@ final class DailyForecastStructureTest extends EndToEndBase
             "startTime" => $expectedStart->format("c"),
             "shortForecast" => "Scattered rain showers",
             "icon" => (object) [
-                'icon' => 'showers_scattered_rain.svg',
-                'base' => 'showers_scattered_rain'
+                "icon" => "showers_scattered_rain.svg",
+                "base" => "showers_scattered_rain",
             ],
             "temperature" => 75,
             "probabilityOfPrecipitation" => 40,
             "isDaytime" => false,
             "isOvernight" => true,
-            "timeLabel" => "NOW-6AM"
+            "timeLabel" => "NOW-6AM",
         ];
 
         $data = $this->block->build($now);
@@ -144,7 +144,10 @@ final class DailyForecastStructureTest extends EndToEndBase
         unset($actualStructure["hourlyPeriods"]);
 
         /* $this->assertEquals($actualStructure["isOvernight"], true); */
-        $this->assertEquals($expectedStructure["icon"], $actualStructure["icon"]);
+        $this->assertEquals(
+            $expectedStructure["icon"],
+            $actualStructure["icon"],
+        );
         $this->assertEquals($expectedStructure, $actualStructure);
     }
 }
