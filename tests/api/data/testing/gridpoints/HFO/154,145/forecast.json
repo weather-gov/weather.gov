@@ -61,8 +61,8 @@
       {
         "number": 2,
         "name": "Wednesday",
-        "startTime": "2024-04-03T06:00:00-10:00",
-        "endTime": "2024-04-03T18:00:00-10:00",
+        "startTime": "date:today 06:00:-10 +0 days",
+        "endTime": "date:today 18:00:-10 +0 days",
         "isDaytime": true,
         "temperature": 82,
         "temperatureUnit": "F",
@@ -88,8 +88,8 @@
       {
         "number": 3,
         "name": "Wednesday Night",
-        "startTime": "2024-04-03T18:00:00-10:00",
-        "endTime": "2024-04-04T06:00:00-10:00",
+        "startTime": "date:today 18:00:-10 +0 days",
+        "endTime": "date:today 06:00:-10 +1 days",
         "isDaytime": false,
         "temperature": 75,
         "temperatureUnit": "F",
@@ -113,10 +113,10 @@
         "detailedForecast": "Scattered rain showers. Mostly cloudy, with a low around 75. East northeast wind around 24 mph, with gusts as high as 45 mph. Chance of precipitation is 40%. New rainfall amounts less than a tenth of an inch possible."
       },
       {
-        "number": 3,
-        "name": "Thursday Night",
-        "startTime": "date:now +52367 seconds",
-        "endTime": "date:now +95567 seconds",
+        "number": 4,
+        "name": "Thursday",
+        "startTime": "date:today 06:00:-10 +1 days",
+        "endTime": "date:today 18:00:-10 +1 days",
         "isDaytime": false,
         "temperature": 68,
         "temperatureUnit": "F",
@@ -134,10 +134,31 @@
         "detailedForecast": "Mostly clear, with a low around 68. North northeast wind 9 to 15 mph, with gusts as high as 21 mph."
       },
       {
-        "number": 4,
+        "number": 5,
+        "name": "Thursday Night",
+        "startTime": "date:today 18:00:-10 +1 days",
+        "endTime": "date:today 06:00:-10 +2 days",
+        "isDaytime": false,
+        "temperature": 68,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": 15 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 70 },
+        "windSpeed": "9 to 15 mph",
+        "windDirection": "NNE",
+        "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
+        "shortForecast": "Mostly Clear",
+        "detailedForecast": "Mostly clear, with a low around 68. North northeast wind 9 to 15 mph, with gusts as high as 21 mph."
+      },
+      {
+        "number": 6,
         "name": "Friday",
-        "startTime": "date:now +95567 seconds",
-        "endTime": "date:now +138767 seconds",
+        "startTime": "date:today 06:00:-10 +2 days",
+        "endTime": "date:today 18:00:-10 +2 days",
         "isDaytime": true,
         "temperature": 77,
         "temperatureUnit": "F",
@@ -155,10 +176,10 @@
         "detailedForecast": "Mostly sunny, with a high near 77. Northeast wind 9 to 14 mph, with gusts as high as 18 mph."
       },
       {
-        "number": 5,
+        "number": 7,
         "name": "Friday Night",
-        "startTime": "date:now +138767 seconds",
-        "endTime": "date:now +181967 seconds",
+        "startTime": "date:today 18:00:-10 +2 days",
+        "endTime": "date:today 06:00:-10 +3 days",
         "isDaytime": false,
         "temperature": 68,
         "temperatureUnit": "F",
@@ -176,10 +197,10 @@
         "detailedForecast": "Mostly clear, with a low around 68. Northeast wind around 12 mph."
       },
       {
-        "number": 6,
+        "number": 8,
         "name": "Saturday",
-        "startTime": "date:now +181967 seconds",
-        "endTime": "date:now +225167 seconds",
+        "startTime": "date:today 06:00:-10 +3 days",
+        "endTime": "date:today 18:00:-10 +3 days",
         "isDaytime": true,
         "temperature": 78,
         "temperatureUnit": "F",
@@ -197,10 +218,10 @@
         "detailedForecast": "Mostly sunny, with a high near 78. Northeast wind around 12 mph."
       },
       {
-        "number": 7,
+        "number": 9,
         "name": "Saturday Night",
-        "startTime": "date:now +225167 seconds",
-        "endTime": "date:now +268367 seconds",
+        "startTime": "date:today 18:00:-10 +3 days",
+        "endTime": "date:today 06:00:-10 +4 days",
         "isDaytime": false,
         "temperature": 65,
         "temperatureUnit": "F",
@@ -218,10 +239,10 @@
         "detailedForecast": "Mostly clear, with a low around 65. Northeast wind around 13 mph."
       },
       {
-        "number": 8,
+        "number": 10,
         "name": "Sunday",
-        "startTime": "date:now +268367 seconds",
-        "endTime": "date:now +311567 seconds",
+        "startTime": "date:today 06:00:-10 +4 days",
+        "endTime": "date:today 18:00:-10 +4 days",
         "isDaytime": true,
         "temperature": 79,
         "temperatureUnit": "F",
@@ -239,10 +260,10 @@
         "detailedForecast": "Mostly sunny, with a high near 79. Northeast wind around 15 mph, with gusts as high as 21 mph."
       },
       {
-        "number": 9,
+        "number": 11,
         "name": "Sunday Night",
-        "startTime": "date:now +311567 seconds",
-        "endTime": "date:now +354767 seconds",
+        "startTime": "date:today 18:00:-10 +4 days",
+        "endTime": "date:today 06:00:-10 +5 days",
         "isDaytime": false,
         "temperature": 66,
         "temperatureUnit": "F",
@@ -260,10 +281,10 @@
         "detailedForecast": "Partly cloudy, with a low around 66. East northeast wind around 17 mph, with gusts as high as 24 mph."
       },
       {
-        "number": 10,
+        "number": 12,
         "name": "Monday",
-        "startTime": "date:now +354767 seconds",
-        "endTime": "date:now +397967 seconds",
+        "startTime": "date:today 06:00:-10 +5 days",
+        "endTime": "date:today 18:00:-10 +5 days",
         "isDaytime": true,
         "temperature": 79,
         "temperatureUnit": "F",
@@ -281,10 +302,10 @@
         "detailedForecast": "Mostly sunny, with a high near 79. East northeast wind 14 to 17 mph, with gusts as high as 24 mph."
       },
       {
-        "number": 11,
+        "number": 13,
         "name": "Monday Night",
-        "startTime": "date:now +397967 seconds",
-        "endTime": "date:now +441167 seconds",
+        "startTime": "date:today 18:00:-10 +5 days",
+        "endTime": "date:today 06:00:-10 +6 days",
         "isDaytime": false,
         "temperature": 68,
         "temperatureUnit": "F",
@@ -302,10 +323,10 @@
         "detailedForecast": "Scattered rain showers. Partly cloudy, with a low around 68. East northeast wind around 14 mph, with gusts as high as 18 mph. Chance of precipitation is 30%."
       },
       {
-        "number": 12,
+        "number": 14,
         "name": "Tuesday",
-        "startTime": "date:now +441167 seconds",
-        "endTime": "date:now +484367 seconds",
+        "startTime": "date:today 06:00:-10 +6 days",
+        "endTime": "date:today 18:00:-10 +6 days",
         "isDaytime": true,
         "temperature": 80,
         "temperatureUnit": "F",
@@ -323,10 +344,10 @@
         "detailedForecast": "Scattered rain showers. Partly sunny, with a high near 80. East northeast wind 14 to 18 mph, with gusts as high as 25 mph. Chance of precipitation is 30%."
       },
       {
-        "number": 13,
+        "number": 15,
         "name": "Tuesday Night",
-        "startTime": "date:now +484367 seconds",
-        "endTime": "date:now +527567 seconds",
+        "startTime": "date:today 18:00:-10 +6 days",
+        "endTime": "date:today 06:00:-10 +7 days",
         "isDaytime": false,
         "temperature": 68,
         "temperatureUnit": "F",
@@ -344,10 +365,10 @@
         "detailedForecast": "Scattered rain showers. Mostly cloudy, with a low around 68. East northeast wind 17 to 22 mph, with gusts as high as 31 mph. Chance of precipitation is 30%."
       },
       {
-        "number": 14,
+        "number": 16,
         "name": "Wednesday",
-        "startTime": "date:now +527567 seconds",
-        "endTime": "date:now +570767 seconds",
+        "startTime": "date:today 06:00:-10 +7 days",
+        "endTime": "date:today 18:00:-10 +7 days",
         "isDaytime": true,
         "temperature": 73,
         "temperatureUnit": "F",
