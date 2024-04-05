@@ -19,7 +19,7 @@
 
       {#  Render periods associated with future days, in detail #}
       {%  for data in content.detailed %}
-      {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': [data.daytime, data.overnight], 'dayHours': data.hourlyPeriods, 'alertPeriods': data.alertPeriods } %}
+      {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': [data.daytime, data.nighttime], 'dayHours': data.hourlyPeriods, 'alertPeriods': data.alertPeriods } %}
       {%  endfor %}
     </ol>
   </div>
@@ -51,7 +51,7 @@
               </div>
               <div class="display-flex flex-justify-end order-3 flex-1">
                 {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': periods["daytime"]} %}
-                {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': periods["overnight"]} %}
+                {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'period': periods["nighttime"]} %}
               </div>
             </div>
           </div>
