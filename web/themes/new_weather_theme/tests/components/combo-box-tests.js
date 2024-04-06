@@ -1,11 +1,16 @@
 /* eslint no-unused-expressions: off */
-require("jsdom-global")();
+require("jsdom-global")(undefined, {url: "http://localhost/"});
 require("../../assets/js/components/combo-box.js");
 require("whatwg-fetch");
 const { assert, expect, should } = require("chai");
 const { createSandbox, stub, spy, mock } = require("sinon");
 
 global.HTMLElement = window.HTMLElement;
+
+// JSDOM does not have the `scrollIntoView` method,
+// so we need to stub it out here on all elements
+HTMLElement.prototype.scrollIntoView = stub();
+HTMLFormElement.prototype.submit = stub();
 
 const wait = async (milliseconds) => {
   await new Promise((resolve, reject) => {
@@ -222,7 +227,7 @@ describe("Combo box unit tests", () => {
         ["role", "combobox"],
         ["aria-owns", "combo-box-1--list"],
         ["aria-controls", "combo-box-1--list"],
-        ["aria-autocomplete", "list"],
+        ["aria-autocomplete", "none"],
         ["aria-activedescendant", ""],
         ["autocomplete", "off"],
         ["autocapitalize", "off"],
@@ -305,12 +310,14 @@ describe("Combo box unit tests", () => {
 
     });
 
-    it("Expects showList / hideList to toggle aria-expanded", async () => {
+    it("Expects showList / hideList to toggle aria-expanded (input) and expanded (element)", async () => {
       const component = document.querySelector("wx-combo-box");
       component.showList();
-      expect(component.getAttribute("aria-expanded")).to.equal("true");
+      expect(component.getAttribute("expanded")).to.equal("true");
+      expect(component.input.getAttribute("aria-expanded")).to.equal("true");
       component.hideList();
-      expect(component.getAttribute("aria-expanded")).to.equal("false");
+      expect(component.input.getAttribute("aria-expanded")).to.equal("false");
+      expect(component.getAttribute("expanded")).to.equal("false");
     });
   });
 
@@ -380,5 +387,97 @@ describe("Combo box unit tests", () => {
       expect(component.isShowingList).to.be.true;
       expect(lastItem.getAttribute("aria-selected")).to.equal("true");
     });
+  });
+
+  describe("Choosing an option", () => {
+    let sandbox;
+    beforeEach(async () => {
+      sandbox = createSandbox();
+      window.document.body.innerHTML = "";
+      const box = document.createElement("wx-combo-box");
+      document.body.append(box);
+      assert.exists(window.customElements.get("wx-combo-box"));
+      const responseOK = await box.updateSearch("Arlin");
+      expect(responseOK).to.be.true;
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    it("When pushing Enter when the second item is selected but not submitted", () => {
+      const component = document.querySelector("wx-combo-box");
+      component.showList();
+      const secondItem = component.querySelector("ul[role='listbox'] > li:nth-child(2)");
+      component.pseudoFocusListItem(secondItem);
+      const spied = sandbox.spy(component, 'submit');
+
+      const event = new KeyboardEvent("keydown", { key: "Enter", bubbles: true });
+      component.input.dispatchEvent(event);
+
+      const expectedValue = secondItem.dataset.value;
+      const actualValue = component.value;
+
+      expect(expectedValue).to.equal(actualValue);
+      expect(spied.called).to.be.false;
+    });
+
+    it("When pushing Enter a second item, submit is called", () => {
+      const component = document.querySelector("wx-combo-box");
+      const secondItem = component.querySelector("ul[role='listbox'] > li:nth-child(2)");
+      const spied = sandbox.spy(component, 'submit');
+      const event = new KeyboardEvent("keydown", { key: "Enter", bubbles: true });
+      component.input.dispatchEvent(event);
+      component.input.dispatchEvent(event);
+
+      expect(spied.called).to.be.true;
+    });
+
+    it("When clicking the second item, it is selected and submit is called", () => {
+      const component = document.querySelector("wx-combo-box");
+      const secondItem = component.querySelector("ul[role='listbox'] > li:nth-child(2)");
+      const spied = sandbox.spy(component, 'submit');
+
+      secondItem.click();
+
+      const expected = secondItem.dataset.value;
+      const actual = component.value;
+
+      expect(expected).to.equal(actual);
+      expect(spied.called).to.be.true;
+    });
+
+    it("Can get the geodata from a value key", async () => {
+      const component = document.querySelector("wx-combo-box");
+      const secondItem = component.querySelector("ul[role='listbox'] > li:nth-child(2)");
+      component.value = secondItem.dataset.value;
+      const geodata = await component.getGeodataForKey(component.value);
+      
+      
+      const expected = {
+        lon: -77.085,
+        lat: 38.891
+      };
+      
+      expect(expected).to.deep.equal(geodata);
+    });
+
+    it("Updates the parent form action with the correct value on submit", async () => {
+      const component = document.querySelector("wx-combo-box");
+      const form = document.createElement("form");
+      form.setAttribute("data-location-search", "");
+      form.append(component);
+      form.submit = sandbox.spy();
+      document.body.append(form);
+      const secondItem = component.querySelector("ul[role='listbox'] > li:nth-child(2)");
+      component.value = secondItem.dataset.value;
+      await component.submit();
+
+      const expected = "/point/38.891/-77.085";
+      const actual = form.getAttribute("action");
+
+      expect(expected).to.equal(actual);
+      expect(form.submit.called).to.be.true;
+    })
   });
 });

@@ -635,7 +635,7 @@ class ComboBox extends HTMLElement {
         if(formEl){
             const optionText = this.input.value;
             textInput.value = optionText;
-            this.getGeodataForKey(this.value)
+            return this.getGeodataForKey(this.value)
                 .then(coordinates => {
                     if(coordinates){
                         formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
