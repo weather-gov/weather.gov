@@ -133,12 +133,6 @@ jobs:
     name: JS Component Tests
     runs-on: ubuntu-latest
     needs: [should-test]
-    
-
-  style-lint:
-    name: SCSS lint
-    runs-on: ubuntu-latest
-    needs: [should-test]
 
     steps:
       - name: checkout
@@ -156,9 +150,19 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         run: npm ci
 
+      - name: install proxy dependencies
+        if: needs.should-test.outputs.yes == 'true'
+        run: cd tests/api && npm ci
+
       - name: run js-component-tests
         if: needs.should-test.outputs.yes == 'true'
         run: npm run js-component-tests
+    
+
+  style-lint:
+    name: SCSS lint
+    runs-on: ubuntu-latest
+    needs: [should-test]
 
     steps:
       - name: checkout
