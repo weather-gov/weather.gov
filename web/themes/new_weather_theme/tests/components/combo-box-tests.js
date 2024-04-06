@@ -387,6 +387,16 @@ describe("Combo box unit tests", () => {
       expect(component.isShowingList).to.be.true;
       expect(lastItem.getAttribute("aria-selected")).to.equal("true");
     });
+
+    it("Hides the result list if the input loses focus", () => {
+      const component = document.querySelector("wx-combo-box");
+      expect(component.isShowingList).to.be.true;
+
+      const event = new window.FocusEvent("blur");
+      component.input.dispatchEvent(event);
+
+      expect(component.isShowingList).to.be.false;
+    });
   });
 
   describe("Choosing an option", () => {
@@ -478,6 +488,6 @@ describe("Combo box unit tests", () => {
 
       expect(expected).to.equal(actual);
       expect(form.submit.called).to.be.true;
-    })
+    });
   });
 });
