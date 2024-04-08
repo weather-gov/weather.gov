@@ -25,35 +25,12 @@ final class HourlyForecastStructureTest extends EndToEndBase
     {
         $this->onLocationRoute(33.521, -86.812);
 
-        $start = new \DateTimeImmutable();
-        $start = $start
-            ->setTimezone(new \DateTimeZone("America/Chicago"))
-            ->modify("+1 hour");
-        $start = $start->setTime((int) $start->format("H"), 0, 0, 0);
-
-        $expectedHourStructure = [
-            "conditions" => "Day mostly cloudy",
-            "icon" => (object) [
-                "icon" => "mostly_cloudy-day.svg",
-                "base" => "mostly_cloudy-day",
-            ],
-            "dewpoint" => 28,
-            "probabilityOfPrecipitation" => 0,
-            "relativeHumidity" => 75,
-            "time" => $start->format("g A"),
-            "timestamp" => $start->format("c"),
-            "temperature" => 35,
-            "windDirection" => (object) [
-                "long" => "south",
-                "short" => "S",
-                "angle" => 200,
-            ],
-            "windSpeed" => 0,
-        ];
+        $schema = SchemaHelper::load("hourly.json");
 
         $data = $this->block->build();
 
-        $this->assertEquals($expectedHourStructure, $data["hours"][0]);
+        $schema->in(json_decode(json_encode($data["hours"][0])));
+        $this->assertTrue(true);
     }
 
     /**

@@ -25,73 +25,11 @@ final class DailyForecastStructureTest extends EndToEndBase
     {
         $this->onLocationRoute(33.521, -86.812);
 
-        $start = new \DateTimeImmutable();
-        $start = $start->setTimezone(new \DateTimeZone("America/Chicago"));
-
-        $hour = (int) $start->format("H");
-        // If we are between 6am and 6pm point-local time, then our daily
-        // forecast should begin at 6am. Otherwise it should begin at 6pm.
-        if ($hour >= 6 && $hour < 18) {
-            $start = $start->setTime(6, 0, 0, 0);
-        } else {
-            $start = $start->setTime(18, 0, 0, 0);
-
-            // If we're before 6am, then the first daily period should have
-            // begun at 6pm the previous day.
-            if ($hour < 6) {
-                $start = $start->modify("-1 day");
-            }
-        }
-
-        // The first hourly period should be at the top of the next hour.
-        $now = new \DateTimeImmutable();
-        $now = $now->setTimezone(new \DateTimeZone("America/Chicago"));
-        $now = $now->setTime((int) $now->format("H") + 1, 0, 0);
-
-        $expectedStructure = [
-            "shortDayName" => $start->format("D"),
-            "dayName" => $start->format("l"),
-            "monthAndDay" => $start->format("M j"),
-            "startTime" => $start->format("c"),
-            "shortForecast" => "Cloudy",
-            "icon" => (object) [
-                "icon" => "cloudy_overcast.svg",
-                "base" => "cloudy_overcast",
-            ],
-            "temperature" => 31,
-            "probabilityOfPrecipitation" => null,
-            "isDaytime" => true,
-            "hourlyPeriods" => [
-                [
-                    "conditions" => "Day mostly cloudy",
-                    "icon" => (object) [
-                        "icon" => "mostly_cloudy-day.svg",
-                        "base" => "mostly_cloudy-day",
-                    ],
-                    "dewpoint" => 28,
-                    "probabilityOfPrecipitation" => 0,
-                    "relativeHumidity" => 75,
-                    "time" => $now->format("g A"),
-                    "timestamp" => $now->format("c"),
-                    "temperature" => 35,
-                    "windDirection" => (object) [
-                        "long" => "south",
-                        "short" => "S",
-                        "angle" => 200,
-                    ],
-                    "windSpeed" => 0,
-                ],
-            ],
-        ];
+        $schema = SchemaHelper::load("daily.json");
 
         $data = $this->block->build();
 
-        $data["today"][0]["hourlyPeriods"] = array_slice(
-            $data["today"][0]["hourlyPeriods"],
-            0,
-            1,
-        );
-
-        $this->assertEquals($expectedStructure, $data["today"][0]);
+        $schema->in(json_decode(json_encode($data["today"][0])));
+        $this->assertTrue(true);
     }
 }

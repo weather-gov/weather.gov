@@ -95,11 +95,13 @@ trait HourlyForecastTrait
         )->periods;
 
         $properties = [
+            "apparentTemperature",
             "dewpoint",
             "probabilityOfPrecipitation",
             "relativeHumidity",
             "temperature",
             "windDirection",
+            "windGust",
             "windSpeed",
         ];
 
@@ -198,6 +200,17 @@ trait HourlyForecastTrait
             $timeString = $timestamp->format("g A");
 
             return [
+                "apparentTemperature" =>
+                    abs(
+                        $period["apparentTemperature"] - $period["temperature"],
+                    ) > 5
+                        ? UnitConversion::getTemperatureScalar(
+                            (object) [
+                                "unitCode" => $units["apparentTemperature"],
+                                "value" => $period["apparentTemperature"],
+                            ],
+                        )
+                        : null,
                 "conditions" => $this->t->translate(
                     ucfirst(strtolower($period["shortForecast"])),
                 ),
@@ -222,6 +235,15 @@ trait HourlyForecastTrait
                 "windDirection" => UnitConversion::getDirectionOrdinal(
                     $period["windDirection"],
                 ),
+                "windGust" =>
+                    abs($period["windGust"] - $period["windSpeed"]) > 8
+                        ? UnitConversion::getSpeedScalar(
+                            (object) [
+                                "unitCode" => $units["windGust"],
+                                "value" => $period["windGust"],
+                            ],
+                        )
+                        : null,
                 "windSpeed" => UnitConversion::getSpeedScalar(
                     (object) [
                         "unitCode" => $units["windSpeed"],

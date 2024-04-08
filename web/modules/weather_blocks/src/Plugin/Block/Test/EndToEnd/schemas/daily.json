@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "shortDayName": {
+      "type": "string",
+      "enum": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    },
+    "dayName": {
+      "enum": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ]
+    },
+    "monthAndDay": { "type": "string", "pattern": ".+ .+" },
+    "startTime": { "type": "string", "pattern": "$isoRegex" },
+    "shortForecast": { "type": "string" },
+    "icon": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": "string"
+        },
+        "base": {
+          "type": "string"
+        }
+      }
+    },
+    "temperature": { "type": "number" },
+    "probabilityOfPrecipitation": {
+      "oneOf": [{ "type": "number" }, { "type": "null" }]
+    },
+    "isDaytime": { "type": "boolean" },
+    "hourlyPeriods": { "type": "array", "items": "$include:hourly.json" }
+  }
+}
