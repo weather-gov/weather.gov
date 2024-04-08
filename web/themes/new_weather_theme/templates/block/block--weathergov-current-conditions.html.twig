@@ -49,22 +49,18 @@
         <div class="margin-right-05">
           <p class="margin-y-0">
             {%- if content.wind.speed is same as(null) -%}
-              {%- set windString = "N/A" | t() -%}
+              <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>N/A
             {%- else -%}
+            <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>
+            {{ "@windSpeed mph" | t({"@windSpeed":content.wind.speed})}}
               {% if content.wind.speed > 0 %}
-              {% set windString = "@windSpeed mph @windDirection" | t({
-                  "@windSpeed": content.wind.speed,
-                  "@windDirection": content.wind.direction.short
-                }) 
-              %}
-              {% else %}
-                {% set windString = "@windSpeed mph" | t({
-                    "@windSpeed": content.wind.speed,
-                  })
+                {% include '@new_weather_theme/partials/wind-direction.html.twig'
+                  with {
+                    windDirection: content.wind.direction
+                  }
                 %}
               {% endif %}
-            {%- endif -%}
-            <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>{{- windString -}}
+            {% endif %}
           </p>
         </div>
       </div>
