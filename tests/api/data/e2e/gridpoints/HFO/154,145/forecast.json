@@ -117,8 +117,8 @@
         "name": "Thursday",
         "startTime": "date:today 06:00:-10 +1 days",
         "endTime": "date:today 18:00:-10 +1 days",
-        "isDaytime": false,
-        "temperature": 68,
+        "isDaytime": true,
+        "temperature": 76,
         "temperatureUnit": "F",
         "temperatureTrend": null,
         "probabilityOfPrecipitation": {
