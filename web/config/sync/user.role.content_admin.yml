@@ -1,4 +1,4 @@
-uuid: f367fd64-6112-4706-b556-7f9fb5ae37c7
+uuid: b9b6976f-8f4d-48dc-91d9-0253a5f68846
 langcode: en
 status: true
 dependencies:
@@ -19,31 +19,44 @@ dependencies:
     - help
     - node
     - system
+    - taxonomy
     - toolbar
     - workbench
     - workbench_access
-_core:
-  default_config_hash: NtMgnXp0miNtJhag07NSjwdCm4zpJwhlDFs1HgyL4wI
-id: content_editor
-label: 'Content editor'
-weight: -8
-is_admin: false
+id: content_admin
+label: 'Content admin'
+weight: -7
+is_admin: null
 permissions:
-  - 'access administration pages'
   - 'access block library'
   - 'access content'
   - 'access content overview'
   - 'access contextual links'
   - 'access files overview'
   - 'access help pages'
+  - 'access taxonomy overview'
   - 'access toolbar'
   - 'access user profiles'
   - 'access workbench'
   - 'assign selected workbench access'
-  - 'batch update workbench access'
+  - 'create basic block content'
+  - 'create dynamic_safety_information content'
+  - 'create no_title_block block content'
   - 'create page content'
-  - 'delete own page content'
-  - 'delete page revisions'
+  - 'create testing_page content'
+  - 'create weather_story content'
+  - 'create wfo_promo content'
+  - 'delete any basic block content'
+  - 'delete any basic block content revisions'
+  - 'delete any dynamic_safety_information content'
+  - 'delete any file'
+  - 'delete any no_title_block block content'
+  - 'delete any no_title_block block content revisions'
+  - 'delete any page content'
+  - 'delete any testing_page content'
+  - 'delete any weather_story content'
+  - 'delete any wfo_promo content'
+  - 'delete own files'
   - 'edit any basic block content'
   - 'edit any dynamic_safety_information content'
   - 'edit any no_title_block block content'
@@ -51,12 +64,6 @@ permissions:
   - 'edit any testing_page content'
   - 'edit any weather_story content'
   - 'edit any wfo_promo content'
-  - 'edit own dynamic_safety_information content'
-  - 'edit own page content'
-  - 'edit own testing_page content'
-  - 'edit own weather_story content'
-  - 'edit own wfo_promo content'
-  - 'revert all revisions'
   - 'revert any basic block content revisions'
   - 'revert any no_title_block block content revisions'
   - 'revert dynamic_safety_information revisions'
@@ -73,7 +80,6 @@ permissions:
   - 'view own unpublished content'
   - 'view page revisions'
   - 'view testing_page revisions'
-  - 'view the administration theme'
   - 'view weather_story revisions'
   - 'view wfo_promo revisions'
   - 'view workbench access information'

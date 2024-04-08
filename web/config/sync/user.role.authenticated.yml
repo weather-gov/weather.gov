@@ -3,18 +3,43 @@ langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.basic_html
+    - block_content.type.basic
+    - block_content.type.no_title_block
+    - node.type.dynamic_safety_information
+    - node.type.page
+    - node.type.testing_page
+    - node.type.weather_story
+    - node.type.wfo_promo
   module:
+    - block_content
     - file
-    - filter
+    - help
+    - node
     - system
+    - taxonomy
+    - toolbar
+    - workbench
 _core:
   default_config_hash: cFrlqjtkTfvY3RGccjJkPf1SGIfJ942IrxTLWAO4mgA
 id: authenticated
 label: 'Authenticated user'
-weight: 1
+weight: -9
 is_admin: false
 permissions:
+  - 'access block library'
   - 'access content'
-  - 'delete own files'
-  - 'use text format basic_html'
+  - 'access content overview'
+  - 'access files overview'
+  - 'access help pages'
+  - 'access taxonomy overview'
+  - 'access toolbar'
+  - 'access workbench'
+  - 'view all revisions'
+  - 'view any basic block content history'
+  - 'view any no_title_block block content history'
+  - 'view dynamic_safety_information revisions'
+  - 'view own unpublished content'
+  - 'view page revisions'
+  - 'view testing_page revisions'
+  - 'view weather_story revisions'
+  - 'view wfo_promo revisions'
