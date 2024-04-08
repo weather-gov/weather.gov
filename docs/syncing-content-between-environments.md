@@ -57,3 +57,14 @@ manually rebuild all the content in its new home.
 
 5. If you exported multiple files and did not zip them together, you will repeat
    step 4 for each file.
+
+### Programmatically download content from drush export in cloud.gov to your local environment
+
+If you would like to use drush to export content in an environment and then download it to your local to inspect the content using `scp` and `ssh`: 
+
+1. ssh into your environment (need to be logged into the space associated) using `cf ssh`, enter the shell with `/tmp/lifecycle/shell`
+2. Run your export command, i.e. `drush content:export --all-content`
+3. In your local environment, grab your web process GUID: `cf curl /v3/apps/$(cf app <YOUR APP NAME> --guid)/processes | jq --raw-output '.resources | .[] | select(.type == "web").guid'`
+4. Also grab the app_ssh_endpoint from this: `cf curl /v2/info`
+5. Use secure copy to ssh into your environment and retrieve the file(s): `scp -P <PORT FROM THE APP SSH ENDPOINT> -o User=cf:<YOUR APP GUID YOU JUST MADE>/<APP INSTANCE, LIKELY 0> <APP SSH ENDPOINT MINUS PORT>:<LOCATION OF THE FILE YOU CREATED> <WHERE YOU WANT IT TO GO LOCALLY>`
+6. You need a password to complete step 5, grab that from `cf ssh-code`
