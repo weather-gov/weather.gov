@@ -3,7 +3,6 @@
 namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
 
 use Drupal\weather_blocks\Plugin\Block\LocalAlertsBlock;
-// use Swaggest\JsonSchema\Schema;
 
 /**
  * Tests for alerts data structure.

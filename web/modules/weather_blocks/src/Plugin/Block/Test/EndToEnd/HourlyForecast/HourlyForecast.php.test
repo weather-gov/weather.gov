@@ -61,4 +61,64 @@ final class HourlyForecastStructureTest extends EndToEndBase
             $this->assertEquals($offset, $time->getOffset());
         }
     }
+
+    /**
+     * @group e2e2
+     */
+    public function testHourlyApparentTemperatureNullIfCloseToActual(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+        $expected = null;
+
+        $data = $this->block->build();
+
+        $actual = $data["hours"][0]["apparentTemperature"];
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group e2e2
+     */
+    public function testHourlyApparentTemperature(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+        $expected = 94;
+
+        $data = $this->block->build();
+
+        $actual = $data["hours"][1]["apparentTemperature"];
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group e2e2
+     */
+    public function testHourlyWindGustNullIfCloseToSustained(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+        $expected = null;
+
+        $data = $this->block->build();
+
+        $actual = $data["hours"][0]["windGust"];
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group e2e2
+     */
+    public function testHourlyWindGusts(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+        $expected = 8;
+
+        $data = $this->block->build();
+
+        $actual = $data["hours"][1]["windGust"];
+
+        $this->assertEquals($expected, $actual);
+    }
 }
