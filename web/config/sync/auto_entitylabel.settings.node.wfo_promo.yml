@@ -1,5 +1,5 @@
 status: 1
-pattern: '[node:field_wfo]'
+pattern: '[node:field_wfo:entity]'
 escape: false
 preserve_titles: false
 save: false
