@@ -1,0 +1,9 @@
+status: 1
+pattern: '[node:field_wfo]'
+escape: false
+preserve_titles: false
+save: false
+chunk: 50
+dependencies:
+  config:
+    - node.type.wfo_promo

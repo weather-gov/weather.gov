@@ -19,7 +19,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 7
+    weight: 6
     region: content
     settings:
       rows: 9
@@ -35,7 +35,7 @@ content:
     third_party_settings: {  }
   field_facebook_url:
     type: string_textfield
-    weight: 8
+    weight: 7
     region: content
     settings:
       size: 60
@@ -43,7 +43,7 @@ content:
     third_party_settings: {  }
   field_phone_number:
     type: string_textfield
-    weight: 6
+    weight: 5
     region: content
     settings:
       size: 60
@@ -51,7 +51,7 @@ content:
     third_party_settings: {  }
   field_twitter_url:
     type: string_textfield
-    weight: 9
+    weight: 8
     region: content
     settings:
       size: 60
@@ -69,7 +69,7 @@ content:
     third_party_settings: {  }
   field_youtube_url:
     type: string_textfield
-    weight: 10
+    weight: 9
     region: content
     settings:
       size: 60
@@ -88,7 +88,7 @@ content:
     region: content
     settings:
       size: 60
-      placeholder: 'Required, but not used.'
+      placeholder: ''
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete

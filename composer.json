@@ -16,6 +16,7 @@
     ],
     "require": {
         "composer/installers": "^2.0",
+        "drupal/auto_entitylabel": "^3.0",
         "drupal/autologout": "^1.4",
         "drupal/config_split": "^2.0",
         "drupal/core-composer-scaffold": "^10.2",
