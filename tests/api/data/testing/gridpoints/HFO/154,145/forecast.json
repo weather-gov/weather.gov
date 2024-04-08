@@ -127,11 +127,11 @@
         },
         "dewpoint": { "unitCode": "wmoUnit:degC", "value": 15 },
         "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 70 },
-        "windSpeed": "9 to 15 mph",
-        "windDirection": "NNE",
-        "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
-        "shortForecast": "Mostly Clear",
-        "detailedForecast": "Mostly clear, with a low around 68. North northeast wind 9 to 15 mph, with gusts as high as 21 mph."
+        "windSpeed": "3 to 9 mph",
+        "windDirection": "E",
+        "icon": "https://api.weather.gov/icons/land/day/rain_showers,40?size=medium",
+        "shortForecast": "Scattered Rain Showers",
+        "detailedForecast": "Scattered rain showers. Partly sunny, with a high near 82. East wind 3 to 9 mph. Chance of precipitation is 40%."
       },
       {
         "number": 5,
