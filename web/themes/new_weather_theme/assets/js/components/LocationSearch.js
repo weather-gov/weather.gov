@@ -1,12 +1,12 @@
 class LocationSearch extends HTMLElement {
-  constructor(){
+  constructor() {
     super();
 
     // The timeout will be used to prevent
     // concurrent fetches in rapid succession,
     // in particular when users are typing
     // quickly in the search box.
-    this._timeout = null;
+    this.keyPressTimeout = null;
     this.INPUT_WAIT_MS = 300;
 
     // Bind component methods
@@ -17,7 +17,7 @@ class LocationSearch extends HTMLElement {
     this.updateLiveDescriptionArea = this.updateLiveDescriptionArea.bind(this);
   }
 
-  connectedCallback(){
+  connectedCallback() {
     // Ensure that we have the basic
     // USWDS combo box class(es) added
     this.classList.add("usa-combo-box");
@@ -35,16 +35,16 @@ class LocationSearch extends HTMLElement {
    * keystroke that the user makes in the search
    * field.
    */
-  handleInput(event){
-    if(this._timeout){
-      window.clearTimeout(this._timeout);
+  handleInput(event) {
+    if (this.keyPressTimeout) {
+      window.clearTimeout(this.keyPressTimeout);
     }
-    this._timeout = window.setTimeout(() => {
+    this.keyPressDelay = window.setTimeout(() => {
       this.handleSearchChanged(event);
     }, this.INPUT_WAIT_MS);
   }
 
-  async handleSearchChanged(event){
+  async handleSearchChanged(event) {
     // We only care about input elements with the
     // id that we've specified in the template.
     if (event.target.id !== "weather-location-search") {
@@ -57,7 +57,9 @@ class LocationSearch extends HTMLElement {
 
     if (value.length >= 3) {
       const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&countryCode=USA%2CPRI%2CVIR%2CGUM%2CASM&category=Land+Features%2CBay%2CChannel%2CCove%2CDam%2CDelta%2CGulf%2CLagoon%2CLake%2COcean%2CReef%2CReservoir%2CSea%2CSound%2CStrait%2CWaterfall%2CWharf%2CAmusement+Park%2CHistorical+Monument%2CLandmark%2CTourist+Attraction%2CZoo%2CCollege%2CBeach%2CCampground%2CGolf+Course%2CHarbor%2CNature+Reserve%2COther+Parks+and+Outdoors%2CPark%2CRacetrack%2CScenic+Overlook%2CSki+Resort%2CSports+Center%2CSports+Field%2CWildlife+Reserve%2CAirport%2CFerry%2CMarina%2CPier%2CPort%2CResort%2CPostal%2CPopulated+Place&maxSuggestions=10&_=1695666335097&text=${value}`;
-      const response = await fetch(url, {headers: {'Content-Type': 'application/json'}});
+      const response = await fetch(url, {
+        headers: { "Content-Type": "application/json" },
+      });
       const { suggestions } = await response.json();
 
       selectElement.innerText = "";
@@ -73,7 +75,7 @@ class LocationSearch extends HTMLElement {
     }
   }
 
-  async handleChange (event){
+  async handleChange(event) {
     // We only care about change events that have
     // come from select elements with the "weather location"
     // name.
@@ -87,8 +89,8 @@ class LocationSearch extends HTMLElement {
 
     const response = await fetch(url, {
       headers: {
-        'Content-Type': "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
 
     const results = await response.json();
@@ -115,7 +117,7 @@ class LocationSearch extends HTMLElement {
     }
   }
 
-  goToLocationPage(latitude, longitude, placename){
+  goToLocationPage(latitude, longitude, placename) {
     // We want to redirect the user via a POST. We already have the form ready to
     // go, we just need to set its action so the browser knows where to go.
     const form = document.querySelector("form[data-location-search]");
@@ -130,8 +132,8 @@ class LocationSearch extends HTMLElement {
     form.submit();
   }
 
-  updateLiveDescriptionArea(){
-    if(!this.liveDescriptionArea){
+  updateLiveDescriptionArea() {
+    if (!this.liveDescriptionArea) {
       this.liveDescriptionArea = document.createElement("div");
       this.liveDescriptionArea.classList.add("usa-sr-only");
       this.liveDescriptionArea.setAttribute("aria-live", "polite");
@@ -140,7 +142,6 @@ class LocationSearch extends HTMLElement {
     window.setTimeout(() => {
       const numberOfResults = Array.from(this.querySelectorAll("ul li")).length;
       this.liveDescriptionArea.innerHTML = `<span>Search updated: ${numberOfResults} results</span>`;
-      console.log(`Updated with ${numberOfResults} results`);
     }, 1000);
   }
 }

@@ -1,3 +1,4 @@
+/* eslint object-shorthand: 0, func-names: 0, no-underscore-dangle: 0 */
 const searchLocation = async (text) => {
     const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&countryCode=USA%2CPRI%2CVIR%2CGUM%2CASM&category=Land+Features%2CBay%2CChannel%2CCove%2CDam%2CDelta%2CGulf%2CLagoon%2CLake%2COcean%2CReef%2CReservoir%2CSea%2CSound%2CStrait%2CWaterfall%2CWharf%2CAmusement+Park%2CHistorical+Monument%2CLandmark%2CTourist+Attraction%2CZoo%2CCollege%2CBeach%2CCampground%2CGolf+Course%2CHarbor%2CNature+Reserve%2COther+Parks+and+Outdoors%2CPark%2CRacetrack%2CScenic+Overlook%2CSki+Resort%2CSports+Center%2CSports+Field%2CWildlife+Reserve%2CAirport%2CFerry%2CMarina%2CPier%2CPort%2CResort%2CPostal%2CPopulated+Place&maxSuggestions=10&_=1695666335097&text=${text}`;
     return fetch(url, {headers: {'Content-Type': "application/json"}});
@@ -24,9 +25,8 @@ const getLocationGeodata = async (magicKey) => {
         const lat = Math.round(geometry.y * 1_000) / 1_000;
         const lon = Math.round(geometry.x * 1_000) / 1_000;
         return {lat, lon};
-    } else {
-        return null;
     }
+    return null;
 };
 
 /**
@@ -40,14 +40,14 @@ const getLocationGeodata = async (magicKey) => {
  * This can provide the perception of faster interaction.
  */
 const ArcCache = {
-    get: function(magicKey){
+    getItem: function(magicKey){
         const found = window.sessionStorage.getItem(magicKey);
         if(found){
             return JSON.parse(found);
         }
         return null;
     },
-    set: function(magicKey, obj){
+    setItem: function(magicKey, obj){
         const serialized = JSON.stringify(obj);
         window.sessionStorage.setItem(magicKey, serialized);
     }
@@ -231,6 +231,7 @@ class ComboBox extends HTMLElement {
         input.classList.add(...[
             "wx-combo-box__input"
         ]);
+        input.addEventListener("blur", this.hideList);
         this.append(input);
         this.input = input;
     }
@@ -263,7 +264,7 @@ class ComboBox extends HTMLElement {
             "display-block"
         ]);
         toggleButton.setAttribute("slot", "toggle-button");
-        toggleButton.addEventListener("click", event => {
+        toggleButton.addEventListener("click", () => {
             if(this.isShowingList){
                 this.hideList();
             } else {
@@ -287,7 +288,7 @@ class ComboBox extends HTMLElement {
             "display-block"
         ]);
         clearButton.innerHTML = "&nbsp;";
-        clearButton.addEventListener("click", e => {
+        clearButton.addEventListener("click", () => {
             this.clear();
         });
         this.append(clearButton);
@@ -303,10 +304,10 @@ class ComboBox extends HTMLElement {
         if(this._timeout){
             window.clearTimeout(this._timeout);
         }
-        this._timeout = window.setTimeout(() => {
-            this.updateSearch(event.target.value)
-                .then(() => {
-                    this.updateAriaLive(
+        this._timeout = window.setTimeout(async () => {
+            await this.updateSearch(event.target.value)
+                      .then(() => {
+                          this.updateAriaLive(
                         `Search updated. ${this.querySelectorAll("li").length} results available`
                     );
                 });
@@ -443,8 +444,8 @@ class ComboBox extends HTMLElement {
     pseudoBlurItems(){
         Array.from(this.listbox.querySelectorAll("li")).forEach(li => {
             li.setAttribute("aria-selected", "false");
-            li.classList.remove("wx-combox-box__list-option--focused");
-            li.classList.remove("wx-combox-box__list-option--selected");
+            li.classList.remove("wx-combo-box__list-option--focused");
+            li.classList.remove("wx-combo-box__list-option--selected");
         });
         this.input.setAttribute("aria-activedescendant", "");
     }
@@ -455,10 +456,8 @@ class ComboBox extends HTMLElement {
      * If the list is not currently open, this action opens it.
      * Otherwise, it nagivates down to the next item in the list,
      * giving it focus.
-     * @var targetEl HTMLElement - The target element of the
-     * originating keyboard event.
      */
-    navigateDown(targetEl){
+    navigateDown(){
         // If we are not already showing the list,
         // then we should now show it and focus
         // on the first item in the list
@@ -489,10 +488,8 @@ class ComboBox extends HTMLElement {
      * hide the list and return the focus to the input.
      * Otherwise, it selects and gives focus to the previous
      * item in the list.
-     * @var targetEl HTMLElement - The target element of the
-     * originating keyboard event. 
      */
-    navigateUp(targetEl){
+    navigateUp(){
         if(!this.isShowingList){
             return;
         }
@@ -529,8 +526,8 @@ class ComboBox extends HTMLElement {
         this.pseudoBlurItems();
         anElement.setAttribute("aria-selected", "true");
         anElement.classList.add(
-            "wx-combox-box__list-option--focused",
-            "wx-combox-box__list-option--selected"
+            "wx-combo-box__list-option--focused",
+            "wx-combo-box__list-option--selected"
         );
 
         // Update the input's activedescendant attribute
@@ -619,7 +616,7 @@ class ComboBox extends HTMLElement {
      * Triggers a submit call on an ancestor form element,
      * if present.
      */
-    async submit(){
+    submit(){
         const formEl = this.closest("form[data-location-search]");
         const textInput = document.createElement("input");
         textInput.setAttribute("type", "hidden");
@@ -628,11 +625,13 @@ class ComboBox extends HTMLElement {
         if(formEl){
             const optionText = this.input.value;
             textInput.value = optionText;
-            const coordinates = await this.getGeodataForKey(this.value);
-            if(coordinates){
-                formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
-                formEl.submit();
-            }
+            this.getGeodataForKey(this.value)
+                .then(coordinates => {
+                    if(coordinates){
+                        formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
+                        formEl.submit();
+                    }
+                });
         }
     }
 
@@ -644,7 +643,7 @@ class ComboBox extends HTMLElement {
     async cacheLocationGeodata(magicKey){
         if(!window.sessionStorage.getItem(magicKey)){
             const result = await getLocationGeodata(magicKey);
-            ArcCache.set(magicKey, result);
+            ArcCache.setItem(magicKey, result);
         }
     }
 
@@ -655,9 +654,9 @@ class ComboBox extends HTMLElement {
      * to fetch the data.
      */
     async getGeodataForKey(magicKey){
-        const cached = ArcCache.get(magicKey);
+        const cached = ArcCache.getItem(magicKey);
         if(!cached){
-            return await getLocationGeodata(magicKey);
+            return getLocationGeodata(magicKey);
         }
 
         return cached;
@@ -682,7 +681,7 @@ class ComboBox extends HTMLElement {
 
     attributeChangedCallback(name, oldVal, newVal){
         if(name === "input-delay"){
-            this.inputDelay = parseInt(newVal);
+            this.inputDelay = parseInt(newVal, 10);
         }
     }
 
