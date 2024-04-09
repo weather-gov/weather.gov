@@ -138,7 +138,7 @@ class ComboBox extends HTMLElement {
         this.handleInput = this.handleInput.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleEnterKey = this.handleEnterKey.bind(this);
-        this.handleChanged = this.handleChanged.bind(this);
+        this.handleTextInput = this.handleTextInput.bind(this);
         this.updateSearch = this.updateSearch.bind(this);
         this.showList = this.showList.bind(this);
         this.hideList = this.hideList.bind(this);
@@ -162,7 +162,7 @@ class ComboBox extends HTMLElement {
     connectedCallback(){
         this.addEventListener("input", this.handleInput);
         this.addEventListener("keydown", this.handleKeyDown);
-        this.addEventListener("change", this.handleChanged);
+        this.addEventListener("change", this.handleTextInput);
         this.addEventListener("focusout", this.hideList);
 
         // Initial attributes
@@ -186,7 +186,7 @@ class ComboBox extends HTMLElement {
     disconnectedCallback(){
         this.removeEventListener("input", this.handleInput);
         this.removeEventListener("keydown", this.handleKeyDown);
-        this.removeEventListener("change", this.handleChanged);
+        this.removeEventListener("change", this.handleTextInput);
         this.removeEventListener("focusout", this.hideList);
     }
 
@@ -300,6 +300,9 @@ class ComboBox extends HTMLElement {
                           );
                       });
         }, this.inputDelay);
+        if(this.input.value){
+            this.handleTextInput(event);
+        }
     }
 
     /**
@@ -388,8 +391,8 @@ class ComboBox extends HTMLElement {
      * In this handler, we determine whether or not
      * to show the clear button.
      */
-    handleChanged(event){
-        if(event.target === this && event.target.value){
+    handleTextInput(event){
+        if(this.input.value){
             this.clearButton.classList.remove("display-none");
             this.clearButton.classList.add("display-block");
         } else {
