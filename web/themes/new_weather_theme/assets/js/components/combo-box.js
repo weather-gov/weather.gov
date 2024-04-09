@@ -55,53 +55,53 @@ const ArcCache = {
 
 
 const comboTemplate = `
-    <style>
-     :host {
-         position: relative;
-         display: block;
-         box-sizing: border-box;
-     }
-     :host([expanded="true"]) #listbox-wrapper {
-         display: block;
-         position: absolute;
-         top: 100%;
-         left: 0;
-         min-width: 100%;
-     }
-     #listbox-wrapper,
-     :host select {
-         display: none;
-     } 
+  <style>
+   :host {
+       position: relative;
+       display: block;
+       box-sizing: border-box;
+   }
+   :host([expanded="true"]) #listbox-wrapper {
+       display: block;
+       position: absolute;
+       top: 100%;
+       left: 0;
+       min-width: 100%;
+   }
+   #listbox-wrapper,
+   :host select {
+       display: none;
+   } 
 
-     #sr-only {
-         display: block;
-         position: absolute;
-         left: -1000%;
-         height: 1px;
-         width: 1px;
-     }
+   #sr-only {
+       display: block;
+       position: absolute;
+       left: -1000%;
+       height: 1px;
+       width: 1px;
+   }
 
-     #input-area {
-         display: flex;
-         flex-direction: row;
-         align-items: center;
-         width: 100%;
-     }
-     
-    </style>
-    <div id="input-area">
-        <slot name="input"></slot>        
-        <slot name="clear-button"></slot>
-        <slot name="separator"></slot>
-        <slot name="toggle-button"></slot>
-    </div>
-    <div id="listbox-wrapper">
-        <slot name="listbox"></slot>
-    </div>
-    <div id="sr-only" aria-live="polite">
-        <slot name="sr-only"></slot>
-    </div>
-    <slot></slot>
+   #input-area {
+       display: flex;
+       flex-direction: row;
+       align-items: center;
+       width: 100%;
+   }
+   
+  </style>
+  <div id="input-area">
+    <slot name="input"></slot>        
+    <slot name="clear-button"></slot>
+    <slot name="separator"></slot>
+    <slot name="toggle-button"></slot>
+  </div>
+  <div id="listbox-wrapper">
+    <slot name="listbox"></slot>
+  </div>
+  <div id="sr-only" aria-live="polite">
+    <slot name="sr-only"></slot>
+  </div>
+  <slot></slot>
 `;
 
 /**
@@ -124,7 +124,7 @@ class ComboBox extends HTMLElement {
 
         this.template = document.createElement("template");
         this.template.innerHTML = comboTemplate;
-        this.attachShadow({mode: "open"});
+        this.attachShadow({mode: "open", delegatesFocus: true});
         this.shadowRoot.append(
             this.template.content.cloneNode(true)
         );
@@ -163,6 +163,7 @@ class ComboBox extends HTMLElement {
         this.addEventListener("input", this.handleInput);
         this.addEventListener("keydown", this.handleKeyDown);
         this.addEventListener("change", this.handleChanged);
+        this.addEventListener("focusout", this.hideList);
 
         // Initial attributes
         this.classList.add("wx-combo-box");
@@ -184,7 +185,9 @@ class ComboBox extends HTMLElement {
 
     disconnectedCallback(){
         this.removeEventListener("input", this.handleInput);
+        this.removeEventListener("keydown", this.handleKeyDown);
         this.removeEventListener("change", this.handleChanged);
+        this.removeEventListener("focusout", this.hideList);
     }
 
     /**
@@ -216,7 +219,6 @@ class ComboBox extends HTMLElement {
         input.classList.add(
             "wx-combo-box__input"
         );
-        input.addEventListener("blur", this.hideList);
         this.append(input);
         this.input = input;
     }
@@ -633,12 +635,12 @@ class ComboBox extends HTMLElement {
             const optionText = this.input.value;
             textInput.value = optionText;
             return this.getGeodataForKey(this.value)
-                .then(coordinates => {
-                    if(coordinates){
-                        formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
-                        formEl.submit();
-                    }
-                });
+                       .then(coordinates => {
+                           if(coordinates){
+                               formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
+                               formEl.submit();
+                           }
+                       });
         }
     }
 
