@@ -390,7 +390,7 @@ class ComboBox extends HTMLElement {
      * In this handler, we determine whether or not
      * to show the clear button.
      */
-    handleTextInput(event){
+    handleTextInput(){
         if(this.input.value){
             this.clearButton.classList.remove("display-none");
             this.clearButton.classList.add("display-block");
@@ -617,6 +617,10 @@ class ComboBox extends HTMLElement {
                            }
                        });
         }
+
+        return Promise.reject(
+            new Error("No form ancestor element found for this combobox")
+        );
     }
 
     /**
