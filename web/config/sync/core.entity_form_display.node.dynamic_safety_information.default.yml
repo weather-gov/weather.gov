@@ -45,6 +45,8 @@ hidden:
   created: true
   path: true
   promote: true
+  publish_on: true
   status: true
   sticky: true
   uid: true
+  unpublish_on: true
