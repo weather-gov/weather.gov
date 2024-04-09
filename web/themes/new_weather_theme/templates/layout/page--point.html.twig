@@ -55,6 +55,7 @@
         {% endif %}
         <div class="tab-container focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
           {{ drupal_block("weathergov_current_conditions") }}
+          {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
         </div>
         <div class="tab-container focus-offset-205" id="today" role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
           {{ drupal_block("weathergov_weather_story") }}
