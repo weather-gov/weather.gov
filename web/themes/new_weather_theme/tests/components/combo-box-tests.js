@@ -392,7 +392,7 @@ describe("Combo box unit tests", () => {
       const component = document.querySelector("wx-combo-box");
       expect(component.isShowingList).to.be.true;
 
-      const event = new window.FocusEvent("blur");
+      const event = new window.FocusEvent("focusout", { bubbles: true});
       component.input.dispatchEvent(event);
 
       expect(component.isShowingList).to.be.false;
@@ -415,7 +415,7 @@ describe("Combo box unit tests", () => {
       sandbox.restore();
     });
 
-    it("When pushing Enter when the second item is selected but not submitted", () => {
+    it("When pushing Enter when the second item is selected _and_ submitted", () => {
       const component = document.querySelector("wx-combo-box");
       component.showList();
       const secondItem = component.querySelector("ul[role='listbox'] > li:nth-child(2)");
@@ -429,17 +429,6 @@ describe("Combo box unit tests", () => {
       const actualValue = component.value;
 
       expect(expectedValue).to.equal(actualValue);
-      expect(spied.called).to.be.false;
-    });
-
-    it("When pushing Enter a second item, submit is called", () => {
-      const component = document.querySelector("wx-combo-box");
-      const secondItem = component.querySelector("ul[role='listbox'] > li:nth-child(2)");
-      const spied = sandbox.spy(component, 'submit');
-      const event = new KeyboardEvent("keydown", { key: "Enter", bubbles: true });
-      component.input.dispatchEvent(event);
-      component.input.dispatchEvent(event);
-
       expect(spied.called).to.be.true;
     });
 
