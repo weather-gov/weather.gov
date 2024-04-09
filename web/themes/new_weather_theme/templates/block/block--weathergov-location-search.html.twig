@@ -1,5 +1,5 @@
 {{ attach_library("new_weather_theme/location-search") }}
-
+{{ attach_library("new_weather_theme/browser-location-button") }}
 <div class="grid-container">
   <div class="grid-row">
     <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3" data-location-search method="post">
@@ -12,10 +12,10 @@
           <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
         </div>
       </div>
-      <div class="usa-combo-box z-500" data-filter=".*">
+      <wx-location-search class="z-top" data-filter=".*">
         <select class="usa-select" name="weather location" id="weather-location-search">
         </select>
-      </div>
+      </wx-location-search>
       <input type="hidden" name="suggestedPlaceName" value="">
     </form>
   </div>

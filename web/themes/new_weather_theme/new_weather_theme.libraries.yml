@@ -16,8 +16,8 @@ uswds-customized:
         async: true
       minified: true
 
-location-search:
-  version: 2024-02-14
+browser-location-button:
+  version: 2024-03-21
   js:
     assets/js/locationSearch.js:
       attributes:
@@ -30,6 +30,11 @@ localize-timestamps:
       attributes:
         async: true
 
+location-search:
+  version: 2024-03-21
+  js:
+    assets/js/components/LocationSearch.js: { preprocess: false }
+        
 tabbed_nav:
   version: 2024-03-20
   js:
