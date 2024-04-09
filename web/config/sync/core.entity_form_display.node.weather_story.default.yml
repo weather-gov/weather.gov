@@ -10,6 +10,7 @@ dependencies:
     - node.type.weather_story
   module:
     - image
+    - scheduler
     - text
 id: node.weather_story.default
 targetEntityType: node
@@ -44,6 +45,17 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  publish_on:
+    type: datetime_timestamp_no_default
+    weight: 52
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  scheduler_settings:
+    weight: 50
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   title:
     type: string_textfield
     weight: -5
@@ -51,6 +63,12 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  unpublish_on:
+    type: datetime_timestamp_no_default
+    weight: 54
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true
