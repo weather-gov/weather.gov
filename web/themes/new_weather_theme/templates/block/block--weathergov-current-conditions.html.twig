@@ -38,7 +38,7 @@
         {% endif %}
         <p class="font-body-md margin-top-2px margin-bottom-0">{{ content.conditions.short }}</p>
       </div>
-      <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05 border-top-1px border-base-light padding-top-1" aria-hidden="true">
+      <div class="tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05 border-top-1px border-base-light padding-top-1" aria-hidden="true">
         <div class="margin-right-4">
           <p class="margin-y-0">
             <span class="font-mono-xs font-family-mono text-uppercase text-base">Humidity </span>
@@ -46,22 +46,24 @@
           </p>
         </div>
 
-        <div class="margin-right-05">
+        <div class="margin-right-05 display-flex flex-align-center">
           <p class="margin-y-0">
             {%- if content.wind.speed is same as(null) -%}
               <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>N/A
             {%- else -%}
             <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>
             {{ "@windSpeed mph" | t({"@windSpeed":content.wind.speed})}}
-              {% if content.wind.speed > 0 %}
-                {% include '@new_weather_theme/partials/wind-direction.html.twig'
-                  with {
-                    windDirection: content.wind.direction
-                  }
-                %}
-              {% endif %}
             {% endif %}
           </p>
+
+          {% if content.wind.speed is not same as(null) and content.wind.speed > 0 %}
+          {% include '@new_weather_theme/partials/wind-direction.html.twig'
+            with {
+              windDirection: content.wind.direction
+            }
+          %}
+          {% endif %}
+
         </div>
       </div>
     </div>
