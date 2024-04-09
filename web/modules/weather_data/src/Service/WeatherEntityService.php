@@ -39,6 +39,7 @@ class WeatherEntityService
                 ->getStorage("node")
                 ->getQuery()
                 ->accessCheck(false)
+                ->condition("status", 1)
                 ->condition("type", $nodeType)
                 ->condition($termField, $termID)
                 ->sort("changed", "DESC")

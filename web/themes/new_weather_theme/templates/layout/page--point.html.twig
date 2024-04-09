@@ -22,7 +22,7 @@
 
   <main role="main" class="flex-1">
     <a id="main-content" tabindex="-1"></a>
-    {{ page.content }}
+    {{ drupal_block("weathergov_location_search") }}
 
     {% if weather.alerts %}
     <div class="bg-primary-darkest padding-bottom-105">

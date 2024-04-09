@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-03-29
+  version: 2024-04-04
   css:
     theme:
       assets/css/styles.css: {}
@@ -24,7 +24,7 @@ location-search:
         async: true
 
 localize-timestamps:
-  version: 2024-02-14
+  version: 2024-04-04
   js:
     assets/js/localizeTimestamps.js:
       attributes:

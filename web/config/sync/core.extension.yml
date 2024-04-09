@@ -1,6 +1,7 @@
 _core:
   default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
 module:
+  auto_entitylabel: 0
   automated_cron: 0
   big_pipe: 0
   block: 0
@@ -35,6 +36,7 @@ module:
   system: 0
   taxonomy: 0
   text: 0
+  token: 0
   toolbar: 0
   twig_tweak: 0
   update: 0

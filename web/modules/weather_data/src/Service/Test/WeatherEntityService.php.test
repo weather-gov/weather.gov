@@ -78,6 +78,7 @@ final class WeatherEntityServiceTest extends TestCase
             ->method("condition")
             ->will(
                 $this->returnValueMap([
+                    ["status", 1, null, null, $query],
                     ["type", "node type", null, null, $query],
                     [
                         $taxonomyFieldMachineName,
