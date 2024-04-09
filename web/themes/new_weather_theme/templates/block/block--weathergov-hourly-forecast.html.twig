@@ -12,7 +12,13 @@
       {% set message = "There was an error loading the hourly forecast." | t %}
       {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
     {% else %}
-      {% include '@new_weather_theme/partials/hourly-table.html.twig' with { 'hours': content.hours, 'alertPeriods': content.alertPeriods  } %}
+      {% include '@new_weather_theme/partials/hourly-table.html.twig'
+        with {
+          for: "Today",
+          hours: content.hours,
+          alertPeriods: content.alertPeriods
+        }
+      %}
     {% endif %}
   </div>
 </div>
