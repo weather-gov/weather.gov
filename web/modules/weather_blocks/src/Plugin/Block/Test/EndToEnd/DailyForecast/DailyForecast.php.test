@@ -142,7 +142,7 @@ final class DailyForecastStructureTest extends EndToEndBase
         // Get rid of the hourly stuff.
         // For this case, we don't care about it
         unset($actualStructure["hourlyPeriods"]);
-        
+
         $this->assertEquals($expectedStructure, $actualStructure);
     }
 }
