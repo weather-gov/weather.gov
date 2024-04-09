@@ -24,8 +24,9 @@
     "doc": "docs"
   },
   "devDependencies": {
-    "axe-core": "^4.9.0",
-    "cypress": "^13.7.2",
+    "axe-core": "^4.8.4",
+    "chai": "^4.4.1",
+    "cypress": "^13.7.0",
     "cypress-axe": "^1.5.0",
     "cypress-plugin-tab": "^1.0.5",
     "dayjs": "^1.11.10",
@@ -36,16 +37,13 @@
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^24.0.0",
     "jsdom-global": "^3.0.2",
+    "mocha": "^10.4.0",
     "mocha-cli": "^1.0.1",
     "prettier": "^3.2.5",
-<<<<<<< HEAD
-    "stylelint": "^16.3.1",
-    "stylelint-config-standard-scss": "^13.1.0",
-=======
     "sinon": "^17.0.1",
     "stylelint": "^16.2.1",
     "stylelint-config-standard-scss": "^13.0.0",
->>>>>>> d0295c0 (Updating combo-box component and tests (see details))
+    "whatwg-fetch": "^3.6.20",
     "xml-parse": "^0.4.0"
   },
   "scripts": {
