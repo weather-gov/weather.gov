@@ -23,22 +23,24 @@ only be a nighttime period.
       {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods } %}
     </div>
     <div class="grid-row grid-gap">
-        {% for period in periods %}
-            {% set marginUnit = 3 %}
-            {% set tabletCol = 6 %}
-            {%  if period.isOvernight %}
-                {% set label = "Overnight" | t %}
-                {% set lineColor = "midnight-indigo" %}
-                {% set tabletCol = 12 %}
-            {% elseif period.isDaytime %}
-                {% set label = "Day" | t %}
-                {% set lineColor = "yellow" %}
-            {% else %}
-                {% set label = "Night" | t %}
-                {% set lineColor = "indigo" %}
-                {% set marginUnit = 1 %}
-            {% endif %}
-        <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-{{ marginUnit }}">
+      {% for period in periods %}
+        {% set marginUnit = 3 %}
+        {% set tabletMarginUnit = 1 %}
+        {% set tabletCol = 6 %}
+        {%  if period.isOvernight %}
+          {% set label = "Overnight" | t %}
+          {% set lineColor = "midnight-indigo" %}
+          {% set tabletCol = 12 %}
+          {% set tabletMarginUnit = 3 %}
+        {% elseif period.isDaytime %}
+          {% set label = "Day" | t %}
+          {% set lineColor = "yellow" %}
+        {% else %}
+          {% set label = "Night" | t %}
+          {% set lineColor = "indigo" %}
+          {% set marginUnit = 1 %}
+        {% endif %}
+        <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-{{ tabletMarginUnit }}">
         <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-before line-before--{{ lineColor }}">
             {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
         </span>
