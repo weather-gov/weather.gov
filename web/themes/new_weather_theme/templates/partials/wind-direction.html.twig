@@ -1,3 +1,4 @@
+<span class="usa-sr-only">{{ "from the @direction " | t({"@direction": windDirection.long }) }}</span>
 {#
 The +180 here is to account for the fact that wind direction
 is reported as a FROM direction, but our arrow points in the
@@ -6,4 +7,3 @@ TO direction. So we just need to spin it 'round.
 <svg role="img" aria-hidden="true" data-wind-direction class="width-2 height-2 margin-left-05 padding-2px" style="transform: rotate({{ windDirection.angle + 180 }}deg);">
   <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#wind_arrow_s" }}"></use>
 </svg>
-<span class="usa-sr-only">{{ "from the @direction " | t({"@direction": windDirection.long }) }}<span>
