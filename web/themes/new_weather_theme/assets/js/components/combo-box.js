@@ -137,7 +137,6 @@ class ComboBox extends HTMLElement {
         // Bound component methods
         this.handleInput = this.handleInput.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.handleEnterKey = this.handleEnterKey.bind(this);
         this.handleTextInput = this.handleTextInput.bind(this);
         this.updateSearch = this.updateSearch.bind(this);
         this.showList = this.showList.bind(this);
@@ -371,7 +370,7 @@ class ComboBox extends HTMLElement {
         } else if(event.key === "Escape"){
             this.hideList();
         } else if(event.key === "Enter"){
-            this.handleEnterKey(event);
+            this.chooseOption(event);
         } else {
             handled = false;
         }
@@ -548,23 +547,6 @@ class ComboBox extends HTMLElement {
     }
 
     /**
-     * Event handler for when the Enter key is pressed inside
-     * the combobox input element or one of the list items.
-     * If there is a current selection in the actual input/select,
-     * meaning the user has actually selected something from
-     * the dropdown already, this will trigger submission.
-     * If the target element is a list item, then this
-     * method simply chooses/selects that list item
-     */
-    handleEnterKey(event){
-        if(!this.isShowingList && this.value){
-            this.submit();
-        } else {
-            this.chooseOption(event);
-        }
-    }
-
-    /**
      * Choses one of the list item options,
      * determined based on the originating event
      * object that is passed in.
@@ -597,18 +579,8 @@ class ComboBox extends HTMLElement {
             new Event("change", {bubbles: true})
         );
 
-
-        // If the keyboard was used to make a selection,
-        // we _do not submit_ right away. Instead, update
-        // the aria-live reporting with information about
-        // pressing Enter again
-        if(event.type !== "click"){
-            this.updateAriaLive(
-                `You have selected ${this.input.value}. To see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
-            );
-        } else {
-            this.submit();
-        }
+        // Always submit to the parent form
+        this.submit();
     }
 
     /**
