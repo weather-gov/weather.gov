@@ -48,20 +48,24 @@
 
         <div class="margin-right-05 display-flex flex-align-center">
           <p class="margin-y-0">
+            {#
+            If we want the space, we need to be explicit. Otherwise browsers
+            will sometimes strip it out. Like if, for example, a span is
+            followed by a non-text element such as a div.
+            #}
             {%- if content.wind.speed is same as(null) -%}
-              <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>N/A
+              <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind&nbsp;</span>N/A
             {%- else -%}
-            <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>
-            {{ "@windSpeed mph" | t({"@windSpeed":content.wind.speed})}}
+              <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind&nbsp;</span>
+              {% if content.wind.speed > 0 %}
+              {% include '@new_weather_theme/partials/wind.html.twig'
+                with {
+                  wind: content.wind
+                }
+              %}
             {% endif %}
           </p>
 
-          {% if content.wind.speed is not same as(null) and content.wind.speed > 0 %}
-          {% include '@new_weather_theme/partials/wind-direction.html.twig'
-            with {
-              windDirection: content.wind.direction
-            }
-          %}
           {% endif %}
 
         </div>

@@ -86,18 +86,14 @@
         </th>
         {% for period in hours %}
         <td>
-          <div role="text" class="display-flex flex-row flex-align-center">
-          {% if period.windSpeed is not same as (null) %}
-            <span>{{period.windSpeed}} {{ "mph" | t }}</span>
-            {% include '@new_weather_theme/partials/wind-direction.html.twig'
-              with {
-                windDirection: period.windDirection
+          {% include '@new_weather_theme/partials/wind.html.twig'
+            with {
+              wind: {
+                speed: period.windSpeed,
+                direction: period.windDirection
               }
-            %}
-          {% else %}
-            <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
-          {% endif %}
-          </div>
+            }
+          %}
         </td>
         {% endfor %}
       </tr>
