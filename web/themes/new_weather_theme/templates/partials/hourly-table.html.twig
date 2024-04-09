@@ -13,6 +13,7 @@
   </button>
   <div id="hourly-table-container" class="usa-table-container--scrollable">
     <table class="usa-table usa-table--borderless hourly-table" tabindex="0">
+      <caption class="usa-sr-only">hourly forecast</caption>
       <tr data-row-name="time">
         <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
         {% for period in hours %}
