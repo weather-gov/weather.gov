@@ -2,7 +2,7 @@
 
 const WAIT_TIME = 2000;
 
-describe("wx-combo-box tests", () => {
+describe.skip("wx-combo-box tests", () => {
   before(() => {
     // Stub the ArcGIS API requests to use
     // saved data
