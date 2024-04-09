@@ -24,21 +24,21 @@ only be a nighttime period.
     </div>
     <div class="grid-row grid-gap">
         {% for period in periods %}
-            {% set marginUnit = 1 %}
+            {% set marginUnit = 3 %}
             {% set tabletCol = 6 %}
             {%  if period.isOvernight %}
                 {% set label = "Overnight" | t %}
-                {% set lineColor = "indigo" %}
+                {% set lineColor = "midnight-indigo" %}
                 {% set tabletCol = 12 %}
             {% elseif period.isDaytime %}
                 {% set label = "Day" | t %}
                 {% set lineColor = "yellow" %}
-                {% set marginUnit = 3 %}
             {% else %}
                 {% set label = "Night" | t %}
                 {% set lineColor = "indigo" %}
+                {% set marginUnit = 1 %}
             {% endif %}
-        <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-1">
+        <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-{{ marginUnit }}">
         <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-before line-before--{{ lineColor }}">
             {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
         </span>
