@@ -71,7 +71,8 @@
           {{ drupal_block("weathergov_wfo_promo") }}
         </div>
         <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
-            {{ drupal_block("weathergov_daily_forecast") }}
+          <wx-placeholder class="daily-forecast-block" data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/daily" data-trigger="event" data-event="wx:tab-shown">
+          </wx-placeholder>
         </div>
       </div>
 
@@ -81,3 +82,28 @@
   {% include(directory ~ "/templates/layout/footer.html.twig") %}
 
 </div>
+<script>
+ /**
+  * Rough and dirty handler for placeholder elements
+  */
+
+ const fetchAndReplace = async (element, url) => {
+   const response = await fetch(url);
+   if(response.ok){
+     const markup = await response.text();
+     element.outerHTML = markup;
+   } else {
+     console.error(response);
+   }
+ };
+ 
+ document.addEventListener('DOMContentLoaded', () => {
+   Array.from(document.querySelectorAll('wx-placeholder[data-placeholder="true"]')).forEach(placeholder => {
+     if(placeholder.dataset.trigger === "event" && placeholder.dataset.event){
+       placeholder.addEventListener(placeholder.dataset.event, () => {
+         fetchAndReplace(placeholder, placeholder.dataset.href)
+       }, {capture: true});
+     }
+   });
+ });
+</script>

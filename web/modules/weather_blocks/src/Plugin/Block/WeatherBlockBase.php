@@ -167,7 +167,8 @@ abstract class WeatherBlockBase extends BlockBase implements
         ];
 
         // If we're on a location route, pull location from the URL.
-        if ($this->route->getRouteName() == "weather_routes.point") {
+        $routeName = $this->route->getRouteName();
+        if ($routeName == "weather_routes.point" || str_starts_with($routeName, 'weather_routes.html.point')) {
             $lat = floatval($this->route->getParameter("lat"));
             $lon = floatval($this->route->getParameter("lon"));
 

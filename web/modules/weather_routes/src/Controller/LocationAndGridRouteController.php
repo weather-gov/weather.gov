@@ -95,14 +95,14 @@ final class LocationAndGridRouteController extends ControllerBase
         }
     }
 
-    public function serveBasicPartial($item){
+    public function serveBasicPartial($lat, $lon){
         /* $r = new Response();
          * $r->headers->set('Content-Type', 'text/html');
          * $r->setContent('<h1>' . $item . '</h1>');
          * return $r; */
 
         $type = \Drupal::service('plugin.manager.block');
-        $block = $type->createInstance('weathergov_location_search', []);
+        $block = $type->createInstance('weathergov_daily_forecast', []);
 
         $build = [];
         $build['content'] = $block->build();
@@ -123,11 +123,6 @@ final class LocationAndGridRouteController extends ControllerBase
                 unset($build['content'][$property]);
             }
         }
-
-        $build['content']['place'] = [
-            'city' => $item,
-            'state' => $item
-        ];
 
         $rendered = \Drupal::service('renderer')->render($build);
         return new Response($rendered->__toString());
