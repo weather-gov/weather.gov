@@ -41,6 +41,7 @@
     "xml-parse": "^0.4.0"
   },
   "scripts": {
+    "load-spatial": "cd spatial-data && node load-shapefiles.js",
     "cypress:a11y": "cypress open --project tests/a11y",
     "cypress:e2e": "cypress open --project tests/e2e",
     "js-format": "npx prettier -w 'web/themes/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
