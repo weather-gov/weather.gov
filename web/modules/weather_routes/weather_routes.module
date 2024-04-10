@@ -1,1 +1,9 @@
 <?php
+
+function weather_routes_theme($existing, $type, $path){
+  return [
+    'wx_test' => [
+      'template' => 'block--weathergov-location-search'
+    ]
+  ];
+}

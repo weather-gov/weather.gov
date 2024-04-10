@@ -11,6 +11,13 @@ use Drupal\weather_data\Service\WeatherDataService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Render\HtmlResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Cache\CacheableDependencyInterface;
+
+
 
 /**
  * Returns responses for Weather routes routes.
@@ -86,5 +93,43 @@ final class LocationAndGridRouteController extends ControllerBase
         } catch (\Throwable $e) {
             throw new NotFoundHttpException();
         }
+    }
+
+    public function serveBasicPartial($item){
+        /* $r = new Response();
+         * $r->headers->set('Content-Type', 'text/html');
+         * $r->setContent('<h1>' . $item . '</h1>');
+         * return $r; */
+
+        $type = \Drupal::service('plugin.manager.block');
+        $block = $type->createInstance('weathergov_location_search', []);
+
+        $build = [];
+        $build['content'] = $block->build();
+        $build += [
+            '#theme' => 'block',
+            '#attributes' => [],
+            '#contextual_links' => [],
+            '#configuration' => $block->getConfiguration(),
+            '#plugin_id' => $block->getPluginId(),
+            '#base_plugin_id' => $block->getBaseId(),
+            '#derivative_plugin_id' => $block->getDerivativeId(),
+
+        ];
+
+        foreach (['#attributes', '#contextual_links'] as $property) {
+            if (isset($build['content'][$property])) {
+                $build[$property] = $build['content'][$property];
+                unset($build['content'][$property]);
+            }
+        }
+
+        $build['content']['place'] = [
+            'city' => $item,
+            'state' => $item
+        ];
+
+        $rendered = \Drupal::service('renderer')->render($build);
+        return new Response($rendered->__toString());
     }
 }
