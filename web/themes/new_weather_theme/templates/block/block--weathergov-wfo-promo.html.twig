@@ -2,14 +2,14 @@
   <div class="grid-row">
     <div class="grid-col tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
       <h2 class="text-normal text-primary-darkest"> Your Local Forecast Office </h2>
-      <h3 class="margin-bottom-1"><a href="/office/{{ content.code }}/" class="usa-link">{{ content.name }}</a></h3>
+      <h3 class="margin-bottom-1">{{ content.name }}</h3>
       <p class="line-height-sans-4 margin-top-0">
         {{ content.shortIntro }}
       </p>
 
       {% if content.phone %}
       <p>
-        <span class="font-family-mono font-mono-sm text-bold text-primary-darkest text-uppercase"> {{ "Phone" | t }}: </span> {{ content.phone }}
+        <span class="font-family-mono font-mono-sm text-bold text-primary-darkest text-uppercase"> {{ "Phone" | t }}: </span> <a href="tel:{{ content.phone }}" class="usa-link">{{ content.phone }}</a>
       </p>
       {% endif %}
 

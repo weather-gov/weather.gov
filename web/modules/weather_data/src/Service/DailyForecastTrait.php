@@ -41,6 +41,45 @@ trait DailyForecastTrait
         ];
     }
 
+    private function formatDailyPeriodForToday($period, $timezone = null)
+    {
+        $formattedPeriod = $this->formatDailyPeriod($period);
+
+        // Early return if no period was passed
+        if (!$formattedPeriod) {
+            return null;
+        }
+
+        // We need to determine if the period is an "overnight"
+        // period. These are periods whose startTime begins on or
+        // after midnight of the current day, and whose endTime is
+        // 6am of the current day
+        $startTime = DateTimeUtility::stringToDate(
+            $period->startTime,
+            $timezone,
+        );
+        $endTime = DateTimeUtility::stringToDate($period->endTime, $timezone);
+        $midnight = $startTime->setTime(0, 0);
+        $overnightEnd = $startTime->setTime(6, 0);
+        $isOvernightPeriod =
+            $startTime >= $midnight && $endTime <= $overnightEnd;
+
+        $formattedPeriod["isOvernight"] = $isOvernightPeriod;
+
+        // Provide formatted parentheticals about the coverage
+        // of each time period (in text form)
+        // These are only present on the "today" time periods
+        if ($isOvernightPeriod) {
+            $formattedPeriod["timeLabel"] = "NOW-6AM";
+        } elseif ($formattedPeriod["isDaytime"]) {
+            $formattedPeriod["timeLabel"] = "6AM-6PM";
+        } else {
+            $formattedPeriod["timeLabel"] = "6PM-6AM";
+        }
+
+        return $formattedPeriod;
+    }
+
     /**
      * Get the daily forecast for a location.
      *
@@ -62,9 +101,16 @@ trait DailyForecastTrait
         $place = $this->getPlaceFromGrid($wfo, $x, $y);
         $timezone = $place->timezone;
 
+        // In order to keep the time zones straight,
+        // we set the "current" (now) time to be
+        // the startTime of the first period.
+        if (!($now instanceof \DateTimeImmutable)) {
+            $now = new \DateTimeImmutable("now", new \DateTimeZone($timezone));
+        }
+
         $periods = DateTimeUtility::filterToAfter(
             $forecast->periods,
-            new \DateTimeImmutable(),
+            $now,
             "endTime",
         );
 
@@ -78,16 +124,6 @@ trait DailyForecastTrait
         }
         $grid = $this->getGridFromLatLon($point->lat, $point->lon);
         $alerts = $this->getAlerts($grid, $point);
-
-        // In order to keep the time zones straight,
-        // we set the "current" (now) time to be
-        // the startTime of the first period.
-        if (!($now instanceof \DateTimeImmutable)) {
-            $now = DateTimeUtility::stringToDate(
-                $periods[0]->startTime,
-                $timezone,
-            );
-        }
 
         $tomorrow = $now->modify("tomorrow");
 
@@ -116,7 +152,7 @@ trait DailyForecastTrait
         // as assoc arrays that can be used
         // by the templates
         $todayPeriodsFormatted = array_map(function ($period) use (&$timezone) {
-            return $this->formatDailyPeriod($period, $timezone);
+            return $this->formatDailyPeriodForToday($period, $timezone);
         }, $todayPeriods);
 
         // Format each of the detailed periods
@@ -131,7 +167,7 @@ trait DailyForecastTrait
 
             return [
                 "daytime" => $this->formatDailyPeriod($day, $timezone),
-                "overnight" => $this->formatDailyPeriod($night, $timezone),
+                "nighttime" => $this->formatDailyPeriod($night, $timezone),
             ];
         }, array_chunk($detailedPeriods, 2));
 
@@ -143,11 +179,15 @@ trait DailyForecastTrait
             &$timezone,
         ) {
             $day = $periodPair[0];
-            $night = $periodPair[1];
+            $night = null;
+
+            if (count($periodPair) == 2) {
+                $night = $periodPair[1];
+            }
 
             return [
                 "daytime" => $this->formatDailyPeriod($day, $timezone),
-                "overnight" => $this->formatDailyPeriod($night, $timezone),
+                "nighttime" => $this->formatDailyPeriod($night, $timezone),
             ];
         }, array_chunk($extendedPeriods, 2));
 
@@ -187,7 +227,7 @@ trait DailyForecastTrait
 
             return [
                 "daytime" => $this->formatDailyPeriod($day),
-                "overnight" => $this->formatDailyPeriod($night),
+                "nighttime" => $this->formatDailyPeriod($night),
             ];
         }, array_chunk($detailedPeriods, 2));
 
