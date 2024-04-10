@@ -77,3 +77,5 @@ content:
     third_party_settings: {  }
 hidden:
   layout_builder__layout: true
+  publish_on: true
+  unpublish_on: true

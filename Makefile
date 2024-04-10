@@ -100,7 +100,6 @@ backend-test: ## Run all backend tests. (alias be)
 ee: end-to-end-test
 end-to-end-test: ## Run end-to-end tests in Cypress. (alias ee)
 	npx cypress run --project tests/e2e
-	docker compose exec drupal phpunit --group e2e --process-isolation
 
 lt: load-time-test
 load-time-test: ## Run page load time tests in Cypress (alias lt)

@@ -8,7 +8,7 @@ id: node.wfo_promo.title
 field_name: title
 entity_type: node
 bundle: wfo_promo
-label: 'WFO Name'
+label: 'Internal Title'
 description: ''
 required: true
 translatable: true

@@ -143,6 +143,12 @@ table tr:nth-child(2) th {
   }
 }
 
+.line-before--midnight-indigo {
+  &::before {
+    border-top: 2px solid color("secondary-darker");
+  }
+}
+
 // TODO: Remove `line-after`s if stays unused, testing out different visual markers
 .line-after {
   &::after {
