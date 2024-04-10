@@ -10,6 +10,7 @@ dependencies:
     - node.type.weather_story
   module:
     - image
+    - scheduler
     - text
 id: node.weather_story.default
 targetEntityType: node
@@ -18,7 +19,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 121
+    weight: 1
     region: content
     settings:
       rows: 9
@@ -28,7 +29,7 @@ content:
     third_party_settings: {  }
   field_image:
     type: image_image
-    weight: 123
+    weight: 3
     region: content
     settings:
       progress_indicator: throbber
@@ -36,7 +37,7 @@ content:
     third_party_settings: {  }
   field_wfo:
     type: entity_reference_autocomplete
-    weight: 122
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
@@ -44,13 +45,30 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  publish_on:
+    type: datetime_timestamp_no_default
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  scheduler_settings:
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   title:
     type: string_textfield
-    weight: -5
+    weight: 0
     region: content
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  unpublish_on:
+    type: datetime_timestamp_no_default
+    weight: 6
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

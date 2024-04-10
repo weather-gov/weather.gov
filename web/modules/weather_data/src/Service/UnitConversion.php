@@ -53,7 +53,7 @@ class UnitConversion
             return null;
         }
 
-        $isMeters = $speed->unitCode == "wmoUnit:m";
+        $isMeters = $length->unitCode == "wmoUnit:m";
 
         $out = null;
         if ($isMeters) {

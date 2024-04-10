@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-03-14
+  version: 2024-04-04
   css:
     theme:
       assets/css/styles.css: {}
@@ -24,14 +24,14 @@ location-search:
         async: true
 
 localize-timestamps:
-  version: 2024-02-14
+  version: 2024-04-04
   js:
     assets/js/localizeTimestamps.js:
       attributes:
         async: true
 
 tabbed_nav:
-  version: 2024-02-14
+  version: 2024-03-20
   js:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
 
@@ -44,6 +44,19 @@ hourly_toggle:
   version: 2024-03-08
   js:
     assets/js/components/HourlyToggle.js: { preprocess: false }
+
+radar:
+  version: 2024-03-28
+  css:
+    theme:
+      assets/css/radar/cmi-radar.1185c3ee.css:
+  js:
+    assets/js/radar.js:
+      attributes:
+        async: true
+    https://radar.weather.gov/cmi-radar/cmi-radar.1185c3ee.js:
+      attributes:
+        data-wx-radar-cmi: true
 
 digital-analytics-program:
   header: true

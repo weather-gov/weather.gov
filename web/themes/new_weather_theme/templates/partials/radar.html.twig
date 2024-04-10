@@ -1,0 +1,11 @@
+{{ attach_library("new_weather_theme/radar") }}
+
+<div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
+  <div class="grid-container padding-0 bg-white shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+    <div class="grid-row" style="height: 300px;">
+       <wx-radar class="grid-col-12" lat="{{ point.lat }}" lon="{{ point.lon }}">
+         <div id="wx_radar_container" style="height: 300px;"></div>
+      </wx-radar>
+    </div>
+  </div>
+</div>

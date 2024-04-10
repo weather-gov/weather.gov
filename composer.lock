@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f94d87839eb752b7a0657e6cc1ade2cb",
+    "content-hash": "1a3240e1c64236752912cdcdfaaac5d8",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1570,6 +1570,82 @@
             "time": "2023-05-17T18:32:04+00:00"
         },
         {
+            "name": "drupal/auto_entitylabel",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/auto_entitylabel.git",
+                "reference": "8.x-3.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/auto_entitylabel-8.x-3.0.zip",
+                "reference": "8.x-3.0",
+                "shasum": "8dd54d4b677f2c7259a15afd7b71d0d1b6f6b4a6"
+            },
+            "require": {
+                "drupal/core": "^9.3 || ^10"
+            },
+            "require-dev": {
+                "drupal/token": "^1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.0",
+                    "datestamp": "1671545557",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bforchhammer",
+                    "homepage": "https://www.drupal.org/user/216396"
+                },
+                {
+                    "name": "colan",
+                    "homepage": "https://www.drupal.org/user/58704"
+                },
+                {
+                    "name": "diqidoq",
+                    "homepage": "https://www.drupal.org/user/1001934"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "Pravin Ajaaz",
+                    "homepage": "https://www.drupal.org/user/2910049"
+                },
+                {
+                    "name": "purushotam.rai",
+                    "homepage": "https://www.drupal.org/user/3193859"
+                },
+                {
+                    "name": "RenatoG",
+                    "homepage": "https://www.drupal.org/user/3326031"
+                },
+                {
+                    "name": "VladimirAus",
+                    "homepage": "https://www.drupal.org/user/673120"
+                }
+            ],
+            "description": "Allows hiding of entity label fields and automatic label creation.",
+            "homepage": "https://www.drupal.org/project/auto_entitylabel",
+            "support": {
+                "source": "https://git.drupalcode.org/project/auto_entitylabel",
+                "issues": "https://www.drupal.org/project/issues/auto_entitylabel"
+            }
+        },
+        {
             "name": "drupal/autologout",
             "version": "1.4.0",
             "source": {
@@ -2528,6 +2604,78 @@
             }
         },
         {
+            "name": "drupal/scheduler",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/scheduler.git",
+                "reference": "2.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/scheduler-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "d0666b4278b3e54f5c85c28298a35f492e0b715a"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10"
+            },
+            "require-dev": {
+                "drupal/commerce": "^2.0",
+                "drupal/devel_generate": ">=4",
+                "drupal/rules": "^3",
+                "drush/drush": ">=9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.1",
+                    "datestamp": "1689337325",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9 || ^10"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Eric Schaefer (Eric Schaefer)",
+                    "homepage": "https://www.drupal.org/u/eric-schaefer",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jonathan Smith (jonathan1055)",
+                    "homepage": "https://www.drupal.org/u/jonathan1055",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Pieter Frenssen (pfrenssen)",
+                    "homepage": "https://www.drupal.org/u/pfrenssen",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Rick Manelius (rickmanelius)",
+                    "homepage": "https://www.drupal.org/u/rickmanelius",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Automatically publish and unpublish content at specified dates and times.",
+            "homepage": "https://drupal.org/project/scheduler",
+            "support": {
+                "source": "https://git.drupalcode.org/project/scheduler",
+                "issues": "https://www.drupal.org/project/issues/scheduler"
+            }
+        },
+        {
             "name": "drupal/single_content_sync",
             "version": "1.4.4",
             "source": {
@@ -2582,6 +2730,75 @@
             "support": {
                 "source": "https://cgit.drupalcode.org/single_content_sync",
                 "issues": "https://drupal.org/project/issues/single_content_sync"
+            }
+        },
+        {
+            "name": "drupal/token",
+            "version": "1.13.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/token.git",
+                "reference": "8.x-1.13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/token-8.x-1.13.zip",
+                "reference": "8.x-1.13",
+                "shasum": "f2a074b51726de3727c1d900237d6d471806a4d2"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.13",
+                    "datestamp": "1697885927",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": ">=9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "Dave Reid",
+                    "homepage": "https://www.drupal.org/user/53892"
+                },
+                {
+                    "name": "eaton",
+                    "homepage": "https://www.drupal.org/user/16496"
+                },
+                {
+                    "name": "fago",
+                    "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "greggles",
+                    "homepage": "https://www.drupal.org/user/36762"
+                },
+                {
+                    "name": "mikeryan",
+                    "homepage": "https://www.drupal.org/user/4420"
+                }
+            ],
+            "description": "Provides a user interface for the Token API, some missing core tokens.",
+            "homepage": "https://www.drupal.org/project/token",
+            "support": {
+                "source": "https://git.drupalcode.org/project/token"
             }
         },
         {
@@ -8160,6 +8377,54 @@
             "time": "2022-02-21T01:04:05+00:00"
         },
         {
+            "name": "phplang/scope-exit",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phplang/scope-exit.git",
+                "reference": "239b73abe89f9414aa85a7ca075ec9445629192b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phplang/scope-exit/zipball/239b73abe89f9414aa85a7ca075ec9445629192b",
+                "reference": "239b73abe89f9414aa85a7ca075ec9445629192b",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpLang\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Sara Golemon",
+                    "email": "pollita@php.net",
+                    "homepage": "https://twitter.com/SaraMG",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Emulation of SCOPE_EXIT construct from C++",
+            "homepage": "https://github.com/phplang/scope-exit",
+            "keywords": [
+                "cleanup",
+                "exit",
+                "scope"
+            ],
+            "support": {
+                "issues": "https://github.com/phplang/scope-exit/issues",
+                "source": "https://github.com/phplang/scope-exit/tree/master"
+            },
+            "time": "2016-09-17T00:15:18+00:00"
+        },
+        {
             "name": "phpstan/phpdoc-parser",
             "version": "1.26.0",
             "source": {
@@ -8208,16 +8473,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.30",
+            "version": "9.2.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "ca2bd87d2f9215904682a9cb9bb37dda98e76089"
+                "reference": "48c34b5d8d983006bd2adc2d0de92963b9155965"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ca2bd87d2f9215904682a9cb9bb37dda98e76089",
-                "reference": "ca2bd87d2f9215904682a9cb9bb37dda98e76089",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/48c34b5d8d983006bd2adc2d0de92963b9155965",
+                "reference": "48c34b5d8d983006bd2adc2d0de92963b9155965",
                 "shasum": ""
             },
             "require": {
@@ -8274,7 +8539,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.30"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.31"
             },
             "funding": [
                 {
@@ -8282,7 +8547,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-22T06:47:57+00:00"
+            "time": "2024-03-02T06:37:42+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -8527,16 +8792,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.17",
+            "version": "9.6.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1a156980d78a6666721b7e8e8502fe210b587fcd"
+                "reference": "32c2c2d6580b1d8ab3c10b1e9e4dc263cc69bb04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1a156980d78a6666721b7e8e8502fe210b587fcd",
-                "reference": "1a156980d78a6666721b7e8e8502fe210b587fcd",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/32c2c2d6580b1d8ab3c10b1e9e4dc263cc69bb04",
+                "reference": "32c2c2d6580b1d8ab3c10b1e9e4dc263cc69bb04",
                 "shasum": ""
             },
             "require": {
@@ -8610,7 +8875,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.17"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.18"
             },
             "funding": [
                 {
@@ -8626,7 +8891,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-23T13:14:51+00:00"
+            "time": "2024-03-21T12:07:32+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -9728,6 +9993,100 @@
                 }
             ],
             "time": "2024-02-16T15:06:51+00:00"
+        },
+        {
+            "name": "swaggest/json-diff",
+            "version": "v3.10.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swaggest/json-diff.git",
+                "reference": "17bfc66b330f46e12a7e574133497a290cd79ba5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swaggest/json-diff/zipball/17bfc66b330f46e12a7e574133497a290cd79ba5",
+                "reference": "17bfc66b330f46e12a7e574133497a290cd79ba5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*"
+            },
+            "require-dev": {
+                "phperf/phpunit": "4.8.37"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Swaggest\\JsonDiff\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Viacheslav Poturaev",
+                    "email": "vearutop@gmail.com"
+                }
+            ],
+            "description": "JSON diff/rearrange/patch/pointer library for PHP",
+            "support": {
+                "issues": "https://github.com/swaggest/json-diff/issues",
+                "source": "https://github.com/swaggest/json-diff/tree/v3.10.5"
+            },
+            "time": "2023-11-17T11:12:46+00:00"
+        },
+        {
+            "name": "swaggest/json-schema",
+            "version": "v0.12.42",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swaggest/php-json-schema.git",
+                "reference": "d23adb53808b8e2da36f75bc0188546e4cbe3b45"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swaggest/php-json-schema/zipball/d23adb53808b8e2da36f75bc0188546e4cbe3b45",
+                "reference": "d23adb53808b8e2da36f75bc0188546e4cbe3b45",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.4",
+                "phplang/scope-exit": "^1.0",
+                "swaggest/json-diff": "^3.8.2",
+                "symfony/polyfill-mbstring": "^1.19"
+            },
+            "require-dev": {
+                "phperf/phpunit": "4.8.37"
+            },
+            "suggest": {
+                "ext-mbstring": "For better performance"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Swaggest\\JsonSchema\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Viacheslav Poturaev",
+                    "email": "vearutop@gmail.com"
+                }
+            ],
+            "description": "High definition PHP structures with JSON-schema based validation",
+            "support": {
+                "email": "vearutop@gmail.com",
+                "issues": "https://github.com/swaggest/php-json-schema/issues",
+                "source": "https://github.com/swaggest/php-json-schema/tree/v0.12.42"
+            },
+            "time": "2023-09-12T14:43:42+00:00"
         },
         {
             "name": "theseer/tokenizer",

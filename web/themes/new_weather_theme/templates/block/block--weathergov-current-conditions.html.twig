@@ -14,14 +14,15 @@
       {# First row is temperature #}
       <div class="display-flex">
         <div class="current-conditions-temp display-flex flex-row flex-align-start margin-right-2 text-primary-darker">
-          {{ content.temperature }}
-          <span class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">℉</span>
+          {{ content.temperature }}<span aria-hidden="true" class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">&deg;F</span>
+          <span class="usa-sr-only">℉</span>
         </div>
         <div class="margin-top-05 position-relative">
           <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
           <div class="text-primary-darker">
             <p class="margin-top-2px font-body-md">{{ content.feels_like }}
-              <span class="font-body-3xs position-absolute margin-top">℉</span>
+              <span aria-hidden="true" class="font-body-3xs position-absolute margin-top">&deg;F</span>
+              <span class="usa-sr-only">℉</span>
             </p>
           </div>
         </div>
@@ -71,7 +72,7 @@
     <div class="grid-col-12 tablet:grid-col-6">
       <div class="margin-top-3 tablet:margin-top-0 border-top-1px border-base-light padding-top-1">
         <span class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-1 display-block">{{ "Observation station" | t }}</span>
-        <span class="display-block margin-y-1 display-block">
+        <span class="display-block margin-y-1 display-block line-height-sans-3">
           {{ content.stationInfo.name }} ({{ content.stationInfo.identifier }})
         </span>
         <a class="usa-link" href="#">Learn more about observation stations</a>
@@ -79,11 +80,11 @@
 
       {# We hide from screenreaders and use the weather narrative (below) instead #}
       <div data-wx-current-conditions-narrative aria-hidden="true">
-        <p class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-0">
+        <p class="font-family-mono font-mono-xs text-base text-uppercase margin-top-2 margin-bottom-05">
           {{ 'Last updated' | t }}
         </p>
         {# Datetimes are localized in client-side Javascript. #}
-        <time class="display-block font-family-mono font-mono-xs text-bold" datetime="{{ content.timestamp.utc }}" data-wx-local-time>
+        <time class="display-block font-family-mono font-mono-xs" datetime="{{ content.timestamp.utc }}" data-wx-local-time>
           {{ content.timestamp.formatted }}
         </time>
       </div>

@@ -12,35 +12,80 @@ final class CurrentConditionsBlockTest extends Base
     /**
      * Common setup for all component tests.
      *
-     * Creates a mock of a weather data service and injects it into a new current
-     * conditions block object.
+     * Creates a mock of a weather data service and injects it into a new
+     * current conditions block object.
      */
-    protected function setUp($type = null): void
+    protected function setUp($type = null, $override = true): void
     {
         parent::setUp(CurrentConditionsBlock::class);
     }
 
     /**
-     * Test that the block returns the expected data if we're on a grid route.
+     * Test that the block returns the expected data if we're on a point route.
+     * @group unit
+     * @group block
+     * @group current-conditions-block
      */
-    public function testBuild(): void
+    public function testBuildFromPoint(): void
     {
         $this->onLocationRoute();
 
-        $this->weatherData->method("getPlaceNear")->willReturn(
-            (object) [
-                "city" => "Placeville",
-                "state" => "Statesylvania",
-            ],
-        );
+        $this->weatherData
+            ->method("getPlaceNearPoint")
+            ->willReturn((object) ["city" => "Baskin", "state" => "Robbins"]);
+
         $this->weatherData
             ->method("getCurrentConditionsFromGrid")
-            ->willReturn(["info" => "this is weather data"]);
+            ->willReturn(["conditions" => "it's weathering"]);
 
         $expected = [
-            "info" => "this is weather data",
-            "place" => "Placeville, Statesylvania",
+            "conditions" => "it's weathering",
+            "place" => "Baskin, Robbins",
         ];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test that the block returns the expected data if we're on a grid route.
+     * @group unit
+     * @group block
+     * @group current-conditions-block
+     */
+    public function testBuildFromGrid(): void
+    {
+        $this->block->method("getLocation")->willReturn(
+            (object) [
+                "point" => false,
+                "grid" => (object) ["wfo" => "bob", "x" => 32, "y" => 19],
+            ],
+        );
+
+        $this->weatherData
+            ->method("getPlaceFromGrid")
+            ->will(
+                $this->returnValueMap([
+                    [
+                        "bob",
+                        32,
+                        19,
+                        false,
+                        (object) ["city" => "Flavortown", "state" => "Mouth"],
+                    ],
+                ]),
+            );
+
+        $this->weatherData
+            ->method("getCurrentConditionsFromGrid")
+            ->willReturn(["conditions" => "it's weathering"]);
+
+        $expected = [
+            "conditions" => "it's weathering",
+            "place" => "Flavortown, Mouth",
+        ];
+
         $actual = $this->block->build();
 
         $this->assertEquals($expected, $actual);
@@ -48,15 +93,41 @@ final class CurrentConditionsBlockTest extends Base
 
     /**
      * Test that the block returns null if we're not on a grid route.
+     * @group unit
+     * @group block
+     * @group current-conditions-block
      */
     public function testBuildNotGridRoute(): void
     {
-        $this->routeMock
-            ->method("getRouteName")
-            ->willReturn("weather_routes.not-grid");
+        $this->notOnLocationRoute();
 
         $actual = $this->block->build();
 
         $this->assertEquals(null, $actual);
+    }
+
+    /**
+     * Test that the block returns an error if the fetched data is invalid.
+     * @group unit
+     * @group block
+     * @group current-conditions-block
+     */
+    public function testErrorsIfDataIsInvalid(): void
+    {
+        $this->onLocationRoute();
+
+        $this->weatherData
+            ->method("getPlaceNearPoint")
+            ->willReturn((object) ["city" => "Baskin", "state" => "Robbins"]);
+
+        $this->weatherData
+            ->method("getCurrentConditionsFromGrid")
+            ->willReturn(null);
+
+        $expected = ["error" => true];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
     }
 }

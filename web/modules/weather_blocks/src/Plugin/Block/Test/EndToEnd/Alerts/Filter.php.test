@@ -1,0 +1,238 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\weather_blocks\Plugin\Block\LocalAlertsBlock;
+
+/**
+ * Tests for different ways of filtering alerts - forecast zone, fire zone,
+ * county zone ,SAME county code, and geometry.
+ */
+final class AlertFilterTest extends EndToEndBase
+{
+    /**
+     * Create the block under test.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(LocalAlertsBlock::class);
+    }
+
+    /**
+     * Test that we match forecast zone.
+     * @group e2e
+     */
+    public function testForecastZone(): void
+    {
+        $this->onLocationRoute(34.749, -92.675);
+
+        $data = $this->block->build();
+
+        $this->assertEquals("Flood Watch", $data["alerts"][0]->event);
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+
+    /**
+     * Test that we match fire zone.
+     * @group e2e
+     */
+    public function testFireZone(): void
+    {
+        $this->onLocationRoute(34.749, -92.676);
+
+        $data = $this->block->build();
+
+        $this->assertEquals("Winter Storm Watch", $data["alerts"][0]->event);
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+
+    /**
+     * Test that we match county zone.
+     * @group e2e
+     */
+    public function testCountyZone(): void
+    {
+        $this->onLocationRoute(34.749, -92.677);
+
+        $data = $this->block->build();
+
+        $this->assertEquals(
+            "Winter Weather Advisory",
+            $data["alerts"][0]->event,
+        );
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+
+    /**
+     * Test that we match county SAME code.
+     * @group e2e
+     */
+    public function testCountySAMECode(): void
+    {
+        $this->onLocationRoute(35.749, -92.677);
+
+        $data = $this->block->build();
+
+        $this->assertEquals("Blizzard Warning", $data["alerts"][0]->event);
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+
+    /**
+     * Test that we match geometry.
+     * @group e2e
+     */
+    public function testGeometry(): void
+    {
+        $this->onLocationRoute(34.749, -92.678);
+
+        $data = $this->block->build();
+
+        $this->assertEquals(
+            "Severe Thunderstorm Warning",
+            $data["alerts"][0]->event,
+        );
+        $this->assertEquals(1, count($data["alerts"]));
+    }
+
+    /**
+     * Test that marine alerts are not included in our results.
+     * @group e2e
+     */
+    public function testExcludesMarineAlerts(): void
+    {
+        $this->onLocationRoute(34.749, -92.679);
+
+        $data = $this->block->build();
+
+        foreach ($data["alerts"] as $alert) {
+            $this->assertNotEquals(
+                "Heavy Freezing Spray Warning",
+                $alert->event,
+            );
+        }
+    }
+
+    /**
+     * Test that alerts are sorted correctly.
+     * @group e2e
+     */
+    public function testAlertSorting(): void
+    {
+        // Copied from AlertUtility's priority list, with only land hazards
+        // included since marine hazards should be filtered out.
+        $expected = [
+            "tsunami warning",
+            "tornado warning",
+            "extreme wind warning",
+            "severe thunderstorm warning",
+            "flash flood warning",
+            "flash flood statement",
+            "severe weather statement",
+            "shelter in place warning",
+            "evacuation immediate",
+            "civil danger warning",
+            "nuclear power plant warning",
+            "radiological hazard warning",
+            "hazardous materials warning",
+            "fire warning",
+            "civil emergency message",
+            "law enforcement warning",
+            "hurricane warning",
+            "typhoon warning",
+            "blizzard warning",
+            "snow squall warning",
+            "ice storm warning",
+            "winter storm warning",
+            "high wind warning",
+            "tropical storm warning",
+            "tsunami advisory",
+            "tsunami watch",
+            "avalanche warning",
+            "earthquake warning",
+            "volcano warning",
+            "ashfall warning",
+            "coastal flood warning",
+            "lakeshore flood warning",
+            "flood warning",
+            "high surf warning",
+            "dust storm warning",
+            "lake effect snow warning",
+            "excessive heat warning",
+            "tornado watch",
+            "severe thunderstorm watch",
+            "flash flood watch",
+            "flood statement",
+            "wind chill warning",
+            "extreme cold warning",
+            "hard freeze warning",
+            "freeze warning",
+            "red flag warning",
+            "hurricane watch",
+            "typhoon watch",
+            "tropical storm watch",
+            "hurricane local statement",
+            "typhoon local statement",
+            "tropical storm local statement",
+            "tropical depression local statement",
+            "avalanche advisory",
+            "winter weather advisory",
+            "wind chill advisory",
+            "heat advisory",
+            "urban and small stream flood advisory",
+            "small stream flood advisory",
+            "arroyo and small stream flood advisory",
+            "flood advisory",
+            "hydrologic advisory",
+            "lakeshore flood advisory",
+            "coastal flood advisory",
+            "high surf advisory",
+            "dense fog advisory",
+            "dense smoke advisory",
+            "blowing dust advisory",
+            "lake wind advisory",
+            "wind advisory",
+            "frost advisory",
+            "ashfall advisory",
+            "freezing fog advisory",
+            "local area emergency",
+            "avalanche watch",
+            "blizzard watch",
+            "rip current statement",
+            "beach hazards statement",
+            "winter storm watch",
+            "coastal flood watch",
+            "lakeshore flood watch",
+            "flood watch",
+            "high wind watch",
+            "excessive heat watch",
+            "extreme cold watch",
+            "wind chill watch",
+            "lake effect snow watch",
+            "freeze watch",
+            "fire weather watch",
+            "extreme fire danger",
+            "911 telephone outage",
+            "coastal flood statement",
+            "lakeshore flood statement",
+            "special weather statement",
+            "air quality alert",
+            "air stagnation advisory",
+            "hazardous weather outlook",
+            "hydrologic outlook",
+            "short term forecast",
+            "administrative message",
+            "test",
+            "child abduction emergency",
+        ];
+
+        $this->onLocationRoute(37.805, -122.273);
+
+        $data = $this->block->build();
+
+        $actual = array_map(function ($alert) {
+            return $alert->event;
+        }, $data["alerts"]);
+
+        $this->assertEquals($expected, $actual);
+    }
+}

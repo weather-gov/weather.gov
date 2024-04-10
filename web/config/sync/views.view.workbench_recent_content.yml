@@ -16,122 +16,12 @@ base_table: node_field_data
 base_field: nid
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: perm
-        options:
-          perm: 'access workbench'
-      cache:
-        type: tag
-        options: {  }
-      query:
-        type: views_query
-        options:
-          disable_sql_rewrite: false
-          distinct: false
-          replica: false
-          query_comment: ''
-          query_tags: {  }
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        type: full
-        options:
-          items_per_page: 25
-          offset: 0
-          id: 0
-          total_pages: null
-          tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: true
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '10,25,50,100,200'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 9
-      style:
-        type: table
-        options:
-          grouping: {  }
-          row_class: ''
-          default_row_class: true
-          override: true
-          sticky: false
-          caption: ''
-          summary: ''
-          description: ''
-          columns:
-            title: title
-            type: type
-            status: status
-            name: name
-            changed: changed
-            edit_node: edit_node
-          info:
-            title:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            type:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: priority-low
-            status:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: priority-low
-            name:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: priority-low
-            changed:
-              sortable: true
-              default_sort_order: desc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: priority-low
-            edit_node:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: priority-medium
-          default: changed
-          empty_table: false
-      row:
-        type: fields
+      title: 'Workbench: Recent content'
       fields:
         title:
           id: title
@@ -140,6 +30,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: field
           label: Title
           exclude: false
           alter:
@@ -195,7 +86,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          plugin_id: field
         type:
           id: type
           table: node_field_data
@@ -203,6 +93,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: field
           label: Type
           exclude: false
           alter:
@@ -258,9 +151,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: node
-          entity_field: type
-          plugin_id: field
         status:
           id: status
           table: node_field_data
@@ -268,6 +158,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          entity_field: status
+          plugin_id: field
           label: Published
           exclude: false
           alter:
@@ -313,8 +206,8 @@ display:
           type: boolean
           settings:
             format: yes-no
-            format_custom_true: ''
             format_custom_false: ''
+            format_custom_true: ''
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -325,9 +218,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: node
-          entity_field: status
-          plugin_id: field
         name:
           id: name
           table: users_field_data
@@ -335,6 +225,9 @@ display:
           relationship: uid
           group_type: group
           admin_label: ''
+          entity_type: user
+          entity_field: name
+          plugin_id: field
           label: Author
           exclude: false
           alter:
@@ -390,9 +283,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: user
-          entity_field: name
-          plugin_id: field
         changed:
           id: changed
           table: node_field_data
@@ -400,6 +290,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          entity_field: changed
+          plugin_id: field
           label: 'Last updated'
           exclude: false
           alter:
@@ -457,9 +350,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: node
-          entity_field: changed
-          plugin_id: field
         edit_node:
           id: edit_node
           table: node
@@ -467,6 +357,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          plugin_id: entity_link_edit
           label: Actions
           exclude: false
           alter:
@@ -509,8 +401,75 @@ display:
           empty_zero: false
           hide_alter_empty: true
           text: edit
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 25
+          total_pages: null
+          id: 0
+          tags:
+            next: 'Next ›'
+            previous: '‹ Previous'
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: true
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '10,25,50,100,200'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: perm
+        options:
+          perm: 'access workbench'
+      cache:
+        type: tag
+        options: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'There is no content available for you to edit.'
+            format: basic_html
+          tokenize: false
+      sorts:
+        changed:
+          id: changed
+          table: node_field_data
+          field: changed
+          relationship: none
+          group_type: group
+          admin_label: ''
           entity_type: node
-          plugin_id: entity_link_edit
+          entity_field: changed
+          plugin_id: date
+          order: DESC
+          expose:
+            label: ''
+          exposed: false
+          granularity: second
+      arguments: {  }
       filters:
         title:
           id: title
@@ -519,6 +478,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: string
           operator: contains
           value: ''
           group: 1
@@ -550,9 +512,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: node
-          entity_field: title
-          plugin_id: string
         type:
           id: type
           table: node_field_data
@@ -560,6 +519,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
           operator: in
           value: {  }
           group: 1
@@ -592,9 +554,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: node
-          entity_field: type
-          plugin_id: bundle
         status:
           id: status
           table: node_field_data
@@ -602,6 +561,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
           operator: '='
           value: '1'
           group: 1
@@ -633,9 +595,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: boolean
-          entity_type: node
-          entity_field: status
         status_extra:
           id: status_extra
           table: node_field_data
@@ -643,6 +602,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          plugin_id: node_status
           operator: '='
           value: false
           group: 1
@@ -671,46 +632,83 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: node
-          plugin_id: node_status
-      sorts:
-        changed:
-          id: changed
-          table: node_field_data
-          field: changed
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: false
-          expose:
-            label: ''
-          granularity: second
-          entity_type: node
-          entity_field: changed
-          plugin_id: date
-      title: 'Workbench: Recent content'
-      header:
-        area:
-          id: area
-          table: views
-          field: area
-          plugin_id: text
-      footer: {  }
-      empty:
-        area:
-          id: area
-          table: views
-          field: area
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: true
-          tokenize: false
-          content:
-            value: 'There is no content available for you to edit.'
-            format: basic_html
-          plugin_id: text
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          columns:
+            title: title
+            type: type
+            status: status
+            name: name
+            changed: changed
+            edit_node: edit_node
+          default: changed
+          info:
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            type:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: priority-low
+            status:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: priority-low
+            name:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: priority-low
+            changed:
+              sortable: true
+              default_sort_order: desc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: priority-low
+            edit_node:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: priority-medium
+          override: true
+          sticky: false
+          summary: ''
+          empty_table: false
+          caption: ''
+          description: ''
+      row:
+        type: fields
+      query:
+        type: views_query
+        options:
+          query_comment: ''
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+          query_tags: {  }
       relationships:
         uid:
           id: uid
@@ -719,21 +717,23 @@ display:
           relationship: none
           group_type: group
           admin_label: author
-          required: false
           entity_type: node
           entity_field: uid
           plugin_id: standard
-      arguments: {  }
-      display_extenders: {  }
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
-      link_url: /admin/workbench/content/all
-      link_display: '0'
+          required: false
       use_more: false
       use_more_always: false
       use_more_text: 'view all'
+      link_display: '0'
+      link_url: /admin/workbench/content/all
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          plugin_id: text
+      footer: {  }
+      display_extenders: {  }
     cache_metadata:
       max-age: 0
       contexts:
@@ -746,92 +746,11 @@ display:
         - user.permissions
       tags: {  }
   block_1:
-    display_plugin: block
     id: block_1
     display_title: 'Overview block'
+    display_plugin: block
     position: 2
     display_options:
-      display_extenders: {  }
-      defaults:
-        style: true
-        row: true
-        pager: false
-        fields: false
-        filters: false
-        filter_groups: false
-        use_more: true
-        use_more_always: true
-        use_more_text: true
-        header: false
-        use_ajax: false
-      pager:
-        type: full
-        options:
-          items_per_page: 10
-          offset: 0
-          id: 2
-          total_pages: null
-          tags:
-            previous: ‹‹
-            next: ››
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 9
-      display_description: 'The ten most recent posts to the site'
-      filters:
-        status:
-          id: status
-          table: node_field_data
-          field: status
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: Published
-            description: ''
-            use_operator: false
-            operator: status_op
-            identifier: published
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              editor: '0'
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: boolean
-          entity_type: node
-          entity_field: status
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
       fields:
         title:
           id: title
@@ -840,6 +759,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: field
           label: Title
           exclude: false
           alter:
@@ -895,7 +815,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          plugin_id: field
         type:
           id: type
           table: node_field_data
@@ -903,6 +822,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: field
           label: Type
           exclude: false
           alter:
@@ -958,9 +880,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: node
-          entity_field: type
-          plugin_id: field
         name:
           id: name
           table: users_field_data
@@ -968,6 +887,9 @@ display:
           relationship: uid
           group_type: group
           admin_label: ''
+          entity_type: user
+          entity_field: name
+          plugin_id: field
           label: Author
           exclude: false
           alter:
@@ -1023,9 +945,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: user
-          entity_field: name
-          plugin_id: field
         changed:
           id: changed
           table: node_field_data
@@ -1033,6 +952,9 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          entity_field: changed
+          plugin_id: field
           label: 'Last updated'
           exclude: false
           alter:
@@ -1090,9 +1012,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: node
-          entity_field: changed
-          plugin_id: field
         edit_node:
           id: edit_node
           table: node
@@ -1100,6 +1019,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          plugin_id: entity_link_edit
           label: Actions
           exclude: false
           alter:
@@ -1142,8 +1063,87 @@ display:
           empty_zero: false
           hide_alter_empty: true
           text: edit
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 10
+          total_pages: null
+          id: 2
+          tags:
+            next: ››
+            previous: ‹‹
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
           entity_type: node
-          plugin_id: entity_link_edit
+          entity_field: status
+          plugin_id: boolean
+          operator: '='
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: Published
+            description: ''
+            use_operator: false
+            operator: status_op
+            identifier: published
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              editor: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        use_ajax: false
+        pager: false
+        use_more: true
+        use_more_always: true
+        use_more_text: true
+        style: true
+        row: true
+        fields: false
+        filters: false
+        filter_groups: false
+        header: false
+      use_ajax: true
+      display_description: 'The ten most recent posts to the site'
       link_display: /admin/workbench/content/all
       header:
         area:
@@ -1153,13 +1153,13 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: text
           empty: false
-          tokenize: false
           content:
             value: '<h3>Recent content</h3>'
             format: basic_html
-          plugin_id: text
-      use_ajax: true
+          tokenize: false
+      display_extenders: {  }
     cache_metadata:
       max-age: 0
       contexts:
@@ -1170,13 +1170,13 @@ display:
         - user.permissions
       tags: {  }
   embed_1:
-    display_plugin: embed
     id: embed_1
     display_title: 'Page Embed'
+    display_plugin: embed
     position: 3
     display_options:
-      display_extenders: {  }
       display_description: 'The embedded view for use on a landing page'
+      display_extenders: {  }
     cache_metadata:
       max-age: 0
       contexts:

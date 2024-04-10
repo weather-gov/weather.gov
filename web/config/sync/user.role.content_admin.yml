@@ -1,0 +1,85 @@
+uuid: b9b6976f-8f4d-48dc-91d9-0253a5f68846
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.basic
+    - block_content.type.no_title_block
+    - filter.format.basic_html
+    - node.type.dynamic_safety_information
+    - node.type.page
+    - node.type.testing_page
+    - node.type.weather_story
+    - node.type.wfo_promo
+  module:
+    - block_content
+    - contextual
+    - file
+    - filter
+    - help
+    - node
+    - system
+    - taxonomy
+    - toolbar
+    - workbench
+    - workbench_access
+id: content_admin
+label: 'Content admin'
+weight: -7
+is_admin: null
+permissions:
+  - 'access block library'
+  - 'access content'
+  - 'access content overview'
+  - 'access contextual links'
+  - 'access files overview'
+  - 'access help pages'
+  - 'access taxonomy overview'
+  - 'access toolbar'
+  - 'access user profiles'
+  - 'access workbench'
+  - 'assign selected workbench access'
+  - 'create basic block content'
+  - 'create dynamic_safety_information content'
+  - 'create no_title_block block content'
+  - 'create page content'
+  - 'create testing_page content'
+  - 'create weather_story content'
+  - 'create wfo_promo content'
+  - 'delete any basic block content'
+  - 'delete any basic block content revisions'
+  - 'delete any dynamic_safety_information content'
+  - 'delete any file'
+  - 'delete any no_title_block block content'
+  - 'delete any no_title_block block content revisions'
+  - 'delete any page content'
+  - 'delete any testing_page content'
+  - 'delete any weather_story content'
+  - 'delete any wfo_promo content'
+  - 'delete own files'
+  - 'edit any basic block content'
+  - 'edit any dynamic_safety_information content'
+  - 'edit any no_title_block block content'
+  - 'edit any page content'
+  - 'edit any testing_page content'
+  - 'edit any weather_story content'
+  - 'edit any wfo_promo content'
+  - 'revert any basic block content revisions'
+  - 'revert any no_title_block block content revisions'
+  - 'revert dynamic_safety_information revisions'
+  - 'revert page revisions'
+  - 'revert testing_page revisions'
+  - 'revert weather_story revisions'
+  - 'revert wfo_promo revisions'
+  - 'use text format basic_html'
+  - 'use workbench access'
+  - 'view all revisions'
+  - 'view any basic block content history'
+  - 'view any no_title_block block content history'
+  - 'view dynamic_safety_information revisions'
+  - 'view own unpublished content'
+  - 'view page revisions'
+  - 'view testing_page revisions'
+  - 'view weather_story revisions'
+  - 'view wfo_promo revisions'
+  - 'view workbench access information'

@@ -198,3 +198,27 @@ svg[data-wind-direction] {
 .usa-list--unstyled .li-margin-bottom-1 {
   margin-bottom: units(1);
 }
+
+/* Focus ring offset utility
+------------------------------------- */
+.focus-offset-205 {
+  &:focus {
+    outline-offset: units(2.5);
+  }
+}
+
+/* Touchpoints button overrides
+------------------------------------- */
+@include at-media(mobile) {
+    .viewpoints-button {
+        right: unset;
+        width: 100vw;
+    }
+}
+
+@include at-media(tablet-lg) {
+    .viewpoints-button {
+        right: units(3);
+        width: unset;
+    }
+}

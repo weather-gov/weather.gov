@@ -10,8 +10,8 @@ id: node.wfo_promo.field_wfo
 field_name: field_wfo
 entity_type: node
 bundle: wfo_promo
-label: WFO
-description: ''
+label: 'WFO Name'
+description: 'Search for and select the name of the WFO'
 required: true
 translatable: false
 default_value: {  }

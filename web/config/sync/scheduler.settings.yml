@@ -1,0 +1,24 @@
+_core:
+  default_config_hash: 60p3lFvf9Aj7NVOIYt5IX3q8O1xv3JDx-7ikmaOEgnY
+allow_date_only: false
+date_format: 'Y-m-d H:i:s'
+date_letters: djmnFMyY
+date_only_format: Y-m-d
+default_expand_fieldset: when_required
+default_fields_display_mode: vertical_tab
+default_publish_enable: false
+default_publish_past_date: error
+default_publish_past_date_created: false
+default_publish_required: false
+default_publish_revision: false
+default_publish_touch: false
+default_show_message_after_update: true
+default_time: '00:00:00'
+default_unpublish_enable: false
+default_unpublish_required: false
+default_unpublish_revision: false
+hide_seconds: false
+lightweight_cron_access_key: 4851f37e6fbc1c542671
+log: true
+time_letters: hHgGisaA
+time_only_format: 'H:i:s'

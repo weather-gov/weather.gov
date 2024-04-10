@@ -30,9 +30,9 @@ describe("Invalid icon URL tests", () => {
     cy.get("@area").find("svg").should("not.exist");
   });
 
-  it("Doesn't render icon for first night condition in daily (invalid icon url)", () => {
+  it("Doesn't render icon for third night condition in daily (invalid icon url)", () => {
     cy.get(
-      "#daily .daily-forecast-block ol li:first-child .daily-forecast-summary-area:nth-child(2)",
+      "#daily .daily-forecast-block ol li:nth-child(3) .daily-forecast-summary-area:nth-child(2)",
     )
       .as("area")
       .should("exist");

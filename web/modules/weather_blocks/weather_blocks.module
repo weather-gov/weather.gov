@@ -13,6 +13,7 @@ function weather_blocks_template_preprocess_default_variables_alter(
     $weatherMetadata = [
         "alerts" => false,
         "place" => false,
+        "point" => false,
     ];
 
     // First, get our route information.
@@ -23,6 +24,7 @@ function weather_blocks_template_preprocess_default_variables_alter(
     if ($route->getRouteName() == "weather_routes.point") {
         $lat = $route->getParameter("lat");
         $lon = $route->getParameter("lon");
+        $weatherMetadata["point"] = ["lat" => $lat, "lon" => $lon];
 
         $weatherData = $container->get("weather_data");
 

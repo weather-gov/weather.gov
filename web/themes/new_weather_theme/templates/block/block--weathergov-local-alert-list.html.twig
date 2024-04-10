@@ -4,7 +4,7 @@
 {% for alert in content.alerts %}
 <div class="usa-alert usa-alert--warning usa-alert--slim margin-top-0 padding-y-05" role="alert">
   <div class="usa-alert__body">
-    <a href="#alert_{{ loop.index }}">
+    <a href="#alert_{{ alert.alertId }}">
       {{ alert.event | t}} {{ alert.durationText }}
 
     </a>

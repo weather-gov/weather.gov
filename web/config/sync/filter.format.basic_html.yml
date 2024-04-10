@@ -34,7 +34,7 @@ filters:
     status: true
     weight: -10
     settings:
-      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <cite> <dl> <dt> <dd> <a hreflang href> <blockquote cite> <ul type> <ol start type> <strong> <em> <code> <li> <img src alt data-entity-uuid data-entity-type height width data-caption data-align>'
+      allowed_html: '<br> <p> <h2> <h3> <h4> <h5> <h6> <strong> <em> <blockquote> <a href> <ul> <ol start> <li>'
       filter_html_help: false
       filter_html_nofollow: false
   filter_html_image_secure:

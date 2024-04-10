@@ -1,20 +1,20 @@
-<div class="grid-container"> 
+<div class="grid-container padding-x-2"> 
   <div class="grid-row"> 
     <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
       <weathergov-alerts class="display-block">
       {% for alert in content.alerts %}
-      <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ loop.index }}">
+      <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ alert.alertId }}">
         <h2 class="usa-accordion__heading font-heading-lg">
           <button
             type="button"
             class="usa-accordion__button text-ls-1"
-            aria-expanded="{{ (loop.index == 1) ? 'true' : 'false' }}"
-            aria-controls="a{{ loop.index }}"
-            data-button-for="#alert_{{loop.index}}">
+            aria-expanded="{{ (alert.alertId == 1) ? 'true' : 'false' }}"
+            aria-controls="a{{ alert.alertId }}"
+            data-button-for="#alert_{{alert.alertId}}">
             {{ alert.event | t }}
           </button>
         </h2>
-        <div id="a{{loop.index}}" class="usa-accordion__content usa-prose">
+        <div id="a{{alert.alertId}}" class="usa-accordion__content usa-prose">
           <p class="font-sans-md text-bold text-primary-darkest margin-y-0" >
             {{ "In effect from" | t }} {{ alert.onset }}
             {% if alert.ends %} – {{ alert.ends }}{% endif %}
@@ -48,22 +48,11 @@
                 <li class="">{{ areaName }}</li>
               {% endfor %}
             </ul>
+          {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
         </div>
       </div>
       {% endfor %}
       </weathergov-alerts>
     </div>
   </div>
-  <div class="grid-row">
-    <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-      <h2 class="text-primary-darkest text-normal margin-bottom-1">{{ "Tips to stay safe" | t }}</h2>
-    </div>
-  </div>
-  {% for alert in content.alerts %}
-  <div class="grid-row">
-    <div class="grid-col tablet-lg:grid-offset-2 talbet-lg:grid-col-8">
-      {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event , other: "other"})}}
-    </div>
-  </div>
-  {% endfor %}
 </div>

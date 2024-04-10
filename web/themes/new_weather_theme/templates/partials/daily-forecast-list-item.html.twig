@@ -9,7 +9,7 @@ only be a nighttime period.
 #}
 {% set itemId =  periods[0].monthAndDay | lower | replace({" ":"-"}) %}
 <li class="display-block" {% if itemId %}id="{{itemId}}{% endif %}">
-  <div class="grid-container bg-white padding-y-2 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+  <div class="bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
     <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center margin-bottom-3 tablet:margin-bottom-4 tablet:grid-col-6">
       <time class="display-block flex-1 text-bold font-heading-md text-primary-darker" datetime="{{ periods[0].startTime }}">
         {% if dayLabel %}
@@ -61,9 +61,9 @@ only be a nighttime period.
       </div>
       {% endfor %}
     </div>
-    <wx-hourly-toggle class="text-primary-dark" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-table" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="expand_less" data-hidden-icon-name="expand_more">
-      <span class="toggle-text font-mono font-mono-s"></span>
-      <span>
+    <wx-hourly-toggle class="text-primary-dark margin-top-1" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-table" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="expand_less" data-hidden-icon-name="expand_more">
+      <span class="toggle-text font-mono font-mono-s text-ls-neg-1"></span>
+      <span class="margin-top-05">
           <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
               <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#expand_more"></use>
           </svg>

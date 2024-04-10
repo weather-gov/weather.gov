@@ -93,6 +93,10 @@ a11y: accessibility-test
 accessibility-test: ## Run accessibility tests (alias a11y)
 	npx cypress run --project tests/a11y
 
+be: backend-test
+backend-test: ## Run all backend tests. (alias be)
+	docker compose exec drupal phpunit --group unit,e2e --process-isolation --coverage-html /coverage  --coverage-clover /coverage/clover.xml
+
 ee: end-to-end-test
 end-to-end-test: ## Run end-to-end tests in Cypress. (alias ee)
 	npx cypress run --project tests/e2e
@@ -103,7 +107,7 @@ load-time-test: ## Run page load time tests in Cypress (alias lt)
 
 u: unit-test
 unit-test: ## Run PHP unit tests
-	docker compose exec drupal phpunit --coverage-html /coverage
+	docker compose exec drupal phpunit --group unit
 
 ### Linting
 js-lint: ## Run eslint on our Javascript

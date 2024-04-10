@@ -78,6 +78,7 @@ final class WeatherEntityServiceTest extends TestCase
             ->method("condition")
             ->will(
                 $this->returnValueMap([
+                    ["status", 1, null, null, $query],
                     ["type", "node type", null, null, $query],
                     [
                         $taxonomyFieldMachineName,
@@ -95,6 +96,10 @@ final class WeatherEntityServiceTest extends TestCase
         $query->method("execute")->willReturn(["$nodeID"]);
     }
 
+    /**
+     * @group unit
+     * @group entity-service
+     */
     public function testGetLatestNodeWithNoWFOTaxonomyTerm(): void
     {
         $this->taxonomyStore->method("loadByProperties")->willReturn([]);
@@ -109,6 +114,10 @@ final class WeatherEntityServiceTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @group unit
+     * @group entity-service
+     */
     public function testGetWithNoWFONodes(): void
     {
         $this->setupTaxonomyID("100");
@@ -127,6 +136,10 @@ final class WeatherEntityServiceTest extends TestCase
         $this->assertEquals(false, $actual);
     }
 
+    /**
+     * @group unit
+     * @group entity-service
+     */
     public function testGetWithAWFONode(): void
     {
         $this->setupTaxonomyID("100");
@@ -147,6 +160,10 @@ final class WeatherEntityServiceTest extends TestCase
         $this->assertEquals($node, $actual);
     }
 
+    /**
+     * @group unit
+     * @group entity-service
+     */
     public function testGetLatestNodeWithNoHazardTypeTaxonomyTerm(): void
     {
         $this->taxonomyStore->method("loadByProperties")->willReturn([]);
@@ -162,6 +179,10 @@ final class WeatherEntityServiceTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @group unit
+     * @group entity-service
+     */
     public function testGetWithNoHazardInfoNodes(): void
     {
         $this->setupTaxonomyID("100");
@@ -184,6 +205,10 @@ final class WeatherEntityServiceTest extends TestCase
         $this->assertEquals(false, $actual);
     }
 
+    /**
+     * @group unit
+     * @group entity-service
+     */
     public function testGetWithAHazardInfoNode(): void
     {
         $this->setupTaxonomyID("100");

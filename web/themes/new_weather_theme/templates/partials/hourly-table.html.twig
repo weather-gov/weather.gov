@@ -1,11 +1,11 @@
 <hourly-table class="display-block position-relative margin-top-2 padding-top-1 bg-white">
-  <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 left-2 display-flex flex-align-center flex-justify-center" data-direction="left" type="button" role="button">
+  <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 left-2 display-flex flex-align-center flex-justify-center padding-y-1px padding-x-05" data-direction="left" type="button" role="button">
     <span class="usa-sr-only">{{ "scroll left" | t }}</span>
     <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
       <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#arrow_back"></use>
     </svg>
   </button>
-  <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 right-2 display-flex flex-align-center flex-justify-center" data-direction="right" type="button" role="button">
+  <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 right-2 display-flex flex-align-center flex-justify-center padding-y-1px padding-x-05" data-direction="right" type="button" role="button">
     <span class="usa-sr-only">{{ "scroll right" | t }}</span>
     <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
       <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#arrow_forward"></use>
@@ -33,7 +33,8 @@
         {% for period in hours %}
         <td>
           {% if period.temperature is not same as (null) %}
-          {{ period.temperature }}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
+          {{ period.temperature }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+          <span class="usa-sr-only">℉</span>
           {% else %}
           <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
           {% endif %}
@@ -59,11 +60,22 @@
               {% else %}
               <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
               {% endif %}
-              {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
-              <p class="text-base text-ls-neg-3 font-family-mono font-mono-xs margin-top-05 margin-bottom-0"> {{period.probabilityOfPrecipitation}}% {{ "chance" | t }}<span class="usa-sr-only"> {{ "of precipitation" | t }}</span></p>
-              {% endif%}
             </div>
           </div>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="chance-precipitation">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker bg-primary-lightest font-mono-xs text-uppercase z-400">
+          {{"Chance of precipitation" | t}}
+        </th>
+        {% for period in hours %}
+        <td> 
+          {% if period.probabilityOfPrecipitation is not same as (null) %}
+          <p class="margin-y-0"> {{period.probabilityOfPrecipitation}}% </p>
+          {% else %}
+          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
           {% endif %}
         </td>
         {% endfor %}
@@ -113,7 +125,8 @@
         {% for period in hours %}
         <td>
           {% if period.dewpoint is not same as (null) %}
-          {{period.dewpoint}}<span class="font-sans-3xs text-ttop padding-left-1px">℉</span>
+          {{period.dewpoint}}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+          <span class="usa-sr-only">℉</span>
           {% else %}
           <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
           {% endif %}

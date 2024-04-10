@@ -2,8 +2,6 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
-use Drupal\Core\Logger\LoggerChannelTrait;
-
 /**
  * Provides a block of the current weather conditions.
  *
@@ -15,8 +13,6 @@ use Drupal\Core\Logger\LoggerChannelTrait;
  */
 class CurrentConditionsBlock extends WeatherBlockBase
 {
-    use LoggerChannelTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -46,6 +42,10 @@ class CurrentConditionsBlock extends WeatherBlockBase
                     $grid->x,
                     $grid->y,
                 );
+
+                if (!$data) {
+                    throw new \Exception("Invalid current observations");
+                }
 
                 // We generally expect our internal places to be objects with city
                 // and state keys. However, if the user arrived here using location

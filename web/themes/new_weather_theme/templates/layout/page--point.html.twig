@@ -22,7 +22,7 @@
 
   <main role="main" class="flex-1">
     <a id="main-content" tabindex="-1"></a>
-    {{ page.content }}
+    {{ drupal_block("weathergov_location_search") }}
 
     {% if weather.alerts %}
     <div class="bg-primary-darkest padding-bottom-105">
@@ -49,14 +49,15 @@
 
       <div class="bg-base-lightest padding-top-3 padding-bottom-8">
         {% if weather.alerts %}
-        <div class="tab-container" id="alerts"  role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
+        <div class="tab-container focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
           {{ drupal_block("weathergov_local_alerts") }}
         </div>
         {% endif %}
-        <div class="tab-container" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
+        <div class="tab-container focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
           {{ drupal_block("weathergov_current_conditions") }}
+          {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
         </div>
-        <div class="tab-container" id="today"  role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
+        <div class="tab-container focus-offset-205" id="today" role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
           {{ drupal_block("weathergov_weather_story") }}
           <div class="grid-container padding-x-2">
             <div class="grid-row">
@@ -69,7 +70,7 @@
           {{ drupal_block("weathergov_hourly_forecast") }}
           {{ drupal_block("weathergov_wfo_promo") }}
         </div>
-        <div class="tab-container" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
+        <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
             {{ drupal_block("weathergov_daily_forecast") }}
         </div>
       </div>

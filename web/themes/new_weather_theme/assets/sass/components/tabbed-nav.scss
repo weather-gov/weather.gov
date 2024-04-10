@@ -32,7 +32,7 @@ tabbed-nav {
     }
 
     &:focus {
-      outline-offset: units(1);
+      outline-offset: units("1px");
     }
 
     &:active {

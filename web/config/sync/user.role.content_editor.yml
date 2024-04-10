@@ -3,36 +3,77 @@ langcode: en
 status: true
 dependencies:
   config:
+    - block_content.type.basic
+    - block_content.type.no_title_block
+    - filter.format.basic_html
+    - node.type.dynamic_safety_information
     - node.type.page
-    - taxonomy.vocabulary.tags
+    - node.type.testing_page
+    - node.type.weather_story
+    - node.type.wfo_promo
   module:
+    - block_content
+    - contextual
     - file
+    - filter
+    - help
     - node
-    - path
     - system
-    - taxonomy
     - toolbar
+    - workbench
+    - workbench_access
 _core:
   default_config_hash: NtMgnXp0miNtJhag07NSjwdCm4zpJwhlDFs1HgyL4wI
 id: content_editor
 label: 'Content editor'
-weight: 2
+weight: -8
 is_admin: false
 permissions:
   - 'access administration pages'
+  - 'access block library'
+  - 'access content'
   - 'access content overview'
+  - 'access contextual links'
   - 'access files overview'
+  - 'access help pages'
   - 'access toolbar'
-  - 'administer url aliases'
+  - 'access user profiles'
+  - 'access workbench'
+  - 'assign selected workbench access'
+  - 'batch update workbench access'
   - 'create page content'
-  - 'create terms in tags'
-  - 'create url aliases'
-  - 'delete own files'
   - 'delete own page content'
   - 'delete page revisions'
+  - 'edit any basic block content'
+  - 'edit any dynamic_safety_information content'
+  - 'edit any no_title_block block content'
+  - 'edit any page content'
+  - 'edit any testing_page content'
+  - 'edit any weather_story content'
+  - 'edit any wfo_promo content'
+  - 'edit own dynamic_safety_information content'
   - 'edit own page content'
-  - 'edit terms in tags'
+  - 'edit own testing_page content'
+  - 'edit own weather_story content'
+  - 'edit own wfo_promo content'
   - 'revert all revisions'
+  - 'revert any basic block content revisions'
+  - 'revert any no_title_block block content revisions'
+  - 'revert dynamic_safety_information revisions'
+  - 'revert page revisions'
+  - 'revert testing_page revisions'
+  - 'revert weather_story revisions'
+  - 'revert wfo_promo revisions'
+  - 'use text format basic_html'
+  - 'use workbench access'
   - 'view all revisions'
+  - 'view any basic block content history'
+  - 'view any no_title_block block content history'
+  - 'view dynamic_safety_information revisions'
   - 'view own unpublished content'
+  - 'view page revisions'
+  - 'view testing_page revisions'
   - 'view the administration theme'
+  - 'view weather_story revisions'
+  - 'view wfo_promo revisions'
+  - 'view workbench access information'

@@ -1,0 +1,152 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\weather_data\Service\DataLayer;
+use Drupal\weather_data\Service\NewRelicMetrics;
+use Drupal\weather_data\Service\WeatherDataService;
+use Drupal\weather_data\Service\WeatherEntityService;
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise\FulfilledPromise;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+/**
+ * Base setup for weather blocks tests.
+ */
+abstract class EndToEndBase extends TestCase
+{
+    /**
+     * A ready-to-use weather block object.
+     *
+     * @var block
+     */
+    protected $block;
+
+    /**
+     * A mock entity type manager.
+     *
+     * @var entityTypeManagerMock
+     */
+    protected $entityServie;
+
+    /**
+     * A mock of the route object.
+     *
+     * @var routeMock
+     */
+    protected $routeMock;
+
+    /**
+     * A mocked WeatherData service object.
+     *
+     * @var weatherData
+     *
+     * This is injected into the current conditions block object being tested with
+     * dependency injection.
+     */
+    protected $weatherData;
+
+    /**
+     * Common setup for all component tests.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp();
+
+        $definition = [
+            "provider" => "weather_blocks",
+        ];
+
+        $app_root = $site_path = ".";
+
+        include "./web/sites/settings.dev.php";
+        $loadPath = "./web/" . $databases["default"]["default"]["autoload"];
+
+        spl_autoload_register(function ($name) use ($loadPath) {
+            if (
+                str_starts_with(
+                    $name,
+                    "Drupal\\mysql\\Driver\\Database\\mysql\\",
+                )
+            ) {
+                $parts = explode("\\", $name);
+                $className = end($parts);
+                $load = "$loadPath$className.php";
+                include $load;
+            }
+        });
+
+        $httpClient = new Client();
+        $cache = $this->createStub(CacheBackendInterface::class);
+        $cache->method("get")->willReturn(false);
+        $cache->method("set")->willReturn(true);
+
+        Database::addConnectionInfo(
+            "default",
+            "default",
+            $databases["default"]["default"],
+        );
+        $database = Database::getConnection("default", "default");
+
+        $this->routeMock = $this->createStub(RouteMatchInterface::class);
+
+        $dataLayer = new DataLayer(
+            $httpClient,
+            $cache,
+            $database,
+            $this->routeMock,
+            false,
+        );
+
+        $nrPromise = new FulfilledPromise(true);
+        $newRelic = $this->createStub(NewRelicMetrics::class);
+        $newRelic->method("sendMetric")->willReturn($nrPromise);
+
+        $translation = $this->createStub(TranslationInterface::class);
+        $translation->method("translate")->will(
+            $this->returnCallback(function ($text) {
+                return $text;
+            }),
+        );
+
+        $this->weatherData = new WeatherDataService(
+            $translation,
+            $newRelic,
+            $dataLayer,
+        );
+        $this->entityService = $this->createStub(WeatherEntityService::class);
+
+        $this->block = $this->getMockBuilder($type)
+            ->setConstructorArgs([
+                [],
+                "",
+                $definition,
+                $this->routeMock,
+                $this->weatherData,
+                $this->entityService,
+            ])
+            ->setMethods(["getLogger"])
+            ->getMock();
+
+        $logger = $this->createStub(LoggerInterface::class);
+        $this->block->method("getLogger")->willReturn($logger);
+
+        $httpClient->get("http://api-proxy:8081/play/e2e");
+    }
+
+    protected function onLocationRoute($lat = "40", $lon = "-90")
+    {
+        $this->routeMock
+            ->method("getRouteName")
+            ->willReturn("weather_routes.point");
+
+        $this->routeMock
+            ->method("getParameter")
+            ->will($this->returnValueMap([["lat", $lat], ["lon", $lon]]));
+    }
+}

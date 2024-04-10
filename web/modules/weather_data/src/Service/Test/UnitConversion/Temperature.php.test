@@ -1,0 +1,92 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use Drupal\weather_data\Service\UnitConversion;
+use PHPUnit\Framework\TestCase;
+
+final class TemperatureUnitConversionTest extends TestCase
+{
+    /**
+     * Test when the temperature value is null.
+     * @group unit
+     * @group units-utility
+     */
+    public function testNullTemperature(): void
+    {
+        $expected = null;
+        $actual = UnitConversion::getTemperatureScalar(
+            (object) ["value" => null],
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test converting from Fahrenheit to celsius.
+     * @group unit
+     * @group units-utility
+     */
+    public function testFahrenheitToCelsius(): void
+    {
+        $expected = 17;
+        $temperature = (object) [
+            "unitCode" => "wmoUnit:degF",
+            "value" => 63,
+        ];
+        $actual = UnitConversion::getTemperatureScalar($temperature, false);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test converting from Fahrenheit to Fahrenheit.
+     * @group unit
+     * @group units-utility
+     */
+    public function testFahrenheitToFahrenheit(): void
+    {
+        $expected = 44;
+        $temperature = (object) [
+            "unitCode" => "wmoUnit:degF",
+            "value" => 44,
+        ];
+        $actual = UnitConversion::getTemperatureScalar($temperature);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test converting from celsius to Fahrenheit.
+     * @group unit
+     * @group units-utility
+     */
+    public function testCelsiusToFahrenheit(): void
+    {
+        $expected = 63;
+        $temperature = (object) [
+            "unitCode" => "wmoUnit:degC",
+            "value" => 17,
+        ];
+        $actual = UnitConversion::getTemperatureScalar($temperature);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test converting from Fahrenheit to Fahrenheit.
+     * @group unit
+     * @group units-utility
+     */
+    public function testCelsiusToCelsius(): void
+    {
+        $expected = 12;
+        $temperature = (object) [
+            "unitCode" => "wmoUnit:degC",
+            "value" => 12,
+        ];
+        $actual = UnitConversion::getTemperatureScalar($temperature, false);
+
+        $this->assertEquals($expected, $actual);
+    }
+}

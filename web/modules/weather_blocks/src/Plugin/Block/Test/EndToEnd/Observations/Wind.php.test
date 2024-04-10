@@ -1,0 +1,58 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\weather_blocks\Plugin\Block\CurrentConditionsBlock;
+
+/**
+ * Tests for current observations, wind speed.
+ */
+final class ObservationsWindTest extends EndToEndBase
+{
+    /**
+     * Create the block under test.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(CurrentConditionsBlock::class);
+    }
+
+    /**
+     * Tests that null wind speed is preserved. (It's handled on the frontend.)
+     * @group e2e
+     */
+    public function testWindIsNull(): void
+    {
+        $this->onLocationRoute(33.211, -87.566);
+
+        $data = $this->block->build();
+
+        $this->assertSame(null, $data["wind"]["speed"]);
+    }
+
+    /**
+     * Tests that 0 wind speed is also preserved and not converted to null.
+     * @group e2e
+     */
+    public function testWindIsZero(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+
+        $data = $this->block->build();
+
+        $this->assertSame(0, $data["wind"]["speed"]);
+    }
+
+    /**
+     * Tests that wind speed is converted from km/h to mph.
+     * @group e2e
+     */
+    public function testWindIsNotZero(): void
+    {
+        $this->onLocationRoute(34.749, -92.275);
+
+        $data = $this->block->build();
+
+        $this->assertEquals(3, $data["wind"]["speed"]);
+    }
+}

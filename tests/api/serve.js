@@ -1,12 +1,14 @@
 import fs from "fs/promises";
 import path from "path";
 import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone.js";
 import utc from "dayjs/plugin/utc.js";
 
 import config from "./config.js";
 import proxy from "./proxy.js";
 
 dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const dataPath = "./data";
 
@@ -71,7 +73,7 @@ const processDates = (obj, usingHourly = false) => {
         );
 
         updatedTime = updatedTime
-          .utcOffset(+offset, true)
+          .utcOffset(Number.parseInt(offset, 10))
           .hour(+hour)
           .minute(+minute)
           .second(0)
