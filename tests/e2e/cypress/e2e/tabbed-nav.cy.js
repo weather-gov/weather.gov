@@ -1,5 +1,5 @@
 /* eslint no-unused-expressions: off */
-describe("<tabbed-nav> component tests", () => {
+describe("<wx-tabbed-nav> component tests", () => {
   describe("Alert link interaction", () => {
     beforeEach(() => {
       cy.request("http://localhost:8081/play/testing");
@@ -9,7 +9,7 @@ describe("<tabbed-nav> component tests", () => {
     describe("Basic tabbed nav tests", () => {
       let tabbedNav;
       it("Can find the tabbed-nav element on the page", () => {
-        tabbedNav = cy.get("tabbed-nav").then((element) => {
+        tabbedNav = cy.get("wx-tabbed-nav").then((element) => {
           tabbedNav = element;
           expect(tabbedNav).to.exist;
         });
@@ -17,14 +17,14 @@ describe("<tabbed-nav> component tests", () => {
 
       it("Knows the tabbed-nav is a defined custom element", () => {
         cy.window().then((win) => {
-          const customEl = win.customElements.get("tabbed-nav");
+          const customEl = win.customElements.get("wx-tabbed-nav");
           expect(customEl).to.exist;
           expect(tabbedNav.get(0).isConnected).to.be.true;
         });
       });
 
       it("There is a default tab selected and its content is visible", () => {
-        cy.get('tabbed-nav .tab-button[aria-expanded="true"]')
+        cy.get('wx-tabbed-nav .tab-button[aria-expanded="true"]')
           .as("selectedButton")
           .should("exist")
           .get("@selectedButton")
@@ -38,7 +38,7 @@ describe("<tabbed-nav> component tests", () => {
       });
 
       it("The content of un-selected tabs should not be visible", () => {
-        cy.get(`tabbed-nav .tab-button:not([data-selected])`)
+        cy.get(`wx-tabbed-nav .tab-button:not([data-selected])`)
           .as("unselectedBtn")
           .should("exist")
           .get("@unselectedBtn")
@@ -49,7 +49,7 @@ describe("<tabbed-nav> component tests", () => {
       });
 
       it("Clicking an unselected tab should show it", () => {
-        cy.get("tabbed-nav .tab-button:last").as("lastBtn").click();
+        cy.get("wx-tabbed-nav .tab-button:last").as("lastBtn").click();
         cy.get("@lastBtn").then((btn) => {
           const tabName = btn.attr("data-tab-name");
           cy.get(`#${tabName}`)
@@ -66,8 +66,8 @@ describe("<tabbed-nav> component tests", () => {
       });
 
       it("Clicking an unselected tab hides the other tabs", () => {
-        cy.get("tabbed-nav .tab-button:last").click();
-        cy.get("tabbed-nav .tab-button:not(:last)").each((btn) => {
+        cy.get("wx-tabbed-nav .tab-button:last").click();
+        cy.get("wx-tabbed-nav .tab-button:not(:last)").each((btn) => {
           const tabName = btn.attr("data-tab-name");
           cy.get(`#${tabName}`)
             .as("tabContent")
@@ -101,13 +101,13 @@ describe("<tabbed-nav> component tests", () => {
         cy
           // Click on another tab that is not the alerts
           // tab button
-          .get('tabbed-nav .tab-button:not([data-tab-name="alerts"]):first')
+          .get('wx-tabbed-nav .tab-button:not([data-tab-name="alerts"]):first')
           .click();
         // Get the third alert link and click it
         cy.get("weathergov-alert-list a:last").click();
         // Get the alerts tab button and make sure it's now
         // selected
-        cy.get('tabbed-nav .tab-button[data-tab-name="alerts"]')
+        cy.get('wx-tabbed-nav .tab-button[data-tab-name="alerts"]')
           .as("alertsTabBtn")
           .invoke("attr", "aria-expanded")
           .should("eq", "true")

@@ -35,17 +35,17 @@ location-search:
   js:
     assets/js/components/LocationSearch.js: { preprocess: false }
         
-tabbed_nav:
-  version: 2024-03-20
+tabbed-nav:
+  version: 2024-03-21
   js:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
 
-hourly_table:
-  version: 2024-2-14
+hourly-table:
+  version: 2024-03-21
   js:
     assets/js/components/HourlyTable.js: { preprocess: false }
 
-hourly_toggle:
+hourly-toggle:
   version: 2024-03-08
   js:
     assets/js/components/HourlyToggle.js: { preprocess: false }

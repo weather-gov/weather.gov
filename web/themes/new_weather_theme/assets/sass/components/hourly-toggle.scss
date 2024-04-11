@@ -10,7 +10,7 @@ wx-hourly-toggle:hover {
   cursor: pointer;
 }
 
-wx-hourly-toggle[aria-expanded="false"] + hourly-table {
+wx-hourly-toggle[aria-expanded="false"] + wx-hourly-table {
   display: none;
 }
 
