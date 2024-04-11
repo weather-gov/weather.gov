@@ -344,7 +344,7 @@ class ComboBox extends HTMLElement {
                 return li;
             });
             // Append to shadow select element
-            this.querySelector('[slot="listbox"]').append(...items);
+            this.querySelector('[slot="listbox"]').replaceChildren(...items);
 
             // If there are results, show the area
             if(data.suggestions.length){
