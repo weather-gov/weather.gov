@@ -41,6 +41,19 @@
         </td>
         {% endfor %}
       </tr>
+      <tr data-row-name="apparentTemp">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+          {{"Feels like" | t}}
+        </th>
+        {% for period in hours %}
+        <td>
+          {% if period.apparentTemperature is not same as (null) %}
+          {{ period.apparentTemperature }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+          <span class="usa-sr-only">℉</span>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
       <tr data-row-name="condition">
         <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
           {{"Condition" | t}}
@@ -94,6 +107,9 @@
               }
             }
           %}
+          {% if period.windGust is not same as (null) %}
+            <div>{{ "gusting to @gustSpeed mph " | t({ "@gustSpeed": period.windGust }) }}</div>
+          {% endif %}
         </td>
         {% endfor %}
       </tr>
