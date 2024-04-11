@@ -21,6 +21,9 @@
 
 .wx-combo-box__clear-input {
     @extend .usa-combo-box__clear-input;
+    background-image: linear-gradient(rgba(255 255 255 / 40%), rgba(255 255 255 / 40%)), url(/themes/new_weather_theme/assets/images/uswds/usa-icons/close.svg);
+    opacity: 1;
+    background-color: white;
 }
 
 .wx-combo-box__input-button-separator {

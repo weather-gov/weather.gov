@@ -1,28 +1,28 @@
 {{ attach_library("new_weather_theme/location-search") }}
 {{ attach_library("new_weather_theme/location-combo-box") }}
 {{ attach_library("new_weather_theme/browser-location-button") }}
-<div class="grid-container">
-  <div class="grid-row">
-    <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3" data-location-search method="post">
-      <div class="display-flex flex-align-end">
-        <label class="usa-label" for="weather-location-search">
-          {{ 'Search for a location' | t }}
-        </label>
-        <div class="margin-x-1">|</div>
-        <div class="">
-          <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
-        </div>
+{% if content.place %}<div class="grid-container">{% endif %}
+<div class="grid-row">
+  <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3" data-location-search method="post">
+    <div class="display-flex flex-align-end">
+      <label class="usa-label" for="weather-location-search">
+        {{ 'Search for a location' | t }}
+      </label>
+      <div class="margin-x-1">|</div>
+      <div class="">
+        <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
       </div>
-      <!-- <wx-location-search class="z-top" data-filter=".*"> -->
+    </div>
+    <!-- <wx-location-search class="z-top" data-filter=".*"> -->
       <!--   <select class="usa-select" name="weather location" id="weather-location-search"> -->
-      <!--   </select> -->
-        <!-- </wx-location-search> -->
-      <wx-combo-box class="z-top">
-      </wx-combo-box>
-      <input type="hidden" name="suggestedPlaceName" value="">
-    </form>
-  </div>
+        <!--   </select> -->
+      <!-- </wx-location-search> -->
+    <wx-combo-box class="z-top margin-top-1">
+    </wx-combo-box>
+    <input type="hidden" name="suggestedPlaceName" value="">
+  </form>
 </div>
+{% if content.place %}</div>{% endif %}
 
 
 <div class="bg-primary-darkest">

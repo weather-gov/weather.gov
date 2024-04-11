@@ -67,9 +67,6 @@ const comboTemplate = `
          top: 100%;
          left: 0;
          min-width: 100%;
-         height: 300px;
-         overflow-y: auto;
-         box-sizing: border-box;
      }
      #listbox-wrapper,
      :host select {
