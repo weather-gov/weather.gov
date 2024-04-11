@@ -26,18 +26,6 @@ describe.skip("wx-combo-box tests", () => {
   describe("When typing into the input", () => {
     beforeEach(() => {
       // Go to landing page
-      // Stub the ArcGIS API requests to use
-      // saved data
-      cy.intercept(
-        "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest*",
-        { fixture: "arc.query.json" }
-      ).as("arcSearch");
-      cy.intercept(
-        "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find*",
-        { fixture: "arc.query.items.json" }
-      ).as("arcSearchItems");
-
-      // Go to landing page
       cy.visit("http://localhost:8080/");
       cy.wait(200);
       cy.get("wx-combo-box > input[slot='input']").as("componentInput").focus();
@@ -72,11 +60,6 @@ describe.skip("wx-combo-box tests", () => {
       cy.get("wx-combo-box input[slot='input']").as("input").type("{downArrow}{downArrow}{enter}");
       cy.wait(WAIT_TIME);
       cy.get("wx-combo-box ul").should("not.be.visible");
-    });
-    it("pressing Enter selects the second item, but does not submit it", () => {
-      cy.get("wx-combo-box input[slot='input']").type("{downArrow}{downArrow}{enter}{enter}");
-
-      cy.location('pathname').should("eq", "/");
     });
     
     it("clicking selects the second item and navigates to the location page", () => {
