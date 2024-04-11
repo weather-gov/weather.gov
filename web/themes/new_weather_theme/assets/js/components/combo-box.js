@@ -58,7 +58,7 @@ const comboTemplate = `
     <style>
      :host {
          position: relative;
-         display: inline-block;
+         display: block;
          box-sizing: border-box;
      }
      :host([aria-expanded="true"]) #listbox-wrapper {
@@ -76,6 +76,8 @@ const comboTemplate = `
          display: none;
      }
 
+     
+
      #sr-only {
          display: block;
          position: absolute;
@@ -90,29 +92,39 @@ const comboTemplate = `
          align-items: center;
      }
 
-     ::slotted(input){
+     #input-area > div:first-child {
          flex: 1;
      }
 
      .hidden {
          display: none;
      }
+
+     .button-wrapper {
+         box-sizing: inherit;
+         font-size: 1.03rem;
+         line-height: 1.3;
+     }
+     
     </style>
     <div id="input-area">
-        <slot name="input"></slot>
-        <select>
-            <slot name="option"></slot>
-        </select>
-        <span id="clear-button-wrapper" class="hidden">
+        <div>
+            <slot name="input"></slot>
+        </div>        
+        <div id="clear-button-wrapper" class="button-wrapper hidden">
             <slot name="clear-button"></slot>
-        </span>
-        <span id="toggle-button-wrapper">
+        </div>
+        <div><slot name="separator"></slot></div>
+        <div id="toggle-button-wrapper" class="button-wrapper">
             <slot name="toggle-button"></slot>
-        </span>
+        </div>
     </div>
     <div id="listbox-wrapper">
         <slot name="listbox"></slot>
     </div>
+    <select>
+        <slot name="option"></slot>
+    </select>
     <div id="sr-only" aria-live="polite">
         <slot name="sr-only"></slot>
     </div>
@@ -162,12 +174,24 @@ class ComboBox extends HTMLElement {
         this.setAttribute("aria-expanded", "false");
         this.classList.add("wx-combo-box");
 
+        // If we have not provided an id, set a default value
+        if(!this.id){
+            const otherCombosCount = document.querySelectorAll("wx-combo-box").length;
+            this.id = `combo-box-${otherCombosCount}`
+        }
+
         // Initial live dom elements, if not already present
         if(!this.querySelector('[slot="input"]')){
             let input = document.createElement("input");
             input.setAttribute("type", "text");
             input.setAttribute("slot", "input");
             input.setAttribute("role", "combobox");
+            input.setAttribute("aria-owns", `${this.id}--list`);
+            input.setAttribute("aria-controls", `${this.id}--list`);
+            input.setAttribute("aria-autocomplete", "list");
+            input.setAttribute("autocapitalize", "off");
+            input.setAttribute("autocomplete", "off");
+            input.setAttribute("aria-activedescendant", true);
             input.classList.add(...[
                 "wx-combo-box__input"
             ]);
@@ -177,10 +201,18 @@ class ComboBox extends HTMLElement {
             let list = document.createElement("ul");
             list.setAttribute("role", "listbox");
             list.setAttribute("slot", "listbox");
+            list.id = `${this.id}--list`;
             list.classList.add(...[
                 "wx-combo-box__list",
             ]);
             this.append(list);
+        }
+        if(!this.querySelector('[slot="separator"]')){
+            let separator = document.createElement("span");
+            separator.classList.add("wx-combo-box__input-button-separator");
+            separator.setAttribute("slot", "separator");
+            separator.innerHTML = "&nbsp;";
+            this.append(separator);
         }
         if(!this.querySelector('[slot="toggle-button"]')){
             let toggleButton = document.createElement("button");

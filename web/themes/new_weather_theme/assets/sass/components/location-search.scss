@@ -1,17 +1,18 @@
 @forward "uswds-theme";
 @forward "uswds";
-@forward "uswds-theme-custom-styles";
 
 .wx-combo-box {
-   @extend .usa-combo-box;
+    @extend .usa-combo-box;
 }
 
 .wx-combo-box__input {
-    @extend .usa-combo-box__input
+    @extend .usa-combo-box__input;
+    height: auto;
+    margin: 0;
 }
 
 .wx-combo-box__list {
-    @extend .usa-combo-box__list
+    @extend .usa-combo-box__list;
 }
 
 .wx-combo-box__toggle-list {
@@ -20,6 +21,10 @@
 
 .wx-combo-box__clear-input {
     @extend .usa-combo-box__clear-input;
+}
+
+.wx-combo-box__input-button-separator {
+    @extend .usa-combo-box__input-button-separator
 }
 
 .wx-combo-box__list-option {
