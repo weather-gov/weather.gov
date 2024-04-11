@@ -46,7 +46,7 @@ const setupRadar = () => {
           state: false,
         },
         animating: false,
-        zoom: 9,
+        zoom: 8,
         center: point,
         location: point,
       },
