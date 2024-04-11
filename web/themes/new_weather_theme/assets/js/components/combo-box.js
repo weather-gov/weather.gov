@@ -318,10 +318,6 @@ class ComboBox extends HTMLElement {
         if(response.ok){
             const data = await response.json();
 
-            // Clear the existing options
-            Array.from(this.querySelectorAll('ul[role="listbox"] > li')).forEach(optionEl => {
-                optionEl.remove();
-            });
 
             // Create new options
             const items = data.suggestions.map((suggestion, idx) => {
