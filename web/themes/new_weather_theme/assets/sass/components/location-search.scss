@@ -1,0 +1,35 @@
+@forward "uswds-theme";
+@forward "uswds";
+@forward "uswds-theme-custom-styles";
+
+.wx-combo-box {
+   @extend .usa-combo-box;
+}
+
+.wx-combo-box__input {
+    @extend .usa-combo-box__input
+}
+
+.wx-combo-box__list {
+    @extend .usa-combo-box__list
+}
+
+.wx-combo-box__toggle-list {
+    @extend .usa-combo-box__toggle-list;
+}
+
+.wx-combo-box__clear-input {
+    @extend .usa-combo-box__clear-input;
+}
+
+.wx-combo-box__list-option {
+    @extend .usa-combo-box__list-option;
+}
+
+.wx-combo-box__list-option--selected {
+    @extend .usa-combo-box__list-option--selected;
+}
+
+.wx-combo-box__list-option--focused {
+    @extend .usa-combo-box__list-option--focused;
+}

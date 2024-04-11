@@ -29,7 +29,16 @@ const getLocationGeodata = async (magicKey) => {
     }
 };
 
-
+/**
+ * This object uses the browser's SessionStorage
+ * to cache and retrieve ArcGIS magicKey data.
+ * Each time a user navigates to a list option,
+ * we fetch the result for that option asynchronously
+ * and store in this cache.
+ * Later, if the user selects an option, we first check
+ * for the cached data before sending a request.
+ * This can provide the perception of faster interaction.
+ */
 const ArcCache = {
     get: function(magicKey){
         const found = window.sessionStorage.getItem(magicKey);
@@ -78,6 +87,7 @@ const comboTemplate = `
      #input-area {
          display: flex;
          flex-direction: row;
+         align-items: center;
      }
 
      ::slotted(input){
@@ -134,8 +144,7 @@ class ComboBox extends HTMLElement {
         this.navigateUp = this.navigateUp.bind(this);
         this.focusListItem = this.focusListItem.bind(this);
         this.selectListItem = this.selectListItem.bind(this);
-        this.selectWithKeyboard = this.selectWithKeyboard.bind(this);
-        this.selectWithMouse = this.selectWithMouse.bind(this);
+        this.selectOption = this.selectOption.bind(this);
         this.submit = this.submit.bind(this);
         this.clear = this.clear.bind(this);
         this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
@@ -151,7 +160,7 @@ class ComboBox extends HTMLElement {
 
         // Initial attributes
         this.setAttribute("aria-expanded", "false");
-        this.classList.add("usa-combo-box");
+        this.classList.add("wx-combo-box");
 
         // Initial live dom elements, if not already present
         if(!this.querySelector('[slot="input"]')){
@@ -160,7 +169,7 @@ class ComboBox extends HTMLElement {
             input.setAttribute("slot", "input");
             input.setAttribute("role", "combobox");
             input.classList.add(...[
-                "usa-combo-box__input"
+                "wx-combo-box__input"
             ]);
             this.append(input);
         }
@@ -169,18 +178,17 @@ class ComboBox extends HTMLElement {
             list.setAttribute("role", "listbox");
             list.setAttribute("slot", "listbox");
             list.classList.add(...[
-                "usa-combo-box__list",
+                "wx-combo-box__list",
             ]);
             this.append(list);
         }
         if(!this.querySelector('[slot="toggle-button"]')){
-            `<button type="button" class="usa-combo-box__clear-input" aria-label="Clear the select contents">&nbsp;</button>`;
             let toggleButton = document.createElement("button");
             toggleButton.setAttribute("type", "button");
             toggleButton.setAttribute("aria-label", "Toggle the dropdown list");
             toggleButton.innerHTML = "&nbsp;";
             toggleButton.classList.add(...[
-                "usa-combo-box__toggle-list",
+                "wx-combo-box__toggle-list",
                 "display-block"
             ]);
             toggleButton.setAttribute("slot", "toggle-button");
@@ -199,7 +207,7 @@ class ComboBox extends HTMLElement {
             clearButton.setAttribute("tabindex", "-1");
             clearButton.setAttribute("slot", "clear-button");
             clearButton.classList.add(...[
-                "usa-combo-box__clear-input",
+                "wx-combo-box__clear-input",
                 "display-block"
             ]);
             clearButton.innerHTML = "&nbsp;";
@@ -215,6 +223,11 @@ class ComboBox extends HTMLElement {
         this.shadowRoot.querySelector("select").removeEventListener("change", this.handleSelectChanged);
     }
 
+    /**
+     * Handle input events on the custom element.
+     * These will be triggered by the slotted input
+     * element, then bubble up.
+     */
     handleInput(event){
         if(this._timeout){
             window.clearTimeout(this._timeout);
@@ -229,6 +242,15 @@ class ComboBox extends HTMLElement {
         }, this.inputDelay);
     }
 
+    /**
+     * Triggered by input changes.
+     * Will make a request to the ArcGIS endpoint
+     * for search results.
+     * Clears out the current list items and select
+     * options, then creates new versions of each set,
+     * with the correct classes and event handlers
+     * set up.
+     */
     async updateSearch(text){
         const response = await searchLocation(text);
         if(response.ok){
@@ -255,13 +277,13 @@ class ComboBox extends HTMLElement {
                 li.setAttribute("aria-selected", "false");
                 li.setAttribute("data-value", suggestion.magicKey);
                 li.classList.add(...[
-                    "usa-combo-box__list-option"
+                    "wx-combo-box__list-option"
                 ]);
 
                 li.addEventListener("focus", (e) => {
                     this.cacheLocationGeodata(e.target.dataset.value);
                 });
-                li.addEventListener("click", this.selectWithMouse);
+                li.addEventListener("click", this.selectOption);
                 return li;
             });
             // Append to shadow select element
@@ -277,6 +299,10 @@ class ComboBox extends HTMLElement {
         }
     }
 
+    /**
+     * Event handler for keydown, mapped
+     * to the keys that we care about
+     */
     handleKeyDown(event){
         let handled = true;
         const inputEl = this.querySelector("input");
@@ -297,8 +323,14 @@ class ComboBox extends HTMLElement {
         }
     }
 
+    /**
+     * Handler for change events on the shadow dom's
+     * select element. Note that due to how these
+     * element's getters/setters work, we are forced to
+     * trigger the change event manually.
+     * See _setSelectToOption()
+     */
     handleSelectChanged(event){
-        console.log(event);
         const wrapper = this.shadowRoot.getElementById("clear-button-wrapper");
         if(event.target.selectedIndex >= 0){
             // In this case, something is currently selected,
@@ -309,6 +341,11 @@ class ComboBox extends HTMLElement {
         }
     }
 
+    /**
+     * Shows the unordered list of results to the user.
+     * Visually selects the first item if there are
+     * items in the list
+     */
     showList(){
         this.setAttribute("aria-expanded", "true");
         const listIsEmpty = this.querySelector("ul:empty");
@@ -322,11 +359,25 @@ class ComboBox extends HTMLElement {
         }
     }
 
+    /**
+     * Hides the results list from display.
+     * Note that it returns focus to the
+     * combobox input element
+     */
     hideList(){
         this.setAttribute("aria-expanded", "false");
         this.querySelector("input").focus();
     }
 
+    /**
+     * Handles the case where the user has pressed
+     * the arrow down key in a result list or input.
+     * If the list is not currently open, this action opens it.
+     * Otherwise, it nagivates down to the next item in the list,
+     * giving it focus.
+     * @var targetEl HTMLElement - The target element of the
+     * originating keyboard event.
+     */
     navigateDown(targetEl){
         // If we are not already showing the list,
         // then we should now show it and focus
@@ -348,6 +399,16 @@ class ComboBox extends HTMLElement {
         }
     }
 
+    /**
+     * Handles the case where the user has pressed
+     * the arrow up key in a result list or input.
+     * If the first item is currently selected, this action will
+     * hide the list and return the focus to the input.
+     * Otherwise, it selects and gives focus to the previous
+     * item in the list.
+     * @var targetEl HTMLElement - The target element of the
+     * originating keyboard event. 
+     */
     navigateUp(targetEl){
         const listItems = Array.from(this.querySelectorAll("li"));
         const currentFocus = this.querySelector('li:focus');
@@ -361,14 +422,20 @@ class ComboBox extends HTMLElement {
         }
     }
 
+    /**
+     * Visually selects a list item for display and
+     * accessibility purposes.
+     * Updates the classes and aria attributes.
+     * @var anElement HTMLElement - A list item element
+     */
     selectListItem(anElement){
         const listItems = Array.from(this.querySelectorAll("ul li"));
         listItems.forEach(listEl => {
             if(anElement === listEl){
-                listEl.classList.add("usa-combo-box__list-option--selected");
+                listEl.classList.add("wx-combo-box__list-option--selected");
                 listEl.setAttribute("aria-selected", "true");
             } else {
-                listEl.classList.remove("usa-combo-box__list-option--selected");
+                listEl.classList.remove("wx-combo-box__list-option--selected");
                 listEl.setAttribute("aria-selected", "false");
             }
         });
@@ -376,22 +443,36 @@ class ComboBox extends HTMLElement {
         return listItems.indexOf(anElement);
     }
 
+    /**
+     * Gives focus to the passed list item element,
+     * blurring all the others accordingly.
+     * @var anElement HTMLElement - A list item element
+     */
     focusListItem(anElement){
         Array.from(this.querySelectorAll("ul li")).forEach(listEl => {
             if(anElement === listEl){
-                listEl.classList.add("usa-combox-box__list-option--focused");
+                listEl.classList.add("wx-combox-box__list-option--focused");
                 listEl.setAttribute("tabindex", "0");
                 listEl.focus();
             } else {
-                listEl.classList.remove("usa-combox-box__list-option--focused");
+                listEl.classList.remove("wx-combox-box__list-option--focused");
                 listEl.setAttribute("tabindex", "-1");
             }
         });
     }
 
+    /**
+     * Event handler for when the Enter key is pressed inside
+     * the combobox input element or one of the list items.
+     * If there is a current selection in the actual input/select,
+     * meaning the user has actually selected something from
+     * the dropdown already, this will trigger submission.
+     * If the target element is a list item, then this
+     * method simply chooses/selects that list item
+     */
     handleEnterKey(event){
         if(event.target.matches('li[role="option"]')){
-            this.selectWithKeyboard(event);
+            this.selectOption(event);
         } else if(event.target.matches('input[role="combobox"]')) {
             const selectEl = this.shadowRoot.querySelector("select");
             if(selectEl.selectedIndex > -1){
@@ -400,7 +481,16 @@ class ComboBox extends HTMLElement {
         }
     }
 
-    selectWithKeyboard(event){
+    /**
+     * Selects the currently highlighted option/list-item
+     * as the current selection.
+     * Updates both the value of the combobox input and
+     * the hidden select element to the corresponding option.
+     * When complete, will hide the result list and also
+     * update the aria-live region with text about what was
+     * selected.
+     */
+    selectOption(event){
         // If there is a currently focused list item,
         // we make that the current selection
         const selectEl = this.shadowRoot.querySelector("select");
@@ -417,28 +507,20 @@ class ComboBox extends HTMLElement {
         }
     }
 
-    selectWithMouse(event){
-        const selectEl = this.shadowRoot.querySelector("select");
-        const inputEl = this.querySelector("input");
-        this.selectListItem(event.target);
-        const option = this.shadowRoot.querySelector(`option[value="${event.target.dataset.value}"]`);
-        if(option){
-            this._setSelectToOption(option);
-            selectEl.value = option.value;
-            inputEl.value = option.textContent;
-            this.hideList();
-            this.updateAriaLive(
-                `You have selected ${inputEl.value}. To see the weather for this location, press Enter. To search again, continue to edit text in this input area.`
-            );
-        }
-    }
-
+    /**
+     * Clears the input and the shadow select
+     * element values
+     */
     clear(){
         const input = this.querySelector("input");
         input.value = null;
         this._setSelectToOption(null);
     }
 
+    /**
+     * Triggers a submit call on an ancestor form element,
+     * if present.
+     */
     async submit(){
         const formEl = this.closest("form[data-location-search]");
         const textInput = document.createElement("input");
@@ -452,30 +534,30 @@ class ComboBox extends HTMLElement {
             const coordinates = await this.getGeodataForKey(selectEl.value);
             if(coordinates){
                 formEl.setAttribute("action", `/point/${coordinates.lat}/${coordinates.lon}`);
-                console.log(selectEl.value);
                 formEl.submit();
             }
         }
     }
 
+    /**
+     * Asynchronously fetches specific location data
+     * for a given search result, stashing it away in
+     * the cache (See ArcCache)
+     */
     async cacheLocationGeodata(magicKey){
         if(!window.sessionStorage.getItem(magicKey)){
             const result = await getLocationGeodata(magicKey);
-            /* if(result){
-             *     window.sessionStorage.setItem(
-             *         magicKey,
-             *         JSON.stringify(result)
-             *     );
-             * } */
             ArcCache.set(magicKey, result);
         }
     }
 
+    /**
+     * Attempts to retrieve location data for a search
+     * result by its magicKey from the cache.
+     * If not present, will make the Arc API call
+     * to fetch the data.
+     */
     async getGeodataForKey(magicKey){
-        /* const cached = window.sessionStorage.getItem(magicKey);
-         * if(cached){
-         *     return JSON.parse(cached);
-         * } else { */
         const cached = ArcCache.get(magicKey);
         if(!cached){
             return await getLocationGeodata(magicKey);
@@ -484,6 +566,14 @@ class ComboBox extends HTMLElement {
         return cached;
     }
 
+    /**
+     * Adds a span of screenreader only text to
+     * this component's shadow aria-live region,
+     * which it itself also hidden.
+     * Makes use of a slot called "sr-only".
+     * The update is on a 1 second delay, which is preferred
+     * based on convos with USWDS.
+     */
     updateAriaLive(text){
         window.setTimeout(() => {
             const span = document.createElement("span");
@@ -503,6 +593,15 @@ class ComboBox extends HTMLElement {
         return this.getAttribute("aria-expanded") === "true";
     }
 
+    /**
+     * Because the select element is just special in so many ways,
+     * updating the selectedIndex or value programmatically will
+     * _not_ trigger a change event from the element. So, we
+     * have to do it ourselves manually.
+     * This private method is a convenience wrapper for
+     * setting a select to one of its constituent option elements,
+     * then dispatching a change event.
+     */
     _setSelectToOption(option=null){
         const selectEl = this.shadowRoot.querySelector("select");
         if(!option){
@@ -523,4 +622,3 @@ class ComboBox extends HTMLElement {
 };
 
 window.customElements.define("wx-combo-box", ComboBox);
-
