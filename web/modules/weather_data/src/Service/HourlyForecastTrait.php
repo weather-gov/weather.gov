@@ -95,11 +95,13 @@ trait HourlyForecastTrait
         )->periods;
 
         $properties = [
+            "apparentTemperature",
             "dewpoint",
             "probabilityOfPrecipitation",
             "relativeHumidity",
             "temperature",
             "windDirection",
+            "windGust",
             "windSpeed",
         ];
 
@@ -197,7 +199,38 @@ trait HourlyForecastTrait
             );
             $timeString = $timestamp->format("g A");
 
+            $apparentTemperature = UnitConversion::getTemperatureScalar(
+                (object) [
+                    "unitCode" => $units["apparentTemperature"],
+                    "value" => $period["apparentTemperature"],
+                ],
+            );
+
+            $temperature = UnitConversion::getTemperatureScalar(
+                (object) [
+                    "unitCode" => $units["temperature"],
+                    "value" => $period["temperature"],
+                ],
+            );
+
+            $windSpeed = UnitConversion::getSpeedScalar(
+                (object) [
+                    "unitCode" => $units["windSpeed"],
+                    "value" => $period["windSpeed"],
+                ],
+            );
+            $windGust = UnitConversion::getSpeedScalar(
+                (object) [
+                    "unitCode" => $units["windGust"],
+                    "value" => $period["windGust"],
+                ],
+            );
+
             return [
+                "apparentTemperature" =>
+                    abs($apparentTemperature - $temperature) >= 5
+                        ? $apparentTemperature
+                        : null,
                 "conditions" => $this->t->translate(
                     ucfirst(strtolower($period["shortForecast"])),
                 ),
@@ -213,21 +246,13 @@ trait HourlyForecastTrait
                 "relativeHumidity" => $period["relativeHumidity"],
                 "time" => $timeString,
                 "timestamp" => $timestamp->format("c"),
-                "temperature" => UnitConversion::getTemperatureScalar(
-                    (object) [
-                        "unitCode" => $units["temperature"],
-                        "value" => $period["temperature"],
-                    ],
-                ),
+                "temperature" => $temperature,
                 "windDirection" => UnitConversion::getDirectionOrdinal(
                     $period["windDirection"],
                 ),
-                "windSpeed" => UnitConversion::getSpeedScalar(
-                    (object) [
-                        "unitCode" => $units["windSpeed"],
-                        "value" => $period["windSpeed"],
-                    ],
-                ),
+                "windGust" =>
+                    abs($windGust - $windSpeed) >= 8 ? $windGust : null,
+                "windSpeed" => $windSpeed,
             ];
         }, $forecast);
 

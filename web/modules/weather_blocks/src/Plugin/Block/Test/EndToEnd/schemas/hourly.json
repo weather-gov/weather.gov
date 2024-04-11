@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "apparentTemperature": {
+      "oneOf": [{ "type": "number" }, { "type": "null" }]
+    },
+    "conditions": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": "string"
+        },
+        "base": {
+          "type": "string"
+        }
+      }
+    },
+    "dewpoint": { "type": "number" },
+    "probabilityOfPrecipitation": { "type": "number" },
+    "relativeHumidity": { "type": "number" },
+    "timestamp": { "type": "string", "pattern": "$isoRegex" },
+    "time": { "type": "string", "pattern": "^\\d{1,2} [AP]M" },
+    "temperature": { "type": "number" },
+    "windDirection": { "type": "object", "properties": {} },
+    "windGust": { "oneOf": [{ "type": "number" }, { "type": "null" }] },
+    "windSpeed": { "type": "number" }
+  }
+}
