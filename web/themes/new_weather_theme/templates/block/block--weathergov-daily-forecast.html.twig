@@ -1,5 +1,5 @@
 <div class="daily-forecast-block">
-  {{ attach_library('new_weather_theme/hourly_toggle') }}
+  {{ attach_library('new_weather_theme/hourly-toggle') }}
   {% if content.error %}
   {% set message = "There was an error loading the daily forecast." | t %}
   {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
