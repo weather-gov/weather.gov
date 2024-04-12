@@ -184,7 +184,7 @@ trait ObservationsTrait
             ),
             "timestamp" => [
                 "formatted" => $timestamp->format("l g:i A T"),
-                "utc" => (int) $timestamp->format("U"),
+                "utc" => $timestamp->format("c"),
             ],
             "wind" => [
                 // Kph to mph.
