@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-04-04
+  version: 2024-04-12
   css:
     theme:
       assets/css/styles.css: {}
@@ -41,7 +41,7 @@ hourly_table:
     assets/js/components/HourlyTable.js: { preprocess: false }
 
 hourly_toggle:
-  version: 2024-03-08
+  version: 2024-04-12
   js:
     assets/js/components/HourlyToggle.js: { preprocess: false }
 
