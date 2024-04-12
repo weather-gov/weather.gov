@@ -10,7 +10,8 @@ describe("location search", () => {
     cy.get(`form[data-location-search] input[type="text"]`).type("Atlanta", {
       delay: 200,
     });
-    cy.get("form[data-location-search] ul li").first().click();
+    cy.get("form[data-location-search] ul li").first().trigger("click");
+
     cy.location("pathname").should("not.equal", start);
 
     cy.go("back");

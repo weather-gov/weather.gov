@@ -9,10 +9,4 @@
       fill: color("primary-darker");
     }
   }
-
-  & .item {
-    & svg {
-      @include u-width(1.5);
-    }
-  }
 }

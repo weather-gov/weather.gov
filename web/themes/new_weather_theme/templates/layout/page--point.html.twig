@@ -1,6 +1,6 @@
 <div class="layout-container grid-row height-full flex-column flex-no-wrap">
 
-  {{ attach_library('new_weather_theme/tabbed_nav') }}
+  {{ attach_library('new_weather_theme/tabbed-nav') }}
 
   <header role="banner">
     <div class="grid-container">
@@ -32,7 +32,7 @@
     </div>
     {% endif %}
 
-    <tabbed-nav class="display-block position-relative">
+    <wx-tabbed-nav class="display-block position-relative">
       <div id="tablist-label" class="usa-sr-only">{{ "Weather information sections" | t }}</div>
       <div class="position-sticky top-0 z-500 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
         <div class="grid-container padding-x-0">
@@ -75,7 +75,7 @@
         </div>
       </div>
 
-    </tabbed-nav>
+    </wx-tabbed-nav>
   </main>
 
   {% include(directory ~ "/templates/layout/footer.html.twig") %}

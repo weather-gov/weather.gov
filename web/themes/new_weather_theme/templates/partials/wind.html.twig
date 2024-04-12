@@ -1,0 +1,25 @@
+{% if wind.speed is not same as (null) %}
+  {#
+  We will have a dedicated block for screen readers to mitigate an issue with
+  VoiceOver treating spans as distinct elements and forcing users to navigate
+  between them.
+  #}
+  <div class="display-flex flex-row flex-align-center" aria-hidden="true">
+    <span>{{wind.speed}} {{ "mph" | t }}</span>
+    {#
+    The +180 here is to account for the fact that wind direction
+    is reported as a FROM direction, but our arrow points in the
+    TO direction. So we just need to spin it 'round.
+    #}
+    <svg role="img" aria-hidden="true" data-wind-direction class="width-2 height-2 margin-left-05 padding-2px" style="transform: rotate({{ wind.direction.angle + 180 }}deg);">
+      <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#wind_arrow_s" }}"></use>
+    </svg>
+  </div>
+  {#
+  By putting all of the content into a single span, we can get VoiceOver to read
+  it in a more natural way.
+  #}
+  <span class="usa-sr-only">{{ "@speed mph from the @direction " | t({"@speed":wind.speed,"@direction": wind.direction.long }) }}</span>
+{% else %}
+  <span class="text-base font-mono-xs">{{ "N/A" | t }}</span>
+{% endif %}

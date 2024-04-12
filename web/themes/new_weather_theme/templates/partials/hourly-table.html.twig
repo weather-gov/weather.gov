@@ -1,4 +1,4 @@
-<hourly-table class="display-block position-relative margin-top-2 padding-top-1 bg-white expand-transition">
+<wx-hourly-table class="display-block position-relative margin-top-2 padding-top-1 bg-white expand-transition">
   <button class="wx-scroll-button bg-gray-30 circle-5 border-0 text-white position-absolute top-neg-205 left-0 display-flex flex-align-center flex-justify-center padding-y-1px padding-x-05" data-direction="left" type="button" role="button">
     <span class="usa-sr-only">{{ "scroll left" | t }}</span>
     <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
@@ -98,24 +98,17 @@
           {{"Wind speed" | t}}
         </th>
         {% for period in hours %}
-        <td style="">
-          <div class="display-flex flex-row flex-align-center">
-            {% if period.windSpeed is not same as (null) %}
-            <span>{{period.windSpeed}} {{ "mph" | t }}</span>
-            {#
-            The +180 here is to account for the fact that wind direction
-            is reported as a FROM direction, but our arrow points in the
-            TO direction. So we just need to spin it 'round.
-            #}
-            <svg role="img" aria-hidden="true" data-wind-direction class="width-2 height-2 margin-left-05 padding-2px" style="transform: rotate({{ period.windDirection.angle + 180 }}deg);">
-              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#wind_arrow_s" }}"></use>
-            </svg>
-          {% else %}
-          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
-          {% endif %}
-          </div>
+        <td>
+          {% include '@new_weather_theme/partials/wind.html.twig'
+            with {
+              wind: {
+                speed: period.windSpeed,
+                direction: period.windDirection
+              }
+            }
+          %}
           {% if period.windGust is not same as (null) %}
-          <div>{{ "gusting to @gustSpeed mph " | t({ "@gustSpeed": period.windGust }) }}</div>
+            <div>{{ "gusting to @gustSpeed mph " | t({ "@gustSpeed": period.windGust }) }}</div>
           {% endif %}
         </td>
         {% endfor %}
@@ -151,4 +144,4 @@
       </tr>
     </table>
   </div>
-</hourly-table>
+</wx-hourly-table>

@@ -1,0 +1,50 @@
+/* stylelint-disable scss/at-extend-no-missing-placeholder */
+@forward "uswds-theme";
+@forward "uswds";
+
+.wx-combo-box {
+  @extend .usa-combo-box;
+}
+
+.wx-combo-box__input {
+  @extend .usa-combo-box__input;
+
+  height: auto;
+  margin: 0;
+}
+
+.wx-combo-box__list {
+  @extend .usa-combo-box__list;
+}
+
+.wx-combo-box__toggle-list {
+  @extend .usa-combo-box__toggle-list;
+}
+
+.wx-combo-box__clear-input {
+  @extend .usa-combo-box__clear-input;
+
+  background-image: linear-gradient(
+      rgba(255 255 255 / 40%),
+      rgba(255 255 255 / 40%)
+    ),
+    url('/themes/new_weather_theme/assets/images/uswds/usa-icons/close.svg');
+  opacity: 1;
+  background-color: white;
+}
+
+.wx-combo-box__input-button-separator {
+  @extend .usa-combo-box__input-button-separator;
+}
+
+.wx-combo-box__list-option {
+  @extend .usa-combo-box__list-option;
+}
+
+.wx-combo-box__list-option--selected {
+  @extend .usa-combo-box__list-option--selected;
+}
+
+.wx-combo-box__list-option--focused {
+  @extend .usa-combo-box__list-option--focused;
+}

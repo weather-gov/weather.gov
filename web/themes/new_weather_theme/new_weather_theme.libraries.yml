@@ -16,8 +16,8 @@ uswds-customized:
         async: true
       minified: true
 
-location-search:
-  version: 2024-02-14
+browser-location-button:
+  version: 2024-03-21
   js:
     assets/js/locationSearch.js:
       attributes:
@@ -30,18 +30,28 @@ localize-timestamps:
       attributes:
         async: true
 
-tabbed_nav:
-  version: 2024-03-20
+location-search:
+  version: 2024-03-21
+  js:
+    assets/js/components/LocationSearch.js: { preprocess: false }
+
+location-combo-box:
+  version: 2024-03-25
+  js:
+    assets/js/components/combo-box.js: { preprocess: false }
+        
+tabbed-nav:
+  version: 2024-03-21
   js:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
 
-hourly_table:
-  version: 2024-2-14
+hourly-table:
+  version: 2024-03-21
   js:
     assets/js/components/HourlyTable.js: { preprocess: false }
 
-hourly_toggle:
-  version: 2024-04-12
+hourly-toggle:
+  version: 2024-03-08
   js:
     assets/js/components/HourlyToggle.js: { preprocess: false }
 

@@ -90,7 +90,7 @@ $expand-duration: 250ms;
 }
 
 // Table shadow only shows on scroll
-hourly-table[data-scrolled="true"] .usa-table.hourly-table th:first-of-type {
+wx-hourly-table[data-scrolled="true"] .usa-table.hourly-table th:first-of-type {
   &::after {
     content: "";
     top: 0;
