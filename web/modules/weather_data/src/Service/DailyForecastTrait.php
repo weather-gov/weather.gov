@@ -198,8 +198,8 @@ trait DailyForecastTrait
 
         return [
             "today" => array_values($todayPeriodsFormatted),
-            "todayHourly" => $todayHourlyDetails,
-            "todayAlerts" => $todayAlerts,
+            "todayHourly" => array_values($todayHourlyDetails),
+            "todayAlerts" => array_values($todayAlerts),
             "detailed" => array_values($detailedPeriodsFormatted),
         ];
     }
