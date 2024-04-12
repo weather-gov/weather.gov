@@ -27,7 +27,7 @@
     {% if weather.alerts %}
     <div class="bg-primary-darkest padding-bottom-105">
       <div class="grid-container margin-top-0">
-        {{ drupal_block("weathergov_local_alert_list") }}
+        <wx-placeholder data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/local_alert_list" data-trigger="load"></wx-placeholder>
       </div>
     </div>
     {% endif %}
@@ -50,15 +50,15 @@
       <div class="bg-base-lightest padding-top-3 padding-bottom-8">
         {% if weather.alerts %}
         <div class="tab-container focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
-          {{ drupal_block("weathergov_local_alerts") }}
+          <wx-placeholder data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/local_alerts" data-trigger="load"></wx-placeholder>
         </div>
         {% endif %}
         <div class="tab-container focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
-          {{ drupal_block("weathergov_current_conditions") }}
+          <wx-placeholder data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/current_conditions" data-trigger="load"></wx-placeholder>
           {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
         </div>
         <div class="tab-container focus-offset-205" id="today" role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
-          {{ drupal_block("weathergov_weather_story") }}
+          <wx-placeholder data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/weather_story" data-trigger="load"></wx-placeholder>
           <div class="grid-container padding-x-2">
             <div class="grid-row">
               <div class="grid-col tablet-lg:grid-offset-2">
@@ -66,13 +66,13 @@
               </div>
             </div>
           </div>
-          {{ drupal_block("weathergov_hourly_precipitation") }}
-          {{ drupal_block("weathergov_hourly_forecast") }}
-          {{ drupal_block("weathergov_wfo_promo") }}
+          <wx-placeholder data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/hourly_precipitation" data-trigger="load"></wx-placeholder>
+          <wx-placeholder data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/hourly_forecast" data-trigger="load"></wx-placeholder>
+          <wx-placeholder data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/wfo_promo" data-trigger="load"></wx-placeholder>
         </div>
         <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
           {{ attach_library('new_weather_theme/hourly_toggle') }}
-          <wx-placeholder class="daily-forecast-block" data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/daily" data-trigger="event" data-event="wx:tab-shown">
+          <wx-placeholder class="daily-forecast-block" data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/daily_forecast" data-trigger="load">
           </wx-placeholder>
         </div>
       </div>
@@ -100,10 +100,8 @@
  
  document.addEventListener('DOMContentLoaded', () => {
    Array.from(document.querySelectorAll('wx-placeholder[data-placeholder="true"]')).forEach(placeholder => {
-     if(placeholder.dataset.trigger === "event" && placeholder.dataset.event){
-       placeholder.addEventListener(placeholder.dataset.event, () => {
-         fetchAndReplace(placeholder, placeholder.dataset.href)
-       }, {capture: true});
+     if(placeholder.dataset.trigger === "load"){
+       fetchAndReplace(placeholder, placeholder.dataset.href);
      }
    });
  });

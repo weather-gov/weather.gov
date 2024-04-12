@@ -95,14 +95,10 @@ final class LocationAndGridRouteController extends ControllerBase
         }
     }
 
-    public function serveBasicPartial($lat, $lon){
-        /* $r = new Response();
-         * $r->headers->set('Content-Type', 'text/html');
-         * $r->setContent('<h1>' . $item . '</h1>');
-         * return $r; */
-
+    public function serveBasicPartial($lat, $lon, $blockTypeName){
         $type = \Drupal::service('plugin.manager.block');
-        $block = $type->createInstance('weathergov_daily_forecast', []);
+        $name = 'weathergov_' . $blockTypeName;
+        $block = $type->createInstance($name, []);
 
         $build = [];
         $build['content'] = $block->build();

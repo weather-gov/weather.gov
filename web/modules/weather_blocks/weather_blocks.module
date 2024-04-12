@@ -21,7 +21,8 @@ function weather_blocks_template_preprocess_default_variables_alter(
     $route = $container->get("current_route_match");
 
     // We only need to populate globals if we're on a point route.
-    if ($route->getRouteName() == "weather_routes.point") {
+    $routeName = $route->getRouteName();
+    if (str_starts_with($routeName, "weather_routes.point")) {
         $lat = $route->getParameter("lat");
         $lon = $route->getParameter("lon");
         $weatherMetadata["point"] = ["lat" => $lat, "lon" => $lon];

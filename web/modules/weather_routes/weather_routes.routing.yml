@@ -29,8 +29,8 @@ weather_routes.grid:
     gridX: '^[0-9]*$'
     gridY: '^[0-9]*$'
 
-weather_routes.html.point.daily:
-  path: '/wx/point/{lat}/{lon}/daily'
+weather_routes.html.point.block:
+  path: '/wx/point/{lat}/{lon}/{blockTypeName}'
   defaults:
     _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::serveBasicPartial
   requirements:
