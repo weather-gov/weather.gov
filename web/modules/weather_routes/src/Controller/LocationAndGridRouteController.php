@@ -114,7 +114,11 @@ final class LocationAndGridRouteController extends ControllerBase
             '#plugin_id' => $block->getPluginId(),
             '#base_plugin_id' => $block->getBaseId(),
             '#derivative_plugin_id' => $block->getDerivativeId(),
-
+            '#attached' =>
+                array(
+                    'library' =>
+                        array('new_weather_theme/hourly_toggle')
+                ),
         ];
 
         foreach (['#attributes', '#contextual_links'] as $property) {

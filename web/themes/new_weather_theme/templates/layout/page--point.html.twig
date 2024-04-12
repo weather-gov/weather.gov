@@ -71,6 +71,7 @@
           {{ drupal_block("weathergov_wfo_promo") }}
         </div>
         <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
+          {{ attach_library('new_weather_theme/hourly_toggle') }}
           <wx-placeholder class="daily-forecast-block" data-placeholder="true" data-href="/wx/point/{{weather.point.lat}}/{{weather.point.lon}}/daily" data-trigger="event" data-event="wx:tab-shown">
           </wx-placeholder>
         </div>
