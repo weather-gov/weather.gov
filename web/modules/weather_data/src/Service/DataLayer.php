@@ -46,7 +46,7 @@ class DataLayer
         CacheBackendInterface $cache,
         Connection $database,
         RouteMatchInterface $route,
-        $preload = true,
+        $preload = false,
     ) {
         $this->client = $httpClient;
         $this->cache = $cache;
