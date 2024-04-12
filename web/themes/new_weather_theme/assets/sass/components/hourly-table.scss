@@ -27,28 +27,24 @@ $expand-duration: 250ms;
 }
 
 .usa-table.hourly-table {
-  td {
-    min-width: units("card");
-    padding-right: units(2);
-    white-space: normal;
-  }
-
-  // th[scope="row"] {
-  //   white-space: nowrap;
-  // }
-
-  th {
-    padding-right: units(1.5);
-  }
-
   td,
   th {
     padding-left: 0;
     vertical-align: top;
+  }
+
+  td {
+    min-width: units("card");
+    padding-right: units(2);
+    white-space: normal;
 
     &:first-of-type {
       padding-left: units(2);
     }
+  }
+
+  th {
+    padding-right: units(1.5);
   }
 
   // Using class to overide usa-table styles
