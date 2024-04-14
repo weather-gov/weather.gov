@@ -124,7 +124,7 @@ class ComboBox extends HTMLElement {
 
         this.template = document.createElement("template");
         this.template.innerHTML = comboTemplate;
-        this.attachShadow({mode: "open", delegatesFocus: true});
+        this.attachShadow({mode: "open", delegatesFocus: false});
         this.shadowRoot.append(
             this.template.content.cloneNode(true)
         );
@@ -162,7 +162,7 @@ class ComboBox extends HTMLElement {
         this.addEventListener("input", this.handleInput);
         this.addEventListener("keydown", this.handleKeyDown);
         this.addEventListener("change", this.handleTextInput);
-        this.addEventListener("focusout", this.hideList);
+        this.addEventListener("blur", this.hideList);
 
         // Initial attributes
         this.classList.add("wx-combo-box");
@@ -186,7 +186,7 @@ class ComboBox extends HTMLElement {
         this.removeEventListener("input", this.handleInput);
         this.removeEventListener("keydown", this.handleKeyDown);
         this.removeEventListener("change", this.handleTextInput);
-        this.removeEventListener("focusout", this.hideList);
+        this.removeEventListener("blur", this.hideList);
     }
 
     /**
