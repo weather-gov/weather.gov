@@ -147,7 +147,7 @@ final class HourlyForecastStructureTest extends EndToEndBase
     /**
      * @group e2e
      */
-    public function testBeforeMidnightEndAt6amTomorrow(): void
+    public function testBeforeMidnightEndsAt6amTomorrow(): void
     {
         $this->onLocationRoute(33.521, -86.812);
 
