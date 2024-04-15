@@ -159,11 +159,6 @@ class ComboBox extends HTMLElement {
     }
 
     connectedCallback(){
-        this.addEventListener("input", this.handleInput);
-        this.addEventListener("keydown", this.handleKeyDown);
-        this.addEventListener("change", this.handleTextInput);
-        this.addEventListener("focusout", this.hideList);
-
         // Initial attributes
         this.classList.add("wx-combo-box");
         this.setAttribute("expanded", "false");
@@ -179,6 +174,13 @@ class ComboBox extends HTMLElement {
         this.initListbox();
         this.initClearButton();
         this.initToggleButton();
+
+        // Bind event listeners
+        this.addEventListener("input", this.handleInput);
+        this.addEventListener("keydown", this.handleKeyDown);
+        this.addEventListener("change", this.handleTextInput);
+        this.addEventListener("blur", this.hideList);
+        this.input.addEventListener("blur", this.hideList);
         
     }
 
@@ -186,7 +188,8 @@ class ComboBox extends HTMLElement {
         this.removeEventListener("input", this.handleInput);
         this.removeEventListener("keydown", this.handleKeyDown);
         this.removeEventListener("change", this.handleTextInput);
-        this.removeEventListener("focusout", this.hideList);
+        this.removeEventListener("blur", this.hideList);
+        this.input.removeEventListener("blur", this.hideList)
     }
 
     /**
