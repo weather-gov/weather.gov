@@ -392,7 +392,7 @@ describe("Combo box unit tests", () => {
       const component = document.querySelector("wx-combo-box");
       expect(component.isShowingList).to.be.true;
 
-      const event = new window.FocusEvent("focusout", { bubbles: true});
+      const event = new window.FocusEvent("blur", { bubbles: true});
       component.input.dispatchEvent(event);
 
       expect(component.isShowingList).to.be.false;
