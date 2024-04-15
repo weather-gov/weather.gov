@@ -16,7 +16,7 @@ class DailyForecastBlock extends WeatherBlockBase
     /**
      * {@inheritdoc}
      */
-    public function build()
+    public function build($now = false)
     {
         $location = $this->getLocation();
 
@@ -28,7 +28,7 @@ class DailyForecastBlock extends WeatherBlockBase
                     $grid->wfo,
                     $grid->x,
                     $grid->y,
-                    false,
+                    $now,
                     3,
                 );
             } catch (\Throwable $e) {

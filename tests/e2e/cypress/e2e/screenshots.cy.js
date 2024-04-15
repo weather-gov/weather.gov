@@ -10,6 +10,8 @@ const viewports = [
 describe("collect screenshots", () => {
   before(() => {
     cy.request("http://localhost:8081/play/testing");
+    // We don't care about any client errors for this, so just roll.
+    Cypress.on("fail", () => false);
   });
 
   it("is not a test, is just a utility", () => {

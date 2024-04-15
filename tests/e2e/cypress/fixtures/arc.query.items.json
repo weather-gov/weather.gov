@@ -1,0 +1,272 @@
+{
+  "dHA9MCN0dj02NjAzMDhlYyNsb2M9ODM1MzU2NCNsbmc9NDAjcGw9NjQxNTYyNSNsYnM9MTQ6OTA4NTc3OSNsbj1Xb3JsZA==": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington, Minnesota",
+        "extent": {
+          "xmin": -94.0951723,
+          "ymin": 44.5970237,
+          "xmax": -94.0711723,
+          "ymax": 44.6210237
+        },
+        "feature": {
+          "geometry": {
+            "x": -94.0831723,
+            "y": 44.6090237
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  },
+  "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFRYLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington, Texas",
+        "extent": {
+          "xmin": -97.23211,
+          "ymin": 32.610594,
+          "xmax": -96.98211,
+          "ymax": 32.860594
+        },
+        "feature": {
+          "geometry": {
+            "x": -97.10711,
+            "y": 32.735594
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  },
+  "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIE1BLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington, Massachusetts",
+        "extent": {
+          "xmin": -71.183669,
+          "ymin": 42.389249,
+          "xmax": -71.129669,
+          "ymax": 42.443249
+        },
+        "feature": {
+          "geometry": {
+            "x": -71.156669,
+            "y": 42.416249
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  },
+  "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFZBLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington, Virginia",
+        "extent": {
+          "xmin": -77.146755,
+          "ymin": 38.828763,
+          "xmax": -77.022755,
+          "ymax": 38.952763
+        },
+        "feature": {
+          "geometry": {
+            "x": -77.084755,
+            "y": 38.890763
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  },
+  "dHA9MCN0dj02NjAzMDhlYyNsb2M9MTY2MTMwMTkjbG5nPTQwI3BsPTEyMTUzNzI1I2xicz0xNDo5MDg2MTQxI2xuPVdvcmxk": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington County, Virginia",
+        "extent": {
+          "xmin": -77.162917070274,
+          "ymin": 38.816585621295,
+          "xmax": -77.038917070274,
+          "ymax": 38.940585621295
+        },
+        "feature": {
+          "geometry": {
+            "x": -77.10091707027368,
+            "y": 38.87858562129541
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  },
+  "dHA9MCN0dj02NjAzMDhlYyNsb2M9MTY1MjUyNjEjbG5nPTQwI3BsPTEyMTA5NDExI2xicz0xNDo5MDg1Nzc5I2xuPVdvcmxk": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington, Vermont",
+        "extent": {
+          "xmin": -73.2169,
+          "ymin": 43.010536,
+          "xmax": -73.0929,
+          "ymax": 43.134536
+        },
+        "feature": {
+          "geometry": {
+            "x": -73.1549,
+            "y": 43.072536
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  },
+  "dHA9MCN0dj02NjAzMDhlYyNsb2M9MTQ3MDIyMTYjbG5nPTQwI3BsPTEwNzQzMjIzI2xicz0xNDo5MDg1Nzc5I2xuPVdvcmxk": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington, Tennessee",
+        "extent": {
+          "xmin": -89.7254913,
+          "ymin": 35.2435182,
+          "xmax": -89.6254913,
+          "ymax": 35.3435182
+        },
+        "feature": {
+          "geometry": {
+            "x": -89.6754913,
+            "y": 35.2935182
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  },
+  "dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24gSGVpZ2h0cywgSUwsIFVTQSAoQ29vayBDb3VudHkpI3NjPVVTQTpQUkk6VklSOkdVTTpBU00jbmVsPSNsbmc9NDAjbG49V29ybGQ=": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington Heights, Illinois",
+        "extent": {
+          "xmin": -88.0344577,
+          "ymin": 42.0289775,
+          "xmax": -87.9264577,
+          "ymax": 42.1369775
+        },
+        "feature": {
+          "geometry": {
+            "x": -87.9804577,
+            "y": 42.0829775
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  },
+  "dHA9MCN0dj02NjAzMDhlYyNsb2M9MTcyNTI4ODQjbG5nPTQwI3BsPTEyNTMwMTQ1I2xicz0xNDo5MDg1Nzc5I2xuPVdvcmxk": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington, Washington",
+        "extent": {
+          "xmin": -122.280491,
+          "ymin": 48.037311,
+          "xmax": -121.972491,
+          "ymax": 48.345311
+        },
+        "feature": {
+          "geometry": {
+            "x": -122.126491,
+            "y": 48.191311
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  },
+  "dHA9MCN0dj02NjAzMDhlYyNsb2M9MTM0NDE5MjkjbG5nPTQwI3BsPTk5NjYxNTgjbGJzPTE0OjkwODY0OTYjbG49V29ybGQ=": {
+    "spatialReference": {
+      "wkid": 4326,
+      "latestWkid": 4326
+    },
+    "locations": [
+      {
+        "name": "Arlington Heights, Pennsylvania",
+        "extent": {
+          "xmin": -75.242047,
+          "ymin": 40.979132,
+          "xmax": -75.180047,
+          "ymax": 41.041132
+        },
+        "feature": {
+          "geometry": {
+            "x": -75.211047,
+            "y": 41.010132
+          },
+          "attributes": {
+            "Score": 100,
+            "Addr_Type": "Locality"
+          }
+        }
+      }
+    ]
+  }
+}

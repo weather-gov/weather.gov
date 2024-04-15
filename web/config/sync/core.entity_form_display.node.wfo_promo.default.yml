@@ -103,4 +103,6 @@ content:
 hidden:
   path: true
   promote: true
+  publish_on: true
   sticky: true
+  unpublish_on: true

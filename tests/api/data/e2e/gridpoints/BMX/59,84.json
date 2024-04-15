@@ -1848,15 +1848,15 @@
       "values": [
         {
           "validTime": "date:now +0 hours / PT1H",
-          "value": 2.2222222222222223
+          "value": 7.3
         },
         {
           "validTime": "date:now +1 hours / PT1H",
-          "value": 1.6666666666666667
+          "value": 3.89
         },
         {
           "validTime": "date:now +2 hours / PT1H",
-          "value": 4.444444444444445
+          "value": 34.23523
         },
         {
           "validTime": "date:now +3 hours / PT1H",
@@ -4267,7 +4267,7 @@
         },
         {
           "validTime": "date:now +2 hours / PT1H",
-          "value": 0
+          "value": 12.9
         },
         {
           "validTime": "date:now +3 hours / PT1H",

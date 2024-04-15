@@ -1,0 +1,132 @@
+{
+  "type": "object",
+  "properties": {
+    "@id": {
+      "type": "string",
+      "pattern": "^https://api\\.weather\\.gov/alerts/urn:oid:.*$"
+    },
+    "@type": {
+      "const": "wx:Alert"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^urn:oid:.*$"
+    },
+    "areaDesc": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "geocode": {
+      "type": "object",
+      "properties": {
+        "SAME": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "UGC": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "affectedZones": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^https://api\\.weather\\.gov/zones/(forecast|county|fire)/.*$"
+      }
+    },
+    "sent": {
+      "type": "string",
+      "pattern": "$isoRegex"
+    },
+    "effective": {
+      "type": "string",
+      "pattern": "$isoRegex"
+    },
+    "onsetRaw": {
+      "type": "string",
+      "pattern": "$isoRegex"
+    },
+    "endsRaw": {
+      "type": "string",
+      "pattern": "$isoRegex"
+    },
+    "expiresRaw": {
+      "type": "string",
+      "pattern": "$isoRegex"
+    },
+    "onset": {
+      "type": "string",
+      "pattern": "$formattedDateRegex"
+    },
+    "ends": {
+      "type": "string",
+      "pattern": "$formattedDateRegex"
+    },
+    "expires": {
+      "type": "string",
+      "pattern": "$formattedDateRegex"
+    },
+    "event": {
+      "type": "string"
+    },
+    "headline": {
+      "type": "string"
+    },
+    "description": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["heading", "paragraph"]
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "instruction": {
+    "type": "string"
+  },
+  "response": {
+    "type": "string"
+  },
+  "geometry": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "const": "Polygon"
+      },
+      "coordinates": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  "timezone": {
+    "type": "string",
+    "pattern": "^.+\\/.+$"
+  },
+  "duration": {
+    "type": "string"
+  },
+  "alertId": {
+    "type": "integer"
+  }
+}

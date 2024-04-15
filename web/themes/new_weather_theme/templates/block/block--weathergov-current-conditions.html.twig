@@ -14,15 +14,13 @@
       {# First row is temperature #}
       <div class="display-flex">
         <div class="current-conditions-temp display-flex flex-row flex-align-start margin-right-2 text-primary-darker">
-          {{ content.temperature }}<span aria-hidden="true" class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">&deg;F</span>
-          <span class="usa-sr-only">℉</span>
+          {{ content.temperature }}<span class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">&deg;F</span>
         </div>
         <div class="margin-top-05 position-relative">
           <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
           <div class="text-primary-darker">
-            <p class="margin-top-2px font-body-md">{{ content.feels_like }}
-              <span aria-hidden="true" class="font-body-3xs position-absolute margin-top">&deg;F</span>
-              <span class="usa-sr-only">℉</span>
+            <p class="margin-top-2px font-body-md">
+              {{ content.feels_like }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
             </p>
           </div>
         </div>
@@ -38,7 +36,7 @@
         {% endif %}
         <p class="font-body-md margin-top-2px margin-bottom-0">{{ content.conditions.short }}</p>
       </div>
-      <div class="item tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05 border-top-1px border-base-light padding-top-1" aria-hidden="true">
+      <div class="tablet:margin-top-2 display-flex flex-row flex-align-center margin-bottom-05 border-top-1px border-base-light padding-top-1" aria-hidden="true">
         <div class="margin-right-4">
           <p class="margin-y-0">
             <span class="font-mono-xs font-family-mono text-uppercase text-base">Humidity </span>
@@ -46,25 +44,19 @@
           </p>
         </div>
 
-        <div class="margin-right-05">
+        <div class="wx-wind-speed margin-right-05 display-flex flex-align-center">
           <p class="margin-y-0">
-            {%- if content.wind.speed is same as(null) -%}
-              {%- set windString = "N/A" | t() -%}
-            {%- else -%}
-              {% if content.wind.speed > 0 %}
-              {% set windString = "@windSpeed mph @windDirection" | t({
-                  "@windSpeed": content.wind.speed,
-                  "@windDirection": content.wind.direction.short
-                }) 
-              %}
-              {% else %}
-                {% set windString = "@windSpeed mph" | t({
-                    "@windSpeed": content.wind.speed,
-                  })
-                %}
-              {% endif %}
-            {%- endif -%}
-            <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind </span>{{- windString -}}
+            {#
+            If we want the space, we need to be explicit. Otherwise browsers
+            will sometimes strip it out. Like if, for example, a span is
+            followed by a non-text element such as a div.
+            #}
+            <span class="font-mono-xs font-family-mono text-uppercase text-base">Wind&nbsp;</span>
+            {% include '@new_weather_theme/partials/wind.html.twig'
+              with {
+                wind: content.wind
+              }
+            %}
           </p>
         </div>
       </div>
@@ -91,12 +83,12 @@
     </div>
 
     {# Weather narrative is for screen readers only #}
-    <div data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
+    <div role="text" data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
         {{ 'Weather as of' | t }}
         {# Datetimes are localized in client-side Javascript. #}
-        <weather-timestamp data-utc="{{ content.timestamp.utc }}">
+        <time datetime="{{ content.timestamp.utc }}" data-wx-local-time>
           {{ content.timestamp.formatted }}
-        </weather-timestamp>
+        </time>.
         {{ "The weather in @place, is @conditions.
           Temperature is @temperature ℉." |
         t({
