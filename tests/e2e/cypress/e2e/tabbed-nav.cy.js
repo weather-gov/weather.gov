@@ -141,7 +141,7 @@ describe("<wx-tabbed-nav> component tests", () => {
         .should("be.visible");
     });
 
-    ["today", "daily"].forEach((tabName) => {
+    ["alerts", "daily"].forEach((tabName) => {
       it(`Acticates the ${tabName} tab if the hash for it is present`, () => {
         cy.visit(`/point/34.749/-92.275#${tabName}`);
         cy.get(`.tab-button[data-tab-name="${tabName}"]`)

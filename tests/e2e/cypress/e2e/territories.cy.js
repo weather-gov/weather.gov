@@ -21,8 +21,6 @@ describe("territory places are supported", () => {
     it(`supports ${territory}`, () => {
       cy.visit(url);
       cy.get("main h1").should("contain", place);
-
-      cy.get("#today").should("not.contain", "error");
       cy.get("#daily").should("not.contain", "error");
     });
   });
