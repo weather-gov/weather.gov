@@ -18,8 +18,10 @@
 $expand-duration: 250ms; 
 
 .expand-transition {
-  transition: width ease-in $expand-duration, max-width ease-in $expand-duration, margin-left ease-in $expand-duration, margin-right ease-in $expand-duration,;
+  @include at-media("tablet-lg") {
+    transition: width ease-in $expand-duration, max-width ease-in $expand-duration, margin-left ease-in $expand-duration, margin-right ease-in $expand-duration,;
 
+  }
 
   @media (prefers-reduced-motion) {
     transition: none;
