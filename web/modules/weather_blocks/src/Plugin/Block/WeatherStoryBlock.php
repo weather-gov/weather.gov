@@ -66,7 +66,7 @@ class WeatherStoryBlock extends WeatherBlockBase
                     "image" => $image,
                     "updated" => [
                         "formatted" => $changed->format("M j, Y, g:i A"),
-                        "utc" => $changed->format("U"),
+                        "utc" => $changed->format("c"),
                     ],
                 ];
             }

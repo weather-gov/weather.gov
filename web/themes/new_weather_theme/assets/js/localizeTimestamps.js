@@ -37,15 +37,7 @@
 
     const input = timestamp.getAttribute("datetime");
 
-    const date = (() => {
-      // The datetime value we set could be either an ISO8601 string, which
-      // will have non-digit characters, or a Unix epoch timestamp, which only
-      // includes digits. How we parse it depends on which it is.
-      if (input.match(/[^\d]/)) {
-        return new Date(Date.parse(input));
-      }
-      return new Date(Number.parseInt(input, 10) * 1_000);
-    })();
+    const date = new Date(Date.parse(input));
 
     const formatter = timestamp.getAttribute("data-date-format") || "basic";
 

@@ -24,7 +24,7 @@ browser-location-button:
         async: true
 
 localize-timestamps:
-  version: 2024-04-04
+  version: 2024-04-12
   js:
     assets/js/localizeTimestamps.js:
       attributes:

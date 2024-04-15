@@ -53,9 +53,7 @@ describe("main script", () => {
             const format =
               timestamp.getAttribute("data-date-format") || "basic";
 
-            const expected = formatters
-              .get(format)
-              .format(dayjs.unix(utc).toDate());
+            const expected = formatters.get(format).format(dayjs(utc).toDate());
             expect(actual).to.equal(expected);
           }
         });
