@@ -63,7 +63,7 @@ final class HourlyForecastStructureTest extends EndToEndBase
     }
 
     /**
-     * @group e2e2
+     * @group e2e
      */
     public function testHourlyApparentTemperatureNullIfCloseToActual(): void
     {
@@ -78,7 +78,7 @@ final class HourlyForecastStructureTest extends EndToEndBase
     }
 
     /**
-     * @group e2e2
+     * @group e2e
      */
     public function testHourlyApparentTemperature(): void
     {
@@ -93,7 +93,7 @@ final class HourlyForecastStructureTest extends EndToEndBase
     }
 
     /**
-     * @group e2e2
+     * @group e2e
      */
     public function testHourlyWindGustNullIfCloseToSustained(): void
     {
@@ -108,7 +108,7 @@ final class HourlyForecastStructureTest extends EndToEndBase
     }
 
     /**
-     * @group e2e2
+     * @group e2e
      */
     public function testHourlyWindGusts(): void
     {

@@ -133,20 +133,9 @@ trait DailyForecastTrait
         // Examples of period names here include "Today"
         // "This Afternoon" "Tonight" "Overnight" etc
         $todayPeriods = DateTimeUtility::filterToBefore($periods, $tomorrow);
-        $futurePeriods = DateTimeUtility::filterToAfter($periods, $tomorrow);
 
-        // Detailed periods are the periods for which
-        // we want to show a detailed daily forecast.
-        // Periods are either daytime or nighttime
-        // periods, as told by the isDaytime property
-        $detailedPeriods = array_slice($futurePeriods, 0, $defaultDays * 2);
-
-        // The extended periods are all the periods
-        // returned by the API that come after the
-        // detailed periods.
-        // In the UI, we will show less detailed
-        // information for these periods
-        $extendedPeriods = array_slice($futurePeriods, $defaultDays * 2);
+        // And future periods.
+        $detailedPeriods = DateTimeUtility::filterToAfter($periods, $tomorrow);
 
         // Format each of the today periods
         // as assoc arrays that can be used
@@ -163,33 +152,15 @@ trait DailyForecastTrait
             &$timezone,
         ) {
             $day = $periodPair[0];
-            $night = $periodPair[1];
+            // The last day in the forecast can sometimes only have the first
+            // half of the pair. Defend against that.
+            $night = count($periodPair) > 1 ? $periodPair[1] : null;
 
             return [
                 "daytime" => $this->formatDailyPeriod($day, $timezone),
                 "nighttime" => $this->formatDailyPeriod($night, $timezone),
             ];
         }, array_chunk($detailedPeriods, 2));
-
-        // Format each of the extended periods as
-        // assoc arrays that can be used by the
-        // templates. Also group the periods
-        // into daytime and nighttime pairs
-        $extendedPeriodsFormatted = array_map(function ($periodPair) use (
-            &$timezone,
-        ) {
-            $day = $periodPair[0];
-            $night = null;
-
-            if (count($periodPair) == 2) {
-                $night = $periodPair[1];
-            }
-
-            return [
-                "daytime" => $this->formatDailyPeriod($day, $timezone),
-                "nighttime" => $this->formatDailyPeriod($night, $timezone),
-            ];
-        }, array_chunk($extendedPeriods, 2));
 
         // Get detailed hourly data for the today
         // daily period (for display)
@@ -217,20 +188,6 @@ trait DailyForecastTrait
             $todayHourlyDetails,
         );
 
-        // Format each of the detailed periods
-        // as assoc arrays that can be used by
-        // the templates. Also group the periods
-        // into daytime and nighttime pairs
-        $detailedPeriodsFormatted = array_map(function ($periodPair) {
-            $day = $periodPair[0];
-            $night = $periodPair[1];
-
-            return [
-                "daytime" => $this->formatDailyPeriod($day),
-                "nighttime" => $this->formatDailyPeriod($night),
-            ];
-        }, array_chunk($detailedPeriods, 2));
-
         // Get detailed hourly data for the
         // detailed forecast days
         $this->getHourlyDetailsForDay(
@@ -241,10 +198,9 @@ trait DailyForecastTrait
 
         return [
             "today" => array_values($todayPeriodsFormatted),
-            "todayHourly" => $todayHourlyDetails,
-            "todayAlerts" => $todayAlerts,
+            "todayHourly" => array_values($todayHourlyDetails),
+            "todayAlerts" => array_values($todayAlerts),
             "detailed" => array_values($detailedPeriodsFormatted),
-            "extended" => array_values($extendedPeriodsFormatted),
         ];
     }
 }

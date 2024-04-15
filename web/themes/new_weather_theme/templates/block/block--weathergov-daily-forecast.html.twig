@@ -23,40 +23,5 @@
       {%  endfor %}
     </ol>
   </div>
-
-  {# Render the extended periods #}
-  <div class="grid-container padding-x-0 tablet:padding-x-2"> 
-    <div class="grid-row">
-      <div class="grid-col tablet-lg:grid-offset-2"> 
-        <h2 class="padding-x-2 tablet:padding-x-0 text-normal text-primary-darkest">{{ "Extended forecast" | t }}</h2> 
-      </div>
-    </div>
-    <ol class="usa-list--unstyled">
-      {% for periods in content.extended %}
-        <li class="display-block margin-bottom-5">
-          <div class="bg-white padding-top-2 padding-bottom-3 padding-x-205 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-6">
-            <time class="display-block flex-1 text-bold font-heading-md margin-bottom-2" datetime="{{ periods['daytime'].startTime }}">
-              <span class="text-primary-darker">{{ periods["daytime"].dayName }}, {{ periods["daytime"].monthAndDay }}</span>
-            </time>
-            <div class="display-flex flex-row flex-wrap flex-align-center">
-              <div class="order-first width-5 height-5 margin-right-105">
-                <svg role="img" aria-hidden="true" class="width-full height-full">
-                  <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ periods["daytime"].icon.base }}"></use>
-                </svg>
-              </div>
-              <div class="order-last mobile-lg:order-2 flex-basis-100 mobile-lg__flex-basis-auto margin-top-105 tablet:margin-top-0">
-                <p class="daily-short-forecast font-body-sm margin-y-0 padding-right-2">
-                {{ periods["daytime"].shortForecast }}
-                </p>
-              </div>
-              <div class="display-flex flex-justify-end order-3 flex-1">
-                {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods} %}
-              </div>
-            </div>
-          </div>
-        </li>
-      {% endfor %}
-    </ol>
-  </div>
   {% endif %}
 </div>

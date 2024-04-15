@@ -23,13 +23,15 @@ final class DailyForecastStructureTest extends EndToEndBase
      */
     public function testDailyForecastDataStructure(): void
     {
-        $this->onLocationRoute(33.521, -86.812);
+        $this->onLocationRoute(34.749, -92.275);
 
         $schema = SchemaHelper::load("daily.json");
 
         $data = $this->block->build();
 
-        $schema->in(json_decode(json_encode($data["today"][0])));
+        // Convert associative arrays into objects, because JSON (and thus JSON
+        // schema have no concept of associative arrays)
+        $schema->in(json_decode(json_encode($data)));
         $this->assertTrue(true);
     }
 

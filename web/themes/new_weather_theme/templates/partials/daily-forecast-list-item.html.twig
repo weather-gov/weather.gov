@@ -74,6 +74,13 @@ only be a nighttime period.
           </svg>
       </span>
     </wx-hourly-toggle>
-    {%  include '@new_weather_theme/partials/hourly-table.html.twig' with { 'hours': dayHours, 'alertPeriods': alertPeriods, 'itemId': itemId } %}
+    {% include '@new_weather_theme/partials/hourly-table.html.twig'
+      with {
+        for: periods[0].monthAndDay,
+        hours: dayHours,
+        alertPeriods: alertPeriods,
+        itemId: itemId
+      }
+    %}
   </div>
 </li>
