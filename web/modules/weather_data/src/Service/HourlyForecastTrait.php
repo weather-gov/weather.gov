@@ -55,6 +55,32 @@ trait HourlyForecastTrait
         return $periods;
     }
 
+    public function filterHoursToSingleDay($hours)
+    {
+        $times = array_column($hours, "time");
+        $firstTime = explode(" ", $times[0]);
+
+        $first6am = array_search("6 AM", $times);
+        if ($first6am === 0) {
+            $first6am = array_search("6 AM", array_slice($times, 1));
+        }
+
+        if ($firstTime[1] === "AM" && $firstTime[0] < 6) {
+            $second6am = array_slice($times, $first6am + 1);
+            $second6am = array_search("6 AM", $second6am);
+
+            // + 2 to account for the 6 AM values themselves. Otherwise
+            // we'll slice them out, because slice is not inclusive.
+            $day = array_slice($hours, 0, $first6am + $second6am + 2);
+        } else {
+            // + 1 to account for the single 6 AM value. Slice is an
+            // exclusive range operator.
+            $day = array_slice($hours, 0, $first6am + 1);
+        }
+
+        return $day;
+    }
+
     /**
      * Get the hourly forecast for a location.
      *
