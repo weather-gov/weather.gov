@@ -43,9 +43,10 @@
   @extend .usa-combo-box__list-option;
 
   &[data-recent]::after {
-    content: "recent";
     @include u-text("base");
     @include u-font("mono", "sm");
+
+    content: "recent";
     float: right;
   }
 }
