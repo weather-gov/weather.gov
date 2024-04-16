@@ -155,6 +155,9 @@ class ComboBox extends HTMLElement {
     this.initListbox = this.initListbox.bind(this);
     this.initToggleButton = this.initToggleButton.bind(this);
     this.initClearButton = this.initClearButton.bind(this);
+    this.saveSearchResult = this.saveSearchResult.bind(this);
+    this.getSavedResults = this.getSavedResults.bind(this);
+    this.getSearchResults = this.getSearchResults.bind(this);
   }
 
   connectedCallback() {
@@ -180,6 +183,10 @@ class ComboBox extends HTMLElement {
     this.addEventListener("change", this.handleTextInput);
     this.addEventListener("blur", this.hideList);
     this.input.addEventListener("blur", this.hideList);
+
+    this.input.addEventListener("focus", () => {
+      this.updateSearch("");
+    });
   }
 
   disconnectedCallback() {
@@ -289,9 +296,17 @@ class ComboBox extends HTMLElement {
         );
       });
     }, this.inputDelay);
-    if (this.input.value) {
-      this.handleTextInput(event);
+
+    this.handleTextInput();
+  }
+
+  async getSearchResults(text) {
+    const response = await searchLocation(text);
+    if (response.ok) {
+      const data = await response.json();
+      return data;
     }
+    return { suggestions: [] };
   }
 
   /**
@@ -304,40 +319,47 @@ class ComboBox extends HTMLElement {
    * set up.
    */
   async updateSearch(text) {
-    const response = await searchLocation(text);
-    if (response.ok) {
-      const data = await response.json();
+    const data = await this.getSearchResults(text);
 
-      // Create new options
-      const items = data.suggestions.map((suggestion, idx) => {
-        const li = document.createElement("li");
-        li.innerText = suggestion.text;
-        li.setAttribute("role", "option");
-        li.setAttribute("aria-setsize", data.suggestions.length);
-        li.setAttribute("aria-posinset", idx + 1);
-        li.setAttribute("aria-selected", "false");
+    const saved = this.getSavedResults(text);
+    data.suggestions.unshift(...saved.map((s) => ({ ...s, recent: true })));
+
+    // Create new options
+    const items = data.suggestions.map((suggestion, idx) => {
+      const li = document.createElement("li");
+      li.innerText = suggestion.text;
+      li.setAttribute("role", "option");
+      li.setAttribute("aria-setsize", data.suggestions.length);
+      li.setAttribute("aria-posinset", idx + 1);
+      li.setAttribute("aria-selected", "false");
+      if (suggestion.magicKey) {
         li.setAttribute("data-value", suggestion.magicKey);
-        li.classList.add(...["wx-combo-box__list-option"]);
-        li.id = `${this.id}--item-${idx + 1}`;
-
-        li.addEventListener("focus", (e) => {
-          this.cacheLocationGeodata(e.target.dataset.value);
-        });
-        li.addEventListener("click", this.chooseOption);
-        return li;
-      });
-      // Append to shadow select element
-      this.querySelector('[slot="listbox"]').replaceChildren(...items);
-
-      // If there are results, show the area
-      if (data.suggestions.length) {
-        this.showList();
+      } else if (suggestion.url) {
+        li.setAttribute("data-url", suggestion.url);
       } else {
-        this.hideList();
+        return null;
       }
-      return true;
+      if (suggestion.recent) {
+        li.setAttribute("data-recent", true);
+      }
+      li.classList.add(...["wx-combo-box__list-option"]);
+      li.id = `${this.id}--item-${idx + 1}`;
+
+      li.addEventListener("focus", (e) => {
+        this.cacheLocationGeodata(e.target.dataset.value);
+      });
+      li.addEventListener("click", this.chooseOption);
+      return li;
+    });
+    // Append to shadow select element
+    this.querySelector('[slot="listbox"]').replaceChildren(...items);
+
+    // If there are results, show the area
+    if (data.suggestions.length) {
+      this.showList();
+    } else {
+      this.hideList();
     }
-    return false;
   }
 
   /**
@@ -554,7 +576,9 @@ class ComboBox extends HTMLElement {
     this.selectedIndex = Array.from(
       this.listbox.querySelectorAll("li"),
     ).indexOf(selectedItem);
+
     this.value = selectedItem.getAttribute("data-value");
+    this.url = selectedItem.getAttribute("data-url");
 
     // Display the text of the selected item
     // in the input field
@@ -592,12 +616,22 @@ class ComboBox extends HTMLElement {
     if (formEl) {
       const optionText = this.input.value;
       textInput.value = optionText;
+
+      if (this.url) {
+        formEl.setAttribute("action", this.url);
+        return formEl.submit();
+      }
+
       return this.getGeodataForKey(this.value).then((coordinates) => {
         if (coordinates) {
-          formEl.setAttribute(
-            "action",
-            `/point/${coordinates.lat}/${coordinates.lon}`,
-          );
+          const result = {
+            text: this.input.value,
+            url: `/point/${coordinates.lat}/${coordinates.lon}`,
+          };
+
+          this.saveSearchResult(result);
+
+          formEl.setAttribute("action", result.url);
           formEl.submit();
         }
       });
@@ -633,6 +667,40 @@ class ComboBox extends HTMLElement {
     }
 
     return cached;
+  }
+
+  saveSearchResult(result) {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem("wxgov_recent_locations") ?? "[]",
+      );
+      saved.unshift(result);
+
+      localStorage.setItem(
+        "wxgov_recent_locations",
+        // We don't want to save everything forever. Just keep the most recent
+        // ten. We'll handle filtering down at display time.
+        JSON.stringify(saved.slice(0, 10)),
+      );
+    } catch (e) {
+      // Do nothing. If we're here, either the browser doesn't have local
+      // storage (which is unlikely in 2024, but possible), or it is
+      // disabled and we can't use it.
+    }
+  }
+
+  getSavedResults(searchText) {
+    try {
+      const results = JSON.parse(
+        localStorage.getItem("wxgov_recent_locations") ?? "[]",
+      );
+
+      const regex = new RegExp(`^${searchText}`, "i");
+
+      return results.filter(({ text }) => regex.test(text)).slice(0, 3);
+    } catch (e) {
+      return [];
+    }
   }
 
   /**

@@ -1,3 +1,5 @@
+@use "uswds-core" as *;
+
 /* stylelint-disable scss/at-extend-no-missing-placeholder */
 @forward "uswds-theme";
 @forward "uswds";
@@ -28,7 +30,7 @@
       rgba(255 255 255 / 40%),
       rgba(255 255 255 / 40%)
     ),
-    url('/themes/new_weather_theme/assets/images/uswds/usa-icons/close.svg');
+    url("/themes/new_weather_theme/assets/images/uswds/usa-icons/close.svg");
   opacity: 1;
   background-color: white;
 }
@@ -39,6 +41,12 @@
 
 .wx-combo-box__list-option {
   @extend .usa-combo-box__list-option;
+
+  &[data-recent]::after {
+    content: "recent";
+    @include u-font("mono", "sm");
+    float: right;
+  }
 }
 
 .wx-combo-box__list-option--selected {
