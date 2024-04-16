@@ -24,7 +24,7 @@ browser-location-button:
         async: true
 
 localize-timestamps:
-  version: 2024-04-04
+  version: 2024-04-12
   js:
     assets/js/localizeTimestamps.js:
       attributes:
@@ -36,7 +36,7 @@ location-search:
     assets/js/components/LocationSearch.js: { preprocess: false }
 
 location-combo-box:
-  version: 2024-03-25
+  version: 2024-04-15
   js:
     assets/js/components/combo-box.js: { preprocess: false }
         

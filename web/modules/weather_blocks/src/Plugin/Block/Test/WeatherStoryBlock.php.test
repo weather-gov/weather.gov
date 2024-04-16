@@ -85,7 +85,7 @@ final class WeatherStoryBlockTest extends Base
             ],
             "updated" => [
                 "formatted" => "Jun 24, 1977, 7:16 AM",
-                "utc" => "235984600",
+                "utc" => "1977-06-24T07:16:40+00:00",
             ],
         ];
 
@@ -112,7 +112,7 @@ final class WeatherStoryBlockTest extends Base
             "image" => null,
             "updated" => [
                 "formatted" => "Jun 24, 1977, 7:16 AM",
-                "utc" => "235984600",
+                "utc" => "1977-06-24T07:16:40+00:00",
             ],
         ];
 
