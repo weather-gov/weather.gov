@@ -44,6 +44,7 @@
 
   &[data-recent]::after {
     content: "recent";
+    @include u-text("base");
     @include u-font("mono", "sm");
     float: right;
   }
