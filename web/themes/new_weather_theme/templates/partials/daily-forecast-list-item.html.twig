@@ -11,7 +11,7 @@ only be a nighttime period.
 <li class="display-block" {% if itemId %}id="{{itemId}}{% endif %}">
   <div class="bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
     <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center margin-bottom-3 tablet:margin-bottom-4 tablet:grid-col-6">
-      <time class="display-block flex-1 text-bold font-heading-md text-primary-darker" datetime="{{ periods[0].startTime }}">
+      <time class="display-block flex-1 text-bold font-heading-md text-primary-dark" datetime="{{ periods[0].startTime }}">
         {% if dayLabel %}
           <span>{{ dayLabel }}, </span>
         {% else %}
@@ -41,7 +41,7 @@ only be a nighttime period.
           {% set marginUnit = 1 %}
         {% endif %}
         <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-{{ tabletMarginUnit }}">
-        <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darkest line-before line-before--{{ lineColor }}">
+        <span class="display-block font-family-mono text-uppercase font-body-2xs margin-bottom-1 text-primary-darker line-before line-before--{{ lineColor }}">
             {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
         </span>
         <div class="display-flex flex-row flex-align-start">
@@ -66,7 +66,7 @@ only be a nighttime period.
       </div>
       {% endfor %}
     </div>
-    <wx-hourly-toggle class="text-primary-dark margin-top-1" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-table" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="expand_less" data-hidden-icon-name="expand_more">
+    <wx-hourly-toggle class="text-primary margin-top-1" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-table" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="expand_less" data-hidden-icon-name="expand_more">
       <span class="toggle-text font-mono font-mono-s text-ls-neg-1"></span>
       <span class="margin-top-05">
           <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">

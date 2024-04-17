@@ -13,12 +13,12 @@
     <div class="grid-col-12 tablet:grid-col-6" aria-hidden="true">
       {# First row is temperature #}
       <div class="display-flex">
-        <div class="current-conditions-temp display-flex flex-row flex-align-start margin-right-2 text-primary-darker">
+        <div class="current-conditions-temp display-flex flex-row flex-align-start margin-right-2 text-primary-dark">
           {{ content.temperature }}<span class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">&deg;F</span>
         </div>
         <div class="margin-top-05 position-relative">
           <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
-          <div class="text-primary-darker">
+          <div class="text-primary-dark">
             <p class="margin-top-2px font-body-md">
               {{ content.feels_like }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
             </p>

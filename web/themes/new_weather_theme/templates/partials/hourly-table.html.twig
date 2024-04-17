@@ -15,10 +15,10 @@
     <table class="usa-table usa-table--borderless hourly-table" tabindex="0">
       <caption class="usa-sr-only">{{ "Detailed hourly weather data for @place. The rows are weather variables, the columns are hours." | t({ "@place": for }) }}</caption>
       <tr data-row-name="time">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
         {% for period in hours %}
         <th scope="col">
-          <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-primary-darkest">
+          <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-primary-darker">
             {{ period.time }}
           </time>
         </th>
@@ -28,7 +28,7 @@
       {% include '@new_weather_theme/partials/alerts-in-hourly-table.html.twig' with { 'periods': hours, 'alertPeriods': alertPeriods } %}
       {% endif %}
       <tr data-row-name="temp">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
           {{"Temp" | t}}
         </th>
         {% for period in hours %}
@@ -43,7 +43,7 @@
         {% endfor %}
       </tr>
       <tr data-row-name="apparentTemp">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
           {{"Feels like" | t}}
         </th>
         {% for period in hours %}
@@ -56,7 +56,7 @@
         {% endfor %}
       </tr>
       <tr data-row-name="condition">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
           {{"Condition" | t}}
         </th>
         {% for period in hours %}
@@ -81,7 +81,7 @@
         {% endfor %}
       </tr>
       <tr data-row-name="chance-precipitation">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker bg-primary-lightest font-mono-xs text-uppercase z-400">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
           {{"Chance of precipitation" | t}}
         </th>
         {% for period in hours %}
@@ -95,7 +95,7 @@
         {% endfor %}
       </tr>
       <tr data-row-name="wind-speed">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker bg-primary-lightest font-mono-xs text-uppercase z-400">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
           {{"Wind speed" | t}}
         </th>
         {% for period in hours %}
@@ -115,7 +115,7 @@
         {% endfor %}
       </tr>
       <tr data-row-name="humidity">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
           {{"Humidity" | t}}
         </th>
         {% for period in hours %}
@@ -129,7 +129,7 @@
         {% endfor %}
       </tr>
       <tr data-row-name="dewpoint">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-darker font-mono-xs text-uppercase z-400">
+        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
           {{"Dewpoint" | t}}
         </th>
         {% for period in hours %}
