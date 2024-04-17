@@ -17,7 +17,7 @@
 ------------------------------------- */
 $expand-duration: 250ms; 
 
-.expand-transition {
+.hourly-table__expand-transition {
   @include at-media("tablet-lg") {
     transition: width ease-in $expand-duration, max-width ease-in $expand-duration, margin-left ease-in $expand-duration, margin-right ease-in $expand-duration,;
 
