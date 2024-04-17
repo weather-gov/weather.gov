@@ -2,7 +2,7 @@
 {% set low = min(temps) %}
 {% set high = max(temps) %}
 <div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">
-  <span class="display-block text-bold margin-bottom-05 font-mono-3xs font-family-mono text-base-dark text-bold text-uppercase">
+  <span class="display-block margin-bottom-05 font-mono-3xs font-family-mono text-base-darker text-medium text-ls-1 text-uppercase">
     {{ "High" | t }}
   </span>
   <span class="font-ui-lg display-flex flex-row flex-align-start">
@@ -12,7 +12,7 @@
 </div>
 {% if low != null %}
 <div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">
-  <span class="display-block text-bold margin-bottom-05 font-mono-3xs font-family-mono text-base-dark text-bold text-uppercase">
+  <span class="display-block margin-bottom-05 font-mono-3xs font-family-mono text-base-darker text-ls-1 text-uppercase">
     {{ "Low" | t }}
   </span>
   <span class="font-ui-lg display-flex flex-row flex-align-start">
