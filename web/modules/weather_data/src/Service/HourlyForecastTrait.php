@@ -65,7 +65,7 @@ trait HourlyForecastTrait
             $first6am = array_search("6 AM", array_slice($times, 1));
         }
 
-        if ($firstTime[1] === "AM" && $firstTime[0] < 6) {
+        if ($firstTime[1] === "AM" && intval($firstTime[0]) < 6) {
             $second6am = array_slice($times, $first6am + 1);
             $second6am = array_search("6 AM", $second6am);
 

@@ -46,7 +46,7 @@ final class DailyForecastWithHourlyDataTest extends EndToEndBase
     {
         $this->onLocationRoute(33.521, -86.812);
 
-        // We will look at the weather at 2am point-local time
+        // We will look at the weather at 9:15pm point-local time
         $now = new \DateTimeImmutable();
         $now = $now->setTimezone(new \DateTimeZone("America/Chicago"));
         $now = $now->setTime(21, 15, 0);
