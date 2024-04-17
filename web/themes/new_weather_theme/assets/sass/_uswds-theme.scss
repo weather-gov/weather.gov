@@ -124,11 +124,11 @@ $nws-red: #f00;
   ---------------------------------------- */
   $theme-color-primary-lightest: "blue-5",
   $theme-color-primary-lighter: "blue-20",
-  $theme-color-primary-light: "blue-30",
-  $theme-color-primary: $noaa-water-blue,
-  $theme-color-primary-dark: "blue-60v",
-  $theme-color-primary-darker: "blue-70v",
-  $theme-color-primary-darkest: "blue-80v",
+  $theme-color-primary-light: $noaa-water-blue,
+  $theme-color-primary: "blue-60v",
+  $theme-color-primary-dark: "blue-70v",
+  $theme-color-primary-darker: "blue-80v",
+  $theme-color-primary-darkest: "blue-90",
 
   $theme-color-secondary-lightest: "indigo-5v",
   $theme-color-secondary-lighter: "indigo-20v",
@@ -163,9 +163,9 @@ $nws-red: #f00;
   $theme-color-base-darkest: "gray-cool-90",
   $theme-color-base-ink: "gray-cool-90",
 
-  $theme-link-color: "primary-dark",
-  $theme-link-hover-color: "primary-darker",
-  $theme-link-active-color: "primary-darkest",
+  $theme-link-color: "primary",
+  $theme-link-hover-color: "primary-dark",
+  $theme-link-active-color: "primary-darker",
 
   /* ----------------------------------------
   UTILITIES SETTINGS
@@ -175,8 +175,8 @@ $nws-red: #f00;
   /* ----------------------------------------
   COMPONENT SETTINGS
   ---------------------------------------- */
-  $theme-accordion-border-color: "primary-darker",
-  $theme-accordion-button-background-color: "primary-darker",
+  $theme-accordion-border-color: "primary-dark",
+  $theme-accordion-button-background-color: "primary-dark",
 
 
   $theme-table-border-color: "base-lighter",
