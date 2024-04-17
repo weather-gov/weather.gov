@@ -2,7 +2,6 @@
 
 namespace Drupal\weather_blocks\Plugin\Block;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 
 /**
@@ -21,54 +20,22 @@ class HourlyForecastBlock extends WeatherBlockBase
     /**
      * {@inheritdoc}
      */
-    public function blockForm($form, FormStateInterface $form_state)
-    {
-        $form = parent::blockForm($form, $form_state);
-        $config = $this->getConfiguration();
-        $max = $config["max_items"] ?? "12";
-
-        $form["max_items"] = [
-            "#type" => "textfield",
-            "#title" => "Maximum items to display",
-            "#default_value" => $max,
-        ];
-
-        return $form;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function blockSubmit($form, FormStateInterface $form_state)
-    {
-        parent::blockSubmit($form, $form_state);
-
-        $this->setConfigurationValue(
-            "max_items",
-            $form_state->getValue("max_items"),
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function build()
+    public function build($now = false)
     {
         $location = $this->getLocation();
 
         if ($location->grid) {
             $grid = $location->grid;
 
-            $config = $this->getConfiguration();
-            $max = $config["max_items"] ?? "12";
-
             try {
                 $data = $this->weatherData->getHourlyForecastFromGrid(
                     $grid->wfo,
                     $grid->x,
                     $grid->y,
+                    $now,
                 );
-                $data = array_slice($data, 0, $max);
+
+                $data = $this->weatherData->filterHoursToSingleDay($data);
 
                 // Also retrieve any alerts that overlap with
                 // the given hourly periods
