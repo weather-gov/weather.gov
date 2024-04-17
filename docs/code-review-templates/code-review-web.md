@@ -12,7 +12,7 @@ This is an automated comment on every pull request requiring a review. A checked
 ## Documentation
 - [ ] changes to “how we do things” are documented in READMEs
 - [ ] all new functions and methods are commented using plain language
-- [ ] any new modules added documented in modules.md
+- [ ] any new modules added documented in contributed-modules.md
 
 ## Security
 - [ ] security false positives are documented
