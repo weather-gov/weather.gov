@@ -1,6 +1,6 @@
 # Extending Drupal
 
-We have a collection of third-party modules that extend the functionality of Drupal.
+We have a collection of third-party modules that extend the functionality of Drupal. See [our documentation on selecting third-party "contributed" modules](contributed-modules.md).
 
 ## Adding a new module to all environments
 
