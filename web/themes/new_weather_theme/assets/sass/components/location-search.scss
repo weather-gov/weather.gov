@@ -17,6 +17,7 @@
 
 .wx-combo-box__list {
   @extend .usa-combo-box__list;
+  position: initial;
 }
 
 .wx-combo-box__toggle-list {

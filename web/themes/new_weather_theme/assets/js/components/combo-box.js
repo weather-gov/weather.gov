@@ -231,12 +231,11 @@ class ComboBox extends HTMLElement {
   initListbox() {
     let listbox = this.querySelector('[slot="listbox"]');
     if (!listbox) {
-      listbox = document.createElement("ul");
+      listbox = document.createElement("div");
     }
     listbox.setAttribute("role", "listbox");
     listbox.setAttribute("slot", "listbox");
     listbox.id = `${this.id}--list`;
-    listbox.classList.add("wx-combo-box__list");
     this.append(listbox);
     this.listbox = listbox;
   }
@@ -360,16 +359,28 @@ class ComboBox extends HTMLElement {
     // If there are saved items, we want to put in a heading list item for them
     // and possibly a heading list item for current search results as well.
     if (saved.length) {
-      items.push(makeSectionHeading("recent locations"));
-      items.push(...saved.map(makeListItem));
+      const list = document.createElement("ul");
+      list.setAttribute("aria-labeledby", `${this.id}--list`);
+      list.classList.add("wx-combo-box__list");
 
-      if (data.suggestions.length) {
-        items.push(makeSectionHeading("search results"));
-      }
+      list.append(makeSectionHeading("recent locations"));
+      list.append(...saved.map(makeListItem));
+      items.push(list);
     }
 
-    // Create new options
-    items.push(...data.suggestions.map(makeListItem));
+    // Now add search results, if any.
+    if (data.suggestions.length) {
+      const list = document.createElement("ul");
+      list.setAttribute("aria-labeledby", `${this.id}--list`);
+      list.classList.add("wx-combo-box__list");
+
+      if (saved.length) {
+        list.append(makeSectionHeading("search results"));
+      }
+      list.append(...data.suggestions.map(makeListItem));
+
+      items.push(list);
+    }
 
     // Append to shadow select element
     this.querySelector('[slot="listbox"]').replaceChildren(...items);
@@ -509,9 +520,12 @@ class ComboBox extends HTMLElement {
     if (!currentSelection) {
       nextItem = this.querySelector(`li[role="option"]`);
     } else {
-      nextItem = this.querySelector(
-        'li[aria-selected="true"] ~ li[role="option"]',
-      );
+      const allOptions = Array.from(this.querySelectorAll('li[role="option"]'));
+      const index = allOptions.indexOf(currentSelection);
+
+      if (index >= 0 && index < allOptions.length - 1) {
+        nextItem = allOptions[index + 1];
+      }
     }
 
     // Per WCAG guidelines, we can do nothing
@@ -549,6 +563,7 @@ class ComboBox extends HTMLElement {
     const currentItemIndex = listItems.indexOf(currentSelection);
     if (currentItemIndex <= 0) {
       this.hideList();
+      return;
     }
 
     // Otherwise, we navigate to the previous item in the list
