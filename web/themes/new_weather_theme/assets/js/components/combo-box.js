@@ -321,11 +321,15 @@ class ComboBox extends HTMLElement {
   async updateSearch(text) {
     const data = await this.getSearchResults(text);
 
-    const saved = this.getSavedResults(text);
-    data.suggestions.unshift(...saved.map((s) => ({ ...s, recent: true })));
+    const makeSectionHeading = (title) => {
+      const heading = document.createElement("li");
+      heading.textContent = title;
+      heading.classList.add("font-mono-sm", "text-base", "padding-1");
+      heading.setAttribute("role", "presentation");
+      return heading;
+    };
 
-    // Create new options
-    const items = data.suggestions.map((suggestion, idx) => {
+    const makeListItem = (suggestion, idx) => {
       const li = document.createElement("li");
       li.innerText = suggestion.text;
       li.setAttribute("role", "option");
@@ -339,9 +343,6 @@ class ComboBox extends HTMLElement {
       } else {
         return null;
       }
-      if (suggestion.recent) {
-        li.setAttribute("data-recent", true);
-      }
       li.classList.add(...["wx-combo-box__list-option"]);
       li.id = `${this.id}--item-${idx + 1}`;
 
@@ -350,12 +351,31 @@ class ComboBox extends HTMLElement {
       });
       li.addEventListener("click", this.chooseOption);
       return li;
-    });
+    };
+
+    const saved = this.getSavedResults(text);
+
+    const items = [];
+
+    // If there are saved items, we want to put in a heading list item for them
+    // and possibly a heading list item for current search results as well.
+    if (saved.length) {
+      items.push(makeSectionHeading("recent locations"));
+      items.push(...saved.map(makeListItem));
+
+      if (data.suggestions.length) {
+        items.push(makeSectionHeading("search results"));
+      }
+    }
+
+    // Create new options
+    items.push(...data.suggestions.map(makeListItem));
+
     // Append to shadow select element
     this.querySelector('[slot="listbox"]').replaceChildren(...items);
 
     // If there are results, show the area
-    if (data.suggestions.length) {
+    if (saved.length || data.suggestions.length) {
       this.showList();
     } else {
       this.hideList();
@@ -419,10 +439,15 @@ class ComboBox extends HTMLElement {
       // which means temporary selection both
       // in aria and in visual styling,
       // to the first element in the dropdown
-      const firstListItem = this.querySelector("ul li:first-child");
+      const firstListItem = this.querySelector('ul li[role="option"]');
       if (firstListItem) {
         this.pseudoFocusListItem(firstListItem);
       }
+
+      this.querySelector("ul li").scrollIntoView({
+        block: "nearest",
+        inline: "start",
+      });
     }
   }
 
@@ -453,11 +478,13 @@ class ComboBox extends HTMLElement {
    * items in the listbox
    */
   pseudoBlurItems() {
-    Array.from(this.listbox.querySelectorAll("li")).forEach((li) => {
-      li.setAttribute("aria-selected", "false");
-      li.classList.remove("wx-combo-box__list-option--focused");
-      li.classList.remove("wx-combo-box__list-option--selected");
-    });
+    Array.from(this.listbox.querySelectorAll(`li[role="option"]`)).forEach(
+      (li) => {
+        li.setAttribute("aria-selected", "false");
+        li.classList.remove("wx-combo-box__list-option--focused");
+        li.classList.remove("wx-combo-box__list-option--selected");
+      },
+    );
     this.input.setAttribute("aria-activedescendant", "");
   }
 
@@ -480,9 +507,11 @@ class ComboBox extends HTMLElement {
     let nextItem;
     const currentSelection = this.querySelector('li[aria-selected="true"]');
     if (!currentSelection) {
-      nextItem = this.querySelector("li:first-child");
+      nextItem = this.querySelector(`li[role="option"]`);
     } else {
-      nextItem = this.querySelector('li[aria-selected="true"] + li');
+      nextItem = this.querySelector(
+        'li[aria-selected="true"] ~ li[role="option"]',
+      );
     }
 
     // Per WCAG guidelines, we can do nothing
@@ -514,7 +543,9 @@ class ComboBox extends HTMLElement {
 
     // If the selected item matches the first item in the list
     // then we close the list;
-    const listItems = Array.from(this.listbox.querySelectorAll("li"));
+    const listItems = Array.from(
+      this.listbox.querySelectorAll(`li[role="option"]`),
+    );
     const currentItemIndex = listItems.indexOf(currentSelection);
     if (currentItemIndex <= 0) {
       this.hideList();
@@ -574,7 +605,7 @@ class ComboBox extends HTMLElement {
     // Set this component's selectedIndex and
     // value to the corresponding properties
     this.selectedIndex = Array.from(
-      this.listbox.querySelectorAll("li"),
+      this.listbox.querySelectorAll(`li[role="option"]`),
     ).indexOf(selectedItem);
 
     this.value = selectedItem.getAttribute("data-value");
@@ -618,6 +649,13 @@ class ComboBox extends HTMLElement {
       textInput.value = optionText;
 
       if (this.url) {
+        const result = {
+          text: this.input.value,
+          url: this.url,
+        };
+
+        this.saveSearchResult(result);
+
         formEl.setAttribute("action", this.url);
         return formEl.submit();
       }
@@ -671,9 +709,14 @@ class ComboBox extends HTMLElement {
 
   saveSearchResult(result) {
     try {
+      // When loading previously-saved results, immediately remove any items for
+      // the same URL. We'll replace them with the new one. This way we don't
+      // end up having a whole list of the same place.
       const saved = JSON.parse(
         localStorage.getItem("wxgov_recent_locations") ?? "[]",
-      );
+      ).filter(({ url }) => url !== result.url);
+
+      // Put the new one at the front of the list.
       saved.unshift(result);
 
       localStorage.setItem(
