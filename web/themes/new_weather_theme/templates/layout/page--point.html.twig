@@ -41,8 +41,7 @@
             <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
           {% endif %}
             <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="current" aria-controls="current">{{ "Current" | t }}</button>
-            <button role="tab" id="today-tab-button" class="tab-button" data-tab-name="today" aria-controls="today">{{ "Today" | t}}</button>
-            <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "Daily" | t }}</button>
+            <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "7 Days" | t }}</button>
           </div>
         </div>
       </div>
@@ -53,25 +52,16 @@
           {{ drupal_block("weathergov_local_alerts") }}
         </div>
         {% endif %}
+
         <div class="tab-container focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
           {{ drupal_block("weathergov_current_conditions") }}
           {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
         </div>
-        <div class="tab-container focus-offset-205" id="today" role="tabpanel" aria-labelledby="today-tab-button" tabindex="0">
+
+         <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
           {{ drupal_block("weathergov_weather_story") }}
-          <div class="grid-container padding-x-2">
-            <div class="grid-row">
-              <div class="grid-col tablet-lg:grid-offset-2">
-                <h2 class="text-normal text-primary-darkest margin-top-0 margin-bottom-2">{{ "Hourly" | t }}</h2>
-              </div>
-            </div>
-          </div>
-          {{ drupal_block("weathergov_hourly_precipitation") }}
-          {{ drupal_block("weathergov_hourly_forecast") }}
+          {{ drupal_block("weathergov_daily_forecast") }}
           {{ drupal_block("weathergov_wfo_promo") }}
-        </div>
-        <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
-            {{ drupal_block("weathergov_daily_forecast") }}
         </div>
       </div>
 
