@@ -1,3 +1,4 @@
+/* eslint cypress/no-unnecessary-waiting: 0 */
 describe("the location page", () => {
   before(() => {
     cy.request("http://localhost:8081/play/testing");
