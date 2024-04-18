@@ -4,7 +4,12 @@ Drupal provides a core set of functionality as part the standard release for any
 
 ## Selection criteria & checklist
 
+Our checklist is inspired from the [Concise Guide for Evaluating Open Source Software](https://best.openssf.org/Concise-Guide-for-Evaluating-Open-Source-Software).
+
+- Can we avoid using this contributed module? Why not? Make a "decision record" in our [contributed module decision records](#contributed-module-decision-records) section below describing the reasoning. 
 - Our version of Drupal (10) is fully supported.
+- Take a look at the documentation. Is it easy to use and correctly configure? Is there an effort made to make it easy to secure? If we need a module for a specific purpose, does the installed code beyond that purpose? If so, is there a smaller package we could use instead? 
+- Take a look at the code. Are there any red flags? See item 10 in the [Concise Guide for Evaluating Open Source Software](https://best.openssf.org/Concise-Guide-for-Evaluating-Open-Source-Software) on how to conduct a code evaluation of third-party software.
 - Do not use a beta or dev release of a module, even if it provides functionality we are seeking.
 - Stable releases should be covered by the [security advisory policy](https://www.drupal.org/drupal-security-team/security-advisory-process-and-permissions-policy)
 - Choose modules with more than one maintainer. 
@@ -13,7 +18,6 @@ Drupal provides a core set of functionality as part the standard release for any
 - Look at the time since the last commit. We are looking for commits made in the last month. If there have been no new commits in the last three months, consider not using the module unless functionality is very simple and the module is considered "feature complete".
 - Ensure there is a non-beta non-dev release available i.e. a stable release.
 - Look at open issues, closed issues, and open bugs to ensure functionality we are seeking from the module is not impacted by any of these issues. Frequency of opened and closed issues is also an indicator of how well maintained the module is.
-- Make a "decision record" in our [contributed module decision records](#contributed-module-decision-records) section below. 
 
 ## Contributed module decision records
 
