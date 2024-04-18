@@ -105,12 +105,12 @@ const setupRadar = () => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.cmiRadar) {
+document.addEventListener("wx:tab-switched", (event) => {
+  if (window.cmiRadar && event.detail.tabId === "current") {
     setupRadar();
+  } else if(event.detail.tabId === "current"){
+    document.querySelector("[data-wx-radar-cmi]").addEventListener("load", () => {
+      setupRadar();
+    });
   }
-
-  document.querySelector("[data-wx-radar-cmi]").addEventListener("load", () => {
-    setupRadar();
-  });
 });
