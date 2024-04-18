@@ -62,6 +62,17 @@ final class LocationAndGridRouteController extends ControllerBase
     public function serveLocationPage($lat, $lon)
     {
         $path = $this->request->getCurrentRequest()->getPathInfo();
+
+        // Drupal routes are not case-sensitive. However, it uses the path to
+        // determine what Twig files to load, and it *DOES* maintain casing for
+        // that. So where we might land here for a URL that looks like
+        // /POINT/{lat}/{lon} correctly, Drupal will then try to load a template
+        // at page--POINT.html.twig instead of page--point.html.twig.
+        //
+        // To guard against his, if we see that we're not on a lowercase path,
+        // redirect to the lowercase one. It's a bit clunky, but it shouldn't
+        // be a particularly common use case. We can consider looking at other
+        // options if analytics shows us people are landing here frequently.
         if ($path !== strtolower($path)) {
             return new RedirectResponse(strtolower($path));
         }
