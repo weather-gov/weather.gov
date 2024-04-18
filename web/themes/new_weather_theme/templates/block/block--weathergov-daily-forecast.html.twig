@@ -6,11 +6,6 @@
   {% else %}
 
   <div class="grid-container padding-x-0 tablet:padding-x-2">
-    <div class="grid-row">
-      <div class="grid-col tablet-lg:grid-offset-2"> 
-        <h2 class="padding-x-2 tablet:padding-x-0 margin-top-0 text-normal text-primary-darker">{{ "Next @count days" | t({ "@count": (content.detailed | length) + 1 }) }}</h2>
-      </div>
-    </div>
     <ol class="usa-list--unstyled">
       {# Attempt to render the period(s) associated with the current day #}
       {% if content.today %}

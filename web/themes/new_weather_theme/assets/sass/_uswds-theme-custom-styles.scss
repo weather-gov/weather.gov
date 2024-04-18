@@ -173,7 +173,7 @@ table tr:nth-child(2) th {
   }
 }
 
-/* Extended forecast description width
+/* Flex custom utilities 
 ------------------------------------- */
 .flex-basis-auto {
   flex-basis: auto;
@@ -190,6 +190,12 @@ table tr:nth-child(2) th {
 
   .mobile-lg__flex-basis-auto {
     flex-basis: auto;
+  }
+}
+
+@include at-media(tablet) {
+  .tablet__flex-justify-start {
+    justify-content: flex-start;
   }
 }
 

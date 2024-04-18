@@ -9,7 +9,45 @@
     {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
     {% else %}
 
-    {# We hide from screenreaders and use the weather narrative (below) instead #}
+    {# Weather narrative is for screen readers only #}
+    <div role="text" data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
+        {{ 'Weather as of' | t }}
+        {# Datetimes are localized in client-side Javascript. #}
+        <time datetime="{{ content.timestamp.utc }}" data-wx-local-time>
+          {{ content.timestamp.formatted }}
+        </time>.
+        {{ "The weather in @place, is @conditions.
+          Temperature is @temperature ℉." |
+        t({
+          "@place": content.place,
+          "@conditions": content.conditions.long | lower,
+          "@temperature": content.temperature,
+        })
+        }}
+        {% if content.feels_like != content.temperature %}
+          {{ " It feels like @feelsLike ℉." |
+          t({
+            "@feelsLike": content.feels_like
+          })
+          }}
+        {% endif %}
+        {{ " Humidity is @humidity%"
+        |
+        t({
+          "@humidity": content.humidity
+        })
+        }}{% if content.wind.speed != null %}
+          {{
+          "with @windSpeed mph winds from the @windDirection"
+          |
+          t({
+            "@windSpeed": content.wind.speed,
+            "@windDirection": content.wind.direction.long
+          })
+          }}{% else %}{{ ". Wind information is unavailable" | t() }}{% endif %}.
+    </div>
+
+    {# We hide from screenreaders and use the weather narrative (above) instead #}
     <div class="grid-col-12 tablet:grid-col-6" aria-hidden="true">
       {# First row is temperature #}
       <div class="display-flex">
@@ -61,6 +99,7 @@
         </div>
       </div>
     </div>
+
     <div class="grid-col-12 tablet:grid-col-6">
       <div class="margin-top-3 tablet:margin-top-0 border-top-1px border-base-light padding-top-1">
         <span class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-1 display-block">{{ "Observation station" | t }}</span>
@@ -79,44 +118,6 @@
           {{ content.timestamp.formatted }}
         </time>
       </div>
-    </div>
-
-    {# Weather narrative is for screen readers only #}
-    <div role="text" data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
-        {{ 'Weather as of' | t }}
-        {# Datetimes are localized in client-side Javascript. #}
-        <time datetime="{{ content.timestamp.utc }}" data-wx-local-time>
-          {{ content.timestamp.formatted }}
-        </time>.
-        {{ "The weather in @place, is @conditions.
-          Temperature is @temperature ℉." |
-        t({
-          "@place": content.place,
-          "@conditions": content.conditions.long | lower,
-          "@temperature": content.temperature,
-        })
-        }}
-        {% if content.feels_like != content.temperature %}
-          {{ " It feels like @feelsLike ℉." |
-          t({
-            "@feelsLike": content.feels_like
-          })
-          }}
-        {% endif %}
-        {{ " Humidity is @humidity%"
-        |
-        t({
-          "@humidity": content.humidity
-        })
-        }}{% if content.wind.speed != null %}
-          {{
-          "with @windSpeed mph winds from the @windDirection"
-          |
-          t({
-            "@windSpeed": content.wind.speed,
-            "@windDirection": content.wind.direction.long
-          })
-          }}{% else %}{{ ". Wind information is unavailable" | t() }}{% endif %}.
     </div>
     {% endif %}
   </div>

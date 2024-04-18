@@ -1,24 +1,36 @@
 {% if content.title %}
 {{ attach_library("new_weather_theme/localize-timestamps") }}
-<div class="grid-container padding-x-2"> 
-  <div class="grid-row"> 
-    <div class="grid-col tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-      <div data-wx-weather-story class="margin-bottom-4">
-        <h2 class="text-primary-darker text-normal margin-top-0 margin-bottom-2"> {{  content.title | t }} </h2>
-        <p class="text-base margin-top-2"><span class="font-family-mono text-ls-neg-3">{{ "Last updated" | t }}:</span>
-        <time datetime="{{ content.updated.utc }}" data-wx-local-time data-date-format="M d Y T">
-          {{ content.updated.formatted }}
-        </time>
-        </p>
-        <div class="line-height-sans-4"> 
-          {{ content.body | raw }}
+<div class="grid-container padding-bottom-2 padding-x-0 tablet:padding-x-2">
+  <div class="grid-row">
+    <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+      <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="weather_story">
+        <h2 class="usa-accordion__heading font-heading-lg">
+          <button
+            type="button"
+            class="usa-accordion__button text-ls-1"
+            aria-expanded="false"
+            aria-controls="weather_story_content"
+            data-button-for="#weather_story_content">
+            {{ "Forecaster's report" | t }}
+          </button>
+        </h2>
+        <div id="weather_story_content" class="usa-accordion__content usa-prose">
+          <h3 class="text-primary-darker text-normal margin-top-0 margin-bottom-2"> {{  content.title | t }} </h3>
+          <p class="text-base margin-top-2"><span class="font-family-mono text-ls-neg-3">{{ "Last updated" | t }}:</span>
+          <time datetime="{{ content.updated.utc }}" data-wx-local-time data-date-format="M d Y T">
+            {{ content.updated.formatted }}
+          </time>
+          </p>
+          <div class="line-height-sans-4"> 
+            {{ content.body | raw }}
+          </div>
+          {% if content.image %}
+          <img class="margin-left-neg-2 tablet:margin-left-0 maxw-mobile-lg" src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
+          {% endif %}
         </div>
-        {% if content.image %}
-        <img class="margin-left-neg-2 tablet:margin-left-0 maxw-mobile-lg" src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
-        {% endif %}
       </div>
     </div>
-  </div>
-</div> 
+  </div> 
+</div>
 
 {% endif %}

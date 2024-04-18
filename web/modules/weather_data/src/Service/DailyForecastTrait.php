@@ -43,7 +43,7 @@ trait DailyForecastTrait
 
     private function formatDailyPeriodForToday($period, $timezone = null)
     {
-        $formattedPeriod = $this->formatDailyPeriod($period);
+        $formattedPeriod = $this->formatDailyPeriod($period, $timezone);
 
         // Early return if no period was passed
         if (!$formattedPeriod) {
@@ -117,7 +117,7 @@ trait DailyForecastTrait
         // Grab the hourly forecast period information
         // and any relevant alerts so we can use them
         // in the hourly details table for each day
-        $hourlyPeriods = $this->getHourlyForecastFromGrid($wfo, $x, $y);
+        $hourlyPeriods = $this->getHourlyForecastFromGrid($wfo, $x, $y, $now);
         $point = self::$stashedPoint;
         if (!$point) {
             $point = $this->getGeometryFromGrid($wfo, $x, $y)[0];
