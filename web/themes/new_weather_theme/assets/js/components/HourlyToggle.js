@@ -42,6 +42,7 @@ class HourlyToggle extends HTMLElement {
     }
     this.updateText();
     this.updateIcon();
+    this.updateWidth();
   }
 
   updateText() {
@@ -69,6 +70,12 @@ class HourlyToggle extends HTMLElement {
         iconHref,
       );
     }
+  }
+
+  updateWidth() {
+    this.parentNode.classList.toggle("tablet-lg:grid-offset-2");
+    this.parentNode.classList.toggle("tablet-lg:grid-col-8");
+    this.parentNode.classList.toggle("tablet-lg:grid-col-12");
   }
 }
 
