@@ -234,3 +234,9 @@ svg[data-wind-direction] {
         width: unset;
     }
 }
+
+/* Weather story overrides
+------------------------------------- */
+#weather_story_content h3 {
+    font-weight: normal;
+}
