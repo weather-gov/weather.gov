@@ -339,6 +339,11 @@ class ComboBox extends HTMLElement {
                 li.addEventListener("focus", (e) => {
                     this.cacheLocationGeodata(e.target.dataset.value);
                 });
+                li.addEventListener("mousedown", e => {
+                    // Stop the input from losing focus by
+                    // blocking normal browser behavior here
+                    event.preventDefault();
+                })
                 li.addEventListener("click", this.chooseOption);
                 return li;
             });
