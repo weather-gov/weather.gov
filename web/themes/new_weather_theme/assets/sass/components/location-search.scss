@@ -6,6 +6,12 @@
   @extend .usa-combo-box;
 }
 
+.wx-combo-box li[role="option"] {
+  &:hover {
+    background-color: color('base-lighter');
+  }
+}
+
 .wx-combo-box__input {
   @extend .usa-combo-box__input;
 
