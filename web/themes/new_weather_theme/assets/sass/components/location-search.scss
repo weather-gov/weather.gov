@@ -1,4 +1,5 @@
 /* stylelint-disable scss/at-extend-no-missing-placeholder */
+@use "uswds-core" as *;
 @forward "uswds-theme";
 @forward "uswds";
 
@@ -8,7 +9,7 @@
 
 .wx-combo-box li[role="option"] {
   &:hover {
-    background-color: color('base-lighter');
+    background-color: color('base-lightest');
   }
 }
 
