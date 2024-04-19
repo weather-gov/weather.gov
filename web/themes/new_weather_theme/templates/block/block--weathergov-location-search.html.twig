@@ -5,19 +5,15 @@
 <div class="grid-row">
   <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3" data-location-search method="post">
     <div class="display-flex flex-align-end">
-      <label class="usa-label" for="weather-location-search">
-        {{ 'Search for a location' | t }}
+      <label class="usa-label" for="search-combo-box">
+        {{ "Enter city or zip code" | t }}
       </label>
       <div class="margin-x-1">|</div>
       <div class="">
         <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
       </div>
     </div>
-    <!-- <wx-location-search class="z-top" data-filter=".*"> -->
-      <!--   <select class="usa-select" name="weather location" id="weather-location-search"> -->
-        <!--   </select> -->
-      <!-- </wx-location-search> -->
-    <wx-combo-box class="z-top margin-top-1">
+    <wx-combo-box class="z-top margin-top-1" id="search-combo-box">
     </wx-combo-box>
     <input type="hidden" name="suggestedPlaceName" value="">
   </form>
