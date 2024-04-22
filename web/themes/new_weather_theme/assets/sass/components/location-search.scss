@@ -8,7 +8,7 @@
 }
 
 .wx-combo-box li[role="option"] {
-  &:hover {
+  &:not(.wx-combo-box__list-option--focused):hover {
     background-color: color('base-lightest');
   }
 }
