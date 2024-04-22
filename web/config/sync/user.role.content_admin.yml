@@ -18,6 +18,7 @@ dependencies:
     - filter
     - help
     - node
+    - scheduler
     - system
     - taxonomy
     - toolbar
@@ -28,12 +29,14 @@ label: 'Content admin'
 weight: -7
 is_admin: null
 permissions:
+  - 'access administration pages'
   - 'access block library'
   - 'access content'
   - 'access content overview'
   - 'access contextual links'
   - 'access files overview'
   - 'access help pages'
+  - 'access site reports'
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access user profiles'
@@ -43,7 +46,6 @@ permissions:
   - 'create dynamic_safety_information content'
   - 'create no_title_block block content'
   - 'create page content'
-  - 'create testing_page content'
   - 'create weather_story content'
   - 'create wfo_promo content'
   - 'delete any basic block content'
@@ -53,7 +55,6 @@ permissions:
   - 'delete any no_title_block block content'
   - 'delete any no_title_block block content revisions'
   - 'delete any page content'
-  - 'delete any testing_page content'
   - 'delete any weather_story content'
   - 'delete any wfo_promo content'
   - 'delete own files'
@@ -64,13 +65,14 @@ permissions:
   - 'edit any testing_page content'
   - 'edit any weather_story content'
   - 'edit any wfo_promo content'
+  - 'revert all revisions'
   - 'revert any basic block content revisions'
   - 'revert any no_title_block block content revisions'
   - 'revert dynamic_safety_information revisions'
   - 'revert page revisions'
-  - 'revert testing_page revisions'
   - 'revert weather_story revisions'
   - 'revert wfo_promo revisions'
+  - 'schedule publishing of nodes'
   - 'use text format basic_html'
   - 'use workbench access'
   - 'view all revisions'
@@ -79,7 +81,8 @@ permissions:
   - 'view dynamic_safety_information revisions'
   - 'view own unpublished content'
   - 'view page revisions'
-  - 'view testing_page revisions'
+  - 'view scheduled content'
+  - 'view the administration theme'
   - 'view weather_story revisions'
   - 'view wfo_promo revisions'
   - 'view workbench access information'
