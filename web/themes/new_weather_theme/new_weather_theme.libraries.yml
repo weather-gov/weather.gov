@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-04-18
+  version: 2024-04-19
   css:
     theme:
       assets/css/styles.css: {}
@@ -36,7 +36,7 @@ location-search:
     assets/js/components/LocationSearch.js: { preprocess: false }
 
 location-combo-box:
-  version: 2024-04-15
+  version: 2024-04-19
   js:
     assets/js/components/combo-box.js: { preprocess: false }
         
