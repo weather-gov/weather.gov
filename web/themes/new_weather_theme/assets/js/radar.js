@@ -96,12 +96,14 @@ const setupRadar = () => {
   );
 };
 
-document.addEventListener("wx:tab-switched", (event) => {
-  if (window.cmiRadar && event.detail.tabId === "current") {
-    setupRadar();
-  } else if(event.detail.tabId === "current"){
-    document.querySelector("[data-wx-radar-cmi]").addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("wx:tab-switched", (event) => {
+    if (window.cmiRadar && event.detail.tabId === "current") {
       setupRadar();
-    });
-  }
+    } else if(event.detail.tabId === "current"){
+      document.querySelector("[data-wx-radar-cmi]").addEventListener("load", () => {
+        setupRadar();
+      });
+    }
+  });
 });

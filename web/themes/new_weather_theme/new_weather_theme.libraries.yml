@@ -63,9 +63,10 @@ radar:
   js:
     assets/js/radar.js:
       attributes:
-        async: true
+        defer: true
     https://radar.weather.gov/cmi-radar/cmi-radar.1185c3ee.js:
       attributes:
+        defer: true
         data-wx-radar-cmi: true
 
 digital-analytics-program:
