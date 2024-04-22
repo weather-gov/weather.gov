@@ -108,6 +108,17 @@ trait DailyForecastTrait
             $now = new \DateTimeImmutable("now", new \DateTimeZone($timezone));
         }
 
+        // Fetch the 6-hour precipitation amount
+        // data for each day
+        $precipPeriods = $this->getHourlyPrecipitation(
+            $wfo,
+            $x,
+            $y,
+            $now
+        );
+        $precipPeriods = array_chunk($precipPeriods, 4);
+
+        // Fetch the actual daily forecast periods
         $periods = DateTimeUtility::filterToAfter(
             $forecast->periods,
             $now,
@@ -201,6 +212,7 @@ trait DailyForecastTrait
             "todayHourly" => array_values($todayHourlyDetails),
             "todayAlerts" => array_values($todayAlerts),
             "detailed" => array_values($detailedPeriodsFormatted),
+            "precipitationPeriods" => array_values($precipPeriods)
         ];
     }
 }

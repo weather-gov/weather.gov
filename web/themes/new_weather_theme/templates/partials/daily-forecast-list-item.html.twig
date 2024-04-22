@@ -9,6 +9,7 @@ only be a nighttime period.
 #}
 {% set itemId =  periods[0].monthAndDay | lower | replace({" ":"-"}) %}
 <li class="display-block" {% if itemId %}id="{{itemId}}{% endif %}">
+  {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipHours } %}
   <div class="bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8 hourly-table__expand-transition">
     <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center margin-bottom-3 tablet:margin-bottom-4 tablet:grid-col-6 tablet__flex-justify-start">
       <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3" datetime="{{ periods[0].startTime }}">
