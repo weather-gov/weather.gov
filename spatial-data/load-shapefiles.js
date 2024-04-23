@@ -5,6 +5,7 @@ const loadCounties = require("./sources/counties.js");
 const loadCWAs = require("./sources/countyWarningAreas.js");
 const loadPlaces = require("./sources/places.js");
 const loadStates = require("./sources/states.js");
+const loadZones = require("./sources/zones.js");
 
 async function main() {
   const meta = await metadata();
@@ -35,6 +36,12 @@ async function main() {
       console.log(`${target} already up-to-date; skipping`);
     }
   }
+  if (meta.zones.update) {
+    urls.push(
+      "https://www.weather.gov/source/gis/Shapefiles/WSOM/z_05mr24.zip",
+      "https://www.weather.gov/source/gis/Shapefiles/WSOM/fz05mr24.zip",
+    );
+  }
 
   for await (const url of urls) {
     await downloadAndUnzip(url);
@@ -52,6 +59,9 @@ async function main() {
   }
   if (meta.cwas.update) {
     await loadCWAs();
+  }
+  if (meta.zones.update) {
+    await loadZones();
   }
   if (meta.places.update) {
     await loadPlaces();
