@@ -15,36 +15,34 @@ module.exports = {
   parserOptions: { ecmaVersion: 2024 },
   overrides: [
     {
-      files: ["spatial-data/*.js", "tests/**/*.js"],
-      rules: {
-        "no-console": 0,
-      },
-    },
-    {
       files: ["web/themes/new_weather_theme/assets/js/components/**/*.js"],
       rules: {
         "class-methods-use-this": 0,
       },
     },
     {
-      files: [
-        "tests/a11y/**/*.js",
-        "tests/e2e/**/*.js",
-        "tests/load-times/**/*.js",
-      ],
+      files: ["tests/**/*.js", "spatial-data/**/*.js"],
       extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
       env: {
+        es6: true,
         jest: true,
       },
+      parserOptions: { ecmaVersion: 2024 },
       rules: {
         "no-console": 0,
+
         // For imports in Node, file extensions are optional and discouraged as
         // a matter of practice.
-        "import/extensions": ["error", "never"],
+        "import/extensions": [0],
+
         // This rule disallows using require() on files in devDependencies. But
         // for test code, we'll rely on that heavily so we can disable the rule
         // in here.
         "import/no-extraneous-dependencies": [0],
+
+        // Allow reassignment of parameter properties, but not the parameters
+        // themselves.
+        "no-param-reassign": ["error", { props: false }],
 
         // Taken directly from airbnb, but with the for...of statements allowed
         // since we know it is supported in Node.js. We may extend this grace

@@ -96,12 +96,28 @@ const setupRadar = () => {
   );
 };
 
-document.addEventListener("wx:tab-switched", (event) => {
-  if (window.cmiRadar && event.detail.tabId === "current") {
+document.addEventListener("DOMContentLoaded", () => {
+  const scriptEl = document.querySelector("[data-ex-radar-cmi]");
+  const currentTabSelected = document.querySelector("#current[data-selected]");
+  // If the page loads with the current tab selected
+  // then we try to load the radar.
+  // If the page loads with some other tab selected,
+  // than we bind a listener for the tab-switched event.
+  if(currentTabSelected && window.cmiRadar){
     setupRadar();
-  } else if(event.detail.tabId === "current"){
-    document.querySelector("[data-wx-radar-cmi]").addEventListener("load", () => {
+  } else if(currentTabSelected){
+    scriptEl.addEventListener("load", () => {
       setupRadar();
+    });
+  } else {
+    document.addEventListener("wx:tab-switched", (event) => {
+      if (window.cmiRadar && event.detail.tabId === "current") {
+        setupRadar();
+      } else if(event.detail.tabId === "current"){
+        scriptEl.addEventListener("load", () => {
+          setupRadar();
+        });
+      }
     });
   }
 });
