@@ -1,9 +1,11 @@
+{{ attach_library("new_weather_theme/leaflet") }}
+
 <div class="grid-container padding-x-2"> 
   <div class="grid-row"> 
     <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
       <weathergov-alerts class="display-block">
       {% for alert in content.alerts %}
-      <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ alert.alertId }}" data-geometry="{{ alert.geometry | url_encode }}">
+      <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ alert.alertId }}">
         <h2 class="usa-accordion__heading font-heading-lg">
           <button
             type="button"
@@ -49,7 +51,18 @@
               {% endfor %}
             </ul>
           {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
+
+          <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
+            <div class="grid-container padding-0 bg-white shadow-1 grid-col-12">
+              <div class="grid-row wx-radar-container">
+                <wx-alert-map class="grid-col-12" data-geometry="{{ alert.geometry | url_encode }}" data-alert-id="{{ alert.alertId}}" lat="{{ weather.point.lat }}" lon="{{ weather.point.lon }}">
+                  <div id="wx_alert_map_{{ alert.alertId }}" style="height: 100%"></div>
+                </wx-alert-map>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
       {% endfor %}
       </weathergov-alerts>

@@ -9,3 +9,11 @@
     aspect-ratio: 1/1;
   }
 }
+
+.weathergov-location-marker {
+  height: 24px !important;
+  width: 24px !important;
+  background: #1188ff;
+  border: 3px solid white;
+  border-radius: 100%;
+}

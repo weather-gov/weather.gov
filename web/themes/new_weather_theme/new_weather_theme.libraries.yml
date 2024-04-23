@@ -69,6 +69,23 @@ radar:
         defer: true
         data-wx-radar-cmi: true
 
+leaflet:
+  version: 1.9.4
+  css:
+    theme:
+      assets/css/leaflet.css:
+        attributes:
+          integrity: sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=
+          crossorigin: /
+  js:
+    https://unpkg.com/leaflet@1.9.4/dist/leaflet.js:
+    https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js:
+    https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js:
+    assets/js/alertMap.js:
+      attributes:
+        type: module
+        defer: true
+
 digital-analytics-program:
   header: true
   version: 2024-02-14

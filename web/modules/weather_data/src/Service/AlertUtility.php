@@ -437,10 +437,14 @@ class AlertUtility
             }
 
             $polygon = $dataLayer->databaseFetch(
-                "SELECT ST_ASGEOJSON(ST_SIMPLIFY(ST_GEOMFROMTEXT('$polygon'), 0.01)) as shape",
+                "SELECT ST_ASGEOJSON(ST_SIMPLIFY(ST_GEOMFROMTEXT('$polygon'), 0.003)) as shape",
             );
 
             $polygon = json_decode($polygon->shape);
+            if ($polygon->type == "Polygon") {
+                $polygon->type = "MultiPolygon";
+                $polygon->coordinates = [$polygon->coordinates];
+            }
 
             $polygons = count($polygon->coordinates);
             for ($poly = 0; $poly < $polygons; $poly += 1) {
