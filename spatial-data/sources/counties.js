@@ -11,7 +11,7 @@ module.exports = async () => {
   console.log("loading counties...");
   const db = await openDatabase();
 
-  const file = await shapefile.open(`../"c_05mr24.shp`);
+  const file = await shapefile.open(`./c_05mr24.shp`);
 
   await db.query(
     `CREATE TABLE IF NOT EXISTS
