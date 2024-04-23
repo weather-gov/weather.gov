@@ -13,7 +13,6 @@ const targets = {
 };
 
 module.exports = async () => {
-  console.log("fetching versioning metadata...");
   const db = await openDatabase();
 
   await db.query(

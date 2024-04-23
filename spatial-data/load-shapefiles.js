@@ -9,29 +9,39 @@ const loadStates = require("./sources/states.js");
 async function main() {
   const meta = await metadata();
 
-  const urls = [];
-  if (meta.states.update) {
-    urls.push(
+  const dataUrls = {
+    states: [
       "https://www.weather.gov/source/gis/Shapefiles/County/s_05mr24.zip",
-    );
-  }
-  if (meta.counties.update) {
-    urls.push(
+    ],
+    counties: [
       "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
-    );
-  }
-  if (meta.cwas.update) {
-    urls.push(
-      "https://www.weather.gov/source/gis/Shapefiles/WSOM/w_05mr24.zip",
-    );
+    ],
+    cwas: ["https://www.weather.gov/source/gis/Shapefiles/WSOM/w_05mr24.zip"],
+  };
+  const dataZips = { places: ["us.cities500.txt.zip"] };
+
+  const urls = [];
+  const zips = [];
+
+  for (const [target, { update }] of Object.entries(meta)) {
+    if (update) {
+      if (dataUrls[target]) {
+        urls.push(...dataUrls[target]);
+      }
+      if (dataZips[target]) {
+        zips.push(...dataZips[target]);
+      }
+    } else {
+      console.log(`${target} already up-to-date; skipping`);
+    }
   }
 
   for await (const url of urls) {
     await downloadAndUnzip(url);
   }
 
-  if (meta.places.update) {
-    await unzip("us.cities500.txt.zip");
+  for await (const zip of zips) {
+    await unzip(zip);
   }
 
   if (meta.states.update) {
