@@ -41,10 +41,12 @@ module.exports = async () => {
 
   const results = {};
   for (const [target, metadata] of Object.entries(targets)) {
+    const databaseVersion = +(existing[metadata.table] ?? 0);
+    const currentVersion = metadata?.version ?? 0;
+
     results[target] = {
       update:
-        existing[metadata.table] !== metadata?.version &&
-        metadata?.version > existing[metadata.table],
+        databaseVersion !== currentVersion && currentVersion > databaseVersion,
     };
   }
 
@@ -52,17 +54,21 @@ module.exports = async () => {
 };
 
 module.exports.update = async () => {
+  const meta = await module.exports();
+
   const db = await openDatabase();
 
   // eslint-disable-next-line no-restricted-syntax
-  for await (const metadata of Object.values(targets)) {
-    console.log(`setting ${metadata.table} to version ${metadata.version}`);
-    const sql = `INSERT INTO weathergov_geo_metadata
+  for await (const [source, metadata] of Object.entries(targets)) {
+    if (meta[source].update) {
+      console.log(`setting ${metadata.table} to version ${metadata.version}`);
+      const sql = `INSERT INTO weathergov_geo_metadata
                   (table_name, version)
                 VALUES("${metadata.table}", "${metadata.version}")
                 ON DUPLICATE KEY
                   UPDATE version="${metadata.version}"`;
-    await db.query(sql);
+      await db.query(sql);
+    }
   }
 
   await db.end();
