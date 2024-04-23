@@ -45,8 +45,7 @@ module.exports = async () => {
     const currentVersion = metadata?.version ?? 0;
 
     results[target] = {
-      update:
-        databaseVersion !== currentVersion && currentVersion > databaseVersion,
+      update: currentVersion > databaseVersion,
     };
   }
 
@@ -58,10 +57,11 @@ module.exports.update = async () => {
 
   const db = await openDatabase();
 
-  // eslint-disable-next-line no-restricted-syntax
   for await (const [source, metadata] of Object.entries(targets)) {
     if (meta[source].update) {
       console.log(`setting ${metadata.table} to version ${metadata.version}`);
+
+      // UPSERT query, essentially
       const sql = `INSERT INTO weathergov_geo_metadata
                   (table_name, version)
                 VALUES("${metadata.table}", "${metadata.version}")
