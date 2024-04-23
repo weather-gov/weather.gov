@@ -18,6 +18,10 @@ async function main() {
       "https://www.weather.gov/source/gis/Shapefiles/County/c_05mr24.zip",
     ],
     cwas: ["https://www.weather.gov/source/gis/Shapefiles/WSOM/w_05mr24.zip"],
+    zones: [
+      "https://www.weather.gov/source/gis/Shapefiles/WSOM/z_05mr24.zip",
+      "https://www.weather.gov/source/gis/Shapefiles/WSOM/fz05mr24.zip",
+    ],
   };
   const dataZips = { places: ["us.cities500.txt.zip"] };
 
@@ -35,12 +39,6 @@ async function main() {
     } else {
       console.log(`${target} already up-to-date; skipping`);
     }
-  }
-  if (meta.zones.update) {
-    urls.push(
-      "https://www.weather.gov/source/gis/Shapefiles/WSOM/z_05mr24.zip",
-      "https://www.weather.gov/source/gis/Shapefiles/WSOM/fz05mr24.zip",
-    );
   }
 
   for await (const url of urls) {
