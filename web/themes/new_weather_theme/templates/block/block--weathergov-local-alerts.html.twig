@@ -3,7 +3,7 @@
     <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
       <weathergov-alerts class="display-block">
       {% for alert in content.alerts %}
-      <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ alert.alertId }}">
+      <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ alert.alertId }}" data-geometry="{{ alert.geometry | url_encode }}">
         <h2 class="usa-accordion__heading font-heading-lg">
           <button
             type="button"

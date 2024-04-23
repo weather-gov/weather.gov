@@ -373,4 +373,95 @@ class AlertUtility
             }
         }
     }
+
+    public static function getGeometryAsJSON($alert, $dataLayer)
+    {
+        // If the alert already has a geometry, use it.
+        if ($alert->geometry ?? false) {
+            return json_encode($alert->geometry);
+        }
+
+        $geometries = [];
+
+        // Otherwise, we need to derive the geometry from other metadata. Alerts
+        // without a geometry should have a list of affected zones, and we can
+        // build a geometry off that.
+        if (
+            $alert->properties->affectedZones &&
+            count($alert->properties->affectedZones) > 0
+        ) {
+            $ids = array_map(function ($zone) {
+                return "'$zone'";
+            }, $alert->properties->affectedZones);
+            $ids = implode(",", $ids);
+
+            $shapes = $dataLayer->databaseFetchAll(
+                "SELECT ST_AsWKT(shape) as shape FROM weathergov_geo_zones WHERE id IN ($ids)",
+            );
+
+            foreach ($shapes as $shape) {
+                $geometries[] = $shape;
+            }
+        }
+
+        if (count($geometries) == 0) {
+            // If an alert doesn't have a geometry or any zones, that's probably
+            // a bug. However, if the alert has SAME codes, we can use those to
+            // get geometries, too.
+            if (count($alert->properties->geocode->SAME) > 0) {
+                $fips = array_map(function ($same) {
+                    return substr($same, 1);
+                }, $alert->properties->geocode->SAME);
+                $fips = implode(",", $fips);
+
+                $shapes = $dataLayer->databaseFetchAll(
+                    "SELECT ST_AsWKT(shape) as shape FROM weathergov_geo_counties WHERE countyFips IN ($fips)",
+                );
+
+                foreach ($shapes as $shape) {
+                    $geometries[] = $shape;
+                }
+            }
+        }
+
+        $polygon = "";
+
+        if (count($geometries) > 0) {
+            $polygon = array_pop($geometries)->shape;
+
+            foreach ($geometries as $geometry) {
+                $union = $dataLayer->databaseFetch(
+                    "SELECT ST_AsWKT(ST_UNION(ST_GEOMFROMTEXT('$polygon'),ST_GEOMFROMTEXT('$geometry->shape'))) as shape",
+                );
+                $polygon = $union->shape;
+            }
+
+            $polygon = $dataLayer->databaseFetch(
+                "SELECT ST_ASGEOJSON(ST_SIMPLIFY(ST_GEOMFROMTEXT('$polygon'), 0.01)) as shape",
+            );
+
+            $polygon = json_decode($polygon->shape);
+
+            $polygons = count($polygon->coordinates);
+            for ($poly = 0; $poly < $polygons; $poly += 1) {
+                $rings = count($polygon->coordinates[$poly]);
+
+                for ($ring = 0; $ring < $rings; $ring += 1) {
+                    $points = count($polygon->coordinates[$poly][$ring]);
+
+                    for ($point = 0; $point < $points; $point += 1) {
+                        $lat = $polygon->coordinates[$poly][$ring][$point][0];
+                        $lon = $polygon->coordinates[$poly][$ring][$point][1];
+
+                        $polygon->coordinates[$poly][$ring][$point][0] = $lon;
+                        $polygon->coordinates[$poly][$ring][$point][1] = $lat;
+                    }
+                }
+            }
+
+            $polygon = json_encode($polygon);
+        }
+
+        return $polygon;
+    }
 }
