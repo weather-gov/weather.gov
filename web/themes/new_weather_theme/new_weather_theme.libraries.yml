@@ -40,7 +40,6 @@ location-combo-box:
   js:
     assets/js/components/combo-box.js: { preprocess: false }
         
-k
 tabbed-nav:
   version: 2024-03-21
   js:
