@@ -441,27 +441,10 @@ class AlertUtility
             );
 
             $polygon = json_decode($polygon->shape);
-            if ($polygon->type == "Polygon") {
-                $polygon->type = "MultiPolygon";
-                $polygon->coordinates = [$polygon->coordinates];
-            }
 
-            $polygons = count($polygon->coordinates);
-            for ($poly = 0; $poly < $polygons; $poly += 1) {
-                $rings = count($polygon->coordinates[$poly]);
-
-                for ($ring = 0; $ring < $rings; $ring += 1) {
-                    $points = count($polygon->coordinates[$poly][$ring]);
-
-                    for ($point = 0; $point < $points; $point += 1) {
-                        $lat = $polygon->coordinates[$poly][$ring][$point][0];
-                        $lon = $polygon->coordinates[$poly][$ring][$point][1];
-
-                        $polygon->coordinates[$poly][$ring][$point][0] = $lon;
-                        $polygon->coordinates[$poly][$ring][$point][1] = $lat;
-                    }
-                }
-            }
+            $polygon->coordinates = SpatialUtility::swapLatLon(
+                $polygon->coordinates,
+            );
 
             $polygon = json_encode($polygon);
         }
