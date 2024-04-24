@@ -460,7 +460,7 @@ class ComboBox extends HTMLElement {
         this.pseudoFocusListItem(firstListItem);
       }
 
-      this.querySelector("ul li").scrollIntoView({
+      this.querySelector("ul li")?.scrollIntoView({
         block: "nearest",
         inline: "start",
       });
@@ -663,6 +663,7 @@ class ComboBox extends HTMLElement {
     textInput.setAttribute("type", "hidden");
     textInput.setAttribute("name", "placeName");
     this.append(textInput);
+
     if (formEl) {
       const optionText = this.input.value;
       textInput.value = optionText;

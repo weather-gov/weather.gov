@@ -4,7 +4,7 @@ require("../../assets/js/components/combo-box.js");
 require("whatwg-fetch");
 //const { assert, expect, should } = require("chai");
 let assert, expect, should;
-import("chai").then(module => {
+import("chai").then((module) => {
   assert = module.assert;
   expect = module.expect;
   should = module.should;
@@ -192,7 +192,7 @@ global.fetch = mockFetch = (url) => {
 };
 
 describe("Combo box unit tests", () => {
-  before(function (done) {
+  before((done) => {
     import("../../assets/js/components/combo-box.js").then(() => {
       const box = window.document.createElement("wx-combo-box");
       window.document.body.append(box);
@@ -247,19 +247,19 @@ describe("Combo box unit tests", () => {
   });
 
   describe("listbox initialization", () => {
-    it("Adds a listbox ul automatically", () => {
-      expect(document.querySelector("wx-combo-box > ul")).to.exist;
+    it("Adds a listbox list wrapper automatically", () => {
+      expect(document.querySelector("wx-combo-box > div")).to.exist;
     });
 
     it("Adds the expected id automatically", () => {
       const expected = "combo-box-1--list";
-      const actual = document.querySelector("wx-combo-box ul").id;
+      const actual = document.querySelector("wx-combo-box div").id;
 
       expect(actual).to.equal(expected);
     });
 
     it("Adds the correct aria-related attributes", () => {
-      const listbox = document.querySelector("wx-combo-box > ul");
+      const listbox = document.querySelector("wx-combo-box > div");
       const attrs = [["role", "listbox"]];
 
       attrs.forEach((pair) => {
@@ -274,7 +274,7 @@ describe("Combo box unit tests", () => {
 
   describe("Input event and search update tests", () => {
     let sandbox;
-    beforeEach(function () {
+    beforeEach(() => {
       sandbox = createSandbox();
       window.document.body.innerHTML = "";
       const box = document.createElement("wx-combo-box");
@@ -282,7 +282,7 @@ describe("Combo box unit tests", () => {
       assert.exists(window.customElements.get("wx-combo-box"));
     });
 
-    afterEach(function () {
+    afterEach(() => {
       sandbox.restore();
     });
 
@@ -428,7 +428,7 @@ describe("Combo box unit tests", () => {
       const component = document.querySelector("wx-combo-box");
       component.showList();
       const secondItem = component.querySelector(
-        "ul[role='listbox'] > li:nth-child(2)",
+        "div[role='listbox'] > ul > li[role='option']:nth-child(2)",
       );
       component.pseudoFocusListItem(secondItem);
       const spied = sandbox.spy(component, "submit");
@@ -449,7 +449,7 @@ describe("Combo box unit tests", () => {
     it("When clicking the second item, it is selected and submit is called", () => {
       const component = document.querySelector("wx-combo-box");
       const secondItem = component.querySelector(
-        "ul[role='listbox'] > li:nth-child(2)",
+        "div[role='listbox'] > ul > li:nth-child(2)",
       );
       const spied = sandbox.spy(component, "submit");
 
@@ -465,7 +465,7 @@ describe("Combo box unit tests", () => {
     it("Can get the geodata from a value key", async () => {
       const component = document.querySelector("wx-combo-box");
       const secondItem = component.querySelector(
-        "ul[role='listbox'] > li:nth-child(2)",
+        "div[role='listbox'] > ul > li:nth-child(2)",
       );
       component.value = secondItem.dataset.value;
       const geodata = await component.getGeodataForKey(component.value);
@@ -486,7 +486,7 @@ describe("Combo box unit tests", () => {
       form.submit = sandbox.spy();
       document.body.append(form);
       const secondItem = component.querySelector(
-        "ul[role='listbox'] > li:nth-child(2)",
+        "div[role='listbox'] > ul > li:nth-child(2)",
       );
       component.value = secondItem.dataset.value;
       await component.submit();
@@ -496,6 +496,229 @@ describe("Combo box unit tests", () => {
 
       expect(expected).to.equal(actual);
       expect(form.submit.called).to.be.true;
+    });
+  });
+
+  describe("saved search results", () => {
+    let box;
+    const sandbox = createSandbox();
+    const form = document.createElement("form");
+    const response = { json: sandbox.stub() };
+    form.setAttribute("data-location-search", true);
+
+    const { fetch } = global;
+
+    before(() => {
+      global.localStorage = {
+        getItem: sandbox.stub(),
+        setItem: sandbox.stub(),
+      };
+
+      global.fetch = sandbox.stub();
+    });
+
+    after(() => {
+      global.fetch = fetch;
+    });
+
+    beforeEach(async () => {
+      sandbox.resetBehavior();
+      sandbox.resetHistory();
+
+      global.fetch.resolves(response);
+
+      window.document.body.innerHTML = "";
+      box = document.createElement("wx-combo-box");
+      document.body.append(form);
+      form.append(box);
+    });
+
+    describe("saves results", () => {
+      beforeEach(async () => {
+        await box.updateSearch("Arlin");
+      });
+
+      it("when a user chooses a location", () => {
+        const component = document.querySelector("wx-combo-box");
+        component.input.value = "chosen place";
+        component.url = "https://place.com";
+        component.submit();
+
+        expect(
+          global.localStorage.setItem.calledWith(
+            "wxgov_recent_locations",
+            JSON.stringify([
+              { text: "chosen place", url: "https://place.com" },
+            ]),
+          ),
+        ).to.be.true;
+      });
+
+      it("adds new result at the front of the list if prior results exist", () => {
+        const previous = ["previous entry 1", "previosu entry 2"];
+        global.localStorage.getItem
+          .withArgs("wxgov_recent_locations")
+          .returns(JSON.stringify(previous));
+
+        const component = document.querySelector("wx-combo-box");
+        component.input.value = "chosen place";
+        component.url = "https://place.com";
+        component.submit();
+
+        expect(
+          global.localStorage.setItem.calledWith(
+            "wxgov_recent_locations",
+            JSON.stringify([
+              { text: "chosen place", url: "https://place.com" },
+              ...previous,
+            ]),
+          ),
+        ).to.be.true;
+      });
+
+      it("removes existing items with the same url", () => {
+        const previous = [
+          "previous entry 1",
+          { text: "previous entry 2", url: "https://place.com" },
+          "previous entry 3",
+        ];
+        global.localStorage.getItem
+          .withArgs("wxgov_recent_locations")
+          .returns(JSON.stringify(previous));
+
+        const component = document.querySelector("wx-combo-box");
+        component.input.value = "chosen place";
+        component.url = "https://place.com";
+        component.submit();
+
+        expect(
+          global.localStorage.setItem.calledWith(
+            "wxgov_recent_locations",
+            JSON.stringify([
+              { text: "chosen place", url: "https://place.com" },
+              previous[0],
+              previous[2],
+            ]),
+          ),
+        ).to.be.true;
+      });
+    });
+
+    describe("shows previously-saved results", () => {
+      beforeEach(async () => {
+        window.document.body.innerHTML = "";
+        box = document.createElement("wx-combo-box");
+        document.body.append(box);
+
+        response.ok = true;
+      });
+
+      it("shows saved results if there are no search results", async () => {
+        response.json.resolves({ suggestions: [] });
+        global.localStorage.getItem.returns(
+          JSON.stringify([{ text: "saved result", url: "https:/com.place" }]),
+        );
+
+        const component = document.querySelector("wx-combo-box");
+        component.updateSearch("");
+        await wait(0);
+        const items = component.querySelectorAll(
+          `[role="listbox"] li[role="option"]`,
+        );
+
+        expect(items.length).to.equal(1);
+        expect(items.item(0).innerText).to.equal("saved result");
+      });
+
+      it("shows saved results alongside search results", async () => {
+        response.json.resolves({
+          suggestions: [
+            { text: "search 1", magicKey: 1 },
+            { text: "search 2", magicKey: 2 },
+            { text: "search 3", magicKey: 3 },
+          ],
+        });
+        global.localStorage.getItem.returns(
+          JSON.stringify([{ text: "saved result", url: "https:/com.place" }]),
+        );
+
+        const component = document.querySelector("wx-combo-box");
+        component.updateSearch("");
+        await wait(0);
+        const items = component.querySelectorAll(
+          `[role="listbox"] li[role="option"]`,
+        );
+
+        expect(items.length).to.equal(4);
+        expect(items.item(0).innerText).to.equal("saved result");
+      });
+
+      it("only shows saved results that match the provided text", async () => {
+        response.json.resolves({
+          suggestions: [
+            { text: "search 1", magicKey: 1 },
+            { text: "search 2", magicKey: 2 },
+            { text: "search 3", magicKey: 3 },
+          ],
+        });
+        global.localStorage.getItem.returns(
+          JSON.stringify([
+            { text: "saved result", url: "https:/com.place1" },
+            { text: "result that is saved", url: "https:/com.place2" },
+            { text: "another saved result", url: "https:/com.place3" },
+          ]),
+        );
+
+        const component = document.querySelector("wx-combo-box");
+        component.updateSearch("res");
+        await wait(0);
+        const items = component.querySelectorAll(
+          `[role="listbox"] li[role="option"]`,
+        );
+
+        expect(items.length).to.equal(4);
+        expect(items.item(0).innerText).to.equal("result that is saved");
+      });
+    });
+
+    describe("keeps a limited number of saved results", () => {
+      it("only keeps 10 recent results", () => {
+        global.localStorage.getItem
+          .withArgs("wxgov_recent_locations")
+          .returns(
+            JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]),
+          );
+
+        const component = document.querySelector("wx-combo-box");
+        component.saveSearchResult({ url: "new" });
+
+        expect(
+          global.localStorage.setItem.calledWith(
+            "wxgov_recent_locations",
+            JSON.stringify([{ url: "new" }, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+          ),
+        ).to.be.true;
+      });
+
+      it("returns only 3 results", () => {
+        global.localStorage.getItem
+          .withArgs("wxgov_recent_locations")
+          .returns(
+            JSON.stringify([
+              { text: 1 },
+              { text: 2 },
+              { text: 3 },
+              { text: 4 },
+              { text: 5 },
+            ]),
+          );
+
+        const component = document.querySelector("wx-combo-box");
+        const results = component.getSavedResults("");
+
+        // deep equality, not reference equality
+        expect(results).to.eql([{ text: 1 }, { text: 2 }, { text: 3 }]);
+      });
     });
   });
 });
