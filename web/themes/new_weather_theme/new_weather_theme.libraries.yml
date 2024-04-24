@@ -40,6 +40,7 @@ location-combo-box:
   js:
     assets/js/components/combo-box.js: { preprocess: false }
         
+k
 tabbed-nav:
   version: 2024-03-21
   js:
@@ -51,7 +52,7 @@ hourly-table:
     assets/js/components/HourlyTable.js: { preprocess: false }
 
 hourly-toggle:
-  version: 2024-03-08
+  version: 2024-4-24
   js:
     assets/js/components/HourlyToggle.js: { preprocess: false }
 
