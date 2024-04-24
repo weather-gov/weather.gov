@@ -124,4 +124,33 @@ class WeatherAlertParser
 
         return false;
     }
+
+    /**
+     * Attemps to parse out any valid URLs in the provided
+     * text body.
+     * Responds with a list of parsed objects if any are found,
+     * or false if none are found.
+     */
+    public function extractURLs($str)
+    {
+        $regex = "/https\:\/\/[A-Za-z0-9\-._~:\/\?#\[\]@!$]+/";
+        if(preg_match_all($regex, $str, $matches)){
+            $valid = array_filter($matches[0], function($urlString){
+                $url = parse_url($urlString);
+                if(array_key_exists("user", $url)){
+                    return false;
+                } else if(array_key_exists("pass", $url)){
+                    return false;
+                } else if(!str_ends_with($url["host"], ".gov")){
+                    return false;
+                }
+                return true;
+            });
+            if(count($valid) == 0){
+                return false;
+            }
+            return array_values($valid);
+        }
+        return false;
+    }
 }

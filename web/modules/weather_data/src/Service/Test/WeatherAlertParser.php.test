@@ -148,13 +148,13 @@ Wednesday, then drop to near 5500 feet Wednesday night and near
                 "type" => "paragraph",
                 "text" =>
                     ".After a few days of warm weather, a potent winter storm" .
-                    " will bring windy and colder conditions with periods of" .
-                    " heavy snow to the Sierra and higher elevations of northeast" .
-                    " California later this week. While weather-related travel impacts" .
-                    " aren't expected through Wednesday morning, conditions will" .
-                    " begin to worsen Wednesday afternoon and evening, with the most" .
-                    " widespread winter travel impacts likely from Wednesday" .
-                    " evening through much of Thursday.",
+                        " will bring windy and colder conditions with periods of" .
+                        " heavy snow to the Sierra and higher elevations of northeast" .
+                        " California later this week. While weather-related travel impacts" .
+                        " aren't expected through Wednesday morning, conditions will" .
+                        " begin to worsen Wednesday afternoon and evening, with the most" .
+                        " widespread winter travel impacts likely from Wednesday" .
+                        " evening through much of Thursday.",
             ],
             [
                 "type" => "heading",
@@ -164,9 +164,9 @@ Wednesday, then drop to near 5500 feet Wednesday night and near
                 "type" => "paragraph",
                 "text" =>
                     "Heavy snow possible. Snow accumulations of 4 to 10 inches" .
-                    " above 5000 feet west of US-395, with 10 to 20 inches possible" .
-                    " for higher passes such as Fredonyer Summit and Yuba Pass." .
-                    " Winds gusting as high as 50 mph.",
+                        " above 5000 feet west of US-395, with 10 to 20 inches possible" .
+                        " for higher passes such as Fredonyer Summit and Yuba Pass." .
+                        " Winds gusting as high as 50 mph.",
             ],
             [
                 "type" => "heading",
@@ -184,7 +184,7 @@ Wednesday, then drop to near 5500 feet Wednesday night and near
                 "type" => "paragraph",
                 "text" =>
                     "From late Wednesday morning through Friday morning." .
-                    " Heaviest snow is most likely from late Wednesday afternoon through Thursday morning.",
+                        " Heaviest snow is most likely from late Wednesday afternoon through Thursday morning.",
             ],
             [
                 "type" => "heading",
@@ -194,10 +194,10 @@ Wednesday, then drop to near 5500 feet Wednesday night and near
                 "type" => "paragraph",
                 "text" =>
                     "Travel could be very difficult at times," .
-                    " with hazardous conditions impacting the commutes from" .
-                    " Wednesday evening through Friday morning. Strong winds" .
-                    " may blow down some tree limbs and a few power outages" .
-                    " may result.",
+                        " with hazardous conditions impacting the commutes from" .
+                        " Wednesday evening through Friday morning. Strong winds" .
+                        " may blow down some tree limbs and a few power outages" .
+                        " may result.",
             ],
             [
                 "type" => "heading",
@@ -207,8 +207,8 @@ Wednesday, then drop to near 5500 feet Wednesday night and near
                 "type" => "paragraph",
                 "text" =>
                     "Snow levels will start near 6500 feet on Wednesday," .
-                    " then drop to near 5500 feet Wednesday night and near" .
-                    " 5000 feet by Thursday morning.",
+                        " then drop to near 5500 feet Wednesday night and near" .
+                        " 5000 feet by Thursday morning.",
             ],
         ];
 
@@ -216,5 +216,53 @@ Wednesday, then drop to near 5500 feet Wednesday night and near
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-parser
+     */
+    public function testParsesBasicGovUrl()
+    {
+        $sourceText = "Scattered showers with brief heavy rainfall will continue this week.
+A low pressure system from the north will batter your area, relentlessly.
+Be sure to stock up. See https://www.weather.gov/safety/food for more information.";
+        $parser = new WeatherAlertParser("");
+        $actual = $parser->extractURLs($sourceText);
+        $expectedUrl = "https://www.weather.gov/safety/food";
+
+        $this->assertEquals(1, count($actual));
+        $this->assertEquals($expectedUrl, $actual[0]);
+    }
+
+    /**
+     * @group unit
+     * @group alert-parser
+     */
+    public function testIgnoresNonGovUrls()
+    {
+        $sourceText = "Scattered showers with brief heavy rainfall will go on and
+on and on, boring everyone who has to stay inside. They will attempt to visit sites
+like https://fake.com/should/not/render which will not be clickable URLs.";
+        $parser = new WeatherAlertParser("");
+        $actual = $parser->extractURLs($sourceText);
+
+        $this->assertEquals(false, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-parser
+     */
+    public function testIgnoresUserPassUrls()
+    {
+        $sourceText = "Weather will, once again, be horrendous wherever you happen to be.
+Maybe you are cursed? Anyway, the spammers would like you to click this link here that
+has a username and password in the URL (https://root:1234@weather.gov/hack/the/gibson), which
+you shouldn't be able to do thanks to Cautious Public Servants TM.";
+        $parser = new WeatherAlertParser("");
+        $actual = $parser->extractURLs($sourceText);
+
+        $this->assertEquals(false, $actual);
     }
 }
