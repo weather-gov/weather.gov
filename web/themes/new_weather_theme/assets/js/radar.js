@@ -19,6 +19,14 @@ artcc/cwa/county/state/rfc: true/false // if overlay should display, default fal
 */
 
 const setupRadar = () => {
+
+  // If radar has already been initialized on the container
+  // element, return and do nothing else.
+  const existingRadar = document.querySelector(".cmi-radar-container");
+  if(existingRadar){
+    return;
+  }
+  
   const container = document.querySelector("wx-radar");
 
   const lat = Number.parseFloat(container.getAttribute("lat"));
@@ -75,42 +83,41 @@ const setupRadar = () => {
     },
   };
 
-  const go = () => {
-    window.app = window.cmiRadar.createApp("#wx_radar_container", options);
-    window.app.$store.dispatch("markLocation", point);
+  window.app = window.cmiRadar.createApp("#wx_radar_container", options);
+  window.app.$store.dispatch("markLocation", point);
 
-    [".cmi-radar-menu-container", ".cmi-radar-menu-agendas"].forEach(
-      (selector) => {
-        const element = document.querySelector(selector);
-        if (element) {
-          element.remove();
-        }
-      },
-    );
-  };
-
-  if (container.offsetParent) {
-    go();
-  } else {
-    const observer = new IntersectionObserver(
-      (entries, self) => {
-        if (entries[0].isIntersecting) {
-          go();
-          self.disconnect();
-        }
-      },
-      { root: document.body, rootMargin: "0px", threshold: 1 },
-    );
-    observer.observe(container);
-  }
+  [".cmi-radar-menu-container", ".cmi-radar-menu-agendas"].forEach(
+    (selector) => {
+      const element = document.querySelector(selector);
+      if (element) {
+        element.remove();
+      }
+    },
+  );
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (window.cmiRadar) {
+  const scriptEl = document.querySelector("[data-ex-radar-cmi]");
+  const currentTabSelected = document.querySelector("#current[data-selected]");
+  // If the page loads with the current tab selected
+  // then we try to load the radar.
+  // If the page loads with some other tab selected,
+  // than we bind a listener for the tab-switched event.
+  if(currentTabSelected && window.cmiRadar){
     setupRadar();
+  } else if(currentTabSelected){
+    scriptEl.addEventListener("load", () => {
+      setupRadar();
+    });
+  } else {
+    document.addEventListener("wx:tab-switched", (event) => {
+      if (window.cmiRadar && event.detail.tabId === "current") {
+        setupRadar();
+      } else if(event.detail.tabId === "current"){
+        scriptEl.addEventListener("load", () => {
+          setupRadar();
+        });
+      }
+    });
   }
-
-  document.querySelector("[data-wx-radar-cmi]").addEventListener("load", () => {
-    setupRadar();
-  });
 });

@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-04-18
+  version: 2024-04-24
   css:
     theme:
       assets/css/styles.css: {}
@@ -36,7 +36,7 @@ location-search:
     assets/js/components/LocationSearch.js: { preprocess: false }
 
 location-combo-box:
-  version: 2024-04-15
+  version: 2024-04-19
   js:
     assets/js/components/combo-box.js: { preprocess: false }
         
@@ -56,16 +56,17 @@ hourly-toggle:
     assets/js/components/HourlyToggle.js: { preprocess: false }
 
 radar:
-  version: 2024-03-28
+  version: 2024-04-22.2
   css:
     theme:
       assets/css/radar/cmi-radar.1185c3ee.css:
   js:
     assets/js/radar.js:
       attributes:
-        async: true
+        defer: true
     https://radar.weather.gov/cmi-radar/cmi-radar.1185c3ee.js:
       attributes:
+        defer: true
         data-wx-radar-cmi: true
 
 digital-analytics-program:

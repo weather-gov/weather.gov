@@ -106,6 +106,16 @@ class TabbedNavigator extends HTMLElement {
     // Activate the corresponding container
     const tabContainer = this.querySelector(`#${tabId}`);
     tabContainer.setAttribute("data-selected", "");
+
+    // Trigger a custom event for use externally
+    // when tabs switch
+    const event = new CustomEvent("wx:tab-switched", {
+      detail: {
+        tabId
+      },
+      bubbles: true
+    });
+    this.dispatchEvent(event);
   }
 
   handleTabButtonClick(event) {

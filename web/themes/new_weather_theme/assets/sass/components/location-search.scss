@@ -1,11 +1,18 @@
 @use "uswds-core" as *;
 
 /* stylelint-disable scss/at-extend-no-missing-placeholder */
+@use "uswds-core" as *;
 @forward "uswds-theme";
 @forward "uswds";
 
 .wx-combo-box {
   @extend .usa-combo-box;
+}
+
+.wx-combo-box li[role="option"] {
+  &:not(.wx-combo-box__list-option--focused):hover {
+    background-color: color('base-lightest');
+  }
 }
 
 .wx-combo-box__input {

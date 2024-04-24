@@ -1,9 +1,10 @@
+/* eslint cypress/no-unnecessary-waiting: 0 */
 describe("the location page", () => {
   before(() => {
     cy.request("http://localhost:8081/play/testing");
   });
 
-  it("does not display marine laerts", () => {
+  it("does not display marine alerts", () => {
     // This point include a wind advisory and a small craft advisory. We
     // should only get the wind advisory.
     cy.visit("/point/33.521/-86.812");
@@ -44,6 +45,20 @@ describe("the location page", () => {
         "include.text",
         "Wind information is unavailable.",
       );
+    });
+  });
+
+  describe("Radar component loading tests", () => {
+    it("does not load if the current tab is not displaying", () => {
+      cy.visit("/point/33.521/-86.812");
+      cy.get("#wx_radar_container:empty").should("exist");
+    });
+
+    it("loads correctly after switching to the current tab", () => {
+      cy.visit("/point/33.521/-86.812");
+      cy.get('[data-tab-name="current"]').trigger("click");
+      cy.wait(1500);
+      cy.get("#wx_radar_container:empty").should("not.exist");
     });
   });
 

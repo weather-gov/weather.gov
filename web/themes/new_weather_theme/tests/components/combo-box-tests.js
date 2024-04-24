@@ -2,7 +2,13 @@
 require("jsdom-global")(undefined, { url: "http://localhost/" });
 require("../../assets/js/components/combo-box.js");
 require("whatwg-fetch");
-const { assert, expect, should } = require("chai");
+//const { assert, expect, should } = require("chai");
+let assert, expect, should;
+import("chai").then(module => {
+  assert = module.assert;
+  expect = module.expect;
+  should = module.should;
+});
 const { createSandbox, stub, spy, mock } = require("sinon");
 
 global.HTMLElement = window.HTMLElement;

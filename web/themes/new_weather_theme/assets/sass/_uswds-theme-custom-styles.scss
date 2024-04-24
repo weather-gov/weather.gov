@@ -76,11 +76,11 @@ weathergov-alerts {
 /* AlertList Overrides
 -------------------------------------- */
 .usa-alert__body a {
-  color: color("primary-dark");
+  color: color("primary");
 
   &:focus,
   &:hover {
-    color: color("primary-darker");
+    color: color("primary-dark");
   }
 }
 
@@ -233,4 +233,10 @@ svg[data-wind-direction] {
         right: units(3);
         width: unset;
     }
+}
+
+/* Weather story overrides
+------------------------------------- */
+#weather-story-content h3 {
+    font-weight: normal;
 }

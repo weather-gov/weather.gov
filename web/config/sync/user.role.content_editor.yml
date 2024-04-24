@@ -18,7 +18,9 @@ dependencies:
     - filter
     - help
     - node
+    - scheduler
     - system
+    - taxonomy
     - toolbar
     - workbench
     - workbench_access
@@ -36,24 +38,19 @@ permissions:
   - 'access contextual links'
   - 'access files overview'
   - 'access help pages'
+  - 'access taxonomy overview'
   - 'access toolbar'
   - 'access user profiles'
   - 'access workbench'
   - 'assign selected workbench access'
-  - 'batch update workbench access'
-  - 'create page content'
-  - 'delete own page content'
-  - 'delete page revisions'
   - 'edit any basic block content'
   - 'edit any dynamic_safety_information content'
   - 'edit any no_title_block block content'
   - 'edit any page content'
-  - 'edit any testing_page content'
   - 'edit any weather_story content'
   - 'edit any wfo_promo content'
   - 'edit own dynamic_safety_information content'
   - 'edit own page content'
-  - 'edit own testing_page content'
   - 'edit own weather_story content'
   - 'edit own wfo_promo content'
   - 'revert all revisions'
@@ -61,9 +58,9 @@ permissions:
   - 'revert any no_title_block block content revisions'
   - 'revert dynamic_safety_information revisions'
   - 'revert page revisions'
-  - 'revert testing_page revisions'
   - 'revert weather_story revisions'
   - 'revert wfo_promo revisions'
+  - 'schedule publishing of nodes'
   - 'use text format basic_html'
   - 'use workbench access'
   - 'view all revisions'
@@ -72,6 +69,7 @@ permissions:
   - 'view dynamic_safety_information revisions'
   - 'view own unpublished content'
   - 'view page revisions'
+  - 'view scheduled content'
   - 'view testing_page revisions'
   - 'view the administration theme'
   - 'view weather_story revisions'
