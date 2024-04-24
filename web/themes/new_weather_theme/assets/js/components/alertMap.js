@@ -1,50 +1,121 @@
-const setupMaps = () => {
+const setupMap = (alert) => {
   const L = window.L;
 
-  const alerts = document.querySelectorAll("wx-alert-map");
-  for (const alert of alerts) {
-    const geoJSON = JSON.parse(
-      decodeURIComponent(alert.getAttribute("data-geo-json")),
-    );
-    const alertId = alert.getAttribute("data-alert-id");
+  const geoJSON = JSON.parse(decodeURIComponent(alert.dataset.geoJson));
+  const alertId = alert.dataset.alertId;
 
-    const lat = Number.parseFloat(alert.getAttribute("lat"));
-    const lon = Number.parseFloat(alert.getAttribute("lon"));
+  const lat = Number.parseFloat(alert.dataset.lat);
+  const lon = Number.parseFloat(alert.dataset.lon);
 
-    const map = L.map(`wx_alert_map_${alertId}`).setView([lat, lon], 8);
+  const map = L.map(`wx_alert_map_${alertId}`).setView([lat, lon], 8);
 
-    // Leaflet is managed by a Ukrainian team. The default attribution they put on
-    // maps includes a Ukrainian flag to show their national pride. But as an
-    // official website of the US Government, that might not be appropriate for
-    // us, so turn off the attribution. We're not likely to use Leaflet in the
-    // end anyway, but if we do, we'll figure out how to put back attributions
-    // without the flag then.
-    map.attributionControl.setPrefix("");
+  // Leaflet is managed by a Ukrainian team. The default attribution they put on
+  // maps includes a Ukrainian flag to show their national pride. But as an
+  // official website of the US Government, that might not be appropriate for
+  // us, so turn off the attribution. We're not likely to use Leaflet in the
+  // end anyway, but if we do, we'll figure out how to put back attributions
+  // without the flag then.
+  map.attributionControl.setPrefix("");
 
-    L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
-      apiKey:
-        "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ",
-    }).addTo(map);
+  L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
+    apiKey:
+      "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ",
+  }).addTo(map);
 
-    L.geoJSON(geoJSON, { style: { color: "#F00", opacity: 0.6 } }).addTo(map);
+  L.geoJSON(geoJSON, { style: { color: "#F00", opacity: 0.6 } }).addTo(map);
 
-    const locationIcon = L.divIcon({
-      className: "weathergov-location-marker",
-    });
-    L.marker([lat, lon], { icon: locationIcon }).addTo(map);
+  const locationIcon = L.divIcon({
+    className: "weathergov-location-marker",
+  });
+  L.marker([lat, lon], { icon: locationIcon }).addTo(map);
+};
+
+const getAlertObserverCallback = (alert) => (_, observer) => {
+  const expanded =
+    alert
+      .closest("weathergov-alerts > div")
+      .querySelector("button")
+      .getAttribute("aria-expanded") === "true";
+
+  if (expanded) {
+    setupMap(alert);
+    observer.disconnect();
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+const waitForAlertAccordions = () => {
+  const alerts = document.querySelectorAll("wx-alert-map");
+
+  for (const alert of alerts) {
+    // We only want to show an alert map if the alert's accordion is open. If it
+    // is currently closed, we'll wait for it to open and then display it. We
+    // will only do this the first time the accordion is opened, so we don't
+    // have to worry about maps being added multiple times.
+
+    // Traverse up the DOM tree to the nearest node that matches this selector.
+    // This is our container.
+    const parent = alert.closest("weathergov-alerts > div");
+    const button = parent.querySelector("button");
+    const expanded = button.getAttribute("aria-expanded") === "true";
+
+    if (expanded) {
+      setupMap(alert);
+    } else {
+      // If we're not currently expanded, setup a mutation observer. Since we
+      // don't wrap the accordions, we
+      const mutationObserver = new MutationObserver((_, observer) => {
+        const expandedNow =
+          alert
+            .closest("weathergov-alerts > div")
+            .querySelector("button")
+            .getAttribute("aria-expanded") === "true";
+
+        if (expandedNow) {
+          setupMap(alert);
+          observer.disconnect();
+        }
+      });
+      mutationObserver.observe(button, { attributes: true });
+    }
+  }
+};
+
+const waitForAlertTab = () => {
+  // We also don't want to load any alert maps until the alerts tab is selected.
+  // If it is, then we just need to wait for individual alert accordions to
+  // open. Otherwise, we can listen for the tab-switched event.
   const currentTabSelected = document.querySelector("#alerts[data-selected]");
 
   if (currentTabSelected) {
-    setupMaps();
+    waitForAlertAccordions();
   } else {
     document.addEventListener("wx:tab-switched", (event) => {
       if (event.detail.tabId === "alerts") {
-        setupMaps();
+        waitForAlertAccordions();
       }
     });
   }
-});
+};
+
+const checkForLeaflet = () => {
+  // We load Leaflet globally because that's the only way the ESRI plugins work.
+  // We need all three (Leaflet + ESRI plugins) to be loaded before we proceed.
+  if (window.L && window.L.esri && window.L.esri.Vector) {
+    waitForAlertTab();
+  } else {
+    // If addEventListener is called multiple times with identical arguments,
+    // the listener will only be added the first time. So, it's safe to just
+    // keep doing this until we're done.
+    document
+      .querySelector("[data-wx-leaflet]")
+      .addEventListener("load", checkForLeaflet);
+    document
+      .querySelector("[data-wx-leaflet-esri]")
+      .addEventListener("load", checkForLeaflet);
+    document
+      .querySelector("[data-wx-leaflet-esri-vector]")
+      .addEventListener("load", checkForLeaflet);
+  }
+};
+
+document.addEventListener("DOMContentLoaded", checkForLeaflet);

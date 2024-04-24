@@ -79,8 +79,11 @@ leaflet:
           crossorigin: /
   js:
     https://unpkg.com/leaflet@1.9.4/dist/leaflet.js:
+      data-wx-leaflet: true
     https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js:
+      data-wx-leaflet-esri: true
     https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js:
+      data-wx-leaflet-esri-vector: true
     assets/js/components/alertMap.js:
 
 digital-analytics-program:
