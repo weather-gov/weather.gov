@@ -3,8 +3,8 @@ const setupMaps = () => {
 
   const alerts = document.querySelectorAll("wx-alert-map");
   for (const alert of alerts) {
-    const geometry = JSON.parse(
-      decodeURIComponent(alert.getAttribute("data-geometry")),
+    const geoJSON = JSON.parse(
+      decodeURIComponent(alert.getAttribute("data-geo-json")),
     );
     const alertId = alert.getAttribute("data-alert-id");
 
@@ -26,7 +26,7 @@ const setupMaps = () => {
         "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ",
     }).addTo(map);
 
-    L.geoJSON(geometry, { style: { color: "#F00", opacity: 0.6 } }).addTo(map);
+    L.geoJSON(geoJSON, { style: { color: "#F00", opacity: 0.6 } }).addTo(map);
 
     const locationIcon = L.divIcon({
       className: "weathergov-location-marker",

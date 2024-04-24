@@ -81,10 +81,7 @@ leaflet:
     https://unpkg.com/leaflet@1.9.4/dist/leaflet.js:
     https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js:
     https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js:
-    assets/js/alertMap.js:
-      attributes:
-        type: module
-        defer: true
+    assets/js/components/alertMap.js:
 
 digital-analytics-program:
   header: true

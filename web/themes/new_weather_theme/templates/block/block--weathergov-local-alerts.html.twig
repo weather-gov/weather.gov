@@ -55,7 +55,7 @@
           <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
             <div class="grid-container padding-0 bg-white shadow-1 grid-col-12">
               <div class="grid-row wx-radar-container">
-                <wx-alert-map class="grid-col-12" data-geometry="{{ alert.geometry | url_encode }}" data-alert-id="{{ alert.alertId}}" lat="{{ weather.point.lat }}" lon="{{ weather.point.lon }}">
+                <wx-alert-map class="grid-col-12" data-geo-json="{{ alert.geometry | url_encode }}" data-alert-id="{{ alert.alertId}}" lat="{{ weather.point.lat }}" lon="{{ weather.point.lon }}">
                   <div id="wx_alert_map_{{ alert.alertId }}" style="height: 100%"></div>
                 </wx-alert-map>
               </div>
