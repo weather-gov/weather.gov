@@ -65,7 +65,7 @@ describe("Hourly forecast table tests", () => {
     it("Renders the expected min number of table rows", () => {
       cy.visit("/point/34.749/-92.275#daily");
       cy.get("#daily ol li:first-child wx-hourly-toggle").click();
-      cy.get("#daily ol li table.precip-table tbody").each(($tbody, $idx, $list) => {
+      cy.get("#daily ol li table.precip-table tbody").each(($tbody, $idx) => {
         // Our expectation is that up to five days should
         // have precip data. Anything beyond that is not guaranteed
         // at this point
