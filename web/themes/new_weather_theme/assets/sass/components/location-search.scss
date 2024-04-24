@@ -11,7 +11,7 @@
 
 .wx-combo-box li[role="option"] {
   &:not(.wx-combo-box__list-option--focused):hover {
-    background-color: color('base-lightest');
+    background-color: color("base-lightest");
   }
 }
 
@@ -24,6 +24,7 @@
 
 .wx-combo-box__list {
   @extend .usa-combo-box__list;
+
   position: initial;
 }
 
