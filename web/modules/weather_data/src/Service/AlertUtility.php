@@ -387,7 +387,7 @@ class AlertUtility
         // without a geometry should have a list of affected zones, and we can
         // build a geometry off that.
         if (
-            $alert->properties->affectedZones &&
+            property_exists($alert->properties, "affectedZones") &&
             count($alert->properties->affectedZones) > 0
         ) {
             $ids = array_map(function ($zone) {
@@ -410,7 +410,15 @@ class AlertUtility
             // If an alert doesn't have a geometry or any zones, that's probably
             // a bug. However, if the alert has SAME codes, we can use those to
             // get geometries, too.
-            if (count($alert->properties->geocode->SAME) > 0) {
+            $counties = false;
+            if (
+                property_exists($alert->properties, "geocode") &&
+                property_exists($alert->properties->geocode, "SAME")
+            ) {
+                $counties = count($alert->properties->geocode->SAME) > 0;
+            }
+
+            if ($counties) {
                 $fips = array_map(function ($same) {
                     return substr($same, 1);
                 }, $alert->properties->geocode->SAME);
