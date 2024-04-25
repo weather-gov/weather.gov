@@ -22,10 +22,17 @@
   margin: 0;
 }
 
+.wx-combo-box__list--container {
+  @extend .usa-combo-box__list;
+  position: initial;
+}
+
 .wx-combo-box__list {
   @extend .usa-combo-box__list;
 
   position: initial;
+  max-height: initial;
+  overflow-y: hidden;
 }
 
 .wx-combo-box__toggle-list {

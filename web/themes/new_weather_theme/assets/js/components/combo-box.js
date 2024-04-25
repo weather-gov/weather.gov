@@ -235,7 +235,7 @@ class ComboBox extends HTMLElement {
     listbox.setAttribute("role", "listbox");
     listbox.setAttribute("slot", "listbox");
     listbox.id = `${this.id}--list`;
-    listbox.classList.add("wx-combo-box__list");
+    listbox.classList.add("wx-combo-box__list--container");
     this.append(listbox);
     this.listbox = listbox;
   }
