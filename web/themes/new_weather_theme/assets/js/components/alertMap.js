@@ -28,6 +28,16 @@ const setupMap = (alert) => {
     className: "weathergov-location-marker",
   });
   L.marker([lat, lon], { icon: locationIcon, interactive: false }).addTo(map);
+
+  // Hide the location marker from screen readers and remove it from the tab
+  // order. It's not interactive, so there's no reason it should be focusable.
+  const locationMarker = document.querySelector(
+    `#wx_alert_map_${alertId} .weathergov-location-marker`,
+  );
+  if (locationMarker) {
+    locationMarker.setAttribute("aria-hidden", "true");
+    locationMarker.setAttribute("tabindex", "-1");
+  }
 };
 
 const waitForAlertAccordions = () => {
