@@ -30,19 +30,6 @@ const setupMap = (alert) => {
   L.marker([lat, lon], { icon: locationIcon }).addTo(map);
 };
 
-const getAlertObserverCallback = (alert) => (_, observer) => {
-  const expanded =
-    alert
-      .closest("weathergov-alerts > div")
-      .querySelector("button")
-      .getAttribute("aria-expanded") === "true";
-
-  if (expanded) {
-    setupMap(alert);
-    observer.disconnect();
-  }
-};
-
 const waitForAlertAccordions = () => {
   const alerts = document.querySelectorAll("wx-alert-map");
 

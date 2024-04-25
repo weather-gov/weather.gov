@@ -396,7 +396,9 @@ class AlertUtility
             $ids = implode(",", $ids);
 
             $shapes = $dataLayer->databaseFetchAll(
-                "SELECT ST_AsWKT(shape) as shape FROM weathergov_geo_zones WHERE id IN ($ids)",
+                "SELECT ST_AsWKT(shape) as shape
+                    FROM weathergov_geo_zones
+                    WHERE id IN ($ids)",
             );
 
             foreach ($shapes as $shape) {
@@ -415,7 +417,9 @@ class AlertUtility
                 $fips = implode(",", $fips);
 
                 $shapes = $dataLayer->databaseFetchAll(
-                    "SELECT ST_AsWKT(shape) as shape FROM weathergov_geo_counties WHERE countyFips IN ($fips)",
+                    "SELECT ST_AsWKT(shape) as shape
+                        FROM weathergov_geo_counties
+                        WHERE countyFips IN ($fips)",
                 );
 
                 foreach ($shapes as $shape) {
@@ -431,13 +435,23 @@ class AlertUtility
 
             foreach ($geometries as $geometry) {
                 $union = $dataLayer->databaseFetch(
-                    "SELECT ST_AsWKT(ST_UNION(ST_GEOMFROMTEXT('$polygon'),ST_GEOMFROMTEXT('$geometry->shape'))) as shape",
+                    "SELECT ST_AsWKT(
+                        ST_UNION(
+                            ST_GEOMFROMTEXT('$polygon'),
+                            ST_GEOMFROMTEXT('$geometry->shape')
+                        )
+                    ) as shape",
                 );
                 $polygon = $union->shape;
             }
 
             $polygon = $dataLayer->databaseFetch(
-                "SELECT ST_ASGEOJSON(ST_SIMPLIFY(ST_GEOMFROMTEXT('$polygon'), 0.003)) as shape",
+                "SELECT ST_ASGEOJSON(
+                    ST_SIMPLIFY(
+                        ST_GEOMFROMTEXT('$polygon'),
+                        0.003
+                    )
+                ) as shape",
             );
 
             $polygon = json_decode($polygon->shape);
