@@ -1,0 +1,61 @@
+{{ attach_library("new_weather_theme/location-combo-box") }}
+<!-- Search -->
+<div class="bg-primary-darker padding-top-7 padding-bottom-8"> 
+  <div class="grid-container">
+    <div class="grid-row"> 
+      <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
+        <h1 class="text-normal text-white margin-y-0 font-sans-3xl text-ls-1"> Find your forecast </h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3 tablet:grid-offset-2" 
+            data-location-search method="post"
+      >
+        <div class="display-flex flex-align-end text-white">
+          <label class="usa-label margin-top-2" for="search-combo-box">
+            {{ "Enter city or zip code" | t }}
+          </label>
+          <div class="margin-x-2">|</div>
+          <div class="">
+            <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled text-primary-lightest">
+              <svg
+                  class="usa-icon height-2 width-2 margin-right-1 text-top"
+                  aria-hidden="true"
+                  focusable="false"
+                  role="img"
+              >
+                <use
+                  xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#my_location"
+                ></use>
+              </svg>{{ 'Use my location' | t }}
+            </button>
+          </div>
+        </div>
+        <wx-combo-box class="z-top margin-top-1" id="search-combo-box">
+        </wx-combo-box>
+        <input type="hidden" name="suggestedPlaceName" value="">
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Weather.gov -->
+<div class="bg-primary-lightest">
+  <div class="grid-container">
+    <div class="grid-row">
+      <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
+        <h2 class="text-normal text-primary-darker font-sans-2xl">A new weather.gov is coming</h2>
+        <div class="line-height-sans-4">
+          <p class="font-sans-md">This website is in development. We are creating a new, contemporary tool for anyone, anywhere in the U.S. to check their forecast and learn about hazardous weather on the way. 
+          </p>
+          <p>As you explore, you may notice that we’re missing features you’re accustomed to seeing on weather.gov. This site is updated every two weeks with new features. Continue to check back to watch the site expand!
+          </p>
+          <p>Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href="https://www.weather.gov">access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Other 2 --> 
