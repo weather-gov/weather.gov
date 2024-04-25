@@ -55,8 +55,13 @@
       "pattern": "$isoRegex"
     },
     "endsRaw": {
-      "type": "string",
-      "pattern": "$isoRegex"
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "$isoRegex"
+        },
+        { "const": null }
+      ]
     },
     "expiresRaw": {
       "type": "string",
@@ -67,8 +72,13 @@
       "pattern": "$formattedDateRegex"
     },
     "ends": {
-      "type": "string",
-      "pattern": "$formattedDateRegex"
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "$formattedDateRegex"
+        },
+        { "const": false }
+      ]
     },
     "expires": {
       "type": "string",
@@ -106,7 +116,8 @@
     "type": "object",
     "properties": {
       "type": {
-        "const": "Polygon"
+        "type": "string",
+        "enum": ["Polygon", "MultiPolygon"]
       },
       "coordinates": {
         "type": "array",

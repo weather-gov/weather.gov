@@ -378,7 +378,7 @@ class AlertUtility
     {
         // If the alert already has a geometry, use it.
         if ($alert->geometry ?? false) {
-            return json_encode($alert->geometry);
+            return $alert->geometry;
         }
 
         $geometries = [];
@@ -459,8 +459,6 @@ class AlertUtility
             $polygon->coordinates = SpatialUtility::swapLatLon(
                 $polygon->coordinates,
             );
-
-            $polygon = json_encode($polygon);
         }
 
         return $polygon;

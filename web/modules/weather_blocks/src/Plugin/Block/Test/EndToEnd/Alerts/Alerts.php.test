@@ -34,7 +34,15 @@ final class AlertsStructureTest extends EndToEndBase
         // don't use it. We probably ought to address that and only keep the
         // parts we use OR fully document the schema from the API (yikes).
         $schema->setAdditionalProperties(true);
-        $schema->in(json_decode(json_encode($data["alerts"][0])));
+
+        foreach ($data["alerts"] as $alert) {
+            // PHP's associative arrays can't be directly represented in JSON,
+            // so encode and then decode the alert object so everything looks
+            // the way it will to Twig.
+            $alert = json_decode(json_encode($alert));
+            $schema->in($alert);
+        }
+
         $this->assertTrue(true);
     }
 }
