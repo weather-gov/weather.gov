@@ -27,7 +27,7 @@ const setupMap = (alert) => {
   const locationIcon = L.divIcon({
     className: "weathergov-location-marker",
   });
-  L.marker([lat, lon], { icon: locationIcon }).addTo(map);
+  L.marker([lat, lon], { icon: locationIcon, interactive: false }).addTo(map);
 };
 
 const waitForAlertAccordions = () => {
