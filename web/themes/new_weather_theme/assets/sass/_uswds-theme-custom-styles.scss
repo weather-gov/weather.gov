@@ -244,3 +244,22 @@ svg[data-wind-direction] {
 #weather-story-content h3 {
     font-weight: normal;
 }
+
+
+/* Custom unstyle button utilities
+------------------------------------- */
+.wx-button--unstyled-light {
+  color: white;
+
+  &:visited {
+    color: white;
+  }
+
+  &:hover {
+    color: color('primary-lighter');
+  }
+
+  &:active {
+    color: color('accent-cool-lighter');
+  }
+}
