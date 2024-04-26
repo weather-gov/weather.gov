@@ -55,6 +55,10 @@ body {
   overflow-x: clip;
 }
 
+p {
+  @include u-line-height('body', 4)
+}
+
 /* AlertDetails Overrides
 -------------------------------------- */
 weathergov-alerts {

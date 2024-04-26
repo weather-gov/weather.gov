@@ -1,6 +1,6 @@
 {{ attach_library("new_weather_theme/location-combo-box") }}
 <!-- Search -->
-<div class="bg-primary-darker padding-top-7 padding-bottom-8"> 
+<div class="wx-bg-satellite padding-top-7 padding-bottom-8"> 
   <div class="grid-container">
     <div class="grid-row"> 
       <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
@@ -9,7 +9,7 @@
     </div>
 
     <div class="row">
-      <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3 tablet:grid-offset-2" 
+      <form class="usa-form grid-col maxw-tablet-lg margin-bottom-3 tablet:grid-offset-2" 
             data-location-search method="post"
       >
         <div class="display-flex flex-align-end text-white">
@@ -40,22 +40,94 @@
   </div>
 </div>
 <!-- Weather.gov -->
-<div class="bg-primary-lightest">
+<div class="bg-primary-lightest wx-bg-ray padding-y-4">
   <div class="grid-container">
     <div class="grid-row">
       <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-        <h2 class="text-normal text-primary-darker font-sans-2xl">A new weather.gov is coming</h2>
-        <div class="line-height-sans-4">
-          <p class="font-sans-md">This website is in development. We are creating a new, contemporary tool for anyone, anywhere in the U.S. to check their forecast and learn about hazardous weather on the way. 
-          </p>
-          <p>As you explore, you may notice that we’re missing features you’re accustomed to seeing on weather.gov. This site is updated every two weeks with new features. Continue to check back to watch the site expand!
-          </p>
-          <p>Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href="https://www.weather.gov">access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information.
-          </p>
+        <div class="display-flex flex-align-center"> 
+          <img
+            aria-hidden="true"
+            class="margin-right-2"
+            src="/{{ directory }}/assets/images/weather/spot_illos/wx_illo_announce.svg"
+            alt=""
+          />
+          <h2 class="text-normal text-primary-darker font-sans-2xl margin-y-0">A new weather.gov is coming</h2>
         </div>
+      </div>
+    </div>
+    <div class="grid-row">
+      <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
+
+        <p class="font-sans-md">This website is in development. We are creating a new, contemporary tool for anyone, anywhere in the U.S. to check their forecast and learn about hazardous weather on the way. 
+        </p>
+        <p>As you explore, you may notice that we’re missing features you’re accustomed to seeing on weather.gov. This site is updated every two weeks with new features. Continue to check back to watch the site expand!
+        </p>
+        <p class="margin-bottom-0">Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href="https://www.weather.gov">access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information.
+        </p>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Other 2 --> 
+<div class="grid-container margin-top-4 margin-bottom-10">
+  <div class="grid-row">
+    <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
+      <div class="display-flex flex-align-center"> 
+        <img
+          aria-hidden="true"
+          class="margin-right-2"
+          src="/{{ directory }}/assets/images/weather/spot_illos/wx_illo_user.svg"
+          alt=""
+        />
+        <h2 class="font-sans-xl text-normal text-primary-darker">
+          A weather.gov built with you in mind
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="grid-row">
+    <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
+      <p>We are working towards a new weather.gov that quickly provides everyone with the critical information they need to protect themselves and their communities. </p>
+      <p class="margin-bottom-05"> 
+      Over the next few years, we are working towards a site that will be: 
+      </p>
+      <ul class="usa-list margin-y-0"> 
+        <li> One cohesive experience </li>
+        <li> Easy to navigate and understand from any device </li>
+        <li> Accessible to all users, regardless of location, wealth, education, age, or ability </li>
+        <li> Available in more languages </li>
+        <li> A valuable resource for the public, as well as partners of the National Weather Service </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid-row margin-top-4">
+    <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
+      <div class="display-flex flex-align-center"> 
+        <img
+          aria-hidden="true"
+          class="margin-right-2"
+          src="/{{ directory }}/assets/images/weather/spot_illos/wx_illo_message.svg"
+          alt=""
+        />
+        <h2 class="font-sans-xl text-normal text-primary-darker">
+           We want to hear from you!
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="grid-row">
+    <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
+      <p class="margin-bottom-05"> 
+      <a href="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit"> Tell us what you think </a> about how beta.weather.gov looks and functions.
+      </p>
+      <ul class="usa-list margin-y-0"> 
+        <li> Did you find the information you were looking for? </li>
+        <li> Did you have any challenges in understanding it? </li>
+        <li> In what ways have you been using this website? </li>
+        <li> What can we do to serve you better? </li>
+      </ul>
+    </div>
+  </div>
+</div>
