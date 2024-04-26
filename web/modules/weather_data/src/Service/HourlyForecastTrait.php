@@ -112,7 +112,7 @@ trait HourlyForecastTrait
         $timezone = $place->timezone;
 
         $forecast = $this->dataLayer->getGridpoint($wfo, $gridX, $gridY)
-            ->properties;
+                         ->properties;
 
         $extraForecast = $this->dataLayer->getHourlyForecast(
             $wfo,
@@ -255,8 +255,8 @@ trait HourlyForecastTrait
             return [
                 "apparentTemperature" =>
                     abs($apparentTemperature - $temperature) >= 5
-                        ? $apparentTemperature
-                        : null,
+                ? $apparentTemperature
+                                     : null,
                 "conditions" => $this->t->translate(
                     ucfirst(strtolower($period["shortForecast"])),
                 ),
@@ -285,6 +285,50 @@ trait HourlyForecastTrait
         return $forecast;
     }
 
+    public function filterHourlyPrecipitationToDay(
+        \DateTimeImmutable $day,
+        $precipitationPeriods,
+        $timezone
+    ) {
+        // Our NWS day starts after 6am of the "now" day
+        $dayStart = $day->setTime(6, 0);
+        // Our day ends at 6am of the day after the "now" day
+        $dayEnd = $day->modify("+ 1 day")->setTime(6, 0);
+
+        $periods = [];
+
+        foreach ($precipitationPeriods as $quantPrecip) {
+            $valid = $quantPrecip->validTime;
+            $value = $quantPrecip->value;
+            $value = UnitConversion::millimetersToInches($value);
+
+            $valid = explode("/", $valid);
+            $start = DateTimeUtility::stringToDate($valid[0], $timezone);
+
+            $duration = new \DateInterval($valid[1]);
+            $end = $start->add($duration);
+
+            // Because we only have accumulated precip totals
+            // for the duration period, we can't cut off the end of that period.
+            // Therefore we only care about when the period starts.
+            // If it starts within the $dayStart and $dayEnd window, it
+            // counts for the current day.
+            $precipPeriodIsToday = $start >= $dayStart && $start < $dayEnd;
+
+            if ($precipPeriodIsToday) {
+                $periods[] = (object) [
+                    "start" => $start->format("g A"),
+                    "startRaw" => $start->format("c"),
+                    "end" => $end->format("g A"),
+                    "value" => round($value, 2),
+                    "endRaw" => $end->format("c"),
+                ];
+            }
+        }
+
+        return $periods;
+    }
+
     public function getHourlyPrecipitation(
         $wfo,
         $x,
@@ -309,28 +353,6 @@ trait HourlyForecastTrait
 
         $periods = [];
 
-        foreach ($forecast->quantitativePrecipitation->values as $quantPrecip) {
-            $valid = $quantPrecip->validTime;
-            $value = $quantPrecip->value;
-            $value = UnitConversion::millimetersToInches($value);
-
-            $valid = explode("/", $valid);
-            $start = DateTimeUtility::stringToDate($valid[0], $timezone);
-
-            $duration = new \DateInterval($valid[1]);
-            $end = $start->add($duration);
-
-            if ($end >= $now) {
-                $periods[] = (object) [
-                    "start" => $start->format("g A"),
-                    "startRaw" => $start->format("c"),
-                    "end" => $end->format("g A"),
-                    "value" => round($value, 2),
-                    "endRaw" => $end->format("c"),
-                ];
-            }
-        }
-
-        return $periods;
+        return $forecast->quantitativePrecipitation->values;
     }
 }
