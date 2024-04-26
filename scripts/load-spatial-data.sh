@@ -8,9 +8,11 @@ if [ ! $(command -v jq) ] || [ ! $(command -v cf) ]; then
     exit 1
 fi
 
+space=$(if [ $1 = 'beta' ]; then echo "prod"; else echo $1; fi)
+
 TARGET="weathergov-$1"
 
-cf target -o nws-weathergov -s $1
+cf target -o nws-weathergov -s $space
 
 # Get an available local port.
 LOCAL_PORT=$(netstat -aln | awk '
