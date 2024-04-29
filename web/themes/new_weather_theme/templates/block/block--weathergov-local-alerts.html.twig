@@ -1,3 +1,5 @@
+{{ attach_library("new_weather_theme/leaflet") }}
+
 <div class="grid-container padding-x-2"> 
   <div class="grid-row"> 
     <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
@@ -49,7 +51,18 @@
               {% endfor %}
             </ul>
           {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
+
+          <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
+            <div class="grid-container padding-0 bg-white shadow-1 grid-col-12">
+              <div class="grid-row wx-radar-container">
+                <wx-alert-map class="grid-col-12" data-geo-json="{{ alert.geometry | json_encode | url_encode }}" data-alert-id="{{ alert.alertId}}" data-lat="{{ weather.point.lat }}" data-lon="{{ weather.point.lon }}">
+                  <div id="wx_alert_map_{{ alert.alertId }}" style="height: 100%"></div>
+                </wx-alert-map>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
       {% endfor %}
       </weathergov-alerts>

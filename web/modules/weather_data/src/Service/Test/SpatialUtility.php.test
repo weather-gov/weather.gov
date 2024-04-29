@@ -1,0 +1,128 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use Drupal\weather_data\Service\SpatialUtility;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the SpatialUtility helper class.
+ */
+final class SpatialUtilityTest extends TestCase
+{
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testTurningPointArrayIntoObject(): void
+    {
+        $expected = (object) ["lat" => 32, "lon" => 42.444];
+        $actual = SpatialUtility::pointArrayToObject([42.444, 32]);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testPointObjectToWKT(): void
+    {
+        $expected = "ST_GEOMFROMTEXT('POINT(1 2)')";
+        $actual = SpatialUtility::pointObjectToWKT(
+            (object) ["lat" => 2, "lon" => 1],
+        );
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testPointArrayToWKT(): void
+    {
+        $expected = "ST_GEOMFROMTEXT('POINT(1 2)')";
+        $actual = SpatialUtility::pointArrayToWKT([1, 2]);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testGeometryObjectToWKT(): void
+    {
+        $expected = "ST_GEOMFROMTEXT('POLYGON((1 2,3 4,5 6))')";
+        $actual = SpatialUtility::geometryObjectToWKT([
+            (object) ["lat" => 2, "lon" => 1],
+            (object) ["lat" => 4, "lon" => 3],
+            (object) ["lat" => 6, "lon" => 5],
+        ]);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testGeometryArrayToWKT(): void
+    {
+        $expected = "ST_GEOMFROMTEXT('POLYGON((1 2,3 4,5 6))')";
+        $actual = SpatialUtility::geometryArrayToWKT([[1, 2], [3, 4], [5, 6]]);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testSwappingLatLonSinglePoint(): void
+    {
+        $point = [1, 2];
+        $actual = SpatialUtility::swapLatLon($point);
+        $this->assertEquals([2, 1], $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testSwappingLatLonNestedPoints(): void
+    {
+        $point = [[1, 2], [2, 3]];
+        $actual = SpatialUtility::swapLatLon($point);
+        $this->assertEquals([[2, 1], [3, 2]], $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testSwappingLatLonDeeplyNestedPoints(): void
+    {
+        $point = [[[[[[[1, 2], [3, 4], [5, 6]]]]]]];
+        $actual = SpatialUtility::swapLatLon($point);
+        $this->assertEquals([[[[[[[2, 1], [4, 3], [6, 5]]]]]]], $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testThrowsOnInvalidSinglePoint(): void
+    {
+        $point = [1, 2, 3];
+        $this->expectException(\Exception::class);
+        $actual = SpatialUtility::swapLatLon($point);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testThrowsOnInvalidNestedJunk(): void
+    {
+        $point = [[[1, 2], 3]];
+        $this->expectException(\Exception::class);
+        $actual = SpatialUtility::swapLatLon($point);
+    }
+}
