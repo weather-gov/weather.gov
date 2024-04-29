@@ -1,0 +1,202 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use Drupal\weather_data\Service\AlertUtility;
+use Drupal\weather_data\Service\DataLayer;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the AlertUtility helper class, geometry method.
+ */
+final class AlertUtilityGeometryTest extends TestCase
+{
+    private $dataLayer;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->dataLayer = $this->createMock(DataLayer::class);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testAlertHasGeometry(): void
+    {
+        $actual = AlertUtility::getGeometryAsJSON(
+            (object) ["geometry" => "existing geometry"],
+            $this->dataLayer,
+        );
+        $this->assertEquals("existing geometry", $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testAlertHasZones(): void
+    {
+        $alert = (object) [
+            "geometry" => false,
+            "properties" => (object) [
+                "affectedZones" => ["zone 1", "zone 2", "zone 3"],
+            ],
+        ];
+
+        $zoneShapes = [
+            (object) ["shape" => "shape 1"],
+            (object) ["shape" => "shape 2"],
+            (object) ["shape" => "shape 3"],
+        ];
+
+        $this->dataLayer->method("databaseFetchAll")->will(
+            $this->returnValueMap([
+                // Return the shapes for the selected zones
+                [
+                    "SELECT ST_AsWKT(shape) as shape
+                    FROM weathergov_geo_zones
+                    WHERE id IN ('zone 1','zone 2','zone 3')",
+                    $zoneShapes,
+                ],
+            ]),
+        );
+
+        $this->dataLayer->method("databaseFetch")->will(
+            $this->returnValueMap([
+                // Return the unioned shape of 3 and 1
+                [
+                    "SELECT ST_AsWKT(
+                        ST_UNION(
+                            ST_GEOMFROMTEXT('shape 3'),
+                            ST_GEOMFROMTEXT('shape 1')
+                        )
+                    ) as shape",
+                    (object) ["shape" => "union 3,1"],
+                ],
+
+                // Return the unioned shape of 3,1 and 2
+                [
+                    "SELECT ST_AsWKT(
+                        ST_UNION(
+                            ST_GEOMFROMTEXT('union 3,1'),
+                            ST_GEOMFROMTEXT('shape 2')
+                        )
+                    ) as shape",
+                    (object) ["shape" => "union 1,2,3"],
+                ],
+
+                // Return the simplified shape
+                [
+                    "SELECT ST_ASGEOJSON(
+                    ST_SIMPLIFY(
+                        ST_GEOMFROMTEXT('union 1,2,3'),
+                        0.003
+                    )
+                ) as shape",
+                    (object) ["shape" => '{"coordinates":[[0,1],[2,3],[4,5]]}'],
+                ],
+            ]),
+        );
+
+        $expected = (object) ["coordinates" => [[1, 0], [3, 2], [5, 4]]];
+
+        $actual = AlertUtility::getGeometryAsJSON($alert, $this->dataLayer);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testAlertHasCounties(): void
+    {
+        $alert = (object) [
+            "geometry" => false,
+            "properties" => (object) [
+                "geocode" => (object) [
+                    // SAME code is FIPS code with a leading zero. The leading
+                    // zero gets stripped out, so we need to include it here
+                    // so we get what we expect later.
+                    "SAME" => ["0county 1", "0county 2", "0county 3"],
+                ],
+            ],
+        ];
+
+        $countyShapes = [
+            (object) ["shape" => "shape 1"],
+            (object) ["shape" => "shape 2"],
+            (object) ["shape" => "shape 3"],
+        ];
+
+        $this->dataLayer->method("databaseFetchAll")->will(
+            $this->returnValueMap([
+                // Return the shapes for the selected zones. Note that county
+                // FIPS codes are numeric, so they are not quoted in the query.
+                [
+                    "SELECT ST_AsWKT(shape) as shape
+                        FROM weathergov_geo_counties
+                        WHERE countyFips IN (county 1,county 2,county 3)",
+                    $countyShapes,
+                ],
+            ]),
+        );
+
+        $this->dataLayer->method("databaseFetch")->will(
+            $this->returnValueMap([
+                // Return the unioned shape of 3 and 1
+                [
+                    "SELECT ST_AsWKT(
+                        ST_UNION(
+                            ST_GEOMFROMTEXT('shape 3'),
+                            ST_GEOMFROMTEXT('shape 1')
+                        )
+                    ) as shape",
+                    (object) ["shape" => "union 3,1"],
+                ],
+
+                // Return the unioned shape of 3,1 and 2
+                [
+                    "SELECT ST_AsWKT(
+                        ST_UNION(
+                            ST_GEOMFROMTEXT('union 3,1'),
+                            ST_GEOMFROMTEXT('shape 2')
+                        )
+                    ) as shape",
+                    (object) ["shape" => "union 1,2,3"],
+                ],
+
+                // Return the simplified shape
+                [
+                    "SELECT ST_ASGEOJSON(
+                    ST_SIMPLIFY(
+                        ST_GEOMFROMTEXT('union 1,2,3'),
+                        0.003
+                    )
+                ) as shape",
+                    (object) ["shape" => '{"coordinates":[[0,1],[2,3],[4,5]]}'],
+                ],
+            ]),
+        );
+
+        $expected = (object) ["coordinates" => [[1, 0], [3, 2], [5, 4]]];
+
+        $actual = AlertUtility::getGeometryAsJSON($alert, $this->dataLayer);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testAintGotNothing(): void
+    {
+        $actual = AlertUtility::getGeometryAsJSON(
+            (object) ["geometry" => false, "properties" => (object) []],
+            $this->dataLayer,
+        );
+        $this->assertEquals("", $actual);
+    }
+}
