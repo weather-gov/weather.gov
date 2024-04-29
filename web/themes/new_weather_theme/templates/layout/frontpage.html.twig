@@ -1,6 +1,6 @@
 {{ attach_library("new_weather_theme/location-combo-box") }}
 <!-- Search -->
-<div class="wx-bg-satellite padding-top-7 padding-bottom-8"> 
+<div class="wx-bg-satellite padding-y-4 tablet:padding-top-7 tablet:padding-bottom-8"> 
   <div class="grid-container">
     <div class="grid-row"> 
       <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
@@ -12,11 +12,11 @@
       <form class="usa-form grid-col maxw-tablet-lg margin-bottom-3 tablet:grid-offset-2" 
             data-location-search method="post"
       >
-        <div class="display-flex flex-align-end text-white">
+        <div class="display-flex flex-align-end text-white flex-wrap">
           <label class="usa-label margin-top-2" for="search-combo-box">
             {{ "Enter city or zip code" | t }}
           </label>
-          <div class="margin-x-2">|</div>
+          <div class="margin-x-105">|</div>
           <div class="">
             <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled wx-button--unstyled-light">
               <svg
@@ -40,18 +40,18 @@
   </div>
 </div>
 <!-- Weather.gov -->
-<div class="bg-primary-lightest wx-bg-ray padding-y-4">
+<div class="bg-primary-lightest wx-bg-ray padding-y-4 border-top-05 border-primary-light">
   <div class="grid-container">
     <div class="grid-row">
       <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-        <div class="display-flex flex-align-center"> 
+        <div class="display-flex flex-align-start mobile-lg__flex-align-center"> 
           <img
             aria-hidden="true"
-            class="margin-right-2"
+            class="margin-right-2 maxw-8 tablet__maxw10"
             src="/{{ directory }}/assets/images/weather/spot_illos/wx_illo_announce.svg"
             alt=""
           />
-          <h2 class="text-normal text-primary-darker font-sans-2xl margin-y-0">A new weather.gov is coming</h2>
+          <h2 class="text-normal text-primary-darker font-sans-2xl margin-y-0">A new weather.gov is&nbsp;coming</h2>
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@
         </p>
         <p>As you explore, you may notice that we’re missing features you’re accustomed to seeing on weather.gov. This site is updated every two weeks with new features. Continue to check back to watch the site expand!
         </p>
-        <p class="margin-bottom-0">Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href="https://www.weather.gov">access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information.
+        <p class="margin-bottom-0">Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href="https://www.weather.gov" class="usa-link">access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information.
         </p>
       </div>
     </div>
@@ -73,15 +73,15 @@
 <div class="grid-container margin-top-4 margin-bottom-10">
   <div class="grid-row">
     <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-      <div class="display-flex flex-align-center"> 
+      <div class="display-flex flex-align-start mobile-lg__flex-align-center"> 
         <img
           aria-hidden="true"
           class="margin-right-2"
           src="/{{ directory }}/assets/images/weather/spot_illos/wx_illo_user.svg"
           alt=""
         />
-        <h2 class="font-sans-xl text-normal text-primary-darker">
-          A weather.gov built with you in mind
+        <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
+          A weather.gov built with you in&nbsp;mind
         </h2>
       </div>
     </div>
@@ -104,14 +104,14 @@
 
   <div class="grid-row margin-top-4">
     <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-      <div class="display-flex flex-align-center"> 
+      <div class="display-flex flex-align-start mobile-lg__flex-align-center"> 
         <img
           aria-hidden="true"
           class="margin-right-2"
           src="/{{ directory }}/assets/images/weather/spot_illos/wx_illo_message.svg"
           alt=""
         />
-        <h2 class="font-sans-xl text-normal text-primary-darker">
+        <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
            We want to hear from you!
         </h2>
       </div>
@@ -120,7 +120,7 @@
   <div class="grid-row">
     <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
       <p class="margin-bottom-1"> 
-      <a href="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit"> Tell us what you think </a> about how beta.weather.gov looks and functions.
+      <a href="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit" class="usa-link"> Tell us what you think </a> about how beta.weather.gov looks and functions.
       </p>
       <ul class="usa-list margin-y-0"> 
         <li> Did you find the information you were looking for? </li>
