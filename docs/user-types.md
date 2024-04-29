@@ -92,18 +92,30 @@ This includes both traditional "core" partners such as Emergency managers, schoo
 Forecasters communicate weather, especially hazard weather, clearly to the public and emergency management partners.
 
 ### Goals
-Desire to support local partners
-Desire to innovate and improve
+- Desire to support local partners
+- Desire to innovate and improve
 
 ### Responsibilities during hazards
-Communicating weather information effectively to partners and the general public
-Building relationships with local and regional partners
-Managing forecast packages
-Sending out alerts and warnings in a hazard
+- Communicating weather information effectively to partners and the general public
+- Building relationships with local and regional partners
+- Managing forecast packages
+- Sending out alerts and warnings in a hazard
 
 ### Existing challenges
-Have to use multiple systems (AWIPs, CMS, etc) that don’t work well together
-Depending on how much WFO has automated, varying levels of manual tasks to produce forecast, push data, etc
+- Have to use multiple systems (AWIPs, CMS, etc) that don’t work well together
+- Depending on how much WFO has automated, varying levels of manual tasks to produce forecast, push data, etc
+
+-----------------------------------------------------
+
+## Tech leads
+
+### Goals
+ITOs and webmasters support WFO and regional offices in maintaining the website and other aspects of the tech stack
+
+#### Responsibilities during hazards
+- Keep the website up and running
+- Support forecasters and partners by “customizing” the website via the CMS
+- Build out scripts to automate things like pushing data from AWIPs to API/website, ingesting data, producing graphics from AWIPs
 
 
 
