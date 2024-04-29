@@ -36,9 +36,6 @@
   <head>
     <head-placeholder token="{{ placeholder_token }}">
     <title>{% if weather.place %}{{ weather.place }} | {% endif %}{{ head_title | safe_join(' | ') }}</title>
-    <css-placeholder token="{{ placeholder_token }}">
-    <js-placeholder token="{{ placeholder_token }}">
-    <link rel="icon" type="image/png" href="/{{ directory }}/assets/images/weather/favicons/noaa-favicon.ico" />
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="{% if weather.place %}{{ weather.place }} | National Weather Service{% else %}{{ head_title.title }}{% endif %}">
@@ -47,6 +44,10 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{% if weather.place %}{{ weather.place }} | National Weather Service{% else %}{{ head_title.title }}{% endif %}">
     <meta name="twitter:image" content="{{ url('<front>') | render ~ directory ~ "/nws-meta.png" }}">
+
+    <css-placeholder token="{{ placeholder_token }}">
+    <js-placeholder token="{{ placeholder_token }}">
+    <link rel="icon" type="image/png" href="/{{ directory }}/assets/images/weather/favicons/noaa-favicon.ico" />
   </head>
   <body{{ attributes.addClass(body_classes) }}>
     {#
