@@ -40,8 +40,10 @@
     <js-placeholder token="{{ placeholder_token }}">
     <link rel="icon" type="image/png" href="/{{ directory }}/assets/images/weather/favicons/noaa-favicon.ico" />
 
+    <meta property="og:type" content="website">
     <meta property="og:title" content="{% if weather.place %}{{ weather.place }} | National Weather Service{% else %}{{ head_title.title }}{% endif %}">
     <meta property="og:image" content="{{ url('<front>') | render ~ directory ~ "/nws-meta.png" }}">
+    <meta property="og:url" content="{{ url("<current>") }}">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{% if weather.place %}{{ weather.place }} | National Weather Service{% else %}{{ head_title.title }}{% endif %}">
     <meta name="twitter:image" content="{{ url('<front>') | render ~ directory ~ "/nws-meta.png" }}">
