@@ -1,0 +1,8 @@
+<p>
+  <span class="font-family-mono font-mono-sm text-bold text-primary-darker text-uppercase">
+    {{ "Phone" | t }}:
+  </span>
+  {% for item in items %}
+  <a href="tel:{{ item.content }}" class="usa-link">{{ item.content }}</a>
+  {% endfor %}
+</p>
