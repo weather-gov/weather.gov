@@ -112,11 +112,20 @@ Forecasters communicate weather, especially hazard weather, clearly to the publi
 ### Goals
 ITOs and webmasters support WFO and regional offices in maintaining the website and other aspects of the tech stack
 
-#### Responsibilities during hazards
+### Responsibilities during hazards
 - Keep the website up and running
 - Support forecasters and partners by “customizing” the website via the CMS
 - Build out scripts to automate things like pushing data from AWIPs to API/website, ingesting data, producing graphics from AWIPs
 
+### Existing challenges
+- Tech stack is prone to breaking
+- Limited time and resources - it’s not a full time job.
+- Have to use code and train others to in order to accomplish goals
+
+### Opportunities
+
+- Empower them to train forecasters on content governance, new website, etc
+- Give them time back from making sure the website doesn’t crash
 
 
 
