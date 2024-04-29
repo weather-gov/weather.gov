@@ -101,6 +101,10 @@ Building relationships with local and regional partners
 Managing forecast packages
 Sending out alerts and warnings in a hazard
 
+### Existing challenges
+Have to use multiple systems (AWIPs, CMS, etc) that don’t work well together
+Depending on how much WFO has automated, varying levels of manual tasks to produce forecast, push data, etc
+
 
 
 
