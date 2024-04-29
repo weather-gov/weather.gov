@@ -63,17 +63,17 @@ Our team has a broad definition of a "partner" as anyone that is in a leadership
 
 This includes both traditional "core" partners such as Emergency managers, school leaders and transit, as well as community based organizations and businesses that make decisions for their staff and community. 
 
-Goals
+### Goals
 - Understand weather in order to plan ahead and make decisions to protect life and property
 - Keep those within their organization, including staff, safe during an emergency
 - Communicate situation to others, who may have less weather expertise
 
-During a Hazard
+### During a Hazard
 - Before: Monitor the weather, be prepared
 - During: Varies across roles. Focused on communicating of weather information and impacts. - -- Make decisions as needed. 
 - After: Varies across roles. Deal with damage and prepare for the next event. 
 
-General challenges
+### General challenges
 - Multiple information sources
 - Disparate sources of real time data
 - Lots of data and technical jargon
@@ -81,11 +81,26 @@ General challenges
 - Some weather can lack clear signs, hard to know when to prepare without “crying wolf”
 - WFO lines create challenges, relationships fill in the gaps
 
-What do they need?
+### What do they need?
 - Actionable, high level information on timing, severity
 - Understand the geographic location of the hazard, direction and real time data points
 - Understand precise timing of the storm in order to make time related decisions, such as delaying a school start or canceling an event.
 - Needs to understand exactly what will happen at the location/s that they manages.
+-----------------------------------------------------
+## Forecasters
+
+Forecasters communicate weather, especially hazard weather, clearly to the public and emergency management partners.
+
+### Goals
+Desire to support local partners
+Desire to innovate and improve
+
+### Responsibilities during hazards
+Communicating weather information effectively to partners and the general public
+Building relationships with local and regional partners
+Managing forecast packages
+Sending out alerts and warnings in a hazard
+
 
 
 
