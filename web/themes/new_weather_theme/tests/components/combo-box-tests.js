@@ -554,6 +554,23 @@ describe("Combo box unit tests", () => {
         ).to.be.true;
       });
 
+      it("when a user loads a location page", () => {
+        window.document.body.innerHTML = "";
+        const component = document.createElement("wx-combo-box");
+        component.setAttribute("data-place", "Placeville, ST");
+        document.body.append(form);
+        form.append(component);
+
+        expect(
+          global.localStorage.setItem.calledWith(
+            "wxgov_recent_locations",
+            JSON.stringify([
+              { text: "Placeville, ST", url: "http://localhost/" },
+            ]),
+          ),
+        ).to.be.true;
+      });
+
       it("adds new result at the front of the list if prior results exist", () => {
         const previous = ["previous entry 1", "previosu entry 2"];
         global.localStorage.getItem
