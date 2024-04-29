@@ -56,7 +56,7 @@ body {
 }
 
 p {
-  @include u-line-height('body', 4)
+  @include u-line-height("body", 4)
 }
 
 /* AlertDetails Overrides
@@ -261,11 +261,11 @@ svg[data-wind-direction] {
   }
 
   &:hover {
-    color: color('primary-lighter');
+    color: color("primary-lighter");
   }
 
   &:active {
-    color: color('accent-cool-lighter');
+    color: color("accent-cool-lighter");
   }
 }
 
