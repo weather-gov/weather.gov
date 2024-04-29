@@ -1,6 +1,6 @@
 uuid: 65cc34f3-934c-4963-9342-14f59fda65a6
 langcode: en
-status: false
+status: true
 dependencies:
   module:
     - system
@@ -21,4 +21,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: '<front>'
+    pages: "<front>\r\n/point/*\r\n/node/*"
