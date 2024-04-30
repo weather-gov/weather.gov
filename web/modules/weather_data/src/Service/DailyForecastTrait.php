@@ -204,48 +204,43 @@ trait DailyForecastTrait
         $periodStartTimes = [
             DateTimeUtility::stringToDate(
                 $todayPeriods[0]->startTime,
-                $timezone
-        )];
-        $detailedPeriodStartTimes = array_map(
-            function($periodPair) use (&$timezone){
-                return DateTimeUtility::stringToDate(
-                    $periodPair[0]->startTime,
-                    $timezone
-                );
-            },
-            array_chunk($detailedPeriods, 2)
-        );
+                $timezone,
+            ),
+        ];
+        $detailedPeriodStartTimes = array_map(function ($periodPair) use (
+            &$timezone,
+        ) {
+            return DateTimeUtility::stringToDate(
+                $periodPair[0]->startTime,
+                $timezone,
+            );
+        }, array_chunk($detailedPeriods, 2));
         $periodStartTimes = array_merge(
             $periodStartTimes,
-            $detailedPeriodStartTimes
+            $detailedPeriodStartTimes,
         );
 
         // Get raw precipitation periods data, then map and
         // chunk into groups of periods based on each day's
         // startTime
-        $precipPeriods = $this->getHourlyPrecipitation(
-            $wfo,
-            $x,
-            $y,
-            $now
-        );
-        $precipPeriods = array_map(
-            function($startTime) use(&$precipPeriods, &$timezone){
-                return $this->filterHourlyPrecipitationToDay(
-                    $startTime,
-                    $precipPeriods,
-                    $timezone
-                );
-            },
-            $periodStartTimes
-        );
-        
+        $precipPeriods = $this->getHourlyPrecipitation($wfo, $x, $y, $now);
+        $precipPeriods = array_map(function ($startTime) use (
+            &$precipPeriods,
+            &$timezone,
+        ) {
+            return $this->filterHourlyPrecipitationToDay(
+                $startTime,
+                $precipPeriods,
+                $timezone,
+            );
+        }, $periodStartTimes);
+
         return [
             "today" => array_values($todayPeriodsFormatted),
             "todayHourly" => array_values($todayHourlyDetails),
             "todayAlerts" => array_values($todayAlerts),
             "detailed" => array_values($detailedPeriodsFormatted),
-            "precipitationPeriods" => array_values($precipPeriods)
+            "precipitationPeriods" => array_values($precipPeriods),
         ];
     }
 }

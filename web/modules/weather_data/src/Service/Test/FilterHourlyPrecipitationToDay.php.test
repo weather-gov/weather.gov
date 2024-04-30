@@ -1,3 +1,4 @@
+// phpcs:ignoreFile
 <?php
 
 namespace Drupal\weather_data\Service\Test;
@@ -6,126 +7,128 @@ use Drupal\weather_data\Service\DateTimeUtility;
 use Drupal\weather_data\Service\HourlyForecastTrait;
 use PHPUnit\Framework\TestCase;
 
-class PrecipAmountMock {
-  use HourlyForecastTrait;
+class PrecipAmountMock
+{
+    use HourlyForecastTrait;
 }
 
 /**
  * Tests for the filtering of precipitation periods in
  * the daily forecast
  */
-final class FilterHourlyPrecipitationToDayTest extends TestCase {
-  /**
-   * Ensure that all precipitation periods
-   * for the given day are returned
-   * @group unit
-   */
-  public function testHappyDay(): void
-  {
-    $input = [
-      (object) [
-        "validTime" => "2024-05-05T06:01:00-05:00/PT6H",
-        "value" => 10
-      ],
-      (object) [
-        "validTime" => "2024-05-05T12:01:00-05:00/PT6H",
-        "value" => 20
-      ],
-      (object) [
-        "validTime" => "2024-05-05T18:01:00-05:00/PT6H",
-        "value" => 30
-      ],
-      (object) [
-        "validTime" => "2024-05-06T00:01:00-05:00/PT6H",
-        "value" => 40
-      ],
-      // We expect this one _not_ to be included, because
-      // it starts after the 6am next day cutoff
-      (object) [
-        "validTime" => "2024-05-06T06:01:00-05:00/PT6H",
-        "value" => 50
-      ],
-    ];
+final class FilterHourlyPrecipitationToDayTest extends TestCase
+{
+    /**
+     * Ensure that all precipitation periods
+     * for the given day are returned
+     * @group unit
+     */
+    public function testHappyDay(): void
+    {
+        $input = [
+            (object) [
+                "validTime" => "2024-05-05T06:01:00-05:00/PT6H",
+                "value" => 10,
+            ],
+            (object) [
+                "validTime" => "2024-05-05T12:01:00-05:00/PT6H",
+                "value" => 20,
+            ],
+            (object) [
+                "validTime" => "2024-05-05T18:01:00-05:00/PT6H",
+                "value" => 30,
+            ],
+            (object) [
+                "validTime" => "2024-05-06T00:01:00-05:00/PT6H",
+                "value" => 40,
+            ],
+            // We expect this one _not_ to be included, because
+            // it starts after the 6am next day cutoff
+            (object) [
+                "validTime" => "2024-05-06T06:01:00-05:00/PT6H",
+                "value" => 50,
+            ],
+        ];
 
-    $today = DateTimeUtility::stringToDate("2024-05-05T02:01:00-05:00");
+        $today = DateTimeUtility::stringToDate("2024-05-05T02:01:00-05:00");
 
-    $expected = [
-      (object) [
-        "start" => "6 AM",
-        "startRaw" => "2024-05-05T06:01:00-05:00",
-        "end" => "12 PM",
-        "endRaw" => "2024-05-05T12:01:00-05:00",
-        "value" => 0.39
-      ],
-      (object) [
-        "start" => "12 PM",
-        "startRaw" => "2024-05-05T12:01:00-05:00",
-        "end" => "6 PM",
-        "endRaw" => "2024-05-05T18:01:00-05:00",
-        "value" => 0.79
-      ],
-      (object) [
-        "start" => "6 PM",
-        "startRaw" => "2024-05-05T18:01:00-05:00",
-        "end" => "12 AM",
-        "endRaw" => "2024-05-06T00:01:00-05:00",
-        "value" => 1.18
-      ],
-      (object) [
-        "start" => "12 AM",
-        "startRaw" => "2024-05-06T00:01:00-05:00",
-        "end" => "6 AM",
-        "endRaw" => "2024-05-06T06:01:00-05:00",
-        "value" => 1.57
-      ]
-    ];
+        $expected = [
+            (object) [
+                "start" => "6 AM",
+                "startRaw" => "2024-05-05T06:01:00-05:00",
+                "end" => "12 PM",
+                "endRaw" => "2024-05-05T12:01:00-05:00",
+                "value" => 0.39,
+            ],
+            (object) [
+                "start" => "12 PM",
+                "startRaw" => "2024-05-05T12:01:00-05:00",
+                "end" => "6 PM",
+                "endRaw" => "2024-05-05T18:01:00-05:00",
+                "value" => 0.79,
+            ],
+            (object) [
+                "start" => "6 PM",
+                "startRaw" => "2024-05-05T18:01:00-05:00",
+                "end" => "12 AM",
+                "endRaw" => "2024-05-06T00:01:00-05:00",
+                "value" => 1.18,
+            ],
+            (object) [
+                "start" => "12 AM",
+                "startRaw" => "2024-05-06T00:01:00-05:00",
+                "end" => "6 AM",
+                "endRaw" => "2024-05-06T06:01:00-05:00",
+                "value" => 1.57,
+            ],
+        ];
 
-    $utility = new PrecipAmountMock();
-    $actual = $utility->filterHourlyPrecipitationToDay(
-      $today,
-      $input,
-      null
-    );
+        $utility = new PrecipAmountMock();
+        $actual = $utility->filterHourlyPrecipitationToDay(
+            $today,
+            $input,
+            null,
+        );
 
-    $this->assertEquals($expected, $actual);
-  }
+        $this->assertEquals($expected, $actual);
+    }
 
-  /**
-   * Ensures that the last percip period, if it starts
-   * _before_ 6am the following day, is _still included_
-   * in the results.
-   * NOTE: this assumption might change in the future
-   * as we decide how we want to align these.
-   * @group unit
-   */
-  public function testLastPeriodStartOverlap(): void
-  {
-    // This final period actually begins at 5 AM the _following_ day.
-    // Because it starts before the "6 AM cutoff", we still
-    // count it towards the given day
-    $overlapInput = (object) [
-      "validTime" => "2024-05-06T05:00:00-05:00/PT6H",
-      "value" => 10
-    ];
-    $today = DateTimeUtility::stringToDate("2024-05-05T02:01:00-05:00");
+    /**
+     * Ensures that the last percip period, if it starts
+     * _before_ 6am the following day, is _still included_
+     * in the results.
+     * NOTE: this assumption might change in the future
+     * as we decide how we want to align these.
+     * @group unit
+     */
+    public function testLastPeriodStartOverlap(): void
+    {
+        // This final period actually begins at 5 AM the _following_ day.
+        // Because it starts before the "6 AM cutoff", we still
+        // count it towards the given day
+        $overlapInput = (object) [
+            "validTime" => "2024-05-06T05:00:00-05:00/PT6H",
+            "value" => 10,
+        ];
+        $today = DateTimeUtility::stringToDate("2024-05-05T02:01:00-05:00");
 
-    $expected = [
-      (object) [
-        "startRaw" => "2024-05-06T05:00:00-05:00",
-        "start" => "5 AM",
-        "endRaw" => "2024-05-06T11:00:00-05:00",
-        "end" => "11 AM",
-        "value" => 0.39
-      ]
-    ];
+        $expected = [
+            (object) [
+                "startRaw" => "2024-05-06T05:00:00-05:00",
+                "start" => "5 AM",
+                "endRaw" => "2024-05-06T11:00:00-05:00",
+                "end" => "11 AM",
+                "value" => 0.39,
+            ],
+        ];
 
-    $utility = new PrecipAmountMock();
-    $actual = $utility->filterHourlyPrecipitationToDay(
-      $today,
-      [$overlapInput],
-      null
-    );
+        $utility = new PrecipAmountMock();
+        $actual = $utility->filterHourlyPrecipitationToDay(
+            $today,
+            [$overlapInput],
+            null,
+        );
 
-    $this->assertEquals($expected, $actual);
-  }
-};
+        $this->assertEquals($expected, $actual);
+    }
+}

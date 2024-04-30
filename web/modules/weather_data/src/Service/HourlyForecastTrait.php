@@ -112,7 +112,7 @@ trait HourlyForecastTrait
         $timezone = $place->timezone;
 
         $forecast = $this->dataLayer->getGridpoint($wfo, $gridX, $gridY)
-                         ->properties;
+            ->properties;
 
         $extraForecast = $this->dataLayer->getHourlyForecast(
             $wfo,
@@ -255,8 +255,8 @@ trait HourlyForecastTrait
             return [
                 "apparentTemperature" =>
                     abs($apparentTemperature - $temperature) >= 5
-                ? $apparentTemperature
-                                     : null,
+                        ? $apparentTemperature
+                        : null,
                 "conditions" => $this->t->translate(
                     ucfirst(strtolower($period["shortForecast"])),
                 ),
@@ -288,7 +288,7 @@ trait HourlyForecastTrait
     public function filterHourlyPrecipitationToDay(
         \DateTimeImmutable $day,
         $precipitationPeriods,
-        $timezone
+        $timezone,
     ) {
         // Our NWS day starts after 6am of the "now" day
         $dayStart = $day->setTime(6, 0);
