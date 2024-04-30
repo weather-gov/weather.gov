@@ -1,3 +1,5 @@
+@use "uswds-core" as *;
+
 /* stylelint-disable scss/at-extend-no-missing-placeholder */
 @use "uswds-core" as *;
 @forward "uswds-theme";
@@ -9,7 +11,7 @@
 
 .wx-combo-box li[role="option"] {
   &:not(.wx-combo-box__list-option--focused):hover {
-    background-color: color('base-lightest');
+    background-color: color("base-lightest");
   }
 }
 
@@ -20,8 +22,18 @@
   margin: 0;
 }
 
+.wx-combo-box__list--container {
+  @extend .usa-combo-box__list;
+
+  position: initial;
+}
+
 .wx-combo-box__list {
   @extend .usa-combo-box__list;
+
+  position: initial;
+  max-height: initial;
+  overflow-y: hidden;
 }
 
 .wx-combo-box__toggle-list {
@@ -35,7 +47,7 @@
       rgba(255 255 255 / 40%),
       rgba(255 255 255 / 40%)
     ),
-    url('/themes/new_weather_theme/assets/images/uswds/usa-icons/close.svg');
+    url("/themes/new_weather_theme/assets/images/uswds/usa-icons/close.svg");
   opacity: 1;
   background-color: white;
 }
@@ -46,6 +58,14 @@
 
 .wx-combo-box__list-option {
   @extend .usa-combo-box__list-option;
+
+  &[data-recent]::after {
+    @include u-text("base");
+    @include u-font("mono", "sm");
+
+    content: "recent";
+    float: right;
+  }
 }
 
 .wx-combo-box__list-option--selected {

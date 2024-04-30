@@ -373,4 +373,102 @@ class AlertUtility
             }
         }
     }
+
+    public static function getGeometryAsJSON($alert, $dataLayer)
+    {
+        // If the alert already has a geometry, use it.
+        if ($alert->geometry ?? false) {
+            return $alert->geometry;
+        }
+
+        $geometries = [];
+
+        // Otherwise, we need to derive the geometry from other metadata. Alerts
+        // without a geometry should have a list of affected zones, and we can
+        // build a geometry off that.
+        if (
+            property_exists($alert->properties, "affectedZones") &&
+            count($alert->properties->affectedZones) > 0
+        ) {
+            $ids = array_map(function ($zone) {
+                return "'$zone'";
+            }, $alert->properties->affectedZones);
+            $ids = implode(",", $ids);
+
+            $shapes = $dataLayer->databaseFetchAll(
+                "SELECT ST_AsWKT(shape) as shape
+                    FROM weathergov_geo_zones
+                    WHERE id IN ($ids)",
+            );
+
+            foreach ($shapes as $shape) {
+                $geometries[] = $shape;
+            }
+        }
+
+        if (count($geometries) == 0) {
+            // If an alert doesn't have a geometry or any zones, that's probably
+            // a bug. However, if the alert has SAME codes, we can use those to
+            // get geometries, too.
+            $counties = false;
+            if (
+                property_exists($alert->properties, "geocode") &&
+                property_exists($alert->properties->geocode, "SAME")
+            ) {
+                $counties = count($alert->properties->geocode->SAME) > 0;
+            }
+
+            if ($counties) {
+                $fips = array_map(function ($same) {
+                    return substr($same, 1);
+                }, $alert->properties->geocode->SAME);
+                $fips = implode(",", $fips);
+
+                $shapes = $dataLayer->databaseFetchAll(
+                    "SELECT ST_AsWKT(shape) as shape
+                        FROM weathergov_geo_counties
+                        WHERE countyFips IN ($fips)",
+                );
+
+                foreach ($shapes as $shape) {
+                    $geometries[] = $shape;
+                }
+            }
+        }
+
+        $polygon = "";
+
+        if (count($geometries) > 0) {
+            $polygon = array_pop($geometries)->shape;
+
+            foreach ($geometries as $geometry) {
+                $union = $dataLayer->databaseFetch(
+                    "SELECT ST_AsWKT(
+                        ST_UNION(
+                            ST_GEOMFROMTEXT('$polygon'),
+                            ST_GEOMFROMTEXT('$geometry->shape')
+                        )
+                    ) as shape",
+                );
+                $polygon = $union->shape;
+            }
+
+            $polygon = $dataLayer->databaseFetch(
+                "SELECT ST_ASGEOJSON(
+                    ST_SIMPLIFY(
+                        ST_GEOMFROMTEXT('$polygon'),
+                        0.003
+                    )
+                ) as shape",
+            );
+
+            $polygon = json_decode($polygon->shape);
+
+            $polygon->coordinates = SpatialUtility::swapLatLon(
+                $polygon->coordinates,
+            );
+        }
+
+        return $polygon;
+    }
 }

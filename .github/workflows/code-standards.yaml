@@ -157,7 +157,6 @@ jobs:
       - name: run js-component-tests
         if: needs.should-test.outputs.yes == 'true'
         run: npm run js-component-tests
-    
 
   style-lint:
     name: SCSS lint
@@ -295,6 +294,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: setup site
+        if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/setup-site
 
       - name: run unit tests
@@ -344,6 +344,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: setup site
+        if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/setup-site
 
       - name: Cypress run
@@ -373,6 +374,7 @@ jobs:
           lfs: true
 
       - name: setup site
+        if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/setup-site
 
       - name: Cypress run
@@ -393,6 +395,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: setup site
+        if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/setup-site
 
       - name: Cypress run

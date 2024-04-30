@@ -7,6 +7,26 @@ module.exports = {
     "prefer-destructuring": [0],
     "no-param-reassign": ["error", { props: false }],
     "no-console": "error",
+    // Taken directly from airbnb, but with the for...of statements allowed. It
+    // is now supported by all the browsers.
+    "no-restricted-syntax": [
+      "error",
+      {
+        selector: "ForInStatement",
+        message:
+          "for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array.",
+      },
+      {
+        selector: "LabeledStatement",
+        message:
+          "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.",
+      },
+      {
+        selector: "WithStatement",
+        message:
+          "`with` is disallowed in strict mode because it makes code impossible to predict and optimize.",
+      },
+    ],
   },
   env: {
     es6: true,
@@ -21,7 +41,7 @@ module.exports = {
       },
     },
     {
-      files: ["tests/**/*.js", "spatial-data/**/*.js"],
+      files: ["tests/**/*.js", "spatial-data/**/*.js", "web/**/tests/**/*.js"],
       extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
       env: {
         es6: true,
