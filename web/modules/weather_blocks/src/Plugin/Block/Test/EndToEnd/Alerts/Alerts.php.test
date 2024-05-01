@@ -45,4 +45,41 @@ final class AlertsStructureTest extends EndToEndBase
 
         $this->assertTrue(true);
     }
+
+    /**
+     * @group e2e
+     */
+    public function testAlertDurationText(): void
+    {
+        $this->onLocationRoute(39.738, -104.985);
+
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2024-04-30T01:00:00-0700",
+        );
+
+        $expected = [
+            "has concluded",
+            "until 2:00 AM today",
+            "until Wednesday 05/01 2:00 AM MDT",
+            "is in effect",
+            "this morning",
+            "this afternoon",
+            "tonight",
+            "tomorrow morning",
+            "tomorrow afternoon",
+            "tomorrow night",
+            "Thursday",
+        ];
+
+        $data = $this->block->build($now);
+
+        $durations = array_map(function ($alert) {
+            return $alert->durationText;
+        }, $data["alerts"]);
+
+        $this->assertTrue(true);
+
+        $this->assertEquals($expected, $durations);
+    }
 }
