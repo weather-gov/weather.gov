@@ -1,7 +1,4 @@
 @use "uswds-core" as *;
-
-/* stylelint-disable scss/at-extend-no-missing-placeholder */
-// @use "uswds-core" as *;
 @forward "uswds-theme";
 @forward "uswds";
 
@@ -18,4 +15,8 @@ h4.visual-h3,
 h3.visual-h2,
 .usa-prose h3.visual-h2 {
   @include h2;
+
+  &.text-normal {
+    font-weight: 400;
+  }
 }
