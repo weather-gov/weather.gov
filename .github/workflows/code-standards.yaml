@@ -207,6 +207,10 @@ jobs:
     needs: [build-drupal-image, should-test]
 
     steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
+
       - name: populate database
         if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/populate-database
