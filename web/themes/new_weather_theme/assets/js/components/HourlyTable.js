@@ -42,6 +42,9 @@ class HourlyTable extends HTMLElement {
   }
 
   clickScrollRight(wrapper) {
+    const containerWidth = wrapper.getBoundingClientRect().width;
+    const firstColumnWidth = this.querySelector("table tr:last-child th").getBoundingClientRect().width;
+    const visibleWidth = containerWidth - firstColumnWidth;
     const cellsToRight = Array.from(
       this.querySelectorAll("table tr:last-child td"),
     ).filter((cell) => {
@@ -51,13 +54,16 @@ class HourlyTable extends HTMLElement {
 
     if (cellsToRight.length) {
       wrapper.scrollTo({
-        left: cellsToRight[0].offsetLeft - 16,
+        left: (wrapper.scrollLeft + visibleWidth) - 16,
         behavior: "smooth",
       });
     }
   }
 
   clickScrollLeft(wrapper) {
+    const containerWidth = wrapper.getBoundingClientRect().width;
+    const firstColumnWidth = this.querySelector("table tr:last-child th").getBoundingClientRect().width;
+    const visibleWidth = containerWidth - firstColumnWidth;
     const cellsToLeft = Array.from(
       this.querySelectorAll("table tr:last-child td"),
     ).filter((cell) => {
@@ -67,7 +73,7 @@ class HourlyTable extends HTMLElement {
 
     if (cellsToLeft.length) {
       wrapper.scrollTo({
-        left: cellsToLeft.at(-1).offsetLeft - 16,
+        left: wrapper.scrollLeft - visibleWidth - 16,
         behavior: "smooth",
       });
     } else {
