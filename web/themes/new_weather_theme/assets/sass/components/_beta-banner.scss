@@ -4,4 +4,25 @@ section.beta-banner {
   p {
     @include u-margin-y(0);
   }
+
+  a {
+    color: color("primary");
+
+    &:hover  {
+      color: color("primary-dark");
+    }
+
+    &:active{
+      color: color("primary-darker");
+    }
+  }
 }
+
+.bg-gold-10v {
+  background-color: color("gold-10v");
+}
+
+.border-gold-20v {
+  border-color: color("gold-20v");
+}
+
