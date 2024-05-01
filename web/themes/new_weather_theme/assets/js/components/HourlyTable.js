@@ -45,16 +45,18 @@ class HourlyTable extends HTMLElement {
     const containerWidth = wrapper.getBoundingClientRect().width;
     const firstColumnWidth = this.querySelector("table tr:last-child th").getBoundingClientRect().width;
     const visibleWidth = containerWidth - firstColumnWidth;
-    const cellsToRight = Array.from(
-      this.querySelectorAll("table tr:last-child td"),
-    ).filter((cell) => {
-      const diff = cell.offsetLeft - wrapper.scrollLeft;
-      return diff > 16;
-    });
+    const rightSide = wrapper.scrollLeft + visibleWidth;
 
-    if (cellsToRight.length) {
+    const nextCol = Array.from(this.querySelectorAll("table tr:last-child td"))
+          .find(el => {
+            const left = el.offsetLeft;
+            const right = el.offsetLeft + el.offsetWidth;
+            return left <= rightSide && right >= rightSide;
+          });
+
+    if (nextCol) {
       wrapper.scrollTo({
-        left: (wrapper.scrollLeft + visibleWidth) - 16,
+        left: nextCol.offsetLeft - 16,
         behavior: "smooth",
       });
     }
@@ -64,16 +66,18 @@ class HourlyTable extends HTMLElement {
     const containerWidth = wrapper.getBoundingClientRect().width;
     const firstColumnWidth = this.querySelector("table tr:last-child th").getBoundingClientRect().width;
     const visibleWidth = containerWidth - firstColumnWidth;
-    const cellsToLeft = Array.from(
-      this.querySelectorAll("table tr:last-child td"),
-    ).filter((cell) => {
-      const diff = cell.offsetLeft - wrapper.scrollLeft;
-      return diff < 16;
-    });
+    const leftSide = wrapper.scrollLeft - visibleWidth;
 
-    if (cellsToLeft.length) {
+    const prevCol = Array.from(this.querySelectorAll("table tr:last-child td"))
+          .find(el => {
+            const left = el.offsetLeft;
+            const right = el.offsetLeft + el.offsetWidth;
+            return left <= leftSide && right >= leftSide;
+          });
+
+    if (prevCol) {
       wrapper.scrollTo({
-        left: wrapper.scrollLeft - visibleWidth - 16,
+        left: prevCol.nextElementSibling.offsetLeft - 16,
         behavior: "smooth",
       });
     } else {
