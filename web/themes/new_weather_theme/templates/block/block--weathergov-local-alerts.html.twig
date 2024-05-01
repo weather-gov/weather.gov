@@ -10,7 +10,7 @@
           <button
             type="button"
             class="usa-accordion__button text-ls-1"
-            aria-expanded="{{ (alert.alertId == 1) ? 'true' : 'false' }}"
+            aria-expanded="true"
             aria-controls="a{{ alert.alertId }}"
             data-button-for="#alert_{{alert.alertId}}">
             {{ alert.event | t }}
