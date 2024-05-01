@@ -564,9 +564,7 @@ describe("Combo box unit tests", () => {
         expect(
           global.localStorage.setItem.calledWith(
             "wxgov_recent_locations",
-            JSON.stringify([
-              { text: "Placeville, ST", url: "http://localhost/" },
-            ]),
+            JSON.stringify([{ text: "Placeville, ST", url: "/" }]),
           ),
         ).to.be.true;
       });
