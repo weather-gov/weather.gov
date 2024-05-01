@@ -120,11 +120,10 @@ trait AlertTrait
         $alerts = array_map(function ($alert) use ($timezone, $now) {
             $output = clone $alert->properties;
 
-            if ($alert->geometry ?? false) {
-                $output->geometry = $alert->geometry->coordinates[0];
-            } else {
-                $output->geometry = [];
-            }
+            $output->geometry = AlertUtility::getGeometryAsJSON(
+                $alert,
+                $this->dataLayer,
+            );
 
             $output->description = self::tryParsingDescriptionText(
                 $output->description,

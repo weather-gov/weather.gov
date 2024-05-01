@@ -332,4 +332,9 @@ class DataLayer
     {
         return $this->database->query($sql)->fetch();
     }
+
+    public function databaseFetchAll($sql)
+    {
+        return $this->database->query($sql)->fetchAll();
+    }
 }

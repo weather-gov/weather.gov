@@ -186,6 +186,13 @@ class ComboBox extends HTMLElement {
     this.input.addEventListener("focus", () => {
       this.updateSearch("");
     });
+
+    if (this.dataset.place) {
+      this.saveSearchResult({
+        text: this.dataset.place,
+        url: window.location.pathname,
+      });
+    }
   }
 
   disconnectedCallback() {

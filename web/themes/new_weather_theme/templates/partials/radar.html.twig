@@ -1,7 +1,19 @@
 {{ attach_library("new_weather_theme/radar") }}
 
-<div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
+<div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2" wx-outer-radar-container>
   <div class="grid-container padding-0 bg-white shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+    <div class="usa-sr-only">
+      <p>Listed below is a visual representation of radar data for
+      {{ weather.place }}. For more details on specific weather conditions,
+      view hourly data within the <a href="" data-daily-tab-link>daily tab.</a></p>
+      <script type="text/javascript">
+        const link = document.querySelector("[data-daily-tab-link]");
+        link.addEventListener("click", e => {
+          e.preventDefault();
+          document.querySelector("wx-tabbed-nav").switchToTab("daily");
+        });
+      </script>
+    </div>
     <div class="grid-row wx-radar-container">
        <wx-radar class="grid-col-12" lat="{{ point.lat }}" lon="{{ point.lon }}">
          <div id="wx_radar_container" style="height: 300px;"></div>
