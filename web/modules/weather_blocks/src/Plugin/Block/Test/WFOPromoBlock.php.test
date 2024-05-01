@@ -2,7 +2,7 @@
 
 namespace Drupal\weather_blocks\Plugin\Block\Test;
 
-use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\weather_blocks\Plugin\Block\WFOPromoBlock;
 
 /**
@@ -20,104 +20,28 @@ final class WFOPromoBlockTest extends Base
     protected function setUp($type = null, $override = true): void
     {
         parent::setUp(WFOPromoBlock::class);
-
-        $this->bodyField = $this->createStub(FieldItemListInterface::class);
-        $this->titleField = $this->createStub(FieldItemListInterface::class);
-        $this->phoneField = $this->createStub(FieldItemListInterface::class);
-        $this->facebookField = $this->createStub(FieldItemListInterface::class);
-        $this->twitterField = $this->createStub(FieldItemListInterface::class);
-        $this->youtubeField = $this->createStub(FieldItemListInterface::class);
-
-        $this->bodyField
-            ->method("getValue")
-            ->willReturn([["value" => "WFO promo body"]]);
-
-        $this->titleField
-            ->method("getString")
-            ->willReturn("wfo descriptive name");
-
-        $this->phoneField->method("getString")->willReturn("beep boop");
     }
 
-    protected function setupEntityAPIMocksForGoodStory()
+    /**
+     * Test that the block returns a node iD.
+     * @group unit
+     * @group block
+     * @group wfo-promo-block
+     */
+    public function testReturnsAWFOPromo(): void
     {
-        // Setup fetching the actual node.
-        $story = $this->createStub(FieldItemListInterface::class);
+        $this->onLocationRoute();
 
-        $story
-            ->method("get")
-            ->will(
-                $this->returnValueMap([
-                    ["body", $this->bodyField],
-                    ["title", $this->titleField],
-                    ["field_phone_number", $this->phoneField],
-                    ["field_facebook_url", $this->facebookField],
-                    ["field_twitter_url", $this->twitterField],
-                    ["field_youtube_url", $this->youtubeField],
-                ]),
-            );
+        // Setup fetching the actual node.
+        $story = $this->createStub(ContentEntityInterface::class);
+
+        $story->method("id")->willReturn(94);
 
         $this->entityService
             ->method("getLatestNodeFromWFO")
             ->willReturn($story);
-    }
 
-    /**
-     * Test that the block returns a block without social media links.
-     * @group unit
-     * @group block
-     * @group wfo-promo-block
-     */
-    public function testReturnsAWFOPromotWithNoSocial(): void
-    {
-        $this->onLocationRoute();
-
-        $this->setupEntityAPIMocksForGoodStory(true);
-
-        $expected = [
-            "name" => "wfo descriptive name",
-            "shortIntro" => "WFO promo body",
-            "code" => "WFO",
-            "phone" => "beep boop",
-            "social" => false,
-        ];
-
-        $actual = $this->block->build();
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test that the block returns a block with social media links.
-     * @group unit
-     * @group block
-     * @group wfo-promo-block
-     */
-    public function testReturnsAWFOPromotWithYesSocial(): void
-    {
-        $this->onLocationRoute();
-
-        $this->setupEntityAPIMocksForGoodStory(true);
-
-        $this->facebookField->method("getString")->willReturn("book-in-face");
-        $this->twitterField
-            ->method("getString")
-            ->willReturn("birds aren't real");
-        $this->youtubeField
-            ->method("getString")
-            ->willReturn("internet VHS tapes");
-
-        $expected = [
-            "name" => "wfo descriptive name",
-            "shortIntro" => "WFO promo body",
-            "code" => "WFO",
-            "phone" => "beep boop",
-            "social" => [
-                "facebook" => "book-in-face",
-                "twitter" => "birds aren't real",
-                "youtube" => "internet VHS tapes",
-            ],
-        ];
+        $expected = ["node" => 94];
 
         $actual = $this->block->build();
 
