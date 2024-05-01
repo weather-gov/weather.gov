@@ -27,7 +27,7 @@ content:
     region: content
   field_facebook_url:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -35,7 +35,7 @@ content:
     region: content
   field_phone_number:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -43,7 +43,7 @@ content:
     region: content
   field_twitter_url:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -51,7 +51,7 @@ content:
     region: content
   field_wfo:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: false
     third_party_settings: {  }
@@ -59,7 +59,7 @@ content:
     region: content
   field_youtube_url:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }

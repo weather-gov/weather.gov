@@ -14,7 +14,7 @@
 */
 #}
 {% block content %}
-<a href="{{ path('<front>') }}" class="display-flex flex-align-center text-no-underline margin-top-2 margin-bottom-05" rel="home">
+<a href="{{ path('<front>') }}" class="display-flex flex-align-center flex-wrap text-no-underline margin-y-2" rel="home">
   {% if site_logo %}
   <img class="height-9" src="{{ site_logo }}" alt=""/>
   {% endif %}
@@ -30,6 +30,18 @@
     </span>
     {% endif %} 
   </div>
-  <span class="display-block usa-tag margin-left-1 bg-gold text-black">Beta</span>
+  <span class="display-flex flex-align-center bg-gold-10v text-black text-uppercase padding-y-05 padding-left-1 padding-right-105 font-sans-xs radius-md margin-left-1 margin-top-105 tablet:margin-top-0">
+    <svg
+        class="usa-icon height-205 width-205 margin-right-05 text-top margin-bottom-2px"
+        aria-hidden="true"
+        focusable="false"
+        role="img"
+    >
+      <use
+        xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#construction_worker"
+      ></use>
+    </svg>
+    Under development 
+  </span>
 </a>
 {% endblock %}

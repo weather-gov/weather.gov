@@ -15,7 +15,7 @@ wx-hourly-toggle[tabindex="0"]:focus {
   outline-offset: units("2px");
 }
 
-wx-hourly-toggle[aria-expanded="false"] + wx-hourly-table {
+wx-hourly-toggle[aria-expanded="false"] + .hourly-toggle-target {
   display: none;
 }
 

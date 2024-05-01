@@ -49,11 +49,11 @@
       {{ 'Skip to main content'|t }}
     </a>
 
+    {% include '@new_weather_theme/partials/gov-banner.html.twig' %}
+
     {% if page.beta %}
     {{ page.beta }}
     {% endif %}
-
-    {% include '@new_weather_theme/partials/gov-banner.html.twig' %}
 
     {{ page_top }}
     {{ page }}

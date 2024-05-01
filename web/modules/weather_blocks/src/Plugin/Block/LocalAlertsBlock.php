@@ -16,7 +16,7 @@ class LocalAlertsBlock extends WeatherBlockBase
     /**
      * {@inheritdoc}
      */
-    public function build()
+    public function build($now = false)
     {
         $location = $this->getLocation();
 
@@ -25,6 +25,8 @@ class LocalAlertsBlock extends WeatherBlockBase
                 $data = $this->weatherData->getAlerts(
                     $location->grid,
                     $location->point,
+                    false,
+                    $now,
                 );
                 return ["alerts" => $data];
             } catch (\Throwable $e) {

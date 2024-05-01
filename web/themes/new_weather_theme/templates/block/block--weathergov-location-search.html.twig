@@ -1,6 +1,7 @@
 {{ attach_library("new_weather_theme/location-search") }}
 {{ attach_library("new_weather_theme/location-combo-box") }}
 {{ attach_library("new_weather_theme/browser-location-button") }}
+
 {% if content.place %}<div class="grid-container">{% endif %}
 <div class="grid-row">
   <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3" data-location-search method="get">
@@ -13,7 +14,7 @@
         <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
       </div>
     </div>
-    <wx-combo-box class="z-top margin-top-1" id="search-combo-box">
+    <wx-combo-box class="z-top margin-top-1" id="search-combo-box" {% if content.place %}data-place="{{ content.place.city }}{% if content.place.state %}, {{ content.place.state }}{% endif %}"{% endif %}}>
     </wx-combo-box>
   </form>
 </div>
