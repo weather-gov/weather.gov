@@ -7,10 +7,15 @@ describe("location search", () => {
     const start = "/point/36.168/-86.778";
 
     cy.visit(start);
+    // Clear out saved results for simplicity's sake
+    cy.clearLocalStorage();
+
     cy.get(`form[data-location-search] input[type="text"]`).type("Atlanta", {
       delay: 200,
     });
-    cy.get("form[data-location-search] ul li").first().trigger("click");
+    cy.get(`form[data-location-search] ul li[role="option"]`)
+      .first()
+      .trigger("click");
 
     cy.location("pathname").should("not.equal", start);
 
