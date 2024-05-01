@@ -4,7 +4,7 @@
 
 {% if content.place %}<div class="grid-container">{% endif %}
 <div class="grid-row">
-  <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3" data-location-search method="post">
+  <form class="usa-form grid-col-12 maxw-tablet-lg margin-bottom-3" data-location-search method="get">
     <div class="display-flex flex-align-end">
       <label class="usa-label" for="search-combo-box">
         {{ "Enter city or zip code" | t }}
@@ -16,7 +16,6 @@
     </div>
     <wx-combo-box class="z-top margin-top-1" id="search-combo-box" {% if content.place %}data-place="{{ content.place.city }}{% if content.place.state %}, {{ content.place.state }}{% endif %}"{% endif %}}>
     </wx-combo-box>
-    <input type="hidden" name="suggestedPlaceName" value="">
   </form>
 </div>
 {% if content.place %}</div>{% endif %}

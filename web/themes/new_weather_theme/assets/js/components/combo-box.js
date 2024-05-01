@@ -666,15 +666,8 @@ class ComboBox extends HTMLElement {
    */
   submit() {
     const formEl = this.closest("form[data-location-search]");
-    const textInput = document.createElement("input");
-    textInput.setAttribute("type", "hidden");
-    textInput.setAttribute("name", "placeName");
-    this.append(textInput);
 
     if (formEl) {
-      const optionText = this.input.value;
-      textInput.value = optionText;
-
       if (this.url) {
         const result = {
           text: this.input.value,
