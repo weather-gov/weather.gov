@@ -27,6 +27,7 @@ runs:
 
     - name: start the site
       if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
+      shell: bash
       run: |
         docker load --input /tmp/image.tar
         docker compose up -d
@@ -34,10 +35,12 @@ runs:
     # Give the containers a moment to settle.
     - name: wait a tick
       if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
+      shell: bash
       run: sleep 10
 
     - name: populate the site
       if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
+      shell: bash
       run: |
         cp web/sites/example.settings.dev.php web/sites/settings.dev.php
         make install-site
@@ -45,6 +48,7 @@ runs:
 
     - name: dump database
       if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
+      shell: bash
       run: |
         mysqldump \
           --host=127.0.0.1 \
