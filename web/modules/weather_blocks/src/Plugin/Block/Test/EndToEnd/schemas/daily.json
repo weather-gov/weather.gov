@@ -21,7 +21,7 @@
       "type": "array",
       "items": {
         "type": "array",
-        "maxItems": 4,
+        "maxItems": 5,
         "items": {
           "$ref": "#/$defs/precipPeriod"
         }
