@@ -226,7 +226,6 @@ class ComboBox extends HTMLElement {
     input.setAttribute("autocorrect", "off");
     input.setAttribute("spellcheck", "false");
     input.setAttribute("aria-activedescendant", "");
-    input.setAttribute("aria-describedby", `${this.id}--input--description`);
     input.setAttribute("placeholder", "");
     input.id = `${this.id}--search-input`;
     input.classList.add("wx-combo-box__input");
