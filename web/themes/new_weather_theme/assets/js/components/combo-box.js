@@ -190,7 +190,7 @@ class ComboBox extends HTMLElement {
     if (this.dataset.place) {
       this.saveSearchResult({
         text: this.dataset.place,
-        url: window.location.href,
+        url: window.location.pathname,
       });
     }
   }
