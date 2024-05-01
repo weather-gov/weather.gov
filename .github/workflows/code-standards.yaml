@@ -197,26 +197,9 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
 
-      - name: setup image cacheing
+      - name: build drupal
         if: needs.should-test.outputs.yes == 'true'
-        uses: actions/cache@v4
-        id: cache
-        with:
-          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
-          path: /tmp/image.tar
-
-      - name: Set up Docker Buildx
-        if: needs.should-test.outputs.yes == 'true' && steps.cache.outputs.cache-hit != 'true'
-        uses: docker/setup-buildx-action@v3
-
-      - name: build and export
-        if: needs.should-test.outputs.yes == 'true' && steps.cache.outputs.cache-hit != 'true'
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile.dev
-          tags: 18f-zscaler-drupal:10-apache
-          outputs: type=docker,dest=/tmp/image.tar
+        uses: ./.github/actions/build-drupal-image
 
   populate-database:
     name: populate database
@@ -224,64 +207,9 @@ jobs:
     needs: [build-drupal-image, should-test]
 
     steps:
-      - name: checkout
+      - name: populate database
         if: needs.should-test.outputs.yes == 'true'
-        uses: actions/checkout@v4
-
-      - name: database dump cache
-        if: needs.should-test.outputs.yes == 'true'
-        uses: actions/cache@v4
-        id: db-cache
-        with:
-          key: drupal-database-${{ hashFiles('web/config/**/*.yml', 'web/scs-export/**/*') }}
-          path: weathergov.sql
-
-      - name: setup image cacheing
-        if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
-        with:
-          key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
-          path: /tmp/image.tar
-
-      - name: cache spatial data
-        if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
-        with:
-          key: spatial-data-05mr24
-          path: |
-            spatial-data/c_05mr24.zip
-            spatial-data/s_05mr24.zip
-
-      - name: start the site
-        if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
-        run: |
-          docker load --input /tmp/image.tar
-          docker compose up -d
-
-      # Give the containers a moment to settle.
-      - name: wait a tick
-        if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
-        run: sleep 10
-
-      - name: populate the site
-        if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
-        run: |
-          cp web/sites/example.settings.dev.php web/sites/settings.dev.php
-          make install-site
-          make load-spatial
-
-      - name: dump database
-        if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
-        run: |
-          mysqldump \
-            --host=127.0.0.1 \
-            --port=3306 \
-            --password=drupal \
-            --user=root \
-            --compact \
-            --add-drop-table \
-            --add-drop-trigger \
-            weathergov > weathergov.sql
+        uses: ./.github/actions/populate-database
 
   php-tests:
     name: PHP tests
