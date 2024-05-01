@@ -15,9 +15,6 @@
       </div>
     </div>
       <wx-combo-box class="z-top margin-top-1" id="search-combo-box" {% if content.place %}data-place="{{ content.place.city }}{% if content.place.state %}, {{ content.place.state }}{% endif %}"{% endif %}}>
-      <span id="search-combo-box--input--description" class="usa-sr-only">
-        {{  "Enter a zip code, city, or county name to see a list of matching results " | t }}
-      </span>
     </wx-combo-box>
   </form>
 </div>
