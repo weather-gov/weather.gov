@@ -271,6 +271,9 @@ jobs:
     needs: [populate-database, should-test]
 
     steps:
+      - uses: browser-actions/setup-chrome@v1
+      - uses: browser-actions/setup-edge@v1
+
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
