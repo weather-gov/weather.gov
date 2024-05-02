@@ -91,7 +91,7 @@ load-spatial: # Load spatial data into the database
 ### Testing
 a11y: accessibility-test
 accessibility-test: ## Run accessibility tests (alias a11y)
-	npx cypress run --project tests/a11y
+	npx playwright test a11y
 
 be: backend-test
 backend-test: ## Run all backend tests. (alias be)

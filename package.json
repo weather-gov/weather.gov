@@ -52,7 +52,6 @@
   },
   "scripts": {
     "load-spatial": "cd spatial-data && node load-shapefiles.js",
-    "cypress:a11y": "cypress open --project tests/a11y",
     "cypress:e2e": "cypress open --project tests/e2e",
     "js-component-tests": "npx mocha web/themes/**/tests/components/*-tests.js",
     "js-format": "npx prettier -w 'web/themes/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
