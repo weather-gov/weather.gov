@@ -24,6 +24,9 @@
     "doc": "docs"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.9.0",
+    "@playwright/test": "^1.43.1",
+    "@types/node": "^20.12.8",
     "axe-core": "^4.8.4",
     "chai": "^5.1.0",
     "cypress": "^13.8.1",
@@ -39,6 +42,7 @@
     "jsdom-global": "^3.0.2",
     "mocha": "^10.4.0",
     "mocha-cli": "^1.0.1",
+    "playwright": "^1.43.1",
     "prettier": "^3.2.5",
     "sinon": "^17.0.1",
     "stylelint": "^16.4.0",
