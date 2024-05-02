@@ -37,6 +37,20 @@ for (const { name, url } of pages) {
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
         .analyze();
 
+      accessibilityScanResults.incomplete.forEach(
+        ({ id, description, nodes }) => {
+          if (process.env.CI)
+            console.log(
+              `::warning title=${name} accessibility::(${id}) - ${description} [selectors: ${nodes.map(({ target }) => target).join(", ")}]`,
+            );
+          else {
+            console.log(`${name} accessibility
+  ${id} - ${description}
+  - ${nodes.map(({ target }) => target).join("\n  - ")}`);
+          }
+        },
+      );
+
       expect(accessibilityScanResults.violations).toEqual([]);
     });
   });
