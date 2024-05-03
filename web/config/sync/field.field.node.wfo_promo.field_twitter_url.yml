@@ -9,7 +9,7 @@ id: node.wfo_promo.field_twitter_url
 field_name: field_twitter_url
 entity_type: node
 bundle: wfo_promo
-label: 'Twitter/X URL (optional)'
+label: 'X (formerly Twitter) URL (optional)'
 description: ''
 required: false
 translatable: false
