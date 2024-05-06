@@ -1,5 +1,5 @@
 uswds-init:
-  version: 3.7.1
+  version: 3.8.0
   header: true
   js:
     assets/js/uswds-init.js:
@@ -36,7 +36,7 @@ location-search:
     assets/js/components/LocationSearch.js: { preprocess: false }
 
 location-combo-box:
-  version: 2024-05-01
+  version: 2024-05-01.2
   js:
     assets/js/components/combo-box.js: { preprocess: false }
         
