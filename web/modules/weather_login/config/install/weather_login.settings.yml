@@ -1,0 +1,4 @@
+sso_login_path: '/saml/login'
+sso_login_text: 'Login via SSO'
+sso_cancel_path: '/'
+sso_cancel_text: 'Cancel and return home'

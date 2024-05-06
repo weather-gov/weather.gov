@@ -14,7 +14,6 @@ $settings["file_private_path"] = dirname(DRUPAL_ROOT) . "/private";
 
 $settings["migrate_node_migrate_type_classic"] = false;
 $settings["config_sync_directory"] = dirname(DRUPAL_ROOT) . "/web/config/sync";
-$config["config_split.config_split.cloudgov"]["status"] = true;
 
 $applicaiton_fqdn_regex = "^.+\.(app\.cloud\.gov|weather\.gov)$";
 $settings["trusted_host_patterns"][] = $applicaiton_fqdn_regex;
@@ -84,25 +83,32 @@ foreach ($cf_service_data as $service_list) {
 $application_environment = $cf_application_data["space_name"];
 switch ($application_environment) {
     case "design":
+        // TODO: Setup on SAML certs and remove this bool
+        $settings["weather_login_local_form"] = true;
+        $config["config_split.config_split.design"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-design.app.cloud.gov";
         break;
     case "greg":
+        $config["config_split.config_split.cloudgov"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-greg.app.cloud.gov";
         break;
 
     case "eric":
+        $config["config_split.config_split.cloudgov"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-eric.app.cloud.gov";
         break;
 
     case "staging":
+        $config["config_split.config_split.cloudgov"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-staging.app.cloud.gov";
         break;
 
     case "prod":
+        $config["config_split.config_split.cloudgov"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://beta.weather.gov";
         break;
@@ -110,3 +116,4 @@ switch ($application_environment) {
 
 // Add the application name so that it can be used in NewRelic reporting
 $settings["wx.application_name"] = $cf_application_data["application_name"];
+$settings["application_environment"] = $cf_application_data["space_name"];

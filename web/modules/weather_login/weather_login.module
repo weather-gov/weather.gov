@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Weather Login Customization module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function weather_login_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  $config = \Drupal::config('weather_login.settings');
+  $loginPath = $config->get('sso_login_path');
+  $loginText = $config->get('sso_login_text');
+  $cancelPath = $config->get('sso_cancel_path');
+  $cancelText = $config->get('sso_cancel_text');
+
+  // Allow override for local login forms via $settings[] in settings.*.php
+  $settings_state = Settings::get('weather_login_local_form', 0);
+  if ($settings_state || $state) {
+    $state = 1;
+  }
+
+  if ($loginPath) {
+
+    if (!$state) {
+      $form['name']['#access'] = FALSE;
+      $form['pass']['#access'] = FALSE;
+      $form['actions']['#access'] = FALSE;
+
+      $form['sso_button'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'a',
+        '#attributes' => [
+          'href' => $loginPath,
+          'class' => ['usa-button'],
+        ],
+        '#value' => $loginText,
+        '#weight' => '-20',
+      ];
+
+      $form['sso_cancel_link'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'a',
+        '#attributes' => [
+          'href' => $cancelPath,
+          'class' => ['cancel-link'],
+        ],
+        '#value' => $cancelText,
+        '#weight' => '-20',
+        '#prefix' => '<div class="sso-cancel-link-wrapper margin-top-2 margin-bottom-6">',
+        '#suffix' => '</div>',
+      ];
+
+      $form['#attributes']['class'][] = 'usa-list.usa-list--unstyled';
+    }
+  }
+}

@@ -1,0 +1,5 @@
+name: Weather Login Customizations
+type: module
+description: Module description.
+package: weather.gov
+core_version_requirement: ^10
