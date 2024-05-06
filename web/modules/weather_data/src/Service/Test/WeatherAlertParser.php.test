@@ -102,6 +102,8 @@ final class WeatherAlertParserTest extends TestCase
         $rawDescription = "...WINTER CONDITIONS RETURN TO THE SIERRA AND NORTHEAST CALIFORNIA
 FOR MID-LATE WEEK...
 
+This bit...has ellipses in the middle...but is not an overview.
+
 .After a few days of warm weather, a potent winter storm will bring
 windy and colder conditions with periods of heavy snow to the Sierra
 and higher elevations of northeast California later this week. While
@@ -136,6 +138,11 @@ Wednesday, then drop to near 5500 feet Wednesday night and near
                 "type" => "paragraph",
                 "text" =>
                     "WINTER CONDITIONS RETURN TO THE SIERRA AND NORTHEAST CALIFORNIA FOR MID-LATE WEEK",
+            ],
+            [
+                "type" => "paragraph",
+                "text" =>
+                    "This bit...has ellipses in the middle...but is not an overview.",
             ],
             [
                 "type" => "paragraph",
