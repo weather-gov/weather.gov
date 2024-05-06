@@ -8,7 +8,7 @@ logout_regardless_of_activity: false
 no_individual_logout_threshold: false
 role_logout: false
 role_logout_max: false
-redirect_url: /user/saml
+redirect_url: /user/login
 no_dialog: false
 message: 'Your session is about to expire. Do you want to reset it?'
 inactivity_message: 'You have been logged out due to inactivity.'
