@@ -101,3 +101,7 @@ spatial-data/*.shp
 spatial-data/*.txt
 !spatial-data/us.cities500.txt.zip
 /.gitattributes
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

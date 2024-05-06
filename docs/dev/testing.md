@@ -102,12 +102,12 @@ make ee
 
 Automated accessibility testing can identify about half of all kinds of
 accessibility bugs, so it is not a total solution. However, even a partial
-automated solution is helpful! We also use [Cypress](https://www.cypress.io) for
-accessibility testing, with the addition of the
-[cypress-axe](https://www.npmjs.com/package/cypress-axe) library. This library
-integrates [Axe core](https://github.com/dequelabs/axe-core) to test the
-rendered page. We use the [WCAG2AA](https://www.w3.org/WAI/WCAG2AA-Conformance)
-standard.
+automated solution is helpful! We also use [Playwright](https://playwright.dev/)
+for accessibility testing, with the addition of the
+[@axe-core/playwright](https://www.npmjs.com/package/@axe-core/playwright)
+library. This library integrates [Axe core](https://github.com/dequelabs/axe-core)
+to test the rendered page. We use the
+[WCAG2AA](https://www.w3.org/WAI/WCAG2AA-Conformance) standard.
 
 To run accessibility tests locally, the Makefile command is:
 

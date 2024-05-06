@@ -24,6 +24,9 @@
     "doc": "docs"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.9.0",
+    "@playwright/test": "^1.43.1",
+    "@types/node": "^20.12.8",
     "axe-core": "^4.9.1",
     "chai": "^5.1.0",
     "cypress": "^13.8.1",
@@ -39,6 +42,7 @@
     "jsdom-global": "^3.0.2",
     "mocha": "^10.4.0",
     "mocha-cli": "^1.0.1",
+    "playwright": "^1.43.1",
     "prettier": "^3.2.5",
     "sinon": "^17.0.1",
     "stylelint": "^16.4.0",
@@ -48,7 +52,6 @@
   },
   "scripts": {
     "load-spatial": "cd spatial-data && node load-shapefiles.js",
-    "cypress:a11y": "cypress open --project tests/a11y",
     "cypress:e2e": "cypress open --project tests/e2e",
     "js-component-tests": "npx mocha web/themes/**/tests/components/*-tests.js",
     "js-format": "npx prettier -w 'web/themes/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
