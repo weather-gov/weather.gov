@@ -4,7 +4,7 @@
   <div class="grid-row">
     <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
       <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="weather-story">
-        <h2 class="usa-accordion__heading font-heading-lg">
+        <h3 class="usa-accordion__heading font-heading-lg">
           <button
             type="button"
             class="usa-accordion__button text-ls-1"
@@ -13,9 +13,9 @@
             data-button-for="#weather-story-content">
             {{ "Forecaster's report" | t }}
           </button>
-        </h2>
+        </h3>
         <div id="weather-story-content" class="usa-accordion__content usa-prose">
-          <h3 class="text-primary-darker text-normal margin-top-0 margin-bottom-2"> {{  content.title | t }} </h3>
+          <h4 class="visual-h3 text-primary-darker text-normal margin-top-0 margin-bottom-2"> {{  content.title | t }} </h4>
           <p class="text-base margin-top-2"><span class="font-family-mono text-ls-neg-3">{{ "Last updated" | t }}:</span>
           <time datetime="{{ content.updated.utc }}" data-wx-local-time data-date-format="M d Y T">
             {{ content.updated.formatted }}
