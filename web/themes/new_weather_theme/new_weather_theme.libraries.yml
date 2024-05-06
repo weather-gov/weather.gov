@@ -1,12 +1,12 @@
 uswds-init:
-  version: 3.7.1
+  version: 3.8.0
   header: true
   js:
     assets/js/uswds-init.js:
       minified: true
 
 uswds-customized:
-  version: 2024-04-30
+  version: 2024-05-01
   css:
     theme:
       assets/css/styles.css: {}

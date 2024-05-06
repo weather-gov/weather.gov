@@ -20,7 +20,7 @@
     </div>
   </header>
 
-  <main role="main" class="flex-1">
+  <main role="main" class="flex-1 wx-location-page">
     <a id="main-content" tabindex="-1"></a>
     {{ drupal_block("weathergov_location_search") }}
 
@@ -59,8 +59,12 @@
         </div>
 
          <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
+          <h2 class="usa-sr-only">7 days</h2>
           {{ drupal_block("weathergov_weather_story") }}
+
+          <h3 class="usa-sr-only">Daily forecast</h3>
           {{ drupal_block("weathergov_daily_forecast") }}
+
           {{ drupal_block("weathergov_wfo_promo") }}
         </div>
       </div>

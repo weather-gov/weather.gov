@@ -62,12 +62,12 @@ p {
 /* AlertDetails Overrides
 -------------------------------------- */
 weathergov-alerts {
-  .usa-prose h3 {
-    font-weight: normal;
+  .usa-prose h4 {
+    font-weight: normal !important;
     margin-top: units(3);
   }
 
-  .usa-prose h3 + p {
+  .usa-prose h4 + p {
     margin-top: units(0.5);
   }
 
