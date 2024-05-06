@@ -2,7 +2,6 @@ runs:
   using: composite
   steps:
     - name: database dump cache
-      if: needs.should-test.outputs.yes == 'true'
       uses: actions/cache@v4
       id: db-cache
       with:
@@ -10,14 +9,12 @@ runs:
         path: weathergov.sql
 
     - name: setup image cacheing
-      if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
       uses: actions/cache@v4
       with:
         key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
         path: /tmp/image.tar
 
     - name: cache spatial data
-      if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
       uses: actions/cache@v4
       with:
         key: spatial-data-05mr24
@@ -26,7 +23,6 @@ runs:
           spatial-data/s_05mr24.zip
 
     - name: start the site
-      if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
         docker load --input /tmp/image.tar
@@ -34,12 +30,10 @@ runs:
 
     # Give the containers a moment to settle.
     - name: wait a tick
-      if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
       shell: bash
       run: sleep 10
 
     - name: populate the site
-      if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
         cp web/sites/example.settings.dev.php web/sites/settings.dev.php
@@ -47,7 +41,6 @@ runs:
         make load-spatial
 
     - name: dump database
-      if: needs.should-test.outputs.yes == 'true' && steps.db-cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
         mysqldump \
