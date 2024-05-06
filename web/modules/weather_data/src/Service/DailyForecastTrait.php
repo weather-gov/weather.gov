@@ -41,7 +41,7 @@ trait DailyForecastTrait
         ];
     }
 
-    private function formatDailyPeriodForToday($period, $timezone = null)
+    private function formatDailyPeriodForToday($period, $timezone, $now)
     {
         $formattedPeriod = $this->formatDailyPeriod($period, $timezone);
 
@@ -49,6 +49,18 @@ trait DailyForecastTrait
         if (!$formattedPeriod) {
             return null;
         }
+
+        // For "today" periods, we need to get date information from the current
+        // time, not from the forecast period because the first forecast period
+        // for "today" could actually be from "yesterday" if it begins before
+        // midnight. See #1151.
+        $shortDayName = $now->format("D");
+        $dayName = $now->format("l");
+        $monthAndDay = $now->format("M j");
+
+        $formattedPeriod["shortDayName"] = $shortDayName;
+        $formattedPeriod["dayName"] = $dayName;
+        $formattedPeriod["monthAndDay"] = $monthAndDay;
 
         // We need to determine if the period is an "overnight"
         // period. These are periods whose startTime begins on or
@@ -59,10 +71,17 @@ trait DailyForecastTrait
             $timezone,
         );
         $endTime = DateTimeUtility::stringToDate($period->endTime, $timezone);
-        $midnight = $startTime->setTime(0, 0);
-        $overnightEnd = $startTime->setTime(6, 0);
-        $isOvernightPeriod =
-            $startTime >= $midnight && $endTime <= $overnightEnd;
+        $midnight = $now->setTime(0, 0);
+        $overnightEnd = $now->setTime(6, 0);
+
+        // This is an overnight period if the current time is after midnight and
+        // the period ends on or before 6am of the same day.
+        //
+        // If now is before midnight, this must either be a day or night period.
+        //
+        // If now is after midnight and this period ends after 6am, then it must
+        // also be a day or night period.
+        $isOvernightPeriod = $now >= $midnight && $endTime <= $overnightEnd;
 
         $formattedPeriod["isOvernight"] = $isOvernightPeriod;
 
@@ -141,8 +160,11 @@ trait DailyForecastTrait
         // Format each of the today periods
         // as assoc arrays that can be used
         // by the templates
-        $todayPeriodsFormatted = array_map(function ($period) use (&$timezone) {
-            return $this->formatDailyPeriodForToday($period, $timezone);
+        $todayPeriodsFormatted = array_map(function ($period) use (
+            &$now,
+            &$timezone,
+        ) {
+            return $this->formatDailyPeriodForToday($period, $timezone, $now);
         }, $todayPeriods);
 
         // Format each of the detailed periods
