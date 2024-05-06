@@ -80,7 +80,7 @@ class WeatherAlertParser
      */
     public function parseOverview($str)
     {
-        $regex = "/\.\.\.([^\.]+)\.\.\./";
+        $regex = "/^\.\.\.([^\.]+)\.\.\.$/";
         if (preg_match($regex, $str, $matches)) {
             array_push($this->parsedNodes, [
                 "type" => "paragraph",

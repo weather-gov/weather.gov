@@ -3,15 +3,17 @@ runs:
   steps:
     - name: setup image cacheing
       uses: actions/cache@v4
-      id: cache
+      id: docker-cache
       with:
         key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
         path: /tmp/image.tar
 
     - name: Set up Docker Buildx
+      if: steps.docker-cache.outputs.cache-hit != 'true'
       uses: docker/setup-buildx-action@v3
 
     - name: build and export
+      if: steps.docker-cache.outputs.cache-hit != 'true'
       uses: docker/build-push-action@v5
       with:
         context: .
