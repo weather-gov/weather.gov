@@ -2,14 +2,12 @@ runs:
   using: composite
   steps:
     - name: setup image cacheing
-      if: needs.should-test.outputs.yes == 'true'
       uses: actions/cache@v4
       with:
         key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
         path: /tmp/image.tar
 
     - name: database dump cache
-      if: needs.should-test.outputs.yes == 'true'
       uses: actions/cache@v4
       id: db-cache
       with:
@@ -17,7 +15,6 @@ runs:
         path: weathergov.sql
 
     - name: start the site
-      if: needs.should-test.outputs.yes == 'true'
       shell: bash
       run: |
         mkdir .coverage
@@ -27,12 +24,10 @@ runs:
 
     # Give the containers a moment to settle.
     - name: wait a tick
-      if: needs.should-test.outputs.yes == 'true'
       shell: bash
       run: sleep 10
 
     - name: populate the site
-      if: needs.should-test.outputs.yes == 'true'
       shell: bash
       run: |
         cp web/sites/example.settings.dev.php web/sites/settings.dev.php
