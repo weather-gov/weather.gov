@@ -27,7 +27,7 @@
     "@axe-core/playwright": "^4.9.0",
     "@playwright/test": "^1.43.1",
     "@types/node": "^20.12.8",
-    "axe-core": "^4.8.4",
+    "axe-core": "^4.9.1",
     "chai": "^5.1.0",
     "cypress": "^13.8.1",
     "cypress-axe": "^1.5.0",
