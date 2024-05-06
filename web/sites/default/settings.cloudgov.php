@@ -85,30 +85,25 @@ switch ($application_environment) {
     case "design":
         // TODO: Setup on SAML certs and remove this bool
         $settings["weather_login_local_form"] = true;
-        $config["config_split.config_split.design"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-design.app.cloud.gov";
         break;
     case "greg":
-        $config["config_split.config_split.cloudgov"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-greg.app.cloud.gov";
         break;
 
     case "eric":
-        $config["config_split.config_split.cloudgov"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-eric.app.cloud.gov";
         break;
 
     case "staging":
-        $config["config_split.config_split.cloudgov"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-staging.app.cloud.gov";
         break;
 
     case "prod":
-        $config["config_split.config_split.cloudgov"]["status"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://beta.weather.gov";
         break;
@@ -116,4 +111,3 @@ switch ($application_environment) {
 
 // Add the application name so that it can be used in NewRelic reporting
 $settings["wx.application_name"] = $cf_application_data["application_name"];
-$settings["application_environment"] = $cf_application_data["space_name"];
