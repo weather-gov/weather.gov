@@ -8,4 +8,6 @@ id: front
 label: 'Front page'
 tags:
   canonical_url: '[site:url]'
+  description: 'Official government resource for finding weather near you.'
   shortlink: '[site:url]'
+  title: 'National Weather Service | [site:name]'
