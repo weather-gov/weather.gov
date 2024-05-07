@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
+    - field.field.node.page.field_meta_tags
     - node.type.page
   module:
     - text
@@ -27,4 +28,5 @@ content:
   links:
     weight: 101
     region: content
-hidden: {  }
+hidden:
+  field_meta_tags: true

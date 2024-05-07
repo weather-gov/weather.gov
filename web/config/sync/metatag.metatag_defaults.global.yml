@@ -21,7 +21,7 @@ tags:
   shortcut_icon: /themes/new_weather_theme/assets/images/weather/favicons/nws-favicon.ico
   title: 'National Weather Service | [site:name]'
   twitter_cards_description: '[current-page:metatag:description]'
-  twitter_cards_image: /themes/new_weather_theme/assets/images/weather/nws_meta.png
+  twitter_cards_image: /themes/new_weather_theme/assets/images/weather/nws-meta.png
   twitter_cards_site: '@nws'
   twitter_cards_title: '[current-page:metatag:title]'
   twitter_cards_type: summary_large_image
