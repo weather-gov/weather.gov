@@ -36,6 +36,11 @@ class DataLayer
      */
     private $database;
 
+    /**
+     * Identifier for a unique set of API requests.
+     */
+    private $responseId = false;
+
     private static $INITIALIZED = false;
 
     /**
@@ -321,11 +326,11 @@ class DataLayer
         $wktPoints = SpatialUtility::geometryObjectToWKT($points);
 
         if (!array_key_exists($wktPoints, self::$i_placeNearPolygon)) {
-            $this->iPlaceNearPolygon[$wktPoints] = $this->getPlaceNear(
+            self::$i_placeNearPolygon[$wktPoints] = $this->getPlaceNear(
                 $wktPoints,
             );
         }
-        return $this->iPlaceNearPolygon[$wktPoints];
+        return self::$i_placeNearPolygon[$wktPoints];
     }
 
     public function databaseFetch($sql)

@@ -51,8 +51,13 @@ class WeatherEntityService
             // Always be popping.
             $nodeID = array_pop($nodeID);
 
-            // Then we can use the convenience method to actually load the node.
-            $node = $this->entityTypeManager->getStorage("node")->load($nodeID);
+            $node = false;
+            if ($nodeID) {
+                // Then we can use the convenience method to actually load the node.
+                $node = $this->entityTypeManager
+                    ->getStorage("node")
+                    ->load($nodeID);
+            }
 
             if ($node) {
                 return $node;

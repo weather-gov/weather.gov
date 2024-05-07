@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c44c735e7e6e8051be6a48c6fbe1287",
+    "content-hash": "51dfcce38253aa93d9bc468536aae22e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2034,6 +2034,64 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/key_asymmetric",
                 "issues": "https://www.drupal.org/project/issues/key_asymmetric"
+            }
+        },
+        {
+            "name": "drupal/log_stdout",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/log_stdout.git",
+                "reference": "8.x-1.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/log_stdout-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "2adb5d992618ee0a26bb8ca2cf80137654d9e0eb"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.5",
+                    "datestamp": "1696840633",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Bladedu",
+                    "homepage": "https://www.drupal.org/user/436000"
+                },
+                {
+                    "name": "Bohun Tak",
+                    "homepage": "https://www.drupal.org/user/1205098"
+                },
+                {
+                    "name": "mrhanlon",
+                    "homepage": "https://www.drupal.org/user/764624"
+                },
+                {
+                    "name": "singularo",
+                    "homepage": "https://www.drupal.org/user/143"
+                }
+            ],
+            "description": "This module provides an hook for Drupal Watchdog that directs log messages to php://stdout or php://stderr for better log handling with Docker.",
+            "homepage": "https://www.drupal.org/project/log_stdout",
+            "support": {
+                "source": "https://git.drupalcode.org/project/log_stdout",
+                "issues": "https://www.drupal.org/project/issues/log_stdout",
+                "irc": "irc://irc.freenode.org/drupal-support"
             }
         },
         {
@@ -10147,5 +10205,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.2.0"
 }

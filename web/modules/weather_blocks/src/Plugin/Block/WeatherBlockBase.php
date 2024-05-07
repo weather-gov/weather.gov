@@ -166,40 +166,55 @@ abstract class WeatherBlockBase extends BlockBase implements
             "point" => false,
         ];
 
-        // If we're on a location route, pull location from the URL.
-        if ($this->route->getRouteName() == "weather_routes.point") {
-            $lat = floatval($this->route->getParameter("lat"));
-            $lon = floatval($this->route->getParameter("lon"));
+        try {
+            // If we're on a location route, pull location from the URL.
+            if ($this->route->getRouteName() == "weather_routes.point") {
+                $lat = floatval($this->route->getParameter("lat"));
+                $lon = floatval($this->route->getParameter("lon"));
 
-            $location->point = SpatialUtility::pointArrayToObject([$lon, $lat]);
+                $location->point = SpatialUtility::pointArrayToObject([
+                    $lon,
+                    $lat,
+                ]);
 
-            $location->grid = $this->weatherData->getGridFromLatLon($lat, $lon);
-        } else {
-            // Otherwise, attempt to get it from configuration.
-            $configuredGrid = $this->getConfiguration()["grid"] ?? false;
-            if ($configuredGrid != false && $configuredGrid != ",,") {
-                $parts = explode(",", $configuredGrid);
-
-                $wfo = strtoupper($parts[0]);
-                $x = $parts[1];
-                $y = $parts[2];
-
-                $location->grid = (object) [
-                    "wfo" => $wfo,
-                    "x" => $x,
-                    "y" => $y,
-                ];
-
-                $geometry = $this->weatherData->getGeometryFromGrid(
-                    $wfo,
-                    $x,
-                    $y,
+                $location->grid = $this->weatherData->getGridFromLatLon(
+                    $lat,
+                    $lon,
                 );
+            } else {
+                // Otherwise, attempt to get it from configuration.
+                $configuredGrid = $this->getConfiguration()["grid"] ?? false;
+                if ($configuredGrid != false && $configuredGrid != ",,") {
+                    $parts = explode(",", $configuredGrid);
 
-                $location->point = $geometry[0];
+                    $wfo = strtoupper($parts[0]);
+                    $x = $parts[1];
+                    $y = $parts[2];
+
+                    $location->grid = (object) [
+                        "wfo" => $wfo,
+                        "x" => $x,
+                        "y" => $y,
+                    ];
+
+                    $geometry = $this->weatherData->getGeometryFromGrid(
+                        $wfo,
+                        $x,
+                        $y,
+                    );
+
+                    $location->point = $geometry[0];
+                }
             }
-        }
 
-        return $location;
+            return $location;
+        } catch (\Throwable $e) {
+            $logger = $this->getLogger("block: get location");
+            $logger->error($e->getMessage());
+            return (object) [
+                "grid" => false,
+                "point" => false,
+            ];
+        }
     }
 }

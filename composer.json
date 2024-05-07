@@ -23,6 +23,7 @@
         "drupal/core-project-message": "^10.2",
         "drupal/core-recommended": "^10.2",
         "drupal/key_asymmetric": "^1.1",
+        "drupal/log_stdout": "^1.5",
         "drupal/new_relic_rpm": "^2.1",
         "drupal/s3fs": "^3.1",
         "drupal/samlauth": "^3.9",
