@@ -20,13 +20,10 @@ function weather_login_form_user_login_form_alter(&$form, FormStateInterface $fo
     $cancelText = $config->get('sso_cancel_text');
 
     // Allow override for local login forms via $settings[] in settings.*.php
-    $settings_state = Settings::get('weather_login_local_form', 0);
-    if ($settings_state || $state) {
-        $state = 1;
-    }
+    $basicAuthSetting = Settings::get('weather_login_local_form', false);
 
     if ($loginPath) {
-        if (!$state) {
+        if (!$basicAuthSetting) {
             $form['name']['#access'] = false;
             $form['pass']['#access'] = false;
             $form['actions']['#access'] = false;
