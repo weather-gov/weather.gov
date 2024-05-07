@@ -12,8 +12,8 @@ tags:
   icon_16x16: /themes/new_weather_theme/assets/images/weather/favicons/favicon-16x16.ico
   icon_32x32: /themes/new_weather_theme/assets/images/weather/favicons/favicon-32x32.ico
   icon_96x96: /themes/new_weather_theme/assets/images/weather/favicons/favicon-96x96.ico
-  og_description: '[current-page:metatag:description]'
-  og_image: /themes/new_weather_theme/assets/images/weather/nws_metatag.png
+  og_description: 'Find weather near you.'
+  og_image: /themes/new_weather_theme/assets/images/weather/nws-meta.png
   og_site_name: '[site:name]'
   og_title: '[current-page:metatag:title]'
   og_type: website
