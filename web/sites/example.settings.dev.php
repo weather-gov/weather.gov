@@ -845,3 +845,5 @@ $databases["default"]["default"] = [
 ];
 $settings["config_sync_directory"] = "/opt/drupal/web/config/sync/";
 $config["config_split.config_split.local"]["status"] = true;
+$settings["weather_login_local_form"] = true;
+
