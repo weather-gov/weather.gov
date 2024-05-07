@@ -74,14 +74,16 @@ trait DailyForecastTrait
         $midnight = $now->setTime(0, 0);
         $overnightEnd = $now->setTime(6, 0);
 
-        // This is an overnight period if the current time is after midnight and
-        // the period ends on or before 6am of the same day.
+        // This is an overnight period if the current time is between midnight
+        // and 6am, and the period ends on or before 6am of the same day.
         //
         // If now is before midnight, this must either be a day or night period.
+        // It can only become a̵ ̵g̵r̵e̵m̵l̵i̵n̵ an overnight period at midnight.
         //
         // If now is after midnight and this period ends after 6am, then it must
         // also be a day or night period.
-        $isOvernightPeriod = $now >= $midnight && $endTime <= $overnightEnd;
+        $isOvernightPeriod =
+            intval($now->format("G")) <= 6 && $endTime <= $overnightEnd;
 
         $formattedPeriod["isOvernight"] = $isOvernightPeriod;
 
