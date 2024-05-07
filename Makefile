@@ -4,7 +4,7 @@ help:
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 pause:
-	sleep 10
+	sleep 15
 
 ### Drupal management
 cc: clear-cache
@@ -79,6 +79,11 @@ zap: zap-containers rebuild pause install-site load-spatial ## Delete the entire
 zap-containers:
 	docker compose stop
 	docker compose rm -f
+
+scorched-earth:
+	docker stop $$(docker ps -a -q)
+	docker rm $$(docker ps -a -q)
+	docker system prune -f
 
 ### CSS
 build-css: # Build CSS

@@ -1,0 +1,5 @@
+name: Weather Login Customizations
+type: module
+description: A module for customizing the /user/login page to isolate login to SSO.
+package: weather.gov
+core_version_requirement: ^10

@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Install and update hooks.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function weather_login_requirements($phase)
+{
+    if ($phase === 'runtime') {
+        $config = \Drupal::config('weather_login.settings');
+        if ($config->get('sso_login_path') === null || !$config->get('sso_login_path')) {
+            $severity = REQUIREMENT_WARNING;
+            $description = 'There is no configured value for the Weather Login module SSO Link Path';
+        } else {
+            $severity = REQUIREMENT_OK;
+            $description = 'The SSO Link has been configured.';
+        }
+
+        return [
+            'weather_login_sso_path' => [
+                'title' => 'Weather Login Module',
+                'description' => $description,
+                'severity' => $severity,
+            ],
+        ];
+    }
+}

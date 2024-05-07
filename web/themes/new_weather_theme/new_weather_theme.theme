@@ -5,35 +5,6 @@
  * Functions to support theming.
  */
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-
-/**
- * Implements hook_form_FORM_ID_alter() for the login form.
- */
-function new_weather_theme_form_user_login_form_alter(
-    &$form,
-    FormStateInterface $form_state,
-) {
-    $moduleHandler = \Drupal::service("module_handler");
-    if ($moduleHandler->moduleExists("samlauth")) {
-        $form["samlauth_login_link"] = [
-            "#title" => "Login with your NOAA Account",
-            "#type" => "link",
-            "#url" => Url::fromRoute("samlauth.saml_controller_login"),
-            "#attributes" => [
-                "title" => "NOAA Account",
-                "class" => ["usa-button"],
-            ],
-            "#weight" => -2000,
-        ];
-        $form["mymarkup"] = [
-            "#markup" => "<strong>OR your username and password: </strong>",
-            "#weight" => -1000,
-        ];
-    }
-}
-
 /**
  * Implements hook_preprocess_image_widget().
  */
