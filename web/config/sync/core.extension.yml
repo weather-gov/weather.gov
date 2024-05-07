@@ -27,6 +27,7 @@ module:
   log_stdout: 0
   menu_link_content: 0
   menu_ui: 0
+  metatag: 0
   mysql: 0
   node: 0
   options: 0
