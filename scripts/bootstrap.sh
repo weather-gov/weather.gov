@@ -5,7 +5,8 @@ if [ -z "${VCAP_SERVICES:-}" ]; then
     exit 1;
 fi
 
-dirs=( "${HOME}/private" "${HOME}/web/sites/default/files" )
+export home="/home/vcap"
+dirs=( "${home}/private" "${home}/web/sites/default/files" )
 
 for dir in $dirs; do
   if [ ! -d $dir ]; then
