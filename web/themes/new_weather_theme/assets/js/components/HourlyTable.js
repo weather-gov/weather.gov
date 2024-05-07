@@ -52,11 +52,16 @@ class HourlyTable extends HTMLElement {
             const left = el.offsetLeft;
             const right = el.offsetLeft + el.offsetWidth;
             return left <= rightSide && right >= rightSide;
-          });
+          });   
 
     if (nextCol) {
+      let nextLeftPos = nextCol.offsetLeft - firstColumnWidth - 16;
+      if(Math.floor(nextLeftPos) <= Math.floor(wrapper.scrollLeft)){
+        nextLeftPos = nextCol.nextElementSibling.offsetLeft - firstColumnWidth - 16;
+      }
+      
       wrapper.scrollTo({
-        left: nextCol.offsetLeft - firstColumnWidth - 16,
+        left: nextLeftPos,
         behavior: "smooth",
       });
     }
@@ -76,8 +81,13 @@ class HourlyTable extends HTMLElement {
           });
 
     if (prevCol) {
+      let nextLeftPos = prevCol.nextElementSibling.offsetLeft - firstColumnWidth - 16;
+      if(Math.floor(nextLeftPos) >= Math.floor(wrapper.scrollLeft)){
+        nextLeftPos = prevCol.offsetLeft - firstColumnWidth - 16;
+      }
+
       wrapper.scrollTo({
-        left: prevCol.nextElementSibling.offsetLeft - firstColumnWidth - 16,
+        left: nextLeftPos,
         behavior: "smooth",
       });
     } else {
