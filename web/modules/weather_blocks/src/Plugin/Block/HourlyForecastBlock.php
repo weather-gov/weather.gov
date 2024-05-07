@@ -51,7 +51,7 @@ class HourlyForecastBlock extends WeatherBlockBase
 
                 return ["hours" => $data, "alertPeriods" => $alertPeriods];
             } catch (\Throwable $e) {
-                $logger = $this->getLogger("HOURLYFORECAST");
+                $logger = $this->getLogger("hourly forecast");
                 $logger->error($e->getMessage());
                 return ["error" => true];
             }
