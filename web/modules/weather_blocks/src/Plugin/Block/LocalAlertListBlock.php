@@ -28,6 +28,8 @@ class LocalAlertListBlock extends WeatherBlockBase
                 );
                 return ["alerts" => $data];
             } catch (\Throwable $e) {
+                $logger = $this->getLogger("alert list");
+                $logger->error($e->getMessage());
                 return ["error" => true];
             }
         }

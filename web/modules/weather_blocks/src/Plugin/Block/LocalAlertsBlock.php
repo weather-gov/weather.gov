@@ -30,6 +30,8 @@ class LocalAlertsBlock extends WeatherBlockBase
                 );
                 return ["alerts" => $data];
             } catch (\Throwable $e) {
+                $logger = $this->getLogger("alerts");
+                $logger->error($e->getMessage());
                 return ["error" => true];
             }
         }

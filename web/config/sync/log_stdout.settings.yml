@@ -1,0 +1,4 @@
+_core:
+  default_config_hash: CkmpJe8_0UrxS99diNYffcf6SJcbRtIxgQTeCOxeOhQ
+format: '[@severity] [@type] [@date] @message | uid: @uid | request-uri: @request_uri'
+use_stderr: '1'
