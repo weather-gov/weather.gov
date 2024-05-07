@@ -235,4 +235,20 @@ final class AlertFilterTest extends EndToEndBase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * Validate that past alerts (ended or expired) are not returned.
+     * @group e2e
+     */
+    public function testPastAlertsAreRemoved(): void
+    {
+        $this->onLocationRoute(33.521, -86.812);
+
+        // Build up expected times, based on the contents of the test data.
+        $now = new \DateTimeImmutable();
+
+        $data = $this->block->build();
+
+        $this->assertEquals(0, count($data["alerts"]));
+    }
 }
