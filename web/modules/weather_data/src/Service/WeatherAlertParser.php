@@ -151,7 +151,8 @@ class WeatherAlertParser
         $nodes = [];
         $current = $str;
         foreach($links as $link){
-            $paraText = substr($current, 0, $link["offset"]);
+            $pos = strpos($current, $link["url"]);
+            $paraText = substr($current, 0, $pos);
             array_push(
                 $nodes,
                 [
@@ -160,8 +161,7 @@ class WeatherAlertParser
                 ],
                 $link
             );
-
-            $current = substr($current, $link["offset"] + strlen($link["url"]));
+            $current = substr($current, $pos + strlen($link["url"]));
         }
 
         if($current && $current != ""){
@@ -204,15 +204,13 @@ class WeatherAlertParser
 
             // Each link should be an assoc array
             // with the URL along with data about
-            // whether it's internal or external and
-            // its text offset
+            // whether it's internal or external
             return array_map(
                 function($url){
                     $isInternal = str_contains($url[0], "weather.gov");
                     return [
                         "type" => "link",
                         "url" => $url[0],
-                        "offset" => $url[1],
                         "external" => !$isInternal
                     ];
                 },

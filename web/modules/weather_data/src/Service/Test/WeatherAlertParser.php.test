@@ -287,8 +287,7 @@ Be sure to stock up. See https://www.weather.gov/safety/food for more informatio
     $expected = [
       "type" => "link",
       "url" => "https://www.weather.gov/safety/food",
-      "external" => false,
-      "offset" => 168
+      "external" => false
     ];
 
     $this->assertEquals(1, count($actual));
@@ -349,8 +348,7 @@ you shouldn't be able to do thanks to Cautious Public Servants TM.";
           [
             "type" => "link",
             "url" => "https://winds.weather.gov/info",
-            "external" => false,
-            "offset" => 49
+            "external" => false
           ],
           [
             "type" => "text",
@@ -389,8 +387,7 @@ you shouldn't be able to do thanks to Cautious Public Servants TM.";
           [
             "type" => "link",
             "url" => "https://usgs.gov/earthquakes",
-            "external" => true,
-            "offset" => 51
+            "external" => true
           ],
           [
             "type" => "text",
@@ -425,6 +422,51 @@ you shouldn't be able to do thanks to Cautious Public Servants TM.";
           [
             "type" => "text",
             "content" => "There will be weather like you cannot believe. See https://other-weather-site.com for more information, or even check out http://insecure.gov or else www.foo.net"
+          ]
+        ]
+      ]
+    ];
+
+    $parser = new WeatherAlertParser($sourceText);
+    $actual = $parser->parse();
+
+    $this->assertEquals($expected, $actual);
+  }
+
+  /**
+   * @group unit
+   * @group alert-parser
+   * @group helpme
+   */
+  public function testAlertUrlNodesDoubledRepresentation()
+  {
+    $sourceText = "Damaging winds will blow down large objects such as trees and power lines. Power outages are expected. See www.your-power-company.com/outages for more information. Travel will be difficult, especially for high profile vehicles. For road safety, see https://transportation.gov/safe-travels . For more weather information, check out https://weather.gov/your-office for up to date forecasts and alerts.";
+
+    $expected = [
+      [
+        "type" => "paragraph",
+        "nodes" => [
+          [
+            "type" => "text",
+            "content" => "Damaging winds will blow down large objects such as trees and power lines. Power outages are expected. See www.your-power-company.com/outages for more information. Travel will be difficult, especially for high profile vehicles. For road safety, see "
+          ],
+          [
+            "type" => "link",
+            "url" => "https://transportation.gov/safe-travels",
+            "external" => true
+          ],
+          [
+            "type" => "text",
+            "content" => " . For more weather information, check out "
+          ],
+          [
+            "type" => "link",
+            "url" => "https://weather.gov/your-office",
+            "external" => false
+          ],
+          [
+            "type" => "text",
+            "content" => " for up to date forecasts and alerts."
           ]
         ]
       ]
