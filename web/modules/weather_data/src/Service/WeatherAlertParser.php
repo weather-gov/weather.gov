@@ -58,7 +58,9 @@ class WeatherAlertParser
             if (!$parsedOverview && !$parsedWhatWhereWhen) {
                 array_push($this->parsedNodes, [
                     "type" => "paragraph",
-                    "text" => $paragraph,
+                    "nodes" => $this->getParagraphNodesForString(
+                        $paragraph
+                    ),
                 ]);
             }
         }
@@ -84,7 +86,9 @@ class WeatherAlertParser
         if (preg_match($regex, $str, $matches)) {
             array_push($this->parsedNodes, [
                 "type" => "paragraph",
-                "text" => $matches[1],
+                "nodes" => $this->getParagraphNodesForString(
+                    $matches[1]
+                ),
             ]);
 
             return true;
@@ -116,13 +120,61 @@ class WeatherAlertParser
             ]);
             array_push($this->parsedNodes, [
                 "type" => "paragraph",
-                "text" => $matches["text"],
+                "nodes" => $this->getParagraphNodesForString(
+                    $matches["text"]
+                ),
             ]);
 
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Given a string that will be parsed into a paragraph
+     * node, determine if there are any valid links within it and,
+     * if so, responds with ordered text and link subnodes
+     */
+    public function getParagraphNodesForString($str)
+    {
+        $links = $this->extractURLs($str);
+        if(!$links){
+            return [
+                [
+                    "type" => "text",
+                    "content" => $str
+                ]
+            ];
+        }
+
+        $nodes = [];
+        $current = $str;
+        foreach($links as $link){
+            $paraText = substr($current, 0, $link["offset"]);
+            array_push(
+                $nodes,
+                [
+                    "type" => "text",
+                    "content" => $paraText
+                ],
+                $link
+            );
+
+            $current = substr($current, $link["offset"] + strlen($link["url"]));
+        }
+
+        if($current && $current != ""){
+            array_push(
+                $nodes,
+                [
+                    "type" => "text",
+                    "content" => $current
+                ]
+            );
+        }
+
+        return array_values($nodes);
     }
 
     /**
@@ -134,9 +186,9 @@ class WeatherAlertParser
     public function extractURLs($str)
     {
         $regex = "/https\:\/\/[A-Za-z0-9\-._~:\/\?#\[\]@!$]+/";
-        if(preg_match_all($regex, $str, $matches)){
+        if(preg_match_all($regex, $str, $matches, PREG_OFFSET_CAPTURE)){
             $valid = array_filter($matches[0], function($urlString){
-                $url = parse_url($urlString);
+                $url = parse_url($urlString[0]);
                 if(array_key_exists("user", $url)){
                     return false;
                 } else if(array_key_exists("pass", $url)){
@@ -149,7 +201,23 @@ class WeatherAlertParser
             if(count($valid) == 0){
                 return false;
             }
-            return array_values($valid);
+
+            // Each link should be an assoc array
+            // with the URL along with data about
+            // whether it's internal or external and
+            // its text offset
+            return array_map(
+                function($url){
+                    $isInternal = str_contains($url[0], "weather.gov");
+                    return [
+                        "type" => "link",
+                        "url" => $url[0],
+                        "offset" => $url[1],
+                        "external" => !$isInternal
+                    ];
+                },
+                array_values($valid)
+            );
         }
         return false;
     }
