@@ -244,7 +244,6 @@ final class AlertFilterTest extends EndToEndBase
     {
         $this->onLocationRoute(33.521, -86.812);
 
-        // Build up expected times, based on the contents of the test data.
         $now = new \DateTimeImmutable();
 
         $data = $this->block->build();
