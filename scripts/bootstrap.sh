@@ -5,6 +5,16 @@ if [ -z "${VCAP_SERVICES:-}" ]; then
     exit 1;
 fi
 
+dirs=( "${HOME}/private" "${HOME}/web/sites/default/files" )
+
+for dir in $dirs; do
+  if [ ! -d $dir ]; then
+    echo "Creating ${dir} directory ... "
+    mkdir $dir
+    chown vcap. $dir
+  fi
+done
+
 # Create files for SAML auth
 export home="/home/vcap"
 export app_path="${home}/app"
