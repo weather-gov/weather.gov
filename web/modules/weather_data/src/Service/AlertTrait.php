@@ -117,8 +117,33 @@ trait AlertTrait
             return false;
         });
 
-        $alerts = array_map(function ($alert) use ($timezone, $now) {
+        $index = 0;
+        $alerts = array_map(function ($alert) use ($timezone, $now, &$index) {
             $output = clone $alert->properties;
+
+            if (
+                str_starts_with($alert->properties->id, "urn:oid:2.49.0.1.840")
+            ) {
+                // The ID provided by the API is an OID URN of the form:
+                // urn:oid:2.49.0.1.840.0.35c08d67b727d304ea1d6ae50eb6139b4be1cc8f.001.1
+                //
+                // The 2.49.0.1.840 is used to identify the object as an alert as
+                // defined by the World Meteorological Organization and sent by the
+                // United States. (You can piece that together starting here:
+                // https://oidref.com/2.49.0, and then
+                // http://www.oid-info.com/doc/introduction%20to%20object%20identifiers%20(OIDs)%20at%20WMO.pdf).
+                //
+                // The UUID uniquely identifies the alert, so we can use that. Not
+                // sure what the 001 and 0 parts of the OID are - updates, maybe?
+                // But not super relevant for us.
+                $id = explode(".", $alert->properties->id);
+
+                $id = $id[count($id) - 3];
+                $output->alertId = $id;
+            } else {
+                // If it's not a NWS OID, just use the array index.
+                $output->alertId = $index;
+            }
 
             $output->geometry = AlertUtility::getGeometryAsJSON(
                 $alert,
@@ -164,17 +189,11 @@ trait AlertTrait
                 AlertUtility::getDurationText($output, $now),
             );
 
+            $index += 1;
             return $output;
         }, $alerts);
 
         $alerts = AlertUtility::sort($alerts);
-
-        // The API's alert ids are just too long for use
-        // in the DOM. Let's loop through and simply
-        // assign an index value
-        for ($i = 0; $i < count($alerts); $i++) {
-            $alerts[$i]->alertId = $i + 1;
-        }
 
         // For some reason, Twig is unreliable in how it formats the dates.
         // Sometimes they are done in the timezone-local time, other times it

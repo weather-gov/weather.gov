@@ -1,0 +1,12 @@
+{
+  "@bundle": {
+    "name": "serves an HTTP 503 on the /points endpoint",
+    "status": 503
+  },
+  "geometry": { "type": "Point", "coordinates": [-123.106, 47.212] },
+  "properties": {
+    "cwa": "SEW",
+    "gridX": 96,
+    "gridY": 55
+  }
+}
