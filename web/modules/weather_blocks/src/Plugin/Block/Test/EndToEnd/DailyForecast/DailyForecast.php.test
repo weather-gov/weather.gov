@@ -83,4 +83,181 @@ final class DailyForecastStructureTest extends EndToEndBase
 
         $this->assertEquals($expectedStructure, $actualStructure);
     }
+
+    /**
+     * Ensure that when it is after midnight local time and the API still
+     * returns a starting time before midnight, we return the correct data.
+     *
+     * https://github.com/weather-gov/weather.gov/issues/1151
+     *
+     * @group e2e
+     */
+    public function testAfterMidnightButDataIsBeforeMidnight()
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2024-05-07T00:03:00-0500",
+        );
+
+        $this->onLocationRoute(32.778, -96.796);
+
+        $expected = [
+            [
+                "shortDayName" => "Tue",
+                "dayName" => "Tuesday",
+                "monthAndDay" => "May 7",
+                "startTime" => "2024-05-06T23:00:00-05:00",
+                "shortForecast" => "First period",
+                "icon" => (object) [
+                    "icon" => "thunderstorm.svg",
+                    "base" => "thunderstorm",
+                ],
+                "temperature" => 83,
+                "probabilityOfPrecipitation" => 30,
+                "isDaytime" => false,
+                "isOvernight" => true,
+                "timeLabel" => "NOW-6AM",
+            ],
+            [
+                "shortDayName" => "Tue",
+                "dayName" => "Tuesday",
+                "monthAndDay" => "May 7",
+                "startTime" => "2024-05-07T06:00:00-05:00",
+                "shortForecast" => "Second period",
+                "icon" => (object) [
+                    "icon" => "thunderstorm.svg",
+                    "base" => "thunderstorm",
+                ],
+                "temperature" => 72,
+                "probabilityOfPrecipitation" => 30,
+                "isDaytime" => true,
+                "isOvernight" => false,
+                "timeLabel" => "6AM-6PM",
+            ],
+            [
+                "shortDayName" => "Tue",
+                "dayName" => "Tuesday",
+                "monthAndDay" => "May 7",
+                "startTime" => "2024-05-07T18:00:00-05:00",
+                "shortForecast" => "Third period",
+                "icon" => (object) [
+                    "icon" => "mostly_clear-day.svg",
+                    "base" => "mostly_clear-day",
+                ],
+                "temperature" => 89,
+                "probabilityOfPrecipitation" => null,
+                "isDaytime" => false,
+                "isOvernight" => false,
+                "timeLabel" => "6PM-6AM",
+            ],
+        ];
+
+        $actual = $this->block->build($now);
+
+        $this->assertEquals(3, count($actual["today"]));
+        unset($actual["today"][0]["hourlyPeriods"]);
+        unset($actual["today"][1]["hourlyPeriods"]);
+        unset($actual["today"][2]["hourlyPeriods"]);
+
+        $this->assertEquals($expected, $actual["today"]);
+    }
+
+    /**
+     * Ensure that before midnight, we do not have an overnight period for today
+     *
+     * @group e2e
+     */
+    public function testBeforeMidnightPeriodIsNight()
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2024-05-06T23:59:00-0500",
+        );
+
+        $this->onLocationRoute(32.778, -96.796);
+
+        $expected = [
+            [
+                "shortDayName" => "Mon",
+                "dayName" => "Monday",
+                "monthAndDay" => "May 6",
+                "startTime" => "2024-05-06T23:00:00-05:00",
+                "shortForecast" => "First period",
+                "icon" => (object) [
+                    "icon" => "thunderstorm.svg",
+                    "base" => "thunderstorm",
+                ],
+                "temperature" => 83,
+                "probabilityOfPrecipitation" => 30,
+                "isDaytime" => false,
+                "isOvernight" => false,
+                "timeLabel" => "6PM-6AM",
+            ],
+        ];
+
+        $actual = $this->block->build($now);
+
+        $this->assertEquals(1, count($actual["today"]));
+        unset($actual["today"][0]["hourlyPeriods"]);
+
+        $this->assertEquals($expected, $actual["today"]);
+    }
+
+    /**
+     * Ensure we do not have an overnight period after 6am.
+     *
+     * @group e2e
+     */
+    public function testAfter6amThereIsNoOvernight()
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2024-05-07T06:01:00-0500",
+        );
+
+        $this->onLocationRoute(32.778, -96.796);
+
+        $expected = [
+            [
+                "shortDayName" => "Tue",
+                "dayName" => "Tuesday",
+                "monthAndDay" => "May 7",
+                "startTime" => "2024-05-07T06:00:00-05:00",
+                "shortForecast" => "Second period",
+                "icon" => (object) [
+                    "icon" => "thunderstorm.svg",
+                    "base" => "thunderstorm",
+                ],
+                "temperature" => 72,
+                "probabilityOfPrecipitation" => 30,
+                "isDaytime" => true,
+                "isOvernight" => false,
+                "timeLabel" => "6AM-6PM",
+            ],
+            [
+                "shortDayName" => "Tue",
+                "dayName" => "Tuesday",
+                "monthAndDay" => "May 7",
+                "startTime" => "2024-05-07T18:00:00-05:00",
+                "shortForecast" => "Third period",
+                "icon" => (object) [
+                    "icon" => "mostly_clear-day.svg",
+                    "base" => "mostly_clear-day",
+                ],
+                "temperature" => 89,
+                "probabilityOfPrecipitation" => null,
+                "isDaytime" => false,
+                "isOvernight" => false,
+                "timeLabel" => "6PM-6AM",
+            ],
+        ];
+
+        $actual = $this->block->build($now);
+
+        $this->assertEquals(2, count($actual["today"]));
+        unset($actual["today"][0]["hourlyPeriods"]);
+        unset($actual["today"][1]["hourlyPeriods"]);
+
+        $this->assertEquals($expected, $actual["today"]);
+    }
 }
