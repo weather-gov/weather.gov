@@ -34,6 +34,9 @@ foreach ($cf_service_data as $service_list) {
                 "namespace" => "Drupal\\mysql\\Driver\\Database\\mysql",
                 "driver" => "mysql",
                 "autoload" => "core/modules/mysql/src/Driver/Database/mysql/",
+                "init_commands" => [
+                    "isolation_level" => "SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED",
+                ],
             ];
         } elseif (stristr($service["name"], "secrets")) {
             $settings["hash_salt"] = hash(
@@ -84,6 +87,8 @@ foreach ($cf_service_data as $service_list) {
 $application_environment = $cf_application_data["space_name"];
 switch ($application_environment) {
     case "design":
+        // TODO: Setup on SAML certs and remove this bool
+        $settings["weather_login_local_form"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-design.app.cloud.gov";
         break;

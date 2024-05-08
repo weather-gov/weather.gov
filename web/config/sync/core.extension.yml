@@ -24,6 +24,7 @@ module:
   layout_builder: 0
   layout_discovery: 0
   link: 0
+  log_stdout: 0
   menu_link_content: 0
   menu_ui: 0
   mysql: 0
@@ -44,6 +45,7 @@ module:
   views_ui: 0
   weather_blocks: 0
   weather_data: 0
+  weather_login: 0
   weather_routes: 0
   workbench: 0
   workbench_access: 0

@@ -42,32 +42,52 @@ class HourlyTable extends HTMLElement {
   }
 
   clickScrollRight(wrapper) {
-    const cellsToRight = Array.from(
-      this.querySelectorAll("table tr:last-child td"),
-    ).filter((cell) => {
-      const diff = cell.offsetLeft - wrapper.scrollLeft;
-      return diff > 16;
-    });
+    const containerWidth = wrapper.getBoundingClientRect().width;
+    const firstColumnWidth = this.querySelector("table tr:last-child th").getBoundingClientRect().width;
+    const visibleWidth = containerWidth;
+    const rightSide = wrapper.scrollLeft + visibleWidth;
 
-    if (cellsToRight.length) {
+    const nextCol = Array.from(this.querySelectorAll("table tr:last-child td"))
+          .find(el => {
+            const left = el.offsetLeft;
+            const right = el.offsetLeft + el.offsetWidth;
+            return left <= rightSide && right >= rightSide;
+          });   
+
+    if (nextCol) {
+      let nextLeftPos = nextCol.offsetLeft - firstColumnWidth - 16;
+      if(Math.floor(nextLeftPos) <= Math.floor(wrapper.scrollLeft)){
+        nextLeftPos = nextCol.nextElementSibling.offsetLeft - firstColumnWidth - 16;
+      }
+      
       wrapper.scrollTo({
-        left: cellsToRight[0].offsetLeft - 16,
+        left: nextLeftPos,
         behavior: "smooth",
       });
     }
   }
 
   clickScrollLeft(wrapper) {
-    const cellsToLeft = Array.from(
-      this.querySelectorAll("table tr:last-child td"),
-    ).filter((cell) => {
-      const diff = cell.offsetLeft - wrapper.scrollLeft;
-      return diff < 16;
-    });
+    const containerWidth = wrapper.getBoundingClientRect().width;
+    const firstColumnWidth = this.querySelector("table tr:last-child th").getBoundingClientRect().width;
+    const visibleWidth = containerWidth - firstColumnWidth;
+    const leftSide = wrapper.scrollLeft - visibleWidth + firstColumnWidth;
 
-    if (cellsToLeft.length) {
+    const prevCol = Array.from(this.querySelectorAll("table tr:last-child td"))
+          .find(el => {
+            const left = el.offsetLeft;
+            const right = el.offsetLeft + el.offsetWidth;
+            return left <= leftSide && right >= leftSide;
+          });
+
+    if (prevCol) {
+      let nextLeftPos = prevCol.nextElementSibling.offsetLeft - firstColumnWidth - 16;
+      if(Math.floor(nextLeftPos) >= Math.floor(wrapper.scrollLeft)){
+        nextLeftPos = prevCol.offsetLeft - firstColumnWidth - 16;
+      }
+
       wrapper.scrollTo({
-        left: cellsToLeft.at(-1).offsetLeft - 16,
+        left: nextLeftPos,
         behavior: "smooth",
       });
     } else {

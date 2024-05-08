@@ -1,0 +1,5 @@
+services:
+  weather_login.user_route_subscriber:
+    class: Drupal\weather_login\RouteSubscriber\UserLoginRouteSubscriber
+    tags:
+      - { name: event_subscriber }

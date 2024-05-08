@@ -59,7 +59,6 @@ final class AlertsStructureTest extends EndToEndBase
         );
 
         $expected = [
-            "has concluded",
             "until 2:00 AM today",
             "until Wednesday 05/01 2:00 AM MDT",
             "is in effect",

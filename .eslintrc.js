@@ -41,7 +41,12 @@ module.exports = {
       },
     },
     {
-      files: ["tests/**/*.js", "spatial-data/**/*.js", "web/**/tests/**/*.js"],
+      files: [
+        "tests/**/*.js",
+        "spatial-data/**/*.js",
+        "web/**/tests/**/*.js",
+        "playwright.config.js",
+      ],
       extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
       env: {
         es6: true,

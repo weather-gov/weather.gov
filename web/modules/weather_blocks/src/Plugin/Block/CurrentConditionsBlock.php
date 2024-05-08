@@ -60,7 +60,7 @@ class CurrentConditionsBlock extends WeatherBlockBase
 
                 return $data;
             } catch (\Throwable $e) {
-                $logger = $this->getLogger("CURRENT_CONDITIONS");
+                $logger = $this->getLogger("observations");
                 $logger->error($e->getMessage());
                 return ["error" => true];
             }
