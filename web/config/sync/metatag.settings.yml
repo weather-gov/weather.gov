@@ -2,7 +2,11 @@ _core:
   default_config_hash: tKLBW2GXZVLFXqS9QgLyfTuxCLc1u_quKPQLtCia-Bw
 entity_type_groups:
   node:
-    landing:
+    page:
+      basic: basic
+      open_graph: open_graph
+      twitter_cards: twitter_cards
+    wfo_promo:
       basic: basic
       open_graph: open_graph
       twitter_cards: twitter_cards
@@ -16,6 +20,6 @@ tag_trim_maxlength:
   metatag_maxlength_og_site_name: null
   metatag_maxlength_og_title: null
   metatag_maxlength_og_description: null
-  metatag_maxlength_twitter_cards_description: null
   metatag_maxlength_twitter_cards_title: null
+  metatag_maxlength_twitter_cards_description: null
 tag_scroll_max_height: ''

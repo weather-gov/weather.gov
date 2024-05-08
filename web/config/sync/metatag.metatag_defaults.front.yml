@@ -8,6 +8,6 @@ id: front
 label: 'Front page'
 tags:
   canonical_url: '[site:url]'
-  description: 'Official government resource for finding weather near you.'
+  description: 'The National Weather Service provides weather, water and climate data, forecasts, warnings, and impact-based decision support services to protect life and property, and enhance the national economy.'
   shortlink: '[site:url]'
-  title: 'National Weather Service | [site:name]'
+  title: '[site:name]'
