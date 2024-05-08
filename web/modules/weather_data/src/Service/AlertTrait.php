@@ -58,9 +58,24 @@ trait AlertTrait
             $forecastZone,
             $countyZone,
             $fireZone,
+            $now,
         ) {
             if (AlertUtility::isMarineAlert($alert->properties->event)) {
                 return false;
+            }
+
+            // If the alert doesn't have an ending or expiration time, we can't
+            // possibly filter it for already being expired.
+            if ($alert->properties->ends || $alert->properties->expires) {
+                $endsDateTime = $alert->properties->ends
+                    ? DateTimeUtility::stringToDate($alert->properties->ends)
+                    : DateTimeUtility::stringToDate(
+                        $alert->properties->expires,
+                    );
+
+                if ($endsDateTime < $now) {
+                    return false;
+                }
             }
 
             // If there's a geometry for this alert, use that to determine
