@@ -38,7 +38,7 @@ content:
     weight: 121
     region: content
     settings:
-      sidebar: true
+      sidebar: false
       use_details: true
     third_party_settings: {  }
   path:
