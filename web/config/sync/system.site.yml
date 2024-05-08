@@ -2,9 +2,9 @@ _core:
   default_config_hash: l58O_yEXSo-SeJi19LXdzTU1tNJG3lmnIhCitRkM1tk
 langcode: en
 uuid: a8610938-ba2d-4f34-a473-bac1d92b4311
-name: Weather.gov
+name: National Weather Service
 mail: admin@noaa.gov
-slogan: 'National Weather Service'
+slogan: 'Creating a weather-ready nation'
 page:
   403: ''
   404: ''
