@@ -58,9 +58,7 @@ class WeatherAlertParser
             if (!$parsedOverview && !$parsedWhatWhereWhen) {
                 array_push($this->parsedNodes, [
                     "type" => "paragraph",
-                    "nodes" => $this->getParagraphNodesForString(
-                        $paragraph
-                    ),
+                    "nodes" => $this->getParagraphNodesForString($paragraph),
                 ]);
             }
         }
@@ -86,9 +84,7 @@ class WeatherAlertParser
         if (preg_match($regex, $str, $matches)) {
             array_push($this->parsedNodes, [
                 "type" => "paragraph",
-                "nodes" => $this->getParagraphNodesForString(
-                    $matches[1]
-                ),
+                "nodes" => $this->getParagraphNodesForString($matches[1]),
             ]);
 
             return true;
@@ -120,9 +116,7 @@ class WeatherAlertParser
             ]);
             array_push($this->parsedNodes, [
                 "type" => "paragraph",
-                "nodes" => $this->getParagraphNodesForString(
-                    $matches["text"]
-                ),
+                "nodes" => $this->getParagraphNodesForString($matches["text"]),
             ]);
 
             return true;
@@ -139,39 +133,36 @@ class WeatherAlertParser
     public function getParagraphNodesForString($str)
     {
         $links = $this->extractURLs($str);
-        if(!$links){
+        if (!$links) {
             return [
                 [
                     "type" => "text",
-                    "content" => $str
-                ]
+                    "content" => $str,
+                ],
             ];
         }
 
         $nodes = [];
         $current = $str;
-        foreach($links as $link){
+        foreach ($links as $link) {
             $pos = strpos($current, $link["url"]);
             $paraText = substr($current, 0, $pos);
             array_push(
                 $nodes,
                 [
                     "type" => "text",
-                    "content" => $paraText
+                    "content" => $paraText,
                 ],
-                $link
+                $link,
             );
             $current = substr($current, $pos + strlen($link["url"]));
         }
 
-        if($current && $current != ""){
-            array_push(
-                $nodes,
-                [
-                    "type" => "text",
-                    "content" => $current
-                ]
-            );
+        if ($current && $current != "") {
+            array_push($nodes, [
+                "type" => "text",
+                "content" => $current,
+            ]);
         }
 
         return array_values($nodes);
@@ -186,36 +177,33 @@ class WeatherAlertParser
     public function extractURLs($str)
     {
         $regex = "/https\:\/\/[A-Za-z0-9\-._~:\/\?#\[\]@!$]+/";
-        if(preg_match_all($regex, $str, $matches, PREG_OFFSET_CAPTURE)){
-            $valid = array_filter($matches[0], function($urlString){
+        if (preg_match_all($regex, $str, $matches, PREG_OFFSET_CAPTURE)) {
+            $valid = array_filter($matches[0], function ($urlString) {
                 $url = parse_url($urlString[0]);
-                if(array_key_exists("user", $url)){
+                if (array_key_exists("user", $url)) {
                     return false;
-                } else if(array_key_exists("pass", $url)){
+                } elseif (array_key_exists("pass", $url)) {
                     return false;
-                } else if(!str_ends_with($url["host"], ".gov")){
+                } elseif (!str_ends_with($url["host"], ".gov")) {
                     return false;
                 }
                 return true;
             });
-            if(count($valid) == 0){
+            if (count($valid) == 0) {
                 return false;
             }
 
             // Each link should be an assoc array
             // with the URL along with data about
             // whether it's internal or external
-            return array_map(
-                function($url){
-                    $isInternal = str_contains($url[0], "weather.gov");
-                    return [
-                        "type" => "link",
-                        "url" => $url[0],
-                        "external" => !$isInternal
-                    ];
-                },
-                array_values($valid)
-            );
+            return array_map(function ($url) {
+                $isInternal = str_contains($url[0], "weather.gov");
+                return [
+                    "type" => "link",
+                    "url" => $url[0],
+                    "external" => !$isInternal,
+                ];
+            }, array_values($valid));
         }
         return false;
     }

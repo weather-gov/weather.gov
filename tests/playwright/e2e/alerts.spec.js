@@ -1,4 +1,6 @@
+/* eslint-disable no-await-in-loop, no-plusplus */
 const { test, expect } = require("@playwright/test");
+
 const { describe, beforeEach } = test;
 
 describe("Alerts e2e tests", () => {
