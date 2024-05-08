@@ -34,6 +34,9 @@ foreach ($cf_service_data as $service_list) {
                 "namespace" => "Drupal\\mysql\\Driver\\Database\\mysql",
                 "driver" => "mysql",
                 "autoload" => "core/modules/mysql/src/Driver/Database/mysql/",
+                "init_commands" => [
+                    "isolation_level" => "SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED",
+                ],
             ];
         } elseif (stristr($service["name"], "secrets")) {
             $settings["hash_salt"] = hash(
