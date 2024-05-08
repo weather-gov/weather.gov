@@ -57,7 +57,9 @@ describe("Hourly forecast table tests", () => {
         .contains("Red Flag Warning")
         .invoke("attr", "aria-expanded")
         .should("equal", "true");
-      cy.get("#a3").should("be.visible");
+      cy.get("#alert_82d03a893a84390fbc5217471cd259eaa41a4135").should(
+        "be.visible",
+      );
     });
   });
 
@@ -69,7 +71,7 @@ describe("Hourly forecast table tests", () => {
         // Our expectation is that up to five days should
         // have precip data. Anything beyond that is not guaranteed
         // at this point
-        if($idx >= 4){
+        if ($idx >= 4) {
           cy.wrap($tbody).children("tr").should("exist");
         }
       });
