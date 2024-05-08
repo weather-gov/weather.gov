@@ -35,7 +35,7 @@
 <html{{ html_attributes }}>
   <head>
     <head-placeholder token="{{ placeholder_token }}">
-    <title>{% if weather.place %}{{ weather.place }} | {% endif %}{{ head_title|safe_join(' | ') }}</title>
+    <title>{% if weather.place %}{{ weather.place }} | {% endif %}{{ head_title | safe_join(' | ') }}</title>
     <css-placeholder token="{{ placeholder_token }}">
     <js-placeholder token="{{ placeholder_token }}">
     <link rel="icon" type="image/png" href="/{{ directory }}/assets/images/weather/favicons/nws-favicon.ico" />
