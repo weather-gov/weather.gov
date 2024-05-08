@@ -113,9 +113,20 @@ export default async (request, response) => {
     console.log(`LOCAL:    local file does not exist; proxying [${filePath}]`);
     await proxy(request, response);
   } else {
-    const isHourlyForecast = filePath.toString().includes("hourly");
     console.log(`LOCAL:    serving local file: ${filePath}`);
     const output = JSON.parse(await fs.readFile(filePath));
+
+    if (output["@bundle"]?.status) {
+      console.log(
+        `LOCAL:    local file has response status ${output["@bundle"].status}`,
+      );
+      response.writeHead(output["@bundle"].status);
+      response.end();
+      return;
+    }
+
+    const isHourlyForecast = filePath.toString().includes("hourly");
+
     processDates(output, isHourlyForecast);
 
     response.writeHead(200, {
