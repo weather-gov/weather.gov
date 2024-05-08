@@ -5,7 +5,8 @@
     <svg class="usa-icon usa-icon--size-3 text-primary-darker margin-right-1 margin-top-neg-2px" aria-hidden="true" focusable="false" role="img">
       <use xlink:href="{{ "/themes/new_weather_theme/assets/images/uswds/sprite.svg#x"}}"></use>
     </svg>
-      <span class="">{{ "X" | t }}</span>
+    <span class="">{{ "X" | t }}</span>
+    {% include '@new_weather_theme/partials/external-link-decoration.html.twig' %}
   </a>
 </li>
 {% endfor %}
