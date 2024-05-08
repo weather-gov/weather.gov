@@ -46,7 +46,7 @@ tabbed-nav:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
 
 hourly-table:
-  version: 2024-03-21
+  version: 2024-05-07
   js:
     assets/js/components/HourlyTable.js: { preprocess: false }
 
