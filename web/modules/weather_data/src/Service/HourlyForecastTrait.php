@@ -254,7 +254,7 @@ trait HourlyForecastTrait
 
             return [
                 "apparentTemperature" =>
-                    abs($apparentTemperature - $temperature) >= 5
+                    abs($apparentTemperature - $temperature) >= 0
                         ? $apparentTemperature
                         : null,
                 "conditions" => $this->t->translate(
