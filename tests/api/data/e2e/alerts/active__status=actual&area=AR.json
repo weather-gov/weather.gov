@@ -245,7 +245,7 @@
         "sender": "w-nws.webmaster@noaa.gov",
         "senderName": "NWS Los Angeles/Oxnard CA",
         "headline": "High Wind Warning issued January 3 at 9:50AM PST until January 5 at 1:00AM PST by NWS Los Angeles/Oxnard CA",
-        "description": "* WHAT...North winds 25 to 35 mph with gusts up to 60 to 65 mph\nexpected.\n\n* WHERE...Santa Ynez Mountains Eastern Range.\n\n* WHEN...Until 1 AM PST Friday.\n\n* IMPACTS...Damaging winds will blow down large objects such as\ntrees and power lines. Power outages are expected. Travel will\nbe difficult, especially for high profile vehicles.",
+        "description": "* WHAT...North winds 25 to 35 mph with gusts up to 60 to 65 mph\nexpected.\n\n* WHERE...Santa Ynez Mountains Eastern Range.\n\n* WHEN...Until 1 AM PST Friday.\n\n* IMPACTS...Damaging winds will blow down large objects such as\ntrees and power lines. Power outages are expected. See www.your-power-company.com/outages for more information. Travel will\nbe difficult, especially for high profile vehicles. For road safety, see https://transportation.gov/safe-travels . For more weather information, check out https://weather.gov/your-office for up to date forecasts and alerts.",
         "instruction": "People should avoid being outside in forested areas and around\ntrees and branches. If possible, remain in the lower levels of\nyour home during the windstorm, and avoid windows. Use caution if\nyou must drive.",
         "response": "Prepare",
         "parameters": {

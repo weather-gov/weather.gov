@@ -53,6 +53,8 @@
   "scripts": {
     "load-spatial": "cd spatial-data && node load-shapefiles.js",
     "cypress:e2e": "cypress open --project tests/e2e",
+    "a11y": "playwright test a11y",
+    "playwright:e2e": "playwright test e2e/*",
     "js-component-tests": "npx mocha web/themes/**/tests/components/*-tests.js",
     "js-format": "npx prettier -w 'web/themes/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
     "js-lint": "eslint 'web/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
