@@ -55,6 +55,12 @@ _Added in May 2024_
 
 We added this module to enable us to forward Drupal Watchdog logs to `stdout` and `stderr` instead of Drupal's internal logging database. This improves the developer experience by making logs easier to access and it allows cloud.gov to capture the logs and present them in its logging interface, which is easier to get around than Drupal's.
 
+### [`metatag`](https://www.drupal.org/project/metatag)
+
+_Added in May 2024_
+
+We added metatag in order to allow content managers and administrators to customize our metatags for social share across content types on the site. We enabled the main module and other extensions for OpenGraph, Twitter, and Favicon management.
+
 ### [`new_relic_rpm`](https://www.drupal.org/project/new_relic_rpm)
 
 _Added in January 2024_
