@@ -148,12 +148,16 @@ trait AlertTrait
                 // https://oidref.com/2.49.0, and then
                 // http://www.oid-info.com/doc/introduction%20to%20object%20identifiers%20(OIDs)%20at%20WMO.pdf).
                 //
-                // The UUID uniquely identifies the alert, so we can use that. Not
-                // sure what the 001 and 0 parts of the OID are - updates, maybe?
-                // But not super relevant for us.
+                // The UUID uniquely identifies the alert and the .001.1 part
+                // uniquely identifies the alert.
+                //
+                // There's something funky that happens where a single alert can
+                // show up multiple times, but that's an issue upstream of us
+                // and for now, we can't really do anything about it.
                 $id = explode(".", $alert->properties->id);
+                $id = array_slice($id, -3);
+                $id = implode("_", $id);
 
-                $id = $id[count($id) - 3];
                 $output->alertId = $id;
             } else {
                 // If it's not a NWS OID, just use the array index.
