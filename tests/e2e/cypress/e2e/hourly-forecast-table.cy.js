@@ -57,7 +57,7 @@ describe("Hourly forecast table tests", () => {
         .contains("Red Flag Warning")
         .invoke("attr", "aria-expanded")
         .should("equal", "true");
-      cy.get("#alert_82d03a893a84390fbc5217471cd259eaa41a4135").should(
+      cy.get("#alert_82d03a893a84390fbc5217471cd259eaa41a4135_001_1").should(
         "be.visible",
       );
     });
