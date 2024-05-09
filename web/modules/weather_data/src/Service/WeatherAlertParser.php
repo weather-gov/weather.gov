@@ -189,6 +189,7 @@ class WeatherAlertParser
                 }
                 return true;
             });
+
             if (count($valid) == 0) {
                 return false;
             }
@@ -197,7 +198,8 @@ class WeatherAlertParser
             // with the URL along with data about
             // whether it's internal or external
             return array_map(function ($url) {
-                $isInternal = str_contains($url[0], "weather.gov");
+                $parsedUrl = parse_url($url[0]);
+                $isInternal = str_contains($parsedUrl["host"], "weather.gov");
                 return [
                     "type" => "link",
                     "url" => $url[0],
