@@ -176,7 +176,7 @@ class WeatherAlertParser
      */
     public function extractURLs($str)
     {
-        $regex = "/https\:\/\/[A-Za-z0-9\-._~:\/\?#\[\]@!$]+/";
+        $regex = "/https\:\/\/[A-Za-z0-9\-._~:\/\?#\[\]@!$]+\b/";
         if (preg_match_all($regex, $str, $matches, PREG_OFFSET_CAPTURE)) {
             $valid = array_filter($matches[0], function ($urlString) {
                 $url = parse_url($urlString[0]);
