@@ -126,7 +126,7 @@ describe("<wx-tabbed-nav> component tests", () => {
 
   describe("Initial page load with hash", () => {
     it("Navigates to the correct alert accordion and opens it if hash present", () => {
-      const alertId = "alert_aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65";
+      const alertId = "alert_aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65_001_1";
       cy.visit(`/point/34.749/-92.275#${alertId}`);
       cy.get(`#${alertId}`)
         .as("alertEl")
