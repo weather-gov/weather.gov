@@ -33,8 +33,20 @@
           {% for element in alert.description %}
             {% if element.type == "heading" %}
               <h4 class="visual-h3 text-normal text-primary-dark">{{ element.text | capitalize }}</h4>
+            {% elseif element.type == "paragraph" %}
+              <p>
+                {% for node in element.nodes %}
+                  {% if node.type == "link" %}
+                    <a href="{{node.url}}" class="usa-link{% if node.external %} usa-link--external{% endif %}">
+                      {{node.url}}
+                    </a>
+                  {% else %}
+                    {{ node.content }}
+                  {% endif %}
+                {% endfor %}
+              </p>
             {% else %}
-              <p>{{ element.text }}</p>
+              {{ node }}
             {% endif %}
           {% endfor %}
 
