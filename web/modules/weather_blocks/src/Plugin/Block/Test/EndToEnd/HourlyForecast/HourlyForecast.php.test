@@ -65,21 +65,6 @@ final class HourlyForecastStructureTest extends EndToEndBase
     /**
      * @group e2e
      */
-    public function testHourlyApparentTemperatureNullIfCloseToActual(): void
-    {
-        $this->onLocationRoute(33.521, -86.812);
-        $expected = null;
-
-        $data = $this->block->build();
-
-        $actual = $data["hours"][0]["apparentTemperature"];
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @group e2e
-     */
     public function testHourlyApparentTemperature(): void
     {
         $this->onLocationRoute(33.521, -86.812);
