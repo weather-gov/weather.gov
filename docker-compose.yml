@@ -62,7 +62,7 @@ services:
       - ./web/themes:/opt/drupal/web/themes
       - /opt/drupal/web/modules/contrib
       - /opt/drupal/web/themes/contrib
-      - ./tools:/opt/drupal/wx-tools
+      - ./tools:/opt/drupal/tools
 
       # Map in saved configuration. This is used to import configuration and it
       # is also where configuration gets exported to. The target/container

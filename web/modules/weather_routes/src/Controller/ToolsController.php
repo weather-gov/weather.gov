@@ -21,7 +21,7 @@ class ToolsController extends ControllerBase
      */
     public function toolIndex($name)
     {
-        $path = realpath(getcwd() . "/../wx-tools/" . $name);
+        $path = realpath(getcwd() . "/../tools/" . $name);
         if ($path === false) {
             throw new NotFoundHttpException();
         }
