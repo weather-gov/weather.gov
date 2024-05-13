@@ -29,7 +29,7 @@
     "@types/node": "^20.12.8",
     "axe-core": "^4.9.1",
     "chai": "^5.1.0",
-    "cypress": "^13.8.1",
+    "cypress": "^13.9.0",
     "cypress-axe": "^1.5.0",
     "cypress-plugin-tab": "^1.0.5",
     "dayjs": "^1.11.11",
