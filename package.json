@@ -42,7 +42,7 @@
     "jsdom-global": "^3.0.2",
     "mocha": "^10.4.0",
     "mocha-cli": "^1.0.1",
-    "playwright": "^1.43.1",
+    "playwright": "^1.44.0",
     "prettier": "^3.2.5",
     "sinon": "^17.0.1",
     "stylelint": "^16.5.0",
