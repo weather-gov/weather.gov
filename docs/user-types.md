@@ -37,13 +37,14 @@ For example, visuals of what “1 in rain in an hour” or “30 mph wind” loo
         - Physical
         - Speech
         - Visual
-- What do they need?: 
-  - Screen reader support and optimization
-  - Multi-language support
-  - Multiple formats of information such as video and visual option
-  - Access to technology / internet during a weather hazard
-- A website is only useful if folks can actually access it. Particularly in a hazard, many folks lose access to reliable internet - and many lack access to begin with. But internet access isn’t a binary - often folks may have some, limited access, just not enough to load lots of fancy graphics.
-    - What do they need?: A website should only ever be one way that people can receive critical information about a weather hazard. Additionally, ensuring that low-bandwidth users are able to access is critical - so that folks with just a tiny bit of service can get what they need, quickly. 
+  - What do they need?: 
+    - Screen reader support and optimization
+    - Multi-language support
+    - Multiple formats of information such as video and visual option
+    - Access to technology / internet during a weather hazard
+- Access
+  - A website is only useful if folks can actually access it. Particularly in a hazard, many folks lose access to reliable internet - and many lack access to begin with. But internet access isn’t a binary - often folks may have some, limited access, just not enough to load lots of fancy graphics.
+  - What do they need?: A website should only ever be one way that people can receive critical information about a weather hazard. Additionally, ensuring that low-bandwidth users are able to access is critical - so that folks with just a tiny bit of service can get what they need, quickly. 
 
 - Physical barriers to responding to weather information
   - There are many reasons folks are unable to respond in a hazard. Some include:
@@ -118,10 +119,10 @@ ITOs and webmasters support WFO and regional offices in maintaining the website 
 - Limited time and resources - it’s not a full time job.
 - Have to use code and train others to in order to accomplish goals
 
-### Opportunities
+### What do they need?
 
-- Empower them to train forecasters on content governance, new website, etc
-- Give them time back from making sure the website doesn’t crash
+- Resources to train forecasters on content governance, new website, etc
+- Time back from making sure the website doesn’t crash
 
 
 
