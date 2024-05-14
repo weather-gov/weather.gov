@@ -52,8 +52,8 @@ Providing definitions, explanations and examples of weather terms and metrics.
     - Ability to independently walk and/or drive during an emergency
     - Lack of funds and/or resources to move or stay sheltered
     - Lack of safe housing
-- What do they need?
-  - Safety guidance that acknowledges differences in ability.
+  - What do they need? 
+    - Safety guidance that acknowledges differences in ability.
 
 
 -------------
