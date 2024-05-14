@@ -21,14 +21,13 @@ But for folks with disabilities, low literacy and less resources, these challeng
 
 - Low literacy of weather information (ie non-weather expert)
     - Weather terms and concepts both simple and complex leave many folks confused, while others have a working understanding.
-    - What do they need?
-Providing definitions, explanations and examples of weather terms and metrics.
- For example, visuals of what “1in rain in an hour” or “30 mph wind” look like that don’t assume prior knowledge. 
+    - What do they need?: Providing definitions, explanations and examples of weather terms and metrics.
+For example, visuals of what “1 in rain in an hour” or “30 mph wind” look like that don’t assume prior knowledge. 
 
 
 - Past experience with the specific weather hazard
    - If a tornado hits Nashville, a person who has lived their whole life in Tennessee needs something very different than a person who recently moved from NY.
-   - What do they need? Folks with experience with a hazard have their own understanding of how to stay safe, and may or may not be interested in learning more. Folks who have never experienced the hazard are most interested in safety information and guidance. 
+   - What do they need?: Folks with experience with a hazard have their own understanding of how to stay safe, and may or may not be interested in learning more. Folks who have never experienced the hazard are most interested in safety information and guidance. 
 
 
 - Physical, cognitive and language barriers to interpreting weather information
@@ -38,23 +37,20 @@ Providing definitions, explanations and examples of weather terms and metrics.
         - Physical
         - Speech
         - Visual
-    - What do they need?
-        - Screen reader support and optimization
-        - Multi-language support
-        - Multiple formats of information such as video and visual option
-
-- Access to technology / internet during a weather hazard
-    - A website is only useful if folks can actually access it. Particularly in a hazard, many folks lose access to reliable internet - and many lack access to begin with. But internet access isn’t a binary - often folks may have some, limited access, just not enough to load lots of fancy graphics.
-    - What do they need? A website should only ever be one way that people can receive critical information about a weather hazard. Additionally, ensuring that low-bandwidth users are able to access is critical - so that folks with just a tiny bit of service can get what they need, quickly. 
+- What do they need?: 
+  - Screen reader support and optimization
+  - Multi-language support
+  - Multiple formats of information such as video and visual option
+  - Access to technology / internet during a weather hazard
+- A website is only useful if folks can actually access it. Particularly in a hazard, many folks lose access to reliable internet - and many lack access to begin with. But internet access isn’t a binary - often folks may have some, limited access, just not enough to load lots of fancy graphics.
+    - What do they need?: A website should only ever be one way that people can receive critical information about a weather hazard. Additionally, ensuring that low-bandwidth users are able to access is critical - so that folks with just a tiny bit of service can get what they need, quickly. 
 
 - Physical barriers to responding to weather information
   - There are many reasons folks are unable to respond in a hazard. Some include:
     - Ability to independently walk and/or drive during an emergency
     - Lack of funds and/or resources to move or stay sheltered
     - Lack of safe housing
-  - What do they need? 
-    - Safety guidance that acknowledges differences in ability.
-
+  - What do they need?: Safety guidance that acknowledges differences in ability.
 
 -------------
 ## Partners
