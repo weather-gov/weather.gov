@@ -6,7 +6,7 @@ dependencies:
     - field.field.node.weather_story.body
     - field.field.node.weather_story.field_image
     - field.field.node.weather_story.field_wfo
-    - image.style.thumbnail
+    - image.style.large
     - node.type.weather_story
   module:
     - image
@@ -33,7 +33,7 @@ content:
     region: content
     settings:
       progress_indicator: throbber
-      preview_image_style: thumbnail
+      preview_image_style: large
     third_party_settings: {  }
   field_wfo:
     type: entity_reference_autocomplete
