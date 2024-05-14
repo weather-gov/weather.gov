@@ -4,7 +4,7 @@ External (beta.weather.gov)
 - Public
 - Partners
   - Prioritized for MVP: EMs, school admin
-  - Future expansion: Media, Researchers, Marine, Aviation, Universities, Broadcasters, International
+  - Future expansion: Fire, Marine, Agencies (FEMA, DOT), Professional Meteorologists, Media, Water, Aviation, Military, Corporations, International, Researchers
 
 Internal (tools + CMS)
 - Forecasters
