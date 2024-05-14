@@ -78,9 +78,11 @@
       {% endif %}
     </div>
   </header>
-
 	<main role="main" class="flex-1">
     <a id="main-content" tabindex="-1"></a>
+    {% if path('<current>') == "/home" %}
+    {% include(directory ~ "/templates/layout/frontpage.html.twig") %}
+    {% else %}
     {# link is in html.html.twig #}
     <div class="grid-container">
       {% if page.location %}{{ page.location }}{% endif %}
@@ -88,6 +90,7 @@
         {{ page.content }}
       </div>
     </div>
+    {% endif %}
   </main>
   {% if page.prefooter %}
     <section id="prefooter" class="bg-primary-lighter">

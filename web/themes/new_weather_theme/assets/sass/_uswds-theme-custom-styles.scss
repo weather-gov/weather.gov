@@ -55,15 +55,19 @@ body {
   overflow-x: clip;
 }
 
+p {
+  @include u-line-height("body", 4)
+}
+
 /* AlertDetails Overrides
 -------------------------------------- */
 weathergov-alerts {
-  .usa-prose h3 {
-    font-weight: normal;
+  .usa-prose h4 {
+    font-weight: normal !important;
     margin-top: units(3);
   }
 
-  .usa-prose h3 + p {
+  .usa-prose h4 + p {
     margin-top: units(0.5);
   }
 
@@ -191,6 +195,11 @@ table tr:nth-child(2) th {
   .mobile-lg__flex-basis-auto {
     flex-basis: auto;
   }
+
+  .mobile-lg__flex-align-center {
+    align-items: center;
+  }
+  
 }
 
 @include at-media(tablet) {
@@ -240,3 +249,31 @@ svg[data-wind-direction] {
 #weather-story-content h3 {
     font-weight: normal;
 }
+
+
+/* Custom unstyle button utilities
+------------------------------------- */
+.wx-button--unstyled-light {
+  color: white;
+
+  &:visited {
+    color: white;
+  }
+
+  &:hover {
+    color: color("primary-lighter");
+  }
+
+  &:active {
+    color: color("accent-cool-lighter");
+  }
+}
+
+/* Custom width responsive utilities
+------------------------------------- */
+.tablet__maxw10 {
+  @include at-media("tablet") {
+    @include u-maxw(10);
+  }
+}
+

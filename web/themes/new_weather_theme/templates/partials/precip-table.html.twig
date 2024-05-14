@@ -1,0 +1,26 @@
+{% if precipHours %}
+  <div class="grid-row"> 
+    <div class="grid-col-12"> 
+      <h5 class="visual-h3 font-heading-md text-normal text-primary-darker margin-top-1 margin-bottom-105">{{ "Precipitation amounts" |t }}</h5>
+    </div>
+  </div>
+  <div class="grid-row tablet:margin-x-0 tablet:grid-col-6">
+    <table class="usa-table usa-table--borderless precip-table margin-y-0 width-full">
+      <caption class="usa-sr-only">{{ "precipitation amounts for the coming hours" | t }}
+        <thead class="usa-sr-only">
+          <tr>
+            <th scope="col">{{ "time period" | t }}</th>
+            <th scope="col">{{ "forecast precipitation" | t }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for hour in precipHours %}
+            <tr>
+              <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">{{ hour.start }}&emsp13;–&emsp13;{{ hour.end }}</td>
+              <td class="text-align-right">{{ hour.value }} {{ "inches" | t }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  </div>
+{% endif %}

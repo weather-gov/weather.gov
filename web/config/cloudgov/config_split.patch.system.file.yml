@@ -1,0 +1,4 @@
+adding:
+  default_scheme: s3
+removing:
+  default_scheme: public

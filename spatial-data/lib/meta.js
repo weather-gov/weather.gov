@@ -4,12 +4,14 @@ const { metadata: counties } = require("../sources/counties.js");
 const { metadata: cwas } = require("../sources/countyWarningAreas.js");
 const { metadata: places } = require("../sources/places.js");
 const { metadata: states } = require("../sources/states.js");
+const { metadata: zones } = require("../sources/zones.js");
 
 const targets = {
   counties,
   cwas,
   places,
   states,
+  zones,
 };
 
 module.exports = async () => {

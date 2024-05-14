@@ -41,7 +41,7 @@ trait DailyForecastTrait
         ];
     }
 
-    private function formatDailyPeriodForToday($period, $timezone = null)
+    private function formatDailyPeriodForToday($period, $timezone, $now)
     {
         $formattedPeriod = $this->formatDailyPeriod($period, $timezone);
 
@@ -49,6 +49,18 @@ trait DailyForecastTrait
         if (!$formattedPeriod) {
             return null;
         }
+
+        // For "today" periods, we need to get date information from the current
+        // time, not from the forecast period because the first forecast period
+        // for "today" could actually be from "yesterday" if it begins before
+        // midnight. See #1151.
+        $shortDayName = $now->format("D");
+        $dayName = $now->format("l");
+        $monthAndDay = $now->format("M j");
+
+        $formattedPeriod["shortDayName"] = $shortDayName;
+        $formattedPeriod["dayName"] = $dayName;
+        $formattedPeriod["monthAndDay"] = $monthAndDay;
 
         // We need to determine if the period is an "overnight"
         // period. These are periods whose startTime begins on or
@@ -59,10 +71,19 @@ trait DailyForecastTrait
             $timezone,
         );
         $endTime = DateTimeUtility::stringToDate($period->endTime, $timezone);
-        $midnight = $startTime->setTime(0, 0);
-        $overnightEnd = $startTime->setTime(6, 0);
+        $midnight = $now->setTime(0, 0);
+        $overnightEnd = $now->setTime(6, 0);
+
+        // This is an overnight period if the current time is between midnight
+        // and 6am, and the period ends on or before 6am of the same day.
+        //
+        // If now is before midnight, this must either be a day or night period.
+        // It can only become a̵ ̵g̵r̵e̵m̵l̵i̵n̵ an overnight period at midnight.
+        //
+        // If now is after midnight and this period ends after 6am, then it must
+        // also be a day or night period.
         $isOvernightPeriod =
-            $startTime >= $midnight && $endTime <= $overnightEnd;
+            intval($now->format("G")) <= 6 && $endTime <= $overnightEnd;
 
         $formattedPeriod["isOvernight"] = $isOvernightPeriod;
 
@@ -108,6 +129,7 @@ trait DailyForecastTrait
             $now = new \DateTimeImmutable("now", new \DateTimeZone($timezone));
         }
 
+        // Fetch the actual daily forecast periods
         $periods = DateTimeUtility::filterToAfter(
             $forecast->periods,
             $now,
@@ -140,8 +162,11 @@ trait DailyForecastTrait
         // Format each of the today periods
         // as assoc arrays that can be used
         // by the templates
-        $todayPeriodsFormatted = array_map(function ($period) use (&$timezone) {
-            return $this->formatDailyPeriodForToday($period, $timezone);
+        $todayPeriodsFormatted = array_map(function ($period) use (
+            &$now,
+            &$timezone,
+        ) {
+            return $this->formatDailyPeriodForToday($period, $timezone, $now);
         }, $todayPeriods);
 
         // Format each of the detailed periods
@@ -196,11 +221,50 @@ trait DailyForecastTrait
             $alerts,
         );
 
+        // Get a mapping of the starTime for each day,
+        // starting with the today period. These will
+        // be used for grouping precipitation totals
+        // for each day.
+        $periodStartTimes = [
+            DateTimeUtility::stringToDate(
+                $todayPeriods[0]->startTime,
+                $timezone,
+            ),
+        ];
+        $detailedPeriodStartTimes = array_map(function ($periodPair) use (
+            &$timezone,
+        ) {
+            return DateTimeUtility::stringToDate(
+                $periodPair[0]->startTime,
+                $timezone,
+            );
+        }, array_chunk($detailedPeriods, 2));
+        $periodStartTimes = array_merge(
+            $periodStartTimes,
+            $detailedPeriodStartTimes,
+        );
+
+        // Get raw precipitation periods data, then map and
+        // chunk into groups of periods based on each day's
+        // startTime
+        $precipPeriods = $this->getHourlyPrecipitation($wfo, $x, $y, $now);
+        $precipPeriods = array_map(function ($startTime) use (
+            &$precipPeriods,
+            &$timezone,
+        ) {
+            return $this->filterHourlyPrecipitationToDay(
+                $startTime,
+                $precipPeriods,
+                $timezone,
+            );
+        }, $periodStartTimes);
+
         return [
             "today" => array_values($todayPeriodsFormatted),
             "todayHourly" => array_values($todayHourlyDetails),
             "todayAlerts" => array_values($todayAlerts),
             "detailed" => array_values($detailedPeriodsFormatted),
+            "precipitationPeriods" => array_values($precipPeriods),
         ];
     }
 }

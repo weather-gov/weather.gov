@@ -1,0 +1,24 @@
+uuid: 8ef3ecdf-ffe1-4413-829f-27bb7abbac3c
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: sL588ui1E_8-2c_UupwyYxcqX2OVyMFp3HTLbbFqvPc
+id: global
+label: Global
+tags:
+  canonical_url: '[current-page:url]'
+  description: 'The National Weather Service provides weather, water and climate data, forecasts, warnings, and impact-based decision support services to protect life and property, and enhance the national economy.'
+  icon_16x16: /themes/new_weather_theme/assets/images/weather/favicons/favicon-16x16.ico
+  icon_32x32: /themes/new_weather_theme/assets/images/weather/favicons/favicon-32x32.ico
+  icon_96x96: /themes/new_weather_theme/assets/images/weather/favicons/favicon-96x96.ico
+  og_description: 'The National Weather Service provides weather, water and climate data, forecasts, warnings, and impact-based decision support services to protect life and property, and enhance the national economy.'
+  og_image: /themes/new_weather_theme/assets/images/weather/nws-meta-og.png
+  og_site_name: '[site:name]'
+  og_type: website
+  og_url: '[site:url]'
+  shortcut_icon: /themes/new_weather_theme/assets/images/weather/favicons/nws-favicon.ico
+  twitter_cards_description: 'The National Weather Service provides weather, water and climate data, forecasts, warnings, and impact-based decision support services to protect life and property, and enhance the national economy.'
+  twitter_cards_image: /themes/new_weather_theme/assets/images/weather/nws-meta-og.png
+  twitter_cards_site: '@nws'
+  twitter_cards_type: summary_large_image

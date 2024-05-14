@@ -21,32 +21,34 @@ class LocationSearchBlock extends WeatherBlockBase
         $data = false;
         $location = $this->getLocation();
 
-        if ($location->point) {
-            $data = $this->weatherData->getPlaceNearPoint(
-                $location->point->lat,
-                $location->point->lon,
-            );
-        } elseif ($location->grid) {
-            $grid = $location->grid;
-            try {
+        try {
+            if ($location->point) {
+                $data = $this->weatherData->getPlaceNearPoint(
+                    $location->point->lat,
+                    $location->point->lon,
+                );
+            } elseif ($location->grid) {
+                $grid = $location->grid;
                 $data = $this->weatherData->getPlaceFromGrid(
                     $grid->wfo,
                     $grid->x,
                     $grid->y,
                 );
-            } catch (\Throwable $e) {
-                return ["error" => true];
             }
-        }
 
-        if ($data) {
+            if ($data) {
+                return [
+                    "place" => $data,
+                ];
+            }
+
             return [
-                "place" => $data,
+                "place" => null,
             ];
+        } catch (\Throwable $e) {
+            $logger = $this->getLogger("location search");
+            $logger->error($e->getMessage());
+            return ["error" => true];
         }
-
-        return [
-            "place" => null,
-        ];
     }
 }

@@ -97,7 +97,7 @@ const setupRadar = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const scriptEl = document.querySelector("[data-ex-radar-cmi]");
+  const scriptEl = document.querySelector("[data-wx-radar-cmi]");
   const currentTabSelected = document.querySelector("#current[data-selected]");
   // If the page loads with the current tab selected
   // then we try to load the radar.

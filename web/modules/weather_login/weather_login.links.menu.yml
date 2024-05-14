@@ -1,0 +1,6 @@
+weather_login.settings_form:
+  title: 'Weather Login Form Settings'
+  route_name: weather_login.login_settings
+  description: 'System wide settings for the Weather Login form'
+  parent: system.admin_config_system
+  weight: 98

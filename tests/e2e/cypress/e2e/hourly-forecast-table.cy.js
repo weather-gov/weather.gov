@@ -57,7 +57,24 @@ describe("Hourly forecast table tests", () => {
         .contains("Red Flag Warning")
         .invoke("attr", "aria-expanded")
         .should("equal", "true");
-      cy.get("#a3").should("be.visible");
+      cy.get("#alert_82d03a893a84390fbc5217471cd259eaa41a4135_001_1").should(
+        "be.visible",
+      );
+    });
+  });
+
+  describe("Hourly precipitation tables", () => {
+    it("Renders the expected min number of table rows", () => {
+      cy.visit("/point/34.749/-92.275#daily");
+      cy.get("#daily ol li:first-child wx-hourly-toggle").click();
+      cy.get("#daily ol li table.precip-table tbody").each(($tbody, $idx) => {
+        // Our expectation is that up to five days should
+        // have precip data. Anything beyond that is not guaranteed
+        // at this point
+        if ($idx >= 4) {
+          cy.wrap($tbody).children("tr").should("exist");
+        }
+      });
     });
   });
 });

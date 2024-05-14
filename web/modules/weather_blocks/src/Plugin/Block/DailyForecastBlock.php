@@ -32,6 +32,8 @@ class DailyForecastBlock extends WeatherBlockBase
                     3,
                 );
             } catch (\Throwable $e) {
+                $logger = $this->getLogger("daily forecast");
+                $logger->error($e->getMessage());
                 return ["error" => true];
             }
         }

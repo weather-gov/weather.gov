@@ -1,19 +1,21 @@
+{{ attach_library("new_weather_theme/leaflet") }}
+<h2 class="usa-sr-only">Alerts</h2>
 <div class="grid-container padding-x-2"> 
   <div class="grid-row"> 
     <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
       <weathergov-alerts class="display-block">
       {% for alert in content.alerts %}
       <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ alert.alertId }}">
-        <h2 class="usa-accordion__heading font-heading-lg">
+        <h3 class="usa-accordion__heading font-heading-lg">
           <button
             type="button"
             class="usa-accordion__button text-ls-1"
-            aria-expanded="{{ (alert.alertId == 1) ? 'true' : 'false' }}"
+            aria-expanded="true"
             aria-controls="a{{ alert.alertId }}"
             data-button-for="#alert_{{alert.alertId}}">
             {{ alert.event | t }}
           </button>
-        </h2>
+        </h3>
         <div id="a{{alert.alertId}}" class="usa-accordion__content usa-prose">
           <p class="font-sans-md text-bold text-primary-darker margin-y-0" >
             {{ "In effect from" | t }} {{ alert.onset }}
@@ -30,26 +32,49 @@
           -->
           {% for element in alert.description %}
             {% if element.type == "heading" %}
-              <h3 class="text-normal text-primary-dark">{{ element.text | capitalize }}</h3>
+              <h4 class="visual-h3 text-normal text-primary-dark">{{ element.text | capitalize }}</h4>
+            {% elseif element.type == "paragraph" %}
+              <p>
+                {% for node in element.nodes %}
+                  {% if node.type == "link" %}
+                    <a href="{{node.url}}" class="usa-link{% if node.external %} usa-link--external{% endif %}">
+                      {{node.url}}
+                    </a>
+                  {% else %}
+                    {{ node.content }}
+                  {% endif %}
+                {% endfor %}
+              </p>
             {% else %}
-              <p>{{ element.text }}</p>
+              {{ node }}
             {% endif %}
           {% endfor %}
 
           {% if alert.instruction %}
-          <h3 class="text-normal text-primary-dark">{{ "What to do" | t }}</h3>
+          <h4 class="visual-h3 text-normal text-primary-dark">{{ "What to do" | t }}</h4>
           <p>
             {{ alert.instruction | nl2br }}
           </p>
           {% endif %}
-          <h3 class="text-normal text-primary-dark">{{ "Areas impacted" |t }}</h3>
+          <h4 class="visual-h3 text-normal text-primary-dark">{{ "Areas impacted" |t }}</h4>
           <ul class="usa-list {%- if alert.areaDesc | length > 7 %} wx-col-2 {%- endif -%}">
               {%  for areaName in alert.areaDesc %}
                 <li class="">{{ areaName }}</li>
               {% endfor %}
             </ul>
           {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
+
+          <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
+            <div class="grid-container padding-0 bg-white shadow-1 grid-col-12">
+              <div class="grid-row wx-radar-container">
+                <wx-alert-map class="grid-col-12" data-geo-json="{{ alert.geometry | json_encode | url_encode }}" data-alert-id="{{ alert.alertId}}" data-lat="{{ weather.point.lat }}" data-lon="{{ weather.point.lon }}">
+                  <div id="wx_alert_map_{{ alert.alertId }}" style="height: 100%"></div>
+                </wx-alert-map>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
       {% endfor %}
       </weathergov-alerts>

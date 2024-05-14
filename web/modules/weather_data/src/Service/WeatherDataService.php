@@ -20,6 +20,13 @@ class WeatherDataService
     protected const NUMBER_OF_OBS_STATIONS_TO_TRY = 3;
 
     /**
+     * The data layer.
+     *
+     * @var dataLayer
+     */
+    private $dataLayer;
+
+    /**
      * Mapping of legacy API icon paths to new icons and conditions text.
      *
      * @var legacyMapping

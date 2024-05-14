@@ -63,12 +63,12 @@ time. The process for reviewing PRs is outlined here.
    - PR authors are free to enable auto-merge on their PRs and GitHub will
      automatically merge it once all of the requirements below are satisfied.
 
-   - We merge using the squash+rebase strategy in GitHub. The GitHub behavior is
+   - We merge using the merge commits in GitHub. The GitHub behavior is
      something like this:
 
      ```sh
      git checkout main
-     git merge --squash <branch>
+     git merge <branch>
      git push
      ```
 
@@ -107,15 +107,13 @@ rules:
   by their authors.
   ([GPG signatures](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits)
   are also allowed, though SSH is easier to configure and thus encouraged.)
-- All merges into `main` will be pushed into a merge queue. Merge queues help
-  reduce the friction of merging PRs where multiple need to be done at once. PRs
-  go into the queue and get batched up, tested, and merged all at once. There's
-  no need for PR authors to merge from `main` before merging _into_ `main`.
+- PRs must be up-to-date with `main` before they can be merged. This helps
+  ensure that tests are run against the actual end state and incorporate changes
+  that were made in other PRs.
 
 ### Merging strategy
 
-We use squash merging in the merge queue. PR authors do not need to select
-anything as this is handled automatically.
+We use merge commits to preserve history.
 
 ### Deployment strategy
 

@@ -1,0 +1,6 @@
+_core:
+  default_config_hash: 2W_V8vaLQRC4EsW4AydB7ZGHLTg3K1b1hqAcWtKUChY
+sso_login_path: /saml/login
+sso_login_text: 'Login via your NOAA Account'
+sso_cancel_path: /
+sso_cancel_text: 'Cancel and return home'

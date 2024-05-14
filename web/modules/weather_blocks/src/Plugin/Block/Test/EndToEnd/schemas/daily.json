@@ -17,6 +17,16 @@
         "$ref": "#/$defs/alert"
       }
     },
+    "precipitationPeriods": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "maxItems": 5,
+        "items": {
+          "$ref": "#/$defs/precipPeriod"
+        }
+      }
+    },
     "detailed": {
       "type": "array",
       "items": {
@@ -88,6 +98,15 @@
         "periodIndex": { "type": "integer" },
         "duration": { "type": "integer" },
         "alert": "$include:alerts.json"
+      }
+    },
+    "precipPeriod": {
+      "type": "object",
+      "properties": {
+        "start": { "type": "string" },
+        "startRaw": { "type": "string" },
+        "end": { "type": "string" },
+        "endRaw": { "type": "string" }
       }
     }
   }

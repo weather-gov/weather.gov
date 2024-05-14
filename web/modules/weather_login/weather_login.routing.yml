@@ -1,0 +1,7 @@
+weather_login.login_settings:
+  path: '/admin/config/system/login-settings'
+  defaults:
+    _title: 'Login settings'
+    _form: 'Drupal\weather_login\Form\LoginSettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
