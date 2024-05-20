@@ -1,0 +1,7 @@
+runs:
+  using: composite
+  steps:
+    - name: prepare playwright
+      uses: ./.github/actions/setup-playwright
+    - name: run tests
+      run: npx playwright test a11y

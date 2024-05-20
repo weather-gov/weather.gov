@@ -1,0 +1,17 @@
+runs:
+  using: composite
+  steps:
+    - name: setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: npm
+
+    - name: install dependencies
+      run: npm ci
+
+    - name: install proxy dependencies
+      run: cd tests/api && npm ci
+
+    - name: run js-component-tests
+      run: npm run js-component-tests

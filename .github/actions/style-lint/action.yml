@@ -1,0 +1,18 @@
+runs:
+  using: composite
+  steps:
+    - name: setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: npm
+
+    - name: install dependencies
+      run: npm ci
+
+      # Stylelint has a GitHub workflow commands output available by default,
+      # so we can use that instead of needing a problem matcher.
+      # https://stylelint.io/user-guide/options#formatter
+      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
+    - name: run stylelint
+      run: npm run style-lint -- -f github

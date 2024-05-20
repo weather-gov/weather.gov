@@ -10,7 +10,6 @@ jobs:
     outputs:
       "no": ${{ steps.skip-tests.outputs.no }}
       "yes": ${{ steps.skip-tests.outputs.yes }}
-
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -58,140 +57,54 @@ jobs:
     name: PHP lint
     runs-on: ubuntu-latest
     needs: [should-test]
-
     steps:
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
-
-      - name: setup PHP
+      - name: lint PHP
         if: needs.should-test.outputs.yes == 'true'
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.2"
-
-      - name: get composer paths
-        if: needs.should-test.outputs.yes == 'true'
-        id: composer-paths
-        run: |
-          echo "cache-dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-          echo "bin-dir=${{ github.workspace }}/$(composer config bin-dir)" >> $GITHUB_OUTPUT
-
-      - name: cache composer caches
-        if: needs.should-test.outputs.yes == 'true'
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-paths.outputs.cache-dir }}
-          key: composer-cache-${{ hashFiles('composer.lock') }}
-
-      - name: install dependencies
-        if: needs.should-test.outputs.yes == 'true'
-        env:
-          COMPOSER_NO_DEV: 0
-        run: composer install
-
-      - name: run phpcs
-        if: needs.should-test.outputs.yes == 'true'
-        run: |
-          echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-phpcs.json"
-          vendor/bin/phpcs --report=checkstyle
+        uses: ./.github/actions/php-lint
 
   js-lint:
     name: JS lint
     runs-on: ubuntu-latest
     needs: [should-test]
-
     steps:
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
-
-      - name: setup node
+      - name: lint Javascript
         if: needs.should-test.outputs.yes == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: install dependencies
-        if: needs.should-test.outputs.yes == 'true'
-        run: npm ci
-
-      - name: install proxy dependencies
-        if: needs.should-test.outputs.yes == 'true'
-        run: cd tests/api && npm ci
-
-      - name: add problem matcher
-        if: needs.should-test.outputs.yes == 'true'
-        run: echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-eslint.json"
-
-      - name: run eslint
-        if: needs.should-test.outputs.yes == 'true'
-        run: npm run js-lint
+        uses: ./.github/actions/javascript-lint
 
   js-component-tests:
     name: JS Component Tests
     runs-on: ubuntu-latest
     needs: [should-test]
-
     steps:
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
-
-      - name: setup node
+      - name: run Javascript component tests
         if: needs.should-test.outputs.yes == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: install dependencies
-        if: needs.should-test.outputs.yes == 'true'
-        run: npm ci
-
-      - name: install proxy dependencies
-        if: needs.should-test.outputs.yes == 'true'
-        run: cd tests/api && npm ci
-
-      - name: run js-component-tests
-        if: needs.should-test.outputs.yes == 'true'
-        run: npm run js-component-tests
+        uses: ./.github/actions/javascript-component-tests
 
   style-lint:
     name: SCSS lint
     runs-on: ubuntu-latest
     needs: [should-test]
-
     steps:
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
-
-      - name: setup node
+      - name: lint styles
         if: needs.should-test.outputs.yes == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: install dependencies
-        if: needs.should-test.outputs.yes == 'true'
-        run: npm ci
-
-        # Stylelint has a GitHub workflow commands output available by default,
-        # so we can use that instead of needing a problem matcher.
-        # https://stylelint.io/user-guide/options#formatter
-        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
-      - name: run stylelint
-        if: needs.should-test.outputs.yes == 'true'
-        run: npm run style-lint -- -f github
+        uses: ./.github/actions/style-lint
 
   build-drupal-image:
     name: build Drupal image
     runs-on: ubuntu-latest
     needs: [should-test]
-
     steps:
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
@@ -205,12 +118,10 @@ jobs:
     name: populate database
     runs-on: ubuntu-latest
     needs: [build-drupal-image, should-test]
-
     steps:
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
-
       - name: populate database
         if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/populate-database
@@ -219,7 +130,6 @@ jobs:
     name: PHP tests
     runs-on: ubuntu-latest
     needs: [populate-database, should-test]
-
     steps:
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
@@ -271,33 +181,15 @@ jobs:
     needs: [populate-database, should-test]
 
     steps:
-      - uses: browser-actions/setup-chrome@v1
-      - uses: browser-actions/setup-edge@v1
-
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
-
       - name: setup site
         if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/setup-site
-
-      - uses: actions/setup-node@v4
+      - name: run automated accessibility tests
         if: needs.should-test.outputs.yes == 'true'
-        with:
-          node-version: 18
-
-      - name: install dependencies
-        if: needs.should-test.outputs.yes == 'true'
-        run: npm ci
-
-      - name: install browsers
-        if: needs.should-test.outputs.yes == 'true'
-        run: npx playwright install --with-deps
-
-      - name: run tests
-        if: needs.should-test.outputs.yes == 'true'
-        run: npx playwright test a11y
+        uses: ./.github/actions/accessibility-tests
 
   new-end-to-end-tests:
     name: playwright end to end tests
@@ -305,33 +197,15 @@ jobs:
     needs: [populate-database, should-test]
 
     steps:
-      - uses: browser-actions/setup-chrome@v1
-      - uses: browser-actions/setup-edge@v1
-
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
-
       - name: setup site
         if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/setup-site
-
-      - uses: actions/setup-node@v4
+      - name: run browser tests (Playwright)
         if: needs.should-test.outputs.yes == 'true'
-        with:
-          node-version: 18
-
-      - name: install dependencies
-        if: needs.should-test.outputs.yes == 'true'
-        run: npm ci
-
-      - name: install browsers
-        if: needs.should-test.outputs.yes == 'true'
-        run: npx playwright install --with-deps
-
-      - name: run tests
-        if: needs.should-test.outputs.yes == 'true'
-        run: npx playwright test e2e/*
+        uses: ./.github/actions/browser-tests-playwright
 
   end-to-end-tests:
     name: end-to-end tests
