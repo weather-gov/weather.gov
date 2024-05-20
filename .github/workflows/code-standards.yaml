@@ -283,16 +283,20 @@ jobs:
         uses: ./.github/actions/setup-site
 
       - uses: actions/setup-node@v4
+        if: needs.should-test.outputs.yes == 'true'
         with:
           node-version: 18
 
       - name: install dependencies
+        if: needs.should-test.outputs.yes == 'true'
         run: npm ci
 
       - name: install browsers
+        if: needs.should-test.outputs.yes == 'true'
         run: npx playwright install --with-deps
 
       - name: run tests
+        if: needs.should-test.outputs.yes == 'true'
         run: npx playwright test a11y
 
   new-end-to-end-tests:
@@ -313,16 +317,20 @@ jobs:
         uses: ./.github/actions/setup-site
 
       - uses: actions/setup-node@v4
+        if: needs.should-test.outputs.yes == 'true'
         with:
           node-version: 18
 
       - name: install dependencies
+        if: needs.should-test.outputs.yes == 'true'
         run: npm ci
 
       - name: install browsers
+        if: needs.should-test.outputs.yes == 'true'
         run: npx playwright install --with-deps
 
       - name: run tests
+        if: needs.should-test.outputs.yes == 'true'
         run: npx playwright test e2e/*
 
   end-to-end-tests:
