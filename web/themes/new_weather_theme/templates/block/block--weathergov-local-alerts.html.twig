@@ -65,7 +65,7 @@
           {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
 
           <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
-            <div class="grid-container padding-0 bg-white shadow-1 grid-col-12">
+            <div class="grid-container padding-0 isolation-isolate grid-col-12">
               <div class="grid-row wx-radar-container">
                 <wx-alert-map class="grid-col-12" data-geo-json="{{ alert.geometry | json_encode | url_encode }}" data-alert-id="{{ alert.alertId}}" data-lat="{{ weather.point.lat }}" data-lon="{{ weather.point.lon }}">
                   <div id="wx_alert_map_{{ alert.alertId }}" style="height: 100%"></div>
