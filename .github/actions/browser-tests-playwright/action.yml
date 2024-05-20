@@ -4,4 +4,5 @@ runs:
     - name: prepare playwright
       uses: ./.github/actions/setup-playwright
     - name: run tests
+      shell: bash
       run: npx playwright test e2e/*

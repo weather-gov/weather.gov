@@ -8,13 +8,17 @@ runs:
         cache: npm
 
     - name: install dependencies
+      shell: bash
       run: npm ci
 
     - name: install proxy dependencies
+      shell: bash
       run: cd tests/api && npm ci
 
     - name: add problem matcher
+      shell: bash
       run: echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-eslint.json"
 
     - name: run eslint
+      shell: bash
       run: npm run js-lint

@@ -7,6 +7,8 @@ runs:
       with:
         node-version: 18
     - name: install dependencies
+      shell: bash
       run: npm ci
     - name: install browsers
+      shell: bash
       run: npx playwright install --with-deps

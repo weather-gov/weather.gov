@@ -8,6 +8,7 @@ runs:
 
     - name: get composer paths
       id: composer-paths
+      shell: bash
       run: |
         echo "cache-dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
         echo "bin-dir=${{ github.workspace }}/$(composer config bin-dir)" >> $GITHUB_OUTPUT
@@ -21,9 +22,11 @@ runs:
     - name: install dependencies
       env:
         COMPOSER_NO_DEV: 0
+      shell: bash
       run: composer install
 
     - name: run phpcs
+      shell: bash
       run: |
         echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-phpcs.json"
         vendor/bin/phpcs --report=checkstyle

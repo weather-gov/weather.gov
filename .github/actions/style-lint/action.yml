@@ -8,6 +8,7 @@ runs:
         cache: npm
 
     - name: install dependencies
+      shell: bash
       run: npm ci
 
       # Stylelint has a GitHub workflow commands output available by default,
@@ -15,4 +16,5 @@ runs:
       # https://stylelint.io/user-guide/options#formatter
       # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
     - name: run stylelint
+      shell: bash
       run: npm run style-lint -- -f github
