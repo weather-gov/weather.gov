@@ -1,23 +1,64 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Url;
+
+function weathergov_admin_form_node_stay_on_editor($form, $formState)
+{
+    // Don't redirect anywhere, just stay on the edit page. This is required
+    // because it must be called after the submit. If you call this in the
+    // form_alter hook, you're setting temporary variables that just get rebuilt
+    // from defaults on submission.
+    $formState->disableRedirect();
+}
 
 function weathergov_admin_form_node_form_alter(
     array &$form,
     FormStateInterface $formState,
 ) {
-    $node = $formState->getFormObject()->getEntity();
-    if ($node->isNew()) {
-        $node->setUnpublished();
-    } else {
-        $weight = 1000;
-        if (array_key_exists("delete", $form["actions"])) {
-            if (array_key_exists("#weight", $form["actions"]["delete"])) {
-                $weight = $form["actions"]["delete"]["#weight"] - 1;
-            }
-        }
+    // These are the button values we want for new content. If this is a
+    // revision, we'll change the button values below.
+    $form["actions"]["submit"]["#value"] = "Save as draft";
+    $form["actions"]["preview"]["#value"] = "Preview and publish";
 
-        if ($node->isPublished()) {
+    // Saving the form should keep us on the editor. We can add a form
+    // submission handler of our own to the stack.
+    $form["actions"]["submit"]["#submit"][] =
+        "weathergov_admin_form_node_stay_on_editor";
+
+    // ALL content defaults to draft, whether newly-created or revision.
+    $form["moderation_state"]["widget"][0]["state"]["#type"] = "value";
+    $form["moderation_state"]["widget"][0]["state"]["#default_value"] = "draft";
+
+    $node = $formState->getFormObject()->getEntity();
+
+    // If the node isn't new, then we're creating a revision.
+    if (!$node->isNew()) {
+        $form["actions"]["submit"]["#value"] = "Save updates as draft";
+        $form["actions"]["preview"]["#value"] = "Preview and publish updates";
+
+        // We can't use the node we loaded previously to check if the node is
+        // published. We could hypothetically check that node's moderation state
+        // but that returns a string, and multiple states can correlate with a
+        // node being published. To find out absolutely, we need to load the
+        // node based only on its ID, which will return the active revision.
+        // Since only the active revision can be published, we can just check
+        // that one's status. If this one isn't published, then the node isn't
+        // published at all.
+        $isPublished = \Drupal::entityTypeManager()
+            ->getStorage("node")
+            ->load($node->id())
+            ->isPublished();
+
+        if ($isPublished) {
+            $weight = 1000;
+            if (array_key_exists("delete", $form["actions"])) {
+                if (array_key_exists("#weight", $form["actions"]["delete"])) {
+                    $weight = $form["actions"]["delete"]["#weight"] - 1;
+                }
+            }
+
             $form["actions"]["unpublish"] = [
                 "#type" => "submit",
                 "#value" => "Unpublish",
@@ -25,34 +66,36 @@ function weathergov_admin_form_node_form_alter(
                 "#submit" => ["weathergov_form_node_unpublish"],
                 "#weight" => $weight,
             ];
-        } else {
-            $form["actions"]["publish"] = [
-                "#type" => "submit",
-                "#value" => "Publish",
-                "#name" => "publish",
-                "#submit" => ["weathergov_form_node_publish"],
-                "#weight" => $weight,
-            ];
         }
     }
 }
 
-function weathergov_form_node_publish($form, &$formState)
-{
-    $node = $formState->getFormObject()->getEntity();
-    $node->setPublished();
-    $node->save();
-}
-
 function weathergov_form_node_unpublish($form, &$formState)
 {
+    // In order to unpublish properly, we need to load the published revision,
+    // not the one that was loaded in the form when the button was clicked.
+    // Then we set its new moderation state and save it. Voila.
     $node = $formState->getFormObject()->getEntity();
-    $node->setUnpublished();
+    $node = \Drupal::entityTypeManager()->getStorage("node")->load($node->id());
+    $node->set("moderation_state", "archived");
     $node->save();
-}
 
-/*
-// This will be triggered for every form. Can be a helpful way of finding the
-// particular form ID you want to target.
-function weathergov_admin_form_alter(array &$form, $formState, $formId) { }
-*/
+    // To make a nice message, we can use the entity type's label and the title
+    // of the node revision that we're unpublishing.
+    $type = $node->type->entity->label();
+    $title = $node->get("title")->value;
+
+    // We'll also insert a link to the current revision of the node. For that,
+    // we need the node ID.
+    $nodeID = $formState->getFormObject()->getEntity()->id();
+    $url = Url::fromUri("base:node/$nodeID");
+    $url = $url->toString();
+
+    // Add the pretty message.
+    \Drupal::service("messenger")->addMessage(
+        Markup::create("Unpublished $type <a href=\"$url\">$title</a>"),
+    );
+
+    // Stay on the editor.
+    $formState->disableRedirect(true);
+}
