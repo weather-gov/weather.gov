@@ -277,3 +277,11 @@ svg[data-wind-direction] {
   }
 }
 
+
+/* Custom isolation utilities
+------------------------------------- */
+.isolation-isolate {
+  isolation: isolate;
+}
+
+
