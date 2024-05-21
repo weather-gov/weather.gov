@@ -51,7 +51,6 @@ module:
   weather_data: 0
   weather_login: 0
   weather_routes: 0
-  workbench: 0
   workbench_access: 0
   externalauth: 10
   views: 10

@@ -1,0 +1,20 @@
+uuid: 3b7a250c-f6c8-4b21-a84f-5c017853591d
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+    - user
+id: user.field_primary_wfo
+field_name: field_primary_wfo
+entity_type: user
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
