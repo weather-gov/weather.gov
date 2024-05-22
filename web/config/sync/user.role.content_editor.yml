@@ -41,6 +41,7 @@ permissions:
   - 'access toolbar'
   - 'access user profiles'
   - 'assign selected workbench access'
+  - 'create weather_story content'
   - 'edit any basic block content'
   - 'edit any dynamic_safety_information content'
   - 'edit any no_title_block block content'
