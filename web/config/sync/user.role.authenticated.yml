@@ -18,7 +18,6 @@ dependencies:
     - system
     - taxonomy
     - toolbar
-    - workbench
 _core:
   default_config_hash: cFrlqjtkTfvY3RGccjJkPf1SGIfJ942IrxTLWAO4mgA
 id: authenticated
@@ -33,7 +32,6 @@ permissions:
   - 'access help pages'
   - 'access taxonomy overview'
   - 'access toolbar'
-  - 'access workbench'
   - 'view all revisions'
   - 'view any basic block content history'
   - 'view any no_title_block block content history'

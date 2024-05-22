@@ -103,11 +103,11 @@ _Added in January 2024_
 
 This module adds a lot of helper functions and filters, such as the ability to pull in an arbitrary block. We added it when setting up some of our initial twig templates.
 
-### [`workbench`](https://www.drupal.org/project/workbench) and [`workbench_access`](https://www.drupal.org/project/workbench_access)
+### [`workbench_access`](https://www.drupal.org/project/workbench_access)
 
 _Added in January 2024_
 
-The original impetus for adding Workbench, was actually Workbench Access, the comparatively smaller module in the ecosystem. We needed a way to associate user accounts with WFO taxonomy with a regional hierarchy. We evaluated several options ([group](https://www.drupal.org/project/group), [permissions_by_term](https://www.drupal.org/project/permissions_by_term)) for this authorization schema and settled on WA for its simple model and user-friendly interface. Since we had enabled WA we decided to go ahead and also enable Workbench, since it ticked off several boxes in our user needs for the CMS. At the time we added it, full design of the CMS user interface was not complete, so time will tell if we continue to use Workbench as the guiding design for CMS user experience.
+We added Workbench Access because we needed a way to associate user accounts with WFO taxonomy with a regional hierarchy. We evaluated several options ([group](https://www.drupal.org/project/group), [permissions_by_term](https://www.drupal.org/project/permissions_by_term)) for this authorization schema and settled on WA for its simple model and user-friendly interface. 
 
 ### (dev only) [`coder`](https://www.drupal.org/project/coder)
 

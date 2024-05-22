@@ -22,7 +22,6 @@ dependencies:
     - system
     - taxonomy
     - toolbar
-    - workbench
     - workbench_access
 _core:
   default_config_hash: NtMgnXp0miNtJhag07NSjwdCm4zpJwhlDFs1HgyL4wI
@@ -41,8 +40,8 @@ permissions:
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access user profiles'
-  - 'access workbench'
   - 'assign selected workbench access'
+  - 'create weather_story content'
   - 'edit any basic block content'
   - 'edit any dynamic_safety_information content'
   - 'edit any no_title_block block content'

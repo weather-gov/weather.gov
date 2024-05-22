@@ -2,8 +2,12 @@ uuid: 84b56c9d-45f8-4586-9a77-26fb1bf9a290
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.storage.node.field_wfo
+    - taxonomy.vocabulary.weather_forecast_offices
   module:
     - node
+    - taxonomy
     - user
 _core:
   default_config_hash: 3ELwBpDb9lzqW5-daqjZYsC5lNcwbDS_i_-LKba12Lw
@@ -246,6 +250,69 @@ display:
           empty_zero: false
           hide_alter_empty: true
           destination: true
+        field_wfo:
+          id: field_wfo
+          table: node__field_wfo
+          field: field_wfo
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: WFO
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: true
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       pager:
         type: full
         options:
@@ -415,35 +482,47 @@ display:
                 title: Unpublished
                 operator: '='
                 value: '0'
-        langcode:
-          id: langcode
+        status_extra:
+          id: status_extra
           table: node_field_data
-          field: langcode
+          field: status_extra
+          entity_type: node
+          plugin_id: node_status
+          operator: '='
+          value: false
+          group: 1
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        field_wfo_target_id:
+          id: field_wfo_target_id
+          table: node__field_wfo
+          field: field_wfo_target_id
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: langcode
-          plugin_id: language
-          operator: in
+          plugin_id: taxonomy_index_tid
+          operator: or
           value: {  }
           group: 1
           exposed: true
           expose:
-            operator_id: langcode_op
-            label: Language
-            description: ''
+            operator_id: field_wfo_target_id_op
+            label: WFO
+            description: 'The WFO label on the content. If you set your Primary WFO in your account settings, this will be filtered automatically.'
             use_operator: false
-            operator: langcode_op
+            operator: field_wfo_target_id_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: langcode
+            identifier: field_wfo_target_id
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
               anonymous: '0'
+              content_editor: '0'
+              content_admin: '0'
               administrator: '0'
             reduce: false
           is_grouped: false
@@ -458,18 +537,12 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        status_extra:
-          id: status_extra
-          table: node_field_data
-          field: status_extra
-          entity_type: node
-          plugin_id: node_status
-          operator: '='
-          value: false
-          group: 1
-          expose:
-            operator_limit_selection: false
-            operator_list: {  }
+          reduce_duplicates: false
+          vid: weather_forecast_offices
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: true
       filter_groups:
         operator: AND
         groups:
@@ -591,7 +664,8 @@ display:
         - user
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.field_wfo'
   page_1:
     id: page_1
     display_title: Page
@@ -623,4 +697,5 @@ display:
         - user
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.field_wfo'
