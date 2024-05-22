@@ -1,0 +1,19 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+// This hook allows us to alter single elements of a widget, which we want to do for alt text on uploaded images
+function weather_cms_field_widget_single_element_form_alter(array &$element, FormStateInterface $form_state, array $context) // phpcs:ignore
+{
+    if ($context["widget"] instanceof \Drupal\image\Plugin\Field\FieldWidget\ImageWidget) {
+        $element["#process"][] = "weather_cms_image_field_widget_process";
+    }
+}
+
+function weather_cms_image_field_widget_process($element, &$form_state, $form)
+{
+    if (isset($element["alt"])) {
+        $element["alt"]["#description"] = "Alt text should provide the same information as the image, not serve as a description of the image itself. If you have included text on your image, it should be in the alt text along with whatever additional context is needed to provide the same information to users who cannot view the image."; // phpcs:ignore
+    }
+    return $element;
+}
