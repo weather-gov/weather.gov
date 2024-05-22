@@ -14,6 +14,11 @@ targetEntityType: user
 bundle: user
 mode: default
 content:
+  account:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   contact:
     weight: 5
     region: content
@@ -33,6 +38,5 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  account: true
   language: true
   user_picture: true
