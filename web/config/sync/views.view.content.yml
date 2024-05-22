@@ -509,7 +509,7 @@ display:
           expose:
             operator_id: field_wfo_target_id_op
             label: WFO
-            description: 'The Weather Forecast Office label on the content. '
+            description: 'The WFO label on the content. If you set your Primary WFO in your account settings, this will be filtered automatically.'
             use_operator: false
             operator: field_wfo_target_id_op
             operator_limit_selection: false
