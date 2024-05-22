@@ -22,7 +22,6 @@ dependencies:
     - system
     - taxonomy
     - toolbar
-    - workbench
     - workbench_access
 id: content_admin
 label: 'Content admin'
@@ -40,7 +39,6 @@ permissions:
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access user profiles'
-  - 'access workbench'
   - 'assign selected workbench access'
   - 'create basic block content'
   - 'create dynamic_safety_information content'
