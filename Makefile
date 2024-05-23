@@ -80,10 +80,11 @@ zap-containers:
 	docker compose stop
 	docker compose rm -f
 
-scorched-earth:
+scorched-earth: ## A tool to reset your Docker Desktop.
 	docker stop $$(docker ps -a -q)
 	docker rm $$(docker ps -a -q)
 	docker system prune -f
+	docker volume rm $(docker volume ls -qf dangling=true)
 
 ### CSS
 build-css: # Build CSS

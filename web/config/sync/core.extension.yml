@@ -49,10 +49,10 @@ module:
   user: 0
   views_ui: 0
   weather_blocks: 0
+  weather_cms: 0
   weather_data: 0
   weather_login: 0
   weather_routes: 0
-  workbench: 0
   workbench_access: 0
   workflows: 0
   externalauth: 10

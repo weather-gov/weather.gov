@@ -99,3 +99,19 @@ function weathergov_form_node_unpublish($form, &$formState)
     // Stay on the editor.
     $formState->disableRedirect(true);
 }
+
+function weathergov_admin_form_alter(&$form, $form_state, $form_id)
+{
+    if ($form["#id"] == "views-exposed-form-content-page-1") {
+        $request = \Drupal::request();
+        if (is_null($request->get("field_wfo_target_id"))) {
+            $user = \Drupal\user\Entity\User::load(
+                \Drupal::currentUser()->id(),
+            );
+            $wfo = $user->get("field_primary_wfo")->getValue();
+            $input = $form_state->getUserInput();
+            $input["field_wfo_target_id"] = $wfo;
+            $form_state->setUserInput($input);
+        }
+    }
+}

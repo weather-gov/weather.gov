@@ -1,18 +1,19 @@
-uuid: 38d6fcd2-101d-4ce9-b0d0-52e02a2bdf37
+uuid: 0c3318be-917d-433b-b244-f2df643dc3df
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_wfo
-    - node.type.weather_story
+    - field.storage.user.field_primary_wfo
     - taxonomy.vocabulary.weather_forecast_offices
-id: node.weather_story.field_wfo
-field_name: field_wfo
-entity_type: node
-bundle: weather_story
-label: WFO
-description: ''
-required: true
+  module:
+    - user
+id: user.user.field_primary_wfo
+field_name: field_primary_wfo
+entity_type: user
+bundle: user
+label: 'Primary WFO'
+description: 'Enter your primary WFO to help organize your content dashboard.'
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
