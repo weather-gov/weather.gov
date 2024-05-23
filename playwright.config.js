@@ -10,7 +10,7 @@ const { defineConfig, devices } = require("@playwright/test");
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
-module.exports = defineConfig({
+const config = {
   testDir: "./tests/playwright",
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -53,10 +53,8 @@ module.exports = defineConfig({
       name: "Mobile Chrome",
       use: { ...devices["Pixel 5"] },
     },
-    {
-      name: "Mobile Safari",
-      use: { ...devices["iPhone 12"] },
-    },
+    // Mobile Safari is excluded in CI because it tends to fail when it's
+    // containerized.
 
     /* Test against branded browsers. */
     {
@@ -68,4 +66,13 @@ module.exports = defineConfig({
       use: { ...devices["Desktop Chrome"], channel: "chrome" },
     },
   ],
-});
+};
+
+if (!process.env.CI) {
+  config.projects.push({
+    name: "Mobile Safari",
+    use: { ...devices["iPhone 12"] },
+  });
+}
+
+module.exports = defineConfig(config);
