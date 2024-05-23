@@ -21,7 +21,7 @@ jobs:
         run: |
           # Use GitHub API to create a comment on the PR
           PR_NUMBER=${{ github.event.pull_request.number }}
-          COMMENT="It looks like our enabled modules has changed in this PR. Please ensure any documentation in https://github.com/weather-gov/weather.gov/tree/main/docs/contributed-modules.md has been updated!"
+          COMMENT="It looks like our enabled modules has changed in this PR. Please ensure any documentation in https://github.com/weather-gov/weather.gov/tree/main/docs/dev/contributed-modules.md has been updated!"
           GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
           COMMENT_URL="https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments"
       
