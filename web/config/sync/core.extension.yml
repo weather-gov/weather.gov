@@ -48,6 +48,7 @@ module:
   user: 0
   views_ui: 0
   weather_blocks: 0
+  weather_cms: 0
   weather_data: 0
   weather_login: 0
   weather_routes: 0

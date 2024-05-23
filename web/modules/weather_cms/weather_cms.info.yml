@@ -1,0 +1,6 @@
+name: Weather cms
+type: module
+description: Various customizations used for the weather.gov CMS
+package: weather.gov
+
+core_version_requirement: ^10
