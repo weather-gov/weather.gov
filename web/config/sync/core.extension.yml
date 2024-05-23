@@ -10,6 +10,7 @@ module:
   ckeditor5: 0
   config: 0
   config_split: 0
+  content_moderation: 0
   contextual: 0
   datetime: 0
   dblog: 0
@@ -53,6 +54,7 @@ module:
   weather_login: 0
   weather_routes: 0
   workbench_access: 0
+  workflows: 0
   externalauth: 10
   views: 10
   minimal: 1000
