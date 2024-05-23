@@ -1,0 +1,58 @@
+{
+  "@bundle": {
+    "name": "R5"
+  },
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/41.978,-91.67",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-91.67, 41.978] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/41.978,-91.67",
+    "@type": "wx:Point",
+    "cwa": "DVN",
+    "forecastOffice": "https://api.weather.gov/offices/DVN",
+    "gridId": "DVN",
+    "gridX": 30,
+    "gridY": 86,
+    "forecast": "https://api.weather.gov/gridpoints/DVN/30,86/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/DVN/30,86/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/DVN/30,86",
+    "observationStations": "https://api.weather.gov/gridpoints/DVN/30,86/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-91.67776, 41.967048] },
+      "properties": {
+        "city": "Cedar Rapids",
+        "state": "IA",
+        "distance": { "unitCode": "wmoUnit:m", "value": 1376.4453461088 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 27 }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/IAZ052",
+    "county": "https://api.weather.gov/zones/county/IAC113",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/IAZ052",
+    "timeZone": "America/Chicago",
+    "radarStation": "KDVN"
+  }
+}
