@@ -11,8 +11,10 @@ dependencies:
     - node.type.testing_page
     - node.type.weather_story
     - node.type.wfo_promo
+    - workflows.workflow.weather_gov_content_moderation
   module:
     - block_content
+    - content_moderation
     - contextual
     - file
     - filter
@@ -72,6 +74,9 @@ permissions:
   - 'revert wfo_promo revisions'
   - 'schedule publishing of nodes'
   - 'use text format basic_html'
+  - 'use weather_gov_content_moderation transition archive'
+  - 'use weather_gov_content_moderation transition create_new_draft'
+  - 'use weather_gov_content_moderation transition publish'
   - 'use workbench access'
   - 'view all revisions'
   - 'view any basic block content history'
