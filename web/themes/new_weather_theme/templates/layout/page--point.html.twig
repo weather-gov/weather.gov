@@ -55,7 +55,20 @@
 
         <div class="tab-container focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
           {{ drupal_block("weathergov_current_conditions") }}
+          {#  temporarly comment out Radar for R5
           {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
+          #}
+          <div class="grid-container padding-x-0 tablet:padding-x-2 margin-top-4">
+            <div class="grid-row">
+              <div class="grid-col tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+                <img 
+                   src="/{{ directory }}/assets/images/weather/r5/R5_CederRapids_Radar_02.gif" 
+                   alt="Looping animation of RADAR near Cedar Rapids, Iowa"
+                   class="width-full"
+                   />
+              </div>
+            </div>
+          </div>
         </div>
 
          <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
