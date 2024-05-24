@@ -26,12 +26,46 @@ function weather_cms_image_field_widget_process($element, &$form_state, $form)
 function weather_cms_form_alter(&$form, FormStateInterface $form_state, $form_id)
 {
 
-  if($form_id == 'user_register_form' || $form_id == 'user_profile_form'){
-    $form['#after_build'][] = 'weather_cms_form_adjust_timezones';
-  }
+    if($form_id == 'user_register_form' || $form_id == 'user_profile_form'){
+        $form['#after_build'][] = 'weather_cms_form_adjust_timezones';
+    }
 }
 
 function weather_cms_form_adjust_timezones($form, &$form_state)
 {
-  // Do nothing for now
+    $ABBREVS_TO_LONGNAME = [
+        "AKDT" => "Alaska Daylight Time",
+        "AKST" => "Alaska Standard Time",
+        "HDT" => "Hawaii–Aleutian Daylight Time",
+        "HST" => "Hawaii–Aleutian Standard Time",
+        "MDT" => "Mountain Daylight Time",
+        "MST" => "Mountain Standard Time",
+        "CDT" => "Central Daylight Time",
+        "CST" => "Central Standard Time",
+        "EDT" => "Eastern Daylight Time",
+        "EST" => "Eastern Standard Time",
+        "PDT" => "Pacific Daylight Time",
+        "PST" => "Pacific Standard Time",
+        // More to do
+    ];
+    $us_timezone_ids = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, "US");
+    $utc = new \DateTime("now", new \DateTimeZone("UTC"));
+    $abbrevs = [];
+    $zone_info = array_map(
+        function($timezone_id) use (&$utc, &$abbrevs){
+            $timezone = new \DateTimeZone($timezone_id);
+            $abbrev = (new \DateTime("now", $timezone))->format("T");
+            $abbrevs[] = $abbrev;
+            return [
+                "id" => $timezone_id,
+                "label" => $timezone_id,
+                "name" => $timezone->getName(),
+                "abbrev" => $abbrev,
+                "utc_offset" => ($timezone->getOffset($utc) / 60) / 60
+            ];
+        },
+        $us_timezone_ids
+    );
+    $abbrevs = array_unique($abbrevs);
+    // Something here!
 }
