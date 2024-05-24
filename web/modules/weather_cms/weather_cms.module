@@ -17,3 +17,21 @@ function weather_cms_image_field_widget_process($element, &$form_state, $form)
     }
     return $element;
 }
+
+/**
+ * Alter the list of timezones available when
+ * a user is created or updated
+ *
+ */
+function weather_cms_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+
+  if($form_id == 'user_register_form' || $form_id == 'user_profile_form'){
+    $form['#after_build'][] = 'weather_cms_form_adjust_timezones';
+  }
+}
+
+function weather_cms_form_adjust_timezones($form, &$form_state)
+{
+  // Do nothing for now
+}
