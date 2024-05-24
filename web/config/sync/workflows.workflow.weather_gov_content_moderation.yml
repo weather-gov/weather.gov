@@ -1,0 +1,55 @@
+uuid: eb2a9706-ca14-4333-aced-d6f2c623dc08
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.weather_story
+  module:
+    - content_moderation
+id: weather_gov_content_moderation
+label: 'Weather.gov content moderation'
+type: content_moderation
+type_settings:
+  states:
+    archived:
+      label: Archived
+      weight: 2
+      published: false
+      default_revision: true
+    draft:
+      label: Draft
+      weight: 0
+      published: false
+      default_revision: false
+    published:
+      label: Published
+      weight: 1
+      published: true
+      default_revision: true
+  transitions:
+    archive:
+      label: Archive
+      from:
+        - published
+      to: archived
+      weight: 2
+    create_new_draft:
+      label: 'Create New Draft'
+      from:
+        - archived
+        - draft
+        - published
+      to: draft
+      weight: 0
+    publish:
+      label: Publish
+      from:
+        - archived
+        - draft
+        - published
+      to: published
+      weight: 1
+  entity_types:
+    node:
+      - weather_story
+  default_moderation_state: draft
