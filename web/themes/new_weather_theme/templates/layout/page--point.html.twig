@@ -55,9 +55,8 @@
 
         <div class="tab-container focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
           {{ drupal_block("weathergov_current_conditions") }}
-          {#  temporarly comment out Radar for R5
-          {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
-          #}
+          {#  Conditionally render Radar for R5, rendering gif for ceder rapids #}
+          {% if weather.point["lat"] == 41.978 and weather.point["lon"] == -91.67 %}
           <div class="grid-container padding-x-0 tablet:padding-x-2 margin-top-4">
             <div class="grid-row">
               <div class="grid-col tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
@@ -69,6 +68,10 @@
               </div>
             </div>
           </div>
+          {% else %}
+          {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
+          {% endif %}
+
         </div>
 
          <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
