@@ -6,6 +6,9 @@ help:
 pause:
 	sleep 15
 
+update-settings:
+	cp -f web/sites/example.settings.dev.php web/sites/settings.dev.php
+
 ### Drupal management
 cc: clear-cache
 clear-cache: ## Clear and rebuild all Drupal caches (alias cc)
@@ -75,7 +78,7 @@ reset-site-database:
 shell: ## Get a shell inside the Drupal container
 	docker compose exec drupal bash
 
-zap: zap-containers rebuild pause install-site load-spatial ## Delete the entire Docker environment and start from scratch.
+zap: update-settings zap-containers rebuild pause install-site load-spatial ## Delete the entire Docker environment and start from scratch.
 zap-containers:
 	docker compose stop
 	docker compose rm -f
