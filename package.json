@@ -45,7 +45,7 @@
     "playwright": "^1.44.0",
     "prettier": "^3.2.5",
     "sinon": "^18.0.0",
-    "stylelint": "^16.5.0",
+    "stylelint": "^16.6.0",
     "stylelint-config-standard-scss": "^13.0.0",
     "whatwg-fetch": "^3.6.20",
     "xml-parse": "^0.4.0"
