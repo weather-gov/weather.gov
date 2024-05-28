@@ -38,7 +38,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^3.2.0",
     "eslint-plugin-import": "^2.29.1",
-    "jsdom": "^24.0.0",
+    "jsdom": "^24.1.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^10.4.0",
     "mocha-cli": "^1.0.1",
