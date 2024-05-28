@@ -24,7 +24,7 @@
     "doc": "docs"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.9.0",
+    "@axe-core/playwright": "^4.9.1",
     "@playwright/test": "^1.44.0",
     "@types/node": "^20.12.12",
     "axe-core": "^4.9.1",
