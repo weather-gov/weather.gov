@@ -17,3 +17,44 @@
   border: 3px solid white;
   border-radius: 100%;
 }
+
+.wx-radar-legend {
+  h4.visual-h3 {
+    @include u-text("normal");
+    margin-top: 0;
+  }
+
+  .wx-radar-legend__row {
+    th {
+      vertical-align: top;
+    }
+
+    td {
+      padding: 0;
+      vertical-align: top;
+
+      // The cell needs a height in order for
+      // its contents to have something to be
+      // relative to. It's an older hack, sir,
+      // but it checks out.
+      min-height: 1px;
+    }
+
+    .wx-radar-legend__intensity {
+      // Use padding so that it goes inside
+      // the border, effectively pushing
+      // text content left and down from the
+      // gradient.
+      padding: 0.5rem 1rem;
+
+      // Setup the border so we can put a
+      // gradient in it. We could try using
+      // attr() and define the background
+      // image here, but attr() is experimental
+      // for properties other than content
+      // so that doesn't seem safe yet.
+      border-left: 5px solid;
+      border-image-slice: 1;
+    }
+  }
+}
