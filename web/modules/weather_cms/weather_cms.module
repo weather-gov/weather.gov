@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\weather_cms\Timezones\getTimezoneIdsToLabels;
 
 // This hook allows us to alter single elements of a widget, which we want to do for alt text on uploaded images
 function weather_cms_field_widget_single_element_form_alter(array &$element, FormStateInterface $form_state, array $context) // phpcs:ignore
@@ -31,41 +32,16 @@ function weather_cms_form_alter(&$form, FormStateInterface $form_state, $form_id
     }
 }
 
+
+/**
+ * Update the available timezones in the dropdown to only
+ * include those relevant to the US and its territories,
+ * and add custom label text with the correct Daylight/Standard
+ * variants and UTC offsets
+ */
 function weather_cms_form_adjust_timezones($form, &$form_state)
 {
-    $ABBREVS_TO_LONGNAME = [
-        "AKDT" => "Alaska Daylight Time",
-        "AKST" => "Alaska Standard Time",
-        "HDT" => "Hawaii–Aleutian Daylight Time",
-        "HST" => "Hawaii–Aleutian Standard Time",
-        "MDT" => "Mountain Daylight Time",
-        "MST" => "Mountain Standard Time",
-        "CDT" => "Central Daylight Time",
-        "CST" => "Central Standard Time",
-        "EDT" => "Eastern Daylight Time",
-        "EST" => "Eastern Standard Time",
-        "PDT" => "Pacific Daylight Time",
-        "PST" => "Pacific Standard Time",
-        // More to do
-    ];
-    $us_timezone_ids = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, "US");
-    $utc = new \DateTime("now", new \DateTimeZone("UTC"));
-    $abbrevs = [];
-    $zone_info = array_map(
-        function($timezone_id) use (&$utc, &$abbrevs){
-            $timezone = new \DateTimeZone($timezone_id);
-            $abbrev = (new \DateTime("now", $timezone))->format("T");
-            $abbrevs[] = $abbrev;
-            return [
-                "id" => $timezone_id,
-                "label" => $timezone_id,
-                "name" => $timezone->getName(),
-                "abbrev" => $abbrev,
-                "utc_offset" => ($timezone->getOffset($utc) / 60) / 60
-            ];
-        },
-        $us_timezone_ids
-    );
-    $abbrevs = array_unique($abbrevs);
-    // Something here!
+    $timezone_ids_to_labels = getTimezoneIdsToLabels();
+    $form["timezone"]["timezone"]["#options"] = $timezone_ids_to_labels;
+    return $form;
 }
