@@ -62,7 +62,6 @@
                 <li class="">{{ areaName }}</li>
               {% endfor %}
             </ul>
-          {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
 
           <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
             <div class="grid-container padding-0 isolation-isolate grid-col-12">
@@ -73,8 +72,10 @@
               </div>
             </div>
           </div>
-        </div>
 
+        {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
+
+        </div>
       </div>
       {% endfor %}
       </weathergov-alerts>
