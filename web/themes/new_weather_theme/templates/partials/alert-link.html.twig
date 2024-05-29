@@ -1,0 +1,18 @@
+{#
+  Expected inputs:
+    - alertID   - the ID used to link to this specific alert, or null to link
+                  to the alerts tab
+    - alertType - the event type, such as "Severe Thunderstorm Warning"
+#}
+<a
+  class="wx-alert-link"
+  href="#{{ alertID is same as(null) ? "alerts" : "alert_" ~ alertID }}">
+  <div class="display-flex flex-align-center">
+    <div class="width-3 height-3 margin-right-05">
+      <svg role="img" aria-hidden="true" class="width-full height-full">
+        <use xlink:href="{{ "/" ~ directory ~ "/assets/images/uswds/sprite.svg#warning" }}"></use>
+      </svg>
+    </div>
+    {{ alertType }}
+  </div>
+</a>

@@ -8,24 +8,46 @@ In some cases -- like the case of the current day -- there might
 only be a nighttime period.
 #}
 {% set itemId =  periods[0].monthAndDay | lower | replace({" ":"-"}) %}
+
 <li class="display-block" {% if itemId %}id="{{itemId}}{% endif %}">
   <div class="bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8 hourly-table__expand-transition">
-    <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center margin-bottom-3 tablet:margin-bottom-4 tablet:grid-col-6 tablet__flex-justify-start">
-      <h4 class="padding-0 margin-0">
-        <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3" datetime="{{ periods[0].startTime }}">
-          {% if dayLabel %}
-            <span>{{ dayLabel }}, </span>
-          {% else %}
-            <span>{{ periods[0].dayName }}, </span>
-          {% endif %}
-          <span class="display-block">{{ periods[0].monthAndDay }}</span>
-        </time>
-      </h4>
+    
+    <div class="grid-container padding-0 margin-0 margin-bottom-3 tablet:margin-bottom-4">
+      <div class="grid-row">
+        <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center tablet:grid-col-6 tablet__flex-justify-start">
+          <h4 class="padding-0 margin-0">
+            <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3" datetime="{{ periods[0].startTime }}">
+              {% if dayLabel %}
+                <span>{{ dayLabel }}, </span>
+              {% else %}
+                <span>{{ periods[0].dayName }}, </span>
+              {% endif %}
+              <span class="display-block">{{ periods[0].monthAndDay }}</span>
+            </time>
+          </h4>
 
-      <div class="display-flex">
-      {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods } %}
+          <div class="display-flex">
+          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods } %}
+          </div>
+        </div>
+
+        {% set alertCount = alertPeriods | length %}
+        {% if alertCount > 0 %}
+          {% set alertID = alertPeriods[0].alert.alertId %}
+          {% set alertType = alertPeriods[0].alert.event %}
+
+          {% if alertCount > 1 %}
+            {% set alertID = null %}
+            {% set alertType = "Multiple alerts" | t %}
+          {% endif %}
+
+          <div class="grid-col-12 tablet:grid-col-6 margin-top-2 tablet:margin-top-0">
+            {% include "@new_weather_theme/partials/alert-link.html.twig" with { alertID: alertID, alertType: alertType } %}
+          </div>
+        {% endif %}
       </div>
     </div>
+
     <div class="grid-row grid-gap">
       {% for period in periods %}
         {% set marginUnit = 3 %}

@@ -34,7 +34,7 @@ class TabbedNavigator extends HTMLElement {
 
     // Intercept click events on Alert spans in
     // any hourly detail tables
-    Array.from(this.querySelectorAll("a.hourly-table__alert")).forEach(
+    Array.from(this.querySelectorAll("a.wx-alert-link")).forEach(
       (alertSpan) => {
         alertSpan.addEventListener("click", this.handleAlertAnchorClick);
       }
@@ -61,27 +61,33 @@ class TabbedNavigator extends HTMLElement {
       return;
     }
 
-    const matchedTabButton = this.querySelector(
-      `[data-tab-name="${hash.replace("#", "")}"]`,
-    );
-    if (matchedTabButton) {
-      this.switchToTab(matchedTabButton.dataset.tabName);
-      matchedTabButton.parentElement.scrollIntoView();
-      return;
-    }
-
-    const childElement = this.querySelector(
-      `${hash},tab-container, .tab-container ${hash}`,
-    );
-    if (childElement) {
-      const tabContainer = childElement.closest(".tab-container");
-      this.switchToTab(tabContainer.id);
-      if (childElement.matches(".usa-accordion")) {
-        this.toggleAccordion(childElement, true);
-        document.addEventListener("DOMContentLoaded", () => {
-          this.scrollToAccordion(childElement);
-        });
+    try {
+      const matchedTabButton = this.querySelector(
+        `[data-tab-name="${hash.replace("#", "")}"]`,
+      );
+      if (matchedTabButton) {
+        this.switchToTab(matchedTabButton.dataset.tabName);
+        matchedTabButton.parentElement.scrollIntoView();
+        return;
       }
+
+      const childElement = this.querySelector(
+        `${hash},tab-container, .tab-container ${hash}`,
+      );
+      if (childElement) {
+        const tabContainer = childElement.closest(".tab-container");
+        this.switchToTab(tabContainer.id);
+        if (childElement.matches(".usa-accordion")) {
+          this.toggleAccordion(childElement, true);
+          document.addEventListener("DOMContentLoaded", () => {
+            this.scrollToAccordion(childElement);
+          });
+        }
+      }
+    } catch (e) {
+      // Guard against hashes that are not valid DOM identifiers. We can't
+      // prevent users from typing random stuff in the address bar, but we
+      // prevent our scripts from crashing if they do.
     }
   }
 
@@ -147,6 +153,17 @@ class TabbedNavigator extends HTMLElement {
       this.scrollToAccordion(accordionEl);
       event.preventDefault();
       window.history.replaceState(null, null, hash);
+    } else {
+      // If we're not looking at one of the tab container's inner accordions,
+      // check if we're looking for a tab.
+      const tabContainer = this.querySelector(`${hash}.tab-container`);
+      if (tabContainer) {
+        // If we are, switch to that tab.
+        this.switchToTab(tabContainer.id);
+        event.preventDefault();
+        this.scrollTo(0, 0);
+        window.history.replaceState(null, null, hash);
+      }
     }
   }
 

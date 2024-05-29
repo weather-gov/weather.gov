@@ -1,6 +1,7 @@
 @forward "uswds-theme";
 @forward "uswds";
 @forward "uswds-theme-custom-styles";
+@use "components/alerts";
 @use "components/beta-banner";
 @use "components/current-conditions";
 @use "components/weather-story";
