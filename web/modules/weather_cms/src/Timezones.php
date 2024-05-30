@@ -8,6 +8,7 @@ namespace Drupal\weather_cms\Timezones;
  * to longer names we have take from NIST at
  * time.gov
  */
+global $ABBREVS_TO_LONGNAME;
 $ABBREVS_TO_LONGNAME = [
     "UTC" => "Universal Coordinated Time (UTC)",
     "AKDT" => "Alaska Daylight Time",
@@ -34,6 +35,7 @@ $ABBREVS_TO_LONGNAME = [
  * ABBREVS_TO_LONGNAME zones (with variations
  * for Daylight/Standard time as needed)
  */
+global $US_TIMEZONE_IDS;
 $US_TIMEZONE_IDS = [
     "UTC",
     "Pacific/Pago_Pago",

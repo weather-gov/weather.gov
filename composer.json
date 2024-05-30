@@ -56,7 +56,8 @@
         "psr-4": {
             "Drupal\\weather_blocks\\": "web/modules/weather_blocks/src/",
             "Drupal\\weather_data\\": "web/modules/weather_data/src/",
-            "Drupal\\weather_content\\": "web/modules/weather_content/src/"
+            "Drupal\\weather_content\\": "web/modules/weather_content/src/",
+            "Drupal\\weather_cms\\": "web/modules/weather_cms/src/"
         }
     },
     "extra": {
