@@ -3,110 +3,17 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\weather_cms\Timezones;
 
-/**
- * The following lines of code are identical to
- * src/Timezones.php, but I can't get that file to
- * properly include/require/use
- */
-/**
- * Abbreviations of DateTimeZone instances
- * that cover the US and territories, mapped
- * to longer names we have take from NIST at
- * time.gov
- */
-global $ABBREVS_TO_LONGNAME;
-$ABBREVS_TO_LONGNAME = [
-    "UTC" => "Universal Coordinated Time (UTC)",
-    "AKDT" => "Alaska Daylight Time",
-    "AKST" => "Alaska Standard Time",
-    "HDT" => "Hawaii–Aleutian Daylight Time",
-    "HST" => "Hawaii–Aleutian Standard Time",
-    "MDT" => "Mountain Daylight Time",
-    "MST" => "Mountain Standard Time",
-    "CDT" => "Central Daylight Time",
-    "CST" => "Central Standard Time",
-    "EDT" => "Eastern Daylight Time",
-    "EST" => "Eastern Standard Time",
-    "PDT" => "Pacific Daylight Time",
-    "PST" => "Pacific Standard Time",
-    "ChST" =>  "Chamorro Standard Time (Guam)",
-    "SST" => "Samoa Standard Time"
-];
-
-/**
- * Drupal DateTimeZone id names that are each
- * an example from the given timezones we care
- * about for the US and its territories.
- * Each of these will map to one of the
- * ABBREVS_TO_LONGNAME zones (with variations
- * for Daylight/Standard time as needed)
- */
-global $US_TIMEZONE_IDS;
-$US_TIMEZONE_IDS = [
-    "UTC",
-    "Pacific/Pago_Pago",
-    "Pacific/Saipan",
-    "America/Adak",
-    "America/Yakutat",
-    "America/Denver",
-    "America/North_Dakota/New_Salem",
-    "America/New_York",
-    "America/Los_Angeles",
-    "America/Phoenix",
-    "Pacific/Honolulu"
-];
-
-/**
- * For a given DateTimeZone instance, provide a label
- * string that can be used in a user interface.
- */
-function getLabelForTimezone(\DateTimeZone $timezone){
-    global $ABBREVS_TO_LONGNAME;
-    $abbrev = (new \DateTime("now", $timezone))->format("T");
-    if(!array_key_exists($abbrev, $ABBREVS_TO_LONGNAME)){
-        return;
-    }
-    $longname = $ABBREVS_TO_LONGNAME[$abbrev];
-    $utc = new \DateTime("now", new \DateTimeZone("UTC"));
-    if($abbrev == "UTC"){
-        return $longname;
-    }
-    $offset = "";
-    $offsetInt = (($timezone->getOffset($utc) / 60) / 60);
-    $prefix = "+";
-    if($offsetInt < 0){
-        $prefix = "";
-    }
-    $offset = "UTC " . $prefix . $offsetInt;
-    return $longname . " (" . $offset . ")";
-}
-
-/**
- * Return an associative array that maps
- * PHP timezone ids to custom labels that
- * can be used in a user interface
- */
-function getTimezoneIdsToLabels(){
-    global $US_TIMEZONE_IDS;
-    $sorted_timezones = 
-        $result = [];
-    foreach($US_TIMEZONE_IDS as $timezone_id){
-        $timezone = new \DateTimeZone($timezone_id);
-        $label = getLabelForTimezone($timezone);
-        $result[$timezone_id] = $label;
-    }
-
-    return $result;
-}
-
-/**
- * End code that is identical to src/Timezones.php
- */
-
 // This hook allows us to alter single elements of a widget, which we want to do for alt text on uploaded images
-function weather_cms_field_widget_single_element_form_alter(array &$element, FormStateInterface $form_state, array $context) // phpcs:ignore
-{
-    if ($context["widget"] instanceof \Drupal\image\Plugin\Field\FieldWidget\ImageWidget) {
+function weather_cms_field_widget_single_element_form_alter(
+    array &$element,
+    FormStateInterface $form_state,
+    array $context,
+) {
+    // phpcs:ignore
+    if (
+        $context["widget"] instanceof
+        \Drupal\image\Plugin\Field\FieldWidget\ImageWidget
+    ) {
         $element["#process"][] = "weather_cms_image_field_widget_process";
     }
 }
@@ -114,7 +21,8 @@ function weather_cms_field_widget_single_element_form_alter(array &$element, For
 function weather_cms_image_field_widget_process($element, &$form_state, $form)
 {
     if (isset($element["alt"])) {
-        $element["alt"]["#description"] = "Alt text should provide the same information as the image, not serve as a description of the image itself. If you have included text on your image, it should be in the alt text along with whatever additional context is needed to provide the same information to users who cannot view the image."; // phpcs:ignore
+        $element["alt"]["#description"] =
+            "Alt text should provide the same information as the image, not serve as a description of the image itself. If you have included text on your image, it should be in the alt text along with whatever additional context is needed to provide the same information to users who cannot view the image."; // phpcs:ignore
     }
     return $element;
 }
@@ -124,14 +32,15 @@ function weather_cms_image_field_widget_process($element, &$form_state, $form)
  * a user is created or updated
  *
  */
-function weather_cms_form_alter(&$form, FormStateInterface $form_state, $form_id)
-{
-
-    if($form_id == 'user_register_form' || $form_id == 'user_profile_form'){
-        $form['#after_build'][] = 'weather_cms_form_adjust_timezones';
+function weather_cms_form_alter(
+    &$form,
+    FormStateInterface $form_state,
+    $form_id,
+) {
+    if ($form_id == "user_register_form" || $form_id == "user_profile_form") {
+        $form["#after_build"][] = "weather_cms_form_adjust_timezones";
     }
 }
-
 
 /**
  * Update the available timezones in the dropdown to only
@@ -141,7 +50,7 @@ function weather_cms_form_alter(&$form, FormStateInterface $form_state, $form_id
  */
 function weather_cms_form_adjust_timezones($form, &$form_state)
 {
-    $timezone_ids_to_labels = getTimezoneIdsToLabels();
+    $timezone_ids_to_labels = Timezones::getTimezoneIdsToLabels();
     $form["timezone"]["timezone"]["#options"] = $timezone_ids_to_labels;
     return $form;
 }
