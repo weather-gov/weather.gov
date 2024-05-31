@@ -1,0 +1,17 @@
+uuid: a5c2f06a-f60d-49e3-82d2-53395df0bb82
+langcode: en
+status: true
+dependencies:
+  config:
+    - workflows.workflow.weather_gov_content_moderation
+  module:
+    - content_moderation
+    - node
+id: change_moderation_state_of_content
+label: Archive
+type: node
+plugin: 'moderation_state_change:node'
+configuration:
+  workflow: weather_gov_content_moderation
+  state: archived
+  revision_log_message: ''
