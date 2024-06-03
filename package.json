@@ -43,7 +43,7 @@
     "mocha": "^10.4.0",
     "mocha-cli": "^1.0.1",
     "playwright": "^1.44.1",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.0",
     "sinon": "^18.0.0",
     "stylelint": "^16.6.1",
     "stylelint-config-standard-scss": "^13.0.0",
