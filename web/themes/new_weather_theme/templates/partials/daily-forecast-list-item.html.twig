@@ -41,7 +41,7 @@ only be a nighttime period.
             {% set alertType = "Multiple alerts" | t %}
           {% endif %}
 
-          <div class="grid-col-12 tablet:grid-col-6 margin-top-2 tablet:margin-top-0 daily-alert-summary">
+          <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 daily-alert-summary">
             {% include "@new_weather_theme/partials/alert-link.html.twig" with { alertID: alertID, alertType: alertType } %}
           </div>
         {% endif %}
