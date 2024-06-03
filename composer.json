@@ -16,6 +16,7 @@
     ],
     "require": {
         "composer/installers": "^2.0",
+        "cweagans/composer-patches": "^1.7",
         "drupal/auto_entitylabel": "^3.0",
         "drupal/autologout": "^1.4",
         "drupal/config_split": "^2.0",
@@ -46,7 +47,8 @@
             "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
             "phpstan/extension-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "cweagans/composer-patches": true
         },
         "sort-packages": true
     },
@@ -115,6 +117,12 @@
                 "  * Remove the plugin that prints this message:",
                 "      composer remove drupal/core-project-message"
             ]
+        },
+        "composer-exit-on-patch-failure": true,
+        "patches": {
+            "drupal/core": {
+                "moderation-action-plugins": "https://www.drupal.org/files/issues/2022-12-06/2797583-215.patch"
+            }
         }
     },
     "require-dev": {

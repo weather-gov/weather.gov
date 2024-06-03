@@ -12,6 +12,7 @@ dependencies:
     - node.type.wfo_promo
   module:
     - block_content
+    - content_moderation
     - file
     - help
     - node
@@ -35,6 +36,7 @@ permissions:
   - 'view all revisions'
   - 'view any basic block content history'
   - 'view any no_title_block block content history'
+  - 'view any unpublished content'
   - 'view dynamic_safety_information revisions'
   - 'view own unpublished content'
   - 'view page revisions'
