@@ -52,28 +52,27 @@ describe("wx-combo-box tests", () => {
     });
 
     test("typing the down key pseudo-focuses the second element", async ({page}) => {
-      await page.keyboard.press("ArrowDown");
       const correctSelection = page.locator('wx-combo-box ul > li[aria-selected="true"]:nth-child(2)');
+      await page.keyboard.press("ArrowDown");
 
       await expect(correctSelection).toHaveCount(1);
       await expect(correctSelection).toBeVisible();
     });
 
     test("typing down twice pseudo-focuses the third element", async ({page}) => {
-      await page.keyboard.press("ArrowDown");
-      await page.keyboard.press("ArrowDown");
       const correctSelection = page.locator('wx-combo-box ul > li[aria-selected="true"]:nth-child(3)');
+      await page.keyboard.press("ArrowDown");
+      await page.keyboard.press("ArrowDown");
 
       await expect(correctSelection).toHaveCount(1);
       await expect(correctSelection).toBeVisible();
     });
 
     test("pressing the up arrow collapses the search list", async ({page}) => {
-      await page.keyboard.press("ArrowUp");
       const resultList = page.locator("wx-combo-box ul");
+      await page.keyboard.press("ArrowUp");
 
       await expect(resultList).not.toBeVisible();
-      await page.pause();
     });
 
     test("pressing Enter selects an item, closing the list from view", async ({page}) => {
@@ -87,11 +86,18 @@ describe("wx-combo-box tests", () => {
 
     test("clicking selects the second item and navigates to the location page", async ({page, context}) => {
       const thirdItem = page.locator("wx-combo-box ul > li:nth-child(3)");
-      //await thirdItem.evaluate((node) => { node.click(); });
       await thirdItem.click();
       await page.waitForNavigation();
 
       await expect(page.url()).toMatch(/.*\/point\/.*/);
+    });
+
+    test("clicking the second item displays the loading element", async ({page}) => {
+      const thirdItem = page.locator("wx-combo-box ul > li:nth-child(3)");
+      await thirdItem.click();
+      const loader = page.locator("wx-loader");
+
+      await expect(loader).toBeVisible();
     });
   });
 });
