@@ -76,6 +76,11 @@ describe("wx-combo-box tests", () => {
     });
 
     test("pressing Enter selects an item, closing the list from view", async ({page}) => {
+      // Ensure that the page doesn't navigate so we can test the presence of
+      // the loader
+      await page.route("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find*", async route => {
+        await route.abort();
+      }, { times: 1 });
       await page.keyboard.press("ArrowDown");
       await page.keyboard.press("ArrowDown");
       await page.keyboard.press("Enter");
@@ -93,9 +98,14 @@ describe("wx-combo-box tests", () => {
     });
 
     test("clicking the second item displays the loading element", async ({page}) => {
+      // Ensure that the page doesn't navigate so we can test the presence of
+      // the loader
+      await page.route("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find*", async route => {
+        await route.abort();
+      }, { times: 1 });
       const thirdItem = page.locator("wx-combo-box ul > li:nth-child(3)");
-      await thirdItem.click();
       const loader = page.locator("wx-loader");
+      await thirdItem.click();
 
       await expect(loader).toBeVisible();
     });
