@@ -44,7 +44,9 @@ describe("alerts in the daily tab", () => {
   describe("alerts link to the right places", () => {
     test("multiple alerts link opens the alerts tab only", async ({ page }) => {
       const link = await page
-        .locator(".daily-forecast-block li .daily-alert-summary .wx-alert-link")
+        .locator(
+          ".daily-forecast-block li .daily-alert-summary .wx-alert-link a",
+        )
         .first();
 
       await link.click();
@@ -59,7 +61,9 @@ describe("alerts in the daily tab", () => {
     }) => {
       const alertID = "alert_8760a86c78e313ccfc42aa4eb5166572a0e26e9d_003_1";
       const link = await page
-        .locator(".daily-forecast-block li .daily-alert-summary .wx-alert-link")
+        .locator(
+          ".daily-forecast-block li .daily-alert-summary .wx-alert-link a",
+        )
         .nth(1);
 
       await link.click();

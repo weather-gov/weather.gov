@@ -34,7 +34,7 @@ class TabbedNavigator extends HTMLElement {
 
     // Intercept click events on Alert spans in
     // any hourly detail tables
-    Array.from(this.querySelectorAll("a.wx-alert-link")).forEach(
+    Array.from(this.querySelectorAll(".wx-alert-link a")).forEach(
       (alertSpan) => {
         alertSpan.addEventListener("click", this.handleAlertAnchorClick);
       }
@@ -117,9 +117,9 @@ class TabbedNavigator extends HTMLElement {
     // when tabs switch
     const event = new CustomEvent("wx:tab-switched", {
       detail: {
-        tabId
+        tabId,
       },
-      bubbles: true
+      bubbles: true,
     });
     this.dispatchEvent(event);
   }
