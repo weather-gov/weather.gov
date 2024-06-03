@@ -9,7 +9,7 @@
     </div>
 
     <div class="row">
-      <form class="usa-form grid-col maxw-tablet-lg margin-bottom-3 tablet:grid-offset-2" 
+      <form class="usa-form grid-col maxw-tablet-lg margin-bottom-105 tablet:grid-offset-2" 
             data-location-search method="post"
       >
         <div class="display-flex flex-align-end text-white flex-wrap">
@@ -35,7 +35,12 @@
         <wx-combo-box class="z-top margin-top-105" id="search-combo-box">
         </wx-combo-box>
         <input type="hidden" name="suggestedPlaceName" value="">
-      </form>
+      </form>      
+    </div>
+    <div class="row wx-loader-container--front font-sans-md text-white tablet:grid-offset-2">
+        <div class="grid-col">
+            {% include '@new_weather_theme/partials/wx-loader.html.twig' %}
+        </div>
     </div>
   </div>
 </div>

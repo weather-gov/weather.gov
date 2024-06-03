@@ -678,6 +678,13 @@ class ComboBox extends HTMLElement {
         return formEl.submit();
       }
 
+      // If there is a loader component available,
+      // display it
+      const loader = document.querySelector("wx-loader");
+      if(loader){
+        loader.classList.remove("display-none");
+      }
+
       return this.getGeodataForKey(this.value).then((coordinates) => {
         if (coordinates) {
           const result = {
