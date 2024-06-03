@@ -38,6 +38,8 @@
 
 .wx-combo-box__toggle-list {
   @extend .usa-combo-box__toggle-list;
+  top: unset;
+  bottom: unset;
 }
 
 .wx-combo-box__clear-input {

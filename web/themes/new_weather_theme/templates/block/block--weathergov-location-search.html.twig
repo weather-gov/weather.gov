@@ -4,7 +4,7 @@
 
 {% if content.place %}<div class="grid-container">{% endif %}
 <div class="grid-row">
-  <form class="usa-form grid-col-12 maxw-tablet-lg" data-location-search method="get">
+  <form class="usa-form grid-col-12  maxw-tablet-lg" data-location-search method="get">
     <div class="display-flex flex-align-end">
       <label class="usa-label" for="search-combo-box">
         {{ "Enter city or zip code" | t }}
@@ -14,14 +14,18 @@
         <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
       </div>
     </div>
-      <wx-combo-box class="z-top margin-top-1" id="search-combo-box" {% if content.place %}data-place="{{ content.place.city }}{% if content.place.state %}, {{ content.place.state }}{% endif %}"{% endif %}}>
-    </wx-combo-box>
-  </form>
-</div>
-<div class="row font-sans-md text-primary-dark tablet:grid-offset-2 margin-top-105 margin-bottom-105">
-    <div class="grid-col">
-        {% include '@new_weather_theme/partials/wx-loader.html.twig' %}
+    <div class="grid-row">
+        <div class="tablet:grid-col-6">
+            <wx-combo-box class="z-top margin-top-1 tablet:margin-right-105" id="search-combo-box" {% if content.place %}data-place="{{ content.place.city }}{% if content.place.state %}, {{ content.place.state }}{% endif %}"{% endif %}}>
+            </wx-combo-box>
+        </div>
+        <div class="font-sans-md text-primary-dark tablet:grid-col-6 margin-top-105 margin-bottom-105">
+            <div class="grid-col">
+                {% include '@new_weather_theme/partials/wx-loader.html.twig' %}
+            </div>
+        </div>
     </div>
+  </form>
 </div>
 {% if content.place %}</div>{% endif %}
 
