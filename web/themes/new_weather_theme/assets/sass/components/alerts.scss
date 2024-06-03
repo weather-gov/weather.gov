@@ -3,14 +3,13 @@
 .wx-alert-link {
   background-color: color("accent-warm-lightest");
   border: 1px solid color("accent-warm-lighter");
-  display: block;
   padding: units(1) units(1.5);
-  text-decoration: none;
 
-  &:visited,
-  &:active,
-  &:link {
+  & a:visited,
+  & a:active,
+  & a:link {
     color: initial;
+    text-decoration: none;
   }
 
   svg {
