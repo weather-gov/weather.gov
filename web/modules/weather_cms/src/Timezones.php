@@ -82,7 +82,7 @@ class Timezones
      */
     public static function getTimezoneIdsToLabels()
     {
-        $sorted_timezones = $result = [];
+        $result = [];
         foreach (self::$US_TIMEZONE_IDS as $timezone_id) {
             $timezone = new \DateTimeZone($timezone_id);
             $label = self::getLabelForTimezone($timezone);
