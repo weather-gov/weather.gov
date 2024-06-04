@@ -1,11 +1,19 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\weather_cms\Timezones;
 
 // This hook allows us to alter single elements of a widget, which we want to do for alt text on uploaded images
-function weather_cms_field_widget_single_element_form_alter(array &$element, FormStateInterface $form_state, array $context) // phpcs:ignore
-{
-    if ($context["widget"] instanceof \Drupal\image\Plugin\Field\FieldWidget\ImageWidget) {
+function weather_cms_field_widget_single_element_form_alter(
+    array &$element,
+    FormStateInterface $form_state,
+    array $context,
+) {
+    // phpcs:ignore
+    if (
+        $context["widget"] instanceof
+        \Drupal\image\Plugin\Field\FieldWidget\ImageWidget
+    ) {
         $element["#process"][] = "weather_cms_image_field_widget_process";
     }
 }
@@ -13,7 +21,36 @@ function weather_cms_field_widget_single_element_form_alter(array &$element, For
 function weather_cms_image_field_widget_process($element, &$form_state, $form)
 {
     if (isset($element["alt"])) {
-        $element["alt"]["#description"] = "Alt text should provide the same information as the image, not serve as a description of the image itself. If you have included text on your image, it should be in the alt text along with whatever additional context is needed to provide the same information to users who cannot view the image."; // phpcs:ignore
+        $element["alt"]["#description"] =
+            "Alt text should provide the same information as the image, not serve as a description of the image itself. If you have included text on your image, it should be in the alt text along with whatever additional context is needed to provide the same information to users who cannot view the image."; // phpcs:ignore
     }
     return $element;
+}
+
+/**
+ * Alter the list of timezones available when
+ * a user is created or updated
+ *
+ */
+function weather_cms_form_alter(
+    &$form,
+    FormStateInterface $form_state,
+    $form_id,
+) {
+    if ($form_id == "user_register_form" || $form_id == "user_profile_form") {
+        $form["#after_build"][] = "weather_cms_form_adjust_timezones";
+    }
+}
+
+/**
+ * Update the available timezones in the dropdown to only
+ * include those relevant to the US and its territories,
+ * and add custom label text with the correct Daylight/Standard
+ * variants and UTC offsets
+ */
+function weather_cms_form_adjust_timezones($form, &$form_state)
+{
+    $timezone_ids_to_labels = Timezones::getTimezoneIdsToLabels();
+    $form["timezone"]["timezone"]["#options"] = $timezone_ids_to_labels;
+    return $form;
 }
