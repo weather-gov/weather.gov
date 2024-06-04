@@ -5,11 +5,16 @@
   border: 1px solid color("accent-warm-lighter");
   padding: units(1) units(1.5);
 
-  & a:visited,
-  & a:active,
-  & a:link {
-    color: initial;
-    text-decoration: none;
+  & a {
+    color: color("primary");
+
+    &:visited {
+      color: color("primary-dark");
+    }
+
+    &:hover {
+      color: color("primary-darker");
+    }
   }
 
   svg {
