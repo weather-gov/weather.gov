@@ -17,7 +17,7 @@ uswds-customized:
       minified: true
 
 browser-location-button:
-  version: 2024-03-21
+  version: 2024-06-04
   js:
     assets/js/locationSearch.js:
       attributes:
