@@ -30,11 +30,6 @@ localize-timestamps:
       attributes:
         async: true
 
-location-search:
-  version: 2024-03-21
-  js:
-    assets/js/components/LocationSearch.js: { preprocess: false }
-
 location-combo-box:
   version: 2024-06-03
   js:
