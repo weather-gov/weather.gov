@@ -3,10 +3,10 @@ const { test, expect } = require("@playwright/test");
 const arcQueryData = require("../mock-data/arc.query.json");
 const arcQueryItemsData = require("../mock-data/arc.query.items.json");
 
-const { describe, before, beforeEach } = test;
+const { describe, beforeEach } = test;
 
 describe("wx-combo-box tests", () => {
-  beforeEach(async ({ page, context }) => {
+  beforeEach(async ({ page }) => {
     // Stub the ArcGIS API requests
     // so that they use saved data
     await page.route("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest*", async route => {
@@ -89,7 +89,7 @@ describe("wx-combo-box tests", () => {
       await expect(list).not.toBeVisible();
     });
 
-    test("clicking selects the second item and navigates to the location page", async ({page, context}) => {
+    test("clicking selects the second item and navigates to the location page", async ({page}) => {
       const thirdItem = page.locator("wx-combo-box ul > li:nth-child(3)");
       await thirdItem.click();
       await page.waitForNavigation();
