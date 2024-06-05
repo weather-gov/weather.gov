@@ -140,16 +140,16 @@ class UnitConversion
     public static function getPressureScalar(
         \stdClass $pressure,
         bool $inPsi = true,
-    ){
-        $rawValue = $pressure -> value;
+    ) {
+        $rawValue = $pressure->value;
 
-        if($rawValue == null){
+        if ($rawValue == null) {
             return null;
         }
 
         $inPa = $pressure->unitCode == "wmoUnit:Pa";
 
-        if($inPsi){
+        if ($inPsi) {
             return $rawValue * 0.0001450377;
         } else {
             return $rawValue * 0.01;

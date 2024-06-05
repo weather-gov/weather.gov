@@ -169,22 +169,19 @@ trait ObservationsTrait
 
         // Get the barometric pressure or null
         $pressure = $obs->barometricPressure;
-        if($pressure->value == null){
-          $pressure = null;
+        if ($pressure->value == null) {
+            $pressure = null;
         } else {
-          $pressure = [
-            "mbar" => round(
-              UnitConversion::getPressureScalar(
-                $pressure,
-                false
-              ),
-              2 // round to 2 decimal places
-            ),
-            "psi" => round(
-              UnitConversion::getPressureScalar($pressure),
-              2 // round to 2 decimal places
-            )
-          ];
+            $pressure = [
+                "mbar" => round(
+                    UnitConversion::getPressureScalar($pressure, false),
+                    2, // round to 2 decimal places
+                ),
+                "psi" => round(
+                    UnitConversion::getPressureScalar($pressure),
+                    2, // round to 2 decimal places
+                ),
+            ];
         }
 
         $description = ucfirst(strtolower($obs->textDescription));
@@ -202,9 +199,7 @@ trait ObservationsTrait
             "temperature" => UnitConversion::getTemperatureScalar(
                 $obs->temperature,
             ),
-            "dewpoint" => UnitConversion::getTemperatureScalar(
-              $obs->dewpoint
-            ),
+            "dewpoint" => UnitConversion::getTemperatureScalar($obs->dewpoint),
             "timestamp" => [
                 "formatted" => $timestamp->format("l g:i A T"),
                 "utc" => $timestamp->format("c"),
@@ -219,11 +214,12 @@ trait ObservationsTrait
                     $obs->windDirection->value,
                 ),
             ],
-            "gusts" => $obs->windGust->value === null
-              ? null
-              : UnitConversion::getSpeedScalar($obs->windGust),
+            "gusts" =>
+                $obs->windGust->value === null
+                    ? null
+                    : UnitConversion::getSpeedScalar($obs->windGust),
             "pressure" => $pressure,
-            
+
             "stationInfo" => [
                 "name" => $observationStation->properties->name,
                 "identifier" =>

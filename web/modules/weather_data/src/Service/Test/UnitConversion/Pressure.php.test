@@ -12,11 +12,10 @@ final class PressureUnitConversionTest extends TestCase
      * @group unit
      * @group units-utility
      */
-    public function testNullPressure(): void {
+    public function testNullPressure(): void
+    {
         $expected = null;
-        $actual = UnitConversion::getPressureScalar(
-            (object) [ "value" =>  null ],
-        );
+        $actual = UnitConversion::getPressureScalar((object) ["value" => null]);
 
         $this->assertEquals($expected, $actual);
     }
@@ -31,7 +30,7 @@ final class PressureUnitConversionTest extends TestCase
         $expected = 0.15;
         $pressure = (object) [
             "unitCode" => "wmoUnit:Pa",
-            "value" => 15
+            "value" => 15,
         ];
         $actual = UnitConversion::getPressureScalar($pressure, false);
 
@@ -48,12 +47,9 @@ final class PressureUnitConversionTest extends TestCase
         $expected = 0.0021756;
         $pressure = (object) [
             "unitCode" => "wmoUnit:Pa",
-            "value" => 15
+            "value" => 15,
         ];
-        $actual = round(
-            UnitConversion::getPressureScalar($pressure),
-            7
-        );
+        $actual = round(UnitConversion::getPressureScalar($pressure), 7);
 
         $this->assertEquals($expected, $actual);
     }
