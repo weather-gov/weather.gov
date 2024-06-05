@@ -1,0 +1,13 @@
+@use "uswds-core" as *;
+
+.wx-loader-icon {
+  background-image: url("../images/weather/wx_loader_animated_cloud.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (prefers-reduced-motion){
+  .wx-loader-icon {
+    background-image: url("../images/weather/wx_loader_static.svg");
+  }
+}

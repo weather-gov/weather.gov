@@ -667,6 +667,13 @@ class ComboBox extends HTMLElement {
     const formEl = this.closest("form[data-location-search]");
 
     if (formEl) {
+      // If there is a loader component available,
+      // display it
+      const loader = document.querySelector("wx-loader");
+      if(loader){
+        loader.classList.remove("display-none");
+      }
+      
       if (this.url) {
         const result = {
           text: this.input.value,

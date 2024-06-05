@@ -1,5 +1,20 @@
 (() => {
+
+  /**
+   * If there is a navigation loader available on the page,
+   * make sure that it is being displayed
+   */
+  const displayNavigationLoader = () => {
+    const loader = document.querySelector("wx-loader");
+    if(loader){
+      loader.classList.remove("display-none");
+    }
+  };
+  
   const goToLocationPage = (latitude, longitude, placename) => {
+    // Show the loader animation, if available
+    displayNavigationLoader();
+    
     // We want to redirect the user via a POST. We already have the form ready to
     // go, we just need to set its action so the browser knows where to go.
     const form = document.querySelector("form[data-location-search]");
