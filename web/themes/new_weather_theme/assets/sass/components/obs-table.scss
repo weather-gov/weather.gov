@@ -7,14 +7,13 @@
   th {
     padding-left: 0;
     vertical-align: top;
-    padding-top: units(1);
-    padding-bottom: units(1);
-    padding-right: units(4);
+    padding-top: units(1) units(4) units(1) inherit;
   }
 
   tr:first-of-type > td {
     border-top: none;
   }
+
   tr:last-of-type > td,
   tr:last-of-type > th {
     border-bottom: none;
