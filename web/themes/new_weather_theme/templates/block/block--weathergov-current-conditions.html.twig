@@ -36,20 +36,6 @@
                         })
                         }}
                     {% endif %}
-                    {{ " Humidity is @humidity%"
-                    |
-                    t({
-                        "@humidity": content.humidity
-                    })
-                    }}{% if content.wind.speed != null %}
-                        {{
-                        "with @windSpeed mph winds from the @windDirection"
-                        |
-                        t({
-                            "@windSpeed": content.wind.speed,
-                            "@windDirection": content.wind.direction.long
-                        })
-                        }}{% else %}{{ ". Wind information is unavailable" | t() }}{% endif %}.
                 </div>
 
                 {# We hide from screenreaders and use the weather narrative (above) instead #}
@@ -82,7 +68,7 @@
                 </div>
 
                 <div class="grid-row tablet:margin-top-2">
-                    <div class="grid-col-12 tablet:grid-col-6 margin-bottom-05 tablet:padding-right-4" aria-hidden="true">
+                    <div class="grid-col-12 tablet:grid-col-6 margin-bottom-05 tablet:padding-right-4">
                         {%  include '@new_weather_theme/partials/observation-table.html.twig'%}
                     </div>
                     <div class="grid-col-12 tablet:grid-col-6">
@@ -93,7 +79,7 @@
                             </span>
                         </div>
                         
-                        {# We hide from screenreaders and use the weather narrative (below) instead #}
+                        {# We hide from screenreaders and use the weather narrative (above) instead #}
                         <div data-wx-current-conditions-narrative aria-hidden="true">
                             <p class="font-family-mono font-mono-xs text-base text-uppercase margin-top-2 margin-bottom-05">
                                 {{ 'Last updated' | t }}
