@@ -23,7 +23,7 @@ Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect the
 [Timeline visual]
 
 ## Roadmap
-- [Summary](https://github.com/weather-gov/weather.gov/blob/main/docs/product/MVP-roadmap.md)
+- [Summary](https://github.com/weather-gov/weather.gov/blob/main/docs/product/roadmap.md)
 - [Milestone planning chart](https://github.com/orgs/weather-gov/projects/2/views/18)
 
 ## Goals for the next two years 
