@@ -1,0 +1,123 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="16" cy="16" r="7.33333" fill="#FACE00" stroke="#E5A000" stroke-width="1.33333"/>
+<path opacity="0.0833333" d="M21 7.33972L23 3.87562" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.1666" d="M24.6602 11L28.1243 9" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0.08333333333333333s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.2499" d="M26 16L30 16" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0.16666666666666666s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.3332" d="M24.6602 21L28.1243 23" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0.25s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.4165" d="M21 24.6603L23 28.1244" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0.333333333333333s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.4998" d="M16 26V30" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0.41666666666666666s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.5831" d="M9 28.1243L11 24.6602" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin=".5s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.6664" d="M3.87564 23L7.33974 21" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0.5833333333333333s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.7497" d="M2 16L6 16" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0.6666666666666666s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.833" d="M3.87564 9L7.33974 11" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin=".75s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path opacity="0.9163" d="M9 3.87567L11 7.33977" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0.8333333333333333s;"
+    repeatCount="indefinite"
+    />
+</path>
+<path d="M16 2V6" stroke="#E5A000" stroke-width="2" stroke-linecap="round">
+    <animate 
+    attributeName="opacity"
+    from="0" to="1" 
+    dur="1s"
+    begin="0.9166666666666666s;"
+    repeatCount="indefinite"
+    />
+</path>
+<g transform="translate(0,0)">
+  <animateTransform begin="0s;" attributeName="transform" type="translate" from="-48" to="32" dur="4s" repeatCount="indefinite"></animateTransform>
+  <animate begin="0s;"
+  attributeName="opacity"
+  dur="4s"
+  values='1;.95;0'
+  keyTimes="0; 0.7; 1"
+  repeatCount="indefinite"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M5.4 17.0455C5.29732 17.0559 5.19315 17.0612 5.08776 17.0612C3.38244 17.0612 2 15.6633 2 13.9388C2 12.2143 3.38244 10.8163 5.08776 10.8163C5.14487 10.8163 5.20163 10.8179 5.25799 10.821C5.79555 9.91598 6.73407 9.28178 7.82541 9.16901C8.50843 7.87834 9.85692 7 11.4088 7C12.9729 7 14.3304 7.89219 15.0082 9.1995C15.1806 9.14649 15.3633 9.11803 15.5525 9.11803C16.4864 9.11803 17.2631 9.81215 17.424 10.7274C18.3715 11.337 19 12.4076 19 13.6266C19 15.5235 17.4778 17.0612 15.6 17.0612C15.5949 17.0612 15.5898 17.0612 15.5846 17.0612H5.4V17.0455Z" fill="#F5F6F7">
+</path>
+</g>
+
+</svg>
