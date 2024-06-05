@@ -9,10 +9,15 @@
     color: color("primary");
 
     &:visited {
-      color: color("primary-dark");
+      color: color("primary");
     }
 
+    &:focus,
     &:hover {
+      color: color("primary-dark");
+    }
+    
+    &:active {
       color: color("primary-darker");
     }
   }
