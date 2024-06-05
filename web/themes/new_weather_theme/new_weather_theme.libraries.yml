@@ -7,6 +7,7 @@ uswds-init:
 
 uswds-customized:
   version: 2024-06-04.2
+  version: 2024-06-04
   css:
     theme:
       assets/css/styles.css: {}
