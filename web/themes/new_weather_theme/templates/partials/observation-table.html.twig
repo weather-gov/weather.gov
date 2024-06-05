@@ -1,7 +1,7 @@
 <table class="usa-table usa-table--borderless observation-table border-top-1px border-base-light width-full">
     <tbody>
         {# WIND #}
-        <tr>
+        <tr class="wx-wind-speed">
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Wind" | t }}
             </th>
@@ -11,7 +11,7 @@
         </tr>
         {# GUSTS #}
         {%  if content.gusts is not same as (null) %}
-            <tr>
+            <tr class="wx-gusts">
                 <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                     {{ "Gusts" | t }}
                 </th>
@@ -21,7 +21,7 @@
             </tr>
         {% endif %}
         {# HUMIDITY #}
-        <tr>
+        <tr class="wx-humidity">
             <th scope="row" class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Humidity" | t }}
             </th>
@@ -34,7 +34,7 @@
             </td>
         </tr>
         {# DEWPOINT #}
-        <tr>
+        <tr class="wx-dewpoint">
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Dewpoint" | t }}
             </th>
@@ -47,7 +47,7 @@
             </td>
         </tr>
         {# VISIBILITY #}
-        <tr>
+        <tr class="wx-visibility">
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Visibility"  | t }}
             </th>
@@ -60,7 +60,7 @@
             </td>
         </tr>
         {# PRESSURE #}
-        <tr>
+        <tr class="wx-pressure">
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Pressure" | t }}
             </th>
