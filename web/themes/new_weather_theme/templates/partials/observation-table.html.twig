@@ -1,0 +1,76 @@
+<table class="usa-table usa-table--borderless observation-table border-top-1px border-base-light width-full">
+    <tbody>
+        {# WIND #}
+        <tr>
+            <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Wind" | t }}
+            </th>
+            <td>
+                {% include '@new_weather_theme/partials/wind.html.twig' with { wind: content.wind } %}
+            </td>
+        </tr>
+        {# GUSTS #}
+        {%  if content.gusts is not same as (null) %}
+            <tr>
+                <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                    {{ "Gusts" | t }}
+                </th>
+                <td>
+                    {{ content.gusts.speed }} {{  "mph" | t }}
+                </td>
+            </tr>
+        {% endif %}
+        {# HUMIDITY #}
+        <tr>
+            <th scope="row" class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Humidity" | t }}
+            </th>
+            <td>
+                {% if content.humidity == 0 %}
+                    {{  "N/A" | t}}
+                {% else %}
+                    {{  content.humidity }}%
+                {% endif %}
+            </td>
+        </tr>
+        {# DEWPOINT #}
+        <tr>
+            <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Dewpoint" | t }}
+            </th>
+            <td>
+                {% if content.dewpoint is same as (null) %}
+                    {{  "N/A" | t}}
+                {% else %}
+                    {{  content.dewpoint }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
+                {% endif %}
+            </td>
+        </tr>
+        {# VISIBILITY #}
+        <tr>
+            <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Visibility"  | t }}
+            </th>
+            <td>
+                {% if content.visibility is same as (null) %}
+                    {{  "N/A" | t}}
+                {% else %}
+                    {{  content.visibility }} {{ "miles" | t }}
+                {% endif %}
+            </td>
+        </tr>
+        {# PRESSURE #}
+        <tr>
+            <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Pressure" | t }}
+            </th>
+            <td>
+                {% if content.pressure is same as (null) %}
+                    {{  "N/A" | t}}
+                {% else %}
+                    {{  "@psi in (@mbar mb)" | t({ "@psi": content.pressure.psi, "@mbar": content.pressure.mbar })}}
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
