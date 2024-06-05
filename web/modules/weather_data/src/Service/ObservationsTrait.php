@@ -219,7 +219,13 @@ trait ObservationsTrait
                     ? null
                     : UnitConversion::getSpeedScalar($obs->windGust),
             "pressure" => $pressure,
-
+            "visibility" =>
+                $obs->visibility->value === null
+                    ? null
+                    : round(
+                        UnitConversion::getDistanceScalar($obs->visibility),
+                        2,
+                    ),
             "stationInfo" => [
                 "name" => $observationStation->properties->name,
                 "identifier" =>

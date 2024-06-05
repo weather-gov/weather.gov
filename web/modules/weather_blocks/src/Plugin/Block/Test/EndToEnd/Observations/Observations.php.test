@@ -20,6 +20,7 @@ final class ObservationsStructureTest extends EndToEndBase
     /**
      * Simply validate the data structure.
      * @group e2e
+     * @group eric
      */
     public function testDataStructure(): void
     {
@@ -46,6 +47,13 @@ final class ObservationsStructureTest extends EndToEndBase
                     "angle" => 250,
                 ],
             ],
+            "gusts" => null,
+            "pressure" => [
+                "psi" => 14.88,
+                "mbar" => 1026.1,
+            ],
+            "dewpoint" => 22,
+            "visibility" => 10,
             "stationInfo" => [
                 "name" => "Birmingham, Birmingham International Airport",
                 "identifier" => "KBHM",

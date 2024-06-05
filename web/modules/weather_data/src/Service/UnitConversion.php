@@ -155,4 +155,31 @@ class UnitConversion
             return $rawValue * 0.01;
         }
     }
+
+    /**
+     * Get a distance scalar from objects like a visibility distance
+     */
+    public static function getDistanceScalar(
+        \stdClass $distance,
+        bool $inMiles = true,
+    ) {
+        $rawValue = $distance->value;
+
+        if ($rawValue == null) {
+            return null;
+        }
+
+        $inMeters = $distance->unitCode == "wmoUnit:m";
+
+        $valueInKm = $rawValue;
+        if ($inMeters) {
+            $valueInKm = $valueInKm * 0.001;
+        }
+
+        if ($inMiles) {
+            return $valueInKm * 0.6213711922;
+        } else {
+            return $valueInKm;
+        }
+    }
 }
