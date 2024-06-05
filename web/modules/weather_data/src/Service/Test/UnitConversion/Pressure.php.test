@@ -1,0 +1,60 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use Drupal\weather_data\Service\UnitConversion;
+use PHPUnit\Framework\TestCase;
+
+final class PressureUnitConversionTest extends TestCase
+{
+    /**
+     * Test when the pressure value is null
+     * @group unit
+     * @group units-utility
+     */
+    public function testNullPressure(): void {
+        $expected = null;
+        $actual = UnitConversion::getPressureScalar(
+            (object) [ "value" =>  null ],
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test from Pa to mbar
+     * @group unit
+     * @group units-utility
+     */
+    public function testPaToMbar(): void
+    {
+        $expected = 0.15;
+        $pressure = (object) [
+            "unitCode" => "wmoUnit:Pa",
+            "value" => 15
+        ];
+        $actual = UnitConversion::getPressureScalar($pressure, false);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test from Pa to PSI
+     * @group unit
+     * @group units-utility
+     */
+    public function testPaToPsi(): void
+    {
+        $expected = 0.0021756;
+        $pressure = (object) [
+            "unitCode" => "wmoUnit:Pa",
+            "value" => 15
+        ];
+        $actual = round(
+            UnitConversion::getPressureScalar($pressure),
+            7
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+}

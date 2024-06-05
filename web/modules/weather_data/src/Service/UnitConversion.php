@@ -133,4 +133,26 @@ class UnitConversion
 
         return (int) round($out);
     }
+
+    /**
+     * Get a pressure scalar from a wmoUnit pressure object
+     */
+    public static function getPressureScalar(
+        \stdClass $pressure,
+        bool $inPsi = true,
+    ){
+        $rawValue = $pressure -> value;
+
+        if($rawValue == null){
+            return null;
+        }
+
+        $inPa = $pressure->unitCode == "wmoUnit:Pa";
+
+        if($inPsi){
+            return $rawValue * 0.0001450377;
+        } else {
+            return $rawValue * 0.01;
+        }
+    }
 }
