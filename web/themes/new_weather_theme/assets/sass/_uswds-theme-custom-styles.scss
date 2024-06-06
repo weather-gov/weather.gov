@@ -88,17 +88,6 @@ weathergov-alerts {
   }
 }
 
-/* Column utility
-------------------------------------- */
-.wx-col-2 {
-  column-count: 2;
-  column-gap: units(4);
-
-  li {
-    break-inside: avoid-column;
-  }
-}
-
 /* Current Conditions
 ------------------------------------- */
 .current-conditions-temp {
@@ -177,36 +166,6 @@ table tr:nth-child(2) th {
   }
 }
 
-/* Flex custom utilities 
-------------------------------------- */
-.flex-basis-auto {
-  flex-basis: auto;
-}
-
-.flex-basis-100 {
-  flex-basis: 100%;
-}
-
-@include at-media(mobile-lg) {
-  .mobile-lg__flex-basis-100 {
-    flex-basis: 100%;
-  }
-
-  .mobile-lg__flex-basis-auto {
-    flex-basis: auto;
-  }
-
-  .mobile-lg__flex-align-center {
-    align-items: center;
-  }
-  
-}
-
-@include at-media(tablet) {
-  .tablet__flex-justify-start {
-    justify-content: flex-start;
-  }
-}
 
 /* Wind direction icon transformations
 ------------------------------------- */
@@ -214,19 +173,6 @@ svg[data-wind-direction] {
   transform-origin: center;
 }
 
-/* Unstyle list utilities 
-------------------------------------- */
-.usa-list--unstyled .li-margin-bottom-1 {
-  margin-bottom: units(1);
-}
-
-/* Focus ring offset utility
-------------------------------------- */
-.focus-offset-205 {
-  &:focus {
-    outline-offset: units(2.5);
-  }
-}
 
 /* Touchpoints button overrides
 ------------------------------------- */
@@ -249,39 +195,3 @@ svg[data-wind-direction] {
 #weather-story-content h3 {
     font-weight: normal;
 }
-
-
-/* Custom unstyle button utilities
-------------------------------------- */
-.wx-button--unstyled-light {
-  color: white;
-
-  &:visited {
-    color: white;
-  }
-
-  &:hover {
-    color: color("primary-lighter");
-  }
-
-  &:active {
-    color: color("accent-cool-lighter");
-  }
-}
-
-/* Custom width responsive utilities
-------------------------------------- */
-.tablet__maxw10 {
-  @include at-media("tablet") {
-    @include u-maxw(10);
-  }
-}
-
-
-/* Custom isolation utilities
-------------------------------------- */
-.isolation-isolate {
-  isolation: isolate;
-}
-
-
