@@ -27,7 +27,7 @@
             </th>
             <td>
                 {% if content.humidity == 0 %}
-                    {{  "N/A" | t}}
+                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
                     {{  content.humidity }}%
                 {% endif %}
@@ -40,7 +40,7 @@
             </th>
             <td>
                 {% if content.dewpoint is same as (null) %}
-                    {{  "N/A" | t}}
+                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
                     {{  content.dewpoint }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
                 {% endif %}
@@ -53,7 +53,7 @@
             </th>
             <td>
                 {% if content.visibility is same as (null) %}
-                    {{  "N/A" | t}}
+                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
                     {{  content.visibility }} {{ "miles" | t }}
                 {% endif %}
@@ -66,9 +66,9 @@
             </th>
             <td>
                 {% if content.pressure is same as (null) %}
-                    {{  "N/A" | t}}
+                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
-                    {{  "@psi in (@mbar mb)" | t({ "@psi": content.pressure.psi, "@mbar": content.pressure.mbar })}}
+                    {{  "@mercury_inches in (@mbar&nbsp;mb)" | t({ "@mercury_inches": content.pressure.mercury_inches, "@mbar": content.pressure.mbar })}}
                 {% endif %}
             </td>
         </tr>

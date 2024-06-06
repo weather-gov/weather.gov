@@ -5,10 +5,11 @@
 .usa-table.observation-table {
   td,
   th {
-    padding-left: 0;
     vertical-align: top;
-    padding-top: units(1) units(4) units(1) inherit;
+    padding: units(1) units(4) units(0.5) inherit;
   }
+
+  th { padding-left: 0; }
 
   tr:first-of-type > td {
     border-top: none;
@@ -20,4 +21,5 @@
   }
 
   margin-top: 0;
+  line-height: line-height('body', 2);
 }
