@@ -1,5 +1,36 @@
 @use "uswds-core" as *;
 
+/* AlertDetails Overrides
+-------------------------------------- */
+weathergov-alerts {
+  .usa-prose h4 {
+    font-weight: normal !important;
+    margin-top: units(3);
+  }
+
+  .usa-prose h4 + p {
+    margin-top: units(0.5);
+  }
+
+  .usa-prose > ul {
+    // align bullet with the text
+    padding-left: 2ch;
+  }
+}
+
+/* AlertList Overrides
+-------------------------------------- */
+.usa-alert__body a {
+  color: color("primary");
+
+  &:focus,
+  &:hover {
+    color: color("primary-dark");
+  }
+}
+
+/* Alert Link (table and daily overview)
+-------------------------------------- */
 .wx-alert-link {
   background-color: color("accent-warm-lightest");
   border: 1px solid color("accent-warm-lighter");
@@ -26,3 +57,4 @@
     fill: color("accent-warm-dark");
   }
 }
+

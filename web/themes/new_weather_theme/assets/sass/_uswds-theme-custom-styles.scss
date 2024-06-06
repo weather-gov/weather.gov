@@ -59,35 +59,6 @@ p {
   @include u-line-height("body", 4)
 }
 
-/* AlertDetails Overrides
--------------------------------------- */
-weathergov-alerts {
-  .usa-prose h4 {
-    font-weight: normal !important;
-    margin-top: units(3);
-  }
-
-  .usa-prose h4 + p {
-    margin-top: units(0.5);
-  }
-
-  .usa-prose > ul {
-    // align bullet with the text
-    padding-left: 2ch;
-  }
-}
-
-/* AlertList Overrides
--------------------------------------- */
-.usa-alert__body a {
-  color: color("primary");
-
-  &:focus,
-  &:hover {
-    color: color("primary-dark");
-  }
-}
-
 /* Current Conditions
 ------------------------------------- */
 .current-conditions-temp {
