@@ -59,84 +59,6 @@ p {
   @include u-line-height("body", 4)
 }
 
-/* Current Conditions
-------------------------------------- */
-.current-conditions-temp {
-  // Custom size not in typecale
-  font-size: units(5) + units(0.5);
-}
-
-/* Hourly Forecast Block Overrides
--------------------------------------- */
-.hourly-forecast-block ol > li {
-  @include u-margin-bottom(3);
-}
-
-table tr:first-child th,
-table tr:nth-child(2) th {
-  border-top: none;
-}
-
-/* Daily Forecast Block Overrides
-------------------------------------- */
-.daily-forecast-block ol > li {
-  @include u-margin-bottom(3);
-}
-
-/* Day/Night marker line utility
-------------------------------------- */
-.line-before {
-  &::before {
-    content: "";
-    top: units(-1);
-    width: units(5);
-    position: relative;
-    display: block;
-  }
-}
-
-.line-before--yellow {
-  &::before {
-    border-top: 2px solid color("yellow-20");
-  }
-}
-
-.line-before--indigo {
-  &::before {
-    border-top: 2px solid color("secondary-darkest");
-  }
-}
-
-.line-before--midnight-indigo {
-  &::before {
-    border-top: 2px solid color("secondary-darker");
-  }
-}
-
-// TODO: Remove `line-after`s if stays unused, testing out different visual markers
-.line-after {
-  &::after {
-    content: "";
-    top: calc(units(-1) - units("2px")); // align with word center
-    left: units(5) + units(1.5); // icon size + margin-right
-    width: calc(100% - units(8)); // width - margins
-    position: relative;
-    display: block;
-  }
-}
-
-.line-after--yellow {
-  &::after {
-    border-top: 2px solid color("yellow-20");
-  }
-}
-
-.line-after--indigo {
-  &::after {
-    border-top: 2px solid color("secondary-darkest");
-  }
-}
-
 
 /* Wind direction icon transformations
 ------------------------------------- */
@@ -161,8 +83,3 @@ svg[data-wind-direction] {
     }
 }
 
-/* Weather story overrides
-------------------------------------- */
-#weather-story-content h3 {
-    font-weight: normal;
-}
