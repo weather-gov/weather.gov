@@ -169,6 +169,20 @@ trait AlertTrait
                 $this->dataLayer,
             );
 
+            // See if there is place information from the alert description.
+            $output->alertAreas = AlertUtility::getPlacesFromAlertDescription(
+                $alert,
+            );
+            if ($output->alertAreas !== false) {
+                // If there is county area text, strip it from the alert
+                // description
+                $output->description = preg_replace(
+                    "/\n\n.+?this watch includes \d+ counties\n.*?this includes the cities of.+(\n\n|$)/sim",
+                    "",
+                    $output->description,
+                );
+            }
+
             $output->description = self::tryParsingDescriptionText(
                 $output->description,
             );

@@ -471,4 +471,140 @@ class AlertUtility
 
         return $polygon;
     }
+
+    public static function getPlacesFromAlertDescription($alert)
+    {
+        $description = $alert->properties->description;
+        $matches = [];
+
+        // If the alert description has fine-grained location information, there
+        // will be a line that starts with:
+        //
+        // THIS [WARNING | WATCH | WHATEVER] INCLUDES 13 COUNTIES
+        //
+        // So if we have a line that matches, we should try parsing it.
+        preg_match("/INCLUDES \d+ COUNTIES/sim", $description, $matches);
+
+        if (count($matches) > 0) {
+            $startToken = $matches[0];
+            $matches = [];
+
+            $startIndex = strpos($description, $startToken);
+
+            // First get the regions of the covered states. This will be things
+            // like "Northwest Nebraska". This will create two matches: one for
+            // the entire line and another for just the region area name.
+            $countyAreaMatches = [];
+            preg_match_all(
+                "/IN (.+)\n/",
+                $description,
+                $countyAreaMatches,
+                0,
+                $startIndex,
+            );
+
+            // The match array will have 0 or 2 elements. The 0th and 1th index
+            // will refer to the list of lines indicating regions and the list
+            // of region names, respectively. If the match array is empty, fall
+            // back to county an empty array to avoid errors.
+            $countyAreaCount = count($countyAreaMatches[0] ?? []);
+
+            if ($countyAreaCount > 0) {
+                $countyAreas = [];
+
+                for ($i = 0; $i < $countyAreaCount; $i += 1) {
+                    $startToken = $countyAreaMatches[0][$i];
+                    $countyArea = $countyAreaMatches[1][$i];
+
+                    $countiesStartIndex =
+                        strpos($description, $startToken) + strlen($startToken);
+
+                    // The list of counties begins where the region name ends
+                    // and continues until either a pair of newlines OR the end
+                    // of the text.
+                    $counties = [];
+                    preg_match(
+                        "/(.+?)(\n\n|$)/sim",
+                        $description,
+                        $counties,
+                        0,
+                        $countiesStartIndex,
+                    );
+
+                    // The counties are delimitted by multiple spaces, so replace
+                    // 2 or more spaces with a single comma. The county list also
+                    // spans multiple lines, so replace newlines with commas as
+                    // well. Finally, split the list on commas to get the
+                    // individual items.
+                    $counties = explode(
+                        ",",
+                        preg_replace(
+                            "/\n/",
+                            ",",
+                            preg_replace("/\s{2,}/", ",", trim($counties[1])),
+                        ),
+                    );
+
+                    // We only want uppercase words. We don't want to scream at
+                    // people. Also take this opportunity to trim off extraneous
+                    // whitespace.
+                    $countyAreas[] = [
+                        "area" => ucwords(strtolower($countyArea)),
+                        "counties" => array_map(function ($county) {
+                            return ucwords(strtolower(trim($county)));
+                        }, $counties),
+                    ];
+                }
+
+                $cities = [];
+
+                // When there is this particularly formatted location information
+                // in the alert description, there is also sometimes a list of
+                // cities. So let's look for those, too.
+                preg_match(
+                    "/this includes the cities of(.+)(\n\n|$)/sim",
+                    $description,
+                    $matches,
+                    0,
+                    $startIndex,
+                );
+
+                if (count($matches) > 0) {
+                    // The list of cities may be grammatically correct and end
+                    // with an "and" before the last item. We don't actually
+                    // care about that, so remove it if it's there.
+                    $cityList = preg_replace(
+                        "/\sand\s/i",
+                        "",
+                        trim($matches[1]),
+                    );
+
+                    // Cites are delimitted by commas and a single city can span
+                    // multiple lines (like "St. Louis" where perhaps the "St."
+                    // is on one line and "Louis" is on the other). So, replace
+                    // newlines with spaces.
+                    $cityList = preg_replace("/\n/", " ", $cityList);
+
+                    // Now split the list on commas.
+                    $cityList = explode(",", str_replace(".", "", $cityList));
+
+                    // And now format it.
+                    $cities = array_map(function ($city) {
+                        return ucwords(strtolower(trim($city)));
+                    }, $cityList);
+                }
+
+                $areas = ["countyAreas" => $countyAreas];
+                if (count($cities) > 0) {
+                    $areas["cities"] = $cities;
+                }
+
+                return $areas;
+            }
+        }
+
+        // If we're here, we don't recognize any special location information,
+        // so return false so we don't do any other processing elsewhere.
+        return false;
+    }
 }

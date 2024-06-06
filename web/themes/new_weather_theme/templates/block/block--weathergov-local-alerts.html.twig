@@ -25,11 +25,11 @@
             {{ "Issued by @sender" | t({ "@sender": alert.senderName }) }}
           </p>
 
-          <!--
-          We don't translate alert descriptions for now. There is a larger effort to
-          do those translations in realtime and we will try to hook into that when the
-          time comes. For now... we can't really do anything.
-          -->
+          {#
+            We don't translate alert descriptions for now. There is a larger
+            effort to do those translations in realtime and we will try to hook
+            into that when the time comes. For now... we can't really do anything.
+          #}
           {% for element in alert.description %}
             {% if element.type == "heading" %}
               <h4 class="visual-h3 text-normal text-primary-dark">{{ element.text | capitalize }}</h4>
@@ -56,12 +56,51 @@
             {{ alert.instruction | nl2br }}
           </p>
           {% endif %}
-          <h4 class="visual-h3 text-normal text-primary-dark">{{ "Areas impacted" |t }}</h4>
-          <ul class="usa-list {%- if alert.areaDesc | length > 7 %} wx-col-2 {%- endif -%}">
+
+          {#
+            Some alerts come with location information in the description text
+            in a common text formatting. In those cases, the location information
+            is lists of counties by region of the state, and sometimes a list of
+            impacted cities as well. When we have that more fine-grained data,
+            we will display it.
+          #}
+          {% if alert.alertAreas != false %}
+            {% for area in alert.alertAreas.countyAreas %}
+              <h4 class="visual-h3 text-normal text-primary-dark">
+                {{ "Counties in" | t }} {{ area.area }}
+              </h4>
+              <ul class="usa-list {%- if area.counties | length > 7 %} wx-col-2 {%- endif -%}">
+                {%  for county in area.counties %}
+                  <li class="">{{ county }}</li>
+                {% endfor %}
+              </ul>
+            {% endfor %}
+            {% if alert.alertAreas.cities %}
+              <h4 class="visual-h3 text-normal text-primary-dark">
+                {{ "Including these cities" | t }} {{ area.area }}
+              </h4>
+              <ul class="usa-list {%- if alert.alertAreas.cities | length > 7 %} wx-col-2 {%- endif -%}">
+
+              {% for city in alert.alertAreas.cities %}
+                <li class="">{{ city }}</li>
+              {% endfor %}
+              </ul>
+            {% endif %}
+
+          {#
+            If the alert doesn't have that location information in the description
+            text, we can use the list of impacted areas provided by AWIPS. This
+            list is based on the alert polygon drawn by a forecaster, and then
+            AWIPS identifies the areas.
+          #}
+          {% else %}
+            <h4 class="visual-h3 text-normal text-primary-dark">{{ "Areas impacted" |t }}</h4>
+            <ul class="usa-list {%- if alert.areaDesc | length > 7 %} wx-col-2 {%- endif -%}">
               {%  for areaName in alert.areaDesc %}
                 <li class="">{{ areaName }}</li>
               {% endfor %}
             </ul>
+          {% endif %}
 
           <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
             <div class="grid-container padding-0 isolation-isolate grid-col-12">
