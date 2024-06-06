@@ -67,19 +67,4 @@ svg[data-wind-direction] {
 }
 
 
-/* Touchpoints button overrides
-------------------------------------- */
-@include at-media(mobile) {
-    .viewpoints-button {
-        right: unset;
-        width: 100vw;
-    }
-}
-
-@include at-media(tablet-lg) {
-    .viewpoints-button {
-        right: units(3);
-        width: unset;
-    }
-}
 
