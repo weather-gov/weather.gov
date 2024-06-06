@@ -1,0 +1,25 @@
+@use "uswds-core" as *;
+
+/* Observation table overrides
+------------------------------- */
+.usa-table.observation-table {
+  td,
+  th {
+    vertical-align: top;
+    padding: units(1) units(4) units(0.5) inherit;
+  }
+
+  th { padding-left: 0; }
+
+  tr:first-of-type > td {
+    border-top: none;
+  }
+
+  tr:last-of-type > td,
+  tr:last-of-type > th {
+    border-bottom: none;
+  }
+
+  margin-top: 0;
+  line-height: line-height('body', 2);
+}
