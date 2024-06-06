@@ -49,7 +49,7 @@ describe("Hourly forecast table tests", () => {
       cy.visit("/point/34.749/-92.275#daily");
       cy.get("#daily ol li:first-child wx-hourly-toggle").click();
       cy.get(
-        `#daily ol li:first-child wx-hourly-table tr[data-row-name="alert"]:nth-child(2) .hourly-table__alert`,
+        `#daily ol li:first-child wx-hourly-table tr[data-row-name="alert"]:nth-child(2) .wx-alert-link`,
       ).click();
 
       cy.get("#alerts").should("be.visible");

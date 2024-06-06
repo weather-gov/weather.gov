@@ -7,16 +7,8 @@
       <td colspan="{{ alertInfo.periodIndex }}"></td>
     {% endif %}
     <td colspan="{{alertInfo.duration}}">
-      <a class="hourly-table__alert" href="#alert_{{alertInfo.alert.alertId}}">
-        <div class="display-flex">
-          <div class="width-3 height-3 margin-right-05">
-            <svg role="img" aria-hidden="true" class="width-full height-full">
-              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/uswds/sprite.svg#warning" }}"></use>
-            </svg>
-          </div>
-          {{alertInfo.alert.event}}
-        </div>
-      </a>
+      {% include "@new_weather_theme/partials/alert-link.html.twig"
+         with { alertID: alertInfo.alert.alertId, alertType: alertInfo.alert.event } %}
     </td>
     {% if remainingCount > 0 %}
       <td colspan="{{ remainingCount }}"></td>
