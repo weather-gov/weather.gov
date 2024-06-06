@@ -1,0 +1,76 @@
+<table class="usa-table usa-table--borderless observation-table border-top-1px border-base-light tablet:margin-bottom-0 width-full">
+    <tbody>
+        {# WIND #}
+        <tr class="wx-wind-speed">
+            <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Wind" | t }}
+            </th>
+            <td>
+                {% include '@new_weather_theme/partials/wind.html.twig' with { wind: content.wind } %}
+            </td>
+        </tr>
+        {# GUSTS #}
+        {%  if content.gusts is not same as (null) %}
+            <tr class="wx-gusts">
+                <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                    {{ "Gusts" | t }}
+                </th>
+                <td>
+                    {{ content.gusts.speed }} {{  "mph" | t }}
+                </td>
+            </tr>
+        {% endif %}
+        {# HUMIDITY #}
+        <tr class="wx-humidity">
+            <th scope="row" class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Humidity" | t }}
+            </th>
+            <td>
+                {% if content.humidity == 0 %}
+                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
+                {% else %}
+                    {{  content.humidity }}%
+                {% endif %}
+            </td>
+        </tr>
+        {# DEWPOINT #}
+        <tr class="wx-dewpoint">
+            <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Dewpoint" | t }}
+            </th>
+            <td>
+                {% if content.dewpoint is same as (null) %}
+                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
+                {% else %}
+                    {{  content.dewpoint }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
+                {% endif %}
+            </td>
+        </tr>
+        {# VISIBILITY #}
+        <tr class="wx-visibility">
+            <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Visibility"  | t }}
+            </th>
+            <td>
+                {% if content.visibility is same as (null) %}
+                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
+                {% else %}
+                    {{  content.visibility }} {{ "miles" | t }}
+                {% endif %}
+            </td>
+        </tr>
+        {# PRESSURE #}
+        <tr class="wx-pressure">
+            <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+                {{ "Pressure" | t }}
+            </th>
+            <td>
+                {% if content.pressure is same as (null) %}
+                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
+                {% else %}
+                    {{  "@mercury_inches in (@mbar&nbsp;mb)" | t({ "@mercury_inches": content.pressure.mercury_inches, "@mbar": content.pressure.mbar })}}
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
