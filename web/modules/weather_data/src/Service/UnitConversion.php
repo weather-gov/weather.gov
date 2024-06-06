@@ -150,7 +150,7 @@ class UnitConversion
         $inPa = $pressure->unitCode == "wmoUnit:Pa";
 
         if ($inPsi) {
-            return $rawValue * 0.0001450377;
+            return $rawValue * 0.0002953;
         } else {
             return $rawValue * 0.01;
         }
