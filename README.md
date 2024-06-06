@@ -22,7 +22,7 @@ Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect the
 
 ![5 steps as an analogy of the Weather.gov 2.0 phases. We are on the Minimal Viable Product phase and entering the Initial Operating Capability (IOC) phase in 2025 then after that in 2026 is Additional Capability and Training phase and lastly in 2027-2028 is the Fully Operational and Decommission "Legacy" weather.gov phase](/docs/img/Weather.gov-2.0-stairs.png)
 
-## Roadmap
+## Product Roadmap
 - [Summary](https://github.com/weather-gov/weather.gov/blob/main/docs/product/roadmap.md)
 - [Milestone planning chart](https://github.com/orgs/weather-gov/projects/2/views/18)
 
