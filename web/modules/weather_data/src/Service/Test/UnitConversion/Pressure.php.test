@@ -38,13 +38,13 @@ final class PressureUnitConversionTest extends TestCase
     }
 
     /**
-     * Test from Pa to PSI
+     * Test from Pa to Mercury
      * @group unit
      * @group units-utility
      */
     public function testPaToPsi(): void
     {
-        $expected = 0.0021756;
+        $expected = 0.0044295;
         $pressure = (object) [
             "unitCode" => "wmoUnit:Pa",
             "value" => 15,
