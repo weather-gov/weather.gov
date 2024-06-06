@@ -177,7 +177,7 @@ trait ObservationsTrait
                     UnitConversion::getPressureScalar($pressure, false),
                     2, // round to 2 decimal places
                 ),
-                "psi" => round(
+                "mercury_inches" => round(
                     UnitConversion::getPressureScalar($pressure),
                     2, // round to 2 decimal places
                 ),
