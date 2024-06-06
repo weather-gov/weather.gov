@@ -50,24 +50,6 @@ $expand-duration: 250ms;
   }
 
   // Using class to overide usa-table styles
-  .hourly-table__alert {
-    background-color: color("accent-warm-lightest");
-    border: 1px solid color("accent-warm-lighter");
-    display: block;
-    padding: units(1) units(1.5);
-    text-decoration: none;
-
-    &:visited,
-    &:active,
-    &:link {
-      color: initial;
-    }
-
-    svg {
-      fill: color("accent-warm-dark");
-    }
-  }
-
   tr[data-row-name="alert"] td,
   tr[data-row-name="alert"] th {
     border: 0;

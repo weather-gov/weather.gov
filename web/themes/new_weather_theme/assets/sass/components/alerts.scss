@@ -1,0 +1,28 @@
+@use "uswds-core" as *;
+
+.wx-alert-link {
+  background-color: color("accent-warm-lightest");
+  border: 1px solid color("accent-warm-lighter");
+  padding: units(1) units(1.5);
+
+  & a {
+    color: color("primary");
+
+    &:visited {
+      color: color("primary");
+    }
+
+    &:focus,
+    &:hover {
+      color: color("primary-dark");
+    }
+    
+    &:active {
+      color: color("primary-darker");
+    }
+  }
+
+  svg {
+    fill: color("accent-warm-dark");
+  }
+}

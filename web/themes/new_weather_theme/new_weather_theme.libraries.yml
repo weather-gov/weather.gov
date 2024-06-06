@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-06-03
+  version: 2024-06-04.2
   css:
     theme:
       assets/css/styles.css: {}
@@ -36,7 +36,7 @@ location-combo-box:
     assets/js/components/combo-box.js: { preprocess: false }
         
 tabbed-nav:
-  version: 2024-03-21
+  version: 2024-05-30
   js:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
 
