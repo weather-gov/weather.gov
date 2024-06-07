@@ -11,7 +11,12 @@
     </svg>
   </div>
   <a
-    class="margin-top-05"
+    {#
+      Table cells have a set line height. Set our own line height so that we
+      know what we're working with. The margin nudges the text down a bit so it
+      vertically aligns with the icon.
+    #}
+    class="line-height-sans-1 margin-top-05"
     href="#{{ alertID is same as(null) ? "alerts" : "alert_" ~ alertID }}">
       {{ alertType }}
   </a>
