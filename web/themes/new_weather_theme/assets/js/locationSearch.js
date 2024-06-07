@@ -12,9 +12,6 @@
   };
   
   const goToLocationPage = (latitude, longitude, placename) => {
-    // Show the loader animation, if available
-    displayNavigationLoader();
-    
     // We want to redirect the user via a POST. We already have the form ready to
     // go, we just need to set its action so the browser knows where to go.
     const form = document.querySelector("form[data-location-search]");
@@ -118,6 +115,9 @@
       // If we don't know about the permission, we were already approved to use
       // it, or the user has signaled that we can ask for it... ask for it!
       if (proceed) {
+        // Show the loader animation, if available
+        displayNavigationLoader();
+
         navigator.geolocation.getCurrentPosition(
           // Success callback
           ({ coords: { latitude, longitude } }) => {
