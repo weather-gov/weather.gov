@@ -31,6 +31,8 @@ function weather_blocks_template_preprocess_default_variables_alter(
         try {
             $grid = $weatherData->getGridFromLatLon($lat, $lon);
 
+            $weatherMetadata["grid"] = $grid;
+
             $alerts = $weatherData->getAlerts(
                 $grid,
                 SpatialUtility::pointArrayToObject([$lon, $lat]),
