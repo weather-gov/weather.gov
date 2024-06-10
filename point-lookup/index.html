@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="en-US">
   <head>
+    <style type="text/css">
+      .api-call-container {
+        border: 1px solid black;
+        padding: 1em;
+      }
+    </style>
   </head>
   <body>
     <form>
@@ -9,12 +15,15 @@
           Latitude: <input type="text" id="form__lat">
         </li>
         <li>
-          Longitude: <input type="text" id="form__lat">
+          Longitude: <input type="text" id="form__lon">
         </li>
       </ul>
       <input type="submit" value="Go"></input>
 
     </form>
+
+    <div id="api_output"></div>
+
     <script async type="module" src="main.js"></script>
   </body>
 </html>
