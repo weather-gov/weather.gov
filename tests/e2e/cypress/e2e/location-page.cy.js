@@ -37,7 +37,7 @@ describe("the location page", () => {
   describe("shows n/a for unavailable data", () => {
     it("wind is null", () => {
       cy.visit("/point/33.211/-87.566");
-      cy.get(".weather-gov-current-conditions .wx-wind-speed").should(
+      cy.get(".wx-current-conditions .wx-wind-speed").should(
         "include.text",
         "N/A",
       );

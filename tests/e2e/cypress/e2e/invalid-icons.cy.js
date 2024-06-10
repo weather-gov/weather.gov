@@ -65,7 +65,7 @@ describe("Valid icon rendering double-checks", () => {
   });
 
   it("Should render an icon in the current conditions", () => {
-    cy.get("#current .weather-gov-current-conditions .wx-icon > svg").should(
+    cy.get("#current .wx-current-conditions .wx-icon > svg").should(
       "exist",
     );
   });
