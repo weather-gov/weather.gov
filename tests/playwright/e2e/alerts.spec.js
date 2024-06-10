@@ -10,17 +10,17 @@ describe("Alerts e2e tests", () => {
   });
 
   test("The correct number of alerts show on the page", async ({ page }) => {
-    const alertAccordions = await page.locator("weathergov-alerts div.usa-accordion").all();
+    const alertAccordions = await page.locator("wx-alerts div.usa-accordion").all();
     expect(alertAccordions).toHaveLength(6);
   });
 
   test("All alert accordions are open by default", async ({ page }) => {
-    const alertAccordions = await page.locator('weathergov-alerts div.usa-accordion button[aria-expanded="true"]').all();
+    const alertAccordions = await page.locator('wx-alerts div.usa-accordion button[aria-expanded="true"]').all();
     expect(alertAccordions).toHaveLength(6);
   });
 
   test("Clicking the alert accordion buttons closes them", async ({ page }) => {
-    const alertAccordions = page.locator("weathergov-alerts div.usa-accordion button");
+    const alertAccordions = page.locator("wx-alerts div.usa-accordion button");
     for(let i = 0; i < await alertAccordions.count(); i++){
       await alertAccordions.nth(i).click();
       await expect(alertAccordions.nth(i)).toHaveAttribute("aria-expanded", "false");
@@ -29,7 +29,7 @@ describe("Alerts e2e tests", () => {
 
   describe("Parsed URLs in alerts", () => {
     test("Should not find a link wrapping the non-gov url", async ({ page }) => {
-      const containingText = page.locator("weathergov-alerts").getByText("www.your-power-company.com/outages");
+      const containingText = page.locator("wx-alerts").getByText("www.your-power-company.com/outages");
       await expect(containingText).toHaveCount(1);
 
       const link = page.locator('a[href="www.your-power-company.com/outages"]');
@@ -37,7 +37,7 @@ describe("Alerts e2e tests", () => {
     });
 
     test("Should find a link wrapping the external url, and should have the correct class", async ({ page }) => {
-      const containingText = page.locator("weathergov-alerts").getByText("https://transportation.gov/safe-travels");
+      const containingText = page.locator("wx-alerts").getByText("https://transportation.gov/safe-travels");
       await expect(containingText).toHaveCount(1);
 
       const link = page.getByRole("link").filter({hasText: "https://transportation.gov/safe-travels"});
@@ -47,7 +47,7 @@ describe("Alerts e2e tests", () => {
     });
 
     test("Should find a link wrapping the inernal url, and should have the correct class", async ({ page }) => {
-      const containingText = page.locator("weathergov-alerts").getByText("https://weather.gov/your-office");
+      const containingText = page.locator("wx-alerts").getByText("https://weather.gov/your-office");
       await expect(containingText).toHaveCount(1);
 
       const link = page.getByRole("link").filter({hasText: "https://weather.gov/your-office"});

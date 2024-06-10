@@ -51,7 +51,7 @@ const waitForAlertAccordions = () => {
 
     // Traverse up the DOM tree to the nearest node that matches this selector.
     // This is our container.
-    const parent = alert.closest("weathergov-alerts > div");
+    const parent = alert.closest("wx-alerts > div");
     const button = parent.querySelector("button");
     const expanded = button.getAttribute("aria-expanded") === "true";
 
@@ -63,7 +63,7 @@ const waitForAlertAccordions = () => {
       const mutationObserver = new MutationObserver((_, observer) => {
         const expandedNow =
           alert
-            .closest("weathergov-alerts > div")
+            .closest("wx-alerts > div")
             .querySelector("button")
             .getAttribute("aria-expanded") === "true";
 
