@@ -11,6 +11,7 @@
 @use "components/preview";
 @use "components/hourly-table";
 @use "components/hourly-toggle";
+@use "components/icons";
 @use "components/radar";
 @use "components/saftey-tips";
 @use "components/location-search";
@@ -20,3 +21,4 @@
 @use "components/wx-loader";
 @use "components/obs-table";
 @use "components/touchpoints";
+@use "components/usa-identifier";

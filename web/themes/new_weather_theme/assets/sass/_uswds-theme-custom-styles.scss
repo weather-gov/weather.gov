@@ -22,25 +22,6 @@ i.e.
 
 @use "uswds-core" as *;
 
-.usa-identifier__required-links-list {
-  @include add-list-reset;
-  @include u-margin-y(0);
-
-  // Overrides the default column count set in @uswds/.../_usa-identifier.scss
-  @include at-media("desktop") {
-    column-count: 2; // default is 4
-  }
-}
-
-.icon svg {
-  height: 100%;
-  width: 100%;
-
-  path.st0 {
-    fill: color("black");
-  }
-}
-
 html,
 body {
   height: 100%;
@@ -58,13 +39,3 @@ body {
 p {
   @include u-line-height("body", 4)
 }
-
-
-/* Wind direction icon transformations
-------------------------------------- */
-svg[data-wind-direction] {
-  transform-origin: center;
-}
-
-
-
