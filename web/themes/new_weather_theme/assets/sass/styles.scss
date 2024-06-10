@@ -1,7 +1,9 @@
 @forward "uswds-theme";
 @forward "uswds";
 @forward "uswds-theme-custom-styles";
-@use "components/alerts";
+@use "components/alert-details";
+@use "components/alert-link";
+@use "components/alert-list";
 @use "components/beta-banner";
 @use "components/current-conditions";
 @use "components/daily";
