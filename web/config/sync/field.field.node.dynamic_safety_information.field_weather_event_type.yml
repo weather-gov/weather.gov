@@ -6,12 +6,18 @@ dependencies:
     - field.storage.node.field_weather_event_type
     - node.type.dynamic_safety_information
     - taxonomy.vocabulary.weather_event_types
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: true
+    unique_text: 'There can only be one set of safety information per event type. '
 id: node.dynamic_safety_information.field_weather_event_type
 field_name: field_weather_event_type
 entity_type: node
 bundle: dynamic_safety_information
 label: 'Event type'
-description: ''
+description: 'You will only be able to create safety information for an event type that does not already have safety information. '
 required: true
 translatable: false
 default_value: {  }

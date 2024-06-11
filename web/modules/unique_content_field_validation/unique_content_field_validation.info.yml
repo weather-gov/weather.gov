@@ -1,0 +1,6 @@
+name: 'Unique content field validation'
+description: 'Validate the uniqueness of the entities fields.'
+type: module
+core_version_requirement: ^10
+dependencies:
+  - drupal:node
