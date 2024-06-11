@@ -18,7 +18,7 @@ Anyone can understand the impact of impending weather, especially when making de
 | Timing | Epics or User Groups|
 | :----------- | :-------------|
 | Currently | <ol><li>Local Expertise</li><li>Local Engagement</li><li>Prototype Translations</li><li>Content Governance and Information Architecture</li><li>Iterate Forecaster Experience (CMS)</li></ol> |
-| Over the next 6 months | <ol><li>Visualizing data and trends</li><li>Real-time data (e.g. satellite)</li><li>County/State Views</li><li>Regional/National Views (FEMA)</li>><li>Site strategy (Centers)</li></ol> |
+| Over the next 6 months | <ol><li>Visualizing data and trends</li><li>Real-time data (e.g. satellite)</li><li>County/State Views</li><li>Regional/National Views (FEMA)</li><li>Site strategy (Centers)</li></ol> |
 | By Sept ‘25 | <ol><li>Regional/National Views (FEMA)</li><li>Site strategy (Centers)</li><li>Marine</li><li>Fire</li></ol> |
 | By Sept ‘26 | <ol><li>**Site is experimental and available to preview**</li><li>WFO / Forecaster onboarding and training)</li><li>Water</li><li>Media</li><li>Notifications - Discovery</li><li>Climate</li><li>DOT</li><li>Hazard-specific Features</li></ol> |
 | Oct ‘26 and Beyond | <ol><li>**Site is operational, replacing current weather.gov**</li><li>Local content and tool migration</li><li>Professional Mets</li><li>Parks and Rec</li><li>Private Industry</li><li>Aviation</li><li>Military</li><li>International</li><li>Research</li></ol> |
