@@ -6,21 +6,23 @@ use Drupal\Core\Url;
 
 function weathergov_admin_form_node_stay_on_editor($form, $formState)
 {
-    // Don't redirect anywhere, just stay on the edit page. This is required
-    // because it must be called after the submit. If you call this in the
-    // form_alter hook, you're setting temporary variables that just get rebuilt
-    // from defaults on submission.
-    $formState->disableRedirect();
+    // Redirect to the edit form. We need to actually follow the redirect so we
+    // don't re-load the prior form state.
+    $nodeID = $formState->getFormObject()->getEntity()->id();
+    $editForm = Url::fromUri("base:node/$nodeID/edit");
+    $formState->setRedirectUrl($editForm);
 }
 
 function weathergov_admin_form_node_form_alter(
     array &$form,
     FormStateInterface $formState,
 ) {
+    $isPreviewed = $formState->getStorage()["has_been_previewed"];
+
     // These are the button values we want for new content. If this is a
     // revision, we'll change the button values below.
     $form["actions"]["submit"]["#value"] = "Save as draft";
-    $form["actions"]["preview"]["#value"] = "Preview and publish";
+    $form["actions"]["submit"]["#attributes"]["disabled"] = !$isPreviewed;
 
     // Saving the form should keep us on the editor. We can add a form
     // submission handler of our own to the stack.
@@ -33,10 +35,16 @@ function weathergov_admin_form_node_form_alter(
 
     $node = $formState->getFormObject()->getEntity();
 
+    $weight = 1000;
+    if (array_key_exists("delete", $form["actions"])) {
+        if (array_key_exists("#weight", $form["actions"]["delete"])) {
+            $weight = $form["actions"]["delete"]["#weight"] - 1;
+        }
+    }
+
     // If the node isn't new, then we're creating a revision.
     if (!$node->isNew()) {
         $form["actions"]["submit"]["#value"] = "Save updates as draft";
-        $form["actions"]["preview"]["#value"] = "Preview and publish updates";
 
         // We can't use the node we loaded previously to check if the node is
         // published. We could hypothetically check that node's moderation state
@@ -52,13 +60,6 @@ function weathergov_admin_form_node_form_alter(
             ->isPublished();
 
         if ($isPublished) {
-            $weight = 1000;
-            if (array_key_exists("delete", $form["actions"])) {
-                if (array_key_exists("#weight", $form["actions"]["delete"])) {
-                    $weight = $form["actions"]["delete"]["#weight"] - 1;
-                }
-            }
-
             $form["actions"]["unpublish"] = [
                 "#type" => "submit",
                 "#value" => "Unpublish",
@@ -66,8 +67,59 @@ function weathergov_admin_form_node_form_alter(
                 "#submit" => ["weathergov_form_node_unpublish"],
                 "#weight" => $weight,
             ];
+        } else {
+            $form["actions"]["publish"] = [
+                "#type" => "submit",
+                "#value" => "Publish",
+                "#name" => "publish",
+                "#submit" => ["weathergov_form_node_publish"],
+                "#weight" => $weight,
+                "#attributes" => ["disabled" => !$isPreviewed],
+            ];
         }
+    } else {
+        $form["actions"]["publish"] = [
+            "#type" => "submit",
+            "#value" => "Publish",
+            "#name" => "publish",
+            "#submit" => ["weathergov_form_node_publish"],
+            "#weight" => $weight,
+            "#attributes" => ["disabled" => !$isPreviewed],
+        ];
     }
+
+    if (!$isPreviewed) {
+        $form["previewRequirement"]["notice"] = [
+            "#type" => "markup",
+            "#markup" =>
+                "Content must be previewed before it can be saved or published.",
+        ];
+    }
+}
+
+function weathergov_form_node_publish($form, &$formState)
+{
+    $node = $formState->getFormObject()->getEntity();
+    $node->set("moderation_state", "published");
+    $node->save();
+
+    $nodeID = $node->id();
+
+    $type = $node->type->entity->label();
+    $title = $node->get("title")->value;
+
+    $url = Url::fromUri("base:node/$nodeID");
+    $url = $url->toString();
+
+    // Add the pretty message.
+    \Drupal::service("messenger")->addMessage(
+        Markup::create("Published $type <a href=\"$url\">$title</a>"),
+    );
+
+    weathergov_admin_form_node_stay_on_editor($form, $formState);
+    // Go to the content dashboard
+    // $contentDashboard = Url::fromUri("base:admin/content");
+    // $formState->setRedirectUrl($contentDashboard);
 }
 
 function weathergov_form_node_unpublish($form, &$formState)
@@ -96,8 +148,10 @@ function weathergov_form_node_unpublish($form, &$formState)
         Markup::create("Unpublished $type <a href=\"$url\">$title</a>"),
     );
 
-    // Stay on the editor.
-    $formState->disableRedirect(true);
+    weathergov_admin_form_node_stay_on_editor($form, $formState);
+    // Go to the content dashboard.
+    // $contentDashboard = Url::fromUri("base:admin/content");
+    // $formState->setRedirectUrl($contentDashboard);
 }
 
 function weathergov_admin_form_alter(&$form, $form_state, $form_id)
