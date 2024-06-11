@@ -25,14 +25,14 @@ const setupMap = (alert) => {
   L.geoJSON(geoJSON, { style: { color: "#F00", opacity: 0.6 } }).addTo(map);
 
   const locationIcon = L.divIcon({
-    className: "weathergov-location-marker",
+    className: "wx-location-marker",
   });
   L.marker([lat, lon], { icon: locationIcon, interactive: false }).addTo(map);
 
   // Hide the location marker from screen readers and remove it from the tab
   // order. It's not interactive, so there's no reason it should be focusable.
   const locationMarker = document.querySelector(
-    `#wx_alert_map_${alertId} .weathergov-location-marker`,
+    `#wx_alert_map_${alertId} .wx-location-marker`,
   );
   if (locationMarker) {
     locationMarker.setAttribute("aria-hidden", "true");
