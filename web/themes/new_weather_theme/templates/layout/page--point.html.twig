@@ -48,17 +48,17 @@
 
       <div class="bg-base-lightest padding-top-3 padding-bottom-8">
         {% if weather.alerts %}
-        <div class="tab-container focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
+        <div class="wx-tab-container focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
           {{ drupal_block("weathergov_local_alerts") }}
         </div>
         {% endif %}
 
-        <div class="tab-container focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
+        <div class="wx-tab-container focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
           {{ drupal_block("weathergov_current_conditions") }}
           {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
         </div>
 
-         <div class="tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
+         <div class="wx-tab-container focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
           <h2 class="usa-sr-only">7 days</h2>
           {{ drupal_block("weathergov_weather_story") }}
 

@@ -233,7 +233,7 @@ describe("<wx-tabbed-nav> component tests", () => {
       await selectedTab.press("Tab");
 
       const focused = await page.locator(":focus").first();
-      await expect(focused).toHaveClass(/\btab-container\b/);
+      await expect(focused).toHaveClass(/\bwx-tab-container\b/);
       await expect(await focused.getAttribute("id")).toBe("alerts");
     });
 
