@@ -26,10 +26,10 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.9.1",
     "@playwright/test": "^1.44.1",
-    "@types/node": "^20.14.1",
+    "@types/node": "^20.14.2",
     "axe-core": "^4.9.1",
     "chai": "^5.1.1",
-    "cypress": "^13.10.0",
+    "cypress": "^13.11.0",
     "cypress-axe": "^1.5.0",
     "cypress-plugin-tab": "^1.0.5",
     "dayjs": "^1.11.11",
@@ -43,7 +43,7 @@
     "mocha": "^10.4.0",
     "mocha-cli": "^1.0.1",
     "playwright": "^1.44.1",
-    "prettier": "^3.3.0",
+    "prettier": "^3.3.1",
     "sinon": "^18.0.0",
     "stylelint": "^16.6.1",
     "stylelint-config-standard-scss": "^13.0.0",
@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "@prettier/plugin-php": "^0.22.2",
-    "mariadb": "^3.3.0",
+    "mariadb": "^3.3.1",
     "shapefile": "^0.6.6"
   }
 }
