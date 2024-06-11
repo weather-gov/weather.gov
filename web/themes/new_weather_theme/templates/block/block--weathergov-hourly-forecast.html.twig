@@ -7,7 +7,7 @@
   </div>
 </div>
 <div class="grid-container padding-x-2"> 
-  <div class="hourly-forecast-block margin-x-neg-2 tablet:margin-x-0">
+  <div class="wx-hourly-forecast-block margin-x-neg-2 tablet:margin-x-0">
     {% if content.error %}
       {% set message = "There was an error loading the hourly forecast." | t %}
       {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
