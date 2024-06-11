@@ -97,8 +97,23 @@ trait DailyForecastTrait
         } else {
             $formattedPeriod["timeLabel"] = "6PM-6AM";
         }
-
+        
         return $formattedPeriod;
+    }
+
+    /**
+     * Determine if we will only show the low temp for 'today' period
+     *
+     * @return boolean
+     */
+    public function shouldUseLowTempToday($timezone)
+    {
+        // If it is after 6pm local time, we only want to
+        // display the low temp for the period
+        $tz = new \DateTimeZone($timezone);
+        $currentTime = new \DateTimeImmutable("now", $tz);
+        $limit = $currentTime->setTime(18, 0);
+        return $currentTime > $limit;
     }
 
     /**
@@ -265,6 +280,7 @@ trait DailyForecastTrait
             "todayAlerts" => array_values($todayAlerts),
             "detailed" => array_values($detailedPeriodsFormatted),
             "precipitationPeriods" => array_values($precipPeriods),
+            "useOnlyLowForToday" => $this->shouldUseLowTempToday($timezone)
         ];
     }
 }

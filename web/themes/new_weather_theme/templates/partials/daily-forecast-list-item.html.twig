@@ -27,7 +27,7 @@ only be a nighttime period.
           </h4>
 
           <div class="display-flex">
-          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods } %}
+          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods, 'useOnlyLowForToday': useOnlyLowForToday  } %}
           </div>
         </div>
 
