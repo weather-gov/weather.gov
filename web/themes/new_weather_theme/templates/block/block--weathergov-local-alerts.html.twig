@@ -32,7 +32,7 @@
           -->
           {% for element in alert.description %}
             {% if element.type == "heading" %}
-              <h4 class="visual-h3 text-normal text-primary-dark">{{ element.text | capitalize }}</h4>
+              <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ element.text | capitalize }}</h4>
             {% elseif element.type == "paragraph" %}
               <p>
                 {% for node in element.nodes %}
@@ -51,12 +51,12 @@
           {% endfor %}
 
           {% if alert.instruction %}
-          <h4 class="visual-h3 text-normal text-primary-dark">{{ "What to do" | t }}</h4>
+          <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ "What to do" | t }}</h4>
           <p>
             {{ alert.instruction | nl2br }}
           </p>
           {% endif %}
-          <h4 class="visual-h3 text-normal text-primary-dark">{{ "Areas impacted" |t }}</h4>
+          <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ "Areas impacted" |t }}</h4>
           <ul class="usa-list {%- if alert.areaDesc | length > 7 %} wx-col-2 {%- endif -%}">
               {%  for areaName in alert.areaDesc %}
                 <li class="">{{ areaName }}</li>
