@@ -19,7 +19,7 @@ table tr:nth-child(2) th {
 
 /* Day/Night marker line utility
 ------------------------------------- */
-.line-before {
+.wx-line-before {
   &::before {
     content: "";
     top: units(-1);
@@ -29,19 +29,19 @@ table tr:nth-child(2) th {
   }
 }
 
-.line-before--yellow {
+.wx-line-before--yellow {
   &::before {
     border-top: 2px solid color("yellow-20");
   }
 }
 
-.line-before--indigo {
+.wx-line-before--indigo {
   &::before {
     border-top: 2px solid color("secondary-darkest");
   }
 }
 
-.line-before--midnight-indigo {
+.wx-line-before--midnight-indigo {
   &::before {
     border-top: 2px solid color("secondary-darker");
   }
