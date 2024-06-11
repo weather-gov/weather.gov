@@ -1,5 +1,10 @@
 import Formatter from "https://unpkg.com/json-formatter-js@2.5.11/dist/json-formatter.mjs";
 
+const getClientZip = async () =>
+  import("https://unpkg.com/client-zip@2.4.5/index.js");
+
+const files = [];
+
 const apiFetch = async (path) => {
   const url = `https://api.weather.gov${path}`;
 
@@ -21,12 +26,45 @@ const apiFetch = async (path) => {
   const h4 = node.querySelector("h4");
   h4.innerHTML = `${h4.innerHTML} - ${elapsed}ms`;
 
+  const parserUrl = new URL(url);
+  const pieces = [
+    parserUrl.pathname.replace(/\/$/, ""),
+    parserUrl.search.replace("?", "__"),
+    ".json",
+  ];
+
+  const name = pieces.join("");
+  files.push({ name, input: JSON.stringify(json, null, 2) });
+
   node.appendChild(content);
   return json;
 };
 
+const download = async () => {
+  const { downloadZip } = await getClientZip();
+
+  const zip = await downloadZip(files).blob();
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(zip);
+  link.download = `bundle_${Date.now()}.zip`;
+  link.click();
+  link.remove();
+
+  setTimeout(() => {
+    URL.revokeObjectURL(link.href);
+  }, 100);
+};
+
 const main = async () => {
+  document
+    .querySelector("button[download]")
+    .addEventListener("click", download);
+
+  files.length = 0;
+
   document.querySelector("form").addEventListener("submit", async (e) => {
+    document.querySelector("button[download]").setAttribute("disabled", "true");
     e.preventDefault();
 
     const lat = +document.getElementById("form__lat").value;
@@ -92,6 +130,8 @@ const main = async () => {
       const elapsed = performance.now() - start;
       document.getElementById("api_metadata").innerHTML =
         `Total time: ${elapsed} ms - ${grid.wfo} / ${grid.gridX} / ${grid.gridY} / ${grid.state}`;
+
+      document.querySelector("button[download]").removeAttribute("disabled");
     }
   });
 };

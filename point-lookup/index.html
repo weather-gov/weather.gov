@@ -10,6 +10,10 @@
       #api_metadata {
         margin: 1em 0;
       }
+
+      button[disabled] {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -24,6 +28,8 @@
       </ul>
       <input type="submit" value="Go"></input>
     </form>
+
+    <button download disabled="true">Download bundle</button>
 
     <div id="api_metadata">
 
