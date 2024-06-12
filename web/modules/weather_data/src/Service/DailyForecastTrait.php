@@ -102,21 +102,6 @@ trait DailyForecastTrait
     }
 
     /**
-     * Determine if we will only show the low temp for 'today' period
-     *
-     * @return boolean
-     */
-    public function shouldUseLowTempToday($timezone)
-    {
-        // If it is after 6pm local time, we only want to
-        // display the low temp for the period
-        $tz = new \DateTimeZone($timezone);
-        $currentTime = new \DateTimeImmutable("now", $tz);
-        $limit = $currentTime->setTime(18, 0);
-        return $currentTime > $limit;
-    }
-
-    /**
      * Get the daily forecast for a location.
      *
      * Note that the $now object should *NOT* be set. It's a dependency injection
@@ -274,13 +259,15 @@ trait DailyForecastTrait
             );
         }, $periodStartTimes);
 
+        $useOnlyLowForToday = count($todayPeriodsFormatted) == 1;
+
         return [
             "today" => array_values($todayPeriodsFormatted),
             "todayHourly" => array_values($todayHourlyDetails),
             "todayAlerts" => array_values($todayAlerts),
             "detailed" => array_values($detailedPeriodsFormatted),
             "precipitationPeriods" => array_values($precipPeriods),
-            "useOnlyLowForToday" => $this->shouldUseLowTempToday($timezone)
+            "useOnlyLowForToday" => $useOnlyLowForToday
         ];
     }
 }
