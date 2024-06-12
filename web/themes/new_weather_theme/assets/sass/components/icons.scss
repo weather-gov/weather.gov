@@ -1,0 +1,16 @@
+@use "uswds-core" as *;
+
+.icon svg {
+  height: 100%;
+  width: 100%;
+
+  path.st0 {
+    fill: color("black");
+  }
+}
+
+/* Wind direction icon transformations
+------------------------------------- */
+svg[data-wind-direction] {
+  transform-origin: center;
+}

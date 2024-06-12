@@ -1,0 +1,49 @@
+@use "uswds-core" as *;
+
+/* Daily Forecast Block Overrides
+------------------------------------- */
+.daily-forecast-block ol > li {
+  @include u-margin-bottom(3);
+}
+
+/* Hourly Forecast Block Overrides
+-------------------------------------- */
+.hourly-forecast-block ol > li {
+  @include u-margin-bottom(3);
+}
+
+table tr:first-child th,
+table tr:nth-child(2) th {
+  border-top: none;
+}
+
+/* Day/Night marker line utility
+------------------------------------- */
+.line-before {
+  &::before {
+    content: "";
+    top: units(-1);
+    width: units(5);
+    position: relative;
+    display: block;
+  }
+}
+
+.line-before--yellow {
+  &::before {
+    border-top: 2px solid color("yellow-20");
+  }
+}
+
+.line-before--indigo {
+  &::before {
+    border-top: 2px solid color("secondary-darkest");
+  }
+}
+
+.line-before--midnight-indigo {
+  &::before {
+    border-top: 2px solid color("secondary-darker");
+  }
+}
+
