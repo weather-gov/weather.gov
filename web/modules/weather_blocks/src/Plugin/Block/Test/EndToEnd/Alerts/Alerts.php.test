@@ -20,7 +20,6 @@ final class AlertsStructureTest extends EndToEndBase
     /**
      * Simply validate the data structure.
      * @group e2e
-     * @group eric
      */
     public function testAlertDataStructure(): void
     {
