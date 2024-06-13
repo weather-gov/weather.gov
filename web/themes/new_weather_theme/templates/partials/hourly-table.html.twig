@@ -25,10 +25,10 @@
     <table class="usa-table usa-table--borderless hourly-table" tabindex="0">
       <caption class="usa-sr-only">{{ "Detailed hourly weather data for @place. The rows are weather variables, the columns are hours." | t({ "@place": for }) }}</caption>
       <tr data-row-name="time">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
+        <th scope="row" class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
         {% for period in hours %}
         <th scope="col">
-          <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-primary-darker">
+          <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-base-lightest">
             {{ period.time }}
           </time>
         </th>
@@ -39,7 +39,7 @@
       {% endif %}
       <tr data-row-name="temp">
         <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-          {{"Temp" | t}}
+          {{"Temperature" | t}}
         </th>
         {% for period in hours %}
         <td>

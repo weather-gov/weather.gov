@@ -31,7 +31,7 @@ $expand-duration: 250ms;
 .usa-table.hourly-table {
   td,
   th {
-    padding-left: 0;
+    padding-left: units("2px");
     vertical-align: top;
   }
 
@@ -48,6 +48,16 @@ $expand-duration: 250ms;
   th {
     padding-right: units(1.5);
   }
+
+  tr:nth-child(odd) td,
+  tr:nth-child(odd) th  {
+   background-color: color('base-lightest');
+  }
+
+  tr:first-of-type th {
+    background-color: color('primary-darker');
+  }
+
 
   // Using class to overide usa-table styles
   tr[data-row-name="alert"] td,
