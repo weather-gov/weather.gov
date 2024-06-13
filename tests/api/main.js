@@ -107,7 +107,6 @@ const ui = async ({ error = false } = {}) => {
 app.get("/set-now", async (req, res) => {
   config.now = req.query.t || null;
   res.redirect("/");
-  return;
 });
 
 app.get("*", async (req, res) => {

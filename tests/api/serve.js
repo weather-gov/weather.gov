@@ -30,7 +30,7 @@ const processDates = (obj, usingHourly = false) => {
     return;
   }
 
-  const now = config.now;
+  const { now } = config;
 
   // Recursively search through the object to find all values that have the
   // date:now token so we can process those into proper ISO8601 timestamps.
