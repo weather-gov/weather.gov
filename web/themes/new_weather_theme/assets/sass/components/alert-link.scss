@@ -1,5 +1,7 @@
 @use "uswds-core" as *;
 
+/* Alert Link (table and daily overview)
+-------------------------------------- */
 .wx-alert-link {
   background-color: color("accent-warm-lightest");
   border: 1px solid color("accent-warm-lighter");
