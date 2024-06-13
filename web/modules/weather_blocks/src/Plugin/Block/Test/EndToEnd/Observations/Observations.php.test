@@ -46,6 +46,13 @@ final class ObservationsStructureTest extends EndToEndBase
                     "angle" => 250,
                 ],
             ],
+            "gusts" => null,
+            "pressure" => [
+                "mercury_inches" => 30.3,
+                "mbar" => 1026.1,
+            ],
+            "dewpoint" => 22,
+            "visibility" => 10.0,
             "stationInfo" => [
                 "name" => "Birmingham, Birmingham International Airport",
                 "identifier" => "KBHM",

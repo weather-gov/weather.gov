@@ -3,7 +3,7 @@
 <div class="grid-container padding-x-2"> 
   <div class="grid-row"> 
     <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-      <weathergov-alerts class="display-block">
+      <wx-alerts class="display-block">
       {% for alert in content.alerts %}
       <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ alert.alertId }}">
         <h3 class="usa-accordion__heading font-heading-lg">
@@ -32,7 +32,7 @@
           #}
           {% for element in alert.description %}
             {% if element.type == "heading" %}
-              <h4 class="visual-h3 text-normal text-primary-dark">{{ element.text | capitalize }}</h4>
+              <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ element.text | capitalize }}</h4>
             {% elseif element.type == "paragraph" %}
               <p>
                 {% for node in element.nodes %}
@@ -51,7 +51,7 @@
           {% endfor %}
 
           {% if alert.instruction %}
-          <h4 class="visual-h3 text-normal text-primary-dark">{{ "What to do" | t }}</h4>
+          <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ "What to do" | t }}</h4>
           <p>
             {{ alert.instruction | nl2br }}
           </p>
@@ -66,7 +66,7 @@
           #}
           {% if alert.alertAreas != false %}
             {% for area in alert.alertAreas.countyAreas %}
-              <h4 class="visual-h3 text-normal text-primary-dark">
+              <h4 class="wx-visual-h3 text-normal text-primary-dark">
                 {{ "Counties in" | t }} {{ area.area }}
               </h4>
               <ul class="usa-list {%- if area.counties | length > 7 %} wx-col-2 {%- endif -%}">
@@ -103,7 +103,7 @@
           {% endif %}
 
           <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
-            <div class="grid-container padding-0 isolation-isolate grid-col-12">
+            <div class="grid-container padding-0 wx-isolation-isolate grid-col-12">
               <div class="grid-row wx-radar-container">
                 <wx-alert-map class="grid-col-12" data-geo-json="{{ alert.geometry | json_encode | url_encode }}" data-alert-id="{{ alert.alertId}}" data-lat="{{ weather.point.lat }}" data-lon="{{ weather.point.lon }}">
                   <div id="wx_alert_map_{{ alert.alertId }}" style="height: 100%"></div>
@@ -117,7 +117,7 @@
         </div>
       </div>
       {% endfor %}
-      </weathergov-alerts>
+      </wx-alerts>
     </div>
   </div>
 </div>

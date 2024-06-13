@@ -10,66 +10,43 @@ This has led to a disorganized repository of valuable information that external 
 
 We will know that we are progressing forward on this problem if people find the information faster, understand it better, continue to see NWS as the authoritative source, and maintain that progress.
 
-## Vision, mission, and strategy for MVP
+## Vision
+Anyone can understand the impact of impending weather, especially when it comes to making decisions to save life and property – every word and every minute matters.
 
-### Our vision is that anyone can understand the impact of impending weather. When it comes to making decisions to save life and property, every word and every minute matters.
-
-**Our mission** is to rebuild weather.gov to reflect the integrity and care NWS has for the people you serve.
+## Mission 
+Rebuild weather.gov to reflect the integrity and care NWS has for the people they serve.
 
 Weather.gov 2.0 will only succeed if everyone with NWS sees the site reflect their values, much like the agency. Because the mission and culture at NWS is built around serving, preparing, and protecting people, the site must do the same.
 
-**Our strategy** for our Minimal Viable Product (MVP) is to make it easier to communicate forecasts and conditions for regular and hazardous weather in a way that anyone can find, understand, and use to take action.
+## Plan
 
-**Our primary outcomes** for MVP include:
+![5 steps as an analogy of the Weather.gov 2.0 phases. We are on the Minimal Viable Product phase and entering the Initial Operating Capability (IOC) phase in 2025 then after that in 2026 is Additional Capability and Training phase and lastly in 2027-2028 is the Fully Operational and Decommission "Legacy" weather.gov phase](/docs/img/Weather.gov-2.0-stairs.png)
 
-- Make it easier to communicate the impact of impending, regular and hazardous weather
-- Anyone can find, understand, and use the information take action
-- A sustainable and compliant system
+## Product Roadmap
+- [Summary](https://github.com/weather-gov/weather.gov/blob/main/docs/product/roadmap.md)
+- [Milestone planning chart](https://github.com/orgs/weather-gov/projects/2/views/18)
 
-**Our primary users** for MVP include:
+## Goals for the next two years 
 
-- Internal - NWS Meteorologists
-- External - The Public and Emergency Managers
+- **By the end of Sept 2025**:
+  - The new weather.gov is “experimental” to NWS standards and ready for public release
+  - Partner needs are being met (county, state, regional, national) through automated content
+  - A governance policy for content and tools exists
+  - Model for 24x7 support is defined and tested
+  - Acquisition for longer-term support is completed
+  - A strategy for complementary sites (tools and centers) exists
+  - Feature and user experience development continues
 
-## Strategy and plan
+- **By the end of Sept 2026**:
+  - The new weather.gov is “operational” to NWS standards and ready for public and partner usage
+  - Majority of public, partner, and other user needs are met
+  - The site is supported 24x7
+  - All WFOs and Forecasters are trained and onboarded
+  - A governance policy for content and tools is implemented
+  - Long-term support is established, transition is ongoing
+  - ATO has been attained
+  - Feature and user experience development continues
 
-**Strategy for prioritization**
-
-- Now - Prototype individual parts to inform key decisions and evaluate risk
-- Next - Start building the simplest thing possible
-- Later - Add complexity, ASAP
-
-| Phase               | Priorities                                                                                                                                                                                                                                        |
-| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Done - Prototype | <ul><li>Partners / gen public view weather basics</li><li>CMS requirements and viable options</li><li>Critical data integrations</li><li>BONUS: Critical third party integrations</li><li>User validation</li></ul>                               |
-| **Now - Build MVP**    | <ul><li>A “happy path” for NWS forecasters and public users</li><li>Core needs across locations</li><li>Core architecture - CMS, Admin experience, User experience, data integrations, CI/CD pipeline</li><li>Initial governance</li><li>User validation</li></ul> |
-| Next - Expand      | <ul><li>“Unhappy paths” for forecasters and public users</li><li>Multiple locations, geographies, or specialized services</li><li>More comprehensive governance</li><li>User validation</li></ul>                                                 |
-| Later              | <ul><li>Transition and migration</li><li>Continuous improvement</li></ul>|
-
-
-**Initial roadmap can be viewed [here](/docs/product/MVP-roadmap.md)**
-
-![happy path journey map](/docs/img/happy-path-v2.png)
-
-## How will we ultimately succeed or fail
-
-### We will succeed if
-
-- all regions and programs work in good faith with the team when the site is ready to expand and cover their needs
-- decisions are made by those closest to the work, backed by data
-- we start small with a small group and bring it to more and more people
-- having the space to test and iteratively improve
-- Continuously get feedback on working code, over memos and proposals
-
-### We will fail if
-
-- The site is mandated, instead of organically adopted
-- We do a big splash rollout
-- A single miss is considered a failure of the project instead of a learning experience to inform the next version
-- Decisions are informed by opinions and perceptions, over observations and data
-- Everyone’s explicit commitment is required to begin development
-- Everyone’s feedback has to be factored into the solution
-- The product team works in isolation from the rest of the NWS
 
 ## Public domain
 

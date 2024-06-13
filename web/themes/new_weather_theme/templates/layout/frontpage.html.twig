@@ -1,6 +1,6 @@
 {{ attach_library("new_weather_theme/location-combo-box") }}
 {{ attach_library("new_weather_theme/browser-location-button") }}
-<div class="wx-bg-satellite padding-y-4 tablet:padding-top-7 tablet:padding-bottom-8"> 
+<div class="bg-primary-darker wx-bg-satellite padding-y-4 tablet:padding-top-7 tablet:padding-bottom-8">
   <div class="grid-container">
     <div class="grid-row"> 
       <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
@@ -10,7 +10,7 @@
 
     <div class="row">
       <form class="usa-form grid-col maxw-tablet-lg margin-bottom-105 tablet:grid-offset-2" 
-            data-location-search method="post"
+            data-location-search method="get"
       >
         <div class="display-flex flex-align-end text-white flex-wrap">
           <label class="usa-label margin-top-2" for="search-combo-box">
@@ -52,7 +52,7 @@
         <div class="display-flex flex-align-start mobile-lg__flex-align-center"> 
           <img
             aria-hidden="true"
-            class="margin-right-2 maxw-8 tablet__maxw10"
+            class="margin-right-2 maxw-8 tablet__wx-maxw10"
             src="/{{ directory }}/assets/images/weather/spot_illos/wx_illo_announce.svg"
             alt=""
           />

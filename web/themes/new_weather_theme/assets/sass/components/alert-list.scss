@@ -1,0 +1,16 @@
+@use "uswds-core" as *;
+
+/* AlertList Overrides
+-------------------------------------- */
+.usa-alert__body {
+  & a {
+    color: color("primary");
+
+    &:focus,
+    &:hover {
+      color: color("primary-dark");
+    }
+  }
+}
+
+
