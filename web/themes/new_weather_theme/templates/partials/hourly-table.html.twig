@@ -22,7 +22,7 @@
   </div>
 
   <div id="hourly-table-container" class="usa-table-container--scrollable">
-    <table class="usa-table usa-table--borderless hourly-table" tabindex="0">
+    <table class="usa-table usa-table--borderless hourly-table" tabindex="0" {% if alertPeriods | length > 0 %} data-has-alerts="true" {% else %} data-has-alerts="false" {% endif %}>
       <caption class="usa-sr-only">{{ "Detailed hourly weather data for @place. The rows are weather variables, the columns are hours." | t({ "@place": for }) }}</caption>
       <tr data-row-name="time">
         <th scope="row" class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>

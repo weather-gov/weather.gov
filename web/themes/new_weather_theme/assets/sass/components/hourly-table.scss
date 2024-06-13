@@ -50,13 +50,25 @@ $expand-duration: 250ms;
     padding-right: units(1.5);
   }
 
-  tr:nth-child(odd) td,
-  tr:nth-child(odd) th  {
-   background-color: color('base-lightest');
+  &[data-has-alerts="true"] {
+    tr:nth-child(even) td,
+    tr:nth-child(even) th  {
+      background-color: color('base-lightest');
+    }
   }
 
-  tr:first-of-type th {
-    background-color: color('accent-cool-dark');
+  &[data-has-alerts="false"] {
+    tr:nth-child(odd) td,
+    tr:nth-child(odd) th  {
+      background-color: color('base-lightest');
+    }
+  }
+
+  &[data-has-alerts="false"], 
+  &[data-has-alerts="true"] {
+    tr:first-of-type th {
+      background-color: color('accent-cool-dark');
+    }
   }
 
 
