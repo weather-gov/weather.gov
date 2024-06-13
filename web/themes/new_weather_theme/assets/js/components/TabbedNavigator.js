@@ -72,10 +72,10 @@ class TabbedNavigator extends HTMLElement {
       }
 
       const childElement = this.querySelector(
-        `${hash},tab-container, .tab-container ${hash}`,
+        `${hash},wx-tab-container, .wx-tab-container ${hash}`,
       );
       if (childElement) {
-        const tabContainer = childElement.closest(".tab-container");
+        const tabContainer = childElement.closest(".wx-tab-container");
         this.switchToTab(tabContainer.id);
         if (childElement.matches(".usa-accordion")) {
           this.toggleAccordion(childElement, true);
@@ -93,7 +93,7 @@ class TabbedNavigator extends HTMLElement {
 
   switchToTab(tabId) {
     // First, deactivate all tabs
-    Array.from(this.querySelectorAll(".tab-button, .tab-container")).forEach(
+    Array.from(this.querySelectorAll(".tab-button, .wx-tab-container")).forEach(
       (element) => {
         element.removeAttribute("data-selected");
         if (element.matches(".tab-button")) {
@@ -141,7 +141,7 @@ class TabbedNavigator extends HTMLElement {
       // navigator.
       // We need to toggle to the correct tab pane
       // to properly display and scroll to the element.
-      const tabContainer = accordionEl.closest(".tab-container");
+      const tabContainer = accordionEl.closest(".wx-tab-container");
       this.switchToTab(tabContainer.id);
       this.toggleAccordion(accordionEl, true);
 
@@ -156,7 +156,7 @@ class TabbedNavigator extends HTMLElement {
     } else {
       // If we're not looking at one of the tab container's inner accordions,
       // check if we're looking for a tab.
-      const tabContainer = this.querySelector(`${hash}.tab-container`);
+      const tabContainer = this.querySelector(`${hash}.wx-tab-container`);
       if (tabContainer) {
         // If we are, switch to that tab.
         this.switchToTab(tabContainer.id);

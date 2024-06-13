@@ -2,20 +2,20 @@
 
 /* Flex custom utilities 
 ------------------------------------- */
-.flex-basis-auto {
-  flex-basis: auto;
+.wx-flex-basis-auto {
+ flex-basis: auto;
 }
 
-.flex-basis-100 {
+.wx-flex-basis-100 {
   flex-basis: 100%;
 }
 
 @include at-media(mobile-lg) {
-  .mobile-lg__flex-basis-100 {
+  .mobile-lg__wx-flex-basis-100 {
     flex-basis: 100%;
   }
 
-  .mobile-lg__flex-basis-auto {
+  .mobile-lg__wx-flex-basis-auto {
     flex-basis: auto;
   }
 
@@ -32,7 +32,7 @@
 
 /* Focus ring offset utility
 ------------------------------------- */
-.focus-offset-205 {
+.wx-focus-offset-205 {
   &:focus {
     outline-offset: units(2.5);
   }
@@ -40,13 +40,13 @@
 
 /* Custom isolation utilities
 ------------------------------------- */
-.isolation-isolate {
+.wx-isolation-isolate {
   isolation: isolate;
 }
 
 /* Custom width responsive utilities
 ------------------------------------- */
-.tablet__maxw10 {
+.tablet__wx-maxw10 {
   @include at-media("tablet") {
     @include u-maxw(10);
   }
