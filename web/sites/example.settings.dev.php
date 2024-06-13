@@ -859,8 +859,8 @@ $settings["weather_login_local_form"] = true;
  * env variable
  */
 $nowTime = getenv("WX_NOW_TIMESTAMP");
-if($nowTime){
-  $settings["wx_now_timestamp"] = $nowTime;
+if ($nowTime) {
+    $settings["wx_now_timestamp"] = $nowTime;
 } else {
-  $settings["wx_now_timestamp"] = false;
+    $settings["wx_now_timestamp"] = false;
 }

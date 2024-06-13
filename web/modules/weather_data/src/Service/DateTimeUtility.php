@@ -21,8 +21,8 @@ class DateTimeUtility
         return array_values(
             array_filter($array, function ($item) use ($after, $property) {
                 $itemTime = property_exists($item, $property)
-                ? $item->$property
-                          : $item[$property];
+                    ? $item->$property
+                    : $item[$property];
 
                 $itemTime = self::stringToDate($itemTime);
 
@@ -39,8 +39,8 @@ class DateTimeUtility
         return array_values(
             array_filter($array, function ($item) use ($before, $property) {
                 $itemTime = property_exists($item, $property)
-                ? $item->$property
-                          : $item[$property];
+                    ? $item->$property
+                    : $item[$property];
 
                 $itemTime = self::stringToDate($itemTime);
 
@@ -108,20 +108,20 @@ class DateTimeUtility
      * If neither 1 or 2 are set, this method will simply return the
      * current datetime given the provided timezone
      */
-    public static function now(string | \DateTimeZone $timezone = null)
+    public static function now(string|\DateTimeZone $timezone = null)
     {
         // If we have overridden the now timestamp in
         // code (ie via static class method overrides)
         // then simply return that cached value
-        if(self::$nowOverriddenTimestamp){
+        if (self::$nowOverriddenTimestamp) {
             return self::$nowOverriddenTimestamp;
         }
 
         // If there is a timestamp set in the Drupal settings
         // (which can come from our ENV variables originally)
         // then use that instead of the actual now
-        $nowSetting = Settings::get('wx_now_timestamp', false);
-        if($nowSetting){
+        $nowSetting = Settings::get("wx_now_timestamp", false);
+        if ($nowSetting) {
             return \DateTimeImmutable::createFromFormat(
                 \DateTimeInterface::ISO8601_EXPANDED,
                 $nowSetting,
@@ -131,9 +131,9 @@ class DateTimeUtility
         // Otherwise, return the actual now time according
         // to the supplied timezone
         $tz = $timezone;
-        if(is_string($tz)){
+        if (is_string($tz)) {
             $tz = new \DateTimeZone($tz);
         }
-        return new \DateTimeImmutable('now', $tz);
+        return new \DateTimeImmutable("now", $tz);
     }
 }
