@@ -24,7 +24,7 @@ final class DailyForecastBlockTest extends Base
      * Test that the block returns the expected data if we're on a location route.
      * @group unit
      * @group block
-     * @group wx-daily-forecast-block
+     * @group daily-forecast-block
      */
     public function testBuildOnLocation(): void
     {
@@ -45,7 +45,7 @@ final class DailyForecastBlockTest extends Base
      * Test that the block returns null if we're not on a grid route.
      * @group unit
      * @group block
-     * @group wx-daily-forecast-block
+     * @group daily-forecast-block
      */
     public function testBuildNotGridRoute(): void
     {
