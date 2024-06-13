@@ -117,9 +117,6 @@ function weathergov_form_node_publish($form, &$formState)
     );
 
     weathergov_admin_form_node_stay_on_editor($form, $formState);
-    // Go to the content dashboard
-    // $contentDashboard = Url::fromUri("base:admin/content");
-    // $formState->setRedirectUrl($contentDashboard);
 }
 
 function weathergov_form_node_unpublish($form, &$formState)
