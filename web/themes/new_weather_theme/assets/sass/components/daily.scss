@@ -19,31 +19,35 @@ table tr:nth-child(2) th {
 
 /* Day/Night marker line utility
 ------------------------------------- */
-.wx-line-before {
+.wx-marker-before {
   &::before {
     content: "";
-    top: units(-1);
-    width: units(5);
+    width: units(1);
+    height: units(1);
+    border-radius: units(1);
     position: relative;
-    display: block;
+    display: inline-block;
+    top: units("neg-2px");
+    left: 0;
+    margin-right: units("neg-2px");
   }
 }
 
-.wx-line-before--yellow {
+.wx-marker-before--yellow {
   &::before {
-    border-top: 2px solid color("yellow-20");
+    background-color: color("yellow-20");
   }
 }
 
-.wx-line-before--indigo {
+.wx-marker-before--indigo {
   &::before {
-    border-top: 2px solid color("secondary-darkest");
+    background-color: color("secondary-darkest");
   }
 }
 
-.wx-line-before--midnight-indigo {
+.wx-marker-before--midnight-indigo {
   &::before {
-    border-top: 2px solid color("secondary-darker");
+    background-color: color("secondary-darker");
   }
 }
 
