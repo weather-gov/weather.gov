@@ -23,7 +23,7 @@ describe("Invalid icon URL tests", () => {
 
   it("Doesn't render icon for first day condition in daily (unknown icon name)", () => {
     cy.get(
-      "#daily .daily-forecast-block ol li:first-child .daily-forecast-summary-area:first-child",
+      "#daily .wx-daily-forecast-block ol li:first-child .wx-daily-forecast-summary-area:first-child",
     )
       .as("area")
       .should("exist");
@@ -32,7 +32,7 @@ describe("Invalid icon URL tests", () => {
 
   it("Doesn't render icon for third night condition in daily (invalid icon url)", () => {
     cy.get(
-      "#daily .daily-forecast-block ol li:nth-child(3) .daily-forecast-summary-area:nth-child(2)",
+      "#daily .wx-daily-forecast-block ol li:nth-child(3) .wx-daily-forecast-summary-area:nth-child(2)",
     )
       .as("area")
       .should("exist");
@@ -41,7 +41,7 @@ describe("Invalid icon URL tests", () => {
 
   it("Doesn't render icon for second day condition in daily (icon value is null)", () => {
     cy.get(
-      "#daily .daily-forecast-block ol li:nth-child(2) .daily-forecast-summary-area:first-child",
+      "#daily .wx-daily-forecast-block ol li:nth-child(2) .wx-daily-forecast-summary-area:first-child",
     )
       .as("area")
       .should("exist");
@@ -50,7 +50,7 @@ describe("Invalid icon URL tests", () => {
 
   it("Does render icon for second night condition in daily", () => {
     cy.get(
-      "#daily .daily-forecast-block ol li:nth-child(2) .daily-forecast-summary-area:nth-child(2)",
+      "#daily .wx-daily-forecast-block ol li:nth-child(2) .wx-daily-forecast-summary-area:nth-child(2)",
     )
       .as("area")
       .should("exist");
@@ -65,7 +65,7 @@ describe("Valid icon rendering double-checks", () => {
   });
 
   it("Should render an icon in the current conditions", () => {
-    cy.get("#current .weather-gov-current-conditions .wx-icon > svg").should(
+    cy.get("#current .wx-current-conditions .wx-icon > svg").should(
       "exist",
     );
   });
