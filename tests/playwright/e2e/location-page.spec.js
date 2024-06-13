@@ -27,7 +27,7 @@ describe("the location page", () => {
   describe("shows n/a for unavailable data", () => {
     test("wind is null", async ({page}) => {
       await page.goto("/point/33.211/-87.566");
-      const windEl = page.locator(".weather-gov-current-conditions .wx-wind-speed > td");
+      const windEl = page.locator(".wx-current-conditions .wx-wind-speed > td");
 
       await expect(windEl).toContainText("N/A");
     });

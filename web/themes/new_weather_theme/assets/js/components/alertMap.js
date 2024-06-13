@@ -25,14 +25,14 @@ const setupMap = (alert) => {
   L.geoJSON(geoJSON, { style: { color: "#F00", opacity: 0.6 } }).addTo(map);
 
   const locationIcon = L.divIcon({
-    className: "weathergov-location-marker",
+    className: "wx-location-marker",
   });
   L.marker([lat, lon], { icon: locationIcon, interactive: false }).addTo(map);
 
   // Hide the location marker from screen readers and remove it from the tab
   // order. It's not interactive, so there's no reason it should be focusable.
   const locationMarker = document.querySelector(
-    `#wx_alert_map_${alertId} .weathergov-location-marker`,
+    `#wx_alert_map_${alertId} .wx-location-marker`,
   );
   if (locationMarker) {
     locationMarker.setAttribute("aria-hidden", "true");
@@ -51,7 +51,7 @@ const waitForAlertAccordions = () => {
 
     // Traverse up the DOM tree to the nearest node that matches this selector.
     // This is our container.
-    const parent = alert.closest("weathergov-alerts > div");
+    const parent = alert.closest("wx-alerts > div");
     const button = parent.querySelector("button");
     const expanded = button.getAttribute("aria-expanded") === "true";
 
@@ -63,7 +63,7 @@ const waitForAlertAccordions = () => {
       const mutationObserver = new MutationObserver((_, observer) => {
         const expandedNow =
           alert
-            .closest("weathergov-alerts > div")
+            .closest("wx-alerts > div")
             .querySelector("button")
             .getAttribute("aria-expanded") === "true";
 
