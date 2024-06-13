@@ -1,0 +1,5 @@
+const Util = {
+  get now(){
+    
+  }
+}
