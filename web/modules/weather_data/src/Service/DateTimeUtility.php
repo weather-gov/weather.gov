@@ -114,12 +114,13 @@ class DateTimeUtility
         // code (ie via static class method overrides)
         // then simply return that cached value
         if(self::$nowOverriddenTimestamp){
-            return $self::$nowOverriddenTimestamp;
+            return self::$nowOverriddenTimestamp;
         }
 
         // If there is a timestamp set in the Drupal settings
         // (which can come from our ENV variables originally)
         // then use that instead of the actual now
+        $all = Settings::getAll();
         $nowSetting = Settings::get('wx_now_timestamp', false);
         if($nowSetting){
             return \DateTimeImmutable::createFromFormat(
