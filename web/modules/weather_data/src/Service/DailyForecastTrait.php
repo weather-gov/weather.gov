@@ -97,7 +97,7 @@ trait DailyForecastTrait
         } else {
             $formattedPeriod["timeLabel"] = "6PM-6AM";
         }
-        
+
         return $formattedPeriod;
     }
 
