@@ -10,7 +10,7 @@ interface UniqueContentFieldValidationInterface
   /**
    * Key values supported.
    */
-    const UNIQUE_CONTENT_FIELD_VALIDATION_VALID_KEY_VALUES = [
+    public const UNIQUE_CONTENT_FIELD_VALIDATION_VALID_KEY_VALUES = [
       'value',
       'target_id',
       'uri',
