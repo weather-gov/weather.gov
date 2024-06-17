@@ -1,0 +1,6 @@
+# Look for a query string that includes a time parameter. If that exists,
+# prepend our setTime script to anything else that gets run.
+<If "%{QUERY_STRING} =~ /time=/">
+  php_value auto_prepend_file "/opt/drupal/web/config/dev/setTime.php"
+  php_flag opcache.enable Off
+</If>
