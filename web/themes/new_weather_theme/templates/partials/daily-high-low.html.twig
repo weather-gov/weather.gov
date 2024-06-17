@@ -1,6 +1,7 @@
 {% set temps = periods | map(p => p.temperature) %}
 {% set low = min(temps) %}
 {% set high = max(temps) %}
+{% if useOnlyLowForToday == false %}
 <div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">
   <span class="display-block margin-bottom-05 font-mono-3xs font-family-mono text-base-darker text-medium text-ls-1 text-uppercase">
     {{ "High" | t }}
@@ -10,6 +11,8 @@
     <span class="usa-sr-only">℉</span>
   </span>
 </div>
+{% endif %}
+
 {% if low != null %}
 <div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">
   <span class="display-block margin-bottom-05 font-mono-3xs font-family-mono text-base-darker text-ls-1 text-uppercase">

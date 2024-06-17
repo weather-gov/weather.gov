@@ -259,12 +259,15 @@ trait DailyForecastTrait
             );
         }, $periodStartTimes);
 
+        $useOnlyLowForToday = count($todayPeriodsFormatted) == 1;
+
         return [
             "today" => array_values($todayPeriodsFormatted),
             "todayHourly" => array_values($todayHourlyDetails),
             "todayAlerts" => array_values($todayAlerts),
             "detailed" => array_values($detailedPeriodsFormatted),
             "precipitationPeriods" => array_values($precipPeriods),
+            "useOnlyLowForToday" => $useOnlyLowForToday
         ];
     }
 }
