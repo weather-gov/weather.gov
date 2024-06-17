@@ -4,6 +4,10 @@ status: true
 dependencies:
   config:
     - node.type.weather_story
+    - node.type.wfo_promo
+    - node.type.dynamic_safety_information
+    - node.type.testing_page
+    - node.type.page
   module:
     - content_moderation
 id: weather_gov_content_moderation
@@ -52,4 +56,8 @@ type_settings:
   entity_types:
     node:
       - weather_story
+      - wfo_promo
+      - dynamic_safety_information
+      - basic_page
+      - testing_page
   default_moderation_state: draft
