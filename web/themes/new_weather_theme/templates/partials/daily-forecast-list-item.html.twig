@@ -12,8 +12,8 @@ only be a nighttime period.
 <li class="display-block" {% if itemId %}id="{{itemId}}{% endif %}">
   <div class="bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8 hourly-table__expand-transition">
     
-    <div class="grid-container padding-0 margin-0 margin-bottom-3 tablet:margin-bottom-4">
-      <div class="grid-row display-flex flex-align-start">
+    <div class="grid-container padding-0 margin-bottom-2 tablet:margin-bottom-2">
+      <div class="grid-row display-flex flex-align-start border-bottom-1px border-base-lighter padding-bottom-2">
         <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center tablet:grid-col-6 tablet__flex-justify-start">
           <h4 class="padding-0 margin-0">
             <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3" datetime="{{ periods[0].startTime }}">
@@ -47,7 +47,6 @@ only be a nighttime period.
         {% endif %}
       </div>
     </div>
-
     <div class="grid-row grid-gap">
       {% for period in periods %}
         {% set marginUnit = 3 %}
@@ -67,7 +66,7 @@ only be a nighttime period.
           {% set marginUnit = 1 %}
         {% endif %}
         <div class="wx-daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-{{ tabletMarginUnit }}">
-        <span class="display-block font-family-mono text-uppercase font-body-xs margin-bottom-1 text-primary-darker wx-line-before wx-line-before--{{ lineColor }}">
+        <span class="display-block font-family-mono text-uppercase font-body-xs margin-bottom-1 text-primary-darker wx-marker-before wx-marker-before--{{ lineColor }}">
             {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
         </span>
         <div class="display-flex flex-row flex-align-start">
@@ -79,7 +78,7 @@ only be a nighttime period.
           </div>
           {% endif %}
           <div class="flex-1">
-            <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 line-height-sans-3">
+            <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
             {{period.shortForecast}}
             </p>
             {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
@@ -92,13 +91,13 @@ only be a nighttime period.
       </div>
       {% endfor %}
     </div>
-    <wx-hourly-toggle class="text-primary-dark margin-top-1" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-togglee" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="expand_less" data-hidden-icon-name="expand_more" tabindex="0">
-      <span class="toggle-text font-mono font-mono-s text-ls-neg-1"></span>
-      <span class="margin-top-05">
+    <wx-hourly-toggle class="text-primary margin-top-1" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-togglee" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="remove_circle" data-hidden-icon-name="add_circle" tabindex="0">
+      <span class="margin-top-05 margin-right-05">
           <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
-              <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#expand_more"></use>
+              <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#add_circle"></use>
           </svg>
       </span>
+      <span class="toggle-text font-mono font-mono-s text-ls-neg-1"></span>
     </wx-hourly-toggle>
     <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee">
       {% include '@new_weather_theme/partials/hourly-table.html.twig'
