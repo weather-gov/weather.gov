@@ -66,8 +66,8 @@ only be a nighttime period.
           {% set lineColor = "indigo" %}
           {% set marginUnit = 1 %}
         {% endif %}
-        <div class="daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-{{ tabletMarginUnit }}">
-        <span class="display-block font-family-mono text-uppercase font-body-xs margin-bottom-1 text-primary-darker line-before line-before--{{ lineColor }}">
+        <div class="wx-daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-{{ tabletMarginUnit }}">
+        <span class="display-block font-family-mono text-uppercase font-body-xs margin-bottom-1 text-primary-darker wx-line-before wx-line-before--{{ lineColor }}">
             {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
         </span>
         <div class="display-flex flex-row flex-align-start">

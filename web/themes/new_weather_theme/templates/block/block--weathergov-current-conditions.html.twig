@@ -3,95 +3,95 @@
 
 {# Widgets and stuff. This is presented as a row of columns. #}
 <div class="grid-container padding-x-0 tablet:padding-x-2">
-    <div class="grid-row grid-col-8 grid-offset-2">
-        <h3 class="usa-sr-only">Current conditions</h3>
-    </div>
+  <div class="grid-row grid-col-8 grid-offset-2">
+    <h3 class="usa-sr-only">Current conditions</h3>
+  </div>
 
-    <div class="grid-container bg-white padding-y-2 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-        <div class="weather-gov-current-conditions grid-row grid-gap">
-            {% if content.error %}
-                {% set message = "There was an error loading the current conditions." | t %}
-                {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
-            {% else %}
-                
-                {# Weather narrative is for screen readers only #}
-                <div role="text" data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
-                    {{ 'Weather as of' | t }}
-                    {# Datetimes are localized in client-side Javascript. #}
-                    <time datetime="{{ content.timestamp.utc }}" data-wx-local-time>
-                        {{ content.timestamp.formatted }}
-                    </time>.
-                    {{ "The weather in @place, is @conditions.
-          Temperature is @temperature ℉." |
-                    t({
-                        "@place": content.place,
-                        "@conditions": content.conditions.long | lower,
-                        "@temperature": content.temperature,
-                    })
-                    }}
-                    {% if content.feels_like != content.temperature %}
-                        {{ " It feels like @feelsLike ℉." |
-                        t({
-                            "@feelsLike": content.feels_like
-                        })
-                        }}
-                    {% endif %}
-                </div>
+  <div class="grid-container bg-white padding-y-2 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+    <div class="wx-current-conditions grid-row grid-gap">
+      {% if content.error %}
+        {% set message = "There was an error loading the current conditions." | t %}
+        {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+      {% else %}
 
-                {# We hide from screenreaders and use the weather narrative (above) instead #}
-                <div class="grid-col-12" aria-hidden="true">
-                    {# First row is temperature #}
-                    <div class="display-flex">
-                        <div class="current-conditions-temp display-flex flex-row flex-align-start margin-right-2 text-primary-dark">
-                            {{ content.temperature }}<span class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">&deg;F</span>
-                        </div>
-                        <div class="margin-top-05 position-relative">
-                            <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
-                            <div class="text-primary-dark">
-                                <p class="margin-top-2px font-body-md">
-                                    {{ content.feels_like }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+      {# Weather narrative is for screen readers only #}
+      <div role="text" data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
+        {{ 'Weather as of' | t }}
+        {# Datetimes are localized in client-side Javascript. #}
+          <time datetime="{{ content.timestamp.utc }}" data-wx-local-time>
+            {{ content.timestamp.formatted }}
+          </time>.
+          {{ "The weather in @place, is @conditions.
+            Temperature is @temperature ℉." |
+              t({
+                  "@place": content.place,
+                  "@conditions": content.conditions.long | lower,
+                  "@temperature": content.temperature,
+              })
+              }}
+              {% if content.feels_like != content.temperature %}
+                  {{ " It feels like @feelsLike ℉." |
+                  t({
+                      "@feelsLike": content.feels_like
+                  })
+                  }}
+              {% endif %}
+      </div>
 
-                    <div class="display-flex flex-align-center margin-bottom-2">
-                        {% if content.icon.icon %}
-                            <div class="wx-icon margin-right-105 width-5 height-5">
-                                <svg role="img" aria-hidden="true" class="width-full height-full">
-                                    <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ content.icon.base }}"></use>
-                                </svg>
-                            </div>
-                        {% endif %}
-                        <p class="font-body-md margin-top-2px margin-bottom-0">{{ content.conditions.short }}</p>
-                    </div>
-                </div>
-
-                <div class="grid-row tablet:margin-top-2">
-                    <div class="grid-col-12 tablet:grid-col-6 margin-bottom-05 tablet:padding-right-4 tablet:margin-bottom-0">
-                        {%  include '@new_weather_theme/partials/observation-table.html.twig'%}
-                    </div>
-                    <div class="grid-col-12 tablet:grid-col-6">
-                        <div class="border-top-1px border-base-light padding-top-1">
-                            <span class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-1 display-block">{{ "Observation station" | t }}</span>
-                            <span class="display-block margin-y-1 display-block line-height-sans-3">
-                                {{ content.stationInfo.name }} ({{ content.stationInfo.identifier }})
-                            </span>
-                        </div>
-                        
-                        {# We hide from screenreaders and use the weather narrative (above) instead #}
-                        <div data-wx-current-conditions-narrative aria-hidden="true">
-                            <p class="font-family-mono font-mono-xs text-base text-uppercase margin-top-2 margin-bottom-05">
-                                {{ 'Last updated' | t }}
-                            </p>
-                            {# Datetimes are localized in client-side Javascript. #}
-                            <time class="display-block font-family-mono font-mono-xs" datetime="{{ content.timestamp.utc }}" data-wx-local-time>
-                                {{ content.timestamp.formatted }}
-                            </time>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
+      {# We hide from screenreaders and use the weather narrative (above) instead #}
+      <div class="grid-col-12" aria-hidden="true">
+        {# First row is temperature #}
+        <div class="display-flex">
+          <div class="wx-current-conditions__temp display-flex flex-row flex-align-start margin-right-2 text-primary-dark">
+            {{ content.temperature }}<span class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">&deg;F</span>
+          </div>
+          <div class="margin-top-05 position-relative">
+            <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
+            <div class="text-primary-dark">
+              <p class="margin-top-2px font-body-md">
+              {{ content.feels_like }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
+              </p>
+            </div>
+          </div>
         </div>
+
+        <div class="display-flex flex-align-center margin-bottom-2">
+          {% if content.icon.icon %}
+          <div class="wx-icon margin-right-105 width-5 height-5">
+            <svg role="img" aria-hidden="true" class="width-full height-full">
+              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ content.icon.base }}"></use>
+            </svg>
+          </div>
+          {% endif %}
+          <p class="font-body-md margin-top-2px margin-bottom-0">{{ content.conditions.short }}</p>
+        </div>
+      </div>
+
+      <div class="grid-row tablet:margin-top-2">
+        <div class="grid-col-12 tablet:grid-col-6 margin-bottom-05 tablet:padding-right-4 tablet:margin-bottom-0">
+          {%  include '@new_weather_theme/partials/observation-table.html.twig'%}
+        </div>
+        <div class="grid-col-12 tablet:grid-col-6">
+          <div class="border-top-1px border-base-light padding-top-1">
+            <span class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-1 display-block">{{ "Observation station" | t }}</span>
+            <span class="display-block margin-y-1 display-block line-height-sans-3">
+              {{ content.stationInfo.name }} ({{ content.stationInfo.identifier }})
+            </span>
+          </div>
+
+          {# We hide from screenreaders and use the weather narrative (above) instead #}
+          <div data-wx-current-conditions-narrative aria-hidden="true">
+            <p class="font-family-mono font-mono-xs text-base text-uppercase margin-top-2 margin-bottom-05">
+            {{ 'Last updated' | t }}
+            </p>
+            {# Datetimes are localized in client-side Javascript. #}
+            <time class="display-block font-family-mono font-mono-xs" datetime="{{ content.timestamp.utc }}" data-wx-local-time>
+              {{ content.timestamp.formatted }}
+            </time>
+          </div>
+        </div>
+      </div>
+            {% endif %}
     </div>
+  </div>
 </div>
