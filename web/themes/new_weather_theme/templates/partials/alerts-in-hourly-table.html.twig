@@ -2,7 +2,19 @@
 {% for alertInfo in alertPeriods %}
   {% set remainingCount = periodLength - alertInfo.duration - alertInfo.periodIndex %}
   <tr data-row-name="alert">
-    <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400"><span class="">{{ "Alert" | t }}</span></th>
+    <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+    {# Visually we can display the alert(s) heading just once for the alerts section of 
+       the table, however we want the row head to announced for each row of alerts to 
+       screen reader users so they know the content of the row. Using "rowspan" would
+       seem to solve for both cases, but unfortunately the row header isn't always
+       announced when testing using VO.
+    #}
+    {% if loop.first %}
+      {% if alertPeriods | length > 1 %} {% set plural="s" %} {% endif %}
+      <span class="" aria-hidden="true">{{ "Alert#{plural}" | t }}</span>
+      <span class="usa-sr-only">{{ "Alert" | t }}</span>
+    {% endif %}
+    </th>
     {% if alertInfo.periodIndex > 0 %}
       <td colspan="{{ alertInfo.periodIndex }}"></td>
     {% endif %}

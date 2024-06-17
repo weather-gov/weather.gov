@@ -1,5 +1,6 @@
 @use "uswds-core" as *;
 
+
 /* Scroll button states
 ------------------------------------- */
 .wx-scroll-button {
@@ -50,27 +51,14 @@ $expand-duration: 250ms;
     padding-right: units(1.5);
   }
 
-  &[data-has-alerts="true"] {
-    tr:nth-child(even) td,
-    tr:nth-child(even) th  {
-      background-color: color('base-lightest');
-    }
+  tbody[data-table-section="time-alerts"] tr:first-child th {
+    background-color: color('accent-cool-dark');
+    vertical-align: text-top;
   }
 
-  &[data-has-alerts="false"] {
-    tr:nth-child(odd) td,
-    tr:nth-child(odd) th  {
-      background-color: color('base-lightest');
-    }
+  tbody[data-table-section="variables"] tr:nth-child(even) > * { 
+    background-color: color('base-lightest');
   }
-
-  &[data-has-alerts="false"], 
-  &[data-has-alerts="true"] {
-    tr:first-of-type th {
-      background-color: color('accent-cool-dark');
-    }
-  }
-
 
   // Using class to overide usa-table styles
   tr[data-row-name="alert"] td,
@@ -86,8 +74,12 @@ $expand-duration: 250ms;
     }
   }
 
+  tr[data-row-name="alert"]:first-of-type td {
+    padding-top: units(2);
+  }
+
   tr[data-row-name="alert"]:last-of-type td {
-    padding-bottom: 0 !important;
+    padding-bottom: units(2);
   }
 
   // Fighting specificity
