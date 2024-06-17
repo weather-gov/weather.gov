@@ -66,6 +66,7 @@
           #}
           {% if alert.alertAreas != false %}
             {% for area in alert.alertAreas.countyAreas %}
+              <wx-alert-county-region>
               <h4 class="wx-visual-h3 text-normal text-primary-dark">
                 {{ "Counties in" | t }} {{ area.area }}
               </h4>
@@ -74,9 +75,11 @@
                   <li class="">{{ county }}</li>
                 {% endfor %}
               </ul>
+              </wx-alert-county-region>
             {% endfor %}
             {% if alert.alertAreas.cities %}
-              <h4 class="visual-h3 text-normal text-primary-dark">
+              <wx-alert-cities>
+              <h4 class="wx-visual-h3 text-normal text-primary-dark">
                 {{ "Including these cities" | t }} {{ area.area }}
               </h4>
               <ul class="usa-list {%- if alert.alertAreas.cities | length > 7 %} wx-col-2 {%- endif -%}">
@@ -85,6 +88,7 @@
                 <li class="">{{ city }}</li>
               {% endfor %}
               </ul>
+              </wx-alert-cities>
             {% endif %}
 
           {#

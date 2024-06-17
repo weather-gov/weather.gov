@@ -170,17 +170,16 @@ trait AlertTrait
             );
 
             // See if there is place information from the alert description.
-            $output->alertAreas = AlertUtility::getPlacesFromAlertDescription(
-                $alert,
-            );
-            if ($output->alertAreas !== false) {
-                // If there is county area text, strip it from the alert
-                // description
-                $output->description = preg_replace(
-                    "/\n\n.+?this watch includes \d+ counties\n.*?this includes the cities of.+(\n\n|$)/sim",
-                    "",
-                    $output->description,
-                );
+            // This will be false if there is no special location information,
+            // or an array if there is. The first element of the array will be
+            // the parsed location information. The second element will be the
+            // alert description with the location information removed.
+            $alertAreas = AlertUtility::getPlacesFromAlertDescription($alert);
+            if ($alertAreas !== false) {
+                // Since we have location info, update the description and add
+                // the locaiton info to our output object.
+                $output->description = $alertAreas[1];
+                $output->alertAreas = $alertAreas[0];
             }
 
             $output->description = self::tryParsingDescriptionText(

@@ -480,16 +480,23 @@ class AlertUtility
         // If the alert description has fine-grained location information, there
         // will be a line that starts with:
         //
-        // THIS [WARNING | WATCH | WHATEVER] INCLUDES 13 COUNTIES
+        // IN [STATE] THIS [WARNING | WATCH | WHATEVER] INCLUDES 13 COUNTIES
         //
         // So if we have a line that matches, we should try parsing it.
-        preg_match("/INCLUDES \d+ COUNTIES/sim", $description, $matches);
+        preg_match(
+            "/IN \S+ THIS \S+ INCLUDES \d+ COUNTIES$/sim",
+            $description,
+            $matches,
+        );
 
         if (count($matches) > 0) {
             $startToken = $matches[0];
             $matches = [];
 
+            // Keep track of where the extra location information lives inside
+            // the alert description so it's easier to remove it later.
             $startIndex = strpos($description, $startToken);
+            $endIndex = $startIndex + strlen($startToken);
 
             // First get the regions of the covered states. This will be things
             // like "Northwest Nebraska". This will create two matches: one for
@@ -500,35 +507,35 @@ class AlertUtility
                 $description,
                 $countyAreaMatches,
                 0,
-                $startIndex,
+                $startIndex + strlen($startToken),
             );
 
             // The match array will have 0 or 2 elements. The 0th and 1th index
             // will refer to the list of lines indicating regions and the list
             // of region names, respectively. If the match array is empty, fall
-            // back to county an empty array to avoid errors.
+            // back to counting an empty array to avoid errors.
             $countyAreaCount = count($countyAreaMatches[0] ?? []);
 
             if ($countyAreaCount > 0) {
                 $countyAreas = [];
 
                 for ($i = 0; $i < $countyAreaCount; $i += 1) {
-                    $startToken = $countyAreaMatches[0][$i];
+                    // The region description will end with a newline. For
+                    // simplicity in the regex later, we'll eat this newline
+                    // here.
+                    $startToken = trim($countyAreaMatches[0][$i]);
                     $countyArea = $countyAreaMatches[1][$i];
 
-                    $countiesStartIndex =
-                        strpos($description, $startToken) + strlen($startToken);
-
-                    // The list of counties begins where the region name ends
-                    // and continues until either a pair of newlines OR the end
-                    // of the text.
+                    // The list of counties begins where the region name is
+                    // followed by two newlines and continues until either
+                    // another pair of newlines OR the end of the text.
                     $counties = [];
                     preg_match(
-                        "/(.+?)(\n\n|$)/sim",
+                        "/$startToken\n\n([\s\S]+?)(\n\n|$)/si",
                         $description,
                         $counties,
                         0,
-                        $countiesStartIndex,
+                        $startIndex,
                     );
 
                     // The counties are delimitted by multiple spaces, so replace
@@ -544,6 +551,15 @@ class AlertUtility
                             preg_replace("/\s{2,}/", ",", trim($counties[1])),
                         ),
                     );
+
+                    // Updating the ending index based on the counties we find.
+                    // Add two to account for the pair of newlines at the end
+                    // of the county list.
+                    $lastCounty = $counties[count($counties) - 1];
+                    $endIndex =
+                        strpos($description, $lastCounty, $endIndex) +
+                        strlen($lastCounty) +
+                        2;
 
                     // We only want uppercase words. We don't want to scream at
                     // people. Also take this opportunity to trim off extraneous
@@ -562,7 +578,7 @@ class AlertUtility
                 // in the alert description, there is also sometimes a list of
                 // cities. So let's look for those, too.
                 preg_match(
-                    "/this includes the cities of(.+)(\n\n|$)/sim",
+                    "/this includes the cities of([\s\S]+?)(\n\n|$)/si",
                     $description,
                     $matches,
                     0,
@@ -588,6 +604,14 @@ class AlertUtility
                     // Now split the list on commas.
                     $cityList = explode(",", str_replace(".", "", $cityList));
 
+                    // Move the ending index again. Still account for the two
+                    // newlines at the end of the city list.
+                    $lastCity = $cityList[count($cityList) - 1];
+                    $endIndex =
+                        strpos($description, $lastCity, $endIndex) +
+                        strlen($lastCity) +
+                        2;
+
                     // And now format it.
                     $cities = array_map(function ($city) {
                         return ucwords(strtolower(trim($city)));
@@ -599,7 +623,14 @@ class AlertUtility
                     $areas["cities"] = $cities;
                 }
 
-                return $areas;
+                // Build a new description string that strips out this extra
+                // location information since we've now separated it.
+                $newDescription =
+                    substr($description, 0, $startIndex) .
+                    substr($description, $endIndex);
+
+                // Return both things.
+                return [$areas, $newDescription];
             }
         }
 
