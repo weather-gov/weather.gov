@@ -119,6 +119,24 @@ trait DailyForecastTrait
     ) {
         $forecast = $this->dataLayer->getDailyForecast($wfo, $x, $y);
 
+        foreach ($forecast->periods as $period) {
+            $oopty = $this->dataLayer->client->request(
+                "POST",
+                "http://translation:5000/translate",
+                [
+                    "json" => [
+                        "q" => $period->shortForecast,
+                        "source" => "en",
+                        "target" => "fr",
+                        "format" => "text",
+                    ],
+                ],
+            );
+            $translation = json_decode($oopty->getBody());
+            $translation = $translation->translatedText;
+            $period->shortForecast = $translation;
+        }
+
         $place = $this->getPlaceFromGrid($wfo, $x, $y);
         $timezone = $place->timezone;
 
@@ -267,7 +285,7 @@ trait DailyForecastTrait
             "todayAlerts" => array_values($todayAlerts),
             "detailed" => array_values($detailedPeriodsFormatted),
             "precipitationPeriods" => array_values($precipPeriods),
-            "useOnlyLowForToday" => $useOnlyLowForToday
+            "useOnlyLowForToday" => $useOnlyLowForToday,
         ];
     }
 }

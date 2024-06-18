@@ -29,7 +29,7 @@ class DataLayer
      *
      * @var \GuzzleHttp\ClientInterface client
      */
-    private $client;
+    public $client;
 
     /**
      * Connection to the Drupal database.

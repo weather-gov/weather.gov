@@ -1,0 +1,23 @@
+FROM libretranslate/libretranslate:v1.6.0 AS models_cache
+
+ARG with_models=true
+
+USER libretranslate
+
+WORKDIR /app
+
+RUN if [ "$with_models" = "true" ]; then  \
+  # initialize the language models
+  if [ ! -z "$models" ]; then \
+  ./venv/bin/python scripts/install_models.py --load_only_lang_codes "$models";   \
+  else \
+  ./venv/bin/python scripts/install_models.py;  \
+  fi \
+  fi
+
+RUN ./venv/bin/pip install . && ./venv/bin/pip cache purge
+
+FROM models_cache AS final
+RUN rm -rf /tmp/prometheus_data && mkdir -p /tmp/prometheus_data
+ENV PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus_data
+ENTRYPOINT [ "./venv/bin/libretranslate"]

@@ -26,6 +26,17 @@ services:
       - ./tests/api:/app
       - /app/node_modules
 
+  translation:
+    build:
+      dockerfile: Dockerfile.libretranslate
+    environment:
+      LT_HOST: 0.0.0.0
+      LT_PORT: 5000
+    networks:
+      - weather.gov
+    ports:
+      - 8082:5000
+
   drupal:
     build:
       context: ./
