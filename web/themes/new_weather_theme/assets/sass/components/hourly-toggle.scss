@@ -6,8 +6,14 @@ wx-hourly-toggle {
   align-items: center;
 }
 
+wx-hourly-toggle:focus,
 wx-hourly-toggle:hover {
   cursor: pointer;
+  color: color('primary-dark');
+}
+
+wx-hourly-toggle:active {
+  color: color('primary-darker');
 }
 
 wx-hourly-toggle[tabindex="0"]:focus {

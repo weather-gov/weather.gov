@@ -260,4 +260,24 @@ final class DailyForecastStructureTest extends EndToEndBase
 
         $this->assertEquals($expected, $actual["today"]);
     }
+
+    /**
+     * Ensure that we set the flag for only low temp after 6pm
+     *
+     * @group e2e
+     * @group eric
+     */
+    public function testOnlyLowAfter6pmToday()
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2024-05-07T18:01:00-0500",
+        );
+
+        $this->onLocationRoute(32.778, -96.796);
+
+        $actual = $this->block->build($now);
+
+        $this->assertTrue($actual['useOnlyLowForToday']);
+    }
 }
