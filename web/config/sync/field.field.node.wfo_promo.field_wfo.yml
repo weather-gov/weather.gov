@@ -11,7 +11,7 @@ dependencies:
 third_party_settings:
   unique_content_field_validation:
     unique: true
-    unique_text: 'A WFO promo already exists. You cannot create a second WFO promo, but should edit the current WFO promo. '
+    unique_text: 'A WFO promo for this office already exists. Please edit the existing promo instead of creating a new one.'
 id: node.wfo_promo.field_wfo
 field_name: field_wfo
 entity_type: node
