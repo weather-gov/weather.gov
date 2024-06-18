@@ -51,15 +51,6 @@ $expand-duration: 250ms;
     padding-right: units(1.5);
   }
 
-  tbody[data-table-section="time-alerts"] tr:first-child th {
-    background-color: color('accent-cool-dark');
-    vertical-align: text-top;
-  }
-
-  tbody[data-table-section="variables"] tr:nth-child(even) > * { 
-    background-color: color('base-lightest');
-  }
-
   // Using class to overide usa-table styles
   tr[data-row-name="alert"] td,
   tr[data-row-name="alert"] th {
@@ -86,6 +77,7 @@ $expand-duration: 250ms;
   tr[data-row-name="time"] th:nth-child(2) {
     padding-left: units(2);
   }
+
 }
 
 // Table shadow only shows on scroll
@@ -101,5 +93,16 @@ wx-hourly-table[data-scrolled="true"] .usa-table.hourly-table th:first-of-type {
     background-image: linear-gradient(90deg, rgba(0 0 0 / 10%), transparent);
     background-size: 50%;
     background-repeat: no-repeat;
+  }
+}
+
+.usa-table.hourly-table tbody{
+  &[data-table-section="time-alerts"] tr:first-child th {
+    background-color: color('accent-cool-dark');
+    vertical-align: text-top;
+  }
+
+  &[data-table-section="variables"] tr:nth-child(even) > * { 
+    background-color: color('base-lightest');
   }
 }
