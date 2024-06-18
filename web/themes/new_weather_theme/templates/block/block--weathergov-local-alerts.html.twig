@@ -57,6 +57,8 @@
           </p>
           {% endif %}
 
+          <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ "Areas impacted" |t }}</h4>
+
           {#
             Some alerts come with location information in the description text
             in a common text formatting. In those cases, the location information
@@ -67,9 +69,9 @@
           {% if alert.alertAreas != false %}
             {% for area in alert.alertAreas.countyAreas %}
               <wx-alert-county-region>
-              <h4 class="wx-visual-h3 text-normal text-primary-dark">
+              <h5 class="wx-visual-h4 text-normal text-primary-dark">
                 {{ "Counties in" | t }} {{ area.area }}
-              </h4>
+              </h5>
               <ul class="usa-list {%- if area.counties | length > 7 %} wx-col-2 {%- endif -%}">
                 {%  for county in area.counties %}
                   <li class="">{{ county }}</li>
@@ -79,9 +81,9 @@
             {% endfor %}
             {% if alert.alertAreas.cities %}
               <wx-alert-cities>
-              <h4 class="wx-visual-h3 text-normal text-primary-dark">
+              <h5 class="wx-visual-h4 text-normal text-primary-dark">
                 {{ "Including these cities" | t }} {{ area.area }}
-              </h4>
+              </h5>
               <ul class="usa-list {%- if alert.alertAreas.cities | length > 7 %} wx-col-2 {%- endif -%}">
 
               {% for city in alert.alertAreas.cities %}
@@ -98,7 +100,6 @@
             AWIPS identifies the areas.
           #}
           {% else %}
-            <h4 class="visual-h3 text-normal text-primary-dark">{{ "Areas impacted" |t }}</h4>
             <ul class="usa-list {%- if alert.areaDesc | length > 7 %} wx-col-2 {%- endif -%}">
               {%  for areaName in alert.areaDesc %}
                 <li class="">{{ areaName }}</li>
