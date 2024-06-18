@@ -1,6 +1,6 @@
 @use "uswds-core" as *;
 
-.weather-gov-current-conditions {
+.wx-current-conditions {
   & .icon svg {
     max-width: 100%;
     max-height: 100%;
@@ -10,3 +10,9 @@
     }
   }
 }
+
+.wx-current-conditions__temp {
+  // Custom size not in typecale
+  font-size: units(5) + units(0.5);
+}
+

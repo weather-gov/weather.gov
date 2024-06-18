@@ -1,0 +1,53 @@
+@use "uswds-core" as *;
+
+/* Daily Forecast Block Overrides
+------------------------------------- */
+.wx-daily-forecast-block ol > li {
+  @include u-margin-bottom(3);
+}
+
+/* Hourly Forecast Block Overrides
+-------------------------------------- */
+.wx-hourly-forecast-block ol > li {
+  @include u-margin-bottom(3);
+}
+
+table tr:first-child th,
+table tr:nth-child(2) th {
+  border-top: none;
+}
+
+/* Day/Night marker line utility
+------------------------------------- */
+.wx-marker-before {
+  &::before {
+    content: "";
+    width: units(1);
+    height: units(1);
+    border-radius: units(1);
+    position: relative;
+    display: inline-block;
+    top: units("neg-2px");
+    left: 0;
+    margin-right: units("neg-2px");
+  }
+}
+
+.wx-marker-before--yellow {
+  &::before {
+    background-color: color("yellow-20");
+  }
+}
+
+.wx-marker-before--indigo {
+  &::before {
+    background-color: color("secondary-darkest");
+  }
+}
+
+.wx-marker-before--midnight-indigo {
+  &::before {
+    background-color: color("secondary-darker");
+  }
+}
+

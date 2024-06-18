@@ -24,7 +24,7 @@ describe("pages load", () => {
       // will retry a few times with a short wait in between. Return the result
       // because it's a Cypress chainable object and the caller can use it to
       // know when we're all finished.
-      return cy.get(".weather-gov-current-conditions").then(() => {
+      return cy.get(".wx-current-conditions").then(() => {
         const measurement = performance.measure(name, { start: name });
         measurements.push({
           name,

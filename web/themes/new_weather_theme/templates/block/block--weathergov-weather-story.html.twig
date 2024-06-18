@@ -9,13 +9,13 @@
             type="button"
             class="usa-accordion__button text-ls-1"
             aria-expanded="false"
-            aria-controls="weather-story-content"
-            data-button-for="#weather-story-content">
+            aria-controls="wx-weather-story-content"
+            data-button-for="#wx-weather-story-content">
             {{ "Forecaster's report" | t }}
           </button>
         </h3>
-        <div id="weather-story-content" class="usa-accordion__content usa-prose">
-          <h4 class="visual-h3 text-primary-darker text-normal margin-top-0 margin-bottom-2"> {{  content.title | t }} </h4>
+        <div id="wx-weather-story-content" class="usa-accordion__content usa-prose">
+          <h4 class="wx-visual-h3 text-primary-darker text-normal margin-top-0 margin-bottom-2"> {{  content.title | t }} </h4>
           <p class="text-base margin-top-2"><span class="font-family-mono text-ls-neg-3">{{ "Last updated" | t }}:</span>
           <time datetime="{{ content.updated.utc }}" data-wx-local-time data-date-format="M d Y T">
             {{ content.updated.formatted }}

@@ -10,7 +10,7 @@
   }
 }
 
-.weathergov-location-marker {
+.wx-location-marker {
   height: 24px !important;
   width: 24px !important;
   background: #18f;
@@ -19,7 +19,7 @@
 }
 
 .wx-radar-legend {
-  h4.visual-h3 {
+  h4.wx-visual-h3 {
     @include u-text("normal");
 
     margin-top: 0;
