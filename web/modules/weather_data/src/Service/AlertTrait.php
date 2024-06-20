@@ -167,6 +167,19 @@ trait AlertTrait
                 $this->dataLayer,
             );
 
+            // See if there is place information from the alert description.
+            // This will be false if there is no special location information,
+            // or an array if there is. The first element of the array will be
+            // the parsed location information. The second element will be the
+            // alert description with the location information removed.
+            $alertAreas = AlertUtility::getPlacesFromAlertDescription($alert);
+            if ($alertAreas !== false) {
+                // Since we have location info, update the description and add
+                // the locaiton info to our output object.
+                $output->description = $alertAreas[1];
+                $output->alertAreas = $alertAreas[0];
+            }
+
             $output->description = self::tryParsingDescriptionText(
                 $output->description,
             );
