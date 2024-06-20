@@ -64,11 +64,63 @@ final class SpatialUtilityTest extends TestCase
      * @group unit
      * @group spatial-utility
      */
-    public function testGeometryArrayToWKT(): void
+    public function testGeoJSONtoSQLWithPoint(): void
     {
-        $expected = "ST_GEOMFROMTEXT('POLYGON((1 2,3 4,5 6))')";
-        $actual = SpatialUtility::geometryArrayToWKT([[1, 2], [3, 4], [5, 6]]);
+        $expected = "ST_GEOMFROMTEXT('POINT(1 2)')";
+        $actual = SpatialUtility::geoJSONtoSQL(
+            (object) [
+                "type" => "point",
+                "coordinates" => [1, 2],
+            ],
+        );
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testGeoJSONtoSQLWithPolygon(): void
+    {
+        $expected = "ST_GEOMFROMTEXT('POLYGON((1 2))')";
+        $actual = SpatialUtility::geoJSONtoSQL(
+            (object) [
+                "type" => "PolyGON",
+                "coordinates" => [[[1, 2]]],
+            ],
+        );
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testGeoJSONtoSQLWithMultipolygon(): void
+    {
+        $expected = "ST_GEOMFROMTEXT('MULTIPOLYGON(((1 2)),((3 4)))')";
+        $actual = SpatialUtility::geoJSONtoSQL(
+            (object) [
+                "type" => "MuLtIpOlYgOn",
+                "coordinates" => [[[[1, 2]]], [[[3, 4]]]],
+            ],
+        );
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group spatial-utility
+     */
+    public function testGeoJSONtoSQLWithUnsupportedType(): void
+    {
+        $this->expectException(\Exception::class);
+        $actual = SpatialUtility::geoJSONtoSQL(
+            (object) [
+                "type" => "Line",
+                "coordinates" => [[1, 2], [3, 4]],
+            ],
+        );
     }
 
     /**
