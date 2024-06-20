@@ -103,6 +103,12 @@ _Added in January 2024_
 
 This module adds a lot of helper functions and filters, such as the ability to pull in an arbitrary block. We added it when setting up some of our initial twig templates.
 
+### [`unique_content_field_validation](https://www.drupal.org/project/unique_content_field_validation)
+
+_Added in June 2024_
+
+This is a module that allows us to disallow duplicate content types controlling for uniqueness on a certain field or title. We pulled the code from this module into our custom modules since there aren't regular updates, and we only needed the field validation, not taxonomy. We may continue to customize this module as our use case evolves.
+
 ### [`workbench_access`](https://www.drupal.org/project/workbench_access)
 
 _Added in January 2024_
