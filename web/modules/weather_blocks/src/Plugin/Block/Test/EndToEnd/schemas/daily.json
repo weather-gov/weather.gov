@@ -43,6 +43,9 @@
           }
         }
       }
+    },
+    "useOnlyLowForToday": {
+      "type": "boolean"
     }
   },
 

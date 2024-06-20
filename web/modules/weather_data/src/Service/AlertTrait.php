@@ -81,13 +81,11 @@ trait AlertTrait
             // If there's a geometry for this alert, use that to determine
             // whether it's relevant for our location.
             if ($alert->geometry) {
-                $alertWKT = SpatialUtility::geometryArrayToWKT(
-                    $alert->geometry->coordinates[0],
-                );
+                $alertSQL = SpatialUtility::geoJSONtoSQL($alert->geometry);
 
                 $sql = "SELECT ST_INTERSECTS(
                     $gridWKT,
-                    $alertWKT
+                    $alertSQL
                 ) as yes";
 
                 $intersects = $this->dataLayer->databaseFetch($sql)->yes;
