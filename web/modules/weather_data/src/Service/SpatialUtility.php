@@ -39,11 +39,51 @@ class SpatialUtility
         return "ST_GEOMFROMTEXT('POLYGON(($wkt))')";
     }
 
-    public static function geometryArrayToWKT($geometry)
+    public static function geoJSONtoSQL($geoJSON)
     {
-        return self::geometryObjectToWKT(
-            self::geometryArrayToObject($geometry),
-        );
+        $type = strtoupper($geoJSON->type);
+        $points = false;
+
+        switch ($type) {
+            case "POINT":
+                $points = $geoJSON->coordinates;
+
+                return "ST_GEOMFROMTEXT('POINT(" .
+                    $points[0] .
+                    " " .
+                    $points[1] .
+                    ")')";
+
+            case "POLYGON":
+                $points = $geoJSON->coordinates[0];
+
+                $points = array_map(function ($point) {
+                    return $point[0] . " " . $point[1];
+                }, $points);
+                $wkt = implode(",", $points);
+
+                return "ST_GEOMFROMTEXT('POLYGON((" . $wkt . "))')";
+
+            case "MULTIPOLYGON":
+                $points = array_map(function ($polygon) {
+                    return $polygon[0];
+                }, $geoJSON->coordinates);
+
+                $polygons = array_map(function ($polygon) {
+                    $points = array_map(function ($point) {
+                        return $point[0] . " " . $point[1];
+                    }, $polygon);
+                    $wkt = implode(",", $points);
+
+                    return "(($wkt))";
+                }, $points);
+                $wkt = implode(",", $polygons);
+
+                return "ST_GEOMFROMTEXT('MULTIPOLYGON(" . $wkt . ")')";
+
+            default:
+                throw new \Exception("Unsupported GeoJSON type: " . $type);
+        }
     }
 
     // For geographic projects, MySQL returns coordinates in lat/lon order
