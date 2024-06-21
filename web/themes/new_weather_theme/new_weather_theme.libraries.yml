@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-06-17
+  version: 2024-06-21
   css:
     theme:
       assets/css/styles.css: {}
@@ -17,7 +17,7 @@ uswds-customized:
       minified: true
 
 browser-location-button:
-  version: 2024-06-04
+  version: 2024-06-21
   js:
     assets/js/locationSearch.js:
       attributes:
@@ -36,7 +36,7 @@ location-combo-box:
     assets/js/components/combo-box.js: { preprocess: false }
         
 tabbed-nav:
-  version: 2024-05-30
+  version: 2024-06-21
   js:
     assets/js/components/TabbedNavigator.js: { preprocess: false }
 
@@ -65,7 +65,7 @@ radar:
         data-wx-radar-cmi: true
 
 leaflet:
-  version: 1.9.4
+  version: 2024-06-21
   css:
     theme:
       assets/css/leaflet.css:
