@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-06-17
+  version: 2024-06-21
   css:
     theme:
       assets/css/styles.css: {}
@@ -65,7 +65,7 @@ radar:
         data-wx-radar-cmi: true
 
 leaflet:
-  version: 1.9.4
+  version: 2024-06-21
   css:
     theme:
       assets/css/leaflet.css:
