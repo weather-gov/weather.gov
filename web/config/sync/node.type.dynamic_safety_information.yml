@@ -13,5 +13,5 @@ type: dynamic_safety_information
 description: 'Safety information to show in addition to hazard text.'
 help: ''
 new_revision: false
-preview_mode: 0
+preview_mode: 1
 display_submitted: false
