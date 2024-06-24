@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   database:
     # 8.0.35 in prod

@@ -81,13 +81,11 @@ trait AlertTrait
             // If there's a geometry for this alert, use that to determine
             // whether it's relevant for our location.
             if ($alert->geometry) {
-                $alertWKT = SpatialUtility::geometryArrayToWKT(
-                    $alert->geometry->coordinates[0],
-                );
+                $alertSQL = SpatialUtility::geoJSONtoSQL($alert->geometry);
 
                 $sql = "SELECT ST_INTERSECTS(
                     $gridWKT,
-                    $alertWKT
+                    $alertSQL
                 ) as yes";
 
                 $intersects = $this->dataLayer->databaseFetch($sql)->yes;
@@ -168,6 +166,19 @@ trait AlertTrait
                 $alert,
                 $this->dataLayer,
             );
+
+            // See if there is place information from the alert description.
+            // This will be false if there is no special location information,
+            // or an array if there is. The first element of the array will be
+            // the parsed location information. The second element will be the
+            // alert description with the location information removed.
+            $alertAreas = AlertUtility::getPlacesFromAlertDescription($alert);
+            if ($alertAreas !== false) {
+                // Since we have location info, update the description and add
+                // the locaiton info to our output object.
+                $output->description = $alertAreas[1];
+                $output->alertAreas = $alertAreas[0];
+            }
 
             $output->description = self::tryParsingDescriptionText(
                 $output->description,

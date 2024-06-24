@@ -27,6 +27,69 @@ describe("Alerts e2e tests", () => {
     }
   });
 
+  describe("Alerts with additional location information are parsed correctly", () => {
+    test("expected county regions are displayed", async ({ page }) => {
+      const regions = page.locator("wx-alert-county-region");
+
+      await expect(regions).toHaveCount(2);
+
+      await expect(page.locator("wx-alert-county-region")).toContainText(
+        ["Counties in Central Nebraska"],
+        ["Conties in North Central Nebraska"],
+      );
+    });
+
+    test("expected counties are displayed", async ({ page }) => {
+      const centralNebraska = page.locator("wx-alert-county-region").nth(0);
+      const centralNebraskaCounties = centralNebraska.locator("ul li");
+
+      await expect(centralNebraskaCounties).toHaveCount(1);
+      await expect(centralNebraskaCounties).toContainText(["Custer"]);
+
+      const northCentralNebraska = page
+        .locator("wx-alert-county-region")
+        .nth(1);
+      const northCentralNebraskaCounties =
+        northCentralNebraska.locator("ul li");
+
+      await expect(northCentralNebraskaCounties).toHaveCount(11);
+      await expect(northCentralNebraskaCounties).toContainText([
+        "Blaine",
+        "Boyd",
+        "Brown",
+        "Cherry",
+        "Garfield",
+        "Holt",
+        "Keya Paha",
+        "Loup",
+        "Rock",
+        "Thomas",
+        "Wheeler",
+      ]);
+    });
+
+    test("expected cities are displayed", async ({ page }) => {
+      const citiesContainer = page.locator("wx-alert-cities");
+      await expect(citiesContainer).toHaveCount(1);
+
+      const cities = citiesContainer.locator("ul li");
+
+      await expect(cities).toHaveCount(10);
+      await expect(cities).toContainText([
+        "Ainsworth",
+        "Atkinson",
+        "Bartlett",
+        "Bassett",
+        "Brewster",
+        "Broken Bow",
+        "Burwell",
+        "Butte",
+        "Curtis",
+        "Dunning",
+      ]);
+    });
+  });
+
   describe("Parsed URLs in alerts", () => {
     test("Should not find a link wrapping the non-gov url", async ({ page }) => {
       const containingText = page.locator("wx-alerts").getByText("www.your-power-company.com/outages");

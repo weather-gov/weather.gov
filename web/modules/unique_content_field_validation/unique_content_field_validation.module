@@ -1,0 +1,346 @@
+<?php
+
+/**
+ * @file
+ * Allows administrators to set fields as unique.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\node\NodeTypeInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\unique_content_field_validation\UniqueContentFieldValidationInterface;
+
+/**
+ * Implements hook_help().
+ */
+function unique_content_field_validation_help($route_name, RouteMatchInterface $route_match)
+{
+    switch ($route_name) {
+        case 'help.page.unique_content_field_validation':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('The Unique Content Field Validation module allows administrators to require that content supplied for specified fields is unique or choose in node types if the Title/Name is unique.') . '</p>'; //phpcs:ignore
+            return $output;
+
+        default:
+    }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function unique_content_field_validation_form_field_config_edit_form_alter(array &$form, FormStateInterface $form_state)
+{
+  /** @var Drupal\field\Entity\FieldConfig $field */
+    $field = $form_state->getFormObject()->getEntity();
+    $field_types = [
+        'email',
+        'link',
+        'decimal',
+        'float',
+        'integer',
+        'list_float',
+        'list_integer',
+        'entity_reference',
+        'list_string',
+        'text',
+        'text_long',
+        'text_with_summary',
+        'string',
+        'string_long',
+        'webform',
+    ];
+
+    if (in_array($field->getType(), $field_types)) {
+        $form['settings']['unique_content_field_validation'] = [
+          '#type' => 'details',
+          '#open' => true,
+          '#title' => t('Unique'),
+          '#tree' => true,
+          '#weight' => 3,
+          '#parents' => ['third_party_settings', 'unique_content_field_validation'],
+        ];
+
+        $form['settings']['unique_content_field_validation']['unique'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Unique'),
+          '#default_value' => $field->getThirdPartySetting('unique_content_field_validation', 'unique', false),
+          '#description' => t('Enabling this will ensure that the field of the entity will be different for each content'), //phpcs:ignore
+        ];
+        $form['settings']['unique_content_field_validation']['unique_text'] = [
+          '#type' => 'textarea',
+          '#title' => t('Unique message validation'),
+          '#default_value' => $field->getThirdPartySetting('unique_content_field_validation', 'unique_text', ''),
+          '#description' => t('Message to show up when the content is duplicated. <br /> To show the field name use %label <br /> To show the field value use %value'), //phpcs:ignore
+          '#states' => [
+            'visible' => [
+              ':input[name="third_party_settings[unique_content_field_validation][unique]"]' => ['checked' => true],
+            ],
+          ],
+        ];
+
+        // If field is multiple option to allow prevent
+        // the same value more than once.
+        if ($field->getFieldStorageDefinition()->isMultiple()) {
+            $form['settings']['unique_content_field_validation']['unique_multivalue'] = [
+                '#type' => 'checkbox',
+                '#title' => t('Do not allow same value.'),
+                '#description' => t('Prevent the same value to be entered more than once within the same field.'),
+                '#default_value' => $field->getThirdPartySetting('unique_content_field_validation', 'unique_multivalue', false), //phpcs:ignore
+            ];
+            $form['settings']['unique_content_field_validation']['unique_multivalue_text'] = [
+                '#type' => 'textarea',
+                '#title' => t('Multi value field message validation'),
+                '#default_value' => $field->getThirdPartySetting('unique_content_field_validation', 'unique_multivalue_text', ''), //phpcs:ignore
+                '#description' => t('Message to show up when the content entered is set more than one time within the same field. <br /> To show the field name use %label <br /> To show the field value use %value'), //phpcs:ignore
+                '#states' => [
+                    'visible' => [
+                        ':input[name="third_party_settings[unique_content_field_validation][unique_multivalue]"]' => ['checked' => true], //phpcs:ignore
+                    ],
+                ],
+            ];
+        }
+    }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for node_type_form.
+ */
+function unique_content_field_validation_form_node_type_form_alter(array &$form, FormStateInterface $form_state)
+{
+    /** @var \Drupal\node\NodeTypeInterface $node_type */
+    $node_type = $form_state->getFormObject()->getEntity();
+
+    $form['submission']['unique_content_field_validation'] = [
+        '#type' => 'details',
+        '#title' => t('Unique'),
+        '#open' => true,
+        '#tree' => true,
+    ];
+    $form['submission']['unique_content_field_validation']['unique'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Unique'),
+        '#default_value' => $node_type->getThirdPartySetting('unique_content_field_validation', 'unique', false),
+        '#description' => t('Enabling this will ensure that the title of the node will be different for each content.'),
+    ];
+    $form['submission']['unique_content_field_validation']['unique_text'] = [
+        '#type' => 'textarea',
+        '#title' => t('Unique message validation'),
+        '#default_value' => $node_type->getThirdPartySetting('unique_content_field_validation', 'unique_text', ''),
+        '#description' => t('Message to show up when the content is duplicated. <br /> To show the Title field label use %label <br /> To show the value of the field use %value'), //phpcs:ignore
+        '#states' => [
+            'visible' => [
+                ':input[name="unique_content_field_validation[unique]"]' => ['checked' => true],
+            ],
+        ],
+    ];
+    $form['#entity_builders'][] = 'unique_content_field_validation_form_node_type_form_builder';
+}
+
+/**
+ * Entity builder for the node title unique content field validation.
+ *
+ * @see unique_content_field_validation_form_node_type_form_alter()
+ */
+function unique_content_field_validation_form_node_type_form_builder($entity_type, NodeTypeInterface $node_type, &$form, FormStateInterface $form_state) //phpcs:ignore
+{
+    $unique_settings = $form_state->getValue('unique_content_field_validation');
+    $node_type->setThirdPartySetting('unique_content_field_validation', 'unique', $unique_settings['unique']);
+    $node_type->setThirdPartySetting('unique_content_field_validation', 'unique_text', $unique_settings['unique_text']);
+}
+
+/**
+ * Implements hook_field_widget_single_element_form_alter().
+ */
+function unique_content_field_validation_field_widget_single_element_form_alter(&$element, FormStateInterface $form_state, $context) //phpcs:ignore
+{
+    /** @var Drupal\field\Entity\FieldConfig $field_definition */
+    $field_definition = $context['items']->getFieldDefinition();
+    $name = $field_definition->getFieldStorageDefinition()->getName();
+    if ($field_definition instanceof FieldConfig) {
+      // Unique entity field value.
+        if ($field_definition->getThirdPartySetting('unique_content_field_validation', 'unique')) {
+            $element['#unique_field_settings'] = [
+                'field_definition' => $field_definition,
+                'field_name' => $name,
+                'message' => $field_definition->getThirdPartySetting('unique_content_field_validation', 'unique_text', ''), //phpcs:ignore
+            ];
+
+            $element['#element_validate'][] = 'unique_content_field_validation_validate_unique';
+        }
+
+        // Unique multi-value field value within the same field.
+        if ($field_definition->getThirdPartySetting('unique_content_field_validation', 'unique_multivalue')) {
+            $element['#unique_multi_field_settings'] = [
+                'field_definition' => $field_definition,
+                'field_name' => $name,
+                'message' => $field_definition->getThirdPartySetting('unique_content_field_validation', 'unique_multivalue_text', ''), //phpcs:ignore
+            ];
+            $element['#element_validate'][] = 'unique_content_field_validation_unique_multivalue';
+        }
+    }
+}
+
+/**
+ * Callback to validate field.
+ */
+function unique_content_field_validation_validate_unique($element, FormStateInterface $form_state, array $form)
+{
+    $items = [];
+
+    // Check whether the method exists before continuing.
+    if (!method_exists($form_state->getFormObject(), 'getEntity')) {
+        return;
+    }
+
+    $entity = $form_state->getFormObject()->getEntity();
+    // If !isset langcode set it to 0.
+    $langcode = (
+        !empty($form_state->getValues()['langcode'][0]['value']) &&
+        $form_state->getValues()['langcode'][0]['value']) ?
+        $form_state->getValues()['langcode'][0]['value'] : '0';
+
+    $field_name = $element['#unique_field_settings']['field_name'];
+    $field_definition = $element['#unique_field_settings']['field_definition'];
+    $field_label = $field_definition->label();
+    $form_value = $form_state->getValue($field_name) ?? [];
+
+    foreach ($form_value as $key => $values) {
+        if (is_numeric($key)) {
+            foreach ($values as $key_value => $value) {
+                if (in_array($key_value, UniqueContentFieldValidationInterface::UNIQUE_CONTENT_FIELD_VALIDATION_VALID_KEY_VALUES)) { //phpcs:ignore
+                    $items[$key] = $value;
+                }
+            }
+        }
+    }
+    $entity_type = $entity->getEntityTypeId();
+
+    if ($items) {
+      // If field is not unique set error.
+        $valid = unique_content_field_validation_field_is_unique($entity_type, $langcode, $field_name, $items, $entity->bundle(), $entity); //phpcs:ignore
+        if (!$valid) {
+            $items_msg = implode(',', $items);
+            if (!empty($element['#unique_field_settings']['message'])) {
+                $message = str_replace(["%label", "%value"], [$field_label, $items_msg], $element['#unique_field_settings']['message']); //phpcs:ignore
+                $form_state->setErrorByName($field_name, t($message));
+            } else {
+                $form_state->setErrorByName($field_name, t('%label must be unique but "%value" already exists!', [
+                    '%label' => $field_label,
+                    '%value' => $items_msg,
+                ]));
+            }
+
+            $form_state->setRebuild();
+        }
+    }
+}
+
+/**
+ * Callback to validate multi-value field.
+ */
+function unique_content_field_validation_unique_multivalue($element, FormStateInterface $form_state, array $form)
+{
+    $field_name = $element['#unique_multi_field_settings']['field_name'];
+    $field_definition = $element['#unique_multi_field_settings']['field_definition'];
+    $field_label = $field_definition->label();
+    $message_item = !empty($element['#unique_multi_field_settings']['message']) ? $element['#unique_multi_field_settings']['message'] : '%value is already set and each value needs to be unique.'; //phpcs:ignore
+
+    // Check again if the field is multiple in case that
+    // the config is enabled but the field config was set back to non multiple.
+    if ($field_definition->getFieldStorageDefinition()->isMultiple() && $form_state->getValue($field_name)) {
+        $items = [];
+        foreach ($form_state->getValue($field_name) as $key => $values) {
+            if (is_numeric($key)) {
+                foreach ($values as $key_value => $value) {
+                    if (in_array($key_value, UniqueContentFieldValidationInterface::UNIQUE_CONTENT_FIELD_VALIDATION_VALID_KEY_VALUES)) { //phpcs:ignore
+                        if ($value && in_array($value, $items)) {
+                            if (!empty($element['#unique_multi_field_settings']['message'])) {
+                                $message = str_replace(["%label", "%value"], [$field_label, $value], $element['#unique_multi_field_settings']['message']); //phpcs:ignore
+                                $form_state->setErrorByName($field_name, t($message));
+                            } else {
+                                $form_state->setErrorByName($field_name, t('%value is already set and each value needs to be unique.', [ //phpcs:ignore
+                                    '%label' => $field_label,
+                                    '%value' => $value,
+                                ]));
+                            }
+                        }
+                        $items[] = $value;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Content field validation.
+ *
+ * @param string $entity_type
+ *   Id of the Entity Type.
+ * @param string $langcode
+ *   Landcode.
+ * @param string $field_name
+ *   The name of the field.
+ * @param array $values
+ *   Value to search.
+ * @param string $bundle
+ *   Bundle of the entity.
+ * @param object $entity
+ *   Entity object.
+ *
+ * @return bool
+ *   Whether the entity is unique or not.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function unique_content_field_validation_field_is_unique($entity_type, $langcode, $field_name, array $values, $bundle, $entity) //phpcs:ignore
+{
+    $valid = true;
+    $entity_type_definition = Drupal::entityTypeManager()->getDefinition($entity_type);
+
+    $query = Drupal::entityQuery($entity_type)
+      ->condition($field_name, $values, 'IN');
+    // Check entity has a bundle.
+    if (!empty($entity_type_definition->getKey('bundle'))) {
+        $query->condition($entity_type_definition->getKey('bundle'), $bundle, '=');
+    }
+    $query->condition('langcode', $langcode);
+    $entities = $query->accessCheck(false)->execute();
+
+    if ($entities) {
+        $valid = false;
+        if ($entity->id() && in_array($entity->id(), $entities)) {
+            $valid = true;
+        }
+    }
+    return $valid;
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function unique_content_field_validation_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type)
+{
+    if ($entity_type->id() === 'node' && isset($fields['title']) && $fields['title']) {
+        // Adding a Unique content title constraint.
+        $fields['title']->addConstraint('UniqueContentTitle', []);
+    }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function unique_content_field_validation_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) //phpcs:ignore
+{
+    /* This is necessary for content types where the title label is changed from the default "Title" to something else.
+    * In this case, the title field is considered a bundle field and the constraint must be added here.
+    * This is expected (not a Drupal bug); there is some info here: https://www.drupal.org/project/drupal/issues/3193351
+    */
+    if ($entity_type->id() === 'node' && isset($fields['title']) && $fields['title']) {
+        $fields['title']->addConstraint('UniqueContentTitle', []);
+    }
+}

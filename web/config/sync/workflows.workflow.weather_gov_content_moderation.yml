@@ -3,7 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - node.type.dynamic_safety_information
+    - node.type.page
+    - node.type.testing_page
     - node.type.weather_story
+    - node.type.wfo_promo
   module:
     - content_moderation
 id: weather_gov_content_moderation
@@ -51,5 +55,9 @@ type_settings:
       weight: 1
   entity_types:
     node:
+      - dynamic_safety_information
+      - page
+      - testing_page
       - weather_story
+      - wfo_promo
   default_moderation_state: draft
