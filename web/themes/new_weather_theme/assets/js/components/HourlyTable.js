@@ -43,11 +43,11 @@ class HourlyTable extends HTMLElement {
 
   clickScrollRight(wrapper) {
     const containerWidth = wrapper.getBoundingClientRect().width;
-    const firstColumnWidth = this.querySelector("table tr:last-child th").getBoundingClientRect().width;
+    const firstColumnWidth = this.querySelector("table tbody:last-child tr:last-child th").getBoundingClientRect().width;
     const visibleWidth = containerWidth;
     const rightSide = wrapper.scrollLeft + visibleWidth;
 
-    const nextCol = Array.from(this.querySelectorAll("table tr:last-child td"))
+    const nextCol = Array.from(this.querySelectorAll("table tbody:last-child tr:last-child td"))
           .find(el => {
             const left = el.offsetLeft;
             const right = el.offsetLeft + el.offsetWidth;
@@ -69,11 +69,11 @@ class HourlyTable extends HTMLElement {
 
   clickScrollLeft(wrapper) {
     const containerWidth = wrapper.getBoundingClientRect().width;
-    const firstColumnWidth = this.querySelector("table tr:last-child th").getBoundingClientRect().width;
+    const firstColumnWidth = this.querySelector("table tbody:last-child tr:last-child th").getBoundingClientRect().width;
     const visibleWidth = containerWidth - firstColumnWidth;
     const leftSide = wrapper.scrollLeft - visibleWidth + firstColumnWidth;
 
-    const prevCol = Array.from(this.querySelectorAll("table tr:last-child td"))
+    const prevCol = Array.from(this.querySelectorAll("table tbody:last-child tr:last-child td"))
           .find(el => {
             const left = el.offsetLeft;
             const right = el.offsetLeft + el.offsetWidth;

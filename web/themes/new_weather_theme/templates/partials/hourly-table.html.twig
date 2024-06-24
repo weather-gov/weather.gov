@@ -22,13 +22,14 @@
   </div>
 
   <div id="hourly-table-container" class="usa-table-container--scrollable">
-    <table class="usa-table usa-table--borderless hourly-table" tabindex="0">
+    <table class="usa-table usa-table--borderless hourly-table" tabindex="0" {% if alertPeriods | length > 0 %} data-has-alerts="true" {% else %} data-has-alerts="false" {% endif %}>
       <caption class="usa-sr-only">{{ "Detailed hourly weather data for @place. The rows are weather variables, the columns are hours." | t({ "@place": for }) }}</caption>
+      <tbody data-table-section="time-alerts" class="border-bottom-1px border-base-light">
       <tr data-row-name="time">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
+        <th scope="row" class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
         {% for period in hours %}
         <th scope="col">
-          <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-primary-darker">
+          <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-base-lightest">
             {{ period.time }}
           </time>
         </th>
@@ -37,122 +38,125 @@
       {%  if alertPeriods | length > 0 %}
       {% include '@new_weather_theme/partials/alerts-in-hourly-table.html.twig' with { 'periods': hours, 'alertPeriods': alertPeriods } %}
       {% endif %}
-      <tr data-row-name="temp">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-          {{"Temp" | t}}
-        </th>
-        {% for period in hours %}
-        <td>
-          {% if period.temperature is not same as (null) %}
-          {{ period.temperature }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
-          <span class="usa-sr-only">℉</span>
-          {% else %}
-          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
-          {% endif %}
-        </td>
-        {% endfor %}
-      </tr>
-      <tr data-row-name="apparentTemp">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-          {{"Feels like" | t}}
-        </th>
-        {% for period in hours %}
-        <td>
-          {% if period.apparentTemperature is not same as (null) %}
-          {{ period.apparentTemperature }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
-          <span class="usa-sr-only">℉</span>
-          {% endif %}
-        </td>
-        {% endfor %}
-      </tr>
-      <tr data-row-name="condition">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-          {{"Condition" | t}}
-        </th>
-        {% for period in hours %}
-        <td>
-          {% if period.icon.icon %}
-          <div class="line-height-sans-3">
-            <div class="icon margin-right-1 width-3 margin-top-05">
-              <svg role="img" aria-hidden="true" class="maxh-3 maxw-3">
-                <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.icon.base }}"></use>
-              </svg>
+      </tobdy>
+      <tbody data-table-section="variables">
+        <tr data-row-name="temp">
+          <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            {{"Temperature" | t}}
+          </th>
+          {% for period in hours %}
+          <td>
+            {% if period.temperature is not same as (null) %}
+            {{ period.temperature }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+            <span class="usa-sr-only">℉</span>
+            {% else %}
+            <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        <tr data-row-name="apparentTemp">
+          <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            {{"Feels like" | t}}
+          </th>
+          {% for period in hours %}
+          <td>
+            {% if period.apparentTemperature is not same as (null) %}
+            {{ period.apparentTemperature }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+            <span class="usa-sr-only">℉</span>
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        <tr data-row-name="condition">
+          <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            {{"Condition" | t}}
+          </th>
+          {% for period in hours %}
+          <td>
+            {% if period.icon.icon %}
+            <div class="line-height-sans-3">
+              <div class="icon margin-right-1 width-3 margin-top-05">
+                <svg role="img" aria-hidden="true" class="maxh-3 maxw-3">
+                  <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.icon.base }}"></use>
+                </svg>
+              </div>
+              <div>
+                {% if period.conditions | length %}
+                <p class="margin-y-0">{{period.conditions}}</p>
+                {% else %}
+                <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+                {% endif %}
+              </div>
             </div>
-            <div>
-              {% if period.conditions | length %}
-              <p class="margin-y-0">{{period.conditions}}</p>
-              {% else %}
-              <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
-              {% endif %}
-            </div>
-          </div>
-          {% endif %}
-        </td>
-        {% endfor %}
-      </tr>
-      <tr data-row-name="chance-precipitation">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
-          {{"Chance of precipitation" | t}}
-        </th>
-        {% for period in hours %}
-        <td> 
-          {% if period.probabilityOfPrecipitation is not same as (null) %}
-          <p class="margin-y-0"> {{period.probabilityOfPrecipitation}}% </p>
-          {% else %}
-          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
-          {% endif %}
-        </td>
-        {% endfor %}
-      </tr>
-      <tr data-row-name="wind-speed">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
-          {{"Wind speed" | t}}
-        </th>
-        {% for period in hours %}
-        <td>
-          {% include '@new_weather_theme/partials/wind.html.twig'
-            with {
-              wind: {
-                speed: period.windSpeed,
-                direction: period.windDirection
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        <tr data-row-name="chance-precipitation">
+          <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
+            {{"Chance of precipitation" | t}}
+          </th>
+          {% for period in hours %}
+          <td> 
+            {% if period.probabilityOfPrecipitation is not same as (null) %}
+            <p class="margin-y-0"> {{period.probabilityOfPrecipitation}}% </p>
+            {% else %}
+            <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        <tr data-row-name="wind-speed">
+          <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
+            {{"Wind speed" | t}}
+          </th>
+          {% for period in hours %}
+          <td>
+            {% include '@new_weather_theme/partials/wind.html.twig'
+              with {
+                wind: {
+                  speed: period.windSpeed,
+                  direction: period.windDirection
+                }
               }
-            }
-          %}
-          {% if period.windGust is not same as (null) %}
-            <div>{{ "gusting to @gustSpeed mph " | t({ "@gustSpeed": period.windGust }) }}</div>
-          {% endif %}
-        </td>
-        {% endfor %}
-      </tr>
-      <tr data-row-name="humidity">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-          {{"Humidity" | t}}
-        </th>
-        {% for period in hours %}
-        <td>
-          {% if period.relativeHumidity is not same as (null) %}
-          {{period.relativeHumidity}}%
-          {% else %}
-          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
-          {% endif %}
-        </td>
-        {% endfor %}
-      </tr>
-      <tr data-row-name="dewpoint">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-          {{"Dewpoint" | t}}
-        </th>
-        {% for period in hours %}
-        <td>
-          {% if period.dewpoint is not same as (null) %}
-          {{period.dewpoint}}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
-          <span class="usa-sr-only">℉</span>
-          {% else %}
-          <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
-          {% endif %}
-        </td>
-        {% endfor %}
-      </tr>
+            %}
+            {% if period.windGust is not same as (null) %}
+              <div>{{ "gusting to @gustSpeed mph " | t({ "@gustSpeed": period.windGust }) }}</div>
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        <tr data-row-name="humidity">
+          <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            {{"Humidity" | t}}
+          </th>
+          {% for period in hours %}
+          <td>
+            {% if period.relativeHumidity is not same as (null) %}
+            {{period.relativeHumidity}}%
+            {% else %}
+            <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        <tr data-row-name="dewpoint">
+          <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            {{"Dewpoint" | t}}
+          </th>
+          {% for period in hours %}
+          <td>
+            {% if period.dewpoint is not same as (null) %}
+            {{period.dewpoint}}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+            <span class="usa-sr-only">℉</span>
+            {% else %}
+            <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+      </tbody>
     </table>
   </div>
 </wx-hourly-table>

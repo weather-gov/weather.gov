@@ -1,5 +1,6 @@
 @use "uswds-core" as *;
 
+
 /* Scroll button states
 ------------------------------------- */
 .wx-scroll-button {
@@ -31,7 +32,8 @@ $expand-duration: 250ms;
 .usa-table.hourly-table {
   td,
   th {
-    padding-left: 0;
+    border: 0; 
+    padding-left: units(1);
     vertical-align: top;
   }
 
@@ -63,14 +65,19 @@ $expand-duration: 250ms;
     }
   }
 
+  tr[data-row-name="alert"]:first-of-type td {
+    padding-top: units(2);
+  }
+
   tr[data-row-name="alert"]:last-of-type td {
-    padding-bottom: 0 !important;
+    padding-bottom: units(2);
   }
 
   // Fighting specificity
   tr[data-row-name="time"] th:nth-child(2) {
     padding-left: units(2);
   }
+
 }
 
 // Table shadow only shows on scroll
@@ -86,5 +93,16 @@ wx-hourly-table[data-scrolled="true"] .usa-table.hourly-table th:first-of-type {
     background-image: linear-gradient(90deg, rgba(0 0 0 / 10%), transparent);
     background-size: 50%;
     background-repeat: no-repeat;
+  }
+}
+
+.usa-table.hourly-table tbody{
+  &[data-table-section="time-alerts"] tr:first-child th {
+    background-color: color('accent-cool-dark');
+    vertical-align: text-top;
+  }
+
+  &[data-table-section="variables"] tr:nth-child(even) > * { 
+    background-color: color('base-lightest');
   }
 }
