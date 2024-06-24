@@ -41,7 +41,7 @@ for (const { name, url } of pages) {
         ({ id, description, nodes }) => {
           if (process.env.CI)
             console.log(
-              `::warning title=${name} accessibility::(${id}) - ${description} [selectors: ${nodes.map(({ target }) => target).join(", ")}]`,
+              `\n::warning title=${name} accessibility::(${id}) - ${description} [selectors: ${nodes.map(({ target }) => target).join(", ")}]`,
             );
           else {
             console.log(`${name} accessibility
