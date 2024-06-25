@@ -1,12 +1,18 @@
 @use "uswds-core" as *;
 
 .wx-radar-container {
-  aspect-ratio: 3/4;
+  aspect-ratio: 3/2;
+
+  &.wx-radar-container__expanded {
+    aspect-ratio: 3/4;
+  }
 }
 
-@include at-media("desktop") {
+@include at-media("tablet") {
   .wx-radar-container {
-    aspect-ratio: 1/1;
+    &.wx-radar-container__expanded {
+      aspect-ratio: 1/1;
+    }
   }
 }
 
