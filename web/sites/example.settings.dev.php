@@ -859,8 +859,8 @@ $settings["weather_login_local_form"] = true;
  * env variable
  */
 $nowTime = getenv("WX_NOW_TIMESTAMP");
-$isLocalDev = !(getenv("VCAP_APPLICATION"));
-if ($nowTime && isLocalDev) {
+$isLocalDev = !(getenv("VCAP_APPLICATION")) || false;
+if ($nowTime && $isLocalDev) {
     $settings["wx_now_timestamp"] = $nowTime;
 } else {
     $settings["wx_now_timestamp"] = false;
