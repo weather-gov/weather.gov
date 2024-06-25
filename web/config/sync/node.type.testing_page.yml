@@ -12,7 +12,7 @@ third_party_settings:
 name: 'Testing Page'
 type: testing_page
 description: 'Custom pages used for site development and testing'
-help: ''
+help: null
 new_revision: false
 preview_mode: 1
 display_submitted: true

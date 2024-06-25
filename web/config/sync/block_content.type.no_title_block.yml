@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: no_title_block
 label: 'No title block'
-revision: 0
+revision: false
 description: 'Block only has a body.'
