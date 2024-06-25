@@ -6,7 +6,7 @@ name: beta.weather.gov
 mail: admin@noaa.gov
 slogan: 'National Weather Service'
 page:
-  403: ''
+  403: /user/login
   404: ''
   front: /home
 admin_compact_mode: false
