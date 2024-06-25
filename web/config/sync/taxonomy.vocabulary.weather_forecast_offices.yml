@@ -4,5 +4,6 @@ status: true
 dependencies: {  }
 name: 'Weather Forecast Offices'
 vid: weather_forecast_offices
-description: ''
+description: null
 weight: 0
+new_revision: false
