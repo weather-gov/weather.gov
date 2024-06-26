@@ -11,6 +11,30 @@
       color: color("primary-dark");
     }
   }
+
+  &.wx-alert-li--warning {
+    background-color: color("red-cool-10v");
+
+    &::before {
+      background-color: color("red-50");
+    }
+  }
+
+  &.wx-alert-li--watch {
+    background-color: color("yellow-5");
+
+    &::before {
+      background-color: color("yellow-50v");
+    }
+  }
+
+  &.wx-alert-li--other {
+    background-color: color("base-lightest");
+
+    &::before {
+      background-color: color("base-dark");
+    }
+  }
 }
 
 

@@ -1,5 +1,38 @@
 @use "uswds-core" as *;
 
+/* Color utilities
+------------------------------------- */
+.wx-bg-red-10v {
+  background-color: color("red-10v");
+}
+
+.wx-bg-yellow-5 {
+  background-color: color("yellow-5");
+}
+
+.wx-border-gray-cool-30 {
+  border-color: color("gray-cool-30");
+}
+
+.wx-border-red-40v {
+  border-color: color("red-40v");
+}
+
+.wx-border-yellow-20v {
+  border-color: color("yellow-20v");
+}
+
+/* Column utility
+------------------------------------- */
+.wx-col-2 {
+  column-count: 2;
+  column-gap: units(4);
+
+  li {
+    break-inside: avoid-column;
+  }
+}
+
 /* Flex custom utilities 
 ------------------------------------- */
 .wx-flex-basis-auto {
@@ -58,7 +91,6 @@
   margin-bottom: units(1);
 }
 
-
 /* Custom unstyle button utilities
 ------------------------------------- */
 .wx-button--unstyled-light {
@@ -76,16 +108,3 @@
     color: color("accent-cool-lighter");
   }
 }
-
-
-/* Column utility
-------------------------------------- */
-.wx-col-2 {
-  column-count: 2;
-  column-gap: units(4);
-
-  li {
-    break-inside: avoid-column;
-  }
-}
-

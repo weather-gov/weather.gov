@@ -2,8 +2,21 @@
 <weathergov-alert-list>
 <div class="margin-top-0 margin-bottom-2">
 {% for alert in content.alerts %}
-<div class="usa-alert usa-alert--warning usa-alert--slim margin-top-0 padding-y-05" role="alert">
-  <div class="usa-alert__body">
+  {% if alert.alertType | lower == "warning" %}
+    {% set alertBgColor = "wx-bg-red-10v" %}
+    {% set alertBorderColor = "wx-border-red-40v" %}
+    {% set alertBodyStyle = "warning" %}
+  {% elseif alert.alertType | lower == "watch"  %}
+    {% set alertBgColor = "wx-bg-yellow-5" %}
+    {% set alertBorderColor = "wx-border-yellow-50v" %}
+    {% set alertBodyStyle = "watch" %}
+  {% else %}
+    {% set alertBgColor = "bg-base-lightest" %}
+    {% set alertBorderColor = "wx-border-gray-cool-30" %}
+    {% set alertBodyStyle = "other" %}
+  {% endif %}
+  <div class="usa-alert usa-alert--warning usa-alert--slim margin-top-0 margin-bottom-1 padding-y-05 {{ alertBgColor }} {{ alertBorderColor }}" role="alert">
+  <div class="usa-alert__body wx-alert-li--{{ alertBodyStyle }}">
     <a href="#alert_{{ alert.alertId }}">
       {{ alert.event | t}} {{ alert.durationText }}
 
