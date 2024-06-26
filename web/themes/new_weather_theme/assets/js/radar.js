@@ -107,6 +107,16 @@ const setupRadar = () => {
   const expandButton = document.querySelector("button.wx-radar-expand");
   if (expandButton) {
     expandButton.addEventListener("click", toggleMapExpand);
+
+    // The sticky top of the expand button should be the bottom of the tab list,
+    // so query that and set the button's top accordingly. Do it this way rather
+    // than hard-coding it so things will behave well later if the tab list
+    // height changes.
+    const tabList = document.querySelector(`div.tab-buttons[role="tablist"]`);
+    if (tabList) {
+      const buttonContainer = expandButton.parentElement;
+      buttonContainer.style.top = `${tabList.offsetHeight}px`;
+    }
   }
 };
 
