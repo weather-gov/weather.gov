@@ -1,9 +1,107 @@
 uuid: 79442ee6-da3c-4c91-95d4-fbf53472b464
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - block_content.type.basic
+    - block_content.type.no_title_block
+    - filter.format.basic_html
+    - node.type.dynamic_safety_information
+    - node.type.page
+    - node.type.testing_page
+    - node.type.weather_story
+    - node.type.wfo_promo
+    - taxonomy.vocabulary.weather_event_types
+    - taxonomy.vocabulary.weather_forecast_offices
+    - workflows.workflow.weather_gov_content_moderation
+  module:
+    - block_content
+    - content_moderation
+    - contextual
+    - file
+    - filter
+    - help
+    - node
+    - scheduler
+    - system
+    - taxonomy
+    - toolbar
+    - workbench_access
 id: user_admin
 label: 'User Admin'
 weight: -5
 is_admin: null
-permissions: {  }
+permissions:
+  - 'access administration pages'
+  - 'access block library'
+  - 'access content'
+  - 'access content overview'
+  - 'access contextual links'
+  - 'access files overview'
+  - 'access help pages'
+  - 'access site reports'
+  - 'access taxonomy overview'
+  - 'access toolbar'
+  - 'administer nodes'
+  - 'administer permissions'
+  - 'administer taxonomy'
+  - 'administer users'
+  - 'assign selected workbench access'
+  - 'batch update workbench access'
+  - 'create basic block content'
+  - 'create dynamic_safety_information content'
+  - 'create no_title_block block content'
+  - 'create page content'
+  - 'create terms in weather_event_types'
+  - 'create terms in weather_forecast_offices'
+  - 'create weather_story content'
+  - 'create wfo_promo content'
+  - 'delete any basic block content'
+  - 'delete any dynamic_safety_information content'
+  - 'delete any no_title_block block content'
+  - 'delete any page content'
+  - 'delete any weather_story content'
+  - 'delete any wfo_promo content'
+  - 'delete own files'
+  - 'delete terms in weather_event_types'
+  - 'delete terms in weather_forecast_offices'
+  - 'edit any basic block content'
+  - 'edit any dynamic_safety_information content'
+  - 'edit any no_title_block block content'
+  - 'edit any page content'
+  - 'edit any testing_page content'
+  - 'edit any weather_story content'
+  - 'edit any wfo_promo content'
+  - 'edit terms in weather_event_types'
+  - 'edit terms in weather_forecast_offices'
+  - 'revert any basic block content revisions'
+  - 'revert any no_title_block block content revisions'
+  - 'revert dynamic_safety_information revisions'
+  - 'revert page revisions'
+  - 'revert term revisions in weather_event_types'
+  - 'revert term revisions in weather_forecast_offices'
+  - 'revert weather_story revisions'
+  - 'revert wfo_promo revisions'
+  - 'schedule publishing of nodes'
+  - 'use text format basic_html'
+  - 'use weather_gov_content_moderation transition archive'
+  - 'use weather_gov_content_moderation transition create_new_draft'
+  - 'use weather_gov_content_moderation transition publish'
+  - 'use workbench access'
+  - 'view all revisions'
+  - 'view all taxonomy revisions'
+  - 'view any basic block content history'
+  - 'view any no_title_block block content history'
+  - 'view any unpublished content'
+  - 'view dynamic_safety_information revisions'
+  - 'view latest version'
+  - 'view own unpublished content'
+  - 'view page revisions'
+  - 'view scheduled content'
+  - 'view term revisions in weather_event_types'
+  - 'view term revisions in weather_forecast_offices'
+  - 'view the administration theme'
+  - 'view vocabulary labels'
+  - 'view weather_story revisions'
+  - 'view wfo_promo revisions'
+  - 'view workbench access information'
