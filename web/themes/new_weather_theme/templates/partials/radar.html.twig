@@ -21,10 +21,16 @@
         });
       </script>
     </div>
-    <div class="grid-row wx-radar-container">
-       <wx-radar class="grid-col-12" lat="{{ point.lat }}" lon="{{ point.lon }}">
-         <div id="wx_radar_container" style="height: 300px;"></div>
+    <div class="grid-row wx-radar-container position-relative">
+      <wx-radar class="grid-col-12" lat="{{ point.lat }}" lon="{{ point.lon }}">
+        <div id="wx_radar_container" style="height: 300px;"></div>
       </wx-radar>
+
+      <div class="position-absolute top-0 right-0 height-full">
+        <div class="position-sticky top-0" style="top:100px;">
+          <button class="wx-radar-expand padding-0 margin-1">{{ source(directory ~ '/assets/images/weather/icons/wx_zoom-in-map.svg') }}</button>
+        </div>
+      </div>
     </div>
 
     {% set intensities = [{

@@ -6,6 +6,40 @@
   &.wx-radar-container__expanded {
     aspect-ratio: 3/4;
   }
+
+  button.wx-radar-expand {
+    @include u-bg("transparent");
+    border: 0;
+
+    svg {
+      @include u-bg("white");
+      fill: color("base");
+      stroke: color("base");
+
+      height: units(4);
+      width: units(4);
+      @include u-shadow(1);
+
+      &:hover,
+      &:focus,
+      &:active {
+        @include u-shadow(2);
+      }
+
+      &:hover,
+      &:focus {
+        @include u-bg("base-dark");
+        stroke: color("base-lighter");
+        fill: color("base-lighter");
+      }
+
+      &:active {
+        @include u-bg("base-dark");
+        stroke: color("base-light");
+        fill: color("base-light");
+      }
+    }
+  }
 }
 
 @include at-media("tablet") {
