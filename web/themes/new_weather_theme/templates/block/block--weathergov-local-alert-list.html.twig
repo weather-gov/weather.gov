@@ -2,11 +2,11 @@
 <weathergov-alert-list>
 <div class="margin-top-0 margin-bottom-2">
 {% for alert in content.alerts %}
-  {% if alert.alertType | lower == "warning" %}
+  {% if alert.alertLevel | lower == "warning" %}
     {% set alertBgColor = "wx-bg-red-10v" %}
     {% set alertBorderColor = "wx-border-red-40v" %}
     {% set alertBodyStyle = "warning" %}
-  {% elseif alert.alertType | lower == "watch"  %}
+  {% elseif alert.alertLevel | lower == "watch"  %}
     {% set alertBgColor = "wx-bg-yellow-5" %}
     {% set alertBorderColor = "wx-border-yellow-50v" %}
     {% set alertBodyStyle = "watch" %}
