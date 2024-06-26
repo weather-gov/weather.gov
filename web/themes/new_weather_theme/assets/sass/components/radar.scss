@@ -12,6 +12,11 @@
     border: 0;
 
     svg {
+      // Inline elements have a default baseline vertical alignment which
+      // adds a bottom gap that cannot be styled away. We can either change the
+      // vertical alignment or the display type to get rid of it. Without this
+      // change, the button is taller than the contents.
+      display: block;
       @include u-bg("white");
       fill: color("base");
       stroke: color("base");

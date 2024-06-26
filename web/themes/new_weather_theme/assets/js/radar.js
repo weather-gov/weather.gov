@@ -1,7 +1,16 @@
 const toggleMapExpand = (() => {
   let expanded = false;
+
+  const sprites = {
+    false:
+      "/themes/new_weather_theme/assets/images/uswds/sprite.svg#zoom_out_map",
+    true: "/themes/new_weather_theme/assets/images/spritesheet.svg#wx_zoom-in-map",
+  };
+
   return (event) => {
     const container = event.target.closest(".wx-radar-container");
+    const svgUse = document.querySelector("button.wx-radar-expand svg use");
+
     expanded = !expanded;
 
     if (expanded) {
@@ -10,8 +19,11 @@ const toggleMapExpand = (() => {
       container.classList.remove("wx-radar-container__expanded");
     }
 
-    // CMI is listening to resize events on the window, not the container, so
-    // let's fire a resize event so the map will grow/shrink correctly.
+    svgUse.setAttribute("xlink:href", sprites[expanded]);
+
+    // If an element changes size due toggling a CSS class, that does not
+    // trigger a resize event. CMI is listening to resize events on the window,
+    // so let's fire a resize event so the map will grow/shrink correctly.
     window.dispatchEvent(new Event("resize"));
   };
 })();
