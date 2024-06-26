@@ -18,12 +18,12 @@ const getMarkupForEntries = (entries) => {
   // different node of existing published content.
   const wfoName = entries[0].name;
   let infoPrefix = `There is already a published Weather Story for the ${wfoName} WFO:`;
-  if(entries.length > 1){
+  if (entries.length > 1) {
     infoPrefix = `There are already published Weather Stories for the ${wfoName} WFO:`;
   }
-  const linkListLinks = entries.map(entry => {
-    return `<li><a href=${entry.nodeUrl} target="_blank">${entry.nodeTitle}</a></li>`;
-  }).join("\n");
+  const linkListLinks = entries
+    .map((entry) => `<li><a href=${entry.nodeUrl} target="_blank">${entry.nodeTitle}</a></li>`)
+    .join("\n");
   const linkList = `<ul>${linkListLinks}</ul>`;
   return `<p>${infoPrefix}</p>\n${linkList}`;
 };
@@ -48,10 +48,10 @@ const WeatherStoryModalHandler = {
    * WFO Term ids
    */
   hasExistingId: (anId) => {
-    if(WeatherStoryModalHandler.entries){
-      return WeatherStoryModalHandler.entries.map(entry => {
-        return entry.id;
-      }).includes(anId);
+    if (WeatherStoryModalHandler.entries) {
+      return WeatherStoryModalHandler.entries
+        .map((entry) => entry.id)
+        .includes(anId);
     }
 
     return false;
@@ -64,21 +64,20 @@ const WeatherStoryModalHandler = {
   submitHandler: (event) => {
     // We only care about submit events where
     // the publish button was pushed.
-    if(event.target.id !== "edit-publish"){
+    if (event.target.id !== "edit-publish") {
       return;
     }
-    const value = document.querySelector('input[data-drupal-selector^="edit-field-wfo"]').value;
-    if(!value || value == ""){
+    const value = document.querySelector(
+      'input[data-drupal-selector^="edit-field-wfo"]',
+    ).value;
+    if (!value || value === "") {
       return;
     }
     const idMatch = value.match(/^.*\(([0-9]+)\).*$/);
     const id = idMatch[1];
-    const matchingEntries = WeatherStoryModalHandler.entries.filter(entry => {
-      return entry.id == id;
-    });
-    if(matchingEntries.length){
+    const matchingEntries = WeatherStoryModalHandler.entries.filter((entry) => entry.id === id);
+    if (matchingEntries.length) {
       event.preventDefault();
-      console.log(event.target);
       WeatherStoryModalHandler.showModalWith(id, event.target, matchingEntries);
     }
   },
@@ -89,67 +88,69 @@ const WeatherStoryModalHandler = {
    */
   showModalWith: (id, submitterElement, matchingEntries) => {
     // Add the text to the modal
-    const description = document.createElement('div');
+    const description = document.createElement("div");
     description.innerHTML = getMarkupForEntries(matchingEntries);
     WeatherStoryModalHandler.modal.prepend(description);
 
     // Add event handlers to the modal's buttons
-    Array.from(WeatherStoryModalHandler.modal.querySelectorAll('button'))
-      .forEach(button => {
-        button.addEventListener('click', () => {
-          // The data attribute will reference the id
-          // of a target button to programmatically click
-          // on the page's actual form.
-          // If there is no target, the modal will simply close
-          const targetButton = document.getElementById(
-            button.dataset.modalSubmitterTarget
+    Array.from(
+      WeatherStoryModalHandler.modal.querySelectorAll("button"),
+    ).forEach((button) => {
+      button.addEventListener("click", () => {
+        // The data attribute will reference the id
+        // of a target button to programmatically click
+        // on the page's actual form.
+        // If there is no target, the modal will simply close
+        const targetButton = document.getElementById(
+          button.dataset.modalSubmitterTarget,
+        );
+        if (!targetButton) {
+          WeatherStoryModalHandler.modal.close();
+        } else {
+          submitterElement.removeEventListener(
+            "click",
+            WeatherStoryModalHandler.submitHandler,
           );
-          if(!targetButton){
-            console.log(button.dataset.modalSubmitterTarget, 'close');
-            WeatherStoryModalHandler.modal.close();
-          } else {
-            submitterElement.removeEventListener('click', WeatherStoryModalHandler.submitHandler);
-            WeatherStoryModalHandler.modal.close();
-            targetButton.click();
-          }
-        });
+          WeatherStoryModalHandler.modal.close();
+          targetButton.click();
+        }
       });
+    });
 
     // Now show the modal
     WeatherStoryModalHandler.modal.showModal();
   },
 
-  get modal(){
-    return document.querySelector('dialog#weather-story-confirm-modal');
-  }
+  get modal() {
+    return document.querySelector("dialog#weather-story-confirm-modal");
+  },
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // First, we find the script tag containing the
   // JSON with any published WFO stories
-  const existingEl = document.getElementById('existing-wfo-entries');
+  const existingEl = document.getElementById("existing-wfo-entries");
 
   // Make sure there is a publish button
-  const publishButton = document.getElementById('edit-publish');
-  if(!publishButton){
+  const publishButton = document.getElementById("edit-publish");
+  if (!publishButton) {
     return;
   }
 
   // Next, ensure that the corresponding modal is
   // on the page
-  if(!existingEl || !WeatherStoryModalHandler.modal){
+  if (!existingEl || !WeatherStoryModalHandler.modal) {
     return;
   }
 
   // Parse the JSON and load it into the
   // modal handler
-  const existingItems = JSON.parse(
-    existingEl.textContent
-  );
+  const existingItems = JSON.parse(existingEl.textContent);
   WeatherStoryModalHandler.setExisting(existingItems);
 
   // Listen for click events on the publish button
-  publishButton.addEventListener('click', WeatherStoryModalHandler.submitHandler);
-  
+  publishButton.addEventListener(
+    "click",
+    WeatherStoryModalHandler.submitHandler,
+  );
 });
-console.log('MODULE LOADED');
