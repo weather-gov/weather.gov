@@ -1,3 +1,4 @@
+/* eslint no-use-before-define: 0 */
 /**
  * Weather Story Create Confirm Modal
  * --------------------------------
@@ -32,9 +33,7 @@ const getMarkupForEntries = (entries) => {
  * Find the dialog element on the page
  * and return it
  */
-const getModal = () => {
-  return document.querySelector("dialog#weather-story-confirm-modal");
-};
+const getModal = () => document.querySelector("dialog#weather-story-confirm-modal");
 
 /**
  * Attempt to retrieve an array of objects
