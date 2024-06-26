@@ -28,129 +28,128 @@ const getMarkupForEntries = (entries) => {
   return `<p>${infoPrefix}</p>\n${linkList}`;
 };
 
-const WeatherStoryModalHandler = {
-  /**
-   * Take an array of objects that represents
-   * existing WFO Terms that already
-   * have published Weather Stories.
-   * These objects will have the keys:
-   *     id - The WFO Term ID
-   *     name - The name of the WFO
-   *     code - The WFO three-letter code
-   */
-  setExisting: (aDictArray) => {
-    WeatherStoryModalHandler.entries = aDictArray;
-  },
+/**
+ * Find the dialog element on the page
+ * and return it
+ */
+const getModal = () => {
+  return document.querySelector("dialog#weather-story-confirm-modal");
+};
 
-  /**
-   * Responds true if the given id
-   * matches one of our existing
-   * WFO Term ids
-   */
-  hasExistingId: (anId) => {
-    if (WeatherStoryModalHandler.entries) {
-      return WeatherStoryModalHandler.entries
-        .map((entry) => entry.id)
-        .includes(anId);
-    }
+/**
+ * Attempt to retrieve an array of objects
+ * corresponding to published Weather Story
+ * WFO information, as provided by the server.
+ * This information will be stored as JSON in a
+ * script tag
+ */
+const getExistingWFOEntries = () => {
+  const jsonEl = document.getElementById("existing-wfo-entries");
+  if(!jsonEl){
+    return [];
+  }
 
-    return false;
-  },
+  return JSON.parse(jsonEl.textContent);
+};
 
-  /**
-   * A handler for any submit events at the
-   * document level. Will check for matches.
-   */
-  submitHandler: (event) => {
-    // We only care about submit events where
-    // the publish button was pushed.
-    if (event.target.id !== "edit-publish") {
-      return;
-    }
-    const value = document.querySelector(
-      'input[data-drupal-selector^="edit-field-wfo"]',
-    ).value;
-    if (!value || value === "") {
-      return;
-    }
-    const idMatch = value.match(/^.*\(([0-9]+)\).*$/);
-    const id = idMatch[1];
-    const matchingEntries = WeatherStoryModalHandler.entries.filter((entry) => entry.id === id);
-    if (matchingEntries.length) {
-      event.preventDefault();
-      WeatherStoryModalHandler.showModalWith(id, event.target, matchingEntries);
-    }
-  },
+/**
+ * Handles showing the dialog element in modal form.
+ *
+ * This function will also add the appropriate event handlers
+ * to the modal window's buttons (see below)
+ * and will prepend some descriptive markup -- including links
+ * to existing Weather Story nodes that match -- to the
+ * beginning of the dialog
+ *
+ * Button delegation: The buttons in the dialog have been
+ * templated in Drupal to have a
+ * `data-modal-submitter-target` property whose value
+ * is the ID of the button on the actual page that should
+ * be clicked programmatically when selected.
+ */
+const showModal = (submitterElement, matchingEntries) => {
+  const modal = getModal();
+  // Add the text to the modal
+  const description = document.createElement("div");
+  description.innerHTML = getMarkupForEntries(matchingEntries);
+  modal.prepend(description);
 
-  /**
-   * Show the modal, binding appropriate methods
-   * to the buttons inside of it
-   */
-  showModalWith: (id, submitterElement, matchingEntries) => {
-    // Add the text to the modal
-    const description = document.createElement("div");
-    description.innerHTML = getMarkupForEntries(matchingEntries);
-    WeatherStoryModalHandler.modal.prepend(description);
-
-    // Add event handlers to the modal's buttons
-    Array.from(
-      WeatherStoryModalHandler.modal.querySelectorAll("button"),
-    ).forEach((button) => {
-      button.addEventListener("click", () => {
-        // The data attribute will reference the id
-        // of a target button to programmatically click
-        // on the page's actual form.
-        // If there is no target, the modal will simply close
-        const targetButton = document.getElementById(
-          button.dataset.modalSubmitterTarget,
+  // Add event handlers to the modal's buttons
+  Array.from(
+    modal.querySelectorAll("button"),
+  ).forEach((button) => {
+    button.addEventListener("click", () => {
+      // The data attribute will reference the id
+      // of a target button to programmatically click
+      // on the page's actual form.
+      // If there is no target, the modal will simply close
+      const targetButton = document.getElementById(
+        button.dataset.modalSubmitterTarget,
+      );
+      if (!targetButton) {
+        modal.close();
+      } else {
+        submitterElement.removeEventListener(
+          "click",
+          publishClickHandler,
         );
-        if (!targetButton) {
-          WeatherStoryModalHandler.modal.close();
-        } else {
-          submitterElement.removeEventListener(
-            "click",
-            WeatherStoryModalHandler.submitHandler,
-          );
-          WeatherStoryModalHandler.modal.close();
-          targetButton.click();
-        }
-      });
+        modal.close();
+        targetButton.click();
+      }
     });
+  });
 
-    // Now show the modal
-    WeatherStoryModalHandler.modal.showModal();
-  },
+  // Now show the modal
+  modal.showModal();
+};
 
-  get modal() {
-    return document.querySelector("dialog#weather-story-confirm-modal");
-  },
+/**
+ * Click handler for the Publish button.
+ * Will stop the default button action,
+ * which is form submission, if there
+ * are matching WFOs in the entries,
+ * then will display the dialog
+ */
+const publishClickHandler = (event) => {
+  // We only care about submit events where
+  // the publish button was pushed.
+  if (event.target.id !== "edit-publish") {
+    return;
+  }
+  const value = document.querySelector(
+    'input[data-drupal-selector^="edit-field-wfo"]',
+  ).value;
+  if (!value || value === "") {
+    return;
+  }
+  const idMatch = value.match(/^.*\(([0-9]+)\).*$/); // actual value looks like "Nashville (184)"
+  const id = idMatch[1];
+  const matchingEntries = getExistingWFOEntries().filter((entry) => entry.id === id);
+  if (matchingEntries.length) {
+    event.preventDefault();
+    showModal(event.target, matchingEntries);
+  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  // First, we find the script tag containing the
-  // JSON with any published WFO stories
-  const existingEl = document.getElementById("existing-wfo-entries");
-
+  
   // Make sure there is a publish button
   const publishButton = document.getElementById("edit-publish");
   if (!publishButton) {
     return;
   }
 
-  // Next, ensure that the corresponding modal is
-  // on the page
-  if (!existingEl || !WeatherStoryModalHandler.modal) {
+  // Get the information about existing Weather Stories
+  // and bail out if the list is empty
+  const existing = getExistingWFOEntries();
+  const modal = getModal();
+  if(existing.length === 0 || !modal){
     return;
   }
-
-  // Parse the JSON and load it into the
-  // modal handler
-  const existingItems = JSON.parse(existingEl.textContent);
-  WeatherStoryModalHandler.setExisting(existingItems);
 
   // Listen for click events on the publish button
   publishButton.addEventListener(
     "click",
-    WeatherStoryModalHandler.submitHandler,
+    publishClickHandler,
   );
 });
