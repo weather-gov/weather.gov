@@ -11,7 +11,7 @@ third_party_settings:
 name: 'WFO Promo'
 type: wfo_promo
 description: 'A quick introduction to the WFO responsible for the forecast on a given page, with a quick path to contact the office or learn more about it.'
-help: ''
+help: null
 new_revision: false
 preview_mode: 1
 display_submitted: true
