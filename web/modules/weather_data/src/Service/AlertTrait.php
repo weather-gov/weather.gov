@@ -219,6 +219,8 @@ trait AlertTrait
                 AlertUtility::getDurationText($output, $now),
             );
 
+            $output->alertType = end(explode(" ",$output->event));
+
             $index += 1;
             return $output;
         }, $alerts);
