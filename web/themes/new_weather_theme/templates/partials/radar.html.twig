@@ -28,7 +28,9 @@
 
       <div class="position-absolute top-0 right-0 height-full">
         <div class="position-sticky top-0" style="top: 55px;">
-          <button class="wx-radar-expand padding-0 margin-1">
+          <button type="button" class="wx-radar-expand padding-0 margin-1">
+            <div class="usa-sr-only wx-radar-expand__description">{{ "expand the radar map" | t }}</div>
+            <div class="usa-sr-only display-none wx-radar-expand__description">{{ "collapse the radar map" | t }}</div>
             <svg role="img" aria-hidden="true" class="width-full height-full">
               <use xlink:href="{{ "/" ~ directory ~ "/assets/images/uswds/sprite.svg#zoom_out_map" }}"></use>
             </svg>

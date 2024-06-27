@@ -8,7 +8,7 @@
   }
 
   button.wx-radar-expand {
-    @include u-bg("transparent");
+    background-color: color("transparent");
     border: 0;
 
     svg {
@@ -17,12 +17,12 @@
       // vertical alignment or the display type to get rid of it. Without this
       // change, the button is taller than the contents.
       display: block;
-      @include u-bg("white");
+      background: color("white");
       fill: color("base");
       stroke: color("base");
-
       height: units(4);
       width: units(4);
+
       @include u-shadow(1);
 
       &:hover,
@@ -33,13 +33,13 @@
 
       &:hover,
       &:focus {
-        @include u-bg("base-dark");
+        background: color("base-dark");
         stroke: color("base-lighter");
         fill: color("base-lighter");
       }
 
       &:active {
-        @include u-bg("base-dark");
+        background: color("base-dark");
         stroke: color("base-light");
         fill: color("base-light");
       }

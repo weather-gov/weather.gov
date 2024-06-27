@@ -19,6 +19,17 @@ const toggleMapExpand = (() => {
       container.classList.remove("wx-radar-container__expanded");
     }
 
+    const descriptors = Array.from(
+      container.querySelectorAll(".wx-radar-expand__description"),
+    );
+    for (const descriptor of descriptors) {
+      if (descriptor.classList.contains("display-none")) {
+        descriptor.classList.remove("display-none");
+      } else {
+        descriptor.classList.add("display-none");
+      }
+    }
+
     svgUse.setAttribute("xlink:href", sprites[expanded]);
 
     // If an element changes size due toggling a CSS class, that does not
