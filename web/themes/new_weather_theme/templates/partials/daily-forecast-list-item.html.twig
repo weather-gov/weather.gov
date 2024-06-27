@@ -91,24 +91,29 @@ only be a nighttime period.
       </div>
       {% endfor %}
     </div>
-    <wx-hourly-toggle class="text-primary margin-top-1" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-togglee" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="remove_circle" data-hidden-icon-name="add_circle" tabindex="0">
-      <span class="margin-top-05 margin-right-05">
-          <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
-              <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#add_circle"></use>
-          </svg>
-      </span>
-      <span class="toggle-text font-mono font-mono-s text-ls-neg-1"></span>
-    </wx-hourly-toggle>
-    <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee">
-      {% include '@new_weather_theme/partials/hourly-table.html.twig'
-      with {
-        for: periods[0].monthAndDay,
-        hours: dayHours,
-        alertPeriods: alertPeriods,
-        itemId: itemId
-      }
-      %}
-      {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipHours } %}
-    </div>
+
+    {% set hourCount = dayHours | length %}
+    {% if hourCount > 0 %}
+      <wx-hourly-toggle class="text-primary margin-top-1" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-togglee" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="remove_circle" data-hidden-icon-name="add_circle" tabindex="0">
+        <span class="margin-top-05 margin-right-05">
+            <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#add_circle"></use>
+            </svg>
+        </span>
+        <span class="toggle-text font-mono font-mono-s text-ls-neg-1"></span>
+      </wx-hourly-toggle>
+      <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee">
+        {% include '@new_weather_theme/partials/hourly-table.html.twig'
+        with {
+          for: periods[0].monthAndDay,
+          hours: dayHours,
+          alertPeriods: alertPeriods,
+          itemId: itemId
+        }
+        %}
+        {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipHours } %}
+      </div>
+    {% endif %}
+
   </div>
 </li>
