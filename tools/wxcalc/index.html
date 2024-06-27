@@ -1,0 +1,188 @@
+<script language="JavaScript">
+  function decideConvert(temp) {
+    var temp = parseFloat(document.Convert.Temp.value);
+
+    if (document.Convert.tempunit[0].checked) {
+      document.Convert.Fahr.value = roundOff(temp);
+      document.Convert.Cels.value = roundOff(convertFtoC(temp));
+      document.Convert.Kel.value = roundOff(convertFtoK(temp));
+      document.Convert.Rank.value = roundOff(convertFtoR(temp));
+    } else if (document.Convert.tempunit[1].checked) {
+      document.Convert.Fahr.value = roundOff(convertCtoF(temp));
+      document.Convert.Cels.value = roundOff(temp);
+      document.Convert.Kel.value = roundOff(convertCtoK(temp));
+      document.Convert.Rank.value = roundOff(convertCtoR(temp));
+    } else if (document.Convert.tempunit[2].checked) {
+      document.Convert.Fahr.value = roundOff(convertKtoF(temp));
+      document.Convert.Cels.value = roundOff(convertKtoC(temp));
+      document.Convert.Kel.value = roundOff(temp);
+      document.Convert.Rank.value = roundOff(convertKtoR(temp));
+    } else if (document.Convert.tempunit[3].checked) {
+      document.Convert.Fahr.value = roundOff(convertRtoF(temp));
+      document.Convert.Cels.value = roundOff(convertRtoC(temp));
+      document.Convert.Kel.value = roundOff(convertRtoK(temp));
+      document.Convert.Rank.value = roundOff(temp);
+    }
+  }
+  function convertFtoC(Fahr) {
+    Cels = 0.55556 * (Fahr - 32);
+    return Cels;
+  }
+
+  function convertFtoK(Fahr) {
+    Kelvin = 0.5556 * (Fahr - 32) + 273.15;
+    return Kelvin;
+  }
+
+  function convertFtoR(Fahr) {
+    Rankin = Fahr + 459.67;
+    return Rankin;
+  }
+
+  function convertCtoF(Cels) {
+    Fahr = 1.8 * Cels + 32;
+    return Fahr;
+  }
+
+  function convertCtoK(Cels) {
+    Kelvin = Cels + 273.15;
+    return Kelvin;
+  }
+
+  function convertCtoR(Cels) {
+    Rankin = 1.8 * Cels + 32 + 459.67;
+    return Rankin;
+  }
+
+  function convertKtoC(Kelvin) {
+    Cels = Kelvin - 273.15;
+    return Cels;
+  }
+
+  function convertKtoF(Kelvin) {
+    Fahr = 1.8 * (Kelvin - 273.15) + 32;
+    return Fahr;
+  }
+
+  function convertKtoC(Kelvin) {
+    Cels = Kelvin - 273.15;
+    return Cels;
+  }
+
+  function convertKtoR(Kelvin) {
+    Rankin = 1.8 * (Kelvin - 273.15) + 32 + 459.67;
+    return Rankin;
+  }
+
+  function convertRtoF(Rankin) {
+    Fahr = Rankin - 459.67;
+    return Fahr;
+  }
+
+  function convertRtoC(Rankin) {
+    Cels = 0.55556 * (Rankin - 459.67 - 32);
+    return Cels;
+  }
+
+  function convertRtoK(Rankin) {
+    Kelvin = 0.55556 * (Rankin - 459.67 - 32) + 273.15;
+    return Kelvin;
+  }
+
+  function roundOff(value) {
+    value = Math.round(100 * value) / 100;
+    return value;
+  }
+
+  function setToNull() {
+    document.Convert.Fahr.value = "";
+    document.Convert.Cels.value = "";
+    document.Convert.Kel.value = "";
+    document.Convert.Rank.value = "";
+    document.Convert.Temp.value = "";
+  }
+</script>
+
+<table cellpadding="4" cellspacing="0" width="525">
+  <tbody>
+    <tr>
+      <td>
+        <h2>Temperature Unit Converter</h2>
+
+        <h5>
+          by <a href="mailto:tim.brice@noaa.gov">Tim Brice</a> and
+          <a href="mailto:todd.hall@noaa.gov">Todd Hall</a>
+        </h5>
+
+        <p class="text-bold">Enter a temperature that you would like:</p>
+
+        <form name="Convert">
+          <table width="100%">
+            <thead>
+              <tr>
+                <td><input name="Temp" size="6" type="text" /></td>
+                <th>Answers:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    checked="checked"
+                    name="tempunit"
+                    type="radio"
+                    value="on"
+                  />
+                  Fahrenheit
+                </td>
+                <td><input name="Fahr" size="6" type="text" /> ℉</td>
+              </tr>
+              <tr>
+                <td>
+                  <input name="tempunit" type="radio" value="on" /> Celsius
+                </td>
+                <td><input name="Cels" size="6" type="text" /> ℃</td>
+              </tr>
+              <tr>
+                <td>
+                  <input name="tempunit" type="radio" value="on" /> Kelvin
+                </td>
+                <td><input name="Kel" size="6" type="text" /> K</td>
+              </tr>
+              <tr>
+                <td>
+                  <input name="tempunit" type="radio" value="on" /> Rankine
+                </td>
+                <td><input name="Rank" size="6" type="text" /> Rankine</td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    onclick="decideConvert(document.Convert.Temp.value)"
+                    type="button"
+                    value="Convert"
+                  />
+                </td>
+                <td>
+                  <input
+                    onclick="setToNull()"
+                    type="button"
+                    value="Clear Values"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+
+        <p>&nbsp;</p>
+
+        <h5>
+          <a href="/media/epz/wxcalc/tempConvert.pdf"
+            >What are the formulas for the temperature conversion script?
+          </a>
+        </h5>
+      </td>
+    </tr>
+  </tbody>
+</table>
