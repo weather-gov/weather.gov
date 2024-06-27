@@ -17,29 +17,6 @@
 
     @include u-shadow(1);
 
-    &:hover,
-    &:focus,
-    &:active {
-      @include u-shadow(2);
-    }
-
-    &:hover,
-    &:focus {
-      background: color("base-lighter");
-      svg {
-        stroke: color("base-dark");
-        fill: color("base-dark");
-      }
-    }
-
-    &:active {
-      background: color("base-light");
-      svg {
-        stroke: color("base-dark");
-        fill: color("base-dark");
-      }
-    }
-
     svg {
       // Inline elements have a default baseline vertical alignment which
       // adds a bottom gap that cannot be styled away. We can either change the
@@ -50,8 +27,34 @@
       stroke: color("base");
       height: units(2.5);
       width: units(2.5);
+
       // units(0.75) is not understood, so calc it.
       margin-left: calc(calc(units(4) - units(2.5)) / 2);
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      @include u-shadow(2);
+    }
+
+    &:hover,
+    &:focus {
+      background: color("base-lighter");
+
+      svg {
+        stroke: color("base-dark");
+        fill: color("base-dark");
+      }
+    }
+
+    &:active {
+      background: color("base-light");
+
+      svg {
+        stroke: color("base-dark");
+        fill: color("base-dark");
+      }
     }
   }
 }
