@@ -55,9 +55,9 @@ function weathergov_admin_form_node_form_alter(
         // that one's status. If this one isn't published, then the node isn't
         // published at all.
         $isPublished = \Drupal::entityTypeManager()
-                              ->getStorage("node")
-                              ->load($node->id())
-                              ->isPublished();
+            ->getStorage("node")
+            ->load($node->id())
+            ->isPublished();
 
         if ($isPublished) {
             $form["actions"]["unpublish"] = [
@@ -108,11 +108,11 @@ function weathergov_form_node_publish($form, &$formState)
 {
     // Grab the referenced content node
     $node = $formState->getFormObject()->getEntity();
-    
+
     // If this is a Weather Story, archive any Weather Story nodes
     // that are already published if they have the same WFO
     // as was submitted
-    if($node->getType() == "weather_story"){
+    if ($node->getType() == "weather_story") {
         $wfo_id = $formState->getValue("field_wfo")[0]["target_id"];
         weathergov_unpublish_published_weather_stories($wfo_id);
     }
@@ -191,11 +191,11 @@ function get_all_published_weather_stories()
     // Get a list of published weather story nodes and
     // their associated WFOs.
     return \Drupal::entityTypeManager()
-                  ->getStorage("node")
-                  ->loadByProperties([
-                      "type" => "weather_story",
-                      "status" => 1,
-                  ]);
+        ->getStorage("node")
+        ->loadByProperties([
+            "type" => "weather_story",
+            "status" => 1,
+        ]);
 }
 
 function weathergov_admin_preprocess_page__node__add__weather_story(&$variables)
