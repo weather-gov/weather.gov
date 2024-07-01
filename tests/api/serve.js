@@ -1,14 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
-import dayjs from "dayjs";
-import timezone from "dayjs/plugin/timezone.js";
-import utc from "dayjs/plugin/utc.js";
 
 import config from "./config.js";
 import proxy from "./proxy.js";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const dataPath = "./data";
 
@@ -36,7 +30,7 @@ const processDates = (obj, usingHourly = false) => {
     return;
   }
 
-  const now = dayjs();
+  const { now } = config;
 
   // Recursively search through the object to find all values that have the
   // date:now token so we can process those into proper ISO8601 timestamps.
@@ -108,6 +102,7 @@ export default async (request, response) => {
   }${query}.json`;
 
   const fileExists = await exists(filePath);
+  console.log(`NOW_TIME: Set from ${config.nowMethod} as ${config.now}`);
 
   if (!fileExists) {
     console.log(`LOCAL:    local file does not exist; proxying [${filePath}]`);
