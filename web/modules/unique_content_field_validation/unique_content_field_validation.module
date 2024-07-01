@@ -74,7 +74,7 @@ function unique_content_field_validation_form_field_config_edit_form_alter(array
           '#type' => 'textarea',
           '#title' => t('Unique message validation'),
           '#default_value' => $field->getThirdPartySetting('unique_content_field_validation', 'unique_text', ''),
-          '#description' => t('Message to show up when the content is duplicated. <br /> To show the field name use %label <br /> To show the field value use %value'), //phpcs:ignore
+          '#description' => t('Message to show up when the content is duplicated. <br /> To show the field name use %label <br /> To show the field value use %value <br /> To show the ID of the preexisting node use %nodeId'), //phpcs:ignore
           '#states' => [
             'visible' => [
               ':input[name="third_party_settings[unique_content_field_validation][unique]"]' => ['checked' => true],
@@ -95,7 +95,7 @@ function unique_content_field_validation_form_field_config_edit_form_alter(array
                 '#type' => 'textarea',
                 '#title' => t('Multi value field message validation'),
                 '#default_value' => $field->getThirdPartySetting('unique_content_field_validation', 'unique_multivalue_text', ''), //phpcs:ignore
-                '#description' => t('Message to show up when the content entered is set more than one time within the same field. <br /> To show the field name use %label <br /> To show the field value use %value'), //phpcs:ignore
+                '#description' => t('Message to show up when the content entered is set more than one time within the same field. <br /> To show the field name use %label <br /> To show the field value use %value <br /> To show the ID of the preexisting node use %nodeId'), //phpcs:ignore
                 '#states' => [
                     'visible' => [
                         ':input[name="third_party_settings[unique_content_field_validation][unique_multivalue]"]' => ['checked' => true], //phpcs:ignore
@@ -130,7 +130,7 @@ function unique_content_field_validation_form_node_type_form_alter(array &$form,
         '#type' => 'textarea',
         '#title' => t('Unique message validation'),
         '#default_value' => $node_type->getThirdPartySetting('unique_content_field_validation', 'unique_text', ''),
-        '#description' => t('Message to show up when the content is duplicated. <br /> To show the Title field label use %label <br /> To show the value of the field use %value'), //phpcs:ignore
+        '#description' => t('Message to show up when the content is duplicated. <br /> To show the Title field label use %label <br /> To show the value of the field use %value <br /> To show the ID of the preexisting node use %nodeId'), //phpcs:ignore
         '#states' => [
             'visible' => [
                 ':input[name="unique_content_field_validation[unique]"]' => ['checked' => true],
