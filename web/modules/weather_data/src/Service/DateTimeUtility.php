@@ -80,7 +80,7 @@ class DateTimeUtility
     {
         self::$nowOverriddenTimestamp = \DateTimeImmutable::createFromFormat(
             \DateTimeInterface::ISO8601_EXPANDED,
-            $nowSetting,
+            $timestamp
         );
     }
 
