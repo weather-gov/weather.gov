@@ -29,8 +29,8 @@ RUN set -eux; \
   libzip-dev \
   ; \
   # xdebug is being pinned to 3.2.2 because of an issue with Drupal 10.2, see: https://git.drupalcode.org/project/drupal/-/merge_requests/5774
-  pecl install xdebug-3.2.2 uopz; \
-  docker-php-ext-enable xdebug uopz; \
+  pecl install xdebug-3.2.2; \
+  docker-php-ext-enable xdebug; \
   \
   docker-php-ext-configure gd \
   --with-freetype \
@@ -99,10 +99,5 @@ RUN { \
   } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 ENV PATH=${PATH}:/opt/drupal/vendor/bin
-
-# Add an Apache config that conditionally sets our pre-run scripts
-COPY ./web/config/dev/.htaccess /tmp/coverage-htaccess
-RUN cat /tmp/coverage-htaccess >> /opt/drupal/web/.htaccess
-RUN rm /tmp/coverage-htaccess
 
 # vim:set ft=dockerfile:
