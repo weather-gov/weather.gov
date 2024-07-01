@@ -76,12 +76,23 @@ class UniqueContentTitleValidator extends ConstraintValidator implements Contain
                 $id_field = 'nid';
                 break;
         }
-        if ($unique_validation_enabled && $this->uniqueValidation($unique_field_name, $value, $entity_type, $bundle_field, $entity_bundle, $id_field)) { //phpcs:ignore
-            $message = $custom_message ?: $constraint->message;
-            $this->context->addViolation($message, [
-                '%label' => $unique_entity_title_label,
-                '%value' => $value,
-            ]);
+        if ($unique_validation_enabled) {
+            $existingNodes = $this->uniqueValidation(
+                $unique_field_name,
+                $value,
+                $entity_type,
+                $bundle_field,
+                $entity_bundle,
+                $id_field,
+            );
+            if ($existingNodes !== false) {
+                $message = $custom_message ?: $constraint->message;
+                $this->context->addViolation($message, [
+                    "%label" => $unique_entity_title_label,
+                    "%value" => $value,
+                    "%nodeId" => array_pop($existingNodes),
+                ]);
+            }
         }
     }
 
@@ -117,7 +128,7 @@ class UniqueContentTitleValidator extends ConstraintValidator implements Contain
             }
             $entities = $query->accessCheck(false)->execute();
             if (!empty($entities)) {
-                return true;
+                return $entities;
             }
         }
         return false;

@@ -220,18 +220,27 @@ function unique_content_field_validation_validate_unique($element, FormStateInte
     $entity_type = $entity->getEntityTypeId();
 
     if ($items) {
-      // If field is not unique set error.
-        $valid = unique_content_field_validation_field_is_unique($entity_type, $langcode, $field_name, $items, $entity->bundle(), $entity); //phpcs:ignore
-        if (!$valid) {
-            $items_msg = implode(',', $items);
-            if (!empty($element['#unique_field_settings']['message'])) {
-                $message = str_replace(["%label", "%value"], [$field_label, $items_msg], $element['#unique_field_settings']['message']); //phpcs:ignore
+        // If field is not unique set error.
+        $valid = unique_content_field_validation_field_is_unique( $entity_type, $langcode, $field_name, $items, $entity->bundle(), $entity); //phpcs:ignore
+        if ($valid !== true) {
+            $existingNodeID = array_pop($valid);
+            $items_msg = implode(",", $items);
+            if (!empty($element["#unique_field_settings"]["message"])) {
+                $message = str_replace(
+                    ["%label", "%value", "%nodeId"],
+                    [$field_label, $items_msg, $existingNodeID],
+                    $element["#unique_field_settings"]["message"],
+                ); //phpcs:ignore
                 $form_state->setErrorByName($field_name, t($message));
             } else {
-                $form_state->setErrorByName($field_name, t('%label must be unique but "%value" already exists!', [
-                    '%label' => $field_label,
-                    '%value' => $items_msg,
-                ]));
+                $form_state->setErrorByName(
+                    $field_name,
+                    t('%label must be unique but "%value" already exists!', [
+                        "%label" => $field_label,
+                        "%value" => $items_msg,
+                        "%nodeId" => $existingNodeID,
+                    ]),
+                );
             }
 
             $form_state->setRebuild();
@@ -317,7 +326,7 @@ function unique_content_field_validation_field_is_unique($entity_type, $langcode
             $valid = true;
         }
     }
-    return $valid;
+    return $valid ? $valid : $entities;
 }
 
 /**
