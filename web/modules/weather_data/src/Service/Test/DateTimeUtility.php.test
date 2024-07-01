@@ -1,0 +1,54 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use Drupal\weather_data\Service\DateTimeUtility;
+use PHPUnit\Framework\TestCase;
+
+final class DateTimeUtilityTest extends TestCase
+{
+    /**
+     * @group unit
+     * @group datetime-utility
+     */
+    public function testNowReturnsNow()
+    {
+        $trueNow = new \DateTimeImmutable('now');
+        $ourNow = DateTimeUtility::now();
+        $expected = $trueNow->format("Y-m-dTH:i");
+        $actual = $ourNow->format("Y-m-dTH:i");
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group datetime-utility
+     */
+    public function testSetNow()
+    {
+        $customNow = "2021-04-04T13:01:00-04:00";
+        DateTimeUtility::setNow($customNow);
+        $expected = $customNow;
+        $now = DateTimeUtility::now();
+        $actual = $now->format("c");
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group datetime-utility
+     */
+    public function testUnsetNow()
+    {
+        $theRealNow = new \DateTimeImmutable("now");
+        DateTimeUtility::setNow("2021-04-04T13:01:00-04:00");
+        DateTimeUtility::unsetNow();
+        $ourNow = DateTimeUtility::now();
+        $expected = $theRealNow->format("Y-m-dT-H:i");
+        $actual = $ourNow->format("Y-m-dT-H:i");
+
+        $this->assertEquals($expected, $actual);
+    }
+}

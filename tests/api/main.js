@@ -17,6 +17,8 @@ const fsExists = async (filePath) =>
 const ui = async ({ error = false } = {}) => {
   const lines = ["<html>"];
 
+  lines.push(`<span>'now' is set to <time>${config.now}</time></span><br/>`);
+
   if (error) {
     lines.push(`<h2>${error}</h2>`);
   }
@@ -101,6 +103,11 @@ const ui = async ({ error = false } = {}) => {
   lines.push("</html>");
   return lines.join("");
 };
+
+app.get("/set-now", async (req, res) => {
+  config.now = req.query.t || null;
+  res.redirect("/");
+});
 
 app.get("*", async (req, res) => {
   res.setHeader("Content-Type", "text/html");

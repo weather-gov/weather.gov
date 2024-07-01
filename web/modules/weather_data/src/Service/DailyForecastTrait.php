@@ -126,7 +126,7 @@ trait DailyForecastTrait
         // we set the "current" (now) time to be
         // the startTime of the first period.
         if (!($now instanceof \DateTimeImmutable)) {
-            $now = new \DateTimeImmutable("now", new \DateTimeZone($timezone));
+            $now = DateTimeUtility::now($timezone);
         }
 
         // Fetch the actual daily forecast periods
