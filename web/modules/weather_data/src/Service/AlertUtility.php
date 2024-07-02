@@ -644,10 +644,8 @@ class AlertUtility
      * */
     public static function getAlertLevel($event) 
     {
-        print("from the utility again");
         $eventWords = explode(" ", $event);
         $alertLevel = strtolower($eventWords[array_key_last($eventWords)]); 
-        dump($alertLevel);
         return $alertLevel;
     } 
 

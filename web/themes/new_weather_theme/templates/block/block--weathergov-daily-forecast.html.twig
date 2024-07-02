@@ -13,16 +13,12 @@
           {% set precipHours = content.precipitationPeriods[0] %}
           {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': content.today, 'dayHours': content.todayHourly, 'alertPeriods': content.todayAlerts, 'highestAlertLevel': content.todayHighestAlertLevel, 'useOnlyLowForToday': content.useOnlyLowForToday, 'precipHours': precipHours, 'dayLabel': "Today" | t } %}
           {% set precipIndex = 1 %}
-        <p> Content Today </p>
-        {{ dump(content)}}
       {% endif %}
 
       {#  Render periods associated with future days, in detail #}
       {%  for data in content.detailed %}
         {% set precipHours = content.precipitationPeriods[loop.index0 + precipIndex] %}
         {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': [data.daytime, data.nighttime], 'dayHours': data.hourlyPeriods, 'alertPeriods': data.alertPeriods, 'highestAlertLevel': data.highestAlertLevel, 'precipHours': precipHours } %}
-        <p> Cotent all other days </p>
-        {{ dump(content)}}
       {%  endfor %}
     </ol>
   </div>
