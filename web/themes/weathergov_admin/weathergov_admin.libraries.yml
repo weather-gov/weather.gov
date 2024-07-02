@@ -1,0 +1,4 @@
+weather-story-modal-dialog:
+  version: 2024-06-24
+  js:
+    assets/js/weather-story-modal.js: {}
