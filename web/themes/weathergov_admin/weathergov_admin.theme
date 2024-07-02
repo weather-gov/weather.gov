@@ -95,11 +95,30 @@ function weathergov_admin_form_node_form_alter(
                 "Content must be previewed before it can be saved or published.",
         ];
     }
+
+    // If this is a node form for a Weather Story,
+    // we attach the modal confirm library
+    if ($form_id == "node_weather_story_form") {
+        $form["#attached"]["library"][] =
+            "weathergov_admin/weather-story-modal-dialog";
+    }
 }
 
 function weathergov_form_node_publish($form, &$formState)
 {
+    // Grab the referenced content node
     $node = $formState->getFormObject()->getEntity();
+
+    // If this is a Weather Story, archive any Weather Story nodes
+    // that are already published if they have the same WFO
+    // as was submitted
+    if ($node->getType() == "weather_story") {
+        $wfo_id = $formState->getValue("field_wfo")[0]["target_id"];
+        weathergov_unpublish_published_weather_stories($wfo_id);
+    }
+
+    // Now change the moderation state in order to publish
+    // the current node described by the form
     $node->set("moderation_state", "published");
     $node->save();
 
@@ -164,5 +183,68 @@ function weathergov_admin_form_alter(&$form, $form_state, $form_id)
             $input["field_wfo_target_id"] = $wfo;
             $form_state->setUserInput($input);
         }
+    }
+}
+
+function get_all_published_weather_stories()
+{
+    // Get a list of published weather story nodes and
+    // their associated WFOs.
+    return \Drupal::entityTypeManager()
+        ->getStorage("node")
+        ->loadByProperties([
+            "type" => "weather_story",
+            "status" => 1,
+        ]);
+}
+
+function weathergov_admin_preprocess_page__node__add__weather_story(&$variables)
+{
+    $nodes = get_all_published_weather_stories();
+    // Get an associative array of published wfo term
+    // information, including its id and name.
+    // Set a template variable to be the JSON string
+    // of this array.
+    $wfos = array_map(function ($node) {
+        $reference = $node->get("field_wfo")->referencedEntities()[0];
+        return (object) [
+            "name" => $reference->get("name")->value,
+            "code" => $reference->get("field_wfo_code")->value,
+            "id" => $reference->id(),
+            "nodeUrl" => $node->toUrl()->toString(),
+            "nodeTitle" => $node->getTitle(),
+        ];
+    }, $nodes);
+    $wfos = array_values($wfos);
+    $variables["#attached"]["library"][] =
+        "weathergov_admin/weather-story-modal-dialog";
+    $variables["published_wfos"] = json_encode($wfos);
+}
+
+function weathergov_unpublish_published_weather_stories($wfo_id)
+{
+    // Get all published weather story nodes
+    $nodes = get_all_published_weather_stories();
+
+    // Filter to only those nodes that have the corresponding
+    // WFO Term id
+    $filtered_nodes = array_filter($nodes, function ($node) use (&$wfo_id) {
+        $wfo_ref = $node->get("field_wfo")->referencedEntities()[0];
+        return $wfo_ref->id() == $wfo_id;
+    });
+
+    foreach ($filtered_nodes as $node) {
+        $node->set("moderation_state", "archived");
+        $node->save();
+
+        $url = $node->toUrl()->toString();
+        $title = $node->getTitle();
+
+        // Add the pretty message.
+        \Drupal::service("messenger")->addMessage(
+            Markup::create(
+                "Unpublished Weather Story <a href=\"$url\">$title</a> (due to same WFO)",
+            ),
+        );
     }
 }
