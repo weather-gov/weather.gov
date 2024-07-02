@@ -6,3 +6,4 @@ name: 'Weather Event Types'
 vid: weather_event_types
 description: 'The list of weather events understood by weather.gov.'
 weight: 0
+new_revision: false

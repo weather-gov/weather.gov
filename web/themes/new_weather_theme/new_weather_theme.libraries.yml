@@ -1,12 +1,12 @@
 uswds-init:
-  version: 3.8.0
+  version: 3.8.1
   header: true
   js:
     assets/js/uswds-init.js:
       minified: true
 
 uswds-customized:
-  version: 2024-06-24
+  version: 2024-06-25
   css:
     theme:
       assets/css/styles.css: {}
@@ -17,7 +17,7 @@ uswds-customized:
       minified: true
 
 browser-location-button:
-  version: 2024-06-21
+  version: 2024-06-24
   js:
     assets/js/locationSearch.js:
       attributes:

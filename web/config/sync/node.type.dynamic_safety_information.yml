@@ -11,7 +11,7 @@ third_party_settings:
 name: 'Dynamic Safety Information'
 type: dynamic_safety_information
 description: 'Safety information to show in addition to hazard text.'
-help: ''
+help: null
 new_revision: false
 preview_mode: 1
 display_submitted: false

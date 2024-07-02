@@ -103,7 +103,7 @@ trait HourlyForecastTrait
 
         $wfo = strtoupper($wfo);
         if (!($now instanceof \DateTimeImmutable)) {
-            $now = new \DateTimeImmutable();
+            $now = DateTimeUtility::now();
         }
 
         date_default_timezone_set("America/New_York");
@@ -341,7 +341,7 @@ trait HourlyForecastTrait
         }
 
         if (!($now instanceof \DateTimeImmutable)) {
-            $now = new \DateTimeImmutable();
+            $now = DateTimeUtility::now();
         }
 
         date_default_timezone_set("America/New_York");

@@ -1,6 +1,10 @@
 {
   "@bundle": {
-    "name": "Invalid icons (should not crash site)"
+    "name": "Arlington, VA",
+    "attributes": [
+      "Invalid icons (should not crash site)",
+      "Only 22 hours of hourly data"
+    ]
   },
   "@context": [
     "https://geojson.org/geojson-ld/geojson-context.jsonld",

@@ -1,32 +1,52 @@
-/*
-agenda: {
-  id: 'national', 'weather', 'local' // sets the initial view, default undefined
-  center: [lat, lon] // set the intitial center, default center of Conus
-  location: [lat, lon] // set the initial selected location (only applies to weather view), default undefined
-  layer: {radar product options by view} // the selected product, default to Super Resolution Base Reflectivity
-  filter: 'WSR-88D', 'TDWR', undefined (all) // type of radar stations to display, default to undefined
-  station: {any station id}, undefined // The selected station, default undefined
-}
-opacity: {
-  local/national/local/localStations: 0 to 1 // opacity for each layer, not the if layer is visible (which is set by view)
-}
-menu: true/false // display the top-right menu, default true
-shortFuseOnly: true/false // if only short-fused alerts (vs all hazards) should display (if visible), default false
-animating: true/false // if radar should enable play-back, default false
-basemap: 'standard', 'topographic', 'satallite', 'ocean', 'darkcanvas' // what basemap to display, default 'standard'
-artcc/cwa/county/state/rfc: true/false // if overlay should display, default false
-}
-*/
+const toggleMapExpand = (() => {
+  let expanded = false;
+
+  const sprites = {
+    false:
+      "/themes/new_weather_theme/assets/images/uswds/sprite.svg#zoom_out_map",
+    true: "/themes/new_weather_theme/assets/images/spritesheet.svg#wx_zoom-in-map",
+  };
+
+  return (event) => {
+    const container = event.target.closest(".wx-radar-container");
+    const svgUse = document.querySelector("button.wx-radar-expand svg use");
+
+    expanded = !expanded;
+
+    if (expanded) {
+      container.classList.add("wx-radar-container__expanded");
+    } else {
+      container.classList.remove("wx-radar-container__expanded");
+    }
+
+    const descriptors = Array.from(
+      container.querySelectorAll(".wx-radar-expand__description"),
+    );
+    for (const descriptor of descriptors) {
+      if (descriptor.classList.contains("display-none")) {
+        descriptor.classList.remove("display-none");
+      } else {
+        descriptor.classList.add("display-none");
+      }
+    }
+
+    svgUse.setAttribute("xlink:href", sprites[expanded]);
+
+    // If an element changes size due toggling a CSS class, that does not
+    // trigger a resize event. CMI is listening to resize events on the window,
+    // so let's fire a resize event so the map will grow/shrink correctly.
+    window.dispatchEvent(new Event("resize"));
+  };
+})();
 
 const setupRadar = () => {
-
   // If radar has already been initialized on the container
   // element, return and do nothing else.
   const existingRadar = document.querySelector(".cmi-radar-container");
-  if(existingRadar){
+  if (existingRadar) {
     return;
   }
-  
+
   const container = document.querySelector("wx-radar");
 
   const lat = Number.parseFloat(container.getAttribute("lat"));
@@ -94,6 +114,21 @@ const setupRadar = () => {
       }
     },
   );
+
+  const expandButton = document.querySelector("button.wx-radar-expand");
+  if (expandButton) {
+    expandButton.addEventListener("click", toggleMapExpand);
+
+    // The sticky top of the expand button should be the bottom of the tab list,
+    // so query that and set the button's top accordingly. Do it this way rather
+    // than hard-coding it so things will behave well later if the tab list
+    // height changes.
+    const tabList = document.querySelector(`div.tab-buttons[role="tablist"]`);
+    if (tabList) {
+      const buttonContainer = expandButton.parentElement;
+      buttonContainer.style.top = `${tabList.offsetHeight}px`;
+    }
+  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -103,9 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // then we try to load the radar.
   // If the page loads with some other tab selected,
   // than we bind a listener for the tab-switched event.
-  if(currentTabSelected && window.cmiRadar){
+  if (currentTabSelected && window.cmiRadar) {
     setupRadar();
-  } else if(currentTabSelected){
+  } else if (currentTabSelected) {
     scriptEl.addEventListener("load", () => {
       setupRadar();
     });
@@ -113,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("wx:tab-switched", (event) => {
       if (window.cmiRadar && event.detail.tabId === "current") {
         setupRadar();
-      } else if(event.detail.tabId === "current"){
+      } else if (event.detail.tabId === "current") {
         scriptEl.addEventListener("load", () => {
           setupRadar();
         });

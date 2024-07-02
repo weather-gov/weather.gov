@@ -245,7 +245,7 @@ class AlertUtility
 
     public static function sort($alerts)
     {
-        $now = new \DateTimeImmutable();
+        $now = DateTimeUtility::now();
 
         usort($alerts, function ($a, $b) use ($now) {
             $priorityA = array_search(strtolower($a->event), self::$priorities);

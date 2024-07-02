@@ -1,12 +1,69 @@
 @use "uswds-core" as *;
 
 .wx-radar-container {
-  aspect-ratio: 3/4;
+  aspect-ratio: 3/2;
+
+  &.wx-radar-container__expanded {
+    aspect-ratio: 3/4;
+  }
+
+  button.wx-radar-expand {
+    border: 0;
+    border-radius: radius("md");
+    height: units(4);
+    width: units(4);
+    text-align: center;
+    background: color("white");
+
+    @include u-shadow(1);
+
+    svg {
+      // Inline elements have a default baseline vertical alignment which
+      // adds a bottom gap that cannot be styled away. We can either change the
+      // vertical alignment or the display type to get rid of it. Without this
+      // change, the button is taller than the contents.
+      display: block;
+      fill: color("base");
+      stroke: color("base");
+      height: units(2.5);
+      width: units(2.5);
+
+      // units(0.75) is not understood, so calc it.
+      margin-left: calc(calc(units(4) - units(2.5)) / 2);
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      @include u-shadow(2);
+    }
+
+    &:hover,
+    &:focus {
+      background: color("base-lighter");
+
+      svg {
+        stroke: color("base-dark");
+        fill: color("base-dark");
+      }
+    }
+
+    &:active {
+      background: color("base-light");
+
+      svg {
+        stroke: color("base-dark");
+        fill: color("base-dark");
+      }
+    }
+  }
 }
 
-@include at-media("desktop") {
+@include at-media("tablet") {
   .wx-radar-container {
-    aspect-ratio: 1/1;
+    &.wx-radar-container__expanded {
+      aspect-ratio: 1/1;
+    }
   }
 }
 

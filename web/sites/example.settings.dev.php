@@ -723,6 +723,12 @@ $settings["container_yamls"][] = $app_root . "/" . $site_path . "/services.yml";
  *
  * @see https://www.drupal.org/docs/installing-drupal/trusted-host-settings
  */
+$settings['trusted_host_patterns'] = [
+    '^localhost$',
+    '127\.0\.0\.1',
+    // Or use preg_quote() to escape the dots and other characters.
+    preg_quote('127.0.0.1'),
+];
 
 /**
  * The default list of directories that will be ignored by Drupal's file API.
@@ -847,3 +853,15 @@ $settings["config_sync_directory"] = "/opt/drupal/web/config/sync/";
 $config["config_split.config_split.local"]["status"] = true;
 $settings["weather_login_local_form"] = true;
 
+/**
+ * Custom 'now' time, which can
+ * be set via the WX_NOW_TIMESTAMP
+ * env variable
+ */
+$nowTime = getenv("WX_NOW_TIMESTAMP");
+$isLocalDev = !(getenv("VCAP_APPLICATION")) || false;
+if ($nowTime && $isLocalDev) {
+    $settings["wx_now_timestamp"] = $nowTime;
+} else {
+    $settings["wx_now_timestamp"] = false;
+}

@@ -31,8 +31,9 @@ trait AlertTrait
         if (!$self) {
             $self = $this;
         }
+
         if (!($now instanceof \DateTimeImmutable)) {
-            $now = new \DateTimeImmutable();
+            $now = DateTimeUtility::now();
         }
 
         $wfo = $grid->wfo;
