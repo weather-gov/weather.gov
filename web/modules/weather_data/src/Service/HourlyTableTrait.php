@@ -81,7 +81,7 @@ trait HourlyTableTrait
                     $dayHourlyPeriods,
                 );
                 //Array of only the alert objects for the given day
-                $dayPeriodAlerts = array_map(function($alertPeriod){
+                $dayPeriodAlerts = array_map(function ($alertPeriod) {
                     return $alertPeriod["alert"];
                 }, $alertPeriods);
                 $dayPeriod["highestAlertLevel"] = AlertUtility::getHighestAlertLevel($dayPeriodAlerts);

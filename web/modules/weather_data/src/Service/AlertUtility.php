@@ -642,31 +642,30 @@ class AlertUtility
     /* Determine the "level" of the alert (warning, watch, advisory, etc..)
      * based on the the last word in the alert event name
      * */
-    public static function getAlertLevel($event) 
+    public static function getAlertLevel($event)
     {
         $eventWords = explode(" ", $event);
-        $alertLevel = strtolower($eventWords[array_key_last($eventWords)]); 
+        $alertLevel = strtolower($eventWords[array_key_last($eventWords)]);
         return $alertLevel;
-    } 
+    }
 
     /* Determine the highest alert level from an array of alerts.
      * Warnings are highest, followed by Watches, and anything else is last ("other").
      * */
-    public static function getHighestAlertLevel($alerts) 
+    public static function getHighestAlertLevel($alerts)
     {
-        if (count($alerts) == 0) { 
+        if (count($alerts) == 0) {
             return "";
         }
         $highestAlertLevel = "other";
         foreach ($alerts as $alert) {
             if ($alert->alertLevel == "warning") {
                 $highestAlertLevel = "warning";
-                break; 
-            }
-            elseif ($alert->alertLevel == "watch") {
+                break;
+            } elseif ($alert->alertLevel == "watch") {
                 $highestAlertLevel = "watch";
             }
-        } 
+        }
         return $highestAlertLevel;
     }
 }

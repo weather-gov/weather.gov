@@ -214,7 +214,7 @@ trait DailyForecastTrait
         );
 
         // Array of only the alert objects for today
-        $todayAlertItems = array_map(function($todayAlert){
+        $todayAlertItems = array_map(function ($todayAlert) {
             return $todayAlert["alert"];
         }, $todayAlerts);
 
