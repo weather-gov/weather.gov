@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-06-25
+  version: 2024-07-02
   css:
     theme:
       assets/css/styles.css: {}
