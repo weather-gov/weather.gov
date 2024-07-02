@@ -14,9 +14,11 @@
   >
     <include>
       <directory suffix=".theme">web/themes/new_weather_theme</directory>
-      <directory suffix=".theme">web/themes/weathergov_admin</directory>
       <directory>web/modules/weather_blocks</directory>
       <directory>web/modules/weather_data</directory>
     </include>
+    <exclude>
+      <directory suffix=".theme">web/themes/weathergov_admin</directory>
+    </exclude>
   </coverage>
 </phpunit>
