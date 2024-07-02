@@ -48,7 +48,7 @@ only be a nighttime period.
       </div>
     </div>
     <div class="grid-row grid-gap">
-      {% for period in periods %}
+      {% for period in periods | filter(v => v) %}
         {% set marginUnit = 3 %}
         {% set tabletMarginUnit = 1 %}
         {% set tabletCol = 6 %}
