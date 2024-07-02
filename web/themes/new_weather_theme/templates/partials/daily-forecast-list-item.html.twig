@@ -35,21 +35,11 @@ only be a nighttime period.
         {% if alertCount > 0 %}
           {% set alertID = alertPeriods[0].alert.alertId %}
           {% set alertType = alertPeriods[0].alert.event %}
-          {% set alertLevel = alertPeriods[0].alert.alertLevel %}
+          {% set alertLevel = highestAlertLevel %}
 
           {% if alertCount > 1 %}
             {% set alertID = null %}
             {% set alertType = "Multiple alerts" | t %}
-            {% set alertLevel = "other" %}
-            {% set done = false %}
-            {% for alertPeriod in alertPeriods %}
-              {% if alertPeriod.alert.alertLevel | lower == "warning" %}
-                {% set alertLevel = "warning" %}
-                {% set done = true %}
-              {% elseif alertPeriod.alert.alertLevel | lower == "watch" and not done %}
-                {% set alertLevel = "watch" %}
-              {% endif %}
-            {% endfor %}
           {% endif %}
 
           <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 daily-alert-summary">

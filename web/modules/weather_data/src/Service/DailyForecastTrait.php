@@ -213,6 +213,13 @@ trait DailyForecastTrait
             $todayHourlyDetails,
         );
 
+        // Array of only the alert objects for today
+        $todayAlertItems = array_map(function($todayAlert){
+            return $todayAlert["alert"];
+        }, $todayAlerts);
+
+        $todayHighestAlertLevel = AlertUtility::getHighestAlertLevel($todayAlertItems);
+
         // Get detailed hourly data for the
         // detailed forecast days
         $this->getHourlyDetailsForDay(
@@ -265,9 +272,10 @@ trait DailyForecastTrait
             "today" => array_values($todayPeriodsFormatted),
             "todayHourly" => array_values($todayHourlyDetails),
             "todayAlerts" => array_values($todayAlerts),
+            "todayHighestAlertLevel" => $todayHighestAlertLevel,
             "detailed" => array_values($detailedPeriodsFormatted),
             "precipitationPeriods" => array_values($precipPeriods),
-            "useOnlyLowForToday" => $useOnlyLowForToday
+            "useOnlyLowForToday" => $useOnlyLowForToday,
         ];
     }
 }
