@@ -74,7 +74,7 @@ function unique_content_field_validation_form_field_config_edit_form_alter(array
           '#type' => 'textarea',
           '#title' => t('Unique message validation'),
           '#default_value' => $field->getThirdPartySetting('unique_content_field_validation', 'unique_text', ''),
-          '#description' => t('Message to show up when the content is duplicated. <br /> To show the field name use %label <br /> To show the field value use %value'), //phpcs:ignore
+          '#description' => t('Message to show up when the content is duplicated. <br /> To show the field name use %label <br /> To show the field value use %value <br /> To show the ID of the preexisting node use %nodeId'), //phpcs:ignore
           '#states' => [
             'visible' => [
               ':input[name="third_party_settings[unique_content_field_validation][unique]"]' => ['checked' => true],
@@ -95,7 +95,7 @@ function unique_content_field_validation_form_field_config_edit_form_alter(array
                 '#type' => 'textarea',
                 '#title' => t('Multi value field message validation'),
                 '#default_value' => $field->getThirdPartySetting('unique_content_field_validation', 'unique_multivalue_text', ''), //phpcs:ignore
-                '#description' => t('Message to show up when the content entered is set more than one time within the same field. <br /> To show the field name use %label <br /> To show the field value use %value'), //phpcs:ignore
+                '#description' => t('Message to show up when the content entered is set more than one time within the same field. <br /> To show the field name use %label <br /> To show the field value use %value <br /> To show the ID of the preexisting node use %nodeId'), //phpcs:ignore
                 '#states' => [
                     'visible' => [
                         ':input[name="third_party_settings[unique_content_field_validation][unique_multivalue]"]' => ['checked' => true], //phpcs:ignore
@@ -130,7 +130,7 @@ function unique_content_field_validation_form_node_type_form_alter(array &$form,
         '#type' => 'textarea',
         '#title' => t('Unique message validation'),
         '#default_value' => $node_type->getThirdPartySetting('unique_content_field_validation', 'unique_text', ''),
-        '#description' => t('Message to show up when the content is duplicated. <br /> To show the Title field label use %label <br /> To show the value of the field use %value'), //phpcs:ignore
+        '#description' => t('Message to show up when the content is duplicated. <br /> To show the Title field label use %label <br /> To show the value of the field use %value <br /> To show the ID of the preexisting node use %nodeId'), //phpcs:ignore
         '#states' => [
             'visible' => [
                 ':input[name="unique_content_field_validation[unique]"]' => ['checked' => true],
@@ -220,18 +220,27 @@ function unique_content_field_validation_validate_unique($element, FormStateInte
     $entity_type = $entity->getEntityTypeId();
 
     if ($items) {
-      // If field is not unique set error.
-        $valid = unique_content_field_validation_field_is_unique($entity_type, $langcode, $field_name, $items, $entity->bundle(), $entity); //phpcs:ignore
-        if (!$valid) {
-            $items_msg = implode(',', $items);
-            if (!empty($element['#unique_field_settings']['message'])) {
-                $message = str_replace(["%label", "%value"], [$field_label, $items_msg], $element['#unique_field_settings']['message']); //phpcs:ignore
+        // If field is not unique set error.
+        $valid = unique_content_field_validation_field_is_unique( $entity_type, $langcode, $field_name, $items, $entity->bundle(), $entity); //phpcs:ignore
+        if ($valid !== true) {
+            $existingNodeID = array_pop($valid);
+            $items_msg = implode(",", $items);
+            if (!empty($element["#unique_field_settings"]["message"])) {
+                $message = str_replace(
+                    ["%label", "%value", "%nodeId"],
+                    [$field_label, $items_msg, $existingNodeID],
+                    $element["#unique_field_settings"]["message"],
+                ); //phpcs:ignore
                 $form_state->setErrorByName($field_name, t($message));
             } else {
-                $form_state->setErrorByName($field_name, t('%label must be unique but "%value" already exists!', [
-                    '%label' => $field_label,
-                    '%value' => $items_msg,
-                ]));
+                $form_state->setErrorByName(
+                    $field_name,
+                    t('%label must be unique but "%value" already exists!', [
+                        "%label" => $field_label,
+                        "%value" => $items_msg,
+                        "%nodeId" => $existingNodeID,
+                    ]),
+                );
             }
 
             $form_state->setRebuild();
@@ -317,7 +326,7 @@ function unique_content_field_validation_field_is_unique($entity_type, $langcode
             $valid = true;
         }
     }
-    return $valid;
+    return $valid ? $valid : $entities;
 }
 
 /**
