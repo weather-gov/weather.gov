@@ -1,0 +1,18 @@
+const { test, expect } = require("@playwright/test");
+
+const { describe, beforeEach } = test;
+
+describe("daily forecast", () => {
+  beforeEach(async ({ page }) => {
+    await page.goto("http://localhost:8081/play/testing");
+  });
+
+  test("does not display missing day periods", async ({ page }) => {
+    await page.goto("/point/21.305/-157.858");
+    const lastDay = page.locator(".wx-daily-forecast-block li").last();
+
+    const periods = lastDay.locator(".wx-daily-forecast-summary-area");
+
+    await expect(periods).toHaveCount(1);
+  });
+});

@@ -1,6 +1,10 @@
 {
   "@bundle": {
-    "name": "has extra overnight period for today"
+    "name": "Honolulu, HI",
+    "attributes": [
+      "has preceding overnight period for today",
+      "has only day time period for 7th day (no night period)"
+    ]
   },
   "@context": [
     "https://geojson.org/geojson-ld/geojson-context.jsonld",
