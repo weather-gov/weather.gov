@@ -20,7 +20,7 @@
     {% endif %}
     <td colspan="{{alertInfo.duration}}">
       {% include "@new_weather_theme/partials/alert-link.html.twig"
-         with { alertID: alertInfo.alert.alertId, alertType: alertInfo.alert.event } %}
+         with { alertID: alertInfo.alert.alertId, alertType: alertInfo.alert.event, alertLevel: alertInfo.alert.alertLevel } %}
     </td>
     {% if remainingCount > 0 %}
       <td colspan="{{ remainingCount }}"></td>

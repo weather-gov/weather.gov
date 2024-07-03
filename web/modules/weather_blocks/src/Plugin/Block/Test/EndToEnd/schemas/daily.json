@@ -17,6 +17,9 @@
         "$ref": "#/$defs/alert"
       }
     },
+    "todayHighestAlertLevel": {
+        "type": "string"
+    },
     "precipitationPeriods": {
       "type": "array",
       "items": {

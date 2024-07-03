@@ -1,10 +1,17 @@
 {#
   Expected inputs:
-    - alertID   - the ID used to link to this specific alert, or null to link
-                  to the alerts tab
-    - alertType - the event type, such as "Severe Thunderstorm Warning"
+    - alertID        - the ID used to link to this specific alert, or null to link
+                       to the alerts tab
+    - alertType      - the event type, such as "Severe Thunderstorm Warning"
+    - alertLevel - the severity level of the event type, such as "Warning"
 #}
-<div class="wx-alert-link display-flex flex-align-start">
+{% set alertLinkStyle = "other" %}
+{% if alertLevel | lower == "warning" %}
+  {% set alertLinkStyle = "warning" %}
+{% elseif alertLevel | lower == "watch" %}
+  {% set alertLinkStyle = "watch" %}
+{% endif %}
+<div class="wx-alert-link wx-alert-link--{{ alertLinkStyle }} display-flex flex-align-start">
   <div class="maxw-3 height-3 margin-right-05">
     <svg role="img" aria-hidden="true" class="width-full height-full">
       <use xlink:href="{{ "/" ~ directory ~ "/assets/images/uswds/sprite.svg#warning" }}"></use>
