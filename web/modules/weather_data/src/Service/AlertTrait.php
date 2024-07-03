@@ -220,6 +220,9 @@ trait AlertTrait
                 AlertUtility::getDurationText($output, $now),
             );
 
+            /* Determine the "level" of the alert (warning, watch, advisory, etc..) */
+            $output->alertLevel = AlertUtility::getAlertLevel($output->event);
+
             $index += 1;
             return $output;
         }, $alerts);

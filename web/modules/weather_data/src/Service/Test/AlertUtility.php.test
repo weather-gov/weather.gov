@@ -409,4 +409,109 @@ final class AlertUtilityTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testGetAlertLevel(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alerts = [
+            (object) [
+                "event" => "winter storm warning",
+                "onset" => $now->modify("-1 hour"),
+            ],
+            (object) [
+                "event" => "flood Watch",
+                "onset" => $now->modify("+1 hour"),
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => $now->modify("+1 hour"),
+            ],
+        ];
+
+        $expected = ["warning", "watch", "alert"];
+        $actual = array_map(function ($alert) {
+            return AlertUtility::getAlertLevel($alert->event);
+        }, $alerts);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testHighestAlertLevelWarning(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alerts = [
+            (object) [
+                "event" => "winter storm warning",
+                "onset" => $now->modify("-1 hour"),
+                "alertLevel" => "warning",
+            ],
+            (object) [
+                "event" => "flood Watch",
+                "onset" => $now->modify("+1 hour"),
+                "alertLevel" => "watch",
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => $now->modify("+1 hour"),
+                "alertLevel" => "other",
+            ],
+        ];
+
+        $expected = "warning";
+
+        $actual = AlertUtility::getHighestAlertLevel($alerts);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testHighestAlertLevelWatch(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alerts = [
+            (object) [
+                "event" => "winter weather advisory",
+                "onset" => $now->modify("-1 hour"),
+                "alertLevel" => "other",
+            ],
+            (object) [
+                "event" => "flood watch",
+                "onset" => $now->modify("+1 hour"),
+                "alertLevel" => "watch",
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => $now->modify("+1 hour"),
+                "alertLevel" => "other",
+            ],
+        ];
+
+        $expected = "watch";
+
+        $actual = AlertUtility::getHighestAlertLevel($alerts);
+
+        $this->assertEquals($expected, $actual);
+    }
 }
