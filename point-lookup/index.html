@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en-US">
   <head>
+    <link rel="stylesheet" href="https://beta.weather.gov/themes/new_weather_theme/assets/css/styles.css">
     <style type="text/css">
       .api-call-container {
         border: 1px solid black;
@@ -17,21 +18,36 @@
     </style>
   </head>
   <body>
-    <form>
-      <ul>
-        <li>
-          Latitude: <input type="text" id="form__lat">
-        </li>
-        <li>
-          Longitude: <input type="text" id="form__lon">
-        </li>
-      </ul>
-      <input type="submit" value="Go"></input>
-    </form>
+    <div class="display-flex margin-top-2">
+      <div class="grid-col-4 text-right">
+        <form id="lat_lon">
+          <div class="width-full">
+            Latitude: <input type="text" id="form__lat">
+          </div>
+          <div class="width-full">
+            Longitude: <input type="text" id="form__lon">
+          </div>
+          <div class="width-full margin-top-1">
+            <input type="submit" value="Find by lat/lon"></input>
+          </div>
+        </form>
+      </div>
+
+      <div class="margin-left-2 grid-col-4 text-right">
+        <form id="url">
+          <div class="width-full">
+            beta.weather.gov URL: <input type="text" id="form__url">
+          </div>
+          <div class="width-full margin-top-1">
+            <input type="submit" value="Find by URL"></input>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <button download disabled="true">Download bundle</button>
 
-    <div id="api_metadata">
+    <div id="api_metadata" class="border-top-05">
 
     </div>
 
