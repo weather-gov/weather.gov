@@ -6,7 +6,9 @@ dependencies:
     - field.field.node.testing_page.body
     - field.field.node.testing_page.layout_builder__layout
     - node.type.testing_page
+    - workflows.workflow.weather_gov_content_moderation
   module:
+    - content_moderation
     - path
     - text
 id: node.testing_page.default
@@ -27,6 +29,19 @@ content:
   created:
     type: datetime_timestamp
     weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
     region: content
     settings: {  }
     third_party_settings: {  }

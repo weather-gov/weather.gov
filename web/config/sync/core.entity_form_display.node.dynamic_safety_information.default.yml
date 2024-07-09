@@ -6,7 +6,9 @@ dependencies:
     - field.field.node.dynamic_safety_information.body
     - field.field.node.dynamic_safety_information.field_weather_event_type
     - node.type.dynamic_safety_information
+    - workflows.workflow.weather_gov_content_moderation
   module:
+    - content_moderation
     - text
 id: node.dynamic_safety_information.default
 targetEntityType: node
@@ -32,6 +34,19 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    region: content
+    settings: {  }
     third_party_settings: {  }
   title:
     type: string_textfield

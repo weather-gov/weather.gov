@@ -1,0 +1,7 @@
+name: 'weather_i18n'
+type: module
+description: 'Internationalization for beta.weather.gov'
+package: Custom
+core_version_requirement: ^10 || ^11
+interface translation project: weather_i18n
+interface translation server pattern: modules/%project/translations/%language.po

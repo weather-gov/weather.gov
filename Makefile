@@ -78,6 +78,12 @@ reset-site-database:
 shell: ## Get a shell inside the Drupal container
 	docker compose exec drupal bash
 
+ut: update-translations ## Update Drupal from local .po translation files
+update-translations:
+	docker compose exec drupal drush locale:clear-status
+	docker compose exec drupal drush locale:update
+	docker compose exec drupal drush cache:rebuild
+
 zap: update-settings zap-containers rebuild pause install-site load-spatial ## Delete the entire Docker environment and start from scratch.
 zap-containers:
 	docker compose stop
