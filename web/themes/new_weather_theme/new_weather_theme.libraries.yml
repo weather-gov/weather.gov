@@ -65,7 +65,7 @@ radar:
         data-wx-radar-cmi: true
 
 leaflet:
-  version: 2024-06-21
+  version: 2024-07-10
   css:
     theme:
       assets/css/leaflet.css:
