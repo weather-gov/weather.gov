@@ -22,7 +22,14 @@ const setupMap = (alert) => {
       "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ",
   }).addTo(map);
 
-  L.geoJSON(geoJSON, { style: { color: "#F00", opacity: 0.6 } }).addTo(map);
+  const alertType = alert.dataset.alertName.split(" ").pop();
+  if (alertType === "Warning") {
+      L.geoJSON(geoJSON, { style: { fillColor: "#D83933", color: '#FB5A47', opacity: 0.85, fillOpacity: 0.3 } }).addTo(map);
+  } else if (alertType === "Watch") {
+      L.geoJSON(geoJSON, { style: { fillColor: "#D2B93B", color: '#947100', opacity: 0.85, fillOpacity: 0.3 } }).addTo(map);
+  } else {
+      L.geoJSON(geoJSON, { style: { fillColor: "#B4C1CD", color: "#585E63", opacity: 0.85, fillOpacity: 0.3 } }).addTo(map);
+  }
 
   const locationIcon = L.divIcon({
     className: "wx-location-marker",
