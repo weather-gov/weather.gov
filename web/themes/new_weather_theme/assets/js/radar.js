@@ -94,6 +94,8 @@ const setupRadar = () => {
           opacity: 0.6,
         },
       },
+      bookmark: null,
+      quickset: null,
     },
     urls: {
       alerts: "https://alerts-v2.weather.gov",
