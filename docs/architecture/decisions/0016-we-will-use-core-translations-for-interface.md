@@ -29,5 +29,5 @@ We will use Drupal's core Internationalization modules for "interface translatio
 ### Consequences
 By using our own custom, separate module for storing and enabling our own translation files, we keep all the translation information in one place. Additionally, if we need to include any custom code and/or hooks for dealing with probable translation edge cases (think right-to-left languages or special character sets), we will already have a module where we can add that custom code.
   
-The use of translation files allows us to store the translation in ur code repository and keep it versioned. It also allows us to programmatically track changes to any translations as we proceed. Additionally, we can later develop intergrated tests to make sure we are accounting for all text that should be translated, as well as pruning translations that are no longer used.
+The use of translation files allows us to store the translation in our code repository and keep it versioned. It also allows us to programmatically track changes to any translations as we proceed. Additionally, we can later develop intergrated tests to make sure we are accounting for all text that should be translated, as well as pruning translations that are no longer used.
   
