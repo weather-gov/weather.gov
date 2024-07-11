@@ -110,7 +110,7 @@
           <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
             <div class="grid-container padding-0 wx-isolation-isolate grid-col-12">
               <div class="grid-row wx-radar-container">
-                <wx-alert-map class="grid-col-12" data-geo-json="{{ alert.geometry | json_encode | url_encode }}" data-alert-id="{{ alert.alertId}}" data-lat="{{ weather.point.lat }}" data-lon="{{ weather.point.lon }}">
+                <wx-alert-map class="grid-col-12" data-geo-json="{{ alert.geometry | json_encode | url_encode }}" data-alert-id="{{ alert.alertId}}" data-lat="{{ weather.point.lat }}" data-lon="{{ weather.point.lon }}" data-alert-name="{{ alert.event }}">
                   <div id="wx_alert_map_{{ alert.alertId }}" style="height: 100%"></div>
                 </wx-alert-map>
               </div>
