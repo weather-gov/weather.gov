@@ -25,22 +25,16 @@
    */
   const displayNavigationLoader = () => {
     const loader = document.querySelector("wx-loader");
-    if(loader){
+    if (loader) {
       loader.classList.remove("display-none");
     }
   };
-  
-  const goToLocationPage = (latitude, longitude, placename) => {
-    // We want to redirect the user via a POST. We already have the form ready to
-    // go, we just need to set its action so the browser knows where to go.
+
+  const goToLocationPage = (latitude, longitude) => {
+    // Submit the form, so we get the same behavior regardless of how we end up
+    // navigating to the location page.
     const form = document.querySelector("form[data-location-search]");
     form.setAttribute("action", `/point/${latitude}/${longitude}`);
-
-    // If we also have a suggested place name, add that to the form.
-    if (placename) {
-      const suggestion = form.querySelector(`input[name="suggestedPlaceName"]`);
-      suggestion.setAttribute("value", placename);
-    }
 
     form.submit();
   };
