@@ -108,7 +108,7 @@ const setupRadar = () => {
   window.app = window.cmiRadar.createApp("#wx_radar_container", options);
   window.app.$store.dispatch("markLocation", point);
 
-  [".cmi-radar-menu-container", ".cmi-radar-menu-agendas"].forEach(
+  [".cmi-radar-container .menu", ".cmi-radar-menu-agendas"].forEach(
     (selector) => {
       const element = document.querySelector(selector);
       if (element) {
