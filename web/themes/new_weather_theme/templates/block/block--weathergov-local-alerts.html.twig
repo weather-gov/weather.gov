@@ -105,20 +105,14 @@
                 <li class="">{{ areaName }}</li>
               {% endfor %}
             </ul>
-          {% endif %}
+            {% endif %}
 
-          <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2">
-            <div class="grid-container padding-0 wx-isolation-isolate grid-col-12">
-              <div class="grid-row wx-radar-container">
-                <wx-alert-map class="grid-col-12 display-flex flex-column" data-geo-json="{{ alert.geometry | json_encode | url_encode }}" data-alert-id="{{ alert.alertId}}" data-lat="{{ weather.point.lat }}" data-lon="{{ weather.point.lon }}" data-alert-name="{{ alert.event }}">
-                  <div id="wx_alert_map_{{ alert.alertId }}" class="flex-1"></div>
-                  <div class="wx_alert_map_legend margin-top-3 display-flex flex-align-center">
-                    <div class="wx_alert_map_legend_impact_area display-block width-3 height-3 border-2px margin-right-1"></div><span>Impacted Area</span>
-                  </div>
-                </wx-alert-map>
+            <wx-alert-map class="display-block grid-col-12 wx-radar-container" data-geo-json="{{ alert.geometry | json_encode | url_encode }}" data-alert-id="{{ alert.alertId}}" data-lat="{{ weather.point.lat }}" data-lon="{{ weather.point.lon }}" data-alert-name="{{ alert.event }}">
+              <div id="wx_alert_map_{{ alert.alertId }}" class="height-full"></div>
+              <div class="wx_alert_map_legend margin-top-3 display-flex flex-align-center">
+                <div class="wx_alert_map_legend_impact_area display-block width-3 height-3 border-2px margin-right-1"></div><span>Impacted Area</span>
               </div>
-            </div>
-          </div>
+            </wx-alert-map>
 
         {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
 
