@@ -228,7 +228,8 @@ jobs:
         run: npm ci
       - name: install browsers
         shell: bash
-        run: npx playwright install --with-deps- uses: actions/checkout@v4
+        run: npx playwright install --with-deps-
+        uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 18
