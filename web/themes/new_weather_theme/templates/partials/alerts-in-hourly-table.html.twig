@@ -12,8 +12,8 @@
     {% if loop.first %}
       {% if alertPeriods | length > 1 %} {% set plural="s" %} {% endif %}
       <span class="" aria-hidden="true">{{ "Alert#{plural}" | t }}</span>
-      <span class="usa-sr-only">{{ "Alert" | t }}</span>
     {% endif %}
+      <span class="usa-sr-only">{{ "Alert" | t }}</span>
     </th>
     {% if alertInfo.periodIndex > 0 %}
       <td colspan="{{ alertInfo.periodIndex }}"></td>
