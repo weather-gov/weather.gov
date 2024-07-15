@@ -1,0 +1,22 @@
+@use "uswds-core" as *;
+
+/* AlertMap Overrides
+-------------------------------------- */
+
+wx-alert-map > .wx_alert_map_legend > div
+{
+    background-color: rgb(180 193 205 / 30%);
+    border: 2px solid rgb(88 94 99 / 85%);
+}
+
+wx-alert-map[data-alert-name$="Warning"] > .wx_alert_map_legend > div
+{
+    background-color: rgb(216 57 51 / 30%);
+    border: 2px solid rgb(251 90 71 / 85%);
+}
+
+wx-alert-map[data-alert-name$="Watch"] > .wx_alert_map_legend > div
+{
+    background-color: rgb(210 185 59 / 30%);
+    border: 2px solid rgb(148 113 0 / 85%);
+}
