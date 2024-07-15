@@ -195,7 +195,11 @@ jobs:
     name: playwright end to end tests
     runs-on: ubuntu-latest
     needs: [populate-database, should-test]
-
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
     steps:
       - name: checkout
         if: needs.should-test.outputs.yes == 'true'
