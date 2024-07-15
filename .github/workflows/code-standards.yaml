@@ -220,6 +220,7 @@ jobs:
     steps:
       - uses: browser-actions/setup-chrome@v1
       - uses: browser-actions/setup-edge@v1
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -229,10 +230,6 @@ jobs:
       - name: install browsers
         shell: bash
         run: npx playwright install --with-deps-
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
       - name: Install dependencies
         run: npm ci
 
