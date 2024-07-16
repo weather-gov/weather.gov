@@ -3,7 +3,7 @@ const { test, expect } = require("@playwright/test");
 
 const { describe, beforeEach } = test;
 
-describe("Alerts e2e tests", () => {
+describe("Alerts e2e tests", () => {  
   beforeEach(async ({ page }) => {
     await page.goto("http://localhost:8081/play/testing");
     await page.goto("/point/34.749/-92.275");
