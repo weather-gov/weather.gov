@@ -23,7 +23,7 @@ const adjust = (time, adjustment) => {
   return time;
 };
 
-const processDates = (obj, usingHourly = false) => {
+const processDates = (obj, usingHourly = false, { parent = null } = {}) => {
   // If the input is null, just bail out. Otherwise we'll accidentally turn it
   // into an object.
   if (obj === null) {
@@ -37,9 +37,9 @@ const processDates = (obj, usingHourly = false) => {
   Object.entries(obj ?? {}).forEach(([key, value]) => {
     // For arrays and objects, recurse into them
     if (Array.isArray(value)) {
-      value.forEach((item) => processDates(item, usingHourly));
+      value.forEach((item) => processDates(item, usingHourly, { parent: key }));
     } else if (typeof value === "object" && value !== null) {
-      processDates(value, usingHourly);
+      processDates(value, usingHourly, { parent: key });
     }
     //
     // But if the value has a startsWith function and it starts with the token,
@@ -55,9 +55,14 @@ const processDates = (obj, usingHourly = false) => {
         // If we are parsing hourly forcast data, and the key is either the
         // start or end time, then align the output to the start of the given
         // hour.
+        //
+        // Alternatively, if we are not parsing hourly data but our parent key
+        // is "values" and our key is "validTime", then this is the hourly data
+        // stuffed inside the gridpoints API return. Do the same thing.
         if (
-          usingHourly &&
-          ["startTime", "endTime", "validTime"].includes(key)
+          (usingHourly &&
+            ["startTime", "endTime", "validTime"].includes(key)) ||
+          (!usingHourly && parent === "values" && key === "validTime")
         ) {
           updatedTime = updatedTime.startOf("hour");
         }

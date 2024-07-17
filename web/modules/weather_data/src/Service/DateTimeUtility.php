@@ -13,6 +13,17 @@ class DateTimeUtility
      */
     private static $nowOverriddenTimestamp;
 
+    private static function getTimeValue($source, $property)
+    {
+        if (is_object($source) && property_exists($source, $property)) {
+            return $source->$property;
+        }
+        if (is_array($source) && array_key_exists($property, $source)) {
+            return $source[$property];
+        }
+        return false;
+    }
+
     public static function filterToAfter(
         $array,
         $after,
@@ -20,13 +31,25 @@ class DateTimeUtility
     ) {
         return array_values(
             array_filter($array, function ($item) use ($after, $property) {
-                $itemTime = property_exists($item, $property)
-                    ? $item->$property
-                    : $item[$property];
-
+                $itemTime = self::getTimeValue($item, $property);
                 $itemTime = self::stringToDate($itemTime);
 
                 return $itemTime > $after;
+            }),
+        );
+    }
+
+    public static function filterToOnOrAfter(
+        $array,
+        $after,
+        $property = "startTime",
+    ) {
+        return array_values(
+            array_filter($array, function ($item) use ($after, $property) {
+                $itemTime = self::getTimeValue($item, $property);
+                $itemTime = self::stringToDate($itemTime);
+
+                return $itemTime >= $after;
             }),
         );
     }
@@ -38,10 +61,7 @@ class DateTimeUtility
     ) {
         return array_values(
             array_filter($array, function ($item) use ($before, $property) {
-                $itemTime = property_exists($item, $property)
-                    ? $item->$property
-                    : $item[$property];
-
+                $itemTime = self::getTimeValue($item, $property);
                 $itemTime = self::stringToDate($itemTime);
 
                 return $itemTime < $before;
@@ -80,7 +100,7 @@ class DateTimeUtility
     {
         self::$nowOverriddenTimestamp = \DateTimeImmutable::createFromFormat(
             \DateTimeInterface::ISO8601_EXPANDED,
-            $timestamp
+            $timestamp,
         );
     }
 

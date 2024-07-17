@@ -313,7 +313,10 @@ trait HourlyForecastTrait
             // Therefore we only care about when the period starts.
             // If it starts within the $dayStart and $dayEnd window, it
             // counts for the current day.
-            $precipPeriodIsToday = $start >= $dayStart && $start < $dayEnd;
+            $precipPeriodIsToday =
+                $start < $dayEnd &&
+                ($start >= $dayStart ||
+                    ($start < $dayStart && $end > $dayStart));
 
             if ($precipPeriodIsToday) {
                 $periods[] = (object) [
