@@ -364,3 +364,19 @@ msgstr ""
 #: theme.text.submitted-by
 msgid "Submitted by @author_name on @date"
 msgstr ""
+
+#: backend.login.sso-login-path
+msgid "SSO Login Path"
+msgstr ""
+
+#: backend.login.login-text
+msgid "Login Text"
+msgstr ""
+
+#: backend.login.sso-cancel-path
+msgid "SSO Cancel Path"
+msgstr ""
+
+#: backend.login.cancel-text
+msgid "Cancel Text
+msgstr ""
