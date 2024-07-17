@@ -4,8 +4,9 @@ const { globSync } = require('glob');
 
 
 const TWIG_T_FUNCTION_RX = /\{\{\s*t\(['"][^'"]*['"].*\)\}\}/sg;
-const TWIG_T_FILTER_RX = /\{\{\s*['"]([^'"]*)['"]\s*\|\s*t(\(\s*(\{[^}]+\})\s*\))?\s*\}\}\n/sg;
-const PHP_T_FUNCTION_RX = /-\>t\(.*\)/sg;
+const TWIG_T_FILTER_RX = /\{\{\s*['"]([^'"]*)['"]\s*\|\s*t(\(\s*(\{[^}]+\})\s*\))?\s*\}\}\n/mg;
+const ALT_RX = /\{\{\s*["'].*['"]\s*\|\s*t\s*\}\}/mg;
+const PHP_T_FUNCTION_RX = /-\>t\(['"]([^'"]+)['"]\)/sg;
 
 /**
  * Get all the individual paths for template files
@@ -14,6 +15,48 @@ const PHP_T_FUNCTION_RX = /-\>t\(.*\)/sg;
 const getTemplatePaths = sourceDir => {
   const globPattern = path.resolve(sourceDir, "**/*.twig");
   return globSync(globPattern);
+};
+
+/**
+ * Get all the individual paths for PHP code files
+ * recursively under the provided source directory.
+ * Note that we check both the php and module extensions
+ * for drupal compatibility
+ */
+const getPHPPaths = sourceDir => {
+  const phpPattern = path.resolve(sourceDir, "**/*.php");
+  const modulePattern = path.resolve(sourceDir, "**/*.php");
+  const phpPaths = globSync(phpPattern);
+  const modulePaths = globSync(modulePattern);
+  return phpPaths.concat(modulePaths);
+};
+
+/**
+ * For a given PHP file, extract all of the translation matches
+ * and return information about the match line number
+ * and matched / extracted strings
+ */
+const extractPHPTranslations = filePath => {
+  const source = fs.readFileSync(filePath).toString();
+  let result = [];
+
+  const matches = source.matchAll(PHP_T_FUNCTION_RX);
+  if(matches){
+    result = result.concat(Array.from(
+      matches,
+      match => {
+        return {
+          filename: path.basename(filePath),
+          matchedString: match[0],
+          extracted: match[1],
+          extractedArgs: match[3] | null,
+          lineNumber: getLineNumberForPosition(source, match.index)
+        };
+      }
+    ));
+  }
+
+  return result;
 };
 
 /**
@@ -94,10 +137,12 @@ const appendToLookup = (lookup, key, val) => {
  * dictionary that maps string to be translated to
  * arrays of match information.
  */
-const getTemplateMatchInfo = dirPath => {
+const getFileMatchInfo = (templatePath, phpPath) => {
   const lookupByTerm = {};
-  const sourcesPath = path.resolve(__dirname, dirPath);
-  const templates = getTemplatePaths(sourcesPath);
+  const templateSourcesPath = path.resolve(__dirname, templatePath);
+  const phpSourcesPath = path.resolve(__dirname, phpPath);
+  const templates = getTemplatePaths(templateSourcesPath);
+  const php = getPHPPaths(phpPath);
 
   templates.forEach(filePath => {
     const parsed = extractTemplateTranslations(filePath);
@@ -108,9 +153,19 @@ const getTemplateMatchInfo = dirPath => {
     }
   });
 
+  php.forEach(filePath => {
+    const parsed = extractPHPTranslations(filePath);
+    if(parsed.length){
+      parsed.forEach(translateMatch => {
+        appendToLookup(lookupByTerm, translateMatch.extracted, translateMatch);
+      });
+    }
+  });
+  
   return lookupByTerm;
 };
 
 module.exports = {
-  getTemplateMatchInfo
+  getFileMatchInfo,
+  getPHPPaths
 };

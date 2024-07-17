@@ -38,6 +38,8 @@
               {% endif %}
       </div>
 
+      {{ "Heya boo boo" | t }}
+
       {# We hide from screenreaders and use the weather narrative (above) instead #}
       <div class="grid-col-12" aria-hidden="true">
         {# First row is temperature #}
@@ -48,13 +50,15 @@
           <div class="margin-top-05 position-relative">
             <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
             <div class="text-primary-dark">
-              <p class="margin-top-2px font-body-md">
-              {{ content.feels_like }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
-              </p>
+                <p class="margin-top-2px font-body-md">
+                    {{ content.feels_like }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
+                </p>
             </div>
           </div>
         </div>
 
+        {{ "Heya boo boo" | t }}
+        
         <div class="display-flex flex-align-center margin-bottom-2">
           {% if content.icon.icon %}
           <div class="wx-icon margin-right-105 width-5 height-5">
