@@ -10,7 +10,9 @@ dependencies:
     - field.field.node.wfo_promo.field_wfo
     - field.field.node.wfo_promo.field_youtube_url
     - node.type.wfo_promo
+    - workflows.workflow.weather_gov_content_moderation
   module:
+    - content_moderation
     - text
 id: node.wfo_promo.default
 targetEntityType: node
@@ -74,6 +76,19 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    region: content
+    settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox

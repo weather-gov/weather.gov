@@ -30,4 +30,5 @@ content:
     region: content
 hidden:
   field_primary_wfo: true
+  langcode: true
   member_for: true

@@ -24,6 +24,11 @@ content:
     third_party_settings: {  }
     weight: 101
     region: content
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
@@ -32,3 +37,4 @@ content:
 hidden:
   field_image: true
   field_wfo: true
+  langcode: true

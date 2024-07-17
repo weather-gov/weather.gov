@@ -1,0 +1,382 @@
+# English translation of beta.weather.gov
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Vote.gov Utility\\n"
+"MIME-Version: 1.0\\n"
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\\n"
+
+#: daily-forecast.labels.alert
+msgid "Alert"
+msgstr ""
+
+#: daily-forecast.labels.multiple-alerts
+msgid "Multiple alerts"
+msgstr ""
+
+#: daily-forecast.labels.overnight
+msgid "Overnight"
+msgstr ""
+
+#: daily-forecast.labels.day
+msgid "Day"
+msgstr ""
+
+#: daily-forecast.labels.night
+msgid "Night"
+msgstr ""
+
+#: daily-forecast.text.chance-precip
+msgid "chance of precipitation"
+msgstr ""
+
+#: daily-forecast.text.hide-details
+msgid "Hide hourly details"
+msgstr ""
+
+#: daily-forecast.text.show-details
+msgid "Show hourly details"
+msgstr ""
+
+#: daily-forecast.labels.high
+msgid "High"
+msgstr ""
+
+#: daily-forecast.labels.low
+msgid "Low"
+msgstr ""
+
+#: daily-forecast.text.usa-gov-site
+msgid "Official website of the United States government"
+msgstr ""
+
+#: footer.text.usa-gov-site-alt
+msgid "An official website of the United States government"
+msgstr ""
+
+#: uswds-banner.how-you-know
+msgid "Heres how you know"
+msgstr ""
+
+#: uswds-banner.gov.description
+msgid "Official websites use .gov"
+
+#: uswds-banner.gov.description_html
+msgid "A <strong>.gov</strong>\n                  website belongs to an official government organization in the\n                  United States."
+msgstr ""
+
+#: uswds-banner.gov.https
+msgid "Secure .gov websites use HTTPS"
+msgstr ""
+
+#: uswds-banner.lock_html
+msgid "A <strong>lock</strong>"
+msgstr ""
+
+#: uswds-banner.lock
+msgid "Lock"
+msgstr ""
+
+#: uswds-banner.lock_alt
+msgid "Locked padlock icon"
+msgstr ""
+
+#: uswds-banner.gov.safely-connected_html
+msgid "or <strong>https://</strong>\n                  means youve safely connected to the .gov website. Share\n                  sensitive information only on official, secure websites."
+msgstr ""
+
+#: hourly-table.aria.scroll-left
+msgid "scroll left"
+msgstr ""
+
+#: hourly-table.aria.scroll-right
+msgid "scroll right"
+msgstr ""
+
+#: hourly-table.aria.table-description
+msgid "Detailed hourly weather data for @place. The rows are weather variables, the columns are hours."
+msgstr ""
+
+#: hourly-table.labels.time
+msgid "Time"
+msgstr ""
+
+#: hourly-table.labels.temperature
+msgid "Temperature"
+msgstr ""
+
+#: abbreviations.not-applicable
+msgid "N/A"
+msgstr ""
+
+#: hourly-table.labels.condition
+msgid "Condition"
+msgstr ""
+
+#: hourly-table.labels.chance-precip
+msgid "Chance of precipitation"
+msgstr ""
+
+#: hourly-table.labels.wind-speed
+msgid "Wind speed"
+msgstr ""
+
+#: hourly-table.text.gusting
+msgid "gusting to @gustSpeed mph"
+msgstr ""
+
+#: hourly-table.labels.humidity
+#: observation-table.labels.humidity
+msgid "Humidity"
+msgstr ""
+
+#: hourly-table.labels.dewpoint
+#: observation-table.labels.dewpoint
+msgid "Dewpoint"
+msgstr ""
+
+#: observation-table.labels.wind
+msgid "Wind"
+msgstr ""
+
+#: observation-table.labels.gusts
+msgid "Gusts"
+msgstr ""
+
+#: units.mph
+msgid "mph"
+msgstr ""
+
+#: observation-table.labels.visibility
+msgid "Visibility"
+msgstr ""
+
+#: units.miles
+msgid "miles"
+msgstr ""
+
+#: observation-table.labels.pressure
+msgid "Pressure"
+msgstr ""
+
+#: units.mercury-inches
+msgid "@mercury_inches in (@mbar&nbsp;mb)"
+msgstr ""
+
+#: radar.labels.radar
+msgid "Radar"
+msgstr ""
+
+#: radar.aria.description
+msgid "Listed below is a visual representation of radar data for\n        @place. For more details on specific weather conditions,\n        view hourly data within the"
+msgstr ""
+
+#: radar.labels.daily-tab
+msgid "daily tab"
+msgstr ""
+
+#: radar.aria.expand-map
+msgid "expand the radar map"
+msgstr ""
+
+#: radar.aria.collapse-map
+msgid "collapse the radar map"
+msgstr ""
+
+#: radar.labels.legend
+msgid "Radar legend"
+msgstr ""
+
+#: radar.aria.legend
+msgid "Legend which describes the intensity levels that correspond to color and dBz values"
+msgstr ""
+
+#: units.dbz
+msgid "dBz"
+msgstr ""
+
+#: radar.labels.intensity
+msgid "Intensity"
+msgstr ""
+
+#: wind.labels.speed-from-direction
+msgid "@speed mph from the @direction"
+msgstr ""
+
+#: loader.loading-text
+msgid "Loading the forecast"
+msgstr ""
+
+#: wfo.labels.facebook
+msgid "Facebook"
+msgstr ""
+
+#: wfo.labels.phone
+msgid "Phone"
+msgstr ""
+
+#: wfo.labels.twitter
+msgid "X"
+msgstr ""
+
+#: wfo.labels.youtube
+msgid "YouTube"
+msgstr ""
+
+#:footer.aria.noaa-logo
+msgid "National Oceanic and Atmospheric Administration logo"
+msgstr ""
+
+#: footer.noaa-motto
+msgid "Science. Service. Stewardship"
+msgstr ""
+
+#: uswds-banner.skip-to-content
+msgid "Skip to main content"
+msgstr ""
+
+#: forecast.labels.weather-info
+msgid "Weather information sections"
+msgstr ""
+
+#: forecast.labels.alerts
+msgid "Alerts"
+msgstr ""
+
+#: forecast.labels.current
+msgid "Current"
+msgstr ""
+
+#: forecast.labels.seven-days
+msgid "7 Days"
+msgstr ""
+
+#: forecast.errors.current-conditions
+msgid "There was an error loading the current conditions."
+msgstr ""
+
+#: forecast.current.weather-as-of
+msgid "Weather as of"
+msgstr ""
+
+#: forecast.current.aria.feels-like
+msgid "It feels like @feelsLike 	."
+msgstr ""
+
+#: forecast.current.feels-like
+msgid "Feels like"
+msgstr ""
+
+#: forecast.current.obs-station
+msgid "Observation station"
+msgstr ""
+
+#: forecast.current.last-updated
+msgid "Last updated"
+msgstr ""
+
+#: forecast.errors.daily
+msgid "There was an error loading the daily forecast."
+msgstr ""
+
+#: daily-forecast.labels.today
+msgid "Today"
+msgstr ""
+
+#: safety.labels.tips
+msgid "Tips to stay safe"
+msgstr ""
+
+#: hourly-forecast.labels.forecast
+msgid "Forecast"
+msgstr ""
+
+#: forecast.errors.hourly
+msgid "There was an error loading the hourly forecast."
+msgstr ""
+
+#: precip-table.labels.amounts
+msgid "Precipitation amounts"
+msgstr ""
+
+#: precip-table.aria.amounts
+msgid "precipitation amounts for the coming hours"
+msgstr ""
+
+#: precip-table.aria.period
+msgid "time period"
+msgstr ""
+
+#: precip-table.aria.precipitation
+msgid "forecast precipitation"
+msgstr ""
+
+#: units.inches
+msgid "inches"
+msgstr ""
+
+#: alerts.text.in-effect-from
+msgid "In effect from"
+msgstr ""
+
+#: alerts.text.issued-by
+msgid "Issued by @sender"
+msgstr ""
+
+#: alerts.labels.what-to-do
+msgid "What to do"
+msgstr ""
+
+#: alerts.labels.areas-impacted
+msgid "Areas impacted"
+msgstr ""
+
+#: alerts.text.counties-in
+msgid "Counties in"
+msgstr ""
+
+#: alerts.text.including-cities
+msgid "Including these cities"
+msgstr ""
+
+#: location-search.labels.enter-city-zip
+msgid "Enter city or zip code"
+msgstr ""
+
+#: location-search.labels.use-location
+msgid "Use my location"
+msgstr ""
+
+#: forecast.labels.weather-story
+msgid "Forecaster's report"
+msgstr ""
+
+#: wfo.labels.local-office
+msgid "Your Local Forecast Office"
+msgstr ""
+
+#: wfo.labels.find-us
+msgid "Find us on"
+msgstr ""
+
+#: theme.text.submitted-by
+msgid "Submitted by @author_name on @date"
+msgstr ""
+
+#: backend.login.sso-login-path
+msgid "SSO Login Path"
+msgstr ""
+
+#: backend.login.login-text
+msgid "Login Text"
+msgstr ""
+
+#: backend.login.sso-cancel-path
+msgid "SSO Cancel Path"
+msgstr ""
+
+#: backend.login.cancel-text
+msgid "Cancel Text
+msgstr ""

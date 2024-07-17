@@ -6,7 +6,9 @@ dependencies:
     - field.field.node.page.body
     - field.field.node.page.field_meta_tags
     - node.type.page
+    - workflows.workflow.weather_gov_content_moderation
   module:
+    - content_moderation
     - metatag
     - path
     - text
@@ -40,6 +42,19 @@ content:
     settings:
       sidebar: false
       use_details: true
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    region: content
+    settings: {  }
     third_party_settings: {  }
   path:
     type: path

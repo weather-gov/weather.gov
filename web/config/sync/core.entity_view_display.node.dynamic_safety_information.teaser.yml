@@ -23,6 +23,11 @@ content:
     third_party_settings: {  }
     weight: 101
     region: content
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
@@ -30,3 +35,4 @@ content:
     region: content
 hidden:
   field_weather_event_type: true
+  langcode: true

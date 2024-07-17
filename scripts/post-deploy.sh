@@ -23,4 +23,7 @@ echo  "Updating drupal ... "
 drush state:set system.maintenance_mode 1 -y
 drush deploy -y
 drush state:set system.maintenance_mode 0 -y
+drush locale:clear-status
+drush locale:update
+drush cache:rebuild
 echo "Bootstrap finished"

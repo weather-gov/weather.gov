@@ -1,4 +1,19 @@
 describe("pages load", () => {
+  before(() => {
+    /**
+     * Due to how translations are initially cached, we should
+     * visit any relevant point location page that will *not*
+     * be visited later as part of this test suite.
+     * We want to assume translation cache has been loaded
+     * but not individual point location caches.
+     */
+    const preloadPage = {
+      name: "Brooklyn Heights, NY",
+      url: "/point/40.693/-73.991"
+    };
+    cy.visit(preloadPage.url);
+  });
+  
   it("average less than 3 seconds, max less than 5 seconds", () => {
     const pages = [
       { name: "Hoboken, NJ", url: "/point/40.737/-74.031" },

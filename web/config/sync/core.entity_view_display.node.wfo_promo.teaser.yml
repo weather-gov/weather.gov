@@ -27,6 +27,11 @@ content:
     third_party_settings: {  }
     weight: 101
     region: content
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
@@ -38,3 +43,4 @@ hidden:
   field_twitter_url: true
   field_wfo: true
   field_youtube_url: true
+  langcode: true

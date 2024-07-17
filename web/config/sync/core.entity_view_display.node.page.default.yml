@@ -24,6 +24,11 @@ content:
     third_party_settings: {  }
     weight: 100
     region: content
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
   field_meta_tags:
     type: metatag_empty_formatter
     label: above
@@ -34,4 +39,5 @@ content:
   links:
     weight: 101
     region: content
-hidden: {  }
+hidden:
+  langcode: true
