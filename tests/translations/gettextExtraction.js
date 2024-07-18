@@ -57,24 +57,14 @@ const parseGettextSource = str => {
 };
 
 /**
- * Get all the individual paths for the translation
- * files relative to some source directory.
- */
-const getTranslationPaths = sourceDir => {
-  const globPattern = path.resolve(sourceDir, "**/*.po");
-  return globSync(globPattern);
-};
-
-/**
  * For a given list of translation file paths,
  * respond with a dictionary mapping filenames
  * to match information for the gettext values
  */
-const getTranslationMatchInfo = sourcePath => {
-  const translationPaths = getTranslationPaths(path.resolve(__dirname, sourcePath));
+const getTranslationMatchInfo = sourcePaths => {
   const lookup = {};
 
-  translationPaths.forEach(filePath => {
+  sourcePaths.forEach(filePath => {
     const languageCode = path.basename(filePath).split(".")[0];
     const langLookup = {};
     const source = fs.readFileSync(filePath).toString();

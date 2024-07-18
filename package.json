@@ -38,6 +38,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^3.3.0",
     "eslint-plugin-import": "^2.29.1",
+    "glob": "^11.0.0",
     "jsdom": "^24.1.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^10.6.0",
@@ -61,11 +62,13 @@
     "php-format": "npx prettier -w 'web/**/*.php' 'web/**/*.php.test' 'web/**/*.theme' 'web/**/*.module'",
     "style-format": "npx prettier -w 'web/themes/**/*.scss'",
     "style-lint": "stylelint '**/*.scss'",
-    "compile-svg": "node ./scripts/compile-svg-sprite.js ./web/themes/new_weather_theme/assets/images/weather/icons/*.svg ./web/themes/new_weather_theme/assets/images/weather/icons/conditions/*.svg"
+    "compile-svg": "node ./scripts/compile-svg-sprite.js ./web/themes/new_weather_theme/assets/images/weather/icons/*.svg ./web/themes/new_weather_theme/assets/images/weather/icons/conditions/*.svg",
+    "check-translations": "node ./tests/translations/main.js"
   },
   "dependencies": {
     "@prettier/plugin-php": "^0.22.2",
     "mariadb": "^3.3.1",
-    "shapefile": "^0.6.6"
+    "shapefile": "^0.6.6",
+    "twing": "^7.0.0-beta.3"
   }
 }
