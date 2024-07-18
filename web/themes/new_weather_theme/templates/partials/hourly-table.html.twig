@@ -123,11 +123,13 @@
             {{"Accumulation" | t}}
           </th>
           {% if precipPeriods[0].periodIndex > 0 %}
-            <td colspan="{{ precipPeriods[0].periodIndex }}">placeholder</td>
+            <td colspan="{{ precipPeriods[0].periodIndex }}"></td>
           {% endif %}
           {% for period in precipPeriods %}
           <td colspan="{{ period.duration }}">
+            {% if period.value > 0 %}
             <div class="bg-primary-lighter text-center">{{ period.value }} inches</div>
+            {% endif %}
           </td>
           {% endfor %}
         </tr>
