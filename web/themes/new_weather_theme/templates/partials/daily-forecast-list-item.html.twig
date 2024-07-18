@@ -113,7 +113,7 @@ only be a nighttime period.
           precipPeriods: precipPeriods
         }
         %}
-        {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipHours } %}
+        {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipPeriods } %}
       </div>
     {% endif %}
 

@@ -149,7 +149,7 @@ trait DailyForecastTrait
         $alerts = $this->getAlerts($grid, $point);
 
         $allPrecipPeriods = $this->getHourlyPrecipitation($wfo, $x, $y, $now);
-        $allPrecipPeriods = array_map(function ($period) {
+        $allPrecipPeriods = array_map(function ($period) use (&$timezone) {
             $valid = $period->validTime;
             $value = $period->value;
             $value = UnitConversion::millimetersToInches($value);
@@ -352,15 +352,20 @@ trait DailyForecastTrait
                     return [
                         "periodIndex" => $myIndex,
                         "duration" => $duration,
+                        "start" => $period->start->format("g A"),
+                        "end" => $period->end->format("g A"),
                         "value" => $period->value,
                     ];
                 }, $precipPeriods);
 
-                $precipPeriods = array_filter($precipPeriods, function (
+                $noPrecipPeriods = array_filter($precipPeriods, function (
                     $period,
                 ) {
                     return $period["value"] > 0;
                 });
+                if (count($noPrecipPeriods) === count($precipPeriods)) {
+                    $precipPeriods = [];
+                }
 
                 $day = [
                     "periods" => $periods,

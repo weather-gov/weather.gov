@@ -5185,11 +5185,11 @@
       "values": [
         {
           "validTime": "date:now +0 hours / PT1H",
-          "value": 0
+          "value": 13
         },
         {
           "validTime": "date:now +1 hours / PT6H",
-          "value": 0
+          "value": 94
         },
         {
           "validTime": "date:now +7 hours / PT6H",
@@ -5197,11 +5197,11 @@
         },
         {
           "validTime": "date:now +13 hours / PT6H",
-          "value": 0
+          "value": 42
         },
         {
           "validTime": "date:now +19 hours / PT6H",
-          "value": 0
+          "value": 4
         },
         {
           "validTime": "date:now +25 hours / PT6H",
