@@ -6,6 +6,7 @@
       <directory suffix=".php.test">web/themes/weathergov_admin</directory>
       <directory suffix=".php.test">web/modules/weather_blocks</directory>
       <directory suffix=".php.test">web/modules/weather_data</directory>
+      <directory suffix=".php.test">web/modules/weather_i18n</directory>
     </testsuite>
   </testsuites>
   <coverage

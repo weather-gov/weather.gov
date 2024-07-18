@@ -19,7 +19,7 @@
   By putting all of the content into a single span, we can get VoiceOver to read
   it in a more natural way.
   #}
-  <span class="usa-sr-only">{{ "@speed mph from the @direction " | t({"@speed":wind.speed,"@direction": wind.direction.long }) }}</span>
+  <span class="usa-sr-only">{{ "@speed mph from the @direction" | t({"@speed":wind.speed,"@direction": wind.direction.long }) }}</span>
 {% else %}
   <span class="text-base font-mono-xs">{{ "N/A" | t }}</span>
 {% endif %}

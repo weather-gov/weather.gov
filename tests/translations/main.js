@@ -1,23 +1,34 @@
-const { getFileMatchInfo, getPHPPaths } = require("./translationExtraction");
+const { globSync } = require("glob");
+const path = require("path");
+const { getFileMatchInfo } = require("./translationExtraction");
 const { getTranslationMatchInfo } = require("./gettextExtraction");
+const config = require("./config.js");
 
-const reportUsage = () => {
-  const output = `Usage: ${__filename.split("/").pop()} [PATH_TO_TEMPLATE_DIR] [PATH_TO_PHP_FILES_DIR] [PATH_TO_TRANSLATIONS_DIR]`;
-  console.log(output);
-}
 
-// Parse out translation tags/filters from the templates
-// and get an initial lookup dictionary about the matches.
-const TEMPLATE_PATH = process.argv[2];
-const PHP_PATH = process.argv[3];
-const TRANS_PATH = process.argv[4];
-if(!TEMPLATE_PATH || !TRANS_PATH || !PHP_PATH){
-  reportUsage();
-  process.exit(-1);
-}
+/**
+ * Get all of the template and php paths as flat arrays
+ */
+const templatePaths = config.templates.include.reduce((prev, current) => {
+  const relativeGlob = path.resolve(__dirname, current);
+  const filePaths = globSync(relativeGlob);
+  return prev.concat(filePaths);
+},[]).filter(filePath => {
+  const fileName = path.basename(filePath);
+  return !config.templates.exclude.includes(fileName);
+});
+const phpPaths = config.php.include.reduce((prev, current) => {
+  const relativeGlob = path.resolve(__dirname, current);
+  const filePaths = globSync(relativeGlob);
+  return prev.concat(filePaths);
+}, []);
+const translationPaths = config.translations.include.reduce((prev, current) => {
+  const relativeGlob = path.resolve(__dirname, current);
+  const filePaths = globSync(relativeGlob);
+  return prev.concat(filePaths);
+}, []);
 
-const templateLookup = getFileMatchInfo(TEMPLATE_PATH, PHP_PATH);
-const translationLookup = getTranslationMatchInfo(TRANS_PATH);
+const templateLookup = getFileMatchInfo(templatePaths, phpPaths);
+const translationLookup = getTranslationMatchInfo(translationPaths);
 const languages = Object.keys(translationLookup);
 let errorsSummary = [];
 
@@ -36,8 +47,6 @@ languages.forEach(langCode => {
       fileNames.add(phrase.filename);
     });
   });
-
-  console.log(Array.from(fileNames).sort());
 
   console.log("Checking for missing translations");
   const missing = templateTerms.filter(key => {
@@ -58,6 +67,7 @@ languages.forEach(langCode => {
         console.error(`${fileLocations.join("\n")}\n${serialized}`);
       }
     });
+    process.exit(-1);
   }
 
   console.log("Checking for stale translations");
@@ -66,10 +76,7 @@ languages.forEach(langCode => {
   });
 
   if(stale.length){
-    console.error(`Found ${stale.length} stale translations in the ${langCode} file`);
+    console.warn(`Found ${stale.length} potentially stale translations in the ${langCode} file`);
+    console.log(stale);
   }
-
-  console.log(
-    templateTerms.find(term => term.startsWith("There"))
-  );
 });
