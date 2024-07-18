@@ -28,6 +28,7 @@ There are several tools we use locally that you will need to have.
 cf login -a api.fr.cloud.gov  --sso
 ```
 - [ ] Have an admin add you to cloud.gov org and set up your sandbox developer space. Ensure you can deploy to your sandbox space.
+- [ ] If your GitHub account is associated with any non-government or personal work, create a new GitHub account. (NOAA policy)
 
 ### Steps for the onboarder
 - [ ] Ask an admin to add the onboardee to our [GitHub organization](https://github.com/orgs/weather-gov).
@@ -35,6 +36,7 @@ cf login -a api.fr.cloud.gov  --sso
 - [ ] Add the onboardee to our cloud.gov org
 - [ ] Before you finalize the developer sandbox setup, [generate new metadata](../../docs/dev/authentication.md) for SAML communication
 - [ ] Setup the developer sandbox space with [sandbox script](./scripts/create_cloudgov_env.md).
+- [ ] Get the developer a NOAA account so they can access documents.
 
 ## Documents to Review
 
