@@ -25,7 +25,7 @@ runs:
     # Give the containers a moment to settle.
     - name: wait a tick
       shell: bash
-      run: sleep 15
+      run: sleep 10
 
     - name: populate the site
       shell: bash
