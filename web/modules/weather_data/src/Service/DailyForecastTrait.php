@@ -361,7 +361,7 @@ trait DailyForecastTrait
                 $noPrecipPeriods = array_filter($precipPeriods, function (
                     $period,
                 ) {
-                    return $period["value"] > 0;
+                    return $period["value"] == 0;
                 });
                 if (count($noPrecipPeriods) === count($precipPeriods)) {
                     $precipPeriods = [];
