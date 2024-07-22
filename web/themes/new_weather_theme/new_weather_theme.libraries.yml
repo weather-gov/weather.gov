@@ -51,7 +51,7 @@ hourly-toggle:
     assets/js/components/HourlyToggle.js: { preprocess: false }
 
 radar:
-  version: 2024-04-22.2
+  version: 2024-06-23
   css:
     theme:
       assets/css/radar/cmi-radar.6602f65c.css:
