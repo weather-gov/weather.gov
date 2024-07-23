@@ -57,7 +57,7 @@ const config = {
     /* Test against branded browsers. */
     {
       name: "Microsoft Edge",
-      use: { ...devices["Desktop Edge"], channel: "msedge-dev" },
+      use: { ...devices["Desktop Edge"], channel: "msedge" },
     },
     {
       name: "Google Chrome",

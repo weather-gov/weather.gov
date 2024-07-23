@@ -2,6 +2,11 @@ runs:
   using: composite
   steps:
     - uses: browser-actions/setup-chrome@v1
+    - name: Setup Edge
+      uses: browser-actions/setup-edge@v1
+      id: setup-edge
+      with:
+        edge-version: 'beta'
     - uses: actions/setup-node@v4
       with:
         node-version: 18
