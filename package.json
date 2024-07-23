@@ -63,10 +63,12 @@
     "style-format": "npx prettier -w 'web/themes/**/*.scss'",
     "style-lint": "stylelint '**/*.scss'",
     "compile-svg": "node ./scripts/compile-svg-sprite.js ./web/themes/new_weather_theme/assets/images/weather/icons/*.svg ./web/themes/new_weather_theme/assets/images/weather/icons/conditions/*.svg",
-    "check-translations": "node ./tests/translations/main.js"
+    "check-translations": "node ./tests/translations/main.js",
+    "po-to-csv": "node ./scripts/po-to-csv.js"
   },
   "dependencies": {
     "@prettier/plugin-php": "^0.22.2",
+    "csv-stringify": "^6.5.0",
     "mariadb": "^3.3.1",
     "shapefile": "^0.6.6",
     "twing": "^7.0.0-beta.3"
