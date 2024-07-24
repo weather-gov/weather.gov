@@ -40,7 +40,7 @@
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^24.1.1",
     "jsdom-global": "^3.0.2",
-    "mocha": "^10.6.0",
+    "mocha": "^10.7.0",
     "mocha-cli": "^1.0.1",
     "playwright": "^1.44.1",
     "prettier": "^3.3.3",
