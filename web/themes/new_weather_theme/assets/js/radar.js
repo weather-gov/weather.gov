@@ -54,51 +54,20 @@ const setupRadar = () => {
 
   const point = [lon, lat];
 
-  // no alerts;
-  // different heights on different breakpoints
-  // explore customizing the controls
-  // for a11y, describe that it's a radar map and otherwise hide it
+  const bookmark = {
+    agenda: { id: "weather", zoom: 8, center: point, location: point },
+    opacity: {
+      alerts: 0,
+    },
+  };
 
   const options = {
     settings: {
-      menu: {
-        open: true,
-      },
-      map: {
-        base: "standard",
-        overlays: {
-          artcc: false,
-          county: false,
-          cwa: false,
-          rfc: false,
-          state: false,
-        },
-        animating: false,
-        zoom: 8,
-        center: point,
-        location: point,
-      },
-      agenda: null,
-      layers: {
-        alerts: {
-          filter: "hazards",
-          opacity: 0,
-        },
-        local: {
-          opacity: 0.6,
-        },
-        stations: {
-          opacity: 0.8,
-        },
-        national: {
-          opacity: 0.6,
-        },
-      },
-      bookmark: null,
+      bookmark: `v1_${btoa(JSON.stringify(bookmark))}`,
       quickset: null,
     },
     urls: {
-      alerts: "https://alerts-v2.weather.gov",
+      alerts: "https://alerts.weather.gov",
       api: "https://api.weather.gov",
       forecast: "https://forecast.weather.gov",
       gis: "https://opengeo.ncep.noaa.gov/geoserver",
@@ -106,7 +75,6 @@ const setupRadar = () => {
   };
 
   window.app = window.cmiRadar.createApp("#wx_radar_container", options);
-  window.app.$store.dispatch("markLocation", point);
 
   [".cmi-radar-container .menu", ".cmi-radar-menu-agendas"].forEach(
     (selector) => {
