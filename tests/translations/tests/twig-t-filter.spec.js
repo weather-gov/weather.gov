@@ -12,7 +12,11 @@ describe("Twig translation regex tests", () => {
   describe("Basic cases", () => {
     let source;
     before(() => {
-      source = fs.readFileSync(path.resolve(__dirname, "fixtures", "t.filter.basic.twig")).toString();
+      source = fs
+        .readFileSync(
+          path.resolve(__dirname, "fixtures", "t.filter.basic.twig"),
+        )
+        .toString();
     });
 
     it("Matches the correct number of translations", () => {
@@ -43,7 +47,9 @@ describe("Twig translation regex tests", () => {
   describe("Embedded HTML cases", () => {
     let source;
     before(() => {
-      source = fs.readFileSync(path.resolve(__dirname, "fixtures", "t.filter.html.twig")).toString();
+      source = fs
+        .readFileSync(path.resolve(__dirname, "fixtures", "t.filter.html.twig"))
+        .toString();
     });
 
     it("Has the correct number of matches", () => {
@@ -74,7 +80,9 @@ describe("Twig translation regex tests", () => {
   describe("Variable setting cases", () => {
     let source;
     before(() => {
-      source = fs.readFileSync(path.resolve(__dirname, "fixtures", "t.variable.twig")).toString();
+      source = fs
+        .readFileSync(path.resolve(__dirname, "fixtures", "t.variable.twig"))
+        .toString();
     });
 
     it("Has the correct number of matches", () => {

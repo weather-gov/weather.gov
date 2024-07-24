@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const { globSync } = require('glob');
+const fs = require("fs");
+const path = require("path");
+const { globSync } = require("glob");
 
 const MSG_ID_RX = /msgid\s+\"(.+)\"/m;
 const MSG_STR_RX = /msgstr\s+\"(.*)\"/m;
@@ -12,36 +12,41 @@ const MSG_STR_RX = /msgstr\s+\"(.*)\"/m;
  * Here a 'block' is any series of contiguous
  * lines of text that are not just an empty string/newline.
  */
-const parseGettextBlocks = str => {
+const parseGettextBlocks = (str) => {
   // We ignore the first block, which is just
   // the gettext header information
   return str.split("\n\n").slice(1);
 };
 
-const parseGettextSource = str => {
+const parseGettextSource = (str) => {
   const results = [];
   const blocks = parseGettextBlocks(str);
 
-  blocks.forEach(block => {
-    const comments = block.split("\n").filter(line => {
+  blocks.forEach((block) => {
+    const comments = block.split("\n").filter((line) => {
       return line.startsWith("#");
     });
-    let msgidString, msgstrString, msgid, msgstr = null;
+    let msgidString,
+      msgstrString,
+      msgid,
+      msgstr = null;
 
     const msgidMatch = block.match(MSG_ID_RX);
-    if(msgidMatch){
+    if (msgidMatch) {
       msgidString = msgidMatch[0];
       msgid = msgidMatch[1].replace(/\\n/g, "\n");
     }
 
     const msgstrMatch = block.match(MSG_STR_RX);
-    if(msgstrMatch){
+    if (msgstrMatch) {
       msgstrString = msgstrMatch[0];
       msgstr = msgstrMatch[1];
     }
 
-    if(!msgstrMatch || !msgidMatch){
-      throw new Error(`Parse Error: Missing id or str pattern in block: ${block}`);
+    if (!msgstrMatch || !msgidMatch) {
+      throw new Error(
+        `Parse Error: Missing id or str pattern in block: ${block}`,
+      );
     }
 
     results.push({
@@ -49,7 +54,7 @@ const parseGettextSource = str => {
       msgid,
       msgstr,
       msgidString,
-      msgstrString
+      msgstrString,
     });
   });
 
@@ -61,15 +66,15 @@ const parseGettextSource = str => {
  * respond with a dictionary mapping filenames
  * to match information for the gettext values
  */
-const getTranslationMatchInfo = sourcePaths => {
+const getTranslationMatchInfo = (sourcePaths) => {
   const lookup = {};
 
-  sourcePaths.forEach(filePath => {
+  sourcePaths.forEach((filePath) => {
     const languageCode = path.basename(filePath).split(".")[0];
     const langLookup = {};
     const source = fs.readFileSync(filePath).toString();
     const parsed = parseGettextSource(source);
-    parsed.forEach(entry => langLookup[entry.msgid] = entry);
+    parsed.forEach((entry) => (langLookup[entry.msgid] = entry));
     lookup[languageCode] = langLookup;
   });
 
@@ -77,5 +82,5 @@ const getTranslationMatchInfo = sourcePaths => {
 };
 
 module.exports = {
-  getTranslationMatchInfo
+  getTranslationMatchInfo,
 };
