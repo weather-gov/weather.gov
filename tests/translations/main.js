@@ -20,12 +20,18 @@ const phpPaths = config.php.include.reduce((prev, current) => {
   const relativeGlob = path.resolve(__dirname, current);
   const filePaths = globSync(relativeGlob);
   return prev.concat(filePaths);
-}, []);
+}, []).filter(filePath => {
+  const fileName = path.basename(filePath);
+  return !config.php.exclude.includes(fileName);
+});
 const translationPaths = config.translations.include.reduce((prev, current) => {
   const relativeGlob = path.resolve(__dirname, current);
   const filePaths = globSync(relativeGlob);
   return prev.concat(filePaths);
-}, []);
+}, []).filter(filePath => {
+  const fileName = path.basename(filePath);
+  return !config.translations.exclude.includes(fileName);
+});
 
 const templateLookup = getFileMatchInfo(templatePaths, phpPaths);
 const translationLookup = getTranslationMatchInfo(translationPaths);
