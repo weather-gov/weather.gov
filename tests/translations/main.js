@@ -41,7 +41,7 @@ const translationPaths = config.translations.include
 const templateLookup = getFileMatchInfo(templatePaths, phpPaths);
 const translationLookup = getTranslationMatchInfo(translationPaths);
 const languages = Object.keys(translationLookup);
-let errorsSummary = [];
+const errorsSummary = [];
 
 languages.forEach((langCode) => {
   console.log(`Checking translation integrity for: ${langCode}`);
@@ -52,7 +52,7 @@ languages.forEach((langCode) => {
   const translationTerms = Object.keys(translations);
   const templateTerms = Object.keys(templateLookup);
 
-  let fileNames = new Set();
+  const fileNames = new Set();
   templateTerms.forEach((key) => {
     templateLookup[key].forEach((phrase) => {
       fileNames.add(phrase.filename);
@@ -60,20 +60,16 @@ languages.forEach((langCode) => {
   });
 
   console.log("Checking for missing translations");
-  const missing = templateTerms.filter((key) => {
-    return !translationTerms.includes(key);
-  });
+  const missing = templateTerms.filter((key) => !translationTerms.includes(key));
 
   if (missing.length) {
     const errString = `Missing [${missing.length}] translations in the ${langCode} translations file`;
     errorsSummary.push(errString);
-    console.error(errString + ":");
+    console.error(`${errString  }:`);
     missing.forEach((key) => {
       const entryList = templateLookup[key];
       if (entryList) {
-        const fileLocations = entryList.map((entry) => {
-          return `${entry.filename}:${entry.lineNumber}`;
-        });
+        const fileLocations = entryList.map((entry) => `${entry.filename}:${entry.lineNumber}`);
         const serialized = JSON.stringify(entryList, null, 2);
         console.error(`${fileLocations.join("\n")}\n${serialized}`);
       }
@@ -82,9 +78,7 @@ languages.forEach((langCode) => {
   }
 
   console.log("Checking for stale translations");
-  const stale = translationTerms.filter((key) => {
-    return !templateTerms.includes(key);
-  });
+  const stale = translationTerms.filter((key) => !templateTerms.includes(key));
 
   if (stale.length) {
     console.warn(

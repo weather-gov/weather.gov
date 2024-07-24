@@ -41,9 +41,9 @@ const matchTranslationFilters = (source) => {
   return result.sort((a, b) => {
     if (a.index < b.index) {
       return -1;
-    } else {
+    } 
       return 0;
-    }
+    
   });
 };
 
@@ -59,15 +59,13 @@ const extractPHPTranslations = (filePath) => {
   const matches = source.matchAll(PHP_T_FUNCTION_RX);
   if (matches) {
     result = result.concat(
-      Array.from(matches, (match) => {
-        return {
+      Array.from(matches, (match) => ({
           filename: path.basename(filePath),
           matchedString: match[0],
           extracted: match[1],
           extractedArgs: match[3] | null,
           lineNumber: getLineNumberForPosition(source, match.index),
-        };
-      }),
+        })),
     );
   }
 
@@ -85,31 +83,27 @@ const extractTemplateTranslations = (filePath) => {
   const functionMatches = source.matchAll(TWIG_T_FUNCTION_RX);
   if (functionMatches) {
     result = result.concat(
-      Array.from(functionMatches, (match) => {
-        return {
+      Array.from(functionMatches, (match) => ({
           filename: path.basename(filePath),
           matchedString: match[0],
           extracted: match[1],
           extractedArgs: match[3] | null,
           lineNumber: getLineNumberForPosition(source, match.index),
           index: match.index,
-        };
-      }),
+        })),
     );
   }
   const filterMatches = matchTranslationFilters(source);
   if (filterMatches.length) {
     result = result.concat(
-      Array.from(filterMatches, (match) => {
-        return {
+      Array.from(filterMatches, (match) => ({
           filename: path.basename(filePath),
           matchedString: match[0],
           extracted: match[1],
           extractedArgs: match[3] || null,
           lineNumber: getLineNumberForPosition(source, match.index),
           index: match.index,
-        };
-      }),
+        })),
     );
   }
 
