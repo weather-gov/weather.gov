@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
-const { describe, beforeEach } = test;
+
+const { describe } = test;
 
 describe("Touchpoints button tests", () => {
   describe("Basic layout", () => {
