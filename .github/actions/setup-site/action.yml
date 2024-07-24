@@ -11,7 +11,7 @@ runs:
       uses: actions/cache@v4
       id: db-cache
       with:
-        key: drupal-database-${{ hashFiles('web/config/**/*.yml', 'web/scs-export/**/*', 'web/modules/weather_i18n/translations/*.po') }}
+        key: drupal-database-${{ hashFiles('web/config/**/*.yml', 'web/scs-export/**/*', 'web/modules/weather_i18n/translations/*.po', 'spatial/**/*.js') }}
         path: weathergov.sql
 
     - name: start the site
