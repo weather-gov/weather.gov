@@ -1,6 +1,9 @@
 module.exports = {
   extends: ["airbnb-base", "prettier"],
-  ignorePatterns: ["uswds*.js"],
+  ignorePatterns: [
+    "tests/translations/**/*.js",
+    "uswds*.js"
+  ],
   rules: {
     // For imports in the browser, file extensions are always required.
     "import/extensions": ["error", "always"],
