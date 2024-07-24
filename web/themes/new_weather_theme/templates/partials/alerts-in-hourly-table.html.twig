@@ -10,8 +10,8 @@
        announced when testing using VO.
     #}
     {% if loop.first %}
-      {% if alertPeriods | length > 1 %} {% set plural="s" %} {% endif %}
-      <span class="" aria-hidden="true">{{ "Alert#{plural}" | t }}</span>
+      {% if alertPeriods | length > 1 %} {% set alertLabel="Alerts" | t %}{% else %}{% set alertLabel="Alert" | t %}{% endif %}
+      <span class="" aria-hidden="true">{{ alertLabel }}</span>
     {% endif %}
       <span class="usa-sr-only">{{ "Alert" | t }}</span>
     </th>
