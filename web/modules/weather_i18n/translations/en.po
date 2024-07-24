@@ -57,11 +57,12 @@ msgid "An official website of the United States government"
 msgstr ""
 
 #: uswds-banner.how-you-know
-msgid "Heres how you know"
+msgid "Here’s how you know"
 msgstr ""
 
 #: uswds-banner.gov.description
 msgid "Official websites use .gov"
+msgstr ""
 
 #: uswds-banner.gov.description_html
 msgid "A <strong>.gov</strong>\n                  website belongs to an official government organization in the\n                  United States."
@@ -84,7 +85,7 @@ msgid "Locked padlock icon"
 msgstr ""
 
 #: uswds-banner.gov.safely-connected_html
-msgid "or <strong>https://</strong>\n                  means youve safely connected to the .gov website. Share\n                  sensitive information only on official, secure websites."
+msgid "or <strong>https://</strong>\n                  means you've safely connected to the .gov website. Share\n                  sensitive information only on official, secure websites."
 msgstr ""
 
 #: hourly-table.aria.scroll-left
@@ -262,7 +263,11 @@ msgid "Weather as of"
 msgstr ""
 
 #: forecast.current.aria.feels-like
-msgid "It feels like @feelsLike 	."
+msgid "It feels like @feelsLike ℉."
+msgstr ""
+
+#: forecast.current.weather-temp-description
+msgid "The weather in @place, is @conditions.\n            Temperature is @temperature ℉."
 msgstr ""
 
 #: forecast.current.feels-like
@@ -378,5 +383,5 @@ msgid "SSO Cancel Path"
 msgstr ""
 
 #: backend.login.cancel-text
-msgid "Cancel Text
+msgid "Cancel Text"
 msgstr ""

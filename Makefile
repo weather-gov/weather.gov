@@ -148,6 +148,11 @@ php-format: ## Format your PHP code according to the Drupal PHP language standar
 style-format: ## Format your Sass code according to our style code.
 	npm run style-format
 
+### Other checks
+ct: check-translations
+check-translations: ## Check the consistency of translations
+	npm run check-translations
+
 ### Composer management
 ci: composer-install
 composer-install: ## Installs dependencies from lock file

@@ -1,0 +1,10 @@
+{% if content.error %}
+    {% set message = "There was an error loading the current conditions." | t %}
+    {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+{% endif %}
+{%  if period.isOvernight %}
+    {% set label = "Overnight" | t %}
+    {% set lineColor = "midnight-indigo" %}
+    {% set tabletCol = 12 %}
+    {% set tabletMarginUnit = 3 %}
+{% endif %}
