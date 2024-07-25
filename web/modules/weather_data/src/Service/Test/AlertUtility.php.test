@@ -34,6 +34,26 @@ final class AlertUtilityTest extends TestCase
      * @group unit
      * @group alert-utility
      */
+    public function testKnowsLandAlerts(): void
+    {
+        $actual = AlertUtility::isLandAlert("severe THUNDERSTORM warning");
+        $this->assertEquals(true, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testKnowsNotLandAlerts(): void
+    {
+        $actual = AlertUtility::isLandAlert("storm watch");
+        $this->assertEquals(false, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
     public function testSortsAlertsCorrectly(): void
     {
         $now = new \DateTimeImmutable();

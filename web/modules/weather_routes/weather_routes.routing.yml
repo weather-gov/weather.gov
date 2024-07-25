@@ -40,3 +40,11 @@ weather_routes.grid.legacy:
     wfo: '^[A-Za-z][A-Za-z][A-Za-z]$'
     gridX: '^[0-9]*$'
     gridY: '^[0-9]*$'
+
+weather_routes.alert-info:
+  path: '/info/alerts'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::noop
+  requirements:
+    # Public endpoint
+    _access: 'TRUE'
