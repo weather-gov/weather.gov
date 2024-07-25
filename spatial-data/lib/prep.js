@@ -41,5 +41,7 @@ module.exports.downloadAndUnzip = async (url) => {
 
 module.exports.unzip = async (path) => {
   console.log(`   [${path}] decompressing...`);
-  await exec(`unzip -u ${path}`);
+
+  // Use -o to overwrite existing files.
+  await exec(`unzip -o -u ${path}`);
 };

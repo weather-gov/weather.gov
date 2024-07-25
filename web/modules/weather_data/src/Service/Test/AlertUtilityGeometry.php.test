@@ -88,7 +88,8 @@ final class AlertUtilityGeometryTest extends TestCase
                     (object) ["shape" => "union 1,2,3"],
                 ],
 
-                // Return the simplified shape
+                // Return the simplified shape as a geometry collection, so we
+                // can also test that those points are flipped properly.
                 [
                     "SELECT ST_ASGEOJSON(
                     ST_SIMPLIFY(
@@ -96,12 +97,20 @@ final class AlertUtilityGeometryTest extends TestCase
                         0.003
                     )
                 ) as shape",
-                    (object) ["shape" => '{"coordinates":[[0,1],[2,3],[4,5]]}'],
+                    (object) [
+                        "shape" =>
+                            '{"type":"GeometryCollection","geometries":[{"coordinates":[[0,1],[2,3],[4,5]]}]}',
+                    ],
                 ],
             ]),
         );
 
-        $expected = (object) ["coordinates" => [[1, 0], [3, 2], [5, 4]]];
+        $expected = (object) [
+            "type" => "GeometryCollection",
+            "geometries" => [
+                (object) ["coordinates" => [[1, 0], [3, 2], [5, 4]]],
+            ],
+        ];
 
         $actual = AlertUtility::getGeometryAsJSON($alert, $this->dataLayer);
         $this->assertEquals($expected, $actual);
@@ -176,12 +185,18 @@ final class AlertUtilityGeometryTest extends TestCase
                         0.003
                     )
                 ) as shape",
-                    (object) ["shape" => '{"coordinates":[[0,1],[2,3],[4,5]]}'],
+                    (object) [
+                        "shape" =>
+                            '{"type":"Polygon","coordinates":[[0,1],[2,3],[4,5]]}',
+                    ],
                 ],
             ]),
         );
 
-        $expected = (object) ["coordinates" => [[1, 0], [3, 2], [5, 4]]];
+        $expected = (object) [
+            "type" => "Polygon",
+            "coordinates" => [[1, 0], [3, 2], [5, 4]],
+        ];
 
         $actual = AlertUtility::getGeometryAsJSON($alert, $this->dataLayer);
         $this->assertEquals($expected, $actual);
