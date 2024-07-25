@@ -3,7 +3,8 @@
     "name": "Arlington, VA",
     "attributes": [
       "Invalid icons (should not crash site)",
-      "Only 22 hours of hourly data"
+      "Only 22 hours of hourly data",
+      "Alert with locations embedded, multiple states"
     ]
   },
   "@context": [

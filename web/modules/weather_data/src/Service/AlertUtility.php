@@ -464,9 +464,17 @@ class AlertUtility
 
             $polygon = json_decode($polygon->shape);
 
-            $polygon->coordinates = SpatialUtility::swapLatLon(
-                $polygon->coordinates,
-            );
+            if ($polygon->type == "GeometryCollection") {
+                foreach ($polygon->geometries as $innerPolygon) {
+                    $innerPolygon->coordinates = SpatialUtility::swapLatLon(
+                        $innerPolygon->coordinates,
+                    );
+                }
+            } else {
+                $polygon->coordinates = SpatialUtility::swapLatLon(
+                    $polygon->coordinates,
+                );
+            }
         }
 
         return $polygon;
@@ -525,6 +533,19 @@ class AlertUtility
                     // here.
                     $startToken = trim($countyAreaMatches[0][$i]);
                     $countyArea = $countyAreaMatches[1][$i];
+
+                    // If the alert covers multiple states, we can end up with
+                    // several of these "THIS WATCH INCLUDES 42 COUNTIES"
+                    // headings. If this is such a thing, then it is not a
+                    // county area heading and we can skip it.
+                    if (
+                        preg_match(
+                            "/THIS \S+ INCLUDES \d+ COUNTIES$/",
+                            $startToken,
+                        ) === 1
+                    ) {
+                        continue;
+                    }
 
                     // The list of counties begins where the region name is
                     // followed by two newlines and continues until either
