@@ -464,9 +464,17 @@ class AlertUtility
 
             $polygon = json_decode($polygon->shape);
 
-            $polygon->coordinates = SpatialUtility::swapLatLon(
-                $polygon->coordinates,
-            );
+            if ($polygon->type == "GeometryCollection") {
+                foreach ($polygon->geometries as $innerPolygon) {
+                    $innerPolygon->coordinates = SpatialUtility::swapLatLon(
+                        $innerPolygon->coordinates,
+                    );
+                }
+            } else {
+                $polygon->coordinates = SpatialUtility::swapLatLon(
+                    $polygon->coordinates,
+                );
+            }
         }
 
         return $polygon;
