@@ -1127,9 +1127,12 @@ class AlertUtility
      * */
     public static function getAlertLevel($event)
     {
-        $eventWords = explode(" ", $event);
-        $alertLevel = strtolower($eventWords[array_key_last($eventWords)]);
-        return $alertLevel;
+        $alert = strtolower($event);
+        if (array_key_exists($alert, self::ALERT_TYPES)) {
+            $levelKey = self::ALERT_TYPES[$alert]["level"];
+            return self::ALERT_LEVEL[$levelKey]["text"];
+        }
+        return self::ALERT_LEVEL["ALERT_LEVEL_OTHER"]["text"];
     }
 
     /* Determine the highest alert level from an array of alerts.
@@ -1140,15 +1143,19 @@ class AlertUtility
         if (count($alerts) == 0) {
             return "";
         }
-        $highestAlertLevel = "other";
+        $highestAlertLevel = self::ALERT_LEVEL["ALERT_LEVEL_OTHER"];
+
         foreach ($alerts as $alert) {
-            if ($alert->alertLevel == "warning") {
-                $highestAlertLevel = "warning";
-                break;
-            } elseif ($alert->alertLevel == "watch") {
-                $highestAlertLevel = "watch";
+            $event = strtolower($alert->event);
+            if (array_key_exists($event, self::ALERT_TYPES)) {
+                $levelKey = self::ALERT_TYPES[$event]["level"];
+                $level = self::ALERT_LEVEL[$levelKey];
+
+                if ($level["priority"] < $highestAlertLevel["priority"]) {
+                    $highestAlertLevel = $level;
+                }
             }
         }
-        return $highestAlertLevel;
+        return $highestAlertLevel["text"];
     }
 }

@@ -456,7 +456,7 @@ final class AlertUtilityTest extends TestCase
             ],
         ];
 
-        $expected = ["warning", "watch", "alert"];
+        $expected = ["warning", "watch", "other"];
         $actual = array_map(function ($alert) {
             return AlertUtility::getAlertLevel($alert->event);
         }, $alerts);
