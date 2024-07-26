@@ -116,6 +116,10 @@ ee: end-to-end-test
 end-to-end-test: ## Run end-to-end tests in Cypress. (alias ee)
 	npx cypress run --project tests/e2e
 
+eep: end-to-end-playwright
+end-to-end-playwright: ## Run Playwright version of e2e tests
+	npx playwright test e2e/*
+
 lt: load-time-test
 load-time-test: ## Run page load time tests in Cypress (alias lt)
 	npx cypress run --project tests/load-times
