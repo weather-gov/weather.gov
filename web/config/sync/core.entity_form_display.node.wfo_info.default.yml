@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.wfo_info.body
+    - field.field.node.wfo_info.field_address
     - field.field.node.wfo_info.field_facebook_url
     - field.field.node.wfo_info.field_phone_number_opt
     - field.field.node.wfo_info.field_twitter_url
@@ -13,6 +14,7 @@ dependencies:
     - image.style.thumbnail
     - node.type.wfo_info
   module:
+    - address
     - content_moderation
     - image
     - path
@@ -38,6 +40,13 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_address:
+    type: address_default
+    weight: 124
+    region: content
+    settings:
+      wrapper_type: fieldset
     third_party_settings: {  }
   field_facebook_url:
     type: string_textfield

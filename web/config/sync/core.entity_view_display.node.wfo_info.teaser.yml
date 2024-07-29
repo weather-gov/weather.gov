@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.wfo_info.body
+    - field.field.node.wfo_info.field_address
     - field.field.node.wfo_info.field_facebook_url
     - field.field.node.wfo_info.field_phone_number_opt
     - field.field.node.wfo_info.field_twitter_url
@@ -34,6 +35,7 @@ content:
     weight: 100
     region: content
 hidden:
+  field_address: true
   field_facebook_url: true
   field_phone_number_opt: true
   field_twitter_url: true
