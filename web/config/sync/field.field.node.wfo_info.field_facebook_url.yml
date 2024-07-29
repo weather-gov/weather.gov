@@ -1,0 +1,25 @@
+uuid: f70c56c6-4780-4a0f-875f-d18fe8586f9d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_facebook_url
+    - node.type.wfo_info
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_info.field_facebook_url
+field_name: field_facebook_url
+entity_type: node
+bundle: wfo_info
+label: 'Facebook URL (optional)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

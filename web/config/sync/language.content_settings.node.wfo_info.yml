@@ -1,0 +1,11 @@
+uuid: 97e7de50-f481-41a2-91f7-3ac43fe684a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_info
+id: node.wfo_info
+target_entity_type_id: node
+target_bundle: wfo_info
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,87 @@
+uuid: e7e4dba7-44c6-4e25-9f94-0dbe27bbab44
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.wfo_info.body
+    - field.field.node.wfo_info.field_facebook_url
+    - field.field.node.wfo_info.field_phone_number
+    - field.field.node.wfo_info.field_twitter_url
+    - field.field.node.wfo_info.field_wfo
+    - field.field.node.wfo_info.field_wfo_image
+    - field.field.node.wfo_info.field_youtube_url
+    - node.type.wfo_info
+  module:
+    - image
+    - text
+    - user
+id: node.wfo_info.default
+targetEntityType: node
+bundle: wfo_info
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_facebook_url:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_phone_number:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  field_twitter_url:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  field_wfo:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_wfo_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 107
+    region: content
+  field_youtube_url:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 106
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  langcode: true

@@ -1,0 +1,25 @@
+uuid: f7b0c036-e809-43da-b89b-e3f47f10f352
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_youtube_url
+    - node.type.wfo_info
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_info.field_youtube_url
+field_name: field_youtube_url
+entity_type: node
+bundle: wfo_info
+label: 'YouTube URL (optional)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,43 @@
+uuid: 3d20f053-8550-4ecf-9e19-324b407caa17
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.wfo_info.body
+    - field.field.node.wfo_info.field_facebook_url
+    - field.field.node.wfo_info.field_phone_number
+    - field.field.node.wfo_info.field_twitter_url
+    - field.field.node.wfo_info.field_wfo
+    - field.field.node.wfo_info.field_wfo_image
+    - field.field.node.wfo_info.field_youtube_url
+    - node.type.wfo_info
+  module:
+    - text
+    - user
+id: node.wfo_info.teaser
+targetEntityType: node
+bundle: wfo_info
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_facebook_url: true
+  field_phone_number: true
+  field_twitter_url: true
+  field_wfo: true
+  field_wfo_image: true
+  field_youtube_url: true
+  langcode: true
