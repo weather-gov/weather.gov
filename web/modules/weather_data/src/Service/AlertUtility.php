@@ -4,243 +4,694 @@ namespace Drupal\weather_data\Service;
 
 class AlertUtility
 {
-    private static $priorities = [
-        "tsunami warning",
-        "tornado warning",
-        "extreme wind warning",
-        "severe thunderstorm warning",
-        "flash flood warning",
-        "flash flood statement",
-        "severe weather statement",
-        "shelter in place warning",
-        "evacuation immediate",
-        "civil danger warning",
-        "nuclear power plant warning",
-        "radiological hazard warning",
-        "hazardous materials warning",
-        "fire warning",
-        "civil emergency message",
-        "law enforcement warning",
-        "storm surge warning",
-        "hurricane force wind warning",
-        "hurricane warning",
-        "typhoon warning",
-        "special marine warning",
-        "blizzard warning",
-        "snow squall warning",
-        "ice storm warning",
-        "winter storm warning",
-        "high wind warning",
-        "tropical storm warning",
-        "storm warning",
-        "tsunami advisory",
-        "tsunami watch",
-        "avalanche warning",
-        "earthquake warning",
-        "volcano warning",
-        "ashfall warning",
-        "coastal flood warning",
-        "lakeshore flood warning",
-        "flood warning",
-        "high surf warning",
-        "dust storm warning",
-        "blowing dust warning",
-        "lake effect snow warning",
-        "excessive heat warning",
-        "tornado watch",
-        "severe thunderstorm watch",
-        "flash flood watch",
-        "gale warning",
-        "flood statement",
-        "wind chill warning",
-        "extreme cold warning",
-        "hard freeze warning",
-        "freeze warning",
-        "red flag warning",
-        "storm surge watch",
-        "hurricane watch",
-        "hurricane force wind watch",
-        "typhoon watch",
-        "tropical storm watch",
-        "storm watch",
-        "hurricane local statement",
-        "typhoon local statement",
-        "tropical storm local statement",
-        "tropical depression local statement",
-        "avalanche advisory",
-        "winter weather advisory",
-        "wind chill advisory",
-        "heat advisory",
-        "urban and small stream flood advisory",
-        "small stream flood advisory",
-        "arroyo and small stream flood advisory",
-        "flood advisory",
-        "hydrologic advisory",
-        "lakeshore flood advisory",
-        "coastal flood advisory",
-        "high surf advisory",
-        "heavy freezing spray warning",
-        "dense fog advisory",
-        "dense smoke advisory",
-        "small craft advisory",
-        "brisk wind advisory",
-        "hazardous seas warning",
-        "dust advisory",
-        "blowing dust advisory",
-        "lake wind advisory",
-        "wind advisory",
-        "frost advisory",
-        "ashfall advisory",
-        "freezing fog advisory",
-        "freezing spray advisory",
-        "low water advisory",
-        "local area emergency",
-        "avalanche watch",
-        "blizzard watch",
-        "rip current statement",
-        "beach hazards statement",
-        "gale watch",
-        "winter storm watch",
-        "hazardous seas watch",
-        "heavy freezing spray watch",
-        "coastal flood watch",
-        "lakeshore flood watch",
-        "flood watch",
-        "high wind watch",
-        "excessive heat watch",
-        "extreme cold watch",
-        "wind chill watch",
-        "lake effect snow watch",
-        "hard freeze watch",
-        "freeze watch",
-        "fire weather watch",
-        "extreme fire danger",
-        "911 telephone outage",
-        "coastal flood statement",
-        "lakeshore flood statement",
-        "special weather statement",
-        "marine weather statement",
-        "air quality alert",
-        "air stagnation advisory",
-        "hazardous weather outlook",
-        "hydrologic outlook",
-        "short term forecast",
-        "administrative message",
-        "test",
-        "child abduction emergency",
-        "blue alert",
+    private const ALERT_KIND = [
+        "ALERT_KIND_LAND" => "land",
+        "ALERT_KIND_MARINE" => "marine",
+        "ALERT_KIND_OTHER" => "other",
     ];
 
-    private static $landAlerts = [
-        "tsunami warning",
-        "tornado warning",
-        "extreme wind warning",
-        "severe thunderstorm warning",
-        "flash flood warning",
-        "flash flood statement",
-        "severe weather statement",
-        "shelter in place warning",
-        "evacuation immediate",
-        "civil danger warning",
-        "nuclear power plant warning",
-        "radiological hazard warning",
-        "hazardous materials warning",
-        "fire warning",
-        "civil emergency message",
-        "law enforcement warning",
-        "hurricane warning",
-        "typhoon warning",
-        "blizzard warning",
-        "snow squall warning",
-        "ice storm warning",
-        "winter storm warning",
-        "high wind warning",
-        "tropical storm warning",
-        "tsunami advisory",
-        "tsunami watch",
-        "avalanche warning",
-        "earthquake warning",
-        "volcano warning",
-        "ashfall warning",
-        "coastal flood warning",
-        "lakeshore flood warning",
-        "flood warning",
-        "high surf warning",
-        "lake effect snow warning",
-        "excessive heat warning",
-        "dust storm warning",
-        "tornado watch",
-        "severe thunderstorm watch",
-        "flash flood watch",
-        "flood statement",
-        "wind chill warning",
-        "extreme cold warning",
-        "hard freeze warning",
-        "freeze warning",
-        "red flag warning",
-        "hurricane watch",
-        "typhoon watch",
-        "tropical storm watch",
-        "hurricane local statement",
-        "typhoon local statement",
-        "tropical storm local statement",
-        "tropical depression local statement",
-        "avalanche advisory",
-        "freezing rain advisory",
-        "winter weather advisory",
-        "lake effect snow advisory",
-        "wind chill advisory",
-        "heat advisory",
-        "urban and small stream flood advisory",
-        "small stream flood advisory",
-        "arroyo and small stream flood advisory",
-        "flood advisory",
-        "hydrologic advisory",
-        "lakeshore flood advisory",
-        "coastal flood advisory",
-        "high surf advisory",
-        "dense fog advisory",
-        "dense smoke advisory",
-        "lake wind advisory",
-        "wind advisory",
-        "blowing dust advisory",
-        "frost advisory",
-        "ashfall advisory",
-        "freezing fog advisory",
-        "local area emergency",
-        "child abduction emergency",
-        "avalanche watch",
-        "blizzard watch",
-        "rip current statement",
-        "beach hazards statement",
-        "winter storm watch",
-        "coastal flood watch",
-        "lakeshore flood watch",
-        "flood watch",
-        "high wind watch",
-        "excessive heat watch",
-        "extreme cold watch",
-        "wind chill watch",
-        "lake effect snow watch",
-        "freeze watch",
-        "fire weather watch",
-        "extreme fire danger",
-        "911 telephone outage",
-        "coastal flood statement",
-        "lakeshore flood statement",
-        "special weather statement",
-        "air quality alert",
-        "air stagnation advisory",
-        "hazardous weather outlook",
-        "hydrologic outlook",
-        "short term forecast",
-        "administrative message",
-        "test",
+    private const ALERT_LEVEL = [
+        "ALERT_LEVEL_WARNING" => [
+            "priority" => 0,
+            "text" => "warning",
+        ],
+
+        "ALERT_LEVEL_WATCH" => [
+            "priority" => 128,
+            "text" => "watch",
+        ],
+
+        "ALERT_LEVEL_OTHER" => [
+            "priority" => 2048,
+            "text" => "other",
+        ],
     ];
+
+    private const ALERT_TYPES = [
+        // Priorities are spaced at intervals of powers of two so that new
+        // alerts can be inserted exactly in the middle of any existing alerts
+        // without needing to reorder all of the other alerts.
+        "tsunami warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 0,
+        ],
+        "tornado warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 1024,
+        ],
+        "extreme wind warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 2048,
+        ],
+        "severe thunderstorm warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 3072,
+        ],
+        "flash flood warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 4096,
+        ],
+        "flash flood statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 5120,
+        ],
+        "severe weather statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 6144,
+        ],
+        "shelter in place warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 7168,
+        ],
+        "evacuation immediate" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 8192,
+        ],
+        "civil danger warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 9216,
+        ],
+        "nuclear power plant warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 10240,
+        ],
+        "radiological hazard warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 11264,
+        ],
+        "hazardous materials warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 12288,
+        ],
+        "fire warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 13312,
+        ],
+        "civil emergency message" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 14336,
+        ],
+        "law enforcement warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 15360,
+        ],
+        "storm surge warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 16384,
+        ],
+        "hurricane force wind warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 17408,
+        ],
+        "hurricane warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 18432,
+        ],
+        "typhoon warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 19456,
+        ],
+        "special marine warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 20480,
+        ],
+        "blizzard warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 21504,
+        ],
+        "snow squall warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 22528,
+        ],
+        "ice storm warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 23552,
+        ],
+        "winter storm warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 24576,
+        ],
+        "high wind warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 25600,
+        ],
+        "tropical storm warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 26624,
+        ],
+        "storm warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 27648,
+        ],
+        "tsunami advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 28672,
+        ],
+        "tsunami watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 29696,
+        ],
+        "avalanche warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 30720,
+        ],
+        "earthquake warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 31744,
+        ],
+        "volcano warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 32768,
+        ],
+        "ashfall warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 33792,
+        ],
+        "coastal flood warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 34816,
+        ],
+        "lakeshore flood warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 35840,
+        ],
+        "flood warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 36864,
+        ],
+        "high surf warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 37888,
+        ],
+        "dust storm warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 38912,
+        ],
+        "blowing dust warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_OTHER",
+            "priority" => 39936,
+        ],
+        "lake effect snow warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 40960,
+        ],
+        "excessive heat warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 41984,
+        ],
+        "tornado watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 43008,
+        ],
+        "severe thunderstorm watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 44032,
+        ],
+        "flash flood watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 45056,
+        ],
+        "gale warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 46080,
+        ],
+        "flood statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 47104,
+        ],
+        "wind chill warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 48128,
+        ],
+        "extreme cold warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 49152,
+        ],
+        "hard freeze warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 50176,
+        ],
+        "freeze warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 51200,
+        ],
+        "red flag warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 52224,
+        ],
+        "storm surge watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 53248,
+        ],
+        "hurricane watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 54272,
+        ],
+        "hurricane force wind watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 55296,
+        ],
+        "typhoon watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 56320,
+        ],
+        "tropical storm watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 57344,
+        ],
+        "storm watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 58368,
+        ],
+        "hurricane local statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 59392,
+        ],
+        "typhoon local statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 60416,
+        ],
+        "tropical storm local statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 61440,
+        ],
+        "tropical depression local statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 62464,
+        ],
+        "avalanche advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 63488,
+        ],
+        "winter weather advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 64512,
+        ],
+        "wind chill advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 65536,
+        ],
+        "heat advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 66560,
+        ],
+        "urban and small stream flood advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 67584,
+        ],
+        "small stream flood advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 68608,
+        ],
+        "arroyo and small stream flood advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 69632,
+        ],
+        "flood advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 70656,
+        ],
+        "hydrologic advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 71680,
+        ],
+        "lakeshore flood advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 72704,
+        ],
+        "coastal flood advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 73728,
+        ],
+        "high surf advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 74752,
+        ],
+        "heavy freezing spray warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 75776,
+        ],
+        "dense fog advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 76800,
+        ],
+        "dense smoke advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 77824,
+        ],
+        "small craft advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 78848,
+        ],
+        "brisk wind advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 79872,
+        ],
+        "hazardous seas warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 80896,
+        ],
+        "dust advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_OTHER",
+            "priority" => 81920,
+        ],
+        "blowing dust advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 82944,
+        ],
+        "lake wind advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 83968,
+        ],
+        "wind advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 84992,
+        ],
+        "frost advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 86016,
+        ],
+        "ashfall advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 87040,
+        ],
+        "freezing fog advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 88064,
+        ],
+        "freezing spray advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 89088,
+        ],
+        "low water advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 90112,
+        ],
+        "local area emergency" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 91136,
+        ],
+        "avalanche watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 92160,
+        ],
+        "blizzard watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 93184,
+        ],
+        "rip current statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 94208,
+        ],
+        "beach hazards statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 95232,
+        ],
+        "gale watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 96256,
+        ],
+        "winter storm watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 97280,
+        ],
+        "hazardous seas watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 98304,
+        ],
+        "heavy freezing spray watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 99328,
+        ],
+        "coastal flood watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 100352,
+        ],
+        "lakeshore flood watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 101376,
+        ],
+        "flood watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 102400,
+        ],
+        "high wind watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 103424,
+        ],
+        "excessive heat watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 104448,
+        ],
+        "extreme cold watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 105472,
+        ],
+        "wind chill watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 106496,
+        ],
+        "lake effect snow watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 107520,
+        ],
+        "hard freeze watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 108544,
+        ],
+        "freeze watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 109568,
+        ],
+        "fire weather watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 110592,
+        ],
+        "extreme fire danger" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 111616,
+        ],
+        "911 telephone outage" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 112640,
+        ],
+        "coastal flood statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 113664,
+        ],
+        "lakeshore flood statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 114688,
+        ],
+        "special weather statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 115712,
+        ],
+        "marine weather statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 116736,
+        ],
+        "air quality alert" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 117760,
+        ],
+        "air stagnation advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 118784,
+        ],
+        "hazardous weather outlook" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 119808,
+        ],
+        "hydrologic outlook" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 120832,
+        ],
+        "short term forecast" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 121856,
+        ],
+        "administrative message" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 122880,
+        ],
+        "test" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 123904,
+        ],
+        "child abduction emergency" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 124928,
+        ],
+        "blue alert" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_OTHER",
+            "priority" => 125952,
+        ],
+    ];
+
+    public static function getAlertTypes()
+    {
+        // Encode and decode so we get a deep clone, preventing anyone from
+        // outside of this class from accidentally editing anything here.
+        $alertTypes = json_decode(json_encode(self::ALERT_TYPES));
+
+        $output = [];
+        foreach ($alertTypes as $alert => $info) {
+            $info->alert = $alert;
+            $info->kind = self::ALERT_KIND[$info->kind];
+            $info->level = self::ALERT_LEVEL[$info->level]["text"];
+            $output[] = $info;
+        }
+
+        return $output;
+    }
+
+    public static function isLandAlert($event)
+    {
+        $alert = strtolower($event);
+
+        if (array_key_exists($alert, self::ALERT_TYPES)) {
+            return self::ALERT_KIND[self::ALERT_TYPES[$alert]["kind"]] ==
+                self::ALERT_KIND["ALERT_KIND_LAND"];
+        }
+
+        return false;
+    }
 
     public static function isMarineAlert($event)
     {
-        return array_search(strtolower($event), self::$landAlerts) === false;
+        $alert = strtolower($event);
+
+        if (array_key_exists($alert, self::ALERT_TYPES)) {
+            return self::ALERT_KIND[self::ALERT_TYPES[$alert]["kind"]] ==
+                self::ALERT_KIND["ALERT_KIND_MARINE"];
+        }
+
+        return false;
     }
 
     public static function sort($alerts)
@@ -248,8 +699,19 @@ class AlertUtility
         $now = DateTimeUtility::now();
 
         usort($alerts, function ($a, $b) use ($now) {
-            $priorityA = array_search(strtolower($a->event), self::$priorities);
-            $priorityB = array_search(strtolower($b->event), self::$priorities);
+            $priorityA = array_key_exists(
+                strtolower($a->event),
+                self::ALERT_TYPES,
+            )
+                ? self::ALERT_TYPES[strtolower($a->event)]["priority"]
+                : INF;
+
+            $priorityB = array_key_exists(
+                strtolower($b->event),
+                self::ALERT_TYPES,
+            )
+                ? self::ALERT_TYPES[strtolower($b->event)]["priority"]
+                : INF;
 
             // If both alerts are currently active, sort them by priority.
             if ($a->onset < $now && $b->onset < $now) {
@@ -665,9 +1127,12 @@ class AlertUtility
      * */
     public static function getAlertLevel($event)
     {
-        $eventWords = explode(" ", $event);
-        $alertLevel = strtolower($eventWords[array_key_last($eventWords)]);
-        return $alertLevel;
+        $alert = strtolower($event);
+        if (array_key_exists($alert, self::ALERT_TYPES)) {
+            $levelKey = self::ALERT_TYPES[$alert]["level"];
+            return self::ALERT_LEVEL[$levelKey]["text"];
+        }
+        return self::ALERT_LEVEL["ALERT_LEVEL_OTHER"]["text"];
     }
 
     /* Determine the highest alert level from an array of alerts.
@@ -678,15 +1143,19 @@ class AlertUtility
         if (count($alerts) == 0) {
             return "";
         }
-        $highestAlertLevel = "other";
+        $highestAlertLevel = self::ALERT_LEVEL["ALERT_LEVEL_OTHER"];
+
         foreach ($alerts as $alert) {
-            if ($alert->alertLevel == "warning") {
-                $highestAlertLevel = "warning";
-                break;
-            } elseif ($alert->alertLevel == "watch") {
-                $highestAlertLevel = "watch";
+            $event = strtolower($alert->event);
+            if (array_key_exists($event, self::ALERT_TYPES)) {
+                $levelKey = self::ALERT_TYPES[$event]["level"];
+                $level = self::ALERT_LEVEL[$levelKey];
+
+                if ($level["priority"] < $highestAlertLevel["priority"]) {
+                    $highestAlertLevel = $level;
+                }
             }
         }
-        return $highestAlertLevel;
+        return $highestAlertLevel["text"];
     }
 }

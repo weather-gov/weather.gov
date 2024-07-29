@@ -61,7 +61,7 @@ trait AlertTrait
             $fireZone,
             $now,
         ) {
-            if (AlertUtility::isMarineAlert($alert->properties->event)) {
+            if (!AlertUtility::isLandAlert($alert->properties->event)) {
                 return false;
             }
 

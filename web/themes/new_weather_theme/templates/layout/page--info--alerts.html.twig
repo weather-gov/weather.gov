@@ -1,0 +1,27 @@
+<div class="layout-container grid-row height-full flex-column flex-no-wrap">
+  <header role="banner">
+    <div class="grid-container">
+      {% if page.header %}
+      <div class="grid-row">{{ page.header }}</div>
+      {% endif %} {% if page.primary_menu %}
+      <div class="grid-row">{{ page.primary_menu }}</div>
+      {% endif %} {% if page.secondary_menu %}
+      <div class="grid-row">{{ page.secondary_menu }}</div>
+      {% endif %} {% if page.breadcrumb %}
+      <div class="grid-row">{{ page.breadcrumb }}</div>
+      {% endif %} {% if page.highlighted %}
+      <div class="grid-row">{{ page.highlighted }}</div>
+      {% endif %} {% if page.help %}
+      <div class="grid-row">{{ page.help }}</div>
+      {% endif %}
+    </div>
+  </header>
+
+  <main role="main" class="flex-1 wx-location-page">
+    <a id="main-content" tabindex="-1"></a>
+    
+    <div class="grid-container">
+      {{ drupal_block("weathergov_info_alert") }}
+    </div>
+  </main>
+</div>
