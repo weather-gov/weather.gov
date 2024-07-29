@@ -40,6 +40,7 @@ module:
   options: 0
   path: 0
   path_alias: 0
+  phone_number: 0
   scheduler: 0
   single_content_sync: 0
   system: 0

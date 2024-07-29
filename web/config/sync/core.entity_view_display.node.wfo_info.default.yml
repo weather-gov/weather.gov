@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.field.node.wfo_info.body
     - field.field.node.wfo_info.field_facebook_url
-    - field.field.node.wfo_info.field_phone_number
+    - field.field.node.wfo_info.field_phone_number_opt
     - field.field.node.wfo_info.field_twitter_url
     - field.field.node.wfo_info.field_wfo
     - field.field.node.wfo_info.field_wfo_image
@@ -13,6 +13,7 @@ dependencies:
     - node.type.wfo_info
   module:
     - image
+    - phone_number
     - text
     - user
 id: node.wfo_info.default
@@ -35,13 +36,13 @@ content:
     third_party_settings: {  }
     weight: 104
     region: content
-  field_phone_number:
-    type: string
-    label: hidden
+  field_phone_number_opt:
+    type: phone_number_international
+    label: above
     settings:
-      link_to_entity: false
+      as_link: false
     third_party_settings: {  }
-    weight: 103
+    weight: 108
     region: content
   field_twitter_url:
     type: string

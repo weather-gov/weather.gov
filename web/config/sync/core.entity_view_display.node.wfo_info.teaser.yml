@@ -6,7 +6,7 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.wfo_info.body
     - field.field.node.wfo_info.field_facebook_url
-    - field.field.node.wfo_info.field_phone_number
+    - field.field.node.wfo_info.field_phone_number_opt
     - field.field.node.wfo_info.field_twitter_url
     - field.field.node.wfo_info.field_wfo
     - field.field.node.wfo_info.field_wfo_image
@@ -35,7 +35,7 @@ content:
     region: content
 hidden:
   field_facebook_url: true
-  field_phone_number: true
+  field_phone_number_opt: true
   field_twitter_url: true
   field_wfo: true
   field_wfo_image: true

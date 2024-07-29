@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.field.node.wfo_info.body
     - field.field.node.wfo_info.field_facebook_url
-    - field.field.node.wfo_info.field_phone_number
+    - field.field.node.wfo_info.field_phone_number_opt
     - field.field.node.wfo_info.field_twitter_url
     - field.field.node.wfo_info.field_wfo
     - field.field.node.wfo_info.field_wfo_image
@@ -16,6 +16,7 @@ dependencies:
     - content_moderation
     - image
     - path
+    - phone_number
     - text
 id: node.wfo_info.default
 targetEntityType: node
@@ -46,13 +47,16 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_phone_number:
-    type: string_textfield
-    weight: 5
+  field_phone_number_opt:
+    type: phone_number_default
+    weight: 123
     region: content
     settings:
-      size: 60
-      placeholder: ''
+      default_country: US
+      placeholder: 'Phone number'
+      phone_size: 60
+      extension_size: 5
+      country_selection: flag
     third_party_settings: {  }
   field_twitter_url:
     type: string_textfield
