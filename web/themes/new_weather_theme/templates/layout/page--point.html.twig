@@ -65,7 +65,16 @@
             </div>
 
             <div class="grid-container padding-0 bg-white shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-              <div class="padding-top-3 text-center">
+              <div class="usa-sr-only">
+                <p>
+                  {{ "Listed below is an animated loop of the most recent
+                      satellite imagery for @place."
+                      | t({"@place": weather.place })
+                  }}
+                </p>
+              </div>
+
+              <div class="padding-top-3 text-center" aria-hidden="true">
                 <img src="{{ weather.satellite.gif }}">
               </div>
             </div>
