@@ -5,7 +5,32 @@ weather_routes.security:
   requirements:
     # Public endpoint
     _access: 'TRUE'
-    
+
+weather_routes.tools:
+  path: '/tools/{name}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\ToolsController::toolIndex
+  requirements:
+    _access: 'TRUE'
+    name: .*
+weather_routes.tools.file:
+  path: '/tools/{name}/{file}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\ToolsController::toolFile
+  requirements:
+    _access: 'TRUE'
+    name: .*
+    file: .*
+weather_routes.tools.subfile:
+  path: '/tools/{name}/{dir}/{file}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\ToolsController::toolSubFile
+  requirements:
+    _access: 'TRUE'
+    name: .*
+    dir: .*
+    file: .*
+
 weather_routes.point:
   path: '/point/{lat}/{lon}'
   defaults:
