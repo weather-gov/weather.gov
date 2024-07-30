@@ -200,4 +200,9 @@ class WeatherDataService
     {
         return $this->dataLayer->getPlaceNearPoint($lat, $lon);
     }
+
+    public function getSatelliteMetadata($wfo)
+    {
+        return $this->dataLayer->getSatelliteMetadata($wfo);
+    }
 }

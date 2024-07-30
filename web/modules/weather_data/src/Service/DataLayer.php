@@ -333,6 +333,17 @@ class DataLayer
         return self::$i_placeNearPolygon[$wktPoints];
     }
 
+    public function getSatelliteMetadata($wfo)
+    {
+        $wfo = strtolower($wfo);
+        $url =
+            "https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_" .
+            $wfo .
+            "_catalog.json";
+        $response = $this->fetch($url)->wait();
+        return $response;
+    }
+
     public function databaseFetch($sql)
     {
         return $this->database->query($sql)->fetch();

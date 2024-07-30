@@ -50,6 +50,27 @@ function weather_blocks_template_preprocess_default_variables_alter(
             }
         } catch (Throwable $e) {
         }
+
+        try {
+            $wfo = strtolower($weatherMetadata["grid"]->wfo);
+            $satellite = $weatherData->getSatelliteMetadata($wfo);
+
+            $goes = "GOES16";
+            $satellite = $satellite->meta->satellite;
+            if ($satellite == "GOES-West") {
+                $goes = "GOES18";
+            }
+
+            if ($satellite) {
+                $weatherMetadata["satellite"] = [
+                    "gif" =>
+                        "https://cdn.star.nesdis.noaa.gov/WFO/$wfo/GEOCOLOR/$goes-" .
+                        strtoupper($wfo) .
+                        "-GEOCOLOR-600x600.gif",
+                ];
+            }
+        } catch (Throwable $e) {
+        }
     }
 
     $variables["weather"] = $weatherMetadata;
