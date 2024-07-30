@@ -1,0 +1,36 @@
+<?php
+
+namespace Drupal\weather_blocks\Plugin\Block\Test\EndToEnd;
+
+use Drupal\weather_blocks\Plugin\Block\AreaForecastDiscussionBlock;
+
+/**
+ * Tests for area forecast discussion block
+ */
+final class AreaForecastDiscussionTest extends EndToEndBase
+{
+    /**
+     * Create the block under test.
+     */
+    protected function setUp($type = null): void
+    {
+        parent::setUp(AreaForecastDiscussionBlock::class);
+    }
+
+    /**
+     * Tests if heat index and wind chill are null, "feels like" is just the
+     * current temperature.
+     * @group e2e
+     */
+    public function testText(): void
+    {
+        $this->onLocationRoute(35.198, -111.651);
+
+        $data = $this->block->build();
+
+        $this->assertSame(
+            "This is short text, just for testing.",
+            $data["productText"],
+        );
+    }
+}
