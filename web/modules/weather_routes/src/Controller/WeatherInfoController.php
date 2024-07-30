@@ -69,7 +69,8 @@ final class WeatherInfoController extends ControllerBase {
       $wfoInfo = $this->getWFOInfoFromTerm($wfoTerm);
       $viewBuilder = \Drupal::entityTypeManager()
                    ->getViewBuilder('node');
-      return $viewBuilder->view($wfoInfo);
+      $build = $viewBuilder->view($wfoInfo);
+      return $build;
     } catch (\Throwable $ex) {
       throw new NotFoundHttpException();
     }
