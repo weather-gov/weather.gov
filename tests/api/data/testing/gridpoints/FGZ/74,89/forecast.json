@@ -141,8 +141,8 @@
         "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 84 },
         "windSpeed": "5 mph",
         "windDirection": "SW",
-        "icon": "/icons/land/day/ovc/snow,50?size=medium",
-        "shortForecast": "Cloudy then Chance Light Snow",
+        "icon": "/icons/land/day/hurricane",
+        "shortForecast": "It's Gonna Hurricane",
         "detailedForecast": "A chance of snow after noon. Cloudy, with a high near 27. Southwest wind around 5 mph. Chance of precipitation is 50%. New snow accumulation of less than half an inch possible."
       },
       {
