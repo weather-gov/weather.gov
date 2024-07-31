@@ -125,7 +125,7 @@ msgid "Wind speed"
 msgstr ""
 
 #: hourly-table.text.gusting
-msgid "gusting to @gustSpeed mph"
+msgid "with gusts up to @gustSpeed mph"
 msgstr ""
 
 #: hourly-table.labels.humidity
