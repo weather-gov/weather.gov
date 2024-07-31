@@ -2,6 +2,7 @@ _core:
   default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
 module:
   action: 0
+  address: 0
   auto_entitylabel: 0
   automated_cron: 0
   big_pipe: 0
@@ -23,6 +24,7 @@ module:
   filter: 0
   help: 0
   image: 0
+  js_cookie: 0
   language: 0
   layout_builder: 0
   layout_discovery: 0
@@ -40,6 +42,7 @@ module:
   options: 0
   path: 0
   path_alias: 0
+  phone_number: 0
   scheduler: 0
   single_content_sync: 0
   system: 0

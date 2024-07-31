@@ -1,0 +1,26 @@
+uuid: 3bd885b6-04dd-46de-8379-588808af4361
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_phone_number_opt
+    - node.type.wfo_info
+  module:
+    - phone_number
+id: node.wfo_info.field_phone_number_opt
+field_name: field_phone_number_opt
+entity_type: node
+bundle: wfo_info
+label: 'Phone number (optional)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_countries:
+    US: US
+  allowed_types:
+    - 0
+  extension_field: false
+field_type: phone_number

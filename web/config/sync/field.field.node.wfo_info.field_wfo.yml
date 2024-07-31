@@ -1,0 +1,35 @@
+uuid: ad5987eb-45e1-4c26-a8c1-692b3747159f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_wfo
+    - node.type.wfo_info
+    - taxonomy.vocabulary.weather_forecast_offices
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: true
+    unique_text: 'There is already a WFO Information node for %value with id %nodeId'
+id: node.wfo_info.field_wfo
+field_name: field_wfo
+entity_type: node
+bundle: wfo_info
+label: 'WFO Name'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      weather_forecast_offices: weather_forecast_offices
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
