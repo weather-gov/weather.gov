@@ -9,10 +9,13 @@
       fill: color("primary-dark");
     }
   }
+
+  & table td {
+    padding-right: 0;
+  }
 }
 
 .wx-current-conditions__temp {
   // Custom size not in typecale
   font-size: units(5) + units(0.5);
 }
-
