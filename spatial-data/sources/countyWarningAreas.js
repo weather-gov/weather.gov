@@ -4,28 +4,37 @@ const { dropIndexIfExists, openDatabase } = require("../lib/db.js");
 
 const metadata = {
   table: "weathergov_geo_cwas",
-  version: 1,
 };
 
-module.exports = async () => {
-  console.log("loading WFOs...");
+const schemas = {
+  1: async () => {
+    const db = await openDatabase();
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS
+       ${metadata.table}
+       (
+          id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+         wfo VARCHAR(3),
+         cwa VARCHAR(3),
+         region VARCHAR(2),
+         city VARCHAR(50),
+         state VARCHAR(50),
+         st VARCHAR(2),
+         shape MULTIPOLYGON NOT NULL
+      )`);
+
+    await db.end();
+
+    return true;
+  },
+};
+
+const loadData = async () => {
+  console.log("  loading WFOs/CWAs data");
   const db = await openDatabase();
 
   const file = await shapefile.open(`./w_05mr24.shp`);
-
-  await db.query(`
-CREATE TABLE IF NOT EXISTS
- ${metadata.table}
- (
-    id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-   wfo VARCHAR(3),
-   cwa VARCHAR(3),
-   region VARCHAR(2),
-   city VARCHAR(50),
-   state VARCHAR(50),
-   st VARCHAR(2),
-   shape MULTIPOLYGON NOT NULL
-)`);
 
   await dropIndexIfExists(db, "cwas_spatial_idx", "weathergov_geo_cwas");
   await db.query("TRUNCATE TABLE weathergov_geo_cwas");
@@ -79,4 +88,4 @@ CREATE TABLE IF NOT EXISTS
   db.end();
 };
 
-module.exports.metadata = metadata;
+module.exports = { ...metadata, schemas, loadData };

@@ -35,3 +35,37 @@ data into.
 ```sh
 ./scripts/load-spatial-data.sh <environment>
 ```
+
+## Updating geospatial tables
+
+Our geospatial data is managed by a set of utility scripts in the `spatial-data`
+directory at the root of the project. Each spatial data source is represented by
+a Javascript file in the `spatial-data/sources` directory. This Javascript file
+includes code for creating and updating schema versions as well as code for
+loading the actual data into the database.
+
+A sources script file should export an object that looks roughly like this:
+
+```js
+  table: <string>,
+   schemas: {
+      <version | int>: async function() <bool> {},
+      <version | int>: async function() <bool> {},
+   },
+   loadData: async function() {}
+```
+
+The `table` property is the name of the table used by the source.
+
+The `schemas` property is an object whose keys are integers representing schema
+versions. The keys are used to determine the list of schema upgrades necessary
+for a given table. The values are functions that are called if a given schema
+upgrade is necessary. A schema upgrade function should return `true` if the
+source data needs to be reloaded or `false` if only a schema change is
+necessary. If there is an update that _only_ requires reloading data, there
+should be still be an new version created in the `schemas` property, but its
+function should simply return `true`.
+
+The `loadData` function is called if any necessary schema upgrades also need
+data to be loaded/reloaded. The `loadData` should assume that the schema is the
+most recent version and should not need to do any schema consistency checks.
