@@ -1,0 +1,45 @@
+uuid: 7540cde8-5fed-4aa7-9510-683a5e44500a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_address
+    - node.type.wfo_info
+  module:
+    - address
+id: node.wfo_info.field_address
+field_name: field_address
+entity_type: node
+bundle: wfo_info
+label: Address
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  available_countries:
+    PR: PR
+    UM: UM
+    VI: VI
+    US: US
+  langcode_override: ''
+  field_overrides:
+    givenName:
+      override: hidden
+    additionalName:
+      override: hidden
+    familyName:
+      override: hidden
+    organization:
+      override: hidden
+    addressLine2:
+      override: optional
+    addressLine3:
+      override: optional
+    sortingCode:
+      override: optional
+    dependentLocality:
+      override: optional
+  fields: {  }
+field_type: address
