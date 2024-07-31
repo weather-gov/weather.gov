@@ -7,7 +7,7 @@
   <div class="display-flex flex-row flex-align-center" aria-hidden="true">
     <span>{{wind.speed}} {{ "mph" | t }}</span>
     <span class="padding-x-05">{{ wind.direction.short }}</span>
-    <span class="display-flex flex-align-center">
+    <span class="display-flex flex-align-center margin-bottom-2px">
       {#
       The +180 here is to account for the fact that wind direction
       is reported as a FROM direction, but our arrow points in the
