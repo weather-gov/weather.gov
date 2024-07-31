@@ -138,3 +138,15 @@ How we run unit tests!
 _Added in April 2024_
 
 Part of a change with made to our unit tests for alerts. We needed to update the alert structure tests to use JSON schema validation, so we don't have to care as much about actual values, only the form of the values.
+  
+### [`phone number`](https://www.drupal.org/project/phone_number)
+  
+_Added July 2024_
+  
+We use this module to get a specific phone number field type, along with validation for entry. Used initially for WFO Information.
+  
+### [`address`](https://www.drupal.org/project/address)
+  
+_Added July 2024_
+  
+This module gives us a physical address field type, along with configuration options and validation. Used initially for WFO Information.
