@@ -5,11 +5,36 @@ const { US_CODES } = require("../lib/util.js");
 
 const metadata = {
   table: "weathergov_geo_places",
-  version: 1,
 };
 
-module.exports = async () => {
-  console.log("loading places...");
+const schemas = {
+  1: async () => {
+    const db = await openDatabase();
+
+    await db.query(
+      `CREATE TABLE IF NOT EXISTS
+        ${metadata.table}
+          (
+            id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            name TEXT,
+            state TEXT,
+            stateName TEXT,
+            stateFIPS VARCHAR(2),
+            county TEXT,
+            countyFIPS VARCHAR(5),
+            timezone TEXT,
+            point POINT NOT NULL
+          )`,
+    );
+
+    await db.end();
+
+    return true;
+  },
+};
+
+const loadData = async () => {
+  console.log("  loading places data");
 
   const parameters = [
     "undefined",
@@ -123,21 +148,6 @@ module.exports = async () => {
       }),
   );
 
-  await db.query(
-    `CREATE TABLE IF NOT EXISTS
-      ${metadata.table}
-        (
-          id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-          name TEXT,
-          state TEXT,
-          stateName TEXT,
-          stateFIPS VARCHAR(2),
-          county TEXT,
-          countyFIPS VARCHAR(5),
-          timezone TEXT,
-          point POINT NOT NULL
-        )`,
-  );
   await dropIndexIfExists(db, "places_spatial_idx", "weathergov_geo_places");
   await db.query("TRUNCATE TABLE weathergov_geo_places");
   await db.query("ALTER TABLE weathergov_geo_places AUTO_INCREMENT=0");
@@ -147,7 +157,7 @@ module.exports = async () => {
       // If the place is in one of the US
       // territories, we use the country code
       // for that territory as the state
-      let state = place.state;
+      let { state } = place;
       if (place.country !== "US") {
         state = place.country;
       }
@@ -205,4 +215,4 @@ module.exports = async () => {
   db.end();
 };
 
-module.exports.metadata = metadata;
+module.exports = { ...metadata, schemas, loadData };

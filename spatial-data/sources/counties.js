@@ -1,38 +1,44 @@
 const shapefile = require("shapefile");
-
+const { table: statesTable } = require("./states.js");
 const { dropIndexIfExists, openDatabase } = require("../lib/db.js");
 
 const metadata = {
   table: "weathergov_geo_counties",
-  version: 1,
 };
 
-module.exports = async () => {
-  console.log("loading counties...");
-  const db = await openDatabase();
+const schemas = {
+  1: async () => {
+    const db = await openDatabase();
 
+    await db.query(
+      `CREATE TABLE IF NOT EXISTS
+        ${metadata.table}
+        (
+          id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          state VARCHAR(2),
+          stateName TEXT,
+          stateFips VARCHAR(2),
+          countyName TEXT,
+          countyFips VARCHAR(5),
+          timezone TEXT,
+          dst BOOLEAN,
+          shape MULTIPOLYGON NOT NULL
+        )`,
+    );
+
+    await db.end();
+
+    return true;
+  },
+};
+
+const loadData = async () => {
+  console.log("  loading counties data");
+
+  const db = await openDatabase();
   const file = await shapefile.open(`./c_05mr24.shp`);
 
-  await db.query(
-    `CREATE TABLE IF NOT EXISTS
-      ${metadata.table}
-      (
-        id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        state VARCHAR(2),
-        stateName TEXT,
-        stateFips VARCHAR(2),
-        countyName TEXT,
-        countyFips VARCHAR(5),
-        timezone TEXT,
-        dst BOOLEAN,
-        shape MULTIPOLYGON NOT NULL
-      )`,
-  );
-  await dropIndexIfExists(
-    db,
-    "counties_spatial_idx",
-    "weathergov_geo_counties",
-  );
+  await dropIndexIfExists(db, "counties_spatial_idx", metadata.table);
 
   const shapeTzToIANA = new Map([
     ["V", "America/Puerto_Rico"],
@@ -47,8 +53,8 @@ module.exports = async () => {
     ["S", "Pacific/Pago_Pago"],
   ]);
 
-  await db.query("TRUNCATE TABLE weathergov_geo_counties");
-  await db.query("ALTER TABLE weathergov_geo_counties AUTO_INCREMENT=0");
+  await db.query(`TRUNCATE TABLE ${metadata.table}`);
+  await db.query(`ALTER TABLE ${metadata.table} AUTO_INCREMENT=0`);
 
   const getSqlForShape = async ({ done, value }) => {
     if (done) {
@@ -71,7 +77,7 @@ module.exports = async () => {
     const observesDST = tz.toUpperCase() === tz;
 
     await db.query(
-      `INSERT INTO weathergov_geo_counties
+      `INSERT INTO ${metadata.table}
         (state, countyName, countyFips, timezone, dst, shape)
         VALUES(
           '${state}',
@@ -91,25 +97,25 @@ module.exports = async () => {
   // Once we've got all the counties loaded, grab the associated full state
   // names and state FIPS codes from the states table.
   await db.query(
-    `UPDATE weathergov_geo_counties c
+    `UPDATE ${metadata.table} c
           SET
           stateName=(
-            SELECT name FROM weathergov_geo_states s
+            SELECT name FROM ${statesTable} s
             WHERE
               s.state=c.state
           ),
           stateFips=(
-            SELECT fips FROM weathergov_geo_states s
+            SELECT fips FROM ${statesTable} s
             WHERE
               s.state=c.state
           )`,
   );
 
   await db.query(
-    "CREATE SPATIAL INDEX counties_spatial_idx ON weathergov_geo_counties(shape)",
+    `CREATE SPATIAL INDEX counties_spatial_idx ON ${metadata.table}(shape)`,
   );
 
   db.end();
 };
 
-module.exports.metadata = metadata;
+module.exports = { ...metadata, schemas, loadData };

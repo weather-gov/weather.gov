@@ -1,21 +1,21 @@
-uuid: bcaa91d1-23e2-4351-be27-f132cf26a551
+uuid: f70c56c6-4780-4a0f-875f-d18fe8586f9d
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_phone_number
-    - node.type.wfo_promo
+    - field.storage.node.field_facebook_url
+    - node.type.wfo_info
   module:
     - unique_content_field_validation
 third_party_settings:
   unique_content_field_validation:
     unique: false
     unique_text: ''
-id: node.wfo_promo.field_phone_number
-field_name: field_phone_number
+id: node.wfo_info.field_facebook_url
+field_name: field_facebook_url
 entity_type: node
-bundle: wfo_promo
-label: 'Phone number (optional)'
+bundle: wfo_info
+label: 'Facebook URL (optional)'
 description: ''
 required: false
 translatable: false

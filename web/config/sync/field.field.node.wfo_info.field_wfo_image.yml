@@ -1,0 +1,38 @@
+uuid: 80e88ba5-945c-43bc-b9f4-d0fa0b3a0a2d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_wfo_image
+    - node.type.wfo_info
+  module:
+    - image
+id: node.wfo_info.field_wfo_image
+field_name: field_wfo_image
+entity_type: node
+bundle: wfo_info
+label: 'WFO Image'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'png gif jpg jpeg webp'
+  max_filesize: ''
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: true
+  alt_field_required: true
+  title_field: true
+  title_field_required: true
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image
