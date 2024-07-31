@@ -5,7 +5,7 @@
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Wind" | t }}
             </th>
-            <td class="padding-left-0">
+            <td>
                 {% include '@new_weather_theme/partials/wind.html.twig' with { wind: content.wind } %}
             </td>
         </tr>
@@ -15,7 +15,7 @@
                 <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                     {{ "Gusts" | t }}
                 </th>
-                <td class="padding-left-0">
+                <td>
                     {{ content.gusts.speed }} {{  "mph" | t }}
                 </td>
             </tr>
@@ -25,7 +25,7 @@
             <th scope="row" class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Humidity" | t }}
             </th>
-            <td class="padding-left-0">
+            <td>
                 {% if content.humidity == 0 %}
                     <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
@@ -38,7 +38,7 @@
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Dewpoint" | t }}
             </th>
-            <td class="padding-left-0">
+            <td>
                 {% if content.dewpoint is same as (null) %}
                     <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
@@ -51,7 +51,7 @@
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Visibility"  | t }}
             </th>
-            <td class="padding-left-0">
+            <td>
                 {% if content.visibility is same as (null) %}
                     <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
@@ -64,7 +64,7 @@
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
                 {{ "Pressure" | t }}
             </th>
-            <td class="wx_">
+            <td>
                 {% if content.pressure is same as (null) %}
                     <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
