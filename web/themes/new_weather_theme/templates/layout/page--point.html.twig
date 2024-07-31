@@ -58,28 +58,7 @@
           {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
 
 
-          {% if weather.satellite %}
-          <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2" wx-outer-radar-container>
-            <div class="grid-row tablet-lg:grid-col-8 tablet-lg:grid-offset-2">
-              <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2">{{ "Satellite" | t }}</h3>
-            </div>
-
-            <div class="grid-container padding-0 bg-white shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-              <div class="usa-sr-only">
-                <p>
-                  {{ "Listed below is an animated loop of the most recent
-                      satellite imagery for @place."
-                      | t({"@place": weather.place })
-                  }}
-                </p>
-              </div>
-
-              <div class="padding-top-3 text-center" aria-hidden="true">
-                <img src="{{ weather.satellite.gif }}">
-              </div>
-            </div>
-          </div>
-          {% endif %}
+          {% include '@new_weather_theme/partials/satellite.html.twig' %}
         </div>
 
          <div class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
