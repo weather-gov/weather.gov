@@ -18,8 +18,7 @@ final class AreaForecastDiscussionTest extends EndToEndBase
     }
 
     /**
-     * Tests if heat index and wind chill are null, "feels like" is just the
-     * current temperature.
+     * Tests that we get back the expected product text.
      * @group e2e
      */
     public function testText(): void
