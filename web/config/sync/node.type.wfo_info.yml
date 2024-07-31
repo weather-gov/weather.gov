@@ -1,0 +1,36 @@
+uuid: 1548e7ac-6534-4e4c-83f2-94b6800e7b15
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - scheduler
+    - unique_content_field_validation
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: false
+    publish_past_date: error
+    publish_past_date_created: false
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    show_message_after_update: true
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
+  unique_content_field_validation:
+    unique: 0
+    unique_text: ''
+name: 'WFO Information'
+type: wfo_info
+description: 'Information about a given WFO, including contact details and a short description of the office.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: true
