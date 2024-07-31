@@ -92,7 +92,7 @@ export default async (request, response, output) => {
 
   const contentType = response.headers["content-type"].replace(/\/geo\+/, "/");
 
-  if (response.statusCode >= 200 && contentType === "application/json") {
+  if (response.statusCode >= 200 && /^application\/.+json$/.test(contentType)) {
     console.log(`SAVE:     saving response to ${filePath}`);
 
     // Make the directory structure if necessary, then write out the
