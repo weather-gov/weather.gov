@@ -115,7 +115,14 @@ final class LocationAndGridRouteController extends ControllerBase
     {
         try {
             $location = $this->dataLayer->databaseFetch(
-                "SELECT ST_X(point) AS lon,ST_Y(point) AS lat FROM weathergov_geo_places WHERE state LIKE :state AND name LIKE :place",
+                "SELECT
+                    ST_X(point) AS lon,
+                    ST_Y(point) AS lat
+                FROM weathergov_geo_places
+                WHERE
+                    state LIKE :state
+                    AND
+                    name LIKE :place",
                 [":state" => $state, ":place" => $place],
             );
 
