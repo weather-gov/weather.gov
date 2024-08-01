@@ -4,26 +4,35 @@ const { dropIndexIfExists, openDatabase } = require("../lib/db.js");
 
 const metadata = {
   table: "weathergov_geo_states",
-  version: 1,
 };
 
-module.exports = async () => {
-  console.log("loading states...");
+const schemas = {
+  1: async () => {
+    const db = await openDatabase();
+
+    await db.query(
+      `CREATE TABLE IF NOT EXISTS
+        ${metadata.table}
+        (
+          id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          state VARCHAR(2),
+          name TEXT,
+          fips VARCHAR(2),
+          shape MULTIPOLYGON NOT NULL
+        )`,
+    );
+
+    await db.end();
+
+    return true;
+  },
+};
+
+const loadData = async () => {
+  console.log("  loading states data");
   const db = await openDatabase();
 
   const file = await shapefile.open(`./s_05mr24.shp`);
-
-  await db.query(
-    `CREATE TABLE IF NOT EXISTS
-      ${metadata.table}
-      (
-        id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        state VARCHAR(2),
-        name TEXT,
-        fips VARCHAR(2),
-        shape MULTIPOLYGON NOT NULL
-      )`,
-  );
 
   await dropIndexIfExists(db, "states_spatial_idx", "weathergov_geo_states");
 
@@ -70,4 +79,4 @@ module.exports = async () => {
   db.end();
 };
 
-module.exports.metadata = metadata;
+module.exports = { ...metadata, schemas, loadData };

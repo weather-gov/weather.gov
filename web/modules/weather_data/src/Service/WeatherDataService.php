@@ -205,4 +205,14 @@ class WeatherDataService
     {
         return $this->dataLayer->getSatelliteMetadata($wfo);
     }
+
+    public function getLatestAFD($wfo)
+    {
+        $afds = $this->dataLayer->getProductsByTypeAndOffice("AFD", $wfo);
+        if (count($afds) > 0) {
+            $afd = $this->dataLayer->getProduct($afds[0]->id);
+            return json_decode(json_encode($afd), true);
+        }
+        return false;
+    }
 }

@@ -57,8 +57,9 @@
           {{ drupal_block("weathergov_current_conditions") }}
           {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
 
-
           {% include '@new_weather_theme/partials/satellite.html.twig' %}
+
+          {{ drupal_block("weathergov_area_forecast_discussion") }}
         </div>
 
          <div class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">

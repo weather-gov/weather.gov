@@ -273,6 +273,32 @@ class DataLayer
         return self::$i_obsStations;
     }
 
+    private static $i_products_by_type = [];
+    public function getProductsByTypeAndOffice($type, $wfo)
+    {
+        $wfo = strtoupper($wfo);
+        $key = "$type / $wfo";
+
+        if (!array_key_exists($key, self::$i_products_by_type)) {
+            $prop = "@graph";
+            self::$i_products_by_type[$key] = $this->getFromWeatherAPI(
+                "/products/types/$type/locations/$wfo",
+            )->$prop;
+        }
+        return self::$i_products_by_type[$key];
+    }
+
+    private static $i_products = [];
+    public function getProduct($uuid)
+    {
+        if (!array_key_exists($uuid, self::$i_products)) {
+            $product = $this->getFromWeatherAPI("/products/$uuid");
+
+            self::$i_products[$uuid] = $product;
+        }
+        return self::$i_products[$uuid];
+    }
+
     private static $i_point = false;
     public function getPoint($lat, $lon)
     {

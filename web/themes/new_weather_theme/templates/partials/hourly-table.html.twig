@@ -122,7 +122,7 @@
               }
             %}
             {% if period.windGust is not same as (null) %}
-              <div>{{ "gusting to @gustSpeed mph" | t({ "@gustSpeed": period.windGust }) }}</div>
+              <div>{{ "with gusts up to @gustSpeed mph" | t({ "@gustSpeed": period.windGust }) }}</div>
             {% endif %}
           </td>
           {% endfor %}

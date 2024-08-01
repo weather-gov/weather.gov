@@ -1,36 +1,63 @@
-const fs = require("node:fs/promises");
 const shapefile = require("shapefile");
 
 const { dropIndexIfExists, openDatabase } = require("../lib/db.js");
 
 const metadata = {
   table: "weathergov_geo_zones",
-  version: 2,
 };
 
-module.exports = async () => {
-  console.log("loading zones...");
-  const db = await openDatabase();
+const schemas = {
+  1: async () => {
+    const db = await openDatabase();
 
-  await db.query(
-    `CREATE TABLE IF NOT EXISTS
-      ${metadata.table}
-      (
-        id varchar(45) NOT NULL PRIMARY KEY,
-        state VARCHAR(2),
-        shape MULTIPOLYGON NOT NULL
-      )`,
-  );
+    await db.query(
+      `CREATE TABLE IF NOT EXISTS
+        ${metadata.table}
+        (
+          id varchar(45) NOT NULL PRIMARY KEY,
+          state VARCHAR(2),
+          shape MULTIPOLYGON NOT NULL
+        )`,
+    );
+    await db.end();
+    return true;
+  },
+
+  // No schema change, but need to reload data.
+  2: async () => {
+    const db = await openDatabase();
+    // Version 2: Change the shape column into a collection rather than a single
+    // multipolygon. This allows us to capture all of the polygons for a zone as
+    // a collection rather than trying to collect or union them into one entity.
+    await db.query(
+      `ALTER TABLE ${metadata.table} MODIFY shape GEOMETRYCOLLECTION`,
+    );
+    await db.end();
+
+    return true;
+  },
+
+  3: async () => {
+    const db = await openDatabase();
+    await db.query(
+      `ALTER TABLE ${metadata.table} MODIFY shape GEOMETRYCOLLECTION NOT NULL`,
+    );
+    await db.query(
+      `CREATE SPATIAL INDEX zones_spatial_idx ON ${metadata.table}(shape)`,
+    );
+    await db.end();
+
+    // No data load needed, just creating the index.
+    return false;
+  },
+};
+
+const loadData = async () => {
+  console.log("  loading zones data");
+  const db = await openDatabase();
 
   await dropIndexIfExists(db, "zones_spatial_idx", metadata.table);
   await db.query(`TRUNCATE TABLE ${metadata.table}`);
-
-  // Version 2: Change the shape column into a collection rather than a single
-  // multipolygon. This allows us to capture all of the polygons for a zone as
-  // a collection rather than trying to collect or union them into one entity.
-  await db.query(
-    `ALTER TABLE ${metadata.table} MODIFY shape GEOMETRYCOLLECTION`,
-  );
 
   const found = new Map();
 
@@ -95,7 +122,11 @@ module.exports = async () => {
     );
   }
 
+  await db.query(
+    `CREATE SPATIAL INDEX zones_spatial_idx ON ${metadata.table}(shape)`,
+  );
+
   db.end();
 };
 
-module.exports.metadata = metadata;
+module.exports = { ...metadata, schemas, loadData };

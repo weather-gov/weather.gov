@@ -1,16 +1,18 @@
 const { openDatabase } = require("./db.js");
 
-const { metadata: counties } = require("../sources/counties.js");
-const { metadata: cwas } = require("../sources/countyWarningAreas.js");
-const { metadata: places } = require("../sources/places.js");
-const { metadata: states } = require("../sources/states.js");
-const { metadata: zones } = require("../sources/zones.js");
+const counties = require("../sources/counties.js");
+const cwas = require("../sources/countyWarningAreas.js");
+const places = require("../sources/places.js");
+const states = require("../sources/states.js");
+const zones = require("../sources/zones.js");
 
+// These should be in dependency order. That is, if any table depends on another
+// table, the dependent table should be listed *after* its dependency.
 const targets = {
+  states,
   counties,
   cwas,
   places,
-  states,
   zones,
 };
 
@@ -43,10 +45,16 @@ module.exports = async () => {
   const results = {};
   for (const [target, metadata] of Object.entries(targets)) {
     const databaseVersion = +(existing[metadata.table] ?? 0);
-    const currentVersion = metadata?.version ?? 0;
+
+    const currentVersion = Math.max(
+      ...Object.keys(metadata?.schemas).map((v) => +v),
+    );
 
     results[target] = {
       update: currentVersion > databaseVersion,
+      from: databaseVersion,
+      to: currentVersion,
+      metadata,
     };
   }
 
@@ -60,14 +68,17 @@ module.exports.update = async () => {
 
   for await (const [source, metadata] of Object.entries(targets)) {
     if (meta[source].update) {
-      console.log(`setting ${metadata.table} to version ${metadata.version}`);
+      const currentVersion = Math.max(
+        ...Object.keys(metadata?.schemas).map((v) => +v),
+      );
+      console.log(`setting ${metadata.table} to version ${currentVersion}`);
 
       // UPSERT query, essentially
       const sql = `INSERT INTO weathergov_geo_metadata
                   (table_name, version)
-                VALUES("${metadata.table}", "${metadata.version}")
+                VALUES("${metadata.table}", "${currentVersion}")
                 ON DUPLICATE KEY
-                  UPDATE version="${metadata.version}"`;
+                  UPDATE version="${currentVersion}"`;
       await db.query(sql);
     }
   }

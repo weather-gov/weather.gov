@@ -1,11 +1,7 @@
 const { downloadAndUnzip, unzip } = require("./lib/prep.js");
 
 const metadata = require("./lib/meta.js");
-const loadCounties = require("./sources/counties.js");
-const loadCWAs = require("./sources/countyWarningAreas.js");
-const loadPlaces = require("./sources/places.js");
-const loadStates = require("./sources/states.js");
-const loadZones = require("./sources/zones.js");
+const updateSchema = require("./lib/schema.js");
 
 async function main() {
   const meta = await metadata();
@@ -29,6 +25,7 @@ async function main() {
   const zips = [];
 
   for (const [target, { update }] of Object.entries(meta)) {
+    console.log(`Fetching data for ${target}...`);
     if (update) {
       if (dataUrls[target]) {
         urls.push(...dataUrls[target]);
@@ -37,7 +34,7 @@ async function main() {
         zips.push(...dataZips[target]);
       }
     } else {
-      console.log(`${target} already up-to-date; skipping`);
+      console.log(`  already up-to-date; skipping`);
     }
   }
 
@@ -49,20 +46,15 @@ async function main() {
     await unzip(zip);
   }
 
-  if (meta.states.update) {
-    await loadStates();
-  }
-  if (meta.counties.update) {
-    await loadCounties();
-  }
-  if (meta.cwas.update) {
-    await loadCWAs();
-  }
-  if (meta.zones.update) {
-    await loadZones();
-  }
-  if (meta.places.update) {
-    await loadPlaces();
+  for await (const [source, sourceMetadata] of Object.entries(meta)) {
+    if (sourceMetadata.update) {
+      console.log(`${source} needs updating...`);
+      const importData = await updateSchema(sourceMetadata);
+      if (importData) {
+        console.log(`  ${source} requires data loading...`);
+        await sourceMetadata.metadata.loadData();
+      }
+    }
   }
 
   await metadata.update();
