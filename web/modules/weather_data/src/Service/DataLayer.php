@@ -359,13 +359,13 @@ class DataLayer
         return self::$i_placeNearPolygon[$wktPoints];
     }
 
-    public function databaseFetch($sql)
+    public function databaseFetch($sql, $args = [])
     {
-        return $this->database->query($sql)->fetch();
+        return $this->database->query($sql, $args)->fetch();
     }
 
-    public function databaseFetchAll($sql)
+    public function databaseFetchAll($sql, $args = [])
     {
-        return $this->database->query($sql)->fetchAll();
+        return $this->database->query($sql, $args)->fetchAll();
     }
 }

@@ -59,6 +59,7 @@ final class AlertUtilityGeometryTest extends TestCase
                     "SELECT ST_AsWKT(shape) as shape
                     FROM weathergov_geo_zones
                     WHERE id IN ('zone 1','zone 2','zone 3')",
+                    [],
                     $zoneShapes,
                 ],
             ]),
@@ -74,6 +75,7 @@ final class AlertUtilityGeometryTest extends TestCase
                             ST_GEOMFROMTEXT('shape 1')
                         )
                     ) as shape",
+                    [],
                     (object) ["shape" => "union 3,1"],
                 ],
 
@@ -85,6 +87,7 @@ final class AlertUtilityGeometryTest extends TestCase
                             ST_GEOMFROMTEXT('shape 2')
                         )
                     ) as shape",
+                    [],
                     (object) ["shape" => "union 1,2,3"],
                 ],
 
@@ -97,6 +100,7 @@ final class AlertUtilityGeometryTest extends TestCase
                         0.003
                     )
                 ) as shape",
+                    [],
                     (object) [
                         "shape" =>
                             '{"type":"GeometryCollection","geometries":[{"coordinates":[[0,1],[2,3],[4,5]]}]}',
@@ -148,6 +152,7 @@ final class AlertUtilityGeometryTest extends TestCase
                     "SELECT ST_AsWKT(shape) as shape
                         FROM weathergov_geo_counties
                         WHERE countyFips IN (county 1,county 2,county 3)",
+                    [],
                     $countyShapes,
                 ],
             ]),
@@ -163,6 +168,7 @@ final class AlertUtilityGeometryTest extends TestCase
                             ST_GEOMFROMTEXT('shape 1')
                         )
                     ) as shape",
+                    [],
                     (object) ["shape" => "union 3,1"],
                 ],
 
@@ -174,6 +180,7 @@ final class AlertUtilityGeometryTest extends TestCase
                             ST_GEOMFROMTEXT('shape 2')
                         )
                     ) as shape",
+                    [],
                     (object) ["shape" => "union 1,2,3"],
                 ],
 
@@ -185,6 +192,7 @@ final class AlertUtilityGeometryTest extends TestCase
                         0.003
                     )
                 ) as shape",
+                    [],
                     (object) [
                         "shape" =>
                             '{"type":"Polygon","coordinates":[[0,1],[2,3],[4,5]]}',

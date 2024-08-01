@@ -21,7 +21,7 @@ final class LocationAndGridRouteController extends ControllerBase
     /**
      * A service for fetching weather data.
      *
-     * @var WeatherDataService weatherData
+     * @var DataLayer weatherData
      */
     private $dataLayer;
 
@@ -109,5 +109,27 @@ final class LocationAndGridRouteController extends ControllerBase
         } catch (\Throwable $e) {
             throw new NotFoundHttpException();
         }
+    }
+
+    public function redirectFromPlace($state, $place)
+    {
+        try {
+            $location = $this->dataLayer->databaseFetch(
+                "SELECT ST_X(point) AS lon,ST_Y(point) AS lat FROM weathergov_geo_places WHERE state LIKE :state AND name LIKE :place",
+                [":state" => $state, ":place" => $place],
+            );
+
+            if ($location !== false) {
+                $url = Url::fromRoute("weather_routes.point", [
+                    "lat" => $location->lat,
+                    "lon" => $location->lon,
+                ]);
+                return new RedirectResponse($url->toString());
+            }
+        } catch (\Throwable $e) {
+            throw new NotFoundHttpException();
+        }
+
+        throw new NotFoundHttpException();
     }
 }
