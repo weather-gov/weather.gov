@@ -10,18 +10,18 @@
  */
 function new_weather_theme_preprocess_image_widget(array &$variables)
 {
-  $data = &$variables["data"];
+    $data = &$variables["data"];
 
-  // This prevents image widget templates from rendering preview container HTML
-  // to users that do not have permission to access these previews.
-  // @todo revisit in https://drupal.org/node/953034
-  // @todo revisit in https://drupal.org/node/3114318
-  if (
-    isset($data["preview"]["#access"]) &&
-      $data["preview"]["#access"] === false
-  ) {
-    unset($data["preview"]);
-  }
+    // This prevents image widget templates from rendering preview container HTML
+    // to users that do not have permission to access these previews.
+    // @todo revisit in https://drupal.org/node/953034
+    // @todo revisit in https://drupal.org/node/3114318
+    if (
+        isset($data["preview"]["#access"]) &&
+        $data["preview"]["#access"] === false
+    ) {
+        unset($data["preview"]);
+    }
 }
 
 /**
@@ -33,54 +33,50 @@ function new_weather_theme_preprocess_image_widget(array &$variables)
  */
 function new_weather_theme_preprocess_node__wfo_info(&$variables, $theme)
 {
-  $node = $variables['node'];
-  
-  // Process the field_wfo information 
-  $field_wfo = $variables['content']['field_wfo'];
-  $wfo_entity = $field_wfo[0]['#entity'];
-  $wfo_code = $wfo_entity->field_wfo_code->value;
-  $wfo_name = $wfo_entity->name->value;
-  $wfo_id = $wfo_entity->id();
-  $variables['wfo'] = [
-    'code' => $wfo_code,
-    'name' => $wfo_name,
-    'id' => $wfo_id
-  ];
+    $node = $variables["node"];
 
-  // Process field_address information
-  $field_address = $variables['content']['field_address'];
-  $address_object = $field_address[0];
-  $address_keys = array_filter(
-    array_keys($address_object),
-    function($key){
-      return !str_starts_with($key, '#');
+    // Process the field_wfo information
+    $field_wfo = $variables["content"]["field_wfo"];
+    $wfo_entity = $field_wfo[0]["#entity"];
+    $wfo_code = $wfo_entity->field_wfo_code->value;
+    $wfo_name = $wfo_entity->name->value;
+    $wfo_id = $wfo_entity->id();
+    $variables["wfo"] = [
+        "code" => $wfo_code,
+        "name" => $wfo_name,
+        "id" => $wfo_id,
+    ];
+
+    // Process field_address information
+    $field_address = $variables["content"]["field_address"];
+    $address_object = $field_address[0];
+    $address_keys = array_filter(array_keys($address_object), function ($key) {
+        return !str_starts_with($key, "#");
+    });
+    $address_vars = [];
+    foreach ($address_keys as $key) {
+        $value = $address_object[$key]["#value"];
+        $address_vars[$key] = $value;
     }
-  );
-  $address_vars = [];
-  foreach($address_keys as $key){
-    $value = $address_object[$key]['#value'];
-    $address_vars[$key] = $value;
-  }
-  $variables['address'] = $address_vars;
+    $variables["address"] = $address_vars;
 
-  // Process all url fields
-  $url_field_names = array_filter(
-    array_keys($node->getFields()),
-    function($key){
-      return str_ends_with($key, '_url');
+    // Process all url fields
+    $url_field_names = array_filter(array_keys($node->getFields()), function (
+        $key,
+    ) {
+        return str_ends_with($key, "_url");
+    });
+
+    $variables["external_links"] = [];
+    foreach ($url_field_names as $name) {
+        $short_name = str_replace("field_", "", $name);
+        $value = $node->$name->value;
+        $variables["external_links"][$short_name] = $value;
     }
-  );
 
-  $variables['external_links'] = [];
-  foreach($url_field_names as $name){
-    $short_name = str_replace('field_', '', $name);
-    $value = $node->$name->value;
-    $variables['external_links'][$short_name] = $value;
-  }
-
-  // Process phone number field
-  $phone_value = $node->field_phone_number_opt->first()->getValue();
-  $variables['phone'] = $phone_value;
+    // Process phone number field
+    $phone_value = $node->field_phone_number_opt->first()->getValue();
+    $variables["phone"] = $phone_value;
 }
 
 /**
@@ -88,8 +84,17 @@ function new_weather_theme_preprocess_node__wfo_info(&$variables, $theme)
  * on a by-node type basis.
  * Taken from (https://drupal.stackexchange.com/questions/137652/override-image-formatter-html-twig)
  */
-function new_weather_theme_theme_suggestions_image_formatter_alter(array &$suggestions, array $variables) {
-  $entity = $variables['item']->getEntity();
-  $field_name = $variables['item']->getParent()->getName();
-  $suggestions[] = 'image_formatter__' . $entity->getEntityTypeId() . '__' . $entity->bundle() . '__' . $field_name;
+function new_weather_theme_theme_suggestions_image_formatter_alter(
+    array &$suggestions,
+    array $variables,
+) {
+    $entity = $variables["item"]->getEntity();
+    $field_name = $variables["item"]->getParent()->getName();
+    $suggestions[] =
+        "image_formatter__" .
+        $entity->getEntityTypeId() .
+        "__" .
+        $entity->bundle() .
+        "__" .
+        $field_name;
 }
