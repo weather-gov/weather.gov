@@ -57,6 +57,8 @@
           {{ drupal_block("weathergov_current_conditions") }}
           {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
 
+          {% include '@new_weather_theme/partials/satellite.html.twig' %}
+
           {#{ drupal_block("weathergov_area_forecast_discussion") }#}
         </div>
 

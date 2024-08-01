@@ -257,4 +257,36 @@ final class DataLayerTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group unit
+     * @group data-layer
+     */
+    public function testGetSatelliteMetadata(): void
+    {
+        $expected = (object) [
+            "satellite" => "is got",
+        ];
+
+        $dataLayer = $this->getDataLayer(false);
+        $this->httpClient->append(
+            new Response(
+                200,
+                ["Content-type", "application/json"],
+                json_encode($expected),
+            ),
+        );
+
+        $actual = $dataLayer->getSatelliteMetadata("BOB");
+
+        $this->assertEquals($expected, $actual);
+        $this->assertEquals(
+            "GET",
+            $this->httpHistory[0]["request"]->getMethod(),
+        );
+        $this->assertEquals(
+            "/WFO/catalogs/WFO_02_bob_catalog.json",
+            $this->httpHistory[0]["request"]->getURI()->getPath(),
+        );
+    }
 }
