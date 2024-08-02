@@ -4,7 +4,7 @@
   { "name": "location page with alerts", "url": "/point/33.521/-86.812" },
   {
     "name": "location page with alerts (today tab)",
-    "url": "/point/33.521/-86.812#today"
+    "url": "/point/33.521/-86.812#current"
   },
   {
     "name": "location page with alerts (daily tab)",

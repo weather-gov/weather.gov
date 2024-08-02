@@ -201,6 +201,11 @@ class WeatherDataService
         return $this->dataLayer->getPlaceNearPoint($lat, $lon);
     }
 
+    public function getSatelliteMetadata($wfo)
+    {
+        return $this->dataLayer->getSatelliteMetadata($wfo);
+    }
+
     public function getLatestAFD($wfo)
     {
         $afds = $this->dataLayer->getProductsByTypeAndOffice("AFD", $wfo);
