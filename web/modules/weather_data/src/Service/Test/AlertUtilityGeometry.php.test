@@ -46,70 +46,31 @@ final class AlertUtilityGeometryTest extends TestCase
             ],
         ];
 
-        $zoneShapes = [
-            (object) ["shape" => "shape 1"],
-            (object) ["shape" => "shape 2"],
-            (object) ["shape" => "shape 3"],
-        ];
+        $zoneShapes = (object) ["shape" => '{"combined":"zones"}'];
 
-        $this->dataLayer->method("databaseFetchAll")->will(
+        $this->dataLayer->method("databaseFetch")->will(
             $this->returnValueMap([
                 // Return the shapes for the selected zones
                 [
-                    "SELECT ST_AsWKT(shape) as shape
-                    FROM weathergov_geo_zones
-                    WHERE id IN ('zone 1','zone 2','zone 3')",
+                    "SELECT ST_ASGEOJSON(
+                ST_SIMPLIFY(
+                    ST_SRID(
+                        ST_COLLECT(shape),
+                        0
+                    ),
+                    0.003
+                )
+            )
+            as shape
+                FROM weathergov_geo_zones
+                WHERE id IN ('zone 1','zone 2','zone 3')",
                     $zoneShapes,
                 ],
             ]),
         );
 
-        $this->dataLayer->method("databaseFetch")->will(
-            $this->returnValueMap([
-                // Return the unioned shape of 3 and 1
-                [
-                    "SELECT ST_AsWKT(
-                        ST_UNION(
-                            ST_GEOMFROMTEXT('shape 3'),
-                            ST_GEOMFROMTEXT('shape 1')
-                        )
-                    ) as shape",
-                    (object) ["shape" => "union 3,1"],
-                ],
-
-                // Return the unioned shape of 3,1 and 2
-                [
-                    "SELECT ST_AsWKT(
-                        ST_UNION(
-                            ST_GEOMFROMTEXT('union 3,1'),
-                            ST_GEOMFROMTEXT('shape 2')
-                        )
-                    ) as shape",
-                    (object) ["shape" => "union 1,2,3"],
-                ],
-
-                // Return the simplified shape as a geometry collection, so we
-                // can also test that those points are flipped properly.
-                [
-                    "SELECT ST_ASGEOJSON(
-                    ST_SIMPLIFY(
-                        ST_GEOMFROMTEXT('union 1,2,3'),
-                        0.003
-                    )
-                ) as shape",
-                    (object) [
-                        "shape" =>
-                            '{"type":"GeometryCollection","geometries":[{"coordinates":[[0,1],[2,3],[4,5]]}]}',
-                    ],
-                ],
-            ]),
-        );
-
         $expected = (object) [
-            "type" => "GeometryCollection",
-            "geometries" => [
-                (object) ["coordinates" => [[1, 0], [3, 2], [5, 4]]],
-            ],
+            "combined" => "zones",
         ];
 
         $actual = AlertUtility::getGeometryAsJSON($alert, $this->dataLayer);
@@ -134,68 +95,32 @@ final class AlertUtilityGeometryTest extends TestCase
             ],
         ];
 
-        $countyShapes = [
-            (object) ["shape" => "shape 1"],
-            (object) ["shape" => "shape 2"],
-            (object) ["shape" => "shape 3"],
-        ];
+        $countyShapes = (object) ["shape" => '{"combined":"county"}'];
 
-        $this->dataLayer->method("databaseFetchAll")->will(
+        $this->dataLayer->method("databaseFetch")->will(
             $this->returnValueMap([
                 // Return the shapes for the selected zones. Note that county
                 // FIPS codes are numeric, so they are not quoted in the query.
                 [
-                    "SELECT ST_AsWKT(shape) as shape
-                        FROM weathergov_geo_counties
-                        WHERE countyFips IN (county 1,county 2,county 3)",
+                    "SELECT ST_ASGEOJSON(
+                    ST_SIMPLIFY(
+                        ST_SRID(
+                            ST_COLLECT(shape),
+                            0
+                        ),
+                        0.003
+                    )
+                )
+                as shape
+                    FROM weathergov_geo_counties
+                    WHERE countyFips IN (county 1,county 2,county 3)",
                     $countyShapes,
                 ],
             ]),
         );
 
-        $this->dataLayer->method("databaseFetch")->will(
-            $this->returnValueMap([
-                // Return the unioned shape of 3 and 1
-                [
-                    "SELECT ST_AsWKT(
-                        ST_UNION(
-                            ST_GEOMFROMTEXT('shape 3'),
-                            ST_GEOMFROMTEXT('shape 1')
-                        )
-                    ) as shape",
-                    (object) ["shape" => "union 3,1"],
-                ],
-
-                // Return the unioned shape of 3,1 and 2
-                [
-                    "SELECT ST_AsWKT(
-                        ST_UNION(
-                            ST_GEOMFROMTEXT('union 3,1'),
-                            ST_GEOMFROMTEXT('shape 2')
-                        )
-                    ) as shape",
-                    (object) ["shape" => "union 1,2,3"],
-                ],
-
-                // Return the simplified shape
-                [
-                    "SELECT ST_ASGEOJSON(
-                    ST_SIMPLIFY(
-                        ST_GEOMFROMTEXT('union 1,2,3'),
-                        0.003
-                    )
-                ) as shape",
-                    (object) [
-                        "shape" =>
-                            '{"type":"Polygon","coordinates":[[0,1],[2,3],[4,5]]}',
-                    ],
-                ],
-            ]),
-        );
-
         $expected = (object) [
-            "type" => "Polygon",
-            "coordinates" => [[1, 0], [3, 2], [5, 4]],
+            "combined" => "county",
         ];
 
         $actual = AlertUtility::getGeometryAsJSON($alert, $this->dataLayer);
