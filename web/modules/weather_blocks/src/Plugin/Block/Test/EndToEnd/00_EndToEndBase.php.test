@@ -116,6 +116,7 @@ abstract class EndToEndBase extends TestCase
 
         $this->weatherData = new WeatherDataService(
             $translation,
+            $cache,
             $newRelic,
             $dataLayer,
         );

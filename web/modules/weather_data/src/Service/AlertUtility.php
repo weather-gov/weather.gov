@@ -843,8 +843,6 @@ class AlertUtility
             return $alert->geometry;
         }
 
-        $geometries = [];
-
         // Otherwise, we need to derive the geometry from other metadata. Alerts
         // without a geometry should have a list of affected zones, and we can
         // build a geometry off that.
@@ -857,89 +855,68 @@ class AlertUtility
             }, $alert->properties->affectedZones);
             $ids = implode(",", $ids);
 
-            $shapes = $dataLayer->databaseFetchAll(
-                "SELECT ST_AsWKT(shape) as shape
-                    FROM weathergov_geo_zones
-                    WHERE id IN ($ids)",
-            );
+            $sql = "SELECT ST_ASGEOJSON(
+                ST_SIMPLIFY(
+                    ST_SRID(
+                        ST_COLLECT(shape),
+                        0
+                    ),
+                    0.003
+                )
+            )
+            as shape
+                FROM weathergov_geo_zones
+                WHERE id IN ($ids)";
 
-            foreach ($shapes as $shape) {
-                $geometries[] = $shape;
+            $shape = $dataLayer->databaseFetch($sql);
+
+            if ($shape && property_exists($shape, "shape") && $shape->shape) {
+                $polygon = json_decode($shape->shape);
+
+                return $polygon;
             }
         }
 
-        if (count($geometries) == 0) {
-            // If an alert doesn't have a geometry or any zones, that's probably
-            // a bug. However, if the alert has SAME codes, we can use those to
-            // get geometries, too.
-            $counties = false;
-            if (
-                property_exists($alert->properties, "geocode") &&
-                property_exists($alert->properties->geocode, "SAME")
-            ) {
-                $counties = count($alert->properties->geocode->SAME) > 0;
-            }
-
-            if ($counties) {
-                $fips = array_map(function ($same) {
-                    return substr($same, 1);
-                }, $alert->properties->geocode->SAME);
-                $fips = implode(",", $fips);
-
-                $shapes = $dataLayer->databaseFetchAll(
-                    "SELECT ST_AsWKT(shape) as shape
-                        FROM weathergov_geo_counties
-                        WHERE countyFips IN ($fips)",
-                );
-
-                foreach ($shapes as $shape) {
-                    $geometries[] = $shape;
-                }
-            }
+        // If an alert doesn't have a geometry or any zones, that's probably
+        // a bug. However, if the alert has SAME codes, we can use those to
+        // get geometries, too.
+        $counties = false;
+        if (
+            property_exists($alert->properties, "geocode") &&
+            property_exists($alert->properties->geocode, "SAME")
+        ) {
+            $counties = count($alert->properties->geocode->SAME) > 0;
         }
 
-        $polygon = "";
+        if ($counties) {
+            $fips = array_map(function ($same) {
+                return substr($same, 1);
+            }, $alert->properties->geocode->SAME);
+            $fips = implode(",", $fips);
 
-        if (count($geometries) > 0) {
-            $polygon = array_pop($geometries)->shape;
-
-            foreach ($geometries as $geometry) {
-                $union = $dataLayer->databaseFetch(
-                    "SELECT ST_AsWKT(
-                        ST_UNION(
-                            ST_GEOMFROMTEXT('$polygon'),
-                            ST_GEOMFROMTEXT('$geometry->shape')
-                        )
-                    ) as shape",
-                );
-                $polygon = $union->shape;
-            }
-
-            $polygon = $dataLayer->databaseFetch(
-                "SELECT ST_ASGEOJSON(
+            $sql = "SELECT ST_ASGEOJSON(
                     ST_SIMPLIFY(
-                        ST_GEOMFROMTEXT('$polygon'),
+                        ST_SRID(
+                            ST_COLLECT(shape),
+                            0
+                        ),
                         0.003
                     )
-                ) as shape",
-            );
+                )
+                as shape
+                    FROM weathergov_geo_counties
+                    WHERE countyFips IN ($fips)";
 
-            $polygon = json_decode($polygon->shape);
-
-            if ($polygon->type == "GeometryCollection") {
-                foreach ($polygon->geometries as $innerPolygon) {
-                    $innerPolygon->coordinates = SpatialUtility::swapLatLon(
-                        $innerPolygon->coordinates,
-                    );
-                }
-            } else {
-                $polygon->coordinates = SpatialUtility::swapLatLon(
-                    $polygon->coordinates,
-                );
+            $shape = $dataLayer->databaseFetch($sql);
+            if ($shape && property_exists($shape, "shape") && $shape->shape) {
+                $polygon = json_decode($shape->shape);
+                return $polygon;
             }
         }
 
-        return $polygon;
+        // If we're here, then we didn't find a polygon, zone, or county for
+        // the alert. That's almost certainly a bug.
+        return false;
     }
 
     public static function getPlacesFromAlertDescription($alert)
@@ -954,7 +931,7 @@ class AlertUtility
         //
         // So if we have a line that matches, we should try parsing it.
         preg_match(
-            "/IN \S+ THIS \S+ INCLUDES \d+ COUNTIES$/sim",
+            "/IN \S+ (THIS|THE NEW) \S+ INCLUDES \d+ COUNTIES$/sim",
             $description,
             $matches,
         );
