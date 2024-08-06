@@ -80,12 +80,12 @@ const ui = async ({ error = false } = {}) => {
   } else if (config.play) {
     const pointTargets = await getPointFileInfo();
 
+    lines.push(`Currently playing bundle <strong>${config.play}</strong>`);
+
     // Add the UI lines for Products Info to
     // the lines array
     await products.ui("./data", config.play, lines);
     
-
-    lines.push(`Currently playing bundle <strong>${config.play}</strong>`);
     if (pointTargets.length) {
       lines.push("<br><br>Points in the bundle:");
       lines.push("<ul>");
