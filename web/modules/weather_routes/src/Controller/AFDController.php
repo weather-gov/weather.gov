@@ -60,14 +60,11 @@ final class AFDController extends ControllerBase
     {
         $foo = 1;
         $wfo = $this->request->getCurrentRequest()->query->get('wfo');
-        $afdReferences = null;
-        if($wfo){
-          $afdReferences = $this->weatherData->getLatestAFDReferences($wfo);
-        }
+        $afd = $this->weatherData->getLatestAFD($wfo);
         return [
           '#theme' => 'weather_routes_afd',
           '#wfo' => $wfo,
-          '#afd' => $afdReferences
+          '#afd' => $afd
         ];
     }
 }

@@ -17,6 +17,16 @@
     </div>
     </header>
 
-    <h1>WFO: {{wfo}}</h1>
-    {{dump()}}
+    <h1>Area Forecast Discussion (AFD)</h1>
+    {% if wfo is not null %}
+        <h2>latest for {{wfo}}</h2>
+    {% else %}
+        <h2>latest anywhere</h2>
+    {% endif %}
+    {%  if afd is not null %}
+        <pre>
+{{afd.productText}}
+        </pre>
+    {% endif %}
+    
 </div>
