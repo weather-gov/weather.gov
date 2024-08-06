@@ -163,10 +163,20 @@ trait AlertTrait
                 $output->alertId = $index;
             }
 
-            $output->geometry = AlertUtility::getGeometryAsJSON(
-                $alert,
-                $this->dataLayer,
-            );
+            $hit = $this->cache->get("alert-polygon-" . $alert->id);
+            if ($hit) {
+                $output->geometry = $hit->data;
+            } else {
+                $output->geometry = AlertUtility::getGeometryAsJSON(
+                    $alert,
+                    $this->dataLayer,
+                );
+                $this->cache->set(
+                    "alert-polygon-" . $alert->id,
+                    $output->geometry,
+                    time() + 3600, // keep it for an hour
+                );
+            }
 
             // See if there is place information from the alert description.
             // This will be false if there is no special location information,
