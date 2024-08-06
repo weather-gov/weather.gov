@@ -206,6 +206,10 @@ msgstr ""
 msgid "@speed mph from the @direction"
 msgstr ""
 
+#: wind.labels.calm
+msgid "calm"
+msgstr ""
+
 #: loader.loading-text
 msgid "Loading the forecast"
 msgstr ""
