@@ -79,6 +79,13 @@ function new_weather_theme_preprocess_node__wfo_info(&$variables, $theme)
     $variables["phone"] = $phone_value;
 }
 
+function new_weather_theme_preprocess_image(&$variables)
+{
+    foreach (["width", "height"] as $key) {
+        unset($variables["attributes"][$key]);
+    }
+}
+
 /**
  * Allows us the ability to override image formatter templates
  * on a by-node type basis.

@@ -223,7 +223,7 @@ msgid "Phone"
 msgstr ""
 
 #: wfo.labels.twitter
-msgid "X"
+msgid "X (Twitter)"
 msgstr ""
 
 #: wfo.labels.youtube

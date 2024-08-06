@@ -1,0 +1,10 @@
+<p>
+  <div class="text-bold text-primary-darker">
+    {{ "address" | t }}:
+  </div>
+  <span>
+  {% for item in items %}
+    {{ item.content }}
+  {% endfor %}
+  </span>
+</p>
