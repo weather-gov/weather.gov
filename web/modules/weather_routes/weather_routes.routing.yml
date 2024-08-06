@@ -48,3 +48,13 @@ weather_routes.alert-info:
   requirements:
     # Public endpoint
     _access: 'TRUE'
+
+weather_routes.afd:
+  path: '/afd'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\AFDController::content
+  options:
+    query:
+      wfo: ""
+  requirements:
+    _access: 'TRUE'

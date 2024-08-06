@@ -273,16 +273,28 @@ class DataLayer
         return self::$i_obsStations;
     }
 
-    private static $i_products_by_type = [];
+    private static $i_products_by_type_and_office = [];
     public function getProductsByTypeAndOffice($type, $wfo)
     {
         $wfo = strtoupper($wfo);
         $key = "$type / $wfo";
 
-        if (!array_key_exists($key, self::$i_products_by_type)) {
+        if (!array_key_exists($key, self::$i_products_by_type_and_office)) {
+            $prop = "@graph";
+            self::$i_products_by_type_and_office[$key] = $this->getFromWeatherAPI(
+                "/products/types/$type/locations/$wfo",
+            )->$prop;
+        }
+        return self::$i_products_by_type_and_office[$key];
+    }
+
+    private static $i_products_by_type = [];
+    public function getProductsByType($type)
+    {
+        if(!array_key_exists($key, self::$i_products_by_type)) {
             $prop = "@graph";
             self::$i_products_by_type[$key] = $this->getFromWeatherAPI(
-                "/products/types/$type/locations/$wfo",
+                "/products/types/$type"
             )->$prop;
         }
         return self::$i_products_by_type[$key];
