@@ -281,7 +281,9 @@ class DataLayer
 
         if (!array_key_exists($key, self::$i_products_by_type_and_office)) {
             $prop = "@graph";
-            self::$i_products_by_type_and_office[$key] = $this->getFromWeatherAPI(
+            self::$i_products_by_type_and_office[
+                $key
+            ] = $this->getFromWeatherAPI(
                 "/products/types/$type/locations/$wfo",
             )->$prop;
         }
@@ -291,10 +293,10 @@ class DataLayer
     private static $i_products_by_type = [];
     public function getProductsByType($type)
     {
-        if(!array_key_exists($key, self::$i_products_by_type)) {
+        if (!array_key_exists($key, self::$i_products_by_type)) {
             $prop = "@graph";
             self::$i_products_by_type[$key] = $this->getFromWeatherAPI(
-                "/products/types/$type"
+                "/products/types/$type",
             )->$prop;
         }
         return self::$i_products_by_type[$key];

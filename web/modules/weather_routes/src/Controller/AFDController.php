@@ -40,7 +40,7 @@ final class AFDController extends ControllerBase
     {
         return new static(
             $container->get("weather_data"),
-            $container->get("request_stack")
+            $container->get("request_stack"),
         );
     }
 
@@ -59,12 +59,12 @@ final class AFDController extends ControllerBase
     public function content()
     {
         $foo = 1;
-        $wfo = $this->request->getCurrentRequest()->query->get('wfo');
+        $wfo = $this->request->getCurrentRequest()->query->get("wfo");
         $afd = $this->weatherData->getLatestAFD($wfo);
         return [
-          '#theme' => 'weather_routes_afd',
-          '#wfo' => $wfo,
-          '#afd' => $afd
+            "#theme" => "weather_routes_afd",
+            "#wfo" => $wfo,
+            "#afd" => $afd,
         ];
     }
 }

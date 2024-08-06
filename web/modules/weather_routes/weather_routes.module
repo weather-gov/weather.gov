@@ -1,15 +1,16 @@
 <?php
 
-function weather_routes_theme($existing, $type, $theme, $path){
-  return [
-    // Custom data for the AFD route
-    'weather_routes_afd' => [
-      'render element' => 'children',
-      'template' => 'afd-page',
-      'variables' => [
-        'wfo' => null,
-        'afd' => null
-      ]
-    ]
-  ];
+function weather_routes_theme($existing, $type, $theme, $path)
+{
+    return [
+        // Custom data for the AFD route
+        "weather_routes_afd" => [
+            "render element" => "children",
+            "template" => "afd-page",
+            "variables" => [
+                "wfo" => null,
+                "afd" => null,
+            ],
+        ],
+    ];
 }
