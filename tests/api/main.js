@@ -5,7 +5,6 @@ import proxyToApi from "./proxy.js";
 import config from "./config.js";
 import serveBundle from "./serve.js";
 import * as products from "./products.js";
-import { globSync } from "glob";
 
 const app = express();
 const port = process.env.PORT ?? 8081;
@@ -16,30 +15,21 @@ const fsExists = async (filePath) =>
     .then(() => true)
     .catch(() => false);
 
-const getPointsUI = async (lines=[]) => {
-  if(!config.play){
-    return lines;
-  }
-
-  const pointFiles = await fs.readdir(path.join("./data", config.play, "points"));
-  if(!pointFiles.length){
-    return lines;
-  }
-
-  
-};
-
 const getPointFileInfo = async () => {
   try {
-    const pointFiles = await fs.readdir(path.join("./data", config.play, "points"));
-    if(!pointFiles.length){
+    const pointFiles = await fs.readdir(
+      path.join("./data", config.play, "points"),
+    );
+    if (!pointFiles.length) {
       return [];
     }
 
     return await Promise.all(
-      pointFiles.map(async(pointFile) => {
+      pointFiles.map(async (pointFile) => {
         const target = JSON.parse(
-          await fs.readFile(path.join("./data", config.play, "points", pointFile)),
+          await fs.readFile(
+            path.join("./data", config.play, "points", pointFile),
+          ),
         );
         const name = target["@bundle"]?.name ?? pointFile;
         const attributes = target["@bundle"]?.attributes ?? [];
@@ -56,8 +46,14 @@ const getPointFileInfo = async () => {
         }
         const link = `${hostName}/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
 
-        return { name, attributes, grid, point: pointFile.replace(".json", ""), link };
-      })
+        return {
+          name,
+          attributes,
+          grid,
+          point: pointFile.replace(".json", ""),
+          link,
+        };
+      }),
     );
   } catch (e) {
     return [];
@@ -85,7 +81,7 @@ const ui = async ({ error = false } = {}) => {
     // Add the UI lines for Products Info to
     // the lines array
     await products.ui("./data", config.play, lines);
-    
+
     if (pointTargets.length) {
       lines.push("<br><br>Points in the bundle:");
       lines.push("<ul>");
