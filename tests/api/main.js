@@ -4,6 +4,8 @@ import path from "node:path";
 import proxyToApi from "./proxy.js";
 import config from "./config.js";
 import serveBundle from "./serve.js";
+import * as products from "./products.js";
+import { globSync } from "glob";
 
 const app = express();
 const port = process.env.PORT ?? 8081;
@@ -13,6 +15,54 @@ const fsExists = async (filePath) =>
     .access(filePath, fs.constants.F_OK)
     .then(() => true)
     .catch(() => false);
+
+const getPointsUI = async (lines=[]) => {
+  if(!config.play){
+    return lines;
+  }
+
+  const pointFiles = await fs.readdir(path.join("./data", config.play, "points"));
+  if(!pointFiles.length){
+    return lines;
+  }
+
+  
+};
+
+const getPointFileInfo = async () => {
+  try {
+    const pointFiles = await fs.readdir(path.join("./data", config.play, "points"));
+    if(!pointFiles.length){
+      return [];
+    }
+
+    return await Promise.all(
+      pointFiles.map(async(pointFile) => {
+        const target = JSON.parse(
+          await fs.readFile(path.join("./data", config.play, "points", pointFile)),
+        );
+        const name = target["@bundle"]?.name ?? pointFile;
+        const attributes = target["@bundle"]?.attributes ?? [];
+
+        const grid = {
+          wfo: target.properties.cwa,
+          x: target.properties.gridX,
+          y: target.properties.gridY,
+        };
+
+        let hostName = "http://localhost:8080";
+        if (process.env.CLOUDGOV_PROXY) {
+          hostName = "https://weathergov-design.app.cloud.gov";
+        }
+        const link = `${hostName}/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
+
+        return { name, attributes, grid, point: pointFile.replace(".json", ""), link };
+      })
+    );
+  } catch (e) {
+    return [];
+  }
+};
 
 const ui = async ({ error = false } = {}) => {
   const lines = ["<html>"];
@@ -28,36 +78,18 @@ const ui = async ({ error = false } = {}) => {
     lines.push(`<br><a href="/stop">Stop recording</a>`);
     lines.push("<br><br>");
   } else if (config.play) {
-    const points = await fs.readdir(path.join("./data", config.play, "points"));
-    const targets = await Promise.all(
-      points.map(async (p) => {
-        const target = JSON.parse(
-          await fs.readFile(path.join("./data", config.play, "points", p)),
-        );
-        const name = target["@bundle"]?.name ?? p;
-        const attributes = target["@bundle"]?.attributes ?? [];
+    const pointTargets = await getPointFileInfo();
 
-        const grid = {
-          wfo: target.properties.cwa,
-          x: target.properties.gridX,
-          y: target.properties.gridY,
-        };
-
-        let hostName = "http://localhost:8080";
-        if (process.env.CLOUDGOV_PROXY) {
-          hostName = "https://weathergov-design.app.cloud.gov";
-        }
-        const link = `${hostName}/point/${path.basename(p, ".json").split(",").join("/")}`;
-
-        return { name, attributes, grid, point: p.replace(".json", ""), link };
-      }),
-    );
+    // Add the UI lines for Products Info to
+    // the lines array
+    await products.ui("./data", config.play, lines);
+    
 
     lines.push(`Currently playing bundle <strong>${config.play}</strong>`);
-    if (targets.length) {
+    if (pointTargets.length) {
       lines.push("<br><br>Points in the bundle:");
       lines.push("<ul>");
-      targets.forEach(({ name, attributes, grid, point, link }) => {
+      pointTargets.forEach(({ name, attributes, grid, point, link }) => {
         lines.push(
           `<li><a href="${link}">${name}</a> (${point} | ${grid.wfo} / ${grid.x}, ${grid.y})`,
         );
