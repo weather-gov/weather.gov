@@ -216,12 +216,33 @@ class WeatherDataService
         return $this->dataLayer->getSatelliteMetadata($wfo);
     }
 
-    public function getLatestAFD($wfo)
+    public function getLatestAFD($wfo = null)
     {
-        $afds = $this->dataLayer->getProductsByTypeAndOffice("AFD", $wfo);
+        if ($wfo) {
+            $afds = $this->dataLayer->getProductsByTypeAndOffice("AFD", $wfo);
+        } else {
+            $afds = $this->dataLayer->getProductsByType("AFD");
+        }
+
         if (count($afds) > 0) {
             $afd = $this->dataLayer->getProduct($afds[0]->id);
             return json_decode(json_encode($afd), true);
+        }
+        return false;
+    }
+
+    public function getLatestAFDReferences($wfo = null)
+    {
+        if ($wfo) {
+            $afds = $this->dataLayer->getProductsByTypeAndOffice("AFD", $wfo);
+        } else {
+            $afds = $this->dataLayer->getProductsByType("AFD");
+        }
+
+        if (count($afds) > 0) {
+            return array_map(function ($afdReference) {
+                return json_decode(json_encode($afdReference), true);
+            }, $afds);
         }
         return false;
     }
