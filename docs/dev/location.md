@@ -24,7 +24,7 @@ user experience.
 
 However, when we render a location weather page, we use a different place name
 database to determine what to show. For that, we use a local spatial database
-populated with cities from the Geonames cities500 dataset. Ostensibly, the
+populated with cities from the [Geonames](http://www.geonames.org/) cities500 dataset. Ostensibly, the
 cities500 dataset should include most global places with a population of 500 or
 more people. We then filter it down to just US locations.
 
