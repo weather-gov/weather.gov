@@ -78,3 +78,15 @@
 .wx-combo-box__list-option--focused {
   @extend .usa-combo-box__list-option--focused;
 }
+
+// Get rid of magic spacing inside the location search component, so we can more
+// explicitly set spacing on the outside and get the results we expect.
+.wx-location-search {
+  form {
+    label,
+    button.usa-button {
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+  }
+}

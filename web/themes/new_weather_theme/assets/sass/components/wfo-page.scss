@@ -1,0 +1,16 @@
+@use "uswds-core" as *;
+
+.wx-wfo-info {
+  .wx-wfo-image img {
+    min-width: 100%;
+  }
+}
+
+@include at-media("tablet") {
+  .wx-wfo-info {
+    .wx-wfo-image img {
+      max-height: 200px;
+      object-fit: cover;
+    }
+  }
+}
