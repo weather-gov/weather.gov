@@ -3,6 +3,7 @@
 namespace Drupal\weather_data\Service;
 
 use Drupal\weather_data\Service\HourlyTableTrait;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -25,6 +26,13 @@ class WeatherDataService
      * @var dataLayer
      */
     private $dataLayer;
+
+    /**
+     * Cache of API calls for this request.
+     *
+     * @var cache
+     */
+    private $cache;
 
     /**
      * Mapping of legacy API icon paths to new icons and conditions text.
@@ -78,9 +86,11 @@ class WeatherDataService
      */
     public function __construct(
         TranslationInterface $t,
+        CacheBackendInterface $cache,
         NewRelicMetrics $newRelic,
         DataLayer $dataLayer,
     ) {
+        $this->cache = $cache;
         $this->dataLayer = $dataLayer;
         $this->t = $t;
         $this->newRelic = $newRelic;
