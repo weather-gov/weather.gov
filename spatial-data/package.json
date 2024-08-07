@@ -6,5 +6,8 @@
   "dependencies": {
     "mariadb": "^3.2.3",
     "shapefile": "^0.6.6"
+  },
+  "devDependencies": {
+    "playwright": "^1.46.0"
   }
 }
