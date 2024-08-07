@@ -63,7 +63,6 @@ weather_routes.afd:
   defaults:
     _controller: \Drupal\weather_routes\Controller\AFDController::content
   options:
-    query:
-      wfo: ""
+    no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
