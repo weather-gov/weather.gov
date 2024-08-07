@@ -50,15 +50,19 @@ function new_weather_theme_preprocess_node__wfo_info(&$variables, $theme)
     // Process field_address information
     $field_address = $variables["content"]["field_address"];
     $address_object = $field_address[0];
-    $address_keys = array_filter(array_keys($address_object), function ($key) {
-        return !str_starts_with($key, "#");
-    });
-    $address_vars = [];
-    foreach ($address_keys as $key) {
-        $value = $address_object[$key]["#value"];
-        $address_vars[$key] = $value;
+    if ($address_object) {
+        $address_keys = array_filter(array_keys($address_object), function (
+            $key,
+        ) {
+            return !str_starts_with($key, "#");
+        });
+        $address_vars = [];
+        foreach ($address_keys as $key) {
+            $value = $address_object[$key]["#value"];
+            $address_vars[$key] = $value;
+        }
+        $variables["address"] = $address_vars;
     }
-    $variables["address"] = $address_vars;
 
     // Process all url fields
     $url_field_names = array_filter(array_keys($node->getFields()), function (
@@ -75,7 +79,7 @@ function new_weather_theme_preprocess_node__wfo_info(&$variables, $theme)
     }
 
     // Process phone number field
-    $phone_value = $node->field_phone_number_opt->first()->getValue();
+    $phone_value = $node->field_phone_number_opt->first()?->getValue();
     $variables["phone"] = $phone_value;
 }
 

@@ -8,7 +8,7 @@ module.exports.openDatabase = async () => {
     user: args[0] ?? "drupal",
     password: args[1] ?? "drupal",
     database: args[2] ?? "weathergov",
-    host: args[3] ?? "localhost",
+    host: args[3] ?? "database",
     port: args[4] ?? 3306,
   };
 
