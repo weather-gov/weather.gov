@@ -1,74 +1,82 @@
 <div class="wx-wfo-info margin-bottom-4">
+
 {% if content.field_wfo_image is not empty %}
-  {{ content.field_wfo_image }}
+  <div class="wx-wfo-image grid-container padding-0 tablet:padding-2">
+    {{ content.field_wfo_image }}
+  </div>
 {% endif %}
 
-<h1 class="text-normal text-primary-darker">
-  {{ wfo.name }} ({{ wfo.code }}) National Weather Service Office
-</h1>
+<div class="grid-container">
+  <h1 class="text-normal text-primary-darker">
+    {{ wfo.name }} ({{ wfo.code }}) National Weather Service Office
+  </h1>
 
-<div class="grid-row">
-  <div class="grid-col-12 tablet:grid-col-4">
-    <h2 class="text-normal text-primary-darker">About</h2>
-    {{content.body}}
+  <div class="grid-row">
+    <div class="grid-col-12 tablet:grid-col-4">
+      <h2 class="text-normal text-primary-darker">About</h2>
+      {{content.body}}
+    </div>
+
+    <div class="grid-col-12 tablet:grid-col-8">
+      <figure class="margin-0">
+        [[ map ]]
+        <figcaption>{{ "Coverage area for @wfo WFO" | t({ "@wfo": wfo.name })}}</figcaption>
+      </figure>
+    </div>
   </div>
 
-  <div class="grid-col-12 tablet:grid-col-8">
-    <figure class="margin-0">
-      [[ map ]]
-      <figcaption>{{ "Coverage area for @wfo WFO" | t({ "@wfo": wfo.name })}}</figcaption>
-    </figure>
+  <div class="grid-row">
+    <div class="grid-col-12 tablet:grid-col-6">
+      <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">Local expertise</h2>
+      <p>
+        Decision support is description tk tk tk
+      </p>
+      <ul class="padding-left-1">
+        <li class="padding-y-05"><a href="#">Briefing</a></li>
+        <li class="padding-y-05"><a href="#">County finder</a></li>
+        <li class="padding-y-05"><a href="#">State page</a></li>
+        <li class="padding-y-05"><a href="#">Resource 1</a></li>
+        <li class="padding-y-05"><a href="#">Resource 2</a></li>
+        <li class="padding-y-05"><a href="#">Resource 3</a></li>
+      </ul>
+    </div>
+
+    <div class="grid-col-12 tablet:grid-col-6">
+      <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">Forecaster's discussion</h2>
+      <p>
+        The purpose of the area forecast discussion is to provide the
+        meteorological/scientific reasoning behind the forecast
+      </p>
+      <a href="#">Current Area Forecast Discussion</a>
+    </div>
   </div>
-</div>
 
-<div class="grid-row">
-  <div class="grid-col-12 tablet:grid-col-6">
-    <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">Local expertise</h2>
-    <p>
-      Decision support is description tk tk tk
-    </p>
-    <ul class="padding-left-1">
-      <li class="padding-y-05"><a href="#">Briefing</a></li>
-      <li class="padding-y-05"><a href="#">County finder</a></li>
-      <li class="padding-y-05"><a href="#">State page</a></li>
-      <li class="padding-y-05"><a href="#">Resource 1</a></li>
-      <li class="padding-y-05"><a href="#">Resource 2</a></li>
-      <li class="padding-y-05"><a href="#">Resource 3</a></li>
-    </ul>
+  <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">Contact us</h2>
+  <div class="grid-row">
+    <div class="grid-col-12 tablet:grid-col-4">
+      {% set hasPhone = content.field_phone_number_opt | length %}
+      {% if hasPhone > 0 %}
+        {{ content.field_phone_number_opt }}
+      {% endif %}
+
+      {% set hasAddress = content.field_address | length %}
+      {% if hasAddress %}
+      {{ content.field_address }}
+      {% endif %}
+    </div>
+
+    <div class="grid-col-12 tablet:grid-col-8">
+      {% set hasFacebook = content.field_facebook_url | length %}
+      {% set hasTwitter = content.field_twitter_url | length %}
+      {% set hasYoutube = content.field_youtube_url | length %}
+      {% set hasSocial = hasFacebook > 0 or hasTwitter > 0 or hasYoutube > 0 %}
+      {% if hasSocial %}
+        <ul class="usa-list usa-list--unstyled"> 
+          {{ content.field_facebook_url }}
+          {{ content.field_twitter_url }}
+          {{ content.field_youtube_url }}
+        </ul>
+      {% endif %}
+    </div>
   </div>
-
-  <div class="grid-col-12 tablet:grid-col-6">
-    <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">Forecaster's discussion</h2>
-    <p>
-      The purpose of the area forecast discussion is to provide the
-      meteorological/scientific reasoning behind the forecast
-    </p>
-    <a href="#">Current Area Forecast Discussion</a>
-  </div>
-</div>
-
-<h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">Contact us</h2>
-
-{% set hasPhone = content.field_phone_number_opt | length %}
-{% if hasPhone > 0 %}
-  {{ content.field_phone_number_opt }}
-{% endif %}
-
-{% set hasAddress = content.field_address | length %}
-{% if hasAddress %}
-{{ content.field_address }}
-{% endif %}
-
-
-{% set hasFacebook = content.field_facebook_url | length %}
-{% set hasTwitter = content.field_twitter_url | length %}
-{% set hasYoutube = content.field_youtube_url | length %}
-{% set hasSocial = hasFacebook > 0 or hasTwitter > 0 or hasYoutube > 0 %}
-{% if hasSocial %}
-  <ul class="usa-list usa-list--unstyled"> 
-    {{ content.field_facebook_url }}
-    {{ content.field_twitter_url }}
-    {{ content.field_youtube_url }}
-  </ul>
-{% endif %}
 </div>
