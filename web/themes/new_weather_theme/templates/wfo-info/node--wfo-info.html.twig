@@ -7,14 +7,14 @@
 
   <div class="grid-container">
     <h1 class="text-normal text-primary-darker">
-      {{ wfo.name }} ({{ wfo.code }}) National Weather Service Office
+      {{ "@wfoName (@wfoCode) National Weather Service Office" | t({ "@wfoName": wfo.name, "@wfoCode": wfo.code }) }}
     </h1>
 
     <div class="grid-row">
       {% set hasAbout = not (content.body.isEmpty or content.body.0 is not defined) %}
       {% if hasAbout %}
       <div class="grid-col-12 tablet:grid-col-4">
-        <h2 class="text-normal text-primary-darker">About</h2>
+        <h2 class="text-normal text-primary-darker">{{ "About" | t }}</h2>
         {{content.body}}
       </div>
       {% endif %}
@@ -27,9 +27,15 @@
       </div>
     </div>
 
+    {#
+      TODO: This is all placeholder stuff. When it comes out in favor of real
+      stuff, make sure we add things to the translations list appropriately.
+    #}
     <div class="grid-row">
       <div class="grid-col-12 tablet:grid-col-6">
-        <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">Local expertise</h2>
+        <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">
+          {{ "Local expertise" | t }}
+        </h2>
         <p>
           Decision support is description tk tk tk
         </p>
@@ -44,7 +50,9 @@
       </div>
 
       <div class="grid-col-12 tablet:grid-col-6">
-        <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">Forecaster's discussion</h2>
+        <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1">
+          {{ "Forecaster's discussion" | t }}
+        </h2>
         <p>
           The purpose of the area forecast discussion is to provide the
           meteorological/scientific reasoning behind the forecast
@@ -65,7 +73,9 @@
     {% set hasContact = hasSocial or hasAddress or hasPhone or hasEmail %}
 
     {% if hasContact %}
-      <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1 margin-bottom-0">Contact us</h2>
+      <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1 margin-bottom-0">
+        {{ "Contact us" | t }}
+      </h2>
 
       <div class="grid-row margin-top-2">
         <div class="grid-col-12 tablet:grid-col-4">
