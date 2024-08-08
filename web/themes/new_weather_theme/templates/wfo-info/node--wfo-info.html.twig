@@ -55,25 +55,34 @@
 
     {% set hasPhone = phone is not empty %}
     {% set hasAddress = address is not empty %}
+    {% set hasEmail = email is not empty %}
 
     {% set hasFacebook = not (content.field_facebook_url.isEmpty or content.field_facebook_url.0 is not defined) %}
     {% set hasTwitter = not (content.field_twitter_url.isEmpty or content.field_twitter_url.0 is not defined) %}
     {% set hasYoutube = not (content.field_youtube_url.isEmpty or content.field_youtube_url.0 is not defined) %}
     {% set hasSocial = hasFacebook or hasTwitter or hasYoutube %}
 
-    {% set hasContact = hasSocial or hasAddress or hasPhone %}
+    {% set hasContact = hasSocial or hasAddress or hasPhone or hasEmail %}
 
     {% if hasContact %}
       <h2 class="border-top-1px border-base-light text-normal text-primary-darker padding-top-1 margin-bottom-0">Contact us</h2>
 
       <div class="grid-row margin-top-2">
         <div class="grid-col-12 tablet:grid-col-4">
-          {% if hasPhone > 0 %}
+          {% if hasPhone %}
             {{ content.field_phone_number_opt }}
           {% endif %}
 
+          {% if hasEmail %}
+            {% if hasPhone %}<div class="margin-top-2">{% endif %}
+              {{ content.field_wfo_email }}
+            {% if hasPhone %}</div>{% endif %}
+          {% endif %}
+
           {% if hasAddress %}
-          {{ content.field_address }}
+            {% if hasPhone or hasEmail %}<div class="margin-top-2">{% endif %}
+              {{ content.field_address }}
+            {% if hasPhone or hasEmail %}</div>{% endif %}
           {% endif %}
         </div>
 

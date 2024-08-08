@@ -1,0 +1,25 @@
+uuid: 12c58e50-6290-46f0-b244-0a8da972254f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_wfo_email
+    - node.type.wfo_info
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_info.field_wfo_email
+field_name: field_wfo_email
+entity_type: node
+bundle: wfo_info
+label: 'Email address'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

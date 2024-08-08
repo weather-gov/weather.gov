@@ -64,6 +64,13 @@ function new_weather_theme_preprocess_node__wfo_info(&$variables, $theme)
         $variables["address"] = $address_vars;
     }
 
+    // Check if there is email
+    $field_email = $variables["content"]["field_wfo_email"];
+    $email_object = $field_email[0];
+    if ($email_object) {
+        $variables["email"] = true;
+    }
+
     // Process all url fields
     $url_field_names = array_filter(array_keys($node->getFields()), function (
         $key,
