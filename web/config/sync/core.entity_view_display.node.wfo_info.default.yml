@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.wfo_info.field_phone_number_opt
     - field.field.node.wfo_info.field_twitter_url
     - field.field.node.wfo_info.field_wfo
+    - field.field.node.wfo_info.field_wfo_email
     - field.field.node.wfo_info.field_wfo_image
     - field.field.node.wfo_info.field_youtube_url
     - node.type.wfo_info
@@ -32,7 +33,7 @@ content:
     region: content
   field_address:
     type: address_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 109
@@ -47,9 +48,9 @@ content:
     region: content
   field_phone_number_opt:
     type: phone_number_international
-    label: above
+    label: hidden
     settings:
-      as_link: false
+      as_link: true
     third_party_settings: {  }
     weight: 108
     region: content
@@ -69,9 +70,16 @@ content:
     third_party_settings: {  }
     weight: 102
     region: content
+  field_wfo_email:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 110
+    region: content
   field_wfo_image:
     type: image
-    label: above
+    label: hidden
     settings:
       image_link: ''
       image_style: ''
