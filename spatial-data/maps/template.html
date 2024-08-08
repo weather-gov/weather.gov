@@ -24,16 +24,26 @@
   <body>
     <div id="map"></div>
     <script type="text/javascript">
+      // This function is created globally and can be called from Playwright.
+      // It expects a GeoJSON object representing the WFO bounds.
       window.draw = (geojson) => {
+        // Turn off the zoom and attribution controls. Generally we'd leave the
+        // attribution, but Leaflet is created and primarily  maintained by a
+        // Ukrainian team and they have added the Ukrainian flag to the
+        // attribution to raise awareness for the war Russia is waging against
+        // them. However, as we are producing images to be used by the US
+        // government, it seems inappropriate to place other countries' flags
+        // on them absent a directive from elsewhere.
         const map = L.map("map", { zoomControl: false });
-
         map.attributionControl.setPrefix("");
 
+        // Use the same street base map that we use elsewhere.
         L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
           apiKey:
             "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ",
         }).addTo(map);
 
+        // Slap the WFO polygon on that thing.
         const wfo = L.geoJSON(geojson, {
           style: {
             fillColor: "#B4C1CD",
@@ -43,10 +53,9 @@
           },
         }).addTo(map);
 
+        // Compute the bounds, center the map accordingly, and then zoom out
+        // one step so we have a somewhat broader view.
         const bounds = wfo.getBounds();
-        console.log(bounds);
-        console.log(bounds.getCenter());
-
         map.fitBounds(bounds);
         map.zoomOut(1);
       };

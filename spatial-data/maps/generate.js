@@ -11,8 +11,9 @@ const sleep = async (ms) =>
     }, ms);
   });
 
+// Do pathing based on the location of *this* file, not where it was executed
+// from.
 const srcPath = path.dirname(require.main.filename);
-
 const outputPath = path.resolve(
   srcPath,
   "../../web/themes/new_weather_theme/assets/images/wfos/",
@@ -21,17 +22,22 @@ const outputPath = path.resolve(
 async function main() {
   const db = await openDatabase();
 
-  const url = pathToFileURL(path.join(srcPath, "template.html")).href;
-
   const wfos = await db.query(
     `SELECT wfo,ST_ASGEOJSON(shape) shape FROM ${table}`,
   );
+  // We don't need the DB connection anymore, but rather than wait here, we can
+  // continue with other stuff and await it later.
   const dbEnd = db.end();
 
   const browser = await chromium.launch();
   const page = await browser.newPage();
+
+  const url = pathToFileURL(path.join(srcPath, "template.html")).href;
   await page.goto(url);
 
+  // For each WFO, we'll load the template file, call its global draw function
+  // passing in the WFO's GeoJSON, and save a screenshot of the resulting map
+  // to disk.
   for await (const { wfo, shape } of wfos) {
     await page.reload();
     await sleep(500);
@@ -45,6 +51,8 @@ async function main() {
     await map.screenshot({ path: path.join(outputPath, `${wfo}.png`) });
   }
 
+  // Wait for the database and browser to fully close.
   await Promise.all([dbEnd, browser.close()]);
 }
+
 main();
