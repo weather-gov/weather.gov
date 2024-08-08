@@ -25,7 +25,7 @@ class WFOPromoBlock extends WeatherBlockBase
 
             $promo = $this->entityTypeService->getLatestNodeFromWFO(
                 $grid->wfo,
-                "wfo_promo",
+                "wfo_info",
             );
 
             // If we actually have a story, pass its ID on for the template
