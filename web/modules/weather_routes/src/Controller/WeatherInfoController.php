@@ -58,7 +58,6 @@ final class WeatherInfoController extends ControllerBase
 
         if (count($results) == 0) {
             return false;
-            // throw new NotFoundHttpException();
         }
         return $results[0];
     }
