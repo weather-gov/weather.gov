@@ -53,11 +53,9 @@
           },
         }).addTo(map);
 
-        // Compute the bounds, center the map accordingly, and then zoom out
-        // one step so we have a somewhat broader view.
+        // Compute the bounds and center the map accordingly.
         const bounds = wfo.getBounds();
         map.fitBounds(bounds);
-        map.zoomOut(1);
       };
     </script>
   </body>
