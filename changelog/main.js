@@ -37,7 +37,7 @@ const main = async () => {
   const ul = document.createElement("ul");
   for (const pull of pulls) {
     const li = document.createElement("li");
-    li.innerHTML = `<a href="${pull.url}">#${pull.number}</a> - ${pull.title}`;
+    li.innerHTML = `<a href="https://github.com/weather-gov/weather.gov/pull/${pull.number}">#${pull.number}</a> - ${pull.title}`;
     ul.append(li);
   }
 
