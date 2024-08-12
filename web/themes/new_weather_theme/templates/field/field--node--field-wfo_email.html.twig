@@ -1,6 +1,8 @@
+<div class="email">
   <span class="text-bold text-primary-darker">
     {{ "email" | t }}:
   </span>
   {% for item in items %}
     <a href="mailto:{{ item.content }}">{{ item.content }}</a>
   {% endfor %}
+</div>

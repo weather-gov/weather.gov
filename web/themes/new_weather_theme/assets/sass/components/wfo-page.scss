@@ -1,8 +1,20 @@
 @use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
 
 .wx-wfo-info {
   .wx-wfo-image img {
     min-width: 100%;
+  }
+
+  .address {
+    margin-top: 0;
+  }
+
+  .phone a,
+  .email a,
+  .address a {
+    @extend .usa-link;
   }
 }
 
