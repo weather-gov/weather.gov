@@ -1,0 +1,26 @@
+{% set preamble = afd.parsedProductText.preamble %}
+{% set body = afd.parsedProductText.body %}
+<div class="afd-preamble">
+    {% for key,val in preamble %}
+        <span class="afd-preamble-{{key}} text-pre-line">
+            {% for node in val %}
+                {{node.content}}
+            {% endfor %}
+        </span>
+    {% endfor %}
+</div>
+
+<div class="afd-body">
+    {% for node in body %}
+        {% if node.type == 'header' %}
+            <h2 class="usa-heading">{{node.content}}</h2>
+            {% if node.postHeader %}
+                <h3>{{node.postHeader}}</h3>
+            {% endif %}
+
+        {% else %}
+            <p class="usa-text">{{node.content}}</p>
+        {% endif %}
+    {% endfor %}
+</div>
+
