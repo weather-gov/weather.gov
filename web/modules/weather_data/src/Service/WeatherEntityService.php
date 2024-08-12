@@ -90,4 +90,12 @@ class WeatherEntityService
 
         return $this->getLatestNodeByTerm($termID, "field_wfo", $nodeType);
     }
+
+    public function getWFOEntity($wfo)
+    {
+        $term = $this->entityTypeManager
+            ->getStorage("taxonomy_term")
+            ->loadByProperties(["field_wfo_code" => $wfo]);
+        return $term;
+    }
 }
