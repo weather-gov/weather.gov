@@ -1,0 +1,41 @@
+<h1>
+    WFO Information Page
+</h1>
+
+<h2>Image</h2>
+{{content.field_wfo_image}}
+
+<h2>WFO</h2>
+<dl>
+    {% for key,val in wfo %}
+        <dt>{{key}}</dt>
+        <dd>{{val}}</dd>
+    {% endfor %}
+</dl>
+
+<h2>About</h2>
+{{content.body}}
+
+<h2>Phone number</h2>
+<dl>
+    {% for key,val in phone %}
+        <dt>{{key}}</dt>
+        <dd>{{val}}</dd>
+    {% endfor %}
+</dl>
+
+<h2>Address</h2>
+<dl>
+    {% for key,val in address %}
+        <dt>{{key}}</dt>
+        <dd>{{val}}</dd>
+    {% endfor %}
+</dl>
+
+<h2>External links</h2>
+<dl>
+    {% for key,val in external_links %}
+        <dt>{{key}}</dt>
+        <dd>{{val}}</dd>
+    {% endfor %}
+</dl>
