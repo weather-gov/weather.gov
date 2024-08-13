@@ -1,0 +1,6 @@
+{
+  "all": true,
+  "reporter": ["html"],
+  "exclude": ["node_modules/**", "coverage", "**/*.test.js"],
+  "require": ["mocha.js"]
+}
