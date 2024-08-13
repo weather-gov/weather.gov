@@ -1,4 +1,4 @@
-{% if precipHours %}
+{% if qpf %}
   <div class="grid-row"> 
     <div class="grid-col-12"> 
       <h5 class="wx-visual-h3 font-heading-md text-normal text-primary-darker margin-top-1 margin-bottom-105">{{ "Precipitation amounts" |t }}</h5>
@@ -14,10 +14,10 @@
           </tr>
         </thead>
         <tbody>
-          {% for hour in precipHours %}
+          {% for hour in qpf %}
             <tr>
-              <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">{{ hour.start }}&emsp13;–&emsp13;{{ hour.end }}</td>
-              <td class="text-align-right">{{ hour.value }} {{ "inches" | t }}</td>
+              <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">{{ hour.startHour }}&emsp13;–&emsp13;{{ hour.endHour }}</td>
+              <td class="text-align-right">{{ hour.in }} {{ "inches" | t }}</td>
             </tr>
           {% endfor %}
         </tbody>

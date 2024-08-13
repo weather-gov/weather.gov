@@ -27,15 +27,16 @@ only be a nighttime period.
           </h4>
 
           <div class="display-flex">
-          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods, 'useOnlyLow': useOnlyLow  } %}
+          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods } %}
           </div>
         </div>
 
-        {% set alertCount = alertPeriods | length %}
+        {% set alertCount = alerts.metadata.count %}
+        {% set alertLevel = alerts.metadata.highest %}
+
         {% if alertCount > 0 %}
-          {% set alertID = alertPeriods[0].alert.alertId %}
-          {% set alertType = alertPeriods[0].alert.event %}
-          {% set alertLevel = highestAlertLevel %}
+          {% set alertID = alerts.items[0].id %}
+          {% set alertType = alerts.items[0].event %}
 
           {% if alertCount > 1 %}
             {% set alertID = null %}
@@ -71,20 +72,20 @@ only be a nighttime period.
             {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
         </span>
         <div class="display-flex flex-row flex-align-start">
-          {% if period.icon.base %}
+          {% if period.data.icon.base %}
           <div class="width-5 height-5 margin-right-105">
             <svg role="img" aria-hidden="true" class="width-full height-full">
-              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.icon.base }}"></use>
+              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.data.icon.base }}"></use>
             </svg>
           </div>
           {% endif %}
           <div class="flex-1">
             <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
-            {{period.shortForecast}}
+            {{ period.data.description }}
             </p>
-            {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
+            {% if period.data.probabilityOfPrecipitation.percent and period.data.probabilityOfPrecipitation.percent > 1 %}
             <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-            {{period.probabilityOfPrecipitation}}% {{ "chance of precipitation" | t }}
+            {{ period.data.probabilityOfPrecipitation.percent }}% {{ "chance of precipitation" | t }}
             </p>
             {% endif %}
           </div>
@@ -93,8 +94,7 @@ only be a nighttime period.
       {% endfor %}
     </div>
 
-    {% set hourCount = dayHours | length %}
-    {% if hourCount > 0 %}
+    {% if dayHours | length > 0 %}
       <wx-hourly-toggle class="text-primary margin-top-1" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-togglee" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="remove_circle" data-hidden-icon-name="add_circle" tabindex="0">
         <span class="margin-top-05 margin-right-05">
             <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
@@ -106,14 +106,11 @@ only be a nighttime period.
       <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee">
         {% include '@new_weather_theme/partials/hourly-table.html.twig'
         with {
-          for: periods[0].monthAndDay,
           hours: dayHours,
-          alertPeriods: alertPeriods,
-          itemId: itemId,
-          precipPeriods: precipPeriods
+          alerts: alerts.items,
         }
         %}
-        {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipPeriods } %}
+        {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'qpf': qpf } %}
       </div>
     {% endif %}
 

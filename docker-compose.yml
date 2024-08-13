@@ -25,6 +25,31 @@ services:
       - ./tests/api:/app
       - /app/node_modules
 
+  api-interop-layer:
+    build:
+      context: ./api-interop-layer
+      dockerfile: Dockerfile
+    environment:
+      PORT: 8082
+      DB_NAME: weathergov
+      DB_USERNAME: drupal
+      DB_PASSWORD: drupal
+      DB_HOST: database
+      DB_PORT: 3306
+      API_URL: http://api-proxy:8081
+      API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
+      NEWRELIC_LICENSE: $NEWRELIC_LICENSE
+    networks:
+      - weather.gov
+    links:
+      - database
+      - api-proxy
+    ports:
+      - 8082:8082
+    volumes:
+      - ./api-interop-layer:/app
+      - /app/node_modules
+
   drupal:
     build:
       context: ./
@@ -40,8 +65,10 @@ services:
     links:
       - database
       - api-proxy
+      - api-interop-layer
     environment:
       API_URL: http://api-proxy:8081
+      API_INTEROP_URL: http://api-interop-layer:8082
       DRUPAL_DB_NAME: weathergov
       DRUPAL_DB_USERNAME: drupal
       DRUPAL_DB_PASSWORD: drupal
