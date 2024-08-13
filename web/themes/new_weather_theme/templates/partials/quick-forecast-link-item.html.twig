@@ -4,13 +4,12 @@ This template expects two variables available to it:
 - dayIndex: The index of the day currently being rendered within
 the content
 #}
-{% set day = content[dayIndex] %}
 {% set dayId = day.periods[0].monthAndDay | lower | replace({" ":"-"}) %}
-{% set hasAlertIcon = day.highestAlertLevel != "" %}
-{% set temps = day.periods | map(p => p.temperature) %}
+{% set hasAlertIcon = day.alerts.metadata.highest != "" %}
+{% set temps = day.periods | map(p => p.data.temperature.degF) %}
 {% set low = min(temps) %}
 {% set high = max(temps) %}
-{% set pops = day.periods | map(p => p.probabilityOfPrecipitation) %}
+{% set pops = day.periods | map(p => p.data.probabilityOfPrecipitation.percent) %}
 {% set pop = max(pops) %}
 {% if pop is null %}
     {% set pop = 0 %}
@@ -24,7 +23,7 @@ the content
         <time class="" datetime="{{day.periods[0].startTime}}" aria-label="{{"Date" | t}}">
             <span>{{day.periods[0].dayName}}</span>
             <span class="display-block">
-                {{day.periods[0].monthNumericString}}/{{day.periods[0].dayNumericString}}
+                {{day.monthNumericString}}/{{day.dayNumericString}}
             </span>
         </time>
 
@@ -36,7 +35,7 @@ the content
             {% endif %}
 
             <svg role="img" aria-hidden="true" class="wx-alert-icon">
-                <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ day.periods[0].icon.base }}"></use>
+                <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ day.periods[0].data.icon.base }}"></use>
             </svg>
         </div>
 
