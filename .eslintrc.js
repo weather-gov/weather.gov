@@ -1,9 +1,7 @@
 module.exports = {
+  root: true,
   extends: ["airbnb-base", "prettier"],
-  ignorePatterns: [
-    "tests/translations/**/*.js",
-    "uswds*.js"
-  ],
+  ignorePatterns: ["tests/translations/**/*.js", "uswds*.js"],
   rules: {
     // For imports in the browser, file extensions are always required.
     "import/extensions": ["error", "always"],
@@ -45,6 +43,25 @@ module.exports = {
       rules: {
         "class-methods-use-this": 0,
       },
+    },
+    {
+      files: ["api-interop-layer/**/*.test.js"],
+      extends: ["airbnb-base", "prettier"],
+      parserOptions: { ecmaVersion: 2024 },
+      rules: {
+        // This rule disallows using require() on files in devDependencies. But
+        // for test code, we'll rely on that heavily so we can disable the rule
+        // in here.
+        "import/no-extraneous-dependencies": [0],
+
+        // For imports in Node, file extensions are optional and discouraged as
+        // a matter of practice.
+        "import/extensions": ["error", "always"],
+
+        // chai provides "empty" expressions, such as `to.be.true`
+        "no-unused-expressions": "off"
+      },
+      env: { mocha: true },
     },
     {
       files: [

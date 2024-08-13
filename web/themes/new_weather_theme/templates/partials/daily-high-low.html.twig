@@ -1,7 +1,20 @@
-{% set temps = periods | map(p => p.temperature) %}
+{% set temps = periods | map(p => p.data.temperature.degF) %}
 {% set low = min(temps) %}
 {% set high = max(temps) %}
-{% if useOnlyLow == false %}
+
+{#
+  If there are two or more periods, we'll always show both high and low. If
+  there is only one period, then which we show depends on whether or not the
+  single period is a day time period.
+#}
+{% if periods | length > 1 or periods[0].isDaytime %}
+  {% set showHigh = true %}
+{% endif %}
+{% if periods | length > 1 or not periods[0].isDaytime %}
+  {% set showLow = true %}
+{% endif %}
+
+{% if showHigh %}
 <div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">
   <span class="display-block margin-bottom-05 font-mono-3xs font-family-mono text-base-darker text-medium text-ls-1 text-uppercase">
     {{ "High" | t }}
@@ -13,7 +26,7 @@
 </div>
 {% endif %}
 
-{% if low != null %}
+{% if showLow %}
 <div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">
   <span class="display-block margin-bottom-05 font-mono-3xs font-family-mono text-base-darker text-ls-1 text-uppercase">
     {{ "Low" | t }}

@@ -18,13 +18,14 @@ class WFOPromoBlock extends WeatherBlockBase
      */
     public function build()
     {
-        $location = $this->getLocation();
+        $wfo = false;
+        if (array_key_exists("wfo", $this->configuration)) {
+            $wfo = strtoupper($this->configuration["wfo"]);
+        }
 
-        if ($location->grid) {
-            $grid = $location->grid;
-
+        if ($wfo) {
             $promo = $this->entityTypeService->getLatestNodeFromWFO(
-                $grid->wfo,
+                $wfo,
                 "wfo_info",
             );
 
@@ -60,13 +61,13 @@ class WFOPromoBlock extends WeatherBlockBase
             }
 
             // If there's not a WFO info, just return the name and code.
-            $taxonomyTerm = $this->entityTypeService->getWFOEntity($grid->wfo);
+            $taxonomyTerm = $this->entityTypeService->getWFOEntity($wfo);
             if ($taxonomyTerm) {
                 $name = $taxonomyTerm->get("name")->getString();
 
                 return [
                     "name" => $name,
-                    "code" => $grid->wfo,
+                    "code" => $wfo,
                     "phone" => false,
                     "social" => false,
                 ];
