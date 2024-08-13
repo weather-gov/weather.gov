@@ -45,6 +45,7 @@ const getPointFileInfo = async () => {
           hostName = "https://weathergov-design.app.cloud.gov";
         }
         const link = `${hostName}/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
+        const interop = `http://localhost:8082/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
 
         return {
           name,
@@ -52,6 +53,7 @@ const getPointFileInfo = async () => {
           grid,
           point: pointFile.replace(".json", ""),
           link,
+          interop,
         };
       }),
     );
@@ -85,18 +87,20 @@ const ui = async ({ error = false } = {}) => {
     if (pointTargets.length) {
       lines.push("<br><br>Points in the bundle:");
       lines.push("<ul>");
-      pointTargets.forEach(({ name, attributes, grid, point, link }) => {
-        lines.push(
-          `<li><a href="${link}">${name}</a> (${point} | ${grid.wfo} / ${grid.x}, ${grid.y})`,
-        );
+      pointTargets.forEach(
+        ({ name, attributes, grid, point, link, interop }) => {
+          lines.push(
+            `<li><a href="${link}">${name}</a> (${point} | ${grid.wfo} / ${grid.x}, ${grid.y}) [<a href="${interop}">interop layer</a>]`,
+          );
 
-        if (Array.isArray(attributes) && attributes.length > 0) {
-          lines.push("<ul>");
-          lines.push(attributes.map((v) => `<li>${v}</li>`).join(""));
-          lines.push("</ul>");
-        }
-        lines.push(`</li>`);
-      });
+          if (Array.isArray(attributes) && attributes.length > 0) {
+            lines.push("<ul>");
+            lines.push(attributes.map((v) => `<li>${v}</li>`).join(""));
+            lines.push("</ul>");
+          }
+          lines.push(`</li>`);
+        },
+      );
       lines.push("</ul>");
     }
     lines.push(`<br><a href="/stop">Stop playing</a>`);

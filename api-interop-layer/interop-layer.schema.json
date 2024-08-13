@@ -1,0 +1,747 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://weather.gov/interop.schema.json",
+  "title": "weather.gov API interoperability layer",
+  "description": "The results of querying for a specific latitude and longitude",
+  "type": "object",
+  "properties": {
+    "alerts": {
+      "title": "Point alerts",
+      "description": "Alerts that are applicable to the given lat/lon.",
+      "type": "object",
+      "properties": {
+        "items": {
+          "title": "List of alerts",
+          "description": "The alerts themselves",
+          "type": "array",
+          "items": {
+            "title": "Alert",
+            "type": "object",
+            "properties": {
+              "metadata": {
+                "title": "Alert metadata",
+                "description": "Prioritization and categorization metadata",
+                "type": "object",
+                "properties": {
+                  "level": {
+                    "title": "Alert level",
+                    "description": "Alert level information",
+                    "type": "object",
+                    "properties": {
+                      "priority": {
+                        "description": "The priority of this alert relative to others. Lower numbers are higher priority.",
+                        "type": "integer"
+                      },
+                      "text": {
+                        "$ref": "#/$defs/alert/level"
+                      }
+                    },
+                    "required": ["priority", "text"]
+                  },
+                  "kind": {
+                    "$ref": "#/$defs/alert/level"
+                  },
+                  "priority": {
+                    "description": "The priority of this alert relative to others. Lower numbers are higher priority.",
+                    "type": "integer"
+                  }
+                },
+                "required": ["level", "kind", "priority"]
+              },
+              "id": {
+                "description": "ID of this alert. NOTE: may not be globally unique",
+                "type": "string"
+              },
+              "event": {
+                "description": "The alert event, such as 'Severe Thunderstorm Warning.'",
+                "type": "string"
+              },
+              "sender": {
+                "description": "The government office responsible for issuing this alert. Usually a NWS office, but sometimes state or local civil authorities.",
+                "type": "string"
+              },
+              "locations": {
+                "title": "Alert locations",
+                "description": "A list of counties by state region and cities, if an alert description includes embedded location information.",
+                "type": "object",
+                "properties": {
+                  "regions": {
+                    "title": "List of regions",
+                    "description": "A list of state regions covered by this alert, as derived from the alert description.",
+                    "type": "array",
+                    "items": {
+                      "title": "Alert location",
+                      "type": "object",
+                      "properties": {
+                        "area": {
+                          "description": "The name of a state region covered by this alert, as derived from the alert description.",
+                          "type": "string"
+                        },
+                        "counties": {
+                          "title": "List of counties",
+                          "description": "A list of counties within this state region covered by this alert, as derived from the alert description.",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": ["area", "counties"]
+                    }
+                  },
+                  "cities": {
+                    "title": "List of cities",
+                    "description": "A list of cities impacted by this alert, as derived from the alert description.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["regions", "cities"]
+              },
+              "description": {
+                "title": "List of parsed content nodes",
+                "description": "The alert description, parsed into content nodes.",
+                "type": "array",
+                "items": {
+                  "title": "Parsed content node",
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "The kind of content node",
+                      "type": "string",
+                      "enum": ["heading", "paragraph"]
+                    },
+                    "nodes": {
+                      "title": "List of parsed in-paragraph nodes",
+                      "description": "For paragraph nodes, the list of content nodes that go into the paragraph.",
+                      "type": "array",
+                      "items": {
+                        "title": "Parsed in-paragraph node",
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "description": "The type of in-paragraph content node.",
+                            "type": "string",
+                            "enum": ["text", "link"]
+                          },
+                          "text": {
+                            "description": "For text nodes, the textual content.",
+                            "type": "string"
+                          },
+                          "url": {
+                            "description": "For link nodes, the URL.",
+                            "type": "string"
+                          },
+                          "external": {
+                            "description": "For link nodes, whether the link is for a site outside of weather.gov.",
+                            "type": "boolean"
+                          }
+                        },
+                        "required": ["type"]
+                      }
+                    },
+                    "text": {
+                      "description": "For heading nodes, the textual content of the node",
+                      "type": "string"
+                    }
+                  },
+                  "required": ["type"]
+                }
+              },
+              "instruction": {
+                "description": "Safety instructions associated with the alert",
+                "type": "string"
+              },
+              "area": {
+                "title": "List of areas",
+                "description": "A list of areas affected by this alert, as provided by the origin.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "sent": {
+                "description": "When the alert was initially sent.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "effective": {
+                "description": "When the alert becomes effective.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "onset": {
+                "description": "When the conditions described in the alert are forecast to begin.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "expires": {
+                "description": "When the alert will expire. NOTE: this is NOT when the hazardous conditions are forecast to end.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "ends": {
+                "description": "When the conditions described in the alert are forecast to end.",
+                "type": ["string", "null"],
+                "format": "date-time"
+              },
+              "finish": {
+                "description": "When the alert will no longer displayed on weather.gov, as derived from the expires and ends properties.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "geometry": {
+                "description": "GeoJSON GeometryCollection representing the area covered by this alert.",
+                "$ref": "https://geojson.org/schema/GeometryCollection.json"
+              },
+              "duration": {
+                "description": "When the alert will no longer be displayed on weather.gov, in human-friendly text based on the timezone of the alert area.",
+                "type": "string"
+              },
+              "timing": {
+                "title": "Alert timing",
+                "description": "Human-friendly text describing the beginning and completion of the alert, based on the timezone of the alert area.",
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": ["start", "end"]
+              }
+            },
+            "required": [
+              "id",
+              "event",
+              "sender",
+              "description",
+              "instruction",
+              "area",
+              "sent",
+              "effective",
+              "onset",
+              "expires",
+              "ends",
+              "finish",
+              "geometry",
+              "duration",
+              "timing"
+            ]
+          }
+        },
+        "highestLevel": {
+          "$ref": "#/$defs/alert/level"
+        }
+      },
+      "required": ["items", "highestLevel"]
+    },
+    "point": {
+      "title": "Point",
+      "description": "Information about the point",
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -360,
+          "maximum": 360
+        }
+      },
+      "required": ["latitude", "longitude"]
+    },
+    "place": {
+      "title": "Place",
+      "description": "Information about the place at the described point, as close as we know.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "City or other municipal name.",
+          "type": "string"
+        },
+        "state": {
+          "description": "2-letter abbreviation of the state or territory.",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "stateName": {
+          "description": "Full name of the state.",
+          "type": "string"
+        },
+        "county": {
+          "description": "Full name of the county.",
+          "type": "string"
+        },
+        "timezone": {
+          "description": "Full tzdb name of the timezone at this point, as best we know.",
+          "type": "string"
+        },
+        "stateFIPS": {
+          "description": "2-digit FIPS code for this state.",
+          "type": "string",
+          "pattern": "^\\d{2}$"
+        },
+        "countyFIPS": {
+          "description": "5-digit FIPS code for this county. Note that this value has the state FIPS code prepended to the usual 3-digit county FIPS code.",
+          "type": "string",
+          "pattern": "^\\d{5}$"
+        },
+        "fullName": {
+          "description": "The full name of this place, with state or territory abbreviation.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "state",
+        "stateName",
+        "county",
+        "timezone",
+        "stateFIPS",
+        "countyFIPS",
+        "fullName"
+      ]
+    },
+    "grid": {
+      "title": "NWS Grid",
+      "description": "The NWS grid cell that this point falls in.",
+      "type": "object",
+      "properties": {
+        "wfo": {
+          "description": "The NWS weather forecasting office (WFO) that serves this point.",
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "x": {
+          "description": "WFO grid X coordinate.",
+          "type": "integer"
+        },
+        "y": {
+          "description": "WFO grid Y coordinate.",
+          "type": "integer"
+        },
+        "geometry": {
+          "description": "GeoJSON Polygon representing the area covered by this WFO grid cell.",
+          "$ref": "https://geojson.org/schema/Polygon.json"
+        },
+        "elevation": {
+          "description": "Elevation of this grid point.",
+          "$ref": "#/$defs/measures/distance"
+        }
+      },
+      "required": ["wfo", "x", "y", "geometry", "elevation"]
+    },
+    "observed": {
+      "title": "Observations",
+      "description": "Most-recently observed conditions for this location from the nearest approved observation station.",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "description": "When the observation was recorded.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "icon": {
+          "$ref": "#/$defs/icon"
+        },
+        "description": {
+          "description": "Textual description of the observed conditions, if available.",
+          "type": "string"
+        },
+        "station": {
+          "title": "Observation station",
+          "description": "Metadata about the observation station that reported this data.",
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "The 4-character ID for the observation station.",
+              "type": "string",
+              "pattern": "^[A-Z0-9]{4}$"
+            },
+            "name": {
+              "description": "The full name of the observation station.",
+              "type": "string"
+            },
+            "elevation": {
+              "description": "The elevation at the observation station.",
+              "$ref": "#/$defs/measures/distance"
+            },
+            "distance": {
+              "description": "The flat-ground distance between the observation station and the requested point.",
+              "$ref": "#/$defs/measures/distance"
+            }
+          },
+          "required": ["id", "name", "elevation", "distance"]
+        },
+        "data": {
+          "title": "Observation data",
+          "description": "The observed data. The full list of properties is not provided here as it is taken directly from the NWS public API and is not controlled by weather.gov. The data provided by the NWS public API is converted into US and SI units.",
+          "type": "object"
+        }
+      },
+      "required": ["timestamp", "icon", "station", "data"]
+    },
+    "forecast": {
+      "title": "Forecast",
+      "description": "Forecast for this point.",
+      "type": "object",
+      "properties": {
+        "generated": {
+          "description": "When the forecast was generated.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated": {
+          "description": "When the forecast was last updated.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "valid": {
+          "description": "When the forecast is valid. This is a combination of ISO 8601 date-time and duration, in the form 'date-time/duration'.",
+          "type": "string"
+        },
+        "days": {
+          "title": "List of daily forecasts",
+          "description": "The daily forecasts for each day in the forecast period.",
+          "type": "array",
+          "items": {
+            "title": "Daily forecast",
+            "type": "object",
+            "properties": {
+              "start": {
+                "description": "The starting time for this daily forecast.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "end": {
+                "description": "The ending time for this daily forecast.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "periods": {
+                "title": "List of daily forecast periods",
+                "description": "The periods of the daily forecast, such as overnight, day, and night.",
+                "type": "array",
+                "items": {
+                  "title": "Daily forecast period",
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "description": "The starting time for this period of the daily forecast.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "end": {
+                      "description": "The ending time for this period of the daily forecast.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isDaytime": {
+                      "description": "Whether this period represents the daytime period. A period can be daytime, nighttime, or overnight.",
+                      "type": "boolean"
+                    },
+                    "isOvernight": {
+                      "description": "Whether this period represents the overnight period. A period can be daytime, nighttime, or overnight.",
+                      "type": "boolean"
+                    },
+                    "monthAndDay": {
+                      "description": "The short month name (eg, Jan, Feb, etc.) and day number that this forecast period applies to. Formatted in en-US locale.",
+                      "type": "string",
+                      "pattern": "^[A-Z][a-z]{2} d{1,2}$"
+                    },
+                    "dayName": {
+                      "description": "The name of the day this forecast period applies to, or 'Today' if it's the current day. Uses English day names.",
+                      "type": "string",
+                      "pattern": "^[A-Z][a-z]+$"
+                    },
+                    "timeLabel": {
+                      "description": "Textual representation of the hour range covered by this period, in the timezone of the location.",
+                      "type": "string",
+                      "pattern": "^1?[0-9]-1?[0-9]$"
+                    },
+                    "data": {
+                      "title": "Daily forecast period data",
+                      "description": "The forecast data for this period.",
+                      "type": "object",
+                      "properties": {
+                        "icon": {
+                          "$ref": "#/$defs/icon"
+                        },
+                        "description": {
+                          "description": "Textual description of the forecast period conditions.",
+                          "type": "text"
+                        },
+                        "temperature": {
+                          "description": "Forecast temperature for this forecast period.",
+                          "$ref": "#/$defs/measures/temperature"
+                        },
+                        "probabilityOfPrecipitation": {
+                          "description": "Forecast probability of precipitation for this forecast period.",
+                          "type": "integer"
+                        },
+                        "windSpeed": {
+                          "description": "Forecast wind speed for this forecast period.",
+                          "$ref": "#/$defs/measures/speed"
+                        },
+                        "windDirection": {
+                          "description": "Forecast wind direction for this forecast period, in cardinal/ordinal direction (eg, N, NW, WNW, etc.).",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "qpf": {
+                "title": "List of hourly QPFs",
+                "description": "Forecast quantitative precipitation for this forecast period. Note that QPF is delivered in multi-hour totals rather than individual-hour totals, so it must be treated differently than other forecast period data.",
+                "type": "array",
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/measures/length"
+                  }
+                ],
+                "items": {
+                  "title": "QPF",
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "description": "The starting time for this QPF forecast.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "end": {
+                      "description": "The ending time for this QPF forecast.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startHour": {
+                      "description": "The starting hour in the timezone of the forecast, in AM/PM.",
+                      "type": "string",
+                      "pattern": "^1?\\d (A|P)M$"
+                    },
+                    "endHour": {
+                      "description": "The ending hour in the timezone of the forecast, in AM/PM.",
+                      "type": "string",
+                      "pattern": "^1?\\d (A|P)M$"
+                    }
+                  }
+                }
+              },
+              "hours": {
+                "title": "List of hourly forecasts",
+                "description": "Hourly forecast for each hour of this daily forecast period. The full list of properties is not provided here as it is taken directly from the NWS public API and is not controlled by weather.gov. The properties listed below are created by weather.gov and are the only guaranteed properties.",
+                "type": "array",
+                "items": {
+                  "title": "Hourly forecast",
+                  "type": "object",
+                  "properties": {
+                    "time": {
+                      "description": "The time at which this hourly forecast begins.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "hour": {
+                      "description": "Human-friendly hour when the hourly forecast begins. Eg, '6 AM",
+                      "type": "string",
+                      "pattern": "^1?\\d (A|P)M$"
+                    },
+                    "icon": {
+                      "$ref": "#/$defs/icon"
+                    }
+                  },
+                  "required": ["time", "hour"]
+                }
+              },
+              "alerts": {
+                "title": "Daily forecast alerts",
+                "description": "Information about alerts that are valid during this forecast day.",
+                "type": "object",
+                "properties": {
+                  "metadata": {
+                    "title": "Daily forecast alert metadata",
+                    "description": "Top-level metadata about the alerts for this forecast day.",
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "description": "The number of alerts that are applicable to this forecast day.",
+                        "type": "integer"
+                      },
+                      "highest": {
+                        "$ref": "#/$defs/alert/level"
+                      }
+                    }
+                  },
+                  "items": {
+                    "title": "List of alerts",
+                    "description": "List of alerts.",
+                    "type": "array",
+                    "items": {
+                      "title": "Daily forecast alert",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "description": "An ID for this alert. NOTE: this may not be globally unique.",
+                          "type": "string"
+                        },
+                        "event": {
+                          "description": "The event type for the alert. Eg, 'Severe Thunderstorm Warning,' etc.",
+                          "type": "string"
+                        },
+                        "level": {
+                          "$ref": "#/$defs/alert/level"
+                        },
+                        "offset": {
+                          "description": "The number of hours after the first whole hour covered by this forecast period when the alert will begin.",
+                          "type": "integer"
+                        },
+                        "duration": {
+                          "description": "The number of hours that this alert will be active after the first whole hour of this forecast period, up to the total number of hours remaining in the forecast period.",
+                          "type": "integer"
+                        },
+                        "remainder": {
+                          "description": "The number of hours that this alert will be active in excess of the duration property.",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": ["start", "end", "periods", "qpf", "hours", "alerts"]
+          }
+        }
+      },
+      "required": ["generated", "updated", "valid", "days"]
+    },
+    "satellite": {
+      "title": "Satellite",
+      "description": "Information about satellite imagery for this point.",
+      "type": "object",
+      "properties": {
+        "gif": {
+          "description": "URL to the 600x600 geocolor GIF of the most recent satellite for this point.",
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "@metadata": {
+      "title": "Response metadata",
+      "description": "Metadata about the response itself.",
+      "type": "object",
+      "properties": {
+        "timing": {
+          "title": "Response timing",
+          "description": "The time spent answering the request.",
+          "type": "object",
+          "properties": {
+            "e2e": {
+              "description": "Total time spent, in seconds.",
+              "type": "number"
+            },
+            "api": {
+              "title": "Response API timing",
+              "description": "Time spent making and receiving each request and response to the NWS public API. Keys are the API URLs and values are the times in seconds.",
+              "type": "object"
+            }
+          }
+        },
+        "size": {
+          "description": "The uncompressed size of the data being returned, excluding the metadata, in bytes.",
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "alert": {
+      "kind": {
+        "description": "The kind of alert",
+        "type": "string",
+        "enum": ["land", "marine", "other"]
+      },
+      "level": {
+        "description": "The alert level, as defined by weather.gov.",
+        "type": "string",
+        "enum": ["warning", "watch", "other"]
+      }
+    },
+    "icon": {
+      "title": "Icon",
+      "description": "Information about the icon that represents this forecast period's conditions.",
+      "type": "object",
+      "properties": {
+        "icon": {
+          "description": "The icon filename, as used by weather.gov.",
+          "type": "string"
+        },
+        "base": {
+          "description": "The basename of the icon (without file extension).",
+          "type": "string"
+        }
+      }
+    },
+    "measures": {
+      "distance": {
+        "title": "Distance",
+        "type": "object",
+        "properties": {
+          "m": {
+            "description": "Elevation, in meters.",
+            "type": "number"
+          },
+          "ft": {
+            "description": "Elevation, in ft.",
+            "type": "number"
+          },
+          "mi": {
+            "description": "Elevation, in miles.",
+            "type": "number"
+          }
+        },
+        "required": ["m", "ft", "mi"]
+      },
+      "speed": {
+        "title": "Speed",
+        "type": "object",
+        "properties": {
+          "mph": {
+            "description": "Speed, in miles per hour.",
+            "type": "integer"
+          },
+          "km/h": {
+            "description": "Speed, in kilometers per hour.",
+            "type": "integer"
+          }
+        },
+        "required": ["mph", "km/h"]
+      },
+      "temperature": {
+        "title": "Temperature",
+        "type": "object",
+        "properties": {
+          "degF": {
+            "description": "Temperature, in degrees Fahrenheit.",
+            "type": "integer"
+          },
+          "degC": {
+            "description": "Temperature, in degrees Celsius.",
+            "type": "integer"
+          }
+        },
+        "required": ["degF", "degC"]
+      }
+    }
+  }
+}

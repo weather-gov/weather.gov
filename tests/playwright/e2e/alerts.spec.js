@@ -11,12 +11,12 @@ describe("Alerts e2e tests", () => {
 
   test("The correct number of alerts show on the page", async ({ page }) => {
     const alertAccordions = await page.locator("wx-alerts div.usa-accordion").all();
-    expect(alertAccordions).toHaveLength(6);
+    expect(alertAccordions).toHaveLength(7);
   });
 
   test("All alert accordions are open by default", async ({ page }) => {
     const alertAccordions = await page.locator('wx-alerts div.usa-accordion button[aria-expanded="true"]').all();
-    expect(alertAccordions).toHaveLength(6);
+    expect(alertAccordions).toHaveLength(7);
   });
 
   test("Clicking the alert accordion buttons closes them", async ({ page }) => {
