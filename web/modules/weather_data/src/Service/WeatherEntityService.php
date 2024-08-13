@@ -96,6 +96,9 @@ class WeatherEntityService
         $term = $this->entityTypeManager
             ->getStorage("taxonomy_term")
             ->loadByProperties(["field_wfo_code" => $wfo]);
-        return $term;
+        if (count($term) > 0) {
+            return array_pop($term);
+        }
+        return false;
     }
 }

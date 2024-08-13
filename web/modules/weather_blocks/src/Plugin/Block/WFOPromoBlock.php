@@ -61,9 +61,8 @@ class WFOPromoBlock extends WeatherBlockBase
 
             // If there's not a WFO info, just return the name and code.
             $taxonomyTerm = $this->entityTypeService->getWFOEntity($grid->wfo);
-            if (count($taxonomyTerm) > 0) {
-                $term = array_pop($taxonomyTerm);
-                $name = $term->get("name")->getString();
+            if ($taxonomyTerm) {
+                $name = $taxonomyTerm->get("name")->getString();
 
                 return [
                     "name" => $name,
