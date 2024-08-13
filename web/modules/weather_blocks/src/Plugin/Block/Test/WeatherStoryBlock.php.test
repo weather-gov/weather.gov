@@ -72,7 +72,7 @@ final class WeatherStoryBlockTest extends Base
      */
     public function testReturnsAWeatherStory(): void
     {
-        $this->onLocationRoute();
+        $this->block->setConfigurationValue("wfo", "BOB");
 
         $this->setupEntityAPIMocksForGoodStory(true);
 
@@ -102,7 +102,7 @@ final class WeatherStoryBlockTest extends Base
      */
     public function testReturnsAWeatherStoryWithNoImage(): void
     {
-        $this->onLocationRoute();
+        $this->block->setConfigurationValue("wfo", "BOB");
 
         $this->setupEntityAPIMocksForGoodStory(false);
 
@@ -129,8 +129,6 @@ final class WeatherStoryBlockTest extends Base
      */
     public function testBuildNotGridRoute(): void
     {
-        $this->notOnLocationRoute();
-
         $actual = $this->block->build();
 
         $this->assertEquals([], $actual);

@@ -76,7 +76,7 @@ const drawWindInfoLabels = (chart) => {
     const img = new Image();
     img.src = createArrowSVG(
       "",
-      windInfo[dataIndex].direction.angle,
+      windInfo[dataIndex].direction.degrees,
       styles.colors.secondaryDarker,
     );
     ctx.save();
@@ -84,7 +84,7 @@ const drawWindInfoLabels = (chart) => {
     ctx.restore();
 
     // Draw the cardinal direction text
-    const text = windInfo[dataIndex].direction.short;
+    const text = windInfo[dataIndex].direction.cardinalShort;
     ctx.save();
     const textMeasure = ctx.measureText(text);
     const textMarginRight = 2;

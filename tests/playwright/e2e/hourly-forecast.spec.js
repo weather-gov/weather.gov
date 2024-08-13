@@ -7,7 +7,7 @@ describe("Hourly forecast table tests", () => {
   describe("Alert row spanning tests", () => {
     beforeEach(async ({ page }) => {
       await page.goto("http://localhost:8081/play/testing");
-      await page.goto("/point/34.749/-92.275");
+      await page.goto("/point/34.749/-92.275#daily");
     });
 
     test("Should have 2 alert rows on the hourly forecast", async ({
@@ -18,7 +18,7 @@ describe("Hourly forecast table tests", () => {
           `#daily ol li:first-of-type wx-hourly-table tr[data-row-name="alert"]`,
         )
         .count();
-      expect(count).toEqual(2);
+      expect(count).toEqual(5);
     });
 
     test("There is a Red Flag alert of the correct displayed duration", async ({
@@ -27,22 +27,22 @@ describe("Hourly forecast table tests", () => {
       // We expect there to be a red-flag alert that spans two hours
       // and that contains the correct event label
       const alert = await page.locator(
-        `#daily ol li:first-of-type wx-hourly-table tr[data-row-name="alert"]:nth-child(2) td[colspan]:nth-child(2)`,
+        `#daily ol li:nth-of-type(1) wx-hourly-table tr[data-row-name="alert"]:nth-of-type(4) td[colspan]:nth-of-type(1)`,
       );
 
       await expect(alert).toHaveText("Red Flag Warning");
-      await expect(alert).toHaveAttribute("colspan", "2");
+      await expect(alert).toHaveAttribute("colspan", "4");
     });
 
     test("Has a Special Weather Statement that begins in the third hour and spans 5 hours", async ({
       page,
     }) => {
       const alert = await page.locator(
-        `#daily ol li:first-of-type wx-hourly-table tr[data-row-name="alert"]:nth-child(3) td[colspan]:nth-child(3)`,
+        `#daily ol li:first-of-type wx-hourly-table tr[data-row-name="alert"]:nth-of-type(6) td[colspan]:nth-child(3)`,
       );
 
       await expect(alert).toHaveText("Special Weather Statement");
-      await expect(alert).toHaveAttribute("colspan", "5");
+      await expect(alert).toHaveAttribute("colspan", "6");
     });
 
     test("has a blizzard warning starting tomorrow", async ({ page }) => {
