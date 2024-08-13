@@ -7,7 +7,7 @@ services:
     arguments: ['@http_client','@cache.default','@database', '@current_route_match']
   weather_data:
     class: Drupal\weather_data\Service\WeatherDataService
-    arguments: ['@string_translation', '@cache.default', '@newrelic_metrics', '@weather_data_layer']
+    arguments: ['@string_translation', '@cache.default', '@weather_data_layer']
   newrelic_metrics:
     class: Drupal\weather_data\Service\NewRelicMetrics
     arguments: ['@http_client']

@@ -10,7 +10,9 @@ describe("quantitative precipitation forecast table", () => {
   });
 
   test("shows snow, ice, and water when all are present", async ({ page }) => {
-    const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").first();
+    const day = await page
+      .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
+      .first();
     await day.locator("span.toggle-text").click();
 
     const headings = await day.locator(".wx-precip-table thead th");
@@ -24,7 +26,9 @@ describe("quantitative precipitation forecast table", () => {
   });
 
   test("shows snow and water when there is no ice", async ({ page }) => {
-    const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").nth(1);
+    const day = await page
+      .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
+      .nth(1);
     await day.locator("span.toggle-text").click();
 
     const headings = await day.locator(".wx-precip-table thead th");
@@ -37,7 +41,9 @@ describe("quantitative precipitation forecast table", () => {
   });
 
   test("shows ice and water when there is no snow", async ({ page }) => {
-    const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").nth(2);
+    const day = await page
+      .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
+      .nth(2);
     await day.locator("span.toggle-text").click();
 
     const headings = await day.locator(".wx-precip-table thead th");
@@ -50,7 +56,9 @@ describe("quantitative precipitation forecast table", () => {
   });
 
   test("shows rain when there is no snow or ice", async ({ page }) => {
-    const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").nth(3);
+    const day = await page
+      .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
+      .nth(3);
     await day.locator("span.toggle-text").click();
 
     const headings = await day.locator(".wx-precip-table thead th");
@@ -61,18 +69,21 @@ describe("quantitative precipitation forecast table", () => {
     await expect(headings.nth(1)).toHaveText("Rain");
   });
 
-  test("still shows the graph and table when there is no precipitation forecast", async ({
+  test("still shows the table when there is no precipitation forecast", async ({
     page,
   }) => {
-    const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").nth(4);
+    const day = await page
+      .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
+      .nth(4);
     await day.locator("span.toggle-text").click();
-    await day.locator(".wx-forecast-details-toggle li:nth-child(2) button").click();
+    await day
+      .locator(".wx-forecast-details-toggle li:nth-child(2) button")
+      .click();
     const headings = await day.locator(".wx-precip-table thead th");
 
     // period, rain
     await expect(headings).toHaveCount(2);
     await expect(headings.nth(0)).toHaveText("Time Period");
     await expect(headings.nth(1)).toHaveText("Rain");
-    await expect(day.locator(".wx-qpf-chart-container canvas")).toBeVisible();
   });
 });

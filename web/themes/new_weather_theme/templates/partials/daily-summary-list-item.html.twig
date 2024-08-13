@@ -10,10 +10,6 @@ intended for use within the "Today" tab, and should only
 display some of the forecast information for the current
 day
 #}
-{% set times = dayHours | map(h => h.time) | json_encode %}
-{% set temps = dayHours | map(h => h.temperature) | json_encode %}
-{% set feelsLike = dayHours | map(h => h.apparentTemperature) | json_encode %}
-
 {% set itemId =  periods[0].monthAndDay | lower | replace({" ":"-"}) %}
 
 <li class="display-block bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 height-full" {% if itemId %}id="{{itemId}}{% endif %}">    
@@ -32,19 +28,20 @@ day
           </h3>
 
           <div class="display-flex">
-          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods, 'useOnlyLow': useOnlyLow  } %}
+          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods } %}
           </div>
         </div>
 
-        {% set alertCount = alertPeriods | length %}
+        {% set alertCount = alerts.metadata.count %}
         {% if alertCount > 0 %}
-          {% set alertID = alertPeriods[0].alert.alertId %}
-          {% set alertType = alertPeriods[0].alert.event %}
-          {% set alertLevel = highestAlertLevel %}
+          {% set alertID = alerts.item[0].id %}
+          {% set alertType = alerts.item[0].event %}
+          {% set alertLevel = alerts.item[0].level %}
 
           {% if alertCount > 1 %}
             {% set alertID = null %}
             {% set alertType = "Multiple alerts" | t %}
+            {% set alertLevel = alerts.metadata.highest %}
           {% endif %}
 
           <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 daily-alert-summary">
@@ -76,20 +73,20 @@ day
             {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
         </span>
         <div class="display-flex flex-row flex-align-start">
-          {% if period.icon.base %}
+          {% if period.data.icon.base %}
           <div class="width-5 height-5 margin-right-105">
             <svg role="img" aria-hidden="true" class="width-full height-full">
-              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.icon.base }}"></use>
+              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.data.icon.base }}"></use>
             </svg>
           </div>
           {% endif %}
           <div class="flex-1">
             <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
-            {{period.shortForecast}}
+            {{period.data.description}}
             </p>
-            {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
+            {% if period.data.probabilityOfPrecipitation.percent and period.data.probabilityOfPrecipitation.percent > 1 %}
             <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-            {{period.probabilityOfPrecipitation}}% {{ "chance of precipitation" | t }}
+            {{period.data.probabilityOfPrecipitation.percent}}% {{ "chance of precipitation" | t }}
             </p>
             {% endif %}
           </div>
@@ -102,6 +99,9 @@ day
     {% if hourCount > 0 %}
         <div>
             {#  Summary Temperature Chart #}
+            {% set times = dayHours | map(h => h.hour) | json_encode %}
+            {% set temps = dayHours | map(h => h.temperature.degF) | json_encode %}
+            {% set feelsLike = dayHours | map(h => h.apparentTemperature.degF) | json_encode %}
             <div class="wx-chart-wrapper margin-top-0 margin-bottom-4">
                 <span class="font-family-mono text-primary-dark usa-sr-only">
                     {{ "Temperature" | t }}

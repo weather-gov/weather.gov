@@ -13,29 +13,42 @@ jobs:
   deploy-staging:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v4
-        - name: set library versions
-          uses: ./.github/actions/set-library-versions
-        - name: bundle javascript
-          uses: ./.github/actions/javascript-bundle
-        - name: Deploy to cloud.gov weathergov-staging space
-          uses: cloud-gov/cg-cli-tools@main
-          env:
-            DEPLOY_NOW: thanks
-          with:
-            cf_username: ${{ secrets.CF_STAGING_USERNAME }}
-            cf_password: ${{ secrets.CF_STAGING_PASSWORD }}
-            cf_org: nws-weathergov
-            cf_space: staging
-            cf_command: "push -f manifests/manifest-staging.yaml --var newrelic-license=${{ secrets.NEWRELIC_LICENSE }} --strategy rolling"
-        - name: Run post deploy steps
-          uses: cloud-gov/cg-cli-tools@main
-          with:
-            cf_username: ${{ secrets.CF_STAGING_USERNAME }}
-            cf_password: ${{ secrets.CF_STAGING_PASSWORD }}
-            cf_org: nws-weathergov
-            cf_space: staging
-            cf_command: "run-task weathergov-staging --command './scripts/post-deploy.sh' --name 'weathergov-staging-deploy' -k '2G' -m '256M'"
+      - uses: actions/checkout@v4
+      - name: set library versions
+        uses: ./.github/actions/set-library-versions
+      - name: bundle javascript
+        uses: ./.github/actions/javascript-bundle
+
+      - name: Deploy api interop layer to cloud.gov weathergov-staging space
+        uses: cloud-gov/cg-cli-tools@main
+        env:
+          DEPLOY_NOW: thanks
+        with:
+          cf_username: ${{ secrets.CF_STAGING_USERNAME }}
+          cf_password: ${{ secrets.CF_STAGING_PASSWORD }}
+          cf_org: nws-weathergov
+          cf_space: staging
+          cf_command: "push api-weathergov-staging -f manifests/manifest-staging.yaml --var newrelic-license=${{ secrets.NEWRELIC_LICENSE }} --strategy rolling"
+
+      - name: Deploy application to cloud.gov weathergov-staging space
+        uses: cloud-gov/cg-cli-tools@main
+        env:
+          DEPLOY_NOW: thanks
+        with:
+          cf_username: ${{ secrets.CF_STAGING_USERNAME }}
+          cf_password: ${{ secrets.CF_STAGING_PASSWORD }}
+          cf_org: nws-weathergov
+          cf_space: staging
+          cf_command: "push weathergov-staging -f manifests/manifest-staging.yaml --var newrelic-license=${{ secrets.NEWRELIC_LICENSE }} --strategy rolling"
+
+      - name: Run post deploy steps
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          cf_username: ${{ secrets.CF_STAGING_USERNAME }}
+          cf_password: ${{ secrets.CF_STAGING_PASSWORD }}
+          cf_org: nws-weathergov
+          cf_space: staging
+          cf_command: "run-task weathergov-staging --command './scripts/post-deploy.sh' --name 'weathergov-staging-deploy' -k '2G' -m '256M'"
 
   new-relic-record:
     name: Record deployment to New Relic

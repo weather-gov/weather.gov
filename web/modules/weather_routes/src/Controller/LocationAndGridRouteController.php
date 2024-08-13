@@ -78,10 +78,12 @@ final class LocationAndGridRouteController extends ControllerBase
         }
 
         try {
-            $this->dataLayer->getPoint($lat, $lon);
-            WeatherDataService::setPoint(
-                SpatialUtility::pointArrayToObject([$lon, $lat]),
-            );
+            // Need to figure out what to do here – we should deffo not simply
+            // continue if the lat/lon given to us is not covered by NWS, but
+            // that knowledge has now been pushed over to the interop layer.
+            // Maybe a simple "is valid" query here, which is effectively what
+            // we were doing previously anyway. And let the interop layer handle
+            // caching on its own.
             return [];
         } catch (\Throwable $e) {
             // If we don't get a corresponding grid location, throw a 404.
