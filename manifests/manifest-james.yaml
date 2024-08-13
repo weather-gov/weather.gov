@@ -9,6 +9,7 @@ default_config: &defaults
   env:
     PHP_INI_SCAN_DIR: /home/vcap/app/php/etc/:/home/vcap/app/php/etc/php.ini.d/
     NEWRELIC_LICENSE: ((newrelic-license))
+    API_INTEROP_URL: https://api-weathergov-james.app.cloud.gov
   services:
     - database
     - storage
@@ -34,3 +35,19 @@ applications:
       ALLOWED_IPS: ((allowed-ips))
       SPACE_NAME: james
     random-route: false
+
+  - name: api-weathergov-james
+    stack: cflinuxfs4
+    memory: 256M
+    instances: 1
+    buildpacks:
+      - nodejs_buildpack
+    env:
+      NEWRELIC_LICENSE: ((newrelic-license))
+      API_INTEROP_PRODUCTION: true
+      API_INTEROP_NAME: james
+    health-check-type: process
+    path: ../api-interop-layer
+    random-route: false
+    services:
+      - database

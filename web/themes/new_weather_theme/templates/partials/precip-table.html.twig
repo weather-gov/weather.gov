@@ -1,5 +1,5 @@
-{% if precipHours.hasQPF %}
-  <div class="grid-row wx-qpf-periods"> 
+{% if qpf %}
+  <div class="grid-row"> 
     <div class="grid-col-12"> 
       <h5 class="wx-visual-h3 font-heading-md text-normal text-primary-darker margin-top-1 margin-bottom-105">{{ "Precipitation amounts" |t }}</h5>
     </div>
@@ -73,17 +73,17 @@
         <tbody>
           {% for hour in precipHours.periods %}
             <tr>
-              <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">{{ hour.start }}&emsp13;–&emsp13;{{ hour.end }}</td>
+              <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">{{ hour.startHour }}&emsp13;–&emsp13;{{ hour.endHour }}</td>
               {% if precipHours.hasSnow %}
-              <td class="text-align-left">{{ hour.snow }}{{ '"' | t }}</td>
+              <td class="text-align-left">{{ hour.snow.in }}{{ '"' | t }}</td>
               {% endif %}
               {% if precipHours.hasIce %}
-              <td class="text-align-left">{{ hour.ice }}{{ '"' | t }}</td>
+              <td class="text-align-left">{{ hour.ice.in }}{{ '"' | t }}</td>
               {% endif %}
               {% if precipHours.hasSnow or precipHours.hasIce %}
               <td aria-hidden="true"></td>
               {% endif %}
-              <td class="text-align-left">{{ hour.liquid }}{{ '"' | t }}</td>
+              <td class="text-align-left">{{ hour.liquid.in }}{{ '"' | t }}</td>
             </tr>
           {% endfor %}
         </tbody>

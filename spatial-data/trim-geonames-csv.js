@@ -29,6 +29,7 @@ const US_CODES = [
 const FILENAME = "cities500.txt";
 const OUTFILE_NAME = "us.cities500.txt";
 
+// eslint-disable-next-line no-unused-vars
 const COLUMN_NAMES = [
   "geonameId",
   "name",
@@ -55,12 +56,8 @@ async function main(){
   const fileText = await fs.readFile(FILENAME, { encoding: "utf-8"} );
   const rows = fileText.split("\n")
         .map(line => line.trim().split("\t"))
-        .filter(row => {
-          return US_CODES.includes(row[8]);
-        })
-        .map(row => {
-          return row.join("\t");
-        });
+        .filter(row => US_CODES.includes(row[8]))
+        .map(row => row.join("\t"));
   console.log(rows.length);
   await fs.writeFile(OUTFILE_NAME, rows.join("\n"));
 };

@@ -1,6 +1,4 @@
-{% set periodLength = periods | length %}
-{% for alertInfo in alertPeriods %}
-  {% set remainingCount = periodLength - alertInfo.duration - alertInfo.periodIndex %}
+{% for alert in alerts %}
   <tr data-row-name="alert">
     <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
     {# Visually we can display the alert(s) heading just once for the alerts section of 
@@ -10,20 +8,20 @@
        announced when testing using VO.
     #}
     {% if loop.first %}
-      {% if alertPeriods | length > 1 %} {% set alertLabel="Alerts" | t %}{% else %}{% set alertLabel="Alert" | t %}{% endif %}
+      {% if alerts | length > 1 %} {% set alertLabel="Alerts" | t %}{% else %}{% set alertLabel="Alert" | t %}{% endif %}
       <span class="" aria-hidden="true">{{ alertLabel }}</span>
     {% endif %}
       <span class="usa-sr-only">{{ "Alert" | t }}</span>
     </th>
-    {% if alertInfo.periodIndex > 0 %}
-      <td colspan="{{ alertInfo.periodIndex }}"></td>
+    {% if alert.offset > 0 %}
+      <td colspan="{{ alert.offset }}"></td>
     {% endif %}
-    <td colspan="{{alertInfo.duration}}">
+    <td colspan="{{alert.duration}}">
       {% include "@new_weather_theme/partials/alert-link.html.twig"
-         with { alertID: alertInfo.alert.alertId, alertType: alertInfo.alert.event, alertLevel: alertInfo.alert.alertLevel } %}
+         with { alertID: alert.id, alertType: alert.event, alertLevel: alert.level } %}
     </td>
-    {% if remainingCount > 0 %}
-      <td colspan="{{ remainingCount }}"></td>
+    {% if alert.remainder > 0 %}
+      <td colspan="{{ alert.remainder }}"></td>
     {% endif %}
   </tr>
 {% endfor %}
