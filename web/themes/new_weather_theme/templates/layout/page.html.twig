@@ -85,6 +85,7 @@
     {% if path('<current>') == "/home" %}
     {% include(directory ~ "/templates/layout/frontpage.html.twig") %}
     {% else %}
+    {% include(directory ~ "/templates/partials/location-search.html.twig") with { place: point.place } %}
     {{ page.content }}
     {% endif %}
   </main>
