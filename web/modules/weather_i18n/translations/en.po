@@ -8,6 +8,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\\n"
 
+#: node.fields.labels.field_address
+msgid "address"
+msgstr ""
+
+#: node.fields.labels.field_phone_number_opt
+msgid "phone"
+msgstr ""
+
+#: node.fields.labels.field_wfo_email
+msgid "email"
+msgstr ""
+
+#: wfo-info.labels.wfo
+msgid "@wfoName (@wfoCode) National Weather Service Office"
+msgstr ""
+
+#: wfo-info.labels.about
+msgid "About"
+msgstr ""
+
+#: wfo-info.labels.coverage-area-map-caption
+msgid "Coverage area for @wfo wfo"
+msgstr ""
+
+#: wfo-info.labels.local-expertise
+msgid "Local expertise"
+msgstr ""
+
+#: wfo-info.labels.forecast-discussion
+msgid "Forecaster's discussion"
+msgstr ""
+
+#: wfo-info.labels.contact-us
+msgid "Contact us"
+msgstr ""
+
 #: daily-forecast.labels.alert
 msgid "Alert"
 msgstr ""
@@ -223,7 +259,7 @@ msgid "Phone"
 msgstr ""
 
 #: wfo.labels.twitter
-msgid "X"
+msgid "X (Twitter)"
 msgstr ""
 
 #: wfo.labels.youtube
