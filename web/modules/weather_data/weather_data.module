@@ -1,1 +1,22 @@
 <?php
+
+function weather_data_template_preprocess_default_variables_alter(&$variables)
+{
+    // First, get our route information.
+    $container = \Drupal::getContainer();
+    $route = $container->get("current_route_match");
+
+    // We only need to populate globals if we're on a point route.
+    if ($route->getRouteName() == "weather_routes.point") {
+        $lat = $route->getParameter("lat");
+        $lon = $route->getParameter("lon");
+        $weatherMetadata["point"] = ["lat" => $lat, "lon" => $lon];
+
+        $fetch = $container->get("http_client");
+        $data = $fetch
+            ->get("http://api-interop-layer:8082/point/$lat/$lon")
+            ->getBody();
+
+        $variables["point"] = json_decode($data);
+    }
+}
