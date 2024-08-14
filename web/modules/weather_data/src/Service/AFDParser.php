@@ -94,6 +94,13 @@ class AFDParser
         $this->source = $source;
     }
 
+    /**
+     * Using the internal source string captured
+     * at construction time, this main method
+     * will return an array of "nodes" --
+     * associative arrays with a type --
+     * that can be used by Twig
+     */
     public function parse()
     {
         $this->parsedNodes = [];
@@ -118,68 +125,14 @@ class AFDParser
         return $this->parsedNodes;
     }
 
-    public function scrubParagraphs(array $paragraphs)
-    {
-        // Remove any paragraphs that contain "&&" or "$$"
-        return array_filter($paragraphs, function ($paragraph) {
-            return trim($paragraph) != "&&";
-        });
-    }
-
     /**
-     * Parse out the administrative codes that usually
-     * come at the beginning of an AFD product
+     * Main content parsing method.
+     * Take a single paragraph as a string
+     * and attempt to parse any nodes out of it.
+     * Also change currentContentType when certain
+     * headers and/or tokens are encountered.
+     * Returns an array of nodes
      */
-    public function parsePreambleCodes(string $str)
-    {
-        $regex = "/^(?<preambleCodes>000\s.+.*)$/sm";
-        if (preg_match($regex, $str, $matches)) {
-            $codeSections = explode("\n", $matches["preambleCodes"]);
-            $lastIdx = count($codeSections) - 1;
-            $first = $codeSections[0];
-            $last = $codeSections[$lastIdx];
-            $middle = array_slice($codeSections, 1, $lastIdx - 1);
-
-            return [
-                [
-                    "type" => "preambleCode",
-                    "content" => $first,
-                ],
-                [
-                    "type" => "preambleCode",
-                    "content" => implode(" ", $middle),
-                ],
-                [
-                    "type" => "preambleCode",
-                    "content" => $last,
-                ],
-            ];
-        }
-
-        return null;
-    }
-
-    /**
-     * Parse out the WFO title and information
-     * that comes at the top of AFD reports
-     */
-    public function parsePreambleWFOInfo(string $str)
-    {
-        // If it starts with the beginning of an AFD header,
-        // we know this isn't a valid preamble section
-        if (str_starts_with($str, ".")) {
-            return false;
-        }
-
-        $lines = explode("\n", $str);
-        return array_map(function ($line) {
-            return [
-                "type" => "preambleText",
-                "content" => $line,
-            ];
-        }, $lines);
-    }
-
     public function parseParagraph(string $str)
     {
         $result = [];
@@ -370,6 +323,14 @@ class AFDParser
         } else {
             $this->currentContentType = "generic";
         }
+    }
+
+    public function scrubParagraphs(array $paragraphs)
+    {
+        // Remove any paragraphs that contain "&&" or "$$"
+        return array_filter($paragraphs, function ($paragraph) {
+            return trim($paragraph) != "&&";
+        });
     }
 
     public function getPreambleNodes()
