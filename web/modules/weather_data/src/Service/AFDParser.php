@@ -4,6 +4,60 @@ namespace Drupal\weather_data\Service;
 
 use Drupal\weather_data\Service\ParsingUtility;
 
+/**
+ * AFD Parser Class
+ * ==========================
+ * This class handles all the parsing of raw
+ * AFD text products, as they are given to us via
+ * the NWS API.
+ * 
+ * You can find out _some_ of the structure of the
+ * AFD product in the following document:
+ *    https://www.weather.gov/media/directives/010_pdfs/pd01005003curr.pdf
+ * 
+ * # Summary of structure
+ * The AFD is divided into the following sections:
+ * 1. Codes and description (we call this the "preamble").
+ *   These lines appear before the first AFD header
+ * 2. The main body (we call this the body).
+ *   These lines are made up of a combination of headers,
+ *   text paragraphs, and optionally sub-headers.
+ *   Headers are lines that begin with a . and contain
+ *   uppercase labels, with optional ellipses and post-header
+ *   text.
+ *   Subheaders are lines whose text is surrounded on both
+ *   ends by ellipses
+ *   NOTE: Header sections are generally separated at the end by
+ *   a line with just "&&", but we do not use those in this parser.
+ * 3. Everything else (we call this the "epilogue").
+ *   The main part of the body ends with "$$". There is sometimes
+ *   extra text after this point, usually authorship attribution.
+ * 
+ * # Parsing strategy
+ * The general idea is to split the text up into "paragraphs,"
+ * defined as any contiguous chunks of text separated by _two_
+ * newlines.
+ * 
+ * We then attempt to parse out headers, subheaders, and guess at the
+ * structure of the subsequent body text.
+ * 
+ * The parser will set a kind of mode called currentContentType when
+ * it encounters a type of paragraph based on an encountered header
+ * type/name or other indicator token. Currently we have the following types:
+ * - preamble (the initial setting / default)
+ * - wwa (Watches/Warnings/Advisories header content)
+ * - generic (All other header-type content)
+ * - epilogue (the epilogue content)
+ *
+ * # Output
+ * Like our other parsers, the expected output of the overall `parse()`
+ * method is an array of "nodes" (associative arrays with a type property).
+ * These nodes are then given to Teig to render based on their type and
+ * other attributes.
+ * 
+ * This parser contains an additional helper method that structures
+ * the nodes into separate sections, to make rendering in Twig more
+ * logical. */
 class AFDParser
 {
     /**
