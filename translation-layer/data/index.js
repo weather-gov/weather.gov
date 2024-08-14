@@ -6,9 +6,9 @@ import getPoint from "./points.js";
 export const getDataForPoint = async (lat, lon) => {
   const { point, place, grid } = await getPoint(lat, lon);
 
-  const [forecast, obs] = await Promise.all([
+  const [forecast, observations] = await Promise.all([
     getForecast({ grid }),
-    getObservations({ point }),
+    getObservations({ grid, point }),
   ]);
 
   Object.assign(grid, forecast.gridData);
@@ -16,9 +16,13 @@ export const getDataForPoint = async (lat, lon) => {
 
   const alerts = await getAlerts({ grid, point });
 
+  if (forecast.daily.elevation) {
+    grid.elevation = forecast.daily.elevation;
+  }
+
   return {
     alerts,
-    obs,
+    observations,
     point,
     place,
     grid,
