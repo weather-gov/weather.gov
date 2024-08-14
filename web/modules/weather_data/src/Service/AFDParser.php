@@ -3,208 +3,206 @@
 namespace Drupal\weather_data\Service;
 
 use Drupal\weather_data\Service\ParsingUtility;
+use Drupal\weather_data\Service\LineStream;
 
-class AFDParser
-{
+class AFDParser {
     /**
-     * The input AFD source string
-     *
-     * @var source
+     * The source input string
      */
     private $source;
 
     /**
-     * The compiled parse tree (array of nodes)
-     *
-     * @var parsedNodes
+     * The current parsed nodes
      */
-    private $parsedNodes;
+    public $parsedNodes = [];
 
+    /**
+     * An instance of LineStream
+     */
+    public $stream;
+
+    /**
+     * Various regexes we will use
+     */
+    private $SECTION_END_RX = "/^[&]{2}|[$]{2}$/";
+    private $HEADER_RX = "/^\.(?<header>[^\.]+)[\.]{3}?(?<after>.*)$/";
+    private $SUBHEADER_RX = "/^\s*\.{3}(?<secondary>[^\.]+)\.{3}$/";
+    private $BLANK_LINE_RX = "/^[\s\n]*$/";
     
     public function __construct(string $source)
     {
         $this->source = $source;
+        $this->stream = new LineStream($this->source);
     }
 
     public function parse()
     {
         $this->parsedNodes = [];
         
-        // Strategy: split the string up into contiguous chunks
-        // of text ("paragraphs") separated by double newlines.
-        // Attempt to find matches in each chunk, and output
-        // corresponding nodes.
-        $paragraphs = explode("\n\n", $this->source);
-        $paragraphs = $this->scrubParagraphs($paragraphs);
-
-        // The offset is the number of paragraphs to 'skip'
-        // when parsing actual paragraph content, ie, if we
-        // find any preamble paragraphs, we increment this
-        // value
-        $offset = 0;
-
-        // First attempt to extract any code section.
-        // So far we've always noticed that there is one
-        // And that it's the first part of the product
-        $preambleCode = $this->parsePreambleCodes($paragraphs[0]);
-        if($preambleCode){
-            $offset += 1;
-            $this->appendNodes($preambleCode);
+        // Parse up to the first header.
+        // This gives us any potential preamble section
+        $preambleLines = $this->stream->upToMatch(
+            $this->HEADER_RX
+        );
+        if($preambleLines && count($preambleLines)){
+            $this->parsePreambleLines($preambleLines);
         }
 
-        // Next, attempt to extract the forecast office title
-        // and information. This typically comes after the preamble codes
-        // and should be in the second paragraph.
-        $preambleWFO = $this->parsePreambleWFOInfo($paragraphs[$offset]);
-        if($preambleWFO){
-            $offset += 1;
-            $this->appendNodes($preambleWFO);
-        }
-
-        // Finally, parse out nodes for each of the paragraphs.
-        // If we cannot parse a given paragraph, simply dump the
-        // string into a generic text node.
-        foreach(array_slice($paragraphs, $offset) as $paragraph){
-            $parsedParagraph = $this->parseParagraph($paragraph);
-            if($parsedParagraph){
-                $this->appendNodes($parsedParagraph);
-            } else if($paragraph != "") {
-                $this->appendNode([
-                    "type" => "text",
-                    "content" => $paragraph
-                ]);
-            }
+        // Now get the lines for each "section",
+        // which will be delineated by the presence
+        // of a valid header
+        while(!$this->stream->atEnd()){
+            $this->parseSectionFromStream(
+                $this->stream
+            );
         }
 
         return $this->parsedNodes;
     }
 
-    public function scrubParagraphs(array $paragraphs)
+    public function parsePreambleLines($lines)
     {
-        // Remove any paragraphs that contain "&&" or "$$"
-        return array_filter(
-            $paragraphs,
-            function($paragraph){
-                return trim($paragraph) != "&&" && $paragraph != "$$";
+        $raw = implode("\n", $lines);
+        $raw = trim($raw);
+
+        // Split into the different paragraphs.
+        // A "paragraph" here denotes sections of
+        // text separated by two consecutive newlines
+        $paragraphs = explode("\n\n", $raw);
+
+        // If we have some other number of paragraphs
+        // than 2, these are unspecified blocks of text
+        // and we should return plain text nodes for them
+        if(count($paragraphs) != 2){
+            foreach($paragraphs as $paragraph){
+                $this->appendNode([
+                    "type" => "text",
+                    "content" => $paragraph
+                ]);
             }
-        );
-    }
-
-    public function getPreambleNodes()
-    {
-        return array_filter(
-            $this->parsedNodes,
-            function($node){
-                return str_starts_with($node['type'], 'preamble');
-            }                
-        );
-    }
-
-    public function getBodyNodes()
-    {
-        return array_filter(
-            $this->parsedNodes,
-            function($node){
-                return !str_starts_with($node['type'], 'preamble');
-            }
-        );
-    }
-
-    /**
-     * Parse out the administrative codes that usually
-     * come at the beginning of an AFD product
-     */
-    public function parsePreambleCodes(string $str)
-    {
-        $regex = "/^(?<preambleCodes>000\s.+.*)$/sm";
-        if(preg_match($regex, $str, $matches)){
-            $codeSections = explode("\n", $matches['preambleCodes']);
-            $lastIdx = count($codeSections) - 1;
-            $first = $codeSections[0];
-            $last = $codeSections[$lastIdx];
-            $middle = array_slice($codeSections, 1, $lastIdx - 1);
-
-            return [
-                [
-                    "type" => "preambleCode",
-                    "content" => $first
-                ],
-                [
-                    "type" => "preambleCode",
-                    "content" => implode(" ", $middle)
-                ],
-                [
-                    "type" => "preambleCode",
-                    "content" => $last
-                ]
-            ];
+            return;
         }
 
-        return null;
-    }
+        // Otherwise, we assume the first paragraph to
+        // be the codes and the second to be the WFO
+        // and product description
+        $codeLines = explode("\n", $paragraphs[0]);
+        $lastIdx = count($codeLines) - 1;
+        $middle = array_slice($codeLines, 1, $lastIdx - 1);
+        $first = $codeLines[0];
+        $last = $codeLines[$lastIdx];
+        $this->appendNodes([
+            [
+                "type" => "preambleCode",
+                "content" => $first
+            ],
+            [
+                "type" => "preambleCode",
+                "content" => implode(" ", $middle)
+            ],
+            [
+                "type" => "preambleCode",
+                "content" => $last
+            ]
+        ]);
 
-    /**
-     * Parse out the WFO title and information
-     * that comes at the top of AFD reports
-     */
-    public function parsePreambleWFOInfo(string $str)
-    {
-        // If it starts with the beginning of an AFD header,
-        // we know this isn't a valid preamble section
-        if(str_starts_with($str, ".")){
-            return false;
-        }
-
-        $lines = explode("\n", $str);
-        return array_map(
-            function($line){
-                return [
-                    "type" => "preambleText",
-                    "content" => $line
-                ];
-            },
-            $lines
-        );
-    }
-
-    public function parseParagraph(string $str)
-    {
-        $result = [];
-        $currentString = $str;
-
-        // See if this paragraph is or contains a secondary header
-        $subheaderRegex = "/^\s*\.{3}(?<secondary>[^\.]+)\.{3}/U";
-        if(preg_match($subheaderRegex, $str, $matches)){
-            $currentString = preg_replace($subheaderRegex, "", $currentString);
-            array_push($result, [
-                "type" => "subheader",
-                "content" => $matches["secondary"]
+        $textLines = explode("\n", $paragraphs[1]);
+        foreach($textLines as $textLine){
+            $this->appendNode([
+                "type" => "preambleText",
+                "content" => $textLine
             ]);
         }
+    }
 
-        // See if this paragraph contains a top level header
-        $headerRegex = "/^\.(?<header>[^\.]+)[\.]{3}?(?<after>.*)\n/mU";
-        if(preg_match($headerRegex, $currentString, $matches)){
-            $header = $matches['header'];
-            $postHeader = $matches['after'] ?? null;
-            array_push($result, [
+    public function parseSectionFromStream(LineStream $stream)
+    {
+        // We assume that a stream was passed in whose next
+        // line is a header
+        $this->parseHeader(
+            $stream->nextLine()
+        );
+
+        $this->parseSectionLines(
+            $stream->upToMatch($this->HEADER_RX)
+        );
+    }
+
+    public function parseSectionLines(array $lines)
+    {
+        if(!count($lines)){
+            return;
+        }
+
+        $stream = new LineStream(implode("\n", $lines));
+
+        // Stream through the lines extracting any
+        // subheaders along the way.
+        // If a line matches the BLANK_LINE_RX,
+        // it indicates a separate paragraph.
+        $currentLines = [];
+        while(!$stream->atEnd()){
+            $line = $stream->nextLine();
+            $isBlankLine = preg_match($this->BLANK_LINE_RX, $line) || $line == "";
+            $isSectionEnd = preg_match($this->SECTION_END_RX, $line);
+            $isSubHeader = preg_match($this->SUBHEADER_RX, $line);
+            if($stream->atEnd() || $isBlankLine || $isSectionEnd){
+                $this->parseCurrentParagraphLines($currentLines);
+                $currentLines = [];
+            } else if($isSubHeader){
+                $this->parseCurrentParagraphLines($currentLines);
+                $currentLines = [];
+                $this->parseSubheader($line);
+            } else {
+                array_push($currentLines, $line);
+            }
+        }
+
+        if(count($currentLines)){
+            $this->parseCurrentParagraphLines($currentLines);
+        }   
+    }
+
+    public function parseHeader(string $str)
+    {
+        $isMatch = preg_match($this->HEADER_RX, $str, $match);
+        if($isMatch){
+            $postHeader = null;
+            if($match['after']){
+                $postHeader = $match['after'];
+            }
+            $this->appendNode([
                 "type" => "header",
-                "content" => $header,
+                "content" => $match['header'],
                 "postHeader" => $postHeader
             ]);
         }
-        $rest = preg_replace($headerRegex, "", $currentString);
-        $rest = preg_replace("/\n/", " ", $rest);
-        $rest = ParsingUtility::normalizeSpaces($rest);
-        $rest = trim($rest);
-        if($rest != ""){
-            array_push($result, [
-                "type" => "text",
-                "content" => $rest
+    }
+
+    public function parseSubheader(string $str)
+    {
+        if(preg_match($this->SUBHEADER_RX, $str, $match)){
+            $this->appendNode([
+                "type" => "subheader",
+                "content" => $match['secondary']
             ]);
         }
+    }
 
-        return $result;
+    public function parseCurrentParagraphLines(array $lines){
+        $text = implode("\n", $lines);
+        $paragraphs = explode("\n\n", $text);
+        foreach($paragraphs as $paragraph){
+            $cleanText = ParsingUtility::removeSingleLineBreaks($paragraph);
+            $cleanText = ParsingUtility::normalizeSpaces($cleanText);
+            $cleanText = trim($cleanText);
+            if($cleanText != ""){
+                $this->appendNode([
+                    "type" => "text",
+                    "content" => $cleanText
+                ]);
+            }
+        }
     }
 
     public function getStructureForTwig()
@@ -230,14 +228,34 @@ class AFDParser
         ];
     }
 
+    public function getPreambleNodes()
+    {
+        return array_filter(
+            $this->parsedNodes,
+            function($node){
+                return str_starts_with($node['type'], 'preamble');
+            }                
+        );
+    }
+
+    public function getBodyNodes()
+    {
+        return array_filter(
+            $this->parsedNodes,
+            function($node){
+                return !str_starts_with($node['type'], 'preamble');
+            }
+        );
+    }
+
     private function appendNode($node)
     {
         return array_push($this->parsedNodes, $node);
     }
 
-    private function appendNodes($nodeArray)
+    private function appendNodes(array $list)
     {
-        foreach($nodeArray as $node){
+        foreach($list as $node){
             $this->appendNode($node);
         }
     }

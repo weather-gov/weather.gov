@@ -19,7 +19,9 @@ class LineStream {
 
     public function __construct(string $str)
     {
-        $this->lines = explode("\n", $str);
+        if($str && $str != ""){
+            $this->lines = explode("\n", $str);
+        }
     }
 
     public function nextLine()
@@ -83,18 +85,27 @@ class LineStream {
         if($this->position < 0){
             $this->position = 0;
         }
+
+        return $result;
     }
 
     public function upToMatch(string $regex, string $flags="")
     {
         $result = [];
-        $currentLine = $this->nextLine();
-        $match = preg_match($regex . $flags, $currentLine);
-        while($currentLine){
+        $peek = $this->peek();
+        while($peek){
+            // If we have a match on the peeked
+            // line, then we break
+            $match = preg_match(($regex . $flags), $peek[0]);
             if($match){
                 break;
             }
-            array_push($result, $currentLine);
+
+            // Otherwise, actually increment the stream
+            // and grab that next line, appending it to
+            // the results
+            array_push($result, $this->nextLine());
+            $peek = $this->peek();
         }
 
         return $result;
@@ -103,14 +114,18 @@ class LineStream {
     public function upToAndIncludingMatch(string $regex, string $flags="")
     {
         $result = $this->upToMatch($regex, $flags);
-        return array_push(
+        array_push(
             $result,
-            $this->peekBack()
+            $this->peekBack()[0]
         );
+        return $result;
     }
 
     public function atEnd()
     {
-        return $this->position >= count($this->lines);
+        if(count($this->lines)){
+            return $this->position >= count($this->lines);
+        }
+        return true;
     }
 }

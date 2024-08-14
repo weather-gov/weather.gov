@@ -2,10 +2,10 @@
 
 namespace Drupal\weather_data\Service\Test;
 
-use Drupal\weather_data\Service\AFDParser;
+use Drupal\weather_data\Service\AFDParserOld;
 use PHPUnit\Framework\TestCase;
 
-final class AFDParserTest extends TestCase {
+final class AFDParserOldTest extends TestCase {
     /**
      * @group unit
      * @group afd-parser
@@ -31,7 +31,7 @@ final class AFDParserTest extends TestCase {
             ]
         ];
         
-        $parser = new AFDParser($raw);
+        $parser = new AFDParserOld($raw);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -61,7 +61,7 @@ final class AFDParserTest extends TestCase {
             ]
         ];
 
-        $parser = new AFDParser($raw);
+        $parser = new AFDParserOld($raw);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -82,10 +82,10 @@ final class AFDParserTest extends TestCase {
             ]
         ];
 
-        $parser = new AFDParser($raw);
-        $parser->parseSubheader($raw);
+        $parser = new AFDParserOld($raw);
+        $actual = $parser->parseParagraph($raw);
 
-        $this->assertEquals($expected, $parser->parsedNodes);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -130,7 +130,7 @@ final class AFDParserTest extends TestCase {
             ]
         ];
 
-        $parser = new AFDParser($raw);
+        $parser = new AFDParserOld($raw);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -252,55 +252,15 @@ final class AFDParserTest extends TestCase {
             ],
             [
                 "type" => "text",
-                "content" => "CT...None."
+                "content" => "CT...None. NY...None. NJ...None. MARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350- 353-355."
             ],
             [
                 "type" => "text",
-                "content" => "NY...None."
-            ],
-            [
-                "type" => "text",
-                "content" => "NJ...None."
-            ],
-            [
-                "type" => "text",
-                "content" => "MARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350-"
-            ],
-            [
-                "type" => "text",
-                "content" => "                353-355."
-            ],
-            [
-                "type" => "text",
-                "content" => "        SYNOPSIS...JT/DW"
-            ],
-            [
-                "type" => "text",
-                "content" => "        NEAR TERM...DS/DW"
-            ],
-            [
-                "type" => "text",
-                "content" => "        SHORT TERM...DW"
-            ],
-            [
-                "type" => "text",
-                "content" => "        LONG TERM...JT"
-            ],
-            [
-                "type" => "text",
-                "content" => "        MARINE...JT/DW "
-            ],
-            [
-                "type" => "text",
-                "content" => "        HYDROLOGY...JT/DW "
-            ],
-            [
-                "type" => "text",
-                "content" => "        TIDES/COASTAL FLOODING..."
+                "content" => "SYNOPSIS...JT/DW NEAR TERM...DS/DW SHORT TERM...DW LONG TERM...JT MARINE...JT/DW HYDROLOGY...JT/DW TIDES/COASTAL FLOODING..."
             ],
         ];
         
-        $parser = new AFDParser($raw);
+        $parser = new AFDParserOld($raw);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);

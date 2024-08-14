@@ -15,9 +15,11 @@
         {% if node.type == 'header' %}
             <h2 class="usa-heading">{{node.content}}</h2>
             {% if node.postHeader %}
-                <h3>{{node.postHeader}}</h3>
+                <span class="afd-postheader">{{node.postHeader}}</span>
             {% endif %}
 
+        {% elseif node.type == 'subheader' %}
+            <h3>{{node.content}}</h3>
         {% else %}
             <p class="usa-text">{{node.content}}</p>
         {% endif %}
