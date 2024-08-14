@@ -30,7 +30,7 @@ class WeatherAlertParser
         $cleanedDescriptionString = ParsingUtility::removeSingleLineBreaks(
             $this->descriptionString,
         );
-        $paragraphs = ParserUtility::splitByParagraphs($cleanedDescriptionString);
+        $paragraphs = ParsingUtility::splitByParagraphs($cleanedDescriptionString);
 
         $this->parsedNodes = [];
 
