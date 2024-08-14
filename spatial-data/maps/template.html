@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <style type="text/css">
+      #map {
+        height: 800px;
+        width: 1200px;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"></script>
+    <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="text/javascript">
+      // This function is created globally and can be called from Playwright.
+      // It expects a GeoJSON object representing the WFO bounds.
+      window.draw = (geojson) => {
+        // Turn off the zoom and attribution controls. Generally we'd leave the
+        // attribution, but Leaflet is created and primarily  maintained by a
+        // Ukrainian team and they have added the Ukrainian flag to the
+        // attribution to raise awareness for the war Russia is waging against
+        // them. However, as we are producing images to be used by the US
+        // government, it seems inappropriate to place other countries' flags
+        // on them absent a directive from elsewhere.
+        const map = L.map("map", { zoomControl: false });
+        map.attributionControl.setPrefix("");
+
+        // Use the same street base map that we use elsewhere.
+        L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
+          apiKey:
+            "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ",
+        }).addTo(map);
+
+        // Slap the WFO polygon on that thing.
+        const wfo = L.geoJSON(geojson, {
+          style: {
+            fillColor: "#B4C1CD",
+            color: "rgb(7,100,141)",
+            opacity: 0.85,
+            fillOpacity: 0.3,
+          },
+        }).addTo(map);
+
+        // Compute the bounds and center the map accordingly.
+        const bounds = wfo.getBounds();
+        map.fitBounds(bounds);
+      };
+    </script>
+  </body>
+</html>

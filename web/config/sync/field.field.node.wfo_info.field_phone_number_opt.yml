@@ -21,6 +21,14 @@ settings:
   allowed_countries:
     US: US
   allowed_types:
-    - 0
+    0: 0
+    1: 1
+    2: 2
+    3: 3
+    5: 5
+    6: 6
+    10: 10
+    27: 27
+    28: 28
   extension_field: false
 field_type: phone_number

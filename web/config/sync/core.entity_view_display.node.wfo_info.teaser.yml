@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.wfo_info.field_phone_number_opt
     - field.field.node.wfo_info.field_twitter_url
     - field.field.node.wfo_info.field_wfo
+    - field.field.node.wfo_info.field_wfo_email
     - field.field.node.wfo_info.field_wfo_image
     - field.field.node.wfo_info.field_youtube_url
     - node.type.wfo_info
@@ -40,6 +41,7 @@ hidden:
   field_phone_number_opt: true
   field_twitter_url: true
   field_wfo: true
+  field_wfo_email: true
   field_wfo_image: true
   field_youtube_url: true
   langcode: true
