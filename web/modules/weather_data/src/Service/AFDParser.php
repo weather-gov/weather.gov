@@ -27,7 +27,7 @@ class AFDParser
      * most recently parsed heading
      * @var currentContentType
      */
-    private $currentContentType = 'preamble';
+    private $currentContentType = "preamble";
 
     /**
      * The number of preamble paragraphs parsed
@@ -35,7 +35,6 @@ class AFDParser
      */
     private $preambleCount = 0;
 
-    
     public function __construct(string $source)
     {
         $this->source = $source;
@@ -44,7 +43,7 @@ class AFDParser
     public function parse()
     {
         $this->parsedNodes = [];
-        
+
         // Strategy: split the string up into contiguous chunks
         // of text ("paragraphs") separated by double newlines.
         // Attempt to find matches in each chunk, and output
@@ -55,9 +54,9 @@ class AFDParser
         // Parse out nodes for each of the paragraphs.
         // If we cannot parse a given paragraph, simply dump the
         // string into a generic text node.
-        foreach($paragraphs as $paragraph){
+        foreach ($paragraphs as $paragraph) {
             $parsedParagraph = $this->parseParagraph($paragraph);
-            if($parsedParagraph){
+            if ($parsedParagraph) {
                 $this->appendNodes($parsedParagraph);
             }
         }
@@ -68,12 +67,9 @@ class AFDParser
     public function scrubParagraphs(array $paragraphs)
     {
         // Remove any paragraphs that contain "&&" or "$$"
-        return array_filter(
-            $paragraphs,
-            function($paragraph){
-                return trim($paragraph) != "&&";
-            }
-        );
+        return array_filter($paragraphs, function ($paragraph) {
+            return trim($paragraph) != "&&";
+        });
     }
 
     /**
@@ -83,8 +79,8 @@ class AFDParser
     public function parsePreambleCodes(string $str)
     {
         $regex = "/^(?<preambleCodes>000\s.+.*)$/sm";
-        if(preg_match($regex, $str, $matches)){
-            $codeSections = explode("\n", $matches['preambleCodes']);
+        if (preg_match($regex, $str, $matches)) {
+            $codeSections = explode("\n", $matches["preambleCodes"]);
             $lastIdx = count($codeSections) - 1;
             $first = $codeSections[0];
             $last = $codeSections[$lastIdx];
@@ -93,16 +89,16 @@ class AFDParser
             return [
                 [
                     "type" => "preambleCode",
-                    "content" => $first
+                    "content" => $first,
                 ],
                 [
                     "type" => "preambleCode",
-                    "content" => implode(" ", $middle)
+                    "content" => implode(" ", $middle),
                 ],
                 [
                     "type" => "preambleCode",
-                    "content" => $last
-                ]
+                    "content" => $last,
+                ],
             ];
         }
 
@@ -117,20 +113,17 @@ class AFDParser
     {
         // If it starts with the beginning of an AFD header,
         // we know this isn't a valid preamble section
-        if(str_starts_with($str, ".")){
+        if (str_starts_with($str, ".")) {
             return false;
         }
 
         $lines = explode("\n", $str);
-        return array_map(
-            function($line){
-                return [
-                    "type" => "preambleText",
-                    "content" => $line
-                ];
-            },
-            $lines
-        );
+        return array_map(function ($line) {
+            return [
+                "type" => "preambleText",
+                "content" => $line,
+            ];
+        }, $lines);
     }
 
     public function parseParagraph(string $str)
@@ -140,24 +133,24 @@ class AFDParser
 
         // See if this paragraph is or contains a secondary header
         $subheaderRegex = "/^\s*\.{3}(?<secondary>[^\.]+)\.{3}/U";
-        if(preg_match($subheaderRegex, $str, $matches)){
+        if (preg_match($subheaderRegex, $str, $matches)) {
             $currentString = preg_replace($subheaderRegex, "", $currentString);
             array_push($result, [
                 "type" => "subheader",
-                "content" => $matches["secondary"]
+                "content" => $matches["secondary"],
             ]);
         }
 
         // See if this paragraph contains a top level header
         $headerRegex = "/^\.(?<header>[^\.]+)[\.]{3}?(?<after>.*)\n/mU";
-        if(preg_match($headerRegex, $currentString, $matches)){
-            $header = $matches['header'];
+        if (preg_match($headerRegex, $currentString, $matches)) {
+            $header = $matches["header"];
             $this->updateCurrentContentType($header);
-            $postHeader = $matches['after'] ?? null;
+            $postHeader = $matches["after"] ?? null;
             array_push($result, [
                 "type" => "header",
                 "content" => $header,
-                "postHeader" => $postHeader
+                "postHeader" => $postHeader,
             ]);
             $currentString = preg_replace($headerRegex, "", $currentString);
         }
@@ -165,8 +158,8 @@ class AFDParser
         // See if this paragraph contains the end of the body
         // characters, '$$'
         $endOfBodyRegex = "/^\s*(?<eob>[$]{2})\s*/m";
-        if(preg_match($endOfBodyRegex, $currentString, $match)){
-            $symbol = $match['eob'];
+        if (preg_match($endOfBodyRegex, $currentString, $match)) {
+            $symbol = $match["eob"];
             $this->updateCurrentContentType($symbol);
             $currentString = preg_replace($endOfBodyRegex, "", $currentString);
         }
@@ -177,11 +170,11 @@ class AFDParser
         // For example, if the content type is 'wwa',
         // then we treat newlines differently than if
         // it is 'generic'
-        if($this->currentContentType == "preamble"){
+        if ($this->currentContentType == "preamble") {
             $this->parsePreambleContent($currentString, $result);
-        } else if($this->currentContentType == 'wwa'){
-            $this->parseWWAContent($currentString, $result);            
-        } else if($this->currentContentType == "epilogue"){
+        } elseif ($this->currentContentType == "wwa") {
+            $this->parseWWAContent($currentString, $result);
+        } elseif ($this->currentContentType == "epilogue") {
             $this->parseEpilogueContent($currentString, $result);
         } else {
             $this->parseGenericContent($currentString, $result);
@@ -199,12 +192,12 @@ class AFDParser
      */
     public function parsePreambleContent(string $str, array &$result)
     {
-        $nodeType = ($this->preambleCount > 0) ? "preambleText" : "preambleCode";
+        $nodeType = $this->preambleCount > 0 ? "preambleText" : "preambleCode";
         $currentString = trim($str);
-        if($currentString != ""){
+        if ($currentString != "") {
             array_push($result, [
                 "type" => $nodeType,
-                "content" => $currentString
+                "content" => $currentString,
             ]);
         }
         $this->preambleCount += 1;
@@ -219,10 +212,10 @@ class AFDParser
         $str = preg_replace("/\n/", " ", $str);
         $str = ParsingUtility::normalizeSpaces($str);
         $str = trim($str);
-        if($str != ""){
+        if ($str != "") {
             array_push($result, [
                 "type" => "text",
-                "content" => $str
+                "content" => $str,
             ]);
         }
     }
@@ -238,15 +231,15 @@ class AFDParser
         // indicates line continuation. Replace with the empty
         // string, followed by a normal newline.
         $currentString = trim($str);
-        if(preg_match("/SYNOPSIS/", $currentString)){
+        if (preg_match("/SYNOPSIS/", $currentString)) {
             $test = true;
         }
         $indentRegex = "/\n    +/";
-        $currentString = preg_replace($indentRegex, '', $currentString);
-        if($currentString != ""){
+        $currentString = preg_replace($indentRegex, "", $currentString);
+        if ($currentString != "") {
             array_push($result, [
                 "type" => "text",
-                "content" => $currentString
+                "content" => $currentString,
             ]);
         }
     }
@@ -264,17 +257,14 @@ class AFDParser
         // Remove all spacing from the ends
         // of each line
         $lines = explode("\n", $currentString);
-        $lines = array_map(
-            function($line){
-                return trim($line);
-            },
-            $lines
-        );
+        $lines = array_map(function ($line) {
+            return trim($line);
+        }, $lines);
         $currentString = implode("\n", $lines);
-        if($currentString != ""){
+        if ($currentString != "") {
             array_push($result, [
                 "type" => "epilogueText",
-                "content" => $currentString
+                "content" => $currentString,
             ]);
         }
     }
@@ -286,8 +276,8 @@ class AFDParser
         $epilogueNodes = $this->getEpilogueNodes();
         $preambleCode = [];
         $preambleText = [];
-        foreach($preambleNodes as $node){
-            if($node['type'] == 'preambleCode'){
+        foreach ($preambleNodes as $node) {
+            if ($node["type"] == "preambleCode") {
                 array_push($preambleCode, $node);
             } else {
                 array_push($preambleText, $node);
@@ -295,12 +285,12 @@ class AFDParser
         }
 
         return [
-            'preamble' => [
-                'code' => $preambleCode,
-                'text' => $preambleText
+            "preamble" => [
+                "code" => $preambleCode,
+                "text" => $preambleText,
             ],
-            'body' => $body,
-            'epilogue' => $epilogueNodes
+            "body" => $body,
+            "epilogue" => $epilogueNodes,
         ];
     }
 
@@ -319,9 +309,9 @@ class AFDParser
     public function updateCurrentContentType(string $str)
     {
         $wwaRegex = "/^[A-Z]{3}\sWATCHES\/WARNINGS\/ADVISORIES\s*$/";
-        if(preg_match($wwaRegex, $str)){
+        if (preg_match($wwaRegex, $str)) {
             $this->currentContentType = "wwa";
-        } else if($str == '$$') {
+        } elseif ($str == '$$') {
             $this->currentContentType = "epilogue";
         } else {
             $this->currentContentType = "generic";
@@ -330,35 +320,26 @@ class AFDParser
 
     public function getPreambleNodes()
     {
-        return array_filter(
-            $this->parsedNodes,
-            function($node){
-                return str_starts_with($node['type'], 'preamble');
-            }                
-        );
+        return array_filter($this->parsedNodes, function ($node) {
+            return str_starts_with($node["type"], "preamble");
+        });
     }
 
     public function getBodyNodes()
     {
-        return array_filter(
-            $this->parsedNodes,
-            function($node){
-                $nodeType = $node["type"];
-                $isPreamble = str_starts_with($nodeType, "preamble");
-                $isEpilogue = str_starts_with($nodeType, "epilogue");
-                return !$isPreamble && !$isEpilogue;
-            }
-        );
+        return array_filter($this->parsedNodes, function ($node) {
+            $nodeType = $node["type"];
+            $isPreamble = str_starts_with($nodeType, "preamble");
+            $isEpilogue = str_starts_with($nodeType, "epilogue");
+            return !$isPreamble && !$isEpilogue;
+        });
     }
 
     public function getEpilogueNodes()
     {
-        return array_filter(
-            $this->parsedNodes,
-            function($node){
-                return str_starts_with($node['type'], "epilogue");
-            }
-        );
+        return array_filter($this->parsedNodes, function ($node) {
+            return str_starts_with($node["type"], "epilogue");
+        });
     }
 
     private function appendNode($node)
@@ -368,7 +349,7 @@ class AFDParser
 
     private function appendNodes($nodeArray)
     {
-        foreach($nodeArray as $node){
+        foreach ($nodeArray as $node) {
             $this->appendNode($node);
         }
     }

@@ -5,7 +5,8 @@ namespace Drupal\weather_data\Service\Test;
 use Drupal\weather_data\Service\AFDParser;
 use PHPUnit\Framework\TestCase;
 
-final class AFDParserTest extends TestCase {
+final class AFDParserTest extends TestCase
+{
     /**
      * @group unit
      * @group afd-parser
@@ -14,23 +15,26 @@ final class AFDParserTest extends TestCase {
     public function testBasicHeaderAndText(): void
     {
         $raw = ".SYNOPSIS...\n";
-        $raw .= "A nearly stationary front will remain near the coast through\n";
-        $raw .= "Thursday. The front will then return northward Thursday night\n";
+        $raw .=
+            "A nearly stationary front will remain near the coast through\n";
+        $raw .=
+            "Thursday. The front will then return northward Thursday night\n";
         $raw .= "into Friday.\n";
 
         $expected = [
             [
                 "type" => "header",
                 "content" => "SYNOPSIS",
-                "postHeader" => null
+                "postHeader" => null,
             ],
             [
                 "type" => "text",
-                "content" => "A nearly stationary front will remain near the coast through"
-                         . " Thursday. The front will then return northward Thursday night into Friday."
-            ]
+                "content" =>
+                    "A nearly stationary front will remain near the coast through" .
+                    " Thursday. The front will then return northward Thursday night into Friday.",
+            ],
         ];
-        
+
         $parser = new AFDParser($raw);
         $actual = $parser->parse();
 
@@ -43,22 +47,27 @@ final class AFDParserTest extends TestCase {
      */
     public function testHeaderWithPostheader(): void
     {
-        $raw = ".AVIATION /15Z WEDNESDAY THROUGH SUNDAY/...SOME OTHER TEXT HERE\n";
-        $raw .= "Improvement to MVFR cigs by mid-morning for any sites that are\n";
-        $raw .= "not already MVFR. Slow improvement then to VFR starting from the\n";
-        $raw .= "north in the late afternoon and reaching the NYC terminals late\n";
+        $raw =
+            ".AVIATION /15Z WEDNESDAY THROUGH SUNDAY/...SOME OTHER TEXT HERE\n";
+        $raw .=
+            "Improvement to MVFR cigs by mid-morning for any sites that are\n";
+        $raw .=
+            "not already MVFR. Slow improvement then to VFR starting from the\n";
+        $raw .=
+            "north in the late afternoon and reaching the NYC terminals late\n";
         $raw .= "this evening.\n";
 
         $expected = [
             [
                 "type" => "header",
                 "content" => "AVIATION /15Z WEDNESDAY THROUGH SUNDAY/",
-                "postHeader" => "SOME OTHER TEXT HERE"
+                "postHeader" => "SOME OTHER TEXT HERE",
             ],
             [
                 "type" => "text",
-                "content" => "Improvement to MVFR cigs by mid-morning for any sites that are not already MVFR. Slow improvement then to VFR starting from the north in the late afternoon and reaching the NYC terminals late this evening."
-            ]
+                "content" =>
+                    "Improvement to MVFR cigs by mid-morning for any sites that are not already MVFR. Slow improvement then to VFR starting from the north in the late afternoon and reaching the NYC terminals late this evening.",
+            ],
         ];
 
         $parser = new AFDParser($raw);
@@ -78,8 +87,8 @@ final class AFDParserTest extends TestCase {
         $expected = [
             [
                 "type" => "subheader",
-                "content" => "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty"
-            ]
+                "content" => "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty",
+            ],
         ];
 
         $parser = new AFDParser($raw);
@@ -101,17 +110,18 @@ final class AFDParserTest extends TestCase {
         $raw .= "Area Forecast Discussion\n";
         $raw .= "National Weather Service New York NY\n";
         $raw .= "1043 AM EDT Wed Aug 7 2024\n";
-        $raw .="\n";
+        $raw .= "\n";
 
         $expected = [
             [
                 "type" => "preambleCode",
-                "content" => "000\nFXUS61 KOKX 071443\nAFDOKX"
+                "content" => "000\nFXUS61 KOKX 071443\nAFDOKX",
             ],
             [
                 "type" => "preambleText",
-                "content" => "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024"
-            ]
+                "content" =>
+                    "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024",
+            ],
         ];
 
         $parser = new AFDParser($raw);
@@ -135,29 +145,36 @@ final class AFDParserTest extends TestCase {
         $raw .= "Area Forecast Discussion\n";
         $raw .= "National Weather Service New York NY\n";
         $raw .= "1043 AM EDT Wed Aug 7 2024\n";
-        $raw .="\n";
+        $raw .= "\n";
         $raw .= ".SYNOPSIS...\n";
-        $raw .= "A nearly stationary front will remain near the coast through \n";
-        $raw .= "Thursday. The front will then return northward Thursday night\n";
+        $raw .=
+            "A nearly stationary front will remain near the coast through \n";
+        $raw .=
+            "Thursday. The front will then return northward Thursday night\n";
         $raw .= "into Friday. \n";
-        $raw .="\n";
-        $raw .= "Please refer to the latest official forecast on Debby from the \n";
+        $raw .= "\n";
+        $raw .=
+            "Please refer to the latest official forecast on Debby from the \n";
         $raw .= "National Hurricane Center.\n";
         $raw .= "\n";
         $raw .= "&&\n";
         $raw .= "\n";
         $raw .= ".NEAR TERM /THROUGH TONIGHT/...\n";
-        $raw .= "Forecast mainly on track. Much cooler air mass has worked into the \n";
+        $raw .=
+            "Forecast mainly on track. Much cooler air mass has worked into the \n";
         $raw .= "region with the stationary front just of the of the area.\n";
         $raw .= "\n\n ...NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty...\n";
-        $raw .= "High pressure builds down from the north into tonight, which will \n";
-        $raw .= "only reinforce some of the lower level cooler and drier air. \n";
+        $raw .=
+            "High pressure builds down from the north into tonight, which will \n";
+        $raw .=
+            "only reinforce some of the lower level cooler and drier air. \n";
         $raw .= "\n";
         $raw .= ".OKX WATCHES/WARNINGS/ADVISORIES...\n";
         $raw .= "CT...None.\n";
         $raw .= "NY...None.\n";
         $raw .= "NJ...None.\n";
-        $raw .= "MARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350-\n";
+        $raw .=
+            "MARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350-\n";
         $raw .= "                353-355.\n";
         $raw .= "\n";
         $raw .= "            &&\n";
@@ -175,61 +192,70 @@ final class AFDParserTest extends TestCase {
         $expected = [
             [
                 "type" => "preambleCode",
-                "content" => "000\nFXUS61 KOKX 071443\nAFDOKX"
+                "content" => "000\nFXUS61 KOKX 071443\nAFDOKX",
             ],
             [
                 "type" => "preambleText",
-                "content" => "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024"
+                "content" =>
+                    "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024",
             ],
             [
                 "type" => "header",
                 "content" => "SYNOPSIS",
-                "postHeader" => null
+                "postHeader" => null,
             ],
             [
                 "type" => "text",
-                "content" => "A nearly stationary front will remain near the coast through"
-                         . " Thursday. The front will then return northward Thursday night into Friday."
+                "content" =>
+                    "A nearly stationary front will remain near the coast through" .
+                    " Thursday. The front will then return northward Thursday night into Friday.",
             ],
             [
                 "type" => "text",
-                "content" => "Please refer to the latest official forecast on Debby from the National Hurricane Center."
+                "content" =>
+                    "Please refer to the latest official forecast on Debby from the National Hurricane Center.",
             ],
             [
                 "type" => "header",
                 "content" => "NEAR TERM /THROUGH TONIGHT/",
-                "postHeader" => null
+                "postHeader" => null,
             ],
             [
                 "type" => "text",
-                "content" => "Forecast mainly on track. Much cooler air mass has worked into the "
-                         . "region with the stationary front just of the of the area."
+                "content" =>
+                    "Forecast mainly on track. Much cooler air mass has worked into the " .
+                    "region with the stationary front just of the of the area.",
             ],
             [
                 "type" => "subheader",
-                "content" => "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty"
+                "content" => "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty",
             ],
             [
                 "type" => "text",
-                "content" => "High pressure builds down from the north into tonight, which will "
-                         . "only reinforce some of the lower level cooler and drier air."
+                "content" =>
+                    "High pressure builds down from the north into tonight, which will " .
+                    "only reinforce some of the lower level cooler and drier air.",
             ],
             [
                 "type" => "header",
                 "content" => "OKX WATCHES/WARNINGS/ADVISORIES",
-                "postHeader" => null
+                "postHeader" => null,
             ],
             [
                 "type" => "text",
-                "content" => "CT...None.\nNY...None.\nNJ...None.\nMARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350-353-355."
+                "content" =>
+                    "CT...None.\nNY...None.\nNJ...None.\nMARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350-353-355.",
             ],
-            ["type" => "epilogueText", "content" => "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT TERM...DW\nLONG TERM...JT\nMARINE...JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING..."],
+            [
+                "type" => "epilogueText",
+                "content" =>
+                    "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT TERM...DW\nLONG TERM...JT\nMARINE...JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
+            ],
         ];
-        
+
         $parser = new AFDParser($raw);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
     }
 }
-

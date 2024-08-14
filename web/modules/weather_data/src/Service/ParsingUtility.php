@@ -20,14 +20,16 @@ class ParsingUtility
 
     /**
      * Split the incoming string by "paragraph" line breaks.
-     * Optionally filter out elements that are empty strings.       
+     * Optionally filter out elements that are empty strings.
      */
-    public static function splitByParagraphs(string $str, bool $filterEmpty=true)
-    {
+    public static function splitByParagraphs(
+        string $str,
+        bool $filterEmpty = true,
+    ) {
         $paragraphs = preg_split("/\r\n|\n|\r/", $str);
 
         // Optionally remove any blank strings
-        if($filterEmpty){
+        if ($filterEmpty) {
             $paragraphs = array_filter($paragraphs, function ($paragraph) {
                 return $paragraph != "";
             });

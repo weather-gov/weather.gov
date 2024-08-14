@@ -5,7 +5,8 @@ namespace Drupal\weather_data\Service\Test;
 use Drupal\weather_data\Service\LineStream;
 use PHPUnit\Framework\TestCase;
 
-final class LineStreamTest extends TestCase {
+final class LineStreamTest extends TestCase
+{
     /**
      * @group unit
      * @group linestream
@@ -16,7 +17,7 @@ final class LineStreamTest extends TestCase {
         $stream = new LineStream($source);
 
         $this->assertEquals(false, $stream->atEnd());
-        
+
         $stream->position = 3;
 
         $this->assertEquals(true, $stream->atEnd());
@@ -153,7 +154,7 @@ final class LineStreamTest extends TestCase {
         $this->assertEquals($expected, $actual);
         $this->assertEquals(3, $stream->position);
     }
-    
+
     /**
      * @group unit
      * @group linestream
@@ -217,10 +218,7 @@ final class LineStreamTest extends TestCase {
         $stream = new LineStream($source);
         $stream->position = 2;
 
-        $expected = [
-            "Line1",
-            "Line2"
-        ];
+        $expected = ["Line1", "Line2"];
         // Peek back beyond the beginning
         $actual = $stream->peekBack(7);
         $expectedPosition = 2;
@@ -329,10 +327,7 @@ final class LineStreamTest extends TestCase {
         $stream = new LineStream($source);
         $regex = "/^[\.]{3}[^\.]+[\.]{3}$/";
 
-        $expected = [
-            "First line",
-            "Second line"
-        ];
+        $expected = ["First line", "Second line"];
         $actual = $stream->upToMatch($regex);
 
         $this->assertEquals($expected, $actual);
@@ -348,11 +343,7 @@ final class LineStreamTest extends TestCase {
         $stream = new LineStream($source);
         $regex = "/^[\.]{3}[^\.]+[\.]{3}$/";
 
-        $expected = [
-            "First line",
-            "Second line",
-            "...Third line..."
-        ];
+        $expected = ["First line", "Second line", "...Third line..."];
         $actual = $stream->upToAndIncludingMatch($regex);
 
         $this->assertEquals($expected, $actual);
