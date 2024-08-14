@@ -26,6 +26,8 @@ module:
   image: 0
   js_cookie: 0
   jsonapi: 0
+  jsonapi_defaults: 0
+  jsonapi_extras: 0
   language: 0
   layout_builder: 0
   layout_discovery: 0
