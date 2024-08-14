@@ -2,6 +2,18 @@ import path from "node:path";
 import fs from "node:fs/promises";
 import { globSync } from "glob";
 
+/**
+ * Note on Product Types and Paths
+ * There are two kinds of paths for potential product
+ * types.
+ * The first is `/products/types/<type>.json`, which
+ * will currently pull (up to) the 5k most recent products
+ * of that type, no matter where they were issued.
+ * The second kind of product path starts with
+ * `/products/types/<type>/`, and can be further specified
+ * to get products for a specific WFO, for example,
+ * `/products/types/AFD/locations/OKX.json
+ */
 const PRODUCT_TYPE_IN_PATH_RX = /\/products\/types\/([A-Za-z]+)(\/|\.json)/;
 const PRODUCT_TYPE_LOCATION_RX =
   /\/products\/types\/[A-Za-z]+\/locations\/([A-Za-z]+)\.json/;
