@@ -73,16 +73,15 @@ const getProductLabel = (data, filePath, recordType) => {
   const productType =
     getProductTypeFromPath(filePath) ?? getProductTypeFromData(data);
   const wfoCode = getWFOCodeFromPath(filePath);
-  let size;
-  if (recordType === "all" || recordType === "location") {
-    size = data["@graph"].length;
-  }
   if (recordType === "all") {
+    const size = data["@graph"].length;
     return `List of most recent ${productType}s (sample of ${size})`;
   }
   if (recordType === "location") {
+    const size = data["@graph"].length;
     return `List of most recent ${productType}s for office ${wfoCode} (sample of ${size})`;
   }
+}
 
   return `${productType} for ${data.issuingOffice} issued at ${data.issuanceTime}`;
 };
