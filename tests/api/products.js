@@ -93,9 +93,6 @@ const getProductLabel = (data, filePath, recordType) => {
     const size = data["@graph"].length;
     return `List of most recent ${productType}s for office ${wfoCode} (sample of ${size})`;
   }
-}
-
-  return `${productType} for ${data.issuingOffice} issued at ${data.issuanceTime}`;
 };
 
 /**
