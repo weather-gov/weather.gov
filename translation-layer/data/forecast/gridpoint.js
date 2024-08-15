@@ -1,9 +1,4 @@
-import dayjs from "dayjs";
-import dayjsDuration from "dayjs/plugin/duration.js";
-import dayjsUTC from "dayjs/plugin/utc.js";
-
-dayjs.extend(dayjsDuration);
-dayjs.extend(dayjsUTC);
+import dayjs from "../../util/day.js";
 
 export default (data, hours) => {
   const properties = Object.keys(data.properties).filter(

@@ -41,6 +41,7 @@ services:
       - weather.gov
     links:
       - database
+      - api-proxy
     ports:
       - 8082:8082
     volumes:

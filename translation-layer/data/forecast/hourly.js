@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from "../../util/day.js";
 
 export default (data, hours) => {
   for (const period of data.properties.periods) {

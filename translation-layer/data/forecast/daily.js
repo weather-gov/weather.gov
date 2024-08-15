@@ -1,10 +1,5 @@
-import dayjs from "dayjs";
-import tz from "dayjs/plugin/timezone.js";
-import utc from "dayjs/plugin/utc.js";
+import dayjs from "../../util/day.js";
 import { convertProperties } from "../../util/convert.js";
-
-dayjs.extend(tz);
-dayjs.extend(utc);
 
 const dayjsOffset = (iso8601) => {
   const time = dayjs(iso8601);

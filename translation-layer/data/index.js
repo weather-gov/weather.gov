@@ -14,7 +14,7 @@ export const getDataForPoint = async (lat, lon) => {
   Object.assign(grid, forecast.gridData);
   delete forecast.gridData;
 
-  const alerts = await getAlerts({ grid, point });
+  const alerts = await getAlerts({ grid, point, place });
 
   if (forecast.daily.elevation) {
     grid.elevation = forecast.daily.elevation;

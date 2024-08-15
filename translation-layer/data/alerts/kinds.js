@@ -21,7 +21,7 @@ const ALERT_LEVEL = {
   },
 };
 
-export default new Map([
+const alertTypes = new Map([
   // Priorities are spaced at intervals of powers of two so that new
   // alerts can be inserted exactly in the middle of any existing alerts
   // without needing to reorder all of the other alerts.
@@ -1018,3 +1018,15 @@ export default new Map([
     },
   ],
 ]);
+
+export default alertTypes;
+
+export const rest = () => {
+  const output = [...alertTypes.entries()]
+    .sort(([, { priority: a }], [, { priority: b }]) => a - b)
+    .map(([name, metadata]) => ({
+      name,
+      kind: metadata.kind,
+    }));
+  return output;
+};

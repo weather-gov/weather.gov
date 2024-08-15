@@ -1,5 +1,6 @@
 import fastify from "fastify";
 import { getDataForPoint } from "./data/index.js";
+import { rest as alertsRest } from "./data/alerts/kinds.js";
 
 const main = async () => {
   const port = process.env.PORT || 8082;
@@ -49,6 +50,10 @@ const main = async () => {
         },
       });
     },
+  });
+
+  server.get("/meta/alerts", (_, response) => {
+    response.send(alertsRest());
   });
 
   await server.listen({ port, host: "0.0.0.0" });
