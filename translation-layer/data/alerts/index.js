@@ -1,4 +1,5 @@
 import { openDatabase } from "../db.js";
+import alertKinds from "./kinds.js";
 
 const cachedAlerts = [];
 
@@ -19,7 +20,7 @@ const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
 };
 
 const updateAlerts = async () => {
-  const alerts = await fetch(
+  const rawAlerts = await fetch(
     "https://api.weather.gov/alerts/active?status=actual",
   )
     .then((r) => r.json())
@@ -27,10 +28,20 @@ const updateAlerts = async () => {
 
   const db = await openDatabase();
 
-  for await (const alert of alerts) {
+  const alerts = [];
+
+  for await (const rawAlert of rawAlerts) {
+    const alert = {
+      metadata: alertKinds.get(rawAlert.properties.event.toLowerCase()),
+      _raw: rawAlert,
+    };
+    alerts.push(alert);
+
+    alert.geometry = rawAlert.geometry;
+
     if (alert.geometry === null) {
-      const zones = alert.properties.affectedZones;
-      const counties = alert.properties.geocode?.SAME;
+      const zones = rawAlert.properties.affectedZones;
+      const counties = rawAlert.properties.geocode?.SAME;
 
       if (Array.isArray(zones) && zones.length > 0) {
         const sql = `
@@ -115,6 +126,16 @@ export default async ({ grid }) => {
     }
   }
 
+  const highest = alerts
+    .map(({ metadata: { level } }) => level)
+    .sort((a, b) => {
+      const priorityA = a.priority;
+      const priorityB = b.priority;
+
+      return priorityB - priorityA;
+    })
+    .pop();
+
   await db.end();
-  return alerts;
+  return { items: alerts, highestLevel: highest.text };
 };
