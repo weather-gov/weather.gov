@@ -1,4 +1,4 @@
-<h1> How has research been involved in informing the weather.gov 2.0 design? </h1>
+r<h1> How has research been involved in informing the weather.gov 2.0 design? </h1>
 
 * Understanding the challenges that both internal and external users experience through open-ended “generative” research 
 * Understanding the ins and outs of the existing systems through onsite visit 
@@ -14,9 +14,9 @@
 | Path Analysis | April 2023 | Initial research with stakeholders, partners and forecasters across NWS to understand the problem space | Users experience challenges finding and understanding content due to the organization of the website which is based on the NWS org structure. Significant inconsistencies make data hard to interpret, areas do not map to areas that decision makers use. |
 | WFO onsite - Sterling (DC) | July 2023 | Onsite tour + observations at Sterling WFO office (DC area). Includes in-depth notes on internal tools and systems (AWIPs, etc) | Understanding of current forecaster workflow and tools in creating forecasts and various types of content  |
 | Forecaster research | Sept 2023 | Validate our understanding of the forecaster experience before, during and after a weather hazard | Began to identify some common needs for a CMS experience |
-| WFO onsite - Nashville | Nov 2023 | -------- | ------- |
-| R1 - Usability (public) | Dec 2023 | -------- | ------- |
-| R2 - Usability (public) | Jan 2024 | -------- | ------- |
+| WFO onsite - Nashville | Nov 2023 | Better understand partner experiences before, during and after a weather hazard | Identified partner painpoints during a hazard - post-event support, mapping and radar, etc |
+| R1 - Usability (public) | Dec 2023 | Evaluate usability of prototyped website  | ------- |
+| R2 - Usability (public) | Jan 2024 | Evaluate usability of  | ------- |
 | R3 - Usability (public + partner)| Mar 2024 | -------- | ------- |
 | R4- Usability (CMS, forecasters) | Apr 2024 | -------- | ------- |
 | R5 - Unmoderated testing pilot | May 2024 | -------- | ------- |
