@@ -31,7 +31,7 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "A nearly stationary front will remain near the coast through" .
-                           " Thursday. The front will then return northward Thursday night into Friday.",
+                    " Thursday. The front will then return northward Thursday night into Friday.",
             ],
         ];
 
@@ -66,10 +66,10 @@ final class AFDParserTest extends TestCase
             [
                 "type" => "text",
                 "content" =>
-                    "Improvement to MVFR cigs by mid-morning for any sites "
-                    . "that are not already MVFR. Slow improvement then to "
-                         . "VFR starting from the north in the late afternoon and "
-                         . "reaching the NYC terminals late this evening.",
+                    "Improvement to MVFR cigs by mid-morning for any sites " .
+                    "that are not already MVFR. Slow improvement then to " .
+                    "VFR starting from the north in the late afternoon and " .
+                    "reaching the NYC terminals late this evening.",
             ],
         ];
 
@@ -211,7 +211,7 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "A nearly stationary front will remain near the coast through" .
-                           " Thursday. The front will then return northward Thursday night into Friday.",
+                    " Thursday. The front will then return northward Thursday night into Friday.",
             ],
             [
                 "type" => "text",
@@ -227,7 +227,7 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "Forecast mainly on track. Much cooler air mass has worked into the " .
-                           "region with the stationary front just of the of the area.",
+                    "region with the stationary front just of the of the area.",
             ],
             [
                 "type" => "subheader",
@@ -237,7 +237,7 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "High pressure builds down from the north into tonight, which will " .
-                           "only reinforce some of the lower level cooler and drier air.",
+                    "only reinforce some of the lower level cooler and drier air.",
             ],
             [
                 "type" => "header",
@@ -247,16 +247,16 @@ final class AFDParserTest extends TestCase
             [
                 "type" => "text",
                 "content" =>
-                    "CT...None.\nNY...None.\nNJ...None.\nMARINE"
-                    . "...Small Craft Advisory until 11 PM EDT "
-                         . "this evening for ANZ350-353-355.",
+                    "CT...None.\nNY...None.\nNJ...None.\nMARINE" .
+                    "...Small Craft Advisory until 11 PM EDT " .
+                    "this evening for ANZ350-353-355.",
             ],
             [
                 "type" => "epilogueText",
                 "content" =>
-                    "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT"
-                    . " TERM...DW\nLONG TERM...JT\nMARINE..."
-                         . "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
+                    "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" .
+                    " TERM...DW\nLONG TERM...JT\nMARINE..." .
+                    "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
             ],
         ];
 

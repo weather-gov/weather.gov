@@ -3,6 +3,7 @@
 namespace Drupal\weather_data\Service;
 
 use Drupal\weather_data\Service\WeatherAlertParser;
+use Drupal\weather_data\Service\ParsingUtility;
 
 /**
  * Add weather alert methods.
@@ -195,11 +196,11 @@ trait AlertTrait
                 $output->description,
             );
 
-            $output->instruction = WeatherAlertParser::fixupNewlines(
+            $output->instruction = ParsingUtility::removeSingleLineBreaks(
                 $output->instruction ?? false,
             );
 
-            $output->areaDesc = WeatherAlertParser::fixupNewlines(
+            $output->areaDesc = ParsingUtility::removeSingleLineBreaks(
                 $output->areaDesc ?? false,
             );
             if ($output->areaDesc) {
