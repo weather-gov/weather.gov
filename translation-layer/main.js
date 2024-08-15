@@ -43,7 +43,10 @@ const main = async () => {
 
       response.send({
         ...data,
-        "@metadata": { timing: { e2e: end, api: apiTimings } },
+        "@metadata": {
+          timing: { e2e: end, api: apiTimings },
+          size: JSON.stringify(data).length,
+        },
       });
     },
   });

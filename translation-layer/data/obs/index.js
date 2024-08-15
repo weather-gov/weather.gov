@@ -50,7 +50,7 @@ export default async ({
       .filter((key) => observation[key].unitCode)
       .reduce((o, key) => ({ ...o, [key]: observation[key] }), {});
 
-    // convertProperties(data);
+    convertProperties(data);
 
     const [{ distance }] = await db.query(`
       SELECT ST_DISTANCE_SPHERE(
@@ -64,7 +64,7 @@ export default async ({
       timestamp: observation.timestamp,
       icon: observation.icon,
       description: observation.textDescription,
-      station: {
+      station: convertProperties({
         id: station.properties.stationIdentifier,
         name: station.properties.name,
         elevation: station.properties.elevation,
@@ -72,7 +72,7 @@ export default async ({
           unitCode: "wmoUnit:m",
           value: distance,
         },
-      },
+      }),
       data,
     };
   }

@@ -42,10 +42,13 @@ export default (data) => {
     if (!dayPeriod.start) {
       dayPeriod.start = period.startTime;
     }
+    if (days.length > 0) {
+      days[days.length - 1].end = period.endTime;
+    }
 
     const periodData = {
-      start: period.start,
-      end: period.endTime,
+      start: dayjs(period.startTime),
+      end: dayjs(period.endTime),
       isDaytime: period.isDaytime,
       data: convertProperties({
         icon: period.icon,
@@ -66,8 +69,13 @@ export default (data) => {
     dayPeriod.periods.push(periodData);
   }
 
+  days.forEach((day) => {
+    day.start = dayjs(day.start);
+    day.end = dayjs(day.end);
+  });
+
   return {
-    elevation: data.properties.elevation,
+    ...convertProperties({ elevation: data.properties.elevation }),
     generated: data.properties.generatedAt,
     updated: data.properties.updateTime,
     valid: data.properties.validTimes,

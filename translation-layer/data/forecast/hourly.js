@@ -9,7 +9,7 @@ export default (data, hours) => {
       const time = start.toISOString();
 
       const hourData = hours.get(time) ?? {};
-      hourData.time = time;
+      hourData.time = start;
       hourData.shortForecast = period.shortForecast;
       hourData.icon = period.icon;
 

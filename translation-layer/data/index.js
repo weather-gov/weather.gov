@@ -27,7 +27,7 @@ export const getDataForPoint = async (lat, lon) => {
     point,
     place,
     grid,
-    forecast,
+    forecast: forecast.daily,
   };
 };
 

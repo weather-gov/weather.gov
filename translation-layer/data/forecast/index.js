@@ -54,5 +54,25 @@ export default async ({ grid }) => {
     convertProperties(hour);
   });
 
-  return { gridData, daily: dailyData, hourly: h };
+  let hourIndex = 0;
+  for (const day of dailyData.days) {
+    for (const period of day.periods) {
+      const start = dayjs(period.start);
+      const end = dayjs(period.end);
+
+      period.hours = [];
+      while (
+        hourIndex < h.length &&
+        h[hourIndex].time >= start &&
+        h[hourIndex].time < end
+      ) {
+        period.hours.push(h[hourIndex]);
+        hourIndex += 1;
+      }
+    }
+
+    // day.hours = day.periods.flatMap(({ hours: periodHours }) => periodHours);
+  }
+
+  return { gridData, daily: dailyData /*hourly: h*/ };
 };
