@@ -2,6 +2,22 @@ import { openDatabase } from "../db.js";
 
 const cachedAlerts = [];
 
+const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
+  if (geojson.type === "GeometryCollection") {
+    const geometries = geojson.geometries.flatMap((geometry) =>
+      unwindGeometryCollection(geometry, true),
+    );
+    if (parentIsCollection) {
+      return geometries;
+    }
+
+    geojson.geometries = geometries;
+    return geojson;
+  }
+
+  return geojson;
+};
+
 const updateAlerts = async () => {
   const alerts = await fetch(
     "https://api.weather.gov/alerts/active?status=actual",
@@ -33,14 +49,8 @@ const updateAlerts = async () => {
         const [{ shape }] = await db.query(sql);
         if (shape) {
           alert.geometry = shape;
-
-          // Like eslint, I also dislike `continue`. However, it's really a
-          // better option here than a convoluted series of ifs and elses.
-          continue; // eslint-disable-line no-continue
         }
-      }
-
-      if (Array.isArray(counties) && counties.length > 0) {
+      } else if (Array.isArray(counties) && counties.length > 0) {
         const sql = `
           SELECT ST_ASGEOJSON(
             ST_SIMPLIFY(
@@ -57,17 +67,19 @@ const updateAlerts = async () => {
         const [{ shape }] = await db.query(sql);
         if (shape) {
           alert.geometry = shape;
-          // Samesies.
-          continue; // eslint-disable-line no-continue
         }
+      } else {
+        // We shouldn't get here. This means we found an alert that does not have
+        // a geometry, either provided by the API or built from zones or counties.
+        // For now, this happens with most marine alerts, but in the future, we
+        // probably want to log these alerts because they are slipping through the
+        // cracks.
+        alert.geometry = false;
       }
 
-      // We shouldn't get here. This means we found an alert that does not have
-      // a geometry, either provided by the API or built from zones or counties.
-      // For now, this happens with most marine alerts, but in the future, we
-      // probably want to log these alerts because they are slipping through the
-      // cracks.
-      alert.geometry = false;
+      if (alert.geometry) {
+        alert.geometry = unwindGeometryCollection(alert.geometry);
+      }
     }
   }
 
