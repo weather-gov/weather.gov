@@ -24,10 +24,10 @@
     <a id="main-content" tabindex="-1"></a>
     {{ drupal_block("weathergov_location_search") }}
 
-    {% if weather.alerts %}
+    {% if point.alerts.items | length > 0 %}
     <div class="bg-primary-darker padding-bottom-105">
       <div class="grid-container margin-top-0">
-        {{ drupal_block("weathergov_local_alert_list") }}
+        {% include(directory ~ "/templates/point/alert-summary.html.twig") with { alerts: point.alerts.items } %}
       </div>
     </div>
     {% endif %}
@@ -37,7 +37,7 @@
       <div class="position-sticky top-0 z-500 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
         <div class="grid-container padding-x-0">
          <div role="tablist" class="tab-buttons display-flex flex-row top-4 grid-col-12" aria-labelledby="tablist-label">
-          {% if weather.alerts %}
+          {% if point.alerts.items | length > 0 %}
             <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
           {% endif %}
             <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="current" aria-controls="current">{{ "Current" | t }}</button>
@@ -47,16 +47,15 @@
       </div>
 
       <div class="bg-base-lightest padding-top-3 padding-bottom-8">
-        {% if weather.alerts %}
+        {% if point.alerts.items | length > 0 %}
         <div class="wx-tab-container wx-focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
-          {{ drupal_block("weathergov_local_alerts") }}
+          {% include(directory ~ "/templates/point/alerts.html.twig") with { alerts: point.alerts.items } %}
         </div>
         {% endif %}
 
         <div class="wx-tab-container wx-focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
-          {{ drupal_block("weathergov_current_conditions") }}
-          {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
-
+          {% include '@new_weather_theme/point/observations.html.twig' with { obs: point.observed } %}
+          {% include '@new_weather_theme/partials/radar.html.twig' with { point: point.point  } %}
           {% include '@new_weather_theme/partials/satellite.html.twig' %}
 
           {#{ drupal_block("weathergov_area_forecast_discussion") }#}

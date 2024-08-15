@@ -8,6 +8,8 @@ function weather_blocks_template_preprocess_default_variables_alter(
     &$variables,
     $hook,
 ) {
+    return;
+
     // Let's create a single global that contains all of our stuff, rather than
     // scattering them around. Yay, namespaces!
     $weatherMetadata = [

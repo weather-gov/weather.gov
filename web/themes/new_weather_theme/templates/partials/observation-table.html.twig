@@ -6,7 +6,7 @@
                 {{ "Wind" | t }}
             </th>
             <td>
-                {% include '@new_weather_theme/partials/wind.html.twig' with { wind: content.wind } %}
+                {% include '@new_weather_theme/partials/wind.html.twig' with { speed: obs.windSpeed, direction: obs.windDirection } %}
             </td>
         </tr>
         {# GUSTS #}
