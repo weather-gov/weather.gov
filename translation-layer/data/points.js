@@ -20,7 +20,7 @@ export default async (latitude, longitude) => {
     });
 
   const db = await openDatabase();
-  const placePromise = await db
+  const placePromise = db
     .query(
       `SELECT
        name,state,stateName,county,timezone,stateFIPS,countyFIPS
@@ -32,6 +32,7 @@ export default async (latitude, longitude) => {
       if (Array.isArray(row) && row.length > 0) {
         return row[0];
       }
+      return null;
     });
 
   const [grid, place] = await Promise.all([pointsPromise, placePromise]);

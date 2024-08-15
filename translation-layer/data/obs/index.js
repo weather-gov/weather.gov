@@ -1,55 +1,9 @@
-import convert from "convert";
 import { openDatabase } from "../db.js";
 import isObservationValid from "./valid.js";
+import { convertProperties } from "../../util/convert.js";
 
 // document the translation layer; high level conceptual and some lower-level for eng
 // then we can figure out SDB resourcing and how we'd collaborate
-
-const obsUnitMapping = new Map([
-  [
-    "wmoUnit:degC",
-    {
-      in: { name: "celsius", label: "degC" },
-      out: [{ name: "fahrenheit", label: "degF" }],
-    },
-  ],
-  [
-    "wmoUnit:km_h-1",
-    {
-      in: { name: "km", label: "km/h" },
-      out: [{ name: "miles", label: "mph" }],
-    },
-  ],
-  [
-    "wmoUnit:degree_(angle)",
-    { in: { name: "degrees", label: "degrees" }, out: [] },
-  ],
-  ["wmoUnit:percent", { in: { name: "percent", label: "percent" }, out: [] }],
-  [
-    "wmoUnit:Pa",
-    {
-      in: { name: "pascal", label: "pa" },
-      out: [{ name: "millibar", label: "mb" }],
-    },
-  ],
-  [
-    "wmoUnit:mm",
-    {
-      in: { name: "millimeters", label: "mm" },
-      out: [{ name: "inches", label: "in" }],
-    },
-  ],
-  [
-    "wmoUnit:m",
-    {
-      in: { name: "meters", label: "m" },
-      out: [
-        { name: "feet", label: "ft" },
-        { name: "miles", label: "mi" },
-      ],
-    },
-  ],
-]);
 
 export default async ({
   grid: { wfo, x, y },
@@ -92,29 +46,11 @@ export default async ({
   if (station && observation) {
     const db = await dbPromise;
 
-    const properties = Object.keys(observation)
+    const data = Object.keys(observation)
       .filter((key) => observation[key].unitCode)
-      .forEach((key) => {
-        const prop = observation[key];
+      .reduce((o, key) => ({ ...o, [key]: observation[key] }), {});
 
-        const conversion = obsUnitMapping.get(prop.unitCode);
-        if (conversion) {
-          const value = prop.value;
-
-          observation[key] = { [conversion.in.label]: value };
-
-          for (const out of conversion.out) {
-            if (value === null) {
-              observation[key][out.label] = null;
-            } else {
-              observation[key][out.label] = convert(
-                value,
-                conversion.in.name,
-              ).to(out.name);
-            }
-          }
-        }
-      });
+    // convertProperties(data);
 
     const [{ distance }] = await db.query(`
       SELECT ST_DISTANCE_SPHERE(
@@ -125,6 +61,9 @@ export default async ({
     await db.end();
 
     return {
+      timestamp: observation.timestamp,
+      icon: observation.icon,
+      description: observation.textDescription,
       station: {
         id: station.properties.stationIdentifier,
         name: station.properties.name,
@@ -134,7 +73,7 @@ export default async ({
           value: distance,
         },
       },
-      data: observation,
+      data,
     };
   }
 

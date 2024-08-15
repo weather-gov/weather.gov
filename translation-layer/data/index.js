@@ -6,7 +6,7 @@ import getPoint from "./points.js";
 export const getDataForPoint = async (lat, lon) => {
   const { point, place, grid } = await getPoint(lat, lon);
 
-  const [forecast, observations] = await Promise.all([
+  const [forecast, observed] = await Promise.all([
     getForecast({ grid }),
     getObservations({ grid, point }),
   ]);
@@ -18,11 +18,12 @@ export const getDataForPoint = async (lat, lon) => {
 
   if (forecast.daily.elevation) {
     grid.elevation = forecast.daily.elevation;
+    delete forecast.daily.elevation;
   }
 
   return {
     alerts,
-    observations,
+    observed,
     point,
     place,
     grid,

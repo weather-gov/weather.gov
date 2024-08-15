@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
+import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
 import hourly from "./hourly.js";
+import { convertProperties } from "../../util/convert.js";
 
 export default async ({ grid }) => {
   const hours = new Map();
@@ -14,7 +16,7 @@ export default async ({ grid }) => {
     `https://api.weather.gov/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`,
   )
     .then((r) => r.json())
-    .then((data) => data.properties);
+    .then((data) => daily(data));
   const hourlyPromise = fetch(
     `https://api.weather.gov/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`,
   )
@@ -22,7 +24,7 @@ export default async ({ grid }) => {
     .then((data) => {
       hourly(data, hours);
     });
-  const [daily, gridData] = await Promise.all([
+  const [dailyData, gridData] = await Promise.all([
     dailyPromise,
     gridPromise,
     hourlyPromise,
@@ -48,5 +50,9 @@ export default async ({ grid }) => {
     })
     .filter(({ time }) => dayjs(time) >= earliest);
 
-  return { gridData, daily, hourly: h };
+  h.forEach((hour) => {
+    convertProperties(hour);
+  });
+
+  return { gridData, daily: dailyData, hourly: h };
 };
