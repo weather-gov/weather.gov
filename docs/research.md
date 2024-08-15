@@ -10,11 +10,15 @@
 
 
 | Name  | When  | Summary  | Insights  |
-| Path Analysis | April 2023 | Initial exploratory research with stakeholders, partners and forecasters across NWS to understand the problem space and identify what purpose weather.gov might serve | ------- |  ------- |
-| -------- | ------- | -------- | ------- |  ------- |
-| -------- | ------- | -------- | ------- |  ------- |
-| -------- | ------- | -------- | ------- |  ------- |
-| -------- | ------- | -------- | ------- |  ------- |
-| -------- | ------- | -------- | ------- |  ------- |
-| -------- | ------- | -------- | ------- |  ------- |
-| -------- | ------- | -------- | ------- |  ------- |
+| -------- | ------- | -------- | ------- |
+| Path Analysis | April 2023 | Initial research with stakeholders, partners and forecasters across NWS to understand the problem space | Defined problem space |
+| WFO onsite - Sterling (DC) | July 2023 | Onsite tour + observations at Sterling WFO office (DC area). Includes in-depth notes on internal tools and systems (AWIPs, etc) | ------- |
+| Forecaster research - remote | Sept 2023 | -------- | ------- |
+| WFO onsite - Nashville | Nov 2023 | -------- | ------- |
+| R1 - Usability (public) | Dec 2023 | -------- | ------- |
+| R2 - Usability (public) | Jan 2024 | -------- | ------- |
+| R3 - Usability (public + partner)| Mar 2024 | -------- | ------- |
+| R4- Usability (CMS, forecasters) | Apr 2024 | -------- | ------- |
+| R5 - Unmoderated testing pilot | May 2024 | -------- | ------- |
+| R6 - Content Strategy testing | June 2024 | -------- | ------- |
+
