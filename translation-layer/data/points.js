@@ -37,5 +37,9 @@ export default async (latitude, longitude) => {
 
   const [grid, place] = await Promise.all([pointsPromise, placePromise]);
 
+  if (place && place.name && place.state) {
+    place.fullName = `${place.name}, ${place.state}`;
+  }
+
   return { point, place, grid };
 };

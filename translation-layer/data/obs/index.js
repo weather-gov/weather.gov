@@ -1,3 +1,4 @@
+import dayjs from "../../util/day.js";
 import { openDatabase } from "../db.js";
 import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
@@ -47,7 +48,7 @@ export default async ({
     const db = await dbPromise;
 
     const data = Object.keys(observation)
-      .filter((key) => observation[key].unitCode)
+      .filter((key) => observation[key]?.unitCode)
       .reduce((o, key) => ({ ...o, [key]: observation[key] }), {});
 
     convertProperties(data);
@@ -61,7 +62,10 @@ export default async ({
     await db.end();
 
     return {
-      timestamp: observation.timestamp,
+      timestamp: {
+        formatted: observation.timestamp,
+        utc: dayjs(observation.timestamp),
+      },
       icon: observation.icon,
       description: observation.textDescription,
       station: convertProperties({

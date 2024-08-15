@@ -2,9 +2,12 @@ import getAlerts from "./alerts/index.js";
 import getForecast from "./forecast/index.js";
 import getObservations from "./obs/index.js";
 import getPoint from "./points.js";
+import getSatellite from "./satellite.js";
 
 export const getDataForPoint = async (lat, lon) => {
   const { point, place, grid } = await getPoint(lat, lon);
+
+  const satellitePromise = getSatellite({ grid });
 
   const [forecast, observed] = await Promise.all([
     getForecast({ grid }),
@@ -21,6 +24,8 @@ export const getDataForPoint = async (lat, lon) => {
     delete forecast.daily.elevation;
   }
 
+  const satellite = await satellitePromise;
+
   return {
     alerts,
     observed,
@@ -28,6 +33,7 @@ export const getDataForPoint = async (lat, lon) => {
     place,
     grid,
     forecast: forecast.daily,
+    satellite,
   };
 };
 

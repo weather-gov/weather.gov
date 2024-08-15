@@ -129,7 +129,10 @@ export const parseLocations = (description) => {
       updatedDescription.slice(endIndex);
   }
 
-  return { description: updatedDescription.trim(), locations };
+  if (locations.regions.length > 0 || locations.cities.length > 0) {
+    return { description: updatedDescription.trim(), locations };
+  }
+  return { description, location: false };
 };
 
 export default { parseLocations };

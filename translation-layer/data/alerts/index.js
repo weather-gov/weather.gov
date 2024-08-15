@@ -29,8 +29,7 @@ const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
 
 const updateAlerts = async () => {
   const rawAlerts = await fetch(
-    // "https://api.weather.gov/alerts/active?status=actual",
-    "http://api-proxy:8081/alerts/active?status=actual&area=VA",
+    "https://api.weather.gov/alerts/active?status=actual",
   )
     .then((r) => r.json())
     .then(({ features }) => features)
