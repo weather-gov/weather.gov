@@ -57,3 +57,13 @@ weather_routes.weather_info.content:
     # Public endpoint
     _access: 'TRUE'
     wfo: '^[A-Za-z][A-Za-z][A-Za-z]$'
+
+weather_routes.afd:
+  path: '/afd'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\AFDController::content
+  options:
+    query:
+      wfo: ""
+  requirements:
+    _access: 'TRUE'
