@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Responses for Weather Info node routes
  *
  */
+
 final class WeatherInfoController extends ControllerBase
 {
     /**
@@ -57,7 +58,7 @@ final class WeatherInfoController extends ControllerBase
         $results = array_values($results);
 
         if (count($results) == 0) {
-            return false;
+            throw new NotFoundHttpException();
         }
         return $results[0];
     }
@@ -69,16 +70,8 @@ final class WeatherInfoController extends ControllerBase
         try {
             $wfoTerm = $this->getWFOTaxonomyTerm($wfo);
             $wfoInfo = $this->getWFOInfoFromTerm($wfoTerm);
-            if (!$wfoInfo) {
-                // If there's not already a node for this WFO, create a blank
-                // one in memory so we can still render a page. It'll just have
-                // less content in it.
-                $wfoInfo = Node::create(["type" => "wfo_info"]);
-                $wfoInfo->set("field_wfo", $wfoTerm);
-            }
             $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder("node");
-            $build = $viewBuilder->view($wfoInfo);
-            return $build;
+            return $viewBuilder->view($wfoInfo);
         } catch (\Throwable $ex) {
             throw new NotFoundHttpException();
         }
