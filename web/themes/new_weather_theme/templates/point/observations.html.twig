@@ -1,8 +1,6 @@
 {{ attach_library("new_weather_theme/localize-timestamps") }}
 <h2 class="usa-sr-only">Current</h2>
 
-{{ dump(obs) }}
-
 {# Widgets and stuff. This is presented as a row of columns. #}
 <div class="grid-container padding-x-0 tablet:padding-x-2">
   <div class="grid-row grid-col-8 grid-offset-2">
@@ -26,15 +24,15 @@
           {{ "The weather in @place, is @conditions.
             Temperature is @temperature ℉." |
               t({
-                  "@place": content.place,
-                  "@conditions": content.conditions.long | lower,
-                  "@temperature": content.temperature,
+                  "@place": point.place.fullName,
+                  "@conditions": obs.description | lower,
+                  "@temperature": obs.data.temperature.degF,
               })
               }}
-              {% if content.feels_like != content.temperature %}
+              {% if obs.data.feelsLike.degF != obs.data.temperature.degF %}
                   {{ "It feels like @feelsLike ℉." |
                   t({
-                      "@feelsLike": content.feels_like
+                      "@feelsLike": obs.data.feelsLike.degF
                   })
                   }}
               {% endif %}
@@ -51,7 +49,7 @@
             <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
             <div class="text-primary-dark">
                 <p class="margin-top-2px font-body-md">
-                    {{ content.feels_like }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
+                    {{ obs.data.feelsLike.degF }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
                 </p>
             </div>
           </div>

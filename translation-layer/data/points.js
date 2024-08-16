@@ -1,13 +1,11 @@
 import { openDatabase } from "./db.js";
+import { fetchAPIJson } from "../util/fetch.js";
 
 export default async (latitude, longitude) => {
   const point = { latitude, longitude };
 
-  const pointsPromise = fetch(
-    `https://api.weather.gov/points/${latitude},${longitude}`,
-  )
-    .then((r) => r.json())
-    .then((data) => {
+  const pointsPromise = fetchAPIJson(`/points/${latitude},${longitude}`).then(
+    (data) => {
       if (data.error) {
         throw new Error(data.error);
       }
@@ -17,7 +15,8 @@ export default async (latitude, longitude) => {
         x: data.properties.gridX,
         y: data.properties.gridY,
       };
-    });
+    },
+  );
 
   const db = await openDatabase();
   const placePromise = db

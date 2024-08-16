@@ -1,4 +1,5 @@
 import dayjs from "../../util/day.js";
+import { fetchAPIJson } from "../../util/fetch.js";
 import paragraphSquash from "../../util/paragraphSquash.js";
 import { openDatabase } from "../db.js";
 import alertKinds from "./kinds.js";
@@ -28,10 +29,7 @@ const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
 };
 
 const updateAlerts = async () => {
-  const rawAlerts = await fetch(
-    "https://api.weather.gov/alerts/active?status=actual",
-  )
-    .then((r) => r.json())
+  const rawAlerts = await fetchAPIJson("/alerts/active?status=actual")
     .then(({ features }) => features)
     .then((features) =>
       features.map((feature) => {

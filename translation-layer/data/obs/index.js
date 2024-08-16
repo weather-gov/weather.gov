@@ -2,6 +2,7 @@ import dayjs from "../../util/day.js";
 import { openDatabase } from "../db.js";
 import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
+import { fetchAPIJson } from "../../util/fetch.js";
 
 // document the translation layer; high level conceptual and some lower-level for eng
 // then we can figure out SDB resourcing and how we'd collaborate
@@ -12,11 +13,9 @@ export default async ({
 }) => {
   const dbPromise = openDatabase();
 
-  const stations = await fetch(
-    `https://api.weather.gov/gridpoints/${wfo}/${x},${y}/stations`,
-  )
-    .then((r) => r.json())
-    .then((out) => out.features.slice(0, 3));
+  const stations = await fetchAPIJson(
+    `/gridpoints/${wfo}/${x},${y}/stations`,
+  ).then((out) => out.features.slice(0, 3));
 
   let station = stations.shift();
 
@@ -50,6 +49,16 @@ export default async ({
     const data = Object.keys(observation)
       .filter((key) => observation[key]?.unitCode)
       .reduce((o, key) => ({ ...o, [key]: observation[key] }), {});
+
+    // Add a "feels like" property, which is coerced from the heat index and
+    // wind chill, if provided.
+    data.feelsLike = data.heatIndex;
+    if (data.feelsLike.value === null) {
+      data.feelsLike = data.windChill;
+    }
+    if (data.feelsLike.value === null) {
+      data.feelsLike = data.temperature;
+    }
 
     convertProperties(data);
 

@@ -6,7 +6,7 @@
                 {{ "Wind" | t }}
             </th>
             <td>
-                {% include '@new_weather_theme/partials/wind.html.twig' with { speed: obs.windSpeed, direction: obs.windDirection } %}
+                {% include '@new_weather_theme/partials/wind.html.twig' with { speed: obs.data.windSpeed, direction: obs.data.windDirection } %}
             </td>
         </tr>
         {# GUSTS #}
@@ -26,10 +26,10 @@
                 {{ "Humidity" | t }}
             </th>
             <td>
-                {% if content.humidity == 0 %}
+                {% if obs.data.relativeHumidity.percent == 0 %}
                     <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
-                    {{  content.humidity }}%
+                    {{  obs.data.relativeHumidity.percent }}%
                 {% endif %}
             </td>
         </tr>
@@ -39,10 +39,10 @@
                 {{ "Dewpoint" | t }}
             </th>
             <td>
-                {% if content.dewpoint is same as (null) %}
+                {% if obs.data.dewpoint.degF is same as (null) %}
                     <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
-                    {{  content.dewpoint }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
+                    {{ obs.data.dewpoint.degF }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
                 {% endif %}
             </td>
         </tr>
@@ -52,10 +52,10 @@
                 {{ "Visibility"  | t }}
             </th>
             <td>
-                {% if content.visibility is same as (null) %}
+                {% if obs.data.visibility.mi is same as (null) %}
                     <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
-                    {{  content.visibility }} {{ "miles" | t }}
+                    {{ obs.data.visibility.mi }} {{ "miles" | t }}
                 {% endif %}
             </td>
         </tr>
@@ -65,10 +65,10 @@
                 {{ "Pressure" | t }}
             </th>
             <td>
-                {% if content.pressure is same as (null) %}
+                {% if obs.data.barometricPressure.inHg is same as (null) %}
                     <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
                 {% else %}
-                    {{  "@mercury_inches in (@mbar&nbsp;mb)" | t({ "@mercury_inches": content.pressure.mercury_inches, "@mbar": content.pressure.mbar })}}
+                    {{  "@mercury_inches in (@mbar&nbsp;mb)" | t({ "@mercury_inches": obs.data.barometricPressure.inHg, "@mbar": obs.data.barometricPressure.mb })}}
                 {% endif %}
             </td>
         </tr>

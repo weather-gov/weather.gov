@@ -3,27 +3,22 @@ import gridpoint from "./gridpoint.js";
 import hourly from "./hourly.js";
 import { convertProperties } from "../../util/convert.js";
 import dayjs from "../../util/day.js";
+import { fetchAPIJson } from "../../util/fetch.js";
 
 export default async ({ grid }) => {
   const hours = new Map();
 
-  const gridPromise = fetch(
-    `https://api.weather.gov/gridpoints/${grid.wfo}/${grid.x},${grid.y}`,
-  )
-    .then((r) => r.json())
-    .then((data) => gridpoint(data, hours));
-  const dailyPromise = fetch(
-    `https://api.weather.gov/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`,
-  )
-    .then((r) => r.json())
-    .then((data) => daily(data));
-  const hourlyPromise = fetch(
-    `https://api.weather.gov/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`,
-  )
-    .then((r) => r.json())
-    .then((data) => {
-      hourly(data, hours);
-    });
+  const gridPromise = fetchAPIJson(
+    `/gridpoints/${grid.wfo}/${grid.x},${grid.y}`,
+  ).then((data) => gridpoint(data, hours));
+  const dailyPromise = fetchAPIJson(
+    `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`,
+  ).then((data) => daily(data));
+  const hourlyPromise = fetchAPIJson(
+    `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`,
+  ).then((data) => {
+    hourly(data, hours);
+  });
   const [dailyData, gridData] = await Promise.all([
     dailyPromise,
     gridPromise,
