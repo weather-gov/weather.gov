@@ -25,9 +25,7 @@
             <h2>latest anywhere</h2>
         {% endif %}
         {%  if afd is not null %}
-            <pre>
-                {{afd.productText}}
-            </pre>
+            {% include '@new_weather_theme/partials/afd.html.twig' %}
         {% endif %}
     </div>
 </div>
