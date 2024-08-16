@@ -251,4 +251,20 @@ class WeatherDataService
         }
         return false;
     }
+
+    public function getLatestAFDReferences($wfo = null)
+    {
+        if ($wfo) {
+            $afds = $this->dataLayer->getProductsByTypeAndOffice("AFD", $wfo);
+        } else {
+            $afds = $this->dataLayer->getProductsByType("AFD");
+        }
+
+        if (count($afds) > 0) {
+            return array_map(function ($afdReference) {
+                return json_decode(json_encode($afdReference), true);
+            }, $afds);
+        }
+        return false;
+    }
 }

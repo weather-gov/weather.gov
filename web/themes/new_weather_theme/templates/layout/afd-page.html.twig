@@ -17,14 +17,17 @@
     </div>
     </header>
 
-    <h1>Area Forecast Discussion (AFD)</h1>
-    {% if wfo is not null %}
-        <h2>latest for {{wfo}}</h2>
-    {% else %}
-        <h2>latest anywhere</h2>
-    {% endif %}
-    {%  if afd is not null %}
-        {% include "@new_weather_theme/partials/afd.html.twig" with { afd: afd } %}
-    {% endif %}
-    
+    <div class="grid-container">
+        <h1>Area Forecast Discussion (AFD)</h1>
+        {% if wfo is not null %}
+            <h2>latest for {{wfo}}</h2>
+        {% else %}
+            <h2>latest anywhere</h2>
+        {% endif %}
+        {%  if afd is not null %}
+            <pre>
+                {{afd.productText}}
+            </pre>
+        {% endif %}
+    </div>
 </div>
