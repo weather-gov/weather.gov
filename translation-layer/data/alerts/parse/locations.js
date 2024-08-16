@@ -1,3 +1,5 @@
+import { titleCase } from "../../../util/case.js";
+
 export const parseLocations = (description) => {
   let updatedDescription = description;
   const locations = { regions: [], cities: [] };
@@ -42,14 +44,7 @@ export const parseLocations = (description) => {
           return;
         }
 
-        const area = region
-          .replace(/^IN /, "")
-          .replace(
-            /\w\S*/g,
-            (text) =>
-              text.charAt(0).toUpperCase() + text.slice(1).toLowerCase(),
-          );
-
+        const area = titleCase(region.replace(/^IN /, ""));
         // The list of counties begins where the region name is
         // followed by two newlines and continues until either
         // another pair of newlines OR the end of the text.
@@ -66,13 +61,7 @@ export const parseLocations = (description) => {
           .replace(/\n/g, "  ")
           .replace(/\s{2,}/g, ",")
           .split(",")
-          .map((c) =>
-            c.replace(
-              /\w\S*/g,
-              (text) =>
-                text.charAt(0).toUpperCase() + text.slice(1).toLowerCase(),
-            ),
-          );
+          .map(titleCase);
 
         if (counties.length > 0) {
           locations.regions.push({
@@ -107,16 +96,7 @@ export const parseLocations = (description) => {
         .split(",")
         // Trim the city names and title-case them. Sometimes the cities will
         // have a period at the very end, too, so eat that, just in case.
-        .map((s) =>
-          s
-            .trim()
-            .replace(/.$/, "")
-            .replace(
-              /\w\S*/g,
-              (text) =>
-                text.charAt(0).toUpperCase() + text.slice(1).toLowerCase(),
-            ),
-        );
+        .map((s) => titleCase(s.trim().replace(/.$/, "")));
 
       // Advance the end index, plus two newlines.
       endIndex += citiesToken.length + 2;

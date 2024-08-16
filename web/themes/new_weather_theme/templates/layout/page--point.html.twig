@@ -66,7 +66,7 @@
           {{ drupal_block("weathergov_weather_story") }}
 
           <h3 class="usa-sr-only">Daily forecast</h3>
-          {{ drupal_block("weathergov_daily_forecast") }}
+          {% include '@new_weather_theme/point/forecast.html.twig' with { forecast: point.forecast } %}
 
           {{ drupal_block("weathergov_wfo_promo") }}
         </div>

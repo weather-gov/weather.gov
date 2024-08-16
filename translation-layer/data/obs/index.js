@@ -30,7 +30,7 @@ export default async ({
     .then((out) => out.features[0].properties);
 
   if (!isObservationValid(observation)) {
-    const fallbackObs = await others;
+    const fallbackObs = await Promise.all(others);
     if (isObservationValid(fallbackObs[0])) {
       station = stations[0];
       observation = fallbackObs[0];

@@ -1,0 +1,209 @@
+{
+  "day/bkn": {
+    "icon": "mostly_cloudy-day.svg"
+  },
+  "night/bkn": {
+    "icon": "mostly_cloudy-night.svg"
+  },
+  "day/blizzard": {
+    "icon": "blizzard_winter_storm.svg"
+  },
+  "night/blizzard": {
+    "icon": "blizzard_winter_storm.svg"
+  },
+  "day/cold": {
+    "icon": "cold.svg"
+  },
+  "night/cold": {
+    "icon": "cold.svg"
+  },
+  "day/dust": {
+    "icon": "new_dust.svg"
+  },
+  "night/dust": {
+    "icon": "new_dust.svg"
+  },
+  "day/few": {
+    "icon": "mostly_clear-day.svg"
+  },
+  "night/few": {
+    "icon": "mostly_clear-night.svg"
+  },
+  "day/fog": {
+    "icon": "fog.svg"
+  },
+  "night/fog": {
+    "icon": "fog.svg"
+  },
+  "day/fzra": {
+    "icon": "cold.svg"
+  },
+  "night/fzra": {
+    "icon": "cold.svg"
+  },
+  "day/haze": {
+    "icon": "hazy_smoke-day.svg"
+  },
+  "night/haze": {
+    "icon": "fog.svg"
+  },
+  "day/hot": {
+    "icon": "hot.svg"
+  },
+  "night/hot": {
+    "icon": "hot.svg"
+  },
+  "day/hurricane": {
+    "icon": "hurricane.svg"
+  },
+  "night/hurricane": {
+    "icon": "hurricane.svg"
+  },
+  "no data": {
+    "icon": "nodata.svg"
+  },
+  "day/ovc": {
+    "icon": "cloudy_overcast.svg"
+  },
+  "night/ovc": {
+    "icon": "cloudy_overcast.svg"
+  },
+  "day/rain": {
+    "icon": "rain.svg"
+  },
+  "day/rain_fzra": {
+    "icon": "freezing_rain_sleet.svg"
+  },
+  "night/rain_fzra": {
+    "icon": "freezing_rain_sleet.svg"
+  },
+  "night/rain": {
+    "icon": "rain.svg"
+  },
+  "day/rain_showers": {
+    "icon": "showers_scattered_rain.svg"
+  },
+  "day/rain_showers_hi": {
+    "icon": "showers_scattered_rain.svg"
+  },
+  "night/rain_showers_hi": {
+    "icon": "showers_scattered_rain.svg"
+  },
+  "night/rain_showers": {
+    "icon": "showers_scattered_rain.svg"
+  },
+  "day/rain_sleet": {
+    "icon": "freezing_rain_sleet.svg"
+  },
+  "night/rain_sleet": {
+    "icon": "freezing_rain_sleet.svg"
+  },
+  "day/rain_snow": {
+    "icon": "mixed_precip.svg"
+  },
+  "night/rain_snow": {
+    "icon": "mixed_precip.svg"
+  },
+  "day/sct": {
+    "icon": "mostly_clear-day.svg"
+  },
+  "night/sct": {
+    "icon": "mostly_clear-night.svg"
+  },
+  "day/skc": {
+    "icon": "clear-day.svg"
+  },
+  "night/skc": {
+    "icon": "clear-night.svg"
+  },
+  "day/sleet": {
+    "icon": "freezing_rain_sleet.svg"
+  },
+  "night/sleet": {
+    "icon": "freezing_rain_sleet.svg"
+  },
+  "day/smoke": {
+    "icon": "hazy_smoke-day.svg"
+  },
+  "night/smoke": {
+    "icon": "hazy_smoke-day.svg"
+  },
+  "day/snow": {
+    "icon": "snow.svg"
+  },
+  "day/snow_fzra": {
+    "icon": "mixed_precip.svg"
+  },
+  "night/snow_fzra": {
+    "icon": "mixed_precip.svg"
+  },
+  "night/snow": {
+    "icon": "snow.svg"
+  },
+  "day/snow_sleet": {
+    "icon": "new_snow_sleet.svg"
+  },
+  "night/snow_sleet": {
+    "icon": "new_snow_sleet.svg"
+  },
+  "day/tornado": {
+    "icon": "tornado.svg"
+  },
+  "night/tornado": {
+    "icon": "tornado.svg"
+  },
+  "day/tropical_storm": {
+    "icon": "hurricane.svg"
+  },
+  "night/tropical_storm": {
+    "icon": "hurricane.svg"
+  },
+  "day/tsra": {
+    "icon": "thunderstorm.svg"
+  },
+  "day/tsra_hi": {
+    "icon": "thunderstorm.svg"
+  },
+  "night/tsra_hi": {
+    "icon": "thunderstorm.svg"
+  },
+  "night/tsra": {
+    "icon": "thunderstorm.svg"
+  },
+  "day/tsra_sct": {
+    "icon": "thunderstorm.svg"
+  },
+  "night/tsra_sct": {
+    "icon": "thunderstorm.svg"
+  },
+  "day/wind_bkn": {
+    "icon": "new_windy_cloudy.svg"
+  },
+  "night/wind_bkn": {
+    "icon": "new_windy_cloudy.svg"
+  },
+  "day/wind_few": {
+    "icon": "new_windy_cloudy.svg"
+  },
+  "night/wind_few": {
+    "icon": "new_windy_cloudy.svg"
+  },
+  "day/wind_ovc": {
+    "icon": "new_windy_cloudy.svg"
+  },
+  "night/wind_ovc": {
+    "icon": "new_windy_cloudy.svg"
+  },
+  "day/wind_sct": {
+    "icon": "new_windy_cloudy.svg"
+  },
+  "night/wind_sct": {
+    "icon": "new_windy_cloudy.svg"
+  },
+  "day/wind_skc": {
+    "icon": "windy.svg"
+  },
+  "night/wind_skc": {
+    "icon": "windy.svg"
+  }
+}

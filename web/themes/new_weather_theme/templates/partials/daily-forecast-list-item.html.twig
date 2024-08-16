@@ -27,7 +27,7 @@ only be a nighttime period.
           </h4>
 
           <div class="display-flex">
-          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods, 'useOnlyLowForToday': useOnlyLowForToday  } %}
+          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods } %}
           </div>
         </div>
 
@@ -71,20 +71,20 @@ only be a nighttime period.
             {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
         </span>
         <div class="display-flex flex-row flex-align-start">
-          {% if period.icon.base %}
+          {% if period.data.icon.base %}
           <div class="width-5 height-5 margin-right-105">
             <svg role="img" aria-hidden="true" class="width-full height-full">
-              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.icon.base }}"></use>
+              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.data.icon.base }}"></use>
             </svg>
           </div>
           {% endif %}
           <div class="flex-1">
             <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
-            {{period.shortForecast}}
+            {{ period.data.description }}
             </p>
-            {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
+            {% if period.data.probabilityOfPrecipitation.percent and period.data.probabilityOfPrecipitation.percent > 1 %}
             <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-            {{period.probabilityOfPrecipitation}}% {{ "chance of precipitation" | t }}
+            {{ period.data.probabilityOfPrecipitation.percent }}% {{ "chance of precipitation" | t }}
             </p>
             {% endif %}
           </div>

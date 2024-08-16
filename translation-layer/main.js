@@ -6,7 +6,12 @@ const main = async () => {
   const port = process.env.PORT || 8082;
   const server = fastify();
 
-  server.get("/", (request, response) => {
+  server.setErrorHandler((err, request, reply) => {
+    console.log(err);
+    reply.status(500).send({ error: true });
+  });
+
+  server.get("/", (response) => {
     response.send({ ok: true });
   });
 

@@ -1,5 +1,7 @@
 import dayjs from "../../util/day.js";
 import { convertProperties } from "../../util/convert.js";
+import { parseAPIIcon } from "../../util/icon.js";
+import { sentenceCase } from "../../util/case.js";
 
 const dayjsOffset = (iso8601) => {
   const time = dayjs(iso8601);
@@ -17,20 +19,20 @@ const dayjsOffset = (iso8601) => {
 };
 
 export default (data) => {
-  const days = [{ periods: [] }];
+  const days = [];
+  let previousDay = -1;
 
   for (const period of data.properties.periods) {
     const start = dayjsOffset(period.startTime);
     const startHour = start.get("hour");
 
-    if (startHour === 6) {
+    if (start.get("day") !== previousDay) {
       if (days.length > 0) {
         days[days.length - 1].end = period.startTime;
       }
-      days.push({
-        start: period.startTime,
-        periods: [],
-      });
+
+      days.push({ start: period.startTime, periods: [] });
+      previousDay = start.get("day");
     }
 
     const dayPeriod = days[days.length - 1];
@@ -45,9 +47,15 @@ export default (data) => {
       start: dayjs(period.startTime),
       end: dayjs(period.endTime),
       isDaytime: period.isDaytime,
+      isOvernight:
+        days.length === 1 &&
+        dayPeriod.periods.length === 0 &&
+        period.isDaytime === false,
+      monthAndDay: start.format("MMMM D"),
+      dayName: start.format("dddd"),
       data: convertProperties({
-        icon: period.icon,
-        description: period.shortForecast,
+        icon: parseAPIIcon(period.icon),
+        description: sentenceCase(period.shortForecast),
         temperature: {
           unitCode: "wmoUnit:degF",
           value: period.temperature,
@@ -74,6 +82,6 @@ export default (data) => {
     generated: data.properties.generatedAt,
     updated: data.properties.updateTime,
     valid: data.properties.validTimes,
-    days,
+    days: days.filter(({ periods }) => periods.length > 0),
   };
 };
