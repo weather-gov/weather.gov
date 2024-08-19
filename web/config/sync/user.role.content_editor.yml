@@ -10,7 +10,6 @@ dependencies:
     - node.type.page
     - node.type.testing_page
     - node.type.weather_story
-    - node.type.wfo_promo
     - workflows.workflow.weather_gov_content_moderation
   module:
     - block_content
@@ -49,18 +48,15 @@ permissions:
   - 'edit any no_title_block block content'
   - 'edit any page content'
   - 'edit any weather_story content'
-  - 'edit any wfo_promo content'
   - 'edit own dynamic_safety_information content'
   - 'edit own page content'
   - 'edit own weather_story content'
-  - 'edit own wfo_promo content'
   - 'revert all revisions'
   - 'revert any basic block content revisions'
   - 'revert any no_title_block block content revisions'
   - 'revert dynamic_safety_information revisions'
   - 'revert page revisions'
   - 'revert weather_story revisions'
-  - 'revert wfo_promo revisions'
   - 'schedule publishing of nodes'
   - 'use text format basic_html'
   - 'use weather_gov_content_moderation transition archive'
@@ -79,5 +75,4 @@ permissions:
   - 'view testing_page revisions'
   - 'view the administration theme'
   - 'view weather_story revisions'
-  - 'view wfo_promo revisions'
   - 'view workbench access information'
