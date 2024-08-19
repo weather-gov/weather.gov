@@ -91,6 +91,47 @@ services:
       - 8180:8080
     profiles: ["utilities"]
 
+  utility-node:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM node:20
+        COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
+        RUN c_rehash
+        ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/zscaler-root.pem
+        RUN mkdir /app
+        WORKDIR /app
+        ADD ./package.json .
+        ADD ./package-lock.json .
+        RUN npm ci
+    profiles: ["utility"]
+    networks:
+      - weather.gov
+    links:
+      - database
+    volumes:
+      - ./:/app
+      - /app/node_modules
+
+  uswds:
+    build:
+      context: ./web/themes/new_weather_theme
+      dockerfile_inline: |
+        FROM node:20
+        COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
+        RUN c_rehash
+        ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/zscaler-root.pem
+        RUN mkdir /app
+        WORKDIR /app
+        ADD ./package.json .
+        ADD ./package-lock.json .
+        RUN npm ci
+        RUN npm i sass-embedded-linux-arm64
+    profiles: ["utility"]
+    volumes:
+      - ./web/themes/new_weather_theme/:/app
+      - /app/node_modules
+
   spatial:
       build:
         context: ./spatial-data
