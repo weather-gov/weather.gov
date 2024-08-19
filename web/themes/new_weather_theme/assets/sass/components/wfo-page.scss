@@ -1,0 +1,34 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+.wx-wfo-info {
+  .wx-wfo-image img {
+    min-width: 100%;
+  }
+
+  .address {
+    margin-top: 0;
+  }
+
+  .phone a,
+  .email a,
+  .address a {
+    /*
+      Stylelint wants us to use the %placeholder notation here, but since we
+      don't control the code that we're extending, that's not an option for us,
+      unfortunately. So... disable the rule.
+    */
+    /* stylelint-disable */
+    @extend .usa-link;
+  }
+}
+
+@include at-media("tablet") {
+  .wx-wfo-info {
+    .wx-wfo-image img {
+      max-height: 200px;
+      object-fit: cover;
+    }
+  }
+}

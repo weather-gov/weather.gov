@@ -1,0 +1,537 @@
+<?php
+
+namespace Drupal\weather_data\Service\Test;
+
+use Drupal\weather_data\Service\AlertUtility;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for the AlertUtility helper class.
+ */
+final class SatelliteTest extends TestCase
+{
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testKnowsMarineAlerts(): void
+    {
+        $actual = AlertUtility::isMarineAlert("storm watch");
+        $this->assertEquals(true, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testKnowsNotMarineAlerts(): void
+    {
+        $actual = AlertUtility::isMarineAlert("severe thunderstorm WARNING");
+        $this->assertEquals(false, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testKnowsLandAlerts(): void
+    {
+        $actual = AlertUtility::isLandAlert("severe THUNDERSTORM warning");
+        $this->assertEquals(true, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testKnowsNotLandAlerts(): void
+    {
+        $actual = AlertUtility::isLandAlert("storm watch");
+        $this->assertEquals(false, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testSortsAlertsCorrectly(): void
+    {
+        $now = new \DateTimeImmutable();
+
+        $alerts = [
+            (object) [
+                "event" => "flood watch",
+                "onset" => $now->modify("-1 hour"),
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => $now->modify("+1 hour"),
+            ],
+            (object) [
+                "event" => "volcano warning",
+                "onset" => $now->modify("-1 hour"),
+            ],
+            (object) [
+                "event" => "tornado warning",
+                "onset" => $now->modify("-1 hour"),
+            ],
+            (object) [
+                "event" => "dust storm warning",
+                "onset" => $now->modify("-1 hour"),
+            ],
+            (object) [
+                "event" => "volcano warning",
+                "onset" => $now->modify("+2 hour"),
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => $now->modify("+2 hours"),
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => $now->modify("+3 hour"),
+            ],
+        ];
+
+        $expected = [
+            $alerts[3], // active tornado warning
+            $alerts[2], // active volcano warning
+            $alerts[4], // active dust storm warning
+            $alerts[0], // active flood watch
+            $alerts[1], // next hour air quality alert
+            $alerts[5], // in two hours volcano warning
+            $alerts[6], // in two hours air quality alert
+            $alerts[7], // in three hours air quality alert
+        ];
+
+        $actual = AlertUtility::sort($alerts);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testGetsEndTime(): void
+    {
+        $expected = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $actual = AlertUtility::getEndTime(
+            (object) [
+                "endsRaw" => "2000-01-01T05:00:00Z",
+                "expiresRaw" => "oh no",
+                "timezone" => "Etc/UTC",
+            ],
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testGetsExpireTimeIfNoEndTime(): void
+    {
+        $expected = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2073-01-01T05:00:00Z",
+        );
+
+        $actual = AlertUtility::getEndTime(
+            (object) [
+                "endsRaw" => null,
+                "expiresRaw" => "2073-01-01T05:00:00Z",
+                "timezone" => "Etc/UTC",
+            ],
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testGetsExpireTimeIfNothing(): void
+    {
+        $expected = false;
+
+        $actual = AlertUtility::getEndTime(
+            (object) [
+                "endsRaw" => null,
+                "expiresRaw" => null,
+                "timezone" => "Etc/UTC",
+            ],
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForOngoingEndingToday(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("-1 hour"),
+            "endsRaw" => "2000-01-01T07:00:00Z",
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "until 7:00 AM today";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForOngoingEndingLater(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("-1 hour"),
+            "endsRaw" => "2000-01-02T07:00:00Z",
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "until Sunday 01/02 7:00 AM UTC";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForOngoingUnknownEnding(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("-1 hour"),
+            "endsRaw" => null,
+            "expiresRaw" => null,
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "is in effect";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForThisMorning(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("+1 hour"),
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "this morning";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForThisAfternoon(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("+12 hours"),
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "this afternoon";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForTonight(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("+16 hour"),
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "tonight";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForTomorrowMorning(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("+24 hour"),
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "tomorrow morning";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForTomorrowAfternoon(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("+36 hour"),
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "tomorrow afternoon";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForTomorrowNight(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("+40 hour"),
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "tomorrow night";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForFurtherFuture(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("+2 days"),
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "Monday";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testDurationTextForPast(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alert = (object) [
+            "onset" => $now->modify("-2 hour"),
+            "endsRaw" => "2000-01-01T04:00:00Z",
+            "timezone" => "Etc/UTC",
+        ];
+
+        $expected = "has concluded";
+
+        $actual = AlertUtility::getDurationText($alert, $now);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testGetAlertLevel(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alerts = [
+            (object) [
+                "event" => "winter storm warning",
+                "onset" => $now->modify("-1 hour"),
+            ],
+            (object) [
+                "event" => "flood Watch",
+                "onset" => $now->modify("+1 hour"),
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => $now->modify("+1 hour"),
+            ],
+        ];
+
+        $expected = ["warning", "watch", "other"];
+        $actual = array_map(function ($alert) {
+            return AlertUtility::getAlertLevel($alert->event);
+        }, $alerts);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testHighestAlertLevelWarning(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alerts = [
+            (object) [
+                "event" => "winter storm warning",
+                "onset" => $now->modify("-1 hour"),
+                "alertLevel" => "warning",
+            ],
+            (object) [
+                "event" => "flood Watch",
+                "onset" => $now->modify("+1 hour"),
+                "alertLevel" => "watch",
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => $now->modify("+1 hour"),
+                "alertLevel" => "other",
+            ],
+        ];
+
+        $expected = "warning";
+
+        $actual = AlertUtility::getHighestAlertLevel($alerts);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group alert-utility
+     */
+    public function testHighestAlertLevelWatch(): void
+    {
+        $now = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ISO8601_EXPANDED,
+            "2000-01-01T05:00:00Z",
+        );
+
+        $alerts = [
+            (object) [
+                "event" => "winter weather advisory",
+                "onset" => $now->modify("-1 hour"),
+                "alertLevel" => "other",
+            ],
+            (object) [
+                "event" => "flood watch",
+                "onset" => $now->modify("+1 hour"),
+                "alertLevel" => "watch",
+            ],
+            (object) [
+                "event" => "air quality alert",
+                "onset" => $now->modify("+1 hour"),
+                "alertLevel" => "other",
+            ],
+        ];
+
+        $expected = "watch";
+
+        $actual = AlertUtility::getHighestAlertLevel($alerts);
+
+        $this->assertEquals($expected, $actual);
+    }
+}

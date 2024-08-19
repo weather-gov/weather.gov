@@ -3,6 +3,7 @@
 namespace Drupal\weather_blocks\Plugin\Block\Test;
 
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\TypedData\TypedDataInterface;
 use Drupal\weather_blocks\Plugin\Block\WFOPromoBlock;
 
 /**
@@ -23,7 +24,7 @@ final class WFOPromoBlockTest extends Base
     }
 
     /**
-     * Test that the block returns a node iD.
+     * Test that the block returns promo info
      * @group unit
      * @group block
      * @group wfo-promo-block
@@ -32,16 +33,79 @@ final class WFOPromoBlockTest extends Base
     {
         $this->onLocationRoute();
 
-        // Setup fetching the actual node.
-        $story = $this->createStub(ContentEntityInterface::class);
-
-        $story->method("id")->willReturn(94);
+        $promo = (object) [
+            "field_wfo" => (object) [
+                "entity" => (object) [
+                    "name" => (object) [
+                        "value" => "WFO name",
+                    ],
+                    "field_wfo_code" => (object) [
+                        "value" => "WFO code",
+                    ],
+                ],
+            ],
+            "body" => "WFO information body",
+            "field_phone_number_opt" => "phone number entity",
+            "field_facebook_url" => "facebook url entity",
+            "field_twitter_url" => "twitter url entity",
+            "field_youtube_url" => "youtube url entity",
+        ];
 
         $this->entityService
             ->method("getLatestNodeFromWFO")
-            ->willReturn($story);
+            ->willReturn($promo);
 
-        $expected = ["node" => 94];
+        $expected = [
+            "name" => "WFO name",
+            "code" => "WFO code",
+            "about" => "WFO information body",
+            "phone" => "phone number entity",
+            "social" => [
+                "facebook" => "facebook url entity",
+                "twitter" => "twitter url entity",
+                "youtube" => "youtube url entity",
+            ],
+        ];
+
+        $actual = $this->block->build();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test that the block returns WFO name and code if there is no WFO info
+     * @group unit
+     * @group block
+     * @group wfo-promo-block
+     */
+    public function testReturnsWFOIfNoPromo(): void
+    {
+        $this->onLocationRoute();
+
+        $promo = null;
+
+        $this->entityService->method("getLatestNodeFromWFO")->willReturn(null);
+
+        // Setup fetching the actual node.
+        $wfoTaxonomyTerm = $this->createStub(ContentEntityInterface::class);
+
+        $wfoName = $this->createStub(TypedDataInterface::class);
+        $wfoName->method("getString")->willReturn("WFO name");
+
+        $wfoTaxonomyTerm
+            ->method("get")
+            ->will($this->returnValueMap([["name", $wfoName]]));
+
+        $this->entityService
+            ->method("getWFOEntity")
+            ->willReturn($wfoTaxonomyTerm);
+
+        $expected = [
+            "name" => "WFO name",
+            "code" => "WFO",
+            "phone" => false,
+            "social" => false,
+        ];
 
         $actual = $this->block->build();
 

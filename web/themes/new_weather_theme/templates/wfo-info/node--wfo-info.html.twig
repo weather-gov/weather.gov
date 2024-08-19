@@ -1,0 +1,111 @@
+<div class="wx-wfo-info margin-bottom-10">
+  {% if content.field_wfo_image is not empty %}
+    <div class="wx-wfo-image grid-container padding-0 tablet:padding-x-2 desktop:padding-x-4">
+      {{ content.field_wfo_image }}
+    </div>
+  {% endif %}
+
+  <div class="grid-container">
+    <h1 class="text-normal text-primary-darker desktop:margin-bottom-3">
+      {{ "@wfoName (@wfoCode) National Weather Service Office" | t({ "@wfoName": wfo.name, "@wfoCode": wfo.code }) }}
+    </h1>
+
+    <div class="grid-row grid-gap">
+      {% set hasAbout = not (content.body.isEmpty or content.body.0 is not defined) %}
+      {% if hasAbout %}
+      <div class="grid-col-12 tablet:grid-col-4">
+        <h2 class="font-sans-xl text-normal text-primary-darker margin-top-0">{{ "About" | t }}</h2>
+        {{content.body}}
+      </div>
+      {% endif %}
+
+      <div class="grid-col-12{% if hasAbout %} tablet:grid-col-8{% endif %}">
+        <figure class="margin-0">
+          <img src="/{{ directory }}/assets/images/wfos/{{ wfo.code }}.png" alt="">
+          <figcaption class="font-sans-xs">{{ "Coverage area for @wfo WFO" | t({ "@wfo": wfo.name })}}</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    {#
+      TODO: This is all placeholder stuff. When it comes out in favor of real
+      stuff, make sure we add things to the translations list appropriately.
+    #}
+    <div class="grid-row">
+      <div class="grid-col-12 tablet:grid-col-6">
+        <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
+          {{ "Local expertise" | t }}
+        </h2>
+        <p>
+          Decision support is description tk tk tk
+        </p>
+        <ul class="margin-bottom-0 padding-left-2">
+          <li class="padding-y-05"><a class="usa-link" href="#">Briefing</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">County finder</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">State page</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">Resource 1</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">Resource 2</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">Resource 3</a></li>
+        </ul>
+      </div>
+
+      <div class="grid-col-12 tablet:grid-col-6">
+        <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
+          {{ "Forecaster's discussion" | t }}
+        </h2>
+        <p>
+          The purpose of the area forecast discussion is to provide the
+          meteorological/scientific reasoning behind the forecast
+        </p>
+        <a class="usa-link" href="#">Current Area Forecast Discussion</a>
+      </div>
+    </div>
+
+    {% set hasPhone = phone is not empty %}
+    {% set hasAddress = address is not empty %}
+    {% set hasEmail = email is not empty %}
+
+    {% set hasFacebook = not (content.field_facebook_url.isEmpty or content.field_facebook_url.0 is not defined) %}
+    {% set hasTwitter = not (content.field_twitter_url.isEmpty or content.field_twitter_url.0 is not defined) %}
+    {% set hasYoutube = not (content.field_youtube_url.isEmpty or content.field_youtube_url.0 is not defined) %}
+    {% set hasSocial = hasFacebook or hasTwitter or hasYoutube %}
+
+    {% set hasContact = hasSocial or hasAddress or hasPhone or hasEmail %}
+
+    {% if hasContact %}
+      <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker margin-bottom-0 padding-top-105 margin-top-4">
+        {{ "Contact us" | t }}
+      </h2>
+
+      <div class="grid-row margin-top-2">
+        <div class="grid-col-12 tablet:grid-col-4">
+          {% if hasPhone %}
+            {{ content.field_phone_number_opt }}
+          {% endif %}
+
+          {% if hasEmail %}
+            {% if hasPhone %}<div class="margin-top-2">{% endif %}
+              {{ content.field_wfo_email }}
+            {% if hasPhone %}</div>{% endif %}
+          {% endif %}
+
+          {% if hasAddress %}
+            {% if hasPhone or hasEmail %}<div class="margin-top-2">{% endif %}
+              {{ content.field_address }}
+            {% if hasPhone or hasEmail %}</div>{% endif %}
+          {% endif %}
+        </div>
+
+        <div class="grid-col-12 tablet:grid-col-8">
+          {% if hasSocial %}
+            <ul class="usa-list usa-list--unstyled"> 
+              {{ content.field_facebook_url }}
+              {{ content.field_twitter_url }}
+              {{ content.field_youtube_url }}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>

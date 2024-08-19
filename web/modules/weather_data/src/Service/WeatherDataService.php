@@ -3,6 +3,7 @@
 namespace Drupal\weather_data\Service;
 
 use Drupal\weather_data\Service\HourlyTableTrait;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -25,6 +26,13 @@ class WeatherDataService
      * @var dataLayer
      */
     private $dataLayer;
+
+    /**
+     * Cache of API calls for this request.
+     *
+     * @var cache
+     */
+    private $cache;
 
     /**
      * Mapping of legacy API icon paths to new icons and conditions text.
@@ -78,9 +86,11 @@ class WeatherDataService
      */
     public function __construct(
         TranslationInterface $t,
+        CacheBackendInterface $cache,
         NewRelicMetrics $newRelic,
         DataLayer $dataLayer,
     ) {
+        $this->cache = $cache;
         $this->dataLayer = $dataLayer;
         $this->t = $t;
         $this->newRelic = $newRelic;
@@ -201,12 +211,38 @@ class WeatherDataService
         return $this->dataLayer->getPlaceNearPoint($lat, $lon);
     }
 
-    public function getLatestAFD($wfo)
+    public function getSatelliteMetadata($wfo)
     {
-        $afds = $this->dataLayer->getProductsByTypeAndOffice("AFD", $wfo);
+        return $this->dataLayer->getSatelliteMetadata($wfo);
+    }
+
+    public function getLatestAFD($wfo = null)
+    {
+        if ($wfo) {
+            $afds = $this->dataLayer->getProductsByTypeAndOffice("AFD", $wfo);
+        } else {
+            $afds = $this->dataLayer->getProductsByType("AFD");
+        }
+
         if (count($afds) > 0) {
             $afd = $this->dataLayer->getProduct($afds[0]->id);
             return json_decode(json_encode($afd), true);
+        }
+        return false;
+    }
+
+    public function getLatestAFDReferences($wfo = null)
+    {
+        if ($wfo) {
+            $afds = $this->dataLayer->getProductsByTypeAndOffice("AFD", $wfo);
+        } else {
+            $afds = $this->dataLayer->getProductsByType("AFD");
+        }
+
+        if (count($afds) > 0) {
+            return array_map(function ($afdReference) {
+                return json_decode(json_encode($afdReference), true);
+            }, $afds);
         }
         return false;
     }
