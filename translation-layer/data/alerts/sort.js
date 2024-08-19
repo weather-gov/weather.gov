@@ -6,8 +6,20 @@ export default (alertA, alertB) => {
   const priorityA = alertA.metadata.priority;
   const priorityB = alertB.metadata.priority;
 
-  // If both alerts are currently active, sort them by priority.
+  // If both alerts are currently active...
   if (alertA.onset.isBefore(now) && alertB.onset.isBefore(now)) {
+    // ...and they have the same priority, sort them by when they finish.
+    if (priorityA === priorityB) {
+      if (alertA.finish.isBefore(alertB.finish)) {
+        return -1;
+      }
+      if (alertB.finish.isBefore(alertA.finish)) {
+        return 1;
+      }
+      return 0;
+    }
+
+    // ...or else sort them by priority.
     return priorityA - priorityB;
   }
 
@@ -20,7 +32,18 @@ export default (alertA, alertB) => {
     return 1;
   }
 
-  // Otherwise, they start at the same time in the future. Back to sorting by
-  // priority!
+  // Otherwise, they start at the same time in the future. If they have the same
+  // priority, sort them by ending time.
+  if (priorityA === priorityB) {
+    if (alertA.finish.isBefore(alertB.finish)) {
+      return -1;
+    }
+    if (alertB.finish.isBefore(alertA.finish)) {
+      return 1;
+    }
+    return 0;
+  }
+
+  // Otherwise, sort them by priority.
   return priorityA - priorityB;
 };

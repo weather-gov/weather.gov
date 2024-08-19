@@ -11,7 +11,7 @@ const main = async () => {
     reply.status(500).send({ error: true });
   });
 
-  server.get("/", (response) => {
+  server.get("/", (_, response) => {
     response.send({ ok: true });
   });
 

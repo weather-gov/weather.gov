@@ -43,26 +43,19 @@ export default async ({ grid }) => {
       }
       return 0;
     })
-    .filter(({ time }) => dayjs(time) >= earliest);
+    .filter(({ time }) => time.isAfter(earliest));
 
   h.forEach((hour) => {
     convertProperties(hour);
   });
 
-  let hourIndex = 0;
   for (const day of dailyData.days) {
     const start = dayjs(day.start);
     const end = dayjs(day.end);
 
-    day.hours = [];
-    while (
-      hourIndex < h.length &&
-      h[hourIndex].time.isSameOrAfter(start) &&
-      h[hourIndex].time.isBefore(end)
-    ) {
-      day.hours.push(h[hourIndex]);
-      hourIndex += 1;
-    }
+    day.hours = h.filter(
+      ({ time }) => time.isSameOrAfter(start) && time.isSameOrBefore(end),
+    );
   }
 
   return { gridData, daily: dailyData };

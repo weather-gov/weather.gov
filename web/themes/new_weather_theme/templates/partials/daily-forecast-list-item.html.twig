@@ -31,11 +31,12 @@ only be a nighttime period.
           </div>
         </div>
 
-        {% set alertCount = alertPeriods | length %}
+        {% set alertCount = alerts.metadata.count %}
+        {% set alertLevel = alerts.metadata.highest %}
+
         {% if alertCount > 0 %}
-          {% set alertID = alertPeriods[0].alert.alertId %}
-          {% set alertType = alertPeriods[0].alert.event %}
-          {% set alertLevel = highestAlertLevel %}
+          {% set alertID = alerts.items[0].id %}
+          {% set alertType = alerts.items[0].event %}
 
           {% if alertCount > 1 %}
             {% set alertID = null %}
@@ -105,10 +106,8 @@ only be a nighttime period.
       <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee">
         {% include '@new_weather_theme/partials/hourly-table.html.twig'
         with {
-          for: periods[0].monthAndDay,
           hours: dayHours,
-          alertPeriods: alertPeriods,
-          itemId: itemId
+          alerts: alerts.items,
         }
         %}
         {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipHours } %}

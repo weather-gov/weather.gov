@@ -16,9 +16,10 @@ export default (data, hours) => {
       const duration = dayjs.duration(isoDuration).asHours();
 
       for (let offset = 0; offset < duration; offset += 1) {
-        const time = start.add(offset, "hours").toISOString();
+        const ts = start.add(offset, "hours").startOf("hour");
+        const time = ts.toISOString();
         const hourData = hours.get(time) ?? {};
-        hourData.time = time;
+        hourData.time = ts;
         hourData[key] = { uom, value: value.value };
 
         hours.set(time, hourData);

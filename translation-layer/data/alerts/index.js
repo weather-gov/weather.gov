@@ -88,12 +88,15 @@ const updateAlerts = async () => {
 
     alert.sent = rawAlert.properties.sent;
     alert.effective = rawAlert.properties.effective;
-    alert.onset = rawAlert.properties.onset;
+    // Sometimes onset is missing. In that case, use the starting time.
+    alert.onset = rawAlert.properties.onset ?? alert.effective;
     alert.expires = rawAlert.properties.expires;
     alert.ends = rawAlert.properties.ends;
 
+    // If an alert has an ending time, that is when the alert is over. If the
+    // alert doesn't have an end time, try using the expiration time. If that's
+    // also missing, then the alert is indefinite.
     alert.finish = alert.ends;
-
     if (!alert.finish) {
       alert.finish = alert.expires;
     }

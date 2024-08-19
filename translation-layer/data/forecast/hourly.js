@@ -23,7 +23,9 @@ export default (data, hours) => {
     const end = dayjsOffset(period.endTime);
 
     while (start < end) {
-      const time = start.toISOString();
+      // Always take hours DOWN to the last whole hour. This should never be an
+      // issue with API data, but let's protect ourselves anyway.
+      const time = start.startOf("hour").toISOString();
 
       const hourData = hours.get(time) ?? {};
       hourData.time = start;
