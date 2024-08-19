@@ -226,11 +226,8 @@ class WeatherDataService
         }
 
         if (count($afds) > 0) {
-            $afd = $this->dataLayer->getProduct($afds[0]->id);
-            $afd = json_decode(json_encode($afd), true);
-            $parser = new AFDParser($afd['productText']);
-            $parser->parse();
-            $afd['parsedProductText'] = $parser->getStructureForTwig();
+            $afd = $this->getAFDById($afds[0]->id);
+            
             return $afd;
         }
         return false;
@@ -248,6 +245,26 @@ class WeatherDataService
             return array_map(function ($afdReference) {
                 return json_decode(json_encode($afdReference), true);
             }, $afds);
+        }
+        return false;
+    }
+
+    /**
+     * Attempt to fetch an AFD by its ID.
+     * If found, respond with an associative
+     * array that can be used by Twig for
+     * display
+     */
+    public function getAFDById($id)
+    {
+        $afd = $this->dataLayer->getProduct($id);
+        if($afd){
+            $afd = $this->dataLayer->getProduct($id);
+            $afd = json_decode(json_encode($afd), true);
+            $parser = new AFDParser($afd['productText']);
+            $parser->parse();
+            $afd['parsedProductText'] = $parser->getStructureForTwig();
+            return $afd;
         }
         return false;
     }

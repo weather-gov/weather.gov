@@ -2,6 +2,9 @@
 
 function weather_routes_theme($existing, $type, $theme, $path)
 {
+    for($i = 0; $i < count($existing); $i++){
+        array_splice($existing, $i);
+    }
     return [
         // Custom data for the AFD route
         "weather_routes_afd" => [

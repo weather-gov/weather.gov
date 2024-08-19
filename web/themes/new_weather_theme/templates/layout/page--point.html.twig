@@ -1,6 +1,7 @@
 <div class="layout-container grid-row height-full flex-column flex-no-wrap">
 
   {{ attach_library('new_weather_theme/tabbed-nav') }}
+  {{ attach_library('new_weather_theme/afd-selector') }}
 
   <header role="banner">
     <div class="grid-container">
@@ -47,7 +48,10 @@
       </div>
 
       <div class="bg-base-lightest padding-top-3 padding-bottom-8">
-        {% if weather.alerts %}
+          <wx-afd-selector class="display-block" wfo="OKX">
+              <div slot="afd"></div>
+          </wx-afd-selector>
+          {% if weather.alerts %}
         <div class="wx-tab-container wx-focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
           {{ drupal_block("weathergov_local_alerts") }}
         </div>
@@ -59,7 +63,7 @@
 
           {% include '@new_weather_theme/partials/satellite.html.twig' %}
 
-          {#{ drupal_block("weathergov_area_forecast_discussion") }#}
+            {#{ drupal_block("weathergov_area_forecast_discussion") }#}
         </div>
 
          <div class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">

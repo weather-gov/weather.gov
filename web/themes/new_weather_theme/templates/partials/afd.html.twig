@@ -1,38 +1,40 @@
 {% set preamble = afd.parsedProductText.preamble %}
 {% set body = afd.parsedProductText.body %}
 {% set epilogue = afd.parsedProductText.epilogue %}
-<div class="afd-preamble">
-    {% for key,val in preamble %}
-        <span class="afd-preamble-{{key}} text-pre-line">
-            {% for node in val %}
-                {{node.content}}
-            {% endfor %}
-        </span>
-    {% endfor %}
-</div>
-
-<div class="afd-body">
-    {% for node in body %}
-        {% if node.type == 'header' %}
-            <h2 class="usa-heading">{{node.content}}</h2>
-            {% if node.postHeader %}
-                <span class="afd-postheader">{{node.postHeader}}</span>
-            {% endif %}
-
-        {% elseif node.type == 'subheader' %}
-            <h3>{{node.content}}</h3>
-        {% else %}
-            <p class="usa-text text-pre-line">{{node.content}}</p>
-        {% endif %}
-    {% endfor %}
-</div>
-
-{% if epilogue %}
-    <div class="afd-epilogue">
-        {% for node in epilogue %}
-            <p class="usa-text text-pre-line">
-                {{node.content}}
-            </p>
+<article class="afd-content" data-afd-id="{{afd.id}}">
+    <div class="afd-preamble">
+        {% for key,val in preamble %}
+            <span class="afd-preamble-{{key}} text-pre-line">
+                {% for node in val %}
+                    {{node.content}}
+                {% endfor %}
+            </span>
         {% endfor %}
-    </div>    
-{% endif %}
+    </div>
+
+    <div class="afd-body">
+        {% for node in body %}
+            {% if node.type == 'header' %}
+                <h2 class="usa-heading">{{node.content}}</h2>
+                {% if node.postHeader %}
+                    <span class="afd-postheader">{{node.postHeader}}</span>
+                {% endif %}
+
+            {% elseif node.type == 'subheader' %}
+                <h3>{{node.content}}</h3>
+            {% else %}
+                <p class="usa-text text-pre-line">{{node.content}}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {% if epilogue %}
+        <div class="afd-epilogue">
+            {% for node in epilogue %}
+                <p class="usa-text text-pre-line">
+                    {{node.content}}
+                </p>
+            {% endfor %}
+        </div>    
+    {% endif %}
+</article>

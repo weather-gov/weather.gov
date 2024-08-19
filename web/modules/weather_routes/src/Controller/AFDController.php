@@ -9,6 +9,7 @@ use Drupal\Core\Url;
 use Drupal\weather_data\Service\WeatherDataService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Responses for AFD retrieval routes
@@ -53,5 +54,21 @@ final class AFDController extends ControllerBase
             "#wfo" => $wfo,
             "#afd" => $afd,
         ];
+    }
+
+    /**
+     * Fetch the markup for a parsed AFD by
+     * the ID of the AFD.
+     */
+    public function byId($afd_id)
+    {
+        $afd = $this->weatherData->getAFDById($afd_id);
+        $build = [
+            "#theme" => "weather_routes_afd",
+            "#wfo" => "UNK",
+            "#afd" => $afd,
+        ];
+        $renderedMarkup = \Drupal::service('renderer')->render($build);
+        return new Response($renderedMarkup->__toString());
     }
 }
