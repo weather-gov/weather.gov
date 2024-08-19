@@ -29,8 +29,8 @@
         <th scope="row" class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
         {% for period in hours %}
         <th scope="col">
-          <time datetime="{{period.timestamp}}" class="font-family-mono font-mono-xs text-base-lightest">
-            {{ period.time }}
+          <time datetime="{{period.time}}" class="font-family-mono font-mono-xs text-base-lightest">
+            {{ period.hour }}
           </time>
         </th>
         {% endfor %}
@@ -47,7 +47,7 @@
           {% for period in hours %}
           <td>
             {% if period.temperature is not same as (null) %}
-            {{ period.temperature }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+            {{ period.temperature.degF }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
             <span class="usa-sr-only">℉</span>
             {% else %}
             <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
@@ -62,7 +62,7 @@
           {% for period in hours %}
           <td>
             {% if period.apparentTemperature is not same as (null) %}
-            {{ period.apparentTemperature }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+            {{ period.apparentTemperature.degF }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
             <span class="usa-sr-only">℉</span>
             {% endif %}
           </td>
@@ -82,8 +82,8 @@
                 </svg>
               </div>
               <div>
-                {% if period.conditions | length %}
-                <p class="margin-y-0">{{period.conditions}}</p>
+                {% if period.shortForecast | length %}
+                <p class="margin-y-0">{{period.shortForecast}}</p>
                 {% else %}
                 <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
                 {% endif %}
@@ -100,7 +100,7 @@
           {% for period in hours %}
           <td> 
             {% if period.probabilityOfPrecipitation is not same as (null) %}
-            <p class="margin-y-0"> {{period.probabilityOfPrecipitation}}% </p>
+            <p class="margin-y-0"> {{period.probabilityOfPrecipitation.percent}}% </p>
             {% else %}
             <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
             {% endif %}
@@ -122,7 +122,7 @@
               }
             %}
             {% if period.windGust is not same as (null) %}
-              <div>{{ "with gusts up to @gustSpeed mph" | t({ "@gustSpeed": period.windGust }) }}</div>
+              <div>{{ "with gusts up to @gustSpeed mph" | t({ "@gustSpeed": period.windGust.mph }) }}</div>
             {% endif %}
           </td>
           {% endfor %}
@@ -133,8 +133,8 @@
           </th>
           {% for period in hours %}
           <td>
-            {% if period.relativeHumidity is not same as (null) %}
-            {{period.relativeHumidity}}%
+            {% if period.relativeHumidity.percent is not same as (null) %}
+            {{period.relativeHumidity.percent}}%
             {% else %}
             <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
             {% endif %}
@@ -147,8 +147,8 @@
           </th>
           {% for period in hours %}
           <td>
-            {% if period.dewpoint is not same as (null) %}
-            {{period.dewpoint}}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+            {% if period.dewpoint.degF is not same as (null) %}
+            {{period.dewpoint.degF}}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
             <span class="usa-sr-only">℉</span>
             {% else %}
             <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>

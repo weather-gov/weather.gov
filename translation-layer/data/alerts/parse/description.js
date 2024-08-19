@@ -60,6 +60,10 @@ const getParagraphNodesForString = (str) => {
 };
 
 export const parseDescription = (description) => {
+  if (!description) {
+    return [{ type: "paragraph", nodes: [] }];
+  }
+
   const blocks = paragraphSquash(description);
 
   const nodes = blocks

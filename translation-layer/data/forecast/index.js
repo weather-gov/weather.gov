@@ -51,23 +51,19 @@ export default async ({ grid }) => {
 
   let hourIndex = 0;
   for (const day of dailyData.days) {
-    for (const period of day.periods) {
-      const start = dayjs(period.start);
-      const end = dayjs(period.end);
+    const start = dayjs(day.start);
+    const end = dayjs(day.end);
 
-      period.hours = [];
-      while (
-        hourIndex < h.length &&
-        h[hourIndex].time >= start &&
-        h[hourIndex].time < end
-      ) {
-        period.hours.push(h[hourIndex]);
-        hourIndex += 1;
-      }
+    day.hours = [];
+    while (
+      hourIndex < h.length &&
+      h[hourIndex].time.isSameOrAfter(start) &&
+      h[hourIndex].time.isBefore(end)
+    ) {
+      day.hours.push(h[hourIndex]);
+      hourIndex += 1;
     }
-
-    // day.hours = day.periods.flatMap(({ hours: periodHours }) => periodHours);
   }
 
-  return { gridData, daily: dailyData /*hourly: h*/ };
+  return { gridData, daily: dailyData };
 };

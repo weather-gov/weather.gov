@@ -43,16 +43,18 @@ export default (data) => {
       days[days.length - 1].end = period.endTime;
     }
 
+    const isOvernight =
+      days.length === 1 &&
+      dayPeriod.periods.length === 0 &&
+      period.isDaytime === false;
+
     const periodData = {
       start: dayjs(period.startTime),
       end: dayjs(period.endTime),
       isDaytime: period.isDaytime,
-      isOvernight:
-        days.length === 1 &&
-        dayPeriod.periods.length === 0 &&
-        period.isDaytime === false,
-      monthAndDay: start.format("MMMM D"),
-      dayName: start.format("dddd"),
+      isOvernight,
+      monthAndDay: start.format("MMM D"),
+      dayName: days.length === 1 ? "Today" : start.format("dddd"),
       data: convertProperties({
         icon: parseAPIIcon(period.icon),
         description: sentenceCase(period.shortForecast),
@@ -68,6 +70,17 @@ export default (data) => {
         windDirection: period.windDirection,
       }),
     };
+
+    // Add time labels to the first day
+    if (days.length === 1) {
+      if (isOvernight) {
+        periodData.timeLabel = "NOW-6AM";
+      } else if (periodData.isDaytime) {
+        periodData.timeLabel = "6AM-6PM";
+      } else {
+        periodData.timeLabel = "6PM-6AM";
+      }
+    }
 
     dayPeriod.periods.push(periodData);
   }

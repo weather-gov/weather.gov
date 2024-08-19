@@ -8,17 +8,17 @@
 
     <div class="grid-container padding-x-0 tablet:padding-x-2">
       <ol class="usa-list--unstyled">
-      {# Attempt to render the period(s) associated with the current day #}
-      {% if content.today %}
-        {% set precipHours = content.precipitationPeriods[0] %}
-        {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': content.today, 'dayHours': content.todayHourly, 'alertPeriods': content.todayAlerts, 'highestAlertLevel': content.todayHighestAlertLevel, 'useOnlyLowForToday': content.useOnlyLowForToday, 'precipHours': precipHours, 'dayLabel': "Today" | t } %}
-        {% set precipIndex = 1 %}
-      {% endif %}
-
-      {#  Render periods associated with future days, in detail #}
       {%  for data in forecast.days %}
         {% set precipHours = content.precipitationPeriods[loop.index0 + precipIndex] %}
-        {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with { 'periods': data.periods, 'dayHours': data.hourlyPeriods, 'alertPeriods': data.alertPeriods, 'highestAlertLevel': data.highestAlertLevel, 'precipHours': precipHours } %}
+        {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with
+           {
+              'periods': data.periods,
+              'dayHours': data.hours,
+              'alertPeriods': data.alertPeriods,
+              'highestAlertLevel': data.highestAlertLevel,
+              'precipHours': precipHours
+            }
+        %}
       {%  endfor %}
     </ol>
   </div>

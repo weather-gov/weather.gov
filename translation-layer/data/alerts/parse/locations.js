@@ -1,6 +1,10 @@
 import { titleCase } from "../../../util/case.js";
 
 export const parseLocations = (description) => {
+  if (!description) {
+    return { description, location: false };
+  }
+
   let updatedDescription = description;
   const locations = { regions: [], cities: [] };
 
