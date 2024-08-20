@@ -268,4 +268,40 @@ class WeatherDataService
         }
         return false;
     }
+
+    /**
+     * Attempts to retrieve the three-letter WFO code
+     * from the product text body of an AFD.
+     */
+    public function getWFOFromAFD(array $afd)
+    {
+        if(!$afd || !array_key_exists("productText", $afd)){
+            return null;
+        }
+        $rx = "/AFD(?<wfo>[A-Z]{3})/";
+        if(preg_match($rx, $afd['productText'], $matches)){
+            return $matches['wfo'];
+        }
+        return null;
+    }
+
+    /**
+     * Returns an array of associative arrays of
+     * information about the available WFOs
+     * based on the current taxonomy
+     */
+    public function getAllWFOs()
+    {
+        $all = \Drupal::service("weather_entity")->getWFOEntities();
+        return array_map(
+            function($entity){
+                return [
+                    "id" => $entity->id(),
+                    "name" => $entity->get("name")->value,
+                    "code" => $entity->get("field_wfo_code")->value
+                ];
+            },
+            $all
+        );
+    }
 }

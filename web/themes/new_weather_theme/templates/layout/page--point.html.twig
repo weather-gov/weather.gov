@@ -48,9 +48,6 @@
       </div>
 
       <div class="bg-base-lightest padding-top-3 padding-bottom-8">
-          <wx-afd-selector class="display-block" wfo="OKX">
-              <div slot="afd"></div>
-          </wx-afd-selector>
           {% if weather.alerts %}
         <div class="wx-tab-container wx-focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
           {{ drupal_block("weathergov_local_alerts") }}

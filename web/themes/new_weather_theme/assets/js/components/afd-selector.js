@@ -14,10 +14,10 @@ class AFDSelector extends HTMLElement {
       return;
     }
 
-    let container = this.querySelector('.afd-content-container');
+    let container = this.querySelector('.afd-content');
     if(!container){
       container = document.createElement('div');
-      container.classList.add('afd-content-container');
+      container.classList.add('afd-content');
       this.append(container);
     }
 
@@ -61,7 +61,7 @@ class AFDSelector extends HTMLElement {
     const response = await fetch(`/afd/${afdId}`);
     if(response.ok){
       const markup = await response.text();
-      afdContainer.innerHTML = markup;
+      afdContainer.outerHTML = markup;
     }
   }
 

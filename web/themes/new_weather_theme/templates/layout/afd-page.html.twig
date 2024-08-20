@@ -1,31 +1,61 @@
 <div class="layout-container grid-row height-full flex-column flex-no-wrap">
     <header role="banner">
-    <div class="grid-container">
-      {% if page.header %}
-      <div class="grid-row">{{ page.header }}</div>
-      {% endif %} {% if page.primary_menu %}
-      <div class="grid-row">{{ page.primary_menu }}</div>
-      {% endif %} {% if page.secondary_menu %}
-      <div class="grid-row">{{ page.secondary_menu }}</div>
-      {% endif %} {% if page.breadcrumb %}
-      <div class="grid-row">{{ page.breadcrumb }}</div>
-      {% endif %} {% if page.highlighted %}
-      <div class="grid-row">{{ page.highlighted }}</div>
-      {% endif %} {% if page.help %}
-          <div class="grid-row">{{ page.help }}</div>
-      {% endif %}
-    </div>
+        <div class="grid-container">
+            {% if page.header %}
+                <div class="grid-row">{{ page.header }}</div>
+            {% endif %} {% if page.primary_menu %}
+                <div class="grid-row">{{ page.primary_menu }}</div>
+            {% endif %} {% if page.secondary_menu %}
+                <div class="grid-row">{{ page.secondary_menu }}</div>
+            {% endif %} {% if page.breadcrumb %}
+                <div class="grid-row">{{ page.breadcrumb }}</div>
+            {% endif %} {% if page.highlighted %}
+                <div class="grid-row">{{ page.highlighted }}</div>
+            {% endif %} {% if page.help %}
+                <div class="grid-row">{{ page.help }}</div>
+            {% endif %}
+        </div>
     </header>
 
     <div class="grid-container">
+        <form id="afd-selection-form" name="afd-selection-form" method="GET" action="/afd">
+            <label for="wfo-selector">Forecast office: </label>
+            <select id="wfo-selector" name="wfo">
+                {% for office in wfo_list %}
+                    <option value="{{office.code}}"{% if office.code == wfo %} selected{% endif %}>
+                        {{office.name}} ({{office.code}})
+                    </option>
+                {% endfor %}
+            </select>
+
+            <br/>
+
+            {% if version_list | length > 0 %}
+                <label for="version-selector">Versions for {{wfo}}: </label>
+                <select id="version-selector" name="id">
+                    {% for version in version_list %}
+                        <option value="{{version.id}}"{% if afd.id == version.id %} selected{% endif %}>
+                            {{version.issuanceTime}}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+
+            <br />
+            <input type="hidden" name="current-id" value="{{afd.id}}"/>
+            <button type="submit">Update selection</button>
+        </form>
+
         <h1>Area Forecast Discussion (AFD)</h1>
         {% if wfo is not null %}
-            <h2>latest for {{wfo}}</h2>
+            <h2>Issued by {{wfo}} at {{afd.issuanceTime}}</h2>
         {% else %}
-            <h2>latest anywhere</h2>
+            <h2>No WFO available!</h2>
         {% endif %}
         {%  if afd is not null %}
-            {% include '@new_weather_theme/partials/afd.html.twig' %}
+            <wx-afd-selector class="display-block" {% if wfo is not null %}wfo="{{wfo}}"{% endif %}>
+                {% include '@new_weather_theme/partials/afd.html.twig' %}
+            </wx-afd-selector>
         {% endif %}
     </div>
 </div>
