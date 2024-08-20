@@ -1,5 +1,4 @@
-// const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
-const BASE_URL = "https://api.weather.gov";
+const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
 
 export const fetchAPIJson = async (path) =>
   fetch(`${BASE_URL}${path}`)

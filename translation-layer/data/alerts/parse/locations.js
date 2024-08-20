@@ -100,7 +100,7 @@ export const parseLocations = (description) => {
         .split(",")
         // Trim the city names and title-case them. Sometimes the cities will
         // have a period at the very end, too, so eat that, just in case.
-        .map((s) => titleCase(s.trim().replace(/.$/, "")));
+        .map((s) => titleCase(s.trim().replace(/\.$/, "")));
 
       // Advance the end index, plus two newlines.
       endIndex += citiesToken.length + 2;

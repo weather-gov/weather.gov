@@ -64,6 +64,13 @@ const updateAlerts = async () => {
     const alert = {
       metadata: alertKinds.get(rawAlert.properties.event.toLowerCase()),
     };
+    // For now, we're only ingesting land alerts. Once we get into marine
+    // alerts, we'll revisit this, but since we don't know what the use case
+    // will be in the future, we'll just leave them out entirely for now.
+    if (alert.metadata.kind !== "land") {
+      continue; // eslint-disable-line no-continue
+    }
+
     alerts.push(alert);
 
     alert.id = alerts.length;

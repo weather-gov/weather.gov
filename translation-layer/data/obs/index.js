@@ -19,15 +19,15 @@ export default async ({
 
   let station = stations.shift();
 
-  const others = stations.map(({ id }) =>
-    fetch(`${id}/observations/?limit=1`)
-      .then((r) => r.json())
-      .then((out) => out.features[0].properties),
+  const others = stations.map(({ properties: { stationIdentifier } }) =>
+    fetchAPIJson(`/stations/${stationIdentifier}/observations?limit=1`).then(
+      (out) => out.features[0].properties,
+    ),
   );
 
-  let observation = await fetch(`${station.id}/observations/?limit=1`)
-    .then((r) => r.json())
-    .then((out) => out.features[0].properties);
+  let observation = await fetchAPIJson(
+    `/stations/${station.properties.stationIdentifier}/observations?limit=1`,
+  ).then((out) => out.features[0].properties);
 
   if (!isObservationValid(observation)) {
     const fallbackObs = await Promise.all(others);

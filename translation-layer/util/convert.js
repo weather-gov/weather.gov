@@ -135,7 +135,10 @@ export const convertProperties = (obj) => {
     const conversion = unitMapping.get(prop[unitKey]);
     const value = obj[key].value;
 
-    obj[key] = { [conversion.in.label]: round(value, conversion.in) };
+    // If the input value is null, preserve that.
+    obj[key] = {
+      [conversion.in.label]: value ? round(value, conversion.in) : null,
+    };
 
     for (const out of conversion.out) {
       if (value === null) {
@@ -146,7 +149,10 @@ export const convertProperties = (obj) => {
         obj[key][out.label] = convert(value, conversion.in.name).to(out.name);
       }
 
-      obj[key][out.label] = round(obj[key][out.label], out);
+      // Likewise preserve nulls in the outputs.
+      if (obj[key][out.label]) {
+        obj[key][out.label] = round(obj[key][out.label], out);
+      }
     }
   }
 

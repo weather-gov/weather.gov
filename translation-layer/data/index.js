@@ -32,9 +32,13 @@ export const getDataForPoint = async (lat, lon) => {
 
   const alerts = await getAlerts({ grid, point, place });
 
-  // Now map alerts into the daily forecast.
-  for (const day of forecast.daily.days) {
+  // Now map alerts into the daily forecast. Only do the days that have hours in
+  // them. This shouldn't be an issue, but better safe than sorry.
+  for (const day of forecast.daily.days.filter(
+    ({ hours }) => hours.length > 0,
+  )) {
     day.alerts = { metadata: { count: 0, highest: "other" }, items: [] };
+
     const start = day.hours[0].time;
     const end = day.hours[day.hours.length - 1].time;
 
