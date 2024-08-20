@@ -46,7 +46,7 @@ final class AFDController extends ControllerBase
         );
     }
 
-    public function index()
+    public function afdDefault()
     {
         $id = $this->request->getCurrentRequest()->query->get("id");
         $wfo_code = $this->request->getCurrentRequest()->query->get("wfo");
