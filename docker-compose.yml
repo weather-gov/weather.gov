@@ -26,9 +26,9 @@ services:
       - ./tests/api:/app
       - /app/node_modules
 
-  translation-layer:
+  api-interop-layer:
     build:
-      context: ./translation-layer
+      context: ./api-interop-layer
       dockerfile: Dockerfile
     environment:
       PORT: 8082
@@ -46,7 +46,7 @@ services:
     ports:
       - 8082:8082
     volumes:
-      - ./translation-layer:/app
+      - ./api-interop-layer:/app
       - /app/node_modules
 
   drupal:
@@ -61,7 +61,7 @@ services:
     links:
       - database
       - api-proxy
-      - translation-layer
+      - api-interop-layer
     environment:
       API_URL: http://api-proxy:8081
       DRUPAL_DB_NAME: weathergov

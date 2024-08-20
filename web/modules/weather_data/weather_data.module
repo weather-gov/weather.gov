@@ -14,7 +14,7 @@ function weather_data_template_preprocess_default_variables_alter(&$variables)
 
         $fetch = $container->get("http_client");
         $data = $fetch
-            ->get("http://translation-layer:8082/point/$lat/$lon")
+            ->get("http://api-interop-layer:8082/point/$lat/$lon")
             ->getBody();
 
         $variables["point"] = json_decode($data);
