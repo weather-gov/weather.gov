@@ -49,15 +49,15 @@ final class DataLayerTest extends TestCase
         $client = new Client(["handler" => $stack]);
 
         $dataLayer = $this->getMockBuilder(DataLayer::class)
-                          ->setConstructorArgs([
-                              $client,
-                              $this->cache,
-                              $this->database,
-                              $this->route,
-                              $preload,
-                          ])
-                          ->setMethods(["getLogger"])
-                          ->getMock();
+            ->setConstructorArgs([
+                $client,
+                $this->cache,
+                $this->database,
+                $this->route,
+                $preload,
+            ])
+            ->setMethods(["getLogger"])
+            ->getMock();
 
         $logger = $this->createMock(LoggerInterface::class);
         $dataLayer->method("getLogger")->willReturn($logger);
@@ -162,8 +162,8 @@ final class DataLayerTest extends TestCase
     public function testDoesNotPreloadIfNotPointRoute(): void
     {
         $this->route
-             ->method("getRouteName")
-             ->willReturn("weather_routes.not_a_point");
+            ->method("getRouteName")
+            ->willReturn("weather_routes.not_a_point");
 
         $this->getDataLayer(true);
 
@@ -178,12 +178,12 @@ final class DataLayerTest extends TestCase
     {
         $this->setHttpClient();
         $this->route
-             ->method("getRouteName")
-             ->willReturn("weather_routes.point");
+            ->method("getRouteName")
+            ->willReturn("weather_routes.point");
 
         $this->route
-             ->method("getParameter")
-             ->will($this->returnValueMap([["lat", 0], ["lon", 200]]));
+            ->method("getParameter")
+            ->will($this->returnValueMap([["lat", 0], ["lon", 200]]));
 
         // First call should map a lat/lon to WFO grid
         $this->httpClient->append(
@@ -296,9 +296,8 @@ final class DataLayerTest extends TestCase
      */
     public function testGetProductsByType(): void
     {
-        
         $expected = (object) [
-            "hello" => "test"
+            "hello" => "test",
         ];
         $dataLayer = $this->getDataLayer(false);
         $this->httpClient->append(
@@ -308,20 +307,23 @@ final class DataLayerTest extends TestCase
                 json_encode(
                     (object) [
                         "@graph" => [
-                            "hello" => "test"
-                        ]
-                    ]
-                )
-            )
+                            "hello" => "test",
+                        ],
+                    ],
+                ),
+            ),
         );
 
         $actual = $dataLayer->getProductsByType("AFD");
 
         $this->assertEquals($expected, $actual);
-        $this->assertEquals("GET", $this->httpHistory[0]["request"]->getMethod());
+        $this->assertEquals(
+            "GET",
+            $this->httpHistory[0]["request"]->getMethod(),
+        );
         $this->assertEquals(
             "/products/types/AFD",
-            $this->httpHistory[0]["request"]->getURI()->getPath()
+            $this->httpHistory[0]["request"]->getURI()->getPath(),
         );
     }
 
@@ -335,12 +337,12 @@ final class DataLayerTest extends TestCase
         $office = "UNK";
         $input = (object) [
             "@graph" => [
-                "more" => "products"
-            ]
+                "more" => "products",
+            ],
         ];
 
-        $expected = (object)[
-            "more" => "products"
+        $expected = (object) [
+            "more" => "products",
         ];
 
         $dataLayer = $this->getDataLayer(false);
@@ -348,19 +350,19 @@ final class DataLayerTest extends TestCase
             new Response(
                 200,
                 ["Content-Type", "application/json"],
-                json_encode($input)
-            )
+                json_encode($input),
+            ),
         );
         $actual = $dataLayer->getProductsByTypeAndOffice($type, $office);
 
         $this->assertEquals($expected, $actual);
         $this->assertEquals(
             "GET",
-            $this->httpHistory[0]["request"]->getMethod()
+            $this->httpHistory[0]["request"]->getMethod(),
         );
         $this->assertEquals(
             "/products/types/TEST/locations/UNK",
-            $this->httpHistory[0]["request"]->getURI()->getPath()
+            $this->httpHistory[0]["request"]->getURI()->getPath(),
         );
     }
 
@@ -371,27 +373,27 @@ final class DataLayerTest extends TestCase
     public function testGetProduct(): void
     {
         $uuid = "1234-5678-abcd";
-        $expected = (object)[
-            "some" => "product"
+        $expected = (object) [
+            "some" => "product",
         ];
         $dataLayer = $this->getDataLayer(false);
         $this->httpClient->append(
             new Response(
                 200,
                 ["Content-Type", "application/json"],
-                json_encode($expected)
-            )
+                json_encode($expected),
+            ),
         );
         $actual = $dataLayer->getProduct($uuid);
 
         $this->assertEquals($expected, $actual);
         $this->assertEquals(
             "GET",
-            $this->httpHistory[0]["request"]->getMethod()
+            $this->httpHistory[0]["request"]->getMethod(),
         );
         $this->assertEquals(
             "/products/1234-5678-abcd",
-            $this->httpHistory[0]["request"]->getURI()->getPath()
+            $this->httpHistory[0]["request"]->getURI()->getPath(),
         );
     }
 }

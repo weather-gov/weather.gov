@@ -2,6 +2,7 @@
 const { test, expect } = require("@playwright/test");
 const fs = require("fs");
 const path = require("path");
+
 const { describe, beforeEach } = test;
 
 const PRODUCT_PATH = path.resolve(__dirname, "..", "..", "api", "data", "testing", "products");

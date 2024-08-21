@@ -234,7 +234,7 @@ class WeatherDataService
 
         if (count($afds) > 0) {
             $afd = $this->getAFDById($afds[0]->id);
-            
+
             return $afd;
         }
         return false;
@@ -271,12 +271,12 @@ class WeatherDataService
     public function getAFDById($id)
     {
         $afd = $this->dataLayer->getProduct($id);
-        if($afd){
+        if ($afd) {
             $afd = $this->dataLayer->getProduct($id);
             $afd = json_decode(json_encode($afd), true);
-            $parser = new AFDParser($afd['productText']);
+            $parser = new AFDParser($afd["productText"]);
             $parser->parse();
-            $afd['parsedProductText'] = $parser->getStructureForTwig();
+            $afd["parsedProductText"] = $parser->getStructureForTwig();
             return $afd;
         }
         return false;
@@ -288,12 +288,12 @@ class WeatherDataService
      */
     public function getWFOFromAFD(array $afd)
     {
-        if(!$afd || !array_key_exists("productText", $afd)){
+        if (!$afd || !array_key_exists("productText", $afd)) {
             return null;
         }
         $rx = "/AFD(?<wfo>[A-Z]{3})/";
-        if(preg_match($rx, $afd['productText'], $matches)){
-            return $matches['wfo'];
+        if (preg_match($rx, $afd["productText"], $matches)) {
+            return $matches["wfo"];
         }
         return null;
     }
@@ -306,21 +306,17 @@ class WeatherDataService
     public function getAllWFOs()
     {
         $all = \Drupal::service("weather_entity")->getWFOEntities();
-        $all = array_map(
-            function($entity){
-                return [
-                    "id" => $entity->id(),
-                    "name" => $entity->get("name")->value,
-                    "code" => $entity->get("field_wfo_code")->value
-                ];
-            },
-            $all
+        $all = array_map(function ($entity) {
+            return [
+                "id" => $entity->id(),
+                "name" => $entity->get("name")->value,
+                "code" => $entity->get("field_wfo_code")->value,
+            ];
+        }, $all);
+        return array_values(
+            array_filter($all, function ($entry) {
+                return $entry["code"] != null;
+            }),
         );
-        return array_values(array_filter(
-            $all,
-            function($entry){
-                return $entry['code'] != null;
-            }
-        ));
     }
 }

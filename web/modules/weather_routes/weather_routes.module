@@ -11,7 +11,7 @@ function weather_routes_theme($existing, $type, $theme, $path)
                 "wfo" => null,
                 "afd" => null,
                 "wfo_list" => [],
-                "version_list" => []
+                "version_list" => [],
             ],
         ],
 
@@ -21,8 +21,8 @@ function weather_routes_theme($existing, $type, $theme, $path)
             "variables" => [
                 "wfo" => null,
                 "afd" => null,
-                "version_list" => []
-            ]
+                "version_list" => [],
+            ],
         ],
 
         // Theme for the partial HTML only
@@ -34,8 +34,8 @@ function weather_routes_theme($existing, $type, $theme, $path)
                 "wfo" => null,
                 "afd" => null,
                 "wfo_list" => [],
-                "version_list" => []
-            ]
-        ]
+                "version_list" => [],
+            ],
+        ],
     ];
 }
