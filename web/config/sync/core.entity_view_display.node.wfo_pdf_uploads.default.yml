@@ -1,0 +1,30 @@
+uuid: fdc6e771-c4ad-4a30-bfdc-1467f0bd71fc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.wfo_pdf_uploads.field_wfo_sitrep
+    - node.type.wfo_pdf_uploads
+  module:
+    - file
+    - user
+id: node.wfo_pdf_uploads.default
+targetEntityType: node
+bundle: wfo_pdf_uploads
+mode: default
+content:
+  field_wfo_sitrep:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  langcode: true

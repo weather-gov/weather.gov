@@ -1,0 +1,22 @@
+uuid: 40065a22-4f5e-4edc-b4b1-7206f364be8b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_pdf_uploads
+id: node.wfo_pdf_uploads.status
+field_name: status
+entity_type: node
+bundle: wfo_pdf_uploads
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

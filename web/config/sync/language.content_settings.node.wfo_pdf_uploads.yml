@@ -1,0 +1,11 @@
+uuid: cff4e6c4-50bd-4898-971e-4666e73af40c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_pdf_uploads
+id: node.wfo_pdf_uploads
+target_entity_type_id: node
+target_bundle: wfo_pdf_uploads
+default_langcode: zxx
+language_alterable: false

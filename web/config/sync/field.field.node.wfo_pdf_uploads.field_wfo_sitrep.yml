@@ -1,0 +1,27 @@
+uuid: 695a1588-0c81-441f-b9a3-e16918fcf741
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_wfo_sitrep
+    - node.type.wfo_pdf_uploads
+  module:
+    - file
+id: node.wfo_pdf_uploads.field_wfo_sitrep
+field_name: field_wfo_sitrep
+entity_type: node
+bundle: wfo_pdf_uploads
+label: 'WFO SITREP'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: pdf
+  max_filesize: '2 MB'
+  description_field: false
+field_type: file

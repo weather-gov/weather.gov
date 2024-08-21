@@ -1,0 +1,23 @@
+uuid: b768913a-4823-4317-b0dd-f39d8cb42eb3
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.wfo_pdf_uploads.field_wfo_sitrep
+    - node.type.wfo_pdf_uploads
+  module:
+    - user
+id: node.wfo_pdf_uploads.teaser
+targetEntityType: node
+bundle: wfo_pdf_uploads
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_wfo_sitrep: true
+  langcode: true
