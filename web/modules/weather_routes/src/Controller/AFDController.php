@@ -162,13 +162,29 @@ final class AFDController extends ControllerBase
     {
         $afd = $this->weatherData->getAFDById($afd_id);
         $build = [
-            "#theme" => "weather_routes_afd",
+            "#theme" => "weather_routes_afd_partial",
             "#wfo" => "UNK",
             "#afd" => $afd,
             "#wfo_list" => [],
             "#version_list" => [],
         ];
         $renderedMarkup = \Drupal::service('renderer')->render($build);
+        return new Response($renderedMarkup->__toString());
+    }
+
+    /**
+     * Fetch the markup for versions for the given WFO.
+     * This means providing a collection of <options> elements
+     */
+    public function markupOnlyForVersions($wfo_code)
+    {
+        $versions = $this->weatherData->getLatestAFDReferences($wfo_code);
+        $build = [
+            "#theme" => "weather_routes_wx_afd_versions",
+            "#wfo" => $wfo_code,
+            "#version_list" => $versions
+        ];
+        $renderedMarkup = \Drupal::service("renderer")->render($build);
         return new Response($renderedMarkup->__toString());
     }
 }

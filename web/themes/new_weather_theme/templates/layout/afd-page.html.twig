@@ -17,7 +17,7 @@
         </div>
     </header>
 
-    <div class="grid-container">
+    <wx-afd-selector class="grid-container" {% if wfo is not null %}wfo="{{wfo}}"{% endif %}>
         <form id="afd-selection-form" name="afd-selection-form" method="GET" action="/afd">
             <label for="wfo-selector">Forecast office: </label>
             <select id="wfo-selector" name="wfo">
@@ -33,11 +33,7 @@
             {% if version_list | length > 0 %}
                 <label for="version-selector">Versions for {{wfo}}: </label>
                 <select id="version-selector" name="id">
-                    {% for version in version_list %}
-                        <option value="{{version.id}}"{% if afd.id == version.id %} selected{% endif %}>
-                            {{version.issuanceTime}}
-                        </option>
-                    {% endfor %}
+                    {% include "@new_weather_theme/partials/afd-versions-select.html.twig" %}
                 </select>
             {% endif %}
 
@@ -53,9 +49,9 @@
             <h2>No WFO available!</h2>
         {% endif %}
         {%  if afd is not null %}
-            <wx-afd-selector class="display-block" {% if wfo is not null %}wfo="{{wfo}}"{% endif %}>
-                {% include '@new_weather_theme/partials/afd.html.twig' %}
-            </wx-afd-selector>
+            {% include '@new_weather_theme/partials/afd.html.twig' %}
         {% endif %}
-    </div>
+    </wx-afd-selector>
 </div>
+
+{# {{attach_library("new_weather_theme/afd-selector")}} #}

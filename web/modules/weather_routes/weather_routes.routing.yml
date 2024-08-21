@@ -94,6 +94,15 @@ weather_routes.afd.wx.id:
     no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
+
+weather_routes.afd.wx.versions:
+  path: '/wx/afd/locations/{wfo_code}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\AFDController::markupOnlyForVersions
+  options:
+    no_cache: 'TRUE'
+  requirements:
+    _access: 'TRUE'
   
 weather_routes.weather_info.content:
   path: '/offices/{wfo}'
