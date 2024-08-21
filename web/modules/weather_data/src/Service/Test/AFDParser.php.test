@@ -249,7 +249,7 @@ final class AFDParserTest extends TestCase
                 "content" =>
                     "CT...None.\nNY...None.\nNJ...None.\nMARINE" .
                     "...Small Craft Advisory until 11 PM EDT " .
-                    "this evening for ANZ350-353-355.",
+                    "this evening for ANZ350-\n                353-355.",
             ],
             [
                 "type" => "epilogueText",

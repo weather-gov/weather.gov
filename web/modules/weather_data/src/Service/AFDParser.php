@@ -238,8 +238,6 @@ class AFDParser
         // indicates line continuation. Replace with the empty
         // string, followed by a normal newline.
         $currentString = trim($str);
-        $indentRegex = "/\n    +/";
-        $currentString = preg_replace($indentRegex, "", $currentString);
         if ($currentString != "") {
             array_push($result, [
                 "type" => "text",
