@@ -15,15 +15,15 @@ then:
 2. Clone this repository into a new directory and `cd` into it.
 3. Copy the file at `web/sites/example.settings.dev.php` to
    `web/sites/settings.dev.php` and make any necessary changes.
-   > [!NOTE]  
+   > [!NOTE]
    > As of this writing, no changes are necessary.
-4. Run `make zap` from the command line.  
+4. Run `make zap` from the command line.
    This command will first attempt to destroy any weather.gov 2.0 containers you
    have, so you may notice some warnings on the command line. It is safe to
    ignore those warnings. After the warnings, it will build all of the necessary
    containers, create a Drupal site with our configuration, and populate the
    site with our content.
-5. Run `npm ci` from the command line.  
+5. Run `npm ci` from the command line.
    This installs our Javascript and Sass code linters and formatters, as well as
    Playwright, which is necessary for end-to-end and accessibility testing.
 6. Run `npx playwright install --with-deps` to install Playwright's browsers.
