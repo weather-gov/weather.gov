@@ -1,0 +1,14 @@
+uuid: 6749ac3e-fc5f-4ed2-a39f-a8742bb61c31
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_pdf_uploads
+  module:
+    - node
+id: uploader
+label: Uploader
+weight: -4
+is_admin: null
+permissions:
+  - 'create wfo_pdf_uploads content'
