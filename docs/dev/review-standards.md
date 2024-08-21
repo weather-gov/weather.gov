@@ -32,6 +32,11 @@ time. The process for reviewing PRs is outlined here.
    - The area leads will scan the PR to determine who should review it. They may
      also review it themselves.
 
+   - Please note that all PRs will be reviewed with security in mind.
+     Nonetheless, if you are aware of any security implications or concerns in
+     the PR, please call these out explicitly in the PR description or contact
+     us directly.
+
    - If you know who needs to review your PR needs, feel free to assign those
      people directly instead of assigning the leads.
 
@@ -97,7 +102,7 @@ rules:
 
 - All PRs must be reviewed and approved by at least one other person.
 - All PRs must pass all required automated checks. The list of required checks
-  will evolved over time.
+  will evolve over time.
 - Any code that is exempted from automated tests must be documented and
   explained in code itself as well as the pull request. Code my be exempted due
   to false positives that cannot be resolved in other ways; true positives that
@@ -141,3 +146,15 @@ candidate as a whole before deploying it.
 > release to be rebuilt in-place without relying on mutable git attributes, such
 > as tags or even hashes. A given deployment should be recreatable without any
 > external content or context.
+
+### Dependabot
+
+We use [GitHub Dependabot](https://github.com/dependabot) for automated
+dependency update scanning. If a Dependabot-submitted PR has a minor or patch
+[semver](https://semver.org/) update **and** passes CI tests, then the PR is
+likely safe to merge. It is up to the PR reviewer to exercise their best
+judgment when automated dependency updates come in.
+
+If there is a major semver update, however, then it is strongly encouraged to
+check the release notes for the library to see what changed, and to manually
+test the major update locally before approving the Dependabot PR.

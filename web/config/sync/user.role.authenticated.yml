@@ -9,7 +9,6 @@ dependencies:
     - node.type.page
     - node.type.testing_page
     - node.type.weather_story
-    - node.type.wfo_promo
   module:
     - block_content
     - content_moderation
@@ -42,4 +41,3 @@ permissions:
   - 'view page revisions'
   - 'view testing_page revisions'
   - 'view weather_story revisions'
-  - 'view wfo_promo revisions'

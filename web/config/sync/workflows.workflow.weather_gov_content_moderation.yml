@@ -8,7 +8,6 @@ dependencies:
     - node.type.testing_page
     - node.type.weather_story
     - node.type.wfo_info
-    - node.type.wfo_promo
   module:
     - content_moderation
 id: weather_gov_content_moderation
@@ -61,5 +60,4 @@ type_settings:
       - testing_page
       - weather_story
       - wfo_info
-      - wfo_promo
   default_moderation_state: draft
