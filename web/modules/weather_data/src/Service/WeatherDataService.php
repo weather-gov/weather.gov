@@ -217,6 +217,13 @@ class WeatherDataService
         return $this->dataLayer->getSatelliteMetadata($wfo);
     }
 
+    /**
+     * Fetch the full AFD product data for the most
+     * recent AFD. If no WFO is provided, get the
+     * most recent AFD anywhere in the country.
+     * Otherwise, get the most recent that was
+     * issued by the given office.
+     */
     public function getLatestAFD($wfo = null)
     {
         if ($wfo) {
@@ -233,6 +240,12 @@ class WeatherDataService
         return false;
     }
 
+    /**
+     * Get a list of AFD references, sorted by the most recent.
+     * If no WFO code is provided, get references from all WFOs
+     * collectively. Otherwise, simply get the latest references
+     * for the given WFO
+     */
     public function getLatestAFDReferences($wfo = null)
     {
         if ($wfo) {
@@ -293,7 +306,7 @@ class WeatherDataService
     public function getAllWFOs()
     {
         $all = \Drupal::service("weather_entity")->getWFOEntities();
-        return array_map(
+        $all = array_map(
             function($entity){
                 return [
                     "id" => $entity->id(),
@@ -303,5 +316,11 @@ class WeatherDataService
             },
             $all
         );
+        return array_values(array_filter(
+            $all,
+            function($entry){
+                return $entry['code'] != null;
+            }
+        ));
     }
 }
