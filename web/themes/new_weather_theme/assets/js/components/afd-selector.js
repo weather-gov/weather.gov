@@ -4,9 +4,10 @@ class AFDSelector extends HTMLElement {
 
 
     // Bind methods
-    this.handleWFOUpdated = this.handleWFOUpdated.bind(this);
-    this.handleAFDUpdated = this.handleAFDUpdated.bind(this);
-    this.afdSelectElementChanged = this.afdSelectElementChanged.bind(this);
+    this.handleAFDSelectionUpdated = this.handleAFDSelectionUpdated.bind(this);
+    this.handleWFOSelectionUpdated = this.handleWFOSelectionUpdated.bind(this);
+    this.disableInputs = this.disableInputs.bind(this);
+    this.enableInputs = this.enableInputs.bind(this);
   }
 
   connectedCallback(){
@@ -14,70 +15,70 @@ class AFDSelector extends HTMLElement {
       return;
     }
 
+    let wfoSelector = document.getElementById('wfo-selector');
+    if(!wfoSelector){
+      wfoSelector = document.createElement("select");
+      wfoSelector.id = "wfo-selector";
+      this.append(wfoSelector);
+    }
+    wfoSelector.addEventListener('change', this.handleWFOSelectionUpdated);
+
+    let versionSelector = document.getElementById('version-selector');
+    if(!versionSelector){
+      versionSelector = document.createElement('select');
+      versionSelector.id = 'version-selector';
+      this.append(versionSelector);
+    }
+    versionSelector.addEventListener('change', this.handleAFDSelectionUpdated);
+
     let container = this.querySelector('.afd-content');
     if(!container){
       container = document.createElement('div');
       container.classList.add('afd-content');
       this.append(container);
     }
-
-    let afdSelector = this.querySelector('select.afd-selection');
-    if(!afdSelector){
-      afdSelector = document.createElement('select');
-      afdSelector.classList.add('afd-selection');
-      this.prepend(afdSelector);
-    }
-    afdSelector.addEventListener('change', this.afdSelectElementChanged);
   }
 
 
-  async handleWFOUpdated(wfoCode){
-    const url = `https://api.weather.gov/products/types/AFD/locations/${wfoCode}`;
+  async handleWFOSelectionUpdated(event){
+    this.disableInputs();
+    const wfoCode = event.target.value;
+    const afdSelectElement = document.getElementById('version-selector');
+    const url = `/wx/afd/locations/${wfoCode}`;
     const response = await fetch(url);
     if(response.ok){
-      const data = await response.json();
-      const options = data['@graph'].map(item => {
-        const option = document.createElement('option');
-        option.setAttribute('value', item.id);
-        option.textContent = `${item.issuanceTime}`;
-        return option;
-      });
-      const afdSelectElement = this.querySelector('select.afd-selection');
       afdSelectElement.innerHTML = "";
-      afdSelectElement.append(...options);
+      const markup = await response.text();
+      afdSelectElement.innerHTML = markup;
     }
+    this.enableInputs();
   }
 
-  afdSelectElementChanged(event){
+  async handleAFDSelectionUpdated(event){
+    this.disableInputs();
     const id = event.target.value;
-    this.setAttribute("afd", id);
-  }
-
-  async handleAFDUpdated(afdId){
-    const afdContainer = this.querySelector('.afd-content-container');
+    const afdContainer = this.querySelector('.afd-content');
     if(!afdContainer){
       return;
     }
-    const response = await fetch(`/afd/${afdId}`);
+    const response = await fetch(`/wx/afd/${id}`);
     if(response.ok){
       const markup = await response.text();
       afdContainer.outerHTML = markup;
     }
+    this.enableInputs();
   }
 
-  attributeChangedCallback(name, oldVal, newVal){
-    if(name === 'wfo'){
-      this.handleWFOUpdated(newVal);
-    } else if(name === 'afd'){
-      this.handleAFDUpdated(newVal);
-    }
+  disableInputs(){
+    Array.from(this.querySelectorAll('select')).forEach(el => {
+      el.setAttribute("disabled", "true");
+    });
   }
 
-  static get observedAttributes(){
-    return [
-      'wfo',
-      'afd'
-    ];
+  enableInputs(){
+    Array.from(this.querySelectorAll('select')).forEach(el => {
+      el.removeAttribute("disabled");
+    });
   }
 };
 
