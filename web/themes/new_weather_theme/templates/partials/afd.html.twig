@@ -1,10 +1,13 @@
 {% set preamble = afd.parsedProductText.preamble %}
 {% set body = afd.parsedProductText.body %}
 {% set epilogue = afd.parsedProductText.epilogue %}
-<article class="afd-content" data-afd-id="{{afd.id}}">
+<article class="afd-content desktop:padding-left-1" data-afd-id="{{afd.id}}">
     <div class="afd-preamble">
+        <h2 class="usa-heading usa-sr-only">
+            {{ "Letterhead and timestamp" | t }}
+        </h2>
         {% for key,val in preamble %}
-            <span class="afd-preamble-{{key}} text-pre-line">
+            <span class="afd-preamble-{{key}} font-mono-md text-pre-line">
                 {% for node in val %}
                     {{node.content}}
                 {% endfor %}
@@ -15,15 +18,15 @@
     <div class="afd-body">
         {% for node in body %}
             {% if node.type == 'header' %}
-                <h2 class="usa-heading">{{node.content}}</h2>
+                <h2 class="usa-heading font-mono margin-bottom-1 margin-top-4">{{node.content}}</h2>
                 {% if node.postHeader %}
                     <span class="afd-postheader">{{node.postHeader}}</span>
                 {% endif %}
 
             {% elseif node.type == 'subheader' %}
-                <h3>{{node.content}}</h3>
+                <h3 class="font-mono margin-top-105">{{node.content}}</h3>
             {% else %}
-                <p class="usa-text text-pre-line">{{node.content}}</p>
+                <p class="usa-text font-mono-md text-pre-line">{{node.content}}</p>
             {% endif %}
         {% endfor %}
     </div>
@@ -31,10 +34,13 @@
     {% if epilogue %}
         <div class="afd-epilogue">
             {% for node in epilogue %}
-                <p class="usa-text text-pre-line">
+                <p class="usa-text font-mono-md text-pre-line">
                     {{node.content}}
                 </p>
             {% endfor %}
         </div>    
     {% endif %}
 </article>
+<pre>
+{{afd.productText}}
+</pre>

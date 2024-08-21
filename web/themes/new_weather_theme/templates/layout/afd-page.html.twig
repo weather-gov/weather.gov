@@ -53,11 +53,6 @@
             </div>
 
             <div class="afd-content-section grid-col-12 desktop:grid-col-8">
-                {% if wfo is not null %}
-                    <h2>Issued by {{wfo | upper}} at {{afd.issuanceTime}}</h2>
-                {% else %}
-                    <h2>No WFO available!</h2>
-                {% endif %}
                 {%  if afd is not null %}
                     {% include '@new_weather_theme/partials/afd.html.twig' %}
                 {% endif %}
