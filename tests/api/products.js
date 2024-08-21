@@ -96,7 +96,6 @@ const getProductLabel = (data, filePath, recordType) => {
   return `${productType} for ${data.issuingOffice} issued at ${data.issuanceTime}`;
 };
 
-
 /**
  * Attempts to get a URL to a representation of the file
  * in our Drupal application.
