@@ -8,8 +8,8 @@
   },
   "@graph": [
     {
-      "@id": "https://api.weather.gov/products/2d75368e-4a94-4c22-b870-d09729478f00",
-      "id": "2d75368e-4a94-4c22-b870-d09729478f00",
+      "@id": "https://api.weather.gov/products/12c9be7e-414e-4fae-a0a1-b02e50ff2070",
+      "id": "12c9be7e-414e-4fae-a0a1-b02e50ff2070",
       "wmoCollectiveId": "FXUS62",
       "issuingOffice": "KTAE",
       "issuanceTime": "2024-08-06T18:51:00+00:00",
