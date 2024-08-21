@@ -191,7 +191,11 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/accessibility-tests
       - name: bob
+        if: always()
         run: docker compose logs drupal
+      - name: bob2
+        if: always()
+        run: docker compose logs api-interop-layer
 
   # new-end-to-end-tests:
   #   name: playwright end to end tests

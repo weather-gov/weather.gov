@@ -81,33 +81,6 @@ abstract class Base extends TestCase
         $this->block->method("getLogger")->willReturn($logger);
     }
 
-    protected function onLocationRoute($lat = "40", $lon = "-90")
-    {
-        $this->block->method("getLocation")->willReturn(
-            (object) [
-                "grid" => (object) [
-                    "wfo" => "WFO",
-                    "x" => 1,
-                    "y" => 1,
-                ],
-                "point" => (object) [
-                    "lat" => floatval($lat),
-                    "lon" => floatval($lon),
-                ],
-            ],
-        );
-    }
-
-    protected function notOnLocationRoute()
-    {
-        $this->block->method("getLocation")->willReturn(
-            (object) [
-                "grid" => false,
-                "point" => false,
-            ],
-        );
-    }
-
     /**
      * @group unit
      * @group block
