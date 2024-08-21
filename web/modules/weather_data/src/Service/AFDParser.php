@@ -238,9 +238,6 @@ class AFDParser
         // indicates line continuation. Replace with the empty
         // string, followed by a normal newline.
         $currentString = trim($str);
-        if (preg_match("/SYNOPSIS/", $currentString)) {
-            $test = true;
-        }
         $indentRegex = "/\n    +/";
         $currentString = preg_replace($indentRegex, "", $currentString);
         if ($currentString != "") {
