@@ -1,5 +1,12 @@
 FROM php:8.2-apache-bookworm
 
+# set the www-data uid to our own uid, so that we do not clobber drupal
+# permissions when mounting docker-compose volumes.
+ARG UID
+ARG GID
+RUN usermod -u ${UID} www-data
+RUN usermod -g ${GID} www-data
+
 # Copy the zscaler root CA into the container and add it to the list of OpenSSL
 # root certificates.
 COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
@@ -59,9 +66,6 @@ RUN set -eux; \
   rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:lts /usr/bin/composer /usr/local/bin/
-
-# https://www.drupal.org/node/3060/release
-ENV DRUPAL_VERSION 10.2.2
 
 # Copy in our composer files to start with.
 COPY composer.json /opt/drupal/composer.json
