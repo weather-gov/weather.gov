@@ -10,9 +10,9 @@
 
 <h3> Generative research </h3>
 
-| Name  | When  | Goals  | Insights  |
-| -------- | ------- | -------- | ------- |
-| Path Analysis | April 2023 | Initial research with stakeholders, partners and forecasters across NWS to understand the problem space | Users experience challenges finding and understanding content due to the organization of the website which is based on the NWS org structure. Significant inconsistencies make data hard to interpret, areas do not map to areas that decision makers use. |
+| Name  | When  | Goals  | Insights  | Deck (Restricted Access) |
+| -------- | ------- | -------- | ------- |------- |
+| Path Analysis | April 2023 | Initial research with stakeholders, partners and forecasters across NWS to understand the problem space | Users experience challenges finding and understanding content due to the organization of the website which is based on the NWS org structure. Significant inconsistencies make data hard to interpret, areas do not map to areas that decision makers use. |[Deck](https://docs.google.com/presentation/d/1u6_msv_ogHgPo_1D8OZCnc_VxRAMMf7L4kmII1ZcSy4/edit?usp=sharing)|
 | WFO onsite - Sterling (DC) | July 2023 | Onsite tour + observations at Sterling WFO office (DC area). Includes in-depth notes on internal tools and systems (AWIPs, etc) | Understanding of current forecaster workflow and tools in creating forecasts and various types of content  |
 | Forecaster research | Sept 2023 | Validate our understanding of the forecaster experience before, during and after a weather hazard | Began to identify some common needs for a CMS experience |
 | WFO onsite - Nashville | Nov 2023 | Better understand partner experiences before, during and after a weather hazard | Identified partner painpoints during a hazard - post-event support, mapping and radar, etc |
