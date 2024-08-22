@@ -25,7 +25,7 @@ runs:
           spatial-data/s_05mr24.zip
 
     - name: start the site
-      if: steps.db-cache.outputs.cache-hit != 'true'
+      #if: steps.db-cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
         docker load --input /tmp/image.tar
