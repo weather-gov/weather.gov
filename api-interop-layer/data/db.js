@@ -7,9 +7,27 @@ export const openDatabase = async () => {
     database: process.env.DB_NAME ?? "weathergov",
     host: process.env.DB_HOST ?? "database",
     port: process.env.DB_PORT ?? 3306,
+    ssl: { rejectUnauthorized: false },
   };
 
   return mariadb.createConnection(connectionDetails);
 };
+
+const sleep = (ms) =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+
+// Try to connect, wait, try again, wait, etc. If the database isn't ready after
+// 4 attempts and 30 seconds, we'll just fail.
+await openDatabase()
+  .catch(() => sleep(5_000))
+  .then(openDatabase)
+  .catch(() => sleep(9_000))
+  .then(openDatabase)
+  .catch(() => sleep(16_000))
+  .then(openDatabase);
 
 export default { openDatabase };

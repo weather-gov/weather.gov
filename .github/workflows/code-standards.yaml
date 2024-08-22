@@ -53,53 +53,53 @@ jobs:
               core.notice(`Skipping tests. Modified files are:\n* ${changedFiles.join("\n* ")}`);
             }
 
-  # php-lint:
-  #   name: PHP lint
-  #   runs-on: ubuntu-latest
-  #   needs: [should-test]
-  #   steps:
-  #     - name: checkout
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/checkout@v4
-  #     - name: lint PHP
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: ./.github/actions/php-lint
+  php-lint:
+    name: PHP lint
+    runs-on: ubuntu-latest
+    needs: [should-test]
+    steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
+      - name: lint PHP
+        if: needs.should-test.outputs.yes == 'true'
+        uses: ./.github/actions/php-lint
 
-  # js-lint:
-  #   name: JS lint
-  #   runs-on: ubuntu-latest
-  #   needs: [should-test]
-  #   steps:
-  #     - name: checkout
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/checkout@v4
-  #     - name: lint Javascript
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: ./.github/actions/javascript-lint
+  js-lint:
+    name: JS lint
+    runs-on: ubuntu-latest
+    needs: [should-test]
+    steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
+      - name: lint Javascript
+        if: needs.should-test.outputs.yes == 'true'
+        uses: ./.github/actions/javascript-lint
 
-  # js-component-tests:
-  #   name: JS Component Tests
-  #   runs-on: ubuntu-latest
-  #   needs: [should-test]
-  #   steps:
-  #     - name: checkout
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/checkout@v4
-  #     - name: run Javascript component tests
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: ./.github/actions/javascript-component-tests
+  js-component-tests:
+    name: JS Component Tests
+    runs-on: ubuntu-latest
+    needs: [should-test]
+    steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
+      - name: run Javascript component tests
+        if: needs.should-test.outputs.yes == 'true'
+        uses: ./.github/actions/javascript-component-tests
 
-  # style-lint:
-  #   name: SCSS lint
-  #   runs-on: ubuntu-latest
-  #   needs: [should-test]
-  #   steps:
-  #     - name: checkout
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/checkout@v4
-  #     - name: lint styles
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: ./.github/actions/style-lint
+  style-lint:
+    name: SCSS lint
+    runs-on: ubuntu-latest
+    needs: [should-test]
+    steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
+      - name: lint styles
+        if: needs.should-test.outputs.yes == 'true'
+        uses: ./.github/actions/style-lint
 
   build-drupal-image:
     name: build Drupal image
@@ -126,54 +126,54 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/populate-database
 
-  # php-tests:
-  #   name: PHP tests
-  #   runs-on: ubuntu-latest
-  #   needs: [populate-database, should-test]
-  #   steps:
-  #     - name: checkout
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/checkout@v4
+  php-tests:
+    name: PHP tests
+    runs-on: ubuntu-latest
+    needs: [populate-database, should-test]
+    steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
 
-  #     - name: setup site
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: ./.github/actions/setup-site
+      - name: setup site
+        if: needs.should-test.outputs.yes == 'true'
+        uses: ./.github/actions/setup-site
 
-  #     - name: run unit tests
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       run: |
-  #         curl http://localhost:8081/play/e2e
-  #         make backend-test
+      - name: run unit tests
+        if: needs.should-test.outputs.yes == 'true'
+        run: |
+          curl http://localhost:8081/play/e2e
+          make backend-test
 
-  #     - name: store coverage output
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: coverage-report
-  #         path: .coverage/clover.xml
-  #         retention-days: 1
+      - name: store coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: .coverage/clover.xml
+          retention-days: 1
 
-  # min-code-coverage:
-  #   name: "90% code coverage"
-  #   runs-on: ubuntu-latest
-  #   needs: [php-tests, should-test]
+  min-code-coverage:
+    name: "90% code coverage"
+    runs-on: ubuntu-latest
+    needs: [php-tests, should-test]
 
-  #   steps:
-  #     - name: get coverage output
-  #       id: download
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: coverage-report
+    steps:
+      - name: get coverage output
+        id: download
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
 
-  #     - name: 90% code coverage
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       id: test-coverage
-  #       uses: johanvanhelden/gha-clover-test-coverage-check@v1
-  #       with:
-  #         percentage: 90
-  #         filename: clover.xml
-  #         metric: statements
+      - name: 90% code coverage
+        if: needs.should-test.outputs.yes == 'true'
+        id: test-coverage
+        uses: johanvanhelden/gha-clover-test-coverage-check@v1
+        with:
+          percentage: 90
+          filename: clover.xml
+          metric: statements
 
   accessibility-tests:
     name: accessibility tests
@@ -191,103 +191,107 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/accessibility-tests
       - name: bob
+        if: always()
         run: docker compose logs drupal
+      - name: bob2
+        if: always()
+        run: docker compose logs api-interop-layer
 
-  # new-end-to-end-tests:
-  #   name: playwright end to end tests
-  #   runs-on: ubuntu-latest
-  #   needs: [populate-database, should-test]
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       shardIndex: [1, 2, 3, 4]
-  #       shardTotal: [4]
-  #   steps:
-  #     - name: checkout
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/checkout@v4
-  #     - name: setup site
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: ./.github/actions/setup-site
-  #     - name: run browser tests (Playwright)
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: ./.github/actions/browser-tests-playwright
+  new-end-to-end-tests:
+    name: playwright end to end tests
+    runs-on: ubuntu-latest
+    needs: [populate-database, should-test]
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
+    steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
+      - name: setup site
+        if: needs.should-test.outputs.yes == 'true'
+        uses: ./.github/actions/setup-site
+      - name: run browser tests (Playwright)
+        if: needs.should-test.outputs.yes == 'true'
+        uses: ./.github/actions/browser-tests-playwright
 
-  # merge-reports:
-  #   # Merge reports after playwright-tests, even if some shards have failed
-  #   if: ${{ !cancelled() }}
-  #   needs: [new-end-to-end-tests]
+  merge-reports:
+    # Merge reports after playwright-tests, even if some shards have failed
+    if: ${{ !cancelled() }}
+    needs: [new-end-to-end-tests]
 
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 18
-  #     - name: Install dependencies
-  #       run: npm ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci
 
-  #     - name: Download blob reports from GitHub Actions Artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         path: all-blob-reports
-  #         pattern: blob-report-*
-  #         merge-multiple: true
+      - name: Download blob reports from GitHub Actions Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
 
-  #     - name: Merge into HTML Report
-  #       run: npx playwright merge-reports --reporter html ./all-blob-reports
+      - name: Merge into HTML Report
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
 
-  #     - name: Upload HTML report
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: html-report--attempt-${{ github.run_attempt }}
-  #         path: playwright-report
-  #         retention-days: 14
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report--attempt-${{ github.run_attempt }}
+          path: playwright-report
+          retention-days: 14
 
-  # end-to-end-tests:
-  #   name: end-to-end tests
-  #   runs-on: ubuntu-latest
-  #   needs: [populate-database, should-test]
+  end-to-end-tests:
+    name: end-to-end tests
+    runs-on: ubuntu-latest
+    needs: [populate-database, should-test]
 
-  #   steps:
-  #     - name: checkout
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/checkout@v4
+    steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
 
-  #     - name: setup site
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: ./.github/actions/setup-site
+      - name: setup site
+        if: needs.should-test.outputs.yes == 'true'
+        uses: ./.github/actions/setup-site
 
-  #     - name: Cypress run
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: cypress-io/github-action@v6
-  #       with:
-  #         project: tests/e2e
-  #         cache-key: cypress-e2e-${{ hashFiles('package-lock.json') }}
+      - name: Cypress run
+        if: needs.should-test.outputs.yes == 'true'
+        uses: cypress-io/github-action@v6
+        with:
+          project: tests/e2e
+          cache-key: cypress-e2e-${{ hashFiles('package-lock.json') }}
 
-  #     - name: save screenshots
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: screenshots
-  #         path: tests/e2e/cypress/screenshots/screenshots.cy.js/
+      - name: save screenshots
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: tests/e2e/cypress/screenshots/screenshots.cy.js/
 
-  # page-load-time-tests:
-  #   name: page load time tests
-  #   runs-on: ubuntu-latest
-  #   needs: [populate-database, should-test]
-  #   if: needs.should-test.outputs.yes == 'true'
+  page-load-time-tests:
+    name: page load time tests
+    runs-on: ubuntu-latest
+    needs: [populate-database, should-test]
+    if: needs.should-test.outputs.yes == 'true'
 
-  #   steps:
-  #     - name: checkout
-  #       uses: actions/checkout@v4
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
 
-  #     - name: setup site
-  #       if: needs.should-test.outputs.yes == 'true'
-  #       uses: ./.github/actions/setup-site
+      - name: setup site
+        if: needs.should-test.outputs.yes == 'true'
+        uses: ./.github/actions/setup-site
 
-  #     - name: Cypress run
-  #       uses: cypress-io/github-action@v6
-  #       with:
-  #         project: tests/load-times
-  #         cache-key: cypress-a11y-${{ hashFiles('package-lock.json') }}
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          project: tests/load-times
+          cache-key: cypress-a11y-${{ hashFiles('package-lock.json') }}

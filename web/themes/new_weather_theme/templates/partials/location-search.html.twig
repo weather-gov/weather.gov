@@ -1,0 +1,54 @@
+{{ attach_library("new_weather_theme/location-combo-box") }}
+{{ attach_library("new_weather_theme/browser-location-button") }}
+
+<div class="wx-location-search">
+  <div class="grid-container">
+    <div class="grid-row">
+      <form class="usa-form grid-col-12  maxw-tablet-lg" data-location-search method="get">
+        <div class="display-flex flex-align-end">
+          <label class="usa-label" for="search-combo-box">
+            {{ "Enter city or zip code" | t }}
+          </label>
+          <div class="margin-x-1">|</div>
+          <div class="">
+            <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled">{{ 'Use my location' | t }}</button>
+          </div>
+        </div>
+        <div class="grid-row">
+            <div class="tablet:grid-col-6">
+              <wx-combo-box class="z-top margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105" id="search-combo-box" {% if place %}data-place="{{ place.name }}{% if place.state %}, {{ place.state }}{% endif %}"{% endif %}}>
+              </wx-combo-box>
+            </div>
+            <div class="font-sans-md text-primary-dark tablet:grid-col-6 margin-top-105 margin-bottom-105">
+              <div class="grid-col">
+                {% include '@new_weather_theme/partials/wx-loader.html.twig' %}
+              </div>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="bg-primary-darker">
+    {% if place %}
+    <div class="grid-container">
+      <div class="grid-row flex-no-wrap">
+        <svg
+          class="usa-icon height-4 width-4 margin-top-2 margin-right-05 text-accent-cool"
+          aria-hidden="true"
+          focusable="false"
+          role="img"
+          style="vertical-align: middle;"
+        >
+          <use
+            xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#location_on"
+          ></use>
+        </svg>
+        <h1 class="text-white font-heading-xl tablet:flex-1">
+          {{ place.name }}{% if place.state %}, {{ place.state }}{% endif %}
+        </h1>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
