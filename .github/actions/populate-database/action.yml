@@ -9,7 +9,7 @@ runs:
         path: weathergov.sql
 
     - name: setup image cacheing
-      if: steps.db-cache.outputs.cache-hit != 'true'
+      #if: steps.db-cache.outputs.cache-hit != 'true'
       uses: actions/cache@v4
       with:
         key: drupal-image-${{ hashFiles('composer.lock','web/sites/example.settings.dev.php','Dockerfile.dev') }}
@@ -33,7 +33,7 @@ runs:
 
     # Give the containers a moment to settle.
     - name: wait a tick
-      if: steps.db-cache.outputs.cache-hit != 'true'
+      #if: steps.db-cache.outputs.cache-hit != 'true'
       shell: bash
       run: sleep 10
 
