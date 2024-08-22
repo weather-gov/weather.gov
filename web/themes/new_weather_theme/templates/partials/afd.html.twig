@@ -7,7 +7,7 @@
             {{ "Letterhead and timestamp" | t }}
         </h2>
         {% for key,val in preamble %}
-            <span class="afd-preamble-{{key}} font-mono-md text-pre-line">
+            <span class="afd-preamble-{{key}} font-mono-sm text-pre-line">
                 {% for node in val %}
                     {{node.content}}
                 {% endfor %}
@@ -18,15 +18,26 @@
     <div class="afd-body">
         {% for node in body %}
             {% if node.type == 'header' %}
-                <h2 class="usa-heading font-mono margin-bottom-1 margin-top-4">{{node.content}}</h2>
+                <h2 class="usa-heading wx-mono-h2 margin-bottom-1 margin-top-4">{{node.content}}</h2>
                 {% if node.postHeader %}
                     <span class="afd-postheader">{{node.postHeader}}</span>
                 {% endif %}
 
             {% elseif node.type == 'subheader' %}
-                <h3 class="font-mono margin-top-105">{{node.content}}</h3>
+                <h3 class="wx-mono-h3 margin-top-105">{{node.content}}</h3>
+            {% elseif node.type == 'temps-table' %}
+                <table class="usa-table">
+                    {% for row in node.rows %}
+                        <tr>
+                            <td>{{row.name}}</td>
+                            {% for num in row.numbers %}
+                                <td>{{num}}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
             {% else %}
-                <p class="usa-text font-mono-md text-pre-line">{{node.content}}</p>
+                <p class="usa-text font-mono-sm text-pre-line">{{node.content}}</p>
             {% endif %}
         {% endfor %}
     </div>
@@ -34,7 +45,7 @@
     {% if epilogue %}
         <div class="afd-epilogue">
             {% for node in epilogue %}
-                <p class="usa-text font-mono-md text-pre-line">
+                <p class="usa-text font-mono-sm text-pre-line">
                     {{node.content}}
                 </p>
             {% endfor %}

@@ -181,6 +181,8 @@ class AFDParser
             $this->parsePreambleContent($currentString, $result);
         } elseif ($this->currentContentType == "wwa") {
             $this->parseWWAContent($currentString, $result);
+        } elseif ($this->currentContentType == "temps-table"){
+            $this->parseTempsTableContent($currentString, $result);
         } elseif ($this->currentContentType == "epilogue") {
             $this->parseEpilogueContent($currentString, $result);
         } else {
@@ -242,6 +244,50 @@ class AFDParser
             array_push($result, [
                 "type" => "text",
                 "content" => $currentString,
+            ]);
+        }
+    }
+
+    public function parseTempsTableContent(string $str, array &$result)
+    {
+        if($str == ""){
+            return;
+        }
+
+        
+        $lines = explode("\n", $str);
+        $rx = "/^[^\d]*(.+)/";
+        $rows = [];
+        foreach($lines as $line){
+            $numbers = preg_split($rx, $line, 0, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+            $numbers = trim($numbers[0]);
+            $numbers = preg_split("/\s+/", $numbers);
+            $numbers = array_values(
+                array_filter(
+                    $numbers,
+                    function($str){
+                        return $str != "/";
+                    }
+                )
+            );
+
+            $placeRx = "/^(?<place>[^\d]+)/";
+            $place = null;
+            if(preg_match($placeRx, $line, $matches)){
+                $place = trim($matches['place']);
+            }
+
+            array_push($rows, [
+                "type" => "temps-table-row",
+                "numbers" => $numbers,
+                "name" => $place
+            ]);
+        }
+
+        if(count($rows)){
+            array_push($result, [
+                "type" => "temps-table",
+                "rows" => $rows
             ]);
         }
     }
@@ -311,8 +357,11 @@ class AFDParser
     public function updateCurrentContentType(string $str)
     {
         $wwaRegex = "/^[A-Z]{3}\sWATCHES\/WARNINGS\/ADVISORIES\s*$/";
+        $tempsTableRegex = "/TEMPS\/POPS$/";
         if (preg_match($wwaRegex, $str)) {
             $this->currentContentType = "wwa";
+        } elseif (preg_match($tempsTableRegex, $str)){
+            $this->currentContentType = "temps-table";
         } elseif ($str == '$$') {
             $this->currentContentType = "epilogue";
         } else {
