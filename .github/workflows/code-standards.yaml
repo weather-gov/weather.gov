@@ -210,6 +210,9 @@ jobs:
       - name: run browser tests (Playwright)
         if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/browser-tests-playwright
+      - name: dump drupal logs
+        if: always()
+        run: docker compose logs drupal
 
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed
