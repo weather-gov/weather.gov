@@ -44,3 +44,11 @@ runs:
           --password=drupal \
           --user=root \
           weathergov
+
+    # Restart the interop layer once the database is loaded. It immediately
+    # tries to run some queries, but if the database isn't ready, it'll crash
+    # and die.
+    - name: restart the interop layer
+      shell: bash
+      run: |
+        docker compose restart api-interop-layer
