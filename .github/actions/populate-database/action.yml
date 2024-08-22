@@ -59,3 +59,7 @@ runs:
           --add-drop-table \
           --add-drop-trigger \
           weathergov > weathergov.sql
+
+    - name: clear the Druapl cache
+      shell: bash
+      run: make cc
