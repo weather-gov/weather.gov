@@ -21,12 +21,12 @@
 
 <h3> General public usability research </h3>
 
-| Name  | When  | Interest  | Usability| Relevance| Comprehension|
-| -------- | ------- | -------- | ------- |------- | -------- |
-| R1 - Usability (public) | Dec 2024 | ------- |------- | -------- |
-| R2 - Usability (public) | Jan 2024 |  🟢 Most participants said they would try out weather.gov alongside other apps and website | 🟡 Some participants had some issues finding what they were looking for | 🟡 Additional details required | 🟡 Issues interpreting metrics |
-| R3 - Usability (public + partner)| Mar 2024 | Most participants said they would try out weather.gov, including those that do not currently use it | Screenreader dependent user had moderate challenges, some info surprising | General public participants found what they were looking for, EM needs consistent with known gaps| Minor issues, most comprehensive issues resolved |
-| R5 - Unmoderated testing pilot | May 2024 | Range of enthusiasm but engaged general public  | No major navigation issues, but minor friction navigating tabs consistent with other observed behavior | Desires for additional data points and functionality consistent with roadmap and known gaps | No major issues |
+| Name  | When  | Interest  | Usability| Relevance| Comprehension| Summary |
+| -------- | ------- | -------- | ------- |------- | -------- | -------- |
+| R1 - Usability (public) | Dec 2024 | The information was generally what users were looking for, although EMs would continue to rely on more advanced tools without enhancements | 🟡 Moderate issues interpretting data | 🟠 Prompts to find what they were looking for |  -------- |[Deck - Internal Access only](https://docs.google.com/presentation/d/1tbOs4QxaAPvD-RO9-cv8ZJCvBRMWYN3egQxbWi5tGeg/edit?usp=sharing)|
+| R2 - Usability (public) | Jan 2024 |  🟢 Most participants said they would try out weather.gov alongside other apps and website | 🟡 Some participants had some issues finding what they were looking for | 🟠 Additional details required | 🟠 Issues interpreting metrics | [Deck - Internal Access only](https://docs.google.com/presentation/d/1fspeYmrbelbo4Gcq6Wb7lR1hdPAXhiO-K_KJUtoQS1I/edit?usp=drive_link)|
+| R3 - Usability (public + partner)| Mar 2024 | Most participants said they would try out weather.gov, including those that do not currently use it | Screenreader dependent user had moderate challenges, some info surprising | General public participants found what they were looking for, EM needs consistent with known gaps| Minor issues, most comprehensive issues resolved |[Deck - Internal Access only](https://docs.google.com/presentation/d/1tbOs4QxaAPvD-RO9-cv8ZJCvBRMWYN3egQxbWi5tGeg/edit?usp=sharing)|
+| R5 - Unmoderated testing pilot | May 2024 | Range of enthusiasm but engaged general public  | No major navigation issues, but minor friction navigating tabs consistent with other observed behavior | Desires for additional data points and functionality consistent with roadmap and known gaps | No major issues |[Deck - Internal Access only](https://docs.google.com/presentation/d/1tbOs4QxaAPvD-RO9-cv8ZJCvBRMWYN3egQxbWi5tGeg/edit?usp=sharing)|
 
 <h3> Internal research </h3>
 
