@@ -26,16 +26,18 @@
             {% elseif node.type == 'subheader' %}
                 <h3 class="wx-mono-h3 margin-top-105">{{node.content}}</h3>
             {% elseif node.type == 'temps-table' %}
-                <table class="usa-table">
-                    {% for row in node.rows %}
-                        <tr>
-                            <td>{{row.name}}</td>
-                            {% for num in row.numbers %}
-                                <td>{{num}}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </table>
+                <div class="afd-table-wrapper usa-table-container--scrollable">
+                    <table class="usa-table width-full">
+                        {% for row in node.rows %}
+                            <tr>
+                                <td>{{row.name}}</td>
+                                {% for num in row.numbers %}
+                                    <td>{{num}}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             {% else %}
                 <p class="usa-text font-mono-sm text-pre-line">{{node.content}}</p>
             {% endif %}
