@@ -64,6 +64,7 @@ final class AlertUtilityGeometryTest extends TestCase
             as shape
                 FROM weathergov_geo_zones
                 WHERE id IN ('zone 1','zone 2','zone 3')",
+                    [],
                     $zoneShapes,
                 ],
             ]),
@@ -114,6 +115,7 @@ final class AlertUtilityGeometryTest extends TestCase
                 as shape
                     FROM weathergov_geo_counties
                     WHERE countyFips IN (county 1,county 2,county 3)",
+                    [],
                     $countyShapes,
                 ],
             ]),

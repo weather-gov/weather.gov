@@ -18,5 +18,8 @@ runs:
       with:
         context: .
         file: ./Dockerfile.dev
+        build-args: |
+          UID=1000
+          GID=100
         tags: 18f-zscaler-drupal:10-apache
         outputs: type=docker,dest=/tmp/image.tar

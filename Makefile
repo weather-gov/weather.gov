@@ -66,7 +66,7 @@ log-ws: ## tail the Drupal Watchdog logs
 rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose stop drupal
 	docker compose rm drupal -f
-	docker compose build drupal
+	docker compose build drupal --build-arg "UID=$$(id -u)" --build-arg "GID=$$(id -g)"
 	docker compose up -d
 
 reset-site: reset-site-database pause install-site ## Delete the database and rebuild it from configuration and exported content
@@ -93,7 +93,7 @@ scorched-earth: ## A tool to reset your Docker Desktop.
 	docker stop $$(docker ps -a -q)
 	docker rm $$(docker ps -a -q)
 	docker system prune -f
-	docker volume rm $(docker volume ls -qf dangling=true)
+	docker volume rm $$(docker volume ls -qf dangling=true)
 
 ### CSS
 build-css: # Build CSS

@@ -29,6 +29,15 @@ weather_routes.grid:
     gridX: '^[0-9]*$'
     gridY: '^[0-9]*$'
 
+weather_routes.place:
+  path: '/place/{state}/{place}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::redirectFromPlace
+  requirements:
+    _access: 'TRUE'
+    state: '^[a-zA-Z]{2}$'
+    place: '^.+$'
+
 weather_routes.grid.legacy:
   path: '/local/{wfo}/{gridX}/{gridY}/{location}'
   defaults:
@@ -48,15 +57,6 @@ weather_routes.alert-info:
   requirements:
     # Public endpoint
     _access: 'TRUE'
-
-weather_routes.weather_info.content:
-  path: '/offices/{wfo}'
-  defaults:
-    _controller: \Drupal\weather_routes\Controller\WeatherInfoController::content
-  requirements:
-    # Public endpoint
-    _access: 'TRUE'
-    wfo: '^[A-Za-z][A-Za-z][A-Za-z]$'
 
 weather_routes.afd:
   path: '/afd'

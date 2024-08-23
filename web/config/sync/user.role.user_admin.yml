@@ -10,7 +10,6 @@ dependencies:
     - node.type.page
     - node.type.testing_page
     - node.type.weather_story
-    - node.type.wfo_promo
     - taxonomy.vocabulary.weather_event_types
     - taxonomy.vocabulary.weather_forecast_offices
     - workflows.workflow.weather_gov_content_moderation
@@ -55,13 +54,11 @@ permissions:
   - 'create terms in weather_event_types'
   - 'create terms in weather_forecast_offices'
   - 'create weather_story content'
-  - 'create wfo_promo content'
   - 'delete any basic block content'
   - 'delete any dynamic_safety_information content'
   - 'delete any no_title_block block content'
   - 'delete any page content'
   - 'delete any weather_story content'
-  - 'delete any wfo_promo content'
   - 'delete own files'
   - 'delete terms in weather_event_types'
   - 'delete terms in weather_forecast_offices'
@@ -71,7 +68,6 @@ permissions:
   - 'edit any page content'
   - 'edit any testing_page content'
   - 'edit any weather_story content'
-  - 'edit any wfo_promo content'
   - 'edit terms in weather_event_types'
   - 'edit terms in weather_forecast_offices'
   - 'revert any basic block content revisions'
@@ -81,7 +77,6 @@ permissions:
   - 'revert term revisions in weather_event_types'
   - 'revert term revisions in weather_forecast_offices'
   - 'revert weather_story revisions'
-  - 'revert wfo_promo revisions'
   - 'schedule publishing of nodes'
   - 'use text format basic_html'
   - 'use weather_gov_content_moderation transition archive'
@@ -103,5 +98,4 @@ permissions:
   - 'view the administration theme'
   - 'view vocabulary labels'
   - 'view weather_story revisions'
-  - 'view wfo_promo revisions'
   - 'view workbench access information'

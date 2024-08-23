@@ -98,6 +98,17 @@ To run end-to-end tests locally, the Makefile command is:
 make ee
 ```
 
+To run end-to-end tests locally using [Playwright](https://playwright.dev/), the
+corresponding Makefile command is:
+
+```sh
+make eep
+```
+
+Note that you can set the environment variable `WX_NOW_TIMESTAMP` to any ISO8601
+date to "freeze" time; the proxy and the Drupal application will then use that value
+to mean "now". (An example: `WX_NOW_TIMESTAMP=2024-08-20T19:36:38Z make eep`)
+
 ## Accessibility testing
 
 Automated accessibility testing can identify about half of all kinds of
