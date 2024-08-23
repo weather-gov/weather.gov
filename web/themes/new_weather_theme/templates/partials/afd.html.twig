@@ -18,7 +18,7 @@
     <div class="afd-body">
         {% for node in body %}
             {% if node.type == 'header' %}
-                <h2 class="usa-heading wx-mono-h2 margin-bottom-1 margin-top-4">{{node.content}}</h2>
+                <h2 class="usa-heading wx-mono-h2 margin-bottom-1 margin-top-4">{{node.content | raw}}</h2>
                 {% if node.postHeader %}
                     <span class="afd-postheader">{{node.postHeader}}</span>
                 {% endif %}
@@ -52,6 +52,3 @@
         </div>    
     {% endif %}
 </article>
-<pre>
-{{afd.productText}}
-</pre>

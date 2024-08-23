@@ -154,6 +154,13 @@ class AFDParser
             $header = $matches["header"];
             $this->updateCurrentContentType($header);
             $postHeader = $matches["after"] ?? null;
+
+            // For WWA headers, we want to join the / characters
+            // with partial spaces
+            if($this->currentContentType == "wwa"){
+              $split = explode("/", $header);
+              $header = implode("&hairsp;/&hairsp;", $split);
+            }
             array_push($result, [
                 "type" => "header",
                 "content" => $header,
