@@ -3,7 +3,7 @@ import getForecast from "./forecast/index.js";
 import getObservations from "./obs/index.js";
 import getPoint from "./points.js";
 import getSatellite from "./satellite.js";
-import dayjs from "../util/day.js";
+import { dayjs } from "@wxgov-interop/utils";
 
 export const getDataForPoint = async (lat, lon) => {
   const { point, place, grid } = await getPoint(lat, lon);

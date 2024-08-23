@@ -1,4 +1,4 @@
-import dayjs from "../../../util/day.js";
+import { dayjs } from "@wxgov-interop/utils";
 
 export const parseDuration = (alert, timezone) => {
   const now = dayjs().tz(timezone);

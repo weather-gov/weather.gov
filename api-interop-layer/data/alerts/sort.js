@@ -1,4 +1,4 @@
-import dayjs from "../../util/day.js";
+import { dayjs } from "@wxgov-interop/utils";
 
 export default (alertA, alertB) => {
   const now = dayjs();

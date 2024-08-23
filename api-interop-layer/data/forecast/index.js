@@ -1,9 +1,8 @@
 import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
 import hourly from "./hourly.js";
-import { convertProperties } from "../../util/convert.js";
-import dayjs from "../../util/day.js";
-import { fetchAPIJson } from "../../util/fetch.js";
+
+import { convertProperties, dayjs, fetchAPIJson } from "@wxgov-interop/utils";
 
 export default async ({ grid }) => {
   const hours = new Map();

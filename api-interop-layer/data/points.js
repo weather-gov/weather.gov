@@ -1,5 +1,4 @@
-import { openDatabase } from "./db.js";
-import { fetchAPIJson } from "../util/fetch.js";
+import { fetchAPIJson, openDatabase } from "@wxgov-interop/utils";
 
 export default async (latitude, longitude) => {
   const point = { latitude, longitude };

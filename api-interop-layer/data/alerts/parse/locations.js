@@ -1,4 +1,4 @@
-import { titleCase } from "../../../util/case.js";
+import { titleCase } from "@wxgov-interop/utils";
 
 export const parseLocations = (description) => {
   if (!description) {

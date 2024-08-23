@@ -1,8 +1,11 @@
-import dayjs from "../../util/day.js";
-import { openDatabase } from "../db.js";
 import isObservationValid from "./valid.js";
-import { convertProperties } from "../../util/convert.js";
-import { fetchAPIJson } from "../../util/fetch.js";
+
+import {
+  convertProperties,
+  dayjs,
+  openDatabase,
+  fetchAPIJson,
+} from "@wxgov-interop/utils";
 
 // document the translation layer; high level conceptual and some lower-level for eng
 // then we can figure out SDB resourcing and how we'd collaborate

@@ -1,4 +1,4 @@
-import dayjs from "../../util/day.js";
+import { dayjs } from "@wxgov-interop/utils";
 
 export default (data, hours) => {
   const properties = Object.keys(data.properties).filter(

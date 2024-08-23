@@ -1,7 +1,3 @@
-import dayjs from "../../util/day.js";
-import { fetchAPIJson } from "../../util/fetch.js";
-import paragraphSquash from "../../util/paragraphSquash.js";
-import { openDatabase } from "../db.js";
 import alertKinds from "./kinds.js";
 import {
   parseDescription,
@@ -9,6 +5,12 @@ import {
   parseLocations,
 } from "./parse/index.js";
 import sort from "./sort.js";
+import {
+  dayjs,
+  fetchAPIJson,
+  openDatabase,
+  paragraphSquash,
+} from "@wxgov-interop/utils";
 
 const cachedAlerts = [];
 
