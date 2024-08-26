@@ -1,5 +1,7 @@
 import mariadb from "mariadb";
 
+import { sleep } from "../util/sleep.js";
+
 export const openDatabase = async () => {
   const connectionDetails = {
     user: process.env.DB_USERNAME ?? "drupal",
@@ -12,13 +14,6 @@ export const openDatabase = async () => {
 
   return mariadb.createConnection(connectionDetails);
 };
-
-const sleep = (ms) =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
 
 // Try to connect, wait, try again, wait, etc. If the database isn't ready after
 // 4 attempts and 30 seconds, we'll just fail.
