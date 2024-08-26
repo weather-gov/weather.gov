@@ -67,6 +67,15 @@
           <h2 class="usa-sr-only">7 days</h2>
           {{ drupal_block("weathergov_weather_story") }}
 
+          <div class="grid-container padding-bottom-2 padding-x-0 tablet:padding-x-2">
+            <div class="grid-row">
+              <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+                <a href="/afd/{{ weather.grid.wfo }}">Current Area Forecast Discussion</a>
+              </div>
+            </div>
+          </div>
+
+
           <h3 class="usa-sr-only">Daily forecast</h3>
           {{ drupal_block("weathergov_daily_forecast") }}
 
