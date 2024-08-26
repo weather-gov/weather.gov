@@ -31,5 +31,5 @@ type: wfo_pdf_uploads
 description: 'PDFs that are produced by a WFO, using the DSS Builder (Google Slides) and applicable to any location within their WCA.'
 help: null
 new_revision: false
-preview_mode: 0
+preview_mode: 2
 display_submitted: false
