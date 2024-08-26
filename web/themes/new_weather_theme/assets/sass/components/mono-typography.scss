@@ -3,15 +3,17 @@
 @forward "uswds";
 
 .wx-mono-h2 {
-  @include u-font-family('mono');
+  @include u-font-family("mono");
+  @include u-text("bold");
+
   font-size: 1.375rem;
-  color: color('primary-darker');
-  @include u-text('bold');
+  color: color("primary-darker");
 }
 
 .wx-mono-h3 {
-  @include u-font-family('mono');
+  @include u-font-family("mono");
+  @include u-text("bold");
+
   font-size: 1.125rem;
-  color: color('primary-dark');
-  @include u-text('bold');
+  color: color("primary-dark");
 }
