@@ -293,13 +293,13 @@ class DataLayer
     private static $i_products_by_type = [];
     public function getProductsByType($type)
     {
-        if (!array_key_exists($key, self::$i_products_by_type)) {
+        if (!array_key_exists($type, self::$i_products_by_type)) {
             $prop = "@graph";
-            self::$i_products_by_type[$key] = $this->getFromWeatherAPI(
+            self::$i_products_by_type[$type] = $this->getFromWeatherAPI(
                 "/products/types/$type",
             )->$prop;
         }
-        return self::$i_products_by_type[$key];
+        return self::$i_products_by_type[$type];
     }
 
     private static $i_products = [];

@@ -101,4 +101,18 @@ class WeatherEntityService
         }
         return false;
     }
+
+    public function getWFOEntities()
+    {
+        $ids = $this->entityTypeManager
+            ->getStorage("taxonomy_term")
+            ->getQuery()
+            ->accessCheck(false)
+            ->condition("vid", "weather_forecast_offices")
+            ->execute();
+        $result = $this->entityTypeManager
+            ->getStorage("taxonomy_term")
+            ->loadMultiple($ids);
+        return $result;
+    }
 }

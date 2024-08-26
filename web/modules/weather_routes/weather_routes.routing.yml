@@ -61,12 +61,49 @@ weather_routes.alert-info:
 weather_routes.afd:
   path: '/afd'
   defaults:
-    _controller: \Drupal\weather_routes\Controller\AFDController::content
+    _controller: \Drupal\weather_routes\Controller\AFDController::afdDefault
   options:
     no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
 
+weather_routes.afd.wfo_id:
+  path: '/afd/{wfo_code}/{afd_id}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\AFDController::byOfficeAndId
+  options:
+    no_cache: 'TRUE'
+  requirements:
+    _access: 'TRUE'
+
+weather_routes.afd.by_office:
+  path: '/afd/{wfo_code}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\AFDController::byOffice
+  options:
+    no_cache: 'TRUE'
+  requirements:
+    _access: 'TRUE'
+
+
+weather_routes.afd.wx.id:
+  path: '/wx/afd/{afd_id}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\AFDController::markupOnlyById
+  options:
+    no_cache: 'TRUE'
+  requirements:
+    _access: 'TRUE'
+
+weather_routes.afd.wx.versions:
+  path: '/wx/afd/locations/{wfo_code}'
+  defaults:
+    _controller: \Drupal\weather_routes\Controller\AFDController::markupOnlyForVersions
+  options:
+    no_cache: 'TRUE'
+  requirements:
+    _access: 'TRUE'
+  
 weather_routes.weather_info.content:
   path: '/offices/{wfo}'
   defaults:

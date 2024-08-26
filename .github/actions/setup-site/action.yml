@@ -44,3 +44,7 @@ runs:
           --password=drupal \
           --user=root \
           weathergov
+
+    - name: clear the Drupal cache
+      shell: bash
+      run: make cc

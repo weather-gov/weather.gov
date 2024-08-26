@@ -93,3 +93,8 @@ digital-analytics-program:
     https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety: {
       attributes: { id: "_fed_an_ua_tag" }
     }
+
+afd-selector:
+  version: 2024-08-16
+  js:
+    assets/js/components/afd-selector.js: { preprocess: false }

@@ -10,6 +10,31 @@ function weather_routes_theme($existing, $type, $theme, $path)
             "variables" => [
                 "wfo" => null,
                 "afd" => null,
+                "wfo_list" => [],
+                "version_list" => [],
+            ],
+        ],
+
+        "weather_routes_wx_afd_versions" => [
+            "render element" => "children",
+            "template" => "afd-versions-select",
+            "variables" => [
+                "wfo" => null,
+                "afd" => null,
+                "version_list" => [],
+            ],
+        ],
+
+        // Theme for the partial HTML only
+        // that will be served to AJAX requests
+        "weather_routes_afd_partial" => [
+            "render element" => "children",
+            "template" => "afd",
+            "variables" => [
+                "wfo" => null,
+                "afd" => null,
+                "wfo_list" => [],
+                "version_list" => [],
             ],
         ],
     ];
