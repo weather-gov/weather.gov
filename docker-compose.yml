@@ -17,7 +17,7 @@ services:
       context: ./tests/api
       dockerfile: Dockerfile
     environment:
-      WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP}
+      WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
     networks:
       - weather.gov
     ports:
@@ -30,6 +30,9 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.dev
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-100}
     image: 18f-zscaler-drupal:10-apache
     ports:
       - 8080:80
@@ -45,7 +48,7 @@ services:
       DRUPAL_DB_PASSWORD: drupal
       DRUPAL_DB_HOST: database
       DRUPAL_DB_PORT: 3306
-      WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP}
+      WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
     volumes:
       # Map in our composer files. That way if we make changes inside the
       # container, they'll be persisted out here in the real world.
