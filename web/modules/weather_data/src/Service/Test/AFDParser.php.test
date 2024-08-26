@@ -10,7 +10,6 @@ final class AFDParserTest extends TestCase
     /**
      * @group unit
      * @group afd-parser
-     * @group hi
      */
     public function testBasicHeaderAndText(): void
     {
@@ -31,11 +30,30 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "A nearly stationary front will remain near the coast through" .
-                    " Thursday. The front will then return northward Thursday night into Friday.",
+                           " Thursday. The front will then return northward Thursday night into Friday.",
             ],
         ];
 
         $parser = new AFDParser($raw);
+        $actual = $parser->parse();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group afd-parser
+     */
+    public function testHeaderWithoutNewline(): void
+    {
+        $source = ".SPOTTER INFORMATION STATEMENT...";
+        $expected = [[
+            "type" => "header",
+            "content" => "SPOTTER INFORMATION STATEMENT",
+            "postHeader" => null
+        ]];
+
+        $parser = new AFDParser($source);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -67,9 +85,9 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "Improvement to MVFR cigs by mid-morning for any sites " .
-                    "that are not already MVFR. Slow improvement then to " .
-                    "VFR starting from the north in the late afternoon and " .
-                    "reaching the NYC terminals late this evening.",
+                           "that are not already MVFR. Slow improvement then to " .
+                           "VFR starting from the north in the late afternoon and " .
+                           "reaching the NYC terminals late this evening.",
             ],
         ];
 
@@ -136,7 +154,6 @@ final class AFDParserTest extends TestCase
     /**
      * @group unit
      * @group afd-parser
-     * @group hi
      */
     public function testParsingFullExample(): void
     {
@@ -211,7 +228,7 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "A nearly stationary front will remain near the coast through" .
-                    " Thursday. The front will then return northward Thursday night into Friday.",
+                           " Thursday. The front will then return northward Thursday night into Friday.",
             ],
             [
                 "type" => "text",
@@ -227,7 +244,7 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "Forecast mainly on track. Much cooler air mass has worked into the " .
-                    "region with the stationary front just of the of the area.",
+                           "region with the stationary front just of the of the area.",
             ],
             [
                 "type" => "subheader",
@@ -237,26 +254,26 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "High pressure builds down from the north into tonight, which will " .
-                    "only reinforce some of the lower level cooler and drier air.",
+                           "only reinforce some of the lower level cooler and drier air.",
             ],
             [
                 "type" => "header",
-                "content" => "OKX WATCHES/WARNINGS/ADVISORIES",
+                "content" => "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES",
                 "postHeader" => null,
             ],
             [
                 "type" => "text",
                 "content" =>
                     "CT...None.\nNY...None.\nNJ...None.\nMARINE" .
-                    "...Small Craft Advisory until 11 PM EDT " .
-                    "this evening for ANZ350-\n                353-355.",
+                           "...Small Craft Advisory until 11 PM EDT " .
+                           "this evening for ANZ350-353-355.",
             ],
             [
                 "type" => "epilogueText",
                 "content" =>
                     "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" .
-                    " TERM...DW\nLONG TERM...JT\nMARINE..." .
-                    "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
+                           " TERM...DW\nLONG TERM...JT\nMARINE..." .
+                           "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
             ],
         ];
 

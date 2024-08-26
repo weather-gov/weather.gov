@@ -118,3 +118,19 @@
 .wx-minw-full {
   min-width: 100%;
 }
+
+/* Custom sticky at desktop
+------------------------------------- */
+@include at-media(desktop){
+  .desktop__wx-position-sticky {
+    position: sticky;
+    top: 0;
+  }
+}
+
+/* Compensate for .grid-container padding in a direct
+ * child in order to make it full width
+------------------------------------- */
+.wx-full-container-width {
+  width: calc(100% + units(2))
+}
