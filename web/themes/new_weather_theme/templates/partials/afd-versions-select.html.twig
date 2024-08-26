@@ -1,0 +1,5 @@
+{% for version in version_list %}
+    <option value="{{version.id}}"{% if afd.id == version.id %} selected{% endif %}>
+        {{version.issuanceTime}}
+    </option>
+{% endfor %}
