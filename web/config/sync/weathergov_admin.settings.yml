@@ -1,0 +1,11 @@
+features:
+  node_user_picture: 0
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: 1
+logo:
+  use_default: 1
+favicon:
+  use_default: 0
+  path: themes/new_weather_theme/favicon.ico
+  mimetype: image/vnd.microsoft.icon
