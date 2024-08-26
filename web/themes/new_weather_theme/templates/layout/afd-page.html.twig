@@ -26,7 +26,7 @@
     </div>
     <wx-afd-selector {% if wfo is not null %}wfo="{{wfo}}"{% endif %} class="grid-container width-full">
         <div class="grid-row grid-gap">
-            <div class="grid-col-12 desktop:grid-col-4">
+            <div class="grid-col-12 desktop:grid-col-4 desktop:margin-top-205">
 
                 <form id="afd-selection-form" name="afd-selection-form" class="bg-primary-lightest padding-x-2 padding-y-3 border-bottom-2px border-primary desktop__wx-position-sticky margin-x-neg-2" method="GET" action="/afd">
                     <label for="wfo-selector" class="usa-label margin-top-0">
@@ -47,7 +47,7 @@
                         </select>
                     {% endif %}
                     <input type="hidden" name="current-id" value="{{afd.id}}"/>
-                    <button class="usa-button margin-top-2" type="submit">Update selection</button>
+                    <button class="usa-button margin-top-3" type="submit">Update selection</button>
 
                 </form>
             </div>
