@@ -247,6 +247,8 @@ class AFDParser
         // indicates line continuation. Replace with the empty
         // string, followed by a normal newline.
         $currentString = trim($str);
+        $currentString = preg_replace("/\n\s+/", "", $currentString);
+
         if ($currentString != "") {
             array_push($result, [
                 "type" => "text",

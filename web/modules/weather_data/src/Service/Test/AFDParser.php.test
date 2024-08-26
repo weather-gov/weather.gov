@@ -10,7 +10,6 @@ final class AFDParserTest extends TestCase
     /**
      * @group unit
      * @group afd-parser
-     * @group hi
      */
     public function testBasicHeaderAndText(): void
     {
@@ -155,7 +154,6 @@ final class AFDParserTest extends TestCase
     /**
      * @group unit
      * @group afd-parser
-     * @group hi
      */
     public function testParsingFullExample(): void
     {
@@ -260,7 +258,7 @@ final class AFDParserTest extends TestCase
             ],
             [
                 "type" => "header",
-                "content" => "OKX WATCHES/WARNINGS/ADVISORIES",
+                "content" => "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES",
                 "postHeader" => null,
             ],
             [
