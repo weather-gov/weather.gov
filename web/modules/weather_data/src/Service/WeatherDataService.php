@@ -272,7 +272,6 @@ class WeatherDataService
     {
         $afd = $this->dataLayer->getProduct($id);
         if ($afd) {
-            $afd = $this->dataLayer->getProduct($id);
             $afd = json_decode(json_encode($afd), true);
             $parser = new AFDParser($afd["productText"]);
             $parser->parse();
@@ -288,14 +287,46 @@ class WeatherDataService
      */
     public function getWFOFromAFD(array $afd)
     {
-        if (!$afd || !array_key_exists("productText", $afd)) {
+        if (!$afd || !array_key_exists("issuingOffice", $afd)) {
             return null;
         }
-        $rx = "/AFD(?<wfo>[A-Z]{3})/";
-        if (preg_match($rx, $afd["productText"], $matches)) {
-            return $matches["wfo"];
+
+        // AFD issuing offices uses the FAA 4-letter international code. For
+        // CONUS WFOs, the FAA code is the WFO code with a preceding K, so if
+        // the code starts with K, we can just strip it off.
+        $rawOffice = strtoupper($afd["issuingOffice"]);
+        if (str_starts_with($rawOffice, "K")) {
+            return substr($rawOffice, 1);
         }
-        return null;
+
+        // For OCONUS, the codes do not always map so cleanly. There are only
+        // nine OCONUS FAA codes used by AFDs, so we can just special case them.
+        switch ($rawOffice) {
+            case "PHFO": // Honolulu, HI
+                return "HFO";
+            case "TJSJ": // San Juan, PR
+                return "SJU";
+            case "NSTU": // Pago Pago, AS
+                return "PPG";
+            case "PGUM": // Tiyan, GU
+                return "GUM";
+            case "PAFC": // Anchorage, AK
+                return "AFC";
+            case "PAFG": // Fairbanks, AK
+                return "AFG";
+            case "PAJK": // Juneau, AK
+                return "AJK";
+
+            // And if we don't recognize the FAA international code, then we
+            // bail out because we just don't know. But this shouldn't happen.
+            // PPQE and PPQW map to WSOs, not WFOs, and AFDs should *NOT* be
+            // issued under these codes, so we can explicitly map them to null
+            // as well.
+            case "PPQE": // Micronesia Domain East
+            case "PPQW": // Micronesia Domain West
+            default:
+                return null;
+        }
     }
 
     /**
