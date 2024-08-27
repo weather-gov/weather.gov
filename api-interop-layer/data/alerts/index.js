@@ -29,9 +29,8 @@ const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
 };
 
 const updateAlerts = async () => {
-  const rawAlerts = await fetchAPIJson("/alerts/active?status=actual")
-    .then(({ features }) => features)
-    .then((features) =>
+  const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
+    ({ features }) =>
       features.map((feature) => {
         Object.keys(feature.properties).forEach((key) => {
           const value = feature.properties[key];
@@ -54,7 +53,7 @@ const updateAlerts = async () => {
 
         return feature;
       }),
-    );
+  );
 
   const db = await openDatabase();
 
@@ -130,8 +129,8 @@ const updateAlerts = async () => {
           )
             AS shape
             FROM weathergov_geo_zones
-            WHERE id IN (${zones.map((z) => `'${z}'`).join(",")})`;
-        const [{ shape }] = await db.query(sql);
+            WHERE id IN (${zones.map(() => "?").join(",")})`;
+        const [{ shape }] = await db.query(sql, zones);
 
         if (shape) {
           alert.geometry = shape;
