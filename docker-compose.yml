@@ -94,16 +94,7 @@ services:
   utility-node:
     build:
       context: .
-      dockerfile_inline: |
-        FROM node:20
-        COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
-        RUN c_rehash
-        ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/zscaler-root.pem
-        RUN mkdir /app
-        WORKDIR /app
-        ADD ./package.json .
-        ADD ./package-lock.json .
-        RUN npm ci
+      dockerfile: Dockerfile.utility-node
     profiles: ["utility"]
     networks:
       - weather.gov
@@ -115,18 +106,8 @@ services:
 
   uswds:
     build:
-      context: ./web/themes/new_weather_theme
-      dockerfile_inline: |
-        FROM node:20
-        COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
-        RUN c_rehash
-        ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/zscaler-root.pem
-        RUN mkdir /app
-        WORKDIR /app
-        ADD ./package.json .
-        ADD ./package-lock.json .
-        RUN npm ci
-        RUN npm i sass-embedded-linux-arm64
+      context: ./
+      dockerfile: Dockerfile.uswds
     profiles: ["utility"]
     volumes:
       - ./web/themes/new_weather_theme/:/app
