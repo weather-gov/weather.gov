@@ -67,10 +67,22 @@
           <h2 class="usa-sr-only">7 days</h2>
           {{ drupal_block("weathergov_weather_story") }}
 
-          <div class="grid-container padding-bottom-2 padding-x-0 tablet:padding-x-2">
+          <div class="grid-container margin-bottom-4 padding-x-0 tablet:padding-x-2">
             <div class="grid-row">
               <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-                <a href="/afd/{{ weather.grid.wfo }}">Current Area Forecast Discussion</a>
+                <div class="bg-accent-cool-lightest border border-accent-cool-lighter padding-105" role="alert">
+                  <svg
+                    class="usa-icon height-3 width-3 text-accent-cool-dark margin-right-1"
+                    aria-hidden="true"
+                    focusable="false"
+                    role="img"
+                    style="vertical-align: middle;"
+                  >
+                    <use
+                      xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#info_outline"
+                    ></use>
+                  </svg><a href="/afd/{{ weather.grid.wfo }}">Current Area Forecast Discussion</a>
+                </div>
               </div>
             </div>
           </div>
