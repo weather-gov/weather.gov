@@ -1,6 +1,6 @@
 @use "uswds-core" as *;
 
-.usa-table.afd-table { 
+.usa-table.afd-table {
   thead {
     @include u-font("mono", "sm");
 
@@ -12,10 +12,11 @@
     tr {
       border: none;
       color: white;
-    } 
+    }
 
     th {
       @include u-text("normal");
+
       color: white;
     }
 
@@ -30,7 +31,7 @@
     tr:last-of-type {
       th {
         background-color: color("primary-dark");
-      } 
+      }
 
       th:first-child {
         background-color: color("primary-darker");
