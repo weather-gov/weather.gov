@@ -155,4 +155,4 @@ This module gives us a physical address field type, along with configuration opt
 
 _Added August 2024_
 
-We use this module to disable all resource access by default, via the API endpoint. We also use this module to disable certain fields within Drupal content types.
+We use this module to disable resource access by default, via the API endpoint. We also use this module to disable certain fields within permitted Drupal content types for the API endpoint. Please see [./json-api.md](the JSON:API documentation) for more information.
