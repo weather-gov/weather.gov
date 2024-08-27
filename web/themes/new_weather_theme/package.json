@@ -12,6 +12,7 @@
     "@uswds/uswds": "^3.8.1"
   },
   "devDependencies": {
-    "@uswds/compile": "^1.1.0"
+    "@uswds/compile": "^1.1.0",
+    "sass": "^1.77.8"
   }
 }
