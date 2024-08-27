@@ -14,31 +14,31 @@ path: file/file
 resourceType: file--file
 resourceFields:
   fid:
-    disabled: false
+    disabled: true
     fieldName: fid
     publicName: fid
     enhancer:
       id: ''
   uuid:
-    disabled: false
+    disabled: true
     fieldName: uuid
     publicName: uuid
     enhancer:
       id: ''
   langcode:
-    disabled: false
+    disabled: true
     fieldName: langcode
     publicName: langcode
     enhancer:
       id: ''
   uid:
-    disabled: false
+    disabled: true
     fieldName: uid
     publicName: uid
     enhancer:
       id: ''
   filename:
-    disabled: false
+    disabled: true
     fieldName: filename
     publicName: filename
     enhancer:
@@ -50,31 +50,31 @@ resourceFields:
     enhancer:
       id: ''
   filemime:
-    disabled: false
+    disabled: true
     fieldName: filemime
     publicName: filemime
     enhancer:
       id: ''
   filesize:
-    disabled: false
+    disabled: true
     fieldName: filesize
     publicName: filesize
     enhancer:
       id: ''
   status:
-    disabled: false
+    disabled: true
     fieldName: status
     publicName: status
     enhancer:
       id: ''
   created:
-    disabled: false
+    disabled: true
     fieldName: created
     publicName: created
     enhancer:
       id: ''
   changed:
-    disabled: false
+    disabled: true
     fieldName: changed
     publicName: changed
     enhancer:

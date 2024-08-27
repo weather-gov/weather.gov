@@ -60,6 +60,6 @@ Second, we create the `wfo_pdf_upload` entity itself and link the PDF `id`:
             }
           }
         }' \
-     http://localhost:8888/jsonapi/node/wfo_pdf_uploads
+     http://localhost:8080/jsonapi/node/wfo_pdf_uploads
 
 The response should also be a 201 with JSON information about the newly created `wfo_pdf_upload` entity.
