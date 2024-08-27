@@ -8,19 +8,18 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="grid-row">
       <form class="usa-form grid-col maxw-tablet-lg margin-bottom-105 tablet:grid-offset-2" 
             data-location-search method="get"
       >
-        <div class="display-flex flex-align-end text-white flex-wrap">
-          <label class="usa-label margin-top-2" for="search-combo-box">
+        <div class="display-flex flex-align-end text-white flex-wrap margin-top-2">
+          <label class="usa-label margin-top-0 line-height-sans-1" for="search-combo-box">
             {{ "Enter city or zip code" | t }}
           </label>
           <div class="margin-x-105">|</div>
-          <div class="">
-            <button id="weathergov-use-browser-location" type="button" class="usa-button usa-button--unstyled wx-button--unstyled-light">
+            <button id="weathergov-use-browser-location" type="button" class="usa-button--unstyled wx-button--unstyled-light line-height-sans-1 margin-top-1">
               <svg
-                  class="usa-icon height-2 width-2 margin-right-1 text-top"
+                  class="usa-icon height-2 width-2 margin-right-05 text-top"
                   aria-hidden="true"
                   focusable="false"
                   role="img"
@@ -30,13 +29,12 @@
                 ></use>
               </svg>{{ 'Use my location' | t }}
             </button>
-          </div>
         </div>
         <wx-combo-box class="z-top margin-top-105" id="search-combo-box">
         </wx-combo-box>
       </form>      
     </div>
-    <div class="row font-sans-md text-white tablet:grid-offset-2">
+    <div class="grid-row font-sans-md text-white tablet:grid-offset-2">
         <div class="grid-col">
             {% include '@new_weather_theme/partials/wx-loader.html.twig' %}
         </div>
