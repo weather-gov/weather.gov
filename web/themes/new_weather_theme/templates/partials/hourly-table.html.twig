@@ -1,6 +1,21 @@
 {{ attach_library('new_weather_theme/hourly-table') }}
+{{ attach_library('new_weather_theme/chartjs') }}
+{{ attach_library('new_weather_theme/chart-hourly-temperature') }}
+
+{% set times = hours | map(h => h.time) | json_encode %}
+{% set temps = hours | map(h => h.temperature) | json_encode %}
+{% set feelsLike = hours | map(h => h.apparentTemperature) | json_encode %}
+
 <wx-hourly-table class="display-block position-relative margin-top-2 bg-white">
   <h5 class="wx-visual-h3 font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">Hourly forecast</h5>
+
+  <div class="margin-bottom-2">
+    <span class="font-family-mono text-primary-dark">Temperature</span>
+    <div class="wx-hourly-temp-chart-container position-relative grid-col-12" data-times="{{ times }}" data-temps="{{ temps }}" data-feels-like="{{ feelsLike }}">
+      <canvas>
+      </canvas>
+    </div>
+  </div>
 
   <div class="display-flex flex-justify">
     <div>

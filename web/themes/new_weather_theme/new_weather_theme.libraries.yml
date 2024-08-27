@@ -98,3 +98,33 @@ afd-selector:
   version: 2024-08-16
   js:
     assets/js/components/afd-selector.js: { preprocess: false }
+
+chartjs:
+  version: 4.4.1
+  header: true
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js:
+    # https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js:
+      attributes:
+        # integrity: "sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==",
+        integrity: "sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw=="
+        crossorigin: "anonymous"
+        referrerpolicy: "no-referrer"
+    https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js:
+      attributes:
+        integrity: sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==
+        crossorigin: anonymous
+        referrerpolicy: no-referrer
+
+chart-hourly-temperature:
+  version: 2024-08-27
+  js:
+    assets/js/charts/hourly-temperature.js:
+      attributes:
+        defer: true
+chart-daily-temperature-range:
+  version: 2024-08-27
+  js:
+    assets/js/charts/daily-temperature-range.js:
+      attributes:
+        defer: true
