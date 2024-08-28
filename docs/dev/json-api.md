@@ -8,7 +8,7 @@ We are also enabling the following core Drupal modules:
 
 - [`basic_auth`](https://www.drupal.org/docs/8/core/modules/basic_auth/overview) for authentication
 - [`jsonapi_extras`](https://www.drupal.org/project/jsonapi_extras) by default, prevent resources (and resource fields) from being accessible via the API
-- [`jsonapi_defaults`](https://www.drupal.org/project/jsonapi_defaults) is a submodule of the above which adds defaults to API resource types
+- `jsonapi_defaults` is a submodule of the above which adds defaults to API resource types
 - [`serialization`](https://www.drupal.org/docs/8/core/modules/serialization/overview) for JSON support
 
 ## Configuration
