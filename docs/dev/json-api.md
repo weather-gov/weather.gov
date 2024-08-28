@@ -19,7 +19,9 @@ We have configured JSON:API to only display `wfo_pdf_upload`s and `file`s. (The 
 
 We have also configured a new user type, `uploader`, which has no permissions except to create new `wfo_pdf_upload`s.
 
-Because JSON:API follows Drupal entity permissions, JSON:API also respects the user permissions for that entity type. This means that currently `anonymous` users can browse the JSON API, including viewing `file`s and `wfo_pdf_upload`s, because `anonymous` users can `view published content`. (This will change in a later version.)
+Because JSON:API follows Drupal entity permissions, JSON:API also respects the user permissions for that entity type. This means that currently `anonymous` users can browse the JSON API, including viewing `file`s and `wfo_pdf_upload`s, because `anonymous` users can `view published content`.
+
+Because we do not have an use case for listing resources, we are blocking all `GET` requests for the JSON:API via an [Apache configuration](../../.bp-config/httpd/user-provided/httpd-block-api-get-requests.conf).
 
 # Example
 
