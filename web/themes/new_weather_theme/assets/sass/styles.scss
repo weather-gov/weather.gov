@@ -1,6 +1,7 @@
 @forward "uswds-theme";
 @forward "uswds";
 @forward "uswds-theme-custom-styles";
+@use "components/afd-table";
 @use "components/alert-details";
 @use "components/alert-link";
 @use "components/alert-list";
@@ -13,6 +14,7 @@
 @use "components/hourly-toggle";
 @use "components/icons";
 @use "components/location-search";
+@use "components/mono-typography";
 @use "components/obs-table";
 @use "components/precip-table";
 @use "components/preview";
@@ -24,5 +26,5 @@
 @use "components/utilities";
 @use "components/visual-page-headings";
 @use "components/weather-story";
+@use "components/wfo-page";
 @use "components/wx-loader";
-@use "components/wfo-page.scss";

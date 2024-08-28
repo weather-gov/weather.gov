@@ -1,10 +1,14 @@
 {% set preamble = afd.parsedProductText.preamble %}
 {% set body = afd.parsedProductText.body %}
 {% set epilogue = afd.parsedProductText.epilogue %}
-<article class="afd-content" data-afd-id="{{afd.id}}">
+
+<article class="afd-content desktop:padding-left-1" data-afd-id="{{afd.id}}">
     <div class="afd-preamble">
+        <h2 class="usa-heading usa-sr-only">
+            {{ "Letterhead and timestamp" | t }}
+        </h2>
         {% for key,val in preamble %}
-            <span class="afd-preamble-{{key}} text-pre-line">
+            <span class="afd-preamble-{{key}} font-mono-sm text-pre-line">
                 {% for node in val %}
                     {{node.content}}
                 {% endfor %}
@@ -15,15 +19,67 @@
     <div class="afd-body">
         {% for node in body %}
             {% if node.type == 'header' %}
-                <h2 class="usa-heading">{{node.content}}</h2>
+                <h2 class="usa-heading wx-mono-h2 margin-bottom-1 margin-top-4">{{node.content | raw}}</h2>
                 {% if node.postHeader %}
                     <span class="afd-postheader">{{node.postHeader}}</span>
                 {% endif %}
 
             {% elseif node.type == 'subheader' %}
-                <h3>{{node.content}}</h3>
+                <h3 class="wx-mono-h3 margin-top-105">{{node.content}}</h3>
+            {% elseif node.type == 'temps-table' %}
+                <div class="afd-table-wrapper usa-table-container--scrollable">
+                    <table class="usa-table usa-table--compact afd-table width-full">
+                      <thead> 
+                        <tr>
+                          <td></td>
+                          <th colspan="4" scope="colgroup"> Temperatures </th>
+                          <th colspan="4" scope="colgroup"> Chance of precipitation </th>
+                        </tr>
+                        <tr>
+                          <th scope="col"> Location </th>
+                          {# An unsophisticated check for which period the numbers correspond to#}
+                          {% if (node.rows[0].numbers[0] - node.rows[0].numbers[1] > 0)  %}
+                          <th scope="col"> Today </th>
+                          <th scope="col"> Tonight </th>
+                          <th scope="col"> Tomorrow </th>
+                          <th scope="col"> Tomorrow night</th>
+                          <th scope="col"> Today </th>
+                          <th scope="col"> Tonight </th>
+                          <th scope="col"> Tomorrow </th>
+                          <th scope="col"> Tomorrow night</th>
+                          {% else %}
+                          <th scope="col"> Tonight </th>
+                          <th scope="col"> Tomorrow </th>
+                          <th scope="col"> Tomorrow night</th>
+                          <th scope="col"> Next day</th>
+                          <th scope="col"> Tonight </th>
+                          <th scope="col"> Tomorrow </th>
+                          <th scope="col"> Tomorrow night</th>
+                          <th scope="col"> Next day</th>
+                          {% endif %}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in node.rows %}
+                            <tr>
+                                <th scope="row">{{row.name}}</th>
+                                {% for num in row.numbers %}
+                                {% if row.numbers | length == 8 %}
+                                  {% if loop.index0 < 4 %}
+                                      {% set unit = '<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span><span class="usa-sr-only">℉</span>'%}
+                                  {% else %}
+                                      {% set unit = "%" %}
+                                  {% endif %}
+                                {% endif %}
+                                <td>{{num}}{{unit | raw}}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
             {% else %}
-                <p class="usa-text text-pre-line">{{node.content}}</p>
+                <p class="usa-text font-mono-sm text-pre-line">{{node.content}}</p>
             {% endif %}
         {% endfor %}
     </div>
@@ -31,7 +87,7 @@
     {% if epilogue %}
         <div class="afd-epilogue">
             {% for node in epilogue %}
-                <p class="usa-text text-pre-line">
+                <p class="usa-text font-mono-sm text-pre-line">
                     {{node.content}}
                 </p>
             {% endfor %}

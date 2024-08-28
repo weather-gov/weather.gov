@@ -17,40 +17,47 @@
         </div>
     </header>
 
-    <wx-afd-selector class="grid-container" {% if wfo is not null %}wfo="{{wfo}}"{% endif %}>
-        <form id="afd-selection-form" name="afd-selection-form" method="GET" action="/afd">
-            <label for="wfo-selector">Forecast office: </label>
-            <select id="wfo-selector" name="wfo">
-                {% for office in wfo_list %}
-                    <option value="{{office.code}}"{% if office.code == wfo %} selected{% endif %}>
-                        {{office.name}} ({{office.code}})
-                    </option>
-                {% endfor %}
-            </select>
+    <div class="bg-primary-dark width-full">
+        <div class="grid-container">
+            <h1 class="text-white font-heading-xl text-normal tablet:flex-1 margin-y-1">
+                {{  "Area Forecast Discussion" | t }}
+            </h1>
+        </div>
+    </div>
+    <wx-afd-selector {% if wfo is not null %}wfo="{{wfo}}"{% endif %} class="grid-container width-full">
+        <div class="grid-row grid-gap">
+            <div class="grid-col-12 desktop:grid-col-4 desktop:margin-top-205">
 
-            <br/>
+                <form id="afd-selection-form" name="afd-selection-form" class="bg-primary-lightest padding-x-2 padding-y-3 border-bottom-2px border-primary desktop__wx-position-sticky margin-x-neg-2" method="GET" action="/afd">
+                    <label for="wfo-selector" class="usa-label margin-top-0">
+                        Forecast office:
+                    </label>
+                    <select id="wfo-selector" name="wfo" class="usa-select maxw-none tablet:maxw-mobile-lg">
+                        {% for office in wfo_list %}
+                            <option value="{{office.code}}"{% if office.code == wfo %} selected{% endif %}>
+                                {{office.name}} ({{office.code}})
+                            </option>
+                        {% endfor %}
+                    </select>
 
-            {% if version_list | length > 0 %}
-                <label for="version-selector">Versions for {{wfo | upper}}: </label>
-                <select id="version-selector" name="id">
-                    {% include "@new_weather_theme/partials/afd-versions-select.html.twig" %}
-                </select>
-            {% endif %}
+                    {% if version_list | length > 0 %}
+                        <label for="version-selector" class="usa-label">Versions for {{wfo | upper}}: </label>
+                        <select id="version-selector" name="id" class="usa-select maxw-none tablet:maxw-mobile-lg">
+                            {% include "@new_weather_theme/partials/afd-versions-select.html.twig" %}
+                        </select>
+                    {% endif %}
+                    <input type="hidden" name="current-id" value="{{afd.id}}"/>
+                    <button class="usa-button margin-top-3" type="submit">Update selection</button>
 
-            <br />
-            <input type="hidden" name="current-id" value="{{afd.id}}"/>
-            <button type="submit">Update selection</button>
-        </form>
+                </form>
+            </div>
 
-        <h1>Area Forecast Discussion (AFD)</h1>
-        {% if wfo is not null %}
-            <h2>Issued by {{wfo | upper}} at {{afd.issuanceTime}}</h2>
-        {% else %}
-            <h2>No WFO available!</h2>
-        {% endif %}
-        {%  if afd is not null %}
-            {% include '@new_weather_theme/partials/afd.html.twig' %}
-        {% endif %}
+            <div class="afd-content-section grid-col-12 desktop:grid-col-8">
+                {%  if afd is not null %}
+                    {% include '@new_weather_theme/partials/afd.html.twig' %}
+                {% endif %}
+            </div>
+        </div>
     </wx-afd-selector>
 </div>
 

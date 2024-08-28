@@ -22,5 +22,5 @@ settings:
 visibility:
   request_path:
     id: request_path
-    negate: false
-    pages: '<front>'
+    negate: true
+    pages: "/afd\r\n/afd/*\r\n/afd/*/*"
