@@ -347,8 +347,8 @@ class AFDParser
                 "code" => $preambleCode,
                 "text" => $preambleText,
             ],
-            "body" => $body,
-            "epilogue" => $epilogueNodes,
+            "body" => array_values($body),
+            "epilogue" => array_values($epilogueNodes),
         ];
     }
 
