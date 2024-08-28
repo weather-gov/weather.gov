@@ -392,7 +392,8 @@ final class AFDParserTest extends TestCase
                     [
                         "type" => "preambleText",
                         "content" =>
-                            "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024",
+                            "Area Forecast Discussion\nNational Weather Service " .
+                            "New York NY\n1043 AM EDT Wed Aug 7 2024",
                     ],
                 ],
             ],
