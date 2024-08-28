@@ -33,7 +33,7 @@
     "cypress": "^13.13.3",
     "cypress-axe": "^1.5.0",
     "cypress-plugin-tab": "^1.0.5",
-    "dayjs": "^1.11.12",
+    "dayjs": "^1.11.13",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",
