@@ -3,15 +3,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.wfo_pdf_uploads.field_wfo_sitrep
-    - node.type.wfo_pdf_uploads
+    - field.field.node.wfo_pdf_upload.field_wfo_sitrep
+    - node.type.wfo_pdf_upload
   module:
     - content_moderation
     - file
     - path
-id: node.wfo_pdf_uploads.default
+id: node.wfo_pdf_upload.default
 targetEntityType: node
-bundle: wfo_pdf_uploads
+bundle: wfo_pdf_upload
 mode: default
 content:
   created:

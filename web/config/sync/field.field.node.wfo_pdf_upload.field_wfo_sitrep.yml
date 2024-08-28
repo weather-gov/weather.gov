@@ -4,13 +4,13 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_wfo_sitrep
-    - node.type.wfo_pdf_uploads
+    - node.type.wfo_pdf_upload
   module:
     - file
-id: node.wfo_pdf_uploads.field_wfo_sitrep
+id: node.wfo_pdf_upload.field_wfo_sitrep
 field_name: field_wfo_sitrep
 entity_type: node
-bundle: wfo_pdf_uploads
+bundle: wfo_pdf_upload
 label: 'WFO SITREP'
 description: ''
 required: true

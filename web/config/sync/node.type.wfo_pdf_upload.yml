@@ -27,7 +27,7 @@ third_party_settings:
     unique: 0
     unique_text: ''
 name: 'WFO PDF upload'
-type: wfo_pdf_uploads
+type: wfo_pdf_upload
 description: 'PDFs that are produced by a WFO, using the DSS Builder (Google Slides) and applicable to any location within their WCA.'
 help: null
 new_revision: false

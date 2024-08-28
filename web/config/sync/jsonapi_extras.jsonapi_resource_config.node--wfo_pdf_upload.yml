@@ -3,16 +3,16 @@ langcode: en
 status: true
 dependencies:
   config:
-    - node.type.wfo_pdf_uploads
+    - node.type.wfo_pdf_upload
   module:
     - jsonapi_defaults
 third_party_settings:
   jsonapi_defaults:
     page_limit: 50
-id: node--wfo_pdf_uploads
+id: node--wfo_pdf_upload
 disabled: false
-path: node/wfo_pdf_uploads
-resourceType: node--wfo_pdf_uploads
+path: node/wfo_pdf_upload
+resourceType: node--wfo_pdf_upload
 resourceFields:
   nid:
     disabled: true

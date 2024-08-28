@@ -3,11 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - node.type.wfo_pdf_uploads
-id: node.wfo_pdf_uploads.promote
+    - node.type.wfo_pdf_upload
+id: node.wfo_pdf_upload.promote
 field_name: promote
 entity_type: node
-bundle: wfo_pdf_uploads
+bundle: wfo_pdf_upload
 label: 'Promoted to front page'
 description: ''
 required: false

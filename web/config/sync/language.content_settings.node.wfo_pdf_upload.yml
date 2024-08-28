@@ -3,9 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
-    - node.type.wfo_pdf_uploads
-id: node.wfo_pdf_uploads
+    - node.type.wfo_pdf_upload
+id: node.wfo_pdf_upload
 target_entity_type_id: node
-target_bundle: wfo_pdf_uploads
+target_bundle: wfo_pdf_upload
 default_langcode: zxx
 language_alterable: false

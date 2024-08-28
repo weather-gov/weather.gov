@@ -6,4 +6,4 @@ save: false
 chunk: 50
 dependencies:
   config:
-    - node.type.wfo_pdf_uploads
+    - node.type.wfo_pdf_upload

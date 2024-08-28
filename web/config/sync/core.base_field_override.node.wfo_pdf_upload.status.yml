@@ -3,11 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - node.type.wfo_pdf_uploads
-id: node.wfo_pdf_uploads.status
+    - node.type.wfo_pdf_upload
+id: node.wfo_pdf_upload.status
 field_name: status
 entity_type: node
-bundle: wfo_pdf_uploads
+bundle: wfo_pdf_upload
 label: Published
 description: ''
 required: false

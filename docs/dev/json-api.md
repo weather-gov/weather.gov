@@ -35,7 +35,7 @@ First, we upload the PDF itself to the `wfo_pdf_upload/field_wfo_sitrep` field (
       -H 'Content-Type: application/octet-stream' \
       -H 'Content-Disposition: file; filename="test.pdf"' \
       -d @test.pdf \
-      http://localhost:8080/jsonapi/node/wfo_pdf_uploads/field_wfo_sitrep
+      http://localhost:8080/jsonapi/node/wfo_pdf_upload/field_wfo_sitrep
 
 The response should be a 201 with JSON information about the newly uploaded file attributes. We want the `id` of the newly uploaded file for the next step. (You can use `jq` and add a pipe: `| jq "data.id"` above to more easily retrieve the resulting `id`.)
 
@@ -48,7 +48,7 @@ Second, we create the `wfo_pdf_upload` entity itself and link the PDF `id`:
       -H 'Accept: application/vnd.api+json' \
       -H 'Content-Type: application/vnd.api+json' \
       -d '{"data": {
-            "type": "node--wfo_pdf_uploads",
+            "type": "node--wfo_pdf_upload",
             "attributes": {
               "title": "test.pdf"
             },
@@ -62,6 +62,6 @@ Second, we create the `wfo_pdf_upload` entity itself and link the PDF `id`:
             }
           }
         }' \
-     http://localhost:8080/jsonapi/node/wfo_pdf_uploads
+     http://localhost:8080/jsonapi/node/wfo_pdf_upload
 
 The response should also be a 201 with JSON information about the newly created `wfo_pdf_upload` entity.
