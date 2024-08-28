@@ -82,9 +82,6 @@ services:
       # Map in our test coverage directory so we can have those pretty outputs.
       - ./.coverage:/coverage
 
-      # Map specific apache2 conf settings (optional)
-      # - ./.bp-config/httpd/user-provided/httpd-block-api-get-requests.conf:/etc/apache2/conf-enabled/httpd-block-api-get-requests.conf
-
   plantuml:
     build:
       context: ./
