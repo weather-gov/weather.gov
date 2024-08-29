@@ -30,10 +30,11 @@ localize-timestamps:
       attributes:
         async: true
 
-location-combo-box:
-  version: 2024-06-03
+combo-box-location:
+  version: 2024-08-28
   js:
     assets/js/components/combo-box.js: { preprocess: false }
+    assets/js/components/combo-box-location.js: { preprocess: false }
         
 tabbed-nav:
   version: 2024-06-21
