@@ -19,7 +19,7 @@ We have configured JSON:API to only display `wfo_pdf_upload`s and `file`s. (The 
 
 We have also configured a new user type, `uploader`, which has no permissions except to create new `wfo_pdf_upload`s.
 
-Because JSON:API follows Drupal entity permissions, JSON:API also respects the user permissions for that entity type. This permission system is not sufficient in and of itself (for example, `anonymous` users could browse the JSON API, including viewing `file`s and `wfo_pdf_upload`s, because `anonymous` users can `view published content`.). So, to further restrict access, we have added a `JsonApiLimitingRouteSubscriber` that mandates `uploader` permissions for the API. All other users will get a `403` response.
+Because JSON:API follows Drupal entity permissions, JSON:API also respects the user permissions for that entity type. This permission system is not sufficient in and of itself (for example, `anonymous` users could browse the JSON API, including viewing `file`s and `wfo_pdf_upload`s, because `anonymous` users can `view published content`.). So, to further restrict access, we have added a `JsonApiLimitingRouteSubscriber` that mandates an `uploader` role for the API. All other users will get a `403` response.
 
 # Example
 
