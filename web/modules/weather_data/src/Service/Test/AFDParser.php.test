@@ -325,6 +325,45 @@ final class AFDParserTest extends TestCase
     /**
      * @group unit
      * @group afd-parser
+     * @group unit2
+     */
+    public function testPOPsTableWithLeadingNewline(): void
+    {
+        $raw = "Place A   1 2 3 4 / 5 6 7 8
+                Place B   0 9  8 7 / 6   5 4  3";
+        // Remove leading spaces on test data.
+        $raw = preg_replace("/^\s*/m", "", $raw);
+        // Put in a leading newline.
+        $raw = "\n$raw";
+
+        $expected = [
+            [
+                "type" => "temps-table",
+                "rows" => [
+                    [
+                        "type" => "temps-table-row",
+                        "numbers" => ["1", "2", "3", "4", "5", "6", "7", "8"],
+                        "name" => "Place A",
+                    ],
+                    [
+                        "type" => "temps-table-row",
+                        "numbers" => ["0", "9", "8", "7", "6", "5", "4", "3"],
+                        "name" => "Place B",
+                    ],
+                ],
+            ],
+        ];
+
+        $parser = new AFDParser($raw);
+        $actual = [];
+        $parser->parseTempsTableContent($raw, $actual);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group afd-parser
      */
     public function testGetStructureForTwig(): void
     {
