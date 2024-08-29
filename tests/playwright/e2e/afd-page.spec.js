@@ -99,6 +99,19 @@ describe("AFD Page Tests", () => {
       await page.goto("http://localhost:8080/afd/OKX");
     });
 
+    describe("WFO selector correctly populates based on path", () => {
+      test("with uppercase WFO code", async ({ page }) => {
+        const selected = page.locator("wx-afd-selector #wfo-selector");
+        await expect(selected).toHaveValue("OKX");
+      });
+
+      test("with lowercase WFO code", async ({ page }) => {
+        await page.goto("http://localhost:8080/afd/okx");
+        const selected = page.locator("wx-afd-selector #wfo-selector");
+        await expect(selected).toHaveValue("OKX");
+      });
+    });
+
     test("Selecting third version and clicking button will load that version", async ({page}) => {
       const thirdId = OKX_REFERENCES["@graph"][2].id;
       const versionSelect = await page.locator('select#version-selector');
