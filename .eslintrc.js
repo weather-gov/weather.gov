@@ -51,7 +51,7 @@ module.exports = {
 
         // For imports in Node, file extensions are optional and discouraged as
         // a matter of practice.
-        "import/extensions": { js: "always", json: "always" },
+        "import/extensions": ["error", "always"],
       },
       env: { mocha: true },
     },
