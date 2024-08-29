@@ -2,7 +2,7 @@ const { test, expect } = require("@playwright/test");
 
 const { describe, beforeEach } = test;
 
-const API_ENDPOINT = "http://localhost:8080/jsonapi"
+const API_ENDPOINT = "http://localhost:9080/jsonapi"
 
 describe("API tests", () => {
   test("users without credentials cannot get an API listing", async ({request}) => {
