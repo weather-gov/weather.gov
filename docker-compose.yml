@@ -1,5 +1,5 @@
 services:
-  database:
+  database: &database
     # 8.0.35 in prod
     image: mysql:8.0
     networks:
@@ -11,6 +11,13 @@ services:
       MYSQL_ROOT_PASSWORD: drupal
     ports:
       - 3306:3306
+
+  database-test:
+    profiles:
+      - test-only
+    <<: *database
+    ports:
+      - 3307:3307
 
   api-proxy:
     build:
@@ -26,7 +33,7 @@ services:
       - ./tests/api:/app
       - /app/node_modules
 
-  drupal:
+  drupal: &drupal
     build:
       context: ./
       dockerfile: Dockerfile.dev
@@ -81,6 +88,24 @@ services:
 
       # Map in our test coverage directory so we can have those pretty outputs.
       - ./.coverage:/coverage
+
+  drupal-test:
+    profiles:
+      - test-only
+    <<: *drupal
+    ports:
+      - 8082:80
+    links:
+      - database-test
+      - api-proxy
+    environment:
+      API_URL: http://api-proxy:8081
+      DRUPAL_DB_NAME: weathergov-test
+      DRUPAL_DB_USERNAME: drupal
+      DRUPAL_DB_PASSWORD: drupal
+      DRUPAL_DB_HOST: database-test
+      DRUPAL_DB_PORT: 3307
+      WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
 
   plantuml:
     build:

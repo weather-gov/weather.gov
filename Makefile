@@ -132,6 +132,10 @@ u: unit-test
 unit-test: ## Run PHP unit tests
 	docker compose exec drupal phpunit --group unit
 
+ot: outside-test
+outside-test: ## Run a separate weather.gov instance for testing
+	docker compose --profile test-only up
+
 ### Linting
 js-lint: ## Run eslint on our Javascript
 	npm run js-lint
