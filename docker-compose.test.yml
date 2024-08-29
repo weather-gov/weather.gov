@@ -4,6 +4,8 @@ services:
     profiles: ["noop"]
   drupal:
     profiles: ["noop"]
+  api-proxy:
+    profiles: ["noop"]
 
   # overrides
   spatial:

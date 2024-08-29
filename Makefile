@@ -149,9 +149,12 @@ u: unit-test
 unit-test: ## Run PHP unit tests
 	docker compose exec drupal phpunit --group unit
 
-start-test-environment:
-	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test-only down
+start-test-environment: destroy-test-environment
 	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test-only up -d
+
+destroy-test-environment:
+	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test-only down
+
 ot: outside-test
 outside-test: start-test-environment pause install-site-test load-spatial ## Run a separate weather.gov instance for testing
 	echo "setup"

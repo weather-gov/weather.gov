@@ -15,8 +15,10 @@ services:
   database-test:
     profiles: ["test-only"]
     <<: *database
+    ports:
+      - 4306:3306
 
-  api-proxy:
+  api-proxy: &api-proxy
     build:
       context: ./tests/api
       dockerfile: Dockerfile
@@ -29,6 +31,12 @@ services:
     volumes:
       - ./tests/api:/app
       - /app/node_modules
+
+  api-proxy-test:
+    profiles: ["test-only"]
+    <<: *api-proxy
+    ports:
+      - 9081:8081
 
   drupal: &drupal
     build:
@@ -90,12 +98,12 @@ services:
     profiles: ["test-only"]
     <<: *drupal
     ports:
-      - 8082:80
+      - 9080:80
     links:
       - database-test
-      - api-proxy
+      - api-proxy-test
     environment:
-      API_URL: http://api-proxy:8081
+      API_URL: http://api-proxy-test:9081
       DRUPAL_DB_NAME: weathergov
       DRUPAL_DB_USERNAME: drupal
       DRUPAL_DB_PASSWORD: drupal
