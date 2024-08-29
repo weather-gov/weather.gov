@@ -1,4 +1,4 @@
-.PHONY: help clear-cache export-config import-config install-site
+.PHONY: help clear-cache export-config import-config install-site install-site-test
 
 help:
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -45,10 +45,21 @@ import-config: ## Import the Drupal configuration from the config directory into
 	docker compose exec drupal drush twig:debug on
 	docker compose exec drupal drush state:set disable_rendered_output_cache_bins 1
 
+import-config-test: ## Import the Drupal configuration from the config directory into your site (test only)
+	docker compose exec drupal-test drush config:import -y
+	docker compose exec drupal-test drush twig:debug on
+	docker compose exec drupal-test drush state:set disable_rendered_output_cache_bins 1
+
 import-content: web/scs-export/* ## Import content from web/scs-export
 	for file in $^; do \
 		file="$${file#*/}"; \
 		docker compose exec drupal drush content:import "$$file"; \
+	done
+
+import-content-test: web/scs-export/* ## Import content from web/scs-export (test-only)
+	for file in $^; do \
+		file="$${file#*/}"; \
+		docker compose exec drupal-test drush content:import "$$file"; \
 	done
 
 install-site: install-site-config import-content ## Install a minimal Drupal site using the configuration in the config directory and exported content
@@ -56,6 +67,12 @@ install-site-config:
 	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
 	docker compose exec drupal drush twig:debug on
 	docker compose exec drupal drush state:set disable_rendered_output_cache_bins 1
+
+install-site-test: install-site-config-test import-content-test ## Install a minimal Drupal site using the configuration in the config directory and exported content (test only)
+install-site-config-test:
+	docker compose exec drupal-test drush site:install minimal --existing-config --account-pass=root -y
+	docker compose exec drupal-test drush twig:debug on
+	docker compose exec drupal-test drush state:set disable_rendered_output_cache_bins 1
 
 log: ## Tail the log for the Drupal container
 	docker compose logs --follow drupal
@@ -132,9 +149,12 @@ u: unit-test
 unit-test: ## Run PHP unit tests
 	docker compose exec drupal phpunit --group unit
 
+start-test-environment:
+	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test-only down
+	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test-only up -d
 ot: outside-test
-outside-test: ## Run a separate weather.gov instance for testing
-	docker compose --profile test-only up
+outside-test: start-test-environment pause install-site-test load-spatial ## Run a separate weather.gov instance for testing
+	echo "setup"
 
 ### Linting
 js-lint: ## Run eslint on our Javascript

@@ -13,11 +13,8 @@ services:
       - 3306:3306
 
   database-test:
-    profiles:
-      - test-only
+    profiles: ["test-only"]
     <<: *database
-    ports:
-      - 3307:3307
 
   api-proxy:
     build:
@@ -90,8 +87,7 @@ services:
       - ./.coverage:/coverage
 
   drupal-test:
-    profiles:
-      - test-only
+    profiles: ["test-only"]
     <<: *drupal
     ports:
       - 8082:80
@@ -100,11 +96,11 @@ services:
       - api-proxy
     environment:
       API_URL: http://api-proxy:8081
-      DRUPAL_DB_NAME: weathergov-test
+      DRUPAL_DB_NAME: weathergov
       DRUPAL_DB_USERNAME: drupal
       DRUPAL_DB_PASSWORD: drupal
       DRUPAL_DB_HOST: database-test
-      DRUPAL_DB_PORT: 3307
+      DRUPAL_DB_PORT: 3306
       WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
 
   plantuml:
