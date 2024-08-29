@@ -3,7 +3,3 @@ services:
     class: Drupal\weather_login\RouteSubscriber\UserLoginRouteSubscriber
     tags:
       - { name: event_subscriber }
-  weather_login.route_subscriber:
-    class: Drupal\weather_login\Routing\JsonApiLimitingRouteSubscriber
-    tags:
-      - { name: event_subscriber }

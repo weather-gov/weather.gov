@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\weather_login\Routing;
+namespace Drupal\weather_cms\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
