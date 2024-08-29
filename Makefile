@@ -157,7 +157,9 @@ destroy-test-environment:
 
 ot: outside-test
 outside-test: start-test-environment pause install-site-test load-spatial ## Run a separate weather.gov instance for testing
-	echo "setup"
+	docker compose exec drupal-test drush user:create uploader --mail='testuser@noaa.com' --password='testpass'
+	docker compose exec drupal-test drush user:role:add 'uploader' uploader
+	npx playwright test outside/*
 
 ### Linting
 js-lint: ## Run eslint on our Javascript
