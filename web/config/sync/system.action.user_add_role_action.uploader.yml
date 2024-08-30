@@ -1,0 +1,14 @@
+uuid: ec2ebe67-3920-4e11-8361-f36881e080ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.uploader
+  module:
+    - user
+id: user_add_role_action.uploader
+label: 'Add the uploader role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: uploader

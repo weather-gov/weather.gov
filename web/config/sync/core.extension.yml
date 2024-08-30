@@ -5,6 +5,7 @@ module:
   address: 0
   auto_entitylabel: 0
   automated_cron: 0
+  basic_auth: 0
   big_pipe: 0
   block: 0
   block_content: 0
@@ -25,6 +26,9 @@ module:
   help: 0
   image: 0
   js_cookie: 0
+  jsonapi: 0
+  jsonapi_defaults: 0
+  jsonapi_extras: 0
   language: 0
   layout_builder: 0
   layout_discovery: 0
@@ -44,6 +48,7 @@ module:
   path_alias: 0
   phone_number: 0
   scheduler: 0
+  serialization: 0
   single_content_sync: 0
   system: 0
   taxonomy: 0

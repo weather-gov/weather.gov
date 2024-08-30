@@ -150,3 +150,9 @@ We use this module to get a specific phone number field type, along with validat
 _Added July 2024_
   
 This module gives us a physical address field type, along with configuration options and validation. Used initially for WFO Information.
+
+### [`jsonapi_extras`](https://www.drupal.org/project/jsonapi_extras)
+
+_Added August 2024_
+
+We use this module to disable resource access by default, via the API endpoint. We also use this module to disable certain fields within permitted Drupal content types for the API endpoint. Please see [./json-api.md](the JSON:API documentation) for more information.
