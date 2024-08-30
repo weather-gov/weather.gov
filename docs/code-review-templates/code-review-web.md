@@ -12,22 +12,25 @@ This is an automated comment on every pull request requiring a review. A checked
 ## Documentation
 - [ ] changes to “how we do things” are documented in READMEs
 - [ ] all new functions and methods are commented using plain language
-- [ ] any new modules added documented in contributed-modules.md
+- [ ] any new Drupal modules are documented in `contributed-modules.md`
 
 ## Security
-- [ ] security false positives are documented
 - [ ] data from external sources is cleaned and clearly marked
+- [ ] a change in permissions or workflow is audited
+- [ ] a change in a library or Drupal module is vetted
+- [ ] security false positives, if any, are documented
 
 ## Reliability
 - [ ] error handling exists for unusual or missing values
 - [ ] interactions with external systems are wrapped in try/except
 - [ ] functionality is tested with unit or integration tests
-- [ ] dependency updates in composer.json also got changed in composer-lock.json
+- [ ] dependency updates in composer.json also got changed in `composer-lock.json`
 
 ## Infrastructure
 - [ ] all changes are auditable and documented via a script
 - [ ] it is clear who can and should run the script
 - [ ] (if applicable) diagrams have been updated or added in PlantUML
+- [ ] (if applicable) relevant SSPP controls are updated or have tickets to be updated
 
 ## Accessibility
 - [ ] New pages have been added to cypress-axe file so that they will be tested with our automated accessibility testing
