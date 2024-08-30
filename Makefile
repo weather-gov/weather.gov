@@ -124,6 +124,9 @@ build-sprites: # Build sprites
 load-spatial: # Load spatial data into the database
 	docker compose run --rm spatial node load-shapefiles.js
 
+load-spatial-test: # Load spatial data into the database
+	docker compose run --rm spatial-test node load-shapefiles.js
+
 ### Testing
 a11y: accessibility-test
 accessibility-test: ## Run accessibility tests (alias a11y)
@@ -150,15 +153,14 @@ unit-test: ## Run PHP unit tests
 	docker compose exec drupal phpunit --group unit
 
 start-test-environment: destroy-test-environment
-	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test up -d
+	docker compose --profile test up -d
 
 destroy-test-environment:
-	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test down
+	docker compose --profile test down
 
 ot: outside-test
-outside-test: start-test-environment pause install-site-test load-spatial ## Run a separate weather.gov instance for testing
-	docker compose exec drupal-test drush user:create uploader --mail='testuser@noaa.com' --password='testpass'
-	docker compose exec drupal-test drush user:role:add 'uploader' uploader
+outside-test: start-test-environment pause install-site-test load-spatial-test ## Run a separate weather.gov instance for testing
+	./tests/playwright/outside/setup.sh
 	npx playwright test outside/*
 
 ### Linting
