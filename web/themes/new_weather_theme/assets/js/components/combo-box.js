@@ -574,9 +574,6 @@ class ComboBox extends HTMLElement {
     // Hide list and trigger change event
     this.hideList();
     this.dispatchEvent(new Event("change", { bubbles: true }));
-
-    // Always submit to the parent form
-    this.submit();
   }
 
   filterItems(itemList, query) {

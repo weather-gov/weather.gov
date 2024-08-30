@@ -64,11 +64,7 @@ class LocationComboBox extends ComboBox {
     this.inputDelay = 250;
 
     // Bound component methods
-    this.handleInput = this.handleInput.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
-    this.submit = this.submit.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-
     this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
     this.getGeodataForKey = this.getGeodataForKey.bind(this);
     this.updateAriaLive = this.updateAriaLive.bind(this);
@@ -114,6 +110,13 @@ class LocationComboBox extends ComboBox {
 
   handleFocus() {
     this.updateSearch("");
+  }
+
+  chooseOption(event) {
+    ComboBox.prototype.chooseOption.call(this, event);
+
+    // Always submit to the parent form
+    this.submit();
   }
 
   async getSearchResults(text) {
