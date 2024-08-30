@@ -64,12 +64,12 @@ const comboTemplate = `
  * We call this new type of focus pseudo-focus
  */
 
-let count = 0;
-
 class ComboBox extends HTMLElement {
+  static count = 0;
+
   constructor() {
     super();
-    count += 1;
+    ComboBox.count += 1;
 
     this.template = document.createElement("template");
     this.template.innerHTML = comboTemplate;
@@ -112,7 +112,7 @@ class ComboBox extends HTMLElement {
 
     // If we have not provided an id, set a default value
     if (!this.id) {
-      this.id = `combo-box-${count}`;
+      this.id = `combo-box-${ComboBox.count}`;
     }
 
     // Initial live dom elements, if not already present

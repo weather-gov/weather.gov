@@ -1,15 +1,20 @@
 /* eslint no-unused-expressions: off */
 require("jsdom-global")(undefined, { url: "http://localhost/" });
 require("../../assets/js/components/combo-box.js");
+
+global.ComboBox = window.customElements.get("wx-combo-box");
+
+require("../../assets/js/components/combo-box-location.js");
 require("whatwg-fetch");
-//const { assert, expect, should } = require("chai");
-let assert, expect, should;
-import("chai").then((module) => {
+
+let assert;
+let expect;
+
+const chaiPromise = import("chai").then((module) => {
   assert = module.assert;
   expect = module.expect;
-  should = module.should;
 });
-const { createSandbox, stub, spy, mock } = require("sinon");
+const { createSandbox, stub } = require("sinon");
 
 global.HTMLElement = window.HTMLElement;
 
@@ -19,7 +24,7 @@ HTMLElement.prototype.scrollIntoView = stub();
 HTMLFormElement.prototype.submit = stub();
 
 const wait = async (milliseconds) => {
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, milliseconds);
@@ -170,7 +175,7 @@ const SEARCH_RESULT_ITEMS = {
     },
 };
 
-global.fetch = mockFetch = (url) => {
+global.fetch = async (url) => {
   const parsedUrl = new URL(url);
   if (parsedUrl.pathname.includes("suggest")) {
     return window.Promise.resolve(
@@ -179,42 +184,38 @@ global.fetch = mockFetch = (url) => {
         headers: { "Content-Type": "application/json" },
       }),
     );
-  } else {
-    const key = parsedUrl.searchParams.get("magicKey");
-    const data = SEARCH_RESULT_ITEMS[key];
-    return Promise.resolve(
-      new Response(JSON.stringify(data), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }),
-    );
   }
+
+  const key = parsedUrl.searchParams.get("magicKey");
+  const data = SEARCH_RESULT_ITEMS[key];
+
+  return new Response(JSON.stringify(data), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 };
 
 describe("Combo box unit tests", () => {
   before((done) => {
-    import("../../assets/js/components/combo-box.js").then(() => {
-      const box = window.document.createElement("wx-combo-box");
-      window.document.body.append(box);
+    chaiPromise.then(() => {
       done();
     });
   });
+
   beforeEach(() => {
     window.document.body.innerHTML = "";
-    const box = document.querySelector("wx-combo-box");
-    if (!box) {
-      document.body.append(document.createElement("wx-combo-box"));
-    }
+    const box = window.document.createElement("wx-combo-box-location");
+    window.document.body.append(box);
   });
 
   it("Has the element", () => {
-    assert.exists(window.document.querySelector("wx-combo-box"));
-    assert.exists(window.customElements.get("wx-combo-box"));
+    assert.exists(window.document.querySelector("wx-combo-box-location"));
+    assert.exists(window.customElements.get("wx-combo-box-location"));
   });
 
   it("Element has the correct auto-generated id", () => {
-    const component = document.querySelector("wx-combo-box");
-    const expected = "combo-box-1";
+    const component = document.querySelector("wx-combo-box-location");
+    const expected = "combo-box-2";
     const actual = component.id;
 
     expect(expected).to.equal(actual);
@@ -222,14 +223,15 @@ describe("Combo box unit tests", () => {
 
   describe("Input initialization", () => {
     it("Adds an input element automatically", () => {
-      expect(document.querySelector("wx-combo-box > input")).to.exist;
+      expect(document.querySelector("wx-combo-box-location > input")).to.exist;
     });
+
     it("Adds the correct aria-related attributes to the input", () => {
-      const input = document.querySelector("wx-combo-box > input");
+      const input = document.querySelector("wx-combo-box-location > input");
       const attrs = [
         ["role", "combobox"],
-        ["aria-owns", "combo-box-1--list"],
-        ["aria-controls", "combo-box-1--list"],
+        ["aria-owns", "combo-box-4--list"],
+        ["aria-controls", "combo-box-4--list"],
         ["aria-autocomplete", "none"],
         ["aria-activedescendant", ""],
         ["autocomplete", "off"],
@@ -248,18 +250,18 @@ describe("Combo box unit tests", () => {
 
   describe("listbox initialization", () => {
     it("Adds a listbox list wrapper automatically", () => {
-      expect(document.querySelector("wx-combo-box > div")).to.exist;
+      expect(document.querySelector("wx-combo-box-location > div")).to.exist;
     });
 
     it("Adds the expected id automatically", () => {
-      const expected = "combo-box-1--list";
-      const actual = document.querySelector("wx-combo-box div").id;
+      const expected = "combo-box-6--list";
+      const actual = document.querySelector("wx-combo-box-location div").id;
 
       expect(actual).to.equal(expected);
     });
 
     it("Adds the correct aria-related attributes", () => {
-      const listbox = document.querySelector("wx-combo-box > div");
+      const listbox = document.querySelector("wx-combo-box-location > div");
       const attrs = [["role", "listbox"]];
 
       attrs.forEach((pair) => {
@@ -277,9 +279,9 @@ describe("Combo box unit tests", () => {
     beforeEach(() => {
       sandbox = createSandbox();
       window.document.body.innerHTML = "";
-      const box = document.createElement("wx-combo-box");
+      const box = document.createElement("wx-combo-box-location");
       document.body.append(box);
-      assert.exists(window.customElements.get("wx-combo-box"));
+      assert.exists(window.customElements.get("wx-combo-box-location"));
     });
 
     afterEach(() => {
@@ -288,7 +290,7 @@ describe("Combo box unit tests", () => {
 
     it("Expects the component's updateSearch method to have been called on input", async () => {
       const event = new Event("input", { bubbles: true });
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       const input = component.querySelector("input");
       input.focus();
       input.value = "Arlin";
@@ -301,7 +303,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Expects showList to have been called when updateSearch completes", async () => {
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       sandbox.spy(component, "showList");
       await component.updateSearch("Arlin");
 
@@ -309,7 +311,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Expects showList / hideList to toggle aria-expanded (input) and expanded (element)", async () => {
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       component.showList();
       expect(component.getAttribute("expanded")).to.equal("true");
       expect(component.input.getAttribute("aria-expanded")).to.equal("true");
@@ -324,9 +326,9 @@ describe("Combo box unit tests", () => {
     beforeEach(async () => {
       sandbox = createSandbox();
       window.document.body.innerHTML = "";
-      const box = document.createElement("wx-combo-box");
+      const box = document.createElement("wx-combo-box-location");
       document.body.append(box);
-      assert.exists(window.customElements.get("wx-combo-box"));
+      assert.exists(window.customElements.get("wx-combo-box-location"));
       await box.updateSearch("Arlin");
     });
 
@@ -335,7 +337,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Selects the first element in the dropdown automatically", () => {
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       const listbox = component.querySelector("ul");
       const firstItem = listbox.querySelector("li:first-child");
       const actual = firstItem.getAttribute("aria-selected");
@@ -348,7 +350,7 @@ describe("Combo box unit tests", () => {
         key: "ArrowDown",
         bubbles: true,
       });
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       const listbox = component.querySelector("ul");
       const input = component.querySelector("input[slot='input']");
       input.focus();
@@ -368,8 +370,7 @@ describe("Combo box unit tests", () => {
         key: "ArrowUp",
         bubbles: true,
       });
-      const component = document.querySelector("wx-combo-box");
-      const listbox = component.querySelector("ul");
+      const component = document.querySelector("wx-combo-box-location");
       const input = component.querySelector("input[slot='input']");
       input.focus();
 
@@ -383,7 +384,7 @@ describe("Combo box unit tests", () => {
         key: "ArrowDown",
         bubbles: true,
       });
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       const listbox = component.querySelector("ul");
       const input = component.querySelector("input[slot='input']");
       listbox
@@ -399,7 +400,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Hides the result list if the input loses focus", () => {
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       expect(component.isShowingList).to.be.true;
 
       const event = new window.FocusEvent("blur", { bubbles: true });
@@ -414,9 +415,9 @@ describe("Combo box unit tests", () => {
     beforeEach(async () => {
       sandbox = createSandbox();
       window.document.body.innerHTML = "";
-      const box = document.createElement("wx-combo-box");
+      const box = document.createElement("wx-combo-box-location");
       document.body.append(box);
-      assert.exists(window.customElements.get("wx-combo-box"));
+      assert.exists(window.customElements.get("wx-combo-box-location"));
       await box.updateSearch("Arlin");
     });
 
@@ -425,7 +426,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("When pushing Enter when the second item is selected _and_ submitted", () => {
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       component.showList();
       const secondItem = component.querySelector(
         "div[role='listbox'] > ul > li[role='option']:nth-child(2)",
@@ -447,7 +448,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("When clicking the second item, it is selected and submit is called", () => {
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       const secondItem = component.querySelector(
         "div[role='listbox'] > ul > li:nth-child(2)",
       );
@@ -463,7 +464,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Can get the geodata from a value key", async () => {
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       const secondItem = component.querySelector(
         "div[role='listbox'] > ul > li:nth-child(2)",
       );
@@ -479,7 +480,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Updates the parent form action with the correct value on submit", async () => {
-      const component = document.querySelector("wx-combo-box");
+      const component = document.querySelector("wx-combo-box-location");
       const form = document.createElement("form");
       form.setAttribute("data-location-search", "");
       form.append(component);
@@ -528,7 +529,7 @@ describe("Combo box unit tests", () => {
       global.fetch.resolves(response);
 
       window.document.body.innerHTML = "";
-      box = document.createElement("wx-combo-box");
+      box = document.createElement("wx-combo-box-location");
       document.body.append(form);
       form.append(box);
     });
@@ -539,7 +540,7 @@ describe("Combo box unit tests", () => {
       });
 
       it("when a user chooses a location", () => {
-        const component = document.querySelector("wx-combo-box");
+        const component = document.querySelector("wx-combo-box-location");
         component.input.value = "chosen place";
         component.url = "https://place.com";
         component.submit();
@@ -556,7 +557,7 @@ describe("Combo box unit tests", () => {
 
       it("when a user loads a location page", () => {
         window.document.body.innerHTML = "";
-        const component = document.createElement("wx-combo-box");
+        const component = document.createElement("wx-combo-box-location");
         component.setAttribute("data-place", "Placeville, ST");
         document.body.append(form);
         form.append(component);
@@ -575,7 +576,7 @@ describe("Combo box unit tests", () => {
           .withArgs("wxgov_recent_locations")
           .returns(JSON.stringify(previous));
 
-        const component = document.querySelector("wx-combo-box");
+        const component = document.querySelector("wx-combo-box-location");
         component.input.value = "chosen place";
         component.url = "https://place.com";
         component.submit();
@@ -601,7 +602,7 @@ describe("Combo box unit tests", () => {
           .withArgs("wxgov_recent_locations")
           .returns(JSON.stringify(previous));
 
-        const component = document.querySelector("wx-combo-box");
+        const component = document.querySelector("wx-combo-box-location");
         component.input.value = "chosen place";
         component.url = "https://place.com";
         component.submit();
@@ -622,7 +623,7 @@ describe("Combo box unit tests", () => {
     describe("shows previously-saved results", () => {
       beforeEach(async () => {
         window.document.body.innerHTML = "";
-        box = document.createElement("wx-combo-box");
+        box = document.createElement("wx-combo-box-location");
         document.body.append(box);
 
         response.ok = true;
@@ -634,7 +635,7 @@ describe("Combo box unit tests", () => {
           JSON.stringify([{ text: "saved result", url: "https:/com.place" }]),
         );
 
-        const component = document.querySelector("wx-combo-box");
+        const component = document.querySelector("wx-combo-box-location");
         component.updateSearch("");
         await wait(0);
         const items = component.querySelectorAll(
@@ -657,7 +658,7 @@ describe("Combo box unit tests", () => {
           JSON.stringify([{ text: "saved result", url: "https:/com.place" }]),
         );
 
-        const component = document.querySelector("wx-combo-box");
+        const component = document.querySelector("wx-combo-box-location");
         component.updateSearch("");
         await wait(0);
         const items = component.querySelectorAll(
@@ -684,7 +685,7 @@ describe("Combo box unit tests", () => {
           ]),
         );
 
-        const component = document.querySelector("wx-combo-box");
+        const component = document.querySelector("wx-combo-box-location");
         component.updateSearch("res");
         await wait(0);
         const items = component.querySelectorAll(
@@ -704,7 +705,7 @@ describe("Combo box unit tests", () => {
             JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]),
           );
 
-        const component = document.querySelector("wx-combo-box");
+        const component = document.querySelector("wx-combo-box-location");
         component.saveSearchResult({ url: "new" });
 
         expect(
@@ -728,7 +729,7 @@ describe("Combo box unit tests", () => {
             ]),
           );
 
-        const component = document.querySelector("wx-combo-box");
+        const component = document.querySelector("wx-combo-box-location");
         const results = component.getSavedResults("");
 
         // deep equality, not reference equality

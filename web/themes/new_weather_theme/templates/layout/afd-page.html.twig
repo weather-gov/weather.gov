@@ -42,6 +42,18 @@
                         selected="{{ wfo }}">
                     </wx-combo-box>
 
+                    <wx-combo-box
+                        name="wfo"
+                        items="{{ wfo_list | map(wfo => ({ value: wfo.code, text: wfo.name ~ " (" ~ wfo.code ~ ")", wfo })) | json_encode }}"
+                        selected="{{ wfo }}">
+                    </wx-combo-box>
+
+                    <wx-combo-box
+                        name="wfo"
+                        items="{{ wfo_list | map(wfo => ({ value: wfo.code, text: wfo.name ~ " (" ~ wfo.code ~ ")", wfo })) | json_encode }}"
+                        selected="{{ wfo }}">
+                    </wx-combo-box>
+
                     {% if version_list | length > 0 %}
                         <label for="version-selector" class="usa-label">Versions for {{wfo | upper}}: </label>
                         <select id="version-selector" name="id" class="usa-select maxw-none tablet:maxw-mobile-lg">
