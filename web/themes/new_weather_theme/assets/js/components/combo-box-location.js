@@ -1,4 +1,5 @@
-/* eslint object-shorthand: 0, func-names: 0, no-underscore-dangle: 0 */
+/* global ComboBox */
+
 const searchLocation = async (text) => {
   const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&countryCode=USA%2CPRI%2CVIR%2CGUM%2CASM&category=Land+Features%2CBay%2CChannel%2CCove%2CDam%2CDelta%2CGulf%2CLagoon%2CLake%2COcean%2CReef%2CReservoir%2CSea%2CSound%2CStrait%2CWaterfall%2CWharf%2CAmusement+Park%2CHistorical+Monument%2CLandmark%2CTourist+Attraction%2CZoo%2CCollege%2CBeach%2CCampground%2CGolf+Course%2CHarbor%2CNature+Reserve%2COther+Parks+and+Outdoors%2CPark%2CRacetrack%2CScenic+Overlook%2CSki+Resort%2CSports+Center%2CSports+Field%2CWildlife+Reserve%2CAirport%2CFerry%2CMarina%2CPier%2CPort%2CResort%2CPostal%2CPopulated+Place&maxSuggestions=10&_=1695666335097&text=${text}`;
   return fetch(url, { headers: { "Content-Type": "application/json" } });
@@ -42,14 +43,14 @@ const getLocationGeodata = async (magicKey) => {
  * This can provide the perception of faster interaction.
  */
 const ArcCache = {
-  getItem: function (magicKey) {
+  getItem(magicKey) {
     const found = window.sessionStorage.getItem(magicKey);
     if (found) {
       return JSON.parse(found);
     }
     return null;
   },
-  setItem: function (magicKey, obj) {
+  setItem(magicKey, obj) {
     const serialized = JSON.stringify(obj);
     window.sessionStorage.setItem(magicKey, serialized);
   },
@@ -61,31 +62,16 @@ class LocationComboBox extends ComboBox {
 
     // Private property defaults
     this.inputDelay = 250;
-    this.selectedIndex = -1;
-    this.value = null;
 
     // Bound component methods
     this.handleInput = this.handleInput.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleTextInput = this.handleTextInput.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
-    this.showList = this.showList.bind(this);
-    this.hideList = this.hideList.bind(this);
-    this.toggleList = this.toggleList.bind(this);
-    this.navigateDown = this.navigateDown.bind(this);
-    this.navigateUp = this.navigateUp.bind(this);
-    this.pseudoFocusListItem = this.pseudoFocusListItem.bind(this);
-    this.pseudoBlurItems = this.pseudoBlurItems.bind(this);
-    this.chooseOption = this.chooseOption.bind(this);
     this.submit = this.submit.bind(this);
-    this.clear = this.clear.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
+
     this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
     this.getGeodataForKey = this.getGeodataForKey.bind(this);
     this.updateAriaLive = this.updateAriaLive.bind(this);
-    this.initInput = this.initInput.bind(this);
-    this.initListbox = this.initListbox.bind(this);
-    this.initToggleButton = this.initToggleButton.bind(this);
-    this.initClearButton = this.initClearButton.bind(this);
     this.saveSearchResult = this.saveSearchResult.bind(this);
     this.getSavedResults = this.getSavedResults.bind(this);
     this.getSearchResults = this.getSearchResults.bind(this);
@@ -94,15 +80,9 @@ class LocationComboBox extends ComboBox {
   connectedCallback() {
     ComboBox.prototype.connectedCallback.call(this);
 
-    // Bind event listeners
-    this.addEventListener("input", this.handleInput);
-    this.addEventListener("keydown", this.handleKeyDown);
-    this.addEventListener("change", this.handleTextInput);
-    this.addEventListener("blur", this.hideList);
-    this.input.addEventListener("blur", this.hideList);
-    this.input.addEventListener("focus", () => {
-      this.updateSearch("");
-    });
+    // Bind additional event listeners. We can override the event handler
+    // methods to intercept other events, as needed.
+    this.input.addEventListener("focus", this.handleFocus);
 
     if (this.dataset.place) {
       this.saveSearchResult({
@@ -113,11 +93,8 @@ class LocationComboBox extends ComboBox {
   }
 
   disconnectedCallback() {
-    this.removeEventListener("input", this.handleInput);
-    this.removeEventListener("keydown", this.handleKeyDown);
-    this.removeEventListener("change", this.handleTextInput);
-    this.removeEventListener("blur", this.hideList);
-    this.input.removeEventListener("blur", this.hideList);
+    ComboBox.prototype.disconnectedCallback.call(this);
+    this.input.removeEventListener("focus", this.handleFocus);
   }
 
   /**
@@ -126,10 +103,10 @@ class LocationComboBox extends ComboBox {
    * element, then bubble up.
    */
   handleInput(event) {
-    if (this._timeout) {
-      window.clearTimeout(this._timeout);
+    if (this.inputDebounceTimer) {
+      window.clearTimeout(this.inputDebounceTimer);
     }
-    this._timeout = window.setTimeout(async () => {
+    this.inputDebounceTimer = window.setTimeout(async () => {
       await this.updateSearch(event.target.value).then(() => {
         this.updateAriaLive(
           `Search updated. ${this.querySelectorAll("li").length} results available`,
@@ -138,6 +115,10 @@ class LocationComboBox extends ComboBox {
     }, this.inputDelay);
 
     this.handleTextInput(event);
+  }
+
+  handleFocus() {
+    this.updateSearch("");
   }
 
   async getSearchResults(text) {
@@ -237,261 +218,6 @@ class LocationComboBox extends ComboBox {
     } else {
       this.hideList();
     }
-  }
-
-  /**
-   * Event handler for keydown, mapped
-   * to the keys that we care about
-   */
-  handleKeyDown(event) {
-    let handled = true;
-    if (event.key === "ArrowDown" || event.key === "Down") {
-      this.navigateDown(event.target);
-    } else if (event.key === "ArrowUp" || event.key === "Up") {
-      this.navigateUp(event.target);
-    } else if (event.key === "Escape") {
-      this.hideList();
-    } else if (event.key === "Enter") {
-      this.chooseOption(event);
-    } else {
-      handled = false;
-    }
-
-    if (handled) {
-      event.preventDefault();
-    }
-  }
-
-  /**
-   * Handler for a change event triggered on
-   * this component.
-   * The event will be dispatched when a value
-   * has been _chosen_ (as opposed to 'selected')
-   * and the corresponding `value` property has been
-   * changed.
-   * In this handler, we determine whether or not
-   * to show the clear button.
-   */
-  handleTextInput() {
-    if (this.input.value) {
-      this.clearButton.classList.remove("display-none");
-      this.clearButton.classList.add("display-block");
-    } else {
-      this.clearButton.classList.add("display-none");
-      this.clearButton.classList.remove("display-block");
-    }
-  }
-
-  /**
-   * Shows the unordered list of results to the user.
-   * Visually selects the first item if there are
-   * items in the list
-   */
-  showList() {
-    this.input.setAttribute("aria-expanded", "true");
-    this.setAttribute("expanded", "true");
-    const listIsEmpty = this.querySelector("ul:empty");
-    if (!listIsEmpty) {
-      // We want to give the artificial focus,
-      // which means temporary selection both
-      // in aria and in visual styling,
-      // to the first element in the dropdown
-      const firstListItem = this.querySelector(`ul li[role="option"]`);
-      if (firstListItem) {
-        this.pseudoFocusListItem(firstListItem);
-      }
-
-      this.querySelector("ul li")?.scrollIntoView({
-        block: "nearest",
-        inline: "start",
-      });
-    }
-  }
-
-  /**
-   * Hides the results list from display.
-   * Note that it returns focus to the
-   * combobox input element
-   */
-  hideList() {
-    this.setAttribute("expanded", "false");
-    this.input.setAttribute("aria-expanded", "false");
-    this.input.setAttribute("aria-activedescendant", "");
-  }
-
-  /**
-   * Toggles the display of the list
-   */
-  toggleList() {
-    if (this.isShowingList) {
-      this.hideList();
-    } else {
-      this.showList();
-    }
-  }
-
-  /**
-   * Remove the pseudo-focus from all
-   * items in the listbox
-   */
-  pseudoBlurItems() {
-    Array.from(this.listbox.querySelectorAll(`li[role="option"]`)).forEach(
-      (li) => {
-        li.setAttribute("aria-selected", "false");
-        li.classList.remove("wx-combo-box__list-option--focused");
-        li.classList.remove("wx-combo-box__list-option--selected");
-      },
-    );
-    this.input.setAttribute("aria-activedescendant", "");
-  }
-
-  /**
-   * Handles the case where the user has pressed
-   * the arrow down key in a result list or input.
-   * If the list is not currently open, this action opens it.
-   * Otherwise, it nagivates down to the next item in the list,
-   * giving it focus.
-   */
-  navigateDown() {
-    // If we are not already showing the list,
-    // then we should now show it and focus
-    // on the first item in the list
-    if (!this.isShowingList) {
-      this.showList();
-      return;
-    }
-
-    let nextItem;
-    const currentSelection = this.querySelector('li[aria-selected="true"]');
-    if (!currentSelection) {
-      nextItem = this.querySelector(`li[role="option"]`);
-    } else {
-      const allOptions = Array.from(this.querySelectorAll('li[role="option"]'));
-      const index = allOptions.indexOf(currentSelection);
-
-      if (index >= 0 && index < allOptions.length - 1) {
-        nextItem = allOptions[index + 1];
-      }
-    }
-
-    // Per WCAG guidelines, we can do nothing
-    // if the pseudo-focus is on the last item.
-    if (nextItem) {
-      this.pseudoFocusListItem(nextItem);
-    }
-  }
-
-  /**
-   * Handles the case where the user has pressed
-   * the arrow up key in a result list or input.
-   * If the first item is currently selected, this action will
-   * hide the list and return the focus to the input.
-   * Otherwise, it selects and gives focus to the previous
-   * item in the list.
-   */
-  navigateUp() {
-    if (!this.isShowingList) {
-      return;
-    }
-
-    const currentSelection = this.listbox.querySelector(
-      'li[aria-selected="true"]',
-    );
-    if (!currentSelection) {
-      this.hideList();
-    }
-
-    // If the selected item matches the first item in the list
-    // then we close the list;
-    const listItems = Array.from(
-      this.listbox.querySelectorAll(`li[role="option"]`),
-    );
-    const currentItemIndex = listItems.indexOf(currentSelection);
-    if (currentItemIndex <= 0) {
-      this.hideList();
-      return;
-    }
-
-    // Otherwise, we navigate to the previous item in the list
-    const nextItem = listItems[currentItemIndex - 1];
-
-    if (nextItem) {
-      this.pseudoFocusListItem(nextItem);
-    } else {
-      this.hideList();
-    }
-  }
-
-  /**
-   * Gives pseudo-focus to the passed list item element,
-   * blurring all the others accordingly.
-   * @var anElement HTMLElement - A list item element
-   */
-  pseudoFocusListItem(anElement) {
-    this.pseudoBlurItems();
-    anElement.setAttribute("aria-selected", "true");
-    anElement.classList.add(
-      "wx-combo-box__list-option--focused",
-      "wx-combo-box__list-option--selected",
-    );
-
-    // Scroll the list item into view if it is
-    // not currently visible in the list. This is to
-    // help users with difficult vision
-    anElement.scrollIntoView({ block: "nearest", inline: "start" });
-
-    // Update the input's activedescendant attribute
-    // to refer to this list item's id
-    this.input.setAttribute("aria-activedescendant", anElement.id);
-  }
-
-  /**
-   * Choses one of the list item options,
-   * determined based on the originating event
-   * object that is passed in.
-   * This handler can be triggered either by a
-   * click event or pressing Enter while on
-   * a pseudo-focused list item.
-   */
-  chooseOption(event) {
-    let selectedItem = this.listbox.querySelector('li[aria-selected="true"]');
-    if (event.type === "click") {
-      // If the event was a click, then
-      // the actual item we want isn't the current
-      // pseudo-focus/selection, but instead the
-      // target of the mouse event itself
-      selectedItem = event.target;
-    }
-
-    // Set this component's selectedIndex and
-    // value to the corresponding properties
-    this.selectedIndex = Array.from(
-      this.listbox.querySelectorAll(`li[role="option"]`),
-    ).indexOf(selectedItem);
-    this.value = selectedItem.getAttribute("data-value");
-    this.url = selectedItem.getAttribute("data-url");
-
-    // Display the text of the selected item
-    // in the input field
-    this.input.value = selectedItem.textContent;
-
-    // Hide list and trigger change event
-    this.hideList();
-    this.dispatchEvent(new Event("change", { bubbles: true }));
-
-    // Always submit to the parent form
-    this.submit();
-  }
-
-  /**
-   * Clear all chosen information from this component
-   */
-  clear() {
-    this.input.value = null;
-    this.selectedItemIndex = -1;
-    this.value = null;
-    this.input.setAttribute("aria-activedescendant", "");
-    this.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
   /**
@@ -615,10 +341,10 @@ class LocationComboBox extends ComboBox {
    * based on convos with USWDS.
    */
   updateAriaLive(text) {
-    if (this._ariaLiveTimeout) {
-      window.clearTimeout(this._ariaLiveTimeout);
+    if (this.ariaLiveDebounceTimer) {
+      window.clearTimeout(this.ariaLiveDebounceTimer);
     }
-    this._ariaLiveTimeout = window.setTimeout(() => {
+    this.ariaLiveDebounceTimer = window.setTimeout(() => {
       Array.from(this.querySelectorAll("[slot='sr-only']")).forEach((span) =>
         span.remove(),
       );
@@ -627,20 +353,6 @@ class LocationComboBox extends ComboBox {
       span.innerText = text;
       this.append(span);
     }, 1000);
-  }
-
-  attributeChangedCallback(name, oldVal, newVal) {
-    if (name === "input-delay") {
-      this.inputDelay = parseInt(newVal, 10);
-    }
-  }
-
-  get isShowingList() {
-    return this.input.getAttribute("aria-expanded") === "true";
-  }
-
-  static get observedAttributes() {
-    return ["input-delay"];
   }
 }
 
