@@ -84,6 +84,7 @@ class ComboBox extends HTMLElement {
     this.handleInput = this.handleInput.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleTextInput = this.handleTextInput.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
     this.showList = this.showList.bind(this);
     this.hideList = this.hideList.bind(this);
     this.toggleList = this.toggleList.bind(this);
@@ -94,6 +95,13 @@ class ComboBox extends HTMLElement {
     this.chooseOption = this.chooseOption.bind(this);
     this.submit = this.submit.bind(this);
     this.clear = this.clear.bind(this);
+    this.initInput = this.initInput.bind(this);
+    this.initListbox = this.initListbox.bind(this);
+    this.initToggleButton = this.initToggleButton.bind(this);
+    this.initClearButton = this.initClearButton.bind(this);
+    this.setListItems = this.setListItems.bind(this);
+    this.getItemByValue = this.getItemByValue.bind(this);
+    this.filterItems = this.filterItems.bind(this);
   }
 
   // #region Component lifecycle
@@ -117,14 +125,38 @@ class ComboBox extends HTMLElement {
     this.addEventListener("input", this.handleInput);
     this.addEventListener("keydown", this.handleKeyDown);
     this.addEventListener("change", this.handleTextInput);
+    this.input.addEventListener("focus", this.handleFocus);
     this.addEventListener("blur", this.hideList);
     this.input.addEventListener("blur", this.hideList);
+
+    const items = JSON.parse(this.getAttribute("items") ?? "null");
+    if (Array.isArray(items) && items.length > 0) {
+      this.listItems = items;
+      this.setListItems(items);
+
+      const selected = this.getAttribute("selected");
+      if (selected) {
+        const li = this.getItemByValue(selected);
+        if (li) {
+          this.input.value = li.innerText;
+          if (this.namedInput) {
+            this.namedInput.value = li.dataset.value;
+          }
+
+          this.pseudoFocusListItem(li);
+          this.handleTextInput();
+        }
+      }
+    }
   }
 
   disconnectedCallback() {
     this.removeEventListener("input", this.handleInput);
     this.removeEventListener("keydown", this.handleKeyDown);
     this.removeEventListener("change", this.handleTextInput);
+    this.input.removeEventListener("focus", this.handleFocus);
+    this.removeEventListener("blur", this.hideList);
+    this.input.removeEventListener("blur", this.hideList);
   }
   // #endregion
 
@@ -135,10 +167,10 @@ class ComboBox extends HTMLElement {
    * If there is no valid input element, create it
    */
   initInput() {
-    let input = this.querySelector('input[slot="input"]');
-    if (!input) {
-      input = document.createElement("input");
-    }
+    const input =
+      this.querySelector('input[slot="input"]') ??
+      document.createElement("input");
+
     input.setAttribute("type", "text");
     input.setAttribute("slot", "input");
     input.setAttribute("role", "combobox");
@@ -157,6 +189,20 @@ class ComboBox extends HTMLElement {
     input.classList.add("wx-combo-box__input");
     this.append(input);
     this.input = input;
+
+    // This named input element is provided so the value of the combo box is
+    // presented to the containing form just like any other input. We hide it,
+    // we inherit its name from the component, and we programmatically set its
+    // value as the combo box state changes. Then this component works basically
+    // like a real input element.
+    if (this.getAttribute("name")) {
+      const namedInput = document.createElement("input");
+      namedInput.setAttribute("name", this.getAttribute("name"));
+      namedInput.setAttribute("value", this.getAttribute("selected"));
+      namedInput.setAttribute("type", "hidden");
+      this.append(namedInput);
+      this.namedInput = namedInput;
+    }
   }
 
   initListbox() {
@@ -218,7 +264,22 @@ class ComboBox extends HTMLElement {
    * These will be triggered by the slotted input
    * element, then bubble up.
    */
-  handleInput(event) {}
+  handleInput(event) {
+    const query = event?.target?.value;
+
+    if (query) {
+      this.setListItems(this.filterItems(this.listItems, query));
+    } else {
+      this.setListItems(this.listItems);
+    }
+
+    // Update UI elements accordingly
+    this.handleTextInput(event);
+  }
+
+  handleFocus() {
+    this.showList();
+  }
 
   /**
    * Event handler for keydown, mapped
@@ -316,6 +377,50 @@ class ComboBox extends HTMLElement {
     } else {
       this.showList();
     }
+  }
+
+  /**
+   * Resets the list to just the provided items.
+   * @var items [items] The items that should be represented in the list
+   *            These are objects. They must have value and text properties.
+   *            The value property is the value that should be sent to the form
+   *            when submitted. The text property is what will be displayed to
+   *            the user in the list. If there are any other properties, they
+   *            will be stored in the list item's data-meta property as JSON-
+   *            encoded text
+   */
+  setListItems(items) {
+    const list = document.createElement("ul");
+    list.setAttribute("aria-labeledby", `${this.id}--list`);
+    list.classList.add("wx-combo-box__list");
+
+    const listItems = items.map((item, idx) => {
+      const { value, text, ...meta } = item;
+
+      const li = document.createElement("li");
+      li.innerText = text;
+      li.id = `${this.id}--item-${idx + 1}`;
+      li.setAttribute("role", "option");
+      li.setAttribute("aria-setsize", text.length);
+      li.setAttribute("aria-posinset", idx + 1);
+      li.setAttribute("aria-selected", "false");
+      li.setAttribute("data-value", value);
+      li.setAttribute("data-meta", JSON.stringify(meta));
+      li.classList.add("wx-combo-box__list-option");
+
+      li.addEventListener("mousedown", (e) => {
+        // Stop the input from losing focus by
+        // blocking normal browser behavior here
+        e.preventDefault();
+      });
+
+      li.addEventListener("click", this.chooseOption);
+
+      return li;
+    });
+
+    list.append(...listItems);
+    this.querySelector('[slot="listbox"]').replaceChildren(list);
   }
 
   /**
@@ -460,8 +565,11 @@ class ComboBox extends HTMLElement {
     this.url = selectedItem.getAttribute("data-url");
 
     // Display the text of the selected item
-    // in the input field
+    // in the input field and update the named input.
     this.input.value = selectedItem.textContent;
+    if (this.namedInput) {
+      this.namedInput.value = selectedItem.dataset.value;
+    }
 
     // Hide list and trigger change event
     this.hideList();
@@ -471,13 +579,26 @@ class ComboBox extends HTMLElement {
     this.submit();
   }
 
+  filterItems(itemList, query) {
+    const regex = new RegExp(query, "i");
+    return itemList.filter(({ text }) => regex.test(text));
+  }
+
+  getItemByValue(value) {
+    return this.listbox.querySelector(`li[data-value='${value}']`);
+  }
+
   /**
    * Clear all chosen information from this component
    */
   clear() {
     this.input.value = null;
+    if (this.namedInput) {
+      this.namedInput.value = null;
+    }
     this.selectedItemIndex = -1;
     this.value = null;
+    this.setListItems(this.listItems);
     this.input.setAttribute("aria-activedescendant", "");
     this.dispatchEvent(new Event("change", { bubbles: true }));
   }
@@ -487,3 +608,5 @@ class ComboBox extends HTMLElement {
   }
   // #endregion
 }
+
+window.customElements.define("wx-combo-box", ComboBox);

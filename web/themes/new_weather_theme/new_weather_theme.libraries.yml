@@ -35,6 +35,12 @@ combo-box-location:
   js:
     assets/js/components/combo-box.js: { preprocess: false }
     assets/js/components/combo-box-location.js: { preprocess: false }
+
+combo-box-afd-wfo:
+  version: 2024-08-28
+  js:
+    assets/js/components/combo-box.js: { preprocess: false }
+    assets/js/components/combo-box-afd-wfo.js: { preprocess: false }
         
 tabbed-nav:
   version: 2024-06-21

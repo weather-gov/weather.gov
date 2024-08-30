@@ -1,3 +1,4 @@
+{{ attach_library("new_weather_theme/combo-box-afd-wfo") }}
 {% set wfo = wfo | upper %}
 
 <div class="layout-container grid-row height-full flex-column flex-no-wrap">
@@ -34,13 +35,11 @@
                     <label for="wfo-selector" class="usa-label margin-top-0">
                         Forecast office:
                     </label>
-                    <select id="wfo-selector" name="wfo" class="usa-select maxw-none tablet:maxw-mobile-lg">
-                        {% for office in wfo_list %}
-                            <option value="{{office.code}}"{% if office.code == wfo %} selected{% endif %}>
-                                {{office.name}} ({{office.code}})
-                            </option>
-                        {% endfor %}
-                    </select>
+
+                    <wx-combo-box-afd-wfo
+                        name="wfo"
+                        items="{{ wfo_list | map(wfo => ({ value: wfo.code, text: wfo.name ~ " (" ~ wfo.code ~ ")", wfo })) | json_encode }}"
+                        selected="{{ wfo }}"></wx-combo-box-afd-wfo>
 
                     {% if version_list | length > 0 %}
                         <label for="version-selector" class="usa-label">Versions for {{wfo | upper}}: </label>

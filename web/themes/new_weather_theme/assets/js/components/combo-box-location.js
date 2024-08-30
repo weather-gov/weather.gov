@@ -80,10 +80,6 @@ class LocationComboBox extends ComboBox {
   connectedCallback() {
     ComboBox.prototype.connectedCallback.call(this);
 
-    // Bind additional event listeners. We can override the event handler
-    // methods to intercept other events, as needed.
-    this.input.addEventListener("focus", this.handleFocus);
-
     if (this.dataset.place) {
       this.saveSearchResult({
         text: this.dataset.place,
@@ -94,7 +90,6 @@ class LocationComboBox extends ComboBox {
 
   disconnectedCallback() {
     ComboBox.prototype.disconnectedCallback.call(this);
-    this.input.removeEventListener("focus", this.handleFocus);
   }
 
   /**
