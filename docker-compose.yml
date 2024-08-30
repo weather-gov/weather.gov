@@ -1,7 +1,6 @@
 services:
-  database: &database
-    # 8.0.35 in prod
-    image: mysql:8.0
+  database:
+    image: mysql:8.0 # 8.0.35 in prod
     networks:
       - weather.gov
     environment:
@@ -11,14 +10,15 @@ services:
       MYSQL_ROOT_PASSWORD: drupal
     ports:
       - 3306:3306
+    profiles: ["dev"]
 
   database-test:
-    profiles: ["test-only"]
-    <<: *database
-    ports:
+    extends: database
+    ports: !override
       - 4306:3306
+    profiles: !override ["test"]
 
-  api-proxy: &api-proxy
+  api-proxy:
     build:
       context: ./tests/api
       dockerfile: Dockerfile
@@ -31,14 +31,15 @@ services:
     volumes:
       - ./tests/api:/app
       - /app/node_modules
+    profiles: ["dev"]
 
   api-proxy-test:
-    profiles: ["test-only"]
-    <<: *api-proxy
-    ports:
+    extends: api-proxy
+    ports: !override
       - 9081:8081
+    profiles: !override ["test"]
 
-  drupal: &drupal
+  drupal:
     build:
       context: ./
       dockerfile: Dockerfile.dev
@@ -93,23 +94,19 @@ services:
 
       # Map in our test coverage directory so we can have those pretty outputs.
       - ./.coverage:/coverage
+    profiles: ["dev"]
 
   drupal-test:
-    profiles: ["test-only"]
-    <<: *drupal
-    ports:
+    extends: drupal
+    ports: !override
       - 9080:80
-    links:
+    links: !override
       - database-test
       - api-proxy-test
-    environment:
+    environment: # we want to extend, not override
       API_URL: http://api-proxy-test:9081
-      DRUPAL_DB_NAME: weathergov
-      DRUPAL_DB_USERNAME: drupal
-      DRUPAL_DB_PASSWORD: drupal
       DRUPAL_DB_HOST: database-test
-      DRUPAL_DB_PORT: 3306
-      WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
+    profiles: !override ["test"]
 
   plantuml:
     build:
@@ -118,13 +115,12 @@ services:
     image: 18f-zscaler-plantum:jetty
     ports:
       - 8180:8080
-    profiles: ["utilities"]
+    profiles: ["utility"]
 
   utility-node:
     build:
       context: .
       dockerfile: Dockerfile.utility-node
-    profiles: ["utility"]
     networks:
       - weather.gov
     links:
@@ -132,29 +128,36 @@ services:
     volumes:
       - ./:/app
       - /app/node_modules
+    profiles: ["utility"]
 
   uswds:
     build:
       context: ./
       dockerfile: Dockerfile.uswds
-    profiles: ["utility"]
     volumes:
       - ./web/themes/new_weather_theme/:/app
       - /app/node_modules
+    profiles: ["utility"]
 
   spatial:
-      build:
-        context: ./spatial-data
-        dockerfile: Dockerfile.spatial
-      image: 18f-spatial-node:20
-      profiles: ["spatial"]
-      networks:
-        - weather.gov
-      links:
-        - database
-      volumes:
-        - ./spatial-data/:/app
-        - /app/node_modules
+    build:
+      context: ./spatial-data
+      dockerfile: Dockerfile.spatial
+    image: 18f-spatial-node:20
+    networks:
+      - weather.gov
+    links:
+      - database
+    volumes:
+      - ./spatial-data/:/app
+      - /app/node_modules
+    profiles: ["dev", "spatial"]
+
+  spatial-test:
+    extends: spatial
+    links: !override
+      - database-test
+    profiles: !override ["test", "spatial"]
 
 networks:
   weather.gov:
