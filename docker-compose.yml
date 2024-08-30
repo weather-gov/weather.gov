@@ -91,6 +91,28 @@ services:
       - 8180:8080
     profiles: ["utilities"]
 
+  utility-node:
+    build:
+      context: .
+      dockerfile: Dockerfile.utility-node
+    profiles: ["utility"]
+    networks:
+      - weather.gov
+    links:
+      - database
+    volumes:
+      - ./:/app
+      - /app/node_modules
+
+  uswds:
+    build:
+      context: ./
+      dockerfile: Dockerfile.uswds
+    profiles: ["utility"]
+    volumes:
+      - ./web/themes/new_weather_theme/:/app
+      - /app/node_modules
+
   spatial:
       build:
         context: ./spatial-data
