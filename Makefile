@@ -40,9 +40,8 @@ export-content: ## Export all content to web/scs-export
 	rm web/scs-export/*.zip
 	docker compose exec drupal drush content:export node scs-export --all-content
 
-# set docker image variables so that we do not have to duplicate makefile rules for testing.
+# set a docker image variable so that we do not have to duplicate makefile rules for testing.
 drupal_image = "drupal"
-spatial_image = "spatial"
 
 import-config: ## Import the Drupal configuration from the config directory into your site
 	docker compose exec ${drupal_image} drush config:import -y
@@ -109,7 +108,10 @@ build-sprites: # Build sprites
 
 ### Spatial data
 load-spatial: # Load spatial data into the database
-	docker compose run --rm ${spatial_image} node load-shapefiles.js
+	docker compose run --rm spatial node load-shapefiles.js
+
+load-spatial-test: # Load spatial data into the test database
+	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test run --rm spatial-test node load-shapefiles.js
 
 ### Testing
 a11y: accessibility-test
@@ -142,12 +144,11 @@ start-test-environment: destroy-test-environment
 destroy-test-environment:
 	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test down
 
-setup-outside:
+setup-outside-vars:
 	$(eval drupal_image="drupal-test")
-	$(eval spatial_image="spatial-test")
 
 ot: outside-test
-outside-test: setup-outside start-test-environment pause install-site load-spatial ## Run a separate weather.gov instance for testing
+outside-test: setup-outside-vars start-test-environment pause install-site load-spatial-test ## Run a separate weather.gov instance for testing
 	./tests/playwright/outside/setup.sh
 	npx playwright test outside/*
 

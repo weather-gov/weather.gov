@@ -11,12 +11,6 @@ services:
     ports:
       - 3306:3306
 
-  database-test:
-    extends: database
-    ports: !override
-      - 4306:3306
-    profiles: !override ["test"]
-
   api-proxy:
     build:
       context: ./tests/api
@@ -30,12 +24,6 @@ services:
     volumes:
       - ./tests/api:/app
       - /app/node_modules
-
-  api-proxy-test:
-    extends: api-proxy
-    ports: !override
-      - 9081:8081
-    profiles: !override ["test"]
 
   drupal:
     build:
@@ -93,18 +81,6 @@ services:
       # Map in our test coverage directory so we can have those pretty outputs.
       - ./.coverage:/coverage
 
-  drupal-test:
-    extends: drupal
-    ports: !override
-      - 9080:80
-    links: !override
-      - database-test
-      - api-proxy-test
-    environment: # we want to extend, not override
-      API_URL: http://api-proxy-test:9081
-      DRUPAL_DB_HOST: database-test
-    profiles: !override ["test"]
-
   plantuml:
     build:
       context: ./
@@ -150,14 +126,6 @@ services:
     volumes:
       - ./spatial-data/:/app
       - /app/node_modules
-
-  spatial-test:
-    extends: spatial
-    links: !override
-      - database-test
-    environment:
-      DB_HOST: database-test
-    profiles: !override ["test"]
 
 networks:
   weather.gov:
