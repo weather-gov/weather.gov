@@ -1,4 +1,4 @@
-.PHONY: help clear-cache export-config import-config install-site install-site-test
+.PHONY: help clear-cache export-config import-config install-site
 
 help:
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -40,39 +40,26 @@ export-content: ## Export all content to web/scs-export
 	rm web/scs-export/*.zip
 	docker compose exec drupal drush content:export node scs-export --all-content
 
-import-config: ## Import the Drupal configuration from the config directory into your site
-	docker compose exec drupal drush config:import -y
-	docker compose exec drupal drush twig:debug on
-	docker compose exec drupal drush state:set disable_rendered_output_cache_bins 1
+# set docker image variables so that we do not have to duplicate makefile rules for testing.
+drupal_image = "drupal"
+spatial_image = "spatial"
 
-import-config-test: ## Import the Drupal configuration from the config directory into your site (test only)
-	docker compose exec drupal-test drush config:import -y
-	docker compose exec drupal-test drush twig:debug on
-	docker compose exec drupal-test drush state:set disable_rendered_output_cache_bins 1
+import-config: ## Import the Drupal configuration from the config directory into your site
+	docker compose exec ${drupal_image} drush config:import -y
+	docker compose exec ${drupal_image} drush twig:debug on
+	docker compose exec ${drupal_image} drush state:set disable_rendered_output_cache_bins 1
 
 import-content: web/scs-export/* ## Import content from web/scs-export
 	for file in $^; do \
 		file="$${file#*/}"; \
-		docker compose exec drupal drush content:import "$$file"; \
-	done
-
-import-content-test: web/scs-export/* ## Import content from web/scs-export (test-only)
-	for file in $^; do \
-		file="$${file#*/}"; \
-		docker compose exec drupal-test drush content:import "$$file"; \
+		docker compose exec ${drupal_image} drush content:import "$$file"; \
 	done
 
 install-site: install-site-config import-content ## Install a minimal Drupal site using the configuration in the config directory and exported content
 install-site-config:
-	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
-	docker compose exec drupal drush twig:debug on
-	docker compose exec drupal drush state:set disable_rendered_output_cache_bins 1
-
-install-site-test: install-site-config-test import-content-test ## Install a minimal Drupal site using the configuration in the config directory and exported content (test only)
-install-site-config-test:
-	docker compose exec drupal-test drush site:install minimal --existing-config --account-pass=root -y
-	docker compose exec drupal-test drush twig:debug on
-	docker compose exec drupal-test drush state:set disable_rendered_output_cache_bins 1
+	docker compose exec ${drupal_image} drush site:install minimal --existing-config --account-pass=root -y
+	docker compose exec ${drupal_image} drush twig:debug on
+	docker compose exec ${drupal_image} drush state:set disable_rendered_output_cache_bins 1
 
 log: ## Tail the log for the Drupal container
 	docker compose logs --follow drupal
@@ -122,10 +109,7 @@ build-sprites: # Build sprites
 
 ### Spatial data
 load-spatial: # Load spatial data into the database
-	docker compose run --rm spatial node load-shapefiles.js
-
-load-spatial-test: # Load spatial data into the database
-	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test run --rm spatial-test node load-shapefiles.js
+	docker compose run --rm ${spatial_image} node load-shapefiles.js
 
 ### Testing
 a11y: accessibility-test
@@ -158,8 +142,12 @@ start-test-environment: destroy-test-environment
 destroy-test-environment:
 	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test down
 
+setup-outside:
+	$(eval drupal_image="drupal-test")
+	$(eval spatial_image="spatial-test")
+
 ot: outside-test
-outside-test: start-test-environment pause install-site-test load-spatial-test ## Run a separate weather.gov instance for testing
+outside-test: setup-outside start-test-environment pause install-site load-spatial ## Run a separate weather.gov instance for testing
 	./tests/playwright/outside/setup.sh
 	npx playwright test outside/*
 
