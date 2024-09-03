@@ -1,0 +1,18 @@
+uuid: 05b0cc16-5580-4eb5-a2f4-86c3b253570c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_pdf_upload
+id: node.wfo_pdf_upload.title
+field_name: title
+entity_type: node
+bundle: wfo_pdf_upload
+label: 'PDF file name'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

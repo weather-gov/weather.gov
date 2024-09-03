@@ -1,0 +1,9 @@
+status: 0
+pattern: ''
+escape: false
+preserve_titles: false
+save: false
+chunk: 50
+dependencies:
+  config:
+    - node.type.wfo_pdf_upload
