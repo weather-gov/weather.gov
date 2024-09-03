@@ -1,14 +1,15 @@
 /* global Chart ChartDataLabels */
 (() => {
-  const fontMono = `DM Mono, "Roboto Mono Web", "Courier New", monospace, serif`;
+  const styles = getComputedStyle(document.body);
 
+  const fontMono = styles.getPropertyValue("--font-family-mono");
   const colors = {
-    base: "#71767A",
-    baseLighter: "#DFE1E2",
-    baseLightest: "#F5F6F7",
-    primary: "#005EA2",
-    primaryDark: "#0B4778",
-    primaryLight: "#0085CA",
+    base: styles.getPropertyValue("--color-base"),
+    baseLighter: styles.getPropertyValue("--color-base-lighter"),
+    baseLightest: styles.getPropertyValue("--color-base-lightest"),
+    primary: styles.getPropertyValue("--color-primary"),
+    primaryDark: styles.getPropertyValue("--color-primary-dark"),
+    primaryLight: styles.getPropertyValue("--color-primary-light"),
   };
 
   Chart.register(ChartDataLabels);
