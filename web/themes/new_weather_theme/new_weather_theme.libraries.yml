@@ -120,9 +120,3 @@ chart-hourly-temperature:
     assets/js/charts/hourly-temperature.js:
       attributes:
         defer: true
-chart-daily-temperature-range:
-  version: 2024-08-27
-  js:
-    assets/js/charts/daily-temperature-range.js:
-      attributes:
-        defer: true

@@ -97,7 +97,8 @@
             label: "Temperature",
             data: temps,
             datalabels: {
-              align: (_, i) => (temps[i] > feelsLike[i] ? "top" : "bottom"),
+              align: ({ dataIndex }) =>
+                temps[dataIndex] >= feelsLike[dataIndex] ? "top" : "bottom",
               color: colors.primaryDark,
             },
             backgroundColor: colors.primaryDark,
@@ -108,7 +109,8 @@
             label: "Feels like",
             data: feelsLike,
             datalabels: {
-              align: (_, i) => (temps[i] > feelsLike[i] ? "bottom" : "top"),
+              align: ({ dataIndex }) =>
+                temps[dataIndex] >= feelsLike[dataIndex] ? "bottom" : "top",
               color: colors.primary,
             },
             borderDash: [4],

@@ -1,52 +1,10 @@
 
 <div class="wx-daily-forecast-block">
   {{ attach_library('new_weather_theme/hourly-toggle') }}
-  {{ attach_library('new_weather_theme/chartjs') }}
-  {{ attach_library('new_weather_theme/chart-daily-temperature-range') }}
   {% if content.error %}
     {% set message = "There was an error loading the daily forecast." | t %}
   {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
-
-    {% set days = [] %}
-    {% if content.today %}
-      {% set temps = content.today | filter(v => v.isOvernight != true) | map(v => v.temperature) %}
-      {% set dayLetter = content.today.0.dayName | slice(0, 1) %}
-
-      {% set high = max(temps) %}
-      {% set low = min(temps) %}
-
-      {% if high != low %}
-        {% set days = days | merge([{"day": dayLetter, "temps": [high, low] }]) %}
-      {% else %}
-        {% set days = days | merge([{"day": dayLetter, "temps": [high] }]) %}
-      {% endif %}
-    {% endif %}
-
-    {% for day in content.detailed %}
-      {% set temps = [day.daytime.temperature, day.nighttime.temperature] %}
-      {% set dayLetter = day.daytime.dayName | slice(0, 1) %}
-
-      {% set high = max(temps) %}
-      {% set low = min(temps) %}
-
-      {% if high != low %}
-        {% set days = days | merge([{"day": dayLetter, "temps": [high, low] }]) %}
-      {% else %}
-        {% set days = days | merge([{"day": dayLetter, "temps": [high] }]) %}
-      {% endif %}
-    {% endfor %}
-
-    <div class="grid-container">
-      <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-        <span class="font-family-mono text-primary-dark">Temperature</span>
-        <div class="wx-daily-temp-range-chart-container position-relative grid-col-12" data-days="{{ days | json_encode }}">
-          <canvas>
-          </canvas>
-        </div>
-      </div>
-    </div>
-
     <div class="grid-container padding-x-0 tablet:padding-x-2">
       <ol class="usa-list--unstyled">
       {# Attempt to render the period(s) associated with the current day #}
