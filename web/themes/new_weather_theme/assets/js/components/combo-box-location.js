@@ -74,7 +74,7 @@ class LocationComboBox extends ComboBox {
   }
 
   connectedCallback() {
-    ComboBox.prototype.connectedCallback.call(this);
+    super.connectedCallback();
 
     if (this.dataset.place) {
       this.saveSearchResult({
@@ -82,10 +82,6 @@ class LocationComboBox extends ComboBox {
         url: window.location.pathname,
       });
     }
-  }
-
-  disconnectedCallback() {
-    ComboBox.prototype.disconnectedCallback.call(this);
   }
 
   /**
@@ -113,7 +109,7 @@ class LocationComboBox extends ComboBox {
   }
 
   chooseOption(event) {
-    ComboBox.prototype.chooseOption.call(this, event);
+    super.chooseOption(event);
 
     // Always submit to the parent form
     this.submit();
