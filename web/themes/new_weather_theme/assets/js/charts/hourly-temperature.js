@@ -46,8 +46,7 @@
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            align: "start",
-            position: "bottom",
+            display: false,
           },
         },
         scales: {
