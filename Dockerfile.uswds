@@ -1,0 +1,13 @@
+FROM node:20
+
+COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
+RUN c_rehash
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/zscaler-root.pem
+
+RUN mkdir /app
+WORKDIR /app
+
+ADD ./web/themes/new_weather_theme/package.json .
+ADD ./web/themes/new_weather_theme/package-lock.json .
+
+RUN npm ci

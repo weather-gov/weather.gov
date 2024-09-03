@@ -27,10 +27,10 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
     "@playwright/test": "^1.46.1",
-    "@types/node": "^22.5.1",
+    "@types/node": "^22.5.2",
     "axe-core": "^4.10.0",
     "chai": "^5.1.1",
-    "cypress": "^13.13.3",
+    "cypress": "^13.14.1",
     "cypress-axe": "^1.5.0",
     "cypress-plugin-tab": "^1.0.5",
     "dayjs": "^1.11.13",
@@ -47,7 +47,7 @@
     "playwright": "^1.46.1",
     "prettier": "^3.3.3",
     "sinon": "^18.0.0",
-    "stylelint": "^16.8.1",
+    "stylelint": "^16.9.0",
     "stylelint-config-standard-scss": "^13.0.0",
     "whatwg-fetch": "^3.6.20",
     "xml-parse": "^0.4.0"
