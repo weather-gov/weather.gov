@@ -97,11 +97,15 @@ scorched-earth: ## A tool to reset your Docker Desktop.
 
 ### CSS
 build-css: # Build CSS
-	cd web/themes/new_weather_theme && npx gulp compile
+	docker compose run --rm uswds npx gulp compile
+
+### Build sprites
+build-sprites: # Build sprites
+	docker compose run --rm utility-node npm run compile-svg
 
 ### Spatial data
 load-spatial: # Load spatial data into the database
-	docker compose run spatial node load-shapefiles.js
+	docker compose run --rm spatial node load-shapefiles.js
 
 ### Testing
 a11y: accessibility-test
