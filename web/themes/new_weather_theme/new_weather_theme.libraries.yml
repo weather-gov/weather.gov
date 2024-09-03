@@ -33,13 +33,22 @@ localize-timestamps:
 combo-box:
   version: 2024-08-28
   js:
-    assets/js/components/combo-box.js: { preprocess: false }
+    assets/js/components/combo-box.js:
+      preprocess: false
+      attributes:
+        defer: true
 
 combo-box-location:
   version: 2024-08-28
   js:
-    assets/js/components/combo-box.js: { preprocess: false }
-    assets/js/components/combo-box-location.js: { preprocess: false }
+    assets/js/components/combo-box.js:
+      preprocess: false
+      attributes:
+        defer: true
+    assets/js/components/combo-box-location.js:
+      preprocess: false
+      attributes:
+        defer: true
 
 tabbed-nav:
   version: 2024-06-21

@@ -2,6 +2,8 @@
 require("jsdom-global")(undefined, { url: "http://localhost/" });
 require("../../assets/js/components/combo-box.js");
 
+// The location combobox needs the base combobox to inherit from, so set it
+// globally.
 global.ComboBox = window.customElements.get("wx-combo-box");
 
 require("../../assets/js/components/combo-box-location.js");
