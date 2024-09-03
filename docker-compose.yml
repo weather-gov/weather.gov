@@ -10,7 +10,6 @@ services:
       MYSQL_ROOT_PASSWORD: drupal
     ports:
       - 3306:3306
-    profiles: ["dev"]
 
   database-test:
     extends: database
@@ -31,7 +30,6 @@ services:
     volumes:
       - ./tests/api:/app
       - /app/node_modules
-    profiles: ["dev"]
 
   api-proxy-test:
     extends: api-proxy
@@ -94,7 +92,6 @@ services:
 
       # Map in our test coverage directory so we can have those pretty outputs.
       - ./.coverage:/coverage
-    profiles: ["dev"]
 
   drupal-test:
     extends: drupal
@@ -148,16 +145,19 @@ services:
       - weather.gov
     links:
       - database
+    environment:
+      DB_HOST: database
     volumes:
       - ./spatial-data/:/app
       - /app/node_modules
-    profiles: ["dev", "spatial"]
 
   spatial-test:
     extends: spatial
     links: !override
       - database-test
-    profiles: !override ["test", "spatial"]
+    environment:
+      DB_HOST: database-test
+    profiles: !override ["test"]
 
 networks:
   weather.gov:

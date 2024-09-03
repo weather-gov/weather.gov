@@ -1,0 +1,10 @@
+services:
+  # add noop profiles so we don't run dev instances by accident when running tests
+  database:
+    profiles: ["noop"]
+  drupal:
+    profiles: ["noop"]
+  api-proxy:
+    profiles: ["noop"]
+  spatial:
+    profiles: ["noop"]
