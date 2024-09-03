@@ -1,4 +1,4 @@
-{{ attach_library("new_weather_theme/location-combo-box") }}
+{{ attach_library("new_weather_theme/combo-box-location") }}
 {{ attach_library("new_weather_theme/browser-location-button") }}
 <div class="bg-primary-darker wx-bg-satellite padding-y-4 tablet:padding-top-7 tablet:padding-bottom-8">
   <div class="grid-container">
@@ -30,8 +30,8 @@
               </svg>{{ 'Use my location' | t }}
             </button>
         </div>
-        <wx-combo-box class="z-top margin-top-105" id="search-combo-box">
-        </wx-combo-box>
+        <wx-combo-box-location class="z-top margin-top-105" id="search-combo-box">
+        </wx-combo-box-location>
       </form>      
     </div>
     <div class="grid-row font-sans-md text-white tablet:grid-offset-2">
