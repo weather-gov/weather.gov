@@ -1,0 +1,6 @@
+_core:
+  default_config_hash: 4_ifqxmFEAYSrGFkA63fLBYAWO-Fz9ACp9qVjkxPghg
+path_prefix: jsonapi
+include_count: false
+default_disabled: true
+validate_configuration_integrity: true

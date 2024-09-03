@@ -263,6 +263,11 @@ class AFDParser
             return;
         }
 
+        // There could be whitespace between the TEMP/POPS header and the actual
+        // data, so clean that up first. There *shouldn't* be, but we've seen it
+        // happen, so guard against it.
+        $str = trim($str);
+
         $lines = explode("\n", $str);
         $rx = "/^[^\d]*(.+)/";
         $rows = [];
@@ -347,8 +352,8 @@ class AFDParser
                 "code" => $preambleCode,
                 "text" => $preambleText,
             ],
-            "body" => $body,
-            "epilogue" => $epilogueNodes,
+            "body" => array_values($body),
+            "epilogue" => array_values($epilogueNodes),
         ];
     }
 

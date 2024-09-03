@@ -1,0 +1,22 @@
+uuid: 6431aada-45e3-41ed-a433-2099e55ce421
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_pdf_upload
+id: node.wfo_pdf_upload.promote
+field_name: promote
+entity_type: node
+bundle: wfo_pdf_upload
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

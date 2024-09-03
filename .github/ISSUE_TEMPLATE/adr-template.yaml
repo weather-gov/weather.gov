@@ -1,4 +1,4 @@
-name: Architecure decision record (ADR)
+name: Architecture decision record (ADR)
 description: Open a new draft ADR
 labels: ["ADR"]
 body:
@@ -9,7 +9,7 @@ body:
     attributes:
       label: Context
       description: >
-        Describe the motivating factors behind this decision: social, politlcal,
+        Describe the motivating factors behind this decision: social, political,
         technical, etc. Why does this decision need to be made? This section should
         be a statement of facts.
   - type: textarea
