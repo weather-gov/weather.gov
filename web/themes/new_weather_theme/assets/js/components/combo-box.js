@@ -607,3 +607,5 @@ class ComboBox extends HTMLElement {
 }
 
 window.customElements.define("wx-combo-box", ComboBox);
+
+export default ComboBox;

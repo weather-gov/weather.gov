@@ -16,64 +16,36 @@ uswds-customized:
         async: true
       minified: true
 
-browser-location-button:
-  version: 2024-07-10
+front-page:
+  version: 2024-09-03
   js:
-    assets/js/locationSearch.js:
+    assets/js/front.page.js:
       attributes:
-        async: true
-
-localize-timestamps:
-  version: 2024-04-12
-  js:
-    assets/js/localizeTimestamps.js:
-      attributes:
-        async: true
-
-combo-box:
-  version: 2024-08-28
-  js:
-    assets/js/components/combo-box.js:
-      preprocess: false
-      attributes:
+        type: module
         defer: true
 
-combo-box-location:
-  version: 2024-08-28
+point-page:
+  version: 2024-09-03
   js:
-    assets/js/components/combo-box.js:
-      preprocess: false
+    assets/js/point.page.js:
       attributes:
-        defer: true
-    assets/js/components/combo-box-location.js:
-      preprocess: false
-      attributes:
+        type: module
         defer: true
 
-tabbed-nav:
-  version: 2024-06-21
+afd-page:
+  version: 2024-09-03
   js:
-    assets/js/components/TabbedNavigator.js: { preprocess: false }
+    assets/js/afd.page.js:
+      attributes:
+        type: module
+        defer: true
 
-hourly-table:
-  version: 2024-06-18
-  js:
-    assets/js/components/HourlyTable.js: { preprocess: false }
-
-hourly-toggle:
-  version: 2024-4-24
-  js:
-    assets/js/components/HourlyToggle.js: { preprocess: false }
-
-radar:
+cmi-radar:
   version: 2024-06-23
   css:
     theme:
       assets/css/radar/cmi-radar.6602f65c.css:
   js:
-    assets/js/radar.js:
-      attributes:
-        defer: true
     https://radar.weather.gov/cmi-radar/cmi-radar.6602f65c.js:
       attributes:
         defer: true
@@ -97,9 +69,6 @@ leaflet:
     https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js:
       attributes:
         defer: true
-    assets/js/components/alertMap.js:
-      attributes:
-        defer: true
 
 digital-analytics-program:
   header: true
@@ -108,11 +77,6 @@ digital-analytics-program:
     https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety: {
       attributes: { id: "_fed_an_ua_tag" }
     }
-
-afd-selector:
-  version: 2024-08-16
-  js:
-    assets/js/components/afd-selector.js: { preprocess: false }
 
 chartjs:
   version: 4.4.1
@@ -128,16 +92,3 @@ chartjs:
         integrity: sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==
         crossorigin: anonymous
         referrerpolicy: no-referrer
-
-chart-hourly-temperature:
-  version: 2024-08-27
-  js:
-    assets/js/charts/hourly-temperature.js:
-      attributes:
-        defer: true
-chart-hourly-pops:
-  version: 2024-08-27
-  js:
-    assets/js/charts/hourly-pops.js:
-      attributes:
-        defer: true

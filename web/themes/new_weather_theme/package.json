@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@uswds/compile": "^1.1.0",
+    "esbuild": "^0.23.1",
     "sass": "^1.77.8"
   }
 }
