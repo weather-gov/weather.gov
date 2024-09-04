@@ -21,6 +21,9 @@ runs:
         chmod a+rwx -R .coverage
         docker load --input /tmp/image.tar
         docker compose up -d
+    
+    - name: build JS bundle
+      uses: ./.github/actions/javascript-bundle
 
     # Give the containers a moment to settle.
     - name: wait a tick
