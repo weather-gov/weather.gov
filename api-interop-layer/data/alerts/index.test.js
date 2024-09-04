@@ -20,7 +20,11 @@ describe("alert data module", () => {
   });
 
   it("fetches alerts when the module is loaded", async () => {
-    response.json.resolves({ features: ["bob"] });
-    return import("./index.js");
+    response.json.resolves({ features: [] });
+    await import("./index.js");
+
+    expect(
+      fetch.calledWith("https://api.weather.gov/alerts/active?status=actual"),
+    ).to.be.true;
   });
 });

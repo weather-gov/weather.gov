@@ -28,11 +28,10 @@ const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
   return geojson;
 };
 
-const updateAlerts = async () => {
+export const updateAlerts = async () => {
   const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
     ({ features }) =>
       features.map((feature) => {
-        console.log(feature);
         Object.keys(feature.properties).forEach((key) => {
           const value = feature.properties[key];
           const date = dayjs(value);
