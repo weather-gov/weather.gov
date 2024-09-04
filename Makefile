@@ -40,22 +40,25 @@ export-content: ## Export all content to web/scs-export
 	rm web/scs-export/*.zip
 	docker compose exec drupal drush content:export node scs-export --all-content
 
+# set a docker image variable so that we do not have to duplicate makefile rules for testing.
+drupal_image = "drupal"
+
 import-config: ## Import the Drupal configuration from the config directory into your site
-	docker compose exec drupal drush config:import -y
-	docker compose exec drupal drush twig:debug on
-	docker compose exec drupal drush state:set disable_rendered_output_cache_bins 1
+	docker compose exec ${drupal_image} drush config:import -y
+	docker compose exec ${drupal_image} drush twig:debug on
+	docker compose exec ${drupal_image} drush state:set disable_rendered_output_cache_bins 1
 
 import-content: web/scs-export/* ## Import content from web/scs-export
 	for file in $^; do \
 		file="$${file#*/}"; \
-		docker compose exec drupal drush content:import "$$file"; \
+		docker compose exec ${drupal_image} drush content:import "$$file"; \
 	done
 
 install-site: install-site-config import-content ## Install a minimal Drupal site using the configuration in the config directory and exported content
 install-site-config:
-	docker compose exec drupal drush site:install minimal --existing-config --account-pass=root -y
-	docker compose exec drupal drush twig:debug on
-	docker compose exec drupal drush state:set disable_rendered_output_cache_bins 1
+	docker compose exec ${drupal_image} drush site:install minimal --existing-config --account-pass=root -y
+	docker compose exec ${drupal_image} drush twig:debug on
+	docker compose exec ${drupal_image} drush state:set disable_rendered_output_cache_bins 1
 
 log: ## Tail the log for the Drupal container
 	docker compose logs --follow drupal
@@ -107,6 +110,9 @@ build-sprites: # Build sprites
 load-spatial: # Load spatial data into the database
 	docker compose run --rm spatial node load-shapefiles.js
 
+load-spatial-test: # Load spatial data into the test database
+	docker compose -f docker-compose.test.yml --profile test run --rm spatial-test node load-shapefiles.js
+
 ### Testing
 a11y: accessibility-test
 accessibility-test: ## Run accessibility tests (alias a11y)
@@ -131,6 +137,20 @@ load-time-test: ## Run page load time tests in Cypress (alias lt)
 u: unit-test
 unit-test: ## Run PHP unit tests
 	docker compose exec drupal phpunit --group unit
+
+start-test-environment: destroy-test-environment
+	docker compose -f docker-compose.test.yml --profile test up -d
+
+destroy-test-environment:
+	docker compose -f docker-compose.test.yml --profile test down
+
+setup-outside-vars:
+	$(eval drupal_image="drupal-test")
+
+ot: outside-test
+outside-test: setup-outside-vars start-test-environment pause install-site load-spatial-test ## Run a separate weather.gov instance for testing
+	./tests/playwright/outside/setup.sh
+	npx playwright test outside/*
 
 ### Linting
 js-lint: ## Run eslint on our Javascript

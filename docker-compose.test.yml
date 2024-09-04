@@ -1,0 +1,43 @@
+services:
+  drupal-test:
+    extends:
+      file: ./docker-compose.yml
+      service: drupal
+    ports: !override
+      - 9080:80
+    links: !override
+      - database-test
+      - api-proxy-test
+    environment: # we want to extend, not override
+      API_URL: http://api-proxy-test:9081
+      DRUPAL_DB_HOST: database-test
+    profiles: !override ["test"]
+
+  database-test:
+    extends:
+      file: ./docker-compose.yml
+      service: database
+    ports: !override
+      - 4306:3306
+    profiles: !override ["test"]
+
+  api-proxy-test:
+    extends:
+      file: ./docker-compose.yml
+      service: api-proxy
+    ports: !override
+      - 9081:8081
+    profiles: !override ["test"]
+
+  spatial-test:
+    extends:
+      file: ./docker-compose.yml
+      service: spatial
+    links: !override
+      - database-test
+    environment:
+      DB_HOST: database-test
+    profiles: !override ["test"]
+
+networks:
+  weather.gov:
