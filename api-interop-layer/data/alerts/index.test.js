@@ -9,27 +9,14 @@ describe("alert data module", () => {
     end: () => Promise.resolve(),
   };
 
-  let fetchMock;
-  let createConnection;
-
-  before(() => {
-    fetchMock = sandbox.stub(global, "fetch");
-    createConnection = sandbox.stub(mariadb.default, "createConnection");
-  });
-
   const response = { json: sandbox.stub() };
 
   beforeEach(() => {
     sandbox.resetBehavior();
     sandbox.resetHistory();
 
-    createConnection.resolves(db);
-    fetchMock.resolves(response);
-  });
-
-  after(() => {
-    global.fetch.restore();
-    mariadb.default.createConnection.restore();
+    mariadb.default.createConnection.resolves(db);
+    fetch.resolves(response);
   });
 
   it("fetches alerts when the module is loaded", async () => {
