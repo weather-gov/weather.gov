@@ -7,15 +7,22 @@ use(chaiAsPromised);
 
 describe("fetch module", () => {
   const sandbox = sinon.createSandbox();
-
-  const fetchMock = sandbox.stub(global, "fetch");
+  let fetchMock;
   const response = { json: sandbox.stub() };
   const wait = sandbox.stub();
+
+  before(() => {
+    fetchMock = sandbox.stub(global, "fetch");
+  });
 
   beforeEach(() => {
     sandbox.resetBehavior();
     sandbox.resetHistory();
     wait.resolves();
+  });
+
+  after(() => {
+    global.fetch.restore();
   });
 
   it("succeeds on the first attempt", async () => {

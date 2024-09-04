@@ -32,6 +32,7 @@ const updateAlerts = async () => {
   const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
     ({ features }) =>
       features.map((feature) => {
+        console.log(feature);
         Object.keys(feature.properties).forEach((key) => {
           const value = feature.properties[key];
           const date = dayjs(value);
@@ -178,9 +179,9 @@ const updateAlerts = async () => {
 
 updateAlerts();
 
-// Update the alerts every 30 seconds. They are cached upstream for about a
-// minute, so there's no need to try much more often than this.
-setInterval(updateAlerts, 30_000);
+// // Update the alerts every 30 seconds. They are cached upstream for about a
+// // minute, so there's no need to try much more often than this.
+// setInterval(updateAlerts, 30_000);
 
 export default async ({ grid, place: { timezone } }) => {
   const geometry = grid.geometry;
