@@ -39,15 +39,5 @@ services:
       DB_HOST: database-test
     profiles: !override ["test"]
 
-  # add noop profiles so we don't run dev instances by accident when running tests
-  database: !override
-    profiles: ["noop"]
-  drupal: !override
-    profiles: ["noop"]
-  api-proxy: !override
-    profiles: ["noop"]
-  spatial: !override
-    profiles: ["noop"]
-
 networks:
   weather.gov:
