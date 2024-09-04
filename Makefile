@@ -111,7 +111,7 @@ load-spatial: # Load spatial data into the database
 	docker compose run --rm spatial node load-shapefiles.js
 
 load-spatial-test: # Load spatial data into the test database
-	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test run --rm spatial-test node load-shapefiles.js
+	docker compose -f docker-compose.test.yml --profile test run --rm spatial-test node load-shapefiles.js
 
 ### Testing
 a11y: accessibility-test
@@ -139,10 +139,10 @@ unit-test: ## Run PHP unit tests
 	docker compose exec drupal phpunit --group unit
 
 start-test-environment: destroy-test-environment
-	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test up -d
+	docker compose -f docker-compose.test.yml --profile test up -d
 
 destroy-test-environment:
-	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile test down
+	docker compose -f docker-compose.test.yml --profile test down
 
 setup-outside-vars:
 	$(eval drupal_image="drupal-test")

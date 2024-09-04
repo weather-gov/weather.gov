@@ -48,3 +48,6 @@ services:
     profiles: ["noop"]
   spatial: !override
     profiles: ["noop"]
+
+networks:
+  weather.gov:
