@@ -178,9 +178,9 @@ export const updateAlerts = async () => {
 
 updateAlerts();
 
-// // Update the alerts every 30 seconds. They are cached upstream for about a
-// // minute, so there's no need to try much more often than this.
-// setInterval(updateAlerts, 30_000);
+// Update the alerts every 30 seconds. They are cached upstream for about a
+// minute, so there's no need to try much more often than this.
+setInterval(updateAlerts, 30_000);
 
 export default async ({ grid, place: { timezone } }) => {
   const geometry = grid.geometry;
