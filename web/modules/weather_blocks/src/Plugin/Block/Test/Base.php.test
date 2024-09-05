@@ -28,23 +28,6 @@ abstract class Base extends TestCase
     protected $entityServie;
 
     /**
-     * A mock of the route object.
-     *
-     * @var routeMock
-     */
-    protected $routeMock;
-
-    /**
-     * A mocked WeatherData service object.
-     *
-     * @var weatherData
-     *
-     * This is injected into the current conditions block object being tested with
-     * dependency injection.
-     */
-    protected $weatherData;
-
-    /**
      * Common setup for all component tests.
      */
     protected function setUp($type = null, $override = true): void
@@ -60,20 +43,10 @@ abstract class Base extends TestCase
             $methods[] = "getLocation";
         }
 
-        $this->weatherData = $this->createStub(WeatherDataService::class);
         $this->entityService = $this->createStub(WeatherEntityService::class);
 
-        $this->routeMock = $this->createStub(RouteMatchInterface::class);
-
         $this->block = $this->getMockBuilder($type)
-            ->setConstructorArgs([
-                [],
-                "",
-                $definition,
-                $this->routeMock,
-                $this->weatherData,
-                $this->entityService,
-            ])
+            ->setConstructorArgs([[], "", $definition, $this->entityService])
             ->setMethods($methods)
             ->getMock();
 
