@@ -1,6 +1,13 @@
 import dayjs from "../../util/day.js";
+import quantitativePrecipitation from "./quantitativePrecipitation.js";
 
-export default (data, hours) => {
+export default (data, hours, place) => {
+  const qpf = quantitativePrecipitation(
+    data.properties.quantitativePrecipitation,
+    place,
+  );
+  delete data.properties.quantitativePrecipitation;
+
   const properties = Object.keys(data.properties).filter(
     (key) =>
       data.properties[key].uom && Array.isArray(data.properties[key].values),
@@ -27,5 +34,5 @@ export default (data, hours) => {
     }
   }
 
-  return { geometry: data.geometry };
+  return { geometry: data.geometry, qpf };
 };

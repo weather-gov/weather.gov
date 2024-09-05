@@ -1,23 +1,23 @@
 import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
 import hourly from "./hourly.js";
-import { convertProperties } from "../../util/convert.js";
+import { convertValue, convertProperties } from "../../util/convert.js";
 import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 
-export default async ({ grid }) => {
+export default async ({ grid, place }) => {
   const hours = new Map();
 
   const gridPromise = fetchAPIJson(
     `/gridpoints/${grid.wfo}/${grid.x},${grid.y}`,
-  ).then((data) => gridpoint(data, hours));
+  ).then((data) => gridpoint(data, hours, place));
   const dailyPromise = fetchAPIJson(
     `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`,
-  ).then((data) => daily(data));
+  ).then((data) => daily(data, place));
   const hourlyPromise = fetchAPIJson(
     `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`,
   ).then((data) => {
-    hourly(data, hours);
+    hourly(data, hours, place);
   });
   const [dailyData, gridData] = await Promise.all([
     dailyPromise,
@@ -49,9 +49,18 @@ export default async ({ grid }) => {
     convertProperties(hour);
   });
 
+  gridData.qpf.forEach((period) => convertValue(period));
+
   for (const day of dailyData.days) {
-    const start = dayjs(day.start);
-    const end = dayjs(day.end);
+    const start = dayjs.tz(day.start);
+    const end = dayjs.tz(day.end);
+
+    day.qpf = gridData.qpf.filter(({ start: qpfStart, end: qpfEnd }) => {
+      if (qpfStart.isSameOrAfter(start) && qpfStart.isBefore(end)) {
+        return true;
+      }
+      return qpfEnd.isSameOrAfter(start) && qpfEnd.isBefore(end);
+    });
 
     day.hours = h.filter(
       ({ time }) => time.isSameOrAfter(start) && time.isSameOrBefore(end),
