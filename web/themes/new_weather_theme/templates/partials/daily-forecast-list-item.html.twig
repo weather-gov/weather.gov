@@ -110,7 +110,7 @@ only be a nighttime period.
           alerts: alerts.items,
         }
         %}
-        {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipHours } %}
+        {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'qpf': qpf } %}
       </div>
     {% endif %}
 

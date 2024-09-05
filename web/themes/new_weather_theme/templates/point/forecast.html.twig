@@ -1,4 +1,3 @@
-
 <div class="wx-daily-forecast-block">
   {{ attach_library('new_weather_theme/hourly-toggle') }}
   {% if content.error %}
@@ -16,7 +15,7 @@
               'dayHours': data.hours,
               'alerts': data.alerts,
               'highestAlertLevel': data.highestAlertLevel,
-              'precipHours': precipHours
+              'qpf': data.qpf
             }
         %}
       {%  endfor %}
