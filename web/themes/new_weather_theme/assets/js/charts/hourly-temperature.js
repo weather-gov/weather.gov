@@ -14,6 +14,14 @@
 
   Chart.register(ChartDataLabels);
 
+  // These are applied globally to all charts. Unclear if that's okay, or if
+  // what we really want is to set them per-chart, but this is what I've got
+  // for now.
+  Chart.defaults.font = {
+    family: fontMono,
+    size: 12,
+  };
+
   const chartContainers = Array.from(
     document.querySelectorAll(".wx-hourly-temp-chart-container"),
   );
@@ -27,12 +35,6 @@
       Number.parseInt(v, 10),
     );
 
-    // These are applied globally to all charts. Unclear if that's okay, or if
-    // what we really want is to set them per-chart, but this is what I've got
-    // for now.
-    Chart.defaults.font.family = fontMono;
-    Chart.defaults.font.size = `10px`;
-
     // We don't need to keep a reference to the chart object. We only need the
     // side-effects of creating it. This is not ideal, but it's how Chart.js
     // works, so it's what we've got.
@@ -45,6 +47,10 @@
         animation: false,
         responsive: true,
         maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
         plugins: {
           legend: {
             display: false,
@@ -53,6 +59,7 @@
         scales: {
           x: {
             ticks: {
+              autoSkip: true,
               maxRotation: 0,
               color: colors.base,
             },
@@ -72,12 +79,10 @@
           },
           y: {
             min: Math.min(
-              // 0,
               Math.round(Math.min(...temps) / 10) * 10 - 10,
               Math.round(Math.min(...feelsLike) / 10) * 10 - 10,
             ),
             max: Math.max(
-              // 100,
               Math.round(Math.max(...temps) / 10) * 10 + 10,
               Math.round(Math.max(...feelsLike) / 10) * 10 + 10,
             ),
@@ -92,7 +97,7 @@
       },
 
       data: {
-        labels: times.map((v) => (Number.parseInt(v, 10) % 2 === 0 ? v : "")),
+        labels: times,
         datasets: [
           {
             label: "Temperature",
@@ -113,6 +118,8 @@
               align: ({ dataIndex }) =>
                 temps[dataIndex] >= feelsLike[dataIndex] ? "bottom" : "top",
               color: colors.primary,
+              display: ({ dataIndex }) =>
+                temps[dataIndex] !== feelsLike[dataIndex],
             },
             borderDash: [4],
             backgroundColor: colors.primaryLight,
