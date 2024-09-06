@@ -66,4 +66,4 @@ The response should also be a 201 with JSON information about the newly created 
 
 # Integration Example
 
-A sample [Python script](../json-api-upload-example.py) is provided to help to aid in integration. Note that this script depends on the [requests](https://pypi.org/project/requests/) library.
+A sample [Python script](./json-api-upload-example.py) is provided to help to aid in integration. Note that this script depends on the [requests](https://pypi.org/project/requests/) library.

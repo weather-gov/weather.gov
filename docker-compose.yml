@@ -1,7 +1,6 @@
 services:
   database:
-    # 8.0.35 in prod
-    image: mysql:8.0
+    image: mysql:8.0 # 8.0.35 in prod
     networks:
       - weather.gov
     environment:
@@ -89,13 +88,12 @@ services:
     image: 18f-zscaler-plantum:jetty
     ports:
       - 8180:8080
-    profiles: ["utilities"]
+    profiles: ["utility"]
 
   utility-node:
     build:
       context: .
       dockerfile: Dockerfile.utility-node
-    profiles: ["utility"]
     networks:
       - weather.gov
     links:
@@ -103,29 +101,31 @@ services:
     volumes:
       - ./:/app
       - /app/node_modules
+    profiles: ["utility"]
 
   uswds:
     build:
       context: ./
       dockerfile: Dockerfile.uswds
-    profiles: ["utility"]
     volumes:
       - ./web/themes/new_weather_theme/:/app
       - /app/node_modules
+    profiles: ["utility"]
 
   spatial:
-      build:
-        context: ./spatial-data
-        dockerfile: Dockerfile.spatial
-      image: 18f-spatial-node:20
-      profiles: ["spatial"]
-      networks:
-        - weather.gov
-      links:
-        - database
-      volumes:
-        - ./spatial-data/:/app
-        - /app/node_modules
+    build:
+      context: ./spatial-data
+      dockerfile: Dockerfile.spatial
+    image: 18f-spatial-node:20
+    networks:
+      - weather.gov
+    links:
+      - database
+    environment:
+      DB_HOST: database
+    volumes:
+      - ./spatial-data/:/app
+      - /app/node_modules
 
 networks:
   weather.gov:

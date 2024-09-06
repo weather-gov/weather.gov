@@ -1,60 +1,4 @@
-/* eslint object-shorthand: 0, func-names: 0, no-underscore-dangle: 0 */
-const searchLocation = async (text) => {
-  const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&countryCode=USA%2CPRI%2CVIR%2CGUM%2CASM&category=Land+Features%2CBay%2CChannel%2CCove%2CDam%2CDelta%2CGulf%2CLagoon%2CLake%2COcean%2CReef%2CReservoir%2CSea%2CSound%2CStrait%2CWaterfall%2CWharf%2CAmusement+Park%2CHistorical+Monument%2CLandmark%2CTourist+Attraction%2CZoo%2CCollege%2CBeach%2CCampground%2CGolf+Course%2CHarbor%2CNature+Reserve%2COther+Parks+and+Outdoors%2CPark%2CRacetrack%2CScenic+Overlook%2CSki+Resort%2CSports+Center%2CSports+Field%2CWildlife+Reserve%2CAirport%2CFerry%2CMarina%2CPier%2CPort%2CResort%2CPostal%2CPopulated+Place&maxSuggestions=10&_=1695666335097&text=${text}`;
-  return fetch(url, { headers: { "Content-Type": "application/json" } });
-};
-
-const getLocationGeodata = async (magicKey) => {
-  const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?magicKey=${magicKey}&f=json&_=1695666335115`;
-  const response = await fetch(url, {
-    headers: { "Content-Type": "application/json" },
-  });
-  const results = await response.json();
-
-  if (
-    !results.error &&
-    Array.isArray(results.locations) &&
-    results.locations.length > 0
-  ) {
-    const {
-      locations: [
-        {
-          feature: { geometry },
-        },
-      ],
-    } = results;
-
-    const lat = Math.round(geometry.y * 1_000) / 1_000;
-    const lon = Math.round(geometry.x * 1_000) / 1_000;
-    return { lat, lon };
-  }
-  return null;
-};
-
-/**
- * This object uses the browser's SessionStorage
- * to cache and retrieve ArcGIS magicKey data.
- * Each time a user navigates to a list option,
- * we fetch the result for that option asynchronously
- * and store in this cache.
- * Later, if the user selects an option, we first check
- * for the cached data before sending a request.
- * This can provide the perception of faster interaction.
- */
-const ArcCache = {
-  getItem: function (magicKey) {
-    const found = window.sessionStorage.getItem(magicKey);
-    if (found) {
-      return JSON.parse(found);
-    }
-    return null;
-  },
-  setItem: function (magicKey, obj) {
-    const serialized = JSON.stringify(obj);
-    window.sessionStorage.setItem(magicKey, serialized);
-  },
-};
-
+// #region Template
 const comboTemplate = `
 <style>
  :host {
@@ -91,7 +35,7 @@ const comboTemplate = `
  
 </style>
 <div id="input-area">
-  <slot name="input"></slot>        
+  <slot name="input"></slot>
   <slot name="clear-button"></slot>
   <slot name="separator"></slot>
   <slot name="toggle-button"></slot>
@@ -104,6 +48,7 @@ const comboTemplate = `
 </div>
 <slot></slot>
 `;
+// #endregion
 
 /**
  * A note on terminology:
@@ -120,8 +65,11 @@ const comboTemplate = `
  */
 
 class ComboBox extends HTMLElement {
+  static count = 0;
+
   constructor() {
     super();
+    ComboBox.count += 1;
 
     this.template = document.createElement("template");
     this.template.innerHTML = comboTemplate;
@@ -129,15 +77,14 @@ class ComboBox extends HTMLElement {
     this.shadowRoot.append(this.template.content.cloneNode(true));
 
     // Private property defaults
-    this.inputDelay = 250;
     this.selectedIndex = -1;
     this.value = null;
 
-    // Bound component methods
+    // Bind component methods
     this.handleInput = this.handleInput.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleTextInput = this.handleTextInput.bind(this);
-    this.updateSearch = this.updateSearch.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
     this.showList = this.showList.bind(this);
     this.hideList = this.hideList.bind(this);
     this.toggleList = this.toggleList.bind(this);
@@ -148,18 +95,16 @@ class ComboBox extends HTMLElement {
     this.chooseOption = this.chooseOption.bind(this);
     this.submit = this.submit.bind(this);
     this.clear = this.clear.bind(this);
-    this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
-    this.getGeodataForKey = this.getGeodataForKey.bind(this);
-    this.updateAriaLive = this.updateAriaLive.bind(this);
     this.initInput = this.initInput.bind(this);
     this.initListbox = this.initListbox.bind(this);
     this.initToggleButton = this.initToggleButton.bind(this);
     this.initClearButton = this.initClearButton.bind(this);
-    this.saveSearchResult = this.saveSearchResult.bind(this);
-    this.getSavedResults = this.getSavedResults.bind(this);
-    this.getSearchResults = this.getSearchResults.bind(this);
+    this.setListItems = this.setListItems.bind(this);
+    this.getItemByValue = this.getItemByValue.bind(this);
+    this.filterItems = this.filterItems.bind(this);
   }
 
+  // #region Component lifecycle
   connectedCallback() {
     // Initial attributes
     this.classList.add("wx-combo-box");
@@ -167,8 +112,7 @@ class ComboBox extends HTMLElement {
 
     // If we have not provided an id, set a default value
     if (!this.id) {
-      const otherCombosCount = document.querySelectorAll("wx-combo-box").length;
-      this.id = `combo-box-${otherCombosCount}`;
+      this.id = `combo-box-${ComboBox.count}`;
     }
 
     // Initial live dom elements, if not already present
@@ -181,17 +125,28 @@ class ComboBox extends HTMLElement {
     this.addEventListener("input", this.handleInput);
     this.addEventListener("keydown", this.handleKeyDown);
     this.addEventListener("change", this.handleTextInput);
+    this.input.addEventListener("focus", this.handleFocus);
     this.addEventListener("blur", this.hideList);
     this.input.addEventListener("blur", this.hideList);
-    this.input.addEventListener("focus", () => {
-      this.updateSearch("");
-    });
 
-    if (this.dataset.place) {
-      this.saveSearchResult({
-        text: this.dataset.place,
-        url: window.location.pathname,
-      });
+    const items = JSON.parse(this.getAttribute("items") ?? "null");
+    if (Array.isArray(items) && items.length > 0) {
+      this.listItems = items;
+      this.setListItems(items);
+
+      const selected = this.getAttribute("selected");
+      if (selected) {
+        const li = this.getItemByValue(selected);
+        if (li) {
+          this.input.value = li.innerText;
+          if (this.namedInput) {
+            this.namedInput.value = li.dataset.value;
+          }
+
+          this.pseudoFocusListItem(li);
+          this.handleTextInput();
+        }
+      }
     }
   }
 
@@ -199,20 +154,23 @@ class ComboBox extends HTMLElement {
     this.removeEventListener("input", this.handleInput);
     this.removeEventListener("keydown", this.handleKeyDown);
     this.removeEventListener("change", this.handleTextInput);
+    this.input.removeEventListener("focus", this.handleFocus);
     this.removeEventListener("blur", this.hideList);
     this.input.removeEventListener("blur", this.hideList);
   }
+  // #endregion
 
+  // #region Component initialization
   /**
    * Set the required attributes and classes on the
    * input element.
    * If there is no valid input element, create it
    */
   initInput() {
-    let input = this.querySelector('input[slot="input"]');
-    if (!input) {
-      input = document.createElement("input");
-    }
+    const input =
+      this.querySelector('input[slot="input"]') ??
+      document.createElement("input");
+
     input.setAttribute("type", "text");
     input.setAttribute("slot", "input");
     input.setAttribute("role", "combobox");
@@ -231,6 +189,20 @@ class ComboBox extends HTMLElement {
     input.classList.add("wx-combo-box__input");
     this.append(input);
     this.input = input;
+
+    // This named input element is provided so the value of the combo box is
+    // presented to the containing form just like any other input. We hide it,
+    // we inherit its name from the component, and we programmatically set its
+    // value as the combo box state changes. Then this component works basically
+    // like a real input element.
+    if (this.getAttribute("name")) {
+      const namedInput = document.createElement("input");
+      namedInput.setAttribute("name", this.getAttribute("name"));
+      namedInput.setAttribute("value", this.getAttribute("selected"));
+      namedInput.setAttribute("type", "hidden");
+      this.append(namedInput);
+      this.namedInput = namedInput;
+    }
   }
 
   initListbox() {
@@ -284,124 +256,29 @@ class ComboBox extends HTMLElement {
     this.append(clearButton);
     this.clearButton = clearButton;
   }
+  // #endregion
 
+  // #region Event handlers
   /**
    * Handle input events on the custom element.
    * These will be triggered by the slotted input
    * element, then bubble up.
    */
   handleInput(event) {
-    if (this._timeout) {
-      window.clearTimeout(this._timeout);
-    }
-    this._timeout = window.setTimeout(async () => {
-      await this.updateSearch(event.target.value).then(() => {
-        this.updateAriaLive(
-          `Search updated. ${this.querySelectorAll("li").length} results available`,
-        );
-      });
-    }, this.inputDelay);
+    const query = event?.target?.value;
 
+    if (query) {
+      this.setListItems(this.filterItems(this.listItems, query));
+    } else {
+      this.setListItems(this.listItems);
+    }
+
+    // Update UI elements accordingly
     this.handleTextInput(event);
   }
 
-  async getSearchResults(text) {
-    const response = await searchLocation(text);
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    }
-    return { suggestions: [] };
-  }
-
-  /**
-   * Triggered by input changes.
-   * Will make a request to the ArcGIS endpoint
-   * for search results.
-   * Clears out the current list items and select
-   * options, then creates new versions of each set,
-   * with the correct classes and event handlers
-   * set up.
-   */
-  async updateSearch(text) {
-    const data = await this.getSearchResults(text);
-
-    const makeSectionHeading = (title) => {
-      const heading = document.createElement("li");
-      heading.textContent = title;
-      heading.classList.add("font-mono-sm", "text-base", "padding-1");
-      heading.setAttribute("role", "presentation");
-      return heading;
-    };
-
-    const makeListItem = (suggestion, idx) => {
-      const li = document.createElement("li");
-      li.innerText = suggestion.text;
-      li.setAttribute("role", "option");
-      li.setAttribute("aria-setsize", data.suggestions.length);
-      li.setAttribute("aria-posinset", idx + 1);
-      li.setAttribute("aria-selected", "false");
-      if (suggestion.magicKey) {
-        li.setAttribute("data-value", suggestion.magicKey);
-      } else if (suggestion.url) {
-        li.setAttribute("data-url", suggestion.url);
-      } else {
-        return null;
-      }
-      li.classList.add(...["wx-combo-box__list-option"]);
-      li.id = `${this.id}--item-${idx + 1}`;
-
-      li.addEventListener("focus", (e) => {
-        this.cacheLocationGeodata(e.target.dataset.value);
-      });
-      li.addEventListener("mousedown", (event) => {
-        // Stop the input from losing focus by
-        // blocking normal browser behavior here
-        event.preventDefault();
-      });
-      li.addEventListener("click", this.chooseOption);
-      return li;
-    };
-
-    const saved = this.getSavedResults(text);
-
-    const items = [];
-
-    // If there are saved items, we want to put in a heading list item for them
-    // and possibly a heading list item for current search results as well.
-    if (saved.length) {
-      const list = document.createElement("ul");
-      list.setAttribute("aria-labeledby", `${this.id}--list`);
-      list.classList.add("wx-combo-box__list");
-
-      list.append(makeSectionHeading("recent locations"));
-      list.append(...saved.map(makeListItem));
-      items.push(list);
-    }
-
-    // Now add search results, if any.
-    if (data.suggestions.length) {
-      const list = document.createElement("ul");
-      list.setAttribute("aria-labeledby", `${this.id}--list`);
-      list.classList.add("wx-combo-box__list");
-
-      if (saved.length) {
-        list.append(makeSectionHeading("search results"));
-      }
-      list.append(...data.suggestions.map(makeListItem));
-
-      items.push(list);
-    }
-
-    // Append to shadow select element
-    this.querySelector('[slot="listbox"]').replaceChildren(...items);
-
-    // If there are results, show the area
-    if (saved.length || data.suggestions.length) {
-      this.showList();
-    } else {
-      this.hideList();
-    }
+  handleFocus() {
+    this.showList();
   }
 
   /**
@@ -447,6 +324,13 @@ class ComboBox extends HTMLElement {
     }
   }
 
+  submit() {
+    // Find the nearest parent form element and submit it.
+    this.closest("form")?.submit();
+  }
+  // #endregion
+
+  // #region State management
   /**
    * Shows the unordered list of results to the user.
    * Visually selects the first item if there are
@@ -493,6 +377,50 @@ class ComboBox extends HTMLElement {
     } else {
       this.showList();
     }
+  }
+
+  /**
+   * Resets the list to just the provided items.
+   * @var items [items] The items that should be represented in the list
+   *            These are objects. They must have value and text properties.
+   *            The value property is the value that should be sent to the form
+   *            when submitted. The text property is what will be displayed to
+   *            the user in the list. If there are any other properties, they
+   *            will be stored in the list item's data-meta property as JSON-
+   *            encoded text
+   */
+  setListItems(items) {
+    const list = document.createElement("ul");
+    list.setAttribute("aria-labeledby", `${this.id}--list`);
+    list.classList.add("wx-combo-box__list");
+
+    const listItems = items.map((item, idx) => {
+      const { value, text, ...meta } = item;
+
+      const li = document.createElement("li");
+      li.innerText = text;
+      li.id = `${this.id}--item-${idx + 1}`;
+      li.setAttribute("role", "option");
+      li.setAttribute("aria-setsize", text.length);
+      li.setAttribute("aria-posinset", idx + 1);
+      li.setAttribute("aria-selected", "false");
+      li.setAttribute("data-value", value);
+      li.setAttribute("data-meta", JSON.stringify(meta));
+      li.classList.add("wx-combo-box__list-option");
+
+      li.addEventListener("mousedown", (e) => {
+        // Stop the input from losing focus by
+        // blocking normal browser behavior here
+        e.preventDefault();
+      });
+
+      li.addEventListener("click", this.chooseOption);
+
+      return li;
+    });
+
+    list.append(...listItems);
+    this.querySelector('[slot="listbox"]').replaceChildren(list);
   }
 
   /**
@@ -637,15 +565,24 @@ class ComboBox extends HTMLElement {
     this.url = selectedItem.getAttribute("data-url");
 
     // Display the text of the selected item
-    // in the input field
+    // in the input field and update the named input.
     this.input.value = selectedItem.textContent;
+    if (this.namedInput) {
+      this.namedInput.value = selectedItem.dataset.value;
+    }
 
     // Hide list and trigger change event
     this.hideList();
     this.dispatchEvent(new Event("change", { bubbles: true }));
+  }
 
-    // Always submit to the parent form
-    this.submit();
+  filterItems(itemList, query) {
+    const regex = new RegExp(query, "i");
+    return itemList.filter(({ text }) => regex.test(text));
+  }
+
+  getItemByValue(value) {
+    return this.listbox.querySelector(`li[data-value='${value}']`);
   }
 
   /**
@@ -653,160 +590,20 @@ class ComboBox extends HTMLElement {
    */
   clear() {
     this.input.value = null;
+    if (this.namedInput) {
+      this.namedInput.value = null;
+    }
     this.selectedItemIndex = -1;
     this.value = null;
+    this.setListItems(this.listItems);
     this.input.setAttribute("aria-activedescendant", "");
     this.dispatchEvent(new Event("change", { bubbles: true }));
-  }
-
-  /**
-   * Triggers a submit call on an ancestor form element,
-   * if present.
-   */
-  submit() {
-    const formEl = this.closest("form[data-location-search]");
-
-    if (formEl) {
-      // If there is a loader component available,
-      // display it
-      const loader = document.querySelector("wx-loader");
-      if(loader){
-        loader.classList.remove("display-none");
-      }
-      
-      if (this.url) {
-        const result = {
-          text: this.input.value,
-          url: this.url,
-        };
-
-        this.saveSearchResult(result);
-        formEl.setAttribute("action", this.url);
-        return formEl.submit();
-      }
-
-      return this.getGeodataForKey(this.value).then((coordinates) => {
-        if (coordinates) {
-          const result = {
-            text: this.input.value,
-            url: `/point/${coordinates.lat}/${coordinates.lon}`,
-          };
-
-          this.saveSearchResult(result);
-
-          formEl.setAttribute("action", result.url);
-          formEl.submit();
-        }
-      });
-    }
-
-    return Promise.reject(
-      new Error("No form ancestor element found for this combobox"),
-    );
-  }
-
-  /**
-   * Asynchronously fetches specific location data
-   * for a given search result, stashing it away in
-   * the cache (See ArcCache)
-   */
-  async cacheLocationGeodata(magicKey) {
-    if (!window.sessionStorage.getItem(magicKey)) {
-      const result = await getLocationGeodata(magicKey);
-      ArcCache.setItem(magicKey, result);
-    }
-  }
-
-  /**
-   * Attempts to retrieve location data for a search
-   * result by its magicKey from the cache.
-   * If not present, will make the Arc API call
-   * to fetch the data.
-   */
-  async getGeodataForKey(magicKey) {
-    const cached = ArcCache.getItem(magicKey);
-    if (!cached) {
-      return getLocationGeodata(magicKey);
-    }
-
-    return cached;
-  }
-
-  saveSearchResult(result) {
-    try {
-      // When loading previously-saved results, immediately remove any items for
-      // the same URL. We'll replace them with the new one. This way we don't
-      // end up having a whole list of the same place.
-      const saved = JSON.parse(
-        localStorage.getItem("wxgov_recent_locations") ?? "[]",
-      ).filter(({ url }) => url !== result.url);
-
-      // Put the new one at the front of the list.
-      saved.unshift(result);
-
-      localStorage.setItem(
-        "wxgov_recent_locations",
-        // We don't want to save everything forever. Just keep the most recent
-        // ten. We'll handle filtering down at display time.
-        JSON.stringify(saved.slice(0, 10)),
-      );
-    } catch (e) {
-      // Do nothing. If we're here, either the browser doesn't have local
-      // storage (which is unlikely in 2024, but possible), or it is
-      // disabled and we can't use it.
-    }
-  }
-
-  getSavedResults(searchText) {
-    try {
-      const results = JSON.parse(
-        localStorage.getItem("wxgov_recent_locations") ?? "[]",
-      );
-
-      const regex = new RegExp(`^${searchText}`, "i");
-
-      return results.filter(({ text }) => regex.test(text)).slice(0, 3);
-    } catch (e) {
-      return [];
-    }
-  }
-
-  /**
-   * Adds a span of screenreader only text to
-   * this component's shadow aria-live region,
-   * which it itself also hidden.
-   * Makes use of a slot called "sr-only".
-   * The update is on a 1 second delay, which is preferred
-   * based on convos with USWDS.
-   */
-  updateAriaLive(text) {
-    if (this._ariaLiveTimeout) {
-      window.clearTimeout(this._ariaLiveTimeout);
-    }
-    this._ariaLiveTimeout = window.setTimeout(() => {
-      Array.from(this.querySelectorAll("[slot='sr-only']")).forEach((span) =>
-        span.remove(),
-      );
-      const span = document.createElement("span");
-      span.setAttribute("slot", "sr-only");
-      span.innerText = text;
-      this.append(span);
-    }, 1000);
-  }
-
-  attributeChangedCallback(name, oldVal, newVal) {
-    if (name === "input-delay") {
-      this.inputDelay = parseInt(newVal, 10);
-    }
   }
 
   get isShowingList() {
     return this.input.getAttribute("aria-expanded") === "true";
   }
-
-  static get observedAttributes() {
-    return ["input-delay"];
-  }
+  // #endregion
 }
 
 window.customElements.define("wx-combo-box", ComboBox);
