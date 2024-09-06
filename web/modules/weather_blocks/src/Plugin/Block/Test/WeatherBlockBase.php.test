@@ -36,12 +36,6 @@ final class WeatherBlockBaseTest extends Base
             $this->returnCallback(function () {
                 $args = func_get_args();
                 switch ($args[0]) {
-                    case "weather_data":
-                        return $this->weatherData;
-
-                    case "current_route_match":
-                        return $this->routeMock;
-
                     case "weather_entity":
                         return $this->entityService;
 
@@ -67,106 +61,6 @@ final class WeatherBlockBaseTest extends Base
     {
         $expected = 0;
         $actual = $this->block->getCacheMaxAge();
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test that the block properly persists configuration changes.
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testBlockSubmit(): void
-    {
-        $expected = "wfo,x,y";
-
-        $formState = $this->createStub(FormStateInterface::class);
-        $formState->method("getValue")->willReturn([
-            "wfo" => "wfo",
-            "gridX" => "x",
-            "gridY" => "y",
-        ]);
-
-        $this->block->blockSubmit([], $formState);
-
-        $actual = $this->block->getConfiguration()["grid"];
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testGetsFormWithNoConfig(): void
-    {
-        $expected = [
-            "grid" => [
-                "#type" => "fieldset",
-                "#title" => "Manual location - for testing",
-                "wfo" => [
-                    "#type" => "textfield",
-                    "#title" => "WFO",
-                    "#default_value" => "",
-                ],
-                "gridX" => [
-                    "#type" => "textfield",
-                    "#title" => "Grid X coordinate",
-                    "#default_value" => "",
-                ],
-                "gridY" => [
-                    "#type" => "textfield",
-                    "#title" => "Grid Y coordinate",
-                    "#default_value" => "",
-                ],
-            ],
-        ];
-
-        $actual = $this->block->blockForm(
-            [],
-            $this->createStub(FormStateInterface::class),
-        );
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testGetsFormWithExistingConfig(): void
-    {
-        $this->block->setConfigurationValue("grid", "bob,37,38");
-
-        $expected = [
-            "grid" => [
-                "#type" => "fieldset",
-                "#title" => "Manual location - for testing",
-                "wfo" => [
-                    "#type" => "textfield",
-                    "#title" => "WFO",
-                    "#default_value" => "bob",
-                ],
-                "gridX" => [
-                    "#type" => "textfield",
-                    "#title" => "Grid X coordinate",
-                    "#default_value" => "37",
-                ],
-                "gridY" => [
-                    "#type" => "textfield",
-                    "#title" => "Grid Y coordinate",
-                    "#default_value" => "38",
-                ],
-            ],
-        ];
-
-        $actual = $this->block->blockForm(
-            [],
-            $this->createStub(FormStateInterface::class),
-        );
 
         $this->assertEquals($expected, $actual);
     }
