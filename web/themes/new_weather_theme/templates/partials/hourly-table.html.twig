@@ -1,6 +1,32 @@
 {{ attach_library('new_weather_theme/hourly-table') }}
+{{ attach_library('new_weather_theme/chartjs') }}
+{{ attach_library('new_weather_theme/chart-hourly-temperature') }}
+
+{% set times = hours | map(h => h.time) | json_encode %}
+{% set temps = hours | map(h => h.temperature) | json_encode %}
+{% set feelsLike = hours | map(h => h.apparentTemperature) | json_encode %}
+
 <wx-hourly-table class="display-block position-relative margin-top-2 bg-white">
   <h5 class="wx-visual-h3 font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">Hourly forecast</h5>
+
+  <div class="margin-bottom-205">
+    <span class="font-family-mono text-primary-dark">Temperature</span>
+    <div class="wx-hourly-temp-chart-container margin-y-105 position-relative grid-col-12" data-times="{{ times }}" data-temps="{{ temps }}" data-feels-like="{{ feelsLike }}">
+      <canvas>
+      </canvas>
+    </div>
+    <div class="display-flex flex-align-center font-mono-xs text-base">
+      <div class="width-3 border-bottom-2px border-primary-dark height-0 margin-right-1">
+        <div class="bg-primary-dark margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
+      </div>
+      Temperature
+      <div class="margin-left-3 width-3 border-bottom-2px border-top-0 border-left-0 border-right-0 border-dotted border-primary-light height-0 margin-right-1">
+        <div class="bg-primary-light margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
+      </div>
+      Feels like
+    </div>
+  </div>
+
 
   <div class="display-flex flex-justify">
     <div>

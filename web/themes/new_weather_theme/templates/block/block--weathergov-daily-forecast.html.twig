@@ -5,7 +5,6 @@
     {% set message = "There was an error loading the daily forecast." | t %}
   {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
   {% else %}
-
     <div class="grid-container padding-x-0 tablet:padding-x-2">
       <ol class="usa-list--unstyled">
       {# Attempt to render the period(s) associated with the current day #}
@@ -22,5 +21,6 @@
       {%  endfor %}
     </ol>
   </div>
+
   {% endif %}
 </div>
