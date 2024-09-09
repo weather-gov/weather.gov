@@ -10,15 +10,15 @@ const exists = async (file) =>
 
 describe("weather icon legacy mapping", async () => {
   it("refers to files that actually exist", async () => {
+    const dir = path.dirname(new URL(import.meta.url).pathname);
+
     const iconPath = path.resolve(
-      import.meta.dirname,
+      dir,
       "../../web/themes/new_weather_theme/assets/images/weather/icons/conditions",
     );
 
     const iconMapping = JSON.parse(
-      await fs.readFile(
-        path.join(import.meta.dirname, "icon.legacyMapping.json"),
-      ),
+      await fs.readFile(path.join(dir, "icon.legacyMapping.json")),
     );
 
     const errors = [];

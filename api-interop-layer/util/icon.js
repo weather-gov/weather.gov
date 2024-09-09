@@ -1,7 +1,9 @@
 import fs from "node:fs/promises";
+import path from "node:path";
 
+const dir = path.dirname(new URL(import.meta.url).pathname);
 const legacyMapping = JSON.parse(
-  await fs.readFile(`${import.meta.dirname}/icon.legacyMapping.json`),
+  await fs.readFile(`${dir}/icon.legacyMapping.json`),
 );
 
 export const parseAPIIcon = (apiIcon) => {

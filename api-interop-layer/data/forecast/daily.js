@@ -7,7 +7,7 @@ const dayjsOffset = (iso8601) => {
   const time = dayjs(iso8601);
   const [, offset] = iso8601.match(/([-+]\d{2}:\d{2})$/) ?? [];
 
-  if (offset === "z") {
+  if (!offset || offset === "z") {
     return time;
   }
 
@@ -23,6 +23,7 @@ export default (data, { timezone }) => {
   let previousDay = -1;
 
   for (const period of data.properties.periods) {
+    console.log(period);
     const start = dayjsOffset(period.startTime);
 
     if (start.get("day") !== previousDay) {
