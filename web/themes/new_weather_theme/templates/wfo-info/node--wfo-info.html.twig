@@ -71,6 +71,7 @@
     {% set hasSocial = hasFacebook or hasTwitter or hasYoutube %}
 
     {% set hasContact = hasSocial or hasAddress or hasPhone or hasEmail %}
+    {% set hasFirstPane = hasPhone or hasAddress or hasEmail %}
 
     {% if hasContact %}
       <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker margin-bottom-0 padding-top-105 margin-top-4">
@@ -78,23 +79,25 @@
       </h2>
 
       <div class="grid-row margin-top-2">
-        <div class="grid-col-12 tablet:grid-col-4">
-          {% if hasPhone %}
-            {{ content.field_phone_number_opt }}
-          {% endif %}
-
-          {% if hasEmail %}
-            {% if hasPhone %}<div class="margin-top-2">{% endif %}
-              {{ content.field_wfo_email }}
-            {% if hasPhone %}</div>{% endif %}
-          {% endif %}
-
-          {% if hasAddress %}
-            {% if hasPhone or hasEmail %}<div class="margin-top-2">{% endif %}
-              {{ content.field_address }}
-            {% if hasPhone or hasEmail %}</div>{% endif %}
-          {% endif %}
-        </div>
+        {% if hasFirstPane %}
+          <div class="grid-col-12 tablet:grid-col-4">
+            {% if hasPhone %}
+              {{ content.field_phone_number_opt }}
+            {% endif %}
+            
+            {% if hasEmail %}
+              {% if hasPhone %}<div class="margin-top-2">{% endif %}
+                {{ content.field_wfo_email }}
+                {% if hasPhone %}</div>{% endif %}
+            {% endif %}
+            
+            {% if hasAddress %}
+              {% if hasPhone or hasEmail %}<div class="margin-top-2">{% endif %}
+                {{ content.field_address }}
+                {% if hasPhone or hasEmail %}</div>{% endif %}
+            {% endif %}
+          </div>
+        {% endif %}
 
         <div class="grid-col-12 tablet:grid-col-8">
           {% if hasSocial %}
