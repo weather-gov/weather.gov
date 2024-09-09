@@ -27,7 +27,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
     "@playwright/test": "^1.46.1",
-    "@types/node": "^22.5.2",
+    "@types/node": "^22.5.4",
     "axe-core": "^4.10.0",
     "chai": "^5.1.1",
     "cypress": "^13.14.1",
