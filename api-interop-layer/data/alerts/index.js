@@ -28,7 +28,7 @@ const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
   return geojson;
 };
 
-const updateAlerts = async () => {
+export const updateAlerts = async () => {
   const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
     ({ features }) =>
       features.map((feature) => {

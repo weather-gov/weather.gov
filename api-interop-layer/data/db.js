@@ -17,12 +17,13 @@ export const openDatabase = async () => {
 
 // Try to connect, wait, try again, wait, etc. If the database isn't ready after
 // 4 attempts and 30 seconds, we'll just fail.
-await openDatabase()
+const db = await openDatabase()
   .catch(() => sleep(5_000))
   .then(openDatabase)
   .catch(() => sleep(9_000))
   .then(openDatabase)
   .catch(() => sleep(16_000))
   .then(openDatabase);
+await db.end();
 
 export default { openDatabase };
