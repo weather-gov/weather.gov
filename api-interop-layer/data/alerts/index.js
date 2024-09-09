@@ -174,6 +174,8 @@ export const updateAlerts = async () => {
   cachedAlerts.push(...alerts);
 
   await db.end();
+
+  return cachedAlerts;
 };
 
 updateAlerts();

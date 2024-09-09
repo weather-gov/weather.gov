@@ -47,7 +47,7 @@ describe("alert data module", () => {
           effective: new Date().toISOString(),
           onset: new Date().toISOString(),
           expires: new Date().toISOString(),
-          onset: new Date().toISOString(),
+          ends: new Date().toISOString(),
         };
 
         response.json.resolves({
@@ -103,6 +103,53 @@ describe("alert data module", () => {
 
         const kinds = alerts.items.map(({ metadata: { kind } }) => kind);
         expect(kinds).to.have.same.members(["land", "land", "land"]);
+      });
+    });
+
+    describe("computes the alert finish time", () => {
+      const alertResponse = {
+        features: [
+          {
+            geometry: "geo",
+            properties: {
+              id: "one",
+              event: "Severe Thunderstorm Warning",
+              sent: new Date().toISOString(),
+              effective: new Date().toISOString(),
+              onset: new Date().toISOString(),
+            },
+          },
+        ],
+      };
+
+      it("if the alert has an ends property", async () => {
+        alertResponse.features[0].properties.ends = "2430-04-03T12:00:00Z";
+        alertResponse.features[0].properties.expires = null;
+        response.json.resolves(alertResponse);
+
+        const [{ ends, finish }] = await alertHandler.updateAlerts();
+
+        expect(ends.isSame(finish)).to.be.true;
+      });
+
+      it("if the alert does not have an ends property but does have expires", async () => {
+        alertResponse.features[0].properties.ends = null;
+        alertResponse.features[0].properties.expires = "2430-04-03T12:00:00Z";
+        response.json.resolves(alertResponse);
+
+        const [{ expires, finish }] = await alertHandler.updateAlerts();
+
+        expect(expires.isSame(finish)).to.be.true;
+      });
+
+      it("if the alert has neither ends nor expires properties", async () => {
+        alertResponse.features[0].properties.ends = null;
+        alertResponse.features[0].properties.expires = null;
+        response.json.resolves(alertResponse);
+
+        const [{ finish }] = await alertHandler.updateAlerts();
+
+        expect(finish).to.be.null;
       });
     });
   });
