@@ -133,13 +133,13 @@ const checkForLeaflet = () => {
     // keep doing this until we're done.
     document
       .querySelector("[data-wx-leaflet]")
-      .addEventListener("load", checkForLeaflet);
+      ?.addEventListener("load", checkForLeaflet);
     document
       .querySelector("[data-wx-leaflet-esri]")
-      .addEventListener("load", checkForLeaflet);
+      ?.addEventListener("load", checkForLeaflet);
     document
       .querySelector("[data-wx-leaflet-esri-vector]")
-      .addEventListener("load", checkForLeaflet);
+      ?.addEventListener("load", checkForLeaflet);
   }
 };
 
