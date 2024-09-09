@@ -180,7 +180,12 @@ updateAlerts();
 
 // Update the alerts every 30 seconds. They are cached upstream for about a
 // minute, so there's no need to try much more often than this.
-setInterval(updateAlerts, 30_000);
+//
+// Tell Node not to keep a reference to this timer. Otherwise, Node will think
+// the process is still active forever. This is not an issue in production,
+// where we don't want the process to end, but in testing, we want the process
+// to quit cleanly when the Mocha tests are finished.
+setInterval(updateAlerts, 30_000).unref();
 
 export default async ({ grid, place: { timezone } }) => {
   const geometry = grid.geometry;
