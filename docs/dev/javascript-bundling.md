@@ -17,6 +17,32 @@ We define what Javascript to deploy in the Drupal theme's libraries file at
 there should be one entry per page type. The same code may be bundled in multiple
 page types, but we only want to deliver a single bundled file per page type.
 
+In order for an entrypoint script to be enabled for bundling, its top-level key
+must end in `-page`. For example:
+
+```yaml
+front-page:
+  version: 2
+  js:
+    assets/js/front.page.js:
+      attributes:
+        type: module
+        defer: true
+
+cmi:
+  version: 3
+  js:
+    https://cmi:
+      attributes:
+        defer: true
+        data-wx-radar-cmi: true
+```
+
+This will cause the `front-page` library to be built into a bundle. There must
+be only **_ONE_** Javascript file here, and it is the entrypoint into the
+module. In its current form, our entrypoints just `import` the sub-components
+that are relevant for each page type.
+
 > [!CAUTION]  
 > If there are any changes in any of the files that get bundled into a page's
 > library, the version **_MUST_** be updated. If the version is not updated,
