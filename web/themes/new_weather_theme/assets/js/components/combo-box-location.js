@@ -56,7 +56,7 @@ const ArcCache = {
   },
 };
 
-class LocationComboBox extends ComboBox {
+export default class LocationComboBox extends ComboBox {
   constructor() {
     super();
 
