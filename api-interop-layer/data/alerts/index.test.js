@@ -11,11 +11,17 @@ describe("alert data module", () => {
 
   const response = { json: sandbox.stub() };
 
+  // Do this before everything, so it'll happen before any describe blocks run,
+  // otherwise the connection creation won't be stubbed when the script is first
+  // imported below.
+  before(() => {
+    mariadb.default.createConnection.resolves(db);
+  });
+
   beforeEach(() => {
     sandbox.resetBehavior();
     sandbox.resetHistory();
 
-    mariadb.default.createConnection.resolves(db);
     fetch.resolves(response);
   });
 

@@ -8,7 +8,7 @@ export async function mochaGlobalSetup() {
 
 export async function mochaGlobalTeardown() {
   global.fetch.restore();
-  mariadb.default.restore();
+  mariadb.default.createConnection.restore();
 }
 
 export const mochaHooks = {
