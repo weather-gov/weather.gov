@@ -28,3 +28,13 @@ complete `launch.json`:
   ]
 }
 ```
+
+Our container will also happily let you step into Drupal source code, if you
+have it locally on your machine and setup path mappings for it. We recommend
+cloning the Drupal source and checking out the appropriate tag that matches the
+version we're using. Then, add these as additional items to the `pathMappings`
+property above:
+
+```json
+"/opt/drupal/web/core": "/{path/to/drupal/source}/core"
+```

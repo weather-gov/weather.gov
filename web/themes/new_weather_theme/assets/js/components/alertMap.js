@@ -24,11 +24,32 @@ const setupMap = (alert) => {
 
   const alertType = alert.dataset.alertName.split(" ").pop();
   if (alertType === "Warning") {
-      L.geoJSON(geoJSON, { style: { fillColor: "#D83933", color: '#FB5A47', opacity: 0.85, fillOpacity: 0.3 } }).addTo(map);
+    L.geoJSON(geoJSON, {
+      style: {
+        fillColor: "#D83933",
+        color: "#FB5A47",
+        opacity: 0.85,
+        fillOpacity: 0.3,
+      },
+    }).addTo(map);
   } else if (alertType === "Watch") {
-      L.geoJSON(geoJSON, { style: { fillColor: "#D2B93B", color: '#947100', opacity: 0.85, fillOpacity: 0.3 } }).addTo(map);
+    L.geoJSON(geoJSON, {
+      style: {
+        fillColor: "#D2B93B",
+        color: "#947100",
+        opacity: 0.85,
+        fillOpacity: 0.3,
+      },
+    }).addTo(map);
   } else {
-      L.geoJSON(geoJSON, { style: { fillColor: "#B4C1CD", color: "#585E63", opacity: 0.85, fillOpacity: 0.3 } }).addTo(map);
+    L.geoJSON(geoJSON, {
+      style: {
+        fillColor: "#B4C1CD",
+        color: "#585E63",
+        opacity: 0.85,
+        fillOpacity: 0.3,
+      },
+    }).addTo(map);
   }
 
   const locationIcon = L.divIcon({
@@ -112,14 +133,14 @@ const checkForLeaflet = () => {
     // keep doing this until we're done.
     document
       .querySelector("[data-wx-leaflet]")
-      .addEventListener("load", checkForLeaflet);
+      ?.addEventListener("load", checkForLeaflet);
     document
       .querySelector("[data-wx-leaflet-esri]")
-      .addEventListener("load", checkForLeaflet);
+      ?.addEventListener("load", checkForLeaflet);
     document
       .querySelector("[data-wx-leaflet-esri-vector]")
-      .addEventListener("load", checkForLeaflet);
+      ?.addEventListener("load", checkForLeaflet);
   }
 };
 
-document.addEventListener("DOMContentLoaded", checkForLeaflet);
+checkForLeaflet();

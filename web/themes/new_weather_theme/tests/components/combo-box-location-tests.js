@@ -1,29 +1,22 @@
 /* eslint no-unused-expressions: off */
-require("jsdom-global")(undefined, { url: "http://localhost/" });
-require("../../assets/js/components/combo-box.js");
+import { JSDOM } from "jsdom";
+import { createSandbox, stub } from "sinon";
+import { assert, expect } from "chai";
 
-// The location combobox needs the base combobox to inherit from, so set it
-// globally.
-global.ComboBox = window.customElements.get("wx-combo-box");
+// Create the DOM and capture the parts that we will use directly.
+const { window } = new JSDOM("undefined", { url: "http://localhost/" });
+const { document } = window;
 
-require("../../assets/js/components/combo-box-location.js");
-require("whatwg-fetch");
-
-let assert;
-let expect;
-
-const chaiPromise = import("chai").then((module) => {
-  assert = module.assert;
-  expect = module.expect;
-});
-const { createSandbox, stub } = require("sinon");
-
+// Set up the globals that the components need.
+global.window = window;
+global.document = document;
 global.HTMLElement = window.HTMLElement;
+global.Event = window.Event;
 
 // JSDOM does not have the `scrollIntoView` method,
 // so we need to stub it out here on all elements
-HTMLElement.prototype.scrollIntoView = stub();
-HTMLFormElement.prototype.submit = stub();
+window.HTMLElement.prototype.scrollIntoView = stub();
+window.HTMLFormElement.prototype.submit = stub();
 
 const wait = async (milliseconds) => {
   await new Promise((resolve) => {
@@ -177,7 +170,7 @@ const SEARCH_RESULT_ITEMS = {
     },
 };
 
-global.fetch = async (url) => {
+window.fetch = async (url) => {
   const parsedUrl = new URL(url);
   if (parsedUrl.pathname.includes("suggest")) {
     return window.Promise.resolve(
@@ -198,20 +191,21 @@ global.fetch = async (url) => {
 };
 
 describe("Combo box unit tests", () => {
-  before((done) => {
-    chaiPromise.then(() => {
-      done();
-    });
+  before(async () => {
+    // After all the globals are setup, now we can import the component being
+    // tested. The imports will unwind themselves and it'll use the globals we
+    // defined above to register itself with our DOM.
+    await import("../../assets/js/components/combo-box-location.js");
   });
 
   beforeEach(() => {
-    window.document.body.innerHTML = "";
-    const box = window.document.createElement("wx-combo-box-location");
-    window.document.body.append(box);
+    document.body.innerHTML = "";
+    const box = document.createElement("wx-combo-box-location");
+    document.body.append(box);
   });
 
   it("Has the element", () => {
-    assert.exists(window.document.querySelector("wx-combo-box-location"));
+    assert.exists(document.querySelector("wx-combo-box-location"));
     assert.exists(window.customElements.get("wx-combo-box-location"));
   });
 
@@ -280,7 +274,7 @@ describe("Combo box unit tests", () => {
     let sandbox;
     beforeEach(() => {
       sandbox = createSandbox();
-      window.document.body.innerHTML = "";
+      document.body.innerHTML = "";
       const box = document.createElement("wx-combo-box-location");
       document.body.append(box);
       assert.exists(window.customElements.get("wx-combo-box-location"));
@@ -291,7 +285,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Expects the component's updateSearch method to have been called on input", async () => {
-      const event = new Event("input", { bubbles: true });
+      const event = new window.Event("input", { bubbles: true });
       const component = document.querySelector("wx-combo-box-location");
       const input = component.querySelector("input");
       input.focus();
@@ -327,7 +321,7 @@ describe("Combo box unit tests", () => {
     let sandbox;
     beforeEach(async () => {
       sandbox = createSandbox();
-      window.document.body.innerHTML = "";
+      document.body.innerHTML = "";
       const box = document.createElement("wx-combo-box-location");
       document.body.append(box);
       assert.exists(window.customElements.get("wx-combo-box-location"));
@@ -348,7 +342,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Selects the second element in the list when the down arrow is pushed", () => {
-      const event = new KeyboardEvent("keydown", {
+      const event = new window.KeyboardEvent("keydown", {
         key: "ArrowDown",
         bubbles: true,
       });
@@ -368,7 +362,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Hides the result list if up is pressed while on the first item", () => {
-      const event = new KeyboardEvent("keydown", {
+      const event = new window.KeyboardEvent("keydown", {
         key: "ArrowUp",
         bubbles: true,
       });
@@ -382,7 +376,7 @@ describe("Combo box unit tests", () => {
     });
 
     it("Does nothing when pushing down arrow when the last item is selected", () => {
-      const event = new KeyboardEvent("keydown", {
+      const event = new window.KeyboardEvent("keydown", {
         key: "ArrowDown",
         bubbles: true,
       });
@@ -416,7 +410,7 @@ describe("Combo box unit tests", () => {
     let sandbox;
     beforeEach(async () => {
       sandbox = createSandbox();
-      window.document.body.innerHTML = "";
+      document.body.innerHTML = "";
       const box = document.createElement("wx-combo-box-location");
       document.body.append(box);
       assert.exists(window.customElements.get("wx-combo-box-location"));
@@ -436,7 +430,7 @@ describe("Combo box unit tests", () => {
       component.pseudoFocusListItem(secondItem);
       const spied = sandbox.spy(component, "submit");
 
-      const event = new KeyboardEvent("keydown", {
+      const event = new window.KeyboardEvent("keydown", {
         key: "Enter",
         bubbles: true,
       });
@@ -530,7 +524,7 @@ describe("Combo box unit tests", () => {
 
       global.fetch.resolves(response);
 
-      window.document.body.innerHTML = "";
+      document.body.innerHTML = "";
       box = document.createElement("wx-combo-box-location");
       document.body.append(form);
       form.append(box);
@@ -558,7 +552,7 @@ describe("Combo box unit tests", () => {
       });
 
       it("when a user loads a location page", () => {
-        window.document.body.innerHTML = "";
+        document.body.innerHTML = "";
         const component = document.createElement("wx-combo-box-location");
         component.setAttribute("data-place", "Placeville, ST");
         document.body.append(form);
@@ -624,7 +618,7 @@ describe("Combo box unit tests", () => {
 
     describe("shows previously-saved results", () => {
       beforeEach(async () => {
-        window.document.body.innerHTML = "";
+        document.body.innerHTML = "";
         box = document.createElement("wx-combo-box-location");
         document.body.append(box);
 

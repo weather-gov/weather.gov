@@ -1,0 +1,41 @@
+runs:
+  using: composite
+  steps:
+    - name: install dependencies
+      shell: bash
+      run: |
+        cd web/themes/new_weather_theme
+        npm ci
+        
+    - name: bundle
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { chdir } = require("node:process");
+          chdir("web/themes/new_weather_theme");
+          const fs = require("node:fs/promises");
+          const esbuild = require("esbuild");
+          const yaml = require("js-yaml");
+
+          const libs = yaml.load(await fs.readFile("new_weather_theme.libraries.yml"));
+          const targets = Object.entries(libs).filter(([key, config]) => {
+            if(key.endsWith("-page")) {
+              const sources = Object.keys(config.js);
+              if(sources.length === 1 && sources[0].startsWith('assets/js')) {
+                return true;
+              }
+            }
+            return false;
+          }).map(([, {js}])=>Object.keys(js)[0]);
+
+          for await(const target of targets) {
+            await esbuild.build({
+              entryPoints: [target],
+              bundle: true,
+              minify: true,
+              sourcemap: true,
+              outfile: target,
+              allowOverwrite: true,
+            });
+          }
+

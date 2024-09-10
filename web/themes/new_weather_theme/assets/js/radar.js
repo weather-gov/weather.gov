@@ -101,28 +101,26 @@ const setupRadar = () => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const scriptEl = document.querySelector("[data-wx-radar-cmi]");
-  const currentTabSelected = document.querySelector("#current[data-selected]");
-  // If the page loads with the current tab selected
-  // then we try to load the radar.
-  // If the page loads with some other tab selected,
-  // than we bind a listener for the tab-switched event.
-  if (currentTabSelected && window.cmiRadar) {
+const scriptEl = document.querySelector("[data-wx-radar-cmi]");
+const currentTabSelected = document.querySelector("#current[data-selected]");
+// If the page loads with the current tab selected
+// then we try to load the radar.
+// If the page loads with some other tab selected,
+// than we bind a listener for the tab-switched event.
+if (currentTabSelected && window.cmiRadar) {
+  setupRadar();
+} else if (currentTabSelected) {
+  scriptEl.addEventListener("load", () => {
     setupRadar();
-  } else if (currentTabSelected) {
-    scriptEl.addEventListener("load", () => {
+  });
+} else {
+  document.addEventListener("wx:tab-switched", (event) => {
+    if (window.cmiRadar && event.detail.tabId === "current") {
       setupRadar();
-    });
-  } else {
-    document.addEventListener("wx:tab-switched", (event) => {
-      if (window.cmiRadar && event.detail.tabId === "current") {
+    } else if (event.detail.tabId === "current") {
+      scriptEl.addEventListener("load", () => {
         setupRadar();
-      } else if (event.detail.tabId === "current") {
-        scriptEl.addEventListener("load", () => {
-          setupRadar();
-        });
-      }
-    });
-  }
-});
+      });
+    }
+  });
+}
