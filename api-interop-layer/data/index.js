@@ -4,8 +4,12 @@ import getObservations from "./obs/index.js";
 import getPoint from "./points.js";
 import getSatellite from "./satellite.js";
 import dayjs from "../util/day.js";
+import { createLogger } from "../util/monitoring/index.js";
+
+const logger = createLogger("forecast");
 
 export const getDataForPoint = async (lat, lon) => {
+  logger.verbose(`fetching forecast for ${lat}, ${lon}}`);
   const { point, place, grid } = await getPoint(lat, lon);
 
   const satellitePromise = getSatellite({ grid });

@@ -1,3 +1,7 @@
+import { createLogger } from "../util/monitoring/index.js";
+
+const logger = createLogger("satellite");
+
 export default async ({ grid: { wfo } }) => {
   try {
     const satelliteMetadata = await fetch(
@@ -13,8 +17,8 @@ export default async ({ grid: { wfo } }) => {
       };
     }
   } catch (e) {
-    console.log(`Error getting satellite metadata for ${wfo}`);
-    console.log(e.message);
+    logger.error(`Error getting satellite metadata for ${wfo}`);
+    logger.error(e.message);
   }
 
   return {};

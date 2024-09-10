@@ -1,5 +1,6 @@
 import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
+import { createLogger } from "../../util/monitoring/index.js";
 import paragraphSquash from "../../util/paragraphSquash.js";
 import { openDatabase } from "../db.js";
 import alertKinds from "./kinds.js";
@@ -10,6 +11,7 @@ import {
 } from "./parse/index.js";
 import sort from "./sort.js";
 
+const logger = createLogger("alerts");
 const cachedAlerts = [];
 
 const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
@@ -29,6 +31,7 @@ const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
 };
 
 export const updateAlerts = async () => {
+  logger.verbose("updating alerts");
   const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
     ({ features }) =>
       features.map((feature) => {
@@ -57,6 +60,7 @@ export const updateAlerts = async () => {
 
   const db = await openDatabase();
 
+  logger.verbose(`got ${rawAlerts.length} alerts`);
   const alerts = [];
 
   for await (const rawAlert of rawAlerts) {
@@ -66,7 +70,10 @@ export const updateAlerts = async () => {
     // For now, we're only ingesting land alerts. Once we get into marine
     // alerts, we'll revisit this, but since we don't know what the use case
     // will be in the future, we'll just leave them out entirely for now.
-    if (alert.metadata.kind !== "land") {
+    if (!alert.metadata || alert.metadata.kind !== "land") {
+      logger.verbose(
+        `ignoring "${rawAlert.properties.event}" - not a land alert`,
+      );
       continue; // eslint-disable-line no-continue
     }
 
@@ -175,6 +182,7 @@ export const updateAlerts = async () => {
 
   await db.end();
 
+  logger.verbose(`storing ${cachedAlerts.length} alerts`);
   return cachedAlerts;
 };
 
@@ -190,6 +198,7 @@ updateAlerts();
 setInterval(updateAlerts, 30_000).unref();
 
 export default async ({ grid, place: { timezone } }) => {
+  logger.verbose(`getting alerts for ${grid.wfo} ${grid.x} ${grid.y}`);
   const geometry = grid.geometry;
   const location = `ST_GEOMFROMGEOJSON('${JSON.stringify(geometry)}')`;
   const db = await openDatabase();
@@ -210,6 +219,8 @@ export default async ({ grid, place: { timezone } }) => {
           start: alert.onset.tz(timezone).format("dddd MM/DD h:mm A __"),
           end: alert.finish?.tz(timezone).format("dddd MM/DD h:mm A __"),
         };
+
+        logger.verbose(`has ${alert.event}`);
         alerts.push(alert);
       }
     }
@@ -225,5 +236,6 @@ export default async ({ grid, place: { timezone } }) => {
     .pop();
 
   await db.end();
+  logger.verbose(`got ${alerts.length} alerts; highest is ${highest?.text}`);
   return { items: alerts, highestLevel: highest?.text };
 };

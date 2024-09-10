@@ -1,7 +1,11 @@
 import { openDatabase } from "./db.js";
 import { fetchAPIJson } from "../util/fetch.js";
+import { createLogger } from "../util/monitoring/index.js";
+
+const logger = createLogger("point");
 
 export default async (latitude, longitude) => {
+  logger.verbose(`getting information for place at ${latitude}, ${longitude}`);
   const point = { latitude, longitude };
 
   const pointsPromise = fetchAPIJson(`/points/${latitude},${longitude}`).then(
