@@ -17,8 +17,24 @@ export const parseDuration = (alert, timezone) => {
           // It ends today
           return `until ${finish.format("h:mm A")} today`;
         }
+
+        // Day.js doesn't support short format timezones anymore, but thankfully
+        // the Intl.DateTimeFormat stdlib does. We can format the finish date
+        // with it and then extract just the timezone. The output of formatting
+        // is something like:
+        //
+        // [date time string] [short timezone]
+        //
+        // So we can just split on the space and take the second element.
+        const [, tz] = new Intl.DateTimeFormat("en-US", {
+          timeZone: timezone,
+          timeZoneName: "short",
+        })
+          .format(finish.toDate())
+          .split(" ");
+
         // It ends after today
-        return `until ${finish.format("dddd MM/DD h:mm A __")}`;
+        return `until ${finish.format("dddd MM/DD h:mm A")} ${tz}`;
       }
       // The event has already concluded. We shouldn't be
       // showing this alert at all.
