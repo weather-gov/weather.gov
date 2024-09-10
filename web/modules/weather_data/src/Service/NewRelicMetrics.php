@@ -58,7 +58,7 @@ class NewRelicMetrics
         $type = "gauge",
         $now = false,
     ) {
-        $now = $now ?? time();
+        $now = $now ?: time();
 
         $attributes["applicationName"] = $this->applicationName;
 
