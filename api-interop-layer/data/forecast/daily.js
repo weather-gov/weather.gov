@@ -23,7 +23,6 @@ export default (data, { timezone }) => {
   let previousDay = -1;
 
   for (const period of data.properties.periods) {
-    console.log(period);
     const start = dayjsOffset(period.startTime);
 
     if (start.get("day") !== previousDay) {

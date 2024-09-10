@@ -63,13 +63,11 @@ export default async ({ grid, place }) => {
   // Do unit conversions on all the hourly properties. Each item in the array
   // is an object representing one hour. Each property in the object represents
   // a measurable value.
-  orderedHours.forEach((hour) => {
-    convertProperties(hour);
-  });
+  orderedHours.forEach(convertProperties);
 
   // Also convert the QPF. QPF is represented as an array of individual
   // measurements instead of an array of objects whose values are measurements.
-  gridpointData.qpf.forEach((period) => convertValue(period));
+  gridpointData.qpf.forEach(convertValue);
 
   // Now add the appropriate QPF and hourly data to each day.
   for (const day of dailyData.days) {
