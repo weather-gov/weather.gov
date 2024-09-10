@@ -7,7 +7,7 @@ const dayjsOffset = (iso8601) => {
   const time = dayjs(iso8601);
   const [, offset] = iso8601.match(/([-+]\d{2}:\d{2})$/) ?? [];
 
-  if (offset === "z") {
+  if (!offset || offset === "z") {
     return time;
   }
 
@@ -18,13 +18,12 @@ const dayjsOffset = (iso8601) => {
   return time.utcOffset(bump * (direction === "-" ? -1 : 1));
 };
 
-export default (data) => {
+export default (data, { timezone }) => {
   const days = [];
   let previousDay = -1;
 
   for (const period of data.properties.periods) {
     const start = dayjsOffset(period.startTime);
-    const startHour = start.get("hour");
 
     if (start.get("day") !== previousDay) {
       if (days.length > 0) {
@@ -53,8 +52,8 @@ export default (data) => {
       end: dayjs(period.endTime),
       isDaytime: period.isDaytime,
       isOvernight,
-      monthAndDay: start.format("MMM D"),
-      dayName: days.length === 1 ? "Today" : start.format("dddd"),
+      monthAndDay: start.tz(timezone).format("MMM D"),
+      dayName: days.length === 1 ? "Today" : start.tz(timezone).format("dddd"),
       data: convertProperties({
         icon: parseAPIIcon(period.icon),
         description: sentenceCase(period.shortForecast),

@@ -11,7 +11,7 @@ export const getDataForPoint = async (lat, lon) => {
   const satellitePromise = getSatellite({ grid });
 
   const { forecast, observed } = await Promise.all([
-    getForecast({ grid }),
+    getForecast({ grid, place }),
     getObservations({ grid, point }),
   ]).then(([forecastData, obsData]) => {
     // The forecast endpoint returns extra information about the grid. Why? I

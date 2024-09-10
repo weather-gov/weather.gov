@@ -116,6 +116,45 @@ const round = (value, { decimals }) => {
   return Math.round(value * multiple) / multiple;
 };
 
+export const convertValue = (obj) => {
+  let unitKey = "unitCode";
+
+  if (!unitMapping.has(obj.unitCode)) {
+    unitKey = "uom";
+  }
+  if (!unitMapping.has(obj[unitKey])) {
+    return obj;
+  }
+
+  const unit = obj[unitKey];
+  const value = obj.value;
+  delete obj[unitKey];
+  delete obj.value;
+
+  const conversion = unitMapping.get(unit);
+
+  // If the input value is null, preserve that.
+  obj[conversion.in.label] =
+    value !== null ? round(value, conversion.in) : null;
+
+  for (const out of conversion.out) {
+    if (value === null) {
+      obj[out.label] = null;
+    } else if (out.convert) {
+      obj[out.label] = out.convert(value);
+    } else {
+      obj[out.label] = convert(value, conversion.in.name).to(out.name);
+    }
+
+    // Likewise preserve nulls in the outputs.
+    if (obj[out.label] !== null) {
+      obj[out.label] = round(obj[out.label], out);
+    }
+  }
+
+  return obj;
+};
+
 export const convertProperties = (obj) => {
   let unitKey = "unitCode";
 
@@ -137,7 +176,8 @@ export const convertProperties = (obj) => {
 
     // If the input value is null, preserve that.
     obj[key] = {
-      [conversion.in.label]: value ? round(value, conversion.in) : null,
+      [conversion.in.label]:
+        value !== null ? round(value, conversion.in) : null,
     };
 
     for (const out of conversion.out) {
@@ -150,7 +190,7 @@ export const convertProperties = (obj) => {
       }
 
       // Likewise preserve nulls in the outputs.
-      if (obj[key][out.label]) {
+      if (obj[key][out.label] !== null) {
         obj[key][out.label] = round(obj[key][out.label], out);
       }
     }
