@@ -16,8 +16,8 @@
         </div>
         <div class="grid-row">
             <div class="tablet:grid-col-6">
-              <wx-combo-box class="z-top margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105" id="search-combo-box" {% if place %}data-place="{{ place.name }}{% if place.state %}, {{ place.state }}{% endif %}"{% endif %}}>
-              </wx-combo-box>
+              <wx-combo-box-location class="z-top margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105" id="search-combo-box" {% if place %}data-place="{{ place.name }}{% if place.state %}, {{ place.state }}{% endif %}"{% endif %}}>
+              </wx-combo-box-location>
             </div>
             <div class="font-sans-md text-primary-dark tablet:grid-col-6 margin-top-105 margin-bottom-105">
               <div class="grid-col">
