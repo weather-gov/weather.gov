@@ -3,6 +3,7 @@ import { openDatabase } from "../db.js";
 import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
 import { fetchAPIJson } from "../../util/fetch.js";
+import { parseAPIIcon } from "../../util/icon.js";
 
 // document the translation layer; high level conceptual and some lower-level for eng
 // then we can figure out SDB resourcing and how we'd collaborate
@@ -75,7 +76,7 @@ export default async ({
         formatted: observation.timestamp,
         utc: dayjs(observation.timestamp),
       },
-      icon: observation.icon,
+      icon: parseAPIIcon(observation.icon),
       description: observation.textDescription,
       station: convertProperties({
         id: station.properties.stationIdentifier,

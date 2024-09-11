@@ -66,7 +66,7 @@ export const getDataForPoint = async (lat, lon) => {
       // How long will the alert last AFTER the start of the first hour of the
       // hourly forecast?
       const absoluteDuration = Math.ceil(
-        dayjs.duration(alert.finish.diff(start.add(offset, "hours"))).asHours(),
+        dayjs.duration(alert.finish.diff(start)).asHours() - offset,
       );
 
       // Cap the alert duration at the remaining hours in the forecast.

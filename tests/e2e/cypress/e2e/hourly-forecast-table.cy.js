@@ -6,30 +6,30 @@ describe("Hourly forecast table tests", () => {
       cy.visit("/point/34.749/-92.275");
     });
 
-    it("Should have 2 alert rows on the hourly forecast", () => {
+    it("Should have 5 alert rows on the hourly forecast", () => {
       cy.get(
         `#daily ol li:first-of-type wx-hourly-table tr[data-row-name="alert"]`,
-      ).should("have.length", 2);
+      ).should("have.length", 5);
     });
 
     it("There is a Red Flag alert of the correct displayed duration", () => {
       // We expect there to be a red-flag alert that spans two hours
       // and that contains the correct event label
       cy.contains(
-        `#daily ol li:first-of-type wx-hourly-table tr[data-row-name="alert"]:nth-child(2) td[colspan]:nth-child(2)`,
+        `#daily ol li:first-of-type wx-hourly-table tr[data-row-name="alert"]:nth-child(4) td[colspan]:nth-child(2)`,
         "Red Flag Warning",
       )
         .invoke("attr", "colspan")
-        .should("equal", "2");
+        .should("equal", "3");
     });
 
     it("Has a Special Weather Statement that begins in the third hour and spans 5 hours", () => {
       cy.contains(
-        `#daily ol li:first-of-type wx-hourly-table tr[data-row-name="alert"]:nth-child(3) td[colspan]:nth-child(3)`,
+        `#daily ol li:first-of-type wx-hourly-table tr[data-row-name="alert"]:nth-child(6) td[colspan]:nth-child(3)`,
         "Special Weather Statement",
       )
         .invoke("attr", "colspan")
-        .should("equal", "5");
+        .should("equal", "6");
     });
 
     it("has a blizzard warning starting tomorrow", () => {
@@ -67,14 +67,16 @@ describe("Hourly forecast table tests", () => {
     it("Renders the expected min number of table rows", () => {
       cy.visit("/point/34.749/-92.275#daily");
       cy.get("#daily ol li:first-child wx-hourly-toggle").click();
-      cy.get("#daily ol li table.wx-precip-table tbody").each(($tbody, $idx) => {
-        // Our expectation is that up to five days should
-        // have precip data. Anything beyond that is not guaranteed
-        // at this point
-        if ($idx >= 4) {
-          cy.wrap($tbody).children("tr").should("exist");
-        }
-      });
+      cy.get("#daily ol li table.wx-precip-table tbody").each(
+        ($tbody, $idx) => {
+          // Our expectation is that up to five days should
+          // have precip data. Anything beyond that is not guaranteed
+          // at this point
+          if ($idx >= 4) {
+            cy.wrap($tbody).children("tr").should("exist");
+          }
+        },
+      );
     });
   });
 });

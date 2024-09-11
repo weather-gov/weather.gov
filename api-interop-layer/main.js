@@ -13,6 +13,11 @@ const main = async () => {
     reply.status(500).send({ error: true });
   });
 
+  process.on("uncaughtException", (err) => {
+    logger.error("Uncaught exception");
+    logger.error(err);
+  });
+
   server.get("/", (_, response) => {
     response.send({ ok: true });
   });
