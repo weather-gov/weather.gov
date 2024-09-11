@@ -16,19 +16,40 @@ export default async ({
 
   const stations = await fetchAPIJson(
     `/gridpoints/${wfo}/${x},${y}/stations`,
-  ).then((out) => out.features.slice(0, 3));
+  ).then((out) => {
+    if (out.error) {
+      return out;
+    }
+    return out.features.slice(0, 3);
+  });
+  if (stations.error) {
+    return {
+      error: true,
+      message: "Failed to find an approved observation station",
+    };
+  }
 
   let station = stations.shift();
 
   const others = stations.map(({ properties: { stationIdentifier } }) =>
     fetchAPIJson(`/stations/${stationIdentifier}/observations?limit=1`).then(
-      (out) => out.features[0].properties,
+      (out) => {
+        if (out.error) {
+          return out;
+        }
+        return out.features[0].properties;
+      },
     ),
   );
 
   let observation = await fetchAPIJson(
     `/stations/${station.properties.stationIdentifier}/observations?limit=1`,
-  ).then((out) => out.features[0].properties);
+  ).then((out) => {
+    if (out.error) {
+      return out;
+    }
+    return out.features[0].properties;
+  });
 
   if (!isObservationValid(observation)) {
     const fallbackObs = await Promise.all(others);
@@ -91,5 +112,5 @@ export default async ({
     };
   }
 
-  return false;
+  return { error: true, message: "No valid observations found" };
 };

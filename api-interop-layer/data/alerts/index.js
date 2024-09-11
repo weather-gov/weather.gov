@@ -14,6 +14,11 @@ import sort from "./sort.js";
 const logger = createLogger("alerts");
 const cachedAlerts = [];
 
+const metadata = {
+  error: false,
+  updated: null,
+};
+
 const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
   if (geojson.type === "GeometryCollection") {
     const geometries = geojson.geometries.flatMap((geometry) =>
@@ -33,8 +38,11 @@ const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
 export const updateAlerts = async () => {
   logger.verbose("updating alerts");
   const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
-    ({ features }) =>
-      features.map((feature) => {
+    ({ error, features }) => {
+      if (error) {
+        return { error: true };
+      }
+      return features.map((feature) => {
         Object.keys(feature.properties).forEach((key) => {
           const value = feature.properties[key];
           const date = dayjs(value);
@@ -55,8 +63,14 @@ export const updateAlerts = async () => {
         });
 
         return feature;
-      }),
+      });
+    },
   );
+
+  if (rawAlerts.error) {
+    metadata.error = true;
+    return metadata;
+  }
 
   const db = await openDatabase();
 
@@ -192,6 +206,8 @@ export const updateAlerts = async () => {
 
   cachedAlerts.length = 0;
   cachedAlerts.push(...alerts);
+  metadata.updated = dayjs();
+  metadata.error = false;
 
   await db.end();
 
@@ -210,9 +226,24 @@ updateAlerts();
 // to quit cleanly when the Mocha tests are finished.
 setInterval(updateAlerts, 30_000).unref();
 
-export default async ({ grid, place: { timezone } }) => {
-  logger.verbose(`getting alerts for ${grid.wfo} ${grid.x} ${grid.y}`);
-  const geometry = grid.geometry;
+export default async ({ grid, point, place: { timezone } }) => {
+  let geometry;
+
+  if (grid.error) {
+    logger.warn("no grid; falling back to point");
+    logger.verbose(`getting alerts for ${point.latitude}, ${point.longitude}`);
+    geometry = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [point.longitude, point.latitude],
+      },
+    };
+  } else {
+    logger.verbose(`getting alerts for ${grid.wfo} ${grid.x} ${grid.y}`);
+    geometry = grid.geometry;
+  }
   const location = `ST_GEOMFROMGEOJSON('${JSON.stringify(geometry)}')`;
   const db = await openDatabase();
 
@@ -250,5 +281,5 @@ export default async ({ grid, place: { timezone } }) => {
 
   await db.end();
   logger.verbose(`got ${alerts.length} alerts; highest is ${highest?.text}`);
-  return { items: alerts, highestLevel: highest?.text };
+  return { items: alerts, highestLevel: highest?.text, metadata };
 };

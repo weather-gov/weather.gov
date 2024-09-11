@@ -3,6 +3,10 @@ import dayjs from "../../util/day.js";
 import { parseAPIIcon } from "../../util/icon.js";
 
 export default (data, hours, { timezone }) => {
+  if (data.error) {
+    return;
+  }
+
   for (const period of data.properties.periods) {
     let start = dayjs(period.startTime).tz(timezone);
     const end = dayjs(period.endTime).tz(timezone);

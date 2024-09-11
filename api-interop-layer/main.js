@@ -56,6 +56,11 @@ const main = async () => {
           {},
         );
 
+      // If there is a top-level error, set the status code accordingly.
+      if (data.error && data.status) {
+        response.code(data.status);
+      }
+
       response.send({
         ...data,
         "@metadata": {

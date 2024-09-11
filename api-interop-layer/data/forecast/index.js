@@ -67,25 +67,29 @@ export default async ({ grid, place }) => {
 
   // Also convert the QPF. QPF is represented as an array of individual
   // measurements instead of an array of objects whose values are measurements.
-  gridpointData.qpf.forEach(convertValue);
+  if (gridpointData.qpf) {
+    gridpointData.qpf.forEach(convertValue);
+  }
 
   // Now add the appropriate QPF and hourly data to each day.
-  for (const day of dailyData.days) {
+  for (const day of dailyData.days ?? []) {
     const start = dayjs.tz(day.start);
     const end = dayjs.tz(day.end);
 
-    day.qpf = gridpointData.qpf.filter(({ start: qpfStart, end: qpfEnd }) => {
-      // QPF is provided in multi-hour chunks, but unlike the other measurables,
-      // the value is the total across the time period rather than continuous.
-      // So we have to preserve the multi-hour-ness of QPF. As a result,
-      // determining whether a QPF belongs to a given day is slightly more
-      // complex. If either the QPF start or end time is between the day start
-      // and end time, then it belongs in the day.
-      if (qpfStart.isSameOrAfter(start) && qpfStart.isBefore(end)) {
-        return true;
-      }
-      return qpfEnd.isSameOrAfter(start) && qpfEnd.isBefore(end);
-    });
+    if (gridpointData.qpf) {
+      day.qpf = gridpointData.qpf.filter(({ start: qpfStart, end: qpfEnd }) => {
+        // QPF is provided in multi-hour chunks, but unlike the other measurables,
+        // the value is the total across the time period rather than continuous.
+        // So we have to preserve the multi-hour-ness of QPF. As a result,
+        // determining whether a QPF belongs to a given day is slightly more
+        // complex. If either the QPF start or end time is between the day start
+        // and end time, then it belongs in the day.
+        if (qpfStart.isSameOrAfter(start) && qpfStart.isBefore(end)) {
+          return true;
+        }
+        return qpfEnd.isSameOrAfter(start) && qpfEnd.isBefore(end);
+      });
+    }
 
     // Hours are simpler. Is the hour between the start and end? Done.
     day.hours = orderedHours.filter(

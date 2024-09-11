@@ -19,6 +19,9 @@ const dayjsOffset = (iso8601) => {
 };
 
 export default (data, { timezone }) => {
+  if (data.error) {
+    return { error: true };
+  }
   const days = [];
   let previousDay = -1;
 

@@ -2,6 +2,11 @@ import dayjs from "../../util/day.js";
 import quantitativePrecipitation from "./quantitativePrecipitation.js";
 
 export default (data, hours, place) => {
+  // If we got an error, bail out. There's no data to process.
+  if (data.error) {
+    return { error: true };
+  }
+
   // QPF is different from everything else. The value given to us is the total
   // predicted precipitation (liquid equivalent) over the duration, rather than
   // the precipitation for each hour in the duration. So pull it out, parse it

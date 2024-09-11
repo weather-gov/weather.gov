@@ -1,12 +1,13 @@
 import { createLogger } from "../util/monitoring/index.js";
+import { fetchAPIJson } from "../util/fetch.js";
 
 const logger = createLogger("satellite");
 
 export default async ({ grid: { wfo } }) => {
   try {
-    const satelliteMetadata = await fetch(
+    const satelliteMetadata = await fetchAPIJson(
       `https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`,
-    ).then((r) => r.json());
+    );
 
     const satellite = satelliteMetadata.meta.satellite;
     if (satellite) {
@@ -21,5 +22,5 @@ export default async ({ grid: { wfo } }) => {
     logger.error(e.message);
   }
 
-  return {};
+  return { error: true };
 };

@@ -11,7 +11,7 @@ export default async (latitude, longitude) => {
   const pointsPromise = fetchAPIJson(`/points/${latitude},${longitude}`).then(
     (data) => {
       if (data.error) {
-        throw new Error(data.error);
+        return { error: true };
       }
 
       return {

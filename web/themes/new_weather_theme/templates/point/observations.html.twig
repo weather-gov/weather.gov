@@ -7,13 +7,19 @@
     <h3 class="usa-sr-only">Current conditions</h3>
   </div>
 
+  {% if obs.error %}
+    {% set message = "There was an error loading the current conditions." | t %}
+    {% if obs.message %}
+      {% set message = message ~ " " ~ obs.message %}
+    {% endif %}
+    <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+      {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+    </div>
+  {% endif %}
+
+  {% if not obs.error %}
   <div class="grid-container bg-white padding-y-2 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
     <div class="wx-current-conditions grid-row grid-gap">
-      {% if content.error %}
-        {% set message = "There was an error loading the current conditions." | t %}
-        {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
-      {% else %}
-
       {# Weather narrative is for screen readers only #}
       <div role="text" data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
         {{ 'Weather as of' | t }}
@@ -48,9 +54,9 @@
           <div class="margin-top-05 position-relative">
             <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
             <div class="text-primary-dark">
-                <p class="margin-top-2px font-body-md">
-                    {{ obs.data.feelsLike.degF }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
-                </p>
+              <p class="margin-top-2px font-body-md">
+                {{ obs.data.feelsLike.degF }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
+              </p>
             </div>
           </div>
         </div>
@@ -91,7 +97,7 @@
           </div>
         </div>
       </div>
-            {% endif %}
     </div>
   </div>
+  {% endif %}
 </div>

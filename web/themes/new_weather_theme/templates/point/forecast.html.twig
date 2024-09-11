@@ -1,11 +1,15 @@
 <div class="wx-daily-forecast-block">
   {{ attach_library('new_weather_theme/hourly-toggle') }}
-  {% if content.error %}
+  <div class="grid-container padding-x-0 tablet:padding-x-2">
+  {% if forecast.error %}
     {% set message = "There was an error loading the daily forecast." | t %}
-  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+    {% if forecast.message %}
+      {% set message = message ~ " " ~ forecast.message %}
+    {% endif %}
+    <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+      {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+    </div>
   {% else %}
-
-    <div class="grid-container padding-x-0 tablet:padding-x-2">
       <ol class="usa-list--unstyled">
       {%  for data in forecast.days %}
         {% set precipHours = content.precipitationPeriods[loop.index0 + precipIndex] %}
@@ -19,7 +23,7 @@
             }
         %}
       {%  endfor %}
-    </ol>
-  </div>
+      </ol>
   {% endif %}
+  </div>
 </div>

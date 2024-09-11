@@ -6,10 +6,20 @@ const logger = createLogger("fetch wrapper");
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
 
 const internalFetch = async (path) => {
-  logger.verbose(`making API request to ${path}`);
-  return fetch(`${BASE_URL}${path}`).then((r) => {
-    logger.verbose(`success from ${path}`);
-    return r.json();
+  const url = URL.canParse(path) ? path : `${BASE_URL}/${path}`;
+  logger.verbose(`making request to ${url}`);
+
+  return fetch(url).then(async (r) => {
+    if (r.status >= 200 && r.status < 400) {
+      logger.verbose(`success from ${path}`);
+      return r.json();
+    }
+
+    const response = await r.json();
+    logger.error(`non-success on ${path}`);
+    logger.error(response);
+
+    return { error: true, ...response };
   });
 };
 
