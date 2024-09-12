@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon -e js main.js",
+    "start": "nodemon -e js --experimental-loader newrelic/esm-loader.mjs -r newrelic main.js",
     "test": "LOG_LEVEL=silent c8 mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
   },
   "author": "",
@@ -15,6 +15,7 @@
     "dayjs": "^1.11.12",
     "fastify": "^4.28.1",
     "mariadb": "^3.3.1",
+    "newrelic": "^12.5.0",
     "nodemon": "^3.1.4"
   },
   "devDependencies": {
