@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon -e js main.js",
-    "test": "c8 mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
+    "test": "LOG_LEVEL=silent c8 mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
   },
   "author": "",
   "license": "CC0-1.0",

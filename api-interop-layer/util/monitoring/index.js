@@ -11,13 +11,15 @@ const writeLog = (name, level, message) => {
 };
 
 const logLevels = {
+  silent: 0,
   error: 1,
   warn: 2,
   info: 3,
   verbose: 4,
 };
 
-const logLevel = logLevels[process.env.LOG_LEVEL] ?? logLevels.info;
+const logLevel =
+  logLevels[process.env.LOG_LEVEL?.toLowerCase()] ?? logLevels.info;
 
 const noop = () => {};
 
