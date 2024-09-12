@@ -281,5 +281,12 @@ export default async ({ grid, point, place: { timezone } }) => {
 
   await db.end();
   logger.verbose(`got ${alerts.length} alerts; highest is ${highest?.text}`);
-  return { items: alerts, highestLevel: highest?.text, metadata };
+
+  // Clone the cached stuff so external entities can't overwrite it. Also so
+  // external references aren't modified unexpectedly mid-request.
+  return {
+    items: [...alerts],
+    highestLevel: highest?.text,
+    metadata: { ...metadata },
+  };
 };

@@ -19,10 +19,12 @@ describe("alert data module", () => {
   });
 
   beforeEach(() => {
+    response.status = 200;
     sandbox.resetBehavior();
     sandbox.resetHistory();
 
     fetch.resolves(response);
+    db.query.resolves([{ yes: 1 }]);
   });
 
   it("fetches alerts when the module is loaded", async () => {
@@ -38,6 +40,83 @@ describe("alert data module", () => {
     let alertHandler;
     before(async () => {
       alertHandler = await import("./index.js");
+    });
+
+    describe("error handling", () => {
+      beforeEach(async () => {
+        response.json.resolves({
+          features: [
+            {
+              geometry: "geo",
+              properties: {
+                id: "one",
+                event: "Severe Thunderstorm Warning",
+                sent: new Date().toISOString(),
+                effective: new Date().toISOString(),
+                onset: new Date().toISOString(),
+                expires: new Date().toISOString(),
+                ends: new Date().toISOString(),
+              },
+            },
+          ],
+        });
+
+        await alertHandler.updateAlerts();
+
+        response.json.resetBehavior();
+        response.json.resetHistory();
+      });
+
+      it("updates metadata but does NOT update alerts if there is an error", async () => {
+        const expected = await alertHandler.default({
+          grid: { geometry: [] },
+          place: { timezone: "America/Chicago" },
+        });
+
+        response.status = 400;
+        response.json.resolves({ no: "errors" });
+        await alertHandler.updateAlerts();
+
+        const actual = await alertHandler.default({
+          grid: { geometry: [] },
+          place: { timezone: "America/Chicago" },
+        });
+
+        expect(expected.metadata.error).to.equal(false);
+        expect(actual.metadata.error).to.equal(true);
+
+        // We've validated the error flag was changed. Now validate that the
+        // rest of returned data is the same.
+        delete expected.metadata.error;
+        delete actual.metadata.error;
+        expect(actual).to.eql(expected);
+      });
+
+      it("clears the error flag after a successful update", async () => {
+        response.status = 400;
+        response.json.resolves({ no: "errors" });
+        await alertHandler.updateAlerts();
+
+        const initial = await alertHandler.default({
+          grid: { geometry: [] },
+          place: { timezone: "America/Chicago" },
+        });
+
+        response.status = 200;
+        response.json.resolves({ features: [] });
+        await alertHandler.updateAlerts();
+
+        const after = await alertHandler.default({
+          grid: { geometry: [] },
+          place: { timezone: "America/Chicago" },
+        });
+
+        expect(initial.metadata.error).to.equal(true);
+        expect(after.metadata.error).to.equal(false);
+
+        expect(initial.items.length).to.equal(1);
+        expect(after.items.length).to.equal(0);
+      });
     });
 
     describe("the main alert function", () => {
@@ -91,11 +170,6 @@ describe("alert data module", () => {
         // alerts. We need to run it first.
         await alertHandler.updateAlerts();
 
-        // Then the default export will find the applicable alerts for us, but it
-        // will do some database queries to find geospatial intersections. Gotta
-        // mock that too.
-        db.query.resolves([{ yes: 1 }]);
-
         const alerts = await alertHandler.default({
           grid: { geometry: [] },
           place: { timezone: "America/Chicago" },
@@ -103,6 +177,72 @@ describe("alert data module", () => {
 
         const kinds = alerts.items.map(({ metadata: { kind } }) => kind);
         expect(kinds).to.have.same.members(["land", "land", "land"]);
+      });
+
+      it("derives an alert ID", async () => {
+        response.json.resolves({
+          features: [
+            {
+              geometry: "geo",
+              properties: {
+                id: "urn:oid:2.49.0.1.840.part1.part2.part3",
+                event: "Severe Thunderstorm Warning",
+                sent: new Date().toISOString(),
+                effective: new Date().toISOString(),
+                onset: new Date().toISOString(),
+                expires: new Date().toISOString(),
+                ends: new Date().toISOString(),
+              },
+            },
+          ],
+        });
+
+        await alertHandler.updateAlerts();
+
+        const alerts = await alertHandler.default({
+          grid: { geometry: [] },
+          place: { timezone: "America/Chicago" },
+        });
+
+        expect(alerts.items[0].id).to.equal("part1_part2_part3");
+      });
+
+      it("passes unknown alert types straight through", async () => {
+        response.json.resolves({
+          features: [
+            {
+              geometry: "geo",
+              properties: {
+                id: "one",
+                event: "Severe Meatballstorm Warning",
+                sent: new Date().toISOString(),
+                effective: new Date().toISOString(),
+                onset: new Date().toISOString(),
+                expires: new Date().toISOString(),
+                ends: new Date().toISOString(),
+              },
+            },
+          ],
+        });
+
+        await alertHandler.updateAlerts();
+
+        const {
+          items: [{ event, metadata }],
+        } = await alertHandler.default({
+          grid: { geometry: [] },
+          place: { timezone: "America/Chicago" },
+        });
+
+        expect(event).to.equal("Severe Meatballstorm Warning");
+        expect(metadata).to.eql({
+          level: {
+            priority: Number.MAX_SAFE_INTEGER,
+            text: "other",
+          },
+          kind: "land",
+          priority: Number.MAX_SAFE_INTEGER,
+        });
       });
 
       describe("correctly sets the highest alert level", () => {
@@ -117,10 +257,6 @@ describe("alert data module", () => {
             ends: new Date().toISOString(),
             event: type,
           },
-        });
-
-        beforeEach(() => {
-          db.query.resolves([{ yes: 1 }]);
         });
 
         it("when one of them is a warning", async () => {

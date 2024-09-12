@@ -34,14 +34,14 @@ describe("satellite metadata module", () => {
     });
   });
 
-  it("returns an empty object if the metadata is invalid", async () => {
+  it("returns an error object if the metadata is invalid", async () => {
     response.json.resolves({ nometa: {} });
     const actual = await getSatelliteData({ grid: { wfo: "wfo3" } });
 
     expect(actual).to.eql({ error: true });
   });
 
-  it("returns an empty object if the metadata fetch is unsuccessful", async () => {
+  it("returns an error object if the metadata fetch is unsuccessful", async () => {
     response.status = 404;
     const actual = await getSatelliteData({ grid: { wfo: "wfo4" } });
 
