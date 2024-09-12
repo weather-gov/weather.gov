@@ -9,6 +9,7 @@ const colors = {
   primaryDark: styles.getPropertyValue("--color-primary-dark"),
   primaryLight: styles.getPropertyValue("--color-primary-light"),
   cyan50: styles.getPropertyValue("--color-cyan-50"),
+  accentCoolDark: styles.getPropertyValue("--color-accent-cool-dark"),
 };
 
 export default {
