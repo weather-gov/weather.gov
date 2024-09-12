@@ -67,6 +67,19 @@ export const updateAlerts = async () => {
     const alert = {
       metadata: alertKinds.get(rawAlert.properties.event.toLowerCase()),
     };
+
+    // If we get an alert type that we don't have a mapping for, capture that in
+    // logs. Default to a land alert with the lowest priority so we can at least
+    // still show it to users.
+    if (!alert.metadata) {
+      logger.warn(`Unknown alert type: ${rawAlert.properties.event}`);
+      alert.metadata = {
+        level: { priority: Number.MAX_SAFE_INTEGER, text: "other" },
+        kind: "land",
+        priority: Number.MAX_SAFE_INTEGER,
+      };
+    }
+
     // For now, we're only ingesting land alerts. Once we get into marine
     // alerts, we'll revisit this, but since we don't know what the use case
     // will be in the future, we'll just leave them out entirely for now.
