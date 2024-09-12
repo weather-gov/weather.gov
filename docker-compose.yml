@@ -37,6 +37,7 @@ services:
       DB_HOST: database
       DB_PORT: 3306
       API_URL: http://api-proxy:8081
+      NEWRELIC_LICENSE: $NEWRELIC_LICENSE
     networks:
       - weather.gov
     links:

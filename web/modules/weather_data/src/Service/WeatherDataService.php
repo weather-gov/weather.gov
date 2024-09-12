@@ -35,11 +35,6 @@ class WeatherDataService
     private $t;
 
     /**
-     * NewRelic API handler
-     */
-    private $newRelic;
-
-    /**
      * Geometry of a WFO grid cell (stashed per request)
      *
      * @var stashedGridGeometry
@@ -59,13 +54,11 @@ class WeatherDataService
     public function __construct(
         TranslationInterface $t,
         CacheBackendInterface $cache,
-        NewRelicMetrics $newRelic,
         DataLayer $dataLayer,
     ) {
         $this->cache = $cache;
         $this->dataLayer = $dataLayer;
         $this->t = $t;
-        $this->newRelic = $newRelic;
     }
 
     /**

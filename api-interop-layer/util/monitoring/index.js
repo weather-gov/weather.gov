@@ -1,4 +1,7 @@
+import newrelic from "newrelic";
+
 const writeLog = (name, level, message) => {
+  newrelic.recordLogEvent({ message, level, name });
   /* eslint-disable no-console */
   if (typeof message === "string") {
     console.log(`[${name}] | ${level} | ${message} |`);
