@@ -1,4 +1,4 @@
-const uswds = require("@uswds/compile");
+import uswds from "@uswds/compile";
 
 uswds.settings.version = 3;
 
@@ -8,6 +8,6 @@ uswds.paths.dist.img = "./assets/images/uswds/";
 uswds.paths.dist.fonts = "./assets/fonts";
 uswds.paths.dist.js = "./assets/js";
 
-exports.compile = uswds.compile;
-exports.init = uswds.init;
-exports.watch = uswds.watch;
+export const compile = uswds.compile;
+export const init = uswds.init;
+export const watch = uswds.watch;
