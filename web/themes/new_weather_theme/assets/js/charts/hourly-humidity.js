@@ -10,7 +10,7 @@ const chartContainers = Array.from(
 
 for (const container of chartContainers) {
   const times = JSON.parse(container.dataset.times);
-  const pops = JSON.parse(container.dataset.humidity).map((v) =>
+  const humidity = JSON.parse(container.dataset.humidity).map((v) =>
     Number.parseInt(v, 10),
   );
   
@@ -66,7 +66,7 @@ for (const container of chartContainers) {
       datasets: [
         {
           label: "Humidity",
-          data: pops,
+          data: humidity,
           datalabels: {
             align: "end",
             anchor: "end",
