@@ -65,6 +65,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
 
   it("puts QPF into the right days", async () => {
     fetch.withArgs("https://api.weather.gov/gridpoints/BOB/X,Y").resolves({
+      status: 200,
       json: sinon.stub().resolves({
         properties: {
           quantitativePrecipitation: {
@@ -85,6 +86,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
     fetch
       .withArgs("https://api.weather.gov/gridpoints/BOB/X,Y/forecast")
       .resolves({
+        status: 200,
         json: sinon.stub().resolves({
           properties: {
             periods: [
@@ -100,6 +102,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
     fetch
       .withArgs("https://api.weather.gov/gridpoints/BOB/X,Y/forecast/hourly")
       .resolves({
+        status: 200,
         json: sinon.stub().resolves({
           properties: {
             periods: [],

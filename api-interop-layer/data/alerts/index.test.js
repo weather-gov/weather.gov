@@ -9,7 +9,7 @@ describe("alert data module", () => {
     end: () => Promise.resolve(),
   };
 
-  const response = { json: sandbox.stub() };
+  const response = { status: 200, json: sandbox.stub() };
 
   // Do this before everything, so it'll happen before any describe blocks run,
   // otherwise the connection creation won't be stubbed when the script is first

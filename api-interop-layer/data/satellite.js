@@ -9,7 +9,7 @@ export default async ({ grid: { wfo } }) => {
       `https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`,
     );
 
-    const satellite = satelliteMetadata.meta.satellite;
+    const satellite = satelliteMetadata?.meta?.satellite;
     if (satellite) {
       const goes = satellite === "GOES-West" ? "GOES18" : "GOES16";
 
