@@ -22,13 +22,13 @@ const internalFetch = async (path) => {
     // If there was a server error, retry. These are often temporary.
     if (r.status >= 500) {
       const error = new Error();
-      error.cause = { status: r.status, ...response };
+      error.cause = { ...response, status: r.status };
       return Promise.reject(error);
     }
 
     // For request errors, don't retry. They're not likely to resolve on their
     // own so there's no point.
-    return { error: true, status: r.status, ...response };
+    return { status: r.status, ...response, error: true };
   });
 };
 
@@ -40,7 +40,7 @@ export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
     .catch(() => wait(337).then(() => internalFetch(path)))
     .catch((e) => {
       logger.error(e.cause);
-      return { error: true, ...e.cause };
+      return { ...e.cause, error: true };
     });
 
 export default { fetchAPIJson };
