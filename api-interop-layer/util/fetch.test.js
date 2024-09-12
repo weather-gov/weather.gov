@@ -7,7 +7,7 @@ use(chaiAsPromised);
 
 describe("fetch module", () => {
   const sandbox = sinon.createSandbox();
-  const response = { json: sandbox.stub() };
+  const response = { status: 200, json: sandbox.stub() };
   const wait = sandbox.stub();
 
   beforeEach(() => {
