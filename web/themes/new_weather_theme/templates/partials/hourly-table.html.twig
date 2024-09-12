@@ -2,6 +2,7 @@
 {% set temps = hours | map(h => h.temperature) | json_encode %}
 {% set feelsLike = hours | map(h => h.apparentTemperature) | json_encode %}
 {% set pops = hours | map(h => h.probabilityOfPrecipitation) | json_encode %}
+{% set relativeHumidity = hours | map(h => h.relativeHumidity) | json_encode %}
 
 <wx-hourly-table class="display-block position-relative margin-top-2 bg-white">
   <h5 class="wx-visual-h3 font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">Hourly forecast</h5>
@@ -21,6 +22,14 @@
         <div class="bg-primary-light margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
       </div>
       Feels like
+    </div>
+  </div>
+
+  <div class="margin-bottom-205">
+    <span class="font-family-mono text-primary-dark">Humidity</span>
+    <div class="wx-hourly-humidity-chart-container margin-y-205 position-relative grid-col-12" data-times="{{ times }}" data-humidity="{{ relativeHumidity }}">
+      <canvas>
+      </canvas>
     </div>
   </div>
 
