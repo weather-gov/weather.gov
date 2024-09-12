@@ -15,8 +15,9 @@ for(const container of chartContainers){
   const directionShortNames = directions.map(direction => {
     return direction.short;
   });
+  console.log(directions);
   const directionDegrees = directions.map(direction => {
-    return direction.degrees;
+    return direction.angle;
   });
   const gusts = JSON.parse(container.dataset.windGusts);
 
@@ -26,12 +27,65 @@ for(const container of chartContainers){
   // eslint-disable-next-line no-new
   new Chart(container.querySelector("canvas"), {
     type: "line",
-    plugins: [ChartDataLabels],
+    plugins: [
+      ChartDataLabels,
+      {
+        afterDraw: chart => {
+          const ctx = chart.ctx;
+          const xAxis = chart.scales.x;
+          const yAxis = chart.scales.y;
+          xAxis.ticks.forEach((val, idx) =>
+            {
+              const x = xAxis.getPixelForTick(idx);
+
+              // Draw the arrow with rotation
+              const drawX = x;
+              const drawY = yAxis.bottom + 20;
+              const img = new Image();
+              img.src = "/themes/new_weather_theme/assets/images/weather/icons/wx_wind_arrow.svg";
+              const imgOffsetX = img.width / 2;
+              const imgOffsetY = img.height / 2;
+              const degrees = directionDegrees[idx] * (Math.PI/180);
+              ctx.save();
+              ctx.translate(drawX, drawY);
+              ctx.rotate(degrees);
+              ctx.translate(-(drawX + imgOffsetX), -(drawY + imgOffsetY));
+              ctx.drawImage(img, drawX, drawY);
+              ctx.restore();
+
+              // Draw the cardinal direction text
+              const text = directionShortNames[idx];
+              ctx.save();
+              const textMeasure = ctx.measureText(text);
+              const textX = drawX - (textMeasure.width / 2);
+              const textY = drawY + Math.max(img.height, img.width) + 4;
+              ctx.fillStyle = styles.colors.secondary;
+              ctx.font ="bold 16px DM Mono";
+              ctx.fillText(text, textX, textY);
+              ctx.restore();
+            });
+
+          // Draw the bottom border line
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(xAxis.left, yAxis.bottom + 40);
+          ctx.lineTo(xAxis.right, yAxis.bottom + 40);
+          ctx.closePath();
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+    ],
 
     options: {
       animation: false,
       responsive: true,
       maintainAspectRatio: false,
+      layout: {
+        padding: {
+          bottom: 50
+        }
+      },
       interaction: {
         intersect: false,
         mode: "index",
@@ -39,7 +93,7 @@ for(const container of chartContainers){
       plugins: {
         legend: {
           display: false,
-        },
+        }
       },
       scales: {
         x: {
@@ -47,6 +101,7 @@ for(const container of chartContainers){
             autoSkip: true,
             maxRotation: 0,
             color: styles.colors.base,
+            padding: 40
           },
           grid: {
             color: times.map((v) => {
