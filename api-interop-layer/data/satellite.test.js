@@ -10,6 +10,7 @@ describe("satellite metadata module", () => {
   };
 
   beforeEach(() => {
+    response.status = 200;
     fetch.resolves(response);
   });
 
@@ -41,8 +42,7 @@ describe("satellite metadata module", () => {
   });
 
   it("returns an empty object if the metadata fetch is unsuccessful", async () => {
-    // response.json.rejects(new Error("test error"));
-    response.status = 500;
+    response.status = 404;
     const actual = await getSatelliteData({ grid: { wfo: "wfo4" } });
 
     expect(actual).to.eql({ error: true });

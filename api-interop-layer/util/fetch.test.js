@@ -11,6 +11,7 @@ describe("fetch module", () => {
   const wait = sandbox.stub();
 
   beforeEach(() => {
+    response.status = 200;
     sandbox.resetBehavior();
     sandbox.resetHistory();
     wait.resolves();
@@ -121,9 +122,9 @@ describe("fetch module", () => {
     fetch.onCall(3).rejects();
     fetch.onCall(4).rejects();
 
-    const result = fetchAPIJson("/path/goes/here", { wait });
+    const result = await fetchAPIJson("/path/goes/here", { wait });
 
-    await expect(result).to.be.rejected;
+    await expect(result).to.eql({ error: true });
 
     expect(wait.callCount).to.equal(4);
     expect(wait.calledWith(75)).to.equal(true);
@@ -132,6 +133,21 @@ describe("fetch module", () => {
     expect(wait.calledWith(337)).to.equal(true);
 
     expect(fetch.callCount).to.equal(5);
+    expect(fetch.calledWith("https://api.weather.gov/path/goes/here")).to.equal(
+      true,
+    );
+  });
+
+  it("does not retry on request errors (status code 4xx)", async () => {
+    response.status = 400;
+    response.json.resolves({ message: "here" });
+    fetch.resolves(response);
+
+    const result = await fetchAPIJson("/path/goes/here");
+
+    expect(result).to.eql({ error: true, status: 400, message: "here" });
+    expect(wait.callCount).to.equal(0);
+    expect(fetch.callCount).to.equal(1);
     expect(fetch.calledWith("https://api.weather.gov/path/goes/here")).to.equal(
       true,
     );
