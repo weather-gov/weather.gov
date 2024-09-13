@@ -12,10 +12,14 @@ const chartContainers = Array.from(
 /**
  * Source image for the arrow icon
  */
+const IMG_WIDTH = 16;
+const IMG_HEIGHT = 16;
+const IMG_HEIGHT_OFFSET = IMG_HEIGHT / 2;
+const IMG_WIDTH_OFFSET = IMG_WIDTH / 2;
 const createArrowSVG = (label, degrees, color="#3D4551") => {
   const encodedColor = encodeURIComponent(color);
   return "data:image/svg+xml;utf8,"
-    + `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(${degrees}deg);transform-origin:center;">`
+    + `<svg width="${IMG_WIDTH}" height="${IMG_HEIGHT}" viewBox="0 0 ${IMG_WIDTH} ${IMG_HEIGHT}" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(${degrees}deg);transform-origin:center;">`
     + '<rect width="16" height="16" transform="translate(0.625)"/>'
     + `<path fill-rule="evenodd" clip-rule="evenodd" d="M2.96808 6.46448L4.38229 7.88059L7.625 4.63354L7.625 9.97052H9.625L9.625 4.63372L12.8676 7.88065L14.2818 6.46454L10.0391 2.21618L10.0391 2.21616L8.62493 0.800049L2.96808 6.46448ZM9.625 11.9705H7.625V14.9584H9.625V11.9705Z" fill="${encodedColor}"/>`
     + "</svg>";
@@ -67,10 +71,8 @@ const drawWindInfoLabels = (chart) => {
       const drawY = yAxis.bottom + 40;
       const img = new Image();
       img.src = createArrowSVG("", windInfo[dataIndex].direction.angle, styles.colors.secondary);
-      const imgOffsetX = img.width / 2;
-      const imgOffsetY = img.height / 2;
       ctx.save();
-      ctx.drawImage(img, drawX - imgOffsetX, drawY - imgOffsetY);
+      ctx.drawImage(img, drawX - IMG_WIDTH_OFFSET, drawY - IMG_HEIGHT_OFFSET);
       ctx.restore();
 
       // Draw the cardinal direction text
