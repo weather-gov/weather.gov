@@ -20,6 +20,10 @@ export default async ({
     if (out.error) {
       return out;
     }
+    if (!Array.isArray(out.features) || out.features.length === 0) {
+      return { error: true };
+    }
+
     return out.features.slice(0, 3);
   });
   if (stations.error) {
@@ -109,10 +113,12 @@ export default async ({
     // Add a "feels like" property, which is coerced from the heat index and
     // wind chill, if provided.
     data.feelsLike = data.heatIndex;
-    if (data.feelsLike.value === null) {
+
+    // Can't just check truthiness because 0 is valid.
+    if (Number.isNaN(Number.parseInt(data.feelsLike?.value, 10))) {
       data.feelsLike = data.windChill;
     }
-    if (data.feelsLike.value === null) {
+    if (Number.isNaN(Number.parseInt(data.feelsLike?.value, 10))) {
       data.feelsLike = data.temperature;
     }
 
