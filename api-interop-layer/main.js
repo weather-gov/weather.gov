@@ -59,7 +59,7 @@ const main = async () => {
 
       if (data.error) {
         // track this error in New Relic
-        newrelic.recordLogEvent({ message: request.url, level: "error", error });
+        newrelic.recordLogEvent({ message: request.url, level: "error", error: data.error });
 
         // If there is a top-level error, set the status code accordingly.
         if (data.status) {
