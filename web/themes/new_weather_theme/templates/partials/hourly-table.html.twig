@@ -1,3 +1,8 @@
+{#
+  Available variables:
+    hours - An array of all the hours that should be represented in the table.
+    alerts - An array of all the alerts that intersect with those hours.
+#}
 {% set times = hours | map(h => h.time) | json_encode %}
 {% set temps = hours | map(h => h.temperature) | json_encode %}
 {% set feelsLike = hours | map(h => h.apparentTemperature) | json_encode %}
