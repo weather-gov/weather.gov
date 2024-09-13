@@ -4,9 +4,9 @@ import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import { parseAPIIcon } from "../../util/icon.js";
+import { createLogger } from "../../util/monitoring/index.js";
 
-// document the translation layer; high level conceptual and some lower-level for eng
-// then we can figure out SDB resourcing and how we'd collaborate
+const logger = createLogger("observations");
 
 export default async ({
   grid: { wfo, x, y },
@@ -23,6 +23,7 @@ export default async ({
     return out.features.slice(0, 3);
   });
   if (stations.error) {
+    logger.warn("Failed to get a list of stations");
     return {
       error: true,
       message: "Failed to find an approved observation station",
@@ -35,8 +36,14 @@ export default async ({
     fetchAPIJson(`/stations/${stationIdentifier}/observations?limit=1`).then(
       (out) => {
         if (out.error) {
+          logger.warn(`station ${stationIdentifier} returned an error`);
           return out;
         }
+        if (!Array.isArray(out.features) || out.features.length === 0) {
+          logger.warn(`station ${stationIdentifier} returned, but has no data`);
+          return { error: true, message: "No valid observations found." };
+        }
+
         return out.features[0].properties;
       },
     ),
@@ -46,26 +53,53 @@ export default async ({
     `/stations/${station.properties.stationIdentifier}/observations?limit=1`,
   ).then((out) => {
     if (out.error) {
+      logger.warn(
+        `station ${station.properties.stationIdentifier} returned an error`,
+      );
       return out;
     }
+    if (!Array.isArray(out.features) || out.features.length === 0) {
+      logger.warn(
+        `station ${station.properties.stationIdentifier} returned, but has no data`,
+      );
+      return { error: true, message: "No valid observations found." };
+    }
+
     return out.features[0].properties;
   });
 
   if (!isObservationValid(observation)) {
+    logger.warn(
+      `observations from ${station.properties.stationIdentifier} (first choice) are invalid`,
+    );
+
     const fallbackObs = await Promise.all(others);
     if (isObservationValid(fallbackObs[0])) {
       station = stations[0];
       observation = fallbackObs[0];
+      logger.info(
+        `observations from ${station.properties.stationIdentifier} (second choice) are valid`,
+      );
     } else if (isObservationValid(fallbackObs[1])) {
-      station = stations[0];
-      observation = fallbackObs[0];
+      station = stations[1];
+      observation = fallbackObs[1];
+      logger.info(
+        `observations from ${station.properties.stationIdentifier} (third choice) are valid`,
+      );
     } else {
+      logger.warn(
+        `observations from ${stations.map(({ properties: { stationIdentifier } }) => stationIdentifier).join(", ")} (second and third choice) are invalid`,
+      );
+
       station = null;
       observation = null;
     }
   }
 
   if (station && observation) {
+    logger.verbose(
+      `using observations from ${station.properties.stationIdentifier}`,
+    );
     const db = await dbPromise;
 
     const data = Object.keys(observation)
@@ -112,5 +146,6 @@ export default async ({
     };
   }
 
+  logger.warn(`No valid observations found for ${wfo}/${x}/${y}`);
   return { error: true, message: "No valid observations found" };
 };

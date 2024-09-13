@@ -3,7 +3,8 @@ export default (observation) => {
     return false;
   }
 
-  if (observation.temperature.value === null) {
+  // The temperature must exist and must not be null.
+  if (observation.temperature?.value === null) {
     return false;
   }
   return true;
