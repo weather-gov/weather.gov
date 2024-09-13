@@ -1,5 +1,28 @@
 import newrelic from "newrelic";
 
+const NEW_RELIC_METRICS_URL = "https://metric-api.newrelic.com/metric/v1";
+
+export const sendNewRelicMetrics = (name, metric) => {
+  const newRelicApiKey = process.env.NEWRELIC_LICENSE;
+  if (!newRelicApiKey) {
+    return {}; // nothing to do
+  }
+
+  return fetch(NEW_RELIC_METRICS_URL, {
+    method: "POST",
+    headers: { "Api-Key": newRelicApiKey },
+    data: JSON.stringify([{ name, ...metric }]),
+  }).then(async (r) => {
+    if (r.status !== 202) {
+      const response = await r.json();
+      /* eslint-disable no-console */
+      console.log(`NR error: ${response}`);
+      /* eslint-enable no-console */
+    }
+    return r.json();
+  });
+};
+
 const writeLog = (name, level, message) => {
   newrelic.recordLogEvent({ message, level, name });
   /* eslint-disable no-console */
