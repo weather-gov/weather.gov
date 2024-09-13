@@ -15,7 +15,14 @@ function weather_data_template_preprocess_default_variables_alter(&$variables)
         $baseUrl = getEnv("INTEROP_URL");
 
         $fetch = $container->get("http_client");
-        $data = $fetch->get("$baseUrl/point/$lat/$lon")->getBody();
+
+        try {
+            $data = $fetch
+                ->get("http://api-interop-layer:8082/point/$lat/$lon")
+                ->getBody();
+        } catch (Throwable $e) {
+            $data = '{"error":true}';
+        }
 
         $variables["point"] = json_decode($data);
     }
