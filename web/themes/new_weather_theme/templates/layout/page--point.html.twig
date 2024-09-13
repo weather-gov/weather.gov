@@ -37,7 +37,7 @@
     {% endif %}
 
     {% if point.error %}
-      {% set message = "Something went wrong loading this page. Unfortunately we don't have any more information to share right now, but we'll look into it. In the meantime, please try again in a few minutes." | t %}
+      {% set message = "Something went wrong loading this page. Please try again in a few minutes." | t %}
       <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
         {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
       </div>
