@@ -2,16 +2,17 @@ import newrelic from "newrelic";
 
 const NEW_RELIC_METRICS_URL = "https://metric-api.newrelic.com/metric/v1";
 
-export const sendNewRelicMetrics = (name, metric) => {
+export const sendNewRelicMetrics = (metrics) => {
   const newRelicApiKey = process.env.NEWRELIC_LICENSE;
   if (!newRelicApiKey) {
     return {}; // nothing to do
   }
 
+  const data = JSON.stringify([{ metrics }]);
   return fetch(NEW_RELIC_METRICS_URL, {
     method: "POST",
     headers: { "Api-Key": newRelicApiKey },
-    data: JSON.stringify([{ name, ...metric }]),
+    data,
   }).then(async (r) => {
     if (r.status !== 202) {
       const response = await r.json();
@@ -19,7 +20,7 @@ export const sendNewRelicMetrics = (name, metric) => {
       console.log(`NR error: ${response}`);
       /* eslint-enable no-console */
     }
-    return r.json();
+    return {};
   });
 };
 

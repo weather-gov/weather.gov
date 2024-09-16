@@ -9,7 +9,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['beta.weather.gov API interop layer'],
+  app_name: [`api-interop-${process.env.APP_NAME || 'local'}`],
   /**
    * Your New Relic license key.
    */
