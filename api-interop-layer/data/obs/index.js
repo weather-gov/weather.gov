@@ -138,7 +138,7 @@ export default async ({
       type: "gauge",
       value: distance,
       attributes: {
-        stationIndex: stations.indexOf(station),
+        stationIndex: stations.indexOf(station) + 1,
         obsStation: station.properties.stationIdentifier,
       },
     });
