@@ -12,7 +12,10 @@ function weather_data_template_preprocess_default_variables_alter(&$variables)
         $lon = $route->getParameter("lon");
         $weatherMetadata["point"] = ["lat" => $lat, "lon" => $lon];
 
+        $baseUrl = getEnv("INTEROP_URL");
+
         $fetch = $container->get("http_client");
+
         try {
             $data = $fetch
                 ->get("http://api-interop-layer:8082/point/$lat/$lon")

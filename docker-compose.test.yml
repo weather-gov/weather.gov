@@ -8,8 +8,10 @@ services:
     links: !override
       - database-test
       - api-proxy-test
+      - api-interop-layer-test
     environment: # we want to extend, not override
       API_URL: http://api-proxy-test:9081
+      INTEROP_URL: http://api-interop-layer-test:9082
       DRUPAL_DB_HOST: database-test
     profiles: !override ["test"]
 
@@ -19,6 +21,14 @@ services:
       service: database
     ports: !override
       - 4306:3306
+    profiles: !override ["test"]
+
+  api-interop-layer-test:
+    extends:
+      file: ./docker-compose.yml
+      service: api-proxy
+    ports: !override
+      - 9082:8082
     profiles: !override ["test"]
 
   api-proxy-test:
