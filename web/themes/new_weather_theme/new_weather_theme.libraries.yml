@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-08-29
+  version: 2024-09-12
   css:
     theme:
       assets/css/styles.css: {}
@@ -25,7 +25,7 @@ front-page:
         defer: true
 
 point-page:
-  version: 2024-09-03
+  version: 2024-09-12
   js:
     assets/js/point.page.js:
       attributes:

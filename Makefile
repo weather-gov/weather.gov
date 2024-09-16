@@ -87,7 +87,7 @@ update-translations:
 	docker compose exec drupal drush locale:update
 	docker compose exec drupal drush cache:rebuild
 
-zap: update-settings zap-containers rebuild pause install-site load-spatial ## Delete the entire Docker environment and start from scratch.
+zap: update-settings zap-containers rebuild pause install-site load-spatial fix-permissions ## Delete the entire Docker environment and start from scratch.
 zap-containers:
 	docker compose stop
 	docker compose rm -f
@@ -185,3 +185,8 @@ check-translations: ## Check the consistency of translations
 ci: composer-install
 composer-install: ## Installs dependencies from lock file
 	docker compose exec drupal composer install 
+
+### Fix file permissions
+fix-permissions: ## Updates owner in docker and mod in local
+	docker compose exec drupal chown -R www-data:www-data web/sites web/modules web/themes
+	chmod -R ug+rwx web/sites web/modules web/themes
