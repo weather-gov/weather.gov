@@ -13,12 +13,13 @@ export const sendNewRelicMetric = (metric) => {
   // not record where we are sending this metric from
   metric.attributes ??= {};
   metric.attributes["applicationName"] = appName;
+  metric.timestamp ??= Date.now();
 
-  const data = JSON.stringify([{ "metrics": [metric] }]);
+  const body = JSON.stringify([{ "metrics": [metric] }]);
   return fetch(NEW_RELIC_METRICS_URL, {
     method: "POST",
     headers: { "Api-Key": licenseKey },
-    data,
+    body,
   }).then(async (r) => {
     const response = await r.json();
     if (r.status !== 202) {

@@ -137,7 +137,6 @@ export default async ({
       name: "wx.observation",
       type: "gauge",
       value: distance,
-      timestamp: Date.now(),
       attributes: {
         stationIndex: stations.indexOf(station),
         obsStation: station.properties.stationIdentifier,
