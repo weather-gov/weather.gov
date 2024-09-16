@@ -2,25 +2,31 @@ import newrelic from "newrelic";
 
 const NEW_RELIC_METRICS_URL = "https://metric-api.newrelic.com/metric/v1";
 
-export const sendNewRelicMetrics = (metrics) => {
-  const newRelicApiKey = process.env.NEWRELIC_LICENSE;
-  if (!newRelicApiKey) {
+export const sendNewRelicMetric = (metric) => {
+  const [ appName ] = newrelic.agent.config.app_name;
+  const licenseKey = newrelic.agent.config.license_key;
+  if (!licenseKey) {
     return {}; // nothing to do
   }
 
-  const data = JSON.stringify([{ metrics }]);
+  // augment metric attributes with our application name, since NR metrics does
+  // not record where we are sending this metric from
+  metric.attributes ??= {};
+  metric.attributes["applicationName"] = appName;
+
+  const data = JSON.stringify([{ "metrics": [metric] }]);
   return fetch(NEW_RELIC_METRICS_URL, {
     method: "POST",
-    headers: { "Api-Key": newRelicApiKey },
+    headers: { "Api-Key": licenseKey },
     data,
   }).then(async (r) => {
+    const response = await r.json();
     if (r.status !== 202) {
-      const response = await r.json();
       /* eslint-disable no-console */
       console.log(`NR error: ${response}`);
       /* eslint-enable no-console */
     }
-    return {};
+    return response;
   });
 };
 

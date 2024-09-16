@@ -4,7 +4,7 @@ import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import { parseAPIIcon } from "../../util/icon.js";
-import { sendNewRelicMetrics, createLogger } from "../../util/monitoring/index.js";
+import { sendNewRelicMetric, createLogger } from "../../util/monitoring/index.js";
 
 const logger = createLogger("observations");
 
@@ -133,16 +133,16 @@ export default async ({
     `);
     await db.end();
 
-    sendNewRelicMetrics([{
+    sendNewRelicMetric({
       name: "wx.observation",
       type: "gauge",
       value: distance,
       timestamp: Date.now(),
       attributes: {
         stationIndex: stations.indexOf(station),
-        obsStation: station.stationIdentifier,
+        obsStation: station.properties.stationIdentifier,
       },
-    }]);
+    });
 
     return {
       timestamp: {
