@@ -133,15 +133,16 @@ export default async ({
     `);
     await db.end();
 
-    sendNewRelicMetrics("wx.observation", {
+    sendNewRelicMetrics([{
+      name: "wx.observation",
       type: "gauge",
       value: distance,
-      timestamp: Math.floor(Date.now() / 1000),
+      timestamp: Date.now(),
       attributes: {
         stationIndex: stations.indexOf(station),
         obsStation: station.stationIdentifier,
       },
-    });
+    }]);
 
     return {
       timestamp: {
