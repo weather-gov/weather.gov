@@ -57,34 +57,34 @@ describe("API tests", () => {
 
   test("uploader can upload files", async ({ request }) => {
     // step one: upload the PDF
-    const pdf_filename = "test-upload.pdf";
-    const binary_data = await fs.readFileSync(
-      path.resolve(__dirname, "..", "mock-data", pdf_filename),
+    const pdfFilename = "test-upload.pdf";
+    const binaryData = await fs.readFileSync(
+      path.resolve(__dirname, "..", "mock-data", pdfFilename),
     );
-    const first_response = await request.post(
+    const firstResponse = await request.post(
       `${API_ENDPOINT}/node/wfo_pdf_upload/field_wfo_sitrep`,
       {
         headers: {
           Authorization: `Basic ${btoa("uploader:testpass")}`,
           "Content-Type": "application/octet-stream",
-          "Content-Disposition": `file; filename="${pdf_filename}"`,
+          "Content-Disposition": `file; filename="${pdfFilename}"`,
         },
-        data: binary_data,
+        data: binaryData,
       },
     );
-    expect(first_response.status()).toEqual(201);
-    const first_json = await first_response.json();
-    expect(first_json).toHaveProperty("data");
-    expect(first_json["data"]).toHaveProperty("id");
-    expect(first_json["data"]).toHaveProperty("attributes");
-    const id = first_json["data"]["id"];
+    expect(firstResponse.status()).toEqual(201);
+    const firstJson = await firstResponse.json();
+    expect(firstJson).toHaveProperty("data");
+    expect(firstJson["data"]).toHaveProperty("id");
+    expect(firstJson["data"]).toHaveProperty("attributes");
+    const id = firstJson["data"]["id"];
 
     // step two: upload the metadata
     const data = {
       data: {
         type: "node--wfo_pdf_upload",
         attributes: {
-          title: pdf_filename,
+          title: pdfFilename,
         },
         relationships: {
           field_wfo_sitrep: {
@@ -96,7 +96,7 @@ describe("API tests", () => {
         },
       },
     };
-    const second_response = await request.post(
+    const secondResponse = await request.post(
       `${API_ENDPOINT}/node/wfo_pdf_upload`,
       {
         headers: {
@@ -106,9 +106,9 @@ describe("API tests", () => {
         data,
       },
     );
-    expect(second_response.status()).toEqual(201);
-    const second_json = await second_response.json();
-    expect(second_json).not.toHaveProperty("errors");
-    expect(second_json).toHaveProperty("data");
+    expect(secondResponse.status()).toEqual(201);
+    const secondJson = await secondResponse.json();
+    expect(secondJson).not.toHaveProperty("errors");
+    expect(secondJson).toHaveProperty("data");
   });
 });
