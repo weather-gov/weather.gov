@@ -5,9 +5,8 @@ import styles from "../styles.js";
 Chart.register(ChartDataLabels);
 
 const chartContainers = Array.from(
-  document.querySelectorAll(".wx-hourly-wind-chart-container")
+  document.querySelectorAll(".wx-hourly-wind-chart-container"),
 );
-
 
 /**
  * Source image for the arrow icon
@@ -16,36 +15,37 @@ const IMG_WIDTH = 16;
 const IMG_HEIGHT = 16;
 const IMG_HEIGHT_OFFSET = IMG_HEIGHT / 2;
 const IMG_WIDTH_OFFSET = IMG_WIDTH / 2;
-const createArrowSVG = (label, degrees, color="#3D4551") => {
+const createArrowSVG = (label, degrees, color = "#3D4551") => {
   const encodedColor = encodeURIComponent(color);
-  return "data:image/svg+xml;utf8,"
-    + `<svg width="${IMG_WIDTH}" height="${IMG_HEIGHT}" viewBox="0 0 ${IMG_WIDTH} ${IMG_HEIGHT}" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(${degrees}deg);transform-origin:center;">`
-    + '<rect width="16" height="16" transform="translate(0.625)"/>'
-    + `<path fill-rule="evenodd" clip-rule="evenodd" d="M2.96808 6.46448L4.38229 7.88059L7.625 4.63354L7.625 9.97052H9.625L9.625 4.63372L12.8676 7.88065L14.2818 6.46454L10.0391 2.21618L10.0391 2.21616L8.62493 0.800049L2.96808 6.46448ZM9.625 11.9705H7.625V14.9584H9.625V11.9705Z" fill="${encodedColor}"/>`
-    + "</svg>";
+  return (
+    "data:image/svg+xml;utf8," +
+    `<svg width="${IMG_WIDTH}" height="${IMG_HEIGHT}" viewBox="0 0 ${IMG_WIDTH} ${IMG_HEIGHT}" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(${degrees}deg);transform-origin:center;">` +
+    '<rect width="16" height="16" transform="translate(0.625)"/>' +
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M2.96808 6.46448L4.38229 7.88059L7.625 4.63354L7.625 9.97052H9.625L9.625 4.63372L12.8676 7.88065L14.2818 6.46454L10.0391 2.21618L10.0391 2.21616L8.62493 0.800049L2.96808 6.46448ZM9.625 11.9705H7.625V14.9584H9.625V11.9705Z" fill="${encodedColor}"/>` +
+    "</svg>"
+  );
 };
-
 
 /**
  * Pull out all of the relevant wind information
  * from the data attributes on the element
  */
-const getCombinedWindInfo = element => {
+const getCombinedWindInfo = (element) => {
   const times = JSON.parse(element.dataset.times);
   const speeds = JSON.parse(element.dataset.windSpeeds);
   const directions = JSON.parse(element.dataset.windDirections);
   const gusts = JSON.parse(element.dataset.windGusts);
 
-  return times.map((time, idx) => {
-    return Object.assign(
+  return times.map((time, idx) => Object.assign(
       {},
       {
         time,
         speed: speeds[idx],
         gusts: gusts[idx],
-        direction: directions[idx]
-      });
-  });
+        direction: directions[idx],
+      },
+    )
+  );
 };
 
 /**
@@ -61,44 +61,40 @@ const drawWindInfoLabels = (chart) => {
   const yAxis = chart.scales.y;
   const container = chart.canvas.closest(".wx-hourly-wind-chart-container");
   const windInfo = getCombinedWindInfo(container);
-  xAxis.ticks.forEach((val, idx) =>
-    {
-      const x = xAxis.getPixelForTick(idx);
-      const dataIndex = val.value;
+  xAxis.ticks.forEach((val, idx) => {
+    const x = xAxis.getPixelForTick(idx);
+    const dataIndex = val.value;
 
-      // Draw the arrow with rotation
-      const drawX = x;
-      const drawY = yAxis.bottom + 40;
-      const img = new Image();
-      img.src = createArrowSVG("", windInfo[dataIndex].direction.angle, styles.colors.secondaryDarker);
-      ctx.save();
-      ctx.drawImage(img, drawX - IMG_WIDTH_OFFSET, drawY - IMG_HEIGHT_OFFSET);
-      ctx.restore();
+    // Draw the arrow with rotation
+    const drawX = x;
+    const drawY = yAxis.bottom + 40;
+    const img = new Image();
+    img.src = createArrowSVG(
+      "",
+      windInfo[dataIndex].direction.angle,
+      styles.colors.secondaryDarker,
+    );
+    ctx.save();
+    ctx.drawImage(img, drawX - IMG_WIDTH_OFFSET, drawY - IMG_HEIGHT_OFFSET);
+    ctx.restore();
 
-      // Draw the cardinal direction text
-      const text = windInfo[dataIndex].direction.short;
-      ctx.save();
-      const textMeasure = ctx.measureText(text);
-      const textMarginRight = 2;
-      const textX = drawX - (textMeasure.width / 2) - textMarginRight;
-      const textY = drawY + Math.max(img.height, img.width) + 8;
-      ctx.fillStyle = styles.colors.secondaryDarker;
-      ctx.font ="bold 16px DM Mono";
-      ctx.fillText(text, textX, textY);
-      ctx.restore();
-    });
-}
+    // Draw the cardinal direction text
+    const text = windInfo[dataIndex].direction.short;
+    ctx.save();
+    const textMeasure = ctx.measureText(text);
+    const textMarginRight = 2;
+    const textX = drawX - textMeasure.width / 2 - textMarginRight;
+    const textY = drawY + Math.max(img.height, img.width) + 8;
+    ctx.fillStyle = styles.colors.secondaryDarker;
+    ctx.font = "bold 16px DM Mono";
+    ctx.fillText(text, textX, textY);
+    ctx.restore();
+  });
+};
 
-for(const container of chartContainers){
+for (const container of chartContainers) {
   const times = JSON.parse(container.dataset.times);
   const speeds = JSON.parse(container.dataset.windSpeeds);
-  const directions = JSON.parse(container.dataset.windDirections);
-  const directionShortNames = directions.map(direction => {
-    return direction.short;
-  });
-  const directionDegrees = directions.map(direction => {
-    return direction.angle;
-  });
   const gusts = JSON.parse(container.dataset.windGusts);
 
   // We don't need to keep a reference to the chart object. We only need the
@@ -110,8 +106,8 @@ for(const container of chartContainers){
     plugins: [
       ChartDataLabels,
       {
-        afterDraw: drawWindInfoLabels
-      }
+        afterDraw: drawWindInfoLabels,
+      },
     ],
 
     options: {
@@ -125,12 +121,12 @@ for(const container of chartContainers){
       plugins: {
         legend: {
           display: false,
-        }
+        },
       },
       layout: {
         padding: {
-          bottom: 50
-        }
+          bottom: 50,
+        },
       },
       scales: {
         x: {
@@ -191,8 +187,7 @@ for(const container of chartContainers){
             align: ({ dataIndex }) =>
               speeds[dataIndex] >= gusts[dataIndex] ? "bottom" : "top",
             color: styles.colors.primary,
-            display: ({ dataIndex }) =>
-              speeds[dataIndex] !== gusts[dataIndex],
+            display: ({ dataIndex }) => speeds[dataIndex] !== gusts[dataIndex],
           },
           borderDash: [4],
           backgroundColor: styles.colors.secondary,
