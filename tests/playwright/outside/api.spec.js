@@ -75,9 +75,9 @@ describe("API tests", () => {
     expect(firstResponse.status()).toEqual(201);
     const firstJson = await firstResponse.json();
     expect(firstJson).toHaveProperty("data");
-    expect(firstJson["data"]).toHaveProperty("id");
-    expect(firstJson["data"]).toHaveProperty("attributes");
-    const id = firstJson["data"]["id"];
+    expect(firstJson.data).toHaveProperty("id");
+    expect(firstJson.data).toHaveProperty("attributes");
+    const { id } = firstJson.data;
 
     // step two: upload the metadata
     const data = {
@@ -90,7 +90,7 @@ describe("API tests", () => {
           field_wfo_sitrep: {
             data: {
               type: "file--file",
-              id: id,
+              id,
             },
           },
         },
