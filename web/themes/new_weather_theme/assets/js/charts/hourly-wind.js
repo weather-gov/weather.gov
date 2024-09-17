@@ -70,7 +70,7 @@ const drawWindInfoLabels = (chart) => {
       const drawX = x;
       const drawY = yAxis.bottom + 40;
       const img = new Image();
-      img.src = createArrowSVG("", windInfo[dataIndex].direction.angle, styles.colors.secondary);
+      img.src = createArrowSVG("", windInfo[dataIndex].direction.angle, styles.colors.secondaryDarker);
       ctx.save();
       ctx.drawImage(img, drawX - IMG_WIDTH_OFFSET, drawY - IMG_HEIGHT_OFFSET);
       ctx.restore();
@@ -79,9 +79,10 @@ const drawWindInfoLabels = (chart) => {
       const text = windInfo[dataIndex].direction.short;
       ctx.save();
       const textMeasure = ctx.measureText(text);
-      const textX = drawX - (textMeasure.width / 2);
+      const textMarginRight = 2;
+      const textX = drawX - (textMeasure.width / 2) - textMarginRight;
       const textY = drawY + Math.max(img.height, img.width) + 8;
-      ctx.fillStyle = styles.colors.secondary;
+      ctx.fillStyle = styles.colors.secondaryDarker;
       ctx.font ="bold 16px DM Mono";
       ctx.fillText(text, textX, textY);
       ctx.restore();
