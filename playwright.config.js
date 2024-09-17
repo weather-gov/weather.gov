@@ -34,6 +34,14 @@ const config = {
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      testIgnore: /api.spec.js/,
+    },
+
+    // since we are running API tests, we really only need one browser
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: /api.spec.js/,
     },
 
     // {
@@ -44,12 +52,14 @@ const config = {
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
+      testIgnore: /api.spec.js/,
     },
 
     /* Test against mobile viewports. */
     {
       name: "Mobile Chrome",
       use: { ...devices["Pixel 5"] },
+      testIgnore: /api.spec.js/,
     },
     // Mobile Safari is excluded in CI because it tends to fail when it's
     // containerized.
@@ -58,11 +68,13 @@ const config = {
     {
       name: "Microsoft Edge",
       use: { ...devices["Desktop Edge"], channel: "msedge" },
+      testIgnore: /api.spec.js/,
     },
 
     {
       name: "Google Chrome",
       use: { ...devices["Desktop Chrome"], channel: "chrome" },
+      testIgnore: /api.spec.js/,
     },
   ],
 };
@@ -71,6 +83,7 @@ if (!process.env.CI) {
   config.projects.push({
     name: "Mobile Safari",
     use: { ...devices["iPhone 12"] },
+    testIgnore: /api.spec.js/,
   });
 }
 
