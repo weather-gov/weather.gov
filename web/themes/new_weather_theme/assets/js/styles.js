@@ -8,6 +8,8 @@ const colors = {
   primary: styles.getPropertyValue("--color-primary"),
   primaryDark: styles.getPropertyValue("--color-primary-dark"),
   primaryLight: styles.getPropertyValue("--color-primary-light"),
+  secondary: styles.getPropertyValue("--color-secondary"),
+  secondaryDarker: styles.getPropertyValue("--color-secondary-darker"),
   cyan50: styles.getPropertyValue("--color-cyan-50"),
   accentCoolDark: styles.getPropertyValue("--color-accent-cool-dark"),
 };
