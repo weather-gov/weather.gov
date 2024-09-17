@@ -133,6 +133,13 @@ to only use `drush` commands to manipulate data (rather than modifying database
 or Drupal files directly) so that we guarantee CMS consistency, integrity, and
 reproducibility.
 
+To iteratively develop and run tests while the test environment is up (note
+that, again, changes will be permanent until the test environment is restarted):
+
+```sh
+PW_TEST_HTML_REPORT_OPEN='never' npx playwright test outside/
+```
+
 ## Accessibility testing
 
 Automated accessibility testing can identify about half of all kinds of
