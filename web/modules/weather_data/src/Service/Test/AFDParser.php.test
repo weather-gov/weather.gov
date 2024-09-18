@@ -501,7 +501,6 @@ final class AFDParserTest extends TestCase
     /**
      * @group unit
      * @group afd-parser
-     * @group eric
      */
     public function testConsecutiveHeaders(): void
     {
