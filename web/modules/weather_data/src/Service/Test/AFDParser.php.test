@@ -23,8 +23,7 @@ final class AFDParserTest extends TestCase
         $expected = [
             [
                 "type" => "header",
-                "content" => "SYNOPSIS",
-                "postHeader" => null,
+                "content" => "SYNOPSIS"
             ],
             [
                 "type" => "text",
@@ -50,8 +49,7 @@ final class AFDParserTest extends TestCase
         $expected = [
             [
                 "type" => "header",
-                "content" => "SPOTTER INFORMATION STATEMENT",
-                "postHeader" => null,
+                "content" => "SPOTTER INFORMATION STATEMENT"
             ],
         ];
 
@@ -80,16 +78,15 @@ final class AFDParserTest extends TestCase
         $expected = [
             [
                 "type" => "header",
-                "content" => "AVIATION /15Z WEDNESDAY THROUGH SUNDAY/",
-                "postHeader" => "SOME OTHER TEXT HERE",
+                "content" => "AVIATION /15Z WEDNESDAY THROUGH SUNDAY/"
             ],
             [
                 "type" => "text",
                 "content" =>
-                    "Improvement to MVFR cigs by mid-morning for any sites " .
-                           "that are not already MVFR. Slow improvement then to " .
-                           "VFR starting from the north in the late afternoon and " .
-                           "reaching the NYC terminals late this evening.",
+                    "SOME OTHER TEXT HERE Improvement to MVFR cigs by mid-morning for any sites " .
+                    "that are not already MVFR. Slow improvement then to " .
+                    "VFR starting from the north in the late afternoon and " .
+                    "reaching the NYC terminals late this evening.",
             ],
         ];
 
@@ -109,8 +106,8 @@ final class AFDParserTest extends TestCase
 
         $expected = [
             [
-                "type" => "subheader",
-                "content" => "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty",
+        "type" => "subheader",
+        "content" => "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty",
             ],
         ];
 
@@ -137,13 +134,13 @@ final class AFDParserTest extends TestCase
 
         $expected = [
             [
-                "type" => "preambleCode",
-                "content" => "000\nFXUS61 KOKX 071443\nAFDOKX",
+        "type" => "preambleCode",
+        "content" => "000\nFXUS61 KOKX 071443\nAFDOKX",
             ],
             [
-                "type" => "preambleText",
-                "content" =>
-                    "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024",
+        "type" => "preambleText",
+        "content" =>
+        "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024",
             ],
         ];
 
@@ -170,33 +167,33 @@ final class AFDParserTest extends TestCase
         $raw .= "\n";
         $raw .= ".SYNOPSIS...\n";
         $raw .=
-            "A nearly stationary front will remain near the coast through \n";
+        "A nearly stationary front will remain near the coast through \n";
         $raw .=
-            "Thursday. The front will then return northward Thursday night\n";
+        "Thursday. The front will then return northward Thursday night\n";
         $raw .= "into Friday. \n";
         $raw .= "\n";
         $raw .=
-            "Please refer to the latest official forecast on Debby from the \n";
+        "Please refer to the latest official forecast on Debby from the \n";
         $raw .= "National Hurricane Center.\n";
         $raw .= "\n";
         $raw .= "&&\n";
         $raw .= "\n";
         $raw .= ".NEAR TERM /THROUGH TONIGHT/...\n";
         $raw .=
-            "Forecast mainly on track. Much cooler air mass has worked into the \n";
+        "Forecast mainly on track. Much cooler air mass has worked into the \n";
         $raw .= "region with the stationary front just of the of the area.\n";
         $raw .= "\n\n ...NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty...\n";
         $raw .=
-            "High pressure builds down from the north into tonight, which will \n";
+        "High pressure builds down from the north into tonight, which will \n";
         $raw .=
-            "only reinforce some of the lower level cooler and drier air. \n";
+        "only reinforce some of the lower level cooler and drier air. \n";
         $raw .= "\n";
         $raw .= ".OKX WATCHES/WARNINGS/ADVISORIES...\n";
         $raw .= "CT...None.\n";
         $raw .= "NY...None.\n";
         $raw .= "NJ...None.\n";
         $raw .=
-            "MARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350-\n";
+        "MARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350-\n";
         $raw .= "                353-355.\n";
         $raw .= "\n";
         $raw .= "            &&\n";
@@ -213,70 +210,67 @@ final class AFDParserTest extends TestCase
 
         $expected = [
             [
-                "type" => "preambleCode",
-                "content" => "000\nFXUS61 KOKX 071443\nAFDOKX",
+        "type" => "preambleCode",
+        "content" => "000\nFXUS61 KOKX 071443\nAFDOKX",
             ],
             [
-                "type" => "preambleText",
-                "content" =>
-                    "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024",
+        "type" => "preambleText",
+        "content" =>
+        "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024",
             ],
             [
-                "type" => "header",
-                "content" => "SYNOPSIS",
-                "postHeader" => null,
+        "type" => "header",
+        "content" => "SYNOPSIS",
             ],
             [
-                "type" => "text",
-                "content" =>
-                    "A nearly stationary front will remain near the coast through" .
-                           " Thursday. The front will then return northward Thursday night into Friday.",
+        "type" => "text",
+        "content" =>
+        "A nearly stationary front will remain near the coast through" .
+        " Thursday. The front will then return northward Thursday night into Friday.",
             ],
             [
-                "type" => "text",
-                "content" =>
-                    "Please refer to the latest official forecast on Debby from the National Hurricane Center.",
+        "type" => "text",
+        "content" =>
+        "Please refer to the latest official forecast on Debby from the National Hurricane Center.",
             ],
             [
-                "type" => "header",
-                "content" => "NEAR TERM /THROUGH TONIGHT/",
-                "postHeader" => null,
+        "type" => "header",
+        "content" => "NEAR TERM /THROUGH TONIGHT/"
             ],
             [
-                "type" => "text",
-                "content" =>
-                    "Forecast mainly on track. Much cooler air mass has worked into the " .
-                           "region with the stationary front just of the of the area.",
+        "type" => "text",
+        "content" =>
+        "Forecast mainly on track. Much cooler air mass has worked into the " .
+        "region with the stationary front just of the of the area.",
             ],
             [
-                "type" => "subheader",
-                "content" => "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty",
+        "type" => "subheader",
+        "content" => "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty",
             ],
             [
-                "type" => "text",
-                "content" =>
-                    "High pressure builds down from the north into tonight, which will " .
-                           "only reinforce some of the lower level cooler and drier air.",
+        "type" => "text",
+        "content" =>
+        "High pressure builds down from the north into tonight, which will " .
+        "only reinforce some of the lower level cooler and drier air.",
             ],
             [
-                "type" => "header",
-                "content" =>
-                    "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES",
-                "postHeader" => null,
+        "type" => "header",
+        "content" =>
+        "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES"
             ],
             [
-                "type" => "text",
-                "content" =>
-                    "CT...None.\nNY...None.\nNJ...None.\nMARINE" .
-                           "...Small Craft Advisory until 11 PM EDT " .
-                           "this evening for ANZ350-353-355.",
+        "type" => "text",
+        "content" =>
+        "CT...None.\nNY...None.\nNJ...None.\nMARINE" .
+        "...Small Craft Advisory until 11 PM EDT " .
+        "this evening for ANZ350-353-355.",
             ],
             [
-                "type" => "epilogueText",
-                "content" =>
-                    "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" .
-                           " TERM...DW\nLONG TERM...JT\nMARINE..." .
-                           "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
+        "type" => "epilogueText",
+        "content" =>
+        "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" .
+        " TERM...DW\nLONG TERM...JT\nMARINE..." .
+        "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
             ],
         ];
 
@@ -299,17 +293,17 @@ final class AFDParserTest extends TestCase
 
         $expected = [
             [
-                "type" => "temps-table",
-                "rows" => [
+        "type" => "temps-table",
+        "rows" => [
                     [
-                        "type" => "temps-table-row",
-                        "numbers" => ["1", "2", "3", "4", "5", "6", "7", "8"],
-                        "name" => "Place A",
+        "type" => "temps-table-row",
+        "numbers" => ["1", "2", "3", "4", "5", "6", "7", "8"],
+        "name" => "Place A",
                     ],
                     [
-                        "type" => "temps-table-row",
-                        "numbers" => ["0", "9", "8", "7", "6", "5", "4", "3"],
-                        "name" => "Place B",
+        "type" => "temps-table-row",
+        "numbers" => ["0", "9", "8", "7", "6", "5", "4", "3"],
+        "name" => "Place B",
                     ],
                 ],
             ],
@@ -338,17 +332,17 @@ final class AFDParserTest extends TestCase
 
         $expected = [
             [
-                "type" => "temps-table",
-                "rows" => [
+        "type" => "temps-table",
+        "rows" => [
                     [
-                        "type" => "temps-table-row",
-                        "numbers" => ["1", "2", "3", "4", "5", "6", "7", "8"],
-                        "name" => "Place A",
+        "type" => "temps-table-row",
+        "numbers" => ["1", "2", "3", "4", "5", "6", "7", "8"],
+        "name" => "Place A",
                     ],
                     [
-                        "type" => "temps-table-row",
-                        "numbers" => ["0", "9", "8", "7", "6", "5", "4", "3"],
-                        "name" => "Place B",
+        "type" => "temps-table-row",
+        "numbers" => ["0", "9", "8", "7", "6", "5", "4", "3"],
+        "name" => "Place B",
                     ],
                 ],
             ],
@@ -378,33 +372,33 @@ final class AFDParserTest extends TestCase
         $raw .= "\n";
         $raw .= ".SYNOPSIS...\n";
         $raw .=
-            "A nearly stationary front will remain near the coast through \n";
+        "A nearly stationary front will remain near the coast through \n";
         $raw .=
-            "Thursday. The front will then return northward Thursday night\n";
+        "Thursday. The front will then return northward Thursday night\n";
         $raw .= "into Friday. \n";
         $raw .= "\n";
         $raw .=
-            "Please refer to the latest official forecast on Debby from the \n";
+        "Please refer to the latest official forecast on Debby from the \n";
         $raw .= "National Hurricane Center.\n";
         $raw .= "\n";
         $raw .= "&&\n";
         $raw .= "\n";
         $raw .= ".NEAR TERM /THROUGH TONIGHT/...\n";
         $raw .=
-            "Forecast mainly on track. Much cooler air mass has worked into the \n";
+        "Forecast mainly on track. Much cooler air mass has worked into the \n";
         $raw .= "region with the stationary front just of the of the area.\n";
         $raw .= "\n\n ...NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty...\n";
         $raw .=
-            "High pressure builds down from the north into tonight, which will \n";
+        "High pressure builds down from the north into tonight, which will \n";
         $raw .=
-            "only reinforce some of the lower level cooler and drier air. \n";
+        "only reinforce some of the lower level cooler and drier air. \n";
         $raw .= "\n";
         $raw .= ".OKX WATCHES/WARNINGS/ADVISORIES...\n";
         $raw .= "CT...None.\n";
         $raw .= "NY...None.\n";
         $raw .= "NJ...None.\n";
         $raw .=
-            "MARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350-\n";
+        "MARINE...Small Craft Advisory until 11 PM EDT this evening for ANZ350-\n";
         $raw .= "                353-355.\n";
         $raw .= "\n";
         $raw .= "            &&\n";
@@ -420,82 +414,79 @@ final class AFDParserTest extends TestCase
         $raw .= "        TIDES/COASTAL FLOODING...\n";
 
         $expected = [
-            "preamble" => [
-                "code" => [
+        "preamble" => [
+        "code" => [
                     [
-                        "type" => "preambleCode",
-                        "content" => "000\nFXUS61 KOKX 071443\nAFDOKX",
+        "type" => "preambleCode",
+        "content" => "000\nFXUS61 KOKX 071443\nAFDOKX",
                     ],
                 ],
-                "text" => [
+        "text" => [
                     [
-                        "type" => "preambleText",
-                        "content" =>
-                            "Area Forecast Discussion\nNational Weather Service " .
-                                   "New York NY\n1043 AM EDT Wed Aug 7 2024",
+        "type" => "preambleText",
+        "content" =>
+        "Area Forecast Discussion\nNational Weather Service " .
+        "New York NY\n1043 AM EDT Wed Aug 7 2024",
                     ],
                 ],
             ],
-            "body" => [
+        "body" => [
                 [
-                    "type" => "header",
-                    "content" => "SYNOPSIS",
-                    "postHeader" => null,
+        "type" => "header",
+        "content" => "SYNOPSIS"
                 ],
                 [
-                    "type" => "text",
-                    "content" =>
-                        "A nearly stationary front will remain near the coast through" .
-                               " Thursday. The front will then return northward Thursday night into Friday.",
+        "type" => "text",
+        "content" =>
+        "A nearly stationary front will remain near the coast through" .
+        " Thursday. The front will then return northward Thursday night into Friday.",
                 ],
                 [
-                    "type" => "text",
-                    "content" =>
-                        "Please refer to the latest official forecast on Debby from the National Hurricane Center.",
+        "type" => "text",
+        "content" =>
+        "Please refer to the latest official forecast on Debby from the National Hurricane Center.",
                 ],
                 [
-                    "type" => "header",
-                    "content" => "NEAR TERM /THROUGH TONIGHT/",
-                    "postHeader" => null,
+        "type" => "header",
+        "content" => "NEAR TERM /THROUGH TONIGHT/"
                 ],
                 [
-                    "type" => "text",
-                    "content" =>
-                        "Forecast mainly on track. Much cooler air mass has worked into the " .
-                               "region with the stationary front just of the of the area.",
+        "type" => "text",
+        "content" =>
+        "Forecast mainly on track. Much cooler air mass has worked into the " .
+        "region with the stationary front just of the of the area.",
                 ],
                 [
-                    "type" => "subheader",
-                    "content" =>
-                        "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty",
+        "type" => "subheader",
+        "content" =>
+        "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty",
                 ],
                 [
-                    "type" => "text",
-                    "content" =>
-                        "High pressure builds down from the north into tonight, which will " .
-                               "only reinforce some of the lower level cooler and drier air.",
+        "type" => "text",
+        "content" =>
+        "High pressure builds down from the north into tonight, which will " .
+        "only reinforce some of the lower level cooler and drier air.",
                 ],
                 [
-                    "type" => "header",
-                    "content" =>
-                        "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES",
-                    "postHeader" => null,
+        "type" => "header",
+        "content" =>
+        "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES"
                 ],
                 [
-                    "type" => "text",
-                    "content" =>
-                        "CT...None.\nNY...None.\nNJ...None.\nMARINE" .
-                               "...Small Craft Advisory until 11 PM EDT " .
-                               "this evening for ANZ350-353-355.",
+        "type" => "text",
+        "content" =>
+        "CT...None.\nNY...None.\nNJ...None.\nMARINE" .
+        "...Small Craft Advisory until 11 PM EDT " .
+        "this evening for ANZ350-353-355.",
                 ],
             ],
-            "epilogue" => [
+        "epilogue" => [
                 [
-                    "type" => "epilogueText",
-                    "content" =>
-                        "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" .
-                               " TERM...DW\nLONG TERM...JT\nMARINE..." .
-                               "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
+        "type" => "epilogueText",
+        "content" =>
+        "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" .
+        " TERM...DW\nLONG TERM...JT\nMARINE..." .
+        "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
                 ],
             ],
         ];
@@ -521,19 +512,17 @@ final class AFDParserTest extends TestCase
 
         $expected = [
             [
-                "type" => "header",
-                "content" => "NEAR TERM /UNTIL 6 PM THIS EVENING/",
-                "postHeader" => null
+        "type" => "header",
+        "content" => "NEAR TERM /UNTIL 6 PM THIS EVENING/"
             ],
             [
-                "type" => "header",
-                "content" =>
-                    "UPDATE",
-                "postHeader" => "As of 630 AM EDT, patchy fog has developed within many"
+        "type" => "header",
+        "content" => "UPDATE"
             ],
             [
-                "type" => "text",
-                "content" => "river valleys across the region, some of which was locally dense. This fog will dissipate between 8 and 10 AM."     
+        "type" => "text",
+        "content" =>
+        "As of 630 AM EDT, patchy fog has developed within many river valleys across the region, some of which was locally dense. This fog will dissipate between 8 and 10 AM."     
             ]
         ];
 
