@@ -20,10 +20,6 @@
         {% for node in body %}
             {% if node.type == 'header' %}
                 <h2 class="usa-heading wx-mono-h2 margin-bottom-1 margin-top-4">{{node.content | raw}}</h2>
-                {% if node.postHeader %}
-                    <span class="afd-postheader">{{node.postHeader}}</span>
-                {% endif %}
-
             {% elseif node.type == 'subheader' %}
                 <h3 class="wx-mono-h3 margin-top-105">{{node.content}}</h3>
             {% elseif node.type == 'temps-table' %}
@@ -94,3 +90,8 @@
         </div>    
     {% endif %}
 </article>
+<div>
+    <pre>
+{{afd.productText}}
+    </pre>
+</div>
