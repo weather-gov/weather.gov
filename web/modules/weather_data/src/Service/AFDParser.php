@@ -149,11 +149,14 @@ class AFDParser
         }
 
         // See if this paragraph contains a top level header
-        $headerRegex = "/^\.(?<header>[^\.]+)[\.]{3}?(?<after>.*)(\n|$)/mU";
-        if (preg_match($headerRegex, $currentString, $matches)) {
+        $headerRegex = "/^\.(?<header>.+)[\.]{3}?(?<after>.*)(\n|$)/mU";
+        while(preg_match($headerRegex, $currentString, $matches)) {
             $header = $matches["header"];
             $this->updateCurrentContentType($header);
-            $postHeader = $matches["after"] ?? null;
+            $postHeader = trim($matches['after']);
+            if($postHeader == ""){
+                $postHeader = null;
+            }
 
             // For WWA headers, we want to join the / characters
             // with partial spaces
@@ -166,7 +169,8 @@ class AFDParser
                 "content" => $header,
                 "postHeader" => $postHeader,
             ]);
-            $currentString = preg_replace($headerRegex, "", $currentString);
+            $currentString = preg_replace($headerRegex, "", $currentString, 1);
+            $currentString = trim($currentString);
         }
 
         // See if this paragraph contains the end of the body
