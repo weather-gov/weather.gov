@@ -137,7 +137,7 @@ app.get("/set-now", async (req, res) => {
   res.redirect("/");
 });
 
-app.get("*", async (req, res) => {
+app.get("*any", async (req, res) => {
   res.setHeader("Content-Type", "text/html");
   if (req.path === "/") {
     res.write(await ui());
