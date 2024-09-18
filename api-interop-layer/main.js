@@ -1,4 +1,5 @@
 import fastify from "fastify";
+import newrelic from "newrelic";
 import { getDataForPoint } from "./data/index.js";
 import { rest as alertsRest } from "./data/alerts/kinds.js";
 import { createLogger } from "./util/monitoring/index.js";
@@ -56,9 +57,14 @@ const main = async () => {
           {},
         );
 
-      // If there is a top-level error, set the status code accordingly.
-      if (data.error && data.status) {
-        response.code(data.status);
+      if (data.error) {
+        // track this error in New Relic
+        newrelic.recordLogEvent({ message: request.url, level: "error", error: data.error });
+
+        // If there is a top-level error, set the status code accordingly.
+        if (data.status) {
+          response.code(data.status);
+        }
       }
 
       response.send({
