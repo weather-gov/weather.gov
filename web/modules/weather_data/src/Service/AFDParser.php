@@ -150,7 +150,7 @@ class AFDParser
 
         // See if this paragraph contains a top level header
         $headerRegex = "/^\.(?<header>.+)[\.]{3}/mU";
-        while(preg_match($headerRegex, $currentString, $matches)) {
+        while (preg_match($headerRegex, $currentString, $matches)) {
             $header = $matches["header"];
             $this->updateCurrentContentType($header);
 
