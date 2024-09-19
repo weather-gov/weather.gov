@@ -351,30 +351,10 @@ class AlertUtility
             "kind" => "ALERT_KIND_LAND",
             "priority" => 66560,
         ],
-        "urban and small stream flood advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 67584,
-        ],
-        "small stream flood advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 68608,
-        ],
-        "arroyo and small stream flood advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 69632,
-        ],
         "flood advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 70656,
-        ],
-        "hydrologic advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 71680,
         ],
         "lakeshore flood advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
