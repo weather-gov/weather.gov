@@ -8,8 +8,8 @@
 	auto_https off
 }
 
-:5555 {
-	@private-ipv4 remote_ip $ALLOWED_IPS
+:{$PORT} {
+	@private-ipv4 remote_ip {$ALLOWED_IPS}
 	@denied not remote_ip private_ranges
 
 	route /jsonapi {
@@ -18,7 +18,12 @@
 		}
 	}
 
-	reverse_proxy localhost:8080
+	# note that by default Caddy passes through incoming headers so we do not
+	# have to special case the X-CF-Forwarded-Url, X-CF-Proxy-Signature, and
+	# X-CF-Proxy-Metadata headers (as would be required in a service instance)
+
+	reverse_proxy weathergov-james.apps.internal
+	# reverse_proxy localhost:8080
 
 	log {
 		format console

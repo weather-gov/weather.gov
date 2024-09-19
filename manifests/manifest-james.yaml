@@ -28,10 +28,11 @@ applications:
     buildpacks:
       - binary_buildpack
     health-check-type: process
-    path: proxy
+    path: ../proxy
     command: ./caddy run --config ./Caddyfile
     env:
-      ALLOWED_IPS: 10.0.0.1/32
+      ALLOWED_IPS: ((allowed-ips))
+    random-route: true
 # - name: cronish
 #   <<: *defaults
 #   no-route: true
