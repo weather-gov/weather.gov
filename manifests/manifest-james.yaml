@@ -20,6 +20,17 @@ applications:
   memory: 256M
   instances: 1
   random-route: false
+
+- name: proxy-weathergov-james
+  path: proxy-weathergov-james
+  memory: 64M
+  instances: 1
+  buildpacks:
+    - nginx_buildpack
+  env:
+    ALLOWED_IPS: |
+      allow 0.0.0.0/32;
+
 # - name: cronish
 #   <<: *defaults
 #   no-route: true

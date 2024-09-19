@@ -1,0 +1,21 @@
+{
+	debug
+	log {
+		format console
+		level INFO
+	}
+	auto_https off
+}
+
+:5555 {
+	@private-ipv4 remote_ip 10.0.0.200/24
+	@denied not remote_ip private_ranges
+
+	route /jsonapi {
+		respond @denied 403 {
+			close
+		}
+	}
+
+	reverse_proxy localhost:8080
+}
