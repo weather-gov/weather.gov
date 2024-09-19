@@ -289,3 +289,12 @@ jobs:
         with:
           project: tests/load-times
           cache-key: cypress-a11y-${{ hashFiles('package-lock.json') }}
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: dependency review
+        uses: actions/dependency-review-action@v4
