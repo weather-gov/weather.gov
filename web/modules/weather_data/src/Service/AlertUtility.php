@@ -316,21 +316,6 @@ class AlertUtility
             "kind" => "ALERT_KIND_LAND",
             "priority" => 59392,
         ],
-        "typhoon local statement" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 60416,
-        ],
-        "tropical storm local statement" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 61440,
-        ],
-        "tropical depression local statement" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 62464,
-        ],
         "avalanche advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
@@ -456,11 +441,6 @@ class AlertUtility
             "kind" => "ALERT_KIND_LAND",
             "priority" => 92160,
         ],
-        "blizzard watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 93184,
-        ],
         "rip current statement" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
@@ -520,11 +500,6 @@ class AlertUtility
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 105472,
-        ],
-        "lake effect snow watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 107520,
         ],
         "freeze watch" => [
             "level" => "ALERT_LEVEL_WATCH",
