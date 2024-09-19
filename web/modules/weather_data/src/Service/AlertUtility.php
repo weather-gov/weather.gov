@@ -266,20 +266,10 @@ class AlertUtility
             "kind" => "ALERT_KIND_LAND",
             "priority" => 47104,
         ],
-        "wind chill warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 48128,
-        ],
         "extreme cold warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 49152,
-        ],
-        "hard freeze warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 50176,
         ],
         "freeze warning" => [
             "level" => "ALERT_LEVEL_WARNING",
@@ -321,7 +311,7 @@ class AlertUtility
             "kind" => "ALERT_KIND_MARINE",
             "priority" => 58368,
         ],
-        "hurricane local statement" => [
+        "tropical cyclone local statement" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 59392,
@@ -351,7 +341,7 @@ class AlertUtility
             "kind" => "ALERT_KIND_LAND",
             "priority" => 64512,
         ],
-        "wind chill advisory" => [
+        "cold weather advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 65536,
@@ -551,20 +541,10 @@ class AlertUtility
             "kind" => "ALERT_KIND_LAND",
             "priority" => 105472,
         ],
-        "wind chill watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 106496,
-        ],
         "lake effect snow watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 107520,
-        ],
-        "hard freeze watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_MARINE",
-            "priority" => 108544,
         ],
         "freeze watch" => [
             "level" => "ALERT_LEVEL_WATCH",
