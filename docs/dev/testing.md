@@ -109,6 +109,37 @@ Note that you can set the environment variable `WX_NOW_TIMESTAMP` to any ISO8601
 date to "freeze" time; the proxy and the Drupal application will then use that value
 to mean "now". (An example: `WX_NOW_TIMESTAMP=2024-08-20T19:36:38Z make eep`)
 
+Note also that if you intend on testing interactions that modify the CMS in some
+way, it is suggested instead to use outside testing (see next section).
+
+## Outside testing
+
+We also have a separate test environment that is intended for potentially
+destructive changes, such as adding users, uploading files and overwriting or
+deleting content. This test environment is completely torn down once finished,
+so we do not have to worry about adverse impact on our running developer
+environments.
+
+To run "outside" tests locally using [Playwright](https://playwright.dev/), the
+corresponding Makefile command is:
+
+```sh
+make ot
+```
+
+We provide a [`setup.sh`](../../tests/playwright/outside/setup.sh) where
+one-time setup can happen before testing the outside environment. It is advised
+to only use `drush` commands to manipulate data (rather than modifying database
+or Drupal files directly) so that we guarantee CMS consistency, integrity, and
+reproducibility.
+
+To iteratively develop and run tests while the test environment is up (note
+that, again, changes will be permanent until the test environment is restarted):
+
+```sh
+PW_TEST_HTML_REPORT_OPEN='never' npx playwright test outside/
+```
+
 ## Accessibility testing
 
 Automated accessibility testing can identify about half of all kinds of
