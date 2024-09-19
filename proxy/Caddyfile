@@ -3,12 +3,13 @@
 	log {
 		format console
 		level INFO
+		output stdout
 	}
 	auto_https off
 }
 
 :5555 {
-	@private-ipv4 remote_ip 10.0.0.200/24
+	@private-ipv4 remote_ip $ALLOWED_IPS
 	@denied not remote_ip private_ranges
 
 	route /jsonapi {
@@ -18,4 +19,10 @@
 	}
 
 	reverse_proxy localhost:8080
+
+	log {
+		format console
+		level INFO
+		output stdout
+	}
 }
