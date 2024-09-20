@@ -15,11 +15,24 @@ default_config: &defaults
     - secrets
 
 applications:
-- name: weathergov-ENVIRONMENT
-  <<: *defaults
-  memory: 256M
-  instances: 1
-  random-route: false
+  - name: weathergov-ENVIRONMENT
+    <<: *defaults
+    memory: 256M
+    instances: 1
+    random-route: false
+
+  - name: proxy-weathergov-ENVIRONMENT
+    stack: cflinuxfs4
+    memory: 64M
+    instances: 1
+    buildpacks:
+      - binary_buildpack
+    health-check-type: process
+    path: ../proxy
+    command: ./caddy run --config ./Caddyfile
+    env:
+      ALLOWED_IPS: ((allowed-ips))
+    random-route: false
 # - name: cronish
 #   <<: *defaults
 #   no-route: true

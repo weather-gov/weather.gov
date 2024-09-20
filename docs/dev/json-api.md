@@ -72,20 +72,14 @@ We also have [outside tests for uploads](../../tests/playwright/outside/api.spec
 
 # IP Address Filtering
 
-To utilize IP address filtering, we are using a [route service](https://docs.cloudfoundry.org/services/route-services.html) which involves creating an user-provided service as a route service. To route, we use [Caddy](https://caddyserver.com/) as a [reverse proxy](../../proxy/Caddyfile). 
+To utilize IP address filtering, we are using a [route service](https://docs.cloudfoundry.org/services/route-services.html) which involves creating an user-provided service as a route service. To route, we use [Caddy](https://caddyserver.com/) as a [reverse proxy](../../proxy/Caddyfile). This configuration permits all traffic to pass through to the weather.gov application except for the `/jsonapi` endpoint, which is restricted by IP address.
 
-First, we make sure the Drupal instance is internally accessible via "apps.internal":
+Setting this up requires [several steps](../../scripts/create-cloudgov-env.sh):
 
-    cf map-route weathergov-james apps.internal --hostname weathergov-james
-
-Second, we create an user provided service and supply the proxy and its public address:
-
-    cf create-user-provided-service proxy-weathergov-james -r https://proxy-weathergov-james-optimistic-kangaroo-jx.app.cloud.gov
-
-    cf bind-route-service app.cloud.gov proxy-weathergov-james --hostname weathergov-james
-
-We make sure the proxy can connect to Drupal via 61443:
-
-    cf add-network-policy proxy-weathergov-james weathergov-james -s james --protocol tcp --port 61443
+- an internal route to the weather.gov application for container-to-container networking
+- an user-provided service using the Caddy proxy above
+- a route service that tells cloud.gov to use the Caddy proxy above to reach the weather.gov application
+- a secure network policy for the weather.gov application
+  - note that we use port `61443`: [all traffic sent to this port will use SSL/TLS](https://docs.cloudfoundry.org/concepts/understand-cf-networking.html#securing-traffic).
 
 TODO: update architectural diagrams
