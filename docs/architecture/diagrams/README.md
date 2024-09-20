@@ -5,7 +5,7 @@ We use PlantUML for diagraming our architecture.
 You can use the [VS Code plugin](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml)
 for generating the diagrams from configuration stored in this git repository.
 Diagrams will be stored in PlantUML and as images in the
-docs/architecutre/diagrams folder.
+docs/architecture/diagrams folder.
 
 This plugin works best when running PlantUML as a server. Our project includes
 a PlantUML server in our Docker composer, so you can use that rather than

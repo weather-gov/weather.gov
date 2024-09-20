@@ -192,5 +192,5 @@ fix-permissions: ## Updates owner in docker and mod in local
 	chmod -R ug+rwx web/sites web/modules web/themes
 
 ### Install caddy for uploading manifests: we only need the binary
-build-caddy:
+install-caddy:
 	docker cp $$(docker create caddy:2.8.4-alpine):/usr/bin/caddy proxy/caddy
