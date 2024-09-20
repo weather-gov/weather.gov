@@ -32,6 +32,7 @@ applications:
     command: ./caddy run --config ./Caddyfile
     env:
       ALLOWED_IPS: ((allowed-ips))
+      SPACE_NAME: james
     random-route: false
 # - name: cronish
 #   <<: *defaults

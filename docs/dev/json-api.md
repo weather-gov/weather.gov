@@ -72,9 +72,9 @@ We also have [outside tests for uploads](../../tests/playwright/outside/api.spec
 
 # IP Address Filtering
 
-To utilize IP address filtering, we are using a [route service](https://docs.cloudfoundry.org/services/route-services.html) which involves creating an user-provided service as a route service. To route, we use [Caddy](https://caddyserver.com/) as a [reverse proxy](../../proxy/Caddyfile). This configuration permits all traffic to pass through to the weather.gov application except for the `/jsonapi` endpoint, which is restricted by IP address.
+To implement IP address filtering, we are using a [route service](https://docs.cloudfoundry.org/services/route-services.html) which involves creating an user-provided service as a route service. To route, we use [Caddy](https://caddyserver.com/) as a [reverse proxy](../../proxy/Caddyfile). This configuration permits all traffic to pass through to the weather.gov application except for the `/jsonapi` endpoint, which is restricted by IP address.
 
-Setting this up requires [several steps](../../scripts/create-cloudgov-env.sh):
+Setting this up requires [several steps](../../scripts/create-cloudgov-env.sh#L101-L115):
 
 - an internal route to the weather.gov application for container-to-container networking
 - an user-provided service using the Caddy proxy above

@@ -100,7 +100,7 @@ cf cups secrets -p credentials-"$1".json
 echo "Database create succeeded and credentials created. Deploying the weather.gov application to the new space $1..."
 cf push -f manifests/manifest-"$1".yaml --var newrelic-license="$NEWRELIC_LICENSE"
 
-## IP address filtering for the /jsonapi endpoint.
+## set up IP address filtering for the /jsonapi endpoint.
 
 echo "Adding an internal route to the weather.gov application (for reverse proxy purposes)."
 cf map-route weathergov-"$1" apps.internal --hostname weathergov-"$1"
