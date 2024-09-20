@@ -84,18 +84,20 @@ class WeatherEntityService
     public function getLatestNodeFromWFO($wfo, $nodeType)
     {
         // Get the ID for the WFO taxonomy term that matches our grid WFO.
+        $wfoCode = $this->normalizeAnchorageWFO($wfo);
         $termID = $this->entityTypeManager
             ->getStorage("taxonomy_term")
-            ->loadByProperties(["field_wfo_code" => $wfo]);
+            ->loadByProperties(["field_wfo_code" => $wfoCode]);
 
         return $this->getLatestNodeByTerm($termID, "field_wfo", $nodeType);
     }
 
     public function getWFOEntity($wfo)
     {
+        $wfoCode = $this->normalizeAnchorageWFO($wfo);
         $term = $this->entityTypeManager
             ->getStorage("taxonomy_term")
-            ->loadByProperties(["field_wfo_code" => $wfo]);
+            ->loadByProperties(["field_wfo_code" => $wfoCode]);
         if (count($term) > 0) {
             return array_pop($term);
         }
@@ -114,5 +116,24 @@ class WeatherEntityService
             ->getStorage("taxonomy_term")
             ->loadMultiple($ids);
         return $result;
+    }
+
+    /**
+     * Normalize WFOs for Alaska/Anchorage
+     */
+    public function normalizeAnchorageWFO(string $wfo): string
+    {
+        $inAnchorageCodes = [
+            "aer",
+            "alu"
+        ];
+        $matches = in_array(
+            strtolower($wfo),
+            $inAnchorageCodes
+        );
+        if($matches){
+            return "AFC";
+        }
+        return $wfo;
     }
 }
