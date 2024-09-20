@@ -9,23 +9,20 @@ use Twig\Extension\ExtensionInterface;
 
 class WeatherTwigExtension extends AbstractExtension
 {
-    
-    public function getFunctions(){
+    public function getFunctions()
+    {
         return [
             new TwigFunction(
                 "normalize_wfo",
-                [$this, 'normalizeWFO'],
-                ["is_safe" => ["html"]])
+                [$this, "normalizeWFO"],
+                ["is_safe" => ["html"]],
+            ),
         ];
     }
 
-    public function getFilters(){
-        return [
-            new TwigFilter(
-                "normalize_wfo",
-                [$this, "normalizeWFO"]
-            )
-        ];
+    public function getFilters()
+    {
+        return [new TwigFilter("normalize_wfo", [$this, "normalizeWFO"])];
     }
 
     /**
@@ -35,14 +32,11 @@ class WeatherTwigExtension extends AbstractExtension
     public function normalizeWFO(string $wfo)
     {
         $anchorageAlternates = ["alu", "aer"];
-        $isAlternate = in_array(
-            strtolower($wfo),
-            $anchorageAlternates
-        );
-        if($isAlternate){
+        $isAlternate = in_array(strtolower($wfo), $anchorageAlternates);
+        if ($isAlternate) {
             return "AFC";
         }
 
         return $wfo;
     }
-};
+}

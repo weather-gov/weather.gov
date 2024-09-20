@@ -123,15 +123,9 @@ class WeatherEntityService
      */
     public function normalizeAnchorageWFO(string $wfo): string
     {
-        $inAnchorageCodes = [
-            "aer",
-            "alu"
-        ];
-        $matches = in_array(
-            strtolower($wfo),
-            $inAnchorageCodes
-        );
-        if($matches){
+        $inAnchorageCodes = ["aer", "alu"];
+        $matches = in_array(strtolower($wfo), $inAnchorageCodes);
+        if ($matches) {
             return "AFC";
         }
         return $wfo;
