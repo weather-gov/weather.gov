@@ -69,3 +69,23 @@ The response should also be a 201 with JSON information about the newly created 
 A sample [Python script](./json-api-upload-example.py) is provided to help to aid in integration. Note that this script depends on the [requests](https://pypi.org/project/requests/) library.
 
 We also have [outside tests for uploads](../../tests/playwright/outside/api.spec.js).
+
+# IP Address Filtering
+
+To utilize IP address filtering, we are using a [route service](https://docs.cloudfoundry.org/services/route-services.html) which involves creating an user-provided service as a route service. To route, we use [Caddy](https://caddyserver.com/) as a [reverse proxy](../../proxy/Caddyfile). 
+
+First, we make sure the Drupal instance is internally accessible via "apps.internal":
+
+    cf map-route weathergov-james apps.internal --hostname weathergov-james
+
+Second, we create an user provided service and supply the proxy and its public address:
+
+    cf create-user-provided-service proxy-weathergov-james -r https://proxy-weathergov-james-optimistic-kangaroo-jx.app.cloud.gov
+
+    cf bind-route-service app.cloud.gov proxy-weathergov-james --hostname weathergov-james
+
+We make sure the proxy can connect to Drupal via 61443:
+
+    cf add-network-policy proxy-weathergov-james weathergov-james -s james --protocol tcp --port 61443
+
+TODO: update architectural diagrams

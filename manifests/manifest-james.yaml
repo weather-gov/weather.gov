@@ -32,7 +32,7 @@ applications:
     command: ./caddy run --config ./Caddyfile
     env:
       ALLOWED_IPS: ((allowed-ips))
-    random-route: true
+    random-route: false
 # - name: cronish
 #   <<: *defaults
 #   no-route: true

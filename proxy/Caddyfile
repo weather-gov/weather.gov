@@ -22,7 +22,7 @@
 	# have to special case the X-CF-Forwarded-Url, X-CF-Proxy-Signature, and
 	# X-CF-Proxy-Metadata headers (as would be required in a service instance)
 
-	reverse_proxy weathergov-james.apps.internal
+	reverse_proxy https://weathergov-james.apps.internal:61443
 	# reverse_proxy localhost:8080
 
 	log {
