@@ -9,6 +9,8 @@
 }
 
 :{$PORT} {
+	# set up IP address filtering for the JSON:API endpoint only.
+
 	@private-ipv4 remote_ip {$ALLOWED_IPS}
 	@denied not remote_ip private_ranges
 
@@ -18,12 +20,24 @@
 		}
 	}
 
-	# note that by default Caddy passes through incoming headers so we do not
-	# have to special case the X-CF-Forwarded-Url, X-CF-Proxy-Signature, and
-	# X-CF-Proxy-Metadata headers (as would be required in a service instance)
+	# cloud.gov passes us the X-CF-Forwarded-Url, X-CF-Proxy-Signature, and
+	# X-CF-Proxy-Metadata headers, but does not forward the path by default.
+	# So we capture the X-CF-Forwarded-Url path to pass to the proxy. If no
+	# such header is found, we proxy anyway (so we can test the proxy directly.)
 
-	reverse_proxy https://weathergov-{$SPACE_NAME}.apps.internal:61443
-	# reverse_proxy localhost:8080
+	@loc header_regexp X-Cf-Forwarded-Url ^https://weathergov-{$SPACE_NAME}[^\/]+/(.*)
+
+	handle @loc {
+		rewrite /{re.loc.1}
+		reverse_proxy https://weathergov-{$SPACE_NAME}.apps.internal:61443
+	}
+
+	handle {
+		reverse_proxy https://weathergov-{$SPACE_NAME}.apps.internal:61443
+		# respond "X-Cf-Forwarded-Url header not found" 404 {
+		# 	close
+		# }
+	}
 
 	log {
 		format console
