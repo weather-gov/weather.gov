@@ -31,7 +31,7 @@ class WeatherTwigExtension extends AbstractExtension
      */
     public function normalizeWFO($wfo)
     {
-        if (!$wfo){
+        if (!$wfo) {
             return "";
         }
         $anchorageAlternates = ["alu", "aer"];
