@@ -80,7 +80,7 @@
                     <use
                       xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#info_outline"
                     ></use>
-                  </svg><a href="/afd/{{ weather.grid.wfo }}" class="usa-link">Area forecast discussion</a>
+                  </svg><a href="/afd/{{ weather.grid.wfo | normalize_wfo }}" class="usa-link">Area forecast discussion</a>
                 </div>
               </div>
             </div>

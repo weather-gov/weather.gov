@@ -11,3 +11,7 @@ services:
   newrelic_metrics:
     class: Drupal\weather_data\Service\NewRelicMetrics
     arguments: ['@http_client']
+  weather_twig_extension:
+    class: Drupal\weather_data\Service\WeatherTwigExtension
+    tags:
+      - { name: twig.extension }
