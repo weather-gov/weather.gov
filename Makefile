@@ -186,11 +186,6 @@ ci: composer-install
 composer-install: ## Installs dependencies from lock file
 	docker compose exec drupal composer install 
 
-### Fix file permissions
-fix-permissions: ## Updates owner in docker and mod in local
-	docker compose exec drupal chown -R www-data:www-data web/sites web/modules web/themes
-	chmod -R ug+rwx web/sites web/modules web/themes
-
 ### Install caddy for uploading manifests: we only need the binary
 install-caddy:
 	docker cp $$(docker create caddy:2.8.4-alpine):/usr/bin/caddy proxy/caddy

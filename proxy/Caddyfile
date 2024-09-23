@@ -6,37 +6,47 @@
 		output stdout
 	}
 	auto_https off
+
+	servers {
+		# treat this route service as a trusted proxy because the cloud.gov
+		# router requires an X-Cf-Proxy-Signature (essentially an access token)
+		# to confirm that a request has come through the route service. See:
+		# https://docs.cloudfoundry.org/services/route-services.html#headers
+		# this will set client_ip to the left-most X-Forwarded-For header.
+		trusted_proxies static private_ranges
+	}
 }
 
 :{$PORT} {
-	# set up IP address filtering for the JSON:API endpoint only.
+	# if the client_ip is not in the allowed list then it cannot access
+	# the JSON:API endpoint.
 
-	@private-ipv4 remote_ip {$ALLOWED_IPS}
-	@denied not remote_ip private_ranges
-
-	route /jsonapi {
-		respond @denied 403 {
-			close
-		}
-	}
+	@denied not client_ip {$ALLOWED_IPS}
 
 	# cloud.gov passes us the X-CF-Forwarded-Url, X-CF-Proxy-Signature, and
 	# X-CF-Proxy-Metadata headers, but does not forward the path by default.
 	# So we capture the X-CF-Forwarded-Url path to pass to the proxy. If no
-	# such header is found, we proxy anyway (so we can test the proxy directly.)
+	# such header is found, the routing is invalid and we return a 500.
 
 	@loc header_regexp X-Cf-Forwarded-Url ^https://weathergov-{$SPACE_NAME}[^\/]+/(.*)
 
 	handle @loc {
 		rewrite /{re.loc.1}
-		reverse_proxy https://weathergov-{$SPACE_NAME}.apps.internal:61443
+		route {
+			handle /jsonapi* {
+				respond @denied 403 {
+					close
+				}
+				reverse_proxy https://weathergov-{$SPACE_NAME}.apps.internal:61443
+			}
+			reverse_proxy https://weathergov-{$SPACE_NAME}.apps.internal:61443
+		}
 	}
 
 	handle {
-		reverse_proxy https://weathergov-{$SPACE_NAME}.apps.internal:61443
-		# respond "X-Cf-Forwarded-Url header not found" 404 {
-		# 	close
-		# }
+		respond "X-Cf-Forwarded-Url header not found" 500 {
+			close
+		}
 	}
 
 	log {
