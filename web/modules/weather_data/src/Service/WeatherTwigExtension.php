@@ -29,8 +29,11 @@ class WeatherTwigExtension extends AbstractExtension
      * Handle the edge cases of WFO codes
      * for Alaska/Anchorage
      */
-    public function normalizeWFO(string $wfo)
+    public function normalizeWFO($wfo)
     {
+        if(!$wfo){
+            return "";
+        }
         $anchorageAlternates = ["alu", "aer"];
         $isAlternate = in_array(strtolower($wfo), $anchorageAlternates);
         if ($isAlternate) {
