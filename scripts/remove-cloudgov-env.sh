@@ -59,6 +59,7 @@ cf delete proxy-weathergov-"$1"
 cf delete-service database
 cf delete-service secrets
 cf delete-service storage
+cf delete-service proxy-weathergov-$1
 
 # delete space
 cf delete-space "$1"
