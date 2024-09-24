@@ -64,6 +64,7 @@ module.exports = {
         "spatial-data/**/*.js",
         "web/**/tests/**/*.js",
         "playwright.config.js",
+        "api-interop-layer/**/*.js",
       ],
       extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
       env: {

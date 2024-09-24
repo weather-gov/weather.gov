@@ -12,7 +12,7 @@ export const sendNewRelicMetric = (metric) => {
   // augment metric attributes with our application name, since NR metrics does
   // not record where we are sending this metric from
   metric.attributes ??= {};
-  metric.attributes["applicationName"] = appName;
+  metric.attributes.applicationName = appName;
   metric.timestamp ??= Date.now();
 
   const body = JSON.stringify([{ "metrics": [metric] }]);
