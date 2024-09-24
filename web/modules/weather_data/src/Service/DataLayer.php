@@ -80,8 +80,8 @@ class DataLayer
                 // First thing we need to do is get the WFO information for this
                 // lat/lon.
                 $url = "/points/$lat,$lon";
-                $response = $this->fetch($url)->wait();
-                if (property_exists($response, "error")) {
+                [$responseOrError, $statusCode, $isError] = $this->fetch($url)->wait();
+                if ($isError) {
                     return;
                 }
 
