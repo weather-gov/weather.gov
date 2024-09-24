@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import { expect } from "chai";
 import qpf from "./quantitativePrecipitation.js";
 import forecast from "./index.js";
-import quantitativePrecipitation from "./quantitativePrecipitation.js";
 
 describe("quantitative precipitation forecase (QPF)", () => {
   let clock;
