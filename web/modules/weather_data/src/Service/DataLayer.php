@@ -9,6 +9,9 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Data layer methods
@@ -116,7 +119,7 @@ class DataLayer
 
                 $station =
                     $responses["stations"]->features[0]->properties
-                        ->stationIdentifier;
+                                          ->stationIdentifier;
                 $this->fetch("/stations/$station/observations?limit=1")->wait();
             }
         }
@@ -150,40 +153,64 @@ class DataLayer
         } else {
             $promise->resolve(
                 $this->client
-                    ->getAsync($url, [
-                        "headers" => [
-                            "wx-gov-response-id" => $this->responseId,
-                        ],
-                    ])
-                    ->then(
-                        function ($response) use ($url) {
-                            $response = json_decode($response->getBody());
-                            $this->cache->set($url, $response, time() + 60);
-                            return $response;
-                        },
-                        function ($error) use ($url, $attempt, $delay) {
-                            $logger = $this->getLogger(
-                                "Weather.gov data service",
-                            );
-                            $logger->notice(
-                                "got 500 error on attempt $attempt for: $url",
-                            );
+                     ->getAsync($url, [
+                         "headers" => [
+                             "wx-gov-response-id" => $this->responseId,
+                         ],
+                     ])
+                     ->then(
+                         function ($response) use ($url) {
+                             $statusCode = $response->getStatusCode();
+                             $result = [
+                                 json_decode($response->getBody()),
+                                 $statusCode,
+                                 false //Whether or not there is an error
+                             ];
+                             $this->cache->set($url, $result, time() + 60);
+                             return $result;
+                         },
+                         function ($error) use ($url, $attempt, $delay) {
+                             $response = $error->getResponse();
+                             $statusCode = $response->getStatusCode();
+                             $result =  [
+                                 "error" => $error
+                             ];
 
-                            if ($attempt < 5) {
-                                usleep($delay * 1000);
-                                return $this->fetch(
-                                    $url,
-                                    $attempt + 1,
-                                    $delay * 1.65,
-                                );
-                            }
+                             $logger = $this->getLogger(
+                                 "Weather.gov data service",
+                             );
+                             $logger->notice(
+                                 "got $statusCode error on attempt $attempt for: $url",
+                             );
+                             $logger->notice($error);
 
-                            $logger->error("giving up on: $url");
-                            $response = (object) ["error" => $error];
-                            $this->cache->set($url, $response, time() + 5);
-                            return $response;
-                        },
-                    ),
+                             if(is_a($error, "GuzzleHttp\Exception\ClientException")){
+                                 // In this case, the 'error' is a 4xx
+                                 // level response. We should skip
+                                 // repeated retries and return the response
+                                 // verbatim
+                                 $this->cache->set($url, $result, time() + 60);
+                             } else {
+                                 if ($attempt < 5) {
+                                     usleep($delay * 1000);
+                                     return $this->fetch(
+                                         $url,
+                                         $attempt + 1,
+                                         $delay * 1.65,
+                                     );
+                                 }
+
+                                 $logger->error("giving up on: $url");
+                                 $this->cache->set($url, $result, time() + 5);
+                             }
+
+                             return [
+                                 $error,
+                                 $statusCode,
+                                 true
+                             ];
+                         },
+                     ),
             );
         }
 
@@ -195,13 +222,15 @@ class DataLayer
      */
     private function getFromWeatherAPI($url, $attempt = 1, $delay = 75)
     {
-        $response = $this->fetch($url)->wait();
+        [$responseOrError, $statusCode, $isError] = $this->fetch($url)->wait();
 
-        if (property_exists($response, "error")) {
-            throw $response->error;
+        if ($isError && $statusCode < 500) {
+            throw new NotFoundHttpException();
+        } else if ($isError) {
+            throw $responseOrError;
         }
 
-        return $response;
+        return $responseOrError;
     }
 
     private static $i_alertsState = false;

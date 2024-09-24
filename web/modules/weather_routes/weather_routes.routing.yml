@@ -75,6 +75,7 @@ weather_routes.afd.wfo_id:
     no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
+    wfo_code: '^[A-Za-z][A-Za-z][A-Za-z]$'
 
 weather_routes.afd.by_office:
   path: '/afd/{wfo_code}'
@@ -84,6 +85,7 @@ weather_routes.afd.by_office:
     no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
+    wfo_code: '^[A-Za-z][A-Za-z][A-Za-z]$'
 
 
 weather_routes.afd.wx.id:
@@ -103,6 +105,7 @@ weather_routes.afd.wx.versions:
     no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
+    wfo_code: '^[A-Za-z][A-Za-z][A-Za-z]$'
   
 weather_routes.weather_info.content:
   path: '/offices/{wfo}'

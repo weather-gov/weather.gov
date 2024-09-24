@@ -27,6 +27,20 @@ const OVERALL_REFERENCES = JSON.parse(
 const firstId = OKX_REFERENCES["@graph"][0].id;
 
 describe("AFD Page Tests", () => {
+  describe("Not Found (404) tests", () => {
+    test("Displays a 404 page for an invalid / expired AFD id", async ({ page }) => {
+      const response = await page.goto("http://localhost:8080/afd/OKX/invalid-afd-id.json");
+
+      expect(response.status()).toBe(404);
+    });
+
+    test("Displays a 404 page for a listing of AFDs at an invalid WFO", async ({ page }) => {
+      const response = await page.goto("http://localhost:8080/afd/WWW");
+
+      expect(response.status()).toBe(404);
+    });
+  });
+
   describe("Partial HTML routes", () => {
     test("Can retrieve <option> elements html partial for version listing", async ({
       page,
