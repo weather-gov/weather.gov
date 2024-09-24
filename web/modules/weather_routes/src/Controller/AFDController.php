@@ -52,8 +52,8 @@ final class AFDController extends ControllerBase
             $id = $this->request->getCurrentRequest()->query->get("id");
             $wfo_code = $this->request->getCurrentRequest()->query->get("wfo");
             $current = $this->request
-                            ->getCurrentRequest()
-                            ->query->get("current-id");
+                ->getCurrentRequest()
+                ->query->get("current-id");
 
             // If the AFD id of the referer page is the same as the requested
             // id, this means we really just want to update the WFO
@@ -89,12 +89,10 @@ final class AFDController extends ControllerBase
         } catch (Exception $e) {
             throw new NotFoundHttpException();
         }
-        
     }
 
     public function byOfficeAndId($wfo_code, $afd_id)
     {
-        
         try {
             $versions = $this->weatherData->getLatestAFDReferences($wfo_code);
             $afd = $this->weatherData->getAFDById($afd_id);
@@ -185,7 +183,7 @@ final class AFDController extends ControllerBase
     public function markupOnlyById($afd_id)
     {
         $afd = $this->weatherData->getAFDById($afd_id);
-        if(!$afd){
+        if (!$afd) {
             throw new NotFoundHttpException();
         }
         $build = [

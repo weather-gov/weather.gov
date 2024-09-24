@@ -116,18 +116,15 @@ class DataLayer
                 // We also don't have to catch anything because our fetch()
                 // method never rejects. Hooray?
                 $responses = Utils::unwrap($responses);
-                $responses = array_map(
-                    function($responseData){
-                        // The first item in the array
-                        // is the actual response std object
-                        return $responseData[0];
-                    },
-                    $responses
-                );
+                $responses = array_map(function ($responseData) {
+                    // The first item in the array
+                    // is the actual response std object
+                    return $responseData[0];
+                }, $responses);
 
                 $station =
                     $responses["stations"]->features[0]->properties
-                                          ->stationIdentifier;
+                        ->stationIdentifier;
                 $this->fetch("/stations/$station/observations?limit=1")->wait();
             }
         }
@@ -161,64 +158,65 @@ class DataLayer
         } else {
             $promise->resolve(
                 $this->client
-                     ->getAsync($url, [
-                         "headers" => [
-                             "wx-gov-response-id" => $this->responseId,
-                         ],
-                     ])
-                     ->then(
-                         function ($response) use ($url) {
-                             $statusCode = $response->getStatusCode();
-                             $result = [
-                                 json_decode($response->getBody()),
-                                 $statusCode,
-                                 false //Whether or not there is an error
-                             ];
-                             $this->cache->set($url, $result, time() + 60);
-                             return $result;
-                         },
-                         function ($error) use ($url, $attempt, $delay) {
-                             $response = $error->getResponse();
-                             $statusCode = $response->getStatusCode();
-                             $result =  [
-                                 "error" => $error
-                             ];
+                    ->getAsync($url, [
+                        "headers" => [
+                            "wx-gov-response-id" => $this->responseId,
+                        ],
+                    ])
+                    ->then(
+                        function ($response) use ($url) {
+                            $statusCode = $response->getStatusCode();
+                            $result = [
+                                json_decode($response->getBody()),
+                                $statusCode,
+                                false, //Whether or not there is an error
+                            ];
+                            $this->cache->set($url, $result, time() + 60);
+                            return $result;
+                        },
+                        function ($error) use ($url, $attempt, $delay) {
+                            $response = $error->getResponse();
+                            $statusCode = $response->getStatusCode();
+                            $result = [
+                                "error" => $error,
+                            ];
 
-                             $logger = $this->getLogger(
-                                 "Weather.gov data service",
-                             );
-                             $logger->notice(
-                                 "got $statusCode error on attempt $attempt for: $url",
-                             );
-                             $logger->notice($error);
+                            $logger = $this->getLogger(
+                                "Weather.gov data service",
+                            );
+                            $logger->notice(
+                                "got $statusCode error on attempt $attempt for: $url",
+                            );
+                            $logger->notice($error);
 
-                             if(is_a($error, "GuzzleHttp\Exception\ClientException")){
-                                 // In this case, the 'error' is a 4xx
-                                 // level response. We should skip
-                                 // repeated retries and return the response
-                                 // verbatim
-                                 $this->cache->set($url, $result, time() + 60);
-                             } else {
-                                 if ($attempt < 5) {
-                                     usleep($delay * 1000);
-                                     return $this->fetch(
-                                         $url,
-                                         $attempt + 1,
-                                         $delay * 1.65,
-                                     );
-                                 }
+                            if (
+                                is_a(
+                                    $error,
+                                    "GuzzleHttp\Exception\ClientException",
+                                )
+                            ) {
+                                // In this case, the 'error' is a 4xx
+                                // level response. We should skip
+                                // repeated retries and return the response
+                                // verbatim
+                                $this->cache->set($url, $result, time() + 60);
+                            } else {
+                                if ($attempt < 5) {
+                                    usleep($delay * 1000);
+                                    return $this->fetch(
+                                        $url,
+                                        $attempt + 1,
+                                        $delay * 1.65,
+                                    );
+                                }
 
-                                 $logger->error("giving up on: $url");
-                                 $this->cache->set($url, $result, time() + 5);
-                             }
+                                $logger->error("giving up on: $url");
+                                $this->cache->set($url, $result, time() + 5);
+                            }
 
-                             return [
-                                 $error,
-                                 $statusCode,
-                                 true
-                             ];
-                         },
-                     ),
+                            return [$error, $statusCode, true];
+                        },
+                    ),
             );
         }
 
@@ -234,7 +232,7 @@ class DataLayer
 
         if ($isError && $statusCode < 500) {
             throw new NotFoundHttpException();
-        } else if ($isError) {
+        } elseif ($isError) {
             throw $responseOrError;
         }
 
@@ -417,7 +415,7 @@ class DataLayer
             "https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_" .
             $wfo .
             "_catalog.json";
-        [$response, , ] = $this->fetch($url)->wait();
+        [$response, ,] = $this->fetch($url)->wait();
         return $response;
     }
 
