@@ -24,9 +24,7 @@ const dom = new Jsdom(`<!DOCTYPE html><html><head></head>/><body></body>/></html
 const window = dom.window;
 const document = window.document;
 
-const getBasename = (filepath) => {
-  return path.basename(filepath, ".svg");
-};
+const getBasename = (filepath) => path.basename(filepath, ".svg");
 
 /**
  * Given a path filename, make the
@@ -49,11 +47,7 @@ const filenameToId = (str) => {
  */
 const cleanupWhitespace = (str) => {
   const lines = str.split("\n");
-  return lines.map(line => {
-    return line.replace(/^\w+\n$/, "");
-  }).filter(line => {
-    return line !== "";
-  }).join("\n");
+  return lines.map(line => line.replace(/^\w+\n$/, "")).filter(line => line !== "").join("\n");
 };
 
 /**
@@ -63,9 +57,7 @@ const cleanupWhitespace = (str) => {
  * @return string A string with any inline style
  * tags removed from the SVG XML.
  */
-const removeStyleTags = (str) => {
-  return str.replace(/<style[\w\W]*?<\/style>\n/gm, '');
-};
+const removeStyleTags = (str) => str.replace(/<style[\w\W]*?<\/style>\n/gm, '');
 
 /**
  * Removes the XML header from the string
@@ -73,9 +65,7 @@ const removeStyleTags = (str) => {
  * @param str string The source xml string
  * @return string The cleaned output xml string
  */
-const removeXMLDeclaration = str => {
-  return str.replace(/\n<?xml[^\n]*/gm, "");
-};
+const removeXMLDeclaration = str => str.replace(/\n<?xml[^\n]*/gm, "");
 
 /**
  * Remove class attributes from elements
@@ -87,19 +77,17 @@ const removeXMLDeclaration = str => {
  * @param str string The source XML string
  * @return string The cleaned output XML string
  */
-const removeClassAttributes = str => {
-  return str.replace(/class="st0"/g, "");
-};
+const removeClassAttributes = str => str.replace(/class="st0"/g, "");
 
 /**
  * For an array of input paths, parse the XML
  * and return a spritesheet formatted <symbol>
  *
- * @param inputPaths [string] A collection of svg filepaths
+ * @param allInputPaths [string] A collection of svg filepaths
  * @return [string] A collection of strings that are <symbol> xml fragments
  */
-const getSymbolDefsFromPaths = inputPaths => {
-  return inputPaths.map(inputPath => {
+const getSymbolDefsFromPaths = allInputPaths =>
+  allInputPaths.map(inputPath => {
     const fp = fs.readFileSync(
       path.resolve(__dirname, "..", inputPath),
       'utf8'
@@ -116,7 +104,7 @@ const getSymbolDefsFromPaths = inputPaths => {
     symbolEl.setAttribute('id', filenameToId(inputPath));
     symbolEl.innerHTML = svgEl.innerHTML;
     let outputStr = symbolEl.outerHTML;
-    outputStr = outputStr.replace(/\<svg/, "<symbol");
+    outputStr = outputStr.replace(/<svg/, "<symbol");
     outputStr = outputStr.replace(/<\/svg/, "</symbol");
     outputStr = outputStr.replace(/viewbox/g, "viewBox");
     outputStr = cleanupWhitespace(outputStr);
@@ -125,7 +113,6 @@ const getSymbolDefsFromPaths = inputPaths => {
     outputStr = removeClassAttributes(outputStr);
     return outputStr;
   });
-};
 
 // Main
 const symbols = getSymbolDefsFromPaths(inputPaths).join("\n");
@@ -136,4 +123,7 @@ const outputString = `<?xml version="1.0" encoding="utf-8"?>
   </defs>
 </svg>`;
 fs.writeFileSync(outputPath, outputString);
+
+/* eslint-disable no-console */
 console.log(`Wrote ${outputPath}`);
+/* eslint-enable no-console */
