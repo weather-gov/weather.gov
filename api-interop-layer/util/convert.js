@@ -127,7 +127,7 @@ export const convertValue = (obj) => {
   }
 
   const unit = obj[unitKey];
-  const value = obj.value;
+  const { value } = obj;
   delete obj[unitKey];
   delete obj.value;
 
@@ -172,7 +172,7 @@ export const convertProperties = (obj) => {
   for (const key of keys) {
     const prop = obj[key];
     const conversion = unitMapping.get(prop[unitKey]);
-    const value = obj[key].value;
+    const { value } = obj[key];
 
     // If the input value is null, preserve that.
     obj[key] = {

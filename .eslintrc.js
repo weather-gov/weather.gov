@@ -108,5 +108,12 @@ module.exports = {
         ],
       },
     },
+    {
+      "files": ["*.test.js", "*.spec.js"],
+      "rules": {
+        // chai provides "empty" expressions, such as `to.be.true`
+        "no-unused-expressions": "off"
+      }
+    },
   ],
 };
