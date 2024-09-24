@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   extends: ["airbnb-base", "prettier"],
   ignorePatterns: ["tests/translations/**/*.js", "uswds*.js"],
   rules: {
@@ -43,6 +44,7 @@ module.exports = {
     {
       files: ["api-interop-layer/**/*.test.js"],
       extends: ["airbnb-base", "prettier"],
+      parserOptions: { ecmaVersion: 2024 },
       rules: {
         // This rule disallows using require() on files in devDependencies. But
         // for test code, we'll rely on that heavily so we can disable the rule
@@ -52,6 +54,9 @@ module.exports = {
         // For imports in Node, file extensions are optional and discouraged as
         // a matter of practice.
         "import/extensions": ["error", "always"],
+
+        // chai provides "empty" expressions, such as `to.be.true`
+        "no-unused-expressions": "off"
       },
       env: { mocha: true },
     },
@@ -61,7 +66,6 @@ module.exports = {
         "spatial-data/**/*.js",
         "web/**/tests/**/*.js",
         "playwright.config.js",
-        "api-interop-layer/**/*.js",
       ],
       extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
       env: {
@@ -107,13 +111,6 @@ module.exports = {
           },
         ],
       },
-    },
-    {
-      "files": ["*.test.js", "*.spec.js"],
-      "rules": {
-        // chai provides "empty" expressions, such as `to.be.true`
-        "no-unused-expressions": "off"
-      }
     },
   ],
 };

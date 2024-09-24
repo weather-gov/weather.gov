@@ -29,7 +29,7 @@ const US_CODES = [
 const FILENAME = "cities500.txt";
 const OUTFILE_NAME = "us.cities500.txt";
 
-/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 const COLUMN_NAMES = [
   "geonameId",
   "name",
@@ -51,7 +51,6 @@ const COLUMN_NAMES = [
   "timezone",
   "modified"
 ];
-/* eslint-enable no-unused-vars */
 
 async function main(){
   const fileText = await fs.readFile(FILENAME, { encoding: "utf-8"} );
