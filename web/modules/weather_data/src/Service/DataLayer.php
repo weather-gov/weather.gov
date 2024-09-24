@@ -80,7 +80,7 @@ class DataLayer
                 // First thing we need to do is get the WFO information for this
                 // lat/lon.
                 $url = "/points/$lat,$lon";
-                [$responseOrError, $statusCode, $isError] = $this->fetch($url)->wait();
+                [$response, $statusCode, $isError] = $this->fetch($url)->wait();
                 if ($isError) {
                     return;
                 }
@@ -116,6 +116,14 @@ class DataLayer
                 // We also don't have to catch anything because our fetch()
                 // method never rejects. Hooray?
                 $responses = Utils::unwrap($responses);
+                $responses = array_map(
+                    function($responseData){
+                        // The first item in the array
+                        // is the actual response std object
+                        return $responseData[0];
+                    },
+                    $responses
+                );
 
                 $station =
                     $responses["stations"]->features[0]->properties
@@ -409,7 +417,7 @@ class DataLayer
             "https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_" .
             $wfo .
             "_catalog.json";
-        $response = $this->fetch($url)->wait();
+        [$response, , ] = $this->fetch($url)->wait();
         return $response;
     }
 
