@@ -59,7 +59,7 @@
     "playwright:e2e": "playwright test e2e/*",
     "js-component-tests": "npx mocha web/themes/**/tests/components/*-tests.js",
     "js-format": "npx prettier -w 'web/themes/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
-    "js-lint": "eslint 'web/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
+    "js-lint": "eslint '**/*.js'",
     "php-format": "npx prettier -w 'web/**/*.php' 'web/**/*.php.test' 'web/**/*.theme' 'web/**/*.module'",
     "style-format": "npx prettier -w 'web/themes/**/*.scss'",
     "style-lint": "stylelint '**/*.scss'",

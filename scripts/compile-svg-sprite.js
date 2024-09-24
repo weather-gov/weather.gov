@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const jsdom = require('jsdom').JSDOM;
+const Jsdom = require('jsdom').JSDOM;
 
 // Grab the passed-in filenames from the command
 // line. These should have been provided from a glob
@@ -20,7 +20,7 @@ const outputPath = path.resolve(
 // easily manipulating the elements as
 // we create them. This also parses the XML
 // easily into HTML friendly SVG.
-const dom = new jsdom(`<!DOCTYPE html><html><head></head>/><body></body>/></html>`);
+const dom = new Jsdom(`<!DOCTYPE html><html><head></head>/><body></body>/></html>`);
 const window = dom.window;
 const document = window.document;
 
