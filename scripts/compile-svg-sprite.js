@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const Jsdom = require('jsdom').JSDOM;
 
 // Grab the passed-in filenames from the command
@@ -124,6 +125,4 @@ const outputString = `<?xml version="1.0" encoding="utf-8"?>
 </svg>`;
 fs.writeFileSync(outputPath, outputString);
 
-/* eslint-disable no-console */
-console.log(`Wrote ${outputPath}`);
-/* eslint-enable no-console */
+console.log(`Wrote ${outputPath}`); // eslint-disable-line no-console

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import uswds from "@uswds/compile";
 
 uswds.settings.version = 3;

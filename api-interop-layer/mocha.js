@@ -1,4 +1,4 @@
-import sinon from "sinon";
+import sinon from "sinon"; // eslint-disable-line import/no-extraneous-dependencies
 import * as mariadb from "mariadb";
 
 export async function mochaGlobalSetup() {

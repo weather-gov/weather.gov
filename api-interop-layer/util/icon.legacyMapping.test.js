@@ -22,6 +22,7 @@ describe("weather icon legacy mapping", async () => {
     );
 
     const errors = [];
+    // eslint-disable-next-line no-restricted-syntax
     for await (const [key, { icon }] of Object.entries(iconMapping)) {
       if (!(await exists(path.join(iconPath, icon)))) {
         errors.push(`Icon for [${key}] does not exist [${icon}]`);
@@ -29,7 +30,7 @@ describe("weather icon legacy mapping", async () => {
     }
 
     if (errors.length) {
-      console.log(errors);
+      console.log(errors); // eslint-disable-line no-console
     }
     expect(errors).to.have.length(0);
   });
