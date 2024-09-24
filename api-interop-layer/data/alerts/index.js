@@ -10,6 +10,7 @@ import {
   parseLocations,
 } from "./parse/index.js";
 import sort from "./sort.js";
+import { generateAlertGeometry } from "./geometry.js";
 
 const logger = createLogger("alerts");
 const cachedAlerts = [];
@@ -17,22 +18,6 @@ const cachedAlerts = [];
 const metadata = {
   error: false,
   updated: null,
-};
-
-const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
-  if (geojson.type === "GeometryCollection") {
-    const geometries = geojson.geometries.flatMap((geometry) =>
-      unwindGeometryCollection(geometry, true),
-    );
-    if (parentIsCollection) {
-      return geometries;
-    }
-
-    geojson.geometries = geometries;
-    return geojson;
-  }
-
-  return geojson;
 };
 
 export const updateAlerts = async () => {
@@ -144,62 +129,7 @@ export const updateAlerts = async () => {
       alert.finish = null;
     }
 
-    alert.geometry = rawAlert.geometry;
-
-    if (alert.geometry === null) {
-      const zones = rawAlert.properties.affectedZones;
-      const counties = rawAlert.properties.geocode?.SAME;
-
-      if (Array.isArray(zones) && zones.length > 0) {
-        const sql = `
-          SELECT ST_ASGEOJSON(
-            ST_SIMPLIFY(
-              ST_SRID(
-                ST_COLLECT(shape),
-                0
-              ),
-              0.003
-            )
-          )
-            AS shape
-            FROM weathergov_geo_zones
-            WHERE id IN (${zones.map(() => "?").join(",")})`;
-        const [{ shape }] = await db.query(sql, zones);
-
-        if (shape) {
-          alert.geometry = shape;
-        }
-      }
-
-      if (
-        alert.geometry === null &&
-        Array.isArray(counties) &&
-        counties.length > 0
-      ) {
-        const sql = `
-          SELECT ST_ASGEOJSON(
-            ST_SIMPLIFY(
-              ST_SRID(
-                ST_COLLECT(shape),
-                0
-              ),
-              0.003
-            )
-          )
-            AS shape
-            FROM weathergov_geo_counties
-            WHERE countyFips IN (${counties.map((c) => `'${c.slice(1)}'`).join(",")})`;
-        const [{ shape }] = await db.query(sql);
-
-        if (shape) {
-          alert.geometry = shape;
-        }
-      }
-
-      if (alert.geometry) {
-        alert.geometry = unwindGeometryCollection(alert.geometry);
-      }
-    }
+    alert.geometry = await generateAlertGeometry(db, rawAlert);
   }
 
   alerts.sort(sort);
