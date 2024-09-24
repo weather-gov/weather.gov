@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+// eslint-disable-next-line import/no-unresolved
 import express from "express";
 import path from "node:path";
 import proxyToApi from "./proxy.js";
