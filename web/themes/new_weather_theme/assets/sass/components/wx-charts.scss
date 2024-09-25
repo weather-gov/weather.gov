@@ -1,0 +1,28 @@
+@use "uswds-core" as *;
+
+/* 
+Setting an explicit width on the chart to show a set number of hours
+for different size screens. Remainig hours are scrolled to
+--------------------------------------------------------------------
+Mobile:     min 8   max 12 
+Mobile-lg:  min 14  max 20 
+Tablet:     min 14  max 22 
+Tablet-lg:  min 20  max 25 
+Desktop:    min 25  max 25 
+*/
+$mobile-chart-width: 720px; // 
+$tablet-chart-width: 940px;
+$tablet-lg-chart-width: 951px;
+
+
+.chart-width {
+  width: $mobile-chart-width;
+  
+  @include at-media(tablet) {
+    width: $tablet-chart-width;
+  }
+
+  @include at-media(tablet-lg) {
+    width: $tablet-lg-chart-width;
+  }
+}

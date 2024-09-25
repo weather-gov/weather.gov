@@ -84,6 +84,11 @@ for (const container of chartContainers) {
           },
         },
       },
+      layout: {
+        padding: {
+          top: 12,
+        },
+      },
     },
 
     data: {
