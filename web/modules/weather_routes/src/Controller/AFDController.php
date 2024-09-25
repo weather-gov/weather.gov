@@ -48,63 +48,70 @@ final class AFDController extends ControllerBase
 
     public function afdDefault()
     {
-        $id = $this->request->getCurrentRequest()->query->get("id");
-        $wfo_code = $this->request->getCurrentRequest()->query->get("wfo");
-        $current = $this->request
-            ->getCurrentRequest()
-            ->query->get("current-id");
+        try {
+            $id = $this->request->getCurrentRequest()->query->get("id");
+            $wfo_code = $this->request->getCurrentRequest()->query->get("wfo");
+            $current = $this->request
+                ->getCurrentRequest()
+                ->query->get("current-id");
 
-        // If the AFD id of the referer page is the same as the requested
-        // id, this means we really just want to update the WFO
-        if ($current == $id) {
-            $id = null;
-        }
-
-        if ($id && $wfo_code) {
-            return new RedirectResponse("/afd/" . $wfo_code . "/" . $id);
-        } elseif ($wfo_code) {
-            return new RedirectResponse("/afd/" . $wfo_code);
-        } elseif ($id) {
-            // In this case, we just have the id and not the WFO.
-            // We can attempt to pre-fetch the AFD and parse
-            // the WFO from its body
-            $afd = $this->weatherData->getAFDById($id);
-            $extracted_code = $this->weatherData->getWFOFromAFD($afd);
-            if ($afd && $extracted_code) {
-                return new RedirectResponse(
-                    "/afd/" . $extracted_code . "/" . $afd["id"],
-                );
+            // If the AFD id of the referer page is the same as the requested
+            // id, this means we really just want to update the WFO
+            if ($current == $id) {
+                $id = null;
             }
-        }
 
-        // In the catch-all case, we grab the most recent AFDs from
-        // everywhere, and return a link to the viewer set up for the
-        // first encountered AFD (using its WFO and WFO versions)
-        $refs = $this->weatherData->getLatestAFDReferences();
-        $id = $refs[0]["id"];
-        $afd = $this->weatherData->getAFDById($id);
-        $wfo = $this->weatherData->getWFOFromAFD($afd);
-        return new RedirectResponse("/afd/" . $wfo . "/" . $id);
+            if ($id && $wfo_code) {
+                return new RedirectResponse("/afd/" . $wfo_code . "/" . $id);
+            } elseif ($wfo_code) {
+                return new RedirectResponse("/afd/" . $wfo_code);
+            } elseif ($id) {
+                // In this case, we just have the id and not the WFO.
+                // We can attempt to pre-fetch the AFD and parse
+                // the WFO from its body
+                $afd = $this->weatherData->getAFDById($id);
+                $extracted_code = $this->weatherData->getWFOFromAFD($afd);
+                if ($afd && $extracted_code) {
+                    return new RedirectResponse(
+                        "/afd/" . $extracted_code . "/" . $afd["id"],
+                    );
+                }
+            }
+
+            // In the catch-all case, we grab the most recent AFDs from
+            // everywhere, and return a link to the viewer set up for the
+            // first encountered AFD (using its WFO and WFO versions)
+            $refs = $this->weatherData->getLatestAFDReferences();
+            $id = $refs[0]["id"];
+            $afd = $this->weatherData->getAFDById($id);
+            $wfo = $this->weatherData->getWFOFromAFD($afd);
+            return new RedirectResponse("/afd/" . $wfo . "/" . $id);
+        } catch (Exception $e) {
+            throw new NotFoundHttpException();
+        }
     }
 
     public function byOfficeAndId($wfo_code, $afd_id)
     {
-        $versions = $this->weatherData->getLatestAFDReferences($wfo_code);
-        $afd = $this->weatherData->getAFDById($afd_id);
-        if (!$afd) {
-            // This is where you 404
-            return;
-        }
-        $allWfos = $this->weatherData->getAllWFOs();
-        $versions = $this->weatherData->getLatestAFDReferences($wfo_code);
+        try {
+            $versions = $this->weatherData->getLatestAFDReferences($wfo_code);
+            $afd = $this->weatherData->getAFDById($afd_id);
+            if (!$afd) {
+                throw new NotFoundHttpException();
+            }
+            $allWfos = $this->weatherData->getAllWFOs();
+            $versions = $this->weatherData->getLatestAFDReferences($wfo_code);
 
-        return [
-            "#theme" => "weather_routes_afd",
-            "#wfo" => $wfo_code,
-            "#afd" => $afd,
-            "#wfo_list" => $allWfos,
-            "#version_list" => $versions,
-        ];
+            return [
+                "#theme" => "weather_routes_afd",
+                "#wfo" => $wfo_code,
+                "#afd" => $afd,
+                "#wfo_list" => $allWfos,
+                "#version_list" => $versions,
+            ];
+        } catch (Exception $e) {
+            throw new NotFoundHttpException();
+        }
     }
 
     /**
@@ -123,13 +130,19 @@ final class AFDController extends ControllerBase
             return new RedirectResponse("/afd/" . $wfo_code . "/" . $id);
         }
 
-        // Otherwise, grab all of the current versions for the WFO
-        // and use the most recent one as the id
-        $versions = $this->weatherData->getLatestAFDReferences($wfo_code);
-        if ($versions && count($versions)) {
-            return new RedirectResponse(
-                "/afd/" . $wfo_code . "/" . $versions[0]["id"],
-            );
+        try {
+            // Otherwise, grab all of the current versions for the WFO
+            // and use the most recent one as the id
+            $versions = $this->weatherData->getLatestAFDReferences($wfo_code);
+            if ($versions && count($versions)) {
+                return new RedirectResponse(
+                    "/afd/" . $wfo_code . "/" . $versions[0]["id"],
+                );
+            } else {
+                throw new NotFoundHttpException();
+            }
+        } catch (Exception $e) {
+            throw new NotFoundHttpException();
         }
     }
 
@@ -139,25 +152,28 @@ final class AFDController extends ControllerBase
      */
     public function byId($afd_id)
     {
-        $afd = $this->weatherData->getAFDById($afd_id);
-        if (!$afd) {
-            // This is where you 404
-            return;
-        }
-        $wfo = $this->weatherData->getWFOFromAFD($afd);
-        $versions = [];
-        if ($wfo) {
-            $versions = $this->weatherData->getLatestAFDReferences($wfo);
-        }
-        $allWfos = $this->weatherData->getAllWFOs();
+        try {
+            $afd = $this->weatherData->getAFDById($afd_id);
+            if (!$afd) {
+                throw new NotFoundHttpException();
+            }
+            $wfo = $this->weatherData->getWFOFromAFD($afd);
+            $versions = [];
+            if ($wfo) {
+                $versions = $this->weatherData->getLatestAFDReferences($wfo);
+            }
+            $allWfos = $this->weatherData->getAllWFOs();
 
-        return [
-            "#theme" => "weather_routes_afd",
-            "#wfo" => $wfo,
-            "#afd" => $afd,
-            "#wfo_list" => $allWfos,
-            "#version_list" => $versions,
-        ];
+            return [
+                "#theme" => "weather_routes_afd",
+                "#wfo" => $wfo,
+                "#afd" => $afd,
+                "#wfo_list" => $allWfos,
+                "#version_list" => $versions,
+            ];
+        } catch (Exception $e) {
+            throw new NotFoundHttpException();
+        }
     }
 
     /**
@@ -167,6 +183,9 @@ final class AFDController extends ControllerBase
     public function markupOnlyById($afd_id)
     {
         $afd = $this->weatherData->getAFDById($afd_id);
+        if (!$afd) {
+            throw new NotFoundHttpException();
+        }
         $build = [
             "#theme" => "weather_routes_afd_partial",
             "#wfo" => "UNK",
