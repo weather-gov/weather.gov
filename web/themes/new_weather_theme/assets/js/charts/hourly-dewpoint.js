@@ -13,7 +13,6 @@ for (const container of chartContainers) {
   const dewpoints = JSON.parse(container.dataset.dewpoints).map((v) =>
     Number.parseInt(v, 10),
   );
-  console.log(dewpoints);
 
   // We don't need to keep a reference to the chart object. We only need the
   // side-effects of creating it. This is not ideal, but it's how Chart.js
