@@ -13,12 +13,13 @@ function weather_data_template_preprocess_default_variables_alter(&$variables)
         $weatherMetadata["point"] = ["lat" => $lat, "lon" => $lon];
 
         // this is required since we no longer can interpret api.weather.gov lat/lon directly
+        // note: the url must have a scheme (https:// or http://) and no trailing slash
         $baseUrl = getEnv("API_INTEROP_URL");
 
         $fetch = $container->get("http_client");
         try {
             $data = $fetch
-                ->get("http://$baseUrl/point/$lat/$lon")
+                ->get("$baseUrl/point/$lat/$lon")
                 ->getBody();
         } catch (Throwable $e) {
             $data = '{"error":true}';
