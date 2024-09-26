@@ -15,18 +15,17 @@ const getDatabaseConnection = () => {
       host: db.credentials.host,
       port: db.credentials.port,
     };
-    return mariadb.createConnection(connectionDetails);
-  } else {
-    // we are in a local environment: offer defaults for ease of use
-    return {
-      user: process.env.DB_USERNAME ?? "drupal",
-      password: process.env.DB_PASSWORD ?? "drupal",
-      database: process.env.DB_NAME ?? "weathergov",
-      host: process.env.DB_HOST ?? "database",
-      port: process.env.DB_PORT ?? 3306,
-      ssl: { rejectUnauthorized: false },
-    };
   }
+
+  // we are in a local environment: offer defaults for ease of use
+  return {
+    user: process.env.DB_USERNAME ?? "drupal",
+    password: process.env.DB_PASSWORD ?? "drupal",
+    database: process.env.DB_NAME ?? "weathergov",
+    host: process.env.DB_HOST ?? "database",
+    port: process.env.DB_PORT ?? 3306,
+    ssl: { rejectUnauthorized: false },
+  };
 }
 
 export const openDatabase = async () => {
