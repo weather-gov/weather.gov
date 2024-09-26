@@ -2,6 +2,7 @@
 {% set temps = hours | map(h => h.temperature) | json_encode %}
 {% set feelsLike = hours | map(h => h.apparentTemperature) | json_encode %}
 {% set pops = hours | map(h => h.probabilityOfPrecipitation) | json_encode %}
+{% set dewpoints = hours | map(h => h.dewpoint) | json_encode %}
 {% set relativeHumidity = hours | map(h => h.relativeHumidity) | json_encode %}
 {% set windSpeeds = hours | map(h => h.windSpeed) | json_encode %}
 {% set windGusts = hours | map(h => h.windGust) | json_encode %}
@@ -9,51 +10,6 @@
 
 <wx-hourly-table class="display-block position-relative margin-top-2 bg-white">
   <h5 class="wx-visual-h3 font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">Hourly forecast</h5>
-
-  <div class="margin-bottom-205">
-    <span class="font-family-mono text-primary-dark">
-      {{ "Temperature" | t }}
-    </span>
-    <div class="wx-hourly-temp-chart-container margin-y-105 position-relative grid-col-12" data-times="{{ times }}" data-temps="{{ temps }}" data-feels-like="{{ feelsLike }}">
-      <canvas>
-      </canvas>
-    </div>
-    <div class="display-flex flex-align-center font-mono-xs text-base">
-      <div class="width-3 border-bottom-2px border-primary-dark height-0 margin-right-1">
-        <div class="bg-primary-dark margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
-      </div>
-      {{ "Temperature" | t }}
-      <div class="margin-left-3 width-3 border-bottom-2px border-top-0 border-left-0 border-right-0 border-dotted border-primary-light height-0 margin-right-1">
-        <div class="bg-primary-light margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
-      </div>
-      {{  "Feels like" | t }}
-    </div>
-  </div>
-
-  <div class="margin-bottom-205">
-    <span class="font-family-mono text-primary-dark">{{"Chance of precipitation" | t }}</span>
-    <div class="wx-hourly-pops-chart-container margin-y-205 position-relative grid-col-12" data-times="{{ times }}" data-pops="{{ pops }}">
-      <canvas>
-      </canvas>
-    </div>
-  </div>
-
-  <div class="margin-bottom-205">
-    <span class="font-family-mono text-primary-dark">{{ "Wind" | t }}</span>
-    <div class="wx-hourly-wind-chart-container margin-y-205 position-relative grid-col-12" data-times="{{ times }}" data-wind-speeds="{{ windSpeeds }}" data-wind-gusts="{{ windGusts }}" data-wind-directions="{{ windDirections }}">
-      <canvas></canvas>
-    </div>
-    <div class="display-flex flex-align-center font-mono-xs text-base">
-      <div class="width-3 border-bottom-2px border-secondary-darker height-0 margin-right-1">
-        <div class="bg-primary-dark margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
-      </div>
-      {{ "Wind speed" | t }}
-      <div class="margin-left-3 width-3 border-bottom-2px border-top-0 border-left-0 border-right-0 border-dotted border-secondary height-0 margin-right-1">
-        <div class="bg-secondary margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
-      </div>
-      {{  "Gusts" | t }}
-    </div>
-  </div>
 
   <div class="display-flex flex-justify">
     <div>
@@ -213,8 +169,10 @@
     </table>
   </div>
 
-  <div class="margin-bottom-3">
-    <span class="font-family-mono text-primary-dark">Temperature</span>
+  <div class="margin-bottom-205">
+    <span class="font-family-mono text-primary-dark">
+      {{ "Temperature" | t }}
+    </span>
     <div class="wx-hourly-temp-chart-container margin-y-105 position-relative grid-col-12" data-times="{{ times }}" data-temps="{{ temps }}" data-feels-like="{{ feelsLike }}">
       <canvas>
       </canvas>
@@ -223,16 +181,41 @@
       <div class="width-3 border-bottom-2px border-primary-dark height-0 margin-right-1">
         <div class="bg-primary-dark margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
       </div>
-      Temperature
+      {{ "Temperature" | t }}
       <div class="margin-left-3 width-3 border-bottom-2px border-top-0 border-left-0 border-right-0 border-dotted border-primary-light height-0 margin-right-1">
         <div class="bg-primary-light margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
       </div>
-      Feels like
+      {{  "Feels like" | t }}
     </div>
   </div>
 
   <div class="margin-bottom-205">
-    <span class="font-family-mono text-primary-dark">Humidity</span>
+    <span class="font-family-mono text-primary-dark">{{"Chance of precipitation" | t }}</span>
+    <div class="wx-hourly-pops-chart-container margin-y-205 position-relative grid-col-12" data-times="{{ times }}" data-pops="{{ pops }}">
+      <canvas>
+      </canvas>
+    </div>
+  </div>
+
+<div class="margin-bottom-205">
+    <span class="font-family-mono text-primary-dark">{{ "Wind" | t }}</span>
+    <div class="wx-hourly-wind-chart-container margin-y-205 position-relative grid-col-12" data-times="{{ times }}" data-wind-speeds="{{ windSpeeds }}" data-wind-gusts="{{ windGusts }}" data-wind-directions="{{ windDirections }}">
+      <canvas></canvas>
+    </div>
+    <div class="display-flex flex-align-center font-mono-xs text-base">
+      <div class="width-3 border-bottom-2px border-secondary-darker height-0 margin-right-1">
+        <div class="bg-primary-dark margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
+      </div>
+      {{ "Wind speed" | t }}
+      <div class="margin-left-3 width-3 border-bottom-2px border-top-0 border-left-0 border-right-0 border-dotted border-secondary height-0 margin-right-1">
+        <div class="bg-secondary margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
+      </div>
+      {{  "Gusts" | t }}
+    </div>
+  </div>
+
+  <div class="margin-bottom-205">
+    <span class="font-family-mono text-primary-dark"> {{"Humidity" | t }} </span>
     <div class="wx-hourly-humidity-chart-container margin-y-205 position-relative grid-col-12" data-times="{{ times }}" data-humidity="{{ relativeHumidity }}">
       <canvas>
       </canvas>
@@ -240,12 +223,11 @@
   </div>
 
   <div class="margin-bottom-205">
-    <span class="font-family-mono text-primary-dark">Chance of precipitation</span>
-    <div class="wx-hourly-pops-chart-container margin-y-205 position-relative grid-col-12" data-times="{{ times }}" data-pops="{{ pops }}">
+    <span class="font-family-mono text-primary-dark">{{"Dewpoint" | t }}</span>
+    <div class="wx-hourly-dewpoint-chart-container margin-y-205 position-relative grid-col-12" data-times="{{ times }}" data-dewpoints="{{ dewpoints }}">
       <canvas>
       </canvas>
     </div>
   </div>
-
 
 </wx-hourly-table>
