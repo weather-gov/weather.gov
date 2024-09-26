@@ -1,6 +1,6 @@
 import paragraphSquash from "../../../util/paragraphSquash.js";
 
-const extractUrls = (str) => {
+export const extractUrls = (str) => {
   const regex = /https:\/\/[A-Za-z0-9\-._~:?#[\]@!$]+(\/[\S]+|$)\b/gi;
 
   const match = str.match(regex);
