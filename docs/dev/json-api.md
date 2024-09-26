@@ -32,7 +32,7 @@ First, we upload the PDF itself to the `wfo_pdf_upload/field_wfo_sitrep` field (
       -H 'Accept: application/vnd.api+json' \
       -H 'Content-Type: application/octet-stream' \
       -H 'Content-Disposition: file; filename="test.pdf"' \
-      -d @test.pdf \
+      --data-binary @test.pdf \
       http://localhost:8080/jsonapi/node/wfo_pdf_upload/field_wfo_sitrep
 
 The response should be a 201 with JSON information about the newly uploaded file attributes. We want the `id` of the newly uploaded file for the next step. (You can use `jq` and add a pipe: `| jq "data.id"` above to more easily retrieve the resulting `id`.)
@@ -67,3 +67,5 @@ The response should also be a 201 with JSON information about the newly created 
 # Integration Example
 
 A sample [Python script](./json-api-upload-example.py) is provided to help to aid in integration. Note that this script depends on the [requests](https://pypi.org/project/requests/) library.
+
+We also have [outside tests for uploads](../../tests/playwright/outside/api.spec.js).

@@ -10,6 +10,9 @@ module.exports = {
     "prefer-destructuring": [0],
     "no-param-reassign": ["error", { props: false }],
     "no-console": "error",
+    // This rule forces us to use object spread operators instead of
+    // Object.assign. I disagree, and see the latter as the clearer method
+    "prefer-object-spread": [0],
     // Taken directly from airbnb, but with the for...of statements allowed. It
     // is now supported by all the browsers.
     "no-restricted-syntax": [

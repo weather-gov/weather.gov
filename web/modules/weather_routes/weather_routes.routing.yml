@@ -25,7 +25,7 @@ weather_routes.grid:
     # Public endpoint
     _access: 'TRUE'
     # Validate path parameters
-    wfo: '^[A-Za-z][A-Za-z][A-Za-z]$'
+    wfo: '^[A-Za-z]{3}$'
     gridX: '^[0-9]*$'
     gridY: '^[0-9]*$'
 
@@ -46,7 +46,7 @@ weather_routes.grid.legacy:
     # Public endpoint
     _access: 'TRUE'
     # Validate path parameters
-    wfo: '^[A-Za-z][A-Za-z][A-Za-z]$'
+    wfo: '^[A-Za-z]{3}$'
     gridX: '^[0-9]*$'
     gridY: '^[0-9]*$'
 
@@ -75,6 +75,7 @@ weather_routes.afd.wfo_id:
     no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
+    wfo_code: '^[A-Za-z]{3}$'
 
 weather_routes.afd.by_office:
   path: '/afd/{wfo_code}'
@@ -84,6 +85,7 @@ weather_routes.afd.by_office:
     no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
+    wfo_code: '^[A-Za-z]{3}$'
 
 
 weather_routes.afd.wx.id:
@@ -103,6 +105,7 @@ weather_routes.afd.wx.versions:
     no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
+    wfo_code: '^[A-Za-z]{3}$'
   
 weather_routes.weather_info.content:
   path: '/offices/{wfo}'
@@ -111,4 +114,4 @@ weather_routes.weather_info.content:
   requirements:
     # Public endpoint
     _access: 'TRUE'
-    wfo: '^[A-Za-z][A-Za-z][A-Za-z]$'
+    wfo: '^[A-Za-z]{3}$'

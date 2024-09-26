@@ -11,3 +11,4 @@ import("./components/alertMap.js");
 import("./charts/hourly-temperature.js");
 import("./charts/hourly-pops.js");
 import("./charts/hourly-humidity.js");
+import("./charts/hourly-wind.js");

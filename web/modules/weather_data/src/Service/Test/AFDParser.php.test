@@ -23,14 +23,13 @@ final class AFDParserTest extends TestCase
         $expected = [
             [
                 "type" => "header",
-                "content" => "SYNOPSIS",
-                "postHeader" => null,
+                "content" => "SYNOPSIS"
             ],
             [
                 "type" => "text",
                 "content" =>
                     "A nearly stationary front will remain near the coast through" .
-                    " Thursday. The front will then return northward Thursday night into Friday.",
+                           " Thursday. The front will then return northward Thursday night into Friday.",
             ],
         ];
 
@@ -50,8 +49,7 @@ final class AFDParserTest extends TestCase
         $expected = [
             [
                 "type" => "header",
-                "content" => "SPOTTER INFORMATION STATEMENT",
-                "postHeader" => null,
+                "content" => "SPOTTER INFORMATION STATEMENT"
             ],
         ];
 
@@ -80,16 +78,15 @@ final class AFDParserTest extends TestCase
         $expected = [
             [
                 "type" => "header",
-                "content" => "AVIATION /15Z WEDNESDAY THROUGH SUNDAY/",
-                "postHeader" => "SOME OTHER TEXT HERE",
+                "content" => "AVIATION /15Z WEDNESDAY THROUGH SUNDAY/"
             ],
             [
                 "type" => "text",
                 "content" =>
-                    "Improvement to MVFR cigs by mid-morning for any sites " .
-                    "that are not already MVFR. Slow improvement then to " .
-                    "VFR starting from the north in the late afternoon and " .
-                    "reaching the NYC terminals late this evening.",
+                    "SOME OTHER TEXT HERE Improvement to MVFR cigs by mid-morning for any sites " .
+                           "that are not already MVFR. Slow improvement then to " .
+                           "VFR starting from the north in the late afternoon and " .
+                           "reaching the NYC terminals late this evening.",
             ],
         ];
 
@@ -224,13 +221,12 @@ final class AFDParserTest extends TestCase
             [
                 "type" => "header",
                 "content" => "SYNOPSIS",
-                "postHeader" => null,
             ],
             [
                 "type" => "text",
                 "content" =>
                     "A nearly stationary front will remain near the coast through" .
-                    " Thursday. The front will then return northward Thursday night into Friday.",
+                           " Thursday. The front will then return northward Thursday night into Friday.",
             ],
             [
                 "type" => "text",
@@ -239,14 +235,13 @@ final class AFDParserTest extends TestCase
             ],
             [
                 "type" => "header",
-                "content" => "NEAR TERM /THROUGH TONIGHT/",
-                "postHeader" => null,
+                "content" => "NEAR TERM /THROUGH TONIGHT/"
             ],
             [
                 "type" => "text",
                 "content" =>
                     "Forecast mainly on track. Much cooler air mass has worked into the " .
-                    "region with the stationary front just of the of the area.",
+                           "region with the stationary front just of the of the area.",
             ],
             [
                 "type" => "subheader",
@@ -256,27 +251,26 @@ final class AFDParserTest extends TestCase
                 "type" => "text",
                 "content" =>
                     "High pressure builds down from the north into tonight, which will " .
-                    "only reinforce some of the lower level cooler and drier air.",
+                           "only reinforce some of the lower level cooler and drier air.",
             ],
             [
                 "type" => "header",
                 "content" =>
-                    "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES",
-                "postHeader" => null,
+                    "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES"
             ],
             [
                 "type" => "text",
                 "content" =>
                     "CT...None.\nNY...None.\nNJ...None.\nMARINE" .
-                    "...Small Craft Advisory until 11 PM EDT " .
-                    "this evening for ANZ350-353-355.",
+                           "...Small Craft Advisory until 11 PM EDT " .
+                           "this evening for ANZ350-353-355.",
             ],
             [
                 "type" => "epilogueText",
                 "content" =>
                     "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" .
-                    " TERM...DW\nLONG TERM...JT\nMARINE..." .
-                    "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
+                           " TERM...DW\nLONG TERM...JT\nMARINE..." .
+                           "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
             ],
         ];
 
@@ -432,21 +426,20 @@ final class AFDParserTest extends TestCase
                         "type" => "preambleText",
                         "content" =>
                             "Area Forecast Discussion\nNational Weather Service " .
-                            "New York NY\n1043 AM EDT Wed Aug 7 2024",
+                                   "New York NY\n1043 AM EDT Wed Aug 7 2024",
                     ],
                 ],
             ],
             "body" => [
                 [
                     "type" => "header",
-                    "content" => "SYNOPSIS",
-                    "postHeader" => null,
+                    "content" => "SYNOPSIS"
                 ],
                 [
                     "type" => "text",
                     "content" =>
                         "A nearly stationary front will remain near the coast through" .
-                        " Thursday. The front will then return northward Thursday night into Friday.",
+                               " Thursday. The front will then return northward Thursday night into Friday.",
                 ],
                 [
                     "type" => "text",
@@ -455,14 +448,13 @@ final class AFDParserTest extends TestCase
                 ],
                 [
                     "type" => "header",
-                    "content" => "NEAR TERM /THROUGH TONIGHT/",
-                    "postHeader" => null,
+                    "content" => "NEAR TERM /THROUGH TONIGHT/"
                 ],
                 [
                     "type" => "text",
                     "content" =>
                         "Forecast mainly on track. Much cooler air mass has worked into the " .
-                        "region with the stationary front just of the of the area.",
+                               "region with the stationary front just of the of the area.",
                 ],
                 [
                     "type" => "subheader",
@@ -473,20 +465,19 @@ final class AFDParserTest extends TestCase
                     "type" => "text",
                     "content" =>
                         "High pressure builds down from the north into tonight, which will " .
-                        "only reinforce some of the lower level cooler and drier air.",
+                               "only reinforce some of the lower level cooler and drier air.",
                 ],
                 [
                     "type" => "header",
                     "content" =>
-                        "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES",
-                    "postHeader" => null,
+                        "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES"
                 ],
                 [
                     "type" => "text",
                     "content" =>
                         "CT...None.\nNY...None.\nNJ...None.\nMARINE" .
-                        "...Small Craft Advisory until 11 PM EDT " .
-                        "this evening for ANZ350-353-355.",
+                               "...Small Craft Advisory until 11 PM EDT " .
+                               "this evening for ANZ350-353-355.",
                 ],
             ],
             "epilogue" => [
@@ -494,8 +485,8 @@ final class AFDParserTest extends TestCase
                     "type" => "epilogueText",
                     "content" =>
                         "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" .
-                        " TERM...DW\nLONG TERM...JT\nMARINE..." .
-                        "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
+                               " TERM...DW\nLONG TERM...JT\nMARINE..." .
+                               "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
                 ],
             ],
         ];
@@ -503,6 +494,41 @@ final class AFDParserTest extends TestCase
         $parser = new AFDParser($raw);
         $parser->parse();
         $actual = $parser->getStructureForTwig();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group unit
+     * @group afd-parser
+     */
+    public function testConsecutiveHeaders(): void
+    {
+        $raw = ".NEAR TERM /UNTIL 6 PM THIS EVENING/...\n";
+        $raw .= ".UPDATE...As of 630 AM EDT, patchy fog has developed within many\n";
+        $raw .= "river valleys across the region, some of which was locally\n";
+        $raw .= "dense. This fog will dissipate between 8 and 10 AM.";
+
+        $expected = [
+            [
+                "type" => "header",
+                "content" => "NEAR TERM /UNTIL 6 PM THIS EVENING/"
+            ],
+            [
+                "type" => "header",
+                "content" => "UPDATE"
+            ],
+            [
+                "type" => "text",
+                "content" =>
+                    "As of 630 AM EDT, patchy fog has developed within many river valleys"
+                    . " across the region, some of which was locally dense. This fog will "
+                         . "dissipate between 8 and 10 AM."
+            ]
+        ];
+
+        $parser = new AFDParser($raw);
+        $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
     }
