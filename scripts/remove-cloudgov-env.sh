@@ -53,11 +53,13 @@ echo "Cleaning up services, applications, and the Cloud.gov space for $1..."
 # delete apps
 cf delete cronish
 cf delete weathergov-"$1"
+cf delete proxy-weathergov-"$1"
 
 # delete services
 cf delete-service database
 cf delete-service secrets
 cf delete-service storage
+cf delete-service proxy-weathergov-$1
 
 # delete space
 cf delete-space "$1"
