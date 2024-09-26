@@ -92,6 +92,7 @@ SP_PUBLIC_KEY=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATI
 SP_PRIVATE_KEY=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.SP_PRIVATE_KEY')
 IDP_PUBLIC_KEY=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.IDP_PUBLIC_KEY')
 NEWRELIC_LICENSE=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.NEWRELIC_LICENSE')
+ALLOWED_IPS=$(cf env weathergov-beta | sed -n '/VCAP_SERVICES/,/VCAP_APPLICATION/p' |  sed '$d' |  sed '1s;^;{\n;' | sed '$s/$/}/' | sed 's/VCAP_SERVICES/"VCAP_SERVICES"/g' | jq -r '."VCAP_SERVICES"."user-provided"[].credentials.ALLOWED_IPS')
 cf target -o nws-weathergov -s "$1"
 
 jq -n --arg cron_key "$CRON_KEY" --arg hash_salt "$HASH_SALT" --arg root_user_name "$ROOT_USER_NAME" --arg root_user_pass "$ROOT_USER_PASS" --arg sp_public_key "$SP_PUBLIC_KEY" --arg sp_private_key "$SP_PRIVATE_KEY" --arg idp_public_key "$IDP_PUBLIC_KEY" --arg newrelic_license "$NEWRELIC_LICENSE" '{"CRON_KEY":$cron_key,"HASH_SALT":$hash_salt,"SP_PUBLIC_KEY":$sp_public_key,"SP_PRIVATE_KEY":$sp_private_key,"IDP_PUBLIC_KEY":$idp_public_key,"ROOT_USER_PASS":$root_user_pass,"ROOT_USER_NAME":$root_user_name,"NEWRELIC_LICENSE":$newrelic_license}' > credentials-"$1".json
@@ -99,6 +100,22 @@ cf cups secrets -p credentials-"$1".json
 
 echo "Database create succeeded and credentials created. Deploying the weather.gov application to the new space $1..."
 cf push -f manifests/manifest-"$1".yaml --var newrelic-license="$NEWRELIC_LICENSE"
+
+## set up IP address filtering for the /jsonapi endpoint.
+
+echo "Adding an internal route to the weather.gov application (for reverse proxy purposes)."
+cf map-route weathergov-"$1" apps.internal --hostname weathergov-"$1"
+
+echo "Creating the proxy as a user provided service"
+cf create-user-provided-service proxy-weathergov-"$1" -r https://proxy-weathergov-"$1".app.cloud.gov
+
+echo "Setting up the proxy as a route service for the weather.gov application"
+cf bind-route-service app.cloud.gov proxy-weathergov-"$1" --hostname weathergov-"$1"
+
+echo "Configuring the network policy on the weather.gov to permit SSL/TLS traffic through the proxy"
+cf add-network-policy proxy-weathergov-"$1" weathergov-"$1" -s "$1" --protocol tcp --port 61443
+
+## end IP address filtering
 
 echo "Creating credentials to talk to storage in $1..."
 cf create-service-key storage storagekey
