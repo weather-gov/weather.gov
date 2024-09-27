@@ -45,7 +45,7 @@ applications:
 
   - name: api-weathergov-ENVIRONMENT
     stack: cflinuxfs4
-    memory: 1G
+    memory: 256M
     instances: 1
     buildpacks:
       - nodejs_buildpack
