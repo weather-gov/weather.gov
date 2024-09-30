@@ -52,6 +52,7 @@ applications:
     env:
       NEWRELIC_LICENSE: ((newrelic-license))
       API_INTEROP_PRODUCTION: true
+      API_INTEROP_NAME: ENVIRONMENT
     health-check-type: process
     path: ../api-interop-layer
     random-route: false
