@@ -16,8 +16,8 @@ $settings["migrate_node_migrate_type_classic"] = false;
 $settings["config_sync_directory"] = dirname(DRUPAL_ROOT) . "/web/config/sync";
 $config["config_split.config_split.cloudgov"]["status"] = true;
 
-$applicaiton_fqdn_regex = "^.+\.(app\.cloud\.gov|weather\.gov)$";
-$settings["trusted_host_patterns"][] = $applicaiton_fqdn_regex;
+$application_fqdn_regex = "^.+\.(app\.cloud\.gov|weather\.gov|apps\.internal)$";
+$settings["trusted_host_patterns"][] = $application_fqdn_regex;
 
 $cf_application_data = json_decode(getenv("VCAP_APPLICATION") ?? "{}", true);
 $cf_service_data = json_decode(getenv("VCAP_SERVICES") ?? "{}", true);
