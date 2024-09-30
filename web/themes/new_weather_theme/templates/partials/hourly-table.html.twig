@@ -117,24 +117,6 @@
           {% endfor %}
         </tr>
 
-        {% if precipPeriods | length > 0%}
-        <tr data-row-name="quant-precip">
-          <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
-            {{"Accumulation" | t}}
-          </th>
-          {% if precipPeriods[0].periodIndex > 0 %}
-            <td colspan="{{ precipPeriods[0].periodIndex }}"></td>
-          {% endif %}
-          {% for period in precipPeriods %}
-          <td colspan="{{ period.duration }}">
-            {% if period.value > 0 %}
-            <div class="bg-primary-lighter text-center">{{ period.value }} inches</div>
-            {% endif %}
-          </td>
-          {% endfor %}
-        </tr>
-        {% endif %}
-
         <tr data-row-name="wind-speed">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
             {{"Wind speed" | t}}
