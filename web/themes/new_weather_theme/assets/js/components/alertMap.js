@@ -131,6 +131,11 @@ const checkForLeaflet = () => {
     // If addEventListener is called multiple times with identical arguments,
     // the listener will only be added the first time. So, it's safe to just
     // keep doing this until we're done.
+    //
+    // It's also possible that we got here before the DOM load event, in which
+    // case the Leaflet, ESRI, and ESRI vector script tags may not even be
+    // present yet. So... wait on that as well!
+    document.addEventListener("DOMContentLoaded", checkForLeaflet);
     document
       .querySelector("[data-wx-leaflet]")
       ?.addEventListener("load", checkForLeaflet);
