@@ -44,7 +44,7 @@ applications:
       - nodejs_buildpack
     env:
       NEWRELIC_LICENSE: ((newrelic-license))
-      PRODUCTION: true
+      API_INTEROP_PRODUCTION: true
     health-check-type: process
     path: ../api-interop-layer
     random-route: false

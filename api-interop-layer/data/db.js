@@ -3,7 +3,7 @@ import mariadb from "mariadb";
 import { sleep } from "../util/sleep.js";
 
 const getDatabaseConnection = () => {
-  if (process.env.PRODUCTION) {
+  if (process.env.API_INTEROP_PRODUCTION) {
     // we are in a cloud.gov environment and must retrieve credentials from
     // the VCAP_SERVICES environment variable
     const vcap = JSON.parse(process.env.VCAP_SERVICES);
