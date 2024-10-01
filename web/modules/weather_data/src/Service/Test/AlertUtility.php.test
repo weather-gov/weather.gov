@@ -95,8 +95,8 @@ final class AlertUtilityTest extends TestCase
 
         $expected = [
             $alerts[3], // active tornado warning
-            $alerts[2], // active volcano warning
-            $alerts[4], // active dust storm warning
+            $alerts[4], // active volcano warning
+            $alerts[2], // active dust storm warning
             $alerts[0], // active flood watch
             $alerts[1], // next hour air quality alert
             $alerts[5], // in two hours volcano warning
