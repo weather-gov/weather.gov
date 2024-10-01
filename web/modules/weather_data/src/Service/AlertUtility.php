@@ -151,132 +151,132 @@ class AlertUtility
             "kind" => "ALERT_KIND_LAND",
             "priority" => 23552,
         ],
-        "winter storm warning" => [
+        "heavy freezing spray warning" => [
             "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
+            "kind" => "ALERT_KIND_MARINE",
             "priority" => 24576,
         ],
-        "high wind warning" => [
+        "winter storm warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 25600,
         ],
-        "tropical storm warning" => [
+        "lake effect snow warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 26624,
         ],
-        "storm warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_MARINE",
-            "priority" => 27648,
-        ],
-        "tsunami advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 28672,
-        ],
-        "tsunami watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 29696,
-        ],
-        "avalanche warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 30720,
-        ],
-        "earthquake warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 31744,
-        ],
-        "volcano warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 32768,
-        ],
-        "ashfall warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 33792,
-        ],
-        "coastal flood warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 34816,
-        ],
-        "lakeshore flood warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 35840,
-        ],
-        "flood warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 36864,
-        ],
-        "high surf warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 37888,
-        ],
         "dust storm warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 38912,
+            "priority" => 27648,
         ],
         "blowing dust warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_OTHER",
+            "priority" => 28672,
+        ],
+        "high wind warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 29696,
+        ],
+        "tropical storm warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 30720,
+        ],
+        "storm warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 31744,
+        ],
+        "tsunami advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 32768,
+        ],
+        "tsunami watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 33792,
+        ],
+        "avalanche warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 34816,
+        ],
+        "earthquake warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 35840,
+        ],
+        "volcano warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 36864,
+        ],
+        "ashfall warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 37888,
+        ],
+        "flood warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 38912,
+        ],
+        "coastal flood warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
             "priority" => 39936,
         ],
-        "lake effect snow warning" => [
+        "lakeshore flood warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 40960,
         ],
+        "ashfall advisory" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 41984,
+        ],
+        "high surf warning" => [
+            "level" => "ALERT_LEVEL_WARNING",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 43008,
+        ],
         "excessive heat warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 41984,
+            "priority" => 44032,
         ],
         "tornado watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 43008,
+            "priority" => 45056,
         ],
         "severe thunderstorm watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 44032,
+            "priority" => 46080,
         ],
         "flash flood watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 45056,
+            "priority" => 47104,
         ],
         "gale warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_MARINE",
-            "priority" => 46080,
+            "priority" => 48128,
         ],
         "flood statement" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 47104,
-        ],
-        "wind chill warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 48128,
-        ],
-        "extreme cold warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_LAND",
             "priority" => 49152,
         ],
-        "hard freeze warning" => [
+        "extreme cold warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 50176,
@@ -321,336 +321,271 @@ class AlertUtility
             "kind" => "ALERT_KIND_MARINE",
             "priority" => 58368,
         ],
-        "hurricane local statement" => [
+        "tropical cyclone local statement" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 59392,
         ],
-        "typhoon local statement" => [
+        "winter weather advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 60416,
         ],
-        "tropical storm local statement" => [
+        "avalanche advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 61440,
         ],
-        "tropical depression local statement" => [
+        "cold weather advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 62464,
         ],
-        "avalanche advisory" => [
+        "heat advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 63488,
         ],
-        "winter weather advisory" => [
+        "flood advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 64512,
         ],
-        "wind chill advisory" => [
+        "coastal flood advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 65536,
         ],
-        "heat advisory" => [
+        "lakeshore flood advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 66560,
         ],
-        "urban and small stream flood advisory" => [
+        "high surf advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 67584,
         ],
-        "small stream flood advisory" => [
+        "dense fog advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 68608,
         ],
-        "arroyo and small stream flood advisory" => [
+        "dense smoke advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 69632,
         ],
-        "flood advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 70656,
-        ],
-        "hydrologic advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 71680,
-        ],
-        "lakeshore flood advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 72704,
-        ],
-        "coastal flood advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 73728,
-        ],
-        "high surf advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 74752,
-        ],
-        "heavy freezing spray warning" => [
-            "level" => "ALERT_LEVEL_WARNING",
-            "kind" => "ALERT_KIND_MARINE",
-            "priority" => 75776,
-        ],
-        "dense fog advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 76800,
-        ],
-        "dense smoke advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 77824,
-        ],
         "small craft advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_MARINE",
-            "priority" => 78848,
+            "priority" => 70656,
         ],
         "brisk wind advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_MARINE",
-            "priority" => 79872,
+            "priority" => 71680,
         ],
         "hazardous seas warning" => [
             "level" => "ALERT_LEVEL_WARNING",
             "kind" => "ALERT_KIND_MARINE",
-            "priority" => 80896,
+            "priority" => 72704,
         ],
         "dust advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_OTHER",
-            "priority" => 81920,
+            "priority" => 73728,
         ],
         "blowing dust advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 82944,
+            "priority" => 74752,
         ],
         "lake wind advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 83968,
+            "priority" => 75776,
         ],
         "wind advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 84992,
+            "priority" => 76800,
         ],
         "frost advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 86016,
-        ],
-        "ashfall advisory" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 87040,
+            "priority" => 77824,
         ],
         "freezing fog advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 88064,
+            "priority" => 78848,
         ],
         "freezing spray advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_MARINE",
-            "priority" => 89088,
+            "priority" => 79872,
         ],
         "low water advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_MARINE",
-            "priority" => 90112,
+            "priority" => 80896,
         ],
         "local area emergency" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 91136,
-        ],
-        "avalanche watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 92160,
-        ],
-        "blizzard watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 93184,
-        ],
-        "rip current statement" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 94208,
-        ],
-        "beach hazards statement" => [
-            "level" => "ALERT_LEVEL_OTHER",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 95232,
-        ],
-        "gale watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_MARINE",
-            "priority" => 96256,
+            "priority" => 81920,
         ],
         "winter storm watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 97280,
+            "priority" => 82944,
+        ],
+        "rip current statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 83968,
+        ],
+        "beach hazards statement" => [
+            "level" => "ALERT_LEVEL_OTHER",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 84992,
+        ],
+        "gale watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_MARINE",
+            "priority" => 86016,
+        ],
+        "avalanche watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 87040,
         ],
         "hazardous seas watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_MARINE",
-            "priority" => 98304,
+            "priority" => 88064,
         ],
         "heavy freezing spray watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_MARINE",
-            "priority" => 99328,
-        ],
-        "coastal flood watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 100352,
-        ],
-        "lakeshore flood watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 101376,
+            "priority" => 89088,
         ],
         "flood watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 102400,
+            "priority" => 90112,
+        ],
+        "coastal flood watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 91136,
+        ],
+        "lakeshore flood watch" => [
+            "level" => "ALERT_LEVEL_WATCH",
+            "kind" => "ALERT_KIND_LAND",
+            "priority" => 92160,
         ],
         "high wind watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 103424,
+            "priority" => 93184,
         ],
         "excessive heat watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 104448,
+            "priority" => 94208,
         ],
         "extreme cold watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 105472,
-        ],
-        "wind chill watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 106496,
-        ],
-        "lake effect snow watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_LAND",
-            "priority" => 107520,
-        ],
-        "hard freeze watch" => [
-            "level" => "ALERT_LEVEL_WATCH",
-            "kind" => "ALERT_KIND_MARINE",
-            "priority" => 108544,
+            "priority" => 95232,
         ],
         "freeze watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 109568,
+            "priority" => 96256,
         ],
         "fire weather watch" => [
             "level" => "ALERT_LEVEL_WATCH",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 110592,
+            "priority" => 97280,
         ],
         "extreme fire danger" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 111616,
+            "priority" => 98304,
         ],
         "911 telephone outage" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 112640,
+            "priority" => 99328,
         ],
         "coastal flood statement" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 113664,
+            "priority" => 100352,
         ],
         "lakeshore flood statement" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 114688,
+            "priority" => 101376,
         ],
         "special weather statement" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 115712,
+            "priority" => 102400,
         ],
         "marine weather statement" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_MARINE",
-            "priority" => 116736,
+            "priority" => 103424,
         ],
         "air quality alert" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 117760,
+            "priority" => 104448,
         ],
         "air stagnation advisory" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 118784,
+            "priority" => 105472,
         ],
         "hazardous weather outlook" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 119808,
+            "priority" => 106496,
         ],
         "hydrologic outlook" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 120832,
+            "priority" => 107520,
         ],
         "short term forecast" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 121856,
+            "priority" => 108544,
         ],
         "administrative message" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 122880,
+            "priority" => 109568,
         ],
         "test" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 123904,
+            "priority" => 110592,
         ],
         "child abduction emergency" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
-            "priority" => 124928,
+            "priority" => 111616,
         ],
         "blue alert" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_OTHER",
-            "priority" => 125952,
-        ],
+            "priority" => 112640,
+        ]
     ];
 
     public static function getAlertTypes()
