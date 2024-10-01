@@ -189,6 +189,9 @@ trait DailyForecastTrait
         $all = [$todayPeriods, ...array_chunk($detailedPeriods, 2)];
 
         $all = array_map(
+            // Ignore the lint on this line because it conflicts with the code
+            // formatter. I choose to prefer to formatter.
+            // phpcs:ignore
             function ($day, $dayIndex) use (
                 &$now,
                 &$timezone,
@@ -198,6 +201,7 @@ trait DailyForecastTrait
             ) {
                 // For each day, get the component periods, formatted.
                 $periods = array_map(function ($period) use (
+                    &$dayIndex,
                     &$now,
                     &$timezone,
                 ) {
@@ -286,7 +290,7 @@ trait DailyForecastTrait
                     $start,
                     "timestamp",
                 );
-                $hourPeriods = DateTimeUtility::filterToBefore(
+                $hourPeriods = DateTimeUtility::filterToOnOrBefore(
                     $hourPeriods,
                     $end,
                     "timestamp",
@@ -349,7 +353,7 @@ trait DailyForecastTrait
                     "hourPeriods" => $hourPeriods,
                     "alerts" => $dayAlerts,
                     "highestAlertLevel" => $highestAlertLevel,
-                    "precipPeriods" => $precipPeriods,
+                    "precipPeriods" => array_values($precipPeriods),
                 ];
 
                 return $day;

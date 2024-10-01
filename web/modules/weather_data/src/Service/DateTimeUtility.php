@@ -69,6 +69,21 @@ class DateTimeUtility
         );
     }
 
+    public static function filterToOnOrBefore(
+        $array,
+        $before,
+        $property = "startTime",
+    ) {
+        return array_values(
+            array_filter($array, function ($item) use ($before, $property) {
+                $itemTime = self::getTimeValue($item, $property);
+                $itemTime = self::stringToDate($itemTime);
+
+                return $itemTime <= $before;
+            }),
+        );
+    }
+
     public static function stringToDate($str, $timezone = false)
     {
         if ($str) {

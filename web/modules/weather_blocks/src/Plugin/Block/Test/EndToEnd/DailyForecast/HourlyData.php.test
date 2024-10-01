@@ -35,7 +35,7 @@ final class DailyForecastWithHourlyDataTest extends EndToEndBase
 
         $this->assertEquals(
             $start->format("c"),
-            $data["todayHourly"][0]["timestamp"],
+            $data[0]["hourPeriods"][0]["timestamp"],
         );
     }
 
@@ -67,7 +67,7 @@ final class DailyForecastWithHourlyDataTest extends EndToEndBase
 
         $actual = array_map(function ($hour) {
             return $hour["time"];
-        }, $data["todayHourly"]);
+        }, $data[0]["hourPeriods"]);
 
         $this->assertEquals($expected, $actual);
     }
@@ -121,7 +121,7 @@ final class DailyForecastWithHourlyDataTest extends EndToEndBase
 
         $actual = array_map(function ($hour) {
             return $hour["time"];
-        }, $data["todayHourly"]);
+        }, $data[0]["hourPeriods"]);
 
         $this->assertEquals($expected, $actual);
     }
@@ -140,10 +140,10 @@ final class DailyForecastWithHourlyDataTest extends EndToEndBase
 
         $data = $this->block->build();
 
-        $extended = $data["detailed"];
+        $extended = array_slice($data, 1);
         foreach ($extended as $period) {
             $start = $start->modify("+1 day");
-            $hourly = $period["hourlyPeriods"];
+            $hourly = $period["hourPeriods"];
 
             $this->assertEquals($start->format("c"), $hourly[0]["timestamp"]);
             $this->assertEquals(

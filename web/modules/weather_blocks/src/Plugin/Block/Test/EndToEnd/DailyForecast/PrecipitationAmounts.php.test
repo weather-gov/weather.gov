@@ -34,29 +34,26 @@ final class PrecipitationAmountsTest extends EndToEndBase
                 {
                   "type": "array",
                   "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "startRaw": {
-                          "type": "string",
-                          "pattern": "$isoRegex"
-                        },
-                        "endRaw": {
-                          "type": "string",
-                          "pattern": "$isoRegex"
-                        },
-                        "start": {
-                          "type": "string",
-                          "pattern": "$hourSpanRegex"
-                        },
-                        "end": {
-                          "type": "string",
-                          "pattern": "$hourSpanRegex"
-                        },
-                        "value": {
-                          "type": "number"
-                        }
+                    "type": "object",
+                    "properties": {
+                      "startRaw": {
+                        "type": "string",
+                        "pattern": "$isoRegex"
+                      },
+                      "endRaw": {
+                        "type": "string",
+                        "pattern": "$isoRegex"
+                      },
+                      "start": {
+                        "type": "string",
+                        "pattern": "$hourSpanRegex"
+                      },
+                      "end": {
+                        "type": "string",
+                        "pattern": "$hourSpanRegex"
+                      },
+                      "value": {
+                        "type": "number"
                       }
                     }
                   }
@@ -67,7 +64,7 @@ final class PrecipitationAmountsTest extends EndToEndBase
         );
 
         $data = $this->block->build();
-        $schema->in(json_decode(json_encode($data["precipitationPeriods"])));
+        $schema->in(json_decode(json_encode($data[2]["precipPeriods"])));
 
         $this->assertTrue(true);
     }

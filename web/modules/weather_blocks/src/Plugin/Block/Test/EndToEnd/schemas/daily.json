@@ -1,54 +1,41 @@
 {
-  "type": "object",
-  "properties": {
-    "today": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/day"
-      }
-    },
-    "todayHourly": {
-      "type": "array",
-      "items": "$include:hourly.json"
-    },
-    "todayAlerts": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/alert"
-      }
-    },
-    "todayHighestAlertLevel": {
-        "type": "string"
-    },
-    "precipitationPeriods": {
-      "type": "array",
-      "items": {
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "periods": {
         "type": "array",
-        "maxItems": 5,
         "items": {
-          "$ref": "#/$defs/precipPeriod"
+          "$ref": "#/$defs/day"
         }
-      }
-    },
-    "detailed": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "daytime": { "$ref": "#/$defs/day" },
-          "nightime": { "$ref": "#/$defs/day" },
-          "hourlyPeriods": { "type": "array" },
-          "alertPeriods": {
-            "type": "array",
-            "items": {
-              "$ref": "#/$defs/alert"
-            }
+      },
+      "hourPeriods": {
+        "type": "array",
+        "items": {
+          "items": "$include:hourly.json"
+        }
+      },
+      "alerts": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/alert"
+        }
+      },
+      "todayHighestAlertLevel": {
+        "type": "string"
+      },
+      "precipPeriods": {
+        "type": "array",
+        "items": {
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/precipPeriod"
           }
         }
+      },
+      "useOnlyLow": {
+        "type": "boolean"
       }
-    },
-    "useOnlyLowForToday": {
-      "type": "boolean"
     }
   },
 
