@@ -23,7 +23,7 @@ const adjust = (time, adjustment) => {
   return time;
 };
 
-const processDates = (obj, usingHourly = false, { parent = null } = {}) => {
+const processDates = (obj, usingHourly = false) => {
   // If the input is null, just bail out. Otherwise we'll accidentally turn it
   // into an object.
   if (obj === null) {
@@ -39,7 +39,7 @@ const processDates = (obj, usingHourly = false, { parent = null } = {}) => {
     if (Array.isArray(value)) {
       value.forEach((item) => processDates(item, usingHourly, { parent: key }));
     } else if (typeof value === "object" && value !== null) {
-      processDates(value, usingHourly, { parent: key });
+      processDates(value, usingHourly);
     }
     //
     // But if the value has a startsWith function and it starts with the token,
@@ -52,18 +52,13 @@ const processDates = (obj, usingHourly = false, { parent = null } = {}) => {
       if (start === "now" && modifier) {
         updatedTime = adjust(updatedTime, modifier);
 
-        // If we are parsing hourly forcast data, and the key is either the
-        // start or end time, then align the output to the start of the given
-        // hour.
-        //
-        // Alternatively, if we are not parsing hourly data but our parent key
-        // is "values" and our key is "validTime", then this is the hourly data
-        // stuffed inside the gridpoints API return. Do the same thing.
-        if (
-          (usingHourly &&
-            ["startTime", "endTime", "validTime"].includes(key)) ||
-          (!usingHourly && parent === "values" && key === "validTime")
-        ) {
+        // If the object key is in this list, then we may need to align the
+        // output to the start of the given hour.
+        const isAlignKey = ["startTime", "endTime", "validTime"].includes(key);
+
+        // If we are processing hourly data AND this is one of the keys that
+        // needs to be aligned to the start of the hour
+        if (usingHourly && isAlignKey) {
           updatedTime = updatedTime.startOf("hour");
         }
       } else if (start === "today") {
@@ -125,7 +120,12 @@ export default async (request, response) => {
       return;
     }
 
-    const isHourlyForecast = filePath.toString().includes("hourly");
+    // We know this is hourly forecast data if it's somewhere in the /gridpoints
+    // tree and EITHER ends after the WFO grid OR ends with /forecast/hourly.
+    const isHourlyForecast =
+      /\/gridpoints\/[A-Z]{3}\/\d+,\d+(\/forecast\/hourly)?\.json/.test(
+        filePath.toString(),
+      );
 
     processDates(output, isHourlyForecast);
 
