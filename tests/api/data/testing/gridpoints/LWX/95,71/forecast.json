@@ -123,6 +123,54 @@
         "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
         "shortForecast": "Mostly Clear",
         "detailedForecast": "Mostly clear, with a low around 33. Northwest wind 12 to 18 mph, with gusts as high as 28 mph."
+      },
+      {
+        "number": 5,
+        "name": "Thursday",
+        "startTime": "date:today 06:00:-5 +2 days",
+        "endTime": "date:today 18:00:-5 +2 days",
+        "isDaytime": false,
+        "temperature": 33,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -2.7777777777777777
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 49 },
+        "windSpeed": "12 to 18 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
+        "shortForecast": "Mostly Clear",
+        "detailedForecast": "Mostly clear, with a low around 33. Northwest wind 12 to 18 mph, with gusts as high as 28 mph."
+      },
+      {
+        "number": 6,
+        "name": "Thursday Night",
+        "startTime": "date:today 18:00:-5 +2 days",
+        "endTime": "date:today 06:00:-5 +3 days",
+        "isDaytime": false,
+        "temperature": 33,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -2.7777777777777777
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 49 },
+        "windSpeed": "12 to 18 mph",
+        "windDirection": "NW",
+        "icon": "INVALID_ICON_URL",
+        "shortForecast": "Mostly Clear",
+        "detailedForecast": "Mostly clear, with a low around 33. Northwest wind 12 to 18 mph, with gusts as high as 28 mph."
       }
     ]
   }
