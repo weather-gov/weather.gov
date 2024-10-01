@@ -9,7 +9,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: [`api-interop-${process.env.APP_NAME || 'local'}`],
+  app_name: [`api-interop-${process.env.API_INTEROP_NAME || 'local'}`],
   /**
    * Your New Relic license key.
    */

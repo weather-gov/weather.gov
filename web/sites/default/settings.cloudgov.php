@@ -102,6 +102,11 @@ switch ($application_environment) {
             "https://weathergov-eric.app.cloud.gov";
         break;
 
+    case "james":
+        $config["samlauth.authentication"]["sp_entity_id"] =
+            "https://weathergov-james.app.cloud.gov";
+        break;
+
     case "staging":
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-staging.app.cloud.gov";

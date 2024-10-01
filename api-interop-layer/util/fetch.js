@@ -39,7 +39,12 @@ export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
     .catch(() => wait(204).then(() => internalFetch(path)))
     .catch(() => wait(337).then(() => internalFetch(path)))
     .catch((e) => {
-      logger.error(e.cause);
+      if (e instanceof SyntaxError) {
+          // this can happen if the API or proxy returns HTML
+          logger.error(`error retrieving ${path}: endpoint returned invalid JSON: ${e}`);
+      } else {
+          logger.error(`error retrieving ${path}: ${e.cause}`);
+      }
       return { ...e.cause, error: true };
     });
 
