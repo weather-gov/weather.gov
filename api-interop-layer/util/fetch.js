@@ -3,7 +3,7 @@ import { sleep } from "./sleep.js";
 
 const logger = createLogger("fetch wrapper");
 
-const BASE_URL = process.env.API_PROXY_URL ?? "https://api.weather.gov";
+const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
 
 const internalFetch = async (path) => {
   const url = URL.canParse(path) ? path : new URL(path, BASE_URL).toString();

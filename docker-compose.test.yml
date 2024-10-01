@@ -10,7 +10,7 @@ services:
       - api-proxy-test
       - api-interop-layer-test
     environment: # we want to extend, not override
-      API_PROXY_URL: http://api-proxy-test:9081
+      API_URL: http://api-proxy-test:9081
       API_INTEROP_URL: http://api-interop-layer-test:9082
       DRUPAL_DB_HOST: database-test
     profiles: !override ["test"]

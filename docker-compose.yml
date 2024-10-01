@@ -36,7 +36,7 @@ services:
       DB_PASSWORD: drupal
       DB_HOST: database
       DB_PORT: 3306
-      API_PROXY_URL: http://api-proxy:8081
+      API_URL: http://api-proxy:8081
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
       NEWRELIC_LICENSE: $NEWRELIC_LICENSE
     networks:
@@ -67,7 +67,7 @@ services:
       - api-proxy
       - api-interop-layer
     environment:
-      API_PROXY_URL: http://api-proxy:8081
+      API_URL: http://api-proxy:8081
       API_INTEROP_URL: http://api-interop-layer:8082
       DRUPAL_DB_NAME: weathergov
       DRUPAL_DB_USERNAME: drupal

@@ -66,7 +66,7 @@ class DataLayer
     private function fetch($url, $attempt = 1, $delay = 75)
     {
         if (!preg_match("/^https?:\/\//", $url)) {
-            $baseUrl = getEnv("API_PROXY_URL");
+            $baseUrl = getEnv("API_URL");
             $baseUrl = $baseUrl == false ? "https://api.weather.gov" : $baseUrl;
             $url = $baseUrl . $url;
         }
