@@ -4,22 +4,8 @@ import { expect } from "chai";
 import daily from "./daily.js";
 import fs from "fs";
 import path from "path";
-import Ajv from "ajv";
 
 describe("daily forecast", () => {
-  it("returns data in the expected schema", async () => {
-    const filename = new URL('../schemas/daily.json', import.meta.url); // relative to this file
-    const schema = JSON.parse(fs.readFileSync(filename));
-    const ajv = new Ajv();
-
-    // TODO
-    // $this->onLocationRoute(34.749, -92.275);
-    // $data = $this->block->build();
-
-    const valid = ajv.validate(schema, {});
-    expect(valid).to.be.true;
-  });
-
   it("returns one overnight period when between midnight and 6am", () => {
     const timezone = "Pacific/Honolulu";
     const data = {
