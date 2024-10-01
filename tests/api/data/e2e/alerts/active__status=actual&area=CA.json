@@ -5588,6 +5588,96 @@
           "eventEndingTime": ["2024-01-05T02:00:00+00:00"]
         }
       }
+    },
+    {
+      "id": "https://alert/tropical_cyclone_local_statement}",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://alert/tropical_cyclone_local_statement}",
+        "@type": "wx:Alert",
+        "id": "tropical_cyclone_local_statement",
+        "areaDesc": "Over there. Over there. Send the word, to be heard, over there",
+        "geocode": {
+          "SAME": [],
+          "UGC": []
+        },
+        "affectedZones": ["https://every-alert/zone"],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "tropical cyclone local statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Anchorage AK",
+        "headline": "Tropical Cyclone Local Statement",
+        "description": "Not real",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": ["CWFALU"],
+          "WMOidentifier": ["FZAK52 PAFC 031605 AAA"],
+          "NWSheadline": [
+            "GALE WARNING THROUGH THURSDAY... ...HEAVY FREEZING SPRAY WARNING TONIGHT AND THURSDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.NEW.PAFC.UP.W.3097.240104T0200Z-240105T0200Z/"],
+          "eventEndingTime": ["2024-01-05T02:00:00+00:00"]
+        }
+      }
+    },
+    {
+      "id": "https://alert/cold_weather_advisory}",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://alert/cold_weather_advisory}",
+        "@type": "wx:Alert",
+        "id": "cold_weather_advisory",
+        "areaDesc": "Over there. Over there. Send the word, to be heard, over there",
+        "geocode": {
+          "SAME": [],
+          "UGC": []
+        },
+        "affectedZones": ["https://every-alert/zone"],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "cold weather advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Anchorage AK",
+        "headline": "Dummy alert",
+        "description": "Not real",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": ["CWFALU"],
+          "WMOidentifier": ["FZAK52 PAFC 031605 AAA"],
+          "NWSheadline": [
+            "GALE WARNING THROUGH THURSDAY... ...HEAVY FREEZING SPRAY WARNING TONIGHT AND THURSDAY"
+          ],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "VTEC": ["/O.NEW.PAFC.UP.W.3097.240104T0200Z-240105T0200Z/"],
+          "eventEndingTime": ["2024-01-05T02:00:00+00:00"]
+        }
+      }
     }
   ]
 }
