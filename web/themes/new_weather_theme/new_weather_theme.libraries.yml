@@ -63,12 +63,15 @@ leaflet:
     https://unpkg.com/leaflet@1.9.4/dist/leaflet.js:
       attributes:
         defer: true
+        id: data-wx-leaflet
     https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js:
       attributes:
         defer: true
+        id: data-wx-leaflet-esri
     https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js:
       attributes:
         defer: true
+        id: data-wx-leaflet-esri-vector
 
 digital-analytics-program:
   header: true
