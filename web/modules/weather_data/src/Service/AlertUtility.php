@@ -516,7 +516,7 @@ class AlertUtility
             "kind" => "ALERT_KIND_LAND",
             "priority" => 98304,
         ],
-        "911, telephone outage" => [
+        "911 telephone outage" => [
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_LAND",
             "priority" => 99328,
