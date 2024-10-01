@@ -3,6 +3,30 @@
 /* Hourly precipitation table overrides
 ------------------------------------- */
 .wx-precip-table {
+  thead {
+    tr {
+      th {
+        // We have to do this here rather than setting utility classes directly
+        // in the HTML because USWDS's selectors for table headings are more
+        // specific than general-purpose utility classes.
+        @include u-font("mono", "sm");
+        @include u-text("normal");
+        @include u-color("primary-darker");
+        text-align: left;
+
+        &:first-of-type {
+          @include u-padding-left(0);
+        }
+      }
+    }
+  }
+
+  th[aria-hidden],
+  td[aria-hidden] {
+    padding: 0;
+    border: 1px solid color("base-light");
+  }
+
   td:first-of-type {
     padding-left: 0;
   }
@@ -23,4 +47,3 @@
     padding-bottom: 0;
   }
 }
-

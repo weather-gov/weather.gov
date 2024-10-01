@@ -1,6 +1,4 @@
-<?php
-
-namespace Drupal\weather_data\Service;
+<?php namespace Drupal\weather_data\Service;
 
 trait HourlyForecastTrait
 {
@@ -355,7 +353,21 @@ trait HourlyForecastTrait
         $timezone = $place->timezone;
 
         $periods = [];
+        for (
+            $i = 0;
+            $i < count($forecast->quantitativePrecipitation->values);
+            $i += 1
+        ) {
+            $periods[] = [
+                "validTime" =>
+                    $forecast->quantitativePrecipitation->values[$i]->validTime,
+                "liquid" =>
+                    $forecast->quantitativePrecipitation->values[$i]->value,
+                "ice" => $forecast->iceAccumulation->values[$i]->value,
+                "snow" => $forecast->snowfallAmount->values[$i]->value,
+            ];
+        }
 
-        return $forecast->quantitativePrecipitation->values;
+        return $periods;
     }
 }

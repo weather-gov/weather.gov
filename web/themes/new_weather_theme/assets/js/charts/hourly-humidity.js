@@ -13,7 +13,7 @@ for (const container of chartContainers) {
   const humidity = JSON.parse(container.dataset.humidity).map((v) =>
     Number.parseInt(v, 10),
   );
-  
+
   // We don't need to keep a reference to the chart object. We only need the
   // side-effects of creating it. This is not ideal, but it's how Chart.js
   // works, so it's what we've got.
