@@ -213,7 +213,6 @@ trait DailyForecastTrait
                     &$dayIndex,
                     &$now,
                     &$timezone,
-                    &$dayIndex,
                 ) {
                     $formatted = $this->formatDailyPeriod($period, $timezone);
 
@@ -332,7 +331,10 @@ trait DailyForecastTrait
 
                     $precipPeriods = array_filter($allPrecipPeriods, function (
                         $period,
-                    ) use (&$firstHour, &$lastHour) {
+                    ) use (
+                        &$firstHour,
+                        &$lastHour,
+                    ) {
                         if (
                             $period->start < $lastHour &&
                             $period->end > $firstHour

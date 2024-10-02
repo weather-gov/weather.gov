@@ -1,4 +1,6 @@
-<?php namespace Drupal\weather_data\Service;
+<?php
+
+namespace Drupal\weather_data\Service;
 
 trait HourlyForecastTrait
 {
@@ -358,14 +360,23 @@ trait HourlyForecastTrait
             $i < count($forecast->quantitativePrecipitation->values);
             $i += 1
         ) {
-            $periods[] = [
+            $qpfData = [
                 "validTime" =>
                     $forecast->quantitativePrecipitation->values[$i]->validTime,
                 "liquid" =>
                     $forecast->quantitativePrecipitation->values[$i]->value,
-                "ice" => $forecast->iceAccumulation->values[$i]->value,
-                "snow" => $forecast->snowfallAmount->values[$i]->value,
+                "ice" => null,
+                "snow" => null,
             ];
+
+            if (count($forecast->iceAccumulation->values) > $i) {
+                $qpfData["ice"] = $forecast->iceAccumulation->values[$i]->value;
+            }
+            if (count($forecast->snowfallAmount->values) > $i) {
+                $qpfData["snow"] = $forecast->snowfallAmount->values[$i]->value;
+            }
+
+            $periods[] = $qpfData;
         }
 
         return $periods;

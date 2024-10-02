@@ -12,6 +12,7 @@
         @include u-font("mono", "sm");
         @include u-text("normal");
         @include u-color("primary-darker");
+
         text-align: left;
 
         &:first-of-type {
