@@ -1,0 +1,25 @@
+uuid: dfdf1bdd-6484-47f9-b189-55d00e03c8e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smallimage
+    - node.type.wfo_weather_story_upload
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_weather_story_upload.field_smallimage
+field_name: field_smallimage
+entity_type: node
+bundle: wfo_weather_story_upload
+label: 'small image'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

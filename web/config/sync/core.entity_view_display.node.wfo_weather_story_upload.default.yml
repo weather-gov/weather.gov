@@ -1,0 +1,172 @@
+uuid: 915554d8-5a89-48be-a7c4-e9eb6c08e641
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.wfo_weather_story_upload.field_cwa_center_lat
+    - field.field.node.wfo_weather_story_upload.field_cwa_center_lon
+    - field.field.node.wfo_weather_story_upload.field_description
+    - field.field.node.wfo_weather_story_upload.field_endtime
+    - field.field.node.wfo_weather_story_upload.field_frontpage
+    - field.field.node.wfo_weather_story_upload.field_fullimage
+    - field.field.node.wfo_weather_story_upload.field_graphicnumber
+    - field.field.node.wfo_weather_story_upload.field_office
+    - field.field.node.wfo_weather_story_upload.field_order
+    - field.field.node.wfo_weather_story_upload.field_radar
+    - field.field.node.wfo_weather_story_upload.field_smallimage
+    - field.field.node.wfo_weather_story_upload.field_starttime
+    - field.field.node.wfo_weather_story_upload.field_title
+    - field.field.node.wfo_weather_story_upload.field_weburl
+    - node.type.wfo_weather_story_upload
+  module:
+    - text
+    - user
+id: node.wfo_weather_story_upload.default
+targetEntityType: node
+bundle: wfo_weather_story_upload
+mode: default
+content:
+  field_cwa_center_lat:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_cwa_center_lon:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  field_description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 112
+    region: content
+  field_endtime:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 106
+    region: content
+  field_frontpage:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 110
+    region: content
+  field_fullimage:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 114
+    region: content
+  field_graphicnumber:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 107
+    region: content
+  field_office:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_order:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 108
+    region: content
+  field_radar:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 109
+    region: content
+  field_smallimage:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 115
+    region: content
+  field_starttime:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  field_title:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 111
+    region: content
+  field_weburl:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 113
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  langcode: true

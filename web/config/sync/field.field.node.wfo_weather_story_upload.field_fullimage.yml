@@ -1,0 +1,25 @@
+uuid: 1c411040-80ed-4673-b5a1-84843734e8c1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_fullimage
+    - node.type.wfo_weather_story_upload
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_weather_story_upload.field_fullimage
+field_name: field_fullimage
+entity_type: node
+bundle: wfo_weather_story_upload
+label: 'full image'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,49 @@
+uuid: 871894ee-918e-40e2-b196-959a7cf8885f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.wfo_weather_story_upload.field_cwa_center_lat
+    - field.field.node.wfo_weather_story_upload.field_cwa_center_lon
+    - field.field.node.wfo_weather_story_upload.field_description
+    - field.field.node.wfo_weather_story_upload.field_endtime
+    - field.field.node.wfo_weather_story_upload.field_frontpage
+    - field.field.node.wfo_weather_story_upload.field_fullimage
+    - field.field.node.wfo_weather_story_upload.field_graphicnumber
+    - field.field.node.wfo_weather_story_upload.field_office
+    - field.field.node.wfo_weather_story_upload.field_order
+    - field.field.node.wfo_weather_story_upload.field_radar
+    - field.field.node.wfo_weather_story_upload.field_smallimage
+    - field.field.node.wfo_weather_story_upload.field_starttime
+    - field.field.node.wfo_weather_story_upload.field_title
+    - field.field.node.wfo_weather_story_upload.field_weburl
+    - node.type.wfo_weather_story_upload
+  module:
+    - user
+id: node.wfo_weather_story_upload.teaser
+targetEntityType: node
+bundle: wfo_weather_story_upload
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_cwa_center_lat: true
+  field_cwa_center_lon: true
+  field_description: true
+  field_endtime: true
+  field_frontpage: true
+  field_fullimage: true
+  field_graphicnumber: true
+  field_office: true
+  field_order: true
+  field_radar: true
+  field_smallimage: true
+  field_starttime: true
+  field_title: true
+  field_weburl: true
+  langcode: true
