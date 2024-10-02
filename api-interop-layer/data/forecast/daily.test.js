@@ -1,9 +1,5 @@
-import sinon from "sinon";
-import dayjs from "dayjs";
 import { expect } from "chai";
 import daily from "./daily.js";
-import fs from "fs";
-import path from "path";
 
 describe("daily forecast", () => {
 
