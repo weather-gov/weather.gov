@@ -67,6 +67,10 @@ function weather_blocks_template_preprocess_default_variables_alter(
                         "https://cdn.star.nesdis.noaa.gov/WFO/$wfo/GEOCOLOR/$goes-" .
                         strtoupper($wfo) .
                         "-GEOCOLOR-600x600.gif",
+                    "mp4" =>
+                        "https://cdn.star.nesdis.noaa.gov/WFO/$wfo/GEOCOLOR/$goes-" .
+                        strtoupper($wfo) .
+                        "-GEOCOLOR-600x600.mp4",
                 ];
             }
         } catch (Throwable $e) {
