@@ -25,6 +25,12 @@ export default (data, { timezone }) => {
   const days = [];
   let previousDay = -1;
 
+  // The API returns a list of day periods. Every calendar day is represented by
+  // one or two day periods. They’re 12 hours each from 6am to 6pm and from 6pm to
+  // 6am. The API includes an isDaytime property so we know which one is for the
+  // day and night.
+
+  // So, we iterate over all day periods and bundle up them into days.
   for (const period of data.properties.periods) {
     const start = dayjsOffset(period.startTime);
 
@@ -45,6 +51,10 @@ export default (data, { timezone }) => {
       days[days.length - 1].end = period.endTime;
     }
 
+    // if the collection of weather days has only one item in it, it is the
+    // first day of the forecast. additionally, if this day has no periods, that
+    // means this is the first period of the day, and if this period is not
+    // marked as daytime then it must be an overnight period.
     const isOvernight =
       days.length === 1 &&
       dayPeriod.periods.length === 0 &&
