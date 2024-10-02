@@ -27,7 +27,7 @@ only be a nighttime period.
           </h4>
 
           <div class="display-flex">
-          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods, 'useOnlyLowForToday': useOnlyLowForToday  } %}
+          {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods, 'useOnlyLow': useOnlyLow  } %}
           </div>
         </div>
 
@@ -109,10 +109,11 @@ only be a nighttime period.
           for: periods[0].monthAndDay,
           hours: dayHours,
           alertPeriods: alertPeriods,
-          itemId: itemId
+          itemId: itemId,
+          precipPeriods: precipPeriods
         }
         %}
-        {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipHours } %}
+        {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipPeriods } %}
       </div>
     {% endif %}
 

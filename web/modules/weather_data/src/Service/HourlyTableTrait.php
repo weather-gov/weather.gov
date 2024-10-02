@@ -24,6 +24,7 @@ trait HourlyTableTrait
         &$dayPeriods,
         &$hourlyPeriods,
         &$alerts,
+        $precip,
         $isTodayPeriod = false,
     ) {
         foreach ($dayPeriods as &$dayPeriod) {
@@ -84,7 +85,9 @@ trait HourlyTableTrait
                 $dayPeriodAlerts = array_map(function ($alertPeriod) {
                     return $alertPeriod["alert"];
                 }, $alertPeriods);
-                $dayPeriod["highestAlertLevel"] = AlertUtility::getHighestAlertLevel($dayPeriodAlerts);
+                $dayPeriod[
+                    "highestAlertLevel"
+                ] = AlertUtility::getHighestAlertLevel($dayPeriodAlerts);
             }
         }
         return $dayPeriods;

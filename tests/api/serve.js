@@ -37,7 +37,7 @@ const processDates = (obj, usingHourly = false) => {
   Object.entries(obj ?? {}).forEach(([key, value]) => {
     // For arrays and objects, recurse into them
     if (Array.isArray(value)) {
-      value.forEach((item) => processDates(item, usingHourly));
+      value.forEach((item) => processDates(item, usingHourly, { parent: key }));
     } else if (typeof value === "object" && value !== null) {
       processDates(value, usingHourly);
     }
@@ -52,13 +52,13 @@ const processDates = (obj, usingHourly = false) => {
       if (start === "now" && modifier) {
         updatedTime = adjust(updatedTime, modifier);
 
-        // If we are parsing hourly forcast data, and the key is either the
-        // start or end time, then align the output to the start of the given
-        // hour.
-        if (
-          usingHourly &&
-          ["startTime", "endTime", "validTime"].includes(key)
-        ) {
+        // If the object key is in this list, then we may need to align the
+        // output to the start of the given hour.
+        const isAlignKey = ["startTime", "endTime", "validTime"].includes(key);
+
+        // If we are processing hourly data AND this is one of the keys that
+        // needs to be aligned to the start of the hour
+        if (usingHourly && isAlignKey) {
           updatedTime = updatedTime.startOf("hour");
         }
       } else if (start === "today") {
@@ -120,7 +120,12 @@ export default async (request, response) => {
       return;
     }
 
-    const isHourlyForecast = filePath.toString().includes("hourly");
+    // We know this is hourly forecast data if it's somewhere in the /gridpoints
+    // tree and EITHER ends after the WFO grid OR ends with /forecast/hourly.
+    const isHourlyForecast =
+      /\/gridpoints\/[A-Z]{3}\/\d+,\d+(\/forecast\/hourly)?\.json/.test(
+        filePath.toString(),
+      );
 
     processDates(output, isHourlyForecast);
 
