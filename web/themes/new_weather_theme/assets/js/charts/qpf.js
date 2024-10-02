@@ -35,7 +35,12 @@ for (const container of chartContainers) {
         anchor: "end",
         color: styles.colors.baseDarker,
       },
-      backgroundColor: styles.colors.white,
+      backgroundColor: window.pattern.draw(
+        "circle",
+        styles.colors.white,
+        styles.colors.baseLight,
+        10,
+      ), // styles.colors.white,
       borderColor: styles.colors.baseDarker,
       borderWidth: 1,
     });
@@ -49,7 +54,12 @@ for (const container of chartContainers) {
         anchor: "end",
         color: styles.colors.cyan80,
       },
-      backgroundColor: styles.colors.cyan60,
+      backgroundColor: window.pattern.draw(
+        "diagonal",
+        styles.colors.cyan60,
+        styles.colors.cyan80,
+        10,
+      ), // styles.colors.cyan60,
       borderColor: styles.colors.cyan80,
       borderWidth: 1,
     });

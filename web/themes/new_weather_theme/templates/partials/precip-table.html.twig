@@ -1,5 +1,5 @@
 {% if precipHours.hasQPF %}
-  <div class="grid-row"> 
+  <div class="grid-row wx-qpf-periods"> 
     <div class="grid-col-12"> 
       <h5 class="wx-visual-h3 font-heading-md text-normal text-primary-darker margin-top-1 margin-bottom-105">{{ "Precipitation amounts" |t }}</h5>
     </div>
@@ -27,20 +27,21 @@
       <canvas>
       </canvas>
     </div>
+
     <div class="display-flex flex-align-center font-mono-xs text-base">
       {% if precipHours.hasSnow %}
-      <div class="margin-x-1 margin-right-1 bg-white margin-left-1 width-1 height-1 border border-base-darker" style="margin-top: -3px;"></div>
+      <div class="margin-x-1 margin-right-1 wx-bg-snow margin-left-1 width-2 height-2 border border-base-darker" style="margin-top: -3px;"></div>
       {{ "Snow" | t }}
       <div class="margin-right-3"></div>
       {% endif %}
 
       {% if precipHours.hasIce %}
-      <div class="margin-x-1 margin-right-1 margin-left-3 wx-bg-cyan-60 margin-left-1 width-1 height-1 border wx-border-cyan-80" style="margin-top: -3px;"></div>
+      <div class="margin-x-1 margin-right-1 wx-bg-ice margin-left-1 width-2 height-2 border wx-border-cyan-80" style="margin-top: -3px;"></div>
       {{ "Ice" | t }}
       <div class="margin-right-3"></div>
       {% endif %}
 
-      <div class="margin-x-1 margin-right-1 bg-accent-cool margin-left-1 width-1 height-1 border border-accent-cool-dark" style="margin-top: -3px;"></div>
+      <div class="margin-x-1 margin-right-1 bg-accent-cool margin-left-1 width-2 height-2 border border-accent-cool-dark" style="margin-top: -3px;"></div>
       {{ "Water" | t }}
     </div>
   </div>

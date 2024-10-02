@@ -48,3 +48,26 @@
     padding-bottom: 0;
   }
 }
+
+.wx-bg-snow {
+  background-color: white;
+  opacity: 0.8;
+  background-image: radial-gradient(#c6cace 2px, transparent 2px),
+    radial-gradient(#c6cace 2px, white 2px);
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    4px 4px;
+}
+
+.wx-bg-ice {
+  background-color: #2a646d;
+  opacity: 0.8;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #203133,
+    #203133 2px,
+    #2a646d 2px,
+    #2a646d 5px
+  );
+}
