@@ -32,7 +32,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 102
+    weight: 1
     region: content
   field_cwa_center_lon:
     type: string
@@ -40,43 +40,14 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 103
+    weight: 2
     region: content
   field_description:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 112
-    region: content
-  field_endtime:
-    type: timestamp
-    label: above
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: long
-        custom_date_format: ''
-      time_diff:
-        enabled: false
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 2
-        refresh: 60
-    third_party_settings: {  }
-    weight: 106
-    region: content
-  field_frontpage:
-    type: boolean
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    weight: 110
+    weight: 5
     region: content
   field_fullimage:
     type: string
@@ -84,16 +55,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 114
-    region: content
-  field_graphicnumber:
-    type: number_integer
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 107
+    weight: 7
     region: content
   field_office:
     type: string
@@ -101,25 +63,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 104
-    region: content
-  field_order:
-    type: number_integer
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 108
-    region: content
-  field_radar:
-    type: number_integer
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 109
+    weight: 3
     region: content
   field_smallimage:
     type: string
@@ -127,33 +71,14 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 115
-    region: content
-  field_starttime:
-    type: timestamp
-    label: above
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: long
-        custom_date_format: ''
-      time_diff:
-        enabled: false
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 2
-        refresh: 60
-    third_party_settings: {  }
-    weight: 105
+    weight: 8
     region: content
   field_title:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 111
+    weight: 4
     region: content
   field_weburl:
     type: string
@@ -161,12 +86,18 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 113
+    weight: 6
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 100
+    weight: 0
     region: content
 hidden:
+  field_endtime: true
+  field_frontpage: true
+  field_graphicnumber: true
+  field_order: true
+  field_radar: true
+  field_starttime: true
   langcode: true
