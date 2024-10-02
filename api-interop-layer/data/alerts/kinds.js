@@ -1,9 +1,11 @@
+// eslint-disable-next-line no-unused-vars
 const ALERT_KIND = {
   LAND: "land",
   MARINE: "marine",
   OTHER: "other",
 };
 
+// eslint-disable-next-line no-unused-vars
 const ALERT_LEVEL = {
   WARNING: {
     priority: 0,
