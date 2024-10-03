@@ -129,6 +129,7 @@ for (const container of chartContainers) {
       },
       layout: {
         padding: {
+          top: 24,
           bottom: 50,
         },
       },
