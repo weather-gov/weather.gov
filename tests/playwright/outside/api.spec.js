@@ -8,7 +8,7 @@ const API_ENDPOINT = "http://localhost:9080/jsonapi";
 
 // helper function to upload files to the JSON API
 const uploadFile = async (request, where, filename) => {
-  const binaryData = await fs.readFileSync(
+  const binaryData = fs.readFileSync(
     path.resolve(__dirname, "..", "mock-data", filename),
   );
   return request.post(where,
