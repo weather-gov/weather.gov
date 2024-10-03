@@ -17,9 +17,11 @@ dependencies:
     - field.field.node.wfo_weather_story_upload.field_starttime
     - field.field.node.wfo_weather_story_upload.field_title
     - field.field.node.wfo_weather_story_upload.field_weburl
+    - image.style.thumbnail
     - node.type.wfo_weather_story_upload
   module:
     - content_moderation
+    - image
     - path
     - text
 id: node.wfo_weather_story_upload.default
@@ -71,12 +73,12 @@ content:
       display_label: true
     third_party_settings: {  }
   field_fullimage:
-    type: string_textfield
-    weight: 134
+    type: image_image
+    weight: 136
     region: content
     settings:
-      size: 60
-      placeholder: ''
+      progress_indicator: throbber
+      preview_image_style: thumbnail
     third_party_settings: {  }
   field_graphicnumber:
     type: number
@@ -108,12 +110,12 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_smallimage:
-    type: string_textfield
-    weight: 135
+    type: image_image
+    weight: 137
     region: content
     settings:
-      size: 60
-      placeholder: ''
+      progress_indicator: throbber
+      preview_image_style: thumbnail
     third_party_settings: {  }
   field_starttime:
     type: datetime_timestamp

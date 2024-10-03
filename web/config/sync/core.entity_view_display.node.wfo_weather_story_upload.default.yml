@@ -19,6 +19,7 @@ dependencies:
     - field.field.node.wfo_weather_story_upload.field_weburl
     - node.type.wfo_weather_story_upload
   module:
+    - image
     - text
     - user
 id: node.wfo_weather_story_upload.default
@@ -50,12 +51,15 @@ content:
     weight: 5
     region: content
   field_fullimage:
-    type: string
+    type: image
     label: above
     settings:
-      link_to_entity: false
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
-    weight: 7
+    weight: 9
     region: content
   field_office:
     type: string
@@ -66,12 +70,15 @@ content:
     weight: 3
     region: content
   field_smallimage:
-    type: string
+    type: image
     label: above
     settings:
-      link_to_entity: false
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
-    weight: 8
+    weight: 10
     region: content
   field_title:
     type: text_default

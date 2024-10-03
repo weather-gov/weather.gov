@@ -1,4 +1,4 @@
-uuid: 1c411040-80ed-4673-b5a1-84843734e8c1
+uuid: 90fe5e10-76d5-447c-80b6-09c95e9b10be
 langcode: en
 status: true
 dependencies:
@@ -6,11 +6,7 @@ dependencies:
     - field.storage.node.field_fullimage
     - node.type.wfo_weather_story_upload
   module:
-    - unique_content_field_validation
-third_party_settings:
-  unique_content_field_validation:
-    unique: false
-    unique_text: ''
+    - image
 id: node.wfo_weather_story_upload.field_fullimage
 field_name: field_fullimage
 entity_type: node
@@ -21,5 +17,22 @@ required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings: {  }
-field_type: string
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'png gif jpg jpeg webp'
+  max_filesize: '2 MB'
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: false
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image
