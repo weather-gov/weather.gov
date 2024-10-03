@@ -21,6 +21,7 @@ describe("satellite metadata module", () => {
 
       expect(actual).to.eql({
         gif: "https://cdn.star.nesdis.noaa.gov/WFO/wfo1/GEOCOLOR/GOES18-WFO1-GEOCOLOR-600x600.gif",
+        mp4: "https://cdn.star.nesdis.noaa.gov/WFO/wfo1/GEOCOLOR/GOES18-WFO1-GEOCOLOR-600x600.mp4",
       });
     });
 
@@ -30,6 +31,7 @@ describe("satellite metadata module", () => {
 
       expect(actual).to.eql({
         gif: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES16-WFO2-GEOCOLOR-600x600.gif",
+        mp4: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES16-WFO2-GEOCOLOR-600x600.mp4",
       });
     });
   });
