@@ -1,8 +1,7 @@
 /* global Chart ChartDataLabels */
 
+import { drawChart } from "./WeatherChart.js";
 import styles from "../styles.js";
-
-Chart.register(ChartDataLabels);
 
 const round = (number, decimals) =>
   Math.round(number * 10 ** decimals) / 10 ** decimals;
@@ -57,9 +56,9 @@ for (const container of chartContainers) {
       backgroundColor: window.pattern.draw(
         "diagonal",
         styles.colors.cyan60,
-        styles.colors.cyan80,
+        styles.colors.cyan50,
         10,
-      ), // styles.colors.cyan60,
+      ),
       borderColor: styles.colors.cyan80,
       borderWidth: 1,
     });
@@ -79,11 +78,7 @@ for (const container of chartContainers) {
     });
   }
 
-  // We don't need to keep a reference to the chart object. We only need the
-  // side-effects of creating it. This is not ideal, but it's how Chart.js
-  // works, so it's what we've got.
-  // eslint-disable-next-line no-new
-  new Chart(container.querySelector("canvas"), {
+  const config = {
     type: "bar",
     plugins: [ChartDataLabels],
 
@@ -128,5 +123,7 @@ for (const container of chartContainers) {
       labels: times,
       datasets,
     },
-  });
+  };
+
+  drawChart(container, config);
 }
