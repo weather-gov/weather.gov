@@ -1,0 +1,19 @@
+uuid: f2e300f0-05d0-47d0-bb5f-822ad4a1b2d4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_starttime
+    - node.type.wfo_weather_story_upload
+id: node.wfo_weather_story_upload.field_starttime
+field_name: field_starttime
+entity_type: node
+bundle: wfo_weather_story_upload
+label: 'start time'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

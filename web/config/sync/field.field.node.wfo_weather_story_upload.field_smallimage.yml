@@ -1,0 +1,38 @@
+uuid: c63967b6-35c3-4bd8-9b58-16910f497d1a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smallimage
+    - node.type.wfo_weather_story_upload
+  module:
+    - image
+id: node.wfo_weather_story_upload.field_smallimage
+field_name: field_smallimage
+entity_type: node
+bundle: wfo_weather_story_upload
+label: 'small image'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'png gif jpg jpeg webp'
+  max_filesize: '2 MB'
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: false
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image

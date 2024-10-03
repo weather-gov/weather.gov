@@ -1,0 +1,11 @@
+uuid: 1ac71f46-80c5-4b2a-b7f6-5816fff15cd6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_weather_story_upload
+id: node.wfo_weather_story_upload
+target_entity_type_id: node
+target_bundle: wfo_weather_story_upload
+default_langcode: site_default
+language_alterable: false
