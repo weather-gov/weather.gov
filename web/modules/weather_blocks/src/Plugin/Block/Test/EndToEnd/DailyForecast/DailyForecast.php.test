@@ -62,6 +62,7 @@ final class DailyForecastStructureTest extends EndToEndBase
             "dayName" => $expectedStart->format("l"),
             "monthAndDay" => $expectedStart->format("M j"),
             "startTime" => $expectedStart->format("c"),
+            "endTime" => $expectedEnd->format("c"),
             "shortForecast" => "Scattered rain showers",
             "icon" => (object) [
                 "icon" => "showers_scattered_rain.svg",
@@ -75,11 +76,7 @@ final class DailyForecastStructureTest extends EndToEndBase
         ];
 
         $data = $this->block->build($now);
-        $actualStructure = $data["today"][0];
-
-        // Get rid of the hourly stuff.
-        // For this case, we don't care about it
-        unset($actualStructure["hourlyPeriods"]);
+        $actualStructure = $data[0]["periods"][0];
 
         $this->assertEquals($expectedStructure, $actualStructure);
     }
@@ -107,6 +104,7 @@ final class DailyForecastStructureTest extends EndToEndBase
                 "dayName" => "Tuesday",
                 "monthAndDay" => "May 7",
                 "startTime" => "2024-05-06T23:00:00-05:00",
+                "endTime" => "2024-05-07T06:00:00-0500",
                 "shortForecast" => "First period",
                 "icon" => (object) [
                     "icon" => "thunderstorm.svg",
@@ -123,6 +121,7 @@ final class DailyForecastStructureTest extends EndToEndBase
                 "dayName" => "Tuesday",
                 "monthAndDay" => "May 7",
                 "startTime" => "2024-05-07T06:00:00-05:00",
+                "endTime" => "2024-05-07T18:00:00-0500",
                 "shortForecast" => "Second period",
                 "icon" => (object) [
                     "icon" => "thunderstorm.svg",
@@ -139,6 +138,7 @@ final class DailyForecastStructureTest extends EndToEndBase
                 "dayName" => "Tuesday",
                 "monthAndDay" => "May 7",
                 "startTime" => "2024-05-07T18:00:00-05:00",
+                "endTime" => "2024-05-08T06:00:00-0500",
                 "shortForecast" => "Third period",
                 "icon" => (object) [
                     "icon" => "mostly_clear-day.svg",
@@ -154,12 +154,8 @@ final class DailyForecastStructureTest extends EndToEndBase
 
         $actual = $this->block->build($now);
 
-        $this->assertEquals(3, count($actual["today"]));
-        unset($actual["today"][0]["hourlyPeriods"]);
-        unset($actual["today"][1]["hourlyPeriods"]);
-        unset($actual["today"][2]["hourlyPeriods"]);
-
-        $this->assertEquals($expected, $actual["today"]);
+        $this->assertEquals(3, count($actual[0]["periods"]));
+        $this->assertEquals($expected, $actual[0]["periods"]);
     }
 
     /**
@@ -182,6 +178,7 @@ final class DailyForecastStructureTest extends EndToEndBase
                 "dayName" => "Monday",
                 "monthAndDay" => "May 6",
                 "startTime" => "2024-05-06T23:00:00-05:00",
+                "endTime" => "2024-05-07T06:00:00-0500",
                 "shortForecast" => "First period",
                 "icon" => (object) [
                     "icon" => "thunderstorm.svg",
@@ -197,10 +194,8 @@ final class DailyForecastStructureTest extends EndToEndBase
 
         $actual = $this->block->build($now);
 
-        $this->assertEquals(1, count($actual["today"]));
-        unset($actual["today"][0]["hourlyPeriods"]);
-
-        $this->assertEquals($expected, $actual["today"]);
+        $this->assertEquals(1, count($actual[0]["periods"]));
+        $this->assertEquals($expected, $actual[0]["periods"]);
     }
 
     /**
@@ -223,6 +218,7 @@ final class DailyForecastStructureTest extends EndToEndBase
                 "dayName" => "Tuesday",
                 "monthAndDay" => "May 7",
                 "startTime" => "2024-05-07T06:00:00-05:00",
+                "endTime" => "2024-05-07T18:00:00-0500",
                 "shortForecast" => "Second period",
                 "icon" => (object) [
                     "icon" => "thunderstorm.svg",
@@ -239,6 +235,7 @@ final class DailyForecastStructureTest extends EndToEndBase
                 "dayName" => "Tuesday",
                 "monthAndDay" => "May 7",
                 "startTime" => "2024-05-07T18:00:00-05:00",
+                "endTime" => "2024-05-08T06:00:00-0500",
                 "shortForecast" => "Third period",
                 "icon" => (object) [
                     "icon" => "mostly_clear-day.svg",
@@ -254,18 +251,14 @@ final class DailyForecastStructureTest extends EndToEndBase
 
         $actual = $this->block->build($now);
 
-        $this->assertEquals(2, count($actual["today"]));
-        unset($actual["today"][0]["hourlyPeriods"]);
-        unset($actual["today"][1]["hourlyPeriods"]);
-
-        $this->assertEquals($expected, $actual["today"]);
+        $this->assertEquals(2, count($actual[0]["periods"]));
+        $this->assertEquals($expected, $actual[0]["periods"]);
     }
 
     /**
      * Ensure that we set the flag for only low temp after 6pm
      *
      * @group e2e
-     * @group eric
      */
     public function testOnlyLowAfter6pmToday()
     {
@@ -278,6 +271,6 @@ final class DailyForecastStructureTest extends EndToEndBase
 
         $actual = $this->block->build($now);
 
-        $this->assertTrue($actual['useOnlyLowForToday']);
+        $this->assertTrue($actual[0]["useOnlyLow"]);
     }
 }

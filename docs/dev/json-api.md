@@ -69,3 +69,15 @@ The response should also be a 201 with JSON information about the newly created 
 A sample [Python script](./json-api-upload-example.py) is provided to help to aid in integration. Note that this script depends on the [requests](https://pypi.org/project/requests/) library.
 
 We also have [outside tests for uploads](../../tests/playwright/outside/api.spec.js).
+
+# IP Address Filtering
+
+To implement IP address filtering, we are using a [route service](https://docs.cloudfoundry.org/services/route-services.html) which involves creating an user-provided service as a route service in a separate cloud.gov app. To route, we use [Caddy](https://caddyserver.com/) as a [reverse proxy](../../proxy/Caddyfile). This configuration permits all traffic to pass through to the weather.gov application except for the `/jsonapi` endpoint, which is restricted by IP address.
+
+Setting this up requires [several steps](../../scripts/create-cloudgov-env.sh#L101-L115):
+
+- an internal route to the weather.gov application for container-to-container networking
+- an user-provided service using the Caddy proxy above
+- a route service that tells cloud.gov to use the Caddy proxy above to reach the weather.gov application
+- a secure network policy for the weather.gov application
+  - note that we use port `61443`: [all traffic sent to this port will use SSL/TLS](https://docs.cloudfoundry.org/concepts/understand-cf-networking.html#securing-traffic).
