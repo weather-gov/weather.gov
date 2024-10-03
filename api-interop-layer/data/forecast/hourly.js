@@ -2,32 +2,11 @@ import { sentenceCase } from "../../util/case.js";
 import dayjs from "../../util/day.js";
 import { parseAPIIcon } from "../../util/icon.js";
 
-/**
- * Given an array of processed hourly forecast
- * hour objects, each with a `time` property,
- * and a dayjs object corresponding to the earliest
- * time we care about, return a sorted list of hour
- * objects where only hours _after_ the given earliest
- * time are returned.
- * @param hours object[] - An array of processed hour
- * periods
- * @param earliest dayjs - A dayJS datetime
- * @returns object[] - A sorted and filtered array of
- * hour objects
- */
+
 export const sortAndFilterHours = (hours, earliest) => {
-  // Note: the following two rules:
-  // - if the current local time is before midnight,
-  //   the list of hours extends through 6am the next day
-  // - if the current local time is between midnight and 6am,
-  //   the list of hours extends through 6am the next day
-  // Can be captured with the following code:
-  const latest = earliest
-        .hour(6)
-        .minute(0)
-        .second(0)
-        .millisecond(0)
-        .add(1, "day");
+  // Align the passed in time to the start of its
+  // hour
+  const alignedEarliest = earliest.startOf("hour");
   return hours
     .sort(({ time: a }, { time: b }) => {
       const timeA = dayjs(a);
@@ -41,7 +20,32 @@ export const sortAndFilterHours = (hours, earliest) => {
       }
       return 0;
     })
-    .filter(({ time }) => time.isAfter(earliest) && time.isSameOrBefore(latest));
+    .filter(({ time }) => time.isSameOrAfter(alignedEarliest));
+};
+
+export const filterHoursForDay = (hours, dayStart) => {
+  // For the purposes of NWS, we consider a day to end at 6am
+  // the following day
+  const dayEnd = dayStart
+        .hour(6)
+        .minute(0)
+        .second(0)
+        .millisecond(0)
+        .add(1, "day");
+  return hours.filter(({time}) => {
+    return time.isSameOrAfter(dayStart) && time.isSameOrBefore(dayEnd);
+  });
+};
+
+export const filterHoursForCurrentDay = (hours, currentTime) => {
+  const startHour = currentTime.hour();
+  const limit = currentTime
+        .hour(6)
+        .minute(0)
+        .second(0)
+        .millisecond(0)
+        .add(1, "day");
+  return hours.filter(({time}) => time.isSameOrBefore(limit));
 };
 
 export default (data, hours, { timezone }) => {

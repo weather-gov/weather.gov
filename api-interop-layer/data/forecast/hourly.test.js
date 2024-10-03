@@ -1,6 +1,10 @@
 import { expect } from "chai";
 import dayjs from "../../util/day.js";
-import hourly, {sortAndFilterHours} from "./hourly.js";
+import hourly, {
+  sortAndFilterHours,
+  filterHoursForCurrentDay,
+  filterHoursForDay
+} from "./hourly.js";
 
 const place = {
   timezone: "America/Los_Angeles"
@@ -8,12 +12,11 @@ const place = {
 
 /**
  * Generate the hourly test data we will use.
- * We will create two full days of hourly data
- * (plus an additional two hours for specific tests),
+ * We will create four full days of hourly data
  * starting at 7 minutes past each hour.
  */
 const startTime = dayjs.utc("2024-09-09T05:07:00-07:00").tz("America/Los_Angeles");
-const endTime = dayjs.utc("2024-09-11T07:07:00-07:00").tz("America/Los_Angeles");
+const endTime = dayjs.utc("2024-09-14T03:07:00-07:00").tz("America/Los_Angeles");
 const hourDiff = endTime.diff(startTime, "hour");
 
 let times = [];
@@ -73,21 +76,22 @@ describe("Hourly forecast processing (basic)", () => {
     expect(expected).to.eql(actual);
   });
 
-  it("the first hour begins at the start of the next whole hour", () => {
+  it("the first hour begins at the start of the current whole hour", () => {
     const now = dayjs.utc("2024-09-09T09:15:00-07:00").tz(place.timezone);
     const result = new Map();
     hourly(hourlyData, result, place.timezone);
-    const hours = [...result.values()];
-    const actual = sortAndFilterHours(hours, now)
+    let hours = [...result.values()];
+    hours = sortAndFilterHours(hours, now);
+    const actual = filterHoursForCurrentDay(hours, now)
           .map(hour => hour.time.tz(place.timezone).format())
           .slice(0,5);
 
     const expected = [
+      "2024-09-09T09:00:00-07:00",
       "2024-09-09T10:00:00-07:00",
       "2024-09-09T11:00:00-07:00",
       "2024-09-09T12:00:00-07:00",
       "2024-09-09T13:00:00-07:00",
-      "2024-09-09T14:00:00-07:00",
     ];
 
     expect(expected).to.eql(actual);
@@ -97,11 +101,13 @@ describe("Hourly forecast processing (basic)", () => {
     const now = dayjs.utc("2024-09-09T21:01:00-07:00").tz(place.timezone);
     const result = new Map();
     hourly(hourlyData, result, place.timezone);
-    const hours = [...result.values()];
-    const actual = sortAndFilterHours(hours, now)
+    let hours = [...result.values()];
+    hours = sortAndFilterHours(hours, now);
+    const actual = filterHoursForCurrentDay(hours, now)
           .map(hour => hour.time.tz(place.timezone).format());
 
     const expected = [
+      "2024-09-09T21:00:00-07:00",
       "2024-09-09T22:00:00-07:00",
       "2024-09-09T23:00:00-07:00",
       "2024-09-10T00:00:00-07:00",
@@ -120,20 +126,53 @@ describe("Hourly forecast processing (basic)", () => {
     const now = dayjs.utc("2024-09-10T03:00:00-07:00").tz(place.timezone);
     const result = new Map();
     hourly(hourlyData, result, place.timezone);
-    const hours = [...result.values()];
-    const actual = sortAndFilterHours(hours, now)
+    let hours = [...result.values()];
+    hours = sortAndFilterHours(hours, now);
+    const actual = filterHoursForCurrentDay(hours, now)
           .map(hour => hour.time.tz(place.timezone).format());
 
     const actualHourCount = actual.length;
     const actualFirstTimestamp = actual[0];
     const actualLastTimestamp = actual[actualHourCount - 1];
     
-    const expectedHourCount = 27;
-    const expectedFirstTimestamp = "2024-09-10T04:00:00-07:00";
+    const expectedHourCount = 28;
+    const expectedFirstTimestamp = "2024-09-10T03:00:00-07:00";
     const expectedLastTimestamp = "2024-09-11T06:00:00-07:00";
 
     expect(expectedHourCount).to.equal(actualHourCount);
     expect(expectedFirstTimestamp).to.equal(actualFirstTimestamp);
     expect(expectedLastTimestamp).to.equal(actualLastTimestamp);
+  });
+
+  it("future days are 6am to 6am (next day)", () => {
+    const dayStart = dayjs.utc("2024-09-12T06:00:00-07:00").tz(place.timezone);
+    const result = new Map();
+    hourly(hourlyData, result, place.timezone);
+    let hours = [...result.values()];
+    hours = sortAndFilterHours(hours, dayStart);
+    const actual = filterHoursForDay(hours, dayStart)
+          .map(hour => hour.time.tz(place.timezone).format());
+
+    const expectedStart = "2024-09-12T06:00:00-07:00";
+    const expectedEnd = "2024-09-13T06:00:00-07:00";
+
+    // expect(expectedStart).to.equal(actual[0]);
+    expect(expectedEnd).to.equal(actual[actual.length-1]);
+  });
+
+  it("if there aren't enough hours for the future day, do just up to what's available", () => {
+    const dayStart = dayjs.utc("2024-09-13T06:00:00-07:00").tz(place.timezone);
+    const result = new Map();
+    hourly(hourlyData, result, place.timezone);
+    let hours = [...result.values()];
+    hours = sortAndFilterHours(hours, dayStart);
+    const actual = filterHoursForDay(hours, dayStart)
+          .map(hour => hour.time.tz(place.timezone).format());
+
+    const expectedStart = "2024-09-13T06:00:00-07:00";
+    const expectedEnd = "2024-09-14T02:00:00-07:00";
+
+    expect(expectedStart).to.equal(actual[0]);
+    expect(expectedEnd).to.equal(actual[actual.length-1]);
   });
 });
