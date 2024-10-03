@@ -15,7 +15,6 @@ dependencies:
     - field.field.node.wfo_weather_story_upload.field_radar
     - field.field.node.wfo_weather_story_upload.field_smallimage
     - field.field.node.wfo_weather_story_upload.field_starttime
-    - field.field.node.wfo_weather_story_upload.field_title
     - field.field.node.wfo_weather_story_upload.field_weburl
     - node.type.wfo_weather_story_upload
   module:
@@ -79,13 +78,6 @@ content:
         attribute: lazy
     third_party_settings: {  }
     weight: 10
-    region: content
-  field_title:
-    type: text_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 4
     region: content
   field_weburl:
     type: string

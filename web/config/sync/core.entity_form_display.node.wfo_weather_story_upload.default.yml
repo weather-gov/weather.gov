@@ -15,7 +15,6 @@ dependencies:
     - field.field.node.wfo_weather_story_upload.field_radar
     - field.field.node.wfo_weather_story_upload.field_smallimage
     - field.field.node.wfo_weather_story_upload.field_starttime
-    - field.field.node.wfo_weather_story_upload.field_title
     - field.field.node.wfo_weather_story_upload.field_weburl
     - image.style.thumbnail
     - node.type.wfo_weather_story_upload
@@ -122,14 +121,6 @@ content:
     weight: 125
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_title:
-    type: text_textfield
-    weight: 131
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   field_weburl:
     type: string_textfield
