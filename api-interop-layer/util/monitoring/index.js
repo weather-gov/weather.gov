@@ -53,7 +53,7 @@ const logLevels = {
 };
 
 const logLevel =
-  logLevels[process.env.LOG_LEVEL?.toLowerCase()] ?? logLevels.verbose;
+  logLevels[process.env.LOG_LEVEL?.toLowerCase()] ?? logLevels.info;
 
 const noop = () => {};
 
