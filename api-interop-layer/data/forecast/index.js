@@ -1,9 +1,10 @@
 import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
-import hourly from "./hourly.js";
+import hourly, { sortAndFilterHours } from "./hourly.js";
 import { convertValue, convertProperties } from "../../util/convert.js";
 import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
+
 
 export default async ({ grid, place }) => {
   const hours = new Map();
@@ -45,20 +46,10 @@ export default async ({ grid, place }) => {
 
   // Sort the hours and remove any that occur before midnight at place-local
   // time today.
-  const orderedHours = [...hours.values()]
-    .sort(({ time: a }, { time: b }) => {
-      const timeA = dayjs(a);
-      const timeB = dayjs(b);
-
-      if (timeA > timeB) {
-        return 1;
-      }
-      if (timeA < timeB) {
-        return -1;
-      }
-      return 0;
-    })
-    .filter(({ time }) => time.isAfter(earliest));
+  const orderedHours = sortAndFilterHours(
+    [...hours.values()],
+    earliest
+  );
 
   // Do unit conversions on all the hourly properties. Each item in the array
   // is an object representing one hour. Each property in the object represents
