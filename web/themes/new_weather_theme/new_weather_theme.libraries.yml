@@ -95,8 +95,4 @@ chartjs:
         integrity: sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==
         crossorigin: anonymous
         referrerpolicy: no-referrer
-    https://cdnjs.cloudflare.com/ajax/libs/patternomaly/1.3.2/patternomaly.min.js:
-      attributes:
-        integrity: sha512-Zjnjh2DCl/MrwdZ8FNp25vSbXac3yWUWoMn0CL8qQ/K11HGv7cJ9RGNUiojnSfqVtwbGf+eyqEEjiw2hlHd6iQ
-        crossorigin: anonymous
-        referrerpolicy: no-referrer
+

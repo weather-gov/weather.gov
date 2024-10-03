@@ -1,5 +1,3 @@
-/* global Chart ChartDataLabels */
-
 import { drawChart } from "./WeatherChart.js";
 import styles from "../styles.js";
 
@@ -8,6 +6,32 @@ const round = (number, decimals) =>
 
 const chartContainers = Array.from(
   document.querySelectorAll(".wx-qpf-chart-container"),
+);
+
+const makePattern = async (imageUrl, size = 60) =>
+  new Promise((resolve) => {
+    const imgage = new Image();
+    imgage.src = imageUrl;
+    imgage.onload = () => {
+      const imageCanvas = document.createElement("canvas");
+      imageCanvas.width = size;
+      imageCanvas.height = size;
+
+      const imageContext = imageCanvas.getContext("2d");
+      imageContext.drawImage(imgage, 0, 0, size, size);
+      document.body.insertBefore(imageCanvas, document.body.firstChild);
+
+      const pattern = imageContext.createPattern(imageCanvas, "repeat");
+
+      resolve(pattern);
+    };
+  });
+
+const snowPattern = await makePattern(
+  "/themes/new_weather_theme/assets/images/weather/wx_snow_pattern.svg",
+);
+const icePattern = await makePattern(
+  "/themes/new_weather_theme/assets/images/weather/wx_ice_pattern.svg",
 );
 
 for (const container of chartContainers) {
@@ -34,12 +58,7 @@ for (const container of chartContainers) {
         anchor: "end",
         color: styles.colors.baseDarker,
       },
-      backgroundColor: window.pattern.draw(
-        "circle",
-        styles.colors.white,
-        styles.colors.baseLight,
-        10,
-      ), // styles.colors.white,
+      backgroundColor: snowPattern,
       borderColor: styles.colors.baseDarker,
       borderWidth: 1,
     });
@@ -53,12 +72,7 @@ for (const container of chartContainers) {
         anchor: "end",
         color: styles.colors.cyan80,
       },
-      backgroundColor: window.pattern.draw(
-        "diagonal",
-        styles.colors.cyan60,
-        styles.colors.cyan50,
-        10,
-      ),
+      backgroundColor: icePattern,
       borderColor: styles.colors.cyan80,
       borderWidth: 1,
     });
@@ -80,7 +94,6 @@ for (const container of chartContainers) {
 
   const config = {
     type: "bar",
-    plugins: [ChartDataLabels],
 
     options: {
       animation: false,

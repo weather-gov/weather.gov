@@ -52,21 +52,11 @@
 .wx-bg-snow {
   background-color: white;
   opacity: 0.8;
-  background-image: radial-gradient(#c6cace 2px, transparent 2px),
-    radial-gradient(#c6cace 2px, white 2px);
-  background-size: 8px 8px;
-  background-position:
-    0 0,
-    4px 4px;
+  background-image: url("/themes/new_weather_theme/assets/images/weather/wx_snow_pattern.svg");
 }
 
 .wx-bg-ice {
   background-color: #2a646d;
   opacity: 0.8;
-  background-image: repeating-linear-gradient(
-    45deg,
-    color("cyan-50"),
-    color("cyan-60") 2px,
-    color("cyan-60") 5px
-  );
+  background-image: url("/themes/new_weather_theme/assets/images/weather/wx_ice_pattern.svg");
 }
