@@ -16,7 +16,6 @@ for (const container of chartContainers) {
 
   const config = {
     type: "line",
-    plugins: [ChartDataLabels],
 
     options: {
       animation: false,

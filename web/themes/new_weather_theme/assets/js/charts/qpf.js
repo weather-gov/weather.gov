@@ -26,116 +26,123 @@ const makePattern = async (imageUrl, size = 60) =>
     };
   });
 
-const snowPattern = await makePattern(
-  "/themes/new_weather_theme/assets/images/weather/wx_snow_pattern.svg",
-);
-const icePattern = await makePattern(
-  "/themes/new_weather_theme/assets/images/weather/wx_ice_pattern.svg",
-);
-
-for (const container of chartContainers) {
-  const times = JSON.parse(container.dataset.times);
-
-  const liquid = JSON.parse(container.dataset.liquid).map((v) =>
-    round(Number.parseFloat(v, 10), 1),
+// We use esbuild to bundle our scripts together in testing and deployment. It
+// currently does not support top-level await, so we have to wrap those in a
+// function. That's why this is here.
+const createCharts = async () => {
+  const snowPattern = await makePattern(
+    "/themes/new_weather_theme/assets/images/weather/wx_snow_pattern.svg",
   );
-  const snow = JSON.parse(container.dataset.snow).map((v) =>
-    round(Number.parseFloat(v, 10), 1),
-  );
-  const ice = JSON.parse(container.dataset.ice).map((v) =>
-    round(Number.parseFloat(v, 10), 1),
+  const icePattern = await makePattern(
+    "/themes/new_weather_theme/assets/images/weather/wx_ice_pattern.svg",
   );
 
-  const datasets = [];
+  for (const container of chartContainers) {
+    const times = JSON.parse(container.dataset.times);
 
-  if (snow.length > 0) {
-    datasets.push({
-      label: "Snow",
-      data: snow,
-      datalabels: {
-        align: "end",
-        anchor: "end",
-        color: styles.colors.baseDarker,
-      },
-      backgroundColor: snowPattern,
-      borderColor: styles.colors.baseDarker,
-      borderWidth: 1,
-    });
-  }
-  if (ice.length > 0) {
-    datasets.push({
-      label: "Ice",
-      data: ice,
-      datalabels: {
-        align: "end",
-        anchor: "end",
-        color: styles.colors.cyan80,
-      },
-      backgroundColor: icePattern,
-      borderColor: styles.colors.cyan80,
-      borderWidth: 1,
-    });
-  }
-  if (liquid.length > 0) {
-    datasets.push({
-      label: "Water",
-      data: liquid,
-      datalabels: {
-        align: "end",
-        anchor: "end",
-        color: styles.colors.accentCoolDark,
-      },
-      backgroundColor: styles.colors.accentCool,
-      borderColor: styles.colors.accentCoolDark,
-      borderWidth: 1,
-    });
-  }
+    const liquid = JSON.parse(container.dataset.liquid).map((v) =>
+      round(Number.parseFloat(v, 10), 1),
+    );
+    const snow = JSON.parse(container.dataset.snow).map((v) =>
+      round(Number.parseFloat(v, 10), 1),
+    );
+    const ice = JSON.parse(container.dataset.ice).map((v) =>
+      round(Number.parseFloat(v, 10), 1),
+    );
 
-  const config = {
-    type: "bar",
+    const datasets = [];
 
-    options: {
-      animation: false,
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        intersect: false,
-        mode: "index",
-      },
-
-      plugins: {
-        legend: {
-          display: false,
+    if (snow.length > 0) {
+      datasets.push({
+        label: "Snow",
+        data: snow,
+        datalabels: {
+          align: "end",
+          anchor: "end",
+          color: styles.colors.baseDarker,
         },
-        tooltip: {
-          xAlign: "center",
-          yAlign: "bottom",
+        backgroundColor: snowPattern,
+        borderColor: styles.colors.baseDarker,
+        borderWidth: 1,
+      });
+    }
+    if (ice.length > 0) {
+      datasets.push({
+        label: "Ice",
+        data: ice,
+        datalabels: {
+          align: "end",
+          anchor: "end",
+          color: styles.colors.cyan80,
         },
-      },
-      scales: {
-        x: {
-          ticks: {
-            maxRotation: 0,
-            color: styles.colors.base,
+        backgroundColor: icePattern,
+        borderColor: styles.colors.cyan80,
+        borderWidth: 1,
+      });
+    }
+    if (liquid.length > 0) {
+      datasets.push({
+        label: "Water",
+        data: liquid,
+        datalabels: {
+          align: "end",
+          anchor: "end",
+          color: styles.colors.accentCoolDark,
+        },
+        backgroundColor: styles.colors.accentCool,
+        borderColor: styles.colors.accentCoolDark,
+        borderWidth: 1,
+      });
+    }
+
+    const config = {
+      type: "bar",
+
+      options: {
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
+
+        plugins: {
+          legend: {
+            display: false,
           },
-          grid: { display: false },
-        },
-        y: {
-          ticks: {
-            autoSkip: true,
-            color: styles.colors.base,
-            maxTicksLimit: 6,
-            callback: (v) => `${v}"`,
+          tooltip: {
+            xAlign: "center",
+            yAlign: "bottom",
           },
         },
+        scales: {
+          x: {
+            ticks: {
+              maxRotation: 0,
+              color: styles.colors.base,
+            },
+            grid: { display: false },
+          },
+          y: {
+            ticks: {
+              autoSkip: true,
+              color: styles.colors.base,
+              maxTicksLimit: 6,
+              callback: (v) => `${v}"`,
+            },
+          },
+        },
       },
-    },
 
-    data: {
-      labels: times,
-      datasets,
-    },
-  };
+      data: {
+        labels: times,
+        datasets,
+      },
+    };
 
-  drawChart(container, config);
-}
+    drawChart(container, config);
+  }
+};
+
+createCharts();
