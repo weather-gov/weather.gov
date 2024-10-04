@@ -73,6 +73,11 @@ We have sample Python scripts to aid with integration. Note that these scripts d
 - [Sample PDF upload script](./json-api-upload-pdf-example.py)
 - [Sample weather story upload script](./json-api-upload-weather-story-example.py)
 
+Sample data (randomly chosen):
+
+- [PIH Weather Story](https://www.weather.gov/source/pih/WxStory/WeatherStory.xml)
+- [EAX Daily Situation PDF](https://www.weather.gov/media/eax/DssPacket.pdf)
+
 We also have [outside tests for uploads](../../tests/playwright/outside/api.spec.js).
 
 # IP Address Filtering
