@@ -1,0 +1,31 @@
+@use "uswds-core" as *;
+
+/*
+Setting the width each datapoint should take up in a chart at different breakpoints
+on a css variable, which is then used to calculate the total table width based on
+the number of hours in the table (i.e. accounting for today having a variable number
+of hours). This allows us to show the following number of hours at each screensize:
+----------------------------------------------------------------------------------
+Breakpoint  Number of Hours  25-hour chart width
+Mobile:     min 9   max 13   725
+Mobile-lg:  min 15  max 21   725
+Tablet:     min 15  max 23   938
+Tablet-lg:  min 21  max 25   952
+Desktop:    min 25  max 25   952
+*/
+
+$mobile-datapoint-width: 29px;
+$tablet-datapoint-width: 37.5px;
+$tablet-lg-datapoint-width: 38px;
+
+body {
+  --chart-datapoint-width: #{$mobile-datapoint-width};
+
+  @include at-media(tablet) {
+    --chart-datapoint-width: #{$tablet-datapoint-width};
+  }
+
+  @include at-media(tablet-lg) {
+    --chart-datapoint-width: #{$tablet-lg-datapoint-width};
+  }
+}
