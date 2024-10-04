@@ -175,7 +175,7 @@
       {{ "Temperature" | t }}
     </span>
     <div class="wx-hourly-temp-chart-container margin-bottom-105 position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-temps="{{ temps }}" data-feels-like="{{ feelsLike }}">
-      <div class="chart-width maxh-card-lg">
+      <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
           <canvas>
           </canvas>
         </div>
@@ -195,7 +195,7 @@
   <div class="margin-bottom-2">
     <span class="font-family-mono text-primary-dark">{{"Chance of precipitation" | t }}</span>
     <div class="wx-hourly-pops-chart-container position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-pops="{{ pops }}">
-      <div class="chart-width maxh-card-lg">
+      <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
         <canvas>
         </canvas>
       </div>
@@ -205,7 +205,7 @@
   <div class="margin-bottom-4">
     <span class="font-family-mono text-primary-dark">{{ "Wind" | t }}</span>
     <div class="wx-hourly-wind-chart-container margin-bottom-105 position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-wind-speeds="{{ windSpeeds }}" data-wind-gusts="{{ windGusts }}" data-wind-directions="{{ windDirections }}">
-      <div class="chart-width maxh-card-lg">
+      <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
         <canvas></canvas>
       </div>
     </div>
@@ -224,7 +224,7 @@
   <div class="margin-bottom-2">
     <span class="font-family-mono text-primary-dark"> {{"Humidity" | t }} </span>
     <div class="wx-hourly-humidity-chart-container position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-humidity="{{ relativeHumidity }}">
-      <div class="chart-width maxh-card-lg">
+      <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
         <canvas>
         </canvas>
       </div>
@@ -234,7 +234,7 @@
   <div class="margin-bottom-0">
     <span class="font-family-mono text-primary-dark">{{"Dewpoint" | t }}</span>
     <div class="wx-hourly-dewpoint-chart-container position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-dewpoints="{{ dewpoints }}">
-      <div class="chart-width maxh-card-lg">
+      <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
         <canvas>
         </canvas>
       </div>
