@@ -1,0 +1,35 @@
+uuid: 783daf0e-5e9d-4b30-a93d-f00f7ef2ef8e
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - scheduler
+    - unique_content_field_validation
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: false
+    publish_past_date: error
+    publish_past_date_created: false
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    show_message_after_update: true
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
+  unique_content_field_validation:
+    unique: 0
+    unique_text: ''
+name: 'WFO weather story upload'
+type: wfo_weather_story_upload
+description: 'Images that are produced by a WFO, using the DSS Builder (Google Slides) and applicable to any location within their WCA.'
+help: null
+new_revision: false
+preview_mode: 1
+display_submitted: false

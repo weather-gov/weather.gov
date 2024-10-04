@@ -1,0 +1,29 @@
+uuid: 671b7bec-89fc-479b-9bc5-acf75e3b4932
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_graphicnumber
+    - node.type.wfo_weather_story_upload
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_weather_story_upload.field_graphicnumber
+field_name: field_graphicnumber
+entity_type: node
+bundle: wfo_weather_story_upload
+label: 'graphic number'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,21 @@
+uuid: 7078348e-72b5-49fd-a78c-9b0e2029438c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_frontpage
+    - node.type.wfo_weather_story_upload
+id: node.wfo_weather_story_upload.field_frontpage
+field_name: field_frontpage
+entity_type: node
+bundle: wfo_weather_story_upload
+label: frontpage
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

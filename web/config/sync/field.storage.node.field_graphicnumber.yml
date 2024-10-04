@@ -1,0 +1,20 @@
+uuid: 73b7c56c-edcf-43a5-b5b7-6a72f22662b2
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_graphicnumber
+field_name: field_graphicnumber
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

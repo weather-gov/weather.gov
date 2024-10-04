@@ -1,0 +1,25 @@
+uuid: 1364bfc7-dc57-4d77-ad58-223d0b7c6988
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_cwa_center_lat
+    - node.type.wfo_weather_story_upload
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_weather_story_upload.field_cwa_center_lat
+field_name: field_cwa_center_lat
+entity_type: node
+bundle: wfo_weather_story_upload
+label: 'CWA center latitude'
+description: 'Latitude for the CWA, if applicable'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
