@@ -10,9 +10,9 @@ const chartContainers = Array.from(
 
 const makePattern = async (imageUrl, size = 60) =>
   new Promise((resolve) => {
-    const imgage = new Image();
-    imgage.src = imageUrl;
-    imgage.onload = () => {
+    const image = new Image();
+    image.src = imageUrl;
+    image.onload = () => {
       const imageCanvas = document.createElement("canvas");
       imageCanvas.width = size;
       imageCanvas.height = size;
