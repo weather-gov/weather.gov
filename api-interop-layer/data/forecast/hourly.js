@@ -32,13 +32,10 @@ export const filterHoursForDay = (hours, dayStart) => {
         .second(0)
         .millisecond(0)
         .add(1, "day");
-  return hours.filter(({time}) => {
-    return time.isSameOrAfter(dayStart) && time.isSameOrBefore(dayEnd);
-  });
+  return hours.filter(({time}) => time.isSameOrAfter(dayStart) && time.isSameOrBefore(dayEnd));
 };
 
 export const filterHoursForCurrentDay = (hours, currentTime) => {
-  const startHour = currentTime.hour();
   const limit = currentTime
         .hour(6)
         .minute(0)
