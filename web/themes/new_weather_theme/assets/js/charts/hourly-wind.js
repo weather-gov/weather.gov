@@ -1,8 +1,5 @@
-/* global Chart ChartDataLabels */
-
+import { drawChart } from "./WeatherChart.js";
 import styles from "../styles.js";
-
-Chart.register(ChartDataLabels);
 
 const chartContainers = Array.from(
   document.querySelectorAll(".wx-hourly-wind-chart-container"),
@@ -40,7 +37,8 @@ const getCombinedWindInfo = (element) => {
   const directions = JSON.parse(element.dataset.windDirections);
   const gusts = JSON.parse(element.dataset.windGusts);
 
-  return times.map((time, idx) => Object.assign(
+  return times.map((time, idx) =>
+    Object.assign(
       {},
       {
         time,
@@ -48,7 +46,7 @@ const getCombinedWindInfo = (element) => {
         gusts: gusts[idx],
         direction: directions[idx],
       },
-    )
+    ),
   );
 };
 
@@ -101,14 +99,9 @@ for (const container of chartContainers) {
   const speeds = JSON.parse(container.dataset.windSpeeds);
   const gusts = JSON.parse(container.dataset.windGusts);
 
-  // We don't need to keep a reference to the chart object. We only need the
-  // side-effects of creating it. This is not ideal, but it's how Chart.js
-  // works, so it's what we've got.
-  // eslint-disable-next-line no-new
-  new Chart(container.querySelector("canvas"), {
+  const config = {
     type: "line",
     plugins: [
-      ChartDataLabels,
       {
         afterDraw: drawWindInfoLabels,
       },
@@ -201,5 +194,7 @@ for (const container of chartContainers) {
         },
       ],
     },
-  });
+  };
+
+  drawChart(container, config);
 }

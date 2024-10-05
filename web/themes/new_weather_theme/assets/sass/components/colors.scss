@@ -1,0 +1,9 @@
+@use "uswds-core" as *;
+
+.wx-bg-cyan-60 {
+  background-color: color("cyan-60");
+}
+
+.wx-border-cyan-80 {
+  border-color: color("cyan-80");
+}
