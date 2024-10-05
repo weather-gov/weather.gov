@@ -1,0 +1,21 @@
+uuid: 959b1c04-e7ac-4730-a9d4-de8674f952e5
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_cwa_center_lon
+field_name: field_cwa_center_lon
+entity_type: node
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
