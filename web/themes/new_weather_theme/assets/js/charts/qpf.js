@@ -18,7 +18,7 @@ const makePattern = async (imageUrl, size = 60) =>
       imageCanvas.height = size;
 
       const imageContext = imageCanvas.getContext("2d");
-      imageContext.drawImage(imgage, 0, 0, size, size);
+      imageContext.drawImage(image, 0, 0, size, size);
 
       const pattern = imageContext.createPattern(imageCanvas, "repeat");
 
