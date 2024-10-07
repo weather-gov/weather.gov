@@ -1,9 +1,14 @@
 import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
-import hourly from "./hourly.js";
+import hourly, {
+  sortAndFilterHours,
+  filterHoursForCurrentDay,
+  filterHoursForDay
+} from "./hourly.js";
 import { convertValue, convertProperties } from "../../util/convert.js";
 import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
+
 
 export default async ({ grid, place }) => {
   const hours = new Map();
@@ -37,7 +42,7 @@ export default async ({ grid, place }) => {
     hourlyPromise,
   ]);
 
-  const earliest = dayjs()
+  const now = dayjs()
     .tz(place.timezone)
     .set("minute", 0)
     .set("second", 0)
@@ -45,20 +50,10 @@ export default async ({ grid, place }) => {
 
   // Sort the hours and remove any that occur before midnight at place-local
   // time today.
-  const orderedHours = [...hours.values()]
-    .sort(({ time: a }, { time: b }) => {
-      const timeA = dayjs(a);
-      const timeB = dayjs(b);
-
-      if (timeA > timeB) {
-        return 1;
-      }
-      if (timeA < timeB) {
-        return -1;
-      }
-      return 0;
-    })
-    .filter(({ time }) => time.isAfter(earliest));
+  const orderedHours = sortAndFilterHours(
+    [...hours.values()],
+    now
+  );
 
   // Do unit conversions on all the hourly properties. Each item in the array
   // is an object representing one hour. Each property in the object represents
@@ -73,8 +68,8 @@ export default async ({ grid, place }) => {
 
   // Now add the appropriate QPF and hourly data to each day.
   for (const day of dailyData.days ?? []) {
-    const start = dayjs.tz(day.start);
-    const end = dayjs.tz(day.end);
+    const start = dayjs.utc(day.start).tz(place.timezone);
+    const end = dayjs.utc(day.end).tz(place.timezone);
 
     if (gridpointData.qpf) {
       day.qpf = gridpointData.qpf.filter(({ start: qpfStart, end: qpfEnd }) => {
@@ -91,10 +86,16 @@ export default async ({ grid, place }) => {
       });
     }
 
-    // Hours are simpler. Is the hour between the start and end? Done.
-    day.hours = orderedHours.filter(
-      ({ time }) => time.isSameOrAfter(start) && time.isSameOrBefore(end),
-    );
+    if(now.isSameOrAfter(start)){
+      // Are we in the current day?
+      // (ie, does `now` come after the day start?)
+      // If so, we filter the hours a bit differently
+      day.hours = filterHoursForCurrentDay(orderedHours, now);
+    } else {
+      // Otherwise we filter for a future day,
+      // which maxes out at 6am the _following_ day
+      day.hours = filterHoursForDay(orderedHours, start);
+    }
   }
 
   // Whatever gridData is returned here gets merged into the top-level grid
