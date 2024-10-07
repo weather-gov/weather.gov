@@ -1,4 +1,7 @@
-import { drawChart } from "./WeatherChart.js";
+import {
+  drawChart,
+  setupScrollButtons
+} from "./WeatherChart.js";
 import styles from "../styles.js";
 
 const chartContainers = Array.from(
@@ -110,5 +113,7 @@ for (const container of chartContainers) {
     },
   };
 
+  
   drawChart(container, config);
+  setupScrollButtons(container);
 }
