@@ -1,6 +1,13 @@
 {
   "@bundle": {
-    "name": "Many alerts"
+    "name": "Little Rock, AR",
+    "attributes": [
+      "Many alerts",
+      "Day 1 has ice, snow, and water",
+      "Day 2 has snow and water",
+      "Day 3 has ice and water",
+      "Day 4 has rain"
+    ]
   },
   "@context": [
     "https://geojson.org/geojson-ld/geojson-context.jsonld",
