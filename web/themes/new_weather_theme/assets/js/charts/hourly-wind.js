@@ -120,7 +120,7 @@ for (const container of chartContainers) {
           display: false,
         },
         tooltip: {
-          events: ['click'],
+          events: ['click', 'mousemove'],
         },
       },
       layout: {
