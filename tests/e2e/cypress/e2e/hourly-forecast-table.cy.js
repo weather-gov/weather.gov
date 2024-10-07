@@ -20,7 +20,7 @@ describe("Hourly forecast table tests", () => {
         "Red Flag Warning",
       )
         .invoke("attr", "colspan")
-        .should("equal", "3");
+        .should("equal", "4");
     });
 
     it("Has a Special Weather Statement that begins in the third hour and spans 5 hours", () => {
