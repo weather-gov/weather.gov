@@ -150,9 +150,16 @@ trait DailyForecastTrait
 
         $allPrecipPeriods = $this->getHourlyPrecipitation($wfo, $x, $y, $now);
         $allPrecipPeriods = array_map(function ($period) use (&$timezone) {
-            $valid = $period->validTime;
-            $value = $period->value;
-            $value = UnitConversion::millimetersToInches($value);
+            $valid = $period["validTime"];
+
+            $liquid = $period["liquid"];
+            $liquid = UnitConversion::millimetersToInches($liquid);
+
+            $ice = $period["ice"];
+            $ice = UnitConversion::millimetersToInches($ice);
+
+            $snow = $period["snow"];
+            $snow = UnitConversion::millimetersToInches($snow);
 
             $valid = explode("/", $valid);
             $start = DateTimeUtility::stringToDate($valid[0], $timezone);
@@ -163,7 +170,9 @@ trait DailyForecastTrait
             return (object) [
                 "start" => $start,
                 "end" => $end,
-                "value" => round($value, 2),
+                "liquid" => round($liquid, 2),
+                "ice" => round($ice, 2),
+                "snow" => round($snow, 2),
             ];
         }, $allPrecipPeriods);
 
@@ -308,47 +317,65 @@ trait DailyForecastTrait
                     }, $dayAlerts),
                 );
 
-                // Get the first and last hours in our hourly data. We'll use
-                // these to filter alerts and precip.
-                $firstHour = DateTimeUtility::stringToDate(
-                    $hourPeriods[0]["timestamp"],
-                );
-                $lastHour = DateTimeUtility::stringToDate(
-                    $hourPeriods[array_key_last($hourPeriods)]["timestamp"],
-                );
-                $lastHour = $lastHour->modify("+1 hour");
+                $precipPeriods = [];
+                if (count($hourPeriods) > 0) {
+                    // Get the first and last hours in our hourly data. We'll use
+                    // these to filter alerts and precip.
+                    $firstHour = DateTimeUtility::stringToDate(
+                        $hourPeriods[0]["timestamp"],
+                    );
+                    $lastHour = DateTimeUtility::stringToDate(
+                        $hourPeriods[array_key_last($hourPeriods)]["timestamp"],
+                    );
+                    $lastHour = $lastHour->modify("+1 hour");
 
-                $precipPeriods = array_filter($allPrecipPeriods, function (
-                    $period,
-                ) use (
-                    &$firstHour,
-                    &$lastHour,
-                ) {
-                    if (
-                        $period->start < $lastHour &&
-                        $period->end > $firstHour
+                    $precipPeriods = array_filter($allPrecipPeriods, function (
+                        $period,
+                    ) use (
+                        &$firstHour,
+                        &$lastHour,
                     ) {
-                        return true;
-                    }
-                    return false;
-                });
+                        if (
+                            $period->start < $lastHour &&
+                            $period->end > $firstHour
+                        ) {
+                            return true;
+                        }
+                        return false;
+                    });
+                }
 
                 $precipPeriods = array_map(function ($period) {
                     return [
                         "start" => $period->start->format("g A"),
                         "end" => $period->end->format("g A"),
-                        "value" => $period->value,
+                        "liquid" => $period->liquid,
+                        "ice" => $period->ice,
+                        "snow" => $period->snow,
                     ];
                 }, $precipPeriods);
 
                 $noPrecipPeriods = array_filter($precipPeriods, function (
                     $period,
                 ) {
-                    return $period["value"] == 0;
+                    return $period["liquid"] == 0;
                 });
                 if (count($noPrecipPeriods) === count($precipPeriods)) {
                     $precipPeriods = [];
                 }
+
+                $hasIce =
+                    count(
+                        array_filter($precipPeriods, function ($period) {
+                            return $period["ice"] > 0;
+                        }),
+                    ) > 0;
+                $hasSnow =
+                    count(
+                        array_filter($precipPeriods, function ($period) {
+                            return $period["snow"] > 0;
+                        }),
+                    ) > 0;
 
                 $day = [
                     "periods" => $periods,
@@ -356,7 +383,12 @@ trait DailyForecastTrait
                     "hourPeriods" => $hourPeriods,
                     "alerts" => $dayAlerts,
                     "highestAlertLevel" => $highestAlertLevel,
-                    "precipPeriods" => array_values($precipPeriods),
+                    "precipPeriods" => [
+                        "hasIce" => $hasIce,
+                        "hasSnow" => $hasSnow,
+                        "hasQPF" => count($precipPeriods) > 0,
+                        "periods" => array_values($precipPeriods),
+                    ],
                 ];
 
                 return $day;

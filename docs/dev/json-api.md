@@ -68,7 +68,15 @@ The response should also be a 201 with JSON information about the newly created 
 
 # Integration Example
 
-A sample [Python script](./json-api-upload-example.py) is provided to help to aid in integration. Note that this script depends on the [requests](https://pypi.org/project/requests/) library.
+We have sample Python scripts to aid with integration. Note that these scripts depend on the [requests](https://pypi.org/project/requests/) library.
+
+- [Sample PDF upload script](./json-api-upload-pdf-example.py)
+- [Sample weather story upload script](./json-api-upload-weather-story-example.py)
+
+Sample data (randomly chosen):
+
+- [PIH Weather Story](https://www.weather.gov/source/pih/WxStory/WeatherStory.xml)
+- [EAX Daily Situation PDF](https://www.weather.gov/media/eax/DssPacket.pdf)
 
 We also have [outside tests for uploads](../../tests/playwright/outside/api.spec.js).
 

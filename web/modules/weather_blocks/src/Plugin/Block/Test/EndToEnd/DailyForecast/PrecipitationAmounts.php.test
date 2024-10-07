@@ -32,28 +32,35 @@ final class PrecipitationAmountsTest extends EndToEndBase
             json_decode(
                 <<<JSON
                 {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "startRaw": {
-                        "type": "string",
-                        "pattern": "$isoRegex"
-                      },
-                      "endRaw": {
-                        "type": "string",
-                        "pattern": "$isoRegex"
-                      },
-                      "start": {
-                        "type": "string",
-                        "pattern": "$hourSpanRegex"
-                      },
-                      "end": {
-                        "type": "string",
-                        "pattern": "$hourSpanRegex"
-                      },
-                      "value": {
-                        "type": "number"
+                  "type":"object",
+                  "properties":{
+                    "hasIce": { "type": "boolean" },
+                    "hasSnow": { "type": "boolean" },
+                    "hasQPF": { "type": "boolean" },
+
+                    "periods":{
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "start": {
+                            "type": "string",
+                            "pattern": "$hourSpanRegex"
+                          },
+                          "end": {
+                            "type": "string",
+                            "pattern": "$hourSpanRegex"
+                          },
+                          "liquid": {
+                            "type": "number"
+                          },
+                          "ice": {
+                            "type": "number"
+                          },
+                          "snow": {
+                            "type": "number"
+                          }
+                        }
                       }
                     }
                   }

@@ -1,8 +1,5 @@
-/* global Chart ChartDataLabels */
-
+import { drawChart } from "./WeatherChart.js";
 import styles from "../styles.js";
-
-Chart.register(ChartDataLabels);
 
 const chartContainers = Array.from(
   document.querySelectorAll(".wx-hourly-humidity-chart-container"),
@@ -13,14 +10,13 @@ for (const container of chartContainers) {
   const humidity = JSON.parse(container.dataset.humidity).map((v) =>
     Number.parseInt(v, 10),
   );
-  
+
   // We don't need to keep a reference to the chart object. We only need the
   // side-effects of creating it. This is not ideal, but it's how Chart.js
   // works, so it's what we've got.
   // eslint-disable-next-line no-new
-  new Chart(container.querySelector("canvas"), {
+  const config = {
     type: "bar",
-    plugins: [ChartDataLabels],
 
     options: {
       animation: false,
@@ -83,5 +79,7 @@ for (const container of chartContainers) {
         },
       ],
     },
-  });
+  };
+
+  drawChart(container, config);
 }

@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-10-4
+  version: 2024-10-05
   css:
     theme:
       assets/css/styles.css: {}
@@ -82,7 +82,7 @@ digital-analytics-program:
     }
 
 chartjs:
-  version: 4.4.1
+  version: 4.4.1-add-patternomaly
   header: true
   js:
     https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js:
@@ -95,3 +95,4 @@ chartjs:
         integrity: sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==
         crossorigin: anonymous
         referrerpolicy: no-referrer
+

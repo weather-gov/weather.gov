@@ -1,26 +1,100 @@
-{% if precipHours %}
-  <div class="grid-row"> 
+{% if precipHours.hasQPF %}
+  <div class="grid-row wx-qpf-periods"> 
     <div class="grid-col-12"> 
       <h5 class="wx-visual-h3 font-heading-md text-normal text-primary-darker margin-top-1 margin-bottom-105">{{ "Precipitation amounts" |t }}</h5>
     </div>
   </div>
-  <div class="grid-row tablet:margin-x-0 tablet:grid-col-6">
-    <table class="usa-table usa-table--borderless wx-precip-table margin-y-0 width-full">
-      <caption class="usa-sr-only">{{ "precipitation amounts for the coming hours" | t }}
-        <thead class="usa-sr-only">
+
+  {% set times = precipHours.periods | map(p => p.start ~ "-" ~ p.end) | json_encode %}
+  {% set liquid = precipHours.periods | map(p => p.liquid) | json_encode %}
+  {% set snow = '[]' %}
+  {% set ice = '[]' %}
+  
+  {% if precipHours.hasSnow %}
+    {% set snow = precipHours.periods | map(p => p.snow) | json_encode %}
+  {% endif %}
+  {% if precipHours.hasIce %}
+    {% set ice = precipHours.periods | map(p => p.ice) | json_encode %}
+  {% endif %}
+
+  <div class="margin-bottom-205">
+    <div class="wx-qpf-chart-container margin-y-205 position-relative grid-col-12"
+      data-times="{{ times | escape('html_attr') }}"
+      data-liquid="{{ liquid | escape('html_attr') }}"
+      data-snow="{{ snow | escape('html_attr') }}"
+      data-ice="{{ ice | escape('html_attr') }}"
+    >
+      <canvas>
+      </canvas>
+    </div>
+
+    <div class="display-flex flex-align-center font-mono-xs text-base">
+      {% if precipHours.hasSnow %}
+      <div class="margin-x-1 margin-right-1 wx-bg-snow margin-left-1 width-2 height-2 border border-base-darker" style="margin-top: -3px;"></div>
+      {{ "Snow" | t }}
+      <div class="margin-right-3"></div>
+      {% endif %}
+
+      {% if precipHours.hasIce %}
+      <div class="margin-x-1 margin-right-1 wx-bg-ice margin-left-1 width-2 height-2 border wx-border-cyan-80" style="margin-top: -3px;"></div>
+      {{ "Ice" | t }}
+      <div class="margin-right-3"></div>
+      {% endif %}
+
+      <div class="margin-x-1 margin-right-1 bg-accent-cool margin-left-1 width-2 height-2 border border-accent-cool-dark" style="margin-top: -3px;"></div>
+      {{ "Water" | t }}
+    </div>
+  </div>
+
+
+  <div class="grid-row grid-col-12">
+    <div class="grid-col-12 tablet:grid-col-6 tablet:padding-right-1">
+      <table class="usa-table usa-table--borderless wx-precip-table margin-y-0 width-full">
+        <caption class="usa-sr-only">{{ "precipitation amounts for the coming hours" | t }}</caption>
+        <thead>
           <tr>
-            <th scope="col">{{ "time period" | t }}</th>
-            <th scope="col">{{ "forecast precipitation" | t }}</th>
+            <th scope="col">{{ "Time Period" | t }}</th>
+            {% if precipHours.hasSnow %}
+            <th scope="col">{{ "Snow" | t }}</th>
+            {% endif %}
+            {% if precipHours.hasIce %}
+            <th scope="col">{{ "Ice" | t }}</th>
+            {% endif %}
+            {% if precipHours.hasSnow or precipHours.hasIce %}
+            <th aria-hidden="true"></th>
+            {% endif %}
+            <th scope="col">{{ "Water" | t }}</th>
           </tr>
         </thead>
+
         <tbody>
-          {% for hour in precipHours %}
+          {% for hour in precipHours.periods %}
             <tr>
               <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">{{ hour.start }}&emsp13;–&emsp13;{{ hour.end }}</td>
-              <td class="text-align-right">{{ hour.value }} {{ "inches" | t }}</td>
+              {% if precipHours.hasSnow %}
+              <td class="text-align-left">{{ hour.snow }}{{ '"' | t }}</td>
+              {% endif %}
+              {% if precipHours.hasIce %}
+              <td class="text-align-left">{{ hour.ice }}{{ '"' | t }}</td>
+              {% endif %}
+              {% if precipHours.hasSnow or precipHours.hasIce %}
+              <td aria-hidden="true"></td>
+              {% endif %}
+              <td class="text-align-left">{{ hour.liquid }}{{ '"' | t }}</td>
             </tr>
           {% endfor %}
         </tbody>
-    </table>
+      </table>
+    </div>
+
+    <div class="grid-col-12 tablet:grid-col-6 tablet:padding-left-1">
+      <p class="bg-base-lightest padding-105">
+        {{
+          "\"Water\" refers to the amount of water that is present in the precipitation.
+          The precipitation may actually fall in solid form such as ice or snow, in
+          liquid form as rain, or a mix of both." | t
+        }}
+      </p>
+    </div>
   </div>
 {% endif %}
