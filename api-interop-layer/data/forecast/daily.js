@@ -3,36 +3,28 @@ import { convertProperties } from "../../util/convert.js";
 import { parseAPIIcon } from "../../util/icon.js";
 import { sentenceCase } from "../../util/case.js";
 
-const dayjsOffset = (iso8601) => {
-  const time = dayjs(iso8601);
-  const [, offset] = iso8601.match(/([-+]\d{2}:\d{2})$/) ?? [];
-
-  if (!offset || offset === "z") {
-    return time;
-  }
-
-  const [, direction, hours, minutes] =
-    offset.match(/([-+])(\d{2}):(\d{2})/) ?? [];
-  const bump = +hours * 60 + +minutes;
-
-  return time.utcOffset(bump * (direction === "-" ? -1 : 1));
-};
-
 export default (data, { timezone }) => {
   if (data.error) {
     return { error: true };
   }
+  // The API returns a list of day periods. Every calendar day is represented by
+  // one, two, or three day periods. They’re 12 hours each from 6am to 6pm and
+  // from 6pm to 6am. The API includes an isDaytime property so we know which
+  // one is for the day and night. The *FIRST* calendar day ("today") can have
+  // three periods, the first of which is "overnight." (between midnight and
+  // 6am; this is technically the night period from the previous weather day).
+  // The first weather day can also have just a single night time period between
+  // 6pm and midnight.
+
+  // This is the list of all weather days that have been processed. As we
+  // iterate over the total list of weather day periods from the input, we will
+  // populate this list.
   const days = [];
   let previousDay = -1;
 
-  // The API returns a list of day periods. Every calendar day is represented by
-  // one or two day periods. They’re 12 hours each from 6am to 6pm and from 6pm to
-  // 6am. The API includes an isDaytime property so we know which one is for the
-  // day and night.
-
   // So, we iterate over all day periods and bundle up them into days.
   for (const period of data.properties.periods) {
-    const start = dayjsOffset(period.startTime);
+    const start = dayjs(period.startTime).tz(timezone);
 
     if (start.get("day") !== previousDay) {
       if (days.length > 0) {
@@ -44,27 +36,15 @@ export default (data, { timezone }) => {
     }
 
     const dayPeriod = days[days.length - 1];
-    if (!dayPeriod.start) {
-      dayPeriod.start = period.startTime;
-    }
     if (days.length > 0) {
       days[days.length - 1].end = period.endTime;
     }
-
-    // if the collection of weather days has only one item in it, it is the
-    // first day of the forecast. additionally, if this day has no periods, that
-    // means this is the first period of the day, and if this period is not
-    // marked as daytime then it must be an overnight period.
-    const isOvernight =
-      days.length === 1 &&
-      dayPeriod.periods.length === 0 &&
-      period.isDaytime === false;
 
     const periodData = {
       start: dayjs(period.startTime),
       end: dayjs(period.endTime),
       isDaytime: period.isDaytime,
-      isOvernight,
+      isOvernight: false,
       monthAndDay: start.tz(timezone).format("MMM D"),
       dayName: days.length === 1 ? "Today" : start.tz(timezone).format("dddd"),
       data: convertProperties({
@@ -85,9 +65,7 @@ export default (data, { timezone }) => {
 
     // Add time labels to the first day
     if (days.length === 1) {
-      if (isOvernight) {
-        periodData.timeLabel = "NOW-6AM";
-      } else if (periodData.isDaytime) {
+      if (periodData.isDaytime) {
         periodData.timeLabel = "6AM-6PM";
       } else {
         periodData.timeLabel = "6PM-6AM";
@@ -95,6 +73,17 @@ export default (data, { timezone }) => {
     }
 
     dayPeriod.periods.push(periodData);
+  }
+
+  if (days.length > 0) {
+    // The first day could have an overnight period, so we need to check for
+    // that. The first period of the day is an overnight period IFF there are
+    // three periods in total.
+    const [today] = days;
+    if (today.periods.length === 3) {
+      today.periods[0].isOvernight = true;
+      today.periods[0].timeLabel = "NOW-6AM";
+    }
   }
 
   days.forEach((day) => {
