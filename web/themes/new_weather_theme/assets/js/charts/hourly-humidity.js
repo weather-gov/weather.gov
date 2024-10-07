@@ -38,6 +38,7 @@ for (const container of chartContainers) {
         tooltip: {
           xAlign: "center",
           yAlign: "bottom",
+          events: ['click'],
         },
       },
       scales: {

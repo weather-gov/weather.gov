@@ -126,6 +126,9 @@ for (const container of chartContainers) {
         legend: {
           display: false,
         },
+        tooltip: {
+          events: ['click'],
+        },
       },
       layout: {
         padding: {
