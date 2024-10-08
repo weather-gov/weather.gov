@@ -181,6 +181,8 @@ jobs:
           curl http://localhost:8081/play/e2e
           make backend-test
 
+      - run: dir .coverage
+
       - name: store coverage output
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/upload-artifact@v4
@@ -188,7 +190,7 @@ jobs:
           name: drupal-coverage-report
           path: .coverage/clover.xml
           retention-days: 1
-      - name: store coverage output
+      - name: store coverage HTML
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/upload-artifact@v4
         with:
