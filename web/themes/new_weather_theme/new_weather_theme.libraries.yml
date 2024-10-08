@@ -25,7 +25,7 @@ front-page:
         defer: true
 
 point-page:
-  version: 2024-10-04
+  version: 2024-10-08
   js:
     assets/js/point.page.js:
       attributes:
