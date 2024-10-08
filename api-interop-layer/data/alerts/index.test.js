@@ -2,7 +2,23 @@ import sinon from "sinon";
 import { expect } from "chai";
 import * as mariadb from "mariadb";
 import dayjs from "../../util/day.js";
-import { alignAlertsToDaily } from "./index.js";
+import { alignAlertsToDaily } from "./utils.js";
+
+/**
+ * Test helper for creating arrays of mock
+ * day / hours objects
+ */
+const makeDayWithHours = (startTimestamp, numHours, timezone="America/New_York") => {
+  let hours = [];
+  const start = dayjs.utc(startTimestamp).tz(timezone);
+  for(let i = 0; i < numHours; i++){
+    const time = start.add(i, "hours");
+    hours.push({ time });
+  }
+  return {
+    hours
+  };
+};
 
 describe("alert data module", () => {
   const sandbox = sinon.createSandbox();
@@ -370,41 +386,40 @@ describe("alert data module", () => {
 
   describe("Alert to daily alignment", () => {
     it("Correctly aligns an alert appearing in the middle of its day", () => {
-      const day = {
-        hours: Array(24).map((_, idx) => {
-          // 6am to 6am
-          let time = dayjs.utc("2024-09-09T06:00:00-04:00").tz("America/New_York");
-          time = time.add(idx, "hours");
-          return {
-            time
-          };
-        })
-      };
+      const day = makeDayWithHours("2024-09-09T06:00:00-04:00", 24, "America/New_York");
       const alerts = {
         items: [{
           id: "id",
           event: "test",
           onset: dayjs.utc("2024-09-09T15:32:00-04:00").tz("America/New_York"),
-          finish: dayjs.utc("2024-09-09T17:55:00-04:00").tz("America/New_York")
+          finish: dayjs.utc("2024-09-09T17:55:00-04:00").tz("America/New_York"),
+          metadata: {
+            level: {
+              text: "other"
+            }
+          }
         }]
       };
 
       const expected = {
         metadata: {
-          count: 0,
+          count: 1,
           highest: "other"
         },
         items: [{
-          offset: 8,
-          duration: 4,
+          id: "id",
+          offset: 9,
+          duration: 3,
           event: "test",
-          remainder: 12
+          remainder: 12,
+          level: "other"
         }]
       };
 
-      const actual = alignAlertsToDaily(alerts, [day]);
+      // Modifies day in place
+      alignAlertsToDaily(alerts, [day]);
 
-      expect(expected).to.eql(actual);
+      expect(day.alerts).to.eql(expected);
     });
   });
 });

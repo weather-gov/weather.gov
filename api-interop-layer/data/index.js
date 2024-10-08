@@ -1,6 +1,5 @@
-import getAlerts, {
-  alignAlertsToDaily
-} from "./alerts/index.js";
+import getAlerts from "./alerts/index.js";
+import { alignAlertsToDaily } from "./alerts/utils.js";
 import getForecast from "./forecast/index.js";
 import getObservations from "./obs/index.js";
 import getPoint from "./points.js";
