@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - node.type.wfo_pdf_upload
+    - node.type.wfo_weather_story_upload
   module:
     - node
 id: uploader
@@ -12,3 +13,4 @@ weight: -4
 is_admin: null
 permissions:
   - 'create wfo_pdf_upload content'
+  - 'create wfo_weather_story_upload content'

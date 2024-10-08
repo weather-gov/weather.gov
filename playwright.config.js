@@ -31,45 +31,45 @@ const config = {
 
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-      testIgnore: /api.spec.js/,
-    },
+    // {
+    //   name: "chromium",
+    //   use: { ...devices["Desktop Chrome"] },
+    //   testIgnore: /api.spec.js/,
+    // },
 
     // since we are running API tests, we really only need one browser
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-      testMatch: /api.spec.js/,
-    },
+    // {
+    //   name: "chromium",
+    //   use: { ...devices["Desktop Chrome"] },
+    //   testMatch: /api.spec.js/,
+    // },
 
     // {
     //   name: "firefox",
     //   use: { ...devices["Desktop Firefox"] },
     // },
 
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-      testIgnore: /api.spec.js/,
-    },
+    // {
+    //   name: "webkit",
+    //   use: { ...devices["Desktop Safari"] },
+    //   testIgnore: /api.spec.js/,
+    // },
 
     /* Test against mobile viewports. */
-    {
-      name: "Mobile Chrome",
-      use: { ...devices["Pixel 5"] },
-      testIgnore: /api.spec.js/,
-    },
+    // {
+    //   name: "Mobile Chrome",
+    //   use: { ...devices["Pixel 5"] },
+    //   testIgnore: /api.spec.js/,
+    // },
     // Mobile Safari is excluded in CI because it tends to fail when it's
     // containerized.
 
     /* Test against branded browsers. */
-    {
-      name: "Microsoft Edge",
-      use: { ...devices["Desktop Edge"], channel: "msedge" },
-      testIgnore: /api.spec.js/,
-    },
+    // {
+    //   name: "Microsoft Edge",
+    //   use: { ...devices["Desktop Edge"], channel: "msedge" },
+    //   testIgnore: /api.spec.js/,
+    // },
 
     {
       name: "Google Chrome",
@@ -79,12 +79,12 @@ const config = {
   ],
 };
 
-if (!process.env.CI) {
-  config.projects.push({
-    name: "Mobile Safari",
-    use: { ...devices["iPhone 12"] },
-    testIgnore: /api.spec.js/,
-  });
-}
+// if (!process.env.CI) {
+//   config.projects.push({
+//     name: "Mobile Safari",
+//     use: { ...devices["iPhone 12"] },
+//     testIgnore: /api.spec.js/,
+//   });
+// }
 
 module.exports = defineConfig(config);

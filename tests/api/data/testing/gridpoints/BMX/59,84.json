@@ -5154,6 +5154,14 @@
         {
           "validTime": "date:now +177 hours / PT6H",
           "value": 0
+        },
+        {
+          "validTime": "date:now +183 hours / PT6H",
+          "value": 0
+        },
+        {
+          "validTime": "date:now +189 hours / PT6H",
+          "value": 0
         }
       ]
     },
@@ -5282,6 +5290,14 @@
         },
         {
           "validTime": "date:now +177 hours / PT6H",
+          "value": 0
+        },
+        {
+          "validTime": "date:now +183 hours / PT6H",
+          "value": 0
+        },
+        {
+          "validTime": "date:now +189 hours / PT6H",
           "value": 0
         }
       ]

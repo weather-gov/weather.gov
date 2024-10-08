@@ -1,0 +1,102 @@
+uuid: 915554d8-5a89-48be-a7c4-e9eb6c08e641
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.wfo_weather_story_upload.field_cwa_center_lat
+    - field.field.node.wfo_weather_story_upload.field_cwa_center_lon
+    - field.field.node.wfo_weather_story_upload.field_description
+    - field.field.node.wfo_weather_story_upload.field_endtime
+    - field.field.node.wfo_weather_story_upload.field_frontpage
+    - field.field.node.wfo_weather_story_upload.field_fullimage
+    - field.field.node.wfo_weather_story_upload.field_graphicnumber
+    - field.field.node.wfo_weather_story_upload.field_office
+    - field.field.node.wfo_weather_story_upload.field_order
+    - field.field.node.wfo_weather_story_upload.field_radar
+    - field.field.node.wfo_weather_story_upload.field_smallimage
+    - field.field.node.wfo_weather_story_upload.field_starttime
+    - field.field.node.wfo_weather_story_upload.field_weburl
+    - node.type.wfo_weather_story_upload
+  module:
+    - image
+    - text
+    - user
+id: node.wfo_weather_story_upload.default
+targetEntityType: node
+bundle: wfo_weather_story_upload
+mode: default
+content:
+  field_cwa_center_lat:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_cwa_center_lon:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_fullimage:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_office:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_smallimage:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_weburl:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_endtime: true
+  field_frontpage: true
+  field_graphicnumber: true
+  field_order: true
+  field_radar: true
+  field_starttime: true
+  langcode: true

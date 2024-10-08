@@ -1,8 +1,8 @@
-/* global Chart ChartDataLabels */
-
+import {
+  drawChart,
+  setupScrollButtons
+} from "./WeatherChart.js";
 import styles from "../styles.js";
-
-Chart.register(ChartDataLabels);
 
 const chartContainers = Array.from(
   document.querySelectorAll(".wx-hourly-dewpoint-chart-container"),
@@ -14,13 +14,8 @@ for (const container of chartContainers) {
     Number.parseInt(v, 10),
   );
 
-  // We don't need to keep a reference to the chart object. We only need the
-  // side-effects of creating it. This is not ideal, but it's how Chart.js
-  // works, so it's what we've got.
-  // eslint-disable-next-line no-new
-  new Chart(container.querySelector("canvas"), {
+  const config = {
     type: "line",
-    plugins: [ChartDataLabels],
 
     options: {
       animation: false,
@@ -33,6 +28,9 @@ for (const container of chartContainers) {
       plugins: {
         legend: {
           display: false,
+        },
+        tooltip: {
+          events: ['click', 'mousemove'],
         },
       },
       scales: {
@@ -67,6 +65,12 @@ for (const container of chartContainers) {
           },
         },
       },
+      layout: {
+        padding: {
+          top: 24,
+          bottom: 12,
+        },
+      },
     },
 
     data: {
@@ -85,5 +89,8 @@ for (const container of chartContainers) {
         },
       ],
     },
-  });
+  };
+
+  drawChart(container, config);
+  setupScrollButtons(container);
 }

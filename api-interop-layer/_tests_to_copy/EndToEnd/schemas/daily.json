@@ -25,11 +25,18 @@
         "type": "string"
       },
       "precipPeriods": {
-        "type": "array",
-        "items": {
-          "maxItems": 5,
-          "items": {
-            "$ref": "#/$defs/precipPeriod"
+        "type": "object",
+        "properties": {
+          "hasIce": { "type": "boolean" },
+          "hasSnow": { "type": "boolean" },
+          "hasQPF": { "type": "boolean" },
+
+          "periods": {
+            "type": "array",
+            "maxItems": 5,
+            "items": {
+              "$ref": "#/$defs/precipPeriod"
+            }
           }
         }
       },
@@ -97,9 +104,10 @@
       "type": "object",
       "properties": {
         "start": { "type": "string" },
-        "startRaw": { "type": "string" },
         "end": { "type": "string" },
-        "endRaw": { "type": "string" }
+        "liquid": { "type": "number" },
+        "ice": { "type": "number" },
+        "snow": { "type": "number" }
       }
     }
   }

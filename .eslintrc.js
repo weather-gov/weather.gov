@@ -5,6 +5,9 @@ module.exports = {
   rules: {
     // For imports in the browser, file extensions are always required.
     "import/extensions": ["error", "always"],
+    // eslint can't resolve remote imports, so ignore anything that starts
+    // with https.
+    "import/no-unresolved": ["error", { ignore: ["^https://"] }],
     "prefer-destructuring": [0],
     "no-param-reassign": ["error", { props: false }],
     "no-console": "error",

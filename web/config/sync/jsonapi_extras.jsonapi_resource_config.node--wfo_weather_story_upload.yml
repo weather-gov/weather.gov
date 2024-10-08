@@ -1,0 +1,244 @@
+uuid: 11da7e3e-ec7b-4ff8-8ba3-776a5709b8e6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_weather_story_upload
+  module:
+    - jsonapi_defaults
+third_party_settings:
+  jsonapi_defaults:
+    page_limit: 50
+id: node--wfo_weather_story_upload
+disabled: false
+path: node/wfo_weather_story_upload
+resourceType: node--wfo_weather_story_upload
+resourceFields:
+  nid:
+    disabled: true
+    fieldName: nid
+    publicName: nid
+    enhancer:
+      id: ''
+  uuid:
+    disabled: true
+    fieldName: uuid
+    publicName: uuid
+    enhancer:
+      id: ''
+  vid:
+    disabled: true
+    fieldName: vid
+    publicName: vid
+    enhancer:
+      id: ''
+  langcode:
+    disabled: true
+    fieldName: langcode
+    publicName: langcode
+    enhancer:
+      id: ''
+  type:
+    disabled: true
+    fieldName: type
+    publicName: type
+    enhancer:
+      id: ''
+  revision_timestamp:
+    disabled: true
+    fieldName: revision_timestamp
+    publicName: revision_timestamp
+    enhancer:
+      id: ''
+  revision_uid:
+    disabled: true
+    fieldName: revision_uid
+    publicName: revision_uid
+    enhancer:
+      id: ''
+  revision_log:
+    disabled: true
+    fieldName: revision_log
+    publicName: revision_log
+    enhancer:
+      id: ''
+  status:
+    disabled: true
+    fieldName: status
+    publicName: status
+    enhancer:
+      id: ''
+  uid:
+    disabled: true
+    fieldName: uid
+    publicName: uid
+    enhancer:
+      id: ''
+  title:
+    disabled: false
+    fieldName: title
+    publicName: title
+    enhancer:
+      id: ''
+  created:
+    disabled: true
+    fieldName: created
+    publicName: created
+    enhancer:
+      id: ''
+  changed:
+    disabled: true
+    fieldName: changed
+    publicName: changed
+    enhancer:
+      id: ''
+  promote:
+    disabled: true
+    fieldName: promote
+    publicName: promote
+    enhancer:
+      id: ''
+  sticky:
+    disabled: true
+    fieldName: sticky
+    publicName: sticky
+    enhancer:
+      id: ''
+  default_langcode:
+    disabled: true
+    fieldName: default_langcode
+    publicName: default_langcode
+    enhancer:
+      id: ''
+  revision_default:
+    disabled: true
+    fieldName: revision_default
+    publicName: revision_default
+    enhancer:
+      id: ''
+  revision_translation_affected:
+    disabled: true
+    fieldName: revision_translation_affected
+    publicName: revision_translation_affected
+    enhancer:
+      id: ''
+  moderation_state:
+    disabled: true
+    fieldName: moderation_state
+    publicName: moderation_state
+    enhancer:
+      id: ''
+  metatag:
+    disabled: true
+    fieldName: metatag
+    publicName: metatag
+    enhancer:
+      id: ''
+  path:
+    disabled: true
+    fieldName: path
+    publicName: path
+    enhancer:
+      id: ''
+  publish_on:
+    disabled: true
+    fieldName: publish_on
+    publicName: publish_on
+    enhancer:
+      id: ''
+  unpublish_on:
+    disabled: true
+    fieldName: unpublish_on
+    publicName: unpublish_on
+    enhancer:
+      id: ''
+  menu_link:
+    disabled: true
+    fieldName: menu_link
+    publicName: menu_link
+    enhancer:
+      id: ''
+  field_cwa_center_lat:
+    disabled: false
+    fieldName: field_cwa_center_lat
+    publicName: field_cwa_center_lat
+    enhancer:
+      id: ''
+  field_cwa_center_lon:
+    disabled: false
+    fieldName: field_cwa_center_lon
+    publicName: field_cwa_center_lon
+    enhancer:
+      id: ''
+  field_description:
+    disabled: false
+    fieldName: field_description
+    publicName: field_description
+    enhancer:
+      id: ''
+  field_endtime:
+    disabled: false
+    fieldName: field_endtime
+    publicName: field_endtime
+    enhancer:
+      id: ''
+  field_frontpage:
+    disabled: false
+    fieldName: field_frontpage
+    publicName: field_frontpage
+    enhancer:
+      id: ''
+  field_fullimage:
+    disabled: false
+    fieldName: field_fullimage
+    publicName: field_fullimage
+    enhancer:
+      id: ''
+  field_graphicnumber:
+    disabled: false
+    fieldName: field_graphicnumber
+    publicName: field_graphicnumber
+    enhancer:
+      id: ''
+  field_office:
+    disabled: false
+    fieldName: field_office
+    publicName: field_office
+    enhancer:
+      id: ''
+  field_order:
+    disabled: false
+    fieldName: field_order
+    publicName: field_order
+    enhancer:
+      id: ''
+  field_radar:
+    disabled: false
+    fieldName: field_radar
+    publicName: field_radar
+    enhancer:
+      id: ''
+  field_smallimage:
+    disabled: false
+    fieldName: field_smallimage
+    publicName: field_smallimage
+    enhancer:
+      id: ''
+  field_starttime:
+    disabled: false
+    fieldName: field_starttime
+    publicName: field_starttime
+    enhancer:
+      id: ''
+  field_title:
+    disabled: false
+    fieldName: field_title
+    publicName: field_title
+    enhancer:
+      id: ''
+  field_weburl:
+    disabled: false
+    fieldName: field_weburl
+    publicName: field_weburl
+    enhancer:
+      id: ''

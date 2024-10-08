@@ -1,14 +1,8 @@
-/* global Chart ChartDataLabels */
-
+import {
+  drawChart,
+  setupScrollButtons
+} from "./WeatherChart.js";
 import styles from "../styles.js";
-
-Chart.register(ChartDataLabels);
-
-// These are applied globally to all charts. Unclear if that's okay, or if
-// what we really want is to set them per-chart, but this is what I've got
-// for now.
-Chart.defaults.font.family = styles.font.mono;
-Chart.defaults.font.size = 12;
 
 const chartContainers = Array.from(
   document.querySelectorAll(".wx-hourly-pops-chart-container"),
@@ -20,13 +14,8 @@ for (const container of chartContainers) {
     Number.parseInt(v, 10),
   );
 
-  // We don't need to keep a reference to the chart object. We only need the
-  // side-effects of creating it. This is not ideal, but it's how Chart.js
-  // works, so it's what we've got.
-  // eslint-disable-next-line no-new
-  new Chart(container.querySelector("canvas"), {
+  const config = {
     type: "bar",
-    plugins: [ChartDataLabels],
 
     options: {
       animation: false,
@@ -44,6 +33,7 @@ for (const container of chartContainers) {
         tooltip: {
           xAlign: "center",
           yAlign: "bottom",
+          events: ['click','mousemove'],
         },
       },
       scales: {
@@ -65,10 +55,16 @@ for (const container of chartContainers) {
           },
         },
       },
+      layout: {
+        padding: {
+          top: 24,
+          bottom: 12,
+        },
+      },
     },
 
     data: {
-      labels: times.map((v) => (Number.parseInt(v, 10) % 2 === 0 ? v : "")),
+      labels: times,
       datasets: [
         {
           label: "Chance of precipitation",
@@ -82,5 +78,8 @@ for (const container of chartContainers) {
         },
       ],
     },
-  });
+  };
+
+  drawChart(container, config);
+  setupScrollButtons(container);
 }

@@ -7,6 +7,7 @@
 @use "components/alert-list";
 @use "components/alert-map";
 @use "components/beta-banner";
+@use "components/colors";
 @use "components/current-conditions";
 @use "components/daily";
 @use "components/frontpage";
@@ -28,4 +29,5 @@
 @use "components/visual-page-headings";
 @use "components/weather-story";
 @use "components/wfo-page";
+@use "components/wx-charts";
 @use "components/wx-loader";
