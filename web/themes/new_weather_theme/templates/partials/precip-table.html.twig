@@ -17,7 +17,7 @@
           {% for hour in qpf %}
             <tr>
               <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">{{ hour.startHour }}&emsp13;–&emsp13;{{ hour.endHour }}</td>
-              <td class="text-align-right">{{ hour.in }} {{ "inches" | t }}</td>
+              <td class="text-align-right">{{ hour.liquid.in }} {{ "inches" | t }}</td>
             </tr>
           {% endfor %}
         </tbody>

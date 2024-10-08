@@ -13,6 +13,8 @@ export default (data, hours, place) => {
   // separately, and then remove it from the larger hourly dataset.
   const qpf = quantitativePrecipitation(
     data.properties.quantitativePrecipitation,
+    data.properties.iceAccumulation,
+    data.properties.snowfallAmount,
     place,
   );
   delete data.properties.quantitativePrecipitation;

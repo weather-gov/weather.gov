@@ -3,12 +3,11 @@ import gridpoint from "./gridpoint.js";
 import hourly, {
   sortAndFilterHours,
   filterHoursForCurrentDay,
-  filterHoursForDay
+  filterHoursForDay,
 } from "./hourly.js";
 import { convertValue, convertProperties } from "../../util/convert.js";
 import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
-
 
 export default async ({ grid, place }) => {
   const hours = new Map();
@@ -50,10 +49,7 @@ export default async ({ grid, place }) => {
 
   // Sort the hours and remove any that occur before midnight at place-local
   // time today.
-  const orderedHours = sortAndFilterHours(
-    [...hours.values()],
-    now
-  );
+  const orderedHours = sortAndFilterHours([...hours.values()], now);
 
   // Do unit conversions on all the hourly properties. Each item in the array
   // is an object representing one hour. Each property in the object represents
@@ -63,7 +59,11 @@ export default async ({ grid, place }) => {
   // Also convert the QPF. QPF is represented as an array of individual
   // measurements instead of an array of objects whose values are measurements.
   if (gridpointData.qpf) {
-    gridpointData.qpf.forEach(convertValue);
+    gridpointData.qpf.forEach(({ liquid, ice, snow }) => {
+      convertValue(liquid);
+      convertValue(ice);
+      convertValue(snow);
+    });
   }
 
   // Now add the appropriate QPF and hourly data to each day.
@@ -86,7 +86,7 @@ export default async ({ grid, place }) => {
       });
     }
 
-    if(now.isSameOrAfter(start)){
+    if (now.isSameOrAfter(start)) {
       // Are we in the current day?
       // (ie, does `now` come after the day start?)
       // If so, we filter the hours a bit differently
