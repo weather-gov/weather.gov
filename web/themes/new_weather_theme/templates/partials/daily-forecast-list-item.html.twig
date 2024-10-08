@@ -105,18 +105,26 @@ only be a nighttime period.
         <span class="toggle-text font-mono font-mono-s text-ls-neg-1"></span>
       </wx-hourly-toggle>
       <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee">
-        {% include '@new_weather_theme/partials/hourly-table.html.twig'
-        with {
-          for: periods[0].monthAndDay,
-          hours: dayHours,
-          alertPeriods: alertPeriods,
-          itemId: itemId,
-          precipPeriods: precipPeriods
-        }
-        %}
+          {% include '@new_weather_theme/partials/hourly-table.html.twig'
+          with {
+              for: periods[0].monthAndDay,
+              hours: dayHours,
+              alertPeriods: alertPeriods,
+              itemId: itemId,
+              precipPeriods: precipPeriods
+          }
+          %}
+          {% include '@new_weather_theme/partials/hourly-charts.html.twig'
+          with {
+              for: periods[0].monthAndDay,
+              hours: dayHours,
+              alertPeriods: alertPeriods,
+              itemId: itemId,
+              precipPeriods: precipPeriods
+          }
+          %}
         {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipPeriods } %}
       </div>
     {% endif %}
-
   </div>
 </li>
