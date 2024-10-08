@@ -5310,7 +5310,7 @@
         },
         {
           "validTime": "date:now +61 hours / PT6H",
-          "value": 34
+          "value": 0
         },
         {
           "validTime": "date:now +67 hours / PT6H",
