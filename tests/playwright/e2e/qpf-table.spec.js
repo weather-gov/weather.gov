@@ -11,9 +11,7 @@ describe("quantitative precipitation forecast table", () => {
 
   test("shows snow, ice, and water when all are present", async ({ page }) => {
     const day = await page.locator(".wx-daily-forecast-block li").first();
-    console.log("got day");
     await day.locator("span.toggle-text").click();
-    console.log("got clickable");
 
     const headings = await day.locator(".wx-precip-table thead th");
 
