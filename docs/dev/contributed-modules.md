@@ -159,6 +159,12 @@ _Added August 2024_
 
 We use this module to disable resource access by default, via the API endpoint. We also use this module to disable certain fields within permitted Drupal content types for the API endpoint. Please see [./json-api.md](the JSON:API documentation) for more information.
 
+#### [`filefield_paths`](https://www.drupal.org/project/filefield_paths)
+
+_Added October 2024_
+
+We use this module to group DSS builder uploads under a per-WFO directory structure. This module also has the side benefit of keeping our uploaded files cleanly organized.
+
 ## Javascript
 
 Similarly, there are countless Javascript libraries that we can use to simplify the job of building the website. Those are also documented here.

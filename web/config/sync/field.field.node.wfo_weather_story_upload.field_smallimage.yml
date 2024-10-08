@@ -39,7 +39,7 @@ default_value_callback: ''
 settings:
   handler: 'default:file'
   handler_settings: {  }
-  file_directory: '[random:number]'
+  file_directory: 'tmp/[random:number]'
   file_extensions: 'png gif jpg jpeg webp'
   max_filesize: '2 MB'
   max_resolution: ''
