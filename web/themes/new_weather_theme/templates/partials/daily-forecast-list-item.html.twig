@@ -106,12 +106,16 @@ only be a nighttime period.
       </wx-hourly-toggle>
       <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee">
         {% include '@new_weather_theme/partials/hourly-table.html.twig'
-        with {
-          hours: dayHours,
-          alerts: alerts.items,
-        }
+            with {
+              hours: dayHours,
+              alerts: alerts.items,
+            }
         %}
-        {% include '@new_weather_theme/partials/hourly-charts.html.twig' %}
+        {% include '@new_weather_theme/partials/hourly-charts.html.twig'
+            with {
+              hours: dayHours,
+            }
+        %}
         {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'qpf': qpf } %}
       </div>
     {% endif %}

@@ -84,6 +84,19 @@ export default async ({ grid, place }) => {
         }
         return qpfEnd.isSameOrAfter(start) && qpfEnd.isBefore(end);
       });
+
+      const hasLiquid = day.qpf.some(
+        ({ liquid }) => liquid !== null && liquid.in > 0,
+      );
+      const hasIce = day.qpf.some(({ ice }) => ice !== null && ice.in > 0);
+      const hasSnow = day.qpf.some(({ snow }) => snow !== null && snow.in > 0);
+
+      day.qpf = {
+        periods: day.qpf,
+        hasIce,
+        hasSnow,
+        hasQPF: hasLiquid || hasIce || hasSnow,
+      };
     }
 
     if (now.isSameOrAfter(start)) {
