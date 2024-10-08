@@ -1,6 +1,8 @@
 import sinon from "sinon";
 import { expect } from "chai";
 import * as mariadb from "mariadb";
+import dayjs from "../../util/day.js";
+import { alignAlertsToDaily } from "./index.js";
 
 describe("alert data module", () => {
   const sandbox = sinon.createSandbox();
@@ -363,6 +365,46 @@ describe("alert data module", () => {
 
         expect(finish).to.be.null;
       });
+    });
+  });
+
+  describe("Alert to daily alignment", () => {
+    it("Correctly aligns an alert appearing in the middle of its day", () => {
+      const day = {
+        hours: Array(24).map((_, idx) => {
+          // 6am to 6am
+          let time = dayjs.utc("2024-09-09T06:00:00-04:00").tz("America/New_York");
+          time = time.add(idx, "hours");
+          return {
+            time
+          };
+        })
+      };
+      const alerts = {
+        items: [{
+          id: "id",
+          event: "test",
+          onset: dayjs.utc("2024-09-09T15:32:00-04:00").tz("America/New_York"),
+          finish: dayjs.utc("2024-09-09T17:55:00-04:00").tz("America/New_York")
+        }]
+      };
+
+      const expected = {
+        metadata: {
+          count: 0,
+          highest: "other"
+        },
+        items: [{
+          offset: 8,
+          duration: 4,
+          event: "test",
+          remainder: 12
+        }]
+      };
+
+      const actual = alignAlertsToDaily(alerts, [day]);
+
+      expect(expected).to.eql(actual);
     });
   });
 });
