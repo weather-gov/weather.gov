@@ -11,8 +11,7 @@ import { alignAlertsToDaily } from "./utils.js";
 const makeDayWithHours = (startTimestamp, numHours, timezone="America/New_York") => {
   const hours = [];
   const start = dayjs.utc(startTimestamp).tz(timezone);
-  // eslint-disable-next-line no-plusplus
-  for(let i = 0; i < numHours; i++){
+  for(let i = 0; i < numHours; i += 1){
     const time = start.add(i, "hours");
     hours.push({ time });
   }
