@@ -52,6 +52,8 @@ const createCharts = async () => {
 
     const datasets = [];
 
+    const liquidTitle = ice.length > 0 || snow.length > 0 ? "Water" : "Rain";
+
     if (snow.length > 0) {
       datasets.push({
         label: "Snow",
@@ -82,7 +84,7 @@ const createCharts = async () => {
     }
     if (liquid.length > 0) {
       datasets.push({
-        label: "Water",
+        label: liquidTitle,
         data: liquid,
         datalabels: {
           align: "end",
