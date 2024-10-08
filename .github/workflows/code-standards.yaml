@@ -129,6 +129,13 @@ jobs:
           name: interop-coverage-report
           path: ./api-interop-layer/coverage/clover.xml
           retention-days: 1
+      - name: store coverage HTML
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: interop-coverage-html
+          path: coverage/
+          retention-days: 1
 
   build-drupal-image:
     name: build Drupal image
@@ -180,6 +187,13 @@ jobs:
         with:
           name: drupal-coverage-report
           path: .coverage/clover.xml
+          retention-days: 1
+      - name: store coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: drupal-coverage-html
+          path: .coverage/
           retention-days: 1
 
   merge-code-coverage:
