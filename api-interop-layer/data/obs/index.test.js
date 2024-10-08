@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import * as mariadb from "mariadb";
+import dayjs from "dayjs";
 import sinon, { createSandbox } from "sinon";
 
 describe("observations module", () => {
@@ -37,7 +38,13 @@ describe("observations module", () => {
 
     stations.json.resolves({
       features: [
-        { properties: { stationIdentifier: "station1" } },
+        {
+          properties: {
+            stationIdentifier: "station1",
+            name: "Station #1",
+            elevation: { unitCode: "wmoUnit:m", value: 49 },
+          },
+        },
         { properties: { stationIdentifier: "station2" } },
         { properties: { stationIdentifier: "station3" } },
       ],
@@ -203,7 +210,7 @@ describe("observations module", () => {
       ];
       const invalid = {
         status: 200,
-        json: sinon.stub().resolves(features),
+        json: sinon.stub().resolves({ features }),
       };
 
       it("tries the second observation if the first is invalid", async () => {
@@ -415,5 +422,66 @@ describe("observations module", () => {
 
       expect(actual).to.eql(expected);
     });
+  });
+
+  it("handles the happy path, where everything is good", async () => {
+    response.json.resolves({
+      features: [
+        {
+          properties: {
+            barometricPressure: { unitCode: "wmoUnit:Pa", value: 101800 },
+            icon: "https://api.weather.gov/icons/land/night/skc?size=medium",
+            textDescription: "Weathery",
+            temperature: { value: 100, unitCode: "wmoUnit:degC" },
+            timestamp: "2024-10-01T13:00:00-0500",
+            windDirection: { unitCode: "wmoUnit:degree_(angle)", value: 260 },
+            windSpeed: { unitCode: "wmoUnit:km_h-1", value: 37 },
+          },
+        },
+      ],
+    });
+
+    const expected = {
+      description: "Weathery",
+      icon: {
+        base: "clear-night",
+        icon: "clear-night.svg",
+      },
+      station: {
+        distance: { ft: 328, m: 100, mi: 0 },
+        elevation: { ft: 161, m: 49, mi: 0 },
+        id: "station1",
+        name: "Station #1",
+      },
+      data: {
+        barometricPressure: {
+          inHg: 30.06,
+          mb: 1018,
+          pa: 101800,
+        },
+        feelsLike: { degC: 100, degF: 212 },
+        temperature: { degC: 100, degF: 212 },
+        windDirection: {
+          cardinalLong: "west",
+          cardinalShort: "W",
+          degrees: 260,
+        },
+        windSpeed: {
+          "km/h": 37,
+          mph: 23,
+        },
+      },
+      timestamp: {
+        formatted: "2024-10-01T13:00:00-0500",
+        utc: dayjs("2024-10-01T13:00:00-0500"),
+      },
+    };
+
+    const obs = await getObservations({
+      grid: { wfo: "TEST", x: 1, y: 1 },
+      point: {},
+    });
+
+    expect(obs).to.eql(expected);
   });
 });

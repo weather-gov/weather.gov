@@ -84,7 +84,12 @@ const unitMapping = new Map([
       in: { name: "pascal", label: "pa", decimals: 0 },
       out: [
         { name: "millibar", label: "mb", decimals: 0 },
-        { convert: (v) => v / 3386.38, label: "inHg", decimals: 2 },
+        {
+          name: "inches mercury",
+          convert: (v) => v / 3386.38,
+          label: "inHg",
+          decimals: 2,
+        },
       ],
     },
   ],
