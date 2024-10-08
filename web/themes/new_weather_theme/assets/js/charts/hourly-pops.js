@@ -33,6 +33,7 @@ for (const container of chartContainers) {
         tooltip: {
           xAlign: "center",
           yAlign: "bottom",
+          events: ['click','mousemove'],
         },
       },
       scales: {
@@ -63,7 +64,7 @@ for (const container of chartContainers) {
     },
 
     data: {
-      labels: times.map((v) => (Number.parseInt(v, 10) % 2 === 0 ? v : "")),
+      labels: times,
       datasets: [
         {
           label: "Chance of precipitation",

@@ -32,6 +32,9 @@ for (const container of chartContainers) {
         legend: {
           display: false,
         },
+        tooltip: {
+          events: ['click', 'mousemove'],
+        },
       },
       scales: {
         x: {
