@@ -3,7 +3,6 @@
 namespace Drupal\weather_data\Service;
 
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Routing\RouteMatchInterface;
 use GuzzleHttp\ClientInterface;
@@ -35,21 +34,14 @@ class DataLayer
     private $client;
 
     /**
-     * Connection to the Drupal database.
-     */
-    private $database;
-
-    /**
      * Constructor.
      */
     public function __construct(
         ClientInterface $httpClient,
         CacheBackendInterface $cache,
-        Connection $database,
     ) {
         $this->client = $httpClient;
         $this->cache = $cache;
-        $this->database = $database;
     }
 
     /**
@@ -199,15 +191,5 @@ class DataLayer
             self::$i_products[$uuid] = $product;
         }
         return self::$i_products[$uuid];
-    }
-
-    public function databaseFetch($sql, $args = [])
-    {
-        return $this->database->query($sql, $args)->fetch();
-    }
-
-    public function databaseFetchAll($sql, $args = [])
-    {
-        return $this->database->query($sql, $args)->fetchAll();
     }
 }

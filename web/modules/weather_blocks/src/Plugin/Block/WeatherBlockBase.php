@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Base class for weather.gov custom blocks.
  *
  * This class handles the dependency injection to get access to a
- * RouteMatchInterface object and a WeatherDataService object.
+ * RouteMatchInterface object and a WeatherEntityService object.
  */
 abstract class WeatherBlockBase extends BlockBase implements
     ContainerFactoryPluginInterface

@@ -2,7 +2,6 @@
 
 namespace Drupal\weather_data\Service;
 
-use Drupal\weather_data\Service\HourlyTableTrait;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\HttpFoundation\RequestStack;

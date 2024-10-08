@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\weather_routes\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Url;
-use Drupal\weather_data\Service\SpatialUtility;
-use Drupal\weather_data\Service\WeatherDataService;
+use GuzzleHttp\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -21,19 +21,32 @@ final class LocationAndGridRouteController extends ControllerBase
     /**
      * A service for fetching weather data.
      *
-     * @var DataLayer weatherData
+     * @var ClientInterface weatherData
      */
-    private $dataLayer;
+    private $httpClient;
 
     private $request;
 
     /**
+     * @var Connection database
+     */
+    private $database;
+
+    /**
      * Constructor for dependency injection.
      */
-    public function __construct($dataLayer, $request)
-    {
-        $this->dataLayer = $dataLayer;
+    public function __construct(
+        ClientInterface $httpClient,
+        $request,
+        Connection $database,
+    ) {
+        $this->httpClient = $httpClient;
         $this->request = $request;
+        $this->database = $database;
+
+        $baseUrl = getEnv("API_URL");
+        $baseUrl = $baseUrl == false ? "https://api.weather.gov" : $baseUrl;
+        $this->baseUrl = $baseUrl;
     }
 
     /**
@@ -42,8 +55,9 @@ final class LocationAndGridRouteController extends ControllerBase
     public static function create(ContainerInterface $container)
     {
         return new static(
-            $container->get("weather_data_layer"),
+            $container->get("http_client"),
             $container->get("request_stack"),
+            $container->get("database"),
         );
     }
 
@@ -100,7 +114,10 @@ final class LocationAndGridRouteController extends ControllerBase
     public function redirectFromGrid($wfo, $gridX, $gridY)
     {
         try {
-            $gridpoint = $this->dataLayer->getGridpoint($wfo, $gridX, $gridY);
+            $wfo = strtoupper($wfo);
+            $url = $this->baseUrl . "/gridpoints/$wfo/$gridX,$gridY";
+            $response = $this->httpClient->get($url);
+            $gridpoint = json_decode((string) $response->getBody());
             $point = $gridpoint->geometry->coordinates[0][0];
 
             $url = Url::fromRoute("weather_routes.point", [
@@ -116,8 +133,9 @@ final class LocationAndGridRouteController extends ControllerBase
     public function redirectFromPlace($state, $place)
     {
         try {
-            $location = $this->dataLayer->databaseFetch(
-                "SELECT
+            $location = $this->database
+                ->query(
+                    "SELECT
                     ST_X(point) AS lon,
                     ST_Y(point) AS lat
                 FROM weathergov_geo_places
@@ -125,8 +143,9 @@ final class LocationAndGridRouteController extends ControllerBase
                     state LIKE :state
                     AND
                     name LIKE :place",
-                [":state" => $state, ":place" => $place],
-            );
+                    [":state" => $state, ":place" => $place],
+                )
+                ->fetch();
 
             if ($location !== false) {
                 $url = Url::fromRoute("weather_routes.point", [
