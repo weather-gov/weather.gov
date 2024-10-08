@@ -33,7 +33,7 @@ const drawChart = (container, config) => {
 const setupScrollButtons = (container) => {
   const isSynced = container.dataset.syncScrolling === "true";
   const wrapper = container.closest('.wx-chart-wrapper');
-  const left = wrapper.closest('.wx-chart-wrapper').querySelector('.wx-scroll-button[data-direction="left"]');
+  const left = wrapper.querySelector('.wx-scroll-button[data-direction="left"]');
   const right = wrapper.querySelector('.wx-scroll-button[data-direction="right"]');
   if(!left || !right){
     return;
