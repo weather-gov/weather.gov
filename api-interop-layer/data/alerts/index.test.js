@@ -9,8 +9,9 @@ import { alignAlertsToDaily } from "./utils.js";
  * day / hours objects
  */
 const makeDayWithHours = (startTimestamp, numHours, timezone="America/New_York") => {
-  let hours = [];
+  const hours = [];
   const start = dayjs.utc(startTimestamp).tz(timezone);
+  // eslint-disable-next-line no-plusplus
   for(let i = 0; i < numHours; i++){
     const time = start.add(i, "hours");
     hours.push({ time });
@@ -414,6 +415,302 @@ describe("alert data module", () => {
           remainder: 12,
           level: "other"
         }]
+      };
+
+      // Modifies day in place
+      alignAlertsToDaily(alerts, [day]);
+
+      expect(day.alerts).to.eql(expected);
+    });
+    it("Correctly aligns an alert that starts before the day, but ends within it", () => {
+      const day = makeDayWithHours("2024-09-09T06:00:00-04:00", 24, "America/New_York");
+      const alerts = {
+        items: [{
+          id: "id",
+          event: "test",
+          onset: dayjs.utc("2024-09-08T23:01:00-04:00").tz("America/New_York"),
+          finish: dayjs.utc("2024-09-09T07:55:00-04:00").tz("America/New_York"),
+          metadata: {
+            level: {
+              text: "other"
+            }
+          }
+        }]
+      };
+
+      const expected = {
+        metadata: {
+          count: 1,
+          highest: "other"
+        },
+        items: [{
+          id: "id",
+          offset: 0,
+          duration: 2,
+          event: "test",
+          remainder: 22,
+          level: "other"
+        }]
+      };
+
+      // Modifies day in place
+      alignAlertsToDaily(alerts, [day]);
+
+      expect(day.alerts).to.eql(expected);
+    });
+    it("Correctly aligns an alert that starts within the day, but ends after it", () => {
+      const day = makeDayWithHours("2024-09-09T06:00:00-04:00", 24, "America/New_York");
+      const alerts = {
+        items: [{
+          id: "id",
+          event: "test",
+          onset: dayjs.utc("2024-09-09T15:32:00-04:00").tz("America/New_York"),
+          finish: dayjs.utc("2024-09-10T07:55:00-04:00").tz("America/New_York"),
+          metadata: {
+            level: {
+              text: "other"
+            }
+          }
+        }]
+      };
+
+      const expected = {
+        metadata: {
+          count: 1,
+          highest: "other"
+        },
+        items: [{
+          id: "id",
+          offset: 9,
+          duration: 15,
+          event: "test",
+          remainder: 0,
+          level: "other"
+        }]
+      };
+
+      // Modifies day in place
+      alignAlertsToDaily(alerts, [day]);
+
+      expect(day.alerts).to.eql(expected);
+    });
+    it("Correctly aligns an alert that starts before the day and ends after it", () => {
+      const day = makeDayWithHours("2024-09-09T06:00:00-04:00", 24, "America/New_York");
+      const alerts = {
+        items: [{
+          id: "id",
+          event: "test",
+          onset: dayjs.utc("2024-09-08T15:32:00-04:00").tz("America/New_York"),
+          finish: dayjs.utc("2024-09-10T17:55:00-04:00").tz("America/New_York"),
+          metadata: {
+            level: {
+              text: "other"
+            }
+          }
+        }]
+      };
+
+      const expected = {
+        metadata: {
+          count: 1,
+          highest: "other"
+        },
+        items: [{
+          id: "id",
+          offset: 0,
+          duration: 24,
+          event: "test",
+          remainder: 0,
+          level: "other"
+        }]
+      };
+
+      // Modifies day in place
+      alignAlertsToDaily(alerts, [day]);
+
+      expect(day.alerts).to.eql(expected);
+    });
+    it("Ignores an alert that both starts and ends before the day start", () => {
+      const day = makeDayWithHours("2024-09-09T06:00:00-04:00", 24, "America/New_York");
+      const alerts = {
+        items: [{
+          id: "id",
+          event: "test",
+          onset: dayjs.utc("2024-09-06T15:32:00-04:00").tz("America/New_York"),
+          finish: dayjs.utc("2024-09-09T05:59:00-04:00").tz("America/New_York"),
+          metadata: {
+            level: {
+              text: "other"
+            }
+          }
+        }]
+      };
+
+      const expected = {
+        metadata: {
+          count: 0,
+          highest: undefined
+        },
+        items: []
+      };
+
+      // Modifies day in place
+      alignAlertsToDaily(alerts, [day]);
+
+      expect(day.alerts).to.eql(expected);
+    });
+    it("Ignores an alert that starts after the day has already ended", () => {
+      const day = makeDayWithHours("2024-09-09T06:00:00-04:00", 24, "America/New_York");
+      const alerts = {
+        items: [{
+          id: "id",
+          event: "test",
+          onset: dayjs.utc("2024-09-11T15:32:00-04:00").tz("America/New_York"),
+          finish: dayjs.utc("2024-09-11T17:55:00-04:00").tz("America/New_York"),
+          metadata: {
+            level: {
+              text: "other"
+            }
+          }
+        }]
+      };
+
+      const expected = {
+        metadata: {
+          count: 0,
+          highest: undefined
+        },
+        items: []
+      };
+
+      // Modifies day in place
+      alignAlertsToDaily(alerts, [day]);
+
+      expect(day.alerts).to.eql(expected);
+    });
+    it("Alert that spans multiple days is shown in all the affected days", () => {
+      const days = [
+        makeDayWithHours("2024-09-09T06:00:00-04:00", 24, "America/New_York"),
+        makeDayWithHours("2024-09-10T06:00:00-04:00", 24, "America/New_York"),
+        makeDayWithHours("2024-09-11T06:00:00-04:00", 24, "America/New_York")
+      ];
+
+      const alerts = {
+        items: [{
+          id: "id",
+          event: "test",
+          onset: dayjs.utc("2024-09-09T15:32:00-04:00").tz("America/New_York"),
+          finish: dayjs.utc("2024-09-11T07:55:00-04:00").tz("America/New_York"),
+          metadata: {
+            level: {
+              text: "other"
+            }
+          }
+        }]
+      };
+
+      const expectedDay1 = {
+        metadata: {
+          count: 1,
+          highest: "other"
+        },
+        items: [{
+          id: "id",
+          offset: 9,
+          duration: 15,
+          event: "test",
+          remainder: 0,
+          level: "other"
+        }]
+      };
+      const expectedDay2 = {
+        metadata: {
+          count: 1,
+          highest: "other"
+        },
+        items: [{
+          id: "id",
+          offset: 0,
+          duration: 24,
+          event: "test",
+          remainder: 0,
+          level: "other"
+        }]
+      };
+      const expectedDay3 = {
+        metadata: {
+          count: 1,
+          highest: "other"
+        },
+        items: [{
+          id: "id",
+          offset: 0,
+          duration: 2,
+          event: "test",
+          remainder: 22,
+          level: "other"
+        }]
+      };
+
+      // Modifies day in place
+      alignAlertsToDaily(alerts, days);
+
+      expect(days[0].alerts).to.eql(expectedDay1);
+      expect(days[1].alerts).to.eql(expectedDay2);
+      expect(days[2].alerts).to.eql(expectedDay3);
+    });
+    it("The highest level of alert is noted", () => {
+      const day = makeDayWithHours("2024-09-09T06:00:00-04:00", 24, "America/New_York");
+      const alerts = {
+        items: [
+          {
+            id: "id",
+            event: "test",
+            onset: dayjs.utc("2024-09-09T15:32:00-04:00").tz("America/New_York"),
+            finish: dayjs.utc("2024-09-09T17:55:00-04:00").tz("America/New_York"),
+            metadata: {
+              level: {
+                text: "other"
+              }
+            }
+          },
+          {
+            id: "id2",
+            event: "tornado warning",
+            onset: dayjs.utc("2024-09-09T16:32:00-04:00").tz("America/New_York"),
+            finish: dayjs.utc("2024-09-09T18:55:00-04:00").tz("America/New_York"),
+            metadata: {
+              level: {
+                text: "warning"
+              }
+            }
+          }
+        ]
+      };
+
+      const expected = {
+        metadata: {
+          count: 2,
+          highest: "warning"
+        },
+        items: [
+          {
+          id: "id",
+          offset: 9,
+          duration: 3,
+          event: "test",
+          remainder: 12,
+          level: "other"
+          },
+          {
+            id: "id2",
+            offset: 10,
+            duration: 3,
+            event: "tornado warning",
+            remainder: 11,
+            level: "warning"
+          }
+        ]
       };
 
       // Modifies day in place

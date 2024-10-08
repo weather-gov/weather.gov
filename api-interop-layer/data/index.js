@@ -4,7 +4,6 @@ import getForecast from "./forecast/index.js";
 import getObservations from "./obs/index.js";
 import getPoint from "./points.js";
 import getSatellite from "./satellite.js";
-import dayjs from "../util/day.js";
 import { createLogger } from "../util/monitoring/index.js";
 
 const logger = createLogger("forecast");

@@ -69,3 +69,5 @@ export const alignAlertsToDaily = (alerts, days) => {
       .pop()?.text;
   }
 };
+
+export default alignAlertsToDaily;
