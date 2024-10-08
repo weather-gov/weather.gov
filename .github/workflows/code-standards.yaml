@@ -181,8 +181,6 @@ jobs:
           curl http://localhost:8081/play/e2e
           make backend-test
 
-      - run: dir .coverage
-
       - name: store coverage output
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/upload-artifact@v4
@@ -190,11 +188,16 @@ jobs:
           name: drupal-coverage-report
           path: .coverage/clover.xml
           retention-days: 1
+
       - name: store coverage HTML
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: drupal-coverage-html
+          # This is necessary because the action interprets this single entity
+          # starting with a dot as hidden. This is a bug in the action.
+          #   https://github.com/actions/upload-artifact/issues/618
+          include-hidden-files: true
           path: .coverage/
           retention-days: 1
 
