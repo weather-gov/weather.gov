@@ -13,11 +13,26 @@
     "type": "Polygon",
     "coordinates": [
       [
-        [-77.0934052, 38.9066303],
-        [-77.09715220000001, 38.884677100000005],
-        [-77.06893950000001, 38.8817577],
-        [-77.06518670000001, 38.903710600000004],
-        [-77.0934052, 38.9066303]
+        [
+          -77.0934052,
+          38.9066303
+        ],
+        [
+          -77.09715220000001,
+          38.884677100000005
+        ],
+        [
+          -77.06893950000001,
+          38.8817577
+        ],
+        [
+          -77.06518670000001,
+          38.903710600000004
+        ],
+        [
+          -77.0934052,
+          38.9066303
+        ]
       ]
     ]
   },
@@ -124,6 +139,10 @@
         {
           "validTime": "date:now +83932 seconds / PT1H",
           "value": 12.777777777777779
+        },
+        {
+          "validTime": "date:now +87532 seconds / PT72H",
+          "value": 12.777777777777779
         }
       ]
     },
@@ -189,6 +208,10 @@
         {
           "validTime": "date:now +80332 seconds / PT4H",
           "value": -1.6666666666666667
+        },
+        {
+          "validTime": "date:now +94732 seconds / PT72H",
+          "value": -1.6666666666666667
         }
       ]
     },
@@ -198,6 +221,10 @@
         {
           "validTime": "date:now +69532 seconds / PT13H",
           "value": 16.666666666666668
+        },
+        {
+          "validTime": "date:now +116332 seconds / PT72H",
+          "value": 16.666666666666668
         }
       ]
     },
@@ -206,6 +233,10 @@
       "values": [
         {
           "validTime": "date:now +26332 seconds / PT14H",
+          "value": 4.444444444444445
+        },
+        {
+          "validTime": "date:now +76732 seconds / PT72H",
           "value": 4.444444444444445
         }
       ]
@@ -304,6 +335,10 @@
         {
           "validTime": "date:now +83932 seconds / PT1H",
           "value": 37
+        },
+        {
+          "validTime": "date:now +87532 seconds / PT72H",
+          "value": 37
         }
       ]
     },
@@ -397,6 +432,10 @@
         {
           "validTime": "date:now +83932 seconds / PT1H",
           "value": 12.777777777777779
+        },
+        {
+          "validTime": "date:now +87532 seconds / PT72H",
+          "value": 12.777777777777779
         }
       ]
     },
@@ -429,6 +468,10 @@
         },
         {
           "validTime": "date:now +83932 seconds / PT2H",
+          "value": 11.666666666666666
+        },
+        {
+          "validTime": "date:now +91132 seconds / PT72H",
           "value": 11.666666666666666
         }
       ]
@@ -510,6 +553,10 @@
         },
         {
           "validTime": "date:now +80332 seconds / PT11H",
+          "value": null
+        },
+        {
+          "validTime": "date:now +119932 seconds / PT72H",
           "value": null
         }
       ]
@@ -596,6 +643,10 @@
         {
           "validTime": "date:now +83932 seconds / PT1H",
           "value": 39
+        },
+        {
+          "validTime": "date:now +87532 seconds / PT72H",
+          "value": 39
         }
       ]
     },
@@ -657,6 +708,10 @@
         {
           "validTime": "date:now +83932 seconds / PT1H",
           "value": 250
+        },
+        {
+          "validTime": "date:now +87532 seconds / PT72H",
+          "value": 250
         }
       ]
     },
@@ -714,6 +769,10 @@
         {
           "validTime": "date:now +83932 seconds / PT1H",
           "value": 20.372
+        },
+        {
+          "validTime": "date:now +87532 seconds / PT72H",
+          "value": 20.372
         }
       ]
     },
@@ -763,6 +822,10 @@
         {
           "validTime": "date:now +83932 seconds / PT1H",
           "value": 31.484
+        },
+        {
+          "validTime": "date:now +87532 seconds / PT72H",
+          "value": 31.484
         }
       ]
     },
@@ -797,6 +860,10 @@
         {
           "validTime": "date:now +69532 seconds / PT6H",
           "value": 4
+        },
+        {
+          "validTime": "date:now +91132 seconds / PT72H",
+          "value": 4
         }
       ]
     },
@@ -817,6 +884,10 @@
         },
         {
           "validTime": "date:now +69532 seconds / PT6H",
+          "value": 0
+        },
+        {
+          "validTime": "date:now +91132 seconds / PT72H",
           "value": 0
         }
       ]
@@ -839,6 +910,10 @@
         {
           "validTime": "date:now +69532 seconds / PT6H",
           "value": 0
+        },
+        {
+          "validTime": "date:now +91132 seconds / PT72H",
+          "value": 0
         }
       ]
     },
@@ -859,6 +934,10 @@
         },
         {
           "validTime": "date:now +69532 seconds / PT6H",
+          "value": 0
+        },
+        {
+          "validTime": "date:now +91132 seconds / PT72H",
           "value": 0
         }
       ]
@@ -932,6 +1011,10 @@
         {
           "validTime": "date:now +83932 seconds / PT1H",
           "value": 37.04
+        },
+        {
+          "validTime": "date:now +87532 seconds / PT72H",
+          "value": 37.04
         }
       ]
     },
@@ -984,6 +1067,10 @@
         },
         {
           "validTime": "date:now +80332 seconds / PT5H",
+          "value": 260
+        },
+        {
+          "validTime": "date:now +98332 seconds / PT72H",
           "value": 260
         }
       ]
@@ -1077,6 +1164,10 @@
         },
         {
           "validTime": "date:now +83932 seconds / PT1H",
+          "value": 1721.2056
+        },
+        {
+          "validTime": "date:now +87532 seconds / PT72H",
           "value": 1721.2056
         }
       ]

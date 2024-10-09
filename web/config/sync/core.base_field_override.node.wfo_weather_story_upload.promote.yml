@@ -1,0 +1,22 @@
+uuid: b4addbc0-2703-45db-b94d-973a5285e9a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.wfo_weather_story_upload
+id: node.wfo_weather_story_upload.promote
+field_name: promote
+entity_type: node
+bundle: wfo_weather_story_upload
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

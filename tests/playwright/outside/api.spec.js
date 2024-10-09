@@ -6,6 +6,34 @@ const { describe } = test;
 
 const API_ENDPOINT = "http://localhost:9080/jsonapi";
 
+// helper function to upload files to the JSON API
+const uploadFile = async (request, where, filename) => {
+  const binaryData = fs.readFileSync(
+    path.resolve(__dirname, "..", "mock-data", filename),
+  );
+  return request.post(where,
+    {
+      headers: {
+        Authorization: `Basic ${btoa("uploader:testpass")}`,
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition": `file; filename="${filename}"`,
+      },
+      data: binaryData,
+    },
+  );
+};
+
+// helper function to upload content types to the JSON API
+const uploadContentType = async (request, where, data) => request.post(where,
+  {
+    headers: {
+      Authorization: `Basic ${btoa("uploader:testpass")}`,
+      "Content-Type": "application/vnd.api+json",
+    },
+    data,
+  },
+);
+
 describe("API tests", () => {
   test("users without credentials cannot get an API listing", async ({
     request,
@@ -55,23 +83,11 @@ describe("API tests", () => {
     expect(json).not.toHaveProperty("errors");
   });
 
-  test("uploader can upload files", async ({ request }) => {
+  test("uploader can upload wfo pdfs", async ({ request }) => {
     // step one: upload the PDF
     const pdfFilename = "test-upload.pdf";
-    const binaryData = await fs.readFileSync(
-      path.resolve(__dirname, "..", "mock-data", pdfFilename),
-    );
-    const firstResponse = await request.post(
-      `${API_ENDPOINT}/node/wfo_pdf_upload/field_wfo_sitrep`,
-      {
-        headers: {
-          Authorization: `Basic ${btoa("uploader:testpass")}`,
-          "Content-Type": "application/octet-stream",
-          "Content-Disposition": `file; filename="${pdfFilename}"`,
-        },
-        data: binaryData,
-      },
-    );
+    const uploadLocation = `${API_ENDPOINT}/node/wfo_pdf_upload/field_wfo_sitrep`;
+    const firstResponse = await uploadFile(request, uploadLocation, pdfFilename);
     expect(firstResponse.status()).toEqual(201);
     const firstJson = await firstResponse.json();
     expect(firstJson).toHaveProperty("data");
@@ -79,7 +95,8 @@ describe("API tests", () => {
     expect(firstJson.data).toHaveProperty("attributes");
     const { id } = firstJson.data;
 
-    // step two: upload the metadata
+    // step two: upload the content type data
+    const contentLocation = `${API_ENDPOINT}/node/wfo_pdf_upload`;
     const data = {
       data: {
         type: "node--wfo_pdf_upload",
@@ -96,16 +113,145 @@ describe("API tests", () => {
         },
       },
     };
-    const secondResponse = await request.post(
-      `${API_ENDPOINT}/node/wfo_pdf_upload`,
-      {
-        headers: {
-          Authorization: `Basic ${btoa("uploader:testpass")}`,
-          "Content-Type": "application/vnd.api+json",
+    const secondResponse = await uploadContentType(request, contentLocation, data);
+    expect(secondResponse.status()).toEqual(201);
+    const secondJson = await secondResponse.json();
+    expect(secondJson).not.toHaveProperty("errors");
+    expect(secondJson).toHaveProperty("data");
+  });
+
+  test("uploader can upload wfo weather story images", async ({ request }) => {
+    // step one: upload the image
+    const pngFilename = "test-upload.png";
+    const uploadLocation = `${API_ENDPOINT}/node/wfo_weather_story_upload/field_fullimage`;
+    const firstResponse = await uploadFile(request, uploadLocation, pngFilename);
+    expect(firstResponse.status()).toEqual(201);
+    const firstJson = await firstResponse.json();
+    expect(firstJson).toHaveProperty("data");
+    expect(firstJson.data).toHaveProperty("id");
+    expect(firstJson.data).toHaveProperty("attributes");
+    const { id } = firstJson.data;
+
+    // step two: upload the metadata (only these that are required attributes)
+    const contentLocation = `${API_ENDPOINT}/node/wfo_weather_story_upload`;
+    const data = {
+      data: {
+        type: "node--wfo_weather_story_upload",
+        attributes: {
+          title: pngFilename,
+          field_office: "WFO test office",
+          field_description: "a blank uploaded image",
         },
-        data,
+        relationships: {
+          field_fullimage: {
+            data: {
+              type: "file--file",
+              id,
+            },
+          },
+        },
       },
-    );
+    };
+    const secondResponse = await uploadContentType(request, contentLocation, data);
+    expect(secondResponse.status()).toEqual(201);
+    const secondJson = await secondResponse.json();
+    expect(secondJson).not.toHaveProperty("errors");
+    expect(secondJson).toHaveProperty("data");
+  });
+
+  test("uploader cannot upload wfo weather story images with missing attributes", async ({ request }) => {
+    // step one: upload the image
+    const pngFilename = "test-upload.png";
+    const uploadLocation = `${API_ENDPOINT}/node/wfo_weather_story_upload/field_fullimage`;
+    const firstResponse = await uploadFile(request, uploadLocation, pngFilename);
+    expect(firstResponse.status()).toEqual(201);
+    const firstJson = await firstResponse.json();
+    expect(firstJson).toHaveProperty("data");
+    expect(firstJson.data).toHaveProperty("id");
+    expect(firstJson.data).toHaveProperty("attributes");
+    const { id } = firstJson.data;
+
+    // step two: upload the metadata with missing attributes
+    const contentLocation = `${API_ENDPOINT}/node/wfo_weather_story_upload`;
+    const data = {
+      data: {
+        type: "node--wfo_weather_story_upload",
+        attributes: {
+          title: pngFilename,
+        },
+        relationships: {
+          field_fullimage: {
+            data: {
+              type: "file--file",
+              id,
+            },
+          },
+        },
+      },
+    };
+    const secondResponse = await uploadContentType(request, contentLocation, data);
+    expect(secondResponse.status()).toEqual(422);
+  });
+
+  test("uploader can upload wfo weather story images with all attributes", async ({ request }) => {
+    // step one: upload the first image
+    const pngFilename = "test-upload.png";
+    const uploadFullLocation = `${API_ENDPOINT}/node/wfo_weather_story_upload/field_fullimage`;
+    const firstFullResponse = await uploadFile(request, uploadFullLocation, pngFilename);
+    expect(firstFullResponse.status()).toEqual(201);
+    const firstFullJson = await firstFullResponse.json();
+    expect(firstFullJson).toHaveProperty("data");
+    expect(firstFullJson.data).toHaveProperty("id");
+    expect(firstFullJson.data).toHaveProperty("attributes");
+    const { id: firstId } = firstFullJson.data;
+
+    // step one: upload the second image
+    const uploadSmallLocation = `${API_ENDPOINT}/node/wfo_weather_story_upload/field_smallimage`;
+    const firstSmallResponse = await uploadFile(request, uploadSmallLocation, pngFilename);
+    expect(firstSmallResponse.status()).toEqual(201);
+    const firstSmallJson = await firstSmallResponse.json();
+    expect(firstSmallJson).toHaveProperty("data");
+    expect(firstSmallJson.data).toHaveProperty("id");
+    expect(firstSmallJson.data).toHaveProperty("attributes");
+    const { id: secondId } = firstSmallJson.data;
+
+    // step three: upload the metadata (all required attributes)
+    const contentLocation = `${API_ENDPOINT}/node/wfo_weather_story_upload`;
+    const data = {
+      data: {
+        type: "node--wfo_weather_story_upload",
+        attributes: {
+          title: pngFilename,
+          field_office: "WFO test office",
+          field_description: "a blank uploaded image",
+          field_weburl: "/test/wxstory.php?wfo=test",
+          field_frontpage: true,
+          field_graphicnumber: 1,
+          field_order: 1,
+          field_radar: 0,
+          // lat/lon is real, this is from the FXC WFO
+          field_cwa_center_lat: 36.3274502,
+          field_cwa_center_lon: 119.6456844,
+          field_starttime: 1726572420,
+          field_endtime: 1726572420,
+        },
+        relationships: {
+          field_fullimage: {
+            data: {
+              type: "file--file",
+              id: firstId,
+            },
+          },
+          field_smallimage: {
+            data: {
+              type: "file--file",
+              id: secondId,
+            },
+          },
+        },
+      },
+    };
+    const secondResponse = await uploadContentType(request, contentLocation, data);
     expect(secondResponse.status()).toEqual(201);
     const secondJson = await secondResponse.json();
     expect(secondJson).not.toHaveProperty("errors");

@@ -313,7 +313,10 @@ trait HourlyForecastTrait
             // Therefore we only care about when the period starts.
             // If it starts within the $dayStart and $dayEnd window, it
             // counts for the current day.
-            $precipPeriodIsToday = $start >= $dayStart && $start < $dayEnd;
+            $precipPeriodIsToday =
+                $start < $dayEnd &&
+                ($start >= $dayStart ||
+                    ($start < $dayStart && $end > $dayStart));
 
             if ($precipPeriodIsToday) {
                 $periods[] = (object) [
@@ -352,7 +355,30 @@ trait HourlyForecastTrait
         $timezone = $place->timezone;
 
         $periods = [];
+        for (
+            $i = 0;
+            $i < count($forecast->quantitativePrecipitation->values);
+            $i += 1
+        ) {
+            $qpfData = [
+                "validTime" =>
+                    $forecast->quantitativePrecipitation->values[$i]->validTime,
+                "liquid" =>
+                    $forecast->quantitativePrecipitation->values[$i]->value,
+                "ice" => null,
+                "snow" => null,
+            ];
 
-        return $forecast->quantitativePrecipitation->values;
+            if (count($forecast->iceAccumulation->values) > $i) {
+                $qpfData["ice"] = $forecast->iceAccumulation->values[$i]->value;
+            }
+            if (count($forecast->snowfallAmount->values) > $i) {
+                $qpfData["snow"] = $forecast->snowfallAmount->values[$i]->value;
+            }
+
+            $periods[] = $qpfData;
+        }
+
+        return $periods;
     }
 }

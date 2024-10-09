@@ -1,0 +1,20 @@
+uuid: a25d1159-4843-4fb4-929d-76857e08af68
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_radar
+field_name: field_radar
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

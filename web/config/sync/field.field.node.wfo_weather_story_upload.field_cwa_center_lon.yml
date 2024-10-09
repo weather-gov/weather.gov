@@ -1,0 +1,25 @@
+uuid: 8daf7ba8-3948-44a1-a524-8cbefe1fcd6f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_cwa_center_lon
+    - node.type.wfo_weather_story_upload
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_weather_story_upload.field_cwa_center_lon
+field_name: field_cwa_center_lon
+entity_type: node
+bundle: wfo_weather_story_upload
+label: 'CWA center longitude'
+description: 'Longitude for the CWA, if applicable'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

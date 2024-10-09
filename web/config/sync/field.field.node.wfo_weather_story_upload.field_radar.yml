@@ -1,0 +1,29 @@
+uuid: f2cf853c-c4bd-43cb-93eb-c8c6d20789d8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_radar
+    - node.type.wfo_weather_story_upload
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_weather_story_upload.field_radar
+field_name: field_radar
+entity_type: node
+bundle: wfo_weather_story_upload
+label: radar
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer
