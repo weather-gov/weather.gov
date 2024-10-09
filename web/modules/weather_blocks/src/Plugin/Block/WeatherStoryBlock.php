@@ -18,13 +18,14 @@ class WeatherStoryBlock extends WeatherBlockBase
      */
     public function build()
     {
-        $location = $this->getLocation();
+        $wfo = false;
+        if (array_key_exists("wfo", $this->configuration)) {
+            $wfo = strtoupper($this->configuration["wfo"]);
+        }
 
-        if ($location->grid) {
-            $grid = $location->grid;
-
+        if ($wfo) {
             $story = $this->entityTypeService->getLatestNodeFromWFO(
-                $grid->wfo,
+                $wfo,
                 "weather_story",
             );
 

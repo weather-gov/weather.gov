@@ -1,0 +1,106 @@
+@startuml weather.gov API interop layer / alerts updating
+title weather.gov API interop layer / alert updating
+
+start
+
+:startup;
+
+repeat
+  :updateAlerts()
+  • data/alerts/index.js;
+
+  :fetch from API;
+
+  if(error) then (yes)
+    :set metadata.error
+    to true;
+  else (no)
+    :parse time properties
+    into date/time objects;
+
+    while(alerts)
+      :get alert priority,
+      level, and kind
+      (land, marine, etc);
+
+      if(unknown alert type) then (yes)
+        :set priority to lowest,
+        kind to "land", and
+        level to "other";
+      endif
+
+      :remove non-land alerts;
+      note right
+        weather.gov currently only
+        serves land alerts. When
+        that changes, this filter
+        must be removed.
+      end note
+
+      :parse alert ID;
+
+      :parseLocations(alert.description)
+      • alerts/parse/locations.js;
+
+      if(description) then (yes)
+        :parse state regions, counties,
+        and cities from description;
+
+        :remove location information
+        from remaining description;
+      endif
+
+      :parseDescription(alert.description)
+      • alerts/parse/description.js;
+
+      if(description) then (yes)
+        :parse into heading and
+        paragraph nodes;
+
+        :parse text nodes into
+        pure text and link nodes;
+      else
+        :return a single empty
+        paragraph node;
+      endif
+
+      if(alert onset is missing) then (yes)
+        :set onset to equal
+        effective time;
+      endif
+
+      if(alert has ends property) then (yes)
+        :set alert finish time
+        to equal the ends time;
+      else if(alert has expires property) then (yes)
+        :set alert finish time
+        to equal the expires time;
+      endif
+
+      if(alert has geometry) then (yes)
+      else (no)
+        if(alert has zones) then (yes)
+          :get collected geometry of
+          all impacted zones;
+
+          :set alert geometry;
+        else if(alert has SAME codes) then (yes)
+          :get collected geometry of
+          all impacted counties by
+          SAME code;
+
+          :set alert geometry;
+        endif
+      endif
+
+    endwhile
+
+    :update cached alerts;
+    :update last update time;
+    :set metadata.error to false;
+  endif
+
+  :wait 30
+  seconds;
+
+

@@ -101,6 +101,28 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         uses: ./.github/actions/style-lint
 
+  interop-layer-unit-tests:
+    name: interop layer unit tests
+    runs-on: ubuntu-latest
+    needs: [should-test]
+    defaults:
+      run:
+        working-directory: ./api-interop-layer/
+
+    steps:
+      - name: checkout
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/checkout@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: install dependencies
+        run: npm ci
+      - name: test
+        run: npm test
+
   build-drupal-image:
     name: build Drupal image
     runs-on: ubuntu-latest

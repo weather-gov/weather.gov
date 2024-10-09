@@ -15,6 +15,10 @@ runs:
       shell: bash
       run: cd tests/api && npm ci
 
+    - name: install api-interop-layer dependencies
+      shell: bash
+      run: cd api-interop-layer && npm ci
+
     - name: add problem matcher
       shell: bash
       run: echo "::add-matcher::${{ github.workspace }}/.github/workflows/problem-matcher-eslint.json"

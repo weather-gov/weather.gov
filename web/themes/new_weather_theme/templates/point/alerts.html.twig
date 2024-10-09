@@ -1,0 +1,134 @@
+{{ attach_library("new_weather_theme/leaflet") }}
+<h2 class="usa-sr-only">Alerts</h2>
+<div class="grid-container padding-x-2"> 
+  <div class="grid-row"> 
+    <div class="grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+      <wx-alerts class="display-block">
+
+      {% for alert in alerts %}
+      <div class="usa-accordion usa-accordion--bordered margin-bottom-1" id="alert_{{ alert.id }}">
+        <h3 class="usa-accordion__heading font-heading-lg">
+          <button
+            type="button"
+            class="usa-accordion__button text-ls-1"
+            aria-expanded="true"
+            aria-controls="a{{ alert.id }}"
+            data-button-for="#alert_{{alert.id}}">
+            {{ alert.event | t }}
+          </button>
+        </h3>
+        <div id="a{{alert.id}}" class="usa-accordion__content usa-prose">
+          <p class="font-sans-md text-bold text-primary-darker margin-y-0" >
+            {{ "In effect from" | t }} {{ alert.timing.start }}
+            {% if alert.timing.end %} – {{ alert.timing.end }}{% endif %}
+          </p>
+          <p class="margin-y-05">
+            {{ "Issued by @sender" | t({ "@sender": alert.sender }) }}
+          </p>
+
+          {#
+            We don't translate alert descriptions for now. There is a larger
+            effort to do those translations in realtime and we will try to hook
+            into that when the time comes. For now... we can't really do anything.
+          #}
+          {% for element in alert.description %}
+            {% if element.type == "heading" %}
+              <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ element.text | capitalize }}</h4>
+            {% elseif element.type == "paragraph" %}
+              <p>
+                {% for node in element.nodes %}
+                  {% if node.type == "link" %}
+                    <a href="{{node.url}}" class="usa-link{% if node.external %} usa-link--external{% endif %}">
+                      {{node.url}}
+                    </a>
+                  {% else %}
+                    {{ node.content }}
+                  {% endif %}
+                {% endfor %}
+              </p>
+            {% else %}
+              {{ node }}
+            {% endif %}
+          {% endfor %}
+
+          {% if alert.instruction %}
+          <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ "What to do" | t }}</h4>
+          <p>
+            {{ alert.instruction | nl2br }}
+          </p>
+          {% endif %}
+
+          <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ "Areas impacted" |t }}</h4>
+
+          {#
+            Some alerts come with location information in the description text
+            in a common text formatting. In those cases, the location information
+            is lists of counties by region of the state, and sometimes a list of
+            impacted cities as well. When we have that more fine-grained data,
+            we will display it.
+          #}
+          {% if alert.locations != false %}
+            {% for area in alert.locations.regions %}
+              <wx-alert-county-region>
+              <h5 class="wx-visual-h4 text-normal text-primary-dark margin-top-205 margin-bottom-0">
+                {{ "Counties in" | t }} {{ area.area }}
+              </h5>
+              <ul class="usa-list margin-top-1 {%- if area.counties | length > 7 %} wx-col-2 {%- endif -%}">
+                {%  for county in area.counties %}
+                  <li class="">{{ county }}</li>
+                {% endfor %}
+              </ul>
+              </wx-alert-county-region>
+            {% endfor %}
+            {% if alert.locations.cities | length > 0 %}
+              <wx-alert-cities>
+              <h5 class="wx-visual-h4 text-normal text-primary-dark margin-top-105 margin-bottom-0">
+                {{ "Including these cities" | t }}
+              </h5>
+              <ul class="usa-list margin-top-1 {%- if alert.locations.cities | length > 7 %} wx-col-2 {%- endif -%}">
+
+              {% for city in alert.locations.cities %}
+                <li class="">{{ city }}</li>
+              {% endfor %}
+              </ul>
+              </wx-alert-cities>
+            {% endif %}
+
+          {#
+            If the alert doesn't have that location information in the description
+            text, we can use the list of impacted areas provided by AWIPS. This
+            list is based on the alert polygon drawn by a forecaster, and then
+            AWIPS identifies the areas.
+          #}
+          {% else %}
+            <ul class="usa-list {%- if alert.area | length > 7 %} wx-col-2 {%- endif -%}">
+              {%  for areaName in alert.area %}
+                <li class="">{{ areaName }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+            <wx-alert-map
+              class="display-block grid-col-12 wx-radar-container wx-isolation-isolate"
+              data-geo-json="{{ alert.geometry | json_encode | url_encode }}"
+              data-alert-id="{{ alert.id }}"
+              data-alert-level="{{ alert.metadata.level.text }}"
+              data-lat="{{ point.point.latitude }}"
+              data-lon="{{ point.point.longitude }}"
+              data-alert-name="{{ alert.event }}"
+            >
+              <div id="wx_alert_map_{{ alert.id }}" class="height-full"></div>
+              <div class="wx_alert_map_legend margin-top-3 display-flex flex-align-center">
+                <div class="wx_alert_map_legend_impact_area display-block width-3 height-3 border-2px margin-right-1"></div><span>Impacted Area</span>
+              </div>
+            </wx-alert-map>
+
+        {{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }}
+
+        </div>
+      </div>
+      {% endfor %}
+      </wx-alerts>
+    </div>
+  </div>
+</div>
