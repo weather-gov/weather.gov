@@ -16,7 +16,7 @@ only be a nighttime period.
     <div class="grid-container padding-0 margin-bottom-2 tablet:margin-bottom-2">
       <div class="grid-row display-flex flex-align-start border-bottom-1px border-base-lighter padding-bottom-2">
         <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center tablet:grid-col-6 tablet__flex-justify-start">
-          <h4 class="padding-0 margin-0">
+          <h3 class="padding-0 margin-0">
             <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3" datetime="{{ periods[0].startTime }}">
               {% if dayLabel %}
                 <span>{{ dayLabel }}, </span>
@@ -25,7 +25,7 @@ only be a nighttime period.
               {% endif %}
               <span class="display-block">{{ periods[0].monthAndDay }}</span>
             </time>
-          </h4>
+          </h3>
 
           <div class="display-flex">
           {% include '@new_weather_theme/partials/daily-high-low.html.twig' with { 'periods': periods, 'useOnlyLow': useOnlyLow  } %}
