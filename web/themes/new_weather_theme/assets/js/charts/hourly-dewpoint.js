@@ -1,4 +1,7 @@
-import { drawChart } from "./WeatherChart.js";
+import {
+  drawChart,
+  setupScrollButtons
+} from "./WeatherChart.js";
 import styles from "../styles.js";
 
 const chartContainers = Array.from(
@@ -25,6 +28,9 @@ for (const container of chartContainers) {
       plugins: {
         legend: {
           display: false,
+        },
+        tooltip: {
+          events: ['click', 'mousemove', 'mouseout'],
         },
       },
       scales: {
@@ -86,4 +92,5 @@ for (const container of chartContainers) {
   };
 
   drawChart(container, config);
+  setupScrollButtons(container);
 }

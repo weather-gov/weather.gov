@@ -1,4 +1,7 @@
-import { drawChart } from "./WeatherChart.js";
+import {
+  drawChart,
+  setupScrollButtons
+} from "./WeatherChart.js";
 import styles from "../styles.js";
 
 const chartContainers = Array.from(
@@ -30,6 +33,7 @@ for (const container of chartContainers) {
         tooltip: {
           xAlign: "center",
           yAlign: "bottom",
+          events: ['click', 'mousemove', 'mouseout'],
         },
       },
       scales: {
@@ -60,7 +64,7 @@ for (const container of chartContainers) {
     },
 
     data: {
-      labels: times.map((v) => (Number.parseInt(v, 10) % 2 === 0 ? v : "")),
+      labels: times,
       datasets: [
         {
           label: "Chance of precipitation",
@@ -77,4 +81,5 @@ for (const container of chartContainers) {
   };
 
   drawChart(container, config);
+  setupScrollButtons(container);
 }

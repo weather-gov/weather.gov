@@ -30,5 +30,68 @@ const drawChart = (container, config) => {
   return new Chart(canvas, config);
 };
 
-export { drawChart };
-export default { drawChart };
+const setupScrollButtons = (container) => {
+  const isSynced = container.dataset.syncScrolling === "true";
+  const wrapper = container.closest('.wx-chart-wrapper');
+  const left = wrapper.querySelector('.wx-scroll-button[data-direction="left"]');
+  const right = wrapper.querySelector('.wx-scroll-button[data-direction="right"]');
+  if(!left || !right){
+    return;
+  }
+
+  right.addEventListener("click", () => {
+    const canvasEl = container.querySelector("canvas");
+    const fullWidth = canvasEl.offsetWidth;
+    const shownWidth = container.offsetWidth;
+    const remainingWidth = fullWidth - shownWidth - container.scrollLeft;
+    const scrollAmount = Math.min(remainingWidth, shownWidth);
+
+    if(isSynced){
+      Array.from(
+        container
+          .closest("li")
+          .querySelectorAll('.wx-chart-wrapper .wx-chart[data-sync-scrolling="true"]')
+      ).forEach(chartContainer => {
+        chartContainer.scrollTo({
+          left: scrollAmount + container.scrollLeft,
+          behavior: "smooth",
+        });
+      });
+    } else {
+      container.scrollTo({
+        left: scrollAmount + container.scrollLeft,
+        behavior: "smooth",
+      });
+    }    
+  });
+
+  left.addEventListener("click", () => {
+    const shownWidth = container.offsetWidth;
+    const scrollPosition = Math.max(
+      0,
+      container.scrollLeft - shownWidth
+    );
+    if(isSynced){
+      Array.from(
+        container
+          .closest("li")
+          .querySelectorAll('.wx-chart-wrapper .wx-chart[data-sync-scrolling]')
+      ).forEach(chartContainer => {
+        chartContainer.scrollTo({
+          left: scrollPosition,
+          behavior: "smooth"
+        });
+      });
+    } else {
+      container.scrollTo({
+        left: scrollPosition,
+        behavior: "smooth"
+      });
+    }
+  });
+};
+
+export {
+  drawChart,
+  setupScrollButtons
+};
