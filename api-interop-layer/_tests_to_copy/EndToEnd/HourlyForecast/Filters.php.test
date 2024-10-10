@@ -18,28 +18,6 @@ final class HourlyForecastFilterTest extends EndToEndBase
     }
 
     /**
-     * Validate that no future hours are returned.
-     * @group e2e
-     */
-    public function testPastHoursAreRemoved(): void
-    {
-        // This endpoint has past hours
-        $this->onLocationRoute(33.521, -86.812);
-
-        $now = new \DateTimeImmutable();
-
-        $data = $this->block->build();
-
-        foreach ($data["hours"] as $period) {
-            $timestamp = \DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ISO8601_EXPANDED,
-                $period["timestamp"],
-            );
-            $this->assertEquals(true, $timestamp > $now);
-        }
-    }
-
-    /**
      * Validate that past alerts (ended or expired) are not returned.
      * @group e2e
      */

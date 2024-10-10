@@ -11,14 +11,6 @@ use Drupal\weather_blocks\Plugin\Block\LocalAlertsBlock;
 final class AlertFilterTest extends EndToEndBase
 {
     /**
-     * Create the block under test.
-     */
-    protected function setUp($type = null): void
-    {
-        parent::setUp(LocalAlertsBlock::class);
-    }
-
-    /**
      * Test that we match forecast zone.
      * @group e2e
      */
