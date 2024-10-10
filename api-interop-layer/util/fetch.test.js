@@ -138,6 +138,28 @@ describe("fetch module", () => {
     );
   });
 
+  it("does retry on server errors (status code 5xx)", async () => {
+    response.status = 500;
+    response.json.resolves({ message: "here" });
+
+    const response2 = {
+      status: 200,
+      json: sinon.stub().resolves({ message: "there" }),
+    };
+
+    fetch.onCall(0).resolves(response);
+    fetch.onCall(1).resolves(response2);
+
+    const result = await fetchAPIJson("/path/goes/here", { wait });
+
+    expect(result).to.eql({ message: "there" });
+    expect(wait.callCount).to.equal(1);
+    expect(fetch.callCount).to.equal(2);
+    expect(fetch.calledWith("https://api.weather.gov/path/goes/here")).to.equal(
+      true,
+    );
+  });
+
   it("does not retry on request errors (status code 4xx)", async () => {
     response.status = 400;
     response.json.resolves({ message: "here" });
@@ -151,5 +173,18 @@ describe("fetch module", () => {
     expect(fetch.calledWith("https://api.weather.gov/path/goes/here")).to.equal(
       true,
     );
+  });
+
+  it("specially handles syntax errors (ie, non-JSON data", async () => {
+    const error = new SyntaxError();
+    error.cause = { message: "not JSON probably" };
+    response.json.rejects(error);
+    fetch.resolves(response);
+
+    const expected = { message: "not JSON probably", error: true };
+
+    const result = await fetchAPIJson("/path/goes/here", { wait });
+
+    expect(result).to.eql(expected);
   });
 });

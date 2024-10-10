@@ -122,6 +122,20 @@ jobs:
         run: npm ci
       - name: test
         run: npm test
+      - name: store coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: interop-coverage-report
+          path: ./api-interop-layer/coverage/clover.xml
+          retention-days: 1
+      - name: store coverage HTML
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: interop-coverage-html
+          path: ./api-interop-layer/coverage/
+          retention-days: 1
 
   build-drupal-image:
     name: build Drupal image
@@ -171,22 +185,75 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-report
+          name: drupal-coverage-report
           path: .coverage/clover.xml
+          retention-days: 1
+
+      - name: store coverage HTML
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: drupal-coverage-html
+          # This is necessary because the action interprets this single entity
+          # starting with a dot as hidden. This is a bug in the action.
+          #   https://github.com/actions/upload-artifact/issues/618
+          include-hidden-files: true
+          path: .coverage/
+          retention-days: 1
+
+  merge-code-coverage:
+    name: merge coverage
+    runs-on: ubuntu-latest
+    needs: [php-tests, interop-layer-unit-tests, should-test]
+
+    steps:
+      - name: get Drupal coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: drupal-coverage-report
+      - name: rename
+        if: needs.should-test.outputs.yes == 'true'
+        run: mv clover.xml drupal.xml
+      - name: get interop layer coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: interop-coverage-report
+      - name: rename
+        if: needs.should-test.outputs.yes == 'true'
+        run: mv clover.xml interop.xml
+      - name: setup PHP
+        if: needs.should-test.outputs.yes == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: uopz
+      - name: install combine library
+        if: needs.should-test.outputs.yes == 'true'
+        run: composer require kavinsky/clover-merge
+      - name: combine reports
+        if: needs.should-test.outputs.yes == 'true'
+        run: ./vendor/bin/clover-merge merge -o combined.xml drupal.xml interop.xml
+      - name: store coverage output
+        if: needs.should-test.outputs.yes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined-coverage-report
+          path: combined.xml
           retention-days: 1
 
   min-code-coverage:
     name: "90% code coverage"
     runs-on: ubuntu-latest
-    needs: [php-tests, should-test]
+    needs: [merge-code-coverage, should-test]
 
     steps:
-      - name: get coverage output
-        id: download
+      - name: get combined coverage output
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/download-artifact@v4
         with:
-          name: coverage-report
+          name: combined-coverage-report
 
       - name: 90% code coverage
         if: needs.should-test.outputs.yes == 'true'
@@ -194,7 +261,7 @@ jobs:
         uses: johanvanhelden/gha-clover-test-coverage-check@v1
         with:
           percentage: 90
-          filename: clover.xml
+          filename: combined.xml
           metric: statements
 
   accessibility-tests:
