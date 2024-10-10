@@ -142,6 +142,68 @@ describe("alert data module", () => {
     });
 
     describe("the main alert function", () => {
+      describe("does not store alerts that have ended", () => {
+        // 24 hours ago...
+        const past = new Date(Date.now() - 86_400_000).toISOString();
+
+        const times = {
+          sent: new Date().toISOString(),
+          effective: new Date().toISOString(),
+          onset: new Date().toISOString(),
+          expires: new Date().toISOString(),
+          ends: new Date().toISOString(),
+        };
+
+        it("if the alert has an end time in the past", async () => {
+          response.json.resolves({
+            features: [
+              {
+                geometry: "geo",
+                properties: {
+                  id: "one",
+                  event: "Severe Thunderstorm Warning",
+                  ...times,
+                  ends: past,
+                },
+              },
+            ],
+          });
+          await alertHandler.updateAlerts();
+
+          const alerts = await alertHandler.default({
+            grid: { geometry: [] },
+            place: { timezone: "America/Chicago" },
+          });
+
+          expect(alerts.items.length).to.equal(0);
+        });
+
+        it("if the alert does not have an end time and the expire time is in the past", async () => {
+          response.json.resolves({
+            features: [
+              {
+                geometry: "geo",
+                properties: {
+                  id: "one",
+                  event: "Severe Thunderstorm Warning",
+                  ...times,
+                  ends: null,
+                  expires: past,
+                },
+              },
+            ],
+          });
+          await alertHandler.updateAlerts();
+
+          const alerts = await alertHandler.default({
+            grid: { geometry: [] },
+            place: { timezone: "America/Chicago" },
+          });
+
+          expect(alerts.items.length).to.equal(0);
+        });
+      });
+
       it("does not store alerts that are not land-based", async () => {
         const shared = {
           sent: new Date().toISOString(),

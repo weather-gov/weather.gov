@@ -42,7 +42,7 @@ export const generateAlertGeometry = async (db, rawAlert) => {
     }
   }
 
-  // if all geocodes are the same, generate a geometry from geocodes
+  // if the alert has SAME codes, generate a geometry from SAME codes
   const counties = rawAlert.properties.geocode?.SAME;
   if (Array.isArray(counties) && counties.length > 0) {
     const sql = `
@@ -67,6 +67,6 @@ export const generateAlertGeometry = async (db, rawAlert) => {
 
   // we cannot generate a geometry.
   return null;
-}
+};
 
 export default { generateAlertGeometry };
