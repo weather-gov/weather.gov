@@ -4,13 +4,18 @@
 /* Scroll button states
 ------------------------------------- */
 .wx-scroll-button {
+  background-color: color("gray-cool-20");
+  color: color("base-darker");
+
   &:hover {
     cursor: pointer;
-    background-color: color("base");
+    background-color: color("base-dark");
+    color: color("white");
   }
 
   &:active {
-    background-color: color("base-darker");
+    background-color: color("base-darkest");
+    color: color("white");
   }
 }
 
