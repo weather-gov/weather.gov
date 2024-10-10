@@ -190,8 +190,8 @@ export default async ({ grid, point, place: { timezone } }) => {
       if (yes > 0) {
         alert.duration = parseDuration(alert, timezone);
         alert.timing = {
-          start: alert.onset.tz(timezone).format("dddd MM/DD h:mm A __"),
-          end: alert.finish?.tz(timezone).format("dddd MM/DD h:mm A __"),
+          start: alert.onset.tz(timezone).format("dddd MM/DD h:mm A z"),
+          end: alert.finish?.tz(timezone).format("dddd MM/DD h:mm A z"),
         };
 
         logger.verbose(`has ${alert.event}`);
