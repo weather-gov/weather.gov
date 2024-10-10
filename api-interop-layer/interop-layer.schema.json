@@ -504,35 +504,49 @@
               "qpf": {
                 "title": "List of hourly QPFs",
                 "description": "Forecast quantitative precipitation for this forecast period. Note that QPF is delivered in multi-hour totals rather than individual-hour totals, so it must be treated differently than other forecast period data.",
-                "type": "array",
-                "allOf": [
-                  {
-                    "$ref": "#/$defs/measures/length"
-                  }
-                ],
-                "items": {
-                  "title": "QPF",
-                  "type": "object",
-                  "properties": {
-                    "start": {
-                      "description": "The starting time for this QPF forecast.",
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "end": {
-                      "description": "The ending time for this QPF forecast.",
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "startHour": {
-                      "description": "The starting hour in the timezone of the forecast, in AM/PM.",
-                      "type": "string",
-                      "pattern": "^1?\\d (A|P)M$"
-                    },
-                    "endHour": {
-                      "description": "The ending hour in the timezone of the forecast, in AM/PM.",
-                      "type": "string",
-                      "pattern": "^1?\\d (A|P)M$"
+                "type": "object",
+                "properties": {
+                  "hasQPF": {
+                    "type": "boolean"
+                  },
+                  "hasIce": {
+                    "type": "boolean"
+                  },
+                  "hasSnow": {
+                    "type": "boolean"
+                  },
+                  "periods": {
+                    "type": "array",
+                    "allOf": [
+                      {
+                        "$ref": "#/$defs/measures/length"
+                      }
+                    ],
+                    "items": {
+                      "title": "QPF",
+                      "type": "object",
+                      "properties": {
+                        "start": {
+                          "description": "The starting time for this QPF forecast.",
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "end": {
+                          "description": "The ending time for this QPF forecast.",
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "startHour": {
+                          "description": "The starting hour in the timezone of the forecast, in AM/PM.",
+                          "type": "string",
+                          "pattern": "^1?\\d (A|P)M$"
+                        },
+                        "endHour": {
+                          "description": "The ending hour in the timezone of the forecast, in AM/PM.",
+                          "type": "string",
+                          "pattern": "^1?\\d (A|P)M$"
+                        }
+                      }
                     }
                   }
                 }

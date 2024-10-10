@@ -16,7 +16,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
 
   it("parses the raw data", () => {
     const rawLiquid = {
-      uom: "raw-units",
+      uom: "wmoUnit:mm",
       values: [
         {
           validTime: "2024-09-09T21:00:00Z/PT3H",
@@ -30,7 +30,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
       ],
     };
     const rawIce = {
-      uom: "raw-units-ice",
+      uom: "wmoUnit:mm",
       values: [
         {
           validTime: "2024-09-09T21:00:00Z/PT3H",
@@ -44,7 +44,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
       ],
     };
     const rawSnow = {
-      uom: "raw-units-snow",
+      uom: "wmoUnit:mm",
       values: [
         {
           validTime: "2024-09-09T21:00:00Z/PT3H",
@@ -62,27 +62,27 @@ describe("quantitative precipitation forecase (QPF)", () => {
       {
         start: dayjs("2024-09-09T21:00:00Z"),
         end: dayjs("2024-09-10T00:00:00Z"),
-        liquid: { uom: "raw-units", value: 32 },
-        ice: { uom: "raw-units-ice", value: 5 },
-        snow: { uom: "raw-units-snow", value: 14 },
+        liquid: { uom: "wmoUnit:mm", value: 32 },
+        ice: { uom: "wmoUnit:mm", value: 5 },
+        snow: { uom: "wmoUnit:mm", value: 14 },
         startHour: "4 PM",
         endHour: "7 PM",
       },
       {
         start: dayjs("2024-09-10T00:00:00Z"),
         end: dayjs("2024-09-10T06:00:00Z"),
-        liquid: { uom: "raw-units", value: 19 },
-        ice: { uom: "raw-units-ice", value: 1 },
-        snow: { uom: "raw-units-snow", value: 85 },
+        liquid: { uom: "wmoUnit:mm", value: 19 },
+        ice: { uom: "wmoUnit:mm", value: 1 },
+        snow: { uom: "wmoUnit:mm", value: 85 },
         startHour: "7 PM",
         endHour: "1 AM",
       },
       {
         start: dayjs("2024-09-10T06:00:00Z"),
         end: dayjs("2024-09-10T08:00:00Z"),
-        liquid: { uom: "raw-units", value: 4 },
-        ice: { uom: "raw-units-ice", value: 64 },
-        snow: { uom: "raw-units-snow", value: 5 },
+        liquid: { uom: "wmoUnit:mm", value: 4 },
+        ice: { uom: "wmoUnit:mm", value: 64 },
+        snow: { uom: "wmoUnit:mm", value: 5 },
         startHour: "1 AM",
         endHour: "3 AM",
       },
@@ -101,7 +101,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
       json: sinon.stub().resolves({
         properties: {
           quantitativePrecipitation: {
-            uom: "some units",
+            uom: "wmoUnit:mm",
             values: [
               // These times are UTC. They'll be converted to the timezone
               // specified below.
@@ -114,7 +114,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
             ],
           },
           iceAccumulation: {
-            uom: "ice units",
+            uom: "wmoUnit:mm",
             values: [
               {
                 validTime: "2024-08-02T01:00:00Z/PT8H",
@@ -124,7 +124,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
             ],
           },
           snowfallAmount: {
-            uom: "snow units",
+            uom: "wmoUnit:mm",
             values: [
               {
                 validTime: "2024-08-02T01:00:00Z/PT8H",
@@ -194,47 +194,57 @@ describe("quantitative precipitation forecase (QPF)", () => {
     //   • Day 1, 9 inches and 100 inches
     //   • Day 2, 100 inches and 4 inches
 
-    const expectedDay1 = [
-      {
-        start: dayjs("2024-08-02T01:00:00Z"),
-        end: dayjs("2024-08-02T09:00:00Z"),
-        liquid: { uom: "some units", value: 9 },
-        ice: { uom: "ice units", value: 19 },
-        snow: { uom: "snow units", value: 29 },
-        startHour: "6 PM",
-        endHour: "2 AM",
-      },
-      {
-        start: dayjs("2024-08-02T09:00:00Z"),
-        end: dayjs("2024-08-02T15:00:00Z"),
-        liquid: { uom: "some units", value: 100 },
-        ice: { uom: "ice units", value: 10 },
-        snow: { uom: "snow units", value: null },
-        startHour: "2 AM",
-        endHour: "8 AM",
-      },
-    ];
+    const expectedDay1 = {
+      hasQPF: true,
+      hasIce: true,
+      hasSnow: true,
+      periods: [
+        {
+          start: dayjs("2024-08-02T01:00:00Z"),
+          end: dayjs("2024-08-02T09:00:00Z"),
+          liquid: { mm: 9, in: 0.35 },
+          ice: { mm: 19, in: 0.75 },
+          snow: { mm: 29, in: 1.14 },
+          startHour: "6 PM",
+          endHour: "2 AM",
+        },
+        {
+          start: dayjs("2024-08-02T09:00:00Z"),
+          end: dayjs("2024-08-02T15:00:00Z"),
+          liquid: { mm: 100, in: 3.94 },
+          ice: { mm: 10, in: 0.39 },
+          snow: { mm: null, in: null },
+          startHour: "2 AM",
+          endHour: "8 AM",
+        },
+      ],
+    };
 
-    const expectedDay2 = [
-      {
-        start: dayjs("2024-08-02T09:00:00Z"),
-        end: dayjs("2024-08-02T15:00:00Z"),
-        liquid: { uom: "some units", value: 100 },
-        ice: { uom: "ice units", value: 10 },
-        snow: { uom: "snow units", value: null },
-        startHour: "2 AM",
-        endHour: "8 AM",
-      },
-      {
-        start: dayjs("2024-08-02T15:00:00Z"),
-        end: dayjs("2024-08-02T23:00:00Z"),
-        liquid: { uom: "some units", value: 4 },
-        ice: { uom: "ice units", value: null },
-        snow: { uom: "snow units", value: null },
-        startHour: "8 AM",
-        endHour: "4 PM",
-      },
-    ];
+    const expectedDay2 = {
+      hasQPF: true,
+      hasIce: true,
+      hasSnow: false,
+      periods: [
+        {
+          start: dayjs("2024-08-02T09:00:00Z"),
+          end: dayjs("2024-08-02T15:00:00Z"),
+          liquid: { mm: 100, in: 3.94 },
+          ice: { mm: 10, in: 0.39 },
+          snow: { mm: null, in: null },
+          startHour: "2 AM",
+          endHour: "8 AM",
+        },
+        {
+          start: dayjs("2024-08-02T15:00:00Z"),
+          end: dayjs("2024-08-02T23:00:00Z"),
+          liquid: { mm: 4, in: 0.16 },
+          ice: { mm: null, in: null },
+          snow: { mm: null, in: null },
+          startHour: "8 AM",
+          endHour: "4 PM",
+        },
+      ],
+    };
 
     const actual = await forecast({ grid, place });
 
