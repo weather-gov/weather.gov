@@ -24,6 +24,8 @@ jobs:
       CF_PASSWORD: CF_${{ github.event.inputs.environment }}_PASSWORD
     steps:
       - uses: actions/checkout@v4
+      - name: set library versions
+        uses: ./.github/actions/set-library-versions
       - name: bundle javascript
         uses: ./.github/actions/javascript-bundle
       - name: Deploy application in ${{ github.event.inputs.environment }} space
