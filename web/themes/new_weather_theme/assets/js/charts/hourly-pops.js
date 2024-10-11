@@ -33,7 +33,7 @@ for (const container of chartContainers) {
         tooltip: {
           xAlign: "center",
           yAlign: "bottom",
-          events: ['click','mousemove'],
+          events: ['click', 'mousemove', 'mouseout'],
         },
       },
       scales: {

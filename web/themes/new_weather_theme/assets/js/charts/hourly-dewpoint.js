@@ -30,7 +30,7 @@ for (const container of chartContainers) {
           display: false,
         },
         tooltip: {
-          events: ['click', 'mousemove'],
+          events: ['click', 'mousemove', 'mouseout'],
         },
       },
       scales: {
