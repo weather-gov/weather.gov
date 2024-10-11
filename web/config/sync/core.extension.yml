@@ -22,6 +22,7 @@ module:
   field: 0
   field_ui: 0
   file: 0
+  filefield_paths: 0
   filter: 0
   help: 0
   image: 0
