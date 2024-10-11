@@ -72,6 +72,15 @@ rebuild: ## Delete the Drupal container and rebuild. Does *NOT* delete the site
 	docker compose build drupal --build-arg "UID=$$(id -u)" --build-arg "GID=$$(id -g)"
 	docker compose up -d
 
+import-spatial:
+ifneq ("spatial-data/dump.mysql","")
+	cat spatial-data/dump.mysql | docker compose exec -T database mysql -udrupal -pdrupal -hdatabase weathergov
+endif
+
+
+dump-spatial:
+	docker compose exec database mysqldump -udrupal -pdrupal -hdatabase weathergov weathergov_geo_metadata weathergov_geo_states weathergov_geo_counties weathergov_geo_places weathergov_geo_cwas weathergov_geo_zones > spatial-data/dump.mysql
+
 reset-site: reset-site-database pause install-site ## Delete the database and rebuild it from configuration and exported content
 reset-site-database:
 	docker compose stop database
@@ -87,7 +96,7 @@ update-translations:
 	docker compose exec drupal drush locale:update
 	docker compose exec drupal drush cache:rebuild
 
-zap: update-settings zap-containers rebuild pause install-site load-spatial  ## Delete the entire Docker environment and start from scratch.
+zap: update-settings dump-spatial zap-containers rebuild pause install-site import-spatial load-spatial  ## Delete the entire Docker environment and start from scratch.
 zap-containers:
 	docker compose stop
 	docker compose rm -f
