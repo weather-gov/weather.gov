@@ -6,7 +6,7 @@ uswds-init:
       minified: true
 
 uswds-customized:
-  version: 2024-10-09
+  version: 2024-10-16.1
   css:
     theme:
       assets/css/styles.css: {}
@@ -25,7 +25,7 @@ front-page:
         defer: true
 
 point-page:
-  version: 2024-10-15
+  version: 2024-10-16.1
   js:
     assets/js/point.page.js:
       attributes:
@@ -41,7 +41,7 @@ afd-page:
         defer: true
 
 cmi-radar:
-  version: 2024-06-23
+  version: 2024-10-15
   css:
     theme:
       assets/css/radar/cmi-radar.6602f65c.css:
