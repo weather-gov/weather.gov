@@ -355,14 +355,12 @@ trait DailyForecastTrait
                     ];
                 }, $precipPeriods);
 
-                $noPrecipPeriods = array_filter($precipPeriods, function (
-                    $period,
-                ) {
-                    return $period["liquid"] == 0;
-                });
-                if (count($noPrecipPeriods) === count($precipPeriods)) {
-                    $precipPeriods = [];
-                }
+                $hasQpf =
+                    count(
+                        array_filter($precipPeriods, function ($period) {
+                            return $period["liquid"] > 0;
+                        }),
+                    ) > 0;
 
                 $hasIce =
                     count(
@@ -386,7 +384,7 @@ trait DailyForecastTrait
                     "precipPeriods" => [
                         "hasIce" => $hasIce,
                         "hasSnow" => $hasSnow,
-                        "hasQPF" => count($precipPeriods) > 0,
+                        "hasQPF" => $hasQpf,
                         "periods" => array_values($precipPeriods),
                     ],
                 ];
