@@ -1,22 +1,22 @@
-{% if wind.speed is not same as (null) %}
+{% if speed.mph is not same as (null) %}
   {#
   We will have a dedicated block for screen readers to mitigate an issue with
   VoiceOver treating spans as distinct elements and forcing users to navigate
   between them.
   #}
   <div class="display-flex flex-row flex-align-center" aria-hidden="true">
-    {% if wind.speed == 0 %}
+    {% if speed.mph == 0 %}
       <span>{{ "calm" | t }}</span>
     {% else %}
-      <span>{{wind.speed}} {{ "mph" | t }}</span>
-      <span class="padding-x-05">{{ wind.direction.short }}</span>
+      <span>{{speed.mph}} {{ "mph" | t }}</span>
+      <span class="padding-x-05">{{ direction.cardinalShort }}</span>
       <span class="display-flex flex-align-center margin-bottom-2px">
         {#
         The +180 here is to account for the fact that wind direction
         is reported as a FROM direction, but our arrow points in the
         TO direction. So we just need to spin it 'round.
         #}
-        <svg role="img" aria-hidden="true" data-wind-direction class="width-2 height-2" style="transform: rotate({{ wind.direction.angle + 180 }}deg);">
+        <svg role="img" aria-hidden="true" data-wind-direction class="width-2 height-2" style="transform: rotate({{ direction.degrees + 180 }}deg);">
           <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#wx_wind_arrow" }}"></use>
         </svg>
       </span>
@@ -26,10 +26,10 @@
   By putting all of the content into a single span, we can get VoiceOver to read
   it in a more natural way.
   #}
-  {% if wind.speed == 0 %}
+  {% if speed.mph == 0 %}
     <span class="usa-sr-only">{{ "calm" | t }}</span>
   {% else %}
-    <span class="usa-sr-only">{{ "@speed mph from the @direction" | t({"@speed":wind.speed,"@direction": wind.direction.long }) }}</span>
+    <span class="usa-sr-only">{{ "@speed mph from the @direction" | t({ "@speed": speed.mph, "@direction": direction.cardinalLong }) }}</span>
   {% endif %}
 {% else %}
   <span class="text-base font-mono-xs">{{ "N/A" | t }}</span>

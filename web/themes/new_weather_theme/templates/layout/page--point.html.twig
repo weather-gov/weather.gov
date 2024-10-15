@@ -1,7 +1,9 @@
 <div class="layout-container grid-row height-full flex-column flex-no-wrap">
 
-  {{ attach_library("new_weather_theme/leaflet") }}
-  {{ attach_library('new_weather_theme/chartjs') }}
+  {% if not point.error %}
+    {{ attach_library("new_weather_theme/leaflet") }}
+    {{ attach_library('new_weather_theme/chartjs') }}
+  {% endif %}
   {{ attach_library('new_weather_theme/point-page') }}
 
   <header role="banner">
@@ -24,47 +26,53 @@
 
   <main role="main" class="flex-1 wx-location-page">
     <a id="main-content" tabindex="-1"></a>
-    {{ drupal_block("weathergov_location_search") }}
+    {% include(directory ~ "/templates/partials/location-search.html.twig") with { place: point.place } %}
 
-    {% if weather.alerts %}
+    {% if point.alerts.items | length > 0 %}
     <div class="bg-primary-darker padding-bottom-105">
       <div class="grid-container margin-top-0">
-        {{ drupal_block("weathergov_local_alert_list") }}
+        {% include(directory ~ "/templates/point/alert-summary.html.twig") with { alerts: point.alerts.items } %}
       </div>
     </div>
     {% endif %}
 
-    <wx-tabbed-nav class="display-block position-relative">
-      <div id="tablist-label" class="usa-sr-only">{{ "Weather information sections" | t }}</div>
-      <div class="position-sticky top-0 z-500 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
-        <div class="grid-container padding-x-0">
-         <div role="tablist" class="tab-buttons display-flex flex-row top-4 grid-col-12" aria-labelledby="tablist-label">
-          {% if weather.alerts %}
-            <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
-          {% endif %}
-            <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="current" aria-controls="current">{{ "Current" | t }}</button>
-            <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "7 Days" | t }}</button>
+    {% if point.error %}
+      {% set message = "Something went wrong loading this page. Please try again in a few minutes." | t %}
+      <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+        {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+      </div>
+    {% else %}
+      <wx-tabbed-nav class="display-block position-relative">
+        <div id="tablist-label" class="usa-sr-only">{{ "Weather information sections" | t }}</div>
+        <div class="position-sticky top-0 z-500 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
+          <div class="grid-container padding-x-0">
+          <div role="tablist" class="tab-buttons display-flex flex-row top-4 grid-col-12" aria-labelledby="tablist-label">
+            {% if point.alerts.items | length > 0 %}
+              <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
+            {% endif %}
+              <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="current" aria-controls="current">{{ "Current" | t }}</button>
+              <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "7 Days" | t }}</button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="bg-base-lightest padding-top-3 padding-bottom-8">
-          {% if weather.alerts %}
-        <div class="wx-tab-container wx-focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
-          {{ drupal_block("weathergov_local_alerts") }}
-        </div>
-        {% endif %}
+        <div class="bg-base-lightest padding-top-3 padding-bottom-8">
+          {% if point.alerts.items | length > 0 %}
+          <div class="wx-tab-container wx-focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
+            {% include(directory ~ "/templates/point/alerts.html.twig") with { alerts: point.alerts.items } %}
+          </div>
+          {% endif %}
 
-        <div class="wx-tab-container wx-focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
-          {{ drupal_block("weathergov_current_conditions") }}
-          {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
+          <div class="wx-tab-container wx-focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
+            {% include '@new_weather_theme/point/observations.html.twig' with { obs: point.observed } %}
+            {% include '@new_weather_theme/partials/radar.html.twig' with { point: point.point  } %}
+            {% include '@new_weather_theme/partials/satellite.html.twig' %}
+          </div>
 
-          {% include '@new_weather_theme/partials/satellite.html.twig' %}
-        </div>
 
          <div class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
           <h2 class="usa-sr-only">7 days forecast</h2>
-          {{ drupal_block("weathergov_weather_story") }}
+          {{ drupal_block("weathergov_weather_story", { wfo: point.grid.wfo }) }}
 
           <div class="margin-x-2 tablet:margin-x-auto tablet:grid-container margin-bottom-4 padding-x-0 tablet:padding-x-2">
             <div class="grid-row">
@@ -84,15 +92,17 @@
                 </div>
               </div>
             </div>
+
+            <h3 class="usa-sr-only">Daily forecast</h3>
+            {% include '@new_weather_theme/point/forecast.html.twig' with { forecast: point.forecast } %}
+
+            {{ drupal_block("weathergov_wfo_promo", { wfo: point.grid.wfo }) }}
           </div>
-
-          {{ drupal_block("weathergov_daily_forecast") }}
-
-          {{ drupal_block("weathergov_wfo_promo") }}
         </div>
-      </div>
 
-    </wx-tabbed-nav>
+      </wx-tabbed-nav>
+    {% endif %}
+
   </main>
 
   {% include(directory ~ "/templates/layout/footer.html.twig") %}

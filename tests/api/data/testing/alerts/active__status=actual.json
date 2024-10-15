@@ -1,0 +1,3716 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.21973bd423ae0db39e5260d08fa31bb6eba8b288.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.21973bd423ae0db39e5260d08fa31bb6eba8b288.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.21973bd423ae0db39e5260d08fa31bb6eba8b288.001.1",
+        "areaDesc": "Stewart; Montgomery; Robertson; Sumner; Macon; Clay; Pickett; Houston; Humphreys; Dickson; Cheatham; Davidson; Wilson; Trousdale; Smith; Jackson; Putnam; Overton; Fentress; Perry; Hickman; Lewis; Williamson; Maury; Marshall; Rutherford; Cannon; De Kalb; White; Cumberland; Bedford; Coffee; Warren; Grundy; Van Buren; Wayne; Lawrence; Giles",
+        "geocode": {
+          "SAME": [
+            "001073"
+          ],
+          "UGC": []
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/ALZ024"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.afcd34b4302cf9180226182fb6ce02cae67c88c5.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.afcd34b4302cf9180226182fb6ce02cae67c88c5.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-08T01:25:00-06:00"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.7802fd1de0bf82a1dce4d005b5b72cb099b94766.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.7802fd1de0bf82a1dce4d005b5b72cb099b94766.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-08T08:24:00-06:00"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.3f75dc0fcc5146ce6b90b8cda2e8c565c7f4e2ad.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.3f75dc0fcc5146ce6b90b8cda2e8c565c7f4e2ad.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-07T13:21:00-06:00"
+          }
+        ],
+        "sent": "2024-01-08T13:48:00-06:00",
+        "effective": "2024-01-08T13:48:00-06:00",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +10 minutes",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Wind Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Nashville TN",
+        "headline": "Wind Advisory issued January 8 at 1:48PM CST until January 10 at 12:00AM CST by NWS Nashville TN",
+        "description": "* WHAT...Sustained wind speeds of 25 to 30 mph with gusts of 35\nto 45 mph will be likely starting late Monday. Wind gusts as\nhigh as 50 mph will be possible in areas of higher elevation.\nHighest winds will be experienced during the overnight hours\ntonight.\n\n* WHERE...All of Middle Tennessee.\n\n* WHEN...From 6 PM this evening to midnight CST Tuesday night.\n\n* IMPACTS...Gusty winds could blow around unsecured objects. Tree\nlimbs could be blown down and a few power outages may result.",
+        "instruction": "Use extra caution when driving, especially if operating a high\nprofile vehicle. Secure outdoor objects.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "NPWOHX"
+          ],
+          "WMOidentifier": [
+            "WWUS74 KOHX 081948"
+          ],
+          "NWSheadline": [
+            "WIND ADVISORY REMAINS IN EFFECT FROM 6 PM THIS EVENING TO MIDNIGHT CST TUESDAY NIGHT"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KOHX.WI.Y.0001.240109T0000Z-240110T0600Z/"
+          ],
+          "eventEndingTime": [
+            "2024-01-10T06:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.21973bd423ae0db39e5260d08fa31bb6eba8b288.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.21973bd423ae0db39e5260d08fa31bb6eba8b288.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.21973bd423ae0db39e5260d08fa31bb6eba8b288.001.1",
+        "areaDesc": "All over. Just... just everywhere.",
+        "geocode": {
+          "SAME": [
+            "001073"
+          ],
+          "UGC": []
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/ALZ024"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.afcd34b4302cf9180226182fb6ce02cae67c88c5.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.afcd34b4302cf9180226182fb6ce02cae67c88c5.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-08T01:25:00-06:00"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.7802fd1de0bf82a1dce4d005b5b72cb099b94766.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.7802fd1de0bf82a1dce4d005b5b72cb099b94766.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-08T08:24:00-06:00"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.3f75dc0fcc5146ce6b90b8cda2e8c565c7f4e2ad.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.3f75dc0fcc5146ce6b90b8cda2e8c565c7f4e2ad.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-07T13:21:00-06:00"
+          }
+        ],
+        "sent": "2024-01-08T13:48:00-06:00",
+        "effective": "2024-01-08T13:48:00-06:00",
+        "onset": "date:now +2 days",
+        "expires": "date:now 52 hours",
+        "ends": "date:now 3 days",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Small Craft Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Nashville TN",
+        "headline": "Wind Advisory issued January 8 at 1:48PM CST until January 10 at 12:00AM CST by NWS Nashville TN",
+        "description": "If you see this, something is broken.",
+        "instruction": "Tell someone. You have seen something, now you must tell someone. It's in the rules.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "NPWOHX"
+          ],
+          "WMOidentifier": [
+            "WWUS74 KOHX 081948"
+          ],
+          "NWSheadline": [
+            "WIND ADVISORY REMAINS IN EFFECT FROM 6 PM THIS EVENING TO MIDNIGHT CST TUESDAY NIGHT"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KOHX.WI.Y.0001.240109T0000Z-240110T0600Z/"
+          ],
+          "eventEndingTime": [
+            "2024-01-10T06:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.35c08d67b727d304ea1d6ae50eb6139b4be1cc8f.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.35c08d67b727d304ea1d6ae50eb6139b4be1cc8f.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.35c08d67b727d304ea1d6ae50eb6139b4be1cc8f.001.1",
+        "areaDesc": "San Francisco; Marin Coastal Range; Sonoma Coastal Range; North Bay Interior Mountains; Coastal North Bay Including Point Reyes National Seashore; North Bay Interior Valleys; San Francisco Bay Shoreline; San Fransisco Peninsula Coast; East Bay Interior Valleys; Santa Cruz Mountains; Santa Clara Valley Including San Jose; Eastern Santa Clara Hills; East Bay Hills; Southern Salinas Valley/Arroyo Seco and Lake San Antonio; Santa Lucia Mountains and Los Padres National Forest; Mountains Of San Benito County And Interior Monterey County Including Pinnacles National Park; Northern Salinas Valley/Hollister Valley and Carmel Valley; Northern Monterey Bay; Southern Monterey Bay and Big Sur Coast",
+        "geocode": {
+          "SAME": [],
+          "UGC": []
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/ARZ045"
+        ],
+        "references": [],
+        "sent": "2024-01-29T12:41:00-08:00",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Flood Watch",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS San Francisco CA",
+        "headline": "Flood Watch issued January 29 at 12:41PM PST until February 2 at 4:00AM PST by NWS San Francisco CA",
+        "description": "Model guidance continues to suggests greatest accumulation of\nprecipitation will be observed across the North Bay and along\nthe coastal ranges. Rainfall totals remain consistent with\n1.5 to 3 inches expected across most areas with 3-5 inches\nexpected over the North Bay. Locally up to 6 to 8 inches over\nfavored peaks and higher terrain of the the North Bay and up to\n4 to 6 inches in the Santa Cruz and Santa Lucia Mountains.\n\n* WHAT...Flooding caused by excessive rainfall is possible.\n\n* WHERE...Entire San Francisco Bay Area and Central Coast including\nMonterey and San Benito Counties.\n\n* WHEN...From late Tuesday night through late Thursday night.\n\n* IMPACTS...Excessive runoff may result in flooding of rivers,\ncreeks, streams, and other low-lying and flood-prone locations.\nFlooding may occur in poor drainage and urban areas. Low-water\ncrossings may be flooded. Storm drains and ditches may become\nclogged with debris.\n\n* ADDITIONAL DETAILS...\n- Periods of moderate to heavy rainfall will bring the\npotential for moderate to rapid rises along area rivers,\nstreams, and creeks across the region. This could result in\nnuisance as well as minor flooding. Although many sites are\nforecast to remain below flood stage, several locations may\nreach and exceed flood stage across the region.\n\nEnsemble guidance shows a greater than 50 percent chance of\nreaching flood stage on numerous rivers and creeks across the\nNorth Bay  and monitor stage on the San Lorenzo River at Big\nTrees and numerous other locations across the San Francisco\nand Monterey Bay Area by Thursday.\n- http://www.weather.gov/safety/flood",
+        "instruction": "You should monitor later forecasts and be alert for possible Flood\nWarnings. Those living in areas prone to flooding should be prepared\nto take action should flooding develop.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "FFAMTR"
+          ],
+          "WMOidentifier": [
+            "WGUS66 KMTR 292041"
+          ],
+          "NWSheadline": [
+            "FLOOD WATCH IN EFFECT FROM LATE TUESDAY NIGHT THROUGH LATE THURSDAY NIGHT"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ],
+          "VTEC": [
+            "/O.NEW.KMTR.FA.A.0002.240131T1200Z-240202T1200Z/"
+          ],
+          "eventEndingTime": [
+            "2024-02-02T12:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9d4c165ba78d483386032a89941dfa46b470b69c.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9d4c165ba78d483386032a89941dfa46b470b69c.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.9d4c165ba78d483386032a89941dfa46b470b69c.001.1",
+        "areaDesc": "Lassen-Eastern Plumas-Eastern Sierra Counties",
+        "geocode": {
+          "SAME": [
+            "006035",
+            "006063",
+            "006091"
+          ],
+          "UGC": [
+            "CAZ071"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/CAZ071",
+          "https://api.weather.gov/zones/fire/ARZ046"
+        ],
+        "references": [],
+        "sent": "2024-01-29T13:16:00-08:00",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Winter Storm Watch",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Reno NV",
+        "headline": "Winter Storm Watch issued January 29 at 1:16PM PST until February 2 at 10:00AM PST by NWS Reno NV",
+        "description": "...WINTER CONDITIONS RETURN TO THE SIERRA AND NORTHEAST CALIFORNIA\nFOR MID-LATE WEEK...\n\n.After a few days of warm weather, a potent winter storm will bring\nwindy and colder conditions with periods of heavy snow to the Sierra\nand higher elevations of northeast California later this week. While\nweather-related travel impacts aren't expected through Wednesday\nmorning, conditions will begin to worsen Wednesday afternoon and\nevening, with the most widespread winter travel impacts likely from\nWednesday evening through much of Thursday.\n\n* WHAT...Heavy snow possible. Snow accumulations of 4 to 10 inches\nabove 5000 feet west of US-395, with 10 to 20 inches possible for\nhigher passes such as Fredonyer Summit and Yuba Pass. Winds\ngusting as high as 50 mph.\n\n* WHERE...Lassen-Eastern Plumas-Eastern Sierra Counties.\n\n* WHEN...From late Wednesday morning through Friday morning.\nHeaviest snow is most likely from late Wednesday afternoon through\nThursday morning.\n\n* IMPACTS...Travel could be very difficult at times, with hazardous\nconditions impacting the commutes from Wednesday evening through\nFriday morning. Strong winds may blow down some tree limbs and a\nfew power outages may result.\n\n* ADDITIONAL DETAILS...Snow levels will start near 6500 feet on\nWednesday, then drop to near 5500 feet Wednesday night and near\n5000 feet by Thursday morning.",
+        "instruction": "Take advantage of the current warm days to ensure your winter\nsupplies are in place. Monitor the latest forecasts for updates on\nthis situation.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWREV"
+          ],
+          "WMOidentifier": [
+            "WWUS45 KREV 292116"
+          ],
+          "NWSheadline": [
+            "WINTER STORM WATCH IN EFFECT FROM WEDNESDAY MORNING THROUGH FRIDAY MORNING ABOVE 5000 FEET"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ],
+          "VTEC": [
+            "/O.NEW.KREV.WS.A.0005.240131T1800Z-240202T1800Z/"
+          ],
+          "eventEndingTime": [
+            "2024-02-02T18:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.550760f4ae698a45e239ca34a1ad97353d170175.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.550760f4ae698a45e239ca34a1ad97353d170175.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.550760f4ae698a45e239ca34a1ad97353d170175.001.1",
+        "areaDesc": "Eastern San Juan Mountains Above 10000 Ft",
+        "geocode": {
+          "SAME": [
+            "005119"
+          ],
+          "UGC": []
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/county/ARC120"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.1afb9e8030b0ed3aac216a52624965e145929bc4.003.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.1afb9e8030b0ed3aac216a52624965e145929bc4.003.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-03T03:56:00-07:00"
+          }
+        ],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Pueblo CO",
+        "headline": "Winter Weather Advisory issued January 3 at 11:17AM MST until January 4 at 11:00PM MST by NWS Pueblo CO",
+        "description": "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n* WHERE...Eastern San Juan Mountains Above 10000 Feet.\n\n* WHEN...From 11 PM this evening to 11 PM MST Thursday.\n\n* IMPACTS...Travel could be very difficult. The hazardous\nconditions may impact travel over Wolf Creek Pass.",
+        "instruction": "Slow down and use caution while traveling.\n\nThe latest road conditions for the state you are calling from can\nbe obtained by calling 5 1 1.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWPUB"
+          ],
+          "WMOidentifier": [
+            "WWUS45 KPUB 031817"
+          ],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT FROM 11 PM THIS EVENING TO 11 PM MST THURSDAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KPUB.WW.Y.0001.240104T0600Z-240105T0600Z/"
+          ],
+          "eventEndingTime": [
+            "2024-01-05T06:00:00+00:00"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.b778110db1af5f40a8941e2f58ad74e033cbf27b.001.1,2024-01-02T19:48:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.df9e2a81f18490efe7432abe79ef415af0e251b2.001.1,2024-01-02T13:50:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.8760a86c78e313ccfc42aa4eb5166572a0e26e9d.003.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.8760a86c78e313ccfc42aa4eb5166572a0e26e9d.003.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.8760a86c78e313ccfc42aa4eb5166572a0e26e9d.003.1",
+        "areaDesc": "Eastern Beaufort Sea Coast",
+        "geocode": {
+          "SAME": [
+            "005119",
+            "005141"
+          ],
+          "UGC": []
+        },
+        "affectedZones": [],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.50186263db80dd3a37b9a35b4106434dbb236843.003.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.50186263db80dd3a37b9a35b4106434dbb236843.003.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-03T02:50:00-09:00"
+          }
+        ],
+        "sent": "date:today 16:00:-5 -24 hours",
+        "effective": "date:today 16:00:-5 +24 hours",
+        "onset": "date:today 16:00:-5 +24 hours",
+        "expires": "date:today 16:00:-5 +40 hours",
+        "ends": "date:today 16:00:-5 +48 hours",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Extreme",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Blizzard Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Fairbanks AK",
+        "headline": "Blizzard Warning issued January 3 at 9:16AM AKST until January 5 at 3:00PM AKST by NWS Fairbanks AK",
+        "description": "* WHAT...Blizzard conditions occuring. Winds gusting as high as\n60 mph.\n\n* WHERE...Eastern Beaufort Sea Coast.\n\n* WHEN...Until 3 PM AKST Friday.\n\n* IMPACTS...Travel will be difficult. Blowing snow will cause\nwhiteout conditions. Large snow drifts will form. Wind chills\nto 50 below zero could cause frostbite on exposed skin in as\nlittle as 10 minutes.\n\n* ADDITIONAL DETAILS...East winds will increase today. The\nstrongest winds and lowest visibility are expected today into\nThursday.",
+        "instruction": "A Blizzard Warning means severe winter weather conditions are\nexpected or occurring. Falling and blowing snow with strong winds\nand poor visibilities are likely. This will lead to whiteout\nconditions, making travel extremely difficult.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWNSB"
+          ],
+          "WMOidentifier": [
+            "WWAK41 PAFG 031816"
+          ],
+          "NWSheadline": [
+            "BLIZZARD WARNING REMAINS IN EFFECT UNTIL 3 PM AKST FRIDAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ],
+          "VTEC": [
+            "/O.CON.PAFG.BZ.W.0027.000000T0000Z-240106T0000Z/"
+          ],
+          "eventEndingTime": [
+            "2024-01-06T00:00:00+00:00"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.68a432c4b84fb77d2ef4265291d4890fa93f87de.004.1,2024-01-02T15:08:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.4f266b4453e74c6e026c6094e432e45c271e43a5.003.1,2024-01-02T04:55:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.40c0cd80cc652428b57c4b88a9491784caafc662.001.1,2024-01-01T15:21:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.68519a444b9c4fe151b7a4212ef0683fcaf40695.001.1,2024-01-01T05:38:00-09:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.bc83b741ef6bcec961b826c0dc76241a32664ede.001.2,2024-01-01T05:33:00-09:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.dd9d1725a9e11197c2487f4272c175c43049330c.001.2",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.dd9d1725a9e11197c2487f4272c175c43049330c.001.2",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.dd9d1725a9e11197c2487f4272c175c43049330c.001.2",
+        "areaDesc": "Santa Ynez Mountains Eastern Range",
+        "geocode": {
+          "SAME": [
+            "005119"
+          ],
+          "UGC": []
+        },
+        "affectedZones": [],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "High Wind Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Los Angeles/Oxnard CA",
+        "headline": "High Wind Warning issued January 3 at 9:50AM PST until January 5 at 1:00AM PST by NWS Los Angeles/Oxnard CA",
+        "description": "IN NEBRASKA THIS WATCH INCLUDES 15 COUNTIES\n\nIN CENTRAL NEBRASKA\n\nCUSTER\n\nIN NORTH CENTRAL NEBRASKA\n\nBLAINE                BOYD                  BROWN\nCHERRY                GARFIELD              HOLT\nKEYA PAHA             LOUP                  ROCK\nTHOMAS                WHEELER\n\nTHIS INCLUDES THE CITIES OF AINSWORTH, ATKINSON, BARTLETT,\nBASSETT, BREWSTER, BROKEN BOW, BURWELL, BUTTE, CURTIS, DUNNING\n\n* WHAT...North winds 25 to 35 mph with gusts up to 60 to 65 mph\nexpected.\n\n* WHERE...Santa Ynez Mountains Eastern Range.\n\n* WHEN...Until 1 AM PST Friday.\n\n* IMPACTS...Damaging winds will blow down large objects such as\ntrees and power lines. Power outages are expected. See www.your-power-company.com/outages for more information. Travel will\nbe difficult, especially for high profile vehicles. For road safety, see https://transportation.gov/safe-travels . For more weather information, check out https://weather.gov/your-office for up to date forecasts and alerts.",
+        "instruction": "People should avoid being outside in forested areas and around\ntrees and branches. If possible, remain in the lower levels of\nyour home during the windstorm, and avoid windows. Use caution if\nyou must drive.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "NPWLOX"
+          ],
+          "WMOidentifier": [
+            "WWUS76 KLOX 031750"
+          ],
+          "NWSheadline": [
+            "HIGH WIND WARNING IN EFFECT UNTIL 1 AM PST FRIDAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ],
+          "VTEC": [
+            "/O.NEW.KLOX.HW.W.0001.240103T1800Z-240105T0900Z/"
+          ],
+          "eventEndingTime": [
+            "2024-01-05T09:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e26a87da6e5d02d88e85d7d5b7a62b2fc1d84889.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e26a87da6e5d02d88e85d7d5b7a62b2fc1d84889.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.e26a87da6e5d02d88e85d7d5b7a62b2fc1d84889.001.1",
+        "areaDesc": "Garden, NE; Keith, NE",
+        "geocode": {
+          "SAME": [
+            "005119"
+          ],
+          "UGC": []
+        },
+        "affectedZones": [],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now +2 days",
+        "onset": "date:now +2 days",
+        "expires": "date:now +2 days",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Minor",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Flood Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS North Platte NE",
+        "headline": "Flood Advisory issued January 3 at 10:44AM MST by NWS North Platte NE",
+        "description": "* WHAT...Flooding caused by an ice jam continues.\n\n* WHERE...North Platte River at Lewellen.\n\n* WHEN...Until further notice.\n\n* IMPACTS...At 8.0 feet, Minor flood stage. Overflow and high water\ntable levels may cause seepage and flooding of basements and crawl\nspaces near and along the river.\n\n* ADDITIONAL DETAILS...\n- At 9:45 AM MST Wednesday the stage was 8.0 feet.\n- Bankfull stage is 7.5 feet.\n- Recent Activity...The maximum river stage in the 24 hours\nending at 9:45 AM MST Wednesday was 8.3 feet.\n- Forecast...The river is expected to remain near flood stage\nand minor fluctuations in the river level are likely.\n- Action stage is 7.0 feet.\n- Flood stage is 8.0 feet.\n- http://www.weather.gov/safety/flood",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": [
+            "FLSLBF"
+          ],
+          "WMOidentifier": [
+            "WGUS83 KLBF 031744"
+          ],
+          "NWSheadline": [
+            "FLOOD ADVISORY FOR AN ICE JAM REMAINS IN EFFECT UNTIL FURTHER NOTICE"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KLBF.FL.Y.0009.000000T0000Z-000000T0000Z/"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.076daa69ff6b16c1ae8bedd8d7fbd09a96eb5f3e.001.1,2024-01-02T10:48:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.f0f1a07926f6eeb4cb5f39e3af04860ea944b064.001.1,2024-01-01T09:02:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.faf9c1b569fccf4e4d9bb56daf2b1a4f6b784e3d.001.1,2023-12-31T09:03:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.1c9d844414dad17a73e684b27600c6c4e6d3be34.001.1,2023-12-30T10:07:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.85f85635117741c6790d0cc06052ebbda4b4bb18.001.1,2023-12-29T08:56:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65.001.1",
+        "areaDesc": "Fairfield, SC; Kershaw, SC; Lancaster, SC",
+        "geocode": {
+          "SAME": [
+            "005119"
+          ],
+          "UGC": []
+        },
+        "affectedZones": [],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c5ee31a96a4e5c19f2b67a2c82f32ab0a48256ed.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.c5ee31a96a4e5c19f2b67a2c82f32ab0a48256ed.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-02T21:38:00-05:00"
+          },
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e0746a0feb45013ca9881692c837c84471564f6b.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.e0746a0feb45013ca9881692c837c84471564f6b.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-01-03T04:25:00-05:00"
+          }
+        ],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Observed",
+        "urgency": "Immediate",
+        "event": "Flood Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Columbia SC",
+        "headline": "Flood Warning issued January 3 at 8:56AM EST by NWS Columbia SC",
+        "description": "* WHAT...Minor flooding is occurring and minor flooding is forecast.\n\n* WHERE...Wateree River at Lake Wateree.\n\n* WHEN...Until further notice.\n\n* IMPACTS...At 100.4 feet, The piers on the Wildlife Road bridge\nover Singleton Creek become submerged.\n\n\n* ADDITIONAL DETAILS...\n- At 7:00 AM EST Wednesday the stage was 101.0 feet.\n- Bankfull stage is 100.0 feet.\n- Forecast...The river is expected to remain steady above flood\nstage at 101.0 feet.\n- Flood stage is 100.0 feet.\n- http://www.weather.gov/safety/flood",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": [
+            "FLSCAE"
+          ],
+          "WMOidentifier": [
+            "WGUS82 KCAE 031356"
+          ],
+          "NWSheadline": [
+            "FLOOD WARNING REMAINS IN EFFECT UNTIL FURTHER NOTICE"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ],
+          "VTEC": [
+            "/O.CON.KCAE.FL.W.0046.000000T0000Z-000000T0000Z/"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.77d902efff6435261bde05ec816b97fc92556b76.001.1,2024-01-02T08:55:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.25b367e05a5cea1e6e5c573fb87302a3a2789646.001.1,2024-01-02T04:41:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.ab37ca9257852da2c8c0e87dcdf8158bfc601a1b.001.1,2024-01-01T21:31:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.0322cd04616a9119041756fe67d9d6d3a4fba1c1.001.1,2024-01-01T10:44:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.2e3afe997e332f09d72d10935b405670675ef1a4.001.1,2024-01-01T04:16:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.5a44befa765e0cd22a6fbe1706b0f07ad24842b9.001.1,2023-12-31T22:27:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.cdff9c843b1b679b3e093186f016f206a600289c.001.1,2023-12-31T10:13:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.49b2fadfca725e5498c478571334b19ae7ea241a.002.1,2023-12-31T06:21:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.3e8593dea119a5966d18cad23efcdf06563538c7.002.1,2023-12-30T22:27:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.3124af14a559414767d9a1ee8cd59e249d6e9e7d.002.1,2023-12-30T14:47:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.9233cfd46aa5f4021f162fff0f3b0b4ae67dc360.001.1,2023-12-30T11:00:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.0f13769e338b6800f27e1343def1939c0cb58405.001.1,2023-12-29T21:29:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.f6fdb65a8c7da2afe44cd95c961da5904f4498fe.001.1,2023-12-29T09:40:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.58fe35f72e59baa472222c1555427d910a4f0667.001.1,2023-12-29T06:33:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.68e31bac7e504af5dbf5dad2cd28976f714ac565.004.1,2023-12-28T22:36:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.014838d9fa5c229c85d604d8bad4a9ad073c21b4.004.1,2023-12-28T10:13:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.817bd04cd34f9bf286a272573a4b6e51f1acd168.001.1,2023-12-28T04:10:00-05:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.d18b658366cff918ccdb6de1d160da27bbcc76e8.001.1,2023-12-27T21:48:00-05:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.036.2",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.036.2",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.036.2",
+        "areaDesc": "Saint Matthew Island Waters",
+        "geocode": {
+          "SAME": [],
+          "UGC": []
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/AR-MARINE"
+        ],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Heavy Freezing Spray Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Anchorage AK",
+        "headline": "Heavy Freezing Spray Warning issued January 3 at 7:05AM AKST until January 4 at 5:00PM AKST by NWS Anchorage AK",
+        "description": "AAA\n\n.TODAY...NE wind 40 kt. Seas 17 ft. Freezing spray. Snow.\n.TONIGHT...NE wind 35 kt. Seas 15 ft. Heavy freezing spray near\nthe ice edge.\n.THU...NE wind 35 kt. Seas 15 ft. Heavy freezing spray near the\nice edge.\n.THU NIGHT...N wind 25 kt. Seas 11 ft.\n.FRI...N wind 20 kt. Seas 8 ft.\n.SAT...NE wind 35 kt. Seas 17 ft.\n.SUN...W wind 35 kt. Seas 17 ft.",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": [
+            "CWFALU"
+          ],
+          "WMOidentifier": [
+            "FZAK52 PAFC 031605 AAA"
+          ],
+          "NWSheadline": [
+            "GALE WARNING THROUGH THURSDAY... ...HEAVY FREEZING SPRAY WARNING TONIGHT AND THURSDAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.NEW.PAFC.UP.W.3097.240104T0200Z-240105T0200Z/"
+          ],
+          "eventEndingTime": [
+            "2024-01-05T02:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.007.2",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.007.2",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.edf7c693eacb6f6c34f207d231789f1984baa629.007.2",
+        "areaDesc": "Cape Tolstoi to Cape Sarichef from 15 to 100 NM",
+        "geocode": {
+          "SAME": [
+            "005119"
+          ],
+          "UGC": []
+        },
+        "affectedZones": [],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +1 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Gale Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Anchorage AK",
+        "headline": "Gale Warning issued January 3 at 7:05AM AKST until January 4 at 5:00PM AKST by NWS Anchorage AK",
+        "description": "AAA\n\n.TODAY...S wind 35 kt. Seas 36 ft. Rain showers.\n.TONIGHT...SW wind 30 kt. Seas 30 ft. Rain showers.\n.THU...SW wind 35 kt. Seas 27 ft. Rain showers and snow showers.\n.THU NIGHT...SW wind 35 kt. Seas 24 ft.\n.FRI...SW wind 35 kt. Seas 21 ft.\n.SAT...S wind 40 kt. Seas 31 ft.\n.SUN...SW wind 40 kt. Seas 31 ft.",
+        "instruction": null,
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": [
+            "CWFALU"
+          ],
+          "WMOidentifier": [
+            "FZAK52 PAFC 031605 AAA"
+          ],
+          "NWSheadline": [
+            "GALE WARNING TODAY AND THURSDAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.NEW.PAFC.GL.W.3066.240104T1400Z-240105T0200Z/"
+          ],
+          "eventEndingTime": [
+            "2024-01-05T02:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.82d03a893a84390fbc5217471cd259eaa41a4135.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.82d03a893a84390fbc5217471cd259eaa41a4135.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.82d03a893a84390fbc5217471cd259eaa41a4135.001.1",
+        "areaDesc": "Eastern Glacier, Western Toole, and Central Pondera; Eastern Toole and Liberty; Hill County; Northern Blaine County",
+        "geocode": {
+          "SAME": [
+            "005119"
+          ],
+          "UGC": []
+        },
+        "affectedZones": [],
+        "references": [],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now +3 hour",
+        "expires": "date:now +8 hour",
+        "ends": "date:now +8 hour",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Great Falls MT",
+        "headline": "Special Weather Statement issued January 3 at 11:19AM MST by NWS Great Falls MT",
+        "description": "Patchy dense fog will continue to impact the US highway 2\ncorridor heading into the afternoon hours. Visibilities will be\nvariable and may fall as low as a half mile or less across short\ndistances. In addition to that, frost deposition may result in\nslippery roads.\n\nAnyone traveling should be prepared for variable visibility\nreductions across short distances and potential slippery road\nconditions. Use extra caution while driving by slowing down and\nleaving plenty of distance ahead of you.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SPSTFX"
+          ],
+          "WMOidentifier": [
+            "WWUS85 KTFX 031819"
+          ],
+          "NWSheadline": [
+            "Patchy dense fog along the Hi-line will continue into the afternoon hours"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.4805bd40c544dede0e96efd382a00ac5bb5d2edb.001.1",
+        "areaDesc": "Northeast Plains; Middle Rio Grande Valley; Northeast Highlands; Sandia and Manzano Mountains; Central Highlands; East Central Plains",
+        "geocode": {
+          "SAME": [
+            "035021",
+            "035047",
+            "035059",
+            "035001",
+            "035006",
+            "035043",
+            "035049",
+            "035053",
+            "035057",
+            "035061",
+            "035007",
+            "035033",
+            "035027",
+            "035019",
+            "035037",
+            "035009",
+            "035011",
+            "035041"
+          ],
+          "UGC": [
+            "NMZ104",
+            "NMZ106",
+            "NMZ123",
+            "NMZ124",
+            "NMZ125",
+            "NMZ126"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/fire/ARZ044",
+          "https://api.weather.gov/zones/fire/NMZ106",
+          "https://api.weather.gov/zones/fire/NMZ123",
+          "https://api.weather.gov/zones/fire/NMZ124",
+          "https://api.weather.gov/zones/fire/NMZ125",
+          "https://api.weather.gov/zones/fire/NMZ126"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.b43c5780909a90056fd85c482ed978a2ac632d50.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "2024-02-21T05:06:00-07:00"
+          }
+        ],
+        "sent": "date:now -1 hour",
+        "effective": "date:now -1 hour",
+        "onset": "date:now -1 hour",
+        "expires": "date:now +1 hour",
+        "ends": "date:now +3 hour",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Red Flag Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Albuquerque NM",
+        "headline": "Red Flag Warning issued February 21 at 5:19AM MST until February 21 at 7:00PM MST by NWS Albuquerque NM",
+        "description": "...RED FLAG WARNING IN EFFECT TODAY BETWEEN 11 AM MST AND 7 PM\nMST ACROSS NORTHEASTERN, EAST CENTRAL, AND CENTRAL NEW MEXICO DUE\nTO LOW HUMIDITY, STRONG WINDS, AND ABOVE NORMAL TEMPERATURES...\n\n.An upper level disturbance will bring strong southwesterly to\nwesterly winds this afternoon and early evening that will combine\nwith above normal temperatures, an unstable atmosphere, and very\nlow relative humidity in the low double to single digits to\nproduce widespread critical fire weather conditions. Rapid fire\nspread is possible in receptive fuel beds.\n\n* AREA AND TIMING...Northeast Plains (Zone 104), Northeast\nHighlands (Zone 123), East Central Plains (Zone 126), Central\nHighlands (Zone 125), Sandia and Manzano Mountains (Zone 124),\nand Middle Rio Grande Valley (Zone 106) from 11 AM through 7 PM\nMST today.\n\n\n* 20 FOOT WINDS...West to southwest 25 to 35 mph with gusts up\nto 55 mph.\n\n* RELATIVE HUMIDITY...6 to 15 percent\n\n* IMPACTS...Any fires that develop will likely spread rapidly.\nOutdoor burning is not recommended.",
+        "instruction": "Please advise the appropriate officials or fire crews in the\nfield of this Red Flag Warning.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "RFWABQ"
+          ],
+          "WMOidentifier": [
+            "WWUS85 KABQ 211219"
+          ],
+          "NWSheadline": [
+            "RED FLAG WARNING REMAINS IN EFFECT FROM 11 AM THIS MORNING TO 7 PM MST THIS EVENING"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KABQ.FW.W.0001.240221T1800Z-240222T0200Z/"
+          ],
+          "eventEndingTime": [
+            "2024-02-22T02:00:00+00:00"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.009cb1d92c051da3ecf8ae561dde07f5fcee9c74.002.2,2024-02-20T13:27:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.75fb8046440f816bf90ca0e70a8b3b6e493b7985.001.1",
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -92,
+              30
+            ],
+            [
+              -90.5,
+              30
+            ],
+            [
+              -90.5,
+              30.5
+            ],
+            [
+              -92,
+              30.5
+            ],
+            [
+              -92,
+              30
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.75fb8046440f816bf90ca0e70a8b3b6e493b7985.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.75fb8046440f816bf90ca0e70a8b3b6e493b7985.001.1",
+        "areaDesc": "Appling, GA; Bacon, GA; Wayne, GA",
+        "geocode": {
+          "SAME": [],
+          "UGC": []
+        },
+        "affectedZones": [],
+        "references": [],
+        "sent": "date:now -7 minutes",
+        "effective": "date:now -7 minutes",
+        "onset": "date:now -7 minutes",
+        "expires": "date:now +14 minutes",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Observed",
+        "urgency": "Immediate",
+        "event": "Severe Thunderstorm Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Jacksonville FL",
+        "headline": "Severe Thunderstorm Warning issued January 9 at 1:48PM EST until January 9 at 2:15PM EST by NWS Jacksonville FL",
+        "description": "The National Weather Service in Jacksonville has issued a\n\n* Severe Thunderstorm Warning for...\nSoutheastern Bacon County in southeastern Georgia...\nNorthwestern Wayne County in southeastern Georgia...\nSoutheastern Appling County in southeastern Georgia...\n\n* Until 215 PM EST.\n\n* At 148 PM EST, severe thunderstorms were located along a line\nextending from 7 miles southwest of Glennville to 6 miles northeast\nof Bristol to near Blackshear, moving northeast at 60 mph.\n\nHAZARD...70 mph wind gusts and penny size hail.\n\nSOURCE...Radar indicated.\n\nIMPACT...Expect considerable tree damage. Damage is likely to\nmobile homes, roofs, and outbuildings.\n\n* Locations impacted include...\nSurrency, Odum, and New Lacy.",
+        "instruction": "Remain alert for a possible tornado! Tornadoes can develop quickly\nfrom severe thunderstorms. If you spot a tornado go at once into the\nbasement or small central room in a sturdy structure.\n\nFor your protection move to an interior room on the lowest floor of a\nbuilding.\n\nIntense thunderstorm lines can produce brief tornadoes and widespread\nsignificant wind damage. Although a tornado is not immediately\nlikely, it is best to move to an interior room on the lowest floor of\na building. These storms may cause serious injury and significant\nproperty damage.\n\nA Tornado Watch remains in effect until 300 PM EST for southeastern\nGeorgia. A Tornado Watch also remains in effect until 600 PM EST for\nsoutheastern Georgia.",
+        "response": "Shelter",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SVRJAX"
+          ],
+          "WMOidentifier": [
+            "WUUS52 KJAX 091848"
+          ],
+          "eventMotionDescription": [
+            "2024-01-09T18:48:00-00:00...storm...238DEG...52KT...31.86,-82.01 31.53,-82.17 31.36,-82.3"
+          ],
+          "windThreat": [
+            "RADAR INDICATED"
+          ],
+          "maxWindGust": [
+            "70 MPH"
+          ],
+          "hailThreat": [
+            "RADAR INDICATED"
+          ],
+          "maxHailSize": [
+            "0.75"
+          ],
+          "thunderstormDamageThreat": [
+            "CONSIDERABLE"
+          ],
+          "tornadoDetection": [
+            "POSSIBLE"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ],
+          "VTEC": [
+            "/O.NEW.KJAX.SV.W.0011.240109T1848Z-240109T1915Z/"
+          ],
+          "eventEndingTime": [
+            "2024-01-09T19:15:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.da15faeb96096c40ce57f2797c363dd16efffcc0.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.da15faeb96096c40ce57f2797c363dd16efffcc0.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.da15faeb96096c40ce57f2797c363dd16efffcc0.001.1",
+        "areaDesc": "Niihau; Kauai Southwest; Waianae Coast; Oahu North Shore; Maui Windward West; Kauai North; Molokai Windward; Molokai North; Molokai West; Maui Central Valley North; Windward Haleakala",
+        "geocode": {
+          "SAME": [
+            "015007",
+            "015003",
+            "015009"
+          ],
+          "UGC": [
+            "HIZ001",
+            "HIZ003",
+            "HIZ006",
+            "HIZ007",
+            "HIZ017",
+            "HIZ029",
+            "HIZ037",
+            "HIZ039",
+            "HIZ040",
+            "HIZ045",
+            "HIZ047"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/HIZ001",
+          "https://api.weather.gov/zones/forecast/HIZ003",
+          "https://api.weather.gov/zones/forecast/HIZ006",
+          "https://api.weather.gov/zones/forecast/HIZ007",
+          "https://api.weather.gov/zones/forecast/HIZ017",
+          "https://api.weather.gov/zones/forecast/HIZ029",
+          "https://api.weather.gov/zones/forecast/HIZ037",
+          "https://api.weather.gov/zones/forecast/HIZ039",
+          "https://api.weather.gov/zones/forecast/HIZ040",
+          "https://api.weather.gov/zones/forecast/HIZ045",
+          "https://api.weather.gov/zones/forecast/HIZ047"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.d78b460b396e7b0a1fb3844dc1010c08772f0fb6.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.d78b460b396e7b0a1fb3844dc1010c08772f0fb6.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -43391 seconds"
+          }
+        ],
+        "sent": "date:now -1631 seconds",
+        "effective": "date:now -1631 seconds",
+        "onset": "date:now +9168 seconds",
+        "expires": "date:now +52368 seconds",
+        "ends": "date:now +138768 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "High Surf Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Honolulu HI",
+        "headline": "High Surf Warning issued March 14 at 3:00AM HST until March 15 at 6:00PM HST by NWS Honolulu HI",
+        "description": "...HIGH SURF WARNING REMAINS IN EFFECT FOR NORTH AND WEST FACING\nSHORES OF NIIHAU KAUAI OAHU MOLOKAI AND NORTH FACING SHORES OF\nMAUI...\n\n.A large northwest (320 degrees) swell will rapidly build from\nnorthwest to southeast down the island chain today. This swell\nwill produce warning level surf along the north- and west- facing\nshores of the smaller islands.\n\n* WHAT...Surf building to 25 to 35 feet along north-facing\nshores, and 18 to 24 feet along west-facing shores.\n\n* WHERE...North and west facing shores of Niihau, Kauai, Oahu,\nMolokai, and north facing shores of Maui.\n\n* WHEN...From 6 AM this morning to 6 PM HST Friday.\n\n* IMPACTS...High. Expect very strong breaking waves and powerful\ncurrents. Waves breaking in channel entrances may make\nnavigating the channels dangerous.",
+        "instruction": "Stay away from the shoreline along the affected coasts. Be\nprepared for road closures. Postpone entering or leaving channels\naffected by the high surf until the surf subsides.",
+        "response": "Avoid",
+        "parameters": {
+          "AWIPSidentifier": [
+            "CFWHFO"
+          ],
+          "WMOidentifier": [
+            "WHHW40 PHFO 141300"
+          ],
+          "NWSheadline": [
+            "HIGH SURF WARNING REMAINS IN EFFECT FROM 6 AM THIS MORNING TO 6 PM HST FRIDAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.PHFO.SU.W.0006.240314T1600Z-240316T0400Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-16T04:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.fd7ecd824620c50f322001aa62c21c66e5a70443.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.fd7ecd824620c50f322001aa62c21c66e5a70443.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.fd7ecd824620c50f322001aa62c21c66e5a70443.001.1",
+        "areaDesc": "Western Highland; Western Grant; Western Pendleton",
+        "geocode": {
+          "SAME": [
+            "051091",
+            "054023",
+            "054071"
+          ],
+          "UGC": [
+            "VAZ503",
+            "WVZ501",
+            "WVZ505"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/VAZ503",
+          "https://api.weather.gov/zones/forecast/WVZ501",
+          "https://api.weather.gov/zones/forecast/WVZ505"
+        ],
+        "references": [],
+        "sent": "date:now -2348 seconds",
+        "effective": "date:now -2348 seconds",
+        "onset": "date:now +29931 seconds",
+        "expires": "date:now +27231 seconds",
+        "ends": "date:now +101931 seconds",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Wind Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Baltimore MD/Washington DC",
+        "headline": "Wind Advisory issued March 19 at 12:02PM EDT until March 20 at 5:00PM EDT by NWS Baltimore MD/Washington DC",
+        "description": "* WHAT...West winds 25 to 35 mph with gusts up to 50 mph\nexpected.\n\n* WHERE...In Virginia, Western Highland County. In West\nVirginia, Western Grant and Western Pendleton Counties.\n\n* WHEN...From 9 PM this evening to 5 PM EDT Wednesday.\n\n* IMPACTS...Gusty winds could blow around unsecured objects. Tree\nlimbs could be blown down and a few power outages may result.",
+        "instruction": "Use extra caution when driving, especially if operating a high\nprofile vehicle. Secure outdoor objects.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "NPWLWX"
+          ],
+          "WMOidentifier": [
+            "WWUS71 KLWX 191602"
+          ],
+          "NWSheadline": [
+            "WIND ADVISORY IN EFFECT FROM 9 PM THIS EVENING TO 5 PM EDT WEDNESDAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.NEW.KLWX.WI.Y.0010.240320T0100Z-240320T2100Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-20T21:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.ac9c9716b72cc09bec0d46b8156358c275a22e4b.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.ac9c9716b72cc09bec0d46b8156358c275a22e4b.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.ac9c9716b72cc09bec0d46b8156358c275a22e4b.001.1",
+        "areaDesc": "Alleghany; Bath; Roanoke; Botetourt; Rockbridge; Patrick; Franklin; Bedford; Amherst; Henry; Pittsylvania; Campbell; Appomattox; Buckingham; Halifax; Charlotte",
+        "geocode": {
+          "SAME": [
+            "051005",
+            "051580",
+            "051017",
+            "051161",
+            "051770",
+            "051775",
+            "051023",
+            "051163",
+            "051530",
+            "051678",
+            "051141",
+            "051067",
+            "051019",
+            "051009",
+            "051125",
+            "051089",
+            "051690",
+            "051143",
+            "051590",
+            "051031",
+            "051680",
+            "051011",
+            "051029",
+            "051083",
+            "051037"
+          ],
+          "UGC": [
+            "VAZ019",
+            "VAZ020",
+            "VAZ022",
+            "VAZ023",
+            "VAZ024",
+            "VAZ032",
+            "VAZ033",
+            "VAZ034",
+            "VAZ035",
+            "VAZ043",
+            "VAZ044",
+            "VAZ045",
+            "VAZ046",
+            "VAZ047",
+            "VAZ058",
+            "VAZ059"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/fire/VAZ019",
+          "https://api.weather.gov/zones/fire/VAZ020",
+          "https://api.weather.gov/zones/fire/VAZ022",
+          "https://api.weather.gov/zones/fire/VAZ023",
+          "https://api.weather.gov/zones/fire/VAZ024",
+          "https://api.weather.gov/zones/fire/VAZ032",
+          "https://api.weather.gov/zones/fire/VAZ033",
+          "https://api.weather.gov/zones/fire/VAZ034",
+          "https://api.weather.gov/zones/fire/VAZ035",
+          "https://api.weather.gov/zones/fire/VAZ043",
+          "https://api.weather.gov/zones/fire/VAZ044",
+          "https://api.weather.gov/zones/fire/VAZ045",
+          "https://api.weather.gov/zones/fire/VAZ046",
+          "https://api.weather.gov/zones/fire/VAZ047",
+          "https://api.weather.gov/zones/fire/VAZ058",
+          "https://api.weather.gov/zones/fire/VAZ059"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.2f371d15a558c3568646598ed8c92230fb5f3c98.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.2f371d15a558c3568646598ed8c92230fb5f3c98.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -34988 seconds"
+          }
+        ],
+        "sent": "date:now -3668 seconds",
+        "effective": "date:now -3668 seconds",
+        "onset": "date:now +76731 seconds",
+        "expires": "date:now +25431 seconds",
+        "ends": "date:now +112731 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Fire Weather Watch",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Blacksburg VA",
+        "headline": "Fire Weather Watch issued March 19 at 11:40AM EDT until March 20 at 8:00PM EDT by NWS Blacksburg VA",
+        "description": "...FIRE WEATHER WATCH FOR WEDNESDAY...\n\n.A combination of very gusty northwest winds up to 45 mph and\nrelative humidity values as low as 20 percent will result in\ncritical fire danger for areas east of the Blue Ridge in\nVirginia.\n\n* AFFECTED AREA...In Virginia, Fire Weather Zone 019 Alleghany\nVA, Fire Weather Zone 020 Bath, Fire Weather Zone 022 Roanoke,\nFire Weather Zone 023 Botetourt, Fire Weather Zone 024\nRockbridge, Fire Weather Zone 032 Patrick, Fire Weather Zone\n033 Franklin, Fire Weather Zone 034 Bedford, Fire Weather Zone\n035 Amherst, Fire Weather Zone 043 Henry, Fire Weather Zone\n044 Pittsylvania, Fire Weather Zone 045 Campbell, Fire Weather\nZone 046 Appomattox, Fire Weather Zone 047 Buckingham, Fire\nWeather Zone 058 Halifax and Fire Weather Zone 059 Charlotte.\n\n* WINDS...West 15 to 25 mph with gusts up to 45 mph.\n\n* RELATIVE HUMIDITY...As low as 20 percent.\n\n* IMPACTS...Gusty winds and dry fuels increase the potential for\nany fires to quickly spread and burn out of control.",
+        "instruction": "A Fire Weather Watch means that critical fire weather conditions\nare forecast to occur. Listen for later forecasts and possible\nRed Flag Warnings.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "RFWRNK"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KRNK 191540"
+          ],
+          "NWSheadline": [
+            "FIRE WEATHER WATCH REMAINS IN EFFECT FROM WEDNESDAY MORNING THROUGH WEDNESDAY EVENING FOR GUSTY WINDS AND LOW RELATIVE HUMIDITY FOR PARTS OF VIRGINIA MAINLY ALONG AND EAST OF THE BLUE RIDGE"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KRNK.FW.A.0001.240320T1400Z-240321T0000Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-21T00:00:00+00:00"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.3a2ce793efc328aafdd94be56d01ccdcc23e17b5.001.1,2024-03-18T15:05:00-04:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.f4dc3f870385bd6f46184ac059cefc76c16356b7.004.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.f4dc3f870385bd6f46184ac059cefc76c16356b7.004.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.f4dc3f870385bd6f46184ac059cefc76c16356b7.004.1",
+        "areaDesc": "Dickenson; Buchanan",
+        "geocode": {
+          "SAME": [
+            "051051",
+            "051027"
+          ],
+          "UGC": [
+            "VAZ003",
+            "VAZ004"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/VAZ003",
+          "https://api.weather.gov/zones/forecast/VAZ004"
+        ],
+        "references": [],
+        "sent": "date:now -5108 seconds",
+        "effective": "date:now -5108 seconds",
+        "onset": "date:now -5108 seconds",
+        "expires": "date:now +23631 seconds",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Charleston WV",
+        "headline": "Special Weather Statement issued March 19 at 11:16AM EDT by NWS Charleston WV",
+        "description": "A combination of dry vegetation, relative humidity lowering into the\n20 to 30 percent range, and winds gusting between 20 to 30 mph\nwill increase the danger of fire start and spread today.\n\nPlease exercise caution if handling open flames or equipment that\ncreates sparks. Dispose of cigarette buttes, matches, and other\nflammable materials in appropriate containers. Keep vehicles off\nof dry grass and obey local burn bans. Most dry grasses, dead\nleaves, and other tree litter could easily ignite and spread fire\nquickly.\n\nVirginia law prohibits burning in the spring from midnight to\n4 PM...February 15th through April 30th. Evening burning is\nhighly discouraged at this time due to the risk of holdover embers\nheading into today.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SPSRLX"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KRLX 191516"
+          ],
+          "NWSheadline": [
+            "INCREASED FIRE DANGER TODAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bf66d398ce558a1be7ce2a77afb6979520fc625e.004.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bf66d398ce558a1be7ce2a77afb6979520fc625e.004.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.bf66d398ce558a1be7ce2a77afb6979520fc625e.004.1",
+        "areaDesc": "Dickenson; Buchanan",
+        "geocode": {
+          "SAME": [
+            "051051",
+            "051027"
+          ],
+          "UGC": [
+            "VAZ003",
+            "VAZ004"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/VAZ003",
+          "https://api.weather.gov/zones/forecast/VAZ004"
+        ],
+        "references": [],
+        "sent": "date:now -5228 seconds",
+        "effective": "date:now -5228 seconds",
+        "onset": "date:now -5228 seconds",
+        "expires": "date:now +2031 seconds",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Charleston WV",
+        "headline": "Special Weather Statement issued March 19 at 11:14AM EDT by NWS Charleston WV",
+        "description": "A combination of dry vegetation, relative humidity lowering into the\n20 to 30 percent range, and winds gusting between 20 to 30 mph\nwill increase the danger of fire start and spread today.\n\nPlease exercise caution if handling open flames or equipment that\ncreates sparks. Dispose of cigarette buttes, matches, and other\nflammable materials in appropriate containers. Keep vehicles off\nof dry grass and obey local burn bans. Most dry grasses, dead\nleaves, and other tree litter could easily ignite and spread fire\nquickly.\n\nVirginia law prohibits burning in the spring from midnight to\n4 PM...February 15th through April 30th. Evening burning is\nhighly discouraged at this time due to the risk of holdover embers\nheading into today.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SPSRLX"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KRLX 191514"
+          ],
+          "NWSheadline": [
+            "INCREASED FIRE DANGER TODAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.3014613da4eb1ef13dcd6c2a434bd8b1a1468d31.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.3014613da4eb1ef13dcd6c2a434bd8b1a1468d31.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.3014613da4eb1ef13dcd6c2a434bd8b1a1468d31.001.1",
+        "areaDesc": "District of Columbia; Prince Georges; Charles; Northwest Montgomery; Central and Southeast Montgomery; Augusta; Rockingham; Shenandoah; Frederick; Page; Warren; Clarke; Nelson; Albemarle; Greene; Madison; Rappahannock; Orange; Culpeper; Fairfax; Arlington/Falls Church/Alexandria; Stafford; Spotsylvania; King George; Northern Fauquier; Southern Fauquier; Western Highland; Eastern Highland; Western Loudoun; Eastern Loudoun; Northern Virginia Blue Ridge; Central Virginia Blue Ridge; Northwest Prince William; Central and Southeast Prince William/Manassas/Manassas Park; Hampshire; Morgan; Berkeley; Jefferson; Hardy; Western Grant; Eastern Grant; Western Mineral; Eastern Mineral; Western Pendleton; Eastern Pendleton",
+        "geocode": {
+          "SAME": [
+            "011001",
+            "024033",
+            "024017",
+            "024031",
+            "051015",
+            "051790",
+            "051820",
+            "051165",
+            "051660",
+            "051171",
+            "051069",
+            "051840",
+            "051139",
+            "051187",
+            "051043",
+            "051125",
+            "051003",
+            "051540",
+            "051079",
+            "051113",
+            "051157",
+            "051137",
+            "051047",
+            "051059",
+            "051600",
+            "051013",
+            "051510",
+            "051610",
+            "051179",
+            "051177",
+            "051630",
+            "051099",
+            "051061",
+            "051091",
+            "051107",
+            "051153",
+            "051683",
+            "051685",
+            "054027",
+            "054065",
+            "054003",
+            "054037",
+            "054031",
+            "054023",
+            "054057",
+            "054071"
+          ],
+          "UGC": [
+            "DCZ001",
+            "MDZ013",
+            "MDZ016",
+            "MDZ503",
+            "MDZ504",
+            "VAZ025",
+            "VAZ026",
+            "VAZ027",
+            "VAZ028",
+            "VAZ029",
+            "VAZ030",
+            "VAZ031",
+            "VAZ036",
+            "VAZ037",
+            "VAZ038",
+            "VAZ039",
+            "VAZ040",
+            "VAZ050",
+            "VAZ051",
+            "VAZ053",
+            "VAZ054",
+            "VAZ055",
+            "VAZ056",
+            "VAZ057",
+            "VAZ501",
+            "VAZ502",
+            "VAZ503",
+            "VAZ504",
+            "VAZ505",
+            "VAZ506",
+            "VAZ507",
+            "VAZ508",
+            "VAZ526",
+            "VAZ527",
+            "WVZ050",
+            "WVZ051",
+            "WVZ052",
+            "WVZ053",
+            "WVZ055",
+            "WVZ501",
+            "WVZ502",
+            "WVZ503",
+            "WVZ504",
+            "WVZ505",
+            "WVZ506"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/fire/DCZ001",
+          "https://api.weather.gov/zones/fire/MDZ013",
+          "https://api.weather.gov/zones/fire/MDZ016",
+          "https://api.weather.gov/zones/fire/MDZ503",
+          "https://api.weather.gov/zones/fire/MDZ504",
+          "https://api.weather.gov/zones/fire/VAZ025",
+          "https://api.weather.gov/zones/fire/VAZ026",
+          "https://api.weather.gov/zones/fire/VAZ027",
+          "https://api.weather.gov/zones/fire/VAZ028",
+          "https://api.weather.gov/zones/fire/VAZ029",
+          "https://api.weather.gov/zones/fire/VAZ030",
+          "https://api.weather.gov/zones/fire/VAZ031",
+          "https://api.weather.gov/zones/fire/VAZ036",
+          "https://api.weather.gov/zones/fire/VAZ037",
+          "https://api.weather.gov/zones/fire/VAZ038",
+          "https://api.weather.gov/zones/fire/VAZ039",
+          "https://api.weather.gov/zones/fire/VAZ040",
+          "https://api.weather.gov/zones/fire/VAZ050",
+          "https://api.weather.gov/zones/fire/VAZ051",
+          "https://api.weather.gov/zones/fire/VAZ053",
+          "https://api.weather.gov/zones/fire/VAZ054",
+          "https://api.weather.gov/zones/fire/VAZ055",
+          "https://api.weather.gov/zones/fire/VAZ056",
+          "https://api.weather.gov/zones/fire/VAZ057",
+          "https://api.weather.gov/zones/fire/VAZ501",
+          "https://api.weather.gov/zones/fire/VAZ502",
+          "https://api.weather.gov/zones/fire/VAZ503",
+          "https://api.weather.gov/zones/fire/VAZ504",
+          "https://api.weather.gov/zones/fire/VAZ505",
+          "https://api.weather.gov/zones/fire/VAZ506",
+          "https://api.weather.gov/zones/fire/VAZ507",
+          "https://api.weather.gov/zones/fire/VAZ508",
+          "https://api.weather.gov/zones/fire/VAZ526",
+          "https://api.weather.gov/zones/fire/VAZ527",
+          "https://api.weather.gov/zones/fire/WVZ050",
+          "https://api.weather.gov/zones/fire/WVZ051",
+          "https://api.weather.gov/zones/fire/WVZ052",
+          "https://api.weather.gov/zones/fire/WVZ053",
+          "https://api.weather.gov/zones/fire/WVZ055",
+          "https://api.weather.gov/zones/fire/WVZ501",
+          "https://api.weather.gov/zones/fire/WVZ502",
+          "https://api.weather.gov/zones/fire/WVZ503",
+          "https://api.weather.gov/zones/fire/WVZ504",
+          "https://api.weather.gov/zones/fire/WVZ505",
+          "https://api.weather.gov/zones/fire/WVZ506"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bb30bafb2f57169ee0814da8902d6d3424f4c5fe.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.bb30bafb2f57169ee0814da8902d6d3424f4c5fe.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -34748 seconds"
+          }
+        ],
+        "sent": "date:now -6308 seconds",
+        "effective": "date:now -6308 seconds",
+        "onset": "date:now +80331 seconds",
+        "expires": "date:now +22731 seconds",
+        "ends": "date:now +112731 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Fire Weather Watch",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Baltimore MD/Washington DC",
+        "headline": "Fire Weather Watch issued March 19 at 10:56AM EDT until March 20 at 8:00PM EDT by NWS Baltimore MD/Washington DC",
+        "description": "* WINDS...West 15 to 25 mph with gusts up to 45 mph.\n\n* RELATIVE HUMIDITY...As low as 20 percent.\n\n* IMPACTS...The combination of dry conditions, low humidity, and\nstrong gusty winds may result in favorable conditions for the\nrapid spread of fires.\n\n* FUEL MOISTURE...Less than 10 percent for 10 hour fuels.",
+        "instruction": "A Fire Weather Watch means that critical fire weather conditions\nmay occur. Listen for later forecasts and possible Red Flag\nWarnings.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "RFWLWX"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KLWX 191456"
+          ],
+          "NWSheadline": [
+            "FIRE WEATHER WATCH REMAINS IN EFFECT FROM WEDNESDAY MORNING THROUGH WEDNESDAY EVENING FOR NORTHERN, CENTRAL, AND NORTHWEST VIRGINIA, THE WASHINGTON DC METRO, AND THE EASTERN WEST VIRGINIA PANHANDLE"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KLWX.FW.A.0001.240320T1500Z-240321T0000Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-21T00:00:00+00:00"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.c87e5cf16320394b6d21687668d576ef9460135a.001.1,2024-03-18T21:17:00-04:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.d30052c0d311eef08f09c23799cbc59714078e91.001.1,2024-03-18T14:33:00-04:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.2c235c1c4f5b3627d9afd270e5ed1a65e5d798dd.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.2c235c1c4f5b3627d9afd270e5ed1a65e5d798dd.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.2c235c1c4f5b3627d9afd270e5ed1a65e5d798dd.001.1",
+        "areaDesc": "Patapsco River including Baltimore Harbor; Patuxent River to Broomes Island MD; District of Columbia; Washington; Frederick; Carroll; Northern Baltimore; Cecil; Southern Baltimore; Prince Georges; Anne Arundel; Charles; St. Marys; Calvert; Central and Eastern Allegany; Northwest Montgomery; Central and Southeast Montgomery; Northwest Howard; Central and Southeast Howard; Northwest Harford; Southeast Harford; Augusta; Rockingham; Shenandoah; Frederick; Page; Warren; Clarke; Nelson; Albemarle; Greene; Madison; Rappahannock; Orange; Culpeper; Fairfax; Arlington/Falls Church/Alexandria; Stafford; Spotsylvania; King George; Northern Fauquier; Southern Fauquier; Eastern Highland; Western Loudoun; Eastern Loudoun; Northern Virginia Blue Ridge; Central Virginia Blue Ridge; Northwest Prince William; Central and Southeast Prince William/Manassas/Manassas Park; Hampshire; Morgan; Berkeley; Jefferson; Hardy; Eastern Grant; Eastern Mineral; Eastern Pendleton",
+        "geocode": {
+          "SAME": [
+            "073538",
+            "073542",
+            "011001",
+            "024043",
+            "024021",
+            "024013",
+            "024005",
+            "024015",
+            "024510",
+            "024033",
+            "024003",
+            "024017",
+            "024037",
+            "024009",
+            "024001",
+            "024031",
+            "024027",
+            "024025",
+            "051790",
+            "051820",
+            "051165",
+            "051660",
+            "051171",
+            "051069",
+            "051840",
+            "051139",
+            "051187",
+            "051043",
+            "051125",
+            "051540",
+            "051079",
+            "051113",
+            "051157",
+            "051137",
+            "051047",
+            "051059",
+            "051600",
+            "051013",
+            "051510",
+            "051610",
+            "051179",
+            "051177",
+            "051630",
+            "051099",
+            "051061",
+            "051091",
+            "051107",
+            "051003",
+            "051015",
+            "051009",
+            "051163",
+            "051153",
+            "051683",
+            "051685",
+            "054027",
+            "054065",
+            "054003",
+            "054037",
+            "054031",
+            "054023",
+            "054057",
+            "054071"
+          ],
+          "UGC": [
+            "ANZ538",
+            "ANZ542",
+            "DCZ001",
+            "MDZ003",
+            "MDZ004",
+            "MDZ005",
+            "MDZ006",
+            "MDZ008",
+            "MDZ011",
+            "MDZ013",
+            "MDZ014",
+            "MDZ016",
+            "MDZ017",
+            "MDZ018",
+            "MDZ502",
+            "MDZ503",
+            "MDZ504",
+            "MDZ505",
+            "MDZ506",
+            "MDZ507",
+            "MDZ508",
+            "VAZ025",
+            "VAZ026",
+            "VAZ027",
+            "VAZ028",
+            "VAZ029",
+            "VAZ030",
+            "VAZ031",
+            "VAZ036",
+            "VAZ037",
+            "VAZ038",
+            "VAZ039",
+            "VAZ040",
+            "VAZ050",
+            "VAZ051",
+            "VAZ053",
+            "VAZ054",
+            "VAZ055",
+            "VAZ056",
+            "VAZ057",
+            "VAZ501",
+            "VAZ502",
+            "VAZ504",
+            "VAZ505",
+            "VAZ506",
+            "VAZ507",
+            "VAZ508",
+            "VAZ526",
+            "VAZ527",
+            "WVZ050",
+            "WVZ051",
+            "WVZ052",
+            "WVZ053",
+            "WVZ055",
+            "WVZ502",
+            "WVZ504",
+            "WVZ506"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/ANZ538",
+          "https://api.weather.gov/zones/forecast/ANZ542",
+          "https://api.weather.gov/zones/forecast/DCZ001",
+          "https://api.weather.gov/zones/forecast/MDZ003",
+          "https://api.weather.gov/zones/forecast/MDZ004",
+          "https://api.weather.gov/zones/forecast/MDZ005",
+          "https://api.weather.gov/zones/forecast/MDZ006",
+          "https://api.weather.gov/zones/forecast/MDZ008",
+          "https://api.weather.gov/zones/forecast/MDZ011",
+          "https://api.weather.gov/zones/forecast/MDZ013",
+          "https://api.weather.gov/zones/forecast/MDZ014",
+          "https://api.weather.gov/zones/forecast/MDZ016",
+          "https://api.weather.gov/zones/forecast/MDZ017",
+          "https://api.weather.gov/zones/forecast/MDZ018",
+          "https://api.weather.gov/zones/forecast/MDZ502",
+          "https://api.weather.gov/zones/forecast/MDZ503",
+          "https://api.weather.gov/zones/forecast/MDZ504",
+          "https://api.weather.gov/zones/forecast/MDZ505",
+          "https://api.weather.gov/zones/forecast/MDZ506",
+          "https://api.weather.gov/zones/forecast/MDZ507",
+          "https://api.weather.gov/zones/forecast/MDZ508",
+          "https://api.weather.gov/zones/forecast/VAZ025",
+          "https://api.weather.gov/zones/forecast/VAZ026",
+          "https://api.weather.gov/zones/forecast/VAZ027",
+          "https://api.weather.gov/zones/forecast/VAZ028",
+          "https://api.weather.gov/zones/forecast/VAZ029",
+          "https://api.weather.gov/zones/forecast/VAZ030",
+          "https://api.weather.gov/zones/forecast/VAZ031",
+          "https://api.weather.gov/zones/forecast/VAZ036",
+          "https://api.weather.gov/zones/forecast/VAZ037",
+          "https://api.weather.gov/zones/forecast/VAZ038",
+          "https://api.weather.gov/zones/forecast/VAZ039",
+          "https://api.weather.gov/zones/forecast/VAZ040",
+          "https://api.weather.gov/zones/forecast/VAZ050",
+          "https://api.weather.gov/zones/forecast/VAZ051",
+          "https://api.weather.gov/zones/forecast/VAZ053",
+          "https://api.weather.gov/zones/forecast/VAZ054",
+          "https://api.weather.gov/zones/forecast/VAZ055",
+          "https://api.weather.gov/zones/forecast/VAZ056",
+          "https://api.weather.gov/zones/forecast/VAZ057",
+          "https://api.weather.gov/zones/forecast/VAZ501",
+          "https://api.weather.gov/zones/forecast/VAZ502",
+          "https://api.weather.gov/zones/forecast/VAZ504",
+          "https://api.weather.gov/zones/forecast/VAZ505",
+          "https://api.weather.gov/zones/forecast/VAZ506",
+          "https://api.weather.gov/zones/forecast/VAZ507",
+          "https://api.weather.gov/zones/forecast/VAZ508",
+          "https://api.weather.gov/zones/forecast/VAZ526",
+          "https://api.weather.gov/zones/forecast/VAZ527",
+          "https://api.weather.gov/zones/forecast/WVZ050",
+          "https://api.weather.gov/zones/forecast/WVZ051",
+          "https://api.weather.gov/zones/forecast/WVZ052",
+          "https://api.weather.gov/zones/forecast/WVZ053",
+          "https://api.weather.gov/zones/forecast/WVZ055",
+          "https://api.weather.gov/zones/forecast/WVZ502",
+          "https://api.weather.gov/zones/forecast/WVZ504",
+          "https://api.weather.gov/zones/forecast/WVZ506"
+        ],
+        "references": [],
+        "sent": "date:now -7808 seconds",
+        "effective": "date:now -7808 seconds",
+        "onset": "date:now -7808 seconds",
+        "expires": "date:now +27231 seconds",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Baltimore MD/Washington DC",
+        "headline": "Special Weather Statement issued March 19 at 10:31AM EDT by NWS Baltimore MD/Washington DC",
+        "description": "Elevated fire weather conditions are expected today across most\nof Maryland, eastern West Virginia, and Virginia.\n\nRelative humidity values are expected to drop back to around 20 to\n25 percent this afternoon, with some areas possibly seeing\nrelative humidity values below 20 percent for a couple of hours.\nWest wind gusts 15 to 20 mph in the valleys, and 20 to 25 mph on\nthe eastern slopes of the mountains. Gusts could occasionally be\nclose to 30 mph. This will result in the continued drying of fine\nfuels.\n\nResidents and visitors are urged to exercise caution if handling\nopen flames or equipment that creates sparks. Also, dispose of\ncigarette butts, matches, and other flammable items in appropriate\ncontainers. Keep vehicles off of dry grass and obey local burn bans.\nMost dry grasses, dead leaves, and other tree litter could easily\nignite and spread fire quickly.\n\nFor more information about wildfire danger, burn restrictions,\nand wildfire prevention and education, please visit your state's\nforestry or environmental protection website.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SPSLWX"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KLWX 191431"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9e42dc013101cbdddb578bff6172f4c0ac7c228d.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9e42dc013101cbdddb578bff6172f4c0ac7c228d.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.9e42dc013101cbdddb578bff6172f4c0ac7c228d.001.1",
+        "areaDesc": "Fluvanna; Prince Edward; Cumberland; Goochland; Caroline; Mecklenburg; Lunenburg; Nottoway; Amelia; Powhatan; Brunswick; Dinwiddie; Prince George; Charles City; New Kent; Greensville; Sussex; Surry; James City; Southampton; Isle of Wight; Suffolk; Western Louisa; Eastern Louisa; Western Hanover; Eastern Hanover; Western Chesterfield; Eastern Chesterfield (Including Col. Heights); Western Henrico (Including the City of Richmond); Eastern Henrico; Western King William; Eastern King William; Western King and Queen; Eastern King and Queen; Western Essex; Eastern Essex",
+        "geocode": {
+          "SAME": [
+            "051065",
+            "051147",
+            "051049",
+            "051075",
+            "051033",
+            "051117",
+            "051111",
+            "051135",
+            "051007",
+            "051145",
+            "051025",
+            "051053",
+            "051149",
+            "051670",
+            "051730",
+            "051036",
+            "051127",
+            "051081",
+            "051595",
+            "051183",
+            "051181",
+            "051095",
+            "051199",
+            "051830",
+            "051175",
+            "051620",
+            "051093",
+            "051800",
+            "051109",
+            "051085",
+            "051041",
+            "051570",
+            "051087",
+            "051760",
+            "051101",
+            "051097",
+            "051057"
+          ],
+          "UGC": [
+            "VAZ048",
+            "VAZ060",
+            "VAZ061",
+            "VAZ062",
+            "VAZ064",
+            "VAZ065",
+            "VAZ066",
+            "VAZ067",
+            "VAZ068",
+            "VAZ069",
+            "VAZ079",
+            "VAZ080",
+            "VAZ081",
+            "VAZ082",
+            "VAZ083",
+            "VAZ087",
+            "VAZ088",
+            "VAZ089",
+            "VAZ090",
+            "VAZ092",
+            "VAZ093",
+            "VAZ096",
+            "VAZ509",
+            "VAZ510",
+            "VAZ511",
+            "VAZ512",
+            "VAZ513",
+            "VAZ514",
+            "VAZ515",
+            "VAZ516",
+            "VAZ517",
+            "VAZ518",
+            "VAZ519",
+            "VAZ520",
+            "VAZ521",
+            "VAZ522"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/fire/VAZ048",
+          "https://api.weather.gov/zones/fire/VAZ060",
+          "https://api.weather.gov/zones/fire/VAZ061",
+          "https://api.weather.gov/zones/fire/VAZ062",
+          "https://api.weather.gov/zones/fire/VAZ064",
+          "https://api.weather.gov/zones/fire/VAZ065",
+          "https://api.weather.gov/zones/fire/VAZ066",
+          "https://api.weather.gov/zones/fire/VAZ067",
+          "https://api.weather.gov/zones/fire/VAZ068",
+          "https://api.weather.gov/zones/fire/VAZ069",
+          "https://api.weather.gov/zones/fire/VAZ079",
+          "https://api.weather.gov/zones/fire/VAZ080",
+          "https://api.weather.gov/zones/fire/VAZ081",
+          "https://api.weather.gov/zones/fire/VAZ082",
+          "https://api.weather.gov/zones/fire/VAZ083",
+          "https://api.weather.gov/zones/fire/VAZ087",
+          "https://api.weather.gov/zones/fire/VAZ088",
+          "https://api.weather.gov/zones/fire/VAZ089",
+          "https://api.weather.gov/zones/fire/VAZ090",
+          "https://api.weather.gov/zones/fire/VAZ092",
+          "https://api.weather.gov/zones/fire/VAZ093",
+          "https://api.weather.gov/zones/fire/VAZ096",
+          "https://api.weather.gov/zones/fire/VAZ509",
+          "https://api.weather.gov/zones/fire/VAZ510",
+          "https://api.weather.gov/zones/fire/VAZ511",
+          "https://api.weather.gov/zones/fire/VAZ512",
+          "https://api.weather.gov/zones/fire/VAZ513",
+          "https://api.weather.gov/zones/fire/VAZ514",
+          "https://api.weather.gov/zones/fire/VAZ515",
+          "https://api.weather.gov/zones/fire/VAZ516",
+          "https://api.weather.gov/zones/fire/VAZ517",
+          "https://api.weather.gov/zones/fire/VAZ518",
+          "https://api.weather.gov/zones/fire/VAZ519",
+          "https://api.weather.gov/zones/fire/VAZ520",
+          "https://api.weather.gov/zones/fire/VAZ521",
+          "https://api.weather.gov/zones/fire/VAZ522"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.ba46aee3b6a57e9d78a714d2cd28acd065b59b2d.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.ba46aee3b6a57e9d78a714d2cd28acd065b59b2d.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -29588 seconds"
+          }
+        ],
+        "sent": "date:now -9128 seconds",
+        "effective": "date:now -9128 seconds",
+        "onset": "date:now +80331 seconds",
+        "expires": "date:now +20031 seconds",
+        "ends": "date:now +112731 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Fire Weather Watch",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Wakefield VA",
+        "headline": "Fire Weather Watch issued March 19 at 10:09AM EDT until March 20 at 8:00PM EDT by NWS Wakefield VA",
+        "description": "* AFFECTED AREA...Much of central and southeast Virginia.\n\n* TIMING...Wednesday morning through Wednesday evening.\n\n* WINDS...West 15 to 20 mph with gusts between 25 and 35 mph.\n\n* RELATIVE HUMIDITY...20 to 25 percent.\n\n* TEMPERATURES...In the 60s.\n\n* IMPACTS...Dry and breezy conditions will support adverse fire\nbehavior allowing fires to spread rapidly.",
+        "instruction": "A Fire Weather Watch means that critical fire weather conditions\nare forecast to occur. Listen for later forecasts and possible\nRed Flag Warnings.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "RFWAKQ"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KAKQ 191409"
+          ],
+          "NWSheadline": [
+            "FIRE WEATHER WATCH REMAINS IN EFFECT FROM WEDNESDAY MORNING THROUGH WEDNESDAY EVENING FOR PORTIONS OF CENTRAL AND SOUTHEAST VIRGINIA"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KAKQ.FW.A.0001.240320T1500Z-240321T0000Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-21T00:00:00+00:00"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.078481587eae792e6bc7b60e257f1f70867fd8bc.001.1,2024-03-18T15:45:00-04:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.4c7c2cc494657474c72c54ba959e8705f6fca204.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.4c7c2cc494657474c72c54ba959e8705f6fca204.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.4c7c2cc494657474c72c54ba959e8705f6fca204.001.1",
+        "areaDesc": "Ashe; Alleghany; Surry; Stokes; Rockingham; Caswell; Watauga; Wilkes; Yadkin; Tazewell; Smyth; Bland; Giles; Wythe; Pulaski; Montgomery; Grayson; Carroll; Floyd; Craig; Alleghany; Bath; Roanoke; Botetourt; Rockbridge; Patrick; Franklin; Bedford; Amherst; Henry; Pittsylvania; Campbell; Appomattox; Buckingham; Halifax; Charlotte; Mercer; Summers; Monroe; Eastern Greenbrier; Western Greenbrier",
+        "geocode": {
+          "SAME": [
+            "037009",
+            "037005",
+            "037171",
+            "037169",
+            "037157",
+            "037033",
+            "037189",
+            "037193",
+            "037197",
+            "051185",
+            "051173",
+            "051021",
+            "051071",
+            "051197",
+            "051155",
+            "051750",
+            "051121",
+            "051077",
+            "051035",
+            "051640",
+            "051063",
+            "051045",
+            "051005",
+            "051580",
+            "051017",
+            "051161",
+            "051770",
+            "051775",
+            "051023",
+            "051163",
+            "051530",
+            "051678",
+            "051141",
+            "051067",
+            "051019",
+            "051009",
+            "051089",
+            "051690",
+            "051143",
+            "051590",
+            "051031",
+            "051680",
+            "051011",
+            "051029",
+            "051083",
+            "051037",
+            "054055",
+            "054089",
+            "054063",
+            "054025"
+          ],
+          "UGC": [
+            "NCZ001",
+            "NCZ002",
+            "NCZ003",
+            "NCZ004",
+            "NCZ005",
+            "NCZ006",
+            "NCZ018",
+            "NCZ019",
+            "NCZ020",
+            "VAZ007",
+            "VAZ009",
+            "VAZ010",
+            "VAZ011",
+            "VAZ012",
+            "VAZ013",
+            "VAZ014",
+            "VAZ015",
+            "VAZ016",
+            "VAZ017",
+            "VAZ018",
+            "VAZ019",
+            "VAZ020",
+            "VAZ022",
+            "VAZ023",
+            "VAZ024",
+            "VAZ032",
+            "VAZ033",
+            "VAZ034",
+            "VAZ035",
+            "VAZ043",
+            "VAZ044",
+            "VAZ045",
+            "VAZ046",
+            "VAZ047",
+            "VAZ058",
+            "VAZ059",
+            "WVZ042",
+            "WVZ043",
+            "WVZ044",
+            "WVZ507",
+            "WVZ508"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/NCZ001",
+          "https://api.weather.gov/zones/forecast/NCZ002",
+          "https://api.weather.gov/zones/forecast/NCZ003",
+          "https://api.weather.gov/zones/forecast/NCZ004",
+          "https://api.weather.gov/zones/forecast/NCZ005",
+          "https://api.weather.gov/zones/forecast/NCZ006",
+          "https://api.weather.gov/zones/forecast/NCZ018",
+          "https://api.weather.gov/zones/forecast/NCZ019",
+          "https://api.weather.gov/zones/forecast/NCZ020",
+          "https://api.weather.gov/zones/forecast/VAZ007",
+          "https://api.weather.gov/zones/forecast/VAZ009",
+          "https://api.weather.gov/zones/forecast/VAZ010",
+          "https://api.weather.gov/zones/forecast/VAZ011",
+          "https://api.weather.gov/zones/forecast/VAZ012",
+          "https://api.weather.gov/zones/forecast/VAZ013",
+          "https://api.weather.gov/zones/forecast/VAZ014",
+          "https://api.weather.gov/zones/forecast/VAZ015",
+          "https://api.weather.gov/zones/forecast/VAZ016",
+          "https://api.weather.gov/zones/forecast/VAZ017",
+          "https://api.weather.gov/zones/forecast/VAZ018",
+          "https://api.weather.gov/zones/forecast/VAZ019",
+          "https://api.weather.gov/zones/forecast/VAZ020",
+          "https://api.weather.gov/zones/forecast/VAZ022",
+          "https://api.weather.gov/zones/forecast/VAZ023",
+          "https://api.weather.gov/zones/forecast/VAZ024",
+          "https://api.weather.gov/zones/forecast/VAZ032",
+          "https://api.weather.gov/zones/forecast/VAZ033",
+          "https://api.weather.gov/zones/forecast/VAZ034",
+          "https://api.weather.gov/zones/forecast/VAZ035",
+          "https://api.weather.gov/zones/forecast/VAZ043",
+          "https://api.weather.gov/zones/forecast/VAZ044",
+          "https://api.weather.gov/zones/forecast/VAZ045",
+          "https://api.weather.gov/zones/forecast/VAZ046",
+          "https://api.weather.gov/zones/forecast/VAZ047",
+          "https://api.weather.gov/zones/forecast/VAZ058",
+          "https://api.weather.gov/zones/forecast/VAZ059",
+          "https://api.weather.gov/zones/forecast/WVZ042",
+          "https://api.weather.gov/zones/forecast/WVZ043",
+          "https://api.weather.gov/zones/forecast/WVZ044",
+          "https://api.weather.gov/zones/forecast/WVZ507",
+          "https://api.weather.gov/zones/forecast/WVZ508"
+        ],
+        "references": [],
+        "sent": "date:now -29408 seconds",
+        "effective": "date:now -29408 seconds",
+        "onset": "date:now -29408 seconds",
+        "expires": "date:now +26331 seconds",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Blacksburg VA",
+        "headline": "Special Weather Statement issued March 19 at 4:31AM EDT by NWS Blacksburg VA",
+        "description": "After coordination with local land managers, a Fire Danger\nStatement has been issued for counties within southeast West\nVirginia, southwest Virginia and northwest North Carolina. The\ncombination of dry fuels, afternoon relative humidity below 30\npercent, and winds gusting at times 25 mph to locally 40 mph will\nincrease the danger of any fires quickly spreading out of\ncontrol.\n\nPlease exercise extreme caution if handling open flames or\nequipment that creates sparks. Dispose of cigarette buttes,\nmatches, and other flammable materials in appropriate containers.\nKeep vehicles off of dry grass and obey local burn bans. Most dry\ngrasses, dead leaves, and other tree litter could easily ignite\nand spread fire quickly. Refer to your local burn-permitting\nauthority on whether you may burn today.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SPSRNK"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KRNK 190831"
+          ],
+          "NWSheadline": [
+            "INCREASED FIRE DANGER ACROSS SOUTHEAST WEST VIRGINIA, SOUTHWEST VIRGINIA AND NORTHWEST NORTH CAROLINA IN EFFECT FROM 11 AM THROUGH 8 PM EDT THIS EVENING"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.28069713ebf5d0b1bab3bbbc11088b04ceff8d2b.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.28069713ebf5d0b1bab3bbbc11088b04ceff8d2b.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.28069713ebf5d0b1bab3bbbc11088b04ceff8d2b.001.1",
+        "areaDesc": "Fluvanna; Prince Edward; Cumberland; Goochland; Caroline; Mecklenburg; Lunenburg; Nottoway; Amelia; Powhatan; Westmoreland; Richmond; Northumberland; Lancaster; Brunswick; Dinwiddie; Prince George; Charles City; New Kent; Gloucester; Middlesex; Mathews; Greensville; Sussex; Surry; James City; Southampton; Isle of Wight; Norfolk/Portsmouth; Suffolk; Chesapeake; Virginia Beach; Western Louisa; Eastern Louisa; Western Hanover; Eastern Hanover; Western Chesterfield; Eastern Chesterfield (Including Col. Heights); Western Henrico (Including the City of Richmond); Eastern Henrico; Western King William; Eastern King William; Western King and Queen; Eastern King and Queen; Western Essex; Eastern Essex; York; Newport News; Hampton/Poquoson",
+        "geocode": {
+          "SAME": [
+            "051065",
+            "051147",
+            "051049",
+            "051075",
+            "051033",
+            "051117",
+            "051111",
+            "051135",
+            "051007",
+            "051145",
+            "051193",
+            "051159",
+            "051133",
+            "051103",
+            "051025",
+            "051053",
+            "051149",
+            "051670",
+            "051730",
+            "051036",
+            "051127",
+            "051073",
+            "051119",
+            "051115",
+            "051081",
+            "051595",
+            "051183",
+            "051181",
+            "051095",
+            "051830",
+            "051175",
+            "051620",
+            "051093",
+            "051710",
+            "051740",
+            "051800",
+            "051550",
+            "051810",
+            "051109",
+            "051085",
+            "051041",
+            "051570",
+            "051087",
+            "051760",
+            "051101",
+            "051097",
+            "051057",
+            "051199",
+            "051735",
+            "051700",
+            "051650"
+          ],
+          "UGC": [
+            "VAZ048",
+            "VAZ060",
+            "VAZ061",
+            "VAZ062",
+            "VAZ064",
+            "VAZ065",
+            "VAZ066",
+            "VAZ067",
+            "VAZ068",
+            "VAZ069",
+            "VAZ075",
+            "VAZ076",
+            "VAZ077",
+            "VAZ078",
+            "VAZ079",
+            "VAZ080",
+            "VAZ081",
+            "VAZ082",
+            "VAZ083",
+            "VAZ084",
+            "VAZ085",
+            "VAZ086",
+            "VAZ087",
+            "VAZ088",
+            "VAZ089",
+            "VAZ090",
+            "VAZ092",
+            "VAZ093",
+            "VAZ095",
+            "VAZ096",
+            "VAZ097",
+            "VAZ098",
+            "VAZ509",
+            "VAZ510",
+            "VAZ511",
+            "VAZ512",
+            "VAZ513",
+            "VAZ514",
+            "VAZ515",
+            "VAZ516",
+            "VAZ517",
+            "VAZ518",
+            "VAZ519",
+            "VAZ520",
+            "VAZ521",
+            "VAZ522",
+            "VAZ523",
+            "VAZ524",
+            "VAZ525"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/VAZ048",
+          "https://api.weather.gov/zones/forecast/VAZ060",
+          "https://api.weather.gov/zones/forecast/VAZ061",
+          "https://api.weather.gov/zones/forecast/VAZ062",
+          "https://api.weather.gov/zones/forecast/VAZ064",
+          "https://api.weather.gov/zones/forecast/VAZ065",
+          "https://api.weather.gov/zones/forecast/VAZ066",
+          "https://api.weather.gov/zones/forecast/VAZ067",
+          "https://api.weather.gov/zones/forecast/VAZ068",
+          "https://api.weather.gov/zones/forecast/VAZ069",
+          "https://api.weather.gov/zones/forecast/VAZ075",
+          "https://api.weather.gov/zones/forecast/VAZ076",
+          "https://api.weather.gov/zones/forecast/VAZ077",
+          "https://api.weather.gov/zones/forecast/VAZ078",
+          "https://api.weather.gov/zones/forecast/VAZ079",
+          "https://api.weather.gov/zones/forecast/VAZ080",
+          "https://api.weather.gov/zones/forecast/VAZ081",
+          "https://api.weather.gov/zones/forecast/VAZ082",
+          "https://api.weather.gov/zones/forecast/VAZ083",
+          "https://api.weather.gov/zones/forecast/VAZ084",
+          "https://api.weather.gov/zones/forecast/VAZ085",
+          "https://api.weather.gov/zones/forecast/VAZ086",
+          "https://api.weather.gov/zones/forecast/VAZ087",
+          "https://api.weather.gov/zones/forecast/VAZ088",
+          "https://api.weather.gov/zones/forecast/VAZ089",
+          "https://api.weather.gov/zones/forecast/VAZ090",
+          "https://api.weather.gov/zones/forecast/VAZ092",
+          "https://api.weather.gov/zones/forecast/VAZ093",
+          "https://api.weather.gov/zones/forecast/VAZ095",
+          "https://api.weather.gov/zones/forecast/VAZ096",
+          "https://api.weather.gov/zones/forecast/VAZ097",
+          "https://api.weather.gov/zones/forecast/VAZ098",
+          "https://api.weather.gov/zones/forecast/VAZ509",
+          "https://api.weather.gov/zones/forecast/VAZ510",
+          "https://api.weather.gov/zones/forecast/VAZ511",
+          "https://api.weather.gov/zones/forecast/VAZ512",
+          "https://api.weather.gov/zones/forecast/VAZ513",
+          "https://api.weather.gov/zones/forecast/VAZ514",
+          "https://api.weather.gov/zones/forecast/VAZ515",
+          "https://api.weather.gov/zones/forecast/VAZ516",
+          "https://api.weather.gov/zones/forecast/VAZ517",
+          "https://api.weather.gov/zones/forecast/VAZ518",
+          "https://api.weather.gov/zones/forecast/VAZ519",
+          "https://api.weather.gov/zones/forecast/VAZ520",
+          "https://api.weather.gov/zones/forecast/VAZ521",
+          "https://api.weather.gov/zones/forecast/VAZ522",
+          "https://api.weather.gov/zones/forecast/VAZ523",
+          "https://api.weather.gov/zones/forecast/VAZ524",
+          "https://api.weather.gov/zones/forecast/VAZ525"
+        ],
+        "references": [],
+        "sent": "date:now -30308 seconds",
+        "effective": "date:now -30308 seconds",
+        "onset": "date:now -30308 seconds",
+        "expires": "date:now +22731 seconds",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Wakefield VA",
+        "headline": "Special Weather Statement issued March 19 at 4:16AM EDT by NWS Wakefield VA",
+        "description": "The combination of low relative humidity values between 20 and 30\npercent, W-NW winds gusting up to 25 mph and dry fuels will\nincrease the potential for the spread of wildfires today.\n\nResidents are urged to exercise caution handling any potential\nignition source...including machinery... cigarettes...and matches.\nBe sure to properly discard all smoking materials. Any dry grasses\nand tree litter that ignite will have the potential to spread\nquickly.\n\nVirginia residents are reminded that open-air burning is prohibited\nbefore 4 pm each day through April 30th.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SPSAKQ"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KAKQ 190816"
+          ],
+          "NWSheadline": [
+            "INCREASED FIRE DANGER THIS AFTERNOON INTO THIS EVENING"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.28069713ebf5d0b1bab3bbbc11088b04ceff8d2b.002.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.28069713ebf5d0b1bab3bbbc11088b04ceff8d2b.002.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.28069713ebf5d0b1bab3bbbc11088b04ceff8d2b.002.1",
+        "areaDesc": "Dorchester; Wicomico; Somerset; Inland Worcester; Accomack; Northampton",
+        "geocode": {
+          "SAME": [
+            "024019",
+            "024045",
+            "024039",
+            "024047",
+            "051001",
+            "051131"
+          ],
+          "UGC": [
+            "MDZ021",
+            "MDZ022",
+            "MDZ023",
+            "MDZ024",
+            "VAZ099",
+            "VAZ100"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/MDZ021",
+          "https://api.weather.gov/zones/forecast/MDZ022",
+          "https://api.weather.gov/zones/forecast/MDZ023",
+          "https://api.weather.gov/zones/forecast/MDZ024",
+          "https://api.weather.gov/zones/forecast/VAZ099",
+          "https://api.weather.gov/zones/forecast/VAZ100"
+        ],
+        "references": [],
+        "sent": "date:now -30308 seconds",
+        "effective": "date:now -30308 seconds",
+        "onset": "date:now -30308 seconds",
+        "expires": "date:now +22731 seconds",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Wakefield VA",
+        "headline": "Special Weather Statement issued March 19 at 4:16AM EDT by NWS Wakefield VA",
+        "description": "The combination of low relative humidity values between 25 and 30\npercent, W-NW winds gusting up to 25 mph and dry fuels will\nincrease the potential for the spread of wildfires today.\n\nResidents are urged to exercise caution handling any potential\nignition source...including machinery... cigarettes...and matches.\nBe sure to properly discard all smoking materials. Any dry grasses\nand tree litter that ignite will have the potential to spread\nquickly.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SPSAKQ"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KAKQ 190816"
+          ],
+          "NWSheadline": [
+            "INCREASED FIRE DANGER THIS AFTERNOON INTO THIS EVENING"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.6f8010e8a60f4f322920e9c7c8f98174321feeb6.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.6f8010e8a60f4f322920e9c7c8f98174321feeb6.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.6f8010e8a60f4f322920e9c7c8f98174321feeb6.001.1",
+        "areaDesc": "Ashe; Alleghany; Surry; Stokes; Rockingham; Caswell; Watauga; Wilkes; Yadkin; Tazewell; Smyth; Bland; Giles; Wythe; Pulaski; Montgomery; Grayson; Carroll; Floyd; Craig; Alleghany; Bath; Roanoke; Botetourt; Rockbridge; Patrick; Franklin; Bedford; Amherst; Henry; Pittsylvania; Campbell; Appomattox; Buckingham; Halifax; Charlotte; Mercer; Summers; Monroe; Eastern Greenbrier; Western Greenbrier",
+        "geocode": {
+          "SAME": [
+            "037009",
+            "037005",
+            "037171",
+            "037169",
+            "037157",
+            "037033",
+            "037189",
+            "037193",
+            "037197",
+            "051185",
+            "051173",
+            "051021",
+            "051071",
+            "051197",
+            "051155",
+            "051750",
+            "051121",
+            "051077",
+            "051035",
+            "051640",
+            "051063",
+            "051045",
+            "051005",
+            "051580",
+            "051017",
+            "051161",
+            "051770",
+            "051775",
+            "051023",
+            "051163",
+            "051530",
+            "051678",
+            "051141",
+            "051067",
+            "051019",
+            "051009",
+            "051089",
+            "051690",
+            "051143",
+            "051590",
+            "051031",
+            "051680",
+            "051011",
+            "051029",
+            "051083",
+            "051037",
+            "054055",
+            "054089",
+            "054063",
+            "054025"
+          ],
+          "UGC": [
+            "NCZ001",
+            "NCZ002",
+            "NCZ003",
+            "NCZ004",
+            "NCZ005",
+            "NCZ006",
+            "NCZ018",
+            "NCZ019",
+            "NCZ020",
+            "VAZ007",
+            "VAZ009",
+            "VAZ010",
+            "VAZ011",
+            "VAZ012",
+            "VAZ013",
+            "VAZ014",
+            "VAZ015",
+            "VAZ016",
+            "VAZ017",
+            "VAZ018",
+            "VAZ019",
+            "VAZ020",
+            "VAZ022",
+            "VAZ023",
+            "VAZ024",
+            "VAZ032",
+            "VAZ033",
+            "VAZ034",
+            "VAZ035",
+            "VAZ043",
+            "VAZ044",
+            "VAZ045",
+            "VAZ046",
+            "VAZ047",
+            "VAZ058",
+            "VAZ059",
+            "WVZ042",
+            "WVZ043",
+            "WVZ044",
+            "WVZ507",
+            "WVZ508"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/NCZ001",
+          "https://api.weather.gov/zones/forecast/NCZ002",
+          "https://api.weather.gov/zones/forecast/NCZ003",
+          "https://api.weather.gov/zones/forecast/NCZ004",
+          "https://api.weather.gov/zones/forecast/NCZ005",
+          "https://api.weather.gov/zones/forecast/NCZ006",
+          "https://api.weather.gov/zones/forecast/NCZ018",
+          "https://api.weather.gov/zones/forecast/NCZ019",
+          "https://api.weather.gov/zones/forecast/NCZ020",
+          "https://api.weather.gov/zones/forecast/VAZ007",
+          "https://api.weather.gov/zones/forecast/VAZ009",
+          "https://api.weather.gov/zones/forecast/VAZ010",
+          "https://api.weather.gov/zones/forecast/VAZ011",
+          "https://api.weather.gov/zones/forecast/VAZ012",
+          "https://api.weather.gov/zones/forecast/VAZ013",
+          "https://api.weather.gov/zones/forecast/VAZ014",
+          "https://api.weather.gov/zones/forecast/VAZ015",
+          "https://api.weather.gov/zones/forecast/VAZ016",
+          "https://api.weather.gov/zones/forecast/VAZ017",
+          "https://api.weather.gov/zones/forecast/VAZ018",
+          "https://api.weather.gov/zones/forecast/VAZ019",
+          "https://api.weather.gov/zones/forecast/VAZ020",
+          "https://api.weather.gov/zones/forecast/VAZ022",
+          "https://api.weather.gov/zones/forecast/VAZ023",
+          "https://api.weather.gov/zones/forecast/VAZ024",
+          "https://api.weather.gov/zones/forecast/VAZ032",
+          "https://api.weather.gov/zones/forecast/VAZ033",
+          "https://api.weather.gov/zones/forecast/VAZ034",
+          "https://api.weather.gov/zones/forecast/VAZ035",
+          "https://api.weather.gov/zones/forecast/VAZ043",
+          "https://api.weather.gov/zones/forecast/VAZ044",
+          "https://api.weather.gov/zones/forecast/VAZ045",
+          "https://api.weather.gov/zones/forecast/VAZ046",
+          "https://api.weather.gov/zones/forecast/VAZ047",
+          "https://api.weather.gov/zones/forecast/VAZ058",
+          "https://api.weather.gov/zones/forecast/VAZ059",
+          "https://api.weather.gov/zones/forecast/WVZ042",
+          "https://api.weather.gov/zones/forecast/WVZ043",
+          "https://api.weather.gov/zones/forecast/WVZ044",
+          "https://api.weather.gov/zones/forecast/WVZ507",
+          "https://api.weather.gov/zones/forecast/WVZ508"
+        ],
+        "references": [],
+        "sent": "date:now -31388 seconds",
+        "effective": "date:now -31388 seconds",
+        "onset": "date:now -31388 seconds",
+        "expires": "date:now +26331 seconds",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Blacksburg VA",
+        "headline": "Special Weather Statement issued March 19 at 3:58AM EDT by NWS Blacksburg VA",
+        "description": "After coordination with local land managers, a Fire Danger\nStatement has been issued for counties within southeast West\nVirgina, southwest Virginia and northwest North Carolina. The\ncombination of dry fuels, afternoon relative humidity below 30\npercent, and winds gusting at times 25 mph to locally 40 mph will\nincrease the danger of any fires quickly spreading out of\ncontrol.\n\nPlease exercise extreme caution if handling open flames or\nequipment that creates sparks. Dispose of cigarette buttes,\nmatches, and other flammable materials in appropriate containers.\nKeep vehicles off of dry grass and obey local burn bans. Most dry\ngrasses, dead leaves, and other tree litter could easily ignite\nand spread fire quickly. Refer to your local burn-permitting\nauthority on whether you may burn today.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SPSRNK"
+          ],
+          "WMOidentifier": [
+            "WWUS81 KRNK 190758"
+          ],
+          "NWSheadline": [
+            "INCREASED FIRE DANGER ACROSS SOUTHEAST WEST VIRGINIA, SOUTHWEST VIRGINIA AND NORTHWEST NORTH CAROLINA IN EFFECT FROM 11 AM THROUGH 8 PM EDT THIS EVENING"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c6abf3314218a419c86ac6797aef7f61e6b48d07.002.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c6abf3314218a419c86ac6797aef7f61e6b48d07.002.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.c6abf3314218a419c86ac6797aef7f61e6b48d07.002.1",
+        "areaDesc": "Lee; Wise; Scott; Russell; Washington",
+        "geocode": {
+          "SAME": [
+            "051105",
+            "051195",
+            "051720",
+            "051169",
+            "051167",
+            "051191",
+            "051520"
+          ],
+          "UGC": [
+            "VAZ001",
+            "VAZ002",
+            "VAZ005",
+            "VAZ006",
+            "VAZ008"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/VAZ001",
+          "https://api.weather.gov/zones/forecast/VAZ002",
+          "https://api.weather.gov/zones/forecast/VAZ005",
+          "https://api.weather.gov/zones/forecast/VAZ006",
+          "https://api.weather.gov/zones/forecast/VAZ008"
+        ],
+        "references": [],
+        "sent": "date:now -32648 seconds",
+        "effective": "date:now -32648 seconds",
+        "onset": "date:now -32648 seconds",
+        "expires": "date:now +26331 seconds",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Observed",
+        "urgency": "Expected",
+        "event": "Special Weather Statement",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Morristown TN",
+        "headline": "Special Weather Statement issued March 19 at 3:37AM EDT by NWS Morristown TN",
+        "description": "The combination of southwest winds gusting up to 30 mph and low\nrelative humidities will continue an elevated fire risk until\nearly this evening. Fire danger will diminish tonight as relative\nhumidities increase and winds slowly decrease.\n\nPlease refer to your local burn permitting authorities on whether\nyou can burn today and Tuesday. Use caution when burning as fires\nmay get out of hand quickly in these conditions.",
+        "instruction": null,
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "SPSMRX"
+          ],
+          "WMOidentifier": [
+            "WWUS84 KMRX 190737"
+          ],
+          "NWSheadline": [
+            "ELEVATED FIRE RISK EXPECTED THIS AFTERNOON"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9aea4a1625fc1f3b8484d0f41db1b6f8a6ccd9d7.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9aea4a1625fc1f3b8484d0f41db1b6f8a6ccd9d7.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.9aea4a1625fc1f3b8484d0f41db1b6f8a6ccd9d7.001.1",
+        "areaDesc": "District of Columbia, DC; Allegany, MD; Anne Arundel, MD; Baltimore, MD; Carroll, MD; Cecil, MD; Charles, MD; Frederick, MD; Harford, MD; Howard, MD; Montgomery, MD; Prince Georges, MD; Washington, MD; Baltimore City, MD; Albemarle, VA; Arlington, VA; Augusta, VA; Clarke, VA; Culpeper, VA; Fairfax, VA; Fauquier, VA; Frederick, VA; Greene, VA; King George, VA; Loudoun, VA; Madison, VA; Nelson, VA; Orange, VA; Page, VA; Prince William, VA; Rappahannock, VA; Rockingham, VA; Shenandoah, VA; Spotsylvania, VA; Stafford, VA; Warren, VA; City of Alexandria, VA; City of Charlottesville, VA; City of Fairfax, VA; City of Falls Church, VA; City of Fredericksburg, VA; City of Harrisonburg, VA; City of Manassas, VA; City of Manassas Park, VA; City of Staunton, VA; City of Waynesboro, VA; City of Winchester, VA; Berkeley, WV; Hampshire, WV; Hardy, WV; Jefferson, WV; Morgan, WV",
+        "geocode": {
+          "SAME": [
+            "011001",
+            "024001",
+            "024003",
+            "024005",
+            "024013",
+            "024015",
+            "024017",
+            "024021",
+            "024025",
+            "024027",
+            "024031",
+            "024033",
+            "024043",
+            "024510",
+            "051003",
+            "051013",
+            "051015",
+            "051043",
+            "051047",
+            "051059",
+            "051061",
+            "051069",
+            "051079",
+            "051099",
+            "051107",
+            "051113",
+            "051125",
+            "051137",
+            "051139",
+            "051153",
+            "051157",
+            "051165",
+            "051171",
+            "051177",
+            "051179",
+            "051187",
+            "051510",
+            "051540",
+            "051600",
+            "051610",
+            "051630",
+            "051660",
+            "051683",
+            "051685",
+            "051790",
+            "051820",
+            "051840",
+            "054003",
+            "054027",
+            "054031",
+            "054037",
+            "054065"
+          ],
+          "UGC": [
+            "DCC001",
+            "MDC001",
+            "MDC003",
+            "MDC005",
+            "MDC013",
+            "MDC015",
+            "MDC017",
+            "MDC021",
+            "MDC025",
+            "MDC027",
+            "MDC031",
+            "MDC033",
+            "MDC043",
+            "MDC510",
+            "VAC003",
+            "VAC013",
+            "VAC015",
+            "VAC043",
+            "VAC047",
+            "VAC059",
+            "VAC061",
+            "VAC069",
+            "VAC079",
+            "VAC099",
+            "VAC107",
+            "VAC113",
+            "VAC125",
+            "VAC137",
+            "VAC139",
+            "VAC153",
+            "VAC157",
+            "VAC165",
+            "VAC171",
+            "VAC177",
+            "VAC179",
+            "VAC187",
+            "VAC510",
+            "VAC540",
+            "VAC600",
+            "VAC610",
+            "VAC630",
+            "VAC660",
+            "VAC683",
+            "VAC685",
+            "VAC790",
+            "VAC820",
+            "VAC840",
+            "WVC003",
+            "WVC027",
+            "WVC031",
+            "WVC037",
+            "WVC065"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/county/DCC001",
+          "https://api.weather.gov/zones/county/MDC001",
+          "https://api.weather.gov/zones/county/MDC003",
+          "https://api.weather.gov/zones/county/MDC005",
+          "https://api.weather.gov/zones/county/MDC013",
+          "https://api.weather.gov/zones/county/MDC015",
+          "https://api.weather.gov/zones/county/MDC017",
+          "https://api.weather.gov/zones/county/MDC021",
+          "https://api.weather.gov/zones/county/MDC025",
+          "https://api.weather.gov/zones/county/MDC027",
+          "https://api.weather.gov/zones/county/MDC031",
+          "https://api.weather.gov/zones/county/MDC033",
+          "https://api.weather.gov/zones/county/MDC043",
+          "https://api.weather.gov/zones/county/MDC510",
+          "https://api.weather.gov/zones/county/VAC003",
+          "https://api.weather.gov/zones/county/VAC013",
+          "https://api.weather.gov/zones/county/VAC015",
+          "https://api.weather.gov/zones/county/VAC043",
+          "https://api.weather.gov/zones/county/VAC047",
+          "https://api.weather.gov/zones/county/VAC059",
+          "https://api.weather.gov/zones/county/VAC061",
+          "https://api.weather.gov/zones/county/VAC069",
+          "https://api.weather.gov/zones/county/VAC079",
+          "https://api.weather.gov/zones/county/VAC099",
+          "https://api.weather.gov/zones/county/VAC107",
+          "https://api.weather.gov/zones/county/VAC113",
+          "https://api.weather.gov/zones/county/VAC125",
+          "https://api.weather.gov/zones/county/VAC137",
+          "https://api.weather.gov/zones/county/VAC139",
+          "https://api.weather.gov/zones/county/VAC153",
+          "https://api.weather.gov/zones/county/VAC157",
+          "https://api.weather.gov/zones/county/VAC165",
+          "https://api.weather.gov/zones/county/VAC171",
+          "https://api.weather.gov/zones/county/VAC177",
+          "https://api.weather.gov/zones/county/VAC179",
+          "https://api.weather.gov/zones/county/VAC187",
+          "https://api.weather.gov/zones/county/VAC510",
+          "https://api.weather.gov/zones/county/VAC540",
+          "https://api.weather.gov/zones/county/VAC600",
+          "https://api.weather.gov/zones/county/VAC610",
+          "https://api.weather.gov/zones/county/VAC630",
+          "https://api.weather.gov/zones/county/VAC660",
+          "https://api.weather.gov/zones/county/VAC683",
+          "https://api.weather.gov/zones/county/VAC685",
+          "https://api.weather.gov/zones/county/VAC790",
+          "https://api.weather.gov/zones/county/VAC820",
+          "https://api.weather.gov/zones/county/VAC840",
+          "https://api.weather.gov/zones/county/WVC003",
+          "https://api.weather.gov/zones/county/WVC027",
+          "https://api.weather.gov/zones/county/WVC031",
+          "https://api.weather.gov/zones/county/WVC037",
+          "https://api.weather.gov/zones/county/WVC065"
+        ],
+        "references": [],
+        "sent": "date:now -2 hours",
+        "effective": "date:now -2 hours",
+        "onset": "date:now -2 hours",
+        "expires": "date:now +2 hours",
+        "ends": "date:now +2 hours",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Severe Thunderstorm Watch",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Baltimore MD/Washington DC",
+        "headline": "Severe Thunderstorm Watch issued July 10 at 1:37PM EDT until July 10 at 10:00PM EDT by NWS Baltimore MD/Washington DC",
+        "description": "THE NATIONAL WEATHER SERVICE HAS ISSUED SEVERE THUNDERSTORM WATCH\n518 IN EFFECT UNTIL 10 PM EDT THIS EVENING FOR THE FOLLOWING\nAREAS\n\nTHE DISTRICT OF COLUMBIA\n\nIN MARYLAND THIS WATCH INCLUDES 13 COUNTIES\n\nIN CENTRAL MARYLAND\n\nANNE ARUNDEL                       HOWARD\nMONTGOMERY\nPRINCE GEORGES\n\nIN NORTH CENTRAL MARYLAND\n\nCARROLL                       FREDERICK\nWASHINGTON\n\nIN NORTHEAST MARYLAND\n\nCECIL\n\nIN NORTHERN MARYLAND\n\nBALTIMORE\nBALTIMORE CITY\nHARFORD\n\nIN SOUTHERN MARYLAND\n\nCHARLES\n\nIN WESTERN MARYLAND\n\nALLEGANY\n\nIN VIRGINIA THIS WATCH INCLUDES 33 COUNTIES\n\nIN CENTRAL VIRGINIA\n\nALBEMARLE\nCITY OF CHARLOTTESVILLE\nCITY OF FREDERICKSBURG\nGREENE                       KING GEORGE\nNELSON                       ORANGE\nSPOTSYLVANIA\n\nIN NORTHERN VIRGINIA\n\nARLINGTON\nCITY OF ALEXANDRIA\nCITY OF FAIRFAX\nCITY OF FALLS CHURCH\nCITY OF MANASSAS\nCITY OF MANASSAS PARK\nCULPEPER                       FAIRFAX\nFAUQUIER                       LOUDOUN\nPRINCE WILLIAM\nSTAFFORD\n\nIN NORTHWEST VIRGINIA\n\nCITY OF WINCHESTER\nCLARKE                       FREDERICK\nMADISON                       PAGE\nRAPPAHANNOCK\nSHENANDOAH                       WARREN\n\nIN WESTERN VIRGINIA\n\nAUGUSTA\nCITY OF HARRISONBURG\nCITY OF STAUNTON\nCITY OF WAYNESBORO\nROCKINGHAM\n\nIN WEST VIRGINIA THIS WATCH INCLUDES 5 COUNTIES\n\nIN EASTERN WEST VIRGINIA\n\nHAMPSHIRE                       HARDY\n\nIN PANHANDLE WEST VIRGINIA\n\nBERKELEY                       JEFFERSON\nMORGAN\n\nTHIS INCLUDES THE CITIES OF ABERDEEN, ALEXANDRIA, ANNAPOLIS,\nARLINGTON, ARNOLD, ASPEN HILL, BALLENGER CREEK, BALTIMORE,\nBEL AIR, BERRYVILLE, BETHESDA, BOWIE, CAMP SPRINGS, CATONSVILLE,\nCHANTILLY, CHARLES TOWN, CHARLOTTESVILLE, CLINTON, COLLEGE PARK,\nCOLUMBIA, CROZET, CULPEPER, CUMBERLAND, DAHLGREN, DUNDALK,\nEDGEWOOD, ELDERSBURG, ELKTON, ELLICOTT CITY, ESSEX, FAIRFAX,\nFALLS CHURCH, FALLSTON, FALMOUTH, FREDERICK, FREDERICKSBURG,\nFRONT ROYAL, FROSTBURG, GAITHERSBURG, GERMANTOWN, GLEN BURNIE,\nGORDONSVILLE, GREENBELT, GREENFIELD, HAGERSTOWN, HARRISONBURG,\nHARRISONBURG, HAVRE DE GRACE, HERNDON, JOPPATOWNE, LAUREL,\nLEESBURG, LURAY, MADISON, MANASSAS, MANASSAS PARK, MARTINSBURG,\nMCLEAN, MOOREFIELD, ODENTON, ORANGE, PARKVILLE, PAW PAW,\nPIKESVILLE, POTOMAC, RANDALLSTOWN, RESTON, ROCKVILLE, ROMNEY,\nSEVERN, SEVERNA PARK, SHENANDOAH, SHEPHERDSTOWN, SILVER SPRING,\nSOUTH GATE, SPOTSYLVANIA COURTHOUSE, ST. CHARLES, STANARDSVILLE,\nSTANLEY, STAUNTON, STAUNTON, STERLING, STRASBURG,\nSUITLAND-SILVER HILL, TOWSON, WALDORF, WARRENTON, WASHINGTON,\nWASHINGTON, WAYNESBORO, WAYNESBORO, WESTMINSTER, WINCHESTER,\nWINCHESTER, WOODBRIDGE, AND WOODSTOCK.",
+        "instruction": null,
+        "response": "Monitor",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WCNLWX"
+          ],
+          "WMOidentifier": [
+            "WWUS61 KLWX 101737"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ],
+          "VTEC": [
+            "/O.NEW.KLWX.SV.A.0518.240710T1737Z-240711T0200Z/"
+          ],
+          "eventEndingTime": [
+            "2024-07-11T02:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.47fd7fa2786b2d161bf5867891635cb5d0e794a4.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.47fd7fa2786b2d161bf5867891635cb5d0e794a4.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.47fd7fa2786b2d161bf5867891635cb5d0e794a4.001.1",
+        "areaDesc": "Upper Slopes of the Eastern Washington Cascades Crest",
+        "geocode": {
+          "SAME": [
+            "053037",
+            "053077"
+          ],
+          "UGC": [
+            "WAZ522"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ522"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9dccbed176f0b09b9ca781bcf7e0424f6191094f.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.9dccbed176f0b09b9ca781bcf7e0424f6191094f.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -47634 seconds"
+          }
+        ],
+        "sent": "date:now -22254 seconds",
+        "effective": "date:now -22254 seconds",
+        "onset": "date:now -22254 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Pendleton OR",
+        "headline": "Winter Weather Advisory issued March 11 at 4:30AM PDT until March 12 at 11:00PM PDT by NWS Pendleton OR",
+        "description": "* WHAT...Snow above 3000 feet. Additional snow accumulations of 6\nto 18 inches. Winds gusting as high as 40 mph, mainly on the\nhigher exposed ridges.\n\n* WHERE...Upper Slopes of the Eastern Washington Cascades Crest.\n\n* WHEN...Until 11 PM PDT Tuesday. There will be a lull in the snow\nthis morning before additional snow develops this afternoon.\nHowever, little daytime accumulation is expected today, except\nat the higher elevations.\n\n* IMPACTS...Travel could be very difficult to impossible.",
+        "instruction": "Slow down and use caution while traveling.\n\nThe latest road conditions can be obtained for Oregon by calling\n5 1 1 or by visiting online at https://tripcheck.com, or for\nWashington by visiting online at https://wsdot.com/travel.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWPDT"
+          ],
+          "WMOidentifier": [
+            "WWUS46 KPDT 111130"
+          ],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 11 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KPDT.WW.Y.0019.000000T0000Z-240313T0600Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-13T06:00:00+00:00"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.b201c1197c1d346fb1e941707e884c22b38e5ab7.001.1,2024-03-10T13:08:00-07:00 w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.f8ec459990f34734ec707e692a50d819325be49a.001.1,2024-03-10T07:37:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c0e91a5ec4050ea3102c04d92fba0330b674098e.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c0e91a5ec4050ea3102c04d92fba0330b674098e.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.c0e91a5ec4050ea3102c04d92fba0330b674098e.001.1",
+        "areaDesc": "Mason, WA",
+        "geocode": {
+          "SAME": [
+            "053045"
+          ],
+          "UGC": [
+            "WAC045"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/county/WAC045"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.92873eb172f266ad6f13bfbaa2aceaa8acceb71f.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.92873eb172f266ad6f13bfbaa2aceaa8acceb71f.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -66114 seconds"
+          }
+        ],
+        "sent": "date:now -22914 seconds",
+        "effective": "date:now -22914 seconds",
+        "onset": "date:now -22914 seconds",
+        "expires": "date:now +20945 seconds",
+        "ends": "date:now +109145 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Flood Watch",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Flood Watch issued March 11 at 4:19AM PDT until March 12 at 5:00PM PDT by NWS Seattle WA",
+        "description": "A strong front will bring heavy rainfall to lower elevations of the\nOlympics this afternoon into early Tuesday morning increasing the\npotential for flooding on the Skokomish River in Mason County.\n\n* WHAT...Flooding caused by excessive rainfall continues to be\npossible.\n\n* WHERE...A portion of northwest Washington, including the following\ncounty, Mason.\n\n* WHEN...Through Tuesday afternoon.\n\n* IMPACTS...Excessive runoff may result in flooding of rivers,\ncreeks, streams, and other low-lying and flood-prone locations.\n\n* ADDITIONAL DETAILS...\n- Heavy rain over the south slopes of the Olympics this\nafternoon through early Tuesday morning could push the\nSkokomish river above flood stage as early as tonight.\n- http://www.weather.gov/safety/flood",
+        "instruction": "You should monitor later forecasts and be alert for possible Flood\nWarnings. Those living in areas prone to flooding should be prepared\nto take action should flooding develop.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "FFASEW"
+          ],
+          "WMOidentifier": [
+            "WGUS66 KSEW 111119"
+          ],
+          "NWSheadline": [
+            "FLOOD WATCH REMAINS IN EFFECT THROUGH TUESDAY AFTERNOON"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ],
+          "VTEC": [
+            "/O.CON.KSEW.FA.A.0006.000000T0000Z-240313T0000Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-13T00:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.004.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.004.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.004.1",
+        "areaDesc": "Olympics",
+        "geocode": {
+          "SAME": [
+            "053009",
+            "053027",
+            "053031",
+            "053045"
+          ],
+          "UGC": [
+            "WAZ513"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ513"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.003.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.003.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -68634 seconds"
+          }
+        ],
+        "sent": "date:now -23574 seconds",
+        "effective": "date:now -23574 seconds",
+        "onset": "date:now -20454 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +109145 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Winter Weather Advisory issued March 11 at 4:08AM PDT until March 12 at 5:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...Snow expected above 3000 feet. Total snow accumulations\nof 8 to 12 inches. Winds gusting as high as 50 mph.\n\n* WHERE...Olympic mountains including Hurricane Ridge.\n\n* WHEN...Until 5 PM PDT Tuesday.\n\n* IMPACTS...Travel could be very difficult. Gusty winds could\nbring down tree branches.",
+        "instruction": "Slow down and use caution while traveling.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWSEW"
+          ],
+          "WMOidentifier": [
+            "WWUS46 KSEW 111108"
+          ],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 5 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KSEW.WW.Y.0012.240311T1200Z-240313T0000Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-13T00:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.001.1",
+        "areaDesc": "West Slopes North Cascades and Passes",
+        "geocode": {
+          "SAME": [
+            "053057",
+            "053073"
+          ],
+          "UGC": [
+            "WAZ567"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ567"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -68634 seconds"
+          }
+        ],
+        "sent": "date:now -23574 seconds",
+        "effective": "date:now -23574 seconds",
+        "onset": "date:now -23574 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Severe",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Storm Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Winter Storm Warning issued March 11 at 4:08AM PDT until March 12 at 11:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...Heavy snow above 3000 feet. Additional snow accumulations\nof 15 to 30 inches. Winds gusting as high as 40 mph.\n\n* WHERE...Cascade mountains of Whatcom and Skagit Counties,\nincluding the Mount Baker Ski Area.\n\n* WHEN...Until 11 PM PDT Tuesday.\n\n* IMPACTS...Travel could be very difficult.",
+        "instruction": "If you must travel, keep an extra flashlight, food, and water in\nyour vehicle in case of an emergency.",
+        "response": "Prepare",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWSEW"
+          ],
+          "WMOidentifier": [
+            "WWUS46 KSEW 111108"
+          ],
+          "NWSheadline": [
+            "WINTER STORM WARNING REMAINS IN EFFECT UNTIL 11 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "EAS-ORG": [
+            "WXR"
+          ],
+          "VTEC": [
+            "/O.CON.KSEW.WS.W.0008.000000T0000Z-240313T0600Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-13T06:00:00+00:00"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.b949012818b3c3c2abc735dbc2640d711efc388b.001.2,2024-03-10T04:02:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.003.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.003.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.003.1",
+        "areaDesc": "West Slopes North Central Cascades and Passes",
+        "geocode": {
+          "SAME": [
+            "053033",
+            "053061"
+          ],
+          "UGC": [
+            "WAZ568"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ568"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.002.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.002.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -68634 seconds"
+          }
+        ],
+        "sent": "date:now -23574 seconds",
+        "effective": "date:now -23574 seconds",
+        "onset": "date:now -20454 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Winter Weather Advisory issued March 11 at 4:08AM PDT until March 12 at 11:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...Snow expected above 3000 feet. Total snow accumulations\nof 5 to 15 inches.\n\n* WHERE...Cascade mountains of Snohomish and King Counties,\nincluding Stevens Pass and Snoqualmie Pass.\n\n* WHEN...Until 11 PM PDT Tuesday.\n\n* IMPACTS...Plan on very difficult travel.",
+        "instruction": "Slow down and use caution while traveling.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWSEW"
+          ],
+          "WMOidentifier": [
+            "WWUS46 KSEW 111108"
+          ],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 11 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KSEW.WW.Y.0012.240311T1200Z-240313T0600Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-13T06:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.002.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.002.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.71eaf34ad02e2f44466f1de17a563376ca21e454.002.1",
+        "areaDesc": "West Slopes South Central Cascades and Passes",
+        "geocode": {
+          "SAME": [
+            "053041",
+            "053053"
+          ],
+          "UGC": [
+            "WAZ569"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ569"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.004.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.be1fc7c8819bd368711358ebaef9b3ad98ef452c.004.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -68634 seconds"
+          }
+        ],
+        "sent": "date:now -23574 seconds",
+        "effective": "date:now -23574 seconds",
+        "onset": "date:now -23574 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Winter Weather Advisory issued March 11 at 4:08AM PDT until March 12 at 11:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...Snow above 3000 feet. Additional snow accumulations of 12\nto 24 inches. Winds gusting as high as 40 mph.\n\n* WHERE...Cascade mountains of Pierce and Lewis Counties,\nincluding the Crystal Mountain Ski Area and Paradise on Mount\nRainier.\n\n* WHEN...Until 11 PM PDT Tuesday.\n\n* IMPACTS...Plan on very difficult travel.",
+        "instruction": "Slow down and use caution while traveling.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWSEW"
+          ],
+          "WMOidentifier": [
+            "WWUS46 KSEW 111108"
+          ],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 11 PM PDT TUESDAY ABOVE 3000 FEET"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KSEW.WW.Y.0012.000000T0000Z-240313T0600Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-13T06:00:00+00:00"
+          ],
+          "expiredReferences": [
+            "w-nws.webmaster@noaa.gov,urn:oid:2.49.0.1.840.0.b949012818b3c3c2abc735dbc2640d711efc388b.002.1,2024-03-10T04:02:00-07:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.001.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.001.1",
+        "areaDesc": "North Coast; Central Coast",
+        "geocode": {
+          "SAME": [
+            "053009",
+            "053031",
+            "053027"
+          ],
+          "UGC": [
+            "WAZ516",
+            "WAZ517"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ516",
+          "https://api.weather.gov/zones/forecast/WAZ517"
+        ],
+        "references": [],
+        "sent": "date:now -23934 seconds",
+        "effective": "date:now -23934 seconds",
+        "onset": "date:now +11945 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +44345 seconds",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Wind Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Wind Advisory issued March 11 at 4:02AM PDT until March 11 at 11:00PM PDT by NWS Seattle WA",
+        "description": "* WHAT...South winds 20 to 35 mph with gusts up to 45 mph\nexpected.\n\n* WHERE...North Coast and Central Coast.\n\n* WHEN...From 2 PM this afternoon to 11 PM PDT this evening.\n\n* IMPACTS...Gusty winds could blow around unsecured objects.\nTree limbs could be blown down and a few power outages may\nresult.",
+        "instruction": "Use extra caution when driving, especially if operating a high\nprofile vehicle. Secure outdoor objects.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "NPWSEW"
+          ],
+          "WMOidentifier": [
+            "WWUS76 KSEW 111102"
+          ],
+          "NWSheadline": [
+            "WIND ADVISORY IN EFFECT FROM 2 PM THIS AFTERNOON TO 11 PM PDT THIS EVENING"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.NEW.KSEW.WI.Y.0010.240311T2100Z-240312T0600Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-12T06:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.002.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.002.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.b8a2dbbbd8c52409c9fcb1025cf5f6440387a460.002.1",
+        "areaDesc": "San Juan County; Western Whatcom County; Western Skagit County; Admiralty Inlet Area",
+        "geocode": {
+          "SAME": [
+            "053055",
+            "053073",
+            "053057",
+            "053029",
+            "053031"
+          ],
+          "UGC": [
+            "WAZ001",
+            "WAZ503",
+            "WAZ506",
+            "WAZ510"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ001",
+          "https://api.weather.gov/zones/forecast/WAZ503",
+          "https://api.weather.gov/zones/forecast/WAZ506",
+          "https://api.weather.gov/zones/forecast/WAZ510"
+        ],
+        "references": [],
+        "sent": "date:now -23934 seconds",
+        "effective": "date:now -23934 seconds",
+        "onset": "date:now +26345 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +55145 seconds",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Wind Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Seattle WA",
+        "headline": "Wind Advisory issued March 11 at 4:02AM PDT until March 12 at 2:00AM PDT by NWS Seattle WA",
+        "description": "* WHAT...Southeast winds 20 to 35 with gusts 45 to 50 mph\nexpected.\n\n* WHERE...San Juan County, Western Whatcom County, Western\nSkagit County and Admiralty Inlet Area.\n\n* WHEN...From 6 PM this evening to 2 AM PDT Tuesday.\n\n* IMPACTS...Gusty winds could blow around unsecured objects.\nTree limbs could be blown down and a few power outages may\nresult.",
+        "instruction": "Use extra caution when driving, especially if operating a high\nprofile vehicle. Secure outdoor objects.",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "NPWSEW"
+          ],
+          "WMOidentifier": [
+            "WWUS76 KSEW 111102"
+          ],
+          "NWSheadline": [
+            "WIND ADVISORY IN EFFECT FROM 6 PM THIS EVENING TO 2 AM PDT TUESDAY"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.NEW.KSEW.WI.Y.0010.240312T0100Z-240312T0900Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-12T09:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.5e739d6a36383e527303a3b1a2f2c438824c0b13.002.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.5e739d6a36383e527303a3b1a2f2c438824c0b13.002.1",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.5e739d6a36383e527303a3b1a2f2c438824c0b13.002.1",
+        "areaDesc": "Western Chelan County",
+        "geocode": {
+          "SAME": [
+            "053007"
+          ],
+          "UGC": [
+            "WAZ048"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/WAZ048"
+        ],
+        "references": [
+          {
+            "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.85f2f5558de067fa95f696fcd3e6fb092c4620ac.001.1",
+            "identifier": "urn:oid:2.49.0.1.840.0.85f2f5558de067fa95f696fcd3e6fb092c4620ac.001.1",
+            "sender": "w-nws.webmaster@noaa.gov",
+            "sent": "date:now -74094 seconds"
+          }
+        ],
+        "sent": "date:now -32334 seconds",
+        "effective": "date:now -32334 seconds",
+        "onset": "date:now +22745 seconds",
+        "expires": "date:now +22745 seconds",
+        "ends": "date:now +130745 seconds",
+        "status": "Actual",
+        "messageType": "Update",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Spokane WA",
+        "headline": "Winter Weather Advisory issued March 11 at 1:42AM PDT until March 12 at 11:00PM PDT by NWS Spokane WA",
+        "description": "* WHAT...Snow expected above 3000 ft. Total snow accumulation 5 to\n10 inches above 3000 ft with heavier accumulations of 12 to 18\ninches above 4000 ft.\n\n* WHERE...Stevens Pass and Holden Village.\n\n* WHEN...From 5 PM this afternoon to 11 PM PDT Tuesday.\n\n* IMPACTS...Travel could be difficult. The hazardous conditions\ncould impact the Tuesday morning commute.",
+        "instruction": "Slow down and use caution while traveling. For the latest travel\ninformation in Washington, go to https://wsdot.wa.gov/travel",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWOTX"
+          ],
+          "WMOidentifier": [
+            "WWUS46 KOTX 110842"
+          ],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY REMAINS IN EFFECT FROM 5 PM THIS AFTERNOON TO 11 PM PDT TUESDAY ABOVE 3000 FT"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.CON.KOTX.WW.Y.0019.240312T0000Z-240313T0600Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-13T06:00:00+00:00"
+          ]
+        }
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.f1fc8d9313d48ef6c13df00b804dbda2c17aae8f.001.2",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.f1fc8d9313d48ef6c13df00b804dbda2c17aae8f.001.2",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.f1fc8d9313d48ef6c13df00b804dbda2c17aae8f.001.2",
+        "areaDesc": "North Oregon Cascades; South Washington Cascades",
+        "geocode": {
+          "UGC": [
+            "ORZ126",
+            "WAZ211"
+          ]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/ORZ126",
+          "https://api.weather.gov/zones/forecast/WAZ211"
+        ],
+        "references": [],
+        "sent": "date:now -36294 seconds",
+        "effective": "date:now -36294 seconds",
+        "onset": "date:now +4745 seconds",
+        "expires": "date:now +19145 seconds",
+        "ends": "date:now +112745 seconds",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Winter Weather Advisory",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Portland OR",
+        "headline": "Winter Weather Advisory issued March 11 at 12:36AM PDT until March 12 at 6:00PM PDT by NWS Portland OR",
+        "description": "* WHAT...Snow expected above 2500 feet. Total snow accumulations\nof 6 to 10 inches, but 12 to 18 inches above 3500 feet. Winds\ngusting up to 45 mph tonight into Tuesday.\n\n* WHERE...In Oregon, North Oregon Cascades. In Washington, South\nWashington Cascades.\n\n* WHEN...From noon today to 6 PM PDT Tuesday.\n\n* IMPACTS...Travel could difficult at times.\n\n* ADDITIONAL DETAILS...Snow levels will hold around 3000 to 3500\nfeet today into this evening, then lower to 2500 feet Monday\nnight.",
+        "instruction": "Slow down and use caution while traveling.\n\nFor the latest road conditions call 5 1 1, or visit\nfor Oregon: https://www.tripcheck.com\nand for Washington: https://wsdot.com/travel/real-time/map",
+        "response": "Execute",
+        "parameters": {
+          "AWIPSidentifier": [
+            "WSWPQR"
+          ],
+          "WMOidentifier": [
+            "WWUS46 KPQR 110736"
+          ],
+          "NWSheadline": [
+            "WINTER WEATHER ADVISORY IN EFFECT FOR THIS AFTERNOON THROUGH TUESDAY AFTERNOON FOR AREAS ABOVE 2500 FEET"
+          ],
+          "BLOCKCHANNEL": [
+            "EAS",
+            "NWEM",
+            "CMAS"
+          ],
+          "VTEC": [
+            "/O.NEW.KPQR.WW.Y.0018.240311T1900Z-240313T0100Z/"
+          ],
+          "eventEndingTime": [
+            "2024-03-13T01:00:00+00:00"
+          ]
+        }
+      }
+    }
+  ],
+  "title": "Current watches, warnings, and advisories for Washington",
+  "updated": "date:now -22134 seconds"
+}

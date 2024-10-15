@@ -26,6 +26,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: bundle javascript
         uses: ./.github/actions/javascript-bundle
+
+      - name: Deploy api interop layer in ${{ github.event.inputs.environment }} space
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          cf_username: ${{ secrets[env.CF_USERNAME] }}
+          cf_password: ${{ secrets[env.CF_PASSWORD] }}
+          cf_org: nws-weathergov
+          cf_space: ${{ github.event.inputs.environment }}
+          cf_command: "push api-weathergov-${{ github.event.inputs.environment }} -f manifests/manifest-${{ github.event.inputs.environment }}.yaml --var newrelic-license='${{ secrets.NEWRELIC_LICENSE }}' --strategy rolling"
+
       - name: Deploy application in ${{ github.event.inputs.environment }} space
         uses: cloud-gov/cg-cli-tools@main
         with:
@@ -33,7 +43,7 @@ jobs:
           cf_password: ${{ secrets[env.CF_PASSWORD] }}
           cf_org: nws-weathergov
           cf_space: ${{ github.event.inputs.environment }}
-          cf_command: "push -f manifests/manifest-${{ github.event.inputs.environment }}.yaml --var newrelic-license='${{ secrets.NEWRELIC_LICENSE }}' --var allowed-ips='${{secrets.ALLOWED_IP_ADDRESSES}}' --strategy rolling"
+          cf_command: "push weathergov-${{ github.event.inputs.environment }} -f manifests/manifest-${{ github.event.inputs.environment }}.yaml --var newrelic-license='${{ secrets.NEWRELIC_LICENSE }}' --strategy rolling"
 
       - name: Run post-deploy steps in ${{ github.event.inputs.environment }} space
         uses: cloud-gov/cg-cli-tools@main

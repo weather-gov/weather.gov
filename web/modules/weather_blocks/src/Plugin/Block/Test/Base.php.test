@@ -28,23 +28,6 @@ abstract class Base extends TestCase
     protected $entityServie;
 
     /**
-     * A mock of the route object.
-     *
-     * @var routeMock
-     */
-    protected $routeMock;
-
-    /**
-     * A mocked WeatherData service object.
-     *
-     * @var weatherData
-     *
-     * This is injected into the current conditions block object being tested with
-     * dependency injection.
-     */
-    protected $weatherData;
-
-    /**
      * Common setup for all component tests.
      */
     protected function setUp($type = null, $override = true): void
@@ -60,52 +43,15 @@ abstract class Base extends TestCase
             $methods[] = "getLocation";
         }
 
-        $this->weatherData = $this->createStub(WeatherDataService::class);
         $this->entityService = $this->createStub(WeatherEntityService::class);
 
-        $this->routeMock = $this->createStub(RouteMatchInterface::class);
-
         $this->block = $this->getMockBuilder($type)
-            ->setConstructorArgs([
-                [],
-                "",
-                $definition,
-                $this->routeMock,
-                $this->weatherData,
-                $this->entityService,
-            ])
+            ->setConstructorArgs([[], "", $definition, $this->entityService])
             ->setMethods($methods)
             ->getMock();
 
         $logger = $this->createMock(LoggerInterface::class);
         $this->block->method("getLogger")->willReturn($logger);
-    }
-
-    protected function onLocationRoute($lat = "40", $lon = "-90")
-    {
-        $this->block->method("getLocation")->willReturn(
-            (object) [
-                "grid" => (object) [
-                    "wfo" => "WFO",
-                    "x" => 1,
-                    "y" => 1,
-                ],
-                "point" => (object) [
-                    "lat" => floatval($lat),
-                    "lon" => floatval($lon),
-                ],
-            ],
-        );
-    }
-
-    protected function notOnLocationRoute()
-    {
-        $this->block->method("getLocation")->willReturn(
-            (object) [
-                "grid" => false,
-                "point" => false,
-            ],
-        );
     }
 
     /**
