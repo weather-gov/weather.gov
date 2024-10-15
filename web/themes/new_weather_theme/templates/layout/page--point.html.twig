@@ -42,7 +42,7 @@
           {% if weather.alerts %}
             <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
           {% endif %}
-            <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="current" aria-controls="current">{{ "Current" | t }}</button>
+            <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="today" aria-controls="today">{{ "Today" | t }}</button>
             <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "7 Days" | t }}</button>
           </div>
         </div>
@@ -55,11 +55,26 @@
         </div>
         {% endif %}
 
-        <div class="wx-tab-container wx-focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
-          {{ drupal_block("weathergov_current_conditions") }}
-          {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
-
-          {% include '@new_weather_theme/partials/satellite.html.twig' %}
+        <div class="wx-tab-container wx-focus-offset-205" id="today" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
+          <div class="grid-container">
+            <div class="grid-row grid-gap-lg">
+              {#  grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8 #}
+              <div class="desktop:grid-col-4 display-flex flex-column">
+                {{ drupal_block("weathergov_current_conditions") }}
+              </div>
+              <div class="desktop:grid-col-8 display-flex flex-column">
+                   {% include '@new_weather_theme/partials/today-summary-forecast.html.twig' %}
+              </div>
+            </div>
+            <div class="grid-row grid-gap-lg">
+              <div class="desktop:grid-col-6 wx-radar-wrapper">
+                {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
+              </div>
+              <div class="desktop:grid-col-6 wx-satellite-wrapper">
+                {% include '@new_weather_theme/partials/satellite.html.twig' %}
+              </div>
+            </div>
+          </div>
         </div>
 
          <div class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">

@@ -16,6 +16,7 @@ for (const container of chartContainers) {
   const feelsLike = JSON.parse(container.dataset.feelsLike).map((v) =>
     Number.parseInt(v, 10),
   );
+  const hideYAxis = container.dataset.hideYAxis === "true";
 
   const config = {
     type: "line",
@@ -55,6 +56,7 @@ for (const container of chartContainers) {
               }
               return styles.colors.baseLightest;
             }),
+            display: !hideYAxis
           },
         },
         y: {
@@ -72,6 +74,7 @@ for (const container of chartContainers) {
             maxTicksLimit: 6,
             callback: (v) => `${v}°`,
           },
+          display: !hideYAxis
         },
       },
       layout: {

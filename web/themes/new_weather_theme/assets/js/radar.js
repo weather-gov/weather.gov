@@ -9,14 +9,19 @@ const toggleMapExpand = (() => {
 
   return (event) => {
     const container = event.target.closest(".wx-radar-container");
+    const wrapper = event.target.closest(".wx-radar-wrapper");
     const svgUse = document.querySelector("button.wx-radar-expand svg use");
 
     expanded = !expanded;
 
     if (expanded) {
       container.classList.add("wx-radar-container__expanded");
+      wrapper.classList.remove("desktop:grid-col-6");
+      wrapper.classList.add("desktop:grid-col-12");
     } else {
       container.classList.remove("wx-radar-container__expanded");
+      wrapper.classList.add("desktop:grid-col-6");
+      wrapper.classList.remove("desktop:grid-col-12");
     }
 
     const descriptors = Array.from(
@@ -102,7 +107,7 @@ const setupRadar = () => {
 };
 
 const scriptEl = document.querySelector("[data-wx-radar-cmi]");
-const currentTabSelected = document.querySelector("#current[data-selected]");
+const currentTabSelected = document.querySelector("#today[data-selected]");
 // If the page loads with the current tab selected
 // then we try to load the radar.
 // If the page loads with some other tab selected,
@@ -115,9 +120,9 @@ if (currentTabSelected && window.cmiRadar) {
   });
 } else {
   document.addEventListener("wx:tab-switched", (event) => {
-    if (window.cmiRadar && event.detail.tabId === "current") {
+    if (window.cmiRadar && event.detail.tabId === "today") {
       setupRadar();
-    } else if (event.detail.tabId === "current") {
+    } else if (event.detail.tabId === "today") {
       scriptEl.addEventListener("load", () => {
         setupRadar();
       });

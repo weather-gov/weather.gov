@@ -42,6 +42,18 @@ function weather_blocks_template_preprocess_default_variables_alter(
         }
 
         try {
+          $daily = $weatherData->getDailyForecastFromGrid(
+            $grid->wfo,
+            $grid->x,
+            $grid->y,
+            false,
+            3
+          );
+          $weatherMetadata["daily"] = $daily;
+        } catch (Throwable $e){ 
+        }
+
+        try {
             $place = $weatherData->getPlaceNearPoint($lat, $lon);
             if ($place) {
                 $weatherMetadata["place"] = trim(
