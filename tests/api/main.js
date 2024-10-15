@@ -154,6 +154,11 @@ app.get("*any", async (req, res) => {
   }
 
   if (/^\/play\/.+$/.test(req.path)) {
+    // Prevent path traversal
+    if (req.path.includes("..")) {
+      return;
+    }
+
     const bundle = req.path.split("/").pop();
     const exists = await fsExists(path.join("./data", bundle));
     if (exists) {

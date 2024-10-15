@@ -91,6 +91,12 @@ const processDates = (obj, usingHourly = false) => {
 };
 
 export default async (request, response) => {
+  // Prevent path traversal.
+  if (request.path.includes("..")) {
+    response.end();
+    return;
+  }
+
   // Put the query string back together.
   const query = Object.entries(request.query)
     .map(([key, value]) => `${key}=${value}`)
