@@ -2,7 +2,7 @@ import { drawChart } from "./WeatherChart.js";
 import styles from "../styles.js";
 
 const round = (number, decimals) =>
-  Math.round(number * 10 ** decimals) / 10 ** decimals;
+  Math.round(number * 100 ** decimals) / 100 ** decimals;
 
 const chartContainers = Array.from(
   document.querySelectorAll(".wx-qpf-chart-container"),
@@ -41,13 +41,13 @@ const createCharts = async () => {
     const times = JSON.parse(container.dataset.times);
 
     const liquid = JSON.parse(container.dataset.liquid).map((v) =>
-      round(Number.parseFloat(v, 10), 1),
+      round(Number.parseFloat(v, 10), 2),
     );
     const snow = JSON.parse(container.dataset.snow).map((v) =>
-      round(Number.parseFloat(v, 10), 1),
+      round(Number.parseFloat(v, 10), 2),
     );
     const ice = JSON.parse(container.dataset.ice).map((v) =>
-      round(Number.parseFloat(v, 10), 1),
+      round(Number.parseFloat(v, 10), 2),
     );
 
     const datasets = [];
