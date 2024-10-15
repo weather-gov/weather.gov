@@ -60,4 +60,19 @@ describe("quantitative precipitation forecast table", () => {
     await expect(headings.nth(0)).toHaveText("Time Period");
     await expect(headings.nth(1)).toHaveText("Rain");
   });
+
+  test("still shows the graph and table when there is no precipitation forecast", async ({
+    page,
+  }) => {
+    const day = await page.locator(".wx-daily-forecast-block li").nth(4);
+    await day.locator("span.toggle-text").click();
+
+    const headings = await day.locator(".wx-precip-table thead th");
+
+    // period, rain
+    await expect(headings).toHaveCount(2);
+    await expect(headings.nth(0)).toHaveText("Time Period");
+    await expect(headings.nth(1)).toHaveText("Rain");
+    await expect(day.locator(".wx-qpf-chart-container canvas")).toBeVisible();
+  });
 });

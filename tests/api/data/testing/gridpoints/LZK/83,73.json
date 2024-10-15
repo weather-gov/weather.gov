@@ -5241,11 +5241,11 @@
         },
         {
           "validTime": "date:now +79 hours / PT6H",
-          "value": 0
+          "value": 30
         },
         {
           "validTime": "date:now +85 hours / PT6H",
-          "value": 30
+          "value": 0
         },
         {
           "validTime": "date:now +91 hours / PT6H",
