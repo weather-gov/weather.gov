@@ -1,0 +1,88 @@
+{
+  "name": "Weather.gov",
+  "start_url": "/",
+  "display": "standalone",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-48.jpg",
+      "sizes": "48x48",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-57.jpg",
+      "sizes": "57x57",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-60.jpg",
+      "sizes": "60x60",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-72.jpg",
+      "sizes": "72x72",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-76.jpg",
+      "sizes": "76x76",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-96.jpg",
+      "sizes": "96x96",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-114.jpg",
+      "sizes": "114x114",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-120.jpg",
+      "sizes": "120x120",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-144.jpg",
+      "sizes": "144x144",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-152.jpg",
+      "sizes": "152x152",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-180.jpg",
+      "sizes": "180x180",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-192.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-256.jpg",
+      "sizes": "256x256",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-384.jpg",
+      "sizes": "384x384",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-512.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
