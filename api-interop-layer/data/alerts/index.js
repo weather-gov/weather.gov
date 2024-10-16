@@ -21,7 +21,9 @@ const metadata = {
 };
 
 export const updateAlerts = async () => {
+  const now = dayjs();
   logger.verbose("updating alerts");
+
   const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
     ({ error, features }) => {
       if (error) {
@@ -89,8 +91,6 @@ export const updateAlerts = async () => {
       continue; // eslint-disable-line no-continue
     }
 
-    alerts.push(alert);
-
     alert.id = alerts.length;
     if (rawAlert.properties.id.startsWith("urn:oid:2.49.0.1.840")) {
       alert.id = rawAlert.properties.id.split(".").slice(-3).join("_");
@@ -128,6 +128,11 @@ export const updateAlerts = async () => {
     if (!alert.finish) {
       alert.finish = null;
     }
+
+    if (alert.finish && alert.finish.isBefore(now)) {
+      continue; // eslint-disable-line no-continue
+    }
+    alerts.push(alert);
 
     alert.geometry = await generateAlertGeometry(db, rawAlert);
   }

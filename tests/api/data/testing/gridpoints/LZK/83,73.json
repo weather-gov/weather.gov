@@ -4595,11 +4595,11 @@
         },
         {
           "validTime": "date:now +4 hours / PT1H",
-          "value": 11.112
+          "value": 22.39
         },
         {
-          "validTime": "date:now +5 hours / PT1H",
-          "value": 14.816
+          "validTime": "date:now +5 hours / PT2H",
+          "value": 24.4
         },
         {
           "validTime": "date:now +6 hours / PT1H",

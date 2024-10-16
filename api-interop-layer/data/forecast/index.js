@@ -56,6 +56,20 @@ export default async ({ grid, place }) => {
   // a measurable value.
   orderedHours.forEach(convertProperties);
 
+  orderedHours.forEach(({ windGust, windSpeed }) => {
+    // Not every hour period will have gusts and wind. Some of the further out
+    // future forecast periods just don't have wind yet.
+    if (windGust && windSpeed) {
+      if (windGust.mph < windSpeed.mph + 8) {
+        // If the wind gust is less than 8 mph more than sustained winds, then
+        // we just set that to null. Get all the units.
+        Object.keys(windGust).forEach((unit) => {
+          windGust[unit] = null;
+        });
+      }
+    }
+  });
+
   // Also convert the QPF. QPF is represented as an array of individual
   // measurements instead of an array of objects whose values are measurements.
   if (gridpointData.qpf) {

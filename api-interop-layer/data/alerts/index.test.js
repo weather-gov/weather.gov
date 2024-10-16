@@ -73,11 +73,11 @@ describe("alert data module", () => {
               properties: {
                 id: "one",
                 event: "Severe Thunderstorm Warning",
-                sent: new Date().toISOString(),
-                effective: new Date().toISOString(),
-                onset: new Date().toISOString(),
-                expires: new Date().toISOString(),
-                ends: new Date().toISOString(),
+                sent: dayjs().subtract(1, "minute").toISOString(),
+                effective: dayjs().subtract(1, "minute").toISOString(),
+                onset: dayjs().subtract(1, "minute").toISOString(),
+                expires: dayjs().add(1, "minute").toISOString(),
+                ends: dayjs().add(1, "minute").toISOString(),
               },
             },
           ],
@@ -142,13 +142,75 @@ describe("alert data module", () => {
     });
 
     describe("the main alert function", () => {
+      describe("does not store alerts that have ended", () => {
+        // 24 hours ago...
+        const past = new Date(Date.now() - 86_400_000).toISOString();
+
+        const times = {
+          sent: dayjs().subtract(1, "minute").toISOString(),
+          effective: dayjs().subtract(1, "minute").toISOString(),
+          onset: dayjs().subtract(1, "minute").toISOString(),
+          expires: dayjs().add(1, "minute").toISOString(),
+          ends: dayjs().add(1, "minute").toISOString(),
+        };
+
+        it("if the alert has an end time in the past", async () => {
+          response.json.resolves({
+            features: [
+              {
+                geometry: "geo",
+                properties: {
+                  id: "one",
+                  event: "Severe Thunderstorm Warning",
+                  ...times,
+                  ends: past,
+                },
+              },
+            ],
+          });
+          await alertHandler.updateAlerts();
+
+          const alerts = await alertHandler.default({
+            grid: { geometry: [] },
+            place: { timezone: "America/Chicago" },
+          });
+
+          expect(alerts.items.length).to.equal(0);
+        });
+
+        it("if the alert does not have an end time and the expire time is in the past", async () => {
+          response.json.resolves({
+            features: [
+              {
+                geometry: "geo",
+                properties: {
+                  id: "one",
+                  event: "Severe Thunderstorm Warning",
+                  ...times,
+                  ends: null,
+                  expires: past,
+                },
+              },
+            ],
+          });
+          await alertHandler.updateAlerts();
+
+          const alerts = await alertHandler.default({
+            grid: { geometry: [] },
+            place: { timezone: "America/Chicago" },
+          });
+
+          expect(alerts.items.length).to.equal(0);
+        });
+      });
+
       it("does not store alerts that are not land-based", async () => {
         const shared = {
-          sent: new Date().toISOString(),
-          effective: new Date().toISOString(),
-          onset: new Date().toISOString(),
-          expires: new Date().toISOString(),
-          ends: new Date().toISOString(),
+          sent: dayjs().subtract(1, "minute").toISOString(),
+          effective: dayjs().subtract(1, "minute").toISOString(),
+          onset: dayjs().subtract(1, "minute").toISOString(),
+          expires: dayjs().add(1, "minute").toISOString(),
+          ends: dayjs().add(1, "minute").toISOString(),
         };
 
         response.json.resolves({
@@ -209,11 +271,11 @@ describe("alert data module", () => {
               properties: {
                 id: "urn:oid:2.49.0.1.840.part1.part2.part3",
                 event: "Severe Thunderstorm Warning",
-                sent: new Date().toISOString(),
-                effective: new Date().toISOString(),
-                onset: new Date().toISOString(),
-                expires: new Date().toISOString(),
-                ends: new Date().toISOString(),
+                sent: dayjs().subtract(1, "minute").toISOString(),
+                effective: dayjs().subtract(1, "minute").toISOString(),
+                onset: dayjs().subtract(1, "minute").toISOString(),
+                expires: dayjs().add(1, "minute").toISOString(),
+                ends: dayjs().add(1, "minute").toISOString(),
               },
             },
           ],
@@ -237,11 +299,11 @@ describe("alert data module", () => {
               properties: {
                 id: "one",
                 event: "Severe Meatballstorm Warning",
-                sent: new Date().toISOString(),
-                effective: new Date().toISOString(),
-                onset: new Date().toISOString(),
-                expires: new Date().toISOString(),
-                ends: new Date().toISOString(),
+                sent: dayjs().subtract(1, "minute").toISOString(),
+                effective: dayjs().subtract(1, "minute").toISOString(),
+                onset: dayjs().subtract(1, "minute").toISOString(),
+                expires: dayjs().add(1, "minute").toISOString(),
+                ends: dayjs().add(1, "minute").toISOString(),
               },
             },
           ],
@@ -286,8 +348,8 @@ describe("alert data module", () => {
                 properties: {
                   id: "one",
                   event: "Severe Meatballstorm Warning",
-                  sent: new Date().toISOString(),
-                  effective: new Date().toISOString(),
+                  sent: dayjs().subtract(1, "minute").toISOString(),
+                  effective: dayjs().subtract(1, "minute").toISOString(),
                   onset: start.toISOString(),
                   expires: end.toISOString(),
                   ends: end.toISOString(),
@@ -331,11 +393,11 @@ describe("alert data module", () => {
           geometry: "geo",
           properties: {
             id: "one",
-            sent: new Date().toISOString(),
-            effective: new Date().toISOString(),
-            onset: new Date().toISOString(),
-            expires: new Date().toISOString(),
-            ends: new Date().toISOString(),
+            sent: dayjs().subtract(1, "minute").toISOString(),
+            effective: dayjs().subtract(1, "minute").toISOString(),
+            onset: dayjs().subtract(1, "minute").toISOString(),
+            expires: dayjs().add(1, "minute").toISOString(),
+            ends: dayjs().add(1, "minute").toISOString(),
             event: type,
           },
         });
@@ -407,9 +469,9 @@ describe("alert data module", () => {
             properties: {
               id: "one",
               event: "Severe Thunderstorm Warning",
-              sent: new Date().toISOString(),
-              effective: new Date().toISOString(),
-              onset: new Date().toISOString(),
+              sent: dayjs().subtract(1, "minute").toISOString(),
+              effective: dayjs().subtract(1, "minute").toISOString(),
+              onset: dayjs().subtract(1, "minute").toISOString(),
             },
           },
         ],
