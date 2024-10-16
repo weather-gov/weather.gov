@@ -1,0 +1,114 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+.wx-quick-forecast {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid color("base-lighter");
+    text-decoration: none;
+    background-color: color("white");
+
+    .wx-quick-forecast-item {
+        text-decoration: none;
+        display: block;
+        padding: units(1.5);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-right: 1px solid color("base-lighter");
+
+        &:last-child {
+            border-right: none;
+        }
+
+        hr {
+            border: none;
+            border-bottom: 1px solid color("base-lighter");
+            width: 100%;
+            margin: 0;
+        }
+
+        .wx-quick-forecast-item-top {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: units(1);
+        }
+
+        .wx-quick-forecast-item-middle {
+            width: 100%;
+            padding-bottom: units(1);
+            padding-top: units(1);
+        }
+
+        .wx-quick-forecast-item-bottom {
+            @include u-font("body", "sm");
+
+            color: color("primary-darker");
+            text-align: center;
+            padding-top: units(1);
+        }
+
+        .wx-quick-forecast-condition {
+            margin-top: units(1.5);
+        }
+    }
+
+    time {
+        @include u-font("mono", "xs");
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: color("primary-dark");
+        
+        span:last-child {
+            text-decoration: none;
+            margin-top: units(1);
+        }
+    }
+
+    .wx-alert-icon {
+        width: units(4);
+        height: units(4);
+        &[data-alert-level] {
+            fill: color("base");
+        }
+        &[data-alert-level="watch"] {
+            fill: color("yellow-50v");
+        }
+        &[data-alert-level="warning"] {
+            fill: color("red-50");
+        }
+    }
+
+    .wx-quick-high,
+    .wx-quick-low {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        @include u-font("mono", "xs");
+        margin-bottom: units(0.5);
+        
+        .wx-quick-label {
+            text-transform: uppercase;
+            color: color("base-dark");
+        }
+
+        .wx-quick-temp {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: flex-start;
+            color: color("primary-darker");
+        }
+
+        .wx-degree {
+            @include u-font("body", "3xs");
+            padding-left: 1px;
+        }
+    }
+}
