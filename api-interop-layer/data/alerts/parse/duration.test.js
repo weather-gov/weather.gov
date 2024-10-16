@@ -36,7 +36,7 @@ describe("alert parsing > duration", () => {
       const finish = now.add(2, "hours").add(1, "day");
 
       const duration = parseDuration({ onset, finish }, "America/Chicago");
-      expect(duration).to.equal("until Monday 09/02 10:00 AM CDT");
+      expect(duration).to.equal("until Monday 09/02 10:00 AM");
     });
 
     it("with unknown ending", () => {
