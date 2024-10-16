@@ -9,36 +9,37 @@ runs:
     
     - name: set library versions
       uses: actions/github-script@v7
-      with: |
-        const { chdir } = require("node:process");
-        chdir("web/themes/new_weather_theme");
+      with:
+        script: |
+          const { chdir } = require("node:process");
+          chdir("web/themes/new_weather_theme");
 
-        const fs = require("node:fs/promises");
-        const yaml = require("js-yaml");
+          const fs = require("node:fs/promises");
+          const yaml = require("js-yaml");
 
-        const paths = [
-          "new_weather_theme.libraries.yml",
-          "../weathergov_admin/weathergov_admin.libraries.yml",
-        ];
+          const paths = [
+            "new_weather_theme.libraries.yml",
+            "../weathergov_admin/weathergov_admin.libraries.yml",
+          ];
 
-        const timestamp = Date.now();
+          const timestamp = Date.now();
 
-        await Promise.all(
-          paths.map(async (path) => {
-            const lib = yaml.load(await fs.readFile(path));
-            Object.entries(lib).forEach(([key, library]) => {
-              if (library.js) {
-                Object.keys(library.js).forEach((jsPath) => {
-                  // If any of the paths to the components of this library are not URLs,
-                  // then at least some of it must be local, in which case we should
-                  // increment the version.
-                  if (!URL.canParse(jsPath)) {
-                    library.version = timestamp;
-                  }
-                });
-              }
-            });
+          await Promise.all(
+            paths.map(async (path) => {
+              const lib = yaml.load(await fs.readFile(path));
+              Object.entries(lib).forEach(([key, library]) => {
+                if (library.js) {
+                  Object.keys(library.js).forEach((jsPath) => {
+                    // If any of the paths to the components of this library are not URLs,
+                    // then at least some of it must be local, in which case we should
+                    // increment the version.
+                    if (!URL.canParse(jsPath)) {
+                      library.version = timestamp;
+                    }
+                  });
+                }
+              });
 
-            await fs.writeFile(path, yaml.dump(lib));
-          }),
-        );
+              await fs.writeFile(path, yaml.dump(lib));
+            }),
+          );
