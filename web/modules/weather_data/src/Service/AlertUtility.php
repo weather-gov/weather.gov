@@ -585,7 +585,7 @@ class AlertUtility
             "level" => "ALERT_LEVEL_OTHER",
             "kind" => "ALERT_KIND_OTHER",
             "priority" => 112640,
-        ]
+        ],
     ];
 
     public static function getAlertTypes()
@@ -730,7 +730,7 @@ class AlertUtility
                         // It ends today
                         return "until " . $ends->format("g:i A") . " today";
                     } else {
-                        return "until " . $ends->format("l m/d g:i A T");
+                        return "until " . $ends->format("l m/d g:i A");
                     }
                 } else {
                     // The event has already concluded. We shouldn't be
