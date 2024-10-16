@@ -70,12 +70,6 @@ const replaceTimestamps = (obj) => {
 };
 
 export default async (request, response, output) => {
-  // Prevent path traversal.
-  if (request.path.includes("..")) {
-    response.end();
-    return;
-  }
-
   const requestID = request.headers["wx-gov-response-id"];
 
   if (!requestID) {
