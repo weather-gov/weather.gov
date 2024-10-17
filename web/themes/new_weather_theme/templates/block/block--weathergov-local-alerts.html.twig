@@ -130,14 +130,6 @@
       </div>
       {% endfor %}
       </wx-alerts>
-
-      <script type="text/javascript">
-        {#
-          We can't set the link classes in Drupal, so do it on the browser side,
-          immediately after rendering, before the user actually sees it.
-        #}
-        Array.from(document.querySelectorAll(".wx-safety-tips a")).forEach(node => node.classList.add("usa-link"));
-      </script>
     </div>
   </div>
 </div>
