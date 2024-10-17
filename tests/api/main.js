@@ -139,7 +139,10 @@ app.get("/set-now", async (req, res) => {
 
 app.get("*any", async (req, res) => {
   res.setHeader("Content-Type", "text/html");
-  if (req.path === "/") {
+
+  // If there are any double-dots in the path, that could result in a path
+  // traversal, so just eat it here and go straight to the UI.
+  if (req.path === "/" || /\.\./.test(req.path)) {
     res.write(await ui());
     res.end();
     return;
