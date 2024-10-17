@@ -16,6 +16,20 @@ for (const container of chartContainers) {
   const feelsLike = JSON.parse(container.dataset.feelsLike).map((v) =>
     Number.parseInt(v, 10),
   );
+  const hideYAxis = container.dataset.hideYAxis === "true";
+  const useMaxY = container.dataset.useMaxY === "true";
+
+  let yMax = Math.max(
+    Math.round(Math.max(...temps) / 10) * 10 + 10,
+    Math.round(Math.max(...feelsLike) / 10) * 10 + 10,
+  );
+
+  if(useMaxY){
+    yMax = Math.max(
+      Math.round(Math.max(...feelsLike)),
+      Math.round(Math.max(...temps))
+    ) + 1;
+  }
 
   const config = {
     type: "line",
@@ -55,6 +69,7 @@ for (const container of chartContainers) {
               }
               return styles.colors.baseLightest;
             }),
+            display: !hideYAxis
           },
         },
         y: {
@@ -62,16 +77,14 @@ for (const container of chartContainers) {
             Math.round(Math.min(...temps) / 10) * 10 - 10,
             Math.round(Math.min(...feelsLike) / 10) * 10 - 10,
           ),
-          max: Math.max(
-            Math.round(Math.max(...temps) / 10) * 10 + 10,
-            Math.round(Math.max(...feelsLike) / 10) * 10 + 10,
-          ),
+          max: yMax,
           ticks: {
             autoSkip: true,
             color: styles.colors.base,
             maxTicksLimit: 6,
             callback: (v) => `${v}°`,
           },
+          display: !hideYAxis
         },
       },
       layout: {
