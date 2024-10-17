@@ -6,6 +6,7 @@
 
 .wx-quick-forecast {
     @include grid-row;
+
     border: 1px solid color("base-lighter");
     text-decoration: none;
     background-color: color("white");
@@ -39,6 +40,7 @@
 .wx-quick-forecast-item-top {
     @include grid-row;
     @include grid-col;
+
     align-items: center;
 }
 
@@ -49,13 +51,16 @@
 
 .wx-quick-forecast-condition {
     display:  flex;
+
     @include grid-col;
+
     justify-content: center;
 }
 
 .wx-quick-forecast-item-bottom {
     @include u-font("body", "sm");
     @include grid-col(12);
+
     color: color("primary-darker");
     text-align: left;
     margin-top: units(1);
@@ -64,6 +69,7 @@
 .wx-quick-forecast-item {
     @include grid-col(12);
     @include grid-row;
+
     padding: units(1.5);
     text-decoration: none;
     border-bottom: 1px solid color("base-lighter");
@@ -73,6 +79,7 @@
 .wx-quick-low {
     @include u-font("mono", "sm");
     @include grid-col(6);
+
     margin-bottom: units(0.5);
 }
 
@@ -84,10 +91,10 @@
 
 .wx-quick-temp {
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-flow: row nowrap;
     align-items: flex-start;
     color: color("primary-darker");
+
     @include u-font("body", "sm");
 
     span {
@@ -98,12 +105,15 @@
 .wx-alert-icon {
     width: units(3);
     height: units(3);
+
     &[data-alert-level] {
         fill: color("base");
     }
+
     &[data-alert-level="watch"] {
         fill: color("yellow-50v");
     }
+
     &[data-alert-level="warning"] {
         fill: color("red-50");
     }
@@ -117,6 +127,7 @@
     width: 100;
     color: color("primary-darker");
     padding: units(1.5);
+
     @include grid-row;
 }
 
@@ -127,6 +138,7 @@
 
 .wx-quick-forecast-header-bottom {
     @include grid-row;
+
     display: none;
 }
 
@@ -136,6 +148,7 @@
 
 .wx-quick-forecast-header-condition {
     @include grid-col;
+
     display: flex;
     justify-content: space-around;
 }
@@ -151,7 +164,7 @@
 
 
 /* Desktop styles
---------------------------------------------*/
+-------------------------------------------- */
 @include at-media("desktop") {
     .wx-quick-forecast-header {
         display: none;
@@ -160,6 +173,7 @@
     .wx-quick-forecast {
         @include grid-row;
         @include grid-col(12);
+
         flex-wrap: nowrap;
 
         .wx-alert-icon {
@@ -175,6 +189,7 @@
     .wx-quick-forecast-item {
         @include grid-col;
         @include grid-row;
+
         border-right: 1px solid color("base-lighter");
 
         &:last-child {
@@ -199,18 +214,15 @@
         }
     }
 
-    .wx-quick-forecast-item-high-low {
-        @include grid-col(12);
-        @include grid-row;
-        
-    }
-
     .wx-quick-high,
     .wx-quick-low {
         @include u-font("mono", "xs");
+
         margin-bottom: units(0.5);
+
         @include grid-row;
         @include grid-col(12);
+
         align-items: center;
         justify-content: space-between;
     }
@@ -221,6 +233,7 @@
 
     .wx-quick-forecast-item-top {
         padding-bottom: units(1);
+
         @include grid-col(12);
     }
 
@@ -228,6 +241,7 @@
         padding-top: units(1);
         margin-top: 0;
         text-align: center;
+
         @include grid-col(12);
     }
 
@@ -248,12 +262,16 @@
 
     .wx-degree {
         @include u-font("body", "3xs");
+
         padding-left: 1px;
     }
 
     .wx-quick-forecast-item-high-low {
         width: 100%;
         margin-top: units(1);
+
+        @include grid-col(12);
+        @include grid-row;
     }
 }
 
@@ -263,7 +281,7 @@
 
 
 /* Tablet styles
---------------------------------------------*/
+-------------------------------------------- */
 @include at-media("tablet") {
     .wx-quick-forecast-item-top {
         @include grid-col;
@@ -275,6 +293,7 @@
 
     .wx-quick-forecast-header-bottom {
         display: block;
+
         @include grid-col;
     }
 }
