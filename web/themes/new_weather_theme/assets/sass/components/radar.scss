@@ -1,7 +1,10 @@
 @use "uswds-core" as *;
 
 .wx-radar-container {
-  
+  aspect-ratio: 1/1 !important;
+  height: auto !important;
+  width: auto !important;
+    
   button.wx-radar-expand {
     border: 0;
     border-radius: radius("md");
@@ -52,12 +55,6 @@
       }
     }
   }
-}
-
-.wx-radar-container {
-  aspect-ratio: 1/1 !important;
-  height: auto !important;
-  width: auto !important;
 }
   
 .wx-radar-container.wx-radar-container__expanded {
