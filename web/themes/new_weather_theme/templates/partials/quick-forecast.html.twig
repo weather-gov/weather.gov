@@ -8,17 +8,18 @@ In some cases -- like the case of the current day -- there might
 only be a nighttime period.
 #}
 <div class="wx-quick-forecast-header">
-    <div>
+    <div class="wx-quick-forecast-header-top">
+    <div class="wx-quick-forecast-header-date">
         <span>
             {{"Date" | t}}
         </span>
     </div>
-    <div>
+    <div class="wx-quick-forecast-header-condition">
         <span>
             {{"Condition" | t}}
         </span>
     </div>
-    <div>
+    <div class="wx-quick-forecast-header-highlow">
         <span>
             {{"High" | t}}
         </span>
@@ -26,7 +27,10 @@ only be a nighttime period.
             {{"Low" | t}}
         </span>
     </div>
-    <div></div>
+    </div>
+    <div class="wx-quick-forecast-header-bottom">
+        <div class="wx-quick-forecast-header-empty"></div>
+    </div>
 </div>
 <nav class="wx-quick-forecast">
     {% for day in content %}
