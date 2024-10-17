@@ -6,7 +6,7 @@
 * Designing and implementing internal and external surveys to get continuous feedback 
 
 <h2> What research has the team done to date? </h2>
-<p>Last updated: August 2024 </p>
+<p>Last updated: Oct 2024 </p>
 
 <h3> Generative research </h3>
 
@@ -26,8 +26,9 @@
 | R1 - Usability (public) | Dec 2024 | 🟠The information was generally what users were looking for, although EMs would continue to rely on more advanced tools without enhancements | 🟡 Moderate issues interpretting data | 🟠 Prompts to find what they were looking for |  -------- |[Deck](https://docs.google.com/presentation/d/1tbOs4QxaAPvD-RO9-cv8ZJCvBRMWYN3egQxbWi5tGeg/edit?usp=sharing)|
 | R2 - Usability (public) | Jan 2024 |  🟡 Most participants said they would try out weather.gov alongside other apps and website | 🟡 Some participants had some issues finding what they were looking for | 🟠 Additional details required | 🟠 Issues interpreting metrics | [Deck](https://docs.google.com/presentation/d/1fspeYmrbelbo4Gcq6Wb7lR1hdPAXhiO-K_KJUtoQS1I/edit?usp=sharing)|
 | R3 - Usability (public + partner)| Mar 2024 | 🟡 Most participants said they would try out weather.gov, including those that do not currently use it | 🟠 Screenreader dependent user had moderate challenges, some info surprising | 🟢 General public participants found what they were looking for, EM needs consistent with known gaps| 🟢 Minor issues, most comprehensive issues resolved |[Deck](https://docs.google.com/presentation/d/1I00ZNIfwCAhJZwd8tKivEYWNBqLO9RmnCDS7SA28lvc/edit?usp=sharing)|
-| R5 - Unmoderated testing pilot | May 2024 | 🟡 Range of enthusiasm but engaged general public  | 🟢 No major navigation issues, but minor friction navigating tabs consistent with other observed behavior |🟡 Desires for additional data points and functionality consistent with roadmap and known gaps |🟢 No major issues |[Deck](https://docs.google.com/presentation/d/1qif1XlCzrx9Qw9HnUYmRIMdRtUGH4u_ORX4_MfGRB44/edit?usp=sharing)|
+| R5 - Unmoderated testing pilot | May 2024 | 🟡 Range of enthusiasm but engaged general public  |🟡 Friction navigating tabs consistent with other observed behavior |🟡 Desires for additional data points and functionality consistent with roadmap and known gaps |🟢 No major issues |[Deck](https://docs.google.com/presentation/d/1qif1XlCzrx9Qw9HnUYmRIMdRtUGH4u_ORX4_MfGRB44/edit?usp=sharing)|
 | R7 - Moderated testing (alternate options) | Sept 2024 |🟢 Positive reaction to new tabs | 🟢 Resolved navigation issues |🟡 Desires for additional data points and functionality consistent with roadmap and known gaps |🟢 No major issues |[Deck](https://docs.google.com/presentation/d/1MrL2IxWta1d3ebcWKAH0BGXbnZNNFIp3BZ3Mu7qiZB0/edit#slide=id.g27836d05cea_1_0)|
+| R8 - Unmoderated testing (usertesting.com) | Oct 2024 |🟡 Mixed impressions and desirability |🟡 Nav issues consistent (tested older version live in beta) |🟡 Some desires for additional data - more in depth on fire, other products |🟢 Strong comprehension|[Doc](https://docs.google.com/document/d/1aXfddRXpIVl5qyIbsiVVK3PDmvHHNbHZedaDVBl0UMU/edit#heading=h.6y3oo4cmdgs8)|
 
 <h3> Internal research </h3>
 
