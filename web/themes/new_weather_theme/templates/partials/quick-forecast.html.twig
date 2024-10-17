@@ -32,7 +32,7 @@ only be a nighttime period.
         <div class="wx-quick-forecast-header-empty"></div>
     </div>
 </div>
-<nav class="wx-quick-forecast">
+<nav class="wx-quick-forecast margin-bottom-4">
     {% for day in content %}
         {% include '@new_weather_theme/partials/quick-forecast-link-item.html.twig'
         with { dayIndex: loop.index0 }%}

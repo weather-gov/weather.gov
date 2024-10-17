@@ -5,8 +5,6 @@
 // Mobile is the default
 
 .wx-quick-forecast {
-    // display: flex;
-    // flex-direction: column;
     @include grid-row;
     border: 1px solid color("base-lighter");
     text-decoration: none;
@@ -26,8 +24,6 @@
 
         color: color("primary-dark");
         text-align: left;
-        // flex: 1;
-        // justify-content: // flex-start;
 
         span {
             display: block;
@@ -43,29 +39,18 @@
 .wx-quick-forecast-item-top {
     @include grid-row;
     @include grid-col;
-    // display: flex;
-    // flex-wrap: nowrap;
     align-items: center;
-    // justify-content: space-between;
 }
 
 .wx-quick-forecast-item-high-low {
     @include grid-row;
     @include grid-col;
-    // width: unset;
-    // display: flex;
-    // align-items: center;
-    // flex: 1;
 }
 
 .wx-quick-forecast-condition {
     display:  flex;
     @include grid-col;
     justify-content: center;
-    // flex-direction: row;
-    // flex-wrap: nowrap;
-    // flex: 1;
-    // justify-content: center;
 }
 
 .wx-quick-forecast-item-bottom {
@@ -79,7 +64,6 @@
 .wx-quick-forecast-item {
     @include grid-col(12);
     @include grid-row;
-    // display: flex; // EXAMINE
     padding: units(1.5);
     text-decoration: none;
     border-bottom: 1px solid color("base-lighter");
@@ -87,11 +71,6 @@
 
 .wx-quick-high,
 .wx-quick-low {
-    // display: flex;
-    // flex: 1;
-    // flex-direction: row;
-    // align-items: center;
-    // justify-content: space-between;
     @include u-font("mono", "sm");
     @include grid-col(6);
     margin-bottom: units(0.5);
@@ -135,10 +114,7 @@
     @include u-font("mono", "sm");
 
     text-transform: uppercase;
-    // display: flex;
     width: 100;
-    // align-items: center;
-    // justify-content: space-between;
     color: color("primary-darker");
     padding: units(1.5);
     @include grid-row;
@@ -172,36 +148,7 @@
         @include grid-col(6);
     }
 }
-    // div {
-    //     @include grid-col;
-    //     // flex: 1;
-    //     // display: flex;
-    //     // flex-wrap: nowrap;
-    //     // justify-content: // flex-start;
-    // }
 
-    // div:nth-child(2) {
-    //     display: flex;
-    //     justify-content: space-around;
-    // }
-
-    // div:nth-child(3) {
-    //     // display: flex;
-    //     // justify-content: // flex-end;
-
-    //     @include grid-row;
-        
-    //     span {
-    //         // flex: 1;
-    //         @include grid-col(6);
-    //     }
-    // }
-
-    // div:last-child {
-    //     @include grid-col;
-    //     display: none;
-    // }
-//}
 
 /* Desktop styles
 --------------------------------------------*/
@@ -226,9 +173,6 @@
     }
 
     .wx-quick-forecast-item {
-        // flex: 1;
-        // flex-direction: column;
-        // align-items: center;
         @include grid-col;
         @include grid-row;
         border-right: 1px solid color("base-lighter");
@@ -263,10 +207,6 @@
 
     .wx-quick-high,
     .wx-quick-low {
-        // display: flex;
-        // flex-direction: row;
-        // align-items: center;
-        // justify-content: space-between;
         @include u-font("mono", "xs");
         margin-bottom: units(0.5);
         @include grid-row;
@@ -280,7 +220,6 @@
     }
 
     .wx-quick-forecast-item-top {
-        // flex-direction: column;
         padding-bottom: units(1);
         @include grid-col(12);
     }
@@ -304,10 +243,6 @@
     }
 
     .wx-quick-temp {
-        // display: flex;
-        // flex-direction: row;
-        // flex-wrap: nowrap;
-        // align-items: flex-start;
         color: color("primary-darker");
     }
 
@@ -317,7 +252,6 @@
     }
 
     .wx-quick-forecast-item-high-low {
-        // flex-direction: column;
         width: 100%;
         margin-top: units(1);
     }
