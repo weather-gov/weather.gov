@@ -1,5 +1,4 @@
 const { test, expect } = require("@playwright/test");
-const dayjs = require("dayjs");
 
 const { describe, beforeEach } = test;
 
