@@ -1,7 +1,9 @@
+const { test, expect } = require("@playwright/test");
+
+const { describe, beforeEach } = test;
+
 describe("territory places are supported", () => {
-  before(() => {
-    cy.request("http://localhost:8081/stop");
-  });
+  beforeEach(async ({ page }) => page.goto("http://localhost:8081/stop"));
 
   [
     ["/point/13.466/144.746", "Guam (GU)", "Agana Heights Village, GU"],
@@ -18,9 +20,9 @@ describe("territory places are supported", () => {
     // on any of these islands. We also know the API doesn't have any of them.
     // ["", "US Minor Outlying Islands (UM)", ""],
   ].forEach(([url, territory, place]) => {
-    it(`supports ${territory}`, () => {
-      cy.visit(url);
-      cy.get("main h1").should("contain", place);
+    test(`supports ${territory}`, async ({ page }) => {
+      await page.goto(url);
+      await expect(page.locator("main h1")).toContainText(place);
 
       // These validate that there is forecast data for the territories. But
       // since that's out of our hands - and the API somewhat regularly fails to

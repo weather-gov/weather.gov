@@ -53,7 +53,7 @@ module.exports = {
         "web/**/tests/**/*.js",
         "playwright.config.js",
       ],
-      extends: ["airbnb-base", "prettier", "plugin:cypress/recommended"],
+      extends: ["airbnb-base", "prettier"],
       env: {
         es6: true,
         jest: true,

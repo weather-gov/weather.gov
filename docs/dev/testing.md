@@ -87,7 +87,7 @@ Note that backend tests include unit tests.
 
 ## End-to-end testing
 
-We test the running product using [Cypress](https://www.cypress.io/) to load
+We test the running product using [Playwright](https://playwright.dev/) to load
 specific URLs, possibly interact with the page, and then make assertions about
 the state of the page These tests help us catch issues where a page's behavior
 suddenly changes by accident.
@@ -96,13 +96,6 @@ To run end-to-end tests locally, the Makefile command is:
 
 ```sh
 make ee
-```
-
-To run end-to-end tests locally using [Playwright](https://playwright.dev/), the
-corresponding Makefile command is:
-
-```sh
-make eep
 ```
 
 Note that you can set the environment variable `WX_NOW_TIMESTAMP` to any ISO8601
@@ -212,9 +205,8 @@ make php-lint
 #### Javascript code quality
 
 We use [eslint](https://eslint.org/) to test our Javascript code styles. We use
-the [Airbnb style guide](https://airbnb.io/javascript/) as our base, and we
-add the [Cypress recommended rules](https://github.com/cypress-io/eslint-plugin-cypress)
-for our tests. We also use [prettier](https://prettier.io) as a formatter.
+the [Airbnb style guide](https://airbnb.io/javascript/) as our base. We also use
+[prettier](https://prettier.io) as a formatter.
 
 To format the project's Javascript code:
 
