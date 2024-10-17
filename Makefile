@@ -6,13 +6,7 @@ help:
 pause:
 	sleep 15
 
-update-settings:
-	cp -f web/sites/example.settings.dev.php web/sites/settings.dev.php
-
 ### Drupal management
-cc: clear-cache
-clear-cache: ## Clear and rebuild all Drupal caches (alias cc)
-	docker compose exec drupal drush cache:rebuild
 
 dd: database-dump
 database-dump: ## Dump the current Drupal database to a the dump.sql file. (alias dd)
@@ -33,26 +27,8 @@ database-restore: ## Restore the Drupal database from the dump.sql file (alias d
 			-p$$DRUPAL_DB_PASSWORD \
 			$$DRUPAL_DB_NAME < web/config/database/dump.sql'
 
-export-config: ## Export your current Drupal site's configuration to the config directory
-	docker compose exec drupal drush config:export -y
-
-export-content: ## Export all content to web/scs-export
-	rm web/scs-export/*.zip
-	docker compose exec drupal drush content:export node scs-export --all-content
-
 # set a docker image variable so that we do not have to duplicate makefile rules for testing.
 drupal_image = "drupal"
-
-import-config: ## Import the Drupal configuration from the config directory into your site
-	docker compose exec ${drupal_image} drush config:import -y
-	docker compose exec ${drupal_image} drush twig:debug on
-	docker compose exec ${drupal_image} drush state:set disable_rendered_output_cache_bins 1
-
-import-content: web/scs-export/* ## Import content from web/scs-export
-	for file in $^; do \
-		file="$${file#*/}"; \
-		docker compose exec ${drupal_image} drush content:import "$$file"; \
-	done
 
 install-site: install-site-config import-content ## Install a minimal Drupal site using the configuration in the config directory and exported content
 install-site-config:
