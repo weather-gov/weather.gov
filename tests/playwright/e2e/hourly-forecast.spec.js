@@ -46,10 +46,11 @@ describe("Hourly forecast table tests", () => {
     });
 
     test("has a blizzard warning starting tomorrow", async ({ page }) => {
-      // cy.contains(
-      //   `#daily ol li:nth-of-type(2) wx-hourly-table tr[data-row-name="alert"]:nth-child(2) td[colspan]:nth-child(3)`,
-      //   "Blizzard Warning",
-      // );
+      await expect(
+        page.locator(
+          `#daily ol li:nth-of-type(2) wx-hourly-table tr[data-row-name="alert"]:nth-child(2) td[colspan]:nth-child(3)`,
+        ),
+      ).toContainText("Blizzard Warning");
     });
   });
 
