@@ -90,6 +90,12 @@
   border-radius: 100%;
 }
 
+// CMI's own legend strip.
+// Let's hide it for now
+.control-bar > .legend {
+    display: none !important;
+}
+
 .wx-radar-legend {
   h4.wx-visual-h3 {
     @include u-text("normal");
