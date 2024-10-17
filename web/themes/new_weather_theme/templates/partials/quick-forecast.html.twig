@@ -7,7 +7,27 @@ nighttime periods.
 In some cases -- like the case of the current day -- there might
 only be a nighttime period.
 #}
-{{dump(content)}}
+<div class="wx-quick-forecast-header">
+    <div>
+        <span>
+            {{"Date" | t}}
+        </span>
+    </div>
+    <div>
+        <span>
+            {{"Condition" | t}}
+        </span>
+    </div>
+    <div>
+        <span>
+            {{"High" | t}}
+        </span>
+        <span>
+            {{"Low" | t}}
+        </span>
+    </div>
+    <div></div>
+</div>
 <nav class="wx-quick-forecast">
     {% for day in content %}
         {% include '@new_weather_theme/partials/quick-forecast-link-item.html.twig'

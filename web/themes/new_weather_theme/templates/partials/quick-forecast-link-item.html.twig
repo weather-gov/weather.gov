@@ -39,39 +39,39 @@ the content
                 <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ day.periods[0].icon.base }}"></use>
             </svg>
         </div>
-    </div>
 
-    <hr/>
-    
-    <div class="wx-quick-forecast-item-middle">
-        {% if not day.useOnlyLow %}
-            <div class="wx-quick-high">
+        <hr/>
+        
+        <div class="wx-quick-forecast-item-high-low">
+            {% if not day.useOnlyLow %}
+                <div class="wx-quick-high">
+                    <span class="wx-quick-label">
+                        {{"High" | t}}
+                    </span>
+                    <span class="wx-quick-temp">
+                        {{ high  }}
+                        <span aria-hidden="true" class="wx-degree">
+                            &deg;F
+                        </span>
+                        <span class="usa-sr-only">℉</span>
+                    </span>
+                </div>
+            {% endif %}
+            <div class="wx-quick-low">
                 <span class="wx-quick-label">
-                    {{"High" | t}}
+                    {{"Low" | t}}
                 </span>
                 <span class="wx-quick-temp">
-                    {{ high  }}
+                    {{ low }}
                     <span aria-hidden="true" class="wx-degree">
                         &deg;F
                     </span>
                     <span class="usa-sr-only">℉</span>
                 </span>
             </div>
-        {% endif %}
-        <div class="wx-quick-low">
-            <span class="wx-quick-label">
-                {{"Low" | t}}
-            </span>
-            <span class="wx-quick-temp">
-                {{ low }}
-                <span aria-hidden="true" class="wx-degree">
-                    &deg;F
-                </span>
-                <span class="usa-sr-only">℉</span>
-            </span>
         </div>
     </div>
-
+    
     <hr/>
     
     <div class="wx-quick-forecast-item-bottom">
