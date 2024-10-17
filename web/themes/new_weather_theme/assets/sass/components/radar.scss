@@ -1,9 +1,6 @@
 @use "uswds-core" as *;
 
 .wx-radar-container {
-  .cmi-radar-container > .cmi-map-container > .control-bar {
-    position: relative;
-  }
   
   button.wx-radar-expand {
     border: 0;
@@ -57,24 +54,32 @@
   }
 }
 
-.wx-radar-container .cmi-map {
-  aspect-ratio: 3/2 !important;
+.wx-radar-container {
+  aspect-ratio: 1/1 !important;
   height: auto !important;
   width: auto !important;
 }
   
-.wx-radar-container.wx-radar-container__expanded .cmi-map {
-  aspect-ratio: 3/4 !important;
+.wx-radar-container.wx-radar-container__expanded {
+  aspect-ratio: 3/5 !important;
   height: auto !important;
   width: auto !important;
 }
 
 @include at-media("tablet") {
   .wx-radar-container {
-    &.wx-radar-container__expanded {
-      aspect-ratio: 1/1 !important;
-    }
+      aspect-ratio: 3/4 !important;
   }
+}
+
+@include at-media("desktop") {
+    .wx-radar-container {
+        aspect-ratio: 1/1 !important;
+
+        &.wx-radar-container__expanded {
+            aspect-ratio: 3/2 !important;
+        }
+    }
 }
 
 .wx-location-marker {
