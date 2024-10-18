@@ -63,7 +63,8 @@
 
     color: color("primary-darker");
     text-align: left;
-    margin-top: units(1);
+    display: flex;
+    align-items: center;
 }
 
 .wx-quick-forecast-item {
@@ -79,8 +80,6 @@
 .wx-quick-low {
     @include u-font("mono", "sm");
     @include grid-col(6);
-
-    margin-bottom: units(0.5);
 }
 
 .wx-quick-label {
@@ -243,8 +242,9 @@
         padding-top: units(1);
         margin-top: 0;
         text-align: center;
-
+        margin-top: units(1);
         @include grid-col(12);
+        display: block;
     }
 
     .wx-quick-forecast-condition {
