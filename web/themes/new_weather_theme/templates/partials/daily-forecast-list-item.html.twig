@@ -109,7 +109,17 @@ only be a nighttime period.
         </span>
         <span class="toggle-text font-mono font-mono-s text-ls-neg-1"></span>
       </wx-hourly-toggle>
-      <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee">
+      <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee" data-display-mode="table">
+        <h4 class="font-heading-md text-normal text-primary-darker margin-top-2 margin-bottom-205">Hourly forecast</h4>
+        <ul class="usa-button-group usa-button-group--segmented wx-display-mode-selector">
+          <li class="usa-button-group__item">
+            <button type="button" class="usa-button" value="table">Table</button>
+          </li>
+          <li class="usa-button-group__item">
+            <button type="button" class="usa-button usa-button--outline" value="charts">Charts</button>
+          </li>
+        </ul>
+
           {% include '@new_weather_theme/partials/hourly-table.html.twig'
           with {
               for: periods[0].monthAndDay,
@@ -119,6 +129,7 @@ only be a nighttime period.
               precipPeriods: precipPeriods
           }
           %}
+          <div class="wx-charts-container display-none">
           {% include '@new_weather_theme/partials/hourly-charts.html.twig'
           with {
               for: periods[0].monthAndDay,
@@ -128,7 +139,13 @@ only be a nighttime period.
               precipPeriods: precipPeriods
           }
           %}
+          </div>
+        <div class="wx-qpf-table-wrapper margin-top-3">
         {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'precipHours': precipPeriods } %}
+        </div>
+        <div class="wx-qpf-chart-wrapper display-none">
+        {% include '@new_weather_theme/partials/precip-chart.html.twig' with { 'precipHours': precipPeriods } %}
+        </div>
       </div>
     {% endif %}
   </div>
