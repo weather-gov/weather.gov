@@ -1,0 +1,49 @@
+  <div class="grid-row wx-qpf-periods"> 
+    <div class="grid-col-12"> 
+      <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-0 margin-bottom-105">{{ "Precipitation amounts" |t }}</h5>
+    </div>
+  </div>
+
+  {% set times = precipHours.periods | map(p => p.start ~ "-" ~ p.end) | json_encode %}
+  {% set liquid = precipHours.periods | map(p => p.liquid) | json_encode %}
+  {% set snow = '[]' %}
+  {% set ice = '[]' %}
+  {% set liquidTitle = 'Rain' | t %}
+  
+  {% if precipHours.hasSnow %}
+    {% set snow = precipHours.periods | map(p => p.snow) | json_encode %}
+    {% set liquidTitle = 'Water' | t %}
+  {% endif %}
+  {% if precipHours.hasIce %}
+    {% set ice = precipHours.periods | map(p => p.ice) | json_encode %}
+    {% set liquidTitle = 'Water' | t %}
+  {% endif %}
+
+  <div class="margin-bottom-205">
+    <div class="wx-qpf-chart-container margin-y-205 position-relative grid-col-12"
+      data-times="{{ times | escape('html_attr') }}"
+      data-liquid="{{ liquid | escape('html_attr') }}"
+      data-snow="{{ snow | escape('html_attr') }}"
+      data-ice="{{ ice | escape('html_attr') }}"
+    >
+      <canvas>
+      </canvas>
+    </div>
+
+    <div class="display-flex flex-align-center font-mono-xs text-base">
+      {% if precipHours.hasSnow %}
+      <div class="margin-x-1 margin-right-1 wx-bg-snow margin-left-1 width-2 height-2 border border-base-darker" style="margin-top: -3px;"></div>
+      {{ "Snow" | t }}
+      <div class="margin-right-3"></div>
+      {% endif %}
+
+      {% if precipHours.hasIce %}
+      <div class="margin-x-1 margin-right-1 wx-bg-ice margin-left-1 width-2 height-2 border wx-border-cyan-80" style="margin-top: -3px;"></div>
+      {{ "Ice" | t }}
+      <div class="margin-right-3"></div>
+      {% endif %}
+
+      <div class="margin-x-1 margin-right-1 bg-accent-cool margin-left-1 width-2 height-2 border border-accent-cool-dark" style="margin-top: -3px;"></div>
+      {{ liquidTitle }}
+    </div>
+  </div>

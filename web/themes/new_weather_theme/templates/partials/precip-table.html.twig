@@ -20,35 +20,6 @@
     {% set liquidTitle = 'Water' | t %}
   {% endif %}
 
-  <div class="margin-bottom-205">
-    <div class="wx-qpf-chart-container margin-y-205 position-relative grid-col-12"
-      data-times="{{ times | escape('html_attr') }}"
-      data-liquid="{{ liquid | escape('html_attr') }}"
-      data-snow="{{ snow | escape('html_attr') }}"
-      data-ice="{{ ice | escape('html_attr') }}"
-    >
-      <canvas>
-      </canvas>
-    </div>
-
-    <div class="display-flex flex-align-center font-mono-xs text-base">
-      {% if precipHours.hasSnow %}
-      <div class="margin-x-1 margin-right-1 wx-bg-snow margin-left-1 width-2 height-2 border border-base-darker" style="margin-top: -3px;"></div>
-      {{ "Snow" | t }}
-      <div class="margin-right-3"></div>
-      {% endif %}
-
-      {% if precipHours.hasIce %}
-      <div class="margin-x-1 margin-right-1 wx-bg-ice margin-left-1 width-2 height-2 border wx-border-cyan-80" style="margin-top: -3px;"></div>
-      {{ "Ice" | t }}
-      <div class="margin-right-3"></div>
-      {% endif %}
-
-      <div class="margin-x-1 margin-right-1 bg-accent-cool margin-left-1 width-2 height-2 border border-accent-cool-dark" style="margin-top: -3px;"></div>
-      {{ liquidTitle }}
-    </div>
-  </div>
-
 
   <div class="grid-row grid-col-12">
     <div class="grid-col-12 tablet:grid-col-6 tablet:padding-right-1">
