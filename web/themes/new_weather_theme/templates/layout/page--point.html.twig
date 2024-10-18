@@ -57,6 +57,9 @@
 
         <div class="wx-tab-container wx-focus-offset-205" id="current" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
           {{ drupal_block("weathergov_current_conditions") }}
+
+          {{ drupal_block("weathergov_weather_story_image") }}
+
           {% include '@new_weather_theme/partials/radar.html.twig' with { 'point': weather.point  } %}
 
           {% include '@new_weather_theme/partials/satellite.html.twig' %}
