@@ -32,6 +32,6 @@ const handleDisplayToggle = (e) => {
 }
 
 displayToggleButtons.forEach((displayButton) => 
-  { addEventListener("click", handleDisplayToggle)}
+  { displayButton.addEventListener("click", handleDisplayToggle)}
 );
 
