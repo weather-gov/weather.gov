@@ -16,4 +16,8 @@ wx-alerts {
     // align bullet with the text
     padding-left: 2ch;
   }
+
+  .usa-accordion .usa-prose p {
+    @include u-measure(6);
+  }
 }
