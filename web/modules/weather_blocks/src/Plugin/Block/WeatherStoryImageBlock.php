@@ -49,6 +49,8 @@ class WeatherStoryImageBlock extends WeatherBlockBase
                     $story->get("changed")->value,
                 );
 
+                $wfo_name = $this->entityTypeService->getWFOEntity($grid->wfo)->get("name")->getString();
+
                 return [
                     "title" => $story->get("title")->getString(),
                     "description" => $description,
@@ -57,7 +59,8 @@ class WeatherStoryImageBlock extends WeatherBlockBase
                         "formatted" => $changed->format("M j, Y, g:i A"),
                         "utc" => $changed->format("c"),
                     ],
-                    "wfo" => $grid->wfo,
+                    "wfo_code" => $grid->wfo,
+                    "wfo_name" => $wfo_name,
                 ];
             }
         }
