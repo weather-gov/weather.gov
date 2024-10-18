@@ -8,7 +8,7 @@
     </div>
     <div class="grid-row padding-x-2 margin-bottom-2">
       <p class="margin-0">
-        <strong class="text-base-dark">Created: {{ content.updated.formatted }}</strong> by the <a class="usa-link" href="/offices/{{ content.wfo | normalize_wfo }}">{{ content.wfo }}</a>
+        <strong class="text-base-dark">Created: {{ content.updated.formatted }}</strong> by the <a class="usa-link" href="/offices/{{ content.wfo_code | normalize_wfo }}">{{ content.wfo_name }} WFO</a>
       </p>
     </div>
     <div class="grid-row padding-x-2 margin-bottom-2">
@@ -21,7 +21,7 @@
     </div>
     <div class="grid-row padding-x-2 margin-bottom-2">
       <p class="margin-0">
-        <a class="usa-link" href="/afd/{{ content.wfo }}">Area Forecast Discussion</a>
+        <a class="usa-link" href="/afd/{{ content.wfo_code }}">Area Forecast Discussion</a>
       </p>
     </div>
     <div class="grid-row padding-x-2 margin-bottom-2">
