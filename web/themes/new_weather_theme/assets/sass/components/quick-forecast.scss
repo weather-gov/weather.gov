@@ -207,6 +207,7 @@
         time {
             display: block;
             text-align: center;
+            @include grid-col(12);
 
             span:last-child {
                 text-decoration: none;
@@ -248,6 +249,7 @@
     .wx-quick-forecast-condition {
         margin-top: units(1.5);
         margin-bottom: units(1);
+        @include grid-col(12);
     }
 
     .wx-quick-label {
@@ -274,10 +276,6 @@
         @include grid-row;
     }
 }
-
-
-
-
 
 
 /* Tablet styles
