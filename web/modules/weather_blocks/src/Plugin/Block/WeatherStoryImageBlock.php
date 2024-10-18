@@ -34,8 +34,8 @@ class WeatherStoryImageBlock extends WeatherBlockBase
                 $description = $story->get("field_description")->value;
                 $description = strip_tags($description);
 
-                // If there's an image, get its alt text and file URI. Twig will
-                // handle turning that into a proper web URL for us.
+                // Set the image alt text and get the file URI. Twig will handle
+                // turning that into a proper web URL for us.
                 $fullimage = $story->get("field_fullimage");
                 $image = [
                     "alt" => $description,

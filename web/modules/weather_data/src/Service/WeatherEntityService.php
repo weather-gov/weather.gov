@@ -99,7 +99,7 @@ class WeatherEntityService
             ->getStorage("node")
             ->getQuery()
             ->accessCheck(false)
-            // ->condition("status", 1) // TODO fix!
+            ->condition("status", 1)
             ->condition("type", $nodeType)
             ->condition("field_office", $wfo)
             ->sort("changed", "DESC")
@@ -108,17 +108,14 @@ class WeatherEntityService
             ->execute();
         $nodeID = array_pop($nodeID);
 
+        // if we have a node ID then we need to actually load it.
         $node = false;
         if ($nodeID) {
-            // Then we can use the convenience method to actually load the node.
             $node = $this->entityTypeManager
                 ->getStorage("node")
                 ->load($nodeID);
         }
-
-        if ($node) {
-            return $node;
-        }
+        return $node;
     }
 
     public function getWFOEntity($wfo)
