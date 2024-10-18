@@ -188,6 +188,7 @@
     .wx-quick-forecast-item {
         @include grid-col;
         @include grid-row;
+        position: relative;
 
         border-right: 1px solid color("base-lighter");
 
@@ -212,6 +213,18 @@
             span:last-child {
                 text-decoration: none;
             }
+        }
+
+        &:hover:after {
+            display: block;
+            content: " ";
+            position: absolute;
+            height: calc(100% + 4px);
+            width: calc(100% + 4px);
+            top: -2px;
+            left: -2px;
+            border: 2px solid color("primary-dark");
+            z-index: 100;
         }
     }
 
