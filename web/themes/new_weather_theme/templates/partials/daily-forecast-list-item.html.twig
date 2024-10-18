@@ -105,6 +105,7 @@ only be a nighttime period.
         <span class="toggle-text font-mono font-mono-s text-ls-neg-1"></span>
       </wx-hourly-toggle>
       <div class="hourly-toggle-target" id="{{itemId}}-hourly-togglee">
+          {% include '@new_weather_theme/partials/forecast-details-toggle.html.twig' %}
           {% include '@new_weather_theme/partials/hourly-table.html.twig'
           with {
               for: periods[0].monthAndDay,

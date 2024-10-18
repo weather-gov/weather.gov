@@ -1,0 +1,13 @@
+@use "uswds-core" as *;
+
+.wx-forecast-details-toggle ~ * {
+    display: none;
+}
+
+.wx-forecast-details-toggle[data-selected="charts"] ~ *:not(wx-hourly-table) {
+    display: initial;
+}
+
+.wx-forecast-details-toggle[data-selected="table"] ~ wx-hourly-table {
+    display: initial;
+}
