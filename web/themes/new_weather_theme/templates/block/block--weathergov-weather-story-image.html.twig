@@ -1,21 +1,31 @@
 <div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2" wx-outer-radar-container>
-  <div class="grid-row tablet-lg:grid-col-8 tablet-lg:grid-offset-2 bg-accent-cool-lightest">
-      <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3">{{ "From the forecaster" | t }}</h3>
+  <div class="grid-row tablet-lg:grid-col-8 tablet-lg:grid-offset-2 bg-accent-cool-lightest padding-x-2">
+    <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2">{{ "From the forecaster" | t }}</h3>
   </div>
   <div class="grid-container padding-0 bg-accent-cool-lightest grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-    <div class="grid-row grid-gap">
-      <h4>{{ content.title }}</h4>
+    <div class="grid-row padding-x-2 margin-bottom-2">
+      <h4 class="wx-visual-h3 text-primary-dark margin-0">{{ content.title }}</h4>
     </div>
-      <div class="grid-row grid-gap">
-        <p>Created: {{ content.updated.formatted }} by the {{ content.wfo }}</p>
-      </div>
-      <div class="grid-row grid-gap">
-        <p>{{ content.description }}</p>
-      </div>
-      <div class="grid-row grid-gap">
-        {% if content.image %}
-          <img src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
-        {% endif %}
-      </div>
+    <div class="grid-row padding-x-2 margin-bottom-2">
+      <p class="margin-0">
+        <strong class="text-base-dark">Created: {{ content.updated.formatted }}</strong> by the <a class="usa-link" href="/offices/{{ content.wfo | normalize_wfo }}">{{ content.wfo }}</a>
+      </p>
+    </div>
+    <div class="grid-row padding-x-2 margin-bottom-2">
+      <p class="margin-0">{{ content.description }}</p>
+    </div>
+    <div class="grid-row margin-bottom-2">
+      {% if content.image %}
+        <img src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
+      {% endif %}
+    </div>
+    <div class="grid-row padding-x-2 margin-bottom-2">
+      <p class="margin-0">
+        <a class="usa-link" href="/afd/{{ content.wfo }}">Area Forecast Discussion</a>
+      </p>
+    </div>
+    <div class="grid-row padding-x-2 margin-bottom-2">
+      <p class="margin-0">County overview</p>
+    </div>
   </div>
 </div>
