@@ -32,6 +32,7 @@ class WeatherStoryImageBlock extends WeatherBlockBase
             // from it to pass along to the template.
             if ($story) {
                 $description = $story->get("field_description")->value;
+                $description = strip_tags($description);
 
                 // If there's an image, get its alt text and file URI. Twig will
                 // handle turning that into a proper web URL for us.
