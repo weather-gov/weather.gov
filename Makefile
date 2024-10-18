@@ -132,16 +132,12 @@ backend-test: ## Run all backend tests. (alias be)
 	docker compose exec drupal phpunit --group unit,e2e --process-isolation --coverage-html /coverage  --coverage-clover /coverage/clover.xml
 
 ee: end-to-end-test
-end-to-end-test: ## Run end-to-end tests in Cypress. (alias ee)
-	npx cypress run --project tests/e2e
-
-eep: end-to-end-playwright
-end-to-end-playwright: ## Run Playwright version of e2e tests
-	npx playwright test e2e/*
+end-to-end-test: ## Run end-to-end tests in Playwright. (alias ee)
+	npx playwright test e2e
 
 lt: load-time-test
-load-time-test: ## Run page load time tests in Cypress (alias lt)
-	npx cypress run --project tests/load-times
+load-time-test: ## Run page load time tests in Playwright (alias lt)
+	npx playwright test load-times
 
 u: unit-test
 unit-test: ## Run PHP unit tests
