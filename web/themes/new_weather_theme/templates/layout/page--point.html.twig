@@ -62,6 +62,7 @@
               {#  grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8 #}
               <div class="desktop:grid-col-4 display-flex flex-column">
                 {{ drupal_block("weathergov_current_conditions") }}
+                {{ drupal_block("weathergov_weather_story_image") }}
               </div>
               <div class="desktop:grid-col-8 display-flex flex-column">
               {% if weather.daily and weather.daily | length > 0 %}

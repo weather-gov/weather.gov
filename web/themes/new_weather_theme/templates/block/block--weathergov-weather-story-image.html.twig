@@ -1,0 +1,21 @@
+<div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2" wx-outer-radar-container>
+  <div class="grid-row tablet-lg:grid-col-8 tablet-lg:grid-offset-2 bg-accent-cool-lightest">
+      <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3">{{ "From the forecaster" | t }}</h3>
+  </div>
+  <div class="grid-container padding-0 bg-accent-cool-lightest grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+    <div class="grid-row grid-gap">
+      <h4>{{ content.title }}</h4>
+    </div>
+      <div class="grid-row grid-gap">
+        <p>Created: {{ content.updated.formatted }} by the {{ content.wfo }}</p>
+      </div>
+      <div class="grid-row grid-gap">
+        <p>{{ content.description }}</p>
+      </div>
+      <div class="grid-row grid-gap">
+        {% if content.image %}
+          <img src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
+        {% endif %}
+      </div>
+  </div>
+</div>
