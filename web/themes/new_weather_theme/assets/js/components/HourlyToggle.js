@@ -42,7 +42,6 @@ class HourlyToggle extends HTMLElement {
     }
     this.updateText();
     this.updateIcon();
-    this.updateWidth();
   }
 
   updateText() {
@@ -72,11 +71,6 @@ class HourlyToggle extends HTMLElement {
     }
   }
 
-  updateWidth() {
-    this.parentNode.classList.toggle("tablet-lg:grid-offset-2");
-    this.parentNode.classList.toggle("tablet-lg:grid-col-8");
-    this.parentNode.classList.toggle("tablet-lg:grid-col-12");
-  }
 }
 
 window.customElements.define("wx-hourly-toggle", HourlyToggle);

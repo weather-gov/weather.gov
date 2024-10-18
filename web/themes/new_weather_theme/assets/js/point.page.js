@@ -2,6 +2,7 @@ import("./components/TabbedNavigator.js");
 import("./components/afd-selector.js");
 import("./components/HourlyTable.js");
 import("./components/HourlyToggle.js");
+import("./components/DisplayModeToggle.js");
 import("./localizeTimestamps.js");
 import("./locationSearch.js");
 import("./radar.js");
