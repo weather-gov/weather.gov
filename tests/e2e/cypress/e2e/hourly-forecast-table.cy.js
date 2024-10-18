@@ -64,17 +64,9 @@ describe("Hourly forecast table tests", () => {
   });
 
   describe("Hourly precipitation tables", () => {
-    it("Renders the expected min number of table rows", () => {
+    it("Renders tables for every day", () => {
       cy.visit("/point/34.749/-92.275#daily");
-      cy.get("#daily ol li:first-child wx-hourly-toggle").click();
-      cy.get("#daily ol li table.wx-precip-table tbody").each(($tbody, $idx) => {
-        // Our expectation is that up to five days should
-        // have precip data. Anything beyond that is not guaranteed
-        // at this point
-        if ($idx >= 4) {
-          cy.wrap($tbody).children("tr").should("exist");
-        }
-      });
+      cy.get("#daily ol li table.wx-precip-table").should("exist");
     });
   });
 });

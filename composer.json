@@ -24,6 +24,7 @@
         "drupal/core-composer-scaffold": "^10.3",
         "drupal/core-project-message": "^10.3",
         "drupal/core-recommended": "^10.3",
+        "drupal/filefield_paths": "^1.0@beta",
         "drupal/jsonapi_extras": "^3.25",
         "drupal/key_asymmetric": "^1.1",
         "drupal/log_stdout": "^1.5",
