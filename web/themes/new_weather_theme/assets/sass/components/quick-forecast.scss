@@ -76,7 +76,7 @@
     border-bottom: 1px solid color("base-lighter");
     position: relative;
 
-    &:hover:after {
+    &:hover::after {
         display: block;
         content: " ";
         position: absolute;
@@ -249,10 +249,11 @@
 
     .wx-quick-forecast-item-bottom {
         padding-top: units(1);
-        margin-top: 0;
         text-align: center;
         margin-top: units(1);
+
         @include grid-col(12);
+
         display: block;
     }
 
