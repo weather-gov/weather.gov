@@ -1,0 +1,19 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+.wx-accordion-light {
+  button.usa-accordion__button {
+    background-color: color('white');
+    color: color('primary');
+    border: 1px solid color('primary');
+
+   &[aria-expanded="false"] {
+     background-image: url("/themes/new_weather_theme/assets/images/uswds/usa-icons-bg/add--primary.svg"),linear-gradient(transparent,transparent);
+   }
+
+   &[aria-expanded="true"] {
+     background-image: url("/themes/new_weather_theme/assets/images/uswds/usa-icons-bg/remove--primary.svg"),linear-gradient(transparent,transparent);
+   }
+  }
+}
