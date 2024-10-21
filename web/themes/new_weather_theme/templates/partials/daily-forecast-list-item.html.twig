@@ -11,11 +11,13 @@ only be a nighttime period.
 {% set itemId =  periods[0].monthAndDay | lower | replace({" ":"-"}) %}
 
 <li class="display-block" {% if itemId %}id="{{itemId}}{% endif %}">
-  <div class="bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8 hourly-table__expand-transition">
-    
-    <div class="grid-container padding-0 margin-bottom-2 tablet:margin-bottom-2">
-      <div class="grid-row display-flex flex-align-start border-bottom-1px border-base-lighter padding-bottom-2">
-        <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center tablet:grid-col-6 tablet__flex-justify-start">
+  <div class="bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12">
+     {# outer grid-row stores everything that's visible visible without expansion #}
+     <div class="grid-row border-0 tablet-lg:border-bottom-1px tablet-lg:border-base-lighter tablet-lg:padding-bottom-2">
+
+      {# start of date, temps, and alert #}
+      <div class="grid-row grid-col-12 tablet-lg:grid-col-4 border-bottom-1px border-base-lighter padding-bottom-2 margin-bottom-2 tablet-lg:border-0 tablet-lg:margin-bottom-05 tablet-lg:margin-right-2 tablet-lg:padding-bottom-0">
+        <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center tablet:grid-col-6 tablet__wx-flex-justify-start">
           <h3 class="padding-0 margin-0">
             <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3" datetime="{{ periods[0].startTime }}">
               {% if dayLabel %}
@@ -43,60 +45,63 @@ only be a nighttime period.
             {% set alertType = "Multiple alerts" | t %}
           {% endif %}
 
-          <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 daily-alert-summary">
+          <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 tablet-lg:grid-col-12 tablet-lg:margin-top-2 tablet-lg__wx-flex-justify-start daily-alert-summary">
             {% include "@new_weather_theme/partials/alert-link.html.twig" with { alertID: alertID, alertType: alertType, alertLevel: alertLevel} %}
           </div>
         {% endif %}
       </div>
-    </div>
-    <div class="grid-row grid-gap">
-      {% for period in periods | filter(v => v) %}
-        {% set marginUnit = 3 %}
-        {% set tabletMarginUnit = 1 %}
-        {% set tabletCol = 6 %}
-        {%  if period.isOvernight %}
-          {% set label = "Overnight" | t %}
-          {% set lineColor = "midnight-indigo" %}
-          {% set tabletCol = 12 %}
-          {% set tabletMarginUnit = 3 %}
-        {% elseif period.isDaytime %}
-          {% set label = "Day" | t %}
-          {% set lineColor = "yellow" %}
-        {% else %}
-          {% set label = "Night" | t %}
-          {% set lineColor = "indigo" %}
-          {% set marginUnit = 1 %}
-        {% endif %}
-        <div class="wx-daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-{{ tabletMarginUnit }}">
-        <span class="display-block font-family-mono text-uppercase font-body-xs margin-bottom-1 text-primary-darker wx-marker-before wx-marker-before--{{ lineColor }}">
-            {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
-        </span>
-        <div class="display-flex flex-row flex-align-start">
-          {% if period.icon.base %}
-          <div class="width-5 height-5 margin-right-105">
-            <svg role="img" aria-hidden="true" class="width-full height-full">
-              <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.icon.base }}"></use>
-            </svg>
+      {# End of the date, temps alert #}
+
+      {# Start of conditions #}
+      <div class="grid-row grid-gap grid-col-12 tablet-lg:grid-col-8">
+            {% for period in periods | filter(v => v) %}
+              {% set marginUnit = 3 %}
+              {% set tabletMarginUnit = 1 %}
+              {% set tabletCol = 6 %}
+              {%  if period.isOvernight %}
+                {% set label = "Overnight" | t %}
+                {% set lineColor = "midnight-indigo" %}
+                {% set tabletCol = 12 %}
+                {% set tabletMarginUnit = 3 %}
+              {% elseif period.isDaytime %}
+                {% set label = "Day" | t %}
+                {% set lineColor = "yellow" %}
+              {% else %}
+                {% set label = "Night" | t %}
+                {% set lineColor = "indigo" %}
+                {% set marginUnit = 1 %}
+              {% endif %}
+              <div class="wx-daily-forecast-summary-area grid-col-12 tablet:grid-col-{{ tabletCol }} margin-bottom-{{ marginUnit }} tablet:margin-bottom-{{ tabletMarginUnit }}">
+              <span class="display-block font-family-mono text-uppercase font-body-xs margin-bottom-1 text-primary-darker wx-marker-before wx-marker-before--{{ lineColor }}">
+                  {{label}} {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{period.timeLabel}})</span>{% endif %}
+              </span>
+              <div class="display-flex flex-row flex-align-start">
+                {% if period.icon.base %}
+                <div class="width-5 height-5 margin-right-105">
+                  <svg role="img" aria-hidden="true" class="width-full height-full">
+                    <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#" ~ period.icon.base }}"></use>
+                  </svg>
+                </div>
+                {% endif %}
+                <div class="flex-1">
+                  <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
+                  {{period.shortForecast}}
+                  </p>
+                  {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
+                  <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
+                  {{period.probabilityOfPrecipitation}}% {{ "chance of precipitation" | t }}
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
           </div>
-          {% endif %}
-          <div class="flex-1">
-            <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
-            {{period.shortForecast}}
-            </p>
-            {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
-            <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-            {{period.probabilityOfPrecipitation}}% {{ "chance of precipitation" | t }}
-            </p>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-      {% endfor %}
     </div>
 
     {% set hourCount = dayHours | length %}
     {% if hourCount > 0 %}
-      <wx-hourly-toggle class="text-primary margin-top-1" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-togglee" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="remove_circle" data-hidden-icon-name="add_circle" tabindex="0">
+      <wx-hourly-toggle class="text-primary margin-top-2" role="button" aria-expanded="false" aria-controls="{{itemId}}-hourly-togglee" data-expanded-text="{{ 'Hide hourly details' | t}}" data-hidden-text="{{'Show hourly details' | t}}" data-expanded-icon-name="remove_circle" data-hidden-icon-name="add_circle" tabindex="0">
         <span class="margin-top-05 margin-right-05">
             <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
                 <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#add_circle"></use>
