@@ -13,7 +13,7 @@ describe("Touchpoints button tests", () => {
     });
 
     test("Does not occlude any links in the footer", async ({ page }) => {
-      await page.goto("http:localhost:8080/");
+      await page.goto("http://localhost:8080/");
       await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
       const footerLinks = await page.locator("footer a").last();
 
