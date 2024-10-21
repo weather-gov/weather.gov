@@ -6,7 +6,7 @@ describe("Invalid icon URL tests", () => {
   });
 
   it("Is able to render the current conditions", () => {
-    cy.get("#today] .usa-alert--error").should("not.exist");
+    cy.get("#today .usa-alert--error").should("not.exist");
   });
 
   it("Is able to render the hourly tab", () => {
@@ -18,7 +18,7 @@ describe("Invalid icon URL tests", () => {
   });
 
   it("Doesn't render icon for unknown icon name (current conditions)", () => {
-    cy.get("#today] .wx-icon").should("not.exist");
+    cy.get("#today .wx-icon").should("not.exist");
   });
 
   it("Doesn't render icon for first day condition in daily (unknown icon name)", () => {
