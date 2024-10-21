@@ -221,10 +221,6 @@
             text-align: center;
 
             @include grid-col(12);
-
-            span:last-child {
-                text-decoration: none;
-            }
         }
     }
 
