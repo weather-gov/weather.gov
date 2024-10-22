@@ -10,7 +10,7 @@ only be a nighttime period.
 
 {% set itemId =  periods[0].monthAndDay | lower | replace({" ":"-"}) %}
 
-<li class="display-block" {% if itemId %}id="{{itemId}}{% endif %}">
+<li class="wx-daily-forecast-list-item display-block" {% if itemId %}id="{{itemId}}{% endif %}">
   <div class="bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12">
      {# outer grid-row stores everything that's visible visible without expansion #}
      <div class="grid-row border-0 tablet-lg:border-bottom-1px tablet-lg:border-base-lighter tablet-lg:padding-bottom-2">
