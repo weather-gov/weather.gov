@@ -37,7 +37,7 @@ trait DailyForecastTrait
             "shortDayName" => $shortDayName,
             "dayName" => $dayName,
             "monthAndDay" => $monthAndDay,
-            "startTime" => $startTimeFormatted,
+            "startTime" => $formattedStartTime,
             "endTime" => $period->endTime,
             "shortForecast" => $this->t->translate($shortForecast),
             "icon" => $this->getIcon($period),
