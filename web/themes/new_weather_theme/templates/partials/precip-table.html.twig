@@ -1,7 +1,7 @@
 
   <div class="grid-row wx-qpf-periods"> 
     <div class="grid-col-12"> 
-      <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-0 margin-bottom-105">{{ "Precipitation amounts" |t }}</h5>
+      <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-2 margin-bottom-05">{{ "Precipitation amounts" |t }}</h5>
     </div>
   </div>
 
@@ -21,7 +21,7 @@
   {% endif %}
 
   <div class="margin-bottom-205">
-    <div class="wx-qpf-chart-container margin-y-205 position-relative grid-col-12"
+    <div class="wx-qpf-chart-container maxh-card-lg position-relative grid-col-12"
       data-times="{{ times | escape('html_attr') }}"
       data-liquid="{{ liquid | escape('html_attr') }}"
       data-snow="{{ snow | escape('html_attr') }}"

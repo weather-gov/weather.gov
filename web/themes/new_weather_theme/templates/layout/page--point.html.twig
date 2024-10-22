@@ -1,3 +1,4 @@
+
 <div class="layout-container grid-row height-full flex-column flex-no-wrap">
 
   {{ attach_library("new_weather_theme/leaflet") }}
@@ -63,7 +64,12 @@
                 {{ drupal_block("weathergov_current_conditions") }}
               </div>
               <div class="desktop:grid-col-8 display-flex flex-column">
+              {% if weather.daily and weather.daily | length > 0 %}
                    {% include '@new_weather_theme/partials/today-summary-forecast.html.twig' %}
+              {% else %}
+                  {% set message = "There was an error loading the forecast." | t %}
+                  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+              {% endif %}
               </div>
             </div>
             <div class="grid-row grid-gap-lg">
