@@ -11,7 +11,7 @@ describe("Invalid icon URL tests", () => {
   test("Doesn't render icon for unknown icon name (current conditions)", async ({
     page,
   }) => {
-    const count = await page.locator("#current .wx-icon").count();
+    const count = await page.locator("#today .wx-icon").count();
     expect(count).toEqual(0);
   });
 
@@ -68,7 +68,7 @@ describe("Valid icon rendering double-checks", () => {
 
   test("Should render an icon in the current conditions", async ({ page }) => {
     const count = await page
-      .locator("#current .wx-current-conditions .wx-icon > svg")
+      .locator("#today .wx-current-conditions .wx-icon > svg")
       .count();
     expect(count).toEqual(1);
   });

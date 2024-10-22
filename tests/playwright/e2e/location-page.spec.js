@@ -76,7 +76,7 @@ describe("the location page", () => {
     });
 
     test("should load without any error messages in the current conditions tab", async ({page}) => {
-      await page.goto("/point/34.749/-92.275#current");
+      await page.goto("/point/34.749/-92.275#today");
       const errorEl = page.locator(".usa-alert--error");
 
       await expect(errorEl).toHaveCount(0);
