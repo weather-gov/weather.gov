@@ -171,7 +171,7 @@ describe("<wx-tabbed-nav> component tests", () => {
       );
     });
 
-    ["alerts", "current", "daily"].forEach((tabName) => {
+    ["alerts", "today", "daily"].forEach((tabName) => {
       test(`Activates the ${tabName} tab if the hash is present`, async ({
         page,
       }) => {
@@ -250,10 +250,10 @@ describe("<wx-tabbed-nav> component tests", () => {
       const focused = await page.locator(".tab-button:focus").first();
 
       await expect(focused).toHaveClass(/\btab-button\b/);
-      await expect(await focused.getAttribute("data-tab-name")).toBe("current");
+      await expect(await focused.getAttribute("data-tab-name")).toBe("today");
     });
 
-    test("If current tab is the first one, pressing left will cycle to the _last_ button in the list", async ({
+    test("If today tab is the first one, pressing left will cycle to the _last_ button in the list", async ({
       page,
     }) => {
       const startingTab = await page
@@ -269,7 +269,7 @@ describe("<wx-tabbed-nav> component tests", () => {
       await expect(await focused.getAttribute("data-tab-name")).toBe("daily");
     });
 
-    test("If current tab is the last one, pressing right will cycle to the _first_ button in the list", async ({
+    test("If today tab is the last one, pressing right will cycle to the _first_ button in the list", async ({
       page,
     }) => {
       const startingTab = await page
