@@ -1,12 +1,10 @@
 @use "uswds-core" as *;
 
 .wx-radar-container {
-  aspect-ratio: 3/2;
-
-  &.wx-radar-container__expanded {
-    aspect-ratio: 3/4;
-  }
-
+  aspect-ratio: 1/1 !important;
+  height: auto !important;
+  width: auto !important;
+    
   button.wx-radar-expand {
     border: 0;
     border-radius: radius("md");
@@ -58,13 +56,31 @@
     }
   }
 }
+  
+.wx-radar-container.wx-radar-container__expanded {
+  aspect-ratio: 3/5 !important;
+  height: auto !important;
+  width: auto !important;
+}
 
 @include at-media("tablet") {
   .wx-radar-container {
-    &.wx-radar-container__expanded {
-      aspect-ratio: 1/1;
-    }
+      aspect-ratio: 4/3 !important;
+
+      &.wx-radar-container__expanded {
+          aspect-ratio: 5/6 !important;
+      }
   }
+}
+
+@include at-media("desktop") {
+    .wx-radar-container {
+        aspect-ratio: 1/1 !important;
+
+        &.wx-radar-container__expanded {
+            aspect-ratio: 3/2 !important;
+        }
+    }
 }
 
 .wx-location-marker {
@@ -73,6 +89,12 @@
   background: #18f;
   border: 3px solid white;
   border-radius: 100%;
+}
+
+// CMI's own legend strip.
+// Let's hide it for now
+.control-bar > .legend {
+    display: none !important;
 }
 
 .wx-radar-legend {
@@ -117,4 +139,8 @@
       border-image-slice: 1;
     }
   }
+}
+
+.control-bar .legend {
+  max-width: 100%;
 }

@@ -15,7 +15,7 @@
   <div class="position-sticky left-0 display-flex desktop:display-none flex-justify padding-top-2 padding-bottom-05">
     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
   </div>
-  <div class="wx-chart wx-hourly-temp-chart-container margin-bottom-105 position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-temps="{{ temps }}" data-feels-like="{{ feelsLike }}" data-sync-scrolling="true">
+  <div class="wx-chart wx-hourly-temp-chart-container margin-bottom-105 position-relative grid-col-12 width-full overflow-x-auto" tabindex="0" data-times="{{ times }}" data-temps="{{ temps }}" data-feels-like="{{ feelsLike }}" data-sync-scrolling="true">
     <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
       <canvas>
       </canvas>
@@ -40,7 +40,7 @@
   <div class="position-sticky left-0 display-flex desktop:display-none flex-justify padding-top-2 padding-bottom-05">
     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
   </div>
-  <div class="wx-chart wx-hourly-pops-chart-container position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-pops="{{ pops }}" data-sync-scrolling="true">
+  <div class="wx-chart wx-hourly-pops-chart-container position-relative grid-col-12 width-full overflow-x-auto"  tabindex="0" data-times="{{ times }}" data-pops="{{ pops }}" data-sync-scrolling="true">
     <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
       <canvas>
       </canvas>
@@ -55,7 +55,7 @@
   <div class="position-sticky left-0 display-flex desktop:display-none flex-justify padding-top-2 padding-bottom-05">
     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
   </div>
-  <div class="wx-chart wx-hourly-wind-chart-container margin-bottom-105 position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-wind-speeds="{{ windSpeeds }}" data-wind-gusts="{{ windGusts }}" data-wind-directions="{{ windDirections }}" data-sync-scrolling="true">
+  <div class="wx-chart wx-hourly-wind-chart-container margin-bottom-105 position-relative grid-col-12 width-full overflow-x-auto"  tabindex="0" data-times="{{ times }}" data-wind-speeds="{{ windSpeeds }}" data-wind-gusts="{{ windGusts }}" data-wind-directions="{{ windDirections }}" data-sync-scrolling="true">
     <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
       <canvas></canvas>
     </div>
@@ -79,7 +79,7 @@
   <div class="position-sticky left-0 display-flex desktop:display-none flex-justify padding-top-2 padding-bottom-05">
     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
   </div>
-  <div class="wx-chart wx-hourly-humidity-chart-container position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-humidity="{{ relativeHumidity }}" data-sync-scrolling="true">
+  <div class="wx-chart wx-hourly-humidity-chart-container position-relative grid-col-12 width-full overflow-x-auto"  tabindex="0" data-times="{{ times }}" data-humidity="{{ relativeHumidity }}" data-sync-scrolling="true">
     <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
       <canvas>
       </canvas>
@@ -87,14 +87,14 @@
   </div>
 </div>
 
-<div class="wx-chart-wrapper margin-bottom-0">
-  <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-0 margin-bottom-05">
+<div class="wx-chart-wrapper margin-bottom-2">
+  <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-0 margin-bottom-105">
     {{ "Dewpoint" | t }} <span class="usa-sr-only"> {{ "chart" | t }} </span>
   </h5>
   <div class="position-sticky left-0 display-flex desktop:display-none flex-justify padding-top-2 padding-bottom-05">
     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
   </div>
-  <div class="wx-chart wx-hourly-dewpoint-chart-container position-relative grid-col-12 width-full overflow-x-auto" data-times="{{ times }}" data-dewpoints="{{ dewpoints }}" data-sync-scrolling="true">
+  <div class="wx-chart wx-hourly-dewpoint-chart-container position-relative grid-col-12 width-full overflow-x-auto"  tabindex="0" data-times="{{ times }}" data-dewpoints="{{ dewpoints }}" data-sync-scrolling="true">
     <div class="maxh-card-lg" style="width: max(100%, calc(var(--chart-datapoint-width) * {{times | split(',') | length}}))">
       <canvas>
       </canvas>

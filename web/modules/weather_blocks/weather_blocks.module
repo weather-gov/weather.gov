@@ -42,6 +42,18 @@ function weather_blocks_template_preprocess_default_variables_alter(
         }
 
         try {
+            $daily = $weatherData->getDailyForecastFromGrid(
+                $grid->wfo,
+                $grid->x,
+                $grid->y,
+                false,
+                3
+            );
+            $weatherMetadata["daily"] = $daily;
+        } catch (Throwable $e) {
+        }
+
+        try {
             $place = $weatherData->getPlaceNearPoint($lat, $lon);
             if ($place) {
                 $weatherMetadata["place"] = trim(
@@ -65,12 +77,12 @@ function weather_blocks_template_preprocess_default_variables_alter(
                 $weatherMetadata["satellite"] = [
                     "gif" =>
                         "https://cdn.star.nesdis.noaa.gov/WFO/$wfo/GEOCOLOR/$goes-" .
-                        strtoupper($wfo) .
-                        "-GEOCOLOR-600x600.gif",
+                           strtoupper($wfo) .
+                           "-GEOCOLOR-600x600.gif",
                     "mp4" =>
                         "https://cdn.star.nesdis.noaa.gov/WFO/$wfo/GEOCOLOR/$goes-" .
-                        strtoupper($wfo) .
-                        "-GEOCOLOR-600x600.mp4",
+                           strtoupper($wfo) .
+                           "-GEOCOLOR-600x600.mp4",
                 ];
             }
         } catch (Throwable $e) {
