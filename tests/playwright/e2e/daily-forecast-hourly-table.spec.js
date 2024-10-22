@@ -10,7 +10,7 @@ describe("hourly table within the daily forecast", () => {
   });
 
   test("shows hourly expand/collapse button", async ({ page }) => {
-    const days = await page.locator(".wx-daily-forecast-block li").all();
+    const days = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").all();
 
     for await (const day of days) {
       const hourlyButton = day.locator("wx-hourly-toggle");

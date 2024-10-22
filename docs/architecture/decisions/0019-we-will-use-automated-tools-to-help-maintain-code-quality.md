@@ -1,34 +1,34 @@
 # We will use automated tools to help maintain code quality
 
-Date: 2023-10-25
+Date: 2024-10-17
 
 ### Status
 
-Superseded by [ADR 0019](0019-we-will-use-automated-tools-to-help-maintain-code-quality.md).
+Accepted
 
 ### Context
 
 Maintainable code should be consistent, readable, functionally correct, and tested. Automated tools can help tremendously with all of these maintainability concerns.
 
-Supersedes [ADR 0009](0009-we-will-use-automated-tools-to-help-maintain-code-quality.md).
+Supersedes [ADR 0012](0012-we-will-use-automated-tools-to-help-maintain-code-quality.md).
 
 ### Decision
 
 We will use the following tools:
+
 - **PHP Code Beautifier and Fixer** () to automatically fix PHP code style issues. This tool will run on developer machines. It can be automated, but creates diverging git trees that can be a hassle for developers to manage.
 - **PHP_CodeSniffer** () for PHP style checking, using the Drupal style guide
 
-   > [!NOTE]  
-   > NCO has a tool called  that we will look into. It includes two static analysis components as well.
-   >
-   > Also, NCO adopts the PSR1 and PSR2 style rules. This project had opted to adopt the Drupal style rules instead, since it is a Drupal project. We believe using the Drupal rules will make it easier to maintain in the long term.
+  > [!NOTE]  
+  > NCO has a tool called that we will look into. It includes two static analysis components as well.
+  >
+  > Also, NCO adopts the PSR1 and PSR2 style rules. This project had opted to adopt the Drupal style rules instead, since it is a Drupal project. We believe using the Drupal rules will make it easier to maintain in the long term.
 
 - **PHPUnit** for unit testing PHP code and code coverage
 - **eslint** for Javascript style checking, using the Airbnb style guide
 - **prettier** to automatically fix Javascript and SCSS code style issues. This tool will run on developer machines. It can be automated, but creates diverging git trees that can be a hassle for developers to manage.
 - **scsslint** for Sass style checking, using its default style guide
-- **Cypress** for end-to-end testing
-- **cypress-axe** for automated accessibility testing, using the WCAG2AA standard
+- **Playwright** for end-to-end/browser testing and automated accessibility testng against the WCAG2AA standard
 - **GitHub Dependabot** for automated dependency update scanning
 
 ### Consequences

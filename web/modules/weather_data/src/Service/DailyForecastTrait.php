@@ -25,13 +25,19 @@ trait DailyForecastTrait
         // Sentence-case the forecast description.
         $shortForecast = ucfirst(strtolower($period->shortForecast));
 
+        // String versions of day of month numeric
+        // and month of year numeric
+        $formattedStartTime = $startTime->format("c");
+        $dayNumericString = substr(explode("-", $formattedStartTime)[2], 0, 2);
+        $monthNumericString = explode("-", $formattedStartTime)[1];
+
         // Return a formatted assoc array that can be
         // used by the templates
         return [
             "shortDayName" => $shortDayName,
             "dayName" => $dayName,
             "monthAndDay" => $monthAndDay,
-            "startTime" => $startTime->format("c"),
+            "startTime" => $formattedStartTime,
             "endTime" => $period->endTime,
             "shortForecast" => $this->t->translate($shortForecast),
             "icon" => $this->getIcon($period),
@@ -39,6 +45,8 @@ trait DailyForecastTrait
             "probabilityOfPrecipitation" =>
                 $period->probabilityOfPrecipitation->value,
             "isDaytime" => $period->isDaytime,
+            "dayNumericString" => $dayNumericString,
+            "monthNumericString" => $monthNumericString
         ];
     }
 

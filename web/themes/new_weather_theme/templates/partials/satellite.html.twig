@@ -1,26 +1,24 @@
 {% if weather.satellite %}
-<div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2" wx-outer-radar-container>
-  <div class="grid-row tablet-lg:grid-col-8 tablet-lg:grid-offset-2">
-    <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2">{{ "Satellite" | t }}</h3>
-  </div>
+  <div class="margin-top-2" wx-outer-radar-container>
+    <h3 class="wx-visual-h2 text-normal text-primary-darker margin-top-3 margin-bottom-2 padding-left-2 tablet:padding-left-0">{{ "Satellite" | t }}</h3>
 
-  <div class="grid-container padding-0 bg-white shadow-1 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-    <div class="usa-sr-only">
-      <p>
-        {{ "Listed below is an animated loop of the most recent
+    <div class="padding-0 bg-white shadow-1">
+      <div class="usa-sr-only">
+        <p>
+          {{ "Listed below is an animated loop of the most recent
             satellite imagery for @place."
-            | t({"@place": weather.place })
-        }}
-      </p>
-    </div>
+          | t({"@place": weather.place })
+          }}
+        </p>
+      </div>
 
-    <div aria-hidden="true" class="text-center">
-      <video controls loop class="display-block wx-minw-full">
-        <source src="{{ weather.satellite.mp4 }}" type="video/mp4" />
-        {# Fallback to GIF, in case video is not supported #}
-        <img src="{{ weather.satellite.gif }}" class="wx-minw-full" alt="">
-      </video>
+      <div aria-hidden="true" class="display-flex text-center">
+        <video controls loop class="display-block flex-1 width-full">
+          <source src="{{ weather.satellite.mp4 }}" type="video/mp4" />
+          {# Fallback to GIF, in case video is not supported #}
+          <img src="{{ weather.satellite.gif }}"  alt="">
+        </video>
+      </div>
     </div>
   </div>
-</div>
 {% endif %}

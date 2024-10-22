@@ -58,7 +58,13 @@
 }
 
 @include at-media(tablet) {
-  .tablet__flex-justify-start {
+  .tablet__wx-flex-justify-start {
+    justify-content: flex-start;
+  }
+}
+
+@include at-media(tablet-lg) {
+  .tablet-lg__wx-flex-justify-start {
     justify-content: flex-start;
   }
 }

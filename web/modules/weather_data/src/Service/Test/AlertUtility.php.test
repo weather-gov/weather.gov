@@ -213,7 +213,7 @@ final class AlertUtilityTest extends TestCase
             "timezone" => "Etc/UTC",
         ];
 
-        $expected = "until Sunday 01/02 7:00 AM UTC";
+        $expected = "until Sunday 01/02 7:00 AM";
 
         $actual = AlertUtility::getDurationText($alert, $now);
 
