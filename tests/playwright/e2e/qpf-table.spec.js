@@ -66,7 +66,7 @@ describe("quantitative precipitation forecast table", () => {
   }) => {
     const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").nth(4);
     await day.locator("span.toggle-text").click();
-
+    await day.locator(".wx-forecast-details-toggle li:nth-child(2) button").click();
     const headings = await day.locator(".wx-precip-table thead th");
 
     // period, rain
