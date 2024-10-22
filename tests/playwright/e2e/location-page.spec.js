@@ -34,16 +34,16 @@ describe("the location page", () => {
   });
 
   describe("Radar component loading tests", () => {
-    test("does not kload if the current tab is not displaying", async ({page}) => {
+    test("does not kload if the today tab is not displaying", async ({page}) => {
       await page.goto("/point/33.521/-86.812");
       const radarContainer = page.locator("#wx_radar_container");
 
       await expect(radarContainer).toBeEmpty();
     });
 
-    test("loads correctly after switching to the current tab", async ({page}) => {
+    test("loads correctly after switching to the today tab", async ({page}) => {
       await page.goto("/point/33.521/-86.812");
-      const currentTab = page.locator('[data-tab-name="current"]');
+      const currentTab = page.locator('[data-tab-name="today"]');
       const radarContainer = page.locator("#wx_radar_container");
 
       await currentTab.click();

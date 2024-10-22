@@ -11,7 +11,7 @@ describe("alerts in the daily tab", () => {
 
   describe("has alerts on the daily overviews", () => {
     test("combines multiple alerts into a single link", async ({ page }) => {
-      const day = await page.locator(".wx-daily-forecast-block li").first();
+      const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").first();
       const links = await day.locator(".daily-alert-summary .wx-alert-link");
 
       await test.step("there is only one link", async () => {
@@ -26,7 +26,7 @@ describe("alerts in the daily tab", () => {
     });
 
     test("single alerts show the alert type", async ({ page }) => {
-      const day = await page.locator(".wx-daily-forecast-block li").nth(1);
+      const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").nth(1);
       const links = await day.locator(".daily-alert-summary .wx-alert-link");
 
       await test.step("there is only one link", async () => {
@@ -45,7 +45,7 @@ describe("alerts in the daily tab", () => {
     test("multiple alerts link opens the alerts tab only", async ({ page }) => {
       const link = await page
         .locator(
-          ".wx-daily-forecast-block li .daily-alert-summary .wx-alert-link a",
+          ".wx-daily-forecast-block .wx-daily-forecast-list-item .daily-alert-summary .wx-alert-link a",
         )
         .first();
 
@@ -62,7 +62,7 @@ describe("alerts in the daily tab", () => {
       const alertID = "alert_8760a86c78e313ccfc42aa4eb5166572a0e26e9d_003_1";
       const link = await page
         .locator(
-          ".wx-daily-forecast-block li .daily-alert-summary .wx-alert-link a",
+          ".wx-daily-forecast-block .wx-daily-forecast-list-item .daily-alert-summary .wx-alert-link a",
         )
         .nth(1);
 
