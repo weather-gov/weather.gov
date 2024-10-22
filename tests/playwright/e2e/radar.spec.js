@@ -4,12 +4,12 @@ const { test, expect } = require("@playwright/test");
 const { describe, beforeEach } = test;
 
 describe("radar component", () => {
-  describe("radar container", () => {
-    beforeEach(async ({ page }) => {
-      await page.goto("http://localhost:8081/play/testing");
-      await page.goto("/point/35.198/-111.651");
-    });
+  beforeEach(async ({ page }) => {
+    await page.goto("http://localhost:8081/play/testing");
+    await page.goto("/point/35.198/-111.651");
+  });
 
+  describe("radar container", () => {
     describe("is initialized...", () => {
       test("in unexpanded state", async ({ page }) => {
         const container = page.locator(".wx-radar-container");
@@ -142,6 +142,19 @@ describe("radar component", () => {
           expect(out).toBe(true);
         });
       });
+    });
+  });
+
+  describe("screenreader-only link", () => {
+    test("opens the daily tab", async ({ page }) => {
+      await page
+        .locator("[wx-outer-radar-container] .usa-sr-only a")
+        .evaluate((node) => node.click());
+
+      const dailyTab = await page.locator("#daily");
+
+      await expect(dailyTab).toBeVisible();
+      await expect(dailyTab).toHaveAttribute("data-selected");
     });
   });
 });
