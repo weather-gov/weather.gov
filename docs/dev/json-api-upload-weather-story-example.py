@@ -108,7 +108,7 @@ for item in root.findall("./graphicasts/graphicast"):
 
     if "field_smallimage" in story.keys():
         smallimage = story.pop("field_smallimage")
-        url = f"https://www.weather.gov{smallimage}"
+        url = smallimage if smallimage.startswith("https://www.weather.gov") else f"https://www.weather.gov{smallimage}"
         response = requests.get(url, allow_redirects=True)
         small_image_id = upload_file(
             f"smallimage{number}.png", response.content, "smallimage"
@@ -118,7 +118,7 @@ for item in root.findall("./graphicasts/graphicast"):
 
     # full image is required
     fullimage = story.pop("field_fullimage")
-    url = f"https://www.weather.gov{fullimage}"
+    url = fullimage if fullimage.startswith("https://www.weather.gov") else f"https://www.weather.gov{fullimage}"
     response = requests.get(url, allow_redirects=True)
     full_image_id = upload_file(f"fullimage{number}.png", response.content, "fullimage")
     if not full_image_id:

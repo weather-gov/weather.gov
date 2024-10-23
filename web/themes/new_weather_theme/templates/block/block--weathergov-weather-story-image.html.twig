@@ -1,0 +1,38 @@
+<div class="grid-container margin-top-2 padding-x-0 tablet:padding-x-2" wx-outer-radar-container>
+  <div class="grid-row grid-col-12 tablet-lg:grid-col-12 bg-accent-cool-lightest padding-x-2 border-top border-base-light">
+    <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2">{{ "From the forecaster" | t }}</h3>
+  </div>
+  <div class="grid-container padding-0 bg-accent-cool-lightest grid-col-12 tablet-lg:grid-col-12 border-bottom border-base-light">
+    <div class="grid-row padding-x-2 margin-bottom-2">
+      <h4 class="wx-visual-h3 text-primary-dark margin-0">{{ content.title }}</h4>
+    </div>
+    <div class="grid-row padding-x-2 margin-bottom-2">
+      <p class="margin-0">
+        <strong class="text-base-dark">Created: {{ content.updated.formatted }}</strong> by the <a class="usa-link" href="/offices/{{ content.wfo_code | normalize_wfo }}">{{ content.wfo_name }} WFO</a>
+      </p>
+    </div>
+    <div class="grid-row padding-x-2 margin-bottom-2">
+      <p class="margin-0">{{ content.description }}</p>
+    </div>
+    <div class="grid-row margin-bottom-2">
+      {% if content.image %}
+        <img src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
+      {% endif %}
+    </div>
+    <div class="grid-row padding-x-2 margin-bottom-2">
+      <p class="margin-0">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="24" height="24" fill="transparent"/>
+          <path d="M6 5H18V6H6V5Z" fill="#0085CA"/>
+          <path d="M6 10H18V11H6V10Z" fill="#0085CA"/>
+          <path d="M18 15H6V16H18V15Z" fill="#0085CA"/>
+          <path d="M6 12H16V13H6V12Z" fill="#0085CA"/>
+          <path d="M16 17H6V18H16V17Z" fill="#0085CA"/>
+          <path d="M6 7H16V8H6V7Z" fill="#0085CA"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M4 2H20V22H4V2ZM5 3H19V21H5V3Z" fill="#0085CA"/>
+        </svg>
+        <a class="usa-link" href="/afd/{{ content.wfo_code }}">Area Forecast Discussion</a>
+      </p>
+    </div>
+  </div>
+</div>

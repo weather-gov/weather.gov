@@ -92,6 +92,32 @@ class WeatherEntityService
         return $this->getLatestNodeByTerm($termID, "field_wfo", $nodeType);
     }
 
+    public function getLatestWeatherStoryImageFromWFO($wfo, $nodeType)
+    {
+        // get the latest weather story upload that matches the grid WFO.
+        $nodeID = $this->entityTypeManager
+            ->getStorage("node")
+            ->getQuery()
+            ->accessCheck(false)
+            ->condition("status", 1)
+            ->condition("type", $nodeType)
+            ->condition("field_office", $wfo)
+            ->sort("changed", "DESC")
+            // Only get the first one.
+            ->range(0, 1)
+            ->execute();
+        $nodeID = array_pop($nodeID);
+
+        // if we have a node ID then we need to actually load it.
+        $node = false;
+        if ($nodeID) {
+            $node = $this->entityTypeManager
+                ->getStorage("node")
+                ->load($nodeID);
+        }
+        return $node;
+    }
+
     public function getWFOEntity($wfo)
     {
         $wfoCode = $this->normalizeAnchorageWFO($wfo);
