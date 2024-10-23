@@ -48,7 +48,10 @@ module.exports = {
       },
     },
     {
-      files: ["api-interop-layer/**/*.test.js"],
+      files: [
+        "api-interop-layer/**/*.test.js",
+        "web/themes/new_weather_theme/tests/**/*.js",
+      ],
       extends: ["airbnb-base", "prettier"],
       parserOptions: { ecmaVersion: 2024 },
       rules: {
@@ -62,7 +65,7 @@ module.exports = {
         "import/extensions": ["error", "always"],
 
         // chai provides "empty" expressions, such as `to.be.true`
-        "no-unused-expressions": "off"
+        "no-unused-expressions": "off",
       },
       env: { mocha: true },
     },
