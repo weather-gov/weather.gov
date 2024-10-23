@@ -34,9 +34,9 @@ day
 
         {% set alertCount = alerts.metadata.count %}
         {% if alertCount > 0 %}
-          {% set alertID = alerts.item[0].id %}
-          {% set alertType = alerts.item[0].event %}
-          {% set alertLevel = alerts.item[0].level %}
+          {% set alertID = alerts.items[0].id %}
+          {% set alertType = alerts.items[0].event %}
+          {% set alertLevel = alerts.items[0].level %}
 
           {% if alertCount > 1 %}
             {% set alertID = null %}

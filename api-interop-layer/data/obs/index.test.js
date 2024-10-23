@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import * as mariadb from "mariadb";
 import dayjs from "dayjs";
 import sinon, { createSandbox } from "sinon";
 
@@ -15,16 +14,9 @@ describe("observations module", () => {
     json: sandbox.stub(),
   };
 
-  const db = {
-    query: sandbox.stub(),
-    end: () => Promise.resolve(),
-  };
-
   let getObservations;
 
   before(async () => {
-    mariadb.default.createConnection.resolves(db);
-
     // Import the module now. Its dependency on the database will cause a hang
     // if we load it before the mocking is all setup. The reason is that the
     // database utility itself blocks until it can establish a connection.
@@ -75,7 +67,7 @@ describe("observations module", () => {
       )
       .resolves(response);
 
-    db.query.resolves([{ distance: 100 }]);
+    global.test.database.query.resolves([{ distance: 100 }]);
   });
 
   describe("properly handles feels-like temperature", () => {
