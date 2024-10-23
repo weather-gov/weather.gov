@@ -28,7 +28,7 @@ const getDatabaseConnection = () => {
   };
 };
 
-let pool = false;
+let pool;
 
 export default async () => {
   if (pool) {
