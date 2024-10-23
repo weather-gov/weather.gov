@@ -5,79 +5,149 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-48.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-20.png",
+      "sizes": "20x20",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-29.png",
+      "sizes": "29x29",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-40.png",
+      "sizes": "40x40",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-48.png",
       "sizes": "48x48",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-57.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-50.png",
+      "sizes": "50x50",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-57.png",
       "sizes": "57x57",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-60.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-58.png",
+      "sizes": "58x58",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-60.png",
       "sizes": "60x60",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-72.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-72.png",
       "sizes": "72x72",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-76.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-76.png",
       "sizes": "76x76",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-96.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-80.png",
+      "sizes": "80x80",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-87.png",
+      "sizes": "87x87",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-96.png",
       "sizes": "96x96",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-114.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-100.png",
+      "sizes": "100x100",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-114.png",
       "sizes": "114x114",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-120.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-120.png",
       "sizes": "120x120",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-144.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-144.png",
       "sizes": "144x144",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-152.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-152.png",
       "sizes": "152x152",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-180.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-167.png",
+      "sizes": "167x167",
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-180.png",
       "sizes": "180x180",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-192.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-192.png",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-256.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-256.png",
       "sizes": "256x256",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-384.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-384.png",
       "sizes": "384x384",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-512.jpg",
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-512.png",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png"
+    },
+    {
+      "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
     },
     {
       "src": "/themes/new_weather_theme/assets/images/app-icons/app-icon.svg",
