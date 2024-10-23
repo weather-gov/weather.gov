@@ -1,0 +1,6 @@
+adding:
+  settings:
+    uri_scheme: private
+removing:
+  settings:
+    uri_scheme: public
