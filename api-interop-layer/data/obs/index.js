@@ -1,5 +1,5 @@
 import dayjs from "../../util/day.js";
-import { openDatabase } from "../db.js";
+import openDatabase from "../db.js";
 import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
 import { fetchAPIJson } from "../../util/fetch.js";
@@ -133,7 +133,6 @@ export default async ({
         ST_SRID(ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})'), 4326)
       ) as distance
     `);
-    await db.end();
 
     sendNewRelicMetric({
       name: "wx.observation",

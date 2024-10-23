@@ -1,4 +1,4 @@
-import { openDatabase } from "./db.js";
+import openDatabase from "./db.js";
 import { fetchAPIJson } from "../util/fetch.js";
 import { createLogger } from "../util/monitoring/index.js";
 

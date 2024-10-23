@@ -1,33 +1,17 @@
 import sinon from "sinon";
 import { expect } from "chai";
-import * as mariadb from "mariadb";
 import { generateAlertGeometry } from "./geometry.js";
 
 describe("alert geometries", () => {
-  const sandbox = sinon.createSandbox();
-  const db = {
-    query: sandbox.stub(),
-    end: () => Promise.resolve(),
-  };
-
-  // Do this before everything, so it'll happen before any describe blocks run,
-  // otherwise the connection creation won't be stubbed when the script is first
-  // imported below.
-  before(() => {
-    mariadb.default.createConnection.resolves(db);
-  });
-
-  beforeEach(() => {
-    sandbox.resetBehavior();
-    sandbox.resetHistory();
-  });
-
   it("returns an alert with a geometry as-is", async () => {
     const rawAlert = {
       geometry: "existing geometry",
     };
 
-    const geometry = await generateAlertGeometry(db, rawAlert);
+    const geometry = await generateAlertGeometry(
+      global.test.database,
+      rawAlert,
+    );
     expect(geometry).to.equal("existing geometry");
   });
 
@@ -51,22 +35,26 @@ describe("alert geometries", () => {
         AS shape
         FROM weathergov_geo_zones
         WHERE id IN (?,?,?)`;
-    db.query.withArgs(sinon.match(query), sinon.match.same(affectedZones))
+    global.test.database.query
+      .withArgs(sinon.match(query), sinon.match.same(affectedZones))
       .resolves([{ shape: { combined: "zones" } }]);
 
-    const geometry = await generateAlertGeometry(db, rawAlert);
+    const geometry = await generateAlertGeometry(
+      global.test.database,
+      rawAlert,
+    );
     expect(geometry).to.eql({ combined: "zones" });
   });
 
   it("autogenerates a geometry from same geocodes if no zones are present", async () => {
     const rawAlert = {
-     geometry: false,
+      geometry: false,
       properties: {
         geocode: {
           // SAME code is FIPS code with a leading zero. The leading
           // zero gets stripped out, so we need to include it here
           // so we get what we expect later.
-          "SAME": ["0county 1", "0county 2", "0county 3"],
+          SAME: ["0county 1", "0county 2", "0county 3"],
         },
       },
     };
@@ -82,9 +70,14 @@ describe("alert geometries", () => {
         AS shape
         FROM weathergov_geo_counties
         WHERE countyFips IN ('county 1','county 2','county 3')`;
-    db.query.withArgs(sinon.match(query)).resolves([{ shape: { combined: "county" } }]);
+    global.test.database.query
+      .withArgs(sinon.match(query))
+      .resolves([{ shape: { combined: "county" } }]);
 
-    const geometry = await generateAlertGeometry(db, rawAlert);
+    const geometry = await generateAlertGeometry(
+      global.test.database,
+      rawAlert,
+    );
     expect(geometry).to.eql({ combined: "county" });
   });
 
@@ -94,7 +87,10 @@ describe("alert geometries", () => {
       properties: {},
     };
 
-    const geometry = await generateAlertGeometry(db, rawAlert);
+    const geometry = await generateAlertGeometry(
+      global.test.database,
+      rawAlert,
+    );
     expect(geometry).to.be.null;
   });
 });
