@@ -1,6 +1,5 @@
 import sinon from "sinon";
 import { expect } from "chai";
-import * as mariadb from "mariadb";
 import dayjs from "../../util/day.js";
 import { alignAlertsToDaily } from "./utils.js";
 
@@ -26,19 +25,8 @@ const makeDayWithHours = (
 
 describe("alert data module", () => {
   const sandbox = sinon.createSandbox();
-  const db = {
-    query: sandbox.stub(),
-    end: () => Promise.resolve(),
-  };
 
   const response = { status: 200, json: sandbox.stub() };
-
-  // Do this before everything, so it'll happen before any describe blocks run,
-  // otherwise the connection creation won't be stubbed when the script is first
-  // imported below.
-  before(() => {
-    mariadb.default.createConnection.resolves(db);
-  });
 
   beforeEach(() => {
     response.status = 200;
@@ -46,7 +34,7 @@ describe("alert data module", () => {
     sandbox.resetHistory();
 
     fetch.resolves(response);
-    db.query.resolves([{ yes: 1 }]);
+    global.test.database.query.resolves([{ yes: 1 }]);
   });
 
   it("fetches alerts when the module is loaded", async () => {
