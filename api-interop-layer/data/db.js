@@ -26,22 +26,38 @@ const getDatabaseConnection = () => {
     port: process.env.DB_PORT ?? 3306,
     ssl: { rejectUnauthorized: false },
   };
-}
-
-export const openDatabase = async () => {
-  const connectionDetails = getDatabaseConnection();
-  return mariadb.createConnection(connectionDetails);
 };
 
-// Try to connect, wait, try again, wait, etc. If the database isn't ready after
-// 4 attempts and 30 seconds, we'll just fail.
-const db = await openDatabase()
-  .catch(() => sleep(5_000))
-  .then(openDatabase)
-  .catch(() => sleep(9_000))
-  .then(openDatabase)
-  .catch(() => sleep(16_000))
-  .then(openDatabase);
-await db.end();
+let pool = false;
 
-export default { openDatabase };
+export default async () => {
+  if (pool) {
+    return pool;
+  }
+
+  const connectionDetails = getDatabaseConnection();
+
+  // Try to connect, wait, try again, wait, etc. If the database isn't ready after
+  // 4 attempts and 30 seconds, we'll just fail.
+  const db = await mariadb
+    .createConnection(connectionDetails)
+    .catch(() => sleep(5_000))
+    .then(() => mariadb.createConnection(connectionDetails))
+    .catch(() => sleep(9_000))
+    .then(() => mariadb.createConnection(connectionDetails))
+    .catch(() => sleep(16_000))
+    .then(() => mariadb.createConnection(connectionDetails));
+  await db.end();
+
+  pool = mariadb.createPool(connectionDetails);
+  return pool;
+};
+
+const cleanup = async () => {
+  if (pool) {
+    await pool.end();
+  }
+};
+
+process.on("SIGINT", cleanup);
+process.on("SIGTERM", cleanup);

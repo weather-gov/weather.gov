@@ -2,7 +2,7 @@ import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import { createLogger } from "../../util/monitoring/index.js";
 import paragraphSquash from "../../util/paragraphSquash.js";
-import { openDatabase } from "../db.js";
+import openDatabase from "../db.js";
 import alertKinds from "./kinds.js";
 import {
   parseDescription,
@@ -144,8 +144,6 @@ export const updateAlerts = async () => {
   metadata.updated = dayjs();
   metadata.error = false;
 
-  await db.end();
-
   logger.verbose(`storing ${cachedAlerts.length} alerts`);
   return cachedAlerts;
 };
@@ -214,7 +212,6 @@ export default async ({ grid, point, place: { timezone } }) => {
     })
     .pop();
 
-  await db.end();
   logger.verbose(`got ${alerts.length} alerts; highest is ${highest?.text}`);
 
   // Clone the cached stuff so external entities can't overwrite it. Also so
