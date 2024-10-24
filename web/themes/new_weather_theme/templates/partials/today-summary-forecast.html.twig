@@ -1,12 +1,23 @@
-{% set today = weather.daily[0] %}
-<h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 desktop:margin-top-0 margin-top-3 margin-bottom-2">
+{% if forecast.error %}
+  {% set message = "There was an error loading the daily forecast." | t %}
+  {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+{% elseif forecast.days | length > 0 %}
+  {% set today = forecast.days[0] %}
+  <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 desktop:margin-top-0 margin-top-3 margin-bottom-2">
     {{ "Today's forecast" | t }}
-</h3>
-<div class="flex-1 height-full">
+  </h3>
+  <div class="flex-1 height-full">
     <ol class="usa-list--unstyled height-full">
         {# Attempt to render the period(s) associated with the current day #}
-        {% set precipHours = today.precipitationPeriods[0] %}
-        {% include '@new_weather_theme/partials/daily-summary-list-item.html.twig' with { 'periods': today.periods, 'dayHours': today.hourPeriods, 'alertPeriods': today.alerts, 'highestAlertLevel': today.highestAlertLevel, 'useOnlyLowForToday': today.useOnlyLowForToday, 'precipHours': precipHours, 'dayLabel': "Today" | t } %}
+        {% set precipHours = today.qpf[0] %}
+        {% include '@new_weather_theme/partials/daily-summary-list-item.html.twig' with
+        {
+            'periods': today.periods,
+            'dayHours': today.hours,
+            'alerts': today.alerts,
+            'qpf': precipHours,
+            'dayLabel': "Today" | t } %}
         {% set precipIndex = 1 %}
     </ol>
-</div>
+  </div>
+{% endif %}

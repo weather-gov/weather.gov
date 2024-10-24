@@ -1,1 +1,30 @@
 <?php
+
+function weather_data_template_preprocess_default_variables_alter(&$variables)
+{
+    // First, get our route information.
+    $container = \Drupal::getContainer();
+    $route = $container->get("current_route_match");
+
+    // We only need to populate globals if we're on a point route.
+    if ($route->getRouteName() == "weather_routes.point") {
+        $lat = $route->getParameter("lat");
+        $lon = $route->getParameter("lon");
+        $weatherMetadata["point"] = ["lat" => $lat, "lon" => $lon];
+
+        // this is required since we no longer can interpret api.weather.gov lat/lon directly
+        // note: the url must have a scheme (https:// or http://) and no trailing slash
+        $baseUrl = getEnv("API_INTEROP_URL");
+
+        $fetch = $container->get("http_client");
+        try {
+            $data = $fetch
+                ->get("$baseUrl/point/$lat/$lon")
+                ->getBody();
+        } catch (Throwable $e) {
+            $data = '{"error":true}';
+        }
+
+        $variables["point"] = json_decode($data);
+    }
+}

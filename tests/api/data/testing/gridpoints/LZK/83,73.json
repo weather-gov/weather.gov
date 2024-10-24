@@ -4595,11 +4595,11 @@
         },
         {
           "validTime": "date:now +4 hours / PT1H",
-          "value": 11.112
+          "value": 22.39
         },
         {
-          "validTime": "date:now +5 hours / PT1H",
-          "value": 14.816
+          "validTime": "date:now +5 hours / PT2H",
+          "value": 24.4
         },
         {
           "validTime": "date:now +6 hours / PT1H",
@@ -5241,7 +5241,7 @@
         },
         {
           "validTime": "date:now +79 hours / PT6H",
-          "value": 30
+          "value": 0
         },
         {
           "validTime": "date:now +85 hours / PT6H",
@@ -5274,7 +5274,7 @@
         },
         {
           "validTime": "date:now +7 hours / PT6H",
-          "value": 3
+          "value": 0
         },
         {
           "validTime": "date:now +13 hours / PT6H",
@@ -5302,11 +5302,11 @@
         },
         {
           "validTime": "date:now +49 hours / PT6H",
-          "value": 0
+          "value": 18
         },
         {
           "validTime": "date:now +55 hours / PT6H",
-          "value": 18
+          "value": 0
         },
         {
           "validTime": "date:now +61 hours / PT6H",
@@ -5371,7 +5371,7 @@
         },
         {
           "validTime": "date:now +31 hours / PT6H",
-          "value": 104
+          "value": 0
         },
         {
           "validTime": "date:now +37 hours / PT6H",

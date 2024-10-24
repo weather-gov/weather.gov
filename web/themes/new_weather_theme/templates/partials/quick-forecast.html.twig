@@ -1,11 +1,5 @@
 {#
-This partial expects an array of forecast period
-assoc arrays (as formatted by the WeatherDataService),
-usually of size 2 corresponding to both daytime and
-nighttime periods.
-
-In some cases -- like the case of the current day -- there might
-only be a nighttime period.
+This partial expects an array of forecast days.
 #}
 <div class="wx-quick-forecast-header">
     <div class="wx-quick-forecast-header-top">
@@ -33,8 +27,8 @@ only be a nighttime period.
     </div>
 </div>
 <nav class="wx-quick-forecast margin-bottom-4">
-    {% for day in content %}
+    {% for day in days %}
         {% include '@new_weather_theme/partials/quick-forecast-link-item.html.twig'
-        with { dayIndex: loop.index0 }%}
+        with { day: day }%}
     {% endfor %}
 </nav>

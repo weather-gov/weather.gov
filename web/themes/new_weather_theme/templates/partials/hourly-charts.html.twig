@@ -1,11 +1,11 @@
-{% set times = hours | map(h => h.time) | json_encode %}
-{% set temps = hours | map(h => h.temperature) | json_encode %}
-{% set feelsLike = hours | map(h => h.apparentTemperature) | json_encode %}
-{% set pops = hours | map(h => h.probabilityOfPrecipitation) | json_encode %}
-{% set dewpoints = hours | map(h => h.dewpoint) | json_encode %}
-{% set relativeHumidity = hours | map(h => h.relativeHumidity) | json_encode %}
-{% set windSpeeds = hours | map(h => h.windSpeed) | json_encode %}
-{% set windGusts = hours | map(h => h.windGust) | json_encode %}
+{% set times = hours | map(h => h.hour) | json_encode %}
+{% set temps = hours | map(h => h.temperature.degF) | json_encode %}
+{% set feelsLike = hours | map(h => h.apparentTemperature.degF) | json_encode %}
+{% set pops = hours | map(h => h.probabilityOfPrecipitation.percent) | json_encode %}
+{% set dewpoints = hours | map(h => h.dewpoint.degF) | json_encode %}
+{% set relativeHumidity = hours | map(h => h.relativeHumidity.percent) | json_encode %}
+{% set windSpeeds = hours | map(h => h.windSpeed.mph) | json_encode %}
+{% set windGusts = hours | map(h => h.windGust.mph) | json_encode %}
 {% set windDirections = hours | map(h => h.windDirection) | json_encode %}
 
 <div class="wx-chart-wrapper">

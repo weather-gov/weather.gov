@@ -15,11 +15,27 @@ default_config: &defaults
     - secrets
 
 applications:
-- name: weathergov-greg
-  <<: *defaults
-  memory: 256M
-  instances: 1
-  random-route: false
+  - name: weathergov-greg
+    <<: *defaults
+    memory: 256M
+    instances: 1
+    random-route: false
+
+  - name: api-weathergov-greg
+    stack: cflinuxfs4
+    memory: 256M
+    instances: 1
+    buildpacks:
+      - nodejs_buildpack
+    env:
+      NEWRELIC_LICENSE: ((newrelic-license))
+      API_INTEROP_PRODUCTION: true
+      API_INTEROP_NAME: greg
+    health-check-type: process
+    path: ../api-interop-layer
+    random-route: false
+    services:
+      - database
 # - name: cronish
 #   <<: *defaults
 #   no-route: true

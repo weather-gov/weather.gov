@@ -3,7 +3,7 @@
 namespace Drupal\weather_blocks\Plugin\Block\Test;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\weather_blocks\Plugin\Block\CurrentConditionsBlock;
+use Drupal\weather_blocks\Plugin\Block\WeatherStoryBlock;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,7 +20,7 @@ final class WeatherBlockBaseTest extends Base
     protected function setUp($type = null, $override = true): void
     {
         // Instantiate a real object because the base class is abstract.
-        parent::setUp(CurrentConditionsBlock::class, false);
+        parent::setUp(WeatherStoryBlock::class, false);
     }
 
     /**
@@ -36,12 +36,6 @@ final class WeatherBlockBaseTest extends Base
             $this->returnCallback(function () {
                 $args = func_get_args();
                 switch ($args[0]) {
-                    case "weather_data":
-                        return $this->weatherData;
-
-                    case "current_route_match":
-                        return $this->routeMock;
-
                     case "weather_entity":
                         return $this->entityService;
 
@@ -51,10 +45,10 @@ final class WeatherBlockBaseTest extends Base
             }),
         );
 
-        $actual = CurrentConditionsBlock::create($container, [], "", [
+        $actual = WeatherStoryBlock::create($container, [], "", [
             "provider" => "weather_blocks",
         ]);
-        $this->assertEquals(CurrentConditionsBlock::class, $actual::class);
+        $this->assertEquals(WeatherStoryBlock::class, $actual::class);
     }
 
     /**
@@ -67,226 +61,6 @@ final class WeatherBlockBaseTest extends Base
     {
         $expected = 0;
         $actual = $this->block->getCacheMaxAge();
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test that the block properly persists configuration changes.
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testBlockSubmit(): void
-    {
-        $expected = "wfo,x,y";
-
-        $formState = $this->createStub(FormStateInterface::class);
-        $formState->method("getValue")->willReturn([
-            "wfo" => "wfo",
-            "gridX" => "x",
-            "gridY" => "y",
-        ]);
-
-        $this->block->blockSubmit([], $formState);
-
-        $actual = $this->block->getConfiguration()["grid"];
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test that the base block can get the relevant location from the URL.
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testGetLocationFromRoute(): void
-    {
-        $this->routeMock
-            ->method("getRouteName")
-            ->willReturn("weather_routes.point");
-        // Also configure the block. This will ensure that we test that the location
-        // only comes from the URL and not configuration.
-        $this->block->setConfigurationValue("grid", "wrong,wrong,wrong");
-
-        $this->routeMock
-            ->method("getParameter")
-            ->will($this->returnValueMap([["lat", 42.9], ["lon", 37.2]]));
-
-        $this->weatherData->method("getGridFromLatLon")->will(
-            $this->returnValueMap([
-                [
-                    42.9,
-                    37.2,
-                    (object) [
-                        "wfo" => "WFO CODE",
-                        "x" => "ex",
-                        "y" => "why",
-                    ],
-                ],
-            ]),
-        );
-
-        $expected = (object) [
-            "grid" => (object) [
-                "wfo" => "WFO CODE",
-                "x" => "ex",
-                "y" => "why",
-            ],
-            "point" => (object) ["lat" => 42.9, "lon" => 37.2],
-        ];
-
-        $actual = $this->block->getLocation();
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test that the base block gets location from configuration if not in URL.
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testGetLocationFromConfiguration(): void
-    {
-        $this->routeMock->method("getRouteName")->willReturn("not grid");
-        $this->block->setConfigurationValue("grid", "wiffo,ex,why");
-
-        $this->weatherData
-            ->method("getGeometryFromGrid")
-            ->will(
-                $this->returnValueMap([["WIFFO", "ex", "why", ["ppooiiiint"]]]),
-            );
-
-        $expected = (object) [
-            "grid" => (object) [
-                "wfo" => "WIFFO",
-                "x" => "ex",
-                "y" => "why",
-            ],
-            "point" => "ppooiiiint",
-        ];
-
-        $actual = $this->block->getLocation();
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests that the location is empty if not on a grid route and not configured.
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testGetsNoLocationWhenConfiguredFalse(): void
-    {
-        $this->routeMock->method("getRouteName")->willReturn("not grid");
-        $this->block->setConfigurationValue("grid", false);
-
-        $expected = (object) [
-            "grid" => false,
-            "point" => false,
-        ];
-
-        $actual = $this->block->getLocation();
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests that the location is empty if not on a grid route and empty config.
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testGetsNoLocationWhenConfiguredEmpty(): void
-    {
-        $this->routeMock->method("getRouteName")->willReturn("not grid");
-        $this->block->setConfigurationValue("grid", ",,");
-
-        $expected = (object) [
-            "grid" => false,
-            "point" => false,
-        ];
-
-        $actual = $this->block->getLocation();
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testGetsFormWithNoConfig(): void
-    {
-        $expected = [
-            "grid" => [
-                "#type" => "fieldset",
-                "#title" => "Manual location - for testing",
-                "wfo" => [
-                    "#type" => "textfield",
-                    "#title" => "WFO",
-                    "#default_value" => "",
-                ],
-                "gridX" => [
-                    "#type" => "textfield",
-                    "#title" => "Grid X coordinate",
-                    "#default_value" => "",
-                ],
-                "gridY" => [
-                    "#type" => "textfield",
-                    "#title" => "Grid Y coordinate",
-                    "#default_value" => "",
-                ],
-            ],
-        ];
-
-        $actual = $this->block->blockForm(
-            [],
-            $this->createStub(FormStateInterface::class),
-        );
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @group unit
-     * @group block
-     * @group base-block
-     */
-    public function testGetsFormWithExistingConfig(): void
-    {
-        $this->block->setConfigurationValue("grid", "bob,37,38");
-
-        $expected = [
-            "grid" => [
-                "#type" => "fieldset",
-                "#title" => "Manual location - for testing",
-                "wfo" => [
-                    "#type" => "textfield",
-                    "#title" => "WFO",
-                    "#default_value" => "bob",
-                ],
-                "gridX" => [
-                    "#type" => "textfield",
-                    "#title" => "Grid X coordinate",
-                    "#default_value" => "37",
-                ],
-                "gridY" => [
-                    "#type" => "textfield",
-                    "#title" => "Grid Y coordinate",
-                    "#default_value" => "38",
-                ],
-            ],
-        ];
-
-        $actual = $this->block->blockForm(
-            [],
-            $this->createStub(FormStateInterface::class),
-        );
 
         $this->assertEquals($expected, $actual);
     }
