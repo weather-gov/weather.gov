@@ -77,7 +77,7 @@
               </div>
               <div class="grid-row grid-gap-lg">
                 <div class="desktop:grid-col-6 wx-radar-wrapper">
-                  {% include '@new_weather_theme/partials/radar.html.twig' with { point: point.point  } %}
+                  {% include '@new_weather_theme/partials/radar.html.twig' with { place: point.place.fullName, point: point.point  } %}
                 </div>
                 <div class="desktop:grid-col-6 wx-satellite-wrapper">
                   {% include '@new_weather_theme/partials/satellite.html.twig' %}
@@ -105,7 +105,7 @@
                     <use
                       xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#info_outline"
                     ></use>
-                  </svg><a href="/afd/{{ weather.grid.wfo | normalize_wfo }}" class="usa-link">Area forecast discussion</a>
+                  </svg><a href="/afd/{{ point.grid.wfo | normalize_wfo }}" class="usa-link">Area forecast discussion</a>
                 </div>
               </div>
             </div>
