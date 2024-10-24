@@ -113,13 +113,11 @@
           <td>
             {% include '@new_weather_theme/partials/wind.html.twig'
               with {
-                wind: {
                   speed: period.windSpeed,
                   direction: period.windDirection
-                }
               }
             %}
-            {% if period.windGust is not same as (null) %}
+            {% if period.windGust.mph is not same as (null) %}
               <div>{{ "with gusts up to @gustSpeed mph" | t({ "@gustSpeed": period.windGust.mph }) }}</div>
             {% endif %}
           </td>
