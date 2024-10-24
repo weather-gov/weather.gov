@@ -90,7 +90,7 @@ only be a nighttime period.
               </p>
               {% if period.data.probabilityOfPrecipitation.percent and period.data.probabilityOfPrecipitation.percent > 1 %}
               <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-              {{period.probabilityOfPrecipitation.percent}}% {{ "chance of precipitation" | t }}
+              {{period.data.probabilityOfPrecipitation.percent}}% {{ "chance of precipitation" | t }}
               </p>
               {% endif %}
             </div>
@@ -114,6 +114,7 @@ only be a nighttime period.
           <h4 class="font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">Hourly forecast</h4>
           {% include '@new_weather_theme/partials/hourly-table.html.twig'
           with {
+              for: point.place.fullName,
               hours: dayHours,
               alerts: alerts.items,
             }
