@@ -1,5 +1,5 @@
 {
-  "name": "Weather.gov",
+  "name": "beta.weather.gov",
   "start_url": "/",
   "display": "standalone",
   "prefer_related_applications": false,
