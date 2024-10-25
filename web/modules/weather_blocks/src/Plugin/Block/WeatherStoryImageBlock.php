@@ -18,13 +18,14 @@ class WeatherStoryImageBlock extends WeatherBlockBase
      */
     public function build()
     {
-        $location = $this->getLocation();
+        $wfo = false;
+        if (array_key_exists("wfo", $this->configuration)) {
+            $wfo = strtoupper($this->configuration["wfo"]);
+        }
 
-        if ($location->grid) {
-            $grid = $location->grid;
-
+        if ($wfo) {
             $story = $this->entityTypeService->getLatestWeatherStoryImageFromWFO(
-                $grid->wfo,
+                $wfo,
                 "wfo_weather_story_upload",
             );
 
@@ -50,7 +51,10 @@ class WeatherStoryImageBlock extends WeatherBlockBase
                     $story->get("changed")->value,
                 );
 
-                $wfo_name = $this->entityTypeService->getWFOEntity($grid->wfo)->get("name")->getString();
+                $wfo_name = $this->entityTypeService
+                    ->getWFOEntity($wfo)
+                    ->get("name")
+                    ->getString();
 
                 return [
                     "title" => $story->get("title")->getString(),
@@ -60,7 +64,7 @@ class WeatherStoryImageBlock extends WeatherBlockBase
                         "formatted" => $changed->format("M j, Y, g:i A"),
                         "utc" => $changed->format("c"),
                     ],
-                    "wfo_code" => $grid->wfo,
+                    "wfo_code" => $wfo,
                     "wfo_name" => $wfo_name,
                 ];
             }
