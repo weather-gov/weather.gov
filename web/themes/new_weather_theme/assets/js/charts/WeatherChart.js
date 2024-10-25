@@ -23,6 +23,7 @@ Chart.defaults.font = {
   size: 12,
 };
 Chart.defaults.font.size = 12;
+Chart.defaults.plugins.tooltip.enabled = false;
 
 const drawChart = (container, config) => {
   const canvas = container.querySelector("canvas");
