@@ -196,3 +196,17 @@ Having chosen to go the canvas-based route, we then picked Chart.js because it
 is well-supported, widely-used, and swapping between libraries is relatively
 lightweight. Bluntly, we picked it because we were familiar with it and didn't
 see much risk in needing to change libraries later.
+
+### Backend
+
+#### Turf
+
+_Added October, 2024_
+
+[Turf.js](https://turfjs.org/) is a zero-dependency geospatial library written
+in Javascript. We explored using a client-side library in place of heavy
+geospatial queries against our MySQL database, and this library proved to be
+subtantially faster. It is actively maintained and includes financial support
+from the likes of MapBox, so it is unlikely to fade away. Furthermore, because
+it is largely an implementation of mathematical algorithms, even if maintenance
+should fizzle, the actual functionality should remain solid.
