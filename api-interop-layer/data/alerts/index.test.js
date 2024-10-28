@@ -2,6 +2,8 @@ import sinon from "sinon";
 import { expect } from "chai";
 import dayjs from "../../util/day.js";
 import { alignAlertsToDaily } from "./utils.js";
+import alertHandler, { updateFromBackground } from "./index.js";
+import alertKinds from "./kinds.js";
 
 /**
  * Test helper for creating arrays of mock
@@ -34,465 +36,212 @@ describe("alert data module", () => {
     sandbox.resetHistory();
 
     fetch.resolves(response);
-    global.test.database.query.resolves([{ yes: 1 }]);
-  });
-
-  it("fetches alerts when the module is loaded", async () => {
-    response.json.resolves({ features: [] });
-    await import("./index.js");
-
-    expect(
-      fetch.calledWith("https://api.weather.gov/alerts/active?status=actual"),
-    ).to.be.true;
   });
 
   describe("after initial setup", () => {
-    let alertHandler;
-    before(async () => {
-      alertHandler = await import("./index.js");
-    });
-
     describe("error handling", () => {
       beforeEach(async () => {
-        response.json.resolves({
-          features: [
-            {
-              geometry: "geo",
-              properties: {
-                id: "one",
-                event: "Severe Thunderstorm Warning",
-                sent: dayjs().subtract(1, "minute").toISOString(),
-                effective: dayjs().subtract(1, "minute").toISOString(),
-                onset: dayjs().subtract(1, "minute").toISOString(),
-                expires: dayjs().add(1, "minute").toISOString(),
-                ends: dayjs().add(1, "minute").toISOString(),
-              },
-            },
-          ],
-        });
-
-        await alertHandler.updateAlerts();
-
         response.json.resetBehavior();
         response.json.resetHistory();
       });
 
+      afterEach(() => {
+        updateFromBackground({ action: "remove", hash: "test" });
+      });
+
       it("updates metadata but does NOT update alerts if there is an error", async () => {
-        const expected = await alertHandler.default({
-          grid: { geometry: [] },
+        const before = await alertHandler({
+          point: { latitude: 3, longitude: 4 },
           place: { timezone: "America/Chicago" },
         });
 
-        response.status = 400;
-        response.json.resolves({ no: "errors" });
-        await alertHandler.updateAlerts();
+        updateFromBackground({ action: "error" });
 
-        const actual = await alertHandler.default({
-          grid: { geometry: [] },
+        const actual = await alertHandler({
+          point: { latitude: 3, longitude: 4 },
           place: { timezone: "America/Chicago" },
         });
 
-        expect(expected.metadata.error).to.equal(false);
-        expect(actual.metadata.error).to.equal(true);
-
-        // We've validated the error flag was changed. Now validate that the
-        // rest of returned data is the same.
-        delete expected.metadata.error;
-        delete actual.metadata.error;
-        expect(actual).to.eql(expected);
+        expect(actual.metadata).to.eql({ ...before.metadata, error: true });
       });
 
       it("clears the error flag after a successful update", async () => {
-        response.status = 400;
-        response.json.resolves({ no: "errors" });
-        await alertHandler.updateAlerts();
+        updateFromBackground({ action: "error" });
+        updateFromBackground({ action: "remove", hash: "test" });
 
-        const initial = await alertHandler.default({
-          grid: { geometry: [] },
+        const actual = await alertHandler({
+          point: { latitude: 3, longitude: 4 },
           place: { timezone: "America/Chicago" },
         });
 
-        response.status = 200;
-        response.json.resolves({ features: [] });
-        await alertHandler.updateAlerts();
-
-        const after = await alertHandler.default({
-          grid: { geometry: [] },
-          place: { timezone: "America/Chicago" },
-        });
-
-        expect(initial.metadata.error).to.equal(true);
-        expect(after.metadata.error).to.equal(false);
-
-        expect(initial.items.length).to.equal(1);
-        expect(after.items.length).to.equal(0);
+        expect(actual.metadata.error).to.be.false;
       });
     });
 
     describe("the main alert function", () => {
-      describe("does not store alerts that have ended", () => {
-        // 24 hours ago...
-        const past = new Date(Date.now() - 86_400_000).toISOString();
-
-        const times = {
-          sent: dayjs().subtract(1, "minute").toISOString(),
-          effective: dayjs().subtract(1, "minute").toISOString(),
-          onset: dayjs().subtract(1, "minute").toISOString(),
-          expires: dayjs().add(1, "minute").toISOString(),
-          ends: dayjs().add(1, "minute").toISOString(),
-        };
-
-        it("if the alert has an end time in the past", async () => {
-          response.json.resolves({
-            features: [
-              {
-                geometry: "geo",
-                properties: {
-                  id: "one",
-                  event: "Severe Thunderstorm Warning",
-                  ...times,
-                  ends: past,
-                },
-              },
-            ],
-          });
-          await alertHandler.updateAlerts();
-
-          const alerts = await alertHandler.default({
-            grid: { geometry: [] },
-            place: { timezone: "America/Chicago" },
-          });
-
-          expect(alerts.items.length).to.equal(0);
-        });
-
-        it("if the alert does not have an end time and the expire time is in the past", async () => {
-          response.json.resolves({
-            features: [
-              {
-                geometry: "geo",
-                properties: {
-                  id: "one",
-                  event: "Severe Thunderstorm Warning",
-                  ...times,
-                  ends: null,
-                  expires: past,
-                },
-              },
-            ],
-          });
-          await alertHandler.updateAlerts();
-
-          const alerts = await alertHandler.default({
-            grid: { geometry: [] },
-            place: { timezone: "America/Chicago" },
-          });
-
-          expect(alerts.items.length).to.equal(0);
-        });
-      });
-
-      it("does not store alerts that are not land-based", async () => {
-        const shared = {
-          sent: dayjs().subtract(1, "minute").toISOString(),
-          effective: dayjs().subtract(1, "minute").toISOString(),
-          onset: dayjs().subtract(1, "minute").toISOString(),
-          expires: dayjs().add(1, "minute").toISOString(),
-          ends: dayjs().add(1, "minute").toISOString(),
-        };
-
-        response.json.resolves({
-          features: [
-            {
-              geometry: "geo",
-              properties: {
-                id: "one",
-                event: "Severe Thunderstorm Warning",
-                ...shared,
-              },
-            },
-            {
-              geometry: "geo",
-              properties: {
-                id: "two",
-                event: "Special Marine Warning",
-                ...shared,
-              },
-            },
-            {
-              geometry: "geo",
-              properties: {
-                id: "three",
-                event: "Typhoon Warning",
-                ...shared,
-              },
-            },
-            {
-              geometry: "geo",
-              properties: {
-                id: "four",
-                event: "avalanche warning",
-                ...shared,
-              },
-            },
-          ],
-        });
-
-        // This is the doohickey that actually parses, filters, and sorts the
-        // alerts. We need to run it first.
-        await alertHandler.updateAlerts();
-
-        const alerts = await alertHandler.default({
-          grid: { geometry: [] },
-          place: { timezone: "America/Chicago" },
-        });
-
-        const kinds = alerts.items.map(({ metadata: { kind } }) => kind);
-        expect(kinds).to.have.same.members(["land", "land", "land"]);
-      });
-
-      it("derives an alert ID", async () => {
-        response.json.resolves({
-          features: [
-            {
-              geometry: "geo",
-              properties: {
-                id: "urn:oid:2.49.0.1.840.part1.part2.part3",
-                event: "Severe Thunderstorm Warning",
-                sent: dayjs().subtract(1, "minute").toISOString(),
-                effective: dayjs().subtract(1, "minute").toISOString(),
-                onset: dayjs().subtract(1, "minute").toISOString(),
-                expires: dayjs().add(1, "minute").toISOString(),
-                ends: dayjs().add(1, "minute").toISOString(),
-              },
-            },
-          ],
-        });
-
-        await alertHandler.updateAlerts();
-
-        const alerts = await alertHandler.default({
-          grid: { geometry: [] },
-          place: { timezone: "America/Chicago" },
-        });
-
-        expect(alerts.items[0].id).to.equal("part1_part2_part3");
-      });
-
-      it("passes unknown alert types straight through", async () => {
-        response.json.resolves({
-          features: [
-            {
-              geometry: "geo",
-              properties: {
-                id: "one",
-                event: "Severe Meatballstorm Warning",
-                sent: dayjs().subtract(1, "minute").toISOString(),
-                effective: dayjs().subtract(1, "minute").toISOString(),
-                onset: dayjs().subtract(1, "minute").toISOString(),
-                expires: dayjs().add(1, "minute").toISOString(),
-                ends: dayjs().add(1, "minute").toISOString(),
-              },
-            },
-          ],
-        });
-
-        await alertHandler.updateAlerts();
-
-        const {
-          items: [{ event, metadata }],
-        } = await alertHandler.default({
-          grid: { geometry: [] },
-          place: { timezone: "America/Chicago" },
-        });
-
-        expect(event).to.equal("Severe Meatballstorm Warning");
-        expect(metadata).to.eql({
-          level: {
-            priority: Number.MAX_SAFE_INTEGER,
-            text: "other",
-          },
-          kind: "land",
-          priority: Number.MAX_SAFE_INTEGER,
-        });
-      });
-
       describe("correctly formats alert timing information", async () => {
         beforeEach(() => {
-          // September 3 in some future year.
-          const futureSeptemberDay = dayjs()
-            .tz("America/Denver")
-            .add(1, "year")
-            .month(8)
-            .date(3);
+          // Use a fixed date. The timezone here is UTC-600, or Mountain
+          // Daylight. Our tests below will be in Central Daylight. Having these
+          // be different assures we're propertly using the user's timezone.
+          const alertDay = dayjs.utc("2024-09-03T07:13:00-0600");
 
-          const start = futureSeptemberDay.hour(7).minute(13);
-          const end = futureSeptemberDay.hour(9).minute(44);
+          const start = alertDay;
+          const end = alertDay.add(2, "hours").add(31, "minutes");
 
-          response.json.resolves({
-            features: [
-              {
-                geometry: "geo",
-                properties: {
-                  id: "one",
-                  event: "Severe Meatballstorm Warning",
-                  sent: dayjs().subtract(1, "minute").toISOString(),
-                  effective: dayjs().subtract(1, "minute").toISOString(),
-                  onset: start.toISOString(),
-                  expires: end.toISOString(),
-                  ends: end.toISOString(),
-                },
+          const alert = {
+            id: "one",
+            event: "Severe Meatballstorm Warning",
+            sent: dayjs().subtract(1, "minute"),
+            effective: dayjs().subtract(1, "minute"),
+            onset: start,
+            expires: end,
+            ends: end,
+            finish: end,
+            metadata: {
+              level: { priority: 1 },
+            },
+            geometry: {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "Polygon",
+                coordinates: [
+                  [
+                    [0, 0],
+                    [2, 0],
+                    [2, 2],
+                    [0, 2],
+                    [0, 0],
+                  ],
+                ],
               },
-            ],
-          });
+            },
+          };
+
+          updateFromBackground({ action: "add", hash: "test", alert });
+        });
+
+        afterEach(() => {
+          updateFromBackground({ action: "remove", hash: "test" });
         });
 
         it("formats the start time", async () => {
-          await alertHandler.updateAlerts();
-
           const {
-            items: [{ timing }],
-          } = await alertHandler.default({
-            grid: { geometry: [] },
+            items: [alert],
+          } = await alertHandler({
+            point: { latitude: 1, longitude: 1 },
             place: { timezone: "America/Chicago" },
           });
 
-          expect(/^[A-Z][a-z]+day 09\/03 8:13 AM CDT$/.test(timing.start)).to.be
-            .true;
+          expect(alert.timing.start).to.equal("Tuesday 09/03 8:13 AM CDT");
         });
 
         it("formats the end time", async () => {
-          await alertHandler.updateAlerts();
-
           const {
-            items: [{ timing }],
-          } = await alertHandler.default({
-            grid: { geometry: [] },
+            items: [alert],
+          } = await alertHandler({
+            point: { latitude: 1, longitude: 1 },
             place: { timezone: "America/Chicago" },
           });
 
-          expect(/^[A-Za-z]+day 09\/03 10:44 AM CDT$/.test(timing.end)).to.be
-            .true;
+          expect(alert.timing.end).to.equal("Tuesday 09/03 10:44 AM CDT");
         });
       });
 
       describe("correctly sets the highest alert level", () => {
-        const getAlert = (type) => ({
-          geometry: "geo",
-          properties: {
-            id: "one",
-            sent: dayjs().subtract(1, "minute").toISOString(),
-            effective: dayjs().subtract(1, "minute").toISOString(),
-            onset: dayjs().subtract(1, "minute").toISOString(),
-            expires: dayjs().add(1, "minute").toISOString(),
-            ends: dayjs().add(1, "minute").toISOString(),
-            event: type,
-          },
-        });
+        const addAlerts = (...types) =>
+          types.map((type) => {
+            const hash = `${Date.now()}${Math.random()}`;
+            const time = dayjs();
 
-        it("when one of them is a warning", async () => {
-          response.json.resolves({
-            features: [
-              getAlert("Severe Thunderstorm Warning"),
-              getAlert("Severe Thunderstorm Watch"),
-              getAlert("severe weather statement"),
-              getAlert("avalanche advisory"),
-            ],
+            const alert = {
+              geometry: {
+                type: "Feature",
+                properties: {},
+                geometry: {
+                  type: "Polygon",
+                  coordinates: [
+                    [
+                      [0, 0],
+                      [2, 0],
+                      [2, 2],
+                      [0, 2],
+                      [0, 0],
+                    ],
+                  ],
+                },
+              },
+              id: "one",
+              sent: time,
+              effective: time,
+              onset: time,
+              expires: time,
+              ends: time,
+              finish: time,
+              event: type,
+              metadata: alertKinds.get(type.toLowerCase()),
+            };
+
+            updateFromBackground({ action: "add", hash, alert });
+            return hash;
           });
 
-          await alertHandler.updateAlerts();
+        const removeAll = (hashes) =>
+          hashes.forEach((hash) =>
+            updateFromBackground({ action: "remove", hash }),
+          );
 
-          const { highestLevel: actual } = await alertHandler.default({
-            grid: { geometry: [] },
+        it("when one of them is a warning", async () => {
+          const hashes = addAlerts(
+            "Severe Thunderstorm Warning",
+            "Severe Thunderstorm Watch",
+            "severe weather statement",
+            "avalanche advisory",
+          );
+
+          const { highestLevel: actual } = await alertHandler({
+            point: { latitude: 1, longitude: 1 },
             place: { timezone: "America/Chicago" },
           });
 
           expect(actual).to.equal("warning");
+
+          removeAll(hashes);
         });
 
         it("when there are no warnings, but at least one watch", async () => {
-          response.json.resolves({
-            features: [
-              getAlert("Severe Thunderstorm Watch"),
-              getAlert("severe weather statement"),
-              getAlert("avalanche advisory"),
-            ],
-          });
+          const hashes = addAlerts(
+            "Severe Thunderstorm Watch",
+            "severe weather statement",
+            "avalanche advisory",
+          );
 
-          await alertHandler.updateAlerts();
-
-          const { highestLevel: actual } = await alertHandler.default({
-            grid: { geometry: [] },
+          const { highestLevel: actual } = await alertHandler({
+            point: { latitude: 1, longitude: 1 },
             place: { timezone: "America/Chicago" },
           });
 
           expect(actual).to.equal("watch");
+
+          removeAll(hashes);
         });
 
         it("when there are no warnings or watches", async () => {
-          response.json.resolves({
-            features: [
-              getAlert("severe weather statement"),
-              getAlert("avalanche advisory"),
-            ],
-          });
+          const hashes = addAlerts(
+            "severe weather statement",
+            "avalanche advisory",
+          );
 
-          await alertHandler.updateAlerts();
-
-          const { highestLevel: actual } = await alertHandler.default({
-            grid: { geometry: [] },
+          const { highestLevel: actual } = await alertHandler({
+            point: { latitude: 1, longitude: 1 },
             place: { timezone: "America/Chicago" },
           });
 
           expect(actual).to.equal("other");
+
+          removeAll(hashes);
         });
-      });
-    });
-
-    describe("computes the alert finish time", () => {
-      const alertResponse = {
-        features: [
-          {
-            geometry: "geo",
-            properties: {
-              id: "one",
-              event: "Severe Thunderstorm Warning",
-              sent: dayjs().subtract(1, "minute").toISOString(),
-              effective: dayjs().subtract(1, "minute").toISOString(),
-              onset: dayjs().subtract(1, "minute").toISOString(),
-            },
-          },
-        ],
-      };
-
-      it("if the alert has an ends property", async () => {
-        alertResponse.features[0].properties.ends = "2430-04-03T12:00:00Z";
-        alertResponse.features[0].properties.expires = null;
-        response.json.resolves(alertResponse);
-
-        const [{ ends, finish }] = await alertHandler.updateAlerts();
-
-        expect(ends.isSame(finish)).to.be.true;
-      });
-
-      it("if the alert does not have an ends property but does have expires", async () => {
-        alertResponse.features[0].properties.ends = null;
-        alertResponse.features[0].properties.expires = "2430-04-03T12:00:00Z";
-        response.json.resolves(alertResponse);
-
-        const [{ expires, finish }] = await alertHandler.updateAlerts();
-
-        expect(expires.isSame(finish)).to.be.true;
-      });
-
-      it("if the alert has neither ends nor expires properties", async () => {
-        alertResponse.features[0].properties.ends = null;
-        alertResponse.features[0].properties.expires = null;
-        response.json.resolves(alertResponse);
-
-        const [{ finish }] = await alertHandler.updateAlerts();
-
-        expect(finish).to.be.null;
       });
     });
   });
