@@ -11,6 +11,7 @@
   "author": "",
   "license": "CC0-1.0",
   "dependencies": {
+    "@turf/turf": "^7.1.0",
     "convert": "^5.3.0",
     "dayjs": "^1.11.12",
     "fastify": "^4.28.1",
