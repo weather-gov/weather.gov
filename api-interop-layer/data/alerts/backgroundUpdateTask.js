@@ -15,7 +15,7 @@ const logger = createLogger("alerts (background)");
 // not be processed in future updates, since we've already captured it.
 const KNOWN_ALERTS = new Set();
 
-export const updateAlerts = async () => {
+export const updateAlerts = async ({ parent = parentPort } = {}) => {
   const now = dayjs();
   logger.verbose("updating alerts");
 
@@ -29,6 +29,15 @@ export const updateAlerts = async () => {
         return { error: true };
       }
       return features.map((feature) => {
+        // To uniquely identify alerts, we'll use a hash of the JSON text of the
+        // alert properties. Alert ID URNs don't appear to be globally unique,
+        // so this should get us to uniqueness.
+        const hash = createHash("sha256");
+        hash.update(JSON.stringify(feature.properties));
+        feature.properties.hash = hash.digest("base64");
+
+        theseAlertHashes.add(feature.properties.hash);
+
         Object.keys(feature.properties).forEach((key) => {
           const value = feature.properties[key];
           const date = dayjs(value);
@@ -48,15 +57,6 @@ export const updateAlerts = async () => {
           }
         });
 
-        // To uniquely identify alerts, we'll use a hash of the JSON text of the
-        // alert properties. Alert ID URNs don't appear to be globally unique,
-        // so this should get us to uniqueness.
-        const hash = createHash("sha256");
-        hash.update(JSON.stringify(feature.properties));
-        feature.properties.hash = hash.digest("base64");
-
-        theseAlertHashes.add(feature.properties.hash);
-
         return feature;
       });
     },
@@ -65,7 +65,7 @@ export const updateAlerts = async () => {
   // If there's an error coming from the API, signal that to the parent thread
   // and stop processing. We'll try again on the next timer tick.
   if (rawAlerts.error) {
-    parentPort.postMessage({ action: "error" });
+    parent.postMessage({ action: "error" });
     return;
   }
 
@@ -77,7 +77,7 @@ export const updateAlerts = async () => {
       // remove it now.
       logger.verbose(`removing alert with hash ${hash}`);
       KNOWN_ALERTS.delete(hash);
-      parentPort.postMessage({ action: "remove", hash });
+      parent.postMessage({ action: "remove", hash });
     }
   }
 
@@ -164,7 +164,7 @@ export const updateAlerts = async () => {
     alert.geometry = await generateAlertGeometry(db, rawAlert);
 
     logger.verbose(`adding alert with hash ${rawAlert.properties.hash}`);
-    parentPort.postMessage({
+    parent.postMessage({
       action: "add",
       hash: rawAlert.properties.hash,
       alert,
@@ -188,12 +188,14 @@ export const start = () => {
   updateAlerts().then(setTimer);
 };
 
-parentPort.on("message", (message) => {
-  switch (message.toLowerCase()) {
-    case "start":
-      start();
-      break;
-    default:
-      break;
-  }
-});
+if (parentPort) {
+  parentPort.on("message", (message) => {
+    switch (message.toLowerCase()) {
+      case "start":
+        start();
+        break;
+      default:
+        break;
+    }
+  });
+}

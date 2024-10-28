@@ -18,7 +18,7 @@ const metadata = {
 // The background process handles fetching and massaging alerts so they don't
 // block the main thread. It will message us if it encounters a new alert or if
 // an alert in its cache is missing from the API results.
-const updateFromBackground = ({ action, hash, alert }) => {
+export const updateFromBackground = ({ action, hash, alert }) => {
   switch (action) {
     case "add":
       logger.verbose(`adding alert with hash ${hash}`);
@@ -43,7 +43,6 @@ const updateFromBackground = ({ action, hash, alert }) => {
       metadata.error = false;
       break;
     case "error":
-      metadata.updated = dayjs();
       metadata.error = true;
       break;
     default:
@@ -51,18 +50,20 @@ const updateFromBackground = ({ action, hash, alert }) => {
   }
 };
 
-// If this is the main thread, fire up the background worker. This should always
-// be the main thread, but if something goes haywire and this script somehow
-// gets loaded in the background worker, don't recursively keep loading it.
-if (isMainThread) {
-  const updater = new Worker(
-    path.join(import.meta.dirname, "backgroundUpdateTask.js"),
-  );
-  updater.on("message", updateFromBackground);
+export const startAlertProcessing = () => {
+  // If this is the main thread, fire up the background worker. This should always
+  // be the main thread, but if something goes haywire and this script somehow
+  // gets loaded in the background worker, don't recursively keep loading it.
+  if (isMainThread) {
+    const updater = new Worker(
+      path.join(import.meta.dirname, "backgroundUpdateTask.js"),
+    );
+    updater.on("message", updateFromBackground);
 
-  // Make it go. Otherwise it won't go.
-  updater.postMessage("start");
-}
+    // Make it go. Otherwise it won't go.
+    updater.postMessage("start");
+  }
+};
 
 export default async ({
   point: { latitude, longitude },

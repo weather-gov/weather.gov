@@ -3,6 +3,7 @@ import newrelic from "newrelic";
 import { getDataForPoint } from "./data/index.js";
 import { rest as alertsRest } from "./data/alerts/kinds.js";
 import { createLogger } from "./util/monitoring/index.js";
+import { startAlertProcessing } from "./data/alerts";
 
 const main = async () => {
   const port = process.env.PORT || 8082;
@@ -59,7 +60,11 @@ const main = async () => {
 
       if (data.error) {
         // track this error in New Relic
-        newrelic.recordLogEvent({ message: request.url, level: "error", error: data.error });
+        newrelic.recordLogEvent({
+          message: request.url,
+          level: "error",
+          error: data.error,
+        });
 
         // If there is a top-level error, set the status code accordingly.
         if (data.status) {
@@ -80,6 +85,8 @@ const main = async () => {
   server.get("/meta/alerts", (_, response) => {
     response.send(alertsRest());
   });
+
+  startAlertProcessing();
 
   await server.listen({ port, host: "0.0.0.0" });
   logger.info(`Listening on ${port}`);
