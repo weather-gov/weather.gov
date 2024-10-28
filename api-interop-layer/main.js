@@ -3,7 +3,7 @@ import newrelic from "newrelic";
 import { getDataForPoint } from "./data/index.js";
 import { rest as alertsRest } from "./data/alerts/kinds.js";
 import { createLogger } from "./util/monitoring/index.js";
-import { startAlertProcessing } from "./data/alerts";
+import { startAlertProcessing } from "./data/alerts/index.js";
 
 const main = async () => {
   const port = process.env.PORT || 8082;
