@@ -25,7 +25,7 @@ let sendMetric = (metric) => {
   });
 };
 
-let recordEvent = newrelic.recordLogEvent;
+let recordEvent = newrelic.recordLogEvent.bind(newrelic);
 
 if (!licenseKey) {
   sendMetric = () => {};
