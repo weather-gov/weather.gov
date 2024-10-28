@@ -26,9 +26,9 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
-    "@playwright/test": "^1.48.1",
-    "@types/node": "^22.7.8",
-    "axe-core": "^4.10.1",
+    "@playwright/test": "^1.48.2",
+    "@types/node": "^22.8.1",
+    "axe-core": "^4.10.2",
     "chai": "^5.1.1",
     "dayjs": "^1.11.13",
     "eslint": "^8.57.1",
@@ -40,7 +40,7 @@
     "jsdom-global": "^3.0.2",
     "mocha": "^10.7.3",
     "mocha-cli": "^1.0.1",
-    "playwright": "^1.48.1",
+    "playwright": "^1.48.2",
     "prettier": "^3.3.3",
     "sinon": "^19.0.2",
     "stylelint": "^16.10.0",
@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@prettier/plugin-php": "^0.22.2",
-    "mariadb": "^3.3.1",
+    "mariadb": "^3.4.0",
     "shapefile": "^0.6.6",
     "twing": "^7.0.0"
   }
