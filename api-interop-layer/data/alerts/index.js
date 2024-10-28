@@ -8,6 +8,7 @@ import { parseDuration } from "./parse/index.js";
 import sort from "./sort.js";
 
 const logger = createLogger("alerts");
+const backgroundLogger = createLogger("alerts (background)");
 const cachedAlerts = new Map();
 
 const metadata = {
@@ -18,7 +19,13 @@ const metadata = {
 // The background process handles fetching and massaging alerts so they don't
 // block the main thread. It will message us if it encounters a new alert or if
 // an alert in its cache is missing from the API results.
-export const updateFromBackground = ({ action, hash, alert }) => {
+export const updateFromBackground = ({
+  action,
+  hash,
+  alert,
+  level,
+  message,
+}) => {
   switch (action) {
     case "add":
       logger.verbose(`adding alert with hash ${hash}`);
@@ -36,15 +43,22 @@ export const updateFromBackground = ({ action, hash, alert }) => {
       metadata.updated = dayjs();
       metadata.error = false;
       break;
+
     case "remove":
       logger.verbose(`removing alert with hash ${hash}`);
       cachedAlerts.delete(hash);
       metadata.updated = dayjs();
       metadata.error = false;
       break;
+
     case "error":
       metadata.error = true;
       break;
+
+    case "log":
+      backgroundLogger[level](message);
+      break;
+
     default:
       break;
   }
