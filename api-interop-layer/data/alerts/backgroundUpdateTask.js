@@ -1,6 +1,5 @@
 import { createHash } from "node:crypto";
 import { parentPort } from "node:worker_threads";
-import { createLogger } from "../../util/monitoring/index.js";
 import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import paragraphSquash from "../../util/paragraphSquash.js";
@@ -9,15 +8,17 @@ import alertKinds from "./kinds.js";
 import { parseDescription, parseLocations } from "./parse/index.js";
 import { generateAlertGeometry } from "./geometry.js";
 
-const logger = createLogger("alerts (background)");
-
 // The hashes of all the active alerts we know about. Anything in this list will
 // not be processed in future updates, since we've already captured it.
 const KNOWN_ALERTS = new Set();
 
 export const updateAlerts = async ({ parent = parentPort } = {}) => {
   const now = dayjs();
-  logger.verbose("updating alerts");
+  parent.postMessage({
+    action: "log",
+    level: "verbose",
+    message: "updating alerts",
+  });
 
   // The list of alert hashes in the current results from the API. We'll use
   // this to figure out which alerts to remove from KNOWN_ALERTS.
@@ -69,13 +70,21 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     return;
   }
 
-  logger.verbose(`got ${rawAlerts.length} alerts from the API`);
+  parent.postMessage({
+    action: "log",
+    level: "verbose",
+    message: `got ${rawAlerts.length} alerts from the API`,
+  });
 
   for (const hash of KNOWN_ALERTS) {
     if (!theseAlertHashes.has(hash)) {
       // A previously-known alert is no longer in this update. We should
       // remove it now.
-      logger.verbose(`removing alert with hash ${hash}`);
+      parent.postMessage({
+        action: "log",
+        level: "verbose",
+        message: `removing alert with hash ${hash}`,
+      });
       KNOWN_ALERTS.delete(hash);
       parent.postMessage({ action: "remove", hash });
     }
@@ -87,8 +96,11 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
 
   const db = await openDatabase();
 
-  logger.verbose(`got ${alertsToUpdate.length} alerts to update`);
-  // const alerts = [];
+  parent.postMessage({
+    action: "log",
+    level: "verbose",
+    message: `got ${alertsToUpdate.length} alerts to update`,
+  });
 
   for await (const rawAlert of alertsToUpdate) {
     KNOWN_ALERTS.add(rawAlert.properties.hash);
@@ -101,7 +113,12 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     // logs. Default to a land alert with the lowest priority so we can at least
     // still show it to users.
     if (!alert.metadata) {
-      logger.warn(`Unknown alert type: ${rawAlert.properties.event}`);
+      parent.postMessage({
+        action: "log",
+        level: "warn",
+        message: `Unknown alert type: "${rawAlert.properties.event}"`,
+      });
+
       alert.metadata = {
         level: { priority: Number.MAX_SAFE_INTEGER, text: "other" },
         kind: "land",
@@ -113,9 +130,12 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     // alerts, we'll revisit this, but since we don't know what the use case
     // will be in the future, we'll just leave them out entirely for now.
     if (!alert.metadata || alert.metadata.kind !== "land") {
-      logger.verbose(
-        `ignoring "${rawAlert.properties.event}" - not a land alert`,
-      );
+      parent.postMessage({
+        action: "log",
+        level: "verbose",
+        message: `Ignoring "${rawAlert.properties.event}" - not a land alert`,
+      });
+
       continue; // eslint-disable-line no-continue
     }
 
@@ -163,7 +183,12 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
 
     alert.geometry = await generateAlertGeometry(db, rawAlert);
 
-    logger.verbose(`adding alert with hash ${rawAlert.properties.hash}`);
+    parent.postMessage({
+      action: "log",
+      level: "verbose",
+      message: `adding alert with hash ${rawAlert.properties.hash}`,
+    });
+
     parent.postMessage({
       action: "add",
       hash: rawAlert.properties.hash,
