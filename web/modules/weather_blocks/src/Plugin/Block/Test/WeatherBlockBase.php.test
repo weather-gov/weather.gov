@@ -3,7 +3,7 @@
 namespace Drupal\weather_blocks\Plugin\Block\Test;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\weather_blocks\Plugin\Block\WeatherStoryBlock;
+use Drupal\weather_blocks\Plugin\Block\WeatherStoryImageBlock;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,7 +20,7 @@ final class WeatherBlockBaseTest extends Base
     protected function setUp($type = null, $override = true): void
     {
         // Instantiate a real object because the base class is abstract.
-        parent::setUp(WeatherStoryBlock::class, false);
+        parent::setUp(WeatherStoryImageBlock::class, false);
     }
 
     /**
@@ -45,10 +45,10 @@ final class WeatherBlockBaseTest extends Base
             }),
         );
 
-        $actual = WeatherStoryBlock::create($container, [], "", [
+        $actual = WeatherStoryImageBlock::create($container, [], "", [
             "provider" => "weather_blocks",
         ]);
-        $this->assertEquals(WeatherStoryBlock::class, $actual::class);
+        $this->assertEquals(WeatherStoryImageBlock::class, $actual::class);
     }
 
     /**
