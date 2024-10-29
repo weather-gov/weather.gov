@@ -3,47 +3,54 @@
 namespace Drupal\weather_blocks\Plugin\Block\Test;
 
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\weather_blocks\Plugin\Block\WeatherStoryBlock;
+use Drupal\weather_blocks\Plugin\Block\WeatherStoryImageBlock;
 
 /**
- * Tests for the WeatherStory block.
+ * Tests for the WeatherStoryImage block.
  */
-final class WeatherStoryBlockTest extends Base
+final class WeatherStoryImageBlockTest extends Base
 {
     protected function setUp($type = null, $override = true): void
     {
-        parent::setUp(WeatherStoryBlock::class);
+        parent::setUp(WeatherStoryImageBlock::class);
     }
 
-    protected function setupEntityAPIMocksForGoodStory($withImage)
+    protected function setupEntityAPIMocksForGoodStory($hasStory)
     {
+        if (!$hasStory) {
+            $this->entityService
+                ->method("getLatestWeatherStoryImageFromWFO")
+                ->willReturn([]);
+            return;
+        }
+
         // Setup fetching the actual node.
         $story = $this->createStub(FieldItemListInterface::class);
-        $imageField = $this->createStub(FieldItemListInterface::class);
         $titleField = $this->createStub(FieldItemListInterface::class);
-        $bodyField = $this->createStub(FieldItemListInterface::class);
+        $descriptionField = $this->createStub(FieldItemListInterface::class);
+        $imageField = $this->createStub(FieldItemListInterface::class);
+        $nameField = $this->createStub(FieldItemListInterface::class);
         $changedField = (object) ["value" => 235984600];
 
         $story
             ->method("get")
             ->will(
                 $this->returnValueMap([
-                    ["field_image", $imageField],
                     ["title", $titleField],
-                    ["body", $bodyField],
+                    ["name", $nameField],
+                    ["field_description", $descriptionField],
+                    ["field_fullimage", $imageField],
                     ["changed", $changedField],
                 ]),
             );
 
-        $altTextField = $this->createStub(FieldItemListInterface::class);
         $uriField = $this->createStub(FieldItemListInterface::class);
 
         $imageField
             ->method("get")
             ->will(
                 $this->returnValueMap([
-                    [0, $withImage ? $imageField : null],
-                    ["alt", $altTextField],
+                    [0, $imageField],
                     ["uri", $uriField],
                 ]),
             );
@@ -51,16 +58,27 @@ final class WeatherStoryBlockTest extends Base
             ->method("__get")
             ->will($this->returnValueMap([["entity", $imageField]]));
 
-        $altTextField->method("getString")->willReturn("image alt text");
         $uriField->method("getString")->willReturn("image url");
 
-        $titleField->method("getString")->willReturn("Weather Story Title");
-        $bodyField
-            ->method("getValue")
-            ->willReturn([["value" => "Weather story body"]]);
+        $titleField->method("getString")->willReturn("Weather Story Image Title");
+
+        $descriptionField->method("__get")->willReturn("Weather Story Image Description");
+
+        $wfoName = $this->createStub(FieldItemListInterface::class);
+        $wfoName->method("getString")->willReturn("Bob's WFO");
+        $wfoNameField = $this->createStub(FieldItemListInterface::class);
+        $wfoNameField
+            ->method("get")
+            ->will(
+                $this->returnValueMap([["name", $wfoName]])
+            );
 
         $this->entityService
-            ->method("getLatestNodeFromWFO")
+            ->method("getWFOEntity")
+            ->willReturn($wfoNameField);
+
+        $this->entityService
+            ->method("getLatestWeatherStoryImageFromWFO")
             ->willReturn($story);
     }
 
@@ -77,16 +95,18 @@ final class WeatherStoryBlockTest extends Base
         $this->setupEntityAPIMocksForGoodStory(true);
 
         $expected = [
-            "title" => "Weather Story Title",
-            "body" => "Weather story body",
+            "title" => "Weather Story Image Title",
+            "description" => "Weather Story Image Description",
             "image" => [
-                "alt" => "image alt text",
                 "uri" => "image url",
+                "alt" => "Weather Story Image Description",
             ],
             "updated" => [
                 "formatted" => "Jun 24, 1977, 7:16 AM",
                 "utc" => "1977-06-24T07:16:40+00:00",
             ],
+            "wfo_code" => "BOB",
+            "wfo_name" => "Bob's WFO",
         ];
 
         $actual = $this->block->build();
@@ -106,15 +126,7 @@ final class WeatherStoryBlockTest extends Base
 
         $this->setupEntityAPIMocksForGoodStory(false);
 
-        $expected = [
-            "title" => "Weather Story Title",
-            "body" => "Weather story body",
-            "image" => null,
-            "updated" => [
-                "formatted" => "Jun 24, 1977, 7:16 AM",
-                "utc" => "1977-06-24T07:16:40+00:00",
-            ],
-        ];
+        $expected = [];
 
         $actual = $this->block->build();
 
