@@ -3,7 +3,7 @@ const SPECIAL_HEADER_TYPES = {
     re: /^\.(?<header>[A-Z]{3}\sWATCHES\/WARNINGS\/ADVISORIES)[\.]{3}/,
   },
   tempsTable: {
-    re: /^\.(?<header>.*\/TEMPS\/POPS)[.]{3}/,
+    re: /^\.(?<header>.*TEMPS\/POPS)[.]{3}/,
   }
 };
 

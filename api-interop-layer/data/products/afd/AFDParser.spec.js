@@ -89,7 +89,7 @@ describe("AFDParser Tests", () => {
     });
 
     describe("Temps/Pops", () => {
-      const example = ".PRELIMINARY POINT TEMPS/POPS...";
+      const example = ".PRELIMINARY POINT TEMPS/POPS...And some other stuff\nHere too!";
       it("parses a header node", () => {
         const parser = new AFDParser();
         parser.parseHeader(example);
@@ -107,6 +107,14 @@ describe("AFDParser Tests", () => {
         parser.parseHeader(example);
         const expected = "tempsTable";
         const actual = parser.contentType;
+
+        expect(actual).to.eql(expected);
+      });
+
+      it("returns the correct substring", () => {
+        const parser = new AFDParser();
+        const expected = "And some other stuff\nHere too!";
+        const actual = parser.parseHeader(example);
 
         expect(actual).to.eql(expected);
       });
