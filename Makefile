@@ -95,7 +95,7 @@ update-translations:
 	docker compose exec drupal drush locale:clear-status
 	docker compose exec drupal drush locale:update
 	docker compose exec drupal drush cache:rebuild
-
+zap-init: update-settings zap-containers rebuild pause install-site import-spatial load-spatial  ## Delete the entire Docker environment and start from scratch.
 zap: update-settings dump-spatial zap-containers rebuild pause install-site import-spatial load-spatial  ## Delete the entire Docker environment and start from scratch.
 zap-containers:
 	docker compose stop
