@@ -69,7 +69,7 @@ const doApiCalls = async (lat, lon) => {
     const state = point.properties.relativeLocation.properties.state;
 
     const fetching = [
-      apiFetch(`/alerts/active/?status=actual&area=${state}`),
+      apiFetch(`/alerts/active/?status=actual`),
       apiFetch(`/gridpoints/${wfo}/${gridX},${gridY}/`),
       apiFetch(`/gridpoints/${wfo}/${gridX},${gridY}/forecast`),
       apiFetch(`/gridpoints/${wfo}/${gridX},${gridY}/forecast/hourly`),
