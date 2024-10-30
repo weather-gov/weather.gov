@@ -118,6 +118,82 @@ describe("AFDParser Tests", () => {
 
         expect(actual).to.eql(expected);
       });
-    });    
+    });
+
+    describe("Generic", () => {
+      const example = ".THIS IS A GENERIC HEADER...with some stuff after it";
+      it("parses a header node", () => {
+        const parser = new AFDParser();
+        parser.parseHeader(example);
+        const expected = {
+          type: "header",
+          content: "THIS IS A GENERIC HEADER"
+        };
+        const actual = parser.parsedNodes.pop();
+
+        expect(actual).to.eql(expected);
+      });
+
+      it("sets the correct content type", () => {
+        const parser = new AFDParser();
+        parser.parseHeader(example);
+        const expected = "generic";
+        const actual = parser.contentType;
+
+        expect(actual).to.eql(expected);
+      });
+
+      it("returns the correct substring", () => {
+        const parser = new AFDParser();
+        const expected = "with some stuff after it";
+        const actual = parser.parseHeader(example);
+
+        expect(actual).to.eql(expected);
+      });
+    });
+  });
+  describe("#parseSubheader", () => {
+    describe("Working example", () => {
+      const example = "...This is some subheader stuff here...\nThen some stuff after";
+      it("appends a subheader node", () => {
+        const parser = new AFDParser();
+        parser.parseSubheader(example);
+        const expected = {
+          type: "subheader",
+          content: "This is some subheader stuff here"
+        };
+        const actual = parser.parsedNodes.pop();
+
+        expect(actual).to.eql(expected);
+      });
+
+      it("returns the correct substring", () => {
+        const parser = new AFDParser();
+        const expected = "\nThen some stuff after";
+        const actual = parser.parseSubheader(example);
+
+        expect(actual).to.equal(expected);
+      });
+    });
+
+    describe("Incorrect example", () => {
+      const example = "..Some incorrect subheader...\nThen other stuff";
+      it("does not append a subheader node", () => {
+        const parser = new AFDParser();
+        parser.parseSubheader(example);
+        const expected = 0;
+        const actual = parser.parsedNodes.length;
+
+        expect(actual).to.equal(expected);
+      });
+
+      it("returns the correct substring (the full original string)", () => {
+        const parser = new AFDParser();
+        const expected = example;
+        const actual = parser.parseSubheader(example);
+
+        expect(actual).to.equal(expected);
+      });
+    });
   });
 });

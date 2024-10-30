@@ -8,7 +8,7 @@ const SPECIAL_HEADER_TYPES = {
 };
 
 const GENERIC_HEADER_REGEX = /^\.(?<header>.+)[\.]{3}/;
-const SUBHEADER_REGEX = /^\s*\.{3}(?<secondary>[^\.]+)\.{3}/;
+const SUBHEADER_REGEX = /^\s*\.{3}(?<subheader>[^\.]+)\.{3}/;
 
 
 export default class AFDParser {
@@ -41,8 +41,6 @@ export default class AFDParser {
    * corresponding section removed
    */
   parseDocumentPreamble(){
-    // Read up to the line that is the first header
-    
     const lines = this.source.split("\n");
     const preambleLines = [];
     let currentLine = 0;
@@ -94,6 +92,7 @@ export default class AFDParser {
     paragraphs.forEach(paragraph => {
       let rest = this.parseHeader(paragraph);
       rest = this.parseSubheader(rest);
+      this.parseTextContent(rest);
     });
   }
 
@@ -135,6 +134,91 @@ export default class AFDParser {
     return str;
   }
 
+  parseSubheader(str){
+    const match = str.trim().match(SUBHEADER_REGEX);
+    if(match){
+      this.parsedNodes.push({
+        type: "subheader",
+        content: match.groups.subheader
+      });
+      return str.slice(
+        match.index + match[0].length
+      );
+    }
+
+    return str;
+  }
+
+  parseTextContent(str){
+    if(str === ""){
+      return;
+    }
+    switch(this.contentType){
+    case "wwa":
+      this.parseWWAContent(str);
+      break;
+    case "tempsTable":
+      this.parseTempsTableContent(str);
+      break;
+    default:
+      this.parsedNodes.push({
+        type: "text",
+        content: str.trim()
+      });
+    }
+  }
+
+  parseWWAContent(str){
+    // A newline followed by 4 spaces indentation
+    // indicates line continuation. Replate with the
+    // empty string, followed by a normal newline
+    let currentString = str.trim();
+    currentString = currentString.replace(/\n\s+/g, "");
+    if(currentString !== ""){
+      this.parsedNodes.push({
+        type: "text",
+        content: currentString
+      });
+    }
+  }
+
+  parseTempsTableContent(str){
+    // There could be whitespace between the TEMPS/POPS header
+    // and the actual data, so clean that up first. There
+    // *shouldn't* be, but we've seen it happen,
+    // so guard against it
+    const lines = str.trim().split("\n");
+    const rx = /^[^\d]*(.+)/;
+    const rows = [];
+    for(let i = 0; i < lines.length; i++){
+      const line = lines[i];
+      let numbers = line.split(rx);
+      numbers = numbers.filter(val => {
+        return val !== "";
+      });
+
+      const placeRx = /^(?<place>[^\d]+)/;
+      let place = null;
+      const placeMatch = line.match(placeRx);
+      if(placeMatch){
+        place = placeMatch.groups.place.trim();
+      }
+
+      rows.push({
+        type: "temps-table-row",
+        numbers,
+        name: place
+      });
+    }
+
+    if(rows.length){
+      this.parsedNodes.push({
+        type: "temps-table",
+        rows
+      });
+    }
+  }
+  
   // TODO: Remove this indirection if we can
   updateContentType(str){
     this.contentType = str;
