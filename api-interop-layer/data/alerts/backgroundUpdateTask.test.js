@@ -17,6 +17,11 @@ describe("alert background processing module", () => {
     fetch.resolves(response);
   });
 
+  const getNewAlertsMessages = () =>
+    parent.postMessage.args.filter(([{ action }]) => action === "add");
+  const getRemoveAlertsMessages = () =>
+    parent.postMessage.args.filter(([{ action }]) => action === "remove");
+
   afterEach(() => {
     // Clear out the background processor's internal cache.
     response.json.resolves({ features: [] });
@@ -63,13 +68,15 @@ describe("alert background processing module", () => {
 
       await updateAlerts({ parent });
 
-      expect(parent.postMessage.callCount).to.equal(2);
+      const newAlertCalls = getNewAlertsMessages();
 
-      expect(parent.postMessage.args[0][0].action).to.equal("add");
-      expect(parent.postMessage.args[0][0].alert.id).to.equal("1_840_alert1");
+      expect(newAlertCalls.length).to.equal(2);
 
-      expect(parent.postMessage.args[1][0].action).to.equal("add");
-      expect(parent.postMessage.args[1][0].alert.id).to.equal("1_840_alert2");
+      expect(newAlertCalls[0][0].action).to.equal("add");
+      expect(newAlertCalls[0][0].alert.id).to.equal("1_840_alert1");
+
+      expect(newAlertCalls[1][0].action).to.equal("add");
+      expect(newAlertCalls[1][0].alert.id).to.equal("1_840_alert2");
     });
 
     it("posts a removal for alerts that are gone", async () => {
@@ -98,15 +105,17 @@ describe("alert background processing module", () => {
 
       await updateAlerts({ parent });
 
-      expect(parent.postMessage.callCount).to.equal(2);
+      const newAlertCalls = getNewAlertsMessages();
+      const removeAlertCalls = getRemoveAlertsMessages();
 
-      expect(parent.postMessage.args[0][0].action).to.equal("add");
-      expect(parent.postMessage.args[0][0].alert.id).to.equal("1_840_alert1");
+      expect(newAlertCalls.length).to.equal(1);
+      expect(removeAlertCalls.length).to.equal(1);
 
-      expect(parent.postMessage.args[1][0].action).to.equal("remove");
-      expect(parent.postMessage.args[1][0].hash).to.equal(
-        parent.postMessage.args[0][0].hash,
-      );
+      expect(newAlertCalls[0][0].action).to.equal("add");
+      expect(newAlertCalls[0][0].alert.id).to.equal("1_840_alert1");
+
+      expect(removeAlertCalls[0][0].action).to.equal("remove");
+      expect(removeAlertCalls[0][0].hash).to.equal(newAlertCalls[0][0].hash);
     });
   });
 
@@ -139,7 +148,9 @@ describe("alert background processing module", () => {
 
       await updateAlerts({ parent });
 
-      expect(parent.postMessage.called).to.be.false;
+      const newAlertCalls = getNewAlertsMessages();
+
+      expect(newAlertCalls.length).to.equal(0);
     });
 
     it("if the alert does not have an end time and the expire time is in the past", async () => {
@@ -159,7 +170,9 @@ describe("alert background processing module", () => {
       });
       await updateAlerts({ parent });
 
-      expect(parent.postMessage.called).to.be.false;
+      const newAlertCalls = getNewAlertsMessages();
+
+      expect(newAlertCalls.length).to.equal(0);
     });
   });
 
@@ -211,11 +224,11 @@ describe("alert background processing module", () => {
 
     await updateAlerts({ parent });
 
-    expect(parent.postMessage.callCount).to.equal(3);
+    const newAlerts = getNewAlertsMessages();
 
-    const kinds = parent.postMessage.args.map(
-      ([{ alert }]) => alert.metadata.kind,
-    );
+    expect(newAlerts.length).to.equal(3);
+
+    const kinds = newAlerts.map(([{ alert }]) => alert.metadata.kind);
 
     expect(kinds).to.have.same.members(["land", "land", "land"]);
   });
@@ -240,7 +253,8 @@ describe("alert background processing module", () => {
 
     await updateAlerts({ parent });
 
-    const { alert } = parent.postMessage.args[0][0];
+    const newAlerts = getNewAlertsMessages();
+    const { alert } = newAlerts[0][0];
 
     expect(alert.id).to.equal("part1_part2_part3");
   });
@@ -265,9 +279,12 @@ describe("alert background processing module", () => {
 
     await updateAlerts({ parent });
 
-    const {
-      alert: { event, metadata },
-    } = parent.postMessage.args[0][0];
+    const newAlerts = getNewAlertsMessages();
+    const [
+      {
+        alert: { event, metadata },
+      },
+    ] = newAlerts[0];
 
     expect(event).to.equal("Severe Meatballstorm Warning");
     expect(metadata).to.eql({
@@ -310,9 +327,13 @@ describe("alert background processing module", () => {
       response.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
-      const {
-        alert: { ends, finish },
-      } = parent.postMessage.args[0][0];
+      const newAlertCalls = getNewAlertsMessages();
+      const [
+        {
+          alert: { ends, finish },
+        },
+      ] = newAlertCalls[0];
+
       expect(ends.isSame(finish)).to.be.true;
     });
 
@@ -322,9 +343,12 @@ describe("alert background processing module", () => {
       response.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
-      const {
-        alert: { expires, finish },
-      } = parent.postMessage.args[0][0];
+      const newAlertCalls = getNewAlertsMessages();
+      const [
+        {
+          alert: { expires, finish },
+        },
+      ] = newAlertCalls[0];
       expect(expires.isSame(finish)).to.be.true;
     });
 
@@ -334,9 +358,12 @@ describe("alert background processing module", () => {
       response.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
-      const {
-        alert: { finish },
-      } = parent.postMessage.args[0][0];
+      const newAlertCalls = getNewAlertsMessages();
+      const [
+        {
+          alert: { finish },
+        },
+      ] = newAlertCalls[0];
 
       expect(finish).to.be.null;
     });
