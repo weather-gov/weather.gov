@@ -60,7 +60,7 @@ const setupRadar = () => {
   const point = [lon, lat];
 
   const bookmark = {
-    agenda: { id: "weather", zoom: 8, center: point, location: point },
+    agenda: { id: "weather", zoom: 6, center: point, location: point },
     opacity: {
       alerts: 0,
     },
