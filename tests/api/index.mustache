@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/themes/new_weather_theme/assets/css/styles.css">
+    <style type="text/css">
+    .dot {
+      border-radius: 100%;
+      min-height: 1em;
+      min-width: 1em;
+      display: inline-block;
+
+      &.red {
+        background-color: red;
+      }
+
+      &.green {
+        background-color: green;
+      }
+
+      &.yellow {
+        border: 1px solid black;
+        background-color: yellow;
+      }
+    }
+    </style>
+    <script src="/frontend.js"></script>
+  </head>
+  <body class="grid-container">
+    <div>
+      <span class="font-family-mono">now</span> is set to <time>{{ config.now }}</time>
+    </div>
+
+    {{#error}}
+      <div class="usa-alert usa-alert--error">
+        <div class="usa-alert__body">
+          <h4 class="usa-alert__heading">Error</h4>
+          <p class="usa-alert__text">
+            {{ error }}
+          </p>
+        </div>
+      </div>
+    {{/error}}
+
+    {{#config.bundling}}
+      <div class="red dot"></div> Currently recording new bundle
+      <br><br>
+      <a class="usa-button">Stop recording</a>
+    {{/config.bundling}}
+
+    {{#config.play}}
+      <h2>Currently playing bundle <span class="font-family-mono">{{config.play}}</span></h2>
+      
+      <a href="/stop" class="usa-button usa-button--outline"><div class="red dot"></div> Stop playing</a>
+
+      <div class="grid-row">
+        <div class="grid-col-6 padding-right-2">
+          <h3>Points in this bundle:</h3>
+
+          <div class="usa-alert usa-alert--info">
+            <div class="usa-alert__body">
+              <h4 class="usa-alert__heading">Note about alerts</h4>
+              <p class="usa-alert__text">
+                All points in a bundle are sharing a single source of alerts.
+                The alerts associated with a particular point are based on that
+                point's location and whether it is within the alert boundaries.
+              </p>
+            </div>
+          </div>
+
+          <ul>
+            {{#points}}
+              <li class="margin-bottom-2">
+                <a href="{{ link }}">{{ name }}</a><br>
+                {{ point }} | {{ grid.wfo }} / {{ grid.x }}, {{ grid.y }}<br>
+                <a href="{{ interop }}">interop layer data</a><br><br>
+                <ul>
+                {{#attributes}}
+                  <li>{{ . }}</li>
+                {{/attributes}}
+                </ul>
+              </li>
+            {{/points}}
+          </ul>
+
+          <h4>Add a point to this bundle:</h4>
+            Provide the URL to the location page you want to add to this bundle.
+            The URL can be any environment, including local development.
+            <div class="margin-top-1">
+              <form action="/add-point/" method="GET">
+              <input type="text" name="url">
+              <button type="submit" class="usa-button usa-button--outline margin-left-1">
+                <div class="yellow dot"></div>
+                add point
+              </button>
+              </form>
+            </div>
+
+        </div>
+        <div class="grid-col-6">
+          <h3>Products in this bundle:</h3>
+          <ul>
+            {{#products}}
+              <li class="margin-bottom-2">
+                {{#url}}
+                  <a href="{{ url }}">{{ label }}</a>
+                {{/url}}
+                {{^url}}
+                  {{ label }} (no linked page yet)
+                {{/url}}
+              </li>
+            {{/products}}
+          </ul>
+        </div>
+      </div>
+    {{/config.play}}
+
+    {{^config.bundling}}
+    <hr>
+    {{^config.play}}
+      <h3>Not playing a bundle. Sending requests through</h3>
+    {{/config.play}}
+
+    {{#isLocal}}
+    <div class="grid-col-6">
+      <h3>Create a new bundle:</h3>
+      Provide the URL to the location page you want to bundle. The URL can be in
+      any environment, including local development.
+      <div class="margin-top-1">
+        <form action="/bundle/" method="GET">
+        <input type="text" name="url">
+        <button type="submit" class="usa-button usa-button--outline margin-left-1">
+          <div class="yellow dot"></div>
+          create bundle
+        </button>
+        </form>
+      </div>
+    </div>
+    {{/isLocal}}
+
+    <h3>Available bundles:</h3>
+    <ul class="usa-list usa-list--unstyled">
+      {{#bundles}}
+        <li>
+          <a href="/play/{{ . }}" class="usa-button usa-button--outline margin-bottom-2">
+            <div class="green dot"></div>
+            play {{ . }}
+          </a>
+        </li>
+      {{/bundles}}
+    </ul>
+    {{/config.bundling}}
+  </body>
+</html>

@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { format } from "prettier";
+import config from "./config.js";
 
 const getRelativeTimestamp = (str) => {
   if (!str) {
@@ -69,41 +70,92 @@ const replaceTimestamps = (obj) => {
   return replaced;
 };
 
-export default async (request, response, output) => {
-  const requestID = request.headers["wx-gov-response-id"];
+const apiFetchAndSave = async (urlPath, savePath) => {
+  const data = await fetch(`https://api.weather.gov${urlPath}`).then((r) =>
+    r.json(),
+  );
 
-  if (!requestID) {
-    return;
+  const filePath = `${path.join(savePath, urlPath)}.json`;
+
+  if (urlPath.startsWith("/points/")) {
+    const { city, state } = data.properties.relativeLocation.properties;
+
+    data["@bundle"] = {
+      name: `${city}, ${state}`,
+    };
   }
 
-  // If we are bundling and this request ID is the same as our bundle ID, then
-  // save it to the bundle folder. Otherwise put it in the normal place.
-  const dataPath = `./data/bundle_${requestID}`;
+  const fixedTimes = replaceTimestamps(data);
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
 
-  // Put the query string back together.
-  const query = Object.entries(request.query)
-    .map(([key, value]) => `${key}=${value}`)
-    .join("&");
+  fs.writeFile(
+    filePath,
+    await format(JSON.stringify(fixedTimes), { parser: "json" }),
+  );
 
-  // The file path is the request path plus the query string, if any.
-  const filePath = `${path.join(dataPath, request.path)}${
-    query.length > 0 ? "__" : ""
-  }${query}.json`;
+  return fixedTimes;
+};
 
-  const contentType = response.headers["content-type"].replace(/\/geo\+/, "/");
-
-  if (response.statusCode >= 200 && /^application\/.+json$/.test(contentType)) {
-    console.log(`SAVE:     saving response to ${filePath}`);
-
-    // Make the directory structure if necessary, then write out the
-    // formatted JSON.
-    await fs.mkdir(path.dirname(filePath), { recursive: true });
-
-    const fixedUp = replaceTimestamps(JSON.parse(output));
-
-    const json = await format(JSON.stringify(fixedUp), { parser: "json" });
-    await fs.writeFile(filePath, json, {
-      encoding: "utf-8",
-    });
+export const savePoint = async (lat, lon) => {
+  if (!config.play) {
+    return {
+      error:
+        "Not currently playing a bundle, so I don't know where to save this point.",
+    };
   }
+
+  const dataPath = `./data/${config.play}`;
+
+  const point = await apiFetchAndSave(`/points/${lat},${lon}`, dataPath);
+
+  const wfo = point.properties.gridId.toUpperCase();
+  const { gridY, gridX } = point.properties;
+
+  const fetching = [
+    apiFetchAndSave(`/gridpoints/${wfo}/${gridX},${gridY}`, dataPath),
+    apiFetchAndSave(`/gridpoints/${wfo}/${gridX},${gridY}/forecast`, dataPath),
+    apiFetchAndSave(
+      `/gridpoints/${wfo}/${gridX},${gridY}/forecast/hourly`,
+      dataPath,
+    ),
+    apiFetchAndSave(
+      `/gridpoints/${wfo}/${gridX},${gridY}/stations`,
+      dataPath,
+    ).then(async (stations) => {
+      const stationID1 = stations.features[0].properties.stationIdentifier;
+      const stationID2 = stations.features[1].properties.stationIdentifier;
+      const stationID3 = stations.features[2].properties.stationIdentifier;
+
+      return Promise.all([
+        apiFetchAndSave(
+          `/stations/${stationID1}/observations?limit=1`,
+          dataPath,
+        ),
+        apiFetchAndSave(
+          `/stations/${stationID2}/observations?limit=1`,
+          dataPath,
+        ),
+        apiFetchAndSave(
+          `/stations/${stationID3}/observations?limit=1`,
+          dataPath,
+        ),
+      ]);
+    }),
+  ];
+
+  await Promise.all(fetching);
+  return {};
+};
+
+export const saveBundle = async (lat, lon) => {
+  config.play = `${Date.now()}`;
+  const dataPath = `./data/${config.play}`;
+  const output = await savePoint(lat, lon);
+
+  if (output.error) {
+    return output;
+  }
+
+  await apiFetchAndSave("/alerts/active?status=actual", dataPath);
+  return {};
 };

@@ -2,10 +2,12 @@ import fs from "node:fs/promises";
 // eslint-disable-next-line import/no-unresolved
 import express from "express";
 import path from "node:path";
+import mustache from "mustache";
 import proxyToApi from "./proxy.js";
 import config from "./config.js";
 import serveBundle from "./serve.js";
 import * as products from "./products.js";
+import { savePoint, saveBundle } from "./save.js";
 
 const app = express();
 const port = process.env.PORT ?? 8081;
@@ -64,52 +66,7 @@ const getPointFileInfo = async () => {
 };
 
 const ui = async ({ error = false } = {}) => {
-  const lines = ["<html>"];
-
-  lines.push(`<span>'now' is set to <time>${config.now}</time></span><br/>`);
-
-  if (error) {
-    lines.push(`<h2>${error}</h2>`);
-  }
-
-  if (config.bundling) {
-    lines.push("Currently recording new bundles");
-    lines.push(`<br><a href="/stop">Stop recording</a>`);
-    lines.push("<br><br>");
-  } else if (config.play) {
-    const pointTargets = await getPointFileInfo();
-
-    lines.push(`Currently playing bundle <strong>${config.play}</strong>`);
-
-    // Add the UI lines for Products Info to
-    // the lines array
-    await products.ui("./data", config.play, lines);
-
-    if (pointTargets.length) {
-      lines.push("<br><br>Points in the bundle:");
-      lines.push("<ul>");
-      pointTargets.forEach(
-        ({ name, attributes, grid, point, link, interop }) => {
-          lines.push(
-            `<li><a href="${link}">${name}</a> (${point} | ${grid.wfo} / ${grid.x}, ${grid.y}) [<a href="${interop}">interop layer</a>]`,
-          );
-
-          if (Array.isArray(attributes) && attributes.length > 0) {
-            lines.push("<ul>");
-            lines.push(attributes.map((v) => `<li>${v}</li>`).join(""));
-            lines.push("</ul>");
-          }
-          lines.push(`</li>`);
-        },
-      );
-      lines.push("</ul>");
-    }
-    lines.push(`<br><a href="/stop">Stop playing</a>`);
-    lines.push("<br><br>");
-  } else {
-    lines.push(`Not playing a bundle. Sending requests through.`);
-    lines.push("<br><br>");
-  }
+  const template = await fs.readFile("./index.mustache", { encoding: "utf-8" });
 
   const contents = await fs
     .readdir("./data")
@@ -124,17 +81,21 @@ const ui = async ({ error = false } = {}) => {
 
   const bundles = contents.filter((_, i) => dirs[i]);
 
-  lines.push("Available bundles:");
-  lines.push(
-    `<ul><li>${bundles.map((p) => `<a href="/play/${p}">${p}</a>`).join("</li><li>")}</li></ul>`,
-  );
+  const isLocal = !process.env.CLOUDGOV_PROXY;
 
-  if (!config.bundling && !process.env.CLOUDGOV_PROXY) {
-    lines.push(`<a href="/bundle">record bundles</a>`);
-  }
+  const points = config.play ? await getPointFileInfo() : [];
+  const bundleProducts = config.play
+    ? await products.info("./data", config.play)
+    : [];
 
-  lines.push("</html>");
-  return lines.join("");
+  return mustache.render(template, {
+    error,
+    config,
+    points,
+    products: bundleProducts,
+    bundles,
+    isLocal,
+  });
 };
 
 app.get("/set-now", async (req, res) => {
@@ -177,14 +138,58 @@ app.get("*any", async (req, res) => {
     return;
   }
 
+  if (/^\/add-point\/?$/.test(req.path) && !process.env.CLOUDGOV_PROXY) {
+    const target = URL.parse(req.url, "http://localhost:8081").searchParams.get(
+      "url",
+    );
+
+    const [, lat, lon] =
+      target.match(/\/point\/(-?\d+\.\d+)\/(-?\d+\.\d+)/) ?? [];
+
+    if (!Number.isNaN(+lat) && !Number.isNaN(+lon)) {
+      const output = await savePoint(+lat, +lon);
+      if (output.error) {
+        res.write(await ui(output));
+      } else {
+        res.redirect(302, "/");
+      }
+      res.end();
+    } else {
+      res.write(
+        await ui({
+          error: "Invalid latitude and longitude in requested point.",
+        }),
+      );
+
+      res.end();
+    }
+    return;
+  }
+
   if (/^\/bundle\/?$/.test(req.path) && !process.env.CLOUDGOV_PROXY) {
-    config.play = false;
-    config.bundling = true;
-    // res.write("The next sequence of requests will be recorded and bundled");
-    // console.log("The next sequence of requests will be recorded and bundled");
-    // res.end();
-    res.write(await ui());
-    res.end();
+    const target = URL.parse(req.url, "http://localhost:8081").searchParams.get(
+      "url",
+    );
+
+    const [, lat, lon] =
+      target.match(/\/point\/(-?\d+\.\d+)\/(-?\d+\.\d+)/) ?? [];
+
+    if (!Number.isNaN(+lat) && !Number.isNaN(+lon)) {
+      const output = await saveBundle(+lat, +lon);
+      if (output.error) {
+        res.write(await ui(output));
+      } else {
+        res.redirect(302, "/");
+      }
+      res.end();
+    } else {
+      res.write(
+        await ui({
+          error: "Invalid latitude and longitude in requested point.",
+        }),
+      );
+      res.end();
+    }
     return;
   }
 

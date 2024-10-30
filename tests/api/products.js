@@ -26,8 +26,8 @@ const PRODUCT_TYPE_INDIVIDUAL_RX = /\/products\/[^/]+\.json/;
  * @returns {string[]} - An array of full file paths for any matching
  *            JSON files under the products for the given bundle
  */
-const getProductFilePaths = (base, bundleName) => 
-      globSync(path.join(base, bundleName, "products", "**", "*.json"));
+const getProductFilePaths = (base, bundleName) =>
+  globSync(path.join(base, bundleName, "products", "**", "*.json"));
 
 /**
  * Attempts to extract the product code from the path
@@ -50,8 +50,7 @@ const getProductTypeFromPath = (filePath) => {
  * individual product
  * @returns {string} - The extracted product code or UNKNOWN
  */
-const getProductTypeFromData = (data) => 
-      data.productCode || "UNKNOWN";
+const getProductTypeFromData = (data) => data.productCode || "UNKNOWN";
 
 /**
  * Attempts to extract a WFO code from the filePath
@@ -157,32 +156,4 @@ const getProductInfo = async (base, bundleName) => {
   return Promise.all(productFiles.map(getProductInfoForFilePath));
 };
 
-/**
- * Given a base location and bundle name, will append
- * lines of markup concerning any products (if present)
- * to the given list of lines.
- * Modifies the list in place, but also returns the list.
- * @param {string} base - The base dir for bundles
- * @param {string} bundleName - The name of the bundle
- * @param {string[]} lines - An array of markup lines that will
- * be appended to if needed
- */
-const getProductUI = async (base, bundleName, lines = []) => {
-  const productInfo = await getProductInfo(base, bundleName);
-  if (!productInfo.length) {
-    return lines;
-  }
-  lines.push(`<br/><br/>Products in the bundle:`);
-  lines.push("<ul>");
-  productInfo.forEach((product) => {
-    if (product.url) {
-      lines.push(`<li><a href="${product.url}">${product.label}</a></li>`);
-    } else {
-      lines.push(`<li>${product.label} (no linked page yet)</li>`);
-    }
-  });
-  lines.push("</ul>");
-  return lines;
-};
-
-export { getProductUI as ui, getProductInfo as info };
+export { getProductInfo as info };
