@@ -110,7 +110,9 @@ app.get(/\/proxy\/stop\/?/, async (_, res) => {
 });
 
 app.get("/proxy/play/:bundle", async (req, res) => {
-  const { bundle } = req.params;
+  // Prevent path traversals by only getting the very last component of whatever
+  // was passed in. This is the target bundle name.
+  const bundle = path.basename(req.params.bundle);
   const exists = await fsExists(path.join("./data", bundle));
   if (exists) {
     config.play = bundle;
@@ -140,8 +142,6 @@ app.get("/proxy/bundle", async (req, res) => {
 });
 
 app.get("*any", async (req, res) => {
-  res.setHeader("Content-Type", "text/html");
-
   // If there are any double-dots in the path, that could result in a path
   // traversal, so just eat it here and go straight to the UI.
   if (req.path === "/" || /\.\./.test(req.path)) {
@@ -149,6 +149,9 @@ app.get("*any", async (req, res) => {
     res.end();
     return;
   }
+
+  res.end();
+  return;
 
   const query = Object.entries(req.query)
     .map(([key, value]) => `${key}=${value}`)
