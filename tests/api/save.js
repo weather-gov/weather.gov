@@ -96,7 +96,7 @@ const apiFetchAndSave = async (urlPath, savePath) => {
   return fixedTimes;
 };
 
-export const savePoint = async (lat, lon) => {
+const savePoint = async (lat, lon) => {
   if (!config.play) {
     return {
       error:
@@ -147,7 +147,7 @@ export const savePoint = async (lat, lon) => {
   return {};
 };
 
-export const saveBundle = async (lat, lon) => {
+const saveBundle = async (lat, lon) => {
   config.play = `${Date.now()}`;
   const dataPath = `./data/${config.play}`;
   const output = await savePoint(lat, lon);
@@ -157,5 +157,36 @@ export const saveBundle = async (lat, lon) => {
   }
 
   await apiFetchAndSave("/alerts/active?status=actual", dataPath);
+  return {};
+};
+
+export default async (req, res, saveAsBundle) => {
+  if (saveAsBundle === undefined) {
+    throw new TypeError("saveAsBundle must be set");
+  }
+
+  const saveMethod = saveAsBundle ? saveBundle : savePoint;
+
+  const target = URL.parse(req.url, "http://localhost:8081").searchParams.get(
+    "url",
+  );
+
+  const [, lat, lon] =
+    target.match(/\/point\/(-?\d+\.\d+)\/(-?\d+\.\d+)/) ?? [];
+
+  if (!Number.isNaN(+lat) && !Number.isNaN(+lon)) {
+    const output = await saveMethod(+lat, +lon);
+    if (output.error) {
+      return output;
+    }
+    res.redirect(302, "/");
+
+    res.end();
+  } else {
+    return {
+      error: "Invalid latitude and longitude in requested point.",
+    };
+  }
+
   return {};
 };

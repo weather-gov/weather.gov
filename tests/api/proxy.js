@@ -1,6 +1,4 @@
 import https from "https";
-import save from "./save.js";
-import config from "./config.js";
 
 export default (req, res) => {
   // Reassemble the query string, if any.
@@ -32,10 +30,6 @@ export default (req, res) => {
           if (!res.writableEnded) {
             res.write(output.join(""));
             console.log("PROXY:    response finished");
-
-            if (config.bundling) {
-              save(req, proxyResponse, output.join(""));
-            }
           }
           res.end();
         };

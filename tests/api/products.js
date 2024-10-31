@@ -156,4 +156,4 @@ const getProductInfo = async (base, bundleName) => {
   return Promise.all(productFiles.map(getProductInfoForFilePath));
 };
 
-export { getProductInfo as info };
+export default getProductInfo;

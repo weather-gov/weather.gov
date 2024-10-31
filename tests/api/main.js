@@ -6,8 +6,8 @@ import mustache from "mustache";
 import proxyToApi from "./proxy.js";
 import config from "./config.js";
 import serveBundle from "./serve.js";
-import * as products from "./products.js";
-import { savePoint, saveBundle } from "./save.js";
+import getProductInfo from "./products.js";
+import save from "./save.js";
 
 const app = express();
 const port = process.env.PORT ?? 8081;
@@ -85,7 +85,7 @@ const ui = async ({ error = false } = {}) => {
 
   const points = config.play ? await getPointFileInfo() : [];
   const bundleProducts = config.play
-    ? await products.info("./data", config.play)
+    ? await getProductInfo("./data", config.play)
     : [];
 
   return mustache.render(template, {
@@ -116,7 +116,6 @@ app.get("*any", async (req, res) => {
 
   if (/^\/stop\/?$/i.test(req.path)) {
     config.play = false;
-    config.bundling = false;
     res.write(await ui());
     res.end();
     return;
@@ -127,7 +126,6 @@ app.get("*any", async (req, res) => {
     const exists = await fsExists(path.join("./data", bundle));
     if (exists) {
       config.play = bundle;
-      config.bundling = false;
       res.write(await ui());
       res.end();
       return;
@@ -139,55 +137,18 @@ app.get("*any", async (req, res) => {
   }
 
   if (/^\/add-point\/?$/.test(req.path) && !process.env.CLOUDGOV_PROXY) {
-    const target = URL.parse(req.url, "http://localhost:8081").searchParams.get(
-      "url",
-    );
-
-    const [, lat, lon] =
-      target.match(/\/point\/(-?\d+\.\d+)\/(-?\d+\.\d+)/) ?? [];
-
-    if (!Number.isNaN(+lat) && !Number.isNaN(+lon)) {
-      const output = await savePoint(+lat, +lon);
-      if (output.error) {
-        res.write(await ui(output));
-      } else {
-        res.redirect(302, "/");
-      }
-      res.end();
-    } else {
-      res.write(
-        await ui({
-          error: "Invalid latitude and longitude in requested point.",
-        }),
-      );
-
+    const output = await save(req, res, false);
+    if (output.error) {
+      res.write(await ui(output));
       res.end();
     }
     return;
   }
 
   if (/^\/bundle\/?$/.test(req.path) && !process.env.CLOUDGOV_PROXY) {
-    const target = URL.parse(req.url, "http://localhost:8081").searchParams.get(
-      "url",
-    );
-
-    const [, lat, lon] =
-      target.match(/\/point\/(-?\d+\.\d+)\/(-?\d+\.\d+)/) ?? [];
-
-    if (!Number.isNaN(+lat) && !Number.isNaN(+lon)) {
-      const output = await saveBundle(+lat, +lon);
-      if (output.error) {
-        res.write(await ui(output));
-      } else {
-        res.redirect(302, "/");
-      }
-      res.end();
-    } else {
-      res.write(
-        await ui({
-          error: "Invalid latitude and longitude in requested point.",
-        }),
-      );
+    const output = await save(req, res, true);
+    if (output.error) {
+      res.write(await ui(output));
       res.end();
     }
     return;
