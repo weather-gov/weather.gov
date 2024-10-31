@@ -16,6 +16,16 @@ export default class AFDParser {
     this.source = str;
     this.parsedNodes = [];
     this.currentContentType = "generic";
+
+    // Bound methods
+    this.parse = this.parse.bind(this);
+    this.parseDocumentPreamble = this.parseDocumentPreamble.bind(this);
+    this.parseSection = this.parseSection.bind(this);
+    this.parseHeader = this.parseHeader.bind(this);
+    this.parseSubheader = this.parseSubheader.bind(this);
+    this.parseTextContent = this.parseTextContent.bind(this);
+    this.parseWWAContent = this.parseWWAContent.bind(this);
+    this.parseTempsTableContent = this.parseTempsTableContent.bind(this);
   }
 
   parse(){
@@ -83,11 +93,14 @@ export default class AFDParser {
    * using mapped functions for each section type as needed
    */
   parseSection(str){
+    // Every new section is assumed to be a generic
+    // type, until a special header dictates otherwise
+    this.contentType = "generic";
+
     // Split into paragraphs, which are defined as
     // double newlines
     // If there is not a valid header in the first paragraph,
     // we consider it "empty"
-    const nodes = [];
     const paragraphs = str.trim().split("\n\n");
     paragraphs.forEach(paragraph => {
       let rest = this.parseHeader(paragraph);
@@ -106,7 +119,7 @@ export default class AFDParser {
       const specialHeader = SPECIAL_HEADER_TYPES[specialTypeName];
       const match = str.match(specialHeader.re);
       if(match){
-        this.updateContentType(specialTypeName);
+        this.contentType = specialTypeName;
         this.parsedNodes.push({
           type: "header",
           content: match.groups.header
@@ -121,7 +134,7 @@ export default class AFDParser {
     // paragraph. Attempt to parse a generic header
     const genericMatch = str.match(GENERIC_HEADER_REGEX);
     if(genericMatch){
-      this.updateContentType("generic");
+      this.contentType = "generic";
       this.parsedNodes.push({
         type: "header",
         content: genericMatch.groups.header
@@ -163,7 +176,9 @@ export default class AFDParser {
     default:
       this.parsedNodes.push({
         type: "text",
-        content: str.trim()
+        content: this.constructor.normalizeSpaces(
+          str.trim().replace("\n", " ")
+        )
       });
     }
   }
@@ -173,7 +188,7 @@ export default class AFDParser {
     // indicates line continuation. Replate with the
     // empty string, followed by a normal newline
     let currentString = str.trim();
-    currentString = currentString.replace(/\n\s+/g, "");
+    currentString = currentString.replace(/\n\s+/g, "\n");
     if(currentString !== ""){
       this.parsedNodes.push({
         type: "text",
@@ -250,11 +265,6 @@ export default class AFDParser {
     }
   }
   
-  // TODO: Remove this indirection if we can
-  updateContentType(str){
-    this.contentType = str;
-  }
-
   /**
    * Change all instances of multiple contiguous spaces
    * into a single space
