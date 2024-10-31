@@ -150,9 +150,6 @@ app.get("*any", async (req, res) => {
     return;
   }
 
-  res.end();
-  return;
-
   const query = Object.entries(req.query)
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
