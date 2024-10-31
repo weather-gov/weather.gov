@@ -81,9 +81,7 @@
                 </div>
               </div>
               <div class="grid-row grid-gap-lg">
-                <div class="grid-row grid-gap-lg">
-                  {{ drupal_block("weathergov_weather_story_image", { wfo: point.grid.wfo }) }}
-                </div>
+                {{ drupal_block("weathergov_weather_story_image") }}
                 <div class="desktop:grid-col-6 wx-radar-wrapper">
                   {% include '@new_weather_theme/partials/radar.html.twig' with { place: point.place.fullName, point: point.point  } %}
                 </div>

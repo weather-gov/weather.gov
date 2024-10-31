@@ -140,3 +140,18 @@
 .wx-full-container-width {
   width: calc(100% + units(2))
 }
+
+/* Custom grid gaps
+------------------------------------- */
+@include at-media("desktop") {
+    .grid-row.wx-grid-gap-lg {
+        margin-left: units(-1.5);
+        margin-right: units(-1.5);
+    }
+    .wx-grid-gap-lg > * {
+        padding-left: units(1.5);
+        padding-right: units(1.5);
+    }
+}
+
+
