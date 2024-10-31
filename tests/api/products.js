@@ -95,6 +95,17 @@ const getProductLabel = (data, filePath, recordType) => {
   return `${productType} for ${data.issuingOffice} issued at ${data.issuanceTime}`;
 };
 
+// Map OCONUS 4-character FAA codes to 3-character WFO codes.
+const oconusFAAtoWFO = new Map([
+  ["PHFO", "HFO"], // Honolulu, HI
+  ["TJSJ", "SJU"], // San Juan, PR
+  ["NSTU", "PPG"], // Pago Pago, AS
+  ["PGUM", "GUM"], // Tiyan, Guam
+  ["PAFC", "AFC"], // Anchorage, AK
+  ["PAFG", "AFG"], // Fairbanks, AK
+  ["PAJK", "AJK"], // Juneau, AK
+]);
+
 /**
  * Attempts to get a URL to a representation of the file
  * in our Drupal application.
@@ -110,7 +121,20 @@ const getProductHref = (data, filePath, recordType) => {
   const wfoCode = getWFOCodeFromPath(filePath);
   const base = "http://localhost:8080";
   if (recordType === "individual") {
-    return null; // For now, we have no way to display individual AFDs by id
+    // AFD issuing offices uses the FAA 4-letter international code.
+    const faaCode = data.issuingOffice;
+    // For CONUS WFOs, the FAA code is the WFO code with a preceding K, so if
+    // the code starts with K, we can just strip it off.
+    const wfo = faaCode.startsWith("K")
+      ? faaCode.slice(1)
+      : // For OCONUS, the codes do not always map so cleanly. There are only
+        // nine OCONUS FAA codes used by AFDs, so we can just special case them.
+        oconusFAAtoWFO.get(faaCode);
+
+    if (wfo) {
+      return `${base}/${data.productCode.toLowerCase()}/${wfo}/${data.id}`;
+    }
+    return null; // If we don't know the WFO, bail out.
   }
   if (recordType === "all") {
     return `${base}/${productType.toLowerCase()}`;
