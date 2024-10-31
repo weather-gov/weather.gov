@@ -38,8 +38,8 @@
  * sizing of their parent element, so we have to add pixels
  * to the height and the top attributes
 */
-.wx-weather-story-block-section:before,
-.wx-weather-story-block-section:after {
+.wx-weather-story-block-section::before,
+.wx-weather-story-block-section::after {
     content: " ";
     display: block;
     position: absolute;
@@ -51,11 +51,11 @@
     top: -1px;
 }
 
-.wx-weather-story-block-section:before {
+.wx-weather-story-block-section::before {
     right: 100%;
 }
 
-.wx-weather-story-block-section:after {
+.wx-weather-story-block-section::after {
     left: 100%;
 }
 
@@ -71,8 +71,4 @@
     .wx-weather-story-wrapper > *:nth-child(2) {
         margin-top: units(3);
     }
-}
-
-@include at-media("mobile") {
-    
 }
