@@ -12,6 +12,7 @@
         {% set precipHours = today.qpf[0] %}
         {% include '@new_weather_theme/partials/daily-summary-list-item.html.twig' with
         {
+            itemId: "quick-forecast-summary",
             'periods': today.periods,
             'dayHours': today.hours,
             'alerts': today.alerts,
