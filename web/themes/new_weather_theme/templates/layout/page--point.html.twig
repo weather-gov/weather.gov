@@ -2,8 +2,8 @@
 <div class="layout-container grid-row height-full flex-column flex-no-wrap">
 
   {% if not point.error %}
-    {{ attach_library("new_weather_theme/leaflet") }}
-    {{ attach_library('new_weather_theme/chartjs') }}
+  {{ attach_library("new_weather_theme/leaflet") }}
+  {{ attach_library('new_weather_theme/chartjs') }}
   {% endif %}
   {{ attach_library('new_weather_theme/point-page') }}
 
@@ -38,62 +38,64 @@
     {% endif %}
 
     {% if point.error %}
-      {% set message = "Something went wrong loading this page. Please try again in a few minutes." | t %}
-      <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-        {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
-      </div>
+    {% set message = "Something went wrong loading this page. Please try again in a few minutes." | t %}
+    <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+      {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+    </div>
     {% else %}
-      <wx-tabbed-nav class="display-block position-relative">
-        <div id="tablist-label" class="usa-sr-only">{{ "Weather information sections" | t }}</div>
-        <div class="position-sticky top-0 z-500 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
-          <div class="grid-container padding-x-0">
+    <wx-tabbed-nav class="display-block position-relative">
+      <div id="tablist-label" class="usa-sr-only">{{ "Weather information sections" | t }}</div>
+      <div class="position-sticky top-0 z-500 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
+        <div class="grid-container padding-x-0">
           <div role="tablist" class="tab-buttons display-flex flex-row top-4 grid-col-12" aria-labelledby="tablist-label">
             {% if point.alerts.items | length > 0 %}
-              <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
+            <button role="tab" id="alerts-tab-button" class="tab-button" data-tab-name="alerts" aria-controls="alerts">{{ "Alerts" | t }}</button>
             {% endif %}
-              <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="today" aria-controls="today">{{ "Today" | t }}</button>
-              <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "7 Days" | t }}</button>
+            <button role="tab" id="current-conditions-tab-button" class="tab-button" data-tab-name="today" aria-controls="today">{{ "Today" | t }}</button>
+            <button role="tab" id="daily-tab-button" class="tab-button" data-tab-name="daily" aria-controls="daily">{{ "7 Days" | t }}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-base-lightest padding-top-3 padding-bottom-8">
+        {% if point.alerts.items | length > 0 %}
+        <div class="wx-tab-container wx-focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
+          {% include(directory ~ "/templates/point/alerts.html.twig") with { alerts: point.alerts.items } %}
+        </div>
+        {% endif %}
+
+        <div class="wx-tab-container wx-focus-offset-205" id="today" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
+          <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
+            <div class="grid-row grid-gap-lg">
+              <div class="desktop:grid-col-4 display-flex flex-column">
+                {% include '@new_weather_theme/point/observations.html.twig' with { obs: point.observed } %}
+              </div>
+              <div class="desktop:grid-col-8 display-flex flex-column">
+                {% if point.forecast.error or point.forecast.days | length == 0 %}
+                {% set message = "There was an error loading the forecast." | t %}
+                {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+                {% else %}
+                {% include '@new_weather_theme/partials/today-summary-forecast.html.twig' with { forecast: point.forecast } %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {{ drupal_block("weathergov_weather_story_image", { wfo: point.grid.wfo }) }}
+          <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
+            <div class="grid-row grid-gap-lg">
+              <div class="desktop:grid-col-6 wx-radar-wrapper">
+                {% include '@new_weather_theme/partials/radar.html.twig' with { place: point.place.fullName, point: point.point  } %}
+              </div>
+              <div class="desktop:grid-col-6 wx-satellite-wrapper">
+                {% include '@new_weather_theme/partials/satellite.html.twig' %}
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="bg-base-lightest padding-top-3 padding-bottom-8">
-          {% if point.alerts.items | length > 0 %}
-          <div class="wx-tab-container wx-focus-offset-205" id="alerts" role="tabpanel" aria-labelledby="alerts-tab-button" tabindex="0">
-            {% include(directory ~ "/templates/point/alerts.html.twig") with { alerts: point.alerts.items } %}
-          </div>
-          {% endif %}
-
-          <div class="wx-tab-container wx-focus-offset-205" id="today" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
-            <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
-              <div class="grid-row grid-gap-lg">
-
-                <div class="desktop:grid-col-4 display-flex flex-column">
-                  {% include '@new_weather_theme/point/observations.html.twig' with { obs: point.observed } %}
-                </div>
-                <div class="desktop:grid-col-8 display-flex flex-column">
-                  {% if point.forecast.error or point.forecast.days | length == 0 %}
-                    {% set message = "There was an error loading the forecast." | t %}
-                    {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
-                  {% else %}
-                    {% include '@new_weather_theme/partials/today-summary-forecast.html.twig' with { forecast: point.forecast } %}
-                  {% endif %}
-                </div>
-              </div>
-              <div class="grid-row grid-gap-lg">
-                {{ drupal_block("weathergov_weather_story_image") }}
-                <div class="desktop:grid-col-6 wx-radar-wrapper">
-                  {% include '@new_weather_theme/partials/radar.html.twig' with { place: point.place.fullName, point: point.point  } %}
-                </div>
-                <div class="desktop:grid-col-6 wx-satellite-wrapper">
-                  {% include '@new_weather_theme/partials/satellite.html.twig' %}
-                </div>
-              </div>
-            </div>
-          </div>
+      </div>
 
 
-         <div class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
+        <div class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
 
           <h2 class="usa-sr-only">Daily forecast</h2>
           {% include '@new_weather_theme/point/forecast.html.twig' with { forecast: point.forecast } %}
@@ -101,11 +103,11 @@
           {{ drupal_block("weathergov_wfo_promo", { wfo: point.grid.wfo }) }}
         </div>
 
-      </wx-tabbed-nav>
+    </wx-tabbed-nav>
     {% endif %}
 
   </main>
 
   {% include(directory ~ "/templates/layout/footer.html.twig") %}
 
-</div>
+      </div>
