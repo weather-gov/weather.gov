@@ -188,14 +188,35 @@ export default class AFDParser {
     // *shouldn't* be, but we've seen it happen,
     // so guard against it
     const lines = str.trim().split("\n");
-    const rx = /^[^\d]*(.+)/;
+
+    // We want to only consider lines that are part of table
+    // rows. Anything else subsequently (if there is anything else)
+    // should be considered text content.
+    const tableRowRx = /[^\d]+(\d+\s+)+\/\s+(\d+\s+)+\d(\n|$)/g;
+    const tableLines = lines.filter(line => {
+      return line.match(tableRowRx);
+    });
+    const restOfLines = lines.filter(line => {
+      return !line.match(tableRowRx);
+    });
+
+    // Parse out the row labels and the numbers from
+    // any table rows
+    const rx = /^([^\d]|\s)*/g;
     const rows = [];
     for(let i = 0; i < lines.length; i++){
       const line = lines[i];
-      let numbers = line.split(rx);
-      numbers = numbers.filter(val => {
-        return val !== "";
-      });
+      let numbers = line.split(rx).filter(item => {
+        return (item !== "" || !item.match(/\s+/));
+      }).pop();
+
+      numbers = numbers.trim().split(" ")
+        .map(digitString => {
+          return digitString.trim();
+        })
+        .filter(digitString => {
+          return digitString.match(/\d+/);
+        });
 
       const placeRx = /^(?<place>[^\d]+)/;
       let place = null;
@@ -215,6 +236,16 @@ export default class AFDParser {
       this.parsedNodes.push({
         type: "temps-table",
         rows
+      });
+    }
+
+    // Finally, parse out any remaining text as
+    // text node(s)
+    const remainingText = restOfLines.join("\n").trim();
+    if(remainingText !== ""){
+      this.parsedNodes.push({
+        type: "text",
+        content: remainingText
       });
     }
   }

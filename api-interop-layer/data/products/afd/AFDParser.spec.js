@@ -196,4 +196,48 @@ describe("AFDParser Tests", () => {
       });
     });
   });
+  describe("#parseTempsTableContent", () => {
+    describe("Basic example", () => {
+      const example = `Place A   1 2 3 4 / 5 6 7 8\nPlace B   0 9  8 7 / 6   5 4  3`;
+      it("can parse the correct table nodes", () => {
+        const parser = new AFDParser();
+        parser.parseTempsTableContent(example);
+        const expected = [
+          {
+            type: "temps-table",
+            rows: [
+              {
+                type: "temps-table-row",
+                numbers: ["1", "2", "3", "4", "5", "6", "7", "8"],
+                name: "Place A"
+              },
+              {
+                type: "temps-table-row",
+                numbers: ["0", "9", "8", "7", "6", "5", "4", "3"],
+                name: "Place B"
+              }
+            ]
+          }
+        ];
+        const actual = parser.parsedNodes;
+
+        expect(actual).to.eql(expected);
+      });
+    });
+    describe("Example with post-table text", () => {
+      let example = "Place A   1 2 3 4 / 5 6 7 8\nPlace B   0 9  8 7 / 6   5 4  3";
+      example += "\nSome additional text down here\nAnd more here";
+      it("parses the text node separately", () => {
+        const parser = new AFDParser();
+        parser.parseTempsTableContent(example);
+        const expected = {
+          type: "text",
+          content: "Some additional text down here\nAnd more here"
+        };
+        const actual = parser.parsedNodes.pop();
+
+        expect(actual).to.eql(expected);
+      });
+    });
+  });
 });
