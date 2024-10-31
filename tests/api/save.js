@@ -71,11 +71,12 @@ const replaceTimestamps = (obj) => {
 };
 
 const apiFetchAndSave = async (urlPath, savePath) => {
-  const data = await fetch(`https://api.weather.gov${urlPath}`).then((r) =>
-    r.json(),
-  );
+  const url = URL.parse(urlPath, "https://api.weather.gov");
+  const data = await fetch(url).then((r) => r.json());
 
-  const filePath = `${path.join(savePath, urlPath)}.json`;
+  const search = url.search ? `__${url.search.slice(1)}` : "";
+
+  const filePath = `${path.join(savePath, urlPath)}${search}.json`;
 
   if (urlPath.startsWith("/points/")) {
     const { city, state } = data.properties.relativeLocation.properties;

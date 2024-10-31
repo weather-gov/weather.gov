@@ -40,13 +40,13 @@
 
       <div class="header">
         {{#config.play}}
-          <a href="/stop" class="usa-button usa-button--outline">
+          <a href="/proxy/stop" class="usa-button usa-button--outline">
             <div class="red dot"></div>
             Stop playing <span class="font-family-mono">{{ config.play }}</span>
           </a>
         {{/config.play}}
         {{#bundles}}
-          <a href="/play/{{ . }}" class="usa-button usa-button--outline">
+          <a href="/proxy/play/{{ . }}" class="usa-button usa-button--outline">
             <div class="green dot"></div>
             play {{ . }}
           </a>
@@ -105,7 +105,7 @@
               Provide the URL to the location page you want to add to this bundle.
               The URL can be any environment, including local development.
               <div class="margin-top-1">
-                <form action="/add-point/" method="GET">
+                <form action="/proxy/add-point" method="GET">
                 <input type="text" name="url">
                 <button type="submit" class="usa-button usa-button--outline margin-left-1">
                   <div class="yellow dot"></div>
@@ -168,7 +168,7 @@
         Provide the URL to the location page you want to bundle. The URL can be in
         any environment, including local development.
         <div class="margin-top-1">
-          <form action="/bundle/" method="GET">
+          <form action="/proxy/bundle" method="GET">
           <input type="text" name="url">
           <button type="submit" class="usa-button usa-button--outline margin-left-1">
             <div class="yellow dot"></div>
@@ -195,7 +195,7 @@
       <ul class="usa-list usa-list--unstyled">
         {{#bundles}}
           <li>
-            <a href="/play/{{ . }}" class="usa-button usa-button--outline margin-bottom-2">
+            <a href="/proxy/play/{{ . }}" class="usa-button usa-button--outline margin-bottom-2">
               <div class="green dot"></div>
               play {{ . }}
             </a>

@@ -103,6 +103,42 @@ app.get("/set-now", async (req, res) => {
   res.redirect("/");
 });
 
+app.get(/\/proxy\/stop\/?/, async (_, res) => {
+  config.play = false;
+  res.redirect("/");
+  res.end();
+});
+
+app.get("/proxy/play/:bundle", async (req, res) => {
+  const { bundle } = req.params;
+  const exists = await fsExists(path.join("./data", bundle));
+  if (exists) {
+    config.play = bundle;
+    res.redirect("/");
+    res.end();
+    return;
+  }
+
+  res.write(await ui({ error: `I don't have a bundle ${bundle}` }));
+  res.end();
+});
+
+app.get("/proxy/add-point", async (req, res) => {
+  const output = await save(req, res, false);
+  if (output.error) {
+    res.write(await ui(output));
+    res.end();
+  }
+});
+
+app.get("/proxy/bundle", async (req, res) => {
+  const output = await save(req, res, true);
+  if (output.error) {
+    res.write(await ui(output));
+    res.end();
+  }
+});
+
 app.get("*any", async (req, res) => {
   res.setHeader("Content-Type", "text/html");
 
@@ -111,46 +147,6 @@ app.get("*any", async (req, res) => {
   if (req.path === "/" || /\.\./.test(req.path)) {
     res.write(await ui());
     res.end();
-    return;
-  }
-
-  if (/^\/stop\/?$/i.test(req.path)) {
-    config.play = false;
-    res.write(await ui());
-    res.end();
-    return;
-  }
-
-  if (/^\/play\/.+$/.test(req.path)) {
-    const bundle = req.path.split("/").pop();
-    const exists = await fsExists(path.join("./data", bundle));
-    if (exists) {
-      config.play = bundle;
-      res.write(await ui());
-      res.end();
-      return;
-    }
-
-    res.write(await ui({ error: `I don't have a bundle ${bundle}` }));
-    res.end();
-    return;
-  }
-
-  if (/^\/add-point\/?$/.test(req.path) && !process.env.CLOUDGOV_PROXY) {
-    const output = await save(req, res, false);
-    if (output.error) {
-      res.write(await ui(output));
-      res.end();
-    }
-    return;
-  }
-
-  if (/^\/bundle\/?$/.test(req.path) && !process.env.CLOUDGOV_PROXY) {
-    const output = await save(req, res, true);
-    if (output.error) {
-      res.write(await ui(output));
-      res.end();
-    }
     return;
   }
 
