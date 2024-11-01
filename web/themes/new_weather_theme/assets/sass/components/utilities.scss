@@ -144,12 +144,12 @@
 /* Custom grid gaps
 ------------------------------------- */
 @include at-media("desktop") {
-    .grid-row.wx-grid-gap-lg {
+    .grid-row.desktop__wx-grid-gap-lg {
         margin-left: units(-1.5);
         margin-right: units(-1.5);
     }
 
-    .wx-grid-gap-lg > * {
+    .desktop__wx-grid-gap-lg > * {
         padding-left: units(1.5);
         padding-right: units(1.5);
     }

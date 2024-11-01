@@ -66,7 +66,7 @@
 
         <div class="wx-tab-container wx-focus-offset-205" id="today" role="tabpanel" aria-labelledby="current-conditions-tab-button" tabindex="0">
           <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
-            <div class="grid-row grid-gap-lg">
+            <div class="grid-row desktop__wx-grid-gap-lg">
               <div class="desktop:grid-col-4 display-flex flex-column">
                 {% include '@new_weather_theme/point/observations.html.twig' with { obs: point.observed } %}
               </div>
@@ -82,7 +82,7 @@
           </div>
           {{ drupal_block("weathergov_weather_story_image", { wfo: point.grid.wfo }) }}
           <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
-            <div class="grid-row grid-gap-lg">
+            <div class="grid-row desktop__wx-grid-gap-lg">
               <div class="desktop:grid-col-6 wx-radar-wrapper">
                 {% include '@new_weather_theme/partials/radar.html.twig' with { place: point.place.fullName, point: point.point  } %}
               </div>
