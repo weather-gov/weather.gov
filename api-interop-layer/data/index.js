@@ -4,6 +4,7 @@ import getForecast from "./forecast/index.js";
 import getObservations from "./obs/index.js";
 import getPoint from "./points.js";
 import getSatellite from "./satellite.js";
+import getAFD from "./products/afd/index.js";
 import { createLogger } from "../util/monitoring/index.js";
 
 const logger = createLogger("forecast");
@@ -76,4 +77,7 @@ export const getDataForPoint = async (lat, lon) => {
   };
 };
 
-export default { getDataForPoint };
+export {
+  getDataForPoint as default,
+  getAFD as getAFDById
+};

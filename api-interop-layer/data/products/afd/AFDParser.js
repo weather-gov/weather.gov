@@ -27,6 +27,7 @@ export default class AFDParser {
     this.parseWWAContent = this.parseWWAContent.bind(this);
     this.parseTempsTableContent = this.parseTempsTableContent.bind(this);
     this.parseEpilogueContent = this.parseEpilogueContent.bind(this);
+    this.getStructureForTwig = this.getStructureForTwig.bind(this);
   }
 
   parse(){
@@ -285,6 +286,33 @@ export default class AFDParser {
         content: currentString
       });
     }
+  }
+
+  getStructureForTwig(){
+    const preambleCode = [];
+    const preambleText = [];
+    const body = [];
+    const epilogue = [];
+    this.parsedNodes.forEach(node => {
+      if(node.type === "preambleCode"){
+        preambleCode.push(node);
+      } else if(node.type == "preambleText"){
+        preambleText.push(node);
+      } else if(node.type.startsWith("epilogue")){
+        epilogue.push(node);
+      } else {
+        body.push(node);
+      }
+    });
+
+    return {
+      preamble: {
+        code: preambleCode,
+        text: preambleText
+      },
+      body: body,
+      epilogue: epilogue
+    };
   }
   
   /**
