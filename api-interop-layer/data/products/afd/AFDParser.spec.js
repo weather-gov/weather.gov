@@ -61,7 +61,7 @@ describe("AFDParser Tests", () => {
           parser.parseHeader(example);
           const expected = {
             type: "header",
-            content: "OKX WATCHES/WARNINGS/ADVISORIES"
+            content: "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES"
           };
           const actual = parser.parsedNodes.pop();
 
@@ -167,7 +167,7 @@ describe("AFDParser Tests", () => {
 
         it("returns the correct substring", () => {
           const parser = new AFDParser();
-          const expected = "\nThen some stuff after";
+          const expected = "Then some stuff after";
           const actual = parser.parseSubheader(example);
 
           expect(actual).to.equal(expected);
@@ -191,6 +191,32 @@ describe("AFDParser Tests", () => {
           const actual = parser.parseSubheader(example);
 
           expect(actual).to.equal(expected);
+        });
+      });
+
+      describe("Comprehensive example", () => {
+        let example = "\n\n ...NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty...\n";
+        example += "High pressure builds down from the north into tonight, which will \n";
+        it("appends the correct subheader node", () => {
+          const parser = new AFDParser();
+          parser.parseSubheader(example);
+          const expected = [
+            {
+              type: "subheader",
+              content: "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty"
+            }
+          ];
+          const actual = parser.parsedNodes;
+
+          expect(actual).to.eql(expected);
+        });
+
+        it("returns the correct substring", () => {
+          const parser = new AFDParser();
+          const expected = "High pressure builds down from the north into tonight, which will";
+          const actual = parser.parseSubheader(example);
+
+          expect(actual).to.eql(expected);
         });
       });
     });
@@ -302,7 +328,7 @@ describe("AFDParser Tests", () => {
       example += "\n";
       example += "            &&\n";
       example += "\n";
-      example += "        $\n";
+      example += "        $$\n";
       example += "\n";
       example += "        SYNOPSIS...JT/DW\n";
       example += "        NEAR TERM...DS/DW\n";
@@ -367,7 +393,7 @@ describe("AFDParser Tests", () => {
           content:
           "CT...None.\nNY...None.\nNJ...None.\nMARINE" +
             "...Small Craft Advisory until 11 PM EDT " +
-            "this evening for ANZ350-353-355.",
+            "this evening for ANZ350-\n353-355.",
         },
         {
           type: "epilogueText",

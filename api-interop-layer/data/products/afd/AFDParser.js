@@ -26,6 +26,7 @@ export default class AFDParser {
     this.parseTextContent = this.parseTextContent.bind(this);
     this.parseWWAContent = this.parseWWAContent.bind(this);
     this.parseTempsTableContent = this.parseTempsTableContent.bind(this);
+    this.parseEpilogueContent = this.parseEpilogueContent.bind(this);
   }
 
   parse(){
@@ -36,13 +37,16 @@ export default class AFDParser {
 
     // Stash the epilogue text for later, and set the body
     // to everything before it.
-    const split = body.split("$$");
-    const epilogueText = split[1];
+    const split = body.split(/\$\$/);
     body = split[0];
+    const epilogueText = split[1];
 
     // Parse each of the sections.
     const sections = this.constructor.splitIntoTopicSections(body);
     sections.forEach(this.parseSection);
+
+    // Now parse the epilogue text
+    this.parseEpilogueContent(epilogueText);
   }
 
   /**
@@ -119,10 +123,14 @@ export default class AFDParser {
       const specialHeader = SPECIAL_HEADER_TYPES[specialTypeName];
       const match = str.match(specialHeader.re);
       if(match){
+        let content = match.groups.header;
+        if(specialTypeName == "wwa"){
+          content = match.groups.header.replaceAll("/", "&hairsp;/&hairsp;");
+        }
         this.contentType = specialTypeName;
         this.parsedNodes.push({
           type: "header",
-          content: match.groups.header
+          content
         });
         return str.slice(
           match.index + match[0].length
@@ -154,9 +162,10 @@ export default class AFDParser {
         type: "subheader",
         content: match.groups.subheader
       });
-      return str.slice(
+      
+      return match.input.slice(
         match.index + match[0].length
-      );
+      ).trim();
     }
 
     return str;
@@ -164,7 +173,7 @@ export default class AFDParser {
 
   parseTextContent(str){
     if(str === ""){
-      return;
+      return str;
     }
     switch(this.contentType){
     case "wwa":
@@ -174,11 +183,11 @@ export default class AFDParser {
       this.parseTempsTableContent(str);
       break;
     default:
+      const result = this.constructor.normalizeSpaces(
+        str.trim().replaceAll("\n", " "));
       this.parsedNodes.push({
         type: "text",
-        content: this.constructor.normalizeSpaces(
-          str.trim().replace("\n", " ")
-        )
+        content: result
       });
     }
   }
@@ -261,6 +270,19 @@ export default class AFDParser {
       this.parsedNodes.push({
         type: "text",
         content: remainingText
+      });
+    }
+  }
+
+  parseEpilogueContent(str){
+    const lines = str.trim().split("\n").map(line => {
+      return line.trim();
+    });
+    let currentString = lines.join("\n");
+    if(currentString !== ""){
+      this.parsedNodes.push({
+        type: "epilogueText",
+        content: currentString
       });
     }
   }
