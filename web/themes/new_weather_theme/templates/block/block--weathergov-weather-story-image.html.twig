@@ -13,8 +13,8 @@
 
     {# Image area #}
     {% if content.image %}
-    <div class="display-block width-ful">
-      <img src="{{ file_url(content.image.uri) }}" alt="{{ content.image.alt | replace({'"': "&quot;"}) }}">
+    <div class="display-block width-full">
+      <img src="{{ file_url(content.image.uri) }}" alt="" aria-hidden="true">
       {% endif %}
     </div>
 
@@ -22,7 +22,7 @@
     <div class="margin-bottom-3">
       <hr class="margin-x-0 border-accent-cool-darker border-top-0 margin-top-2 margin-bottom-105" />
       <div class="display-flex flex-align-center">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <rect width="24" height="24" fill="transparent"/>
           <path d="M6 5H18V6H6V5Z" fill="#0085CA"/>
           <path d="M6 10H18V11H6V10Z" fill="#0085CA"/>

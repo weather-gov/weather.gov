@@ -29,6 +29,21 @@
     position: relative;
 }
 
+
+@include at-media("desktop") {
+    .wx-weather-story-wrapper {
+        grid-template-areas:
+            "a b b"
+            "c b b";
+        grid-auto-columns: 1fr;
+        column-gap: units(4);
+    }
+
+    .wx-weather-story-wrapper > *:nth-child(2) {
+        margin-top: units(3);
+    }
+}
+
 /**
  * NOTE: We use the before/after pseudo elements
  * to make the colored weather story section "appear"
@@ -59,16 +74,9 @@
     left: 100%;
 }
 
-@include at-media("desktop") {
-    .wx-weather-story-wrapper {
-        grid-template-areas:
-            "a b b"
-            "c b b";
-        grid-auto-columns: 1fr;
-        column-gap: units(4);
-    }
-
-    .wx-weather-story-wrapper > *:nth-child(2) {
-        margin-top: units(3);
-    }
+@include at-media("mobile") {
+    .wx-weather-story-block-section::before,
+    .wx-weather-story-block-section::after {
+        display: none;
+    }                                                                    
 }
