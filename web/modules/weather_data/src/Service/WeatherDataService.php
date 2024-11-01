@@ -117,9 +117,6 @@ class WeatherDataService
         $afd = $this->dataLayer->getProduct($id);
         if ($afd) {
             $afd = json_decode(json_encode($afd), true);
-            $parser = new AFDParser($afd["productText"]);
-            $parser->parse();
-            $afd["parsedProductText"] = $parser->getStructureForTwig();
             return $afd;
         }
         return false;
