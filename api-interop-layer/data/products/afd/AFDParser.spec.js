@@ -263,6 +263,19 @@ describe("AFDParser Tests", () => {
           expect(actual).to.eql(expected);
         });
       });
+
+      describe("Example with multi-digit temps", () => {
+        const example =  "Panama City   73  93  74  91 /   0  10  30  60 ";
+        it("parses the rows correctly", () => {
+          const parser = new AFDParser();
+          parser.parseTempsTableContent(example);
+          const expected = "temps-table";
+          console.log(parser.parsedNodes);
+          const actual = parser.parsedNodes.pop().type;
+
+          expect(actual).to.eql(expected);
+        });
+      });
     });
     describe("#parseWWAContent", () => {
       let example = "CT...Some text here that will overflow into\n    the next line\n";
@@ -410,5 +423,43 @@ describe("AFDParser Tests", () => {
 
       expect(actual).to.eql(expected);
     });
+    it("Correctly parses example with table", () => {
+      let example = "\n";
+      example += "000\n";
+      example += "FXUS61 KOKX 071443\n";
+      example += "AFDOKX\n";
+      example += "\n";
+      example += "Area Forecast Discussion\n";
+      example += "National Weather Service New York NY\n";
+      example += "1043 AM EDT Wed Aug 7 2024\n";
+      example += "\n";
+      example += ".PRELIMINARY POINT TEMPS/POPS...";
+      example += "Tallahassee   70  94  72  89 /   0  20  20  70 ";
+      example += "Panama City   73  93  74  91 /   0  10  30  60 ";
+      example += "Dothan        70  94  71  91 /   0  10  20  40 ";
+      example += "Albany        71  92  71  89 /   0  20  20  40 ";
+      example += "Valdosta      71  92  72  89 /   0  30  20  60 ";
+      example += "Cross City    72  92  72  88 /   0  30  20  80 ";
+      example += "Apalachicola  75  91  76  88 /   0  10  30  70 ";
+      example += "\n";
+      example += "&&";
+      example += "\n";
+      example += "        $$\n";
+      example += "\n";
+      example += "        SYNOPSIS...JT/DW\n";
+      example += "        NEAR TERM...DS/DW\n";
+      example += "        SHORT TERM...DW\n";
+      example += "        LONG TERM...JT\n";
+      example += "        MARINE...JT/DW \n";
+      example += "        HYDROLOGY...JT/DW \n";
+      example += "        TIDES/COASTAL FLOODING...\n";
+
+      const parser = new AFDParser(example);
+      parser.parse();
+      const expected = "temps-table";
+      const actual = parser.parsedNodes[parser.parsedNodes.length - 2].type;
+
+      expect(actual).to.eql(expected);
+    });    
   });
 });

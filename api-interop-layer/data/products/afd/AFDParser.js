@@ -217,10 +217,11 @@ export default class AFDParser {
     // We want to only consider lines that are part of table
     // rows. Anything else subsequently (if there is anything else)
     // should be considered text content.
-    const tableRowRx = /[^\d]+(\d+\s+)+\/\s+(\d+\s+)+\d(\n|$)/g;
+    const tableRowRx = /[^\d]+(\d+\s+)+\/\s+(\d+\s+)+\d+\s*(\n|$)/g;
     const tableLines = lines.filter(line => {
       return line.match(tableRowRx);
     });
+
     const restOfLines = lines.filter(line => {
       return !line.match(tableRowRx);
     });
@@ -229,8 +230,8 @@ export default class AFDParser {
     // any table rows
     const rx = /^([^\d]|\s)*/g;
     const rows = [];
-    for(let i = 0; i < lines.length; i++){
-      const line = lines[i];
+    for(let i = 0; i < tableLines.length; i++){
+      const line = tableLines[i];
       let numbers = line.split(rx).filter(item => {
         return (item !== "" || !item.match(/\s+/));
       }).pop();
