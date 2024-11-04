@@ -27,6 +27,13 @@ runs:
           await Promise.all(
             paths.map(async (path) => {
               const lib = yaml.load(await fs.readFile(path));
+
+              // If the libraries file is empty, it'll be falsey. In that case,
+              // don't try to do anything with it because that'd be silly.
+              if(!lib) {
+                return;
+              }
+
               Object.entries(lib).forEach(([key, library]) => {
                 if (library.js) {
                   Object.keys(library.js).forEach((jsPath) => {
