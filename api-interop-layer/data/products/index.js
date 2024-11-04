@@ -28,4 +28,4 @@ export default async (id) => fetchAPIJson(`/products/${id}`)
       // Otherwise, simply return the original response from
       // the API. For now, this would be all non-AFD products.
       return productData;
-    })
+    });
