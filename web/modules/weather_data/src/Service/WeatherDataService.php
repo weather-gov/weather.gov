@@ -6,7 +6,6 @@ use Drupal\weather_data\Service\HourlyTableTrait;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\weather_data\Service\AFDParser;
 
 /**
  * A service class for fetching weather data.
