@@ -1,4 +1,4 @@
-import database from "mysql2/promise";
+import database from "mysql2/promise.js";
 
 import { sleep } from "../util/sleep.js";
 

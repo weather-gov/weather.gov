@@ -4,7 +4,7 @@ const { describe, beforeEach } = test;
 
 describe("main script", () => {
   beforeEach(async ({ page }) =>
-    page.goto("http://localhost:8081/play/testing"),
+    page.goto("http://localhost:8081/proxy/play/testing"),
   );
 
   // US English, Mexican Spanish, Puerto Rican Spanish, and US Spanish. Just

@@ -1,5 +1,5 @@
 import sinon from "sinon"; // eslint-disable-line import/no-extraneous-dependencies
-import * as database from "mysql2/promise";
+import * as database from "mysql2/promise.js";
 
 const sandbox = sinon.createSandbox();
 
