@@ -1,6 +1,6 @@
 import fastify from "fastify";
 import newrelic from "newrelic";
-import { getDataForPoint, getAFDById } from "./data/index.js";
+import { getDataForPoint, getProductById } from "./data/index.js";
 import { rest as alertsRest } from "./data/alerts/kinds.js";
 import { createLogger } from "./util/monitoring/index.js";
 import { startAlertProcessing } from "./data/alerts/index.js";
@@ -86,7 +86,7 @@ const main = async () => {
   });
 
   /**
-   * AFD get by id route
+   * Product get by id route
    */
   server.route({
     method: "GET",
@@ -97,7 +97,7 @@ const main = async () => {
 
       performance.clearResourceTimings();
       const timer = performance.now();
-      const data = await getAFDById(id);
+      const data = await getProductById(id);
       const end = performance.now() - timer;
 
       const apiTimings = performance
