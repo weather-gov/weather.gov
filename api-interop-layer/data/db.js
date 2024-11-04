@@ -1,8 +1,8 @@
-import mariadb from "mariadb";
+import database from "mysql2/promise";
 
 import { sleep } from "../util/sleep.js";
 
-const getDatabaseConnection = () => {
+const getDatabaseConnectionInfo = () => {
   if (process.env.API_INTEROP_PRODUCTION) {
     // we are in a cloud.gov environment and must retrieve credentials from
     // the VCAP_SERVICES environment variable
@@ -35,21 +35,21 @@ export default async () => {
     return pool;
   }
 
-  const connectionDetails = getDatabaseConnection();
+  const connectionDetails = getDatabaseConnectionInfo();
 
   // Try to connect, wait, try again, wait, etc. If the database isn't ready after
   // 4 attempts and 30 seconds, we'll just fail.
-  const db = await mariadb
+  const db = await database
     .createConnection(connectionDetails)
     .catch(() => sleep(5_000))
-    .then(() => mariadb.createConnection(connectionDetails))
+    .then(() => database.createConnection(connectionDetails))
     .catch(() => sleep(9_000))
-    .then(() => mariadb.createConnection(connectionDetails))
+    .then(() => database.createConnection(connectionDetails))
     .catch(() => sleep(16_000))
-    .then(() => mariadb.createConnection(connectionDetails));
+    .then(() => database.createConnection(connectionDetails));
   await db.end();
 
-  pool = mariadb.createPool(connectionDetails);
+  pool = database.createPool(connectionDetails);
   return pool;
 };
 
