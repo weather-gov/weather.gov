@@ -270,7 +270,6 @@ describe("AFDParser Tests", () => {
           const parser = new AFDParser();
           parser.parseTempsTableContent(example);
           const expected = "temps-table";
-          console.log(parser.parsedNodes);
           const actual = parser.parsedNodes.pop().type;
 
           expect(actual).to.eql(expected);
@@ -460,6 +459,60 @@ describe("AFDParser Tests", () => {
       const actual = parser.parsedNodes[parser.parsedNodes.length - 2].type;
 
       expect(actual).to.eql(expected);
-    });    
+    });
+
+    it("Correctly parses example with text right after pops/temps table", () => {
+      let example = "000\n";
+      example += "FXUS62 KTBW 271349\n";
+      example += "AFDTBW\n";
+      example += "\n";
+      example += "Area Forecast Discussion\n";
+      example += "National Weather Service Tampa Bay Ruskin FL\n";
+      example += "949 AM EDT Fri Sep 27 2024\n";
+      example += "\n";
+      example += ".PRELIMINARY POINT TEMPS/POPS...\n";
+      example += "TPA  89  79  88  78 /  10  10  50  40 \n";
+      example += "FMY  90  80  90  79 /  50  60  80  40 \n";
+      example += "GIF  92  77  91  77 /  20  20  70  30 \n";
+      example += "SRQ  90  79  89  78 /  20  30  60  50 \n";
+      example += "BKV  89  74  90  74 /  10  10  40  30 \n";
+      example += "SPG  90  82  89  81 /  10  20  50  50 \n";
+      example += "\n";
+      example += "&&\n";
+      example += "\n";
+      example += "Sea Breeze Thunderstorm Regime For Friday: 5\n";
+      example += "Sea Breeze Thunderstorm Regime For Saturday: 5\n";
+      example += "\n";
+      example += "For additional information on sea breeze regimes, go to: \n";
+      example +=  "    https://www.weather.gov/tbw/ThunderstormClimatology\n";
+      example += "\n";
+      example += "$$\n";
+      example += "\n";
+      example += "UPDATE/AVIATION/MARINE...Wynn \n";
+      example += "DECISION SUPPORT/UPPER AIR...ADavis";
+
+      const parser = new AFDParser(example);
+      parser.parse();
+      
+      const expectedHeader = {
+          type: "header",
+          content: "PRELIMINARY POINT TEMPS/POPS"
+      };
+      const expectedContent = [
+        {
+          type: "text",
+          content: "Sea Breeze Thunderstorm Regime For Friday: 5 Sea Breeze Thunderstorm Regime For Saturday: 5"
+        },
+        {
+          type: "text",
+          content: "For additional information on sea breeze regimes, go to: https://www.weather.gov/tbw/ThunderstormClimatology"
+        }
+      ];
+      const actualHeader = parser.parsedNodes.slice(2)[0];
+      const actualContent = parser.parsedNodes.slice(4, 6);
+
+      expect(actualHeader).to.eql(expectedHeader);
+      expect(actualContent).to.eql(expectedContent);
+    });
   });
 });
