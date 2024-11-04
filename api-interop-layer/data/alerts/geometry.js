@@ -1,4 +1,4 @@
-import { simplify, union } from "@turf/turf";
+import { feature, featureCollection, simplify, union } from "@turf/turf";
 
 const SIMPLIFY_TOLERANCE = 0.003;
 
@@ -30,22 +30,22 @@ export const generateAlertGeometry = async (db, rawAlert) => {
   const zones = rawAlert.properties.affectedZones;
   if (Array.isArray(zones) && zones.length > 0) {
     const sql = `
-      SELECT ST_ASGEOJSON(
-        ST_COLLECT(shape)
-      )
-        AS shape
-        FROM weathergov_geo_zones
-        WHERE id IN (${zones.map(() => "?").join(",")})`;
-    const [{ shape }] = await db.query(sql, zones);
+      SELECT
+        shape
+      FROM weathergov_geo_zones
+      WHERE id IN (${zones.map(() => "?").join(",")})`;
 
-    if (shape) {
-      if (shape.geometries.length > 1) {
-        // If there are multiple geometries in the collection, union them
-        // together and then simplify the result.
-        return simplify(union(shape), { tolerance: SIMPLIFY_TOLERANCE });
+    const shapes = await db.query(sql, zones);
+
+    if (Array.isArray(shapes) && shapes.length > 0) {
+      const geometries = shapes.flatMap(({ shape }) => shape.geometries.flat());
+
+      if (geometries.length === 1) {
+        return simplify(geometries[0], { tolerance: SIMPLIFY_TOLERANCE });
       }
-      // If there's only one geometry, just simplify it and be done.
-      return simplify(shape, { tolerance: SIMPLIFY_TOLERANCE });
+      const collection = featureCollection(geometries.map((g) => feature(g)));
+
+      return simplify(union(collection), { tolerance: SIMPLIFY_TOLERANCE });
     }
   }
 
@@ -53,22 +53,24 @@ export const generateAlertGeometry = async (db, rawAlert) => {
   // process as above
   const counties = rawAlert.properties.geocode?.SAME;
   if (Array.isArray(counties) && counties.length > 0) {
-    const same = counties.map((c) => `${c.slice(1)}`);
+    const fips = counties.map((c) => `${c.slice(1)}`);
 
     const sql = `
-      SELECT ST_ASGEOJSON(
-        ST_COLLECT(shape)
-      )
-        AS shape
-        FROM weathergov_geo_counties
-        WHERE countyFips IN (${same.map(() => "?").join(",")})`;
-    const [{ shape }] = await db.query(sql, same);
+      SELECT 
+        shape
+      FROM weathergov_geo_counties
+      WHERE countyFips IN (${fips.map(() => "?").join(",")})`;
+    const shapes = await db.query(sql, fips);
 
-    if (shape) {
-      if (shape.geometries.length > 1) {
-        return simplify(union(shape), { tolerance: SIMPLIFY_TOLERANCE });
+    if (Array.isArray(shapes) && shapes.length > 0) {
+      const geometries = shapes.flatMap(({ shape }) => shape);
+
+      if (geometries.length === 1) {
+        return simplify(geometries[0], { tolerance: SIMPLIFY_TOLERANCE });
       }
-      return simplify(shape, { tolerance: SIMPLIFY_TOLERANCE });
+      const collection = featureCollection(geometries.map((g) => feature(g)));
+
+      return simplify(union(collection), { tolerance: SIMPLIFY_TOLERANCE });
     }
   }
 

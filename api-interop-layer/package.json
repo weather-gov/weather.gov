@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon -e js --experimental-loader newrelic/esm-loader.mjs -r newrelic main.js",
+    "start": "NODE_OPTIONS='--max-old-space-size=256' nodemon -e js --experimental-loader newrelic/esm-loader.mjs -r newrelic main.js",
     "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
   },
   "author": "",
