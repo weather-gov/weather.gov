@@ -194,9 +194,9 @@ class DataLayer
     public function getProduct($uuid)
     {
         if (!array_key_exists($uuid, self::$i_products)) {
-          // Use the interop endpoint
-          $baseUrl = getEnv("API_INTEROP_URL");
-          $product = $this->getFromWeatherAPI($baseUrl . "/products/$uuid");
+            // Use the interop endpoint
+            $baseUrl = getEnv("API_INTEROP_URL");
+            $product = $this->getFromWeatherAPI($baseUrl . "/products/$uuid");
 
             self::$i_products[$uuid] = $product;
         }

@@ -4,8 +4,7 @@ import AFDParser from "./afd/AFDParser.js";
 
 const logger = createLogger("Product");
 
-export default async (id) => {
-  return fetchAPIJson(`/products/${id}`)
+export default async (id) => fetchAPIJson(`/products/${id}`)
     .then(productData => {
       // If we don't have a good status, simply return
       // the response from the API
@@ -29,5 +28,4 @@ export default async (id) => {
       // Otherwise, simply return the original response from
       // the API. For now, this would be all non-AFD products.
       return productData;
-    });
-}
+    })

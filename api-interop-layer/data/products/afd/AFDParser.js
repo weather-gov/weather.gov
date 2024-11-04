@@ -1,14 +1,15 @@
+/* eslint-disable no-plusplus */
 const SPECIAL_HEADER_TYPES = {
   wwa: {
-    re: /^\.(?<header>[A-Z]{3}\sWATCHES\/WARNINGS\/ADVISORIES)[\.]{3}/,
+    re: /^\.(?<header>[A-Z]{3}\sWATCHES\/WARNINGS\/ADVISORIES)[.]{3}/,
   },
   tempsTable: {
     re: /^\.(?<header>.*TEMPS\/POPS)[.]{3}/,
   }
 };
 
-const GENERIC_HEADER_REGEX = /^\.(?<header>.+)[\.]{3}/;
-const SUBHEADER_REGEX = /^\s*\.{3}(?<subheader>[^\.]+)\.{3}/;
+const GENERIC_HEADER_REGEX = /^\.(?<header>.+)[.]{3}/;
+const SUBHEADER_REGEX = /^\s*\.{3}(?<subheader>[^.]+)\.{3}/;
 
 
 export default class AFDParser {
@@ -77,7 +78,7 @@ export default class AFDParser {
       }
       const paragraph = preambleParagraphs[i];
 
-      let text = this.constructor.normalizeSpaces(paragraph).trim();
+      const text = this.constructor.normalizeSpaces(paragraph).trim();
       if(text !== ""){
         this.parsedNodes.push({
           type: nodeType,
@@ -125,7 +126,7 @@ export default class AFDParser {
       const match = str.match(specialHeader.re);
       if(match){
         let content = match.groups.header;
-        if(specialTypeName == "wwa"){
+        if(specialTypeName === "wwa"){
           content = match.groups.header.replaceAll("/", "&hairsp;/&hairsp;");
         }
         this.contentType = specialTypeName;
@@ -178,19 +179,17 @@ export default class AFDParser {
     }
     switch(this.contentType){
     case "wwa":
-      this.parseWWAContent(str);
-      break;
+      return this.parseWWAContent(str);
     case "tempsTable":
-      this.parseTempsTableContent(str);
-      break;
+      return this.parseTempsTableContent(str);
     default:
-      const result = this.constructor.normalizeSpaces(
-        str.trim().replaceAll("\n", " "));
-      this.parsedNodes.push({
+      return this.parsedNodes.push({
         type: "text",
-        content: result
+        content: this.constructor.normalizeSpaces(
+          str.trim().replaceAll("\n", " "))
       });
     }
+    
   }
 
   parseWWAContent(str){
@@ -218,13 +217,9 @@ export default class AFDParser {
     // rows. Anything else subsequently (if there is anything else)
     // should be considered text content.
     const tableRowRx = /[^\d]+(\d+\s+)+\/\s+(\d+\s+)+\d+\s*(\n|$)/g;
-    const tableLines = lines.filter(line => {
-      return line.match(tableRowRx);
-    });
+    const tableLines = lines.filter(line => line.match(tableRowRx));
 
-    const restOfLines = lines.filter(line => {
-      return !line.match(tableRowRx);
-    });
+    const restOfLines = lines.filter(line => !line.match(tableRowRx));
 
     // Parse out the row labels and the numbers from
     // any table rows
@@ -232,17 +227,11 @@ export default class AFDParser {
     const rows = [];
     for(let i = 0; i < tableLines.length; i++){
       const line = tableLines[i];
-      let numbers = line.split(rx).filter(item => {
-        return (item !== "" || !item.match(/\s+/));
-      }).pop();
+      let numbers = line.split(rx).filter(item => (item !== "" || !item.match(/\s+/))).pop();
 
       numbers = numbers.trim().split(" ")
-        .map(digitString => {
-          return digitString.trim();
-        })
-        .filter(digitString => {
-          return digitString.match(/\d+/);
-        });
+        .map(digitString => digitString.trim())
+        .filter(digitString => digitString.match(/\d+/));
 
       const placeRx = /^(?<place>[^\d]+)/;
       let place = null;
@@ -277,10 +266,8 @@ export default class AFDParser {
   }
 
   parseEpilogueContent(str){
-    const lines = str.trim().split("\n").map(line => {
-      return line.trim();
-    });
-    let currentString = lines.join("\n");
+    const lines = str.trim().split("\n").map(line => line.trim());
+    const currentString = lines.join("\n");
     if(currentString !== ""){
       this.parsedNodes.push({
         type: "epilogueText",
@@ -297,7 +284,7 @@ export default class AFDParser {
     this.parsedNodes.forEach(node => {
       if(node.type === "preambleCode"){
         preambleCode.push(node);
-      } else if(node.type == "preambleText"){
+      } else if(node.type === "preambleText"){
         preambleText.push(node);
       } else if(node.type.startsWith("epilogue")){
         epilogue.push(node);
@@ -311,8 +298,8 @@ export default class AFDParser {
         code: preambleCode,
         text: preambleText
       },
-      body: body,
-      epilogue: epilogue
+      body,
+      epilogue
     };
   }
   
@@ -334,8 +321,6 @@ export default class AFDParser {
    */
   static splitIntoTopicSections(str){
     const splits = str.trimStart().split("&&\n");
-    return splits.filter(section => {
-      return !section.match(/^\s*$/);
-    });
+    return splits.filter(section => !section.match(/^\s*$/));
   }
 }

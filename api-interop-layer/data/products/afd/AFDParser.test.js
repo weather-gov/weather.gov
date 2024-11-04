@@ -1,6 +1,4 @@
 import { expect } from "chai";
-import dayjs from "dayjs";
-import sinon, { createSandbox } from "sinon";
 import AFDParser from "./AFDParser.js";
 
 describe("AFDParser Tests", () => {
