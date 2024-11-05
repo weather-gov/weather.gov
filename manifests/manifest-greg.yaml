@@ -9,6 +9,7 @@ default_config: &defaults
   env:
     PHP_INI_SCAN_DIR: /home/vcap/app/php/etc/:/home/vcap/app/php/etc/php.ini.d/
     NEWRELIC_LICENSE: ((newrelic-license))
+    API_INTEROP_URL: https://api-weathergov-greg.app.cloud.gov
   services:
     - database
     - storage
