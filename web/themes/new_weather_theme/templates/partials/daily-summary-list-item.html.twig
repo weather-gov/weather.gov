@@ -14,7 +14,7 @@ day
   {% set itemId =  periods[0].monthAndDay | lower | replace({" ":"-"}) %}
 {% endif %}
 
-<li class="display-block bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 height-full" {% if itemId %}id="{{itemId}}{% endif %}">    
+<li class="display-block bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 height-full" {% if itemId %}id="{{itemId}}{% endif %}">
     <div class="grid-container padding-0 margin-bottom-2 tablet:margin-bottom-2">
       <div class="grid-row display-flex flex-align-start border-bottom-1px border-base-lighter padding-bottom-2">
         <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center tablet:grid-col-6 tablet__flex-justify-start">
@@ -86,9 +86,9 @@ day
             <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
             {{period.data.description}}
             </p>
-            {% if period.data.probabilityOfPrecipitation.percent and period.data.probabilityOfPrecipitation.percent > 1 %}
+            {% if period.data.probabilityOfPrecipitation.hourlyMax and period.data.probabilityOfPrecipitation.hourlyMax > 1 %}
             <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-            {{period.data.probabilityOfPrecipitation.percent}}% {{ "chance of precipitation" | t }}
+            {{period.data.probabilityOfPrecipitation.hourlyMax}}% {{ "chance of precipitation" | t }}
             </p>
             {% endif %}
           </div>

@@ -156,11 +156,11 @@ export default async ({ grid, place }) => {
       // which maxes out at 6am the _following_ day
       day.hours = filterHoursForDay(orderedHours, start);
     }
-  }
 
-  // TODO: get rid of this
-  //
-  updateHighLowFromHourly(dailyData.days[1]);
+    // Pull out PoP values from the hourly for
+    // the daily periods and the overall day
+    updateHighLowFromHourly(day);
+  }
 
   // Whatever gridData is returned here gets merged into the top-level grid
   // object that contains other information such as the WFO and grid X and Y
