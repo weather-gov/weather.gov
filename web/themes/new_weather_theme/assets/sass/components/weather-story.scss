@@ -1,16 +1,45 @@
 @use "uswds-core" as *;
 
-@include at-media-max("tablet") {
-  // Below the tablet breakpoint, weather story images should be the full width
-  // of the screen. The image's container has 2 units of padding on each side,
-  // so the image's max width needs to be 100% + 4 units to overcome that.
-  [data-wx-weather-story] img {
-    max-width: calc(100% + units(4));
-  }
+/**
+ * The Weather Story area uses a simple CSS Grid
+ * API setup in order to facilitate the reordering and
+ * display of the story image when at the desktop size
+ */
+.wx-weather-story-wrapper {
+    display: grid;
+    grid-template-areas:
+        "a"
+        "b"
+        "c";
 }
 
-/* Weather story overrides
-------------------------------------- */
-#wx-weather-story-content h3 {
-    font-weight: normal;
+.wx-weather-story-wrapper > *:first-child {
+    grid-area: a;
+}
+
+.wx-weather-story-wrapper > *:nth-child(2) {
+    grid-area: b;
+}
+
+.wx-weather-story-wrapper > :last-child {
+    grid-area: c;
+}
+
+.wx-weather-story-block-section {
+    position: relative;
+}
+
+
+@include at-media("desktop") {
+    .wx-weather-story-wrapper {
+        grid-template-areas:
+            "a b b"
+            "c b b";
+        grid-auto-columns: 1fr;
+        column-gap: units(4);
+    }
+
+    .wx-weather-story-wrapper > *:nth-child(2) {
+        margin-top: units(3);
+    }
 }
