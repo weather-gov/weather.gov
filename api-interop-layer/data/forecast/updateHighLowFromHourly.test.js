@@ -80,7 +80,7 @@ describe("updateHighLowFromHourly", () => {
     };
     it("Can get the expected max PoP for the first period", () => {
       const expected = 25;
-      const testDay = Object.assign({}, day);
+      const testDay = { ...day};
       updateHighLowFromHourly(testDay);
       const actual = testDay.periods[0].data.probabilityOfPrecipitation.hourlyMax;
 
@@ -89,7 +89,7 @@ describe("updateHighLowFromHourly", () => {
 
     it("Can get the expected max PoP for the second period", () => {
       const expected = 35;
-      const testDay = Object.assign({}, day);
+      const testDay = { ...day};
       updateHighLowFromHourly(testDay);
       const actual = testDay.periods[1].data.probabilityOfPrecipitation.hourlyMax;
 
@@ -98,7 +98,7 @@ describe("updateHighLowFromHourly", () => {
 
     it("Can get the overall daily max PoP", () => {
       const expected = 35;
-      const testDay = Object.assign({}, day);
+      const testDay = { ...day};
       updateHighLowFromHourly(testDay);
       const actual = testDay.maxPop;
 
