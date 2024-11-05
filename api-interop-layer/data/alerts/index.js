@@ -1,9 +1,9 @@
 import { Worker, isMainThread } from "node:worker_threads";
 import path from "node:path";
+
 import { booleanIntersects, buffer, point } from "@turf/turf";
 import dayjs from "../../util/day.js";
 import { createLogger } from "../../util/monitoring/index.js";
-
 import { parseDuration } from "./parse/index.js";
 import sort from "./sort.js";
 
@@ -56,7 +56,12 @@ export const updateFromBackground = ({
       break;
 
     case "log":
-      backgroundLogger[level](message);
+      backgroundLogger[level]?.(message);
+      if (!backgroundLogger[level]) {
+        logger.error(`Attempted to write to invalid log level: '${level}'`);
+        logger.error("Received message:");
+        logger.error(message);
+      }
       break;
 
     default:
@@ -69,13 +74,38 @@ export const startAlertProcessing = () => {
   // be the main thread, but if something goes haywire and this script somehow
   // gets loaded in the background worker, don't recursively keep loading it.
   if (isMainThread) {
+    logger.info("starting background worker");
     const updater = new Worker(
       path.join(import.meta.dirname, "backgroundUpdateTask.js"),
     );
     updater.on("message", updateFromBackground);
 
+    let restartTimer = null;
+
+    const restart = () => {
+      // We can get the exit event two or more times for the same background
+      // process. Wait a few seconds after the last exit/error event before
+      // restarting so we don't end up with multiples of our background worker.
+      if (restartTimer) {
+        clearTimeout(restartTimer);
+      }
+      restartTimer = setTimeout(() => {
+        startAlertProcessing();
+      }, 5_000);
+    };
+
+    // If our background thread stops, restart it.
+    updater.on("exit", restart);
+    updater.on("error", (e) => {
+      backgroundLogger.error(e);
+      restart();
+    });
+
     // Make it go. Otherwise it won't go.
-    updater.postMessage("start");
+    updater.postMessage({
+      action: "start",
+      data: [...cachedAlerts.keys()],
+    });
   }
 };
 

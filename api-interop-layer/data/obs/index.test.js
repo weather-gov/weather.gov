@@ -67,7 +67,7 @@ describe("observations module", () => {
       )
       .resolves(response);
 
-    global.test.database.query.resolves([{ distance: 100 }]);
+    global.test.database.query.resolves([[{ distance: 100 }]]);
   });
 
   describe("properly handles feels-like temperature", () => {

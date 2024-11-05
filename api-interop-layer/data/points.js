@@ -33,7 +33,7 @@ export default async (latitude, longitude) => {
     )
     .then((row) => {
       if (Array.isArray(row) && row.length > 0) {
-        return row[0];
+        return row[0][0];
       }
       return null;
     });

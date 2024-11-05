@@ -4,7 +4,10 @@ import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import { parseAPIIcon } from "../../util/icon.js";
-import { sendNewRelicMetric, createLogger } from "../../util/monitoring/index.js";
+import {
+  sendNewRelicMetric,
+  createLogger,
+} from "../../util/monitoring/index.js";
 
 const logger = createLogger("observations");
 
@@ -127,7 +130,7 @@ export default async ({
 
     convertProperties(data);
 
-    const [{ distance }] = await db.query(`
+    const [[{ distance }]] = await db.query(`
       SELECT ST_DISTANCE_SPHERE(
         ST_GEOMFROMGEOJSON('${JSON.stringify(station.geometry)}'),
         ST_SRID(ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})'), 4326)
