@@ -17,7 +17,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   parent.postMessage({
     action: "log",
     level: "verbose",
-    message: "updating alerts",
+    message: `updating alerts with ${KNOWN_ALERTS.size} known alerts`,
   });
 
   // The list of alert hashes in the current results from the API. We'll use
@@ -103,8 +103,6 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   });
 
   for await (const rawAlert of alertsToUpdate) {
-    KNOWN_ALERTS.add(rawAlert.properties.hash);
-
     const alert = {
       metadata: alertKinds.get(rawAlert.properties.event.toLowerCase()),
     };
@@ -136,6 +134,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
         message: `Ignoring "${rawAlert.properties.event}" - not a land alert`,
       });
 
+      KNOWN_ALERTS.add(rawAlert.properties.hash);
       continue; // eslint-disable-line no-continue
     }
 
@@ -146,14 +145,23 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
 
     alert.event = rawAlert.properties.event;
 
-    const { locations, description } = parseLocations(
-      rawAlert.properties.description,
-    );
+    try {
+      const { locations, description } = parseLocations(
+        rawAlert.properties.description,
+      );
 
-    alert.sender = rawAlert.properties.senderName;
-    alert.locations = locations;
-    alert.description = parseDescription(description);
-    alert.instruction = paragraphSquash(rawAlert.properties.instruction);
+      alert.sender = rawAlert.properties.senderName;
+      alert.locations = locations;
+      alert.description = parseDescription(description);
+      alert.instruction = paragraphSquash(rawAlert.properties.instruction);
+    } catch (e) {
+      parent.postMessage({
+        type: "log",
+        level: "error",
+        message: `error on alert ${rawAlert.properties.id}`,
+      });
+      parent.postMessage({ type: "log", level: "error", message: e });
+    }
 
     alert.area = paragraphSquash(rawAlert.properties.areaDesc)
       ?.split(";")
@@ -178,6 +186,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     }
 
     if (alert.finish && alert.finish.isBefore(now)) {
+      KNOWN_ALERTS.add(rawAlert.properties.hash);
       continue; // eslint-disable-line no-continue
     }
 
@@ -194,6 +203,8 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
       hash: rawAlert.properties.hash,
       alert,
     });
+
+    KNOWN_ALERTS.add(rawAlert.properties.hash);
   }
 };
 
@@ -214,9 +225,12 @@ export const start = () => {
 };
 
 if (parentPort) {
-  parentPort.on("message", (message) => {
-    switch (message.toLowerCase()) {
+  parentPort.on("message", ({ action, data }) => {
+    switch (action.toLowerCase()) {
       case "start":
+        data.forEach((hash) => {
+          KNOWN_ALERTS.add(hash);
+        });
         start();
         break;
       default:

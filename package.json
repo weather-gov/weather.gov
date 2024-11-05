@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@prettier/plugin-php": "^0.22.2",
-    "mariadb": "^3.4.0",
+    "mysql2": "^3.11.3",
     "shapefile": "^0.6.6",
     "twing": "^7.0.0"
   }

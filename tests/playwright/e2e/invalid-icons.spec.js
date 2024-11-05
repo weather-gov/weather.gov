@@ -4,7 +4,7 @@ const { describe, beforeEach } = test;
 
 describe("Invalid icon URL tests", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/play/testing");
+    await page.goto("http://localhost:8081/proxy/play/testing");
     await page.goto("/point/38.886/-77.094");
   });
 
@@ -62,7 +62,7 @@ describe("Invalid icon URL tests", () => {
 
 describe("Valid icon rendering double-checks", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/play/testing");
+    await page.goto("http://localhost:8081/proxy/play/testing");
     await page.goto("/point/34.749/-92.275");
   });
 

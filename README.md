@@ -62,7 +62,7 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 ## Tech Stack
 
 Type: Traditional CMS (aka Legacy, United, Headful :laugh:)
-Stack: Docker Drupal Image (Apache, PHP, Composer, MariaDB)
+Stack: Docker Drupal Image (Apache, PHP, Composer, MySQL)
 Languages and frameworks: PHP, Symfony, Twig
 
 ## Vulnerability Disclosure Policy
