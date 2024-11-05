@@ -14,7 +14,7 @@ import { fetchAPIJson } from "../../util/fetch.js";
  * for a given day from the formatted hourly
  * forecast for the day.
  */
-const updateHighLowFromHourly = (day) => {
+export const updateHighLowFromHourly = (day) => {
   // We set the probability of precip for each daily period
   // to be the highest percentage taken from the _hourly_ data
   // that is between the start and end times for the period
@@ -24,8 +24,7 @@ const updateHighLowFromHourly = (day) => {
     const dayEnd = dayjs(period.end);
     const relevantHours = day.hours.filter(hour => {
       const start = dayjs(hour.time);
-      const end = start.add(1, "hour");
-      return dayStart.isSameOrBefore(start) && dayEnd.isSameOrBefore(end);
+      return dayStart.isSameOrBefore(start) && dayEnd.isSameOrAfter(start);
     });
     const pops = relevantHours.map(hour => hour.probabilityOfPrecipitation.percent);
     const maxPop =  Math.round(
@@ -35,6 +34,8 @@ const updateHighLowFromHourly = (day) => {
     period.data.probabilityOfPrecipitation.hourlyMax = maxPop;
   });
 
+  // Also set the overall daily max PoP (all periods) on the
+  // top level of the day object itself
   day.maxPop = Math.max(...maxPopsForDay);
 };
 
