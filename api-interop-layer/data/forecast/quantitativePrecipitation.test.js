@@ -132,6 +132,15 @@ describe("quantitative precipitation forecase (QPF)", () => {
               },
             ],
           },
+          probabilityOfPrecipitation: {
+            uom: "wmoUnit:percent",
+            values: [
+              {
+                validTime: "2024-08-02T01:00:00Z/PT24H",
+                value: 19
+              },
+            ]
+          }
         },
       }),
     });
@@ -146,10 +155,18 @@ describe("quantitative precipitation forecase (QPF)", () => {
               {
                 startTime: "2024-08-01T06:00:00-0700",
                 endTime: "2024-08-02T06:00:00-0700",
+                probabilityOfPrecipitation: {
+                  unitCode: "wmoUnit:percent",
+                  value: 40
+                },
               },
               {
                 startTime: "2024-08-02T06:00:00-0700",
                 endTime: "2024-08-03T06:00:00-0700",
+                probabilityOfPrecipitation: {
+                  unitCode: "wmoUnit:percent",
+                  value: 40
+                },
               },
             ],
           },
