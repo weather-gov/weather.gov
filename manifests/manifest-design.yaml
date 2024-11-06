@@ -9,6 +9,7 @@ default_config: &defaults
   env:
     PHP_INI_SCAN_DIR: /home/vcap/app/php/etc/:/home/vcap/app/php/etc/php.ini.d/
     NEWRELIC_LICENSE: ((newrelic-license))
+    API_INTEROP_URL: https://api-weathergov-design.app.cloud.gov
     API_URL: https://weathergov-api-proxy.app.cloud.gov
   services:
     - database
@@ -24,7 +25,7 @@ applications:
 
   - name: api-weathergov-design
     stack: cflinuxfs4
-    memory: 256M
+    memory: 512M
     instances: 1
     buildpacks:
       - nodejs_buildpack
