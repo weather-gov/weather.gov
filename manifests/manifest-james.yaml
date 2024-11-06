@@ -9,7 +9,7 @@ default_config: &defaults
   env:
     PHP_INI_SCAN_DIR: /home/vcap/app/php/etc/:/home/vcap/app/php/etc/php.ini.d/
     NEWRELIC_LICENSE: ((newrelic-license))
-    API_INTEROP_URL: https://api-weathergov-james.app.cloud.gov
+    API_INTEROP_URL: https://api-weathergov-james.apps.internal:61443
   services:
     - database
     - storage
@@ -48,6 +48,6 @@ applications:
       API_INTEROP_NAME: james
     health-check-type: process
     path: ../api-interop-layer
-    random-route: false
+    route: api-weathergov-james.apps.internal
     services:
       - database
