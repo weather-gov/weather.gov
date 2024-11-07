@@ -1,3 +1,4 @@
+const path = require("node:path");
 const { downloadAndUnzip, unzip } = require("./lib/prep.js");
 
 const metadata = require("./lib/meta.js");
@@ -43,7 +44,7 @@ async function main() {
   }
 
   for await (const zip of zips) {
-    await unzip(zip);
+    await unzip(path.join("./data", zip));
   }
 
   for await (const [source, sourceMetadata] of Object.entries(meta)) {

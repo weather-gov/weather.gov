@@ -34,7 +34,7 @@ const loadData = async () => {
   console.log("  loading WFOs/CWAs data");
   const db = await openDatabase();
 
-  const file = await shapefile.open(`./w_05mr24.shp`);
+  const file = await shapefile.open(`./data/w_05mr24.shp`);
 
   await dropIndexIfExists(db, "cwas_spatial_idx", "weathergov_geo_cwas");
   await db.query("TRUNCATE TABLE weathergov_geo_cwas");

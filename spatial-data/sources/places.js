@@ -58,7 +58,7 @@ const loadData = async () => {
   ];
 
   const places = await fs
-    .readFile(`./us.cities500.txt`, { encoding: "utf-8" })
+    .readFile(`./data/us.cities500.txt`, { encoding: "utf-8" })
     .then((str) =>
       str
         .split("\n")

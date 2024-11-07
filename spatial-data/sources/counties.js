@@ -56,7 +56,7 @@ const loadData = async () => {
   console.log("  loading counties data");
 
   const db = await openDatabase();
-  const file = await shapefile.open(`./c_05mr24.shp`);
+  const file = await shapefile.open(`./data/c_05mr24.shp`);
 
   await dropIndexIfExists(db, "counties_spatial_idx", metadata.table);
 

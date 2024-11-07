@@ -98,8 +98,8 @@ const loadData = async () => {
     await file.read().then(getSqlForShape);
   };
 
-  await processFile(`./z_05mr24.shp`, "forecast");
-  await processFile(`./fz05mr24.shp`, "fire");
+  await processFile(`./data/z_05mr24.shp`, "forecast");
+  await processFile(`./data/fz05mr24.shp`, "fire");
 
   // Our map now contains entries for every zone. Iterate over that to insert
   // them into the database.

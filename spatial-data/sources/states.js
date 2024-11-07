@@ -32,7 +32,7 @@ const loadData = async () => {
   console.log("  loading states data");
   const db = await openDatabase();
 
-  const file = await shapefile.open(`./s_05mr24.shp`);
+  const file = await shapefile.open(`./data/s_05mr24.shp`);
 
   await dropIndexIfExists(db, "states_spatial_idx", "weathergov_geo_states");
 
