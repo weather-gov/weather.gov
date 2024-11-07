@@ -51,6 +51,7 @@ services:
       - api-proxy
     ports:
       - 8082:8082
+      - 9229:9229
     volumes:
       - ./api-interop-layer:/app
       - /app/node_modules
