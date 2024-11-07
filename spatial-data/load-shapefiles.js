@@ -42,7 +42,7 @@ async function main() {
 
   if (!hasUpdates) {
     console.log(chalk.green("Everything is already up-to-date. Stopping!"));
-    return;
+    // return;
   }
 
   if (urls.length) {
@@ -59,7 +59,7 @@ async function main() {
     }
   }
 
-  for await (const { target, ...updateMetadata } of meta) {
+  for await (const updateMetadata of meta) {
     if (updateMetadata.update) {
       await updateTable(updateMetadata);
     }
