@@ -80,8 +80,9 @@
               </div>
             </div>
           </div>
-          {% if  drupal_block("weathergov_weather_story_image", { wfo: point.grid.wfo }).content | length > 0  %}
-          {{ drupal_block("weathergov_weather_story_image", { wfo: point.grid.wfo }) }}
+          {% set weather_story =  drupal_block("weathergov_weather_story_image", { wfo: point.grid.wfo }) %}
+          {% if  weather_story.content | length > 0  %}
+          {{ weather_story }}
           {% else %}
           <div class="grid-container margin-top-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
             <div class="grid-row bg-accent-cool-lightest border-1px border-base-light desktop:padding-x-4 padding-x-2">
