@@ -31,3 +31,34 @@ needed in order to render a location forecast.
 Flow diagram of how it works:
 
 ![](diagrams/interop-layer-point.png)
+
+## Production setup
+
+By default, dev instances of the API interop layer are public. If we wish to
+make the API interop layer private (that is, not accessible from outside) for a
+given environment, then we have to set up [secure container-to-container
+networking](https://cloud.gov/docs/management/container-to-container/#configuring-secure-container-to-container-networking)
+on cloud.gov.
+
+First, we want to make the API interop layer accessible internally via `apps.internal`:
+
+    cf map-route api-weathergov-$NAME apps.internal --hostname api-weathergov-$NAME
+
+And tunnel all internal access via TCP port 61443 (SSL/TLS).
+
+    cf add-network-policy weathergov-$NAME api-weathergov-$NAME --protocol tcp --port 61443
+
+Optionally, you may want to unmap and/or remove the older route if extant:
+
+    cf unmap-route api-weathergov-$NAME app.cloud.gov --hostname api-weathergov-$NAME
+    cf delete-orphaned-routes # or delete the route explicitly
+
+Finally, configure the manifest.yml with the appropriate settings. The interop
+layer should have its `route` set to `api-weathergov-$NAME.apps.internal`, while
+the Drupal instance should have the environment variable `API_INTEROP_URL` set
+to the tunneled port: `https://api-weathergov-$NAME.apps.internal:61443`.
+
+To confirm that secure container-to-container networking is properly set up, you
+can `cf ssh` in the instance, make sure `$API_INTEROP_URL` is updated to use
+port 61443, and then `curl -v $API_INTEROP_URL`. This should result in a
+`{"ok":true}` response from the API interop layer.
