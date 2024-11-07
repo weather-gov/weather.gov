@@ -1,4 +1,4 @@
-const mariadb = require("mariadb");
+const database = require("mysql2/promise");
 
 module.exports.openDatabase = async () => {
   // Slice off Node executable and script, keep just the args.
@@ -8,11 +8,11 @@ module.exports.openDatabase = async () => {
     user: args[0] ?? "drupal",
     password: args[1] ?? "drupal",
     database: args[2] ?? "weathergov",
-    host: args[3] ?? (process.env.DB_HOST ?? "database"),
+    host: args[3] ?? process.env.DB_HOST ?? "database",
     port: args[4] ?? 3306,
   };
 
-  return mariadb.createConnection(connectionDetails);
+  return database.createConnection(connectionDetails);
 };
 
 // MariaDB supports IF EXISTS with indices but MySQL does not, so use this more

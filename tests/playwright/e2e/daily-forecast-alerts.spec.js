@@ -4,14 +4,16 @@ const { describe, beforeEach } = test;
 
 describe("alerts in the daily tab", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/play/testing");
+    await page.goto("http://localhost:8081/proxy/play/testing");
     await page.goto("/point/34.749/-92.275");
     await page.locator("#daily-tab-button").first().click();
   });
 
   describe("has alerts on the daily overviews", () => {
     test("combines multiple alerts into a single link", async ({ page }) => {
-      const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").first();
+      const day = await page
+        .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
+        .first();
       const links = await day.locator(".daily-alert-summary .wx-alert-link");
 
       await test.step("there is only one link", async () => {
@@ -26,7 +28,9 @@ describe("alerts in the daily tab", () => {
     });
 
     test("single alerts show the alert type", async ({ page }) => {
-      const day = await page.locator(".wx-daily-forecast-block .wx-daily-forecast-list-item").nth(1);
+      const day = await page
+        .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
+        .nth(1);
       const links = await day.locator(".daily-alert-summary .wx-alert-link");
 
       await test.step("there is only one link", async () => {

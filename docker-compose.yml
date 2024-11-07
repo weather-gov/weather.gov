@@ -29,6 +29,11 @@ services:
     build:
       context: ./api-interop-layer
       dockerfile: Dockerfile
+    # Use the same resource limits as deployed
+    deploy:
+      resources:
+        limits:
+          memory: 256MB
     environment:
       PORT: 8082
       DB_NAME: weathergov
@@ -46,6 +51,7 @@ services:
       - api-proxy
     ports:
       - 8082:8082
+      - 9229:9229
     volumes:
       - ./api-interop-layer:/app
       - /app/node_modules

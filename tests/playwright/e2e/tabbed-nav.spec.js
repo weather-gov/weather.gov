@@ -12,7 +12,7 @@ const { describe, beforeEach } = test;
 describe("<wx-tabbed-nav> component tests", () => {
   describe("Alert link interaction", () => {
     beforeEach(async ({ page }) => {
-      await page.goto("http://localhost:8081/play/testing");
+      await page.goto("http://localhost:8081/proxy/play/testing");
       await page.goto("/point/34.749/-92.275");
     });
 

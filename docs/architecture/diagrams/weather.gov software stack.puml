@@ -19,7 +19,7 @@ System_Boundary(web, "weather.gov") {
 
   System_Boundary(cms, "CMS") {
     System(drupal, "Drupal", $sprite="drupal")
-    ComponentDb(db, "MariaDB", $sprite="mysql")
+    ComponentDb(db, "MySQL", $sprite="mysql")
 
     Component(routes, "Weather routes module")
     Component(data, "Weather data module")

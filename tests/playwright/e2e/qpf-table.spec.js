@@ -5,7 +5,7 @@ const { describe, beforeEach } = test;
 
 describe("quantitative precipitation forecast table", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/play/testing");
+    await page.goto("http://localhost:8081/proxy/play/testing");
     await page.goto("http://localhost:8080/point/34.749/-92.275#daily");
   });
 

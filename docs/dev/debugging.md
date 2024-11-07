@@ -4,6 +4,9 @@ Our Drupal container runs with xdebug installed and configured for debugging and
 coverage reporting. It should already be fully configured, so the only things
 you'll need to configure are your local IDE.
 
+This is also true for our API interop layer container. It enables the Node.js
+inspector and forwards its port to the docker host.
+
 If you're using Visual Studio, you can use the official
 [xdebug plugin](https://github.com/xdebug/vscode-php-debug) and follow the
 instructions there. The only things you should _need_ to change are the path
@@ -15,14 +18,25 @@ complete `launch.json`:
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Listen for Xdebug",
+      "type": "node",
+      "request": "attach",
+      "name": "Interop layer",
+      "address": "localhost",
+      "port": 9229,
+      "restart": true,
+      "remoteRoot": "/app",
+      "localRoot": "${workspaceFolder}/api-interop-layer"
+    },
+    {
+      "name": "Drupal",
       "type": "php",
       "request": "launch",
       "port": 9003,
       "pathMappings": {
         "/opt/drupal/web/sites": "${workspaceFolder}/web/sites",
         "/opt/drupal/web/modules": "${workspaceFolder}/web/modules",
-        "/opt/drupal/web/themes": "${workspaceFolder}/web/themes"
+        "/opt/drupal/web/themes": "${workspaceFolder}/web/themes",
+        "/opt/drupal/web/core": "/Users/michaelgwalker/src/drupal/core"
       }
     }
   ]

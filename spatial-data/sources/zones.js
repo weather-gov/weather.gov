@@ -30,7 +30,7 @@ const schemas = {
     // multipolygon. This allows us to capture all of the polygons for a zone as
     // a collection rather than trying to collect or union them into one entity.
     await db.query(
-      `ALTER TABLE ${metadata.table} MODIFY shape GEOMETRYCOLLECTION`,
+      `ALTER TABLE ${metadata.table} MODIFY shape GEOMETRYCOLLECTION NOT NULL`,
     );
     await db.end();
 
@@ -42,6 +42,7 @@ const schemas = {
     await db.query(
       `ALTER TABLE ${metadata.table} MODIFY shape GEOMETRYCOLLECTION NOT NULL`,
     );
+    await dropIndexIfExists(db, "zones_spatial_idx", metadata.table);
     await db.query(
       `CREATE SPATIAL INDEX zones_spatial_idx ON ${metadata.table}(shape)`,
     );
