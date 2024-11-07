@@ -30,8 +30,8 @@ module.exports = async () => {
 
   const existing = await db
     .query("SELECT * FROM weathergov_geo_metadata")
-    .then((list) =>
-      list.reduce(
+    .then(([rows]) =>
+      rows.reduce(
         (o, meta) => ({
           ...o,
           [meta.table_name]: meta.version,
@@ -61,27 +61,26 @@ module.exports = async () => {
   return results;
 };
 
-module.exports.update = async () => {
+module.exports.update = async (target) => {
   const meta = await module.exports();
 
-  const db = await openDatabase();
+  const metadata = targets[target];
 
-  for await (const [source, metadata] of Object.entries(targets)) {
-    if (meta[source].update) {
-      const currentVersion = Math.max(
-        ...Object.keys(metadata?.schemas).map((v) => +v),
-      );
-      console.log(`setting ${metadata.table} to version ${currentVersion}`);
+  if (meta[target].update) {
+    const currentVersion = Math.max(
+      ...Object.keys(metadata?.schemas).map((v) => +v),
+    );
+    console.log(`setting ${metadata.table} to version ${currentVersion}`);
 
-      // UPSERT query, essentially
-      const sql = `INSERT INTO weathergov_geo_metadata
+    const db = await openDatabase();
+
+    // UPSERT query, essentially
+    const sql = `INSERT INTO weathergov_geo_metadata
                   (table_name, version)
                 VALUES("${metadata.table}", "${currentVersion}")
                 ON DUPLICATE KEY
                   UPDATE version="${currentVersion}"`;
-      await db.query(sql);
-    }
+    await db.query(sql);
+    await db.end();
   }
-
-  await db.end();
 };

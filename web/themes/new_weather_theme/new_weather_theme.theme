@@ -47,6 +47,55 @@ function new_weather_theme_preprocess_node__wfo_info(&$variables, $theme)
         "id" => $wfo_id,
     ];
 
+    // Get counties
+    $container = \Drupal::getContainer();
+    $dataLayer = $container->get("weather_data_layer");
+
+    // Normally we'd use a GROUP BY here, but in ANSI standard mode, MySQL throws
+    // an error if you GROUP BY in a query that selects any columns other than
+    // the grouping column or aggregate functions. ANSI standard mode is default
+    // in MySQL now, and rather than changing its behavior, we'll do the
+    // grouping ourselves.
+    $counties = $dataLayer->databaseFetchAll(
+        "SELECT
+            state,stateName,countyName
+        FROM weathergov_geo_counties
+        WHERE
+            cwas LIKE :wfo
+        ORDER BY countyName
+        ",
+        [":wfo" => "|$wfo_code|"],
+    );
+
+    // Get the list of unique states. We'll use this to group the counties.
+    $states = array_values(
+        array_unique(
+            array_map(function ($county) {
+                return $county->state;
+            }, $counties),
+        ),
+    );
+
+    // Now turn that list of state names into a list of counties. The county
+    // objects contain the state information, so we don't need to keep the
+    // state names from the $states array.
+    $states = array_map(function ($state) use ($counties) {
+        return array_values(
+            array_filter($counties, function ($county) use ($state) {
+                return $county->state === $state;
+            }),
+        );
+    }, $states);
+
+    // Smoosh them all back together.
+    $counties = array_merge(...$states);
+
+    // And turn them into a big string.
+    $counties = array_map(function ($county) {
+        return $county->countyName . ", " . $county->stateName;
+    }, $counties);
+    $variables["counties"] = implode("; ", $counties);
+
     // Process field_address information
     $field_address = $variables["content"]["field_address"];
     $address_object = $field_address[0];

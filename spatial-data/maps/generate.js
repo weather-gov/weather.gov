@@ -22,7 +22,7 @@ const outputPath = path.resolve(
 async function main() {
   const db = await openDatabase();
 
-  const wfos = await db.query(
+  const [wfos] = await db.query(
     `SELECT wfo,ST_ASGEOJSON(shape) shape FROM ${table}`,
   );
   // We don't need the DB connection anymore, but rather than wait here, we can

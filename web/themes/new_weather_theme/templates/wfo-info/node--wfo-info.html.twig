@@ -22,7 +22,12 @@
       <div class="grid-col-12{% if hasAbout %} tablet:grid-col-8{% endif %}">
         <figure class="margin-0">
           <img src="/{{ directory }}/assets/images/wfos/{{ wfo.code }}.png" alt="">
-          <figcaption class="font-sans-xs">{{ "Coverage area for @wfo WFO" | t({ "@wfo": wfo.name })}}</figcaption>
+          <figcaption class="font-sans-xs">
+            {{ "Coverage area for @wfo WFO" | t({ "@wfo": wfo.name })}}
+            <p class="usa-sr-only">
+              {{ "This includes @counties" | t({ "@counties": counties }) }}
+            </p>
+          </figcaption>
         </figure>
       </div>
     </div>
