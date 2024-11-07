@@ -30,6 +30,26 @@ const schemas = {
 
     return true;
   },
+  2: async () => {
+    // This update adds the list of CWAs that cover the counties. The CWAs are
+    // presented as their 3-letter codes surrounded by vertical pipes. Eg:
+    //
+    // |MPX||JAN||OKX|
+    //
+    // The reason for this formatting is so we can use SQL LIKE queries. Eg:
+    //
+    // ...WHERE cwas LIKE '%|MPX|%`
+    const db = await openDatabase();
+
+    await db.query(`
+      ALTER TABLE ${metadata.table}
+        ADD cwas TEXT
+    `);
+
+    await db.end();
+
+    return true;
+  },
 };
 
 const loadData = async () => {
@@ -62,7 +82,13 @@ const loadData = async () => {
     }
 
     const {
-      properties: { STATE: state, COUNTYNAME: name, FIPS: fips, TIME_ZONE: tz },
+      properties: {
+        STATE: state,
+        COUNTYNAME: name,
+        FIPS: fips,
+        TIME_ZONE: tz,
+        CWA: cwaString,
+      },
       geometry,
     } = value;
 
@@ -76,17 +102,35 @@ const loadData = async () => {
     const timezone = shapeTzToIANA.get(tz.toUpperCase());
     const observesDST = tz.toUpperCase() === tz;
 
+    // The CWAs that cover the county are just all jammed together. Since the
+    // CWA codes are 3 characters, we split the string into 3-character-long
+    // chunks and then wrap them in vertical pipes.
+    const cwas = cwaString
+      .match(/.{3}/g)
+      .map((v) => `|${v}|`)
+      .join("");
+
     await db.query(
       `INSERT INTO ${metadata.table}
-        (state, countyName, countyFips, timezone, dst, shape)
+        (state, countyName, countyFips, timezone, dst, cwas, shape)
         VALUES(
-          '${state}',
-          '${name.replace(/'/g, "''") /* escape single quotes */}',
-          '${fips}',
-          '${timezone}',
-          ${observesDST},
-          ST_GeomFromGeoJSON('${JSON.stringify(geometry)}')
+          ?,
+          ?,
+          ?,
+          ?,
+          ?,
+          ?,
+          ST_GeomFromGeoJSON(?)
         )`,
+      [
+        state,
+        name.replace(/'/g, "''") /* escape single quotes */,
+        fips,
+        timezone,
+        observesDST,
+        cwas,
+        JSON.stringify(geometry),
+      ],
     );
 
     return file.read().then(getSqlForShape);

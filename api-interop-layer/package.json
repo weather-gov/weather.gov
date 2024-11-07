@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node --expose-gc --experimental-loader newrelic/esm-loader.mjs -r newrelic main.js",
-    "start-dev": "nodemon -e js --experimental-loader newrelic/esm-loader.mjs -r newrelic main.js",
+    "start-dev": "nodemon -e js --experimental-loader newrelic/esm-loader.mjs -r newrelic --inspect=0.0.0.0:9229 main.js",
     "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
   },
   "author": "",

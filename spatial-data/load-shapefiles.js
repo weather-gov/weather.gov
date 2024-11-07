@@ -54,10 +54,9 @@ async function main() {
         console.log(`  ${source} requires data loading...`);
         await sourceMetadata.metadata.loadData();
       }
+      await metadata.update(source);
     }
   }
-
-  await metadata.update();
 }
 
 main();

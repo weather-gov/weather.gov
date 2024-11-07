@@ -138,7 +138,7 @@ const loadData = async () => {
             )
           LIMIT 1`;
 
-        const result = await db.query(sql);
+        const [result] = await db.query(sql);
         if (result && result.length) {
           const [{ state, county }] = result;
 
