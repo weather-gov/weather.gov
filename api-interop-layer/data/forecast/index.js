@@ -10,11 +10,11 @@ import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 
 /**
- * Helper function to pull the high/low temp
- * for a given day from the formatted hourly
+ * Helper function to set the max PoP
+ * for a given day/period from the formatted hourly
  * forecast for the day.
  */
-export const updateHighLowFromHourly = (day) => {
+export const updateMaxPop = (day) => {
   // We set the probability of precip for each daily period
   // to be the highest percentage taken from the _hourly_ data
   // that is between the start and end times for the period
@@ -164,7 +164,7 @@ export default async ({ grid, place }) => {
 
     // Pull out PoP values from the hourly for
     // the daily periods and the overall day
-    updateHighLowFromHourly(day);
+    updateMaxPop(day);
   }
 
   // Whatever gridData is returned here gets merged into the top-level grid
