@@ -16,6 +16,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: spatial update
+        uses: ./.github/actions/update-spatial-data
+        with:
+          environment: greg
+          cf-space: greg
+          cf-username: ${{ secrets.CF_GREG_USERNAME }}
+          cf-password: ${{ secrets.CF_GREG_PASSWORD }}
+
       - name: list files that have changed from main
         id: diff
         run: echo "diff=$(git diff --name-only origin/main)" | tr "\n" "\t" >> $GITHUB_OUTPUT

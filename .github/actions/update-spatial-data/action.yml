@@ -1,0 +1,22 @@
+inputs:
+  environment:
+    required: true
+  cf-space:
+    required: true
+  cf-username:
+    required: true
+  cf-password:
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+    - uses: dcarbone/install-jq-action@v2
+    - shell: bash
+      run: |
+        wget -O cf-cli.deb "https://packages.cloudfoundry.org/stable?release=debian64&source=github"
+        sudo dpkg -i cf-cli.deb
+        cf login -a api.fr.cloud.gov -u ${{ inputs.cf-username }} -p ${{ inputs.cf-password }}
+    - name: update spatial data tables
+      shell: bash
+      run: ./scripts/load-spatial-data.sh ${{ inputs.environment }}

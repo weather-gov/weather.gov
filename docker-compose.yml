@@ -159,6 +159,8 @@ services:
     volumes:
       - ./spatial-data/:/app
       - /app/node_modules
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 networks:
   weather.gov:
