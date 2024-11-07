@@ -22,6 +22,6 @@ settings:
   handler_settings: {  }
   file_directory: '[date:custom:Y]-[date:custom:m]'
   file_extensions: pdf
-  max_filesize: '2 MB'
+  max_filesize: '3 MB'
   description_field: false
 field_type: file

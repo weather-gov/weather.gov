@@ -41,7 +41,7 @@ settings:
   handler_settings: {  }
   file_directory: 'tmp/[random:number]'
   file_extensions: 'png gif jpg jpeg webp'
-  max_filesize: '2 MB'
+  max_filesize: '3 MB'
   max_resolution: ''
   min_resolution: ''
   alt_field: false

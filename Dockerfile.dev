@@ -96,6 +96,9 @@ RUN { \
   # messages about the debugger not being able to connect when we don't have a
   # listener running yet.
   echo 'xdebug.log_level=0'; \
+  # Mirror cloud.gov php settings
+  echo 'memory_limit = 512M'; \
+  echo 'upload_max_filesize = 3M'; \
   } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 ENV PATH=${PATH}:/opt/drupal/vendor/bin
