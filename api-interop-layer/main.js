@@ -1,6 +1,6 @@
 import fastify from "fastify";
 import newrelic from "newrelic";
-import { getDataForPoint } from "./data/index.js";
+import { getDataForPoint, getProductById } from "./data/index.js";
 import { rest as alertsRest } from "./data/alerts/kinds.js";
 import { createLogger } from "./util/monitoring/index.js";
 import { startAlertProcessing } from "./data/alerts/index.js";
@@ -24,6 +24,9 @@ const main = async () => {
     response.send({ ok: true });
   });
 
+  /**
+   * Main point forecast route
+   */
   server.route({
     method: "GET",
     url: "/point/:latitude/:longitude",
@@ -80,6 +83,53 @@ const main = async () => {
         },
       });
     },
+  });
+
+  /**
+   * Product get by id route
+   */
+  server.route({
+    method: "GET",
+    url: "/products/:id",
+    handler: async (request, response) => {
+      logger.verbose(request.url);
+      const id = request.params.id;
+
+      performance.clearResourceTimings();
+      const timer = performance.now();
+      const data = await getProductById(id);
+      const end = performance.now() - timer;
+
+      const apiTimings = performance
+        .getEntriesByType("resource")
+        .filter(({ initiatorType }) => initiatorType === "fetch")
+        .reduce(
+          (all, { name, duration }) => ({ ...all, [name]: duration }),
+          {},
+        );
+
+      if (data.error) {
+        // track this error in New Relic
+        newrelic.recordLogEvent({
+          message: request.url,
+          level: "error",
+          error: data.error,
+        });
+
+        // If there is a top-level error, set the status code accordingly.
+        if (data.status) {
+          response.code(data.status);
+        }
+      }
+
+      response.send({
+        ...data,
+        "@metadata": {
+          timing: { e2e: end, api: apiTimings },
+          size: JSON.stringify(data).length,
+        },
+      });
+    }
   });
 
   server.get("/meta/alerts", (_, response) => {

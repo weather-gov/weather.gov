@@ -6,7 +6,6 @@ use Drupal\weather_data\Service\HourlyTableTrait;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\weather_data\Service\AFDParser;
 
 /**
  * A service class for fetching weather data.
@@ -117,9 +116,6 @@ class WeatherDataService
         $afd = $this->dataLayer->getProduct($id);
         if ($afd) {
             $afd = json_decode(json_encode($afd), true);
-            $parser = new AFDParser($afd["productText"]);
-            $parser->parse();
-            $afd["parsedProductText"] = $parser->getStructureForTwig();
             return $afd;
         }
         return false;
