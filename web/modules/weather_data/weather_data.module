@@ -1,15 +1,55 @@
 <?php
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 function weather_data_template_preprocess_default_variables_alter(&$variables)
 {
     // First, get our route information.
     $container = \Drupal::getContainer();
     $route = $container->get("current_route_match");
 
-    // We only need to populate globals if we're on a point route.
-    if ($route->getRouteName() == "weather_routes.point") {
+    // By default, assume we are not on a page with lat/lon information.
+    $lat = null;
+    $lon = null;
+
+    $routeName = $route->getRouteName();
+
+    // If we're on a place route, we'll need to query to get the lat/lon. We
+    // are assured that a lat/lon will exist because the route controller will
+    // throw a 404 if there's not. It's a duplicate query, but I couldn't figure
+    // out how to pass the lat/lon from the route controller down to here.
+    if ($routeName == "weather_routes.place") {
+        $state = $route->getParameter("state");
+        $place = $route->getParameter("place");
+
+        $db = $container->get("database");
+        $location = $db
+            ->query(
+                "SELECT
+                ST_X(point) AS lon,
+                ST_Y(point) AS lat
+            FROM weathergov_geo_places
+            WHERE
+                state LIKE :state
+                AND
+                name LIKE :place",
+                [":state" => $state, ":place" => $place],
+            )
+            ->fetch();
+
+        $lat = $location->lat;
+        $lon = $location->lon;
+    }
+
+    // If we're on a point route, we can take lat/lon directly from the URL.
+    if ($routeName == "weather_routes.point") {
         $lat = $route->getParameter("lat");
         $lon = $route->getParameter("lon");
+    }
+
+    // If we have lat and lon, then we can fetch data from the interop layer and
+    // make it available to Twig.
+    if ($lat && $lon) {
         $weatherMetadata["point"] = ["lat" => $lat, "lon" => $lon];
 
         // this is required since we no longer can interpret api.weather.gov lat/lon directly

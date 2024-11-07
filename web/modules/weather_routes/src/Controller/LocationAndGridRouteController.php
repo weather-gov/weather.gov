@@ -129,11 +129,11 @@ final class LocationAndGridRouteController extends ControllerBase
             );
 
             if ($location !== false) {
-                $url = Url::fromRoute("weather_routes.point", [
-                    "lat" => $location->lat,
-                    "lon" => $location->lon,
-                ]);
-                return new RedirectResponse($url->toString());
+                // If we get a location, continue with the rendering process.
+                // If anyone figures out how to pass the lat/lon from here on
+                // through the process, that'd be dandy – then the template
+                // variable preprocessor thingy wouldn't have to redo this query
+                return [];
             }
         } catch (\Throwable $e) {
             throw new NotFoundHttpException();
