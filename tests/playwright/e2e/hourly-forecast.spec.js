@@ -6,7 +6,7 @@ const { describe, beforeEach } = test;
 describe("Hourly forecast table tests", () => {
   describe("Alert row spanning tests", () => {
     beforeEach(async ({ page }) => {
-      await page.goto("http://localhost:8081/play/testing");
+      await page.goto("http://localhost:8081/proxy/play/testing");
       await page.goto("/point/34.749/-92.275#daily");
     });
 
@@ -56,7 +56,7 @@ describe("Hourly forecast table tests", () => {
 
   describe("Alert span clicking behavior", () => {
     beforeEach(async ({ page }) =>
-      page.goto("http://localhost:8081/play/testing"),
+      page.goto("http://localhost:8081/proxy/play/testing"),
     );
 
     test("works when clicking an alert in one of the daily tab's hourly tables", async ({

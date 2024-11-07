@@ -105,3 +105,6 @@ spatial-data/*.txt
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Emacsen
+.dir-locals.el

@@ -4,7 +4,7 @@ const { describe, beforeEach } = test;
 
 describe("invalid location-based routes return 404", () => {
   beforeEach(async ({ page }) =>
-    page.goto("http://localhost:8081/play/testing"),
+    page.goto("http://localhost:8081/proxy/play/testing"),
   );
 
   describe("for non-numeric points", () => {

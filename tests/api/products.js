@@ -26,8 +26,8 @@ const PRODUCT_TYPE_INDIVIDUAL_RX = /\/products\/[^/]+\.json/;
  * @returns {string[]} - An array of full file paths for any matching
  *            JSON files under the products for the given bundle
  */
-const getProductFilePaths = (base, bundleName) => 
-      globSync(path.join(base, bundleName, "products", "**", "*.json"));
+const getProductFilePaths = (base, bundleName) =>
+  globSync(path.join(base, bundleName, "products", "**", "*.json"));
 
 /**
  * Attempts to extract the product code from the path
@@ -50,8 +50,7 @@ const getProductTypeFromPath = (filePath) => {
  * individual product
  * @returns {string} - The extracted product code or UNKNOWN
  */
-const getProductTypeFromData = (data) => 
-      data.productCode || "UNKNOWN";
+const getProductTypeFromData = (data) => data.productCode || "UNKNOWN";
 
 /**
  * Attempts to extract a WFO code from the filePath
@@ -96,6 +95,17 @@ const getProductLabel = (data, filePath, recordType) => {
   return `${productType} for ${data.issuingOffice} issued at ${data.issuanceTime}`;
 };
 
+// Map OCONUS 4-character FAA codes to 3-character WFO codes.
+const oconusFAAtoWFO = new Map([
+  ["PHFO", "HFO"], // Honolulu, HI
+  ["TJSJ", "SJU"], // San Juan, PR
+  ["NSTU", "PPG"], // Pago Pago, AS
+  ["PGUM", "GUM"], // Tiyan, Guam
+  ["PAFC", "AFC"], // Anchorage, AK
+  ["PAFG", "AFG"], // Fairbanks, AK
+  ["PAJK", "AJK"], // Juneau, AK
+]);
+
 /**
  * Attempts to get a URL to a representation of the file
  * in our Drupal application.
@@ -111,7 +121,20 @@ const getProductHref = (data, filePath, recordType) => {
   const wfoCode = getWFOCodeFromPath(filePath);
   const base = "http://localhost:8080";
   if (recordType === "individual") {
-    return null; // For now, we have no way to display individual AFDs by id
+    // AFD issuing offices uses the FAA 4-letter international code.
+    const faaCode = data.issuingOffice;
+    // For CONUS WFOs, the FAA code is the WFO code with a preceding K, so if
+    // the code starts with K, we can just strip it off.
+    const wfo = faaCode.startsWith("K")
+      ? faaCode.slice(1)
+      : // For OCONUS, the codes do not always map so cleanly. There are only
+        // nine OCONUS FAA codes used by AFDs, so we can just special case them.
+        oconusFAAtoWFO.get(faaCode);
+
+    if (wfo) {
+      return `${base}/${data.productCode.toLowerCase()}/${wfo}/${data.id}`;
+    }
+    return null; // If we don't know the WFO, bail out.
   }
   if (recordType === "all") {
     return `${base}/${productType.toLowerCase()}`;
@@ -157,32 +180,4 @@ const getProductInfo = async (base, bundleName) => {
   return Promise.all(productFiles.map(getProductInfoForFilePath));
 };
 
-/**
- * Given a base location and bundle name, will append
- * lines of markup concerning any products (if present)
- * to the given list of lines.
- * Modifies the list in place, but also returns the list.
- * @param {string} base - The base dir for bundles
- * @param {string} bundleName - The name of the bundle
- * @param {string[]} lines - An array of markup lines that will
- * be appended to if needed
- */
-const getProductUI = async (base, bundleName, lines = []) => {
-  const productInfo = await getProductInfo(base, bundleName);
-  if (!productInfo.length) {
-    return lines;
-  }
-  lines.push(`<br/><br/>Products in the bundle:`);
-  lines.push("<ul>");
-  productInfo.forEach((product) => {
-    if (product.url) {
-      lines.push(`<li><a href="${product.url}">${product.label}</a></li>`);
-    } else {
-      lines.push(`<li>${product.label} (no linked page yet)</li>`);
-    }
-  });
-  lines.push("</ul>");
-  return lines;
-};
-
-export { getProductUI as ui, getProductInfo as info };
+export default getProductInfo;

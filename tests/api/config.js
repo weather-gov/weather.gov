@@ -5,15 +5,14 @@ import utc from "dayjs/plugin/utc.js";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-let bundling = false;
 let play = "testing";
 let now = null;
 let nowMethod = null;
 
 const timestampFromEnv = () => {
-  if(process.env.WX_NOW_TIMESTAMP){
+  if (process.env.WX_NOW_TIMESTAMP) {
     const parsed = dayjs.utc(process.env.WX_NOW_TIMESTAMP);
-    if(parsed){
+    if (parsed) {
       return parsed;
     }
   }
@@ -25,15 +24,15 @@ const getNow = () => {
   // If we are able to parse out a timestamp
   // from the environment variable, use that
   const fromEnv = timestampFromEnv();
-  if(fromEnv){
-    nowMethod = 'env';
+  if (fromEnv) {
+    nowMethod = "env";
     return fromEnv;
   }
 
   // Otherwise, if there is a cached
   // now value, use that
-  if(now){
-    nowMethod = 'node';
+  if (now) {
+    nowMethod = "node";
     return dayjs.utc(now);
   }
 
@@ -44,13 +43,6 @@ const getNow = () => {
 };
 
 export default {
-  get bundling() {
-    return bundling;
-  },
-  set bundling(v) {
-    bundling = v;
-  },
-
   get play() {
     return play;
   },
@@ -58,13 +50,13 @@ export default {
     play = v;
   },
 
-  get now(){
+  get now() {
     return getNow();
   },
-  set now(isoString){
+  set now(isoString) {
     now = isoString;
   },
-  get nowMethod(){
+  get nowMethod() {
     return nowMethod;
-  }
+  },
 };

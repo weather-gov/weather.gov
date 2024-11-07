@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "license": "CC0-1.0",
   "dependencies": {
-    "mariadb": "^3.2.3",
+    "mysql2": "^3.11.3",
     "shapefile": "^0.6.6"
   },
   "devDependencies": {

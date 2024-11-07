@@ -36,7 +36,8 @@ export const generateAlertGeometry = async (db, rawAlert) => {
         AS shape
         FROM weathergov_geo_zones
         WHERE id IN (${zones.map(() => "?").join(",")})`;
-    const [{ shape }] = await db.query(sql, zones);
+
+    const [[{ shape }]] = await db.query(sql, zones);
 
     if (shape) {
       if (shape.geometries.length > 1) {
@@ -62,7 +63,7 @@ export const generateAlertGeometry = async (db, rawAlert) => {
         AS shape
         FROM weathergov_geo_counties
         WHERE countyFips IN (${same.map(() => "?").join(",")})`;
-    const [{ shape }] = await db.query(sql, same);
+    const [[{ shape }]] = await db.query(sql, same);
 
     if (shape) {
       if (shape.geometries.length > 1) {

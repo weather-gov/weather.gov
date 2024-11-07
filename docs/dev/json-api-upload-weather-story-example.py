@@ -33,7 +33,8 @@ def upload_file(filename, data, field):
         auth=(user, password),
     )
     if resp.status_code != 201:
-        print(f"error: could not upload file: {resp.json()["errors"]}")
+        errors = resp.json()["errors"]
+        print(f"error: could not upload file: {errors}")
         return None
     return resp.json()["data"]["id"]
 
@@ -85,7 +86,8 @@ def upload_content_type(small_image_id, full_image_id, data):
         auth=(user, password),
     )
     if resp.status_code != 201:
-        print(f"error: could not upload the content type: {resp.json()["errors"]}")
+        errors = resp.json()["errors"]
+        print(f"error: could not upload the content type: {errors}")
         return False
     return True
 

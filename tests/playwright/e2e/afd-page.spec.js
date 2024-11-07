@@ -28,13 +28,19 @@ const firstId = OKX_REFERENCES["@graph"][0].id;
 
 describe("AFD Page Tests", () => {
   describe("Not Found (404) tests", () => {
-    test("Displays a 404 page for an invalid / expired AFD id", async ({ page }) => {
-      const response = await page.goto("http://localhost:8080/afd/OKX/invalid-afd-id.json");
+    test("Displays a 404 page for an invalid / expired AFD id", async ({
+      page,
+    }) => {
+      const response = await page.goto(
+        "http://localhost:8080/afd/OKX/invalid-afd-id.json",
+      );
 
       expect(response.status()).toBe(404);
     });
 
-    test("Displays a 404 page for a listing of AFDs at an invalid WFO", async ({ page }) => {
+    test("Displays a 404 page for a listing of AFDs at an invalid WFO", async ({
+      page,
+    }) => {
       const response = await page.goto("http://localhost:8080/afd/WWW");
 
       expect(response.status()).toBe(404);
@@ -45,7 +51,7 @@ describe("AFD Page Tests", () => {
     test("Can retrieve <option> elements html partial for version listing", async ({
       page,
     }) => {
-      await page.goto("http://localhost:8081/play/testing");
+      await page.goto("http://localhost:8081/proxy/play/testing");
       await page.goto("http://localhost:8080/wx/afd/locations/OKX");
 
       const options = await page.locator("option:first-child");
@@ -59,7 +65,7 @@ describe("AFD Page Tests", () => {
     });
 
     test("Can retreive html partial for AFD content", async ({ page }) => {
-      await page.goto("http://localhost:8081/play/testing");
+      await page.goto("http://localhost:8081/proxy/play/testing");
       // See tests/api/data/products/
       // This is our OKX first AFD testing example data
       await page.goto(`http://localhost:8080/wx/afd/${firstId}`);
@@ -74,7 +80,7 @@ describe("AFD Page Tests", () => {
 
   describe("Querystrings and Redirects", () => {
     beforeEach(async ({ page }) => {
-      await page.goto("http://localhost:8081/play/testing");
+      await page.goto("http://localhost:8081/proxy/play/testing");
     });
 
     test("Hitting /afd without any querystrings will redirect to the most recent anywhere", async ({
@@ -129,7 +135,7 @@ describe("AFD Page Tests", () => {
    */
   describe("Changing selections tests", () => {
     beforeEach(async ({ page }) => {
-      await page.goto("http://localhost:8081/play/testing");
+      await page.goto("http://localhost:8081/proxy/play/testing");
       await page.goto("http://localhost:8080/afd/OKX");
     });
 

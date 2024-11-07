@@ -77,9 +77,11 @@ describe("alert geometries", () => {
       global.test.database.query
         .withArgs(sinon.match(query), sinon.match.same(affectedZones))
         .resolves([
-          {
-            shape,
-          },
+          [
+            {
+              shape,
+            },
+          ],
         ]);
 
       const geometry = await generateAlertGeometry(
@@ -111,7 +113,7 @@ describe("alert geometries", () => {
         WHERE countyFips IN (?,?,?)`;
       global.test.database.query
         .withArgs(sinon.match(query), ["county 1", "county 2", "county 3"])
-        .resolves([{ shape }]);
+        .resolves([[{ shape }]]);
 
       const geometry = await generateAlertGeometry(
         global.test.database,
@@ -188,9 +190,11 @@ describe("alert geometries", () => {
       global.test.database.query
         .withArgs(sinon.match(query), sinon.match.same(affectedZones))
         .resolves([
-          {
-            shape,
-          },
+          [
+            {
+              shape,
+            },
+          ],
         ]);
 
       const geometry = await generateAlertGeometry(
@@ -222,7 +226,7 @@ describe("alert geometries", () => {
         WHERE countyFips IN (?,?,?)`;
       global.test.database.query
         .withArgs(sinon.match(query), ["county 1", "county 2", "county 3"])
-        .resolves([{ shape }]);
+        .resolves([[{ shape }]]);
 
       const geometry = await generateAlertGeometry(
         global.test.database,
