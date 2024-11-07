@@ -3,104 +3,201 @@ title weather.gov API interop layer / alert updating
 
 start
 
-:startup;
+:startAlertProcessing()
+• data/alerts/index.js;
 
-repeat
-  :updateAlerts()
-  • data/alerts/index.js;
+fork
+  :start background process;
+  while(forever)
+    :fetch from API;
 
-  :fetch from API;
+    if(error) then (yes)
+      :post error to
+      parent process;
+    else (no)
+      :create hash of alert
+      using stringified
+      property data;
 
-  if(error) then (yes)
+      :parse time properties
+      into date/time objects;
+
+      while(cached alerts)
+        if(cached hash is not in API hashes) then
+          :post alert removal
+          to parent process;
+          note left
+            If an alert hash is
+            in our cache but not
+            in the hashes we get
+            from the API, that
+            alert is no longer
+            valid, so we should
+            remove it.
+
+            Because we use hashes
+            of all of the alert
+            data to identify them,
+            we don't have to worry
+            about missing updates
+            since they will
+            result in new hashes.
+          end note
+        endif
+      endwhile
+
+      while(api alerts)
+        if(alert hash is in cache) then
+          :remove from list
+          of new alerts;
+          note left
+            If an alert hash is
+            already in our local
+            cache, then we don't
+            need to process it
+            because we already
+            have it.
+          end note
+        endif
+      endwhile
+
+      while(new alerts)
+        :get alert priority,
+        level, and kind
+        (land, marine, etc);
+
+        if(unknown alert type) then (yes)
+          :set priority to lowest,
+          kind to "land", and
+          level to "other";
+        endif
+
+        if(alert kind) then(not land)
+          :remove non-land alerts;
+          note right
+            weather.gov currently only
+            serves land alerts. When
+            that changes, this filter
+            must be removed.
+          end note
+          :add alert hash to
+          local cache;
+          note right
+            Keep the hash for non-land
+            alerts so we can filter
+            them out quickly on
+            subsequent update loops.
+          end note
+
+        else
+          :parse alert ID;
+
+          :parseLocations(alert.description)
+          • alerts/parse/locations.js;
+
+          if(description) then (yes)
+            :parse state regions, counties,
+            and cities from description;
+
+            :remove location information
+            from remaining description;
+          endif
+
+          :parseDescription(alert.description)
+          • alerts/parse/description.js;
+
+          if(description) then (yes)
+            :parse into heading and
+            paragraph nodes;
+
+            :parse text nodes into
+            pure text and link nodes;
+          else
+            :return a single empty
+            paragraph node;
+          endif
+
+          if(alert onset is missing) then (yes)
+            :set onset to equal
+            effective time;
+          endif
+
+          if(alert has ends property) then (yes)
+            :set alert finish time
+            to equal the ends time;
+          else if(alert has expires property) then (yes)
+            :set alert finish time
+            to equal the expires time;
+          endif
+
+          if(alert has ended) then(yes)
+            :add alert hash to
+            local cache;
+            note left
+              Keep the hash for expired
+              alerts so we can filter
+              them out quickly on
+              subsequent update loops.
+            end note
+          else (no)
+            if(alert has geometry) then (yes)
+            else (no)
+              if(alert has zones) then (yes)
+                :get collected geometry of
+                all impacted zones;
+
+                :set alert geometry;
+              else if(alert has SAME codes) then (yes)
+                :get collected geometry of
+                all impacted counties by
+                SAME code;
+
+                :set alert geometry;
+              endif
+            endif
+
+            :post new alert
+            to parent process;
+
+            :add alert hash to
+            local cache;
+            note right
+              Keep the hash for processed
+              alerts so we don't try to
+              process them again in future
+              update loops.
+            end note
+          endif
+        endif
+      endwhile
+    endif
+
+    :wait 30
+    seconds;
+  endwhile
+
+fork again
+  :listen for background exit;
+  :restart background process;
+fork again
+  :listen for background messages;
+  fork
+    :action: add;
+    :add alert to
+    local cache;
+    :update last update time;
+    :set metadata.error
+    to false;
+  fork again
+    :action: remove;
+    :remove alert from
+    local cache;
+    :update last update time;
+    :set metadata.error
+    to false;
+  fork again
+    :action: error;
     :set metadata.error
     to true;
-  else (no)
-    :parse time properties
-    into date/time objects;
-
-    while(alerts)
-      :get alert priority,
-      level, and kind
-      (land, marine, etc);
-
-      if(unknown alert type) then (yes)
-        :set priority to lowest,
-        kind to "land", and
-        level to "other";
-      endif
-
-      :remove non-land alerts;
-      note right
-        weather.gov currently only
-        serves land alerts. When
-        that changes, this filter
-        must be removed.
-      end note
-
-      :parse alert ID;
-
-      :parseLocations(alert.description)
-      • alerts/parse/locations.js;
-
-      if(description) then (yes)
-        :parse state regions, counties,
-        and cities from description;
-
-        :remove location information
-        from remaining description;
-      endif
-
-      :parseDescription(alert.description)
-      • alerts/parse/description.js;
-
-      if(description) then (yes)
-        :parse into heading and
-        paragraph nodes;
-
-        :parse text nodes into
-        pure text and link nodes;
-      else
-        :return a single empty
-        paragraph node;
-      endif
-
-      if(alert onset is missing) then (yes)
-        :set onset to equal
-        effective time;
-      endif
-
-      if(alert has ends property) then (yes)
-        :set alert finish time
-        to equal the ends time;
-      else if(alert has expires property) then (yes)
-        :set alert finish time
-        to equal the expires time;
-      endif
-
-      if(alert has geometry) then (yes)
-      else (no)
-        if(alert has zones) then (yes)
-          :get collected geometry of
-          all impacted zones;
-
-          :set alert geometry;
-        else if(alert has SAME codes) then (yes)
-          :get collected geometry of
-          all impacted counties by
-          SAME code;
-
-          :set alert geometry;
-        endif
-      endif
-
-    endwhile
-
-    :update cached alerts;
-    :update last update time;
-    :set metadata.error to false;
-  endif
-
-  :wait 30
-  seconds;
-
-
+  end fork
+end fork
