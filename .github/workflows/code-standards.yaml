@@ -114,13 +114,16 @@ jobs:
         if: needs.should-test.outputs.yes == 'true'
         uses: actions/checkout@v4
       - name: setup node
+        if: needs.should-test.outputs.yes == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
       - name: install dependencies
+        if: needs.should-test.outputs.yes == 'true'
         run: npm ci
       - name: test
+        if: needs.should-test.outputs.yes == 'true'
         run: npm test
       - name: store coverage output
         if: needs.should-test.outputs.yes == 'true'
