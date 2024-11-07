@@ -79,7 +79,7 @@ endif
 
 
 dump-spatial:
-	docker compose exec database mysqldump -udrupal -pdrupal -hdatabase weathergov weathergov_geo_metadata weathergov_geo_states weathergov_geo_counties weathergov_geo_places weathergov_geo_cwas weathergov_geo_zones > spatial-data/dump.mysql
+	docker compose exec database mysqldump -udrupal -pdrupal -hdatabase --no-tablespaces weathergov weathergov_geo_metadata weathergov_geo_states weathergov_geo_counties weathergov_geo_places weathergov_geo_cwas weathergov_geo_zones > spatial-data/dump.mysql
 
 reset-site: reset-site-database pause install-site ## Delete the database and rebuild it from configuration and exported content
 reset-site-database:
