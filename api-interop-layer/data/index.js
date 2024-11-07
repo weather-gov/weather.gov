@@ -4,11 +4,12 @@ import getForecast from "./forecast/index.js";
 import getObservations from "./obs/index.js";
 import getPoint from "./points.js";
 import getSatellite from "./satellite.js";
+import getProductById from "./products/index.js";
 import { createLogger } from "../util/monitoring/index.js";
 
 const logger = createLogger("forecast");
 
-export const getDataForPoint = async (lat, lon) => {
+const getDataForPoint = async (lat, lon) => {
   logger.verbose(`fetching forecast for ${lat}, ${lon}}`);
   const { point, place, grid } = await getPoint(lat, lon);
 
@@ -76,4 +77,7 @@ export const getDataForPoint = async (lat, lon) => {
   };
 };
 
-export default { getDataForPoint };
+export {
+  getDataForPoint,
+  getProductById
+}
