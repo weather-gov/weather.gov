@@ -26,7 +26,12 @@ export const updateHighLowFromHourly = (day) => {
       const start = dayjs(hour.time);
       return dayStart.isSameOrBefore(start) && dayEnd.isSameOrAfter(start);
     });
-    const pops = relevantHours.map(hour => hour.probabilityOfPrecipitation.percent);
+    const pops = relevantHours.map(hour => {
+      if(!hour.probabilityOfPrecipitation){
+        return 0;
+      }
+      return hour.probabilityOfPrecipitation.percent;
+    });
     const maxPop =  Math.round(
       Math.max(...pops) / 5
     ) * 5;
