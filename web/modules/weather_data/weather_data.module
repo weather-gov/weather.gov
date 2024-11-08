@@ -22,6 +22,10 @@ function weather_data_template_preprocess_default_variables_alter(&$variables)
         $state = $route->getParameter("state");
         $place = $route->getParameter("place");
 
+        // We need to unescape spaces and slashes from the URL parameter.
+        $place = str_replace("_", " ", $place);
+        $place = str_replace(",", "/", $place);
+
         $db = $container->get("database");
         $location = $db
             ->query(
@@ -58,9 +62,7 @@ function weather_data_template_preprocess_default_variables_alter(&$variables)
 
         $fetch = $container->get("http_client");
         try {
-            $data = $fetch
-                ->get("$baseUrl/point/$lat/$lon")
-                ->getBody();
+            $data = $fetch->get("$baseUrl/point/$lat/$lon")->getBody();
         } catch (Throwable $e) {
             $data = '{"error":true}';
         }
