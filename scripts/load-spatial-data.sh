@@ -42,7 +42,10 @@ while read -r host port db username password; do
   echo "setting up SSH tunnel..."
   # open a tunnel
   cf ssh -N -T -L "$LOCAL_PORT":"$host":"$port" "$TARGET" &
-  sleep 5
+  while ! netstat -tna | grep 'LISTEN' | grep -q ":$LOCAL_PORT"; do
+    echo "...port not ready"
+    sleep 3 # time in seconds, tune it as needed
+  done
 
   # load
   docker compose run --rm -T spatial node load-shapefiles.js "$username" "$password" "$db" host.docker.internal "$LOCAL_PORT"
