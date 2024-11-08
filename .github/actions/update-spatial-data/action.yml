@@ -17,6 +17,8 @@ runs:
         wget -O cf-cli.deb "https://packages.cloudfoundry.org/stable?release=debian64&source=github"
         sudo dpkg -i cf-cli.deb
         cf login -a api.fr.cloud.gov -u ${{ inputs.cf-username }} -p ${{ inputs.cf-password }}
+        docker compose build spatial
+        docker compose pull database
     - name: update spatial data tables
       shell: bash
       run: ./scripts/load-spatial-data.sh ${{ inputs.environment }}

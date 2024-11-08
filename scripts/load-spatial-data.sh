@@ -36,8 +36,6 @@ LOCAL_PORT=$(netstat -aln | awk '
 trap "exit" SIGINT SIGTERM
 trap "kill 0" EXIT
 
-docker compose build spatial
-
 # Get database service connection details from cf
 cf curl "/v2/apps/$(cf app --guid "$TARGET")/env" | jq -r '.system_env_json.VCAP_SERVICES["aws-rds"][0].credentials' | jq -r '[.host, .port, .db_name, .username, .password]|@tsv' |
 while read -r host port db username password; do
