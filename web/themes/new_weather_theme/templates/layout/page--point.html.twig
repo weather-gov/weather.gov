@@ -80,7 +80,28 @@
               </div>
             </div>
           </div>
-          {{ drupal_block("weathergov_weather_story_image", { wfo: point.grid.wfo }) }}
+          {% set weather_story =  drupal_block("weathergov_weather_story_image", { wfo: point.grid.wfo }) %}
+          {% if  weather_story.content | length > 0  %}
+          {{ weather_story }}
+          {% else %}
+          <div class="grid-container margin-top-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
+            <div class="grid-row bg-accent-cool-lightest border-1px border-base-light padding-x-2">
+              <div class="display-flex flex-align-center padding-y-105">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect width="24" height="24" fill="transparent"/>
+                  <path d="M6 5H18V6H6V5Z" fill="#0085CA"/>
+                  <path d="M6 10H18V11H6V10Z" fill="#0085CA"/>
+                  <path d="M18 15H6V16H18V15Z" fill="#0085CA"/>
+                  <path d="M6 12H16V13H6V12Z" fill="#0085CA"/>
+                  <path d="M16 17H6V18H16V17Z" fill="#0085CA"/>
+                  <path d="M6 7H16V8H6V7Z" fill="#0085CA"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M4 2H20V22H4V2ZM5 3H19V21H5V3Z" fill="#0085CA"/>
+                </svg>
+                <a class="usa-link margin-left-1" href="/afd/{{ point.grid.wfo | normalize_wfo }}">Area Forecast Discussion</a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
           <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
             <div class="grid-row desktop__wx-grid-gap-lg">
               <div class="desktop:grid-col-6 wx-radar-wrapper">
