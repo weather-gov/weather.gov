@@ -32,7 +32,7 @@ weather_routes.grid:
 weather_routes.place:
   path: '/place/{state}/{place}'
   defaults:
-    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::redirectFromPlace
+    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::servePlacePage
   requirements:
     _access: 'TRUE'
     state: '^[a-zA-Z]{2}$'

@@ -88,9 +88,9 @@ only be a nighttime period.
               <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
               {{period.data.description}}
               </p>
-              {% if period.data.probabilityOfPrecipitation.percent and period.data.probabilityOfPrecipitation.percent > 1 %}
+              {% if period.data.probabilityOfPrecipitation.hourlyMax and period.data.probabilityOfPrecipitation.hourlyMax > 1 %}
               <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-              {{period.data.probabilityOfPrecipitation.percent}}% {{ "chance of precipitation" | t }}
+              {{period.data.probabilityOfPrecipitation.hourlyMax}}% {{ "chance of precipitation" | t }}
               </p>
               {% endif %}
             </div>
