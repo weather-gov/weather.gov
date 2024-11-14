@@ -9,6 +9,44 @@ import { convertValue, convertProperties } from "../../util/convert.js";
 import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 
+/**
+ * Helper function to set the max PoP
+ * for a given day/period from the formatted hourly
+ * forecast for the day.
+ */
+export const updateMaxPop = (day) => {
+  // We set the probability of precip for each daily period
+  // to be the highest percentage taken from the _hourly_ data
+  // that is between the start and end times for the period
+  const maxPopsForDay = [];
+  day.periods.forEach(period => {
+    const dayStart = dayjs(period.start);
+    const dayEnd = dayjs(period.end);
+    const relevantHours = day.hours.filter(hour => {
+      const start = dayjs(hour.time);
+      return dayStart.isSameOrBefore(start) && dayEnd.isSameOrAfter(start);
+    });
+    const pops = relevantHours.map(hour => {
+      if(!hour.probabilityOfPrecipitation){
+        return 0;
+      }
+      return hour.probabilityOfPrecipitation.percent;
+    });
+    const maxPop =  Math.round(
+      Math.max(...pops) / 5
+    ) * 5;
+    maxPopsForDay.push(maxPop);
+    period.data.probabilityOfPrecipitation.hourlyMax = maxPop;
+  });
+
+  // Also set the overall daily max PoP (all periods) on the
+  // top level of the day object itself
+  day.maxPop = Math.max(...maxPopsForDay);
+};
+
+/**
+ * Fetches and formats the main forecast object
+ */
 export default async ({ grid, place }) => {
   const hours = new Map();
 
@@ -123,6 +161,10 @@ export default async ({ grid, place }) => {
       // which maxes out at 6am the _following_ day
       day.hours = filterHoursForDay(orderedHours, start);
     }
+
+    // Pull out PoP values from the hourly for
+    // the daily periods and the overall day
+    updateMaxPop(day);
   }
 
   // Whatever gridData is returned here gets merged into the top-level grid
