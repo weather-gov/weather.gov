@@ -180,6 +180,8 @@ function new_weather_theme_theme_suggestions_page_alter(&$suggestions)
                 ->attributes->get("exception"),
         )
     ) {
+        // If there is an error and we have a page to handle that kind of error,
+        // update the suggested page. In every case, bail out here.
         $status_code = Drupal::requestStack()
             ->getCurrentRequest()
             ->attributes->get("exception")
@@ -187,9 +189,15 @@ function new_weather_theme_theme_suggestions_page_alter(&$suggestions)
         switch ($status_code) {
             case 404:
                 $suggestions[] = "page__" . (string) $status_code;
-                break;
+                return;
             default:
-                break;
+                return;
         }
+    }
+
+    // If we're on a place page, render the point page. The variable preprocess
+    // hook will ensure the appropriate data is available.
+    if (in_array("page__place", $suggestions)) {
+        $suggestions[] = "page__point";
     }
 }
