@@ -78,7 +78,7 @@ function weather_cms_entity_presave(Drupal\Core\Entity\EntityInterface $entity) 
 
         // attempt to match against weather.gov.
         // example: http://www.weather.gov/mfl
-        $weathergov = "/^http:\/\/www.weather.gov\/([a-zA-Z]+)\/?$/i";
+        $weathergov = "/^https?:\/\/www.weather.gov\/([a-zA-Z]+)\/?$/i";
         if (preg_match($weathergov, $url, $matches)) {
             $derived_wfo = strtoupper($matches[1]);
             $entity->set('field_derived_wfo', $derived_wfo);
@@ -105,8 +105,8 @@ function weather_cms_entity_presave(Drupal\Core\Entity\EntityInterface $entity) 
 
         // attempt to match against radar.weather.gov.
         // example: http://radar.weather.gov/lzk/
-        $radar = "/^https?:\/\/radar.weather.gov\/([a-zA-Z]+)/i";
-        if (preg_match($fxc, $url, $matches)) {
+        $radar = "/^https?:\/\/radar.weather.gov\/([a-zA-Z]+)\/?/i";
+        if (preg_match($radar, $url, $matches)) {
             $derived_wfo = strtoupper($matches[1]);
             $entity->set('field_derived_wfo', $derived_wfo);
             return;
