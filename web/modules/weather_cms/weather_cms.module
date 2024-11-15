@@ -58,10 +58,9 @@ function weather_cms_form_adjust_timezones($form, &$form_state)
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function weather_cms_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {
-
+function weather_cms_entity_presave(Drupal\Core\Entity\EntityInterface $entity)
+{
     if ($entity->bundle() === 'wfo_weather_story_upload') {
-
         // field_derived_wfo can be manually overridden because it is not always
         // accurate. so if it is set, bail out.
         if (!empty($entity->get('field_derived_wfo')->getValue())) {
