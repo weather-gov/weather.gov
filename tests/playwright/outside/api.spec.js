@@ -157,6 +157,11 @@ describe("API tests", () => {
     const secondJson = await secondResponse.json();
     expect(secondJson).not.toHaveProperty("errors");
     expect(secondJson).toHaveProperty("data");
+    // verify that `weather_cms_entity_presave` could not derive the WFO due to
+    // insufficient information.
+    expect(secondJson.data).toHaveProperty('attributes');
+    expect(secondJson.data.attributes).toHaveProperty('field_derived_wfo');
+    expect(secondJson.data.attributes.field_derived_wfo).toEqual('unknown');
   });
 
   test("uploader cannot upload wfo weather story images with missing attributes", async ({ request }) => {
@@ -224,7 +229,7 @@ describe("API tests", () => {
           title: pngFilename,
           field_office: "WFO test office",
           field_description: "a blank uploaded image",
-          field_weburl: "/test/wxstory.php?wfo=test",
+          field_weburl: "/FXC/wxstory.php?wfo=test",
           field_frontpage: true,
           field_graphicnumber: 1,
           field_order: 1,
@@ -256,5 +261,11 @@ describe("API tests", () => {
     const secondJson = await secondResponse.json();
     expect(secondJson).not.toHaveProperty("errors");
     expect(secondJson).toHaveProperty("data");
+    // verify that `weather_cms_entity_presave` derived the WFO properly.
+    expect(secondJson.data).toHaveProperty('attributes');
+    expect(secondJson.data.attributes).toHaveProperty('field_derived_wfo');
+    expect(secondJson.data.attributes.field_derived_wfo).toEqual('TEST');
   });
 });
+
+    // TODO test: five regexp matches with example

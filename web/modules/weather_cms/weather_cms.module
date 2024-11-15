@@ -60,11 +60,6 @@ function weather_cms_form_adjust_timezones($form, &$form_state)
  */
 function weather_cms_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {
 
-    // TODO test: if weburl is empty, derived field should be unknown
-    // TODO test: if derived field is already present, it is not changed even if weburl is changed
-    // TODO test: derived field is set through uploading
-    // TODO test: five regexp matches with example
-
     if ($entity->bundle() === 'wfo_weather_story_upload') {
 
         // field_derived_wfo can be manually overridden because it is not always
