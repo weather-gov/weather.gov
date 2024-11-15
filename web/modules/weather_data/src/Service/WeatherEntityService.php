@@ -101,7 +101,7 @@ class WeatherEntityService
             ->accessCheck(false)
             ->condition("status", 1)
             ->condition("type", $nodeType)
-            ->condition("field_office", $wfo)
+            ->condition("field_derived_wfo", $wfo)
             ->sort("changed", "DESC")
             // Only get the first one.
             ->range(0, 1)
