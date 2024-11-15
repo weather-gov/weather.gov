@@ -10,6 +10,7 @@
     border: 1px solid color("base-lighter");
     text-decoration: none;
     background-color: color("white");
+    display: none;
 
     &:last-child {
         border-bottom: none;

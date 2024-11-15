@@ -15,3 +15,4 @@ import("./charts/hourly-wind.js");
 import("./charts/hourly-dewpoint.js");
 import("./charts/qpf.js");
 import("./components/forecast-details-toggle.js");
+import("./components/quick-forecast-toggle.js");

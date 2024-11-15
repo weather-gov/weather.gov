@@ -1,0 +1,7 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+.wx-daily-forecast-quick-toggle[aria-expanded="false"] + .wx-daily-forecast-item-content {
+    display: none;
+}
