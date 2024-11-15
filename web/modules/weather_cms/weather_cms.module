@@ -54,3 +54,79 @@ function weather_cms_form_adjust_timezones($form, &$form_state)
     $form["timezone"]["timezone"]["#options"] = $timezone_ids_to_labels;
     return $form;
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function weather_cms_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {
+
+    // TODO test: if weburl is empty, derived field should be unknown
+    // TODO test: if derived field is already present, it is not changed even if weburl is changed
+    // TODO test: derived field is set through uploading
+    // TODO test: five regexp matches with example
+
+    if ($entity->bundle() === 'wfo_weather_story_upload') {
+
+        // field_derived_wfo can be manually overridden because it is not always
+        // accurate. so if it is set, bail out.
+        if (!empty($entity->get('field_derived_wfo')->getValue())) {
+            return;
+        }
+
+        // WebURL is used to derive the WFO, so if it is not set, also bail out.
+        $url = $entity->get('field_weburl')->value;
+        if (empty($url)) {
+            // we can't map the WFO so mark as unknown.
+            $entity->set('field_derived_wfo', 'unknown');
+            return;
+        }
+
+        // attempt to match against weather.gov.
+        // example: http://www.weather.gov/mfl
+        $weathergov = "/^http:\/\/www.weather.gov\/([a-zA-Z]+)\/?$/i";
+        if (preg_match($weathergov, $url, $matches)) {
+            $derived_wfo = strtoupper($matches[1]);
+            $entity->set('field_derived_wfo', $derived_wfo);
+            return;
+        }
+
+        // attempt to match against a relative WFO url.
+        // example: /eax/
+        $relative = "/^\/([a-zA-Z]+)\/$/i";
+        if (preg_match($relative, $url, $matches)) {
+            $derived_wfo = strtoupper($matches[1]);
+            $entity->set('field_derived_wfo', $derived_wfo);
+            return;
+        }
+
+        // attempt to match against FXC.
+        // example: /FXC/wxstory.php?wfo=pqr
+        $fxc = "/^\/FXC\/wxstory.php\\?wfo=([a-zA-Z]+)$/i";
+        if (preg_match($fxc, $url, $matches)) {
+            $derived_wfo = strtoupper($matches[1]);
+            $entity->set('field_derived_wfo', $derived_wfo);
+            return;
+        }
+
+        // attempt to match against radar.weather.gov.
+        // example: http://radar.weather.gov/lzk/
+        $radar = "/^https?:\/\/radar.weather.gov\/([a-zA-Z]+)/i";
+        if (preg_match($fxc, $url, $matches)) {
+            $derived_wfo = strtoupper($matches[1]);
+            $entity->set('field_derived_wfo', $derived_wfo);
+            return;
+        }
+
+        // attempt to match against srh.noaa.gov. this is rare.
+        // example: http://www.srh.noaa.gov/graphicast.php?site=jan&gc=9
+        $srh = "/^https?:\/\/www.srh.noaa.gov\/graphicast.php\\?site=([a-zA-Z]+)/i";
+        if (preg_match($srh, $url, $matches)) {
+            $derived_wfo = strtoupper($matches[1]);
+            $entity->set('field_derived_wfo', $derived_wfo);
+            return;
+        }
+
+        // we can't map the WFO so mark as unknown.
+        $entity->set('field_derived_wfo', 'unknown');
+    }
+}
