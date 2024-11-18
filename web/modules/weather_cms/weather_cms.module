@@ -128,8 +128,11 @@ function weather_cms_entity_presave(Drupal\Core\Entity\EntityInterface $entity)
 /**
  * Hook after `filefield_paths_filefield_paths_process_file` runs.
  */
-function weather_cms_filefield_paths_process_file(ContentEntityInterface $entity, FieldItemListInterface $field, array $settings)
-{
+function weather_cms_filefield_paths_process_file(
+    ContentEntityInterface $entity,
+    FieldItemListInterface $field,
+    array $settings
+) {
     // if we have a weather story upload, replace the file in-place if applicable.
     if ($entity->bundle() === 'wfo_weather_story_upload') {
         $file_system = \Drupal::service('file_system');
@@ -139,7 +142,7 @@ function weather_cms_filefield_paths_process_file(ContentEntityInterface $entity
             $dirname = $file_system->dirname($location);
             $new_location = "${dirname}/${origname}";
 
-            if ($location != $new_location) {
+            if ($location !== $new_location) {
                 $message = "weather story upload: moving ${location} to ${new_location}";
                 \Drupal::logger("weather_cms")->notice($message);
                 // NB `$file_system->moveUploadedFile` does not work here, so do
