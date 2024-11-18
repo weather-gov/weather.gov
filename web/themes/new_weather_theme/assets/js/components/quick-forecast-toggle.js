@@ -2,8 +2,8 @@
 // of a daily forecast list item in non-desktop views
 const clickHandler = (event) => {
   event.preventDefault();
-  const isExpanded = event.currentTarget.getAttribute("aria-expanded") === "true";
-  event.currentTarget.setAttribute("aria-expanded", !isExpanded);
+  const isExpanded = event.currentTarget.getAttribute("data-expanded") === "true";
+  event.currentTarget.setAttribute("data-expanded", !isExpanded);
 };
 
 Array.from(

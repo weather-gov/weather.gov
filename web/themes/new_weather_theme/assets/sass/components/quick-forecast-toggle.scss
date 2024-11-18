@@ -2,6 +2,21 @@
 @forward "uswds-theme";
 @forward "uswds";
 
-.wx-daily-forecast-quick-toggle[aria-expanded="false"] + .wx-daily-forecast-item-content {
+.wx-daily-forecast-quick-toggle {
+    margin: 0;
+
+    &> button {
+        border: none;
+        outline: none;
+    }
+}
+
+.wx-daily-forecast-quick-toggle[data-expanded="false"] + .wx-daily-forecast-item-content {
     display: none;
+}
+
+@include at-media("desktop"){
+    .wx-daily-forecast-quick-toggle[data-expanded="false"] + .wx-daily-forecast-item-content {
+        display: block;
+    }
 }
