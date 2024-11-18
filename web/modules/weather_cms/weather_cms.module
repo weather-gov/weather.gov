@@ -1,6 +1,8 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\weather_cms\Timezones;
 
 // This hook allows us to alter single elements of a widget, which we want to do for alt text on uploaded images
@@ -122,5 +124,29 @@ function weather_cms_entity_presave(Drupal\Core\Entity\EntityInterface $entity)
 
         // we can't map the WFO so mark as unknown.
         $entity->set('field_derived_wfo', 'unknown');
+
+/**
+ * Hook after `filefield_paths_filefield_paths_process_file` runs.
+ */
+function weather_cms_filefield_paths_process_file(ContentEntityInterface $entity, FieldItemListInterface $field, array $settings)
+{
+    // if we have a weather story upload, replace the file in-place if applicable.
+    if ($entity->bundle() === 'wfo_weather_story_upload') {
+        $file_system = \Drupal::service('file_system');
+        foreach ($field->referencedEntities() as $file) {
+            $origname = $file->get('origname')->value;
+            $location = $file->get('uri')->value;
+            $dirname = $file_system->dirname($location);
+            $new_location = "${dirname}/${origname}";
+
+            if ($location != $new_location) {
+                $message = "weather story upload: moving ${location} to ${new_location}";
+                \Drupal::logger("weather_cms")->notice($message);
+                // NB `$file_system->moveUploadedFile` does not work here, so do
+                // the renaming manually.
+                $file_system->delete($new_location);
+                $file_system->move($location, $new_location);
+            }
+        }
     }
 }
