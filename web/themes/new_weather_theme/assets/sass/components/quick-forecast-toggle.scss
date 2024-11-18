@@ -9,10 +9,58 @@
         border: none;
         outline: none;
     }
+
+    position: relative;
+}
+
+.wx-daily-forecast-list-item > .wx-daily-forecast-quick-toggle {
+    border: 1px solid color("base-lighter");
+    border-bottom: none;
+
+    &:hover {
+        cursor: pointer;
+    }
+    
+    &:hover::after {
+        display: block;
+            content: " ";
+            position: absolute;
+            height: calc(100% + 4px);
+            width: calc(100% + 2px);
+            left: -1px;
+            top: -2px;
+            border: 2px solid color("primary-dark");
+            z-index: 100;
+    }
+    
+}
+
+.wx-daily-forecast-list-item:last-of-type > .wx-daily-forecast-quick-toggle {
+    border-bottom: 1px solid color("base-lighter");
 }
 
 .wx-daily-forecast-quick-toggle[data-expanded="false"] + .wx-daily-forecast-item-content {
     display: none;
+}
+
+.wx-quick-toggle-item-bottom {
+    flex-basis: 100%;
+    text-align: left;
+    margin-top: units(1.5);
+}
+
+@include at-media("tablet") {
+    .wx-quick-toggle-item-bottom {
+        flex-basis: 0%;
+        margin-top: 0;
+    }
+
+    .wx-daily-forecast-list-item > .wx-daily-forecast-quick-toggle {
+        &:hover::after {
+            width: calc(100% + 4px);
+            left: -2px;
+        }
+    }
 }
 
 @include at-media("desktop"){

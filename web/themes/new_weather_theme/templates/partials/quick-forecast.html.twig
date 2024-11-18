@@ -2,33 +2,33 @@
 This partial expects an array of forecast days.
 #}
 <div class="wx-quick-forecast-header">
-    <div class="wx-quick-forecast-header-top">
-    <div class="wx-quick-forecast-header-date">
-        <span>
-            {{"Date" | t}}
-        </span>
+  <div class="wx-quick-forecast-header-top margin-right-3 table:margin-right-0">
+    <div class="flex-1">
+      <span>
+        {{"Date" | t}}
+      </span>
     </div>
-    <div class="wx-quick-forecast-header-condition">
-        <span>
-            {{"Condition" | t}}
-        </span>
+    <div class="flex-1 mobile-lg:display-flex mobile-lg:flex-justify-center">
+      <span>
+        {{"Condition" | t}}
+      </span>
     </div>
-    <div class="wx-quick-forecast-header-highlow">
-        <span>
-            {{"High" | t}}
-        </span>
-        <span>
-            {{"Low" | t}}
-        </span>
+    <div class="flex-1 display-flex">
+      <span class="flex-1">
+        {{"High" | t}}
+      </span>
+      <span class="flex-1">
+        {{"Low" | t}}
+      </span>
     </div>
-    </div>
-    <div class="wx-quick-forecast-header-bottom">
-        <div class="wx-quick-forecast-header-empty"></div>
-    </div>
+  </div>
+  <div class="wx-quick-forecast-header-bottom">
+    <div class="wx-quick-forecast-header-empty"></div>
+  </div>
 </div>
 <nav class="wx-quick-forecast margin-bottom-4">
-    {% for day in days %}
-        {% include '@new_weather_theme/partials/quick-forecast-link-item.html.twig'
-        with { day: day }%}
-    {% endfor %}
+  {% for day in days %}
+  {% include '@new_weather_theme/partials/quick-forecast-link-item.html.twig'
+  with { day: day }%}
+  {% endfor %}
 </nav>

@@ -14,14 +14,14 @@ the content
 {% set pop = 0 %}
 {% endif %}
 <button
-  class="wx-quick-toggle-item bg-white flex-align-center display-flex width-full padding-105"
+  class="wx-quick-toggle-item bg-white flex-align-center display-flex flex-wrap width-full padding-105"
   id="{{dayId}}-quick-forcast-button"
   role="button"
   aria-controls="daily-content-{{itemId}}"
   aria-expanded="true"
 >
-  <div class="wx-quick-toggle-item-top display-flex flex-1 flex-justify flex-align-center">
-    <time class="text-align-left flex-1" datetime="{{day.periods[0].startTime}}" aria-label="{{"Date" | t}}">
+  <div class="wx-quick-toggle-item-top display-flex flex-1 flex-justify flex-align-center text-primary-darker font-mono-sm">
+    <time class="text-align-left flex-1 text-primary-dark" datetime="{{day.periods[0].startTime}}" aria-label="{{"Date" | t}}">
       <span>{{day.periods[0].dayName}}</span>
       <span class="display-block">
         {{day.monthNumericString}}/{{day.dayNumericString}}
@@ -40,7 +40,7 @@ the content
       </svg>
     </div>
 
-    <div class="wx-quick-toggle-item-high-low display-flex flex-1">
+    <div class="wx-quick-toggle-item-high-low display-flex flex-1 text-primary-darker">
       {% if not day.useOnlyLow %}
       <div class="wx-quick-high">
         <span class="wx-quick-label">
@@ -69,7 +69,7 @@ the content
       </div>
     </div>
 
-    <span class="wx-toggler-add-icon display-block tablet:display-none">
+    <span class="wx-toggler-add-icon display-block tablet:display-none text-primary">
       <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
         <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#add_circle"></use>
       </svg>
@@ -78,13 +78,13 @@ the content
 
   <hr/>
 
-  <div class="wx-quick-toggle-item-bottom flex-1">
+  <div class="wx-quick-toggle-item-bottom wx-flex-basis-100 mobile-lg__wx-flex-basis-auto width-full flex-1 tablet:width-auto text-primary-darker">
     <span>
       {{pop}}% {{"chance of precipitation" | t}}
     </span>
   </div>
 
-  <span class="wx-toggler-add-icon display-none tablet:display-block desktop:display-none">
+  <span class="wx-toggler-add-icon display-none tablet:display-block desktop:display-none text-primary">
     <svg class="usa-icon usa-icon--size-3" aria-hidden="true" focusable="false" role="img">
       <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#add_circle"></use>
     </svg>

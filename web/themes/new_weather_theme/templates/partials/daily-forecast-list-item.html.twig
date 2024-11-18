@@ -11,7 +11,7 @@ only be a nighttime period.
 {% set itemId =  periods[0].monthAndDay | lower | replace({" ":"-"}) %}
 
 <li class="wx-daily-forecast-list-item display-block desktop:margin-bottom-3 margin-y-0" {% if itemId %}id="{{itemId}}{% endif %}">
-  <h3 class="wx-daily-forecast-quick-toggle desktop:display-none bg-white border-left-1px border-right-1px border-top-1px border-base-lighter" data-expanded="false">
+  <h3 class="wx-daily-forecast-quick-toggle desktop:display-none bg-white" data-expanded="false">
     {% include "@new_weather_theme/partials/daily-forecast-quick-toggle.html.twig" %}
   </h3>
 
