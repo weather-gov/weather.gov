@@ -23,17 +23,7 @@
         border: 1px solid color("base-lighter");
         text-decoration: none;
         background-color: color("white");
-
         flex-wrap: nowrap;
-
-        .wx-alert-icon {
-            width: units(4);
-            height: units(4);
-
-            &:first-child {
-                margin-right: units(0.5);
-            }
-        }
     }
 
     .wx-quick-forecast-item {
@@ -74,9 +64,8 @@
             @include grid-col(12);
             @include u-font("mono", "xs");
             display: block;
-            text-align: center;
             color: color("primary-dark");
-            text-align: left;
+            text-align: center;
 
             span {
                 display: block;
@@ -161,8 +150,12 @@
         }
 
         .wx-alert-icon {
-            width: units(3);
-            height: units(3);
+            width: units(4);
+            height: units(4);
+
+            &:first-child {
+                margin-right: units(0.5);
+            }
 
             &[data-alert-level] {
                 fill: color("base");
@@ -183,47 +176,84 @@
             padding-left: 1px;
         }
 
-        .wx-quick-forecast-header {
-            @include u-font("mono", "sm");
+        &[aria-selected="true"] {
+            background-color: color("primary-darker");
+            color: white;
+            
+            .wx-quick-forecast-item-bottom,
+            .wx-quick-temp {
+                color: white;
+            }
 
-            text-transform: uppercase;
-            width: 100;
-            color: color("primary-darker");
-            padding: units(1.5);
+            .wx-quick-label {
+                color: color("base-lighter");
+            }
+            
+            time {
+                color: color("accent-cool-lighter");
+            }
 
-            @include grid-row;
-        }
+            .wx-alert-icon {
+                fill: white;
+                
+                &[data-alert-level] {
+                    fill: color("base-lighter");
+                }
 
-        .wx-quick-forecast-header-top {
-            @include grid-row;
-            @include grid-col;
-        }
+                &[data-alert-level="watch"] {
+                    fill: color("yellow-5v");
+                }
 
-        .wx-quick-forecast-header-bottom {
-            @include grid-row;
-
-            display: none;
-        }
-
-        .wx-quick-forecast-header-date {
-            @include grid-col;
-        }
-
-        .wx-quick-forecast-header-condition {
-            @include grid-col;
-
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .wx-quick-forecast-header-highlow {
-            @include grid-col;
-            @include grid-row;
-
-            span {
-                @include grid-col(6);
+                &[data-alert-level="warning"] {
+                    fill: color("red-cool-30v");
+                }
             }
         }
+        
     }
+}
+
+/* Header for quick-toggle area */
+
+.wx-quick-forecast-header-date {
+    @include grid-col;
+}
+
+.wx-quick-forecast-header-condition {
+    @include grid-col;
+
+    display: flex;
+    justify-content: space-around;
+}
+
+.wx-quick-forecast-header-highlow {
+    @include grid-col;
+    @include grid-row;
+
+    span {
+        @include grid-col(6);
+    }
+}
+
+.wx-quick-forecast-header {
+    @include u-font("mono", "sm");
+
+    text-transform: uppercase;
+    width: 100;
+    color: color("primary-darker");
+    padding: units(1.5);
+
+    @include grid-row;
+}
+
+.wx-quick-forecast-header-top {
+    @include grid-row;
+    @include grid-col;
+}
+
+.wx-quick-forecast-header-bottom {
+    @include grid-row;
+
+    display: none;
 }
 

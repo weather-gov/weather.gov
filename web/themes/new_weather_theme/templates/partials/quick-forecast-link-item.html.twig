@@ -14,9 +14,12 @@ the content
   {% set pop = 0 %}
 {% endif %}
 <a
-    class="wx-quick-forecast-item"
-    href="#{{dayId}}"
-    id="{{dayId}}-quick-forcast-button"
+  class="wx-quick-forecast-item"
+  href="#{{dayId}}"
+  id="{{dayId}}-quick-forcast-button"
+  {% if loop.index == 1 %}
+    aria-selected="true"
+  {% endif %}
 >
     <div class="wx-quick-forecast-item-top">
         <time class="" datetime="{{day.periods[0].startTime}}" aria-label="{{"Date" | t}}">
