@@ -3,178 +3,11 @@
 @forward "uswds";
 
 // Mobile is the default
-
+// but we hide this component unless
+// we are on desktop
 .wx-quick-forecast {
-    @include grid-row;
-
-    border: 1px solid color("base-lighter");
-    text-decoration: none;
-    background-color: color("white");
-    display: none;
-
-    &:last-child {
-        border-bottom: none;
-    }
-
-    hr {
-        display: none;
-    }
-
-    time {
-        @include u-font("mono", "xs");
-        @include grid-col;
-
-        color: color("primary-dark");
-        text-align: left;
-
-        span {
-            display: block;
-        }
-        
-        span:last-child {
-            text-decoration: underline;
-            margin-top: units(0);
-        }
-    }
-}
-
-.wx-quick-forecast-item-top {
-    @include grid-row;
-    @include grid-col;
-
-    align-items: center;
-}
-
-.wx-quick-forecast-item-high-low {
-    @include grid-row;
-    @include grid-col;
-}
-
-.wx-quick-forecast-condition {
-    display:  flex;
-
-    @include grid-col;
-
-    justify-content: center;
-}
-
-.wx-quick-forecast-item-bottom {
-    @include u-font("body", "sm");
-    @include grid-col(12);
-
-    color: color("primary-darker");
-    text-align: left;
-    display: flex;
-    align-items: center;
-}
-
-.wx-quick-forecast-item {
-    @include grid-col(12);
-    @include grid-row;
-
-    padding: units(1.5);
-    text-decoration: none;
-    border-bottom: 1px solid color("base-lighter");
-    position: relative;
-
-    &:hover::after {
-        display: block;
-        content: " ";
-        position: absolute;
-        height: calc(100% + 4px);
-        width: calc(100% + 4px);
-        top: -2px;
-        left: -2px;
-        border: 2px solid color("primary-dark");
-        z-index: 100;
-    }
-}
-
-.wx-quick-high,
-.wx-quick-low {
-    @include u-font("mono", "sm");
-    @include grid-col(6);
-}
-
-.wx-quick-label {
-    display: none;
-    text-transform: uppercase;
-    color: color("base-dark");
-}
-
-.wx-quick-temp {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: flex-start;
-    color: color("primary-darker");
-
-    @include u-font("body", "sm");
-
-    span {
-        @include u-font("body", "3xs");
-    }
-}
-
-.wx-alert-icon {
-    width: units(3);
-    height: units(3);
-
-    &[data-alert-level] {
-        fill: color("base");
-    }
-
-    &[data-alert-level="watch"] {
-        fill: color("yellow-50v");
-    }
-
-    &[data-alert-level="warning"] {
-        fill: color("red-50");
-    }
-}
-
-
-.wx-quick-forecast-header {
-    @include u-font("mono", "sm");
-
-    text-transform: uppercase;
-    width: 100;
-    color: color("primary-darker");
-    padding: units(1.5);
-
-    @include grid-row;
-}
-
-.wx-quick-forecast-header-top {
-    @include grid-row;
-    @include grid-col;
-}
-
-.wx-quick-forecast-header-bottom {
-    @include grid-row;
-
     display: none;
 }
-
-.wx-quick-forecast-header-date {
-    @include grid-col;
-}
-
-.wx-quick-forecast-header-condition {
-    @include grid-col;
-
-    display: flex;
-    justify-content: space-around;
-}
-
-.wx-quick-forecast-header-highlow {
-    @include grid-col;
-    @include grid-row;
-
-    span {
-        @include grid-col(6);
-    }
-}
-
 
 /* Desktop styles
 -------------------------------------------- */
@@ -186,6 +19,10 @@
     .wx-quick-forecast {
         @include grid-row;
         @include grid-col(12);
+
+        border: 1px solid color("base-lighter");
+        text-decoration: none;
+        background-color: color("white");
 
         flex-wrap: nowrap;
 
@@ -203,7 +40,23 @@
         @include grid-col;
         @include grid-row;
 
+        padding: units(1.5);
+        text-decoration: none;
+        border-bottom: 1px solid color("base-lighter");
+        position: relative;
         border-right: 1px solid color("base-lighter");
+
+        &:hover::after {
+            display: block;
+            content: " ";
+            position: absolute;
+            height: calc(100% + 4px);
+            width: calc(100% + 4px);
+            top: -2px;
+            left: -2px;
+            border: 2px solid color("primary-dark");
+            z-index: 100;
+        }
 
         &:last-child {
             border-right: none;
@@ -218,93 +71,159 @@
         }
 
         time {
+            @include grid-col(12);
+            @include u-font("mono", "xs");
             display: block;
             text-align: center;
+            color: color("primary-dark");
+            text-align: left;
+
+            span {
+                display: block;
+            }
+            
+            span:last-child {
+                text-decoration: underline;
+                margin-top: units(0);
+            }
+        }
+
+        .wx-quick-forecast-item-top {
+            @include grid-row;
+            @include grid-col(12);
+
+            padding-bottom: units(1);
+            align-items: center;
+        }
+
+        .wx-quick-forecast-item-high-low {
+            width: 100%;
+            margin-top: units(1);
 
             @include grid-col(12);
+            @include grid-row;
+        }
+
+        .wx-quick-forecast-condition {
+            @include grid-col(12);
+
+            display: flex;
+            justify-content: center;
+            margin-top: units(1.5);
+            margin-bottom: units(1);
+        }
+
+        .wx-quick-forecast-item-bottom {
+            @include u-font("body", "sm");
+            @include grid-col(12);
+
+            display: block;
+            padding-top: units(1);
+            text-align: center;
+            margin-top: units(1);
+            color: color("primary-darker");
+        }
+
+        .wx-quick-high,
+        .wx-quick-low {
+            @include u-font("mono", "xs");
+
+            margin-bottom: units(0.5);
+
+            @include grid-row;
+            @include grid-col(12);
+
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .wx-quick-low {
+            margin-bottom: 0;
+        }
+
+        .wx-quick-label {
+            display: block;
+            text-transform: uppercase;
+            color: color("base-dark");
+        }
+
+        .wx-quick-temp {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: flex-start;
+            color: color("primary-darker");
+
+            @include u-font("body", "sm");
+
+            span {
+                @include u-font("body", "3xs");
+            }
+        }
+
+        .wx-alert-icon {
+            width: units(3);
+            height: units(3);
+
+            &[data-alert-level] {
+                fill: color("base");
+            }
+
+            &[data-alert-level="watch"] {
+                fill: color("yellow-50v");
+            }
+
+            &[data-alert-level="warning"] {
+                fill: color("red-50");
+            }
+        }
+
+        .wx-degree {
+            @include u-font("body", "3xs");
+
+            padding-left: 1px;
+        }
+
+        .wx-quick-forecast-header {
+            @include u-font("mono", "sm");
+
+            text-transform: uppercase;
+            width: 100;
+            color: color("primary-darker");
+            padding: units(1.5);
+
+            @include grid-row;
+        }
+
+        .wx-quick-forecast-header-top {
+            @include grid-row;
+            @include grid-col;
+        }
+
+        .wx-quick-forecast-header-bottom {
+            @include grid-row;
+
+            display: none;
+        }
+
+        .wx-quick-forecast-header-date {
+            @include grid-col;
+        }
+
+        .wx-quick-forecast-header-condition {
+            @include grid-col;
+
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .wx-quick-forecast-header-highlow {
+            @include grid-col;
+            @include grid-row;
+
+            span {
+                @include grid-col(6);
+            }
         }
     }
-
-    .wx-quick-high,
-    .wx-quick-low {
-        @include u-font("mono", "xs");
-
-        margin-bottom: units(0.5);
-
-        @include grid-row;
-        @include grid-col(12);
-
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .wx-quick-low {
-        margin-bottom: 0;
-    }
-
-    .wx-quick-forecast-item-top {
-        padding-bottom: units(1);
-
-        @include grid-col(12);
-    }
-
-    .wx-quick-forecast-item-bottom {
-        padding-top: units(1);
-        text-align: center;
-        margin-top: units(1);
-
-        @include grid-col(12);
-
-        display: block;
-    }
-
-    .wx-quick-forecast-condition {
-        margin-top: units(1.5);
-        margin-bottom: units(1);
-
-        @include grid-col(12);
-    }
-
-    .wx-quick-label {
-        display: block;
-        text-transform: uppercase;
-        color: color("base-dark");
-    }
-
-    .wx-quick-temp {
-        color: color("primary-darker");
-    }
-
-    .wx-degree {
-        @include u-font("body", "3xs");
-
-        padding-left: 1px;
-    }
-
-    .wx-quick-forecast-item-high-low {
-        width: 100%;
-        margin-top: units(1);
-
-        @include grid-col(12);
-        @include grid-row;
-    }
 }
 
-
-/* Tablet styles
--------------------------------------------- */
-@include at-media("tablet") {
-    .wx-quick-forecast-item-top {
-        @include grid-col;
-    }
-
-    .wx-quick-forecast-item-bottom {
-        @include grid-col;
-    }
-
-    .wx-quick-forecast-header-bottom {
-        display: block;
-
-        @include grid-col;
-    }
-}
