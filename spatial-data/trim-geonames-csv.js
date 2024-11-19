@@ -53,13 +53,13 @@ const COLUMN_NAMES = [
 ];
 
 async function main(){
-  const fileText = await fs.readFile(FILENAME, { encoding: "utf-8"} );
+  const fileText = await fs.readFile(`./data/${FILENAME}`, { encoding: "utf-8"} );
   const rows = fileText.split("\n")
         .map(line => line.trim().split("\t"))
         .filter(row => US_CODES.includes(row[8]))
         .map(row => row.join("\t"));
   console.log(rows.length);
-  await fs.writeFile(OUTFILE_NAME, rows.join("\n"));
+  await fs.writeFile(`./data/${OUTFILE_NAME}`, rows.join("\n"));
 };
 
 main();

@@ -1,7 +1,9 @@
+const path = require("node:path");
+const chalk = require("chalk");
 const { downloadAndUnzip, unzip } = require("./lib/prep.js");
 
 const metadata = require("./lib/meta.js");
-const updateSchema = require("./lib/schema.js");
+const updateTable = require("./lib/update.js");
 
 async function main() {
   const meta = await metadata();
@@ -24,37 +26,42 @@ async function main() {
   const urls = [];
   const zips = [];
 
-  for (const [target, { update }] of Object.entries(meta)) {
-    console.log(`Fetching data for ${target}...`);
+  let hasUpdates = false;
+
+  for (const { target, update } of meta) {
     if (update) {
+      hasUpdates = true;
       if (dataUrls[target]) {
         urls.push(...dataUrls[target]);
       }
       if (dataZips[target]) {
         zips.push(...dataZips[target]);
       }
-    } else {
-      console.log(`  already up-to-date; skipping`);
     }
   }
 
-  for await (const url of urls) {
-    await downloadAndUnzip(url);
+  if (!hasUpdates) {
+    console.log(chalk.green("Everything is already up-to-date. Stopping!"));
+    // return;
   }
 
-  for await (const zip of zips) {
-    await unzip(zip);
+  if (urls.length) {
+    console.log("━━━━━━ Downloading needed data ━━━━━");
+    for await (const url of urls) {
+      await downloadAndUnzip(url);
+    }
   }
 
-  for await (const [source, sourceMetadata] of Object.entries(meta)) {
-    if (sourceMetadata.update) {
-      console.log(`${source} needs updating...`);
-      const importData = await updateSchema(sourceMetadata);
-      if (importData) {
-        console.log(`  ${source} requires data loading...`);
-        await sourceMetadata.metadata.loadData();
-      }
-      await metadata.update(source);
+  if (zips.length) {
+    console.log("━━━━━━ Decompressing local data ━━━━━");
+    for await (const zip of zips) {
+      await unzip(path.join("./data", zip));
+    }
+  }
+
+  for await (const updateMetadata of meta) {
+    if (updateMetadata.update) {
+      await updateTable(updateMetadata);
     }
   }
 }
