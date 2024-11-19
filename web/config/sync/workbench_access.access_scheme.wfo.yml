@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.weather_story.field_wfo
     - taxonomy.vocabulary.weather_forecast_offices
 id: wfo
 plural_label: WFOs
@@ -12,8 +11,4 @@ scheme: taxonomy
 scheme_settings:
   vocabularies:
     - weather_forecast_offices
-  fields:
-    1:
-      entity_type: node
-      bundle: weather_story
-      field: field_wfo
+  fields: {  }
