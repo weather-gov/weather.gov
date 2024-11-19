@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.wfo_weather_story_upload.field_cwa_center_lat
     - field.field.node.wfo_weather_story_upload.field_cwa_center_lon
+    - field.field.node.wfo_weather_story_upload.field_derived_wfo
     - field.field.node.wfo_weather_story_upload.field_description
     - field.field.node.wfo_weather_story_upload.field_endtime
     - field.field.node.wfo_weather_story_upload.field_frontpage
@@ -30,13 +31,13 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   field_cwa_center_lat:
     type: string_textfield
-    weight: 122
+    weight: 9
     region: content
     settings:
       size: 60
@@ -44,7 +45,15 @@ content:
     third_party_settings: {  }
   field_cwa_center_lon:
     type: string_textfield
-    weight: 123
+    weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_derived_wfo:
+    type: string_textfield
+    weight: 22
     region: content
     settings:
       size: 60
@@ -52,7 +61,7 @@ content:
     third_party_settings: {  }
   field_description:
     type: text_textarea
-    weight: 132
+    weight: 18
     region: content
     settings:
       rows: 5
@@ -60,20 +69,20 @@ content:
     third_party_settings: {  }
   field_endtime:
     type: datetime_timestamp
-    weight: 126
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   field_frontpage:
     type: boolean_checkbox
-    weight: 130
+    weight: 17
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_fullimage:
     type: image_image
-    weight: 136
+    weight: 20
     region: content
     settings:
       progress_indicator: throbber
@@ -81,14 +90,14 @@ content:
     third_party_settings: {  }
   field_graphicnumber:
     type: number
-    weight: 127
+    weight: 14
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_office:
     type: string_textfield
-    weight: 124
+    weight: 11
     region: content
     settings:
       size: 60
@@ -96,21 +105,21 @@ content:
     third_party_settings: {  }
   field_order:
     type: number
-    weight: 128
+    weight: 15
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_radar:
     type: number
-    weight: 129
+    weight: 16
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_smallimage:
     type: image_image
-    weight: 137
+    weight: 21
     region: content
     settings:
       progress_indicator: throbber
@@ -118,13 +127,13 @@ content:
     third_party_settings: {  }
   field_starttime:
     type: datetime_timestamp
-    weight: 125
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
   field_weburl:
     type: string_textfield
-    weight: 133
+    weight: 19
     region: content
     settings:
       size: 60
@@ -132,47 +141,47 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 2
+    weight: 1
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 100
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 15
+    weight: 4
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 120
+    weight: 8
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 16
+    weight: 5
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: -5
+    weight: 0
     region: content
     settings:
       size: 60
@@ -180,7 +189,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
