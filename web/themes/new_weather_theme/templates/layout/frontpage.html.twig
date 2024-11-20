@@ -13,7 +13,7 @@
       >
         <div class="display-flex flex-align-end text-white flex-wrap margin-top-2">
           <label class="usa-label margin-top-0 line-height-sans-1" for="search-combo-box">
-            {{ "Enter city or zip code" | t }}
+            {{ "location-search.labels.enter-city-zip.01" | t }}
           </label>
           <div class="margin-x-105">|</div>
             <button id="weathergov-use-browser-location" type="button" class="usa-button--unstyled wx-button--unstyled-light line-height-sans-1 margin-top-1">
@@ -26,7 +26,7 @@
                 <use
                   xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#my_location"
                 ></use>
-              </svg>{{ 'Use my location' | t }}
+              </svg>{{ 'location-search.labels.use-location.01' | t }}
             </button>
         </div>
         <wx-combo-box-location class="z-top margin-top-105" id="search-combo-box">

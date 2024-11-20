@@ -8,10 +8,10 @@
        announced when testing using VO.
     #}
     {% if loop.first %}
-      {% if alerts | length > 1 %} {% set alertLabel="Alerts" | t %}{% else %}{% set alertLabel="Alert" | t %}{% endif %}
+      {% if alerts | length > 1 %} {% set alertLabel="forecast.labels.alerts.01" | t %}{% else %}{% set alertLabel="daily-forecast.labels.alert.01" | t %}{% endif %}
       <span class="" aria-hidden="true">{{ alertLabel }}</span>
     {% endif %}
-      <span class="usa-sr-only">{{ "Alert" | t }}</span>
+      <span class="usa-sr-only">{{ "daily-forecast.labels.alert.01" | t }}</span>
     </th>
     {% if alert.offset > 0 %}
       <td colspan="{{ alert.offset }}"></td>

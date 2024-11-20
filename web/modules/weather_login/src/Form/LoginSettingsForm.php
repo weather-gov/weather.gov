@@ -68,7 +68,7 @@ class LoginSettingsForm extends ConfigFormBase
     {
         $form['sso_login_path'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('SSO Login Path'),
+            '#title' => $this->t('backend.login.sso-login-path.01'),
             '#default_value' => $this->config('weather_login.settings')
                 ->get('sso_login_path'),
             '#required' => false,
@@ -76,7 +76,7 @@ class LoginSettingsForm extends ConfigFormBase
 
         $form['sso_login_text'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Login Text'),
+            '#title' => $this->t('backend.login.login-text.01'),
             '#default_value' => $this->config('weather_login.settings')
                 ->get('sso_login_text'),
             '#required' => false,
@@ -84,7 +84,7 @@ class LoginSettingsForm extends ConfigFormBase
 
         $form['sso_cancel_path'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('SSO Cancel Path'),
+            '#title' => $this->t('backend.login.sso-cancel-path.01'),
             '#default_value' => $this->config('weather_login.settings')
                 ->get('sso_cancel_path'),
             '#required' => false,
@@ -92,7 +92,7 @@ class LoginSettingsForm extends ConfigFormBase
 
         $form['sso_cancel_text'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Cancel Text'),
+            '#title' => $this->t('backend.login.cancel-text.01'),
             '#default_value' => $this->config('weather_login.settings')
                 ->get('sso_cancel_text'),
             '#required' => false,

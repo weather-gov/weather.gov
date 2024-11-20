@@ -30,7 +30,7 @@ the content
 
         <div class="wx-quick-forecast-condition">
           <span class="usa-sr-only">
-            {{ "Condition" | t }}
+            {{"hourly-table.labels.condition.01" | t}}
             <span>
               {{ day.periods[0].data.description }}
             </span>
@@ -61,16 +61,16 @@ the content
           {% if isNightPeriod %}
             <div class="wx-quick-high">
               <span class="wx-quick-label">
-                {{"High" | t}}
+                {{"daily-forecast.labels.high.01" | t}}
               </span>
               <span class="wx-quick-temp">
-                {{ "N/A" | t  }}
+                {{ "abbreviations.not-applicable.01" | t  }}
               </span>
             </div>
           {% else %}
             <div class="wx-quick-high">
               <span class="wx-quick-label">
-                {{"High" | t}}
+                {{"daily-forecast.labels.high.01" | t}}
               </span>
               <span class="wx-quick-temp">
                 {{ high  }}
@@ -83,7 +83,7 @@ the content
             {% endif %}
             <div class="wx-quick-low">
                 <span class="wx-quick-label">
-                    {{"Low" | t}}
+                    {{"daily-forecast.labels.low.01" | t}}
                 </span>
                 <span class="wx-quick-temp">
                     {{ low }}
@@ -106,7 +106,7 @@ the content
 
     <div class="wx-quick-forecast-item-bottom">
       <span>
-          {{pop}}% {{"chance of precipitation" | t}}
+          {{pop}}% {{"daily-forecast.text.chance-precip.01" | t}}
       </span>
     </div>
 

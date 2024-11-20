@@ -47,7 +47,7 @@ only be a nighttime period.
 
           {% if alertCount > 1 %}
             {% set alertID = null %}
-            {% set alertType = "Multiple alerts" | t %}
+            {% set alertType = "daily-forecast.labels.multiple-alerts.01" | t %}
           {% endif %}
 
           <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 tablet-lg:grid-col-12 tablet-lg:margin-top-2 tablet-lg__wx-flex-justify-start daily-alert-summary">
@@ -64,15 +64,15 @@ only be a nighttime period.
           {% set tabletMarginUnit = 1 %}
           {% set tabletCol = 6 %}
           {%  if period.isOvernight %}
-          {% set label = "Overnight" | t %}
+          {% set label = "daily-forecast.labels.overnight.01" | t %}
           {% set lineColor = "midnight-indigo" %}
           {% set tabletCol = 12 %}
           {% set tabletMarginUnit = 3 %}
           {% elseif period.isDaytime %}
-          {% set label = "Day" | t %}
+          {% set label = "daily-forecast.labels.day.01" | t %}
           {% set lineColor = "yellow" %}
           {% else %}
-          {% set label = "Night" | t %}
+          {% set label = "daily-forecast.labels.night.01" | t %}
           {% set lineColor = "indigo" %}
           {% set marginUnit = 1 %}
           {% endif %}
@@ -94,7 +94,7 @@ only be a nighttime period.
                 </p>
                 {% if period.data.probabilityOfPrecipitation.hourlyMax and period.data.probabilityOfPrecipitation.hourlyMax > 1 %}
                 <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-                  {{period.data.probabilityOfPrecipitation.hourlyMax}}% {{ "chance of precipitation" | t }}
+                  {{period.data.probabilityOfPrecipitation.hourlyMax}}% {{ "daily-forecast.text.chance-precip.01" | t }}
                 </p>
                 {% endif %}
               </div>

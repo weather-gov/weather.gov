@@ -6,9 +6,9 @@
   #}
   <div class="display-flex flex-row flex-align-center" aria-hidden="true">
     {% if speed.mph == 0 %}
-      <span>{{ "calm" | t }}</span>
+      <span>{{ "wind.labels.calm.01" | t }}</span>
     {% else %}
-      <span>{{speed.mph}} {{ "mph" | t }}</span>
+      <span>{{speed.mph}} {{ "units.mph.01" | t }}</span>
       <span class="padding-x-05">{{ direction.cardinalShort }}</span>
       <span class="display-flex flex-align-center margin-bottom-2px">
         {#
@@ -27,10 +27,10 @@
   it in a more natural way.
   #}
   {% if speed.mph == 0 %}
-    <span class="usa-sr-only">{{ "calm" | t }}</span>
+    <span class="usa-sr-only">{{ "wind.labels.calm.01" | t }}</span>
   {% else %}
-    <span class="usa-sr-only">{{ "@speed mph from the @direction" | t({ "@speed": speed.mph, "@direction": direction.cardinalLong }) }}</span>
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-direction.01" | t({ "@speed": speed.mph, "@direction": direction.cardinalLong }) }}</span>
   {% endif %}
 {% else %}
-  <span class="text-base font-mono-xs">{{ "N/A" | t }}</span>
+  <span class="text-base font-mono-xs">{{ "abbreviations.not-applicable.01" | t }}</span>
 {% endif %}

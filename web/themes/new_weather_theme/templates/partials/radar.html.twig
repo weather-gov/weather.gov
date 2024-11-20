@@ -1,15 +1,13 @@
 {{ attach_library("new_weather_theme/cmi-radar") }}
 
 <div class="margin-top-2" wx-outer-radar-container>
-  <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2">{{ "Radar" | t }}</h3>
+  <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2">{{ "radar.labels.radar.01" | t }}</h3>
 
   <div class="grid-container padding-0 bg-white shadow-1">
     <div class="usa-sr-only">
       <p>
-        {{ "Listed below is a visual representation of radar data for
-        @place. For more details on specific weather conditions,
-        view hourly data within the" | t({"@place": place }) }}
-        <a href="" data-daily-tab-link>{{ "daily tab" | t }}</a>.
+        {{ "radar.aria.description.01" | t({"@place": place }) }}
+        <a href="" data-daily-tab-link>{{ "radar.labels.daily-tab.01" | t }}</a>.
       </p>
       <script type="text/javascript">
        const link = document.querySelector("[data-daily-tab-link]");
@@ -27,8 +25,8 @@
       <div class="position-absolute top-0 right-0 height-full">
         <div class="position-sticky top-0" style="top: 55px;">
           <button type="button" class="wx-radar-expand padding-0 margin-1">
-            <div class="usa-sr-only wx-radar-expand__description">{{ "expand the radar map" | t }}</div>
-            <div class="usa-sr-only display-none wx-radar-expand__description">{{ "collapse the radar map" | t }}</div>
+            <div class="usa-sr-only wx-radar-expand__description">{{ "radar.aria.expand-map.01" | t }}</div>
+            <div class="usa-sr-only display-none wx-radar-expand__description">{{ "radar.aria.collapse-map.01" | t }}</div>
             <svg role="img" aria-hidden="true" class="width-full height-full">
               <use xlink:href="{{ "/" ~ directory ~ "/assets/images/uswds/sprite.svg#zoom_out_map" }}"></use>
             </svg>
@@ -73,17 +71,17 @@
               type="button"
               aria-expanded="false"
               aria-controls="radar-legend">
-            {{"Radar legend" | t}}
+            {{"radar.labels.legend.01" | t}}
           </button>
         </h4>
         <table class="usa-accordion__content usa-table usa-table--borderless margin-top-0 wx-radar-legend" tabindex="0"  id="radar-legend">
-          <caption class="usa-sr-only">{{ "Legend which describes the intensity levels that correspond to color and dBz values" | t }}</caption>
+          <caption class="usa-sr-only">{{ "radar.aria.legend.01" | t }}</caption>
           <tr>
             <th class="font-family-mono text-primary-dark font-mono-xs z-400">
-              {{ "dBz" | t }}
+              {{ "units.dbz.01" | t }}
             </th>
             <th class="font-family-mono text-primary-dark font-mono-xs z-400 text-uppercase">
-              {{ "Intensity" | t }}
+              {{ "radar.labels.intensity.01" | t }}
             </th>
           </tr>
 

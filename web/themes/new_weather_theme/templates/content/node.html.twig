@@ -92,7 +92,7 @@
     <footer class="node__meta">
       {{ author_picture }}
       <div{{ author_attributes.addClass('node__submitted') }}>
-        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ "theme.text.submitted-by.01" | t({ "@author_name": author_name, "@date": date }) }}
         {{ metadata }}
       </div>
     </footer>
