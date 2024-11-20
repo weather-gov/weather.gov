@@ -113,11 +113,11 @@
             </div>
           </div>
         </div>
-        <div class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
+        <wx-daily-forecast class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
             <h2 class="usa-sr-only">Daily forecast</h2>
             {% include '@new_weather_theme/point/forecast.html.twig' with { forecast: point.forecast } %}
             {{ drupal_block("weathergov_wfo_promo", { wfo: point.grid.wfo }) }}
-        </div>
+        </wx-daily-forecast>
       </div>
     </wx-tabbed-nav>
     {% endif %}

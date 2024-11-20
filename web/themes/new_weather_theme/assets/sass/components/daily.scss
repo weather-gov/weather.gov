@@ -55,3 +55,24 @@ table tr:nth-child(2) th {
   }
 }
 
+/* Quick Forecast Tab mode styling
+-----------------------------------
+These styles will only apply to the quick forecast
+nav and the sibling daily forecast ol list when both
+items have the appropriate ARIA tab related roles
+set.
+Handles the hiding/showing of tab content based
+on the selected tab.
+*/
+wx-daily-forecast {
+    --wx-media-breakpoint-mobile: #{units("mobile")};
+    --wx-media-breakpoint-desktop: #{units("desktop")};
+}
+
+.wx-daily-forecast-list-item[role="tabpanel"] {
+    display: none;
+}
+
+.wx-daily-forecast-list-item[role="tabpanel"][data-tabpanel-active="true"] {
+    display: initial;
+}
