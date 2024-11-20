@@ -3,7 +3,6 @@
 const clickHandler = (event) => {
   event.preventDefault();
   event.stopPropagation();
-  console.log(event);
   const isExpanded = event.currentTarget.getAttribute("data-expanded") === "true";
   event.currentTarget.setAttribute("data-expanded", !isExpanded);
   Array.from(
