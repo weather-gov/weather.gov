@@ -9,6 +9,8 @@ services:
       - database-test
       - api-proxy-test
       - api-interop-layer-test
+    networks: !override
+      - weather-test.gov
     environment: # we want to extend, not override
       API_URL: http://api-proxy-test:9081
       API_INTEROP_URL: http://api-interop-layer-test:9082
@@ -21,6 +23,8 @@ services:
       service: database
     ports: !override
       - 4306:3306
+    networks: !override
+      - weather-test.gov
     profiles: !override ["test"]
 
   api-interop-layer-test:
@@ -29,6 +33,8 @@ services:
       service: api-proxy
     ports: !override
       - 9082:8082
+    networks: !override
+      - weather-test.gov
     profiles: !override ["test"]
 
   api-proxy-test:
@@ -37,6 +43,8 @@ services:
       service: api-proxy
     ports: !override
       - 9081:8081
+    networks: !override
+      - weather-test.gov
     profiles: !override ["test"]
 
   spatial-test:
@@ -45,9 +53,11 @@ services:
       service: spatial
     links: !override
       - database-test
+    networks: !override
+      - weather-test.gov
     environment:
       DB_HOST: database-test
     profiles: !override ["test"]
 
 networks:
-  weather.gov:
+  weather-test.gov:
