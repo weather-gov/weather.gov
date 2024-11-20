@@ -7,305 +7,228 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
 
-#: abbreviations.not-applicable
-msgid "N/A"
+msgid "abbreviations.not-applicable.01"
 msgstr "不适用"
 
-#: alerts.labels.areas-impacted
-msgid "Areas impacted"
+msgid "alerts.labels.areas-impacted.01"
 msgstr "受影响的地区"
 
-#: alerts.labels.what-to-do
-msgid "What to do"
+msgid "alerts.labels.what-to-do.01"
 msgstr "该怎么做"
 
-#: alerts.text.including-cities
-msgid "Including these cities"
+msgid "alerts.text.including-cities.01"
 msgstr "包括这些城市"
 
-#: backend.login.cancel-text
-msgid "Cancel Text"
+msgid "backend.login.cancel-text.01"
 msgstr "取消文本"
 
-#: backend.login.login-text
-msgid "Login Text"
+msgid "backend.login.login-text.01"
 msgstr "登录文本"
 
-#: backend.login.sso-cancel-path
-msgid "SSO Cancel Path"
+msgid "backend.login.sso-cancel-path.01"
 msgstr "SSO取消路径"
 
-#: backend.login.sso-login-path
-msgid "SSO Login Path"
+msgid "backend.login.sso-login-path.01"
 msgstr "SSO登录路径"
 
-#: daily-forecast.labels.alert
-msgid "Alert"
+msgid "daily-forecast.labels.alert.01"
 msgstr "警报"
 
-#: daily-forecast.labels.day
-msgid "Day"
+msgid "daily-forecast.labels.day.01"
 msgstr "白天"
 
-#: daily-forecast.labels.high
-msgid "High"
+msgid "daily-forecast.labels.high.01"
 msgstr "高温"
 
-#: daily-forecast.labels.low
-msgid "Low"
+msgid "daily-forecast.labels.low.01"
 msgstr "低温"
 
-#: daily-forecast.labels.multiple-alerts
-msgid "Multiple alerts"
+msgid "daily-forecast.labels.multiple-alerts.01"
 msgstr "多重警报"
 
-#: daily-forecast.labels.night
-msgid "Night"
+msgid "daily-forecast.labels.night.01"
 msgstr "晚上"
 
-#: daily-forecast.labels.overnight
-msgid "Overnight"
+msgid "daily-forecast.labels.overnight.01"
 msgstr "整夜"
 
-#: daily-forecast.labels.today
-msgid "Today"
+msgid "daily-forecast.labels.today.01"
 msgstr "今天"
 
-#: daily-forecast.text.chance-precip
-msgid "chance of precipitation"
+msgid "daily-forecast.text.chance-precip.01"
 msgstr "降水概率"
 
-#: daily-forecast.text.hide-details
-msgid "Hide hourly details"
+msgid "daily-forecast.text.hide-details.01"
 msgstr "不显示每小时详情"
 
-#: daily-forecast.text.show-details
-msgid "Show hourly details"
+msgid "daily-forecast.text.show-details.01"
 msgstr "显示每小时详情"
 
-#: daily-forecast.text.usa-gov-site
-msgid "Official website of the United States government"
+msgid "daily-forecast.text.usa-gov-site.01"
 msgstr "美国政府官方网站"
 
 msgid "footer.aria.noaa-logo.01"
 msgstr "国家海洋和大气管理局徽标"
 
-#: footer.noaa-motto
-msgid "Science. Service. Stewardship"
+msgid "footer.noaa-motto.01"
 msgstr "科学。 服务。 管理"
 
-#: footer.text.usa-gov-site-alt
-msgid "An official website of the United States government"
+msgid "footer.text.usa-gov-site-alt.01"
 msgstr "美国政府官方网站"
 
-#: forecast.current.aria.feels-like
-msgid "It feels like @feelsLike ℉."
+msgid "forecast.current.aria.feels-like.01"
 msgstr "感觉像77华氏度。"
 
-#: forecast.current.feels-like
-msgid "Feels like"
+msgid "forecast.current.feels-like.01"
 msgstr "感觉像"
 
-#: forecast.current.last-updated
-msgid "Last updated"
+msgid "forecast.current.last-updated.01"
 msgstr "最近更新"
 
-#: forecast.current.obs-station
-msgid "Observation station"
+msgid "forecast.current.obs-station.01"
 msgstr "观测站"
 
-#: forecast.errors.current-conditions
-msgid "There was an error loading the current conditions."
+msgid "forecast.errors.current-conditions.01"
 msgstr "加载当前状况时出错。"
 
-#: forecast.errors.daily
-msgid "There was an error loading the daily forecast."
+msgid "forecast.errors.daily.01"
 msgstr "加载每天的预报时出错。"
 
-#: forecast.labels.alerts
-msgid "Alerts"
+msgid "forecast.labels.alerts.01"
 msgstr "警报"
 
-#: forecast.labels.seven-days
-msgid "7 Days"
+msgid "forecast.labels.seven-days.01"
 msgstr "7天"
 
-#: forecast.labels.weather-info
-msgid "Weather information sections"
+msgid "forecast.labels.weather-info.01"
 msgstr "天气信息部分"
 
-#: hourly-table.aria.scroll-left
-msgid "scroll left"
+msgid "hourly-table.aria.scroll-left.01"
 msgstr "向左滚动"
 
-#: hourly-table.aria.scroll-right
-msgid "scroll right"
+msgid "hourly-table.aria.scroll-right.01"
 msgstr "向右滚动"
 
 
-
-
-
-#: hourly-table.labels.condition
-msgid "Condition"
+msgid "hourly-table.labels.condition.01"
 msgstr "条件"
 
-#: hourly-table.labels.dewpoint#: observation-table.labels.dewpoint
-msgid "Dewpoint"
+msgid "hourly-table.labels.dewpoint.01"
 msgstr "露点温度"
 
-#: hourly-table.labels.humidity#: observation-table.labels.humidity
-msgid "Humidity"
+msgid "hourly-table.labels.humidity.01"
 msgstr "湿度"
 
-#: hourly-table.labels.temperature
-msgid "Temperature"
+msgid "hourly-table.labels.temperature.01"
 msgstr "温度"
 
-#: hourly-table.labels.time
-msgid "Time"
+msgid "hourly-table.labels.time.01"
 msgstr "时间"
 
-#: hourly-table.labels.wind-speed
-msgid "Wind speed"
+msgid "hourly-table.labels.wind-speed.01"
 msgstr "风速"
 
-#: hourly-table.text.gusting
-msgid "with gusts up to @gustSpeed mph"
+msgid "hourly-table.text.gusting.01"
 msgstr "阵风可达40 mph"
 
-#: loader.loading-text
-msgid "Loading the forecast"
+msgid "loader.loading-text.01"
 msgstr "加载预报"
 
-#: location-search.labels.enter-city-zip
-msgid "Enter city or zip code"
+msgid "location-search.labels.enter-city-zip.01"
 msgstr "输入城市或邮政编码"
 
-#: location-search.labels.use-location
-msgid "Use my location"
+msgid "location-search.labels.use-location.01"
 msgstr "使用我的位置"
 
-#: observation-table.labels.gusts
-msgid "Gusts"
+msgid "observation-table.labels.gusts.01"
 msgstr "阵风"
 
-#: observation-table.labels.pressure
-msgid "Pressure"
+msgid "observation-table.labels.pressure.01"
 msgstr "气压"
 
-#: observation-table.labels.visibility
-msgid "Visibility"
+msgid "observation-table.labels.visibility.01"
 msgstr "能见度"
 
-#: observation-table.labels.wind
-msgid "Wind"
+msgid "observation-table.labels.wind.01"
 msgstr "风"
 
-#: precip-table.aria.amounts
-msgid "precipitation amounts for the coming hours"
+msgid "precip-table.aria.amounts.01"
 msgstr "接下来几小时的降水量"
 
-#: precip-table.labels.amounts
-msgid "Precipitation amounts"
+msgid "precip-table.labels.amounts.01"
 msgstr "降水量"
 
-#: radar.aria.collapse-map
-msgid "collapse the radar map"
+msgid "radar.aria.collapse-map.01"
 msgstr "关闭雷达图"
 
-#: radar.aria.expand-map
-msgid "expand the radar map"
+msgid "radar.aria.expand-map.01"
 msgstr "展开雷达图"
 
-#: radar.aria.legend
-msgid "Legend which describes the intensity levels that correspond to color and dBz values"
+msgid "radar.aria.legend.01"
 msgstr "描述与颜色和 dBz 值相对应的强度等级的图例"
 
-#: radar.labels.daily-tab
-msgid "daily tab"
+msgid "radar.labels.daily-tab.01"
 msgstr "每日天气列表"
 
-#: radar.labels.intensity
-msgid "Intensity"
+msgid "radar.labels.intensity.01"
 msgstr "强度"
 
-#: radar.labels.legend
-msgid "Radar legend"
+msgid "radar.labels.legend.01"
 msgstr "雷达图例"
 
-#: radar.labels.radar
-msgid "Radar"
+msgid "radar.labels.radar.01"
 msgstr "雷达"
 
-#: safety.labels.tips
-msgid "Tips to stay safe"
+msgid "safety.labels.tips.01"
 msgstr "保障安全的提示"
 
-#: units.dbz
-msgid "dBz"
+msgid "units.dbz.01"
 msgstr "dBz"
 
-#: units.mercury-inches
-msgid "@mercury_inches in (@mbar&nbsp;mb)"
+msgid "units.mercury-inches.01"
 msgstr "30.18 in (1022 mb)"
 
-#: units.miles
-msgid "miles"
+msgid "units.miles.01"
 msgstr "英里"
 
-#: units.mph
-msgid "mph"
+msgid "units.mph.01"
 msgstr "mph"
 
-#: uswds-banner.gov.description
-msgid "Official websites use .gov"
-msgstr "官方网站使用.gov"
-
-#: uswds-banner.gov.description_html
-msgid "A <strong>.gov</strong>\n                  website belongs to an official government organization in the\n                  United States."
+msgid "uswds-banner.gov.description_html.01"
 msgstr ".gov网站属于美国的官方政府组织。"
 
-#: uswds-banner.gov.https
-msgid "Secure .gov websites use HTTPS"
+msgid "uswds-banner.gov.description.01"
+msgstr "官方网站使用.gov"
+
+msgid "uswds-banner.gov.https.01"
 msgstr "安全的 .gov网站使用HTTPS"
 
-#: uswds-banner.gov.safely-connected_html
-msgid "or <strong>https://</strong>\n                  means you've safely connected to the .gov website. Share\n                  sensitive information only on official, secure websites."
+msgid "uswds-banner.gov.safely-connected_html.01"
 msgstr "或https://意味着您已安全地连接到.gov网站。 仅在安全的官方网站上共享敏感信息。"
 
-#: uswds-banner.how-you-know
-msgid "Here’s how you know"
+msgid "uswds-banner.how-you-know.01"
 msgstr "以下是你如何知道"
 
-#: uswds-banner.lock
-msgid "Lock"
-msgstr "锁"
-
-#: uswds-banner.lock_alt
-msgid "Locked padlock icon"
+msgid "uswds-banner.lock_alt.01"
 msgstr "锁好的挂锁图标"
 
-#: uswds-banner.lock_html
-msgid "A <strong>lock</strong>"
+msgid "uswds-banner.lock_html.01"
 msgstr "一把锁"
 
-#: uswds-banner.skip-to-content
-msgid "Skip to main content"
+msgid "uswds-banner.lock.01"
+msgstr "锁"
+
+msgid "uswds-banner.skip-to-content.01"
 msgstr "跳至主要内容"
 
-#: wfo.labels.facebook
-msgid "Facebook"
+msgid "wfo.labels.facebook.01"
 msgstr "Facebook"
 
-#: wfo.labels.local-office
-msgid "Your Local Forecast Office"
+msgid "wfo.labels.local-office.01"
 msgstr "您当地的天气预报所"
 
-#: wfo.labels.twitter
-msgid "X (Twitter)"
+msgid "wfo.labels.twitter.01"
 msgstr "X"
 
-#: wfo.labels.youtube
-msgid "YouTube"
+msgid "wfo.labels.youtube.01"
 msgstr "YouTube"
