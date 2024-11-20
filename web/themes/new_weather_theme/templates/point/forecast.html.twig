@@ -12,7 +12,7 @@
   {% else %}
     <div class="grid-container padding-x-0 tablet:padding-x-2">
       {% include '@new_weather_theme/partials/quick-forecast.html.twig' with { days: forecast.days } %}
-      <div class="wx-quick-forecast-header desktop:display-none">
+      <div class="wx-quick-forecast-header desktop:display-none" aria-hidden="true">
         <div class="wx-quick-forecast-header-top margin-right-3 table:margin-right-0">
           <div class="flex-1">
             <span>
