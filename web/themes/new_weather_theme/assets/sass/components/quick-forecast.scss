@@ -9,50 +9,6 @@
     display: none;
 }
 
-/* Header for quick-toggle area */
-
-.wx-quick-forecast-header-date {
-    @include grid-col;
-}
-
-.wx-quick-forecast-header-condition {
-    @include grid-col;
-
-    display: flex;
-    justify-content: space-around;
-}
-
-.wx-quick-forecast-header-highlow {
-    @include grid-col;
-    @include grid-row;
-
-    span {
-        @include grid-col(6);
-    }
-}
-
-.wx-quick-forecast-header {
-    @include u-font("mono", "sm");
-
-    text-transform: uppercase;
-    width: 100;
-    color: color("primary-darker");
-    padding: units(1.5);
-
-    @include grid-row;
-}
-
-.wx-quick-forecast-header-top {
-    @include grid-row;
-    @include grid-col;
-}
-
-.wx-quick-forecast-header-bottom {
-    @include grid-row;
-
-    display: none;
-}
-
 /* Desktop styles
 -------------------------------------------- */
 @include at-media("desktop") {
