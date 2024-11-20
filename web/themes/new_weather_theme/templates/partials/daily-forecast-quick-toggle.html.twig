@@ -42,7 +42,7 @@ the content
 
     <div class="wx-quick-toggle-item-high-low display-flex flex-1 text-primary-darker">
       {% if not day.useOnlyLow %}
-      <div class="wx-quick-high">
+      <div class="wx-quick-high" aria-label="{{'High' | t}}">
         <span class="wx-quick-label">
           {{"High" | t}}
         </span>
@@ -55,7 +55,7 @@ the content
         </span>
       </div>
       {% endif %}
-      <div class="wx-quick-low width-auto">
+      <div class="wx-quick-low width-auto" aria-label="{{'Low' | t }}">
         <span class="wx-quick-label">
           {{"Low" | t}}
         </span>
