@@ -7,11 +7,30 @@ dependencies:
     - node.type.wfo_pdf_upload
   module:
     - file
+    - filefield_paths
+third_party_settings:
+  filefield_paths:
+    enabled: true
+    file_path:
+      value: '[date:custom:Y]-[date:custom:m]'
+      options:
+        slashes: false
+        pathauto: false
+        transliterate: false
+    file_name:
+      value: '[file:ffp-name-only-original].[file:ffp-extension-original]'
+      options:
+        slashes: false
+        pathauto: false
+        transliterate: false
+    redirect: false
+    retroactive_update: false
+    active_updating: false
 id: node.wfo_pdf_upload.field_wfo_sitrep
 field_name: field_wfo_sitrep
 entity_type: node
 bundle: wfo_pdf_upload
-label: 'WFO SITREP'
+label: 'wfo situation report'
 description: ''
 required: true
 translatable: false
