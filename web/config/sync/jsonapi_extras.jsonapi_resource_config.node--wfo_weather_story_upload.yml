@@ -170,6 +170,12 @@ resourceFields:
     publicName: field_cwa_center_lon
     enhancer:
       id: ''
+  field_derived_wfo:
+    disabled: false
+    fieldName: field_derived_wfo
+    publicName: field_derived_wfo
+    enhancer:
+      id: ''
   field_description:
     disabled: false
     fieldName: field_description
@@ -228,12 +234,6 @@ resourceFields:
     disabled: false
     fieldName: field_starttime
     publicName: field_starttime
-    enhancer:
-      id: ''
-  field_title:
-    disabled: false
-    fieldName: field_title
-    publicName: field_title
     enhancer:
       id: ''
   field_weburl:
