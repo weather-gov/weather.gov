@@ -157,6 +157,11 @@ describe("API tests", () => {
     const secondJson = await secondResponse.json();
     expect(secondJson).not.toHaveProperty("errors");
     expect(secondJson).toHaveProperty("data");
+    // verify that `weather_cms_entity_presave` could not derive the WFO due to
+    // insufficient information.
+    expect(secondJson.data).toHaveProperty('attributes');
+    expect(secondJson.data.attributes).toHaveProperty('field_derived_wfo');
+    expect(secondJson.data.attributes.field_derived_wfo).toEqual('unknown');
   });
 
   test("uploader cannot upload wfo weather story images with missing attributes", async ({ request }) => {
@@ -193,7 +198,7 @@ describe("API tests", () => {
     expect(secondResponse.status()).toEqual(422);
   });
 
-  test("uploader can upload wfo weather story images with all attributes", async ({ request }) => {
+  const uploadWeatherStoryWithAttributes = async (request, attributes) => {
     // step one: upload the first image
     const pngFilename = "test-upload.png";
     const uploadFullLocation = `${API_ENDPOINT}/node/wfo_weather_story_upload/field_fullimage`;
@@ -224,7 +229,7 @@ describe("API tests", () => {
           title: pngFilename,
           field_office: "WFO test office",
           field_description: "a blank uploaded image",
-          field_weburl: "/test/wxstory.php?wfo=test",
+          field_weburl: "",
           field_frontpage: true,
           field_graphicnumber: 1,
           field_order: 1,
@@ -234,6 +239,7 @@ describe("API tests", () => {
           field_cwa_center_lon: 119.6456844,
           field_starttime: 1726572420,
           field_endtime: 1726572420,
+          ...attributes,
         },
         relationships: {
           field_fullimage: {
@@ -256,5 +262,56 @@ describe("API tests", () => {
     const secondJson = await secondResponse.json();
     expect(secondJson).not.toHaveProperty("errors");
     expect(secondJson).toHaveProperty("data");
+    return secondJson;
+  };
+
+  test("uploader can upload wfo weather story images with all attributes", async ({ request }) => {
+    const json = await uploadWeatherStoryWithAttributes(request, {
+      field_weburl: "/FXC/wxstory.php?wfo=afc",
+    });
+    // verify that `weather_cms_entity_presave` derived the WFO properly.
+    expect(json.data).toHaveProperty('attributes');
+    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
+    expect(json.data.attributes.field_derived_wfo).toEqual('AFC');
+  });
+
+  test("drupal can derive wfo weather.gov url", async ({ request }) => {
+    const json = await uploadWeatherStoryWithAttributes(request, {
+      field_weburl: "https://www.weather.gov/SJT/",
+    });
+    // verify that `weather_cms_entity_presave` derived the WFO properly.
+    expect(json.data).toHaveProperty('attributes');
+    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
+    expect(json.data.attributes.field_derived_wfo).toEqual('SJT');
+  });
+
+  test("drupal can derive wfo from relative WFO url", async ({ request }) => {
+    const json = await uploadWeatherStoryWithAttributes(request, {
+      field_weburl: "/grr/",
+    });
+    // verify that `weather_cms_entity_presave` derived the WFO properly.
+    expect(json.data).toHaveProperty('attributes');
+    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
+    expect(json.data.attributes.field_derived_wfo).toEqual('GRR');
+  });
+
+  test("drupal can derive wfo from radar url", async ({ request }) => {
+    const json = await uploadWeatherStoryWithAttributes(request, {
+      field_weburl: "http://radar.weather.gov/lzk/",
+    });
+    // verify that `weather_cms_entity_presave` derived the WFO properly.
+    expect(json.data).toHaveProperty('attributes');
+    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
+    expect(json.data.attributes.field_derived_wfo).toEqual('LZK');
+  });
+
+  test("drupal can derive wfo from srh.noaa.gov url", async ({ request }) => {
+    const json = await uploadWeatherStoryWithAttributes(request, {
+      field_weburl: "http://www.srh.noaa.gov/graphicast.php?site=jan&gc=8",
+    });
+    // verify that `weather_cms_entity_presave` derived the WFO properly.
+    expect(json.data).toHaveProperty('attributes');
+    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
+    expect(json.data.attributes.field_derived_wfo).toEqual('JAN');
   });
 });

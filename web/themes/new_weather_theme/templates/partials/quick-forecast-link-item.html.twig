@@ -9,10 +9,9 @@ the content
 {% set temps = day.periods | map(p => p.data.temperature.degF) %}
 {% set low = min(temps) %}
 {% set high = max(temps) %}
-{% set pops = day.periods | map(p => p.data.probabilityOfPrecipitation.percent) %}
-{% set pop = max(pops) %}
+{% set pop = day.maxPop %}
 {% if pop is null %}
-    {% set pop = 0 %}
+  {% set pop = 0 %}
 {% endif %}
 <a
     class="wx-quick-forecast-item"
@@ -40,7 +39,7 @@ the content
         </div>
 
         <hr/>
-        
+
         <div class="wx-quick-forecast-item-high-low">
             {% if not day.useOnlyLow %}
                 <div class="wx-quick-high">
@@ -70,12 +69,12 @@ the content
             </div>
         </div>
     </div>
-    
+
     <hr/>
-    
+
     <div class="wx-quick-forecast-item-bottom">
-        <span>
-            {{pop}}% {{"chance of precipitation" | t}} 
-        </span>
+      <span>
+          {{pop}}% {{"chance of precipitation" | t}}
+      </span>
     </div>
 </a>

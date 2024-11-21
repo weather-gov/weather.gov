@@ -113,28 +113,80 @@ final class LocationAndGridRouteController extends ControllerBase
         }
     }
 
-    public function redirectFromPlace($state, $place)
+    private function getKnownPlace($state, $place)
+    {
+        // We escape spaces with underscores and slashes with commas. We need
+        // to unescape them before querying. (None of the place names in our
+        // database have underscores or commas at the time of this writing.)
+        $place = str_replace("_", " ", $place);
+        $place = str_replace(",", "/", $place);
+
+        return $this->dataLayer->databaseFetch(
+            "SELECT
+                ST_X(point) AS lon,
+                ST_Y(point) AS lat,
+                state,
+                name
+            FROM weathergov_geo_places
+            WHERE
+                state LIKE :state
+                AND
+                name LIKE :place",
+            [":state" => $state, ":place" => $place],
+        );
+    }
+
+    public function servePlacePage($state, $place)
     {
         try {
-            $location = $this->dataLayer->databaseFetch(
-                "SELECT
-                    ST_X(point) AS lon,
-                    ST_Y(point) AS lat
-                FROM weathergov_geo_places
-                WHERE
-                    state LIKE :state
-                    AND
-                    name LIKE :place",
-                [":state" => $state, ":place" => $place],
-            );
+            $known = $this->getKnownPlace($state, $place);
 
-            if ($location !== false) {
-                $url = Url::fromRoute("weather_routes.point", [
-                    "lat" => $location->lat,
-                    "lon" => $location->lon,
+            // If we don't know this place, immediately return a 404. There's no
+            // point doing any further processing.
+            if ($known == false) {
+                throw new NotFoundHttpException();
+            }
+
+            // If the place name has a space in it, we'll need to redirect the
+            // user to the canonical URL.
+            $redirectForSpaces = str_contains($place, " ");
+
+            // Unescape the place name so we can compare it to the place name
+            // we got from the database.
+            $place = str_replace("_", " ", $place);
+            $place = str_replace(",", "/", $place);
+
+            // If the place name we got has a space in it, or if the state or
+            // place do not strictly match what's in our database, we'll send
+            // the user a redirect to our canonical place URL.
+            if (
+                $redirectForSpaces ||
+                $state != $known->state ||
+                $place != $known->name
+            ) {
+                // We'll send them back to this same route, but we'll use
+                // the state and place names from our database, with the
+                // place name escaped to handle spaces and slashes.
+                // (There are two places in American Samoa with slashes in
+                // their names, but slashes are URL path characters so we
+                // don't want to persist them!)
+                $url = Url::fromRoute("weather_routes.place", [
+                    "state" => $known->state,
+                    "place" => str_replace(
+                        "/",
+                        ",",
+                        str_replace(" ", "_", $known->name),
+                    ),
                 ]);
                 return new RedirectResponse($url->toString());
             }
+
+            // If we're here, we know the location and the requested URL is
+            // already canonical, so continue with the rendering process.
+            // If anyone figures out how to pass the lat/lon from here on
+            // through the process, that'd be dandy – then the template
+            // variable preprocessor thingy wouldn't have to redo this query
+            return [];
         } catch (\Throwable $e) {
             throw new NotFoundHttpException();
         }

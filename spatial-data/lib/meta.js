@@ -16,18 +16,24 @@ const targets = {
   zones,
 };
 
-module.exports = async () => {
-  const db = await openDatabase();
-
+const initializeMetadataTable = async (db) => {
   await db.query(
     `CREATE TABLE IF NOT EXISTS
       weathergov_geo_metadata
       (
         table_name varchar(512) NOT NULL PRIMARY KEY,
-        version SMALLINT UNSIGNED
+        version SMALLINT UNSIGNED DEFAULT 0
       )`,
   );
+};
 
+module.exports = async () => {
+  const db = await openDatabase();
+
+  await initializeMetadataTable(db);
+
+  // Get the existing schema and data versions for our tables and mape it into
+  // a useful data structure.
   const existing = await db
     .query("SELECT * FROM weathergov_geo_metadata")
     .then(([rows]) =>
@@ -42,45 +48,35 @@ module.exports = async () => {
 
   await db.end();
 
-  const results = {};
-  for (const [target, metadata] of Object.entries(targets)) {
-    const databaseVersion = +(existing[metadata.table] ?? 0);
+  const pendingUpdates = [];
 
-    const currentVersion = Math.max(
+  // Iterate through all of our sources and figure out which ones need to be
+  // updated in which ways.
+  for (const [target, metadata] of Object.entries(targets)) {
+    const currentSchemaVersion = +(existing[metadata.table] ?? 0);
+
+    const wantedSchemaVersion = Math.max(
       ...Object.keys(metadata?.schemas).map((v) => +v),
     );
 
-    results[target] = {
-      update: currentVersion > databaseVersion,
-      from: databaseVersion,
-      to: currentVersion,
+    pendingUpdates.push({
+      target,
+      update: wantedSchemaVersion > currentSchemaVersion,
+      from: currentSchemaVersion,
+      to: wantedSchemaVersion,
       metadata,
-    };
+    });
   }
 
-  return results;
+  return pendingUpdates;
 };
 
-module.exports.update = async (target) => {
-  const meta = await module.exports();
-
-  const metadata = targets[target];
-
-  if (meta[target].update) {
-    const currentVersion = Math.max(
-      ...Object.keys(metadata?.schemas).map((v) => +v),
-    );
-    console.log(`setting ${metadata.table} to version ${currentVersion}`);
-
-    const db = await openDatabase();
-
-    // UPSERT query, essentially
-    const sql = `INSERT INTO weathergov_geo_metadata
+module.exports.update = async (db, table, version) => {
+  // UPSERT query, essentially
+  const sql = `INSERT INTO weathergov_geo_metadata
                   (table_name, version)
-                VALUES("${metadata.table}", "${currentVersion}")
+                VALUES(?,?)
                 ON DUPLICATE KEY
-                  UPDATE version="${currentVersion}"`;
-    await db.query(sql);
-    await db.end();
-  }
+                  UPDATE version=?`;
+  await db.query(sql, [table, version, version]);
 };
