@@ -66,6 +66,22 @@ describe("QuicForecast navigation tests", () => {
 
         expect(secondItem).toHaveAttribute("aria-selected", "true");
       });
+
+      test("pressing the home key puts focus on the first nav item", async ({page}) => {
+        await page.locator(".wx-quick-forecast-item:nth-child(2)").focus();
+        await page.keyboard.press("Home");
+        const firstItem = await page.locator(".wx-quick-forecast-item:first-child");
+
+        await expect(firstItem).toBeFocused();
+      });
+
+      test("pressing the end key puts focus on last nav item", async ({page}) => {
+        await page.locator(".wx-quick-forecast-item:nth-child(2)").focus();
+        await page.keyboard.press("End");
+        const lastItem = await page.locator(".wx-quick-forecast-item:last-child");
+
+        await expect(lastItem).toBeFocused();
+      });
     });
   });
 });

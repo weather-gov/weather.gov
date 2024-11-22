@@ -178,7 +178,6 @@ class DailyForecast extends HTMLElement {
       // Space selects the item
       event.target.click();
       event.preventDefault();
-      return;
     } else if(event.code === "ArrowRight"){
       // Move to the next element in the nav list.
       // If we are already on the last one, loop back to
@@ -197,6 +196,14 @@ class DailyForecast extends HTMLElement {
       } else {
         event.target.previousElementSibling.focus();
       }
+    } else if(event.code === "Home"){
+      // Move focus to the first nav item
+      this.querySelector(".wx-quick-forecast-item:first-child").focus();
+      event.preventDefault();
+    } else if(event.code === "End"){
+      // Move focus to the last nav item
+      this.querySelector(".wx-quick-forecast-item:last-child").focus();
+      event.preventDefault();
     }
   }
 }
