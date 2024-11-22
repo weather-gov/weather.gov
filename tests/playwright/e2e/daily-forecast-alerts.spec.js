@@ -68,7 +68,7 @@ describe("alerts in the daily tab", () => {
         .locator(
           ".wx-daily-forecast-block .wx-daily-forecast-list-item .daily-alert-summary .wx-alert-link a",
         )
-        .nth(1);
+        .nth(0);
 
       await link.click();
 
