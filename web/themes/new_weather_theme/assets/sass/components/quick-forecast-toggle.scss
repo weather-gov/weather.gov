@@ -165,7 +165,7 @@
 }
 
 .wx-quick-forecast-header {
-  @include u-font("mono", "sm");
+  @include u-font("mono", "xs");
 
   text-transform: uppercase;
   width: 100;

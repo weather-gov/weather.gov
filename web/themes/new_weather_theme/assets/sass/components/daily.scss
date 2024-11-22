@@ -74,5 +74,5 @@ wx-daily-forecast {
 }
 
 .wx-daily-forecast-list-item[role="tabpanel"][data-tabpanel-active="true"] {
-    display: initial;
+    display: revert;
 }
