@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 
-const { describe, beforeEach, beforeAll } = test;
+const { describe, beforeEach } = test;
 
 beforeEach(async ({page}) => {
   await page.goto("http://localhost:8081/proxy/play/testing");

@@ -63,7 +63,7 @@ describe("alerts in the daily tab", () => {
     test("single alert link goes directly to the expected alert", async ({
       page,
     }) => {
-      const alertID = "alert_8760a86c78e313ccfc42aa4eb5166572a0e26e9d_003_1";
+      // const alertID = "alert_8760a86c78e313ccfc42aa4eb5166572a0e26e9d_003_1";
       const link = await page
         .locator(
           ".wx-daily-forecast-block .wx-daily-forecast-list-item .daily-alert-summary .wx-alert-link a",
@@ -73,13 +73,13 @@ describe("alerts in the daily tab", () => {
       await link.click();
 
       const alertTab = await page.locator("#alerts").first();
-      const alert = await page.locator(`#${alertID}`).first();
+      // const alert = await page.locator(`#${alertID}`).first();
 
       await expect(alertTab).toBeVisible();
 
       // Temporarily skipping while we decide on behavior
       // TODO
-      //await expect(alert).toBeInViewport();
+      // await expect(alert).toBeInViewport();
     });
   });
 });
