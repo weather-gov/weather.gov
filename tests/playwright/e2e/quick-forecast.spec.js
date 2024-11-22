@@ -4,10 +4,35 @@ const { describe, beforeEach, beforeAll } = test;
 
 beforeEach(async ({page}) => {
   await page.goto("http://localhost:8081/proxy/play/testing");
-  await page.goto("/point/34.749/-92.275#daily");
+  await page.goto("/point/34.749/-92.275");
+  await page.locator("#daily-tab-button").click();
+  await page.locator('.wx-quick-forecast[role="tablist"]').waitFor();
 });
 
-describe("QuicForecast navigation tests", () => {
+describe("Quick Forecast navigation tests", () => {
+
+  describe("Selecting a quick forecast item", () => {
+    test("shows the corresponding tabpanel", async ({page}) => {
+      const navItem = await page.locator(".wx-quick-forecast-item:nth-child(3)");
+      const target = await navItem.getAttribute("aria-controls");
+      await navItem.click();
+      const tabpanel = await page.locator(`#${target}`);
+
+      await expect(tabpanel).toBeVisible();
+    });
+
+    test("does not display the non-selected tabpanels", async ({page}) => {
+      const navItem = await page.locator(".wx-quick-forecast-item:nth-child(3)");
+      const target = await navItem.getAttribute("aria-controls");
+      await navItem.click();
+      const nonActivePanels = await page.locator(`.wx-daily-forecast-list-item[role="tabpanel"]:not(#${target})`).all();
+
+      nonActivePanels.forEach(async (panel) => {
+        await expect(panel).not.toBeVisible();
+      });
+    });
+  });
+  
   describe("a11y", () => {
     describe("When clicking the second element in the quick forecast", () => {
       test("it has aria-selected set to true", async ({page}) => {
