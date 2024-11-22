@@ -24,10 +24,13 @@ class DailyForecast extends HTMLElement {
     this.setupTabMode = this.setupTabMode.bind(this);
     this.undoTabMode = this.undoTabMode.bind(this);
     this.handleDesktopMediaChange = this.handleDesktopMediaChange.bind(this);
+    this.handleKeys = this.handleKeys.bind(this);
   }
 
   connectedCallback(){
     this.setupMediaEvents();
+
+    this.addEventListener("keydown", this.handleKeys);
   }
 
   disconnectedCallback(){
@@ -36,6 +39,8 @@ class DailyForecast extends HTMLElement {
     ).forEach(item => {
       item.removeEventListener("click", this.tabClickHandler);
     });
+
+    this.removeEventListener("keydown", this.handleKeys);
   }
 
   /**
@@ -161,6 +166,37 @@ class DailyForecast extends HTMLElement {
       const correspondingPanelId = event.target.getAttribute("aria-controls");
       const correspondingPanel = document.getElementById(correspondingPanelId);
       correspondingPanel.setAttribute("data-tabpanel-active", "true");
+    }
+  }
+
+  /**
+   * Handle the additional key events required by the
+   * WCAG tabs pattern
+   */
+  handleKeys(event){
+    if(event.code === "Space"){
+      // Space selects the item
+      event.target.click();
+      event.preventDefault();
+      return;
+    } else if(event.code === "ArrowRight"){
+      // Move to the next element in the nav list.
+      // If we are already on the last one, loop back to
+      // the first one.
+      if(event.target.matches(":last-child")){
+        this.querySelector(".wx-quick-forecast-item:first-child").focus();
+      } else {
+        event.target.nextElementSibling.focus();
+      }
+    } else if(event.code === "ArrowLeft"){
+      // Move to the previous element in the nav list.
+      // If we are already on the first element, loop
+      // around to the last one.
+      if(event.target.matches(":first-child")){
+        this.querySelector(".wx-quick-forecast-item:last-child").focus();
+      } else {
+        event.target.previousElementSibling.focus();
+      }
     }
   }
 }
