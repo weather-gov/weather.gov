@@ -31,6 +31,9 @@
 /web/sites/*/settings*.php
 /web/sites/*/services*.yml
 
+# Ignore user interface translations
+/web/config/sync/language/
+
 # Ignore paths that contain user-generated content.
 /web/sites/*/files
 /web/sites/*/private
