@@ -73,7 +73,7 @@ class DailyForecast extends HTMLElement {
     // Set up the tabpanel role for the forecast items
     const panelRefs = [];
     this.forecastList = this.querySelector(".wx-forecast-list");
-    Array.from(this.forecastList.querySelectorAll(".wx-daily-forecast-list-item"))
+    Array.from(this.forecastList.querySelectorAll(".wx-daily-forecast-list-item-inner"))
       .forEach(item => {
         item.setAttribute("role", "tabpanel");
         panelRefs.push(item.id);
@@ -161,7 +161,7 @@ class DailyForecast extends HTMLElement {
       // Update panel data attributes, used for showing/hiding
       // the tabs
       Array.from(
-        this.forecastList.querySelectorAll(".wx-daily-forecast-list-item")
+        this.forecastList.querySelectorAll(".wx-daily-forecast-list-item-inner")
       ).forEach(item => item.setAttribute("data-tabpanel-active", "false"));
       const correspondingPanelId = event.target.getAttribute("aria-controls");
       const correspondingPanel = document.getElementById(correspondingPanelId);

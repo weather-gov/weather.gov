@@ -69,10 +69,10 @@ wx-daily-forecast {
     --wx-media-breakpoint-desktop: #{units("desktop")};
 }
 
-.wx-daily-forecast-list-item[role="tabpanel"] {
+.wx-daily-forecast-list-item-inner[role="tabpanel"] {
     display: none;
 }
 
-.wx-daily-forecast-list-item[role="tabpanel"][data-tabpanel-active="true"] {
+.wx-daily-forecast-list-item-inner[role="tabpanel"][data-tabpanel-active="true"] {
     display: revert;
 }
