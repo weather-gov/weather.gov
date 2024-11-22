@@ -1,7 +1,7 @@
 {#
 This partial expects an array of forecast days.
 #}
-<nav class="wx-quick-forecast grid-col-12 margin-bottom-4" aria-label="{{'daily forecast tab navigation'}}">
+<nav class="wx-quick-forecast grid-col-12 margin-bottom-2" aria-label="{{'daily forecast tab navigation'}}">
   {% for day in days %}
   {% include '@new_weather_theme/partials/quick-forecast-link-item.html.twig'
   with { day: day }%}
