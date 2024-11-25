@@ -116,7 +116,7 @@ class DailyForecast extends HTMLElement {
   undoTabMode(){
     // Remove all tabpanel roles/aria
     Array.from(
-      this.querySelectorAll(".wx-forecast-list .wx-daily-forecast-list-item")
+      this.querySelectorAll(".wx-daily-forecast-list-item, .wx-daily-forecast-list-item-inner")
     ).forEach(item => {
       item.removeAttribute("role");
       item.removeAttribute("aria-labelledby");
