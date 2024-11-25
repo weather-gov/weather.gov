@@ -82,7 +82,7 @@
 	<main role="main" class="flex-1">
     {# link is in html.html.twig #}
     <a id="main-content" tabindex="-1"></a>
-    {% if path('<current>') == "/home" %}
+    {% if path('<current>') ends with "/home" %}
     {% include(directory ~ "/templates/layout/frontpage.html.twig") %}
     {% else %}
     {% include(directory ~ "/templates/partials/location-search.html.twig") with { place: point.place } %}
