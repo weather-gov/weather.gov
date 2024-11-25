@@ -53,7 +53,7 @@ weather_routes.grid.legacy:
 weather_routes.alert-info:
   path: '/info/alerts'
   defaults:
-    _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::noop
+    _controller: \Drupal\weather_routes\Controller\MetadataRouteController::listAlerts
   requirements:
     # Public endpoint
     _access: 'TRUE'

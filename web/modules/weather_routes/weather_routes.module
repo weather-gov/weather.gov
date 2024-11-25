@@ -37,5 +37,13 @@ function weather_routes_theme($existing, $type, $theme, $path)
                 "version_list" => [],
             ],
         ],
+
+        "weather_routes_info_alerts" => [
+            "render element" => "children",
+            "template" => "page-metadata-alerts",
+            "variables" => [
+                "alerts" => [],
+            ],
+        ],
     ];
 }
