@@ -27,7 +27,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
     "@playwright/test": "^1.48.2",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.9.3",
     "axe-core": "^4.10.2",
     "chai": "^5.1.2",
     "dayjs": "^1.11.13",
