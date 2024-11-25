@@ -8,7 +8,6 @@ dependencies:
     - node.type.dynamic_safety_information
     - node.type.page
     - node.type.testing_page
-    - node.type.weather_story
   module:
     - block_content
     - content_moderation
@@ -40,4 +39,3 @@ permissions:
   - 'view own unpublished content'
   - 'view page revisions'
   - 'view testing_page revisions'
-  - 'view weather_story revisions'

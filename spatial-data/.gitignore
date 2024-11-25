@@ -1,1 +1,11 @@
+# We will fetch most of the source spatial data as-needed. The data directory
+# is a local cache, but it shouldn't be persisted elsewhere. The one exception
+# is the cities500 dataset, which is not controlled by a US government entity,
+# so we don't want to fetch it dynamically.
+data/*
+!data/us.cities500.txt.zip
+
+# This is a temporary file created when zapping a dev environment. It's used
+# to more quickly restore the spatial data tables instead of having to rebuild
+# them from source each time.
 dump.mysql

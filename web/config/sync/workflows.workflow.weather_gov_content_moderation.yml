@@ -6,7 +6,6 @@ dependencies:
     - node.type.dynamic_safety_information
     - node.type.page
     - node.type.testing_page
-    - node.type.weather_story
     - node.type.wfo_info
   module:
     - content_moderation
@@ -58,6 +57,5 @@ type_settings:
       - dynamic_safety_information
       - page
       - testing_page
-      - weather_story
       - wfo_info
   default_moderation_state: draft

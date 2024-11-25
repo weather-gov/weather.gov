@@ -85,11 +85,7 @@
     {# link is in html.html.twig #}
     <div class="grid-container">    
 
-      {% if logged_in %}
-        <h1>Weather.gov content management</h2>
-        <a href="/node/add/weather_story" class="usa-button">Create a weather story</a>
-      {% else %}
-
+      {% if not logged_in %}
       <div class="grid-row">
         {{ page.content }}
       </div>
