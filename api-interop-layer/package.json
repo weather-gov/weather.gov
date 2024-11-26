@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "pm2 start node --name interop-layer -- --expose-gc --experimental-loader newrelic/esm-loader.mjs -r newrelic main.js",
-    "start-dev": "pm2 start node --name interop-layer --watch -- --inspect=0.0.0.0:9229 --expose-gc --experimental-loader newrelic/esm-loader.mjs -r newrelic main.js",
+    "start": "npx pm2-runtime start ecosystem.config.cjs --env production",
+    "start-dev": "npx pm2-runtime start ecosystem.config.cjs",
     "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
   },
   "author": "",
