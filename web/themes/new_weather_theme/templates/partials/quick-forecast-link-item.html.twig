@@ -19,14 +19,29 @@ the content
   id="{{dayId}}-quick-forcast-button"
 >
     <div class="wx-quick-forecast-item-top">
-        <time class="" datetime="{{day.periods[0].startTime}}" aria-label="{{"Date" | t}}">
+        <time class="" datetime="{{day.periods[0].startTime}}">
             <span>{{day.periods[0].dayName}}</span>
             <span class="display-block">
                 {{day.monthNumericString}}/{{day.dayNumericString}}
             </span>
         </time>
 
-        <div class="wx-quick-forecast-condition" aria-label="{{"Condition" | t}}">
+        <div class="wx-quick-forecast-condition">
+          <span class="usa-sr-only">
+            {{ "Condition" | t }}
+            <span>
+              {{ day.periods[0].data.description }}
+            </span>
+          </span>
+          {% if day.alerts.metadata.count %}
+          <span class="usa-sr-only">
+            {% if day.alerts.metadata.count > 1 %}
+              {{ "Multiple weather alerts" | t }}
+            {% else %}
+              {{ "Weather alert" | t }}
+            {% endif %}
+          </span>
+          {% endif %}
             {%  if hasAlertIcon %}
                 <svg role="img" aria-hidden="true" class="wx-alert-icon" data-alert-level="{{day.alerts.metadata.highest}}">
                     <use xlink:href="/themes/new_weather_theme/assets/images/uswds/sprite.svg#warning"></use>
