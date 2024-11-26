@@ -186,7 +186,7 @@ check-translations: ## Check the consistency of translations
 	npm run check-translations
 
 im: interop-monit
-interop-monit: ## Check interop API	metrics and logs
+interop-monit: ## Check interop API metrics and logs
 	docker compose exec api-interop-layer npx pm2 monit
 
 ### Composer management
