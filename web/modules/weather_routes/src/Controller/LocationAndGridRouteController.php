@@ -47,18 +47,6 @@ final class LocationAndGridRouteController extends ControllerBase
         );
     }
 
-    /**
-     * No-operation.
-     *
-     * This is used to handle routes where we don't actually need to do anything.
-     * Not setting a controller seems to cause Drupal to just stop processing the
-     * page, so return an empty array and be done.
-     */
-    public function noop()
-    {
-        return [];
-    }
-
     public function serveLocationPage($lat, $lon)
     {
         $path = $this->request->getCurrentRequest()->getPathInfo();
