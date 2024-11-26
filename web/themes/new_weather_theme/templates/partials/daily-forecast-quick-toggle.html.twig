@@ -18,7 +18,7 @@ the content
   id="{{dayId}}-quick-forcast-button"
   role="button"
   aria-controls="daily-content-{{itemId}}"
-  aria-expanded="true"
+  aria-expanded="false"
 >
   <div class="wx-quick-toggle-item-top display-flex flex-1 flex-justify flex-align-center text-primary-darker font-mono-sm">
     <time class="text-align-left flex-1 text-primary-dark" datetime="{{day.periods[0].startTime}}" aria-label="{{day.periods[0].dayName}}">
@@ -42,7 +42,10 @@ the content
 
     <div class="wx-quick-toggle-item-high-low display-flex flex-1 text-primary-darker">
       {% if not day.useOnlyLow %}
-      <div class="wx-quick-high" aria-label="{{'High' | t}}">
+      <span class="usa-sr-only">
+        {{'High' | t}}
+      </span>
+      <div class="wx-quick-high">
         <span class="wx-quick-temp display-block">
           {{ high  }}
           <span aria-hidden="true" class="wx-degree">
@@ -52,7 +55,10 @@ the content
         </span>
       </div>
       {% endif %}
-      <div class="wx-quick-low width-auto" aria-label="{{'Low' | t }}">
+      <div class="wx-quick-low width-auto">
+        <span class="usa-sr-only">
+          {{'Low' | t }}
+        </span>
         <span class="wx-quick-temp display-block">
           {{ low }}
           <span aria-hidden="true" class="wx-degree">

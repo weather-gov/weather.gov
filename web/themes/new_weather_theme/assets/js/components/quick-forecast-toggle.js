@@ -3,10 +3,24 @@
 const clickHandler = (event) => {
   event.preventDefault();
   event.stopPropagation();
-  const isExpanded = event.currentTarget.getAttribute("data-expanded") === "true";
-  event.currentTarget.setAttribute("data-expanded", !isExpanded);
+  // Depending on a tap, click, or keyboard selection of the h3/button,
+  // the target of the click event can change.
+  // We check to see which of the elements is the target
+  const targetIsButton = event.target.matches("button");
+  let button;
+  let h3;
+  if(targetIsButton){
+    button = event.target;
+    h3 = button.parentElement;
+  } else {
+    button = event.target.querySelector("button");
+    h3 = event.target;
+  }
+  const isExpanded = h3.getAttribute("data-expanded") === "true";
+  h3.setAttribute("data-expanded", !isExpanded);
+  button.setAttribute("aria-expanded", !isExpanded);
   Array.from(
-    event.currentTarget.querySelectorAll(".wx-toggler-add-icon use")
+    h3.querySelectorAll(".wx-toggler-add-icon use")
   ).forEach(element => {
     const iconName = isExpanded ? "add_circle" : "remove_circle";
     const iconHref = element.getAttribute("xlink:href").split("#")[0];
