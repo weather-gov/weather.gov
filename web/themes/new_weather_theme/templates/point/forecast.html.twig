@@ -1,6 +1,5 @@
 <div class="wx-daily-forecast-block">
   {{ attach_library('new_weather_theme/hourly-toggle') }}
-  <div class="grid-container padding-x-0 tablet:padding-x-2">
   {% if forecast.error %}
     {% set message = "There was an error loading the daily forecast." | t %}
     {% if forecast.message %}
@@ -10,7 +9,7 @@
       {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
     </div>
   {% else %}
-    <div class="grid-container padding-x-0 tablet:padding-x-2">
+    <div class="grid-container padding-x-0 desktop:padding-x-4 tablet:padding-x-2">
       {% include '@new_weather_theme/partials/quick-forecast.html.twig' with { days: forecast.days } %}
       <div class="wx-quick-forecast-header desktop:display-none" aria-hidden="true">
         <div class="wx-quick-forecast-header-top margin-right-3 table:margin-right-0">
@@ -52,5 +51,4 @@
       {%  endfor %}
       </ol>
   {% endif %}
-  </div>
 </div>
