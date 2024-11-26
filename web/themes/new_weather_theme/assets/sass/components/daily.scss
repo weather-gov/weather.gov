@@ -4,8 +4,6 @@
 ------------------------------------- */
 @include at-media("desktop"){
     .wx-daily-forecast-block ol > li {
-        @include u-margin-bottom(3);
-
         scroll-margin-top: units(7);
     }
 }
