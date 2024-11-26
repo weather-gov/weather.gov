@@ -297,6 +297,44 @@ describe("alert background processing module", () => {
     });
   });
 
+  it("prioritizes unknown 'evacuation' alerts correctly", async () => {
+    response.json.resolves({
+      features: [
+        {
+          geometry: "geo",
+          properties: {
+            id: "one",
+            event: "Pasta Sauce Evacuation Emergency",
+            sent: dayjs().subtract(1, "minute").toISOString(),
+            effective: dayjs().subtract(1, "minute").toISOString(),
+            onset: dayjs().subtract(1, "minute").toISOString(),
+            expires: dayjs().add(1, "minute").toISOString(),
+            ends: dayjs().add(1, "minute").toISOString(),
+          },
+        },
+      ],
+    });
+
+    await updateAlerts({ parent });
+
+    const newAlerts = getNewAlertsMessages();
+    const [
+      {
+        alert: { event, metadata },
+      },
+    ] = newAlerts[0];
+
+    expect(event).to.equal("Pasta Sauce Evacuation Emergency");
+    expect(metadata).to.eql({
+      level: {
+        priority: 2048,
+        text: "other",
+      },
+      kind: "land",
+      priority: 8192,
+    });
+  });
+
   it("posts an error if it encounters a problem", async () => {
     fetch.rejects();
 

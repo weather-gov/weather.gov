@@ -76,16 +76,13 @@ Languages and frameworks: PHP, Symfony, Twig
 Docker does all the heavy lifting for set up and configurations. It's a cinch to get up and running. Make sure you have Docker installed locally.
 
 1. Clone this repository into a new directory and `cd` into it.
-2. Run `docker compose up` from the command line. Alternatively, install the
-   [Docker plugin](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
-   in VSCode, then right click on the docker-compose.yml and select **Compose
-   Up**.
-3. Install our site configuration by running `make install-site`.
-4. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
-   should see a 404 page because we haven't defined any content. That's okay.
-5. Browse to [http://localhost:8080/user/login](http://localhost:8080/user/login)
+1. Run `make zap-init` from the command line. (Run `make zap` later on to restore to a clean state.) 
+1. Browse to [http://localhost:8080](http://localhost:8080) in your broswer. You
+   should see the home page of beta.weather.gov. That's okay.
+1. Browse to [http://localhost:8080/user/login](http://localhost:8080/user/login)
    to log in. Your username is `admin` and your password is `root`. Then you can
    do stuff!
+1. (optional) Install the node modules (`npm install`) into your node environment of choice.
 
 ## Editing and adding themes
 

@@ -1,0 +1,11 @@
+uuid: 30c1dc77-3d1f-4777-940e-2285e0ea9415
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.dynamic_safety_information
+id: node.dynamic_safety_information
+target_entity_type_id: node
+target_bundle: dynamic_safety_information
+default_langcode: site_default
+language_alterable: false
