@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "npx pm2-runtime start ecosystem.config.cjs --env production",
-    "start-dev": "npx pm2-runtime start ecosystem.config.cjs",
+    "start-dev": "npx pm2-runtime start ecosystem.config.cjs -- --inspect=0.0.0.0:9229 --expose-gc",
     "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
   },
   "author": "",
