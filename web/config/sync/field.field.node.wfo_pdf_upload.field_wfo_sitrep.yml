@@ -39,7 +39,7 @@ default_value_callback: ''
 settings:
   handler: 'default:file'
   handler_settings: {  }
-  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_directory: 'tmp/[random:number]'
   file_extensions: pdf
   max_filesize: '3 MB'
   description_field: false
