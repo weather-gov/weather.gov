@@ -92,8 +92,7 @@ shell: ## Get a shell inside the Drupal container
 
 ut: update-translations ## Update Drupal from local .po translation files
 update-translations:
-	docker compose exec drupal drush locale:clear-status
-	docker compose exec drupal drush locale:update
+	docker compose exec drupal drush locale:import-all /opt/drupal/web/modules/weather_i18n/translations/
 	docker compose exec drupal drush cache:rebuild
 zap-init: update-settings zap-containers rebuild pause install-site import-spatial load-spatial  ## Delete the entire Docker environment and start from scratch.
 zap: update-settings dump-spatial zap-containers rebuild pause install-site import-spatial load-spatial  ## Delete the entire Docker environment and start from scratch.

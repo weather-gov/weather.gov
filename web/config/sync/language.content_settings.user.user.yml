@@ -1,0 +1,11 @@
+uuid: 382dfec0-6912-4208-84d6-03a5886ed6ae
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.user
+target_entity_type_id: user
+target_bundle: user
+default_langcode: site_default
+language_alterable: false

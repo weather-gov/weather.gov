@@ -1,0 +1,11 @@
+uuid: 9ded0194-732f-438e-a678-c4edcac7544a
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.weather_event_types
+id: taxonomy_term.weather_event_types
+target_entity_type_id: taxonomy_term
+target_bundle: weather_event_types
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,11 @@
+uuid: 7542789c-3e63-48be-8f0f-fdf63950f511
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.weather_forecast_offices
+id: taxonomy_term.weather_forecast_offices
+target_entity_type_id: taxonomy_term
+target_bundle: weather_forecast_offices
+default_langcode: site_default
+language_alterable: false

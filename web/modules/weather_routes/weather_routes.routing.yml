@@ -10,6 +10,8 @@ weather_routes.point:
   path: '/point/{lat}/{lon}'
   defaults:
     _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::serveLocationPage
+  options:
+    no_cache: 'TRUE'
   requirements:
     # Public endpoint
     _access: 'TRUE'
@@ -21,6 +23,8 @@ weather_routes.grid:
   path: '/local/{wfo}/{gridX}/{gridY}'
   defaults:
     _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::redirectFromGrid
+  options:
+    no_cache: 'TRUE'
   requirements:
     # Public endpoint
     _access: 'TRUE'
@@ -33,6 +37,8 @@ weather_routes.place:
   path: '/place/{state}/{place}'
   defaults:
     _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::servePlacePage
+  options:
+    no_cache: 'TRUE'
   requirements:
     _access: 'TRUE'
     state: '^[a-zA-Z]{2}$'
@@ -42,6 +48,8 @@ weather_routes.grid.legacy:
   path: '/local/{wfo}/{gridX}/{gridY}/{location}'
   defaults:
     _controller: \Drupal\weather_routes\Controller\LocationAndGridRouteController::redirectFromGrid
+  options:
+    no_cache: 'TRUE'
   requirements:
     # Public endpoint
     _access: 'TRUE'
