@@ -147,10 +147,7 @@ function weather_cms_filefield_paths_process_file(
             if ($location !== $new_location) {
                 $message = "weather story upload: moving {$location} to {$new_location}";
                 \Drupal::logger("weather_cms")->notice($message);
-                // NB `$file_system->moveUploadedFile` does not work here, so do
-                // the renaming manually.
-                $file_system->delete($new_location);
-                $file_system->move($location, $new_location);
+                $file_system->move($location, $new_location, \Drupal\Core\File\FileExists::Replace);
             }
         }
     }
