@@ -139,7 +139,7 @@ describe("API tests", () => {
         type: "node--wfo_weather_story_upload",
         attributes: {
           title: pngFilename,
-          field_office: "WFO test office",
+          field_office: "test-WFO-office",
           field_description: "a blank uploaded image",
         },
         relationships: {
@@ -227,7 +227,7 @@ describe("API tests", () => {
         type: "node--wfo_weather_story_upload",
         attributes: {
           title: pngFilename,
-          field_office: "WFO test office",
+          field_office: "test-WFO-office",
           field_description: "a blank uploaded image",
           field_weburl: "",
           field_frontpage: true,
