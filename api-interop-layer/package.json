@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node --expose-gc --experimental-loader newrelic/esm-loader.mjs -r newrelic main.js",
-    "start-dev": "nodemon -e js --experimental-loader newrelic/esm-loader.mjs -r newrelic --inspect=0.0.0.0:9229 main.js",
+    "start": "npx pm2-runtime start ecosystem.config.cjs --env production",
+    "start-dev": "npx pm2-runtime start ecosystem.config.cjs -- --inspect=0.0.0.0:9229 --expose-gc",
     "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
   },
   "author": "",
@@ -18,7 +18,7 @@
     "fastify": "^4.28.1",
     "mysql2": "^3.11.3",
     "newrelic": "^12.5.0",
-    "nodemon": "^3.1.4"
+    "pm2": "^5.4.3"
   },
   "devDependencies": {
     "c8": "^10.1.2",

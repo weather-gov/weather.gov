@@ -1,0 +1,25 @@
+uuid: f179ab24-befb-4ca8-aa6f-cc070224a916
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pdf_description
+    - node.type.wfo_pdf_upload
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_pdf_upload.field_pdf_description
+field_name: field_pdf_description
+entity_type: node
+bundle: wfo_pdf_upload
+label: description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,19 @@
+uuid: 72c4385e-7cb1-4f38-84fb-42f43a8f2765
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pdf_starttime
+    - node.type.wfo_pdf_upload
+id: node.wfo_pdf_upload.field_pdf_starttime
+field_name: field_pdf_starttime
+entity_type: node
+bundle: wfo_pdf_upload
+label: 'start time'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp
