@@ -4,6 +4,12 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.wfo_pdf_upload.field_pdf_description
+    - field.field.node.wfo_pdf_upload.field_pdf_endtime
+    - field.field.node.wfo_pdf_upload.field_pdf_front_page
+    - field.field.node.wfo_pdf_upload.field_pdf_order
+    - field.field.node.wfo_pdf_upload.field_pdf_starttime
+    - field.field.node.wfo_pdf_upload.field_pdf_title
     - field.field.node.wfo_pdf_upload.field_wfo_sitrep
     - node.type.wfo_pdf_upload
   module:
@@ -19,5 +25,11 @@ content:
     weight: 100
     region: content
 hidden:
+  field_pdf_description: true
+  field_pdf_endtime: true
+  field_pdf_front_page: true
+  field_pdf_order: true
+  field_pdf_starttime: true
+  field_pdf_title: true
   field_wfo_sitrep: true
   langcode: true

@@ -1,0 +1,19 @@
+uuid: 8437af1a-5912-4e81-b52a-519622e7b4ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pdf_endtime
+    - node.type.wfo_pdf_upload
+id: node.wfo_pdf_upload.field_pdf_endtime
+field_name: field_pdf_endtime
+entity_type: node
+bundle: wfo_pdf_upload
+label: 'end time'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

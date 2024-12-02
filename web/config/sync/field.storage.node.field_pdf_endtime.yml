@@ -1,0 +1,18 @@
+uuid: e79278c4-42c5-4197-8ee8-31c87f4867a9
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_pdf_endtime
+field_name: field_pdf_endtime
+entity_type: node
+type: timestamp
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

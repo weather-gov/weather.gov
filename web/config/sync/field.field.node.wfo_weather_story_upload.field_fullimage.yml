@@ -12,7 +12,7 @@ third_party_settings:
   filefield_paths:
     enabled: true
     file_path:
-      value: '[node:field_office]/[node:content-type:machine-name]/field_fullimage'
+      value: '[node:field_derived_wfo]/[node:content-type:machine-name]/field_fullimage'
       options:
         slashes: true
         pathauto: false
