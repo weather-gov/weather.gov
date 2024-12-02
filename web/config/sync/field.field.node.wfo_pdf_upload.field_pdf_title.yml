@@ -1,0 +1,25 @@
+uuid: 2119c1e4-63cc-442f-857a-7328fd74faa9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pdf_title
+    - node.type.wfo_pdf_upload
+  module:
+    - unique_content_field_validation
+third_party_settings:
+  unique_content_field_validation:
+    unique: false
+    unique_text: ''
+id: node.wfo_pdf_upload.field_pdf_title
+field_name: field_pdf_title
+entity_type: node
+bundle: wfo_pdf_upload
+label: title
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
