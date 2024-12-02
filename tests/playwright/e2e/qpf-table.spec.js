@@ -14,8 +14,6 @@ describe("quantitative precipitation forecast table", () => {
       ".wx-daily-forecast-block .wx-daily-forecast-list-item:nth-child(1)",
     );
 
-    await day.locator("span.toggle-text").click();
-
     const headings = await day.locator(".wx-precip-table thead th");
 
     // period, snow, ice, [separator], water
@@ -31,8 +29,6 @@ describe("quantitative precipitation forecast table", () => {
       ".wx-daily-forecast-block .wx-daily-forecast-list-item:nth-child(2)",
     );
 
-    await day.locator("span.toggle-text").click();
-
     const headings = await day.locator(".wx-precip-table thead th");
 
     // period, snow, [separator], water
@@ -46,7 +42,6 @@ describe("quantitative precipitation forecast table", () => {
     const day = await page.locator(
       ".wx-daily-forecast-block .wx-daily-forecast-list-item:nth-child(3)",
     );
-    await day.locator("span.toggle-text").click();
 
     const headings = await day.locator(".wx-precip-table thead th");
 
@@ -61,8 +56,6 @@ describe("quantitative precipitation forecast table", () => {
     const day = await page.locator(
       ".wx-daily-forecast-block .wx-daily-forecast-list-item:nth-child(4)",
     );
-
-    await day.locator("span.toggle-text").click();
 
     const headings = await day.locator(".wx-precip-table thead th");
 
@@ -79,10 +72,6 @@ describe("quantitative precipitation forecast table", () => {
       ".wx-daily-forecast-block .wx-daily-forecast-list-item:nth-child(5)",
     );
 
-    await day.locator("span.toggle-text").click();
-    await day
-      .locator(".wx-forecast-details-toggle li:nth-child(2) button")
-      .click();
     const headings = await day.locator(".wx-precip-table thead th");
 
     // period, rain

@@ -64,9 +64,6 @@ describe("Hourly forecast table tests", () => {
     }) => {
       await page.goto("/point/34.749/-92.275#daily");
 
-      // Expand the hourly table
-      await page.locator("#daily ol li:first-child wx-hourly-toggle").click();
-
       // Click the alert
       await page
         .locator(
