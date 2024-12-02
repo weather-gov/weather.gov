@@ -18,6 +18,8 @@ const main = async () => {
   process.on("uncaughtException", (err) => {
     logger.error("Uncaught exception");
     logger.error(err);
+    // explicitly crash.
+    process.exit(1);
   });
 
   server.get("/", (_, response) => {
