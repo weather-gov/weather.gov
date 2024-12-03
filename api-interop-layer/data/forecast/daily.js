@@ -87,17 +87,10 @@ export default (data, { timezone }) => {
   }
 
   days.forEach((day) => {
-    console.log(timezone);
-    console.log(day.start);
-    console.log(day.end);
     day.start = dayjs.utc(day.start);
     day.end = dayjs.utc(day.end);
-    day.monthNumericString = day.start.format("MM");
-    // foo
-    console.log(`PLAIN: ${day.start.format("DD")}`);
-    console.log(`TZ: ${day.start.tz(timezone).format("DD")}`);
-    day.dayNumericString = day.start.format("DD");
-    console.log(day.dayNumericString);
+    day.monthNumericString = day.start.tz(timezone).format("MM");
+    day.dayNumericString = day.start.tz(timezone).format("DD");
   });
 
   return {
