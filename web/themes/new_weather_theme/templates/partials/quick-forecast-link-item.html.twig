@@ -9,6 +9,8 @@ the content
 {% set temps = day.periods | map(p => p.data.temperature.degF) %}
 {% set low = min(temps) %}
 {% set high = max(temps) %}
+{% set numPeriods = day.periods | length %}
+{% set isNightPeriod = numPeriods == 1 and  not day.periods[0].isOvernight and not day.periods[0].isDaytime %}
 {% set pop = day.maxPop %}
 {% if pop is null %}
   {% set pop = 0 %}
@@ -56,19 +58,28 @@ the content
         <hr/>
 
         <div class="wx-quick-forecast-item-high-low">
-            {% if not day.useOnlyLow %}
-                <div class="wx-quick-high">
-                    <span class="wx-quick-label">
-                        {{"High" | t}}
-                    </span>
-                    <span class="wx-quick-temp">
-                        {{ high  }}
-                        <span aria-hidden="true" class="wx-degree">
-                            &deg;F
-                        </span>
-                        <span class="usa-sr-only">℉</span>
-                    </span>
-                </div>
+          {% if isNightPeriod %}
+            <div class="wx-quick-high">
+              <span class="wx-quick-label">
+                {{"High" | t}}
+              </span>
+              <span class="wx-quick-temp">
+                {{ "N/A" | t  }}
+              </span>
+            </div>
+          {% else %}
+            <div class="wx-quick-high">
+              <span class="wx-quick-label">
+                {{"High" | t}}
+              </span>
+              <span class="wx-quick-temp">
+                {{ high  }}
+                <span aria-hidden="true" class="wx-degree">
+                  &deg;F
+                </span>
+                <span class="usa-sr-only">℉</span>
+              </span>
+            </div>
             {% endif %}
             <div class="wx-quick-low">
                 <span class="wx-quick-label">
