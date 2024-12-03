@@ -50,7 +50,7 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(firstPeriod.dayName).to.equal("Today");
+    expect(firstPeriod.dayName).to.equal("Tonight");
 
     expect(secondPeriod.isDaytime).to.be.true;
     expect(secondPeriod.isOvernight).to.be.false;
@@ -182,7 +182,7 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(firstPeriod.dayName).to.equal("Today");
+    expect(firstPeriod.dayName).to.equal("Tonight");
   });
 
   it("breaks a day, night, and day period into two days", () => {
@@ -298,7 +298,7 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(firstPeriod.dayName).to.equal("Today");
+    expect(firstPeriod.dayName).to.equal("Tonight");
   });
 
   it("computes the correct day of the month (string) when UTC and local timezone refer to different days", () => {
@@ -322,7 +322,7 @@ describe("daily forecast", () => {
     const [period] = firstDay.periods;
 
     expect(firstDay.dayNumericString).to.equal("02");
-    expect(period.dayName).to.equal("Today");
+    expect(period.dayName).to.equal("Tonight");
   });
 
   it("propagates an error", () => {

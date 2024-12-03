@@ -12,8 +12,10 @@ import { sentenceCase } from "../../util/case.js";
  */
 const addDayName = (day, timezone, isFirstDay=false) => {
   if(!isFirstDay){
+    // This will already be a dayjs object
+    const dayStartTime = day.periods[0].start;
     day.periods.forEach(period => {
-      period.dayName = dayjs(period.startTime).tz(timezone).format("dddd");
+      period.dayName = dayStartTime.tz(timezone).format("dddd");
     });
   } else {
     day.periods.forEach(period => {
