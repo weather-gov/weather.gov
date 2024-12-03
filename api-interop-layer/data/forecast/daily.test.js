@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import daily from "./daily.js";
-import dayjs from "../../util/day.js";
 
 describe("daily forecast", () => {
   // timezone is only used to calculate monthAndDay/dayName information and is
