@@ -111,6 +111,13 @@ export default async (request, response) => {
     console.log(`LOCAL:    serving local file: ${filePath}`);
     const output = JSON.parse(await fs.readFile(filePath));
 
+    // If the bundle contains a `now` key, override any
+    // configured value for the current time with the timestamp
+    // present in the bundle
+    if(output["@bundle"]?.now){
+      config.now = output["@bundle"].now;
+    }
+
     if (output["@bundle"]?.status) {
       console.log(
         `LOCAL:    local file has response status ${output["@bundle"].status}`,
