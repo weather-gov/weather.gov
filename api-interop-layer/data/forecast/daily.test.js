@@ -300,6 +300,29 @@ describe("daily forecast", () => {
     expect(firstPeriod.dayName).to.equal("Today");
   });
 
+  it("computes the correct day of the month (string) when UTC and local timezone refer to different days", () => {
+    const data = {
+      properties: {
+        periods: [
+          {
+            // 3AM UTC  on Sept 2nd would be Sept 2
+            // for UTC, but should be Sept 1 (10PM)
+            // for America/New_York
+            startTime: "2024-09-02T03:00:00+00:00",
+            endTime: "2024-09-02T09:00:00+00:00",
+            isDaytime: false,
+          },
+        ],
+      },
+    };
+    const { days } = daily(data, { timezone });
+    const [firstDay] = days;
+    const [period] = firstDay.periods;
+
+    expect(firstDay.dayNumericString).to.equal("01");
+    expect(period.dayName).to.equal("Today");
+  });
+
   it("propagates an error", () => {
     const data = {
       error: true,
