@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import daily from "./daily.js";
+import dayjs from "../../util/day.js";
 
 describe("daily forecast", () => {
   // timezone is only used to calculate monthAndDay/dayName information and is
@@ -305,12 +306,13 @@ describe("daily forecast", () => {
       properties: {
         periods: [
           {
-            // 3AM UTC  on Sept 2nd would be Sept 2
-            // for UTC, but should be Sept 1 (10PM)
+            // 3AM UTC  on Dec 3rd would be Dec 3
+            // for UTC, but should be Dec 2 (8PM)
             // for America/New_York
-            startTime: "2024-09-02T03:00:00+00:00",
-            endTime: "2024-09-02T09:00:00+00:00",
+            startTime: "2024-12-03T01:18:16Z",
+            endTime: "2024-12-03T10:18:15Z",
             isDaytime: false,
+            isOvernight: false
           },
         ],
       },
@@ -319,7 +321,7 @@ describe("daily forecast", () => {
     const [firstDay] = days;
     const [period] = firstDay.periods;
 
-    expect(firstDay.dayNumericString).to.equal("01");
+    expect(firstDay.dayNumericString).to.equal("02");
     expect(period.dayName).to.equal("Today");
   });
 
