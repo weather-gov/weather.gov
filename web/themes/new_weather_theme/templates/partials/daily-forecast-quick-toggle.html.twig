@@ -9,6 +9,8 @@ the content
 {% set temps = day.periods | map(p => p.data.temperature.degF) %}
 {% set low = min(temps) %}
 {% set high = max(temps) %}
+{% set numPeriods = day.periods | length %}
+{% set isNightPeriod = numPeriods == 1 and  not day.periods[0].isOvernight and not day.periods[0].isDaytime %}
 {% set pop = day.maxPop %}
 {% if pop is null %}
 {% set pop = 0 %}
@@ -56,7 +58,16 @@ the content
     </div>
 
     <div class="wx-quick-toggle-item-high-low display-flex flex-1 text-primary-darker">
-      {% if not day.useOnlyLow %}
+      {% if isNightPeriod %}
+      <span class="usa-sr-only">
+        {{'High' | t}}
+      </span>
+      <div class="wx-quick-high">
+        <span class="wx-quick-temp display-block">
+          {{ "N/A" | t  }}
+        </span>
+      </div>
+      {% else %}
       <span class="usa-sr-only">
         {{'High' | t}}
       </span>
