@@ -5,6 +5,6 @@ module.exports = {
     ignore_watch: ["newrelic_agent.log", "node_modules", ".pm2"],
     args: "--update-env",
     interpreter_args: "--experimental-loader newrelic/esm-loader.mjs -r newrelic",
-    watch: ["*.js"]
+    watch: ["**/*.js"]
   }]
 }
