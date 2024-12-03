@@ -52,5 +52,5 @@
     "timeZone": "America/Chicago",
     "radarStation": "KOAX"
   },
-  "@bundle": { "name": "Wahoo, NE", "now": "2024-12-02T21:00:00-05:00" }
+  "@bundle": { "name": "Wahoo, NE (with static time set)", "now": "2024-12-02T21:00:00-05:00" }
 }
