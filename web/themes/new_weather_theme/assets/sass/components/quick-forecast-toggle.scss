@@ -1,0 +1,226 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+.wx-quick-toggle-condition > .wx-alert-icon {
+  width: units(3);
+  height: units(3);
+}
+
+.wx-daily-forecast-quick-toggle {
+  margin: 0;
+
+  & > button {
+    border: none;
+    outline: none;
+    align-items: center;
+  }
+
+  position: relative;
+}
+
+.wx-daily-forecast-list-item .wx-daily-forecast-quick-toggle {
+  border: 1px solid color("base-lighter");
+  border-bottom: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:hover::after {
+    display: block;
+    content: " ";
+    position: absolute;
+    height: calc(100% + 4px);
+    width: calc(100% + 2px);
+    left: -1px;
+    top: -2px;
+    border: 2px solid color("primary-dark");
+    z-index: 100;
+  }
+
+  time {
+    @include u-font("mono", "xs");
+    @include grid-col;
+
+    color: color("primary-dark");
+    text-align: left;
+
+    span {
+      display: block;
+    }
+
+    span:last-child {
+      text-decoration: underline;
+      margin-top: units(0);
+    }
+  }
+
+  .wx-quick-high,
+  .wx-quick-low {
+    @include u-font("mono", "sm");
+    @include grid-col(6);
+  }
+
+  .wx-quick-label {
+    display: none;
+    text-transform: uppercase;
+    color: color("base-dark");
+  }
+
+  .wx-quick-temp {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    color: color("primary-darker");
+
+    @include u-font("body", "sm");
+
+    span {
+      @include u-font("body", "3xs");
+    }
+  }
+
+  .wx-alert-icon {
+    width: units(3);
+    height: units(3);
+
+    &[data-alert-level] {
+      fill: color("base");
+    }
+
+    &[data-alert-level="watch"] {
+      fill: color("yellow-50v");
+    }
+
+    &[data-alert-level="warning"] {
+      fill: color("red-50");
+    }
+  }
+}
+
+.wx-daily-forecast-list-item:last-of-type > .wx-daily-forecast-quick-toggle {
+  border-bottom: 1px solid color("base-lighter");
+}
+
+.wx-daily-forecast-quick-toggle[data-expanded="false"]
+  + .wx-daily-forecast-item-content {
+  display: none;
+}
+
+.wx-quick-toggle-item-top {
+  @include grid-row;
+  @include grid-col;
+
+  align-items: center;
+}
+
+.wx-quick-toggle-item-high-low {
+  @include grid-row;
+  @include grid-col;
+}
+
+.wx-quick-toggle-condition {
+  display: flex;
+
+  @include grid-col;
+
+  justify-content: center;
+}
+
+.wx-quick-toggle-item-bottom {
+  @include u-font("body", "sm");
+  @include grid-col(12);
+
+  color: color("primary-darker");
+  text-align: left;
+  display: flex;
+  align-items: center;
+  flex-basis: 100%;
+  margin-top: units(1.5);
+}
+
+
+
+/* Header for quick-toggle area */
+
+.wx-quick-forecast-header-date {
+  @include grid-col;
+}
+
+.wx-quick-forecast-header-condition {
+  @include grid-col;
+
+  display: flex;
+  justify-content: space-around;
+}
+
+.wx-quick-forecast-header-highlow {
+  @include grid-col;
+  @include grid-row;
+
+  span {
+    @include grid-col(6);
+  }
+}
+
+.wx-quick-forecast-header {
+  @include u-font("mono", "xs");
+
+  text-transform: uppercase;
+  width: 100;
+  color: color("primary-darker");
+  padding: units(1.5);
+
+  @include grid-row;
+}
+
+.wx-quick-forecast-header-top {
+  @include grid-row;
+  @include grid-col;
+}
+
+.wx-quick-forecast-header-bottom {
+  @include grid-row;
+
+  display: block;
+  width: units(1);
+}
+
+@include at-media("tablet") {
+  .wx-quick-toggle-item-bottom {
+    @include grid-col;
+
+    flex-basis: 0%;
+    margin-top: 0;
+    justify-content: center;
+  }
+
+  .wx-quick-toggle-item-top {
+    @include grid-col;
+  }
+
+  .wx-daily-forecast-list-item > .wx-daily-forecast-quick-toggle {
+    &:hover::after {
+      width: calc(100% + 4px);
+      left: -2px;
+    }
+  }
+
+  .wx-quick-forecast-header-bottom {
+    display: block;
+    flex: 1;
+    width: auto;
+  }
+}
+
+@include at-media("desktop") {
+  .wx-daily-forecast-quick-toggle[data-expanded="false"]
+    + .wx-daily-forecast-item-content {
+    display: block;
+  }
+
+  .wx-quick-forecast-header {
+    display: none;
+  }
+}

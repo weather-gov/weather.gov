@@ -1,6 +1,5 @@
 <div class="wx-daily-forecast-block">
   {{ attach_library('new_weather_theme/hourly-toggle') }}
-  <div class="grid-container padding-x-0 tablet:padding-x-2">
   {% if forecast.error %}
     {% set message = "There was an error loading the daily forecast." | t %}
     {% if forecast.message %}
@@ -10,11 +9,34 @@
       {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
     </div>
   {% else %}
-    <div class="grid-container padding-x-0 tablet:padding-x-2">
-      <div class="grid-col-12">
-        {% include '@new_weather_theme/partials/quick-forecast.html.twig' with { days: forecast.days } %}
+    <div class="grid-container padding-x-0 desktop:padding-x-4 tablet:padding-x-2">
+      {% include '@new_weather_theme/partials/quick-forecast.html.twig' with { days: forecast.days } %}
+      <div class="wx-quick-forecast-header desktop:display-none" aria-hidden="true">
+        <div class="wx-quick-forecast-header-top margin-right-3 table:margin-right-0">
+          <div class="flex-1">
+            <span>
+              {{"Date" | t}}
+            </span>
+          </div>
+          <div class="flex-1 mobile-lg:display-flex mobile-lg:flex-justify-center">
+            <span>
+              {{"Condition" | t}}
+            </span>
+          </div>
+          <div class="flex-1 display-flex">
+            <span class="flex-1">
+              {{"High" | t}}
+            </span>
+            <span class="flex-1">
+              {{"Low" | t}}
+            </span>
+          </div>
+        </div>
+        <div class="wx-quick-forecast-header-bottom">
+          <div class="wx-quick-forecast-header-empty"></div>
+        </div>
       </div>
-      <ol class="usa-list--unstyled">
+      <ol class="wx-forecast-list usa-list--unstyled">
       {%  for data in forecast.days %}
         {% set precipHours = content.precipitationPeriods[loop.index0 + precipIndex] %}
         {% include '@new_weather_theme/partials/daily-forecast-list-item.html.twig' with
@@ -22,11 +44,11 @@
               'periods': data.periods,
               'dayHours': data.hours,
               'alerts': data.alerts,
-              'qpf': data.qpf
+             'qpf': data.qpf,
+             'day': data
             }
         %}
       {%  endfor %}
       </ol>
   {% endif %}
-  </div>
 </div>

@@ -2,10 +2,10 @@
 
 /* Daily Forecast Block Overrides
 ------------------------------------- */
-.wx-daily-forecast-block ol > li {
-  @include u-margin-bottom(3);
-
-  scroll-margin-top: units(7);
+@include at-media("desktop"){
+    .wx-daily-forecast-block ol > li {
+        scroll-margin-top: units(7);
+    }
 }
 
 /* Hourly Forecast Block Overrides
@@ -53,3 +53,24 @@ table tr:nth-child(2) th {
   }
 }
 
+/* Quick Forecast Tab mode styling
+-----------------------------------
+These styles will only apply to the quick forecast
+nav and the sibling daily forecast ol list when both
+items have the appropriate ARIA tab related roles
+set.
+Handles the hiding/showing of tab content based
+on the selected tab.
+*/
+wx-daily-forecast {
+    --wx-media-breakpoint-mobile: #{units("mobile")};
+    --wx-media-breakpoint-desktop: #{units("desktop")};
+}
+
+.wx-daily-forecast-list-item-inner[role="tabpanel"] {
+    display: none;
+}
+
+.wx-daily-forecast-list-item-inner[role="tabpanel"][data-tabpanel-active="true"] {
+    display: revert;
+}

@@ -1,7 +1,6 @@
 import("./components/TabbedNavigator.js");
 import("./components/afd-selector.js");
 import("./components/HourlyTable.js");
-import("./components/HourlyToggle.js");
 import("./localizeTimestamps.js");
 import("./locationSearch.js");
 import("./radar.js");
@@ -15,3 +14,5 @@ import("./charts/hourly-wind.js");
 import("./charts/hourly-dewpoint.js");
 import("./charts/qpf.js");
 import("./components/forecast-details-toggle.js");
+import("./components/quick-forecast-toggle.js");
+import("./components/DailyForecast.js");

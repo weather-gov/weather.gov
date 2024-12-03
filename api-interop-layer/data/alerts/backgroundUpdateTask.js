@@ -122,6 +122,12 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
         kind: "land",
         priority: Number.MAX_SAFE_INTEGER,
       };
+
+      if (/\bevacuation\b/i.test(rawAlert.properties.event)) {
+        // For any alert with the word "evacuation", pin it to the same metadata
+        // as the NWS-defined evacuation alert.
+        alert.metadata = alertKinds.get("evacuation immediate");
+      }
     }
 
     // For now, we're only ingesting land alerts. Once we get into marine

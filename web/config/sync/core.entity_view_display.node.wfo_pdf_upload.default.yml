@@ -3,6 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.wfo_pdf_upload.field_pdf_description
+    - field.field.node.wfo_pdf_upload.field_pdf_endtime
+    - field.field.node.wfo_pdf_upload.field_pdf_front_page
+    - field.field.node.wfo_pdf_upload.field_pdf_order
+    - field.field.node.wfo_pdf_upload.field_pdf_starttime
+    - field.field.node.wfo_pdf_upload.field_pdf_title
     - field.field.node.wfo_pdf_upload.field_wfo_sitrep
     - node.type.wfo_pdf_upload
   module:
@@ -13,6 +19,78 @@ targetEntityType: node
 bundle: wfo_pdf_upload
 mode: default
 content:
+  field_pdf_description:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 109
+    region: content
+  field_pdf_endtime:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 106
+    region: content
+  field_pdf_front_page:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 107
+    region: content
+  field_pdf_order:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_pdf_starttime:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  field_pdf_title:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 108
+    region: content
   field_wfo_sitrep:
     type: file_default
     label: above

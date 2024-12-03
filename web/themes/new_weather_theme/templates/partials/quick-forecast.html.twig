@@ -1,34 +1,9 @@
 {#
 This partial expects an array of forecast days.
 #}
-<div class="wx-quick-forecast-header">
-    <div class="wx-quick-forecast-header-top">
-    <div class="wx-quick-forecast-header-date">
-        <span>
-            {{"Date" | t}}
-        </span>
-    </div>
-    <div class="wx-quick-forecast-header-condition">
-        <span>
-            {{"Condition" | t}}
-        </span>
-    </div>
-    <div class="wx-quick-forecast-header-highlow">
-        <span>
-            {{"High" | t}}
-        </span>
-        <span>
-            {{"Low" | t}}
-        </span>
-    </div>
-    </div>
-    <div class="wx-quick-forecast-header-bottom">
-        <div class="wx-quick-forecast-header-empty"></div>
-    </div>
-</div>
-<nav class="wx-quick-forecast margin-bottom-4">
-    {% for day in days %}
-        {% include '@new_weather_theme/partials/quick-forecast-link-item.html.twig'
-        with { day: day }%}
-    {% endfor %}
+<nav class="wx-quick-forecast grid-col-12 margin-bottom-2" aria-label="{{'daily forecast tab navigation'}}">
+  {% for day in days %}
+  {% include '@new_weather_theme/partials/quick-forecast-link-item.html.twig'
+  with { day: day }%}
+  {% endfor %}
 </nav>

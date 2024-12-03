@@ -3,6 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.wfo_pdf_upload.field_pdf_description
+    - field.field.node.wfo_pdf_upload.field_pdf_endtime
+    - field.field.node.wfo_pdf_upload.field_pdf_front_page
+    - field.field.node.wfo_pdf_upload.field_pdf_order
+    - field.field.node.wfo_pdf_upload.field_pdf_starttime
+    - field.field.node.wfo_pdf_upload.field_pdf_title
     - field.field.node.wfo_pdf_upload.field_wfo_sitrep
     - node.type.wfo_pdf_upload
   module:
@@ -19,6 +25,48 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_pdf_description:
+    type: string_textarea
+    weight: 129
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_pdf_endtime:
+    type: datetime_timestamp
+    weight: 126
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_pdf_front_page:
+    type: boolean_checkbox
+    weight: 127
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_pdf_order:
+    type: number
+    weight: 124
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_pdf_starttime:
+    type: datetime_timestamp
+    weight: 125
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_pdf_title:
+    type: string_textfield
+    weight: 128
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_wfo_sitrep:
     type: file_generic

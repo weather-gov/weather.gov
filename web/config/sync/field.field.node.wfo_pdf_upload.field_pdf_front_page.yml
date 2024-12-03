@@ -1,0 +1,21 @@
+uuid: 3df583e2-741c-49f4-82a3-474ee0869b26
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pdf_front_page
+    - node.type.wfo_pdf_upload
+id: node.wfo_pdf_upload.field_pdf_front_page
+field_name: field_pdf_front_page
+entity_type: node
+bundle: wfo_pdf_upload
+label: 'front page'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
