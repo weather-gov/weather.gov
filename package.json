@@ -38,7 +38,7 @@
     "glob": "^11.0.0",
     "jsdom": "^25.0.1",
     "jsdom-global": "^3.0.2",
-    "mocha": "^10.8.2",
+    "mocha": "^11.0.1",
     "mocha-cli": "^1.0.1",
     "playwright": "^1.49.0",
     "prettier": "^3.3.3",
