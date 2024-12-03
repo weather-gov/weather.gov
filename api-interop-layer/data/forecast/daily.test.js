@@ -49,7 +49,7 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(firstPeriod.dayName).to.equal("Today");
+    expect(firstPeriod.dayName).to.equal("Tonight");
 
     expect(secondPeriod.isDaytime).to.be.true;
     expect(secondPeriod.isOvernight).to.be.false;
@@ -181,7 +181,7 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(firstPeriod.dayName).to.equal("Today");
+    expect(firstPeriod.dayName).to.equal("Tonight");
   });
 
   it("breaks a day, night, and day period into two days", () => {
@@ -297,7 +297,31 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(firstPeriod.dayName).to.equal("Today");
+    expect(firstPeriod.dayName).to.equal("Tonight");
+  });
+
+  it("computes the correct day of the month (string) when UTC and local timezone refer to different days", () => {
+    const data = {
+      properties: {
+        periods: [
+          {
+            // 3AM UTC  on Dec 3rd would be Dec 3
+            // for UTC, but should be Dec 2 (8PM)
+            // for America/New_York
+            startTime: "2024-12-03T01:18:16Z",
+            endTime: "2024-12-03T10:18:15Z",
+            isDaytime: false,
+            isOvernight: false
+          },
+        ],
+      },
+    };
+    const { days } = daily(data, { timezone });
+    const [firstDay] = days;
+    const [period] = firstDay.periods;
+
+    expect(firstDay.dayNumericString).to.equal("02");
+    expect(period.dayName).to.equal("Tonight");
   });
 
   it("propagates an error", () => {
