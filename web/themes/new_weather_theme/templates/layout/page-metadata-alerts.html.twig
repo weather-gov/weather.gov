@@ -1,3 +1,5 @@
+{{ attach_library("new_weather_theme/point-page") }}
+
 <div class="layout-container grid-row height-full flex-column flex-no-wrap">
   <header role="banner">
     <div class="grid-container">
@@ -21,7 +23,23 @@
     <a id="main-content" tabindex="-1"></a>
     
     <div class="grid-container">
-      {{ drupal_block("weathergov_info_alert") }}
+      <table>
+        <thead>
+          <tr>
+            <th/>
+            <th>Alert name</th>
+            <th>Type</th>
+          </tr>
+        <tbody>
+        {% for alert in alerts %}
+          <tr>
+            <th>{{ loop.index }}</th>
+            <td>{{ alert.name | title }}</td>
+            <td>{{ alert.kind }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
     </div>
   </main>
 </div>
