@@ -63,6 +63,8 @@ const parseGettextSource = (str) => {
  * For a given list of translation file paths,
  * respond with a dictionary mapping filenames
  * to match information for the gettext values
+ *
+ * @type (sourcePaths: string) => Object<string, Object<string, {comments: string, msgid: string, msgstr: string, msgidString: string, msgstrString: string}>>
  */
 const getTranslationMatchInfo = (sourcePaths) => {
   const lookup = {};

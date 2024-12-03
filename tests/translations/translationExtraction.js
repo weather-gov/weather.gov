@@ -48,9 +48,10 @@ const matchTranslationFilters = (source) => {
 };
 
 /**
- * For a given PHP file, extract all of the translation matches
- * and return information about the match line number
- * and matched / extracted strings
+ * For a given PHP file, extract all of the translatable strings.
+ *
+ * @type (filePath: string) => {filename: string, matchedString: string,
+ * extracted: string, extractedArgs: ?string, lineNumber: number, index: number}[]
  */
 const extractPHPTranslations = (filePath) => {
   const source = fs.readFileSync(filePath).toString();
@@ -65,6 +66,7 @@ const extractPHPTranslations = (filePath) => {
           extracted: match[1],
           extractedArgs: match[3] | null,
           lineNumber: getLineNumberForPosition(source, match.index),
+          index: match.index,
         })),
     );
   }
@@ -73,9 +75,9 @@ const extractPHPTranslations = (filePath) => {
 };
 
 /**
- * For a given template file, extract all of the
- * translation matches and return information about
- * the match line number and string
+ * For a given template file, extract all of the translatable strings.
+ *
+ * @type (filePath: string) => {filename: string, matchedString: string, extracted: string, extractedArgs: ?string, lineNumber: number, index: number}[]
  */
 const extractTemplateTranslations = (filePath) => {
   const source = fs.readFileSync(filePath).toString();
@@ -135,10 +137,10 @@ const getLineNumberForPosition = (source, position) => {
 };
 
 /**
- * Appends the value to the lookup dictionary's
- * key. Because keys map to arrays, if there is not
- * yet an entry for the key, it creates the initial array
- * value and sets the passed-in value as the first element.
+ * Maps an occurrence of a translation to its translation key.
+ *
+ * Keys map to arrays because a translation can occur in multiple places,
+ * so if there is not yet an entry for the key, it creates the initial array.
  */
 const appendToLookup = (lookup, key, val) => {
   if (!Object.keys(lookup).includes(key)) {
@@ -149,9 +151,9 @@ const appendToLookup = (lookup, key, val) => {
 };
 
 /**
- * Given a source path of templates, return a lookup
- * dictionary that maps string to be translated to
- * arrays of match information.
+ * Extract translation keys (`msgid`s) from files.
+ *
+ * @type (templatePaths: string[], phpPaths: string[]) => Object<string, {filename: string, matchedString: string, extracted: string, extractedArgs: ?string, lineNumber: number, index: number}[]>
  */
 const getFileMatchInfo = (templatePaths, phpPaths) => {
   const lookupByTerm = {};
