@@ -69,7 +69,6 @@
 .DS_Store*
 ehthumbs.db
 Thumbs.db
-._*
 
 # Ignore Local Development files
 /web/sites/services.dev.yml
