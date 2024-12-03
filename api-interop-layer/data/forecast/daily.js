@@ -3,6 +3,30 @@ import { convertProperties } from "../../util/convert.js";
 import { parseAPIIcon } from "../../util/icon.js";
 import { sentenceCase } from "../../util/case.js";
 
+/**
+ * For a computed day object,
+ * add the appropriate string of the day name
+ * to each constituent period.
+ * For the first day, we determine the label based
+ * on the number and nature of the period(s)
+ */
+const addDayName = (day, timezone, isFirstDay=false) => {
+  if(!isFirstDay){
+    day.periods.forEach(period => {
+      period.dayName = dayjs(period.startTime).tz(timezone).format("dddd");
+    });
+  } else {
+    day.periods.forEach(period => {
+      // If there is one period, we call it "Tonight"
+      if(day.periods.length === 1){
+        period.dayName =  "Tonight";
+      } else {
+        period.dayName =  "Today";
+      }
+    });
+  }
+};
+
 export default (data, { timezone }) => {
   if (data.error) {
     return { error: true };
@@ -46,7 +70,6 @@ export default (data, { timezone }) => {
       isDaytime: period.isDaytime,
       isOvernight: false,
       monthAndDay: start.tz(timezone).format("MMM D"),
-      dayName: days.length === 1 ? "Today" : start.tz(timezone).format("dddd"),
       data: convertProperties({
         icon: parseAPIIcon(period.icon),
         description: sentenceCase(period.shortForecast),
@@ -86,7 +109,9 @@ export default (data, { timezone }) => {
     }
   }
 
-  days.forEach((day) => {
+  days.forEach((day, idx) => {
+    const isFirstDay = idx === 0;
+    addDayName(day, timezone, isFirstDay);
     day.start = dayjs.utc(day.start);
     day.end = dayjs.utc(day.end);
     day.monthNumericString = day.start.tz(timezone).format("MM");
