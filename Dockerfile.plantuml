@@ -2,7 +2,7 @@ FROM plantuml/plantuml-server:jetty
 
 # Copy the zscaler root CA into the container and add it to the list of OpenSSL
 # root certificates.
-COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
+COPY zscaler-root-public.cert /etc/ssl/certs/zscaler-root.pem
 
 # Put it in the Java keytool. Gotta be root for this.
 USER root

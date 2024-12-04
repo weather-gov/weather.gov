@@ -9,7 +9,7 @@ RUN usermod -g ${GID} www-data
 
 # Copy the zscaler root CA into the container and add it to the list of OpenSSL
 # root certificates.
-COPY zscaler-root.pem /etc/ssl/certs/zscaler-root.pem
+COPY zscaler-root-public.cert /etc/ssl/certs/zscaler-root.pem
 # Rebuild the CA cache. Otherwise the prior step is useless.
 RUN c_rehash
 # Tell PHP where to look for CAs. I dunno why it doesn't look here by default.
