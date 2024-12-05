@@ -12,7 +12,6 @@
       {# Weather narrative is for screen readers only #}
       <div role="text" data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
         {{ 'forecast.current.weather-as-of.01' | t }}
-        {# Datetimes are localized in client-side Javascript. #}
         <time datetime="{{ obs.timestamp.utc }}" data-wx-local-time>
           {{ obs.timestamp.formatted }}
         </time>.

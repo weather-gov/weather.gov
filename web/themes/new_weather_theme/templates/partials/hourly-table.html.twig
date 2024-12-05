@@ -17,10 +17,11 @@
   <div class="display-flex flex-justify">
     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
   </div>
-
   <div id="hourly-table-container" class="usa-table-container--scrollable">
     <table class="usa-table usa-table--borderless hourly-table" tabindex="0" {% if alerts | length > 0 %} data-has-alerts="true" {% else %} data-has-alerts="false" {% endif %}>
-      <caption class="usa-sr-only">{{ "hourly-table.aria.table-description.01" | t({ "@place": for }) }}</caption>
+      <caption class="usa-sr-only">
+        {{ "hourly-table.aria.table-description.01" | t({ "@day": for_day, "@month": for_month }) }}
+      </caption>
       <tbody data-table-section="time-alerts" class="border-bottom-1px border-base-light">
       <tr data-row-name="time">
         <th scope="row" class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase z-400">{{ "hourly-table.labels.time.01" | t }}</th>

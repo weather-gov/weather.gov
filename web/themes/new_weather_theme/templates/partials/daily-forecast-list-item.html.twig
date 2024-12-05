@@ -110,7 +110,8 @@ only be a nighttime period.
         <h4 class="font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">Hourly forecast</h4>
         {% include '@new_weather_theme/partials/hourly-table.html.twig'
         with {
-        for: point.place.fullName,
+        for_day: periods[0].start | date('U') | format_date('custom', 'd'),
+        for_month: periods[0].start | date('U') | format_date('custom', 'm'),
         hours: dayHours,
         alerts: alerts.items,
         }

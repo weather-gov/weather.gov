@@ -89,10 +89,12 @@
   {{ title_suffix }}
 
   {% if display_submitted %}
+    {% set created_day = node.getCreatedTime() | date('U') | format_date('custom', 'd')%}
+    {% set created_month =  node.getCreatedTime() | date('U') | format_date('custom', 'm')%}
     <footer class="node__meta">
       {{ author_picture }}
       <div{{ author_attributes.addClass('node__submitted') }}>
-        {{ "theme.text.submitted-by.01" | t({ "@author_name": author_name, "@date": date }) }}
+        {{ "theme.text.submitted-by.01" | t({ "@author_name": author_name, "@day": created_day, "@month": created_month}) }}
         {{ metadata }}
       </div>
     </footer>

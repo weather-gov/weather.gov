@@ -74,7 +74,7 @@
                   {% for area in alert.locations.regions %}
                     <wx-alert-county-region>
                     <h5 class="wx-visual-h4 text-normal text-primary-dark margin-top-205 margin-bottom-0">
-                      {{ "alerts.text.counties-in.01" | t }} {{ area.area }}
+                      {{ "alerts.text.counties-in.01" | t({ "@area": area.area }) }}
                     </h5>
                     <ul class="usa-list margin-top-1 {%- if area.counties | length > 7 %} wx-col-2 {%- endif -%}">
                       {%  for county in area.counties %}

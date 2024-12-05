@@ -16,8 +16,14 @@ msgstr "受影响的地区"
 msgid "alerts.labels.what-to-do.01"
 msgstr "该怎么做"
 
+msgid "alerts.text.counties-in.01"
+msgstr "在@area的郡"
+
 msgid "alerts.text.including-cities.01"
 msgstr "包括这些城市"
+
+msgid "alerts.text.issued-by.01"
+msgstr "国家气象局@sender发布"
 
 msgid "backend.login.cancel-text.01"
 msgstr "取消文本"
@@ -103,12 +109,14 @@ msgstr "7天"
 msgid "forecast.labels.weather-info.01"
 msgstr "天气信息部分"
 
+msgid "hourly-table.aria.table-description.01"
+msgstr "@month月@day日每小时详细的天气数据。行是天气变量，列是小时。"
+
 msgid "hourly-table.aria.scroll-left.01"
 msgstr "向左滚动"
 
 msgid "hourly-table.aria.scroll-right.01"
 msgstr "向右滚动"
-
 
 msgid "hourly-table.labels.condition.01"
 msgstr "条件"
@@ -182,6 +190,9 @@ msgstr "雷达"
 msgid "safety.labels.tips.01"
 msgstr "保障安全的提示"
 
+msgid "theme.text.submitted-by.01"
+msgstr "@author_name于@month月@day日提交"
+
 msgid "units.dbz.01"
 msgstr "dBz"
 
@@ -232,3 +243,27 @@ msgstr "X"
 
 msgid "wfo.labels.youtube.01"
 msgstr "YouTube"
+
+msgid "wind.labels.speed-from-north.01"
+msgstr "从北方向@speed mph"
+
+msgid "wind.labels.speed-from-northeast.01"
+msgstr "从东北方向@speed mph"
+
+msgid "wind.labels.speed-from-east.01"
+msgstr "从东方向@speed mph"
+
+msgid "wind.labels.speed-from-southeast.01"
+msgstr "从东南方向@speed mph"
+
+msgid "wind.labels.speed-from-south.01"
+msgstr "从南方向@speed mph"
+
+msgid "wind.labels.speed-from-southwest.01"
+msgstr "从西南方向@speed mph"
+
+msgid "wind.labels.speed-from-west.01"
+msgstr "从西方向@speed mph"
+
+msgid "wind.labels.speed-from-northwest.01"
+msgstr "从西北方向@speed mph"

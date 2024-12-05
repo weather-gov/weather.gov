@@ -27,7 +27,7 @@ msgid "alerts.labels.what-to-do.01"
 msgstr "What to do"
 
 msgid "alerts.text.counties-in.01"
-msgstr "Counties in"
+msgstr "Counties in @area"
 
 msgid "alerts.text.in-effect-from.01"
 msgstr "In effect from"
@@ -135,7 +135,7 @@ msgid "hourly-table.aria.scroll-right.01"
 msgstr "scroll right"
 
 msgid "hourly-table.aria.table-description.01"
-msgstr "Detailed hourly weather data for @place. The rows are weather variables, the columns are hours."
+msgstr "Detailed hourly weather data for @month/@day. The rows are weather variables, the columns are hours."
 
 msgid "hourly-table.labels.condition.01"
 msgstr "Condition"
@@ -228,7 +228,7 @@ msgid "safety.labels.tips.01"
 msgstr "Tips to stay safe"
 
 msgid "theme.text.submitted-by.01"
-msgstr "Submitted by @author_name on @date"
+msgstr "Submitted by @author_name on @month/@day"
 
 msgid "units.dbz.01"
 msgstr "dBz"
@@ -305,5 +305,26 @@ msgstr "YouTube"
 msgid "wind.labels.calm.01"
 msgstr "calm"
 
-msgid "wind.labels.speed-from-direction.01"
-msgstr "@speed mph from the @direction"
+msgid "wind.labels.speed-from-north.01"
+msgstr "@speed mph from the north"
+
+msgid "wind.labels.speed-from-northeast.01"
+msgstr "@speed mph from the northeast"
+
+msgid "wind.labels.speed-from-east.01"
+msgstr "@speed mph from the east"
+
+msgid "wind.labels.speed-from-southeast.01"
+msgstr "@speed mph from the southeast"
+
+msgid "wind.labels.speed-from-south.01"
+msgstr "@speed mph from the south"
+
+msgid "wind.labels.speed-from-southwest.01"
+msgstr "@speed mph from the southwest"
+
+msgid "wind.labels.speed-from-west.01"
+msgstr "@speed mph from the west"
+
+msgid "wind.labels.speed-from-northwest.01"
+msgstr "@speed mph from the northwest"

@@ -28,8 +28,20 @@
   #}
   {% if speed.mph == 0 %}
     <span class="usa-sr-only">{{ "wind.labels.calm.01" | t }}</span>
-  {% else %}
-    <span class="usa-sr-only">{{ "wind.labels.speed-from-direction.01" | t({ "@speed": speed.mph, "@direction": direction.cardinalLong }) }}</span>
+  {% elseif direction.cardinalLong == "north" %}
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-north.01" | t({ "@speed": speed.mph }) }}</span>
+  {% elseif direction.cardinalLong == "northeast" %}
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-northeast.01" | t({ "@speed": speed.mph }) }}</span>
+  {% elseif direction.cardinalLong == "east" %}
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-east.01" | t({ "@speed": speed.mph }) }}</span>
+  {% elseif direction.cardinalLong == "southeast" %}
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-southeast.01" | t({ "@speed": speed.mph }) }}</span>
+  {% elseif direction.cardinalLong == "south" %}
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-south.01" | t({ "@speed": speed.mph }) }}</span>
+  {% elseif direction.cardinalLong == "southwest" %}
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-southwest.01" | t({ "@speed": speed.mph }) }}</span>
+  {% elseif direction.cardinalLong == "northwest" %}
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-northwest.01" | t({ "@speed": speed.mph }) }}</span>
   {% endif %}
 {% else %}
   <span class="text-base font-mono-xs">{{ "abbreviations.not-applicable.01" | t }}</span>

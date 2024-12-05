@@ -38,9 +38,11 @@ module.exports = {
   suppress: {
     missing: {
       en: [],
+      "zh-hans": [],
     },
     stale: {
       en: [],
+      "zh-hans": [],
     }
   },
 };
