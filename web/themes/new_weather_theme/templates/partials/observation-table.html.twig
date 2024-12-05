@@ -3,7 +3,7 @@
         {# WIND #}
         <tr class="wx-wind-speed">
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
-                {{ "Wind" | t }}
+                {{ "observation-table.labels.wind.01" | t }}
             </th>
             <td>
                 {% include '@new_weather_theme/partials/wind.html.twig' with { speed: obs.data.windSpeed, direction: obs.data.windDirection } %}
@@ -13,21 +13,21 @@
         {%  if content.gusts is not same as (null) %}
             <tr class="wx-gusts">
                 <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
-                    {{ "Gusts" | t }}
+                    {{ "observation-table.labels.gusts.01" | t }}
                 </th>
                 <td>
-                    {{ content.gusts.speed }} {{  "mph" | t }}
+                    {{ content.gusts.speed }} {{  "units.mph.01" | t }}
                 </td>
             </tr>
         {% endif %}
         {# HUMIDITY #}
         <tr class="wx-humidity">
             <th scope="row" class="font-family-mono text-base font-mono-xs text-uppercase z-400">
-                {{ "Humidity" | t }}
+                {{ "observation-table.labels.humidity.01" | t }}
             </th>
             <td>
                 {% if obs.data.relativeHumidity.percent == 0 %}
-                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
+                    <span class="text-base font-mono-xs"> {{  "abbreviations.not-applicable.01" | t}}</span>
                 {% else %}
                     {{  obs.data.relativeHumidity.percent }}%
                 {% endif %}
@@ -36,11 +36,11 @@
         {# DEWPOINT #}
         <tr class="wx-dewpoint">
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
-                {{ "Dewpoint" | t }}
+                {{ "observation-table.labels.dewpoint.01" | t }}
             </th>
             <td>
                 {% if obs.data.dewpoint.degF is same as (null) %}
-                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
+                    <span class="text-base font-mono-xs"> {{  "abbreviations.not-applicable.01" | t}}</span>
                 {% else %}
                     {{ obs.data.dewpoint.degF }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
                 {% endif %}
@@ -49,26 +49,26 @@
         {# VISIBILITY #}
         <tr class="wx-visibility">
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
-                {{ "Visibility"  | t }}
+                {{ "observation-table.labels.visibility.01"  | t }}
             </th>
             <td>
                 {% if obs.data.visibility.mi is same as (null) %}
-                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
+                    <span class="text-base font-mono-xs"> {{  "abbreviations.not-applicable.01" | t}}</span>
                 {% else %}
-                    {{ obs.data.visibility.mi }} {{ "miles" | t }}
+                    {{ obs.data.visibility.mi }} {{ "units.miles.01" | t }}
                 {% endif %}
             </td>
         </tr>
         {# PRESSURE #}
         <tr class="wx-pressure">
             <th scope="row"  class="font-family-mono text-base font-mono-xs text-uppercase z-400">
-                {{ "Pressure" | t }}
+                {{ "observation-table.labels.pressure.01" | t }}
             </th>
             <td>
                 {% if obs.data.barometricPressure.inHg is same as (null) %}
-                    <span class="text-base font-mono-xs"> {{  "N/A" | t}}</span>
+                    <span class="text-base font-mono-xs"> {{  "abbreviations.not-applicable.01" | t}}</span>
                 {% else %}
-                    {{  "@mercury_inches in (@mbar&nbsp;mb)" | t({ "@mercury_inches": obs.data.barometricPressure.inHg, "@mbar": obs.data.barometricPressure.mb })}}
+                    {{  "units.mercury-inches.01" | t({ "@mercury_inches": obs.data.barometricPressure.inHg, "@mbar": obs.data.barometricPressure.mb })}}
                 {% endif %}
             </td>
         </tr>

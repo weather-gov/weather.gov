@@ -17,13 +17,14 @@
   <div class="display-flex flex-justify">
     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
   </div>
-
   <div id="hourly-table-container" class="usa-table-container--scrollable">
     <table class="usa-table usa-table--borderless hourly-table" tabindex="0" {% if alerts | length > 0 %} data-has-alerts="true" {% else %} data-has-alerts="false" {% endif %}>
-      <caption class="usa-sr-only">{{ "Detailed hourly weather data for @place. The rows are weather variables, the columns are hours." | t({ "@place": for }) }}</caption>
+      <caption class="usa-sr-only">
+        {{ "hourly-table.aria.table-description.01" | t({ "@day": for_day, "@month": for_month }) }}
+      </caption>
       <tbody data-table-section="time-alerts" class="border-bottom-1px border-base-light">
       <tr data-row-name="time">
-        <th scope="row" class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase z-400">{{ "Time" | t }}</th>
+        <th scope="row" class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase z-400">{{ "hourly-table.labels.time.01" | t }}</th>
         {% for period in hours %}
         <th scope="col">
           <time datetime="{{period.time}}" class="font-family-mono font-mono-xs text-base-lightest">
@@ -39,7 +40,7 @@
       <tbody data-table-section="variables">
         <tr data-row-name="temp">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-            {{"Temperature" | t}}
+            {{"hourly-table.labels.temperature.01" | t}}
           </th>
           {% for period in hours %}
           <td>
@@ -47,14 +48,14 @@
             {{ period.temperature.degF }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
             <span class="usa-sr-only">℉</span>
             {% else %}
-            <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+            <span class="text-base font-mono-xs"> {{ "abbreviations.not-applicable.01" | t }} </span>
             {% endif %}
           </td>
           {% endfor %}
         </tr>
         <tr data-row-name="apparentTemp">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-            {{"Feels like" | t}}
+            {{"forecast.current.feels-like.01" | t}}
           </th>
           {% for period in hours %}
           <td>
@@ -67,7 +68,7 @@
         </tr>
         <tr data-row-name="condition">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-            {{"Condition" | t}}
+            {{"hourly-table.labels.condition.01" | t}}
           </th>
           {% for period in hours %}
           <td>
@@ -82,7 +83,7 @@
                 {% if period.shortForecast | length %}
                 <p class="margin-y-0">{{period.shortForecast}}</p>
                 {% else %}
-                <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+                <span class="text-base font-mono-xs"> {{ "abbreviations.not-applicable.01" | t }} </span>
                 {% endif %}
               </div>
             </div>
@@ -92,14 +93,14 @@
         </tr>
         <tr data-row-name="chance-precipitation">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
-            {{"Chance of precipitation" | t}}
+            {{"daily-forecast.text.chance-precip.01" | t}}
           </th>
           {% for period in hours %}
           <td> 
             {% if period.probabilityOfPrecipitation is not same as (null) %}
             <p class="margin-y-0"> {{period.probabilityOfPrecipitation.percent}}% </p>
             {% else %}
-            <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+            <span class="text-base font-mono-xs"> {{ "abbreviations.not-applicable.01" | t }} </span>
             {% endif %}
           </td>
           {% endfor %}
@@ -107,7 +108,7 @@
 
         <tr data-row-name="wind-speed">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
-            {{"Wind speed" | t}}
+            {{"hourly-table.labels.wind-speed.01" | t}}
           </th>
           {% for period in hours %}
           <td>
@@ -118,28 +119,28 @@
               }
             %}
             {% if period.windGust.mph is not same as (null) %}
-              <div>{{ "with gusts up to @gustSpeed mph" | t({ "@gustSpeed": period.windGust.mph }) }}</div>
+              <div>{{ "hourly-table.text.gusting.01" | t({ "@gustSpeed": period.windGust.mph }) }}</div>
             {% endif %}
           </td>
           {% endfor %}
         </tr>
         <tr data-row-name="humidity">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-            {{"Humidity" | t}}
+            {{"hourly-table.labels.humidity.01" | t}}
           </th>
           {% for period in hours %}
           <td>
             {% if period.relativeHumidity.percent is not same as (null) %}
             {{period.relativeHumidity.percent}}%
             {% else %}
-            <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+            <span class="text-base font-mono-xs"> {{ "abbreviations.not-applicable.01" | t }} </span>
             {% endif %}
           </td>
           {% endfor %}
         </tr>
         <tr data-row-name="dewpoint">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
-            {{"Dewpoint" | t}}
+            {{"hourly-table.labels.dewpoint.01" | t}}
           </th>
           {% for period in hours %}
           <td>
@@ -147,7 +148,7 @@
             {{period.dewpoint.degF}}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
             <span class="usa-sr-only">℉</span>
             {% else %}
-            <span class="text-base font-mono-xs"> {{ "N/A" | t }} </span>
+            <span class="text-base font-mono-xs"> {{ "abbreviations.not-applicable.01" | t }} </span>
             {% endif %}
           </td>
           {% endfor %}

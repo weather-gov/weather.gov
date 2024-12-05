@@ -18,11 +18,11 @@
         </h3>
         <div id="a{{alert.id}}" class="usa-accordion__content usa-prose">
           <p class="font-sans-md text-bold text-primary-darker margin-y-0" >
-            {{ "In effect from" | t }} {{ alert.timing.start }}
+            {{ "alerts.text.in-effect-from.01" | t }} {{ alert.timing.start }}
             {% if alert.timing.end %} – {{ alert.timing.end }}{% endif %}
           </p>
           <p class="margin-y-05">
-            {{ "Issued by @sender" | t({ "@sender": alert.sender }) }}
+            {{ "alerts.text.issued-by.01" | t({ "@sender": alert.sender }) }}
           </p>
 
           {#
@@ -51,7 +51,7 @@
           {% endfor %}
 
           {% if alert.instruction %}
-          <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ "What to do" | t }}</h4>
+          <h4 class="wx-visual-h3 text-normal text-primary-dark">{{ "alerts.labels.what-to-do.01" | t }}</h4>
           <p>
             {{ alert.instruction | nl2br }}
           </p>
@@ -62,7 +62,7 @@
           <div class="grid-container margin-0 padding-0">
             <div class="grid-row">
               <div class="grid-col-12 tablet-lg:grid-col-6">
-                <h4 class="wx-visual-h3 text-normal text-primary-dark margin-bottom-05">{{ "Areas impacted" |t }}</h4>
+                <h4 class="wx-visual-h3 text-normal text-primary-dark margin-bottom-05">{{ "alerts.labels.areas-impacted.01" |t }}</h4>
                 {#
                   Some alerts come with location information in the description text
                   in a common text formatting. In those cases, the location information
@@ -74,7 +74,7 @@
                   {% for area in alert.locations.regions %}
                     <wx-alert-county-region>
                     <h5 class="wx-visual-h4 text-normal text-primary-dark margin-top-205 margin-bottom-0">
-                      {{ "Counties in" | t }} {{ area.area }}
+                      {{ "alerts.text.counties-in.01" | t({ "@area": area.area }) }}
                     </h5>
                     <ul class="usa-list margin-top-1 {%- if area.counties | length > 7 %} wx-col-2 {%- endif -%}">
                       {%  for county in area.counties %}
@@ -86,7 +86,7 @@
                   {% if alert.locations.cities | length > 0 %}
                     <wx-alert-cities>
                     <h5 class="wx-visual-h4 text-normal text-primary-dark margin-top-105 margin-bottom-0">
-                      {{ "Including these cities" | t }}
+                      {{ "alerts.text.including-cities.01" | t }}
                     </h5>
                     <ul class="usa-list margin-top-1 {%- if alert.locations.cities | length > 7 %} wx-col-2 {%- endif -%}">
 

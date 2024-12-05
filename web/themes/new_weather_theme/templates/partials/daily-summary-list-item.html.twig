@@ -42,7 +42,7 @@ day
 
           {% if alertCount > 1 %}
             {% set alertID = null %}
-            {% set alertType = "Multiple alerts" | t %}
+            {% set alertType = "daily-forecast.labels.multiple-alerts.01" | t %}
             {% set alertLevel = alerts.metadata.highest %}
           {% endif %}
 
@@ -58,15 +58,15 @@ day
         {% set tabletMarginUnit = 1 %}
         {% set tabletCol = 6 %}
         {%  if period.isOvernight %}
-          {% set label = "Overnight" | t %}
+          {% set label = "daily-forecast.labels.overnight.01" | t %}
           {% set lineColor = "midnight-indigo" %}
           {% set tabletCol = 12 %}
           {% set tabletMarginUnit = 3 %}
         {% elseif period.isDaytime %}
-          {% set label = "Day" | t %}
+          {% set label = "daily-forecast.labels.day.01" | t %}
           {% set lineColor = "yellow" %}
         {% else %}
-          {% set label = "Night" | t %}
+          {% set label = "daily-forecast.labels.night.01" | t %}
           {% set lineColor = "indigo" %}
           {% set marginUnit = 1 %}
         {% endif %}
@@ -88,7 +88,7 @@ day
             </p>
             {% if period.data.probabilityOfPrecipitation.hourlyMax and period.data.probabilityOfPrecipitation.hourlyMax > 1 %}
             <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-            {{period.data.probabilityOfPrecipitation.hourlyMax}}% {{ "chance of precipitation" | t }}
+            {{period.data.probabilityOfPrecipitation.hourlyMax}}% {{ "daily-forecast.text.chance-precip.01" | t }}
             </p>
             {% endif %}
           </div>
@@ -106,7 +106,7 @@ day
             {% set feelsLike = dayHours | map(h => h.apparentTemperature.degF) | json_encode %}
             <div class="wx-chart-wrapper margin-top-0 margin-bottom-4">
                 <span class="font-family-mono text-primary-dark usa-sr-only">
-                    {{ "Temperature" | t }}
+                    {{ "hourly-table.labels.temperature.01" | t }}
                 </span>
                 <div class="position-sticky left-0 display-flex flex-justify padding-top-2 padding-bottom-105">
                     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
@@ -121,11 +121,11 @@ day
                     <div class="width-3 border-bottom-2px border-primary-dark height-0 margin-right-1">
                         <div class="bg-primary-dark margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
                     </div>
-                    {{ "Temperature" | t }}
+                    {{ "hourly-table.labels.temperature.01" | t }}
                     <div class="margin-left-3 width-3 border-bottom-2px border-top-0 border-left-0 border-right-0 border-dotted border-primary-light height-0 margin-right-1">
                         <div class="bg-primary-light margin-left-1 radius-pill width-1 height-1" style="margin-top: -3px;"></div>
                     </div>
-                    {{  "Feels like" | t }}
+                    {{  "forecast.current.feels-like.01" | t }}
                 </div>
             </div>
       </div>

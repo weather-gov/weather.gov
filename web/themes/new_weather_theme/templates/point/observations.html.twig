@@ -5,19 +5,17 @@
 <div class="bg-white padding-2 shadow-1 grid-col-12 flex-1">
   <div class="wx-current-conditions grid-row grid-gap">
     {% if obs.error %}
-      {% set message = "There was an error loading the current conditions." | t %}
+      {% set message = "forecast.errors.current-conditions.01" | t %}
       {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
     {% else %}
 
       {# Weather narrative is for screen readers only #}
       <div role="text" data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
-        {{ 'Weather as of' | t }}
-        {# Datetimes are localized in client-side Javascript. #}
+        {{ 'forecast.current.weather-as-of.01' | t }}
         <time datetime="{{ obs.timestamp.utc }}" data-wx-local-time>
           {{ obs.timestamp.formatted }}
         </time>.
-        {{ "The weather in @place, is @conditions.
-            Temperature is @temperature ℉." |
+        {{ "forecast.current.weather-temp-description.01" |
         t({
             "@place": point.place.fullName,
             "@conditions": obs.description | lower,
@@ -25,7 +23,7 @@
         })
         }}
         {% if obs.data.feelsLike.degF != obs.data.temperature.degF %}
-          {{ "It feels like @feelsLike ℉." |
+          {{ "forecast.current.aria.feels-like.01" |
           t({
               "@feelsLike": obs.data.feelsLike.degF
           })
@@ -41,7 +39,7 @@
             {{ obs.data.temperature.degF }}<span class="font-body-xs display-inline-block left-full margin-top-05 margin-left-neg-2px">&deg;F</span>
           </div>
           <div class="margin-top-05 position-relative">
-            <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "Feels like" | t }}</div>
+            <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "forecast.current.feels-like.01" | t }}</div>
             <div class="text-primary-dark">
               <p class="margin-top-2px font-body-md">
                 {{ obs.data.feelsLike.degF }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
@@ -68,7 +66,7 @@
         </div>
         <div class="mobile:grid-col-12 tablet:grid-col-6 desktop:grid-col-12">
           <div class="border-top-1px border-base-light padding-top-1">
-            <span class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-1 display-block">{{ "Observation station" | t }}</span>
+            <span class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-1 display-block">{{ "forecast.current.obs-station.01" | t }}</span>
             <span class="display-block margin-y-1 display-block line-height-sans-3">
               {{ obs.station.name }} ({{ obs.station.id }})
             </span>
@@ -77,7 +75,7 @@
           {# We hide from screenreaders and use the weather narrative (above) instead #}
           <div data-wx-current-conditions-narrative aria-hidden="true">
             <p class="font-family-mono font-mono-xs text-base text-uppercase margin-top-2 margin-bottom-05">
-              {{ 'Last updated' | t }}
+              {{ 'forecast.current.last-updated.01' | t }}
             </p>
             {# Datetimes are localized in client-side Javascript. #}
             <time class="display-block font-family-mono font-mono-xs" datetime="{{ obs.timestamp.utc }}" data-wx-local-time>

@@ -34,4 +34,15 @@ module.exports = {
     include: ["../../web/modules/weather_i18n/translations/*.po"],
     exclude: [],
   },
+
+  suppress: {
+    missing: {
+      en: [],
+      "zh-hans": [],
+    },
+    stale: {
+      en: [],
+      "zh-hans": [],
+    }
+  },
 };

@@ -23,6 +23,7 @@ echo  "Updating drupal ... "
 drush state:set system.maintenance_mode 1 -y
 drush deploy -y
 drush state:set system.maintenance_mode 0 -y
+drush locale:import-all /home/vcap/app/web/modules/weather_i18n/translations
 drush locale:clear-status
 drush locale:update
 drush cache:rebuild

@@ -1,7 +1,7 @@
 <div class="wx-daily-forecast-block">
   {{ attach_library('new_weather_theme/hourly-toggle') }}
   {% if forecast.error %}
-    {% set message = "There was an error loading the daily forecast." | t %}
+    {% set message = "forecast.errors.daily.01" | t %}
     {% if forecast.message %}
       {% set message = message ~ " " ~ forecast.message %}
     {% endif %}

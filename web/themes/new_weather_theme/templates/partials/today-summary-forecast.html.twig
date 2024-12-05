@@ -1,5 +1,5 @@
 {% if forecast.error %}
-  {% set message = "There was an error loading the daily forecast." | t %}
+  {% set message = "forecast.errors.daily.01" | t %}
   {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
 {% elseif forecast.days | length > 0 %}
   {% set today = forecast.days[0] %}
@@ -17,7 +17,7 @@
             'dayHours': today.hours,
             'alerts': today.alerts,
             'qpf': precipHours,
-            'dayLabel': "Today" | t } %}
+            'dayLabel': "daily-forecast.labels.today.01" | t } %}
         {% set precipIndex = 1 %}
     </ol>
   </div>

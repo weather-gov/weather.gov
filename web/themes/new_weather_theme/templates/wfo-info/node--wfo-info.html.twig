@@ -7,14 +7,14 @@
 
   <div class="grid-container">
     <h1 class="text-normal text-primary-darker desktop:margin-bottom-3">
-      {{ "@wfoName (@wfoCode) National Weather Service Office" | t({ "@wfoName": wfo.name, "@wfoCode": wfo.code }) }}
+      {{ "wfo-info.labels.wfo.01" | t({ "@wfoName": wfo.name, "@wfoCode": wfo.code }) }}
     </h1>
 
     <div class="grid-row grid-gap">
       {% set hasAbout = not (content.body.isEmpty or content.body.0 is not defined) %}
       {% if hasAbout %}
       <div class="grid-col-12 tablet:grid-col-4">
-        <h2 class="font-sans-xl text-normal text-primary-darker margin-top-0">{{ "About" | t }}</h2>
+        <h2 class="font-sans-xl text-normal text-primary-darker margin-top-0">{{ "wfo-info.labels.about.01" | t }}</h2>
         {{content.body}}
       </div>
       {% endif %}
@@ -23,7 +23,7 @@
         <figure class="margin-0">
           <img src="/{{ directory }}/assets/images/wfos/{{ wfo.code }}.png" alt="">
           <figcaption class="font-sans-xs">
-            {{ "Coverage area for @wfo WFO" | t({ "@wfo": wfo.name })}}
+            {{ "wfo-info.labels.coverage-area-map-caption.01" | t({ "@wfo": wfo.name })}}
             <p class="usa-sr-only">
               {{ "This includes @counties" | t({ "@counties": counties }) }}
             </p>
@@ -39,7 +39,7 @@
     <div class="grid-row">
       <div class="grid-col-12 tablet:grid-col-6">
         <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
-          {{ "Local expertise" | t }}
+          {{ "wfo-info.labels.local-expertise.01" | t }}
         </h2>
         <p>
           Decision support is description tk tk tk
@@ -56,7 +56,7 @@
 
       <div class="grid-col-12 tablet:grid-col-6">
         <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
-          {{ "Forecaster's discussion" | t }}
+          {{ "wfo-info.labels.forecast-discussion.01" | t }}
         </h2>
         <p>
           The purpose of the area forecast discussion is to provide the
@@ -80,7 +80,7 @@
 
     {% if hasContact %}
       <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker margin-bottom-0 padding-top-105 margin-top-4">
-        {{ "Contact us" | t }}
+        {{ "wfo-info.labels.contact-us.01" | t }}
       </h2>
 
       <div class="grid-row margin-top-2">
