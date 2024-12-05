@@ -5,6 +5,8 @@
  * tab, tablist, and tabpanel elements are expected
  * to have the correct `role` attributes and other
  * aria references.
+ * See
+ * https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
  */
 class Tabs extends HTMLElement {
   constructor(){
@@ -31,6 +33,14 @@ class Tabs extends HTMLElement {
     });
   }
 
+  /**
+   * The click handler should update the tab's
+   * aria-selected attribute, and also update the
+   * data-tabpanel-selected attribute on its corresponding
+   * tabpanel.
+   * Any hiding/showing of tabpanel content should be
+   * handled by implementor's CSS
+   */
   handleTabClick(event){
     const tab = event.target.closest('[role="tab"]');
     const panelId = tab.getAttribute("aria-controls");
@@ -48,6 +58,10 @@ class Tabs extends HTMLElement {
     }
   }
 
+  /**
+   * Binds key handling events as specified in
+   * the WCAG recommendations
+   */
   handleKeyDown(event){
     const currentFocus = this.querySelector('[role="tab"]:focus,[role="tab"]:focus-within');
     const firstItemInFocus = currentFocus.matches('[role="tab"]:first-child:focus, [role="tab"]:first-child:focus-within');
