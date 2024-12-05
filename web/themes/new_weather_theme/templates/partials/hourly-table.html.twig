@@ -13,7 +13,7 @@
 {% set windGusts = hours | map(h => h.windGust) | json_encode %}
 {% set windDirections = hours | map(h => h.windDirection) | json_encode %}
 
-<wx-hourly-table class="display-block position-relative margin-top-2 bg-white">
+<wx-hourly-table class="display-block position-relative margin-top-2 bg-white" id="hourly-table_{{itemId}}" aria-labelledby="hourly-table-tab_{{itemId}}" data-tabpanel-selected="true" role="tabpanel">
   <div class="display-flex flex-justify">
     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
   </div>
@@ -156,4 +156,6 @@
       </tbody>
     </table>
   </div>
+
+  {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'qpf': qpf } %}
 </wx-hourly-table>

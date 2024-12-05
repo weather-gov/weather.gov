@@ -13,6 +13,6 @@ import("./charts/hourly-humidity.js");
 import("./charts/hourly-wind.js");
 import("./charts/hourly-dewpoint.js");
 import("./charts/qpf.js");
-import("./components/forecast-details-toggle.js");
 import("./components/quick-forecast-toggle.js");
 import("./components/DailyForecast.js");
+import("./components/Tabs.js");

@@ -1,14 +1,14 @@
-<div class="wx-forecast-details-toggle grid-row grid-col-12 tablet:grid-col-6 margin-y-205" data-selected="table">
-    <ul class="usa-button-group usa-button-group--segmented tablet-lg:grid-col-8">
-        <li class="usa-button-group__item flex-1 display-flex">
-            <button type="button" class="usa-button flex-1" data-selection-name="table">
+<wx-tabs class="wx-forecast-details-toggle grid-row grid-col-12 tablet:grid-col-6 margin-y-205" data-selected="hourly-table_{{itemId}}">
+    <ul class="usa-button-group usa-button-group--segmented tablet-lg:grid-col-8" role="tablist">
+        <li id="hourly-table-tab_{{itemId}}" class="usa-button-group__item flex-1 display-flex" role="tab" aria-controls="hourly-table_{{itemId}}" aria-selected="true">
+            <button type="button" class="usa-button flex-1">
                 {{"Table" | t}}
             </button>
         </li>
-        <li class="usa-button-group__item flex-1 display-flex">
-            <button type="button" class="usa-button usa-button--outline flex-1" data-selection-name="charts">
+        <li id="hourly-charts-tab_{{itemId}}" class="usa-button-group__item flex-1 display-flex" role="tab" aria-controls="hourly-charts_{{itemId}}" aria-selected="false">
+            <button type="button" class="usa-button flex-1">
                 {{"Charts" | t}}
             </button>
         </li>
     </ul>
-</div>
+</wx-tabs>
