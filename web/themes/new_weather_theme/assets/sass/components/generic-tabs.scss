@@ -1,0 +1,23 @@
+@use "uswds-core" as *;
+@forward "uswds";
+
+/**
+ * Styling for generic WCAG tab based components / roles
+ * Interation is goverened by the progressively enhanced
+ * Tabs (wx-tabs) custom element
+ */
+[role="tabpanel"][data-tabpanel-selected="false"] {
+    display: none;
+}
+
+/**
+ * Custom styles for table/charts tab toggles
+ * --------------------------------------------------------
+ */
+.wx-forecast-details-toggle button:hover {
+    cursor: pointer;
+}
+.wx-forecast-details-toggle li[aria-selected="false"] button {
+    @extend .usa-button--outline;
+}
+
