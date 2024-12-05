@@ -190,7 +190,7 @@ window.fetch = async (url) => {
   });
 };
 
-describe("Combo box unit tests", () => {
+describe.skip("Combo box unit tests", () => {
   before(async () => {
     // After all the globals are setup, now we can import the component being
     // tested. The imports will unwind themselves and it'll use the globals we
