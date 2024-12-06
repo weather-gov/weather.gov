@@ -1,7 +1,7 @@
 ---
 name: Onboarding
 about: Onboarding steps for new team members.
-title: Team member Onboarding: GH_HANDLE
+title: Team member Onboarding for GH_HANDLE
 labels: Project
 assignees: ''
 
@@ -17,7 +17,7 @@ assignees: ''
 ### Steps for the onboardee
 
 - [ ] Read [welcome to weather.gov!](https://docs.google.com/document/d/1JIagnghg3xYNm4zdr_BtxWOwmifUaxjSCeybsaoqExE/edit?tab=t.0#heading=h.2hifh0miaj5c)
-- [ ] Setup NOAA email (to start this process, please contact @shadkeene)
+- [ ] Setup NOAA email (to start this process, please contact Shad Keene)
 - [ ] Complete NOAA security compliance training
   Note: this will be emailed to your NOAA email address once you've updated your password
 - [ ] (optional) Schedule an onboarding session with the PM
