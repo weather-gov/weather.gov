@@ -1,7 +1,7 @@
 ---
 name: Onboarding
 about: Onboarding steps for new team members.
-title: Team member Onboarding for GH_HANDLE
+title: Team member onboarding for GH_HANDLE
 labels: Project
 assignees: ''
 
