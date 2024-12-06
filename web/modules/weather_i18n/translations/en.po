@@ -1,36 +1,21 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# English translation of beta.weather.gov
 #
-#, fuzzy
+# ⚠️ Strings in English need to be immutable,
+# to prevent translations falling out of sync.
+# Example: Do not change "Forecasters predict rain"
+# to "Rain predicted". Delete "Forecasters predict rain" and
+# add "Rain predicted" with a new `msgid`. This will
+# invalidate the stale translation and ensure the new
+# string gets picked up for fresh translation.
+#
+# Message IDs are versioned, to remind you of this rule. ⚠️
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-
-#~ # English translation of beta.weather.gov
-#~ #
-#~ # ⚠️ Strings in English need to be immutable,
-#~ # to prevent translations falling out of sync.
-#~ # Example: Do not change "Forecasters predict rain"
-#~ # to "Rain predicted". Delete "Forecasters predict rain" and
-#~ # add "Rain predicted" with a new `msgid`. This will
-#~ # invalidate the stale translation and ensure the new
-#~ # string gets picked up for fresh translation.
-#~ #
-#~ # Message IDs are versioned, to remind you of this rule. ⚠️
-#~ #
-#~ msgid ""
-#~ msgstr ""
-#~ "Project-Id-Version: Weather.gov Utility\\n"
-#~ "MIME-Version: 1.0\\n"
-#~ "Content-Type: text/plain; charset=utf-8\\n"
-#~ "Content-Transfer-Encoding: 8bit\\n"
+"Project-Id-Version: Weather.gov Utility\\n"
+"MIME-Version: 1.0\\n"
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
 
 msgid "abbreviations.not-applicable.01"
 msgstr "N/A"
