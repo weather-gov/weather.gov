@@ -1,6 +1,6 @@
 FROM node:20
 
-COPY zscaler-root.public.cert /etc/ssl/certs/zscaler-root.pem
+COPY zscaler-root-public.cert /etc/ssl/certs/zscaler-root.pem
 RUN c_rehash
 ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/zscaler-root.pem
 
