@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.node.wfo_weather_story_upload.field_cwa_center_lat
     - field.field.node.wfo_weather_story_upload.field_cwa_center_lon
-    - field.field.node.wfo_weather_story_upload.field_derived_wfo
     - field.field.node.wfo_weather_story_upload.field_description
     - field.field.node.wfo_weather_story_upload.field_endtime
     - field.field.node.wfo_weather_story_upload.field_frontpage
@@ -42,14 +41,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 2
-    region: content
-  field_derived_wfo:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 11
     region: content
   field_description:
     type: text_default

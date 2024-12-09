@@ -48,6 +48,7 @@ payload = {
         "type": "node--wfo_pdf_upload",
         "attributes": {
             "title": pdf_filename,
+            "field_wfo_code": "EAX",
         },
         "relationships": {
             "field_wfo_sitrep": {

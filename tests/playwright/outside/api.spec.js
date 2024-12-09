@@ -34,7 +34,7 @@ const uploadContentType = async (request, where, data) => request.post(where,
   },
 );
 
-describe("API tests", () => {
+describe("API access tests", () => {
   test("users without credentials cannot get an API listing", async ({
     request,
   }) => {
@@ -82,8 +82,51 @@ describe("API tests", () => {
     const json = await response.json();
     expect(json).not.toHaveProperty("errors");
   });
+});
 
+describe("WFO PDF upload tests", () => {
   test("uploader can upload wfo pdfs", async ({ request }) => {
+    // step one: upload the PDF
+    const pdfFilename = "test-upload.pdf";
+    const uploadLocation = `${API_ENDPOINT}/node/wfo_pdf_upload/field_wfo_sitrep`;
+    const firstResponse = await uploadFile(request, uploadLocation, pdfFilename);
+    expect(firstResponse.status()).toEqual(201);
+    const firstJson = await firstResponse.json();
+    expect(firstJson).toHaveProperty("data");
+    expect(firstJson.data).toHaveProperty("id");
+    expect(firstJson.data).toHaveProperty("attributes");
+    const { id } = firstJson.data;
+
+    // step two: upload the content type data
+    const contentLocation = `${API_ENDPOINT}/node/wfo_pdf_upload`;
+    const data = {
+      data: {
+        type: "node--wfo_pdf_upload",
+        attributes: {
+          title: pdfFilename,
+          field_wfo_code: "AAA",
+        },
+        relationships: {
+          field_wfo_sitrep: {
+            data: {
+              type: "file--file",
+              id,
+            },
+          },
+        },
+      },
+    };
+    const secondResponse = await uploadContentType(request, contentLocation, data);
+    expect(secondResponse.status()).toEqual(201);
+    const secondJson = await secondResponse.json();
+    expect(secondJson).not.toHaveProperty("errors");
+    expect(secondJson.data).toHaveProperty('attributes');
+    expect(secondJson.data.attributes).toHaveProperty('field_wfo_code');
+    expect(secondJson.data.attributes.field_wfo_code).toEqual('AAA');
+    expect(secondJson).toHaveProperty("data");
+  });
+
+  test("uploader cannot upload wfo pdfs without wfo code", async ({ request }) => {
     // step one: upload the PDF
     const pdfFilename = "test-upload.pdf";
     const uploadLocation = `${API_ENDPOINT}/node/wfo_pdf_upload/field_wfo_sitrep`;
@@ -113,13 +156,12 @@ describe("API tests", () => {
         },
       },
     };
-    const secondResponse = await uploadContentType(request, contentLocation, data);
-    expect(secondResponse.status()).toEqual(201);
-    const secondJson = await secondResponse.json();
-    expect(secondJson).not.toHaveProperty("errors");
-    expect(secondJson).toHaveProperty("data");
+    const response = await uploadContentType(request, contentLocation, data);
+    expect(response.status()).toEqual(422);
   });
+});
 
+describe("weather story upload tests", () => {
   test("uploader can upload wfo weather story images", async ({ request }) => {
     // step one: upload the image
     const pngFilename = "test-upload.png";
@@ -139,7 +181,7 @@ describe("API tests", () => {
         type: "node--wfo_weather_story_upload",
         attributes: {
           title: pngFilename,
-          field_office: "test-WFO-office",
+          field_office: "WFO",
           field_description: "a blank uploaded image",
         },
         relationships: {
@@ -160,8 +202,8 @@ describe("API tests", () => {
     // verify that `weather_cms_entity_presave` could not derive the WFO due to
     // insufficient information.
     expect(secondJson.data).toHaveProperty('attributes');
-    expect(secondJson.data.attributes).toHaveProperty('field_derived_wfo');
-    expect(secondJson.data.attributes.field_derived_wfo).toEqual('unknown');
+    expect(secondJson.data.attributes).toHaveProperty('field_office');
+    expect(secondJson.data.attributes.field_office).toEqual('WFO');
   });
 
   test("uploader cannot upload wfo weather story images with missing attributes", async ({ request }) => {
@@ -227,7 +269,6 @@ describe("API tests", () => {
         type: "node--wfo_weather_story_upload",
         attributes: {
           title: pngFilename,
-          field_office: "test-WFO-office",
           field_description: "a blank uploaded image",
           field_weburl: "",
           field_frontpage: true,
@@ -257,61 +298,24 @@ describe("API tests", () => {
         },
       },
     };
-    const secondResponse = await uploadContentType(request, contentLocation, data);
-    expect(secondResponse.status()).toEqual(201);
-    const secondJson = await secondResponse.json();
-    expect(secondJson).not.toHaveProperty("errors");
-    expect(secondJson).toHaveProperty("data");
-    return secondJson;
+    return uploadContentType(request, contentLocation, data);
   };
 
   test("uploader can upload wfo weather story images with all attributes", async ({ request }) => {
-    const json = await uploadWeatherStoryWithAttributes(request, {
-      field_weburl: "/FXC/wxstory.php?wfo=afc",
+    const response = await uploadWeatherStoryWithAttributes(request, {
+      field_office: "AFC",
     });
-    // verify that `weather_cms_entity_presave` derived the WFO properly.
+    expect(response.status()).toEqual(201);
+    const json = await response.json();
+    expect(json).not.toHaveProperty("errors");
+    expect(json).toHaveProperty("data");
     expect(json.data).toHaveProperty('attributes');
-    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
-    expect(json.data.attributes.field_derived_wfo).toEqual('AFC');
+    expect(json.data.attributes).toHaveProperty('field_office');
+    expect(json.data.attributes.field_office).toEqual('AFC');
   });
 
-  test("drupal can derive wfo weather.gov url", async ({ request }) => {
-    const json = await uploadWeatherStoryWithAttributes(request, {
-      field_weburl: "https://www.weather.gov/SJT/",
-    });
-    // verify that `weather_cms_entity_presave` derived the WFO properly.
-    expect(json.data).toHaveProperty('attributes');
-    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
-    expect(json.data.attributes.field_derived_wfo).toEqual('SJT');
-  });
-
-  test("drupal can derive wfo from relative WFO url", async ({ request }) => {
-    const json = await uploadWeatherStoryWithAttributes(request, {
-      field_weburl: "/grr/",
-    });
-    // verify that `weather_cms_entity_presave` derived the WFO properly.
-    expect(json.data).toHaveProperty('attributes');
-    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
-    expect(json.data.attributes.field_derived_wfo).toEqual('GRR');
-  });
-
-  test("drupal can derive wfo from radar url", async ({ request }) => {
-    const json = await uploadWeatherStoryWithAttributes(request, {
-      field_weburl: "http://radar.weather.gov/lzk/",
-    });
-    // verify that `weather_cms_entity_presave` derived the WFO properly.
-    expect(json.data).toHaveProperty('attributes');
-    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
-    expect(json.data.attributes.field_derived_wfo).toEqual('LZK');
-  });
-
-  test("drupal can derive wfo from srh.noaa.gov url", async ({ request }) => {
-    const json = await uploadWeatherStoryWithAttributes(request, {
-      field_weburl: "http://www.srh.noaa.gov/graphicast.php?site=jan&gc=8",
-    });
-    // verify that `weather_cms_entity_presave` derived the WFO properly.
-    expect(json.data).toHaveProperty('attributes');
-    expect(json.data.attributes).toHaveProperty('field_derived_wfo');
-    expect(json.data.attributes.field_derived_wfo).toEqual('JAN');
+  test("uploader cannot upload wfo weather story images without wfo", async ({ request }) => {
+    const response = await uploadWeatherStoryWithAttributes(request, {});
+    expect(response.status()).toEqual(422);
   });
 });

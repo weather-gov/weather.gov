@@ -14,6 +14,7 @@ endpoint = "http://localhost:8080"
 user = "uploader"
 password = "uploader"
 ws_filename = "WeatherStory.xml"
+wfo_code = "EAX"
 
 if len(sys.argv) != 2:
     # override the filename if passed via cli args
@@ -48,6 +49,7 @@ def upload_content_type(small_image_id, full_image_id, data):
     # because a Drupal content type expects a title, rename field_title to title
     title = data.pop("field_title")
     data.update({"title": title})
+    data.update({"field_office", wfo_code})
 
     # process frontpage to be a proper True/False
     frontpage = data.pop("field_frontpage")
