@@ -17,7 +17,6 @@ dependencies:
     - field.field.node.wfo_weather_story_upload.field_smallimage
     - field.field.node.wfo_weather_story_upload.field_starttime
     - field.field.node.wfo_weather_story_upload.field_weburl
-    - field.field.node.wfo_weather_story_upload.field_ws_wfo_code
     - node.type.wfo_weather_story_upload
   module:
     - user
@@ -45,5 +44,4 @@ hidden:
   field_smallimage: true
   field_starttime: true
   field_weburl: true
-  field_ws_wfo_code: true
   langcode: true

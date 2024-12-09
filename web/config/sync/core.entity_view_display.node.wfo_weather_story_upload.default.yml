@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.wfo_weather_story_upload.field_smallimage
     - field.field.node.wfo_weather_story_upload.field_starttime
     - field.field.node.wfo_weather_story_upload.field_weburl
-    - field.field.node.wfo_weather_story_upload.field_ws_wfo_code
     - node.type.wfo_weather_story_upload
   module:
     - image
@@ -87,14 +86,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 6
-    region: content
-  field_ws_wfo_code:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 11
     region: content
   links:
     settings: {  }
