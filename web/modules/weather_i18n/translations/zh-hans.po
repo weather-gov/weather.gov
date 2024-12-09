@@ -70,6 +70,12 @@ msgstr "不显示每小时详情"
 msgid "daily-forecast.text.show-details.01"
 msgstr "显示每小时详情"
 
+msgid "daily-forecast.label.details-toggle-charts.01"
+msgstr ""
+
+msgid "daily-forecast.bale.details-toggle-table.01"
+msgstr ""
+
 msgid "daily-forecast.text.usa-gov-site.01"
 msgstr "美国政府官方网站"
 

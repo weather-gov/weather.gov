@@ -13,11 +13,11 @@
 {% set windGusts = hours | map(h => h.windGust) | json_encode %}
 {% set windDirections = hours | map(h => h.windDirection) | json_encode %}
 
-<wx-hourly-table class="display-block position-relative margin-top-2 bg-white">
+<wx-hourly-table class="display-block position-relative margin-top-2 bg-white" id="hourly-table_{{itemId}}" aria-labelledby="hourly-table-tab_{{itemId}}" data-tabpanel-selected="true" role="tabpanel">
   <div class="display-flex flex-justify">
     {% include "@new_weather_theme/partials/scroll-buttons.html.twig" %}
   </div>
-  <div id="hourly-table-container" class="usa-table-container--scrollable">
+  <div id="hourly-table-container-{{itemId}}" class="usa-table-container--scrollable">
     <table class="usa-table usa-table--borderless hourly-table" tabindex="0" {% if alerts | length > 0 %} data-has-alerts="true" {% else %} data-has-alerts="false" {% endif %}>
       <caption class="usa-sr-only">
         {{ "hourly-table.aria.table-description.01" | t({ "@day": for_day, "@month": for_month }) }}
@@ -38,7 +38,7 @@
       {% endif %}
       </tobdy>
       <tbody data-table-section="variables">
-        <tr data-row-name="temp">
+        <tr data-row-name="temp" id="temp_{{itemId}}">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
             {{"hourly-table.labels.temperature.01" | t}}
           </th>
@@ -53,7 +53,7 @@
           </td>
           {% endfor %}
         </tr>
-        <tr data-row-name="apparentTemp">
+        <tr data-row-name="apparentTemp" id="apparentTemp_{{itemId}}">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
             {{"forecast.current.feels-like.01" | t}}
           </th>
@@ -66,7 +66,7 @@
           </td>
           {% endfor %}
         </tr>
-        <tr data-row-name="condition">
+        <tr data-row-name="condition" id="condition_{{itemId}}">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
             {{"hourly-table.labels.condition.01" | t}}
           </th>
@@ -91,12 +91,12 @@
           </td>
           {% endfor %}
         </tr>
-        <tr data-row-name="chance-precipitation">
+        <tr data-row-name="chance-precipitation" id="chance-precipitation_{{itemId}}">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
             {{"daily-forecast.text.chance-precip.01" | t}}
           </th>
           {% for period in hours %}
-          <td> 
+          <td>
             {% if period.probabilityOfPrecipitation is not same as (null) %}
             <p class="margin-y-0"> {{period.probabilityOfPrecipitation.percent}}% </p>
             {% else %}
@@ -106,7 +106,7 @@
           {% endfor %}
         </tr>
 
-        <tr data-row-name="wind-speed">
+        <tr data-row-name="wind-speed" id="wind-speed_{{itemId}}">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
             {{"hourly-table.labels.wind-speed.01" | t}}
           </th>
@@ -138,7 +138,7 @@
           </td>
           {% endfor %}
         </tr>
-        <tr data-row-name="dewpoint">
+        <tr data-row-name="dewpoint" id="dewpoint_{{itemId}}">
           <th scope="row" class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
             {{"hourly-table.labels.dewpoint.01" | t}}
           </th>
@@ -156,4 +156,6 @@
       </tbody>
     </table>
   </div>
+
+  {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'qpf': qpf } %}
 </wx-hourly-table>

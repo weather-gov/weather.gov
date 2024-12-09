@@ -1,17 +1,7 @@
 /* eslint no-unused-expressions: off */
-import { JSDOM } from "jsdom";
+
 import { createSandbox, stub } from "sinon";
 import { assert, expect } from "chai";
-
-// Create the DOM and capture the parts that we will use directly.
-const { window } = new JSDOM("undefined", { url: "http://localhost/" });
-const { document } = window;
-
-// Set up the globals that the components need.
-global.window = window;
-global.document = document;
-global.HTMLElement = window.HTMLElement;
-global.Event = window.Event;
 
 // JSDOM does not have the `scrollIntoView` method,
 // so we need to stub it out here on all elements
