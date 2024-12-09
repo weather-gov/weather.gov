@@ -1,7 +1,6 @@
 /* eslint no-unused-expressions: off */
 import { JSDOM } from "jsdom";
-import { createSandbox, stub } from "sinon";
-import { assert, expect } from "chai";
+import { expect } from "chai";
 
 // Create the DOM and capture the parts that we will use directly.
 const { window } = new JSDOM("undefined", { url: "http://localhost/" });
@@ -140,7 +139,7 @@ describe("Tab web component basic tests", () => {
 
   it("Home key focuses on the first tab", () => {
     const tablist = document.querySelector("wx-tabs");
-    let evt = new window.KeyboardEvent("keydown", {key: "Home"});
+    const evt = new window.KeyboardEvent("keydown", {key: "Home"});
 
     // Start by focusing the second tab
     tablist.tabs[0].focus();
@@ -153,7 +152,7 @@ describe("Tab web component basic tests", () => {
 
   it("End key focuses on the first tab", () => {
     const tablist = document.querySelector("wx-tabs");
-    let evt = new window.KeyboardEvent("keydown", {key: "End"});
+    const evt = new window.KeyboardEvent("keydown", {key: "End"});
 
     // Start by focusing the second tab
     tablist.tabs[0].focus();
@@ -168,9 +167,7 @@ describe("Tab web component basic tests", () => {
     const tablist = document.querySelector("wx-tabs");
     tablist.tabs[1].click();
     const expected = ["false", "true", "false"];
-    const actual = tablist.tabpanels.map(panel => {
-      return panel.getAttribute("data-tabpanel-selected");
-    });
+    const actual = tablist.tabpanels.map(panel => panel.getAttribute("data-tabpanel-selected"));
 
     expect(actual).to.eql(expected);
   });

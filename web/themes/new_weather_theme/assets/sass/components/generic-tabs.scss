@@ -1,3 +1,4 @@
+/* stylelint-disable scss/at-extend-no-missing-placeholder */
 @use "uswds-core" as *;
 @forward "uswds";
 
@@ -17,7 +18,8 @@
 .wx-forecast-details-toggle button:hover {
     cursor: pointer;
 }
+
 .wx-forecast-details-toggle li[aria-selected="false"] button {
-    @extend .usa-button--outline;
+  @extend .usa-button--outline;
 }
 
