@@ -113,6 +113,12 @@ msgstr "Last updated"
 msgid "forecast.current.obs-station.01"
 msgstr "Observation station"
 
+msgid "forecast.current.obs-station-distance.01"
+msgstr "Distance to location"
+
+msgid "forecast.current.obs-station-elevation.01"
+msgstr "Elevation"
+
 msgid "forecast.current.weather-as-of.01"
 msgstr "Weather as of"
 
@@ -244,6 +250,9 @@ msgstr "@mercury_inches in (@mbar&nbsp;mb)"
 
 msgid "units.miles.01"
 msgstr "miles"
+
+msgid "units.feet.01"
+msgstr "feet"
 
 msgid "units.mph.01"
 msgstr "mph"
