@@ -298,7 +298,7 @@ describe("weather story upload tests", () => {
         },
       },
     };
-    return await uploadContentType(request, contentLocation, data);
+    return uploadContentType(request, contentLocation, data);
   };
 
   test("uploader can upload wfo weather story images with all attributes", async ({ request }) => {
