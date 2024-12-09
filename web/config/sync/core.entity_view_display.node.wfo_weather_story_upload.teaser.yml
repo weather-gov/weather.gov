@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.wfo_weather_story_upload.field_cwa_center_lat
     - field.field.node.wfo_weather_story_upload.field_cwa_center_lon
-    - field.field.node.wfo_weather_story_upload.field_derived_wfo
     - field.field.node.wfo_weather_story_upload.field_description
     - field.field.node.wfo_weather_story_upload.field_endtime
     - field.field.node.wfo_weather_story_upload.field_frontpage
@@ -18,6 +17,7 @@ dependencies:
     - field.field.node.wfo_weather_story_upload.field_smallimage
     - field.field.node.wfo_weather_story_upload.field_starttime
     - field.field.node.wfo_weather_story_upload.field_weburl
+    - field.field.node.wfo_weather_story_upload.field_ws_wfo_code
     - node.type.wfo_weather_story_upload
   module:
     - user
@@ -34,7 +34,6 @@ content:
 hidden:
   field_cwa_center_lat: true
   field_cwa_center_lon: true
-  field_derived_wfo: true
   field_description: true
   field_endtime: true
   field_frontpage: true
@@ -46,4 +45,5 @@ hidden:
   field_smallimage: true
   field_starttime: true
   field_weburl: true
+  field_ws_wfo_code: true
   langcode: true

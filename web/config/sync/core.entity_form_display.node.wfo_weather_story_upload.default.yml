@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.node.wfo_weather_story_upload.field_cwa_center_lat
     - field.field.node.wfo_weather_story_upload.field_cwa_center_lon
-    - field.field.node.wfo_weather_story_upload.field_derived_wfo
     - field.field.node.wfo_weather_story_upload.field_description
     - field.field.node.wfo_weather_story_upload.field_endtime
     - field.field.node.wfo_weather_story_upload.field_frontpage
@@ -17,6 +16,7 @@ dependencies:
     - field.field.node.wfo_weather_story_upload.field_smallimage
     - field.field.node.wfo_weather_story_upload.field_starttime
     - field.field.node.wfo_weather_story_upload.field_weburl
+    - field.field.node.wfo_weather_story_upload.field_ws_wfo_code
     - image.style.thumbnail
     - node.type.wfo_weather_story_upload
   module:
@@ -46,14 +46,6 @@ content:
   field_cwa_center_lon:
     type: string_textfield
     weight: 10
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_derived_wfo:
-    type: string_textfield
-    weight: 22
     region: content
     settings:
       size: 60
@@ -134,6 +126,14 @@ content:
   field_weburl:
     type: string_textfield
     weight: 19
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_ws_wfo_code:
+    type: string_textfield
+    weight: 26
     region: content
     settings:
       size: 60
