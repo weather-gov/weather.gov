@@ -15,7 +15,7 @@ We are also enabling the following core Drupal modules:
 
 Two new content types, `wfo_pdf_upload` and `wfo_weather_story_upload` were created for WFO daily situation reports and WFO weather stories, respectively. 
 
-For `wfo_pdf_upload`, the `field_wfo_sitrep` field holds the PDF file. For `wfo_weather_story_upload`, `field_fullimage` (required) and `field_smallimage` (optional) hold the weather story images.
+For `wfo_pdf_upload`, the `field_wfo_sitrep` field (required) holds the PDF file and `field_wfo_code` (required) holds the WFO code (e.g., `ABQ`). For `wfo_weather_story_upload`, `field_office` (required) holds the WFO code, and `field_fullimage` (required) and `field_smallimage` (optional) hold the weather story images.
 
 We have configured JSON:API to only display `wfo_pdf_upload`s, `wfo_weather_story_upload`s, and `file`s. (`file` is needed because we need to upload the PDF or image and then link the PDF or image to the appropriate field) Furthermore, `file` is configured to only allow the `uri` field to be shown. Note that any PDFs or images uploaded will be publicly available.
 
@@ -51,6 +51,7 @@ Second, we create the `wfo_pdf_upload` entity itself and link the PDF `id`:
             "type": "node--wfo_pdf_upload",
             "attributes": {
               "title": "test.pdf"
+              "field_wfo_code": "EAX",
             },
             "relationships": {
               "field_wfo_sitrep": {
