@@ -40,6 +40,8 @@
     <span class="usa-sr-only">{{ "wind.labels.speed-from-south.01" | t({ "@speed": speed.mph }) }}</span>
   {% elseif direction.cardinalLong == "southwest" %}
     <span class="usa-sr-only">{{ "wind.labels.speed-from-southwest.01" | t({ "@speed": speed.mph }) }}</span>
+  {% elseif direction.cardinalLong == "west" %}
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-west.01" | t({ "@speed": speed.mph }) }}</span>
   {% elseif direction.cardinalLong == "northwest" %}
     <span class="usa-sr-only">{{ "wind.labels.speed-from-northwest.01" | t({ "@speed": speed.mph }) }}</span>
   {% endif %}
