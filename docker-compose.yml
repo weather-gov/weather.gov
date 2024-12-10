@@ -13,6 +13,17 @@ services:
     ports:
       - 3306:3306
 
+  phpmyadmin:
+    image: phpmyadmin
+    networks:
+        - weather.gov
+    depends_on:
+        - database
+    ports:
+        - 8087:80
+    environment:
+        PMA_HOST: database
+
   api-proxy:
     build:
       context: ./tests/api
