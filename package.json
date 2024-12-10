@@ -34,6 +34,7 @@
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-formatter-junit": "^8.40.0",
     "eslint-plugin-import": "^2.31.0",
     "glob": "^11.0.0",
     "jsdom": "^25.0.1",
@@ -45,6 +46,7 @@
     "sinon": "^19.0.2",
     "stylelint": "^16.10.0",
     "stylelint-config-standard-scss": "^14.0.0",
+    "stylelint-gitlabci-formatter": "^1.0.1",
     "whatwg-fetch": "^3.6.20",
     "xml-parse": "^0.4.0"
   },
@@ -55,9 +57,11 @@
     "js-component-tests": "npx mocha --require web/themes/**/tests/components/preload.js web/themes/**/tests/components/*-tests.js",
     "js-format": "npx prettier -w 'web/themes/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
     "js-lint": "eslint '**/*.js'",
+    "js-lint-report": "eslint --format junit '**/*.js'",
     "php-format": "npx prettier -w 'web/**/*.php' 'web/**/*.php.test' 'web/**/*.theme' 'web/**/*.module'",
     "style-format": "npx prettier -w 'web/themes/**/*.scss'",
     "style-lint": "stylelint '**/*.scss'",
+    "style-lint-report": "stylelint --custom-formatter ./node_modules/stylelint-gitlabci-formatter/index.js '**/*.scss'",
     "compile-svg": "node ./scripts/compile-svg-sprite.js ./web/themes/new_weather_theme/assets/images/weather/icons/*.svg ./web/themes/new_weather_theme/assets/images/weather/icons/conditions/*.svg",
     "check-translations": "node ./tests/translations/main.js"
   },
