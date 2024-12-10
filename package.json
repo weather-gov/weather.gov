@@ -41,7 +41,7 @@
     "mocha": "^11.0.1",
     "mocha-cli": "^1.0.1",
     "playwright": "^1.49.0",
-    "prettier": "^3.4.1",
+    "prettier": "^3.4.2",
     "sinon": "^19.0.2",
     "stylelint": "^16.10.0",
     "stylelint-config-standard-scss": "^14.0.0",
@@ -52,7 +52,7 @@
     "load-spatial": "cd spatial-data && node load-shapefiles.js",
     "a11y": "playwright test a11y",
     "playwright:e2e": "playwright test e2e/*",
-    "js-component-tests": "npx mocha web/themes/**/tests/components/*-tests.js",
+    "js-component-tests": "npx mocha --require web/themes/**/tests/components/preload.js web/themes/**/tests/components/*-tests.js",
     "js-format": "npx prettier -w 'web/themes/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
     "js-lint": "eslint '**/*.js'",
     "php-format": "npx prettier -w 'web/**/*.php' 'web/**/*.php.test' 'web/**/*.theme' 'web/**/*.module'",
@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@prettier/plugin-php": "^0.22.2",
-    "mysql2": "^3.11.4",
+    "mysql2": "^3.11.5",
     "shapefile": "^0.6.6",
     "twing": "^7.0.0"
   }

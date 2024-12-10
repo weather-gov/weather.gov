@@ -83,6 +83,12 @@ msgstr "Hide hourly details"
 msgid "daily-forecast.text.show-details.01"
 msgstr "Show hourly details"
 
+msgid "daily-forecast.label.details-toggle-charts.01"
+msgstr "Charts"
+
+msgid "daily-forecast.bale.details-toggle-table.01"
+msgstr "Table"
+
 msgid "daily-forecast.text.usa-gov-site.01"
 msgstr "Official website of the United States government"
 

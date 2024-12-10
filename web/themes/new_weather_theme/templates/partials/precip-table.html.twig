@@ -1,6 +1,6 @@
-<div class="grid-row wx-qpf-periods"> 
-  <div class="grid-col-12"> 
-    <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-2 margin-bottom-05">{{ "precip-table.labels.amounts.01" |t }}</h5>
+<div class="grid-row wx-qpf-periods">
+  <div class="grid-col-12">
+    <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-2 margin-bottom-05">{{ "Precipitation amounts" |t }}</h5>
   </div>
 </div>
 
@@ -20,16 +20,6 @@
 {% endif %}
 
 <div class="margin-bottom-205">
-  <div class="wx-qpf-chart-container maxh-card-lg position-relative grid-col-12"
-    data-times="{{ times | escape('html_attr') }}"
-    data-liquid="{{ liquid | escape('html_attr') }}"
-    data-snow="{{ snow | escape('html_attr') }}"
-    data-ice="{{ ice | escape('html_attr') }}"
-  >
-    <canvas>
-    </canvas>
-  </div>
-
   <div class="display-flex flex-align-center font-mono-xs text-base">
     {% if qpf.hasSnow %}
     <div class="margin-x-1 margin-right-1 wx-bg-snow margin-left-1 width-2 height-2 border border-base-darker" style="margin-top: -3px;"></div>
