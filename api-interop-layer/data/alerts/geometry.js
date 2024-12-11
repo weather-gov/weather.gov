@@ -3,12 +3,6 @@ import { simplify, union } from "@turf/turf";
 const SIMPLIFY_TOLERANCE = 0.003;
 const ZONE_CHUNK_SIZE = 5;
 
-const wait = async (ms) => {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
-};
-
 const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
   if (geojson.type === "GeometryCollection") {
     const geometries = geojson.geometries.flatMap((geometry) =>
@@ -109,7 +103,6 @@ const fetchAndComputeZoneGeometries = async (db, zones, zoneType="forecast") => 
   
   const remaining = zones.slice(1);
   for(let i = 0; i < remaining.length; i++){
-    await wait(100);
     const start = i * ZONE_CHUNK_SIZE;
     const end = start + ZONE_CHUNK_SIZE;
     const chunk = remaining.slice(start, end);
