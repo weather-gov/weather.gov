@@ -1,5 +1,4 @@
 import { simplify, union } from "@turf/turf";
-import openDatabase from "../db.js";
 
 const SIMPLIFY_TOLERANCE = 0.003;
 const ZONE_CHUNK_SIZE = 5;
