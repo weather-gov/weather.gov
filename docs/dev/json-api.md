@@ -92,7 +92,7 @@ The `field_fullimage` is required.
       --data-binary @fullimage.png \
       http://localhost:8080/jsonapi/node/wfo_weather_story_upload/field_fullimage
 
-Optionally one can also upload the `field_smallimage`.
+Be sure to capture the image `id` from the response. Optionally one can also upload the `field_smallimage`.
 
     curl -sL \
       --user uploader:uploader \
@@ -102,7 +102,7 @@ Optionally one can also upload the `field_smallimage`.
       --data-binary @smallimage.png \
       http://localhost:8080/jsonapi/node/wfo_weather_story_upload/field_smallimage
 
-And then we create the `wfo_weather_story_upload` and link the image(s) accordingly:
+And then we create the `wfo_weather_story_upload` and link the above image id(s) accordingly:
 
     curl -sL \
       --user uploader:uploader \
