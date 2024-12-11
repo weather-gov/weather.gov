@@ -6,7 +6,7 @@ describe("Touchpoints button tests", () => {
   describe("Basic layout", () => {
 
     test("Touchpoints button is visible", async ({ page }) => {
-      await page.goto("http://localhost:8080/");
+      await page.goto("http://localhost:8080/", { waitUntil: "load" });
       const button = await page.locator("a.touchpoints-button");
 
       await expect(button).toBeVisible();
