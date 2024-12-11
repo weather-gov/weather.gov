@@ -41,9 +41,6 @@ const getForecastZonesShapeFromDb = async (db, zones) => {
         WHERE id IN (${zones.map(() => "?").join(",")})`;
   const result = await db.query(sql, zones);
   const [[{ shape }]] = result;
-  // if(shape === null){
-  //   console.log(`ZONE RESULT:\n${JSON.stringify(result)}\n${zones}`);
-  // }
   return shape;
 };
 
