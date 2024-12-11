@@ -13,7 +13,7 @@ describe("main script", () => {
     describe("formats the timestamp according to the browser's locale settings", () => {
       test.use({ locale });
       test(`for the ${locale} locale`, async ({ page }) => {
-        await page.goto("/point/33.521/-86.812");
+        await page.goto("/point/33.521/-86.812", { waitUntil: "load"});
 
         const timestamps = await page.locator("time[data-wx-local-time]").all();
         expect(timestamps.length).toBeGreaterThan(0);

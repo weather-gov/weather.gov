@@ -21,7 +21,7 @@ describe("territory places are supported", () => {
     // ["", "US Minor Outlying Islands (UM)", ""],
   ].forEach(([url, territory, place]) => {
     test(`supports ${territory}`, async ({ page }) => {
-      await page.goto(url);
+      await page.goto(url, { waitUntil: "load"});
       await expect(page.locator("main h1")).toContainText(place);
 
       // These validate that there is forecast data for the territories. But

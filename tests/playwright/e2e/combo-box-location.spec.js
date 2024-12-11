@@ -29,7 +29,7 @@ describe("wx-combo-box-location tests", () => {
       },
     );
 
-    await page.goto("http://localhost:8080");
+    await page.goto("http://localhost:8080", { waitUntil: "load"});
   });
 
   test("Can find the combo-box element", async ({ page }) => {

@@ -5,8 +5,8 @@ const { describe, beforeEach } = test;
 
 describe("Alerts e2e tests", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/proxy/play/testing");
-    await page.goto("/point/34.749/-92.275");
+    await page.goto("http://localhost:8081/proxy/play/testing", { waitUntil: "load"});
+    await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
   });
 
   test("The correct number of alerts show on the page", async ({ page }) => {
