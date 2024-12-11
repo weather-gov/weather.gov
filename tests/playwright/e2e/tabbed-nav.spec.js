@@ -13,7 +13,7 @@ describe("<wx-tabbed-nav> component tests", () => {
   describe("Alert link interaction", () => {
     beforeEach(async ({ page }) => {
       await page.goto("http://localhost:8081/proxy/play/testing");
-      await page.goto("/point/34.749/-92.275");
+      await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
     });
 
     describe("Basic tabbed nav tests", () => {
@@ -153,7 +153,7 @@ describe("<wx-tabbed-nav> component tests", () => {
       page,
     }) => {
       const alertID = "alert_aa84ba418dfe6f3e1eb046cf9e4086aaaaddeb65_001_1";
-      await page.goto(`/point/34.749/-92.275#${alertID}`);
+      await page.goto(`/point/34.749/-92.275#${alertID}`, { waitUnfil: "load"});
 
       const alert = await page.locator(`#${alertID}`).first();
       const alertContent = await alert
@@ -175,7 +175,7 @@ describe("<wx-tabbed-nav> component tests", () => {
       test(`Activates the ${tabName} tab if the hash is present`, async ({
         page,
       }) => {
-        await page.goto(`/point/34.749/-92.275#${tabName}`);
+        await page.goto(`/point/34.749/-92.275#${tabName}`, { waitUnfil: "load"});
         const tabButton = await page
           .locator(`.tab-button[data-tab-name="${tabName}"]`)
           .first();
@@ -197,7 +197,7 @@ describe("<wx-tabbed-nav> component tests", () => {
       });
 
       const badHash = "urn:hello.there.everyone";
-      await page.goto(`/point/34.749/-92.275#${badHash}`);
+      await page.goto(`/point/34.749/-92.275#${badHash}`, { waitUnfil: "load"});
 
       expect(gotError).toBe(false);
     });
@@ -207,7 +207,7 @@ describe("<wx-tabbed-nav> component tests", () => {
     test("Should not display an alerts tab or area if there are no alerts", async ({
       page,
     }) => {
-      await page.goto("/point/35.198/-111.651");
+      await page.goto("/point/35.198/-111.651", { waitUntil: "load"});
       const tabButton = await page.locator(
         '.tab-button[data-tab-name="alerts"]',
       );
@@ -220,7 +220,7 @@ describe("<wx-tabbed-nav> component tests", () => {
 
   describe("a11y tablist/tabpanel guidelines tests", () => {
     beforeEach(async ({ page }) => {
-      await page.goto("/point/34.749/-92.275");
+      await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
     });
 
     test("puts focus on the corresponding tabpanel when tab is pushed from a focused tab button", async ({

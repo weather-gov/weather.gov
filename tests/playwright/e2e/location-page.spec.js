@@ -9,7 +9,7 @@ describe("the location page", () => {
   });
 
   test("does not display marine alerts", async ({ page }) => {
-    await page.goto("/point/33.521/-86.812");
+    await page.goto("/point/33.521/-86.812", { waitUntil: "load"});
     const alertEl = page.locator("weathergov-alert-list > div");
 
     await expect(alertEl).toHaveCount(1);
@@ -18,7 +18,7 @@ describe("the location page", () => {
   });
 
   test("does include alerts based on fire zone", async ({ page }) => {
-    await page.goto("/point/34.749/-92.275");
+    await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
     const alertEl = page.locator("weathergov-alert-list > div");
 
     await expect(alertEl).toContainText("Red Flag Warning");
@@ -26,7 +26,7 @@ describe("the location page", () => {
 
   describe("shows n/a for unavailable data", () => {
     test("wind is null", async ({ page }) => {
-      await page.goto("/point/33.211/-87.566");
+      await page.goto("/point/33.211/-87.566", { waitUntil: "load"});
       const windEl = page.locator(".wx-current-conditions .wx-wind-speed > td");
 
       await expect(windEl).toContainText("N/A");
@@ -37,7 +37,7 @@ describe("the location page", () => {
     test("does not kload if the today tab is not displaying", async ({
       page,
     }) => {
-      await page.goto("/point/33.521/-86.812");
+      await page.goto("/point/33.521/-86.812", { waitUntil: "load"});
       const radarContainer = page.locator("#wx_radar_container");
 
       await expect(radarContainer).toBeEmpty();
@@ -46,7 +46,7 @@ describe("the location page", () => {
     test("loads correctly after switching to the today tab", async ({
       page,
     }) => {
-      await page.goto("/point/33.521/-86.812");
+      await page.goto("/point/33.521/-86.812", { waitUntil: "load"});
       const currentTab = page.locator('[data-tab-name="today"]');
       const radarContainer = page.locator("#wx_radar_container");
 
@@ -61,7 +61,7 @@ describe("the location page", () => {
     test("should load the default tabbed view without any error messages", async ({
       page,
     }) => {
-      await page.goto("/point/34.749/-92.275");
+      await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
       const errorEl = page.locator(".usa-alert--error");
 
       await expect(errorEl).toHaveCount(0);
@@ -70,7 +70,7 @@ describe("the location page", () => {
     test("should load without any error messages in the today tab", async ({
       page,
     }) => {
-      await page.goto("/point/34.749/-92.275#today");
+      await page.goto("/point/34.749/-92.275#today", { waitUntil: "load"});
       const errorEl = page.locator(".usa-alert--error");
 
       await expect(errorEl).toHaveCount(0);
@@ -79,7 +79,7 @@ describe("the location page", () => {
     test("should load without any error messages in the daily (7-day) tab", async ({
       page,
     }) => {
-      await page.goto("/point/34.749/-92.275#daily");
+      await page.goto("/point/34.749/-92.275#daily", { waitUntil: "load"});
       const errorEl = page.locator(".usa-alert--error");
 
       await expect(errorEl).toHaveCount(0);
@@ -88,7 +88,7 @@ describe("the location page", () => {
     test("should load without any error messages in the current conditions tab", async ({
       page,
     }) => {
-      await page.goto("/point/34.749/-92.275#today");
+      await page.goto("/point/34.749/-92.275#today", { waitUntil: "load"});
       const errorEl = page.locator(".usa-alert--error");
 
       await expect(errorEl).toHaveCount(0);

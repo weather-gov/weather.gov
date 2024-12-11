@@ -32,6 +32,15 @@ point-page:
         type: module
         defer: true
 
+point-page-components:
+  version: 2024-12-11
+  header: true
+  js:
+    assets/js/point.page.components.js:
+      attributes:
+        type: module
+        defer: false
+
 afd-page:
   version: 2024-09-03
   js:

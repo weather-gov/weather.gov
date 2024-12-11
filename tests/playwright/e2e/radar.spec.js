@@ -6,7 +6,7 @@ const { describe, beforeEach } = test;
 describe("radar component", () => {
   beforeEach(async ({ page }) => {
     await page.goto("http://localhost:8081/proxy/play/testing");
-    await page.goto("/point/35.198/-111.651");
+    await page.goto("/point/35.198/-111.651", { waitUntil: "load"});
   });
 
   describe("radar container", () => {

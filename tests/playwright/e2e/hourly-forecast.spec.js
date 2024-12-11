@@ -7,7 +7,7 @@ describe("Hourly forecast table tests", () => {
   describe("Alert row spanning tests", () => {
     beforeEach(async ({ page }) => {
       await page.goto("http://localhost:8081/proxy/play/testing");
-      await page.goto("/point/34.749/-92.275#daily");
+      await page.goto("/point/34.749/-92.275#daily", { waitUntil: "load"});
     });
 
     test("Should have 2 alert rows on the hourly forecast", async ({
@@ -56,13 +56,13 @@ describe("Hourly forecast table tests", () => {
 
   describe("Alert span clicking behavior", () => {
     beforeEach(async ({ page }) =>
-      page.goto("http://localhost:8081/proxy/play/testing"),
+      page.goto("http://localhost:8081/proxy/play/testing", { waitUntil: "load"}),
     );
 
     test("works when clicking an alert in one of the daily tab's hourly tables", async ({
       page,
     }) => {
-      await page.goto("/point/34.749/-92.275#daily");
+      await page.goto("/point/34.749/-92.275#daily", { waitUntil: "load"});
 
       // Click the alert
       await page
@@ -85,7 +85,7 @@ describe("Hourly forecast table tests", () => {
 
   describe("Hourly precipitation tables", () => {
     test("Renders tables for every day", async ({ page }) => {
-      await page.goto("/point/34.749/-92.275#daily");
+      await page.goto("/point/34.749/-92.275#daily", { waitUntil: "load"});
 
       const count = await page
         .locator("#daily ol li table.wx-precip-table")
