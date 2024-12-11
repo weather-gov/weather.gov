@@ -69,6 +69,12 @@ const getZoneShapeFromDb = async (db, zones, kind="forecast") => {
   }
 };
 
+/**
+ * Turf's union function can take a single GeometryCollection
+ * object and compute the union of all of its constituent shapes.
+ * If this function is only passed a single geometry object, it
+ * will perform that so-called unary union.
+ */
 const getUnion = (firstShape, secondShape=null) => {
   if(secondShape){
     return union(firstShape, secondShape);
