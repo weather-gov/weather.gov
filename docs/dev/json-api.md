@@ -61,7 +61,7 @@ Second, we create the `wfo_pdf_upload` entity itself and link the PDF `id`:
       -d '{"data": {
             "type": "node--wfo_pdf_upload",
             "attributes": {
-              "title": "test.pdf"
+              "title": "test.pdf",
               "field_wfo_code": "EAX"
             },
             "relationships": {
