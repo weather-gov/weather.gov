@@ -1,0 +1,42 @@
+stages:
+  - build
+  - test
+  - deploy
+
+# NB: GitLab clones into CI_BUILDS_DIR which defaults to
+# /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
+# images our WORKDIR is /app. so we symlink the various /app/node_modules to
+# CI_BUILDS_DIR so we can "npm run" as needed.
+js-lint:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  script:
+    - ln -s /app/node_modules/ .
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - ln -s /app/tests/api/node_modules tests/api/
+    - npm run --silent js-lint-report > eslint.xml
+  artifacts:
+    when: always
+    reports:
+      junit: eslint.xml
+
+style-lint:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  script:
+    - ln -s /app/node_modules/ .
+    - npm run --silent style-lint-report 2> stylelint.xml
+  artifacts:
+    when: always
+    reports:
+      junit: stylelint.xml
+
+php-lint:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/weathergov-drupal:latest
+  script:
+    - phpcs --report=junit --report-file=phpcs.xml
+  artifacts:
+    when: always
+    reports:
+      junit: phpcs.xml
