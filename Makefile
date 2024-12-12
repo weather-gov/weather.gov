@@ -154,7 +154,7 @@ setup-outside-vars:
 ot: outside-test
 outside-test: setup-outside-vars start-test-environment pause install-site load-spatial-test ## Run a separate weather.gov instance for testing
 	./tests/playwright/outside/setup.sh
-	npx playwright test outside/*
+	pushd tests; npx playwright test outside/*; popd
 
 ### Linting
 js-lint: ## Run eslint on our Javascript
