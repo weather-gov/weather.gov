@@ -7,10 +7,13 @@ import openDatabase from "../db.js";
 import alertKinds from "./kinds.js";
 import { parseDescription, parseLocations } from "./parse/index.js";
 import { generateAlertGeometry } from "./geometry.js";
+import { AlertsCache } from "./cache.js";
 
 // The hashes of all the active alerts we know about. Anything in this list will
 // not be processed in future updates, since we've already captured it.
 const KNOWN_ALERTS = new Set();
+const alertsCache = new AlertsCache();
+
 
 export const updateAlerts = async ({ parent = parentPort } = {}) => {
   const now = dayjs();
@@ -95,6 +98,14 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   );
 
   const db = await openDatabase();
+  alertsCache.db = db;
+  await alertsCache.createTable();
+
+  // NEW
+  // Remove any invalid alerts from the cache table
+  // (ie alerts in the table that are not present in the current batch)
+  const incomingHashes = alertsToUpdate.map(alert => alert.properties.hash);
+  await alertsCache.removeInvalidBasedOn(incomingHashes);
 
   parent.postMessage({
     action: "log",
@@ -196,21 +207,33 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
       continue; // eslint-disable-line no-continue
     }
 
-    alert.geometry = await generateAlertGeometry(db, rawAlert);
+    const geometry = await generateAlertGeometry(db, rawAlert);
 
-    parent.postMessage({
-      action: "log",
-      level: "verbose",
-      message: `adding alert with hash ${rawAlert.properties.hash}`,
-    });
+    // NEW
+    // Add the alert to the cache table
+    if(geometry){
+      await alertsCache.add(rawAlert.properties.hash, rawAlert, geometry);
 
-    parent.postMessage({
-      action: "add",
-      hash: rawAlert.properties.hash,
-      alert,
-    });
+      parent.postMessage({
+        action: "log",
+        level: "verbose",
+        message: `adding alert with hash ${rawAlert.properties.hash}`,
+      });
 
-    KNOWN_ALERTS.add(rawAlert.properties.hash);
+      parent.postMessage({
+        action: "add",
+        hash: rawAlert.properties.hash,
+        alert,
+      });
+
+      KNOWN_ALERTS.add(rawAlert.properties.hash);
+    } else {
+      parent.postMessage({
+        action: "log",
+        level: "error",
+        message: `Could not determine geometry for alert ${rawAlert.id}`
+      });
+    }
   }
 };
 
