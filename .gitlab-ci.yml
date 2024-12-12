@@ -40,3 +40,10 @@ php-lint:
     when: always
     reports:
       junit: phpcs.xml
+
+js-component-tests:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  script:
+    - ln -s /app/node_modules/ .
+    - npm run js-component-tests
