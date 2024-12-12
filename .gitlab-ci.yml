@@ -46,4 +46,15 @@ js-component-tests:
   image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
   script:
     - ln -s /app/node_modules/ .
-    - npm run js-component-tests
+    - npm run --silent js-component-tests-report
+  artifacts:
+    when: always
+    reports:
+      junit: test-results.xml # mocha-junit-reporter writes to this file by default
+
+# playwright-accessibility-tests:
+#   stage: test
+#   image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+#   script:
+#     - ln -s /app/node_modules/ .
+#     - npx playwright test a11y
