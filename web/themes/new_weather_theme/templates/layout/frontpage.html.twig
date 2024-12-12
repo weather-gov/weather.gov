@@ -3,7 +3,7 @@
   <div class="grid-container">
     <div class="grid-row"> 
       <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-        <h1 class="text-normal text-white margin-y-0 font-sans-3xl text-ls-1"> Find your forecast </h1>
+        <h1 class="text-normal text-white margin-y-0 font-sans-3xl text-ls-1">{{ "Find your forecast" | t }}</h1>
       </div>
     </div>
 
@@ -52,18 +52,20 @@
             src="/{{ directory }}/assets/images/weather/spot_illos/wx_illo_announce.svg"
             alt=""
           />
-          <h2 class="text-normal text-primary-darker font-sans-2xl margin-y-0">A new weather.gov is&nbsp;coming</h2>
+          <h2 class="text-normal text-primary-darker font-sans-2xl margin-y-0">
+            {{ "A new weather.gov is&nbsp;coming" | t }}
+          </h2>
         </div>
       </div>
     </div>
     <div class="grid-row">
       <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
 
-        <p class="font-sans-md">This website is in development. We are creating a new, contemporary tool for anyone, anywhere in the U.S. to check their forecast and learn about hazardous weather on the way. 
+        <p class="font-sans-md">{{ "This website is in development. We are creating a new, contemporary tool for anyone, anywhere in the U.S. to check their forecast and learn about hazardous weather on the way." | t }}
         </p>
-        <p>As you explore, you may notice that we’re missing features you’re accustomed to seeing on weather.gov. This site is updated every two weeks with new features. Continue to check back to watch the site expand!
+        <p>{{ "As you explore, you may notice that we’re missing features you’re accustomed to seeing on weather.gov. This site is updated every two weeks with new features. Continue to check back to watch the site expand!" | t }}
         </p>
-        <p class="margin-bottom-0">Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href="https://www.weather.gov" class="usa-link">access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information.
+        <p class="margin-bottom-0">{{ "Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href='https://www.weather.gov' class='usa-link'>access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information." | t({ "@url": 'https://www.weather.gov' }) }}
         </p>
       </div>
     </div>
@@ -81,23 +83,23 @@
           alt=""
         />
         <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
-          A weather.gov built with you in&nbsp;mind
+          {{ "A weather.gov built with you in&nbsp;mind" | t}}
         </h2>
       </div>
     </div>
   </div>
   <div class="grid-row">
     <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-      <p>We are working towards a new weather.gov that quickly provides everyone with the critical information they need to protect themselves and their communities. </p>
+      <p>{{ "We are working towards a new weather.gov that quickly provides everyone with the critical information they need to protect themselves and their communities." | t }}</p>
       <p class="margin-bottom-1"> 
-      Over the next few years, we are working towards a site that will be: 
+      {{ "Over the next few years, we are working towards a site that will be:" | t}}
       </p>
       <ul class="usa-list margin-y-0"> 
-        <li> One cohesive experience </li>
-        <li> Easy to navigate and understand from any device </li>
-        <li> Accessible to all users, regardless of location, wealth, education, age, or&nbsp;ability </li>
-        <li> Available in more languages </li>
-        <li> A valuable resource for the public, as well as partners of the National Weather Service </li>
+        <li>{{ "One cohesive experience" | t }}</li>
+        <li>{{ "Easy to navigate and understand from any device" | t }}</li>
+        <li>{{ "Accessible to all users, regardless of location, wealth, education, age, or&nbsp;ability" | t }}</li>
+        <li>{{ "Available in more languages" | t }}</li>
+        <li>{{ "A valuable resource for the public, as well as partners of the National Weather Service" | t }}</li>
       </ul>
     </div>
   </div>
@@ -112,7 +114,7 @@
           alt=""
         />
         <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
-           We want to hear from you!
+           {{ "We want to hear from you!" | t }}
         </h2>
       </div>
     </div>
@@ -120,13 +122,13 @@
   <div class="grid-row">
     <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
       <p class="margin-bottom-1"> 
-      <a href="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit" class="usa-link"> Tell us what you think </a> about how beta.weather.gov looks and functions.
+      {{"<a href='https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit' class='usa-link'>Tell us what you think</a> about how beta.weather.gov looks and functions." | t({ "@url": 'https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit' }) }}
       </p>
       <ul class="usa-list margin-y-0"> 
-        <li> Did you find the information you were looking for? </li>
-        <li> Did you have any challenges in understanding it? </li>
-        <li> In what ways have you been using this website? </li>
-        <li> What can we do to serve you better? </li>
+        <li>{{ "Did you find the information you were looking for?" | t }}</li>
+        <li>{{ "Did you have any challenges in understanding it?" | t }}</li>
+        <li>{{ "In what ways have you been using this website?" | t }}</li>
+        <li>{{ "What can we do to serve you better?" | t }}</li>
       </ul>
     </div>
   </div>

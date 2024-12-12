@@ -98,7 +98,7 @@
                   <path d="M6 7H16V8H6V7Z" fill="#0085CA"/>
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M4 2H20V22H4V2ZM5 3H19V21H5V3Z" fill="#0085CA"/>
                 </svg>
-                <a class="usa-link margin-left-1" href="/afd/{{ point.grid.wfo | normalize_wfo }}">Area Forecast Discussion</a>
+                <a class="usa-link margin-left-1" href="/afd/{{ point.grid.wfo | normalize_wfo }}">{{ "Area Forecast Discussion" | t }}</a>
               </div>
             </div>
           </div>
@@ -115,7 +115,7 @@
           </div>
         </div>
         <wx-daily-forecast class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
-            <h2 class="usa-sr-only">Daily forecast</h2>
+            <h2 class="usa-sr-only">{{ "Daily forecast" | t }}</h2>
             {% include '@new_weather_theme/point/forecast.html.twig' with { forecast: point.forecast } %}
             {{ drupal_block("weathergov_wfo_promo", { wfo: point.grid.wfo }) }}
         </wx-daily-forecast>
