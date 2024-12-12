@@ -19,6 +19,8 @@ export class AlertsCache {
     this.determineOldHashesFrom = this.determineOldHashesFrom.bind(this);
     this.removeByHashes = this.removeByHashes.bind(this);
     this.removeInvalidBasedOn = this.removeInvalidBasedOn.bind(this);
+    this.getInsersectingAlerts = this.getIntersectingAlerts.bind(this);
+    this.dropCacheTable = this.dropCacheTable.bind(this);
   }
 
   async createTable(){
@@ -109,6 +111,27 @@ PRIMARY KEY(id)
     const geometryAsString = JSON.stringify(geometry);
     const sql = `INSERT INTO ${this.tableName} (hash, alertJson, shape) VALUES(?, ?, ST_GeomFromGeoJson(?));`;
     return await this.db.query(sql, [hash, alertAsString, geometryAsString]);
+  }
+
+  /**
+   * Given an incoming GeoJSON geometry,
+   * retrieve all alerts that intersect with that geometry.
+   */
+  async getIntersectingAlerts(geojson){
+    const sql = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${this.tableName} WHERE ST_INTERSECTS(ST_GeomFromGeoJson(?), shape);`;
+    const response = await this.db.query(sql, [geojson]);
+    const [results, _] = response;
+    return results.map(result => {
+      return Object.assign({}, result.alertJson, { geometry: result.geometry });
+    });
+  }
+
+  /**
+   * Drop the cache table from the database entirely.
+   */
+  async dropCacheTable(){
+    const sql = `DROP TABLE ${this.tableName}`;
+    return await this.db.query(sql);
   }
 }
 

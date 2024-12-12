@@ -1,6 +1,51 @@
 import dayjs from "../../util/day.js";
 
 /**
+ * Given an alert object, parse the relevant timestamp fields
+ * into dayjs objects that are aligned to the provided timezone.
+ * Modifies the given alert object in place
+ */
+export const modifyTimestampsForAlert = (alert, timezone) => {
+  // A regex we will use for double-checking that the value
+  // is likely to be a timestamp.
+  // The day.js parser looks for ANY ISO-8601 valid text in the string
+  // and attempts to convert it. As a result, some harmless text ends
+  // up getting picked up as valid dates. For example:
+  //
+  // PLEASE CALL 5-1-1
+  //
+  // day.js parses that to May 1, 2001. That is obviously not correct.
+  // But we know all of our timestamps are *only* ISO8601 strings with
+  // full date information, so we can check that the string starts with
+  // a YYYY-MM-DD format as well as parsing to a valid day.js object.
+  const rx = /^\d{4}-\d{2}-\d{2}/;
+
+  // Start with properties.
+  // Alerts pulled out from the database will not have properties,
+  // so be sure to check first
+  if(alert.properties){
+    Object.keys(alert.properties).forEach(key => {
+      const value = alert.properties[key];
+      const date = dayjs(value);
+
+      if(date.isValid() && rx.test(value)){
+        alert.properties[key] = date.tz(timezone);
+      }
+    });
+  }
+
+  // Now do the top level
+  Object.keys(alert).forEach(key => {
+    const value = alert[key];
+    const date = dayjs(value);
+
+    if(date.isValid() && rx.test(value)){
+      alert[key] = date.tz(timezone);
+    }
+  });
+};
+
+/**
  * Maps the alerts into the daily forecast.
  * This also aligns alerts with the hour periods
  * for each given day.

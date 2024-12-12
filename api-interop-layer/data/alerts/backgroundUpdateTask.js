@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { parentPort } from "node:worker_threads";
 import dayjs from "../../util/day.js";
+import { modifyTimestampsForAlert } from "./utils.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import paragraphSquash from "../../util/paragraphSquash.js";
 import openDatabase from "../db.js";
@@ -42,24 +43,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
 
         theseAlertHashes.add(feature.properties.hash);
 
-        Object.keys(feature.properties).forEach((key) => {
-          const value = feature.properties[key];
-          const date = dayjs(value);
-
-          // The day.js parser looks for ANY ISO-8601 valid text in the string
-          // and attempts to convert it. As a result, some harmless text ends
-          // up getting picked up as valid dates. For example:
-          //
-          // PLEASE CALL 5-1-1
-          //
-          // day.js parses that to May 1, 2001. That is obviously not correct.
-          // But we know all of our timestamps are *only* ISO8601 strings with
-          // full date information, so we can check that the string starts with
-          // a YYYY-MM-DD format as well as parsing to a valid day.js object.
-          if (date.isValid() && /^\d{4}-\d{2}-\d{2}/.test(value)) {
-            feature.properties[key] = date;
-          }
-        });
+        modifyTimestampsForAlert(feature);
 
         return feature;
       });
@@ -212,7 +196,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     // NEW
     // Add the alert to the cache table
     if(geometry){
-      await alertsCache.add(rawAlert.properties.hash, rawAlert, geometry);
+      await alertsCache.add(rawAlert.properties.hash, alert, geometry);
 
       parent.postMessage({
         action: "log",
