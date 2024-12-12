@@ -20,8 +20,6 @@ const metadata = {
   updated: null,
 };
 
-
-
 // The background process handles fetching and massaging alerts so they don't
 // block the main thread. It handles fetching alerts, writing new alerts to the
 // database cache table, and removing stale alerts from the cache table.
@@ -33,21 +31,6 @@ export const updateFromBackground = ({
   message,
 }) => {
   switch (action) {
-    case "add":
-      logger.verbose(`adding alert with hash ${hash}`);
-
-      cachedAlerts.set(hash, alert);
-      metadata.updated = dayjs();
-      metadata.error = false;
-      break;
-
-    case "remove":
-      logger.verbose(`removing alert with hash ${hash}`);
-      cachedAlerts.delete(hash);
-      metadata.updated = dayjs();
-      metadata.error = false;
-      break;
-
     case "error":
       metadata.error = true;
       break;
@@ -60,17 +43,22 @@ export const updateFromBackground = ({
         logger.error(message);
       }
       break;
-
     default:
       break;
   }
 };
 
-export const startAlertProcessing = () => {
+export const startAlertProcessing = async () => {
   // If this is the main thread, fire up the background worker. This should always
   // be the main thread, but if something goes haywire and this script somehow
   // gets loaded in the background worker, don't recursively keep loading it.
   if (isMainThread) {
+    // Drop any existing alerts cache table, since that will be repopulated
+    // by the first alerts request
+    logger.info("dropping any existing alerts cache table");
+    alertsCache.db = await openDatabase();
+    await alertsCache.dropCacheTable();
+    
     logger.info("starting background worker");
     const updater = new Worker(
       path.join(import.meta.dirname, "backgroundUpdateTask.js"),

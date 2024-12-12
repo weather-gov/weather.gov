@@ -37,7 +37,7 @@ PRIMARY KEY(id)
   async getHashes(){
     const sql = `SELECT hash FROM ${this.tableName};`;
     const [ result, _ ] = await this.db.query(sql);
-    return result;
+    return result.map(r => r.hash);
   }
 
   /**
@@ -130,7 +130,7 @@ PRIMARY KEY(id)
    * Drop the cache table from the database entirely.
    */
   async dropCacheTable(){
-    const sql = `DROP TABLE ${this.tableName}`;
+    const sql = `DROP TABLE IF EXISTS ${this.tableName}`;
     return await this.db.query(sql);
   }
 }

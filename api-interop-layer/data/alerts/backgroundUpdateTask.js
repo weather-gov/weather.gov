@@ -12,7 +12,6 @@ import { AlertsCache } from "./cache.js";
 
 // The hashes of all the active alerts we know about. Anything in this list will
 // not be processed in future updates, since we've already captured it.
-const KNOWN_ALERTS = new Set();
 const alertsCache = new AlertsCache();
 
 
@@ -21,12 +20,8 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   parent.postMessage({
     action: "log",
     level: "verbose",
-    message: `updating alerts with ${KNOWN_ALERTS.size} known alerts`,
+    message: `updating alerts`,
   });
-
-  // The list of alert hashes in the current results from the API. We'll use
-  // this to figure out which alerts to remove from KNOWN_ALERTS.
-  const theseAlertHashes = new Set();
 
   const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
     ({ error, features }) => {
@@ -40,8 +35,6 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
         const hash = createHash("sha256");
         hash.update(JSON.stringify(feature.properties));
         feature.properties.hash = hash.digest("base64");
-
-        theseAlertHashes.add(feature.properties.hash);
 
         modifyTimestampsForAlert(feature);
 
@@ -63,40 +56,42 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     message: `got ${rawAlerts.length} alerts from the API`,
   });
 
-  for (const hash of KNOWN_ALERTS) {
-    if (!theseAlertHashes.has(hash)) {
-      // A previously-known alert is no longer in this update. We should
-      // remove it now.
-      parent.postMessage({
-        action: "log",
-        level: "verbose",
-        message: `removing alert with hash ${hash}`,
-      });
-      KNOWN_ALERTS.delete(hash);
-      parent.postMessage({ action: "remove", hash });
-    }
-  }
-
-  const alertsToUpdate = rawAlerts.filter(
-    ({ properties: { hash } }) => !KNOWN_ALERTS.has(hash),
-  );
-
+  // Determine which alerts to both update and drop
+  // based on the incoming hashes and the current cache.
   const db = await openDatabase();
   alertsCache.db = db;
   await alertsCache.createTable();
+  
+  const incomingHashes = rawAlerts.map(alert => {
+    return alert.properties.hash;
+  });
 
-  // NEW
-  // Remove any invalid alerts from the cache table
-  // (ie alerts in the table that are not present in the current batch)
-  const incomingHashes = alertsToUpdate.map(alert => alert.properties.hash);
-  await alertsCache.removeInvalidBasedOn(incomingHashes);
+  const currentHashes = await alertsCache.getHashes();
+  const newHashes = await alertsCache.determineNewHashesFrom(currentHashes, incomingHashes);
+  const invalidHashes = await alertsCache.determineOldHashesFrom(currentHashes, incomingHashes);
 
+  // Filter the actual alerts that need to be updated, based
+  // on the computed hash
+  const alertsToUpdate = rawAlerts.filter(alert => {
+    return newHashes.includes(alert.properties.hash);
+  });
   parent.postMessage({
     action: "log",
     level: "verbose",
     message: `got ${alertsToUpdate.length} alerts to update`,
   });
 
+  // Remove the invalid hashes from the cache
+  await alertsCache.removeByHashes(invalidHashes);
+  parent.postMessage({
+    action: "log",
+    level: "verbose",
+    message: `Removed ${invalidHashes.length} alerts from the cache that were no longer valid`
+  });
+
+
+  // Now update each of the alerts in the list of alerts
+  // to update, then store them into the cache.
   for await (const rawAlert of alertsToUpdate) {
     const alert = {
       metadata: alertKinds.get(rawAlert.properties.event.toLowerCase()),
@@ -135,7 +130,6 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
         message: `Ignoring "${rawAlert.properties.event}" - not a land alert`,
       });
 
-      KNOWN_ALERTS.add(rawAlert.properties.hash);
       continue; // eslint-disable-line no-continue
     }
 
@@ -187,14 +181,12 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     }
 
     if (alert.finish && alert.finish.isBefore(now)) {
-      KNOWN_ALERTS.add(rawAlert.properties.hash);
       continue; // eslint-disable-line no-continue
     }
 
     const geometry = await generateAlertGeometry(db, rawAlert);
 
-    // NEW
-    // Add the alert to the cache table
+    // Add the alert to the cache
     if(geometry){
       await alertsCache.add(rawAlert.properties.hash, alert, geometry);
 
@@ -203,14 +195,6 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
         level: "verbose",
         message: `adding alert with hash ${rawAlert.properties.hash}`,
       });
-
-      parent.postMessage({
-        action: "add",
-        hash: rawAlert.properties.hash,
-        alert,
-      });
-
-      KNOWN_ALERTS.add(rawAlert.properties.hash);
     } else {
       parent.postMessage({
         action: "log",
@@ -241,9 +225,6 @@ if (parentPort) {
   parentPort.on("message", ({ action, data }) => {
     switch (action.toLowerCase()) {
       case "start":
-        data.forEach((hash) => {
-          KNOWN_ALERTS.add(hash);
-        });
         start();
         break;
       default:
