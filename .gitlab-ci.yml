@@ -3,57 +3,17 @@ stages:
   - test
   - deploy
 
-# install_node_dependencies:
-#   stage: build
-#   image: node:20
-#   cache:
-#     - key:
-#         files:
-#           - package-lock.json
-#       paths:
-#         - .npm
-#     - key:
-#         files:
-#           - tests/api/package-lock.json
-#       paths:
-#         - tests/api/.npm
-#     - key:
-#         files:
-#           - api-interop-layer/package-lock.json
-#       paths:
-#         - api-interop-layer/.npm
-#   script:
-#     - npm ci --cache .npm
-#     - pushd tests/api && npm ci --cache .npm && popd
-#     - pushd api-interop-layer && npm ci --cache .npm && popd
-
-# js-lint:
-#   stage: test
-#   image: node:20
-#   dependencies:
-#     - install_node_dependencies
-#   cache:
-#     - key:
-#         files:
-#           - package-lock.json
-#       paths:
-#         - .npm
-#   script:
-#     - npm run js-lint
-
 # NB: GitLab clones into CI_BUILDS_DIR which defaults to
-# /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ but in our Docker
-# images our WORKDIR is /app. so here we symlink /app/node_modules to
+# /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
+# images our WORKDIR is /app. so we symlink the various /app/node_modules to
 # CI_BUILDS_DIR so we can "npm run" as needed.
 js-lint:
   stage: test
   image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
-  before_script:
-    # FIXME GitLab CI caching is not enabled so we have no other choice
-    - pushd tests/api && npm ci && popd
-    - pushd api-interop-layer && npm ci && popd
   script:
     - ln -s /app/node_modules/ .
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - ln -s /app/tests/api/node_modules tests/api/
     - npm run --silent js-lint-report > eslint.xml
   artifacts:
     when: always

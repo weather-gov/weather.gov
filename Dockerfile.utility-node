@@ -4,10 +4,18 @@ COPY zscaler-root-public.cert /etc/ssl/certs/zscaler-root.pem
 RUN c_rehash
 ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/zscaler-root.pem
 
-RUN mkdir /app
+RUN mkdir -p /app /app/api-interop-layer /app/tests/api
+
 WORKDIR /app
 
+# set up this docker image so we can run anything node-related in our app
 ADD ./package.json .
 ADD ./package-lock.json .
+ADD ./api-interop-layer/package.json /app/api-interop-layer/
+ADD ./api-interop-layer/package-lock.json /app/api-interop-layer/
+ADD ./tests/api/package.json /app/tests/api/
+ADD ./tests/api/package-lock.json /app/tests/api/
 
-RUN npm ci
+RUN cd /app && npm ci && \
+  cd /app/api-interop-layer && npm ci && \
+  cd /app/tests/api && npm ci
