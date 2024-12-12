@@ -1,11 +1,11 @@
-uuid: 9a0681f5-9676-4faa-b2c2-e36c6f57aecf
+uuid: e1545ac8-5996-4c5a-93ad-84d87d0becc2
 langcode: en
 status: true
 dependencies:
   module:
     - node
-id: node.field_derived_wfo
-field_name: field_derived_wfo
+id: node.field_wfo_code
+field_name: field_wfo_code
 entity_type: node
 type: string
 settings:
