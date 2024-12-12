@@ -130,6 +130,11 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
         message: `Ignoring "${rawAlert.properties.event}" - not a land alert`,
       });
 
+      // For caching purposes, we store these alerts with the alertKind and no
+      // valid geometry. This prevents us from reprocessing them the next round, but
+      // also prevents them from being retrieved from the cache for any given point.
+      alertsCache.add(rawAlert.properties.hash, alert, null, alert.metadata.kind);
+      
       continue; // eslint-disable-line no-continue
     }
 
@@ -188,7 +193,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
 
     // Add the alert to the cache
     if(geometry){
-      await alertsCache.add(rawAlert.properties.hash, alert, geometry);
+      alertsCache.add(rawAlert.properties.hash, alert, geometry, alert.metadata.kind);
 
       parent.postMessage({
         action: "log",

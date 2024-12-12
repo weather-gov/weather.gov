@@ -28,7 +28,8 @@ export class AlertsCache {
 id INT AUTO_INCREMENT,
 hash TEXT NOT NULL,
 alertJson JSON NOT NULL,
-shape GEOMETRY NOT NULL,
+shape GEOMETRY DEFAULT NULL,
+alertKind TEXT DEFAULT NULL,
 PRIMARY KEY(id)
 ) DEFAULT CHARSET=utf8mb4`;
     return await this.db.query(sql);
@@ -106,13 +107,13 @@ PRIMARY KEY(id)
    * Add the provided hash, geometry, and alert data to the
    * cache table.
    */
-  async add(hash, alert, geometry){
+  async add(hash, alert, geometry, alertKind=null){
     const alertAsString = JSON.stringify(alert);
     const geometryAsString = JSON.stringify(geometry);
-    const sql = `INSERT INTO ${this.tableName} (hash, alertJson, shape) VALUES(?, ?, ST_GeomFromGeoJson(?));`;
-    return await this.db.query(sql, [hash, alertAsString, geometryAsString]);
+    const sql = `INSERT INTO ${this.tableName} (hash, alertJson, shape, alertKind) VALUES(?, ?, ST_GeomFromGeoJson(?), ?);`;
+    return await this.db.query(sql, [hash, alertAsString, geometryAsString, alertKind]);
   }
-
+  
   /**
    * Given an incoming GeoJSON geometry,
    * retrieve all alerts that intersect with that geometry.
