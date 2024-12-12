@@ -52,7 +52,7 @@ const getCountiesShapeFromDb = async (db, counties) => {
         AS shape
         FROM weathergov_geo_counties
         WHERE countyFips IN (${same.map(() => "?").join(",")})`;
-  const result = await db.query(sql, counties);
+  const result = await db.query(sql, same);
   const [[{ shape }]] = result;
   return shape;
 };
