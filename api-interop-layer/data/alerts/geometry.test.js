@@ -67,15 +67,32 @@ describe("alert geometries", () => {
         },
       };
 
-      const query = `
+      const firstQuery = `
       SELECT ST_ASGEOJSON(
         ST_COLLECT(shape)
       )
         AS shape
         FROM weathergov_geo_zones
-        WHERE id IN (?,?,?)`;
+        WHERE id IN (?)`;
       global.test.database.query
-        .withArgs(sinon.match(query), sinon.match.same(affectedZones))
+        .withArgs(sinon.match(firstQuery), [affectedZones[0]])
+        .resolves([
+          [
+            {
+              shape,
+            },
+          ],
+        ]);
+
+      const secondQuery = `
+      SELECT ST_ASGEOJSON(
+        ST_COLLECT(shape)
+      )
+        AS shape
+        FROM weathergov_geo_zones
+        WHERE id IN (?,?)`;
+      global.test.database.query
+        .withArgs(sinon.match(secondQuery), affectedZones.slice(1))
         .resolves([
           [
             {
@@ -88,6 +105,7 @@ describe("alert geometries", () => {
         global.test.database,
         rawAlert,
       );
+      
       expect(geometry).to.eql(shape);
     });
 
@@ -104,15 +122,26 @@ describe("alert geometries", () => {
         },
       };
 
-      const query = `
+      const firstQuery = `
       SELECT ST_ASGEOJSON(
         ST_COLLECT(shape)
       )
         AS shape
         FROM weathergov_geo_counties
-        WHERE countyFips IN (?,?,?)`;
+        WHERE countyFips IN (?)`;
       global.test.database.query
-        .withArgs(sinon.match(query), ["county 1", "county 2", "county 3"])
+        .withArgs(sinon.match(firstQuery), ["county 1"])
+        .resolves([[{ shape }]]);
+
+      const secondQuery = `
+      SELECT ST_ASGEOJSON(
+        ST_COLLECT(shape)
+      )
+        AS shape
+        FROM weathergov_geo_counties
+        WHERE countyFips IN (?,?)`;
+      global.test.database.query
+        .withArgs(sinon.match(secondQuery), ["county 2", "county 3"])
         .resolves([[{ shape }]]);
 
       const geometry = await generateAlertGeometry(
@@ -180,15 +209,32 @@ describe("alert geometries", () => {
         },
       };
 
-      const query = `
+      const firstQuery = `
       SELECT ST_ASGEOJSON(
         ST_COLLECT(shape)
       )
         AS shape
         FROM weathergov_geo_zones
-        WHERE id IN (?,?,?)`;
+        WHERE id IN (?)`;
       global.test.database.query
-        .withArgs(sinon.match(query), sinon.match.same(affectedZones))
+        .withArgs(sinon.match(firstQuery), ["zone 1"])
+        .resolves([
+          [
+            {
+              shape,
+            },
+          ],
+        ]);
+
+      const secondQuery = `
+      SELECT ST_ASGEOJSON(
+        ST_COLLECT(shape)
+      )
+        AS shape
+        FROM weathergov_geo_zones
+        WHERE id IN (?,?)`;
+      global.test.database.query
+        .withArgs(sinon.match(secondQuery), affectedZones.slice(1))
         .resolves([
           [
             {
@@ -217,15 +263,26 @@ describe("alert geometries", () => {
         },
       };
 
-      const query = `
+      const firstQuery = `
       SELECT ST_ASGEOJSON(
         ST_COLLECT(shape)
       )
         AS shape
         FROM weathergov_geo_counties
-        WHERE countyFips IN (?,?,?)`;
+        WHERE countyFips IN (?)`;
       global.test.database.query
-        .withArgs(sinon.match(query), ["county 1", "county 2", "county 3"])
+        .withArgs(sinon.match(firstQuery), ["county 1"])
+        .resolves([[{ shape }]]);
+
+      const secondQuery = `
+      SELECT ST_ASGEOJSON(
+        ST_COLLECT(shape)
+      )
+        AS shape
+        FROM weathergov_geo_counties
+        WHERE countyFips IN (?,?)`;
+      global.test.database.query
+        .withArgs(sinon.match(secondQuery), ["county 2", "county 3"])
         .resolves([[{ shape }]]);
 
       const geometry = await generateAlertGeometry(

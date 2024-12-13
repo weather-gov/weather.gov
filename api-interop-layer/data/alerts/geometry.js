@@ -114,7 +114,7 @@ const fetchAndComputeZoneGeometries = async (db, zones, zoneType="forecast") => 
     const chunk = remaining.slice(start, end);
 
     // Update the computed geometry
-    const data = await getZoneShapeFromDb(db, zones, zoneType);
+    const data = await getZoneShapeFromDb(db, remaining, zoneType);
     if(!data){
       return null;
     }
