@@ -1,4 +1,4 @@
-import { simplify, union, geometryCollection as makeGeometryCollection } from "@turf/turf";
+import { simplify, union } from "@turf/turf";
 
 const SIMPLIFY_TOLERANCE = 0.003;
 export const ZONE_CHUNK_SIZE = 5;
@@ -82,10 +82,11 @@ const getZoneShapeFromDb = async (db, zones, kind="forecast") => {
  * found geometries.
  */
 const getGeometriesFromShape = (shape) => {
-  let result = [];
+  const result = [];
   if(shape.geometry){
     result.push(shape.geometry);
     return result;
+    // eslint-disable-next-line no-else-return
   } else if(shape.geometries){
     return shape.geometries;
   }

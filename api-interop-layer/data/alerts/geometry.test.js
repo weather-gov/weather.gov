@@ -261,9 +261,7 @@ describe("alert geometries", () => {
         },
       ],
     };
-    const zones = Array(numChunks).map((_, idx) => {
-      return `zone ${idx + 1}`;
-    });
+    const zones = Array(numChunks).map((_, idx) => `zone ${idx + 1}`);
     const alert = {
       geometry: false,
       properties: {
