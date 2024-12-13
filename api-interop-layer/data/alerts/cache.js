@@ -17,7 +17,6 @@ export class AlertsCache {
     // Bound methods
     this.getHashes = this.getHashes.bind(this);
     this.removeByHashes = this.removeByHashes.bind(this);
-    this.removeInvalidBasedOn = this.removeInvalidBasedOn.bind(this);
     this.getInsersectingAlerts = this.getIntersectingAlerts.bind(this);
     this.dropCacheTable = this.dropCacheTable.bind(this);
   }
@@ -85,17 +84,6 @@ PRIMARY KEY(id)
     }
     const sql = `DELETE FROM ${this.tableName} WHERE ${whereClause}`;
     return this.db.query(sql, aHashList);
-  }
-
-  /**
-   * Given an array of incoming hashes, determine which
-   * from the current cache table are no longer valid and remove
-   * them from the table.
-   */
-  async removeInvalidBasedOn(incomingHashes){
-    const currentHashes = await this.getHashes();
-    const invalidHashes = this.determineOldHashesFrom(currentHashes, incomingHashes);
-    return this.removeByHashes(invalidHashes);
   }
 
   /**
