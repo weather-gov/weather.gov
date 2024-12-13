@@ -1,19 +1,18 @@
 import { Worker, isMainThread } from "node:worker_threads";
 import path from "node:path";
 
-import { booleanIntersects, buffer, point } from "@turf/turf";
-import dayjs from "../../util/day.js";
+import { buffer, point } from "@turf/turf";
 import { modifyTimestampsForAlert } from "./utils.js";
 import { createLogger } from "../../util/monitoring/index.js";
 import { parseDuration } from "./parse/index.js";
 import sort from "./sort.js";
 import { AlertsCache } from "./cache.js";
+import openDatabase from "../db.js";
 
 const logger = createLogger("alerts");
 const backgroundLogger = createLogger("alerts (background)");
 const cachedAlerts = new Map();
 const alertsCache = new AlertsCache();
-import openDatabase from "../db.js";
 
 const metadata = {
   error: false,
@@ -25,8 +24,6 @@ const metadata = {
 // database cache table, and removing stale alerts from the cache table.
 export const updateFromBackground = ({
   action,
-  hash,
-  alert,
   level,
   message,
 }) => {

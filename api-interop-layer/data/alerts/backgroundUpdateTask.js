@@ -62,9 +62,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   alertsCache.db = db;
   await alertsCache.createTable();
   
-  const incomingHashes = rawAlerts.map(alert => {
-    return alert.properties.hash;
-  });
+  const incomingHashes = rawAlerts.map(alert => alert.properties.hash);
 
   const currentHashes = await alertsCache.getHashes();
   const newHashes = await alertsCache.determineNewHashesFrom(currentHashes, incomingHashes);
@@ -72,9 +70,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
 
   // Filter the actual alerts that need to be updated, based
   // on the computed hash
-  const alertsToUpdate = rawAlerts.filter(alert => {
-    return newHashes.includes(alert.properties.hash);
-  });
+  const alertsToUpdate = rawAlerts.filter(alert => newHashes.includes(alert.properties.hash));
   parent.postMessage({
     action: "log",
     level: "verbose",
@@ -227,7 +223,7 @@ export const start = () => {
 };
 
 if (parentPort) {
-  parentPort.on("message", ({ action, data }) => {
+  parentPort.on("message", ({ action }) => {
     switch (action.toLowerCase()) {
       case "start":
         start();

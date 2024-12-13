@@ -1,3 +1,4 @@
+/* eslint import/prefer-default-export: 0, class-methods-use-this: 0 */
 /**
  * AlertsCache
  * -----------------------------------
@@ -10,13 +11,11 @@
  * to the cache table.
  */
 export class AlertsCache {
-  constructor(tableName="weathergov_geo_alerts_cache", dbConnection){
-    this.db = dbConnection;
+  constructor(tableName="weathergov_geo_alerts_cache"){
     this.tableName = tableName;
 
     // Bound methods
     this.getHashes = this.getHashes.bind(this);
-    this.determineOldHashesFrom = this.determineOldHashesFrom.bind(this);
     this.removeByHashes = this.removeByHashes.bind(this);
     this.removeInvalidBasedOn = this.removeInvalidBasedOn.bind(this);
     this.getInsersectingAlerts = this.getIntersectingAlerts.bind(this);
@@ -32,12 +31,12 @@ shape GEOMETRY DEFAULT NULL,
 alertKind TEXT DEFAULT NULL,
 PRIMARY KEY(id)
 ) DEFAULT CHARSET=utf8mb4`;
-    return await this.db.query(sql);
+    return this.db.query(sql);
   }
 
   async getHashes(){
     const sql = `SELECT hash FROM ${this.tableName};`;
-    const [ result, _ ] = await this.db.query(sql);
+    const [ result ] = await this.db.query(sql);
     return result.map(r => r.hash);
   }
 
@@ -53,9 +52,7 @@ PRIMARY KEY(id)
    * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/difference
    */
   determineOldHashesFrom(currentHashes, incomingHashes){
-    return currentHashes.filter(currentHash => {
-      return !incomingHashes.includes(currentHash);
-    });
+    return currentHashes.filter(currentHash => !incomingHashes.includes(currentHash));
   }
 
   /**
@@ -70,9 +67,7 @@ PRIMARY KEY(id)
    * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/difference
    */
   determineNewHashesFrom(currentHashes, incomingHashes){
-    return incomingHashes.filter(incomingHash => {
-      return !currentHashes.includes(incomingHash);
-    });
+    return incomingHashes.filter(incomingHash => !currentHashes.includes(incomingHash));
   }
 
   /**
@@ -89,7 +84,7 @@ PRIMARY KEY(id)
       whereClause = `hash IN (${marks});`;
     }
     const sql = `DELETE FROM ${this.tableName} WHERE ${whereClause}`;
-    return await this.db.query(sql, aHashList);
+    return this.db.query(sql, aHashList);
   }
 
   /**
@@ -100,7 +95,7 @@ PRIMARY KEY(id)
   async removeInvalidBasedOn(incomingHashes){
     const currentHashes = await this.getHashes();
     const invalidHashes = this.determineOldHashesFrom(currentHashes, incomingHashes);
-    return await this.removeByHashes(invalidHashes);
+    return this.removeByHashes(invalidHashes);
   }
 
   /**
@@ -111,7 +106,7 @@ PRIMARY KEY(id)
     const alertAsString = JSON.stringify(alert);
     const geometryAsString = JSON.stringify(geometry);
     const sql = `INSERT INTO ${this.tableName} (hash, alertJson, shape, alertKind) VALUES(?, ?, ST_GeomFromGeoJson(?), ?);`;
-    return await this.db.query(sql, [hash, alertAsString, geometryAsString, alertKind]);
+    return this.db.query(sql, [hash, alertAsString, geometryAsString, alertKind]);
   }
   
   /**
@@ -121,10 +116,8 @@ PRIMARY KEY(id)
   async getIntersectingAlerts(geojson){
     const sql = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${this.tableName} WHERE ST_INTERSECTS(ST_GeomFromGeoJson(?), shape);`;
     const response = await this.db.query(sql, [geojson]);
-    const [results, _] = response;
-    return results.map(result => {
-      return Object.assign({}, result.alertJson, { geometry: result.geometry });
-    });
+    const [results] = response;
+    return results.map(result => Object.assign({}, result.alertJson, { geometry: result.geometry }));
   }
 
   /**
@@ -132,7 +125,7 @@ PRIMARY KEY(id)
    */
   async dropCacheTable(){
     const sql = `DROP TABLE IF EXISTS ${this.tableName}`;
-    return await this.db.query(sql);
+    return this.db.query(sql);
   }
 }
 
