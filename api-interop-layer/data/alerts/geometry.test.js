@@ -96,7 +96,7 @@ describe("alert geometries", () => {
         .resolves([
           [
             {
-              shape,
+              shape: null,
             },
           ],
         ]);
@@ -105,7 +105,7 @@ describe("alert geometries", () => {
         global.test.database,
         rawAlert,
       );
-      
+
       expect(geometry).to.eql(shape);
     });
 
@@ -142,7 +142,7 @@ describe("alert geometries", () => {
         WHERE countyFips IN (?,?)`;
       global.test.database.query
         .withArgs(sinon.match(secondQuery), ["county 2", "county 3"])
-        .resolves([[{ shape }]]);
+        .resolves([[{ shape: null }]]);
 
       const geometry = await generateAlertGeometry(
         global.test.database,

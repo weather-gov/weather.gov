@@ -1,4 +1,4 @@
-import { simplify, union } from "@turf/turf";
+import { simplify, union, geometryCollection as makeGeometryCollection } from "@turf/turf";
 
 const SIMPLIFY_TOLERANCE = 0.003;
 const ZONE_CHUNK_SIZE = 5;
@@ -72,6 +72,27 @@ const getZoneShapeFromDb = async (db, zones, kind="forecast") => {
 };
 
 /**
+ * Retrieves a list of geometries from the given shape object.
+ * This object can be a FeatureCollection, GeometryCollection,
+ * or similar.
+ * The important thing to know is that the object will have a single
+ * geometry (at the `geometry` key) or many geometries
+ * (at the `geometries` key).
+ * This function returns an array regardless of the number of
+ * found geometries.
+ */
+const getGeometriesFromShape = (shape) => {
+  let result = [];
+  if(shape.geometry){
+    result.push(shape.geometry);
+    return result;
+  } else if(shape.geometries){
+    return shape.geometries;
+  }
+  return result;
+};
+
+/**
  * Turf's union function can take a single GeometryCollection
  * object and compute the union of all of its constituent shapes.
  * If this function is only passed a single geometry object, it
@@ -79,8 +100,14 @@ const getZoneShapeFromDb = async (db, zones, kind="forecast") => {
  */
 const getUnion = (firstShape, secondShape=null) => {
   if(secondShape){
-    return union(firstShape, secondShape);
-  } if(firstShape.geometries.length > 1){
+    const firstGeos = getGeometriesFromShape(firstShape);
+    const secondGeos = getGeometriesFromShape(secondShape);
+    const combined = {
+      type: "GeometryCollection",
+      geometries: firstGeos.concat(secondGeos)
+    };
+    return union(combined);
+  } if(firstShape.geometries?.length > 1){
     return union(firstShape);
   }
   return firstShape;
@@ -110,20 +137,26 @@ const fetchAndComputeZoneGeometries = async (db, zones, zoneType="forecast") => 
   }
   
   const remaining = zones.slice(1);
-  for(let i = 0; i < remaining.length; i+=1){
-    const start = i * ZONE_CHUNK_SIZE;
-    const end = start + ZONE_CHUNK_SIZE;
-    const chunk = remaining.slice(start, end);
-
+  let chunkCount = 0;
+  let start = chunkCount * ZONE_CHUNK_SIZE;
+  let end = start + ZONE_CHUNK_SIZE;
+  let chunk = remaining.slice(start, end);
+  while(chunk && chunk.length){
     // Update the computed geometry
     // eslint-disable-next-line no-await-in-loop
     const data = await getZoneShapeFromDb(db, chunk, zoneType);
-    if(!data){
-      return null;
-    }
-    geometry = getUnion(
-      data
-    );
+
+    if(data){
+      geometry = getUnion(
+        geometry,
+        data
+      );
+    }    
+
+    chunkCount += 1;
+    start = chunkCount * ZONE_CHUNK_SIZE;
+    end = start + ZONE_CHUNK_SIZE;
+    chunk = remaining.slice(start, end);
   }
 
   return geometry;
