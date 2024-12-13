@@ -154,7 +154,7 @@ setup-outside-vars:
 ot: outside-test
 outside-test: setup-outside-vars start-test-environment pause install-site load-spatial-test ## Run a separate weather.gov instance for testing
 	./tests/playwright/outside/setup.sh
-	npx playwright test outside/*
+	pushd tests; npx playwright test outside/*; popd
 
 ### Linting
 js-lint: ## Run eslint on our Javascript
@@ -197,3 +197,12 @@ composer-install: ## Installs dependencies from lock file
 ### Install caddy for uploading manifests: we only need the binary
 install-caddy:
 	docker cp $$(docker create caddy:2.8.4-alpine):/usr/bin/caddy proxy/caddy
+
+# store the registry in a variable to make it easier to scan
+container_repository = "registry.gitlab-licensed.vlab.noaa.gov/nws/systems/dis/weather.gov-2.0"
+
+### Tag the weather.gov utility image to push up to our Gitlab container repository
+push-weathergov-utility-image:
+	docker compose build utility-node
+	docker image tag weathergov-utility-node ${container_repository}/weathergov-utility:latest
+	docker push ${container_repository}/weathergov-utility:latest

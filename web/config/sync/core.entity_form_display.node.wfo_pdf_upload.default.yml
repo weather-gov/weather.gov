@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.wfo_pdf_upload.field_pdf_order
     - field.field.node.wfo_pdf_upload.field_pdf_starttime
     - field.field.node.wfo_pdf_upload.field_pdf_title
+    - field.field.node.wfo_pdf_upload.field_wfo_code
     - field.field.node.wfo_pdf_upload.field_wfo_sitrep
     - node.type.wfo_pdf_upload
   module:
@@ -63,6 +64,14 @@ content:
   field_pdf_title:
     type: string_textfield
     weight: 128
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_wfo_code:
+    type: string_textfield
+    weight: 130
     region: content
     settings:
       size: 60
