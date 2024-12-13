@@ -1,7 +1,7 @@
 import { simplify, union, geometryCollection as makeGeometryCollection } from "@turf/turf";
 
 const SIMPLIFY_TOLERANCE = 0.003;
-const ZONE_CHUNK_SIZE = 5;
+export const ZONE_CHUNK_SIZE = 5;
 
 const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
   if (geojson.type === "GeometryCollection") {
@@ -122,41 +122,31 @@ const fetchAndComputeZoneGeometries = async (db, zones, zoneType="forecast") => 
   if(!["forecast", "county"].includes(zoneType)){
     throw new Error(`Invalid geometry zone type: ${zoneType}`);
   }
-
-  // Fetch the first shape and, if needed, perform a union
-  const first = await getZoneShapeFromDb(db, zones.slice(0, 1), zoneType);
-  if(!first){
-    return null;
-  }
-  let geometry = getUnion(
-    first
-  );
-
-  if(zones.length === 1){
-    return geometry;
-  }
   
-  const remaining = zones.slice(1);
+  let geometry = null;
+  
   let chunkCount = 0;
   let start = chunkCount * ZONE_CHUNK_SIZE;
   let end = start + ZONE_CHUNK_SIZE;
-  let chunk = remaining.slice(start, end);
+  let chunk = zones.slice(start, end);
   while(chunk && chunk.length){
     // Update the computed geometry
     // eslint-disable-next-line no-await-in-loop
     const data = await getZoneShapeFromDb(db, chunk, zoneType);
 
-    if(data){
+    if(data && geometry){
       geometry = getUnion(
         geometry,
         data
       );
-    }    
+    } else if (data) {
+      geometry = getUnion(data);
+    } 
 
     chunkCount += 1;
     start = chunkCount * ZONE_CHUNK_SIZE;
     end = start + ZONE_CHUNK_SIZE;
-    chunk = remaining.slice(start, end);
+    chunk = zones.slice(start, end);
   }
 
   return geometry;
