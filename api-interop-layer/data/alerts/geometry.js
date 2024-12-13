@@ -63,10 +63,12 @@ const getCountiesShapeFromDb = async (db, counties) => {
  */
 const getZoneShapeFromDb = async (db, zones, kind="forecast") => {
   if(kind === "forecast"){
-    return await getForecastZonesShapeFromDb(db, zones);
-  } else if(kind === "county"){
-    return await getCountiesShapeFromDb(db, zones);
+    return getForecastZonesShapeFromDb(db, zones);
+  } if(kind === "county"){
+    return getCountiesShapeFromDb(db, zones);
   }
+
+  return null;
 };
 
 /**
@@ -78,7 +80,7 @@ const getZoneShapeFromDb = async (db, zones, kind="forecast") => {
 const getUnion = (firstShape, secondShape=null) => {
   if(secondShape){
     return union(firstShape, secondShape);
-  } else if(firstShape.geometries.length > 1){
+  } if(firstShape.geometries.length > 1){
     return union(firstShape);
   }
   return firstShape;
@@ -108,13 +110,14 @@ const fetchAndComputeZoneGeometries = async (db, zones, zoneType="forecast") => 
   }
   
   const remaining = zones.slice(1);
-  for(let i = 0; i < remaining.length; i++){
+  for(let i = 0; i < remaining.length; i+=1){
     const start = i * ZONE_CHUNK_SIZE;
     const end = start + ZONE_CHUNK_SIZE;
     const chunk = remaining.slice(start, end);
 
     // Update the computed geometry
-    const data = await getZoneShapeFromDb(db, remaining, zoneType);
+    // eslint-disable-next-line no-await-in-loop
+    const data = await getZoneShapeFromDb(db, chunk, zoneType);
     if(!data){
       return null;
     }
