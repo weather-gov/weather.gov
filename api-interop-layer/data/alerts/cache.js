@@ -13,12 +13,6 @@
 export class AlertsCache {
   constructor(tableName="weathergov_geo_alerts_cache"){
     this.tableName = tableName;
-
-    // Bound methods
-    this.getHashes = this.getHashes.bind(this);
-    this.removeByHashes = this.removeByHashes.bind(this);
-    this.getInsersectingAlerts = this.getIntersectingAlerts.bind(this);
-    this.dropCacheTable = this.dropCacheTable.bind(this);
   }
 
   async createTable(){
