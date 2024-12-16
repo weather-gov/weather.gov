@@ -8,6 +8,7 @@ import { parseDuration } from "./parse/index.js";
 import sort from "./sort.js";
 import { AlertsCache } from "./cache.js";
 import openDatabase from "../db.js";
+import dayjs from "../../util/day.js";
 
 const logger = createLogger("alerts");
 const backgroundLogger = createLogger("alerts (background)");
@@ -28,20 +29,22 @@ export const updateFromBackground = ({
   message,
 }) => {
   switch (action) {
-    case "error":
-      metadata.error = true;
-      break;
+  case "error":
+    metadata.error = true;
+    break;
 
-    case "log":
-      backgroundLogger[level]?.(message);
-      if (!backgroundLogger[level]) {
-        logger.error(`Attempted to write to invalid log level: '${level}'`);
-        logger.error("Received message:");
-        logger.error(message);
-      }
-      break;
-    default:
-      break;
+  case "log":
+    backgroundLogger[level]?.(message);
+    if (!backgroundLogger[level]) {
+      logger.error(`Attempted to write to invalid log level: '${level}'`);
+      logger.error("Received message:");
+      logger.error(message);
+    }
+    break;
+  default:
+    metadata.updated = dayjs();
+    metadata.error = false;
+    break;
   }
 };
 
