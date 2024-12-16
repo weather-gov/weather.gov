@@ -32,9 +32,7 @@ describe("AlertsCache tests", () => {
     global.test.database.query
       .withArgs(sinon.match(query))
       .resolves([
-        CURRENT_TEST_HASHES.map(hash => {
-          return { hash };
-        })
+        CURRENT_TEST_HASHES.map(hash => ({ hash }))
       ]);
 
     const result = await alertsCache.getHashes();

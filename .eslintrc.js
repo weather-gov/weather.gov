@@ -70,6 +70,14 @@ module.exports = {
 
         // chai provides "empty" expressions, such as `to.be.true`
         "no-unused-expressions": "off",
+
+        // Sometimes we destructure arrays and in certain cases
+        // we don't care about the first variable, so we use an
+        // underscore
+        "no-unused-vars": ["error", {
+          "varsIgnorePattern": "^_",
+          "argsIgnorePattern": "^_"
+        }],
       },
       env: { mocha: true },
     },

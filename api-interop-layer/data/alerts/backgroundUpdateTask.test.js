@@ -22,16 +22,14 @@ describe("alert background processing module", () => {
     storedHashes = [];
     storedAlerts = {};
     getHashesStub = sandbox.stub(AlertsCache.prototype, "getHashes");
-    getHashesStub.callsFake(function(){
-      return storedHashes;
-    });
+    getHashesStub.callsFake(() =>storedHashes);
     addAlertStub = sandbox.stub(AlertsCache.prototype, "add");
-    addAlertStub.callsFake(function(hash, alert, geometry, alertKind){
+    addAlertStub.callsFake((hash, alert, geometry, alertKind) =>{
       storedHashes.push(hash);
       storedAlerts[hash] = [hash, alert, geometry, alertKind];
     });
     removeAlertsStub = sandbox.stub(AlertsCache.prototype, "removeByHashes");
-    removeAlertsStub.callsFake(function(hashes){
+    removeAlertsStub.callsFake((hashes) =>{
       hashes.forEach(hash => {
         const idx = storedHashes.indexOf(hash);
         if(idx >= 0){
@@ -236,9 +234,7 @@ describe("alert background processing module", () => {
     expect(storedHashes).to.have.length(4);
     expect(Object.values(storedAlerts)).to.have.length(4);
 
-    const geometries = Object.values(storedAlerts).map(alertInfo => {
-      return alertInfo[2];
-    });
+    const geometries = Object.values(storedAlerts).map(alertInfo => alertInfo[2]);
 
     expect(geometries).to.eql(["geo", null, "geo", "geo"]);
   });

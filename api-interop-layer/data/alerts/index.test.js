@@ -50,10 +50,7 @@ describe("alert data module", () => {
       beforeEach(async () => {
         response.json.resetBehavior();
         response.json.resetHistory();
-        getIntersection.callsFake(function(geometry){
-          console.log("get intersecting alerts called!");
-          return Promise.resolve([]);
-        });
+        getIntersection.callsFake(() =>Promise.resolve([]));
       });
 
       afterEach(() => {
@@ -130,9 +127,7 @@ describe("alert data module", () => {
             },
           };
 
-          getIntersection.callsFake(function(){
-            return Promise.resolve([alert]);
-          });
+          getIntersection.callsFake(() =>Promise.resolve([alert]));
         });
 
         afterEach(() => {
