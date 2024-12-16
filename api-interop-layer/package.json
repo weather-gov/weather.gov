@@ -7,7 +7,8 @@
   "scripts": {
     "start": "npx pm2-runtime start ecosystem.config.cjs --env production",
     "start-dev": "npx pm2-runtime start ecosystem.config.cjs -- --inspect=0.0.0.0:9229 --expose-gc",
-    "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
+    "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js",
+    "test-report": "mocha --reporter mocha-junit-reporter '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
   },
   "author": "",
   "license": "CC0-1.0",
@@ -25,6 +26,7 @@
     "chai": "^5.1.1",
     "chai-as-promised": "^8.0.0",
     "mocha": "^10.7.3",
+    "mocha-junit-reporter": "^2.2.1",
     "sinon": "^18.0.0"
   },
   "engines": {

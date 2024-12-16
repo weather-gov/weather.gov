@@ -40,3 +40,25 @@ php-lint:
     when: always
     reports:
       junit: phpcs.xml
+
+js-component-tests:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  script:
+    - ln -s /app/node_modules/ .
+    - npm run --silent js-component-tests-report
+  artifacts:
+    when: always
+    reports:
+      junit: test-results.xml # mocha-junit-reporter writes to this file by default
+
+interop-layer-tests:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  script:
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - cd api-interop-layer/ && npm run --silent test-report
+  artifacts:
+    when: always
+    reports:
+      junit: api-interop-layer/test-results.xml # mocha-junit-reporter writes to this file by default
