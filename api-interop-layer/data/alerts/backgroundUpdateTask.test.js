@@ -2,6 +2,7 @@ import sinon from "sinon";
 import { expect } from "chai";
 import dayjs from "../../util/day.js";
 import { updateAlerts } from "./backgroundUpdateTask.js";
+import { AlertsCache } from "./cache.js";
 
 describe("alert background processing module", () => {
   const sandbox = sinon.createSandbox();
@@ -9,26 +10,51 @@ describe("alert background processing module", () => {
   const response = { status: 200, json: sandbox.stub() };
   const parent = { postMessage: sandbox.stub() };
 
+  let getHashesStub;
+  let addAlertStub;
+  let removeAlertsStub;
+  let storedHashes;
+  let storedAlerts;
+
   beforeEach(() => {
     response.status = 200;
-    sandbox.resetBehavior();
-    sandbox.resetHistory();
+
+    storedHashes = [];
+    storedAlerts = {};
+    getHashesStub = sandbox.stub(AlertsCache.prototype, "getHashes");
+    getHashesStub.callsFake(function(){
+      return storedHashes;
+    });
+    addAlertStub = sandbox.stub(AlertsCache.prototype, "add");
+    addAlertStub.callsFake(function(hash, alert, geometry, alertKind){
+      storedHashes.push(hash);
+      storedAlerts[hash] = [hash, alert, geometry, alertKind];
+    });
+    removeAlertsStub = sandbox.stub(AlertsCache.prototype, "removeByHashes");
+    removeAlertsStub.callsFake(function(hashes){
+      hashes.forEach(hash => {
+        const idx = storedHashes.indexOf(hash);
+        if(idx >= 0){
+          storedHashes.splice(idx, 1);
+          delete storedAlerts[hash];
+        }
+      });
+    });
 
     fetch.resolves(response);
   });
 
-  const getNewAlertsMessages = () =>
-    parent.postMessage.args.filter(([{ action }]) => action === "add");
-  const getRemoveAlertsMessages = () =>
-    parent.postMessage.args.filter(([{ action }]) => action === "remove");
-
   afterEach(() => {
     // Clear out the background processor's internal cache.
     response.json.resolves({ features: [] });
-    return updateAlerts({ parent });
+    sandbox.resetBehavior();
+    sandbox.resetHistory();
+    getHashesStub.restore();
+    addAlertStub.restore();
+    removeAlertsStub.restore();
   });
 
-  describe("posts alerts appropriately", () => {
+  describe("Does not save the same alert twice on repeated call", () => {
     it("does not post the same alert twice", async () => {
       const alert1 = {
         geometry: "geo",
@@ -68,18 +94,12 @@ describe("alert background processing module", () => {
 
       await updateAlerts({ parent });
 
-      const newAlertCalls = getNewAlertsMessages();
-
-      expect(newAlertCalls.length).to.equal(2);
-
-      expect(newAlertCalls[0][0].action).to.equal("add");
-      expect(newAlertCalls[0][0].alert.id).to.equal("1_840_alert1");
-
-      expect(newAlertCalls[1][0].action).to.equal("add");
-      expect(newAlertCalls[1][0].alert.id).to.equal("1_840_alert2");
+      expect(storedHashes).to.have.length(2);
+      expect(Object.values(storedAlerts)).to.have.length(2);
     });
+      
 
-    it("posts a removal for alerts that are gone", async () => {
+    it("removes alerts that are gone in the next pass", async () => {
       const alert1 = {
         geometry: "geo",
         properties: {
@@ -105,17 +125,8 @@ describe("alert background processing module", () => {
 
       await updateAlerts({ parent });
 
-      const newAlertCalls = getNewAlertsMessages();
-      const removeAlertCalls = getRemoveAlertsMessages();
-
-      expect(newAlertCalls.length).to.equal(1);
-      expect(removeAlertCalls.length).to.equal(1);
-
-      expect(newAlertCalls[0][0].action).to.equal("add");
-      expect(newAlertCalls[0][0].alert.id).to.equal("1_840_alert1");
-
-      expect(removeAlertCalls[0][0].action).to.equal("remove");
-      expect(removeAlertCalls[0][0].hash).to.equal(newAlertCalls[0][0].hash);
+      expect(storedHashes).to.have.length(0);
+      expect(Object.values(storedAlerts)).to.have.length(0);
     });
   });
 
@@ -148,9 +159,8 @@ describe("alert background processing module", () => {
 
       await updateAlerts({ parent });
 
-      const newAlertCalls = getNewAlertsMessages();
-
-      expect(newAlertCalls.length).to.equal(0);
+      expect(storedHashes).to.have.length(0);
+      expect(Object.values(storedAlerts)).to.have.length(0);
     });
 
     it("if the alert does not have an end time and the expire time is in the past", async () => {
@@ -170,13 +180,12 @@ describe("alert background processing module", () => {
       });
       await updateAlerts({ parent });
 
-      const newAlertCalls = getNewAlertsMessages();
-
-      expect(newAlertCalls.length).to.equal(0);
+      expect(storedHashes).to.have.length(0);
+      expect(Object.values(storedAlerts)).to.have.length(0);
     });
   });
 
-  it("does not store alerts that are not land-based", async () => {
+  it("stores land based alerts without geometry", async () => {
     const shared = {
       sent: dayjs().subtract(1, "minute").toISOString(),
       effective: dayjs().subtract(1, "minute").toISOString(),
@@ -224,13 +233,14 @@ describe("alert background processing module", () => {
 
     await updateAlerts({ parent });
 
-    const newAlerts = getNewAlertsMessages();
+    expect(storedHashes).to.have.length(4);
+    expect(Object.values(storedAlerts)).to.have.length(4);
 
-    expect(newAlerts.length).to.equal(3);
+    const geometries = Object.values(storedAlerts).map(alertInfo => {
+      return alertInfo[2];
+    });
 
-    const kinds = newAlerts.map(([{ alert }]) => alert.metadata.kind);
-
-    expect(kinds).to.have.same.members(["land", "land", "land"]);
+    expect(geometries).to.eql(["geo", null, "geo", "geo"]);
   });
 
   it("derives an alert ID", async () => {
@@ -253,13 +263,12 @@ describe("alert background processing module", () => {
 
     await updateAlerts({ parent });
 
-    const newAlerts = getNewAlertsMessages();
-    const { alert } = newAlerts[0][0];
+    const [ _, alert ] = Object.values(storedAlerts)[0];
 
     expect(alert.id).to.equal("part1_part2_part3");
   });
 
-  it("passes unknown alert types straight through", async () => {
+  it("stores unknown alert types with appropriate metadata", async () => {
     response.json.resolves({
       features: [
         {
@@ -279,12 +288,10 @@ describe("alert background processing module", () => {
 
     await updateAlerts({ parent });
 
-    const newAlerts = getNewAlertsMessages();
-    const [
-      {
-        alert: { event, metadata },
-      },
-    ] = newAlerts[0];
+    expect(storedHashes).to.have.length(1);
+
+    const [ _, alert ] = Object.values(storedAlerts)[0];
+    const { event, metadata } = alert;
 
     expect(event).to.equal("Severe Meatballstorm Warning");
     expect(metadata).to.eql({
@@ -317,12 +324,10 @@ describe("alert background processing module", () => {
 
     await updateAlerts({ parent });
 
-    const newAlerts = getNewAlertsMessages();
-    const [
-      {
-        alert: { event, metadata },
-      },
-    ] = newAlerts[0];
+    expect(storedHashes).to.have.length(1);
+
+    const [ _, alert ] = Object.values(storedAlerts)[0];
+    const { event, metadata } = alert;
 
     expect(event).to.equal("Pasta Sauce Evacuation Emergency");
     expect(metadata).to.eql({
@@ -365,12 +370,8 @@ describe("alert background processing module", () => {
       response.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
-      const newAlertCalls = getNewAlertsMessages();
-      const [
-        {
-          alert: { ends, finish },
-        },
-      ] = newAlertCalls[0];
+      const [ _, alert ] = Object.values(storedAlerts)[0];
+      const { ends, finish } = alert;
 
       expect(ends.isSame(finish)).to.be.true;
     });
@@ -381,12 +382,8 @@ describe("alert background processing module", () => {
       response.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
-      const newAlertCalls = getNewAlertsMessages();
-      const [
-        {
-          alert: { expires, finish },
-        },
-      ] = newAlertCalls[0];
+      const [ _, alert ] = Object.values(storedAlerts)[0];
+      const { expires, finish } = alert;
       expect(expires.isSame(finish)).to.be.true;
     });
 
@@ -396,12 +393,8 @@ describe("alert background processing module", () => {
       response.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
-      const newAlertCalls = getNewAlertsMessages();
-      const [
-        {
-          alert: { finish },
-        },
-      ] = newAlertCalls[0];
+      const [ _, alert ] = Object.values(storedAlerts)[0];
+      const { finish } = alert;
 
       expect(finish).to.be.null;
     });
