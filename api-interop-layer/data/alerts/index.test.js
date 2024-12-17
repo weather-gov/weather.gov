@@ -4,6 +4,7 @@ import dayjs from "../../util/day.js";
 import { alignAlertsToDaily } from "./utils.js";
 import alertHandler, { updateFromBackground } from "./index.js";
 import alertKinds from "./kinds.js";
+import { AlertsCache } from "./cache.js";
 
 /**
  * Test helper for creating arrays of mock
@@ -29,13 +30,19 @@ describe("alert data module", () => {
   const sandbox = sinon.createSandbox();
 
   const response = { status: 200, json: sandbox.stub() };
+  let getIntersection;
 
   beforeEach(() => {
     response.status = 200;
     sandbox.resetBehavior();
     sandbox.resetHistory();
+    getIntersection = sandbox.stub(AlertsCache.prototype, "getIntersectingAlerts");
 
     fetch.resolves(response);
+  });
+
+  afterEach(() => {
+    getIntersection.restore();
   });
 
   describe("after initial setup", () => {
@@ -43,6 +50,7 @@ describe("alert data module", () => {
       beforeEach(async () => {
         response.json.resetBehavior();
         response.json.resetHistory();
+        getIntersection.callsFake(() =>Promise.resolve([]));
       });
 
       afterEach(() => {
@@ -119,11 +127,12 @@ describe("alert data module", () => {
             },
           };
 
-          updateFromBackground({ action: "add", hash: "test", alert });
+          getIntersection.callsFake(() =>Promise.resolve([alert]));
         });
 
         afterEach(() => {
-          updateFromBackground({ action: "remove", hash: "test" });
+          getIntersection.resetBehavior();
+          getIntersection.resetHistory();
         });
 
         it("formats the start time", async () => {
@@ -184,21 +193,23 @@ describe("alert data module", () => {
             };
 
             updateFromBackground({ action: "add", hash, alert });
-            return hash;
+            return alert;
           });
 
-        const removeAll = (hashes) =>
-          hashes.forEach((hash) =>
-            updateFromBackground({ action: "remove", hash }),
-          );
+        afterEach(() => {
+          getIntersection.resetBehavior();
+          getIntersection.resetHistory();
+        });
 
         it("when one of them is a warning", async () => {
-          const hashes = addAlerts(
+          const alerts = addAlerts(
             "Severe Thunderstorm Warning",
             "Severe Thunderstorm Watch",
             "severe weather statement",
             "avalanche advisory",
           );
+
+          getIntersection.resolves(alerts);
 
           const { highestLevel: actual } = await alertHandler({
             point: { latitude: 1, longitude: 1 },
@@ -206,16 +217,16 @@ describe("alert data module", () => {
           });
 
           expect(actual).to.equal("warning");
-
-          removeAll(hashes);
         });
 
         it("when there are no warnings, but at least one watch", async () => {
-          const hashes = addAlerts(
+          const alerts = addAlerts(
             "Severe Thunderstorm Watch",
             "severe weather statement",
             "avalanche advisory",
           );
+
+          getIntersection.resolves(alerts);
 
           const { highestLevel: actual } = await alertHandler({
             point: { latitude: 1, longitude: 1 },
@@ -223,15 +234,15 @@ describe("alert data module", () => {
           });
 
           expect(actual).to.equal("watch");
-
-          removeAll(hashes);
         });
 
         it("when there are no warnings or watches", async () => {
-          const hashes = addAlerts(
+          const alerts = addAlerts(
             "severe weather statement",
             "avalanche advisory",
           );
+
+          getIntersection.resolves(alerts);
 
           const { highestLevel: actual } = await alertHandler({
             point: { latitude: 1, longitude: 1 },
@@ -239,8 +250,6 @@ describe("alert data module", () => {
           });
 
           expect(actual).to.equal("other");
-
-          removeAll(hashes);
         });
       });
     });
