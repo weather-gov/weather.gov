@@ -1,6 +1,6 @@
 <div class="grid-row wx-qpf-periods">
   <div class="grid-col-12">
-    <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-2 margin-bottom-05">{{ "Precipitation amounts" |t }}</h5>
+    <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-2 margin-bottom-05">{{ "precip-table.heading.amounts.01" |t }}</h5>
   </div>
 </div>
 
@@ -8,28 +8,28 @@
 {% set liquid = qpf.periods | map(p => p.liquid.in) | json_encode %}
 {% set snow = '[]' %}
 {% set ice = '[]' %}
-{% set liquidTitle = 'Rain' | t %}
+{% set liquidTitle = 'precip-table.table-header+legend.rain.01' | t %}
 
 {% if qpf.hasSnow %}
   {% set snow = qpf.periods | map(p => p.snow.in) | json_encode %}
-  {% set liquidTitle = 'Water' | t %}
+  {% set liquidTitle = 'precip-table.table-header+legend.water.01' | t %}
 {% endif %}
 {% if qpf.hasIce %}
   {% set ice = qpf.periods | map(p => p.ice.in) | json_encode %}
-  {% set liquidTitle = 'Water' | t %}
+  {% set liquidTitle = 'precip-table.table-header+legend.water.01' | t %}
 {% endif %}
 
 <div class="margin-bottom-205">
   <div class="display-flex flex-align-center font-mono-xs text-base">
     {% if qpf.hasSnow %}
     <div class="margin-x-1 margin-right-1 wx-bg-snow margin-left-1 width-2 height-2 border border-base-darker" style="margin-top: -3px;"></div>
-    {{ "Snow" | t }}
+    {{ "precip-table.table-header+legend.snow.01" | t }}
     <div class="margin-right-3"></div>
     {% endif %}
 
     {% if qpf.hasIce %}
     <div class="margin-x-1 margin-right-1 wx-bg-ice margin-left-1 width-2 height-2 border wx-border-cyan-80" style="margin-top: -3px;"></div>
-    {{ "Ice" | t }}
+    {{ "precip-table.table-header+legend.ice.01" | t }}
     <div class="margin-right-3"></div>
     {% endif %}
 
@@ -44,12 +44,12 @@
       <caption class="usa-sr-only">{{ "precip-table.aria.amounts.01" | t }}</caption>
       <thead>
         <tr>
-          <th scope="col">{{ "Time Period" | t }}</th>
+          <th scope="col">{{ "precip-table.table-header.time-period.01" | t }}</th>
           {% if qpf.hasSnow %}
-          <th scope="col">{{ "Snow" | t }}</th>
+          <th scope="col">{{ "precip-table.table-header+legend.snow.01" | t }}</th>
           {% endif %}
           {% if qpf.hasIce %}
-          <th scope="col">{{ "Ice" | t }}</th>
+          <th scope="col">{{ "precip-table.table-header+legend.ice.01" | t }}</th>
           {% endif %}
           {% if qpf.hasSnow or qpf.hasIce %}
           <th aria-hidden="true"></th>
@@ -63,15 +63,15 @@
           <tr>
             <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">{{ hour.startHour }}&emsp13;–&emsp13;{{ hour.endHour }}</td>
             {% if qpf.hasSnow %}
-            <td class="text-align-left">{{ hour.snow.in }}{{ '"' | t }}</td>
+            <td class="text-align-left">{{ "units.inches.01" | t({ "@inches": hour.snow.in }) }}</td>
             {% endif %}
             {% if qpf.hasIce %}
-            <td class="text-align-left">{{ hour.ice.in }}{{ '"' | t }}</td>
+            <td class="text-align-left">{{ "units.inches.01" | t({ "@inches": hour.ice.in }) }}</td>
             {% endif %}
             {% if qpf.hasSnow or qpf.hasIce %}
             <td aria-hidden="true"></td>
             {% endif %}
-            <td class="text-align-left">{{ hour.liquid.in }}{{ '"' | t }}</td>
+            <td class="text-align-left">{{ "units.inches.01" | t({ "@inches": hour.liquid.in }) }}</td>
           </tr>
         {% endfor %}
       </tbody>
@@ -81,11 +81,7 @@
   {% if qpf.hasIce or qpf.hasSnow %}
     <div class="grid-col-12 tablet:grid-col-6 tablet:padding-left-1">
       <p class="bg-base-lightest padding-105">
-        {{
-          "\"Water\" refers to the amount of water that is present in the precipitation.
-          The precipitation may actually fall in solid form such as ice or snow, in
-          liquid form as rain, or a mix of both." | t
-        }}
+        {{ "precip-table.text.water-explainer.01" | t }}
       </p>
     </div>
   {% endif %}

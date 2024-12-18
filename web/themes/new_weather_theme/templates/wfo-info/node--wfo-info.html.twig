@@ -23,9 +23,9 @@
         <figure class="margin-0">
           <img src="/{{ directory }}/assets/images/wfos/{{ wfo.code }}.png" alt="">
           <figcaption class="font-sans-xs">
-            {{ "wfo-info.labels.coverage-area-map-caption.01" | t({ "@wfo": wfo.name })}}
+            {{ "wfo-info.caption.coverage-area-map.01" | t({ "@wfo": wfo.name })}}
             <p class="usa-sr-only">
-              {{ "This includes @counties" | t({ "@counties": counties }) }}
+              {{ "wfo-info.caption+aria.coverage-area-map.01" | t({ "@counties": counties }) }}
             </p>
           </figcaption>
         </figure>
@@ -39,30 +39,29 @@
     <div class="grid-row">
       <div class="grid-col-12 tablet:grid-col-6">
         <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
-          {{ "wfo-info.labels.local-expertise.01" | t }}
+          {{ "wfo-info.heading.local-expertise.01" | t }}
         </h2>
         <p>
-          {{ "Decision support is description tk tk tk" | t }}
+          {{ "Decision support is description tk tk" | t }}
         </p>
         <ul class="margin-bottom-0 padding-left-2">
-          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Briefing" | t }}</a></li>
-          <li class="padding-y-05"><a class="usa-link" href="#">{{ "County finder" | t }}</a></li>
-          <li class="padding-y-05"><a class="usa-link" href="#">{{ "State page" | t }}</a></li>
-          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Resource 1" | t }}</a></li>
-          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Resource 2" | t }}</a></li>
-          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Resource 3" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Briefing tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "County finder tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "State page tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Resource 1 tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Resource 2 tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Resource 3 tk tk" | t }}</a></li>
         </ul>
       </div>
 
       <div class="grid-col-12 tablet:grid-col-6">
         <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
-          {{ "wfo-info.labels.forecast-discussion.01" | t }}
+          {{ "wfo-info.heading.forecast-discussion.01" | t }}
         </h2>
         <p>
-          {{ "The purpose of the area forecast discussion is to provide the
-          meteorological/scientific reasoning behind the forecast" | t }}
+          {{ "wfo-info.text.forecast-discussion.01" | t }}
         </p>
-        <a class="usa-link" href="/afd/{{ wfo.code }}">{{ "Current Area Forecast Discussion" | t }}</a>
+        <a class="usa-link" href="/afd/{{ wfo.code }}">{{ "wfo-info.link.area-forecast-discussion" | t }}</a>
       </div>
     </div>
 
@@ -80,7 +79,7 @@
 
     {% if hasContact %}
       <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker margin-bottom-0 padding-top-105 margin-top-4">
-        {{ "wfo-info.labels.contact-us.01" | t }}
+        {{ "wfo-info.heading.contact-us.01" | t }}
       </h2>
 
       <div class="grid-row margin-top-2">
