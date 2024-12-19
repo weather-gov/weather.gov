@@ -11,7 +11,7 @@
 
       <div class="position-absolute top-0 right-0 height-full">
         <div class="position-sticky top-0" style="top: 55px;">
-          <button type="button" class="wx-radar-expand padding-0 margin-1">
+          <button type="button" tabindex="-1" class="wx-radar-expand padding-0 margin-1">
             <svg role="img" class="width-full height-full">
               <use xlink:href="{{ "/" ~ directory ~ "/assets/images/uswds/sprite.svg#zoom_out_map" }}"></use>
             </svg>
@@ -54,6 +54,7 @@
           <button
               class="usa-accordion__button"
               type="button"
+              tabindex="-1"
               aria-expanded="false"
               aria-controls="radar-legend">
             {{"radar.labels.legend.01" | t}}

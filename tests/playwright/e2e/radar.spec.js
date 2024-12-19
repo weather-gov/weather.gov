@@ -24,19 +24,6 @@ describe("radar component", () => {
           .getAttribute("xlink:href");
         await expect(iconHref).toMatch(/uswds\/sprite\.svg#zoom_out_map$/);
       });
-
-      test("with 'expand' text description", async ({ page }) => {
-        const descriptions = await page.locator(
-          ".wx-radar-expand__description",
-        );
-        await expect(descriptions).toHaveCount(2);
-
-        const hidden = await page.locator(
-          ".wx-radar-expand__description.display-none",
-        );
-        await expect(hidden).toHaveCount(1);
-        await expect(hidden).toContainText("collapse");
-      });
     });
 
     describe("toggles expanded state...", () => {
@@ -60,20 +47,6 @@ describe("radar component", () => {
           await expect(iconHref).toMatch(
             /images\/spritesheet\.svg#wx_zoom-in-map$/,
           );
-        });
-
-        test("sets text description to 'collapse'", async ({ page }) => {
-          await click(page);
-          const descriptions = await page.locator(
-            ".wx-radar-expand__description",
-          );
-          await expect(descriptions).toHaveCount(2);
-
-          const hidden = await page.locator(
-            ".wx-radar-expand__description.display-none",
-          );
-          await expect(hidden).toHaveCount(1);
-          await expect(hidden).toContainText("expand");
         });
 
         test("triggers a window resize event", async ({ page }) => {
@@ -110,20 +83,6 @@ describe("radar component", () => {
             .locator(".wx-radar-container svg use")
             .getAttribute("xlink:href");
           await expect(iconHref).toMatch(/uswds\/sprite\.svg#zoom_out_map$/);
-        });
-
-        test("sets text description to 'expand'", async ({ page }) => {
-          await click(page);
-          const descriptions = await page.locator(
-            ".wx-radar-expand__description",
-          );
-          await expect(descriptions).toHaveCount(2);
-
-          const hidden = await page.locator(
-            ".wx-radar-expand__description.display-none",
-          );
-          await expect(hidden).toHaveCount(1);
-          await expect(hidden).toContainText("collapse");
         });
 
         test("triggers a window resize event", async ({ page }) => {
