@@ -8,7 +8,7 @@ const TWIG_T_FILTER_SINGLE_RX =
 const TWIG_T_FILTER_DOUBLE_RX =
   /\{\{\s*["]([^"]+)["]\s*\|\s*t(\(\s*(\{[^}]+\})\s*\))?\s*\}\}/gs;
 const TWIG_T_VARIABLE_SET_RX =
-  /\{\%\s*set\s*[A-Za-z_0-9]+\s*\=\s*["]([^"]+)["]\s*\|\s*t\s*\%\}/gs;
+  /\{\%\s*set\s*[A-Za-z_0-9]+\s*\=\s*['"]([^'"]+)['"]\s*\|\s*t\s*\%\}/gs;
 const TWIG_T_DICT_SET_RX = /\:\s*['"]([^'"]+)['"]\s*\|\s*t/gs;
 const PHP_T_FUNCTION_RX = /-\>t\(['"]([^'"]+)['"]\)/gs;
 
