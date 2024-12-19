@@ -1,3 +1,5 @@
+name: weathergov
+
 services:
   database:
     image: mysql:8.0 # 8.0.35 in prod
