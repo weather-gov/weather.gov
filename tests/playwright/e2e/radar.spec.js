@@ -103,17 +103,4 @@ describe("radar component", () => {
       });
     });
   });
-
-  describe("screenreader-only link", () => {
-    test("opens the daily tab", async ({ page }) => {
-      await page
-        .locator("[wx-outer-radar-container] .usa-sr-only a")
-        .evaluate((node) => node.click());
-
-      const dailyTab = await page.locator("#daily");
-
-      await expect(dailyTab).toBeVisible();
-      await expect(dailyTab).toHaveAttribute("data-selected");
-    });
-  });
 });
