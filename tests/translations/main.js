@@ -116,7 +116,7 @@ languages.forEach((langCode) => {
     console.error(
       `${RED_ERROR} ${missing.length} strings from en.po are not in ${langCode}.po`
     );
-    missing.forEach((key) => console.error(`\t"${key}"`));
+    missing.forEach((key) => console.error(`\t${key}\t${english[key].msgstr}`));
   } else {
     console.log(`${GREEN_SUCCESS} All strings from en.po are in ${langCode}.po.`);
   }
@@ -126,15 +126,15 @@ languages.forEach((langCode) => {
   const stale = comparisonKeys.filter((key) => !translationKeys.includes(key)).filter((key) => !ignored.has(key));
   if (stale.length) {
     console.warn(
-      `${YELLOW_WARNING} ${missing.length} strings from ${langCode}.po are not in en.po`
+      `${YELLOW_WARNING} ${stale.length} strings from ${langCode}.po are not in en.po`
     );
-    missing.forEach((key) => console.warn(`\t"${key}"`));
+    stale.forEach((key) => console.warn(`\t"${key}"`));
   } else {
     console.log(`${GREEN_SUCCESS} All strings from ${langCode}.po are in en.po.`);
   }
 });
 
 if (hasErrors) {
-  console.warn("Hint: You can add keys to config.suppress.missing or config.suppress.stale to suppress test failures.");
+  console.warn(`${YELLOW_WARNING} Exiting with errors.`);
   process.exit(-1);
 }

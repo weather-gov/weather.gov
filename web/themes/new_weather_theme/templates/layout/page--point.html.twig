@@ -39,7 +39,7 @@
     {% endif %}
 
     {% if point.error %}
-    {% set message = "Something went wrong loading this page. Please try again in a few minutes." | t %}
+    {% set message = "forecast.errors.point.01" | t %}
     <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
       {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
     </div>
@@ -73,7 +73,7 @@
               </div>
               <div class="desktop:grid-col-8 display-flex flex-column">
                 {% if point.forecast.error or point.forecast.days | length == 0 %}
-                {% set message = "There was an error loading the forecast." | t %}
+                {% set message = "forecast.errors.loading.01" | t %}
                 {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
                 {% else %}
                 {% include '@new_weather_theme/partials/today-summary-forecast.html.twig' with { forecast: point.forecast } %}
@@ -98,7 +98,7 @@
                   <path d="M6 7H16V8H6V7Z" fill="#0085CA"/>
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M4 2H20V22H4V2ZM5 3H19V21H5V3Z" fill="#0085CA"/>
                 </svg>
-                <a class="usa-link margin-left-1" href="/afd/{{ point.grid.wfo | normalize_wfo }}">Area Forecast Discussion</a>
+                <a class="usa-link margin-left-1" href="/afd/{{ point.grid.wfo | normalize_wfo }}">{{ "forecast.link.area-forecast-discussion.01" | t }}</a>
               </div>
             </div>
           </div>
@@ -115,7 +115,7 @@
           </div>
         </div>
         <wx-daily-forecast class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
-            <h2 class="usa-sr-only">Daily forecast</h2>
+            <h2 class="usa-sr-only">{{ "forecast.heading.daily-forecast.01" | t }}</h2>
             {% include '@new_weather_theme/point/forecast.html.twig' with { forecast: point.forecast } %}
             {{ drupal_block("weathergov_wfo_promo", { wfo: point.grid.wfo }) }}
         </wx-daily-forecast>

@@ -5,7 +5,7 @@
 <article class="afd-content desktop:padding-left-1" data-afd-id="{{afd.id}}">
     <div class="afd-preamble">
         <h2 class="usa-heading usa-sr-only">
-            {{ "Letterhead and timestamp" | t }}
+            {{ "afd.aria.letterhead.01" | t }}
         </h2>
         {% for key,val in preamble %}
             <span class="afd-preamble-{{key}} font-mono-sm text-pre-line">
@@ -28,30 +28,30 @@
                       <thead> 
                         <tr>
                           <td></td>
-                          <th colspan="4" scope="colgroup"> Temperatures </th>
-                          <th colspan="4" scope="colgroup"> Chance of precipitation </th>
+                          <th colspan="4" scope="colgroup">{{ "afd.table-header.temperatures.01" | t }}</th>
+                          <th colspan="4" scope="colgroup">{{ "afd.table-header.chance-precip.01" | t }}</th>
                         </tr>
                         <tr>
-                          <th scope="col"> Location </th>
+                          <th scope="col">{{"afd.table-header.location.01" | t }}</th>
                           {# An unsophisticated check for which period the numbers correspond to#}
                           {% if (node.rows[0].numbers[0] - node.rows[0].numbers[1] > 0)  %}
-                          <th scope="col"> Today </th>
-                          <th scope="col"> Tonight </th>
-                          <th scope="col"> Tomorrow </th>
-                          <th scope="col"> Tomorrow night</th>
-                          <th scope="col"> Today </th>
-                          <th scope="col"> Tonight </th>
-                          <th scope="col"> Tomorrow </th>
-                          <th scope="col"> Tomorrow night</th>
+                          <th scope="col">{{ "afd.table-header.today.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tonight.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tomorrow.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tomorrow-night.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.today.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tonight.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tomorrow.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tomorrow-night.01" | t }}</th>
                           {% else %}
-                          <th scope="col"> Tonight </th>
-                          <th scope="col"> Tomorrow </th>
-                          <th scope="col"> Tomorrow night</th>
-                          <th scope="col"> Next day</th>
-                          <th scope="col"> Tonight </th>
-                          <th scope="col"> Tomorrow </th>
-                          <th scope="col"> Tomorrow night</th>
-                          <th scope="col"> Next day</th>
+                          <th scope="col">{{ "afd.table-header.tonight.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tomorrow.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tomorrow-night.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.next-day.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tonight.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tomorrow.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.tomorrow-night.01" | t }}</th>
+                          <th scope="col">{{ "afd.table-header.next-day.01" | t }}</th>
                           {% endif %}
                         </tr>
                       </thead>

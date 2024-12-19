@@ -3,7 +3,7 @@
   <div class="grid-container">
     <div class="grid-row"> 
       <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-        <h1 class="text-normal text-white margin-y-0 font-sans-3xl text-ls-1"> Find your forecast </h1>
+        <h1 class="text-normal text-white margin-y-0 font-sans-3xl text-ls-1">{{ "frontpage.heading.find-your-forecast.01" | t }}</h1>
       </div>
     </div>
 
@@ -52,19 +52,17 @@
             src="/{{ directory }}/assets/images/weather/spot_illos/wx_illo_announce.svg"
             alt=""
           />
-          <h2 class="text-normal text-primary-darker font-sans-2xl margin-y-0">A new weather.gov is&nbsp;coming</h2>
+          <h2 class="text-normal text-primary-darker font-sans-2xl margin-y-0">
+            {{ "frontpage.heading.is-coming.01" | t }}
+          </h2>
         </div>
       </div>
     </div>
     <div class="grid-row">
       <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-
-        <p class="font-sans-md">This website is in development. We are creating a new, contemporary tool for anyone, anywhere in the U.S. to check their forecast and learn about hazardous weather on the way. 
-        </p>
-        <p>As you explore, you may notice that we’re missing features you’re accustomed to seeing on weather.gov. This site is updated every two weeks with new features. Continue to check back to watch the site expand!
-        </p>
-        <p class="margin-bottom-0">Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href="https://www.weather.gov" class="usa-link">access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information.
-        </p>
+        <p class="font-sans-md">{{ "frontpage.text.is-coming-1-graf.01" | t }}</p>
+        <p>{{ "frontpage.text.is-coming-2-graf.01" | t }}</p>
+        <p class="margin-bottom-0">{{ "frontpage.text.is-coming-3-graf.01" | t({ "@url": 'https://www.weather.gov' }) }}</p>
       </div>
     </div>
   </div>
@@ -81,23 +79,21 @@
           alt=""
         />
         <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
-          A weather.gov built with you in&nbsp;mind
+          {{ "frontpage.heading.in-mind.01" | t}}
         </h2>
       </div>
     </div>
   </div>
   <div class="grid-row">
     <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-      <p>We are working towards a new weather.gov that quickly provides everyone with the critical information they need to protect themselves and their communities. </p>
-      <p class="margin-bottom-1"> 
-      Over the next few years, we are working towards a site that will be: 
-      </p>
-      <ul class="usa-list margin-y-0"> 
-        <li> One cohesive experience </li>
-        <li> Easy to navigate and understand from any device </li>
-        <li> Accessible to all users, regardless of location, wealth, education, age, or&nbsp;ability </li>
-        <li> Available in more languages </li>
-        <li> A valuable resource for the public, as well as partners of the National Weather Service </li>
+      <p>{{ "frontpage.text.in-mind-1-graf.01" | t }}</p>
+      <p class="margin-bottom-1">{{ "frontpage.list-heading.in-mind-2-graf.01" | t}}</p>
+      <ul class="usa-list margin-y-0">
+        <li>{{ "frontpage.list.in-mind-1-item.01" | t }}</li>
+        <li>{{ "frontpage.list.in-mind-2-item.01" | t }}</li>
+        <li>{{ "frontpage.list.in-mind-3-item.01" | t }}</li>
+        <li>{{ "frontpage.list.in-mind-4-item.01" | t }}</li>
+        <li>{{ "frontpage.list.in-mind-5-item.01" | t }}</li>
       </ul>
     </div>
   </div>
@@ -112,7 +108,7 @@
           alt=""
         />
         <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
-           We want to hear from you!
+           {{ "frontpage.heading.touchpoints.01" | t }}
         </h2>
       </div>
     </div>
@@ -120,13 +116,13 @@
   <div class="grid-row">
     <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
       <p class="margin-bottom-1"> 
-      <a href="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit" class="usa-link"> Tell us what you think </a> about how beta.weather.gov looks and functions.
+      {{ "frontpage.text.touchpoints-1-graf.01" | t({ "@url": 'https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit' }) }}
       </p>
       <ul class="usa-list margin-y-0"> 
-        <li> Did you find the information you were looking for? </li>
-        <li> Did you have any challenges in understanding it? </li>
-        <li> In what ways have you been using this website? </li>
-        <li> What can we do to serve you better? </li>
+        <li>{{ "frontpage.list.touchpoints-1-item.01" | t }}</li>
+        <li>{{ "frontpage.list.touchpoints-2-item.01" | t }}</li>
+        <li>{{ "frontpage.list.touchpoints-3-item.01" | t }}</li>
+        <li>{{ "frontpage.list.touchpoints-4-item.01" | t }}</li>
       </ul>
     </div>
   </div>

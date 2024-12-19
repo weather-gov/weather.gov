@@ -38,9 +38,9 @@ the content
           {% if day.alerts.metadata.count %}
           <span class="usa-sr-only">
             {% if day.alerts.metadata.count > 1 %}
-              {{ "Multiple weather alerts" | t }}
+              {{ "alerts.aria.multiple-alert.01" | t }}
             {% else %}
-              {{ "Weather alert" | t }}
+              {{ "alerts.aria.one-alert.01" | t }}
             {% endif %}
           </span>
           {% endif %}
@@ -64,7 +64,7 @@ the content
                 {{"daily-forecast.labels.high.01" | t}}
               </span>
               <span class="wx-quick-temp">
-                {{ "abbreviations.not-applicable.01" | t  }}
+                {{ "abbreviations.not-applicable.01" | t }}
               </span>
             </div>
           {% else %}
@@ -106,7 +106,7 @@ the content
 
     <div class="wx-quick-forecast-item-bottom">
       <span>
-          {{pop}}% {{"daily-forecast.text.chance-precip.01" | t}}
+          {{"daily-forecast.text.chance-precip.02" | t({ "@percent": pop }) }}
       </span>
     </div>
 
