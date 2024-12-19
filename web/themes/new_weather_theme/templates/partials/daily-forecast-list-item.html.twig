@@ -94,7 +94,7 @@ only be a nighttime period.
                 </p>
                 {% if period.data.probabilityOfPrecipitation.hourlyMax and period.data.probabilityOfPrecipitation.hourlyMax > 1 %}
                 <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-                  {{period.data.probabilityOfPrecipitation.hourlyMax}}% {{ "daily-forecast.text.chance-precip.01" | t }}
+                  {{ "daily-forecast.text.chance-precip.02" | t({ "@percent": period.data.probabilityOfPrecipitation.hourlyMax }) }}
                 </p>
                 {% endif %}
               </div>
@@ -107,7 +107,7 @@ only be a nighttime period.
       {% if dayHours | length > 0 %}
       <div class="">
         {% include '@new_weather_theme/partials/forecast-details-toggle.html.twig' %}
-        <h4 class="font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">Hourly forecast</h4>
+        <h4 class="font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">{{ "daily-forecast.heading.hourly-forecast.01" | t }}</h4>
         {% include '@new_weather_theme/partials/hourly-table.html.twig'
         with {
         for_day: periods[0].start | date('U') | format_date('custom', 'd'),
