@@ -1,15 +1,19 @@
 import { Worker, isMainThread } from "node:worker_threads";
 import path from "node:path";
 
-import { booleanIntersects, buffer, point } from "@turf/turf";
-import dayjs from "../../util/day.js";
+import { buffer, point } from "@turf/turf";
+import { modifyTimestampsForAlert } from "./utils.js";
 import { createLogger } from "../../util/monitoring/index.js";
 import { parseDuration } from "./parse/index.js";
 import sort from "./sort.js";
+import { AlertsCache } from "./cache.js";
+import openDatabase from "../db.js";
+import dayjs from "../../util/day.js";
 
 const logger = createLogger("alerts");
 const backgroundLogger = createLogger("alerts (background)");
 const cachedAlerts = new Map();
+const alertsCache = new AlertsCache();
 
 const metadata = {
   error: false,
@@ -17,63 +21,44 @@ const metadata = {
 };
 
 // The background process handles fetching and massaging alerts so they don't
-// block the main thread. It will message us if it encounters a new alert or if
-// an alert in its cache is missing from the API results.
+// block the main thread. It handles fetching alerts, writing new alerts to the
+// database cache table, and removing stale alerts from the cache table.
 export const updateFromBackground = ({
   action,
-  hash,
-  alert,
   level,
   message,
 }) => {
   switch (action) {
-    case "add":
-      logger.verbose(`adding alert with hash ${hash}`);
+  case "error":
+    metadata.error = true;
+    break;
 
-      // dayjs objects turn into plain objects when they cross the thread
-      // boundary, so we'll look for all of them and convert them back.
-      Object.keys(alert).forEach((key) => {
-        const value = alert[key];
-        if (value?.$isDayjsObject) {
-          alert[key] = dayjs(value.$d);
-        }
-      });
-
-      cachedAlerts.set(hash, alert);
-      metadata.updated = dayjs();
-      metadata.error = false;
-      break;
-
-    case "remove":
-      logger.verbose(`removing alert with hash ${hash}`);
-      cachedAlerts.delete(hash);
-      metadata.updated = dayjs();
-      metadata.error = false;
-      break;
-
-    case "error":
-      metadata.error = true;
-      break;
-
-    case "log":
-      backgroundLogger[level]?.(message);
-      if (!backgroundLogger[level]) {
-        logger.error(`Attempted to write to invalid log level: '${level}'`);
-        logger.error("Received message:");
-        logger.error(message);
-      }
-      break;
-
-    default:
-      break;
+  case "log":
+    backgroundLogger[level]?.(message);
+    if (!backgroundLogger[level]) {
+      logger.error(`Attempted to write to invalid log level: '${level}'`);
+      logger.error("Received message:");
+      logger.error(message);
+    }
+    break;
+  default:
+    metadata.updated = dayjs();
+    metadata.error = false;
+    break;
   }
 };
 
-export const startAlertProcessing = () => {
+export const startAlertProcessing = async () => {
   // If this is the main thread, fire up the background worker. This should always
   // be the main thread, but if something goes haywire and this script somehow
   // gets loaded in the background worker, don't recursively keep loading it.
   if (isMainThread) {
+    // Drop any existing alerts cache table, since that will be repopulated
+    // by the first alerts request
+    logger.info("dropping any existing alerts cache table");
+    alertsCache.db = await openDatabase();
+    await alertsCache.dropCacheTable();
+    
     logger.info("starting background worker");
     const updater = new Worker(
       path.join(import.meta.dirname, "backgroundUpdateTask.js"),
@@ -113,34 +98,37 @@ export default async ({
   point: { latitude, longitude },
   place: { timezone },
 }) => {
+
+  // Open a new database connection
+  // (or existing pool instance -- see import)
+  const db = await openDatabase();
+  alertsCache.db = db;
+  
   // Find all alerts within a radius of the location being requested. We're
   // using a quarter mile buffer here.
   const geometry = buffer(point([longitude, latitude]), 0.25, {
     units: "miles",
   });
+  
+  const alerts = await alertsCache.getIntersectingAlerts(
+    JSON.stringify(geometry)
+  );
+  
+  alerts.forEach(alert => {
+    // We need to turn all of the relevant timestamp
+    // fields back into dayjs objects, in order to sort
+    // and perform expiry checks
+    modifyTimestampsForAlert(alert);
 
-  const alerts = [];
-  for await (const [, alert] of cachedAlerts) {
-    if (alert.geometry) {
-      // Ignore intersections with self. I don't actually understand what that
-      // means since any geometry ought to intersect with itself, but if we
-      // don't set this, we get a whole bunch of unrelated alerts matching.
-      const yes = booleanIntersects(geometry, alert.geometry, {
-        ignoreSelfIntersections: true,
-      });
+    // Parse out the correct duration object structure
+    alert.duration = parseDuration(alert, timezone);
+    alert.timing = {
+      start: alert.onset.tz(timezone).format("dddd MM/DD h:mm A z"),
+      end: alert.finish?.tz(timezone).format("dddd MM/DD h:mm A z"),
+    };
 
-      if (yes > 0) {
-        alert.duration = parseDuration(alert, timezone);
-        alert.timing = {
-          start: alert.onset.tz(timezone).format("dddd MM/DD h:mm A z"),
-          end: alert.finish?.tz(timezone).format("dddd MM/DD h:mm A z"),
-        };
-
-        logger.verbose(`has ${alert.event}`);
-        alerts.push(alert);
-      }
-    }
-  }
+    logger.verbose(`has ${alert.event}`);
+  });
 
   const highest = alerts
     .map(({ metadata: { level } }) => level)

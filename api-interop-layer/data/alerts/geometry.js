@@ -180,7 +180,7 @@ export const generateAlertGeometry = async (db, rawAlert) => {
     }
   }
 
-  // we cannot generate a geometry.
+  // we cannot generate a geometry
   return null;
 };
 

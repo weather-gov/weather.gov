@@ -3,6 +3,25 @@ stages:
   - test
   - deploy
 
+build-utility-image:
+  image: docker:27
+  stage: build
+  services:
+    - name: docker:27-dind
+      command: [ "--tls=false" ]
+      variables:
+        HEALTHCHECK_TCP_PORT: "2375"
+  when: manual
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    PROJECT_REGISTRY: "$CI_REGISTRY/nws/systems/dis/weather.gov-2.0"
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker compose build utility-node
+    - docker image tag weathergov-utility-node:latest $PROJECT_REGISTRY/weathergov-utility:latest
+    - docker push $PROJECT_REGISTRY/weathergov-utility:latest
+
 # NB: GitLab clones into CI_BUILDS_DIR which defaults to
 # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
 # images our WORKDIR is /app. so we symlink the various /app/node_modules to
@@ -40,3 +59,25 @@ php-lint:
     when: always
     reports:
       junit: phpcs.xml
+
+js-component-tests:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  script:
+    - ln -s /app/node_modules/ .
+    - npm run --silent js-component-tests-report
+  artifacts:
+    when: always
+    reports:
+      junit: test-results.xml # mocha-junit-reporter writes to this file by default
+
+js-interop-layer-tests:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  script:
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - cd api-interop-layer/ && npm run --silent test-report
+  artifacts:
+    when: always
+    reports:
+      junit: api-interop-layer/test-results.xml # mocha-junit-reporter writes to this file by default
