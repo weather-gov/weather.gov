@@ -3,7 +3,7 @@ stages:
   - test
   - deploy
 
-build-utility-image:
+.build-image:
   image: docker:27
   stage: build
   services:
@@ -15,12 +15,24 @@ build-utility-image:
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
-    PROJECT_REGISTRY: "$CI_REGISTRY/nws/systems/dis/weather.gov-2.0"
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker compose build utility-node
-    - docker image tag weathergov-utility-node:latest $PROJECT_REGISTRY/weathergov-utility:latest
-    - docker push $PROJECT_REGISTRY/weathergov-utility:latest
+    - docker compose build $IMAGE_NAME
+    - IMAGE_ID=$(docker images | grep $DERIVED_IMAGE_NAME | awk '{print $3}')
+    - docker image tag $IMAGE_ID $CI_REGISTRY_IMAGE/weathergov-$IMAGE_NAME:latest
+    - docker push $CI_REGISTRY_IMAGE/weathergov-$IMAGE_NAME:latest
+
+build-utility-node-image:
+  extends: .build-image
+  variables:
+    DERIVED_IMAGE_NAME: utility-node
+    IMAGE_NAME: utility-node
+
+build-drupal-image:
+  extends: .build-image
+  variables:
+    DERIVED_IMAGE_NAME: 18f-zscaler-drupal
+    IMAGE_NAME: drupal
 
 # NB: GitLab clones into CI_BUILDS_DIR which defaults to
 # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
@@ -28,7 +40,7 @@ build-utility-image:
 # CI_BUILDS_DIR so we can "npm run" as needed.
 js-lint:
   stage: test
-  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  image: $CI_REGISTRY_IMAGE/weathergov-utility-node:latest
   script:
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
@@ -41,7 +53,7 @@ js-lint:
 
 style-lint:
   stage: test
-  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  image: $CI_REGISTRY_IMAGE/weathergov-utility-node:latest
   script:
     - ln -s /app/node_modules/ .
     - npm run --silent style-lint-report 2> stylelint.xml
@@ -62,7 +74,7 @@ php-lint:
 
 js-component-tests:
   stage: test
-  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  image: $CI_REGISTRY_IMAGE/weathergov-utility-node:latest
   script:
     - ln -s /app/node_modules/ .
     - npm run --silent js-component-tests-report
@@ -73,7 +85,7 @@ js-component-tests:
 
 js-interop-layer-tests:
   stage: test
-  image: $CI_REGISTRY_IMAGE/weathergov-utility:latest
+  image: $CI_REGISTRY_IMAGE/weathergov-utility-node:latest
   script:
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - cd api-interop-layer/ && npm run --silent test-report
