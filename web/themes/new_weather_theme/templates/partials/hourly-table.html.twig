@@ -157,5 +157,5 @@
     </table>
   </div>
 
-  {% include '@new_weather_theme/partials/precip-table.html.twig' with { 'qpf': qpf } %}
+  {% include '@new_weather_theme/partials/precip.html.twig' with { 'qpf': qpf, 'as_table': true } %}
 </wx-hourly-table>
