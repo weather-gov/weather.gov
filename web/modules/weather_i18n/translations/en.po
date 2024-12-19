@@ -75,7 +75,7 @@ msgid "daily-forecast.labels.today.01"
 msgstr "Today"
 
 msgid "daily-forecast.text.chance-precip.01"
-msgstr "chance of precipitation"
+msgstr "Chance of precipitation"
 
 msgid "daily-forecast.text.hide-details.01"
 msgstr "Hide hourly details"
