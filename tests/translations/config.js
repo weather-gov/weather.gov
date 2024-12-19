@@ -26,6 +26,8 @@ module.exports = {
       "../../web/modules/weather_cms/**/*.module",
       "../../web/modules/weather_data/**/*.php",
       "../../web/modules/weather_data/**/*.module",
+      "../../web/modules/weather_login/**/*.php",
+      "../../web/modules/weather_login/**/*.module",
     ],
     exclude: [],
   },
@@ -37,7 +39,15 @@ module.exports = {
 
   suppress: {
     missing: {
-      en: [],
+      en: [
+        "Decision support is description tk tk",
+        "Briefing tk tk",
+        "County finder tk tk",
+        "State page tk tk",
+        "Resource 1 tk tk",
+        "Resource 2 tk tk",
+        "Resource 3 tk tk"
+      ],
       "zh-hans": [],
     },
     stale: {

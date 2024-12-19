@@ -1,5 +1,5 @@
 {{ attach_library("new_weather_theme/leaflet") }}
-<h2 class="usa-sr-only">Alerts</h2>
+<h2 class="usa-sr-only">{{ "alerts.heading+aria.alerts.01" | t }}</h2>
 <div class="grid-container padding-x-2 desktop:padding-x-4"> 
   <div class="grid-row"> 
     <div class="grid-col-12">
@@ -18,8 +18,11 @@
         </h3>
         <div id="a{{alert.id}}" class="usa-accordion__content usa-prose">
           <p class="font-sans-md text-bold text-primary-darker margin-y-0" >
-            {{ "alerts.text.in-effect-from.01" | t }} {{ alert.timing.start }}
-            {% if alert.timing.end %} – {{ alert.timing.end }}{% endif %}
+          {% if alert.timing.end %}
+            {{ "alerts.text.in-effect-from-until.01" | t({ "@start": alert.timing.start, "@end": alert.timing.end }) }}
+          {% else %}
+            {{ "alerts.text.in-effect-from.01" | t({ "@start": alert.timing.start }) }}
+          {% endif %}
           </p>
           <p class="margin-y-05">
             {{ "alerts.text.issued-by.01" | t({ "@sender": alert.sender }) }}
@@ -123,7 +126,7 @@
                 >
                 <div id="wx_alert_map_{{ alert.id }}" class="height-full"></div>
                 <div class="wx_alert_map_legend margin-top-3 display-flex flex-align-center">
-                  <div class="wx_alert_map_legend_impact_area display-block width-3 height-3 border-2px margin-right-1"></div><span>Impacted Area</span>
+                  <div class="wx_alert_map_legend_impact_area display-block width-3 height-3 border-2px margin-right-1"></div><span>{{ "alerts.legend.impacted-area.01" | t }}</span>
                 </div>
               </wx-alert-map>
             </div>

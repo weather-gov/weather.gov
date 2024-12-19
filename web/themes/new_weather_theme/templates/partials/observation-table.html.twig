@@ -16,7 +16,7 @@
                     {{ "observation-table.labels.gusts.01" | t }}
                 </th>
                 <td>
-                    {{ content.gusts.speed }} {{  "units.mph.01" | t }}
+                    {{ "units.mph.02" | t({ "@speed": content.gusts.speed }) }}
                 </td>
             </tr>
         {% endif %}

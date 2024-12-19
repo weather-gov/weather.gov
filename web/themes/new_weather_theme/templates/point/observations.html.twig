@@ -1,6 +1,6 @@
 {# Widgets and stuff. This is presented as a row of columns. #}
 <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-0 margin-bottom-2">
-  {{ "Current conditions" | t }}
+  {{ "forecast.heading.current-conditions.01" | t }}
 </h3>
 <div class="bg-white padding-2 shadow-1 grid-col-12 flex-1">
   <div class="wx-current-conditions grid-row grid-gap">
@@ -11,21 +11,17 @@
 
       {# Weather narrative is for screen readers only #}
       <div role="text" data-wx-current-conditions-narrative class="tablet:grid-col-12 usa-sr-only height-1px">
-        {{ 'forecast.current.weather-as-of.01' | t }}
-        <time datetime="{{ obs.timestamp.utc }}" data-wx-local-time>
-          {{ obs.timestamp.formatted }}
-        </time>.
-        {{ "forecast.current.weather-temp-description.01" |
-        t({
+        {{ 'forecast.aria.current-conditions-narrative.01' | t({
+            "@time": obs.timestamp.formatted,
             "@place": point.place.fullName,
             "@conditions": obs.description | lower,
             "@temperature": obs.data.temperature.degF,
         })
         }}
         {% if obs.data.feelsLike.degF != obs.data.temperature.degF %}
-          {{ "forecast.current.aria.feels-like.01" |
+          {{ "forecast.aria.current-conditions-feels-like.01" |
           t({
-              "@feelsLike": obs.data.feelsLike.degF
+              "@temperature": obs.data.feelsLike.degF
           })
           }}
         {% endif %}

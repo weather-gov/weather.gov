@@ -61,19 +61,7 @@ msgstr "整夜"
 msgid "daily-forecast.labels.today.01"
 msgstr "今天"
 
-msgid "daily-forecast.text.chance-precip.01"
-msgstr "降水概率"
-
-msgid "daily-forecast.text.hide-details.01"
-msgstr "不显示每小时详情"
-
-msgid "daily-forecast.text.show-details.01"
-msgstr "显示每小时详情"
-
 msgid "daily-forecast.label.details-toggle-charts.01"
-msgstr ""
-
-msgid "daily-forecast.bale.details-toggle-table.01"
 msgstr ""
 
 msgid "daily-forecast.text.usa-gov-site.01"
@@ -87,9 +75,6 @@ msgstr "科学。 服务。 管理"
 
 msgid "footer.text.usa-gov-site-alt.01"
 msgstr "美国政府官方网站"
-
-msgid "forecast.current.aria.feels-like.01"
-msgstr "感觉像77华氏度。"
 
 msgid "forecast.current.feels-like.01"
 msgstr "感觉像"
@@ -169,21 +154,6 @@ msgstr "风"
 msgid "precip-table.aria.amounts.01"
 msgstr "接下来几小时的降水量"
 
-msgid "precip-table.labels.amounts.01"
-msgstr "降水量"
-
-msgid "radar.aria.collapse-map.01"
-msgstr "关闭雷达图"
-
-msgid "radar.aria.expand-map.01"
-msgstr "展开雷达图"
-
-msgid "radar.aria.legend.01"
-msgstr "描述与颜色和 dBz 值相对应的强度等级的图例"
-
-msgid "radar.labels.daily-tab.01"
-msgstr "每日天气列表"
-
 msgid "radar.labels.intensity.01"
 msgstr "强度"
 
@@ -202,14 +172,8 @@ msgstr "@author_name于@month月@day日提交"
 msgid "units.dbz.01"
 msgstr "dBz"
 
-msgid "units.mercury-inches.01"
-msgstr "30.18 in (1022 mb)"
-
 msgid "units.miles.01"
 msgstr "英里"
-
-msgid "units.mph.01"
-msgstr "mph"
 
 msgid "uswds-banner.gov.description_html.01"
 msgstr ".gov网站属于美国的官方政府组织。"

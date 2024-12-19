@@ -1,6 +1,6 @@
             {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
             <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
-            {{period.probabilityOfPrecipitation}}% {{ "daily-forecast.text.chance-precip.01" | t }}
+            {{ "daily-forecast.text.chance-precip.02" | t({ "@percent": period.probabilityOfPrecipitation }) }}
             </p>
             {% endif %}
 
