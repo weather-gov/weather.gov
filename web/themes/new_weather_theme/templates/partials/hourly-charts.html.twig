@@ -102,4 +102,6 @@
       </div>
     </div>
   </div>
+
+  {% include '@new_weather_theme/partials/precip.html.twig' with { 'qpf': qpf, 'as_chart': true } %}
 </wx-hourly-charts>
