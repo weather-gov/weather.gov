@@ -1,14 +1,9 @@
 {% if speed.mph is not same as (null) %}
-  {#
-  We will have a dedicated block for screen readers to mitigate an issue with
-  VoiceOver treating spans as distinct elements and forcing users to navigate
-  between them.
-  #}
-  <div class="display-flex flex-row flex-align-center" aria-hidden="true">
+  <div aria-hidden="true" class="display-flex flex-row flex-align-center">
     {% if speed.mph == 0 %}
       <span>{{ "wind.labels.calm.01" | t }}</span>
     {% else %}
-      <span>{{speed.mph}} {{ "units.mph.01" | t }}</span>
+      <span>{{ "units.mph.02" | t({ "@speed": speed.mph }) }}</span>
       <span class="padding-x-05">{{ direction.cardinalShort }}</span>
       <span class="display-flex flex-align-center margin-bottom-2px">
         {#
@@ -16,13 +11,16 @@
         is reported as a FROM direction, but our arrow points in the
         TO direction. So we just need to spin it 'round.
         #}
-        <svg role="img" aria-hidden="true" data-wind-direction class="width-2 height-2" style="transform: rotate({{ direction.degrees + 180 }}deg);">
+        <svg role="img" data-wind-direction class="width-2 height-2" style="transform: rotate({{ direction.degrees + 180 }}deg);">
           <use xlink:href="{{ "/" ~ directory ~ "/assets/images/spritesheet.svg#wx_wind_arrow" }}"></use>
         </svg>
       </span>
     {% endif %}
   </div>
   {#
+  We have a dedicated block for screen readers to mitigate an issue with
+  VoiceOver treating spans as distinct elements and forcing users to navigate
+  between them.
   By putting all of the content into a single span, we can get VoiceOver to read
   it in a more natural way.
   #}
@@ -40,6 +38,8 @@
     <span class="usa-sr-only">{{ "wind.labels.speed-from-south.01" | t({ "@speed": speed.mph }) }}</span>
   {% elseif direction.cardinalLong == "southwest" %}
     <span class="usa-sr-only">{{ "wind.labels.speed-from-southwest.01" | t({ "@speed": speed.mph }) }}</span>
+  {% elseif direction.cardinalLong == "west" %}
+    <span class="usa-sr-only">{{ "wind.labels.speed-from-west.01" | t({ "@speed": speed.mph }) }}</span>
   {% elseif direction.cardinalLong == "northwest" %}
     <span class="usa-sr-only">{{ "wind.labels.speed-from-northwest.01" | t({ "@speed": speed.mph }) }}</span>
   {% endif %}

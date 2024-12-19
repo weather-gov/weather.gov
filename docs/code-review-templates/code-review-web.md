@@ -52,6 +52,9 @@ This is an automated comment on every pull request requiring a review. A checked
     - [ ] Links are unique and contextual. All links can be understood taken alone, e.g., ‘Read more - about 508’
     - [ ] Page titles are descriptive
 
+## Translations
+- [ ] all new content is marked for translation and in `en.po`
+
 ## Device Matrix
 - [ ] firefox/gecko (renders correctly and user interactions work)
 - [ ] chrome/chromium/edge (renders correctly and user interactions work)
