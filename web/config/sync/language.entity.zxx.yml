@@ -7,5 +7,5 @@ _core:
 id: zxx
 label: 'Not applicable'
 direction: ltr
-weight: 3
+weight: 4
 locked: true

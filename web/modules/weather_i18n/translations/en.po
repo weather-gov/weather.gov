@@ -319,6 +319,9 @@ msgstr "Dewpoint"
 msgid "hourly-charts.heading.humidity.01"
 msgstr "Humidity"
 
+msgid "hourly-charts.heading.precip-amounts.01"
+msgstr "Precipitation amounts"
+
 msgid "hourly-charts.heading.temperature.01"
 msgstr "Temperature"
 
