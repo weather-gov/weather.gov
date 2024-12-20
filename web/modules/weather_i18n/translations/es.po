@@ -1,0 +1,296 @@
+# Spanish translation of beta.weather.gov
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Weather.gov Utility\\n"
+"MIME-Version: 1.0\\n"
+"Content-Type: text/plain; charset=utf-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+
+msgid "abbreviations.not-applicable.01"
+msgstr "N/A"
+
+msgid "alerts.labels.areas-impacted.01"
+msgstr "Áreas afectadas"
+
+msgid "alerts.labels.what-to-do.01"
+msgstr "Qué hacer"
+
+msgid "alerts.text.counties-in.01"
+msgstr "Condados en"
+
+msgid "alerts.text.in-effect-from.01"
+msgstr "En efecto desde"
+
+msgid "alerts.text.including-cities.01"
+msgstr "Incluyendo estas ciudades"
+
+msgid "alerts.text.issued-by.01"
+msgstr "Emitido por el SNM en Los Angeles/Oxnard CA"
+
+msgid "backend.login.cancel-text.01"
+msgstr "Cancelar Texto"
+
+msgid "backend.login.login-text.01"
+msgstr "Texto de inicio de sesión"
+
+msgid "backend.login.sso-cancel-path.01"
+msgstr "Cancelar ruta de sesión SSO"
+
+msgid "backend.login.sso-login-path.01"
+msgstr "Ruta de inicio de sesión del SSO"
+
+msgid "daily-forecast.labels.alert.01"
+msgstr "Alerta"
+
+msgid "daily-forecast.labels.day.01"
+msgstr "Día"
+
+msgid "daily-forecast.labels.high.01"
+msgstr "Alta"
+
+msgid "daily-forecast.labels.low.01"
+msgstr "Baja"
+
+msgid "daily-forecast.labels.multiple-alerts.01"
+msgstr "Múltiples alertas"
+
+msgid "daily-forecast.labels.night.01"
+msgstr "Noche"
+
+msgid "daily-forecast.labels.overnight.01"
+msgstr "Durante la noche"
+
+msgid "daily-forecast.labels.today.01"
+msgstr "Hoy"
+
+msgid "daily-forecast.text.chance-precip.01"
+msgstr "probabilidad de precipitación"
+
+msgid "daily-forecast.text.hide-details.01"
+msgstr "Ocultar detalles de cada hora"
+
+msgid "daily-forecast.text.show-details.01"
+msgstr "Mostrar detalles de cada hora"
+
+msgid "daily-forecast.text.usa-gov-site.01"
+msgstr "Sitio web oficial del gobierno de Estados Unidos"
+
+msgid "footer.aria.noaa-logo.01"
+msgstr "Logo de la Administración Nacional de Océanos y Atmósfera"
+
+msgid "footer.noaa-motto.01"
+msgstr "Ciencia. Servicio. Administración"
+
+msgid "footer.text.usa-gov-site-alt.01"
+msgstr "Un sitio web oficial del gobierno de Estados Unidos"
+
+msgid "forecast.current.aria.feels-like.01"
+msgstr "Se siente como 77 ℉."
+
+msgid "forecast.current.feels-like.01"
+msgstr "Se siente como"
+
+msgid "forecast.current.last-updated.01"
+msgstr "Última actualización"
+
+msgid "forecast.current.obs-station.01"
+msgstr "Estación de observación"
+
+msgid "forecast.current.weather-as-of.01"
+msgstr "Tiempo a partir de"
+
+msgid "forecast.errors.current-conditions.01"
+msgstr "Hubo un error al cargar las condiciones actuales."
+
+msgid "forecast.errors.daily.01"
+msgstr "Hubo un error al cargar el pronóstico diario."
+
+msgid "forecast.errors.hourly.01"
+msgstr "Hubo un error al cargar el pronóstico de cada hora."
+
+msgid "forecast.labels.alerts.01"
+msgstr "Alertas"
+
+msgid "forecast.labels.current.01"
+msgstr "Corriente"
+
+msgid "forecast.labels.seven-days.01"
+msgstr "7 Días"
+
+msgid "forecast.labels.weather-info.01"
+msgstr "Secciones de información del tiempo"
+
+msgid "forecast.labels.weather-story.01"
+msgstr "Informe de un pronosticador"
+
+msgid "hourly-forecast.labels.forecast.01"
+msgstr "Pronóstico"
+
+msgid "hourly-table.aria.scroll-left.01"
+msgstr "desplace a la izquierda"
+
+msgid "hourly-table.aria.scroll-right.01"
+msgstr "desplace a la derecha"
+
+msgid "hourly-table.aria.table-description.01"
+msgstr "Datos detallados del tiempo para el 25 de julio. Las filas son variables del tiempo, las columnas son horas."
+
+msgid "hourly-table.labels.chance-precip.01"
+msgstr "Probabilidad de precipitación"
+
+msgid "hourly-table.labels.condition.01"
+msgstr "Condición"
+
+msgid "hourly-table.labels.dewpoint.01"
+msgstr "Punto de Rocío"
+
+msgid "hourly-table.labels.humidity.01"
+msgstr "Humedad"
+
+msgid "hourly-table.labels.temperature.01"
+msgstr "Temperatura"
+
+msgid "hourly-table.labels.time.01"
+msgstr "Tiempo"
+
+msgid "hourly-table.labels.wind-speed.01"
+msgstr "Velocidad del viento"
+
+msgid "hourly-table.text.gusting.01"
+msgstr "con ráfagas de hasta 40 mph"
+
+msgid "loader.loading-text.01"
+msgstr "Cargando el pronóstico"
+
+msgid "location-search.labels.enter-city-zip.01"
+msgstr "Ingrese la ciudad o el código postal"
+
+msgid "location-search.labels.use-location.01"
+msgstr "Usar mi ubicación"
+
+msgid "observation-table.labels.gusts.01"
+msgstr "Ráfagas"
+
+msgid "observation-table.labels.pressure.01"
+msgstr "Presión"
+
+msgid "observation-table.labels.visibility.01"
+msgstr "Visibilidad"
+
+msgid "observation-table.labels.wind.01"
+msgstr "Viento"
+
+msgid "precip-table.aria.amounts.01"
+msgstr "cantidades de precipitación para las próximas horas"
+
+msgid "precip-table.aria.period.01"
+msgstr "período de tiempo"
+
+msgid "precip-table.aria.precipitation.01"
+msgstr "pronóstico de precipitación"
+
+msgid "precip-table.labels.amounts.01"
+msgstr "Cantidades de precipitación"
+
+msgid "radar.aria.legend.01"
+msgstr "Leyenda que describe los niveles de intensidad que corresponden a valores de color y dBz"
+
+msgid "radar.labels.intensity.01"
+msgstr "Intensidad"
+
+msgid "radar.labels.legend.01"
+msgstr "Leyenda de radar"
+
+msgid "radar.labels.radar.01"
+msgstr "Radar"
+
+msgid "safety.labels.tips.01"
+msgstr "Consejos para mantenerse seguro"
+
+msgid "theme.text.submitted-by.01"
+msgstr "Enviado por Colin Murphy el 25 de julio"
+
+msgid "units.dbz.01"
+msgstr "dBz"
+
+msgid "units.inches.01"
+msgstr "pulgadas"
+
+msgid "units.mercury-inches.01"
+msgstr "30.18 pulgadas (1022 mb)"
+
+msgid "units.miles.01"
+msgstr "millas"
+
+msgid "units.mph.01"
+msgstr "mph"
+
+msgid "uswds-banner.gov.description_html.01"
+msgstr "Un sitio web .gov pertenece a una organización gubernamental oficial en los Estados Unidos."
+
+msgid "uswds-banner.gov.description.01"
+msgstr "Los sitios web oficiales usan .gov"
+
+msgid "uswds-banner.gov.https.01"
+msgstr "Los sitios web seguros .gov usan HTTPS"
+
+msgid "uswds-banner.gov.safely-connected_html.01"
+msgstr "o https:// significa que se ha conectado de forma segura al sitio web .gov. Comparta información sensible solo en los sitios web oficiales y seguros."
+
+msgid "uswds-banner.how-you-know.01"
+msgstr "De esta forma sabrás"
+
+msgid "uswds-banner.lock_alt.01"
+msgstr "Icono de candado cerrado"
+
+msgid "uswds-banner.lock_html.01"
+msgstr "Un bloqueo"
+
+msgid "uswds-banner.lock.01"
+msgstr "Cerrado"
+
+msgid "uswds-banner.skip-to-content.01"
+msgstr "Saltar al contenido principal"
+
+msgid "wfo.labels.facebook.01"
+msgstr "Facebook"
+
+msgid "wfo.labels.find-us.01"
+msgstr "Encuéntranos en"
+
+msgid "wfo.labels.local-office.01"
+msgstr "Su Oficina de Pronóstico Local"
+
+msgid "wfo.labels.phone.01"
+msgstr "Teléfono"
+
+msgid "wfo.labels.twitter.01"
+msgstr "X"
+
+msgid "wfo.labels.youtube.01"
+msgstr "YouTube"
+
+msgid "wind.labels.speed-from-east.01"
+msgstr "@speed mph desde el este "
+
+msgid "wind.labels.speed-from-north.01"
+msgstr "@speed mph desde el norte "
+
+msgid "wind.labels.speed-from-northeast.01"
+msgstr "@speed mph desde el noreste "
+
+msgid "wind.labels.speed-from-northwest.01"
+msgstr "@speed mph desde el noroeste"
+
+msgid "wind.labels.speed-from-south.01"
+msgstr "@speed mph desde el sur "
+
+msgid "wind.labels.speed-from-southeast.01"
+msgstr "@speed mph desde el sureste "
+
+msgid "wind.labels.speed-from-southwest.01"
+msgstr "@speed mph desde el suroeste "
+
+msgid "wind.labels.speed-from-west.01"
+msgstr "@speed mph desde el oeste "
