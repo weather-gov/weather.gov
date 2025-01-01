@@ -204,5 +204,5 @@ container_repository = "registry.gitlab-licensed.vlab.noaa.gov/nws/systems/dis/w
 ### Tag the weather.gov utility image to push up to our Gitlab container repository
 push-weathergov-utility-image:
 	docker compose build utility-node
-	docker image tag weathergov-utility-node ${container_repository}/weathergov-utility:latest
-	docker push ${container_repository}/weathergov-utility:latest
+	docker image tag weathergov-utility-node ${container_repository}/weathergov-utility-node:latest
+	docker push ${container_repository}/weathergov-utility-node:latest
