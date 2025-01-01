@@ -77,17 +77,21 @@
     view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
   ]
 %}
-{{ attach_library('new_weather_theme/node') }}
 <div class="grid-container padding-x-2">
   <div class="grid-row">
     <div class="grid-col tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
       <div data-wx-weather-story class="margin-bottom-4">
-        <h2 class="text-primary-darker text-normal margin-top-0 margin-bottom-2">{{ elements["#title"] }}</h2>
-        <p class="text-base margin-top-2"><span class="font-family-mono text-ls-neg-3">{{ "forecast.current.last-updated.01" | t }}:</span>
+        <h2 class="text-primary-darker text-normal margin-top-0 margin-bottom-2">Weather Story for {{ content["field_office"][0] }}</h2>
+        <p class="text-base margin-top-2">
+            <span class="font-family-mono text-ls-neg-3">Uploaded: </span>
             {{ date }}
         </p>
         <div{{ content_attributes.addClass('node__content') }}>
-            {{ content }}
+            <p><span>Description: </span>{{ content["field_description"][0]["#text"] }}</p>
+            <p><span>Full Image: </span>{{ content["field_fullimage"][0] }}</p>
+            <p><span>Small Image: </span>{{ content["field_smallimage"][0] }}</p>
+            <p><span>Latitude: </span>{{ content["field_cwa_center_lat"][0] }}</p>
+            <p><span>Longitude: </span>{{ content["field_cwa_center_lon"][0] }}</p>
         </div>
       </div>
     </div>
