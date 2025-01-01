@@ -5,7 +5,7 @@
 With Gitlab, we have an opportunity to re-use our existing Docker infrastructure for CI, especially in conjunction with the [Gitlab container registry](https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/container_registry). This simplifies our Gitlab CI configuration since we can build and test in CI exactly the same way as we do locally. (This approach differs from Github Actions because Actions sometimes uses alternative approaches to install the required environment, such as installing `php` via `shivammathur/setup-php@v2`.) Some changes to keep in mind:
 
 - We want Gitlab CI to create the Docker images for us. Generally, pushing direct images to the Gitlab container repository is discouraged, as we want to ensure images were generated from a known and fixed commit for reproducibility and security reasons.
-- We may want to default to pulling from the Gitlab container repository instead of building locally (this will save time.) Of course, you can always build locally.
+- We may want to default to pulling from the Gitlab container repository instead of building the Docker images locally (this will save time.) Of course, you can always build the Docker images locally.
 - NWS Vlab is still building out requisite Gitlab CI runner functionality (see limitations below), and in particular may need help tweaking Gitlab CI runner concurrency settings.
 
 ### Current Limitations as of December 2024
