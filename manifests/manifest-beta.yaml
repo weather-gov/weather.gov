@@ -24,7 +24,7 @@ applications:
 
   - name: api-weathergov-beta
     stack: cflinuxfs4
-    memory: 512M
+    memory: 1024M
     instances: 1
     buildpacks:
       - nodejs_buildpack
