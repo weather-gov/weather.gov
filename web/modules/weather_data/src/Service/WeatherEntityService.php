@@ -94,8 +94,6 @@ class WeatherEntityService
 
     public function getLatestWeatherStoryImageFromWFO($wfo, $nodeType)
     {
-        // we get canonical four letters from the DSS builder. omit the first character.
-        $truncatedWFO = substr($wfo, 1);
         // get the latest weather story upload that matches the grid WFO.
         $nodeID = $this->entityTypeManager
             ->getStorage("node")
@@ -103,7 +101,7 @@ class WeatherEntityService
             ->accessCheck(false)
             ->condition("status", 1)
             ->condition("type", $nodeType)
-            ->condition("field_office", $truncatedWFO)
+            ->condition("field_office", '%' . $wfo, 'LIKE')
             ->sort("changed", "DESC")
             // Only get the first one.
             ->range(0, 1)
