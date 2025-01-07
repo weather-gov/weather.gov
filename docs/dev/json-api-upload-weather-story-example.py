@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 # This is a sample python script to demonstrate how to upload a WFO weather
 # story, which contains several images. This script is for educational purposes
 # only and is intended to aid as a helper for integration.
+# Note: you'll need to create the config user (below) with "uploader" permissions.
 
 # configuration options
 endpoint = "http://localhost:8080"
@@ -49,7 +50,7 @@ def upload_content_type(small_image_id, full_image_id, data):
     # because a Drupal content type expects a title, rename field_title to title
     title = data.pop("field_title")
     data.update({"title": title})
-    data.update({"field_office", wfo_code})
+    data.update({"field_office": wfo_code})
 
     # process frontpage to be a proper True/False
     frontpage = data.pop("field_frontpage")
