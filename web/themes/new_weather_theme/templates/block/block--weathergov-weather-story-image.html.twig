@@ -7,7 +7,7 @@
       <h4 class="wx-visual-h3 text-primary-dark margin-0 margin-bottom-2">{{ content.title }}</h4>
       <p class="margin-0 margin-bottom-2">
         {% set normalized_wfo = content.wfo_code | normalize_wfo %}
-        {% set wfo_url = '/offices/' . normalized_wfo %}
+        {% set wfo_url = '/offices/' ~ normalized_wfo %}
         {{ "weather-story.text.created-by.01" | t({
           "@date": content.updated.formatted,
           "@wfo_url": wfo_url,
