@@ -544,8 +544,8 @@ msgstr "From the forecaster"
 msgid "weather-story.link.area-forecast-discussion.01"
 msgstr "Area Forecast Discussion"
 
-msgid "weather-story.text.created-by.01"
-msgstr "<strong class='text-base-dark'>Created: @date</strong> by the <a class='usa-link' href='@wfo_url'>@wfo_name WFO</a>"
+msgid "weather-story.text.created-by.02"
+msgstr "<strong class='text-base-dark'>Created by the <a class='usa-link' href='@wfo_url'>@wfo_name WFO</a></strong>"
 
 msgid "wind.labels.calm.01"
 msgstr "calm"
