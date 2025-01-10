@@ -32,8 +32,10 @@ class WeatherStoryImageBlock extends WeatherBlockBase
             // If we actually have a story, now we can go about pulling data
             // from it to pass along to the template.
             if ($story) {
+                // because the weather story description is comes via a xml
+                // CDATA tag, we need to strip tags and surrounding whitespace.
                 $description = $story->get("field_description")->value;
-                $description = strip_tags($description);
+                $description = trim(strip_tags($description));
 
                 // Set the image alt text and get the file URI. Twig will handle
                 // turning that into a proper web URL for us.
