@@ -37,7 +37,7 @@
     "eslint-formatter-junit": "^8.40.0",
     "eslint-plugin-import": "^2.31.0",
     "glob": "^11.0.1",
-    "jsdom": "^25.0.1",
+    "jsdom": "^26.0.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^11.0.1",
     "mocha-cli": "^1.0.1",
