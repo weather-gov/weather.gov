@@ -19,13 +19,13 @@
         "cweagans/composer-patches": "^1.7",
         "drupal/address": "^2.0",
         "drupal/auto_entitylabel": "^3.0",
-        "drupal/autologout": "^1.4",
+        "drupal/autologout": "^2.0",
         "drupal/config_split": "^2.0",
-        "drupal/core-composer-scaffold": "^10.3",
-        "drupal/core-project-message": "^10.3",
-        "drupal/core-recommended": "^10.3",
+        "drupal/core-composer-scaffold": "^10.4.0",
+        "drupal/core-project-message": "^10.4.0",
+        "drupal/core-recommended": "^10.4.0",
         "drupal/filefield_paths": "^1.0@beta",
-        "drupal/jsonapi_extras": "^3.25",
+        "drupal/jsonapi_extras": "^3.26",
         "drupal/key_asymmetric": "^1.1",
         "drupal/log_stdout": "^1.5",
         "drupal/metatag": "^2.0",
@@ -38,7 +38,7 @@
         "drupal/token": "^1.13",
         "drupal/twig_tweak": "^3.2",
         "drupal/workbench_access": "^2.0",
-        "drush/drush": "^12.4"
+        "drush/drush": "^13.3"
     },
     "conflict": {
         "drupal/drupal": "*"
