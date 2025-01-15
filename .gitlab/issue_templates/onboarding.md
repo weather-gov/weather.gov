@@ -25,7 +25,6 @@ Onboarder: remove this section if not applicable.
 ```bash
 cf login -a api.fr.cloud.gov  --sso
 ```
-- [ ] Set up your sandbox developer space with the [sandbox script](https://github.com/weather-gov/weather.gov/blob/main/scripts/create-cloudgov-env.sh)
 - [ ] Review the following documents:
   - [ ] [Developer documentation](https://github.com/weather-gov/weather.gov/blob/main/docs/dev/index.md)
   - [ ] [Architecture Decision Records](https://github.com/weather-gov/weather.gov/tree/main/docs/architecture/decisions)
