@@ -10,7 +10,13 @@
       <p class="margin-0 margin-bottom-2">
         {% set normalized_wfo = content.wfo_code | normalize_wfo %}
         {% set wfo_url = '/offices/' ~ normalized_wfo %}
-        {{ "weather-story.text.created-by.02" | t({
+        {% if content.starttime > 0 %}
+          {% set start_time = content.starttime | date('U') | format_date('custom', 'M j, Y, g:i A') %}
+        {% else %}
+          {% set start_time = "" %}
+        {% endif %}
+        {{ "weather-story.text.created-by.03" | t({
+          "@date": start_time,
           "@wfo_url": wfo_url,
           "@wfo_name": content.wfo_name
         })}}
