@@ -7,8 +7,8 @@ on:
         type: string
 
 jobs:
-  newrelic-design:
-    if: ${{ inputs.environment == 'design' }}
+  newrelic-test:
+    if: ${{ inputs.environment == 'test' }}
     runs-on: ubuntu-latest
     name: New Relic Record Deployment
     steps:
@@ -19,39 +19,7 @@ jobs:
         uses: newrelic/deployment-marker-action@v2.5.0
         with:
           apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
-          guid: ${{ secrets.NEW_RELIC_DESIGN_DEPLOYMENT_ENTITY_GUID }}
-          version: "${{ env.RELEASE_VERSION }}"
-          user: "${{ github.actor }}"
-
-  newrelic-eric:
-    if: ${{ inputs.environment == 'eric' }}
-    runs-on: ubuntu-latest
-    name: New Relic Record Deployment
-    steps:
-      - name: Set Release Version from Tag
-        run: echo "RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
-
-      - name: Add New Relic Application Deployment Marker
-        uses: newrelic/deployment-marker-action@v2.5.0
-        with:
-          apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
-          guid: ${{ secrets.NEW_RELIC_ERIC_DEPLOYMENT_ENTITY_GUID }}
-          version: "${{ env.RELEASE_VERSION }}"
-          user: "${{ github.actor }}"
-
-  newrelic-greg:
-    if: ${{ inputs.environment == 'greg' }}
-    runs-on: ubuntu-latest
-    name: New Relic Record Deployment
-    steps:
-      - name: Set Release Version from Tag
-        run: echo "RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
-
-      - name: Add New Relic Application Deployment Marker
-        uses: newrelic/deployment-marker-action@v2.5.0
-        with:
-          apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
-          guid: ${{ secrets.NEW_RELIC_GREG_DEPLOYMENT_ENTITY_GUID }}
+          guid: ${{ secrets.NEW_RELIC_TEST_DEPLOYMENT_ENTITY_GUID }}
           version: "${{ env.RELEASE_VERSION }}"
           user: "${{ github.actor }}"
 

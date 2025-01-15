@@ -16,12 +16,12 @@ Deployment_Node(aws, "AWS GovCloud", "Amazon Web Services Region") {
         System_Ext(cloudgov_logdrain, "logs.fr.cloud.gov", "ELK")
         Boundary(atob, "system boundary") {
             Deployment_Node(organization, "weather.gov cloud.gov organization") {
-                Deployment_Node(sandbox, "sandbox space") {
-                    System_Boundary(dashboard_sandbox, "weather.gov system") {
-                        Container(weathergov_proxy_sandbox, "sandbox proxy", "Caddy", "reverse proxy")
-                        Container(weathergov_app_sandbox, "drupal application", "PHP, Drupal 10", "Delivers pages")
-                        ContainerDb(dashboard_db_sandbox, "sandbox mysql database", "AWS RDS", "CMS content")
-                        ContainerDb(dashboard_storage_sandbox, "sandbox s3 file storage", "AWS S3", "User-uploaded files")
+                Deployment_Node(staging, "staging space") {
+                    System_Boundary(dashboard_staging, "weather.gov system") {
+                        Container(weathergov_proxy_staging, "staging proxy", "Caddy", "reverse proxy")
+                        Container(weathergov_app_staging, "drupal application", "PHP, Drupal 10", "Delivers pages")
+                        ContainerDb(dashboard_db_staging, "staging mysql database", "AWS RDS", "CMS content")
+                        ContainerDb(dashboard_storage_staging, "staging s3 file storage", "AWS S3", "User-uploaded files")
                     }
                 }
                 Deployment_Node(beta, "beta space") {
@@ -39,7 +39,7 @@ Deployment_Node(aws, "AWS GovCloud", "Amazon Web Services Region") {
 
 ' Logs flow
 Rel(beta, cloudgov_logdrain, "logs to", "stdout/stderr")
-Rel(sandbox, cloudgov_logdrain, "logs to", "stdout/stderr")
+Rel(staging, cloudgov_logdrain, "logs to", "stdout/stderr")
 Rel(team, cloudgov_logdrain, "reviews logs", "https (443)")
 
 Rel(team, cloudgov_uaa, "authenticates with", "https (443)")
@@ -60,14 +60,14 @@ Rel(team, github_repo, "commits code, makes pull-request, approves PRs", "https 
 Rel(github_actions_deploy, cloudgov_controller, "pushes code, invokes tasks", "https (443)")
 Rel(github_actions_deploy, cloudgov_router, "runs smoke tests on URLs", "https (443)")
 Rel(cloudgov_controller, beta, "provisions/operates apps and services", "admin access limited")
-Rel(cloudgov_controller, sandbox, "provisions/operates apps and services")
+Rel(cloudgov_controller, staging, "provisions/operates apps and services")
 
 Rel(weathergov_app_beta, dashboard_db_beta, "reads/writes CMS content", "postgres (5432)")
-Rel(weathergov_app_sandbox, dashboard_db_sandbox, "reads/writes CMS content", "postgres (5432)")
-Rel(weathergov_proxy_sandbox, weathergov_app_sandbox, "IP address filtering for API", "https GET/POST (61443)")
+Rel(weathergov_app_staging, dashboard_db_staging, "reads/writes CMS content", "postgres (5432)")
+Rel(weathergov_proxy_staging, weathergov_app_staging, "IP address filtering for API", "https GET/POST (61443)")
 Rel(weathergov_proxy_beta, weathergov_app_beta, "IP address filtering for API", "https GET/POST (61443)")
 Rel(weathergov_app_beta, dashboard_storage_beta, "reads/writes CMS content", "postgres (5432)")
-Rel(weathergov_app_sandbox, dashboard_storage_sandbox, "reads/writes CMS content", "postgres (5432)")
+Rel(weathergov_app_staging, dashboard_storage_staging, "reads/writes CMS content", "postgres (5432)")
 
 Rel(cloudgov_router, weathergov_proxy_beta, "routing service", "https GET/POST (443)")
 

@@ -45,7 +45,7 @@ const getPointFileInfo = async () => {
 
         let hostName = "http://localhost:8080";
         if (process.env.CLOUDGOV_PROXY) {
-          hostName = "https://weathergov-design.app.cloud.gov";
+          hostName = "https://weathergov-test.app.cloud.gov";
         }
         const link = `${hostName}/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
         const interop = `http://localhost:8082/point/${path.basename(pointFile, ".json").split(",").join("/")}`;
