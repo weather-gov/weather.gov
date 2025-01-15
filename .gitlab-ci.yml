@@ -34,6 +34,36 @@ build-drupal-image:
     DERIVED_IMAGE_NAME: 18f-zscaler-drupal
     IMAGE_NAME: drupal
 
+build-api-proxy-image:
+  extends: .build-image
+  variables:
+    DERIVED_IMAGE_NAME: api-proxy
+    IMAGE_NAME: api-proxy
+
+build-api-interop-image:
+  extends: .build-image
+  variables:
+    DERIVED_IMAGE_NAME: api-interop-layer
+    IMAGE_NAME: api-interop-layer
+
+build-playwright-image:
+  extends: .build-image
+  variables:
+    DERIVED_IMAGE_NAME: playwright
+    IMAGE_NAME: playwright
+
+# docker compose does not actually "build" the database image because there is
+# nothing to compose. so, instead, we pull the dependent mysql image and push
+# that as a weather.gov image instead
+build-database-image:
+  extends: .build-image
+  script:
+    - docker pull mysql:8.0
+    - IMAGE_ID=$(docker images | grep mysql | awk '{print $3}')
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker image tag $IMAGE_ID $CI_REGISTRY_IMAGE/weathergov-database:latest
+    - docker push $CI_REGISTRY_IMAGE/weathergov-database:latest
+
 # NB: GitLab clones into CI_BUILDS_DIR which defaults to
 # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
 # images our WORKDIR is /app. so we symlink the various /app/node_modules to
