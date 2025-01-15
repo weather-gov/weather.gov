@@ -11,10 +11,7 @@ on:
         type: choice
         description: Which environment should we deploy to?
         options:
-          - design
-          - eric
-          - greg
-          - james
+          - test
 
 jobs:
   deploy-sandbox:
