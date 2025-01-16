@@ -41,7 +41,7 @@ class WeatherStoryImageBlock extends WeatherBlockBase
                 // turning that into a proper web URL for us.
                 $fullimage = $story->get("field_fullimage");
                 $image = [
-                    "alt" => $description,
+                    "alt" => "",
                     "uri" => $story
                         ->get("field_fullimage")
                         ->entity->get("uri")
@@ -62,8 +62,8 @@ class WeatherStoryImageBlock extends WeatherBlockBase
                     "title" => $story->get("title")->getString(),
                     "description" => $description,
                     "image" => $image,
+                    "starttime" => $story->get("field_starttime")->value,
                     "updated" => [
-                        "formatted" => $changed->format("M j, Y, g:i A"),
                         "utc" => $changed->format("c"),
                     ],
                     "wfo_code" => $wfo,
