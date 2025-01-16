@@ -86,27 +86,12 @@ foreach ($cf_service_data as $service_list) {
 
 $application_environment = $cf_application_data["space_name"];
 switch ($application_environment) {
-    case "design":
-        // TODO: Setup on SAML certs and remove this bool
+    case "test":
+        // Note: This environment does not use samlauth
         $settings["weather_login_local_form"] = true;
         $config["samlauth.authentication"]["sp_entity_id"] =
-            "https://weathergov-design.app.cloud.gov";
+            "https://weathergov-test.app.cloud.gov";
         break;
-    case "greg":
-        $config["samlauth.authentication"]["sp_entity_id"] =
-            "https://weathergov-greg.app.cloud.gov";
-        break;
-
-    case "eric":
-        $config["samlauth.authentication"]["sp_entity_id"] =
-            "https://weathergov-eric.app.cloud.gov";
-        break;
-
-    case "james":
-        $config["samlauth.authentication"]["sp_entity_id"] =
-            "https://weathergov-james.app.cloud.gov";
-        break;
-
     case "staging":
         $config["samlauth.authentication"]["sp_entity_id"] =
             "https://weathergov-staging.app.cloud.gov";

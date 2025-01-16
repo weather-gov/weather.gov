@@ -149,6 +149,17 @@ services:
       - /app/node_modules
     profiles: ["utility"]
 
+  playwright:
+    build:
+      context: .
+      dockerfile: Dockerfile.playwright
+    networks:
+      - weather.gov
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    profiles: ["utility"]
+
   uswds:
     build:
       context: ./
