@@ -101,8 +101,10 @@ class WeatherEntityService
             ->accessCheck(false)
             ->condition("status", 1)
             ->condition("type", $nodeType)
+            ->condition("field_starttime", time(), '<=')
+            ->condition("field_endtime", time(), '>=')
             ->condition("field_office", '%' . $wfo, 'LIKE')
-            ->sort("changed", "DESC")
+            ->sort("field_order", "ASC")
             // Only get the first one.
             ->range(0, 1)
             ->execute();
