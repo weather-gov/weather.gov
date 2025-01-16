@@ -28,6 +28,7 @@ final class WeatherStoryImageBlockTest extends Base
         $story = $this->createStub(FieldItemListInterface::class);
         $titleField = $this->createStub(FieldItemListInterface::class);
         $descriptionField = $this->createStub(FieldItemListInterface::class);
+        $starttimeField = $this->createStub(FieldItemListInterface::class);
         $imageField = $this->createStub(FieldItemListInterface::class);
         $nameField = $this->createStub(FieldItemListInterface::class);
         $changedField = (object) ["value" => 235984600];
@@ -39,6 +40,7 @@ final class WeatherStoryImageBlockTest extends Base
                     ["title", $titleField],
                     ["name", $nameField],
                     ["field_description", $descriptionField],
+                    ["field_starttime", $starttimeField],
                     ["field_fullimage", $imageField],
                     ["changed", $changedField],
                 ]),
@@ -99,10 +101,10 @@ final class WeatherStoryImageBlockTest extends Base
             "description" => "Weather Story Image Description",
             "image" => [
                 "uri" => "image url",
-                "alt" => "Weather Story Image Description",
+                "alt" => "",
             ],
+            "starttime" => null,
             "updated" => [
-                "formatted" => "Jun 24, 1977, 7:16 AM",
                 "utc" => "1977-06-24T07:16:40+00:00",
             ],
             "wfo_code" => "BOB",
