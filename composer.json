@@ -19,7 +19,7 @@
         "cweagans/composer-patches": "^1.7",
         "drupal/address": "^2.0",
         "drupal/auto_entitylabel": "^3.0",
-        "drupal/autologout": "^1.4",
+        "drupal/autologout": "^2.0",
         "drupal/config_split": "^2.0",
         "drupal/core-composer-scaffold": "^10.4",
         "drupal/core-project-message": "^10.4",
