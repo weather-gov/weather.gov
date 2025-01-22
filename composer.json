@@ -38,7 +38,7 @@
         "drupal/token": "^1.13",
         "drupal/twig_tweak": "^3.2",
         "drupal/workbench_access": "^2.0",
-        "drush/drush": "^12.4"
+        "drush/drush": "^13.3"
     },
     "conflict": {
         "drupal/drupal": "*"
