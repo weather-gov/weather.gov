@@ -34,7 +34,7 @@ on the internet.
 See [dev docs](dev/) for information on running the application locally. We use
 docker with composer to manage the application locally.
 
-### Developer Sandboxes/QA
+### Sandbox/QA
 
 Developer sandboxes are instances of weather.gov that are not necessarily
 stable. They are used by the product development team to demonstrate changes
@@ -42,5 +42,4 @@ and to test them out in a more realistic setting than their own computers. They
 can be useful when reviewing a change made in a local environment so others on
 the team do not need to have their own local environment.
 
-Each developer on the team has a sandbox dedicated to them, and they can make
-deployments with the Github Action.
+Currently, we only have one sandbox, `weathergov-test`. There is also an API proxy running in that space for testing. 

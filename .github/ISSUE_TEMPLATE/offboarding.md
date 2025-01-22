@@ -27,7 +27,7 @@ Thank you for your service! :heart:
 
 Offboarder: remove this section if not applicable.
 
-- [ ] Remove your sandbox developer space with the [remove sandbox script](https://github.com/weather-gov/weather.gov/blob/main/scripts/remove-cloudgov-env.sh)
+- [ ] Remove any resources created in a developer space with the [remove sandbox script](https://github.com/weather-gov/weather.gov/blob/main/scripts/remove-cloudgov-env.sh)
 
 ### Steps for the offboarder
 

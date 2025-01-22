@@ -9,20 +9,21 @@ default_config: &defaults
   env:
     PHP_INI_SCAN_DIR: /home/vcap/app/php/etc/:/home/vcap/app/php/etc/php.ini.d/
     NEWRELIC_LICENSE: ((newrelic-license))
-    API_INTEROP_URL: https://api-weathergov-greg.app.cloud.gov
+    API_INTEROP_URL: https://api-weathergov-test.app.cloud.gov
+    API_URL: https://weathergov-api-proxy.app.cloud.gov
   services:
     - database
     - storage
     - secrets
 
 applications:
-  - name: weathergov-greg
+  - name: weathergov-test
     <<: *defaults
     memory: 256M
     instances: 1
     random-route: false
 
-  - name: api-weathergov-greg
+  - name: api-weathergov-test
     stack: cflinuxfs4
     memory: 512M
     instances: 1
@@ -31,15 +32,30 @@ applications:
     env:
       NEWRELIC_LICENSE: ((newrelic-license))
       API_INTEROP_PRODUCTION: true
-      API_INTEROP_NAME: greg
+      API_INTEROP_NAME: test
     health-check-type: process
     path: ../api-interop-layer
     random-route: false
     services:
       - database
-# - name: cronish
-#   <<: *defaults
-#   no-route: true
-#   command: ./cronish.sh
-#   health-check-type: process
-#   memory: 128M
+
+  # - name: proxy-weathergov-ENVIRONMENT
+  #   stack: cflinuxfs4
+  #   memory: 64M
+  #   instances: 1
+  #   buildpacks:
+  #     - binary_buildpack
+  #   health-check-type: process
+  #   path: ../proxy
+  #   command: ./caddy run --config ./Caddyfile
+  #   env:
+  #     ALLOWED_IPS: ((allowed-ips))
+  #     SPACE_NAME: ENVIRONMENT
+  #   random-route: false
+
+  # - name: cronish
+  #   <<: *defaults
+  #   no-route: true
+  #   command: ./cronish.sh
+  #   health-check-type: process
+  #   memory: 128M
