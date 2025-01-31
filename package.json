@@ -42,7 +42,7 @@
     "mocha": "^11.1.0",
     "mocha-cli": "^1.0.1",
     "mocha-junit-reporter": "^2.2.1",
-    "playwright": "^1.49.1",
+    "playwright": "^1.50.1",
     "prettier": "^3.4.2",
     "sinon": "^19.0.2",
     "stylelint": "^16.14.1",
