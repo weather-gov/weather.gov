@@ -1,0 +1,8 @@
+{% for region in regions %}
+    <h1>{{region.name}}</h1>
+    {% for wfo in region.wfos %}
+        <h2>
+            {{wfo.name}} (<a href="https://www.weather.gov/{{wfo.id|lower}}">{{wfo.id}}</a>)
+        </h2>
+    {% endfor %}
+{% endfor %}
