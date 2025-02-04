@@ -77,3 +77,6 @@ def wx_afd_versions(request, wfo):
     Will return _markup only_ for the versions
     of AFDs for the given forecast office
     """
+    data = interop.get_wx_afd_versions_by_wfo(wfo)
+    markup = render_to_string("weather/wx/afd-versions-select.html", {"version_list": data["@graph"]})
+    return HttpResponse(markup, content_type="text/html")
