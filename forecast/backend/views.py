@@ -7,7 +7,38 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
-# Create your views here.
+# Helpers
+def _get_redirect_for_afd_queries(request):
+    """
+    Given a request to the index /afd endpoint,
+    attempt to pull out any querystring values.
+    If they are present, this means the update form
+    was submitted, and we should process a redirect.
+    Return the redirect url string.
+    Otherwise, return None.
+    """
+    # These two are passed from select/combobox
+    # input values on an AFD page
+    wfo = request.GET.get("wfo", None)
+    afd_id = request.GET.get("id", None)
+
+    # These two are always present on the full AFD page
+    # as hidden inputs. When the page is rendered, they
+    # hold what the page's initial WFO and AFD id values
+    # were before any select/combobox selections. 
+    current_wfo = request.GET.get("current-wfo", None)
+    current_afd_id = request.GET.get("current-id", None)
+
+    wfo_was_updated = wfo != current_wfo
+    id_was_updated = afd_id != current_afd_id
+    if wfo_was_updated and id_was_updated:
+        return f"/afd/{wfo.lower()}/{afd_id}"
+    elif wfo_was_updated:
+        return f"/afd/{wfo.lower()}"
+    elif id_was_updated:
+        return f"/afd/{wfo.lower()}/{afd_id}"
+    return None
+
 def index(request):
     return render(request, "weather/index.html", locals())
 
@@ -52,13 +83,16 @@ def afd_index(request):
     url for that page
     """
     # First, we see if there are querystring values for
-    # the WFO and/or a specific AFD id
-    existing_wfo = request.GET.get("wfo", None)
-    existing_afd_id = request.GET.get("id", None)
-    if existing_wfo and existing_afd_id:
-        return redirect(f"/afd/{existing_wfo.lower()}/{existing_afd_id}")
-    elif existing_wfo:
-        return redirect(f"/afd/{existing_wfo.lower()}")
+    # the WFO and the current/requested AFD id.
+    # If the current id (what was being viewed) and
+    # the selected id are different, that means we are
+    # requesting a new AFD id.
+    # Otherwise, if there is a WFO present, we
+    # will redirect to the route for the most recent
+    # AFD at that location.
+    redirect_url = _get_redirect_for_afd_queries(request)
+    if redirect_url:
+        return redirect(redirect_url)
 
     # Otherwise, we get the most recent AFD from anywhere
     # in the country, determine the WFO to which it applies,
@@ -76,7 +110,7 @@ def afd_by_office(request, wfo):
     WFO office and redirect the user to the correct
     url for that product
     """
-    afd_references = interop.get_afd_versions_by_office(wfo.upper())["@graph"]
+    afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
     afd_id = afd_references[0]["id"]
     url = f"/afd/{wfo.lower()}/{afd_id}"
     return redirect(url)
@@ -87,10 +121,23 @@ def afd_by_office_and_id(request, wfo, afd_id):
     and populate the list of available AFDs for
     the provided WFO
     """
-    afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
+
+    # Grab the AFD data from the API and determine which
+    # WFO it applies to. There might be cases where the user 
+    # has input an id and wfo into the url, but they do not correspond.
+    # We will redirect in cases where this happens.
     afd_data = interop.get_wx_afd_by_id(afd_id)
+    afd_wfo = get_wfo_from_afd(afd_data)
+    if not afd_wfo or afd_wfo.lower() != wfo.lower():
+        return redirect(f"/afd/{afd_wfo.lower()}/afd_id")
+
+    # Otherwise, let's grab all the references for the WFO
+    # so we can use them in the select dropdown
+    afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
     all_wfos = WFO.objects.values("code", "name")
     wfo_combo_box_data = [{"value": wfo["code"], "text": f"{wfo['name']} ({wfo['code']})"} for wfo in all_wfos]
+
+    # Compose a dictionary in the format that the templates expect
     to_render = {
         "wfo": wfo.upper(),
         "afd": afd_data,
