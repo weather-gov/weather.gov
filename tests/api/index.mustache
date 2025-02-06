@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/themes/new_weather_theme/assets/css/styles.css">
+    <style type="text/css">
+    .header {
+      position: sticky;
+      top: 0;
+      background-color: white;
+      z-index: 500;
+      border-bottom: 1px solid black;
+      padding: 1em 0;
+      margin-bottom: 1em;
+    }
+
+    .dot {
+      border-radius: 100%;
+      min-height: 1em;
+      min-width: 1em;
+      display: inline-block;
+
+      &.red {
+        background-color: red;
+      }
+
+      &.green {
+        background-color: green;
+      }
+
+      &.yellow {
+        border: 1px solid black;
+        background-color: yellow;
+      }
+    }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container">
+
+      <div class="header">
+        {{#config.play}}
+          <a href="/proxy/stop" class="usa-button usa-button--outline">
+            <div class="red dot"></div>
+            Stop playing <span class="font-family-mono">{{ config.play }}</span>
+          </a>
+        {{/config.play}}
+        {{#bundles}}
+          <a href="/proxy/play/{{ . }}" class="usa-button usa-button--outline">
+            <div class="green dot"></div>
+            play {{ . }}
+          </a>
+        {{/bundles}}
+      </div>
+
+      <div>
+        <span class="font-family-mono">now</span> is set to <time>{{ config.now }}</time>
+      </div>
+
+      {{#error}}
+        <div class="usa-alert usa-alert--error">
+          <div class="usa-alert__body">
+            <h4 class="usa-alert__heading">Error</h4>
+            <p class="usa-alert__text">
+              {{ error }}
+            </p>
+          </div>
+        </div>
+      {{/error}}
+
+      {{#config.play}}
+        <h2>Currently playing bundle <span class="font-family-mono">{{config.play}}</span></h2>
+
+        <div class="grid-row">
+          <div class="grid-col-6 padding-right-2">
+            <h3>Points in this bundle:</h3>
+
+            <div class="usa-alert usa-alert--info">
+              <div class="usa-alert__body">
+                <h4 class="usa-alert__heading">Note about alerts</h4>
+                <p class="usa-alert__text">
+                  All points in a bundle are sharing a single source of alerts.
+                  The alerts associated with a particular point are based on that
+                  point's location and whether it is within the alert boundaries.
+                </p>
+              </div>
+            </div>
+
+            <ul>
+              {{#points}}
+                <li class="margin-bottom-2">
+                  <a href="{{ link }}">{{ name }}</a><br>
+                  {{ point }} | {{ grid.wfo }} / {{ grid.x }}, {{ grid.y }}<br>
+                  <a href="{{ interop }}">interop layer data</a><br><br>
+                  <ul>
+                  {{#attributes}}
+                    <li>{{ . }}</li>
+                  {{/attributes}}
+                  </ul>
+                </li>
+              {{/points}}
+            </ul>
+
+            <h4>Add a point to <span class="font-family-mono">{{ config.play }}</span> bundle:</h4>
+              Provide the URL to the location page you want to add to this bundle.
+              The URL can be any environment, including local development.
+              <div class="margin-top-1">
+                <form action="/proxy/add-point" method="GET">
+                <input type="text" name="url">
+                <button type="submit" class="usa-button usa-button--outline margin-left-1">
+                  <div class="yellow dot"></div>
+                  add point
+                </button>
+                </form>
+              </div>
+              <div class="usa-alert usa-alert--warning">
+                <div class="usa-alert__body">
+                  <h4 class="usa-alert__heading">Alerts will not be updated</h4>
+                  <p class="usa-alert__text">
+                    Adding a point to an existing bundle does <strong><em>NOT</em></strong>
+                    add or modify the alerts in the bundle. To capture alerts,
+                    create a new bundle instead.<br/><br/>
+                    If you want to add alerts to an existing bundle, you can:
+                    <ol>
+                      <li>Capture the point to the existing bundle</li>
+                      <li>Create a new bundle with the same point</li>
+                      <li>
+                        Copy the contents of the alerts data file from the new
+                        bundle and append it to the alerts data file in the
+                        existing bundle.
+                      </li>
+                    </ol>
+                    <strong><em>NOTE</em></strong> however that changing alerts in
+                    a bundle used for automated tests can cause those tests to
+                    break.
+                  </p>
+                </div>
+              </div>
+
+
+          </div>
+          <div class="grid-col-6">
+            <h3>Products in this bundle:</h3>
+            <ul>
+              {{#products}}
+                <li class="margin-bottom-2">
+                  {{#url}}
+                    <a href="{{ url }}">{{ label }}</a>
+                  {{/url}}
+                  {{^url}}
+                    {{ label }} (no linked page yet)
+                  {{/url}}
+                </li>
+              {{/products}}
+            </ul>
+          </div>
+        </div>
+      {{/config.play}}
+
+      <hr>
+      {{^config.play}}
+        <h3>Not playing a bundle. Sending requests through</h3>
+      {{/config.play}}
+
+      {{#isLocal}}
+      <div class="grid-col-6">
+        <h3>Create a new bundle:</h3>
+        Provide the URL to the location page you want to bundle. The URL can be in
+        any environment, including local development.
+        <div class="margin-top-1">
+          <form action="/proxy/bundle" method="GET">
+          <input type="text" name="url">
+          <button type="submit" class="usa-button usa-button--outline margin-left-1">
+            <div class="yellow dot"></div>
+            create bundle
+          </button>
+          </form>
+        </div>
+        <div class="usa-alert usa-alert--info">
+          <div class="usa-alert__body">
+            <p class="usa-alert__text">
+              Creating a new bundle will capture all of the data associated with
+              the specified point as well as all alerts active at the time the
+              bundle is created.
+            </p>
+          </div>
+        </div>
+
+      </div>
+      {{/isLocal}}
+
+      <hr>
+
+      <h3>Available bundles:</h3>
+      <ul class="usa-list usa-list--unstyled">
+        {{#bundles}}
+          <li>
+            <a href="/proxy/play/{{ . }}" class="usa-button usa-button--outline margin-bottom-2">
+              <div class="green dot"></div>
+              play {{ . }}
+            </a>
+          </li>
+        {{/bundles}}
+      </ul>
+
+    </div>
+  </body>
+</html>

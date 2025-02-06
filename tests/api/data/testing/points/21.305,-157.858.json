@@ -1,0 +1,62 @@
+{
+  "@bundle": {
+    "name": "Honolulu, HI",
+    "attributes": [
+      "has preceding overnight period for today",
+      "has only day time period for 7th day (no night period)"
+    ]
+  },
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/21.305,-157.858",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-157.858, 21.305] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/21.305,-157.858",
+    "@type": "wx:Point",
+    "cwa": "HFO",
+    "forecastOffice": "https://api.weather.gov/offices/HFO",
+    "gridId": "HFO",
+    "gridX": 154,
+    "gridY": 145,
+    "forecast": "https://api.weather.gov/gridpoints/HFO/154,145/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/HFO/154,145/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/HFO/154,145",
+    "observationStations": "https://api.weather.gov/gridpoints/HFO/154,145/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-157.84764, 21.324347] },
+      "properties": {
+        "city": "Urban Honolulu",
+        "state": "HI",
+        "distance": { "unitCode": "wmoUnit:m", "value": 2404.1166563731 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 206 }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/HIZ033",
+    "county": "https://api.weather.gov/zones/county/HIC003",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/HIZ308",
+    "timeZone": "Pacific/Honolulu",
+    "radarStation": "PHMO"
+  }
+}

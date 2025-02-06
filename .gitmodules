@@ -1,3 +1,0 @@
-[submodule "weather.gov"]
-	path = weather.gov
-	url = https://github.com/weather-gov/weather.gov

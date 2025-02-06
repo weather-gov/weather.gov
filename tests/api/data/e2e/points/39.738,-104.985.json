@@ -1,0 +1,59 @@
+{
+  "@bundle": {
+    "name": "Denver, CO",
+    "attributes": ["hazards representing every time period"]
+  },
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/39.738,-104.985",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-104.985, 39.738] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/39.738,-104.985",
+    "@type": "wx:Point",
+    "cwa": "BOU",
+    "forecastOffice": "https://api.weather.gov/offices/BOU",
+    "gridId": "BOU",
+    "gridX": 63,
+    "gridY": 61,
+    "forecast": "https://api.weather.gov/gridpoints/BOU/63,61/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/BOU/63,61/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/BOU/63,61",
+    "observationStations": "https://api.weather.gov/gridpoints/BOU/63,61/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-104.936157, 39.703052] },
+      "properties": {
+        "city": "Glendale",
+        "state": "CO",
+        "distance": { "unitCode": "wmoUnit:m", "value": 5705.46998696 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 312 }
+      }
+    },
+    "forecastZone": "https://big-test-zone",
+    "county": "https://api.weather.gov/zones/county/COC031",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/COZ240",
+    "timeZone": "America/Denver",
+    "radarStation": "KFTG"
+  }
+}

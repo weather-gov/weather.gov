@@ -1,0 +1,14 @@
+            {% if period.probabilityOfPrecipitation and period.probabilityOfPrecipitation > 1 %}
+            <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
+            {{ "daily-forecast.text.chance-precip.02" | t({ "@percent": period.probabilityOfPrecipitation }) }}
+            </p>
+            {% endif %}
+
+<div class="margin-top-05 position-relative">
+  <div class="font-mono-2xs font-family-mono text-base text-uppercase">{{ "forecast.current.feels-like.01" | t }}</div>
+  <div class="text-primary-dark">
+    <p class="margin-top-2px font-body-md">
+      {{ content.feels_like }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
+    </p>
+  </div>
+</div>
