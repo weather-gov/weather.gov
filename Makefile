@@ -1,4 +1,4 @@
-zap: zap-containers containers-up pause import-spatial load-spatial
+zap: initial-containers-up pause django-up import-spatial load-spatial migrate load-wfo-data
 rezap: dump-spatial zap
 
 import-spatial:
@@ -19,6 +19,12 @@ update-settings:
 zap-containers:
 	docker compose stop
 	docker compose rm -f
+
+initial-containers-up:
+	docker compose --profile initial start
+
+django-up:
+	docker compose --profile web start
 
 containers-up:
 	docker compose up -d

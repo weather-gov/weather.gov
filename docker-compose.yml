@@ -14,6 +14,7 @@ services:
       MYSQL_ROOT_PASSWORD: drupal
     ports:
       - 3306:3306
+    profiles: [ "initial", "web" ]
 
   web:
     build: forecast/
@@ -34,6 +35,7 @@ services:
       - database
     links:
       - database
+    profiles: ["web"]
 
   api-proxy:
     build:
@@ -48,6 +50,7 @@ services:
     volumes:
       - ./tests/api:/app
       - /app/node_modules
+    profiles: [ "initial" ]
 
 
   api-interop-layer:
@@ -80,6 +83,7 @@ services:
     volumes:
       - ./api-interop-layer:/app
       - /app/node_modules
+    profiles: [ "initial" ]
 
   uswds:
     build:
@@ -88,7 +92,8 @@ services:
     volumes:
       - ./frontend/:/app
       - /app/node_modules
-    profiles: ["utility"]
+    profiles: ["utility", "initial"]
+    
 
   spatial:
     build:
@@ -104,6 +109,7 @@ services:
     volumes:
       - ./spatial-data/:/app
       - /app/node_modules
+    profiles: [ "initial" ]
 
 networks:
   weather.gov:
