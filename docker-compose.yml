@@ -16,10 +16,10 @@ services:
       - 3306:3306
 
   web:
-    build: .
+    build: forecast/
     command: python manage.py runserver 0.0.0.0:8080
     volumes:
-      - .:/code
+      - ./forecast:/code
     ports:
       - "8080:8080"
     environment:
