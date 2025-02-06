@@ -40,3 +40,12 @@ template-format:
 	docker compose exec web djlint forecast/backend/templates/ --reformat --extension=html
 
 lint: python-lint template-format template-lint
+
+migrate:
+	docker compose exec web python manage.py migrate
+
+load-wfo-data:
+	docker compose exec web python manage.py loaddata wfo_model_dump.json
+
+dump-wfo-data:
+	docker compose exec web python manage.py dumpdata weather.Region weather.WFO > wfo_model_dump.json
