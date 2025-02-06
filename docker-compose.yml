@@ -86,7 +86,7 @@ services:
       context: ./
       dockerfile: Dockerfile.uswds
     volumes:
-      - ./weathergov/frontend/:/app
+      - ./frontend/:/app
       - /app/node_modules
     profiles: ["utility"]
 

@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
 ]
 
-ROOT_URLCONF = "weathergov.urls"
+ROOT_URLCONF = "weather.config.urls"
 
 TEMPLATES = [
     {
@@ -77,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "weathergov.wsgi.application"
+WSGI_APPLICATION = "weather.config.wsgi.application"
 
 
 # Database
@@ -137,8 +137,8 @@ USE_TZ = True
 
 STATIC_URL = "/assets/"
 STATICFILES_DIRS = [
-    BASE_DIR / "weathergov/frontend/assets",
-    BASE_DIR / "weathergov/frontend",
+    BASE_DIR / "frontend/assets",
+    BASE_DIR / "frontend",
 ]
 
 # Default primary key field type
