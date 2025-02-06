@@ -37,7 +37,7 @@ services:
 
   api-proxy:
     build:
-      context: ./weather.gov/tests/api
+      context: ./tests/api
       dockerfile: Dockerfile
     environment:
       WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
@@ -46,13 +46,13 @@ services:
     ports:
       - 8081:8081
     volumes:
-      - ./weather.gov/tests/api:/app
+      - ./tests/api:/app
       - /app/node_modules
 
 
   api-interop-layer:
     build:
-      context: ./weather.gov/api-interop-layer
+      context: ./api-interop-layer
       dockerfile: Dockerfile
     # Use the same resource limits as deployed
     deploy:
@@ -78,7 +78,7 @@ services:
       - 8082:8082
       - 9229:9229
     volumes:
-      - ./weather.gov/api-interop-layer:/app
+      - ./api-interop-layer:/app
       - /app/node_modules
 
   uswds:
@@ -92,7 +92,7 @@ services:
 
   spatial:
     build:
-      context: ./weather.gov/spatial-data
+      context: ./spatial-data
       dockerfile: Dockerfile.spatial
     image: 18f-spatial-node:20
     networks:
@@ -102,7 +102,7 @@ services:
     environment:
       DB_HOST: database
     volumes:
-      - ./weather.gov/spatial-data/:/app
+      - ./spatial-data/:/app
       - /app/node_modules
 
 networks:

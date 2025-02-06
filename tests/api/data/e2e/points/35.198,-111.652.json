@@ -1,0 +1,92 @@
+{
+  "@bundle": {
+    "name": "Flagstaff, AZ (#2)",
+    "attributes": ["first three observations are invalid"]
+  },
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": {
+        "@id": "s:GeoCoordinates",
+        "@type": "geo:wktLiteral"
+      },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": {
+        "@id": "s:Distance",
+        "@type": "s:QuantitativeValue"
+      },
+      "bearing": {
+        "@type": "s:QuantitativeValue"
+      },
+      "value": {
+        "@id": "s:value"
+      },
+      "unitCode": {
+        "@id": "s:unitCode",
+        "@type": "@id"
+      },
+      "forecastOffice": {
+        "@type": "@id"
+      },
+      "forecastGridData": {
+        "@type": "@id"
+      },
+      "publicZone": {
+        "@type": "@id"
+      },
+      "county": {
+        "@type": "@id"
+      }
+    }
+  ],
+  "id": "https://api.weather.gov/points/35.198,-111.652",
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [-111.652, 35.198]
+  },
+  "properties": {
+    "@id": "https://api.weather.gov/points/35.198,-111.652",
+    "@type": "wx:Point",
+    "cwa": "FGZ",
+    "forecastOffice": "https://api.weather.gov/offices/FGZ",
+    "gridId": "FGZ",
+    "gridX": 74,
+    "gridY": 90,
+    "forecast": "https://api.weather.gov/gridpoints/FGZ/74,90/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/FGZ/74,90/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/FGZ/74,90",
+    "observationStations": "https://api.weather.gov/gridpoints/FGZ/74,90/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-111.620698, 35.185212]
+      },
+      "properties": {
+        "city": "Flagstaff",
+        "state": "AZ",
+        "distance": {
+          "unitCode": "wmoUnit:m",
+          "value": 3099.0788969673999
+        },
+        "bearing": {
+          "unitCode": "wmoUnit:degree_(angle)",
+          "value": 297
+        }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/AZZ015",
+    "county": "https://api.weather.gov/zones/county/AZC005",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/AZZ115",
+    "timeZone": "America/Phoenix",
+    "radarStation": "KFSX"
+  }
+}
