@@ -17,10 +17,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-import weather.views
+import backend.views
 
 urlpatterns = [
-    path("", weather.views.index, name="index"),
-    path("", include("weather.urls")),
+    path("", backend.views.index, name="index"),
+    path("", include("backend.urls")),
     path("admin/", admin.site.urls),
 ]

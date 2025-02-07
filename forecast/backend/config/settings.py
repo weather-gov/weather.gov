@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "weather",
+    "backend",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
 ]
 
-ROOT_URLCONF = "weather.config.urls"
+ROOT_URLCONF = "backend.config.urls"
 
 TEMPLATES = [
     {
@@ -66,18 +66,18 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
-                "weather.context_processors.route_info",
+                "backend.context_processors.route_info",
             ],
             "builtins": [
                 "django.templatetags.i18n",
-                "weather.templatetags.weather_i18n",
-                "weather.templatetags.weather_partials",
+                "backend.templatetags.weather_i18n",
+                "backend.templatetags.weather_partials",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = "weather.config.wsgi.application"
+WSGI_APPLICATION = "backend.config.wsgi.application"
 
 
 # Database
