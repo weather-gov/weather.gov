@@ -36,3 +36,7 @@ def get_wx_afd_by_id(afd_id):
 def get_wx_afd_versions_by_wfo(wfo):
     url = f"/products/types/AFD/locations/{wfo}"
     return _api_fetch(url)
+
+def get_wx_afd_versions():
+    url = f"/products/types/AFD"
+    return _api_fetch(url)
