@@ -1,4 +1,4 @@
-zap: zap-containers containers-up pause import-spatial load-spatial
+zap: initial-containers-up pause django-up import-spatial load-spatial migrate load-wfo-data
 rezap: dump-spatial zap
 
 import-spatial:
@@ -20,6 +20,12 @@ zap-containers:
 	docker compose stop
 	docker compose rm -f
 
+initial-containers-up:
+	docker compose --profile initial up -d
+
+django-up:
+	docker compose --profile web up -d
+
 containers-up:
 	docker compose up -d
 
@@ -40,3 +46,12 @@ template-format:
 	docker compose exec web djlint forecast/backend/templates/ --reformat --extension=html
 
 lint: python-lint template-format template-lint
+
+migrate:
+	docker compose exec web python manage.py migrate
+
+load-wfo-data:
+	docker compose exec web python manage.py loaddata backend/wfo_model_dump.json
+
+dump-wfo-data:
+	docker compose exec web python manage.py dumpdata backend.Region backend.WFO > forecast/backend/wfo_model_dump.json

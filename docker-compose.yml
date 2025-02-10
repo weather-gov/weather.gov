@@ -9,11 +9,12 @@ services:
       - ./data/db:/data
     environment:
       MYSQL_DATABASE: weathergov
-      MYSQL_USER: drupal
       MYSQL_PASSWORD: drupal
+      MYSQL_USER: drupal
       MYSQL_ROOT_PASSWORD: drupal
     ports:
       - 3306:3306
+    profiles: [ "initial", "web" ]
 
   web:
     build: forecast/
@@ -24,7 +25,7 @@ services:
       - "8080:8080"
     environment:
       MYSQL_DATABASE: weathergov
-      MYSQL_USER: drupal
+      MYSQL_USER: root
       MYSQL_PASSWORD: drupal
       MYSQL_ROOT_PASSWORD: drupal
       INTEROP_URL: "http://api-interop-layer:8082/"
@@ -34,6 +35,7 @@ services:
       - database
     links:
       - database
+    profiles: ["web"]
 
   api-proxy:
     build:
@@ -48,6 +50,7 @@ services:
     volumes:
       - ./tests/api:/app
       - /app/node_modules
+    profiles: [ "initial" ]
 
 
   api-interop-layer:
@@ -80,6 +83,7 @@ services:
     volumes:
       - ./api-interop-layer:/app
       - /app/node_modules
+    profiles: [ "initial" ]
 
   uswds:
     build:
@@ -88,7 +92,8 @@ services:
     volumes:
       - ./frontend/:/app
       - /app/node_modules
-    profiles: ["utility"]
+    profiles: ["utility", "initial"]
+    
 
   spatial:
     build:
@@ -104,6 +109,7 @@ services:
     volumes:
       - ./spatial-data/:/app
       - /app/node_modules
+    profiles: [ "initial" ]
 
 networks:
   weather.gov:
