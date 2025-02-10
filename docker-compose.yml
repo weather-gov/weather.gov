@@ -9,8 +9,8 @@ services:
       - ./data/db:/data
     environment:
       MYSQL_DATABASE: weathergov
-      MYSQL_USER: drupal
       MYSQL_PASSWORD: drupal
+      MYSQL_USER: drupal
       MYSQL_ROOT_PASSWORD: drupal
     ports:
       - 3306:3306
@@ -25,7 +25,7 @@ services:
       - "8080:8080"
     environment:
       MYSQL_DATABASE: weathergov
-      MYSQL_USER: drupal
+      MYSQL_USER: root
       MYSQL_PASSWORD: drupal
       MYSQL_ROOT_PASSWORD: drupal
       INTEROP_URL: "http://api-interop-layer:8082/"

@@ -21,10 +21,10 @@ zap-containers:
 	docker compose rm -f
 
 initial-containers-up:
-	docker compose --profile initial start
+	docker compose --profile initial up -d
 
 django-up:
-	docker compose --profile web start
+	docker compose --profile web up -d
 
 containers-up:
 	docker compose up -d
@@ -51,7 +51,7 @@ migrate:
 	docker compose exec web python manage.py migrate
 
 load-wfo-data:
-	docker compose exec web python manage.py loaddata wfo_model_dump.json
+	docker compose exec web python manage.py loaddata backend/wfo_model_dump.json
 
 dump-wfo-data:
-	docker compose exec web python manage.py dumpdata weather.Region weather.WFO > wfo_model_dump.json
+	docker compose exec web python manage.py dumpdata backend.Region backend.WFO > forecast/backend/wfo_model_dump.json
