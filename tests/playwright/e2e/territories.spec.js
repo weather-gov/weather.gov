@@ -1,9 +1,10 @@
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 describe("territory places are supported", () => {
-  beforeEach(async ({ page }) => page.goto("http://localhost:8081/stop"));
+  beforeEach(async ({ page }) => page.goto(services.apiProxy("/stop")));
 
   [
     ["/point/13.466/144.746", "Guam (GU)", "Agana Heights Village, GU"],

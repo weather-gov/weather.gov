@@ -1,12 +1,13 @@
 /* eslint-disable no-await-in-loop, no-plusplus */
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 describe("quantitative precipitation forecast table", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/proxy/play/testing");
-    await page.goto("http://localhost:8080/point/34.749/-92.275#daily", { waitUntil: "load"});
+    await page.goto(services.apiProxy("/proxy/play/testing"));
+    await page.goto(services.webApp("/point/34.749/-92.275#daily"), { waitUntil: "load"});
   });
 
   test("shows snow, ice, and water when all are present", async ({ page }) => {

@@ -1,11 +1,12 @@
 /* eslint-disable no-await-in-loop, no-plusplus */
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 describe("the location page", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/proxy/play/testing");
+    await page.goto(services.apiProxy("/proxy/play/testing"));
   });
 
   test("does not display marine alerts", async ({ page }) => {

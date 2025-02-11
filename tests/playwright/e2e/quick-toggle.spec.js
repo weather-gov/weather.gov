@@ -1,9 +1,10 @@
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 beforeEach(async ({page}) => {
-  await page.goto("http://localhost:8081/proxy/play/testing");
+  await page.goto(services.apiProxy("/proxy/play/testing"));
   await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
   await page.locator("#daily-tab-button").click();
   await page.locator('.wx-quick-forecast[role="tablist"]').waitFor();

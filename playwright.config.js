@@ -1,5 +1,7 @@
 // @ts-check
 const { defineConfig, devices } = require("@playwright/test");
+const services = require("./tests/playwright/urls.js");
+
 
 /**
  * Read environment variables from file.
@@ -11,7 +13,7 @@ const { defineConfig, devices } = require("@playwright/test");
  * @see https://playwright.dev/docs/test-configuration
  */
 const config = {
-  testDir: "./tests/playwright",
+  testDir: "./tests/playwright/e2e",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -23,7 +25,7 @@ const config = {
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://localhost:8080",
+    baseURL: services.webURL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -31,11 +33,11 @@ const config = {
 
   /* Configure projects for major browsers */
   projects: [
-    // {
-    //   name: "chromium",
-    //   use: { ...devices["Desktop Chrome"] },
-    //   testIgnore: /api.spec.js/,
-    // },
+    {
+      name: "chromium-e2e",
+      use: { ...devices["Desktop Chrome"] },
+      testIgnore: /api.spec.js/,
+    },
 
     // since we are running API tests, we really only need one browser
     // {

@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe } = test;
 
@@ -6,7 +7,7 @@ describe("location search", () => {
   test("properly handles browser history", async ({ page }) => {
     const start = "/point/36.168/-86.778";
 
-    await page.goto("http://localhost:8081/stop");
+    await page.goto(services.apiProxy("/stop"));
     await page.goto(start, { waitUntil: "load"});
 
     // Clear out saved results for simplicity's sake

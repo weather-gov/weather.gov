@@ -2,6 +2,7 @@
 const { test, expect } = require("@playwright/test");
 const arcQueryData = require("../mock-data/arc.query.json");
 const arcQueryItemsData = require("../mock-data/arc.query.items.json");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
@@ -29,7 +30,7 @@ describe("wx-combo-box-location tests", () => {
       },
     );
 
-    await page.goto("http://localhost:8080", { waitUntil: "load"});
+    await page.goto(services.webApp("/"), { waitUntil: "load"});
   });
 
   test("Can find the combo-box element", async ({ page }) => {
