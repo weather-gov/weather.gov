@@ -33,7 +33,7 @@ describe("AFD Page Tests", () => {
       page,
     }) => {
       const response = await page.goto(
-        services.webApp("/afd/OKX/invalid-afd-id.json"),
+        services.webApp("/afd/okx/invalid-afd-id.json"),
         { waitUntil: "load" }
       );
 
@@ -90,7 +90,7 @@ describe("AFD Page Tests", () => {
     }) => {
       const expectedId = OVERALL_REFERENCES["@graph"][0].id;
       await page.goto(services.webApp("/afd"), { waitUntil: "load" });
-      await page.waitForURL(services.webApp(`/afd/TAE/${expectedId}`));
+      await page.waitForURL(services.webApp(`/afd/tae/${expectedId}`));
 
       const article = await page.locator("article");
       const actualId = await article.getAttribute("data-afd-id");
@@ -103,7 +103,7 @@ describe("AFD Page Tests", () => {
     }) => {
       const expectedId = OKX_REFERENCES["@graph"][0].id;
       await page.goto(services.webApp("/afd?wfo=OKX"), { waitUntil: "load"});
-      await page.waitForURL(services.webApp(`/afd/OKX/${expectedId}`));
+      await page.waitForURL(services.webApp(`/afd/okx/${expectedId}`));
 
       const article = await page.locator("article");
       const actualId = await article.getAttribute("data-afd-id");
@@ -116,7 +116,7 @@ describe("AFD Page Tests", () => {
     }) => {
       const expectedId = OKX_REFERENCES["@graph"][1].id;
       await page.goto(services.webApp(`/afd?wfo=OKX&id=${expectedId}`));
-      await page.waitForURL(services.webApp(`/afd/OKX/${expectedId}`));
+      await page.waitForURL(services.webApp(`/afd/okx/${expectedId}`));
 
       const article = await page.locator("article");
       await expect(article).toHaveCount(1);
@@ -138,7 +138,7 @@ describe("AFD Page Tests", () => {
   describe("Changing selections tests", () => {
     beforeEach(async ({ page }) => {
       await page.goto(services.apiProxy("/proxy/play/testing"), { waitUntil: "load"});
-      await page.goto(services.webApp("/afd/OKX"), { waitUntil: "load"});
+      await page.goto(services.webApp("/afd/okx"), { waitUntil: "load"});
     });
 
     describe("WFO selector correctly populates based on path", () => {
@@ -166,7 +166,7 @@ describe("AFD Page Tests", () => {
       );
       await button.click();
 
-      await page.waitForURL(services.webApp(`/afd/OKX/${thirdId}`));
+      await page.waitForURL(services.webApp(`/afd/okx/${thirdId}`));
 
       const article = await page.locator("article");
       const actualId = await article.getAttribute("data-afd-id");
