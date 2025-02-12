@@ -17,24 +17,6 @@ def t(value, args=False):
         return result
     return _(value)
 
-
-def json_encode(value):
-    if isinstance(value, dict) or isinstance(value, list):
-        return json.dumps(value)
-    return ""
-
-
-def normalize_wfo(value):
-    anchorage_alternates = ["alu", "aer"]
-    if value.lower() in anchorage_alternates:
-        return "AFC"
-    return value
-
-
-def normalize_alert_whitespace(text):
-    return mark_safe(re.sub("\n+", "<br />", text))
-
-
 @register.simple_tag
 def trans_with_args(value, *args, **kwargs):
     translated = _(value)
@@ -42,6 +24,3 @@ def trans_with_args(value, *args, **kwargs):
 
 
 register.filter("t", t)
-register.filter("json_encode", json_encode)
-register.filter("normalize_wfo", normalize_wfo)
-register.filter("normalize_alert_whitespace", normalize_alert_whitespace)

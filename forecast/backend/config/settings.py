@@ -72,6 +72,7 @@ TEMPLATES = [
                 "django.templatetags.i18n",
                 "backend.templatetags.weather_i18n",
                 "backend.templatetags.weather_partials",
+                "backend.templatetags.util",
             ],
         },
     },
