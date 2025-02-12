@@ -1,0 +1,23 @@
+uuid: 7eeed965-8e2c-4195-8bbd-0d169018347e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_weather_story_opt_out
+    - taxonomy.vocabulary.weather_forecast_offices
+id: taxonomy_term.weather_forecast_offices.field_weather_story_opt_out
+field_name: field_weather_story_opt_out
+entity_type: taxonomy_term
+bundle: weather_forecast_offices
+label: weather_story_opt_out
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Select to opt out of weather stories'
+  off_label: 'Opted into weather stories by default'
+field_type: boolean

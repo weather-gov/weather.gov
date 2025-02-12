@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.taxonomy_term.weather_forecast_offices.field_weather_story_opt_out
     - field.field.taxonomy_term.weather_forecast_offices.field_wfo_code
     - taxonomy.vocabulary.weather_forecast_offices
 id: taxonomy_term.weather_forecast_offices.default
@@ -10,6 +11,13 @@ targetEntityType: taxonomy_term
 bundle: weather_forecast_offices
 mode: default
 content:
+  field_weather_story_opt_out:
+    type: boolean_checkbox
+    weight: 26
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_wfo_code:
     type: string_textfield
     weight: 3
