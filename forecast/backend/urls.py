@@ -1,13 +1,14 @@
-from django.urls import path
+from django.urls import path, register_converter
 
 from . import views
+from .url_converters import FloatConverter
+
+register_converter(FloatConverter, "float")
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("point/<lat>/<lon>", views.point_location, name="point"),
+    path("point/<float:lat>/<float:lon>", views.point_location, name="point"),
     path("offices", views.offices, name="offices"),
-    # path("afd", views.afd_index, name="afd_index"),
-    # path("afd/<wfo>/<afd_id>", views.afd_by_wfo_and_id, name="afd_by_wfo_and_id")
     path("afd/", views.afd_index, name="afd_index"),
     path("afd/<wfo>", views.afd_by_office, name="afd_by_office"),
     path("afd/<wfo>/<afd_id>", views.afd_by_office_and_id, name="afd_by_office_and_id"),
