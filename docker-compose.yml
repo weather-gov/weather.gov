@@ -28,10 +28,13 @@ services:
       MYSQL_PASSWORD: drupal
       MYSQL_ROOT_PASSWORD: drupal
       INTEROP_URL: "http://api-interop-layer:8082/"
+      API_URL: "http://api-proxy:8081/"
     networks:
       - weather.gov
     depends_on:
       - database
+      - api-proxy
+      - api-interop-layer
     links:
       - database
 
