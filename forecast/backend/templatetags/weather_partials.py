@@ -138,7 +138,8 @@ def daily_summary_list_item(**kwargs):
 def wind_speed_direction(**kwargs):
     has_direction = False
     speed = kwargs["speed"]
-    has_speed = speed is not None and speed != ""
+    if "mph" in speed:
+        has_speed = speed["mph"] is not None and speed["mph"] != ""
     direction = kwargs["direction"]
     if direction and direction != "":
         has_direction = direction["cardinalLong"] is not None
