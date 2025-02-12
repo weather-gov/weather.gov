@@ -13,21 +13,6 @@ namespace Drupal\weather_blocks\Plugin\Block;
  */
 class WeatherStoryImageBlock extends WeatherBlockBase
 {
-    public function getWFOTaxonomyOptOut($wfoCode)
-    {
-        $wfo_results = \Drupal::entityTypeManager()
-            ->getStorage("taxonomy_term")
-            ->loadByProperties([
-                "vid" => "weather_forecast_offices",
-                "field_wfo_code" => strtoupper($wfoCode),
-            ]);
-        $wfo_results = array_values($wfo_results); // Indices can be totally random numbers!
-        if (count($wfo_results) == 0) {
-            throw new NotFoundHttpException();
-        }
-        return $wfo_results[0]->get('field_weather_story_opt_out')->getValue();
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -39,13 +24,13 @@ class WeatherStoryImageBlock extends WeatherBlockBase
         }
 
         if ($wfo) {
-            $weatherStoryOptOut = $this->getWFOTaxonomyOptOut($wfo);
+            $weatherStoryOptOut = $this->entityTypeService->getWFOTaxonomyOptOut($wfo);
             $story = $this->entityTypeService->getLatestWeatherStoryImageFromWFO(
                 $wfo,
                 "wfo_weather_story_upload",
             );
 
-            if ($story && $weatherStoryOptOut[0]['value'] == 0) {
+            if ($story && $weatherStoryOptOut == 0) {
                 // because the weather story description is comes via a xml
                 // CDATA tag, we need to strip tags and surrounding whitespace.
                 $description = $story->get("field_description")->value;

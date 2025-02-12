@@ -21,6 +21,11 @@ final class WeatherStoryImageBlockTest extends Base
             $this->entityService
                 ->method("getLatestWeatherStoryImageFromWFO")
                 ->willReturn([]);
+
+            $this->entityService
+                ->method("getWFOTaxonomyOptOut")
+                ->willReturn(0);
+
             return;
         }
 
@@ -82,6 +87,10 @@ final class WeatherStoryImageBlockTest extends Base
         $this->entityService
             ->method("getLatestWeatherStoryImageFromWFO")
             ->willReturn($story);
+
+        $this->entityService
+            ->method("getWFOTaxonomyOptOut")
+            ->willReturn(0);
     }
 
     /**
