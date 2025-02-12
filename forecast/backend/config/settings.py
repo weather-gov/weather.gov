@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-qku8p%bk=+v_4mcsmi$b%vq&%c_jcjroglyjhouiy^_chak60m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -136,10 +136,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "/assets/"
+# URL to use when referring to static files located in STATIC_ROOT
+# Must be relative and end with "/"
+STATIC_URL = "public/"
+
+STATIC_ROOT = BASE_DIR / "frontend" / "public"
+
 STATICFILES_DIRS = [
-    BASE_DIR / "frontend/assets",
-    BASE_DIR / "frontend",
+    BASE_DIR / "frontend" / "assets",
 ]
 
 # Default primary key field type

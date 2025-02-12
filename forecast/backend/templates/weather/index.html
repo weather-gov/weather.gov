@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load weather_i18n %}
 <!-- index.html -->
-{% block head_js %}<script src="/assets/js/front.page.js"></script>{% endblock %}
+{% block head_js %}<script src="/public/js/front.page.js"></script>{% endblock %}
 {% block page_content %}
   <div class="bg-primary-darker wx-bg-satellite padding-y-4 tablet:padding-top-7 tablet:padding-bottom-8">
     <div class="grid-container">
@@ -28,7 +28,7 @@
                    aria-hidden="true"
                    focusable="false"
                    role="img">
-                <use xlink:href="/assets/images/uswds/sprite.svg#my_location"></use>
+                <use xlink:href="/public/images/uswds/sprite.svg#my_location"></use>
               </svg>
               {{ 'location-search.labels.use-location.01' | t }}
             </button>
@@ -49,7 +49,7 @@
           <div class="display-flex flex-align-start mobile-lg__flex-align-center">
             <img aria-hidden="true"
                  class="margin-right-2 maxw-8 tablet__wx-maxw10"
-                 src="/assets/images/weather/spot_illos/wx_illo_announce.svg"
+                 src="/public/images/weather/spot_illos/wx_illo_announce.svg"
                  alt="" />
             <h2 class="text-normal text-primary-darker font-sans-2xl margin-y-0">
               {{ "frontpage.heading.is-coming.01" | t | safe}}
@@ -72,7 +72,7 @@
         <div class="display-flex flex-align-start mobile-lg__flex-align-center">
           <img aria-hidden="true"
                class="margin-right-2"
-               src="/assets/images/weather/spot_illos/wx_illo_user.svg"
+               src="/public/images/weather/spot_illos/wx_illo_user.svg"
                alt="" />
           <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
             {{ "frontpage.heading.in-mind.01" | t | safe }}
@@ -98,7 +98,7 @@
         <div class="display-flex flex-align-start mobile-lg__flex-align-center">
           <img aria-hidden="true"
                class="margin-right-2"
-               src="/assets/images/weather/spot_illos/wx_illo_message.svg"
+               src="/public/images/weather/spot_illos/wx_illo_message.svg"
                alt="" />
           <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
             {{ "frontpage.heading.touchpoints.01" | t | safe }}
