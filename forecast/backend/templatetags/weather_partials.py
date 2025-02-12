@@ -286,7 +286,7 @@ def hourly_charts(**kwargs):
 # Render the daily forecast quick-toggle component
 @register.inclusion_tag("weather/partials/daily-forecast-quick-toggle.html")
 def daily_forecast_quick_toggle(**kwargs):
-    result = {}
+    result = {"itemId": kwargs.get("itemId", "")}
     day = kwargs["day"]
     result["day"] = day
     result["dayId"] = day["periods"][0]["monthAndDay"].lower().replace(" ", "-")
