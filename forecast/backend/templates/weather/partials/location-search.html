@@ -45,8 +45,7 @@
             <use xlink:href="/assets/images/uswds/sprite.svg#location_on"></use>
           </svg>
           <h1 class="text-white font-heading-xl tablet:flex-1">
-            {{ place.name }}
-            {% if place.state %}, {{ place.state }}{% endif %}
+            {% place_label place %}
           </h1>
         </div>
       </div>
