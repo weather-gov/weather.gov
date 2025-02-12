@@ -4,8 +4,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 {% endblock %}
 {% block end_js %}
-  <script src="/public/js/point.page.js"></script>
-  <script src="/public/js/point.page.components.js"></script>
+  <script src="{% static 'js/point.page.js' %}"></script>
+  <script src="{% static 'js/point.page.components.js' %}"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           id="data-wx-leaflet"
           defer></script>
@@ -20,10 +20,10 @@
           defer></script>
 {% endblock %}
 {% block head_css %}
-  <link rel="stylesheet" type="text/css" href="/public/css/leaflet.css" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/leaflet.css' %}" />
   <link rel="stylesheet"
         type="text/css"
-        href="/public/css/radar/cmi-radar.6602f65c.css" />
+        href="{% static 'css/radar/cmi-radar.6602f65c.css' %}" />
 {% endblock %}
 {% block page_content %}
   <div class="layout-container grid-row height-full flex-column flex-no-wrap">

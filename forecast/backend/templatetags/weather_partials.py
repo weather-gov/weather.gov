@@ -137,6 +137,7 @@ def daily_summary_list_item(**kwargs):
 @register.inclusion_tag("weather/partials/wind.html")
 def wind_speed_direction(**kwargs):
     has_direction = False
+    has_speed = False
     speed = kwargs["speed"]
     if "mph" in speed:
         has_speed = speed["mph"] is not None and speed["mph"] != ""
