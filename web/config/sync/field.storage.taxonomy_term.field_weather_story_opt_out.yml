@@ -1,0 +1,18 @@
+uuid: c84a451b-c210-4374-a479-4ba4866160e8
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_weather_story_opt_out
+field_name: field_weather_story_opt_out
+entity_type: taxonomy_term
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

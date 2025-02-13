@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.taxonomy_term.weather_forecast_offices.field_weather_story_opt_out
     - field.field.taxonomy_term.weather_forecast_offices.field_wfo_code
     - taxonomy.vocabulary.weather_forecast_offices
   module:
@@ -18,6 +19,16 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_weather_story_opt_out:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
     region: content
   field_wfo_code:
     type: string

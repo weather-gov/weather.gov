@@ -24,14 +24,13 @@ class WeatherStoryImageBlock extends WeatherBlockBase
         }
 
         if ($wfo) {
+            $weatherStoryOptOut = $this->entityTypeService->getWFOTaxonomyOptOut($wfo);
             $story = $this->entityTypeService->getLatestWeatherStoryImageFromWFO(
                 $wfo,
                 "wfo_weather_story_upload",
             );
 
-            // If we actually have a story, now we can go about pulling data
-            // from it to pass along to the template.
-            if ($story) {
+            if ($story && $weatherStoryOptOut == 0) {
                 // because the weather story description is comes via a xml
                 // CDATA tag, we need to strip tags and surrounding whitespace.
                 $description = $story->get("field_description")->value;
