@@ -39,7 +39,7 @@ const config = {
      * like we have with our web
      */
     launchOptions: {
-      slowMo: 60
+      slowMo: 100
     }
   },
 
