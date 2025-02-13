@@ -5,5 +5,8 @@ WORKDIR /app
 
 ADD ./package.json .
 ADD ./package-lock.json .
+ADD ./playwright.config.js .
+RUN mkdir tests
 RUN npm ci
-RUN npx playwright install chrome --with-deps --only-shell
+RUN npx playwright install chromium --with-deps --only-shell
+CMD npx playwright test  --project chromium-e2e

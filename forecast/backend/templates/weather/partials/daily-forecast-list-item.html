@@ -12,7 +12,7 @@ only be a nighttime period.
     ">
   <div class="wx-daily-forecast-list-item-inner" id="{{ itemId }}-inner">
     <h3 class="wx-daily-forecast-quick-toggle desktop:display-none bg-white"
-        data-expanded="false">{% daily_forecast_quick_toggle day=day %}</h3>
+        data-expanded="false">{% daily_forecast_quick_toggle day=day itemId=itemId %}</h3>
     <div role="region"
          id="daily-content-{{ itemId }}"
          class="wx-daily-forecast-item-content bg-white padding-y-205 padding-x-205 grid-col-12 border-right-1px border-left-1px desktop:border-top-1px border-base-lighter desktop:border-base-lighter">

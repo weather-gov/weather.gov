@@ -1,9 +1,10 @@
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 beforeEach(async ({page}) => {
-  await page.goto("http://localhost:8081/proxy/play/testing");
+  await page.goto(services.apiProxy("/proxy/play/testing"));
   await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
   await page.locator("#daily-tab-button").click();
   await page.locator('.wx-quick-forecast[role="tablist"]').waitFor();
@@ -18,7 +19,7 @@ describe("Quick Toggle tests", () => {
   test("The Quick Forecast is hidden", async ({page}) => {
     const quickForecast = await page.locator(".wx-quick-forecast");
 
-    expect(quickForecast).not.toBeVisible();
+    await expect(quickForecast).not.toBeVisible();
   });
 
   test("Clicking a quick toggle item shows its accordion daily forecast item content (and clicking agan hides it)", async ({page}) => {
@@ -31,11 +32,11 @@ describe("Quick Toggle tests", () => {
     await toggleButton.click({force: true}); 
     const accordionContent = await page.locator(`#${target}`);
 
-    expect(accordionContent).toBeVisible();
+    await expect(accordionContent).toBeVisible();
 
     await toggleButton.click({force: true});
 
-    expect(accordionContent).not.toBeVisible();
+    await expect(accordionContent).not.toBeVisible();
   });
 });
 

@@ -1,10 +1,11 @@
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 describe("alerts in the daily tab", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/proxy/play/testing");
+    await page.goto(services.apiProxy("/proxy/play/testing"));
     await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
     await page.locator("#daily-tab-button").first().click();
   });
@@ -29,8 +30,7 @@ describe("alerts in the daily tab", () => {
 
     test("single alerts show the alert type", async ({ page }) => {
       const day = await page
-        .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
-        .nth(1);
+            .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item:nth-child(2)");
       const links = await day.locator(".daily-alert-summary .wx-alert-link");
 
       await test.step("there is only one link", async () => {

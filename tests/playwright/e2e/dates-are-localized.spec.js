@@ -1,10 +1,11 @@
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 describe("main script", () => {
   beforeEach(async ({ page }) =>
-    page.goto("http://localhost:8081/proxy/play/testing"),
+    page.goto(services.apiProxy("/proxy/play/testing")),
   );
 
   // US English, Mexican Spanish, Puerto Rican Spanish, and US Spanish. Just

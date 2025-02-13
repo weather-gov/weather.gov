@@ -1,4 +1,5 @@
 import json
+import re
 from django import template
 from django.utils.safestring import mark_safe
 
@@ -16,6 +17,16 @@ def subtract(first, second):
     if second == "":
         second = 0
     return float(first) - float(second)
+
+@register.simple_tag
+def place_label(place):
+    """Given a place dict with a name and possibly a state,
+    return the formatted label"""
+    name = place.get("name", "")
+    state = place.get("state", None)
+    if state:
+        return f"{name}, {state}"
+    return name
 
 def json_encode(value):
     if isinstance(value, dict) or isinstance(value, list):

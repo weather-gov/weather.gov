@@ -1,4 +1,4 @@
-zap: initial-containers-up pause django-up import-spatial load-spatial migrate load-wfo-data
+zap: initial-containers-up pause django-up import-spatial load-spatial migrate load-wfo-data spatial-dump
 rezap: dump-spatial zap
 
 import-spatial:
@@ -28,6 +28,9 @@ django-up:
 
 containers-up:
 	docker compose up -d
+
+spatial-dump:
+	docker compose exec database mysqldump -udrupal -pdrupal -hdatabase --no-tablespaces weathergov weathergov_geo_metadata weathergov_geo_states weathergov_geo_counties weathergov_geo_places weathergov_geo_cwas weathergov_geo_zones > spatial-data/dump.mysql
 
 pause:
 	sleep 15

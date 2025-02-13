@@ -1,11 +1,12 @@
 /* eslint-disable no-await-in-loop, no-plusplus */
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 describe("radar component", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/proxy/play/testing");
+    await page.goto(services.apiProxy("/proxy/play/testing"));
     await page.goto("/point/35.198/-111.651", { waitUntil: "load"});
   });
 

@@ -1,10 +1,11 @@
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 describe("daily forecast", () => {
   beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:8081/proxy/play/testing");
+    await page.goto(services.apiProxy("/proxy/play/testing"));
   });
 
   test("does not display missing day periods", async ({ page }) => {

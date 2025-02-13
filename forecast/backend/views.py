@@ -3,7 +3,7 @@ import requests
 from backend import interop
 from backend.util import get_wfo_from_afd
 from backend.models import WFO, Region
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
@@ -110,10 +110,13 @@ def afd_by_office(request, wfo):
     WFO office and redirect the user to the correct
     url for that product
     """
-    afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
-    afd_id = afd_references[0]["id"]
-    url = f"/afd/{wfo.lower()}/{afd_id}"
-    return redirect(url)
+    try:
+        afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
+        afd_id = afd_references[0]["id"]
+        url = f"/afd/{wfo.lower()}/{afd_id}"
+        return redirect(url)
+    except Exception:
+        raise Http404()
 
 def afd_by_office_and_id(request, wfo, afd_id):
     """
@@ -121,29 +124,32 @@ def afd_by_office_and_id(request, wfo, afd_id):
     and populate the list of available AFDs for
     the provided WFO
     """
+    try:
+        # Grab the AFD data from the API and determine which
+        # WFO it applies to. There might be cases where the user 
+        # has input an id and wfo into the url, but they do not correspond.
+        # We will redirect in cases where this happens.
+        afd_data = interop.get_wx_afd_by_id(afd_id)
+        afd_wfo = get_wfo_from_afd(afd_data)
+        if not afd_wfo or afd_wfo.lower() != wfo.lower():
+            return redirect(f"/afd/{afd_wfo.lower()}/afd_id")
 
-    # Grab the AFD data from the API and determine which
-    # WFO it applies to. There might be cases where the user 
-    # has input an id and wfo into the url, but they do not correspond.
-    # We will redirect in cases where this happens.
-    afd_data = interop.get_wx_afd_by_id(afd_id)
-    afd_wfo = get_wfo_from_afd(afd_data)
-    if not afd_wfo or afd_wfo.lower() != wfo.lower():
-        return redirect(f"/afd/{afd_wfo.lower()}/afd_id")
+        # Otherwise, let's grab all the references for the WFO
+        # so we can use them in the select dropdown
+        afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
+        all_wfos = WFO.objects.values("code", "name")
+        wfo_combo_box_data = [{"value": wfo["code"], "text": f"{wfo['name']} ({wfo['code']})"} for wfo in all_wfos]
 
-    # Otherwise, let's grab all the references for the WFO
-    # so we can use them in the select dropdown
-    afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
-    all_wfos = WFO.objects.values("code", "name")
-    wfo_combo_box_data = [{"value": wfo["code"], "text": f"{wfo['name']} ({wfo['code']})"} for wfo in all_wfos]
-
-    # Compose a dictionary in the format that the templates expect
-    to_render = {
-        "wfo": wfo.upper(),
-        "afd": afd_data,
-        "wfo_list": wfo_combo_box_data,
-        "version_list": afd_references
-    }
+        # Compose a dictionary in the format that the templates expect
+        to_render = {
+            "wfo": wfo.upper(),
+            "afd": afd_data,
+            "wfo_list": wfo_combo_box_data,
+            "version_list": afd_references
+        }
+    except Exception as e:
+        print(e.response.status_code)
+        raise Http404
     return render(request, "weather/afd-page.html", to_render)
 
 def wx_afd_id(request, afd_id):

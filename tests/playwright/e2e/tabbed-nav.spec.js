@@ -1,4 +1,5 @@
 const { test: base, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const test = base.extend({
   tabs: async ({ page }, use) => {
@@ -12,7 +13,7 @@ const { describe, beforeEach } = test;
 describe("<wx-tabbed-nav> component tests", () => {
   describe("Alert link interaction", () => {
     beforeEach(async ({ page }) => {
-      await page.goto("http://localhost:8081/proxy/play/testing");
+      await page.goto(services.apiProxy("/proxy/play/testing"));
       await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
     });
 

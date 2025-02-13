@@ -1,10 +1,11 @@
 const { test, expect } = require("@playwright/test");
+const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
 describe("invalid location-based routes return 404", () => {
   beforeEach(async ({ page }) =>
-    page.goto("http://localhost:8081/proxy/play/testing"),
+    page.goto(services.apiProxy("/proxy/play/testing")),
   );
 
   describe("for non-numeric points", () => {
