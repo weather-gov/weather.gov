@@ -9,4 +9,4 @@ ADD ./playwright.config.js .
 RUN mkdir tests
 RUN npm ci
 RUN npx playwright install chromium --with-deps --only-shell
-CMD npx playwright test --max-failures 3 --project chromium-e2e
+CMD npx playwright test  --project chromium-e2e

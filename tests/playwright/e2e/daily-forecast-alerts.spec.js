@@ -30,8 +30,7 @@ describe("alerts in the daily tab", () => {
 
     test("single alerts show the alert type", async ({ page }) => {
       const day = await page
-        .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
-        .nth(1);
+            .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item:nth-child(2)");
       const links = await day.locator(".daily-alert-summary .wx-alert-link");
 
       await test.step("there is only one link", async () => {

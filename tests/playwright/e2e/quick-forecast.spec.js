@@ -90,7 +90,7 @@ describe("Quick Forecast navigation tests", () => {
         await secondItem.focus();
         await page.keyboard.press("Space");
 
-        expect(secondItem).toHaveAttribute("aria-selected", "true");
+        await expect(secondItem).toHaveAttribute("aria-selected", "true");
       });
 
       test("pressing the home key puts focus on the first nav item", async ({page}) => {

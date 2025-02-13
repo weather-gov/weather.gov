@@ -19,7 +19,7 @@ describe("Quick Toggle tests", () => {
   test("The Quick Forecast is hidden", async ({page}) => {
     const quickForecast = await page.locator(".wx-quick-forecast");
 
-    expect(quickForecast).not.toBeVisible();
+    await expect(quickForecast).not.toBeVisible();
   });
 
   test("Clicking a quick toggle item shows its accordion daily forecast item content (and clicking agan hides it)", async ({page}) => {
@@ -32,11 +32,11 @@ describe("Quick Toggle tests", () => {
     await toggleButton.click({force: true}); 
     const accordionContent = await page.locator(`#${target}`);
 
-    expect(accordionContent).toBeVisible();
+    await expect(accordionContent).toBeVisible();
 
     await toggleButton.click({force: true});
 
-    expect(accordionContent).not.toBeVisible();
+    await expect(accordionContent).not.toBeVisible();
   });
 });
 

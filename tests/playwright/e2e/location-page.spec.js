@@ -54,7 +54,6 @@ describe("the location page", () => {
       await currentTab.click();
 
       await expect(radarContainer).not.toBeVisible();
-      await page.pause();
     });
   });
 
