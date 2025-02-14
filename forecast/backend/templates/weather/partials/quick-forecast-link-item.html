@@ -5,8 +5,8 @@ This template expects two variables available to it:
 the content
 {% endcomment %}
 <a class="wx-quick-forecast-item"
-   href="#{{ dayId }}"
-   id="{{ dayId }}-quick-forcast-button">
+   href="#{{ day.dayId }}"
+   id="{{ day.dayId }}-quick-forcast-button">
   <div class="wx-quick-forecast-item-top">
     <time datetime="{{ day.periods.0.startTime }}">
       <span>{{ day.periods.0.dayName }}</span>
@@ -26,7 +26,7 @@ the content
           {% endif %}
         </span>
       {% endif %}
-      {% if hasAlertIcon %}
+      {% if day.hasAlertIcon %}
         <svg role="img"
              aria-hidden="true"
              class="wx-alert-icon"
@@ -40,7 +40,7 @@ the content
     </div>
     <hr />
     <div class="wx-quick-forecast-item-high-low">
-      {% if isNightPeriod %}
+      {% if day.isNightPeriod %}
         <div class="wx-quick-high">
           <span class="wx-quick-label">{% trans "daily-forecast.labels.high.01" %}</span>
           <span class="wx-quick-temp">{% trans "abbreviations.not-applicable.01" %}</span>
@@ -49,7 +49,7 @@ the content
         <div class="wx-quick-high">
           <span class="wx-quick-label">{% trans "daily-forecast.labels.high.01" %}</span>
           <span class="wx-quick-temp">
-            {{ high }}
+            {{ day.high }}
             <span aria-hidden="true" class="wx-degree">&deg;F</span>
             <span class="usa-sr-only">℉</span>
           </span>
@@ -58,7 +58,7 @@ the content
       <div class="wx-quick-low">
         <span class="wx-quick-label">{% trans "daily-forecast.labels.low.01" %}</span>
         <span class="wx-quick-temp">
-          {{ low }}
+          {{ day.low }}
           <span aria-hidden="true" class="wx-degree">&deg;F</span>
           <span class="usa-sr-only">℉</span>
         </span>
@@ -75,7 +75,7 @@ the content
   </div>
   <hr />
   <div class="wx-quick-forecast-item-bottom">
-    <span>{% trans_with_args "daily-forecast.text.chance-precip.02" percent=pop %}</span>
+    <span>{% trans_with_args "daily-forecast.text.chance-precip.02" percent=day.pop %}</span>
   </div>
   <span class="display-none tablet:display-block desktop:display-none">
     <svg class="usa-icon usa-icon--size-3"
