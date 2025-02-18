@@ -45,7 +45,7 @@ def index(request):
 
 def point_location(request, lat, lon):
     point = interop.get_point_forecast(lat, lon)
-    
+    # TODO: Add some error checking here
     return render(request, "weather/point.html", {"point": point})
 
 def offices(request):

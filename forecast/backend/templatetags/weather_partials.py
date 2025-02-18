@@ -9,12 +9,12 @@ register = template.Library()
 RADAR_INTENSITIES = [
     {
         "dbz": "−35–0",
-        "description": "Extremely light (drizzle/snow)",
+        "description": _("Extremely light (drizzle/snow)"),
         "gradient": "180deg, #8E827E 0%, #969155 17.64%, #A5A36D 27.53%, #D0D2B2 54.47%, #7E8BAF 100%",
     },
     {
         "dbz": "0–20",
-        "description": "Very light precipitation or general clutter",
+        "description": _("Very light precipitation or general clutter"),
         "gradient": (
             "180deg, #7B88AE 0%, #5C71A6 17.64%, #445FA0 36.39%, #5DA9CC 61.25%, #59C0BA 73.2%, #52D6A2 87.85%,"
             " #3FD657 100%"
@@ -22,7 +22,7 @@ RADAR_INTENSITIES = [
     },
     {
         "dbz": "20–40",
-        "description": "Light precipitation",
+        "description": _("Light precipitation"),
         "gradient": (
             "180deg, #3FD657 0%, #3ED624 9.47%, #24890E 36.39%, #176108 61.25%, #819F06 73.2%, #FBE000 85.5%,"
             " #F4CB17 100%"
@@ -30,12 +30,12 @@ RADAR_INTENSITIES = [
     },
     {
         "dbz": "40–50",
-        "description": "Moderate precipitation",
+        "description": _("Moderate precipitation"),
         "gradient": "180deg, #F4CB17 0%, #EBB32D 25.38%, #F9B103 72.13%, #F52D04 73.91%, #D10808 99.72%",
     },
     {
         "dbz": "50–65",
-        "description": "Heavy precipitation or some hail",
+        "description": _("Heavy precipitation or some hail"),
         "gradient": (
             "180deg, #D10808 0%, #A20F10 16.84%, #B00301 48.32%, #FEFBFF 49.94%, #EDA7FD 71.83%, #E474FC 83.75%,"
             " #F174FD 100%);"
@@ -43,7 +43,7 @@ RADAR_INTENSITIES = [
     },
     {
         "dbz": ">65",
-        "description": "Extremely heavy precipitation including water-coated hail",
+        "description": _("Extremely heavy precipitation including water-coated hail"),
         "gradient": "180deg, #F174FD 0%, #F875FF 30.26%, #AA0BFA 34%, #5B06D3 98.5%",
     },
 ]
