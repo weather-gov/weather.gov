@@ -1,6 +1,8 @@
 Django>=5.0
 psycopg2>=2.8
 mysqlclient>=2.2
+boto3
+djangorestframework
 requests
 black
 djlint

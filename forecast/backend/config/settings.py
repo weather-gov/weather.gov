@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,107 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 SITE_LOGO = "/assets/logo.svg"
 SITE_NAME = "beta.weather.gov"
 SITE_SLOGAN = "National Weather Service"
+
+# region: Logging-----------------------------------------------------------###
+
+# A Python logging configuration consists of four parts:
+#   Loggers
+#   Handlers
+#   Filters
+#   Formatters
+# https://docs.djangoproject.com/en/4.1/topics/logging/
+
+# Log a message by doing this:
+#
+#   import logging
+#   logger = logging.getLogger(__name__)
+#
+# Then:
+#
+#   logger.debug("We're about to execute function xyz. Wish us luck!")
+#   logger.info("Oh! Here's something you might want to know.")
+#   logger.warning("Something kinda bad happened.")
+#   logger.error("Can't do this important task. Something is very wrong.")
+#   logger.critical("Going to crash now.")
+
+
+LOGGING = {
+    "version": 1,
+    # Don't import Django's existing loggers
+    "disable_existing_loggers": True,
+    # define how to convert log messages into text;
+    # each handler has its choice of format
+    "formatters": {
+        "verbose": {
+            "format": "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+        },
+        "simple": {
+            "format": "%(levelname)s %(message)s",
+        },
+        "django.server": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "[{server_time}] {message}",
+            "style": "{",
+        },
+    },
+    # define where log messages will be sent
+    # each logger can have one or more handlers
+    "handlers": {
+        "console": {
+            "level": os.environ.get('DJANGO_LOG_LEVEL', "DEBUG"),
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        "django.server": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "django.server",
+        },
+        # No file logger is configured,
+        # because containerized apps
+        # do not log to the file system.
+    },
+    # define loggers: these are "sinks" into which
+    # messages are sent for processing
+    "loggers": {
+        # Django's generic logger
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # Django's template processor
+        "django.template": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # Django's runserver
+        "django.server": {
+            "handlers": ["django.server"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # Django's runserver requests
+        "django.request": {
+            "handlers": ["django.server"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # Our app!
+        "weather": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+    # root logger catches anything, unless
+    # defined by a more specific logger
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}
+
+# endregion
