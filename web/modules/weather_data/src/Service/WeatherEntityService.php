@@ -91,7 +91,7 @@ class WeatherEntityService
             ]);
         $wfo_results = array_values($wfo_results); // Indices can be totally random numbers!
         if (count($wfo_results) == 0) {
-            throw new NotFoundHttpException();
+            return 1;
         }
         return $wfo_results[0]->get('field_weather_story_opt_out')->getValue()[0]['value'];
     }
