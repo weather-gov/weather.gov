@@ -2978,20 +2978,20 @@
         },
         {
             "name": "drupal/single_content_sync",
-            "version": "1.4.5",
+            "version": "1.4.10",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/single_content_sync.git",
-                "reference": "1.4.5"
+                "reference": "1.4.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/single_content_sync-1.4.5.zip",
-                "reference": "1.4.5",
-                "shasum": "e5e3fe3684e389def4283767a6c5fdcfd852d81d"
+                "url": "https://ftp.drupal.org/files/projects/single_content_sync-1.4.10.zip",
+                "reference": "1.4.10",
+                "shasum": "c0c0836b31406e017e00cc5976c984c1e3114644"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10",
+                "drupal/core": "^9.3 || ^10 || ^11",
                 "ext-dom": "*",
                 "ext-zip": "*",
                 "php": ">=7.4"
@@ -3001,12 +3001,15 @@
                 "drupal/block_field": "*",
                 "drupal/color_field": "*",
                 "drupal/dynamic_entity_reference": "*",
+                "drupal/focal_point": "*",
                 "drupal/geofield": "*",
                 "drupal/geolocation": "*",
                 "drupal/metatag": "*",
+                "drupal/paragraph_view_mode": "*",
                 "drupal/paragraphs": "*",
                 "drupal/section_library": "*",
                 "drupal/svg_image_field": "*",
+                "drupal/video_embed_field": "*",
                 "drupal/viewsreference": "*",
                 "drupal/webform": "*",
                 "drupal/weight": "*",
@@ -3015,8 +3018,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.4.5",
-                    "datestamp": "1714647618",
+                    "version": "1.4.10",
+                    "datestamp": "1738182134",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11091,7 +11094,7 @@
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
