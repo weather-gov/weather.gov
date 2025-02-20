@@ -3,6 +3,7 @@ psycopg2>=2.8
 mysqlclient>=2.2
 boto3
 djangorestframework
+wagtail
 requests
 black
 djlint
