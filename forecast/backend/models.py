@@ -1,8 +1,14 @@
 from django.db import models
+from wagtail.admin.panels import FieldPanel
 
 class Region(models.Model):
     name = models.CharField(max_length=128)
     weight = models.IntegerField(default=100)
+
+    # Panels for Wagtail admin
+    panels = [
+        FieldPanel("name")
+    ]
 
     def __str__(self):
         return f"{self.name}"
@@ -13,6 +19,13 @@ class WFO(models.Model):
     weight = models.IntegerField(default=0)
     code = models.CharField(max_length=3, unique=True)
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
+
+    # Panels for Wagtail admin
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("code"),
+        FieldPanel("region")
+    ]
 
     def __str__(self):
         return f"{self.name} ({self.code})"
