@@ -109,7 +109,7 @@
             </div>
             <hr class="border-base-light">
             <!-- Dynamic Safety Information should go here! -->
-            {#{ drupal_block("weathergov_dynamic_safety_information", { weather_event: alert.event }) }#}
+            {% dynamic_safety_information alert.event %}
           </div>
         </div>
       {% endfor %}

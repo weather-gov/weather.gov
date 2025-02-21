@@ -3,6 +3,7 @@ from os import getenv
 from django.utils import dateparse
 from django.utils.translation import gettext_lazy as _
 
+
 def _fetch(url):
     """
     Basic request function for handling all interop layer
