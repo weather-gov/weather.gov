@@ -1,4 +1,4 @@
-zap: initial-containers-up pause django-up import-spatial load-spatial migrate load-wfo-data spatial-dump
+zap: containers-up pause import-spatial load-spatial migrate load-wfo-data load-safety-data spatial-dump sleep django-restart
 rezap: dump-spatial zap
 
 import-spatial:
@@ -20,14 +20,11 @@ zap-containers:
 	docker compose stop
 	docker compose rm -f
 
-initial-containers-up:
-	docker compose --profile initial up -d
-
-django-up:
-	docker compose --profile web up -d
-
 containers-up:
 	docker compose up -d
+
+django-restart:
+	docker compose restart web
 
 spatial-dump:
 	docker compose exec database mysqldump -udrupal -pdrupal -hdatabase --no-tablespaces weathergov weathergov_geo_metadata weathergov_geo_states weathergov_geo_counties weathergov_geo_places weathergov_geo_cwas weathergov_geo_zones > spatial-data/dump.mysql
@@ -53,8 +50,22 @@ lint: python-lint template-format template-lint
 migrate:
 	docker compose exec web python manage.py migrate
 
+make-migrations:
+	docker compose exec web python manage.py makemigrations
+
+mm: make-migrations
+
 load-wfo-data:
 	docker compose exec web python manage.py loaddata backend/wfo_model_dump.json
 
 dump-wfo-data:
 	docker compose exec web python manage.py dumpdata backend.Region backend.WFO > forecast/backend/wfo_model_dump.json
+
+load-safety-data:
+	docker compose exec web python manage.py loaddata backend/dynamic_safety_info_dump.json
+
+createsuperuser:
+	docker compose exec web python manage.py createsuperuser
+
+shell:
+	docker compose exec web python manage.py shell
