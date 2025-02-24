@@ -187,7 +187,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # Custom site information
-SITE_LOGO = "/assets/logo.svg"
+SITE_LOGO = "/public/logo.svg"
 SITE_NAME = "beta.weather.gov"
 SITE_SLOGAN = "National Weather Service"
 

@@ -3,8 +3,8 @@ const toggleMapExpand = (() => {
 
   const sprites = {
     false:
-      "/themes/new_weather_theme/assets/images/uswds/sprite.svg#zoom_out_map",
-    true: "/themes/new_weather_theme/assets/images/spritesheet.svg#wx_zoom-in-map",
+      "/public/images/uswds/sprite.svg#zoom_out_map",
+    true: "/public/images/spritesheet.svg#wx_zoom-in-map",
   };
 
   return (event) => {

@@ -38,7 +38,6 @@ class WFO(models.Model):
         FieldPanel("name"),
         FieldPanel("code"),
         FieldPanel("region")
-        # InlinePanel("region")
     ]
 
     def __str__(self):
