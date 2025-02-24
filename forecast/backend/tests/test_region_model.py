@@ -1,6 +1,7 @@
 from django.test import TestCase
 from backend.models import Region, WFO
 
+
 class RegionModelTests(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -33,5 +34,3 @@ class RegionModelTests(TestCase):
         region = Region.objects.all()[0]
 
         self.assertNotEqual(region, ephemeral_wfo.region)
-            
-            

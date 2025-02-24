@@ -87,7 +87,9 @@ def _process_interop_data(data):
         # hourly tables and charts
         hours = day["hours"]
         day["hourly"] = {}
-        day["hourly"]["feelsLike"] = [hour["apparentTemperature"]["degF"] for hour in hours if "apparentTemperature" in hour]
+        day["hourly"]["feelsLike"] = [
+            hour["apparentTemperature"]["degF"] for hour in hours if "apparentTemperature" in hour
+        ]
         day["hourly"]["times"] = []
         for hour in hours:
             hour_label = hour.get("hour", None)
@@ -97,11 +99,12 @@ def _process_interop_data(data):
             hour["probabilityOfPrecipitation"]["percent"] for hour in hours if "probabilityOfPrecipitation" in hour
         ]
         day["hourly"]["dewpoints"] = [hour["dewpoint"]["degF"] for hour in hours if "dewpoint" in hour]
-        day["hourly"]["relativeHumidity"] = [hour["relativeHumidity"]["percent"] for hour in hours if "relativeHumidity" in hour]
+        day["hourly"]["relativeHumidity"] = [
+            hour["relativeHumidity"]["percent"] for hour in hours if "relativeHumidity" in hour
+        ]
         day["hourly"]["windSpeeds"] = [hour["windSpeed"]["mph"] for hour in hours if "windSpeed" in hour]
         day["hourly"]["windGusts"] = [hour["windGust"]["mph"] for hour in hours if "windGust" in hour]
         day["hourly"]["windDirections"] = [hour["windDirection"] for hour in hours if "windDirection" in hour]
-        
 
         # We tell the templates that this day should have an
         # alert icon if there are any relevant alerts attached
@@ -124,7 +127,6 @@ def _process_interop_data(data):
         if qpf["hasIce"]:
             qpf["ice"] = [period["ice"]["in"] for period in qpf["periods"]]
             qpf["liquidTitle"] = _("precip-table.table-header+legend.water.01")
-        
 
         # Templates also need to know the numeric day and
         # month, for displaying tables and charts
@@ -132,21 +134,25 @@ def _process_interop_data(data):
         start_time = dateparse.parse_datetime(start_timestamp)
         day["for_day"] = f"{start_time.day:02d}"
         day["for_month"] = f"{start_time.month:02d}"
-        
+
     return data
+
 
 def get_point_forecast(lat, lon):
     url = f"/point/{lat}/{lon}"
     return _fetch(url)
 
+
 def get_wx_afd_by_id(afd_id):
     url = f"/products/{afd_id}"
     return _fetch(url)
+
 
 def get_wx_afd_versions_by_wfo(wfo):
     url = f"/products/types/AFD/locations/{wfo}"
     return _api_fetch(url)
 
+
 def get_wx_afd_versions():
-    url = f"/products/types/AFD"
+    url = "/products/types/AFD"
     return _api_fetch(url)

@@ -1,11 +1,10 @@
-from os import getenv
-import requests
 from backend import interop
 from backend.util import get_wfo_from_afd
 from backend.models import WFO, Region
-from django.http import HttpResponse, Http404, HttpResponseNotFound
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+
 
 # Helpers
 def _get_redirect_for_afd_queries(request):
@@ -25,7 +24,7 @@ def _get_redirect_for_afd_queries(request):
     # These two are always present on the full AFD page
     # as hidden inputs. When the page is rendered, they
     # hold what the page's initial WFO and AFD id values
-    # were before any select/combobox selections. 
+    # were before any select/combobox selections.
     current_wfo = request.GET.get("current-wfo", None)
     current_afd_id = request.GET.get("current-id", None)
 
@@ -39,6 +38,7 @@ def _get_redirect_for_afd_queries(request):
         return f"/afd/{wfo.lower()}/{afd_id}"
     return None
 
+
 def index(request):
     return render(request, "weather/index.html", locals())
 
@@ -48,27 +48,20 @@ def point_location(request, lat, lon):
     # TODO: Add some error checking here
     return render(request, "weather/point.html", {"point": point})
 
+
 def offices(request):
     regions = []
     for region in Region.objects.all():
-        entry = {
-            "id": region.id,
-            "name": region.name,
-            "weight": region.weight,
-            "wfos": []
-        }
+        entry = {"id": region.id, "name": region.name, "weight": region.weight, "wfos": []}
         wfos = region.wfo_set.all()
         for wfo in wfos:
-            wfo_entry = {
-                "id": wfo.code.upper(),
-                "name": wfo.name,
-                "weight": wfo.weight
-            }
+            wfo_entry = {"id": wfo.code.upper(), "name": wfo.name, "weight": wfo.weight}
             entry["wfos"].append(wfo_entry)
         regions.append(entry)
 
     return render(request, "weather/offices.html", locals())
-    
+
+
 def afd_index(request):
     """
     Will determine the most recent AFD at _any_ WFO
@@ -100,6 +93,7 @@ def afd_index(request):
     url = f"/afd/{wfo.lower()}/{afd_id}"
     return redirect(url)
 
+
 def afd_by_office(request, wfo):
     """
     Will determine the most recent AFD for the given
@@ -114,6 +108,7 @@ def afd_by_office(request, wfo):
     except Exception:
         raise Http404()
 
+
 def afd_by_office_and_id(request, wfo, afd_id):
     """
     Will display the given AFD product by id
@@ -122,7 +117,7 @@ def afd_by_office_and_id(request, wfo, afd_id):
     """
     try:
         # Grab the AFD data from the API and determine which
-        # WFO it applies to. There might be cases where the user 
+        # WFO it applies to. There might be cases where the user
         # has input an id and wfo into the url, but they do not correspond.
         # We will redirect in cases where this happens.
         afd_data = interop.get_wx_afd_by_id(afd_id)
@@ -141,12 +136,13 @@ def afd_by_office_and_id(request, wfo, afd_id):
             "wfo": wfo.upper(),
             "afd": afd_data,
             "wfo_list": wfo_combo_box_data,
-            "version_list": afd_references
+            "version_list": afd_references,
         }
     except Exception as e:
         print(e.response.status_code)
         raise Http404
     return render(request, "weather/afd-page.html", to_render)
+
 
 def wx_afd_id(request, afd_id):
     """
@@ -156,7 +152,7 @@ def wx_afd_id(request, afd_id):
     data = interop.get_wx_afd_by_id(afd_id)
     markup = render_to_string("weather/wx/afd.html", {"afd": data})
     return HttpResponse(markup, content_type="text/html")
-    
+
 
 def wx_afd_versions(request, wfo):
     """

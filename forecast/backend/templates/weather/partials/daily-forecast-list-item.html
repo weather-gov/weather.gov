@@ -9,7 +9,7 @@ only be a nighttime period.
 {% endcomment %}
 <li class="wx-daily-forecast-list-item display-block desktop:margin-bottom-3 margin-y-0 shadow-1"
     {% if day.itemId %}id="{{ day.itemId }}{% endif %}
-           ">
+    ">
   <div class="wx-daily-forecast-list-item-inner" id="{{ day.itemId }}-inner">
     <h3 class="wx-daily-forecast-quick-toggle desktop:display-none bg-white"
         data-expanded="false">{% daily_forecast_quick_toggle day=day itemId=itemId %}</h3>

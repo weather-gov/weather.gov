@@ -16,14 +16,14 @@
         <div class="grid-row">
           <div class="tablet:grid-col-6">
             <!-- djlint:off -->
-                        <wx-combo-box-location class="z-top margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105" id="search-combo-box"
-                                               {% if place %}
-                                               data-place="{{ place.name }}
-                                                      {% if place.state %}, {{ place.state }}{% endif %}
-                                                      "
-                                               {% endif %}
-                                               }>
-                        </wx-combo-box-location>
+                                                            <wx-combo-box-location class="z-top margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105" id="search-combo-box"
+                                                                                   {% if place %}
+                                                                                   data-place="{{ place.name }}
+                                                                                          {% if place.state %}, {{ place.state }}{% endif %}
+                                                                                          "
+                                                                                   {% endif %}
+                                                                                   }>
+                                                            </wx-combo-box-location>
             <!-- djlint:on -->
           </div>
           <div class="font-sans-md text-primary-dark tablet:grid-col-6 margin-top-105 margin-bottom-105">
@@ -44,9 +44,7 @@
                style="vertical-align: middle">
             <use xlink:href="/public/images/uswds/sprite.svg#location_on"></use>
           </svg>
-          <h1 class="text-white font-heading-xl tablet:flex-1">
-            {% place_label place %}
-          </h1>
+          <h1 class="text-white font-heading-xl tablet:flex-1">{% place_label place %}</h1>
         </div>
       </div>
     {% endif %}

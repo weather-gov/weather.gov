@@ -2,6 +2,7 @@ from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 from .models import Region, WFO, DynamicSafetyInformation
 
+
 class WFOAdminSnippet(SnippetViewSet):
     model = WFO
     menu_label = "WFOs"
@@ -11,8 +12,9 @@ class WFOAdminSnippet(SnippetViewSet):
     add_to_admin_menu = True
     exclude_from_explorer = False
     list_display = ("code", "name")
-    list_filter = ("code", )
+    list_filter = ("code",)
     search_fields = ("code", "name")
+
 
 class RegionAdminSnippet(SnippetViewSet):
     model = Region
@@ -25,6 +27,7 @@ class RegionAdminSnippet(SnippetViewSet):
     list_display = ("name",)
     list_filter = ("name",)
     search_fields = ("name",)
+
 
 class DynamicSafetyInformationAdminSnippet(SnippetViewSet):
     model = DynamicSafetyInformation
