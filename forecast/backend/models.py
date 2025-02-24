@@ -7,6 +7,10 @@ from wagtail.models import Orderable
 
 
 class Region(ClusterableModel):
+    """
+    A Region represents one of the subdivisions of the
+    world in which the NWS operates (ie, Central Region)
+    """
     name = models.CharField(max_length=128)
     weight = models.IntegerField(default=100)
 
@@ -19,6 +23,11 @@ class Region(ClusterableModel):
         return f"{self.name}"
 
 class WFO(models.Model):
+    """
+    A Weather Forecast Office (WFO) is the primary unit
+    in the NWS in which forecasts are generated. These
+    constitute the actual NWS offices.
+    """
     name = models.CharField(max_length=256)
     weight = models.IntegerField(default=0)
     code = models.CharField(max_length=3, unique=True)
@@ -36,6 +45,12 @@ class WFO(models.Model):
         return f"{self.name} ({self.code})"
 
 class DynamicSafetyInformation(models.Model):
+    """
+    A record that matches Hazard/Alert types to specific
+    safety tips that are recommended by the NWS.
+    These tips will be displayed alongside alert information,
+    where available
+    """
     type = models.CharField(unique=True, max_length=256)
     label = models.CharField(max_length=256)
     body = models.TextField()
