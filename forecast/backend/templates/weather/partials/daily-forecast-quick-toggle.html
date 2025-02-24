@@ -11,18 +11,18 @@ the content
         aria-expanded="false">
   <div class="wx-quick-toggle-item-top display-flex flex-1 flex-justify flex-align-center text-primary-darker font-mono-sm">
     <time class="text-align-left flex-1 text-primary-dark"
-          datetime="{{ day.periods.0.startTime }}"
-          aria-label="{{ day.periods.0.dayName }}">
-      <span>{{ day.periods.0.dayName }}</span>
-      <span class="display-block">{{ day.monthNumericString }}/{{ day.dayNumericString }}</span>
+          datetime="{{ periods.0.startTime }}"
+          aria-label="{{ periods.0.dayName }}">
+      <span>{{ periods.0.dayName }}</span>
+      <span class="display-block">{{ monthNumericString }}/{{ dayNumericString }}</span>
     </time>
     <div class="wx-quick-toggle-condition flex-1">
       <span class="usa-sr-only">
-        {% trans_with_args "daily-forecast.aria.condition.01" description=day.periods.0.data.description %}
+        {% trans_with_args "daily-forecast.aria.condition.01" description=periods.0.data.description %}
       </span>
-      {% if day.alerts.metadata.count %}
+      {% if alerts.metadata.count %}
         <span class="usa-sr-only">
-          {% if day.alerts.metadata.count > 1 %}
+          {% if alerts.metadata.count > 1 %}
             {% trans "alerts.aria.multiple-alert.01" %}
           {% else %}
             {% trans "alerts.aria.one-alert.01" %}
@@ -33,12 +33,12 @@ the content
         <svg role="img"
              aria-hidden="true"
              class="wx-alert-icon"
-             data-alert-level="{{ day.alerts.metadata.highest }}">
+             data-alert-level="{{ alerts.metadata.highest }}">
           <use xlink:href="/assets/images/uswds/sprite.svg#warning"></use>
         </svg>
       {% endif %}
       <svg role="img" aria-hidden="true" class="wx-alert-icon">
-        <use xlink:href="/assets/images/spritesheet.svg#{{ day.periods.0.data.icon.base }}"></use>
+        <use xlink:href="/assets/images/spritesheet.svg#{{ periods.0.data.icon.base }}"></use>
       </svg>
     </div>
     <div class="wx-quick-toggle-item-high-low display-flex flex-1 text-primary-darker">

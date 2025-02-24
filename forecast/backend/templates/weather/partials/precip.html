@@ -13,36 +13,36 @@
         <thead>
           <tr>
             <th scope="col">{% trans "precip-table.table-header.time-period.01" %}</th>
-            {% if qpf.hasSnow %}
+            {% if hasSnow %}
               <th scope="col">{% trans "precip-table.table-header+legend.snow.01" %}</th>
             {% endif %}
-            {% if qpf.hasIce %}
+            {% if hasIce %}
               <th scope="col">{% trans "precip-table.table-header+legend.ice.01" %}</th>
             {% endif %}
-            {% if qpf.hasSnow or qpf.hasIce %}<th aria-hidden="true"></th>{% endif %}
+            {% if hasSnow or hasIce %}<th aria-hidden="true"></th>{% endif %}
             <th scope="col">{{ liquidTitle }}</th>
           </tr>
         </thead>
         <tbody>
-          {% for hour in qpf.periods %}
+          {% for hour in periods %}
             <tr>
               <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">
                 {{ hour.startHour }}&emsp13;–&emsp13;{{ hour.endHour }}
               </td>
-              {% if qpf.hasSnow %}
+              {% if hasSnow %}
                 <td class="text-align-left">{% trans_with_args "units.inches.01" inches=hour.snow.in %}</td>
               {% endif %}
-              {% if qpf.hasIce %}
+              {% if hasIce %}
                 <td>{% trans_with_args "units.inches.01" inches=hour.ice.in %}</td>
               {% endif %}
-              {% if qpf.hasSnow or qpf.hasIce %}<td aria-hidden="true"></td>{% endif %}
+              {% if hasSnow or hasIce %}<td aria-hidden="true"></td>{% endif %}
               <td class="text-align-left">{% trans_with_args "units.inches.01" inches=hour.liquid.in %}</td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
-    {% if qpf.hasIce or qpf.hasSnow %}
+    {% if hasIce or hasSnow %}
       <div class="grid-col-12 tablet:grid-col-6 tablet:padding-left-1">
         <p class="bg-base-lightest padding-105">{% trans "precip-table.text.water-explainer.01" %}</p>
       </div>

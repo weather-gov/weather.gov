@@ -44,13 +44,9 @@ def index(request):
 
 
 def point_location(request, lat, lon):
-    base_url = getenv("INTEROP_URL")
-    url = f"{base_url}/point/{lat}/{lon}"
-    r = requests.get(url)
-    # TODO: Put some error handling here
-    point = r.json()
-
-    return render(request, "weather/point.html", locals())
+    point = interop.get_point_forecast(lat, lon)
+    # TODO: Add some error checking here
+    return render(request, "weather/point.html", {"point": point})
 
 def offices(request):
     regions = []
