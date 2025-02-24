@@ -40,10 +40,10 @@ python-lint:
 	docker compose exec web python -m flake8 .
 
 template-lint:
-	docker compose exec web djlint forecast/backend/templates/ --extension=html
+	docker compose exec web djlint backend/templates/ --extension=html
 
 template-format:
-	docker compose exec web djlint forecast/backend/templates/ --reformat --extension=html
+	docker compose exec web djlint backend/templates/ --reformat --extension=html
 
 lint: python-lint template-format template-lint
 

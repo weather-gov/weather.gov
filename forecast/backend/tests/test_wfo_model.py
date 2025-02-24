@@ -1,6 +1,7 @@
 from django.test import TestCase
 from backend.models import Region, WFO
 
+
 class WFOModelTests(TestCase):
     @classmethod
     def setUpTestData(cls):

@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+
 @register.simple_tag
 def subtract(first, second):
     """
@@ -18,6 +19,7 @@ def subtract(first, second):
         second = 0
     return float(first) - float(second)
 
+
 @register.simple_tag
 def place_label(place):
     """Given a place dict with a name and possibly a state,
@@ -27,6 +29,7 @@ def place_label(place):
     if state:
         return f"{name}, {state}"
     return name
+
 
 def json_encode(value):
     if isinstance(value, dict) or isinstance(value, list):
@@ -43,6 +46,7 @@ def normalize_wfo(value):
 
 def normalize_alert_whitespace(text):
     return mark_safe(re.sub("\n+", "<br />", text))
+
 
 register.filter("normalize_wfo", normalize_wfo)
 register.filter("normalize_alert_whitespace", normalize_alert_whitespace)

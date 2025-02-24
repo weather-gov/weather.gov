@@ -1,6 +1,5 @@
 from django import template
 from django.utils.translation import gettext_lazy as _
-from django.utils import dateparse
 from django.utils.safestring import mark_safe
 from backend.models import DynamicSafetyInformation
 
@@ -49,6 +48,7 @@ RADAR_INTENSITIES = [
         "gradient": "180deg, #F174FD 0%, #F875FF 30.26%, #AA0BFA 34%, #5B06D3 98.5%",
     },
 ]
+
 
 # Renders the partial for the daily high/low information
 @register.inclusion_tag("weather/partials/daily-high-low.html")
@@ -118,10 +118,7 @@ def summary_alert_link(**kwargs):
 def daily_forecast_list_item(**kwargs):
     day = kwargs["day"]
     day_label = kwargs.get("dayLabel", day["periods"][0]["dayName"])
-    return {
-        "day": day,
-        "dayLabel": day_label
-    }
+    return {"day": day, "dayLabel": day_label}
 
 
 # Renders a daily summary list item
@@ -183,9 +180,7 @@ def radar(**kwargs):
 # Render a quick forecast link item
 @register.inclusion_tag("weather/partials/quick-forecast-link-item.html")
 def quick_forecast_link_item(**kwargs):
-    return {
-        "day": kwargs.get("day")
-    }
+    return {"day": kwargs.get("day")}
 
 
 # Render an hourly details table
@@ -193,10 +188,7 @@ def quick_forecast_link_item(**kwargs):
 def hourly_table(**kwargs):
     day = kwargs["day"]
 
-    return {
-        **day,
-        "alerts": day["alerts"]["items"]
-    }
+    return {**day, "alerts": day["alerts"]["items"]}
 
 
 # Render the hourly charts
@@ -204,13 +196,8 @@ def hourly_table(**kwargs):
 def hourly_charts(**kwargs):
     hours = kwargs["hours"]
     day = kwargs["day"]
-  
-    return {
-        **day["hourly"],
-        "itemId": day["id"],
-        "hours": hours,
-        "qpf": day["qpf"]
-    }
+
+    return {**day["hourly"], "itemId": day["id"], "hours": hours, "qpf": day["qpf"]}
 
 
 # Render the daily forecast quick-toggle component
@@ -227,10 +214,8 @@ def precip_table(**kwargs):
     qpf = kwargs["qpf"]
     as_table = kwargs.get("as_table", True)
 
-    return {
-        **qpf,
-        "as_table": as_table
-    }
+    return {**qpf, "as_table": as_table}
+
 
 @register.inclusion_tag("weather/partials/dynamic-safety-info.html")
 def dynamic_safety_information(weather_event_type):
@@ -241,9 +226,6 @@ def dynamic_safety_information(weather_event_type):
     """
     try:
         found = DynamicSafetyInformation.objects.get(type=weather_event_type.lower())
-        return {
-            "body": mark_safe(found.body),
-            "type": found.type
-        }
+        return {"body": mark_safe(found.body), "type": found.type}
     except DynamicSafetyInformation.DoesNotExist:
         return None

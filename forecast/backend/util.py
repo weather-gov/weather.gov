@@ -1,12 +1,13 @@
 OCONUS_4CODE_MAPPINGS = {
-    "PHFO": "HFO", # Honolulu, HI
-    "TJSJ": "SJU", # San Juan, PR
-    "NSTU": "PPG", # Pago Pago, AS
-    "PGUM": "GUM", # Tiyan, GU
-    "PAFC": "AFC", # Anchorage, AK
-    "PAFG": "AFG", # Fairbanks, AK
-    "PAJK": "AJK", # Juneau, AK
+    "PHFO": "HFO",  # Honolulu, HI
+    "TJSJ": "SJU",  # San Juan, PR
+    "NSTU": "PPG",  # Pago Pago, AS
+    "PGUM": "GUM",  # Tiyan, GU
+    "PAFC": "AFC",  # Anchorage, AK
+    "PAFG": "AFG",  # Fairbanks, AK
+    "PAJK": "AJK",  # Juneau, AK
 }
+
 
 def get_wfo_from_afd(afd):
     """
@@ -33,4 +34,3 @@ def get_wfo_from_afd(afd):
     # If we get here, we don't recognize the given WFO code as
     # valid, so return None
     return None
-    

@@ -1,5 +1,4 @@
-from django.urls import path, register_converter
-from django.urls import path, include
+from django.urls import path, register_converter, include
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -14,14 +13,12 @@ urlpatterns = [
     path("afd/", views.afd_index, name="afd_index"),
     path("afd/<wfo>", views.afd_by_office, name="afd_by_office"),
     path("afd/<wfo>/<afd_id>", views.afd_by_office_and_id, name="afd_by_office_and_id"),
-
     # WX routes are those that return partial HTML markup
     # that will be requested from the frontend (htmx style)
     path("wx/afd/<afd_id>", views.wx_afd_id, name="wx_afd_id"),
     path("wx/afd/locations/<wfo>", views.wx_afd_versions, name="wx_afd_versions"),
-
-    path('cms/', include(wagtailadmin_urls)),
-    path('documents/', include(wagtaildocs_urls)),
-    path('pages/', include(wagtail_urls)),
+    path("cms/", include(wagtailadmin_urls)),
+    path("documents/", include(wagtaildocs_urls)),
+    path("pages/", include(wagtail_urls)),
     path("point/<float:lat>/<float:lon>", views.point_location, name="point"),
 ]

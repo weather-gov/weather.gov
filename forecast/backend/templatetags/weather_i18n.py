@@ -1,5 +1,4 @@
 import json
-import re
 from django.utils.translation import gettext_lazy as _
 from django import template
 from django.utils.safestring import mark_safe
@@ -16,6 +15,7 @@ def t(value, args=False):
             result = result.replace(key, val)
         return result
     return _(value)
+
 
 @register.simple_tag
 def trans_with_args(value, *args, **kwargs):
