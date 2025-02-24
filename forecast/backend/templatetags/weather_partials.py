@@ -1,6 +1,8 @@
 from django import template
 from django.utils.translation import gettext_lazy as _
 from django.utils import dateparse
+from django.utils.safestring import mark_safe
+from backend.models import DynamicSafetyInformation
 
 register = template.Library()
 
@@ -229,3 +231,19 @@ def precip_table(**kwargs):
         **qpf,
         "as_table": as_table
     }
+
+@register.inclusion_tag("weather/partials/dynamic-safety-info.html")
+def dynamic_safety_information(weather_event_type):
+    """
+    Respond with the (safe) html markup of safety information
+    for the given alert type. If there is no corresponding
+    safety information for the type, return None
+    """
+    try:
+        found = DynamicSafetyInformation.objects.get(type=weather_event_type.lower())
+        return {
+            "body": mark_safe(found.body),
+            "type": found.type
+        }
+    except DynamicSafetyInformation.DoesNotExist:
+        return None

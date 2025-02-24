@@ -40,6 +40,22 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+
+    # Wagtail dependencies
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    #'wagtail.contrib.modeladmin',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail',
+    'modelcluster',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +67,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+
+    # Wagtail related middleware
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = "backend.config.urls"
@@ -137,7 +156,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 # URL to use when referring to static files located in STATIC_ROOT
 # Must be relative and end with "/"
 STATIC_URL = "public/"
@@ -148,6 +166,18 @@ STATICFILES_DIRS = [
     BASE_DIR / "frontend" / "assets",
 ]
 
+
+# Wagtail related settings
+# See https://docs.wagtail.org/en/stable/getting_started/integrating_into_django.html
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10_000
+
+WAGTAIL_SITE_NAME = 'beta.weather.gov'
+WAGTAILADMIN_BASE_URL = 'http://localhost:8080' # Change to env variable for config
+WAGTAILDOCS_EXTENSIONS = [ "jpg", "jpeg", "pdf", "png", "gif" ]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -157,7 +187,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # Custom site information
-SITE_LOGO = "/assets/logo.svg"
+SITE_LOGO = "/public/logo.svg"
 SITE_NAME = "beta.weather.gov"
 SITE_SLOGAN = "National Weather Service"
 
