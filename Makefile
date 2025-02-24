@@ -1,4 +1,4 @@
-zap: containers-up pause import-spatial load-spatial migrate load-wfo-data load-safety-data spatial-dump sleep django-restart
+zap: containers-up pause import-spatial load-spatial migrate load-wfo-data load-safety-data spatial-dump pause django-restart
 rezap: dump-spatial zap
 
 import-spatial:
