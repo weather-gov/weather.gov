@@ -13,9 +13,7 @@ def _fetch(url):
     full_url = f"{base_url}{url}"
     response = requests.get(full_url)
     response.raise_for_status()
-    data = response.json()
-
-    return _process_interop_data(data)
+    return response.json()
 
 
 def _api_fetch(url):
@@ -140,7 +138,8 @@ def _process_interop_data(data):
 
 def get_point_forecast(lat, lon):
     url = f"/point/{lat}/{lon}"
-    return _fetch(url)
+    data = _fetch(url)
+    return _process_interop_data(data)
 
 
 def get_wx_afd_by_id(afd_id):
