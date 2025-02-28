@@ -1,19 +1,22 @@
 name: weathergov-django
 
+volumes:
+  postgres_data:
+
 services:
   database:
-    image: mysql:8.0 # 8.0.35 in prod
+    platform: linux/amd64
+    image: postgis/postgis:17-3.5
     networks:
       - weather.gov
     volumes:
-      - ./data/db:/data
+      - postgres_data:/var/lib/postgresql/data/
     environment:
-      MYSQL_DATABASE: weathergov
-      MYSQL_PASSWORD: drupal
-      MYSQL_USER: drupal
-      MYSQL_ROOT_PASSWORD: drupal
+      POSTGRES_USER: drupal
+      POSTGRES_PASSWORD: drupal
+      POSTGRES_DB: weathergov
     ports:
-      - 3306:3306
+      - 5432:5432
 
   web:
     build: forecast/
@@ -23,10 +26,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      MYSQL_DATABASE: weathergov
-      MYSQL_USER: root
-      MYSQL_PASSWORD: drupal
-      MYSQL_ROOT_PASSWORD: drupal
+      # MYSQL_DATABASE: weathergov
+      # MYSQL_USER: root
+      # MYSQL_PASSWORD: drupal
+      # MYSQL_ROOT_PASSWORD: drupal
+      POSTGRES_DB: weathergov
+      POSTGRES_USER: drupal
+      POSTGRES_PASSWORD: drupal
       INTEROP_URL: "http://api-interop-layer:8082/"
       API_URL: "http://api-proxy:8081/"
     networks:
@@ -69,7 +75,7 @@ services:
       DB_USERNAME: drupal
       DB_PASSWORD: drupal
       DB_HOST: database
-      DB_PORT: 3306
+      DB_PORT: 5432
       API_URL: http://api-proxy:8081
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
       NEWRELIC_LICENSE: ${NEWRELIC_LICENSE:-}
@@ -90,7 +96,7 @@ services:
       context: ./
       dockerfile: Dockerfile.uswds
     volumes:
-      - ./frontend/:/app
+      - ./forecast/frontend/:/app
       - /app/node_modules
     
 

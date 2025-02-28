@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import dayjs from "dayjs";
 import sinon, { createSandbox } from "sinon";
+import { BASE_URL } from "../../util/fetch.js";
 
 describe("observations module", () => {
   const sandbox = createSandbox();
@@ -43,7 +44,7 @@ describe("observations module", () => {
     });
 
     fetch
-      .withArgs("https://api.weather.gov/gridpoints/TEST/1,1/stations")
+      .withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations`)
       .resolves(stations);
 
     // We need to specifically deal with all of these endpoints for every test
@@ -53,21 +54,24 @@ describe("observations module", () => {
     // possibly be slower as a result.
     fetch
       .withArgs(
-        "https://api.weather.gov/stations/station1/observations?limit=1",
+        `${BASE_URL}/stations/station1/observations?limit=1`,
       )
       .resolves(response);
     fetch
       .withArgs(
-        "https://api.weather.gov/stations/station2/observations?limit=1",
+        `${BASE_URL}/stations/station2/observations?limit=1`,
       )
       .resolves(response);
     fetch
       .withArgs(
-        "https://api.weather.gov/stations/station3/observations?limit=1",
+        `${BASE_URL}/stations/station3/observations?limit=1`,
       )
       .resolves(response);
 
-    global.test.database.query.resolves([[{ distance: 100 }]]);
+    // Note: we pass the globally mocked
+    // database as the second param to the
+    // getObservations call
+    global.test.database.query.resolves({rows: [ {distance: 100} ]});
   });
 
   describe("properly handles feels-like temperature", () => {
@@ -87,7 +91,7 @@ describe("observations module", () => {
       const obs = await getObservations({
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
-      });
+      }, global.test.database);
 
       expect(obs.data.feelsLike).to.eql(expected);
     });
@@ -109,7 +113,7 @@ describe("observations module", () => {
       const obs = await getObservations({
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
-      });
+      }, global.test.database);
 
       expect(obs.data.feelsLike).to.eql(expected);
     });
@@ -131,7 +135,7 @@ describe("observations module", () => {
       const obs = await getObservations({
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
-      });
+      }, global.test.database);
 
       expect(obs.data.feelsLike).to.eql(expected);
     });
@@ -159,7 +163,7 @@ describe("observations module", () => {
       const obs = await getObservations({
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
-      });
+      }, global.test.database);
 
       expect(obs.data.windSpeed).to.eql(expected);
     });
@@ -185,7 +189,7 @@ describe("observations module", () => {
       const obs = await getObservations({
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
-      });
+      }, global.test.database);
 
       expect(obs.data.windSpeed).to.eql(expected);
     });
@@ -208,13 +212,13 @@ describe("observations module", () => {
       it("tries the second observation if the first is invalid", async () => {
         fetch
           .withArgs(
-            "https://api.weather.gov/stations/station1/observations?limit=1",
+            `${BASE_URL}/stations/station1/observations?limit=1`,
           )
           .resolves(invalid);
 
         fetch
           .withArgs(
-            "https://api.weather.gov/stations/station2/observations?limit=1",
+            `${BASE_URL}/stations/station2/observations?limit=1`,
           )
           .resolves({
             status: 200,
@@ -234,7 +238,7 @@ describe("observations module", () => {
         const obs = await getObservations({
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
-        });
+        }, global.test.database);
 
         expect(obs.data.temperature).to.eql(expected);
       });
@@ -242,19 +246,19 @@ describe("observations module", () => {
       it("tries the third observation if the second is invalid", async () => {
         fetch
           .withArgs(
-            "https://api.weather.gov/stations/station1/observations?limit=1",
+            `${BASE_URL}/stations/station1/observations?limit=1`,
           )
           .resolves(invalid);
 
         fetch
           .withArgs(
-            "https://api.weather.gov/stations/station2/observations?limit=1",
+            `${BASE_URL}/stations/station2/observations?limit=1`,
           )
           .resolves(invalid);
 
         fetch
           .withArgs(
-            "https://api.weather.gov/stations/station3/observations?limit=1",
+            `${BASE_URL}/stations/station3/observations?limit=1`,
           )
           .resolves({
             status: 200,
@@ -274,7 +278,7 @@ describe("observations module", () => {
         const obs = await getObservations({
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
-        });
+        }, global.test.database);
 
         expect(obs.data.temperature).to.eql(expected);
       });
@@ -283,19 +287,19 @@ describe("observations module", () => {
         it("all stations return invalid observations", async () => {
           fetch
             .withArgs(
-              "https://api.weather.gov/stations/station1/observations?limit=1",
+              `${BASE_URL}/stations/station1/observations?limit=1`,
             )
             .resolves(invalid);
 
           fetch
             .withArgs(
-              "https://api.weather.gov/stations/station2/observations?limit=1",
+              `${BASE_URL}/stations/station2/observations?limit=1`,
             )
             .resolves(invalid);
 
           fetch
             .withArgs(
-              "https://api.weather.gov/stations/station3/observations?limit=1",
+              `${BASE_URL}/stations/station3/observations?limit=1`,
             )
             .resolves(invalid);
 
@@ -307,7 +311,7 @@ describe("observations module", () => {
           const obs = await getObservations({
             grid: { wfo: "TEST", x: 1, y: 1 },
             point: {},
-          });
+          }, global.test.database);
 
           expect(obs).to.eql(expected);
         });
@@ -318,19 +322,19 @@ describe("observations module", () => {
 
           fetch
             .withArgs(
-              "https://api.weather.gov/stations/station1/observations?limit=1",
+              `${BASE_URL}/stations/station1/observations?limit=1`,
             )
             .resolves(invalid);
 
           fetch
             .withArgs(
-              "https://api.weather.gov/stations/station2/observations?limit=1",
+              `${BASE_URL}/stations/station2/observations?limit=1`,
             )
             .resolves(invalid);
 
           fetch
             .withArgs(
-              "https://api.weather.gov/stations/station3/observations?limit=1",
+              `${BASE_URL}/stations/station3/observations?limit=1`,
             )
             .resolves(invalid);
 
@@ -342,7 +346,7 @@ describe("observations module", () => {
           const obs = await getObservations({
             grid: { wfo: "TEST", x: 1, y: 1 },
             point: {},
-          });
+          }, global.test.database);
 
           expect(obs).to.eql(expected);
 
@@ -354,17 +358,17 @@ describe("observations module", () => {
     it("returns an error if none of the stations return", async () => {
       fetch
         .withArgs(
-          "https://api.weather.gov/stations/station1/observations?limit=1",
+          `${BASE_URL}/stations/station1/observations?limit=1`,
         )
         .resolves({ status: 400 });
       fetch
         .withArgs(
-          "https://api.weather.gov/stations/station2/observations?limit=1",
+          `${BASE_URL}/stations/station2/observations?limit=1`,
         )
         .resolves({ status: 400 });
       fetch
         .withArgs(
-          "https://api.weather.gov/stations/station3/observations?limit=1",
+          `${BASE_URL}/stations/station3/observations?limit=1`,
         )
         .resolves({ status: 400 });
 
@@ -376,14 +380,14 @@ describe("observations module", () => {
       const actual = await getObservations({
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
-      });
+      }, global.test.database);
 
       expect(actual).to.eql(expected);
     });
 
     it("returns an error if getting the list of stations fails", async () => {
       fetch
-        .withArgs("https://api.weather.gov/gridpoints/TEST/1,1/stations")
+        .withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations`)
         .rejects();
 
       const expected = {
@@ -394,7 +398,7 @@ describe("observations module", () => {
       const actual = await getObservations({
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
-      });
+      }, global.test.database);
 
       expect(actual).to.eql(expected);
     });
@@ -410,7 +414,7 @@ describe("observations module", () => {
       const actual = await getObservations({
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
-      });
+      }, global.test.database);
 
       expect(actual).to.eql(expected);
     });
@@ -422,7 +426,7 @@ describe("observations module", () => {
         {
           properties: {
             barometricPressure: { unitCode: "wmoUnit:Pa", value: 101800 },
-            icon: "https://api.weather.gov/icons/land/night/skc?size=medium",
+            icon: `${BASE_URL}/icons/land/night/skc?size=medium`,
             textDescription: "Weathery",
             temperature: { value: 100, unitCode: "wmoUnit:degC" },
             timestamp: "2024-10-01T13:00:00-0500",
@@ -472,7 +476,7 @@ describe("observations module", () => {
     const obs = await getObservations({
       grid: { wfo: "TEST", x: 1, y: 1 },
       point: {},
-    });
+    }, global.test.database);
 
     expect(obs).to.eql(expected);
   });

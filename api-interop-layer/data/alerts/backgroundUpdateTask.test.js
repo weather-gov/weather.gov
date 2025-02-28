@@ -13,6 +13,7 @@ describe("alert background processing module", () => {
   let getHashesStub;
   let addAlertStub;
   let removeAlertsStub;
+  let createTableStub;
   let storedHashes;
   let storedAlerts;
 
@@ -22,9 +23,9 @@ describe("alert background processing module", () => {
     storedHashes = [];
     storedAlerts = {};
     getHashesStub = sandbox.stub(AlertsCache.prototype, "getHashes");
-    getHashesStub.callsFake(() =>storedHashes);
+    getHashesStub.callsFake(() => storedHashes);
     addAlertStub = sandbox.stub(AlertsCache.prototype, "add");
-    addAlertStub.callsFake((hash, alert, geometry, alertKind) =>{
+    addAlertStub.callsFake((hash, alert, geometry, alertKind) => {
       storedHashes.push(hash);
       storedAlerts[hash] = [hash, alert, geometry, alertKind];
     });
@@ -38,6 +39,7 @@ describe("alert background processing module", () => {
         }
       });
     });
+    createTableStub = sandbox.stub(AlertsCache.prototype, "createTable");
 
     fetch.resolves(response);
   });
@@ -50,6 +52,7 @@ describe("alert background processing module", () => {
     getHashesStub.restore();
     addAlertStub.restore();
     removeAlertsStub.restore();
+    createTableStub.restore();
   });
 
   describe("Does not save the same alert twice on repeated call", () => {

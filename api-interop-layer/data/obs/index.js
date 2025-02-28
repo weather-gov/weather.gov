@@ -14,9 +14,7 @@ const logger = createLogger("observations");
 export default async ({
   grid: { wfo, x, y },
   point: { latitude, longitude },
-}) => {
-  const dbPromise = openDatabase();
-
+}, dbConnection) => {
   const stations = await fetchAPIJson(
     `/gridpoints/${wfo}/${x},${y}/stations`,
   ).then((out) => {
@@ -29,6 +27,7 @@ export default async ({
 
     return out.features.slice(0, 3);
   });
+  
   if (stations.error) {
     logger.warn("Failed to get a list of stations");
     return {
@@ -110,8 +109,6 @@ export default async ({
       `using observations from ${station.properties.stationIdentifier}`,
     );
 
-    const db = await dbPromise;
-
     const data = Object.keys(observation)
       .filter((key) => observation[key]?.unitCode)
       .reduce((o, key) => ({ ...o, [key]: observation[key] }), {});
@@ -130,12 +127,14 @@ export default async ({
 
     convertProperties(data);
 
-    const [[{ distance }]] = await db.query(`
-      SELECT ST_DISTANCE_SPHERE(
+    const distanceResult =  await dbConnection.query(`
+      SELECT ST_DISTANCESPHERE(
         ST_GEOMFROMGEOJSON('${JSON.stringify(station.geometry)}'),
-        ST_SRID(ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})'), 4326)
+        ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})')
       ) as distance
     `);
+
+    const [{ distance }] = distanceResult.rows;
 
     sendNewRelicMetric({
       name: "wx.observation",

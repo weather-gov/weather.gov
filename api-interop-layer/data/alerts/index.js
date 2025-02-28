@@ -111,7 +111,7 @@ export default async ({
   });
   
   const alerts = await alertsCache.getIntersectingAlerts(
-    JSON.stringify(geometry)
+    geometry
   );
   
   alerts.forEach(alert => {

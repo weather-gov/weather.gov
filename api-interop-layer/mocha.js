@@ -1,22 +1,25 @@
 import sinon from "sinon"; // eslint-disable-line import/no-extraneous-dependencies
-import * as database from "mysql2/promise.js";
+import pg from "pg";
+const { Pool, Client } = pg;
 
 const sandbox = sinon.createSandbox();
 
 export async function mochaGlobalSetup() {
   sandbox.stub(global, "fetch");
-  sinon.stub(database.default, "createConnection");
-  sinon.stub(database.default, "createPool");
-  global.test = { database: { query: sandbox.stub(), end: sandbox.stub() } };
 
-  database.default.createConnection.resolves(global.test.database);
-  database.default.createPool.resolves(global.test.database);
+  // Stub out the PG (postgres) library's database
+  // creation methods
+  global.test = { database: { query: sandbox.stub(), end: sandbox.stub(), release: sandbox.stub() } };
+  sinon.stub(Pool.prototype, "connect");
+  sinon.stub(Client.prototype, "connect");
+  Pool.prototype.connect.resolves(global.test.database);
+  Client.prototype.connect.resolves(global.test.database);
 }
 
 export async function mochaGlobalTeardown() {
   global.fetch.restore();
-  database.default.createConnection.restore();
-  database.default.createPool.restore();
+  Pool.prototype.connect.restore();
+  Client.prototype.connect.restore();
 }
 
 export const mochaHooks = {

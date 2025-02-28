@@ -1,9 +1,9 @@
-zap: containers-up pause import-spatial load-spatial migrate load-wfo-data load-safety-data spatial-dump pause django-restart
+zap: containers-up pause import-spatial load-spatial migrate load-wfo-data load-safety-data dump-spatial pause django-restart
 rezap: dump-spatial zap
 
 import-spatial:
-ifneq ("spatial-data/dump.mysql","")
-	cat spatial-data/dump.mysql | docker compose exec -T database mysql -udrupal -pdrupal -hdatabase weathergov
+ifneq ("spatial-data/dump.sql","")
+	cat spatial-data/dump.sql | docker compose exec -T database psql -U drupal -w -d weathergov
 endif
 
 ### Spatial data
@@ -11,7 +11,7 @@ load-spatial: # Load spatial data into the database
 	docker compose run --rm spatial node load-shapefiles.js
 
 dump-spatial:
-	docker compose exec database mysqldump -udrupal -pdrupal -hdatabase --no-tablespaces weathergov weathergov_geo_metadata weathergov_geo_states weathergov_geo_counties weathergov_geo_places weathergov_geo_cwas weathergov_geo_zones > spatial-data/dump.mysql
+	docker compose exec database pg_dump --username=drupal --dbname=weathergov -w -t weathergov_geo_metadata -t weathergov_geo_states -t weathergov_geo_counties -t weathergov_geo_places -t weathergov_geo_cwas -t  weathergov_geo_zones > spatial-data/dump.sql
 
 update-settings:
 	cp -f web/sites/example.settings.dev.php web/sites/settings.dev.php
@@ -25,9 +25,6 @@ containers-up:
 
 django-restart:
 	docker compose restart web
-
-spatial-dump:
-	docker compose exec database mysqldump -udrupal -pdrupal -hdatabase --no-tablespaces weathergov weathergov_geo_metadata weathergov_geo_states weathergov_geo_counties weathergov_geo_places weathergov_geo_cwas weathergov_geo_zones > spatial-data/dump.mysql
 
 pause:
 	sleep 15

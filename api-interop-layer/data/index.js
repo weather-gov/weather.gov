@@ -6,6 +6,7 @@ import getPoint from "./points.js";
 import getSatellite from "./satellite.js";
 import getProductById from "./products/index.js";
 import { createLogger } from "../util/monitoring/index.js";
+import getDbConnection from "./db.js";
 
 const logger = createLogger("forecast");
 
@@ -22,9 +23,11 @@ const getDataForPoint = async (lat, lon) => {
   if (!grid.error) {
     satellitePromise = getSatellite({ grid });
 
+    const dbPool = await getDbConnection();
+    const dbConnection = await dbPool.connect();
     const { forecast: fct, observed: obs } = await Promise.all([
       getForecast({ grid, place }),
-      getObservations({ grid, point }),
+      getObservations({ grid, point, dbConnection }, dbConnection),
     ]).then(([forecastData, obsData]) => {
       // The forecast endpoint returns extra information about the grid. Why? I
       // dunno. But anyway, let's put it with the other grid info and remove it
@@ -41,6 +44,8 @@ const getDataForPoint = async (lat, lon) => {
 
       return { forecast: forecastData, observed: obsData };
     });
+
+    await dbConnection.release();
 
     forecast = fct;
     observed = obs;

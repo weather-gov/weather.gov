@@ -1,6 +1,6 @@
 const chalk = require("chalk");
 const metadata = require("./meta.js");
-const { openDatabase } = require("./db");
+const { openDatabase, beginTransaction, commitTransaction, rollbackTransaction } = require("./db.js");
 
 module.exports = async ({ target, from, metadata: { table, schemas } }) => {
   const schemaVersions = Object.keys(schemas).filter(
@@ -18,7 +18,7 @@ module.exports = async ({ target, from, metadata: { table, schemas } }) => {
 
     const db = await openDatabase();
     try {
-      await db.beginTransaction();
+      await beginTransaction(db);
       console.log(chalk.blue(`  to version ${version}`));
       if (schema) {
         console.log(chalk.yellow("    ● updating schema"));
@@ -31,14 +31,14 @@ module.exports = async ({ target, from, metadata: { table, schemas } }) => {
 
       console.log(chalk.yellow("    ● updating metadata"));
       await metadata.update(db, table, version);
-      await db.commit();
+      await commitTransaction(db);
       console.log(
         chalk.green(`    ● successfully updated to version ${version}`),
       );
     } catch (e) {
       console.log("  ERROR");
       console.log(e);
-      await db.rollback();
+      await rollbackTransaction(db);
       break;
     } finally {
       await db.end();

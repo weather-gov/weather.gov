@@ -1,6 +1,7 @@
-import database from "mysql2/promise.js";
-
+import pg from "pg";
 import { sleep } from "../util/sleep.js";
+
+const { Client, Pool } = pg;
 
 const getDatabaseConnectionInfo = () => {
   if (process.env.API_INTEROP_PRODUCTION) {
@@ -24,7 +25,6 @@ const getDatabaseConnectionInfo = () => {
     database: process.env.DB_NAME ?? "weathergov",
     host: process.env.DB_HOST ?? "database",
     port: process.env.DB_PORT ?? 3306,
-    ssl: { rejectUnauthorized: false },
   };
 };
 
@@ -39,17 +39,17 @@ export default async () => {
 
   // Try to connect, wait, try again, wait, etc. If the database isn't ready after
   // 4 attempts and 30 seconds, we'll just fail.
-  const db = await database
-    .createConnection(connectionDetails)
+  pool = new Pool(connectionDetails);
+  const client = await pool
+    .connect()
     .catch(() => sleep(5_000))
-    .then(() => database.createConnection(connectionDetails))
+        .then(() => pool.connect())
     .catch(() => sleep(9_000))
-    .then(() => database.createConnection(connectionDetails))
+        .then(() => pool.connect())
     .catch(() => sleep(16_000))
-    .then(() => database.createConnection(connectionDetails));
-  await db.end();
+        .then(() => pool.connect());
+  await client.release();
 
-  pool = database.createPool(connectionDetails);
   return pool;
 };
 

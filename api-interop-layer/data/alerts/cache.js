@@ -6,7 +6,7 @@
  * where active alerts and their geometries are stored.
  * To avoid potential memory conflicts in the threaded environment,
  * actual alert data is not stored on this object and methods are
- * mostly immufable.
+ * mostly immutable.
  * Consumers can use multiple instances of this object to read vs write
  * to the cache table.
  */
@@ -17,20 +17,20 @@ export class AlertsCache {
 
   async createTable(){
     const sql = `CREATE TABLE IF NOT EXISTS ${this.tableName} (
-id INT AUTO_INCREMENT,
+id serial NOT NULL,
 hash TEXT NOT NULL,
 alertJson JSON NOT NULL,
-shape GEOMETRY DEFAULT NULL,
+shape geometry(GEOMETRY) DEFAULT NULL,
 alertKind TEXT DEFAULT NULL,
 PRIMARY KEY(id)
-) DEFAULT CHARSET=utf8mb4`;
+)`;
     return this.db.query(sql);
   }
 
   async getHashes(){
     const sql = `SELECT hash FROM ${this.tableName};`;
-    const [ result ] = await this.db.query(sql);
-    return result.map(r => r.hash);
+    const { rows } = await this.db.query(sql);
+    return rows.map(r => r.hash);
   }
 
   /**
@@ -73,7 +73,7 @@ PRIMARY KEY(id)
     }
     let whereClause = `hash='${aHashList[0]}';`;
     if(aHashList.length > 1){
-      const marks = aHashList.map(() => "?").join(", ");
+      const marks = aHashList.map((_, idx) => `$${idx+1}`).join(", ");
       whereClause = `hash IN (${marks});`;
     }
     const sql = `DELETE FROM ${this.tableName} WHERE ${whereClause}`;
@@ -86,9 +86,8 @@ PRIMARY KEY(id)
    */
   async add(hash, alert, geometry, alertKind=null){
     const alertAsString = JSON.stringify(alert);
-    const geometryAsString = JSON.stringify(geometry);
-    const sql = `INSERT INTO ${this.tableName} (hash, alertJson, shape, alertKind) VALUES(?, ?, ST_GeomFromGeoJson(?), ?);`;
-    return this.db.query(sql, [hash, alertAsString, geometryAsString, alertKind]);
+    const sql = `INSERT INTO ${this.tableName} (hash, alertJson, shape, alertKind) VALUES($1, $2, ST_TRANSFORM(ST_GeomFromGeoJson($3), 4326), $4);`;
+    return await this.db.query(sql, [hash, alertAsString, geometry, alertKind]);
   }
   
   /**
@@ -96,10 +95,14 @@ PRIMARY KEY(id)
    * retrieve all alerts that intersect with that geometry.
    */
   async getIntersectingAlerts(geojson){
-    const sql = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${this.tableName} WHERE ST_INTERSECTS(ST_GeomFromGeoJson(?), shape);`;
-    const response = await this.db.query(sql, [geojson]);
-    const [results] = response;
-    return results.map(result => Object.assign({}, result.alertJson, { geometry: result.geometry }));
+    let shape = geojson;
+    if(geojson.geometry){
+      shape = geojson.geometry;
+    }
+    const sql = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${this.tableName} WHERE ST_INTERSECTS(ST_GeomFromGeoJson($1), shape);`;
+    const response = await this.db.query(sql, [shape]);
+    const results = response.rows;
+    return results.map(result => Object.assign({}, result.alertjson, { geometry: JSON.parse(result.geometry) }));
   }
 
   /**
