@@ -13,11 +13,11 @@ const schemas = {
         `CREATE TABLE
         ${metadata.table}
         (
-          id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          id serial NOT NULL PRIMARY KEY,
           state VARCHAR(2),
           name TEXT,
           fips VARCHAR(2),
-          shape MULTIPOLYGON NOT NULL
+          shape geometry(GEOMETRY) NOT NULL
         )`,
       );
     },
@@ -25,7 +25,7 @@ const schemas = {
       const file = await shapefile.open(`./data/s_05mr24.shp`);
 
       await db.query("TRUNCATE TABLE weathergov_geo_states");
-      await db.query("ALTER TABLE weathergov_geo_states AUTO_INCREMENT=0");
+      //await db.query("ALTER TABLE weathergov_geo_states AUTO_INCREMENT=0");
 
       const getSqlForShape = async ({ done, value }) => {
         if (done) {
@@ -41,9 +41,6 @@ const schemas = {
           geometry.type = "MultiPolygon";
           geometry.coordinates = [geometry.coordinates];
         }
-
-        // These shapefiles are in NAD83, whose SRID is 4269.
-        geometry.crs = { type: "name", properties: { name: "EPSG:4269" } };
 
         await db.query(
           `INSERT INTO weathergov_geo_states
@@ -61,7 +58,7 @@ const schemas = {
       await file.read().then(getSqlForShape);
 
       await db.query(
-        "CREATE SPATIAL INDEX states_spatial_idx ON weathergov_geo_states(shape)",
+        "CREATE INDEX states_spatial_idx ON weathergov_geo_states USING GIST(shape)"
       );
     },
   },

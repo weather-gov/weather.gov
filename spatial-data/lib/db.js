@@ -1,4 +1,5 @@
-const database = require("mysql2/promise");
+const pg = require("pg");
+const { Client } = pg;
 
 module.exports.openDatabase = async () => {
   // Slice off Node executable and script, keep just the args.
@@ -9,22 +10,29 @@ module.exports.openDatabase = async () => {
     password: args[1] ?? "drupal",
     database: args[2] ?? "weathergov",
     host: args[3] ?? process.env.DB_HOST ?? "database",
-    port: args[4] ?? 3306,
+    port: args[4] ?? 5432,
   };
 
-  return database.createConnection(connectionDetails);
+  const client = new Client(connectionDetails);
+  await client.connect();
+  return client;
 };
 
-// MariaDB supports IF EXISTS with indices but MySQL does not, so use this more
-// convoluted way to drop indices if they already exists. (If you try to drop an
-// index that doesn't exist, that's an error.)
+module.exports.beginTransaction = async client => {
+  return await client.query("BEGIN;");
+};
+
+module.exports.commitTransaction = async client => {
+  return await client.query("END;");
+};
+
+module.exports.rollbackTransaction = async client => {
+  return await client.query("ROLLBACK;");
+};
+
+
 module.exports.dropIndexIfExists = async (db, name, table) => {
   await db.query(
-    `set @exist := (select count(*) from information_schema.statistics where table_name ='${table}' and index_name = '${name}' and table_schema = database())`,
+    `DROP INDEX IF EXISTS ${name}`
   );
-  await db.query(
-    `set @sqlstmt := if( @exist > 0, 'DROP INDEX ${name} ON ${table}', 'select "INFO: Index does not exist."')`,
-  );
-  await db.query(`PREPARE stmt FROM @sqlstmt`);
-  await db.query(`EXECUTE stmt`);
 };

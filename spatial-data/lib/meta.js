@@ -22,7 +22,7 @@ const initializeMetadataTable = async (db) => {
       weathergov_geo_metadata
       (
         table_name varchar(512) NOT NULL PRIMARY KEY,
-        version SMALLINT UNSIGNED DEFAULT 0
+        version SMALLINT DEFAULT 0
       )`,
   );
 };
@@ -35,9 +35,9 @@ module.exports = async () => {
   // Get the existing schema and data versions for our tables and mape it into
   // a useful data structure.
   const existing = await db
-    .query("SELECT * FROM weathergov_geo_metadata")
-    .then(([rows]) =>
-      rows.reduce(
+        .query("SELECT * FROM weathergov_geo_metadata")
+    .then((res) =>
+      res.rows.reduce(
         (o, meta) => ({
           ...o,
           [meta.table_name]: meta.version,
@@ -75,8 +75,8 @@ module.exports.update = async (db, table, version) => {
   // UPSERT query, essentially
   const sql = `INSERT INTO weathergov_geo_metadata
                   (table_name, version)
-                VALUES(?,?)
-                ON DUPLICATE KEY
-                  UPDATE version=?`;
+                VALUES($1,$2)
+                ON CONFLICT (table_name) DO UPDATE
+                  SET version=$3`;
   await db.query(sql, [table, version, version]);
 };

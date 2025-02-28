@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { expect } from "chai";
 import qpf from "./quantitativePrecipitation.js";
 import forecast from "./index.js";
+import { BASE_URL } from "../../util/fetch.js";
 
 describe("quantitative precipitation forecase (QPF)", () => {
   let clock;
@@ -96,7 +97,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
   });
 
   it("puts QPF into the right days", async () => {
-    fetch.withArgs("https://api.weather.gov/gridpoints/BOB/X,Y").resolves({
+    fetch.withArgs(`${BASE_URL}/gridpoints/BOB/X,Y`).resolves({
       status: 200,
       json: sinon.stub().resolves({
         properties: {
@@ -146,7 +147,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
     });
 
     fetch
-      .withArgs("https://api.weather.gov/gridpoints/BOB/X,Y/forecast")
+      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast`)
       .resolves({
         status: 200,
         json: sinon.stub().resolves({
@@ -174,7 +175,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
       });
 
     fetch
-      .withArgs("https://api.weather.gov/gridpoints/BOB/X,Y/forecast/hourly")
+      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast/hourly`)
       .resolves({
         status: 200,
         json: sinon.stub().resolves({

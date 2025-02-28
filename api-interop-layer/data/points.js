@@ -31,9 +31,9 @@ export default async (latitude, longitude) => {
        ORDER BY ST_DISTANCE(point,ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})'))
        LIMIT 1`,
     )
-    .then((row) => {
-      if (Array.isArray(row) && row.length > 0) {
-        return row[0][0];
+    .then((result) => {
+      if (Array.isArray(result.rows) && result.rows.length > 0) {
+        return result.rows[0];
       }
       return null;
     });

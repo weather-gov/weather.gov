@@ -50,4 +50,7 @@ export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
       return { ...e.cause, error: true };
     });
 
-export default { fetchAPIJson };
+export {
+  fetchAPIJson as default,
+  BASE_URL
+};

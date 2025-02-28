@@ -14,7 +14,7 @@ const schemas = {
         `CREATE TABLE
         ${metadata.table}
         (
-          id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          id serial NOT NULL PRIMARY KEY,
           state VARCHAR(2),
           stateName TEXT,
           stateFips VARCHAR(2),
@@ -22,7 +22,7 @@ const schemas = {
           countyFips VARCHAR(5),
           timezone TEXT,
           dst BOOLEAN,
-          shape MULTIPOLYGON NOT NULL
+          shape geometry(GEOMETRY) NOT NULL
         )`,
       );
     },
@@ -61,8 +61,6 @@ const schemas = {
           geometry.type = "MultiPolygon";
           geometry.coordinates = [geometry.coordinates];
         }
-        // These shapefiles are in NAD83, whose SRID is 4269.
-        geometry.crs = { type: "name", properties: { name: "EPSG:4269" } };
 
         const timezone = shapeTzToIANA.get(tz.toUpperCase());
         const observesDST = tz.toUpperCase() === tz;
@@ -71,12 +69,12 @@ const schemas = {
           `INSERT INTO ${metadata.table}
             (state, countyName, countyFips, timezone, dst, shape)
             VALUES(
-              ?,
-              ?,
-              ?,
-              ?,
-              ?,
-              ST_GeomFromGeoJSON(?)
+              $1,
+              $2,
+              $3,
+              $4,
+              $5,
+              ST_GeomFromGeoJSON($6)
             )`,
           [
             state,
@@ -111,7 +109,7 @@ const schemas = {
       );
 
       await db.query(
-        `CREATE SPATIAL INDEX counties_spatial_idx ON ${metadata.table}(shape)`,
+        `CREATE INDEX counties_spatial_idx ON ${metadata.table} USING GIST(shape)`
       );
     },
   },
@@ -153,8 +151,8 @@ const schemas = {
 
         await db.query(
           `UPDATE ${metadata.table}
-            SET cwas=?
-            WHERE state=? AND countyFips=?`,
+            SET cwas=$1
+            WHERE state=$2 AND countyFips=$3`,
           [state, fips, cwas],
         );
 

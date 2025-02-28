@@ -17,7 +17,7 @@ const schemas = {
         (
           id varchar(45) NOT NULL PRIMARY KEY,
           state VARCHAR(2),
-          shape MULTIPOLYGON NOT NULL
+          shape geometry(GEOMETRY) NOT NULL
         )`,
       );
     },
@@ -30,7 +30,11 @@ const schemas = {
   2: {
     schema: async (db) => {
       await db.query(
-        `ALTER TABLE ${metadata.table} MODIFY shape GEOMETRYCOLLECTION NOT NULL`,
+        `ALTER TABLE ${metadata.table}
+ALTER COLUMN shape
+SET DATA TYPE geometry(GEOMETRY),
+ALTER COLUMN shape
+SET NOT NULL`,
       );
     },
     data: async (db) => {
@@ -84,24 +88,24 @@ const schemas = {
         const featureCollection = {
           type: "FeatureCollection",
           features: geometry,
-          // Shapefiles are in NAD83, whose SRID is 4269. Set that at the collection
-          // level so that it automatically applies to all contained shapes.
-          crs: { type: "name", properties: { name: "EPSG:4269" } },
         };
 
+        const geometryCollection = JSON.stringify(
+          {
+            type:"GeometryCollection",
+            geometries: geometry
+          }
+        );
+        
         await db.query(
           `INSERT INTO ${metadata.table}
           (id, state, shape)
-          VALUES(
-            '${id}',
-            '${state}',
-            ST_GeomFromGeoJSON('${JSON.stringify(featureCollection)}')
-          )`,
+          VALUES ('${id}', '${state}', ST_GeomFromGeoJSON('${geometryCollection}'));`
         );
       }
 
       await db.query(
-        `CREATE SPATIAL INDEX zones_spatial_idx ON ${metadata.table}(shape)`,
+        `CREATE INDEX zones_spatial_idx ON ${metadata.table} USING GIST(shape)`
       );
     },
   },
@@ -111,7 +115,7 @@ const schemas = {
     schema: async (db) => {
       await dropIndexIfExists(db, "zones_spatial_idx", metadata.table);
       await db.query(
-        `CREATE SPATIAL INDEX zones_spatial_idx ON ${metadata.table}(shape)`,
+        `CREATE INDEX zones_spatial_idx ON ${metadata.table} USING GIST(shape)`
       );
     },
     data: null,

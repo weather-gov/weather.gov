@@ -31,9 +31,9 @@ describe("AlertsCache tests", () => {
     const query = `SELECT hash FROM ${alertsCache.tableName}`;
     global.test.database.query
       .withArgs(sinon.match(query))
-      .resolves([
-        CURRENT_TEST_HASHES.map(hash => ({ hash }))
-      ]);
+      .resolves({
+        rows: CURRENT_TEST_HASHES.map(hash => ({ hash }))
+      });
 
     const result = await alertsCache.getHashes();
 
@@ -68,7 +68,7 @@ describe("AlertsCache tests", () => {
 
   it("#removeByHashes", async () => {
     const toRemove = ["two", "three", "five"];
-    const query = `DELETE FROM ${alertsCache.tableName} WHERE hash IN (?, ?, ?);`;
+    const query = `DELETE FROM ${alertsCache.tableName} WHERE hash IN ($1, $2, $3);`;
     global.test.database.query
       .withArgs(query, toRemove)
       .resolves(true);
@@ -84,10 +84,10 @@ describe("AlertsCache tests", () => {
     const geometry = { some: "geojson-object"};
     const kind = "land";
 
-    const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, shape, alertKind) VALUES(?, ?, ST_GeomFromGeoJson(?), ?);`;
+    const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, shape, alertKind) VALUES($1, $2, ST_TRANSFORM(ST_GeomFromGeoJson($3), 4326), $4);`;
     
     global.test.database.query
-      .withArgs(query, [hash, JSON.stringify(alert), JSON.stringify(geometry), kind])
+      .withArgs(query, [hash, JSON.stringify(alert), geometry, kind])
       .resolves("INSERT WORKED");
 
     const actual = await alertsCache.add(hash, alert, geometry, "land");
@@ -96,31 +96,31 @@ describe("AlertsCache tests", () => {
   });
 
   it("#getIntersectingAlerts", async () => {
-    const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_GeomFromGeoJson(?), shape);`;
+    const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_GeomFromGeoJson($1), shape);`;
     const geoJson = { "this-is": "some-geojson" };
     const output = [
       {
-        alertJson: {name: "alert1"},
-        "geometry": "geometry1"
+        alertjson: {name: "alert1"},
+        "geometry": JSON.stringify({name: "geometry1"})
       },
       {
-        alertJson:{name: "alert2"},
-        "geometry": "geometry2"
+        alertjson:{name: "alert2"},
+        "geometry": JSON.stringify({name: "geometry2"})
       }
     ];
     const expected = [
       {
         name: "alert1",
-        geometry: "geometry1"
+        geometry: {name: "geometry1"}
       },
       {
         name: "alert2",
-        geometry: "geometry2"
+        geometry: {name: "geometry2"}
       }
     ];
     global.test.database.query
       .withArgs(query, [geoJson])
-      .resolves([output]);
+      .resolves({rows: output});
 
     const result = await alertsCache.getIntersectingAlerts(geoJson);
 

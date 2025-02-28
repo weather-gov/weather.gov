@@ -16,7 +16,7 @@ const schemas = {
         `CREATE TABLE
         ${metadata.table}
           (
-            id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            id serial NOT NULL PRIMARY KEY,
             name TEXT,
             state TEXT,
             stateName TEXT,
@@ -24,7 +24,7 @@ const schemas = {
             county TEXT,
             countyFIPS VARCHAR(5),
             timezone TEXT,
-            point POINT NOT NULL
+            point geometry(POINT) NOT NULL
           )`,
       );
     },
@@ -130,9 +130,9 @@ const schemas = {
                 )
               LIMIT 1`;
 
-            const [result] = await db.query(sql);
-            if (result && result.length) {
-              const [{ state, county }] = result;
+            const result = await db.query(sql);
+            if (result.rows && result.rows.length) {
+              const [{ state, county }] = result.rows;
 
               place.county = county;
               place.state = state;
@@ -146,7 +146,7 @@ const schemas = {
         "weathergov_geo_places",
       );
       await db.query("TRUNCATE TABLE weathergov_geo_places");
-      await db.query("ALTER TABLE weathergov_geo_places AUTO_INCREMENT=0");
+      //await db.query("ALTER TABLE weathergov_geo_places AUTO_INCREMENT=0");
 
       await Promise.all(
         places.map((place) => {
@@ -176,7 +176,7 @@ const schemas = {
                 countyName,
                 countyFips,
                 '${place.timezone}',
-                ST_GeomFromText('POINT(${place.lon} ${place.lat})') as geom
+                ST_PointFromText('POINT(${place.lon} ${place.lat})')
               FROM
                 weathergov_geo_counties
               WHERE
@@ -199,13 +199,13 @@ const schemas = {
       await Promise.all(
         remove.map(([name, state]) =>
           db.query(
-            `DELETE FROM weathergov_geo_places WHERE state="${state}" AND name="${name}"`,
+            "DELETE FROM weathergov_geo_places WHERE state='${state}' AND name='${name}'"
           ),
         ),
       );
 
       await db.query(
-        "CREATE SPATIAL INDEX places_spatial_idx ON weathergov_geo_places(point)",
+        "CREATE INDEX places_spatial_idx ON weathergov_geo_places USING GIST(point)",
       );
     },
   },

@@ -96,6 +96,7 @@ credentials-*.json
 /tests/**/screenshots/**
 
 # Spatial data
+spatial-data/dump.sql
 spatial-data/*.dbf
 spatial-data/*.prj
 spatial-data/*.shx
@@ -108,5 +109,7 @@ spatial-data/*.txt
 /blob-report/
 /playwright/.cache/
 
+
 # Emacsen
 .dir-locals.el
+
