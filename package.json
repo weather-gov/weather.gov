@@ -69,7 +69,7 @@
   },
   "dependencies": {
     "@prettier/plugin-php": "^0.22.4",
-    "mysql2": "^3.12.0",
+    "mysql2": "^3.13.0",
     "shapefile": "^0.6.6",
     "twing": "^7.0.0"
   }
