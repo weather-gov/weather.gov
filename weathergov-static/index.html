@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="og: https://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="canonical" href="https://beta.weather.gov/" />
+    <link rel="icon" href="images/favicons/nws-favicon.ico" />
+    <link rel="icon" sizes="16x16" href="images/favicons/favicon-16x16.ico" />
+    <link rel="icon" sizes="32x32" href="images/favicons/favicon-32x32.ico" />
+    <link rel="icon" sizes="96x96" href="images/favicons/favicon-96x96.ico" />
+    <meta property="og:site_name" content="beta.weather.gov" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://beta.weather.gov/" />
+    <meta
+      property="og:description"
+      content="The National Weather Service provides weather, water and climate data, forecasts, warnings, and impact-based decision support services to protect life and property, and enhance the national economy."
+    />
+    <meta property="og:image" content="images/weather/nws-meta-og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:description"
+      content="The National Weather Service provides weather, water and climate data, forecasts, warnings, and impact-based decision support services to protect life and property, and enhance the national economy."
+    />
+    <meta name="twitter:site" content="@nws" />
+    <meta name="twitter:image" content="images/weather/nws-meta-og.png" />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>beta.weather.gov | National Weather Service</title>
+    <link rel="stylesheet" media="all" href="styles/styles.css" />
+    <script
+      src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety"
+      id="_fed_an_ua_tag"
+    ></script>
+    <script src="js/uswds-init.min.js"></script>
+    <link rel="icon" type="image/png" href="images/favicons/nws-favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
+  </head>
+  <body class="path-node page-node-type-page">
+    <a href="#main-content" class="visually-hidden focusable skip-link">
+      Skip to main content
+    </a>
+    <section
+      class="usa-banner"
+      aria-label="Official website of the United States government"
+    >
+      <div class="usa-accordion">
+        <header class="usa-banner__header">
+          <div class="usa-banner__inner">
+            <div class="grid-col-auto">
+              <img
+                aria-hidden="true"
+                class="usa-banner__header-flag"
+                src="images/uswds/us_flag_small.png"
+                alt=""
+              />
+            </div>
+            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+              <p class="usa-banner__header-text">
+                An official website of the United States government
+              </p>
+              <p class="usa-banner__header-action">Here’s how you know</p>
+            </div>
+            <button
+              type="button"
+              class="usa-accordion__button usa-banner__button"
+              aria-expanded="false"
+              aria-controls="gov-banner-default-default"
+            >
+              <span class="usa-banner__button-text">Here’s how you know</span>
+            </button>
+          </div>
+        </header>
+        <div
+          class="usa-banner__content usa-accordion__content"
+          id="gov-banner-default-default"
+        >
+          <div class="grid-row grid-gap-lg">
+            <div class="usa-banner__guidance tablet:grid-col-6">
+              <img
+                class="usa-banner__icon usa-media-block__img"
+                src="images/uswds/icon-dot-gov.svg"
+                role="img"
+                alt=""
+                aria-hidden="true"
+              />
+              <div class="usa-media-block__body">
+                <p>
+                  <strong>Official websites use .gov</strong><br />
+                  A <strong>.gov</strong> website belongs to an official
+                  government organization in the United States.
+                </p>
+              </div>
+            </div>
+            <div class="usa-banner__guidance tablet:grid-col-6">
+              <img
+                class="usa-banner__icon usa-media-block__img"
+                src="images/uswds/icon-https.svg"
+                role="img"
+                alt=""
+                aria-hidden="true"
+              />
+              <div class="usa-media-block__body">
+                <p>
+                  <strong>Secure .gov websites use HTTPS</strong><br />
+                  A <strong>lock</strong>
+                  (
+                  <span class="icon-lock">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="52"
+                      height="64"
+                      viewbox="0 0 52 64"
+                      class="usa-banner__lock-image"
+                      role="img"
+                      aria-labelledby="banner-lock-description-default"
+                      focusable="false"
+                    >
+                      <title id="banner-lock-title-default">Lock</title>
+                      <desc id="banner-lock-description-default">
+                        Locked padlock icon
+                      </desc>
+                      <path
+                        fill="#000000"
+                        fill-rule="evenodd"
+                        d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z"
+                      />
+                    </svg> </span
+                  >) or <strong>https://</strong> means you've safely connected
+                  to the .gov website. Share sensitive information only on
+                  official, secure websites.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div
+      class="dialog-off-canvas-main-canvas height-full"
+      data-off-canvas-main-canvas
+    >
+      <div
+        class="layout-container grid-row height-full flex-column flex-no-wrap"
+      >
+        <header role="banner">
+          <div class="grid-container">
+            <div class="grid-row">
+              <div class="region region-header">
+                <div
+                  id="block-new-weather-theme-sitebranding"
+                  class="block block-system block-system-branding-block"
+                >
+                  <a
+                    href="index.html"
+                    class="display-flex flex-align-center flex-wrap text-no-underline margin-y-2"
+                    rel="home"
+                  >
+                    <img class="height-9" src="logo.svg" alt="" />
+                    <div
+                      class="site-info padding-x-2 display-flex flex-column flex-align-start"
+                    >
+                      <span
+                        class="site-name display-block font-heading-lg desktop:font-heading-xl text-secondary-darkest text-bold"
+                      >
+                        beta.weather.gov
+                      </span>
+                      <span
+                        class="site-slogan display-block font-sans-2xs desktop:font-sans-xs text-base-dark padding-left-05"
+                      >
+                        National Weather Service
+                      </span>
+                    </div>
+                    <span
+                      class="display-flex flex-align-center bg-gold-10v text-black text-uppercase padding-y-05 padding-left-1 padding-right-105 font-sans-xs radius-md margin-left-1 margin-top-105 tablet:margin-top-0"
+                    >
+                      <svg
+                        class="usa-icon height-205 width-205 margin-right-05 text-top margin-bottom-2px"
+                        aria-hidden="true"
+                        focusable="false"
+                        role="img"
+                      >
+                        <use
+                          xlink:href="images/uswds/sprite.svg#construction_worker"
+                        ></use>
+                      </svg>
+                      Under development
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main role="main" class="flex-1">
+          <a id="main-content" tabindex="-1"></a>
+
+          <div
+            class="bg-primary-lightest wx-bg-ray padding-y-4 border-top-05 border-primary-light"
+          >
+            <div class="grid-container">
+              <div class="grid-row">
+                <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
+                  <div
+                    class="display-flex flex-align-start mobile-lg__flex-align-center"
+                  >
+                    <img
+                      aria-hidden="true"
+                      class="margin-right-2 maxw-8 tablet__wx-maxw10"
+                      src="images/weather/spot_illos/wx_illo_announce.svg"
+                      alt=""
+                    />
+                    <h2
+                      class="text-normal text-primary-darker font-sans-2xl margin-y-0"
+                    >
+                      <span class="text-bold">beta.weather.gov</span> Has Been
+                      Deactivated Until Further Notice
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div class="grid-row">
+                <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
+                  <p class="font-sans-md">
+                    This page has been deactivated until further notice due to
+                    the loss of critical federal staff, which leaves this
+                    project without the resources required to continue its
+                    development or for routine monitoring and maintenance.
+                  </p>
+                  <p>
+                    The National Weather Service remains committed to designing
+                    a more informative and user-friendly Weather.gov website,
+                    and we intend to reactivate this beta site as soon as
+                    resources are in place.
+                  </p>
+                  <p>
+                    In the meantime, please continue to utilize
+                    <a href="https://weather.gov">Weather.gov</a> as a source
+                    for official National Weather Service forecasts and
+                    warnings.
+                  </p>
+                  <p>
+                    Thank you to everyone who has and continues to provide
+                    feedback to improve National Weather Service systems like
+                    beta.weather.gov!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <footer role="contentinfo">
+          <div class="usa-identifier padding-y-3">
+            <nav
+              class="usa-identifier__section usa-identifier__section--required-links"
+              aria-label="Important links,"
+            >
+              <div class="grid-container">
+                <div class="grid-row">
+                  <div class="desktop:grid-col-4">
+                    <a
+                      href="index.html"
+                      rel="home"
+                      class="site-logo display-block"
+                    >
+                      <img
+                        class="height-9"
+                        src="logo-noaa.svg"
+                        alt="National Oceanic and Atmospheric Administration logo"
+                      />
+                    </a>
+                    <span class="text-italic display-block"
+                      >Science. Service. Stewardship</span
+                    >
+                  </div>
+                  <div class="desktop:grid-col-8">
+                    <div class="region region-primary-footer">
+                      <nav
+                        role="navigation"
+                        aria-labelledby="block-new-weather-theme-footerprimarylinks-menu"
+                        id="block-new-weather-theme-footerprimarylinks"
+                        class="block block-menu navigation menu--footer"
+                      >
+                        <h2
+                          class="visually-hidden"
+                          id="block-new-weather-theme-footerprimarylinks-menu"
+                        >
+                          Footer primary links
+                        </h2>
+
+                        <nav
+                          class="usa-identifier__section usa-identifier__section--required-links"
+                        >
+                          <div class="usa-identifier__container padding-0">
+                            <ul class="usa-identifier__required-links-list">
+                              <li class="usa-identifier__required-links-item">
+                                <a
+                                  href="https://www.noaa.gov/NOAA-Communications"
+                                  class="usa-identifier__required-link usa-link"
+                                >
+                                  Media inquiries
+                                </a>
+                              </li>
+                              <li class="usa-identifier__required-links-item">
+                                <a
+                                  href="https://www.noaa.gov/information-technology/foia"
+                                  class="usa-identifier__required-link usa-link"
+                                >
+                                  Freedom of Information Act
+                                </a>
+                              </li>
+                              <li class="usa-identifier__required-links-item">
+                                <a
+                                  href="https://www.noaa.gov/organization/information-technology/policy-oversight/information-quality"
+                                  class="usa-identifier__required-link usa-link"
+                                >
+                                  Information Quality
+                                </a>
+                              </li>
+                              <li class="usa-identifier__required-links-item">
+                                <a
+                                  href="https://usa.gov/"
+                                  class="usa-identifier__required-link usa-link"
+                                >
+                                  USA.gov
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </nav>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+            <div class="region region-footer">
+              <nav
+                role="navigation"
+                aria-labelledby="block-new-weather-theme-agencyidentificationlinks-menu"
+                id="block-new-weather-theme-agencyidentificationlinks"
+                class="block block-menu navigation menu--agency-identification-links"
+              >
+                <h2
+                  class="visually-hidden"
+                  id="block-new-weather-theme-agencyidentificationlinks-menu"
+                >
+                  Agency identification links
+                </h2>
+
+                <section
+                  class="usa-identifier__section usa-identifier__section--usagov"
+                  aria-label="U.S. government information and services,"
+                >
+                  <div class="usa-identifier__container">
+                    <ul
+                      class="usa-list--unstyled desktop:display-flex flex-row flex-justify"
+                    >
+                      <li>
+                        <a
+                          class="usa-link text-bold"
+                          href="https://www.commerce.gov/"
+                          >Department of Commerce</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="usa-link text-bold"
+                          href="https://www.noaa.gov/"
+                          >National Oceanic and Atmospheric Administration
+                          (NOAA)</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="usa-link text-bold"
+                          href="https://www.weather.gov/"
+                          >National Weather Service</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </section>
+              </nav>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script src="js/uswds.min.js"></script>
+  </body>
+</html>
