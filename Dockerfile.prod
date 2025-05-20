@@ -1,4 +1,4 @@
 #Chainguard latest php container image (8.4), which is free to use, hardened with daily patches to eliminate vulnerabilties (CVEs) from direct and transitive dependencies, verifiable signatures for authenticity and integrity provided by sigstore.
 #https://images.chainguard.dev/directory/image/php/versions#/ 
 #latest=8.4
-FROM cgr.dev/chainguard-private/php:latest-dev
+FROM cgr.dev/chainguard/php:latest-dev
