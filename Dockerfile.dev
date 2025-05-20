@@ -1,4 +1,7 @@
-FROM php:8.2-apache-bookworm
+#Chainguard latest php container image, which is free to use, hardened with daily patches to eliminate vulnerabilties (CVEs) from direct and transitive dependencies, verifiable signatures for authenticity and integrity provided by sigstore.
+#https://images.chainguard.dev/directory/image/php/versions#/ 
+#latest=8.4
+FROM cgr.dev/chainguard-private/php:latest-dev
 
 # set the www-data uid to our own uid, so that we do not clobber drupal
 # permissions when mounting docker-compose volumes.
