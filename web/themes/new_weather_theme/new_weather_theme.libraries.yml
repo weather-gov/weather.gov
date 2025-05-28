@@ -53,9 +53,9 @@ cmi-radar:
   version: 2024-10-15
   css:
     theme:
-      assets/css/radar/cmi-radar.6602f65c.css:
+      assets/css/radar/cmi-radar.0a93e066.css:
   js:
-    https://radar.weather.gov/cmi-radar/cmi-radar.6602f65c.js:
+    https://radar.weather.gov/cmi-radar/cmi-radar.0a93e066.js:
       attributes:
         defer: true
         data-wx-radar-cmi: true
