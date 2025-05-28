@@ -53,7 +53,7 @@ cmi-radar:
   version: 2024-10-15
   css:
     theme:
-      assets/css/radar/cmi-radar.0a93e066.css:
+      https://radar.weather.gov/cmi-radar/cmi-radar.0a93e066.css:
   js:
     https://radar.weather.gov/cmi-radar/cmi-radar.0a93e066.js:
       attributes:
