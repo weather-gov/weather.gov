@@ -391,7 +391,7 @@ class ComboBox extends HTMLElement {
    */
   setListItems(items) {
     const list = document.createElement("ul");
-    list.setAttribute("aria-labeledby", `${this.id}--list`);
+    list.setAttribute("aria-labelledby", `${this.id}--list`);
     list.classList.add("wx-combo-box__list");
 
     const listItems = items.map((item, idx) => {

@@ -181,7 +181,7 @@ export default class LocationComboBox extends ComboBox {
     // and possibly a heading list item for current search results as well.
     if (saved.length) {
       const list = document.createElement("ul");
-      list.setAttribute("aria-labeledby", `${this.id}--list`);
+      list.setAttribute("aria-labelledby", `${this.id}--list`);
       list.classList.add("wx-combo-box__list");
 
       list.append(makeSectionHeading("recent locations"));
@@ -192,7 +192,7 @@ export default class LocationComboBox extends ComboBox {
     // Now add search results, if any.
     if (data.suggestions.length) {
       const list = document.createElement("ul");
-      list.setAttribute("aria-labeledby", `${this.id}--list`);
+      list.setAttribute("aria-labelledby", `${this.id}--list`);
       list.classList.add("wx-combo-box__list");
 
       if (saved.length) {
