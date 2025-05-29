@@ -1,0 +1,5 @@
+---
+applications:
+- name: weathergov-static
+  buildpacks:
+  - nginx_buildpack
