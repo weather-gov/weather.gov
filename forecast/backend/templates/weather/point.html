@@ -15,7 +15,7 @@
   <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"
           id="data-ex-leaflet-esri-vector"
           defer></script>
-  <script src="https://radar.weather.gov/cmi-radar/cmi-radar.6602f65c.js"
+  <script src="{% static 'js/cmi-radar.0a93e066.js' %}"
           data-wx-radar-cmi="true"
           defer></script>
 {% endblock %}
@@ -25,7 +25,7 @@
         href="{% static 'css/leaflet.css' %}" />
   <link rel="stylesheet"
         type="text/css"
-        href="{% static 'css/radar/cmi-radar.6602f65c.css' %}" />
+        href="{% static 'css/radar/cmi-radar.0a93e066.css' %}" />
 {% endblock %}
 {% block page_content %}
   <div class="layout-container grid-row height-full flex-column flex-no-wrap">

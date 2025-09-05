@@ -15,7 +15,7 @@ describe("satellite metadata module", () => {
   });
 
   describe("returns a URL if everything goes well", () => {
-    it("for GOES-16 imagery", async () => {
+    it("for GOES-18 imagery", async () => {
       response.json.resolves({ meta: { satellite: "GOES-West" } });
       const actual = await getSatelliteData({ grid: { wfo: "wfo1" } });
 
@@ -25,13 +25,13 @@ describe("satellite metadata module", () => {
       });
     });
 
-    it("for GOES-18 imagery", async () => {
+    it("for GOES-19 imagery", async () => {
       response.json.resolves({ meta: { satellite: "GOES-East" } });
       const actual = await getSatelliteData({ grid: { wfo: "wfo2" } });
 
       expect(actual).to.eql({
-        gif: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES16-WFO2-GEOCOLOR-600x600.gif",
-        mp4: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES16-WFO2-GEOCOLOR-600x600.mp4",
+        gif: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES19-WFO2-GEOCOLOR-600x600.gif",
+        mp4: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES19-WFO2-GEOCOLOR-600x600.mp4",
       });
     });
   });
