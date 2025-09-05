@@ -34,7 +34,7 @@ the content
              aria-hidden="true"
              class="wx-alert-icon"
              data-alert-level="{{ alerts.metadata.highest }}">
-          <use xlink:href="/public/images/uswds/sprite.svg#warning"></use>
+          <use xlink:href="{% static 'images/uswds/sprite.svg' %}#warning"></use>
         </svg>
       {% endif %}
       <svg role="img" aria-hidden="true" class="wx-alert-icon">
@@ -67,7 +67,7 @@ the content
            aria-hidden="true"
            focusable="false"
            role="img">
-        <use xlink:href="/public/images/uswds/sprite.svg#add_circle"></use>
+        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#add_circle"></use>
       </svg>
     </span>
   </div>
@@ -79,7 +79,7 @@ the content
          aria-hidden="true"
          focusable="false"
          role="img">
-      <use xlink:href="/public/images/uswds/sprite.svg#add_circle"></use>
+      <use xlink:href="{% static 'images/uswds/sprite.svg' %}#add_circle"></use>
     </svg>
   </span>
 </button>
