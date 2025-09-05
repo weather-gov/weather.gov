@@ -11,7 +11,7 @@ export default async ({ grid: { wfo } }) => {
 
     const satellite = satelliteMetadata?.meta?.satellite;
     if (satellite) {
-      const goes = satellite === "GOES-West" ? "GOES18" : "GOES16";
+      const goes = satellite === "GOES-West" ? "GOES18" : "GOES19";
 
       return {
         gif: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.gif`,
