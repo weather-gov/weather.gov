@@ -53,7 +53,7 @@ def offices(request):
     regions = []
     for region in Region.objects.all():
         entry = {"id": region.id, "name": region.name, "weight": region.weight, "wfos": []}
-        wfos = region.wfo_set.all()
+        wfos = region.wfos.all()
         for wfo in wfos:
             wfo_entry = {"id": wfo.code.upper(), "name": wfo.name, "weight": wfo.weight}
             entry["wfos"].append(wfo_entry)
@@ -61,6 +61,9 @@ def offices(request):
 
     return render(request, "weather/offices.html", locals())
 
+def offices_specific(request, wfo):
+    office = WFO.objects.get(code=wfo.upper())
+    return render(request, "weather/office.html", {'office': office.__dict__})
 
 def afd_index(request):
     """

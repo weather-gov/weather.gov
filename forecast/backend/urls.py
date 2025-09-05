@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import path, register_converter, include
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
@@ -9,7 +10,7 @@ register_converter(FloatConverter, "float")
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("offices", views.offices, name="offices"),
+    path("offices/<wfo>", views.offices_specific, name="office"),
     path("afd/", views.afd_index, name="afd_index"),
     path("afd/<wfo>", views.afd_by_office, name="afd_by_office"),
     path("afd/<wfo>/<afd_id>", views.afd_by_office_and_id, name="afd_by_office_and_id"),
@@ -22,3 +23,8 @@ urlpatterns = [
     path("pages/", include(wagtail_urls)),
     path("point/<float:lat>/<float:lon>", views.point_location, name="point"),
 ]
+
+if settings.DEBUG == True:
+  urlpatterns += [
+    path("offices/", views.offices, name="offices")
+  ]

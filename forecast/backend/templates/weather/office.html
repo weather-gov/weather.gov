@@ -1,0 +1,124 @@
+{% extends "weather/page.html" %}
+{% block page_content %}
+<div class="wx-wfo-info margin-bottom-10">
+  {% if content.field_wfo_image is not empty %}
+    <div class="wx-wfo-image grid-container padding-0 tablet:padding-x-2 desktop:padding-x-4">
+      {{ content.field_wfo_image }}
+    </div>
+  {% endif %}
+
+  <div class="grid-container">
+    <h1 class="text-normal text-primary-darker desktop:margin-bottom-3">
+      {% trans_with_args "wfo-info.labels.wfo.01" wfoName=office.name wfoCode=office.code %}
+    </h1>
+
+    <div class="grid-row grid-gap">
+      {% comment %}
+      {###### THIS IS FOR WFO BLURBS. ######}
+      {% set hasAbout = not (content.body.isEmpty or content.body.0 is not defined) %}
+      {% if hasAbout %}
+      <div class="grid-col-12 tablet:grid-col-4">
+        <h2 class="font-sans-xl text-normal text-primary-darker margin-top-0">{{ "wfo-info.labels.about.01" | t }}</h2>
+        {{content.body}}
+      </div>
+      {% endif %}
+      {% endcomment %}
+
+      <div class="grid-col-12{% if hasAbout %} tablet:grid-col-8{% endif %}">
+        <figure class="margin-0">
+          <img src="{% static 'images/wfos/'|add:office.code|add:'.png' %}" alt="">
+          <figcaption class="font-sans-xs">
+            {% trans_with_args "wfo-info.caption.coverage-area-map.01" wfo=office.name %}
+            <p class="usa-sr-only">
+              {% trans_with_args "wfo-info.caption+aria.coverage-area-map.01" counties=counties %}
+            </p>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+
+    {# TODO: This is all placeholder stuff. When it comes out in favor of real stuff, make sure we add things to the translations list appropriately. #}
+    <div class="grid-row">
+      <div class="grid-col-12 tablet:grid-col-6">
+        <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
+          {{ "wfo-info.heading.local-expertise.01" | t }}
+        </h2>
+        <p>
+          {{ "Decision support is description tk tk" | t }}
+        </p>
+        <ul class="margin-bottom-0 padding-left-2">
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Briefing tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "County finder tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "State page tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Resource 1 tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Resource 2 tk tk" | t }}</a></li>
+          <li class="padding-y-05"><a class="usa-link" href="#">{{ "Resource 3 tk tk" | t }}</a></li>
+        </ul>
+      </div>
+
+      <div class="grid-col-12 tablet:grid-col-6">
+        <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
+          {{ "wfo-info.heading.forecast-discussion.01" | t }}
+        </h2>
+        <p>
+          {{ "wfo-info.text.forecast-discussion.01" | t }}
+        </p>
+        <a class="usa-link" href="/afd/{{ office.code|lower }}">{{ "wfo-info.link.area-forecast-discussion" | t }}</a>
+      </div>
+    </div>
+
+    {% comment %}
+    {###### WE NEED TO BUILD THIS INFORMATION INTO WAGTAIL ######}
+    {% set hasPhone = phone is not empty %}
+    {% set hasAddress = address is not empty %}
+    {% set hasEmail = email is not empty %}
+
+    {% set hasFacebook = not (content.field_facebook_url.isEmpty or content.field_facebook_url.0 is not defined) %}
+    {% set hasTwitter = not (content.field_twitter_url.isEmpty or content.field_twitter_url.0 is not defined) %}
+    {% set hasYoutube = not (content.field_youtube_url.isEmpty or content.field_youtube_url.0 is not defined) %}
+    {% set hasSocial = hasFacebook or hasTwitter or hasYoutube %}
+
+    {% set hasContact = hasSocial or hasAddress or hasPhone or hasEmail %}
+    {% set hasFirstPane = hasPhone or hasAddress or hasEmail %}
+
+    {% if hasContact %}
+      <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker margin-bottom-0 padding-top-105 margin-top-4">
+        {{ "wfo-info.heading.contact-us.01" | t }}
+      </h2>
+
+      <div class="grid-row margin-top-2">
+        {% if hasFirstPane %}
+          <div class="grid-col-12 tablet:grid-col-4">
+            {% if hasPhone %}
+              {{ content.field_phone_number_opt }}
+            {% endif %}
+            
+            {% if hasEmail %}
+              {% if hasPhone %}<div class="margin-top-2">{% endif %}
+                {{ content.field_wfo_email }}
+                {% if hasPhone %}</div>{% endif %}
+            {% endif %}
+            
+            {% if hasAddress %}
+              {% if hasPhone or hasEmail %}<div class="margin-top-2">{% endif %}
+                {{ content.field_address }}
+                {% if hasPhone or hasEmail %}</div>{% endif %}
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="grid-col-12 tablet:grid-col-8">
+          {% if hasSocial %}
+            <ul class="usa-list usa-list--unstyled"> 
+              {{ content.field_facebook_url }}
+              {{ content.field_twitter_url }}
+              {{ content.field_youtube_url }}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+    {% endcomment %}
+  </div>
+</div>
+{% endblock %}
