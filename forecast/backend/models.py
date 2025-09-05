@@ -30,7 +30,7 @@ class WFO(models.Model):
     name = models.CharField(max_length=256)
     weight = models.IntegerField(default=0)
     code = models.CharField(max_length=3, unique=True)
-    region = ParentalKey(Region, on_delete=models.CASCADE, related_name="region")
+    region = ParentalKey(Region, on_delete=models.CASCADE, related_name="wfos")
 
     # Panels for Wagtail admin
     panels = [FieldPanel("name"), FieldPanel("code"), FieldPanel("region")]
