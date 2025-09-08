@@ -31,6 +31,7 @@
           {% daily_forecast_list_item day=data %}
         {% endfor %}
       </ol>
+      {% include "weather/partials/wfo-promo.html" with wfo=point.wfo %}
     {% endif %}
   </div>
 </div>
