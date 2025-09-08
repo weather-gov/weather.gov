@@ -4,7 +4,6 @@ module.exports = {
   ignorePatterns: [
     "tests/translations/**/*.js",
     "uswds*.js",
-    "web/sites/default/**",
   ],
   rules: {
     // For imports in the browser, file extensions are always required.
@@ -46,15 +45,8 @@ module.exports = {
   parserOptions: { ecmaVersion: 2024 },
   overrides: [
     {
-      files: ["web/themes/new_weather_theme/assets/js/components/**/*.js"],
-      rules: {
-        "class-methods-use-this": 0,
-      },
-    },
-    {
       files: [
         "api-interop-layer/**/*.test.js",
-        "web/themes/new_weather_theme/tests/**/*.js",
       ],
       extends: ["airbnb-base", "prettier"],
       parserOptions: { ecmaVersion: 2024 },
@@ -85,7 +77,7 @@ module.exports = {
       files: [
         "tests/**/*.js",
         "spatial-data/**/*.js",
-        "web/**/tests/**/*.js",
+        "forecast/frontend/**/tests/**/*.js",
         "playwright.config.js",
       ],
       extends: ["airbnb-base", "prettier"],
