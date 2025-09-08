@@ -1,16 +1,9 @@
-name: weathergov-django
-
-volumes:
-  postgres_data:
-
 services:
   database:
     platform: linux/amd64
     image: postgis/postgis:17-3.5
     networks:
       - weather.gov
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     environment:
       POSTGRES_USER: drupal
       POSTGRES_PASSWORD: drupal
@@ -19,12 +12,7 @@ services:
       - 5432:5432
 
   web:
-    build:
-      context: forecast/
-      dockerfile: Dockerfile.dev
-    command: python manage.py runserver 0.0.0.0:8080
-    volumes:
-      - ./forecast:/code
+    image: $ci_registry_image/web:$ci_commit_ref_slug
     ports:
       - "8080:8080"
     environment:
@@ -43,9 +31,7 @@ services:
       - database
 
   api-proxy:
-    build:
-      context: ./tests/api
-      dockerfile: Dockerfile.dev
+    image: $ci_registry_image/api-proxy:$ci_commit_ref_slug
     environment:
       WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
       API_URL: "http://api-proxy:8081/"
@@ -53,19 +39,9 @@ services:
       - weather.gov
     ports:
       - 8081:8081
-    volumes:
-      - ./tests/api:/app
-      - /app/node_modules
 
   api-interop-layer:
-    build:
-      context: ./api-interop-layer
-      dockerfile: Dockerfile.dev
-    # Use the same resource limits as deployed
-    deploy:
-      resources:
-        limits:
-          memory: 256MB
+    image: $ci_registry_image/api-interop-layer:$ci_commit_ref_slug
     environment:
       PORT: 8082
       DB_NAME: weathergov
@@ -84,36 +60,9 @@ services:
     ports:
       - 8082:8082
       - 9229:9229
-    volumes:
-      - ./api-interop-layer:/app
-      - /app/node_modules
-
-  uswds:
-    build:
-      context: ./
-      dockerfile: Dockerfile.uswds.dev
-    volumes:
-      - ./forecast/frontend/:/app
-      - /app/node_modules
-
-  spatial:
-    build:
-      context: ./spatial-data
-      dockerfile: Dockerfile.spatial.dev
-    image: 18f-spatial-node:20
-    networks:
-      - weather.gov
-    links:
-      - database
-    environment:
-      DB_HOST: database
-    volumes:
-      - ./spatial-data/:/app
-      - /app/node_modules
 
   playwright:
-    build:
-      dockerfile: Dockerfile.playwright.dev
+    image: $ci_registry_image/utility-node:$ci_commit_ref_slug
     networks:
       - weather.gov
     depends_on:
@@ -121,8 +70,6 @@ services:
       - api-proxy
     links:
       - web
-    volumes:
-      - ./tests/:/app/tests
     environment:
       API_URL: http://api-proxy:8081
       WEB_URL: http://web:8080

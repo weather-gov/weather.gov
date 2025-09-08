@@ -1,125 +1,119 @@
 stages:
+  - gather
   - build
+  - lint
   - test
-  - deploy
 
-.build-image:
+# these are available in all the running containers (images and services)
+variables:
+  POSTGRES_USER: drupal
+  POSTGRES_PASSWORD: drupal
+  POSTGRES_DB: weathergov
+
+# common config for using Docker in later jobs
+.docker-in-docker:
   image: docker:27
-  stage: build
   services:
     - name: docker:27-dind
       command: [ "--tls=false" ]
       variables:
         HEALTHCHECK_TCP_PORT: "2375"
-  when: manual
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
+
+# common config for building images using a specified Dockerfile in the repo
+.build-dependencies-image:
+  extends: .docker-in-docker
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker build -f ${BUILD_CONTEXT}${DOCKERFILE} -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG $BUILD_CONTEXT
+  - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG
+
+# common config for building images using a Dockerfile passed inline as a variable
+.build-image:
+  extends: .docker-in-docker
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker compose build $IMAGE_NAME
-    - IMAGE_ID=$(docker images | grep $DERIVED_IMAGE_NAME | awk '{print $3}')
-    - docker image tag $IMAGE_ID $CI_REGISTRY_IMAGE/weathergov-$IMAGE_NAME:latest
-    - docker push $CI_REGISTRY_IMAGE/weathergov-$IMAGE_NAME:latest
+    - |
+      cat > Dockerfile.tmp << EOF
+      $DOCKERFILE
+      EOF
+    - cat Dockerfile.tmp
+    - docker build -f Dockerfile.tmp -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG $BUILD_CONTEXT
+    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG
 
-build-utility-node-image:
-  extends: .build-image
+# build a base image with all the current node_modules and other JavaScript dependencies
+gather-forecast-node-dependencies:
+  extends: .build-dependencies-image
+  stage: gather
   variables:
-    DERIVED_IMAGE_NAME: utility-node
+    BUILD_CONTEXT: ./
+    DOCKERFILE: Dockerfile.node.ci
     IMAGE_NAME: utility-node
+    IMAGE_TAG: main
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
+      changes:
+        - Dockerfile.node.ci
+        - package.json
+        - package-lock.json
+        - api-interop-layer/package.json
+        - api-interop-layer/package-lock.json
+        - tests/api/package.json
+        - tests/api/package-lock.json
+        - spatial-data/package.json
+        - spatial-data/package-lock.json
 
-build-drupal-image:
-  extends: .build-image
+# build a base image with all the current Python dependencies
+gather-forecast-django-dependencies:
+  extends: .build-dependencies-image
+  stage: gather
   variables:
-    DERIVED_IMAGE_NAME: 18f-zscaler-drupal
-    IMAGE_NAME: drupal
+    BUILD_CONTEXT: forecast/
+    DOCKERFILE: Dockerfile.ci
+    IMAGE_NAME: utility-python
+    IMAGE_TAG: main
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
+      changes:
+        - forecast/Dockerfile.ci
+        - forecast/backend/requirements.txt
 
-build-api-proxy-image:
+# build an image containing the latest Django code from our repository
+build-forecast-django-image:
   extends: .build-image
+  stage: build
   variables:
-    DERIVED_IMAGE_NAME: api-proxy
-    IMAGE_NAME: api-proxy
+    BUILD_CONTEXT: forecast/
+    DOCKERFILE: |-
+      FROM $CI_REGISTRY_IMAGE/utility-python:main
+      COPY . /code/
+      CMD python manage.py runserver 0.0.0.0:8080
+    IMAGE_NAME: web
+    IMAGE_TAG: $CI_COMMIT_REF_SLUG
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - forecast/backend/**/*
 
-build-api-interop-image:
-  extends: .build-image
-  variables:
-    DERIVED_IMAGE_NAME: api-interop-layer
-    IMAGE_NAME: api-interop-layer
-
-build-playwright-image:
-  extends: .build-image
-  variables:
-    DERIVED_IMAGE_NAME: playwright
-    IMAGE_NAME: playwright
-
-# docker compose does not actually "build" the database image because there is
-# nothing to compose. so, instead, we pull the dependent mysql image and push
-# that as a weather.gov image instead
-build-database-image:
-  extends: .build-image
-  script:
-    - docker pull mysql:8.0
-    - IMAGE_ID=$(docker images | grep mysql | awk '{print $3}')
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker image tag $IMAGE_ID $CI_REGISTRY_IMAGE/weathergov-database:latest
-    - docker push $CI_REGISTRY_IMAGE/weathergov-database:latest
-
-# NB: GitLab clones into CI_BUILDS_DIR which defaults to
-# /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
-# images our WORKDIR is /app. so we symlink the various /app/node_modules to
-# CI_BUILDS_DIR so we can "npm run" as needed.
+# lint all JavaScript in the repo in one job
 js-lint:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/weathergov-utility-node:latest
+  stage: lint
+  image: $CI_REGISTRY_IMAGE/utility-node:main
   script:
+    # NB: GitLab clones into CI_BUILDS_DIR which defaults to
+    # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
+    # images our WORKDIR is /app. so we symlink the various /app/node_modules to
+    # CI_BUILDS_DIR so we can "npm run" as needed.
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/tests/api/node_modules tests/api/
-    - npm run --silent js-lint-report > eslint.xml
-  artifacts:
-    when: always
-    reports:
-      junit: eslint.xml
+    - npm run js-lint
 
-style-lint:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/weathergov-utility-node:latest
+django-lint:
+  stage: lint
+  image: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG
   script:
-    - ln -s /app/node_modules/ .
-    - npm run --silent style-lint-report 2> stylelint.xml
-  artifacts:
-    when: always
-    reports:
-      junit: stylelint.xml
-
-php-lint:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/weathergov-drupal:latest
-  script:
-    - phpcs --report=junit --report-file=phpcs.xml
-  artifacts:
-    when: always
-    reports:
-      junit: phpcs.xml
-
-js-component-tests:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/weathergov-utility-node:latest
-  script:
-    - ln -s /app/node_modules/ .
-    - npm run --silent js-component-tests-report
-  artifacts:
-    when: always
-    reports:
-      junit: test-results.xml # mocha-junit-reporter writes to this file by default
-
-js-interop-layer-tests:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/weathergov-utility-node:latest
-  script:
-    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
-    - cd api-interop-layer/ && npm run --silent test-report
-  artifacts:
-    when: always
-    reports:
-      junit: api-interop-layer/test-results.xml # mocha-junit-reporter writes to this file by default
+    - cd /code
+    - python -m flake8 .
