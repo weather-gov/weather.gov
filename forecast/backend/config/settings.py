@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# For request paths without a trailing slash, add one automatically to resolve
+# the handler. This is True by default, but let's set it explicitly to be...
+# explicit.
+APPEND_SLASH = True
 
 # Application definition
 
