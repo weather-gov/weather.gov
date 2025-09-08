@@ -46,6 +46,8 @@ def index(request):
 def point_location(request, lat, lon):
     point = interop.get_point_forecast(lat, lon)
     # TODO: Add some error checking here
+    wfo = WFO.objects.get(code=point["grid"]["wfo"])
+    point["wfo"] = wfo
     return render(request, "weather/point.html", {"point": point})
 
 
