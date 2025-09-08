@@ -18,9 +18,7 @@
             <!-- djlint:off -->
                                                             <wx-combo-box-location class="z-top margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105" id="search-combo-box"
                                                                                    {% if place %}
-                                                                                   data-place="{{ place.name }}
-                                                                                          {% if place.state %}, {{ place.state }}{% endif %}
-                                                                                          "
+                                                                                   data-place="{% place_label place%}"
                                                                                    {% endif %}
                                                                                    }>
                                                             </wx-combo-box-location>
