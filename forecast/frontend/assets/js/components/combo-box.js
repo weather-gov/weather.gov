@@ -59,7 +59,7 @@ const comboTemplate = `
  * browser 'focus' in the traditional sense, and the
  * WCAG concept of 'focus', which is really a set of
  * attributes and styling for accessibility recommendations,
- * an corresponds to an item being 'currently selected'
+ * and corresponds to an item being 'currently selected'
  * (but not 'chosen') in our context.
  * We call this new type of focus pseudo-focus
  */
