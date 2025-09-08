@@ -128,7 +128,7 @@ def afd_by_office_and_id(request, wfo, afd_id):
         afd_data = interop.get_wx_afd_by_id(afd_id)
         afd_wfo = get_wfo_from_afd(afd_data)
         if not afd_wfo or afd_wfo.lower() != wfo.lower():
-            return redirect(f"/afd/{afd_wfo.lower()}/afd_id")
+            return redirect(f"/afd/{wfo.lower()}/")
 
         # Otherwise, let's grab all the references for the WFO
         # so we can use them in the select dropdown
