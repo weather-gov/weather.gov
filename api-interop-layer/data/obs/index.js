@@ -79,7 +79,6 @@ export default async ({
       `observations from ${station.properties.stationIdentifier} (first choice) are invalid`,
     );
 
-    /* eslint-disable prefer-destructuring */
     const fallbackObs = await Promise.all(others);
     if (isObservationValid(fallbackObs[0])) {
       station = stations[0];
@@ -101,7 +100,6 @@ export default async ({
       station = null;
       observation = null;
     }
-    /* eslint-enable prefer-destructuring */
   }
 
   if (station && observation) {

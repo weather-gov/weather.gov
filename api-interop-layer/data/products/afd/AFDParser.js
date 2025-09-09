@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 const SPECIAL_HEADER_TYPES = {
   wwa: {
     re: /^\.(?<header>[A-Z]{3}\sWATCHES\/WARNINGS\/ADVISORIES)[.]{3}/,

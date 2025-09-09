@@ -131,7 +131,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
       // also prevents them from being retrieved from the cache for any given point.
       alertsCache.add(rawAlert.properties.hash, alert, null, alert.metadata.kind);
       
-      continue; // eslint-disable-line no-continue
+      continue;
     }
 
     alert.id = alert.hash; // alerts.length;
@@ -182,7 +182,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     }
 
     if (alert.finish && alert.finish.isBefore(now)) {
-      continue; // eslint-disable-line no-continue
+      continue;
     }
 
     const geometry = await generateAlertGeometry(db, rawAlert);

@@ -29,7 +29,6 @@ const US_CODES = [
 const FILENAME = "cities500.txt";
 const OUTFILE_NAME = "us.cities500.txt";
 
-// eslint-disable-next-line no-unused-vars
 const COLUMN_NAMES = [
   "geonameId",
   "name",
