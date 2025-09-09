@@ -31,26 +31,27 @@ const Services = {
   },
 
   interop(path){
-    return this._composePath(this.interopURL, path);
+    return this.composePath(this.interopURL, path);
   },
 
   apiProxy(path){
-    return this._composePath(this.apiURL, path);
+    return this.composePath(this.apiURL, path);
   },
 
   webApp(path){
-    return this._composePath(this.webURL, path);
+    return this.composePath(this.webURL, path);
   },
 
-  _composePath(url, path){
+  composePath(url, path){
+    let newUrl = url;
     if(url.endsWith("/")){
-      url = url.slice(0, -1);
+      newUrl = url.slice(0, -1);
     }
     let spacer = "";
     if(!path.startsWith("/")){
       spacer = "/";
     }
-    return `${url}${spacer}${path}`;
+    return `${newUrl}${spacer}${path}`;
   }
 };
 

@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 import fs from "fs/promises";
 import path from "path";
 import { expect } from "chai";
@@ -24,7 +25,6 @@ describe("weather icon legacy mapping", async () => {
     );
 
     const errors = [];
-    // eslint-disable-next-line no-restricted-syntax
     for await (const [key, { icon }] of Object.entries(iconMapping)) {
       const thisPath = path.join(iconPath, icon);
       console.log(thisPath);
@@ -34,7 +34,7 @@ describe("weather icon legacy mapping", async () => {
     }
 
     if (errors.length) {
-      console.log(errors); // eslint-disable-line no-console
+      console.log(errors);
     }
     expect(errors).to.have.length(0);
   });

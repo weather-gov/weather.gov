@@ -117,9 +117,6 @@
       // granted us permission to use it, we will let them know before asking for
       // it. It's kind of a double-opt-in.
       if (shouldPrompt) {
-        // Not sure why eslint doesn't want us to use confirm(). This seems like
-        // exactly what it exists for.
-        // eslint-disable-next-line no-alert
         proceed = window.confirm(
           "We will now ask your browser to provide your location. If you approve, you will not be asked again. Your location information is only used to find your forecast.",
         );
@@ -149,7 +146,7 @@
               // (Error code 1 is for when the user denies access to location, so
               // for our purposes, that is not an error.)
 
-              // eslint-disable-next-line no-alert
+               
               alert(
                 `There was a problem getting your location. Here's what your browser told us: ${message}`,
               );

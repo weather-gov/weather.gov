@@ -20,7 +20,7 @@ const endTime = dayjs.utc("2024-09-14T03:07:00-07:00").tz("America/Los_Angeles")
 const hourDiff = endTime.diff(startTime, "hour");
 
 const times = [];
-// eslint-disable-next-line no-plusplus
+
 for(let i = 0; i < hourDiff; i++){
   const newStart = startTime.add(i, "hour");
   const newEnd = newStart.add(1, "hour");

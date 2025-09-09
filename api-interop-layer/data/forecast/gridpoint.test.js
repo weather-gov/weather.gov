@@ -140,7 +140,6 @@ describe("gridpoint data module", () => {
 
     await gridpoint(data, hours, place);
 
-    /* eslint-disable-next-line no-restricted-syntax */
     for (const [key, value] of expected) {
       expect(hours.has(key)).to.be.true;
       expect(hours.get(key)).to.eql(value);

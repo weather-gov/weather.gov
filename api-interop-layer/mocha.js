@@ -1,4 +1,4 @@
-import sinon from "sinon"; // eslint-disable-line import/no-extraneous-dependencies
+import sinon from "sinon";
 import pg from "pg";
 const { Pool, Client } = pg;
 

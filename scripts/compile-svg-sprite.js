@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const Jsdom = require('jsdom').JSDOM;
 
 // Grab the passed-in filenames from the command
