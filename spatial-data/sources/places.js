@@ -114,19 +114,12 @@ const schemas = {
 
             // For all other cases, find the FIPS county that contains the place's
             // point and use those state and FIPS code values.
-            //
-            // Do these lat/lon look reversed from everywhere else? Why yes, they
-            // sure are! It's a quirk of MySQL. For geographic coordinate systems
-            // (such as 4269), they interpret the X coordinate of WKTs as latitude
-            // and the Y coordinate as longitude. For no apparent reason, they just
-            // up and switch them. Anyway, knowing that, we swap them from the way
-            // we do it literally everywhere else.
             const sql = `
               SELECT state,countyFips as county
               FROM weathergov_geo_counties
                 WHERE ST_CONTAINS(
                   shape,
-                  ST_GEOMFROMTEXT('POINT(${place.lat} ${place.lon})', 4269)
+                  ST_GEOMFROMTEXT('POINT(${place.lon} ${place.lat})', 4326)
                 )
               LIMIT 1`;
 
@@ -199,7 +192,7 @@ const schemas = {
       await Promise.all(
         remove.map(([name, state]) =>
           db.query(
-            "DELETE FROM weathergov_geo_places WHERE state='${state}' AND name='${name}'"
+            `DELETE FROM weathergov_geo_places WHERE state='${state}' AND name='${name}'`
           ),
         ),
       );
