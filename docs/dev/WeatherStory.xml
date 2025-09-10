@@ -1,0 +1,118 @@
+<xml version="1.0">
+  <head>
+    <product concise-name="graphicast">
+      <creation-date>2024-10-24T09:07:34.413Z</creation-date>
+    </product>
+    <source>
+      <credit>http://www.weather.gov/iwx</credit>
+      <production-center>Northern Indiana</production-center>
+    </source>
+  </head>
+  <graphicasts>
+    <graphicast>
+      <Office>IWX</Office>
+      <cwa_center_lat>41.36</cwa_center_lat>
+      <cwa_center_lon>-85.7</cwa_center_lon>
+      <StartTime>1729760580</StartTime>
+      <EndTime>1729774800</EndTime>
+      <graphicNumber>1</graphicNumber>
+      <order>1</order>
+      <radar>0</radar>
+      <FrontPage>true</FrontPage>
+      <title>
+        <![CDATA[Patchy Dense Fog This Morning]]>
+      </title>
+      <description>
+        <![CDATA[Clear skies, cold temperatures and light winds  allowed patchy dense fog to form over northern Indiana last night and early this morning. Visibilities may drop to a quarter of a mile or less. If you are traveling early this morning, slow down, and allow for extra time to reach your destination. Watch out for children waiting for the school bus. Conditions should improve by 9 AM EDT.]]>
+      </description>
+      <WebURL>/iwx/</WebURL>
+      <FullImage>https://www.weather.gov//images/iwx/wxstory/Tab1FileL.png</FullImage>
+      <SmallImage>https://www.weather.gov//images/iwx/wxstory/Tab1FileL.png</SmallImage>
+      <ImageLoop></ImageLoop>
+    </graphicast>
+    <graphicast>
+      <Office>Northern Indiana</Office>
+      <cwa_center_lat>41.36</cwa_center_lat>
+      <cwa_center_lon>-85.7</cwa_center_lon>
+      <StartTime>1729759500</StartTime>
+      <EndTime>1729845900</EndTime>
+      <graphicNumber>2</graphicNumber>
+      <order>2</order>
+      <radar>0</radar>
+      <FrontPage>true</FrontPage>
+      <title>
+        <![CDATA[Partly to Mostly Sunny Today, Rain Chances Tonight]]>
+      </title>
+      <description>
+        <![CDATA[Patchy dense fog is possible this morning, but should burn off slowly after sunrise. Otherwise, expect partly to mostly sunny skies with highs in the low-mid 60s.  There are chances for rain showers and maybe a rumble of thunder tonight into Friday. Sunny but cool this weekend, with highs in the mid to upper 50s and low 60s. Lows will be in the 30s, with the coldest night Saturday night where lows will be around 31 degrees for most locations. Any sensitive plants will need to be protected or brought indoors.  ]]>
+      </description>
+      <WebURL>/iwx/</WebURL>
+      <FullImage>https://www.weather.gov//images/iwx/wxstory/Tab2FileL.png</FullImage>
+      <SmallImage>https://www.weather.gov//images/iwx/wxstory/Tab2FileL.png</SmallImage>
+      <ImageLoop></ImageLoop>
+    </graphicast>
+    <graphicast>
+      <Office>Northern Indiana</Office>
+      <cwa_center_lat>41.36</cwa_center_lat>
+      <cwa_center_lon>-85.7</cwa_center_lon>
+      <StartTime>1729584960</StartTime>
+      <EndTime>1729584960</EndTime>
+      <graphicNumber>3</graphicNumber>
+      <order>3</order>
+      <radar>0</radar>
+      <FrontPage>true</FrontPage>
+      <title>
+        <![CDATA[Concerns for Grass and Field Fires into Tuesday]]>
+      </title>
+      <description>
+        <![CDATA[The drought conditions, combined with low afternoon humidity values and above normal temperatures, will lead to a continued risk for grass and field fires from any ignition source. Winds should remain 10 mph or less, limiting the risk of rapid spreading. Follow local burn bans and advisories over the next couple of days. ]]>
+      </description>
+      <WebURL>/iwx/</WebURL>
+      <FullImage>https://www.weather.gov//images/iwx/wxstory/Tab3FileL.png</FullImage>
+      <SmallImage>https://www.weather.gov//images/iwx/wxstory/Tab3FileL.png</SmallImage>
+      <ImageLoop></ImageLoop>
+    </graphicast>
+    <graphicast>
+      <Office>Northern Indiana</Office>
+      <cwa_center_lat>41.36</cwa_center_lat>
+      <cwa_center_lon>-85.7</cwa_center_lon>
+      <StartTime>1728932820</StartTime>
+      <EndTime>1729019220</EndTime>
+      <graphicNumber>4</graphicNumber>
+      <order>4</order>
+      <radar>0</radar>
+      <FrontPage>true</FrontPage>
+      <title>
+        <![CDATA[Frost/Freeze Likely This Week, Especially Thursday]]>
+      </title>
+      <description>
+        <![CDATA[Several nights of frost/freeze conditions are likely to occur this week as lows drop into the 30s. Cover up or bring susceptible plants indoors! Best chances for a widespread frost/freeze will be Thursday morning.]]>
+      </description>
+      <WebURL>/iwx/</WebURL>
+      <FullImage>https://www.weather.gov//images/iwx/wxstory/Tab4FileL.png</FullImage>
+      <SmallImage>https://www.weather.gov//images/iwx/wxstory/Tab4FileL.png</SmallImage>
+      <ImageLoop></ImageLoop>
+    </graphicast>
+    <graphicast>
+      <Office>Northern Indiana</Office>
+      <cwa_center_lat>41.36</cwa_center_lat>
+      <cwa_center_lon>-85.7</cwa_center_lon>
+      <StartTime>1725695520</StartTime>
+      <EndTime>1725781920</EndTime>
+      <graphicNumber>5</graphicNumber>
+      <order>5</order>
+      <radar>0</radar>
+      <FrontPage>true</FrontPage>
+      <title>
+        <![CDATA[Likely Warmer than Normal and Very Dry This Week]]>
+      </title>
+      <description>
+        <![CDATA[Not only will a prolonged dry stretch exacerbate ongoing drought, but it will also allow for temperatures to soar well above normal for mid-September. Highs in the 90s are possible late in the week. Warmer than normal temperature are very likely (80%+ chances) and it is likely that precipitation is below normal in the next 6-10 days (50-60% chances).]]>
+      </description>
+      <WebURL>/iwx/</WebURL>
+      <FullImage>/images/iwx/wxstory/Tab5FileL.png</FullImage>
+      <SmallImage>/images/iwx/wxstory/Tab5FileL.png</SmallImage>
+      <ImageLoop></ImageLoop>
+    </graphicast>
+  </graphicasts>
+</xml>

@@ -1,0 +1,201 @@
+@startuml weather.gov API interop layer / point endpoint
+title weather.gov API interop layer / point endpoint
+
+start
+:entry;
+
+:getDataForPoint(lat, lon)
+• data/index.js;
+
+:getPoint(lat,lon)
+• data/points.js;
+note right
+  This has to happen before
+  anything else, since all
+  other data is fetched by
+  WFO grid (except alerts)
+end note
+
+fork
+  :get grid;
+fork again
+  :get place;
+end fork
+
+if (got grid?) then (yes)
+  fork
+    :getSatellite(grid)
+    • data/satellite.js;
+
+    if(request failed?) then (yes)
+      #pink:ERROR: No satellite;
+    else (no)
+      if(valid response?) then (yes)
+        :build satellite GIF URL;
+      else (no)
+        #pink:ERROR: No satellite;
+      endif
+    endif
+  fork again
+    :getForecast({ grid, place })
+    • data/forecast/index.js;
+
+    fork
+      :gridpoint(data, hours, place)
+      • data/forecast/gridpoint.js;
+
+      if(error?) then (yes)
+        #pink:ERROR: Some hourly
+        data is unvailable;
+      else (no)
+        :parse;
+      endif
+    fork again
+      :daily(data, place)
+      • data/forecast/daily.js;
+
+      if(error?) then (yes)
+        #pink:ERROR: No forecast;
+      else (no)
+        :parse;
+      endif
+    fork again
+      :hourly(data, hours, place)
+      • data/forecast/hourly.js;
+
+      if(error?) then (yes)
+        #pink:ERROR: Some hourly
+        data is unvailable;
+      else (no)
+        :parse;
+      endif
+    end fork
+
+    if(has daily forecast) then(yes)
+      :assemble;
+
+      if(has gridpoint data) then (yes)
+        :add gridpoint data to hourly;
+      else(no)
+      endif
+
+      if(has hourly data) then (yes)
+        :add gridpoint data
+        to hourly;
+        :add qualitative
+        precip data;
+      else(no)
+      endif
+    else (no)
+      #pink:forecast: error;
+    endif
+
+  fork again
+    :getObservations({ grid, point })
+    • data/obs/index.js;
+
+    if(first station responds) then (yes)
+      if(first obs is valid) then (yes)
+        :use observation;
+      else(no)
+        if(second station responds) then (yes)
+          if(second obs is valid) then (yes)
+            :use observation;
+          else(no)
+            if(third station responds) then (yes)
+              if(third obs is valid) then (yes)
+                :use observation;
+              else(no)
+                #pink:obs: error
+                no valid observations;
+              endif
+            else(no)
+              #pink:obs: error
+              could not get get
+              an obs station;
+            endif
+          endif
+        else(no)
+          if(third station responds) then (yes)
+            if(third obs is valid) then (yes)
+              :use observation;
+            endif
+          else(no)
+            #pink:obs: error
+            could not get get
+            an obs station;
+          endif
+        endif
+      endif
+    else(no)
+      if(second station responds) then (yes)
+        if(second obs is valid) then (yes)
+          :use observation;
+        else
+          if(third station responds) then (yes)
+            if(third obs is valid) then (yes)
+              :use observation;
+            else(no)
+              #pink:obs: error
+              no valid observations;
+            endif
+          else(no)
+            #pink:obs: error
+            could not get get
+            an obs station;
+          endif
+        endif
+      else(no)
+        if(third station responds) then (yes)
+          if(third obs is valid) then (yes)
+            :use observation;
+          else(no)
+            #pink:obs: error
+            no valid observations;
+          endif
+        else(no)
+          #pink:obs: error
+          could not get get
+          an obs station;
+        endif
+      endif
+    endif
+  end fork
+
+endif
+
+:getAlerts({ grid, point, place })
+• alerts/index.js;
+
+if(got grid?) then (yes)
+  :get alerts whose geometry
+  intersects the WFO grid
+  geometry;
+  note left
+    We prefer to intersect alerts with
+    the grid geometry because the grid
+    geometry is bigger. Location errors
+    from the browser location API or
+    from the geocoding lookup can be
+    smoothed out a little better over
+    a 1.5km x 1.5km square than over a
+    single point.
+  end note
+else (no)
+  :get alerts whose geometry
+  intersects the point lat
+  and lon;
+endif
+
+if(has forecast) then(yes)
+  :map alerts into days;
+  note left
+    The alerts mapped into the daily
+    forecast have enough metadata to
+    display them in the hourly table,
+    if there is an hourly forecast.
+  end note
+endif
+
+end
+@enduml
