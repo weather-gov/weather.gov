@@ -100,7 +100,6 @@ services:
     build:
       context: ./spatial-data
       dockerfile: Dockerfile.spatial.dev
-    image: 18f-spatial-node:20
     networks:
       - weather.gov
     links:
