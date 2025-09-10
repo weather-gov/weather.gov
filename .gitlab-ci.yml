@@ -1,14 +1,45 @@
+spec:
+  # these inputs permit flexible pipeline runs from the GitLab UI
+  inputs:
+    build-images:
+      type: boolean
+      default: true
+      description: "Build Docker images containing 3rd party dependencies using the config files on the selected branch. Images are tagged with the branch slug and pushed to the NOAA GitLab container registry."
+    run-django-ci:
+      type: boolean
+      default: true
+      description: "Lint and test Django in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+    run-js-ci:
+      type: boolean
+      default: true
+      description: "Lint and test JS in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+---
+# NB: this file is less confusing to read once you realize that it does
+#     different things, depending on which branch is in the pipeline
+
 stages:
-  - gather
-  - build
-  - lint
-  - test
+  - gather  # gather the 3rd party dependencies and push images of them to the registry
+  - build   # pull the dependency images, put the code in them, push the code images
+  - lint    # pull the code images and lint
+  - test    # pull the code images and test
 
 # these are available in all the running containers (images and services)
 variables:
   POSTGRES_USER: drupal
   POSTGRES_PASSWORD: drupal
   POSTGRES_DB: weathergov
+  USE_TAG: main  # in a typical pipeline run, use dependency images built on main
+
+# control when pipelines run and override some parameters
+workflow:
+  rules:
+    # when building from the GitLab UI, use dependency images built on the current branch
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
+      variables:
+        USE_TAG: $CI_COMMIT_REF_SLUG
+    # always allow CI pipelines on pushes and from UI -- nb: a merge will cause a push to the target branch
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 # common config for using Docker in later jobs
 .docker-in-docker:
@@ -27,8 +58,8 @@ variables:
   extends: .docker-in-docker
   script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - docker build -f ${BUILD_CONTEXT}${DOCKERFILE} -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG $BUILD_CONTEXT
-  - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG
+  - docker build -f ${BUILD_CONTEXT}${DOCKERFILE} -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG $BUILD_CONTEXT
+  - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
 
 # common config for building images using a Dockerfile passed inline as a variable
 .build-image:
@@ -40,8 +71,8 @@ variables:
       $DOCKERFILE
       EOF
     - cat Dockerfile.tmp
-    - docker build -f Dockerfile.tmp -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG $BUILD_CONTEXT
-    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG
+    - docker build -f Dockerfile.tmp -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG $BUILD_CONTEXT
+    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
 
 # build a base image with all the current node_modules and other JavaScript dependencies
 gather-forecast-node-dependencies:
@@ -50,8 +81,7 @@ gather-forecast-node-dependencies:
   variables:
     BUILD_CONTEXT: ./
     DOCKERFILE: Dockerfile.node.ci
-    IMAGE_NAME: utility-node
-    IMAGE_TAG: main
+    IMAGE_NAME: node-with-deps
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
       changes:
@@ -64,6 +94,7 @@ gather-forecast-node-dependencies:
         - tests/api/package-lock.json
         - spatial-data/package.json
         - spatial-data/package-lock.json
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
 
 # build a base image with all the current Python dependencies
 gather-forecast-django-dependencies:
@@ -72,35 +103,41 @@ gather-forecast-django-dependencies:
   variables:
     BUILD_CONTEXT: forecast/
     DOCKERFILE: Dockerfile.ci
-    IMAGE_NAME: utility-python
-    IMAGE_TAG: main
+    IMAGE_NAME: python-with-deps
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
       changes:
         - forecast/Dockerfile.ci
         - forecast/backend/requirements.txt
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
 
 # build an image containing the latest Django code from our repository
 build-forecast-django-image:
   extends: .build-image
   stage: build
+  needs:
+    - job: gather-forecast-django-dependencies
+      optional: true
   variables:
     BUILD_CONTEXT: forecast/
     DOCKERFILE: |-
-      FROM $CI_REGISTRY_IMAGE/utility-python:main
+      FROM $CI_REGISTRY_IMAGE/python-with-deps:$USE_TAG
       COPY . /code/
       CMD python manage.py runserver 0.0.0.0:8080
     IMAGE_NAME: web
-    IMAGE_TAG: $CI_COMMIT_REF_SLUG
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
       changes:
         - forecast/backend/**/*
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
 
 # lint all JavaScript in the repo in one job
 js-lint:
   stage: lint
-  image: $CI_REGISTRY_IMAGE/utility-node:main
+  needs:
+    - job: gather-forecast-node-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
   script:
     # NB: GitLab clones into CI_BUILDS_DIR which defaults to
     # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
@@ -110,10 +147,40 @@ js-lint:
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/tests/api/node_modules tests/api/
     - npm run js-lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
 
 django-lint:
   stage: lint
+  needs: ['build-forecast-django-image']
   image: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG
   script:
     - cd /code
     - python -m flake8 .
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - forecast/backend/**/*
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
+
+django-test:
+  stage: test
+  needs: ['build-forecast-django-image']
+  image: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG
+  services:
+  - name: postgis/postgis:17-3.5
+    alias: database
+    variables:
+      POSTGRES_USER: drupal
+      POSTGRES_PASSWORD: drupal
+      POSTGRES_DB: weathergov
+  script:
+    - cd /code
+    - python manage.py migrate
+    - python manage.py test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - forecast/backend/**/*
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
