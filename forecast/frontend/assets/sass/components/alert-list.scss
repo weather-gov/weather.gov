@@ -19,14 +19,18 @@ wx-alerts .usa-accordion {
     scroll-padding-top: units(6);
 }
 
+.wx-alert[data-alert-level] .wx-alert-li {
+    background-color: inherit;
+}
+
 .wx-alert {
     @extend .bg-base-lightest;
 
     &[data-alert-level="watch"] {
         border-left-color: color("yellow-50v");
+        border-color: color("yellow-20v");
+        background-color: color("yellow-5");
         .wx-alert-li {
-            background-color: color("yellow-5");
-
             &::before {
                 background-color: color("yellow-50v");
             }
@@ -35,9 +39,9 @@ wx-alerts .usa-accordion {
 
     &[data-alert-level="warning"]{
         border-left-color: color("red-50");
+        border-color: color("red-40v");
+        background-color: color("red-cool-10v");
         .wx-alert-li {
-            background-color: color("red-cool-10v");
-            
             &::before {
                 background-color: color("red-50");
             }
@@ -48,14 +52,9 @@ wx-alerts .usa-accordion {
         border-left-color: color("gray-cool-30");
         .wx-alert-li {
             background-color: color("base-lightest");
-            
             &::before {
                 background-color: color("base-dark");
             }
         }
     }
 }
-
-
-
-
