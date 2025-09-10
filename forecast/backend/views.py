@@ -65,7 +65,7 @@ def offices(request):
 
 def offices_specific(request, wfo):
     office = WFO.objects.get(code=wfo.upper())
-    return render(request, "weather/office.html", {'office': office.__dict__})
+    return render(request, "weather/office.html", {'office': office })
 
 def afd_index(request):
     """
