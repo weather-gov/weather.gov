@@ -26,6 +26,7 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     path("pages/", include(wagtail_urls)),
     path("point/<float:lat>/<float:lon>/", views.point_location, name="point"),
+    path("place/<state>/<place>/", views.place_forecast, name="place forecast")
 ]
 
 if settings.DEBUG == True:

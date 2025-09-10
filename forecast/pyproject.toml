@@ -1,6 +1,6 @@
 [tool.black]
-line-length=120
-unstable=true
+line-length = 120
+unstable = true
 
 [tool.djlint]
 # H030 Consider adding a meta description.
@@ -9,8 +9,8 @@ unstable=true
 # H023 Do not use entity references.
 # H020 Empty tag pair found. Consider removing.
 # H021 Inline styles should be avoided.
-ignore="H030,H031,H006,H023,H020,H021"
-indent=2
+ignore = "H030,H031,H006,H023,H020,H021"
+indent = 2
 
 
 [tool.mypy]
