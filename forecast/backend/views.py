@@ -1,8 +1,8 @@
 from backend import interop
+from backend.models import WFO, GeographicPlace, Region
 from backend.util import get_wfo_from_afd
-from backend.models import WFO, Region
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect
+from django.http import Http404, HttpResponse
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 
 
@@ -51,6 +51,39 @@ def point_location(request, lat, lon):
     return render(request, "weather/point.html", {"point": point})
 
 
+def place_forecast(request, state, place):
+    known_place = GeographicPlace.get_known_place(state, place)
+
+    # If this is a place we know about...
+    if known_place is not None:
+        # If the requested place name has a space or slash in it, then we need
+        # to redirect them to a normalized URL.
+        normalize_redirect = " " in place or "/" in place
+
+        # Now de-normalize the requested place name, in case it was already
+        # normalized. We'll use the denormalized version to determine whether we
+        # need to redirect to a differently-capitalized version.
+        place = place.replace("_", " ").replace(",", "/")
+
+        # If the input name is not normalized, or if the input state or name
+        # do not exactly match the known place, redirect to the normalized URL
+        do_redirect = normalize_redirect or known_place.state != state or known_place.name != place
+
+        if do_redirect:
+            # Get the expected place name from the model so the capitalization
+            # and whatnot are correct, then normalized. And keep the state from
+            # the model.
+            place = known_place.name.replace(" ", "_").replace("/", ",")
+            return redirect(f"/place/{known_place.state}/{place}/")
+
+        # If we don't need to redirect, then just show them their forecast based
+        # on the location of the place.
+        return point_location(request, known_place.latitude, known_place.longitude)
+
+    # If it's not a place we know, 404.
+    raise Http404()
+
+
 def offices(request):
     regions = []
     for region in Region.objects.all():
@@ -63,9 +96,11 @@ def offices(request):
 
     return render(request, "weather/offices.html", locals())
 
+
 def offices_specific(request, wfo):
     office = WFO.objects.get(code=wfo.upper())
-    return render(request, "weather/office.html", {'office': office })
+    return render(request, "weather/office.html", {"office": office})
+
 
 def afd_index(request):
     """
