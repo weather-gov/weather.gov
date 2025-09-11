@@ -17,7 +17,7 @@
         </h3>
         <div class="display-flex">{% daily_high_low periods=day.periods %}</div>
       </div>
-      {% if alerts|length > 0 %}
+      {% if alerts.items|length > 0 %}
         <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 daily-alert-summary">
           {% summary_alert_link alerts=alerts %}
         </div>
