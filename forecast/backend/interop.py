@@ -1,43 +1,39 @@
-import requests
 from os import getenv
+
+import requests
 from django.utils import dateparse
 from django.utils.translation import gettext_lazy as _
 
 
 def _fetch(url):
-    """
-    Basic request function for handling all interop layer
-    requests
-    """
+    """Fetch a dictionary from the interop layer."""
     base_url = getenv("INTEROP_URL")
     full_url = f"{base_url}{url}"
-    response = requests.get(full_url)
+    response = requests.get(full_url, timeout=5)  # TODO: try-request block with logging
     response.raise_for_status()
     return response.json()
 
 
 def _api_fetch(url):
-    """
-    Fetch directly through the weather API or the
-    proxy, if present
-    """
+    """Fetch a dictionary directly from the weather API. Or the proxy, if present."""
     base_url = getenv("API_URL")
     if not base_url or base_url == "":
         base_url = "https://api.weather.gov/"
     full_url = f"{base_url}{url}"
-    response = requests.get(full_url)
+    response = requests.get(full_url, timeout=5)  # TODO: try-request block with logging
     response.raise_for_status()
     return response.json()
 
 
 def _process_interop_data(data):
     """
-    Given a dictionary response from the interop
-    layer for point information, perform additional
-    processing of the data so that we have structured
-    lists for information like the temperatures for each day,
-    the high, the low, and other lists needed for charts
-    and tables
+    Make structured lists like temperatures per day, high, low, and other lists for charts and tables.
+
+    Args:
+        data: a dictionary from the interop layer for point information
+
+    Returns:
+        The dictionary is modified IN PLACE, but is also returned.
     """
     for day in data["forecast"]["days"]:
         periods = day["periods"]
@@ -137,21 +133,51 @@ def _process_interop_data(data):
 
 
 def get_point_forecast(lat, lon):
+    """
+    Fetch the forecast for a given lat/lon, w/ post-processing.
+
+    To see an example, run:
+
+        docker compose exec -it web bash
+        ./manage.py shell
+        from backend.interop import get_point_forecast
+        get_point_forecast(44.92,-92.937)
+    """
     url = f"/point/{lat}/{lon}"
     data = _fetch(url)
     return _process_interop_data(data)
 
 
 def get_wx_afd_by_id(afd_id):
+    """
+    Fetch an Area Forecast Discussion by ID.
+
+    To see an example, run:
+
+        docker compose exec -it web bash
+        ./manage.py shell
+        from backend.interop import get_wx_afd_versions_by_wfo, get_wx_afd_by_id
+        get_wx_afd_by_id(get_wx_afd_versions_by_wfo("arx")["@graph"][0]["id"])
+    """
     url = f"/products/{afd_id}"
     return _fetch(url)
 
 
 def get_wx_afd_versions_by_wfo(wfo):
+    """
+    Fetch version information for a WFO's Area Forecast Discussions.
+
+    To see an example, go to: https://api.weather.gov/products/types/AFD/locations/arx
+    """
     url = f"/products/types/AFD/locations/{wfo}"
     return _api_fetch(url)
 
 
 def get_wx_afd_versions():
+    """
+    Fetch the list of all Area Forecast Discussion versions.
+
+    To see an example, go to https://api.weather.gov/products/types/AFD
+    """
     url = "/products/types/AFD"
     return _api_fetch(url)

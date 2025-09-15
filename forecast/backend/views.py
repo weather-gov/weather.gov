@@ -1,14 +1,18 @@
-from backend import interop
-from backend.models import WFO, GeographicPlace, Region
-from backend.util import get_wfo_from_afd
+from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
+
+from backend import interop
+from backend.models import WFO, GeographicPlace, Region
+from backend.util import get_wfo_from_afd
 
 
 # Helpers
 def _get_redirect_for_afd_queries(request):
     """
+    Pull out querystring values from a request to /afd.
+
     Given a request to the index /afd endpoint,
     attempt to pull out any querystring values.
     If they are present, this means the update form
@@ -32,18 +36,20 @@ def _get_redirect_for_afd_queries(request):
     id_was_updated = afd_id != current_afd_id
     if wfo_was_updated and id_was_updated:
         return f"/afd/{wfo.lower()}/{afd_id}"
-    elif wfo_was_updated:
+    if wfo_was_updated:
         return f"/afd/{wfo.lower()}"
-    elif id_was_updated:
+    if id_was_updated:
         return f"/afd/{wfo.lower()}/{afd_id}"
     return None
 
 
 def index(request):
-    return render(request, "weather/index.html", locals())
+    """Render the home page."""
+    return render(request, "weather/index.html")
 
 
 def point_location(request, lat, lon):
+    """Render the forecast for a given latitude & longitude."""
     point = interop.get_point_forecast(lat, lon)
     # TODO: Add some error checking here
     wfo = WFO.objects.get(code=point["grid"]["wfo"])
@@ -52,6 +58,7 @@ def point_location(request, lat, lon):
 
 
 def place_forecast(request, state, place):
+    """Render the forecast for a given state and place name."""
     known_place = GeographicPlace.get_known_place(state, place)
 
     # If this is a place we know about...
@@ -85,6 +92,9 @@ def place_forecast(request, state, place):
 
 
 def offices(request):
+    """Render a list of all WFOs. This is a debug route."""
+    if settings.DEBUG:
+        raise Http404()
     regions = []
     for region in Region.objects.all():
         entry = {"id": region.id, "name": region.name, "weight": region.weight, "wfos": []}
@@ -94,19 +104,19 @@ def offices(request):
             entry["wfos"].append(wfo_entry)
         regions.append(entry)
 
-    return render(request, "weather/offices.html", locals())
+    return render(request, "weather/offices.html", {"regions": regions})
 
 
 def offices_specific(request, wfo):
+    """Render the home page for an individual Weather Forecast Office."""
     office = WFO.objects.get(code=wfo.upper())
     return render(request, "weather/office.html", {"office": office})
 
 
 def afd_index(request):
     """
-    Will determine the most recent AFD at _any_ WFO
-    and reroute the user to the correct url for that
-    product.
+    Reroute the user to the correct url for the most recent AFD at _any_ WFO.
+
     If there are querystring values for the wfo and
     a given afd_id, then we redirect to the correct
     url for that page
@@ -134,27 +144,19 @@ def afd_index(request):
     return redirect(url)
 
 
-def afd_by_office(request, wfo):
-    """
-    Will determine the most recent AFD for the given
-    WFO office and redirect the user to the correct
-    url for that product
-    """
+def afd_by_office(_, wfo):
+    """Reroute the user to the correct url for the most recent AFD for the given WFO."""
     try:
         afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
         afd_id = afd_references[0]["id"]
         url = f"/afd/{wfo.lower()}/{afd_id}"
         return redirect(url)
-    except Exception:
-        raise Http404()
+    except Exception as e:
+        raise Http404() from e
 
 
 def afd_by_office_and_id(request, wfo, afd_id):
-    """
-    Will display the given AFD product by id
-    and populate the list of available AFDs for
-    the provided WFO
-    """
+    """Display the given AFD product by id and populate the list of available AFDs for the provided WFO."""
     try:
         # Grab the AFD data from the API and determine which
         # WFO it applies to. There might be cases where the user
@@ -179,26 +181,19 @@ def afd_by_office_and_id(request, wfo, afd_id):
             "version_list": afd_references,
         }
     except Exception as e:
-        print(e.response.status_code)
-        raise Http404
+        raise Http404() from e
     return render(request, "weather/afd-page.html", to_render)
 
 
-def wx_afd_id(request, afd_id):
-    """
-    Will return _markup only_ for a single parsed
-    AFD product by id
-    """
+def wx_afd_id(_, afd_id):
+    """Return _markup only_ for a single parsed AFD product by id."""
     data = interop.get_wx_afd_by_id(afd_id)
     markup = render_to_string("weather/wx/afd.html", {"afd": data})
     return HttpResponse(markup, content_type="text/html")
 
 
-def wx_afd_versions(request, wfo):
-    """
-    Will return _markup only_ for the versions
-    of AFDs for the given forecast office
-    """
+def wx_afd_versions(_, wfo):
+    """Return _markup only_ for the versions of AFDs for the given forecast office."""
     data = interop.get_wx_afd_versions_by_wfo(wfo)
     markup = render_to_string("weather/wx/afd-versions-select.html", {"version_list": data["@graph"]})
     return HttpResponse(markup, content_type="text/html")

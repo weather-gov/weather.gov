@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-qku8p%bk=+v_4mcsmi$b%vq&%c_jcjroglyjhouiy^_chak60m"
+SECRET_KEY = "django-insecure-qku8p%bk=+v_4mcsmi$b%vq&%c_jcjroglyjhouiy^_chak60m"  # noqa: S105 pending security work
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -114,7 +114,7 @@ DATABASES = {
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
         "HOST": "database",
         "PORT": 5432,
-    }
+    },
 }
 
 

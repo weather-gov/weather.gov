@@ -1,5 +1,6 @@
 import json
 import re
+
 from django import template
 from django.utils.safestring import mark_safe
 
@@ -8,11 +9,7 @@ register = template.Library()
 
 @register.simple_tag
 def subtract(first, second):
-    """
-    Given two variables, subtract the second
-    one from the first one and return the result.
-    We assume that both arguments will be numbers
-    """
+    """Subtract `first` from `second`, coercing to float and converting empty strings to 0.0."""
     if first == "":
         first = 0
     if second == "":
@@ -21,9 +18,8 @@ def subtract(first, second):
 
 
 @register.simple_tag
-def place_label(place):
-    """Given a place dict with a name and possibly a state,
-    return the formatted label"""
+def place_label(place: dict):
+    """Format a label with a place name and possibly a state."""
     name = place.get("name", "")
     state = place.get("state", None)
     if state:
@@ -32,12 +28,14 @@ def place_label(place):
 
 
 def json_encode(value):
+    """Transform `value` to a JSON string. If `value` is not dict or list, returns empty string."""
     if isinstance(value, dict) or isinstance(value, list):
         return json.dumps(value)
     return ""
 
 
 def normalize_wfo(value):
+    """Transform a WFO code into its cannonical form."""
     anchorage_alternates = ["alu", "aer"]
     if value.lower() in anchorage_alternates:
         return "AFC"
@@ -45,6 +43,7 @@ def normalize_wfo(value):
 
 
 def normalize_alert_whitespace(text):
+    """Replace Unix line breaks with HTML line breaks."""
     return mark_safe(re.sub("\n+", "<br />", text))
 
 

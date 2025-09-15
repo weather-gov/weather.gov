@@ -9,7 +9,9 @@ from wagtail.fields import RichTextField
 
 class Region(ClusterableModel):
     """
-    A Region represents one of the subdivisions of the
+    Represents a Region.
+
+    A region is one of the subdivisions of the
     world in which the NWS operates (ie, Central Region)
     """
 
@@ -25,9 +27,10 @@ class Region(ClusterableModel):
 
 class WFO(models.Model):
     """
-    A Weather Forecast Office (WFO) is the primary unit
-    in the NWS in which forecasts are generated. These
-    constitute the actual NWS offices.
+    Represents a Weather Forecast Office (WFO).
+
+    A WFO is the primary unit in the NWS in which forecasts are generated.
+    These constitute the actual NWS offices.
     """
 
     name = models.CharField(max_length=256)
@@ -58,32 +61,34 @@ class WFO(models.Model):
                 FieldPanel("facebook"),
                 FieldPanel("twitter"),
                 FieldPanel("youtube"),
-            ]
+            ],
         ),
     ]
-
-    @property
-    def has_social(self):
-        return any([self.facebook, self.twitter, self.youtube])
-
-    @property
-    def has_first_pane(self):
-        return any([self.phone, self.address, self.email])
-
-    @property
-    def has_contact(self):
-        return any([self.has_social, self.address, self.email, self.email])
 
     def __str__(self):
         return f"{self.name} ({self.code})"
 
+    @property
+    def has_social(self):
+        """Has FaceBook, Twitter, or YouTube."""
+        return bool(self.facebook or self.twitter or self.youtube)
+
+    @property
+    def has_first_pane(self):
+        """Has phone, address, or email."""
+        return bool(self.phone or self.address or self.email)
+
+    @property
+    def has_contact(self):
+        """Has social media, address, or email."""
+        return bool(self.has_social or self.address or self.email)
+
 
 class DynamicSafetyInformation(models.Model):
     """
-    A record that matches Hazard/Alert types to specific
-    safety tips that are recommended by the NWS.
-    These tips will be displayed alongside alert information,
-    where available
+    Represents Hazard/Alert types matched to specific safety tips recommended by the NWS.
+
+    These tips will be displayed alongside alert information, where available
     """
 
     type = models.CharField(unique=True, max_length=256)
@@ -93,11 +98,14 @@ class DynamicSafetyInformation(models.Model):
     # Panels for Wagtail admin
     panels = [FieldPanel("type"), FieldPanel("label"), FieldPanel("body")]
 
+    def __str__(self):
+        return self.type
 
 class GeographicPlace:
     """
-    A thing that looks model-like, but is not managed by Django and requires
-    some raw SQL queries in order to handle correctly.
+    A pseudo-model that fetches data (including the lat/lon) of a given state and place name.
+
+    NB: this class uses raw SQL queries and does not expose any Django model methods.
     """
 
     def __init__(self):
@@ -114,11 +122,11 @@ class GeographicPlace:
     @staticmethod
     def get_known_place(state, place):
         """
-        For a state and place name, see if we have a corresponding
-        place. If we do, then create the "model" object and return
-        it.
-        """
+        Create an instance of GeographicPlace for a given state and place.
 
+        Returns:
+            GeographicPlace if one exists for (state,place) else None
+        """
         # De-normalize the place name. For the purposes of clean URLs, we
         # replace spaces with underscores and slahes with commas in place names.
         # There are no places with underscores or commas in their names as of
@@ -147,20 +155,20 @@ class GeographicPlace:
             )
             row = cursor.fetchone()
 
-        if row != None:
-            model = GeographicPlace()
-            model.name = row[0]
-            model.state = row[1]
-            model.state_name = row[2]
-            model.state_fips = row[3]
-            model.county = row[4]
-            model.county_fips = row[5]
-            model.timezone = row[6]
+        if row is not None:
+            _cls = GeographicPlace()
+            _cls.name = row[0]
+            _cls.state = row[1]
+            _cls.state_name = row[2]
+            _cls.state_fips = row[3]
+            _cls.county = row[4]
+            _cls.county_fips = row[5]
+            _cls.timezone = row[6]
 
             # Parse the GeoJSON and pull out the lat/lon.
             geojson = json.loads(row[7])
-            model.longitude = geojson["coordinates"][0]
-            model.latitude = geojson["coordinates"][1]
-            return model
+            _cls.longitude = geojson["coordinates"][0]
+            _cls.latitude = geojson["coordinates"][1]
+            return _cls
 
         return None

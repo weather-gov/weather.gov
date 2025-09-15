@@ -1,8 +1,9 @@
 from django.conf import settings
-from django.urls import path, register_converter, include
-from wagtail.admin import urls as wagtailadmin_urls
+from django.urls import include, path, register_converter
 from wagtail import urls as wagtail_urls
+from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
+
 from . import views
 from .url_converters import FloatConverter
 
@@ -26,10 +27,10 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     path("pages/", include(wagtail_urls)),
     path("point/<float:lat>/<float:lon>/", views.point_location, name="point"),
-    path("place/<state>/<place>/", views.place_forecast, name="place forecast")
+    path("place/<state>/<place>/", views.place_forecast, name="place forecast"),
 ]
 
-if settings.DEBUG == True:
+if settings.DEBUG is True:
   urlpatterns += [
-    path("offices/", views.offices, name="offices")
+    path("offices/", views.offices, name="offices"),
   ]

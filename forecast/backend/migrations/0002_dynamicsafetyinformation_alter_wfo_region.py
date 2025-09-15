@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             model_name="wfo",
             name="region",
             field=modelcluster.fields.ParentalKey(
-                on_delete=django.db.models.deletion.CASCADE, related_name="region", to="backend.region"
+                on_delete=django.db.models.deletion.CASCADE, related_name="region", to="backend.region",
             ),
         ),
     ]

@@ -1,12 +1,12 @@
 from django import template
-from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
+
 from backend.models import DynamicSafetyInformation
 
 register = template.Library()
 
-# Constant for Radar "intensity" data
-# This is used for the legend
+# Constant for Radar "intensity" data. This is used for the legend.
 RADAR_INTENSITIES = [
     {
         "dbz": "−35–0",
@@ -50,9 +50,9 @@ RADAR_INTENSITIES = [
 ]
 
 
-# Renders the partial for the daily high/low information
 @register.inclusion_tag("weather/partials/daily-high-low.html")
 def daily_high_low(**kwargs):
+    """Render the partial for the daily high/low information."""
     periods = kwargs["periods"]
     temps = [period["data"]["temperature"]["degF"] for period in periods]
     low = min(temps)
@@ -72,9 +72,9 @@ def daily_high_low(**kwargs):
     return {"high": high, "low": low, "show_high": show_high, "show_low": show_low}
 
 
-# Renders a single alert link
 @register.inclusion_tag("weather/partials/alert-link.html")
 def alert_link(**kwargs):
+    """Render a single alert link."""
     result = {}
     alert = kwargs["alert"]
     result["alertCount"] = 1
@@ -86,9 +86,9 @@ def alert_link(**kwargs):
     return result
 
 
-# Renders the alert link in the daily summary
 @register.inclusion_tag("weather/partials/alert-link.html")
 def summary_alert_link(**kwargs):
+    """Render the alert link in the daily summary."""
     alerts = kwargs["alerts"]
     num_alerts = alerts["metadata"]["count"]
     alert_id = None
@@ -96,7 +96,7 @@ def summary_alert_link(**kwargs):
     alert_level = None
     if num_alerts == 0:
         return {}
-    elif num_alerts == 1:
+    if num_alerts == 1:
         alert_id = alerts["items"][0]["id"]
         alert_type = alerts["items"][0]["event"]
         alert_level = alerts["items"][0]["level"]
@@ -112,19 +112,17 @@ def summary_alert_link(**kwargs):
     }
 
 
-# Renders a daily forecast list item
-# for a given day
 @register.inclusion_tag("weather/partials/daily-forecast-list-item.html")
 def daily_forecast_list_item(**kwargs):
+    """Render a daily forecast list item for a given day."""
     day = kwargs["day"]
     day_label = kwargs.get("dayLabel", day["periods"][0]["dayName"])
     return {"day": day, "dayLabel": day_label}
 
 
-# Renders a daily summary list item
-# for a given day
 @register.inclusion_tag("weather/partials/daily-summary-list-item.html")
 def daily_summary_list_item(**kwargs):
+    """Render a daily summary list item for a given day."""
     day = kwargs["day"]
     day_label = kwargs.get("dayLabel", day["dayLabel"])
 
@@ -140,9 +138,9 @@ def daily_summary_list_item(**kwargs):
     }
 
 
-# Renders a wind speed and direction arrow
 @register.inclusion_tag("weather/partials/wind.html")
 def wind_speed_direction(**kwargs):
+    """Render a wind speed and direction arrow."""
     has_direction = False
     has_speed = False
     speed = kwargs["speed"]
@@ -168,49 +166,47 @@ def wind_speed_direction(**kwargs):
     }
 
 
-# Renders the radar
 @register.inclusion_tag("weather/partials/radar.html")
 def radar(**kwargs):
+    """Render the radar."""
     place = kwargs["place"]
     point = kwargs["point"]
 
     return {"place": place, "point": point, "intensities": RADAR_INTENSITIES}
 
 
-# Render a quick forecast link item
 @register.inclusion_tag("weather/partials/quick-forecast-link-item.html")
 def quick_forecast_link_item(**kwargs):
+    """Render a quick forecast link item."""
     return {"day": kwargs.get("day")}
 
 
-# Render an hourly details table
 @register.inclusion_tag("weather/partials/hourly-table.html")
 def hourly_table(**kwargs):
+    """Render an hourly details table."""
     day = kwargs["day"]
 
     return {**day, "alerts": day["alerts"]["items"]}
 
 
-# Render the hourly charts
 @register.inclusion_tag("weather/partials/hourly-charts.html")
 def hourly_charts(**kwargs):
+    """Render the hourly charts."""
     hours = kwargs["hours"]
     day = kwargs["day"]
 
     return {**day["hourly"], "itemId": day["id"], "hours": hours, "qpf": day["qpf"]}
 
 
-# Render the daily forecast quick-toggle component
 @register.inclusion_tag("weather/partials/daily-forecast-quick-toggle.html")
 def daily_forecast_quick_toggle(**kwargs):
-    day = kwargs["day"]
+    """Render the daily forecast quick-toggle component."""
+    return kwargs["day"]
 
-    return day
 
-
-# Render the QPF percipitation table
 @register.inclusion_tag("weather/partials/precip.html")
 def precip_table(**kwargs):
+    """Render the QPF percipitation table."""
     qpf = kwargs["qpf"]
     as_table = kwargs.get("as_table", True)
 
@@ -219,11 +215,7 @@ def precip_table(**kwargs):
 
 @register.inclusion_tag("weather/partials/dynamic-safety-info.html")
 def dynamic_safety_information(weather_event_type):
-    """
-    Respond with the (safe) html markup of safety information
-    for the given alert type. If there is no corresponding
-    safety information for the type, return None
-    """
+    """Return HTML markup of safety information for a given alert type, if any exists."""
     try:
         found = DynamicSafetyInformation.objects.get(type=weather_event_type.lower())
         return {"body": mark_safe(found.body), "type": found.type}

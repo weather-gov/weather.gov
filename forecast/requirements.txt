@@ -5,6 +5,5 @@ boto3
 djangorestframework
 wagtail
 requests
-black
+ruff
 djlint
-flake8

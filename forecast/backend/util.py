@@ -11,9 +11,10 @@ OCONUS_4CODE_MAPPINGS = {
 
 def get_wfo_from_afd(afd):
     """
-    Given a parsed JSON dict of AFD
-    product information, determine the correct
-    WFO code to which that AFD applies
+    Determine the correct WFO code for an AFD.
+
+    Args:
+        afd: a parsed JSON dict of AFD product information
     """
     if not afd or "issuingOffice" not in afd:
         return None
