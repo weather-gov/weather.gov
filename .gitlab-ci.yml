@@ -157,7 +157,7 @@ django-lint:
   image: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG
   script:
     - cd /code
-    - python -m flake8 .
+    - python -m ruff check .
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
       changes:

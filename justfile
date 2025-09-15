@@ -51,8 +51,7 @@ lint: python-lint template-format template-lint
 # Lints Python code
 [group("code quality")]
 python-lint:
-  docker compose exec web python -m black .
-  docker compose exec web python -m flake8 .
+  docker compose exec web python -m ruff check --fix .
 
 # Lint the Django HTML templates
 [group("code quality")]

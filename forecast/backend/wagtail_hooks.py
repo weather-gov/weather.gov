@@ -1,9 +1,12 @@
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
-from .models import Region, WFO, DynamicSafetyInformation
+
+from .models import WFO, DynamicSafetyInformation, Region
 
 
 class WFOAdminSnippet(SnippetViewSet):
+    """Bind the Weather Forecast Office model's data to snippets that can be edited and displayed in the CMS."""
+
     model = WFO
     menu_label = "WFOs"
     menu_name = "wfos"
@@ -17,6 +20,8 @@ class WFOAdminSnippet(SnippetViewSet):
 
 
 class RegionAdminSnippet(SnippetViewSet):
+    """Bind the Region model's data to snippets that can be edited and displayed in the CMS."""
+
     model = Region
     menu_label = "Regions"
     menu_name = "regions"
@@ -30,6 +35,8 @@ class RegionAdminSnippet(SnippetViewSet):
 
 
 class DynamicSafetyInformationAdminSnippet(SnippetViewSet):
+    """Bind the Safety Information model's data to snippets that can be edited and displayed in the CMS."""
+
     model = DynamicSafetyInformation
     menu_label = "Safety Information"
     menu_name = "safety-information"
