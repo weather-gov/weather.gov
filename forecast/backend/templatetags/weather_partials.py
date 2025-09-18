@@ -1,8 +1,8 @@
 from django import template
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from backend.models import DynamicSafetyInformation
+from backend.util import mark_safer
 
 register = template.Library()
 
@@ -218,6 +218,6 @@ def dynamic_safety_information(weather_event_type):
     """Return HTML markup of safety information for a given alert type, if any exists."""
     try:
         found = DynamicSafetyInformation.objects.get(type=weather_event_type.lower())
-        return {"body": mark_safe(found.body), "type": found.type}
+        return {"body": mark_safer(found.body), "type": found.type}
     except DynamicSafetyInformation.DoesNotExist:
         return None

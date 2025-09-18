@@ -1,8 +1,9 @@
 import json
 
 from django import template
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+
+from backend.util import mark_safer
 
 register = template.Library()
 
@@ -23,7 +24,7 @@ def t(value, args=False):
 def trans_with_args(value, *args, **kwargs):
     """Translate content in templates, e.g. `{% trans_with_args "key.03" %}`."""
     translated = _(value)
-    return mark_safe(translated.format(**kwargs))
+    return mark_safer(translated.format(**kwargs))
 
 
 register.filter("t", t)
