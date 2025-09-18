@@ -1,35 +1,47 @@
 # We will use automated tools to help maintain code quality
 
-Date: 2024-10-17
+Date: 2025-09-18
 
 ### Status
 
-Superseded by [ADR 0021](0021-we-will-use-automated-tools-to-help-maintain-code-quality.md).
+Accepted
 
 ### Context
 
 Maintainable code should be consistent, readable, functionally correct, and tested. Automated tools can help tremendously with all of these maintainability concerns.
 
-Supersedes [ADR 0012](0012-we-will-use-automated-tools-to-help-maintain-code-quality.md).
+Supersedes [ADR 0019](0019-we-will-use-automated-tools-to-help-maintain-code-quality.md).
 
 ### Decision
 
 We will use the following tools:
 
-- **PHP Code Beautifier and Fixer** () to automatically fix PHP code style issues. This tool will run on developer machines. It can be automated, but creates diverging git trees that can be a hassle for developers to manage.
-- **PHP_CodeSniffer** () for PHP style checking, using the Drupal style guide
-
-  > [!NOTE]  
-  > NCO has a tool called that we will look into. It includes two static analysis components as well.
-  >
-  > Also, NCO adopts the PSR1 and PSR2 style rules. This project had opted to adopt the Drupal style rules instead, since it is a Drupal project. We believe using the Drupal rules will make it easier to maintain in the long term.
-
-- **PHPUnit** for unit testing PHP code and code coverage
-- **eslint** for Javascript style checking, using the Airbnb style guide
+- **ruff** for Python style checking and formatting
+- **djlint** for Django template style checking and formatting
+- **eslint** for Javascript style checking
 - **prettier** to automatically fix Javascript and SCSS code style issues. This tool will run on developer machines. It can be automated, but creates diverging git trees that can be a hassle for developers to manage.
 - **scsslint** for Sass style checking, using its default style guide
 - **Playwright** for end-to-end/browser testing and automated accessibility testng against the WCAG2AA standard
-- **GitHub Dependabot** for automated dependency update scanning
+
+We will maintain our own `ruff` and `eslint` rules. Before turning a rule off, we will take the following steps:
+
+1. Read the rule's help page to understand why it exists.
+2. If the rule does not make sense for a particular use case, we will turn it off at the end of the flag lined and include a comment about why it is turned off.
+
+   > Ruff:
+   >
+   > ```
+   > code code code # noqa: <rule>` – eg, to turn off rule ruff F841, `# noqa: F841
+   > ```
+   >
+   > eslint:
+   >
+   > ```
+   > code code code // eslint-disable-line [rule-name]
+   > ```
+
+3. If a team member disagrees with the rule entirely, they will add it to ruff's ignore list or remove it from eslint's rule list and submit a merge request for discussion.
+   > The ruff ignore list is in `pyproject.toml` The eslint rules are in `eslint.config.js`.
 
 ### Consequences
 

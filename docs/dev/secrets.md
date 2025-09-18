@@ -1,4 +1,5 @@
 # Secrets
+
 ========================
 
 Secrets are read from the running environment in cloud.gov.
@@ -41,7 +42,7 @@ Used for cron and set in settings. Updating in the environment and restaging sho
 
 ## HASH_SALT
 
-This is used for one-time logins, form tokens, etc. and is set in settings. 
+This is used for one-time logins, form tokens, etc. and is set in settings.
 
 ## IDP_PUBLIC_KEY
 
@@ -55,12 +56,12 @@ This is the base64 encoded private key used in the SAML authentication flow with
 
 This is the base64 encoded public key used in the SAML authentication flow with our IDP in combination with our - the "service provider" - private key. It is used to complete the SAML sandshake with our IDP during authetnication requests. Generating a new public/private key pair entails following the process set out in the ICAM documentation.
 
-## ROOT_USER_NAME and ROOT_USER_PASS
+## ~~ROOT_USER_NAME and ROOT_USER_PASS~~
 
-These are the login credentials for the root account that can be used for basic authentication for an admin user here: https://weathergov-<environment>.app.cloud.gov/user/login. If you need to rotate these, you will also need to reset the password with Drupal: 
+~~These are the login credentials for the root account that can be used for basic authentication for an admin user here: https://weathergov-<environment>.app.cloud.gov/user/login. If you need to rotate these, you will also need to reset the password with Drupal:~~
 
 `drush upwd --password="NewPassword" <root_user_name>`
 
 ## NEWRELIC_LICENSE
 
-We need to set the New Relic license in two places. We need it in VCAP_SERVICES so that the Drupal New Relic APM module can pick it up. And we need to set it as an environment variable so the PHP Buildpack knows to install the APM as well. These steps are included in the cloudgov env create script. 
+We need to set the New Relic license in two places. We need it in VCAP_SERVICES so that the Drupal New Relic APM module can pick it up. And we need to set it as an environment variable so the PHP Buildpack knows to install the APM as well. These steps are included in the cloudgov env create script.

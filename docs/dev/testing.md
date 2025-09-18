@@ -10,80 +10,10 @@ we've chosen.
 > documented in
 > [architectural decision record #9](../architecture/decisions/0009-we-will-use-a-content-management-system.md).
 
-## PHP testing
+## Python/Django/Wagtail testing
 
-### Unit tests
-
-We use [PHPUnit](https://phpunit.de/) for unit testing utility classes and
-custom block types. These particular classes are relatively isolated so don't
-require extensive mocking.
-
-For blocks in particular, there is a base test class that handles creating the
-block under test and setting up the appropriate mocks that are
-dependency-injected. It also provides a couple of helpful behaviors:
-
-1. By default, it makes the `getLocation` method mockable. Calling
-   `$this->onLocationRoute()` in a block test will configure the `getLocation`
-   mock to return an appropriate location object with grid and point properties
-   already set. Similarly, `$this->notOnLocationRoute()` will mock `getLocation`
-   to return a location with the grid and point set to `false`.
-
-2. Automatically adds a test that mocks all of the WeatherDataService methods to
-   throw exceptions and tests that the block returns `["error" => true]` in
-   those cases.
-   > [!NOTE]  
-   > If your block doesn't need this test, you can override it:
-   >
-   > ```php
-   > public function testHandlesExceptions(): void
-   > {
-   >   $this->assertEquals(true, true);
-   > }
-   > ```
-
-To run just these unit tests, run:
-
-```shell
-make unit-test
-...or...
-make u
-```
-
-### "API" end-to-end testing
-
-Our Drupal services are largely concerned with fetching data from external
-sources (such as the API or the database) and formatting it to our needs. Unit
-testing them would require a lot of complex and fragile mocking. (We did this
-initially and it was a nightmare to maintain). Instead, we have opted to test
-our services against live data using our API proxy tool.
-
-We essentially treat our blocks as API endpoints. We load a block, point it at
-a particular location with known data, and then ensure the data comes back as
-expected. This is much like end-to-end testing.
-
-These tests are also implemented using [PHPUnit](https://phpunit.de/). They are
-stored alongside our blocks code, since they are executing blocks. They should
-extend the `EndToEndBase` class, which handles setting up autoloading and
-creating all of the necessary services and mocks to run the tests.
-
-It also provides an `onLocationRoute` helper method like the block unit test
-base class. However, instead of mocking the base `getLocation` method, it
-mocks the RouteMatchInterface object to identify the route as being at a given
-location. This ensures more thorough testing.
-
-To defeat caching, these tests are run in process isolation mode, meaning each
-test runs in its own process. This results in somewhat slower tests, but it
-also means we don't have to deal with trying to bypass caches in testing.
-
-To run these tests locally, the Makefile command is:
-
-```sh
-make backend-test
-...or...
-make be
-```
-
-Note that backend tests include unit tests.
+> [!NOTE]  
+> This section is being developed.
 
 ## End-to-end testing
 
@@ -92,42 +22,45 @@ specific URLs, possibly interact with the page, and then make assertions about
 the state of the page These tests help us catch issues where a page's behavior
 suddenly changes by accident.
 
-To run end-to-end tests locally, the Makefile command is:
+To run end-to-end tests locally, the Just command is:
 
 ```sh
-make ee
+just e2e
 ```
 
 Note that you can set the environment variable `WX_NOW_TIMESTAMP` to any ISO8601
-date to "freeze" time; the proxy and the Drupal application will then use that value
-to mean "now". (An example: `WX_NOW_TIMESTAMP=2024-08-20T19:36:38Z make eep`)
+date to "freeze" time; the proxy and the Django application will then use that value
+to mean "now". (An example: `WX_NOW_TIMESTAMP=2024-08-20T19:36:38Z just ee`)
 
 Note also that if you intend on testing interactions that modify the CMS in some
 way, it is suggested instead to use outside testing (see next section).
 
-## Outside testing
+## ~~Outside testing~~
 
-We also have a separate test environment that is intended for potentially
+> [!NOTE]  
+> Outside testing will be fundamentally different in Django.
+
+~~We also have a separate test environment that is intended for potentially
 destructive changes, such as adding users, uploading files and overwriting or
 deleting content. This test environment is completely torn down once finished,
 so we do not have to worry about adverse impact on our running developer
-environments.
+environments.~~
 
-To run "outside" tests locally using [Playwright](https://playwright.dev/), the
-corresponding Makefile command is:
+~~To run "outside" tests locally using [Playwright](https://playwright.dev/), the
+corresponding Just command is:~~
 
 ```sh
-make ot
+just ot
 ```
 
-We provide a [`setup.sh`](../../tests/playwright/outside/setup.sh) where
+~~We provide a [`setup.sh`](../../tests/playwright/outside/setup.sh) where
 one-time setup can happen before testing the outside environment. It is advised
 to only use `drush` commands to manipulate data (rather than modifying database
 or Drupal files directly) so that we guarantee CMS consistency, integrity, and
-reproducibility.
+reproducibility.~~
 
-To iteratively develop and run tests while the test environment is up (note
-that, again, changes will be permanent until the test environment is restarted):
+~~To iteratively develop and run tests while the test environment is up (note
+that, again, changes will be permanent until the test environment is restarted):~~
 
 ```sh
 PW_TEST_HTML_REPORT_OPEN='never' npx playwright test outside/
@@ -144,10 +77,10 @@ library. This library integrates [Axe core](https://github.com/dequelabs/axe-cor
 to test the rendered page. We use the
 [WCAG2AA](https://www.w3.org/WAI/WCAG2AA-Conformance) standard.
 
-To run accessibility tests locally, the Makefile command is:
+To run accessibility tests locally, the Just command is:
 
 ```sh
-make a11y
+just a11y
 ```
 
 ## Code quality
@@ -156,51 +89,16 @@ We use linters to enforce code style standards. These tools help keep our code
 consistent so it's easier for the whole team to move around through it, and it
 helps with onboarding new teammates.
 
-You can run all of our linters at once with:
+You can run all of our linters and formatters at once with:
 
 ```sh
-make lint
+just lint
 ```
 
-In addition to linters, we use code formatters to help us write consistent code.
-To run all of our code formatters at once, run:
+#### Python code quality
 
-```sh
-make format
-```
-
-#### PHP code quality
-
-We use [PHP_CodeSniffer (phpcs)](https://github.com/squizlabs/PHP_CodeSniffer)
-to test our PHP code styles. We have adopted the PSR12 standard style as our
-style guide. We also prettier to format our code. This tool can automatically
-format your code according to our style guide, though it cannot fix all errors.
-
-To format the project's PHP code:
-
-```sh
-make php-format
-```
-
-To test your PHP code's style:
-
-```sh
-make php-lint
-```
-
-> [!NOTE]
-> If you are using VS Code, you will need to update its prettier configuration
-> in order for it to run on save for PHP files. You can add this to your global
-> settings, or you can add it to your local settings in `.vscode/settings.json`.
-> The local settings are the recommended approach.
->
-> ```json
-> {
->   "prettier.documentSelectors": [
->     "**/*.{js,html,css,scss,json,md,yaml,yml,php,test,theme,module}"
->   ]
-> }
-> ```
+> [!NOTE]  
+> This section is being developed.
 
 #### Javascript code quality
 
@@ -211,13 +109,13 @@ the [Airbnb style guide](https://airbnb.io/javascript/) as our base. We also use
 To format the project's Javascript code:
 
 ```sh
-make js-format
+just format-js
 ```
 
 To test your Javascript code's style:
 
 ```sh
-make js-lint
+just lint-js
 ```
 
 #### Sass code quality
@@ -229,11 +127,11 @@ for our Sass code too.
 To format the project's Sass code:
 
 ```sh
-make style-format
+just format-style
 ```
 
 To test your Sass code's style:
 
 ```sh
-make style-lint
+just lint-style
 ```

@@ -12,7 +12,7 @@ const inputPaths = process.argv.slice(2);
 const outputPath = path.resolve(
   __dirname,
   "..",
-  "web/themes/new_weather_theme/assets/images/",
+  "forecast/frontend/assets/images/",
   "spritesheet.svg"
 );
 
