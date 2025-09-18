@@ -1,3 +1,6 @@
+from django.utils.safestring import mark_safe
+from html_sanitizer import Sanitizer
+
 OCONUS_4CODE_MAPPINGS = {
     "PHFO": "HFO",  # Honolulu, HI
     "TJSJ": "SJU",  # San Juan, PR
@@ -35,3 +38,32 @@ def get_wfo_from_afd(afd):
     # If we get here, we don't recognize the given WFO code as
     # valid, so return None
     return None
+
+def mark_safer(value, transformer = None):
+    """
+    Mark safe, more safely.
+
+    This puts `value` through an HTML sanitizer that will strip out
+    many XSS attack vectors before passing it to Django's `mark_safe`.
+
+    Use this instead of django.utils.safestring.mark_safe.
+
+    Args:
+        value: A string to be sanitized and marked safe
+            for inclusion in templates
+
+        transformer (optional): A function to modify `value` before
+            it is passed to `mark_safe`.
+
+            Example:
+            mark_safer(value, lambda cleaned: re.sub("one", "two", cleaned))
+    """
+    sanitizer = Sanitizer({
+        # don't remove stuff like '\n'
+        "keep_typographic_whitespace": True,
+    })
+    cleaned = sanitizer.sanitize(value)
+
+    if callable(transformer):
+        return mark_safe(transformer(cleaned))  # noqa: S308
+    return mark_safe(cleaned)  # noqa: S308

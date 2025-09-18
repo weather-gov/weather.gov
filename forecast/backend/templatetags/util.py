@@ -2,7 +2,8 @@ import json
 import re
 
 from django import template
-from django.utils.safestring import mark_safe
+
+from backend.util import mark_safer
 
 register = template.Library()
 
@@ -44,7 +45,7 @@ def normalize_wfo(value):
 
 def normalize_alert_whitespace(text):
     """Replace Unix line breaks with HTML line breaks."""
-    return mark_safe(re.sub("\n+", "<br />", text))
+    return mark_safer(text, lambda text: re.sub("(\n)+", "<br />", text))
 
 
 register.filter("normalize_wfo", normalize_wfo)

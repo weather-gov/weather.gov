@@ -20,14 +20,14 @@ class RegionModelTests(TestCase):
     def test_region_name(self):
         """Ensure that we have the correct supplied name."""
         expected = "FAKE REGION"
-        region = Region.objects.all()[0]
+        region = Region.objects.first()
 
         self.assertEqual(expected, region.name)
 
     def test_all_valid_in_region(self):
         """Ensure that all the correct WFOs are in the region."""
-        region = Region.objects.all()[0]
-        wfos = region.wfo_set.all()
+        region = Region.objects.first()
+        wfos = region.wfos.all()
         for wfo in wfos:
             self.assertEqual(region, wfo.region)
 
@@ -35,6 +35,6 @@ class RegionModelTests(TestCase):
         """Ensure that a WFO is correctly _not_ related to the linked region."""
         ephemeral_region = Region(name="ephemeral")
         ephemeral_wfo = WFO(name="ephemeral wfo", code="EPH", region=ephemeral_region)
-        region = Region.objects.all()[0]
+        region = Region.objects.first()
 
         self.assertNotEqual(region, ephemeral_wfo.region)
