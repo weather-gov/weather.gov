@@ -16,7 +16,7 @@ The Geonames data is stored in our repository.
 
 2. Load the spatial data into your local database by running
    ```sh
-   make load-spatial
+   just load-spatial
    ```
    This will download shapefiles from NOAA, as necessary. You do not need to
    manually download anything.

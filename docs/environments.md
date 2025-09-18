@@ -8,11 +8,11 @@ There are two tiers of environments - stable and unstable.
 
 Staging is a "pre-production" environment for testing new functional changes or
 bug fixes before they go into a more production-like environment. It is always
-current with the latest changes approved for `main` on GitHub. This site is
+current with the latest changes approved for `main` on GitLab. This site is
 available at [weathergov-staging.app.cloud.gov](https://weathergov-staging.app.cloud.gov).
 
 Staging gets deploys on every push to main. These are done automatically through
-the Github Action.
+the GitLab CI/CD.
 
 ### Beta
 
@@ -41,5 +41,3 @@ stable. They are used by the product development team to demonstrate changes
 and to test them out in a more realistic setting than their own computers. They
 can be useful when reviewing a change made in a local environment so others on
 the team do not need to have their own local environment.
-
-Currently, we only have one sandbox, `weathergov-test`. There is also an API proxy running in that space for testing. 

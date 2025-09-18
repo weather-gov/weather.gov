@@ -146,7 +146,7 @@ js-lint:
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/tests/api/node_modules tests/api/
-    - npm run js-lint
+    - npx eslint
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"

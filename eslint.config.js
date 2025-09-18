@@ -58,11 +58,12 @@ module.exports = defineConfig([
     },
   },
   globalIgnores([
+    "reports/**/*",
     "forecast/frontend/assets/js/cmi-radar.*.js",
     "tests/translations/**/*.js",
     "**/uswds*.js",
     "web/sites/default/**/*",
-    "**/gulpfile.js"
+    "**/gulpfile.js",
   ]),
   {
     files: ["web/themes/new_weather_theme/assets/js/components/**/*.js"],
@@ -74,7 +75,7 @@ module.exports = defineConfig([
   {
     files: [
       "api-interop-layer/**/*.test.js",
-      "web/themes/new_weather_theme/tests/**/*.js",
+      "forecast/frontend/tests/**/*.js",
     ],
 
     languageOptions: {
@@ -100,10 +101,12 @@ module.exports = defineConfig([
   },
   {
     files: [
+      "api-interop-layer/**/*.js",
       "tests/**/*.js",
       "spatial-data/**/*.js",
       "web/**/tests/**/*.js",
       "**/playwright.config.js",
+      "forecast/frontend/**/*.js",
     ],
 
     languageOptions: {

@@ -2,11 +2,11 @@
 
 Our repo is configured to require signed commits, so if you want to contribute
 any code, you'll need to make sure you have commit signing configured. If you
-already have git commit signing configured and your public key is in GitHub,
+already have git commit signing configured and your public key is in GitLab,
 great! You can just keep using your existing setup. Otherwise, we recommend
 using SSH keys for commit signing because it's easier to setup.
 
-First, create an SSH key pair. If you already have SSH keys you use for GitHub
+First, create an SSH key pair. If you already have SSH keys you use for GitLab
 authentication, feel free to reuse them! Otherwise, run this command:
 
 ```sh
@@ -45,10 +45,11 @@ git config --global user.signingkey "<your key ID >"
 > all of your repos, replace `--global` with `--local` in the above commands.
 > This note pplies to all `git config` commands.
 
-Finally, you'll need to add this key to your GitHub profile so that GitHub can verify
-your commits. To add the key to your profile on GitHub, open the "Settings" page
+Finally, you'll need to add this key to your GitLab profile so GitLab can verify
+your commits. To add the key to your profile on GitLab, open the
+[SSH Keys](https://vlab.noaa.gov/gitlab-licensed/-/user_settings/ssh_keys) page
 (you can access this by clicking on your profile icon), and then select the "SSH and
-GPG keys" in the left-hand sidebar. Next, click "New SSH key". On this page give
-your key a unique title so you can distinguish it from other keys you might use.
-Under `Key Type` select, "Signing Key", and paste the public key you added to your
-git config into the `Key` input field.
+Click "Add new key" button to reveal a form. Past the public key you added to
+your git config in the `Key` field. Then give your key a unique title so you can
+distinguish it from other keys you might use. Under `Usage type`, select either
+`Signing` or `Authentication & Signing` (if you use the same key for both).

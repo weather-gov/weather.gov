@@ -51,23 +51,11 @@
     "xml-parse": "^0.4.0"
   },
   "scripts": {
-    "load-spatial": "cd spatial-data && node load-shapefiles.js",
-    "a11y": "playwright test a11y",
-    "playwright:e2e": "playwright test e2e/*",
-    "js-component-tests": "npx mocha --require web/themes/**/tests/components/preload.js web/themes/**/tests/components/*-tests.js",
-    "js-component-tests-report": "npx mocha --reporter mocha-junit-reporter --require web/themes/**/tests/components/preload.js web/themes/**/tests/components/*-tests.js",
-    "js-format": "npx prettier -w 'web/themes/**/assets/**/*.js' 'tests/**/*.js' '*.js'",
-    "js-lint": "eslint '**/*.js'",
-    "js-lint-report": "eslint --format junit '**/*.js'",
-    "php-format": "npx prettier -w 'web/**/*.php' 'web/**/*.php.test' 'web/**/*.theme' 'web/**/*.module'",
-    "style-format": "npx prettier -w 'web/themes/**/*.scss'",
-    "style-lint": "stylelint '**/*.scss'",
-    "style-lint-report": "stylelint --custom-formatter ./node_modules/stylelint-gitlabci-formatter/index.js '**/*.scss'",
-    "compile-svg": "node ./scripts/compile-svg-sprite.js ./web/themes/new_weather_theme/assets/images/weather/icons/*.svg ./web/themes/new_weather_theme/assets/images/weather/icons/conditions/*.svg",
     "check-translations": "node ./tests/translations/main.js"
   },
   "dependencies": {
     "@prettier/plugin-php": "^0.22.2",
+    "c8": "^10.1.3",
     "mysql2": "^3.12.0",
     "shapefile": "^0.6.6",
     "twing": "^7.0.0"

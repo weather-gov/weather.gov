@@ -103,12 +103,15 @@ spatial-data/*.shx
 spatial-data/*.shp
 spatial-data/*.txt
 !spatial-data/us.cities500.txt.zip
+
 /.gitattributes
+
+# Test reports
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-
+/reports
 
 # Emacsen
 .dir-locals.el

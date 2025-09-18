@@ -6,12 +6,24 @@ set unstable
 default:
   just --list
 
-##### Django/django management #####
-# Drop all alerts from the alerts cache table
-[group("django management")]
-clear-alert-cache:
-  docker compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"DELETE FROM weathergov_geo_alerts_cache;\""
+# Build USWDS and our styles together
+[group("building")]
+css:
+  docker compose run --rm uswds npx gulp compile
 
+# Build SVG assets that are assembled programmatically
+[group("building")]
+svg:
+  docker compose --profile utility \
+    run --rm \
+    -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
+    -v "{{justfile_directory()}}/scripts:/app/scripts" \
+    node \
+    node ./scripts/compile-svg-sprite.js \
+      forecast/frontend/assets/images/weather/icons/*.svg \
+      forecast/frontend/assets/images/weather/icons/conditions/*.svg
+
+##### Django/django management #####
 # Create a Wagtail superuser/admin
 [group("django management")]
 create-superuser:
@@ -43,25 +55,114 @@ django-restart:
 shell:
   docker compose exec web python manage.py shell
 
+##### Caching #####
+# Drop all alerts from the alerts cache table
+[group("cache management")]
+clear-alert-cache:
+  docker compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"DELETE FROM weathergov_geo_alerts_cache;\""
+
 ##### Code quality #####
-# Lints and formats Python and HTML templates in one go
+# Format Javascript
 [group("code quality")]
-lint: python-lint template-format template-lint
+format-js:
+  docker compose --profile utility \
+    run --rm \
+    -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
+    -v "{{justfile_directory()}}/tests":"/app/tests" \
+    -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
+    -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
+    node \
+    npx prettier -w 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js'
 
-# Lints Python code
+# Format stylesheets
 [group("code quality")]
-python-lint:
-  docker compose exec web python -m ruff check --fix .
-
-# Lint the Django HTML templates
-[group("code quality")]
-template-lint:
-  docker compose exec web djlint backend/templates/ --extension=html
+format-style:
+  docker compose --profile utility \
+    run --rm \
+    -v "{{justfile_directory()}}/forecast/frontend":"/app" \
+    node \
+    npx prettier -w ./**/*.scss
 
 # Format the Django HTML templates
 [group("code quality")]
-template-format:
+format-template:
   docker compose exec web djlint backend/templates/ --reformat --extension=html
+
+# Lints and formats Python and HTML templates in one go
+[group("code quality")]
+lint: format-js lint-js lint-python format-template lint-template format-style lint-style
+
+# Lint Javascript
+[group("code quality")]
+lint-js:
+  docker compose --profile utility \
+    run --rm \
+    -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
+    -v "{{justfile_directory()}}/tests":"/app/tests" \
+    -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
+    -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
+    node \
+    npx eslint
+
+# Lints Python code
+[group("code quality")]
+lint-python:
+  docker compose exec web python -m ruff check --fix .
+
+# Lint Sass stylesheets
+[group("code quality")]
+lint-style:
+  docker compose --profile utility \
+    run --rm \
+    -v "{{justfile_directory()}}/forecast/frontend":"/app" \
+    node \
+    npx stylelint **/*.scss
+
+# Lint the Django HTML templates
+[group("code quality")]
+lint-template:
+  docker compose exec web djlint backend/templates/ --extension=html
+
+##### Testing #####
+alias a11y := test-a11y
+# Run automated accessibility testing in Playwright
+[group("testing")]
+test-a11y:
+  docker compose \
+    run --rm \
+    playwright \
+    npx playwright test --output /reports/a11y a11y
+
+alias ee := test-e2e
+# Run end-to-end browser testing in Playwright
+[group("testing")]
+test-e2e:
+  docker compose \
+  run --rm \
+  playwright \
+  npx playwright test --output /reports/end-to-end e2e
+
+[group("testing")]
+test-interop:
+  docker compose \
+    run --rm \
+    -v "{{justfile_directory()}}/reports/interop":"/reports" \
+    -e LOG_LEVEL=silent \
+    api-interop-layer \
+    npx c8 --reporter html --reporter clover -o /reports mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
+
+alias wc := test-web-components
+# Run web component testing
+[group("testing")]
+test-web-components:
+  docker compose --profile utility \
+    run --rm \
+    -v "{{justfile_directory()}}/reports/web-components":"/reports" \
+    -v "{{justfile_directory()}}/forecast/frontend":"/app/frontend" \
+    node \
+    npx c8 --reporter html --reporter clover -o /reports mocha \
+      --require frontend/tests/components/preload.js \
+      frontend/tests/components/*-tests.js
 
 ##### Dev environment management #####
 # Starts up all the containers, prepares the databases, and loads initial data
@@ -69,6 +170,16 @@ template-format:
 init: && import-spatial load-spatial dump-spatial migrate load-cms-data django-restart
   docker compose up -d
   sleep 15
+
+# Starts a PlantUML server container listening on localhost:8180
+[group("dev environment management")]
+plantuml:
+  docker compose --profile utility start plantuml
+
+# Stops the PlantUML server
+[group("dev environment management")]
+stop-plantuml:
+  docker compose --profile utility stop plantuml
 
 # Destroys all containers, databases, and volumes and starts over fresh and clean
 [group("dev environment management")]
