@@ -108,7 +108,7 @@ gather-forecast-django-dependencies:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
       changes:
         - forecast/Dockerfile.ci
-        - forecast/backend/requirements.txt
+        - forecast/requirements.txt
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
 
 # build an image containing the latest Django code from our repository
