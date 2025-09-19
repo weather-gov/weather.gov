@@ -165,6 +165,7 @@ class GeographicPlace:
             _cls.county_fips = row[5]
             _cls.timezone = row[6]
 
+
             # Parse the GeoJSON and pull out the lat/lon.
             geojson = json.loads(row[7])
             _cls.longitude = geojson["coordinates"][0]

@@ -11,7 +11,6 @@ register_converter(FloatConverter, "float")
 
 urlpatterns = [
     path("", views.index, name="index"),
-
     # Our URLs should have trailing slashes. Django will automatically add
     # trailing slashes to requests that don't have them, so if our URLs DON'T
     # have trailing slashes, they'll never match.

@@ -177,6 +177,7 @@ django-test:
       POSTGRES_DB: weathergov
   script:
     - cd /code
+    - ldconfig -p | grep gdal
     - python manage.py migrate
     - python manage.py test
   rules:
