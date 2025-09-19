@@ -9,3 +9,6 @@ RUN pip install -r requirements.txt
 COPY . /code/
 RUN apt update
 RUN apt install gettext -y
+RUN apt install binutils -y
+RUN apt install libproj-dev -y
+RUN apt install gdal-bin -y

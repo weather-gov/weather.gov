@@ -37,6 +37,7 @@ APPEND_SLASH = True
 
 INSTALLED_APPS = [
     "backend",
+    "spatial",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -102,13 +103,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.config.wsgi.application"
 
+# GDAL_LIBRARY_PATH = "/lib/x86_64-linux-gnu/libgdal.so.36"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": os.environ.get("POSTGRES_DB"),
         "USER": os.environ.get("POSTGRES_USER"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
