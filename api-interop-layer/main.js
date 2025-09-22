@@ -4,6 +4,7 @@ import { getDataForPoint, getProductById } from "./data/index.js";
 import { rest as alertsRest } from "./data/alerts/kinds.js";
 import { createLogger } from "./util/monitoring/index.js";
 import { startAlertProcessing } from "./data/alerts/index.js";
+import { getGHWOForWFOAndCounty } from "./data/ghwo.js";
 
 const main = async () => {
   const port = process.env.PORT || 8082;
@@ -131,11 +132,61 @@ const main = async () => {
           size: JSON.stringify(data).length,
         },
       });
-    }
+    },
   });
 
   server.get("/meta/alerts", (_, response) => {
     response.send(alertsRest());
+  });
+
+  server.route({
+    method: "GET",
+    url: "/ghwo/:wfo/:county",
+    schema: {
+      params: {
+        wfo: {
+          type: "string",
+          pattern: "^[A-Za-z]{3}$",
+        },
+        county: {
+          type: "string",
+          pattern: "^[0-9]{5}$",
+        },
+      },
+    },
+    handler: async (request, response) => {
+      logger.verbose(request.url);
+
+      performance.clearResourceTimings();
+      const timer = performance.now();
+
+      const { wfo, county } = request.params;
+
+      const ghwo = await getGHWOForWFOAndCounty(wfo, county);
+
+      const end = performance.now() - timer;
+
+      if (ghwo.error) {
+        response.status(ghwo.status ?? 500);
+        response.send({ error: ghwo.error });
+
+        newrelic.recordLogEvent({
+          message: request.url,
+          level: "error",
+          error: `Error: ${ghwo.error}`,
+        });
+
+        return;
+      }
+
+      response.send({
+        data: ghwo.data,
+        "@metadata": {
+          timing: { e2e: end },
+          size: JSON.stringify(ghwo.data).length,
+        },
+      });
+    },
   });
 
   startAlertProcessing();
