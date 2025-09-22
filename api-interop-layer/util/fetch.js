@@ -4,12 +4,13 @@ import { sleep } from "./sleep.js";
 const logger = createLogger("fetch wrapper");
 
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
+const headers = process.env.API_KEY ? { 'API-Key': process.env.API_KEY } : {};
 
 const internalFetch = async (path) => {
   const url = URL.canParse(path) ? path : new URL(path, BASE_URL).toString();
   logger.verbose(`making request to ${url}`);
 
-  return fetch(url).then(async (r) => {
+  return fetch(url, headers).then(async (r) => {
     if (r.status >= 200 && r.status < 400) {
       logger.verbose(`success from ${path}`);
       return r.json();
