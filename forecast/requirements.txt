@@ -1,5 +1,6 @@
 Django>=5.0
-psycopg2>=2.8
+django-allow-cidr==0.7.1
+psycopg2-binary==2.9.10; python_version >= '3.8'
 mysqlclient>=2.2
 boto3
 djangorestframework
@@ -8,3 +9,8 @@ requests
 html-sanitizer
 ruff
 djlint
+gunicorn==23.0.0; python_version >= '3.7'
+gevent==24.11.1; python_version >= '3.9'
+cfenv==0.5.3
+environs[django]==11.2.1; python_version >= '3.8'
+whitenoise==6.8.2; python_version >= '3.9'

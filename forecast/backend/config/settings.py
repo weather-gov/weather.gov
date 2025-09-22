@@ -11,22 +11,41 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import environs
+from cfenv import AppEnv  # type: ignore
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+env = environs.Env()
+
+# Get secrets from Cloud.gov user provided service, if exists
+# If not, get secrets from environment variables
+key_service = AppEnv().get_service(name="test-credentials") # for weathergov-test
+rds_service = AppEnv().get_service(name="weathergov-rds-test")
+
+if key_service and key_service.credentials:
+    secret = key_service.credentials.get
+else:
+    secret = env
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+secret_key = secret("django_secret_key")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-qku8p%bk=+v_4mcsmi$b%vq&%c_jcjroglyjhouiy^_chak60m"  # noqa: S105 pending security work
+SECRET_KEY = secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+env_debug = env.bool("DJANGO_DEBUG", default=False)
+DEBUG = env_debug
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "weathergov-test.app.cloud.gov",
+]
+
+ALLOWED_CIDR_NETS = ["10.0.0.0/8"]
 
 # For request paths without a trailing slash, add one automatically to resolve
 # the handler. This is True by default, but let's set it explicitly to be...
@@ -62,6 +81,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # django-allow-cidr: enable use of CIDR IP ranges in ALLOWED_HOSTS
+    "allow_cidr.middleware.AllowCIDRMiddleware",
+    # serve static assets in production
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -108,16 +131,29 @@ WSGI_APPLICATION = "backend.config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": "database",
-        "PORT": 5432,
-    },
-}
+if rds_service and rds_service.credentials:
+    db_credentials = rds_service.credentials
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.contrib.gis.db.backends.postgis",
+            "NAME": db_credentials["name"],
+            "USER": db_credentials["username"],
+            "PASSWORD": db_credentials["password"],
+            "HOST": db_credentials["host"],
+            "PORT": db_credentials["port"],
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.contrib.gis.db.backends.postgis",
+            "NAME": os.environ.get("POSTGRES_DB"),
+            "USER": os.environ.get("POSTGRES_USER"),
+            "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+            "HOST": "database",
+            "PORT": 5432,
+        }
+    }
 
 
 # Password validation
@@ -297,3 +333,16 @@ LOGGING = {
 }
 
 # endregion
+
+if DEBUG:
+    # used by debug() context processor
+    INTERNAL_IPS = [
+        "127.0.0.1",
+        "::1",
+    ]
+
+    # allow dev laptop and docker-compose network to connect
+    ALLOWED_HOSTS += ("localhost", "web", "0.0.0.0")
+    SECURE_SSL_REDIRECT = False
+    SECURE_HSTS_PRELOAD = False
+    SECURE_CROSS_ORIGIN_OPENER_POLICY = "localhost"

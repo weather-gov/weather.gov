@@ -15,6 +15,7 @@ const getDatabaseConnectionInfo = () => {
       database: db.credentials.name,
       host: db.credentials.host,
       port: db.credentials.port,
+      ssl: true,
     };
   }
 

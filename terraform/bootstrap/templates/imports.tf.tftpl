@@ -1,0 +1,25 @@
+# This file takes care of importing bootstrap
+# resources onto a new developer's machine if needed
+# import happens automatically on a normal ./apply.sh run
+
+%{ for resource_name, id in import_map ~}
+import {
+  to = ${resource_name}
+  id = "${id}"
+}
+%{ endfor ~}
+
+locals {
+  developer_import_map = "${replace(jsonencode(developer_map), "\"", "\\\"")}"
+  manager_import_map   = "${replace(jsonencode(manager_map), "\"", "\\\"")}"
+}
+import {
+  for_each = jsondecode(local.developer_import_map)
+  to       = module.mgmt_space.cloudfoundry_space_role.developers[each.key]
+  id       = each.value
+}
+import {
+  for_each = jsondecode(local.manager_import_map)
+  to       = module.mgmt_space.cloudfoundry_space_role.managers[each.key]
+  id       = each.value
+}
