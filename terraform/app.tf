@@ -1,0 +1,65 @@
+data "archive_file" "app_src" {
+  type        = "zip"
+  source_dir  = "${path.module}/../forecast"
+  output_path = "${path.module}/dist/app_src.zip"
+  excludes = [
+    ".git*",
+    "node_modules/*",
+    "tmp/**/*",
+    "terraform/*",
+    "log/*",
+    "doc/*",
+    "credentials.json"
+  ]
+}
+
+locals {
+  host_name = coalesce(var.host_name, "${local.app_name}-${var.env}")
+  domain    = coalesce(var.custom_domain_name, "app.cloud.gov")
+}
+
+resource "cloudfoundry_app" "app" {
+  name       = "${local.app_name}-${var.env}"
+  space_name = var.cf_space_name
+  org_name   = local.cf_org_name
+
+  path             = data.archive_file.app_src.output_path
+  source_code_hash = data.archive_file.app_src.output_base64sha256
+  buildpacks       = ["python_buildpack"]
+  strategy         = "rolling"
+  routes           = [{ route = "${local.host_name}.${local.domain}" }]
+
+  environment = {
+    # NEWRELIC_LICENSE       = var.newrelic_license
+    INTEROP_URL            = var.interop_url
+    PYTHONUNBUFFERED       = "yup"
+    DJANGO_SETTINGS_MODULE = "backend.config.settings"
+    DJANGO_BASE_URL        = coalesce(var.custom_domain_name, "app.cloud.gov")
+    DJANGO_LOG_LEVEL       = "INFO"
+    DJANGO_LOG_FORMAT      = "console"
+  }
+
+  processes = [
+    {
+      type                       = "web"
+      instances                  = var.web_instances
+      memory                     = var.web_memory
+      health_check_http_endpoint = "/health"
+      health_check_type          = "http"
+      command                    = "./run.sh"
+    }
+  ]
+
+  service_bindings = [
+    { service_instance = "${var.env}-credentials" },
+    { service_instance = "${local.app_name}-s3-${var.env}" },
+    { service_instance = "${local.app_name}-rds-${var.env}" }
+  ]
+
+  depends_on = [
+    cloudfoundry_service_instance.credentials,
+    module.s3,
+    module.app_space,
+    module.database
+  ]
+}

@@ -116,3 +116,10 @@ spatial-data/*.txt
 # Emacsen
 .dir-locals.el
 
+# Terraform
+.terraform.lock.hcl
+**/.terraform/*
+secrets.*.tfvars
+terraform.tfstate
+terraform.tfstate.backup
+terraform/dist

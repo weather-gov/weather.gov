@@ -197,3 +197,6 @@ def wx_afd_versions(_, wfo):
     data = interop.get_wx_afd_versions_by_wfo(wfo)
     markup = render_to_string("weather/wx/afd-versions-select.html", {"version_list": data["@graph"]})
     return HttpResponse(markup, content_type="text/html")
+
+def health(request):
+    return HttpResponse('<html lang="en"><head><title>OK - weather.gov</title></head><body>OK</body>')
