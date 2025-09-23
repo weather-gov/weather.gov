@@ -127,8 +127,6 @@ build-forecast-django-image:
     IMAGE_NAME: web
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
-      changes:
-        - forecast/backend/**/*
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
 
 # lint all JavaScript in the repo in one job
@@ -160,8 +158,6 @@ django-lint:
     - python -m ruff check .
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
-      changes:
-        - forecast/backend/**/*
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
 
 django-test:
@@ -182,6 +178,4 @@ django-test:
     - python manage.py test
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
-      changes:
-        - forecast/backend/**/*
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
