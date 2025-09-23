@@ -4,6 +4,15 @@ We are using Terraform for cloud.gov deployment. The previous approach to deploy
 
 Terraform has a [cloudfoundry](https://registry.terraform.io/providers/cloudfoundry/cloudfoundry/latest/docs) provider. This provider works well with cloud.gov environments, with the exception of service credential bindings (cloud.gov does not support the cloudfoundry v3 API for service credentials). We also utilize custom cloud.gov modules based on [`terraform-cloudgov`](github.com/gsa-tts/terraform-cloudgov).
 
+## Installation
+
+Using `brew` to install Terraform will install version `1.5.7` due to licensing issues and this is too old for our purposes. We want to install the latest Terraform using `brew tap`:
+
+    brew tap hashicorp/tap
+    brew install hashicorp/tap/terraform
+
+Please ensure that your version is at minimum `1.10`. We might switch to OpenTofu at some point.
+
 ## Structure
 
 For maintaining Terraform state, we have set up a S3 bucket in the `weathergov-mgmt` space. This space is configured specifically for bootstrapping (more about this below). We also provide a `terraform.sh` wrapper script to help invoke terraform on cloud.gov resources.
