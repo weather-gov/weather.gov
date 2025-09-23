@@ -66,17 +66,42 @@ describe("AlertsCache tests", () => {
     expect(actual).to.eql(expected);
   });
 
-  it("#removeByHashes", async () => {
-    const toRemove = ["two", "three", "five"];
-    const query = `DELETE FROM ${alertsCache.tableName} WHERE hash IN ($1, $2, $3);`;
-    global.test.database.query
-      .withArgs(query, toRemove)
-      .resolves(true);
+  describe("#removeByHashes", () => {
+    it("with no hashes", async () => {
+      const result1 = await alertsCache.removeByHashes([]);
+      expect(result1).to.eql([]);
 
-    const result = await alertsCache.removeByHashes(toRemove);
+      const result2 = await alertsCache.removeByHashes(17);
+      expect(result2).to.eql([]);
 
-    expect(result).to.be.true;
-  });
+      const result3 = await alertsCache.removeByHashes("hello");
+      expect(result3).to.eql([]);
+    });
+
+    it("with just one hash", async () => {
+      const toRemove = ["one"];
+      const query = `DELETE FROM ${alertsCache.tableName} WHERE hash IN ($1)`;
+      global.test.database.query
+        .withArgs(query, toRemove)
+        .resolves(true);
+
+      const result = await alertsCache.removeByHashes(toRemove);
+
+      expect(result).to.be.true;
+    });
+
+    it("with multiple hashes", async () => {
+      const toRemove = ["two", "three", "five"];
+      const query = `DELETE FROM ${alertsCache.tableName} WHERE hash IN ($1,$2,$3)`;
+      global.test.database.query
+        .withArgs(query, toRemove)
+        .resolves(true);
+
+      const result = await alertsCache.removeByHashes(toRemove);
+
+      expect(result).to.be.true;
+    });
+  })
 
   it("#add (with land alert kind)", async () => {
     const hash = "ten";

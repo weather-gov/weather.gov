@@ -66,17 +66,15 @@ PRIMARY KEY(id)
    * Remove rows from the cache table by hash.
    * If the argument is a list, we assume a list of hashes.
    */
-  async removeByHashes(aHashList){
-    if(!aHashList.length){
+  async removeByHashes(hashes){
+    if(!Array.isArray(hashes) || hashes.length === 0){
       return [];
     }
-    let whereClause = `hash='${aHashList[0]}';`;
-    if(aHashList.length > 1){
-      const marks = aHashList.map((_, idx) => `$${idx+1}`).join(", ");
-      whereClause = `hash IN (${marks});`;
-    }
-    const sql = `DELETE FROM ${this.tableName} WHERE ${whereClause}`;
-    return this.db.query(sql, aHashList);
+
+    const list = hashes.map((_,i) => `$${i+1}`).join(',');
+
+    const sql = `DELETE FROM ${this.tableName} WHERE hash IN (${list})`;
+    return this.db.query(sql, hashes);
   }
 
   /**

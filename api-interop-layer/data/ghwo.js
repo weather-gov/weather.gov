@@ -92,7 +92,7 @@ export const getGHWOForWFOAndCounty = async (wfoCode, county) => {
     const elementKeys = Object.keys(dayData);
     for (const elementKey of elementKeys) {
       // There's no image URL for the daily composite risk, so skip that one.
-      if (elementKey !== "DailyComposite") {
+      if (elementKey !== "DailyComposite" && elementKey !== "images") {
         // Sometimes the element key (like "SevereThunderstorm") is not the same
         // key as used in the URL (in this case, "SevereThunderstorms" - note
         // the s at the end). If we have a URL key mapped to the element key,
