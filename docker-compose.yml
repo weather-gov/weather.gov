@@ -73,7 +73,8 @@ services:
       DB_PASSWORD: drupal
       DB_HOST: database
       DB_PORT: 5432
-      API_URL: http://api-proxy:8081
+      API_URL: ${API_URL:-http://api-proxy:8081}
+      API_KEY: ${API_KEY:-}
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
       NEWRELIC_LICENSE: ${NEWRELIC_LICENSE:-}
     networks:
