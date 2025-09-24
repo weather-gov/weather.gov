@@ -9,7 +9,8 @@ def _fetch(url):
     """Fetch a dictionary from the interop layer."""
     base_url = getenv("INTEROP_URL")
     full_url = f"{base_url}{url}"
-    response = requests.get(full_url, timeout=5)  # TODO: try-request block with logging
+    # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
+    response = requests.get(full_url, timeout=55)  # TODO: try-request block with logging
     response.raise_for_status()
     return response.json()
 
@@ -20,7 +21,8 @@ def _api_fetch(url):
     if not base_url or base_url == "":
         base_url = "https://api.weather.gov/"
     full_url = f"{base_url}{url}"
-    response = requests.get(full_url, timeout=5)  # TODO: try-request block with logging
+    # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
+    response = requests.get(full_url, timeout=55)  # TODO: try-request block with logging
     response.raise_for_status()
     return response.json()
 
