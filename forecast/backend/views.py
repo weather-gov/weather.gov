@@ -198,5 +198,6 @@ def wx_afd_versions(_, wfo):
     markup = render_to_string("weather/wx/afd-versions-select.html", {"version_list": data["@graph"]})
     return HttpResponse(markup, content_type="text/html")
 
-def health(request):
+def health(_request):
+    """Return app status for Terraform health checks."""
     return HttpResponse('<html lang="en"><head><title>OK - weather.gov</title></head><body>OK</body>')

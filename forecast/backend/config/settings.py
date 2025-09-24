@@ -11,9 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import subprocess
+from pathlib import Path
+
 import environs
 from cfenv import AppEnv  # type: ignore
-from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -126,13 +128,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.config.wsgi.application"
 
-# GDAL_LIBRARY_PATH = "/lib/x86_64-linux-gnu/libgdal.so.36"
+def find_cloudgov_library(name):
+    """
+    Find the cloud.gov apt installed library.
+
+    In cloud.gov, buildpacks install their dependencies in
+    `/home/vcap/deps`; since the apt buildpack is configured to run first, we
+    search in `/home/vcap/deps/0/lib` for the libraries we need. (`/1` is
+    for the python buildpack, which runs second)
+    """
+    apt_library_dir = "/home/vcap/deps/0/lib"
+    ls_output = subprocess.run(["/bin/ls", "-1", apt_library_dir], check=True, capture_output=True) # noqa: S603 (no untrusted input)
+    ls_list = ls_output.stdout.decode("utf8").split("\n")
+    lib_entry = [entry for entry in ls_list if entry.strip().startswith(name)]
+    if lib_entry:
+        return f"{apt_library_dir}/{lib_entry[0].strip()}"
+    return None
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 if rds_service and rds_service.credentials:
     db_credentials = rds_service.credentials
+    # NB: Jammy (Ubuntu LTS) has slightly older versions than in our images.
+    # GEOS_LIBRARY_PATH = "/home/vcap/deps/0/lib/libgeos_c.so.1"
+    # GDAL_LIBRARY_PATH = "/home/vcap/deps/0/lib/libgdal.so.30"
+    GEOS_LIBRARY_PATH = find_cloudgov_library("libgeos")
+    GDAL_LIBRARY_PATH = find_cloudgov_library("libgdal")
     DATABASES = {
         "default": {
             "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -141,7 +163,7 @@ if rds_service and rds_service.credentials:
             "PASSWORD": db_credentials["password"],
             "HOST": db_credentials["host"],
             "PORT": db_credentials["port"],
-        }
+        },
     }
 else:
     DATABASES = {
@@ -152,7 +174,7 @@ else:
             "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
             "HOST": "database",
             "PORT": 5432,
-        }
+        },
     }
 
 
@@ -342,7 +364,7 @@ if DEBUG:
     ]
 
     # allow dev laptop and docker-compose network to connect
-    ALLOWED_HOSTS += ("localhost", "web", "0.0.0.0")
+    ALLOWED_HOSTS += ("localhost", "web", "0.0.0.0") # noqa: S104 (DEBUG is never turned on in prod)
     SECURE_SSL_REDIRECT = False
     SECURE_HSTS_PRELOAD = False
     SECURE_CROSS_ORIGIN_OPENER_POLICY = "localhost"

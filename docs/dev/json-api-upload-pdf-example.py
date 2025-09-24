@@ -2,7 +2,6 @@
 
 import requests  # https://pypi.org/project/requests/
 import subprocess
-import base64
 import os
 import sys
 

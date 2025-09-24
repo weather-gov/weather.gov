@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
     dependencies = []
 
     operations = [
+        migrations.RunSQL(sql="CREATE EXTENSION IF NOT EXISTS postgis", reverse_sql="DROP EXTENSION postgis"),
         migrations.CreateModel(
             name="WeatherZone",
             fields=[
