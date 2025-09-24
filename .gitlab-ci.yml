@@ -179,3 +179,26 @@ django-test:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
+
+web-component-and-interop-test:
+  stage: test
+  needs:
+    - job: gather-forecast-node-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  script:
+    # NB: GitLab clones into CI_BUILDS_DIR which defaults to
+    # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
+    # images our WORKDIR is /app. so we symlink the various /app/node_modules to
+    # CI_BUILDS_DIR so we can "npm run" as needed.
+    - ln -s /app/node_modules/ .
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - ln -s /app/tests/api/node_modules tests/api/
+    - npx c8 mocha --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
+    # We also do interop layer tests at the same time so we don't have to wait
+    # for another runner to come available.
+    - cd api-interop-layer
+    - npx c8 mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
