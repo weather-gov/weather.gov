@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import requests  # https://pypi.org/project/requests/
-import os
 import sys
 import xml.etree.ElementTree as ET
 

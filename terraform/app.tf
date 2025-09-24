@@ -25,7 +25,7 @@ resource "cloudfoundry_app" "app" {
 
   path             = data.archive_file.app_src.output_path
   source_code_hash = data.archive_file.app_src.output_base64sha256
-  buildpacks       = ["python_buildpack"]
+  buildpacks       = ["https://github.com/cloudfoundry/apt-buildpack.git", "python_buildpack"]
   strategy         = "rolling"
   routes           = [{ route = "${local.host_name}.${local.domain}" }]
 
@@ -37,6 +37,7 @@ resource "cloudfoundry_app" "app" {
     DJANGO_BASE_URL        = coalesce(var.custom_domain_name, "app.cloud.gov")
     DJANGO_LOG_LEVEL       = "INFO"
     DJANGO_LOG_FORMAT      = "console"
+    DISABLE_COLLECTSTATIC  = 1
   }
 
   processes = [
