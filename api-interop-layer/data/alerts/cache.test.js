@@ -16,16 +16,6 @@ describe("AlertsCache tests", () => {
     alertsCache = new AlertsCache();
     alertsCache.db = global.test.database;
   });
-  it("#createTable", async () => {
-    const partOfQuery = "CREATE TABLE IF NOT EXISTS weathergov_geo_alerts_cache";
-    global.test.database.query
-      .withArgs(sinon.match(partOfQuery))
-      .resolves(true);
-
-    const result = await alertsCache.createTable();
-
-    expect(result).to.equal(true);
-  });
 
   it("#getHashes", async () => {
     const query = `SELECT hash FROM ${alertsCache.tableName}`;

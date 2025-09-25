@@ -50,6 +50,24 @@ load-cms-data:
 django-restart:
   docker compose restart web
 
+# Dump spatial data
+[group("django management")]
+dump-spatial:
+  docker compose exec web python manage.py dumpdata spatial > forecast/spatial/management/commands/__cache/dump.json
+
+# Load spatial data; pass "clean" for clean load
+[group("django management")]
+[script]
+load-spatial arg="":
+  if [ "{{arg}}" = "clean" ]; then
+    docker compose exec web python manage.py loadspatial
+  elif [[ -f "forecast/spatial/management/commands/__cache/dump.json" ]]; then
+    docker compose exec web python manage.py loaddata spatial/management/commands/__cache/dump.json
+  else
+    docker compose exec web python manage.py loadspatial
+  fi
+
+
 # Get a Python shell in the Django container
 [group("django management")]
 shell:
@@ -167,7 +185,7 @@ test-web-components:
 ##### Dev environment management #####
 # Starts up all the containers, prepares the databases, and loads initial data
 [group("dev environment management")]
-init: && import-spatial load-spatial dump-spatial migrate load-cms-data django-restart
+init: && migrate load-cms-data load-spatial django-restart
   docker compose up -d
   sleep 15
 
@@ -185,23 +203,3 @@ stop-plantuml:
 [group("dev environment management")]
 zap: dump-spatial && init
   docker compose down -v
-
-##### Spatial data management #####
-# Export spatial data into a SQL dump
-[group("spatial")]
-[script]
-dump-spatial:
-  docker compose exec database pg_dump --username=drupal --dbname=weathergov -w -t weathergov_geo_metadata -t weathergov_geo_states -t weathergov_geo_counties -t weathergov_geo_places -t weathergov_geo_cwas -t  weathergov_geo_zones > spatial-data/dump.sql
-
-# Import spatial data from a previous SQL dump
-[group("spatial")]
-[script]
-import-spatial:
-  if [[ -f "spatial-data/dump.sql" ]]; then
-    cat spatial-data/dump.sql | docker compose exec -T database psql -U drupal -w -d weathergov
-  fi
-
-# Load spatial data into the database
-[group("spatial")]
-load-spatial:
-  docker compose run --rm spatial node load-shapefiles.js

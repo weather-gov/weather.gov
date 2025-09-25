@@ -4,8 +4,9 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 
 from backend import interop
-from backend.models import WFO, GeographicPlace, Region
+from backend.models import WFO, Region
 from backend.util import get_wfo_from_afd
+from spatial.models import WeatherPlace
 
 
 # Helpers
@@ -59,7 +60,16 @@ def point_location(request, lat, lon):
 
 def place_forecast(request, state, place):
     """Render the forecast for a given state and place name."""
-    known_place = GeographicPlace.get_known_place(state, place)
+    # De-normalize the place name. For the purposes of clean URLs, we
+    # replace spaces with underscores and slahes with commas in place names.
+    # There are no places with underscores or commas in their names as of
+    # the time of this comment. We need the de-normalized name in order to
+    # our query.
+    denormalized_place = place.replace("_", " ").replace(",", "/")
+
+    known_place = WeatherPlace.objects.filter(
+        state__iexact=state, name__iexact=denormalized_place,
+    ).first()
 
     # If this is a place we know about...
     if known_place is not None:
@@ -67,14 +77,13 @@ def place_forecast(request, state, place):
         # to redirect them to a normalized URL.
         normalize_redirect = " " in place or "/" in place
 
-        # Now de-normalize the requested place name, in case it was already
-        # normalized. We'll use the denormalized version to determine whether we
-        # need to redirect to a differently-capitalized version.
-        place = place.replace("_", " ").replace(",", "/")
-
         # If the input name is not normalized, or if the input state or name
         # do not exactly match the known place, redirect to the normalized URL
-        do_redirect = normalize_redirect or known_place.state != state or known_place.name != place
+        do_redirect = (
+            normalize_redirect
+            or known_place.state != state
+            or known_place.name != denormalized_place
+        )
 
         if do_redirect:
             # Get the expected place name from the model so the capitalization
@@ -85,7 +94,7 @@ def place_forecast(request, state, place):
 
         # If we don't need to redirect, then just show them their forecast based
         # on the location of the place.
-        return point_location(request, known_place.latitude, known_place.longitude)
+        return point_location(request, known_place.point.y, known_place.point.x)
 
     # If it's not a place we know, 404.
     raise Http404()

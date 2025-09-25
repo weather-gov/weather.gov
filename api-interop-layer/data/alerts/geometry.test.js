@@ -1,9 +1,6 @@
 import sinon from "sinon";
 import { expect } from "chai";
-import {
-  generateAlertGeometry,
-  SIMPLIFY_TOLERANCE
-} from "./geometry.js";
+import { generateAlertGeometry, SIMPLIFY_TOLERANCE } from "./geometry.js";
 
 describe("alert geometries", () => {
   describe("returns an existing geometry as-is", () => {
@@ -78,7 +75,7 @@ describe("alert geometries", () => {
       FROM weathergov_geo_zones WHERE id IN ($1,$2,$3)) as f;`;
       global.test.database.query
         .withArgs(sinon.match(query), affectedZones)
-        .resolves({rows: [ {shape} ]});
+        .resolves({ rows: [{ shape }] });
 
       const geometry = await generateAlertGeometry(
         global.test.database,
@@ -110,7 +107,7 @@ describe("alert geometries", () => {
       WHERE countyFips IN ($1,$2,$3)) as f;`;
       global.test.database.query
         .withArgs(sinon.match(query), ["county 1", "county 2", "county 3"])
-        .resolves({ rows: [{ shape }]});
+        .resolves({ rows: [{ shape }] });
 
       const geometry = await generateAlertGeometry(
         global.test.database,
