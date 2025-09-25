@@ -57,7 +57,6 @@ export const startAlertProcessing = async () => {
     // by the first alerts request
     logger.info("dropping any existing alerts cache table");
     alertsCache.db = await openDatabase();
-    await alertsCache.dropCacheTable();
     
     logger.info("starting background worker");
     const updater = new Worker(
