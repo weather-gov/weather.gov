@@ -221,3 +221,35 @@ def dynamic_safety_information(weather_event_type):
         return {"body": mark_safer(found.body), "type": found.type}
     except DynamicSafetyInformation.DoesNotExist:
         return None
+
+
+@register.inclusion_tag("weather/partials/weather-icon.html")
+def weather_icon(icon_name, size="sm", color_mode="light", **kwargs):
+    """Return HTML markup for rendering a specific weather icon from the spritesheet."""
+    full_icon_name = f"{icon_name}_{size}_{color_mode}"
+    result = {
+        "icon_name": full_icon_name,
+        "size": size,
+        "color_mode": color_mode,
+        "attrs": {
+            "role": "img",
+        },
+   }
+
+    # Additional kwargs will be interpreted as
+    # additional html attribute values on the wrapping
+    # svg element
+    if not kwargs:
+        return result
+
+    result["has_attrs"] = True
+    for key, val in kwargs.items():
+        result_key = key
+        if "_" in key:
+            result_key = key.replace("_", "-")
+        if key in result["attrs"]:
+            result["attrs"][result_key] = f"{result['attrs'][result_key]} {val}"
+        else:
+            result["attrs"][result_key] = val
+
+    return result

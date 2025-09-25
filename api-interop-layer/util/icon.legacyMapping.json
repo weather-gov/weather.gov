@@ -81,16 +81,16 @@
     "icon": "rain.svg"
   },
   "day/rain_showers": {
-    "icon": "showers_scattered_rain.svg"
+    "icon": "showers_scattered_rain_day.svg"
   },
   "day/rain_showers_hi": {
-    "icon": "showers_scattered_rain.svg"
+    "icon": "showers_scattered_rain_day.svg"
   },
   "night/rain_showers_hi": {
-    "icon": "showers_scattered_rain.svg"
+    "icon": "showers_scattered_rain_night.svg"
   },
   "night/rain_showers": {
-    "icon": "showers_scattered_rain.svg"
+    "icon": "showers_scattered_rain_night.svg"
   },
   "day/rain_sleet": {
     "icon": "freezing_rain_sleet.svg"
@@ -123,10 +123,10 @@
     "icon": "freezing_rain_sleet.svg"
   },
   "day/smoke": {
-    "icon": "hazy_smoke-day.svg"
+    "icon": "hazy_smoke_day.svg"
   },
   "night/smoke": {
-    "icon": "hazy_smoke-day.svg"
+    "icon": "hazy_smoke_night.svg"
   },
   "day/snow": {
     "icon": "snow.svg"

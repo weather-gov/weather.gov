@@ -41,9 +41,7 @@
         <div class="display-flex flex-row flex-align-start">
           {% if period.data.icon.base %}
             <div class="width-5 height-5 margin-right-105">
-              <svg role="img" aria-hidden="true" class="width-full height-full">
-                <use xlink:href="/public/images/spritesheet.svg#{{ period.data.icon.base }}"></use>
-              </svg>
+              {% weather_icon period.data.icon.base size="md" color_mode="light" class="width-full height-full" aria_hidden="true" %}
             </div>
           {% endif %}
           <div class="flex-1">

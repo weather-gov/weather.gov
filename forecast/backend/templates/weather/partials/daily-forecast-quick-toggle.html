@@ -37,9 +37,7 @@ the content
           <use xlink:href="{% static 'images/uswds/sprite.svg' %}#warning"></use>
         </svg>
       {% endif %}
-      <svg role="img" aria-hidden="true" class="wx-alert-icon">
-        <use xlink:href="/public/images/spritesheet.svg#{{ periods.0.data.icon.base }}"></use>
-      </svg>
+        {% weather_icon periods.0.data.icon.base size="sm" color_mode="light" class="wx-alert-icon" aria_hidden="true" %}
     </div>
     <div class="wx-quick-toggle-item-high-low display-flex flex-1 text-primary-darker">
       {% if isNightPeriod %}

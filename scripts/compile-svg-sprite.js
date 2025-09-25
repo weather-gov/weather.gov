@@ -80,6 +80,17 @@ const removeXMLDeclaration = str => str.replace(/\n<?xml[^\n]*/gm, "");
 const removeClassAttributes = str => str.replace(/class="st0"/g, "");
 
 /**
+ * Remove coordinates from masks
+ *
+ * When used inside a symbol or mask definitions the mask coordinates do not align with the 
+ * vector properly, causing the masked objects to be missing from the render
+ *
+ * @param str string The source XML string
+ * @return string The cleaned output XML string
+ */
+const removeMaskCoordinates = str => str.replaceAll(/(maskunits="userSpaceOnUse") [^>]+/g, '$1')
+
+/**
  * For an array of input paths, parse the XML
  * and return a spritesheet formatted <symbol>
  *
@@ -111,6 +122,7 @@ const getSymbolDefsFromPaths = allInputPaths =>
     outputStr = removeXMLDeclaration(outputStr);
     outputStr = removeStyleTags(outputStr);
     outputStr = removeClassAttributes(outputStr);
+    outputStr = removeMaskCoordinates(outputStr);
     return outputStr;
   });
 
