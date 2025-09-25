@@ -1,0 +1,91 @@
+import os
+from urllib.parse import urlparse
+from zipfile import ZipFile
+
+import requests
+from django.contrib.gis.utils import LayerMapping
+
+cache_path = os.path.dirname(os.path.realpath(__file__)) + "/__cache/"
+
+# The following is a list of the two-letter (ISO-3166-alpha2) country
+# codes for the USA and its overseas territories. Note that the
+# territories have their own codes
+US_CODES = [
+    "US",
+    "GU",  # Guam
+    "PR",  # Puerto Rico
+    "AS",  # American Samoa
+    "MP",  # Northern Mariana Islands
+    "VI",  # US Virgin Islands
+    "UM",  # US Minor Outlying Islands
+]
+
+SHAPE_TZ_TO_IANA = {
+    "V": "America/Puerto_Rico",
+    "E": "America/New_York",
+    "C": "America/Chicago",
+    "M": "America/Denver",
+    "P": "America/Los_Angeles",
+    "A": "America/Anchorage",
+    "H": "Pacific/Hololulu",
+    "G": "Pacific/Guam",
+    "J": "Asia/Tokyo",
+    "S": "Pacific/Pago_Pago",
+    "K": "Pacific/Kwajalein",
+    "F": "Pacific/Kosrae",
+}
+
+
+class CustomLayerMapping(LayerMapping):
+    """Custom class to support adding static data to spatial layers."""
+
+    def __init__(self, *args, **kwargs):
+        self.custom = kwargs.pop("custom", {})
+        super(CustomLayerMapping, self).__init__(*args, **kwargs)
+
+    def feature_kwargs(self, feature):
+        """Add custom fields."""
+        kwargs = super(CustomLayerMapping, self).feature_kwargs(feature)
+        kwargs.update(self.custom)
+        return kwargs
+
+
+def unzip_cache(filename):
+    """Unzip a file stored in the cache directory."""
+    with ZipFile(cache_path + filename, "r") as zip:
+        zip.extractall(cache_path)
+
+
+def download_to_cache(url):
+    """Download a file into the cache directory."""
+    filename = os.path.basename(urlparse(url).path)
+    fullpath = cache_path + filename
+
+    if not os.path.isfile(fullpath):
+        with requests.get(url, stream=True, timeout=10) as r:
+            r.raise_for_status()
+            with open(fullpath, "wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    f.write(chunk)
+    return fullpath
+
+
+def load_from_shapefile(model, url, shapefile_mapping, static_mapping=None):
+    """Load data from shapefile into model.
+
+    The shapefile URL should be to a zip file from AWIPS. If the zip file is
+    not already in the cache, it will be downloaded. A mapping from model fields
+    to shapefile fields is required. A mapping of model fields to static values
+    is optional.
+    """
+    fullpath = download_to_cache(url)
+    unzip_cache(os.path.basename(fullpath))
+
+    shapefile = fullpath.replace(".zip", ".shp")
+
+    CustomLayerMapping(
+        model=model,
+        data=shapefile,
+        mapping=shapefile_mapping,
+        custom=static_mapping or {},
+    ).save(progress=True)

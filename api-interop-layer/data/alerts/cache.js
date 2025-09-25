@@ -14,18 +14,6 @@ export class AlertsCache {
     this.tableName = tableName;
   }
 
-  async createTable(){
-    const sql = `CREATE TABLE IF NOT EXISTS ${this.tableName} (
-id serial NOT NULL,
-hash TEXT NOT NULL,
-alertJson JSON NOT NULL,
-shape geometry(GEOMETRY) DEFAULT NULL,
-alertKind TEXT DEFAULT NULL,
-PRIMARY KEY(id)
-)`;
-    return this.db.query(sql);
-  }
-
   async getHashes(){
     const sql = `SELECT hash FROM ${this.tableName};`;
     const { rows } = await this.db.query(sql);

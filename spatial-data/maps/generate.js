@@ -1,8 +1,7 @@
 const { chromium } = require("playwright");
 const { pathToFileURL } = require("node:url");
 const path = require("node:path");
-const { openDatabase } = require("../lib/db.js");
-const { table } = require("../sources/countyWarningAreas.js");
+const { Client } = require("pg");
 
 const sleep = async (ms) =>
   new Promise((resolve) => {
@@ -16,14 +15,24 @@ const sleep = async (ms) =>
 const srcPath = path.dirname(require.main.filename);
 const outputPath = path.resolve(
   srcPath,
-  "../../web/themes/new_weather_theme/assets/images/wfos/",
+  "../../forecast/frontend/assets/images/wfos/",
 );
 
 async function main() {
-  const db = await openDatabase();
+  // Slice off Node executable and script, keep just the args.
+  const args = process.argv.slice(2);
 
-  const [wfos] = await db.query(
-    `SELECT wfo,ST_ASGEOJSON(shape) shape FROM ${table}`,
+  const db = new Client({
+    user: args[0] ?? "drupal",
+    password: args[1] ?? "drupal",
+    database: args[2] ?? "weathergov",
+    host: args[3] ?? process.env.DB_HOST ?? "database",
+    port: args[4] ?? 5432,
+  });
+  await db.connect();
+
+  const { rows: wfos } = await db.query(
+    `SELECT wfo,ST_ASGEOJSON(shape) shape FROM weathergov_geo_cwas`,
   );
   // We don't need the DB connection anymore, but rather than wait here, we can
   // continue with other stuff and await it later.
@@ -44,7 +53,7 @@ async function main() {
 
     await page.evaluate((geojson) => {
       window.draw(geojson);
-    }, shape);
+    }, JSON.parse(shape));
     await sleep(3_000);
 
     const map = await page.$("#map");

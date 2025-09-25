@@ -60,7 +60,6 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   // based on the incoming hashes and the current cache.
   const db = await openDatabase();
   alertsCache.db = db;
-  await alertsCache.createTable();
   
   const incomingHashes = rawAlerts.map(alert => alert.properties.hash);
 
