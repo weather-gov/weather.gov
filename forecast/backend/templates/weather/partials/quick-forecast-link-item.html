@@ -34,9 +34,8 @@ the content
           <use xlink:href="{% static 'images/uswds/sprite.svg' %}#warning"></use>
         </svg>
       {% endif %}
-      <svg role="img" aria-hidden="true" class="wx-alert-icon">
-        <use xlink:href="/public/images/spritesheet.svg#{{ day.periods.0.data.icon.base }}"></use>
-      </svg>
+        {% weather_icon day.periods.0.data.icon.base size="sm" color_mode="light" class="wx-alert-icon condition-icon" aria_hidden="true" %}
+        {% weather_icon day.periods.0.data.icon.base size="sm" color_mode="dark" class="wx-alert-icon condition-icon--on-dark" aria_hidden="true" %}
     </div>
     <hr />
     <div class="wx-quick-forecast-item-high-low">

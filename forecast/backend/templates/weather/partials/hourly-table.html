@@ -74,9 +74,7 @@ alerts - An array of all the alerts that intersect with those hours.
             {% if period.icon.icon %}
               <div class="line-height-sans-3">
                 <div class="icon margin-right-1 width-3 margin-top-05">
-                  <svg role="img" aria-hidden="true" class="maxh-3 maxw-3">
-                    <use xlink:href="/public/images/spritesheet.svg#{{ period.icon.base }}"></use>
-                  </svg>
+                  {% weather_icon period.icon.base size="sm" color_mode="light" class="maxh-3 maxw-3" aria_hidden="true" %}
                 </div>
                 <div>
                   {% if period.shortForecast|length %}
