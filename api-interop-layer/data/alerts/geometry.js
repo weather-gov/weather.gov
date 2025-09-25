@@ -54,7 +54,7 @@ const getCountiesShapeFromDb = async (db, counties) => {
       ST_SIMPLIFY(ST_MemUnion(f.shape), ${SIMPLIFY_TOLERANCE})) as shape
     FROM (SELECT
       (ST_DUMP(shape)).geom as shape
-      FROM weathergov_geo_counties_dj
+      FROM weathergov_geo_counties
       WHERE countyFips IN (${countyIdPart})) as f;`;
   const result = await db.query(sql, same);
   const [{ shape }] = result.rows;
