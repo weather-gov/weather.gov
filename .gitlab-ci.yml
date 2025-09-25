@@ -111,24 +111,6 @@ gather-forecast-django-dependencies:
         - forecast/requirements.txt
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
 
-# build an image containing the latest Django code from our repository
-build-forecast-django-image:
-  extends: .build-image
-  stage: build
-  needs:
-    - job: gather-forecast-django-dependencies
-      optional: true
-  variables:
-    BUILD_CONTEXT: forecast/
-    DOCKERFILE: |-
-      FROM $CI_REGISTRY_IMAGE/python-with-deps:$USE_TAG
-      COPY . /code/
-      CMD python manage.py runserver 0.0.0.0:8080
-    IMAGE_NAME: web
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
-
 # lint all JavaScript in the repo in one job
 js-lint:
   stage: lint
@@ -151,10 +133,12 @@ js-lint:
 
 django-lint:
   stage: lint
-  needs: ['build-forecast-django-image']
-  image: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG
+  needs:
+    - job: gather-forecast-django-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_TAG
   script:
-    - cd /code
+    - cd forecast/
     - python -m ruff check .
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
@@ -162,8 +146,10 @@ django-lint:
 
 django-test:
   stage: test
-  needs: ['build-forecast-django-image']
-  image: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG
+  needs:
+    - job: gather-forecast-django-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_TAG
   services:
   - name: postgis/postgis:17-3.5
     alias: database
@@ -172,7 +158,7 @@ django-test:
       POSTGRES_PASSWORD: drupal
       POSTGRES_DB: weathergov
   script:
-    - cd /code
+    - cd forecast/
     - ldconfig -p | grep gdal
     - python manage.py migrate
     - python manage.py test
