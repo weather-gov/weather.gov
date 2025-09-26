@@ -72,8 +72,7 @@ The recipes are also listed here:
 
 ### Spatial data management
 
-| Recipe                | Description                                                     |
-| --------------------- | --------------------------------------------------------------- |
-| `just dump-spatial`   | Dumps our spatial database into a SQL file.                     |
-| `just import-spatial` | If a spatial SQL dump file exists, import it into our database. |
-| `just load-spatial`   | Load spatial data from shapefiles.                              |
+| Recipe                | Description                                                      |
+| --------------------- | ---------------------------------------------------------------- |
+| `just dump-spatial`   | Dumps our spatial database into a JSON file.                     |
+| `just load-spatial`   | Load spatial data from shapefiles _or_ dumped JSON file.         |
