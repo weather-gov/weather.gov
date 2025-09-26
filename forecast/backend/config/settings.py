@@ -145,6 +145,20 @@ def find_cloudgov_library(name):
         return f"{apt_library_dir}/{lib_entry[0].strip()}"
     return None
 
+def find_cloudgov_proj_resources(name):
+    """Find the cloud.gov apt installed PROJ resources.
+
+    PROJ bundles preconfigured transformations and default parameters that need
+    to be passed in for coordinate reference systems to work.
+    """
+    apt_library_dir = "/home/vcap/deps/0/"
+    find_output = subprocess.run(["/bin/find", apt_library_dir], check=True, capture_output=True) # noqa: S603 (no untrusted input)
+    find_list = find_output.stdout.decode("utf8").split("\n")
+    resource_entry = [entry for entry in find_list if entry.strip().endswith(name)]
+    if resource_entry:
+        return os.path.dirname(resource_entry[0])
+    return None
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -155,6 +169,11 @@ if rds_service and rds_service.credentials:
     # GDAL_LIBRARY_PATH = "/home/vcap/deps/0/lib/libgdal.so.30"
     GEOS_LIBRARY_PATH = find_cloudgov_library("libgeos")
     GDAL_LIBRARY_PATH = find_cloudgov_library("libgdal")
+    # we need to tell PROJ where its resources can be found. so let's look for
+    # the projection database and return the basedir. typically this is at
+    # /home/vcap/deps/0/apt/usr/share/proj/
+    os.environ["PROJ_LIB"] = find_cloudgov_proj_resources("proj.db")
+
     DATABASES = {
         "default": {
             "ENGINE": "django.contrib.gis.db.backends.postgis",

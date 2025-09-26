@@ -28,6 +28,7 @@ resource "cloudfoundry_app" "app" {
   buildpacks       = ["https://github.com/cloudfoundry/apt-buildpack.git", "python_buildpack"]
   strategy         = "rolling"
   routes           = [{ route = "${local.host_name}.${local.domain}" }]
+  enable_ssh       = true
 
   environment = {
     # NEWRELIC_LICENSE       = var.newrelic_license

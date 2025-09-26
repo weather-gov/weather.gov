@@ -24,6 +24,7 @@ resource "cloudfoundry_app" "interop" {
   buildpacks       = ["nodejs_buildpack"]
   strategy         = "rolling"
   routes           = [{ route = "api-${local.host_name}.${local.domain}" }]
+  enable_ssh       = true
 
   environment = {
     # NEWRELIC_LICENSE       = var.newrelic_license
