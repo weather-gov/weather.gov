@@ -96,7 +96,7 @@ gather-forecast-node-dependencies:
         - spatial-data/package-lock.json
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
 
-# build a base image with all the current Python dependencies
+# # build a base image with all the current Python dependencies
 gather-forecast-django-dependencies:
   extends: .build-dependencies-image
   stage: gather
@@ -111,7 +111,7 @@ gather-forecast-django-dependencies:
         - forecast/requirements.txt
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
 
-# lint all JavaScript in the repo in one job
+# # lint all JavaScript in the repo in one job
 js-lint:
   stage: lint
   needs:
@@ -160,8 +160,17 @@ django-test:
   script:
     - cd forecast/
     - ldconfig -p | grep gdal
+    - pip install coverage
     - python manage.py migrate
-    - python manage.py test
+    - coverage run manage.py test
+    - coverage xml -o coverage.xml
+    - coverage report
+  coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: forecast/coverage.xml
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
@@ -180,11 +189,18 @@ web-component-and-interop-test:
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/tests/api/node_modules tests/api/
-    - npx c8 mocha --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
+    - npx c8 --reporter cobertura -o coverage/wc/ --reporter text-summary  mocha --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
     # We also do interop layer tests at the same time so we don't have to wait
     # for another runner to come available.
     - cd api-interop-layer
-    - npx c8 mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
+    - npx c8 --reporter cobertura -o ../coverage/interop/ --reporter text-summary mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
+  coverage:
+    /^Statements\s*:\s*([^%]+)/
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/*/cobertura-coverage.xml
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
