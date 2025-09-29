@@ -77,6 +77,11 @@ variable "web_memory" {
   default     = "256M"
   description = "The amount of memory to assign to the web processes"
 }
+variable "web_disk_quota" {
+  type        = string
+  default     = "5G"
+  description = "The amount of disk memory to allocate per web instance"
+}
 
 variable "api_interop_memory" {
   type        = string

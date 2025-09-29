@@ -247,6 +247,8 @@ django-test:
     - ldconfig -p | grep gdal
     - pip install coverage
     - python manage.py migrate
+    - python manage.py compilemessages
+    - python manage.py collectstatic --noinput --traceback
     - coverage run manage.py test
     - coverage xml -o coverage.xml
     - coverage report
