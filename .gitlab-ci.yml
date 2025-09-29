@@ -1,6 +1,13 @@
 spec:
   # these inputs permit flexible pipeline runs from the GitLab UI
   inputs:
+    deploy-to-environment:
+      options: ['no deploy', 'test', 'staging', 'prod']
+      default: 'no deploy'
+      description: "Deploy the selected branch or tag to this environment using Terraform. You do not need to build the images or run the tests, although you can if you like. At the time of writing (9/25), 'prod' means beta.weather.gov."
+    confirm-beta-deploy:
+      description: "To deploy to beta, type YES in this box."
+      default: ''
     build-images:
       type: boolean
       default: true
@@ -19,9 +26,11 @@ spec:
 
 stages:
   - gather  # gather the 3rd party dependencies and push images of them to the registry
-  - build   # pull the dependency images, put the code in them, push the code images
   - lint    # pull the code images and lint
   - test    # pull the code images and test
+  - notes   # write the release notes and any other pre-release activities
+  - release # create a release, which is stored in GitLab (the software, not the code repository)
+  - deploy  # toss the selected branch/tag into the desired live environment
 
 # these are available in all the running containers (images and services)
 variables:
@@ -73,6 +82,82 @@ workflow:
     - cat Dockerfile.tmp
     - docker build -f Dockerfile.tmp -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG $BUILD_CONTEXT
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
+
+# gather up commits with `Changelog: ...` and assemble them into a markdown file
+write-release-notes:
+  stage: notes
+  image: alpine:latest
+  script:
+    - apk add curl jq
+    - 'curl -H "PRIVATE-TOKEN: $CI_API_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/changelog?version=$CI_COMMIT_TAG" | jq -r .notes > release_notes.md'
+  artifacts:
+    paths:
+      - release_notes.md
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^beta-v\d+\.\d+\.\d+$/'
+
+# create a release (in GitLab) and store the release notes in CHANGELOG.md (via GitLab's API)
+make-tagged-release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - job: write-release-notes
+      artifacts: true
+  script:
+    - 'curl -H "PRIVATE-TOKEN: $CI_API_TOKEN" -X POST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/changelog?version=$CI_COMMIT_TAG"'
+  release:
+    name: '$CI_COMMIT_TAG'
+    description: release_notes.md
+    tag_name: '$CI_COMMIT_TAG'
+    ref: '$CI_COMMIT_SHA'
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^beta-v\d+\.\d+\.\d+$/'
+
+# deploy to prod/beta automatically on a beta version tag (like `beta-v1.3.5`) or manually from the GitLab New Pipeline page
+deploy-to-prod:
+  stage: deploy
+  image: cloudfoundry/cli:8
+  variables:
+    SOME_VAR: "some value"
+  script:
+    # - apk update && apk upgrade && apk add --no-cache bash jq curl grep coreutils
+    # - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
+    # - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
+    # - terraform --version
+    - echo We deployed to $[[ inputs.deploy-to-environment ]]!
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^beta-v\d+\.\d+\.\d+$/'
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "prod" && "$[[ inputs.confirm-beta-deploy ]]" == "YES"
+
+# deploy to staging manually from the GitLab New Pipeline page
+deploy-to-staging:
+  stage: deploy
+  image: cloudfoundry/cli:8
+  variables:
+    SOME_VAR: "some value"
+  script:
+    # - apk update && apk upgrade && apk add --no-cache bash jq curl grep coreutils
+    # - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
+    # - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
+    # - terraform --version
+    - echo We deployed to $[[ inputs.deploy-to-environment ]]!
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "staging"
+
+# deploy to test manually from the GitLab New Pipeline page
+deploy-to-test:
+  stage: deploy
+  image: cloudfoundry/cli:8
+  variables:
+    SOME_VAR: "some value"
+  script:
+    - apk update && apk upgrade && apk add --no-cache bash jq curl grep coreutils
+    - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
+    - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
+    - terraform --version
+    - echo We deployed to $[[ inputs.deploy-to-environment ]]!
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "test"
 
 # build a base image with all the current node_modules and other JavaScript dependencies
 gather-forecast-node-dependencies:

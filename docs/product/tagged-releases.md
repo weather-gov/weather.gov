@@ -2,20 +2,31 @@
 
 ## How to release
 
-Go to https://github.com/weather-gov/weather.gov/releases/new. Type your release version name like so:
+Go to [Code > Tags > New Tag](https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/weathergov-django/-/tags/new) in GitLab.
 
-<img width="807" alt="Screenshot 2023-11-22 at 10 10 02 AM" src="https://github.com/weather-gov/weather.gov/assets/142825699/d280f961-3cd3-4e82-9297-3fd2b7288c50">
+You'll see 3 fields.
 
-The only requirement is that it is prepended with `beta-`. We use semantic versioning as major.minor.patch, but anything will release if it has the right prefix. 
+> Tag name:
+> Create from: main
+> Message:
 
-Click "create new tag" - it will take you to a place to write release notes. Name the release the same as the tag. Then release! You can watch the steps here: https://github.com/weather-gov/weather.gov/actions/workflows/deploy-beta.yaml
+The `Tag name` must start with `beta-v`, followed by the major, minor, and point versions. For example: `beta-v1.12.0`.
+
+Leave `Create from` set to `main`.
+
+The contents of the `Message` field can be any (short) text you like. It should not be left empty.
+
+Click "Create tag".
+
+A GitLab CI pipeline job will create the release. Immediately afterwards, another job will deploy the code. You can find the pipeline and watch progress from [the pipelines page](https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/weathergov-django/-/pipelines).
+
+After the release is created, you may wish to edit the notes. To do that, go to [the releases page](https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/weathergov-django/-/releases).
 
 ## Release cheklist
 
 As part of a release you may follow the following checklist: 
 
 - [ ] Compare [staging](https://weathergov-staging.app.cloud.gov/) and [beta](https://beta.weather.gov/) for differences in configuration, content, and functionality
-- [ ] Look at [commits to main](https://github.com/weather-gov/weather.gov/commits/main) and check what has been merged since the previous release
-- [ ] Write comprehensive release notes (what's changed and what's new) making sure to reference relevant pull requests
+- [ ] Look at [commits to main](https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/weathergov-django/-/commits/main) and check what has been merged since the previous release
 - [ ] Run through [the manual accessibility checklist](https://github.com/weather-gov/weather.gov/blob/main/docs/code-review-templates/code-review-web.md#accessibility) of what is on staging if anything functional or visual has been changed
 - [ ] Check with other product owners about a release
