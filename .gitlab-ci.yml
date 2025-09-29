@@ -24,13 +24,16 @@ spec:
 # NB: this file is less confusing to read once you realize that it does
 #     different things, depending on which branch is in the pipeline
 
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
 stages:
-  - gather  # gather the 3rd party dependencies and push images of them to the registry
-  - lint    # pull the code images and lint
-  - test    # pull the code images and test
-  - notes   # write the release notes and any other pre-release activities
-  - release # create a release, which is stored in GitLab (the software, not the code repository)
-  - deploy  # toss the selected branch/tag into the desired live environment
+  - gather   # gather the 3rd party dependencies and push images of them to the registry
+  - lint     # pull the code images and lint
+  - test     # pull the code images and test
+  - notes    # write the release notes and any other pre-release activities
+  - release  # create a release, which is stored in GitLab (the software, not the code repository)
+  - deploy   # toss the selected branch/tag into the desired live environment
 
 # these are available in all the running containers (images and services)
 variables:
@@ -49,6 +52,7 @@ workflow:
     # always allow CI pipelines on pushes and from UI -- nb: a merge will cause a push to the target branch
     - if: $CI_PIPELINE_SOURCE == "web"
     - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
 
 # common config for using Docker in later jobs
 .docker-in-docker:
@@ -181,7 +185,7 @@ gather-forecast-node-dependencies:
         - spatial-data/package-lock.json
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
 
-# # build a base image with all the current Python dependencies
+# build a base image with all the current Python dependencies
 gather-forecast-django-dependencies:
   extends: .build-dependencies-image
   stage: gather
@@ -196,7 +200,7 @@ gather-forecast-django-dependencies:
         - forecast/requirements.txt
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
 
-# # lint all JavaScript in the repo in one job
+# lint all JavaScript in the repo in one job
 js-lint:
   stage: lint
   needs:
@@ -291,3 +295,26 @@ web-component-and-interop-test:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+
+dependency-scan:
+  stage: test
+  image: snyk/snyk:python-3.12
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PIPELINE_SCHEDULE_NAME == "dependencies"
+    - if: $CI_PIPELINE_SOURCE == "push"
+  before_script:
+    - cd forecast
+    - pip install -r requirements.txt
+    - cd ..
+    - wget -O sarif-converter https://gitlab.com/ignis-build/sarif-converter/-/releases/v0.9.4/downloads/bin/sarif-converter-linux-amd64
+    - chmod +x sarif-converter
+  script:
+    - snyk auth $SNYK_TOKEN
+    - snyk test . --all-projects --sarif-file-output=snyk.sarif || true
+    - ./sarif-converter --type sast snyk.sarif snyk.json
+  artifacts:
+    reports:
+      sast: snyk.json
+
+sast:
+  stage: test
