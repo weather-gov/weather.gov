@@ -1,8 +1,10 @@
 import os
+import re
 from urllib.parse import urlparse
 from zipfile import ZipFile
 
 import requests
+from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.utils import LayerMapping
 
 cache_path = os.path.dirname(os.path.realpath(__file__)) + "/__cache/"
@@ -56,8 +58,8 @@ def unzip_cache(filename):
         zip.extractall(cache_path)
 
 
-def download_to_cache(url):
-    """Download a file into the cache directory."""
+def get_shapefile(url):
+    """Download a shapefile from a URL, if necessary, unzip it, and load it into a reader."""
     filename = os.path.basename(urlparse(url).path)
     fullpath = cache_path + filename
 
@@ -67,25 +69,6 @@ def download_to_cache(url):
             with open(fullpath, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):
                     f.write(chunk)
-    return fullpath
 
-
-def load_from_shapefile(model, url, shapefile_mapping, static_mapping=None):
-    """Load data from shapefile into model.
-
-    The shapefile URL should be to a zip file from AWIPS. If the zip file is
-    not already in the cache, it will be downloaded. A mapping from model fields
-    to shapefile fields is required. A mapping of model fields to static values
-    is optional.
-    """
-    fullpath = download_to_cache(url)
     unzip_cache(os.path.basename(fullpath))
-
-    shapefile = fullpath.replace(".zip", ".shp")
-
-    CustomLayerMapping(
-        model=model,
-        data=shapefile,
-        mapping=shapefile_mapping,
-        custom=static_mapping or {},
-    ).save(progress=True)
+    return DataSource(re.sub(r"\.zip$", ".shp", fullpath))
