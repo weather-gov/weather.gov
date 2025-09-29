@@ -26,13 +26,15 @@ services:
     volumes:
       - ./forecast:/code
     ports:
-      - "8080:8080"
+      - 8080:8080
+      - 34235:34235
     environment:
       POSTGRES_DB: weathergov
       POSTGRES_USER: drupal
       POSTGRES_PASSWORD: drupal
       INTEROP_URL: "http://api-interop-layer:8082/"
       API_URL: "http://api-proxy:8081/"
+      DEBUG_PORT: 34235
     networks:
       - weather.gov
     depends_on:

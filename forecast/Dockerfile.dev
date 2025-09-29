@@ -5,12 +5,19 @@ ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE=backend.config.settings
 ENV django_secret_key=really-long-random-string-BNPecI7+s8jMahQcGHZ3XQ5yUfRrSibdapVLIz0UemdktVPofDKcoy
 ENV DJANGO_DEBUG=true
+
+# Do all this in one shot so we don't get a ton of intermediate image layers,
+# and then clean up the cache so our final image is smaller.
+RUN apt update && \
+  apt install -y \
+  gettext \
+  binutils \
+  libproj-dev \
+  gdal-bin && \
+  apt-get clean
+
 WORKDIR /code
 COPY requirements.txt /code/
 RUN pip install -r requirements.txt
+RUN pip install debugpy
 COPY . /code/
-RUN apt update
-RUN apt install gettext -y
-RUN apt install binutils -y
-RUN apt install libproj-dev -y
-RUN apt install gdal-bin -y
