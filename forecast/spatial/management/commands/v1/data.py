@@ -1,17 +1,14 @@
 import csv
-import os
-import re
 
-from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.geos import GEOSGeometry
+from django.db import connection
 from tqdm import tqdm
 
 from spatial.management.commands._spatial_util import (
     SHAPE_TZ_TO_IANA,
     US_CODES,
     cache_path,
-    download_to_cache,
-    load_from_shapefile,
+    get_shapefile,
     unzip_cache,
 )
 from spatial.models import (
@@ -36,159 +33,234 @@ __bad_places = [
 ]
 
 
+# This has a lot of arguments, but it hides a fair bit of complexity in exchange
+# and that feels worthwhile to me, so I've opted to turn off this rule here.
+def __load_from_shapefile(  # noqa PLR0913
+    model,
+    url,
+    type,
+    callback_get_unique,
+    callback_get_unique_query,
+    callback_create_model,
+):
+    print(f"loading {type}")
+
+    table = model._meta.db_table
+    shapefile = get_shapefile(url)
+
+    # Shapefiles do not support multipolygon features. Instead, a single
+    # entity may have multiple features. Our database does support
+    # multipolygon types, though, so if we encounter an entity we've seen
+    # before, we'll union its existing geometry with this new one rather
+    # than create a new entity.
+    known = set()
+
+    for feature in tqdm(iterable=shapefile[0], ncols=50, leave=False):
+        # Get a unique identifier for this feature.
+        unique = callback_get_unique(feature)
+
+        # If we've seen it before, add this geometry to it rather than create
+        # a new one.
+        if unique in known:
+            where, parameters = callback_get_unique_query(feature)
+            geometry = feature.geom.json
+
+            cursor = connection.cursor()
+
+            # There's a SQL injection vector here, but considering we control
+            # all of the code associated with it, it seems fine. We are using
+            # parameterization on the actual values from the shapefiles which
+            # mitigates the risk.
+            cursor.execute(
+                f"""UPDATE {table} SET
+                    shape=ST_Union(
+                        shape,
+                        ST_GeomFromGeoJSON(%s))
+                    WHERE {where}""",  # noqa S608
+                [geometry] + parameters,
+            )
+            cursor.close()
+        else:
+            callback_create_model(feature)
+            known.add(unique)
+
+    print(f"  :: loaded {str(model.objects.count())} entities")
+
+
 def load_states():
     """Load state data."""
-    print("loading states")
-
-    # Start by emptying the table
     WeatherStates.objects.all().delete()
 
-    # States are easy because they're 100% from shapefile
-    load_from_shapefile(
+    def getid(feature):
+        return feature.get("FIPS")
+
+    def getquery(feature):
+        return "fips=%s", [getid(feature)]
+
+    def create_model(feature):
+        WeatherStates(
+            state=feature.get("STATE"),
+            name=feature.get("NAME"),
+            fips=feature.get("FIPS"),
+            shape=GEOSGeometry(feature.geom.json),
+        ).save()
+
+    __load_from_shapefile(
         model=WeatherStates,
         url="https://www.weather.gov/source/gis/Shapefiles/County/s_18mr25.zip",
-        shapefile_mapping={
-            "state": "STATE",
-            "name": "NAME",
-            "fips": "FIPS",
-            "shape": "POLYGON",
-        },
-    )
-    print(
-        "loaded " + str(WeatherStates.objects.count()) + " states",
+        type="states",
+        callback_get_unique=getid,
+        callback_get_unique_query=getquery,
+        callback_create_model=create_model,
     )
 
 
 def load_cwas():
     """Load county warning area data."""
-    print("loading CWAs")
     WeatherCountyWarningAreas.objects.all().delete()
-    load_from_shapefile(
+
+    def getid(feature):
+        return feature.get("CWA")
+
+    def getquery(feature):
+        return "cwa=%s", [getid(feature)]
+
+    def create_model(feature):
+        WeatherCountyWarningAreas(
+            wfo=feature.get("WFO"),
+            cwa=feature.get("CWA"),
+            region=feature.get("REGION"),
+            city=feature.get("CITY"),
+            shape=GEOSGeometry(feature.geom.json),
+        ).save()
+
+    __load_from_shapefile(
         model=WeatherCountyWarningAreas,
-        url="https://www.weather.gov/source/gis/Shapefiles/WSOM/w_18mr25.zip",
-        shapefile_mapping={
-            "wfo": "WFO",
-            "cwa": "CWA",
-            "region": "REGION",
-            "city": "CITY",
-            "shape": "POLYGON",
-        },
+        url="https://www.weather.gov/source/gis/Shapefiles/County/w_18mr25.zip",
+        type="county warning area",
+        callback_get_unique=getid,
+        callback_get_unique_query=getquery,
+        callback_create_model=create_model,
     )
-    print(
-        "loaded " + str(WeatherCountyWarningAreas.objects.count()) + " CWAs",
-    )
+
+
+def __get_countyname(feature):
+    countyfips = feature.get("FIPS")
+    countyname = feature.get("COUNTYNAME")
+
+    # The county shapefile represents some counties with multiple features
+    # because shapefiles can't handle multipolygons. In a small handful of
+    # cases, the various features for a single county have different
+    # COUNTYNAME properties. We need canonical names, so the following
+    # logic handles those exceptional cases.
+
+    # Monroe County, FL, is divided into four features in the shapefile. One
+    # is for the mainland part of the county and the other three are for
+    # the island portions. The island features have names different from
+    # "Monroe," but for our purposes we'll normalize.
+    if countyfips == "12087":
+        countyname = "Monroe"
+
+    # Hawaii County only has one feature, but its county name property is
+    # "Hawaii in Hawaii" which is funny but not what we want. Meanwhile,
+    # Honolulu County, also with a single fature, has its name listed as
+    # "Oahu in Honolulu." :srhugging-person-made-of-symbols:
+    elif countyfips == "15001":
+        countyname = "Hawaii"
+    elif countyfips == "15003":
+        countyname = "Honolulu"
+
+    # Kauaʻi County covers two islands, represented by two features. The
+    # features use the island names instead of the county name, so we'll
+    # fix that up.
+    elif countyfips == "15007":
+        countyname = "Kauai"
+
+    # Same story with Maui County with its four islands.
+    elif countyfips == "15009":
+        countyname = "Maui"
+
+    # There are four islands in the "Northern Islands" county of the
+    # Northern Mariana Islands. Fun fact: the population of this county in
+    # 2009 was 7.
+    elif countyfips == "69085":
+        countyname = "Northern Islands"
+
+    # The Federate States of Micronesia are freely associated with the
+    # United States, and they don't really have "counties" per se. They have
+    # states, as suggested by the name. Anyway, the organization of
+    # Micronesian political subunits is not captured well with FIPS.
+    # 64001 includes places in three different states, which it should not
+    # do. I don't know enough about Micronesia to suss out we ought to
+    # address it, so I've opted to stick with the boundaries are set forth
+    # in the shapefile on the assumption that the folks at NWS have put in
+    # plenty of thought of the best way to represent this for their users.
+    # And for our purposes, where we need a canonical name, I picked the
+    # state that most of the features are in or associated with.
+    elif countyfips == "64001":
+        countyname = "Pohnpei"
+
+    return countyname
 
 
 def load_counties():
     """Load county data."""
-    print("loading counties")
     WeatherCounties.objects.all().delete()
-    load_from_shapefile(
-        model=WeatherCounties,
-        url="https://www.weather.gov/source/gis/Shapefiles/County/c_18mr25.zip",
-        shapefile_mapping={
-            "countyname": "COUNTYNAME",
-            "countyfips": "FIPS",
-            "cwastring": "CWA",
-            "st": "STATE",
-            "timezone": "TIME_ZONE",
-            "shape": "POLYGON",
-        },
-    )
-    # Counties are linked to states and CWAs, so add those. We also need to
-    # transform the 1-letter NWS timezone abbreviation into IANA zone names
-    for county in WeatherCounties.objects.all():
+
+    # Counties are uniquely defined by their 3-digit FIPS code PLUS their state.
+    # FIPS codes are reused between states.
+    def getid(feature):
+        return feature.get("STATE") + feature.get("FIPS")
+
+    def getquery(feature):
+        return "st=%s AND countyfips=%s", [feature.get("STATE"), feature.get("FIPS")]
+
+    def create_model(feature):
+        countyname = __get_countyname(feature)
+
+        timezone = feature.get("TIME_ZONE")
+        county = WeatherCounties(
+            countyname=countyname,
+            countyfips=feature.get("FIPS"),
+            st=feature.get("STATE"),
+            # The shapefile indicates whether a county observes DST by
+            # capitalizing the timezone code.
+            dst=timezone == timezone.upper(),
+            # The shapefile timezones are 1- or 2-digit codes, but we want
+            # the IANA timezones instead, so grab those.
+            timezone=SHAPE_TZ_TO_IANA[timezone[:1].upper()],
+            shape=GEOSGeometry(feature.geom.json),
+        )
+        # The model must be saved before we can setup foreign key relationships.
+        county.save()
+
+        # Counties are linked to states and CWAs, so add those.
         county.state = WeatherStates.objects.get(state=county.st)
 
-        cwas = [
-            county.cwastring[y - 3 : y] for y in range(3, len(county.cwastring) + 3, 3)
-        ]
+        cwastring = feature.get("CWA")
+        cwas = [cwastring[y - 3 : y] for y in range(3, len(cwastring) + 3, 3)]
         for cwa in cwas:
             county.cwas.add(WeatherCountyWarningAreas.objects.get(cwa=cwa))
 
-        # The shapefile indicates whether a county observes DST by
-        # capitalizing the timezone code.
-        county.dst = county.timezone == county.timezone.upper()
-        county.timezone = SHAPE_TZ_TO_IANA[county.timezone[:1].upper()]
-
         county.save()
-    print(
-        "loaded " + str(WeatherCounties.objects.count()) + " counties",
+
+    __load_from_shapefile(
+        model=WeatherCounties,
+        url="https://www.weather.gov/source/gis/Shapefiles/County/c_18mr25.zip",
+        type="counties",
+        callback_get_unique=getid,
+        callback_get_unique_query=getquery,
+        callback_create_model=create_model,
     )
 
 
-def __insert_zones_into_database(zones):
-    print("...putting them in the database")
-    for id, zone in tqdm(iterable=zones.items(), ncols=50, leave=False):
-        # If there's only one geometry in the zone, use it. Otherwise smoosh
-        # them all together intoa  GeometryCollection object.
-        geometry = (
-            zone["geometry"][0]
-            if len(zone["geometry"]) == 1
-            # If we're smooshing them together, just go ahead and make it a
-            # GeoJSON string.
-            else (
-                '{"type":"GeometryCollection","geometries":['
-                + ",".join(zone["geometry"])
-                + "]}"
-            )
-        )
+def load_zones():
+    """Load zone data."""
+    WeatherZone.objects.all().delete()
 
-        # Put that stuff in the database.
-        wz = WeatherZone(
-            id=id,
-            state=zone["state"],
-            type=zone["type"],
-            shape=GEOSGeometry(geometry),
-        )
-        wz.save()
-
-
-def __load_forecast_and_fire_zones():
-    for type, url in [
+    zonetypes = [
         ["forecast", "https://www.weather.gov/source/gis/Shapefiles/WSOM/z_18mr25.zip"],
         ["fire", "https://www.weather.gov/source/gis/Shapefiles/WSOM/fz18mr25.zip"],
-    ]:
-        path = download_to_cache(url)
-        unzip_cache(os.path.basename(path))
-        known = {}
-
-        ds = DataSource(re.sub(r"\.zip$", ".shp", path))
-
-        print("...reading " + type + " zones")
-        for feature in tqdm(iterable=ds[0], ncols=50, leave=False):
-            state = feature.get("STATE")
-
-            # Build up the globally-unique zone ID. This URI should match the
-            # zone IDs returned by the API.
-            id = (
-                "https://api.weather.gov/zones/"
-                + type
-                + "/"
-                + state
-                + "Z"
-                + feature.get("ZONE")
-            )
-            geometry = feature.geom.json
-
-            # Some of the zones are represented by multiple polygons. To handle
-            # that, we'll gather a list of all polygons and insert them into the
-            # database as a geometry collection.
-            if id in known:
-                known[id]["geometry"].append(geometry)
-            else:
-                known[id] = {
-                    "id": id,
-                    "state": state,
-                    "type": type,
-                    "geometry": [geometry],
-                }
-
-        __insert_zones_into_database(known)
-
-
-def __load_marine_zones():
-    for type, url in [
         [
             "marine:coastal",
             "https://www.weather.gov/source/gis/Shapefiles/WSOM/mz18mr25.zip",
@@ -197,60 +269,56 @@ def __load_marine_zones():
             "marine:offshore",
             "https://www.weather.gov/source/gis/Shapefiles/WSOM/oz18mr25.zip",
         ],
-    ]:
-        path = download_to_cache(url)
-        unzip_cache(os.path.basename(path))
-        known = {}
+    ]
 
-        ds = DataSource(re.sub(r"\.zip$", ".shp", path))
+    for type, url in zonetypes:
 
-        print("...reading " + type + " zones")
-        for feature in tqdm(iterable=ds[0], ncols=50, leave=False):
-            # Unlike forecast zones, marine zones have fully-qualified IDs, so
-            # we just boop the URL part right on the front. The API uses
-            # "forecast" in the path so we do too.
-            id = "https://api.weather.gov/zones/forecast/" + feature.get("ID")
-            geometry = feature.geom.json
+        # Use type=type as a default argument to bind the loop variable to the
+        # function. Otherwise we get a B023 lint error.
+        # https://docs.astral.sh/ruff/rules/function-uses-loop-variable/
+        def getid(feature, type=type):
+            return (
+                # Unlike forecast zones, marine zones have fully-qualified IDs, so
+                # we just boop the URL part right on the front. The API uses
+                # "forecast" in the path so we do too.
+                f"https://api.weather.gov/zones/forecast/{feature.get('ID')}"
+                if type.startswith("marine:")
+                # For forecast and fire zones, however, the zone ID is only
+                # unique within the state and type to which it belongs. So we
+                # build up a globally-unique zone ID ourselves. This URI should
+                # match the zone IDs returned by the API.
+                else (
+                    f"https://api.weather.gov/zones/{type}/{feature.get('STATE')}Z{feature.get('ZONE')}"
+                )
+            )
 
-            # Some of the zones are represented by multiple polygons. To handle
-            # that, we'll gather a list of all polygons and insert them into the
-            # database as a geometry collection.
-            if id in known:
-                known[id]["geometry"].append(geometry)
-            else:
-                known[id] = {
-                    "id": id,
-                    "state": None,
-                    "type": type,
-                    "geometry": [geometry],
-                }
+        def getquery(feature):
+            return "id=%s", [getid(feature)]
 
-        __insert_zones_into_database(known)
+        def create_model(feature, type=type):
+            WeatherZone(
+                id=getid(feature),
+                # Marine zones don't have states
+                state=None if type.startswith("marine:") else feature.get("STATE"),
+                type=type,
+                shape=GEOSGeometry(feature.geom.json),
+            ).save()
 
-
-def load_zones():
-    """Load zone data."""
-    print("loading zones")
-    WeatherZone.objects.all().delete()
-
-    # We can't just use the load_from_shapefile tool for zones because their IDs
-    # are not globally unique; they are only unique within the context of their
-    # zone type and the state they are situated inside. If we use
-    # load_from_shapefile, the uniqueness constraint on the model ID will cause
-    # later zones to overwrite earlier ones.
-    #
-    # So... we do a little custom dancing.
-    __load_forecast_and_fire_zones()
-    __load_marine_zones()
-
-    print("loaded " + str(WeatherZone.objects.count()) + " zones")
+        __load_from_shapefile(
+            model=WeatherZone,
+            url=url,
+            type=f"{type} zones",
+            callback_get_unique=getid,
+            callback_get_unique_query=getquery,
+            callback_create_model=create_model,
+        )
 
 
 def __is_invalid_place(place):
     return (
         place["country"] not in US_CODES
         or not place["code"].startswith("PPL")
-        or (place["name"] + ", " + place["state"]) in __bad_places
+        or f"{place['name']}, {place['state']}" in __bad_places
     )
 
 
@@ -293,7 +361,7 @@ def __get_county_fips(place):
     # For all other cases where we don't have a valid county FIPS,
     # find the county that contains this place's point and use the
     # associated state and FIPS code values.
-    wkt = "POINT(" + place["lon"] + " " + place["lat"] + ")"
+    wkt = f"POINT({place['lon']} {place['lat']})"
     county = WeatherCounties.objects.filter(shape__contains=wkt).first()
     if county is not None:
         return county.countyfips
@@ -366,7 +434,7 @@ def load_places():
 
         # Create a WKT string in order to create the geometry. We may
         # also use this WKT string for a county lookup later on.
-        wkt = "POINT(" + csv_place["lon"] + " " + csv_place["lat"] + ")"
+        wkt = f"POINT({csv_place['lon']} {csv_place['lat']})"
         place.point = GEOSGeometry(wkt)
 
         # And finally grab the state and county names
@@ -381,16 +449,10 @@ def load_places():
             place.statefips = county.state.fips
         else:
             print(
-                "couldn't get county for FIPS "
-                + place.countyfips
-                + " ("
-                + place.state
-                + ")",
+                f"couldn't get county for FIPS {place.countyfips} ({place.state})",
             )
 
         place.save()
 
     csvfile.close()
-    print(
-        "loaded " + str(WeatherPlace.objects.count()) + " places",
-    )
+    print(f"loaded {str(WeatherPlace.objects.count())} places")

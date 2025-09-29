@@ -203,3 +203,24 @@ stop-plantuml:
 [group("dev environment management")]
 zap: dump-spatial && init
   docker compose down -v
+
+# Load just states spatial data.
+[group("spatial data loading")]
+load-states:
+  docker compose exec web python manage.py loadspatial --states
+# Load just CWA spatial data.
+[group("spatial data loading")]
+load-cwas:
+  docker compose exec web python manage.py loadspatial --cwas
+# Load just counties spatial data.
+[group("spatial data loading")]
+load-counties:
+  docker compose exec web python manage.py loadspatial --counties
+# Load just zones spatial data.
+[group("spatial data loading")]
+load-zones:
+  docker compose exec web python manage.py loadspatial --zones
+# Load just place spatial data.
+[group("spatial data loading")]
+load-places:
+  docker compose exec web python manage.py loadspatial --places
