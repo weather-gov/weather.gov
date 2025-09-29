@@ -21,11 +21,12 @@ from cfenv import AppEnv  # type: ignore
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environs.Env()
+cloudgov_space = env("CLOUDGOV_SPACE", "test")
 
 # Get secrets from Cloud.gov user provided service, if exists
 # If not, get secrets from environment variables
-key_service = AppEnv().get_service(name="test-credentials") # for weathergov-test
-rds_service = AppEnv().get_service(name="weathergov-rds-test")
+key_service = AppEnv().get_service(name=f"{cloudgov_space}-credentials")
+rds_service = AppEnv().get_service(name=f"weathergov-rds-{cloudgov_space}")
 
 if key_service and key_service.credentials:
     secret = key_service.credentials.get
@@ -45,6 +46,8 @@ DEBUG = env_debug
 
 ALLOWED_HOSTS = [
     "weathergov-test.app.cloud.gov",
+    "weathergov-staging.app.cloud.gov",
+    "beta.weather.gov",
 ]
 
 ALLOWED_CIDR_NETS = ["10.0.0.0/8"]
