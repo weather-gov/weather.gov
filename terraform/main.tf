@@ -6,6 +6,13 @@ locals {
   django_secret_key = local.credentials.django_secret_key
 }
 
+# only needed if you do not want to destroy the space.
+# `cf space foo --guid` to get the guid for space 'foo'.
+# import {
+#   to = module.app_space.cloudfoundry_space.space
+#   id = "085f4c66-5129-4a34-9a4c-8bd22a5b850e"
+# }
+
 module "app_space" {
   source = "github.com/gsa-tts/terraform-cloudgov//cg_space?ref=v2.1.0"
 

@@ -39,6 +39,7 @@ resource "cloudfoundry_app" "app" {
     DJANGO_LOG_LEVEL       = "INFO"
     DJANGO_LOG_FORMAT      = "console"
     DISABLE_COLLECTSTATIC  = 1
+    CLOUDGOV_SPACE         = var.cf_space_name
   }
 
   processes = [
