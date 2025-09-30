@@ -19,7 +19,7 @@ def _api_fetch(url):
     """Fetch a dictionary directly from the weather API. Or the proxy, if present."""
     base_url = getenv("API_URL")
     if not base_url or base_url == "":
-        base_url = "https://api.weather.gov/"
+        base_url = "https://api.weather.gov"
     full_url = f"{base_url}{url}"
     # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
     response = requests.get(full_url, timeout=55)  # TODO: try-request block with logging

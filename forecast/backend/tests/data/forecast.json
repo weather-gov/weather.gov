@@ -1,0 +1,250 @@
+{
+  "nosnow_noice_noalerts": {
+    "forecast": {
+      "days": [
+        {
+          "periods": [
+            {
+              "start": "2009-01-02T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "monthAndDay": "Mon 1",
+              "dayName": "Gooberday",
+              "data": {
+                "temperature": {
+                  "degF": 100
+                }
+              }
+            },
+            {
+              "isDaytime": false,
+              "isOvernight": false,
+              "monthAndDay": "Mon2",
+              "dayName": "T.Hanksgiving",
+              "data": {
+                "temperature": {
+                  "degF": 30
+                }
+              }
+            }
+          ],
+          "hours": [
+            {
+              "hour": "4am",
+              "apparentTemperature": { "degF": 45 },
+              "temperature": { "degF": 49 },
+              "probabilityOfPrecipitation": { "percent": 27 },
+              "dewpoint": { "degF": 88 },
+              "relativeHumidity": { "percent": 400 },
+              "windSpeed": { "mph": 3 },
+              "windGust": { "mph": 175 },
+              "windDirection": "yonder"
+            },
+            {
+              "apparentTemperature": { "degF": 48 },
+              "temperature": { "degF": 51 },
+              "probabilityOfPrecipitation": { "percent": 13 },
+              "dewpoint": { "degF": 9 },
+              "relativeHumidity": { "percent": 35 },
+              "windSpeed": { "mph": 9 },
+              "windGust": { "mph": 4 },
+              "windDirection": "north"
+            }
+          ],
+          "maxPop": 3,
+          "alerts": {
+            "metadata": { "count": 0 }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": false,
+            "periods": [
+              {
+                "startHour": "2am",
+                "endHour": "4am",
+                "liquid": { "in": 3 }
+              },
+              {
+                "startHour": "4am",
+                "endHour": "7am",
+                "liquid": { "in": 0.03 }
+              }
+            ]
+          }
+        },
+        {
+          "periods": [
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": false,
+              "isOvernight": false,
+              "monthAndDay": "Tue 1",
+              "dayName": "Mocktober",
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": null,
+          "alerts": {
+            "metadata": { "count": 0 }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": false,
+            "periods": []
+          }
+        },
+        {
+          "periods": [
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": false,
+              "isOvernight": true,
+              "monthAndDay": "Tue 1",
+              "dayName": "Mocktober",
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            },
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "monthAndDay": "Tue 1",
+              "dayName": "Mocktober",
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            },
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": false,
+              "isOvernight": false,
+              "monthAndDay": "Tue 1",
+              "dayName": "Mocktober",
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": 30,
+          "alerts": {
+            "metadata": { "count": 0 }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": false,
+            "periods": []
+          }
+        }
+      ]
+    }
+  },
+  "snow_noice_alert_noalertlevel": {
+    "forecast": {
+      "days": [
+        {
+          "periods": [
+            {
+              "start": "2009-01-02T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "monthAndDay": "Mon 1",
+              "dayName": "Gooberday",
+              "data": {
+                "temperature": {
+                  "degF": 100
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": 3,
+          "alerts": {
+            "metadata": {
+              "count": 1,
+              "highest": ""
+            }
+          },
+          "qpf": {
+            "hasSnow": true,
+            "hasIce": false,
+            "periods": [
+              {
+                "startHour": "2am",
+                "endHour": "4am",
+                "liquid": { "in": 3 },
+                "snow": { "in": 17 }
+              },
+              {
+                "startHour": "4am",
+                "endHour": "7am",
+                "liquid": { "in": 0.03 },
+                "snow": { "in": 4 }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "nosnow_ice_alert": {
+    "forecast": {
+      "days": [
+        {
+          "periods": [
+            {
+              "start": "2009-01-02T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "monthAndDay": "Mon 1",
+              "dayName": "Gooberday",
+              "data": {
+                "temperature": {
+                  "degF": 100
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": 3,
+          "alerts": {
+            "metadata": {
+              "count": 1,
+              "highest": "warning"
+            }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": true,
+            "periods": [
+              {
+                "startHour": "2am",
+                "endHour": "4am",
+                "liquid": { "in": 3 },
+                "ice": { "in": 3 }
+              },
+              {
+                "startHour": "4am",
+                "endHour": "7am",
+                "liquid": { "in": 0.03 },
+                "ice": { "in": 6 }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
