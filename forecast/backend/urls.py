@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.urls import include, path, register_converter
+from django.views.generic.base import TemplateView
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -28,6 +29,7 @@ urlpatterns = [
     path("point/<float:lat>/<float:lon>/", views.point_location, name="point"),
     path("place/<state>/<place>/", views.place_forecast, name="place forecast"),
     path("health/", views.health, name="health"),
+    path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]
 
 if settings.DEBUG is True:
