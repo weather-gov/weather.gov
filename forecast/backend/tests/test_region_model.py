@@ -17,17 +17,10 @@ class RegionModelTests(TestCase):
             wfo = WFO(name=name, code=code, region=region)
             wfo.save()
 
-    def test_region_name(self):
-        """Ensure that we have the correct supplied name."""
-        expected = "FAKE REGION"
-        region = Region.objects.first()
-
-        self.assertEqual(expected, region.name)
-
     def test_all_valid_in_region(self):
-        """Ensure that all the correct WFOs are in the region."""
-        region = Region.objects.first()
-        wfos = region.wfos.all()
+        """Ensure that all the fake WFOs are in the fake region."""
+        region = Region.objects.get(name="FAKE REGION")
+        wfos = region.wfos.filter(name__contains="FAKE WFO")
         for wfo in wfos:
             self.assertEqual(region, wfo.region)
 
