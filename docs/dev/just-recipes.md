@@ -37,7 +37,6 @@ The recipes are also listed here:
 | ----------------------- | --------------------------------------------------------------------- |
 | `just create-superuser` | Creates a Wagtail superuser. Run and follow the provided instructions |
 | `just django-restart`   | Restarts the Django contianer.                                        |
-| `just load-cms-data`    | Loads the initial CMS data.                                           |
 | `just make-migrations`  | Generates Django migrations based on model changes.                   |
 | `just migrate`          | Runs Django migrations.                                               |
 | `just shell`            | Opens a Python shell inside the Django container.                     |

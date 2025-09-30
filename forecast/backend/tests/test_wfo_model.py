@@ -16,7 +16,7 @@ class WFOModelTests(TestCase):
 
     def test_wfo_default_weight(self):
         """Ensure we have the default value for the weight."""
-        wfo = WFO.objects.all()[0]
+        wfo = WFO.objects.get(code="FFF")
         expected = 0
         actual = wfo.weight
 
@@ -24,19 +24,19 @@ class WFOModelTests(TestCase):
 
     def test_wfo_name(self):
         """Ensure we have the correct name given."""
-        wfo = WFO.objects.all()[0]
+        wfo = WFO.objects.get(code="FFF")
 
         self.assertEqual("FAKE WFO", wfo.name)
 
     def test_wfo_code(self):
         """Ensure we have the correct code given."""
-        wfo = WFO.objects.all()[0]
+        wfo = WFO.objects.get(name="FAKE WFO")
 
         self.assertEqual("FFF", wfo.code)
 
     def test_wfo_region(self):
         """Ensure that we have the expected region parent/relation."""
-        wfo = WFO.objects.all()[0]
+        wfo = WFO.objects.get(code="FFF")
         region = wfo.region
 
         self.assertEqual("FAKE REGION", region.name)

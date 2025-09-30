@@ -39,12 +39,6 @@ make-migrations:
 migrate:
   docker compose exec web python manage.py migrate
 
-# Load all static CMS data into Wagtail
-[group("django management")]
-load-cms-data:
-  docker compose exec web python manage.py loaddata backend/wfo_model_dump.json
-  docker compose exec web python manage.py loaddata backend/dynamic_safety_info_dump.json
-
 # Restart Django
 [group("django management")]
 django-restart:
@@ -185,7 +179,7 @@ test-web-components:
 ##### Dev environment management #####
 # Starts up all the containers, prepares the databases, and loads initial data
 [group("dev environment management")]
-init: && migrate load-cms-data load-spatial django-restart
+init: && migrate load-spatial django-restart
   docker compose up -d
   sleep 15
 
