@@ -150,6 +150,12 @@ def get_point_forecast(lat, lon):
     return _process_interop_data(data)
 
 
+def get_health():
+    """Fetch the interop health status."""
+    url = "/"
+    return _fetch(url)
+
+
 def get_wx_afd_by_id(afd_id):
     """
     Fetch an Area Forecast Discussion by ID.

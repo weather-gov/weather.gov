@@ -209,4 +209,7 @@ def wx_afd_versions(_, wfo):
 
 def health(_request):
     """Return app status for Terraform health checks."""
-    return HttpResponse('<html lang="en"><head><title>OK - weather.gov</title></head><body>OK</body>')
+    response = interop.get_health()
+    if "ok" in response and response["ok"]:
+        return HttpResponse("OK")
+    return HttpResponse("Interop layer is unavailable.", status=503)
