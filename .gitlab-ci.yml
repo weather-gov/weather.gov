@@ -98,7 +98,7 @@ write-release-notes:
     paths:
       - release_notes.md
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^beta-v\d+\.\d+\.\d+$/'
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
 
 # create a release (in GitLab) and store the release notes in CHANGELOG.md (via GitLab's API)
 make-tagged-release:
@@ -115,7 +115,7 @@ make-tagged-release:
     tag_name: '$CI_COMMIT_TAG'
     ref: '$CI_COMMIT_SHA'
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^beta-v\d+\.\d+\.\d+$/'
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
 
 # deploy to prod/beta automatically on a beta version tag (like `beta-v1.3.5`) or manually from the GitLab New Pipeline page
 deploy-to-prod:
@@ -130,7 +130,7 @@ deploy-to-prod:
     # - terraform --version
     - echo We deployed to $[[ inputs.deploy-to-environment ]]!
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^beta-v\d+\.\d+\.\d+$/'
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "prod" && "$[[ inputs.confirm-beta-deploy ]]" == "YES"
 
 # deploy to staging manually from the GitLab New Pipeline page

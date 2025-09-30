@@ -6,11 +6,16 @@ Go to [Code > Tags > New Tag](https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/
 
 You'll see 3 fields.
 
-> Tag name:
-> Create from: main
-> Message:
+```
+Tag name:
+Create from: main
+Message:
+```
 
-The `Tag name` must start with `beta-v`, followed by the major, minor, and point versions. For example: `beta-v1.12.0`.
+The `Tag name` must be "vN.N.N-beta". That's "v", followed by 3 numbers seperated by dots, followed by "-beta". These numbers are the major, minor, and point versions. For example: `v1.12.0-beta`.
+
+   > [!NOTE]
+   > GitLab can't support the `beta-vN.N.N` convention we previously used. See [this issue](https://gitlab.com/gitlab-org/gitlab/-/issues/420041) from their issue tracker for more information.
 
 Leave `Create from` set to `main`.
 
