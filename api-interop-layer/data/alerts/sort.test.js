@@ -53,7 +53,8 @@ describe("alert sorting", () => {
           { onset, metadata: { priority: 1 }, finish: dayjs().add(1, "hour") },
         );
 
-        expect(actual).to.equal(expected);
+        const failure_message = "This test is flake-y. Re-run it."
+        expect(actual, failure_message).to.equal(expected);
       });
     });
   });
