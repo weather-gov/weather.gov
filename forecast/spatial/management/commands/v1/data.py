@@ -136,7 +136,7 @@ def load_cwas():
 
     __load_from_shapefile(
         model=WeatherCountyWarningAreas,
-        url="https://www.weather.gov/source/gis/Shapefiles/County/w_18mr25.zip",
+        url="https://www.weather.gov/source/gis/Shapefiles/WSOM/w_18mr25.zip",
         type="county warning area",
         callback_get_unique=getid,
         callback_get_unique_query=getquery,
