@@ -48,13 +48,18 @@ describe("alert sorting", () => {
 
       it("if they end at the same time, they are not sorted", () => {
         const expected = 0;
+        // Use the same exact finish value for both in order to guarantee
+        // equality. If we create these objects independently, there's a small
+        // but nonzero chance they will represent different times and this
+        // test will fail.
+        const finish = dayjs().add(1, "hour");
+
         const actual = alertSort(
-          { onset, metadata: { priority: 1 }, finish: dayjs().add(1, "hour") },
-          { onset, metadata: { priority: 1 }, finish: dayjs().add(1, "hour") },
+          { onset, metadata: { priority: 1 }, finish },
+          { onset, metadata: { priority: 1 }, finish },
         );
 
-        const failure_message = "This test is flake-y. Re-run it."
-        expect(actual, failure_message).to.equal(expected);
+        expect(actual).to.equal(expected);
       });
     });
   });
@@ -143,16 +148,23 @@ describe("alert sorting", () => {
 
         it("if they end at the same time, they are not sorted", () => {
           const expected = 0;
+
+          // Use the same exact finish value for both in order to guarantee
+          // equality. If we create these objects independently, there's a small
+          // but nonzero chance they will represent different times and this
+          // test will fail.
+          const finish = dayjs().add(1, "hour");
+
           const actual = alertSort(
             {
               onset,
               metadata: { priority: 1 },
-              finish: dayjs().add(1, "hour"),
+              finish,
             },
             {
               onset,
               metadata: { priority: 1 },
-              finish: dayjs().add(1, "hour"),
+              finish,
             },
           );
 
