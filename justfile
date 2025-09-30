@@ -145,6 +145,15 @@ test-a11y:
     playwright \
     npx playwright test --output /reports/a11y a11y
 
+# Run Django tests
+[group("testing")]
+test-django:
+  docker compose \
+    run --rm \
+    -v "{{justfile_directory()}}/reports/django":"/reports" \
+    web \
+    bash -c "coverage run manage.py test backend spatial && coverage html -d /reports"
+
 alias ee := test-e2e
 # Run end-to-end browser testing in Playwright
 [group("testing")]
