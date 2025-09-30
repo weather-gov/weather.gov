@@ -1,6 +1,5 @@
 from django.contrib.gis.db import models
-
-# Create your models here.
+from django.db.models import JSONField
 
 
 class WeatherZone(models.Model):
@@ -78,7 +77,7 @@ class WeatherAlertsCache(models.Model):
     """Represents a processed alert."""
 
     hash = models.TextField()
-    alertjson = models.TextField()
+    alertjson = JSONField()
     shape = models.GeometryField(null=True)
     alertkind = models.TextField(null=True, default=None)
 
