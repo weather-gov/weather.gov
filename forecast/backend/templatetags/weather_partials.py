@@ -154,8 +154,11 @@ def wind_speed_direction(**kwargs):
         direction_name = direction["cardinalLong"].lower()
 
     # Get the name of the directional i18n message
-    msg_name = f"wind.labels.speed-from-{direction_name}"
-    sr_content = _(msg_name).format({"speed": speed})
+    sr_content = ""
+
+    if has_speed and has_direction:
+        msg_name = f"wind.labels.speed-from-{direction_name}.01"
+        sr_content = _(msg_name).format(speed=speed["mph"])
 
     return {
         "speed": speed,
@@ -234,7 +237,7 @@ def weather_icon(icon_name, size="sm", color_mode="light", **kwargs):
         "attrs": {
             "role": "img",
         },
-   }
+    }
 
     # Additional kwargs will be interpreted as
     # additional html attribute values on the wrapping
