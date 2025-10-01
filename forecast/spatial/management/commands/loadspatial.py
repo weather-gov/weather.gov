@@ -19,16 +19,17 @@ class Command(BaseCommand):
 
     def version_1(self, load_options):
         """Load version 1 of spatial data."""
+        force = load_options["force"]
         if load_options["states"] or load_options["all"]:
-            load_states()
+            load_states(force=force)
         if load_options["cwas"] or load_options["all"]:
-            load_cwas()
+            load_cwas(force=force)
         if load_options["counties"] or load_options["all"]:
-            load_counties()
+            load_counties(force=force)
         if load_options["zones"] or load_options["all"]:
-            load_zones()
+            load_zones(force=force)
         if load_options["places"] or load_options["all"]:
-            load_places()
+            load_places(force=force)
 
     def add_arguments(self, parser):
         """Define arguments for the management command."""
@@ -52,6 +53,10 @@ class Command(BaseCommand):
             dest="places",
             default=False,
         )
+        parser.add_argument(
+            "--force",
+            default=False,
+        )
 
     def handle(self, *args, **options):
         """Handle the loadspatial management command."""
@@ -66,8 +71,9 @@ class Command(BaseCommand):
             and not options["zones"]
             and not options["counties"]
             and not options["places"],
+            "force": options["force"],
         }
 
         os.makedirs(cache_path, exist_ok=True)
 
-        self.version_1(load_options=load)
+        self.version_1(load)

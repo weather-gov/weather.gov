@@ -87,8 +87,12 @@ def __load_from_shapefile(  # noqa PLR0913
     print(f"  :: loaded {str(model.objects.count())} entities")
 
 
-def load_states():
+def load_states(force=False):
     """Load state data."""
+    if WeatherStates.objects.count() and not force:
+        print("States are already loaded. Pass --force to re-create.")
+        return
+
     WeatherStates.objects.all().delete()
 
     def getid(feature):
@@ -115,8 +119,12 @@ def load_states():
     )
 
 
-def load_cwas():
+def load_cwas(force=False):
     """Load county warning area data."""
+    if WeatherCountyWarningAreas.objects.count() and not force:
+        print("CWAs are already loaded. Pass --force to re-create.")
+        return
+
     WeatherCountyWarningAreas.objects.all().delete()
 
     def getid(feature):
@@ -203,8 +211,12 @@ def __get_countyname(feature):
     return countyname
 
 
-def load_counties():
+def load_counties(force=False):
     """Load county data."""
+    if WeatherCounties.objects.count() and not force:
+        print("Counties are already loaded. Pass --force to re-create.")
+        return
+
     WeatherCounties.objects.all().delete()
 
     # Counties are uniquely defined by their 3-digit FIPS code PLUS their state.
@@ -254,8 +266,12 @@ def load_counties():
     )
 
 
-def load_zones():
+def load_zones(force=False):
     """Load zone data."""
+    if WeatherZone.objects.count() and not force:
+        print("Zones are already loaded. Pass --force to re-create.")
+        return
+
     WeatherZone.objects.all().delete()
 
     zonetypes = [
@@ -372,8 +388,12 @@ def __get_county_fips(place):
     return None
 
 
-def load_places():
+def load_places(force=False):
     """Load place data."""
+    if WeatherPlace.objects.count() and not force:
+        print("Places are already loaded. Pass --force to re-create.")
+        return
+
     print("loading places")
     WeatherPlace.objects.all().delete()
 
