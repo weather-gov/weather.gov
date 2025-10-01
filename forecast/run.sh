@@ -17,4 +17,7 @@ set -o pipefail
 # Ensure that styles and static assets can be served up via STATIC_ROOT.
 ./manage.py collectstatic --noinput --traceback
 
+# Ensure that spatial data is loaded.
+./manage.py loadspatial
+
 gunicorn --workers=3 --worker-class=gevent backend.config.wsgi -t 60
