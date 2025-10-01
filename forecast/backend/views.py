@@ -102,7 +102,7 @@ def place_forecast(request, state, place):
 
 def offices(request):
     """Render a list of all WFOs. This is a debug route."""
-    if settings.DEBUG:
+    if not settings.DEBUG:
         raise Http404()
     regions = []
     for region in Region.objects.all():
