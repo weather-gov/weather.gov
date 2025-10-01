@@ -1,0 +1,219 @@
+from unittest import mock
+
+from django.contrib.gis.geos import GEOSGeometry
+from django.test import TestCase
+
+import spatial.models as spatial
+from backend import models
+
+
+class TestViews(TestCase):
+    """Tests our Django views."""
+
+    def setUp(self):
+        """Test setup."""
+        self.region = models.Region.objects.create(name="Test Region")
+        self.wfo = models.WFO.objects.create(
+            code="TST",
+            name="Test WFO",
+            region=self.region,
+        )
+        models.WFO.objects.create(
+            code="AAA",
+            name="Alphabet Start",
+            region=self.region,
+        )
+        models.WFO.objects.create(
+            code="ZZZ",
+            name="Alphabet End",
+            region=self.region,
+        )
+        spatial.WeatherPlace.objects.create(
+            name="Hoboken",
+            state="NJ",
+            point=GEOSGeometry("POINT(30 30)"),
+        )
+        spatial.WeatherPlace.objects.create(
+            name="New York",
+            state="NY",
+            point=GEOSGeometry("POINT(30 30)"),
+        )
+
+    def test_index(self):
+        """Test the index view."""
+        response = self.client.get("/")
+        self.assertTemplateUsed(response, "weather/index.html")
+
+    @mock.patch("backend.views.interop.get_point_forecast")
+    def test_point_location(self, mock_get_point_forecast):
+        """Test the point location view."""
+        mock_get_point_forecast.return_value = {"grid": {"wfo": "TST"}}
+
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertEqual(
+            response.context["point"],
+            {
+                "grid": {"wfo": "TST"},
+                "wfo": self.wfo,
+            },
+        )
+
+    def test_place_unknown(self):
+        """Test the place location view with an unknown place."""
+        response = self.client.get("/place/NJ/Not_Hoboken/")
+        self.assertEqual(response.status_code, 404)
+
+    @mock.patch("backend.views.interop.get_point_forecast")
+    def test_place_redirect_state(self, mock_get_point_forecast):
+        """Test the place location view where the state needs redirection."""
+        mock_get_point_forecast.return_value = {"grid": {"wfo": "TST"}}
+        response = self.client.get("/place/nj/Hoboken/")
+        self.assertRedirects(response, "/place/NJ/Hoboken/")
+
+    @mock.patch("backend.views.interop.get_point_forecast")
+    def test_place_redirect_place(self, mock_get_point_forecast):
+        """Test the place location view where the place name needs redirection."""
+        mock_get_point_forecast.return_value = {"grid": {"wfo": "TST"}}
+        response = self.client.get("/place/NY/New York/")
+        self.assertRedirects(response, "/place/NY/New_York/")
+
+    @mock.patch("backend.views.interop.get_point_forecast")
+    def test_place(self, mock_get_point_forecast):
+        """Test the place location view where the place name needs redirection."""
+        mock_get_point_forecast.return_value = {"grid": {"wfo": "TST"}}
+        response = self.client.get("/place/NJ/Hoboken/")
+        self.assertTemplateUsed(response, "weather/point.html")
+
+        # These values should come from the WeatherPlace model
+        mock_get_point_forecast.assert_called_once_with(30, 30)
+        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertEqual(
+            response.context["point"],
+            {
+                "grid": {"wfo": "TST"},
+                "wfo": self.wfo,
+            },
+        )
+
+    def test_office_specific(self):
+        """Test the specific-office view."""
+        response = self.client.get("/offices/TST", follow=True)
+        self.assertTemplateUsed(response, "weather/office.html")
+        self.assertEqual(response.context["office"], self.wfo)
+
+    def test_afd_index_with_wfo_changed(self):
+        """Tests getting the AFD index where the WFO changed."""
+        response = self.client.get("/afd/?wfo=WFO")
+        self.assertRedirects(
+            response,
+            "/afd/wfo",
+            fetch_redirect_response=False,
+        )
+
+    def test_afd_index_with_afd_changed(self):
+        """Tests getting the AFD index where the AFD changed."""
+        response = self.client.get("/afd/?wfo=WFO&id=AFD&current-wfo=WFO")
+        self.assertRedirects(
+            response,
+            "/afd/wfo/AFD",
+            fetch_redirect_response=False,
+        )
+
+    def test_afd_index_with_wfo_and_afd_changed(self):
+        """Tests getting the AFD index where the WFO and AFD changed."""
+        response = self.client.get("/afd/?wfo=WFO&id=AFD")
+        self.assertRedirects(
+            response,
+            "/afd/wfo/AFD",
+            fetch_redirect_response=False,
+        )
+
+    @mock.patch("backend.views.interop.get_wx_afd_versions")
+    @mock.patch("backend.views.interop.get_wx_afd_by_id")
+    def test_afd_index(self, mock_get_wx_afd_by_id, mock_get_wx_afd_versions):
+        """Tests getting the AFD index."""
+        mock_get_wx_afd_versions.return_value = {"@graph": [{"id": "afd_id"}]}
+        mock_get_wx_afd_by_id.return_value = {"issuingOffice": "KTST"}
+
+        response = self.client.get("/afd/")
+        self.assertRedirects(
+            response,
+            "/afd/tst/afd_id",
+            fetch_redirect_response=False,
+        )
+
+    @mock.patch("backend.views.interop.get_wx_afd_versions_by_wfo")
+    def test_afd_by_office_exception(self, mock_get_wx_afd_versions_by_wfo):
+        """Test getting an AFD by office where the office is unknown."""
+        mock_get_wx_afd_versions_by_wfo.side_effect = models.WFO.DoesNotExist()
+        response = self.client.get("/afd/TST/")
+        self.assertEqual(response.status_code, 404)
+
+    @mock.patch("backend.views.interop.get_wx_afd_versions_by_wfo")
+    def test_afd_by_office(self, mock_get_wx_afd_versions_by_wfo):
+        """Test getting an AFD by office."""
+        mock_get_wx_afd_versions_by_wfo.return_value = {"@graph": [{"id": "magic_afd"}]}
+        response = self.client.get("/afd/TST/")
+        self.assertRedirects(
+            response,
+            "/afd/tst/magic_afd",
+            fetch_redirect_response=False,
+        )
+
+    @mock.patch("backend.views.interop.get_wx_afd_by_id")
+    def test_afd_by_office_and_id_with_exception(self, mock_get_wx_afd_by_id):
+        """Test getting an AFD by office and ID where there is an exception."""
+        mock_get_wx_afd_by_id.side_effect = models.WFO.DoesNotExist()
+        response = self.client.get("/afd/TST/afd_id/")
+        self.assertEqual(response.status_code, 404)
+
+    @mock.patch("backend.views.interop.get_wx_afd_by_id")
+    def test_afd_by_office_and_id_with_redirect_wfo(self, mock_get_wx_afd_by_id):
+        """Test getting an AFD by office and ID where the WFOs don't match."""
+        mock_get_wx_afd_by_id.return_value = {"issuingOffice": "KTST"}
+        response = self.client.get("/afd/BOB/afd_id/")
+        self.assertRedirects(
+            response,
+            "/afd/bob/",
+            fetch_redirect_response=False,
+        )
+
+    @mock.patch("backend.views.interop.get_wx_afd_by_id")
+    @mock.patch("backend.views.interop.get_wx_afd_versions_by_wfo")
+    def test_afd_by_office_and_id(
+        self,
+        mock_get_wx_afd_versions_by_wfo,
+        mock_get_wx_afd_by_id,
+    ):
+        """Test getting an AFD by office and ID."""
+        mock_get_wx_afd_by_id.return_value = {"issuingOffice": "KBOB"}
+        mock_get_wx_afd_versions_by_wfo.return_value = {"@graph": ["v1", "v2", "v3"]}
+
+        response = self.client.get("/afd/bob/afd_id/")
+
+        self.assertTemplateUsed(response, "weather/afd-page.html")
+
+        # For this view, the context is merged into the larger object instead
+        # of creating a unique key, so we'll need to test each piece
+        # individually rather that comparing the whole thing. (Django puts a lot
+        # more stuff into the context than just what our views provide.)
+        self.assertEqual(response.context["wfo"], "BOB")
+        self.assertEqual(response.context["afd"], {"issuingOffice": "KBOB"})
+        self.assertEqual(response.context["version_list"], ["v1", "v2", "v3"])
+
+    @mock.patch("backend.views.interop.get_health")
+    def test_health_not_okay(self, mock_get_health):
+        """Test the health endpoint returning not okay."""
+        mock_get_health.return_value = "no"
+        response = self.client.get("/health/")
+        self.assertEqual(response.status_code, 503)
+
+    @mock.patch("backend.views.interop.get_health")
+    def test_health__okay(self, mock_get_health):
+        """Test the health endpoint returning okay."""
+        mock_get_health.return_value = {"ok": True}
+        response = self.client.get("/health/")
+        self.assertEqual(response.status_code, 200)
