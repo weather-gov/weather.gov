@@ -87,28 +87,29 @@ workflow:
     - docker build -f Dockerfile.tmp -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG $BUILD_CONTEXT
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
 
-# gather up commits with `Changelog: ...` and assemble them into a markdown file
+# gather up commits which have a `Changelog: ...` trailer and push them to CHANGELOG.md (via GitLab's API)
 write-release-notes:
   stage: notes
   image: alpine:latest
   script:
     - apk add curl jq
-    - 'curl -H "PRIVATE-TOKEN: $CI_API_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/changelog?version=$CI_COMMIT_TAG" | jq -r .notes > release_notes.md'
+    - 'curl -H "PRIVATE-TOKEN: $CI_API_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/changelog?version=$CI_COMMIT_TAG" | jq -r .notes | tee release_notes.md'
+    - 'curl -H "PRIVATE-TOKEN: $CI_API_TOKEN" -X POST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/changelog?branch=changelog&version=$CI_COMMIT_TAG"'
   artifacts:
     paths:
       - release_notes.md
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
 
-# create a release (in GitLab) and store the release notes in CHANGELOG.md (via GitLab's API)
+# create a release (in GitLab) using the markdown release notes from the pervious job
 make-tagged-release:
   stage: release
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  image: registry.gitlab.com/gitlab-org/cli:latest
   needs:
     - job: write-release-notes
       artifacts: true
   script:
-    - 'curl -H "PRIVATE-TOKEN: $CI_API_TOKEN" -X POST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/changelog?version=$CI_COMMIT_TAG"'
+    - echo "Making release $CI_COMMIT_TAG from tag $CI_COMMIT_TAG at commit $CI_COMMIT_SHA."
   release:
     name: '$CI_COMMIT_TAG'
     description: release_notes.md
@@ -146,6 +147,7 @@ deploy-to-staging:
     # - terraform --version
     - echo We deployed to $[[ inputs.deploy-to-environment ]]!
   rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "staging"
 
 # deploy to test manually from the GitLab New Pipeline page
@@ -299,9 +301,6 @@ web-component-and-interop-test:
 dependency-scan:
   stage: test
   image: snyk/snyk:python-3.12
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PIPELINE_SCHEDULE_NAME == "dependencies"
-    - if: $CI_PIPELINE_SOURCE == "push"
   before_script:
     - cd forecast
     - pip install -r requirements.txt
@@ -315,6 +314,9 @@ dependency-scan:
   artifacts:
     reports:
       sast: snyk.json
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PIPELINE_SCHEDULE_NAME == "dependencies"
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 sast:
   stage: test
