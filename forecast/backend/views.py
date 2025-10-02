@@ -100,7 +100,7 @@ def place_forecast(request, state, place):
     raise Http404()
 
 
-def offices(request):
+def offices(request): # pragma: no cover
     """Render a list of all WFOs. This is a debug route."""
     if not settings.DEBUG:
         raise Http404()
