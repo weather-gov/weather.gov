@@ -1,16 +1,28 @@
 [tool.ruff]
 show-fixes = true
 line-length = 120
-exclude = [".venv", "manage.py", "backend/migrations/*","spatial/migrations/*"]
+exclude = [".venv", "manage.py", "backend/migrations/*", "spatial/migrations/*"]
 
 [tool.ruff.lint]
 select = [
     # PyFlakes
     "F",
     # flake8
-    "S", "B", "DJ", "DTZ", "Q", "INT", "RET", "ARG", "ASYNC", "COM", "T20", "PT",
+    "S",
+    "B",
+    "DJ",
+    "DTZ",
+    "Q",
+    "INT",
+    "RET",
+    "ARG",
+    "ASYNC",
+    "COM",
+    "T20",
+    "PT",
     # pycodestyle
-    "E", "W",
+    "E",
+    "W",
     # pydocstyle
     "D",
     # Pylint
@@ -50,7 +62,7 @@ ignore = [
     # 'from module import *' used
     "F403",
     # Module level import not at top of file
-    "E402"
+    "E402",
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -71,3 +83,6 @@ indent = 2
 
 [tool.mypy]
 ignore_missing_imports = true
+
+[tool.coverage.run]
+omit = ["manage.py", "backend/migrations/*.py"]
