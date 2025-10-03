@@ -26,5 +26,15 @@
       "remoteRoot": "/app",
       "localRoot": "${workspaceFolder}/api-interop-layer"
     },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug interop tests",
+      "address": "localhost",
+      "port": 2992,
+      "remoteRoot": "/app",
+      "localRoot": "${workspaceFolder}/api-interop-layer",
+      "continueOnAttach": true
+    },
   ]
 }

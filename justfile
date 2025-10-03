@@ -163,14 +163,29 @@ test-e2e:
   playwright \
   npx playwright test --output /reports/end-to-end e2e
 
+# Test the interop layer. Add "debug" to break for a debugger.
 [group("testing")]
-test-interop:
+[script]
+test-interop arg="":
+  inspect=""
+  if [ "{{arg}}" == "debug" ]; then
+    inspect="--inspect-brk=0.0.0.0:2992"
+  fi
   docker compose \
     run --rm \
     -v "{{justfile_directory()}}/reports/interop":"/reports" \
     -e LOG_LEVEL=silent \
+    -p "2992:2992" \
     api-interop-layer \
-    npx c8 --reporter html --reporter clover -o /reports mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
+    npx c8 --all \
+      --exclude "ecosystem.*.config.cjs" \
+      --exclude "main.js" \
+      --reporter html \
+      --reporter clover -o /reports \
+      mocha '**/*.test.js' \
+        --exclude 'node_modules/**' \
+        --require mocha.js \
+        $inspect
 
 alias wc := test-web-components
 # Run web component testing
