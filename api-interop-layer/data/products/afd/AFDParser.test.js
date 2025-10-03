@@ -292,6 +292,43 @@ describe("AFDParser Tests", () => {
         });
       });
     });
+    describe("#parseTextContent preserves empty strings", () => {
+      it("preserves empty strings", () => {
+        const parser = new AFDParser();
+        const parsed = parser.parseTextContent("");
+        expect(parsed).to.equal("");
+      });
+    });
+    it("#getStructureForTwig", () => {
+      const parser = new AFDParser();
+
+      // Put what we want into the parsed nodes.
+      parser.parsedNodes.push(
+        { type: "epilogue", id: 1 },
+        { type: "preambleCode", id: 2 },
+        { type: "random", id: 3 },
+        { type: "random", id: 4 },
+        { type: "preambleText", id: 5 },
+        { type: "preambleCode", id: 6 },
+      );
+
+      const twig = parser.getStructureForTwig();
+
+      expect(twig).to.eql({
+        preamble: {
+          code: [
+            { type: "preambleCode", id: 2 },
+            { type: "preambleCode", id: 6 },
+          ],
+          text: [{ type: "preambleText", id: 5 }],
+        },
+        body: [
+          { type: "random", id: 3 },
+          { type: "random", id: 4 },
+        ],
+        epilogue: [{ type: "epilogue", id: 1 }],
+      });
+    });
   });
 
   describe("Example tests", () => {

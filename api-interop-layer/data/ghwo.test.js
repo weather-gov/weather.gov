@@ -1,22 +1,21 @@
-import { mock } from "node:test";
+import sinon from "sinon";
 import { expect } from "chai";
 import { getGHWOForWFOAndCounty } from "./ghwo.js";
 
 describe("GHWO risks and images", () => {
-  const mockFetch = ({ status = 200, data = null } = {}) => {
-    mock.method(global, "fetch", async () => ({
-      status,
-      json: async () => data,
-    }));
-  };
+  const sandbox = sinon.createSandbox();
+  const response = { status: 200, json: sandbox.stub() };
 
-  afterEach(() => {
-    mock.reset();
+  beforeEach(() => {
+    response.status = 200;
+    fetch.resolves(response);
+    sandbox.resetBehavior();
+    sandbox.resetHistory();
   });
 
   describe("it passes along HTTP error statuses", () => {
     it("400", async () => {
-      mockFetch({ status: 400 });
+      response.status = 400;
       const out = await getGHWOForWFOAndCounty("ABC", "11111");
 
       expect(out).to.eql({
@@ -26,7 +25,7 @@ describe("GHWO risks and images", () => {
     });
 
     it("404", async () => {
-      mockFetch({ status: 404 });
+      response.status = 404;
       const out = await getGHWOForWFOAndCounty("DEF", "11111");
 
       expect(out).to.eql({
@@ -36,7 +35,7 @@ describe("GHWO risks and images", () => {
     });
 
     it("500", async () => {
-      mockFetch({ status: 500 });
+      response.status = 500;
       const out = await getGHWOForWFOAndCounty("GHI", "11111");
 
       expect(out).to.eql({
@@ -47,7 +46,7 @@ describe("GHWO risks and images", () => {
   });
 
   it("returns a 404 if the county is not returned by the WFO", async () => {
-    mockFetch({ data: { 11111: {}, 22222: {} } });
+    response.json.resolves({ 11111: {}, 22222: {} });
     const out = await getGHWOForWFOAndCounty("ABC", "33333");
 
     expect(out).to.eql({
@@ -57,23 +56,21 @@ describe("GHWO risks and images", () => {
   });
 
   it("returns GHWO data", async () => {
-    mockFetch({
-      data: {
-        counties: {
-          12345: {
-            "1970-01-01T00:00:00-00:00": {
-              ConvectiveWind: 3,
-              FakeOne: 1,
-            },
-            "1970-01-02T00:00:00-00:00": {
-              FakeTwo: 2,
-              "Frost/Freeze": "passthrough",
-              DailyComposite: false,
-            },
-            "1970-01-03T00:00:00-00:00": {
-              Day3: 3,
-              Day4: 4,
-            },
+    response.json.resolves({
+      counties: {
+        12345: {
+          "1970-01-01T00:00:00-00:00": {
+            ConvectiveWind: 3,
+            FakeOne: 1,
+          },
+          "1970-01-02T00:00:00-00:00": {
+            FakeTwo: 2,
+            "Frost/Freeze": "passthrough",
+            DailyComposite: false,
+          },
+          "1970-01-03T00:00:00-00:00": {
+            Day3: 3,
+            Day4: 4,
           },
         },
       },

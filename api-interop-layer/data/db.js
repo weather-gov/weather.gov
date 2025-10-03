@@ -3,7 +3,7 @@ import { sleep } from "../util/sleep.js";
 
 const { Client, Pool } = pg;
 
-const getDatabaseConnectionInfo = () => {
+export const getDatabaseConnectionInfo = () => {
   if (process.env.API_INTEROP_PRODUCTION) {
     // we are in a cloud.gov environment and must retrieve credentials from
     // the VCAP_SERVICES environment variable
@@ -44,11 +44,11 @@ export default async () => {
   const client = await pool
     .connect()
     .catch(() => sleep(5_000))
-        .then(() => pool.connect())
+    .then(() => pool.connect())
     .catch(() => sleep(9_000))
-        .then(() => pool.connect())
+    .then(() => pool.connect())
     .catch(() => sleep(16_000))
-        .then(() => pool.connect());
+    .then(() => pool.connect());
   await client.release();
 
   return pool;
