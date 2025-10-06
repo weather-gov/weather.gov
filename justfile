@@ -222,6 +222,16 @@ stop-plantuml:
 zap: dump-spatial && init
   docker compose down -v
 
+alias scorched-earth := controlled-burn
+# Does what zap does, plus destroys spatial data and docker images
+[group("dev environment management")]
+[script]
+controlled-burn: && init
+  if [[ -f "{{justfile_directory()}}/forecast/spatial/management/commands/__cache/dump.json" ]]; then
+    rm "{{justfile_directory()}}/forecast/spatial/management/commands/__cache/dump.json"
+  fi
+  docker compose down -v --rmi all
+
 # Load just states spatial data.
 [group("spatial data loading")]
 load-states:
