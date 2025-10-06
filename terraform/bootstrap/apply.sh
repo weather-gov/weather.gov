@@ -11,5 +11,9 @@ set -e
 # ensure we're logged in via cli
 cf spaces &> /dev/null || cf login -a api.fr.cloud.gov --sso
 
+echo "=============================================================================================================="
+echo "= Applying the bootstrap module to obtain credentials and read S3 Terraform state"
+echo "=============================================================================================================="
+
 terraform init
 terraform apply "$@"

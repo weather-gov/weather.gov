@@ -84,12 +84,15 @@ if [[ $tfm_needs_init = true ]]; then
   terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.$env" -reconfigure
 fi
 
-echo "=============================================================================================================="
-echo "= Creating a bot deployer for $env"
-echo "=============================================================================================================="
 if [[ "$env" = "staging" ]] || [[ "$env" = "production" ]]; then
+  echo "=============================================================================================================="
+  echo "= Obtaining bot deployer credentials for $env"
+  echo "=============================================================================================================="
   (cd bootstrap && ./apply.sh -var create_bot_secrets_file=true $force)
 else
+  echo "=============================================================================================================="
+  echo "= Creating a bot deployer for $env"
+  echo "=============================================================================================================="
   (cd sandbox-bot && ./run.sh "$env" apply $force)
 fi
 

@@ -23,7 +23,9 @@ resource "cloudfoundry_app" "interop" {
   source_code_hash = data.archive_file.api_src.output_base64sha256
   buildpacks       = ["nodejs_buildpack"]
   strategy         = "rolling"
-  routes           = [{ route = "api-${local.host_name}.${local.domain}" }]
+  routes           = (var.custom_domain_name == null ?
+    [{ route = "api-${local.host_name}.${local.domain}" }]:
+    [{ route = "api-${local.host_name}.app.cloud.gov" }])
   enable_ssh       = true
 
   environment = {
