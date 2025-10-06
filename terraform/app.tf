@@ -9,7 +9,8 @@ data "archive_file" "app_src" {
     "terraform/*",
     "log/*",
     "doc/*",
-    "credentials.json"
+    "credentials.json",
+    ".ruff_cache/*"
   ]
 }
 
@@ -27,7 +28,9 @@ resource "cloudfoundry_app" "app" {
   source_code_hash = data.archive_file.app_src.output_base64sha256
   buildpacks       = ["https://github.com/cloudfoundry/apt-buildpack.git", "python_buildpack"]
   strategy         = "rolling"
-  routes           = [{ route = "${local.host_name}.${local.domain}" }]
+  routes           = (var.custom_domain_name == null ?
+    [{ route = "${local.host_name}.${local.domain}" }] :
+    [{ route = "${local.host_name}.app.cloud.gov" }, { route = "${local.domain}" }])
   enable_ssh       = true
 
   environment = {

@@ -1,3 +1,4 @@
 terraform_users = [
-  "james.tranovich@noaa.gov"
+  "james.tranovich@noaa.gov",
+  "seamus.johnston@noaa.gov"
 ]

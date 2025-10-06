@@ -28,7 +28,7 @@ import {
 }
 
 locals {
-  developer_import_map = "{\"james.tranovich@noaa.gov\":\"d488497b-7e90-43ba-a823-8d67dfdb15a9\"}"
+  developer_import_map = "{\"james.tranovich@noaa.gov\":\"d488497b-7e90-43ba-a823-8d67dfdb15a9\",\"seamus.johnston@noaa.gov\":\"469522ce-6e0b-4a48-9113-95c5974c63c9\"}"
   manager_import_map   = "{}"
 }
 import {
