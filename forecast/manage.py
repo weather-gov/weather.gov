@@ -12,9 +12,16 @@ def main():
     if settings.DEBUG:
         # Check "RUN_MAIN" so we don't keep re-registering the debugger when
         # Django is simply reloading due to file changes or something.
-        if os.environ.get("RUN_MAIN") or os.environ.get("RUN_MAIN"):
+
+        command = sys.argv[1:2].pop()
+
+        if os.environ.get("RUN_MAIN") or os.environ.get("RUN_MAIN") or command == "test":
             import debugpy
             debugpy.listen(("0.0.0.0", int(os.environ.get("DEBUG_PORT", 34235))))
+
+            if os.environ.get("BREAK", None) == "true":
+                debugpy.wait_for_client()
+                debugpy.breakpoint()
 
     try:
         from django.core.management import execute_from_command_line

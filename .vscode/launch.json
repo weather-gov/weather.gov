@@ -17,6 +17,22 @@
       }
     },
     {
+      "name": "Debug Django tests",
+      "type": "debugpy",
+      "request": "attach",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/forecast",
+          "remoteRoot": "/code"
+        }
+      ],
+      "connect": {
+        "port": 34532,
+        "host": "localhost"
+      },
+      "justMyCode": true
+    },
+    {
       "type": "node",
       "request": "attach",
       "name": "Debug interop",
