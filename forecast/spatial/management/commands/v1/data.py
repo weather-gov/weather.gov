@@ -55,34 +55,39 @@ def __load_from_shapefile(  # noqa PLR0913
     # than create a new entity.
     known = set()
 
-    for feature in tqdm(iterable=shapefile[0], ncols=50, leave=False):
-        # Get a unique identifier for this feature.
-        unique = callback_get_unique(feature)
+    try:
+        for feature in tqdm(iterable=shapefile[0], ncols=50, leave=False):
+            # Get a unique identifier for this feature.
+            unique = callback_get_unique(feature)
 
-        # If we've seen it before, add this geometry to it rather than create
-        # a new one.
-        if unique in known:
-            where, parameters = callback_get_unique_query(feature)
-            geometry = feature.geom.json
+            # If we've seen it before, add this geometry to it rather than create
+            # a new one.
+            if unique in known:
+                where, parameters = callback_get_unique_query(feature)
+                geometry = feature.geom.json
 
-            cursor = connection.cursor()
+                cursor = connection.cursor()
 
-            # There's a SQL injection vector here, but considering we control
-            # all of the code associated with it, it seems fine. We are using
-            # parameterization on the actual values from the shapefiles which
-            # mitigates the risk.
-            cursor.execute(
-                f"""UPDATE {table} SET
-                    shape=ST_Union(
-                        shape,
-                        ST_GeomFromGeoJSON(%s))
-                    WHERE {where}""",  # noqa S608
-                [geometry] + parameters,
-            )
-            cursor.close()
-        else:
-            callback_create_model(feature)
-            known.add(unique)
+                # There's a SQL injection vector here, but considering we control
+                # all of the code associated with it, it seems fine. We are using
+                # parameterization on the actual values from the shapefiles which
+                # mitigates the risk.
+                cursor.execute(
+                    f"""UPDATE {table} SET
+                        shape=ST_Union(
+                            shape,
+                            ST_GeomFromGeoJSON(%s))
+                        WHERE {where}""",  # noqa S608
+                    [geometry] + parameters,
+                )
+                cursor.close()
+            else:
+                callback_create_model(feature)
+                known.add(unique)
+
+    except Exception as exc:
+        print(f"  !! error when loading {model.__name__}: {exc}")
+        model.objects.all().delete()
 
     print(f"  :: loaded {str(model.objects.count())} entities")
 
@@ -434,45 +439,50 @@ def load_places(force=False):
         delimiter="\t",
     )
 
-    for csv_place in tqdm(iterable=reader, total=lines, ncols=50, leave=False):
-        # If not a US or populated place, skip it
-        if __is_invalid_place(csv_place):
-            continue
+    try:
+        for csv_place in tqdm(iterable=reader, total=lines, ncols=50, leave=False):
+            # If not a US or populated place, skip it
+            if __is_invalid_place(csv_place):
+                continue
 
-        place = WeatherPlace()
-        place.name = csv_place["name"]
-        place.timezone = csv_place["timezone"]
-        place.countyfips = __get_county_fips(csv_place)
+            place = WeatherPlace()
+            place.name = csv_place["name"]
+            place.timezone = csv_place["timezone"]
+            place.countyfips = __get_county_fips(csv_place)
 
-        # For states, the "state" field is the two-letter abbreviation.
-        # For everywhere else, it's a numeric code, but it turns out in
-        # those cases, the country code is the appropriate "state"
-        # abbreviation, so use that.
-        place.state = (
-            csv_place["state"] if csv_place["country"] == "US" else csv_place["country"]
-        )
-
-        # Create a WKT string in order to create the geometry. We may
-        # also use this WKT string for a county lookup later on.
-        wkt = f"POINT({csv_place['lon']} {csv_place['lat']})"
-        place.point = GEOSGeometry(wkt)
-
-        # And finally grab the state and county names
-        county = WeatherCounties.objects.filter(
-            countyfips__endswith=place.countyfips,
-            state__state=place.state,
-        ).first()
-        if county is not None:
-            place.county = county.countyname
-            place.countyfips = county.countyfips
-            place.statename = county.state.name
-            place.statefips = county.state.fips
-        else:
-            print(
-                f"couldn't get county for FIPS {place.countyfips} ({place.state})",
+            # For states, the "state" field is the two-letter abbreviation.
+            # For everywhere else, it's a numeric code, but it turns out in
+            # those cases, the country code is the appropriate "state"
+            # abbreviation, so use that.
+            place.state = (
+                csv_place["state"] if csv_place["country"] == "US" else csv_place["country"]
             )
 
-        place.save()
+            # Create a WKT string in order to create the geometry. We may
+            # also use this WKT string for a county lookup later on.
+            wkt = f"POINT({csv_place['lon']} {csv_place['lat']})"
+            place.point = GEOSGeometry(wkt)
+
+            # And finally grab the state and county names
+            county = WeatherCounties.objects.filter(
+                countyfips__endswith=place.countyfips,
+                state__state=place.state,
+            ).first()
+            if county is not None:
+                place.county = county.countyname
+                place.countyfips = county.countyfips
+                place.statename = county.state.name
+                place.statefips = county.state.fips
+            else:
+                print(
+                    f"couldn't get county for FIPS {place.countyfips} ({place.state})",
+                )
+
+            place.save()
+    except Exception as exc:
+        model = WeatherPlace
+        print(f"  !! error when loading {model.__name__}: {exc}")
+        model.objects.all().delete()
 
     csvfile.close()
     print(f"loaded {str(WeatherPlace.objects.count())} places")
