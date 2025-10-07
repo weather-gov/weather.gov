@@ -37,7 +37,7 @@ resource "cloudfoundry_app" "app" {
     # NEWRELIC_LICENSE       = var.newrelic_license
     INTEROP_URL            = var.interop_url
     PYTHONUNBUFFERED       = "yup"
-    DJANGO_SETTINGS_MODULE = "backend.config.settings"
+    DJANGO_SETTINGS_MODULE = "backend.config.settings.production"
     DJANGO_BASE_URL        = coalesce(var.custom_domain_name, "app.cloud.gov")
     DJANGO_LOG_LEVEL       = "INFO"
     DJANGO_LOG_FORMAT      = "console"

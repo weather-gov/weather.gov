@@ -11,44 +11,33 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
-import subprocess
 from pathlib import Path
 
 import environs
-from cfenv import AppEnv  # type: ignore
+
+SETTINGS_TYPE = "base"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environs.Env()
-cloudgov_space = env("CLOUDGOV_SPACE", "test")
-
-# Get secrets from Cloud.gov user provided service, if exists
-# If not, get secrets from environment variables
-key_service = AppEnv().get_service(name=f"{cloudgov_space}-credentials")
-rds_service = AppEnv().get_service(name=f"weathergov-rds-{cloudgov_space}")
-
-if key_service and key_service.credentials:
-    secret = key_service.credentials.get
-else:
-    secret = env
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-secret_key = secret("django_secret_key")
+# Only suitable for dev environments.
+# Descendant settings files should override as needed
+SECRET_KEY = env("django_secret_key")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secret_key
-
+# Set the DEBUG setting based on the DJANGO_DEBUG env
+# variable value
 # SECURITY WARNING: don't run with debug turned on in production!
 env_debug = env.bool("DJANGO_DEBUG", default=False)
 DEBUG = env_debug
 
-ALLOWED_HOSTS = [
-    "weathergov-test.app.cloud.gov",
-    "weathergov-staging.app.cloud.gov",
-    "beta.weather.gov",
-]
+# Default is empty.
+# This should be redefined or appended
+# to in any descendant settings files
+ALLOWED_HOSTS = []
 
 ALLOWED_CIDR_NETS = ["10.0.0.0/8"]
 
@@ -131,75 +120,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.config.wsgi.application"
 
-def find_cloudgov_library(name):
-    """
-    Find the cloud.gov apt installed library.
-
-    In cloud.gov, buildpacks install their dependencies in
-    `/home/vcap/deps`; since the apt buildpack is configured to run first, we
-    search in `/home/vcap/deps/0/lib` for the libraries we need. (`/1` is
-    for the python buildpack, which runs second)
-    """
-    apt_library_dir = "/home/vcap/deps/0/lib"
-    ls_output = subprocess.run(["/bin/ls", "-1", apt_library_dir], check=True, capture_output=True) # noqa: S603 (no untrusted input)
-    ls_list = ls_output.stdout.decode("utf8").split("\n")
-    lib_entry = [entry for entry in ls_list if entry.strip().startswith(name)]
-    if lib_entry:
-        return f"{apt_library_dir}/{lib_entry[0].strip()}"
-    return None
-
-def find_cloudgov_proj_resources(name):
-    """Find the cloud.gov apt installed PROJ resources.
-
-    PROJ bundles preconfigured transformations and default parameters that need
-    to be passed in for coordinate reference systems to work.
-    """
-    apt_library_dir = "/home/vcap/deps/0/"
-    find_output = subprocess.run(["/bin/find", apt_library_dir], check=True, capture_output=True) # noqa: S603 (no untrusted input)
-    find_list = find_output.stdout.decode("utf8").split("\n")
-    resource_entry = [entry for entry in find_list if entry.strip().endswith(name)]
-    if resource_entry:
-        return os.path.dirname(resource_entry[0])
-    return None
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-if rds_service and rds_service.credentials:
-    db_credentials = rds_service.credentials
-    # NB: Jammy (Ubuntu LTS) has slightly older versions than in our images.
-    # GEOS_LIBRARY_PATH = "/home/vcap/deps/0/lib/libgeos_c.so.1"
-    # GDAL_LIBRARY_PATH = "/home/vcap/deps/0/lib/libgdal.so.30"
-    GEOS_LIBRARY_PATH = find_cloudgov_library("libgeos")
-    GDAL_LIBRARY_PATH = find_cloudgov_library("libgdal")
-    # we need to tell PROJ where its resources can be found. so let's look for
-    # the projection database and return the basedir. typically this is at
-    # /home/vcap/deps/0/apt/usr/share/proj/
-    os.environ["PROJ_LIB"] = find_cloudgov_proj_resources("proj.db")
-
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.contrib.gis.db.backends.postgis",
-            "NAME": db_credentials["name"],
-            "USER": db_credentials["username"],
-            "PASSWORD": db_credentials["password"],
-            "HOST": db_credentials["host"],
-            "PORT": db_credentials["port"],
-        },
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.contrib.gis.db.backends.postgis",
-            "NAME": os.environ.get("POSTGRES_DB"),
-            "USER": os.environ.get("POSTGRES_USER"),
-            "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-            "HOST": "database",
-            "PORT": 5432,
-        },
-    }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -248,6 +168,19 @@ STATIC_ROOT = BASE_DIR / "frontend" / "public"
 STATICFILES_DIRS = [
     BASE_DIR / "frontend" / "assets",
 ]
+
+# Database
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+DATABASES = {
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": "database",
+        "PORT": 5432,
+    },
+}
 
 
 # Wagtail related settings
@@ -384,9 +317,3 @@ if DEBUG:
         "127.0.0.1",
         "::1",
     ]
-
-    # allow dev laptop and docker-compose network to connect
-    ALLOWED_HOSTS += ("localhost", "web", "0.0.0.0") # noqa: S104 (DEBUG is never turned on in prod)
-    SECURE_SSL_REDIRECT = False
-    SECURE_HSTS_PRELOAD = False
-    SECURE_CROSS_ORIGIN_OPENER_POLICY = "localhost"
