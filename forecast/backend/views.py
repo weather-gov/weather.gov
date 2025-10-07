@@ -68,7 +68,8 @@ def place_forecast(request, state, place):
     denormalized_place = place.replace("_", " ").replace(",", "/")
 
     known_place = WeatherPlace.objects.filter(
-        state__iexact=state, name__iexact=denormalized_place,
+        state__iexact=state,
+        name__iexact=denormalized_place,
     ).first()
 
     # If this is a place we know about...
@@ -79,11 +80,7 @@ def place_forecast(request, state, place):
 
         # If the input name is not normalized, or if the input state or name
         # do not exactly match the known place, redirect to the normalized URL
-        do_redirect = (
-            normalize_redirect
-            or known_place.state != state
-            or known_place.name != denormalized_place
-        )
+        do_redirect = normalize_redirect or known_place.state != state or known_place.name != denormalized_place
 
         if do_redirect:
             # Get the expected place name from the model so the capitalization
@@ -100,7 +97,7 @@ def place_forecast(request, state, place):
     raise Http404()
 
 
-def offices(request): # pragma: no cover
+def offices(request):  # pragma: no cover
     """Render a list of all WFOs. This is a debug route."""
     if not settings.DEBUG:
         raise Http404()
@@ -207,9 +204,65 @@ def wx_afd_versions(_, wfo):
     markup = render_to_string("weather/wx/afd-versions-select.html", {"version_list": data["@graph"]})
     return HttpResponse(markup, content_type="text/html")
 
+
 def health(_request):
     """Return app status for Terraform health checks."""
     response = interop.get_health()
     if "ok" in response and response["ok"]:
         return HttpResponse("OK")
     return HttpResponse("Interop layer is unavailable.", status=503)
+
+
+# The exception argument is required, but we don't use it so don't QA it.
+def handle_404(request, exception=None):  # noqa ARG001
+    """Handle 404 errors."""
+    context = {}
+
+    # If there is a resolver match, then one of our handlers raised this 404.
+    # There may be some special handling we can do.
+    if request.resolver_match:
+        view = request.resolver_match.view_name
+
+        # For place forecasts, we might be able to find an alternative to
+        # suggest to the user.
+        if view == "place forecast":
+            # Denormalize, just in case.
+            place = request.resolver_match.kwargs["place"].replace("_", " ").replace(",", "/")
+            state = request.resolver_match.kwargs["state"].upper()
+
+            # Add the place that was requested to the context so we can access
+            # it in the template.
+            context["requested"] = {
+                "place": place,
+                "state": state.upper(),
+            }
+
+            # See if we have any near matches. If we do, we can suggest it.
+            maybe_place = WeatherPlace.get_nearest_match(state, place)
+            if maybe_place:
+                context["suggested"] = {
+                    "place": f"{maybe_place.name}, {maybe_place.state}",
+                    "url": "/"
+                    + request.resolver_match.route.replace(
+                        "<state>",
+                        maybe_place.state,
+                    ).replace(
+                        "<place>",
+                        maybe_place.name.replace(" ", "_").replace("/", ","),
+                    ),
+                }
+
+            return render(
+                request,
+                "errors/404/place-forecast.html",
+                context=context,
+                status=404,
+            )
+
+    # If we didn't render any other 404 handlers, render the generic one.
+    return render(
+        request,
+        "errors/404/generic.html",
+        context=context,
+        status=404,
+    )

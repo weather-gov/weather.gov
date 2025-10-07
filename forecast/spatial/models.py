@@ -26,6 +26,41 @@ class WeatherPlace(models.Model):
     timezone = models.TextField(null=True)
     point = models.PointField()
 
+    @staticmethod
+    def get_nearest_match(state, place):
+        """Attempt to get a place with a similar state/place name."""
+        # We will use the Levenshtein distance on both the state and the place
+        # name to find a place that seems like a probable match.
+        #
+        # The state distance should be less than 2; a distance of 2 or more
+        # means that it it doesn't match either of the actual provided letters
+        # but is instead "nearby" letters, which... seemed wrong.
+        #
+        # Also impose a minimum distance on the place name. Otherwise we could
+        # end up finding a place that is not even remotely close.
+        #
+        # Finally, order by the two distances. We order by state first on the
+        # assumption that either the user typed the state correctly or else the
+        # place name is unique enough within the correct state that it'll float
+        # to the top anyway.
+        maybe = WeatherPlace.objects.raw(
+            """
+            SELECT * FROM weathergov_geo_places
+            WHERE
+                levenshtein(UPPER(state), UPPER(%s)) < 2
+                AND
+                levenshtein(UPPER(name), UPPER(%s)) < 6
+            ORDER BY
+                levenshtein(UPPER(state),UPPER(%s)),
+                levenshtein(UPPER(name),UPPER(%s))
+            LIMIT 1
+            """,
+            [state, place, state, place],
+        )
+
+        # If we got results, return the first one.
+        return maybe[0] if maybe else None
+
     class Meta:  # noqa: D106
         db_table = "weathergov_geo_places"
 
