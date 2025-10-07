@@ -147,12 +147,24 @@ test-a11y:
 
 # Run Django tests
 [group("testing")]
-test-django:
-  docker compose \
-    run --rm \
-    -v "{{justfile_directory()}}/reports/django":"/reports" \
-    web \
-    bash -c "coverage run manage.py test backend spatial && coverage html -d /reports"
+[script]
+test-django arg="":
+  if [ "{{arg}}" == "debug" ]; then
+    docker compose \
+      run --rm \
+      -v "{{justfile_directory()}}/reports/django":"/reports" \
+      -e BREAK=true \
+      -e DEBUG_PORT=34532 \
+      -p "34532:34532" \
+      web \
+      bash -c "coverage run manage.py test backend spatial && coverage html -d /reports"
+  else
+    docker compose \
+      run --rm \
+      -v "{{justfile_directory()}}/reports/django":"/reports" \
+      web \
+      bash -c "coverage run manage.py test backend spatial && coverage html -d /reports"
+  fi
 
 alias ee := test-e2e
 # Run end-to-end browser testing in Playwright
