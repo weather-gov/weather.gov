@@ -9,6 +9,9 @@ from django.contrib.gis.utils import LayerMapping
 
 cache_path = os.path.dirname(os.path.realpath(__file__)) + "/__cache/"
 
+# A list of files added to the cache.
+__cached_files = []
+
 # The following is a list of the two-letter (ISO-3166-alpha2) country
 # codes for the USA and its overseas territories. Note that the
 # territories have their own codes
@@ -52,10 +55,17 @@ class CustomLayerMapping(LayerMapping):
         return kwargs
 
 
+def clean_cache():
+    """Delete any files added to the cache."""
+    [os.remove(cache_path + file) for file in __cached_files]
+
+
 def unzip_cache(filename):
     """Unzip a file stored in the cache directory."""
     with ZipFile(cache_path + filename, "r") as zip:
         zip.extractall(cache_path)
+        # Keep track of the files that we unzipped, for cleanup purposes
+        [__cached_files.append(file) for file in zip.namelist()]
 
 
 def get_shapefile(url):
@@ -69,6 +79,8 @@ def get_shapefile(url):
             with open(fullpath, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):
                     f.write(chunk)
+            # Keep track of any files we download, for cleanup purposes
+            __cached_files.append(filename)
 
     unzip_cache(os.path.basename(fullpath))
     return DataSource(re.sub(r"\.zip$", ".shp", fullpath))
