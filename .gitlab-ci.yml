@@ -40,6 +40,7 @@ variables:
   POSTGRES_USER: drupal
   POSTGRES_PASSWORD: drupal
   POSTGRES_DB: weathergov
+  DJANGO_SETTINGS_MODULE: backend.config.settings.ci
   USE_TAG: main  # in a typical pipeline run, use dependency images built on main
 
 # control when pipelines run and override some parameters

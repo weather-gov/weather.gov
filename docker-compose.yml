@@ -35,6 +35,7 @@ services:
       INTEROP_URL: "http://api-interop-layer:8082/"
       API_URL: "http://api-proxy:8081/"
       DEBUG_PORT: 34235
+      DJANGO_SETTINGS_MODULE: backend.config.settings.dev
     networks:
       - weather.gov
     depends_on:
