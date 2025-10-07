@@ -18,6 +18,6 @@ set -o pipefail
 ./manage.py collectstatic --noinput --traceback
 
 # Ensure that spatial data is loaded.
-./manage.py loadspatial
+./manage.py loadspatial --cleanup
 
 gunicorn --workers=3 --worker-class=gevent backend.config.wsgi -t 60
