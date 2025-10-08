@@ -2,7 +2,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "start": "npx pm2-runtime --watch main.js"
+    "start": "npx pm2-runtime start ecosystem.config.cjs"
   },
   "dependencies": {
     "dayjs": "^1.11.10",
