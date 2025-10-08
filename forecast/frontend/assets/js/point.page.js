@@ -9,3 +9,4 @@ import("./charts/hourly-wind.js");
 import("./charts/hourly-dewpoint.js");
 import("./charts/qpf.js");
 import("./components/quick-forecast-toggle.js");
+import("./components/Satellite.js");

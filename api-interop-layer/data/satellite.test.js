@@ -20,6 +20,7 @@ describe("satellite metadata module", () => {
       const actual = await getSatelliteData({ grid: { wfo: "wfo1" } });
 
       expect(actual).to.eql({
+        latest: "https://cdn.star.nesdis.noaa.gov/WFO/wfo1/GEOCOLOR/latest.jpg",
         gif: "https://cdn.star.nesdis.noaa.gov/WFO/wfo1/GEOCOLOR/GOES18-WFO1-GEOCOLOR-600x600.gif",
         mp4: "https://cdn.star.nesdis.noaa.gov/WFO/wfo1/GEOCOLOR/GOES18-WFO1-GEOCOLOR-600x600.mp4",
       });
@@ -30,6 +31,7 @@ describe("satellite metadata module", () => {
       const actual = await getSatelliteData({ grid: { wfo: "wfo2" } });
 
       expect(actual).to.eql({
+        latest: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/latest.jpg",
         gif: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES19-WFO2-GEOCOLOR-600x600.gif",
         mp4: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES19-WFO2-GEOCOLOR-600x600.mp4",
       });
