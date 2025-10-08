@@ -59,7 +59,7 @@
     {% endfor %}
   </div>
   {% if day.hours|length > 0 %}
-    <div>
+    <div aria-hidden="true">
       {#  Summary Temperature Chart #}
       <div class="wx-chart-wrapper margin-top-0 margin-bottom-4">
         <span class="font-family-mono text-primary-dark usa-sr-only">{{ "hourly-table.labels.temperature.01" | t }}</span>
@@ -93,6 +93,24 @@
           {{  "forecast.current.feels-like.01" | t }}
         </div>
       </div>
+    </div>
+    <div class="sr-only">
+      <table>
+        <thead>
+          <tr>
+            <th>time</th>
+            <th>temperature</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for time,temp in times|zip:temps %}
+          <tr>
+            <td>{{ time }}</td>
+            <td>{{ temp }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   {% endif %}
 </li>
