@@ -42,6 +42,7 @@ urlpatterns = [
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("pages/", include(wagtail_urls)),
+    # Point forecast related, etc
     path("point/<float:lat>/<float:lon>/", views.point_location, name="point"),
     path("place/<state>/<place>/", views.place_forecast, name="place forecast"),
     path("health/", views.health, name="health"),

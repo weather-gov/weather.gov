@@ -10,6 +10,8 @@ import subprocess
 import environs
 from cfenv import AppEnv
 
+from noaa_saml.config import get_cloud_gov_settings
+
 from .base import *  # noqa
 
 SETTINGS_TYPE = "production"
@@ -106,3 +108,8 @@ DATABASES = {
 # Note: might need to join `cms/` to the uri
 # to get the correct admin base url
 WAGTAILADMIN_BASE_URL = AppEnv().uris[0]
+
+
+# SAML Settings
+# See noaa_saml/config.py for details
+SAML_SETTINGS = get_cloud_gov_settings()

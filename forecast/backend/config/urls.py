@@ -23,6 +23,7 @@ import backend.views
 urlpatterns = [
     path("", backend.views.index, name="index"),
     path("", include("backend.urls")),
+    path("", include("noaa_saml.urls")),
     path("admin/", admin.site.urls),
 ]
 
