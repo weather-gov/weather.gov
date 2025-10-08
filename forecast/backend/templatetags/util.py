@@ -48,6 +48,12 @@ def normalize_alert_whitespace(text):
     return mark_safer(text, lambda text: re.sub("(\n)+", "<br />", text))
 
 
+def template_zip(a, b):
+    """Zips two sets together."""
+    return zip(a, b, strict=False)
+
+
 register.filter("normalize_wfo", normalize_wfo)
 register.filter("normalize_alert_whitespace", normalize_alert_whitespace)
 register.filter("json_encode", json_encode)
+register.filter("zip", template_zip)

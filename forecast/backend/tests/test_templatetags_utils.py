@@ -59,3 +59,8 @@ class TestTemplateTagUtilities(TestCase):
         """Test alert whitespace normalization."""
         actual = util.normalize_alert_whitespace("This is\nsome text\nin an\nalert")
         self.assertEquals(actual, "This is<br />some text<br />in an<br />alert")
+
+    def test_template_zip(self):
+        """Test that the zip filter zips things."""
+        actual = util.template_zip([1, 2, 3], ["a", "b", "c"])
+        self.assertEqual(list(actual), [(1, "a"), (2, "b"), (3, "c")])
