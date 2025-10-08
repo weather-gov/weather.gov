@@ -15,6 +15,7 @@ from spatial.models import (
     WeatherCounties,
     WeatherCountyWarningAreas,
     WeatherPlace,
+    WeatherSpatialMetadata,
     WeatherStates,
     WeatherZone,
 )
@@ -84,6 +85,9 @@ def __load_from_shapefile(  # noqa PLR0913
             else:
                 callback_create_model(feature)
                 known.add(unique)
+
+        # Update the timestamp for this table in the metadata
+        WeatherSpatialMetadata.objects.update_or_create(table=table)
 
     except Exception as exc:
         print(f"  !! error when loading {model.__name__}: {exc}")
@@ -479,6 +483,10 @@ def load_places(force=False):
                 )
 
             place.save()
+
+        # Update the timestamp for this table in the metadata
+        WeatherSpatialMetadata.objects.update_or_create(table=WeatherPlace._meta.db_table)
+
     except Exception as exc:
         model = WeatherPlace
         print(f"  !! error when loading {model.__name__}: {exc}")

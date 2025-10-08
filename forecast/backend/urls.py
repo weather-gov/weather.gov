@@ -1,9 +1,13 @@
 from django.conf import settings
+from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path, register_converter
 from django.views.generic.base import TemplateView
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
+from wagtail.contrib.sitemaps.sitemap_generator import Sitemap as WagtailSitemap
 from wagtail.documents import urls as wagtaildocs_urls
+
+from spatial.sitemaps import PlaceSitemap
 
 from . import views
 from .url_converters import FloatConverter
@@ -23,6 +27,18 @@ urlpatterns = [
     # that will be requested from the frontend (htmx style)
     path("wx/afd/<afd_id>/", views.wx_afd_id, name="wx_afd_id"),
     path("wx/afd/locations/<wfo>/", views.wx_afd_versions, name="wx_afd_versions"),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {
+            "sitemaps": {
+                "wagtail": WagtailSitemap,
+                "places": PlaceSitemap,
+            },
+        },
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+    # Wagtail
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("pages/", include(wagtail_urls)),
@@ -33,6 +49,6 @@ urlpatterns = [
 ]
 
 if settings.DEBUG is True:
-  urlpatterns += [
-    path("offices/", views.offices, name="offices"),
-  ]
+    urlpatterns += [
+        path("offices/", views.offices, name="offices"),
+    ]

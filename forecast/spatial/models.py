@@ -2,6 +2,16 @@ from django.contrib.gis.db import models
 from django.db.models import JSONField
 
 
+class WeatherSpatialMetadata(models.Model):
+    """Metadata about our spatial data."""
+
+    table = models.TextField(primary_key=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:  # noqa: D106
+        db_table = "weathergov_geo_metadata"
+
+
 class WeatherZone(models.Model):
     """Represents a forecast, fire, or marine zone."""
 
