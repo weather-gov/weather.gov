@@ -26,7 +26,7 @@ env = environs.Env()
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 # Only suitable for dev environments.
 # Descendant settings files should override as needed
-SECRET_KEY = env("django_secret_key")
+# SECRET_KEY = env("django_secret_key")
 
 # Set the DEBUG setting based on the DJANGO_DEBUG env
 # variable value
@@ -34,10 +34,19 @@ SECRET_KEY = env("django_secret_key")
 env_debug = env.bool("DJANGO_DEBUG", default=False)
 DEBUG = env_debug
 
-# Default is empty.
-# This should be redefined or appended
-# to in any descendant settings files
-ALLOWED_HOSTS = []
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SAMESITE = 'None'
+# SESSION_COOKIE_SAMESITE = 'None'
+CSRF_TRUSTED_ORIGINS = [
+    "https://sso.noaa.gov",
+]
+
+ALLOWED_HOSTS = [
+    "weathergov-test.app.cloud.gov",
+    "weathergov-staging.app.cloud.gov",
+    "beta.weather.gov",
+]
 
 ALLOWED_CIDR_NETS = ["10.0.0.0/8"]
 
@@ -51,6 +60,7 @@ APPEND_SLASH = True
 INSTALLED_APPS = [
     "backend",
     "spatial",
+    "noaa_saml",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -118,6 +128,14 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "noaa_saml.auth.NOAABackend",
+]
+
+
+AUTH_USER_MODEL = "backend.NOAAUser"
 
 WSGI_APPLICATION = "backend.config.wsgi.application"
 
@@ -311,6 +329,11 @@ LOGGING = {
 }
 
 # endregion
+
+# SAML
+SAML_CREATES_NEW_USERS = True
+SAML_LOCAL_DEV = False
+
 
 if DEBUG:
     # used by debug() context processor

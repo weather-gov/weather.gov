@@ -6,6 +6,8 @@ CI tests and builds
 """
 import environs
 
+from noaa_saml import config as saml_config
+
 from .base import *  # noqa
 
 # For now, we keep CI identical to production.
@@ -26,3 +28,9 @@ ALLOWED_HOSTS = [
 # Use development secret key
 env = environs.Env()
 SECRET_KEY = env("django_secret_key")
+
+# SAML Settings
+# See noaa_saml/config.py for details
+# For CI, we need to use the development SAML
+# settings, since prod settings check for VCAP
+SAML_SETTINGS = saml_config.DEV

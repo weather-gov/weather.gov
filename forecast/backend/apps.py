@@ -3,6 +3,7 @@ Each Django site can contain multiple independent apps.
 
 These are configured here and installed via settings.py:INSTALLED_APPS.
 """
+
 from django.apps import AppConfig
 
 

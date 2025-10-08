@@ -297,7 +297,6 @@ def load_zones(force=False):
     ]
 
     for type, url in zonetypes:
-
         # Use type=type as a default argument to bind the loop variable to the
         # function. Otherwise we get a B023 lint error.
         # https://docs.astral.sh/ruff/rules/function-uses-loop-variable/
@@ -312,9 +311,7 @@ def load_zones(force=False):
                 # unique within the state and type to which it belongs. So we
                 # build up a globally-unique zone ID ourselves. This URI should
                 # match the zone IDs returned by the API.
-                else (
-                    f"https://api.weather.gov/zones/{type}/{feature.get('STATE')}Z{feature.get('ZONE')}"
-                )
+                else (f"https://api.weather.gov/zones/{type}/{feature.get('STATE')}Z{feature.get('ZONE')}")
             )
 
         def getquery(feature):

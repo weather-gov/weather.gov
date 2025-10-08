@@ -39,7 +39,8 @@ def get_wfo_from_afd(afd):
     # valid, so return None
     return None
 
-def mark_safer(value, transformer = None):
+
+def mark_safer(value, transformer=None):
     """
     Mark safe, more safely.
 
@@ -58,10 +59,12 @@ def mark_safer(value, transformer = None):
             Example:
             mark_safer(value, lambda cleaned: re.sub("one", "two", cleaned))
     """
-    sanitizer = Sanitizer({
-        # don't remove stuff like '\n'
-        "keep_typographic_whitespace": True,
-    })
+    sanitizer = Sanitizer(
+        {
+            # don't remove stuff like '\n'
+            "keep_typographic_whitespace": True,
+        },
+    )
     cleaned = sanitizer.sanitize(value)
 
     if callable(transformer):

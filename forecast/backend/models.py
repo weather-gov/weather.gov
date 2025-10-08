@@ -1,4 +1,4 @@
-
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -99,3 +99,12 @@ class DynamicSafetyInformation(models.Model):
 
     def __str__(self):
         return self.type
+
+
+class NOAAUser(AbstractUser):
+    """Represents a User of the Wagtail system who can be authenticated in NOAA ICAM.
+
+    For now, we do no special overrides. This model is just a placeholder
+    we can manipulate down the road should we need to.
+    It inherits all of the existing functionality of the default User model
+    """

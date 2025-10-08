@@ -15,3 +15,4 @@ environs[django]==11.2.1; python_version >= '3.8'
 whitenoise==6.8.2; python_version >= '3.9'
 tqdm
 responses
+python3-saml
