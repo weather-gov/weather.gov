@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             ""
 
     dependencies = [
-        ('backend', '0007_remove_noaauser_uid_alter_noaauser_email'),
+        ('backend', '0008_add_generic_wagtail_page'),
     ]
 
     operations = [
