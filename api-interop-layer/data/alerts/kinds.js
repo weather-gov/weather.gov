@@ -370,7 +370,7 @@ const alertTypes = new Map([
     },
   ],
   [
-    "excessive heat warning",
+    "extreme heat warning",
     {
       level: ALERT_LEVEL.WARNING,
       kind: ALERT_KIND.LAND,
@@ -762,7 +762,7 @@ const alertTypes = new Map([
     },
   ],
   [
-    "excessive heat watch",
+    "extreme heat watch",
     {
       level: ALERT_LEVEL.WATCH,
       kind: ALERT_KIND.LAND,
