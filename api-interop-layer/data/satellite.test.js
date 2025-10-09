@@ -14,12 +14,19 @@ describe("satellite metadata module", () => {
     fetch.resolves(response);
   });
 
-  describe("returns a URL if everything goes well", () => {
+  describe("returns data if everything goes well", () => {
     it("for GOES-18 imagery", async () => {
-      response.json.resolves({ meta: { satellite: "GOES-West" } });
-      const actual = await getSatelliteData({ grid: { wfo: "wfo1" } });
+      response.json.resolves({
+        meta: {
+          satellite: "GOES-West",
+        },
+      });
+      const actual = await getSatelliteData({
+        grid: { wfo: "wfo1" },
+        place: { timezone: "America/Los_Angeles" },
+      });
 
-      expect(actual).to.eql({
+      expect(actual).to.include({
         latest: "https://cdn.star.nesdis.noaa.gov/WFO/wfo1/GEOCOLOR/latest.jpg",
         gif: "https://cdn.star.nesdis.noaa.gov/WFO/wfo1/GEOCOLOR/GOES18-WFO1-GEOCOLOR-600x600.gif",
         mp4: "https://cdn.star.nesdis.noaa.gov/WFO/wfo1/GEOCOLOR/GOES18-WFO1-GEOCOLOR-600x600.mp4",
@@ -27,27 +34,82 @@ describe("satellite metadata module", () => {
     });
 
     it("for GOES-19 imagery", async () => {
-      response.json.resolves({ meta: { satellite: "GOES-East" } });
-      const actual = await getSatelliteData({ grid: { wfo: "wfo2" } });
+      response.json.resolves({
+        meta: {
+          satellite: "GOES-East",
+        },
+      });
+      const actual = await getSatelliteData({
+        grid: { wfo: "wfo2" },
+        place: { timezone: "America/New_York" },
+      });
 
-      expect(actual).to.eql({
+      expect(actual).to.include({
         latest: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/latest.jpg",
         gif: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES19-WFO2-GEOCOLOR-600x600.gif",
         mp4: "https://cdn.star.nesdis.noaa.gov/WFO/wfo2/GEOCOLOR/GOES19-WFO2-GEOCOLOR-600x600.mp4",
+      });
+    });
+
+    it("includes satellite time range when the time range crosses days in the local timezone", async () => {
+      response.json.resolves({
+        meta: {
+          satellite: "GOES-East",
+          // The first flood warning issued by the Weather Bureau.
+          observation_time: "1891-01-24T12:00:00Z",
+        },
+      });
+      const actual = await getSatelliteData({
+        grid: { wfo: "wfo2" },
+        place: { timezone: "America/Los_Angeles" },
+      });
+
+      expect(actual.times).to.include({
+        start: "1891-01-24T04:00:00.000Z",
+        startFormatted: "Friday 8:00 PM",
+        end: "1891-01-24T12:00:00.000Z",
+        endFormatted: "Saturday 4:00 AM",
+      });
+    });
+
+    it("includes satellite time range when the time range is entirely within a single day in the local timezone", async () => {
+      response.json.resolves({
+        meta: {
+          satellite: "GOES-East",
+          // Founding of the American Meteorological Society
+          observation_time: "1919-12-29T03:00:00Z",
+        },
+      });
+      const actual = await getSatelliteData({
+        grid: { wfo: "wfo2" },
+        place: { timezone: "America/New_York" },
+      });
+
+      expect(actual.times).to.include({
+        start: "1919-12-28T19:00:00.000Z",
+        startFormatted: "Sunday 2:00 PM",
+        end: "1919-12-29T03:00:00.000Z",
+        endFormatted: "10:00 PM",
       });
     });
   });
 
   it("returns an error object if the metadata is invalid", async () => {
     response.json.resolves({ nometa: {} });
-    const actual = await getSatelliteData({ grid: { wfo: "wfo3" } });
+    const actual = await getSatelliteData({
+      grid: { wfo: "wfo3" },
+      place: { timezone: "America/New_York" },
+    });
 
     expect(actual).to.eql({ error: true });
   });
 
   it("returns an error object if the metadata fetch is unsuccessful", async () => {
     response.status = 404;
-    const actual = await getSatelliteData({ grid: { wfo: "wfo4" } });
+    const actual = await getSatelliteData({
+      grid: { wfo: "wfo4" },
+      place: { timezone: "America/New_York" },
+    });
 
     expect(actual).to.eql({ error: true });
   });

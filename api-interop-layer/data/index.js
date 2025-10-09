@@ -21,7 +21,7 @@ const getDataForPoint = async (lat, lon) => {
   // If we don't have a grid, we can't fetch satellite metadata, forecast, or
   // observations – all of these are based around WFO and WFO grid.
   if (!grid.error) {
-    satellitePromise = getSatellite({ grid });
+    satellitePromise = getSatellite({ grid, place });
 
     const dbPool = await getDbConnection();
     const dbConnection = await dbPool.connect();
@@ -82,7 +82,4 @@ const getDataForPoint = async (lat, lon) => {
   };
 };
 
-export {
-  getDataForPoint,
-  getProductById
-}
+export { getDataForPoint, getProductById };

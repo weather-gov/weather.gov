@@ -39,6 +39,11 @@ make-migrations:
 migrate:
   docker compose exec web python manage.py migrate
 
+# Compile translations
+[group("django management")]
+compile-translations:
+  docker compose exec web python manage.py compilemessages
+
 # Restart Django
 [group("django management")]
 django-restart:

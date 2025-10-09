@@ -448,6 +448,12 @@ msgstr "Tips to stay safe"
 msgid "satellite.heading.satellite.01"
 msgstr "Satellite"
 
+msgid "satellite.time-shown.label.01"
+msgstr "time shown"
+
+msgid "satellite.link.explore-other.01"
+msgstr "Explore other satellite views"
+
 msgid "theme.text.submitted-by.01"
 msgstr "Submitted by {author_name} on {month}/{day}"
 
