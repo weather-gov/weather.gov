@@ -4,6 +4,15 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField
+from wagtail.models import Page
+
+
+class GenericPage(Page):
+    """Represents a generic page."""
+
+    body = RichTextField()
+
+    content_panels = Page.content_panels + [FieldPanel("body"), FieldPanel("slug")]
 
 
 class Region(ClusterableModel):
