@@ -36,7 +36,7 @@ __bad_places = [
 
 # This has a lot of arguments, but it hides a fair bit of complexity in exchange
 # and that feels worthwhile to me, so I've opted to turn off this rule here.
-def __load_from_shapefile(  # noqa PLR0913
+def __load_from_shapefile(  # noqa: PLR0913
     model,
     url,
     type,
@@ -78,7 +78,7 @@ def __load_from_shapefile(  # noqa PLR0913
                         shape=ST_Union(
                             shape,
                             ST_GeomFromGeoJSON(%s))
-                        WHERE {where}""",  # noqa S608
+                        WHERE {where}""",  # noqa: S608
                     [geometry] + parameters,
                 )
                 cursor.close()

@@ -15,7 +15,7 @@ class CustomUserEditForm(UserEditForm):
 
     email = forms.ModelChoiceField(queryset=NOAAUser.objects, required=True, label=_("Email"))
 
-    class Meta(UserEditForm.Meta):  # noqa D101
+    class Meta(UserEditForm.Meta):  # noqa: D106
         fields = UserEditForm.Meta.fields | {"username", "email"}
 
 
@@ -24,5 +24,5 @@ class CustomUserCreationForm(UserCreationForm):
 
     email = forms.ModelChoiceField(queryset=NOAAUser.objects, required=True, label=_("Email"))
 
-    class Meta(UserEditForm.Meta):  # noqa D101
+    class Meta(UserEditForm.Meta):  # noqa: D106
         fields = UserEditForm.Meta.fields | {"username", "email"}

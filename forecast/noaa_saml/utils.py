@@ -30,7 +30,7 @@ def get_saml_meta_expiry():
     # Python changed how you set timezones in the now method
     # between version 3.10 and 3.11
     # We use a mix across our environments currently
-    if sys.version_info[1] < 11:  # noqa PLR2004
+    if sys.version_info[1] < 11:  # noqa: PLR2004
         now = datetime.datetime.now(tz=datetime.timezone.utc)
     else:
         now = datetime.datetime.now(tz=datetime.UTC)
