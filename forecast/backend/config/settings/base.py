@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     "backend",
     "spatial",
     "noaa_saml",
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",

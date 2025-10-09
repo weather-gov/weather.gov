@@ -8,7 +8,7 @@ import environs
 
 from noaa_saml import config as saml_config
 
-from .base import *  # noqa
+from .base import *  # noqa: F403
 
 # For now, we keep CI identical to production.
 # In subsequent work -- SAML, for example -- we

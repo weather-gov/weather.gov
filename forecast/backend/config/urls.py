@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.contrib import admin
+from django.conf import settings
 from django.urls import include, path
 
 import backend.views
@@ -24,7 +24,14 @@ urlpatterns = [
     path("", backend.views.index, name="index"),
     path("", include("backend.urls")),
     path("", include("noaa_saml.urls")),
-    path("admin/", admin.site.urls),
 ]
+
+# Only add admin paths if we're using dev settings
+if settings.SETTINGS_TYPE == "dev":
+    from django.contrib import admin
+
+    urlpatterns.append(
+        path("admin/", admin.site.urls),
+    )
 
 handler404 = "backend.views.handle_404"
