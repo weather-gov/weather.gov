@@ -8,12 +8,15 @@ import environs
 
 from noaa_saml import config as saml_config
 
-from .base import *  # noqa
+from .base import *  # noqa: F403
 
 # spell out explicit variable dependencies
 from .base import ALLOWED_HOSTS
 
 SETTINGS_TYPE = "dev"
+
+# Enable Django admin in local dev
+INSTALLED_APPS.append("django.contrib.admin")  # noqa: F405
 
 env = environs.Env()
 

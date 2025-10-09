@@ -12,7 +12,7 @@ from cfenv import AppEnv
 
 from noaa_saml.config import get_cloud_gov_settings
 
-from .base import *  # noqa
+from .base import *  # noqa: F403
 
 SETTINGS_TYPE = "production"
 
