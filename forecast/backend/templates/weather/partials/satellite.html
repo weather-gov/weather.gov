@@ -5,15 +5,50 @@
   >
     {% trans "satellite.heading.satellite.01" %}
   </h3>
+  <div
+    class="grid-container font-family-mono text-base font-mono-xs margin-bottom-1 padding-left-2 tablet:padding-left-0"
+  >
+    <div class="grid-row">
+      <div
+        class="grid-col-auto desktop:grid-col-12 margin-right-1 desktop:margin-right-0 text-uppercase"
+      >
+        {% trans "satellite.time-shown.label.01" %}<span
+          class="desktop:display-none"
+          >:</span
+        >
+      </div>
+      <div class="grid-col-auto">
+        <time datetime="{{ point.satellite.times.start}}"
+          >{{ point.satellite.times.startFormatted }}</time
+        >
+        –
+        <time datetime="{{ point.satellite.times.end}}"
+          >{{ point.satellite.times.endFormatted }}</time
+        >
+      </div>
+    </div>
+  </div>
   <div class="padding-0 bg-white shadow-1">
     <div class="display-flex text-center">
       <wx-satellite-video>
-        <video tabindex="-1" controls class="display-block flex-1 width-full" poster="{{ point.satellite.latest }}">
+        <video
+          tabindex="-1"
+          controls
+          class="display-block flex-1 width-full"
+          poster="{{ point.satellite.latest }}"
+        >
           <source src="{{ point.satellite.mp4 }}" type="video/mp4" />
           {# Fallback to GIF, in case video is not supported #}
           <img src="{{ point.satellite.gif }}" alt="" />
         </video>
       </wx-satellite-video>
+    </div>
+    <div class="padding-2">
+      <a
+        href="https://www.star.nesdis.noaa.gov/GOES/wfo.php?wfo={{ point.grid.wfo | lower }}"
+        class="usa-link"
+        >{% trans "satellite.link.explore-other.01" %}</a
+      >
     </div>
   </div>
 </div>

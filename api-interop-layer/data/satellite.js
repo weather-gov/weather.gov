@@ -1,9 +1,10 @@
+import dayjs from "../util/day.js";
 import { createLogger } from "../util/monitoring/index.js";
 import { fetchAPIJson } from "../util/fetch.js";
 
 const logger = createLogger("satellite");
 
-export default async ({ grid: { wfo } }) => {
+export default async ({ grid: { wfo }, place: { timezone } }) => {
   try {
     const satelliteMetadata = await fetchAPIJson(
       `https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`,
@@ -13,7 +14,37 @@ export default async ({ grid: { wfo } }) => {
     if (satellite) {
       const goes = satellite === "GOES-West" ? "GOES18" : "GOES19";
 
+      // The NESDIS metadata has earliest and latest timestamps, but those
+      // are for the full range of available images, which cover over 24 hours.
+      // We use the video, which only covers the past 8 hours.
+      //
+      // The timestamps provided are also in a wonky format:
+      //  [four-digit year][day of year][24hr time]
+      //
+      // Rather than parse those timestamps, we can use the observation_time
+      // metadata. And then we can just subtract 8 hours from it. Done-zo!
+      const end = dayjs(satelliteMetadata.meta.observation_time);
+      const start = end.subtract(8, "hours");
+
+      const startTZ = start.tz(timezone);
+      const endTZ = end.tz(timezone);
+
+      // Format the times for the frontend
+      const startFormatted = startTZ.format("dddd h:mm A");
+
+      // If the start and end are the same day, we only show the ending hour.
+      const endFormatted =
+        startTZ.format("dddd") === endTZ.format("dddd")
+          ? endTZ.format("h:mm A")
+          : endTZ.format("dddd h:mm A");
+
       return {
+        times: {
+          start: start.toISOString(),
+          end: end.toISOString(),
+          startFormatted,
+          endFormatted,
+        },
         latest: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/latest.jpg`,
         gif: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.gif`,
         mp4: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.mp4`,
