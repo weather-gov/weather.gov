@@ -18,15 +18,15 @@ class TestUrlConverters(TestCase):
 
     def test_to_python_error_on_none(self):
         """Tests that the converter throws on None."""
-        self.assertRaises(TypeError, self.converter.to_python, None)  # noqa PT027
+        self.assertRaises(TypeError, self.converter.to_python, None)  # noqa: PT027
 
     def test_to_python_error_on_object(self):
         """Tests that the converter throws on object."""
-        self.assertRaises(TypeError, self.converter.to_python, {})  # noqa PT027
+        self.assertRaises(TypeError, self.converter.to_python, {})  # noqa: PT027
 
     def test_to_python_error_on_bad_string(self):
         """Tests that the converter throws on bad string."""
-        self.assertRaises(ValueError, self.converter.to_python, "Just text")  # noqa PT027
+        self.assertRaises(ValueError, self.converter.to_python, "Just text")  # noqa: PT027
 
     def test_to_python(self):
         """Tests that the converter converts a floaty string to a float."""

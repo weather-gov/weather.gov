@@ -152,7 +152,7 @@ def saml_sls(request):
 
     if "LogoutRequestID" in request.session:
         request_id = request.session["LogoutRequestID"]
-    dscb = lambda: request.session.flush()  # noqa E731
+    dscb = lambda: request.session.flush()  # noqa: E731
     url = auth.process_slo(request_id=request_id, delete_session_cb=dscb)
     errors = auth.get_errors()
     if len(errors) == 0:

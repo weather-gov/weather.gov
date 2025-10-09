@@ -214,7 +214,7 @@ def health(_request):
 
 
 # The exception argument is required, but we don't use it so don't QA it.
-def handle_404(request, exception=None):  # noqa ARG001
+def handle_404(request, exception=None):  # noqa: ARG001
     """Handle 404 errors."""
     context = {}
 
