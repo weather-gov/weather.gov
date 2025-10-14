@@ -33,5 +33,8 @@ As part of a release you may follow the following checklist:
 
 - [ ] Compare [staging](https://weathergov-staging.app.cloud.gov/) and [beta](https://beta.weather.gov/) for differences in configuration, content, and functionality
 - [ ] Look at [commits to main](https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/weathergov-django/-/commits/main) and check what has been merged since the previous release
+
+   This can also be done via GitLab's [Code > Compare revisions](https://vlab.noaa.gov/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/weathergov-django/-/compare?from=main&to=main) feature. Select "main" as the source and the previous tag as the target. Leave "Show changes" at its default.
+
 - [ ] Run through [the manual accessibility checklist](https://github.com/weather-gov/weather.gov/blob/main/docs/code-review-templates/code-review-web.md#accessibility) of what is on staging if anything functional or visual has been changed
 - [ ] Check with other product owners about a release
