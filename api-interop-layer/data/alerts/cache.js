@@ -10,14 +10,14 @@
  * to the cache table.
  */
 export class AlertsCache {
-  constructor(tableName="weathergov_geo_alerts_cache"){
+  constructor(tableName = "weathergov_geo_alerts_cache") {
     this.tableName = tableName;
   }
 
-  async getHashes(){
+  async getHashes() {
     const sql = `SELECT hash FROM ${this.tableName};`;
     const { rows } = await this.db.query(sql);
-    return rows.map(r => r.hash);
+    return rows.map((r) => r.hash);
   }
 
   /**
@@ -31,8 +31,10 @@ export class AlertsCache {
    * thing here and use Sets
    * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/difference
    */
-  determineOldHashesFrom(currentHashes, incomingHashes){
-    return currentHashes.filter(currentHash => !incomingHashes.includes(currentHash));
+  determineOldHashesFrom(currentHashes, incomingHashes) {
+    return currentHashes.filter(
+      (currentHash) => !incomingHashes.includes(currentHash),
+    );
   }
 
   /**
@@ -46,20 +48,22 @@ export class AlertsCache {
    * thing here and use Sets
    * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/difference
    */
-  determineNewHashesFrom(currentHashes, incomingHashes){
-    return incomingHashes.filter(incomingHash => !currentHashes.includes(incomingHash));
+  determineNewHashesFrom(currentHashes, incomingHashes) {
+    return incomingHashes.filter(
+      (incomingHash) => !currentHashes.includes(incomingHash),
+    );
   }
 
   /**
    * Remove rows from the cache table by hash.
    * If the argument is a list, we assume a list of hashes.
    */
-  async removeByHashes(hashes){
-    if(!Array.isArray(hashes) || hashes.length === 0){
+  async removeByHashes(hashes) {
+    if (!Array.isArray(hashes) || hashes.length === 0) {
       return [];
     }
 
-    const list = hashes.map((_,i) => `$${i+1}`).join(',');
+    const list = hashes.map((_, i) => `$${i + 1}`).join(",");
 
     const sql = `DELETE FROM ${this.tableName} WHERE hash IN (${list})`;
     return this.db.query(sql, hashes);
@@ -69,33 +73,52 @@ export class AlertsCache {
    * Add the provided hash, geometry, and alert data to the
    * cache table.
    */
-  async add(hash, alert, geometry, alertKind=null){
+  async add(hash, alert, geometry, alertKind = null) {
     const alertAsString = JSON.stringify(alert);
     const sql = `INSERT INTO ${this.tableName} (hash, alertJson, shape, alertKind) VALUES($1, $2, ST_TRANSFORM(ST_GeomFromGeoJson($3), 4326), $4);`;
     return await this.db.query(sql, [hash, alertAsString, geometry, alertKind]);
   }
-  
+
   /**
-   * Given an incoming GeoJSON geometry,
-   * retrieve all alerts that intersect with that geometry.
+   * @function getIntersectingAlerts
+   *
+   * Given a latitude and longitude, retrieve all alerts that include it.
+   * Optionally include a buffer around the point.
+   *
+   * @arg {Object} options
+   * @arg {Number} options.buffer How much buffer to add to the point, in
+   *                              meters. If unset, no buffer will be added.
    */
-  async getIntersectingAlerts(geojson){
-    let shape = geojson;
-    if(geojson.geometry){
-      shape = geojson.geometry;
+  async getIntersectingAlerts(lat, lon, options) {
+    const inputGeometry = [
+      // The ::geography instructs postgis to treat the object as a geographic
+      // shape instead of geometric. That way any buffering will be in meters
+      // rather than degrees.
+      `ST_GeomFromText('POINT(${lon} ${lat})',4326)::geography`,
+    ];
+    if (options?.buffer) {
+      inputGeometry.unshift("ST_Buffer(");
+      inputGeometry.push(`,${options.buffer})`);
     }
-    const sql = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${this.tableName} WHERE ST_INTERSECTS(ST_GeomFromGeoJson($1), shape);`;
-    const response = await this.db.query(sql, [shape]);
+
+    const geometry = inputGeometry.join("");
+
+    const sql = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${this.tableName} WHERE ST_INTERSECTS(${geometry}, shape);`;
+
+    const response = await this.db.query(sql);
     const results = response.rows;
-    return results.map(result => Object.assign({}, result.alertjson, { geometry: JSON.parse(result.geometry) }));
+    return results.map((result) =>
+      Object.assign({}, result.alertjson, {
+        geometry: JSON.parse(result.geometry),
+      }),
+    );
   }
 
   /**
    * Drop the cache table from the database entirely.
    */
-  async dropCacheTable(){
+  async dropCacheTable() {
     const sql = `DROP TABLE IF EXISTS ${this.tableName}`;
     return this.db.query(sql);
   }
 }
-

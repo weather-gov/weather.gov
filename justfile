@@ -229,6 +229,12 @@ init: && migrate load-spatial django-restart
 plantuml:
   docker compose --profile utility start plantuml
 
+# Rebuild a specific container, or all of them!
+[group("dev environment management")]
+rebuild target="":
+  docker compose stop {{ target }} && docker compose rm -f {{ target }} && docker compose build {{ target }} && docker compose up -d
+
+
 # Stops the PlantUML server
 [group("dev environment management")]
 stop-plantuml:

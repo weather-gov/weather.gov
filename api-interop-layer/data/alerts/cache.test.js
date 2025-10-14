@@ -111,8 +111,8 @@ describe("AlertsCache tests", () => {
   });
 
   it("#getIntersectingAlerts", async () => {
-    const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_GeomFromGeoJson($1), shape);`;
-    const geoJson = { "this-is": "some-geojson" };
+    const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,298), shape);`;
+
     const output = [
       {
         alertjson: {name: "alert1"},
@@ -133,11 +133,11 @@ describe("AlertsCache tests", () => {
         geometry: {name: "geometry2"}
       }
     ];
-    global.test.database.query
-      .withArgs(query, [geoJson])
-      .resolves({rows: output});
+    global.test.database.query.withArgs(query).resolves({ rows: output });
 
-    const result = await alertsCache.getIntersectingAlerts(geoJson);
+    const result = await alertsCache.getIntersectingAlerts(1, 3, {
+      buffer: 298,
+    });
 
     expect(result).to.eql(expected);
   });

@@ -1,7 +1,6 @@
 import { Worker, isMainThread } from "node:worker_threads";
 import path from "node:path";
 
-import { buffer, point } from "@turf/turf";
 import { modifyTimestampsForAlert } from "./utils.js";
 import { createLogger } from "../../util/monitoring/index.js";
 import { parseDuration } from "./parse/index.js";
@@ -102,17 +101,12 @@ export default async ({
   // (or existing pool instance -- see import)
   const db = await openDatabase();
   alertsCache.db = db;
-  
-  // Find all alerts within a radius of the location being requested. We're
-  // using a quarter mile buffer here.
-  const geometry = buffer(point([longitude, latitude]), 0.25, {
-    units: "miles",
+
+  const alerts = await alertsCache.getIntersectingAlerts(latitude, longitude, {
+    // Distance is in meters. 400 meters ~= 0.25 miles
+    buffer: 400,
   });
-  
-  const alerts = await alertsCache.getIntersectingAlerts(
-    geometry
-  );
-  
+
   alerts.forEach(alert => {
     // We need to turn all of the relevant timestamp
     // fields back into dayjs objects, in order to sort

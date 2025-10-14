@@ -69,14 +69,10 @@ see much risk in needing to change libraries later.
 
 ### Interop layer
 
-#### [Turf.js](https://turfjs.org/)
+#### PostGIS
 
-_Added October, 2024_
+_Added in September, 2025_
 
-Turf.js is a zero-dependency geospatial library written in Javascript. We
-explored using a client-side library in place of heavy geospatial queries
-against our MySQL database, and this library proved to be subtantially faster.
-It is actively maintained and includes financial support from the likes of
-MapBox, so it is unlikely to fade away. Furthermore, because it is largely an
-implementation of mathematical algorithms, even if maintenance should fizzle,
-the actual functionality should remain solid.
+PostGIS is a set of extensions applied to PostgreSQL that enable high-performance
+geospatial capabilities. This lets us handle more geospatial work in an optimized
+environment rather than doing it in memory in code.
