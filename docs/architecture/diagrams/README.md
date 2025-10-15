@@ -9,8 +9,7 @@ docs/architecture/diagrams folder.
 
 This plugin works best when running PlantUML as a server. Our project includes
 a PlantUML server in our Docker composer, so you can use that rather than
-figuring out how to get Java working properly. (Our Docker setup also adds
-zscaler root certificates to the container so it'll work on GSA computers.)
+figuring out how to get Java working properly.
 
 ```shell
 docker compose run --service-ports plantuml
