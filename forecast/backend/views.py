@@ -2,6 +2,7 @@ from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
 
 from backend import interop
 from backend.models import WFO, Region
@@ -47,6 +48,24 @@ def _get_redirect_for_afd_queries(request):
 def index(request):
     """Render the home page."""
     return render(request, "weather/index.html")
+
+
+def site_page(request):
+    """Render one of the main static site pages.
+
+    These include things like the about page,
+    site map, disclaimer, etc
+    """
+    tokens = [t for t in request.path.split("/") if t != ""]
+    name = tokens[-1]
+    name = name.replace("_", "-")
+    locale_id = f"site.meta.titles.{name}.01"
+    page = {
+        "title": _(locale_id),
+    }
+    context = {"page": page}
+
+    return render(request, f"weather/{name}.html", context)
 
 
 def point_location(request, lat, lon):

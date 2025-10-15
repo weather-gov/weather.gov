@@ -4,8 +4,14 @@
 <html lang="{{ request.LANGUAGE_CODE }}">
   <head>
     <title>
-      {% if point.place %}{{ point.place.fullName }} |{% endif %}
-      beta.weather.gov | {{ "National Weather Service" | t }}
+      {% if point.place %}
+        {{ point.place.fullName }} |
+      {% elif page.title %}
+        {{ page.title }} |
+      {% else %}
+        beta.weather.gov |
+      {% endif %}
+      {{ "National Weather Service" | t }}
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="origin" />

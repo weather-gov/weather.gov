@@ -579,3 +579,18 @@ msgstr "{speed} mph from the west"
 
 msgid "wind.labels.speed-from-northwest.01"
 msgstr "{speed} mph from the northwest"
+
+msgid "site.meta.titles.about.01"
+msgstr "About the National Weather Service"
+
+msgid "site.meta.titles.disclaimer.01"
+msgstr "Disclaimer"
+
+msgid "site.meta.titles.site-index.01"
+msgstr "Site index"
+
+msgid "site.meta.titles.accessibility.01"
+msgstr "Accessibility"
+
+msgid "site.meta.titles.privacy.01"
+msgstr "Privacy policy"
