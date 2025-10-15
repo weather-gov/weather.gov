@@ -174,8 +174,14 @@ def radar(**kwargs):
     """Render the radar."""
     place = kwargs["place"]
     point = kwargs["point"]
+    radar_metadata = kwargs["radar_metadata"]
 
-    return {"place": place, "point": point, "intensities": RADAR_INTENSITIES}
+    return {
+        "place": place,
+        "point": point,
+        "radar_metadata": radar_metadata,
+        "intensities": RADAR_INTENSITIES,
+    }
 
 
 @register.inclusion_tag("weather/partials/quick-forecast-link-item.html")

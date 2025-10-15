@@ -442,6 +442,12 @@ msgstr "Radar Legend"
 msgid "radar.labels.radar.01"
 msgstr "Radar"
 
+msgid "radar.time-shown.label.01"
+msgstr "Time shown"
+
+msgid "radar.link.explore-other.01"
+msgstr "Explore other radar views"
+
 msgid "safety.labels.tips.01"
 msgstr "Tips to stay safe"
 
