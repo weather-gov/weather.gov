@@ -125,3 +125,4 @@ terraform/dist
 
 # Django
 **/__cache/
+*.mo
