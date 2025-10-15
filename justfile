@@ -72,6 +72,11 @@ load-spatial arg="":
 shell:
   docker compose exec web python manage.py shell
 
+# Compile translation messages
+[group("django management")]
+compile-messages:
+  docker compose exec web python manage.py compilemessages
+
 ##### Caching #####
 # Drop all alerts from the alerts cache table
 [group("cache management")]

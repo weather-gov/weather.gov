@@ -19,6 +19,15 @@ urlpatterns = [
     # Our URLs should have trailing slashes. Django will automatically add
     # trailing slashes to requests that don't have them, so if our URLs DON'T
     # have trailing slashes, they'll never match.
+
+    # Static pages for the site
+    path("about/", views.site_page, name="about"),
+    path("site-index/", views.site_page, name="site_index"),
+    path("accessibility/", views.site_page, name="accessibility"),
+    path("disclaimer/", views.site_page, name="disclaimer"),
+    path("privacy/", views.site_page, name="privacy"),
+
+    # Forecast specific URLS
     path("offices/<wfo>/", views.offices_specific, name="office"),
     path("afd/", views.afd_index, name="afd_index"),
     path("afd/<wfo>/", views.afd_by_office, name="afd_by_office"),
