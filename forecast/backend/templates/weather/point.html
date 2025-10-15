@@ -4,8 +4,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 {% endblock %}
 {% block end_js %}
-  <script src="{% static 'js/point.page.js' %}"></script>
-  <script src="{% static 'js/point.page.components.js' %}"></script>
+  <script type="module" src="{% static 'js/localizeTimestamps.js' %}"></script>
+  <script type="module" src="{% static 'js/locationSearch.js' %}"></script>
+  <script type="module" src="{% static 'js/radar.js' %}"></script>
+  <script type="module" src="{% static 'js/components/alertMap.js' %}"></script>
+  <script type="module" src="{% static 'js/charts/hourly-temperature.js' %}"></script>
+  <script type="module" src="{% static 'js/charts/hourly-pops.js' %}"></script>
+  <script type="module" src="{% static 'js/charts/hourly-humidity.js' %}"></script>
+  <script type="module" src="{% static 'js/charts/hourly-wind.js' %}"></script>
+  <script type="module" src="{% static 'js/charts/hourly-dewpoint.js' %}"></script>
+  <script type="module" src="{% static 'js/charts/qpf.js' %}"></script>
+  <script type="module" src="{% static 'js/components/quick-forecast-toggle.js' %}"></script>
+  <script type="module" src="{% static 'js/components/Satellite.js' %}"></script>
+  <script type="module" src="{% static 'js/components/TabbedNavigator.js' %}"></script>
+  <script type="module" src="{% static 'js/components/HourlyTable.js' %}"></script>
+  <script type="module" src="{% static 'js/components/Tabs.js' %}"></script>
+  <script type="module" src="{% static 'js/components/DailyForecast.js' %}"></script>
+  <script type="module" src="{% static 'js/components/combo-box.js' %}"></script>
+  <script type="module" src="{% static 'js/components/combo-box-location.js' %}"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           id="data-wx-leaflet"
           defer></script>

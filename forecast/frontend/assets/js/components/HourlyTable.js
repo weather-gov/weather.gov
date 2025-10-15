@@ -104,4 +104,6 @@ class HourlyTable extends HTMLElement {
   }
 }
 
-window.customElements.define("wx-hourly-table", HourlyTable);
+if (!window.customElements.get("wx-hourly-table")) {
+  window.customElements.define("wx-hourly-table", HourlyTable);
+}

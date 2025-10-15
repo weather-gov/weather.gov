@@ -82,4 +82,6 @@ class SatelliteVideo extends HTMLElement {
   }
 }
 
-window.customElements.define("wx-satellite-video", SatelliteVideo);
+if (!window.customElements.get("wx-satellite-video")) {
+  window.customElements.define("wx-satellite-video", SatelliteVideo);
+}

@@ -127,4 +127,6 @@ class Tabs extends HTMLElement {
   }
 }
 
-window.customElements.define("wx-tabs", Tabs);
+if (!window.customElements.get("wx-tabs")) {
+  window.customElements.define("wx-tabs", Tabs);
+}
