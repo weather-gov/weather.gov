@@ -1,4 +1,5 @@
 import { getDataForPoint } from "../data/index.js";
+import { getRadarMetadata } from "../data/radar.js";
 
 export const method = "GET";
 
@@ -26,6 +27,11 @@ export const handler = async (request) => {
   if (data.error) {
     return { data, status: data.status, error: data.error };
   }
+
+  data.radarMetadata = await getRadarMetadata({
+    place: data.place,
+    point: { latitude, longitude },
+  });
 
   return { data };
 };
