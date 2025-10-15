@@ -39,7 +39,7 @@ variable "rds_plan_name" {
 
 variable "s3_plan_name" {
   type        = string
-  default     = "basic-sandbox"
+  default     = "basic-public"
   description = "The name of the s3 plan to create"
 }
 

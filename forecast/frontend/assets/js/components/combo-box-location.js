@@ -350,4 +350,6 @@ export default class LocationComboBox extends ComboBox {
   }
 }
 
-window.customElements.define("wx-combo-box-location", LocationComboBox);
+if (!window.customElements.get("wx-combo-box-location")) {
+  window.customElements.define("wx-combo-box-location", LocationComboBox);
+}

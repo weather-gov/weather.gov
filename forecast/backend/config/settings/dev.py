@@ -35,3 +35,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = "localhost"
 # See noaa_saml/config.py for details
 SAML_SETTINGS = saml_config.DEV
 SAML_LOCAL_DEV = True
+
+# Use development secret key
+env = environs.Env()
+SECRET_KEY = env("django_secret_key")

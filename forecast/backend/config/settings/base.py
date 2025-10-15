@@ -22,17 +22,10 @@ BASE_DIR = Path(__file__).resolve().parents[3]
 
 env = environs.Env()
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-# Only suitable for dev environments.
-# Descendant settings files should override as needed
-# SECRET_KEY = env("django_secret_key")
-
 # Set the DEBUG setting based on the DJANGO_DEBUG env
 # variable value
 # SECURITY WARNING: don't run with debug turned on in production!
-env_debug = env.bool("DJANGO_DEBUG", default=False)
-DEBUG = env_debug
+DEBUG = env.bool("DJANGO_DEBUG", default=False)
 
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
@@ -82,6 +75,7 @@ INSTALLED_APPS = [
     "wagtail",
     "modelcluster",
     "taggit",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -137,6 +131,15 @@ AUTHENTICATION_BACKENDS = [
 AUTH_USER_MODEL = "backend.NOAAUser"
 
 WSGI_APPLICATION = "backend.config.wsgi.application"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -221,7 +224,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # Custom site information
-SITE_LOGO = "/public/logo.svg"
+SITE_LOGO = "logo.svg"
 SITE_NAME = "beta.weather.gov"
 SITE_SLOGAN = "National Weather Service"
 

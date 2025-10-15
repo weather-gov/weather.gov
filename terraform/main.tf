@@ -35,6 +35,11 @@ module "s3" {
   name         = "${local.app_name}-s3-${var.env}"
   s3_plan_name = var.s3_plan_name
   depends_on   = [module.app_space]
+  json_params = jsonencode(
+    {
+      "object_ownership" : "BucketOwnerEnforced",
+    }
+  )
 }
 
 # this module has prerequisites before it can be utilized:

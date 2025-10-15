@@ -82,4 +82,6 @@ class AFDSelector extends HTMLElement {
   }
 };
 
-window.customElements.define('wx-afd-selector', AFDSelector);
+if (!window.customElements.get("wx-afd-selector")) {
+  window.customElements.define("wx-afd-selector", AFDSelector);
+}

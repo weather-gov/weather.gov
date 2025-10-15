@@ -208,4 +208,6 @@ class DailyForecast extends HTMLElement {
   }
 }
 
-window.customElements.define("wx-daily-forecast", DailyForecast);
+if (!window.customElements.get("wx-daily-forecast")) {
+  window.customElements.define("wx-daily-forecast", DailyForecast);
+}

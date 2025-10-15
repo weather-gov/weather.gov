@@ -606,6 +606,8 @@ class ComboBox extends HTMLElement {
   // #endregion
 }
 
-window.customElements.define("wx-combo-box", ComboBox);
+if (!window.customElements.get("wx-combo-box")) {
+  window.customElements.define("wx-combo-box", ComboBox);
+}
 
 export default ComboBox;

@@ -230,4 +230,6 @@ class TabbedNavigator extends HTMLElement {
   }
 }
 
-window.customElements.define("wx-tabbed-nav", TabbedNavigator);
+if (!window.customElements.get("wx-tabbed-nav")) {
+  window.customElements.define("wx-tabbed-nav", TabbedNavigator);
+}

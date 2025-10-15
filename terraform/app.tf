@@ -43,6 +43,7 @@ resource "cloudfoundry_app" "app" {
     DJANGO_LOG_FORMAT      = "console"
     DISABLE_COLLECTSTATIC  = 1
     CLOUDGOV_SPACE         = var.cf_space_name
+    AWS_USE_FIPS_ENDPOINT  = 1 # required for "s3-fips.us-gov-*.amazonaws.com"
   }
 
   processes = [

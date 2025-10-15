@@ -31,6 +31,13 @@ _Added in September, 2025_
 These extensions provide field definitions for spatial datatypes in Django. They
 require [gdal](https://gdal.org/) to be installed locally.
 
+#### Django-Storages (S3)
+
+_Added in October, 2025_
+
+This backend relies on the `boto3` library and is used to store media uploads
+(such as weather stories and situation report PDFs) on a public S3 bucket.
+
 #### PostGIS
 
 _Added in September, 2025_

@@ -7,6 +7,7 @@ our cloud-gov production environment(s)
 import os
 import subprocess
 
+import boto3
 import environs
 from cfenv import AppEnv
 
@@ -14,15 +15,16 @@ from noaa_saml.config import get_cloud_gov_settings
 
 from .base import *  # noqa: F403
 
+env = environs.Env()
+cloudgov_space = env("CLOUDGOV_SPACE", "test")
+
 SETTINGS_TYPE = "production"
 
 # DEBUG is always off in production
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "weathergov-test.app.cloud.gov",
-    "weathergov-staging.app.cloud.gov",
-    "beta.weather.gov",
+    "beta.weather.gov" if cloudgov_space == "prod" else f"weathergov-{cloudgov_space}.app.cloud.gov",
 ]
 
 # Helpers
@@ -57,28 +59,31 @@ def find_cloudgov_proj_resources(name):
         return os.path.dirname(resource_entry[0])
     return None
 
+def set_cors_on_s3_bucket(bucket_name=None, region_name=None, access_key=None, secret_key=None, **kwargs):
+    """Set CORS setting on the given S3 bucket."""
+    s3 = boto3.client("s3", region_name=region_name, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+    cors_configuration = {
+        "CORSRules": [
+            {
+                "AllowedHeaders": ["*"],
+                "AllowedMethods": ["GET"],
+                "AllowedOrigins": ALLOWED_HOSTS,
+                "ExposeHeaders": [],
+                "MaxAgeSeconds": 3000,
+            },
+        ],
+    }
+    # this operation will raise a `botocore.exceptions.ClientError` if not successful
+    s3.put_bucket_cors(Bucket=bucket_name, CORSConfiguration=cors_configuration)
 
 
-env = environs.Env()
-cloudgov_space = env("CLOUDGOV_SPACE", "test")
-
-# Get secrets from Cloud.gov user provided service, if exists
-# If not, get secrets from environment variables
+# get secrets from Cloud.gov user provided services
 key_service = AppEnv().get_service(name=f"{cloudgov_space}-credentials")
 rds_service = AppEnv().get_service(name=f"weathergov-rds-{cloudgov_space}")
-
-if key_service and key_service.credentials:
-    secret = key_service.credentials.get
-else:
-    secret = env
-
-# Set the secret key based on the function,
-# which will either be the getter for a secret
-# value in VCAP or just the environment itself
-secret_key = secret("django_secret_key")
+s3_service = AppEnv().get_service(name=f"weathergov-s3-{cloudgov_space}")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secret_key
+SECRET_KEY = key_service.credentials.get("django_secret_key")
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -91,7 +96,9 @@ GDAL_LIBRARY_PATH = find_cloudgov_library("libgdal")
 # we need to tell PROJ where its resources can be found. so let's look for
 # the projection database and return the basedir. typically this is at
 # /home/vcap/deps/0/apt/usr/share/proj/
-os.environ["PROJ_LIB"] = find_cloudgov_proj_resources("proj.db")
+proj_resource_location = find_cloudgov_proj_resources("proj.db")
+if proj_resource_location:
+    os.environ["PROJ_LIB"] = proj_resource_location
 
 DATABASES = {
     "default": {
@@ -103,6 +110,26 @@ DATABASES = {
         "PORT": db_credentials["port"],
     },
 }
+
+# S3 for storing media uploads, such as weather stories and situation reports
+s3_credentials = s3_service.credentials
+s3_options = {
+    "bucket_name": s3_credentials["bucket"],
+    "region_name": s3_credentials["region"],
+    "access_key": s3_credentials["access_key_id"],
+    "secret_key": s3_credentials["secret_access_key"],
+    "querystring_auth": False, # do not send AWSAccessKeyId query params since buckets are public
+}
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": s3_options,
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+set_cors_on_s3_bucket(**s3_options)
 
 # Wagtail
 # Note: might need to join `cms/` to the uri
