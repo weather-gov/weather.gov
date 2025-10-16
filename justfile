@@ -1,10 +1,21 @@
 # Recipes with the [script] attribute are currently considered unstable, so we
 # need to mark the whole file accordingly
 set unstable
+set dotenv-load
 
 # Shows this list 🙂
 default:
   just --list
+
+# Use a huge version number to compare against. This will get us everything
+# between now and the last versioned tag. And this should just keep on working
+# until we pass version 10,000. Which... should be a while.
+# Get release notes since the last versioned tag
+[group("assorted")]
+[script]
+release-notes:
+  git remote update
+  curl -s -H "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://vlab.noaa.gov/gitlab-licensed/api/v4/projects/186/repository/changelog?version=v10000.0.0" | jq -r .notes | sed 's/^## .*//g' | sed 's/(http.*//g' | sed 's/\[//g' | sed 's/\]//g'
 
 # Build USWDS and our styles together
 [group("building")]
