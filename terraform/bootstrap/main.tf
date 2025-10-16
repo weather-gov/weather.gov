@@ -30,7 +30,7 @@ variable "mgmt_space_name" {
 variable "create_bot_secrets_file" {
   type        = bool
   default     = false
-  description = "Flag whether to create secrets.cicd.tfvars file"
+  description = "Flag whether to create secrets.cicd.auto.tfvars file"
 }
 
 locals {
@@ -155,7 +155,7 @@ resource "local_sensitive_file" "bucket_creds" {
 
 resource "local_sensitive_file" "bot_secrets_file" {
   count           = (var.create_bot_secrets_file ? 1 : 0)
-  filename        = "${path.module}/../secrets.cicd.tfvars"
+  filename        = "${path.module}/../secrets.cicd.auto.tfvars"
   file_permission = "0600"
 
   content = templatefile("${path.module}/templates/bot_secrets.tftpl", {
