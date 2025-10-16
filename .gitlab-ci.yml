@@ -124,7 +124,31 @@ deploy-to-prod:
   stage: deploy
   image: cloudfoundry/cli:8
   script:
-    - echo We deployed to $[[ inputs.deploy-to-environment ]]!
+    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils
+    - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
+    - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
+    - terraform --version
+    - cd terraform/
+    - >
+      echo {
+      \"django_secret_key\": \"$CI_PROD_DJANGO_SECRET_KEY\",
+      \"sp_private_key\": \"$CI_PROD_SP_PRIVATE_KEY\",
+      \"sp_public_key\": \"$CI_PROD_SP_PUBLIC_KEY\"
+      } > credentials-prod.json
+    - |
+      echo -e \
+      cf_user = \"$CI_PROD_CF_USER\"\\n\
+      cf_password = \"$CI_PROD_CF_PASSWORD\" \
+      > secrets.cicd.auto.tfvars
+    - |
+      echo -e \
+      bucket     = \"$CI_TF_STATE_MGMT_BUCKET\"\\n\
+      region     = \"$CI_TF_STATE_MGMT_REGION\"\\n\
+      access_key = \"$CI_TF_STATE_MGMT_ACCESS_KEY\"\\n\
+      secret_key = \"$CI_TF_STATE_MGMT_SECRET_KEY\" \
+      > secrets.backend.tfvars
+    - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-prod" -reconfigure
+    - terraform apply -var-file="weathergov-prod.tfvars" -auto-approve
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "prod" && "$[[ inputs.confirm-beta-deploy ]]" == "YES"
