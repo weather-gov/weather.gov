@@ -2,7 +2,6 @@ import { recordLogEvent } from "./newRelic.js";
 
 const writeLog = (name, level, message) => {
   recordLogEvent({ message, level, name });
-  /* eslint-disable no-console */
   if (typeof message === "string") {
     console.log(`[${name}] | ${level} | ${message} |`);
   } else {
@@ -10,7 +9,6 @@ const writeLog = (name, level, message) => {
     console.log(message);
     console.log("|");
   }
-  /* eslint-enable no-console */
 };
 
 const logLevels = {

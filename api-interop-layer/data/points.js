@@ -23,6 +23,9 @@ export default async (latitude, longitude) => {
   );
 
   const db = await openDatabase();
+
+  const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',4326)`;
+
   const placePromise = db
     // In this distance query, we need to set the spatial reference system of
     // the point we're querying for. All of our spatial tables are SRS 4326,
@@ -31,7 +34,7 @@ export default async (latitude, longitude) => {
       `SELECT
        name,state,stateName,county,timezone,stateFIPS,countyFIPS
        FROM weathergov_geo_places
-       ORDER BY ST_DISTANCE(point,ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',4326))
+       ORDER BY ST_DISTANCE(point,${pointGeom})
        LIMIT 1`,
     )
     .then((result) => {
@@ -41,11 +44,26 @@ export default async (latitude, longitude) => {
       return null;
     });
 
-  const [grid, place] = await Promise.all([pointsPromise, placePromise]);
+  // Check if the requested point is inside a marine zone.
+  const isMarinePromise = db.query(
+    `SELECT id
+    FROM weathergov_geo_zones
+    WHERE
+      type LIKE 'marine:%'
+      AND
+      ST_Intersects(shape,${pointGeom})
+    LIMIT 1`,
+  );
+
+  const [grid, place, isMarine] = await Promise.all([
+    pointsPromise,
+    placePromise,
+    isMarinePromise,
+  ]);
 
   if (place && place.name && place.state) {
     place.fullName = `${place.name}, ${place.state}`;
   }
 
-  return { point, place, grid };
+  return { point, place, grid, isMarine: isMarine.rows.length > 0 };
 };

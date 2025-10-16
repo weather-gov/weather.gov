@@ -47,7 +47,10 @@ class TestViews(TestCase):
     @mock.patch("backend.views.interop.get_point_forecast")
     def test_point_location(self, mock_get_point_forecast):
         """Test the point location view."""
-        mock_get_point_forecast.return_value = {"grid": {"wfo": "TST"}}
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST"},
+            "isMarine": False,
+        }
 
         response = self.client.get("/point/11.1/22.2", follow=True)
 
@@ -58,8 +61,21 @@ class TestViews(TestCase):
             {
                 "grid": {"wfo": "TST"},
                 "wfo": self.wfo,
+                "isMarine": False,
             },
         )
+
+    @mock.patch("backend.views.interop.get_point_forecast")
+    def test_marine_point(self, mock_get_point_forecast):
+        """Test that a marine point renders the right template."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST"},
+            "isMarine": True,
+        }
+
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        self.assertTemplateUsed(response, "weather/marine-point.html")
 
     def test_place_unknown(self):
         """Test the place location view with an unknown place."""
@@ -69,21 +85,30 @@ class TestViews(TestCase):
     @mock.patch("backend.views.interop.get_point_forecast")
     def test_place_redirect_state(self, mock_get_point_forecast):
         """Test the place location view where the state needs redirection."""
-        mock_get_point_forecast.return_value = {"grid": {"wfo": "TST"}}
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST"},
+            "isMarine": False,
+        }
         response = self.client.get("/place/nj/Hoboken/")
         self.assertRedirects(response, "/place/NJ/Hoboken/")
 
     @mock.patch("backend.views.interop.get_point_forecast")
     def test_place_redirect_place(self, mock_get_point_forecast):
         """Test the place location view where the place name needs redirection."""
-        mock_get_point_forecast.return_value = {"grid": {"wfo": "TST"}}
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST"},
+            "isMarine": False,
+        }
         response = self.client.get("/place/NY/New York/")
         self.assertRedirects(response, "/place/NY/New_York/")
 
     @mock.patch("backend.views.interop.get_point_forecast")
     def test_place(self, mock_get_point_forecast):
         """Test the place location view where the place name needs redirection."""
-        mock_get_point_forecast.return_value = {"grid": {"wfo": "TST"}}
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST"},
+            "isMarine": False,
+        }
         response = self.client.get("/place/NJ/Hoboken/")
         self.assertTemplateUsed(response, "weather/point.html")
 
@@ -95,6 +120,7 @@ class TestViews(TestCase):
             {
                 "grid": {"wfo": "TST"},
                 "wfo": self.wfo,
+                "isMarine": False,
             },
         )
 

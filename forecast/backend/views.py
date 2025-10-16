@@ -74,6 +74,10 @@ def point_location(request, lat, lon):
     # TODO: Add some error checking here
     wfo = WFO.objects.get(code=point["grid"]["wfo"])
     point["wfo"] = wfo
+
+    if point["isMarine"]:
+        return render(request, "weather/marine-point.html", {"point": point})
+
     return render(request, "weather/point.html", {"point": point})
 
 

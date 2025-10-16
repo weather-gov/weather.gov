@@ -38,6 +38,7 @@ describe("point method", () => {
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
       grid: { error: true },
+      isMarine: false,
       place: null,
     });
   });
@@ -53,13 +54,18 @@ describe("point method", () => {
     expect(actual).to.eql({
       point: { latitude: 4, longitude: 5 },
       grid: { wfo: "PPU", x: 30, y: 40 },
+      isMarine: false,
       place: null,
     });
   });
 
   it("includes a location without a full name", async () => {
     fetchAPIJson.resolves({ error: true });
-    db.query.resolves({
+
+    // Marine zone query. Make this one a marine point to validate that logic.
+    db.query.onCall(1).resolves({ rows: [1] });
+
+    db.query.onCall(0).resolves({
       rows: [
         {
           name: "Townsville",
@@ -81,6 +87,7 @@ describe("point method", () => {
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
       grid: { error: true },
+      isMarine: true,
       place: {
         name: "Townsville",
         state: "",
@@ -95,7 +102,11 @@ describe("point method", () => {
 
   it("includes a location with a full name", async () => {
     fetchAPIJson.resolves({ error: true });
-    db.query.resolves({
+
+    // Marine zone query
+    db.query.onCall(1).resolves({ rows: [] });
+
+    db.query.onCall(0).resolves({
       rows: [
         {
           name: "Townsville",
@@ -114,6 +125,7 @@ describe("point method", () => {
     expect(actual).to.eql({
       point: { latitude: 1, longitude: 2 },
       grid: { error: true },
+      isMarine: false,
       place: {
         name: "Townsville",
         state: "FR",

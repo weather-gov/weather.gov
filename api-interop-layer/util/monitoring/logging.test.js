@@ -12,7 +12,7 @@ describe("logging", () => {
   });
 
   after(() => {
-    console.log.restore(); // eslint-disable-line no-console
+    console.log.restore();
   });
 
   const loadLogger = async () => {

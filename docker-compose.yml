@@ -80,6 +80,7 @@ services:
       API_KEY: ${API_KEY:-}
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
       NEWRELIC_LICENSE: ${NEWRELIC_LICENSE:-}
+      LOG_LEVEL: verbose
     networks:
       - weather.gov
     links:

@@ -8,6 +8,7 @@ import hourly, {
 import { convertValue, convertProperties } from "../../util/convert.js";
 import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
+import { getMarineDays } from "./marine.js";
 
 /**
  * Helper function to set the max PoP
@@ -18,7 +19,7 @@ export const updateMaxPop = (day) => {
   // We set the probability of precip for each daily period
   // to be the highest percentage taken from the _hourly_ data
   // that is between the start and end times for the period
-  const maxPopsForDay = [];
+  const maxPopsForDay = [0];
   day.periods.forEach(period => {
     const dayStart = dayjs(period.start);
     const dayEnd = dayjs(period.end);
@@ -47,7 +48,7 @@ export const updateMaxPop = (day) => {
 /**
  * Fetches and formats the main forecast object
  */
-export default async ({ grid, place }) => {
+export default async ({ grid, place, isMarine }) => {
   const hours = new Map();
 
   // The hours map is passed into the gridpoint and hourly data processors so
@@ -61,15 +62,23 @@ export default async ({ grid, place }) => {
     `/gridpoints/${grid.wfo}/${grid.x},${grid.y}`,
   ).then((data) => gridpoint(data, hours, place));
 
-  const dailyPromise = fetchAPIJson(
-    `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`,
-  ).then((data) => daily(data, place));
+  // There is not a distinct daily forecast for marine data, so if we're in a
+  // marine location, just resolve an empty object. We'll populate it manually.
+  const dailyPromise = isMarine
+    ? Promise.resolve({})
+    : fetchAPIJson(`/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`).then(
+        (data) => daily(data, place),
+      );
 
-  const hourlyPromise = fetchAPIJson(
-    `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`,
-  ).then((data) => {
-    hourly(data, hours, place);
-  });
+  // Similarly, there is no distinct hourly forecast data. We only have the
+  // gridpoint forecast, which is already hourly.
+  const hourlyPromise = isMarine
+    ? Promise.resolve(false)
+    : fetchAPIJson(
+        `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`,
+      ).then((data) => {
+        hourly(data, hours, place);
+      });
 
   // We don't capture the results of the hourly processing function because it
   // doesn't return anything. All of its work gets put into the hours map.
@@ -116,6 +125,12 @@ export default async ({ grid, place }) => {
       convertValue(ice);
       convertValue(snow);
     });
+  }
+
+  // For marine data, we don't have a daily forecast, but we do have elements of
+  // an hourly forecast. We can use those hours to build a list of days.
+  if (isMarine) {
+    dailyData.days = await getMarineDays(hours, place.timezone);
   }
 
   // Now add the appropriate QPF and hourly data to each day.
