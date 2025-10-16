@@ -8,5 +8,4 @@ space_deployers = [
 web_memory         = "1024M"
 api_interop_memory = "1024M"
 custom_domain_name = "beta.weather.gov"
-interop_url   = "https://api-weathergov-beta.app.cloud.gov"
-
+interop_url        = "https://api-weathergov-prod.app.cloud.gov"
