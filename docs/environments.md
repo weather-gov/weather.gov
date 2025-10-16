@@ -17,8 +17,8 @@ the GitLab CI/CD.
 ### Beta
 
 Beta is a "production-like" environment that only gets deployed when we do
-manual tagged, scheduled releases as a product team. This is what you see when
-you visit [beta.weather.gov](https://beta.weather.gov).
+[manual tagged, scheduled releases](./product/tagged-releases.md) as a product team.
+This is what you see when you visit [beta.weather.gov](https://beta.weather.gov).
 
 ## Unstable
 
@@ -31,13 +31,13 @@ local/development environment must be reviewed by another team member before
 they are pushed into a stable environment. This environment is not accessible
 on the internet.
 
-See [dev docs](dev/) for information on running the application locally. We use
+See [dev docs](./dev/) for information on running the application locally. We use
 docker with composer to manage the application locally.
 
-### Sandbox/QA
+### Test
 
-Developer sandboxes are instances of weather.gov that are not necessarily
-stable. They are used by the product development team to demonstrate changes
-and to test them out in a more realistic setting than their own computers. They
-can be useful when reviewing a change made in a local environment so others on
-the team do not need to have their own local environment.
+Test is an instance of weather.gov that is not necessarily stable. It is used by
+the team to demonstrate changes and to test them out in a more realistic setting
+than their own computers. They can be useful when reviewing a change made in a
+local environment so others on the team do not need to have their own local
+environment.

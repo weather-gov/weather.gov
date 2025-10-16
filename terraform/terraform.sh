@@ -84,7 +84,7 @@ if [[ $tfm_needs_init = true ]]; then
   terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.$env" -reconfigure
 fi
 
-if [[ "$env" = "staging" ]] || [[ "$env" = "production" ]]; then
+if [[ "$env" = "weathergov-staging" ]] || [[ "$env" = "weathergov-prod" ]]; then
   echo "=============================================================================================================="
   echo "= Obtaining bot deployer credentials for $env"
   echo "=============================================================================================================="
@@ -116,4 +116,8 @@ if [[ "$cmd" = "destroy" ]] && [[ "$env" != "staging" ]] && [[ "$env" != "produc
   echo "= Destroying the sandbox-bot user"
   echo "=============================================================================================================="
   (cd sandbox-bot && ./run.sh "$env" destroy -auto-approve)
+fi
+
+if [[ -f secrets.cicd.auto.tfvars ]]; then
+  rm secrets.cicd.auto.tfvars
 fi
