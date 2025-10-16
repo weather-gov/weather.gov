@@ -1,5 +1,6 @@
 {
   "nosnow_noice_noalerts": {
+    "isMarine": false,
     "forecast": {
       "days": [
         {
@@ -152,6 +153,7 @@
     }
   },
   "snow_noice_alert_noalertlevel": {
+    "isMarine": false,
     "forecast": {
       "days": [
         {
@@ -200,6 +202,7 @@
     }
   },
   "nosnow_ice_alert": {
+    "isMarine": false,
     "forecast": {
       "days": [
         {

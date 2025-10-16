@@ -12,7 +12,7 @@ const logger = createLogger("forecast");
 
 const getDataForPoint = async (lat, lon) => {
   logger.verbose(`fetching forecast for ${lat}, ${lon}}`);
-  const { point, place, grid } = await getPoint(lat, lon);
+  const { point, place, grid, isMarine } = await getPoint(lat, lon);
 
   let satellitePromise = Promise.resolve({ error: true });
   let forecast = { daily: { error: true } };
@@ -26,7 +26,7 @@ const getDataForPoint = async (lat, lon) => {
     const dbPool = await getDbConnection();
     const dbConnection = await dbPool.connect();
     const { forecast: fct, observed: obs } = await Promise.all([
-      getForecast({ grid, place }),
+      getForecast({ grid, place, isMarine }),
       getObservations({ grid, point, dbConnection }, dbConnection),
     ]).then(([forecastData, obsData]) => {
       // The forecast endpoint returns extra information about the grid. Why? I
@@ -77,6 +77,7 @@ const getDataForPoint = async (lat, lon) => {
     point,
     place,
     grid,
+    isMarine,
     forecast: forecast.daily,
     satellite,
   };

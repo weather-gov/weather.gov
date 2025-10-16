@@ -135,8 +135,6 @@ class TestInteropInterface(TestCase):
         self.assertEqual(day1["pop"], 3)
         self.assertEqual(day1["numPeriods"], 2)
         self.assertEqual(day1["hasAlertIcon"], False)
-        self.assertEqual(day1["for_day"], "02")
-        self.assertEqual(day1["for_month"], "01")
 
         # Ensure if the probability of precipitation for the day is null, we
         # fallback to zero. This shouldn't happen but there's check code so

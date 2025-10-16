@@ -19,7 +19,7 @@ let sendMetric = (metric) => {
   }).then(async (r) => {
     const response = await r.json();
     if (r.status !== 202) {
-      console.log(`NR error: ${response}`); // eslint-disable-line no-console
+      console.log(`NR error: ${response}`);
     }
     return response;
   });

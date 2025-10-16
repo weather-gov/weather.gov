@@ -11,7 +11,7 @@ alerts - An array of all the alerts that intersect with those hours.
          tabindex="0"
          {% if alerts|length > 0 %} data-has-alerts="true" {% else %} data-has-alerts="false" {% endif %}>
     <caption class="usa-sr-only">
-      {% trans_with_args "hourly-table.aria.table-description.01" day=for_day month=for_month %}
+      {% trans_with_args "hourly-table.aria.table-description.01" day=dayNumericString month=monthNumericString %}
     </caption>
     <tbody data-table-section="time-alerts"
            class="border-bottom-1px border-base-light">
