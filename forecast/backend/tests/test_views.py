@@ -135,7 +135,7 @@ class TestViews(TestCase):
         response = self.client.get("/afd/?wfo=WFO")
         self.assertRedirects(
             response,
-            "/afd/wfo",
+            "/afd/wfo/",
             fetch_redirect_response=False,
         )
 
@@ -144,7 +144,7 @@ class TestViews(TestCase):
         response = self.client.get("/afd/?wfo=WFO&id=AFD&current-wfo=WFO")
         self.assertRedirects(
             response,
-            "/afd/wfo/AFD",
+            "/afd/wfo/AFD/",
             fetch_redirect_response=False,
         )
 
@@ -153,7 +153,7 @@ class TestViews(TestCase):
         response = self.client.get("/afd/?wfo=WFO&id=AFD")
         self.assertRedirects(
             response,
-            "/afd/wfo/AFD",
+            "/afd/wfo/AFD/",
             fetch_redirect_response=False,
         )
 
@@ -167,7 +167,7 @@ class TestViews(TestCase):
         response = self.client.get("/afd/")
         self.assertRedirects(
             response,
-            "/afd/tst/afd_id",
+            "/afd/tst/afd_id/",
             fetch_redirect_response=False,
         )
 
@@ -185,7 +185,7 @@ class TestViews(TestCase):
         response = self.client.get("/afd/TST/")
         self.assertRedirects(
             response,
-            "/afd/tst/magic_afd",
+            "/afd/tst/magic_afd/",
             fetch_redirect_response=False,
         )
 
