@@ -16,8 +16,8 @@ const internalFetch = async (path) => {
       return r.json();
     }
 
+    logger.error(`non-success (HTTP ${r.status}) on ${path}`);
     const response = await r.json();
-    logger.error(`non-success on ${path}`);
     logger.error(response);
 
     // If there was a server error, retry. These are often temporary.
