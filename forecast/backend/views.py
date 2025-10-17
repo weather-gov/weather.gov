@@ -2,7 +2,9 @@ from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.cache import cache_control, never_cache
 
 from backend import interop
 from backend.models import WFO, Region
@@ -37,14 +39,15 @@ def _get_redirect_for_afd_queries(request):
     wfo_was_updated = wfo != current_wfo
     id_was_updated = afd_id != current_afd_id
     if wfo_was_updated and id_was_updated:
-        return f"/afd/{wfo.lower()}/{afd_id}"
+        return reverse("afd_by_office_and_id", kwargs={"wfo": wfo.lower(), "afd_id": afd_id})
     if wfo_was_updated:
-        return f"/afd/{wfo.lower()}"
+        return reverse("afd_by_office", kwargs={"wfo": wfo.lower()})
     if id_was_updated:
-        return f"/afd/{wfo.lower()}/{afd_id}"
+        return reverse("afd_by_office_and_id", kwargs={"wfo": wfo.lower(), "afd_id": afd_id})
     return None
 
 
+@cache_control(public=True, max_age=3600)
 def index(request):
     """Render the home page."""
     return render(request, "weather/index.html")
@@ -68,6 +71,7 @@ def site_page(request):
     return render(request, f"weather/{name}.html", context)
 
 
+@never_cache
 def point_location(request, lat, lon):
     """Render the forecast for a given latitude & longitude."""
     point = interop.get_point_forecast(lat, lon)
@@ -81,6 +85,7 @@ def point_location(request, lat, lon):
     return render(request, "weather/point.html", {"point": point})
 
 
+@never_cache
 def place_forecast(request, state, place):
     """Render the forecast for a given state and place name."""
     # De-normalize the place name. For the purposes of clean URLs, we
@@ -169,7 +174,7 @@ def afd_index(request):
     afd_id = afd_references[0]["id"]
     afd_data = interop.get_wx_afd_by_id(afd_id)
     wfo = get_wfo_from_afd(afd_data)
-    url = f"/afd/{wfo.lower()}/{afd_id}"
+    url = reverse("afd_by_office_and_id", kwargs={"wfo": wfo.lower(), "afd_id": afd_id})
     return redirect(url)
 
 
@@ -178,7 +183,7 @@ def afd_by_office(_, wfo):
     try:
         afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
         afd_id = afd_references[0]["id"]
-        url = f"/afd/{wfo.lower()}/{afd_id}"
+        url = reverse("afd_by_office_and_id", kwargs={"wfo": wfo.lower(), "afd_id": afd_id})
         return redirect(url)
     except Exception as e:
         raise Http404() from e
@@ -194,7 +199,8 @@ def afd_by_office_and_id(request, wfo, afd_id):
         afd_data = interop.get_wx_afd_by_id(afd_id)
         afd_wfo = get_wfo_from_afd(afd_data)
         if not afd_wfo or afd_wfo.lower() != wfo.lower():
-            return redirect(f"/afd/{wfo.lower()}/")
+            url = reverse("afd_by_office", kwargs={"wfo": wfo.lower()})
+            return redirect(url)
 
         # Otherwise, let's grab all the references for the WFO
         # so we can use them in the select dropdown
