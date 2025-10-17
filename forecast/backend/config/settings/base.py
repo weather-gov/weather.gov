@@ -132,6 +132,9 @@ AUTH_USER_MODEL = "backend.NOAAUser"
 
 WSGI_APPLICATION = "backend.config.wsgi.application"
 
+# any upload that exceeds this limit will raise a `SuspiciousOperation(RequestDataTooBig)`
+DATA_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 # 3MB
+
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
