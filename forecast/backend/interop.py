@@ -167,6 +167,10 @@ def get_health():
     url = "/"
     return _fetch(url)
 
+def get_ghwo_data_for_county(county_fips):
+    """Fetch GHWO data for the given county from the interop."""
+    url = f"/ghwo/{county_fips}"
+    return _fetch(url)
 
 def get_wx_afd_by_id(afd_id):
     """

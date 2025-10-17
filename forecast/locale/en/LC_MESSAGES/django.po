@@ -600,3 +600,15 @@ msgstr "Accessibility"
 
 msgid "site.meta.titles.privacy.01"
 msgstr "Privacy policy"
+
+msgid "site.meta.titles.ghwo.risk.01"
+msgstr "Risk overview"
+
+msgid "ghwo.selector.label.state.01"
+msgstr "Select a state"
+
+msgid "ghwo.selector.label.county.01"
+msgstr "Select a county"
+
+msgid "ghwo.selector.label.county-link.01"
+msgstr "View county page"

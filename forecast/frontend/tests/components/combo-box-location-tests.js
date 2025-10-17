@@ -3,11 +3,6 @@
 import { createSandbox, stub } from "sinon";
 import { assert, expect } from "chai";
 
-// JSDOM does not have the `scrollIntoView` method,
-// so we need to stub it out here on all elements
-window.HTMLElement.prototype.scrollIntoView = stub();
-window.HTMLFormElement.prototype.submit = stub();
-
 const wait = async (milliseconds) => {
   await new Promise((resolve) => {
     setTimeout(() => {
@@ -186,6 +181,18 @@ describe("Combo box unit tests", () => {
     // tested. The imports will unwind themselves and it'll use the globals we
     // defined above to register itself with our DOM.
     await import("../../assets/js/components/combo-box-location.js");
+
+    // JSDOM does not have the `scrollIntoView` method,
+    // so we need to stub it out here on all elements
+    window.HTMLElement.prototype.scrollIntoView = stub();
+    stub(window.HTMLFormElement.prototype, "submit");
+  });
+
+  after(() => {
+    // We need to restore the element prototype
+    // stubs when done, otherwise this could
+    // affect other tests in the suite
+    window.HTMLFormElement.prototype.submit.restore();
   });
 
   beforeEach(() => {

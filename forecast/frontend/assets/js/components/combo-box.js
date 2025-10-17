@@ -100,8 +100,11 @@ class ComboBox extends HTMLElement {
     this.initToggleButton = this.initToggleButton.bind(this);
     this.initClearButton = this.initClearButton.bind(this);
     this.setListItems = this.setListItems.bind(this);
+    this.resetListAndListboxItems = this.resetListAndListboxItems.bind(this);
     this.getItemByValue = this.getItemByValue.bind(this);
     this.filterItems = this.filterItems.bind(this);
+    this.setDisabled = this.setDisabled.bind(this);
+    this.setEventListeners = this.setEventListeners.bind(this);
   }
 
   // #region Component lifecycle
@@ -122,41 +125,20 @@ class ComboBox extends HTMLElement {
     this.initToggleButton();
 
     // Bind event listeners
-    this.addEventListener("input", this.handleInput);
-    this.addEventListener("keydown", this.handleKeyDown);
-    this.addEventListener("change", this.handleTextInput);
-    this.input.addEventListener("focus", this.handleFocus);
-    this.addEventListener("blur", this.hideList);
-    this.input.addEventListener("blur", this.hideList);
+    this.setEventListeners();
 
     const items = JSON.parse(this.getAttribute("items") ?? "null");
-    if (Array.isArray(items) && items.length > 0) {
-      this.listItems = items;
-      this.setListItems(items);
-
-      const selected = this.getAttribute("selected");
-      if (selected) {
-        const li = this.getItemByValue(selected);
-        if (li) {
-          this.input.value = li.innerText;
-          if (this.namedInput) {
-            this.namedInput.value = li.dataset.value;
-          }
-
-          this.pseudoFocusListItem(li);
-          this.handleTextInput();
-        }
-      }
-    }
+    this.resetListAndListboxItems(items);
   }
 
   disconnectedCallback() {
-    this.removeEventListener("input", this.handleInput);
-    this.removeEventListener("keydown", this.handleKeyDown);
-    this.removeEventListener("change", this.handleTextInput);
-    this.input.removeEventListener("focus", this.handleFocus);
-    this.removeEventListener("blur", this.hideList);
-    this.input.removeEventListener("blur", this.hideList);
+    this.setEventListeners(false);
+  }
+
+  attributeChangedCallback(name, oldVal, newVal){
+    if(name === "disabled"){
+      this.setDisabled(newVal === "true");
+    }
   }
   // #endregion
 
@@ -256,6 +238,59 @@ class ComboBox extends HTMLElement {
     this.append(clearButton);
     this.clearButton = clearButton;
   }
+
+  resetListAndListboxItems(listItems){
+    // Update this objects listItems property
+    // to stash the values for later use,
+    // then recreate the <li> elements in the
+    // Listbox
+    if(Array.isArray(listItems) && listItems.length){
+      this.listItems = listItems;
+      this.setListItems(listItems);
+    } else {
+      // There are no new list items to set.
+      // For now, we early return _without_ clearing
+      // the current items, as the location combobox
+      // variant makes the assumption of keeping
+      // current items
+      return;
+    }
+
+    // If there is an item currently selected on the
+    // component, pseudo-focus that item and also
+    // update the internal input field to have the text
+    // of that item.
+    // If there is _not_ a valid item selected,
+    // select the first element in the list
+    const selected = this.getAttribute("selected");
+    let listboxItemToFocus;
+    if(selected && selected !== ""){
+      listboxItemToFocus = this.getItemByValue(selected);
+    }
+
+    // If there is no corresponding listbox item
+    // to the currently selected value, we instead
+    // set the selected item to be the first in the
+    // list of items.
+    if(!listboxItemToFocus){
+      listboxItemToFocus = this.listbox.querySelector("li:first-child");
+    }
+
+    this.input.value = listboxItemToFocus.innerText;
+    this.pseudoFocusListItem(listboxItemToFocus);
+    this.handleTextInput();
+    this.setAttribute(
+      "selected",
+      listboxItemToFocus.dataset.value
+    );
+
+    // Update the internal named input
+    // if present
+    if(listboxItemToFocus && this.namedInput){
+      this.namedInput.value = listboxItemToFocus.dataset.value;
+    }
+  }
+  
   // #endregion
 
   // #region Event handlers
@@ -571,6 +606,9 @@ class ComboBox extends HTMLElement {
       this.namedInput.value = selectedItem.dataset.value;
     }
 
+    // Update this componented 'selected' attribute
+    this.setAttribute("selected", selectedItem.dataset.value);
+
     // Hide list and trigger change event
     this.hideList();
     this.dispatchEvent(new Event("change", { bubbles: true }));
@@ -600,9 +638,50 @@ class ComboBox extends HTMLElement {
     this.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
+  /**
+   * Sets the state of the component to disabled if true,
+   * enabled if false.
+   */
+  setDisabled(shouldDisable){
+    if(shouldDisable){
+      this.setEventListeners(false);
+    } else {
+      this.setEventListeners(true);
+    }
+  }
+
+  /**
+   * Set or remove the event listeners needed by this
+   * custom element.
+   * if the passed in argument is true, we add the listeners.
+   * if false, we remove the listeners.
+   */
+  setEventListeners(shouldAdd=true){
+    if(shouldAdd){
+      this.addEventListener("input", this.handleInput);
+      this.addEventListener("keydown", this.handleKeyDown);
+      this.addEventListener("change", this.handleTextInput);
+      this.input.addEventListener("focus", this.handleFocus);
+      this.addEventListener("blur", this.hideList);
+      this.input.addEventListener("blur", this.hideList);
+    } else {
+      this.removeEventListener("input", this.handleInput);
+      this.removeEventListener("keydown", this.handleKeyDown);
+      this.removeEventListener("change", this.handleTextInput);
+      this.input.removeEventListener("focus", this.handleFocus);
+      this.removeEventListener("blur", this.hideList);
+      this.input.removeEventListener("blur", this.hideList);
+    }
+  }
+
   get isShowingList() {
     return this.input.getAttribute("aria-expanded") === "true";
   }
+
+  static get observedAttributes(){
+    return ["disabled"];
+  }
+  
   // #endregion
 }
 

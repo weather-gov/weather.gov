@@ -9,6 +9,11 @@
   @extend .usa-combo-box;
 }
 
+.wx-combo-box[disabled="true"]{
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .wx-combo-box li[role="option"] {
   &:not(.wx-combo-box__list-option--focused):hover {
     background-color: color("base-lightest");
