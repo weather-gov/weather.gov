@@ -55,6 +55,10 @@ def get_cloud_gov_settings():
             "url": f"{entity_id}/saml/acs",
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
         },
+        "singleLogoutService": {
+            "url": f"{entity_id}/saml/sls",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+        },
         "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
     }
     result["sp"] = sp_settings
