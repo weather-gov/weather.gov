@@ -1,0 +1,26 @@
+<form method="post" action="/counties/ghwo/" class="grid-row padding-y-2">
+  {% csrf_token %}
+  <div class="grid-col-4 line-height-sans-5 margin-right-2">
+    <label for="state-select" class="text-base-darker margin-bottom-1">
+      {{ "ghwo.selector.label.state.01" | t }}
+    </label>
+    <wx-combo-box id="state-select" class="wx-combo-box" name="state-select" selected="{{ county.state.fips }}" items="{{ states|json_encode}}">
+    </wx-combo-box>
+  </div>
+  <div class="grid-col-4 line-height-sans-5 margin-right-2">
+    <label for="county-select" class="text-base-darker margin-bottom-1">
+      {{ "ghwo.selector.label.county.01" | t }}
+    </label>
+    <wx-combo-box class="wx-combo-box" id="county-select" name="county-select" selected="{{ county.countyfips }}" items="{{ counties|json_encode }}">
+    </wx-combo-box>
+    <input type="hidden" id="current-county" name="current-county" value="{{county.countyfips}}"/>
+    <input type="hidden" id="current-state" name="current-state" value="{{county.state.fips}}"/>
+  </div>
+  <div class="grid-col-2 line-height-sans-5 display-flex flex-column flex-align-center flex-justify-center">
+    <div class="bg-base-lightest padding-105">
+      <a href="{% url 'county_ghwo' county_fips=county.countyfips %}" class="usa-link">
+        {{ "ghwo.selector.label.county-link.01" | t }}
+      </a>
+    </div>
+  </div>
+</form>

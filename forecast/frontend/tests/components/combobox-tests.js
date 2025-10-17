@@ -1,4 +1,6 @@
 import { assert, expect } from "chai";
+import { beforeEach } from "mocha";
+import { spy } from "sinon";
 
 describe("generic combo box", () => {
   before(async () => {
@@ -72,6 +74,30 @@ describe("generic combo box", () => {
       document.querySelector(`wx-combo-box input[name="pretty pretty pony"]`)
         .value,
     ).to.equal("value #2");
+  });
+
+  it("updates its own 'selected' attribute when an item is chosen", () => {
+    const combobox = document.createElement("wx-combo-box");
+    combobox.setAttribute(
+      "items",
+      JSON.stringify([
+        { value: "value #1", text: "text #1" },
+        { value: "value #2", text: "text #2" },
+        { value: "value #3", text: "text #3" },
+      ]),
+    );
+    document.body.append(combobox);
+
+    // Select the second item in the this
+    combobox.showList();
+    const secondListItem = combobox.listbox.querySelector('li[role="option"]:nth-child(2)');
+    expect(secondListItem).to.exist;
+    secondListItem.click();
+
+    expect(
+      combobox.getAttribute("selected")
+    ).to.equal("value #2");
+    
   });
 
   describe("clears the list", () => {
@@ -309,5 +335,113 @@ describe("generic combo box", () => {
 
       expect(isExpanded()).to.equal(true);
     });
+  });
+});
+
+describe("#resetListAndListboxItems tests", () => {
+  let initialListItems, combobox;
+  beforeEach(() => {
+    initialListItems = [
+      { value: "Item 1 value", text: "Item 1"},
+      { value: "Item 2 value", text: "Item 2"},
+      { value: "Item 3 value", text: "Item 3"}
+    ];
+    combobox = document.createElement("wx-combo-box");
+    combobox.setAttribute("items", JSON.stringify(initialListItems));
+    document.body.innerHTML = "";
+    document.body.append(combobox);
+  });
+  
+  it("has the initial list items set", () => {
+    const expectedItems = initialListItems;
+    const actualItems = combobox.listItems;
+
+    expect(expectedItems).to.eql(actualItems);
+  });
+
+  it("does not set items when listItems is not an array (early returns)", () => {
+    const nextListItems = "";
+    const clearSpy = spy(combobox, "setListItems");
+    
+    combobox.resetListAndListboxItems(nextListItems);
+
+    expect(clearSpy.calledOnce).to.be.false;
+  });
+
+  it("sets list items when the passed items is an array", () => {
+    const nextListItems = [
+      { value: 1, text: "#1"},
+      { value: 2, text: "#2"}
+    ];
+
+    combobox.resetListAndListboxItems(nextListItems);
+
+    expect(combobox.listItems).to.eql(nextListItems);
+  });
+
+  it("updates the 'selected' attribute to match the first new list item's value (new list)", () => {
+    const nextListItems = [
+      { value: "First Value", text: "#1"},
+      { value: "Second Value", text: "#2"}
+    ];
+    const expectedSelectedValue = nextListItems[0].value;
+
+    expect(combobox.getAttribute("selected")).to.not.equal(expectedSelectedValue);
+
+    combobox.resetListAndListboxItems(nextListItems);
+
+    expect(combobox.getAttribute("selected")).to.equal(expectedSelectedValue);
+  });
+
+  it("pseudo-focusses the first list item (new list)", () => {
+    const nextListItems = [
+      { value: "First Value", text: "#1"},
+      { value: "Second Value", text: "#2"}
+    ];
+    const pseudoFocusSpy = spy(combobox, "pseudoFocusListItem");
+    combobox.resetListAndListboxItems(nextListItems);
+
+    const expected = combobox.listbox.querySelector("li:first-child");
+    expect(expected).to.exist;
+
+    expect(pseudoFocusSpy.calledOnceWithExactly(expected)).to.equal(true);
+  });
+
+  it("keeps the 'selected' attribute when updating to a list that contains the same value in it (overlap list)", () => {
+    // See the definition of initialListValues in this
+    // describe block's beforeEach
+    const nextListItems = [
+      { value: "Item 0 value", text: "Item 0"},
+      { value: "Item 1 value", text: "Item 1"}, // Previously the 'selected' item (overlaps)
+      { value: "Item 2 value", text: "Item 2"},
+      { value: "Item 3 value", text: "Item 3"}
+    ];
+
+    const currentSelectedValue = combobox.getAttribute("selected");
+    expect(currentSelectedValue).to.equal(nextListItems[1].value);
+
+    combobox.resetListAndListboxItems(nextListItems);
+    const nextSelectedValue = combobox.getAttribute("selected");
+    expect(nextSelectedValue).to.not.equal(nextListItems[0].value);
+    expect(nextSelectedValue).to.equal(nextListItems[1].value);
+    expect(nextSelectedValue).to.equal(currentSelectedValue);
+  });
+
+  it("pseudo-focusses the element of the existing selected value when updating to a list that overlaps", () => {
+    // See the definition of initialListValues in this
+    // describe block's beforeEach
+    const nextListItems = [
+      { value: "Item 0 value", text: "Item 0"},
+      { value: "Item 1 value", text: "Item 1"}, // Previously the 'selected' item (overlaps)
+      { value: "Item 2 value", text: "Item 2"},
+      { value: "Item 3 value", text: "Item 3"}
+    ];
+
+    const pseudoFocusSpy = spy(combobox, "pseudoFocusListItem");
+    combobox.resetListAndListboxItems(nextListItems);
+
+    const expected = combobox.listbox.querySelector("li:nth-child(2)");
+
+    expect(pseudoFocusSpy.calledOnceWithExactly(expected)).to.equal(true);
   });
 });

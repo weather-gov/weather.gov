@@ -36,6 +36,8 @@ urlpatterns = [
     # that will be requested from the frontend (htmx style)
     path("wx/afd/<afd_id>/", views.wx_afd_id, name="wx_afd_id"),
     path("wx/afd/locations/<wfo>/", views.wx_afd_versions, name="wx_afd_versions"),
+    path("wx/select/ghwo/counties/", views.wx_select_ghwo_counties, name="wx_select_ghwo_counties"),
+    path("wx/ghwo/counties/<str:county_fips>/", views.wx_ghwo_counties, name="wx_ghwo_counties"),
     path(
         "sitemap.xml",
         sitemap,
@@ -51,11 +53,16 @@ urlpatterns = [
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("pages/", include(wagtail_urls)),
+
     # Point forecast related, etc
     path("point/<float:lat>/<float:lon>/", views.point_location, name="point"),
     path("place/<state>/<place>/", views.place_forecast, name="place forecast"),
     path("health/", views.health, name="health"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
+
+    # GHWO
+    path("counties/ghwo/", views.county_ghwo_index, name="county_ghwo_index"),
+    path("counties/ghwo/<str:county_fips>", views.county_ghwo, name="county_ghwo"),
 ]
 
 if settings.DEBUG is True:

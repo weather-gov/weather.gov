@@ -14,3 +14,4 @@ global.window = window;
 global.document = document;
 global.HTMLElement = window.HTMLElement;
 global.Event = window.Event;
+global.FormData = window.FormData;

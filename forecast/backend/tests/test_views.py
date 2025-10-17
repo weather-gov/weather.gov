@@ -2,6 +2,7 @@ from unittest import mock
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.test import TestCase
+from django.urls import reverse
 
 import spatial.models as spatial
 from backend import models
@@ -243,3 +244,303 @@ class TestViews(TestCase):
         mock_get_health.return_value = {"ok": True}
         response = self.client.get("/health/")
         self.assertEqual(response.status_code, 200)
+
+
+    @mock.patch("backend.views.interop.get_ghwo_data_for_county")
+    @mock.patch("backend.views.get_counties_combo_box_list")
+    @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
+    def test_county_ghwo_with_invalid_county_fips(
+            self,
+            mock_get_county,
+            mock_get_county_list,
+            mock_get_ghwo_data_for_county,
+    ):
+        """Requesting a GHWO county details page for invalid county returns 404."""
+        mock_get_county_list.return_value = []
+        mock_get_ghwo_data_for_county.return_value = {}
+        mock_get_county.side_effect = spatial.WeatherCounties.DoesNotExist
+
+        response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
+
+        self.assertEqual(response.status_code, 404)
+
+
+
+    @mock.patch("backend.views.interop.get_ghwo_data_for_county")
+    @mock.patch("backend.views.get_counties_combo_box_list")
+    @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
+    def test_county_ghwo_with_failed_interop_request(
+            self,
+            mock_get_county,
+            mock_get_county_list,
+            mock_get_ghwo_data_for_county,
+    ):
+        """Requesting a GHWO county details page returns 404 when GHWO interop request fails.
+
+        This should cover anything from the interop crashing to the GHWO
+        data simply not being available for the given county.
+        """
+        mock_get_county_list.return_value = []
+        mock_get_ghwo_data_for_county.side_effect = Exception
+        mock_county = mock.Mock()
+        mock_county.state.fips.return_value = "1"
+        mock_county.county.countyfips.return_value = "1"
+        mock_get_county.return_value = mock_county
+
+        response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
+
+        self.assertEqual(response.status_code, 404)
+
+
+    @mock.patch("backend.views.interop.get_ghwo_data_for_county")
+    @mock.patch("backend.views.get_counties_combo_box_list")
+    @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
+    def test_county_ghwo_success(
+            self,
+            mock_get_county,
+            mock_get_county_list,
+            mock_get_ghwo_data_for_county,
+    ):
+        """Test the success case for rerquesting a GHWO county details page."""
+        mock_get_county_list.return_value = []
+        mock_get_ghwo_data_for_county.return_value = {}
+        mock_county = mock.Mock()
+        mock_county.state.fips.return_value = "1"
+        mock_county.county.countyfips.return_value = "1"
+        mock_get_county.return_value = mock_county
+
+        response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/county/ghwo.html")
+
+    def test_county_ghwo_index_cannot_get(self):
+        """Ensure that we cannot GET request on the county GHWO index page.
+
+        This view is specifically designed to be POST only, as it will
+        redirect the user to the corrrect county page.
+        """
+        response = self.client.get(reverse("county_ghwo_index"))
+
+        # 405: Method Not Allowed
+        self.assertEqual(response.status_code, 405)
+
+    @mock.patch("spatial.models.WeatherStates.objects.get")
+    def test_county_ghwo_index_invalid_state_fips(self, mock_state_get):
+        """Posting to the county ghwo index page with an invalid state fips 404s."""
+        mock_state_get.side_effect = Exception
+
+        response = self.client.post(
+            reverse("county_ghwo_index"),
+            {
+                "current-state": "1",
+                "state-select": "2",
+                "county-select": "2",
+            },
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+
+    @mock.patch("backend.views.WeatherCounties.objects.get")
+    def test_county_ghwo_index_invalid_selected_county(self, mock_county_get):
+        """Posting to the county ghwo index page with an invalid selected county fips 404s."""
+        post_data = {
+            "current-state": "51",
+            "state-select": "51",
+            "county-select": "1",
+        }
+        mock_county_get.side_effect = Exception
+
+        response = self.client.post(
+            reverse("county_ghwo_index"),
+            post_data,
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    @mock.patch("backend.views.WeatherCounties.objects")
+    @mock.patch("backend.views.WeatherStates.objects")
+    def test_county_ghwo_index_valid_selected_state_redirects(self, mock_state_objects, mock_county_objects):
+        """Posting to the county ghwo index page with a valid selected state redirects to the proper url."""
+        post_data = {
+            "current-state": "51",
+            "state-select": "50",
+
+            "county-select": "1",
+        }
+
+        mock_county = mock.MagicMock(countyfips="501")
+        mock_county_objects.filter.return_value.order_by.return_value.first.return_value = mock_county
+
+        mock_state = mock.MagicMock(id="51")
+        mock_state_objects.get.return_value = mock_state
+
+        response = self.client.post(
+            reverse("county_ghwo_index"),
+            post_data,
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("county_ghwo", kwargs={"county_fips": "501"}),
+            fetch_redirect_response=False,
+        )
+
+    @mock.patch("backend.views.WeatherCounties.objects.get")
+    def test_county_ghwo_index_valid_selected_county_redirects(self, mock_county_get):
+        """Posting to the county ghwo index page with a valid selected county redirects to the proper url."""
+        post_data = {
+            "current-state": "51",
+            "state-select": "51",
+            "county-select": "1",
+        }
+        mock_county = mock.MagicMock(countyfips="1")
+        mock_county_get.return_value = mock_county
+
+        response = self.client.post(
+            reverse("county_ghwo_index"),
+            post_data,
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("county_ghwo", kwargs={"county_fips": "1"}),
+            fetch_redirect_response=False,
+        )
+
+    def test_wx_select_ghwo_counties_cannot_get(self):
+        """Ensure that we cannot GET request on the wx ghwo counties view.
+
+        This view is specifically designed for POST only
+        """
+        response = self.client.get(reverse("wx_select_ghwo_counties"))
+
+        # 405: Method Not Allowed
+        self.assertEqual(response.status_code, 405)
+
+
+    @mock.patch("backend.views.WeatherStates.objects.get")
+    def test_wx_select_ghwo_counties_invalid_state_fips(self, mock_state_get):
+        """Posting to wx select ghwo counties with an invalid state fips 404s."""
+        mock_state_get.side_effect = Exception
+
+        response = self.client.post(
+            reverse("wx_select_ghwo_counties"),
+            {
+                "current-state": "1",
+                "state-select": "2",
+                "county-select": "2",
+            },
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+
+    @mock.patch("backend.views.WeatherCounties.objects.get")
+    def test_wx_select_ghwo_counties_invalid_selected_county(self, mock_county_get):
+        """Posting to wx select ghwo counties with an invalid selected county fips 404s."""
+        post_data = {
+            "current-state": "51",
+            "state-select": "51",
+            "county-select": "1",
+        }
+        mock_county_get.side_effect = Exception
+
+        response = self.client.post(
+            reverse("wx_select_ghwo_counties"),
+            post_data,
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+
+    @mock.patch("backend.views.WeatherCounties.objects")
+    @mock.patch("backend.views.WeatherStates.objects")
+    def test_wx_select_ghwo_counties_valid_selected_state(self, mock_state_objects, mock_county_objects):
+        """Posting to wx select ghwo counties endpoint with valid state renders the correct template partial."""
+        post_data = {
+            "current-state": "51",
+            "state-select": "50",
+
+            "county-select": "1",
+        }
+
+        mock_county = mock.MagicMock(countyfips="501")
+        mock_county_objects.filter.return_value.order_by.return_value.first.return_value = mock_county
+
+        mock_state = mock.MagicMock(id="51")
+        mock_state_objects.get.return_value = mock_state
+
+        response = self.client.post(
+            reverse("wx_select_ghwo_counties"),
+            post_data,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/partials/wx-county-ghwo-selector.html")
+
+    @mock.patch("backend.views.WeatherCounties.objects.get")
+    def test_wx_select_ghwo_counties_valid_selected_county(self, mock_county_get):
+        """Posting to wx select ghwo counties endpoint with valid county renders the correct template partial."""
+        post_data = {
+            "current-state": "51",
+            "state-select": "51",
+            "county-select": "1",
+        }
+        mock_county = mock.MagicMock(countyfips="1")
+        mock_county_get.return_value = mock_county
+
+        response = self.client.post(
+            reverse("wx_select_ghwo_counties"),
+            post_data,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/partials/wx-county-ghwo-selector.html")
+
+    @mock.patch("backend.views.WeatherCounties.objects.get")
+    def test_wx_ghwo_counties_invalid_county_fips(self, mock_get_county):
+        """Request to wx ghwo counties endpoint with invalid county fips 404s."""
+        mock_get_county.side_effect = Exception
+
+        response = self.client.get(
+            reverse("wx_ghwo_counties", kwargs={"county_fips": "invalid fips"}),
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    @mock.patch("backend.views.interop.get_ghwo_data_for_county")
+    def test_wx_ghwo_counties_failed_interop_request(self, mock_get_ghwo):
+        """Request to wx ghwo counties endpoint with failing interop ghwo data request 404s."""
+        mock_get_ghwo.side_effect = Exception
+
+        response = self.client.get(
+            reverse("wx_ghwo_counties", kwargs={"county_fips": "51013"}),
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_wx_ghwo_counties_cannot_post(self):
+        """Ensure we cannot POST on the wx ghwo counties partial endpoint."""
+        response = self.client.post(
+            reverse("wx_ghwo_counties", kwargs={"county_fips": "valid"}),
+            {},
+        )
+
+        # 405: Method Not Allowed
+        self.assertEqual(response.status_code, 405)
+
+    @mock.patch("backend.views.WeatherCounties.objects.get")
+    @mock.patch("backend.views.interop.get_ghwo_data_for_county")
+    def test_wx_ghwo_counties_success(self, mock_get_ghwo, mock_get_county):
+        """Test successful request for wx ghwo counties partial."""
+        mock_get_county.return_value = mock.MagicMock()
+        mock_get_ghwo.return_value = {}
+
+        response = self.client.get(
+            reverse("wx_ghwo_counties", kwargs={"county_fips": "valid"}),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
