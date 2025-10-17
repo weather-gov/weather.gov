@@ -1,24 +1,20 @@
-import { getGHWOForWFOAndCounty } from "../data/ghwo.js";
+import { getGHWOData } from "../data/ghwo/index.js";
 
 export const method = "GET";
-export const url = "/ghwo/:wfo/:county";
+export const url = "/ghwo/:id";
 export const schema = {
   params: {
-    wfo: {
+    id: {
       type: "string",
-      pattern: "^[A-Za-z]{3}$",
-    },
-    county: {
-      type: "string",
-      pattern: "^[0-9]{5}$",
+      pattern: "^([0-9]{5}|[A-Za-z]{2})$",
     },
   },
 };
 
 export const handler = async (request) => {
-  const { wfo, county } = request.params;
+  const { id } = request.params;
 
-  const ghwo = await getGHWOForWFOAndCounty(wfo, county);
+  const ghwo = await getGHWOData(id);
 
   if (ghwo.error) {
     return {
