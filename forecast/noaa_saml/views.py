@@ -62,11 +62,6 @@ def saml_logout(request):
     saml_request_info = prepare_saml_request(request)
     auth = init_saml_auth(saml_request_info)
     logout_params = get_saml_info_from_session(request.session)
-
-    # If LogoutRequest ID need to be stored in order to later validate it, do instead
-    # slo_built_url = auth.logout(name_id=name_id, session_index=session_index)
-    # request.session['LogoutRequestID'] = auth.get_last_request_id()
-    # return HttpResponseRedirect(slo_built_url)
     slo_built_url = auth.logout(**logout_params)
     request.session["LogoutRequestID"] = auth.get_last_request_id()
     return HttpResponseRedirect(slo_built_url)
@@ -93,8 +88,8 @@ def saml_acs(request):
     attributes = False
     if "AuthNRequestID" in request.session:
         request_id = request.session["AuthNRequestID"]
-    update_session_with_saml_info(request.session, auth)
     auth.process_response(request_id=request_id)
+    update_session_with_saml_info(request.session, auth)
     errors = auth.get_errors()
     error_reason = None
     not_saml_auth_warn = not auth.is_authenticated()
