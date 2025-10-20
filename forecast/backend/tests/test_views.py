@@ -67,6 +67,36 @@ class TestViews(TestCase):
         )
 
     @mock.patch("backend.views.interop.get_point_forecast")
+    def test_point_location_with_out_of_bounds(self, mock_get_point_forecast):
+        """Test the point location view when the requested point is out of bounds."""
+        mock_get_point_forecast.return_value = {
+            "error": True,
+            "status": 404,
+            "reason": "out-of-bounds",
+        }
+
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
+
+    @mock.patch("backend.views.interop.get_point_forecast")
+    def test_point_location_with_unsupported_point(self, mock_get_point_forecast):
+        """Test the point location view when the requested point is not supported."""
+        mock_get_point_forecast.return_value = {
+            "error": True,
+            "status": 404,
+            "reason": "not-supported",
+        }
+
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "errors/404/point-not-supported.html")
+
+    @mock.patch("backend.views.interop.get_point_forecast")
     def test_marine_point(self, mock_get_point_forecast):
         """Test that a marine point renders the right template."""
         mock_get_point_forecast.return_value = {
