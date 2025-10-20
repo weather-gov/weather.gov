@@ -1,6 +1,7 @@
 import json
 
 from django.conf import settings
+from django.db.models import Subquery
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -13,7 +14,7 @@ from django.views.decorators.http import require_GET, require_POST
 from backend import interop
 from backend.models import WFO, Region
 from backend.util import get_counties_combo_box_list, get_states_combo_box_list, get_wfo_from_afd
-from spatial.models import WeatherCounties, WeatherPlace, WeatherStates
+from spatial.models import WeatherCounties, WeatherCountyWarningAreas, WeatherPlace, WeatherStates
 
 HTTP404 = 404
 
@@ -158,7 +159,28 @@ def offices(request):  # pragma: no cover
 def offices_specific(request, wfo):
     """Render the home page for an individual Weather Forecast Office."""
     office = WFO.objects.get(code=wfo.upper())
-    return render(request, "weather/office.html", {"office": office})
+
+    # Get the counties that intersect the CWA associated with this WFO
+    counties = WeatherCounties.objects.filter(
+        shape__intersects=Subquery(WeatherCountyWarningAreas.objects.filter(wfo=office.code).values("shape")[:1]),
+    ).all()
+
+    # Make a nice, Oxford-comma-delimited list of counties.
+    counties = [county.countyname for county in counties]
+    if len(counties) > 1:
+        last = counties.pop()
+        # 2 is not a magic number. It's how many items we need in order to have
+        # an Oxford comma. It's not magic, just grammar. Disable the rule.
+        counties[-1] = f"{counties[-1]}{',' if len(counties) > 2 else ''} and {last}"  # noqa: PLR2004
+
+    return render(
+        request,
+        "weather/office.html",
+        {
+            "office": office,
+            "counties": ", ".join(counties),
+        },
+    )
 
 
 def afd_index(request):
@@ -247,20 +269,26 @@ def wx_afd_versions(_, wfo):
     markup = render_to_string("weather/wx/afd-versions-select.html", {"version_list": data["@graph"]})
     return HttpResponse(markup, content_type="text/html")
 
+
 def wx_select_state_counties(_request, state_fips):
     """Respond with a list of combo-box items in JSON for counties in the given state."""
     results = []
     for county in WeatherCounties.objects.filter(state__fips=state_fips).order_by("countyname"):
-        results.append({
-            "text": f"{county.countyname}, {county.state.state}",
-            "value": county.countyfips,
-        })
+        results.append(
+            {
+                "text": f"{county.countyname}, {county.state.state}",
+                "value": county.countyfips,
+            },
+        )
 
-    return JsonResponse({
-        "stateFips": state_fips,
-        "state": county.state.state,
-        "items": results,
-    })
+    return JsonResponse(
+        {
+            "stateFips": state_fips,
+            "state": county.state.state,
+            "items": results,
+        },
+    )
+
 
 def health(_request):
     """Return app status for Terraform health checks."""
@@ -386,6 +414,7 @@ def county_ghwo(request, county_fips):
         },
     )
 
+
 @require_POST
 def county_ghwo_index(request):
     """Redirects to the correct County GHWO page given the post data.
@@ -404,9 +433,13 @@ def county_ghwo_index(request):
         # the new state
         if current_state != selected_state:
             state = WeatherStates.objects.get(fips=selected_state)
-            county = WeatherCounties.objects.filter(
-                state__id=state.id,
-            ).order_by("countyname").first()
+            county = (
+                WeatherCounties.objects.filter(
+                    state__id=state.id,
+                )
+                .order_by("countyname")
+                .first()
+            )
             # Otherwise, we render as if the selected county
             # is the one we wish to render the form/page for
         else:
@@ -417,9 +450,7 @@ def county_ghwo_index(request):
     # Redirect to the main county ghwo page for the
     # resolved county
     return redirect(
-        reverse(
-            "county_ghwo",
-            kwargs={"county_fips": county.countyfips}),
+        reverse("county_ghwo", kwargs={"county_fips": county.countyfips}),
     )
 
 
@@ -443,9 +474,13 @@ def wx_select_ghwo_counties(request):
         # the new state
         if current_state != selected_state:
             state = WeatherStates.objects.get(fips=selected_state)
-            county = WeatherCounties.objects.filter(
-                state__id=state.id,
-            ).order_by("countyname").first()
+            county = (
+                WeatherCounties.objects.filter(
+                    state__id=state.id,
+                )
+                .order_by("countyname")
+                .first()
+            )
             # Otherwise, we render as if the selected county
             # is the one we wish to render the form/page for
         else:
@@ -469,6 +504,7 @@ def wx_select_ghwo_counties(request):
             "county": county,
         },
     )
+
 
 @require_GET
 def wx_ghwo_counties(request, county_fips):
