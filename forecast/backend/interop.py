@@ -29,11 +29,12 @@ def _set_high_low_pops(day, is_marine):
     # forecast templates
     if is_marine:
         day["temps"] = [hour["temperature"]["degF"] for hour in day["hours"] if "temperature" in hour]
-        day["low"] = min(day["temps"])
-        day["high"] = max(day["temps"])
-        day["pop"] = day["maxPop"]
-        if day["pop"] is None:
-            day["pop"] = 0
+
+        # The forecast may not have any temperature data for some days, in which
+        # case we can't very well know the high or low.
+        day["low"] = min(day["temps"]) if day["temps"] else None
+        day["high"] = max(day["temps"]) if day["temps"] else None
+        day["pop"] = day["maxPop"] or 0
     else:
         periods = day["periods"]
         day["temps"] = [period["data"]["temperature"]["degF"] for period in periods]
@@ -171,10 +172,12 @@ def get_health():
     url = "/"
     return _fetch(url)
 
+
 def get_ghwo_data_for_county(county_fips):
     """Fetch GHWO data for the given county from the interop."""
     url = f"/ghwo/{county_fips}"
     return _fetch(url)
+
 
 def get_wx_afd_by_id(afd_id):
     """
