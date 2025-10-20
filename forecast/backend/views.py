@@ -15,6 +15,8 @@ from backend.models import WFO, Region
 from backend.util import get_counties_combo_box_list, get_states_combo_box_list, get_wfo_from_afd
 from spatial.models import WeatherCounties, WeatherPlace, WeatherStates
 
+HTTP404 = 404
+
 
 # Helpers
 def _get_redirect_for_afd_queries(request):
@@ -79,6 +81,14 @@ def site_page(request):
 def point_location(request, lat, lon):
     """Render the forecast for a given latitude & longitude."""
     point = interop.get_point_forecast(lat, lon)
+
+    # The QA check is for 404 being a "magic value," which it kind of is, but
+    # within this context, it's a very well-known one. Anyway, if we get a 404
+    # from point forecast, we can raise it as a 404 exception and let our 404
+    # handler handle it. (See how clear "404" is in this context?!)
+    if "status" in point and point["status"] == 404:  # noqa: PLR2004
+        raise Http404(point)
+
     # TODO: Add some error checking here
     wfo = WFO.objects.get(code=point["grid"]["wfo"])
     point["wfo"] = wfo
@@ -264,6 +274,32 @@ def health(_request):
 def handle_404(request, exception=None):  # noqa: ARG001
     """Handle 404 errors."""
     context = {}
+
+    # If there were arguments passed into the 404 exception, there might be
+    # information in there that helps us deliver a more targeted error page.
+    if exception and len(exception.args) > 0:
+        args = exception.args[0]
+        # If we got a reason of out-of-bounds, then this point is outside the
+        # United States, in which case there will never be NWS data.
+        if "reason" in args and args["reason"] == "out-of-bounds":
+            return render(
+                request,
+                "errors/404/point-out-of-bounds.html",
+                context=args,
+                status=404,
+            )
+
+        # If the reason is not-supported, then the point is within the NWS's
+        # jurisdiction but data isn't available from the API for whatever
+        # reason. For example, we see this with American Samoa and some of the
+        # smaller territorial islands.
+        if "reason" in args and args["reason"] == "not-supported":
+            return render(
+                request,
+                "errors/404/point-not-supported.html",
+                context=args,
+                status=404,
+            )
 
     # If there is a resolver match, then one of our handlers raised this 404.
     # There may be some special handling we can do.

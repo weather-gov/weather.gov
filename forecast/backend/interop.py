@@ -10,7 +10,6 @@ def _fetch(url):
     full_url = f"{base_url}{url}"
     # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
     response = requests.get(full_url, timeout=55)  # TODO: try-request block with logging
-    response.raise_for_status()
     return response.json()
 
 
@@ -22,7 +21,6 @@ def _api_fetch(url):
     full_url = f"{base_url}{url}"
     # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
     response = requests.get(full_url, timeout=55)  # TODO: try-request block with logging
-    response.raise_for_status()
     return response.json()
 
 
@@ -159,6 +157,12 @@ def get_point_forecast(lat, lon):
     """
     url = f"/point/{lat}/{lon}"
     data = _fetch(url)
+
+    # If the interop response says there's an error, just pass it straight back
+    # rather than trying to process it.
+    if "error" in data and data["error"]:
+        return data
+
     return _process_interop_data(data)
 
 

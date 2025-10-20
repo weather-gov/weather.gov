@@ -271,3 +271,15 @@ class TestInteropInterface(TestCase):
 
         day1 = actual["forecast"]["days"][0]
         self.assertEqual(day1["hasAlertIcon"], True)
+
+    @responses.activate
+    def test_point_with_error(self):
+        """Tests that an error response is passed straight back."""
+        returned = {"error": True, "key": "value"}
+
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(responses.GET, "https://interop/point/9/10", json=returned, status=404)
+
+        actual = interop.get_point_forecast(9, 10)
+
+        self.assertEqual(actual, returned)

@@ -69,6 +69,33 @@ const getDataForPoint = async (lat, lon) => {
     alignAlertsToDaily(alerts, forecast.daily.days);
   }
 
+  // If the grid response is that the requested point is out-of-bounds, then it
+  // outside of NWS's area of responsibility entirely. We don't need to pass
+  // along anything else.
+  if (grid.outOfBounds) {
+    return {
+      point,
+      error: true,
+      status: 404,
+      reason: "out-of-bounds",
+    };
+  }
+
+  // If the grid response is that the point is unavailable, then it is within
+  // NWS's responsibility but the data isn't in the API. We see this mainly
+  // with American Samoa. However, there may still be alerts, so let's put those
+  // in here.
+  if (grid.notSupported) {
+    return {
+      alerts,
+      point,
+      place,
+      error: true,
+      status: 404,
+      reason: "not-supported",
+    };
+  }
+
   const satellite = await satellitePromise;
 
   return {

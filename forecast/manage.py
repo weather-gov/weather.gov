@@ -10,12 +10,20 @@ def main():
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.config.settings")
 
     if settings.DEBUG:
-        # Check "RUN_MAIN" so we don't keep re-registering the debugger when
-        # Django is simply reloading due to file changes or something.
 
         command = sys.argv[1:2].pop()
 
-        if os.environ.get("RUN_MAIN") or os.environ.get("RUN_MAIN") or command == "test":
+        # Only start the debugger if one of these two rules:
+        #   - we are running tests AND the BREAK env var has been set
+        #       We don't start the debugger for tests without the BREAK env var
+        #       because the debugger interferes with the coverage colelctor.
+        #   - we are running as the main script
+        #       We check "RUN_MAIN" so we don't keep re-registering the debugger
+        #       when Django is simply reloading due to file changes or something.
+        enable_debug = command == "test" and os.environ.get("BREAK",None) == "true"
+        enable_debug |= os.environ.get("RUN_MAIN", False) != False
+
+        if enable_debug:
             import debugpy
             debugpy.listen(("0.0.0.0", int(os.environ.get("DEBUG_PORT", 34235))))
 

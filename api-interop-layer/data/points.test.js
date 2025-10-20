@@ -43,6 +43,42 @@ describe("point method", () => {
     });
   });
 
+  it("returns an out-of-bounds grid for points not covered by the API", async () => {
+    fetchAPIJson.resolves({ error: true, status: 404 });
+    db.query.resolves({ rows: [] });
+
+    const actual = await points(1, 2);
+
+    expect(actual).to.eql({
+      point: { latitude: 1, longitude: 2 },
+      grid: { error: true, outOfBounds: true, status: 404 },
+      isMarine: false,
+      place: null,
+    });
+  });
+
+  it("returns a not-supported grid for points not *supported* by the API", async () => {
+    fetchAPIJson.resolves({
+      properties: { gridId: null, gridX: null, gridY: null },
+    });
+    db.query.resolves({ rows: [] });
+
+    const actual = await points(1, 2);
+
+    expect(actual).to.eql({
+      point: { latitude: 1, longitude: 2 },
+      grid: {
+        error: true,
+        notSupported: true,
+        wfo: null,
+        x: null,
+        y: null,
+      },
+      isMarine: false,
+      place: null,
+    });
+  });
+
   it("fetches a grid from the API, no location", async () => {
     fetchAPIJson.resolves({
       properties: { gridId: "PPU", gridX: 30, gridY: 40 },

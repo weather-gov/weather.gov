@@ -11,7 +11,7 @@ export default async (latitude, longitude) => {
   const pointsPromise = fetchAPIJson(`/points/${latitude},${longitude}`).then(
     (data) => {
       if (data.error) {
-        return { error: true };
+        return data;
       }
 
       return {
@@ -60,6 +60,18 @@ export default async (latitude, longitude) => {
     placePromise,
     isMarinePromise,
   ]);
+
+  if (grid.status === 404) {
+    // If we get a 404 from the API, then the requested point is not within the
+    // NWS's area of resopnsibility.
+    grid.error = true;
+    grid.outOfBounds = true;
+  } else if (grid.wfo === null) {
+    // If we did not get an error but the WFO is empty, then it's within our
+    // responsibility but we don't have the data in the API.
+    grid.error = true;
+    grid.notSupported = true;
+  }
 
   if (place && place.name && place.state) {
     place.fullName = `${place.name}, ${place.state}`;
