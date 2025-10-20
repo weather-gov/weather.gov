@@ -39,6 +39,26 @@ class TestViews(TestCase):
             state="NY",
             point=GEOSGeometry("POINT(30 30)"),
         )
+        spatial.WeatherCountyWarningAreas.objects.create(
+            wfo="TST",
+            shape=GEOSGeometry("POLYGON((3 7, 7 7, 7 3, 3 3, 3 7))"),
+        )
+        spatial.WeatherCounties.objects.create(
+            countyname="Upper left",
+            shape=GEOSGeometry("POLYGON((0 10, 5 10, 5 5, 0 5, 0 10))"),
+        )
+        spatial.WeatherCounties.objects.create(
+            countyname="Upper right",
+            shape=GEOSGeometry("POLYGON((5 10, 10 10, 10 5, 5 5, 5 10))"),
+        )
+        spatial.WeatherCounties.objects.create(
+            countyname="Lower left",
+            shape=GEOSGeometry("POLYGON((0 5, 5 5, 5 0, 0 0, 0 5))"),
+        )
+        spatial.WeatherCounties.objects.create(
+            countyname="Lower right",
+            shape=GEOSGeometry("POLYGON((5 5, 10 5, 10 0, 5 0, 5 5))"),
+        )
 
     def test_index(self):
         """Test the index view."""
@@ -160,6 +180,7 @@ class TestViews(TestCase):
         response = self.client.get("/offices/TST", follow=True)
         self.assertTemplateUsed(response, "weather/office.html")
         self.assertEqual(response.context["office"], self.wfo)
+        self.assertEqual(response.context["counties"], "Upper left, Upper right, Lower left, and Lower right")
 
     def test_afd_index_with_wfo_changed(self):
         """Tests getting the AFD index where the WFO changed."""
