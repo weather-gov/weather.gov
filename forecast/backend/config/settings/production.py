@@ -138,12 +138,12 @@ STORAGES = {
 }
 set_cors_on_s3_bucket(**s3_options)
 
-# Wagtail
-# Note: might need to join `cms/` to the uri
-# to get the correct admin base url
-WAGTAILADMIN_BASE_URL = AppEnv().uris[0]
-
-
 # SAML Settings
 # See noaa_saml/config.py for details
 SAML_SETTINGS = get_cloud_gov_settings()
+LOGIN_URL = "/saml/login"
+
+# Wagtail
+WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
+WAGTAILADMIN_LOGIN_URL = LOGIN_URL
+WAGTAILADMIN_BASE_URL = AppEnv().uris[0]
