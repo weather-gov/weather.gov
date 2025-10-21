@@ -11,6 +11,7 @@ import subprocess
 import boto3
 import environs
 from cfenv import AppEnv
+from csp.constants import SELF
 
 from noaa_saml.config import get_cloud_gov_settings
 
@@ -28,6 +29,8 @@ ALLOWED_HOSTS = [
     "beta.weather.gov" if cloudgov_space == "prod" else f"weathergov-{cloudgov_space}.app.cloud.gov",
 ]
 
+# override content security policy configuration
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["default-src"] = [SELF, *ALLOWED_HOSTS] # noqa: F405 (imported from base.py)
 
 # Helpers
 def find_cloudgov_library(name):
