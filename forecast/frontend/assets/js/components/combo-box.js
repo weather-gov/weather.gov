@@ -12,6 +12,8 @@ const comboTemplate = `
      top: 100%;
      left: 0;
      min-width: 100%;
+     isolation: isolate;
+     z-index: 1000;
  }
  #listbox-wrapper,
  :host select {
@@ -208,7 +210,7 @@ class ComboBox extends HTMLElement {
     toggleButton.setAttribute("type", "button");
     toggleButton.setAttribute("aria-label", "Toggle the dropdown list");
     toggleButton.innerHTML = "&nbsp;";
-    toggleButton.classList.add("wx-combo-box__toggle-list", "display-block");
+    toggleButton.classList.add("wx-combo-box__toggle-list", "display-block", "padding-y-105");
     toggleButton.setAttribute("slot", "toggle-button");
     toggleButton.addEventListener("click", this.toggleList);
     toggleButton.addEventListener("keydown", (e) => {
