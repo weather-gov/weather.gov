@@ -1,12 +1,14 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from onelogin.saml2.settings import OneLogin_Saml2_Settings
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
+from noaa_saml.config import SAMLIDPError
 from noaa_saml.utils import (
     get_saml_info_from_session,
     init_saml_auth,
@@ -15,9 +17,10 @@ from noaa_saml.utils import (
 )
 
 
-# Composed based on the example Django project in the
-# SAML Python3 Toolkit
-# See https://github.com/SAML-Toolkits/python3-saml/tree/master/demo-django
+# this view used to be available via `saml/metadata` but we are disabling it
+# because it never quite worked as intended. python3-saml expects a ISO
+# timestamp with 'Z' but we get an UTC offset instead. if the IDP ever hits this
+# endpoint, though, we will need to re-enable and fix.
 def saml_metadata(_request):
     """Respond with SAML SP metadata XML."""
     saml_settings = OneLogin_Saml2_Settings(settings=settings.SAML_SETTINGS, sp_validation_only=True)
@@ -25,10 +28,9 @@ def saml_metadata(_request):
     errors = saml_settings.validate_metadata(metadata)
 
     if len(errors) == 0:
-        resp = HttpResponse(content=metadata, content_type="text/xml")
-    else:
-        resp = HttpResponseServerError(content=", ".join(errors))
-    return resp
+        return HttpResponse(content=metadata, content_type="text/xml")
+
+    return HttpResponseServerError(content=", ".join(errors))
 
 
 def saml_login(request):
@@ -76,8 +78,8 @@ def saml_acs(request):
     The IDP will POST to this endpoint once a response
     from a login request is processed.
     It handles checking the response for validity and errors.
-    If invalid or other errors are present, it will render
-    a generic saml error page.
+    If invalid or other errors are present, it will
+    raise a SAMLIDPError.
     If successful, this handler will authenticate and log in
     the specified user (setting session vars as needed)
     """
@@ -105,18 +107,13 @@ def saml_acs(request):
     # authentication backend. If successful, calling
     # authenticate will return a User object.
     user = authenticate(request, saml_auth=auth)
-    if not user or not relay_valid:
-        return render(
-            request,
-            "saml_errors.html",
-            {
-                "errors": errors,
-                "error_reason": error_reason,
-                "not_auth_warn": not_saml_auth_warn,
-                "success_slo": False,
-                "attributes": attributes,
-            },
-        )
+    if errors or not user or not relay_valid:
+        logger = logging.getLogger(__name__)
+        logger.error(f"SAML login error: {error_reason}")
+        logger.error(f"SAML backtrace: errors: {errors}")
+        logger.error(f"SAML backtrace: attributes: {attributes}")
+        logger.error(f"SAML backtrace: not_saml_auth_warn: {not_saml_auth_warn}")
+        raise SAMLIDPError()
 
     # Otherwise, login the user in a Django session
     # and redirect to the RelayState page, which here
@@ -134,7 +131,7 @@ def saml_sls(request):
     a logout request.
     If the request is valid, will logout the specified user
     from Django.
-    If not, will render a saml error page
+    If not, will raise a SAMLIDPError.
     """
     saml_request_info = prepare_saml_request(request)
     auth = init_saml_auth(saml_request_info)
@@ -142,38 +139,28 @@ def saml_sls(request):
     request_id = None
     errors = []
     error_reason = False
-    success_slo = False
     attributes = None
 
     if "LogoutRequestID" in request.session:
         request_id = request.session["LogoutRequestID"]
     dscb = lambda: request.session.flush()  # noqa: E731
-    url = auth.process_slo(request_id=request_id, delete_session_cb=dscb)
+    # we ignore the return url as to avoid open redirect attacks.
+    _ = auth.process_slo(request_id=request_id, delete_session_cb=dscb)
     errors = auth.get_errors()
     if len(errors) == 0:
         # Log the current session's user out of Django
         logout(request)
+        return HttpResponseRedirect("/")
 
-        if url is not None:
-            # To avoid 'Open Redirect' attacks, before execute the redirection confirm
-            # the value of the url is a trusted URL
-            return HttpResponseRedirect(url)
-        success_slo = True
-    elif auth.get_settings().is_debug_active():
+    if auth.get_settings().is_debug_active():
         error_reason = auth.get_last_error_reason()
 
     if "samlUserdata" in request.session:
         if len(request.session["samlUserdata"]) > 0:
             attributes = request.session["samlUserdata"].items()
 
-    return render(
-        request,
-        "saml_errors.html",
-        {
-            "errors": errors,
-            "error_reason": error_reason,
-            "not_auth_warn": False,
-            "success_slo": success_slo,
-            "attributes": attributes,
-        },
-    )
+    logger = logging.getLogger(__name__)
+    logger.error(f"SAML logout error: {error_reason}")
+    logger.error(f"SAML backtrace: errors: {errors}")
+    logger.error(f"SAML backtrace: attributes: {attributes}")
+    raise SAMLIDPError()

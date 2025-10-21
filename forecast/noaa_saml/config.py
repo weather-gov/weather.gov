@@ -13,6 +13,13 @@ class SAMLVCAPNotFoundError(Exception):
         super().__init__("SAML Settings could not find VCAP information.")
 
 
+class SAMLIDPError(Exception):
+    """Wrap SAML error responses from the IDP."""
+
+    def __init__(self):
+        super().__init__("SAML IDP returned an error.")
+
+
 env = environs.Env()
 cloudgov_space = env("CLOUDGOV_SPACE", "test")
 DEBUG = env.bool("DJANGO_DEBUG", False)
