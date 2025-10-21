@@ -37,5 +37,5 @@ body {
 }
 
 p {
-  @include u-line-height("body", 4)
+  @include u-line-height("body", 4);
 }

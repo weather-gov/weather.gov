@@ -4,7 +4,9 @@
   <a href="/"
      class="display-flex flex-align-center flex-wrap text-no-underline margin-y-2"
      rel="home">
-    {% if site_logo %}<img class="height-9" src="{% static site_logo %}" alt="" />{% endif %}
+    {% if site_logo %}
+      <img class="height-9" src="{% static site_logo %}" alt="" />
+    {% endif %}
     <div class="site-info padding-x-2 display-flex flex-column flex-align-start">
       {% if site_name %}
         <span class="site-name display-block font-heading-lg desktop:font-heading-xl text-secondary-darkest text-bold">

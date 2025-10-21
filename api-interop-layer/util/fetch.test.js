@@ -26,9 +26,7 @@ describe("fetch module", () => {
     expect(result).to.equal("success");
     expect(wait.callCount).to.equal(0);
     expect(fetch.callCount).to.equal(1);
-    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(
-      true,
-    );
+    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(true);
   });
 
   it("fails once and then succeeds", async () => {
@@ -44,9 +42,7 @@ describe("fetch module", () => {
     expect(wait.calledWith(75)).to.equal(true);
 
     expect(fetch.callCount).to.equal(2);
-    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(
-      true,
-    );
+    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(true);
   });
 
   it("fails twice and then succeeds", async () => {
@@ -64,9 +60,7 @@ describe("fetch module", () => {
     expect(wait.calledWith(124)).to.equal(true);
 
     expect(fetch.callCount).to.equal(3);
-    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(
-      true,
-    );
+    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(true);
   });
 
   it("fails three times and then succeeds", async () => {
@@ -86,9 +80,7 @@ describe("fetch module", () => {
     expect(wait.calledWith(204)).to.equal(true);
 
     expect(fetch.callCount).to.equal(4);
-    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(
-      true,
-    );
+    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(true);
   });
 
   it("fails four times and then succeeds", async () => {
@@ -110,9 +102,7 @@ describe("fetch module", () => {
     expect(wait.calledWith(337)).to.equal(true);
 
     expect(fetch.callCount).to.equal(5);
-    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(
-      true,
-    );
+    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(true);
   });
 
   it("fails fives times and gives up", async () => {
@@ -133,9 +123,7 @@ describe("fetch module", () => {
     expect(wait.calledWith(337)).to.equal(true);
 
     expect(fetch.callCount).to.equal(5);
-    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(
-      true,
-    );
+    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(true);
   });
 
   it("does retry on server errors (status code 5xx)", async () => {
@@ -155,9 +143,7 @@ describe("fetch module", () => {
     expect(result).to.eql({ message: "there" });
     expect(wait.callCount).to.equal(1);
     expect(fetch.callCount).to.equal(2);
-    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(
-      true,
-    );
+    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(true);
   });
 
   it("does not retry on request errors (status code 4xx)", async () => {
@@ -170,9 +156,7 @@ describe("fetch module", () => {
     expect(result).to.eql({ error: true, status: 400, message: "here" });
     expect(wait.callCount).to.equal(0);
     expect(fetch.callCount).to.equal(1);
-    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(
-      true,
-    );
+    expect(fetch.calledWith(`${BASE_URL}/path/goes/here`)).to.equal(true);
   });
 
   it("specially handles syntax errors (ie, non-JSON data", async () => {

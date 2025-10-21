@@ -78,10 +78,12 @@ def get_states_combo_box_list():
     """Get a list of dictionaries of WeatherState 'text' and 'value' keys for use in wx-combo-box."""
     result = []
     for state in WeatherStates.objects.order_by("name"):
-        result.append({ #  noqa: PERF401
-            "text": state.name,
-            "value": state.fips,
-        })
+        result.append(  #  noqa: PERF401
+            {
+                "text": state.name,
+                "value": state.fips,
+            },
+        )
 
     return result
 
@@ -93,9 +95,11 @@ def get_counties_combo_box_list(state_fips):
     """
     result = []
     for county in WeatherCounties.objects.filter(state__fips=state_fips).order_by("countyname"):
-        result.append({ #  noqa: PERF401
-            "text": f"{county.countyname}, {county.state.state}",
-            "value": county.countyfips,
-        })
+        result.append(  #  noqa: PERF401
+            {
+                "text": f"{county.countyname}, {county.state.state}",
+                "value": county.countyfips,
+            },
+        )
 
     return result

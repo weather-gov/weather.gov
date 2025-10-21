@@ -6,40 +6,39 @@
  * display of the story image when at the desktop size
  */
 .wx-weather-story-wrapper {
-    display: grid;
-    grid-template-areas:
-        "a"
-        "b"
-        "c";
+  display: grid;
+  grid-template-areas:
+    "a"
+    "b"
+    "c";
 }
 
 .wx-weather-story-wrapper > *:first-child {
-    grid-area: a;
+  grid-area: a;
 }
 
 .wx-weather-story-wrapper > *:nth-child(2) {
-    grid-area: b;
+  grid-area: b;
 }
 
 .wx-weather-story-wrapper > :last-child {
-    grid-area: c;
+  grid-area: c;
 }
 
 .wx-weather-story-block-section {
-    position: relative;
+  position: relative;
 }
 
-
 @include at-media("desktop") {
-    .wx-weather-story-wrapper {
-        grid-template-areas:
-            "a b b"
-            "c b b";
-        grid-auto-columns: 1fr;
-        column-gap: units(4);
-    }
+  .wx-weather-story-wrapper {
+    grid-template-areas:
+      "a b b"
+      "c b b";
+    grid-auto-columns: 1fr;
+    column-gap: units(4);
+  }
 
-    .wx-weather-story-wrapper > *:nth-child(2) {
-        margin-top: units(3);
-    }
+  .wx-weather-story-wrapper > *:nth-child(2) {
+    margin-top: units(3);
+  }
 }

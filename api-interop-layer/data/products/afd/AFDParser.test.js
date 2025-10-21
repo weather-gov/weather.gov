@@ -2,11 +2,11 @@ import { expect } from "chai";
 import AFDParser from "./AFDParser.js";
 
 describe("AFDParser Tests", () => {
-
   describe("Static helper tests", () => {
     describe("#normalizeSpaces", () => {
       it("compresses consecutive spaces to single spaces in simple example", () => {
-        const example = "this    word   has  multiple spaces  between     others   ";
+        const example =
+          "this    word   has  multiple spaces  between     others   ";
         const expected = "this word has multiple spaces between others ";
         const actual = AFDParser.normalizeSpaces(example);
 
@@ -16,10 +16,11 @@ describe("AFDParser Tests", () => {
 
     describe("#splitIntoTopicSections", () => {
       it("can split into topic sections by && (from directive)", () => {
-        const example = "\n\n.SYNOPSIS...\nA slow moving cold front sags southeast into the area today, \nstalling nearby through tonight.\n\n&&\n\n.NEAR TERM /THROUGH TONIGHT/...\nA severe thunderstorm watch is in effect until 1100 PM EDT for \nportions of the lower Hudson Valley.\n\n&&\n\n";
+        const example =
+          "\n\n.SYNOPSIS...\nA slow moving cold front sags southeast into the area today, \nstalling nearby through tonight.\n\n&&\n\n.NEAR TERM /THROUGH TONIGHT/...\nA severe thunderstorm watch is in effect until 1100 PM EDT for \nportions of the lower Hudson Valley.\n\n&&\n\n";
         const expected = [
           ".SYNOPSIS...\nA slow moving cold front sags southeast into the area today, \nstalling nearby through tonight.\n\n",
-          "\n.NEAR TERM /THROUGH TONIGHT/...\nA severe thunderstorm watch is in effect until 1100 PM EDT for \nportions of the lower Hudson Valley.\n\n"
+          "\n.NEAR TERM /THROUGH TONIGHT/...\nA severe thunderstorm watch is in effect until 1100 PM EDT for \nportions of the lower Hudson Valley.\n\n",
         ];
         const actual = AFDParser.splitIntoTopicSections(example);
 
@@ -31,16 +32,18 @@ describe("AFDParser Tests", () => {
   describe("Parser method tests", () => {
     describe("#parseDocumentPreamble", () => {
       it("can parse a basic example", () => {
-        const example = "\n000\nFXUS61 KALY 051129\nAFDALY\n\nAREA FORECAST DISCUSSION\nNational Weather Service Albany NY\n729 AM EDT Thu Sep 5 2024\n\n.ANY HEADER HERE\n\nMore text here";
+        const example =
+          "\n000\nFXUS61 KALY 051129\nAFDALY\n\nAREA FORECAST DISCUSSION\nNational Weather Service Albany NY\n729 AM EDT Thu Sep 5 2024\n\n.ANY HEADER HERE\n\nMore text here";
         const expectedNodes = [
           {
             type: "preambleCode",
-            content: "000\nFXUS61 KALY 051129\nAFDALY"
+            content: "000\nFXUS61 KALY 051129\nAFDALY",
           },
           {
             type: "preambleText",
-            content: "AREA FORECAST DISCUSSION\nNational Weather Service Albany NY\n729 AM EDT Thu Sep 5 2024"
-          }
+            content:
+              "AREA FORECAST DISCUSSION\nNational Weather Service Albany NY\n729 AM EDT Thu Sep 5 2024",
+          },
         ];
         const expectedReturnValue = ".ANY HEADER HERE\n\nMore text here";
         const parser = new AFDParser(example);
@@ -53,13 +56,15 @@ describe("AFDParser Tests", () => {
     });
     describe("#parseHeader", () => {
       describe("WWA header", () => {
-        const example = ".OKX WATCHES/WARNINGS/ADVISORIES...\nSomething else\nAnd more";
+        const example =
+          ".OKX WATCHES/WARNINGS/ADVISORIES...\nSomething else\nAnd more";
         it("parses a header node", () => {
           const parser = new AFDParser();
           parser.parseHeader(example);
           const expected = {
             type: "header",
-            content: "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES"
+            content:
+              "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES",
           };
           const actual = parser.parsedNodes.pop();
 
@@ -85,13 +90,14 @@ describe("AFDParser Tests", () => {
       });
 
       describe("Temps/Pops", () => {
-        const example = ".PRELIMINARY POINT TEMPS/POPS...And some other stuff\nHere too!";
+        const example =
+          ".PRELIMINARY POINT TEMPS/POPS...And some other stuff\nHere too!";
         it("parses a header node", () => {
           const parser = new AFDParser();
           parser.parseHeader(example);
           const expected = {
             type: "header",
-            content: "PRELIMINARY POINT TEMPS/POPS"
+            content: "PRELIMINARY POINT TEMPS/POPS",
           };
           const actual = parser.parsedNodes.pop();
 
@@ -123,7 +129,7 @@ describe("AFDParser Tests", () => {
           parser.parseHeader(example);
           const expected = {
             type: "header",
-            content: "THIS IS A GENERIC HEADER"
+            content: "THIS IS A GENERIC HEADER",
           };
           const actual = parser.parsedNodes.pop();
 
@@ -150,13 +156,14 @@ describe("AFDParser Tests", () => {
     });
     describe("#parseSubheader", () => {
       describe("Working example", () => {
-        const example = "...This is some subheader stuff here...\nThen some stuff after";
+        const example =
+          "...This is some subheader stuff here...\nThen some stuff after";
         it("appends a subheader node", () => {
           const parser = new AFDParser();
           parser.parseSubheader(example);
           const expected = {
             type: "subheader",
-            content: "This is some subheader stuff here"
+            content: "This is some subheader stuff here",
           };
           const actual = parser.parsedNodes.pop();
 
@@ -193,16 +200,18 @@ describe("AFDParser Tests", () => {
       });
 
       describe("Comprehensive example", () => {
-        let example = "\n\n ...NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty...\n";
-        example += "High pressure builds down from the north into tonight, which will \n";
+        let example =
+          "\n\n ...NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty...\n";
+        example +=
+          "High pressure builds down from the north into tonight, which will \n";
         it("appends the correct subheader node", () => {
           const parser = new AFDParser();
           parser.parseSubheader(example);
           const expected = [
             {
               type: "subheader",
-              content: "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty"
-            }
+              content: "NY Metro (KEWR/KLGA/KJFK/KTEB) TAF Uncertainty",
+            },
           ];
           const actual = parser.parsedNodes;
 
@@ -211,7 +220,8 @@ describe("AFDParser Tests", () => {
 
         it("returns the correct substring", () => {
           const parser = new AFDParser();
-          const expected = "High pressure builds down from the north into tonight, which will";
+          const expected =
+            "High pressure builds down from the north into tonight, which will";
           const actual = parser.parseSubheader(example);
 
           expect(actual).to.eql(expected);
@@ -231,15 +241,15 @@ describe("AFDParser Tests", () => {
                 {
                   type: "temps-table-row",
                   numbers: ["1", "2", "3", "4", "5", "6", "7", "8"],
-                  name: "Place A"
+                  name: "Place A",
                 },
                 {
                   type: "temps-table-row",
                   numbers: ["0", "9", "8", "7", "6", "5", "4", "3"],
-                  name: "Place B"
-                }
-              ]
-            }
+                  name: "Place B",
+                },
+              ],
+            },
           ];
           const actual = parser.parsedNodes;
 
@@ -247,14 +257,15 @@ describe("AFDParser Tests", () => {
         });
       });
       describe("Example with post-table text", () => {
-        let example = "Place A   1 2 3 4 / 5 6 7 8\nPlace B   0 9  8 7 / 6   5 4  3";
+        let example =
+          "Place A   1 2 3 4 / 5 6 7 8\nPlace B   0 9  8 7 / 6   5 4  3";
         example += "\nSome additional text down here\nAnd more here";
         it("parses the text node separately", () => {
           const parser = new AFDParser();
           parser.parseTempsTableContent(example);
           const expected = {
             type: "text",
-            content: "Some additional text down here\nAnd more here"
+            content: "Some additional text down here\nAnd more here",
           };
           const actual = parser.parsedNodes.pop();
 
@@ -263,7 +274,7 @@ describe("AFDParser Tests", () => {
       });
 
       describe("Example with multi-digit temps", () => {
-        const example =  "Panama City   73  93  74  91 /   0  10  30  60 ";
+        const example = "Panama City   73  93  74  91 /   0  10  30  60 ";
         it("parses the rows correctly", () => {
           const parser = new AFDParser();
           parser.parseTempsTableContent(example);
@@ -275,7 +286,8 @@ describe("AFDParser Tests", () => {
       });
     });
     describe("#parseWWAContent", () => {
-      let example = "CT...Some text here that will overflow into\n    the next line\n";
+      let example =
+        "CT...Some text here that will overflow into\n    the next line\n";
       example += "NJ...None\n";
       example += "NY...Some text here";
       describe("Basic example", () => {
@@ -284,7 +296,8 @@ describe("AFDParser Tests", () => {
           parser.parseWWAContent(example);
           const expected = {
             type: "text",
-            content:"CT...Some text here that will overflow into\nthe next line\nNJ...None\nNY...Some text here"
+            content:
+              "CT...Some text here that will overflow into\nthe next line\nNJ...None\nNY...Some text here",
           };
           const actual = parser.parsedNodes.pop();
 
@@ -393,7 +406,7 @@ describe("AFDParser Tests", () => {
         {
           type: "preambleText",
           content:
-          "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024",
+            "Area Forecast Discussion\nNational Weather Service New York NY\n1043 AM EDT Wed Aug 7 2024",
         },
         {
           type: "header",
@@ -402,22 +415,22 @@ describe("AFDParser Tests", () => {
         {
           type: "text",
           content:
-          "A nearly stationary front will remain near the coast through" +
+            "A nearly stationary front will remain near the coast through" +
             " Thursday. The front will then return northward Thursday night into Friday.",
         },
         {
           type: "text",
           content:
-          "Please refer to the latest official forecast on Debby from the National Hurricane Center.",
+            "Please refer to the latest official forecast on Debby from the National Hurricane Center.",
         },
         {
           type: "header",
-          content: "NEAR TERM /THROUGH TONIGHT/"
+          content: "NEAR TERM /THROUGH TONIGHT/",
         },
         {
           type: "text",
           content:
-          "Forecast mainly on track. Much cooler air mass has worked into the " +
+            "Forecast mainly on track. Much cooler air mass has worked into the " +
             "region with the stationary front just of the of the area.",
         },
         {
@@ -427,25 +440,25 @@ describe("AFDParser Tests", () => {
         {
           type: "text",
           content:
-          "High pressure builds down from the north into tonight, which will " +
+            "High pressure builds down from the north into tonight, which will " +
             "only reinforce some of the lower level cooler and drier air.",
         },
         {
           type: "header",
           content:
-          "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES"
+            "OKX WATCHES&hairsp;/&hairsp;WARNINGS&hairsp;/&hairsp;ADVISORIES",
         },
         {
           type: "text",
           content:
-          "CT...None.\nNY...None.\nNJ...None.\nMARINE" +
+            "CT...None.\nNY...None.\nNJ...None.\nMARINE" +
             "...Small Craft Advisory until 11 PM EDT " +
             "this evening for ANZ350-\n353-355.",
         },
         {
           type: "epilogueText",
           content:
-          "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" +
+            "SYNOPSIS...JT/DW\nNEAR TERM...DS/DW\nSHORT" +
             " TERM...DW\nLONG TERM...JT\nMARINE..." +
             "JT/DW\nHYDROLOGY...JT/DW\nTIDES/COASTAL FLOODING...",
         },
@@ -519,7 +532,7 @@ describe("AFDParser Tests", () => {
       example += "Sea Breeze Thunderstorm Regime For Saturday: 5\n";
       example += "\n";
       example += "For additional information on sea breeze regimes, go to: \n";
-      example +=  "    https://www.weather.gov/tbw/ThunderstormClimatology\n";
+      example += "    https://www.weather.gov/tbw/ThunderstormClimatology\n";
       example += "\n";
       example += "$$\n";
       example += "\n";
@@ -528,20 +541,22 @@ describe("AFDParser Tests", () => {
 
       const parser = new AFDParser(example);
       parser.parse();
-      
+
       const expectedHeader = {
-          type: "header",
-          content: "PRELIMINARY POINT TEMPS/POPS"
+        type: "header",
+        content: "PRELIMINARY POINT TEMPS/POPS",
       };
       const expectedContent = [
         {
           type: "text",
-          content: "Sea Breeze Thunderstorm Regime For Friday: 5 Sea Breeze Thunderstorm Regime For Saturday: 5"
+          content:
+            "Sea Breeze Thunderstorm Regime For Friday: 5 Sea Breeze Thunderstorm Regime For Saturday: 5",
         },
         {
           type: "text",
-          content: "For additional information on sea breeze regimes, go to: https://www.weather.gov/tbw/ThunderstormClimatology"
-        }
+          content:
+            "For additional information on sea breeze regimes, go to: https://www.weather.gov/tbw/ThunderstormClimatology",
+        },
       ];
       const actualHeader = parser.parsedNodes.slice(2)[0];
       const actualContent = parser.parsedNodes.slice(4, 6);

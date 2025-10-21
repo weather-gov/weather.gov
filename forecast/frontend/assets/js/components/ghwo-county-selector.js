@@ -28,27 +28,29 @@ const WX_COUNTY_GHWO_SELECTOR_URL = `/wx/select/ghwo/counties/`;
 const WX_COUNTY_GHWO_DETAILS_URL = `/wx/ghwo/counties/`;
 
 class GHWOCountySelector extends HTMLElement {
-  constructor(){
+  constructor() {
     super();
 
     // Bound methods
     this.handleChange = this.handleChange.bind(this);
-    this.fetchUpdatedSelectComponent = this.fetchUpdatedSelectComponent.bind(this);
-    this.fetchAndUpdateDetailsElements = this.fetchAndUpdateDetailsElements.bind(this);
+    this.fetchUpdatedSelectComponent =
+      this.fetchUpdatedSelectComponent.bind(this);
+    this.fetchAndUpdateDetailsElements =
+      this.fetchAndUpdateDetailsElements.bind(this);
     this.handleBackButton = this.handleBackButton.bind(this);
   }
 
-  connectedCallback(){
+  connectedCallback() {
     this.addEventListener("change", this.handleChange);
   }
 
-  disconnectedCallback(){
+  disconnectedCallback() {
     this.removeEventListener("change", this.handleChange);
   }
 
-  async handleChange(event){
+  async handleChange(event) {
     const countyOnly = event.target === this.countyCombobox;
-    if(this.useAsync && countyOnly){
+    if (this.useAsync && countyOnly) {
       // In this case, the existing county dropdown was the
       // source of the change. We do not need to update the
       // comboboxes, but we do need to update any elements
@@ -56,7 +58,7 @@ class GHWOCountySelector extends HTMLElement {
       this.countyCombobox.setAttribute("disabled", true);
       await this.fetchAndUpdateDetailsElements();
       this.countyCombobox.removeAttribute("disabled");
-    } else if(this.useAsync){
+    } else if (this.useAsync) {
       // In this case, the state combobox triggered the change.
       // We need to dynamically update both comboboxes
       // (ie this components innerHTML), as well as any elements
@@ -66,7 +68,7 @@ class GHWOCountySelector extends HTMLElement {
       this.stateCombobox.setAttribute("disabled", true);
       this.countyCombobox.setAttribute("disabled", true);
       const response = await this.fetchUpdatedSelectComponent();
-      if(response.ok){
+      if (response.ok) {
         await this.fetchAndUpdateDetailsElements();
       }
       this.countyCombobox.removeAttribute("disabled");
@@ -87,26 +89,23 @@ class GHWOCountySelector extends HTMLElement {
    * Will also update the URL and history as
    * needed.
    */
-  async fetchUpdatedSelectComponent(){
+  async fetchUpdatedSelectComponent() {
     const formData = new FormData();
-    ["current-county", "current-state"].forEach(name => {
-      formData.append(
-        name,
-        this.querySelector(`[name="${name}"]`).value
-      );
+    ["current-county", "current-state"].forEach((name) => {
+      formData.append(name, this.querySelector(`[name="${name}"]`).value);
     });
-    ["state-select", "county-select"].forEach(name => {
+    ["state-select", "county-select"].forEach((name) => {
       formData.append(
         name,
-        this.querySelector(`[name="${name}"]`).getAttribute("selected")
+        this.querySelector(`[name="${name}"]`).getAttribute("selected"),
       );
     });
     const response = await fetch(WX_COUNTY_GHWO_SELECTOR_URL, {
       method: "POST",
-      body: formData
+      body: formData,
     });
 
-    if(response.ok){
+    if (response.ok) {
       const html = await response.text();
       // Swap out the inner HTML of this component
       this.innerHTML = html;
@@ -115,12 +114,14 @@ class GHWOCountySelector extends HTMLElement {
       window.history.pushState(
         {},
         formData.get("county-select"),
-        `/counties/ghwo/${formData.get("county-select")}`
+        `/counties/ghwo/${formData.get("county-select")}`,
       );
       window.addEventListener("popstate", this.handleBackButton);
     } else {
       // For now simply log the error
-      console.error(`Could not POST to ${WX_COUNTY_GHWO_SELECTOR_URL} with FormData ${formData}`);
+      console.error(
+        `Could not POST to ${WX_COUNTY_GHWO_SELECTOR_URL} with FormData ${formData}`,
+      );
     }
 
     return response;
@@ -134,23 +135,25 @@ class GHWOCountySelector extends HTMLElement {
    * The corresponding elements will have their innerHTML
    * swapped with the result
    */
-  async fetchAndUpdateDetailsElements(){
+  async fetchAndUpdateDetailsElements() {
     // See if there are any elements that actually need to be
     // updated dynamically with the GHWO details.
     // If not, early return
     const elements = Array.from(document.querySelectorAll(`[wx-ghwo-details]`));
-    if(elements.length === 0){
+    if (elements.length === 0) {
       return;
     }
 
     // Fetch the GHWO details partial for the currently selected county fips
-    const selectedCountyFips = this.querySelector(`[name="county-select"]`).getAttribute("selected");
+    const selectedCountyFips = this.querySelector(
+      `[name="county-select"]`,
+    ).getAttribute("selected");
     const url = `${WX_COUNTY_GHWO_DETAILS_URL}${selectedCountyFips}`;
     const response = await fetch(url);
 
-    if(response.ok){
+    if (response.ok) {
       const html = await response.text();
-      elements.forEach(element => {
+      elements.forEach((element) => {
         element.innerHTML = html;
       });
 
@@ -158,49 +161,46 @@ class GHWOCountySelector extends HTMLElement {
       window.history.pushState(
         {},
         selectedCountyFips,
-        `/counties/ghwo/${selectedCountyFips}`
+        `/counties/ghwo/${selectedCountyFips}`,
       );
       window.addEventListener("popstate", this.handleBackButton);
     } else {
       const errorEl = document.createElement("pre");
       errorEl.innerHTML = `Could not retrieve GHWO details for county: ${selectedCountyFips}`;
-      elements.forEach(element => {
+      elements.forEach((element) => {
         element.innerHTML = errorEl.outerHTML;
       });
-      console.error(`Could not retrieve GHWO details for county ${selectedCountyFips}`);
+      console.error(
+        `Could not retrieve GHWO details for county ${selectedCountyFips}`,
+      );
     }
   }
-  
+
   /**
    * When we pushState to the browser history
    * (as we do when fetching partials), we need to
    * ensure that the back button does a full page
    * refresh. Otherwise only the URL will change.
    */
-  handleBackButton(event){
+  handleBackButton(event) {
     window.removeEventListener("popstate", this.handleBackButton);
     window.location.reload();
   }
 
-  get useAsync(){
+  get useAsync() {
     return this.getAttribute("method") === "async";
   }
 
-  get countyCombobox(){
-    return this.querySelector(
-      this.getAttribute("county-target")
-    );
+  get countyCombobox() {
+    return this.querySelector(this.getAttribute("county-target"));
   }
 
-  get stateCombobox(){
-    return this.querySelector(
-      this.getAttribute("state-target")
-    );
+  get stateCombobox() {
+    return this.querySelector(this.getAttribute("state-target"));
   }
-  
 }
 
-if(!window.customElements.get("wx-ghwo-selector")){
+if (!window.customElements.get("wx-ghwo-selector")) {
   window.customElements.define("wx-ghwo-selector", GHWOCountySelector);
 }
 export default GHWOCountySelector;

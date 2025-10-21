@@ -53,25 +53,19 @@ describe("observations module", () => {
     // because we're ultimately not relying on 2nd and 3rd stations, but they'll
     // possibly be slower as a result.
     fetch
-      .withArgs(
-        `${BASE_URL}/stations/station1/observations?limit=1`,
-      )
+      .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
       .resolves(response);
     fetch
-      .withArgs(
-        `${BASE_URL}/stations/station2/observations?limit=1`,
-      )
+      .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
       .resolves(response);
     fetch
-      .withArgs(
-        `${BASE_URL}/stations/station3/observations?limit=1`,
-      )
+      .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
       .resolves(response);
 
     // Note: we pass the globally mocked
     // database as the second param to the
     // getObservations call
-    global.test.database.query.resolves({rows: [ {distance: 100} ]});
+    global.test.database.query.resolves({ rows: [{ distance: 100 }] });
   });
 
   describe("properly handles feels-like temperature", () => {
@@ -88,10 +82,13 @@ describe("observations module", () => {
 
       const expected = { degC: 100, degF: 212 };
 
-      const obs = await getObservations({
-        grid: { wfo: "TEST", x: 1, y: 1 },
-        point: {},
-      }, global.test.database);
+      const obs = await getObservations(
+        {
+          grid: { wfo: "TEST", x: 1, y: 1 },
+          point: {},
+        },
+        global.test.database,
+      );
 
       expect(obs.data.feelsLike).to.eql(expected);
     });
@@ -110,10 +107,13 @@ describe("observations module", () => {
 
       const expected = { degC: 100, degF: 212 };
 
-      const obs = await getObservations({
-        grid: { wfo: "TEST", x: 1, y: 1 },
-        point: {},
-      }, global.test.database);
+      const obs = await getObservations(
+        {
+          grid: { wfo: "TEST", x: 1, y: 1 },
+          point: {},
+        },
+        global.test.database,
+      );
 
       expect(obs.data.feelsLike).to.eql(expected);
     });
@@ -132,10 +132,13 @@ describe("observations module", () => {
 
       const expected = { degC: 100, degF: 212 };
 
-      const obs = await getObservations({
-        grid: { wfo: "TEST", x: 1, y: 1 },
-        point: {},
-      }, global.test.database);
+      const obs = await getObservations(
+        {
+          grid: { wfo: "TEST", x: 1, y: 1 },
+          point: {},
+        },
+        global.test.database,
+      );
 
       expect(obs.data.feelsLike).to.eql(expected);
     });
@@ -160,10 +163,13 @@ describe("observations module", () => {
 
       const expected = { mph: null, "km/h": null };
 
-      const obs = await getObservations({
-        grid: { wfo: "TEST", x: 1, y: 1 },
-        point: {},
-      }, global.test.database);
+      const obs = await getObservations(
+        {
+          grid: { wfo: "TEST", x: 1, y: 1 },
+          point: {},
+        },
+        global.test.database,
+      );
 
       expect(obs.data.windSpeed).to.eql(expected);
     });
@@ -186,10 +192,13 @@ describe("observations module", () => {
 
       const expected = { mph: 0, "km/h": 0 };
 
-      const obs = await getObservations({
-        grid: { wfo: "TEST", x: 1, y: 1 },
-        point: {},
-      }, global.test.database);
+      const obs = await getObservations(
+        {
+          grid: { wfo: "TEST", x: 1, y: 1 },
+          point: {},
+        },
+        global.test.database,
+      );
 
       expect(obs.data.windSpeed).to.eql(expected);
     });
@@ -211,15 +220,11 @@ describe("observations module", () => {
 
       it("tries the second observation if the first is invalid", async () => {
         fetch
-          .withArgs(
-            `${BASE_URL}/stations/station1/observations?limit=1`,
-          )
+          .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
           .resolves(invalid);
 
         fetch
-          .withArgs(
-            `${BASE_URL}/stations/station2/observations?limit=1`,
-          )
+          .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
           .resolves({
             status: 200,
             json: sinon.stub().resolves({
@@ -235,31 +240,28 @@ describe("observations module", () => {
 
         const expected = { degC: 50, degF: 122 };
 
-        const obs = await getObservations({
-          grid: { wfo: "TEST", x: 1, y: 1 },
-          point: {},
-        }, global.test.database);
+        const obs = await getObservations(
+          {
+            grid: { wfo: "TEST", x: 1, y: 1 },
+            point: {},
+          },
+          global.test.database,
+        );
 
         expect(obs.data.temperature).to.eql(expected);
       });
 
       it("tries the third observation if the second is invalid", async () => {
         fetch
-          .withArgs(
-            `${BASE_URL}/stations/station1/observations?limit=1`,
-          )
+          .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
           .resolves(invalid);
 
         fetch
-          .withArgs(
-            `${BASE_URL}/stations/station2/observations?limit=1`,
-          )
+          .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
           .resolves(invalid);
 
         fetch
-          .withArgs(
-            `${BASE_URL}/stations/station3/observations?limit=1`,
-          )
+          .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
           .resolves({
             status: 200,
             json: sinon.stub().resolves({
@@ -275,10 +277,13 @@ describe("observations module", () => {
 
         const expected = { degC: 25, degF: 77 };
 
-        const obs = await getObservations({
-          grid: { wfo: "TEST", x: 1, y: 1 },
-          point: {},
-        }, global.test.database);
+        const obs = await getObservations(
+          {
+            grid: { wfo: "TEST", x: 1, y: 1 },
+            point: {},
+          },
+          global.test.database,
+        );
 
         expect(obs.data.temperature).to.eql(expected);
       });
@@ -286,21 +291,15 @@ describe("observations module", () => {
       describe("returns an error if all observations are invalid", () => {
         it("all stations return invalid observations", async () => {
           fetch
-            .withArgs(
-              `${BASE_URL}/stations/station1/observations?limit=1`,
-            )
+            .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
             .resolves(invalid);
 
           fetch
-            .withArgs(
-              `${BASE_URL}/stations/station2/observations?limit=1`,
-            )
+            .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
             .resolves(invalid);
 
           fetch
-            .withArgs(
-              `${BASE_URL}/stations/station3/observations?limit=1`,
-            )
+            .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
             .resolves(invalid);
 
           const expected = {
@@ -308,10 +307,13 @@ describe("observations module", () => {
             message: "No valid observations found",
           };
 
-          const obs = await getObservations({
-            grid: { wfo: "TEST", x: 1, y: 1 },
-            point: {},
-          }, global.test.database);
+          const obs = await getObservations(
+            {
+              grid: { wfo: "TEST", x: 1, y: 1 },
+              point: {},
+            },
+            global.test.database,
+          );
 
           expect(obs).to.eql(expected);
         });
@@ -321,21 +323,15 @@ describe("observations module", () => {
           features.length = 0;
 
           fetch
-            .withArgs(
-              `${BASE_URL}/stations/station1/observations?limit=1`,
-            )
+            .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
             .resolves(invalid);
 
           fetch
-            .withArgs(
-              `${BASE_URL}/stations/station2/observations?limit=1`,
-            )
+            .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
             .resolves(invalid);
 
           fetch
-            .withArgs(
-              `${BASE_URL}/stations/station3/observations?limit=1`,
-            )
+            .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
             .resolves(invalid);
 
           const expected = {
@@ -343,10 +339,13 @@ describe("observations module", () => {
             message: "No valid observations found",
           };
 
-          const obs = await getObservations({
-            grid: { wfo: "TEST", x: 1, y: 1 },
-            point: {},
-          }, global.test.database);
+          const obs = await getObservations(
+            {
+              grid: { wfo: "TEST", x: 1, y: 1 },
+              point: {},
+            },
+            global.test.database,
+          );
 
           expect(obs).to.eql(expected);
 
@@ -357,19 +356,13 @@ describe("observations module", () => {
 
     it("returns an error if none of the stations return", async () => {
       fetch
-        .withArgs(
-          `${BASE_URL}/stations/station1/observations?limit=1`,
-        )
+        .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
         .resolves({ status: 400 });
       fetch
-        .withArgs(
-          `${BASE_URL}/stations/station2/observations?limit=1`,
-        )
+        .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
         .resolves({ status: 400 });
       fetch
-        .withArgs(
-          `${BASE_URL}/stations/station3/observations?limit=1`,
-        )
+        .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
         .resolves({ status: 400 });
 
       const expected = {
@@ -377,28 +370,32 @@ describe("observations module", () => {
         message: "No valid observations found",
       };
 
-      const actual = await getObservations({
-        grid: { wfo: "TEST", x: 1, y: 1 },
-        point: {},
-      }, global.test.database);
+      const actual = await getObservations(
+        {
+          grid: { wfo: "TEST", x: 1, y: 1 },
+          point: {},
+        },
+        global.test.database,
+      );
 
       expect(actual).to.eql(expected);
     });
 
     it("returns an error if getting the list of stations fails", async () => {
-      fetch
-        .withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations`)
-        .rejects();
+      fetch.withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations`).rejects();
 
       const expected = {
         error: true,
         message: "Failed to find an approved observation station",
       };
 
-      const actual = await getObservations({
-        grid: { wfo: "TEST", x: 1, y: 1 },
-        point: {},
-      }, global.test.database);
+      const actual = await getObservations(
+        {
+          grid: { wfo: "TEST", x: 1, y: 1 },
+          point: {},
+        },
+        global.test.database,
+      );
 
       expect(actual).to.eql(expected);
     });
@@ -411,10 +408,13 @@ describe("observations module", () => {
         message: "Failed to find an approved observation station",
       };
 
-      const actual = await getObservations({
-        grid: { wfo: "TEST", x: 1, y: 1 },
-        point: {},
-      }, global.test.database);
+      const actual = await getObservations(
+        {
+          grid: { wfo: "TEST", x: 1, y: 1 },
+          point: {},
+        },
+        global.test.database,
+      );
 
       expect(actual).to.eql(expected);
     });
@@ -473,10 +473,13 @@ describe("observations module", () => {
       },
     };
 
-    const obs = await getObservations({
-      grid: { wfo: "TEST", x: 1, y: 1 },
-      point: {},
-    }, global.test.database);
+    const obs = await getObservations(
+      {
+        grid: { wfo: "TEST", x: 1, y: 1 },
+        point: {},
+      },
+      global.test.database,
+    );
 
     expect(obs).to.eql(expected);
   });

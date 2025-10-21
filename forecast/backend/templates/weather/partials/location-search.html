@@ -15,14 +15,16 @@
         </div>
         <div class="grid-row">
           <div class="tablet:grid-col-6">
-            <!-- djlint:off -->
-                                                            <wx-combo-box-location class="z-top margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105" id="search-combo-box"
-                                                                                   {% if place %}
-                                                                                   data-place="{% place_label place%}"
-                                                                                   {% endif %}
-                                                                                   }>
-                                                            </wx-combo-box-location>
-            <!-- djlint:on -->
+            {# djlint:off #}
+            <wx-combo-box-location
+              class="z-top margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105"
+              id="search-combo-box"
+              {% if place %}
+                data-place="{% place_label place%}"
+              {% endif %}
+            >
+            </wx-combo-box-location>
+            {# djlint:on #}
           </div>
           <div class="font-sans-md text-primary-dark tablet:grid-col-6 margin-top-105 margin-bottom-105">
             <div class="grid-col">{% include 'weather/partials/wx-loader.html' %}</div>

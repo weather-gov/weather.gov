@@ -9,9 +9,9 @@
   @extend .usa-combo-box;
 }
 
-.wx-combo-box[disabled="true"]{
-    pointer-events: none;
-    opacity: 0.5;
+.wx-combo-box[disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .wx-combo-box li[role="option"] {
@@ -51,10 +51,8 @@
 .wx-combo-box__clear-input {
   @extend .usa-combo-box__clear-input;
 
-  background-image: linear-gradient(
-      rgba(255 255 255 / 40%),
-      rgba(255 255 255 / 40%)
-    ),
+  background-image:
+    linear-gradient(rgba(255 255 255 / 40%), rgba(255 255 255 / 40%)),
     url("/public/images/uswds/usa-icons/close.svg");
   opacity: 1;
   background-color: white;

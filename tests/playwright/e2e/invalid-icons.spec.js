@@ -6,7 +6,7 @@ const { describe, beforeEach } = test;
 describe("Invalid icon URL tests", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
-    await page.goto("/point/38.886/-77.094", { waitUntil: "load"});
+    await page.goto("/point/38.886/-77.094", { waitUntil: "load" });
   });
 
   test("Doesn't render icon for unknown icon name (current conditions)", async ({
@@ -64,7 +64,7 @@ describe("Invalid icon URL tests", () => {
 describe("Valid icon rendering double-checks", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
-    await page.goto("/point/34.749/-92.275", { waitUntil: "load"});
+    await page.goto("/point/34.749/-92.275", { waitUntil: "load" });
   });
 
   test("Should render an icon in the current conditions", async ({ page }) => {

@@ -5,7 +5,8 @@
 {% block head_js %}
   <script type="module" src="{% static 'js/locationSearch.js' %}"></script>
   <script type="module" src="{% static 'js/components/combo-box.js' %}"></script>
-  <script type="module" src="{% static 'js/components/combo-box-location.js' %}"></script>
+  <script type="module"
+          src="{% static 'js/components/combo-box-location.js' %}"></script>
 {% endblock %}
 {% block page_content %}
   <div class="bg-primary-darker wx-bg-satellite padding-y-4 tablet:padding-top-7 tablet:padding-bottom-8">
@@ -33,7 +34,8 @@
                    focusable="false"
                    role="img">
                 <use xlink:href="{% static 'images/uswds/sprite.svg' %}#my_location"></use>
-              </svg>{{ 'location-search.labels.use-location.01' | t }}
+              </svg>
+              {{ 'location-search.labels.use-location.01' | t }}
             </button>
           </div>
           <wx-combo-box-location class="z-top margin-top-105" id="search-combo-box">

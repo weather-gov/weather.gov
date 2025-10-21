@@ -15,7 +15,7 @@
  * hide/show relevant forecast day list items.
  */
 class DailyForecast extends HTMLElement {
-  constructor(){
+  constructor() {
     super();
 
     // Bound methods
@@ -27,18 +27,18 @@ class DailyForecast extends HTMLElement {
     this.handleKeys = this.handleKeys.bind(this);
   }
 
-  connectedCallback(){
+  connectedCallback() {
     this.setupMediaEvents();
 
     this.addEventListener("keydown", this.handleKeys);
   }
 
-  disconnectedCallback(){
-    Array.from(
-      this.querySelectorAll(".wx-quick-forecast-item")
-    ).forEach(item => {
-      item.removeEventListener("click", this.tabClickHandler);
-    });
+  disconnectedCallback() {
+    Array.from(this.querySelectorAll(".wx-quick-forecast-item")).forEach(
+      (item) => {
+        item.removeEventListener("click", this.tabClickHandler);
+      },
+    );
 
     this.removeEventListener("keydown", this.handleKeys);
   }
@@ -52,10 +52,14 @@ class DailyForecast extends HTMLElement {
    * immediately, so as to setup the component for
    * the given media (desktop or everything else)
    */
-  setupMediaEvents(){
+  setupMediaEvents() {
     const computedStyle = getComputedStyle(this);
-    this.desktopBreakpoint = computedStyle.getPropertyValue("--wx-media-breakpoint-desktop");
-    this.desktopQuery = window.matchMedia(`(min-width: ${this.desktopBreakpoint})`);
+    this.desktopBreakpoint = computedStyle.getPropertyValue(
+      "--wx-media-breakpoint-desktop",
+    );
+    this.desktopQuery = window.matchMedia(
+      `(min-width: ${this.desktopBreakpoint})`,
+    );
     this.desktopQuery.addEventListener("change", this.handleDesktopMediaChange);
     this.handleDesktopMediaChange();
   }
@@ -69,22 +73,23 @@ class DailyForecast extends HTMLElement {
    * This is primarily accomplished by setting role and
    * aria attributes as needed on the appropriate elements.
    */
-  setupTabMode(){
+  setupTabMode() {
     // Set up the tabpanel role for the forecast items
     const panelRefs = [];
     this.forecastList = this.querySelector(".wx-forecast-list");
-    Array.from(this.forecastList.querySelectorAll(".wx-daily-forecast-list-item-inner"))
-      .forEach(item => {
-        item.setAttribute("role", "tabpanel");
-        panelRefs.push(item.id);
-      });
-    
+    Array.from(
+      this.forecastList.querySelectorAll(".wx-daily-forecast-list-item-inner"),
+    ).forEach((item) => {
+      item.setAttribute("role", "tabpanel");
+      panelRefs.push(item.id);
+    });
+
     // Set up the tablist and tab roles for the
     // quick forecast and its nav items
     this.quickForecastEl = this.querySelector(".wx-quick-forecast");
     this.quickForecastEl.setAttribute("role", "tablist");
     Array.from(
-      this.quickForecastEl.querySelectorAll(".wx-quick-forecast-item")
+      this.quickForecastEl.querySelectorAll(".wx-quick-forecast-item"),
     ).forEach((item, idx) => {
       item.setAttribute("role", "tab");
       item.setAttribute("aria-controls", panelRefs[idx]);
@@ -93,11 +98,11 @@ class DailyForecast extends HTMLElement {
     });
 
     // Bind even handlers for click on tabs
-    Array.from(
-      this.querySelectorAll(".wx-quick-forecast-item")
-    ).forEach(item => {
-      item.addEventListener("click", this.tabClickHandler);
-    });
+    Array.from(this.querySelectorAll(".wx-quick-forecast-item")).forEach(
+      (item) => {
+        item.addEventListener("click", this.tabClickHandler);
+      },
+    );
 
     // Click the first item in the list to select it
     this.querySelector(".wx-quick-forecast-item:first-child").click();
@@ -113,22 +118,24 @@ class DailyForecast extends HTMLElement {
    * (for example, daily list items shouldn't have tabpanel roles anymore).
    * This method cleans up those attributes as needed.
    */
-  undoTabMode(){
+  undoTabMode() {
     // Remove all tabpanel roles/aria
     Array.from(
-      this.querySelectorAll(".wx-daily-forecast-list-item, .wx-daily-forecast-list-item-inner")
-    ).forEach(item => {
+      this.querySelectorAll(
+        ".wx-daily-forecast-list-item, .wx-daily-forecast-list-item-inner",
+      ),
+    ).forEach((item) => {
       item.removeAttribute("role");
       item.removeAttribute("aria-labelledby");
     });
 
     // Remove all tab roles/aria
-    Array.from(
-      this.querySelectorAll(".wx-quick-forecast-item")
-    ).forEach(item => {
-      item.removeAttribute("role");
-      item.removeAttribute("aria-controls");
-    });
+    Array.from(this.querySelectorAll(".wx-quick-forecast-item")).forEach(
+      (item) => {
+        item.removeAttribute("role");
+        item.removeAttribute("aria-controls");
+      },
+    );
   }
 
   /**
@@ -136,9 +143,9 @@ class DailyForecast extends HTMLElement {
    * this handler will be called.
    * It will toggle tab/non-tab mode as needed.
    */
-  handleDesktopMediaChange(){
+  handleDesktopMediaChange() {
     this.setAttribute("wx-media-desktop", this.desktopQuery.matches);
-    if(this.desktopQuery.matches){
+    if (this.desktopQuery.matches) {
       this.setupTabMode();
     } else {
       this.undoTabMode();
@@ -151,18 +158,21 @@ class DailyForecast extends HTMLElement {
    * operates as a tab, toggling attributes as needed to
    * show/hide appropriate tabpanels
    */
-  tabClickHandler(event){
+  tabClickHandler(event) {
     event.preventDefault();
-    if(event.target.getAttribute("aria-selected") !== "true"){
-      Array.from(this.querySelectorAll(".wx-quick-forecast-item"))
-        .forEach(item => item.setAttribute("aria-selected", "false"));
+    if (event.target.getAttribute("aria-selected") !== "true") {
+      Array.from(this.querySelectorAll(".wx-quick-forecast-item")).forEach(
+        (item) => item.setAttribute("aria-selected", "false"),
+      );
       event.target.setAttribute("aria-selected", "true");
 
       // Update panel data attributes, used for showing/hiding
       // the tabs
       Array.from(
-        this.forecastList.querySelectorAll(".wx-daily-forecast-list-item-inner")
-      ).forEach(item => item.setAttribute("data-tabpanel-active", "false"));
+        this.forecastList.querySelectorAll(
+          ".wx-daily-forecast-list-item-inner",
+        ),
+      ).forEach((item) => item.setAttribute("data-tabpanel-active", "false"));
       const correspondingPanelId = event.target.getAttribute("aria-controls");
       const correspondingPanel = document.getElementById(correspondingPanelId);
       correspondingPanel.setAttribute("data-tabpanel-active", "true");
@@ -173,34 +183,34 @@ class DailyForecast extends HTMLElement {
    * Handle the additional key events required by the
    * WCAG tabs pattern
    */
-  handleKeys(event){
-    if(event.code === "Space"){
+  handleKeys(event) {
+    if (event.code === "Space") {
       // Space selects the item
       event.target.click();
       event.preventDefault();
-    } else if(event.code === "ArrowRight"){
+    } else if (event.code === "ArrowRight") {
       // Move to the next element in the nav list.
       // If we are already on the last one, loop back to
       // the first one.
-      if(event.target.matches(":last-child")){
+      if (event.target.matches(":last-child")) {
         this.querySelector(".wx-quick-forecast-item:first-child").focus();
       } else {
         event.target.nextElementSibling.focus();
       }
-    } else if(event.code === "ArrowLeft"){
+    } else if (event.code === "ArrowLeft") {
       // Move to the previous element in the nav list.
       // If we are already on the first element, loop
       // around to the last one.
-      if(event.target.matches(":first-child")){
+      if (event.target.matches(":first-child")) {
         this.querySelector(".wx-quick-forecast-item:last-child").focus();
       } else {
         event.target.previousElementSibling.focus();
       }
-    } else if(event.code === "Home"){
+    } else if (event.code === "Home") {
       // Move focus to the first nav item
       this.querySelector(".wx-quick-forecast-item:first-child").focus();
       event.preventDefault();
-    } else if(event.code === "End"){
+    } else if (event.code === "End") {
       // Move focus to the last nav item
       this.querySelector(".wx-quick-forecast-item:last-child").focus();
       event.preventDefault();

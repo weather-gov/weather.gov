@@ -9,7 +9,7 @@ describe("daily forecast", () => {
   });
 
   test("does not display missing day periods", async ({ page }) => {
-    await page.goto("/point/21.305/-157.858", { waitUntil: "load"});
+    await page.goto("/point/21.305/-157.858", { waitUntil: "load" });
     const lastDay = page
       .locator(".wx-daily-forecast-block .wx-daily-forecast-list-item")
       .last();

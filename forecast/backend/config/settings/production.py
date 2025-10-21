@@ -4,6 +4,7 @@ beta.weather.gov production settings.
 These settings are intended for use within
 our cloud-gov production environment(s)
 """
+
 import os
 import subprocess
 
@@ -27,6 +28,7 @@ ALLOWED_HOSTS = [
     "beta.weather.gov" if cloudgov_space == "prod" else f"weathergov-{cloudgov_space}.app.cloud.gov",
 ]
 
+
 # Helpers
 def find_cloudgov_library(name):
     """
@@ -38,12 +40,13 @@ def find_cloudgov_library(name):
     for the python buildpack, which runs second)
     """
     apt_library_dir = "/home/vcap/deps/0/lib"
-    ls_output = subprocess.run(["/bin/ls", "-1", apt_library_dir], check=True, capture_output=True) # noqa: S603 (no untrusted input)
+    ls_output = subprocess.run(["/bin/ls", "-1", apt_library_dir], check=True, capture_output=True)  # noqa: S603 (no untrusted input)
     ls_list = ls_output.stdout.decode("utf8").split("\n")
     lib_entry = [entry for entry in ls_list if entry.strip().startswith(name)]
     if lib_entry:
         return f"{apt_library_dir}/{lib_entry[0].strip()}"
     return None
+
 
 def find_cloudgov_proj_resources(name):
     """Find the cloud.gov apt installed PROJ resources.
@@ -52,12 +55,13 @@ def find_cloudgov_proj_resources(name):
     to be passed in for coordinate reference systems to work.
     """
     apt_library_dir = "/home/vcap/deps/0/"
-    find_output = subprocess.run(["/bin/find", apt_library_dir], check=True, capture_output=True) # noqa: S603 (no untrusted input)
+    find_output = subprocess.run(["/bin/find", apt_library_dir], check=True, capture_output=True)  # noqa: S603 (no untrusted input)
     find_list = find_output.stdout.decode("utf8").split("\n")
     resource_entry = [entry for entry in find_list if entry.strip().endswith(name)]
     if resource_entry:
         return os.path.dirname(resource_entry[0])
     return None
+
 
 def set_cors_on_s3_bucket(bucket_name=None, region_name=None, access_key=None, secret_key=None, **kwargs):
     """Set CORS setting on the given S3 bucket."""
@@ -118,7 +122,7 @@ s3_options = {
     "region_name": s3_credentials["region"],
     "access_key": s3_credentials["access_key_id"],
     "secret_key": s3_credentials["secret_access_key"],
-    "querystring_auth": False, # do not send AWSAccessKeyId query params since buckets are public
+    "querystring_auth": False,  # do not send AWSAccessKeyId query params since buckets are public
 }
 STORAGES = {
     "default": {

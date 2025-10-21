@@ -25,20 +25,25 @@ const pages = [
     url: "/point/35.198/-111.651#daily",
   },
   {
-    name: "about page", url: "/about/"
+    name: "about page",
+    url: "/about/",
   },
   {
-    name: "disclaimer page", url: "/disclaimer/"
+    name: "disclaimer page",
+    url: "/disclaimer/",
   },
   {
-    name: "accessibility page", url: "/accessibility/"
+    name: "accessibility page",
+    url: "/accessibility/",
   },
   {
-    name: "privacy page", url: "/privacy/"
+    name: "privacy page",
+    url: "/privacy/",
   },
   {
-    name: "site-index page", url: "/site-index/"
-  }
+    name: "site-index page",
+    url: "/site-index/",
+  },
 ];
 
 for (const { name, url } of pages) {

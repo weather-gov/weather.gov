@@ -1,21 +1,19 @@
 {% extends "weather/page.html" %}
-
 {% block head_js %}
   <script type="module" src="{% static 'js/components/combo-box.js' %}"></script>
-  <script type="module" src="{% static 'js/components/ghwo-county-selector.js' %}"></script>
+  <script type="module"
+          src="{% static 'js/components/ghwo-county-selector.js' %}"></script>
 {% endblock %}
-
 {% block page_content %}
   <div class="bg-primary-dark">
     <div class="grid-container">
       <h1 class="text-white text-light padding-y-1 margin-y-0">{{ "site.meta.titles.ghwo.risk.01" | t }}</h1>
     </div>
   </div>
-
   <div class="bg-primary-lightest border-bottom-2px border-primary">
     <div class="grid-container">
       <wx-ghwo-selector class="display-block" state-target="#state-select" county-target="#county-select" method="async">
-        {% include "weather/partials/wx-county-ghwo-selector.html" %}
+      {% include "weather/partials/wx-county-ghwo-selector.html" %}
       </wx-ghwo-selector>
     </div>
   </div>

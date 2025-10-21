@@ -455,9 +455,7 @@ def load_places(force=False):
             # For everywhere else, it's a numeric code, but it turns out in
             # those cases, the country code is the appropriate "state"
             # abbreviation, so use that.
-            place.state = (
-                csv_place["state"] if csv_place["country"] == "US" else csv_place["country"]
-            )
+            place.state = csv_place["state"] if csv_place["country"] == "US" else csv_place["country"]
 
             # Create a WKT string in order to create the geometry. We may
             # also use this WKT string for a county lookup later on.

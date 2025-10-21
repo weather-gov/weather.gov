@@ -19,14 +19,12 @@ urlpatterns = [
     # Our URLs should have trailing slashes. Django will automatically add
     # trailing slashes to requests that don't have them, so if our URLs DON'T
     # have trailing slashes, they'll never match.
-
     # Static pages for the site
     path("about/", views.site_page, name="about"),
     path("site-index/", views.site_page, name="site_index"),
     path("accessibility/", views.site_page, name="accessibility"),
     path("disclaimer/", views.site_page, name="disclaimer"),
     path("privacy/", views.site_page, name="privacy"),
-
     # Forecast specific URLS
     path("offices/<wfo>/", views.offices_specific, name="office"),
     path("afd/", views.afd_index, name="afd_index"),
@@ -53,13 +51,11 @@ urlpatterns = [
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("pages/", include(wagtail_urls)),
-
     # Point forecast related, etc
     path("point/<float:lat>/<float:lon>/", views.point_location, name="point"),
     path("place/<state>/<place>/", views.place_forecast, name="place forecast"),
     path("health/", views.health, name="health"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
-
     # GHWO
     path("counties/ghwo/", views.county_ghwo_index, name="county_ghwo_index"),
     path("counties/ghwo/<str:county_fips>", views.county_ghwo, name="county_ghwo"),

@@ -146,7 +146,6 @@
               // (Error code 1 is for when the user denies access to location, so
               // for our purposes, that is not an error.)
 
-               
               alert(
                 `There was a problem getting your location. Here's what your browser told us: ${message}`,
               );

@@ -14,7 +14,9 @@ describe("invalid location-based routes return 404", () => {
       ["with non-numeric longitude", "123", "abc"],
     ].forEach(([name, lat, lon]) => {
       test(name, async ({ page }) => {
-        const response = await page.goto(`/point/${lat}/${lon}`, { waitUnfil: "load"});
+        const response = await page.goto(`/point/${lat}/${lon}`, {
+          waitUnfil: "load",
+        });
         await expect(response.status()).toEqual(404);
       });
     });
@@ -27,7 +29,9 @@ describe("invalid location-based routes return 404", () => {
       ["with WFO with numbers", "a1b"],
     ].forEach(([name, wfo]) => {
       test(name, async ({ page }) => {
-        const response = await page.goto(`/local/${wfo}/1/1`, { waitUnfil: "load"});
+        const response = await page.goto(`/local/${wfo}/1/1`, {
+          waitUnfil: "load",
+        });
         await expect(response.status()).toEqual(404);
       });
     });
@@ -39,7 +43,9 @@ describe("invalid location-based routes return 404", () => {
       ["with non-numeric Y", "1", "a"],
     ].forEach(([name, x, y]) => {
       test(name, async ({ page }) => {
-        const response = await page.goto(`/local/TST/${x}/${y}`, { waitUnfil: "load"});
+        const response = await page.goto(`/local/TST/${x}/${y}`, {
+          waitUnfil: "load",
+        });
         await expect(response.status()).toEqual(404);
       });
     });

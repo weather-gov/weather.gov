@@ -12,6 +12,7 @@ class SAMLVCAPNotFoundError(Exception):
     def __init__(self):
         super().__init__("SAML Settings could not find VCAP information.")
 
+
 env = environs.Env()
 cloudgov_space = env("CLOUDGOV_SPACE", "test")
 DEBUG = env.bool("DJANGO_DEBUG", False)

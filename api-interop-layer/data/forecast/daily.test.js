@@ -311,7 +311,7 @@ describe("daily forecast", () => {
             startTime: "2024-12-03T01:18:16Z",
             endTime: "2024-12-03T10:18:15Z",
             isDaytime: false,
-            isOvernight: false
+            isOvernight: false,
           },
         ],
       },

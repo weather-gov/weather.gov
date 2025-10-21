@@ -29,10 +29,10 @@ describe("alert background processing module", () => {
       storedAlerts[hash] = [hash, alert, geometry, alertKind];
     });
     removeAlertsStub = sandbox.stub(AlertsCache.prototype, "removeByHashes");
-    removeAlertsStub.callsFake((hashes) =>{
-      hashes.forEach(hash => {
+    removeAlertsStub.callsFake((hashes) => {
+      hashes.forEach((hash) => {
         const idx = storedHashes.indexOf(hash);
-        if(idx >= 0){
+        if (idx >= 0) {
           storedHashes.splice(idx, 1);
           delete storedAlerts[hash];
         }
@@ -95,7 +95,6 @@ describe("alert background processing module", () => {
       expect(storedHashes).to.have.length(2);
       expect(Object.values(storedAlerts)).to.have.length(2);
     });
-      
 
     it("removes alerts that are gone in the next pass", async () => {
       const alert1 = {
@@ -234,7 +233,9 @@ describe("alert background processing module", () => {
     expect(storedHashes).to.have.length(4);
     expect(Object.values(storedAlerts)).to.have.length(4);
 
-    const geometries = Object.values(storedAlerts).map(alertInfo => alertInfo[2]);
+    const geometries = Object.values(storedAlerts).map(
+      (alertInfo) => alertInfo[2],
+    );
 
     expect(geometries).to.eql(["geo", null, "geo", "geo"]);
   });
@@ -259,7 +260,7 @@ describe("alert background processing module", () => {
 
     await updateAlerts({ parent });
 
-    const [ _, alert ] = Object.values(storedAlerts)[0];
+    const [_, alert] = Object.values(storedAlerts)[0];
 
     expect(alert.id).to.equal("part1_part2_part3");
   });
@@ -286,7 +287,7 @@ describe("alert background processing module", () => {
 
     expect(storedHashes).to.have.length(1);
 
-    const [ _, alert ] = Object.values(storedAlerts)[0];
+    const [_, alert] = Object.values(storedAlerts)[0];
     const { event, metadata } = alert;
 
     expect(event).to.equal("Severe Meatballstorm Warning");
@@ -322,7 +323,7 @@ describe("alert background processing module", () => {
 
     expect(storedHashes).to.have.length(1);
 
-    const [ _, alert ] = Object.values(storedAlerts)[0];
+    const [_, alert] = Object.values(storedAlerts)[0];
     const { event, metadata } = alert;
 
     expect(event).to.equal("Pasta Sauce Evacuation Emergency");
@@ -366,7 +367,7 @@ describe("alert background processing module", () => {
       response.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
-      const [ _, alert ] = Object.values(storedAlerts)[0];
+      const [_, alert] = Object.values(storedAlerts)[0];
       const { ends, finish } = alert;
 
       expect(ends.isSame(finish)).to.be.true;
@@ -378,7 +379,7 @@ describe("alert background processing module", () => {
       response.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
-      const [ _, alert ] = Object.values(storedAlerts)[0];
+      const [_, alert] = Object.values(storedAlerts)[0];
       const { expires, finish } = alert;
       expect(expires.isSame(finish)).to.be.true;
     });
@@ -389,7 +390,7 @@ describe("alert background processing module", () => {
       response.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
-      const [ _, alert ] = Object.values(storedAlerts)[0];
+      const [_, alert] = Object.values(storedAlerts)[0];
       const { finish } = alert;
 
       expect(finish).to.be.null;

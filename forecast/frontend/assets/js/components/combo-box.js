@@ -135,8 +135,8 @@ class ComboBox extends HTMLElement {
     this.setEventListeners(false);
   }
 
-  attributeChangedCallback(name, oldVal, newVal){
-    if(name === "disabled"){
+  attributeChangedCallback(name, oldVal, newVal) {
+    if (name === "disabled") {
       this.setDisabled(newVal === "true");
     }
   }
@@ -239,12 +239,12 @@ class ComboBox extends HTMLElement {
     this.clearButton = clearButton;
   }
 
-  resetListAndListboxItems(listItems){
+  resetListAndListboxItems(listItems) {
     // Update this objects listItems property
     // to stash the values for later use,
     // then recreate the <li> elements in the
     // Listbox
-    if(Array.isArray(listItems) && listItems.length){
+    if (Array.isArray(listItems) && listItems.length) {
       this.listItems = listItems;
       this.setListItems(listItems);
     } else {
@@ -264,7 +264,7 @@ class ComboBox extends HTMLElement {
     // select the first element in the list
     const selected = this.getAttribute("selected");
     let listboxItemToFocus;
-    if(selected && selected !== ""){
+    if (selected && selected !== "") {
       listboxItemToFocus = this.getItemByValue(selected);
     }
 
@@ -272,25 +272,22 @@ class ComboBox extends HTMLElement {
     // to the currently selected value, we instead
     // set the selected item to be the first in the
     // list of items.
-    if(!listboxItemToFocus){
+    if (!listboxItemToFocus) {
       listboxItemToFocus = this.listbox.querySelector("li:first-child");
     }
 
     this.input.value = listboxItemToFocus.innerText;
     this.pseudoFocusListItem(listboxItemToFocus);
     this.handleTextInput();
-    this.setAttribute(
-      "selected",
-      listboxItemToFocus.dataset.value
-    );
+    this.setAttribute("selected", listboxItemToFocus.dataset.value);
 
     // Update the internal named input
     // if present
-    if(listboxItemToFocus && this.namedInput){
+    if (listboxItemToFocus && this.namedInput) {
       this.namedInput.value = listboxItemToFocus.dataset.value;
     }
   }
-  
+
   // #endregion
 
   // #region Event handlers
@@ -642,8 +639,8 @@ class ComboBox extends HTMLElement {
    * Sets the state of the component to disabled if true,
    * enabled if false.
    */
-  setDisabled(shouldDisable){
-    if(shouldDisable){
+  setDisabled(shouldDisable) {
+    if (shouldDisable) {
       this.setEventListeners(false);
     } else {
       this.setEventListeners(true);
@@ -656,8 +653,8 @@ class ComboBox extends HTMLElement {
    * if the passed in argument is true, we add the listeners.
    * if false, we remove the listeners.
    */
-  setEventListeners(shouldAdd=true){
-    if(shouldAdd){
+  setEventListeners(shouldAdd = true) {
+    if (shouldAdd) {
       this.addEventListener("input", this.handleInput);
       this.addEventListener("keydown", this.handleKeyDown);
       this.addEventListener("change", this.handleTextInput);
@@ -678,10 +675,10 @@ class ComboBox extends HTMLElement {
     return this.input.getAttribute("aria-expanded") === "true";
   }
 
-  static get observedAttributes(){
+  static get observedAttributes() {
     return ["disabled"];
   }
-  
+
   // #endregion
 }
 
