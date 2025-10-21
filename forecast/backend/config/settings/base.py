@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 
 import environs
+from csp.constants import NONE, SELF
 
 SETTINGS_TYPE = "base"
 
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "csp",
     # Wagtail dependencies
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -91,6 +93,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "csp.middleware.CSPMiddleware",
     # Wagtail related middleware
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
@@ -217,6 +220,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10_000
 WAGTAIL_SITE_NAME = "beta.weather.gov"
 WAGTAILADMIN_BASE_URL = "http://localhost:8080"  # Change to env variable for config
 WAGTAILDOCS_EXTENSIONS = ["jpg", "jpeg", "pdf", "png", "gif"]
+WAGTAILDOCS_SERVE_METHOD = "redirect"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -230,6 +234,33 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 SITE_LOGO = "logo.svg"
 SITE_NAME = "beta.weather.gov"
 SITE_SLOGAN = "National Weather Service"
+
+# content security policy configuration
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "default-src": [SELF],
+        "script-src": [NONE],
+        "script-src-elem": [
+            SELF,
+            # analytics
+            "dap.digitalgov.gov",
+            "www.googletagmanager.com",
+        ],
+        "connect-src": [
+            SELF,
+            # analytics
+            "dap.digitalgov.gov",
+        ],
+        "font-src": [SELF],
+        "style-src": [
+            SELF,
+            # combo-box.js applies its own CSS styles
+            "'sha256-dv6AqYOOsjqjjjKRCn5keqjhGN/otX85VCpq3YZc/dE='",
+        ],
+        "frame-ancestors": [SELF],
+        "form-action": [SELF],
+    },
+}
 
 # region: Logging-----------------------------------------------------------###
 

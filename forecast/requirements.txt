@@ -17,3 +17,4 @@ django-storages[s3]==1.14.6
 tqdm
 responses
 python3-saml
+django-csp==4.0
