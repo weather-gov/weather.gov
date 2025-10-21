@@ -41,9 +41,8 @@ const matchTranslationFilters = (source) => {
   return result.sort((a, b) => {
     if (a.index < b.index) {
       return -1;
-    } 
-      return 0;
-    
+    }
+    return 0;
   });
 };
 
@@ -61,13 +60,13 @@ const extractPHPTranslations = (filePath) => {
   if (matches) {
     result = result.concat(
       Array.from(matches, (match) => ({
-          filename: path.basename(filePath),
-          matchedString: match[0],
-          extracted: match[1],
-          extractedArgs: match[3] | null,
-          lineNumber: getLineNumberForPosition(source, match.index),
-          index: match.index,
-        })),
+        filename: path.basename(filePath),
+        matchedString: match[0],
+        extracted: match[1],
+        extractedArgs: match[3] | null,
+        lineNumber: getLineNumberForPosition(source, match.index),
+        index: match.index,
+      })),
     );
   }
 
@@ -86,26 +85,26 @@ const extractTemplateTranslations = (filePath) => {
   if (functionMatches) {
     result = result.concat(
       Array.from(functionMatches, (match) => ({
-          filename: path.basename(filePath),
-          matchedString: match[0],
-          extracted: match[1],
-          extractedArgs: match[3] | null,
-          lineNumber: getLineNumberForPosition(source, match.index),
-          index: match.index,
-        })),
+        filename: path.basename(filePath),
+        matchedString: match[0],
+        extracted: match[1],
+        extractedArgs: match[3] | null,
+        lineNumber: getLineNumberForPosition(source, match.index),
+        index: match.index,
+      })),
     );
   }
   const filterMatches = matchTranslationFilters(source);
   if (filterMatches.length) {
     result = result.concat(
       Array.from(filterMatches, (match) => ({
-          filename: path.basename(filePath),
-          matchedString: match[0],
-          extracted: match[1],
-          extractedArgs: match[3] || null,
-          lineNumber: getLineNumberForPosition(source, match.index),
-          index: match.index,
-        })),
+        filename: path.basename(filePath),
+        matchedString: match[0],
+        extracted: match[1],
+        extractedArgs: match[3] || null,
+        lineNumber: getLineNumberForPosition(source, match.index),
+        index: match.index,
+      })),
     );
   }
 

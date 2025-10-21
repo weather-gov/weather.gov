@@ -6,7 +6,7 @@
   background-repeat: no-repeat;
 }
 
-@media (prefers-reduced-motion){
+@media (prefers-reduced-motion) {
   .wx-loader-icon {
     background-image: url("../images/weather/wx_loader_static.svg");
   }

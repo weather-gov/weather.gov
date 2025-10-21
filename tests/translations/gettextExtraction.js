@@ -12,12 +12,10 @@ const MSG_STR_RX = /msgstr\s+\"(.*)\"/m;
  * Here a 'block' is any series of contiguous
  * lines of text that are not just an empty string/newline.
  */
-const parseGettextBlocks = (str) => 
+const parseGettextBlocks = (str) =>
   // We ignore the first block, which is just
   // the gettext header information
-   str.split("\n\n").slice(1)
-;
-
+  str.split("\n\n").slice(1);
 const parseGettextSource = (str) => {
   const results = [];
   const blocks = parseGettextBlocks(str);
@@ -25,9 +23,9 @@ const parseGettextSource = (str) => {
   blocks.forEach((block) => {
     const comments = block.split("\n").filter((line) => line.startsWith("#"));
     let msgidString;
-      let msgstrString;
-      let msgid;
-      let msgstr = null;
+    let msgstrString;
+    let msgid;
+    let msgstr = null;
 
     const msgidMatch = block.match(MSG_ID_RX);
     if (msgidMatch) {

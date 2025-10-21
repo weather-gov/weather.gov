@@ -46,13 +46,13 @@ module.exports = {
         "State page tk tk",
         "Resource 1 tk tk",
         "Resource 2 tk tk",
-        "Resource 3 tk tk"
+        "Resource 3 tk tk",
       ],
       "zh-hans": [],
     },
     stale: {
       en: [],
       "zh-hans": [],
-    }
+    },
   },
 };

@@ -3,11 +3,11 @@ import dayjs from "../../util/day.js";
 import hourly, {
   sortAndFilterHours,
   filterHoursForCurrentDay,
-  filterHoursForDay
+  filterHoursForDay,
 } from "./hourly.js";
 
 const place = {
-  timezone: "America/Los_Angeles"
+  timezone: "America/Los_Angeles",
 };
 
 /**
@@ -15,27 +15,31 @@ const place = {
  * We will create four full days of hourly data
  * starting at 7 minutes past each hour.
  */
-const startTime = dayjs.utc("2024-09-09T05:07:00-07:00").tz("America/Los_Angeles");
-const endTime = dayjs.utc("2024-09-14T03:07:00-07:00").tz("America/Los_Angeles");
+const startTime = dayjs
+  .utc("2024-09-09T05:07:00-07:00")
+  .tz("America/Los_Angeles");
+const endTime = dayjs
+  .utc("2024-09-14T03:07:00-07:00")
+  .tz("America/Los_Angeles");
 const hourDiff = endTime.diff(startTime, "hour");
 
 const times = [];
 
-for(let i = 0; i < hourDiff; i++){
+for (let i = 0; i < hourDiff; i++) {
   const newStart = startTime.add(i, "hour");
   const newEnd = newStart.add(1, "hour");
   times.push({
     startTime: newStart.format(),
     endTime: newEnd.format(),
     shortForecast: "Dummy forecast",
-    icon: "weather-icon"
+    icon: "weather-icon",
   });
 }
 
 const hourlyData = {
   properties: {
-    periods: times
-  }
+    periods: times,
+  },
 };
 
 describe("Hourly forecast processing (basic)", () => {
@@ -47,12 +51,13 @@ describe("Hourly forecast processing (basic)", () => {
       "2024-09-09T06:00:00-07:00",
       "2024-09-09T07:00:00-07:00",
       "2024-09-09T08:00:00-07:00",
-      "2024-09-09T09:00:00-07:00"
+      "2024-09-09T09:00:00-07:00",
     ];
     const result = new Map();
     hourly(hourlyData, result, place);
-    const actual = Array.from(result).map(item =>
-      dayjs.utc(item[0]).tz(place.timezone).format()).slice(0,5);
+    const actual = Array.from(result)
+      .map((item) => dayjs.utc(item[0]).tz(place.timezone).format())
+      .slice(0, 5);
 
     expect(expected).to.eql(actual);
   });
@@ -65,13 +70,13 @@ describe("Hourly forecast processing (basic)", () => {
       "2024-09-09T06:00:00-07:00",
       "2024-09-09T07:00:00-07:00",
       "2024-09-09T08:00:00-07:00",
-      "2024-09-09T09:00:00-07:00"
+      "2024-09-09T09:00:00-07:00",
     ];
     const result = new Map();
     hourly(hourlyData, result, place);
     const actual = [...result.values()]
-          .map(val => val.time.tz(place.timezone).format())
-          .slice(0,5);
+      .map((val) => val.time.tz(place.timezone).format())
+      .slice(0, 5);
 
     expect(expected).to.eql(actual);
   });
@@ -83,8 +88,8 @@ describe("Hourly forecast processing (basic)", () => {
     let hours = [...result.values()];
     hours = sortAndFilterHours(hours, now);
     const actual = filterHoursForCurrentDay(hours, now)
-          .map(hour => hour.time.tz(place.timezone).format())
-          .slice(0,5);
+      .map((hour) => hour.time.tz(place.timezone).format())
+      .slice(0, 5);
 
     const expected = [
       "2024-09-09T09:00:00-07:00",
@@ -109,8 +114,9 @@ describe("Hourly forecast processing (basic)", () => {
     });
 
     it("with the correct timestamps", () => {
-      const actual = filteredHours
-            .map(hour => hour.time.tz(place.timezone).format());
+      const actual = filteredHours.map((hour) =>
+        hour.time.tz(place.timezone).format(),
+      );
 
       const expected = [
         "2024-09-09T21:00:00-07:00",
@@ -122,15 +128,14 @@ describe("Hourly forecast processing (basic)", () => {
         "2024-09-10T03:00:00-07:00",
         "2024-09-10T04:00:00-07:00",
         "2024-09-10T05:00:00-07:00",
-        "2024-09-10T06:00:00-07:00"
+        "2024-09-10T06:00:00-07:00",
       ];
 
       expect(expected).to.eql(actual);
     });
 
     it("with the correct hour labels", () => {
-      const actual = filteredHours
-            .map(hour => hour.hour);
+      const actual = filteredHours.map((hour) => hour.hour);
 
       const expected = [
         "9 PM",
@@ -142,7 +147,7 @@ describe("Hourly forecast processing (basic)", () => {
         "3 AM",
         "4 AM",
         "5 AM",
-        "6 AM"
+        "6 AM",
       ];
 
       expect(expected).to.eql(actual);
@@ -161,13 +166,14 @@ describe("Hourly forecast processing (basic)", () => {
     });
 
     it("with the correct timestamps", () => {
-      const actual = filteredHours
-            .map(hour => hour.time.tz(place.timezone).format());
+      const actual = filteredHours.map((hour) =>
+        hour.time.tz(place.timezone).format(),
+      );
 
       const actualHourCount = actual.length;
       const actualFirstTimestamp = actual[0];
       const actualLastTimestamp = actual[actualHourCount - 1];
-      
+
       const expectedHourCount = 28;
       const expectedFirstTimestamp = "2024-09-10T03:00:00-07:00";
       const expectedLastTimestamp = "2024-09-11T06:00:00-07:00";
@@ -178,21 +184,22 @@ describe("Hourly forecast processing (basic)", () => {
     });
 
     it("with the correct hour labels", () => {
-      const actual = filteredHours
-            .map(hour => hour.hour);
+      const actual = filteredHours.map((hour) => hour.hour);
 
       const expectedFirstLabel = "3 AM";
       const expectedLastLabel = "6 AM";
 
       expect(expectedFirstLabel).to.equal(actual[0]);
-      expect(expectedLastLabel).to.equal(actual[actual.length-1]);
+      expect(expectedLastLabel).to.equal(actual[actual.length - 1]);
     });
   });
 
   describe("future days are 6am to 6am (next day)", () => {
     let filteredHours;
     before(() => {
-      const dayStart = dayjs.utc("2024-09-12T06:00:00-07:00").tz(place.timezone);
+      const dayStart = dayjs
+        .utc("2024-09-12T06:00:00-07:00")
+        .tz(place.timezone);
       const result = new Map();
       hourly(hourlyData, result, place);
       let hours = [...result.values()];
@@ -201,32 +208,34 @@ describe("Hourly forecast processing (basic)", () => {
     });
 
     it("with the correct timestamps", () => {
-      const actual = filteredHours
-            .map(hour => hour.time.tz(place.timezone).format());
+      const actual = filteredHours.map((hour) =>
+        hour.time.tz(place.timezone).format(),
+      );
 
       const expectedStart = "2024-09-12T06:00:00-07:00";
       const expectedEnd = "2024-09-13T06:00:00-07:00";
 
       expect(expectedStart).to.equal(actual[0]);
-      expect(expectedEnd).to.equal(actual[actual.length-1]);
+      expect(expectedEnd).to.equal(actual[actual.length - 1]);
     });
 
     it("with the correct hour labels", () => {
-      const actual = filteredHours
-            .map(hour => hour.hour);
+      const actual = filteredHours.map((hour) => hour.hour);
 
       const expectedStartLabel = "6 AM";
       const expectedEndLabel = "6 AM";
 
       expect(expectedStartLabel).to.equal(actual[0]);
-      expect(expectedEndLabel).to.equal(actual[actual.length-1]);
+      expect(expectedEndLabel).to.equal(actual[actual.length - 1]);
     });
   });
 
   describe("if there aren't enough hours for the future day, do just up to what's available", () => {
     let filteredHours;
     before(() => {
-      const dayStart = dayjs.utc("2024-09-13T06:00:00-07:00").tz(place.timezone);
+      const dayStart = dayjs
+        .utc("2024-09-13T06:00:00-07:00")
+        .tz(place.timezone);
       const result = new Map();
       hourly(hourlyData, result, place);
       let hours = [...result.values()];
@@ -235,23 +244,25 @@ describe("Hourly forecast processing (basic)", () => {
     });
 
     it("with the correct timestamps", () => {
-      const actual = filteredHours.map(hour => hour.time.tz(place.timezone).format());
+      const actual = filteredHours.map((hour) =>
+        hour.time.tz(place.timezone).format(),
+      );
 
       const expectedStart = "2024-09-13T06:00:00-07:00";
       const expectedEnd = "2024-09-14T02:00:00-07:00";
 
       expect(expectedStart).to.equal(actual[0]);
-      expect(expectedEnd).to.equal(actual[actual.length-1]);
+      expect(expectedEnd).to.equal(actual[actual.length - 1]);
     });
 
     it("with the correct hour labels", () => {
-      const actual = filteredHours.map(hour => hour.hour);
+      const actual = filteredHours.map((hour) => hour.hour);
 
       const expectedStartLabel = "6 AM";
       const expectedEndLabel = "2 AM";
 
       expect(expectedStartLabel).to.equal(actual[0]);
-      expect(expectedEndLabel).to.equal(actual[actual.length-1]);
+      expect(expectedEndLabel).to.equal(actual[actual.length - 1]);
     });
   });
 });

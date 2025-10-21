@@ -145,8 +145,6 @@ services:
     networks:
       - weather.gov
     volumes:
-      - ./eslint.config.js:/app/eslint.config.js
-      - ./.stylelintrc.js:/app/.stylelintrc.js
       - ./reports:/reports
       - /app/node_modules
     profiles: ["utility"]

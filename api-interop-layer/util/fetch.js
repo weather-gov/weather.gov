@@ -4,7 +4,7 @@ import { sleep } from "./sleep.js";
 const logger = createLogger("fetch wrapper");
 
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
-const headers = process.env.API_KEY ? { 'API-Key': process.env.API_KEY } : {};
+const headers = process.env.API_KEY ? { "API-Key": process.env.API_KEY } : {};
 
 const internalFetch = async (path) => {
   const url = URL.canParse(path) ? path : new URL(path, BASE_URL).toString();
@@ -51,7 +51,4 @@ export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
       return { ...e.cause, error: true };
     });
 
-export {
-  fetchAPIJson as default,
-  BASE_URL
-};
+export { fetchAPIJson as default, BASE_URL };

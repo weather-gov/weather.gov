@@ -37,7 +37,7 @@ class TabbedNavigator extends HTMLElement {
     Array.from(this.querySelectorAll(".wx-alert-link a")).forEach(
       (alertSpan) => {
         alertSpan.addEventListener("click", this.handleAlertAnchorClick);
-      }
+      },
     );
 
     // Add needed event listeners

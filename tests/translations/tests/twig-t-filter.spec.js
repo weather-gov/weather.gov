@@ -2,7 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const { matchTranslationFilters } = require("../translationExtraction.js");
 
-let assert; let expect; let should;
+let assert;
+let expect;
+let should;
 import("chai").then((module) => {
   assert = module.assert;
   expect = module.expect;

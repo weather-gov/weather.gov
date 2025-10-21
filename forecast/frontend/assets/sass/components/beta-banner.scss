@@ -8,11 +8,11 @@ section.beta-banner {
   a {
     color: color("primary");
 
-    &:hover  {
+    &:hover {
       color: color("primary-dark");
     }
 
-    &:active{
+    &:active {
       color: color("primary-darker");
     }
   }
@@ -25,4 +25,3 @@ section.beta-banner {
 .border-gold-20v {
   border-color: color("gold-20v");
 }
-

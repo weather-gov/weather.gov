@@ -10,20 +10,20 @@ import { sentenceCase } from "../../util/case.js";
  * For the first day, we determine the label based
  * on the number and nature of the period(s)
  */
-const addDayName = (day, timezone, isFirstDay=false) => {
-  if(!isFirstDay){
+const addDayName = (day, timezone, isFirstDay = false) => {
+  if (!isFirstDay) {
     // This will already be a dayjs object
     const dayStartTime = day.periods[0].start;
-    day.periods.forEach(period => {
+    day.periods.forEach((period) => {
       period.dayName = dayStartTime.tz(timezone).format("dddd");
     });
   } else {
-    day.periods.forEach(period => {
+    day.periods.forEach((period) => {
       // If there is one period, we call it "Tonight"
-      if(day.periods.length === 1){
-        period.dayName =  "Tonight";
+      if (day.periods.length === 1) {
+        period.dayName = "Tonight";
       } else {
-        period.dayName =  "Today";
+        period.dayName = "Today";
       }
     });
   }

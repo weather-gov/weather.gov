@@ -14,7 +14,6 @@ import { AlertsCache } from "./cache.js";
 // not be processed in future updates, since we've already captured it.
 const alertsCache = new AlertsCache();
 
-
 export const updateAlerts = async ({ parent = parentPort } = {}) => {
   const now = dayjs();
   parent.postMessage({
@@ -60,16 +59,24 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   // based on the incoming hashes and the current cache.
   const db = await openDatabase();
   alertsCache.db = db;
-  
-  const incomingHashes = rawAlerts.map(alert => alert.properties.hash);
+
+  const incomingHashes = rawAlerts.map((alert) => alert.properties.hash);
 
   const currentHashes = await alertsCache.getHashes();
-  const newHashes = await alertsCache.determineNewHashesFrom(currentHashes, incomingHashes);
-  const invalidHashes = await alertsCache.determineOldHashesFrom(currentHashes, incomingHashes);
+  const newHashes = await alertsCache.determineNewHashesFrom(
+    currentHashes,
+    incomingHashes,
+  );
+  const invalidHashes = await alertsCache.determineOldHashesFrom(
+    currentHashes,
+    incomingHashes,
+  );
 
   // Filter the actual alerts that need to be updated, based
   // on the computed hash
-  const alertsToUpdate = rawAlerts.filter(alert => newHashes.includes(alert.properties.hash));
+  const alertsToUpdate = rawAlerts.filter((alert) =>
+    newHashes.includes(alert.properties.hash),
+  );
   parent.postMessage({
     action: "log",
     level: "verbose",
@@ -81,9 +88,8 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   parent.postMessage({
     action: "log",
     level: "verbose",
-    message: `Removed ${invalidHashes.length} alerts from the cache that were no longer valid`
+    message: `Removed ${invalidHashes.length} alerts from the cache that were no longer valid`,
   });
-
 
   // Now update each of the alerts in the list of alerts
   // to update, then store them into the cache.
@@ -128,8 +134,13 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
       // For caching purposes, we store these alerts with the alertKind and no
       // valid geometry. This prevents us from reprocessing them the next round, but
       // also prevents them from being retrieved from the cache for any given point.
-      alertsCache.add(rawAlert.properties.hash, alert, null, alert.metadata.kind);
-      
+      alertsCache.add(
+        rawAlert.properties.hash,
+        alert,
+        null,
+        alert.metadata.kind,
+      );
+
       continue;
     }
 
@@ -187,8 +198,13 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     const geometry = await generateAlertGeometry(db, rawAlert);
 
     // Add the alert to the cache
-    if(geometry){
-      alertsCache.add(rawAlert.properties.hash, alert, geometry, alert.metadata.kind);
+    if (geometry) {
+      alertsCache.add(
+        rawAlert.properties.hash,
+        alert,
+        geometry,
+        alert.metadata.kind,
+      );
 
       parent.postMessage({
         action: "log",
@@ -199,7 +215,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
       parent.postMessage({
         action: "log",
         level: "error",
-        message: `Could not determine geometry for alert ${rawAlert.id}`
+        message: `Could not determine geometry for alert ${rawAlert.id}`,
       });
     }
   }

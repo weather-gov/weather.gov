@@ -36,7 +36,10 @@ describe("alert data module", () => {
     response.status = 200;
     sandbox.resetBehavior();
     sandbox.resetHistory();
-    getIntersection = sandbox.stub(AlertsCache.prototype, "getIntersectingAlerts");
+    getIntersection = sandbox.stub(
+      AlertsCache.prototype,
+      "getIntersectingAlerts",
+    );
 
     fetch.resolves(response);
   });
@@ -50,7 +53,7 @@ describe("alert data module", () => {
       beforeEach(async () => {
         response.json.resetBehavior();
         response.json.resetHistory();
-        getIntersection.callsFake(() =>Promise.resolve([]));
+        getIntersection.callsFake(() => Promise.resolve([]));
       });
 
       afterEach(() => {
@@ -127,7 +130,7 @@ describe("alert data module", () => {
             },
           };
 
-          getIntersection.callsFake(() =>Promise.resolve([alert]));
+          getIntersection.callsFake(() => Promise.resolve([alert]));
         });
 
         afterEach(() => {

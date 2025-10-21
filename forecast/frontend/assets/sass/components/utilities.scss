@@ -127,7 +127,7 @@
 
 /* Custom sticky at desktop
 ------------------------------------- */
-@include at-media(desktop){
+@include at-media(desktop) {
   .desktop__wx-position-sticky {
     position: sticky;
     top: 0;
@@ -138,21 +138,19 @@
  * child in order to make it full width
 ------------------------------------- */
 .wx-full-container-width {
-  width: calc(100% + units(2))
+  width: calc(100% + units(2));
 }
 
 /* Custom grid gaps
 ------------------------------------- */
 @include at-media("desktop") {
-    .grid-row.desktop__wx-grid-gap-lg {
-        margin-left: units(-1.5);
-        margin-right: units(-1.5);
-    }
+  .grid-row.desktop__wx-grid-gap-lg {
+    margin-left: units(-1.5);
+    margin-right: units(-1.5);
+  }
 
-    .desktop__wx-grid-gap-lg > * {
-        padding-left: units(1.5);
-        padding-right: units(1.5);
-    }
+  .desktop__wx-grid-gap-lg > * {
+    padding-left: units(1.5);
+    padding-right: units(1.5);
+  }
 }
-
-

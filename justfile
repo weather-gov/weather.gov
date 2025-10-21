@@ -100,12 +100,18 @@ clear-alert-cache:
 format-js:
   docker compose --profile utility \
     run --rm \
+    -v "{{justfile_directory()}}/.prettierignore":"/app/.prettierignore" \
+    -v "{{justfile_directory()}}/prettier.config.js":"/app/prettier.config.js" \
     -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
     -v "{{justfile_directory()}}/tests":"/app/tests" \
     -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
     -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
     node \
     npx prettier -w 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js'
+
+[group("code quality")]
+format-python:
+  docker compose exec web python -m ruff format .
 
 # Format stylesheets
 [group("code quality")]
@@ -118,24 +124,30 @@ format-style:
 
 # Format the Django HTML templates
 [group("code quality")]
-format-template:
-  docker compose exec web djlint backend/templates/ --reformat --extension=html
+[script]
+format-template file="":
+  if [[ -z "{{file}}" ]]; then
+    docker compose exec web djlint backend/templates/ --reformat --extension=html
+  else
+    docker compose exec web djlint {{file}} --reformat --extension=html
+  fi
 
 # Lints and formats Python and HTML templates in one go
 [group("code quality")]
-lint: format-js lint-js lint-python format-template lint-template format-style lint-style
+lint: format-js lint-js format-python lint-python format-template lint-template format-style lint-style
 
 # Lint Javascript
 [group("code quality")]
 lint-js:
   docker compose --profile utility \
     run --rm \
+    -v "{{justfile_directory()}}/eslint.config.js":"/app/eslint.config.js" \
     -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
     -v "{{justfile_directory()}}/tests":"/app/tests" \
     -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
     -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
     node \
-    npx eslint
+    npx eslint --fix
 
 # Lints Python code
 [group("code quality")]
@@ -147,9 +159,9 @@ lint-python:
 lint-style:
   docker compose --profile utility \
     run --rm \
-    -v "{{justfile_directory()}}/forecast/frontend":"/app" \
+    -v "{{justfile_directory()}}":"/app" \
     node \
-    npx stylelint **/*.scss
+    npx stylelint **/*.scss --fix
 
 # Lint the Django HTML templates
 [group("code quality")]

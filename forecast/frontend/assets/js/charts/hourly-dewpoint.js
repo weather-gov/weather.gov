@@ -1,7 +1,4 @@
-import {
-  drawChart,
-  setupScrollButtons
-} from "./WeatherChart.js";
+import { drawChart, setupScrollButtons } from "./WeatherChart.js";
 import styles from "../styles.js";
 
 const chartContainers = Array.from(
@@ -30,7 +27,7 @@ for (const container of chartContainers) {
           display: false,
         },
         tooltip: {
-          events: ['click', 'mousemove', 'mouseout'],
+          events: ["click", "mousemove", "mouseout"],
         },
       },
       scales: {

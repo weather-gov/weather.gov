@@ -8,7 +8,6 @@ Designed to be used within a parent <select> element,
 or similar.
 {% endcomment %}
 {% for option in options %}
-  <option value="{{ option.value }}"{% if option.is_current %} selected{% endif %}>
-    {{ option.label }}
-  </option>
-{% endfor  %}
+  <option value="{{ option.value }}"
+          {% if option.is_current %}selected{% endif %}>{{ option.label }}</option>
+{% endfor %}

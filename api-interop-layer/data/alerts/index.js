@@ -22,28 +22,24 @@ const metadata = {
 // The background process handles fetching and massaging alerts so they don't
 // block the main thread. It handles fetching alerts, writing new alerts to the
 // database cache table, and removing stale alerts from the cache table.
-export const updateFromBackground = ({
-  action,
-  level,
-  message,
-}) => {
+export const updateFromBackground = ({ action, level, message }) => {
   switch (action) {
-  case "error":
-    metadata.error = true;
-    break;
+    case "error":
+      metadata.error = true;
+      break;
 
-  case "log":
-    backgroundLogger[level]?.(message);
-    if (!backgroundLogger[level]) {
-      logger.error(`Attempted to write to invalid log level: '${level}'`);
-      logger.error("Received message:");
-      logger.error(message);
-    }
-    break;
-  default:
-    metadata.updated = dayjs();
-    metadata.error = false;
-    break;
+    case "log":
+      backgroundLogger[level]?.(message);
+      if (!backgroundLogger[level]) {
+        logger.error(`Attempted to write to invalid log level: '${level}'`);
+        logger.error("Received message:");
+        logger.error(message);
+      }
+      break;
+    default:
+      metadata.updated = dayjs();
+      metadata.error = false;
+      break;
   }
 };
 
@@ -56,7 +52,7 @@ export const startAlertProcessing = async () => {
     // by the first alerts request
     logger.info("dropping any existing alerts cache table");
     alertsCache.db = await openDatabase();
-    
+
     logger.info("starting background worker");
     const updater = new Worker(
       path.join(import.meta.dirname, "backgroundUpdateTask.js"),
@@ -96,7 +92,6 @@ export default async ({
   point: { latitude, longitude },
   place: { timezone },
 }) => {
-
   // Open a new database connection
   // (or existing pool instance -- see import)
   const db = await openDatabase();
@@ -107,7 +102,7 @@ export default async ({
     buffer: 400,
   });
 
-  alerts.forEach(alert => {
+  alerts.forEach((alert) => {
     // We need to turn all of the relevant timestamp
     // fields back into dayjs objects, in order to sort
     // and perform expiry checks

@@ -2,13 +2,7 @@ import sinon from "sinon";
 import { expect } from "chai";
 import { AlertsCache } from "./cache.js";
 
-const CURRENT_TEST_HASHES = [
-  "one",
-  "two",
-  "three",
-  "five",
-  "seven"
-];
+const CURRENT_TEST_HASHES = ["one", "two", "three", "five", "seven"];
 
 describe("AlertsCache tests", () => {
   let alertsCache;
@@ -19,11 +13,9 @@ describe("AlertsCache tests", () => {
 
   it("#getHashes", async () => {
     const query = `SELECT hash FROM ${alertsCache.tableName}`;
-    global.test.database.query
-      .withArgs(sinon.match(query))
-      .resolves({
-        rows: CURRENT_TEST_HASHES.map(hash => ({ hash }))
-      });
+    global.test.database.query.withArgs(sinon.match(query)).resolves({
+      rows: CURRENT_TEST_HASHES.map((hash) => ({ hash })),
+    });
 
     const result = await alertsCache.getHashes();
 
@@ -35,10 +27,7 @@ describe("AlertsCache tests", () => {
     const incoming = ["two", "three", "four", "five"];
     const expected = ["one", "seven"];
 
-    const actual = alertsCache.determineOldHashesFrom(
-      current,
-      incoming
-    );
+    const actual = alertsCache.determineOldHashesFrom(current, incoming);
 
     expect(actual).to.eql(expected);
   });
@@ -48,10 +37,7 @@ describe("AlertsCache tests", () => {
     const incoming = ["two", "three", "four", "five", "zero"];
     const expected = ["four", "zero"];
 
-    const actual = alertsCache.determineNewHashesFrom(
-      current,
-      incoming
-    );
+    const actual = alertsCache.determineNewHashesFrom(current, incoming);
 
     expect(actual).to.eql(expected);
   });
@@ -71,9 +57,7 @@ describe("AlertsCache tests", () => {
     it("with just one hash", async () => {
       const toRemove = ["one"];
       const query = `DELETE FROM ${alertsCache.tableName} WHERE hash IN ($1)`;
-      global.test.database.query
-        .withArgs(query, toRemove)
-        .resolves(true);
+      global.test.database.query.withArgs(query, toRemove).resolves(true);
 
       const result = await alertsCache.removeByHashes(toRemove);
 
@@ -83,24 +67,22 @@ describe("AlertsCache tests", () => {
     it("with multiple hashes", async () => {
       const toRemove = ["two", "three", "five"];
       const query = `DELETE FROM ${alertsCache.tableName} WHERE hash IN ($1,$2,$3)`;
-      global.test.database.query
-        .withArgs(query, toRemove)
-        .resolves(true);
+      global.test.database.query.withArgs(query, toRemove).resolves(true);
 
       const result = await alertsCache.removeByHashes(toRemove);
 
       expect(result).to.be.true;
     });
-  })
+  });
 
   it("#add (with land alert kind)", async () => {
     const hash = "ten";
-    const alert = { some: "json-object"};
-    const geometry = { some: "geojson-object"};
+    const alert = { some: "json-object" };
+    const geometry = { some: "geojson-object" };
     const kind = "land";
 
     const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, shape, alertKind) VALUES($1, $2, ST_TRANSFORM(ST_GeomFromGeoJson($3), 4326), $4);`;
-    
+
     global.test.database.query
       .withArgs(query, [hash, JSON.stringify(alert), geometry, kind])
       .resolves("INSERT WORKED");
@@ -115,23 +97,23 @@ describe("AlertsCache tests", () => {
 
     const output = [
       {
-        alertjson: {name: "alert1"},
-        "geometry": JSON.stringify({name: "geometry1"})
+        alertjson: { name: "alert1" },
+        geometry: JSON.stringify({ name: "geometry1" }),
       },
       {
-        alertjson:{name: "alert2"},
-        "geometry": JSON.stringify({name: "geometry2"})
-      }
+        alertjson: { name: "alert2" },
+        geometry: JSON.stringify({ name: "geometry2" }),
+      },
     ];
     const expected = [
       {
         name: "alert1",
-        geometry: {name: "geometry1"}
+        geometry: { name: "geometry1" },
       },
       {
         name: "alert2",
-        geometry: {name: "geometry2"}
-      }
+        geometry: { name: "geometry2" },
+      },
     ];
     global.test.database.query.withArgs(query).resolves({ rows: output });
 
@@ -144,9 +126,7 @@ describe("AlertsCache tests", () => {
 
   it("#dropCacheTable", async () => {
     const query = `DROP TABLE IF EXISTS ${alertsCache.tableName}`;
-    global.test.database.query
-      .withArgs(query)
-      .resolves("TABLE DROPPED");
+    global.test.database.query.withArgs(query).resolves("TABLE DROPPED");
 
     const result = await alertsCache.dropCacheTable();
 

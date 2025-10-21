@@ -138,52 +138,48 @@ describe("quantitative precipitation forecase (QPF)", () => {
             values: [
               {
                 validTime: "2024-08-02T01:00:00Z/PT24H",
-                value: 19
+                value: 19,
               },
-            ]
-          }
+            ],
+          },
         },
       }),
     });
 
-    fetch
-      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast`)
-      .resolves({
-        status: 200,
-        json: sinon.stub().resolves({
-          properties: {
-            periods: [
-              {
-                startTime: "2024-08-01T06:00:00-0700",
-                endTime: "2024-08-02T06:00:00-0700",
-                probabilityOfPrecipitation: {
-                  unitCode: "wmoUnit:percent",
-                  value: 40
-                },
+    fetch.withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast`).resolves({
+      status: 200,
+      json: sinon.stub().resolves({
+        properties: {
+          periods: [
+            {
+              startTime: "2024-08-01T06:00:00-0700",
+              endTime: "2024-08-02T06:00:00-0700",
+              probabilityOfPrecipitation: {
+                unitCode: "wmoUnit:percent",
+                value: 40,
               },
-              {
-                startTime: "2024-08-02T06:00:00-0700",
-                endTime: "2024-08-03T06:00:00-0700",
-                probabilityOfPrecipitation: {
-                  unitCode: "wmoUnit:percent",
-                  value: 40
-                },
+            },
+            {
+              startTime: "2024-08-02T06:00:00-0700",
+              endTime: "2024-08-03T06:00:00-0700",
+              probabilityOfPrecipitation: {
+                unitCode: "wmoUnit:percent",
+                value: 40,
               },
-            ],
-          },
-        }),
-      });
+            },
+          ],
+        },
+      }),
+    });
 
-    fetch
-      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast/hourly`)
-      .resolves({
-        status: 200,
-        json: sinon.stub().resolves({
-          properties: {
-            periods: [],
-          },
-        }),
-      });
+    fetch.withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast/hourly`).resolves({
+      status: 200,
+      json: sinon.stub().resolves({
+        properties: {
+          periods: [],
+        },
+      }),
+    });
 
     const grid = {
       wfo: "BOB",

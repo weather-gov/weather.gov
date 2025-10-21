@@ -8,7 +8,7 @@ describe("location search", () => {
     const start = "/point/36.168/-86.778";
 
     await page.goto(services.apiProxy("/stop"));
-    await page.goto(start, { waitUntil: "load"});
+    await page.goto(start, { waitUntil: "load" });
 
     // Clear out saved results for simplicity's sake
     await page.evaluate(() => {

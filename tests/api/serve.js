@@ -114,7 +114,7 @@ export default async (request, response) => {
     // If the bundle contains a `now` key, override any
     // configured value for the current time with the timestamp
     // present in the bundle
-    if(output["@bundle"]?.now){
+    if (output["@bundle"]?.now) {
       config.now = output["@bundle"].now;
     }
 

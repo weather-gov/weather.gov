@@ -5,7 +5,6 @@ const { describe } = test;
 
 describe("Touchpoints button tests", () => {
   describe("Basic layout", () => {
-
     test("Touchpoints button is visible", async ({ page }) => {
       await page.goto(services.webApp("/"), { waitUntil: "load" });
       const button = await page.locator("a.touchpoints-button");

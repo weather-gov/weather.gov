@@ -9,7 +9,13 @@ export async function mochaGlobalSetup() {
 
   // Stub out the PG (postgres) library's database
   // creation methods
-  global.test = { database: { query: sandbox.stub(), end: sandbox.stub(), release: sandbox.stub() } };
+  global.test = {
+    database: {
+      query: sandbox.stub(),
+      end: sandbox.stub(),
+      release: sandbox.stub(),
+    },
+  };
   sinon.stub(Pool.prototype, "connect");
   sinon.stub(Client.prototype, "connect");
   Pool.prototype.connect.resolves(global.test.database);

@@ -44,8 +44,7 @@ $nws-red: #f00;
   $theme-font-sans-custom-src: (
     dir: "Nunito_Sans/static",
     // the name of your font family directory
-    roman:
-      (
+    roman: (
         100: false,
         200: false,
         300: false,
@@ -73,8 +72,7 @@ $nws-red: #f00;
   $theme-font-mono-custom-src: (
     dir: "DM_Mono",
     // the name of your font family directory
-    roman:
-      (
+    roman: (
         100: false,
         200: false,
         300: "DMMono-Light",
@@ -174,8 +172,8 @@ $nws-red: #f00;
   /* ----------------------------------------
   UTILITIES SETTINGS
   ---------------------------------------- */
-  $theme-utility-breakpoints: ("tablet-lg": true,), // 880px)
-
+  $theme-utility-breakpoints: ("tablet-lg": true),
+  // 880px)
   /* ----------------------------------------
   COMPONENT SETTINGS
   ---------------------------------------- */
@@ -185,7 +183,7 @@ $nws-red: #f00;
   $theme-banner-background-color: "primary-darker",
 
   $theme-table-border-color: "base-lighter",
-  
+
   /* ----------------------------------------
   META SETTINGS
   ---------------------------------------- */

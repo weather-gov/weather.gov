@@ -23,23 +23,23 @@ export const modifyTimestampsForAlert = (alert, timezone) => {
   // Start with properties.
   // Alerts pulled out from the database will not have properties,
   // so be sure to check first
-  if(alert.properties){
-    Object.keys(alert.properties).forEach(key => {
+  if (alert.properties) {
+    Object.keys(alert.properties).forEach((key) => {
       const value = alert.properties[key];
       const date = dayjs(value);
 
-      if(date.isValid() && rx.test(value)){
+      if (date.isValid() && rx.test(value)) {
         alert.properties[key] = date.tz(timezone);
       }
     });
   }
 
   // Now do the top level
-  Object.keys(alert).forEach(key => {
+  Object.keys(alert).forEach((key) => {
     const value = alert[key];
     const date = dayjs(value);
 
-    if(date.isValid() && rx.test(value)){
+    if (date.isValid() && rx.test(value)) {
       alert[key] = date.tz(timezone);
     }
   });
@@ -52,9 +52,7 @@ export const modifyTimestampsForAlert = (alert, timezone) => {
  * NOTE: We modify the day objects in place
  */
 export const alignAlertsToDaily = (alerts, days) => {
-  for (const day of days.filter(
-      ({ hours }) => hours.length > 0,
-  )) {
+  for (const day of days.filter(({ hours }) => hours.length > 0)) {
     day.alerts = { metadata: { count: 0, highest: "other" }, items: [] };
 
     const start = day.hours[0].time;
@@ -64,7 +62,7 @@ export const alignAlertsToDaily = (alerts, days) => {
     // particular day.
     const dayAlerts = alerts.items.filter(
       ({ onset, finish }) =>
-      onset.isSameOrBefore(end) && finish.isSameOrAfter(start),
+        onset.isSameOrBefore(end) && finish.isSameOrAfter(start),
     );
 
     dayAlerts.forEach((alert) => {
@@ -80,9 +78,7 @@ export const alignAlertsToDaily = (alerts, days) => {
       // How long will the alert last AFTER the start of the first hour of the
       // hourly forecast?
       const absoluteDuration = Math.ceil(
-        dayjs
-          .duration(alert.finish.diff(start.add(offset, "hours")))
-          .asHours(),
+        dayjs.duration(alert.finish.diff(start.add(offset, "hours"))).asHours(),
       );
 
       // Cap the alert duration at the remaining hours in the forecast.

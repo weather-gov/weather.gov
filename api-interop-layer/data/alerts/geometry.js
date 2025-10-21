@@ -25,7 +25,7 @@ const getForecastZonesShapeFromDb = async (db, zones) => {
   // The PG library templates query params as "$1 $2 ... $N"
   // so we need for format those ahead of time using indices
   // of the incoming zones
-  const zoneIdPart = zones.map((_, idx) => `$${idx+1}`).join(",");
+  const zoneIdPart = zones.map((_, idx) => `$${idx + 1}`).join(",");
   const sql = `
     SELECT ST_ASGEOJSON(
       ST_SIMPLIFY(ST_MemUnion(f.shape), ${SIMPLIFY_TOLERANCE})) as shape
@@ -34,7 +34,7 @@ const getForecastZonesShapeFromDb = async (db, zones) => {
       FROM weathergov_geo_zones WHERE id IN (${zoneIdPart})) as f;`;
   const result = await db.query(sql, zones);
   const [{ shape }] = result.rows;
-  
+
   return shape;
 };
 
@@ -48,7 +48,7 @@ const getCountiesShapeFromDb = async (db, counties) => {
   // The PG library templates query params as "$1 $2 ... $N"
   // so we need for format those ahead of time using indices
   // of the incoming counties
-  const countyIdPart = counties.map((_, idx) => `$${idx+1}`).join(",");
+  const countyIdPart = counties.map((_, idx) => `$${idx + 1}`).join(",");
   const sql = `
     SELECT ST_ASGEOJSON(
       ST_SIMPLIFY(ST_MemUnion(f.shape), ${SIMPLIFY_TOLERANCE})) as shape
@@ -65,10 +65,11 @@ const getCountiesShapeFromDb = async (db, counties) => {
  * Helper function to determine which kind of
  * geographic data to fetch from the database
  */
-const getZoneShapeFromDb = async (db, zones, kind="forecast") => {
-  if(kind === "forecast"){
+const getZoneShapeFromDb = async (db, zones, kind = "forecast") => {
+  if (kind === "forecast") {
     return getForecastZonesShapeFromDb(db, zones);
-  } if(kind === "county"){
+  }
+  if (kind === "county") {
     return getCountiesShapeFromDb(db, zones);
   }
 
@@ -80,8 +81,12 @@ const getZoneShapeFromDb = async (db, zones, kind="forecast") => {
  * a county fips id. Either one will produce a geometry set
  * that is stored in the database.
  */
-const fetchAndComputeZoneGeometries = async (db, zones, zoneType="forecast") => {
-  if(!["forecast", "county"].includes(zoneType)){
+const fetchAndComputeZoneGeometries = async (
+  db,
+  zones,
+  zoneType = "forecast",
+) => {
+  if (!["forecast", "county"].includes(zoneType)) {
     throw new Error(`Invalid geometry zone type: ${zoneType}`);
   }
   const geometry = await getZoneShapeFromDb(db, zones, zoneType);
@@ -101,7 +106,7 @@ export const generateAlertGeometry = async (db, rawAlert) => {
   if (Array.isArray(zones) && zones.length > 0) {
     const shape = await fetchAndComputeZoneGeometries(db, zones, "forecast");
 
-    if(shape){
+    if (shape) {
       return shape;
     }
   }
@@ -111,7 +116,7 @@ export const generateAlertGeometry = async (db, rawAlert) => {
   const counties = rawAlert.properties.geocode?.SAME;
   if (Array.isArray(counties) && counties.length > 0) {
     const shape = await fetchAndComputeZoneGeometries(db, counties, "county");
-    if(shape){
+    if (shape) {
       return shape;
     }
   }

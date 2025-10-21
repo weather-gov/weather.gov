@@ -6,7 +6,9 @@ const { describe, beforeEach } = test;
 describe("quantitative precipitation forecast table", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
-    await page.goto(services.webApp("/point/34.749/-92.275#daily"), { waitUntil: "load"});
+    await page.goto(services.webApp("/point/34.749/-92.275#daily"), {
+      waitUntil: "load",
+    });
   });
 
   test("shows snow, ice, and water when all are present", async ({ page }) => {

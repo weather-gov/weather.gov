@@ -3,15 +3,15 @@
 /* Touchpoints button overrides
 ------------------------------------- */
 @include at-media(mobile) {
-    .touchpoints-button {
-        right: unset;
-        width: 100vw;
-    }
+  .touchpoints-button {
+    right: unset;
+    width: 100vw;
+  }
 }
 
 @include at-media(tablet-lg) {
-    .touchpoints-button {
-        right: units(3);
-        width: unset;
-    }
+  .touchpoints-button {
+    right: units(3);
+    width: unset;
+  }
 }

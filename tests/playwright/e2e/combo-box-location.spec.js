@@ -29,7 +29,7 @@ describe("wx-combo-box-location tests", () => {
       },
     );
 
-    await page.goto(services.webApp("/"), { waitUntil: "load"});
+    await page.goto(services.webApp("/"), { waitUntil: "load" });
   });
 
   test("Can find the combo-box element", async ({ page }) => {

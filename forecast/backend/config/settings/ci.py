@@ -4,6 +4,7 @@ beta.weather.gov CI settings.
 These settings are intended for use during
 CI tests and builds
 """
+
 import environs
 
 from noaa_saml import config as saml_config

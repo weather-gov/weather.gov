@@ -2,7 +2,6 @@ import { sentenceCase } from "../../util/case.js";
 import dayjs from "../../util/day.js";
 import { parseAPIIcon } from "../../util/icon.js";
 
-
 export const sortAndFilterHours = (hours, earliest) => {
   // Align the passed in time to the start of its
   // hour
@@ -27,22 +26,24 @@ export const filterHoursForDay = (hours, dayStart) => {
   // For the purposes of NWS, we consider a day to end at 6am
   // the following day
   const dayEnd = dayStart
-        .hour(6)
-        .minute(0)
-        .second(0)
-        .millisecond(0)
-        .add(1, "day");
-  return hours.filter(({time}) => time.isSameOrAfter(dayStart) && time.isSameOrBefore(dayEnd));
+    .hour(6)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .add(1, "day");
+  return hours.filter(
+    ({ time }) => time.isSameOrAfter(dayStart) && time.isSameOrBefore(dayEnd),
+  );
 };
 
 export const filterHoursForCurrentDay = (hours, currentTime) => {
   const limit = currentTime
-        .hour(6)
-        .minute(0)
-        .second(0)
-        .millisecond(0)
-        .add(1, "day");
-  return hours.filter(({time}) => time.isSameOrBefore(limit));
+    .hour(6)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .add(1, "day");
+  return hours.filter(({ time }) => time.isSameOrBefore(limit));
 };
 
 export default (data, hours, { timezone }) => {

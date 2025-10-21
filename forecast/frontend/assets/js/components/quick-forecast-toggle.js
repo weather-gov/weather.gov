@@ -9,7 +9,7 @@ const clickHandler = (event) => {
   const targetIsButton = event.target.matches("button");
   let button;
   let h3;
-  if(targetIsButton){
+  if (targetIsButton) {
     button = event.target;
     h3 = button.parentElement;
   } else {
@@ -19,21 +19,21 @@ const clickHandler = (event) => {
   const isExpanded = h3.getAttribute("data-expanded") === "true";
   h3.setAttribute("data-expanded", !isExpanded);
   button.setAttribute("aria-expanded", !isExpanded);
-  Array.from(
-    h3.querySelectorAll(".wx-toggler-add-icon use")
-  ).forEach(element => {
-    const iconName = isExpanded ? "add_circle" : "remove_circle";
-    const iconHref = element.getAttribute("xlink:href").split("#")[0];
-    element.setAttributeNS(
-      "http://www.w3.org/1999/xlink",
-      "xlink:href",
-      `${iconHref}#${iconName}`,
-    );
-  });
+  Array.from(h3.querySelectorAll(".wx-toggler-add-icon use")).forEach(
+    (element) => {
+      const iconName = isExpanded ? "add_circle" : "remove_circle";
+      const iconHref = element.getAttribute("xlink:href").split("#")[0];
+      element.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "xlink:href",
+        `${iconHref}#${iconName}`,
+      );
+    },
+  );
 };
 
 Array.from(
-  document.querySelectorAll(".wx-daily-forecast-quick-toggle")
-).forEach(element => {
+  document.querySelectorAll(".wx-daily-forecast-quick-toggle"),
+).forEach((element) => {
   element.addEventListener("click", clickHandler);
 });

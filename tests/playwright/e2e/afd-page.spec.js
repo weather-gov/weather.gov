@@ -33,7 +33,7 @@ describe("AFD Page Tests", () => {
     }) => {
       const response = await page.goto(
         services.webApp("/afd/okx/invalid-afd-id.json"),
-        { waitUntil: "load" }
+        { waitUntil: "load" },
       );
 
       expect(response.status()).toBe(404);
@@ -42,7 +42,9 @@ describe("AFD Page Tests", () => {
     test("Displays a 404 page for a listing of AFDs at an invalid WFO", async ({
       page,
     }) => {
-      const response = await page.goto(services.webApp("/afd/WWW"), { waitUntil: "load" });
+      const response = await page.goto(services.webApp("/afd/WWW"), {
+        waitUntil: "load",
+      });
 
       expect(response.status()).toBe(404);
     });
@@ -52,8 +54,12 @@ describe("AFD Page Tests", () => {
     test("Can retrieve <option> elements html partial for version listing", async ({
       page,
     }) => {
-      await page.goto(services.apiProxy("/proxy/play/testing"), { waitUntil: "load"});
-      await page.goto(services.webApp("/wx/afd/locations/OKX"), { waitUntil: "load"});
+      await page.goto(services.apiProxy("/proxy/play/testing"), {
+        waitUntil: "load",
+      });
+      await page.goto(services.webApp("/wx/afd/locations/OKX"), {
+        waitUntil: "load",
+      });
 
       const options = await page.locator("option:first-child");
       await expect(options).toHaveCount(1);
@@ -66,7 +72,9 @@ describe("AFD Page Tests", () => {
     });
 
     test("Can retreive html partial for AFD content", async ({ page }) => {
-      await page.goto(services.apiProxy("/proxy/play/testing"), { waitUntil: "load"});
+      await page.goto(services.apiProxy("/proxy/play/testing"), {
+        waitUntil: "load",
+      });
       // See tests/api/data/products/
       // This is our OKX first AFD testing example data
       await page.goto(services.webApp(`/wx/afd/${firstId}`));
@@ -81,7 +89,9 @@ describe("AFD Page Tests", () => {
 
   describe("Querystrings and Redirects", () => {
     beforeEach(async ({ page }) => {
-      await page.goto(services.apiProxy("/proxy/play/testing"), { waitUntil: "load"});
+      await page.goto(services.apiProxy("/proxy/play/testing"), {
+        waitUntil: "load",
+      });
     });
 
     test("Hitting /afd without any querystrings will redirect to the most recent anywhere", async ({
@@ -101,7 +111,7 @@ describe("AFD Page Tests", () => {
       page,
     }) => {
       const expectedId = OKX_REFERENCES["@graph"][0].id;
-      await page.goto(services.webApp("/afd?wfo=OKX"), { waitUntil: "load"});
+      await page.goto(services.webApp("/afd?wfo=OKX"), { waitUntil: "load" });
       await page.waitForURL(services.webApp(`/afd/okx/${expectedId}`));
 
       const article = await page.locator("article");
@@ -136,8 +146,10 @@ describe("AFD Page Tests", () => {
    */
   describe("Changing selections tests", () => {
     beforeEach(async ({ page }) => {
-      await page.goto(services.apiProxy("/proxy/play/testing"), { waitUntil: "load"});
-      await page.goto(services.webApp("/afd/okx"), { waitUntil: "load"});
+      await page.goto(services.apiProxy("/proxy/play/testing"), {
+        waitUntil: "load",
+      });
+      await page.goto(services.webApp("/afd/okx"), { waitUntil: "load" });
     });
 
     describe("WFO selector correctly populates based on path", () => {
@@ -147,7 +159,7 @@ describe("AFD Page Tests", () => {
       });
 
       test("with lowercase WFO code", async ({ page }) => {
-        await page.goto(services.webApp("/afd/okx"), { waitUntil: "load"});
+        await page.goto(services.webApp("/afd/okx"), { waitUntil: "load" });
         const selected = page.locator(`wx-combo-box input[name="wfo"]`);
         await expect(selected).toHaveValue("OKX");
       });

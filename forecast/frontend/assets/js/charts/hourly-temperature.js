@@ -1,7 +1,4 @@
-import {
-  drawChart,
-  setupScrollButtons
-} from "./WeatherChart.js";
+import { drawChart, setupScrollButtons } from "./WeatherChart.js";
 import styles from "../styles.js";
 
 const chartContainers = Array.from(
@@ -24,11 +21,12 @@ for (const container of chartContainers) {
     Math.round(Math.max(...feelsLike) / 10) * 10 + 10,
   );
 
-  if(useMaxY){
-    yMax = Math.max(
-      Math.round(Math.max(...feelsLike)),
-      Math.round(Math.max(...temps))
-    ) + 1;
+  if (useMaxY) {
+    yMax =
+      Math.max(
+        Math.round(Math.max(...feelsLike)),
+        Math.round(Math.max(...temps)),
+      ) + 1;
   }
 
   const config = {
@@ -47,7 +45,7 @@ for (const container of chartContainers) {
           display: false,
         },
         tooltip: {
-          events: ['click', 'mousemove', 'mouseout'],
+          events: ["click", "mousemove", "mouseout"],
         },
       },
       scales: {
@@ -69,7 +67,7 @@ for (const container of chartContainers) {
               }
               return styles.colors.baseLightest;
             }),
-            display: !hideYAxis
+            display: !hideYAxis,
           },
         },
         y: {
@@ -84,7 +82,7 @@ for (const container of chartContainers) {
             maxTicksLimit: 6,
             callback: (v) => `${v}°`,
           },
-          display: !hideYAxis
+          display: !hideYAxis,
         },
       },
       layout: {
@@ -129,7 +127,6 @@ for (const container of chartContainers) {
     },
   };
 
-  
   drawChart(container, config);
   setupScrollButtons(container);
 }

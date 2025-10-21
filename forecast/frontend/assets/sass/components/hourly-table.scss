@@ -1,6 +1,5 @@
 @use "uswds-core" as *;
 
-
 /* Scroll button states
 ------------------------------------- */
 .wx-scroll-button {
@@ -21,12 +20,15 @@
 
 /* Hourly forecast table overrides
 ------------------------------------- */
-$expand-duration: 250ms; 
+$expand-duration: 250ms;
 
 .hourly-table__expand-transition {
   @include at-media("tablet-lg") {
-    transition: width ease-in $expand-duration, max-width ease-in $expand-duration, margin-left ease-in $expand-duration, margin-right ease-in $expand-duration,;
-
+    transition:
+      width ease-in $expand-duration,
+      max-width ease-in $expand-duration,
+      margin-left ease-in $expand-duration,
+      margin-right ease-in $expand-duration;
   }
 
   @media (prefers-reduced-motion) {
@@ -37,7 +39,7 @@ $expand-duration: 250ms;
 .usa-table.hourly-table {
   td,
   th {
-    border: 0; 
+    border: 0;
     padding-left: units(1);
     vertical-align: top;
   }
@@ -82,7 +84,6 @@ $expand-duration: 250ms;
   tr[data-row-name="time"] th:nth-child(2) {
     padding-left: units(2);
   }
-
 }
 
 // Table shadow only shows on scroll
@@ -101,13 +102,13 @@ wx-hourly-table[data-scrolled="true"] .usa-table.hourly-table th:first-of-type {
   }
 }
 
-.usa-table.hourly-table tbody{
+.usa-table.hourly-table tbody {
   &[data-table-section="time-alerts"] tr:first-child th {
-    background-color: color('accent-cool-dark');
+    background-color: color("accent-cool-dark");
     vertical-align: text-top;
   }
 
-  &[data-table-section="variables"] tr:nth-child(even) > * { 
-    background-color: color('base-lightest');
+  &[data-table-section="variables"] tr:nth-child(even) > * {
+    background-color: color("base-lightest");
   }
 }

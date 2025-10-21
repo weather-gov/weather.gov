@@ -2,8 +2,7 @@ const toggleMapExpand = (() => {
   let expanded = false;
 
   const sprites = {
-    false:
-      "/public/images/uswds/sprite.svg#zoom_out_map",
+    false: "/public/images/uswds/sprite.svg#zoom_out_map",
     true: "/public/images/spritesheet.svg#wx_zoom-in-map",
   };
 

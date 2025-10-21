@@ -8,7 +8,7 @@
  * Tabs (wx-tabs) custom element
  */
 [role="tabpanel"][data-tabpanel-selected="false"] {
-    display: none;
+  display: none;
 }
 
 /**
@@ -16,7 +16,7 @@
  * --------------------------------------------------------
  */
 .wx-forecast-details-toggle button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .wx-forecast-details-toggle button[aria-selected="false"] {
@@ -24,21 +24,20 @@
 }
 
 .wx-forecast-details-toggle .usa-button-group {
-    display: flex;
+  display: flex;
 }
 
 .wx-forecast-details-toggle button[role="tab"] {
-    margin: 0;
+  margin: 0;
 
-    &:first-child {
-        border-right: 0;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-    }
+  &:first-child {
+    border-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 
-    &:last-child {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
+  &:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
 }
-

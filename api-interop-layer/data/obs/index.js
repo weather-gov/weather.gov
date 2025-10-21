@@ -11,10 +11,10 @@ import {
 
 const logger = createLogger("observations");
 
-export default async ({
-  grid: { wfo, x, y },
-  point: { latitude, longitude },
-}, dbConnection) => {
+export default async (
+  { grid: { wfo, x, y }, point: { latitude, longitude } },
+  dbConnection,
+) => {
   const stations = await fetchAPIJson(
     `/gridpoints/${wfo}/${x},${y}/stations`,
   ).then((out) => {
@@ -27,7 +27,7 @@ export default async ({
 
     return out.features.slice(0, 3);
   });
-  
+
   if (stations.error) {
     logger.warn("Failed to get a list of stations");
     return {
@@ -125,7 +125,7 @@ export default async ({
 
     convertProperties(data);
 
-    const distanceResult =  await dbConnection.query(`
+    const distanceResult = await dbConnection.query(`
       SELECT ST_DISTANCESPHERE(
         ST_GEOMFROMGEOJSON('${JSON.stringify(station.geometry)}'),
         ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})')

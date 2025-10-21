@@ -1,24 +1,25 @@
 import { expect } from "chai";
 import { parseDescription, extractUrls } from "./description.js";
 
-
 describe("Alert Description Parsing", () => {
   it("Can parse a basic WHAT/WHERE/WHEN example", () => {
-    const input = "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
+    const input =
+      "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
     const expected = [
       {
         type: "heading",
-        text: "what"
+        text: "what",
       },
       {
         type: "paragraph",
         nodes: [
           {
             type: "text",
-            content: "Snow expected. Total snow accumulations of 5 to 10 inches."
-          }
-        ]
-      }
+            content:
+              "Snow expected. Total snow accumulations of 5 to 10 inches.",
+          },
+        ],
+      },
     ];
 
     const actual = parseDescription(input);
@@ -27,69 +28,69 @@ describe("Alert Description Parsing", () => {
   });
 
   it("Can parse a full WHAT/WHERE/WHEN example", () => {
-    let input = "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
+    let input =
+      "* WHAT...Snow expected. Total snow accumulations of 5 to 10\ninches.\n\n";
     input += "* WHERE...Eastern San Juan Mountains Above 10000 Feet.\n\n";
     input += "* WHEN...From 11 PM this evening to 11 PM MST Thursday.\n\n";
     input += "* IMPACTS...Travel could be very difficult.";
-    input += " The hazardous conditions may impact travel over Wolf Creek Pass.";
+    input +=
+      " The hazardous conditions may impact travel over Wolf Creek Pass.";
 
     const expected = [
       {
-        "type": "heading",
-        "text": "what",
+        type: "heading",
+        text: "what",
       },
       {
-        "type": "paragraph",
-        "nodes": [
+        type: "paragraph",
+        nodes: [
           {
-            "type": "text",
-            "content":
-            "Snow expected. Total snow accumulations of 5 to 10 inches.",
+            type: "text",
+            content:
+              "Snow expected. Total snow accumulations of 5 to 10 inches.",
           },
         ],
       },
       {
-        "type": "heading",
-        "text": "where",
+        type: "heading",
+        text: "where",
       },
       {
-        "type": "paragraph",
-        "nodes": [
+        type: "paragraph",
+        nodes: [
           {
-            "type": "text",
-            "content":
-            "Eastern San Juan Mountains Above 10000 Feet.",
+            type: "text",
+            content: "Eastern San Juan Mountains Above 10000 Feet.",
           },
         ],
       },
       {
-        "type": "heading",
-        "text": "when",
+        type: "heading",
+        text: "when",
       },
       {
-        "type": "paragraph",
-        "nodes": [
+        type: "paragraph",
+        nodes: [
           {
-            "type": "text",
-            "content":
-            "From 11 PM this evening to 11 PM MST Thursday.",
+            type: "text",
+            content: "From 11 PM this evening to 11 PM MST Thursday.",
           },
         ],
       },
       {
-        "type": "heading",
-        "text": "impacts",
+        type: "heading",
+        text: "impacts",
       },
       {
-        "type": "paragraph",
-        "nodes": [
+        type: "paragraph",
+        nodes: [
           {
-            "type": "text",
-            "content":
-            "Travel could be very difficult. The hazardous conditions may impact travel over Wolf Creek Pass.",
+            type: "text",
+            content:
+              "Travel could be very difficult. The hazardous conditions may impact travel over Wolf Creek Pass.",
           },
         ],
-      }
+      },
     ];
 
     const actual = parseDescription(input);
@@ -132,106 +133,105 @@ Wednesday, then drop to near 5500 feet Wednesday night and near
 5000 feet by Thursday morning.`;
 
     const expected = [
-            {
-                "type": "paragraph",
-                "nodes": [
-                    {
-                        "type": "text",
-                        "content":
-                          "WINTER CONDITIONS RETURN TO THE SIERRA AND NORTHEAST CALIFORNIA FOR MID-LATE WEEK",
-                    },
-                ],
-            },
-            {
-                "type": "paragraph",
-                "nodes": [
-                    {
-                        "type": "text",
-                        "content":
-                            "This bit...has ellipses in the middle...but is not an overview.",
-                    },
-                ],
-            },
-            {
-                "type": "paragraph",
-                "nodes": [
-                    {
-                        "type": "text",
-                        "content":
-                            ".After a few days of warm weather, a potent winter storm will bring windy and colder conditions with periods of heavy snow to the Sierra and higher elevations of northeast California later this week. While weather-related travel impacts aren't expected through Wednesday morning, conditions will begin to worsen Wednesday afternoon and evening, with the most widespread winter travel impacts likely from Wednesday evening through much of Thursday.",
-                    },
-                ],
-            },
-            {
-                "type": "heading",
-                "text": "what",
-            },
-            {
-                "type": "paragraph",
-                "nodes": [
-                    {
-                        "type": "text",
-                        "content":
-                            "Heavy snow possible. Snow accumulations of 4 to 10 inches above 5000 feet west of US-395, with 10 to 20 inches possible for higher passes such as Fredonyer Summit and Yuba Pass. Winds gusting as high as 50 mph.",
-                    },
-                ],
-            },
-            {
-                "type": "heading",
-                "text": "where",
-            },
-            {
-                "type": "paragraph",
-                "nodes": [
-                    {
-                        "type": "text",
-                        "content":
-                            "Lassen-Eastern Plumas-Eastern Sierra Counties.",
-                    },
-                ],
-            },
-            {
-                "type": "heading",
-                "text": "when",
-            },
-            {
-                "type": "paragraph",
-                "nodes": [
-                    {
-                        "type": "text",
-                        "content":
-                            "From late Wednesday morning through Friday morning. Heaviest snow is most likely from late Wednesday afternoon through Thursday morning.",
-                    },
-                ],
-            },
-            {
-                "type": "heading",
-                "text": "impacts",
-            },
-            {
-                "type": "paragraph",
-                "nodes": [
-                    {
-                        "type": "text",
-                        "content":
-                            "Travel could be very difficult at times, with hazardous conditions impacting the commutes from Wednesday evening through Friday morning. Strong winds may blow down some tree limbs and a few power outages may result.",
-                    },
-                ],
-            },
-            {
-                "type": "heading",
-                "text": "additional details",
-            },
-            {
-                "type": "paragraph",
-                "nodes": [
-                    {
-                        "type": "text",
-                        "content":
-                            "Snow levels will start near 6500 feet on Wednesday, then drop to near 5500 feet Wednesday night and near 5000 feet by Thursday morning.",
-                    },
-                ],
-            },
+      {
+        type: "paragraph",
+        nodes: [
+          {
+            type: "text",
+            content:
+              "WINTER CONDITIONS RETURN TO THE SIERRA AND NORTHEAST CALIFORNIA FOR MID-LATE WEEK",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        nodes: [
+          {
+            type: "text",
+            content:
+              "This bit...has ellipses in the middle...but is not an overview.",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        nodes: [
+          {
+            type: "text",
+            content:
+              ".After a few days of warm weather, a potent winter storm will bring windy and colder conditions with periods of heavy snow to the Sierra and higher elevations of northeast California later this week. While weather-related travel impacts aren't expected through Wednesday morning, conditions will begin to worsen Wednesday afternoon and evening, with the most widespread winter travel impacts likely from Wednesday evening through much of Thursday.",
+          },
+        ],
+      },
+      {
+        type: "heading",
+        text: "what",
+      },
+      {
+        type: "paragraph",
+        nodes: [
+          {
+            type: "text",
+            content:
+              "Heavy snow possible. Snow accumulations of 4 to 10 inches above 5000 feet west of US-395, with 10 to 20 inches possible for higher passes such as Fredonyer Summit and Yuba Pass. Winds gusting as high as 50 mph.",
+          },
+        ],
+      },
+      {
+        type: "heading",
+        text: "where",
+      },
+      {
+        type: "paragraph",
+        nodes: [
+          {
+            type: "text",
+            content: "Lassen-Eastern Plumas-Eastern Sierra Counties.",
+          },
+        ],
+      },
+      {
+        type: "heading",
+        text: "when",
+      },
+      {
+        type: "paragraph",
+        nodes: [
+          {
+            type: "text",
+            content:
+              "From late Wednesday morning through Friday morning. Heaviest snow is most likely from late Wednesday afternoon through Thursday morning.",
+          },
+        ],
+      },
+      {
+        type: "heading",
+        text: "impacts",
+      },
+      {
+        type: "paragraph",
+        nodes: [
+          {
+            type: "text",
+            content:
+              "Travel could be very difficult at times, with hazardous conditions impacting the commutes from Wednesday evening through Friday morning. Strong winds may blow down some tree limbs and a few power outages may result.",
+          },
+        ],
+      },
+      {
+        type: "heading",
+        text: "additional details",
+      },
+      {
+        type: "paragraph",
+        nodes: [
+          {
+            type: "text",
+            content:
+              "Snow levels will start near 6500 feet on Wednesday, then drop to near 5500 feet Wednesday night and near 5000 feet by Thursday morning.",
+          },
+        ],
+      },
     ];
 
     const actual = parseDescription(input);
@@ -248,7 +248,7 @@ Be sure to stock up. See https://www.weather.gov/safety/food for more informatio
     const expected = {
       type: "link",
       url: "https://www.weather.gov/safety/food",
-      external: false
+      external: false,
     };
 
     const actual = extractUrls(input);
@@ -280,28 +280,27 @@ you shouldn't be able to do thanks to Cautious Public Servants TM.`;
     const input = `* WHAT...There will be winds like you cannot believe. See https://winds.weather.gov/info for more information.`;
     const expected = [
       {
-        "type": "heading",
-        "text": "what",
+        type: "heading",
+        text: "what",
       },
       {
-        "type": "paragraph",
-        "nodes": [
+        type: "paragraph",
+        nodes: [
           {
-            "type": "text",
-            "content":
-            "There will be winds like you cannot believe. See ",
+            type: "text",
+            content: "There will be winds like you cannot believe. See ",
           },
           {
-            "type": "link",
-            "url": "https://winds.weather.gov/info",
-            "external": false,
+            type: "link",
+            url: "https://winds.weather.gov/info",
+            external: false,
           },
           {
-            "type": "text",
-            "content": " for more information.",
+            type: "text",
+            content: " for more information.",
           },
         ],
-      }
+      },
     ];
 
     const actual = parseDescription(input);
@@ -313,28 +312,27 @@ you shouldn't be able to do thanks to Cautious Public Servants TM.`;
     const input = `* IMPACTS...There will be shaking like you cannot believe. See https://usgs.gov/earthquakes for more information.`;
     const expected = [
       {
-        "type": "heading",
-        "text": "impacts",
+        type: "heading",
+        text: "impacts",
       },
       {
-        "type": "paragraph",
-        "nodes": [
+        type: "paragraph",
+        nodes: [
           {
-            "type": "text",
-            "content":
-            "There will be shaking like you cannot believe. See ",
+            type: "text",
+            content: "There will be shaking like you cannot believe. See ",
           },
           {
-            "type": "link",
-            "url": "https://usgs.gov/earthquakes",
-            "external": true,
+            type: "link",
+            url: "https://usgs.gov/earthquakes",
+            external: true,
           },
           {
-            "type": "text",
-            "content": " for more information.",
+            type: "text",
+            content: " for more information.",
           },
         ],
-      }
+      },
     ];
 
     const actual = parseDescription(input);
@@ -346,19 +344,19 @@ you shouldn't be able to do thanks to Cautious Public Servants TM.`;
     const input = `* WHEN...There will be weather like you cannot believe. See https://other-weather-site.com for more information, or even check out http://insecure.gov or else www.foo.net`;
     const expected = [
       {
-        "type": "heading",
-        "text": "when",
+        type: "heading",
+        text: "when",
       },
       {
-        "type": "paragraph",
-        "nodes": [
+        type: "paragraph",
+        nodes: [
           {
-            "type": "text",
-            "content":
-            "There will be weather like you cannot believe. See https://other-weather-site.com for more information, or even check out http://insecure.gov or else www.foo.net",
+            type: "text",
+            content:
+              "There will be weather like you cannot believe. See https://other-weather-site.com for more information, or even check out http://insecure.gov or else www.foo.net",
           },
         ],
-      }
+      },
     ];
 
     const actual = parseDescription(input);
@@ -370,34 +368,33 @@ you shouldn't be able to do thanks to Cautious Public Servants TM.`;
     const input = `Damaging winds will blow down large objects such as trees and power lines. Power outages are expected. See www.your-power-company.com/outages for more information. Travel will be difficult, especially for high profile vehicles. For road safety, see https://transportation.gov/safe-travels . For more weather information, check out https://weather.gov/your-office for up to date forecasts and alerts.`;
     const expected = [
       {
-        "type": "paragraph",
-        "nodes": [
+        type: "paragraph",
+        nodes: [
           {
-            "type": "text",
-            "content":
-            "Damaging winds will blow down large objects such as trees and power lines. Power outages are expected. See www.your-power-company.com/outages for more information. Travel will be difficult, especially for high profile vehicles. For road safety, see "
+            type: "text",
+            content:
+              "Damaging winds will blow down large objects such as trees and power lines. Power outages are expected. See www.your-power-company.com/outages for more information. Travel will be difficult, especially for high profile vehicles. For road safety, see ",
           },
           {
-            "type": "link",
-            "url": "https://transportation.gov/safe-travels",
-            "external": true,
+            type: "link",
+            url: "https://transportation.gov/safe-travels",
+            external: true,
           },
           {
-            "type": "text",
-            "content":
-            " . For more weather information, check out ",
+            type: "text",
+            content: " . For more weather information, check out ",
           },
           {
-            "type": "link",
-            "url": "https://weather.gov/your-office",
-            "external": false,
+            type: "link",
+            url: "https://weather.gov/your-office",
+            external: false,
           },
           {
-            "type": "text",
-            "content": " for up to date forecasts and alerts.",
+            type: "text",
+            content: " for up to date forecasts and alerts.",
           },
         ],
-      }
+      },
     ];
 
     const actual = parseDescription(input);

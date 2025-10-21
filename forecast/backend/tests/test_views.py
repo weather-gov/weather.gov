@@ -296,15 +296,14 @@ class TestViews(TestCase):
         response = self.client.get("/health/")
         self.assertEqual(response.status_code, 200)
 
-
     @mock.patch("backend.views.interop.get_ghwo_data_for_county")
     @mock.patch("backend.views.get_counties_combo_box_list")
     @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
     def test_county_ghwo_with_invalid_county_fips(
-            self,
-            mock_get_county,
-            mock_get_county_list,
-            mock_get_ghwo_data_for_county,
+        self,
+        mock_get_county,
+        mock_get_county_list,
+        mock_get_ghwo_data_for_county,
     ):
         """Requesting a GHWO county details page for invalid county returns 404."""
         mock_get_county_list.return_value = []
@@ -315,16 +314,14 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-
-
     @mock.patch("backend.views.interop.get_ghwo_data_for_county")
     @mock.patch("backend.views.get_counties_combo_box_list")
     @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
     def test_county_ghwo_with_failed_interop_request(
-            self,
-            mock_get_county,
-            mock_get_county_list,
-            mock_get_ghwo_data_for_county,
+        self,
+        mock_get_county,
+        mock_get_county_list,
+        mock_get_ghwo_data_for_county,
     ):
         """Requesting a GHWO county details page returns 404 when GHWO interop request fails.
 
@@ -342,15 +339,14 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-
     @mock.patch("backend.views.interop.get_ghwo_data_for_county")
     @mock.patch("backend.views.get_counties_combo_box_list")
     @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
     def test_county_ghwo_success(
-            self,
-            mock_get_county,
-            mock_get_county_list,
-            mock_get_ghwo_data_for_county,
+        self,
+        mock_get_county,
+        mock_get_county_list,
+        mock_get_ghwo_data_for_county,
     ):
         """Test the success case for rerquesting a GHWO county details page."""
         mock_get_county_list.return_value = []
@@ -392,7 +388,6 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-
     @mock.patch("backend.views.WeatherCounties.objects.get")
     def test_county_ghwo_index_invalid_selected_county(self, mock_county_get):
         """Posting to the county ghwo index page with an invalid selected county fips 404s."""
@@ -417,7 +412,6 @@ class TestViews(TestCase):
         post_data = {
             "current-state": "51",
             "state-select": "50",
-
             "county-select": "1",
         }
 
@@ -470,7 +464,6 @@ class TestViews(TestCase):
         # 405: Method Not Allowed
         self.assertEqual(response.status_code, 405)
 
-
     @mock.patch("backend.views.WeatherStates.objects.get")
     def test_wx_select_ghwo_counties_invalid_state_fips(self, mock_state_get):
         """Posting to wx select ghwo counties with an invalid state fips 404s."""
@@ -486,7 +479,6 @@ class TestViews(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
-
 
     @mock.patch("backend.views.WeatherCounties.objects.get")
     def test_wx_select_ghwo_counties_invalid_selected_county(self, mock_county_get):
@@ -505,7 +497,6 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-
     @mock.patch("backend.views.WeatherCounties.objects")
     @mock.patch("backend.views.WeatherStates.objects")
     def test_wx_select_ghwo_counties_valid_selected_state(self, mock_state_objects, mock_county_objects):
@@ -513,7 +504,6 @@ class TestViews(TestCase):
         post_data = {
             "current-state": "51",
             "state-select": "50",
-
             "county-select": "1",
         }
 

@@ -20,22 +20,20 @@ export const updateMaxPop = (day) => {
   // to be the highest percentage taken from the _hourly_ data
   // that is between the start and end times for the period
   const maxPopsForDay = [0];
-  day.periods.forEach(period => {
+  day.periods.forEach((period) => {
     const dayStart = dayjs(period.start);
     const dayEnd = dayjs(period.end);
-    const relevantHours = day.hours.filter(hour => {
+    const relevantHours = day.hours.filter((hour) => {
       const start = dayjs(hour.time);
       return dayStart.isSameOrBefore(start) && dayEnd.isSameOrAfter(start);
     });
-    const pops = relevantHours.map(hour => {
-      if(!hour.probabilityOfPrecipitation){
+    const pops = relevantHours.map((hour) => {
+      if (!hour.probabilityOfPrecipitation) {
         return 0;
       }
       return hour.probabilityOfPrecipitation.percent;
     });
-    const maxPop =  Math.round(
-      Math.max(...pops) / 5
-    ) * 5;
+    const maxPop = Math.round(Math.max(...pops) / 5) * 5;
     maxPopsForDay.push(maxPop);
     period.data.probabilityOfPrecipitation.hourlyMax = maxPop;
   });
