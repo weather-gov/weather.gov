@@ -24,5 +24,5 @@ export const handler = async (request) => {
     };
   }
 
-  return { data: ghwo.data };
+  return { data: ghwo };
 };

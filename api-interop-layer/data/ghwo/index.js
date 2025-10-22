@@ -106,7 +106,7 @@ export const getGHWOData = async (id) => {
     );
 
     if (data.rows.length) {
-      return data.rows[0];
+      return data.rows[0].data;
     }
     return { error: `No GHWO found for ${id}`, status: 404 };
   } catch (e) {
