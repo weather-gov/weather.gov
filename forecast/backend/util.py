@@ -1,3 +1,5 @@
+import logging
+
 from django.utils.safestring import mark_safe
 from html_sanitizer import Sanitizer
 
@@ -12,7 +14,6 @@ OCONUS_4CODE_MAPPINGS = {
     "PAFG": "AFG",  # Fairbanks, AK
     "PAJK": "AJK",  # Juneau, AK
 }
-
 
 def get_wfo_from_afd(afd):
     """
@@ -40,7 +41,6 @@ def get_wfo_from_afd(afd):
     # If we get here, we don't recognize the given WFO code as
     # valid, so return None
     return None
-
 
 def mark_safer(value, transformer=None):
     """
@@ -73,7 +73,6 @@ def mark_safer(value, transformer=None):
         return mark_safe(transformer(cleaned))  # noqa: S308
     return mark_safe(cleaned)  # noqa: S308
 
-
 def get_states_combo_box_list():
     """Get a list of dictionaries of WeatherState 'text' and 'value' keys for use in wx-combo-box."""
     result = []
@@ -86,7 +85,6 @@ def get_states_combo_box_list():
         )
 
     return result
-
 
 def get_counties_combo_box_list(state_fips):
     """Get a list of dictionaries of WeatherCounties for the given state.
@@ -103,3 +101,17 @@ def get_counties_combo_box_list(state_fips):
         )
 
     return result
+
+def disable_logging_for_quieter_tests(func):
+    """
+    Turn off logging when console error output is expected.
+
+    This is a decorator to be used with tests. Do not use on real code.
+    """
+    def wrapper(*args, **kwargs):
+        """Disable, then reenable, logging."""
+        logging.disable(logging.CRITICAL)
+        func(*args, **kwargs)
+        logging.disable(logging.NOTSET)
+        return func
+    return wrapper
