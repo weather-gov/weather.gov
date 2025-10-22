@@ -24,7 +24,7 @@ from .util import (
 )
 
 
-@basic_auth_required(user="uploader")
+@basic_auth_required()
 @csrf_exempt
 def pdf(request):
     """Receive a PDF file and store it."""
@@ -40,7 +40,7 @@ def pdf(request):
     # return the same JSON struct that Drupal used
     return FakeDrupal().file_upload(uid, original_filename)
 
-@basic_auth_required(user="uploader")
+@basic_auth_required()
 @csrf_exempt
 def situation_report(request):
     """Record having received the situation report in PDF format."""
@@ -87,7 +87,7 @@ def situation_report(request):
     # return the same JSON struct that Drupal used
     return FakeDrupal().situation_report(data)
 
-@basic_auth_required(user="uploader")
+@basic_auth_required()
 @csrf_exempt
 def image(request, size):
     """Receive an image file and store it."""
@@ -104,7 +104,7 @@ def image(request, size):
     # return the same JSON struct that Drupal used
     return FakeDrupal().file_upload(uid, original_filename)
 
-@basic_auth_required(user="uploader")
+@basic_auth_required()
 @csrf_exempt
 def weather_story(request):
     """Record having received the weather story in image format."""
