@@ -1,7 +1,7 @@
 {% extends "weather/page.html" %}
 {% block head_js %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" nonce="{{ request.csp_nonce }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" nonce="{{ request.csp_nonce }}"></script>
 {% endblock %}
 {% block end_js %}
   <script type="module" src="{% static 'js/localizeTimestamps.js' %}"></script>
@@ -26,14 +26,18 @@
           src="{% static 'js/components/combo-box-location.js' %}"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           id="data-wx-leaflet"
+          nonce="{{ request.csp_nonce }}"
           defer></script>
   <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"
           id="data-wx-leaflet-esri"
+          nonce="{{ request.csp_nonce }}"
           defer></script>
   <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"
           id="data-ex-leaflet-esri-vector"
+          nonce="{{ request.csp_nonce }}"
           defer></script>
   <script src="{% static 'js/cmi-radar.0a93e066.js' %}"
+          nonce="{{ request.csp_nonce }}"
           data-wx-radar-cmi="true"
           defer></script>
 {% endblock %}

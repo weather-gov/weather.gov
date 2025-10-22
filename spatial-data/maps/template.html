@@ -16,10 +16,17 @@
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      nonce="{{ request.csp_nonce }}"
       crossorigin=""
     ></script>
-    <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"></script>
-    <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"></script>
+    <script
+      src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"
+      nonce="{{ request.csp_nonce }}"
+    ></script>
+    <script
+      src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"
+      nonce="{{ request.csp_nonce }}"
+    ></script>
   </head>
   <body>
     <div id="map"></div>
