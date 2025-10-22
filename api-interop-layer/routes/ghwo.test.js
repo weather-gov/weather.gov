@@ -74,7 +74,7 @@ describe("route: GHWO", () => {
 
     it("returns GHWO data if everything is okay", async () => {
       const data = "this is some data here";
-      getGHWOData.resolves({ data });
+      getGHWOData.resolves(data);
       const request = {
         params: { id: "Tupac Shakur" },
       };

@@ -8,6 +8,7 @@ import sort from "./sort.js";
 import { AlertsCache } from "./cache.js";
 import openDatabase from "../db.js";
 import dayjs from "../../util/day.js";
+import { geojsonToWKT } from "@terraformer/wkt";
 
 const logger = createLogger("alerts");
 const backgroundLogger = createLogger("alerts (background)");
@@ -88,16 +89,21 @@ export const startAlertProcessing = async () => {
   }
 };
 
-export default async ({
-  point: { latitude, longitude },
-  place: { timezone },
-}) => {
+export default async ({ point: { latitude, longitude }, place }) => {
+  return getAlertsForWKT(`POINT(${longitude} ${latitude})`, place);
+};
+
+export const getAlertsForGeoJSON = async (GeoJSON, { timezone }) => {
+  return getAlertsForWKT(geojsonToWKT(GeoJSON), { timezone });
+};
+
+const getAlertsForWKT = async (wkt, { timezone }) => {
   // Open a new database connection
   // (or existing pool instance -- see import)
   const db = await openDatabase();
   alertsCache.db = db;
 
-  const alerts = await alertsCache.getIntersectingAlerts(latitude, longitude, {
+  const alerts = await alertsCache.getIntersectingAlertsWKT(wkt, {
     // Distance is in meters. 400 meters ~= 0.25 miles
     buffer: 400,
   });

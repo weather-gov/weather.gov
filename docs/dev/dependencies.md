@@ -76,6 +76,13 @@ see much risk in needing to change libraries later.
 
 ### Interop layer
 
+#### @terraformer/wkt
+
+_Added in October, 2025_
+
+This tool converts from GeoJSON to Well Known Text (WKT) geometry representation
+and vice-versa.
+
 #### PostGIS
 
 _Added in September, 2025_

@@ -92,7 +92,37 @@ describe("AlertsCache tests", () => {
     expect(actual).to.equal("INSERT WORKED");
   });
 
-  it("#getIntersectingAlerts", async () => {
+  it("#getIntersectingAlertsForPoint", async () => {
+    const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,111), shape);`;
+
+    global.test.database.query.withArgs(query).resolves({ rows: [] });
+
+    await alertsCache.getIntersectingAlertsForPoint(1, 3, {
+      buffer: 111,
+    });
+
+    expect(global.test.database.query.calledWith(query)).to.be.true;
+  });
+
+  it("#getIntersectingAlertsForGeoJSON", async () => {
+    // QUIRKY NOTE! The library we use to convert GeoJSON to WKT puts a space
+    // between the type name and the coordinates; e.g., "POINT (x y)" instead
+    // of "POINT(x y)". We need to be sure to account for that here.
+    const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT (44 55)',4326)::geography,333), shape);`;
+
+    global.test.database.query.withArgs(query).resolves({ rows: [] });
+
+    await alertsCache.getIntersectionAlertsForGeoJSON(
+      { type: "Point", coordinates: [44, 55] },
+      {
+        buffer: 333,
+      },
+    );
+
+    expect(global.test.database.query.calledWith(query)).to.be.true;
+  });
+
+  it("#getIntersectingAlertsWKT", async () => {
     const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,298), shape);`;
 
     const output = [
@@ -117,7 +147,7 @@ describe("AlertsCache tests", () => {
     ];
     global.test.database.query.withArgs(query).resolves({ rows: output });
 
-    const result = await alertsCache.getIntersectingAlerts(1, 3, {
+    const result = await alertsCache.getIntersectingAlertsWKT("POINT(3 1)", {
       buffer: 298,
     });
 

@@ -1,3 +1,5 @@
+import { geojsonToWKT } from "@terraformer/wkt";
+
 /**
  * AlertsCache
  * -----------------------------------
@@ -79,8 +81,8 @@ export class AlertsCache {
     return await this.db.query(sql, [hash, alertAsString, geometry, alertKind]);
   }
 
-  /**
-   * @function getIntersectingAlerts
+    /**
+   * @function getIntersectingAlertsForPoint
    *
    * Given a latitude and longitude, retrieve all alerts that include it.
    * Optionally include a buffer around the point.
@@ -89,12 +91,40 @@ export class AlertsCache {
    * @arg {Number} options.buffer How much buffer to add to the point, in
    *                              meters. If unset, no buffer will be added.
    */
-  async getIntersectingAlerts(lat, lon, options) {
+  async getIntersectingAlertsForPoint(lat, lon, options) {
+    return this.getIntersectingAlertsWKT(`POINT(${lon} ${lat})`, options);
+  }
+
+    /**
+   * @function getIntersectingAlertsForGeoJSON
+   *
+   * Given a GeoJSON geometry, retrieve all alerts that include it.
+   * Optionally include a buffer around the geometry.
+   *
+   * @arg {Object} options
+   * @arg {Number} options.buffer How much buffer to add to the point, in
+   *                              meters. If unset, no buffer will be added.
+   */
+  async getIntersectionAlertsForGeoJSON(geoJSON, options) {
+    return this.getIntersectingAlertsWKT(geojsonToWKT(geoJSON), options);
+  }
+
+  /**
+   * @function getIntersectingAlertsWKT
+   *
+   * Given a geometry in WKT format, retrieve all alerts that include it.
+   * Optionally include a buffer around the geometry.
+   *
+   * @arg {Object} options
+   * @arg {Number} options.buffer How much buffer to add to the point, in
+   *                              meters. If unset, no buffer will be added.
+   */
+  async getIntersectingAlertsWKT(wkt, options) {
     const inputGeometry = [
       // The ::geography instructs postgis to treat the object as a geographic
       // shape instead of geometric. That way any buffering will be in meters
       // rather than degrees.
-      `ST_GeomFromText('POINT(${lon} ${lat})',4326)::geography`,
+      `ST_GeomFromText('${wkt}',4326)::geography`,
     ];
     if (options?.buffer) {
       inputGeometry.unshift("ST_Buffer(");

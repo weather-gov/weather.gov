@@ -38,7 +38,7 @@ describe("alert data module", () => {
     sandbox.resetHistory();
     getIntersection = sandbox.stub(
       AlertsCache.prototype,
-      "getIntersectingAlerts",
+      "getIntersectingAlertsWKT",
     );
 
     fetch.resolves(response);
