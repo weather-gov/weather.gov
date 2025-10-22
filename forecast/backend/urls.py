@@ -10,6 +10,8 @@ from wagtail.documents import urls as wagtaildocs_urls
 from spatial.sitemaps import PlaceSitemap
 
 from . import views
+from .county import views as county_views
+from .state import views as state_views
 from .url_converters import FloatConverter
 
 register_converter(FloatConverter, "float")
@@ -30,6 +32,12 @@ urlpatterns = [
     path("afd/", views.afd_index, name="afd_index"),
     path("afd/<wfo>/", views.afd_by_office, name="afd_by_office"),
     path("afd/<wfo>/<afd_id>/", views.afd_by_office_and_id, name="afd_by_office_and_id"),
+    # County pages
+    path("county/", county_views.index, name="county index"),
+    path("county/<countyfips>/", county_views.county_landing, name="county landing"),
+    # State pages
+    path("state/", state_views.index, name="state index"),
+    path("state/<state>/", state_views.state_landing, name="state landing"),
     # WX routes are those that return partial HTML markup
     # that will be requested from the frontend (htmx style)
     path("wx/afd/<afd_id>/", views.wx_afd_id, name="wx_afd_id"),
@@ -48,7 +56,7 @@ urlpatterns = [
         name="django.contrib.sitemaps.views.sitemap",
     ),
     # Wagtail
-    path("cms/logout/", RedirectView.as_view(url="/saml/logout")), # override wagtail logout
+    path("cms/logout/", RedirectView.as_view(url="/saml/logout")),  # override wagtail logout
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("pages/", include(wagtail_urls)),

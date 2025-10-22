@@ -1,0 +1,12 @@
+{% extends "weather/page.html" %}
+{% block page_content %}
+  <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+    <ul>
+      {% for state in states %}
+        <li>
+          <a href="{{ state.state }}/">{{ state.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

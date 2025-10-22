@@ -105,7 +105,7 @@ class WeatherCounties(models.Model):
     """Represents a county, borough, parish, or US Census Area."""
 
     st = models.CharField(max_length=2, null=True)
-    state = models.ForeignKey(WeatherStates, null=True, on_delete=models.SET_NULL)
+    state = models.ForeignKey(WeatherStates, related_name="counties", null=True, on_delete=models.SET_NULL)
     countyname = models.TextField(null=True)
     countyfips = models.CharField(max_length=5, null=True)
     timezone = models.TextField(null=True)

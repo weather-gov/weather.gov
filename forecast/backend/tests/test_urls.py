@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.urls import resolve, reverse
 
 from backend import views
+from backend.county import views as county_views
+from backend.state import views as state_views
 
 
 class TestUrls(TestCase):
@@ -103,3 +105,33 @@ class TestUrls(TestCase):
         # get a raised exception here, it's because the path doesn't exist
         # anymore.
         resolve("/robots.txt")
+
+    def test_county_index(self):
+        """Test county index."""
+        resolver = resolve("/county/")
+        back = reverse("county index")
+        self.assertEquals(resolver.func, county_views.index)
+        self.assertEquals(back, "/county/")
+
+    def test_county_landing(self):
+        """Test county landing page."""
+        resolver = resolve("/county/12345/")
+        back = reverse("county landing", kwargs={"countyfips": "54321"})
+        self.assertEquals(resolver.func, county_views.county_landing)
+        self.assertEquals(resolver.kwargs, {"countyfips": "12345"})
+        self.assertEquals(back, "/county/54321/")
+
+    def test_state_index(self):
+        """Test state index."""
+        resolver = resolve("/state/")
+        back = reverse("state index")
+        self.assertEquals(resolver.func, state_views.index)
+        self.assertEquals(back, "/state/")
+
+    def test_state_landing(self):
+        """Test state landing page."""
+        resolver = resolve("/state/AB/")
+        back = reverse("state landing", kwargs={"state": "ZY"})
+        self.assertEquals(resolver.func, state_views.state_landing)
+        self.assertEqual(resolver.kwargs, {"state": "AB"})
+        self.assertEqual(back, "/state/ZY/")
