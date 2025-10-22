@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 import environs
-from csp.constants import NONE, SELF
+from csp.constants import NONCE, SELF
 
 SETTINGS_TYPE = "base"
 
@@ -240,23 +240,60 @@ SITE_SLOGAN = "National Weather Service"
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": [SELF],
-        "script-src": [NONE],
+        "script-src": [
+            SELF,
+            # required for cmi-radar
+            "'unsafe-eval'",
+        ],
         "script-src-elem": [
             SELF,
+            # required for CDN hosted javascript
+            NONCE,
             # analytics
             "dap.digitalgov.gov",
             "www.googletagmanager.com",
         ],
         "connect-src": [
             SELF,
+            # cmi-radar
+            "api.weather.gov",
             # analytics
             "dap.digitalgov.gov",
+            # mapping
+            "static.arcgis.com",
+            "geocode.arcgis.com",
+            "basemapstyles-api.arcgis.com",
+            "basemaps-api.arcgis.com",
+            "cdn.arcgis.com",
+            "opengeo.ncep.noaa.gov",
         ],
         "font-src": [SELF],
+        "img-src": [
+            SELF,
+            # satellite
+            "cdn.star.nesdis.noaa.gov",
+            # mapping
+            "opengeo.ncep.noaa.gov",
+            "cdn.arcgis.com",
+            # esri-leaflet-vector.js
+            "data:",
+        ],
+        "media-src": [
+            SELF,
+            # satellite
+            "cdn.star.nesdis.noaa.gov",
+        ],
         "style-src": [
             SELF,
-            # combo-box.js applies its own CSS styles
-            "'sha256-dv6AqYOOsjqjjjKRCn5keqjhGN/otX85VCpq3YZc/dE='",
+            "'unsafe-inline'",
+            # NONCE,
+            # # combo-box.js applies its own CSS styles
+            # "'sha256-dv6AqYOOsjqjjjKRCn5keqjhGN/otX85VCpq3YZc/dE='",
+        ],
+        "worker-src": [
+            SELF,
+            # alertMap.js
+            "blob:",
         ],
         "frame-ancestors": [SELF],
         "form-action": [SELF],
