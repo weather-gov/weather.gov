@@ -1,9 +1,13 @@
 from django.test import TestCase
 from django.urls import resolve, reverse
 
-from backend import views
-from backend.county import views as county_views
-from backend.state import views as state_views
+from backend.views import (
+    county,
+    index,
+    partials,
+    point,
+    state,
+)
 
 
 class TestUrls(TestCase):
@@ -23,14 +27,14 @@ class TestUrls(TestCase):
         """Test index."""
         resolver = resolve("/")
         back = reverse("index")
-        self.assertEquals(resolver.func, views.index)
+        self.assertEquals(resolver.func, index.index)
         self.assertEquals(back, "/")
 
     def test_office_url(self):
         """Test WFO office."""
         resolver = resolve("/offices/WFO/")
         back = reverse("office", kwargs={"wfo": "Howdy"})
-        self.assertEquals(resolver.func, views.offices_specific)
+        self.assertEquals(resolver.func, point.offices_specific)
         self.assertEquals(resolver.kwargs, {"wfo": "WFO"})
         self.assertEquals(back, "/offices/Howdy/")
 
@@ -38,14 +42,14 @@ class TestUrls(TestCase):
         """Test AFD index."""
         resolver = resolve("/afd/")
         back = reverse("afd_index")
-        self.assertEquals(resolver.func, views.afd_index)
+        self.assertEquals(resolver.func, point.afd_index)
         self.assertEquals(back, "/afd/")
 
     def test_afd_by_office(self):
         """Test AFD by office."""
         resolver = resolve("/afd/WFO/")
         back = reverse("afd_by_office", kwargs={"wfo": "Doody"})
-        self.assertEquals(resolver.func, views.afd_by_office)
+        self.assertEquals(resolver.func, point.afd_by_office)
         self.assertEquals(resolver.kwargs, {"wfo": "WFO"})
         self.assertEquals(back, "/afd/Doody/")
 
@@ -53,7 +57,7 @@ class TestUrls(TestCase):
         """Test AFD by office and ID."""
         resolver = resolve("/afd/WFO/afdid/")
         back = reverse("afd_by_office_and_id", kwargs={"wfo": "To", "afd_id": "Fro"})
-        self.assertEquals(resolver.func, views.afd_by_office_and_id)
+        self.assertEquals(resolver.func, point.afd_by_office_and_id)
         self.assertEquals(resolver.kwargs, {"wfo": "WFO", "afd_id": "afdid"})
         self.assertEquals(back, "/afd/To/Fro/")
 
@@ -61,7 +65,7 @@ class TestUrls(TestCase):
         """Test AFD by ID fragment."""
         resolver = resolve("/wx/afd/totoro/")
         back = reverse("wx_afd_id", kwargs={"afd_id": "catbus"})
-        self.assertEquals(resolver.func, views.wx_afd_id)
+        self.assertEquals(resolver.func, partials.wx_afd_id)
         self.assertEquals(resolver.kwargs, {"afd_id": "totoro"})
         self.assertEquals(back, "/wx/afd/catbus/")
 
@@ -69,7 +73,7 @@ class TestUrls(TestCase):
         """Test AFD location versions fragment."""
         resolver = resolve("/wx/afd/locations/Columbus/")
         back = reverse("wx_afd_versions", kwargs={"wfo": "Jackson"})
-        self.assertEquals(resolver.func, views.wx_afd_versions)
+        self.assertEquals(resolver.func, partials.wx_afd_versions)
         self.assertEquals(resolver.kwargs, {"wfo": "Columbus"})
         self.assertEquals(back, "/wx/afd/locations/Jackson/")
 
@@ -77,7 +81,7 @@ class TestUrls(TestCase):
         """Test point forecast."""
         resolver = resolve("/point/-82.537/42.535/")
         back = reverse("point", kwargs={"lat": 40.235, "lon": 34.532})
-        self.assertEquals(resolver.func, views.point_location)
+        self.assertEquals(resolver.func, point.point_location)
         self.assertEquals(resolver.kwargs, {"lat": -82.537, "lon": 42.535})
         self.assertEquals(back, "/point/40.235/34.532/")
 
@@ -88,7 +92,7 @@ class TestUrls(TestCase):
             "place forecast",
             kwargs={"state": "Franklin", "place": "Anywhere"},
         )
-        self.assertEquals(resolver.func, views.place_forecast)
+        self.assertEquals(resolver.func, point.place_forecast)
         self.assertEquals(resolver.kwargs, {"state": "State", "place": "Of_Mind"})
         self.assertEquals(back, "/place/Franklin/Anywhere/")
 
@@ -96,7 +100,7 @@ class TestUrls(TestCase):
         """Test health endpoint."""
         resolver = resolve("/health/")
         back = reverse("health")
-        self.assertEquals(resolver.func, views.health)
+        self.assertEquals(resolver.func, index.health)
         self.assertEquals(back, "/health/")
 
     def test_robots(self):
@@ -110,14 +114,14 @@ class TestUrls(TestCase):
         """Test county index."""
         resolver = resolve("/county/")
         back = reverse("county index")
-        self.assertEquals(resolver.func, county_views.index)
+        self.assertEquals(resolver.func, county.index)
         self.assertEquals(back, "/county/")
 
     def test_county_landing(self):
         """Test county landing page."""
         resolver = resolve("/county/12345/")
         back = reverse("county landing", kwargs={"countyfips": "54321"})
-        self.assertEquals(resolver.func, county_views.county_landing)
+        self.assertEquals(resolver.func, county.county_landing)
         self.assertEquals(resolver.kwargs, {"countyfips": "12345"})
         self.assertEquals(back, "/county/54321/")
 
@@ -125,13 +129,13 @@ class TestUrls(TestCase):
         """Test state index."""
         resolver = resolve("/state/")
         back = reverse("state index")
-        self.assertEquals(resolver.func, state_views.index)
+        self.assertEquals(resolver.func, state.index)
         self.assertEquals(back, "/state/")
 
     def test_state_landing(self):
         """Test state landing page."""
         resolver = resolve("/state/AB/")
         back = reverse("state landing", kwargs={"state": "ZY"})
-        self.assertEquals(resolver.func, state_views.state_landing)
+        self.assertEquals(resolver.func, state.state_landing)
         self.assertEqual(resolver.kwargs, {"state": "AB"})
         self.assertEqual(back, "/state/ZY/")

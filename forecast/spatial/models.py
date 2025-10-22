@@ -83,6 +83,9 @@ class WeatherStates(models.Model):
     fips = models.CharField(max_length=2, null=True)
     shape = models.GeometryField()
 
+    def __str__(self):
+        return self.state
+
     class Meta:  # noqa: D106
         db_table = "weathergov_geo_states"
 
@@ -113,6 +116,9 @@ class WeatherCounties(models.Model):
     shape = models.GeometryField()
     cwas = models.ManyToManyField(WeatherCountyWarningAreas)
     cwastring = models.TextField(null=True)
+
+    def __str__(self):
+        return f"{self.countyname}, {self.state} FIPS {self.countyfips}"
 
     class Meta:  # noqa: D106
         db_table = "weathergov_geo_counties"

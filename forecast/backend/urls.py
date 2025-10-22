@@ -7,43 +7,50 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.sitemap_generator import Sitemap as WagtailSitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
+from backend.views import (
+    county,
+    index,
+    partials,
+    point,
+    state,
+    static,
+)
 from spatial.sitemaps import PlaceSitemap
 
-from . import views
-from .county import views as county_views
-from .state import views as state_views
 from .url_converters import FloatConverter
 
 register_converter(FloatConverter, "float")
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", index.index, name="index"),
     # Our URLs should have trailing slashes. Django will automatically add
     # trailing slashes to requests that don't have them, so if our URLs DON'T
     # have trailing slashes, they'll never match.
     # Static pages for the site
-    path("about/", views.site_page, name="about"),
-    path("site-index/", views.site_page, name="site_index"),
-    path("accessibility/", views.site_page, name="accessibility"),
-    path("disclaimer/", views.site_page, name="disclaimer"),
-    path("privacy/", views.site_page, name="privacy"),
+    path("about/", static.site_page, name="about"),
+    path("site-index/", static.site_page, name="site_index"),
+    path("accessibility/", static.site_page, name="accessibility"),
+    path("disclaimer/", static.site_page, name="disclaimer"),
+    path("privacy/", static.site_page, name="privacy"),
     # Forecast specific URLS
-    path("offices/<wfo>/", views.offices_specific, name="office"),
-    path("afd/", views.afd_index, name="afd_index"),
-    path("afd/<wfo>/", views.afd_by_office, name="afd_by_office"),
-    path("afd/<wfo>/<afd_id>/", views.afd_by_office_and_id, name="afd_by_office_and_id"),
+    path("offices/<wfo>/", point.offices_specific, name="office"),
+    path("afd/", point.afd_index, name="afd_index"),
+    path("afd/<wfo>/", point.afd_by_office, name="afd_by_office"),
+    path("afd/<wfo>/<afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
     # County pages
-    path("county/", county_views.index, name="county index"),
-    path("county/<countyfips>/", county_views.county_landing, name="county landing"),
+    path("county/", county.index, name="county index"),
+    path("county/<countyfips>/", county.county_landing, name="county landing"),
+    path("counties/ghwo/", county.county_ghwo_index, name="county_ghwo_index"),
+    path("counties/ghwo/<str:county_fips>", county.county_ghwo, name="county_ghwo"),
     # State pages
-    path("state/", state_views.index, name="state index"),
-    path("state/<state>/", state_views.state_landing, name="state landing"),
+    path("state/", state.index, name="state index"),
+    path("state/<state>/", state.state_landing, name="state landing"),
     # WX routes are those that return partial HTML markup
     # that will be requested from the frontend (htmx style)
-    path("wx/afd/<afd_id>/", views.wx_afd_id, name="wx_afd_id"),
-    path("wx/afd/locations/<wfo>/", views.wx_afd_versions, name="wx_afd_versions"),
-    path("wx/select/ghwo/counties/", views.wx_select_ghwo_counties, name="wx_select_ghwo_counties"),
-    path("wx/ghwo/counties/<str:county_fips>/", views.wx_ghwo_counties, name="wx_ghwo_counties"),
+    path("wx/afd/<afd_id>/", partials.wx_afd_id, name="wx_afd_id"),
+    path("wx/afd/locations/<wfo>/", partials.wx_afd_versions, name="wx_afd_versions"),
+    path("wx/select/ghwo/counties/", partials.wx_select_ghwo_counties, name="wx_select_ghwo_counties"),
+    path("wx/ghwo/counties/<str:county_fips>/", partials.wx_ghwo_counties, name="wx_ghwo_counties"),
     path(
         "sitemap.xml",
         sitemap,
@@ -61,16 +68,13 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     path("pages/", include(wagtail_urls)),
     # Point forecast related, etc
-    path("point/<float:lat>/<float:lon>/", views.point_location, name="point"),
-    path("place/<state>/<place>/", views.place_forecast, name="place forecast"),
-    path("health/", views.health, name="health"),
+    path("point/<float:lat>/<float:lon>/", point.point_location, name="point"),
+    path("place/<state>/<place>/", point.place_forecast, name="place forecast"),
+    path("health/", index.health, name="health"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
-    # GHWO
-    path("counties/ghwo/", views.county_ghwo_index, name="county_ghwo_index"),
-    path("counties/ghwo/<str:county_fips>", views.county_ghwo, name="county_ghwo"),
 ]
 
 if settings.DEBUG is True:
     urlpatterns += [
-        path("offices/", views.offices, name="offices"),
+        path("offices/", point.offices, name="offices"),
     ]

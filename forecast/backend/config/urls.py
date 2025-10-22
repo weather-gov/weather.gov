@@ -18,10 +18,10 @@ Including another URLconf
 from django.conf import settings
 from django.urls import include, path
 
-import backend.views
+from backend.views import index
 
 urlpatterns = [
-    path("", backend.views.index, name="index"),
+    path("", index.index, name="index"),
     path("", include("backend.urls")),
     path("saml/", include("noaa_saml.urls")),
     path("jsonapi/", include("wx_stories_api.urls")),
@@ -35,4 +35,4 @@ if settings.SETTINGS_TYPE == "dev":
         path("admin/", admin.site.urls),
     )
 
-handler404 = "backend.views.handle_404"
+handler404 = "backend.views.errors.handle_404"
