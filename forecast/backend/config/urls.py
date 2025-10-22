@@ -24,6 +24,7 @@ urlpatterns = [
     path("", backend.views.index, name="index"),
     path("", include("backend.urls")),
     path("saml/", include("noaa_saml.urls")),
+    path("jsonapi/", include("wx_stories_api.urls")),
 ]
 
 # Only add admin paths if we're using dev settings

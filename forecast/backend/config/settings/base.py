@@ -53,6 +53,7 @@ APPEND_SLASH = True
 
 INSTALLED_APPS = [
     "backend",
+    "wx_stories_api",
     "spatial",
     "noaa_saml",
     "django.contrib.auth",

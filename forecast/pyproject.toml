@@ -1,7 +1,7 @@
 [tool.ruff]
 show-fixes = true
 line-length = 120
-exclude = [".venv", "manage.py", "backend/migrations/*", "spatial/migrations/*"]
+exclude = [".venv", "manage.py", "backend/migrations/*", "spatial/migrations/*", "wx_stories_api/migrations/*"]
 
 [tool.ruff.lint]
 select = [

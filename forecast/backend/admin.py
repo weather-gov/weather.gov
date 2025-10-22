@@ -1,3 +1,15 @@
-# from django.contrib import admin
+from django.contrib import admin
 
-# Register your models here.
+from backend.models import (
+    WFO,
+    DynamicSafetyInformation,
+    GenericPage,
+    NOAAUser,
+    Region,
+)
+
+admin.site.register(GenericPage)
+admin.site.register(Region)
+admin.site.register(WFO)
+admin.site.register(DynamicSafetyInformation)
+admin.site.register(NOAAUser)

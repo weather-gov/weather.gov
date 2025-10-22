@@ -1,17 +1,21 @@
-# JSON:API
+# JSON API for Weather Story and PDF uploads
 
-## Modules
+## Background
 
-We have enabled and configured the core Drupal [`jsonapi`](https://www.drupal.org/docs/core-modules-and-themes/core-modules/jsonapi-module/api-overview) module specifically to allow uploading of WFO daily situation reports, which are produced as PDFs.
-
-We are also enabling the following core Drupal modules:
-
-- [`basic_auth`](https://www.drupal.org/docs/8/core/modules/basic_auth/overview) for authentication
-- [`jsonapi_extras`](https://www.drupal.org/project/jsonapi_extras) by default, prevent resources (and resource fields) from being accessible via the API
-- `jsonapi_defaults` is a submodule of the above which adds defaults to API resource types
-- [`serialization`](https://www.drupal.org/docs/8/core/modules/serialization/overview) for JSON support
+We need an API to receive situational reports (PDFs) and weather stories (images).
 
 ## Configuration
+
+The API is located in [forecast/wx_stories_api/](/forecast/wx_stories_api/). There are 5 endpoints:
+
+> /jsonapi/node/wfo_pdf_upload/field_wfo_sitrep
+> /jsonapi/node/wfo_pdf_upload
+> /jsonapi/node/wfo_weather_story_upload/field_fullimage
+> /jsonapi/node/wfo_weather_story_upload/field_smallimage
+> /jsonapi/node/wfo_weather_story_upload
+
+> [!NOTE]  
+> The rest of this section refers to Drupal.
 
 Two new content types, `wfo_pdf_upload` and `wfo_weather_story_upload` were created for WFO daily situation reports and WFO weather stories, respectively. 
 
@@ -150,6 +154,9 @@ Sample data (randomly chosen):
 We also have [outside tests for uploads](../../tests/playwright/outside/api.spec.js).
 
 # IP Address Filtering
+
+> [!NOTE]  
+> The rest of this section refers to Drupal.
 
 To implement IP address filtering, we are using a [route service](https://docs.cloudfoundry.org/services/route-services.html) which involves creating an user-provided service as a route service in a separate cloud.gov app. To route, we use [Caddy](https://caddyserver.com/) as a [reverse proxy](../../proxy/Caddyfile). This configuration permits all traffic to pass through to the weather.gov application except for the `/jsonapi` endpoint, which is restricted by IP address.
 
