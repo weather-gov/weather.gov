@@ -44,7 +44,7 @@ class TestWxStoryApiViews(TestCase):
             },
             content_type="application/octet-stream",
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         _id = response.json()["data"]["id"]
         self.assertEqual(TemporaryPDF.objects.filter(id=_id).count(), 1)
 
@@ -66,7 +66,7 @@ class TestWxStoryApiViews(TestCase):
             },
             content_type="application/vnd.api+json",
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
 
         # returns a json response
         self.assertEqual(type(response.json()["data"]["id"]), str)
@@ -94,7 +94,7 @@ class TestWxStoryApiViews(TestCase):
             },
             content_type="application/octet-stream",
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         _id = response.json()["data"]["id"]
         self.assertEqual(TemporaryImage.objects.filter(id=_id).count(), 1)
 
@@ -121,7 +121,7 @@ class TestWxStoryApiViews(TestCase):
             },
             content_type="application/vnd.api+json",
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
 
         # returns a json response
         self.assertEqual(type(response.json()["data"]["id"]), str)
@@ -183,7 +183,7 @@ class TestWxStoryApiViews(TestCase):
             },
             content_type="application/vnd.api+json",
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
 
     @disable_logging_for_quieter_tests
     def test_weather_story_rejects_missing_images(self):

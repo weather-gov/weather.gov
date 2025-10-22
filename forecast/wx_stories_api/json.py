@@ -23,16 +23,16 @@ class FakeDrupal():
 
     def file_upload(self, uuid, original_filename):
         """Return the JSON response for a PDF or image upload."""
-        return JsonResponse(file_upload_response(uuid, original_filename))
+        return JsonResponse(file_upload_response(uuid, original_filename), status=201)
 
     def weather_story(self, data):
         """Return the JSON response for a weather story upload."""
         attr = data["data"]["attributes"]
         uuid = uuid4()
-        return JsonResponse(weather_story_response(attr, uuid))
+        return JsonResponse(weather_story_response(attr, uuid), status=201)
 
     def situation_report(self, data):
         """Return the JSON response for an situation report upload."""
         attr = data["data"]["attributes"]
         uuid = uuid4()
-        return JsonResponse(situation_report_response(attr, uuid))
+        return JsonResponse(situation_report_response(attr, uuid), status=201)
