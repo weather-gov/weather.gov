@@ -65,6 +65,15 @@ def mark_safer(value, transformer=None):
         {
             # don't remove stuff like '\n'
             "keep_typographic_whitespace": True,
+            "tags": {
+                "a", "h1", "h2", "h3", "strong", "em", "p", "ul", "ol",
+                "li", "br", "sub", "sup", "hr", "span",
+            },
+            "attributes": {
+                "a": ("href", "name", "target", "title", "id", "rel", "class"),
+                "strong": ("class",),
+                "span": ("class",),
+            },
         },
     )
     cleaned = sanitizer.sanitize(value)

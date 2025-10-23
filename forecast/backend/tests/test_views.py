@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from unittest import mock
 
 from django.contrib.gis.geos import GEOSGeometry
@@ -6,6 +7,7 @@ from django.urls import reverse
 
 import spatial.models as spatial
 from backend import models
+from wx_stories_api.models import SituationReport, WeatherStory
 
 
 class TestViews(TestCase):
@@ -60,6 +62,19 @@ class TestViews(TestCase):
             shape=GEOSGeometry("POLYGON((5 5, 10 5, 10 0, 5 0, 5 5))"),
         )
 
+        # Create example weather story and
+        # situation report
+        self.weather_story = WeatherStory.objects.create(
+            title="Example weather story",
+            wfo=self.wfo,
+            starttime = datetime.now(tz=timezone.utc).isoformat(),
+            endtime = (datetime.now(tz=timezone.utc) + timedelta(days=1)).isoformat(),
+        )
+        self.situation_report = SituationReport.objects.create(
+            wfo=self.wfo,
+            title="Example situation report",
+        )
+
     def test_index(self):
         """Test the index view."""
         response = self.client.get("/")
@@ -85,6 +100,59 @@ class TestViews(TestCase):
                 "isMarine": False,
             },
         )
+        self.assertEqual(response.context["weather_story"], self.weather_story)
+        self.assertEqual(response.context["situation_report"], self.situation_report)
+
+    @mock.patch("wx_stories_api.models.WeatherStory.objects.current")
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_no_weather_story(self, mock_get_point_forecast, mock_get_current_weather_story):
+        """Test the point location view where there's no weather story available."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST"},
+            "isMarine": False,
+        }
+        mock_get_current_weather_story.return_value.first.return_value = None
+
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+
+        mock_get_current_weather_story.assert_called_once_with(self.wfo)
+        self.assertEqual(
+            response.context["point"],
+             {
+                "grid": {"wfo": "TST"},
+                "wfo": self.wfo,
+                "isMarine": False,
+            },
+        )
+        self.assertEqual(response.context["weather_story"], None)
+        self.assertEqual(response.context["situation_report"], self.situation_report)
+
+
+    @mock.patch("wx_stories_api.models.SituationReport.objects.current")
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_no_situation_report(self, mock_get_point_forecast, mock_get_current_situation_report):
+        """Test the point location view where there's no situation report available."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST"},
+            "isMarine": False,
+        }
+        mock_get_current_situation_report.return_value = None
+
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        mock_get_current_situation_report.assert_called_once_with(self.wfo)
+        self.assertEqual(
+            response.context["point"],
+             {
+                "grid": {"wfo": "TST"},
+                "wfo": self.wfo,
+                "isMarine": False,
+            },
+        )
+        self.assertEqual(response.context["weather_story"], self.weather_story)
+        self.assertEqual(response.context["situation_report"], None)
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_point_location_with_out_of_bounds(self, mock_get_point_forecast):
@@ -95,9 +163,11 @@ class TestViews(TestCase):
             "reason": "out-of-bounds",
         }
 
+
         response = self.client.get("/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
 
@@ -174,6 +244,8 @@ class TestViews(TestCase):
                 "isMarine": False,
             },
         )
+        self.assertEqual(response.context["weather_story"], self.weather_story)
+        self.assertEqual(response.context["situation_report"], self.situation_report)
 
     def test_office_specific(self):
         """Test the specific-office view."""

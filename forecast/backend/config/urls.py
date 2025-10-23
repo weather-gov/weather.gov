@@ -16,6 +16,7 @@ Including another URLconf
 """
 
 from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include, path
 
 from backend.views import index
@@ -26,6 +27,13 @@ urlpatterns = [
     path("saml/", include("noaa_saml.urls")),
     path("jsonapi/", include("wx_stories_api.urls")),
 ]
+
+# We need to add local media serving in non-prod
+# environments where S3 is not used.
+# This will allow uploaded assets like weather story images
+# and sitrep pdfs to be served from the URLs their models are given
+if settings.SETTINGS_TYPE != "production":
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Only add admin paths if we're using dev settings
 if settings.SETTINGS_TYPE == "dev":

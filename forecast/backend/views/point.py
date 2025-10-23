@@ -11,6 +11,7 @@ from backend import interop
 from backend.models import WFO, Region
 from backend.util import get_wfo_from_afd
 from spatial.models import WeatherCounties, WeatherCountyWarningAreas, WeatherPlace
+from wx_stories_api.models import SituationReport, WeatherStory
 
 from ._helpers import get_redirect_for_afd_queries
 
@@ -30,7 +31,25 @@ def point_location(request, lat, lon):
     if point["isMarine"]:
         return render(request, "weather/marine-point.html", {"point": point})
 
-    return render(request, "weather/point.html", {"point": point})
+    # Attempt to get weather story information for the
+    # point.
+    # If there isn't one available, we set the data to None
+    weather_story = WeatherStory.objects.current(wfo).first()
+
+    # Attempt to get the current situation report for the
+    # point.
+    # If there isn't one available, set the data to None
+    situation_report = SituationReport.objects.current(wfo)
+
+    return render(
+        request,
+        "weather/point.html",
+        {
+            "point": point,
+            "weather_story": weather_story,
+            "situation_report": situation_report,
+        },
+    )
 
 @never_cache
 def place_forecast(request, state, place):
