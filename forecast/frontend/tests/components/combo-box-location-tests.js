@@ -456,6 +456,26 @@ describe("Combo box unit tests", () => {
       expect(spied.called).to.be.true;
     });
 
+    it("When clicking the second item, the input does not lose focus", async () => {
+      const component = document.querySelector("wx-combo-box-location");
+      const secondItem = component.querySelector(
+        "div[role='listbox'] > ul > li:nth-child(2)",
+      );
+
+      component.input.focus();
+      const expected = document.activeElement;
+      expect(component.input).to.eql(expected);
+      const event = new Event("mousedown", {cancelable: true});
+      secondItem.dispatchEvent(event);
+
+      // Wait for event handlers to resolve
+      await wait(500);
+
+      expect(document.activeElement).to.eql(expected);
+      expect(event.defaultPrevented).to.be.true;
+      
+    })
+
     it("Can get the geodata from a value key", async () => {
       const component = document.querySelector("wx-combo-box-location");
       const secondItem = component.querySelector(
@@ -492,6 +512,8 @@ describe("Combo box unit tests", () => {
       expect(form.submit.called).to.be.true;
     });
   });
+
+  
 
   describe("saved search results", () => {
     let box;
@@ -727,6 +749,185 @@ describe("Combo box unit tests", () => {
 
         // deep equality, not reference equality
         expect(results).to.eql([{ text: 1 }, { text: 2 }, { text: 3 }]);
+      });
+    });
+  });
+
+  describe("ArcGIS integration", () => {
+    // GAGAG
+    const { fetch } = global;
+    let sandbox = createSandbox();
+    let box;
+
+    before(() => {
+      global.localStorage = {
+        getItem: sandbox.stub(),
+        setItem: sandbox.stub(),
+      };
+
+      global.fetch = sandbox.stub();
+    });
+
+    after(() => {
+      global.fetch = fetch;
+    });
+
+    beforeEach(async () => {
+      sandbox.resetBehavior();
+      sandbox.resetHistory();
+      sandbox.restore();
+
+      const response = { json: sandbox.stub() };
+      global.fetch.resolves(response);
+
+      const form = document.createElement("form");
+      form.setAttribute("data-location-search", true);
+      document.body.innerHTML = "";
+      box = document.createElement("wx-combo-box-location");
+      document.body.append(form);
+      form.append(box);
+    });
+
+    it("uses a cached ArcGIS location on submit, if there is one present", async () =>{
+      // Make an instance of the component and set up some of the
+      //  method spies.
+      const component = document.querySelector("wx-combo-box-location");
+      const cacheCheckSpy = sandbox.spy(component, "getGeodataForKey");
+      const getLocationDataSpy = sandbox.spy(component, "getLocationGeodata");
+      const searchMock = sandbox.stub(component, "getSearchResults");
+      searchMock.resolves(SEARCH_RESULTS);
+
+      // Let's mock this up so the cache will return the second search result item.
+      // These coordinates are computed from the second RESULT_ITEMS
+      // object at the top of this file.
+      const expectedCoordinates = {"lat":38.891,"lon":-77.085};
+      const getItemMock = sandbox.stub(component.cache, "getItem");
+      getItemMock.returns(expectedCoordinates);
+
+      // We want a reference to the actual form element,
+      // so we can intercept the submit event and make sure
+      // it was called with the expected location data
+      const formEl = component.closest("form[data-location-search]");
+      expect(formEl).to.exist;
+      const expectedFormAction = `/point/${expectedCoordinates.lat}/${expectedCoordinates.lon}`;
+
+      expect(cacheCheckSpy.callCount).to.equal(0);
+      expect(getItemMock.callCount).to.equal(0);
+
+      // Do a search and trigger a submit by selecting
+      // the second result item from the list
+      await component.updateSearch("Arlin");
+      const secondListItem = component.querySelector("li:nth-child(2)");
+      expect(secondListItem).to.exist;
+      secondListItem.click();
+
+      // We need to wait for all the event handlers
+      // to resolve
+      await wait(500);
+
+      // We expect that the cache was checked once
+      expect(cacheCheckSpy.callCount).to.equal(1);
+      expect(getItemMock.callCount).to.equal(1);
+
+      // We expect that coordinates for the item were
+      // _not_ called for asynchronously
+      expect(getLocationDataSpy.callCount).to.equal(0);
+
+      // We expect that the cached data was used for the form
+      // submission. Here, that's the equivalent to setting the
+      // forms action to the expected URL
+      expect(formEl.getAttribute("action")).to.equal(expectedFormAction);
+    });
+
+    it("calls a fetch request for location data when ArcGIS cache misses on submit", async () => {
+      const component = document.querySelector("wx-combo-box-location");
+      const getItemMock = sandbox.stub(component.cache, "getItem");
+      getItemMock.returns(null);
+      const expectedCoordinates = {"lat":38.891,"lon":-77.085};
+      const fetchLocationDataMock = sandbox.stub(component, "getLocationGeodata");
+      fetchLocationDataMock.resolves(expectedCoordinates);
+      const searchMock = sandbox.stub(component, "getSearchResults");
+      searchMock.resolves(SEARCH_RESULTS);
+
+      expect(getItemMock.callCount).to.equal(0);
+      expect(fetchLocationDataMock.callCount).to.equal(0);
+
+      // Do a search and check the cache, which
+      // we mock to force a miss
+      await component.updateSearch("Arlin");
+      expect(searchMock.callCount).to.equal(1);
+      const secondListItem = component.querySelector("li:nth-child(2)");
+      expect(secondListItem).to.exist;
+      secondListItem.click();
+
+      // We need to wait for all the event
+      // handlers to resolve
+      await wait(500);
+
+      // We expect the cache was checked
+      expect(getItemMock.callCount).to.equal(1);
+      expect(getItemMock.returned(null)).to.be.true;
+
+      // We expect that fetching data was called
+      expect(fetchLocationDataMock.callCount).to.equal(1);
+    });
+
+    it("when a list item handles the focus event, the location data for it gets cached", async () => {
+      const component = document.querySelector("wx-combo-box-location");
+      const magicKey  = Object.keys(SEARCH_RESULT_ITEMS)[1];
+      const searchMock = sandbox.stub(component, "getSearchResults");
+      searchMock.resolves(SEARCH_RESULTS);
+      const expectedCoordinates = {"lat":38.891,"lon":-77.085};
+      const getLocationGeodataMock = sandbox.stub(component, "getLocationGeodata");
+      getLocationGeodataMock.resolves(expectedCoordinates);
+      const setItemSpy = sandbox.spy(component.cache, "setItem");
+
+      // Perform a search
+      await component.updateSearch("Arlin")
+      const secondListItem = component.querySelector("li:nth-child(2)");
+      expect(secondListItem).to.exist;
+      expect(setItemSpy.callCount).to.equal(0);
+      const event = new Event("focus");
+      secondListItem.dispatchEvent(event);
+
+      // Wait for event handlers to resolve
+      await wait(500);
+
+      expect(setItemSpy.callCount).to.equal(1);
+      expect(setItemSpy.calledWith(magicKey, expectedCoordinates));
+    });
+
+    
+
+    describe("ArcGIS cache specific tests", () => {
+      const magicKey  = Object.keys(SEARCH_RESULT_ITEMS)[1];
+      it("saves the data to browser storage when cached", () => {
+        const component = document.querySelector("wx-combo-box-location");
+
+        // This is the kind of data that would be saved
+        // in sessionStorage, with the magicKey as the key.
+        // This lat lon is what would be resolved from the
+        // second entry in SEARCH_RESULT_ITEMS
+        const expected = {"lat":38.891,"lon":-77.085};
+
+        // Use the cache set method
+        component.cache.setItem(magicKey, expected);
+
+        const actualSerialized = window.sessionStorage.getItem(magicKey);
+        const actual = JSON.parse(actualSerialized);
+
+        expect(actual).to.eql(expected);
+      });
+
+      it("can retrieve what is in session storage by key", () => {
+        const component = document.querySelector("wx-combo-box-location");
+
+        const expectedSerialized = window.sessionStorage.getItem(magicKey);
+        const expected = JSON.parse(expectedSerialized);
+
+        const actual = component.cache.getItem(magicKey);
+
+        expect(actual).to.eql(expected);
       });
     });
   });

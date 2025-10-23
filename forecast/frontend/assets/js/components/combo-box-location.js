@@ -5,33 +5,6 @@ const searchLocation = async (text) => {
   return fetch(url, { headers: { "Content-Type": "application/json" } });
 };
 
-const getLocationGeodata = async (magicKey) => {
-  const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?magicKey=${magicKey}&f=json&_=1695666335115`;
-  const response = await fetch(url, {
-    headers: { "Content-Type": "application/json" },
-  });
-  const results = await response.json();
-
-  if (
-    !results.error &&
-    Array.isArray(results.locations) &&
-    results.locations.length > 0
-  ) {
-    const {
-      locations: [
-        {
-          feature: { geometry },
-        },
-      ],
-    } = results;
-
-    const lat = Math.round(geometry.y * 1_000) / 1_000;
-    const lon = Math.round(geometry.x * 1_000) / 1_000;
-    return { lat, lon };
-  }
-  return null;
-};
-
 /**
  * This object uses the browser's SessionStorage
  * to cache and retrieve ArcGIS magicKey data.
@@ -42,7 +15,7 @@ const getLocationGeodata = async (magicKey) => {
  * for the cached data before sending a request.
  * This can provide the perception of faster interaction.
  */
-const ArcCache = {
+export const ArcCache = {
   getItem(magicKey) {
     const found = window.sessionStorage.getItem(magicKey);
     if (found) {
@@ -63,6 +36,10 @@ export default class LocationComboBox extends ComboBox {
     // Private property defaults
     this.inputDelay = 250;
 
+    // Set the ArcCache object as a property.
+    // This allows us to test it more easily.
+    this.cache = ArcCache;
+
     // Bound component methods
     this.updateSearch = this.updateSearch.bind(this);
     this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
@@ -71,6 +48,7 @@ export default class LocationComboBox extends ComboBox {
     this.saveSearchResult = this.saveSearchResult.bind(this);
     this.getSavedResults = this.getSavedResults.bind(this);
     this.getSearchResults = this.getSearchResults.bind(this);
+    this.getLocationGeodata = this.getLocationGeodata.bind(this);
   }
 
   connectedCallback() {
@@ -267,8 +245,8 @@ export default class LocationComboBox extends ComboBox {
    */
   async cacheLocationGeodata(magicKey) {
     if (!window.sessionStorage.getItem(magicKey)) {
-      const result = await getLocationGeodata(magicKey);
-      ArcCache.setItem(magicKey, result);
+      const result = await this.getLocationGeodata(magicKey);
+      this.cache.setItem(magicKey, result);
     }
   }
 
@@ -279,11 +257,10 @@ export default class LocationComboBox extends ComboBox {
    * to fetch the data.
    */
   async getGeodataForKey(magicKey) {
-    const cached = ArcCache.getItem(magicKey);
+    const cached = this.cache.getItem(magicKey);
     if (!cached) {
-      return getLocationGeodata(magicKey);
+      return this.getLocationGeodata(magicKey);
     }
-
     return cached;
   }
 
@@ -348,6 +325,37 @@ export default class LocationComboBox extends ComboBox {
       this.append(span);
     }, 1000);
   }
+
+  /* Utility methods */
+  async getLocationGeodata(magicKey){
+    const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?magicKey=${magicKey}&f=json&_=1695666335115`;
+    const response = await fetch(url, {
+      headers: { "Content-Type": "application/json" },
+    });
+    const results = await response.json();
+    return this.processLocationGeodata(results);
+  }
+
+  processLocationGeodata(results){
+    if (
+      !results.error &&
+        Array.isArray(results.locations) &&
+        results.locations.length > 0
+    ) {
+      const {
+        locations: [
+          {
+            feature: { geometry },
+          },
+        ],
+      } = results;
+
+      const lat = Math.round(geometry.y * 1_000) / 1_000;
+      const lon = Math.round(geometry.x * 1_000) / 1_000;
+      return { lat, lon };
+    }
+    return null;
+  } 
 }
 
 if (!window.customElements.get("wx-combo-box-location")) {
