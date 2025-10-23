@@ -6,6 +6,7 @@ locals {
   django_secret_key = local.credentials.django_secret_key
   sp_public_key     = local.credentials.sp_public_key
   sp_private_key    = local.credentials.sp_private_key
+  allowed_ips       = local.credentials.allowed_ips
 }
 
 module "app_space" {
@@ -60,14 +61,14 @@ module "s3" {
 # }
 
 resource "cloudfoundry_service_instance" "credentials" {
-  name        = "${var.env}-credentials"
-  space       = module.app_space.space_id
-  type        = "user-provided"
+  name  = "${var.env}-credentials"
+  space = module.app_space.space_id
+  type  = "user-provided"
   credentials = jsonencode({
     "django_secret_key" = local.django_secret_key
     "sp_public_key"     = local.sp_public_key
     "sp_private_key"    = local.sp_private_key
   })
-  tags        = ["terraform-cloudgov-managed"]
-  depends_on  = [module.app_space]
+  tags       = ["terraform-cloudgov-managed"]
+  depends_on = [module.app_space]
 }

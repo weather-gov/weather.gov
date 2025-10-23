@@ -36,6 +36,7 @@ services:
       API_URL: "http://api-proxy:8081/"
       DEBUG_PORT: 34235
       DJANGO_SETTINGS_MODULE: backend.config.settings.dev
+      VCAP_SERVICES: ${VCAP_SERVICES:-}
     networks:
       - weather.gov
     depends_on:
