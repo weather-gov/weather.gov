@@ -612,3 +612,31 @@ msgstr "Select a county"
 
 msgid "ghwo.selector.label.county-link.01"
 msgstr "View county page"
+
+msgid "county.heading.alerts.01"
+msgstr "Alerts"
+
+msgid "county.alert-tabs.day.all.01"
+msgstr "All days"
+
+msgid "county.alert-tabs.day.Monday.01"
+msgstr "Monday"
+
+msgid "county.alert-tabs.day.Tuesday.01"
+msgstr "Tuesday"
+
+msgid "county.alert-tabs.day.Wednesday.01"
+msgstr "Wednesday"
+
+msgid "county.alert-tabs.day.Thursday.01"
+msgstr "Thursday"
+
+msgid "county.alert-tabs.day.Friday.01"
+msgstr "Friday"
+
+msgid "county.alert-tabs.day.Saturday.01"
+msgstr "Saturday"
+
+msgid "county.alert-tabs.day.Sunday.01"
+msgstr "Sunday"
+

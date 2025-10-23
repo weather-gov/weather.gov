@@ -59,6 +59,7 @@ export const getCountyData = async (fips) => {
       return {
         start,
         end,
+        day: start.format("dddd"),
         alerts: alerts.items
           .map((alert, index) => {
             // If the alert onset is before the end of today...

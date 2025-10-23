@@ -1,3 +1,5 @@
+from unittest import mock
+
 from django.contrib.gis.geos import GEOSGeometry
 from django.test import TestCase
 
@@ -51,11 +53,13 @@ class TestCountyViews(TestCase):
         self.assertEqual(response.context["counties"][3], self.county1)
         self.assertEqual(response.context["counties"][4], self.county3)
 
-    def test_landing(self):
+    @mock.patch("backend.interop.get_county_data")
+    def test_landing(self, mock_get_county_data):
         """Test the landing view."""
+        mock_get_county_data.return_value = "Oh boy counties!"
         response = self.client.get("/county/44444/")
         self.assertTemplateUsed(response, "weather/county/landing.html")
-        self.assertEqual(response.context["county"], self.county4)
+        self.assertEqual(response.context["data"], "Oh boy counties!")
 
     def test_landing_404(self):
         """Test the landing view."""

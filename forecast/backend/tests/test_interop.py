@@ -283,3 +283,14 @@ class TestInteropInterface(TestCase):
         actual = interop.get_point_forecast(9, 10)
 
         self.assertEqual(actual, returned)
+
+    @responses.activate
+    def test_get_county_data(self):
+        """Tests that we get county data."""
+        returned = {"message": "some county data"}
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(responses.GET, "https://interop/county/11223", json=returned, status=200)
+
+        actual = interop.get_county_data("11223")
+
+        self.assertEqual(actual, returned)

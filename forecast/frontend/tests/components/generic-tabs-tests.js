@@ -168,5 +168,32 @@ describe("Tab web component basic tests", () => {
     const actual = tablist.getAttribute("data-selected");
 
     expect(actual).to.eql(expected);
-  })
+  });
+
+  it("selecting a tab updates the tabpanels aria-labelledby attribute", () => {
+    const tablist = document.querySelector("wx-tabs");
+    tablist.tabs[1].click();
+    const expected = "button2";
+    const actual = document
+      .querySelector("#tab2")
+      .getAttribute("aria-labelledby");
+
+    expect(actual).to.eql(expected);
+  });
+
+  it("selecting a tab dispatches a wx-tab-focused event with the chosen tab", () => {
+    const tablist = document.querySelector("wx-tabs");
+    const tab = tablist.tabs[0];
+
+    let count = 0;
+    window.addEventListener("wx-tab-focused", (e) => {
+      if (e.detail === tab) {
+        count += 1;
+      }
+    });
+
+    tab.click();
+
+    expect(count).to.eql(1);
+  });
 });

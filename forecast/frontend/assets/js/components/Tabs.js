@@ -52,8 +52,11 @@ class Tabs extends HTMLElement {
         tabpanelElement.setAttribute("data-tabpanel-selected", false);
       });
       panel.setAttribute("data-tabpanel-selected", true);
+      panel.setAttribute("aria-labelledby", tab.id);
       this.setAttribute("data-selected", panelId);
     }
+
+    window.dispatchEvent(new CustomEvent("wx-tab-focused", { detail: tab }));
   }
 
   /**

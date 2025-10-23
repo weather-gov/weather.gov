@@ -17,15 +17,18 @@ def index(request):
     counties = WeatherCounties.objects.all().order_by("st", "countyname")
     return render(request, "weather/county/index.html", {"counties": counties})
 
+
 @never_cache
 def county_landing(request, countyfips):
     """Render the forecast for a given latitude & longitude."""
     county = WeatherCounties.objects.filter(countyfips=countyfips)
 
     if len(county):
-        return render(request, "weather/county/landing.html", {"county": county[0]})
+        county = interop.get_county_data(countyfips)
+        return render(request, "weather/county/landing.html", {"data": county})
 
     raise Http404()
+
 
 def county_ghwo(request, county_fips):
     """Load a county GHWO details page by FIPS."""
@@ -61,6 +64,7 @@ def county_ghwo(request, county_fips):
             "ghwo": json.dumps(ghwo_data, indent=2),
         },
     )
+
 
 @require_POST
 def county_ghwo_index(request):
