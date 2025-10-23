@@ -1,6 +1,41 @@
 {% extends "weather/page.html" %}
-{% block page_content %}
-  <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
-    <h1>{{ county.countyname }}, {{ county.state.name }}</h1>
-  </div>
+{% block end_js %}
+  <script type="module" src="{% static 'js/components/Tabs.js' %}"></script>
 {% endblock %}
+{% block page_content %}
+  <div class="bg-primary-darker">
+    <div class="grid-container">
+      <div class="grid-row flex-no-wrap">
+        <h1 class="text-white font-heading-xl tablet:flex-1">{{ data.county.county }}, {{ data.county.state }}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+    <h2>{{ "county.heading.alerts.01" | t }}</h2>
+    <div class="grid-col-12 desktop:grid-col-12">
+      <wx-tabs>
+      <div class="usa-button-group usa-button-group--segmented" role="tablist">
+        <button id="alert-day-all-button"
+                type="button"
+                class="usa-button"
+                role="tab"
+                data-alert-day="all"
+                aria-controls="alert-day"
+                aria-selected="true">{{ "county.alert-tabs.day.all.01" | t }}</button>
+        {% for day in data.alertDays %}
+          <button id="alert-day-{{ forloop.counter }}-button"
+                  type="button"
+                  class="usa-button"
+                  role="tab"
+                  data-alert-day="{{ forloop.counter }}"
+                  aria-controls="alert-day"
+                  aria-selected="false">{{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}</button>
+        {% endfor %}
+      </div>
+      </wx-tabs>
+      <div id="alert-day"
+           role="tabpanel"
+           aria-labelledby="alert-day-all-button"
+           class="margin-top-2">Here is where alert details will go</div>
+    </div>
+  {% endblock %}

@@ -167,6 +167,11 @@ def get_point_forecast(lat, lon):
     return _process_interop_data(data)
 
 
+def get_county_data(countyfips):
+    """Get county data."""
+    return _fetch(f"/county/{countyfips}")
+
+
 def get_health():
     """Fetch the interop health status."""
     url = "/"

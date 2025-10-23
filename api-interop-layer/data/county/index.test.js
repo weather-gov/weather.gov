@@ -133,12 +133,17 @@ describe("county data index", () => {
 
       const actual = await getCountyData("11223");
 
-      // Validate that the right alerts are attached to each day
-      expect(actual.alertDays[0].alerts).to.eql([1]);
-      expect(actual.alertDays[1].alerts).to.eql([0]);
-      expect(actual.alertDays[2].alerts).to.eql([0, 2]);
-      expect(actual.alertDays[3].alerts).to.eql([]);
-      expect(actual.alertDays[4].alerts).to.eql([]);
+      // Validate that we've got the right day names and alerts associated with
+      // each alert day.
+      expect(
+        actual.alertDays.map(({ alerts, day }) => ({ alerts, day })),
+      ).to.eql([
+        { alerts: [1], day: "Wednesday" },
+        { alerts: [0], day: "Thursday" },
+        { alerts: [0, 2], day: "Friday" },
+        { alerts: [], day: "Saturday" },
+        { alerts: [], day: "Sunday" },
+      ]);
 
       // Now validate alert day start and end times
       expect(actual.alertDays[0].start.toISOString()).to.equal(
