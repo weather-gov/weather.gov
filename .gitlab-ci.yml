@@ -132,6 +132,7 @@ deploy-to-prod:
     - >
       echo {
       \"django_secret_key\": \"$CI_PROD_DJANGO_SECRET_KEY\",
+      \"allowed_ips\": \"$CI_PROD_ALLOWED_IPS\",
       \"sp_private_key\": \"$CI_PROD_SP_PRIVATE_KEY\",
       \"sp_public_key\": \"$CI_PROD_SP_PUBLIC_KEY\"
       } > credentials-prod.json
@@ -166,6 +167,7 @@ deploy-to-staging:
     - >
       echo {
       \"django_secret_key\": \"$CI_STAGING_DJANGO_SECRET_KEY\",
+      \"allowed_ips\": \"$CI_STAGING_ALLOWED_IPS\",
       \"sp_private_key\": \"$CI_STAGING_SP_PRIVATE_KEY\",
       \"sp_public_key\": \"$CI_STAGING_SP_PUBLIC_KEY\"
       } > credentials-staging.json
