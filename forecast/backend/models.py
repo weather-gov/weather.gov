@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
@@ -90,6 +91,25 @@ class WFO(models.Model):
     def has_contact(self):
         """Has social media, address, or email."""
         return bool(self.has_social or self.address or self.email)
+
+    @property
+    def normalized_code(self):
+        """Return the WFO code normalized for Alaska edge cases."""
+        anchorage_alternates = ["alu", "aer"]
+        if self.code.lower() in anchorage_alternates:
+            return "afc"
+        return self.code.lower()
+
+    @property
+    def url(self):
+        """Return the URL for the wfo office page on this site."""
+        return reverse(
+            "office",
+            kwargs={
+                "wfo": self.normalized_code,
+            },
+        )
+
 
 
 class DynamicSafetyInformation(models.Model):
