@@ -113,14 +113,14 @@ class TestUrls(TestCase):
     def test_county_index(self):
         """Test county index."""
         resolver = resolve("/county/")
-        back = reverse("county index")
+        back = reverse("county_index")
         self.assertEquals(resolver.func, county.index)
         self.assertEquals(back, "/county/")
 
     def test_county_landing(self):
         """Test county landing page."""
         resolver = resolve("/county/12345/")
-        back = reverse("county landing", kwargs={"countyfips": "54321"})
+        back = reverse("county_landing", kwargs={"countyfips": "54321"})
         self.assertEquals(resolver.func, county.county_landing)
         self.assertEquals(resolver.kwargs, {"countyfips": "12345"})
         self.assertEquals(back, "/county/54321/")
@@ -128,14 +128,14 @@ class TestUrls(TestCase):
     def test_state_index(self):
         """Test state index."""
         resolver = resolve("/state/")
-        back = reverse("state index")
+        back = reverse("state_index")
         self.assertEquals(resolver.func, state.index)
         self.assertEquals(back, "/state/")
 
     def test_state_landing(self):
         """Test state landing page."""
         resolver = resolve("/state/AB/")
-        back = reverse("state landing", kwargs={"state": "ZY"})
+        back = reverse("state_landing", kwargs={"state": "ZY"})
         self.assertEquals(resolver.func, state.state_landing)
         self.assertEqual(resolver.kwargs, {"state": "AB"})
         self.assertEqual(back, "/state/ZY/")
