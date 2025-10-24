@@ -115,7 +115,7 @@ class WeatherCounties(models.Model):
     dst = models.BooleanField(null=True)
     shape = models.GeometryField()
     cwas = models.ManyToManyField(WeatherCountyWarningAreas)
-    cwastring = models.TextField(null=True)
+    primarywfo = models.ForeignKey(WeatherCountyWarningAreas, related_name="primary_counties", on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.countyname}, {self.state} FIPS {self.countyfips}"

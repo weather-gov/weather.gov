@@ -5,6 +5,7 @@ from django.db import connection
 from tqdm import tqdm
 
 from spatial.management.commands._spatial_util import (
+    COUNTY_FIPS_TO_PRIMARY_WFO_MAP,
     SHAPE_TZ_TO_IANA,
     US_CODES,
     cache_path,
@@ -252,14 +253,25 @@ def load_counties(force=False):
             timezone=SHAPE_TZ_TO_IANA[timezone[:1].upper()],
             shape=GEOSGeometry(feature.geom.json),
         )
-        # The model must be saved before we can setup foreign key relationships.
-        county.save()
 
         # Counties are linked to states and CWAs, so add those.
         county.state = WeatherStates.objects.get(state=county.st)
 
         cwastring = feature.get("CWA")
         cwas = [cwastring[y - 3 : y] for y in range(3, len(cwastring) + 3, 3)]
+
+        # If a county is only covered by a single WFO, then it is primary.
+        if len(cwas) == 1:
+            county.primarywfo = WeatherCountyWarningAreas.objects.get(cwa=cwas[0])
+        # Otherwise, we need to look up which one is primary in our mapping.
+        elif county.countyfips in COUNTY_FIPS_TO_PRIMARY_WFO_MAP:
+            county.primarywfo = WeatherCountyWarningAreas.objects.get(
+                wfo=COUNTY_FIPS_TO_PRIMARY_WFO_MAP[county.countyfips],
+            )
+
+        # The model must be saved before we can setup many-to-many relationships.
+        county.save()
+
         for cwa in cwas:
             county.cwas.add(WeatherCountyWarningAreas.objects.get(cwa=cwa))
 
