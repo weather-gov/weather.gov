@@ -1,11 +1,16 @@
-<div class="usa-accordion usa-accordion--bordered margin-bottom-1 alert-level__{{ alert.metadata.level.text }}"
-     id="{{ idprefix }}alert_{{ alert.id }}">
+<div class="usa-accordion usa-accordion--bordered margin-top-1 alert-level__{{ alert.metadata.level.text }}"
+  id="alert_{{ alert.id }}"
+  {# djlint:off #}
+     {% for day_number in alert_days %}
+         data-alert-day-{{ day_number }}
+     {% endfor %}>
+  {# djlint:on #}
   <h3 class="usa-accordion__heading font-heading-lg">
     <button type="button"
             class="usa-accordion__button text-ls-1"
             aria-expanded="false"
-            aria-controls="{{ idprefix }}a{{ alert.id }}"
-            data-button-for="#{{ idprefix }}alert_{{ alert.id }}">
+            aria-controls="a{{ alert.id }}"
+            data-button-for="#alert_{{ alert.id }}">
       {% if icon %}
         <div class="display-flex flex-align-start">
           <div class="maxw-3 height-3 margin-right-05">
@@ -18,8 +23,7 @@
         {% if icon %}</div>{% endif %}
     </button>
   </h3>
-  <div id="{{ idprefix }}a{{ alert.id }}"
-       class="usa-accordion__content usa-prose">
+  <div id="a{{ alert.id }}" class="usa-accordion__content usa-prose">
     <p class="font-sans-md text-bold text-primary-darker margin-y-0">
       {% if alert.timing.end %}
         {% trans_with_args "alerts.text.in-effect-from-until.01" with start=alert.timing.start end=alert.timing.end %}
