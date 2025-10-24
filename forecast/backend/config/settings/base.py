@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "csp",
+    "cspreports",
     # Wagtail dependencies
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -239,66 +240,81 @@ SITE_NAME = "beta.weather.gov"
 SITE_SLOGAN = "National Weather Service"
 
 # content security policy configuration
+DIRECTIVES = {
+    "default-src": [SELF],
+    "script-src": [
+        SELF,
+        # required for cmi-radar
+        "'unsafe-eval'",
+    ],
+    "script-src-elem": [
+        SELF,
+        # required for CDN hosted javascript
+        NONCE,
+        # analytics
+        "dap.digitalgov.gov",
+        "www.googletagmanager.com",
+    ],
+    "connect-src": [
+        SELF,
+        # cmi-radar
+        "api.weather.gov",
+        # analytics
+        "dap.digitalgov.gov",
+        # mapping
+        "static.arcgis.com",
+        "geocode.arcgis.com",
+        "basemapstyles-api.arcgis.com",
+        "basemaps-api.arcgis.com",
+        "cdn.arcgis.com",
+        "opengeo.ncep.noaa.gov",
+    ],
+    "font-src": [SELF],
+    "img-src": [
+        SELF,
+        # satellite
+        "cdn.star.nesdis.noaa.gov",
+        # mapping
+        "opengeo.ncep.noaa.gov",
+        "cdn.arcgis.com",
+        # esri-leaflet-vector.js
+        "data:",
+    ],
+    "media-src": [
+        SELF,
+        # satellite
+        "cdn.star.nesdis.noaa.gov",
+    ],
+    "worker-src": [
+        SELF,
+        # alertMap.js
+        "blob:",
+    ],
+    "frame-ancestors": [SELF],
+    "form-action": [SELF],
+    "report-uri": "/csp-report/report/",
+}
+
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
-        "default-src": [SELF],
-        "script-src": [
-            SELF,
-            # required for cmi-radar
-            "'unsafe-eval'",
-        ],
-        "script-src-elem": [
-            SELF,
-            # required for CDN hosted javascript
-            NONCE,
-            # analytics
-            "dap.digitalgov.gov",
-            "www.googletagmanager.com",
-        ],
-        "connect-src": [
-            SELF,
-            # cmi-radar
-            "api.weather.gov",
-            # analytics
-            "dap.digitalgov.gov",
-            # mapping
-            "static.arcgis.com",
-            "geocode.arcgis.com",
-            "basemapstyles-api.arcgis.com",
-            "basemaps-api.arcgis.com",
-            "cdn.arcgis.com",
-            "opengeo.ncep.noaa.gov",
-        ],
-        "font-src": [SELF],
-        "img-src": [
-            SELF,
-            # satellite
-            "cdn.star.nesdis.noaa.gov",
-            # mapping
-            "opengeo.ncep.noaa.gov",
-            "cdn.arcgis.com",
-            # esri-leaflet-vector.js
-            "data:",
-        ],
-        "media-src": [
-            SELF,
-            # satellite
-            "cdn.star.nesdis.noaa.gov",
-        ],
+        **DIRECTIVES,
         "style-src": [
             SELF,
             "'unsafe-inline'",
-            # NONCE,
-            # # combo-box.js applies its own CSS styles
-            # "'sha256-dv6AqYOOsjqjjjKRCn5keqjhGN/otX85VCpq3YZc/dE='",
         ],
-        "worker-src": [
+    },
+}
+
+CONTENT_SECURITY_POLICY_REPORT_ONLY = {
+    "DIRECTIVES": {
+        **DIRECTIVES,
+        # report style-src violations
+        "style-src": [
             SELF,
-            # alertMap.js
-            "blob:",
+            NONCE,
+            # combo-box.js applies its own CSS styles
+            "'sha256-gRE3bxId7YdBMR/AIWG7jHh2sJ9XAtq1YUxCaFh3hng='",
         ],
-        "frame-ancestors": [SELF],
-        "form-action": [SELF],
     },
 }
 

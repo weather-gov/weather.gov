@@ -1,5 +1,14 @@
 @use "uswds-core" as *;
 
+#wx_radar_container {
+  height: 300px;
+  width: 100%;
+}
+
+.top-55px {
+  top: 55px;
+}
+
 .wx-radar-container {
   aspect-ratio: 1/1 !important;
   height: auto !important;

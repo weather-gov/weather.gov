@@ -150,7 +150,7 @@ STORAGES = {
 }
 set_cors_on_s3_bucket(**s3_options)
 
-s3_image_src = f"https://{s3_credentials["bucket"]}.s3.{s3_credentials["region"]}.amazonaws.com"
+s3_image_src = f"https://{s3_credentials['bucket']}.s3.{s3_credentials['region']}.amazonaws.com"
 
 # override content security policy configuration
 CONTENT_SECURITY_POLICY["DIRECTIVES"]["default-src"] = [SELF, *ALLOWED_HOSTS] # noqa: F405 (imported from base.py)
