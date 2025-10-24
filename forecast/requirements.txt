@@ -18,3 +18,4 @@ tqdm
 responses
 python3-saml
 django-csp==4.0
+django-csp-reports==1.10.0
