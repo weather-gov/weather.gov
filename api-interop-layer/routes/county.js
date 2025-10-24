@@ -6,7 +6,7 @@ export const schema = {
   params: {
     fips: {
       type: "string",
-      pattern: "^[1-9][0-9]{4}$",
+      pattern: "^[0-9]{5}$",
     },
   },
 };

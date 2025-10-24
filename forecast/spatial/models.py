@@ -129,6 +129,8 @@ class WeatherAlertsCache(models.Model):
 
     hash = models.TextField()
     alertjson = JSONField()
+    counties = JSONField()
+    states = JSONField()
     shape = models.GeometryField(null=True)
     alertkind = models.TextField(null=True, default=None)
 

@@ -10,13 +10,13 @@ describe("county data index", () => {
   const db = { query: sandbox.stub() };
   openDatabase.resolves(db);
 
-  const getAlertsForGeoJSON = sandbox.stub();
+  const getAlertsForCountyFIPS = sandbox.stub();
   const getGHWOData = sandbox.stub();
 
   let getCountyData;
   before(async () => {
     await quibble.esm("../db.js", {}, openDatabase);
-    await quibble.esm("../alerts/index.js", { getAlertsForGeoJSON }, {});
+    await quibble.esm("../alerts/index.js", { getAlertsForCountyFIPS }, {});
     await quibble.esm("../ghwo/index.js", { getGHWOData }, {});
 
     const module = await import("./index.js");
@@ -79,7 +79,7 @@ describe("county data index", () => {
 
     it("returns whatever GHWO data it gets", async () => {
       getGHWOData.resolves("mercy sakes");
-      getAlertsForGeoJSON.resolves({ items: [] });
+      getAlertsForCountyFIPS.resolves({ items: [] });
 
       const actual = await getCountyData("11223");
 
@@ -108,7 +108,7 @@ describe("county data index", () => {
       const now = dayjs("1987-10-21T19:32:14Z").tz("America/New_York");
       clock.tick(now.valueOf());
 
-      getAlertsForGeoJSON.resolves({
+      getAlertsForCountyFIPS.resolves({
         items: [
           {
             // Alert starts on day 2 and ends on day 3, should be on both

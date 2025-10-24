@@ -2,7 +2,12 @@ import sinon from "sinon";
 import { expect } from "chai";
 import dayjs from "../../util/day.js";
 import { alignAlertsToDaily } from "./utils.js";
-import alertHandler, { updateFromBackground } from "./index.js";
+import {
+  getAlertsForCountyFIPS,
+  getAlertsForPoint,
+  postProcessAlerts,
+  updateFromBackground,
+} from "./index.js";
 import alertKinds from "./kinds.js";
 import { AlertsCache } from "./cache.js";
 
@@ -31,6 +36,7 @@ describe("alert data module", () => {
 
   const response = { status: 200, json: sandbox.stub() };
   let getIntersection;
+  let getCountyAlerts;
 
   beforeEach(() => {
     response.status = 200;
@@ -38,7 +44,11 @@ describe("alert data module", () => {
     sandbox.resetHistory();
     getIntersection = sandbox.stub(
       AlertsCache.prototype,
-      "getIntersectingAlertsWKT",
+      "getIntersectingAlertsForPoint",
+    );
+    getCountyAlerts = sandbox.stub(
+      AlertsCache.prototype,
+      "getAlertsForCountyFIPS",
     );
 
     fetch.resolves(response);
@@ -46,6 +56,7 @@ describe("alert data module", () => {
 
   afterEach(() => {
     getIntersection.restore();
+    getCountyAlerts.restore();
   });
 
   describe("after initial setup", () => {
@@ -61,14 +72,14 @@ describe("alert data module", () => {
       });
 
       it("updates metadata but does NOT update alerts if there is an error", async () => {
-        const before = await alertHandler({
+        const before = await getAlertsForPoint({
           point: { latitude: 3, longitude: 4 },
           place: { timezone: "America/Chicago" },
         });
 
         updateFromBackground({ action: "error" });
 
-        const actual = await alertHandler({
+        const actual = await getAlertsForPoint({
           point: { latitude: 3, longitude: 4 },
           place: { timezone: "America/Chicago" },
         });
@@ -80,7 +91,7 @@ describe("alert data module", () => {
         updateFromBackground({ action: "error" });
         updateFromBackground({ action: "remove", hash: "test" });
 
-        const actual = await alertHandler({
+        const actual = await getAlertsForPoint({
           point: { latitude: 3, longitude: 4 },
           place: { timezone: "America/Chicago" },
         });
@@ -89,85 +100,120 @@ describe("alert data module", () => {
       });
     });
 
-    describe("the main alert function", () => {
+    it("get alerts for point", async () => {
+      const now = dayjs();
+      getIntersection.callsFake(() => [
+        {
+          id: "one",
+          event: "Severe Meatballstorm Warning",
+          sent: now,
+          effective: now,
+          onset: now,
+          expires: now,
+          ends: now,
+          finish: now,
+          metadata: {
+            level: { priority: 1 },
+          },
+        },
+      ]);
+
+      const actual = await getAlertsForPoint({
+        point: { latitude: 10, longitude: 10 },
+        place: { timezone: "America/New_York" },
+      });
+
+      expect(actual.items[0].id).to.equal("one");
+    });
+
+    it("get alerts for county FIPS", async () => {
+      const now = dayjs();
+      getCountyAlerts.callsFake(() => [
+        {
+          id: "fippity fips",
+          event: "Sandwich Alert",
+          sent: now,
+          effective: now,
+          onset: now,
+          expires: now,
+          ends: now,
+          finish: now,
+          metadata: {
+            level: { priority: 1 },
+          },
+        },
+      ]);
+
+      const actual = await getAlertsForCountyFIPS("33333", {
+        timezone: "America/New_York",
+      });
+
+      expect(actual.items[0].id).to.equal("fippity fips");
+    });
+
+    describe("alert post-processing function", () => {
       describe("correctly formats alert timing information", async () => {
-        beforeEach(() => {
-          // Use a fixed date. The timezone here is UTC-600, or Mountain
-          // Daylight. Our tests below will be in Central Daylight. Having these
-          // be different assures we're propertly using the user's timezone.
-          const alertDay = dayjs.utc("2024-09-03T07:13:00-0600");
+        // Use a fixed date. The timezone here is UTC-600, or Mountain
+        // Daylight. Our tests below will be in Central Daylight. Having these
+        // be different assures we're propertly using the user's timezone.
+        const alertDay = dayjs.utc("2024-09-03T07:13:00-0600");
 
-          const start = alertDay;
-          const end = alertDay.add(2, "hours").add(31, "minutes");
+        const start = alertDay;
+        const end = alertDay.add(2, "hours").add(31, "minutes");
 
-          const alert = {
-            id: "one",
-            event: "Severe Meatballstorm Warning",
-            sent: dayjs().subtract(1, "minute"),
-            effective: dayjs().subtract(1, "minute"),
-            onset: start,
-            expires: end,
-            ends: end,
-            finish: end,
-            metadata: {
-              level: { priority: 1 },
-            },
+        const cachedAlert = {
+          id: "one",
+          event: "Severe Meatballstorm Warning",
+          sent: dayjs().subtract(1, "minute"),
+          effective: dayjs().subtract(1, "minute"),
+          onset: start,
+          expires: end,
+          ends: end,
+          finish: end,
+          metadata: {
+            level: { priority: 1 },
+          },
+          geometry: {
+            type: "Feature",
+            properties: {},
             geometry: {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "Polygon",
-                coordinates: [
-                  [
-                    [0, 0],
-                    [2, 0],
-                    [2, 2],
-                    [0, 2],
-                    [0, 0],
-                  ],
+              type: "Polygon",
+              coordinates: [
+                [
+                  [0, 0],
+                  [2, 0],
+                  [2, 2],
+                  [0, 2],
+                  [0, 0],
                 ],
-              },
+              ],
             },
-          };
+          },
+        };
 
-          getIntersection.callsFake(() => Promise.resolve([alert]));
-        });
-
-        afterEach(() => {
-          getIntersection.resetBehavior();
-          getIntersection.resetHistory();
-        });
-
-        it("formats the start time", async () => {
+        it("formats the start time", () => {
           const {
             items: [alert],
-          } = await alertHandler({
-            point: { latitude: 1, longitude: 1 },
-            place: { timezone: "America/Chicago" },
-          });
+          } = postProcessAlerts([cachedAlert], { timezone: "America/Chicago" });
 
           expect(alert.timing.start).to.equal("Tuesday 09/03 8:13 AM CDT");
         });
 
-        it("formats the end time", async () => {
+        it("formats the end time", () => {
           const {
             items: [alert],
-          } = await alertHandler({
-            point: { latitude: 1, longitude: 1 },
-            place: { timezone: "America/Chicago" },
-          });
+          } = postProcessAlerts([cachedAlert], { timezone: "America/Chicago" });
 
           expect(alert.timing.end).to.equal("Tuesday 09/03 10:44 AM CDT");
         });
       });
 
       describe("correctly sets the highest alert level", () => {
-        const addAlerts = (...types) =>
-          types.map((type) => {
-            const hash = `${Date.now()}${Math.random()}`;
+        const createAlerts = (...types) =>
+          types.map((type, i) => {
             const time = dayjs();
 
-            const alert = {
+            return {
               geometry: {
                 type: "Feature",
                 properties: {},
@@ -184,7 +230,7 @@ describe("alert data module", () => {
                   ],
                 },
               },
-              id: "one",
+              id: `alert ${i}`,
               sent: time,
               effective: time,
               onset: time,
@@ -194,9 +240,6 @@ describe("alert data module", () => {
               event: type,
               metadata: alertKinds.get(type.toLowerCase()),
             };
-
-            updateFromBackground({ action: "add", hash, alert });
-            return alert;
           });
 
         afterEach(() => {
@@ -205,51 +248,42 @@ describe("alert data module", () => {
         });
 
         it("when one of them is a warning", async () => {
-          const alerts = addAlerts(
+          const alerts = createAlerts(
             "Severe Thunderstorm Warning",
             "Severe Thunderstorm Watch",
             "severe weather statement",
             "avalanche advisory",
           );
 
-          getIntersection.resolves(alerts);
-
-          const { highestLevel: actual } = await alertHandler({
-            point: { latitude: 1, longitude: 1 },
-            place: { timezone: "America/Chicago" },
+          const { highestLevel: actual } = await postProcessAlerts(alerts, {
+            timezone: "America/Chicago",
           });
 
           expect(actual).to.equal("warning");
         });
 
         it("when there are no warnings, but at least one watch", async () => {
-          const alerts = addAlerts(
+          const alerts = createAlerts(
             "Severe Thunderstorm Watch",
             "severe weather statement",
             "avalanche advisory",
           );
 
-          getIntersection.resolves(alerts);
-
-          const { highestLevel: actual } = await alertHandler({
-            point: { latitude: 1, longitude: 1 },
-            place: { timezone: "America/Chicago" },
+          const { highestLevel: actual } = await postProcessAlerts(alerts, {
+            timezone: "America/Chicago",
           });
 
           expect(actual).to.equal("watch");
         });
 
         it("when there are no warnings or watches", async () => {
-          const alerts = addAlerts(
+          const alerts = createAlerts(
             "severe weather statement",
             "avalanche advisory",
           );
 
-          getIntersection.resolves(alerts);
-
-          const { highestLevel: actual } = await alertHandler({
-            point: { latitude: 1, longitude: 1 },
-            place: { timezone: "America/Chicago" },
+          const { highestLevel: actual } = await postProcessAlerts(alerts, {
+            timezone: "America/Chicago",
           });
 
           expect(actual).to.equal("other");
