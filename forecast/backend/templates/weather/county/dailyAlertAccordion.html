@@ -1,19 +1,9 @@
 <div id="county-daily-alert-container">
-  <div id="county-daily-alert-container-day-all">
+  <div id="county-daily-alert-container">
     <wx-alerts class="wx-alerts-county-daily">
     {% for alert in data.alerts.items %}
-      {% include "weather/partials/alert-accordion.html" with alert=alert icon="true" %}
+      {% include "weather/partials/alert-accordion.html" with alert=alert icon="true" alert_days=alert.alertDays %}
     {% endfor %}
     </wx-alerts>
   </div>
-  {% for day in data.alertDays %}
-    <div id="county-daily-alert-container-day-{{ forloop.counter }}"
-         class="display-none">
-      <wx-alerts class="wx-alerts-county-daily">
-      {% for alert in day.alerts %}
-        {% include "weather/partials/alert-accordion.html" with alert=data.alerts.items|item_at_index:alert idprefix="day-"|add:day.day icon="true" %}
-      {% endfor %}
-      </wx-alerts>
-    </div>
-  {% endfor %}
 </div>

@@ -49,6 +49,9 @@ export const getCountyData = async (fips) => {
     const alerts = await getAlertsForCountyFIPS(fips, {
       timezone: county.timezone,
     });
+    alerts.items.forEach((alert) => {
+      alert.alertDays = [];
+    });
 
     const today = dayjs().tz(county.timezone).startOf("day");
 
@@ -68,6 +71,7 @@ export const getCountyData = async (fips) => {
               // indefinite alerts)
               if (alert.finish === null || alert.finish.isSameOrAfter(start)) {
                 // Then we keep this one
+                alert.alertDays.push(day + 1);
                 return index;
               }
             }

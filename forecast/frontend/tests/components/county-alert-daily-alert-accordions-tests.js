@@ -7,36 +7,42 @@ describe("county daily alert accordions", () => {
     );
   });
 
-  const containerIds = [
-    "county-daily-alert-container-day-all",
-    "county-daily-alert-container-day-1",
-    "county-daily-alert-container-day-2",
-    "county-daily-alert-container-day-3",
-    "county-daily-alert-container-day-4",
-    "county-daily-alert-container-day-5",
-  ];
-
   beforeEach(() => {
     document.body.innerHTML = `
-    <div id="county-daily-alert-container">
-      <div id="county-daily-alert-container-day-all"></div>
-      ${containerIds.map((id) => `<div id="${id}" class="display-none"></div>`)}
-    </div>
+    <wx-alerts>
+      <div data-alert-day-1></div>
+      <div data-alert-day-1></div>
+      <div data-alert-day-2></div>
+      <div data-alert-day-3></div>
+      <div data-alert-day-3></div>
+      <div data-alert-day-3></div>
+      <div data-alert-day-4></div>
+      <div data-alert-day-4></div>
+    </wx-alerts>
     `;
   });
 
-  it("does nothing if there's not an associated target", () => {
+  it("hides every alert if there's not an associated target", () => {
     window.dispatchEvent(
-      new CustomEvent("wx-tab-focused", { detail: { id: "day-32-tab" } }),
+      new CustomEvent("wx-tab-focused", {
+        detail: { dataset: { alertDay: "day-32-tab" } },
+      }),
     );
 
-    [false, true, true, true, true, true].forEach((hidden, index) => {
-      expect(
-        document
-          .getElementById(containerIds[index])
-          .classList.contains("display-none"),
-      ).to.equal(hidden);
-    });
+    const hiddenStatus = [...document.querySelectorAll("wx-alerts > div")].map(
+      (node) => node.classList.contains("display-none"),
+    );
+
+    expect(hiddenStatus).to.eql([
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+    ]);
   });
 
   it("displays the correct accordion container", () => {
@@ -46,29 +52,45 @@ describe("county daily alert accordions", () => {
       }),
     );
 
-    [true, true, true, false, true, true].forEach((hidden, index) => {
-      expect(
-        document
-          .getElementById(containerIds[index])
-          .classList.contains("display-none"),
-      ).to.equal(hidden);
-    });
-  });
-
-  it("if no ID is provided, selects the first tab", () => {
-    // First, hide the first tab.
-    document.getElementById(containerIds[0]);
-
-    window.dispatchEvent(
-      new CustomEvent("wx-tab-focused", { detail: { id: "" } }),
+    const hiddenStatus = [...document.querySelectorAll("wx-alerts > div")].map(
+      (node) => node.classList.contains("display-none"),
     );
 
-    [false, true, true, true, true, true].forEach((hidden, index) => {
-      expect(
-        document
-          .getElementById(containerIds[index])
-          .classList.contains("display-none"),
-      ).to.equal(hidden);
-    });
+    expect(hiddenStatus).to.eql([
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+    ]);
+  });
+
+  it("if the day is set to 'all', selects the first tab", () => {
+    // First, hide the first tab.
+    document.querySelector("wx-alerts > div").classList.add("display-none");
+
+    window.dispatchEvent(
+      new CustomEvent("wx-tab-focused", {
+        detail: { dataset: { alertDay: "all" } },
+      }),
+    );
+
+    const hiddenStatus = [...document.querySelectorAll("wx-alerts > div")].map(
+      (node) => node.classList.contains("display-none"),
+    );
+
+    expect(hiddenStatus).to.eql([
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ]);
   });
 });
