@@ -41,25 +41,29 @@ class TestViews(TestCase):
             state="NY",
             point=GEOSGeometry("POINT(30 30)"),
         )
-        spatial.WeatherCountyWarningAreas.objects.create(
+        cwa = spatial.WeatherCountyWarningAreas.objects.create(
             wfo="TST",
             shape=GEOSGeometry("POLYGON((3 7, 7 7, 7 3, 3 3, 3 7))"),
         )
         spatial.WeatherCounties.objects.create(
             countyname="Upper left",
             shape=GEOSGeometry("POLYGON((0 10, 5 10, 5 5, 0 5, 0 10))"),
+            primarywfo=cwa,
         )
         spatial.WeatherCounties.objects.create(
             countyname="Upper right",
             shape=GEOSGeometry("POLYGON((5 10, 10 10, 10 5, 5 5, 5 10))"),
+            primarywfo=cwa,
         )
         spatial.WeatherCounties.objects.create(
             countyname="Lower left",
             shape=GEOSGeometry("POLYGON((0 5, 5 5, 5 0, 0 0, 0 5))"),
+            primarywfo=cwa,
         )
         spatial.WeatherCounties.objects.create(
             countyname="Lower right",
             shape=GEOSGeometry("POLYGON((5 5, 10 5, 10 0, 5 0, 5 5))"),
+            primarywfo=cwa,
         )
 
         # Create example weather story and
@@ -67,8 +71,8 @@ class TestViews(TestCase):
         self.weather_story = WeatherStory.objects.create(
             title="Example weather story",
             wfo=self.wfo,
-            starttime = datetime.now(tz=timezone.utc).isoformat(),
-            endtime = (datetime.now(tz=timezone.utc) + timedelta(days=1)).isoformat(),
+            starttime=datetime.now(tz=timezone.utc).isoformat(),
+            endtime=(datetime.now(tz=timezone.utc) + timedelta(days=1)).isoformat(),
         )
         self.situation_report = SituationReport.objects.create(
             wfo=self.wfo,
@@ -120,7 +124,7 @@ class TestViews(TestCase):
         mock_get_current_weather_story.assert_called_once_with(self.wfo)
         self.assertEqual(
             response.context["point"],
-             {
+            {
                 "grid": {"wfo": "TST"},
                 "wfo": self.wfo,
                 "isMarine": False,
@@ -128,7 +132,6 @@ class TestViews(TestCase):
         )
         self.assertEqual(response.context["weather_story"], None)
         self.assertEqual(response.context["situation_report"], self.situation_report)
-
 
     @mock.patch("wx_stories_api.models.SituationReport.objects.current")
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -145,7 +148,7 @@ class TestViews(TestCase):
         mock_get_current_situation_report.assert_called_once_with(self.wfo)
         self.assertEqual(
             response.context["point"],
-             {
+            {
                 "grid": {"wfo": "TST"},
                 "wfo": self.wfo,
                 "isMarine": False,
@@ -162,7 +165,6 @@ class TestViews(TestCase):
             "status": 404,
             "reason": "out-of-bounds",
         }
-
 
         response = self.client.get("/point/11.1/22.2", follow=True)
 

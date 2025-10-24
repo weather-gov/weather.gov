@@ -11,11 +11,16 @@ class TestCountyViews(TestCase):
 
     def setUp(self):
         """Test setup."""
+        cwa = spatial.WeatherCountyWarningAreas.objects.create(
+            shape=GEOSGeometry("POINT(0 0)"),
+        )
+
         self.county1 = spatial.WeatherCounties.objects.create(
             countyname="Leatherface",
             countyfips="11111",
             st="MA",
             shape=GEOSGeometry("POINT(0 0)"),
+            primarywfo=cwa,
         )
         self.county2 = spatial.WeatherCounties.objects.create(
             # I know.
@@ -23,24 +28,28 @@ class TestCountyViews(TestCase):
             countyfips="22222",
             st="MA",
             shape=GEOSGeometry("POINT(0 0)"),
+            primarywfo=cwa,
         )
         self.county3 = spatial.WeatherCounties.objects.create(
             countyname="Sanderson Sisters",
             countyfips="33333",
             st="MA",
             shape=GEOSGeometry("POINT(0 0)"),
+            primarywfo=cwa,
         )
         self.county4 = spatial.WeatherCounties.objects.create(
             countyname="Anansi",
             countyfips="44444",
             st="GH",
             shape=GEOSGeometry("POINT(0 0)"),
+            primarywfo=cwa,
         )
         self.county5 = spatial.WeatherCounties.objects.create(
             countyname="Keelut",
             countyfips="55555",
             st="AK",
             shape=GEOSGeometry("POINT(0 0)"),
+            primarywfo=cwa,
         )
 
     def test_index(self):

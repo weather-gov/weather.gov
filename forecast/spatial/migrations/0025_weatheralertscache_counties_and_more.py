@@ -5,9 +5,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    def truncate_alert_cache(apps, schema):
-        apps.get_model("spatial","weatheralertscache").objects.truncate()
-
     dependencies = [
         ('spatial', '0024_alter_weathercounties_state'),
     ]

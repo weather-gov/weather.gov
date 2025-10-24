@@ -40,6 +40,26 @@ SHAPE_TZ_TO_IANA = {
     "F": "Pacific/Kosrae",
 }
 
+COUNTY_FIPS_TO_PRIMARY_WFO_MAP = {
+    "23025": "GYX",
+    "36011": "BUF",
+    "06071": "VEF",
+    "04007": "PSR",
+    "04021": "PSR",
+    "06091": "STO",
+    "06065": "SGX",
+    "06109": "HNX",
+    "06057": "STO",
+    "06003": "STO",
+    "06063": "STO",
+    "06035": "REV",
+    "06049": "MFR",
+    "06017": "STO",
+    "06061": "STO",
+    "32023": "VEF",
+    "49037": "GJT",
+}
+
 
 class CustomLayerMapping(LayerMapping):
     """Custom class to support adding static data to spatial layers."""
