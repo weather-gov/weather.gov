@@ -60,23 +60,15 @@ compile-translations:
 django-restart:
   docker compose restart web
 
-# Dump spatial data
-[group("django management")]
-dump-spatial:
-  docker compose exec web python manage.py dumpdata spatial > forecast/spatial/management/commands/__cache/dump.json
-
 # Load spatial data; pass "clean" for clean load
 [group("django management")]
 [script]
 load-spatial arg="":
   if [ "{{arg}}" = "clean" ]; then
-    docker compose exec web python manage.py loadspatial
-  elif [[ -f "forecast/spatial/management/commands/__cache/dump.json" ]]; then
-    docker compose exec web python manage.py loaddata spatial/management/commands/__cache/dump.json
+    docker compose exec web python manage.py loadspatial --force
   else
     docker compose exec web python manage.py loadspatial
   fi
-
 
 # Get a Python shell in the Django container
 [group("django management")]
@@ -270,17 +262,13 @@ stop-plantuml:
 
 # Destroys all containers, databases, and volumes and starts over fresh and clean
 [group("dev environment management")]
-zap: dump-spatial && init
+zap: && init
   docker compose down -v
 
 alias scorched-earth := controlled-burn
 # Does what zap does, plus destroys spatial data and docker images
 [group("dev environment management")]
-[script]
 controlled-burn: && init
-  if [[ -f "{{justfile_directory()}}/forecast/spatial/management/commands/__cache/dump.json" ]]; then
-    rm "{{justfile_directory()}}/forecast/spatial/management/commands/__cache/dump.json"
-  fi
   docker compose down -v --rmi all
 
 # Load just states spatial data.
