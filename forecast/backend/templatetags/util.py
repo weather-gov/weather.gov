@@ -8,6 +8,14 @@ from backend.util import mark_safer
 register = template.Library()
 
 
+@register.filter
+def item_at_index(listlike, index):
+    """If the first item is a list, get the index'th item from it."""
+    if isinstance(listlike, list) and isinstance(index, int) and index < len(listlike):
+        return listlike[index]
+    return None
+
+
 @register.simple_tag
 def subtract(first, second):
     """Subtract `first` from `second`, coercing to float and converting empty strings to 0.0."""
