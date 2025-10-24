@@ -30,9 +30,6 @@ ALLOWED_HOSTS = [
     "beta.weather.gov" if cloudgov_space == "prod" else f"weathergov-{cloudgov_space}.app.cloud.gov",
 ]
 
-# override content security policy configuration
-CONTENT_SECURITY_POLICY["DIRECTIVES"]["default-src"] = [SELF, *ALLOWED_HOSTS] # noqa: F405 (imported from base.py)
-
 # Helpers
 def find_cloudgov_library(name):
     """
@@ -152,6 +149,12 @@ STORAGES = {
     },
 }
 set_cors_on_s3_bucket(**s3_options)
+
+s3_image_src = f"https://{s3_credentials["bucket"]}.s3.{s3_credentials["region"]}.amazonaws.com"
+
+# override content security policy configuration
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["default-src"] = [SELF, *ALLOWED_HOSTS] # noqa: F405 (imported from base.py)
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["img-src"] = [SELF, s3_image_src] # noqa: F405 (imported from base.py)
 
 # SAML Settings
 # See noaa_saml/config.py for details
