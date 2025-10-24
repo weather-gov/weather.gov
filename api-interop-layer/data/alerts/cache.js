@@ -1,5 +1,3 @@
-import { geojsonToWKT } from "@terraformer/wkt";
-
 /**
  * AlertsCache
  * -----------------------------------
@@ -75,13 +73,30 @@ export class AlertsCache {
    * Add the provided hash, geometry, and alert data to the
    * cache table.
    */
-  async add(hash, alert, geometry, alertKind = null) {
+  async add({
+    hash,
+    alert,
+    geometry = null,
+    counties = [],
+    states = [],
+    alertKind = null,
+  }) {
     const alertAsString = JSON.stringify(alert);
-    const sql = `INSERT INTO ${this.tableName} (hash, alertJson, shape, alertKind) VALUES($1, $2, ST_TRANSFORM(ST_GeomFromGeoJson($3), 4326), $4);`;
-    return await this.db.query(sql, [hash, alertAsString, geometry, alertKind]);
+    const countiesAsString = JSON.stringify(counties);
+    const statesAsString = JSON.stringify(states);
+
+    const sql = `INSERT INTO ${this.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, ST_TRANSFORM(ST_GeomFromGeoJson($5), 4326), $6);`;
+    return await this.db.query(sql, [
+      hash,
+      alertAsString,
+      countiesAsString,
+      statesAsString,
+      geometry,
+      alertKind,
+    ]);
   }
 
-    /**
+  /**
    * @function getIntersectingAlertsForPoint
    *
    * Given a latitude and longitude, retrieve all alerts that include it.
@@ -92,39 +107,11 @@ export class AlertsCache {
    *                              meters. If unset, no buffer will be added.
    */
   async getIntersectingAlertsForPoint(lat, lon, options) {
-    return this.getIntersectingAlertsWKT(`POINT(${lon} ${lat})`, options);
-  }
-
-    /**
-   * @function getIntersectingAlertsForGeoJSON
-   *
-   * Given a GeoJSON geometry, retrieve all alerts that include it.
-   * Optionally include a buffer around the geometry.
-   *
-   * @arg {Object} options
-   * @arg {Number} options.buffer How much buffer to add to the point, in
-   *                              meters. If unset, no buffer will be added.
-   */
-  async getIntersectionAlertsForGeoJSON(geoJSON, options) {
-    return this.getIntersectingAlertsWKT(geojsonToWKT(geoJSON), options);
-  }
-
-  /**
-   * @function getIntersectingAlertsWKT
-   *
-   * Given a geometry in WKT format, retrieve all alerts that include it.
-   * Optionally include a buffer around the geometry.
-   *
-   * @arg {Object} options
-   * @arg {Number} options.buffer How much buffer to add to the point, in
-   *                              meters. If unset, no buffer will be added.
-   */
-  async getIntersectingAlertsWKT(wkt, options) {
     const inputGeometry = [
       // The ::geography instructs postgis to treat the object as a geographic
       // shape instead of geometric. That way any buffering will be in meters
       // rather than degrees.
-      `ST_GeomFromText('${wkt}',4326)::geography`,
+      `ST_GeomFromText('POINT(${lon} ${lat})',4326)::geography`,
     ];
     if (options?.buffer) {
       inputGeometry.unshift("ST_Buffer(");
@@ -144,11 +131,15 @@ export class AlertsCache {
     );
   }
 
-  /**
-   * Drop the cache table from the database entirely.
-   */
-  async dropCacheTable() {
-    const sql = `DROP TABLE IF EXISTS ${this.tableName}`;
-    return this.db.query(sql);
+  async getAlertsForCountyFIPS(fips) {
+    const sql = `SELECT alertJSON, ST_AsGeoJSON(shape) as geometry FROM ${this.tableName} WHERE counties::jsonb ? $1`;
+
+    const response = await this.db.query(sql, [fips]);
+    const results = response.rows;
+    return results.map((result) =>
+      Object.assign({}, result.alertjson, {
+        geometry: JSON.parse(result.geometry),
+      }),
+    );
   }
 }

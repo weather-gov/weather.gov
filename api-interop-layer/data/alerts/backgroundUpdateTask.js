@@ -134,12 +134,12 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
       // For caching purposes, we store these alerts with the alertKind and no
       // valid geometry. This prevents us from reprocessing them the next round, but
       // also prevents them from being retrieved from the cache for any given point.
-      alertsCache.add(
-        rawAlert.properties.hash,
+      alertsCache.add({
+        hash: rawAlert.properties.hash,
         alert,
-        null,
-        alert.metadata.kind,
-      );
+        geometry: null,
+        alertKind: alert.metadata.kind,
+      });
 
       continue;
     }
@@ -195,16 +195,23 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
       continue;
     }
 
+    const counties =
+      rawAlert.properties.geocode?.SAME?.map((sameCode) => sameCode.slice(1)) ??
+      [];
+    const states = counties.map((countyfips) => countyfips.slice(0, 2));
+
     const geometry = await generateAlertGeometry(db, rawAlert);
 
     // Add the alert to the cache
     if (geometry) {
-      alertsCache.add(
-        rawAlert.properties.hash,
+      alertsCache.add({
+        hash: rawAlert.properties.hash,
         alert,
         geometry,
-        alert.metadata.kind,
-      );
+        counties,
+        states,
+        alertKind: alert.metadata.kind,
+      });
 
       parent.postMessage({
         action: "log",

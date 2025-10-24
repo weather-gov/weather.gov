@@ -38,6 +38,7 @@ describe("route: county data", () => {
       const fipsRegex = new RegExp(county.schema.params.fips.pattern);
 
       expect(fipsRegex.test("12345")).to.be.true;
+      expect(fipsRegex.test("01234")).to.be.true;
       expect(fipsRegex.test("123")).to.be.false;
       expect(fipsRegex.test("123456")).to.be.false;
       expect(fipsRegex.test("12EAS")).to.be.false;

@@ -24,10 +24,19 @@ describe("alert background processing module", () => {
     getHashesStub = sandbox.stub(AlertsCache.prototype, "getHashes");
     getHashesStub.callsFake(() => storedHashes);
     addAlertStub = sandbox.stub(AlertsCache.prototype, "add");
-    addAlertStub.callsFake((hash, alert, geometry, alertKind) => {
-      storedHashes.push(hash);
-      storedAlerts[hash] = [hash, alert, geometry, alertKind];
-    });
+    addAlertStub.callsFake(
+      ({ hash, alert, counties, states, geometry, alertKind }) => {
+        storedHashes.push(hash);
+        storedAlerts[hash] = [
+          hash,
+          alert,
+          geometry,
+          alertKind,
+          counties,
+          states,
+        ];
+      },
+    );
     removeAlertsStub = sandbox.stub(AlertsCache.prototype, "removeByHashes");
     removeAlertsStub.callsFake((hashes) => {
       hashes.forEach((hash) => {

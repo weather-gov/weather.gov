@@ -81,49 +81,31 @@ describe("AlertsCache tests", () => {
     const geometry = { some: "geojson-object" };
     const kind = "land";
 
-    const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, shape, alertKind) VALUES($1, $2, ST_TRANSFORM(ST_GeomFromGeoJson($3), 4326), $4);`;
+    const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, ST_TRANSFORM(ST_GeomFromGeoJson($5), 4326), $6);`;
 
     global.test.database.query
-      .withArgs(query, [hash, JSON.stringify(alert), geometry, kind])
+      .withArgs(query, [
+        hash,
+        JSON.stringify(alert),
+        "[]",
+        "[]",
+        geometry,
+        kind,
+      ])
       .resolves("INSERT WORKED");
 
-    const actual = await alertsCache.add(hash, alert, geometry, "land");
+    const actual = await alertsCache.add({
+      hash,
+      alert,
+      geometry,
+      alertKind: "land",
+    });
 
     expect(actual).to.equal("INSERT WORKED");
   });
 
   it("#getIntersectingAlertsForPoint", async () => {
     const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,111), shape);`;
-
-    global.test.database.query.withArgs(query).resolves({ rows: [] });
-
-    await alertsCache.getIntersectingAlertsForPoint(1, 3, {
-      buffer: 111,
-    });
-
-    expect(global.test.database.query.calledWith(query)).to.be.true;
-  });
-
-  it("#getIntersectingAlertsForGeoJSON", async () => {
-    // QUIRKY NOTE! The library we use to convert GeoJSON to WKT puts a space
-    // between the type name and the coordinates; e.g., "POINT (x y)" instead
-    // of "POINT(x y)". We need to be sure to account for that here.
-    const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT (44 55)',4326)::geography,333), shape);`;
-
-    global.test.database.query.withArgs(query).resolves({ rows: [] });
-
-    await alertsCache.getIntersectionAlertsForGeoJSON(
-      { type: "Point", coordinates: [44, 55] },
-      {
-        buffer: 333,
-      },
-    );
-
-    expect(global.test.database.query.calledWith(query)).to.be.true;
-  });
-
-  it("#getIntersectingAlertsWKT", async () => {
-    const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,298), shape);`;
 
     const output = [
       {
@@ -147,19 +129,42 @@ describe("AlertsCache tests", () => {
     ];
     global.test.database.query.withArgs(query).resolves({ rows: output });
 
-    const result = await alertsCache.getIntersectingAlertsWKT("POINT(3 1)", {
-      buffer: 298,
+    const result = await alertsCache.getIntersectingAlertsForPoint(1, 3, {
+      buffer: 111,
     });
 
     expect(result).to.eql(expected);
   });
 
-  it("#dropCacheTable", async () => {
-    const query = `DROP TABLE IF EXISTS ${alertsCache.tableName}`;
-    global.test.database.query.withArgs(query).resolves("TABLE DROPPED");
+  it("#getAlertsForCountyFIPS", async () => {
+    const query = `SELECT alertJSON, ST_AsGeoJSON(shape) as geometry FROM ${alertsCache.tableName} WHERE counties::jsonb ? $1`;
 
-    const result = await alertsCache.dropCacheTable();
+    const output = [
+      {
+        alertjson: { name: "alert1" },
+        geometry: JSON.stringify({ name: "geometry1" }),
+      },
+      {
+        alertjson: { name: "alert2" },
+        geometry: JSON.stringify({ name: "geometry2" }),
+      },
+    ];
+    const expected = [
+      {
+        name: "alert1",
+        geometry: { name: "geometry1" },
+      },
+      {
+        name: "alert2",
+        geometry: { name: "geometry2" },
+      },
+    ];
+    global.test.database.query
+      .withArgs(query, ["55443"])
+      .resolves({ rows: output });
 
-    expect(result).to.equal("TABLE DROPPED");
+    const result = await alertsCache.getAlertsForCountyFIPS("55443");
+
+    expect(result).to.eql(expected);
   });
 });

@@ -1,7 +1,7 @@
 import openDatabase from "../db.js";
 import { createLogger } from "../../util/monitoring/index.js";
 import { getGHWOData } from "../ghwo/index.js";
-import { getAlertsForGeoJSON } from "../alerts/index.js";
+import { getAlertsForCountyFIPS } from "../alerts/index.js";
 import dayjs from "../../util/day.js";
 
 const logger = createLogger("county data");
@@ -46,7 +46,7 @@ export const getCountyData = async (fips) => {
 
     const ghwo = await getGHWOData(fips);
 
-    const alerts = await getAlertsForGeoJSON(county.shape, {
+    const alerts = await getAlertsForCountyFIPS(fips, {
       timezone: county.timezone,
     });
 
