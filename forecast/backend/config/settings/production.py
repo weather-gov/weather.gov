@@ -12,6 +12,7 @@ import boto3
 import environs
 from cfenv import AppEnv
 from csp.constants import SELF
+from django.core.exceptions import ImproperlyConfigured
 
 from noaa_saml.config import get_cloud_gov_settings
 
@@ -88,6 +89,20 @@ def set_cors_on_s3_bucket(bucket_name=None, region_name=None, access_key=None, s
 key_service = AppEnv().get_service(name=f"{cloudgov_space}-credentials")
 rds_service = AppEnv().get_service(name=f"weathergov-rds-{cloudgov_space}")
 s3_service = AppEnv().get_service(name=f"weathergov-s3-{cloudgov_space}")
+
+def ensure_environment_variables_are_present(envvars):
+    """Check for required environment variables."""
+    for env in envvars:
+        if not key_service.credentials.get(env):
+            raise ImproperlyConfigured
+
+# we want to bail out if any of these are not set.
+ensure_environment_variables_are_present([
+    "django_secret_key",
+    "sp_public_key",
+    "sp_private_key",
+    "allowed_ips",
+])
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = key_service.credentials.get("django_secret_key")
