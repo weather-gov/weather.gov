@@ -1,6 +1,8 @@
 {% extends "weather/page.html" %}
 {% block end_js %}
   <script type="module" src="{% static 'js/components/Tabs.js' %}"></script>
+  <script type="module"
+          src="{% static 'js/components/county-alert-daily-alert-accordions.js' %}"></script>
 {% endblock %}
 {% block page_content %}
   <div class="bg-primary-darker">
@@ -36,6 +38,11 @@
       <div id="alert-day"
            role="tabpanel"
            aria-labelledby="alert-day-all-button"
-           class="margin-top-2">Here is where alert details will go</div>
+           class="margin-top-2 grid-container">
+        <div class="grid-row">
+          <div class="grid-col-12 tablet:grid-col-7">map</div>
+          <div class="grid-col-12 tablet:grid-col-5">{% include "weather/county/dailyAlertAccordion.html" %}</div>
+        </div>
+      </div>
     </div>
   {% endblock %}
