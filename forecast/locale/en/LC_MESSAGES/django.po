@@ -643,3 +643,20 @@ msgstr "Saturday"
 msgid "county.alert-tabs.day.Sunday.01"
 msgstr "Sunday"
 
+msgid "ghwo.table.caption.header.01"
+msgstr "7 day risk overview"
+
+msgid "ghwo.table.caption.description.01"
+msgstr "The graphic shows the daily risk summary for 7 days. Daily risk is based on highest risk factor for that day."
+
+msgid "ghwo.table.row.risk-summary.01"
+msgstr "Daily risk summary"
+
+msgid "ghwo.table.legend.low-risk.01"
+msgstr "Low risk"
+
+msgid "ghwo.table.legend.high-risk.01"
+msgstr "High risk"
+
+msgid "ghwo.table.legend.label.01"
+msgstr "table legend"

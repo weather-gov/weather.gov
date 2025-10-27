@@ -1,4 +1,6 @@
+import json
 from datetime import datetime, timedelta, timezone
+from os import path
 from unittest import mock
 
 from django.contrib.gis.geos import GEOSGeometry
@@ -15,6 +17,9 @@ class TestViews(TestCase):
 
     def setUp(self):
         """Test setup."""
+        ghwo_data_path = path.join(path.dirname(__file__), "data", "county_ghwo.json")
+        with open(ghwo_data_path) as fp:
+            self.county_ghwo_data = json.loads(fp.read())
         self.region = models.Region.objects.create(name="Test Region")
         self.wfo = models.WFO.objects.create(
             code="TST",
@@ -350,7 +355,7 @@ class TestViews(TestCase):
     ):
         """Requesting a GHWO county details page for invalid county returns 404."""
         mock_get_county_list.return_value = []
-        mock_get_ghwo_data_for_county.return_value = {}
+        mock_get_ghwo_data_for_county.return_value = self.county_ghwo_data
         mock_get_county.side_effect = spatial.WeatherCounties.DoesNotExist
 
         response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
@@ -393,7 +398,7 @@ class TestViews(TestCase):
     ):
         """Test the success case for rerquesting a GHWO county details page."""
         mock_get_county_list.return_value = []
-        mock_get_ghwo_data_for_county.return_value = {}
+        mock_get_ghwo_data_for_county.return_value = self.county_ghwo_data
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
@@ -620,7 +625,7 @@ class TestViews(TestCase):
     def test_wx_ghwo_counties_success(self, mock_get_ghwo, mock_get_county):
         """Test successful request for wx ghwo counties partial."""
         mock_get_county.return_value = mock.MagicMock()
-        mock_get_ghwo.return_value = {}
+        mock_get_ghwo.return_value = self.county_ghwo_data
 
         response = self.client.get(
             reverse("wx_ghwo_counties", kwargs={"county_fips": "valid"}),
