@@ -60,7 +60,7 @@ describe("county data index", () => {
     });
 
     beforeEach(() => {
-      db.query.resolves({
+      db.query.onFirstCall().resolves({
         rows: [
           {
             state: "FR",
@@ -68,9 +68,12 @@ describe("county data index", () => {
             county: "Benjaminsonville",
             timezone: "America/New_York",
             shape: `{ "type": "oblong" }`,
+            primarywfo: 37,
           },
         ],
       });
+
+      db.query.onSecondCall().resolves({ rows: [{ wfo: "FRA" }] });
     });
 
     after(() => {
@@ -96,6 +99,7 @@ describe("county data index", () => {
           statefips: "11",
           timezone: "America/New_York",
           shape: { type: "oblong" },
+          primarywfo: "FRA",
         },
         hazardOutlook: "mercy sakes",
         alerts: { items: [] },

@@ -19,6 +19,7 @@ export const getCountyData = async (fips) => {
         `
         SELECT st as state,
           countyname as county,
+          primarywfo_id as primarywfo,
           timezone,
           ST_AsGeoJSON(ST_Simplify(shape,0.003)) AS shape,
           (SELECT name FROM weathergov_geo_states a WHERE a.state=b.st) as statename
@@ -43,6 +44,17 @@ export const getCountyData = async (fips) => {
         error: `No county found for FIPS ${fips}`,
       };
     }
+
+    county.primarywfo = await db
+      .query(
+        `
+      SELECT wfo
+      FROM weathergov_geo_cwas
+      WHERE id=$1
+      `,
+        [county.primarywfo],
+      )
+      .then(({ rows }) => (rows.length > 0 ? rows[0].wfo : null));
 
     const ghwo = await getGHWOData(fips);
 
