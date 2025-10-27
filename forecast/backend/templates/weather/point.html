@@ -119,8 +119,7 @@
             </div>
           </div>
           <!-- Weather Story Image here -->
-          {#  set weather_story =  drupal_block("weathergov_weather_story_image", { wfo: point.grid.wfo }) #}
-          {% if  weather_story %}
+          {% if weather_story %}
             {% include 'weather/partials/weather-story.html' %}
           {% else %}
             <div class="grid-container margin-top-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
