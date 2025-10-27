@@ -1,0 +1,203 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+.ghwo-chiclet[data-risk-level="0"] {
+    background-color: #F1F3F6;
+    border-color: #F1F3F6;
+}
+
+.ghwo-chiclet[data-risk-level="1"]{
+    background-color: color("green-10v");
+    border-color: color("green-10v");
+
+    &:hover {
+        background-color: color("green-20v");
+        border-color: color("green-20v");
+    }
+
+    &:active {
+        background-color: color("green-20v");
+        border-color: color("green-50v");
+    }
+}
+
+.ghwo-chiclet[data-risk-level="2"]{
+    background-color: color("yellow-20v");
+    border-color: color("yellow-20v");
+
+    &:hover {
+        background-color: color("yellow-30v");
+        border-color: color("yellow-30v");
+    }
+
+    &:active {
+         background-color: color("yellow-30v");
+         border-color: color("yellow-50v");
+    }
+}
+
+.ghwo-chiclet[data-risk-level="3"]{
+    background-color: color("orange-30v");
+    border-color: color("orange-30v");
+
+    &:hover {
+        background-color: color("orange-40v");
+        border-color: color("orange-40v");
+    }
+
+    &:active {
+        background-color: color("orange-40v");
+        border-color: color("orange-60v");
+    }
+}
+
+.ghwo-chiclet[data-risk-level="4"]{
+    background-color: color("red-50v");
+    border-color: color("red-50v");
+    color: white;
+
+    &:hover {
+        background-color: color("red-60v");
+        border-color: color("red-60v");
+    }
+
+    &:active {
+        background-color: color("red-60v");
+        border-color: color("red-80v");
+    }
+}
+
+
+.ghwo-chiclet[data-risk-level="5"]{
+    background-color: color("violet-warm-50v");
+    border-color: color("violet-warm-50v");
+    color: white;
+
+    &:hover {
+        background-color: color("violet-warm-70v");
+        border-color: color("violet-warm-70v");
+    }
+
+    &:active {
+        background-color: color("violet-warm-70v");
+        border-color: color("violet-warm-90");
+    }
+}
+
+.ghwo-risk-summary-table {
+    thead > tr > th:first-child,
+    tbody > tr > th:first-child {
+        display: none;
+    }
+
+    .ghwo-chiclet {
+        pointer-events: none;
+    }
+}
+
+.ghwo-chiclet {
+    width: 32px;
+    height: 32px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ghwo-chiclet-wrapper {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.ghwo-chiclet:focus {
+    outline: 0;
+}
+
+/* Styles for the risk legend at bottom of table */
+.ghwo-risk-table-legend {
+    margin-top: units(2);
+
+
+    dl {
+        dt {
+            display: inline;
+        }
+
+        dt::after {
+            content: ":";
+        }
+
+        dd {
+            display: inline;
+            margin-left: 0;
+        }
+
+        dd:first-of-type::after {
+            content: ", ";
+        }
+    }
+
+    .ghwo-risk-table-legend-inner {
+        display: flex;
+        align-items: center;
+    }
+
+    .ghwo-risk-legend-item {
+        display: flex;
+        align-items: center;
+        margin-right: units(2);
+
+        span {
+            @include u-font("mono", "2xs");
+
+            display: block;
+        }
+    }
+}
+
+.ghwo-risk-legend-square {
+    width: units(2);
+    height: units(2);
+    margin-right: 4px;
+    display: inline-block;
+    
+    &[data-risk-level="1"]{
+        background-color: color("green-10v");
+    }
+
+    &[data-risk-level="2"]{
+        background-color: color("yellow-20");
+    }
+
+    &[data-risk-level="3"]{
+        background-color: color("orange-30v");
+    }
+
+    &[data-risk-level="4"]{
+        background-color: color("red-50v");
+    }
+
+    &[data-risk-level="5"]{
+        background-color: color("violet-warm-50v");
+    }
+}
+
+@include at-media("tablet-lg") {
+    .ghwo-risk-summary-table {
+        thead > tr > th:first-child,
+        tbody > tr > th:first-child {
+            display: table-cell;
+        }
+    }
+
+    .ghwo-chiclet {
+        width: 50px;
+        height: 32px;
+    }
+}

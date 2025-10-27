@@ -1,0 +1,95 @@
+{% if error %}
+  <p>There was an error loading the GHWO summary data.</p>
+  <p>{{error}}</p>
+{% else %}
+
+  <h2 class="wx-visual-h2 text-normal text-primary-dark margin-top-4 margin-bottom-2" id="ghwo-summary-table-header">
+    {{ "ghwo.table.caption.header.01"|t }}
+  </h2>
+  <table class="ghwo-risk-summary-table" aria-labelledby="ghwo-summary-table-header">
+    <caption class="margin-bottom-2">
+        <p class="text-left font-sans-sm text-normal margin-y-0">
+          {{ "ghwo.table.caption.description.01"|t }}
+        </p>
+    </caption>
+    <thead>
+      <tr>
+        <th>
+          <div class="display-flex flex-column flex-align-center flex-justify"></div>
+        </th>
+        {% for day in ghwo_days %}
+          <th scope="col">
+            <div class="font-mono-2xs tablet-lg:font-mono-xs text-normal">
+              <span class="display-block">{{day.datetime|date:"D"}}</span>
+              <span class="display-block">{{day.datetime|date:"n"}}/{{day.datetime|date:"j"}}</span>
+            </div>
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">
+          <span class="font-mono-xs padding-right-3 text-normal">
+            {{"ghwo.table.row.risk-summary.01"|t}}
+          </span>
+        </th>
+        {% for day in ghwo_days %}
+          <td>
+            {% if day.highest %}
+              <div class="ghwo-chiclet-wrapper">
+                <div class="ghwo-chiclet" data-risk-level="{{day.highest.level}}"  data-risk-factor="{{day.highest.riskFactor}}">
+                  <span class="font-mono-2xs text-medium">{{day.highest.level}}</span>
+                </div>
+              </div>
+            {% else %}
+              <div class="ghwo-chiclet-wrapper">
+                <div class="ghwo-chiclet" data-risk-level="0"></div>
+              </div>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+  <div class="ghwo-risk-table-legend" aria-label="{{ 'ghwo.table.legend.label.01'|t }}">
+    <div class="ghwo-risk-table-legend-inner" aria-hidden="true">
+      <div class="ghwo-risk-legend-item">
+        <div class="ghwo-risk-legend-square" data-risk-level="1"></div>
+        <span>1</span>
+      </div>
+      <div class="ghwo-risk-legend-item">
+        <div class="ghwo-risk-legend-square" data-risk-level="2"></div>
+        <span>2</span>
+      </div>
+      <div class="ghwo-risk-legend-item">
+        <div class="ghwo-risk-legend-square" data-risk-level="3"></div>
+        <span>3</span>
+      </div>
+      <div class="ghwo-risk-legend-item">
+        <div class="ghwo-risk-legend-square" data-risk-level="4"></div>
+        <span>4</span>
+      </div>
+      <div class="ghwo-risk-legend-item">
+        <div class="ghwo-risk-legend-square" data-risk-level="5"></div>
+        <span>5</span>
+      </div>
+    </div>
+    <dl>
+      <dt>1</dt>
+      <dd>{{ 'ghwo.table.legend.low-risk.01'|t }}</dd>
+      <dt>5</dt>
+      <dd>{{ 'ghwo.table.legend.high-risk.01'|t }}</dd>
+    </dl>
+  </div>
+
+  <hr class="border-0 height-1px bg-base-light margin-top-4">
+
+  {% if debug %}
+    <div class="overflow-x-auto">
+      <pre>
+        {{ghwo_dump}}
+      </pre>
+    </div>
+  {% endif %}
+{% endif %}

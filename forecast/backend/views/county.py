@@ -1,4 +1,3 @@
-import json
 
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -61,7 +60,7 @@ def county_ghwo(request, county_fips):
             "counties": counties,
             "states": states,
             "county": county,
-            "ghwo": json.dumps(ghwo_data, indent=2),
+            "ghwo": ghwo_data,
         },
     )
 

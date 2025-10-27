@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from django.utils.safestring import mark_safe
 from html_sanitizer import Sanitizer
@@ -124,3 +125,22 @@ def disable_logging_for_quieter_tests(func):
         logging.disable(logging.NOTSET)
         return func
     return wrapper
+
+def process_ghwo_daily_summary(ghwo_data):
+    """Process ghwo data into a form usable by the ghwo daily summary partial."""
+    for day in ghwo_data["days"]:
+
+        # We need a datetime object so that the templates
+        # can correctly format strings
+        day["datetime"] = datetime.fromisoformat(day["timestamp"])
+
+        # The highest level for the day is specified by
+        # the value at the 'DailyComposite' key.
+        # Set the highest to None where the composite
+        # is zero
+        highest = {"level": day["DailyComposite"]}
+        if highest["level"] == 0:
+            highest = None
+        day["highest"] = highest
+
+    return ghwo_data

@@ -1,4 +1,3 @@
-import json
 
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -112,7 +111,7 @@ def wx_ghwo_counties(request, county_fips):
             request,
             "weather/partials/ghwo-details.html",
             {
-                "ghwo": json.dumps(ghwo_data, indent=2),
+                "ghwo": ghwo_data,
                 "county": county,
             },
         )

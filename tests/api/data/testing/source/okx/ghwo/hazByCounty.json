@@ -576,7 +576,7 @@
         "Tornado": 0,
         "ConvectiveWind": 0,
         "Hail": 0,
-        "Lightning": 0,
+        "Lightning": 4,
         "ExcessiveRainfall": 0,
         "NonConvectiveWind": 0,
         "Frost/Freeze": 0,
@@ -585,20 +585,20 @@
         "IceAccumulation": 0,
         "SnowSleet": 0,
         "CoastalFlood": 0,
-        "DailyComposite": 0
+        "DailyComposite": 4
       },
       "date:now +149301 seconds": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
         "NonConvectiveWind": 0,
-        "Frost/Freeze": 0,
+        "Frost/Freeze": 3,
         "Fog": 0,
         "FireWeather": 0,
         "IceAccumulation": 0,
         "SnowSleet": 0,
         "CoastalFlood": 0,
-        "DailyComposite": 0
+        "DailyComposite": 3
       },
       "date:now +235701 seconds": {
         "SevereThunderstorm": 0,
@@ -621,28 +621,28 @@
         "Frost/Freeze": 0,
         "FireWeather": 0,
         "IceAccumulation": 0,
-        "SnowSleet": 0,
-        "DailyComposite": 0
+        "SnowSleet": 1,
+        "DailyComposite": 1
       },
       "date:now +408501 seconds": {
-        "SevereThunderstorm": 0,
+        "SevereThunderstorm": 2,
         "Lightning": 0,
         "NonConvectiveWind": 0,
         "Frost/Freeze": 0,
         "FireWeather": 0,
         "IceAccumulation": 0,
         "SnowSleet": 0,
-        "DailyComposite": 0
+        "DailyComposite": 2
       },
       "date:now +494901 seconds": {
-        "SevereThunderstorm": 0,
+        "SevereThunderstorm": 1,
         "Lightning": 0,
         "NonConvectiveWind": 0,
         "Frost/Freeze": 0,
         "FireWeather": 0,
         "IceAccumulation": 0,
         "SnowSleet": 0,
-        "DailyComposite": 0
+        "DailyComposite": 2
       }
     },
     "36059": {

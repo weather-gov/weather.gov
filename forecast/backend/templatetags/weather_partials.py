@@ -1,8 +1,10 @@
+import json
+
 from django import template
 from django.utils.translation import gettext_lazy as _
 
 from backend.models import DynamicSafetyInformation
-from backend.util import mark_safer
+from backend.util import mark_safer, process_ghwo_daily_summary
 
 register = template.Library()
 
@@ -262,3 +264,21 @@ def weather_icon(icon_name, size="sm", color_mode="light", **kwargs):
             result["attrs"][result_key] = val
 
     return result
+
+@register.inclusion_tag("weather/partials/ghwo-daily-summary.html")
+def ghwo_daily_summary(ghwo_data):
+    """Return the HTML markup for the ghwo daily summary table and legend."""
+    # If there is an error fetching the
+    # GHWO data, render information
+    # about the error
+    if "error" in ghwo_data:
+        return {
+            "error": ghwo_data["error"],
+            "ghwo_dump": json.dumps(ghwo_data),
+        }
+    processed = process_ghwo_daily_summary(ghwo_data)
+
+    return {
+        "ghwo_days": processed["days"],
+        "ghwo_dump": json.dumps(processed["days"], indent=2, default=str),
+    }
