@@ -4,19 +4,35 @@ export default (req, res) => {
   // Reassemble the query string, if any.
   const qs = Object.entries(req.query)
     .map(([key, value]) => `${key}=${value}`)
-    .join("&");
+        .join("&");
+
+  // Determine if this is a GHWO request.
+  // If so, it needs to be proxied to the weathergov
+  // website instead of the api
+  const isGHWORequest = req.path.endsWith("hazByCounty.json");
+  let proxyRequestSettings = {
+    host: "api.weather.gov",
+    port: 443,
+    path: `${req.path}?${qs}`,
+    method: "GET",
+    headers: {
+      "user-agent": "weather.gov dev proxy",
+    },
+  };
+  if(isGHWORequest){
+    proxyRequestSettings = {
+      host: "www.weather.gov",
+      port: 443,
+      path: req.path,
+      headers: {
+        "user-agent": "weather.gov dev proxy"
+      }
+    };
+  }
 
   const proxy = https
     .request(
-      {
-        host: "api.weather.gov",
-        port: 443,
-        path: `${req.path}?${qs}`,
-        method: "GET",
-        headers: {
-          "user-agent": "weather.gov dev proxy",
-        },
-      },
+      proxyRequestSettings,
       (proxyResponse) => {
         const output = [];
         proxyResponse.setEncoding("utf-8");

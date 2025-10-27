@@ -90,21 +90,86 @@ const processDates = (obj, usingHourly = false) => {
   });
 };
 
+const processGHWODates = (ghwoData) => {
+  const { now } = config;
+
+  // The original timestamps are the _keys_ in the
+  // result object for each county.
+  Object.keys(ghwoData.counties).forEach(fips => {
+    const countyData = ghwoData.counties[fips];
+
+    Object.keys(countyData).filter(key => {
+      // Filter out any keys that are not a dynamic
+      // timestamp
+      return /^date:\S+/.test(key);
+    }).forEach(dynamicTimestamp => {
+      const [, start, modifier] = dynamicTimestamp.match(/^date:(\S+)\s(.*)/);
+      let updatedTime = now;
+
+      if (start === "now" && modifier) {
+        updatedTime = adjust(updatedTime, modifier);
+      } else if (start === "today") {
+        const [, hour, minute, offset, adjustment] = modifier.match(
+          /^(\d{2}):(\d{2}):([-+]?\d{1,2})(.*)/,
+        );
+
+        updatedTime = updatedTime
+          .utcOffset(Number.parseInt(offset, 10))
+          .hour(+hour)
+          .minute(+minute)
+          .second(0)
+          .millisecond(0);
+
+        if (adjustment.trim()) {
+          updatedTime = adjust(updatedTime, adjustment);
+        }
+      }
+
+
+      let newTimestamp = updatedTime.format();
+
+      // If there's a duration component, smoosh it on to the end of our
+      // generated timestamp so it'll match the ISO8601 time+duration format.
+      const [, duration] = dynamicTimestamp.split(" / ");
+      if (duration) {
+        newTimestamp = `${newTimestamp}/${duration}`;
+      }
+      
+      // Swap the dynamickey out for the new key,
+      // preserving the same data
+      countyData[newTimestamp] = countyData[dynamicTimestamp];
+      delete countyData[dynamicTimestamp];
+    });
+  });
+
+  return ghwoData;
+};
+
 export default async (request, response) => {
+  // Let's determine if this request is for GHWO data
+  const isGHWORequest = request.path.endsWith("hazByCounty.json");
   // Put the query string back together.
   const query = Object.entries(request.query)
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
 
   // The file path is the request path plus the query string, if any.
-  const filePath = `${path.join(dataPath, config.play, request.path)}${
+  let  filePath = `${path.join(dataPath, config.play, request.path)}${
     query.length > 0 ? "__" : ""
   }${query}.json`;
+
+  // That is, unless the incoming request was for a GHWO endpoint
+  if(isGHWORequest){
+    filePath = `${path.join(dataPath, config.play, request.path)}`;
+  }
 
   const fileExists = await exists(filePath);
   console.log(`NOW_TIME: Set from ${config.nowMethod} as ${config.now}`);
 
   if (!fileExists) {
+    if(isGHWORequest){
+      console.log(`LOCAL:    ghwo file not found`);
+    }
     console.log(`LOCAL:    local file does not exist; proxying [${filePath}]`);
     await proxy(request, response);
   } else {
@@ -134,7 +199,11 @@ export default async (request, response) => {
         filePath.toString(),
       );
 
-    processDates(output, isHourlyForecast);
+    if(isGHWORequest){
+      processGHWODates(output);
+    } else {
+      processDates(output, isHourlyForecast);
+    }
 
     response.writeHead(200, {
       server: "weather.gov dev proxy",
