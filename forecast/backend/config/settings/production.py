@@ -11,7 +11,6 @@ import subprocess
 import boto3
 import environs
 from cfenv import AppEnv
-from csp.constants import SELF
 from django.core.exceptions import ImproperlyConfigured
 
 from noaa_saml.config import get_cloud_gov_settings
@@ -152,9 +151,9 @@ set_cors_on_s3_bucket(**s3_options)
 
 s3_image_src = f"https://{s3_credentials['bucket']}.s3.{s3_credentials['region']}.amazonaws.com"
 
-# override content security policy configuration
-CONTENT_SECURITY_POLICY["DIRECTIVES"]["default-src"] = [SELF, *ALLOWED_HOSTS] # noqa: F405 (imported from base.py)
-CONTENT_SECURITY_POLICY["DIRECTIVES"]["img-src"] = [SELF, s3_image_src] # noqa: F405 (imported from base.py)
+# add this cloud.gov app and s3 bucket to content security policy configuration
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["default-src"] += ALLOWED_HOSTS # noqa: F405 (imported from base.py)
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["img-src"] += [s3_image_src] # noqa: F405 (imported from base.py)
 
 # SAML Settings
 # See noaa_saml/config.py for details
