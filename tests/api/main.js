@@ -140,6 +140,15 @@ app.get("/proxy/bundle", async (req, res) => {
   }
 });
 
+app.get("/source/:wfo/ghwo/hazByCounty.json", async (req, res) => {
+  console.log(`GHWO request for: ${req.params.wfo}`);
+  if (config.play) {
+    serveBundle(req, res);
+  } else {
+    proxyToApi(req, res);
+  }
+});
+
 app.get("*any", async (req, res) => {
   // If there are any double-dots in the path, that could result in a path
   // traversal, so just eat it here and go straight to the UI.

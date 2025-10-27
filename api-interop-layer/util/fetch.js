@@ -4,10 +4,20 @@ import { sleep } from "./sleep.js";
 const logger = createLogger("fetch wrapper");
 
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
+const BASE_GHWO_URL = process.env.API_URL ?? "https://www.weather.gov";
 const headers = process.env.API_KEY ? { "API-Key": process.env.API_KEY } : {};
 
 const internalFetch = async (path) => {
-  const url = URL.canParse(path) ? path : new URL(path, BASE_URL).toString();
+  let url = URL.canParse(path) ? path : new URL(path, BASE_URL).toString();
+
+  // If the incoming path matches a request to
+  // the website's GHWO endpoint, let's try to proxy the
+  // request if possible
+  if(path.endsWith("hazByCounty.json")){
+    const ghwoUrl = URL.parse(path);
+    logger.verbose(`GHWO Request to: ${ghwoUrl.pathname} `);
+    url = new URL(ghwoUrl.pathname, BASE_GHWO_URL).toString();
+  }
   logger.verbose(`making request to ${url}`);
 
   return fetch(url, headers).then(async (r) => {

@@ -70,6 +70,41 @@ const replaceTimestamps = (obj) => {
   return replaced;
 };
 
+const replaceGHWOTimestamps = (ghwoData) => {
+  const replaced = JSON.parse(JSON.stringify(ghwoData ?? {}));
+  if (typeof replaced !== "object") {
+    return ghwoData;
+  }
+
+  // Timestamps in this dataobject are actually the
+  // keys under the county
+  const countyKeys = Object.keys(replaced.counties);
+  countyKeys.forEach(countyFips => {
+    const countyData = replaced.counties[countyFips];
+    const timestampKeys = Object.keys(countyData).filter(key => {
+      // Filter to remove the countyName key, which is the only
+      // non-timestamp based key in this object
+      return key !== "countyName";
+    }).map(timestampKey => {
+      // Map the timestamp keys to arrays which map to
+      // a relative timestamp used by the proxy system
+      return [
+        timestampKey,
+        getRelativeTimestamp(timestampKey)
+      ];
+    }).forEach(([timestamp, relativeTimestamp]) => {
+      // For each of these lookup lists that
+      // map a timestamp key to a relative timestamp,
+      // add the timestamp's data under the new relative
+      // timestamp key. Then remove the older key (and its data)
+      countyData[relativeTimestamp] = countyData[timestamp];
+      delete countyData[timestamp];
+    });
+  });
+
+  return replaced;
+};
+
 const apiFetchAndSave = async (urlPath, savePath) => {
   const url = URL.parse(urlPath, "https://api.weather.gov");
   const data = await fetch(url).then((r) => r.json());
@@ -96,6 +131,27 @@ const apiFetchAndSave = async (urlPath, savePath) => {
 
   return fixedTimes;
 };
+
+const ghwoFetchAndSave = async (urlPath, savePath) => {
+  const url = URL.parse(urlPath, "https://www.weather.gov");
+  const data = await fetch(url).then(r => r.json());
+
+  const wfoCode = urlPath.match(/\/source\/([a-zA-Z]+)\//)[1];
+
+  data["@wfo"] = wfoCode;
+
+  const filePath = `${path.join(savePath, urlPath)}`;
+
+  const fixedTimes = replaceGHWOTimestamps(data);
+  await fs.mkdir(path.dirname(filePath), { recursive: true});
+
+  fs.writeFile(
+    filePath,
+    await format(JSON.stringify(fixedTimes), { parser: "json"})
+  );
+
+  return fixedTimes;
+}
 
 const savePoint = async (lat, lon) => {
   if (!config.play) {
@@ -145,7 +201,7 @@ const savePoint = async (lat, lon) => {
   ];
 
   await Promise.all(fetching);
-  return {};
+  return { point, wfo };
 };
 
 const saveBundle = async (lat, lon) => {
@@ -155,6 +211,12 @@ const saveBundle = async (lat, lon) => {
 
   if (output.error) {
     return output;
+  }
+
+  if(output.wfo){
+    // Fetch and save the GHWO data for the point,
+    // as given by its WFO
+    await ghwoFetchAndSave(`/source/${output.wfo.toLowerCase()}/ghwo/hazByCounty.json`, dataPath);
   }
 
   await apiFetchAndSave("/alerts/active?status=actual", dataPath);

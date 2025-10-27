@@ -32,6 +32,15 @@ const ensureDatabaseExists = openDatabase().then(async (db) => {
       updated timestamp default NOW(),
       primary key(url)
     )`);
+
+  // If the TRUNCATE_GHWO env variable
+  // is set to true, we drop the GHWO metadata
+  // from the meta table on each restart.
+  if(process.env.TRUNCATE_GHWO && process.env.TRUNCATE_GHWO === "true"){
+    logger.info("Truncating GHWO meta table...");
+    await db.query(`TRUNCATE weathergov_temp_ghwo_meta`);
+    await db.query(`TRUNCATE weathergov_temp_ghwo`);
+  }
 });
 
 export const startGHWOProcessing = async () => {
