@@ -7,7 +7,7 @@
   <script type="module" src="{% static 'js/localizeTimestamps.js' %}"></script>
   <script type="module" src="{% static 'js/locationSearch.js' %}"></script>
   <script type="module" src="{% static 'js/radar.js' %}"></script>
-  <script type="module" src="{% static 'js/components/alertMap.js' %}"></script>
+  <script type="module" src="{% static 'js/components/forecastAlertMap.js' %}"></script>
   <script type="module" src="{% static 'js/charts/hourly-temperature.js' %}"></script>
   <script type="module" src="{% static 'js/charts/hourly-pops.js' %}"></script>
   <script type="module" src="{% static 'js/charts/hourly-humidity.js' %}"></script>
@@ -97,7 +97,7 @@
                id="alerts"
                role="tabpanel"
                aria-labelledby="alerts-tab-button"
-               tabindex="0">{% include 'weather/partials/alerts.html' with alerts=point.alerts.items %}</div>
+               tabindex="0">{% include 'weather/partials/forecast-alerts-map.html' with alerts=point.alerts.items %}</div>
         {% endif %}
         <div class="wx-tab-container wx-focus-offset-205"
              id="today"

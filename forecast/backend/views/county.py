@@ -20,11 +20,9 @@ def index(request):
 @never_cache
 def county_landing(request, countyfips):
     """Render the forecast for a given latitude & longitude."""
-    county = WeatherCounties.objects.filter(countyfips=countyfips)
-
-    if len(county):
+    if WeatherCounties.objects.filter(countyfips=countyfips).exists():
         county = interop.get_county_data(countyfips)
-        return render(request, "weather/county/landing.html", {"data": county})
+        return render(request, "weather/county/landing.html", {"data": {"public": county}})
 
     raise Http404()
 

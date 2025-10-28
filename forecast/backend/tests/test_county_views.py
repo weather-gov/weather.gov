@@ -68,7 +68,7 @@ class TestCountyViews(TestCase):
         mock_get_county_data.return_value = "Oh boy counties!"
         response = self.client.get("/county/44444/")
         self.assertTemplateUsed(response, "weather/county/landing.html")
-        self.assertEqual(response.context["data"], "Oh boy counties!")
+        self.assertEqual(response.context["data"]["public"], "Oh boy counties!")
 
     def test_landing_404(self):
         """Test the landing view."""

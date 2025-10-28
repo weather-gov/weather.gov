@@ -1,14 +1,35 @@
 {% extends "weather/page.html" %}
+{% block head_js %}
+  {{ data.public|json_script:"county-data" }}
+{% endblock %}
 {% block end_js %}
   <script type="module" src="{% static 'js/components/Tabs.js' %}"></script>
   <script type="module"
           src="{% static 'js/components/county-alert-daily-alert-accordions.js' %}"></script>
+  <script type="module" src="{% static 'js/components/countyAlertMap.js' %}"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          id="data-wx-leaflet"
+          nonce="{{ request.csp_nonce }}"
+          defer></script>
+  <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"
+          id="data-wx-leaflet-esri"
+          nonce="{{ request.csp_nonce }}"
+          defer></script>
+  <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"
+          id="data-ex-leaflet-esri-vector"
+          nonce="{{ request.csp_nonce }}"
+          defer></script>
+{% endblock %}
+{% block head_css %}
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/leaflet.css' %}" />
 {% endblock %}
 {% block page_content %}
   <div class="bg-primary-darker">
     <div class="grid-container">
       <div class="grid-row flex-no-wrap">
-        <h1 class="text-white font-heading-xl tablet:flex-1">{{ data.county.county }}, {{ data.county.state }}</h1>
+        <h1 class="text-white font-heading-xl tablet:flex-1">{{ data.public.county.county }}, {{ data.public.county.state }}</h1>
       </div>
     </div>
   </div>
@@ -24,7 +45,7 @@
                 data-alert-day="all"
                 aria-controls="alert-day"
                 aria-selected="true">{{ "county.alert-tabs.day.all.01" | t }}</button>
-        {% for day in data.alertDays %}
+        {% for day in data.public.alertDays %}
           <button id="alert-day-{{ forloop.counter }}-button"
                   type="button"
                   class="usa-button"
@@ -38,12 +59,12 @@
       <div id="alert-day"
            role="tabpanel"
            aria-labelledby="alert-day-all-button"
-           class="margin-top-2 grid-container">
+           class="margin-top-2">
         <div class="grid-row">
-          <div class="grid-col-12 tablet:grid-col-7">map</div>
+          <div class="grid-col-12 tablet:grid-col-7">{% include 'weather/partials/county-alerts-map.html' %}</div>
           <div class="grid-col-12 tablet:grid-col-5">{% include "weather/county/dailyAlertAccordion.html" %}</div>
         </div>
       </div>
     </div>
   </div>
-  {% endblock %}
+{% endblock %}
