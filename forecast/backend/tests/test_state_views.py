@@ -24,6 +24,14 @@ class TestStateViews(TestCase):
             state="FR",
             shape=GEOSGeometry("POINT(0 0)"),
         )
+        cwa = spatial.WeatherCountyWarningAreas.objects.create(
+            shape=GEOSGeometry("POINT(0 0)"),
+        )
+        spatial.WeatherCounties.objects.create(
+            state=self.state_fr,
+            shape=GEOSGeometry("POINT(0 0)"),
+            primarywfo=cwa,
+        )
 
     def test_index(self):
         """Test the index view."""
@@ -38,6 +46,7 @@ class TestStateViews(TestCase):
         response = self.client.get("/state/FR/")
         self.assertTemplateUsed(response, "weather/state/landing.html")
         self.assertEqual(response.context["state"], self.state_fr)
+        self.assertEqual(response.status_code, 200)
 
     def test_landing_404(self):
         """Test the landing view."""
