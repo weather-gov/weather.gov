@@ -168,7 +168,15 @@ def get_point_forecast(lat, lon):
 
 
 def get_county_data(countyfips):
-    """Get county data."""
+    """Get county data. Consolidated hazard outlook and alerts per county.
+
+    To see an example, run:
+
+        docker compose exec -it web bash
+        ./manage.py shell
+        from backend.interop import get_county_data
+        get_point_forecast("27123")
+    """
     return _fetch(f"/county/{countyfips}")
 
 

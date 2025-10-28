@@ -12,10 +12,10 @@ const setupMap = (alert) => {
   // Leaflet is managed by a Ukrainian team. The default attribution they put on
   // maps includes a Ukrainian flag to show their national pride. But as an
   // official website of the US Government, that might not be appropriate for
-  // us, so turn off the attribution. We're not likely to use Leaflet in the
-  // end anyway, but if we do, we'll figure out how to put back attributions
-  // without the flag then.
-  map.attributionControl.setPrefix("");
+  // us, so we remove the flag.
+  map.attributionControl.setPrefix(
+    "<a href='https://leafletjs.com' title='A JavaScript library for interactive maps'>Leaflet</a>"
+  );
 
   L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
     apiKey:

@@ -1,7 +1,7 @@
 <div id="county-daily-alert-container">
   <div id="county-daily-alert-container">
     <wx-alerts class="wx-alerts-county-daily">
-    {% for alert in data.alerts.items %}
+    {% for alert in data.public.alerts.items %}
       {% include "weather/partials/alert-accordion.html" with alert=alert icon="true" alert_days=alert.alertDays %}
     {% endfor %}
     </wx-alerts>

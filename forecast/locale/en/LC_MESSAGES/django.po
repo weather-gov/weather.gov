@@ -88,6 +88,18 @@ msgstr "What to do"
 msgid "alerts.legend.impacted-area.01"
 msgstr "Impacted Area"
 
+msgid "alerts.legend.warning-area.01"
+msgstr "Warning Area"
+
+msgid "alerts.legend.watch-area.01"
+msgstr "Watch Area"
+
+msgid "alerts.legend.advisory-area.01"
+msgstr "Advisory Area"
+
+msgid "alerts.legend.county-line.01"
+msgstr "County Line"
+
 msgid "alerts.table-header.alert-name.01"
 msgstr "Alert name"
 
