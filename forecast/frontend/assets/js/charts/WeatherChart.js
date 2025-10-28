@@ -26,6 +26,12 @@ Chart.defaults.font.size = 12;
 Chart.defaults.plugins.tooltip.enabled = false;
 
 const drawChart = (container, config) => {
+  // Set the CSS variable for the number of items
+  // that will appear in this chart.
+  const times = JSON.parse(container.dataset.times);
+  container.style.setProperty("--chart-datapoint-count", times.length);
+
+  // Draw the actual chart to the canvas
   const canvas = container.querySelector("canvas");
   config.options.devicePixelRatio = 4;
   return new Chart(canvas, config);
