@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 
 import environs
@@ -27,6 +28,7 @@ env = environs.Env()
 # variable value
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
+TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
 
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True

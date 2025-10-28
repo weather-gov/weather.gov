@@ -19,6 +19,7 @@ from .base import *  # noqa: F403
 SETTINGS_TYPE = "ci"
 
 DEBUG = False
+TESTING = True
 
 ALLOWED_HOSTS = [
     "weathergov-test.app.cloud.gov",
