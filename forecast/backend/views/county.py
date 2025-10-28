@@ -1,13 +1,19 @@
+import logging
+from zoneinfo import ZoneInfo
 
 from django.http import Http404
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import cache_control, never_cache
 from django.views.decorators.http import require_POST
 
 from backend import interop
+from backend.models import WFO
 from backend.util import get_counties_combo_box_list, get_states_combo_box_list
 from spatial.models import WeatherCounties, WeatherStates
+from wx_stories_api.models import SituationReport
+
+logger = logging.getLogger(__name__)
 
 
 @cache_control(public=True, max_age=3600)
@@ -20,11 +26,62 @@ def index(request):
 @never_cache
 def county_landing(request, countyfips):
     """Render the forecast for a given latitude & longitude."""
-    if WeatherCounties.objects.filter(countyfips=countyfips).exists():
-        county = interop.get_county_data(countyfips)
-        return render(request, "weather/county/landing.html", {"data": {"public": county}})
+    county = get_object_or_404(WeatherCounties, countyfips=countyfips)
 
-    raise Http404()
+    county_data = interop.get_county_data(countyfips)
+
+    localtz = None
+    if county.timezone:
+        localtz = ZoneInfo(county.timezone)
+
+    cwas = county.cwas.all()
+    briefings = []
+    for cwa in cwas:
+        wfo = WFO.objects.filter(code=cwa.wfo).first()
+        if wfo:
+            report = SituationReport.objects.current(wfo)
+            if report:
+                # If the county we found has an associated timezone, switch
+                # the timestamps to use it before we do any formatting.
+                if localtz:
+                    report.created_at = report.created_at.astimezone(tz=localtz)
+                    report.updated_at = report.updated_at.astimezone(tz=localtz)
+
+                human_format = "%A, %b %-d %Y, %-I:%M %p %Z"
+
+                briefing = {
+                    "wfo": wfo,
+                    "report": report,
+                    "created": {
+                        # Make some nice human-friendly default strings
+                        "human": report.created_at.strftime(human_format),
+                        # We also want ISO8601 timestamps we can put into
+                        # the HTML time tags for in-browser localization.
+                        "timestamp": report.created_at.isoformat(),
+                    },
+                }
+
+                # When Django creates a report, the created_at and
+                # updated_at are both set to NOW. However, nothing is ever
+                # truly instantaneous, so there will be a time difference
+                # between the two, on the order of a fraction of a second.
+                # If the difference is more than 1 second, assume that the
+                # briefing has been updated and include the update times.
+                time_diff = report.updated_at - report.created_at
+                if time_diff.total_seconds() > 1:
+                    briefing["updated"] = {
+                        "human": report.updated_at.strftime(human_format),
+                        "timestamp": report.updated_at.isoformat(),
+                    }
+
+                briefings.append(briefing)
+
+        else:
+            # If this happens, something has gone very wrong. We probably
+            # don't want to propagate that to the user, though.
+            logger.error(f"No matching WFO found for {cwa.wfo}")
+
+    return render(request, "weather/county/landing.html", {"data": {"public": county_data, "briefings": briefings}})
 
 
 def county_ghwo(request, county_fips):

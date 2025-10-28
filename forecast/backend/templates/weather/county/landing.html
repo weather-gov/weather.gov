@@ -1,7 +1,5 @@
 {% extends "weather/page.html" %}
-{% block head_js %}
-  {{ data.public|json_script:"county-data" }}
-{% endblock %}
+{% block head_js %}{{ data.public|json_script:"county-data" }}{% endblock %}
 {% block end_js %}
   <script type="module" src="{% static 'js/components/Tabs.js' %}"></script>
   <script type="module"
@@ -29,12 +27,14 @@
   <div class="bg-primary-darker">
     <div class="grid-container">
       <div class="grid-row flex-no-wrap">
-        <h1 class="text-white font-heading-xl tablet:flex-1">{{ data.public.county.county }}, {{ data.public.county.state }}</h1>
+        <h1 class="text-white font-heading-xl tablet:flex-1">
+          {{ data.public.county.county }}, {{ data.public.county.state }}
+        </h1>
       </div>
     </div>
   </div>
   <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
-    <h2>{{ "county.heading.alerts.01" | t }}</h2>
+    <h2 class="text-normal text-primary-darker">{{ "county.heading.alerts.01" | t }}</h2>
     <div class="grid-col-12 desktop:grid-col-12">
       <wx-tabs>
       <div class="usa-button-group usa-button-group--segmented" role="tablist">
@@ -66,5 +66,6 @@
         </div>
       </div>
     </div>
+    <div class="grid-row">{% include "weather/county/briefings.html" %}</div>
   </div>
 {% endblock %}

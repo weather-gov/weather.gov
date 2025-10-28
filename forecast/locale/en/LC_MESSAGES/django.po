@@ -24,6 +24,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "abbreviations.not-applicable.01"
 msgstr "N/A"
@@ -654,6 +655,26 @@ msgstr "Saturday"
 
 msgid "county.alert-tabs.day.Sunday.01"
 msgstr "Sunday"
+
+msgid "county.briefing.header.01"
+msgid_plural "county.briefing.header.01-plural"
+msgstr[0] "Briefing"
+msgstr[1] "Briefings"
+
+msgid "county.briefing.created.01"
+msgstr "Published"
+
+msgid "county.briefing.updated.01"
+msgstr "Last updated"
+
+msgid "county.briefing.download-one.01"
+msgstr "Download briefing [pdf]"
+
+msgid "county.briefing.download-multi.01"
+msgstr "Download {office} briefing [pdf]"
+
+msgid "county.briefing.no-briefing.01"
+msgstr "No recent briefing available"
 
 msgid "ghwo.table.caption.header.01"
 msgstr "7 day risk overview"
