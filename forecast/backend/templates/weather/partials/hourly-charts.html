@@ -12,8 +12,7 @@
        data-temps="{{ temps|json_encode }}"
        data-feels-like="{{ feelsLike|json_encode }}"
        data-sync-scrolling="true">
-    <div class="maxh-card-lg"
-         style="width: max(100%, calc(var(--chart-datapoint-width) * {{ times|length }}))">
+    <div class="maxh-card-lg wx-chart-inner">
       <canvas>
       </canvas>
     </div>
@@ -41,8 +40,7 @@
        data-times="{{ times|json_encode }}"
        data-pops="{{ pops|json_encode }}"
        data-sync-scrolling="true">
-    <div class="maxh-card-lg"
-         style="width: max(100%, calc(var(--chart-datapoint-width) * {{ times|length }}))">
+    <div class="maxh-card-lg wx-chart-inner">
       <canvas>
       </canvas>
     </div>
@@ -62,8 +60,7 @@
        data-wind-gusts="{{ windGusts|json_encode }}"
        data-wind-directions="{{ windDirections|json_encode }}"
        data-sync-scrolling="true">
-    <div class="maxh-card-lg"
-         style="width: max(100%, calc(var(--chart-datapoint-width) * {{ times|length }}))">
+    <div class="maxh-card-lg wx-chart-inner">
       <canvas></canvas>
     </div>
   </div>
@@ -90,8 +87,7 @@
        data-times="{{ times|json_encode }}"
        data-humidity="{{ relativeHumidity|json_encode }}"
        data-sync-scrolling="true">
-    <div class="maxh-card-lg"
-         style="width: max(100%, calc(var(--chart-datapoint-width) * {{ times|length }}))">
+    <div class="maxh-card-lg wx-chart-inner">
       <canvas>
       </canvas>
     </div>
@@ -109,8 +105,7 @@
        data-times="{{ times|json_encode }}"
        data-dewpoints="{{ dewpoints|json_encode }}"
        data-sync-scrolling="true">
-    <div class="maxh-card-lg"
-         style="width: max(100%, calc(var(--chart-datapoint-width) * {{ times|length }}))">
+    <div class="maxh-card-lg wx-chart-inner">
       <canvas>
       </canvas>
     </div>

@@ -19,17 +19,22 @@ $tablet-datapoint-width: 37.5px;
 $tablet-lg-datapoint-width: 38px;
 
 body {
-  --chart-datapoint-width: #{$mobile-datapoint-width};
+    --chart-datapoint-width: #{$mobile-datapoint-width};
+    --chart-datapoint-count: 1;
 
-  @include at-media(tablet) {
-    --chart-datapoint-width: #{$tablet-datapoint-width};
-  }
+    @include at-media(tablet) {
+        --chart-datapoint-width: #{$tablet-datapoint-width};
+    }
 
-  @include at-media(tablet-lg) {
-    --chart-datapoint-width: #{$tablet-lg-datapoint-width};
-  }
+    @include at-media(tablet-lg) {
+        --chart-datapoint-width: #{$tablet-lg-datapoint-width};
+    }
 }
 
 .wx-margin-top-neg-3px {
   margin-top: -3px;
+}
+
+.wx-chart-inner {
+    width: max(100%, calc(var(--chart-datapoint-width) * var(--chart-datapoint-count)))
 }
