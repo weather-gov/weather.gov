@@ -24,6 +24,7 @@ SETTINGS_TYPE = "production"
 
 # DEBUG is always off in production
 DEBUG = False
+TESTING = False
 
 ALLOWED_HOSTS = [
     "beta.weather.gov" if cloudgov_space == "prod" else f"weathergov-{cloudgov_space}.app.cloud.gov",

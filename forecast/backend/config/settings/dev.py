@@ -17,7 +17,12 @@ from .base import ALLOWED_HOSTS
 SETTINGS_TYPE = "dev"
 
 # Enable Django admin in local dev
-INSTALLED_APPS.append("django.contrib.admin")  # noqa: F405
+INSTALLED_APPS += ["django.contrib.admin"]  # noqa: F405
+
+if not TESTING:  # noqa: F405
+    INSTALLED_APPS += ["debug_toolbar"]  # noqa: F405
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa: F405
+    DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": "debug_toolbar.middleware.show_toolbar_with_docker"}
 
 env = environs.Env()
 
