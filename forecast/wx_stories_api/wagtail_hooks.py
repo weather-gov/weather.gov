@@ -19,7 +19,6 @@ class SituationReportAdminSnippet(SnippetViewSet):
     # Panels for Wagtail admin
     panels = [
         FieldPanel("title"),
-        FieldPanel("description"),
         FieldPanel("wfo"),
     ]
 

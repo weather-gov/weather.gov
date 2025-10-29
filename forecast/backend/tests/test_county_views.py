@@ -26,7 +26,6 @@ class TestCountyViews(TestCase):
 
         self.briefing = wxstory.SituationReport.objects.create(
             title="County briefing",
-            description="Some briefing briefs",
             pdf=SimpleUploadedFile("sit_rep.pdf", b"File contents here."),
             wfo=self.wfo,
         )

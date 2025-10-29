@@ -24,8 +24,8 @@ class TestModels(TestCase):
 
     def test_situation_report_current_return(self):
         """Test that current returns the most recently created."""
-        SituationReport.objects.create(title="Test1", description="Test Test", pdf=self.pdf, wfo=self.wfo)
-        SituationReport.objects.create(title="Test2", description="Test Test", pdf=self.pdf, wfo=self.wfo)
+        SituationReport.objects.create(title="Test1", pdf=self.pdf, wfo=self.wfo)
+        SituationReport.objects.create(title="Test2", pdf=self.pdf, wfo=self.wfo)
         actual = SituationReport.objects.current(self.wfo)
         expected = SituationReport.objects.get(title="Test2")
         self.assertEqual(actual, expected)
@@ -33,9 +33,9 @@ class TestModels(TestCase):
     def test_situation_report_prune(self):
         """Test that prune prunes the oldest for that wfo and not more than the max."""
         for x in range(15):
-            SituationReport.objects.create(title=f"Test{x}", description="Test Test", pdf=self.pdf, wfo=self.wfo)
+            SituationReport.objects.create(title=f"Test{x}", pdf=self.pdf, wfo=self.wfo)
         for x in range(5):
-            SituationReport.objects.create(title=f"Other{x}", description="Test Test", pdf=self.pdf, wfo=self.other_wfo)
+            SituationReport.objects.create(title=f"Other{x}", pdf=self.pdf, wfo=self.other_wfo)
         SituationReport.objects.prune(self.wfo)
         actual = SituationReport.objects.count()
         expected = 19

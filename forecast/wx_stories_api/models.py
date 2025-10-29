@@ -39,7 +39,6 @@ class SituationReport(TimeStampedModel):
     """Represents a Situation Report which is saved as PDF."""
 
     title = models.CharField(max_length=1000)
-    description = models.CharField(max_length=3000)
     pdf = models.FileField()
     wfo = models.ForeignKey(WFO, on_delete=models.PROTECT)
 
