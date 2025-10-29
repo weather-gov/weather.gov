@@ -1,11 +1,17 @@
-{% comment %}
-This is a placeholder for the detailed GHWO view for a given
-county.
-For now, we pass in the county model object and the ghwo
-data retrieved from the interop.
-Current implementation is to just display the formatted
-JSON string of the GHWO data.
-{% endcomment %}
-<section wx-ghwo-details="{{county.countyfips}}">
+{% if ghwo.error %}
+  {% if "Error" in ghwo.error %}
+    <h3 class="text-accent-warm-darker">{{ "ghwo.heading.error.01" | t }}</h3>
+    <p>{{ "ghwo.heading.error-description.01" | t}}</p>
+    <div class="display-flex flex-justify-center margin-y-6 desktop:margin-y-8">
+      <img src={% static "images/weather/wx_error-cloud_error.svg" %} alt="" />
+    </div>
+  {% else %}
+    <h3 class="text-base-darker">{{ "ghwo.heading.no-data.01" | t }}</h3>
+    <p>{{ "ghwo.heading.no-data-description.01" | t }}</p>
+    <div class="display-flex flex-justify-center margin-y-6 desktop:margin-y-8">
+      <img src={% static "images/weather/wx_error-cloud_missing.svg" %} alt="" />
+    </div>
+  {% endif %}
+{% else %}
   {% ghwo_daily_summary ghwo %}
-</section>
+{% endif %}

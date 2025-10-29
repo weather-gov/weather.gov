@@ -18,6 +18,8 @@
     </div>
   </div>
   <div class="grid-container">
-    {% include "weather/partials/ghwo-details.html" %}
+    <section wx-ghwo-details="{{county.countyfips}}">
+      {% include "weather/partials/ghwo-details.html" %}
+    </section>
   </div>
 {% endblock %}

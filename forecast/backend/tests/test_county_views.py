@@ -5,6 +5,7 @@ from unittest import mock
 from django.contrib.gis.geos import GEOSGeometry
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
+from django.urls import reverse
 
 import backend.models as backend
 import spatial.models as spatial
@@ -98,7 +99,7 @@ class TestCountyViews(TestCase):
 
     def test_index(self):
         """Test the index view."""
-        response = self.client.get("/county/")
+        response = self.client.get(reverse("county_index"))
         self.assertTemplateUsed(response, "weather/county/index.html")
         self.assertEqual(response.context["counties"][0], self.county5)
         self.assertEqual(response.context["counties"][1], self.county4)
@@ -111,7 +112,7 @@ class TestCountyViews(TestCase):
         """Test the landing view without timezone."""
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
 
-        response = self.client.get("/county/44444/")
+        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
         self.assertTemplateUsed(response, "weather/county/landing.html")
         self.assertEqual(
             response.context["data"],
@@ -149,7 +150,7 @@ class TestCountyViews(TestCase):
         with mock.patch("django.utils.timezone.now", mock.Mock(return_value=updated_at)):
             self.briefing.save()
 
-        response = self.client.get("/county/55555/")
+        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "55555"}))
         self.assertTemplateUsed(response, "weather/county/landing.html")
         self.assertEqual(
             response.context["data"],
@@ -181,7 +182,7 @@ class TestCountyViews(TestCase):
         """
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
 
-        response = self.client.get("/county/33333/")
+        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "33333"}))
         self.assertTemplateUsed(response, "weather/county/landing.html")
         self.assertEqual(
             response.context["data"],
@@ -196,5 +197,13 @@ class TestCountyViews(TestCase):
 
     def test_landing_404(self):
         """Test the landing view."""
-        response = self.client.get("/county/99999/")
+        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "99999"}))
         self.assertEqual(response.status_code, 404)
+
+    @mock.patch("backend.interop.get_county_data")
+    def test_landing_500(self, mock_get_county_data):
+        """Test county error case."""
+        mock_get_county_data.side_effect = Exception
+        with self.assertRaises(Exception): # noqa: PT027, B017 (we want generic Exception)
+            response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
+            self.assertEqual(response.status_code, 500)

@@ -364,45 +364,94 @@ class TestViews(TestCase):
 
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
     @mock.patch("backend.views.county.get_counties_combo_box_list")
-    @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
+    @mock.patch("backend.views.county.get_object_or_404", autospec=True)
     def test_county_ghwo_with_failed_interop_request(
         self,
-        mock_get_county,
+        mock_get_object_or_404,
         mock_get_county_list,
         mock_get_ghwo_data_for_county,
     ):
-        """Requesting a GHWO county details page returns 404 when GHWO interop request fails.
+        """Requesting a GHWO county details page returns 500 when GHWO interop request fails.
 
-        This should cover anything from the interop crashing to the GHWO
-        data simply not being available for the given county.
+        This should cover when the interop crashes.
         """
         mock_get_county_list.return_value = []
         mock_get_ghwo_data_for_county.side_effect = Exception
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
-        mock_get_county.return_value = mock_county
+        mock_get_object_or_404.return_value = mock_county
 
-        response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
-
-        self.assertEqual(response.status_code, 404)
+        with self.assertRaises(Exception): # noqa: PT027, B017 (we want generic Exception)
+            response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
+            self.assertEqual(response.status_code, 500)
 
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
     @mock.patch("backend.views.county.get_counties_combo_box_list")
-    @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
-    def test_county_ghwo_success(
+    @mock.patch("backend.views.county.get_object_or_404", autospec=True)
+    def test_county_ghwo_with_error_interop_request(
         self,
-        mock_get_county,
+        mock_get_object_or_404,
         mock_get_county_list,
         mock_get_ghwo_data_for_county,
     ):
-        """Test the success case for rerquesting a GHWO county details page."""
+        """Requesting a GHWO county details page returns an error.
+
+        Make sure the user is aware that an error occured and that they should try again later.
+        """
+        mock_get_county_list.return_value = []
+        mock_get_ghwo_data_for_county.return_value = {"error": "Error fetching GHWO for 1"}
+        mock_county = mock.Mock()
+        mock_county.state.fips.return_value = "1"
+        mock_county.county.countyfips.return_value = "1"
+        mock_get_object_or_404.return_value = mock_county
+
+        response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
+        self.assertContains(response, "images/weather/wx_error-cloud_error.svg")
+
+    @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
+    @mock.patch("backend.views.county.get_counties_combo_box_list")
+    @mock.patch("backend.views.county.get_object_or_404", autospec=True)
+    def test_county_ghwo_with_no_data_interop_request(
+        self,
+        mock_get_object_or_404,
+        mock_get_county_list,
+        mock_get_ghwo_data_for_county,
+    ):
+        """Requesting a GHWO county details page returns no data.
+
+        Make sure the user is aware that no data is present for their chosen location.
+        """
+        mock_get_county_list.return_value = []
+        mock_get_ghwo_data_for_county.return_value = {"error": "No GHWO found for 1"}
+        mock_county = mock.Mock()
+        mock_county.state.fips.return_value = "1"
+        mock_county.county.countyfips.return_value = "1"
+        mock_get_object_or_404.return_value = mock_county
+
+        response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
+        self.assertContains(response, "images/weather/wx_error-cloud_missing.svg")
+
+    @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
+    @mock.patch("backend.views.county.get_counties_combo_box_list")
+    @mock.patch("backend.views.county.get_object_or_404")
+    def test_county_ghwo_success(
+        self,
+        mock_get_object_or_404,
+        mock_get_county_list,
+        mock_get_ghwo_data_for_county,
+    ):
+        """Test the success case for requesting a GHWO county details page."""
         mock_get_county_list.return_value = []
         mock_get_ghwo_data_for_county.return_value = self.county_ghwo_data
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
-        mock_get_county.return_value = mock_county
+        mock_get_object_or_404.return_value = mock_county
 
         response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
 
@@ -599,6 +648,36 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+    @mock.patch("backend.views.partials.get_object_or_404")
+    @mock.patch("backend.views.partials.interop.get_ghwo_data_for_county")
+    def test_wx_ghwo_counties_with_no_data_interop_request(self, mock_get_ghwo_data_for_county, mock_get_object_or_404):
+        """Request to wx ghwo counties endpoint with 404 interop ghwo data request 200s."""
+        mock_get_ghwo_data_for_county.return_value = { "statusCode": 404, "error": "No GHWO found for 51013" }
+        mock_get_object_or_404.return_value = mock.Mock()
+
+        response = self.client.get(
+            reverse("wx_ghwo_counties", kwargs={"county_fips": "51013"}),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
+        self.assertContains(response, "images/weather/wx_error-cloud_missing.svg")
+
+    @mock.patch("backend.views.partials.get_object_or_404")
+    @mock.patch("backend.views.partials.interop.get_ghwo_data_for_county")
+    def test_wx_ghwo_counties_with_error_interop_request(self, mock_get_ghwo_data_for_county, mock_get_object_or_404):
+        """Request to wx ghwo counties endpoint with 500 interop ghwo data request 200s."""
+        mock_get_ghwo_data_for_county.return_value = { "statusCode": 500, "error": "Error fetching GHWO for 51013" }
+        mock_get_object_or_404.return_value = mock.Mock()
+
+        response = self.client.get(
+            reverse("wx_ghwo_counties", kwargs={"county_fips": "51013"}),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
+        self.assertContains(response, "images/weather/wx_error-cloud_error.svg")
+
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
     def test_wx_ghwo_counties_failed_interop_request(self, mock_get_ghwo):
         """Request to wx ghwo counties endpoint with failing interop ghwo data request 404s."""
@@ -620,11 +699,11 @@ class TestViews(TestCase):
         # 405: Method Not Allowed
         self.assertEqual(response.status_code, 405)
 
-    @mock.patch("backend.views.county.WeatherCounties.objects.get")
+    @mock.patch("backend.views.partials.get_object_or_404")
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
-    def test_wx_ghwo_counties_success(self, mock_get_ghwo, mock_get_county):
+    def test_wx_ghwo_counties_success(self, mock_get_ghwo, mock_get_object_or_404):
         """Test successful request for wx ghwo counties partial."""
-        mock_get_county.return_value = mock.MagicMock()
+        mock_get_object_or_404.return_value = mock.MagicMock()
         mock_get_ghwo.return_value = self.county_ghwo_data
 
         response = self.client.get(

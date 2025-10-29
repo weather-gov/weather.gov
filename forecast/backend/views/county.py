@@ -96,27 +96,16 @@ def county_landing(request, countyfips):
 
 def county_ghwo(request, county_fips):
     """Load a county GHWO details page by FIPS."""
-    # Find the county specified by the FIPS.
-    # If there is no match, 404 for now
-    try:
-        county = WeatherCounties.objects.get(countyfips=county_fips)
-    except WeatherCounties.DoesNotExist as e:
-        raise Http404() from e
+    county = get_object_or_404(WeatherCounties, countyfips=county_fips)
 
-    # Get all of the states, for use in the
-    # combobox dropdown.
+    # Get all of the states, for use in the combobox dropdown.
     states = get_states_combo_box_list()
 
-    # Now get a list of all counties in the
-    # same state as the found county.
+    # Now get a list of all counties in the same state as the found county.
     counties = get_counties_combo_box_list(county.state.fips)
 
-    # Fetch the GHWO data for the county from
-    # the interop layer
-    try:
-        ghwo_data = interop.get_ghwo_data_for_county(county.countyfips)
-    except Exception as e:
-        raise Http404() from e
+    # Fetch the GHWO data for the county from the interop layer
+    ghwo_data = interop.get_ghwo_data_for_county(county.countyfips)
 
     return render(
         request,

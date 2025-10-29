@@ -1,6 +1,6 @@
 
 from django.http import Http404, HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
@@ -100,22 +100,17 @@ def wx_ghwo_counties(request, county_fips):
     using the county FIPS code provided in the
     URL param.
     """
-    try:
-        county = WeatherCounties.objects.get(countyfips=county_fips)
+    county = get_object_or_404(WeatherCounties, countyfips=county_fips)
 
-        # Fetch the GHWO data for the county
-        ghwo_data = interop.get_ghwo_data_for_county(county_fips)
+    # Fetch the GHWO data for the county
+    ghwo_data = interop.get_ghwo_data_for_county(county_fips)
 
-        # Render the partial
-        return render(
-            request,
-            "weather/partials/ghwo-details.html",
-            {
-                "ghwo": ghwo_data,
-                "county": county,
-            },
-        )
-    except Exception as e:
-        # We assume the interop could not properly
-        # fetch the GHWO for the location
-        raise Http404() from e
+    # Render the partial
+    return render(
+        request,
+        "weather/partials/ghwo-details.html",
+        {
+            "ghwo": ghwo_data,
+            "county": county,
+        },
+    )
