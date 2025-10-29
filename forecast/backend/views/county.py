@@ -81,7 +81,17 @@ def county_landing(request, countyfips):
             # don't want to propagate that to the user, though.
             logger.error(f"No matching WFO found for {cwa.wfo}")
 
-    return render(request, "weather/county/landing.html", {"data": {"public": county_data, "briefings": briefings}})
+    return render(
+        request,
+        "weather/county/landing.html",
+        {
+            "data": {
+                "public": county_data,
+                "briefings": briefings,
+                "county": f"{county.countyname} {county.subdivision_name}, {county.st}",
+            },
+        },
+    )
 
 
 def county_ghwo(request, county_fips):

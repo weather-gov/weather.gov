@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.db.models import JSONField
+from django.utils.translation import gettext_lazy as _
 
 
 class WeatherSpatialMetadata(models.Model):
@@ -116,6 +117,70 @@ class WeatherCounties(models.Model):
     shape = models.GeometryField()
     cwas = models.ManyToManyField(WeatherCountyWarningAreas)
     primarywfo = models.ForeignKey(WeatherCountyWarningAreas, related_name="primary_counties", on_delete=models.CASCADE)
+
+    @property
+    def subdivision_name(self):
+        """Get the localized name for this county-like subdivision.
+
+        Specifically, in Louisiana they are called Parishes and in Alaska, they
+        are boroughs or census areas.
+        """
+        subdivision_mapping = {
+            # Most of Alaska is not incorporated into a second-order political
+            # subdivision. The FIPS subdivisions of those parts correspond to
+            # Census Areas.
+            "AK": _("spatial.county-like.name.census-area.01"),
+            # American Samoa FIPS area name are fully-qualified.
+            "AS": "",
+            # In Guam, county-likes are called villages.
+            "GU": _("spatial.county-like.name.village.01"),
+            # In Louisiana, county-likes are called parishes.
+            "LA": _("spatial.county-like.name.parish.01"),
+            # In the Northern Mariana Islands and Puerto Rico, county-likes are
+            # called municipalities.
+            "MP": _("spatial.county-like.name.municipality.01"),
+            "PR": _("spatial.county-like.name.municipality.01"),
+            # In the US Virgin Islands, FIPS areas refer to islands.
+            "VI": _("spatial.county-like.name.island.01"),
+        }
+
+        # Alaska has 19 incorporated boroughs. These are not just census areas.
+        ak_boroughs = [
+            "02013",
+            "02020",
+            "02060",
+            "02068",
+            "02090",
+            "02100",
+            "02110",
+            "02122",
+            "02130",
+            "02150",
+            "02164",
+            "02170",
+            "02185",
+            "02188",
+            "02195",
+            "02220",
+            "02230",
+            "02275",
+            "02282",
+        ]
+
+        # If this is one of the incorporated boroughs of Alaska, use the word
+        # "borough"
+        if self.st == "AK" and self.countyfips in ak_boroughs:
+            return _("spatial.county-like.name.borough.01")
+
+        # If we have a specific mapping to a subdivision name, use that. If not,
+        # then we use the US default name, "county." :)
+        return (
+            subdivision_mapping[self.st]
+            if self.st in subdivision_mapping
+            else _(
+                "spatial.county-like.name.county.01",
+            )
+        )
 
     def __str__(self):
         return f"{self.countyname}, {self.state} FIPS {self.countyfips}"
