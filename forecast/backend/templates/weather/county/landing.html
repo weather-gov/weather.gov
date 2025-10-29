@@ -27,9 +27,7 @@
   <div class="bg-primary-dark">
     <div class="grid-container">
       <div class="grid-row flex-no-wrap">
-        <h1 class="text-white font-heading-xl tablet:flex-1">
-          {{ data.public.county.county }}, {{ data.public.county.state }}
-        </h1>
+        <h1 class="text-white font-heading-xl tablet:flex-1">{{ data.county }}</h1>
       </div>
     </div>
   </div>
@@ -61,7 +59,9 @@
            aria-labelledby="alert-day-all-button"
            class="margin-top-2">
         <div class="grid-row grid-gap">
-          <div class="grid-col-12 tablet:grid-col-7 margin-bottom-205">{% include 'weather/partials/county-alerts-map.html' %}</div>
+          <div class="grid-col-12 tablet:grid-col-7 margin-bottom-205">
+            {% include 'weather/partials/county-alerts-map.html' %}
+          </div>
           <div class="grid-col-12 tablet:grid-col-5">{% include "weather/county/dailyAlertAccordion.html" %}</div>
         </div>
       </div>

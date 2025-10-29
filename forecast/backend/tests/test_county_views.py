@@ -116,6 +116,7 @@ class TestCountyViews(TestCase):
         self.assertEqual(
             response.context["data"],
             {
+                "county": "Anansi County, GH",
                 "public": {"hazardOutlook": self.ghwo},
                 "briefings": [
                     {
@@ -153,6 +154,7 @@ class TestCountyViews(TestCase):
         self.assertEqual(
             response.context["data"],
             {
+                "county": "Keelut Census Area, AK",
                 "public": {"hazardOutlook": self.ghwo},
                 "briefings": [
                     {
@@ -183,7 +185,13 @@ class TestCountyViews(TestCase):
         self.assertTemplateUsed(response, "weather/county/landing.html")
         self.assertEqual(
             response.context["data"],
-            {"public": {"hazardOutlook": self.ghwo}, "briefings": []},
+            {
+                "county": "Sanderson Sisters County, MA",
+                "public": {
+                    "hazardOutlook": self.ghwo,
+                },
+                "briefings": [],
+            },
         )
 
     def test_landing_404(self):

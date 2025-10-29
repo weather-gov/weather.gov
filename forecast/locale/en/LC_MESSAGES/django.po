@@ -693,3 +693,24 @@ msgstr "High risk"
 
 msgid "ghwo.table.legend.label.01"
 msgstr "table legend"
+
+msgid "spatial.county-like.name.county.01"
+msgstr "County"
+
+msgid "spatial.county-like.name.borough.01"
+msgstr "Borough"
+
+msgid "spatial.county-like.name.parish.01"
+msgstr "Parish"
+
+msgid "spatial.county-like.name.census-area.01"
+msgstr "Census Area"
+
+msgid "spatial.county-like.name.village.01"
+msgstr "Village"
+
+msgid "spatial.county-like.name.municipality.01"
+msgstr "Municipality"
+
+msgid "spatial.county-like.name.island.01"
+msgstr "Island"
