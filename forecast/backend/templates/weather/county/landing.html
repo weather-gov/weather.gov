@@ -36,11 +36,11 @@
   <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
     <h2 class="text-normal text-primary-darker">{{ "county.heading.alerts.01" | t }}</h2>
     <div class="grid-col-12 desktop:grid-col-12">
-      <wx-tabs>
+      <wx-tabs id="county-alerts">
       <div class="usa-button-group usa-button-group--segmented" role="tablist">
         <button id="alert-day-all-button"
                 type="button"
-                class="usa-button"
+                class="usa-button padding-x-105"
                 role="tab"
                 data-alert-day="all"
                 aria-controls="alert-day"
@@ -48,7 +48,7 @@
         {% for day in data.public.alertDays %}
           <button id="alert-day-{{ forloop.counter }}-button"
                   type="button"
-                  class="usa-button"
+                  class="usa-button padding-x-105"
                   role="tab"
                   data-alert-day="{{ forloop.counter }}"
                   aria-controls="alert-day"
@@ -60,8 +60,8 @@
            role="tabpanel"
            aria-labelledby="alert-day-all-button"
            class="margin-top-2">
-        <div class="grid-row">
-          <div class="grid-col-12 tablet:grid-col-7">{% include 'weather/partials/county-alerts-map.html' %}</div>
+        <div class="grid-row grid-gap">
+          <div class="grid-col-12 tablet:grid-col-7 margin-bottom-205">{% include 'weather/partials/county-alerts-map.html' %}</div>
           <div class="grid-col-12 tablet:grid-col-5">{% include "weather/county/dailyAlertAccordion.html" %}</div>
         </div>
       </div>

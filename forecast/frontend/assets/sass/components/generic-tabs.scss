@@ -49,3 +49,13 @@ wx-tabs,
     }
   }
 }
+
+wx-tabs#county-alerts {
+  button {
+    @extend .text-normal;
+  }
+
+  button[aria-selected="true"] {
+    @extend .text-bold;
+  }
+}
