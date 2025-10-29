@@ -32,7 +32,7 @@ SHAPE_TZ_TO_IANA = {
     "M": "America/Denver",
     "P": "America/Los_Angeles",
     "A": "America/Anchorage",
-    "H": "Pacific/Hololulu",
+    "H": "Pacific/Honolulu",
     "G": "Pacific/Guam",
     "J": "Asia/Tokyo",
     "S": "Pacific/Pago_Pago",
