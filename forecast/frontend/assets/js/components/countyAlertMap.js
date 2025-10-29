@@ -22,7 +22,7 @@ const setupMap = () => {
 
   const json = JSON.parse(document.getElementById('county-data').textContent);
   const L = window.L;
-  const map = L.map(`wx_county_alert_map`).setView([0, 0], 0);
+  const map = L.map(`wx_county_alert_map`, { zoomSnap: 0.2 }).setView([0, 0], 0);
 
   // Leaflet is managed by a Ukrainian team. The default attribution they put on
   // maps includes a Ukrainian flag to show their national pride. But as an
@@ -62,7 +62,8 @@ const setupMap = () => {
   }
 
   // create layers and sort them
-  json.alerts.items.forEach(({geometry, alertDays, metadata: { level: { text: alertType } }}) => {
+  for (let i = json.alerts.items.length - 1; i >= 0; i--) {
+    let {geometry, alertDays, metadata: { level: { text: alertType } }} = json.alerts.items[i];
     let layer;
     if (alertType === "warning") {
       layer = L.geoJSON(geometry, { style: styles.warning }).addTo(map);
@@ -73,7 +74,7 @@ const setupMap = () => {
     }
     alertDays.forEach((day) => {countyAlertLayers[day].push(layer)});
     countyAlertLayers["all"].push(layer);
-  });
+  };
 
   // ready to handle day change events
   window.addEventListener("wx-tab-focused", handleDay);
@@ -85,7 +86,7 @@ const setupMap = () => {
 
   // add the county outline and zoom to it
   const layer = L.geoJSON(json.county.shape, { style: styles.county }).addTo(map);
-  map.fitBounds(layer.getBounds());
+  map.fitBounds(layer.getBounds(), { padding: [0.4, 0.4]});
 
   // add the user's location if they've already agreed to share it
   (async () => {
