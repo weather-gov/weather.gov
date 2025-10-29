@@ -94,6 +94,8 @@ class TestCountyViews(TestCase):
         )
         self.county5.cwas.set([cwa])
 
+        self.ghwo = {"days": [], "fips": "12345"}
+
     def test_index(self):
         """Test the index view."""
         response = self.client.get("/county/")
@@ -107,14 +109,14 @@ class TestCountyViews(TestCase):
     @mock.patch("backend.interop.get_county_data")
     def test_landing_without_timezone(self, mock_get_county_data):
         """Test the landing view without timezone."""
-        mock_get_county_data.return_value = "By George!"
+        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
 
         response = self.client.get("/county/44444/")
         self.assertTemplateUsed(response, "weather/county/landing.html")
         self.assertEqual(
             response.context["data"],
             {
-                "public": "By George!",
+                "public": {"hazardOutlook": self.ghwo},
                 "briefings": [
                     {
                         "wfo": self.wfo,
@@ -135,7 +137,7 @@ class TestCountyViews(TestCase):
     @mock.patch("backend.interop.get_county_data")
     def test_landing_with_timezone(self, mock_get_county_data):
         """Test the landing view with timezone."""
-        mock_get_county_data.return_value = {}
+        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
 
         # Matt Smith, the Eleventh Doctor Who, is born. We change the updated_at
         # here to ensure that when it is after the creation date, we get the
@@ -151,7 +153,7 @@ class TestCountyViews(TestCase):
         self.assertEqual(
             response.context["data"],
             {
-                "public": {},
+                "public": {"hazardOutlook": self.ghwo},
                 "briefings": [
                     {
                         "wfo": self.wfo,
@@ -175,13 +177,13 @@ class TestCountyViews(TestCase):
 
         This is an error condition, but we don't want it to crash the UX.
         """
-        mock_get_county_data.return_value = {}
+        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
 
         response = self.client.get("/county/33333/")
         self.assertTemplateUsed(response, "weather/county/landing.html")
         self.assertEqual(
             response.context["data"],
-            {"public": {}, "briefings": []},
+            {"public": {"hazardOutlook": self.ghwo}, "briefings": []},
         )
 
     def test_landing_404(self):
