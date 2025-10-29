@@ -24,7 +24,7 @@
         href="{% static 'css/leaflet.css' %}" />
 {% endblock %}
 {% block page_content %}
-  <div class="bg-primary-darker">
+  <div class="bg-primary-dark">
     <div class="grid-container">
       <div class="grid-row flex-no-wrap">
         <h1 class="text-white font-heading-xl tablet:flex-1">
@@ -66,6 +66,11 @@
         </div>
       </div>
     </div>
-    <div class="grid-row">{% include "weather/county/briefings.html" %}</div>
+    <div class="grid-row border-top-2px border-base-light margin-y-4">{% include "weather/county/briefings.html" %}</div>
+    <div class="grid-row">
+      <div class="grid-col-12 desktop:border-base-lightest desktop:border-3 desktop:padding-2">
+        {% ghwo_daily_summary data.public.hazardOutlook %}
+      </div>
+    </div>
   </div>
 {% endblock %}
