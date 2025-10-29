@@ -629,6 +629,18 @@ msgstr "Select a county"
 msgid "ghwo.selector.label.county-link.01"
 msgstr "View county page"
 
+msgid "ghwo.heading.error.01"
+msgstr "There was an error loading the data"
+
+msgid "ghwo.heading.error-description.01"
+msgstr "We couldn't load the data for this county. Please try again later."
+
+msgid "ghwo.heading.no-data.01"
+msgstr "We don't have data for this county"
+
+msgid "ghwo.heading.no-data-description.01"
+msgstr "Please use the forecast search to see data for a specific point near this location."
+
 msgid "county.heading.alerts.01"
 msgstr "Alerts"
 
