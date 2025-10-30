@@ -1,6 +1,15 @@
 import { expect } from "chai";
 import { afterEach, beforeEach } from "mocha";
 import { createSandbox } from "sinon";
+import { WX_GHWO_DETAILS_LOADER_TIMEOUT } from "../../assets/js/components/ghwo-county-selector.js";
+
+const wait = async (milliseconds) => {
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, milliseconds);
+  });
+};
 
 describe("<wx-ghwo-county-selector> component tests", () => {
   let component, sandbox;
@@ -9,6 +18,11 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     await import("../../assets/js/components/ghwo-county-selector.js");
     await import("../../assets/js/components/combo-box.js");
     sandbox = createSandbox();
+  });
+
+  after(() => {
+    sandbox.restore();
+    document.body.innerHTML = "";
   });
 
   beforeEach(() => {
@@ -79,6 +93,16 @@ describe("<wx-ghwo-county-selector> component tests", () => {
 
     // Add component to body
     document.body.append(component);
+
+    // Add the county details area and the
+    // loader template
+    const detailsElement  = document.createElement("div");
+    detailsElement.setAttribute("wx-ghwo-details", component.countyCombobox.getAttribute("selected"));
+    document.body.append(detailsElement);
+    const template = document.createElement("template");
+    template.id = "ghwo-wx-loader";
+    template.innerHTML = `<div id="loader"></div>`;
+    document.body.append(template);
   });
 
   afterEach(() => {
@@ -202,5 +226,58 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     await component.fetchUpdatedSelectComponent();
 
     expect(window.addEventListener.calledWith("popstate", component.handleBackButton)).to.equal(true);
+  });
+
+
+  it("Appends the loader to the DOM if the request is taking longer than the timeout", async () => {
+    // Mock the fetch call so it takes longer than the timeout
+    // to respond
+    sandbox.stub(global, "fetch").callsFake((async() => {
+      await wait(WX_GHWO_DETAILS_LOADER_TIMEOUT + 500);
+      return new Response("", { status: 200 });
+    }));
+    
+    const component = document.querySelector("wx-ghwo-selector");
+    const currentCounty = component.countyCombobox.getAttribute("selected");
+    const detailsElement = document.querySelector("[wx-ghwo-details]");
+    detailsElement.setAttribute("wx-ghwo-details", currentCounty);
+    const template = document.querySelector("template");
+    const templateSpy = sandbox.spy(template.content, "cloneNode");
+
+    // Dispatch the change event to trigger fetching county details
+    component.fetchAndUpdateDetailsElements();
+
+    // Wait for the actual timeout (plus a teensy bit extra)
+    await wait(WX_GHWO_DETAILS_LOADER_TIMEOUT + 20);
+    const loader = document.getElementById("loader");
+    expect(templateSpy.callCount).to.equal(1);
+
+    expect(loader).to.exist;
+  });
+
+  it("Does not append the loader to the DOM at all if the request responds _before_ the timeout", async () => {
+    // Mock the detch call so it returns in a shorter period than
+    // the timeout
+    sandbox.stub(global, "fetch").callsFake((async() => {
+      await wait(WX_GHWO_DETAILS_LOADER_TIMEOUT - 300);
+      return new Response("", { status: 200});
+    }));
+
+    const component = document.querySelector("wx-ghwo-selector");
+    const currentCounty = component.countyCombobox.getAttribute("selected");
+    const detailsElement = document.querySelector("[wx-ghwo-details]");
+    detailsElement.setAttribute("wx-ghwo-details", currentCounty);
+    const template = document.querySelector("template");
+    const templateSpy = sandbox.spy(template.content, "cloneNode");
+
+    // Dispatch the change event to trigger fetching county details
+    component.fetchAndUpdateDetailsElements();
+
+    // We expect that the template was never cloned
+    await wait(WX_GHWO_DETAILS_LOADER_TIMEOUT + 100);
+    const loader = document.getElementById("loader");
+
+    expect(loader).to.not.exist;
+    expect(templateSpy.callCount).to.equal(0);
   });
 });

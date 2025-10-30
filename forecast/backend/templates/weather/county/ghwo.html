@@ -22,4 +22,16 @@
       {% include "weather/partials/ghwo-details.html" %}
     </section>
   </div>
+  <template id="ghwo-wx-loader">
+    <div class="grid-row">
+      <div class="grid-col-12">
+        <wx-loader class="display-flex flex-row flex-align-center margin-top-3 margin-bottom-5">
+          <div class="wx-loader-icon display-block height-4 width-4 margin-right-05"></div>
+          <p class="wx-loader-text font-sans-lg text-normal text-base-darker">
+            {{ "ghwo.loader.loading-text.01" | t }}...
+          </p>
+        </wx-loader>
+      </div>
+    </div>
+  </template>
 {% endblock %}

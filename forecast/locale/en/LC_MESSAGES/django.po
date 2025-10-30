@@ -641,6 +641,9 @@ msgstr "We don't have data for this county"
 msgid "ghwo.heading.no-data-description.01"
 msgstr "Please use the forecast search to see data for a specific point near this location."
 
+msgid "ghwo.loader.loading-text.01"
+msgstr "Loading the risk data"
+
 msgid "county.heading.alerts.01"
 msgstr "Alerts"
 
