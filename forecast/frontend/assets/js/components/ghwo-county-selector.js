@@ -27,6 +27,16 @@
 const WX_COUNTY_GHWO_SELECTOR_URL = `/wx/select/ghwo/counties/`;
 const WX_COUNTY_GHWO_DETAILS_URL = `/wx/ghwo/counties/`;
 
+// Specifies a timeout/delay in milliseconds before the loader
+// image should show during asynchronous requests for
+// ghwo details data. If a request returns _before_ this
+// timeout has expired, the timeout will be cancelled.
+// See the showLoader() and hideLoader() component
+// methods.
+// 400 was picked because it "feels" like a good delay,
+// in testing conditions. Feel free to modify as needed.
+export const WX_GHWO_DETAILS_LOADER_TIMEOUT = 400;
+
 class GHWOCountySelector extends HTMLElement {
   constructor() {
     super();
@@ -38,6 +48,8 @@ class GHWOCountySelector extends HTMLElement {
     this.fetchAndUpdateDetailsElements =
       this.fetchAndUpdateDetailsElements.bind(this);
     this.handleBackButton = this.handleBackButton.bind(this);
+    this.showLoader = this.showLoader.bind(this);
+    this.hideLoader = this.hideLoader.bind(this);
   }
 
   connectedCallback() {
@@ -46,6 +58,11 @@ class GHWOCountySelector extends HTMLElement {
 
   disconnectedCallback() {
     this.removeEventListener("change", this.handleChange);
+
+    // There might be one or more timeouts whose
+    // components have been removed from the DOM
+    // but are still lurking. Make sure we get rid of those.
+    this.hideLoader();
   }
 
   async handleChange(event) {
@@ -149,7 +166,11 @@ class GHWOCountySelector extends HTMLElement {
       `[name="county-select"]`,
     ).getAttribute("selected");
     const url = `${WX_COUNTY_GHWO_DETAILS_URL}${selectedCountyFips}`;
+
+
+    this.showLoader(elements);
     const response = await fetch(url);
+    this.hideLoader();
 
     if (response.ok) {
       const html = await response.text();
@@ -185,6 +206,35 @@ class GHWOCountySelector extends HTMLElement {
   handleBackButton(event) {
     window.removeEventListener("popstate", this.handleBackButton);
     window.location.reload();
+  }
+
+  /**
+   * Show the loader graphic in the details area(s).
+   * Instead of displaying right away, set a timeout
+   * that can be cleared if the request returns fast enough.
+   */
+  showLoader(elements){
+    this.loaderTimeout = setTimeout(() => {
+      const template = document.getElementById("ghwo-wx-loader");
+      if(template){
+        elements.forEach(el => {
+          el.innerHTML = "";
+          el.append(template.content.cloneNode(true));
+        });
+      }
+    }, WX_GHWO_DETAILS_LOADER_TIMEOUT);
+  }
+
+  /**
+   * Remove the timeout that showLoader has set
+   * on this element.
+   * We don't actually hide the loader, because data loaded
+   * or an error will already change the innerHTML
+   */
+  hideLoader(){
+    if(this.loaderTimeout){
+      clearTimeout(this.loaderTimeout);
+    }
   }
 
   get useAsync() {
