@@ -68,8 +68,10 @@
       </div>
     </div>
     <div class="grid-row border-top-2px border-base-light margin-y-4">{% include "weather/county/briefings.html" %}</div>
-    <div class="grid-row">
-      <div class="grid-col-12 desktop:border-base-lightest desktop:border-3 desktop:padding-2">
+  </div>
+  <div class="bg-base-lightest">
+    <div class="grid-container padding-y-4 padding-x-0 desktop:padding-x-4">
+      <div class="grid-col-12 bg-white padding-2 padding-top-1 shadow-1">
         {% ghwo_daily_summary data.public.hazardOutlook %}
       </div>
     </div>
