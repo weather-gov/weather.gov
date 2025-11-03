@@ -322,25 +322,5 @@ web-component-and-interop-test:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
 
-dependency-scan:
-  stage: test
-  image: snyk/snyk:python-3.12
-  before_script:
-    - cd forecast
-    - pip install -r requirements.txt
-    - cd ..
-    - wget -O sarif-converter https://gitlab.com/ignis-build/sarif-converter/-/releases/v0.9.4/downloads/bin/sarif-converter-linux-amd64
-    - chmod +x sarif-converter
-  script:
-    - snyk auth $SNYK_TOKEN
-    - snyk test . --all-projects --sarif-file-output=snyk.sarif || true
-    - ./sarif-converter --type sast snyk.sarif snyk.json
-  artifacts:
-    reports:
-      sast: snyk.json
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PIPELINE_SCHEDULE_NAME == "dependencies"
-    - if: $CI_PIPELINE_SOURCE == "push"
-
 sast:
   stage: test
