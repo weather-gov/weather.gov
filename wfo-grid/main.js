@@ -1,7 +1,7 @@
 import * as leaflet from "https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js";
 
 const main = async () => {
-  const map = leaflet.map("map").setView([40, -70], 8);
+  const map = leaflet.map("map").setView([39.833, -98.5833], 5);
 
   const plottedPolygons = new Map();
 
