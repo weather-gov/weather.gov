@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <style type="text/css">
+      #map {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      #switcher {
+        position: fixed;
+        bottom: 1rem;
+        left: 1rem;
+        background: white;
+        padding: 1rem;
+        border-radius: 1rem;
+        border: 1px solid black;
+      }
+    </style>
+    <title>Map of WFOs</title>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <div id="switcher">
+      <button data-layer="./data/wfos.geojson">WFOs</button>
+      <button data-layer="./data/forecast-zones.geojson">Forecast zones</button>
+      <button data-layer="./data/fire-zones.geojson">Fire zones</button>
+      <button data-layer="./data/marine-coastal-zones.geojson">
+        Marine: coastal
+      </button>
+      <button data-layer="./data/marine-offshore-zones.geojson">
+        Marine: offshore
+      </button>
+      <button data-layer="./data/counties.geojson">US counties</button>
+      <button data-layer="./data/states.geojson">US states</button>
+    </div>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

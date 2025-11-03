@@ -1,0 +1,19 @@
+{
+  "name": "wfo-map",
+  "version": "1.0.0",
+  "description": "A tool for extracting WFO polygons and putting them on a big ol' map.",
+  "type": "module",
+  "main": "node builder/index.js",
+  "scripts": {
+    "build": "node builder/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.3.2"
+  },
+  "prettier": {},
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}
