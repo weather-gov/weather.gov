@@ -46,7 +46,8 @@ map.on("click", (e) => {
 
   leaflet
     .popup(latlng, {
-      content: `<a href="https://beta.weather.gov/point/${lat}/${lng}">Open on beta</a><br><a href="https://weathergov-staging.app.cloud.gov/point/${lat}/${lng}">Open on staging</a>`,
+      content: `<a href="https://beta.weather.gov/point/${lat}/${lng}">Open on beta</a><br><a href="https://weathergov-staging.app.cloud.gov/point/${lat}/${lng}">Open on staging</a>
+      <br><a href="http://localhost:8080/point/${lat}/${lng}">Open in local dev</a>`,
     })
     .openOn(map);
 });
