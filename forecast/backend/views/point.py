@@ -9,6 +9,7 @@ from django.views.decorators.cache import never_cache
 
 from backend import interop
 from backend.models import WFO, Region
+from backend.templatetags.util import normalize_wfo
 from backend.util import get_wfo_from_afd
 from spatial.models import WeatherCounties, WeatherCountyWarningAreas, WeatherPlace
 from wx_stories_api.models import WeatherStory
@@ -25,7 +26,7 @@ def point_location(request, lat, lon):
         raise Http404(point)
 
     # TODO: Add some error checking here
-    wfo = WFO.objects.get(code=point["grid"]["wfo"])
+    wfo = WFO.objects.get(code=normalize_wfo(point["grid"]["wfo"]))
     point["wfo"] = wfo
 
     if point["isMarine"]:
