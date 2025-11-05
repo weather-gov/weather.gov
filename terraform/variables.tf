@@ -95,6 +95,12 @@ variable "api_url" {
   description = "The weather API endpoint for the API interop process"
 }
 
+variable "ghwo_url" {
+  type        = string
+  default     = "https://www.weather.gov"
+  description = "The weather GHWO endpoint for the API interop process"
+}
+
 variable "api_key" {
   type        = string
   default     = ""
