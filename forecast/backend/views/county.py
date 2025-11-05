@@ -11,7 +11,7 @@ from backend import interop
 from backend.models import WFO
 from backend.util import get_counties_combo_box_list, get_states_combo_box_list
 from spatial.models import WeatherCounties, WeatherStates
-from wx_stories_api.models import SituationReport
+from wx_stories_api.models import SituationReport, WeatherStory
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +36,8 @@ def county_landing(request, countyfips):
 
     cwas = county.cwas.all()
     briefings = []
+    weather_stories = []
+
     for cwa in cwas:
         wfo = WFO.objects.filter(code=cwa.wfo).first()
         if wfo:
@@ -76,6 +78,9 @@ def county_landing(request, countyfips):
 
                 briefings.append(briefing)
 
+            weather_story = WeatherStory.objects.current(wfo).first()
+            if weather_story:
+                weather_stories.append(weather_story)
         else:
             # If this happens, something has gone very wrong. We probably
             # don't want to propagate that to the user, though.
@@ -88,6 +93,7 @@ def county_landing(request, countyfips):
             "data": {
                 "public": county_data,
                 "briefings": briefings,
+                "weather_stories": sorted(weather_stories, key=lambda story: story.starttime, reverse=True),
                 "county": f"{county.countyname} {county.subdivision_name}, {county.st}",
             },
         },

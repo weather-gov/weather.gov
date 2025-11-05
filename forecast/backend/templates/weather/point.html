@@ -1,7 +1,9 @@
 {% extends "weather/page.html" %}
 {% block head_js %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" nonce="{{ request.csp_nonce }}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" nonce="{{ request.csp_nonce }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+          nonce="{{ request.csp_nonce }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
+          nonce="{{ request.csp_nonce }}"></script>
 {% endblock %}
 {% block end_js %}
   <script type="module" src="{% static 'js/localizeTimestamps.js' %}"></script>
@@ -97,7 +99,9 @@
                id="alerts"
                role="tabpanel"
                aria-labelledby="alerts-tab-button"
-               tabindex="0">{% include 'weather/partials/forecast-alerts-map.html' with alerts=point.alerts.items %}</div>
+               tabindex="0">
+            {% include 'weather/partials/forecast-alerts-map.html' with alerts=point.alerts.items %}
+          </div>
         {% endif %}
         <div class="wx-tab-container wx-focus-offset-205"
              id="today"
@@ -120,7 +124,7 @@
           </div>
           <!-- Weather Story Image here -->
           {% if weather_story %}
-            {% include 'weather/partials/weather-story.html' %}
+            {% include 'weather/partials/weather-story-container.html' with county=point.place.countyfips %}
           {% else %}
             <div class="grid-container margin-top-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
               <div class="grid-row bg-accent-cool-lightest border-1px border-base-light padding-x-2">

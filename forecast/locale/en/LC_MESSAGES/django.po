@@ -572,6 +572,9 @@ msgstr "Area Forecast Discussion"
 msgid "weather-story.link.county-overview.01"
 msgstr "County overview"
 
+msgid "weather-story.link.zone-forecast.01"
+msgstr "Zone forecast product"
+
 msgid "weather-story.text.created-by.06"
 msgstr "<strong class='text-base-dark'>Created: {date} at {time}</strong><span class='display-block'>by the <a class='usa-link' href='{wfo_url}'>{wfo_name} WFO</a></span>"
 

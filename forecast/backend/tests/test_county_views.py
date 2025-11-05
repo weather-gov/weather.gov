@@ -132,6 +132,7 @@ class TestCountyViews(TestCase):
                         # processing time in the SQL query.
                     },
                 ],
+                "weather_stories": [],
             },
         )
 
@@ -170,6 +171,7 @@ class TestCountyViews(TestCase):
                         },
                     },
                 ],
+                "weather_stories": [],
             },
         )
 
@@ -191,6 +193,7 @@ class TestCountyViews(TestCase):
                     "hazardOutlook": self.ghwo,
                 },
                 "briefings": [],
+                "weather_stories": [],
             },
         )
 
@@ -203,6 +206,6 @@ class TestCountyViews(TestCase):
     def test_landing_500(self, mock_get_county_data):
         """Test county error case."""
         mock_get_county_data.side_effect = Exception
-        with self.assertRaises(Exception): # noqa: PT027, B017 (we want generic Exception)
+        with self.assertRaises(Exception):  # noqa: PT027, B017 (we want generic Exception)
             response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
             self.assertEqual(response.status_code, 500)
