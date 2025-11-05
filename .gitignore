@@ -74,3 +74,6 @@ terraform/dist
 # Django
 **/__cache/
 *.mo
+
+# Uploaded media (weather stories, briefings, etc.)
+forecast/media/*.*
