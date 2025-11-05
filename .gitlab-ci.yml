@@ -37,6 +37,8 @@ stages:
 
 # these are available in all the running containers (images and services)
 variables:
+  API_URL: https://api.weather.gov
+  GHWO_URL: https://www.weather.gov
   POSTGRES_USER: drupal
   POSTGRES_PASSWORD: drupal
   POSTGRES_DB: weathergov

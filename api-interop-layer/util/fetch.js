@@ -4,7 +4,7 @@ import { sleep } from "./sleep.js";
 const logger = createLogger("fetch wrapper");
 
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
-const BASE_GHWO_URL = process.env.API_URL ?? "https://www.weather.gov";
+const BASE_GHWO_URL = process.env.GHWO_URL ?? "https://www.weather.gov";
 const headers = process.env.API_KEY ? { "API-Key": process.env.API_KEY } : {};
 
 const internalFetch = async (path) => {

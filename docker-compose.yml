@@ -34,6 +34,7 @@ services:
       POSTGRES_PASSWORD: drupal
       INTEROP_URL: "http://api-interop-layer:8082/"
       API_URL: "http://api-proxy:8081/"
+      GHWO_URL: "http://api-proxy:8081/"
       DEBUG_PORT: 34235
       DJANGO_SETTINGS_MODULE: backend.config.settings.dev
     networks:
@@ -52,6 +53,7 @@ services:
     environment:
       WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
       API_URL: "http://api-proxy:8081/"
+      GHWO_URL: "http://api-proxy:8081/"
     networks:
       - weather.gov
     ports:
@@ -77,6 +79,7 @@ services:
       DB_HOST: database
       DB_PORT: 5432
       API_URL: ${API_URL:-http://api-proxy:8081}
+      GHWO_URL: ${GHWO_URL:-https://www.weather.gov}
       API_KEY: ${API_KEY:-}
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
       NEWRELIC_LICENSE: ${NEWRELIC_LICENSE:-}
@@ -134,6 +137,7 @@ services:
       - ./reports:/reports
     environment:
       API_URL: http://api-proxy:8081
+      GHWO_URL: http://api-proxy:8081
       WEB_URL: http://web:8080
       INTEROP_URL: http://api-interop-layer:8082
     profiles: ["utility"]
