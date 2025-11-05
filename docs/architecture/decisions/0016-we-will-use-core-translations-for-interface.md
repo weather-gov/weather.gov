@@ -3,8 +3,9 @@
   Date: 2024-07-11
     
 ### Status
-Accepted
-  
+
+**Superseded by [ADR 0026](0026-we-will-use-django-translations.md)**
+
 ### Context
 There are three aspects to internationalization (i18n) and translations when it comes to our site:
 1. **Providing translations for static text across the public site's interface**. 

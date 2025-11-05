@@ -4,7 +4,7 @@ Date: 2023-10-03
 
 ### Status
 
-Accepted
+**Superseded by [ADR 0020](0020-we-will-use-django-and-wagtail-as-our-web-stack.md)**
 
 ### Context
 
