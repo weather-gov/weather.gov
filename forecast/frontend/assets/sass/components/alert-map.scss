@@ -30,6 +30,21 @@ div.wx_alert_map_legend--county {
   height: auto !important;
   width: auto !important;
 
+  button.wx-map-control {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-image: url("/public/images/uswds/material-icons/zoom_out_map.svg");
+  }
+
+  button.wx-map-control__expanded {
+    background-image: url("/public/images/uswds/material-icons/zoom_in_map.svg");
+  }
+
   button.wx-radar-expand {
     border: 0;
     border-radius: radius("md");
