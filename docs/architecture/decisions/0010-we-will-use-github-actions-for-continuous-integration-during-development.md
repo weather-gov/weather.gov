@@ -4,7 +4,7 @@ Date: 2023-10-10
 
 ### Status
 
-Accepted
+**Superseded by [ADR 0025](0025-we-will-use-gitlab-cicd.md)**
 
 ### Context
 
