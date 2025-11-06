@@ -1,8 +1,15 @@
 {% extends "weather/page.html" %}
+{% block head_css %}
+  {% if ghwo.prefetch_images %}
+    {% for url in ghwo.prefetch_images %}<link rel="preload" href="{{ url }}" as="image" />{% endfor %}
+  {% endif %}
+{% endblock %}
 {% block head_js %}
   <script type="module" src="{% static 'js/components/combo-box.js' %}"></script>
   <script type="module"
           src="{% static 'js/components/ghwo-county-selector.js' %}"></script>
+  <script type="module"
+          src="{% static 'js/components/ghwo-details-table.js' %}"></script>
 {% endblock %}
 {% block page_content %}
   <div class="bg-primary-dark">
@@ -11,14 +18,15 @@
     </div>
   </div>
   <div class="bg-primary-lightest border-bottom-2px border-primary">
-    <div class="grid-container margin-top-4 ">
+    <div class="grid-container">
       <wx-ghwo-selector class="display-block" state-target="#state-select" county-target="#county-select" method="async">
       {% include "weather/partials/wx-county-ghwo-selector.html" %}
       </wx-ghwo-selector>
     </div>
   </div>
   <div class="grid-container">
-    <section wx-ghwo-details="{{ county.countyfips }}">
+    <section wx-ghwo-details="{{ county.countyfips }}"
+             class="margin-top-4 margin-bottom-8">
       {% include "weather/partials/ghwo-details.html" %}
     </section>
   </div>

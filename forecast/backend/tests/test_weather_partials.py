@@ -559,56 +559,179 @@ class TestWeatherPartials(TestCase):
         )
 
     def test_ghwo_daily_summary_with_composite(self):
-      """Test ghwo daily summary partial result has expected structure."""
-      example_ghwo_data ={ "days": [
-          {
-              "Fog": 0,
-              "Hail": 0,
-              "images": {
-                  "Fog": "https://www.weather.gov/images/lwx/ghwo/FogDay1.jpg",
-                  "Hail": "https://www.weather.gov/images/lwx/ghwo/HailDay1.jpg",
-                  "Tornado": "https://www.weather.gov/images/lwx/ghwo/TornadoDay1.jpg",
-                  "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay1.jpg",
-                  "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay1.jpg",
-                  "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay1.jpg",
-                  "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay1.jpg",
-                  "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay1.jpg",
-                  "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay1.jpg",
-                  "CoastalFlood": "https://www.weather.gov/images/lwx/ghwo/CoastalFloodDay1.jpg",
-                  "ConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/ThunderstormWindDay1.jpg",
-                  "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay1.jpg",
-                  "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay1.jpg",
-                  "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay1.jpg",
-                  "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay1.jpg",
-              },
-              "Tornado": 0,
-              "Lightning": 0,
-              "SnowSleet": 0,
-              "dayNumber": 1,
-              "timestamp": "2025-10-27T14:00:00-04:00",
-              "ExtremeCold": 5,
-              "FireWeather": 0,
-              "CoastalFlood": 0,
-              "ConvectiveWind": 0,
-              "DailyComposite": 5,
-              "IceAccumulation": 0,
-              "ExcessiveRainfall": 0,
-              "NonConvectiveWind": 0,
-              "SevereThunderstorm": 0,
-          },
-      ]}
+        """Test ghwo daily summary partial result has expected structure."""
+        example_ghwo_data ={ "days": [
+            {
+                "Fog": 0,
+                "Hail": 0,
+                "images": {
+                    "Fog": "https://www.weather.gov/images/lwx/ghwo/FogDay1.jpg",
+                    "Hail": "https://www.weather.gov/images/lwx/ghwo/HailDay1.jpg",
+                    "Tornado": "https://www.weather.gov/images/lwx/ghwo/TornadoDay1.jpg",
+                    "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay1.jpg",
+                    "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay1.jpg",
+                    "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay1.jpg",
+                    "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay1.jpg",
+                    "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay1.jpg",
+                    "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay1.jpg",
+                    "CoastalFlood": "https://www.weather.gov/images/lwx/ghwo/CoastalFloodDay1.jpg",
+                    "ConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/ThunderstormWindDay1.jpg",
+                    "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay1.jpg",
+                    "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay1.jpg",
+                    "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay1.jpg",
+                    "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay1.jpg",
+                },
+                "Tornado": 0,
+                "Lightning": 0,
+                "SnowSleet": 0,
+                "dayNumber": 1,
+                "timestamp": "2025-10-27T14:00:00-04:00",
+                "ExtremeCold": 5,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "ConvectiveWind": 0,
+                "DailyComposite": 5,
+                "IceAccumulation": 0,
+                "ExcessiveRainfall": 0,
+                "NonConvectiveWind": 0,
+                "SevereThunderstorm": 0,
+            },
+        ]}
 
-      expected = example_ghwo_data["days"][0].copy()
-      expected["highest"] = {"level": 5 }
-      expected["datetime"] = datetime.fromisoformat("2025-10-27T14:00:00-04:00")
+        expected = example_ghwo_data["days"][0].copy()
+        expected["highest"] = {"level": 5 }
+        expected["datetime"] = datetime.fromisoformat("2025-10-27T14:00:00-04:00")
 
-      actual = weather_partials.ghwo_daily_summary(example_ghwo_data)
+        actual = weather_partials.ghwo_daily_summary(example_ghwo_data)
 
-      self.assertEqual(
+        self.assertEqual(
+            len(actual["ghwo_days"]),
+            1,
+        )
+        self.assertEqual(
+            actual["ghwo_days"][0],
+            expected,
+        )
+
+    def test_ghwo_daily_details(self):
+        """Test ghwo daily details partial result has expected structure."""
+        example_ghwo_data ={ "days": [
+            {
+                "Fog": 0,
+                "Hail": 0,
+                "images": {
+                    "Fog": "https://www.weather.gov/images/lwx/ghwo/FogDay1.jpg",
+                    "Hail": "https://www.weather.gov/images/lwx/ghwo/HailDay1.jpg",
+                    "Tornado": "https://www.weather.gov/images/lwx/ghwo/TornadoDay1.jpg",
+                    "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay1.jpg",
+                    "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay1.jpg",
+                    "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay1.jpg",
+                    "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay1.jpg",
+                    "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay1.jpg",
+                    "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay1.jpg",
+                    "CoastalFlood": "https://www.weather.gov/images/lwx/ghwo/CoastalFloodDay1.jpg",
+                    "ConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/ThunderstormWindDay1.jpg",
+                    "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay1.jpg",
+                    "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay1.jpg",
+                    "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay1.jpg",
+                    "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay1.jpg",
+                },
+                "Tornado": 0,
+                "Lightning": 0,
+                "SnowSleet": 0,
+                "dayNumber": 1,
+                "timestamp": "2025-10-27T14:00:00-04:00",
+                "ExtremeCold": 5,
+                "FireWeather": 0,
+                "CoastalFlood": 0,
+                "ConvectiveWind": 0,
+                "DailyComposite": 5,
+                "IceAccumulation": 0,
+                "ExcessiveRainfall": 0,
+                "NonConvectiveWind": 0,
+                "SevereThunderstorm": 0,
+            },
+        ]}
+
+        # Corresponds to template data ghwo_days list
+        expected_days = example_ghwo_data["days"][0].copy()
+        expected_days["highest"] = {"level": 5}
+        expected_days["datetime"] = datetime.fromisoformat("2025-10-27T14:00:00-04:00")
+
+        # Corresponds to template dta ghwo_detailed_table_rows list
+        expected_rows = [
+            {
+                "risk": {
+                    "id": "ExtremeCold",
+                    "label": "ExtremeCold",
+                    "description": "A more verbose description for ExtremeCold goes here.",
+                    "basis_description": ("A description of how the local office computes or otherwise " +
+                                          "describes the parameters that meet the requirements for ExtremeCold."),
+                    "levels": {
+                        "0": {
+                            "label": "None",
+                            "number": 0,
+                            "description": "No risk for ExtremeCold",
+                        },
+                        "1": {
+                            "label": "Low",
+                            "number": 1,
+                            "description": "Description for low ExtremeCold level here",
+                        },
+                        "2": {
+                            "label": "Limited",
+                            "number": 2,
+                            "description": "Description for limited ExtremeCold level here",
+                        },
+                        "3": {
+                            "label": "Elevated",
+                            "number": 3,
+                            "description": "Description for elevated ExtremeCold level here",
+                        },
+                        "4": {
+                            "label": "Significant",
+                            "number": 4,
+                            "description": "Description for significant ExtremeCold level here",
+                        },
+                        "5": {
+                            "label": "Extreme",
+                            "number": 5,
+                            "description": "Description for extreme ExtremeCold level here",
+                        },
+                    },
+                },
+                "days": [
+                    {
+                        "level": {
+                            "label": "Extreme",
+                            "number": 5,
+                            "description": "Description for extreme ExtremeCold level here",
+                        },
+                        "timestamp": "2025-10-27T14:00:00-04:00",
+                        "datetime": datetime.fromisoformat("2025-10-27T14:00:00-04:00"),
+                        "day_number": 1,
+                        "image": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay1.jpg",
+                        "is_first": True,
+                    },
+                ],
+            },
+        ]
+
+        actual = weather_partials.ghwo_daily_details(example_ghwo_data)
+
+        # Assertions for ghwo_days template data
+        self.assertEqual(
           len(actual["ghwo_days"]),
           1,
-      )
-      self.assertEqual(
-          actual["ghwo_days"][0],
-          expected,
-      )
+        )
+        self.assertEqual(
+            actual["ghwo_days"][0],
+            expected_days,
+        )
+
+        # Assertions for ghwo_detailed_table_rows data
+        self.assertEqual(
+            actual["ghwo_detailed_table_rows"],
+            expected_rows,
+        )
+
