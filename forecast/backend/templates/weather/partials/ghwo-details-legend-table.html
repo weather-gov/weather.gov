@@ -1,0 +1,31 @@
+<table class="ghwo-details-legend-table">
+  <thead>
+    <tr>
+      <th scope="col">
+        <span class="usa-sr-only">{{"ghwo.details.pane.legend.sr.risk-level-name.01" | t}}</span>
+      </th>
+      <th scope="rol">
+        <span class="usa-sr-only">{{"ghwo.details.pane.legend.sr.risk-level-description.01" | t}}</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for _, level in risk.levels.items %}
+      {% if level.number > 0 %}
+        <tr>
+          <td class="text-top font-mono-2xs text-uppercase"
+              aria-label="{{'ghwo.details.table.risk-level.lower.01' | t}} {{ level.number }}">
+            <div class="display-flex flex-align-center">
+              <div class="ghwo-risk-legend-square display-block width-2 height-2 margin-right-05"
+                   data-risk-level="{{ level.number }}"></div>
+              <span>{{ level.number }}:</span><span>{{ level.label }}</span>
+            </div>
+          </td>
+          <td class="text-top text-left font-sans-xs padding-left-2">
+            <span>{{ level.description }}</span>
+          </td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>

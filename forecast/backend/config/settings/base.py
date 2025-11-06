@@ -304,6 +304,13 @@ CONTENT_SECURITY_POLICY = {
             SELF,
             "'unsafe-inline'",
         ],
+
+        # We want to be able to display images that are hosted
+        # at legacy weather.gov (for now)
+        "img-src": [
+            SELF,
+            "https://www.weather.gov",
+        ],
     },
 }
 

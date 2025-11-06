@@ -647,6 +647,29 @@ msgstr "Please use the forecast search to see data for a specific point near thi
 msgid "ghwo.loader.loading-text.01"
 msgstr "Loading the risk data"
 
+msgid "ghwo.details.table.risk-level.lower.01"
+msgstr "risk level"
+
+msgid "ghwo.details.pane.legend.sr.risk-level-name.01"
+msgstr "risk level name"
+
+msgid "ghwo.details.pane.legend.sr.risk-level-description.01"
+msgstr "risk level description"
+
+msgid "ghwo.details.pane.header.risk-map.01"
+msgstr "Risk map"
+
+msgid "ghwo.details.pane.header.based-on.01"
+msgstr "What is this based on?"
+
+msgid "ghwo.details.pane.header.risk-levels.01"
+msgstr "Risk levels"
+
+msgid "ghwo.details.table.no-impact.01"
+msgid_plural "ghwo.details.table.no-impact.01-plural"
+msgstr[0] "No impact in {num} other category"
+msgstr[1] "No impact in {num} other categories"
+
 msgid "county.heading.alerts.01"
 msgstr "Alerts"
 
@@ -699,6 +722,12 @@ msgstr "7 day risk overview"
 
 msgid "ghwo.table.caption.description.01"
 msgstr "The graphic shows the daily risk summary for 7 days. Daily risk is based on highest risk factor for that day."
+
+msgid "ghwo.table.details.header.01"
+msgstr "What factors are driving the risk?"
+
+msgid "ghwo.table.details.description.01"
+msgstr "The graphic shows the weather factors that have some risk for the next 7 days. Click on the colored boxes to see what the risk factors is based on and what impact it may have."
 
 msgid "ghwo.table.row.risk-summary.01"
 msgstr "Daily risk summary"

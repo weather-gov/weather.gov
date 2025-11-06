@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 
 from backend import interop
 from backend.models import WFO
-from backend.util import get_counties_combo_box_list, get_states_combo_box_list
+from backend.util import get_counties_combo_box_list, get_ghwo_daily_images, get_states_combo_box_list
 from spatial.models import WeatherCounties, WeatherStates
 from wx_stories_api.models import SituationReport, WeatherStory
 
@@ -112,6 +112,10 @@ def county_ghwo(request, county_fips):
 
     # Fetch the GHWO data for the county from the interop layer
     ghwo_data = interop.get_ghwo_data_for_county(county.countyfips)
+
+    # Add any image urls to the list of images to prefetch
+    if "error" not in ghwo_data:
+        ghwo_data["prefetch_images"] = get_ghwo_daily_images(ghwo_data)
 
     return render(
         request,
