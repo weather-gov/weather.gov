@@ -54,21 +54,25 @@ class TestViews(TestCase):
             countyname="Upper left",
             shape=GEOSGeometry("POLYGON((0 10, 5 10, 5 5, 0 5, 0 10))"),
             primarywfo=cwa,
+            countyfips="12345",
         )
         spatial.WeatherCounties.objects.create(
             countyname="Upper right",
             shape=GEOSGeometry("POLYGON((5 10, 10 10, 10 5, 5 5, 5 10))"),
             primarywfo=cwa,
+            countyfips="12346",
         )
         spatial.WeatherCounties.objects.create(
             countyname="Lower left",
             shape=GEOSGeometry("POLYGON((0 5, 5 5, 5 0, 0 0, 0 5))"),
             primarywfo=cwa,
+            countyfips="12347",
         )
         spatial.WeatherCounties.objects.create(
             countyname="Lower right",
             shape=GEOSGeometry("POLYGON((5 5, 10 5, 10 0, 5 0, 5 5))"),
             primarywfo=cwa,
+            countyfips="12348",
         )
 
         # Create example weather story and

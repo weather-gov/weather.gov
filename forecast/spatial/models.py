@@ -111,7 +111,7 @@ class WeatherCounties(models.Model):
     st = models.CharField(max_length=2, null=True)
     state = models.ForeignKey(WeatherStates, related_name="counties", null=True, on_delete=models.SET_NULL)
     countyname = models.TextField(null=True)
-    countyfips = models.CharField(max_length=5, null=True)
+    countyfips = models.CharField(max_length=5, unique=True, db_index=True)
     timezone = models.TextField(null=True)
     dst = models.BooleanField(null=True)
     shape = models.GeometryField()
