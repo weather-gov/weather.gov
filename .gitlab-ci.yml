@@ -207,8 +207,8 @@ gather-forecast-node-dependencies:
         - package-lock.json
         - api-interop-layer/package.json
         - api-interop-layer/package-lock.json
-        - tests/api/package.json
-        - tests/api/package-lock.json
+        - api-proxy/package.json
+        - api-proxy/package-lock.json
         - spatial-data/package.json
         - spatial-data/package-lock.json
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
@@ -242,7 +242,7 @@ js-lint:
     # CI_BUILDS_DIR so we can "npm run" as needed.
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
-    - ln -s /app/tests/api/node_modules tests/api/
+    - ln -s /app/api-proxy/node_modules api-proxy
     - npx eslint
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
@@ -307,7 +307,7 @@ web-component-and-interop-test:
     # CI_BUILDS_DIR so we can "npm run" as needed.
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
-    - ln -s /app/tests/api/node_modules tests/api/
+    - ln -s /app/api-proxy/node_modules api-proxy/
     - npx c8 --reporter cobertura -o coverage/wc/ --reporter text-summary  mocha --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
     # We also do interop layer tests at the same time so we don't have to wait
     # for another runner to come available.

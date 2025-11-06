@@ -95,6 +95,7 @@ format-js:
     -v "{{justfile_directory()}}/.prettierignore":"/app/.prettierignore" \
     -v "{{justfile_directory()}}/prettier.config.js":"/app/prettier.config.js" \
     -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
+    -v "{{justfile_directory()}}/api-proxy":"/app/api-proxy" \
     -v "{{justfile_directory()}}/tests":"/app/tests" \
     -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
     -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
@@ -135,6 +136,7 @@ lint-js:
     run --rm \
     -v "{{justfile_directory()}}/eslint.config.js":"/app/eslint.config.js" \
     -v "{{justfile_directory()}}/api-interop-layer":"/app/api-interop-layer" \
+    -v "{{justfile_directory()}}/api-proxy":"/app/api-proxy" \
     -v "{{justfile_directory()}}/tests":"/app/tests" \
     -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
     -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \

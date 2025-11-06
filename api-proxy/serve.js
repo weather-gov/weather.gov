@@ -95,51 +95,52 @@ const processGHWODates = (ghwoData) => {
 
   // The original timestamps are the _keys_ in the
   // result object for each county.
-  Object.keys(ghwoData.counties).forEach(fips => {
+  Object.keys(ghwoData.counties).forEach((fips) => {
     const countyData = ghwoData.counties[fips];
 
-    Object.keys(countyData).filter(key => {
-      // Filter out any keys that are not a dynamic
-      // timestamp
-      return /^date:\S+/.test(key);
-    }).forEach(dynamicTimestamp => {
-      const [, start, modifier] = dynamicTimestamp.match(/^date:(\S+)\s(.*)/);
-      let updatedTime = now;
+    Object.keys(countyData)
+      .filter((key) => {
+        // Filter out any keys that are not a dynamic
+        // timestamp
+        return /^date:\S+/.test(key);
+      })
+      .forEach((dynamicTimestamp) => {
+        const [, start, modifier] = dynamicTimestamp.match(/^date:(\S+)\s(.*)/);
+        let updatedTime = now;
 
-      if (start === "now" && modifier) {
-        updatedTime = adjust(updatedTime, modifier);
-      } else if (start === "today") {
-        const [, hour, minute, offset, adjustment] = modifier.match(
-          /^(\d{2}):(\d{2}):([-+]?\d{1,2})(.*)/,
-        );
+        if (start === "now" && modifier) {
+          updatedTime = adjust(updatedTime, modifier);
+        } else if (start === "today") {
+          const [, hour, minute, offset, adjustment] = modifier.match(
+            /^(\d{2}):(\d{2}):([-+]?\d{1,2})(.*)/,
+          );
 
-        updatedTime = updatedTime
-          .utcOffset(Number.parseInt(offset, 10))
-          .hour(+hour)
-          .minute(+minute)
-          .second(0)
-          .millisecond(0);
+          updatedTime = updatedTime
+            .utcOffset(Number.parseInt(offset, 10))
+            .hour(+hour)
+            .minute(+minute)
+            .second(0)
+            .millisecond(0);
 
-        if (adjustment.trim()) {
-          updatedTime = adjust(updatedTime, adjustment);
+          if (adjustment.trim()) {
+            updatedTime = adjust(updatedTime, adjustment);
+          }
         }
-      }
 
+        let newTimestamp = updatedTime.format();
 
-      let newTimestamp = updatedTime.format();
+        // If there's a duration component, smoosh it on to the end of our
+        // generated timestamp so it'll match the ISO8601 time+duration format.
+        const [, duration] = dynamicTimestamp.split(" / ");
+        if (duration) {
+          newTimestamp = `${newTimestamp}/${duration}`;
+        }
 
-      // If there's a duration component, smoosh it on to the end of our
-      // generated timestamp so it'll match the ISO8601 time+duration format.
-      const [, duration] = dynamicTimestamp.split(" / ");
-      if (duration) {
-        newTimestamp = `${newTimestamp}/${duration}`;
-      }
-      
-      // Swap the dynamickey out for the new key,
-      // preserving the same data
-      countyData[newTimestamp] = countyData[dynamicTimestamp];
-      delete countyData[dynamicTimestamp];
-    });
+        // Swap the dynamickey out for the new key,
+        // preserving the same data
+        countyData[newTimestamp] = countyData[dynamicTimestamp];
+        delete countyData[dynamicTimestamp];
+      });
   });
 
   return ghwoData;
@@ -154,26 +155,26 @@ export default async (request, response) => {
     .join("&");
 
   // The file path is the request path plus the query string, if any.
-  let  filePath = `${path.join(dataPath, config.play, request.path)}${
+  let filePath = `${path.join(dataPath, config.play, request.path)}${
     query.length > 0 ? "__" : ""
   }${query}.json`;
 
   // That is, unless the incoming request was for a GHWO endpoint
-  if(isGHWORequest){
+  if (isGHWORequest) {
     filePath = `${path.join(dataPath, config.play, request.path)}`;
   }
 
   const fileExists = await exists(filePath);
-  console.log(`NOW_TIME: Set from ${config.nowMethod} as ${config.now}`);
+  console.log(`NOW_TIME: Set from ${config.nowMethod} as ${config.now}`); // eslint-disable-line no-console
 
   if (!fileExists) {
-    if(isGHWORequest){
-      console.log(`LOCAL:    ghwo file not found`);
+    if (isGHWORequest) {
+      console.log(`LOCAL:    ghwo file not found`); // eslint-disable-line no-console
     }
-    console.log(`LOCAL:    local file does not exist; proxying [${filePath}]`);
+    console.log(`LOCAL:    local file does not exist; proxying [${filePath}]`); // eslint-disable-line no-console
     await proxy(request, response);
   } else {
-    console.log(`LOCAL:    serving local file: ${filePath}`);
+    console.log(`LOCAL:    serving local file: ${filePath}`); // eslint-disable-line no-console
     const output = JSON.parse(await fs.readFile(filePath));
 
     // If the bundle contains a `now` key, override any
@@ -184,6 +185,7 @@ export default async (request, response) => {
     }
 
     if (output["@bundle"]?.status) {
+      // eslint-disable-next-line no-console
       console.log(
         `LOCAL:    local file has response status ${output["@bundle"].status}`,
       );
@@ -199,7 +201,7 @@ export default async (request, response) => {
         filePath.toString(),
       );
 
-    if(isGHWORequest){
+    if (isGHWORequest) {
       processGHWODates(output);
     } else {
       processDates(output, isHourlyForecast);

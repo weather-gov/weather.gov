@@ -48,7 +48,7 @@ services:
 
   api-proxy:
     build:
-      context: ./tests/api
+      context: ./api-proxy
       dockerfile: Dockerfile.dev
     environment:
       WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
@@ -59,7 +59,7 @@ services:
     ports:
       - 8081:8081
     volumes:
-      - ./tests/api:/app
+      - ./api-proxy:/app
       - /app/node_modules
 
   api-interop-layer:

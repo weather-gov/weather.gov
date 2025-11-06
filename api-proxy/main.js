@@ -141,7 +141,7 @@ app.get("/proxy/bundle", async (req, res) => {
 });
 
 app.get("/source/:wfo/ghwo/hazByCounty.json", async (req, res) => {
-  console.log(`GHWO request for: ${req.params.wfo}`);
+  console.log(`GHWO request for: ${req.params.wfo}`); // eslint-disable-line no-console
   if (config.play) {
     serveBundle(req, res);
   } else {
@@ -161,7 +161,7 @@ app.get("*any", async (req, res) => {
   const query = Object.entries(req.query)
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
-  console.log(`REQUEST:  ${req.path}${query.length > 0 ? `?${query}` : ""}`);
+  console.log(`REQUEST:  ${req.path}${query.length > 0 ? `?${query}` : ""}`); // eslint-disable-line no-console
 
   if (config.play) {
     serveBundle(req, res);
@@ -171,9 +171,10 @@ app.get("*any", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Now listening on ${port}`);
+  console.log(`Now listening on ${port}`); // eslint-disable-line no-console
+  // eslint-disable-next-line no-console
   console.log(
     `Locally-served files is ${config.localService ? "en" : "dis"}abled`,
   );
-  console.log(`Recording is ${config.recording ? "en" : "dis"}abled`);
+  console.log(`Recording is ${config.recording ? "en" : "dis"}abled`); // eslint-disable-line no-console
 });
