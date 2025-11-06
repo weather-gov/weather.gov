@@ -34,6 +34,7 @@ class TestStateViews(TestCase):
             state=self.state_fr,
             shape=GEOSGeometry("POINT(0 0)"),
             primarywfo=cwa,
+            countyfips="12345",
         )
 
     def test_index(self):
