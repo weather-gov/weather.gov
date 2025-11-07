@@ -69,7 +69,7 @@ variable "interop_url" {
 
 variable "enable_api_proxy" {
   type        = bool
-  sensitive   = true
+  default     = false
   description = "Deploy the API proxy alongside the API interop layer"
 }
 
