@@ -1,0 +1,13 @@
+# English translation of beta.weather.gov for using in JavaScript
+#
+# See django.po for an explanation of this file.
+msgid ""
+msgstr ""
+"Project-Id-Version: Weather.gov Utility\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "js.alerts.link.see-details.01"
+msgstr "see details"

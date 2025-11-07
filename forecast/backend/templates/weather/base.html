@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
     {% block head_css %}{% endblock %}
     <link rel="manifest" href="{% static 'manifest.json' %}" />
+    <script src="{% url 'translation-strings-for-js' %}"></script>
     <script src="{% static 'js/uswds-init.min.js' %}"></script>
     <script async type="text/javascript" id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety">
     </script>
