@@ -34,7 +34,7 @@ resource "cloudfoundry_app" "app" {
   enable_ssh       = true
 
   environment = {
-    # NEWRELIC_LICENSE       = var.newrelic_license
+    NEWRELIC_LICENSE       = var.newrelic_license
     INTEROP_URL            = var.interop_url
     PYTHONUNBUFFERED       = "yup"
     DJANGO_SETTINGS_MODULE = "backend.config.settings.production"

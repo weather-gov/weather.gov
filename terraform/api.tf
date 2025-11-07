@@ -29,7 +29,7 @@ resource "cloudfoundry_app" "interop" {
   enable_ssh       = true
 
   environment = {
-    # NEWRELIC_LICENSE       = var.newrelic_license
+    NEWRELIC_LICENSE       = var.newrelic_license
     API_INTEROP_PRODUCTION = true
     API_INTEROP_NAME       = var.env
     API_URL                = var.api_url
