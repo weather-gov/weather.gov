@@ -120,6 +120,7 @@ app.get("/proxy/play/:bundle", async (req, res) => {
     return;
   }
 
+  res.setHeader("Content-Type", "text/html");
   res.write(await ui({ error: `I don't have a bundle ${bundle}` }));
   res.end();
 });
@@ -127,6 +128,7 @@ app.get("/proxy/play/:bundle", async (req, res) => {
 app.get("/proxy/add-point", async (req, res) => {
   const output = await save(req, res, false);
   if (output.error) {
+    res.setHeader("Content-Type", "text/html");
     res.write(await ui(output));
     res.end();
   }
@@ -135,6 +137,7 @@ app.get("/proxy/add-point", async (req, res) => {
 app.get("/proxy/bundle", async (req, res) => {
   const output = await save(req, res, true);
   if (output.error) {
+    res.setHeader("Content-Type", "text/html");
     res.write(await ui(output));
     res.end();
   }
@@ -153,6 +156,7 @@ app.get("*any", async (req, res) => {
   // If there are any double-dots in the path, that could result in a path
   // traversal, so just eat it here and go straight to the UI.
   if (req.path === "/" || /\.\./.test(req.path)) {
+    res.setHeader("Content-Type", "text/html");
     res.write(await ui());
     res.end();
     return;

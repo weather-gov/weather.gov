@@ -35,8 +35,6 @@ services:
     image: $ci_registry_image/api-proxy:$ci_commit_ref_slug
     environment:
       WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
-      API_URL: "http://api-proxy:8081/"
-      GHWO_URL: "http://api-proxy:8081/"
     networks:
       - weather.gov
     ports:

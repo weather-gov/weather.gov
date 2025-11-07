@@ -67,6 +67,12 @@ variable "interop_url" {
   description = "URL for the API interop layer"
 }
 
+variable "enable_api_proxy" {
+  type        = bool
+  sensitive   = true
+  description = "Deploy the API proxy alongside the API interop layer"
+}
+
 variable "web_instances" {
   type        = number
   default     = 1
@@ -81,6 +87,12 @@ variable "web_disk_quota" {
   type        = string
   default     = "5G"
   description = "The amount of disk memory to allocate per web instance"
+}
+
+variable "api_proxy_memory" {
+  type        = string
+  default     = "256M"
+  description = "The amount of memory to assign to the API proxy process"
 }
 
 variable "api_interop_memory" {
