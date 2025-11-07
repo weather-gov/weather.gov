@@ -52,8 +52,6 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
-      API_URL: "http://api-proxy:8081/"
-      GHWO_URL: "http://api-proxy:8081/"
     networks:
       - weather.gov
     ports:
