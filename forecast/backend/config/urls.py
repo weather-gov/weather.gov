@@ -14,17 +14,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
+from django.utils import timezone
+from django.views.decorators.http import last_modified
+from django.views.i18n import JavaScriptCatalog
 
 from backend.views import index
+
+server_restart_date = timezone.now()
 
 urlpatterns = [
     path("", index.index, name="index"),
     path("", include("backend.urls")),
     path("saml/", include("noaa_saml.urls")),
     path("jsonapi/", include("wx_stories_api.urls")),
+    path(
+        "languages/jsi18n/",
+        last_modified(lambda _, **kw: server_restart_date)(JavaScriptCatalog.as_view()),
+        name="translation-strings-for-js",
+    ),
 ]
 
 # We need to add local media serving in non-prod
@@ -44,6 +55,7 @@ if settings.SETTINGS_TYPE == "dev":
 
     if not settings.TESTING:
         from debug_toolbar.toolbar import debug_toolbar_urls
+
         urlpatterns += debug_toolbar_urls()
 
 handler404 = "backend.views.errors.handle_404"
