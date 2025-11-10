@@ -52,7 +52,7 @@ services:
       API_URL: http://api-proxy:8081
       GHWO_URL: http://api-proxy:8081
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
-      NEWRELIC_LICENSE: ${NEWRELIC_LICENSE:-}
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY:-}
     networks:
       - weather.gov
     links:
