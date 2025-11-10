@@ -15,7 +15,7 @@ data "archive_file" "api_proxy_src" {
 }
 
 resource "cloudfoundry_app" "api-proxy" {
-  count = (var.enable_api_proxy == null ? 0 : 1)
+  count = (var.enable_api_proxy == false ? 0 : 1)
 
   name             = "api-proxy-${local.app_name}-${var.env}"
   space_name       = var.cf_space_name
