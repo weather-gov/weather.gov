@@ -7,6 +7,7 @@ locals {
   sp_public_key     = local.credentials.sp_public_key
   sp_private_key    = local.credentials.sp_private_key
   allowed_ips       = local.credentials.allowed_ips
+  newrelic_license  = local.credentials.newrelic_license
 }
 
 module "app_space" {

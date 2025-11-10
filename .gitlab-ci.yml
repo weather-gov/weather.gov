@@ -209,7 +209,7 @@ deploy-to-test:
       \"allowed_ips\": \"$CI_TEST_ALLOWED_IPS\",
       \"sp_private_key\": \"$CI_TEST_SP_PRIVATE_KEY\",
       \"sp_public_key\": \"$CI_TEST_SP_PUBLIC_KEY\"
-      } > credentials-staging.json
+      } > credentials-test.json
     - |
       echo -e \
       cf_user = \"$CI_CF_USER\"\\n\
