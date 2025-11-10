@@ -165,3 +165,16 @@ LOGIN_URL = "/saml/login"
 WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
 WAGTAILADMIN_LOGIN_URL = LOGIN_URL
 WAGTAILADMIN_BASE_URL = AppEnv().uris[0]
+
+# in production, we want to output JSON to the console instead. to do this, we
+# configure a JSON formatter and set all handlers to use this JSON formatter.
+
+LOGGING["formatters"] = { # noqa: F405 (imported from base.py)
+    "json": {
+        "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
+        "format": "%(asctime)s %(levelname)s %(name)s %(lineno)s %(message)s",
+        "datefmt": "%d/%b/%Y %H:%M:%S",
+    },
+}
+LOGGING["handlers"]["console"]["formatter"] = "json" # noqa: F405 (imported from base.py)
+LOGGING["handlers"]["django.server"]["formatter"] = "json" # noqa: F405 (imported from base.py)
