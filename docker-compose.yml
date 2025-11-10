@@ -80,7 +80,7 @@ services:
       GHWO_URL: ${GHWO_URL:-https://www.weather.gov}
       API_KEY: ${API_KEY:-}
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
-      NEWRELIC_LICENSE: ${NEWRELIC_LICENSE:-}
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY:-}
       LOG_LEVEL: verbose
       TRUNCATE_GHWO: "true"
     networks:
