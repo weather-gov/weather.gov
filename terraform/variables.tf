@@ -129,10 +129,3 @@ variable "worker_memory" {
   default     = "256M"
   description = "The amount of memory to assign to the worker processes"
 }
-
-variable "newrelic_license" {
-  type        = string
-  description = "New Relic license for monitoring"
-  default     = ""
-  sensitive   = true
-}
