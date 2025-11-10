@@ -30,6 +30,7 @@ include:
 stages:
   - gather   # gather the 3rd party dependencies and push images of them to the registry
   - lint     # pull the code images and lint
+  - build    # perform any necesary build steps
   - test     # pull the code images and test
   - notes    # write the release notes and any other pre-release activities
   - release  # create a release, which is stored in GitLab (the software, not the code repository)
@@ -125,6 +126,9 @@ make-tagged-release:
 deploy-to-prod:
   stage: deploy
   image: cloudfoundry/cli:8
+  needs:
+    - job: bundle-js
+      artifacts: true
   script:
     - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils
     - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
@@ -161,6 +165,9 @@ deploy-to-prod:
 deploy-to-staging:
   stage: deploy
   image: cloudfoundry/cli:8
+  needs:
+    - job: bundle-js
+      artifacts: true
   script:
     - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils
     - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
@@ -197,6 +204,9 @@ deploy-to-staging:
 deploy-to-test:
   stage: deploy
   image: cloudfoundry/cli:8
+  needs:
+    - job: bundle-js
+      artifacts: true
   script:
     - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils
     - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
@@ -263,6 +273,30 @@ gather-forecast-django-dependencies:
         - forecast/Dockerfile.ci
         - forecast/requirements.txt
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
+
+bundle-js:
+  stage: build
+  needs:
+    - job: gather-forecast-node-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  script:
+    # NB: GitLab clones into CI_BUILDS_DIR which defaults to
+    # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
+    # images our WORKDIR is /app. so we symlink the various /app/node_modules to
+    # CI_BUILDS_DIR so we can "npm run" as needed.
+    - ln -s /app/node_modules/ .
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - ln -s /app/api-proxy/node_modules api-proxy
+    - npx esbuild --bundle --minify --format=esm --sourcemap "forecast/frontend/assets/js/**/*.html.js" --outdir=forecast/frontend/assets/js --allow-overwrite
+  artifacts:
+    paths:
+      - forecast/frontend/assets/js/**/*.html.js
+      - forecast/frontend/assets/js/**/*.html.js.map
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+
 
 # lint all JavaScript in the repo in one job
 js-lint:

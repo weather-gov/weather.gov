@@ -1,22 +1,10 @@
 {% extends "weather/page.html" %}
 {% block head_js %}{{ data.public|json_script:"county-data" }}{% endblock %}
 {% block end_js %}
-  <script type="module" src="{% static 'js/components/Tabs.js' %}"></script>
   <script type="module"
-          src="{% static 'js/components/county-alert-daily-alert-accordions.js' %}"></script>
-  <script type="module" src="{% static 'js/components/countyAlertMap.js' %}"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          id="data-wx-leaflet"
-          nonce="{{ request.csp_nonce }}"
-          defer></script>
-  <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"
-          id="data-wx-leaflet-esri"
-          nonce="{{ request.csp_nonce }}"
-          defer></script>
-  <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"
-          id="data-ex-leaflet-esri-vector"
-          nonce="{{ request.csp_nonce }}"
-          defer></script>
+          src="{% static 'js/county/landing.html.js' %}"
+          type="module"></script>
+  {% include "weather/scripts/leaflet.html" %}
 {% endblock %}
 {% block head_css %}
   <link rel="stylesheet"

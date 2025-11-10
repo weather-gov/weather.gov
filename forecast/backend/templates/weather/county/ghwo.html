@@ -5,11 +5,9 @@
   {% endif %}
 {% endblock %}
 {% block head_js %}
-  <script type="module" src="{% static 'js/components/combo-box.js' %}"></script>
   <script type="module"
-          src="{% static 'js/components/ghwo-county-selector.js' %}"></script>
-  <script type="module"
-          src="{% static 'js/components/ghwo-details-table.js' %}"></script>
+          src="{% static 'js/county/ghwo.html.js' %}"
+          type="module"></script>
 {% endblock %}
 {% block page_content %}
   <div class="bg-primary-dark">
