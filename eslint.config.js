@@ -60,6 +60,7 @@ module.exports = defineConfig([
   globalIgnores([
     "reports/**/*",
     "forecast/frontend/assets/js/cmi-radar.*.js",
+    "forecast/frontend/assets/js/third-party/*",
     "tests/translations/**/*.js",
     "**/uswds*.js",
     "web/sites/default/**/*",

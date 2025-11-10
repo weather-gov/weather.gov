@@ -1,0 +1,14 @@
+{% comment %}
+  Leaflet doesn't play nicely with ESM. The ESRI plugins do, but then
+  bundling and minifying them ourselves results in substantially larger
+  files than just using the ones they distribute themselves.
+{% endcomment %}
+<script src="{% static 'js/third-party/leaflet@1.9.4.js' %}"
+        id="data-wx-leaflet"
+        defer></script>
+<script src="{% static 'js/third-party/esri-leaflet@3.0.19.js' %}"
+        id="data-wx-leaflet-esri"
+        defer></script>
+<script src="{% static 'js/third-party/esri-leaflet-vector@4.3.2.js'%}"
+        id="data-ex-leaflet-esri-vector"
+        defer></script>

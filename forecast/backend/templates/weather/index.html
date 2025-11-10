@@ -1,12 +1,8 @@
 {% extends "weather/page.html" %}
 {% load i18n %}
 {% load weather_i18n %}
-<!-- index.html -->
 {% block head_js %}
-  <script type="module" src="{% static 'js/locationSearch.js' %}"></script>
-  <script type="module" src="{% static 'js/components/combo-box.js' %}"></script>
-  <script type="module"
-          src="{% static 'js/components/combo-box-location.js' %}"></script>
+  <script type="module" src="{% static 'js/index.html.js' %}" type="module"></script>
 {% endblock %}
 {% block page_content %}
   <div class="bg-primary-darker wx-bg-satellite padding-y-4 tablet:padding-top-7 tablet:padding-bottom-8">
@@ -126,4 +122,3 @@
     </div>
   </div>
 {% endblock %}
-<!-- end index.html -->

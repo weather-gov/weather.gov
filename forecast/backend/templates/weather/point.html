@@ -1,43 +1,18 @@
 {% extends "weather/page.html" %}
 {% block head_js %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
-          nonce="{{ request.csp_nonce }}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
-          nonce="{{ request.csp_nonce }}"></script>
+  <script src="{% static 'js/third-party/chartjs@4.5.1.js' %}"></script>
+  <script src="{% static 'js/third-party/chartjs-plugin-datalabels@2.2.0.js' %}"></script>
 {% endblock %}
 {% block end_js %}
-  <script type="module" src="{% static 'js/localizeTimestamps.js' %}"></script>
-  <script type="module" src="{% static 'js/locationSearch.js' %}"></script>
-  <script type="module" src="{% static 'js/radar.js' %}"></script>
-  <script type="module" src="{% static 'js/components/forecastAlertMap.js' %}"></script>
-  <script type="module" src="{% static 'js/charts/hourly-temperature.js' %}"></script>
-  <script type="module" src="{% static 'js/charts/hourly-pops.js' %}"></script>
-  <script type="module" src="{% static 'js/charts/hourly-humidity.js' %}"></script>
-  <script type="module" src="{% static 'js/charts/hourly-wind.js' %}"></script>
-  <script type="module" src="{% static 'js/charts/hourly-dewpoint.js' %}"></script>
-  <script type="module" src="{% static 'js/charts/qpf.js' %}"></script>
-  <script type="module"
-          src="{% static 'js/components/quick-forecast-toggle.js' %}"></script>
-  <script type="module" src="{% static 'js/components/Satellite.js' %}"></script>
-  <script type="module" src="{% static 'js/components/TabbedNavigator.js' %}"></script>
-  <script type="module" src="{% static 'js/components/HourlyTable.js' %}"></script>
-  <script type="module" src="{% static 'js/components/Tabs.js' %}"></script>
-  <script type="module" src="{% static 'js/components/DailyForecast.js' %}"></script>
-  <script type="module" src="{% static 'js/components/combo-box.js' %}"></script>
-  <script type="module"
-          src="{% static 'js/components/combo-box-location.js' %}"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          id="data-wx-leaflet"
-          nonce="{{ request.csp_nonce }}"
-          defer></script>
-  <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"
-          id="data-wx-leaflet-esri"
-          nonce="{{ request.csp_nonce }}"
-          defer></script>
-  <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"
-          id="data-ex-leaflet-esri-vector"
-          nonce="{{ request.csp_nonce }}"
-          defer></script>
+  <script type="module" src="{% static 'js/point.html.js' %}" type="module"></script>
+  {% if point.alerts.items|length > 0 %}
+    {% comment %}
+      We only use Leaflet and the ESRI plugins on the alert tabs, so we'll
+      only include them here if there are any alerts. Otherwise we don't need
+      to bother!
+    {% endcomment %}
+    {% include "weather/scripts/leaflet.html" %}
+  {% endif %}
   <script src="{% static 'js/cmi-radar.0a93e066.js' %}"
           nonce="{{ request.csp_nonce }}"
           data-wx-radar-cmi="true"
