@@ -35,11 +35,10 @@
   {% endcomment %}
   {# djlint:on #}
   <div class="grid-container margin-bottom-5">
-    <h1>The requested location is not available.</h1>
-    The National Weather Service provides forecast information for the requested
-    location
-    {% if place %}, near {{ place.fullName }},{% endif %}
-    but the forecast
-    is not currently available on this website.
+    <h1>{{ "error.404.not-supported.message.01" | t }}</h1>
+    <p>
+      {% if place %}<strong>{{ place.fullName }}</strong>{% endif %}
+      {{ "error.404.not-supported.description.01" | t }}
+    </p>
   </div>
 {% endblock %}
