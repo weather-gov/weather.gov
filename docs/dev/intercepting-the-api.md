@@ -71,7 +71,7 @@ point's alerts, one possible workflow is this:
 
 ## File structure
 
-The data used by the proxy is stored in the `tests/api/data` directory as JSON
+The data used by the proxy is stored in the `api-proxy/data` directory as JSON
 files. The content of these files should match the results from the API as
 closely as possible so we are testing our code against realistic data. The
 directory structure and filenames are based on the URL being requested. For
@@ -84,7 +84,7 @@ https://api.weather.gov/gridpoints/ABC/32,58/forecast/hourly
 would correspond to this file path:
 
 ```
-tests/api/data/[bundle]gridpoints/ABC/32,58/forecast/hourly.json
+api-proxy/data/[bundle]gridpoints/ABC/32,58/forecast/hourly.json
 ```
 
 Any query parameters in the request are appended to the filename with a leading
@@ -97,7 +97,7 @@ https://api.weather.gov/alerts/active?status=actual&point=10,10
 would correspond to this file path:
 
 ```
-tests/api/data/[bundle]alerts/active__status=actual&point=10,10.json
+api-proxy/data/[bundle]alerts/active__status=actual&point=10,10.json
 ```
 
 ## Timestamp tokens
