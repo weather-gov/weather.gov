@@ -761,3 +761,27 @@ msgstr "Municipality"
 
 msgid "spatial.county-like.name.island.01"
 msgstr "Island"
+
+msgid "error.500.generic.message.01"
+msgstr "500: Something went wrong on our end. Please try again in a few minutes."
+
+msgid "error.404.generic.message.01"
+msgstr "404: The requested page was not found."
+
+msgid "error.404.not-supported.message.01"
+msgstr "The requested location is not available."
+
+msgid "error.404.not-supported.description.01"
+msgstr "The National Weather Service provides forecast information for the requested location but the forecast is not currently available on this website."
+
+msgid "error.404.out-of-bounds.message.01"
+msgstr "404: The requested location is not covered by the National Weather Service."
+
+msgid "error.404.out-of-bounds.description.01"
+msgstr "The National Weather Service only provides weather, forecast, and alert information within the United States."
+
+msgid "error.404.forecast.message.01"
+msgstr "404: The requested place, {place}, {state}, was not found."
+
+msgid "error.404.forecast.suggested.01"
+msgstr "Were you looking for {place}?"

@@ -21,13 +21,11 @@
   {% endcomment %}
   {# djlint:on #}
   <div class="grid-container margin-bottom-5">
-    <h1>
-      404: The requested place, {{ requested.place }}, {{ requested.state }}, was
-      not found.
-    </h1>
-    {% if suggested %}
-      Were you looking for
-      <a href="{{ suggested.url }}">{{ suggested.place }}</a>?
-    {% endif %}
+    <h1>{% trans_with_args "error.404.forecast.message.01" place=requested.place state=requested.state %}</h1>
+    <p>
+      {% if suggested %}
+        <a href="{{ suggested.url }}">{% trans_with_args "error.404.forecast.suggested.01" place=suggested.place %}</a>
+      {% endif %}
+    </p>
   </div>
 {% endblock %}

@@ -18,8 +18,7 @@
   {% endcomment %}
   {# djlint:on #}
   <div class="grid-container margin-bottom-5">
-    <h1>The requested location is not covered by the National Weather Service.</h1>
-    The National Weather Service only provides weather, forecast, and alert
-    information within the United States.
+    <h1>{{ "error.404.out-of-bounds.message.01" | t }}</h1>
+    <p>{{ "error.404.out-of-bounds.description.01" | t }}</p>
   </div>
 {% endblock %}
