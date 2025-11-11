@@ -66,7 +66,7 @@ describe("AFD Page Tests", () => {
 
       // Make sure the first option has the same value/id
       // as the one in our test data.
-      // See tests/api/data/testing/products/types/AFD/locations/OKX.json
+      // See api-proxy/data/testing/products/types/AFD/locations/OKX.json
       const val = await options.getAttribute("value");
       await expect(val).toEqual(firstId);
     });
@@ -75,7 +75,7 @@ describe("AFD Page Tests", () => {
       await page.goto(services.apiProxy("/proxy/play/testing"), {
         waitUntil: "load",
       });
-      // See tests/api/data/products/
+      // See api-proxy/data/products/
       // This is our OKX first AFD testing example data
       await page.goto(services.webApp(`/wx/afd/${firstId}`));
 
