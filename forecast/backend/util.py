@@ -16,6 +16,31 @@ OCONUS_4CODE_MAPPINGS = {
     "PAJK": "AJK",  # Juneau, AK
 }
 
+GHWO_RISK_MAPPINGS = {
+    "BlowingDust": "Blowing Dust Risk",
+    "CoastalFlood": "Coastal Flood Risk",
+    "ConvectiveWind": "Thunderstorm Wind Risk",
+    "ExcessiveRainfall": "Excessive Rainfall Risk",
+    "ExtremeCold": "Extreme Cold Risk",
+    "ExtremeHeat": "Extreme Heat Risk",
+    "FireWeather": "Fire Weather Risk",
+    "Fog": "Fog Risk",
+    "FreezingSpray": "Freezing Spray Risk",
+    "Frost/Freeze": "Frost/Freeze Risk",
+    "Hail": "Hail Risk",
+    "HighSurf": "High Surf Risk",
+    "IceAccumulation": "Ice Accumulation Risk",
+    "LakeshoreFlood": "Lakeshore Flood Risk",
+    "Lightning": "Lightning Risk",
+    "Marine": "Marine Hazard Risk",
+    "NonConvectiveWind": "Wind Risk",
+    "RipRisk": "Rip Current Risk",
+    "SevereThunderstorm": "Severe Thunderstorm Risk",
+    "SnowSleet": "Snow/Sleet Risk",
+    "SwimRisk": "Swim Risk",
+    "Tornado": "Tornado Risk",
+}
+
 def get_wfo_from_afd(afd):
     """
     Determine the correct WFO code for an AFD.
@@ -333,4 +358,3 @@ def get_ghwo_daily_images(county_ghwo_data):
                 urls.add(day["images"][key])
 
     return list(urls)
-

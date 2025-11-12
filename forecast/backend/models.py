@@ -56,6 +56,9 @@ class WFO(models.Model):
     address = models.TextField(blank=True)
     phone = models.CharField(blank=True, max_length=32)
 
+    # GHWO metadata field
+    ghwo_metadata = models.JSONField(default=None, blank=True, null=True)
+
     # Panels for Wagtail admin
     panels = [
         FieldPanel("name"),
