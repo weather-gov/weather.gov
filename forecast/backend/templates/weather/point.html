@@ -102,8 +102,8 @@
             {% include 'weather/partials/weather-story-container.html' with county=point.place.countyfips %}
           {% else %}
             <div class="grid-container margin-top-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
-              <div class="grid-row bg-accent-cool-lightest border-1px border-base-light padding-x-2">
-                <div class="display-flex flex-align-center padding-y-105">
+              <div class="bg-accent-cool-lightest border-1px border-base-light padding-x-2 padding-y-105">
+                <div class="grid-row display-flex flex-align-center">
                   <svg width="24"
                        height="24"
                        viewBox="0 0 24 24"
@@ -122,6 +122,19 @@
                   <a class="usa-link margin-left-1"
                      href="/afd/{{ point.grid.wfo | normalize_wfo }}">{{ "forecast.link.area-forecast-discussion.01" | t }}</a>
                 </div>
+                {% if point.place.countyfips %}
+                  <div class="grid-row display-flex flex-align-center margin-top-105">
+                    <svg width="24"
+                         height="24"
+                         fill="#005EA2"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true">
+                      <use xlink:href="{% static 'images/uswds/sprite.svg' %}#location_city"></use>
+                    </svg>
+                    <a class="usa-link margin-left-1"
+                       href="{% url "county_landing" countyfips=point.place.countyfips %}">{{ "weather-story.link.county-overview.01" | t }}</a>
+                  </div>
+                {% endif %}
               </div>
             </div>
           {% endif %}
