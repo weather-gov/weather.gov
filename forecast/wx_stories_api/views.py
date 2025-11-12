@@ -1,4 +1,5 @@
 import json
+import logging
 import uuid
 from collections import namedtuple
 from datetime import datetime, timezone
@@ -23,6 +24,8 @@ from .util import (
     get_temporary_id,
 )
 
+logger = logging.getLogger(__name__)
+
 
 @basic_auth_required()
 @csrf_exempt
@@ -37,8 +40,16 @@ def pdf(request):
     sitrep = TemporaryPDF(id=uid, file=file)
     sitrep.save()
 
+    logger.info(
+        "Received PDF '%s', saved it as '%s' with TemporaryPDF id of '%s'",
+        original_filename,
+        filename,
+        sitrep.id,
+    )
+
     # return the same JSON struct that Drupal used
     return FakeDrupal().file_upload(uid, original_filename)
+
 
 @basic_auth_required()
 @csrf_exempt
@@ -50,6 +61,7 @@ def situation_report(request):
     try:
         # parse and reformat the json data
         data = json.loads(request.body)
+        logger.info("Received situation report: %s", data)
         attr = data["data"]["attributes"]
 
         wfo = get_short_wfo_code(code=attr["field_wfo_code"])
@@ -58,10 +70,12 @@ def situation_report(request):
 
     except (JSONDecodeError, KeyError, ValueError, WFO.DoesNotExist):
         msg = "Data is malformed or WFO does not match our records"
+        logger.error("Error while processing situation report:", exc_info=True)
         return HttpResponse(msg, status=HTTPStatus.BAD_REQUEST)
 
     # locate matching pdf (this should have been uploaded first)
     if not TemporaryPDF.objects.filter(id=_id).exists():
+        logger.error("No PDF with id %s found for situation report request.", _id)
         return HttpResponse(status=HTTPStatus.PRECONDITION_FAILED)
 
     temp = TemporaryPDF.objects.get(id=_id)
@@ -74,9 +88,9 @@ def situation_report(request):
 
     with transaction.atomic():
         sitrep = SituationReport(
-            title = title,
-            pdf = file,
-            wfo = wfo,
+            title=title,
+            pdf=file,
+            wfo=wfo,
         )
         sitrep.save()
         temp.delete()
@@ -84,8 +98,16 @@ def situation_report(request):
     # keep bucket usage under control
     SituationReport.objects.prune(wfo)
 
+    logger.info(
+        "Saved situation report for %s as '%s' with Django SituationReport id of '%s'",
+        wfo,
+        filename,
+        sitrep.id,
+    )
+
     # return the same JSON struct that Drupal used
     return FakeDrupal().situation_report(data)
+
 
 @basic_auth_required()
 @csrf_exempt
@@ -101,8 +123,16 @@ def image(request, size):
     wx_story = TemporaryImage(id=uid, image=file)
     wx_story.save()
 
+    logger.info(
+        "Received image '%s', saved it as '%s' with TemporaryImage id of '%s'",
+        original_filename,
+        filename,
+        wx_story.id,
+    )
+
     # return the same JSON struct that Drupal used
     return FakeDrupal().file_upload(uid, original_filename)
+
 
 @basic_auth_required()
 @csrf_exempt
@@ -114,6 +144,7 @@ def weather_story(request):
     try:
         # parse and reformat the json data
         data = json.loads(request.body)
+        logger.info("Received weather story: %s", data)
         attr = data["data"]["attributes"]
 
         starttime = datetime.fromtimestamp(int(attr["field_starttime"]), tz=timezone.utc)
@@ -134,12 +165,14 @@ def weather_story(request):
             Data is malformed or WFO does not match our records.
             Please send us the JSON by email so we can fix what went wrong.
             """
+        logger.error("Error while processing weather story:", exc_info=True)
         return HttpResponse(msg, status=HTTPStatus.BAD_REQUEST)
 
     # locate matching images (these should have been uploaded first)
     for _id in images:
         if not TemporaryImage.objects.filter(id=_id).exists():
             msg = "We weren't able to find matching weather story images."
+            logger.error("No image with id %s found for weather story request.", _id)
             return HttpResponse(msg, status=HTTPStatus.PRECONDITION_FAILED)
 
     files = tuple()
@@ -162,13 +195,13 @@ def weather_story(request):
 
     with transaction.atomic():
         wx_story = WeatherStory(
-            title = title,
-            description = description,
-            cwa_center = point,
-            starttime = starttime,
-            endtime = endtime,
-            image = files[0],
-            wfo = wfo,
+            title=title,
+            description=description,
+            cwa_center=point,
+            starttime=starttime,
+            endtime=endtime,
+            image=files[0],
+            wfo=wfo,
         )
         if len(files) > 1:
             wx_story.small = files[1]
@@ -178,6 +211,8 @@ def weather_story(request):
 
     # keep bucket usage under control
     WeatherStory.objects.prune(wfo)
+
+    logger.info("Saved weather story for wfo %s as '%s' with id of '%s'", wfo, files[0].name, wx_story.id)
 
     # return the same JSON struct that Drupal used
     return FakeDrupal().weather_story(data)
