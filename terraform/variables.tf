@@ -97,7 +97,7 @@ variable "api_proxy_memory" {
 
 variable "api_interop_memory" {
   type        = string
-  default     = "1024M"
+  default     = "512M"
   description = "The amount of memory to assign to the API interop process"
 }
 
