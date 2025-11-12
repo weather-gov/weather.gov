@@ -269,12 +269,27 @@ def _set_first_selected_day(rows):
     The rows are those representing data for rows in the interactive
     table.
     Each row has it's own days list, representing each cell in the row.
-    'Viable' here means the first non-level-zero day in the first row.
+    'Viable' here means the first non-level-zero day and the earliest row
+    in which it appears (if at all)
     """
-    for day in rows[0]["days"]:
-        if day["level"]["number"] > 0:
-            day["is_first"] = True
-            break
+    if not len(rows):
+        return
+
+    # We assume that all rows have the same number
+    # of days in the data. To get the common days length
+    # we use the first available row.
+    num_days = len(rows[0]["days"])
+
+    # We search by "column" instead of by row,
+    # so that we find the first instance of a non-zero
+    # level by day.
+    for idx in range(num_days):
+        for row in rows:
+            day = row["days"][idx]
+            if day["level"]["number"] > 0:
+                day["is_first"] = True
+                return
+
 
 def process_ghwo_daily_details(county_ghwo_data):
     """Process ghwo data into a form usable by the ghwo daily details partial."""

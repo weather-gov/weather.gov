@@ -726,6 +726,9 @@ msgstr "The graphic shows the daily risk summary for 7 days. Daily risk is based
 msgid "ghwo.table.details.header.01"
 msgstr "What factors are driving the risk?"
 
+msgid "ghwo.table.details.header.no-risk.01"
+msgstr "No expected risks for the next 7 days"
+
 msgid "ghwo.table.details.description.01"
 msgstr "The graphic shows the weather factors that have some risk for the next 7 days. Click on the colored boxes to see what the risk factors is based on and what impact it may have."
 
