@@ -36,7 +36,7 @@ const ensureDatabaseExists = openDatabase().then(async (db) => {
   // If the TRUNCATE_GHWO env variable
   // is set to true, we drop the GHWO metadata
   // from the meta table on each restart.
-  if(process.env.TRUNCATE_GHWO && process.env.TRUNCATE_GHWO === "true"){
+  if (process.env.TRUNCATE_GHWO && process.env.TRUNCATE_GHWO === "true") {
     logger.info("Truncating GHWO meta table...");
     await db.query(`TRUNCATE weathergov_temp_ghwo_meta`);
     await db.query(`TRUNCATE weathergov_temp_ghwo`);
@@ -55,9 +55,9 @@ export const startGHWOProcessing = async () => {
         case "log":
           backgroundLogger[level]?.(message);
           if (!backgroundLogger[level]) {
-            logger.error(`Attempted to write to invalid log level: '${level}'`);
-            logger.error("Received message:");
-            logger.error(message);
+            logger.error(
+              `Attempted to write to invalid log level: '${level}': ${message}`,
+            );
           }
           break;
 
@@ -119,8 +119,7 @@ export const getGHWOData = async (id) => {
     }
     return { error: `No GHWO found for ${id}`, status: 404 };
   } catch (e) {
-    logger.error(`Error fetching GHWO for ${id}`);
-    logger.error(e);
+    logger.error(`Error fetching GHWO for ${id}`, e);
     return { error: `Error fetching GHWO for ${id}` };
   }
 };

@@ -13,8 +13,6 @@ describe("main bootstrapper", () => {
   };
   const fastify = () => server;
 
-  const newrelic = { recordLogEvent: sandbox.spy() };
-
   const startAlertProcessing = sandbox.spy();
 
   const handler = sandbox.stub();
@@ -44,7 +42,6 @@ describe("main bootstrapper", () => {
     // default argument. The default argument should *ALWAYS* be set, even if
     // it's just an empty argument.
     await quibble.esm("fastify", {}, fastify);
-    await quibble.esm("newrelic", {}, newrelic);
     await quibble.esm("./data/alerts/index.js", { startAlertProcessing }, {});
     await quibble.esm("./routes/index.js", {}, urls);
 
@@ -179,20 +176,6 @@ describe("main bootstrapper", () => {
     beforeEach(async () => {
       await main();
       handlerWrapper = server.route.args[0][0].handler;
-    });
-
-    it("sends a newrelic log if there is error", async () => {
-      handler.resolves({ data: null, error: "oh no!", status: 30 });
-
-      await handlerWrapper(request, response);
-
-      expect(
-        newrelic.recordLogEvent.calledWith({
-          message: "https://test",
-          level: "error",
-          error: "Error: oh no!",
-        }),
-      ).to.be.true;
     });
 
     it("sets the HTTP status code if provided", async () => {

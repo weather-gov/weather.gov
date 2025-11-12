@@ -19,7 +19,7 @@ let sendMetric = (metric) => {
   }).then(async (r) => {
     const response = await r.json();
     if (r.status !== 202) {
-      console.log(`NR error: ${response}`);
+      console.log(`NR error: ${JSON.stringify(response)}`);
     }
     return response;
   });
@@ -34,3 +34,4 @@ if (!licenseKey) {
 
 export const sendNewRelicMetric = sendMetric;
 export const recordLogEvent = recordEvent;
+export const inProduction = !!licenseKey;

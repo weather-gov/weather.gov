@@ -13,9 +13,9 @@ const internalFetch = async (path) => {
   // If the incoming path matches a request to
   // the website's GHWO endpoint, let's try to proxy the
   // request if possible
-  if(path.endsWith("hazByCounty.json")){
+  if (path.endsWith("hazByCounty.json")) {
     const ghwoUrl = URL.parse(path);
-    logger.verbose(`GHWO Request to: ${ghwoUrl.pathname} `);
+    logger.verbose(`GHWO Request to: ${ghwoUrl.pathname}`);
     url = new URL(ghwoUrl.pathname, BASE_GHWO_URL).toString();
   }
   logger.verbose(`making request to ${url}`);
@@ -26,9 +26,8 @@ const internalFetch = async (path) => {
       return r.json();
     }
 
-    logger.error(`non-success (HTTP ${r.status}) on ${path}`);
     const response = await r.json();
-    logger.error(response);
+    logger.error(`non-success (HTTP ${r.status}) on ${path}`, response);
 
     // If there was a server error, retry. These are often temporary.
     if (r.status >= 500) {
@@ -52,11 +51,9 @@ export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
     .catch((e) => {
       if (e instanceof SyntaxError) {
         // this can happen if the API or proxy returns HTML
-        logger.error(
-          `error retrieving ${path}: endpoint returned invalid JSON: ${e}`,
-        );
+        logger.error(`error retrieving ${path} due to invalid JSON`, e);
       } else {
-        logger.error(`error retrieving ${path}: ${e.cause}`);
+        logger.error(`error retrieving ${path}`, e.cause);
       }
       return { ...e.cause, error: true };
     });

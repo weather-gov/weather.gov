@@ -31,9 +31,9 @@ export const updateFromBackground = ({ action, level, message }) => {
     case "log":
       backgroundLogger[level]?.(message);
       if (!backgroundLogger[level]) {
-        logger.error(`Attempted to write to invalid log level: '${level}'`);
-        logger.error("Received message:");
-        logger.error(message);
+        logger.error(
+          `Attempted to write to invalid log level: '${level}': ${message}`,
+        );
       }
       break;
     default:
