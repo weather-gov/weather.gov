@@ -264,6 +264,7 @@ DIRECTIVES = {
         # cmi-radar
         "api.weather.gov",
         # analytics
+        "www.google-analytics.com",
         "dap.digitalgov.gov",
         # mapping
         "static.arcgis.com",
@@ -276,6 +277,9 @@ DIRECTIVES = {
     "font-src": [SELF],
     "img-src": [
         SELF,
+        # analytics
+        "www.google-analytics.com",
+        "www.googletagmanager.com",
         # satellite
         "cdn.star.nesdis.noaa.gov",
         # mapping
