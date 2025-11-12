@@ -56,7 +56,7 @@ class WeatherStoryManager(models.Manager):
     def current(self, wfo):
         """Fetch all current weather stories, according to their start and end times."""
         now = datetime.now(tz=timezone.utc)
-        return self.filter(wfo=wfo, starttime__lte=now, endtime__gte=now)
+        return self.filter(wfo=wfo, starttime__lte=now, endtime__gte=now).order_by("-starttime")
 
     def prune(self, wfo):
         """
@@ -126,5 +126,3 @@ class TemporaryPDF(TimeStampedModel):
 
     def __str__(self):
         return f"PDF {self.id}"
-
-

@@ -47,13 +47,23 @@ class TestModels(TestCase):
         expected = set()
         # current weather stories
         for x in range(5):
-            expected.add(WeatherStory.objects.create(
+            story = WeatherStory.objects.create(
                 title=f"TestCur{x}",
                 image=self.img,
                 wfo=self.wfo,
-                starttime=self.now - timedelta(2),
-                endtime=self.now + timedelta(2),
-            ))
+                starttime=self.now - timedelta(10 * (x + 1)),
+                endtime=self.now + timedelta(10 * (x + 1)),
+            )
+
+            expected.add(story)
+
+            # Make a story that was inserted somewhere in the middle into
+            # the newest story. This will test that we're sorting them properly.
+            if x == 2:  # noqa: PLR2004
+                story.starttime = self.now - timedelta(1)
+                story.save()
+                first = story
+
         # expired weather stories
         for x in range(5):
             WeatherStory.objects.create(
@@ -72,9 +82,9 @@ class TestModels(TestCase):
                 starttime=self.now + timedelta(2),
                 endtime=self.now + timedelta(4),
             )
-        actual = set(WeatherStory.objects.current(self.wfo))
-        self.assertEqual(len(actual), 5)
-        self.assertEqual(actual, expected)
+        actual = WeatherStory.objects.current(self.wfo)
+        self.assertEqual(set(actual), expected)
+        self.assertEqual(actual.first(), first)
 
     def test_weather_story_prune(self):
         """Test that prune prunes the oldest for that wfo and not more than the max."""
