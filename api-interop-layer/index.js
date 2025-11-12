@@ -4,20 +4,17 @@ import { createLogger } from "./util/monitoring/index.js";
 import { startAlertProcessing } from "./data/alerts/index.js";
 import routes from "./routes/index.js";
 
-const REQUIRED_ENV_VARS = [
-  "API_URL",
-  "GHWO_URL"
-];
+const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
 
 const ensureEnvironmentVariables = (logger) => {
   const missing = [];
   logger.info("Checking for required environment variables...");
-  REQUIRED_ENV_VARS.forEach(varName => {
-    if(!process.env[varName]){
+  REQUIRED_ENV_VARS.forEach((varName) => {
+    if (!process.env[varName]) {
       missing.push(varName);
     }
   });
-  if(missing.length){
+  if (missing.length) {
     const msg = `Missing required environment variables: ${missing.join(", ")}`;
     logger.error(msg);
     process.exit(-1);
@@ -39,8 +36,7 @@ export const main = async () => {
   });
 
   process.on("uncaughtException", (err) => {
-    logger.error("Uncaught exception");
-    logger.error(err);
+    logger.error("Uncaught exception", err);
     // explicitly crash.
     process.exit(1);
   });
@@ -63,13 +59,7 @@ export const main = async () => {
         const { data, error, status } = await handler(request);
 
         if (error) {
-          logger.error(`error on ${request.url}`);
-          logger.error(error);
-          newrelic.recordLogEvent({
-            message: request.url,
-            level: "error",
-            error: `Error: ${error}`,
-          });
+          logger.error(`error on ${request.url}`, error);
         }
 
         const apiTimings = performance
