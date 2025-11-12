@@ -53,11 +53,15 @@ APPEND_SLASH = True
 
 # Application definition
 
-INSTALLED_APPS = [
+OUR_APPS = [
     "backend",
     "wx_stories_api",
     "spatial",
     "noaa_saml",
+]
+
+INSTALLED_APPS = [
+    *OUR_APPS,
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -424,11 +428,13 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        # Our app!
-        "weather": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": False,
+        **{
+            app: {
+                "handlers": ["console"],
+                "level": "INFO",
+                "propagate": False,
+            }
+            for app in OUR_APPS
         },
     },
     # root logger catches anything, unless
