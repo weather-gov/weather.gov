@@ -23,6 +23,8 @@ register_converter(FloatConverter, "float")
 
 urlpatterns = [
     path("", index.index, name="index"),
+    # Temporary redirect to volunteer sign-up bage for IAEM.
+    path("volunteer/", RedirectView.as_view(url="https://www.weather.gov/weathergovsurvey")),
     # Our URLs should have trailing slashes. Django will automatically add
     # trailing slashes to requests that don't have them, so if our URLs DON'T
     # have trailing slashes, they'll never match.
