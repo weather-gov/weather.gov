@@ -1,19 +1,45 @@
 /** Initialize county alert map after Leaflet has loaded. */
 const setupMap = () => {
+  const L = window.L;
   const countyAlertLayers = { 1: [], 2: [], 3: [], 4: [], 5: [], all: [] };
+  const iconOffsets = [
+    { x: 0, y: 0 },
+    { x: 0, y: -34 },
+    { x: 34, y: 0 },
+    { x: 0, y: 34 },
+    { x: -34, y: 0 },
+  ];
   let curDayIndex = "all";
+
+  const json = JSON.parse(document.getElementById("county-data").textContent);
+  const map = L.map(`wx_county_alert_map`, {
+    zoomDelta: 1,
+    zoomSnap: 0.5,
+  }).setView([0, 0], 0);
 
   /** Show alerts for the selected day or for "all". */
   const filterMap = () => {
     if (curDayIndex !== "all") {
-      countyAlertLayers["all"].forEach((layer) =>
-        layer.setStyle({
-          fillOpacity: 0,
-          opacity: 0,
-        }),
-      );
+      countyAlertLayers["all"].forEach((layer) => {
+        try {
+          layer.setStyle({
+            fillOpacity: 0,
+            opacity: 0,
+          });
+          layer.wx_marker.remove();
+        } catch (error) {
+          console.log(error);
+        }
+      });
     }
-    countyAlertLayers[curDayIndex].forEach((layer) => layer.resetStyle());
+    countyAlertLayers[curDayIndex].forEach((layer) => {
+      try {
+        layer.resetStyle();
+        layer.wx_marker.addTo(map);
+      } catch (error) {
+        console.log(error);
+      }
+    });
   };
 
   /** Handle when a day is selected via the tab component. */
@@ -22,14 +48,7 @@ const setupMap = () => {
     filterMap();
   };
 
-  const json = JSON.parse(document.getElementById("county-data").textContent);
-  const L = window.L;
-  const map = L.map(`wx_county_alert_map`, { zoomSnap: 0.2 }).setView(
-    [0, 0],
-    0,
-  );
-
-  // add a custom expand/shrink button for the map container.
+  /** A custom expand/shrink button for the map container. */
   L.Control.Expand = L.Control.extend({
     options: {
       position: "topright",
@@ -66,6 +85,103 @@ const setupMap = () => {
   const expandButton = new L.Control.Expand();
   expandButton.addTo(map);
 
+  /** Convert a map's bounds in lat/lng to x/y. */
+  const getXYBounds = () => {
+    const latlngBounds = map.getBounds();
+    const southeast = latlngBounds.getSouthEast();
+    const northwest = latlngBounds.getNorthWest();
+    return L.bounds(
+      [northwest.lat, northwest.lng],
+      [southeast.lat, southeast.lng],
+    );
+  };
+
+  /** Determine the center of a layer, considering only points within the viewport. */
+  const visibleCenter = (layer, xybounds) => {
+    const array = layer.getLayers()[0].feature.geometry.coordinates[0];
+    const coords = array.length > 2 ? array : array[0];
+    const points = coords.map(([y, x]) => L.point([x, y]));
+    const clippy = L.PolyUtil.clipPolygon(points, xybounds).map((p) =>
+      L.latLng([p.x, p.y]),
+    );
+    return clippy ? L.PolyUtil.polygonCenter(clippy, map.options.crs) : null;
+  };
+
+  /** Open the associated alert accordion and bring it into view. */
+  const handlePopupClick = (e) => {
+    const accordion = document.querySelector(
+      `button[aria-controls='a${e.target.dataset.alert_id}']`,
+    );
+    accordion.focus();
+    accordion.scrollIntoView({ behavior: "smooth" });
+    if (accordion.getAttribute("aria-expanded", "") === "false")
+      accordion.click();
+  };
+
+  /** Change the opacity of the selected alert. */
+  const handleMarkerClick = (e, layer) => {
+    switch (e.type) {
+      case "click":
+        layer.setStyle(styles.active);
+        break;
+      case "popupclose":
+        layer.resetStyle();
+        break;
+      default:
+        break;
+    }
+  };
+
+  /** Redraw icons on zoom in or pan; reset them on zoom out. */
+  const handleMotion = (e) => {
+    const zoomedOut =
+      e.target.getZoom() <= map.wx_county_zoom &&
+      map.wx_latest_zoom > map.wx_county_zoom;
+    const zoomedIn =
+      e.target.getZoom() > map.wx_county_zoom &&
+      e.target.getZoom() !== map.wx_latest_zoom;
+    const panned =
+      (e.target.getCenter() !== map.wx_county_center) !== map.wx_latest_center;
+    if (zoomedOut) {
+      countyAlertLayers[curDayIndex].forEach((layer) => {
+        try {
+          layer.wx_marker.setLatLng(layer.wx_marker.wx_orig_pos);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    } else if (zoomedIn || panned) {
+      countyAlertLayers[curDayIndex].forEach((layer) => {
+        try {
+          layer.wx_marker.setLatLng(visibleCenter(layer, getXYBounds()));
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    }
+    map.wx_latest_zoom = e.target.getZoom();
+  };
+  map.on("zoomend", handleMotion);
+  map.on("moveend", handleMotion);
+
+  /** HTML shown inside a popup when clicking on an alert icon on the map. */
+  const getPopupHTML = (alertId, alertName) => {
+    const html = document.createElement("div");
+    html.classList.add("text-center");
+    html.innerHTML = `
+      <div>${gettext(alertName)}</div>
+      <div>
+        <button class="usa-button usa-button--unstyled" type="button">
+          ${gettext("js.alerts.link.see-details.01")}
+        </button>
+      </div>
+    `;
+    const btn = html.querySelector("button");
+    btn.addEventListener("click", handlePopupClick);
+    btn.dataset.alert_id = alertId;
+    return html;
+  };
+
   // Leaflet is managed by a Ukrainian team. The default attribution they put on
   // maps includes a Ukrainian flag to show their national pride. But as an
   // official website of the US Government, that might not be appropriate for
@@ -79,6 +195,27 @@ const setupMap = () => {
   L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
     apiKey: ESRI_API_KEY,
   }).addTo(map);
+
+  const MapIcon = L.Icon.extend({
+    options: {
+      // className: 'my-div-icon',
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -8],
+    },
+  });
+
+  const icons = {
+    warning: new MapIcon({
+      iconUrl: "/public/images/weather/wx_alerticon_circle_warning.svg",
+    }),
+    watch: new MapIcon({
+      iconUrl: "/public/images/weather/wx_alerticon_circle_watch.svg",
+    }),
+    other: new MapIcon({
+      iconUrl: "/public/images/weather/wx_alerticon_circle_other.svg",
+    }),
+  };
 
   const styles = {
     warning: {
@@ -104,46 +241,63 @@ const setupMap = () => {
       opacity: 1,
       fillOpacity: 0,
     },
+    active: {
+      fillOpacity: 0.5,
+    },
   };
 
-  // create layers and sort them
-  for (let i = json.alerts.items.length - 1; i >= 0; i--) {
-    let {
-      geometry,
-      alertDays,
-      metadata: {
-        level: { text: alertType },
-      },
-    } = json.alerts.items[i];
-    let layer;
-    if (alertType === "warning") {
-      layer = L.geoJSON(geometry, { style: styles.warning }).addTo(map);
-    } else if (alertType === "watch") {
-      layer = L.geoJSON(geometry, { style: styles.watch }).addTo(map);
-    } else {
-      layer = L.geoJSON(geometry, { style: styles.other }).addTo(map);
-    }
-    alertDays.forEach((day) => {
-      countyAlertLayers[day].push(layer);
-    });
-    countyAlertLayers["all"].push(layer);
-  }
+  // zoom to the county outline (but do not draw it yet)
+  const countyOutline = L.geoJSON(json.county.shape, { style: styles.county });
+  map.fitBounds(countyOutline.getBounds(), { padding: [15, 15] });
+  map.wx_county_xybounds = getXYBounds();
+  map.wx_county_zoom = map.wx_latest_zoom = map.getZoom();
+  map.wx_county_center = map.wx_latest_center = map.getCenter();
 
-  // ready to handle day change events
-  window.addEventListener("wx-tab-focused", handleDay);
+  // create alert layers and sort them
+  for (let i = json.alerts.items.length - 1; i >= 0; i--) {
+    try {
+      let {
+        geometry,
+        alertDays,
+        metadata: {
+          level: { text: alertType },
+        },
+      } = json.alerts.items[i];
+      let { id: alertId, event: alertName } = json.alerts.items[i];
+
+      let layer = L.geoJSON(geometry, { style: styles[alertType] }).addTo(map);
+      let alertCenter = visibleCenter(layer, map.wx_county_xybounds);
+
+      layer.wx_marker = L.marker(alertCenter, { icon: icons[alertType] }).addTo(
+        map,
+      );
+      layer.wx_marker.bindPopup(getPopupHTML(alertId, alertName), {
+        autoPan: false,
+      });
+      layer.wx_marker.wx_orig_pos = alertCenter;
+      layer.wx_marker.on("click", (e) => handleMarkerClick(e, layer));
+      layer.wx_marker.on("popupclose", (e) => handleMarkerClick(e, layer));
+
+      alertDays.forEach((day) => {
+        countyAlertLayers[day].push(layer);
+      });
+      countyAlertLayers["all"].push(layer);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   // day selection starts on "all", but the user might have changed it
   const selected = document.querySelector(
     "wx-tabs button[aria-selected='true']",
   );
   curDayIndex = selected.dataset.alertDay;
-  if (curDayIndex !== "all") filterMap();
 
-  // add the county outline and zoom to it
-  const layer = L.geoJSON(json.county.shape, { style: styles.county }).addTo(
-    map,
-  );
-  map.fitBounds(layer.getBounds(), { padding: [0.4, 0.4] });
+  countyOutline.addTo(map);
+  filterMap();
+
+  // ready to handle day change events
+  window.addEventListener("wx-tab-focused", handleDay);
 
   // add the user's location if they've already agreed to share it
   (async () => {
@@ -170,7 +324,7 @@ const setupMap = () => {
         });
       }
     } catch (error) {
-      /* do nothing */
+      console.log(error);
     }
   })();
 };
