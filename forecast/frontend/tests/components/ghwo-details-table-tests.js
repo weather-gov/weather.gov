@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from "chai";
 import { createSandbox } from "sinon";
 
 const TEST_MARKUP = `
@@ -40,7 +40,7 @@ const TEST_MARKUP = `
 </wx-ghwo-details-table> 
 `;
 
-describe.only("GHWO Daily Details Table component tests", () => {
+describe("GHWO Daily Details Table component tests", () => {
   before(async () => {
     await import("../../assets/js/components/ghwo-details-table.js");
   });
@@ -60,14 +60,18 @@ describe.only("GHWO Daily Details Table component tests", () => {
 
   it("Has one and only one button selected by default", () => {
     const component = document.querySelector("wx-ghwo-details-table");
-    const selected = Array.from(component.querySelectorAll(`td [aria-selected="true"]`));
+    const selected = Array.from(
+      component.querySelectorAll(`td [aria-selected="true"]`),
+    );
 
     expect(selected).to.have.length(1);
   });
 
   it("Clicking the last button in the table selects that button and de-selects the others", () => {
     const component = document.querySelector("wx-ghwo-details-table");
-    const buttons = Array.from(component.querySelectorAll(`[role="button"].ghwo-chiclet`));
+    const buttons = Array.from(
+      component.querySelectorAll(`[role="button"].ghwo-chiclet`),
+    );
     const thirdButton = buttons[2];
 
     // To start, we expect the third button is not selected
@@ -78,11 +82,13 @@ describe.only("GHWO Daily Details Table component tests", () => {
 
     // We expect all buttons that are not the clicked button to
     // have aria-select set to false
-    buttons.filter(button => {
-      return button !== thirdButton;
-    }).forEach(button => {
-      expect(button.getAttribute("aria-selected")).to.not.equal("true");
-    });
+    buttons
+      .filter((button) => {
+        return button !== thirdButton;
+      })
+      .forEach((button) => {
+        expect(button.getAttribute("aria-selected")).to.not.equal("true");
+      });
 
     // And now the third button should be the selected one
     expect(thirdButton.getAttribute("aria-selected")).to.equal("true");
@@ -91,18 +97,20 @@ describe.only("GHWO Daily Details Table component tests", () => {
   it("Clicking the last button in the table will display its corresponding pane and hide the other panes", async () => {
     const component = document.querySelector("wx-ghwo-details-table");
     const panes = Array.from(component.querySelectorAll(".ghwo-details-pane"));
-    const thirdButton  = component.querySelector(`tr:nth-child(2) td:last-child > [role="button"]`);
+    const thirdButton = component.querySelector(
+      `tr:nth-child(2) td:last-child > [role="button"]`,
+    );
     expect(thirdButton).to.exist;
 
     const thirdPane = panes[2];
-    const otherPanes = panes.filter(pane => pane !== thirdPane);
+    const otherPanes = panes.filter((pane) => pane !== thirdPane);
     expect(thirdPane.getAttribute("aria-hidden")).to.equal("true");
 
     // Click the third button. Then we expect the third pane
     // to be showing, and the others hidden.
     thirdButton.click();
     expect(thirdPane.getAttribute("aria-hidden")).to.equal("false");
-    otherPanes.forEach(pane => {
+    otherPanes.forEach((pane) => {
       expect(pane.getAttribute("aria-hidden")).to.equal("true");
     });
   });
@@ -128,9 +136,15 @@ describe.only("GHWO Daily Details Table component tests", () => {
        * X O O
        * O O O
        */
-      const event = new window.KeyboardEvent("keydown", {bubbles: true, key: "ArrowLeft"});
+      const event = new window.KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "ArrowLeft",
+      });
       const component = document.querySelector("wx-ghwo-details-table");
-      const expectedFocusEl = document.activeElement.parentElement.previousElementSibling.querySelector(".ghwo-chiclet");
+      const expectedFocusEl =
+        document.activeElement.parentElement.previousElementSibling.querySelector(
+          ".ghwo-chiclet",
+        );
 
       component.dispatchEvent(event);
 
@@ -138,13 +152,18 @@ describe.only("GHWO Daily Details Table component tests", () => {
 
       expect(actualFocusEl).to.eql(expectedFocusEl);
     });
-    
+
     it("Doesn't navigate another cell to the left, because we are at the beginning of the row", () => {
-      const event = new window.KeyboardEvent("keydown", { bubbles: true, key: "ArrowLeft" });
+      const event = new window.KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "ArrowLeft",
+      });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Focus the first chiclet in the first row
-      const firstCell = component.querySelector(`tr:first-of-type > td:first-of-type > .ghwo-chiclet`);
+      const firstCell = component.querySelector(
+        `tr:first-of-type > td:first-of-type > .ghwo-chiclet`,
+      );
       firstCell.focus();
       expect(firstCell.matches(`:focus`)).to.equal(true);
 
@@ -166,10 +185,16 @@ describe.only("GHWO Daily Details Table component tests", () => {
      * O O O
      */
     it("Navigates one cell to the right", () => {
-      const event = new window.KeyboardEvent("keydown", { bubbles: true, key: "ArrowRight" });
+      const event = new window.KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "ArrowRight",
+      });
       const component = document.querySelector("wx-ghwo-details-table");
       const currentFocusEl = document.activeElement;
-      const expectedFocusEl = currentFocusEl.parentElement.nextElementSibling.querySelector(".ghwo-chiclet");
+      const expectedFocusEl =
+        currentFocusEl.parentElement.nextElementSibling.querySelector(
+          ".ghwo-chiclet",
+        );
 
       component.dispatchEvent(event);
 
@@ -181,12 +206,14 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("Doesn't navigate to another cell to the right, because we are at the end of the row", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "ArrowRight"
+        key: "ArrowRight",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Focus the last chiclet in the first row
-      const lastCell = component.querySelector(`tr:first-of-type > td:last-of-type > .ghwo-chiclet`);
+      const lastCell = component.querySelector(
+        `tr:first-of-type > td:last-of-type > .ghwo-chiclet`,
+      );
       lastCell.focus();
       expect(lastCell.matches(`:focus`)).to.equal(true);
 
@@ -207,18 +234,22 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("Navigates down to the cell below the current cell", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "ArrowDown"
+        key: "ArrowDown",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Select the second chiclet in the first row
-      const secondCell = component.querySelector(`tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const secondCell = component.querySelector(
+        `tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       secondCell.focus();
       expect(secondCell.matches(`:focus`)).to.equal(true);
 
       // We expect to focus the second chiclet in the second row
       // which is the one right below the current focussed element
-      const expectedCell = component.querySelector(`tr:nth-of-type(2) > td:nth-of-type(2) > .ghwo-chiclet`);
+      const expectedCell = component.querySelector(
+        `tr:nth-of-type(2) > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
 
       component.dispatchEvent(event);
 
@@ -228,12 +259,14 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("Does not navigate down when we are already in the bottom row", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "ArrowDown"
+        key: "ArrowDown",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Select the second chiclet in the last row
-      const secondCell = component.querySelector(`tr:last-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const secondCell = component.querySelector(
+        `tr:last-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       secondCell.focus();
       expect(secondCell.matches(`:focus`)).to.equal(true);
 
@@ -255,18 +288,22 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("Navigates up to the cell above the current cell", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "ArrowUp"
+        key: "ArrowUp",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Select the second cell in the last row
-      const secondCell = component.querySelector(`tr:last-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const secondCell = component.querySelector(
+        `tr:last-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       secondCell.focus();
       expect(secondCell.matches(`:focus`)).to.equal(true);
 
       // We expect the second cell of the first row to be selected
       // after the event
-      const expectedCell = component.querySelector(`tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const expectedCell = component.querySelector(
+        `tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       component.dispatchEvent(event);
 
       expect(document.activeElement).to.eql(expectedCell);
@@ -275,12 +312,14 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("Does not navigate up when we are already in the top row", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "ArrowUp"
+        key: "ArrowUp",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Select the second chiclet in the last row
-      const secondCell = component.querySelector(`tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const secondCell = component.querySelector(
+        `tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       secondCell.focus();
       expect(secondCell.matches(`:focus`)).to.equal(true);
 
@@ -295,18 +334,22 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("PageDown navigates to the bottom row at the same cell index", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "PageDown"
+        key: "PageDown",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Start by selecting the second item in the top row
-      const secondCell = component.querySelector(`tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const secondCell = component.querySelector(
+        `tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       secondCell.focus();
       expect(secondCell.matches(`:focus`)).to.equal(true);
 
       // We expect the second row at the second cell index to be
       // focussed
-      const expectedCell = component.querySelector(`tr:nth-of-type(2) > td:nth-of-type(2) > .ghwo-chiclet`);
+      const expectedCell = component.querySelector(
+        `tr:nth-of-type(2) > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       component.dispatchEvent(event);
 
       expect(document.activeElement).to.eql(expectedCell);
@@ -315,12 +358,14 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("PageDown doesn't navigate if we are already in the bottom row", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "PageDown"
+        key: "PageDown",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Start by selecting the second item in the bottom row
-      const secondCell = component.querySelector(`tr:last-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const secondCell = component.querySelector(
+        `tr:last-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       secondCell.focus();
       expect(secondCell.matches(`:focus`)).to.equal(true);
 
@@ -332,18 +377,22 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("PageUp navigates to the top row at the same cell index", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "PageUp"
+        key: "PageUp",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Start by selecting the second item in the bottom row
-      const secondCell = component.querySelector(`tr:last-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const secondCell = component.querySelector(
+        `tr:last-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       secondCell.focus();
       expect(secondCell.matches(`:focus`)).to.equal(true);
 
       // We expect the second row at the second cell index to be
       // focussed
-      const expectedCell = component.querySelector(`tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const expectedCell = component.querySelector(
+        `tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       component.dispatchEvent(event);
 
       expect(document.activeElement).to.eql(expectedCell);
@@ -352,12 +401,14 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("PageUp doesn't navigate if we are already in the top row", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "PageUp"
+        key: "PageUp",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Start by selecting the second item in the top row
-      const secondCell = component.querySelector(`tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`);
+      const secondCell = component.querySelector(
+        `tr:first-of-type > td:nth-of-type(2) > .ghwo-chiclet`,
+      );
       secondCell.focus();
       expect(secondCell.matches(`:focus`)).to.equal(true);
 
@@ -380,17 +431,21 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("Home moves focus to the first cell in the current row", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "Home"
+        key: "Home",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Select the last item in the first row to start
-      const lastCell = component.querySelector(`tr:first-of-type > td:last-of-type > .ghwo-chiclet`);
+      const lastCell = component.querySelector(
+        `tr:first-of-type > td:last-of-type > .ghwo-chiclet`,
+      );
       lastCell.focus();
       expect(lastCell.matches(`:focus`)).to.equal(true);
 
       // We expect the first cell in the row to get the focus
-      const expectedCell = component.querySelector(`tr:first-of-type > td:first-of-type > .ghwo-chiclet`);
+      const expectedCell = component.querySelector(
+        `tr:first-of-type > td:first-of-type > .ghwo-chiclet`,
+      );
       component.dispatchEvent(event);
 
       expect(document.activeElement).to.eql(expectedCell);
@@ -399,12 +454,14 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("Home does not change focus when first cell in the row already has it", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "Home"
+        key: "Home",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Start at the first cell in the first row
-      const firstCell = component.querySelector(`tr:first-of-type > td:first-of-type > .ghwo-chiclet`);
+      const firstCell = component.querySelector(
+        `tr:first-of-type > td:first-of-type > .ghwo-chiclet`,
+      );
       firstCell.focus();
       expect(firstCell.matches(":focus")).to.equal(true);
 
@@ -427,18 +484,22 @@ describe.only("GHWO Daily Details Table component tests", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
         key: "Home",
-        ctrlKey: true
+        ctrlKey: true,
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Start by selecting the last cell in the last row
-      const lastCell = component.querySelector(`tr:last-of-type > td:last-of-type > .ghwo-chiclet`);
+      const lastCell = component.querySelector(
+        `tr:last-of-type > td:last-of-type > .ghwo-chiclet`,
+      );
       lastCell.focus();
       expect(lastCell.matches(`:focus`)).to.equal(true);
 
       // We expect the first cell in the _first_ row to get
       // the focus
-      const expectedCell = component.querySelector(`tr:first-of-type > td:first-of-type > .ghwo-chiclet`);
+      const expectedCell = component.querySelector(
+        `tr:first-of-type > td:first-of-type > .ghwo-chiclet`,
+      );
       component.dispatchEvent(event);
 
       expect(document.activeElement).to.eql(expectedCell);
@@ -458,18 +519,22 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("End navigates to the last cell in the current row", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "End"
+        key: "End",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Start by selecting the first item in the last row
-      const firstCell = component.querySelector(`tr:last-of-type > td:first-of-type > .ghwo-chiclet`);
+      const firstCell = component.querySelector(
+        `tr:last-of-type > td:first-of-type > .ghwo-chiclet`,
+      );
       firstCell.focus();
       expect(firstCell.matches(":focus")).to.equal(true);
 
       // We expect the first cell of the last row to get the
       // focus
-      const expectedCell = component.querySelector(`tr:last-of-type > td:last-of-type > .ghwo-chiclet`);
+      const expectedCell = component.querySelector(
+        `tr:last-of-type > td:last-of-type > .ghwo-chiclet`,
+      );
       component.dispatchEvent(event);
 
       expect(document.activeElement).to.eql(expectedCell);
@@ -478,12 +543,14 @@ describe.only("GHWO Daily Details Table component tests", () => {
     it("End does not change focus when the last cell in the row already has it", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
-        key: "End"
+        key: "End",
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Start at the first cell of the first row
-      const lastCell = component.querySelector(`tr:first-of-type > td:last-of-type > .ghwo-chiclet`);
+      const lastCell = component.querySelector(
+        `tr:first-of-type > td:last-of-type > .ghwo-chiclet`,
+      );
       lastCell.focus();
       expect(lastCell.matches(`:focus`)).to.equal(true);
 
@@ -497,18 +564,22 @@ describe.only("GHWO Daily Details Table component tests", () => {
       const event = new window.KeyboardEvent("keydown", {
         bubbles: true,
         key: "End",
-        ctrlKey: true
+        ctrlKey: true,
       });
       const component = document.querySelector("wx-ghwo-details-table");
 
       // Select the first cell in the first row
-      const firstCell = component.querySelector(`tr:first-of-type > td:first-of-type > .ghwo-chiclet`);
+      const firstCell = component.querySelector(
+        `tr:first-of-type > td:first-of-type > .ghwo-chiclet`,
+      );
       firstCell.focus();
       expect(firstCell.matches(`:focus`)).to.equal(true);
 
       // We expect the last cell of the last row to
       // get the focus
-      const expectedCell = component.querySelector(`tr:last-of-type > td:last-of-type > .ghwo-chiclet`);
+      const expectedCell = component.querySelector(
+        `tr:last-of-type > td:last-of-type > .ghwo-chiclet`,
+      );
       component.dispatchEvent(event);
 
       expect(document.activeElement).to.eql(expectedCell);
