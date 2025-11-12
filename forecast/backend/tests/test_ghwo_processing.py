@@ -259,5 +259,104 @@ class TestGHWOProcessing(TestCase):
         self.assertEqual(expected_third_row_days, third_row["days"])
 
 
+    def test_set_first_selected_days_no_rows(self):
+        """
+        Ensure we bail from the function when the passed list of rows is empty.
 
+        Should not raise any exceptions
+        """
+        input = []
+        expected = []
+        util._set_first_selected_day(input)
+
+        self.assertEqual(input, expected)
+
+    def test_set_first_selected_days_picks_first_by_time(self):
+        """Ensure we are picking the earliest non-zero level to set."""
+        input = [
+            {
+                "days": [
+                    {
+                        "level": {
+                            "number": 0,
+                        },
+                    },
+                    {
+                        "level": {
+                            "number": 0,
+                        },
+                    },
+                    {
+                        "level": {
+                            "number": 3,
+                        },
+                    },
+                ],
+            },
+            {
+                "days": [
+                    {
+                        "level": {
+                            "number": 1,
+                        },
+                    },
+                    {
+                        "level": {
+                            "number": 0,
+                        },
+                    },
+                    {
+                        "level": {
+                            "number": 3,
+                        },
+                    },
+                ],
+            },
+        ]
+
+        expected = [
+            {
+                "days": [
+                    {
+                        "level": {
+                            "number": 0,
+                        },
+                    },
+                    {
+                        "level": {
+                            "number": 0,
+                        },
+                    },
+                    {
+                        "level": {
+                            "number": 3,
+                        },
+                    },
+                ],
+            },
+            {
+                "days": [
+                    {
+                        "level": {
+                            "number": 1,
+                        },
+                        "is_first": True,
+                    },
+                    {
+                        "level": {
+                            "number": 0,
+                        },
+                    },
+                    {
+                        "level": {
+                            "number": 3,
+                        },
+                    },
+                ],
+            },
+        ]
+
+        util._set_first_selected_day(input)
+
+        self.assertEqual(input, expected)
 

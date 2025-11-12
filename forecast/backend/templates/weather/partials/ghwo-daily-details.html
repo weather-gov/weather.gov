@@ -1,7 +1,7 @@
 {% if ghwo.error %}
   <p>There was an error loading the GHWO detailed data.</p>
   <p>{{ ghwo.error }}</p>
-{% else %}
+{% elif ghwo_detailed_table_rows %}
   <wx-ghwo-details-table target="wx-ghwo-table-details-pane">
   <div class="grid-row">
     <div class="tablet-lg:grid-col-7 grid-col-12">
@@ -91,4 +91,13 @@
     </div>
   </div>
   </wx-ghwo-details-table>
+{% else %}
+  {% comment %}
+  This will be displayed if the GHWO table rows are empty.
+  We get to this state if there are no risk levels above 0
+  for any day for the location
+  {% endcomment %}
+  <p>
+    {{"ghwo.table.details.header.no-risk.01"|t}}
+  </p>
 {% endif %}
