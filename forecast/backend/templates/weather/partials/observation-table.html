@@ -9,15 +9,14 @@
       <td>{% wind_speed_direction speed=obs.data.windSpeed direction=obs.data.windDirection %}</td>
     </tr>
     {# GUSTS #}
-    {% if content.gusts != None %}
+    {% if obs.data.windGust != None and obs.data.windGust.mph > 0 %}
       <tr class="wx-gusts">
         <th scope="row"
             class="font-family-mono text-base font-mono-xs text-uppercase z-400">
           {% trans "observation-table.labels.gusts.01" %}
         </th>
         <td>
-          <!-- what is 'content' here? Find the right key -->
-          {% trans_with_args "units.mph.02" speed=content.gusts.speed %}
+          {% trans_with_args "units.mph.02" speed=obs.data.windGust.mph %}
         </td>
       </tr>
     {% endif %}
