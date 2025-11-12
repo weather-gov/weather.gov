@@ -256,6 +256,8 @@ DIRECTIVES = {
         # analytics
         "dap.digitalgov.gov",
         "www.googletagmanager.com",
+        # new relic
+        "bam.nr-data.net",
     ],
     "connect-src": [
         SELF,
@@ -279,6 +281,8 @@ DIRECTIVES = {
         # mapping
         "opengeo.ncep.noaa.gov",
         "cdn.arcgis.com",
+        # legacy weather.gov images
+        "www.weather.gov",
         # esri-leaflet-vector.js
         "data:",
     ],
@@ -304,13 +308,6 @@ CONTENT_SECURITY_POLICY = {
             SELF,
             "'unsafe-inline'",
         ],
-
-        # We want to be able to display images that are hosted
-        # at legacy weather.gov (for now)
-        "img-src": [
-            SELF,
-            "https://www.weather.gov",
-        ],
     },
 }
 
@@ -323,6 +320,15 @@ CONTENT_SECURITY_POLICY_REPORT_ONLY = {
             NONCE,
             # combo-box.js applies its own CSS styles
             "'sha256-gRE3bxId7YdBMR/AIWG7jHh2sJ9XAtq1YUxCaFh3hng='",
+            # cmi-radar
+            "'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='",
+            "'sha256-624gmqlO23N0g1Ru4tkjuaPEoL/hXP4w7tUqel4WM98='",
+            "'sha256-5uOIRR03mYcVoiexgzGGALQ0p1Babe2XxbeIl9t1UpA='",
+            "'sha256-lM8P08IzH0mbT5Tvlm1F5BY3h0gPsb0qNpnZW9YHc7A='",
+            # esri-leaflet
+            "'sha256-UykT9B84Ik0dt1VPV3lpHxAikh/bNzWCgLl3XN0PYtw='",
+            "'sha256-RXxNUJG3UfHAeHA4copS/oAu4QHoWavn3IraEQ+XrTk='",
+            "'sha256-PhvAqgz4qsgszcJzzo3ctihcuOyVv4VbFiW+ns+wtJM='",
         ],
     },
 }

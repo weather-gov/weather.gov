@@ -147,6 +147,79 @@
       border-left: units(1) solid;
       border-image-slice: 1;
     }
+
+    // we previously set these gradients in the templates but these were
+    // triggering CSP warnings/errors. so assign the gradients to CSS classes.
+    .wx-radar-legend__gradient1 {
+      border-image-source: linear-gradient(
+        180deg,
+        #8e827e 0%,
+        #969155 17.64%,
+        #a5a36d 27.53%,
+        #d0d2b2 54.47%,
+        #7e8baf 100%
+      );
+    }
+
+    .wx-radar-legend__gradient2 {
+      border-image-source: linear-gradient(
+        180deg,
+        #7b88ae 0%,
+        #5c71a6 17.64%,
+        #445fa0 36.39%,
+        #5da9cc 61.25%,
+        #59c0ba 73.2%,
+        #52d6a2 87.85%,
+        #3fd657 100%
+      );
+    }
+
+    .wx-radar-legend__gradient3 {
+      border-image-source: linear-gradient(
+        180deg,
+        #3fd657 0%,
+        #3ed624 9.47%,
+        #24890e 36.39%,
+        #176108 61.25%,
+        #819f06 73.2%,
+        #fbe000 85.5%,
+        #f4cb17 100%
+      );
+    }
+
+    .wx-radar-legend__gradient4 {
+      border-image-source: linear-gradient(
+        180deg,
+        #f4cb17 0%,
+        #ebb32d 25.38%,
+        #f9b103 72.13%,
+        #f52d04 73.91%,
+        #d10808 99.72%
+      );
+    }
+
+    .wx-radar-legend__gradient5 {
+      border-image-source: linear-gradient(
+        180deg,
+        #d10808 0%,
+        #a20f10 16.84%,
+        #b00301 48.32%,
+        #fefbff 49.94%,
+        #eda7fd 71.83%,
+        #e474fc 83.75%,
+        #f174fd 100%
+      );
+    }
+
+    .wx-radar-legend__gradient6 {
+      border-image-source: linear-gradient(
+        180deg,
+        #f174fd 0%,
+        #f875ff 30.26%,
+        #aa0bfa 34%,
+        #5b06d3 98.5%
+      );
+    }
   }
 }
 

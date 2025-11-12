@@ -57,8 +57,7 @@
               {# Need to inline the styles on the th and td to override stylesheets #}
               <th class="text-no-wrap font-family-mono">{{ intensity.dbz }}</th>
               <td>
-                <div class="wx-radar-legend__intensity minh-5 height-full"
-                     style="border-image-source: linear-gradient({{ intensity.gradient }})">
+                <div class="wx-radar-legend__intensity wx-radar-legend__gradient{{ forloop.counter }} minh-5 height-full">
                   {{ intensity.description | t }}
                 </div>
               </td>
