@@ -1,4 +1,5 @@
 from datetime import datetime
+from unittest import mock
 
 from django.test import TestCase
 
@@ -84,14 +85,25 @@ class TestGHWOProcessing(TestCase):
         for should_not_have in expect_to_not_have:
             self.assertNotIn(should_not_have, risk_ids)
 
-    def test_get_risk_daily_rows(self):
+
+    @mock.patch("backend.util.get_object_or_404")
+    def test_get_risk_daily_rows(self, mock_get_wfo):
         """
         Test the processing of GHWO data into a structure of rows.
 
         The output data structure will be one more amenable to
         creating table rows in the template(s).
         """
+        mock_wfo = mock.Mock()
+        mock_get_wfo.return_value = mock_wfo
+        mock_wfo.ghwo_metadata = {
+            "Lightning": util._make_generic_metadata_for_risk("Lightning"),
+            "ExtremeCold": util._make_generic_metadata_for_risk("ExtremeCold"),
+            "SevereThunderstorm": util._make_generic_metadata_for_risk("SevereThunderstorm"),
+        }
+
         data = {
+            "wfo": "okx",
             "days": [
                 {
                     "Lightning": 3,
@@ -128,13 +140,6 @@ class TestGHWOProcessing(TestCase):
 
         risk_ids = ["Lightning", "ExtremeCold", "SevereThunderstorm"]
 
-        # For now, we are only comparing the "days" rows of the
-        # processed data. This is because future work will change
-        # the placeholder legend / level metadata information very
-        # shortly (ie, what appears for now in the function
-        # _temporary_get_metadata_for_ghwo_risk_type).
-        # The functions that pull out legend / risk and level metadata
-        # should then be tested separately.
         processed_data = util._get_risk_daily_rows(risk_ids, data)
         self.assertEqual(len(processed_data), 3)
 
@@ -359,4 +364,70 @@ class TestGHWOProcessing(TestCase):
         util._set_first_selected_day(input)
 
         self.assertEqual(input, expected)
+
+
+    def test_get_no_impact_risk_labels(self):
+        """Ensure we return correct example of no impact risk labels."""
+        data = {
+            "wfo": "okx",
+            "days": [
+                {
+                    "Lightning": 3,
+                    "dayNumber": 1,
+                    "ExtremeCold": 0,
+                    "SevereThunderstorm": 1,
+                    "DailyComposite": 3,
+                    "timestamp": "2025-11-04T19:00:00-05:00",
+                    "Tornado": 0,
+                    "SomeUnknownRisk": 0,
+                    "images": {},
+                },
+                {
+                    "Lightning": 2,
+                    "dayNumber": 2,
+                    "ExtremeCold": 0,
+                    "SevereThunderstorm": 0,
+                    "DailyComposite": 4,
+                    "timestamp": "2025-11-05T07:00:00-05:00",
+                    "Tornado": 0,
+                    "SomeUnknownRisk": 0,
+                    "images": {},
+                },
+            ],
+        }
+
+        # Modified from the set given as a const in
+        # util.GHWO_RISK_MAPPINGS
+        expected = [
+            "Blowing Dust Risk",
+            "Coastal Flood Risk",
+            "Thunderstorm Wind Risk",
+            "Excessive Rainfall Risk",
+            "Extreme Cold Risk",
+            "Extreme Heat Risk",
+            "Fire Weather Risk",
+            "Fog Risk",
+            "Freezing Spray Risk",
+            "Frost/Freeze Risk",
+            "Hail Risk",
+            "High Surf Risk",
+            "Ice Accumulation Risk",
+            "Lakeshore Flood Risk",
+            # There is a lightning risk, so
+            # we don't expect it
+            # 'Lightning Risk',
+            "Marine Hazard Risk",
+            "Wind Risk",
+            "Rip Current Risk",
+            # There is a severe thunderstorm risk,
+            # so we don't expect it
+            # 'Severe Thunderstorm Risk',
+            "Snow/Sleet Risk",
+            "Swim Risk",
+            "Tornado Risk",
+        ].sort()
+
+        actual = util.get_no_impact_risk_labels(data).sort()
+
+        self.assertEqual(expected, actual)
 

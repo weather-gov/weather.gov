@@ -58,8 +58,8 @@
                              data-risk-factor="{{ row.risk.id }}"
                              tabindex="0">
                           <span class="usa-sr-only">
-                            {{row.risk.label}}: {{ "ghwo.details.table.risk-level.lower.01" | t }}{{day.level.number}}
-                            </span>
+                            {{ row.risk.label }}: {{ "ghwo.details.table.risk-level.lower.01" | t }}{{ day.level.number }}
+                          </span>
                         </div>
                       {% endif %}
                     </div>
@@ -72,8 +72,10 @@
       </div>
       {% include 'weather/partials/ghwo-risk-table-legend.html' %}
       <p class="font-sans-xs margin-top-105">
-                <span>{% translate_plural_with_args "ghwo.details.table.no-impact.01" 0 num="[num]" %}:</span>
-        <span>(list of other categories goes here)</span>
+        {% with num_no_risks=ghwo_no_impact_risks|length %}
+          <span>{% translate_plural_with_args "ghwo.details.table.no-impact.01" 0 num=num_no_risks %}:</span>
+        {% endwith %}
+        <span>{{ ghwo_no_impact_risks|join:", " }}</span>
       </p>
     </div>
     <div class="grid-col-12 tablet-lg:grid-col-5 tablet-lg:padding-left-4">
@@ -97,7 +99,5 @@
   We get to this state if there are no risk levels above 0
   for any day for the location
   {% endcomment %}
-  <p>
-    {{"ghwo.table.details.header.no-risk.01"|t}}
-  </p>
+  <p>{{"ghwo.table.details.header.no-risk.01"|t}}</p>
 {% endif %}
