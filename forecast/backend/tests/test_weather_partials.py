@@ -613,45 +613,93 @@ class TestWeatherPartials(TestCase):
             expected,
         )
 
-    def test_ghwo_daily_details(self):
+    @mock.patch("backend.util.get_object_or_404")
+    def test_ghwo_daily_details(self, mock_get_wfo):
         """Test ghwo daily details partial result has expected structure."""
-        example_ghwo_data ={ "days": [
-            {
-                "Fog": 0,
-                "Hail": 0,
-                "images": {
-                    "Fog": "https://www.weather.gov/images/lwx/ghwo/FogDay1.jpg",
-                    "Hail": "https://www.weather.gov/images/lwx/ghwo/HailDay1.jpg",
-                    "Tornado": "https://www.weather.gov/images/lwx/ghwo/TornadoDay1.jpg",
-                    "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay1.jpg",
-                    "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay1.jpg",
-                    "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay1.jpg",
-                    "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay1.jpg",
-                    "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay1.jpg",
-                    "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay1.jpg",
-                    "CoastalFlood": "https://www.weather.gov/images/lwx/ghwo/CoastalFloodDay1.jpg",
-                    "ConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/ThunderstormWindDay1.jpg",
-                    "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay1.jpg",
-                    "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay1.jpg",
-                    "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay1.jpg",
-                    "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay1.jpg",
+        mock_wfo = mock.Mock()
+        mock_get_wfo.return_value = mock_wfo
+        mock_wfo.ghwo_metadata = {
+            "ExtremeCold": {
+                "id": "ExtremeCold",
+                "label": "Extreme Cold Risk",
+                "description": "A more verbose description for Extreme Cold Risk goes here.",
+                "basis_description": ("A description of how the local office computes or otherwise " +
+                                      "describes the parameters that meet the requirements for Extreme Cold Risk."),
+                "levels": {
+                    "0": {
+                        "label": "None",
+                        "number": 0,
+                        "description": "No risk for Extreme Cold Risk",
+                    },
+                    "1": {
+                        "label": "Low",
+                        "number": 1,
+                        "description": "Description for low Extreme Cold Risk level here",
+                    },
+                    "2": {
+                        "label": "Limited",
+                        "number": 2,
+                        "description": "Description for limited Extreme Cold Risk level here",
+                    },
+                    "3": {
+                        "label": "Elevated",
+                        "number": 3,
+                        "description": "Description for elevated Extreme Cold Risk level here",
+                    },
+                    "4": {
+                        "label": "Significant",
+                        "number": 4,
+                        "description": "Description for significant Extreme Cold Risk level here",
+                    },
+                    "5": {
+                        "label": "Extreme",
+                        "number": 5,
+                        "description": "Description for extreme Extreme Cold Risk level here",
+                    },
                 },
-                "Tornado": 0,
-                "Lightning": 0,
-                "SnowSleet": 0,
-                "dayNumber": 1,
-                "timestamp": "2025-10-27T14:00:00-04:00",
-                "ExtremeCold": 5,
-                "FireWeather": 0,
-                "CoastalFlood": 0,
-                "ConvectiveWind": 0,
-                "DailyComposite": 5,
-                "IceAccumulation": 0,
-                "ExcessiveRainfall": 0,
-                "NonConvectiveWind": 0,
-                "SevereThunderstorm": 0,
             },
-        ]}
+        }
+
+        example_ghwo_data ={
+            "days": [
+                {
+                    "Fog": 0,
+                    "Hail": 0,
+                    "images": {
+                        "Fog": "https://www.weather.gov/images/lwx/ghwo/FogDay1.jpg",
+                        "Hail": "https://www.weather.gov/images/lwx/ghwo/HailDay1.jpg",
+                        "Tornado": "https://www.weather.gov/images/lwx/ghwo/TornadoDay1.jpg",
+                        "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay1.jpg",
+                        "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay1.jpg",
+                        "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay1.jpg",
+                        "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay1.jpg",
+                        "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay1.jpg",
+                        "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay1.jpg",
+                        "CoastalFlood": "https://www.weather.gov/images/lwx/ghwo/CoastalFloodDay1.jpg",
+                        "ConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/ThunderstormWindDay1.jpg",
+                        "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay1.jpg",
+                        "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay1.jpg",
+                        "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay1.jpg",
+                        "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay1.jpg",
+                    },
+                    "Tornado": 0,
+                    "Lightning": 0,
+                    "SnowSleet": 0,
+                    "dayNumber": 1,
+                    "timestamp": "2025-10-27T14:00:00-04:00",
+                    "ExtremeCold": 5,
+                    "FireWeather": 0,
+                    "CoastalFlood": 0,
+                    "ConvectiveWind": 0,
+                    "DailyComposite": 5,
+                    "IceAccumulation": 0,
+                    "ExcessiveRainfall": 0,
+                    "NonConvectiveWind": 0,
+                    "SevereThunderstorm": 0,
+                },
+            ],
+            "wfo": "okx",
+        }
 
         # Corresponds to template data ghwo_days list
         expected_days = example_ghwo_data["days"][0].copy()
@@ -663,40 +711,40 @@ class TestWeatherPartials(TestCase):
             {
                 "risk": {
                     "id": "ExtremeCold",
-                    "label": "ExtremeCold",
-                    "description": "A more verbose description for ExtremeCold goes here.",
+                    "label": "Extreme Cold Risk",
+                    "description": "A more verbose description for Extreme Cold Risk goes here.",
                     "basis_description": ("A description of how the local office computes or otherwise " +
-                                          "describes the parameters that meet the requirements for ExtremeCold."),
+                                          "describes the parameters that meet the requirements for Extreme Cold Risk."),
                     "levels": {
                         "0": {
                             "label": "None",
                             "number": 0,
-                            "description": "No risk for ExtremeCold",
+                            "description": "No risk for Extreme Cold Risk",
                         },
                         "1": {
                             "label": "Low",
                             "number": 1,
-                            "description": "Description for low ExtremeCold level here",
+                            "description": "Description for low Extreme Cold Risk level here",
                         },
                         "2": {
                             "label": "Limited",
                             "number": 2,
-                            "description": "Description for limited ExtremeCold level here",
+                            "description": "Description for limited Extreme Cold Risk level here",
                         },
                         "3": {
                             "label": "Elevated",
                             "number": 3,
-                            "description": "Description for elevated ExtremeCold level here",
+                            "description": "Description for elevated Extreme Cold Risk level here",
                         },
                         "4": {
                             "label": "Significant",
                             "number": 4,
-                            "description": "Description for significant ExtremeCold level here",
+                            "description": "Description for significant Extreme Cold Risk level here",
                         },
                         "5": {
                             "label": "Extreme",
                             "number": 5,
-                            "description": "Description for extreme ExtremeCold level here",
+                            "description": "Description for extreme Extreme Cold Risk level here",
                         },
                     },
                 },
@@ -705,7 +753,7 @@ class TestWeatherPartials(TestCase):
                         "level": {
                             "label": "Extreme",
                             "number": 5,
-                            "description": "Description for extreme ExtremeCold level here",
+                            "description": "Description for extreme Extreme Cold Risk level here",
                         },
                         "timestamp": "2025-10-27T14:00:00-04:00",
                         "datetime": datetime.fromisoformat("2025-10-27T14:00:00-04:00"),

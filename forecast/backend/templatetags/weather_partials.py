@@ -4,7 +4,7 @@ from django import template
 from django.utils.translation import gettext_lazy as _
 
 from backend.models import DynamicSafetyInformation
-from backend.util import mark_safer, process_ghwo_daily_details, process_ghwo_daily_summary
+from backend.util import get_no_impact_risk_labels, mark_safer, process_ghwo_daily_details, process_ghwo_daily_summary
 
 register = template.Library()
 
@@ -282,8 +282,10 @@ def ghwo_daily_details(ghwo_data):
 
     processed_days = process_ghwo_daily_summary(ghwo_data)["days"]
     table_rows = process_ghwo_daily_details(ghwo_data)
+    no_impact_risks = get_no_impact_risk_labels(ghwo_data)
 
     return {
         "ghwo_days": processed_days,
         "ghwo_detailed_table_rows": table_rows,
+        "ghwo_no_impact_risks": no_impact_risks,
     }

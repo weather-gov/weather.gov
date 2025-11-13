@@ -1,9 +1,11 @@
 import logging
 from datetime import datetime
 
+from django.shortcuts import get_object_or_404
 from django.utils.safestring import mark_safe
 from html_sanitizer import Sanitizer
 
+from backend.models import WFO
 from spatial.models import WeatherCounties, WeatherStates
 
 OCONUS_4CODE_MAPPINGS = {
@@ -39,6 +41,10 @@ GHWO_RISK_MAPPINGS = {
     "SnowSleet": "Snow/Sleet Risk",
     "SwimRisk": "Swim Risk",
     "Tornado": "Tornado Risk",
+}
+
+GHWO_RISK_MAPPINGS_REVERSE = {
+    value: key for key, value in GHWO_RISK_MAPPINGS.items()
 }
 
 def get_wfo_from_afd(afd):
@@ -170,17 +176,17 @@ def process_ghwo_daily_summary(ghwo_data):
 
     return ghwo_data
 
-def _temporary_get_metadata_for_ghwo_risk_type(risk_type):
+def _make_generic_metadata_for_risk(risk_type):
     """
-    Return a dict of metadata about the specific risk type.
+    Return a generic dict of metadata for the provided risk type.
 
-    Note that this is a temporary placeholder that returrns
-    hard-coded values for now. We still need to determine
-    how to retrieve, store, and access this metadata
+    This is a catch-all that will only be used in cases where an unexpected
+    risk type has come through, or where we do not have metadata at the
+    WFO for the particular risk type
     """
     return {
         "id": risk_type,
-        "label": risk_type,
+        "label": GHWO_RISK_MAPPINGS[risk_type] if risk_type in GHWO_RISK_MAPPINGS else risk_type,
         "description": f"A more verbose description for {risk_type} goes here.",
 
         # The description is how the given office
@@ -223,6 +229,31 @@ def _temporary_get_metadata_for_ghwo_risk_type(risk_type):
         },
     }
 
+def _get_metadata_for_ghwo_risk_type(wfo_code, risk_type):
+    """
+    Return a dict of metadata about the specific risk type.
+
+    Note that this is a temporary placeholder that returrns
+    hard-coded values for now. We still need to determine
+    how to retrieve, store, and access this metadata
+    """
+    wfo = get_object_or_404(WFO, code=wfo_code.upper())
+
+    if risk_type not in GHWO_RISK_MAPPINGS:
+        return _make_generic_metadata_for_risk(risk_type)
+
+    risk_label = GHWO_RISK_MAPPINGS[risk_type]
+
+    if risk_type not in wfo.ghwo_metadata:
+        return _make_generic_metadata_for_risk(risk_type)
+
+    metadata = wfo.ghwo_metadata[risk_type].copy()
+
+    metadata["id"] = risk_type
+    metadata["label"] = risk_label
+
+    return metadata
+
 
 def _get_risk_factor_ids(county_ghwo_data):
     """
@@ -231,8 +262,12 @@ def _get_risk_factor_ids(county_ghwo_data):
     GHWO county data is formatted as a set of days, each of which has keys
     for the different risk factors (and a value for the level that day).
     We call these keys the risk_id.
-    Not all keys are present across all days, so we need to get the
-    'total' set for all the days available and return as a list.
+
+    For now, we are using a preset mapping of risk_ids to
+    risk labels. We consider these the 'canonical' set.
+
+    Any risk that never gets above 0 for the time period
+    is tossed out
     """
     risk_ids = set()
     for day in county_ghwo_data["days"]:
@@ -242,8 +277,8 @@ def _get_risk_factor_ids(county_ghwo_data):
             # which represents the highest level for the day.
             # Additionally, we only want to consider risk ids
             # whose value is greater than zero.
-            is_risk_id = key[0].isupper() and key != "DailyComposite"
-            if is_risk_id and level > 0:
+
+            if key in GHWO_RISK_MAPPINGS.keys() and level > 0:
                 risk_ids.add(key)
 
     return list(risk_ids)
@@ -253,7 +288,7 @@ def _get_risk_daily_rows(risk_ids, county_ghwo_data):
     """Return a list of dicts, each represending data used to render a table row."""
     result = []
     for risk_id in risk_ids:
-        risk = _temporary_get_metadata_for_ghwo_risk_type(risk_id)
+        risk = _get_metadata_for_ghwo_risk_type(county_ghwo_data["wfo"], risk_id)
 
         # Get the risk level and other information for each day.
         # These represent the individual cells of the risk details
@@ -358,3 +393,17 @@ def get_ghwo_daily_images(county_ghwo_data):
                 urls.add(day["images"][key])
 
     return list(urls)
+
+
+def get_no_impact_risk_labels(county_ghwo_data):
+    """Return a list of risk factor ids corresponding to risks that are never above 0."""
+    risk_labels = set()
+    for risk_id, risk_label in GHWO_RISK_MAPPINGS.items():
+        has_level = False
+        for day in county_ghwo_data["days"]:
+            if risk_id in day and day[risk_id] > 0:
+                has_level = True
+        if not has_level:
+            risk_labels.add(risk_label)
+
+    return list(risk_labels)

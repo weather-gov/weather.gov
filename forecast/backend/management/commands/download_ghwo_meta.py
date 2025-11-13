@@ -5,7 +5,7 @@ import requests
 from django.core.management.base import BaseCommand, CommandError
 
 from backend.models import WFO
-from backend.util import GHWO_RISK_MAPPINGS
+from backend.util import GHWO_RISK_MAPPINGS, GHWO_RISK_MAPPINGS_REVERSE
 
 
 class Command(BaseCommand):
@@ -85,20 +85,28 @@ class Command(BaseCommand):
         ]
 
         for risk in relevant_risks:
-            if risk["name"] not in result:
-                result[risk["name"]] = {}
-            result[risk["name"]]["description"] = risk["description"]
+            # We want to use the risk type ids as they appear in raw
+            # ghwo data, not their labels
+            risk_id = GHWO_RISK_MAPPINGS_REVERSE[risk["name"]]
+            if risk_id not in result:
+                result[risk_id] = {}
+            result[risk_id]["basis_description"] = risk["description"]
 
 
     def process_legend(self, legend, result):
         """Pull out the data we need from the legend endpoint."""
         for risk_data in legend["hazards"]:
             if risk_data["name"] in GHWO_RISK_MAPPINGS.values():
-                result[risk_data["name"]] = {
+
+                # We want to use the risk type ids as they appear in raw
+                # ghwo data, not their labels
+                risk_id = GHWO_RISK_MAPPINGS_REVERSE[risk_data["name"]]
+                result[risk_id] = {
                     "levels": {
                         level_num: {
                             "label": level_info["levelName"],
                             "description": level_info["definition"],
+                            "number": int(level_num),
                         }
                         for level_num, level_info in risk_data["category"].items()
                     },

@@ -53,6 +53,7 @@ const processState = async ({ state, data: stateData, wfo }) => {
   const data = {
     state: stateName,
     days: processDays(stateData),
+    wfo,
   };
 
   await upsert(state, data);
@@ -77,6 +78,7 @@ const processCounty = async ({ countyFips, data: countyData, wfo }) => {
     county: county.countyname,
     fips: countyFips,
     days: processDays(countyData),
+    wfo,
   };
 
   data.days.forEach((day) => {
