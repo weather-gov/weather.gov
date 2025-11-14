@@ -1,4 +1,3 @@
-
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
@@ -16,11 +15,13 @@ def wx_afd_id(_, afd_id):
     markup = render_to_string("weather/wx/afd.html", {"afd": data})
     return HttpResponse(markup, content_type="text/html")
 
+
 def wx_afd_versions(_, wfo):
     """Return _markup only_ for the versions of AFDs for the given forecast office."""
     data = interop.get_wx_afd_versions_by_wfo(wfo)
     markup = render_to_string("weather/wx/afd-versions-select.html", {"version_list": data["@graph"]})
     return HttpResponse(markup, content_type="text/html")
+
 
 def wx_select_state_counties(_request, state_fips):
     """Respond with a list of combo-box items in JSON for counties in the given state."""
@@ -41,6 +42,7 @@ def wx_select_state_counties(_request, state_fips):
         },
     )
 
+
 @require_POST
 @csrf_exempt
 def wx_select_ghwo_counties(request):
@@ -60,7 +62,7 @@ def wx_select_ghwo_counties(request):
         # and that we should render the form with data for
         # the new state
         if current_state != selected_state:
-            state = WeatherStates.objects.get(fips=selected_state)
+            state = WeatherStates.objects.defer("shape").get(fips=selected_state)
             county = (
                 WeatherCounties.objects.filter(
                     state__id=state.id,
@@ -71,7 +73,7 @@ def wx_select_ghwo_counties(request):
             # Otherwise, we render as if the selected county
             # is the one we wish to render the form/page for
         else:
-            county = WeatherCounties.objects.get(countyfips=selected_county)
+            county = WeatherCounties.objects.defer("shape").get(countyfips=selected_county)
             state = county.state
 
         # Get the needed state dropdown data
@@ -92,6 +94,7 @@ def wx_select_ghwo_counties(request):
         },
     )
 
+
 @require_GET
 def wx_ghwo_counties(request, county_fips):
     """Respond with markup for the County GHWO details.
@@ -100,7 +103,7 @@ def wx_ghwo_counties(request, county_fips):
     using the county FIPS code provided in the
     URL param.
     """
-    county = get_object_or_404(WeatherCounties, countyfips=county_fips)
+    county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=county_fips)
 
     # Fetch the GHWO data for the county
     ghwo_data = interop.get_ghwo_data_for_county(county_fips)

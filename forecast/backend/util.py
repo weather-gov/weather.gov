@@ -43,9 +43,6 @@ GHWO_RISK_MAPPINGS = {
     "Tornado": "Tornado Risk",
 }
 
-GHWO_RISK_MAPPINGS_REVERSE = {
-    value: key for key, value in GHWO_RISK_MAPPINGS.items()
-}
 
 def get_wfo_from_afd(afd):
     """
@@ -74,6 +71,7 @@ def get_wfo_from_afd(afd):
     # valid, so return None
     return None
 
+
 def mark_safer(value, transformer=None):
     """
     Mark safe, more safely.
@@ -98,8 +96,21 @@ def mark_safer(value, transformer=None):
             # don't remove stuff like '\n'
             "keep_typographic_whitespace": True,
             "tags": {
-                "a", "h1", "h2", "h3", "strong", "em", "p", "ul", "ol",
-                "li", "br", "sub", "sup", "hr", "span",
+                "a",
+                "h1",
+                "h2",
+                "h3",
+                "strong",
+                "em",
+                "p",
+                "ul",
+                "ol",
+                "li",
+                "br",
+                "sub",
+                "sup",
+                "hr",
+                "span",
             },
             "attributes": {
                 "a": ("href", "name", "target", "title", "id", "rel", "class"),
@@ -114,10 +125,11 @@ def mark_safer(value, transformer=None):
         return mark_safe(transformer(cleaned))  # noqa: S308
     return mark_safe(cleaned)  # noqa: S308
 
+
 def get_states_combo_box_list():
     """Get a list of dictionaries of WeatherState 'text' and 'value' keys for use in wx-combo-box."""
     result = []
-    for state in WeatherStates.objects.order_by("name"):
+    for state in WeatherStates.objects.order_by("name").only("name", "fips"):
         result.append(  #  noqa: PERF401
             {
                 "text": state.name,
@@ -127,13 +139,19 @@ def get_states_combo_box_list():
 
     return result
 
+
 def get_counties_combo_box_list(state_fips):
     """Get a list of dictionaries of WeatherCounties for the given state.
 
     The dicts will have'text' and 'value' keys for use in wx-combo-box.
     """
     result = []
-    for county in WeatherCounties.objects.filter(state__fips=state_fips).order_by("countyname"):
+    for county in (
+        WeatherCounties.objects.filter(state__fips=state_fips)
+        .select_related("state")
+        .order_by("countyname")
+        .only("countyname", "countyfips", "state__state")
+    ):
         result.append(  #  noqa: PERF401
             {
                 "text": f"{county.countyname}, {county.state.state}",
@@ -143,24 +161,27 @@ def get_counties_combo_box_list(state_fips):
 
     return result
 
+
 def disable_logging_for_quieter_tests(func):
     """
     Turn off logging when console error output is expected.
 
     This is a decorator to be used with tests. Do not use on real code.
     """
+
     def wrapper(*args, **kwargs):
         """Disable, then reenable, logging."""
         logging.disable(logging.CRITICAL)
         func(*args, **kwargs)
         logging.disable(logging.NOTSET)
         return func
+
     return wrapper
+
 
 def process_ghwo_daily_summary(ghwo_data):
     """Process ghwo data into a form usable by the ghwo daily summary partial."""
     for day in ghwo_data["days"]:
-
         # We need a datetime object so that the templates
         # can correctly format strings
         day["datetime"] = datetime.fromisoformat(day["timestamp"])
@@ -176,6 +197,7 @@ def process_ghwo_daily_summary(ghwo_data):
 
     return ghwo_data
 
+
 def _make_generic_metadata_for_risk(risk_type):
     """
     Return a generic dict of metadata for the provided risk type.
@@ -188,12 +210,12 @@ def _make_generic_metadata_for_risk(risk_type):
         "id": risk_type,
         "label": GHWO_RISK_MAPPINGS[risk_type] if risk_type in GHWO_RISK_MAPPINGS else risk_type,
         "description": f"A more verbose description for {risk_type} goes here.",
-
         # The description is how the given office
         # calculates the specific risk factor
-        "basis_description": ("A description of how the local office computes or otherwise " +
-                              f"describes the parameters that meet the requirements for {risk_type}."),
-
+        "basis_description": (
+            "A description of how the local office computes or otherwise "
+            + f"describes the parameters that meet the requirements for {risk_type}."
+        ),
         # Each level for this risk type has its own label and description
         "levels": {
             "0": {
@@ -228,6 +250,7 @@ def _make_generic_metadata_for_risk(risk_type):
             },
         },
     }
+
 
 def _get_metadata_for_ghwo_risk_type(wfo_code, risk_type):
     """
@@ -308,18 +331,22 @@ def _get_risk_daily_rows(risk_ids, county_ghwo_data):
             else:
                 image = None
 
-            days.append({
-                "level": risk["levels"][str(level)],
-                "timestamp": day["timestamp"],
-                "datetime": datetime.fromisoformat(day["timestamp"]),
-                "day_number": day["dayNumber"],
-                "image": image,
-            })
+            days.append(
+                {
+                    "level": risk["levels"][str(level)],
+                    "timestamp": day["timestamp"],
+                    "datetime": datetime.fromisoformat(day["timestamp"]),
+                    "day_number": day["dayNumber"],
+                    "image": image,
+                },
+            )
 
-        result.append({
-            "risk": risk,
-            "days": days,
-        })
+        result.append(
+            {
+                "risk": risk,
+                "days": days,
+            },
+        )
     return result
 
 
