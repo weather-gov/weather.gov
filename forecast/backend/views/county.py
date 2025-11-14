@@ -19,14 +19,14 @@ logger = logging.getLogger(__name__)
 @cache_control(public=True, max_age=3600)
 def index(request):
     """Render the county landing page."""
-    counties = WeatherCounties.objects.all().order_by("st", "countyname")
+    counties = WeatherCounties.objects.defer("shape").all().order_by("st", "countyname")
     return render(request, "weather/county/index.html", {"counties": counties})
 
 
 @never_cache
 def county_landing(request, countyfips):
-    """Render the forecast for a given latitude & longitude."""
-    county = get_object_or_404(WeatherCounties, countyfips=countyfips)
+    """Render the main page for a particular county."""
+    county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=countyfips)
 
     county_data = interop.get_county_data(countyfips)
 
@@ -34,7 +34,7 @@ def county_landing(request, countyfips):
     if county.timezone:
         localtz = ZoneInfo(county.timezone)
 
-    cwas = county.cwas.all()
+    cwas = county.cwas.defer("shape").all()
     briefings = []
     weather_stories = []
 
@@ -102,7 +102,10 @@ def county_landing(request, countyfips):
 
 def county_ghwo(request, county_fips):
     """Load a county GHWO details page by FIPS."""
-    county = get_object_or_404(WeatherCounties, countyfips=county_fips)
+    county = get_object_or_404(
+        WeatherCounties.objects.select_related("state").only("countyname", "st", "countyfips", "state__fips"),
+        countyfips=county_fips,
+    )
 
     # Get all of the states, for use in the combobox dropdown.
     states = get_states_combo_box_list()

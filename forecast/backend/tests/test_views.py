@@ -386,7 +386,7 @@ class TestViews(TestCase):
         mock_county.county.countyfips.return_value = "1"
         mock_get_object_or_404.return_value = mock_county
 
-        with self.assertRaises(Exception): # noqa: PT027, B017 (we want generic Exception)
+        with self.assertRaises(Exception):  # noqa: PT027, B017 (we want generic Exception)
             response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
             self.assertEqual(response.status_code, 500)
 
@@ -609,10 +609,12 @@ class TestViews(TestCase):
         }
 
         mock_county = mock.MagicMock(countyfips="501")
-        mock_county_objects.filter.return_value.order_by.return_value.first.return_value = mock_county
+        mock_county_objects.defer.return_value.filter.return_value.order_by.return_value.first.return_value = (
+            mock_county
+        )
 
         mock_state = mock.MagicMock(id="51")
-        mock_state_objects.get.return_value = mock_state
+        mock_state_objects.defer.get.return_value = mock_state
 
         response = self.client.post(
             reverse("wx_select_ghwo_counties"),
@@ -622,8 +624,8 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/wx-county-ghwo-selector.html")
 
-    @mock.patch("backend.views.county.WeatherCounties.objects.get")
-    def test_wx_select_ghwo_counties_valid_selected_county(self, mock_county_get):
+    @mock.patch("backend.views.county.WeatherCounties.objects")
+    def test_wx_select_ghwo_counties_valid_selected_county(self, mock_county_objects):
         """Posting to wx select ghwo counties endpoint with valid county renders the correct template partial."""
         post_data = {
             "current-state": "51",
@@ -631,7 +633,7 @@ class TestViews(TestCase):
             "county-select": "1",
         }
         mock_county = mock.MagicMock(countyfips="1")
-        mock_county_get.return_value = mock_county
+        mock_county_objects.defer.return_value.get.return_value = mock_county
 
         response = self.client.post(
             reverse("wx_select_ghwo_counties"),
@@ -656,7 +658,7 @@ class TestViews(TestCase):
     @mock.patch("backend.views.partials.interop.get_ghwo_data_for_county")
     def test_wx_ghwo_counties_with_no_data_interop_request(self, mock_get_ghwo_data_for_county, mock_get_object_or_404):
         """Request to wx ghwo counties endpoint with 404 interop ghwo data request 200s."""
-        mock_get_ghwo_data_for_county.return_value = { "statusCode": 404, "error": "No GHWO found for 51013" }
+        mock_get_ghwo_data_for_county.return_value = {"statusCode": 404, "error": "No GHWO found for 51013"}
         mock_get_object_or_404.return_value = mock.Mock()
 
         response = self.client.get(
@@ -671,7 +673,7 @@ class TestViews(TestCase):
     @mock.patch("backend.views.partials.interop.get_ghwo_data_for_county")
     def test_wx_ghwo_counties_with_error_interop_request(self, mock_get_ghwo_data_for_county, mock_get_object_or_404):
         """Request to wx ghwo counties endpoint with 500 interop ghwo data request 200s."""
-        mock_get_ghwo_data_for_county.return_value = { "statusCode": 500, "error": "Error fetching GHWO for 51013" }
+        mock_get_ghwo_data_for_county.return_value = {"statusCode": 500, "error": "Error fetching GHWO for 51013"}
         mock_get_object_or_404.return_value = mock.Mock()
 
         response = self.client.get(
