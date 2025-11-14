@@ -52,5 +52,16 @@
       "localRoot": "${workspaceFolder}/api-interop-layer",
       "continueOnAttach": true
     },
+        {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug proxy",
+      "address": "localhost",
+      "port": 9230,
+      "restart": true,
+      "remoteRoot": "/app",
+      "localRoot": "${workspaceFolder}/api-proxy"
+    },
+
   ]
 }

@@ -48,9 +48,16 @@ export default (data, { timezone }) => {
   const days = [];
   let previousDay = -1;
 
+  const now = dayjs();
+
   // So, we iterate over all day periods and bundle up them into days.
   for (const period of data.properties.periods) {
     const start = dayjs(period.startTime).tz(timezone);
+
+    const end = dayjs(period.endTime);
+    if (end.isBefore(now)) {
+      continue;
+    }
 
     if (start.get("day") !== previousDay) {
       if (days.length > 0) {

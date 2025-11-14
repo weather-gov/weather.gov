@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import sinon from "sinon";
 import daily from "./daily.js";
 
 describe("daily forecast", () => {
@@ -6,6 +7,22 @@ describe("daily forecast", () => {
   // not important for this test suite
   // America/New_York is UTC-0400 for the dates used in the tests below.
   const timezone = "America/New_York";
+
+  let clock;
+  before(() => {
+    // Initialize the fake clock to the Unix epoch. The tests should either
+    // bypass the temporal filters by using dates in the future, or exercise
+    // the filter by using dates in the past and/or adjusting the fake clock.
+    clock = sinon.useFakeTimers({ now: 0 });
+  });
+
+  beforeEach(() => {
+    clock.reset();
+  });
+
+  after(() => {
+    clock.restore();
+  });
 
   it("correctly handles a single night period moments before midnight", () => {
     // In this test, we have three weather day periods:
@@ -322,6 +339,67 @@ describe("daily forecast", () => {
 
     expect(firstDay.dayNumericString).to.equal("02");
     expect(period.dayName).to.equal("Tonight");
+  });
+
+  it("skips over day periods in the past", async () => {
+    // In this test, we have three weather day periods:
+    //  1am to 6am local time - this would be overnight
+    //  6am to 6pm local time - this should be day
+    //  6pm to 6am local time - this should be night
+    // However, unlike the overnight test above, here we're setting the clock
+    // such that the overnight period is actually in the past. This data
+    // condition is a bug, but we know it can happen:
+    //
+    // https://nco-jira.atlassian.net/jira/software/c/projects/API/boards/70?search=224&selectedIssue=API-224
+    //
+    // While we expect this particular problem to be resolved, there's no good
+    // reason we can't guard against it. And this test is to ensure we do. :)
+
+    // Advance the clock to after the end of the first period and before the
+    // end of the second period. The first perion should be filtered out.
+    clock.tick(Date.parse("2024-09-01T09:00:00-04:00"));
+
+    const data = {
+      properties: {
+        periods: [
+          {
+            startTime: "2024-09-01T01:00:00-04:00",
+            endTime: "2024-09-01T06:00:00-04:00",
+            isDaytime: false,
+          },
+          {
+            // This one is a day period
+            startTime: "2024-09-01T06:00:00-04:00",
+            endTime: "2024-09-01T18:00:00-04:00",
+            isDaytime: true,
+          },
+          {
+            // And this one is a night period
+            startTime: "2024-09-01T18:00:00-04:00",
+            endTime: "2024-09-02T06:00:00-04:00",
+            isDaytime: false,
+          },
+        ],
+      },
+    };
+
+    const { days } = daily(data, { timezone });
+    expect(days.length).to.equal(1);
+
+    const [firstDay] = days;
+    expect(firstDay.periods.length).to.equal(2);
+
+    const [firstPeriod, secondPeriod] = firstDay.periods;
+
+    expect(firstPeriod.isDaytime).to.be.true;
+    expect(firstPeriod.isOvernight).to.be.false;
+    expect(firstPeriod.timeLabel).to.equal("6AM-6PM");
+    expect(firstPeriod.dayName).to.equal("Today");
+
+    expect(secondPeriod.isDaytime).to.be.false;
+    expect(secondPeriod.isOvernight).to.be.false;
+    expect(secondPeriod.timeLabel).to.equal("6PM-6AM");
+    expect(secondPeriod.dayName).to.equal("Today");
   });
 
   it("propagates an error", () => {
