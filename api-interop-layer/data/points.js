@@ -32,7 +32,7 @@ export default async (latitude, longitude) => {
     // which corresponds to WGS84.
     .query(
       `SELECT
-       name,state,stateName,county,timezone,stateFIPS,countyFIPS
+       name,timezone
        FROM weathergov_geo_places
        ORDER BY ST_DISTANCE(point,${pointGeom})
        LIMIT 1`,
@@ -40,6 +40,33 @@ export default async (latitude, longitude) => {
     .then((result) => {
       if (Array.isArray(result.rows) && result.rows.length > 0) {
         return result.rows[0];
+      }
+      return null;
+    });
+
+  const countyStatePromise = db
+    .query(
+      `
+      SELECT
+        c.countyname,c.countyfips,
+        s.state,s.name,s.fips
+      FROM weathergov_geo_counties c
+      INNER JOIN weathergov_geo_states s
+      ON (s.id=c.state_id)
+      WHERE
+        ST_Contains(c.shape, ${pointGeom})
+      LIMIT 1`,
+    )
+    .then((result) => {
+      if (Array.isArray(result.rows) && result.rows.length > 0) {
+        const {
+          state,
+          name: statename,
+          countyname: county,
+          countyfips,
+          fips: statefips,
+        } = result.rows[0];
+        return { state, statename, county, countyfips, statefips };
       }
       return null;
     });
@@ -55,10 +82,11 @@ export default async (latitude, longitude) => {
     LIMIT 1`,
   );
 
-  const [grid, place, isMarine] = await Promise.all([
+  const [grid, place, isMarine, countyState] = await Promise.all([
     pointsPromise,
     placePromise,
     isMarinePromise,
+    countyStatePromise,
   ]);
 
   if (grid.status === 404) {
@@ -71,6 +99,11 @@ export default async (latitude, longitude) => {
     // responsibility but we don't have the data in the API.
     grid.error = true;
     grid.notSupported = true;
+  }
+
+  // Add county and state information.
+  if (countyState) {
+    Object.assign(place, countyState);
   }
 
   if (place && place.name && place.state) {
