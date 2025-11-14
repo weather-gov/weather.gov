@@ -99,21 +99,28 @@ describe("point method", () => {
     fetchAPIJson.resolves({ error: true });
 
     // Marine zone query. Make this one a marine point to validate that logic.
-    db.query.onCall(1).resolves({ rows: [1] });
+    db.query.onCall(2).resolves({ rows: [1] });
 
     db.query.onCall(0).resolves({
       rows: [
         {
           name: "Townsville",
-          state: "",
-          stateName: "Invisibilia",
-          county: "Countsylvania",
           timezone: "Imaginary",
-          stateFIPS: "00",
-          countyFIPS: "999",
         },
         {
           some: "other place",
+        },
+      ],
+    });
+
+    db.query.onCall(1).resolves({
+      rows: [
+        {
+          state: "",
+          name: "Visibilia",
+          countyname: "Parishville",
+          countyfips: "000",
+          fips: "99",
         },
       ],
     });
@@ -127,11 +134,11 @@ describe("point method", () => {
       place: {
         name: "Townsville",
         state: "",
-        stateName: "Invisibilia",
-        county: "Countsylvania",
+        statename: "Visibilia",
+        county: "Parishville",
         timezone: "Imaginary",
-        stateFIPS: "00",
-        countyFIPS: "999",
+        statefips: "99",
+        countyfips: "000",
       },
     });
   });
@@ -140,18 +147,25 @@ describe("point method", () => {
     fetchAPIJson.resolves({ error: true });
 
     // Marine zone query
-    db.query.onCall(1).resolves({ rows: [] });
+    db.query.onCall(2).resolves({ rows: [] });
 
     db.query.onCall(0).resolves({
       rows: [
         {
           name: "Townsville",
-          state: "FR",
-          stateName: "Franklin",
-          county: "Countsylvania",
           timezone: "Imaginary",
-          stateFIPS: "00",
-          countyFIPS: "999",
+        },
+      ],
+    });
+
+    db.query.onCall(1).resolves({
+      rows: [
+        {
+          state: "OT",
+          name: "Overthere",
+          countyname: "Countbackwardsylvania",
+          countyfips: "444",
+          fips: "55",
         },
       ],
     });
@@ -164,13 +178,13 @@ describe("point method", () => {
       isMarine: false,
       place: {
         name: "Townsville",
-        state: "FR",
-        stateName: "Franklin",
-        county: "Countsylvania",
+        state: "OT",
+        statename: "Overthere",
+        county: "Countbackwardsylvania",
         timezone: "Imaginary",
-        stateFIPS: "00",
-        countyFIPS: "999",
-        fullName: "Townsville, FR",
+        statefips: "55",
+        countyfips: "444",
+        fullName: "Townsville, OT",
       },
     });
   });
