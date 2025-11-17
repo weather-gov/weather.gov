@@ -697,6 +697,9 @@ msgstr "Saturday"
 msgid "county.alert-tabs.day.Sunday.01"
 msgstr "Sunday"
 
+msgid "county.landing.link-to-ghwo-analysis.01"
+msgstr "See the detailed risk analysis"
+
 msgid "county.briefing.header.01"
 msgid_plural "county.briefing.header.01-plural"
 msgstr[0] "Briefing"

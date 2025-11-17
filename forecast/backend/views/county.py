@@ -90,6 +90,7 @@ def county_landing(request, countyfips):
         request,
         "weather/county/landing.html",
         {
+            "countyfips": countyfips,
             "data": {
                 "public": county_data,
                 "briefings": briefings,
