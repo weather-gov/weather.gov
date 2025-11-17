@@ -86,6 +86,9 @@ def county_landing(request, countyfips):
             # don't want to propagate that to the user, though.
             logger.error(f"No matching WFO found for {cwa.wfo}")
 
+    (lon, lat) = county.shape.centroid.coords
+    radar = interop.get_radar(lat, lon)
+
     return render(
         request,
         "weather/county/landing.html",
@@ -96,6 +99,7 @@ def county_landing(request, countyfips):
                 "briefings": briefings,
                 "weather_stories": sorted(weather_stories, key=lambda story: story.starttime, reverse=True),
                 "county": f"{county.countyname} {county.subdivision_name}, {county.st}",
+                "radar": radar,
             },
         },
     )

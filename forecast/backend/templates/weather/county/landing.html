@@ -5,11 +5,18 @@
           src="{% static 'js/county/landing.html.js' %}"
           type="module"></script>
   {% include "weather/scripts/leaflet.html" %}
+  <script src="{% static 'js/cmi-radar.0a93e066.js' %}"
+          nonce="{{ request.csp_nonce }}"
+          data-wx-radar-cmi="true"
+          defer></script>
 {% endblock %}
 {% block head_css %}
   <link rel="stylesheet"
         type="text/css"
         href="{% static 'css/leaflet.css' %}" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/radar/cmi-radar.0a93e066.css' %}" />
 {% endblock %}
 {% block page_content %}
   <div class="bg-primary-dark">
@@ -70,6 +77,13 @@
       </div>
     </div>
   </div>
+  {% if data.radar and not data.radar.error %}
+  <div id="radar-enable" class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+    <div class="desktop:grid-col-6 wx-radar-wrapper">
+      {% radar place=data.radar.place.fullName point=data.radar.point radar_metadata=data.radar.radarMetadata %}
+    </div>
+  </div>
+  {% endif %}
   <div class="bg-primary-lightest margin-bottom-4">
     <div class="grid-container padding-top-2">
       <h2 class="text-normal text-primary-darker margin-top-0">{{ "county.forecast-link.heading.01" | t }}</h2>
