@@ -1,9 +1,13 @@
 <div id="county-daily-alert-container">
   <div id="county-daily-alert-container">
     <wx-alerts class="wx-alerts-county-daily">
-    {% for alert in data.public.alerts.items %}
-      {% include "weather/partials/alert-accordion.html" with alert=alert icon="true" alert_days=alert.alertDays %}
-    {% endfor %}
+    {% if alerts|length > 0 %}
+      {% for alert in alerts %}
+        {% include "weather/partials/alert-accordion.html" with alert=alert icon="true" alert_days=alert.alertDays %}
+      {% endfor %}
+    {% else %}
+      {% trans_with_args "county.alert-accordions.no-alerts.01" county=county %}
+    {% endif %}
     </wx-alerts>
   </div>
 </div>
