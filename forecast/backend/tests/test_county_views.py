@@ -107,9 +107,11 @@ class TestCountyViews(TestCase):
         self.assertEqual(response.context["counties"][4], self.county3)
 
     @mock.patch("backend.interop.get_county_data")
-    def test_landing_link_to_county_ghwo(self, mock_get_county_data):
+    @mock.patch("backend.interop.get_radar")
+    def test_landing_link_to_county_ghwo(self, mock_get_radar, mock_get_county_data):
         """Test that county landing links to detailed risk analysis."""
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
+        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
         self.assertTemplateUsed(response, "weather/county/landing.html")
@@ -117,9 +119,11 @@ class TestCountyViews(TestCase):
         self.assertContains(response, link)
 
     @mock.patch("backend.interop.get_county_data")
-    def test_landing_without_timezone(self, mock_get_county_data):
+    @mock.patch("backend.interop.get_radar")
+    def test_landing_without_timezone(self, mock_get_radar, mock_get_county_data):
         """Test the landing view without timezone."""
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
+        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
         self.assertTemplateUsed(response, "weather/county/landing.html")
@@ -143,13 +147,16 @@ class TestCountyViews(TestCase):
                     },
                 ],
                 "weather_stories": [],
+                "radar": {"radarMetadata": {}},
             },
         )
 
     @mock.patch("backend.interop.get_county_data")
-    def test_landing_with_timezone(self, mock_get_county_data):
+    @mock.patch("backend.interop.get_radar")
+    def test_landing_with_timezone(self, mock_get_radar, mock_get_county_data):
         """Test the landing view with timezone."""
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
+        mock_get_radar.return_value = {"radarMetadata": {}}
 
         # Matt Smith, the Eleventh Doctor Who, is born. We change the updated_at
         # here to ensure that when it is after the creation date, we get the
@@ -182,16 +189,19 @@ class TestCountyViews(TestCase):
                     },
                 ],
                 "weather_stories": [],
+                "radar": {"radarMetadata": {}},
             },
         )
 
     @mock.patch("backend.interop.get_county_data")
-    def test_landing_with_no_wfo(self, mock_get_county_data):
+    @mock.patch("backend.interop.get_radar")
+    def test_landing_with_no_wfo(self, mock_get_radar, mock_get_county_data):
         """Test the landing view where the county doesn't map to a WFO.
 
         This is an error condition, but we don't want it to crash the UX.
         """
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
+        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_landing", kwargs={"countyfips": "33333"}))
         self.assertTemplateUsed(response, "weather/county/landing.html")
@@ -204,6 +214,7 @@ class TestCountyViews(TestCase):
                 },
                 "briefings": [],
                 "weather_stories": [],
+                "radar": {"radarMetadata": {}},
             },
         )
 

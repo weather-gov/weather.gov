@@ -285,6 +285,17 @@ class TestInteropInterface(TestCase):
         self.assertEqual(actual, returned)
 
     @responses.activate
+    def test_get_radar(self):
+        """Tests that we get radar metadata."""
+        returned = {"message": "some radar metadata"}
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(responses.GET, "https://interop/radar/9/10", json=returned, status=200)
+
+        actual = interop.get_radar(9, 10)
+
+        self.assertEqual(actual, returned)
+
+    @responses.activate
     def test_get_county_data(self):
         """Tests that we get county data."""
         returned = {"message": "some county data"}

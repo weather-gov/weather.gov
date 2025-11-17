@@ -107,13 +107,17 @@ const setupRadar = () => {
 
 const scriptEl = document.querySelector("[data-wx-radar-cmi]");
 const currentTabSelected = document.querySelector("#today[data-selected]");
+const radarEnabled = document.querySelector("#radar-enable");
+
 // If the page loads with the current tab selected
 // then we try to load the radar.
+// If the page loads with the radar-enable id, then
+// we load the radar anyway since it is desired.
 // If the page loads with some other tab selected,
 // than we bind a listener for the tab-switched event.
 if (currentTabSelected && window.cmiRadar) {
   setupRadar();
-} else if (currentTabSelected) {
+} else if (currentTabSelected || radarEnabled) {
   scriptEl.addEventListener("load", () => {
     setupRadar();
   });
