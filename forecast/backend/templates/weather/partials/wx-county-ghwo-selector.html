@@ -24,7 +24,7 @@
   </div>
   <div class="grid-col-12 tablet-lg:grid-col-3 line-height-sans-5 display-flex flex-column flex-justify-center tablet-lg:border-left-1px border-base-light margin-top-3 tablet-lg:margin-top-0">
     <div class="tablet-lg:margin-top-1 tablet-lg:padding-left-4 desktop:padding-left-5">
-      <a href="{% url 'county_ghwo' county_fips=county.countyfips %}" class="usa-link">
+      <a href="{% url 'county_landing' countyfips=county.countyfips %}" class="usa-link">
         {{ "ghwo.selector.label.county-link.01" | t }}
       </a>
     </div>
