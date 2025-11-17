@@ -260,8 +260,6 @@ DIRECTIVES = {
         # analytics
         "dap.digitalgov.gov",
         "www.googletagmanager.com",
-        # new relic
-        "bam.nr-data.net",
     ],
     "connect-src": [
         SELF,
