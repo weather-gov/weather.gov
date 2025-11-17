@@ -107,6 +107,16 @@ class TestCountyViews(TestCase):
         self.assertEqual(response.context["counties"][4], self.county3)
 
     @mock.patch("backend.interop.get_county_data")
+    def test_landing_link_to_county_ghwo(self, mock_get_county_data):
+        """Test that county landing links to detailed risk analysis."""
+        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
+
+        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
+        self.assertTemplateUsed(response, "weather/county/landing.html")
+        link = reverse("county_ghwo", kwargs={"county_fips": "44444"})
+        self.assertContains(response, link)
+
+    @mock.patch("backend.interop.get_county_data")
     def test_landing_without_timezone(self, mock_get_county_data):
         """Test the landing view without timezone."""
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
