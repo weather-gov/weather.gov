@@ -33,8 +33,8 @@
       </form>
     </div>
   </div>
-  <div class="bg-primary-darker">
-    {% if place %}
+  {% if place %}
+    <div class="bg-primary-darker">
       <div class="grid-container">
         <div class="grid-row flex-no-wrap">
           <svg class="usa-icon height-4 width-4 margin-top-2 margin-right-05 text-accent-cool"
@@ -46,6 +46,6 @@
           <h1 class="text-white font-heading-xl tablet:flex-1">{% place_label place %}</h1>
         </div>
       </div>
-    {% endif %}
-  </div>
+    </div>
+  {% endif %}
 </div>
