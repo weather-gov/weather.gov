@@ -22,7 +22,7 @@
             </div>
           </td>
           <td class="text-top text-left font-sans-xs padding-left-2">
-            <span>{{ level.description }}</span>
+            <span>{{ level.description|striptags }}</span>
           </td>
         </tr>
       {% endif %}
