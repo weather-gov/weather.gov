@@ -720,6 +720,9 @@ msgstr "Download {office} briefing [pdf]"
 msgid "county.briefing.no-briefing.01"
 msgstr "No recent briefing available"
 
+msgid "county.forecast-link.heading.01"
+msgstr "Find a forecast"
+
 msgid "ghwo.table.caption.header.01"
 msgstr "7 day risk overview"
 
