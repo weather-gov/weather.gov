@@ -207,48 +207,6 @@ wx-ghwo-details-table {
   outline: 0;
 }
 
-/* Styles for the risk legend at bottom of table */
-.ghwo-risk-table-legend {
-    margin-top: units(2);
-
-
-    dl {
-        dt {
-            display: inline;
-        }
-
-        dt::after {
-            content: ":";
-        }
-
-        dd {
-            display: inline;
-            margin-left: 0;
-        }
-
-        dd:first-of-type::after {
-            content: ", ";
-        }
-    }
-
-    .ghwo-risk-table-legend-inner {
-        display: flex;
-        align-items: center;
-    }
-
-    .ghwo-risk-legend-item {
-        display: flex;
-        align-items: center;
-        margin-right: units(2);
-
-        span {
-            @include u-font("mono", "2xs");
-
-            display: block;
-        }
-    }
-}
-
 .ghwo-risk-legend-square {
     width: units(2);
     height: units(2);
