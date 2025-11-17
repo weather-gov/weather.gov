@@ -162,12 +162,18 @@ def radar(**kwargs):
     place = kwargs["place"]
     point = kwargs["point"]
     radar_metadata = kwargs["radar_metadata"]
+    radar_heading_level = "h2"  # default value
+    if "heading_level" in kwargs:
+        radar_heading_level = kwargs["heading_level"]
+    radar_heading_class = kwargs.get("heading_class", None)
 
     return {
         "place": place,
         "point": point,
         "radar_metadata": radar_metadata,
         "intensities": RADAR_INTENSITIES,
+        "heading_level": radar_heading_level,
+        "heading_class": radar_heading_class,
     }
 
 

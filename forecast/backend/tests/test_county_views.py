@@ -130,7 +130,8 @@ class TestCountyViews(TestCase):
         self.assertEqual(
             response.context["data"],
             {
-                "county": "Anansi County, GH",
+                "county_label": "Anansi County, GH",
+                "primary_wfo": self.wfo,
                 "public": {"hazardOutlook": self.ghwo},
                 "briefings": [
                     {
@@ -172,7 +173,8 @@ class TestCountyViews(TestCase):
         self.assertEqual(
             response.context["data"],
             {
-                "county": "Keelut Census Area, AK",
+                "county_label": "Keelut Census Area, AK",
+                "primary_wfo": self.wfo,
                 "public": {"hazardOutlook": self.ghwo},
                 "briefings": [
                     {
@@ -208,13 +210,14 @@ class TestCountyViews(TestCase):
         self.assertEqual(
             response.context["data"],
             {
-                "county": "Sanderson Sisters County, MA",
+                "county_label": "Sanderson Sisters County, MA",
                 "public": {
                     "hazardOutlook": self.ghwo,
                 },
                 "briefings": [],
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
+                "primary_wfo": None,
             },
         )
 

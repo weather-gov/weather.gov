@@ -98,8 +98,9 @@ def county_landing(request, countyfips):
                 "public": county_data,
                 "briefings": briefings,
                 "weather_stories": sorted(weather_stories, key=lambda story: story.starttime, reverse=True),
-                "county": f"{county.countyname} {county.subdivision_name}, {county.st}",
+                "county_label": f"{county.countyname} {county.subdivision_name}, {county.st}",
                 "radar": radar,
+                "primary_wfo":  wfo or None,
             },
         },
     )
