@@ -22,7 +22,7 @@
   <div class="bg-primary-dark">
     <div class="grid-container">
       <div class="grid-row flex-no-wrap">
-        <h1 class="text-white font-heading-xl tablet:flex-1">{{ data.county }}</h1>
+        <h1 class="text-white font-heading-xl tablet:flex-1">{{ data.county_label }}</h1>
       </div>
     </div>
   </div>
@@ -77,14 +77,17 @@
       </div>
     </div>
   </div>
-  {% if data.radar and not data.radar.error %}
-  <div id="radar-enable" class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
-    <div class="desktop:grid-col-6 wx-radar-wrapper">
-      {% radar place=data.radar.place.fullName point=data.radar.point radar_metadata=data.radar.radarMetadata %}
+  <div {% if data.radar and not data.radar.error %}id="radar-enable"{% endif %} class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+    <div class="grid-row">
+      {% if data.radar and not data.radar.error %}
+        <div class="desktop:grid-col-6 wx-radar-wrapper">
+          {% radar place=data.radar.place.fullName point=data.radar.point radar_metadata=data.radar.radarMetadata heading_level="h2" heading_class="text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2"%}
+        </div>
+      {% endif %}
+      {% include 'weather/county/wfo-promo.html' %}
     </div>
   </div>
-  {% endif %}
-  <div class="bg-primary-lightest margin-bottom-4">
+  <div class="bg-primary-lightest padding-bottom-4">
     <div class="grid-container padding-top-2">
       <h2 class="text-normal text-primary-darker margin-top-0">{{ "county.forecast-link.heading.01" | t }}</h2>
     </div>
