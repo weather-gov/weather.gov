@@ -59,7 +59,7 @@
             {% include 'weather/partials/county-alerts-map.html' %}
           </div>
           <div class="grid-col-12 tablet:grid-col-5">
-            {% include "weather/county/dailyAlertAccordion.html" with alerts=data.public.alerts.items county=data.county %}
+            {% include "weather/county/dailyAlertAccordion.html" with alerts=data.public.alerts.items county=data.county_label %}
           </div>
         </div>
       </div>
