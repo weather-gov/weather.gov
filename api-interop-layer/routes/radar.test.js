@@ -4,13 +4,13 @@ import quibble from "quibble";
 
 describe("route: radar", () => {
   const sandbox = sinon.createSandbox();
-  const getPoint = sandbox.stub();
+  const getClosestPlace = sandbox.stub();
   const getRadarMetadata = sandbox.stub();
 
   let radar;
 
   before(async () => {
-    await quibble.esm("../data/points.js", {}, getPoint);
+    await quibble.esm("../data/points.js", { getClosestPlace });
     await quibble.esm("../data/radar.js", { getRadarMetadata });
 
     radar = await import("./radar.js");
@@ -54,36 +54,30 @@ describe("route: radar", () => {
   describe("the route handler", () => {
     it("returns an error, if there's an error", async () => {
       const request = { params: { latitude: "up", longitude: "left" } };
-      getPoint.resolves({
-        error: "The princess is in another castle!",
-        status: "Level 1.3",
-      });
+      getClosestPlace.resolves(null);
 
       const actual = await radar.handler(request);
 
-      expect(getPoint.calledWith("up", "left")).to.be.true;
+      expect(getClosestPlace.calledWith("up", "left")).to.be.true;
       expect(actual).to.eql({
-        status: "Level 1.3",
-        error: "The princess is in another castle!",
         data: {
-          status: "Level 1.3",
-          error: "The princess is in another castle!",
+          error: true,
         },
       });
     });
 
     it("returns radar metadata if everything is okay", async () => {
-      const data = { place: "Koopa badlands" };
+      const data = { fullName: "Koopa badlands" };
       const request = { params: { latitude: "down", longitude: "right" } };
-      getPoint.resolves(data);
+      getClosestPlace.resolves(data);
       getRadarMetadata.resolves("Mr. Radar");
 
       const actual = await radar.handler(request);
 
-      expect(getPoint.calledWith("down", "right")).to.be.true;
+      expect(getClosestPlace.calledWith("down", "right")).to.be.true;
       expect(actual).to.eql({
         data: {
-          place: "Koopa badlands",
+          place: { fullName: "Koopa badlands" },
           radarMetadata: "Mr. Radar",
           point: {
             latitude: "down",
