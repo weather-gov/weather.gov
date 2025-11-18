@@ -30,6 +30,33 @@ def county_landing(request, countyfips):
 
     county_data = interop.get_county_data(countyfips)
 
+    level_priorities = {
+        "warning": 1024,
+        "watch": 512,
+        "other": 0,
+    }
+
+    levels = [alert["metadata"]["level"] for alert in county_data["alerts"]["items"]]
+    levels = {level["text"] for level in levels}
+    levels = list(levels)
+    levels.sort(key=lambda level: level_priorities[level], reverse=True)
+    levels = [
+        {
+            "name": level,
+            "css_class": f"wx_alert_map_legend--{level if level != 'other' else 'advisory'}",
+            "translation_key": f"alerts.legend.{level if level != 'other' else 'advisory'}-area.01",
+        }
+        for level in levels
+    ]
+
+    levels_per_alert = [alert["metadata"]["level"]["text"] for alert in county_data["alerts"]["items"]]
+
+    level_days = []
+    for day in county_data["alertDays"]:
+        day_levels = [levels_per_alert[index] for index in day["alerts"]]
+        day_levels.sort(key=lambda level: level_priorities[level], reverse=True)
+        level_days.append(" ".join(day_levels))
+
     localtz = None
     if county.timezone:
         localtz = ZoneInfo(county.timezone)
@@ -95,6 +122,8 @@ def county_landing(request, countyfips):
         {
             "countyfips": countyfips,
             "data": {
+                "alert_levels": levels,
+                "alert_level_days": level_days,
                 "public": county_data,
                 "briefings": briefings,
                 "weather_stories": sorted(weather_stories, key=lambda story: story.starttime, reverse=True),
