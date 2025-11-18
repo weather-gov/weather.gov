@@ -110,7 +110,7 @@ class TestCountyViews(TestCase):
     @mock.patch("backend.interop.get_radar")
     def test_landing_link_to_county_ghwo(self, mock_get_radar, mock_get_county_data):
         """Test that county landing links to detailed risk analysis."""
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
+        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
@@ -122,7 +122,7 @@ class TestCountyViews(TestCase):
     @mock.patch("backend.interop.get_radar")
     def test_landing_without_timezone(self, mock_get_radar, mock_get_county_data):
         """Test the landing view without timezone."""
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
+        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
@@ -130,9 +130,11 @@ class TestCountyViews(TestCase):
         self.assertEqual(
             response.context["data"],
             {
+                "alert_levels": [],
+                "alert_level_days": [],
                 "county_label": "Anansi County, GH",
                 "primary_wfo": self.wfo,
-                "public": {"hazardOutlook": self.ghwo},
+                "public": {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []},
                 "briefings": [
                     {
                         "wfo": self.wfo,
@@ -156,7 +158,7 @@ class TestCountyViews(TestCase):
     @mock.patch("backend.interop.get_radar")
     def test_landing_with_timezone(self, mock_get_radar, mock_get_county_data):
         """Test the landing view with timezone."""
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
+        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         # Matt Smith, the Eleventh Doctor Who, is born. We change the updated_at
@@ -173,9 +175,11 @@ class TestCountyViews(TestCase):
         self.assertEqual(
             response.context["data"],
             {
+                "alert_levels": [],
+                "alert_level_days": [],
                 "county_label": "Keelut Census Area, AK",
                 "primary_wfo": self.wfo,
-                "public": {"hazardOutlook": self.ghwo},
+                "public": {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []},
                 "briefings": [
                     {
                         "wfo": self.wfo,
@@ -202,7 +206,7 @@ class TestCountyViews(TestCase):
 
         This is an error condition, but we don't want it to crash the UX.
         """
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo}
+        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_landing", kwargs={"countyfips": "33333"}))
@@ -210,8 +214,12 @@ class TestCountyViews(TestCase):
         self.assertEqual(
             response.context["data"],
             {
+                "alert_level_days": [],
+                "alert_levels": [],
                 "county_label": "Sanderson Sisters County, MA",
                 "public": {
+                    "alerts": {"items": []},
+                    "alertDays": [],
                     "hazardOutlook": self.ghwo,
                 },
                 "briefings": [],
@@ -219,6 +227,98 @@ class TestCountyViews(TestCase):
                 "radar": {"radarMetadata": {}},
                 "primary_wfo": None,
             },
+        )
+
+    @mock.patch("backend.interop.get_county_data")
+    @mock.patch("backend.interop.get_radar")
+    def test_alert_level_to_day_mapping(self, mock_get_radar, mock_get_county_data):
+        """Tests that the levels for alerts on given days are mapped correctly."""
+        mock_get_county_data.return_value = {
+            "hazardOutlook": self.ghwo,
+            "alerts": {
+                "items": [
+                    {"metadata": {"level": {"text": "warning"}}},
+                    {"metadata": {"level": {"text": "other"}}},
+                    {"metadata": {"level": {"text": "watch"}}},
+                    {"metadata": {"level": {"text": "watch"}}},
+                ],
+            },
+            "alertDays": [
+                {"day": "Oneday", "alerts": [2, 1]},  # watch, other
+                {"day": "Today", "alerts": [1, 0]},  # other, warning
+                {"day": "3sday", "alerts": [0, 3]},  # warning, watch
+            ],
+        }
+        mock_get_radar.return_value = {"radarMetadata": {}}
+
+        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "33333"}))
+
+        alert_levels = response.context["data"]["alert_levels"]
+        alert_level_days = response.context["data"]["alert_level_days"]
+
+        # Make sure they are in the correct order.
+        self.assertEqual(
+            alert_levels,
+            [
+                {
+                    "name": "warning",
+                    "css_class": "wx_alert_map_legend--warning",
+                    "translation_key": "alerts.legend.warning-area.01",
+                },
+                {
+                    "name": "watch",
+                    "css_class": "wx_alert_map_legend--watch",
+                    "translation_key": "alerts.legend.watch-area.01",
+                },
+                {
+                    "name": "other",
+                    "css_class": "wx_alert_map_legend--advisory",
+                    "translation_key": "alerts.legend.advisory-area.01",
+                },
+            ],
+        )
+
+        # And also for each day
+        self.assertEqual(alert_level_days, ["watch other", "warning other", "warning watch"])
+
+    @mock.patch("backend.interop.get_county_data")
+    @mock.patch("backend.interop.get_radar")
+    def test_alert_levels_only_present(self, mock_get_radar, mock_get_county_data):
+        """Tests that only present alert levels are returned."""
+        mock_get_county_data.return_value = {
+            "hazardOutlook": self.ghwo,
+            "alerts": {
+                "items": [
+                    {"metadata": {"level": {"text": "other"}}},
+                    {"metadata": {"level": {"text": "other"}}},
+                    {"metadata": {"level": {"text": "warning"}}},
+                    {"metadata": {"level": {"text": "other"}}},
+                ],
+            },
+            "alertDays": [],
+        }
+        mock_get_radar.return_value = {"radarMetadata": {}}
+
+        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "33333"}))
+
+        alert_levels = response.context["data"]["alert_levels"]
+
+        # Make sure they are in the correct order,  and we only have the ones
+        # that are actually represented in alerts.
+        self.assertEqual(
+            alert_levels,
+            [
+                {
+                    "name": "warning",
+                    "css_class": "wx_alert_map_legend--warning",
+                    "translation_key": "alerts.legend.warning-area.01",
+                },
+                {
+                    "name": "other",
+                    "css_class": "wx_alert_map_legend--advisory",
+                    "translation_key": "alerts.legend.advisory-area.01",
+                },
+            ],
         )
 
     def test_landing_404(self):

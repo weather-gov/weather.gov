@@ -19,6 +19,14 @@ describe("county daily alert accordions", () => {
       <div data-alert-day-4></div>
       <div data-alert-day-4></div>
     </wx-alerts>
+    <wx-alert-map>
+      <div class="wx_alert_map_legend">
+        <div id="wx-alert-legend-level-warning"></div>
+        <div id="wx-alert-legend-level-watch"></div>
+        <div id="wx-alert-legend-level-other"></div>
+        <div>county; should always be visible</div>
+      </div>
+    </wx-alert-map>
     `;
   });
 
@@ -92,5 +100,43 @@ describe("county daily alert accordions", () => {
       false,
       false,
     ]);
+  });
+
+  it("displays the correct map legend items for a day", () => {
+    // First, hide all legends
+    [...document.querySelectorAll(".wx_alert_map_legend > div[id]")].forEach(
+      (node) => node.classList.add("display-none"),
+    );
+
+    window.dispatchEvent(
+      new CustomEvent("wx-tab-focused", {
+        detail: { dataset: { alertDay: "1", alertLevels: "warning other" } },
+      }),
+    );
+
+    const hiddenStatus = [
+      ...document.querySelectorAll(".wx_alert_map_legend > div"),
+    ].map((node) => node.classList.contains("display-none"));
+
+    expect(hiddenStatus).to.eql([false, true, false, false]);
+  });
+
+  it("shows all legends for 'all' day", () => {
+    // First, hide all legends
+    [...document.querySelectorAll(".wx_alert_map_legend > div[id]")].forEach(
+      (node) => node.classList.add("display-none"),
+    );
+
+    window.dispatchEvent(
+      new CustomEvent("wx-tab-focused", {
+        detail: { dataset: { alertDay: "all" } },
+      }),
+    );
+
+    const hiddenStatus = [
+      ...document.querySelectorAll(".wx_alert_map_legend > div"),
+    ].map((node) => node.classList.contains("display-none"));
+
+    expect(hiddenStatus).to.eql([false, false, false, false]);
   });
 });

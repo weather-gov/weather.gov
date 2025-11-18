@@ -45,6 +45,7 @@
                   class="usa-button padding-x-105"
                   role="tab"
                   data-alert-day="{{ forloop.counter }}"
+                  data-alert-levels="{{ data.alert_level_days | item_at_index:forloop.counter0 }}"
                   aria-controls="alert-day"
                   aria-selected="false">{{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}</button>
         {% endfor %}
@@ -56,7 +57,7 @@
            class="margin-top-2">
         <div class="grid-row grid-gap">
           <div class="grid-col-12 tablet:grid-col-7 margin-bottom-205">
-            {% include 'weather/partials/county-alerts-map.html' %}
+            {% include 'weather/partials/county-alerts-map.html' with levels=data.alert_levels %}
           </div>
           <div class="grid-col-12 tablet:grid-col-5">
             {% include "weather/county/dailyAlertAccordion.html" with alerts=data.public.alerts.items county=data.county_label %}
