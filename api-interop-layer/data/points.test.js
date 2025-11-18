@@ -17,7 +17,7 @@ describe("point method", () => {
     await quibble.esm("../util/fetch.js", { fetchAPIJson }, {});
 
     const module = await import("./points.js");
-    points = module.default;
+    points = module.getPointData;
   });
 
   beforeEach(() => {

@@ -2,7 +2,7 @@ import getAlerts from "./alerts/index.js";
 import { alignAlertsToDaily } from "./alerts/utils.js";
 import getForecast from "./forecast/index.js";
 import getObservations from "./obs/index.js";
-import getPoint from "./points.js";
+import { getPointData } from "./points.js";
 import getSatellite from "./satellite.js";
 import getProductById from "./products/index.js";
 import { createLogger } from "../util/monitoring/index.js";
@@ -12,7 +12,7 @@ const logger = createLogger("forecast");
 
 const getDataForPoint = async (lat, lon) => {
   logger.verbose(`fetching forecast for ${lat}, ${lon}}`);
-  const { point, place, grid, isMarine } = await getPoint(lat, lon);
+  const { point, place, grid, isMarine } = await getPointData(lat, lon);
 
   let satellitePromise = Promise.resolve({ error: true });
   let forecast = { daily: { error: true } };

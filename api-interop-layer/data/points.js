@@ -4,29 +4,11 @@ import { createLogger } from "../util/monitoring/index.js";
 
 const logger = createLogger("point");
 
-export default async (latitude, longitude) => {
-  logger.verbose(`getting information for place at ${latitude}, ${longitude}`);
-  const point = { latitude, longitude };
-
-  const pointsPromise = fetchAPIJson(`/points/${latitude},${longitude}`).then(
-    (data) => {
-      if (data.error) {
-        return data;
-      }
-
-      return {
-        wfo: data.properties.gridId,
-        x: data.properties.gridX,
-        y: data.properties.gridY,
-      };
-    },
-  );
-
-  const db = await openDatabase();
-
+export const getClosestPlace = async (latitude, longitude) => {
   const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',4326)`;
 
-  const placePromise = db
+  const db = await openDatabase();
+  const place = await db
     // In this distance query, we need to set the spatial reference system of
     // the point we're querying for. All of our spatial tables are SRS 4326,
     // which corresponds to WGS84.
@@ -44,7 +26,11 @@ export default async (latitude, longitude) => {
       return null;
     });
 
-  const countyStatePromise = db
+  if (place == null) {
+    return null;
+  }
+
+  const countyState = await db
     .query(
       `
       SELECT
@@ -71,6 +57,42 @@ export default async (latitude, longitude) => {
       return null;
     });
 
+  // Add county and state information, if available.
+  if (countyState) {
+    Object.assign(place, countyState);
+  }
+
+  if (place.name && place.state) {
+    place.fullName = `${place.name}, ${place.state}`;
+  }
+
+  return place;
+};
+
+export const getPointData = async (latitude, longitude) => {
+  logger.verbose(`getting information for place at ${latitude}, ${longitude}`);
+  const point = { latitude, longitude };
+
+  const pointsPromise = fetchAPIJson(`/points/${latitude},${longitude}`).then(
+    (data) => {
+      if (data.error) {
+        return data;
+      }
+
+      return {
+        wfo: data.properties.gridId,
+        x: data.properties.gridX,
+        y: data.properties.gridY,
+      };
+    },
+  );
+
+  const db = await openDatabase();
+
+  const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',4326)`;
+
+  const placePromise = await getClosestPlace(latitude, longitude);
+
   // Check if the requested point is inside a marine zone.
   const isMarinePromise = db.query(
     `SELECT id
@@ -82,11 +104,10 @@ export default async (latitude, longitude) => {
     LIMIT 1`,
   );
 
-  const [grid, place, isMarine, countyState] = await Promise.all([
+  const [grid, place, isMarine] = await Promise.all([
     pointsPromise,
     placePromise,
     isMarinePromise,
-    countyStatePromise,
   ]);
 
   if (grid.status === 404) {
@@ -99,15 +120,6 @@ export default async (latitude, longitude) => {
     // responsibility but we don't have the data in the API.
     grid.error = true;
     grid.notSupported = true;
-  }
-
-  // Add county and state information.
-  if (countyState) {
-    Object.assign(place, countyState);
-  }
-
-  if (place && place.name && place.state) {
-    place.fullName = `${place.name}, ${place.state}`;
   }
 
   return { point, place, grid, isMarine: isMarine.rows.length > 0 };
