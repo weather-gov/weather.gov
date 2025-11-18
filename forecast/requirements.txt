@@ -22,3 +22,4 @@ django-csp-reports==1.10.0
 django-debug-toolbar
 newrelic==11.1.0
 python-json-logger==4.0.0
+django-silk==5.4.3
