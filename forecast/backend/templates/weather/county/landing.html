@@ -60,7 +60,7 @@
             {% include 'weather/partials/county-alerts-map.html' with levels=data.alert_levels %}
           </div>
           <div class="grid-col-12 tablet:grid-col-5">
-            {% include "weather/county/dailyAlertAccordion.html" with alerts=data.public.alerts.items county=data.county_label %}
+            {% include "weather/county/dailyAlertAccordion.html" with alerts=data.public.alerts.items alert_days=data.public.alertDays county=data.county_label %}
           </div>
         </div>
       </div>
@@ -80,11 +80,12 @@
       </div>
     </div>
   </div>
-  <div {% if data.radar and not data.radar.error %}id="radar-enable"{% endif %} class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+  <div {% if data.radar and not data.radar.error %}id="radar-enable"{% endif %}
+       class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
     <div class="grid-row">
       {% if data.radar and not data.radar.error %}
         <div class="desktop:grid-col-6 wx-radar-wrapper">
-          {% radar place=data.radar.place.fullName point=data.radar.point radar_metadata=data.radar.radarMetadata heading_level="h2" heading_class="text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2"%}
+          {% radar place=data.radar.place.fullName point=data.radar.point radar_metadata=data.radar.radarMetadata heading_level="h2" heading_class="text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2" %}
         </div>
       {% endif %}
       {% include 'weather/county/wfo-promo.html' %}

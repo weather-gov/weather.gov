@@ -703,6 +703,9 @@ msgstr "Sunday"
 msgid "county.alert-accordions.no-alerts.01"
 msgstr "No alerts for {county}, for the next 5 days"
 
+msgid "county.alert-accordions.no-alerts-for-day.01"
+msgstr "No alerts for {county}, on {day}"
+
 msgid "county.landing.link-to-ghwo-analysis.01"
 msgstr "See the detailed risk analysis"
 
