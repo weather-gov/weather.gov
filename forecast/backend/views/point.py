@@ -20,6 +20,21 @@ from ._helpers import get_redirect_for_afd_queries
 @never_cache
 def point_location(request, lat, lon):
     """Render the forecast for a given latitude & longitude."""
+    # If the latitude or longitude are invalid, bail with an out-of-bounds
+    # error. This will result in a 404 page.
+    if lat > 90 or lat < -90 or lon < -180 or lon > 180:  # noqa: PLR2004
+        raise Http404(
+            {
+                "error": True,
+                "status": 404,
+                "reason": "out-of-bounds",
+                "point": {
+                    "latitude": lat,
+                    "longitude": lon,
+                },
+            },
+        )
+
     point = interop.get_point_forecast(lat, lon)
 
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
@@ -45,6 +60,7 @@ def point_location(request, lat, lon):
             "weather_story": weather_story,
         },
     )
+
 
 @never_cache
 def place_forecast(request, state, place):
@@ -85,6 +101,7 @@ def place_forecast(request, state, place):
     # If it's not a place we know, 404.
     raise Http404()
 
+
 def offices(request):  # pragma: no cover
     """Render a list of all WFOs. This is a debug route."""
     if not settings.DEBUG:
@@ -99,6 +116,7 @@ def offices(request):  # pragma: no cover
         regions.append(entry)
 
     return render(request, "weather/offices.html", {"regions": regions})
+
 
 def offices_specific(request, wfo):
     """Render the home page for an individual Weather Forecast Office."""
@@ -125,6 +143,7 @@ def offices_specific(request, wfo):
             "counties": ", ".join(counties),
         },
     )
+
 
 def afd_index(request):
     """
@@ -156,6 +175,7 @@ def afd_index(request):
     url = reverse("afd_by_office_and_id", kwargs={"wfo": wfo.lower(), "afd_id": afd_id})
     return redirect(url)
 
+
 def afd_by_office(_, wfo):
     """Reroute the user to the correct url for the most recent AFD for the given WFO."""
     try:
@@ -165,6 +185,7 @@ def afd_by_office(_, wfo):
         return redirect(url)
     except Exception as e:
         raise Http404() from e
+
 
 def afd_by_office_and_id(request, wfo, afd_id):
     """Display the given AFD product by id and populate the list of available AFDs for the provided WFO."""

@@ -136,6 +136,34 @@ class TestViews(TestCase):
         )
         self.assertEqual(response.context["weather_story"], None)
 
+    def test_point_location_with_lat_too_high(self):
+        """Test the point location view when the latitude is over 90."""
+        response = self.client.get("/point/127/22.2", follow=True)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
+
+    def test_point_location_with_lat_too_low(self):
+        """Test the point location view when the latitude is below -90."""
+        response = self.client.get("/point/-93.623/22.2", follow=True)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
+
+    def test_point_location_with_lon_too_high(self):
+        """Test the point location view when the longitude is over 180."""
+        response = self.client.get("/point/43.342/181", follow=True)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
+
+    def test_point_location_with_lon_too_low(self):
+        """Test the point location view when the longitude is below -180."""
+        response = self.client.get("/point/127/-197", follow=True)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
+
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_point_location_with_out_of_bounds(self, mock_get_point_forecast):
         """Test the point location view when the requested point is out of bounds."""
