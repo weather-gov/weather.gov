@@ -132,7 +132,7 @@
                       <use xlink:href="{% static 'images/uswds/sprite.svg' %}#location_city"></use>
                     </svg>
                     <a class="usa-link margin-left-1"
-                       href="{% url "county_landing" countyfips=point.place.countyfips %}">{{ "weather-story.link.county-overview.01" | t }}</a>
+                       href="{% url "county_overview" countyfips=point.place.countyfips %}">{{ "weather-story.link.county-overview.01" | t }}</a>
                   </div>
                 {% endif %}
               </div>

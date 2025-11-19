@@ -18,13 +18,13 @@ logger = logging.getLogger(__name__)
 
 @cache_control(public=True, max_age=3600)
 def index(request):
-    """Render the county landing page."""
+    """Render the county index page."""
     counties = WeatherCounties.objects.defer("shape").all().order_by("st", "countyname")
     return render(request, "weather/county/index.html", {"counties": counties})
 
 
 @never_cache
-def county_landing(request, countyfips):
+def county_overview(request, countyfips):
     """Render the main page for a particular county."""
     county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=countyfips)
 
@@ -118,7 +118,7 @@ def county_landing(request, countyfips):
 
     return render(
         request,
-        "weather/county/landing.html",
+        "weather/county/overview.html",
         {
             "countyfips": countyfips,
             "data": {

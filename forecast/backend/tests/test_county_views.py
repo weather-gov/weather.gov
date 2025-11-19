@@ -108,25 +108,25 @@ class TestCountyViews(TestCase):
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_landing_link_to_county_ghwo(self, mock_get_radar, mock_get_county_data):
-        """Test that county landing links to detailed risk analysis."""
+    def test_overview_link_to_county_ghwo(self, mock_get_radar, mock_get_county_data):
+        """Test that county overview links to detailed risk analysis."""
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
-        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
-        self.assertTemplateUsed(response, "weather/county/landing.html")
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
+        self.assertTemplateUsed(response, "weather/county/overview.html")
         link = reverse("county_ghwo", kwargs={"county_fips": "44444"})
         self.assertContains(response, link)
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_landing_without_timezone(self, mock_get_radar, mock_get_county_data):
-        """Test the landing view without timezone."""
+    def test_overview_without_timezone(self, mock_get_radar, mock_get_county_data):
+        """Test the overview view without timezone."""
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
-        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
-        self.assertTemplateUsed(response, "weather/county/landing.html")
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
+        self.assertTemplateUsed(response, "weather/county/overview.html")
         self.assertEqual(
             response.context["data"],
             {
@@ -156,8 +156,8 @@ class TestCountyViews(TestCase):
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_landing_with_timezone(self, mock_get_radar, mock_get_county_data):
-        """Test the landing view with timezone."""
+    def test_overview_with_timezone(self, mock_get_radar, mock_get_county_data):
+        """Test the overview view with timezone."""
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
@@ -170,8 +170,8 @@ class TestCountyViews(TestCase):
         with mock.patch("django.utils.timezone.now", mock.Mock(return_value=updated_at)):
             self.briefing.save()
 
-        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "55555"}))
-        self.assertTemplateUsed(response, "weather/county/landing.html")
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "55555"}))
+        self.assertTemplateUsed(response, "weather/county/overview.html")
         self.assertEqual(
             response.context["data"],
             {
@@ -201,16 +201,16 @@ class TestCountyViews(TestCase):
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_landing_with_no_wfo(self, mock_get_radar, mock_get_county_data):
-        """Test the landing view where the county doesn't map to a WFO.
+    def test_overview_with_no_wfo(self, mock_get_radar, mock_get_county_data):
+        """Test the overview view where the county doesn't map to a WFO.
 
         This is an error condition, but we don't want it to crash the UX.
         """
         mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
-        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "33333"}))
-        self.assertTemplateUsed(response, "weather/county/landing.html")
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "33333"}))
+        self.assertTemplateUsed(response, "weather/county/overview.html")
         self.assertEqual(
             response.context["data"],
             {
@@ -251,7 +251,7 @@ class TestCountyViews(TestCase):
         }
         mock_get_radar.return_value = {"radarMetadata": {}}
 
-        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "33333"}))
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "33333"}))
 
         alert_levels = response.context["data"]["alert_levels"]
         alert_level_days = response.context["data"]["alert_level_days"]
@@ -299,7 +299,7 @@ class TestCountyViews(TestCase):
         }
         mock_get_radar.return_value = {"radarMetadata": {}}
 
-        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "33333"}))
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "33333"}))
 
         alert_levels = response.context["data"]["alert_levels"]
 
@@ -321,15 +321,15 @@ class TestCountyViews(TestCase):
             ],
         )
 
-    def test_landing_404(self):
-        """Test the landing view."""
-        response = self.client.get(reverse("county_landing", kwargs={"countyfips": "99999"}))
+    def test_overview_404(self):
+        """Test the overview view."""
+        response = self.client.get(reverse("county_overview", kwargs={"countyfips": "99999"}))
         self.assertEqual(response.status_code, 404)
 
     @mock.patch("backend.interop.get_county_data")
-    def test_landing_500(self, mock_get_county_data):
+    def test_overview_500(self, mock_get_county_data):
         """Test county error case."""
         mock_get_county_data.side_effect = Exception
         with self.assertRaises(Exception):  # noqa: PT027, B017 (we want generic Exception)
-            response = self.client.get(reverse("county_landing", kwargs={"countyfips": "44444"}))
+            response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
             self.assertEqual(response.status_code, 500)

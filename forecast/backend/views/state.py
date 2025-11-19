@@ -12,7 +12,7 @@ def index(request):
 
 
 @never_cache
-def state_landing(request, state):
+def state_overview(request, state):
     """Render the forecast for a given latitude & longitude."""
     state = get_object_or_404(WeatherStates, state=state.upper())
-    return render(request, "weather/state/landing.html", {"state": state})
+    return render(request, "weather/state/overview.html", {"state": state})
