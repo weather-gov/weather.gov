@@ -1,5 +1,5 @@
 <div class="usa-accordion usa-accordion--bordered margin-bottom-1 alert-level__{{ alert.metadata.level.text }}"
-  id="alert_{{ alert.id }}"
+  id="alert_{{ alert.id }}" data-alert
   {# djlint:off #}
      {% for day_number in alert_days %}
          data-alert-day-{{ day_number }}
