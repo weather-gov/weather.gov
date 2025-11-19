@@ -2,7 +2,7 @@
 {% block head_js %}{{ data.public|json_script:"county-data" }}{% endblock %}
 {% block end_js %}
   <script type="module"
-          src="{% static 'js/county/landing.html.js' %}"
+          src="{% static 'js/county/overview.html.js' %}"
           type="module"></script>
   {% include "weather/scripts/leaflet.html" %}
   <script src="{% static 'js/cmi-radar.0a93e066.js' %}"
@@ -74,7 +74,7 @@
         {% ghwo_daily_summary data.public.hazardOutlook %}
         {% if data.public.hazardOutlook %}
           <div class="margin-top-2">
-            <a href="{% url 'county_ghwo' county_fips=countyfips %}">{{ "county.landing.link-to-ghwo-analysis.01" | t }}</a>
+            <a href="{% url 'county_ghwo' county_fips=countyfips %}">{{ "county.overview.link-to-ghwo-analysis.01" | t }}</a>
           </div>
         {% endif %}
       </div>

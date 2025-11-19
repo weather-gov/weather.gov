@@ -41,12 +41,12 @@ urlpatterns = [
     path("afd/<wfo>/<afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
     # County pages
     path("county/", county.index, name="county_index"),
-    path("county/<countyfips>/", county.county_landing, name="county_landing"),
+    path("county/<countyfips>/", county.county_overview, name="county_overview"),
     path("counties/ghwo/", county.county_ghwo_index, name="county_ghwo_index"),
     path("counties/ghwo/<str:county_fips>", county.county_ghwo, name="county_ghwo"),
     # State pages
     path("state/", state.index, name="state_index"),
-    path("state/<state>/", state.state_landing, name="state_landing"),
+    path("state/<state>/", state.state_overview, name="state_overview"),
     # WX routes are those that return partial HTML markup
     # that will be requested from the frontend (htmx style)
     path("wx/afd/<afd_id>/", partials.wx_afd_id, name="wx_afd_id"),

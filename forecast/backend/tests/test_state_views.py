@@ -45,22 +45,22 @@ class TestStateViews(TestCase):
         self.assertEqual(response.context["states"][1], self.state_fr)
         self.assertEqual(response.context["states"][2], self.state_ln)
 
-    def test_landing(self):
-        """Test the landing view."""
-        response = self.client.get(reverse("state_landing", kwargs={"state": "FR"}))
-        self.assertTemplateUsed(response, "weather/state/landing.html")
+    def test_overview(self):
+        """Test the overview view."""
+        response = self.client.get(reverse("state_overview", kwargs={"state": "FR"}))
+        self.assertTemplateUsed(response, "weather/state/overview.html")
         self.assertEqual(response.context["state"], self.state_fr)
         self.assertEqual(response.status_code, 200)
 
-    def test_landing_404(self):
-        """Test the landing view."""
-        response = self.client.get(reverse("state_landing", kwargs={"state": "TJ"}))
+    def test_overview_404(self):
+        """Test the overview view."""
+        response = self.client.get(reverse("state_overview", kwargs={"state": "TJ"}))
         self.assertEqual(response.status_code, 404)
 
     @mock.patch("backend.views.state.get_object_or_404")
-    def test_landing_500(self, mock_get_object_or_404):
+    def test_overview_500(self, mock_get_object_or_404):
         """Test state error case."""
         mock_get_object_or_404.side_effect = Exception
         with self.assertRaises(Exception): # noqa: PT027, B017 (we want generic Exception)
-            response = self.client.get(reverse("state_landing", kwargs={"state": "FR"}))
+            response = self.client.get(reverse("state_overview", kwargs={"state": "FR"}))
             self.assertEqual(response.status_code, 500)
