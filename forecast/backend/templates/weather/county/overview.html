@@ -74,7 +74,8 @@
         {% ghwo_daily_summary data.public.hazardOutlook %}
         {% if data.public.hazardOutlook %}
           <div class="margin-top-2">
-            <a href="{% url 'county_ghwo' county_fips=countyfips %}">{{ "county.overview.link-to-ghwo-analysis.01" | t }}</a>
+            <a href="{% url 'county_ghwo' county_fips=countyfips %}"
+               class="usa-link">{{ "county.overview.link-to-ghwo-analysis.01" | t }}</a>
           </div>
         {% endif %}
       </div>
@@ -92,7 +93,7 @@
     </div>
   </div>
   <div class="bg-primary-lightest padding-bottom-4">
-    <div class="grid-container padding-top-2">
+    <div class="grid-container padding-top-2 desktop:padding-top-4">
       <h2 class="text-normal text-primary-darker margin-top-0">{{ "county.forecast-link.heading.01" | t }}</h2>
     </div>
     {% include 'weather/partials/location-search.html' %}
