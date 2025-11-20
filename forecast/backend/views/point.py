@@ -3,7 +3,7 @@ from http import HTTPStatus
 from django.conf import settings
 from django.db.models import Subquery
 from django.http import Http404
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import never_cache
 
@@ -120,7 +120,7 @@ def offices(request):  # pragma: no cover
 
 def offices_specific(request, wfo):
     """Render the home page for an individual Weather Forecast Office."""
-    office = WFO.objects.get(code=wfo.upper())
+    office = get_object_or_404(WFO, code=wfo.upper())
 
     # Get the counties that intersect the CWA associated with this WFO
     counties = WeatherCounties.objects.filter(
