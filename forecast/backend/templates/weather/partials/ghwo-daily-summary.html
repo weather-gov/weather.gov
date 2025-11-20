@@ -11,9 +11,11 @@
     </caption>
     <thead>
       <tr>
-        <th>
-          <div class="display-flex flex-column flex-align-center flex-justify"></div>
-        </th>
+        <td>
+          {% comment %}
+          Empty for alignment, structure, and visual purposes
+          {% endcomment %}
+        </td>
         {% for day in ghwo_days %}
           <th scope="col">
             <div class="font-mono-2xs tablet-lg:font-mono-xs text-normal">
@@ -34,14 +36,20 @@
             {% if day.highest %}
               <div class="ghwo-chiclet-wrapper">
                 <div class="ghwo-chiclet"
+                     aria-hidden="true"
                      data-risk-level="{{ day.highest.level }}"
                      data-risk-factor="{{ day.highest.riskFactor }}">
                   <span class="font-mono-2xs text-medium">{{ day.highest.level }}</span>
                 </div>
+                {% include 'weather/partials/ghwo-risk-level-sr-only.html' with level_num=day.highest.level %}
               </div>
             {% else %}
               <div class="ghwo-chiclet-wrapper">
-                <div class="ghwo-chiclet" data-risk-level="0"></div>
+                <div class="ghwo-chiclet" data-risk-level="0">
+                  <span class="usa-sr-only">
+                    {{ "ghwo.summary.levels.sr-labels.0.01" | t}}
+                  </span>
+                </div>
               </div>
             {% endif %}
           </td>

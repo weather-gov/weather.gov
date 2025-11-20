@@ -670,6 +670,24 @@ msgid_plural "ghwo.details.table.no-impact.01-plural"
 msgstr[0] "No impact in {num} other category"
 msgstr[1] "No impact in {num} other categories"
 
+msgid "ghwo.summary.levels.sr-labels.1.01"
+msgstr "Level 1: low risk"
+
+msgid "ghwo.summary.levels.sr-labels.2.01"
+msgstr "Level 2: slight risk"
+
+msgid "ghwo.summary.levels.sr-labels.3.01"
+msgstr "Level 3: medium risk"
+
+msgid "ghwo.summary.levels.sr-labels.4.01"
+msgstr "Level 4: moderate risk"
+
+msgid "ghwo.summary.levels.sr-labels.5.01"
+msgstr "Level 5: high risk"
+
+msgid "ghwo.summary.levels.sr-labels.0.01"
+msgstr "No risk"
+
 msgid "county.heading.alerts.01"
 msgstr "Alerts"
 

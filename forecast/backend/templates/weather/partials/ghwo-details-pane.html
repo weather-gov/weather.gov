@@ -15,7 +15,7 @@
   <p>{{ risk.basis_description|striptags }}</p>
   {% if day.image %}
     <h4 class="font-sans-sm text-bold margin-y-3">{{"ghwo.details.pane.header.risk-map.01" | t}}</h4>
-    <img src="{{ day.image }}" alt="{{ 'ghwo.details.pane.header.risk-map.01' | t}}" />
+    <img src="{{ day.image }}" alt="" />
   {% endif %}
   <h4 class="font-sans-sm text-bold margin-y-3">{{"ghwo.details.pane.header.risk-levels.01" | t}}</h4>
   {% include 'weather/partials/ghwo-details-legend-table.html' with risk=risk %}
