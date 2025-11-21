@@ -57,10 +57,21 @@ const setupMap = () => {
     onAdd: function (map) {
       this.map = map;
       this.container = map.getContainer().parentElement;
-      this.button = L.DomUtil.create("button", "wx-map-control");
-      this.button.setAttribute("aria-label", "Expand the county alert map");
-      L.DomEvent.on(this.button, "click", this._resize, this);
+      this.button = document.createElement("button");
+      this.button.classList.add("wx-radar-expand", "padding-0", "margin-1");
+      this.buttonSetToExpand();
+      this.button.addEventListener("click", this._resize.bind(this));
       return this.button;
+    },
+
+    buttonSetToExpand: function () {
+      this.button.innerHTML = `<svg role="img" class="width-full height-full"><use xlink:href="/public/images/uswds/sprite.svg#zoom_out_map"></use></svg>`;
+      this.button.setAttribute("aria-label", "Expand the county alert map");
+    },
+
+    buttonSetToCollapse: function () {
+      this.button.innerHTML = `<svg role="img" class="width-full height-full"><use xlink:href="/public/images/spritesheet.svg#wx_zoom-in-map"></use></svg>`;
+      this.button.setAttribute("aria-label", "Collapse the county alert map");
     },
 
     _resize: function (event) {
@@ -69,11 +80,10 @@ const setupMap = () => {
         "wx-county-alert-map-container__expanded",
       );
       this.button.classList.toggle("wx-map-control__expanded");
-      // update aria attributes depending on state
       if (this.button.classList.contains("wx-map-control__expanded")) {
-        this.button.setAttribute("aria-label", "Collapse the county alert map");
+        this.buttonSetToCollapse();
       } else {
-        this.button.setAttribute("aria-label", "Expand the county alert map");
+        this.buttonSetToExpand();
       }
       this.map.invalidateSize();
     },
