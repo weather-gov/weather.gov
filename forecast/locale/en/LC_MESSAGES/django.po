@@ -757,10 +757,10 @@ msgid "county.wfo-promo.labels.phone.01"
 msgstr "Phone"
 
 msgid "ghwo.summary.error.not-found.01"
-msgstr "The daily risk summary data cannot be found for this area."
+msgstr "This area doesn't have daily risk summary data. Please try searching for a different location."
 
 msgid "ghwo.summary.error.loading.01"
-msgstr "There was an error loading the daily risk summary data."
+msgstr "There was an error loading the daily risk summary data. Please try again in a moment."
 
 msgid "ghwo.table.caption.header.01"
 msgstr "7 day risk overview"
