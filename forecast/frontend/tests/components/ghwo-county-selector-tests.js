@@ -60,10 +60,10 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     stateCombo.setAttribute(
       "items",
       JSON.stringify([
-        { value: "1", text: "State 1"},
-        { value: "2", text: "State 2"},
-        { value: "3", text: "State 3"}
-      ])
+        { value: "1", text: "State 1" },
+        { value: "2", text: "State 2" },
+        { value: "3", text: "State 3" },
+      ]),
     );
     form.append(stateCombo);
 
@@ -74,15 +74,15 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     countyCombo.setAttribute(
       "items",
       JSON.stringify([
-        { value: "1", text: "County 1"},
-        { value: "2", text: "County 2"},
-        { value: "3", text: "County 3"}
-      ])
+        { value: "1", text: "County 1" },
+        { value: "2", text: "County 2" },
+        { value: "3", text: "County 3" },
+      ]),
     );
     form.append(countyCombo);
 
     // Add the hidden inputs
-    ["current-state", "current-county"].forEach(name => {
+    ["current-state", "current-county"].forEach((name) => {
       const input = document.createElement("input");
       input.setAttribute("type", "hidden");
       input.setAttribute("name", name);
@@ -96,8 +96,11 @@ describe("<wx-ghwo-county-selector> component tests", () => {
 
     // Add the county details area and the
     // loader template
-    const detailsElement  = document.createElement("div");
-    detailsElement.setAttribute("wx-ghwo-details", component.countyCombobox.getAttribute("selected"));
+    const detailsElement = document.createElement("div");
+    detailsElement.setAttribute(
+      "wx-ghwo-details",
+      component.countyCombobox.getAttribute("selected"),
+    );
     document.body.append(detailsElement);
     const template = document.createElement("template");
     template.id = "ghwo-wx-loader";
@@ -111,8 +114,11 @@ describe("<wx-ghwo-county-selector> component tests", () => {
 
   it("calls form submit when async is false and state combobox changes", () => {
     const form = component.querySelector("form");
-    const stateCombo = component.querySelector(`wx-combo-box[name="state-select"]`);
-    stateCombo.dispatchEvent(new Event("change", {bubbles: true}));
+    const stateCombo = component.querySelector(
+      `wx-combo-box[name="state-select"]`,
+    );
+    stateCombo.value = "random state";
+    stateCombo.dispatchEvent(new Event("change", { bubbles: true }));
 
     expect(form.submit.callCount).to.equal(1);
   });
@@ -120,7 +126,8 @@ describe("<wx-ghwo-county-selector> component tests", () => {
   it("calls form submit when async is false and county combobox changes", () => {
     const form = component.querySelector("form");
     const countyCombo = component.countyCombobox;
-    countyCombo.dispatchEvent(new Event("change", {bubbles: true}));
+    countyCombo.value = "random county";
+    countyCombo.dispatchEvent(new Event("change", { bubbles: true }));
 
     expect(form.submit.callCount).to.equal(1);
   });
@@ -136,12 +143,25 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     expect(component.fetchUpdatedSelectComponent.callCount).to.equal(0);
   });
 
+  it("does _not_ call fetchAndUpdateDetailsElements when async method and county combobox is cleared", () => {
+    const countyCombo = component.countyCombobox;
+    sandbox.stub(component, "fetchAndUpdateDetailsElements");
+    expect(component.fetchAndUpdateDetailsElements.callCount).to.equal(0);
+    component.setAttribute("method", "async");
+
+    countyCombo.value = "";
+    countyCombo.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(component.fetchAndUpdateDetailsElements.callCount).to.equal(0);
+  });
+
   it("calls fetchAndUpdateDetailsElements when async method and county combobox changes", () => {
     const countyCombo = component.countyCombobox;
     sandbox.stub(component, "fetchAndUpdateDetailsElements");
     expect(component.fetchAndUpdateDetailsElements.callCount).to.equal(0);
     component.setAttribute("method", "async");
 
+    countyCombo.value = "random county";
     countyCombo.dispatchEvent(new Event("change", { bubbles: true }));
 
     expect(component.fetchAndUpdateDetailsElements.callCount).to.equal(1);
@@ -153,6 +173,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     expect(component.fetchUpdatedSelectComponent.callCount).to.equal(0);
     component.setAttribute("method", "async");
 
+    stateCombo.value = "random state";
     stateCombo.dispatchEvent(new Event("change", { bubbles: true }));
 
     expect(component.fetchUpdatedSelectComponent.callCount).to.equal(1);
@@ -163,15 +184,16 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     // We do this here because when the state combobox changes,
     // fetchAndUpdateDetailsElements is only triggered once the
     // initial call to fetchUpdatedSelectComponent returns and is 200/OK
-    sandbox.stub(component, "fetchUpdatedSelectComponent").resolves(
-      new Response("", { status: 200})
-    );
-    
+    sandbox
+      .stub(component, "fetchUpdatedSelectComponent")
+      .resolves(new Response("", { status: 200 }));
+
     const stateCombo = component.stateCombobox;
     sandbox.stub(component, "fetchAndUpdateDetailsElements").resolves(true);
     expect(component.fetchAndUpdateDetailsElements.callCount).to.equal(0);
     component.setAttribute("method", "async");
 
+    stateCombo.value = "random state";
     await stateCombo.dispatchEvent(new Event("change", { bubbles: true }));
 
     expect(component.fetchAndUpdateDetailsElements.callCount).to.equal(1);
@@ -181,10 +203,8 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     sandbox.stub(window.FormData.prototype, "append");
 
     // Stub out fetch, so that it does nothing
-    sandbox.stub(global, "fetch").resolves(
-      new Response("", { status: 200})
-    );
-    
+    sandbox.stub(global, "fetch").resolves(new Response("", { status: 200 }));
+
     // First value in the initialized  selector comboboxes.
     // See top level beforeEach()
     const expectedCounty = "1";
@@ -192,15 +212,23 @@ describe("<wx-ghwo-county-selector> component tests", () => {
 
     await component.fetchUpdatedSelectComponent();
 
-    expect(window.FormData.prototype.append.calledWith("county-select", expectedCounty)).to.equal(true);
-    expect(window.FormData.prototype.append.calledWith("state-select", expectedState)).to.equal(true);
+    expect(
+      window.FormData.prototype.append.calledWith(
+        "county-select",
+        expectedCounty,
+      ),
+    ).to.equal(true);
+    expect(
+      window.FormData.prototype.append.calledWith(
+        "state-select",
+        expectedState,
+      ),
+    ).to.equal(true);
   });
 
   it("if #fetchUpdatedSelectComponent response is ok, history is pushed", async () => {
     // Stub out fetch, so that it returns an OK response
-    sandbox.stub(global, "fetch").resolves(
-      new Response("", { status: 200})
-    );
+    sandbox.stub(global, "fetch").resolves(new Response("", { status: 200 }));
 
     // Stub the history pushState method
     sandbox.stub(window.history, "pushState");
@@ -210,14 +238,18 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     const expectedCountySelectValue = "1";
     const expectedHistoryURL = `/counties/ghwo/${expectedCountySelectValue}`;
 
-    expect(window.history.pushState.calledWith({}, expectedCountySelectValue, expectedHistoryURL)).to.equal(true);
+    expect(
+      window.history.pushState.calledWith(
+        {},
+        expectedCountySelectValue,
+        expectedHistoryURL,
+      ),
+    ).to.equal(true);
   });
 
   it("if #fetchUpdatedSelectComponent response is ok, adds the popstate handler for back button", async () => {
     // Stub out fetch, so that it returns an OK response
-    sandbox.stub(global, "fetch").resolves(
-      new Response("", { status: 200})
-    );
+    sandbox.stub(global, "fetch").resolves(new Response("", { status: 200 }));
 
     // Stub adding the event listener to the window
     // object
@@ -225,18 +257,22 @@ describe("<wx-ghwo-county-selector> component tests", () => {
 
     await component.fetchUpdatedSelectComponent();
 
-    expect(window.addEventListener.calledWith("popstate", component.handleBackButton)).to.equal(true);
+    expect(
+      window.addEventListener.calledWith(
+        "popstate",
+        component.handleBackButton,
+      ),
+    ).to.equal(true);
   });
-
 
   it("Appends the loader to the DOM if the request is taking longer than the timeout", async () => {
     // Mock the fetch call so it takes longer than the timeout
     // to respond
-    sandbox.stub(global, "fetch").callsFake((async() => {
+    sandbox.stub(global, "fetch").callsFake(async () => {
       await wait(WX_GHWO_DETAILS_LOADER_TIMEOUT + 500);
       return new Response("", { status: 200 });
-    }));
-    
+    });
+
     const component = document.querySelector("wx-ghwo-selector");
     const currentCounty = component.countyCombobox.getAttribute("selected");
     const detailsElement = document.querySelector("[wx-ghwo-details]");
@@ -258,10 +294,10 @@ describe("<wx-ghwo-county-selector> component tests", () => {
   it("Does not append the loader to the DOM at all if the request responds _before_ the timeout", async () => {
     // Mock the detch call so it returns in a shorter period than
     // the timeout
-    sandbox.stub(global, "fetch").callsFake((async() => {
+    sandbox.stub(global, "fetch").callsFake(async () => {
       await wait(WX_GHWO_DETAILS_LOADER_TIMEOUT - 300);
-      return new Response("", { status: 200});
-    }));
+      return new Response("", { status: 200 });
+    });
 
     const component = document.querySelector("wx-ghwo-selector");
     const currentCounty = component.countyCombobox.getAttribute("selected");
