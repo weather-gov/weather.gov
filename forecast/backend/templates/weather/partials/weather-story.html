@@ -12,7 +12,7 @@
     <p class="margin-0 margin-bottom-2">
       {% trans_with_args "weather-story.text.created-by.06" date=weather_story.starttime|date:'l F j, Y' time=weather_story.starttime|date:'g:i A'  wfo_name=weather_story.wfo.name wfo_url=weather_story.wfo.url %}
     </p>
-    <p class="margin-0">{{ weather_story.description }}</p>
+    <p class="margin-0">{{ weather_story.html }}</p>
   </div>
   {# Image area #}
   {% if weather_story.image %}

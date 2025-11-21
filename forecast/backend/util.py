@@ -72,7 +72,7 @@ def get_wfo_from_afd(afd):
     return None
 
 
-def mark_safer(value, transformer=None):
+def mark_safer(value, transformer=None, **kwargs):
     """
     Mark safe, more safely.
 
@@ -91,32 +91,24 @@ def mark_safer(value, transformer=None):
             Example:
             mark_safer(value, lambda cleaned: re.sub("one", "two", cleaned))
     """
+    tags = (
+        kwargs["tag"]
+        if "tag" in kwargs
+        else {"a", "h1", "h2", "h3", "strong", "em", "p", "ul", "ol", "li", "br", "sub", "sup", "hr", "span"}
+    )
+
+    attributes = (
+        kwargs["attributes"]
+        if "attributes" in kwargs
+        else {"a": ("href", "name", "target", "title", "id", "rel", "class"), "strong": ("class",), "span": ("class",)}
+    )
+
     sanitizer = Sanitizer(
         {
             # don't remove stuff like '\n'
             "keep_typographic_whitespace": True,
-            "tags": {
-                "a",
-                "h1",
-                "h2",
-                "h3",
-                "strong",
-                "em",
-                "p",
-                "ul",
-                "ol",
-                "li",
-                "br",
-                "sub",
-                "sup",
-                "hr",
-                "span",
-            },
-            "attributes": {
-                "a": ("href", "name", "target", "title", "id", "rel", "class"),
-                "strong": ("class",),
-                "span": ("class",),
-            },
+            "tags": tags,
+            "attributes": attributes,
         },
     )
     cleaned = sanitizer.sanitize(value)
