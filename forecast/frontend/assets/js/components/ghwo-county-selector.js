@@ -66,6 +66,10 @@ class GHWOCountySelector extends HTMLElement {
   }
 
   async handleChange(event) {
+    // handle the case when state is cleared.
+    if (!event.target.value) {
+      return;
+    }
     const countyOnly = event.target === this.countyCombobox;
     if (this.useAsync && countyOnly) {
       // In this case, the existing county dropdown was the
@@ -167,7 +171,6 @@ class GHWOCountySelector extends HTMLElement {
     ).getAttribute("selected");
     const url = `${WX_COUNTY_GHWO_DETAILS_URL}${selectedCountyFips}`;
 
-
     this.showLoader(elements);
     const response = await fetch(url);
     this.hideLoader();
@@ -213,11 +216,11 @@ class GHWOCountySelector extends HTMLElement {
    * Instead of displaying right away, set a timeout
    * that can be cleared if the request returns fast enough.
    */
-  showLoader(elements){
+  showLoader(elements) {
     this.loaderTimeout = setTimeout(() => {
       const template = document.getElementById("ghwo-wx-loader");
-      if(template){
-        elements.forEach(el => {
+      if (template) {
+        elements.forEach((el) => {
           el.innerHTML = "";
           el.append(template.content.cloneNode(true));
         });
@@ -231,8 +234,8 @@ class GHWOCountySelector extends HTMLElement {
    * We don't actually hide the loader, because data loaded
    * or an error will already change the innerHTML
    */
-  hideLoader(){
-    if(this.loaderTimeout){
+  hideLoader() {
+    if (this.loaderTimeout) {
       clearTimeout(this.loaderTimeout);
     }
   }
