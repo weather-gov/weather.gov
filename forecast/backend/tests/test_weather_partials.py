@@ -495,7 +495,7 @@ class TestWeatherPartials(TestCase):
             "status": 404,
         }
         expected = {
-            "error": ghwo_data["error"],
+            "error": ghwo_data,
         }
         actual = weather_partials.ghwo_daily_summary(ghwo_data)
 

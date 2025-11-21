@@ -264,7 +264,7 @@ def ghwo_daily_summary(ghwo_data):
     # about the error
     if "error" in ghwo_data:
         return {
-            "error": ghwo_data["error"],
+            "error": ghwo_data, # pass error data straight through
             "ghwo_dump": json.dumps(ghwo_data),
         }
     processed = process_ghwo_daily_summary(ghwo_data)
