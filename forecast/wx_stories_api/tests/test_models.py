@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from tempfile import mkdtemp
+from unittest import mock
 
 from django.core.files.base import ContentFile
 from django.test import TestCase, override_settings
@@ -121,3 +122,17 @@ class TestModels(TestCase):
         self.assertEqual(actual, expected)
         self.assertFalse(WeatherStory.objects.filter(title="TestExp0").exists())
         self.assertFalse(WeatherStory.objects.filter(title="TestExp1").exists())
+
+    @mock.patch("backend.util.mark_safer")
+    def test_weather_story_description_as_html(self, mock_mark_safer):
+        """Tests getting weather story description as safe HTML."""
+        story = WeatherStory.objects.create(
+            title="Test",
+            description="Description body goes here",
+            starttime=datetime.now(tz=timezone.utc),
+            endtime=datetime.now(tz=timezone.utc),
+            wfo=self.wfo,
+        )
+        _html = story.html
+
+        mock_mark_safer.assert_called_with("Description body goes here", tags={"strong", "em", "ol", "li", "ul"})

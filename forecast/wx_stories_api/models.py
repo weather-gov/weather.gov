@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from django.contrib.gis.db.models import PointField
 from django.db import models
 
+from backend import util
 from backend.models import WFO
 
 
@@ -90,6 +91,11 @@ class WeatherStory(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    @property
+    def html(self):
+        """Get the weather story description, sanitized and HTML-ready."""
+        return util.mark_safer(self.description, tags={"strong", "em", "ol", "li", "ul"})
 
 
 class TemporaryImage(TimeStampedModel):
