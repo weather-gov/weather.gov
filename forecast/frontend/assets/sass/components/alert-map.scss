@@ -30,22 +30,13 @@ div.wx_alert_map_legend--county {
   height: auto !important;
   width: auto !important;
 
-  button.wx-map-control {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-image: url("/public/images/uswds/usa-icons/zoom_out_map.svg");
+  // radar-specific tweaks
+  button.wx-radar-expand svg {
+    // units(0.75) is not understood, so calc it.
+    margin-left: calc(calc(units(4) - units(2.5)) / 2);
   }
 
-  button.wx-map-control__expanded {
-    background-image: url("/public/images/weather/wx_zoom_in_map.svg");
-  }
-
-  button.wx-radar-expand {
+  button.wx-radar-expand, button.wx-map-control, button.wx-map-control__expanded {
     border: 0;
     border-radius: radius("md");
     height: units(4);
@@ -65,9 +56,6 @@ div.wx_alert_map_legend--county {
       stroke: color("base");
       height: units(2.5);
       width: units(2.5);
-
-      // units(0.75) is not understood, so calc it.
-      margin-left: calc(calc(units(4) - units(2.5)) / 2);
     }
 
     &:hover,
