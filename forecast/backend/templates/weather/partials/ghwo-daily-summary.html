@@ -1,6 +1,15 @@
 {% if error %}
-  <p>There was an error loading the GHWO summary data.</p>
-  <p>{{ error }}</p>
+  {% if error.status == 404 %}
+    <div>
+      <p>{{ "ghwo.summary.error.not-found.01" | t }}</p>
+      <img class="height-8" src={% static "images/weather/wx_error-cloud_missing.svg" %} alt="" />
+    </div>
+  {% else %}
+    <div>
+      <p>{{ "ghwo.summary.error.loading.01" | t }}</p>
+      <img class="height-8" src={% static "images/weather/wx_error-cloud_error.svg" %} alt="" />
+    </div>
+  {% endif %}
 {% else %}
   <h2 class="wx-visual-h2 text-normal text-primary-dark margin-bottom-2 margin-top-1 desktop:margin-top-0"
       id="ghwo-summary-table-header">{{ "ghwo.table.caption.header.01"|t }}</h2>

@@ -756,6 +756,12 @@ msgstr "{wfo_name} Forecast Office"
 msgid "county.wfo-promo.labels.phone.01"
 msgstr "Phone"
 
+msgid "ghwo.summary.error.not-found.01"
+msgstr "The daily risk summary data cannot be found for this area."
+
+msgid "ghwo.summary.error.loading.01"
+msgstr "There was an error loading the daily risk summary data."
+
 msgid "ghwo.table.caption.header.01"
 msgstr "7 day risk overview"
 
