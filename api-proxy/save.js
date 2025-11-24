@@ -111,7 +111,7 @@ const apiFetchAndSave = async (urlPath, savePath) => {
 
   const search = url.search ? `__${url.search.slice(1)}` : "";
 
-  const filePath = `${path.join(savePath, urlPath)}${search}.json`;
+  const filePath = `${path.join(savePath, url.pathname)}${search}.json`;
 
   if (urlPath.startsWith("/points/")) {
     const { city, state } = data.properties.relativeLocation.properties;
