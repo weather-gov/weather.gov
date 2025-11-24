@@ -245,6 +245,40 @@ SITE_LOGO = "logo.svg"
 SITE_NAME = "beta.weather.gov"
 SITE_SLOGAN = "National Weather Service"
 
+# 3rd party sites that weather.gov needs to access in order to function
+# don't put tracking or analytics domains in this list, please
+#               (you will break the site for some people if you do)
+# HOSTS ONLY (domain + port)! No schema or wildcards, please
+CRITICAL_HOSTS = {
+    "connect-src": [
+        # cmi-radar
+        "api.weather.gov",
+        # mapping
+        "static.arcgis.com",
+        "geocode.arcgis.com",
+        "basemapstyles-api.arcgis.com",
+        "basemaps-api.arcgis.com",
+        "cdn.arcgis.com",
+        "opengeo.ncep.noaa.gov",
+    ],
+    "img-src": [
+        # satellite
+        "cdn.star.nesdis.noaa.gov",
+        # mapping
+        "opengeo.ncep.noaa.gov",
+        "cdn.arcgis.com",
+        # legacy weather.gov images
+        "www.weather.gov",
+    ],
+    "media-src": [
+        # satellite
+        "cdn.star.nesdis.noaa.gov",
+    ],
+}
+
+if any("*" in site for group in CRITICAL_HOSTS.values() for site in group):
+    raise TypeError("Please don't use wildcards in CRITICAL_HOSTS")  # noqa: TRY003
+
 # content security policy configuration
 DIRECTIVES = {
     "default-src": [SELF],
@@ -263,18 +297,10 @@ DIRECTIVES = {
     ],
     "connect-src": [
         SELF,
-        # cmi-radar
-        "api.weather.gov",
         # analytics
         "www.google-analytics.com",
         "dap.digitalgov.gov",
-        # mapping
-        "static.arcgis.com",
-        "geocode.arcgis.com",
-        "basemapstyles-api.arcgis.com",
-        "basemaps-api.arcgis.com",
-        "cdn.arcgis.com",
-        "opengeo.ncep.noaa.gov",
+        *CRITICAL_HOSTS["connect-src"],
     ],
     "font-src": [SELF],
     "img-src": [
@@ -282,21 +308,11 @@ DIRECTIVES = {
         # analytics
         "www.google-analytics.com",
         "www.googletagmanager.com",
-        # satellite
-        "cdn.star.nesdis.noaa.gov",
-        # mapping
-        "opengeo.ncep.noaa.gov",
-        "cdn.arcgis.com",
-        # legacy weather.gov images
-        "www.weather.gov",
+        *CRITICAL_HOSTS["img-src"],
         # esri-leaflet-vector.js
         "data:",
     ],
-    "media-src": [
-        SELF,
-        # satellite
-        "cdn.star.nesdis.noaa.gov",
-    ],
+    "media-src": [SELF, *CRITICAL_HOSTS["media-src"]],
     "worker-src": [
         SELF,
         # alertMap.js

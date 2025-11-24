@@ -422,6 +422,9 @@ msgstr "Visibility"
 msgid "observation-table.labels.wind.01"
 msgstr "Wind"
 
+msgid "offline-banner.text.you-are-offline.01"
+msgstr "Your internet connection is unstable. Please try again in a few moments."
+
 msgid "precip-table.aria.amounts.01"
 msgstr "precipitation amounts for the coming hours"
 

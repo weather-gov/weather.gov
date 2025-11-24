@@ -1,0 +1,3 @@
+import "./components/timer.js";
+import "./components/aria-live.js";
+import "./components/offline-banner.js";
