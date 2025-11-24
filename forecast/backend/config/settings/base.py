@@ -286,6 +286,8 @@ DIRECTIVES = {
         SELF,
         # required for cmi-radar
         "'unsafe-eval'",
+        # Required for Wagtail
+        "'unsafe-inline'",
     ],
     "script-src-elem": [
         SELF,
@@ -294,6 +296,8 @@ DIRECTIVES = {
         # analytics
         "dap.digitalgov.gov",
         "www.googletagmanager.com",
+        # Required for Wagtail
+        "'unsafe-inline'",
     ],
     "connect-src": [
         SELF,

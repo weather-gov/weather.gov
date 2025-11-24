@@ -29,6 +29,17 @@
         minute: "numeric",
       }),
     ],
+    [
+      "roadmap",
+      new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        timeZoneName: "short",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }),
+    ],
   ]);
 
   const timestamps = Array.from(

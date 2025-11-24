@@ -3,9 +3,58 @@ from django.db import models
 from django.urls import reverse
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.fields import RichTextField
-from wagtail.models import Page
+from wagtail.models import Orderable, Page
+
+
+class RoadmapPage(Page):
+    """Represents a roadmap page."""
+
+    body = RichTextField()
+
+    content_panels = Page.content_panels + [FieldPanel("body"), InlinePanel("entries", label="Roadmap entries")]
+
+    def get_context(self, request, *args, **kwargs):
+        """Add additional page context."""
+        context = super().get_context(request, *args, **kwargs)
+        context["entries"] = {}
+        context["entries"]["now"] = RoadmapEntry.objects.filter(
+            page=self,
+            period=RoadmapEntry.RoadmapTimePeriod.Now,
+        )
+        context["entries"]["next"] = RoadmapEntry.objects.filter(
+            page=self,
+            period=RoadmapEntry.RoadmapTimePeriod.Next,
+        )
+        context["entries"]["later"] = RoadmapEntry.objects.filter(
+            page=self,
+            period=RoadmapEntry.RoadmapTimePeriod.Later,
+        )
+        return context
+
+
+class RoadmapEntry(Orderable):
+    """Represents a single entry in the roadmap."""
+
+    name = models.TextField()
+    description = models.TextField()
+    outcome = models.TextField()
+    page = ParentalKey(RoadmapPage, on_delete=models.CASCADE, related_name="entries")
+
+    class RoadmapTimePeriod(models.TextChoices):
+        """Represents a now/next/later enum value."""
+
+        Now = "now", "Now"
+        Next = "next", "Next"
+        Later = "later", "Later"
+
+    period = models.CharField(max_length=5, choices=RoadmapTimePeriod.choices)
+
+    panels = [FieldPanel("name"), FieldPanel("period"), FieldPanel("description"), FieldPanel("outcome")]
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class GenericPage(Page):
@@ -112,7 +161,6 @@ class WFO(models.Model):
                 "wfo": self.normalized_code,
             },
         )
-
 
 
 class DynamicSafetyInformation(models.Model):
