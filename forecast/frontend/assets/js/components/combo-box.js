@@ -45,9 +45,6 @@ const comboTemplate = `
 <div id="listbox-wrapper">
   <slot name="listbox"></slot>
 </div>
-<div id="sr-only" aria-live="polite">
-  <slot name="sr-only"></slot>
-</div>
 <slot></slot>
 `;
 // #endregion

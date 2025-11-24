@@ -1,0 +1,31 @@
+{% load i18n %}
+<div id="wx-offline-banner__container" aria-live="polite"></div>
+<template id="wx-offline-banner__template">
+  <section id="wx-offline-banner__content"
+           class="usa-banner bg-accent-cool-lighter beta-banner">
+    <div>
+      <header class="usa-alert usa-alert--error margin-bottom-2 padding-1">
+        <div class="usa-banner__inner flex-row flex-align-start padding-y-1">
+          <div class="grid-col flex-auto margin-right-1">
+            <svg class="usa-icon height-3 width-3"
+                 aria-hidden="true"
+                 focusable="false"
+                 role="img">
+              <use xlink:href="{% static 'images/uswds/sprite.svg' %}#error"></use>
+            </svg>
+          </div>
+          <div class="grid-col">
+            <div class="font-sans-xs line-height-sans-4">
+              <div id="block-new-weather-theme-betabanner"
+                   class="contextual-region block block-block-content">
+                <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">
+                  <p>{{ "offline-banner.text.you-are-offline.01" | t }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    </div>
+  </section>
+</template>

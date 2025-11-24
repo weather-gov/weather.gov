@@ -44,7 +44,6 @@ export default class LocationComboBox extends ComboBox {
     this.updateSearch = this.updateSearch.bind(this);
     this.cacheLocationGeodata = this.cacheLocationGeodata.bind(this);
     this.getGeodataForKey = this.getGeodataForKey.bind(this);
-    this.updateAriaLive = this.updateAriaLive.bind(this);
     this.saveSearchResult = this.saveSearchResult.bind(this);
     this.getSavedResults = this.getSavedResults.bind(this);
     this.getSearchResults = this.getSearchResults.bind(this);
@@ -73,8 +72,15 @@ export default class LocationComboBox extends ComboBox {
     }
     this.inputDebounceTimer = window.setTimeout(async () => {
       await this.updateSearch(event.target.value).then(() => {
-        this.updateAriaLive(
-          `Search updated. ${this.querySelectorAll("li").length} results available`,
+        const numResults = this.querySelectorAll("li").length;
+        const translation = ngettext(
+          "js.location-combo-box.aria.search-updated.01",
+          "js.location-combo-box.aria.search-updated.01-plural",
+          numResults,
+        );
+        const transWithCount = interpolate(translation, [numResults]);
+        window.dispatchEvent(
+          new CustomEvent("wx-announce", { detail: { text: transWithCount } }),
         );
       });
     }, this.inputDelay);
@@ -303,31 +309,8 @@ export default class LocationComboBox extends ComboBox {
     }
   }
 
-  /**
-   * Adds a span of screenreader only text to
-   * this component's shadow aria-live region,
-   * which it itself also hidden.
-   * Makes use of a slot called "sr-only".
-   * The update is on a 1 second delay, which is preferred
-   * based on convos with USWDS.
-   */
-  updateAriaLive(text) {
-    if (this.ariaLiveDebounceTimer) {
-      window.clearTimeout(this.ariaLiveDebounceTimer);
-    }
-    this.ariaLiveDebounceTimer = window.setTimeout(() => {
-      Array.from(this.querySelectorAll("[slot='sr-only']")).forEach((span) =>
-        span.remove(),
-      );
-      const span = document.createElement("span");
-      span.setAttribute("slot", "sr-only");
-      span.innerText = text;
-      this.append(span);
-    }, 1000);
-  }
-
   /* Utility methods */
-  async getLocationGeodata(magicKey){
+  async getLocationGeodata(magicKey) {
     const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?magicKey=${magicKey}&f=json&_=1695666335115`;
     const response = await fetch(url, {
       headers: { "Content-Type": "application/json" },
@@ -336,11 +319,11 @@ export default class LocationComboBox extends ComboBox {
     return this.processLocationGeodata(results);
   }
 
-  processLocationGeodata(results){
+  processLocationGeodata(results) {
     if (
       !results.error &&
-        Array.isArray(results.locations) &&
-        results.locations.length > 0
+      Array.isArray(results.locations) &&
+      results.locations.length > 0
     ) {
       const {
         locations: [
@@ -355,7 +338,7 @@ export default class LocationComboBox extends ComboBox {
       return { lat, lon };
     }
     return null;
-  } 
+  }
 }
 
 if (!window.customElements.get("wx-combo-box-location")) {
