@@ -12,40 +12,15 @@ AddElementTag("code", $bgColor="#A33")
 System(api, "API data")
 System(cms, "Content-managed data", $tags="cms-dark")
 
-System(q, "Related to\nlat/long?", $tags="cms-light")
 
-Container(wds, "Weather Data Service")
+Container(interop, "interop layer")
+Container(django, "Django", $tags="code")
 
-Boundary(blocks, "Weather Blocks") {
-  Container(ccb, "Current Conditions Block", $tags="code")
-  Container(hfb, "Hourly Forecast Block", $tags="code")
-  Container(dfb, "Daily Forecast Block", $tags="code")
-  Container(wsb, "Weather Story Block", $tags="code")
-  Container(whb, "Weather Hazard Block", $tags="code")
-}
+Rel(api, interop, "")
+Rel(interop, django, "")
+Rel(cms, django, "")
 
-Rel(api, wds, "")
-
-Rel(wds, ccb, "")
-Rel(wds, hfb, "")
-Rel(wds, dfb, "")
-
-Rel(cms, q, "")
-Rel(q, wsb, "yes")
-Rel(q, whb, "yes")
-
-Boundary(drupal, "Drupal configuration") {
-  Container(v1, "Views")
-  Container(v2, "Regions")
-  Container(v3, "Content\nTypes")
-}
-
-Rel(ccb, drupal, "")
-Rel(hfb, drupal, "")
-Rel(dfb, drupal, "")
-Rel(q, drupal, "no")
-
-Container(twig, "Twig templates", $tags="code")
-Rel(drupal, twig, "")
+Container(templates, "templates", $tags="code")
+Rel(django, templates, "")
 
 @enduml
