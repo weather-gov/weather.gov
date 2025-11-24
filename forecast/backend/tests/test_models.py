@@ -34,6 +34,11 @@ class TestModels(TestCase):
             "Robble robble (RBR)",
         )
 
+    def test_wfo_normalization(self):
+        """Tests that WFO codes for Alaska are normalized."""
+        self.assertEqual(WFO(name="One of the Alaska ones", code="ALU", region=self.region).normalized_code, "afc")
+        self.assertEqual(WFO(name="The other Alaska one", code="AER", region=self.region).normalized_code, "afc")
+
     def test_region_string(self):
         """Tests the stringification of Regions."""
         self.assertEqual(
