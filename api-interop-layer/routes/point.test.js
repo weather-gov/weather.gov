@@ -73,7 +73,10 @@ describe("route: point", () => {
     });
 
     it("returns product data if everything is okay", async () => {
-      const data = { text: "Mario should just hang out with Toad" };
+      const data = {
+        place: "In Princess Peach's castle",
+        text: "Mario should just hang out with Toad",
+      };
       const request = { params: { latitude: "down", longitude: "right" } };
       getDataForPoint.resolves(data);
       getRadarMetadata.resolves("Mr. Radar");
@@ -83,6 +86,7 @@ describe("route: point", () => {
       expect(getDataForPoint.calledWith("down", "right")).to.be.true;
       expect(actual).to.eql({
         data: {
+          place: "In Princess Peach's castle",
           text: "Mario should just hang out with Toad",
           radarMetadata: "Mr. Radar",
         },

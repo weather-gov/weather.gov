@@ -36,12 +36,7 @@
         </div>
       </div>
     {% endif %}
-    {% if point.error %}
-      <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-        {% include 'weather/partials/uswds-alert.html' with level="error" body="forecast.errors.point.01"|t %}
-      </div>
-    {% else %}
-      <wx-tabbed-nav class="display-block position-relative">
+    <wx-tabbed-nav class="display-block position-relative">
       <div id="tablist-label" class="usa-sr-only">{{ "forecast.labels.weather-info.01" | t }}</div>
       <div class="position-sticky top-0 z-500 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
         <div class="grid-container padding-x-0">
@@ -60,11 +55,13 @@
                     class="tab-button"
                     data-tab-name="today"
                     aria-controls="today">{{ "daily-forecast.labels.today.01" | t }}</button>
+            {% if point.forecast %}
             <button role="tab"
                     id="daily-tab-button"
                     class="tab-button"
                     data-tab-name="daily"
                     aria-controls="daily">{{ "forecast.labels.seven-days.01" | t }}</button>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -85,16 +82,30 @@
              tabindex="0">
           <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
             <div class="grid-row desktop__wx-grid-gap-lg">
-              <div class="desktop:grid-col-4 display-flex flex-column">
-                {% include "weather/partials/observations.html" with obs=point.observed %}
-              </div>
-              <div class="desktop:grid-col-8 display-flex flex-column">
-                {% if point.forecast.error or point.forecast.days|length == 0 %}
-                  {% include 'weather/partials/uswds-alert.html' with level="error" body="forecast.errors.loading.01"|t %}
+              {% if point.observed %}
+                <div class="desktop:grid-col-4 display-flex flex-column">
+                  {% include "weather/partials/observations.html" with obs=point.observed %}
+                </div>
+              {% endif %}
+              {% if point.forecast %}
+                <div class="desktop:grid-col-8 display-flex flex-column">
+                  {% if point.forecast.days|length == 0 %}
+                    {% include 'weather/partials/uswds-alert.html' with level="error" body="forecast.errors.loading.01"|t %}
+                  {% else %}
+                    {% include 'weather/partials/today-summary-forecast.html' with forecast=point.forecast %}
+                  {% endif %}
+                </div>
+              {% else %}
+                {% if point.status == 404 %}
+                  <div class="grid-container padding-x-0 padding-y-2 grid-col-12">
+                    {% include 'weather/partials/uswds-alert.html' with level="error" body="forecast.errors.not-found.01"|t %}
+                  </div>
                 {% else %}
-                  {% include 'weather/partials/today-summary-forecast.html' with forecast=point.forecast %}
-                {% endif %}
-              </div>
+                  <div class="grid-container padding-x-0 padding-y-2 grid-col-12">
+                    {% include 'weather/partials/uswds-alert.html' with level="error" body="forecast.errors.loading.01"|t %}
+                  </div>
+                  {% endif %}
+              {% endif %}
             </div>
           </div>
           <!-- Weather Story Image here -->
@@ -103,6 +114,7 @@
           {% else %}
             <div class="grid-container margin-top-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
               <div class="bg-accent-cool-lightest border-1px border-base-light padding-x-2 padding-y-105">
+                {% if point.grid.wfo %}
                 <div class="grid-row display-flex flex-align-center">
                   <svg width="24"
                        height="24"
@@ -122,8 +134,9 @@
                   <a class="usa-link margin-left-1"
                      href="/afd/{{ point.grid.wfo.normalized_code }}">{{ "forecast.link.area-forecast-discussion.01" | t }}</a>
                 </div>
+                {% endif %}
                 {% if point.place.countyfips %}
-                  <div class="grid-row display-flex flex-align-center margin-top-105">
+                  <div class="grid-row display-flex flex-align-center{% if point.grid.wfo %} margin-top-105{% endif %}">
                     <svg width="24"
                          height="24"
                          fill="#005EA2"
@@ -149,12 +162,13 @@
             </div>
           </div>
         </div>
-        <wx-daily-forecast class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
-        <h2 class="usa-sr-only">{% trans "forecast.heading.daily-forecast.01" %}</h2>
-        {% include "weather/partials/forecast.html" with forecast=point.forecast %}
-        </wx-daily-forecast>
-        </wx-tabbed-nav>
-      {% endif %}
+        {% if point.forecast %}
+          <wx-daily-forecast class="wx-tab-container wx-focus-offset-205" id="daily" role="tabpanel" aria-labelledby="daily-tab-button" tabindex="0">
+            <h2 class="usa-sr-only">{% trans "forecast.heading.daily-forecast.01" %}</h2>
+            {% include "weather/partials/forecast.html" with forecast=point.forecast %}
+          </wx-daily-forecast>
+        {% endif %}
+      </wx-tabbed-nav>
     </div>
   </div>
 {% endblock %}

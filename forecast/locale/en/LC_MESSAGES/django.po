@@ -251,6 +251,9 @@ msgstr "There was an error loading the daily forecast."
 msgid "forecast.errors.loading.01"
 msgstr "There was an error loading the forecast."
 
+msgid "forecast.errors.not-found.01"
+msgstr "This area doesn't have forecast data. Please try searching for a different location."
+
 msgid "forecast.errors.point.01"
 msgstr "Something went wrong loading this page. Please try again in a few minutes."
 

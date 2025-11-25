@@ -91,7 +91,7 @@ const getDataForPoint = async (lat, lon) => {
       point,
       place,
       error: true,
-      status: 404,
+      status: 200,
       reason: "not-supported",
     };
   }
