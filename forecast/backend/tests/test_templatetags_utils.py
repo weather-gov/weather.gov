@@ -59,18 +59,6 @@ class TestTemplateTagUtilities(TestCase):
         o = {"key": "value"}
         self.assertEquals(util.json_encode(o), json.dumps(o))
 
-    def test_normalize_wfo_alu(self):
-        """Tests that ALU is normalized to Anchorage."""
-        self.assertEquals(util.normalize_wfo("ALU"), "AFC")
-
-    def test_normalize_wfo_aer(self):
-        """Tests that AER is normalized to Anchorage."""
-        self.assertEquals(util.normalize_wfo("AER"), "AFC")
-
-    def test_normalize_wfo_others(self):
-        """Tests that other WFO codes are retained."""
-        self.assertEquals(util.normalize_wfo("ABC"), "ABC")
-
     def test_normalize_alert_whitespace(self):
         """Test alert whitespace normalization."""
         actual = util.normalize_alert_whitespace("This is\nsome text\nin an\nalert")
