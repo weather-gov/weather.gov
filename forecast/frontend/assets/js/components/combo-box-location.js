@@ -5,40 +5,12 @@ const searchLocation = async (text) => {
   return fetch(url, { headers: { "Content-Type": "application/json" } });
 };
 
-/**
- * This object uses the browser's SessionStorage
- * to cache and retrieve ArcGIS magicKey data.
- * Each time a user navigates to a list option,
- * we fetch the result for that option asynchronously
- * and store in this cache.
- * Later, if the user selects an option, we first check
- * for the cached data before sending a request.
- * This can provide the perception of faster interaction.
- */
-export const ArcCache = {
-  getItem(magicKey) {
-    const found = window.sessionStorage.getItem(magicKey);
-    if (found) {
-      return JSON.parse(found);
-    }
-    return null;
-  },
-  setItem(magicKey, obj) {
-    const serialized = JSON.stringify(obj);
-    window.sessionStorage.setItem(magicKey, serialized);
-  },
-};
-
 export default class LocationComboBox extends ComboBox {
   constructor() {
     super();
 
     // Private property defaults
     this.inputDelay = 250;
-
-    // Set the ArcCache object as a property.
-    // This allows us to test it more easily.
-    this.cache = ArcCache;
 
     // Bound component methods
     this.updateSearch = this.updateSearch.bind(this);
@@ -247,12 +219,13 @@ export default class LocationComboBox extends ComboBox {
   /**
    * Asynchronously fetches specific location data
    * for a given search result, stashing it away in
-   * the cache (See ArcCache)
+   * the session storage
    */
   async cacheLocationGeodata(magicKey) {
     if (!window.sessionStorage.getItem(magicKey)) {
       const result = await this.getLocationGeodata(magicKey);
-      this.cache.setItem(magicKey, result);
+      const serialized = JSON.stringify(result);
+      window.sessionStorage.setItem(magicKey, serialized);
     }
   }
 
@@ -263,7 +236,8 @@ export default class LocationComboBox extends ComboBox {
    * to fetch the data.
    */
   async getGeodataForKey(magicKey) {
-    const cached = this.cache.getItem(magicKey);
+    const found = window.sessionStorage.getItem(magicKey);
+    const cached = found ? JSON.parse(found) : null;
     if (!cached) {
       return this.getLocationGeodata(magicKey);
     }
