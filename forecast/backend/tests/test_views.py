@@ -185,15 +185,44 @@ class TestViews(TestCase):
         """Test the point location view when the requested point is not supported."""
         mock_get_point_forecast.return_value = {
             "error": True,
-            "status": 404,
+            "status": 200,
             "reason": "not-supported",
         }
 
         response = self.client.get("/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
-        self.assertEqual(response.status_code, 404)
-        self.assertTemplateUsed(response, "errors/404/point-not-supported.html")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/point.html")
+
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_with_minimal_data(self, mock_get_point_forecast):
+        """Test the point location view when we have alerts but no forecast."""
+        mock_get_point_forecast.return_value = {
+            "error": True,
+            "status": 200,
+            "reason": "not-supported",
+            "alerts": {
+                "items": [{ "alert": True }],
+            },
+            "place": {
+                "county": "Upper left",
+                "countyfips": "12345",
+                "name": "Test Region",
+            },
+            "point": {
+                "latitude": 11.1,
+                "longitude": 22.22,
+            },
+        }
+
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertNotContains(response, "daily-tab-button")
+        self.assertContains(response, "alerts-tab-button")
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_marine_point(self, mock_get_point_forecast):

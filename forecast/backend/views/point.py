@@ -39,18 +39,16 @@ def point_location(request, lat, lon):
     if "status" in point and point["status"] == HTTPStatus.NOT_FOUND:
         raise Http404(point)
 
-    # TODO: Add some error checking here
-    code = point["grid"]["wfo"]
-    wfo = WFO.objects.get(code=WFO.normalize_code(code))
-    point["wfo"] = wfo
-
-    if point["isMarine"]:
+    # we do not currently support marine.
+    if "isMarine" in point and point["isMarine"]:
         return render(request, "weather/marine-point.html", {"point": point})
 
-    # Attempt to get weather story information for the
-    # point.
-    # If there isn't one available, we set the data to None
-    weather_story = WeatherStory.objects.current(wfo).first()
+    weather_story = None
+    if "grid" in point and "wfo" in point["grid"]:
+        code = point["grid"]["wfo"]
+        wfo = WFO.objects.get(code=WFO.normalize_code(code))
+        point["wfo"] = wfo
+        weather_story = WeatherStory.objects.current(wfo).first()
 
     return render(
         request,

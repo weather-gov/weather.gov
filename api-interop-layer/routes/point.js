@@ -24,14 +24,17 @@ export const handler = async (request) => {
   const { latitude, longitude } = request.params;
   const data = await getDataForPoint(latitude, longitude);
 
+  // if we have a place, we can get radar even if we don't actually have point
+  // forecast data.
+  if (data.place) {
+    data.radarMetadata = await getRadarMetadata({
+      place: data.place,
+      point: { latitude, longitude },
+    });
+  }
+
   if (data.error) {
     return { data, status: data.status, error: data.error };
   }
-
-  data.radarMetadata = await getRadarMetadata({
-    place: data.place,
-    point: { latitude, longitude },
-  });
-
   return { data };
 };
