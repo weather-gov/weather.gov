@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.db.models import JSONField
+from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 
 
@@ -131,7 +132,7 @@ class WeatherCounties(models.Model):
             # Census Areas.
             "AK": _("spatial.county-like.name.census-area.01"),
             # American Samoa FIPS area name are fully-qualified.
-            "AS": "",
+            "AS": None,
             # In Guam, county-likes are called villages.
             "GU": _("spatial.county-like.name.village.01"),
             # In Louisiana, county-likes are called parishes.
@@ -180,6 +181,23 @@ class WeatherCounties(models.Model):
             else _(
                 "spatial.county-like.name.county.01",
             )
+        )
+
+    @property
+    def label(self):
+        """Get the full localized name for this country."""
+        subdivision = self.subdivision_name
+        if subdivision:
+            return format_lazy(
+                _("spatial.county-like.with-subdivision.label.01"),
+                name=self.countyname,
+                subdivision=subdivision,
+                state=self.st,
+            )
+        return format_lazy(
+            _("spatial.county-like.with-no-subdivision.label.01"),
+            name=self.countyname,
+            state=self.st,
         )
 
     def __str__(self):

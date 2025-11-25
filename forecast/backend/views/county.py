@@ -127,9 +127,9 @@ def county_overview(request, countyfips):
                 "public": county_data,
                 "briefings": briefings,
                 "weather_stories": sorted(weather_stories, key=lambda story: story.starttime, reverse=True),
-                "county_label": f"{county.countyname} {county.subdivision_name}, {county.st}",
+                "county_label": county.label,
                 "radar": radar,
-                "primary_wfo":  wfo or None,
+                "primary_wfo": wfo or None,
             },
         },
     )

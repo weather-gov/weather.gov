@@ -813,6 +813,12 @@ msgstr "Municipality"
 msgid "spatial.county-like.name.island.01"
 msgstr "Island"
 
+msgid "spatial.county-like.with-subdivision.label.01"
+msgstr "{name} {subdivision}, {state}"
+
+msgid "spatial.county-like.with-no-subdivision.label.01"
+msgstr "{name}, {state}"
+
 msgid "error.500.generic.message.01"
 msgstr "500: Something went wrong on our end. Please try again in a few minutes."
 
