@@ -312,6 +312,8 @@ DIRECTIVES = {
         # analytics
         "www.google-analytics.com",
         "www.googletagmanager.com",
+        # gravatar (only on wagtail)
+        "www.gravatar.com",
         *CRITICAL_HOSTS["img-src"],
         # esri-leaflet-vector.js
         "data:",
