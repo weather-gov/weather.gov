@@ -144,13 +144,18 @@ class WFO(models.Model):
         """Has social media, address, or email."""
         return bool(self.has_social or self.address or self.email)
 
+    @staticmethod
+    def normalize_code(code):
+        """Return the WFO code normalized for Alaska edge cases."""
+        anchorage_alternates = ["ALU", "AER"]
+        if code.upper() in anchorage_alternates:
+            return "AFC"
+        return code.upper()
+
     @property
     def normalized_code(self):
-        """Return the WFO code normalized for Alaska edge cases."""
-        anchorage_alternates = ["alu", "aer"]
-        if self.code.lower() in anchorage_alternates:
-            return "afc"
-        return self.code.lower()
+        """Return the normalized WFO code."""
+        return WFO.normalize_code(self.code)
 
     @property
     def url(self):

@@ -43,14 +43,6 @@ def json_encode(value):
     return ""
 
 
-def normalize_wfo(value):
-    """Transform a WFO code into its cannonical form."""
-    anchorage_alternates = ["alu", "aer"]
-    if value.lower() in anchorage_alternates:
-        return "AFC"
-    return value
-
-
 def normalize_alert_whitespace(text):
     """Replace Unix line breaks with HTML line breaks."""
     return mark_safer(text, lambda text: re.sub("(\n)+", "<br />", text))
@@ -61,7 +53,6 @@ def template_zip(a, b):
     return zip(a, b, strict=False)
 
 
-register.filter("normalize_wfo", normalize_wfo)
 register.filter("normalize_alert_whitespace", normalize_alert_whitespace)
 register.filter("json_encode", json_encode)
 register.filter("zip", template_zip)

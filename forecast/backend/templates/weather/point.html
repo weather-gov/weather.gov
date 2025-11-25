@@ -120,7 +120,7 @@
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M4 2H20V22H4V2ZM5 3H19V21H5V3Z" fill="#0085CA" />
                   </svg>
                   <a class="usa-link margin-left-1"
-                     href="/afd/{{ point.grid.wfo | normalize_wfo }}">{{ "forecast.link.area-forecast-discussion.01" | t }}</a>
+                     href="/afd/{{ point.grid.wfo.normalized_code }}">{{ "forecast.link.area-forecast-discussion.01" | t }}</a>
                 </div>
                 {% if point.place.countyfips %}
                   <div class="grid-row display-flex flex-align-center margin-top-105">
