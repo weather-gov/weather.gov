@@ -177,10 +177,22 @@ class DynamicSafetyInformation(models.Model):
 
     type = models.CharField(unique=True, max_length=256)
     label = models.CharField(max_length=256)
-    body = models.TextField()
+    body = RichTextField()
 
     # Panels for Wagtail admin
-    panels = [FieldPanel("type"), FieldPanel("label"), FieldPanel("body")]
+    panels = [
+        FieldPanel(
+            "type",
+            help_text="This is the alert type, in all lowercase. For example, "
+            + '"severe thunderstorm warning" or "wind advisory"',
+        ),
+        FieldPanel("label", help_text="This is currently unused."),
+        FieldPanel(
+            "body",
+            help_text="This will be displayed alongside alerts of "
+            + "this type to provide users more context and safety guidance.",
+        ),
+    ]
 
     def __str__(self):
         return self.type
