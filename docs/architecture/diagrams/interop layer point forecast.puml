@@ -1,0 +1,386 @@
+@startuml weather.gov system deployment
+title interop layer point forecast flow
+
+floating note left
+* pink represents API calls
+* green represents database calls
+end note
+
+:get point forecast;
+note right
+data/index.js
+getDataForPoint()
+end note
+
+partition get point data {
+  :get point data;
+  note right
+  data/points.js
+  getPointData()
+  end note
+
+  fork
+    #pink:get point from API;
+    note left
+    This translates lat/lon
+    into WFO grid coordinates
+    end note
+  fork again
+    #palegreen:get place from database;
+  fork again
+    #palegreen:check if point is marine;
+  end fork
+
+  if (point found) then (no)
+    :return out of bounds error;
+  (yes) elseif (wfo is empty) then (yes)
+    :return not supported error;
+  else (no)
+    :return all data;
+  endif
+
+  :return point (lat/lon), place,
+  grid (wfo), is marine bool;
+}
+
+if (grid error?) then (no)
+  #pink:get satellite metadata;
+  note left
+  data/satellite.js
+  default()
+  end note
+
+  fork
+    note left
+    data/forecast/index.js
+    default()
+    end note
+    partition get forecast {
+      fork
+        #pink:get gridpoints
+        forecast;
+        note left
+        returns forecast data for
+        the gridpoint organized
+        by element, with a list of
+        values over time
+        end note
+
+        if (error?) then (no)
+          :convert raw quantitative
+          precipitation, ice accumulation,
+          and snow accumulation into
+          QPF tables;
+          note left
+          data/forecast/
+          quantitativePrecipitation.js
+          default();
+          end note
+
+          :collect a complete list
+          of hours covered by the
+          forecast;
+          note left
+          the data arrives with each
+          forecast element as a
+          top-level property with a
+          list of values, each with
+          a timestamp and duration;
+          we calculate each individual
+          hour covered by the forecast
+          from this data
+          end note
+        else (yes)
+        endif
+
+      fork again
+        #pink:get daily
+        forecast;
+        note left
+        returns forecast data
+        organized by 12-hour
+        day period; 6am-6pm
+        and 6pm-6am
+        end note
+
+        if (error?) then (no)
+          :collect various day
+          periods into whole days;
+          note left
+          data/forecast/daily.js
+          default();
+          end note
+
+
+          :add metadata (day
+          names, etc.);
+
+          :convert all forecast
+          element units into
+          imperial and metric;
+          note left
+          util/convert.js
+          convertProperties()
+          end note
+
+          :convert API icon
+          property into our
+          icon path;
+          note left
+          util/icon.js
+          parseAPIIcon()
+          end note
+
+          :check if the first
+          day has an overnight
+          period (before 6am);
+        else (yes)
+        endif
+
+      fork again
+        #pink:get hourly
+        forecast;
+        note left
+        returns forecast data
+        one hour at a time, with
+        each hour having a full
+        compliment of forecast
+        data elements
+        end note
+
+        if (error?) then (no)
+          :extract short forecast
+          description and API
+          icon for each hour;
+          note left
+          data/forecast/hourly.js
+          default();
+          end note
+
+          :convert API icon
+          property into our
+          icon path;
+          note left
+          util/icon.js
+          parseAPIIcon()
+          end note
+        else (yes)
+        endif
+      end fork
+    
+      :sort the total set of hours,
+      as derived from both the
+      gridpoint and hourly forecasts,
+      and remove any that occur
+      before midnight in the timezone
+      of the requested point;
+      note left
+      data/forecast/hourly.js
+      sortAndFilterHours()
+      end note
+
+      :for each hour, convert the
+      forecast element units to
+      imperial and metric;
+      note left
+      util/convert.js
+      convertProperties()
+      end note
+
+      :for each hour, if wind gust
+      exists and is less than 8mph
+      more than the sustained
+      winds, remove the gusts;
+
+      if (gridpoint has QPF) then (yes)
+        :convert QPF values to
+        imperial and metric units;
+        note left
+        util/convert.js
+        convertValue()
+        end note
+      else (no)
+      endif
+
+      if (is marine point) then (yes)
+        :create forecast days from
+        gridpoint forecast data –
+        there is no marine daily
+        or hourly forecast;
+        note left
+        data/forecast/marine.js
+        getMarineDays()
+        end note
+      else (no)
+      endif
+
+      while (while there are days)
+        if (gridpoint has QPF) then (yes)
+          :select the subset of
+          gridpoint QPF data that
+          is within this day;
+
+          :break QPF into liquid,
+          ice, and snow;
+        else (no)
+        endif
+
+        :select the subset of hours
+        that apply to this day;
+
+        if (day is today) then (yes)
+          :every hour up to and
+          including 6am the next day;
+          note left
+          data/forecast/hourly.js
+          filterHoursForCurrentDay();
+          end note
+        else (no)
+          :the hours starting at
+          6am this day and up to
+          and including 6am the
+          next day;
+          note right
+          data/forecast/hourly.js
+          filterHoursForDay();
+          end note
+        endif
+
+        :compute the maximum
+        percent change of
+        precipitation for the
+        day using hourly data;
+      endwhile
+    }
+
+  fork again
+    note left
+    data/obs/index.js
+    default()
+    end note
+
+    partition get observations {
+
+      #pink:get stations from API;
+      note right
+      returns a list of observation
+      stations based on a WFO grid,
+      sorted by distance
+      end note
+
+      if (error?) then (yes)
+        :obs error;
+      else (no)
+        fork
+          #pink:fetch latest observation
+          for nearest station;
+        fork again
+          #pink:fetch latest observation
+          for 2nd nearest station;
+        fork again
+          #pink:fetch latest observation
+          for 3rd nearest station;
+        end fork
+
+        if (nearest obs valid?) then (yes)
+          :use first obs;
+        (no) elseif (second obs valid?) then (yes)
+          :use second obs;
+        (no) elseif (third obs valid?) then (yes)
+          :use third obs;
+        else (all invalid)
+          :obs error;
+        endif
+
+        if (obs error?) then (no)
+          :unit conversion;
+
+          :get distance from
+          station to point;
+        else (yes)
+        endif
+      endif
+
+      :return obs
+      or error;
+      note right
+      includes time of obs,
+      representative icon,
+      station information,
+      and observation data
+      end note
+    }
+  end fork
+else (yes)
+endif
+
+#palegreen:get alerts that are
+relevant to the location;
+note left
+these are stored in our alert
+cache database table that is
+updated from the API every
+30 seconds
+end note
+
+if (there is a daily forecast) then (yes)
+  partition associate alerts with days {
+    note left
+    data/alerts/utils.js
+    alignAlertsToDaily()
+    end note
+
+    while (while there are days)
+      :filter alerts to those that
+      will be active on a given day;
+
+      while (while there are filtered alerts)
+        :determine which hour 
+        within the day the
+        alert will become active;
+
+        :determine how many hours
+        the alert will be active
+        within the day;
+      endwhile
+
+      :determine the highest
+      alert level present
+      during the day;
+    endwhile
+  }
+else (no)
+endif
+
+if (the grid is out of bounds) then (yes)
+  :return appropriate
+  error object;
+  note left
+  This is when a lat/lon
+  is out of bounds for
+  NWS data. Like, Canada
+  or Germany or something.
+  end note
+  stop
+else (no)
+endif
+
+if (the grid is not supported) then (yes)
+  :return appropriate
+  error object;
+  note left
+  This is when a lat/lon
+  is within bounds but
+  there is no forecast
+  data available. This
+  happens with American
+  Samoa. :(
+  end note
+  stop
+else (no)
+endif
+
+:return all the data;
+
+stop
+@enduml
