@@ -72,10 +72,14 @@ export default class LocationComboBox extends ComboBox {
   }
 
   async getSearchResults(text) {
-    const response = await searchLocation(text);
-    if (response.ok) {
-      const data = await response.json();
-      return data;
+    try {
+      const response = await searchLocation(text);
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      }
+    } catch (e) {
+      console.error(`Error searching locations: ${e.message}`);
     }
     return { suggestions: [] };
   }
