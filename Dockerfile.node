@@ -12,4 +12,4 @@ RUN npm ci
 #################################################
 
 FROM node AS playwright
-RUN npx playwright install --with-deps
+RUN npx --no-install playwright install --with-deps
