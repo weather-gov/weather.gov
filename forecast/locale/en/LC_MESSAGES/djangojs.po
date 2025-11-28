@@ -19,3 +19,6 @@ msgstr[1] "Search updated. %s results available"
 
 msgid "js.offline-banner.aria.you-are-back-online.01"
 msgstr "You are back online."
+
+msgid "js.inline-panel-confirm-delete-prompt.01"
+msgstr "Are you sure you want to delete this item? Click OK to delete, or Cancel to return to the editor."

@@ -10,7 +10,12 @@ class RoadmapPage(Page):
 
     body = RichTextField()
 
-    content_panels = Page.content_panels + [FieldPanel("body"), InlinePanel("entries", label="Roadmap entries")]
+    content_panels = Page.content_panels + [
+        FieldPanel("body"),
+        # Add a data attribute that flags this inline panel as one that we
+        # want to enforce deletion confirmation on.
+        InlinePanel("entries", label="Roadmap entries", attrs={"data-wx-confirm-delete": "true"}),
+    ]
 
     def get_context(self, request, *args, **kwargs):
         """Add additional page context."""

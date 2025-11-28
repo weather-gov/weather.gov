@@ -237,7 +237,7 @@ test-web-components:
     node \
     npx c8 --reporter html --reporter clover -o /reports mocha \
       --require frontend/tests/components/preload.js \
-      frontend/tests/components/*-tests.js
+      frontend/tests/components/**/*-tests.js
 
 ##### Dev environment management #####
 # Starts up all the containers, prepares the databases, and loads initial data
