@@ -21,7 +21,7 @@ class TestWxStoryApiViews(TestCase):
     def setUpTestData(cls):
         """Test setup. Only for records that will not be modified."""
         cls.region = Region.objects.create(name="Test Region")
-        cls.wfo = WFO.objects.create(code="QQQ",name="Test WFO",region=cls.region)
+        cls.wfo = WFO.objects.create(code="QQQ", name="Test WFO", region=cls.region)
         cls.user = NOAAUser.objects.create_user("uploader", "fake@example.com", "uploader")
 
     def setUp(self):

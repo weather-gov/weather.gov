@@ -102,6 +102,7 @@ format-js:
     node \
     npx --no-install prettier -w 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js'
 
+# Format Python code
 [group("code quality")]
 format-python:
   docker compose exec web python -m ruff format .

@@ -43,4 +43,3 @@ class TestUrls(TestCase):
         back = reverse("create-weather-story")
         self.assertEquals(resolver.func, views.weather_story)
         self.assertEquals(back, "/jsonapi/node/wfo_weather_story_upload")
-

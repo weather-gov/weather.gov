@@ -20,13 +20,13 @@ SETTINGS_TYPE = "dev"
 INSTALLED_APPS += ["django.contrib.admin"]  # noqa: F405
 
 if not TESTING:  # noqa: F405
-    INSTALLED_APPS += [ # noqa: F405
+    INSTALLED_APPS += [  # noqa: F405
         "debug_toolbar",
         "silk",
     ]
     # django debug toolbar needs to be up front
-    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware") # noqa: F405
-    MIDDLEWARE += [ # noqa: F405
+    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")  # noqa: F405
+    MIDDLEWARE += [  # noqa: F405
         "silk.middleware.SilkyMiddleware",
     ]
     DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _: True}

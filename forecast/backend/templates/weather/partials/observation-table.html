@@ -15,9 +15,7 @@
             class="font-family-mono text-base font-mono-xs text-uppercase z-400">
           {% trans "observation-table.labels.gusts.01" %}
         </th>
-        <td>
-          {% trans_with_args "units.mph.02" speed=obs.data.windGust.mph %}
-        </td>
+        <td>{% trans_with_args "units.mph.02" speed=obs.data.windGust.mph %}</td>
       </tr>
     {% endif %}
     {# HUMIDITY #}

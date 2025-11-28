@@ -23,18 +23,20 @@ class TestGHWOProcessing(TestCase):
         """
         data = {
             "days": [
-                {"images": {
-                    "Lightning": "lightning_url",
-                    "SnowSleet": "snowsleet_url",
-                    "FireWeather": "fireweather_url",
+                {
+                    "images": {
+                        "Lightning": "lightning_url",
+                        "SnowSleet": "snowsleet_url",
+                        "FireWeather": "fireweather_url",
+                    },
+                    "Lightning": 1,
+                    "SnowSleet": 0,
+                    "FireWeather": 4,
+                    "UnknownRiskType": 3,
+                    "timestamp": "aTimestamp",
+                    "dayNumber": 1,
                 },
-                 "Lightning": 1,
-                 "SnowSleet": 0,
-                 "FireWeather": 4,
-                 "UnknownRiskType": 3,
-                 "timestamp": "aTimestamp",
-                 "dayNumber": 1,
-                 }],
+            ],
         }
 
         urls = util.get_ghwo_daily_images(data)
@@ -43,7 +45,6 @@ class TestGHWOProcessing(TestCase):
         self.assertIn("fireweather_url", urls)
         self.assertNotIn("snowsleet_url", urls)
         self.assertEqual(len(urls), 2)
-
 
     def test_get_risk_factor_ids(self):
         """Test getting a full list of unique risk factor ids from ghwo days."""
@@ -84,7 +85,6 @@ class TestGHWOProcessing(TestCase):
 
         for should_not_have in expect_to_not_have:
             self.assertNotIn(should_not_have, risk_ids)
-
 
     @mock.patch("backend.util.get_object_or_404")
     def test_get_risk_daily_rows(self, mock_get_wfo):
@@ -263,7 +263,6 @@ class TestGHWOProcessing(TestCase):
         ]
         self.assertEqual(expected_third_row_days, third_row["days"])
 
-
     def test_set_first_selected_days_no_rows(self):
         """
         Ensure we bail from the function when the passed list of rows is empty.
@@ -365,7 +364,6 @@ class TestGHWOProcessing(TestCase):
 
         self.assertEqual(input, expected)
 
-
     def test_get_no_impact_risk_labels(self):
         """Ensure we return correct example of no impact risk labels."""
         data = {
@@ -430,4 +428,3 @@ class TestGHWOProcessing(TestCase):
         actual = util.get_no_impact_risk_labels(data).sort()
 
         self.assertEqual(expected, actual)
-

@@ -256,6 +256,7 @@ def weather_icon(icon_name, size="sm", color_mode="light", **kwargs):
 
     return result
 
+
 @register.inclusion_tag("weather/partials/ghwo-daily-summary.html")
 def ghwo_daily_summary(ghwo_data):
     """Return the HTML markup for the ghwo daily summary table and legend."""
@@ -264,7 +265,7 @@ def ghwo_daily_summary(ghwo_data):
     # about the error
     if "error" in ghwo_data:
         return {
-            "error": ghwo_data, # pass error data straight through
+            "error": ghwo_data,  # pass error data straight through
             "ghwo_dump": json.dumps(ghwo_data),
         }
     processed = process_ghwo_daily_summary(ghwo_data)
@@ -273,6 +274,7 @@ def ghwo_daily_summary(ghwo_data):
         "ghwo_days": processed["days"],
         "ghwo_dump": json.dumps(processed["days"], indent=2, default=str),
     }
+
 
 @register.inclusion_tag("weather/partials/ghwo-daily-details.html")
 def ghwo_daily_details(ghwo_data):

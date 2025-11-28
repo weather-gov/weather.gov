@@ -48,5 +48,6 @@ class WeatherStoryAdminSnippet(SnippetViewSet):
     def __str__(self):
         return self.name
 
+
 register_snippet(SituationReportAdminSnippet)
 register_snippet(WeatherStoryAdminSnippet)

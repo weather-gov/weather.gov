@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     "beta.weather.gov" if cloudgov_space == "prod" else f"weathergov-{cloudgov_space}.app.cloud.gov",
 ]
 
+
 # Helpers
 def find_cloudgov_library(name):
     """
@@ -87,19 +88,23 @@ key_service = AppEnv().get_service(name=f"{cloudgov_space}-credentials")
 rds_service = AppEnv().get_service(name=f"weathergov-rds-{cloudgov_space}")
 s3_service = AppEnv().get_service(name=f"weathergov-s3-{cloudgov_space}")
 
+
 def ensure_environment_variables_are_present(envvars):
     """Check for required environment variables."""
     for env in envvars:
         if not key_service.credentials.get(env):
             raise ImproperlyConfigured
 
+
 # we want to bail out if any of these are not set.
-ensure_environment_variables_are_present([
-    "django_secret_key",
-    "sp_public_key",
-    "sp_private_key",
-    "allowed_ips",
-])
+ensure_environment_variables_are_present(
+    [
+        "django_secret_key",
+        "sp_public_key",
+        "sp_private_key",
+        "allowed_ips",
+    ],
+)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = key_service.credentials.get("django_secret_key")
@@ -153,9 +158,9 @@ set_cors_on_s3_bucket(**s3_options)
 s3_image_src = f"https://{s3_credentials['bucket']}.s3.{s3_credentials['region']}.amazonaws.com"
 
 # add this cloud.gov app and s3 bucket to content security policy configuration
-CONTENT_SECURITY_POLICY["DIRECTIVES"]["default-src"] += ALLOWED_HOSTS # noqa: F405 (imported from base.py)
-CONTENT_SECURITY_POLICY["DIRECTIVES"]["img-src"] += [s3_image_src] # noqa: F405 (imported from base.py)
-CONTENT_SECURITY_POLICY["DIRECTIVES"]["form-action"] += [ f"https://{ALLOWED_HOSTS[0]}/cms/logout/" ] # noqa: F405 (imported from base.py)
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["default-src"] += ALLOWED_HOSTS  # noqa: F405 (imported from base.py)
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["img-src"] += [s3_image_src]  # noqa: F405 (imported from base.py)
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["form-action"] += [f"https://{ALLOWED_HOSTS[0]}/cms/logout/"]  # noqa: F405 (imported from base.py)
 
 # SAML Settings
 # See noaa_saml/config.py for details
@@ -170,12 +175,12 @@ WAGTAILADMIN_BASE_URL = AppEnv().uris[0]
 # in production, we want to output JSON to the console instead. to do this, we
 # configure a JSON formatter and set all handlers to use this JSON formatter.
 
-LOGGING["formatters"] = { # noqa: F405 (imported from base.py)
+LOGGING["formatters"] = {  # noqa: F405 (imported from base.py)
     "json": {
         "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
         "format": "%(asctime)s %(levelname)s %(name)s %(lineno)s %(message)s",
         "datefmt": "%d/%b/%Y %H:%M:%S",
     },
 }
-LOGGING["handlers"]["console"]["formatter"] = "json" # noqa: F405 (imported from base.py)
-LOGGING["handlers"]["django.server"]["formatter"] = "json" # noqa: F405 (imported from base.py)
+LOGGING["handlers"]["console"]["formatter"] = "json"  # noqa: F405 (imported from base.py)
+LOGGING["handlers"]["django.server"]["formatter"] = "json"  # noqa: F405 (imported from base.py)

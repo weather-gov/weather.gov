@@ -78,7 +78,7 @@ const setupRadar = () => {
     },
   };
 
-  window.app = window.cmiRadar.createApp("#wx_radar_container", options);
+  window.app = window.cmiRadar.createApp("#wx-radar-container", options);
 
   [".cmi-radar-container .menu", ".cmi-radar-menu-agendas"].forEach(
     (selector) => {

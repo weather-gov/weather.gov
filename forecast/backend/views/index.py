@@ -17,4 +17,3 @@ def health(_):
     if "ok" in response and response["ok"]:
         return HttpResponse("OK")
     return HttpResponse("Interop layer is unavailable.", status=503)
-

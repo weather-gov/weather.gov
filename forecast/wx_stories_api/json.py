@@ -9,7 +9,7 @@ from wx_stories_api.responses import (
 )
 
 
-class FakeDrupal():
+class FakeDrupal:
     """
     Wrapper for JsonResponse which pretends to be Drupal.
 
