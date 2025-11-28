@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "npx pm2-runtime start ecosystem.prod.config.cjs",
-    "start-dev": "npx pm2-runtime start ecosystem.dev.config.cjs",
+    "start": "npx --no-install -p pm2 pm2-runtime start ecosystem.prod.config.cjs",
+    "start-dev": "npx --no-install -p pm2 pm2-runtime start ecosystem.dev.config.cjs",
     "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js"
   },
   "author": "",

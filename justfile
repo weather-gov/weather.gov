@@ -20,7 +20,7 @@ release-notes:
 # Build USWDS and our styles together
 [group("building")]
 css:
-  docker compose run --rm uswds npx gulp compile
+  docker compose run --rm uswds npx --no-install gulp compile
 
 # Build SVG assets that are assembled programmatically
 [group("building")]
@@ -100,7 +100,7 @@ format-js:
     -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
     -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
     node \
-    npx prettier -w 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js'
+    npx --no-install prettier -w 'forecast/frontend/**/assets/**/*.js' 'tests/**/*.js' '*.js' 'api-interop-layer/**/*.js'
 
 [group("code quality")]
 format-python:
@@ -113,7 +113,7 @@ format-style:
     run --rm \
     -v "{{justfile_directory()}}/forecast/frontend":"/app" \
     node \
-    npx prettier -w ./**/*.scss
+    npx --no-install prettier -w ./**/*.scss
 
 # Format the Django HTML templates
 [group("code quality")]
@@ -141,7 +141,7 @@ lint-js:
     -v "{{justfile_directory()}}/spatial-data":"/app/spatial-data" \
     -v "{{justfile_directory()}}/forecast/frontend":"/app/forecast/frontend" \
     node \
-    npx eslint --fix
+    npx --no-install eslint --fix
 
 # Lints Python code
 [group("code quality")]
@@ -155,7 +155,7 @@ lint-style:
     run --rm \
     -v "{{justfile_directory()}}":"/app" \
     node \
-    npx stylelint **/*.scss --fix
+    npx --no-install stylelint **/*.scss --fix
 
 # Lint the Django HTML templates
 [group("code quality")]
@@ -170,7 +170,7 @@ test-a11y:
   docker compose \
     run --rm \
     playwright \
-    npx playwright test --output /reports/a11y a11y
+    npx --no-install playwright test --output /reports/a11y a11y
 
 # Run Django tests
 [group("testing")]
@@ -200,7 +200,7 @@ test-e2e:
   docker compose \
   run --rm \
   playwright \
-  npx playwright test --output /reports/end-to-end e2e
+  npx --no-install playwright test --output /reports/end-to-end e2e
 
 # Test the interop layer. Add "debug" to break for a debugger.
 [group("testing")]
@@ -216,7 +216,7 @@ test-interop arg="":
     -e LOG_LEVEL=silent \
     -p "2992:2992" \
     api-interop-layer \
-    npx c8 --all \
+    npx --no-install c8 --all \
       --exclude "ecosystem.*.config.cjs" \
       --exclude "main.js" \
       --reporter html \
@@ -235,7 +235,7 @@ test-web-components:
     -v "{{justfile_directory()}}/reports/web-components":"/reports" \
     -v "{{justfile_directory()}}/forecast/frontend":"/app/frontend" \
     node \
-    npx c8 --reporter html --reporter clover -o /reports mocha \
+    npx --no-install c8 --reporter html --reporter clover -o /reports mocha \
       --require frontend/tests/components/preload.js \
       frontend/tests/components/**/*-tests.js
 

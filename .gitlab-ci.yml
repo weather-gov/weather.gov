@@ -289,7 +289,7 @@ bundle-js:
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/api-proxy/node_modules api-proxy
-    - npx esbuild --bundle --minify --format=esm --sourcemap "forecast/frontend/assets/js/**/*.html.js" --outdir=forecast/frontend/assets/js --allow-overwrite
+    - npx --no-install esbuild --bundle --minify --format=esm --sourcemap "forecast/frontend/assets/js/**/*.html.js" --outdir=forecast/frontend/assets/js --allow-overwrite
   artifacts:
     paths:
       - forecast/frontend/assets/js/**/*.html.js
@@ -314,7 +314,7 @@ js-lint:
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/api-proxy/node_modules api-proxy
-    - npx eslint
+    - npx --no-install eslint
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
@@ -379,11 +379,11 @@ web-component-and-interop-test:
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/api-proxy/node_modules api-proxy/
-    - npx c8 --reporter cobertura -o coverage/wc/ --reporter text-summary  mocha --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
+    - npx --no-install c8 --reporter cobertura -o coverage/wc/ --reporter text-summary  mocha --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
     # We also do interop layer tests at the same time so we don't have to wait
     # for another runner to come available.
     - cd api-interop-layer
-    - npx c8 --reporter cobertura -o ../coverage/interop/ --reporter text-summary mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
+    - npx --no-install c8 --reporter cobertura -o ../coverage/interop/ --reporter text-summary mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
   coverage:
     /^Statements\s*:\s*([^%]+)/
   artifacts:
