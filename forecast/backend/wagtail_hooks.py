@@ -1,7 +1,20 @@
+from django.templatetags.static import static
+from django.utils.safestring import mark_safe
+from wagtail import hooks
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
 from .models import WFO, DynamicSafetyInformation, Region
+
+
+# For editor views, add our custom editor javascript.
+@hooks.register("insert_editor_js")
+def editor_js():
+    """Inject our Javascript for the CMS into every editor page."""
+    return mark_safe(f"""
+        <script type="module" src="{static("js/cms/editor.html.js")}"></script>
+    """)  # noqa: S308
+    # This is safe. Good flag, but yeah, it's safe in this context.
 
 
 class WFOAdminSnippet(SnippetViewSet):
