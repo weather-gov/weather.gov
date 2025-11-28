@@ -53,6 +53,8 @@ ignore = [
     "D107",
     # Use a regular `assert` instead of unittest-style `assertEqual`
     "PT009",
+    # Missing trailing comma, disabled per advice of Ruff
+    "COM812",
 ]
 
 [tool.ruff.lint.per-file-ignores]

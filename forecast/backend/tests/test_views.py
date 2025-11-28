@@ -203,7 +203,7 @@ class TestViews(TestCase):
             "status": 200,
             "reason": "not-supported",
             "alerts": {
-                "items": [{ "alert": True }],
+                "items": [{"alert": True}],
             },
             "place": {
                 "county": "Upper left",

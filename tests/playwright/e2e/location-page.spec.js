@@ -38,7 +38,7 @@ describe("the location page", () => {
       page,
     }) => {
       await page.goto("/point/33.521/-86.812", { waitUntil: "load" });
-      const radarContainer = page.locator("#wx_radar_container");
+      const radarContainer = page.locator("#wx-radar-container");
 
       await expect(radarContainer).toBeEmpty();
     });
@@ -48,7 +48,7 @@ describe("the location page", () => {
     }) => {
       await page.goto("/point/33.521/-86.812", { waitUntil: "load" });
       const currentTab = page.locator('[data-tab-name="today"]');
-      const radarContainer = page.locator("#wx_radar_container");
+      const radarContainer = page.locator("#wx-radar-container");
 
       await currentTab.click();
 

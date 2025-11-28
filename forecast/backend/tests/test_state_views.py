@@ -61,6 +61,6 @@ class TestStateViews(TestCase):
     def test_overview_500(self, mock_get_object_or_404):
         """Test state error case."""
         mock_get_object_or_404.side_effect = Exception
-        with self.assertRaises(Exception): # noqa: PT027, B017 (we want generic Exception)
+        with self.assertRaises(Exception):  # noqa: PT027, B017 (we want generic Exception)
             response = self.client.get(reverse("state_overview", kwargs={"state": "FR"}))
             self.assertEqual(response.status_code, 500)

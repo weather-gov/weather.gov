@@ -14,7 +14,7 @@ const setupMap = (alert) => {
   // official website of the US Government, that might not be appropriate for
   // us, so we remove the flag.
   map.attributionControl.setPrefix(
-    "<a href='https://leafletjs.com' title='A JavaScript library for interactive maps'>Leaflet</a>"
+    "<a href='https://leafletjs.com' title='A JavaScript library for interactive maps'>Leaflet</a>",
   );
 
   L.esri.Vector.vectorBasemapLayer("arcgis/streets", {

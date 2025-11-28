@@ -11,7 +11,7 @@ from backend.util import GHWO_RISK_MAPPINGS, GHWO_RISK_MAPPINGS_REVERSE
 class Command(BaseCommand):
     """Download and process ghwo metadata files to json for each wfo."""
 
-    help="Download and process legend.json and chicklet.json files for each wfo."
+    help = "Download and process legend.json and chicklet.json files for each wfo."
 
     def add_arguments(self, parser):
         """Set up the cli parser arguments."""
@@ -28,7 +28,6 @@ class Command(BaseCommand):
             default=False,
             action="store_true",
         )
-
 
     def handle(self, *args, **options):
         """Fetch legend and chiclet for each wfo, then process and save metadata file for each."""
@@ -76,13 +75,9 @@ class Command(BaseCommand):
                 wfo.save()
                 self.stdout.write(f"Updated {wfo.code} model with metadata")
 
-
     def process_chiclet(self, chiclet, result):
         """Pull out the data we need from the chiclet endpoint."""
-        relevant_risks = [
-            risk for risk in chiclet["hazards"]
-            if risk["name"] in GHWO_RISK_MAPPINGS.values()
-        ]
+        relevant_risks = [risk for risk in chiclet["hazards"] if risk["name"] in GHWO_RISK_MAPPINGS.values()]
 
         for risk in relevant_risks:
             # We want to use the risk type ids as they appear in raw
@@ -92,12 +87,10 @@ class Command(BaseCommand):
                 result[risk_id] = {}
             result[risk_id]["basis_description"] = risk["description"]
 
-
     def process_legend(self, legend, result):
         """Pull out the data we need from the legend endpoint."""
         for risk_data in legend["hazards"]:
             if risk_data["name"] in GHWO_RISK_MAPPINGS.values():
-
                 # We want to use the risk type ids as they appear in raw
                 # ghwo data, not their labels
                 risk_id = GHWO_RISK_MAPPINGS_REVERSE[risk_data["name"]]
@@ -118,8 +111,7 @@ class Command(BaseCommand):
         response = requests.get(url, timeout=20)
         if response.ok:
             return json.loads(response.text)
-        raise CommandError(f"Could not fetch legend for {wfo_code}: [{response.status_code}] {response.text}") #  noqa: TRY003
-
+        raise CommandError(f"Could not fetch legend for {wfo_code}: [{response.status_code}] {response.text}")  #  noqa: TRY003
 
     def get_chiclet(self, wfo_code):
         """Fetch the chiclet metadata from the corresponding endpoint."""
@@ -127,6 +119,4 @@ class Command(BaseCommand):
         response = requests.get(url, timeout=20)
         if response.ok:
             return json.loads(response.text)
-        raise CommandError(f"Could not fetch chiclet for {wfo_code}: [{response.status_code}] {response.text}") #  noqa: TRY003
-
-
+        raise CommandError(f"Could not fetch chiclet for {wfo_code}: [{response.status_code}] {response.text}")  #  noqa: TRY003

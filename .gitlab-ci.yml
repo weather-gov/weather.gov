@@ -315,6 +315,14 @@ js-lint:
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/api-proxy/node_modules api-proxy
     - npx --no-install eslint
+    - npx --no-install stylelint 'forecast/frontend/**/assets/**/*.scss'
+    - |
+      npx --no-install prettier \
+      'forecast/frontend/**/assets/**/*.js' \
+      'forecast/frontend/**/assets/**/*.scss' \
+      'tests/**/*.js' \
+      '*.js' \
+      'api-interop-layer/**/*.js'
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
@@ -328,6 +336,7 @@ django-lint:
   script:
     - cd forecast/
     - python -m ruff check .
+    - python -m djlint backend/templates/ --extension=html
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"

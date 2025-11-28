@@ -81,5 +81,3 @@ def handle_404(request, exception=None):
         context=context,
         status=404,
     )
-
-

@@ -5,3 +5,4 @@ node_modules
 
 # Pre-built JS
 cmi-radar.*.js
+**/js/third-party/*js

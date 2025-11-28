@@ -61,14 +61,14 @@ class Command(BaseCommand):
                 timeout=60,
             )
 
-            if response.status_code < 300: #  noqa: PLR2004
+            if response.status_code < 300:  #  noqa: PLR2004
                 response_data = json.loads(response.text)
                 id = response_data["data"]["id"]
                 self.stdout.write(f"Successfully posted image with id {id}")
                 self.stdout.write(response.text)
                 return id
         except Exception as e:
-            raise CommandError(f"Request error posting weather story image file: {e}") from e #  noqa: TRY003
+            raise CommandError(f"Request error posting weather story image file: {e}") from e  #  noqa: TRY003
 
     def _post_weatherstory_data(self, id):
         """Post weather story data to the wx endpoint using an uploaded image id."""
@@ -116,7 +116,7 @@ class Command(BaseCommand):
             timeout=60,
         )
 
-        if response.status_code < 300: #  noqa: PLR2004
+        if response.status_code < 300:  #  noqa: PLR2004
             self.stdout.write("Success writing weather story image file and data")
             self.stdout.write(response.text)
 
@@ -142,14 +142,14 @@ class Command(BaseCommand):
                 timeout=60,
             )
 
-            if response.status_code < 300: #  noqa: PLR2004
+            if response.status_code < 300:  #  noqa: PLR2004
                 response_data = json.loads(response.text)
                 id = response_data["data"]["id"]
                 self.stdout.write(f"Successfully posted PDF with id {id}")
                 self.stdout.write(response.text)
                 return id
         except Exception as e:
-            raise CommandError(f"Error posting sitrep pdf: {e}") from e #  noqa: TRY003
+            raise CommandError(f"Error posting sitrep pdf: {e}") from e  #  noqa: TRY003
 
     def _post_sitrep_data(self, id):
         """Post sitrep data to the wx endpoint using an uploaded pdf id."""
@@ -197,12 +197,11 @@ class Command(BaseCommand):
             timeout=60,
         )
 
-        if response.status_code < 300: #  noqa: PLR2004
+        if response.status_code < 300:  #  noqa: PLR2004
             self.stdout.write("Success writing situation report PDF file and data")
             self.stdout.write(response.text)
         else:
             self.stdout.write(str(response))
-            raise CommandError( #  noqa: TRY003
+            raise CommandError(  #  noqa: TRY003
                 f"Could not complete sitrep data post request. Failed with {response.status_code}: {response.text}",
             )
-

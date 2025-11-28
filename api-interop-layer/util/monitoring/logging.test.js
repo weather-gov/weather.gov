@@ -134,6 +134,7 @@ describe("logging", () => {
 
     logger.verbose({ an: "object" });
 
-    expect(consoleLog.calledWith("[test] | verbose | {\"an\":\"object\"} |")).to.be.true;
+    expect(consoleLog.calledWith('[test] | verbose | {"an":"object"} |')).to.be
+      .true;
   });
 });
