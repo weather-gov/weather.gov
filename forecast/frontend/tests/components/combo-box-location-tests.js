@@ -890,5 +890,13 @@ describe("Combo box unit tests", () => {
       const item = window.sessionStorage.getItem(magicKey);
       expect(item).to.equal(JSON.stringify(expectedCoordinates));
     });
+
+    it("does not fail if the ArcGIS query fails", async () => {
+      global.fetch.rejects("Oh no");
+      const component = document.querySelector("wx-combo-box-location");
+
+      const results = await component.getSearchResults("Geo");
+      expect(results).to.eql({ suggestions: [] });
+    });
   });
 });
