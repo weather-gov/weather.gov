@@ -135,6 +135,7 @@ def county_overview(request, countyfips):
     )
 
 
+@never_cache
 def county_ghwo(request, county_fips):
     """Load a county GHWO details page by FIPS."""
     county = get_object_or_404(
@@ -168,6 +169,7 @@ def county_ghwo(request, county_fips):
 
 
 @require_POST
+@never_cache
 def county_ghwo_index(request):
     """Redirects to the correct County GHWO page given the post data.
 
