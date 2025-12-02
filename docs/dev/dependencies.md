@@ -46,6 +46,14 @@ PostGIS is a set of extensions applied to PostgreSQL that enable high-performanc
 geospatial capabilities. This lets us handle more geospatial work in an optimized
 environment rather than doing it in memory in code.
 
+#### Deepmerge
+
+_Added in December, 2025_
+
+This is a utility for deeply merging lists and dictionaries. Initially introduced
+to support a default set of hazardous weather metadata while allowing WFOs to
+override specific pieces of it.
+
 ### Frontend
 
 #### [Chart.js](https://www.chartjs.org/)

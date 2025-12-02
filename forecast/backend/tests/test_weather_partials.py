@@ -3,12 +3,85 @@ from unittest import mock
 
 from django.test import TestCase
 
-from backend.models import DynamicSafetyInformation
+from backend.models import (
+    WFO,
+    DynamicSafetyInformation,
+    HazardousWeatherOutlookLevels,
+    HazardousWeatherOutlookMetadata,
+    Region,
+)
 from backend.templatetags import weather_partials
 
 
 class TestWeatherPartials(TestCase):
     """Tests the weather partials."""
+
+    def setUp(self):
+        """Set up the test data needed for each test."""
+        wfo = WFO.objects.create(code="TST", name="Test", region=Region.objects.create(name="Test"))
+        # Default extreme cold
+        cold = HazardousWeatherOutlookMetadata.objects.get(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold, wfo=None
+        )
+        cold.basis = "Lips go brr"
+        cold.save()
+
+        # Delete the defaults that come in via migration, then add our own.
+        HazardousWeatherOutlookLevels.objects.filter(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+        ).delete()
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=0,
+            label="Warm",
+            description="It's actually not cold at all.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=1,
+            label="Nippy",
+            description="Your ears will hurt.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=2,
+            label="Cold",
+            description="Two pairs of socks.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=3,
+            label="Very cold",
+            description="The Detroit Lions have appeared in the Super Bowl.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=4,
+            label="YIKES",
+            description="The Detroit Lions have won the Super Bowl.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=5,
+            label="All stop",
+            description="Absolute zero achieved.",
+        )
+
+        # Now some WFO-specific metadata, to test merging.
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=wfo,
+            number=3,
+            label="Very cool",
+            description="Cooler than a penguin's tuxedo",
+        )
 
     def test_daily_high_low_one_period_daytime(self):
         """Tests a single daytime period."""
@@ -619,55 +692,8 @@ class TestWeatherPartials(TestCase):
             expected,
         )
 
-    @mock.patch("backend.util.get_object_or_404")
-    def test_ghwo_daily_details(self, mock_get_wfo):
+    def test_ghwo_daily_details(self):
         """Test ghwo daily details partial result has expected structure."""
-        mock_wfo = mock.Mock()
-        mock_get_wfo.return_value = mock_wfo
-        mock_wfo.ghwo_metadata = {
-            "ExtremeCold": {
-                "id": "ExtremeCold",
-                "label": "Extreme Cold Risk",
-                "description": "A more verbose description for Extreme Cold Risk goes here.",
-                "basis_description": (
-                    "A description of how the local office computes or otherwise "
-                    + "describes the parameters that meet the requirements for Extreme Cold Risk."
-                ),
-                "levels": {
-                    "0": {
-                        "label": "None",
-                        "number": 0,
-                        "description": "No risk for Extreme Cold Risk",
-                    },
-                    "1": {
-                        "label": "Low",
-                        "number": 1,
-                        "description": "Description for low Extreme Cold Risk level here",
-                    },
-                    "2": {
-                        "label": "Limited",
-                        "number": 2,
-                        "description": "Description for limited Extreme Cold Risk level here",
-                    },
-                    "3": {
-                        "label": "Elevated",
-                        "number": 3,
-                        "description": "Description for elevated Extreme Cold Risk level here",
-                    },
-                    "4": {
-                        "label": "Significant",
-                        "number": 4,
-                        "description": "Description for significant Extreme Cold Risk level here",
-                    },
-                    "5": {
-                        "label": "Extreme",
-                        "number": 5,
-                        "description": "Description for extreme Extreme Cold Risk level here",
-                    },
-                },
-            },
-        }
-
         example_ghwo_data = {
             "days": [
                 {
@@ -706,7 +732,7 @@ class TestWeatherPartials(TestCase):
                     "SevereThunderstorm": 0,
                 },
             ],
-            "wfo": "okx",
+            "wfo": "tst",
         }
 
         # Corresponds to template data ghwo_days list
@@ -720,50 +746,46 @@ class TestWeatherPartials(TestCase):
                 "risk": {
                     "id": "ExtremeCold",
                     "label": "Extreme Cold Risk",
-                    "description": "A more verbose description for Extreme Cold Risk goes here.",
-                    "basis_description": (
-                        "A description of how the local office computes or otherwise "
-                        + "describes the parameters that meet the requirements for Extreme Cold Risk."
-                    ),
+                    "basis_description": "Lips go brr",
                     "levels": {
-                        "0": {
-                            "label": "None",
+                        0: {
+                            "label": "Warm",
+                            "description": "It's actually not cold at all.",
                             "number": 0,
-                            "description": "No risk for Extreme Cold Risk",
                         },
-                        "1": {
-                            "label": "Low",
+                        1: {
+                            "label": "Nippy",
+                            "description": "Your ears will hurt.",
                             "number": 1,
-                            "description": "Description for low Extreme Cold Risk level here",
                         },
-                        "2": {
-                            "label": "Limited",
+                        2: {
+                            "label": "Cold",
+                            "description": "Two pairs of socks.",
                             "number": 2,
-                            "description": "Description for limited Extreme Cold Risk level here",
                         },
-                        "3": {
-                            "label": "Elevated",
+                        3: {
+                            "label": "Very cool",
+                            "description": "Cooler than a penguin's tuxedo",
                             "number": 3,
-                            "description": "Description for elevated Extreme Cold Risk level here",
                         },
-                        "4": {
-                            "label": "Significant",
+                        4: {
+                            "label": "YIKES",
+                            "description": "The Detroit Lions have won the Super Bowl.",
                             "number": 4,
-                            "description": "Description for significant Extreme Cold Risk level here",
                         },
-                        "5": {
-                            "label": "Extreme",
+                        5: {
+                            "label": "All stop",
+                            "description": "Absolute zero achieved.",
                             "number": 5,
-                            "description": "Description for extreme Extreme Cold Risk level here",
                         },
                     },
                 },
                 "days": [
                     {
                         "level": {
-                            "label": "Extreme",
+                            "label": "All stop",
                             "number": 5,
-                            "description": "Description for extreme Extreme Cold Risk level here",
+                            "description": "Absolute zero achieved.",
                         },
                         "timestamp": "2025-10-27T14:00:00-04:00",
                         "datetime": datetime.fromisoformat("2025-10-27T14:00:00-04:00"),

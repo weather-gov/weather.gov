@@ -1,9 +1,10 @@
 [tool.ruff]
 show-fixes = true
 line-length = 120
-exclude = [".venv", "manage.py", "backend/migrations/*", "spatial/migrations/*", "wx_stories_api/migrations/*"]
+exclude = [".venv", "manage.py"]
 
 [tool.ruff.lint]
+exclude = ["backend/migrations/*","spatial/migrations/*","wx_stories_api/migrations/*"]
 select = [
     # PyFlakes
     "F",

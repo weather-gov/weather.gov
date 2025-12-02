@@ -1,11 +1,13 @@
 import logging
 from datetime import datetime
 
+from deepmerge import always_merger
+from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
 from django.utils.safestring import mark_safe
 from html_sanitizer import Sanitizer
 
-from backend.models import WFO
+from backend.models import WFO, HazardousWeatherOutlookLevels, HazardousWeatherOutlookMetadata
 from spatial.models import WeatherCounties, WeatherStates
 
 OCONUS_4CODE_MAPPINGS = {
@@ -16,31 +18,6 @@ OCONUS_4CODE_MAPPINGS = {
     "PAFC": "AFC",  # Anchorage, AK
     "PAFG": "AFG",  # Fairbanks, AK
     "PAJK": "AJK",  # Juneau, AK
-}
-
-GHWO_RISK_MAPPINGS = {
-    "BlowingDust": "Blowing Dust Risk",
-    "CoastalFlood": "Coastal Flood Risk",
-    "ConvectiveWind": "Thunderstorm Wind Risk",
-    "ExcessiveRainfall": "Excessive Rainfall Risk",
-    "ExtremeCold": "Extreme Cold Risk",
-    "ExtremeHeat": "Extreme Heat Risk",
-    "FireWeather": "Fire Weather Risk",
-    "Fog": "Fog Risk",
-    "FreezingSpray": "Freezing Spray Risk",
-    "Frost/Freeze": "Frost/Freeze Risk",
-    "Hail": "Hail Risk",
-    "HighSurf": "High Surf Risk",
-    "IceAccumulation": "Ice Accumulation Risk",
-    "LakeshoreFlood": "Lakeshore Flood Risk",
-    "Lightning": "Lightning Risk",
-    "Marine": "Marine Hazard Risk",
-    "NonConvectiveWind": "Wind Risk",
-    "RipRisk": "Rip Current Risk",
-    "SevereThunderstorm": "Severe Thunderstorm Risk",
-    "SnowSleet": "Snow/Sleet Risk",
-    "SwimRisk": "Swim Risk",
-    "Tornado": "Tornado Risk",
 }
 
 
@@ -190,84 +167,54 @@ def process_ghwo_daily_summary(ghwo_data):
     return ghwo_data
 
 
-def _make_generic_metadata_for_risk(risk_type):
-    """
-    Return a generic dict of metadata for the provided risk type.
+def _get_metadata_for_ghwo_risk_type(wfo_code, risk_type):
+    """Return a dict of metadata about the specific risk type."""
+    wfo = get_object_or_404(WFO.objects.select_related(), code=wfo_code.upper())
 
-    This is a catch-all that will only be used in cases where an unexpected
-    risk type has come through, or where we do not have metadata at the
-    WFO for the particular risk type
-    """
-    return {
-        "id": risk_type,
-        "label": GHWO_RISK_MAPPINGS[risk_type] if risk_type in GHWO_RISK_MAPPINGS else risk_type,
-        "description": f"A more verbose description for {risk_type} goes here.",
-        # The description is how the given office
-        # calculates the specific risk factor
-        "basis_description": (
-            "A description of how the local office computes or otherwise "
-            + f"describes the parameters that meet the requirements for {risk_type}."
-        ),
-        # Each level for this risk type has its own label and description
-        "levels": {
-            "0": {
-                "label": "None",
-                "number": 0,
-                "description": f"No risk for {risk_type}",
-            },
-            "1": {
-                "label": "Low",
-                "number": 1,
-                "description": f"Description for low {risk_type} level here",
-            },
-            "2": {
-                "label": "Limited",
-                "number": 2,
-                "description": f"Description for limited {risk_type} level here",
-            },
-            "3": {
-                "label": "Elevated",
-                "number": 3,
-                "description": f"Description for elevated {risk_type} level here",
-            },
-            "4": {
-                "label": "Significant",
-                "number": 4,
-                "description": f"Description for significant {risk_type} level here",
-            },
-            "5": {
-                "label": "Extreme",
-                "number": 5,
-                "description": f"Description for extreme {risk_type} level here",
-            },
-        },
+    # Get default hazardous weather metadata for this risk type. Convert it into
+    # dict so we can merge it into the gaps of any WFO-specific metadata.
+    defaults = HazardousWeatherOutlookMetadata.objects.filter(type=risk_type, wfo=None).first()
+    # The labels is kinda funky. The risk type is an enum, but it comes out as
+    # a string. However, we can make that enum key into a human-readable string
+    # using the name property. So grab that before dict-i-fying. We only need
+    # to get the label from the defaults because it cannot be overridden.
+    label = defaults.name if defaults else None
+    defaults = model_to_dict(defaults) if defaults else {}
+    defaults["label"] = label
+    # Also fetch the default levels metadata.
+    defaults["levels"] = {
+        level.number: model_to_dict(level)
+        for level in HazardousWeatherOutlookLevels.objects.filter(type=risk_type, wfo=None)
     }
 
+    # Now get any WFO-specific metadata.
+    metadata = HazardousWeatherOutlookMetadata.objects.filter(type=risk_type, wfo=wfo).first()
+    metadata = model_to_dict(metadata) if metadata else {}
+    metadata["levels"] = {
+        level.number: model_to_dict(level)
+        for level in HazardousWeatherOutlookLevels.objects.filter(type=risk_type, wfo=wfo)
+    }
 
-def _get_metadata_for_ghwo_risk_type(wfo_code, risk_type):
-    """
-    Return a dict of metadata about the specific risk type.
+    # And merge it in. The WFO-specific metadata will overwrite any default
+    # metadata at the same location or with the same key in the defaults.
+    metadata = always_merger.merge(defaults, metadata)
 
-    Note that this is a temporary placeholder that returrns
-    hard-coded values for now. We still need to determine
-    how to retrieve, store, and access this metadata
-    """
-    wfo = get_object_or_404(WFO, code=wfo_code.upper())
+    if metadata:
+        return {
+            "id": metadata["type"],
+            "label": metadata["label"],
+            "basis_description": metadata["basis"],
+            "levels": {
+                level: {
+                    "label": metadata["levels"][level]["label"],
+                    "description": metadata["levels"][level]["description"],
+                    "number": level,
+                }
+                for level in metadata["levels"]
+            },
+        }
 
-    if risk_type not in GHWO_RISK_MAPPINGS:
-        return _make_generic_metadata_for_risk(risk_type)
-
-    risk_label = GHWO_RISK_MAPPINGS[risk_type]
-
-    if risk_type not in wfo.ghwo_metadata:
-        return _make_generic_metadata_for_risk(risk_type)
-
-    metadata = wfo.ghwo_metadata[risk_type].copy()
-
-    metadata["id"] = risk_type
-    metadata["label"] = risk_label
-
-    return metadata
+    return None
 
 
 def _get_risk_factor_ids(county_ghwo_data):
@@ -285,6 +232,8 @@ def _get_risk_factor_ids(county_ghwo_data):
     is tossed out
     """
     risk_ids = set()
+    all_risk_types = HazardousWeatherOutlookMetadata.get_all_types().keys()
+
     for day in county_ghwo_data["days"]:
         for key, level in day.items():
             # All risk_id keys begin with a capital letter.
@@ -293,7 +242,7 @@ def _get_risk_factor_ids(county_ghwo_data):
             # Additionally, we only want to consider risk ids
             # whose value is greater than zero.
 
-            if key in GHWO_RISK_MAPPINGS.keys() and level > 0:
+            if key in all_risk_types and level > 0:
                 risk_ids.add(key)
 
     return list(risk_ids)
@@ -325,7 +274,7 @@ def _get_risk_daily_rows(risk_ids, county_ghwo_data):
 
             days.append(
                 {
-                    "level": risk["levels"][str(level)],
+                    "level": risk["levels"][level],
                     "timestamp": day["timestamp"],
                     "datetime": datetime.fromisoformat(day["timestamp"]),
                     "day_number": day["dayNumber"],
@@ -417,7 +366,8 @@ def get_ghwo_daily_images(county_ghwo_data):
 def get_no_impact_risk_labels(county_ghwo_data):
     """Return a list of risk factor ids corresponding to risks that are never above 0."""
     risk_labels = set()
-    for risk_id, risk_label in GHWO_RISK_MAPPINGS.items():
+    all_risk_types = HazardousWeatherOutlookMetadata.get_all_types()
+    for risk_id, risk_label in all_risk_types.items():
         has_level = False
         for day in county_ghwo_data["days"]:
             if risk_id in day and day[risk_id] > 0:
