@@ -5,18 +5,22 @@ from django.core import management
 
 from pathlib import Path
 
-class Migration(migrations.Migration):
 
+class Migration(migrations.Migration):
     def load_ghwo_metadata(apps, schema_editor):
-        """Loads the WFO fixtures that have ghwo metadata set on them."""
-        fixtures_path = Path(Path(__file__).parent, "..", "fixtures")
-        fixture_file_path = Path(fixtures_path, "ghwo_metadata.json")
-        management.call_command("loaddata", str(fixture_file_path), verbosity=0)
+        """Legacy.
+
+        This migration previously loaded GHWO metadata into a ghwo_metadata column
+        in the WFO table from a ghwo_metadata fixture file. That fixture file
+        structure changed and the column was removed in 0014, so this migration
+        would fail if we continued trying to load data with it. So the functionality
+        has been removed without changing the structure of the migration so it
+        will run properly, doing nothing.
+        """
+        pass
 
     dependencies = [
-        ('backend', '0010_wfo_ghwo_metadata'),
+        ("backend", "0010_wfo_ghwo_metadata"),
     ]
 
-    operations = [
-        migrations.RunPython(load_ghwo_metadata)
-    ]
+    operations = [migrations.RunPython(load_ghwo_metadata)]

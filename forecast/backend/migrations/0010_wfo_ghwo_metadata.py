@@ -5,23 +5,16 @@ from django.core import management
 
 from pathlib import Path
 
+
 class Migration(migrations.Migration):
-
-    def load_ghwo_metadata(apps, schema_editor):
-        """Loads the WFO fixtures that have ghwo metadata set on them."""
-        fixtures_path = Path(Path(__file__).parent, "..", "fixtures")
-        fixture_file_path = Path(fixtures_path, "ghwo_metadata.json")
-        management.call_command("loaddata", str(fixture_file_path), verbosity=0)
-
     dependencies = [
-        ('backend', '0009_update_dynamic_safety_info'),
+        ("backend", "0009_update_dynamic_safety_info"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='wfo',
-            name='ghwo_metadata',
+            model_name="wfo",
+            name="ghwo_metadata",
             field=models.JSONField(blank=True, default=None, null=True),
         ),
-        migrations.RunPython(load_ghwo_metadata)
     ]

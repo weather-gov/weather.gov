@@ -1,9 +1,9 @@
 from datetime import datetime
-from unittest import mock
 
 from django.test import TestCase
 
 from backend import util
+from backend.models import WFO, HazardousWeatherOutlookLevels, HazardousWeatherOutlookMetadata, Region
 
 
 class TestGHWOProcessing(TestCase):
@@ -11,7 +11,102 @@ class TestGHWOProcessing(TestCase):
 
     def setUp(self):
         """Set up the test data needed for each test."""
-        pass
+        wfo = WFO.objects.create(code="TST", name="Test", region=Region.objects.create(name="Test"))
+
+        # Default lightning levels. Delete the defaults provided by the
+        # migration first.
+        HazardousWeatherOutlookLevels.objects.filter(
+            type=HazardousWeatherOutlookMetadata.Keys.lightning,
+            wfo=None,
+        ).delete()
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.lightning,
+            wfo=None,
+            number=0,
+            label="Zip",
+            description="There won't be any lightning.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.lightning,
+            wfo=None,
+            number=1,
+            label="A bit",
+            description="A few zaps here and there.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.lightning,
+            wfo=None,
+            number=2,
+            label="Some",
+            description="When thunder roars, stay indoors.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.lightning,
+            wfo=None,
+            number=3,
+            label="Lots",
+            description="Someone has angered the gods!",
+        )
+
+        # Default extreme cold
+        HazardousWeatherOutlookMetadata.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold, wfo=None, basis="Lips go brr"
+        )
+        HazardousWeatherOutlookLevels.objects.filter(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+        ).delete()
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=0,
+            label="Warm",
+            description="It's actually not cold at all.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=1,
+            label="Nippy",
+            description="Your ears will hurt.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=2,
+            label="Cold",
+            description="Two pairs of socks.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=3,
+            label="Very cold",
+            description="The Detroit Lions have appeared in the Super Bowl.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=4,
+            label="YIKES",
+            description="The Detroit Lions have won the Super Bowl.",
+        )
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.extreme_cold,
+            wfo=None,
+            number=5,
+            label="All stop",
+            description="Absolute zero achieved.",
+        )
+
+        # Now some WFO-specific metadata, to test merging.
+        HazardousWeatherOutlookLevels.objects.create(
+            type=HazardousWeatherOutlookMetadata.Keys.lightning,
+            wfo=wfo,
+            number=3,
+            label="Ker-pow!",
+            description="Big bada boom",
+        )
 
     def test_get_ghwo_daily_images(self):
         """
@@ -86,62 +181,47 @@ class TestGHWOProcessing(TestCase):
         for should_not_have in expect_to_not_have:
             self.assertNotIn(should_not_have, risk_ids)
 
-    @mock.patch("backend.util.get_object_or_404")
-    def test_get_risk_daily_rows(self, mock_get_wfo):
+    def test_get_risk_daily_rows(self):
         """
         Test the processing of GHWO data into a structure of rows.
 
         The output data structure will be one more amenable to
         creating table rows in the template(s).
         """
-        mock_wfo = mock.Mock()
-        mock_get_wfo.return_value = mock_wfo
-        mock_wfo.ghwo_metadata = {
-            "Lightning": util._make_generic_metadata_for_risk("Lightning"),
-            "ExtremeCold": util._make_generic_metadata_for_risk("ExtremeCold"),
-            "SevereThunderstorm": util._make_generic_metadata_for_risk("SevereThunderstorm"),
-        }
-
         data = {
-            "wfo": "okx",
+            "wfo": "tst",
             "days": [
                 {
                     "Lightning": 3,
                     "dayNumber": 1,
                     "ExtremeCold": 0,
-                    "SevereThunderstorm": 1,
                     "DailyComposite": 3,
                     "timestamp": "2025-11-04T19:00:00-05:00",
-                    "Tornado": 0,
                     "images": {},
                 },
                 {
                     "Lightning": 2,
                     "dayNumber": 2,
                     "ExtremeCold": 4,
-                    "SevereThunderstorm": 0,
                     "DailyComposite": 4,
                     "timestamp": "2025-11-05T07:00:00-05:00",
-                    "Tornado": 0,
                     "images": {},
                 },
                 {
                     "Lightning": 0,
                     "dayNumber": 3,
                     "ExtremeCold": 2,
-                    "SevereThunderstorm": 0,
                     "DailyComposite": 2,
                     "timestamp": "2025-11-06T07:00:00-05:00",
-                    "Tornado": 0,
                     "images": {},
                 },
             ],
         }
 
-        risk_ids = ["Lightning", "ExtremeCold", "SevereThunderstorm"]
+        risk_ids = ["Lightning", "ExtremeCold"]
 
         processed_data = util._get_risk_daily_rows(risk_ids, data)
-        self.assertEqual(len(processed_data), 3)
+        self.assertEqual(len(processed_data), 2)
 
         # Lightning row
         first_row = processed_data[0]
@@ -149,9 +229,9 @@ class TestGHWOProcessing(TestCase):
         expected_first_row_days = [
             {
                 "level": {
-                    "label": "Elevated",
+                    "label": "Ker-pow!",
                     "number": 3,
-                    "description": "Description for elevated Lightning level here",
+                    "description": "Big bada boom",
                 },
                 "timestamp": "2025-11-04T19:00:00-05:00",
                 "datetime": datetime.fromisoformat("2025-11-04T19:00:00-05:00"),
@@ -160,9 +240,9 @@ class TestGHWOProcessing(TestCase):
             },
             {
                 "level": {
-                    "label": "Limited",
+                    "label": "Some",
                     "number": 2,
-                    "description": "Description for limited Lightning level here",
+                    "description": "When thunder roars, stay indoors.",
                 },
                 "timestamp": "2025-11-05T07:00:00-05:00",
                 "datetime": datetime.fromisoformat("2025-11-05T07:00:00-05:00"),
@@ -171,9 +251,9 @@ class TestGHWOProcessing(TestCase):
             },
             {
                 "level": {
-                    "label": "None",
+                    "label": "Zip",
                     "number": 0,
-                    "description": "No risk for Lightning",
+                    "description": "There won't be any lightning.",
                 },
                 "timestamp": "2025-11-06T07:00:00-05:00",
                 "datetime": datetime.fromisoformat("2025-11-06T07:00:00-05:00"),
@@ -189,9 +269,9 @@ class TestGHWOProcessing(TestCase):
         expected_second_row_days = [
             {
                 "level": {
-                    "label": "None",
+                    "label": "Warm",
                     "number": 0,
-                    "description": "No risk for ExtremeCold",
+                    "description": "It's actually not cold at all.",
                 },
                 "timestamp": "2025-11-04T19:00:00-05:00",
                 "datetime": datetime.fromisoformat("2025-11-04T19:00:00-05:00"),
@@ -200,9 +280,9 @@ class TestGHWOProcessing(TestCase):
             },
             {
                 "level": {
-                    "label": "Significant",
+                    "label": "YIKES",
                     "number": 4,
-                    "description": "Description for significant ExtremeCold level here",
+                    "description": "The Detroit Lions have won the Super Bowl.",
                 },
                 "timestamp": "2025-11-05T07:00:00-05:00",
                 "datetime": datetime.fromisoformat("2025-11-05T07:00:00-05:00"),
@@ -211,9 +291,9 @@ class TestGHWOProcessing(TestCase):
             },
             {
                 "level": {
-                    "label": "Limited",
+                    "label": "Cold",
                     "number": 2,
-                    "description": "Description for limited ExtremeCold level here",
+                    "description": "Two pairs of socks.",
                 },
                 "timestamp": "2025-11-06T07:00:00-05:00",
                 "datetime": datetime.fromisoformat("2025-11-06T07:00:00-05:00"),
@@ -222,46 +302,6 @@ class TestGHWOProcessing(TestCase):
             },
         ]
         self.assertEqual(expected_second_row_days, second_row["days"])
-
-        # SevereThunderstorm
-        third_row = processed_data[2]
-        self.assertEqual(third_row["risk"]["id"], "SevereThunderstorm")
-        expected_third_row_days = [
-            {
-                "level": {
-                    "label": "Low",
-                    "number": 1,
-                    "description": "Description for low SevereThunderstorm level here",
-                },
-                "timestamp": "2025-11-04T19:00:00-05:00",
-                "datetime": datetime.fromisoformat("2025-11-04T19:00:00-05:00"),
-                "day_number": 1,
-                "image": None,
-            },
-            {
-                "level": {
-                    "label": "None",
-                    "number": 0,
-                    "description": "No risk for SevereThunderstorm",
-                },
-                "timestamp": "2025-11-05T07:00:00-05:00",
-                "datetime": datetime.fromisoformat("2025-11-05T07:00:00-05:00"),
-                "day_number": 2,
-                "image": None,
-            },
-            {
-                "level": {
-                    "label": "None",
-                    "number": 0,
-                    "description": "No risk for SevereThunderstorm",
-                },
-                "timestamp": "2025-11-06T07:00:00-05:00",
-                "datetime": datetime.fromisoformat("2025-11-06T07:00:00-05:00"),
-                "day_number": 3,
-                "image": None,
-            },
-        ]
-        self.assertEqual(expected_third_row_days, third_row["days"])
 
     def test_set_first_selected_days_no_rows(self):
         """

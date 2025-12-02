@@ -1,10 +1,17 @@
 from django.templatetags.static import static
 from django.utils.safestring import mark_safe
 from wagtail import hooks
+from wagtail.admin.panels import FieldPanel
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
-from .models import WFO, DynamicSafetyInformation, Region
+from .models import (
+    WFO,
+    DynamicSafetyInformation,
+    HazardousWeatherOutlookLevels,
+    HazardousWeatherOutlookMetadata,
+    Region,
+)
 
 
 # For editor views, add our custom editor javascript.
@@ -62,6 +69,42 @@ class DynamicSafetyInformationAdminSnippet(SnippetViewSet):
     search_fields = ("type",)
 
 
+class HazardousWeatherOutlookMetadataSnippet(SnippetViewSet):
+    """Binds the hazardous weather outlook defaults to the admin view in the CMS."""
+
+    model = HazardousWeatherOutlookMetadata
+    menu_label = "Hazardous Weather Outlook"
+    menu_name = "hazardous-weather-outlook"
+    icon = "warning"
+    add_to_admin_menu = True
+    search_fields = ("type",)
+
+    def get_queryset(self, _request):
+        """Get the default metadata."""
+        return HazardousWeatherOutlookMetadata.objects.filter(wfo=None)
+
+    panels = [FieldPanel("basis")]
+
+
+class HazardousWeatherOutlookMetadataLevelsSnippet(SnippetViewSet):
+    """Binds the hazardous weather outlook level defaults to the admin view in the CMS."""
+
+    model = HazardousWeatherOutlookLevels
+    menu_label = "Hazardous Weather Levels"
+    menu_name = "hazardous-weather-levels"
+    icon = "warning"
+    add_to_admin_menu = True
+    search_fields = ("type",)
+
+    def get_queryset(self, _request):
+        """Get the default metadata levels."""
+        return HazardousWeatherOutlookLevels.objects.filter(wfo=None).order_by("type", "number")
+
+    panels = [FieldPanel("label"), FieldPanel("description")]
+
+
 register_snippet(WFOAdminSnippet)
 register_snippet(RegionAdminSnippet)
 register_snippet(DynamicSafetyInformationAdminSnippet)
+register_snippet(HazardousWeatherOutlookMetadataSnippet)
+register_snippet(HazardousWeatherOutlookMetadataLevelsSnippet)

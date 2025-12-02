@@ -4,8 +4,7 @@ from pathlib import Path
 import requests
 from django.core.management.base import BaseCommand, CommandError
 
-from backend.models import WFO
-from backend.util import GHWO_RISK_MAPPINGS, GHWO_RISK_MAPPINGS_REVERSE
+from backend.models import WFO, HazardousWeatherOutlookMetadata
 
 
 class Command(BaseCommand):
@@ -77,23 +76,27 @@ class Command(BaseCommand):
 
     def process_chiclet(self, chiclet, result):
         """Pull out the data we need from the chiclet endpoint."""
-        relevant_risks = [risk for risk in chiclet["hazards"] if risk["name"] in GHWO_RISK_MAPPINGS.values()]
+        all_risk_types = {name: type for type, name in HazardousWeatherOutlookMetadata.get_all_types().values()}
+
+        relevant_risks = [risk for risk in chiclet["hazards"] if risk["name"] in all_risk_types]
 
         for risk in relevant_risks:
             # We want to use the risk type ids as they appear in raw
             # ghwo data, not their labels
-            risk_id = GHWO_RISK_MAPPINGS_REVERSE[risk["name"]]
+            risk_id = all_risk_types[risk["name"]]
             if risk_id not in result:
                 result[risk_id] = {}
             result[risk_id]["basis_description"] = risk["description"]
 
     def process_legend(self, legend, result):
         """Pull out the data we need from the legend endpoint."""
+        all_risk_types = {name: type for type, name in HazardousWeatherOutlookMetadata.get_all_types().values()}
+
         for risk_data in legend["hazards"]:
-            if risk_data["name"] in GHWO_RISK_MAPPINGS.values():
+            if risk_data["name"] in all_risk_types:
                 # We want to use the risk type ids as they appear in raw
                 # ghwo data, not their labels
-                risk_id = GHWO_RISK_MAPPINGS_REVERSE[risk_data["name"]]
+                risk_id = all_risk_types[risk_data["name"]]
                 result[risk_id] = {
                     "levels": {
                         level_num: {

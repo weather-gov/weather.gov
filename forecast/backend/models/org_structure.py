@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.fields import RichTextField
 
 
@@ -24,7 +24,7 @@ class Region(ClusterableModel):
         return f"{self.name}"
 
 
-class WFO(models.Model):
+class WFO(ClusterableModel):
     """
     Represents a Weather Forecast Office (WFO).
 
@@ -46,9 +46,6 @@ class WFO(models.Model):
     address = models.TextField(blank=True)
     phone = models.CharField(blank=True, max_length=32)
 
-    # GHWO metadata field
-    ghwo_metadata = models.JSONField(default=None, blank=True, null=True)
-
     # Panels for Wagtail admin
     panels = [
         FieldPanel("name"),
@@ -65,6 +62,8 @@ class WFO(models.Model):
                 FieldPanel("youtube"),
             ],
         ),
+        InlinePanel("hazardous_outlook_metadata"),
+        InlinePanel("hazardous_outlook_levels"),
     ]
 
     def __str__(self):
