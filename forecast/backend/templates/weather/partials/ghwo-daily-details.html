@@ -1,3 +1,5 @@
+{% load tz %}
+{% localtime off %}
 {% if ghwo.error %}
   <p>There was an error loading the GHWO detailed data.</p>
   <p>{{ ghwo.error }}</p>
@@ -101,3 +103,4 @@
   {% endcomment %}
   <p>{{"ghwo.table.details.header.no-risk.01"|t}}</p>
 {% endif %}
+{% endlocaltime %}

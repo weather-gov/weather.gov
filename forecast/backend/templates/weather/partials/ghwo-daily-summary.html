@@ -1,3 +1,5 @@
+{% load tz %}
+{% localtime off %}
 {% if error %}
   {% if error.status == 404 %}
     <div>
@@ -78,3 +80,4 @@
     </div>
   {% endif %}
 {% endif %}
+{% endlocaltime %}
