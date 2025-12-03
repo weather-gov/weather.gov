@@ -9,6 +9,14 @@ import { JSDOM } from "jsdom";
 const { window } = new JSDOM("undefined", { url: "http://localhost/" });
 const { document } = window;
 
+// Create a version of requestAnimationFrame that immediately calls
+// the passed in callback, as a kind of placeholder.
+// This global function is not available in jsdom because it deals
+// with browser paints etc.
+window.requestAnimationFrame = (cb) => {
+  cb();
+};
+
 // Set up the globals that the components need.
 global.window = window;
 global.document = document;
@@ -16,3 +24,5 @@ global.HTMLElement = window.HTMLElement;
 global.Event = window.Event;
 global.CustomEvent = window.CustomEvent;
 global.FormData = window.FormData;
+global.HTMLInputElement = window.HTMLInputElement;
+global.requestAnimationFrame = window.requestAnimationFrame;

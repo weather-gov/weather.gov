@@ -53,10 +53,32 @@ class TestCountyViews(TestCase):
         )
         cwa_with_no_wfo = spatial.WeatherCountyWarningAreas.objects.create(wfo="NOP", shape=GEOSGeometry("POINT(0 0)"))
 
+        self.state1 = spatial.WeatherStates.objects.create(
+            state="AK",
+            name="Alaska",
+            fips=90,
+            shape=GEOSGeometry("POINT(0 0)"),
+        )
+
+        self.state2 = spatial.WeatherStates.objects.create(
+            state="MA",
+            name="Mass",
+            fips=90,
+            shape=GEOSGeometry("POINT(0 0)"),
+        )
+
+        self.state3 = spatial.WeatherStates.objects.create(
+            state="GH",
+            name="Ghert",
+            fips=92,
+            shape=GEOSGeometry("POINT(0 0)"),
+        )
+
         self.county1 = spatial.WeatherCounties.objects.create(
             countyname="Leatherface",
             countyfips="11111",
             st="MA",
+            state=self.state2,
             shape=GEOSGeometry("POINT(0 0)"),
             primarywfo=cwa,
         )
@@ -65,6 +87,7 @@ class TestCountyViews(TestCase):
             countyname="Frankenstein",
             countyfips="22222",
             st="MA",
+            state=self.state2,
             shape=GEOSGeometry("POINT(0 0)"),
             primarywfo=cwa,
         )
@@ -72,6 +95,7 @@ class TestCountyViews(TestCase):
             countyname="Sanderson Sisters",
             countyfips="33333",
             st="MA",
+            state=self.state2,
             shape=GEOSGeometry("POINT(0 0)"),
             primarywfo=cwa,
         )
@@ -80,6 +104,7 @@ class TestCountyViews(TestCase):
             countyname="Anansi",
             countyfips="44444",
             st="GH",
+            state=self.state3,
             shape=GEOSGeometry("POINT(0 0)"),
             primarywfo=cwa,
         )
@@ -88,6 +113,7 @@ class TestCountyViews(TestCase):
             countyname="Keelut",
             countyfips="55555",
             st="AK",
+            state=self.state1,
             shape=GEOSGeometry("POINT(0 0)"),
             timezone="America/Anchorage",
             primarywfo=cwa,
@@ -100,11 +126,31 @@ class TestCountyViews(TestCase):
         """Test the index view."""
         response = self.client.get(reverse("county_index"))
         self.assertTemplateUsed(response, "weather/county/index.html")
-        self.assertEqual(response.context["counties"][0], self.county5)
-        self.assertEqual(response.context["counties"][1], self.county4)
-        self.assertEqual(response.context["counties"][2], self.county2)
-        self.assertEqual(response.context["counties"][3], self.county1)
-        self.assertEqual(response.context["counties"][4], self.county3)
+
+        self.assertIn(
+            self.state1,
+            response.context["states"],
+        )
+        self.assertIn(
+            { "value": self.state1.state, "text": self.state1.name },
+            response.context["state_list_items"],
+        )
+        self.assertIn(
+            self.state2,
+            response.context["states"],
+        )
+        self.assertIn(
+            { "value": self.state2.state, "text": self.state2.name },
+            response.context["state_list_items"],
+        )
+        self.assertIn(
+            self.state3,
+            response.context["states"],
+        )
+        self.assertIn(
+            { "value": self.state3.state, "text": self.state3.name },
+            response.context["state_list_items"],
+        )
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")

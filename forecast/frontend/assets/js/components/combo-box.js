@@ -127,8 +127,11 @@ class ComboBox extends HTMLElement {
     // Bind event listeners
     this.setEventListeners();
 
+   
     const items = JSON.parse(this.getAttribute("items") ?? "null");
-    this.resetListAndListboxItems(items);
+    if(items){
+      this.resetListAndListboxItems(items);
+    }
   }
 
   disconnectedCallback() {
