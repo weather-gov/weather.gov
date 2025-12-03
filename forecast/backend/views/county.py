@@ -19,8 +19,18 @@ logger = logging.getLogger(__name__)
 @cache_control(public=True, max_age=3600)
 def index(request):
     """Render the county index page."""
-    counties = WeatherCounties.objects.defer("shape").all().order_by("st", "countyname")
-    return render(request, "weather/county/index.html", {"counties": counties})
+    states = (
+        WeatherStates.objects.defer("shape")
+        .prefetch_related("counties")
+        .defer("counties__shape")
+        .all()
+        .order_by("name")
+    )
+    state_list_items = [
+        { "value": state.state, "text": state.name}
+        for state in states
+    ]
+    return render(request, "weather/county/index.html", {"states": states, "state_list_items": state_list_items})
 
 
 @never_cache
