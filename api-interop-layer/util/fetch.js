@@ -21,13 +21,24 @@ const internalFetch = async (path) => {
   logger.verbose(`making request to ${url}`);
 
   return fetch(url, headers).then(async (r) => {
+    // If there are headers, get the correlation ID. There may not be one, but
+    // that's beside the point. We'll attach the correlation ID to downstream
+    // log messages about the success/failure of this response.
+    const correlationID = r.headers?.get("x-correlation-id");
+
     if (r.status >= 200 && r.status < 400) {
-      logger.verbose(`success from ${path}`);
+      logger.verbose({
+        message: `success from ${path}`,
+        "api-correlation-id": correlationID,
+      });
       return r.json();
     }
 
     const response = await r.json();
-    logger.error(`non-success (HTTP ${r.status}) on ${path}`, response);
+    logger.error(
+      { message: `non-success (HTTP ${r.status}) on ${path}`, correlationID },
+      response,
+    );
 
     // If there was a server error, retry. These are often temporary.
     if (r.status >= 500) {
