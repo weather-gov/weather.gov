@@ -17,8 +17,6 @@ RUN apt update && \
   apt-get clean
 
 WORKDIR /code
-COPY requirements.txt /code/
+COPY requirements.dev.txt /code/requirements.txt
 RUN pip install -r requirements.txt
-RUN pip install coverage
-RUN pip install debugpy
 COPY . /code/
