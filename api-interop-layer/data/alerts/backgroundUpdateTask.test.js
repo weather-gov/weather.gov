@@ -246,7 +246,12 @@ describe("alert background processing module", () => {
       (alertInfo) => alertInfo[2],
     );
 
-    expect(geometries).to.eql(["geo", null, "geo", "geo"]);
+    expect(geometries).to.eql([
+      { shape: "geo" },
+      null,
+      { shape: "geo" },
+      { shape: "geo" },
+    ]);
   });
 
   it("derives an alert ID", async () => {

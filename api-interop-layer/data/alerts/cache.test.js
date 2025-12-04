@@ -75,33 +75,59 @@ describe("AlertsCache tests", () => {
     });
   });
 
-  it("#add (with land alert kind)", async () => {
-    const hash = "ten";
-    const alert = { some: "json-object" };
-    const geometry = { some: "geojson-object" };
-    const kind = "land";
+  describe("#add with land alert kind", () => {
+    it("has GeoJSON shape)", async () => {
+      const hash = "ten";
+      const alert = { some: "json-object" };
+      const geometry = { shape: "geojson-object" };
+      const kind = "land";
 
-    const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, ST_TRANSFORM(ST_GeomFromGeoJson($5), 4326), $6);`;
+      const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, ST_TRANSFORM(ST_GeomFromGeoJson($5), 4326), $6);`;
 
-    global.test.database.query
-      .withArgs(query, [
+      global.test.database.query
+        .withArgs(query, [
+          hash,
+          JSON.stringify(alert),
+          "[]",
+          "[]",
+          "geojson-object",
+          kind,
+        ])
+        .resolves("INSERT WORKED");
+
+      const actual = await alertsCache.add({
         hash,
-        JSON.stringify(alert),
-        "[]",
-        "[]",
+        alert,
         geometry,
-        kind,
-      ])
-      .resolves("INSERT WORKED");
+        alertKind: "land",
+      });
 
-    const actual = await alertsCache.add({
-      hash,
-      alert,
-      geometry,
-      alertKind: "land",
+      expect(actual).to.equal("INSERT WORKED");
     });
 
-    expect(actual).to.equal("INSERT WORKED");
+    it("has a spatial sub-query", async () => {
+      const hash = "eleven";
+      const alert = { some: "json-object" };
+      const geometry = { sql: "magic subquery goes here" };
+      const kind = "land";
+
+      const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, (magic subquery goes here), $5);`;
+
+      global.test.database.query
+        .withArgs(query, [hash, JSON.stringify(alert), "[]", "[]", kind])
+        .resolves("INSERT WORKED");
+
+      const actual = await alertsCache.add({
+        hash,
+        alert,
+        geometry,
+        alertKind: "land",
+      });
+
+      console.log(global.test.database.query.args.pop);
+
+      expect(actual).to.equal("INSERT WORKED");
+    });
   });
 
   it("#getIntersectingAlertsForPoint", async () => {

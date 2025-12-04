@@ -85,15 +85,35 @@ export class AlertsCache {
     const countiesAsString = JSON.stringify(counties);
     const statesAsString = JSON.stringify(states);
 
-    const sql = `INSERT INTO ${this.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, ST_TRANSFORM(ST_GeomFromGeoJson($5), 4326), $6);`;
-    return await this.db.query(sql, [
-      hash,
-      alertAsString,
-      countiesAsString,
-      statesAsString,
-      geometry,
-      alertKind,
-    ]);
+    // If there is no geometry object, or there is and it has a shape property,
+    // then there's either no shape or it's being provided to us as a GeoJSON
+    // object.
+    if (geometry == null || geometry.shape) {
+      const sql = `INSERT INTO ${this.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, ST_TRANSFORM(ST_GeomFromGeoJson($5), 4326), $6);`;
+
+      return await this.db.query(sql, [
+        hash,
+        alertAsString,
+        countiesAsString,
+        statesAsString,
+        geometry?.shape,
+        alertKind,
+      ]);
+    }
+
+    // If the geometry has a SQL property, then this alert's shape is determined
+    // by a sub-query, so we'll just insert it right in here.
+    if (geometry.sql) {
+      const sql = `INSERT INTO ${this.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, (${geometry.sql}), $5);`;
+
+      return await this.db.query(sql, [
+        hash,
+        alertAsString,
+        countiesAsString,
+        statesAsString,
+        alertKind,
+      ]);
+    }
   }
 
   /**
