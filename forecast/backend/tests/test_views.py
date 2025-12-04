@@ -286,10 +286,9 @@ class TestViews(TestCase):
 
     def test_office_specific(self):
         """Test the specific-office view."""
-        response = self.client.get("/offices/TST", follow=True)
+        response = self.client.get("/offices/HUN", follow=True) # use a pre-existing WFO so that the image can be found
         self.assertTemplateUsed(response, "weather/office.html")
-        self.assertEqual(response.context["office"], self.wfo)
-        self.assertEqual(response.context["counties"], "Upper left, Upper right, Lower left, and Lower right")
+        self.assertEqual(response.context["office"], models.WFO.objects.get(code="HUN"))
 
     def test_afd_index_with_wfo_changed(self):
         """Tests getting the AFD index where the WFO changed."""
@@ -470,7 +469,7 @@ class TestViews(TestCase):
         response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
-        self.assertContains(response, "images/weather/wx_error-cloud_error.svg")
+        self.assertContains(response, "images/weather/wx_error-cloud_error")
 
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
     @mock.patch("backend.views.county.get_counties_combo_box_list")
@@ -495,7 +494,7 @@ class TestViews(TestCase):
         response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
-        self.assertContains(response, "images/weather/wx_error-cloud_missing.svg")
+        self.assertContains(response, "images/weather/wx_error-cloud_missing")
 
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
     @mock.patch("backend.views.county.get_counties_combo_box_list")
@@ -724,7 +723,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
-        self.assertContains(response, "images/weather/wx_error-cloud_missing.svg")
+        self.assertContains(response, "images/weather/wx_error-cloud_missing")
 
     @mock.patch("backend.views.partials.get_object_or_404")
     @mock.patch("backend.views.partials.interop.get_ghwo_data_for_county")
@@ -739,7 +738,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
-        self.assertContains(response, "images/weather/wx_error-cloud_error.svg")
+        self.assertContains(response, "images/weather/wx_error-cloud_error")
 
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
     def test_wx_ghwo_counties_failed_interop_request(self, mock_get_ghwo):

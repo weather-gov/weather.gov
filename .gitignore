@@ -77,3 +77,5 @@ terraform/dist
 
 # Uploaded media (weather stories, briefings, etc.)
 forecast/media/*.*
+# collectstatic
+forecast/frontend/public/
