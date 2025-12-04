@@ -29,7 +29,7 @@
         </wx-satellite-video>
       </div>
       <div class="padding-2">
-        <a href="https://www.star.nesdis.noaa.gov/GOES/wfo.php?wfo={{ point.grid.wfo | lower }}"
+        <a href="https://www.star.nesdis.noaa.gov/GOES/wfo.php?wfo={{ point.wfo.normalized_code | lower }}"
            class="usa-link">{% trans "satellite.link.explore-other.01" %}</a>
       </div>
     </div>
