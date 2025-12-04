@@ -357,7 +357,6 @@ django-test:
   script:
     - cd forecast/
     - ldconfig -p | grep gdal
-    - pip install coverage
     - python manage.py migrate
     - python manage.py compilemessages
     - python manage.py collectstatic --noinput --traceback

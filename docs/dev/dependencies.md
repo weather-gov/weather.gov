@@ -16,6 +16,32 @@ Our checklist is inspired from the [Concise Guide for Evaluating Open Source Sof
 - Look at the time since the last commit. We are looking for commits made in the last month. If there have been no new commits in the last three months, consider not using the module unless functionality is very simple and the module is considered "feature complete".
 - Look at open issues, closed issues, and open bugs to ensure functionality we are seeking from the module is not impacted by any of these issues. Frequency of opened and closed issues is also an indicator of how well maintained the module is.
 
+## Management
+
+To the extent practical, we lock dependencies to specific versions.
+
+For Python dependencies, we use [`uv`](https://docs.astral.sh/uv/) to install and
+manage dependencies. We use its `export` command to generate requirements files that
+are understood by pip, since pip is required by cloud.gov. The commands are:
+
+```
+uv export --no-dev --format requirements.txt>requirements.txt
+uv export --group dev --format requirements.txt>requirements.dev.txt
+```
+
+These commands create `requirements.txt` files in pip-standard format that include
+specific versions as well as hashes to be checked. This way, we only need to run
+`pip install -r requirements.txt` to ensure our production environment
+dependencies precisely match our dev and test environments.
+
+> [!NOTE]
+> uv places dependencies in pyproject.toml according to the PEP 508 standard, so
+> using other tools for dependency management should not be a significant burden.
+
+For NPM dependencies, this is handled automatically by the `npm` command-line tool.
+It creates and maintains a `package-lock.json` file. At install time, we use `npm ci`
+to ensure that the versions installed exactly match those we have built and tested against.
+
 ## Decision records
 
 ### Backend
