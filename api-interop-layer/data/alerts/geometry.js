@@ -1,3 +1,5 @@
+import { parentPort } from "node:worker_threads";
+
 export const SIMPLIFY_TOLERANCE = 0.003;
 
 const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
@@ -16,109 +18,83 @@ const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
   return geojson;
 };
 
-/**
- * Fetch the combined GeometryCollection for the given
- * forecast zones from the database.
- * Respond with the nested shape object(s)
- */
-const getForecastZonesShapeFromDb = async (db, zones) => {
-  // The PG library templates query params as "$1 $2 ... $N"
-  // so we need for format those ahead of time using indices
-  // of the incoming zones
-  const zoneIdPart = zones.map((_, idx) => `$${idx + 1}`).join(",");
-  const sql = `
-    SELECT ST_ASGEOJSON(
-      ST_SIMPLIFY(ST_MemUnion(f.shape), ${SIMPLIFY_TOLERANCE})) as shape
-    FROM (SELECT
-      (ST_DUMP(shape)).geom as shape
-      FROM weathergov_geo_zones WHERE id IN (${zoneIdPart})) as f;`;
-  const result = await db.query(sql, zones);
-  const [{ shape }] = result.rows;
-
-  return shape;
-};
-
-/**
- * Fetch the combined GeometryCollection for the given
- * list of counties from the database.
- * Respond with the nested shape object(s)
- */
-const getCountiesShapeFromDb = async (db, counties) => {
-  const same = counties.map((c) => `${c.slice(1)}`);
-  // The PG library templates query params as "$1 $2 ... $N"
-  // so we need for format those ahead of time using indices
-  // of the incoming counties
-  const countyIdPart = counties.map((_, idx) => `$${idx + 1}`).join(",");
-  const sql = `
-    SELECT ST_ASGEOJSON(
-      ST_SIMPLIFY(ST_MemUnion(f.shape), ${SIMPLIFY_TOLERANCE})) as shape
-    FROM (SELECT
-      (ST_DUMP(shape)).geom as shape
-      FROM weathergov_geo_counties
-      WHERE countyFips IN (${countyIdPart})) as f;`;
-  const result = await db.query(sql, same);
-  const [{ shape }] = result.rows;
-  return shape;
-};
-
-/**
- * Helper function to determine which kind of
- * geographic data to fetch from the database
- */
-const getZoneShapeFromDb = async (db, zones, kind = "forecast") => {
-  if (kind === "forecast") {
-    return getForecastZonesShapeFromDb(db, zones);
-  }
-  if (kind === "county") {
-    return getCountiesShapeFromDb(db, zones);
-  }
-
-  return null;
-};
-
-/**
- * Here a 'zone' can refer to either a forecast zone or
- * a county fips id. Either one will produce a geometry set
- * that is stored in the database.
- */
-const fetchAndComputeZoneGeometries = async (
+export const generateAlertGeometry = async (
   db,
-  zones,
-  zoneType = "forecast",
+  rawAlert,
+  { parent = parentPort } = {},
 ) => {
-  if (!["forecast", "county"].includes(zoneType)) {
-    throw new Error(`Invalid geometry zone type: ${zoneType}`);
-  }
-  const geometry = await getZoneShapeFromDb(db, zones, zoneType);
-  return geometry;
-};
-
-export const generateAlertGeometry = async (db, rawAlert) => {
   // if the alert already has geometry, nothing to do
   if (rawAlert.geometry) {
-    return unwindGeometryCollection(rawAlert.geometry);
+    return { shape: unwindGeometryCollection(rawAlert.geometry) };
   }
 
-  // if we have affected zones, generate a geometry from zones. For this, we're
-  // only interested in getting a single GeometryCollection. We'll manipulate it
-  // further using a local library.
-  const zones = rawAlert.properties.affectedZones;
-  if (Array.isArray(zones) && zones.length > 0) {
-    const shape = await fetchAndComputeZoneGeometries(db, zones, "forecast");
+  // If we have affected zones, try to use those first. Zones are potentially
+  // more precise than counties. Remove any zones whose type is "county" because
+  // we don't store counties as zones.
+  const zones = (rawAlert.properties.affectedZones ?? []).filter(
+    (zoneId) => !/\/county\//.test(zoneId),
+  );
 
-    if (shape) {
-      return shape;
+  if (Array.isArray(zones) && zones.length > 0) {
+    const zoneQueryString = zones.map((z) => `'${z}'`).join(",");
+
+    // Check how many of these zones we actually know about. The number of zones
+    // we know about should always exactly match the number of zones. If they do
+    // not, then there is a major error: either we don't have a complete list of
+    // zones in our local databaes, our local database is outdated, or an
+    // upstream data provider is sending invalid data. All three cases are a big
+    // honkin' deal.
+    const zoneCount = await db
+      .query(
+        `SELECT COUNT(id) as count FROM weathergov_geo_zones WHERE id IN(${zoneQueryString})`,
+      )
+      // Pluck out just the count, add numberize it.
+      .then((result) => +result?.rows?.[0]?.count);
+
+    // If we are missing *ANY* zones, fallback to counties. We cannot make a
+    // proper representation from zones if any are missing. Also log this
+    // because it is a significant error and should never happen.
+    if (zoneCount !== zones.length) {
+      parent?.postMessage({
+        action: "log",
+        level: "error",
+        message: `No matching zones found for zones with IDs: ${zones.join(", ")}`,
+      });
+    } else {
+      // Finally, if we got here, then all of the zones are either forecast,
+      // marine, or fire zones; and they are all in our database. Huzzah! Build
+      // a query to fetch the union of their shapes and simplify it.
+      return {
+        sql: `(
+        SELECT
+          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE})
+        FROM (
+          SELECT shape
+          FROM weathergov_geo_zones
+          WHERE id IN (${zoneQueryString})
+        )
+      )`,
+      };
     }
   }
 
-  // if the alert has SAME codes, generate a geometry from SAME codes; same
-  // process as above
+  // If we couldn't use zones for any reason – such as there weren't any zones,
+  // they are county zones, or one or more zones is missing from our databgase,
+  // then we fallback to using SAME codes. A county SAME code is a FIPS
+  // state+county code with a leading zero.
   const counties = rawAlert.properties.geocode?.SAME;
   if (Array.isArray(counties) && counties.length > 0) {
-    const shape = await fetchAndComputeZoneGeometries(db, counties, "county");
-    if (shape) {
-      return shape;
-    }
+    return {
+      sql: `(
+        SELECT
+          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE})
+        FROM (
+          SELECT shape
+          FROM weathergov_geo_counties
+          WHERE countyfips IN (${counties.map((c) => `'${c.slice(1)}'`).join(",")})
+        )
+      )`,
+    };
   }
 
   // we cannot generate a geometry
