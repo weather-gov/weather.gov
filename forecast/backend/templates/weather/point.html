@@ -114,7 +114,7 @@
         {% else %}
           <div class="grid-container margin-top-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
             <div class="bg-accent-cool-lightest border-1px border-base-light padding-x-2 padding-y-105">
-              {% if point.grid.wfo %}
+              {% if point.wfo %}
                 <div class="grid-row display-flex flex-align-center">
                   <svg width="24"
                        height="24"
@@ -132,11 +132,11 @@
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M4 2H20V22H4V2ZM5 3H19V21H5V3Z" fill="#0085CA" />
                   </svg>
                   <a class="usa-link margin-left-1"
-                     href="/afd/{{ point.grid.wfo.normalized_code }}">{{ "forecast.link.area-forecast-discussion.01" | t }}</a>
+                     href="{% url "afd_by_office" wfo=point.wfo.normalized_code %}">{{ "forecast.link.area-forecast-discussion.01" | t }}</a>
                 </div>
               {% endif %}
               {% if point.place.countyfips %}
-                <div class="grid-row display-flex flex-align-center{% if point.grid.wfo %} margin-top-105{% endif %}">
+                <div class="grid-row display-flex flex-align-center{% if point.wfo %} margin-top-105{% endif %}">
                   <svg width="24"
                        height="24"
                        fill="#005EA2"
