@@ -144,14 +144,10 @@ s3_options = {
     "secret_key": s3_credentials["secret_access_key"],
     "querystring_auth": False,  # do not send AWSAccessKeyId query params since buckets are public
 }
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS": s3_options,
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    },
+
+STORAGES["default"] = { # noqa: F405 (imported from base.py)
+    "BACKEND": "storages.backends.s3.S3Storage",
+    "OPTIONS": s3_options,
 }
 set_cors_on_s3_bucket(**s3_options)
 
