@@ -67,12 +67,12 @@ export const generateAlertGeometry = async (
       return {
         sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE})
+          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_zones
           WHERE id IN (${zoneQueryString})
-        )
+        ) AS zones
       )`,
       };
     }
@@ -87,12 +87,12 @@ export const generateAlertGeometry = async (
     return {
       sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE})
+          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_counties
           WHERE countyfips IN (${counties.map((c) => `'${c.slice(1)}'`).join(",")})
-        )
+        ) AS counties
       )`,
     };
   }
