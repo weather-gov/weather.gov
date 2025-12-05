@@ -51,7 +51,7 @@ describe("satellite metadata module", () => {
       });
     });
 
-    it("includes satellite time range when the time range crosses days in the local timezone", async () => {
+    it("correctly sets timestamps with proper UTC offset", async () => {
       response.json.resolves({
         meta: {
           satellite: "GOES-East",
@@ -65,31 +65,8 @@ describe("satellite metadata module", () => {
       });
 
       expect(actual.times).to.include({
-        start: "1891-01-24T04:00:00.000Z",
-        startFormatted: "Friday 8:00 PM",
-        end: "1891-01-24T12:00:00.000Z",
-        endFormatted: "Saturday 4:00 AM",
-      });
-    });
-
-    it("includes satellite time range when the time range is entirely within a single day in the local timezone", async () => {
-      response.json.resolves({
-        meta: {
-          satellite: "GOES-East",
-          // Founding of the American Meteorological Society
-          observation_time: "1919-12-29T03:00:00Z",
-        },
-      });
-      const actual = await getSatelliteData({
-        grid: { wfo: "wfo2" },
-        place: { timezone: "America/New_York" },
-      });
-
-      expect(actual.times).to.include({
-        start: "1919-12-28T19:00:00.000Z",
-        startFormatted: "Sunday 2:00 PM",
-        end: "1919-12-29T03:00:00.000Z",
-        endFormatted: "10:00 PM",
+        start: "1891-01-23T20:00:00-08:00",
+        end: "1891-01-24T04:00:00-08:00",
       });
     });
   });

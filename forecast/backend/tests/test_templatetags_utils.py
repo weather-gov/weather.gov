@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from django.test import TestCase
 
@@ -7,6 +9,40 @@ from backend.templatetags import util
 
 class TestTemplateTagUtilities(TestCase):
     """Test template tag utilities."""
+
+    def test_datetime_with_no_timezone(self):
+        """Tests that ISO8601 strings are converted to datetimes with no tz."""
+        str = "2024-01-01T01:02:03-04:00"
+        expected = datetime.fromisoformat(str)
+        self.assertEquals(util.datetime(str), expected)
+
+    def test_datetime_with_timezone(self):
+        """Tests that ISO8601 strings are converted to datetimes with tz."""
+        str = "2024-01-01T01:02:03-04:00"
+        expected = datetime.fromisoformat(str).replace(tzinfo=ZoneInfo("America/New_York"))
+        self.assertEquals(util.datetime(str, "America/New_York"), expected)
+
+    def test_time_range_same_day(self):
+        """Tests that date ranges are formatted correctly if both dates are the same day."""
+        start = "2021-03-07T19:00:00Z"
+        end = "2021-03-07T22:00:00Z"
+        expected = (
+            '<time datetime="2021-03-07T19:00:00Z">Sunday 7:00 PM</time>'
+            + " – "
+            + '<time datetime="2021-03-07T22:00:00Z">10:00 PM</time>'
+        )
+        self.assertEquals(util.time_range(start, end), expected)
+
+    def test_time_range_different_days(self):
+        """Tests that date ranges are formatted correctly if dates are different days."""
+        start = "2021-03-07T19:00:00Z"
+        end = "2021-03-08T04:00:00Z"
+        expected = (
+            '<time datetime="2021-03-07T19:00:00Z">Sunday 7:00 PM</time>'
+            + " – "
+            + '<time datetime="2021-03-08T04:00:00Z">Monday 4:00 AM</time>'
+        )
+        self.assertEquals(util.time_range(start, end), expected)
 
     def test_item_at_index_with_no_list(self):
         """Tests that we get None if the subject is not a list."""

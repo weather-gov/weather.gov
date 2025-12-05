@@ -9,9 +9,7 @@
           {% trans "satellite.time-shown.label.01" %}<span class="desktop:display-none">:</span>
         </div>
         <div class="grid-col-auto">
-          <time datetime="{{ point.satellite.times.start }}">{{ point.satellite.times.startFormatted }}</time>
-          –
-          <time datetime="{{ point.satellite.times.end }}">{{ point.satellite.times.endFormatted }}</time>
+          {% time_range point.satellite.times.start point.satellite.times.end %}
         </div>
       </div>
     </div>
