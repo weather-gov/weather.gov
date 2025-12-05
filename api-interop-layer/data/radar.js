@@ -39,23 +39,12 @@ export const getRadarMetadata = async ({
     }
   }
 
-  const start = dayjs.utc(radarTimestamps.start).tz(timezone);
-  const end = dayjs.utc(radarTimestamps.end).tz(timezone);
+  const start = dayjs.utc(radarTimestamps.start).tz(timezone).format();
+  const end = dayjs.utc(radarTimestamps.end).tz(timezone).format();
 
   return {
-    ...radarTimestamps,
-
-    startFormatted: dayjs
-      .utc(radarTimestamps.start)
-      .tz(timezone)
-      .format("dddd h:mm A"),
-
-    // The formatted end stamp only includes the day name if the start and end
-    // times are not the same day.
-    endFormatted:
-      start.format("dddd") === end.format("dddd")
-        ? end.format("h:mm A")
-        : end.format("dddd h:mm A"),
+    start,
+    end,
 
     // The settings is a base64-encoded JSON string telling radar.weather.gov
     // what we want to look at. For our purposes, we really only care about

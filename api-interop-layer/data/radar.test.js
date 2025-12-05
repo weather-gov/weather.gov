@@ -44,10 +44,8 @@ describe("data: radar", () => {
     });
 
     expect(actual).to.eql({
-      start: "2014-09-03T14:00:00Z",
-      startFormatted: "Wednesday 9:00 AM",
-      end: "2014-09-03T14:30:00Z",
-      endFormatted: "9:30 AM",
+      start: "2014-09-03T09:00:00-05:00",
+      end: "2014-09-03T09:30:00-05:00",
 
       // base64-encoded JSON string specifying the center of the map and a zoom
       // level. It better not change given the inputs!

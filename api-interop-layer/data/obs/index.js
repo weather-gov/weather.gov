@@ -1,5 +1,4 @@
 import dayjs from "../../util/day.js";
-import openDatabase from "../db.js";
 import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
 import { fetchAPIJson } from "../../util/fetch.js";
@@ -12,7 +11,7 @@ import {
 const logger = createLogger("observations");
 
 export default async (
-  { grid: { wfo, x, y }, point: { latitude, longitude } },
+  { grid: { wfo, x, y }, point: { latitude, longitude }, place: { timezone } },
   dbConnection,
 ) => {
   const stations = await fetchAPIJson(
@@ -145,10 +144,7 @@ export default async (
     });
 
     return {
-      timestamp: {
-        formatted: observation.timestamp,
-        utc: dayjs(observation.timestamp),
-      },
+      timestamp: dayjs.utc(observation.timestamp).tz(timezone).format(),
       icon: parseAPIIcon(observation.icon),
       description: observation.textDescription,
       station: convertProperties({

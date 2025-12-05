@@ -1,6 +1,17 @@
+{% load tz %}
 {% load i18n %}
 {% load get_setting %}
 {% load weather_i18n %}
+
+{% comment %}
+  Disable server local time for all templates that inherit from base. The name
+  here is somewhat misleading. If localtime is on, then any datetime objects
+  rendered by templates will use the timezone of the server. We don't want that,
+  pretty much ever. So we turn it off. Doing it this way, templates will render
+  datetime objects in the timezone/offset that they carry with them.
+{% endcomment %}
+{% localtime off %}
+
 <!DOCTYPE html>
 <html lang="{{ request.LANGUAGE_CODE }}">
   <head>
@@ -42,3 +53,4 @@
     {% block end_js %}{% endblock %}
   </body>
 </html>
+{% endlocaltime %}

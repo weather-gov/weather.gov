@@ -35,6 +35,11 @@ svg:
       forecast/frontend/assets/images/weather/icons/conditions/*.svg
 
 ##### Django/django management #####
+# Generate static assets
+[group("django management")]
+collectstatic:
+  docker compose exec web python manage.py collectstatic
+
 # Create a Wagtail superuser/admin
 [group("django management")]
 create-superuser:

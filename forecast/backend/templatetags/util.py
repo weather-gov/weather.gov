@@ -1,11 +1,20 @@
 import json
 import re
+from datetime import datetime as dt
+from zoneinfo import ZoneInfo
 
 from django import template
 
 from backend.util import mark_safer
 
 register = template.Library()
+
+
+@register.filter
+def datetime(iso8601, tz=None):
+    """Convert an ISO8601 string into a datetime object, optionally with timezone."""
+    d = dt.fromisoformat(iso8601)
+    return d.replace(tzinfo=ZoneInfo(tz)) if tz else d
 
 
 @register.filter

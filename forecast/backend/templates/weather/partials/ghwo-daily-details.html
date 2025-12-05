@@ -1,5 +1,3 @@
-{% load tz %}
-{% localtime off %}
 {% if ghwo.error %}
   <p>There was an error loading the GHWO detailed data.</p>
   <p>{{ ghwo.error }}</p>
@@ -27,8 +25,8 @@
                   <time datetime="{{ day.timestamp }}"
                         data-day-number="{{ day.dayNumber }}"
                         class="font-mono-2x tablet-lg:font-mono-xs text-normal">
-                    <span class="display-block">{{ day.datetime|date:"D" }}</span>
-                    <span class="display-block">{{ day.datetime|date:"n" }}/{{ day.datetime|date:"j" }}</span>
+                    <span class="display-block">{{ day.timestamp|datetime|date:"D" }}</span>
+                    <span class="display-block">{{ day.timestamp|datetime|date:"n" }}/{{ day.timestamp|datetime|date:"j" }}</span>
                   </time>
                 </th>
               {% endfor %}
@@ -103,4 +101,3 @@
   {% endcomment %}
   <p>{{"ghwo.table.details.header.no-risk.01"|t}}</p>
 {% endif %}
-{% endlocaltime %}
