@@ -151,10 +151,6 @@ def disable_logging_for_quieter_tests(func):
 def process_ghwo_daily_summary(ghwo_data):
     """Process ghwo data into a form usable by the ghwo daily summary partial."""
     for day in ghwo_data["days"]:
-        # We need a datetime object so that the templates
-        # can correctly format strings
-        day["datetime"] = datetime.fromisoformat(day["timestamp"])
-
         # The highest level for the day is specified by
         # the value at the 'DailyComposite' key.
         # Set the highest to None where the composite

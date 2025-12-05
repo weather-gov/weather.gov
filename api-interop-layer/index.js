@@ -30,8 +30,8 @@ export const main = async () => {
   // variables are set
   ensureEnvironmentVariables(logger);
 
-  server.setErrorHandler((err, request, reply) => {
-    logger.error(err);
+  server.setErrorHandler((err, _, reply) => {
+    logger.error("Unhandled error", err);
     reply.status(500).send({ error: true });
   });
 

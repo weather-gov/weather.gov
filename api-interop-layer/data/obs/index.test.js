@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import dayjs from "dayjs";
 import sinon, { createSandbox } from "sinon";
 import { BASE_URL } from "../../util/fetch.js";
 
@@ -86,6 +85,7 @@ describe("observations module", () => {
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
+          place: { timezone: "America/New_York" },
         },
         global.test.database,
       );
@@ -111,6 +111,7 @@ describe("observations module", () => {
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
+          place: { timezone: "America/New_York" },
         },
         global.test.database,
       );
@@ -136,6 +137,7 @@ describe("observations module", () => {
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
+          place: { timezone: "America/New_York" },
         },
         global.test.database,
       );
@@ -167,6 +169,7 @@ describe("observations module", () => {
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
+          place: { timezone: "America/New_York" },
         },
         global.test.database,
       );
@@ -196,6 +199,7 @@ describe("observations module", () => {
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
+          place: { timezone: "America/New_York" },
         },
         global.test.database,
       );
@@ -244,6 +248,7 @@ describe("observations module", () => {
           {
             grid: { wfo: "TEST", x: 1, y: 1 },
             point: {},
+            place: { timezone: "America/New_York" },
           },
           global.test.database,
         );
@@ -281,6 +286,7 @@ describe("observations module", () => {
           {
             grid: { wfo: "TEST", x: 1, y: 1 },
             point: {},
+            place: { timezone: "America/New_York" },
           },
           global.test.database,
         );
@@ -311,6 +317,7 @@ describe("observations module", () => {
             {
               grid: { wfo: "TEST", x: 1, y: 1 },
               point: {},
+              place: { timezone: "America/New_York" },
             },
             global.test.database,
           );
@@ -343,6 +350,7 @@ describe("observations module", () => {
             {
               grid: { wfo: "TEST", x: 1, y: 1 },
               point: {},
+              place: { timezone: "America/New_York" },
             },
             global.test.database,
           );
@@ -374,6 +382,7 @@ describe("observations module", () => {
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
+          place: { timezone: "America/New_York" },
         },
         global.test.database,
       );
@@ -393,6 +402,7 @@ describe("observations module", () => {
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
+          place: { timezone: "America/New_York" },
         },
         global.test.database,
       );
@@ -412,6 +422,7 @@ describe("observations module", () => {
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
           point: {},
+          place: { timezone: "America/New_York" },
         },
         global.test.database,
       );
@@ -467,16 +478,19 @@ describe("observations module", () => {
           mph: 23,
         },
       },
-      timestamp: {
-        formatted: "2024-10-01T13:00:00-0500",
-        utc: dayjs("2024-10-01T13:00:00-0500"),
-      },
+      // Note that this does *NOT* match the input value. This is because the
+      // timezone passed below is not UTC-05:00, it's UTC-04:00. This check
+      // validates that we are setting the offset properly based on the timezone
+      // of the requested location. The hour goes forward one and the offset goes
+      // down one.
+      timestamp: "2024-10-01T14:00:00-04:00",
     };
 
     const obs = await getObservations(
       {
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
+        place: { timezone: "America/New_York" },
       },
       global.test.database,
     );

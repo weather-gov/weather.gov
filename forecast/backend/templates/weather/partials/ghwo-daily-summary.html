@@ -1,5 +1,3 @@
-{% load tz %}
-{% localtime off %}
 {% if error %}
   {% if error.status == 404 %}
     <div>
@@ -34,8 +32,8 @@
         {% for day in ghwo_days %}
           <th scope="col">
             <div class="font-mono-2xs tablet-lg:font-mono-xs text-normal">
-              <span class="display-block">{{ day.datetime|date:"D" }}</span>
-              <span class="display-block">{{ day.datetime|date:"n" }}/{{ day.datetime|date:"j" }}</span>
+              <span class="display-block">{{ day.timestamp|datetime|date:"D" }}</span>
+              <span class="display-block">{{ day.timestamp|datetime|date:"n" }}/{{ day.timestamp|datetime|date:"j" }}</span>
             </div>
           </th>
         {% endfor %}
@@ -80,4 +78,3 @@
     </div>
   {% endif %}
 {% endif %}
-{% endlocaltime %}

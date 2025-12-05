@@ -9,9 +9,9 @@
           {% trans "radar.time-shown.label.01" %}<span class="desktop:display-none">:</span>
         </div>
         <div class="grid-col-auto">
-          <time datetime="{{ radar_metadata.start }}">{{ radar_metadata.startFormatted }}</time>
+          <time datetime="{{ radar_metadata.start }}">{{ radar_metadata.start|datetime|date:"l g:i A" }}</time>
           –
-          <time datetime="{{ radar_metadata.end }}">{{ radar_metadata.endFormatted }}</time>
+          <time datetime="{{ radar_metadata.end }}">{{ radar_metadata.end|datetime|date:"l g:i A" }}</time>
         </div>
       </div>
     </div>

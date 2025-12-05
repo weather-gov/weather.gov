@@ -622,7 +622,6 @@ class TestWeatherPartials(TestCase):
 
         expected = example_ghwo_data["days"][0].copy()
         expected["highest"] = None
-        expected["datetime"] = datetime.fromisoformat("2025-10-27T14:00:00-04:00")
 
         actual = weather_partials.ghwo_daily_summary(example_ghwo_data)
 
@@ -679,7 +678,6 @@ class TestWeatherPartials(TestCase):
 
         expected = example_ghwo_data["days"][0].copy()
         expected["highest"] = {"level": 5}
-        expected["datetime"] = datetime.fromisoformat("2025-10-27T14:00:00-04:00")
 
         actual = weather_partials.ghwo_daily_summary(example_ghwo_data)
 
@@ -738,7 +736,6 @@ class TestWeatherPartials(TestCase):
         # Corresponds to template data ghwo_days list
         expected_days = example_ghwo_data["days"][0].copy()
         expected_days["highest"] = {"level": 5}
-        expected_days["datetime"] = datetime.fromisoformat("2025-10-27T14:00:00-04:00")
 
         # Corresponds to template dta ghwo_detailed_table_rows list
         expected_rows = [

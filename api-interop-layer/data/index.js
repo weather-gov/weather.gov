@@ -27,7 +27,7 @@ const getDataForPoint = async (lat, lon) => {
     const dbConnection = await dbPool.connect();
     const { forecast: fct, observed: obs } = await Promise.all([
       getForecast({ grid, place, isMarine }),
-      getObservations({ grid, point, dbConnection }, dbConnection),
+      getObservations({ grid, point, place, dbConnection }, dbConnection),
     ]).then(([forecastData, obsData]) => {
       // The forecast endpoint returns extra information about the grid. Why? I
       // dunno. But anyway, let's put it with the other grid info and remove it
