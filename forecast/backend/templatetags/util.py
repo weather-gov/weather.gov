@@ -17,6 +17,23 @@ def datetime(iso8601, tz=None):
     return d.replace(tzinfo=ZoneInfo(tz)) if tz else d
 
 
+@register.simple_tag
+def time_range(start, end, **kwargs):
+    """Convert a pair of ISO8601 strings into a date range."""
+    start_dt = dt.fromisoformat(start)
+    end_dt = dt.fromisoformat(end)
+
+    start_formatted = start_dt.strftime("%A %-I:%M %p")
+    end_formatted = end_dt.strftime("%-I:%M %p")
+
+    if start_dt.day != end_dt.day:
+        end_formatted = end_dt.strftime("%A %-I:%M %p")
+
+    return mark_safer(
+        f"""<time datetime="{start}">{start_formatted}</time> – <time datetime="{end}">{end_formatted}</time>"""
+    )
+
+
 @register.filter
 def item_at_index(listlike, index):
     """If the first item is a list, get the index'th item from it."""

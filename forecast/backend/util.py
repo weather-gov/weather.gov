@@ -71,13 +71,18 @@ def mark_safer(value, transformer=None, **kwargs):
     tags = (
         kwargs["tag"]
         if "tag" in kwargs
-        else {"a", "h1", "h2", "h3", "strong", "em", "p", "ul", "ol", "li", "br", "sub", "sup", "hr", "span"}
+        else {"a", "h1", "h2", "h3", "time", "strong", "em", "p", "ul", "ol", "li", "br", "sub", "sup", "hr", "span"}
     )
 
     attributes = (
         kwargs["attributes"]
         if "attributes" in kwargs
-        else {"a": ("href", "name", "target", "title", "id", "rel", "class"), "strong": ("class",), "span": ("class",)}
+        else {
+            "a": ("href", "name", "target", "title", "id", "rel", "class"),
+            "strong": ("class",),
+            "span": ("class",),
+            "time": ("datetime",),
+        }
     )
 
     sanitizer = Sanitizer(

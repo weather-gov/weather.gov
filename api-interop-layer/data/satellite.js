@@ -29,21 +29,10 @@ export default async ({ grid: { wfo }, place: { timezone } }) => {
       const startTZ = start.tz(timezone);
       const endTZ = end.tz(timezone);
 
-      // Format the times for the frontend
-      const startFormatted = startTZ.format("dddd h:mm A");
-
-      // If the start and end are the same day, we only show the ending hour.
-      const endFormatted =
-        startTZ.format("dddd") === endTZ.format("dddd")
-          ? endTZ.format("h:mm A")
-          : endTZ.format("dddd h:mm A");
-
       return {
         times: {
-          start: start.toISOString(),
-          end: end.toISOString(),
-          startFormatted,
-          endFormatted,
+          start: startTZ.format(),
+          end: endTZ.format(),
         },
         latest: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/latest.jpg`,
         gif: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.gif`,
