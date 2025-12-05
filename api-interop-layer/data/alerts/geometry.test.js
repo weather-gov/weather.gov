@@ -63,12 +63,12 @@ describe("alert geometries", () => {
       expect(geometry).to.eql({
         sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE})
+          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_zones
           WHERE id IN ('zone 1','zone 2','zone 3')
-        )
+        ) AS zones
       )`,
       });
     });
@@ -95,12 +95,12 @@ describe("alert geometries", () => {
       expect(geometry).to.eql({
         sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE})
+          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_counties
           WHERE countyfips IN ('county 1','county 2','county 3')
-        )
+        ) AS counties
       )`,
       });
     });
@@ -133,12 +133,12 @@ describe("alert geometries", () => {
       expect(geometry).to.eql({
         sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE})
+          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_counties
           WHERE countyfips IN ('county 4','county 5')
-        )
+        ) AS counties
       )`,
       });
     });
