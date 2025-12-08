@@ -19,6 +19,7 @@ const layers = new Map([
         layers: "0,1",
         format: "image/png",
         transparent: true,
+        opacity: 0.5,
       },
     ),
   ],
