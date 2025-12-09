@@ -6,13 +6,15 @@
       <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center tablet:grid-col-6 tablet__flex-justify-start">
         <h3 class="padding-0 margin-0">
           <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3"
-                datetime="{{ day.period.0.startTime }}">
-            {% if dayLabel %}
-              <span>{{ dayLabel }},</span>
-            {% else %}
-              <span>{{ day.periods.0.dayName }},</span>
-            {% endif %}
-            <span class="display-block">{{ day.periods.0.monthAndDay }}</span>
+                datetime="{{ day.periods.0.start }}">
+            <span>
+              {%if day.periods.0.isDaytime %}
+                {% trans "daily-forecast.labels.today.01" %},
+              {% else %}
+                {% trans "daily-forecast.labels.tonight.01" %},
+              {% endif %}
+            </span>
+            <span class="display-block">{{ day.periods.0.start|datetime|date:"M  j" }}</span>
           </time>
         </h3>
         <div class="display-flex">{% daily_high_low periods=day.periods %}</div>

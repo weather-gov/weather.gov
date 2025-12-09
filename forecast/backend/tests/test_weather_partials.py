@@ -229,48 +229,20 @@ class TestWeatherPartials(TestCase):
             },
         )
 
-    def test_daily_forecast_list_item_defined_day_name(self):
-        """Tests the daily forecast list item where the day name is set."""
+    def test_daily_forecast_list_item_first(self):
+        """Tests the daily forecast list item for the first entity."""
         day = {"periods": [{"dayName": "Twosday"}]}
-        actual = weather_partials.daily_forecast_list_item(day=day, dayLabel="Moonday")
-        self.assertEqual(actual, {"day": day, "dayLabel": "Moonday"})
+        actual = weather_partials.daily_forecast_list_item(day=day, first=True)
+        self.assertEqual(actual, {"day": day, "first": True})
 
-    def test_daily_forecast_list_item_implicit_day_name(self):
-        """Tests the daily forecast list item where the day name is not given."""
+    def test_daily_forecast_list_item_not_first(self):
+        """Tests the daily forecast list item for a non-first item."""
         day = {"periods": [{"dayName": "Twosday"}]}
         actual = weather_partials.daily_forecast_list_item(day=day)
-        self.assertEqual(actual, {"day": day, "dayLabel": "Twosday"})
+        self.assertEqual(actual, {"day": day, "first": False})
 
-    def test_daily_summary_list_item_defined_day_name(self):
-        """Tests the daily summary list item where the day name is set."""
-        day = {
-            "dayLabel": "Foursday",
-            "hours": "heyo",
-            "itemId": "boop",
-            "alerts": "a list",
-            "hourly": {
-                "times": "hour list",
-                "temps": "some degrees",
-                "feelsLike": "other degrees",
-            },
-        }
-        actual = weather_partials.daily_summary_list_item(day=day, dayLabel="Windsday")
-        self.assertEqual(
-            actual,
-            {
-                "day": day,
-                "dayLabel": "Windsday",
-                "dayHours": "heyo",
-                "itemId": "boop",
-                "alerts": "a list",
-                "times": "hour list",
-                "temps": "some degrees",
-                "feelsLike": "other degrees",
-            },
-        )
-
-    def test_daily_summary_list_item_implicit_day_name(self):
-        """Tests the daily summary list item where the day name is not given."""
+    def test_daily_summary_list_item(self):
+        """Tests the daily summary list item."""
         day = {
             "dayLabel": "Foursday",
             "hours": "heyo",
@@ -287,7 +259,6 @@ class TestWeatherPartials(TestCase):
             actual,
             {
                 "day": day,
-                "dayLabel": "Foursday",
                 "dayHours": "heyo",
                 "itemId": "boop",
                 "alerts": "a list",
@@ -447,10 +418,15 @@ class TestWeatherPartials(TestCase):
             },
         )
 
-    def test_quick_forecast_link_item(self):
+    def test_quick_forecast_link_item_first(self):
+        """Tests the quick forecast link item partial."""
+        actual = weather_partials.quick_forecast_link_item(day="Friesday", first=True)
+        self.assertEqual(actual, {"day": "Friesday", "first": True})
+
+    def test_quick_forecast_link_item_not_first(self):
         """Tests the quick forecast link item partial."""
         actual = weather_partials.quick_forecast_link_item(day="Friesday")
-        self.assertEqual(actual, {"day": "Friesday"})
+        self.assertEqual(actual, {"day": "Friesday", "first": False})
 
     def test_hourly_table(self):
         """Tests the hourly table partial."""
@@ -485,8 +461,8 @@ class TestWeatherPartials(TestCase):
 
     def test_forecast_quick_toggle(self):
         """Tests the forecast quick partial."""
-        actual = weather_partials.daily_forecast_quick_toggle(day="Shunday")
-        self.assertEqual(actual, "Shunday")
+        actual = weather_partials.daily_forecast_quick_toggle(day={"day": "Shunday"}, first=True)
+        self.assertEqual(actual, {"day": "Shunday", "first": True})
 
     def test_precip_table_with_undefined_table(self):
         """Tests the precip table partial with default as_table."""

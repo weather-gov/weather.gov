@@ -3,9 +3,9 @@ import sinon from "sinon";
 import daily from "./daily.js";
 
 describe("daily forecast", () => {
-  // timezone is only used to calculate monthAndDay/dayName information and is
-  // not important for this test suite
-  // America/New_York is UTC-0400 for the dates used in the tests below.
+  // timezone is used to correctly build ISO formatted timestamps with the
+  // correct offsets. America/New_York is UTC-0400 for the dates used in the
+  // tests below.
   const timezone = "America/New_York";
 
   let clock;
@@ -66,15 +66,12 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(firstPeriod.dayName).to.equal("Tonight");
 
     expect(secondPeriod.isDaytime).to.be.true;
     expect(secondPeriod.isOvernight).to.be.false;
-    expect(secondPeriod.dayName).to.equal("Sunday");
 
     expect(thirdPeriod.isDaytime).to.be.false;
     expect(thirdPeriod.isOvernight).to.be.false;
-    expect(thirdPeriod.dayName).to.equal("Sunday");
   });
 
   it("handles an overnight period", () => {
@@ -121,17 +118,14 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.true;
     expect(firstPeriod.timeLabel).to.equal("NOW-6AM");
-    expect(firstPeriod.dayName).to.equal("Today");
 
     expect(secondPeriod.isDaytime).to.be.true;
     expect(secondPeriod.isOvernight).to.be.false;
     expect(secondPeriod.timeLabel).to.equal("6AM-6PM");
-    expect(secondPeriod.dayName).to.equal("Today");
 
     expect(thirdPeriod.isDaytime).to.be.false;
     expect(thirdPeriod.isOvernight).to.be.false;
     expect(thirdPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(thirdPeriod.dayName).to.equal("Today");
   });
 
   it("handles a day and night period", () => {
@@ -165,12 +159,10 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.true;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6AM-6PM");
-    expect(firstPeriod.dayName).to.equal("Today");
 
     expect(secondPeriod.isDaytime).to.be.false;
     expect(secondPeriod.isOvernight).to.be.false;
     expect(secondPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(secondPeriod.dayName).to.equal("Today");
   });
 
   it("handles only a night period", () => {
@@ -198,7 +190,6 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(firstPeriod.dayName).to.equal("Tonight");
   });
 
   it("breaks a day, night, and day period into two days", () => {
@@ -239,18 +230,15 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.true;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6AM-6PM");
-    expect(firstPeriod.dayName).to.equal("Today");
 
     expect(secondPeriod.isDaytime).to.be.false;
     expect(secondPeriod.isOvernight).to.be.false;
     expect(secondPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(secondPeriod.dayName).to.equal("Today");
 
     expect(secondDay.periods.length).to.equal(1);
     const [thirdPeriod] = secondDay.periods;
     expect(thirdPeriod.isDaytime).to.be.true;
     expect(thirdPeriod.isOvernight).to.be.false;
-    expect(thirdPeriod.dayName).to.equal("Monday");
   });
 
   it("handles periods with positive UTC offsets", () => {
@@ -286,12 +274,10 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.true;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6AM-6PM");
-    expect(firstPeriod.dayName).to.equal("Today");
 
     expect(secondPeriod.isDaytime).to.be.false;
     expect(secondPeriod.isOvernight).to.be.false;
     expect(secondPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(secondPeriod.dayName).to.equal("Today");
   });
 
   it("accepts periods with timezones of z", () => {
@@ -314,7 +300,6 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(firstPeriod.dayName).to.equal("Tonight");
   });
 
   it("computes the correct day of the month (string) when UTC and local timezone refer to different days", () => {
@@ -337,8 +322,8 @@ describe("daily forecast", () => {
     const [firstDay] = days;
     const [period] = firstDay.periods;
 
-    expect(firstDay.dayNumericString).to.equal("02");
-    expect(period.dayName).to.equal("Tonight");
+    // In December, America/New_York is UTC-05:00
+    expect(period.start).to.equal("2024-12-02T20:18:16-05:00");
   });
 
   it("skips over day periods in the past", async () => {
@@ -394,12 +379,10 @@ describe("daily forecast", () => {
     expect(firstPeriod.isDaytime).to.be.true;
     expect(firstPeriod.isOvernight).to.be.false;
     expect(firstPeriod.timeLabel).to.equal("6AM-6PM");
-    expect(firstPeriod.dayName).to.equal("Today");
 
     expect(secondPeriod.isDaytime).to.be.false;
     expect(secondPeriod.isOvernight).to.be.false;
     expect(secondPeriod.timeLabel).to.equal("6PM-6AM");
-    expect(secondPeriod.dayName).to.equal("Today");
   });
 
   it("propagates an error", () => {

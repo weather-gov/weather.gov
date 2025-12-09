@@ -3,32 +3,6 @@ import { convertProperties } from "../../util/convert.js";
 import { parseAPIIcon } from "../../util/icon.js";
 import { sentenceCase } from "../../util/case.js";
 
-/**
- * For a computed day object,
- * add the appropriate string of the day name
- * to each constituent period.
- * For the first day, we determine the label based
- * on the number and nature of the period(s)
- */
-const addDayName = (day, timezone, isFirstDay = false) => {
-  if (!isFirstDay) {
-    // This will already be a dayjs object
-    const dayStartTime = day.periods[0].start;
-    day.periods.forEach((period) => {
-      period.dayName = dayStartTime.tz(timezone).format("dddd");
-    });
-  } else {
-    day.periods.forEach((period) => {
-      // If there is one period, we call it "Tonight"
-      if (day.periods.length === 1) {
-        period.dayName = "Tonight";
-      } else {
-        period.dayName = "Today";
-      }
-    });
-  }
-};
-
 export default (data, { timezone }) => {
   if (data.error) {
     return { error: true };
@@ -64,21 +38,23 @@ export default (data, { timezone }) => {
         days[days.length - 1].end = period.startTime;
       }
 
-      days.push({ start: period.startTime, periods: [] });
+      days.push({
+        start: dayjs(period.startTime).tz(timezone).format(),
+        periods: [],
+      });
       previousDay = start.get("day");
     }
 
     const dayPeriod = days[days.length - 1];
     if (days.length > 0) {
-      days[days.length - 1].end = period.endTime;
+      days[days.length - 1].end = dayjs(period.endTime).tz(timezone).format();
     }
 
     const periodData = {
-      start: dayjs(period.startTime),
-      end: dayjs(period.endTime),
+      start: dayjs(period.startTime).tz(timezone).format(),
+      end: dayjs(period.endTime).tz(timezone).format(),
       isDaytime: period.isDaytime,
       isOvernight: false,
-      monthAndDay: start.tz(timezone).format("MMM D"),
       data: convertProperties({
         icon: parseAPIIcon(period.icon),
         description: sentenceCase(period.shortForecast),
@@ -117,15 +93,6 @@ export default (data, { timezone }) => {
       today.periods[0].timeLabel = "NOW-6AM";
     }
   }
-
-  days.forEach((day, idx) => {
-    const isFirstDay = idx === 0;
-    addDayName(day, timezone, isFirstDay);
-    day.start = dayjs.utc(day.start);
-    day.end = dayjs.utc(day.end);
-    day.monthNumericString = day.start.tz(timezone).format("MM");
-    day.dayNumericString = day.start.tz(timezone).format("DD");
-  });
 
   return {
     ...convertProperties({ elevation: data.properties.elevation }),
