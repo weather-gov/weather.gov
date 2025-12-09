@@ -176,6 +176,9 @@ msgstr "Overnight"
 msgid "daily-forecast.labels.today.01"
 msgstr "Today"
 
+msgid "daily-forecast.labels.tonight.01"
+msgstr "Tonight"
+
 msgid "daily-forecast.table-header.date.01"
 msgstr "Date"
 

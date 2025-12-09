@@ -103,19 +103,16 @@ def summary_alert_link(**kwargs):
 def daily_forecast_list_item(**kwargs):
     """Render a daily forecast list item for a given day."""
     day = kwargs["day"]
-    day_label = kwargs.get("dayLabel", day["periods"][0]["dayName"])
-    return {"day": day, "dayLabel": day_label}
+    return {"day": day, "first": kwargs.get("first") or False}
 
 
 @register.inclusion_tag("weather/partials/daily-summary-list-item.html")
 def daily_summary_list_item(**kwargs):
     """Render a daily summary list item for a given day."""
     day = kwargs["day"]
-    day_label = kwargs.get("dayLabel", day["dayLabel"])
 
     return {
         "day": day,
-        "dayLabel": day_label,
         "dayHours": day["hours"],
         "itemId": day["itemId"],
         "alerts": day["alerts"],
@@ -180,7 +177,7 @@ def radar(**kwargs):
 @register.inclusion_tag("weather/partials/quick-forecast-link-item.html")
 def quick_forecast_link_item(**kwargs):
     """Render a quick forecast link item."""
-    return {"day": kwargs.get("day")}
+    return {"day": kwargs.get("day"), "first": kwargs.get("first") or False}
 
 
 @register.inclusion_tag("weather/partials/hourly-table.html")
@@ -203,7 +200,7 @@ def hourly_charts(**kwargs):
 @register.inclusion_tag("weather/partials/daily-forecast-quick-toggle.html")
 def daily_forecast_quick_toggle(**kwargs):
     """Render the daily forecast quick-toggle component."""
-    return kwargs["day"]
+    return {**kwargs["day"], "first": kwargs.get("first") or False}
 
 
 @register.inclusion_tag("weather/partials/precip.html")

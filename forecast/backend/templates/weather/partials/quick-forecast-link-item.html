@@ -8,9 +8,15 @@ the content
    href="#{{ day.dayId }}"
    id="{{ day.dayId }}-quick-forcast-button">
   <div class="wx-quick-forecast-item-top">
-    <time datetime="{{ day.periods.0.startTime }}">
-      <span>{{ day.periods.0.dayName }}</span>
-      <span class="display-block">{{ day.monthNumericString }}/{{ day.dayNumericString }}</span>
+    <time datetime="{{ day.periods.0.start }}">
+      <span>
+        {% if first %}
+          {% trans "daily-forecast.labels.today.01" %},
+        {%else%}
+          {{ day.periods.0.start|datetime|date:"l" }}
+        {%endif%}
+      </span>
+      <span class="display-block">{{ day.periods.0.start|datetime|date:"m/d" }}</span>
     </time>
     <div class="wx-quick-forecast-condition">
       <span class="usa-sr-only">

@@ -125,10 +125,9 @@ class TestInteropInterface(TestCase):
         # explicitly set by the interop interface module.
         self.assertEqual(len(forecast["days"]), 3)
         self.assertEqual(day1["isNightPeriod"], False)
-        self.assertEqual(day1["id"], "mon-1")
-        self.assertEqual(day1["itemId"], "mon-1")
-        self.assertEqual(day1["dayId"], "mon-1")
-        self.assertEqual(day1["dayLabel"], "Gooberday")
+        self.assertEqual(day1["id"], "20090102T130000Z")
+        self.assertEqual(day1["itemId"], "20090102T130000Z")
+        self.assertEqual(day1["dayId"], "20090102T130000Z")
         self.assertEqual(day1["temps"], [100, 30])
         self.assertEqual(day1["low"], 30)
         self.assertEqual(day1["high"], 100)

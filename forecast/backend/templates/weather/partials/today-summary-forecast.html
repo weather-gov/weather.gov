@@ -8,7 +8,7 @@
     <div class="flex-1 height-full">
       <ol class="usa-list--unstyled height-full">
         {# Attempt to render the period(s) associated with the current day #}
-        {% daily_summary_list_item day=forecast.days.0 dayLabel="daily-forecast.labels.today.01"|t %}
+        {% daily_summary_list_item day=forecast.days.0 %}
       </ol>
     </div>
   {% endwith %}

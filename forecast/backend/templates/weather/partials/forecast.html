@@ -28,7 +28,7 @@
       </div>
       <ol class="wx-forecast-list usa-list--unstyled">
         {% for data in forecast.days %}
-          {% daily_forecast_list_item day=data %}
+          {% daily_forecast_list_item day=data first=forloop.first %}
         {% endfor %}
       </ol>
       {% include "weather/partials/wfo-promo.html" with wfo=point.wfo %}

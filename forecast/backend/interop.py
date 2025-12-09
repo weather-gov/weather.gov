@@ -1,7 +1,10 @@
+import re
 from os import getenv
 
 import requests
 from django.utils.translation import gettext_lazy as _
+
+_ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
 
 
 def _fetch(url):
@@ -65,14 +68,9 @@ def _set_day_period_info(day):
 
     # The templates construct element ids in several ways,
     # but this is usually the base when dealing with daily forecast data
-    day["id"] = day["periods"][0]["monthAndDay"].lower().replace(" ", "-")
+    day["id"] = _ID_REGEX.sub("", day["periods"][0]["start"])
     day["itemId"] = day["id"]
     day["dayId"] = day["id"]
-
-    # Set a default label for the day.
-    # Template tags can/should override this as
-    # needed via their arguments
-    day["dayLabel"] = day["periods"][0]["dayName"]
 
     # Convenience variable for the number
     # of periods in the day
