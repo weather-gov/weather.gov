@@ -11,7 +11,9 @@ from backend import interop
 from backend.models import WFO
 from backend.util import get_counties_combo_box_list, get_ghwo_daily_images, get_states_combo_box_list
 from spatial.models import WeatherCounties, WeatherStates
-from wx_stories_api.models import SituationReport, WeatherStory
+from wx_stories_api.models import SituationReport
+
+# from wx_stories_api.models import SituationReport, WeatherStory
 
 logger = logging.getLogger(__name__)
 
@@ -115,9 +117,10 @@ def county_overview(request, countyfips):
 
                 briefings.append(briefing)
 
-            weather_story = WeatherStory.objects.current(wfo).first()
-            if weather_story:
-                weather_stories.append(weather_story)
+            # TODO: uncomment this when weather stories are ready to be live
+            # weather_story = WeatherStory.objects.current(wfo).first()
+            # if weather_story:
+            #     weather_stories.append(weather_story)
         else:
             # If this happens, something has gone very wrong. We probably
             # don't want to propagate that to the user, though.

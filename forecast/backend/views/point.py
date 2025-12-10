@@ -11,8 +11,8 @@ from backend import interop
 from backend.models import WFO, Region
 from backend.util import get_wfo_from_afd
 from spatial.models import WeatherCounties, WeatherCountyWarningAreas, WeatherPlace
-from wx_stories_api.models import WeatherStory
 
+# from wx_stories_api.models import WeatherStory
 from ._helpers import get_redirect_for_afd_queries
 
 
@@ -48,7 +48,9 @@ def point_location(request, lat, lon):
         code = point["grid"]["wfo"]
         wfo = WFO.objects.get(code=WFO.normalize_code(code))
         point["wfo"] = wfo
-        weather_story = WeatherStory.objects.current(wfo).first()
+        # TODO: set this back to the real value when wx stories are ready
+        # weather_story = WeatherStory.objects.current(wfo).first()
+        weather_story = None
 
     return render(
         request,

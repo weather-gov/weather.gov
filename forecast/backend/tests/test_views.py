@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta, timezone
 from os import path
-from unittest import mock
+from unittest import mock, skip
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.test import TestCase
@@ -109,8 +109,11 @@ class TestViews(TestCase):
                 "isMarine": False,
             },
         )
-        self.assertEqual(response.context["weather_story"], self.weather_story)
+        # TODO: restore this test when wx stories are turned on
+        # self.assertEqual(response.context["weather_story"], self.weather_story)
+        self.assertEqual(response.context["weather_story"], None)
 
+    @skip("Disabled until we turn wx stories back on")
     @mock.patch("wx_stories_api.models.WeatherStory.objects.current")
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_point_location_no_weather_story(self, mock_get_point_forecast, mock_get_current_weather_story):
@@ -282,7 +285,9 @@ class TestViews(TestCase):
                 "isMarine": False,
             },
         )
-        self.assertEqual(response.context["weather_story"], self.weather_story)
+        # TODO: restore this test when wx stories are turned on
+        # self.assertEqual(response.context["weather_story"], self.weather_story)
+        self.assertEqual(response.context["weather_story"], None)
 
     def test_office_specific(self):
         """Test the specific-office view."""
