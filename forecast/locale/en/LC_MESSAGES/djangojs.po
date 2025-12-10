@@ -22,3 +22,16 @@ msgstr "You are back online."
 
 msgid "js.inline-panel-confirm-delete-prompt.01"
 msgstr "Are you sure you want to delete this item? Click OK to delete, or Cancel to return to the editor."
+
+msgid "js.county-index.results.aria.01"
+msgstr "Filtered results updated"
+
+msgid "js.county-index.results.num-counties.01"
+msgid_plural "js.county-index.results.num-counties.01-plural"
+msgstr[0] "%s county"
+msgstr[1] "%s counties"
+
+msgid "js.county-index.results.num-states.01"
+msgid_plural "js.county-index.results.num-states.01-plural"
+msgstr[0] "%s state"
+msgstr[1] "%s states"
