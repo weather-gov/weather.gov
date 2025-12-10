@@ -25,9 +25,6 @@ class CountyIndexFilter extends HTMLElement {
   }
 
   connectedCallback(){
-    this.addEventListener("input", this.handleInput);
-    this.addEventListener("change", this.handleChange);
-
     // We stash a copy of the given resultArea DOM
     // internally. This will be used for swapping out
     // filtered trees of results more efficiently.
@@ -44,6 +41,13 @@ class CountyIndexFilter extends HTMLElement {
     if(combobox && combobox.listItems && combobox.listItems.length){
       combobox.clear();
     }
+
+    // Now add the event listeners. We do this here so that the initial
+    // `clear()` on the combobox does not result in a change event
+    // we capture. We only want to know about change events
+    // _after_ that point in time.
+    this.addEventListener("input", this.handleInput);
+    this.addEventListener("change", this.handleChange);
   }
 
   /**
@@ -153,6 +157,31 @@ class CountyIndexFilter extends HTMLElement {
         // This should result in only one relayout/repaint.
         this.resultArea.innerHTML = source.innerHTML;
 
+        // Announce the result changes to screenreaders using
+        // our global SR announce tooling
+        const numCountiesDisplayed = this.resultArea.querySelectorAll(`[data-filter-by="county"]`).length;
+        const numStatesDisplayed = this.resultArea.querySelectorAll(`[data-filter-by="state"]`).length;
+        if(!window.ngettext || !window.interpolate || !window.gettext){
+          return;
+        }
+
+        const prefix = window.gettext("js.county-index.results.aria.01");
+        const counties = window.interpolate(
+          window.ngettext("js.county-index.results.num-counties.01", numCountiesDisplayed),
+          [numCountiesDisplayed]
+        );
+        const states = window.interpolate(
+          window.ngettext("js.county-index.results.num-states.01", numStatesDisplayed),
+          [numStatesDisplayed]
+        );
+        
+        window.dispatchEvent(
+          new CustomEvent("wx-announce", {
+            detail: {
+              text: `${prefix}: ${counties}, ${states}`
+            }
+          })
+        );
       }, 0);
     });
   }

@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import {stub } from "sinon";
+import {stub, createSandbox } from "sinon";
 import { expect } from "chai";
 
 const exampleHtmlPath = path.join(
@@ -139,6 +139,48 @@ describe("County index filter tests", () => {
     // the [dta-county-name] is all in lowercase
     const flurries = document.querySelector(`[data-county-name="flurries"]`);
     expect(flurries).to.exist;
+  });
+
+  describe("aria-live functionality", () => {
+    let sandbox;
+    before(() => {
+      sandbox = createSandbox();
+      if(!window.ngettext){
+        window.ngettext = function(){};
+      }
+      sandbox.stub(window, "ngettext");
+      window.ngettext.returns("");
+      if(!window.gettext){
+        window.gettext = function(){};
+      }
+      sandbox.stub(window, "gettext");
+      window.gettext.returns("");
+      if(!window.interpolate){
+        window.interpolate = function(){};
+      }
+      sandbox.stub(window, "interpolate");
+      if(!window.ngettext){
+        window.ngettext = function(){};
+      }
+      window.interpolate.returns("");
+    });
+
+    after(() => {
+      sandbox.restore();
+    });
+    
+    it("triggers a wx-announce event when filtered", async () => {
+      const component = document.querySelector("wx-county-index-filter");
+      sandbox.spy(window, "dispatchEvent");
+
+      component.filter();
+
+      await wait(20);
+
+      expect(window.dispatchEvent.callCount).to.equal(1);
+      const spyCall = window.dispatchEvent.getCall(0);
+      expect(spyCall.args[0].type).to.equal("wx-announce");
+    });
   });
 
   it("Shows only non-filtered counties when a single state is selected", async () => {
