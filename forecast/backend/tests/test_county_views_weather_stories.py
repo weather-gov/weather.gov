@@ -1,5 +1,5 @@
 import datetime
-from unittest import mock
+from unittest import mock, skip
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -11,6 +11,7 @@ import spatial.models as spatial
 import wx_stories_api.models as wxstory
 
 
+@skip("Disabled until we turn wx stories back on")
 class TestCountyViewWeatherStories(TestCase):
     """Tests our Django county views with weather stories."""
 
