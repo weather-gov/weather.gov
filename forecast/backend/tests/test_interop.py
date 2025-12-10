@@ -142,7 +142,6 @@ class TestInteropInterface(TestCase):
 
         # Check the hourly things are gathered up
         self.assertEqual(hourly["feelsLike"], [45, 48])
-        self.assertEqual(hourly["times"], ["4am", None])
         self.assertEqual(hourly["temps"], [49, 51])
         self.assertEqual(hourly["pops"], [27, 13])
         self.assertEqual(hourly["dewpoints"], [88, 9])

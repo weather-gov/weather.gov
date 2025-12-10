@@ -173,11 +173,20 @@ msgstr "Night"
 msgid "daily-forecast.labels.overnight.01"
 msgstr "Overnight"
 
+msgid "daily-forecast.labels.overnight-time-span.01"
+msgstr "NOW-6AM"
+
 msgid "daily-forecast.labels.today.01"
 msgstr "Today"
 
+msgid "daily-forecast.labels.today-time-span.01"
+msgstr "6AM-6PM"
+
 msgid "daily-forecast.labels.tonight.01"
 msgstr "Tonight"
+
+msgid "daily-forecast.labels.tonight-time-span.01"
+msgstr "6PM-6AM"
 
 msgid "daily-forecast.table-header.date.01"
 msgstr "Date"

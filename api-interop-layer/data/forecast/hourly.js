@@ -62,7 +62,6 @@ export default (data, hours, { timezone }) => {
 
       const hourData = hours.get(time) ?? {};
       hourData.time = start.startOf("hour");
-      hourData.hour = start.format("h A");
       hourData.shortForecast = sentenceCase(period.shortForecast);
       hourData.icon = parseAPIIcon(period.icon);
 
