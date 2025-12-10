@@ -98,6 +98,24 @@ const getDataForPoint = async (lat, lon) => {
 
   const satellite = await satellitePromise;
 
+  // Call format() on the hours. This causes dayjs to convert them to ISO
+  // strings while preserving the UTC offset information. If we don't convert
+  // them manually, the default toString() method outputs times in UTC, which is
+  // not what we want.
+  //
+  // We do this conversion at the very end because the time is preserved as a
+  // dayjs object up to this point and is used for aligning alerts to hours.
+  forecast.daily.days?.forEach((day) => {
+    day.hours.forEach((hour) => {
+      // Note that hour object can be shared by multiple days, particularly the
+      // 6am hour. (It is the last hour of one day and the first hour of the
+      // next day.) Don't try to format them twice.
+      if (typeof hour.time !== "string") {
+        hour.time = hour.time.format();
+      }
+    });
+  });
+
   return {
     alerts,
     observed,

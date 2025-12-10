@@ -71,15 +71,6 @@ export default (data, { timezone }) => {
       }),
     };
 
-    // Add time labels to the first day
-    if (days.length === 1) {
-      if (periodData.isDaytime) {
-        periodData.timeLabel = "6AM-6PM";
-      } else {
-        periodData.timeLabel = "6PM-6AM";
-      }
-    }
-
     dayPeriod.periods.push(periodData);
   }
 
@@ -90,7 +81,6 @@ export default (data, { timezone }) => {
     const [today] = days;
     if (today.periods.length === 3) {
       today.periods[0].isOvernight = true;
-      today.periods[0].timeLabel = "NOW-6AM";
     }
   }
 

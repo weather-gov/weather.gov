@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from os import getenv
 
 import requests
@@ -102,10 +103,9 @@ def _process_interop_data(data):
         day["hourly"]["feelsLike"] = [
             hour["apparentTemperature"]["degF"] for hour in hours if "apparentTemperature" in hour
         ]
-        day["hourly"]["times"] = []
-        for hour in hours:
-            hour_label = hour.get("hour", None)
-            day["hourly"]["times"].append(hour_label)
+        day["hourly"]["times"] = [
+            datetime.fromisoformat(hour["time"]).strftime("%-I %p") if "time" in hour else None for hour in hours
+        ]
         day["hourly"]["temps"] = [hour["temperature"]["degF"] for hour in hours if "temperature" in hour]
         day["hourly"]["pops"] = [
             hour["probabilityOfPrecipitation"]["percent"] for hour in hours if "probabilityOfPrecipitation" in hour

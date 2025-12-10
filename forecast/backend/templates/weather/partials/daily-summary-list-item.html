@@ -33,12 +33,14 @@
           {{ label }}
           {% if period.isOvernight %}
             {% trans "daily-forecast.labels.overnight.01" %}
+            <span class="daily-period-time-label text-gray-50">({% trans "daily-forecast.labels.overnight-time-span.01" %})</span>
           {% elif period.isDaytime %}
             {% trans "daily-forecast.labels.day.01" %}
+            <span class="daily-period-time-label text-gray-50">({% trans "daily-forecast.labels.today-time-span.01" %})</span>
           {% else %}
             {% trans "daily-forecast.labels.night.01" %}
+            <span class="daily-period-time-label text-gray-50">({% trans "daily-forecast.labels.tonight-time-span.01" %})</span>
           {% endif %}
-          {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{ period.timeLabel }})</span>{% endif %}
         </span>
         <div class="display-flex flex-row flex-align-start">
           {% if period.data.icon.base %}
