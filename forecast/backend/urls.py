@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path, register_converter
 from django.views.generic.base import RedirectView, TemplateView
-from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.sitemap_generator import Sitemap as WagtailSitemap
 from wagtail.documents import urls as wagtaildocs_urls
@@ -68,7 +67,6 @@ urlpatterns = [
     path("cms/logout/", RedirectView.as_view(url="/saml/logout")),  # override wagtail logout
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
-    path("pages/", include(wagtail_urls)),
     # Point forecast related, etc
     path("point/<float:lat>/<float:lon>/", point.point_location, name="point"),
     path("place/<state>/<place>/", point.place_forecast, name="place forecast"),
