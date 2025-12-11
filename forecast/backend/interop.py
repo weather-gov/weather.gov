@@ -1,5 +1,4 @@
 import re
-from datetime import datetime
 from os import getenv
 
 import requests
@@ -90,58 +89,96 @@ def _process_interop_data(data):
     """
     is_marine = data["isMarine"]
 
-    for day in data["forecast"]["days"]:
-        if not is_marine:
-            _set_day_period_info(day)
+    if "days" in data["forecast"]:
+        for day in data["forecast"]["days"]:
+            if not is_marine:
+                _set_day_period_info(day)
 
-        _set_high_low_pops(day, is_marine)
+            _set_high_low_pops(day, is_marine)
 
-        # The following are lists of _hourly_ metrics needed for
-        # hourly tables and charts
-        hours = day["hours"]
-        day["hourly"] = {}
-        day["hourly"]["feelsLike"] = [
-            hour["apparentTemperature"]["degF"] for hour in hours if "apparentTemperature" in hour
-        ]
-        day["hourly"]["times"] = [
-            datetime.fromisoformat(hour["time"]).strftime("%-I %p") if "time" in hour else None for hour in hours
-        ]
-        day["hourly"]["temps"] = [hour["temperature"]["degF"] for hour in hours if "temperature" in hour]
-        day["hourly"]["pops"] = [
-            hour["probabilityOfPrecipitation"]["percent"] for hour in hours if "probabilityOfPrecipitation" in hour
-        ]
-        day["hourly"]["dewpoints"] = [hour["dewpoint"]["degF"] for hour in hours if "dewpoint" in hour]
-        day["hourly"]["relativeHumidity"] = [
-            hour["relativeHumidity"]["percent"] for hour in hours if "relativeHumidity" in hour
-        ]
-        day["hourly"]["windSpeeds"] = [hour["windSpeed"]["mph"] for hour in hours if "windSpeed" in hour]
-        day["hourly"]["windGusts"] = [hour["windGust"]["mph"] for hour in hours if "windGust" in hour]
-        day["hourly"]["windDirections"] = [hour["windDirection"] for hour in hours if "windDirection" in hour]
+            # The following are lists of _hourly_ metrics needed for
+            # hourly tables and charts
+            _process_hourly_interop_data(day)
 
-        # We tell the templates that this day should have an
-        # alert icon if there are any relevant alerts attached
-        # to it
-        day["hasAlertIcon"] = False
-        if day["alerts"]["metadata"]["count"] > 0:
-            day["hasAlertIcon"] = day["alerts"]["metadata"]["highest"] != ""
+            # We tell the templates that this day should have an
+            # alert icon if there are any relevant alerts attached
+            # to it
+            day["hasAlertIcon"] = False
+            if day["alerts"]["metadata"]["count"] > 0:
+                day["hasAlertIcon"] = day["alerts"]["metadata"]["highest"] != ""
 
-        # Process the Quantitative Precipitation Forecast (qpf)
-        qpf = day["qpf"]
-        qpf["times"] = [f"{period['startHour']}-{period['endHour']}" for period in qpf["periods"]]
-        qpf["liquid"] = [period["liquid"]["in"] for period in qpf["periods"]]
-        qpf["snow"] = []
-        qpf["ice"] = []
-        # If other kinds of liquids are available, we process them
-        qpf["liquidTitle"] = _("precip-table.table-header+legend.rain.01")
-        if qpf["hasSnow"]:
-            qpf["snow"] = [period["snow"]["in"] for period in qpf["periods"]]
-            qpf["liquidTitle"] = _("precip-table.table-header+legend.water.01")
-        if qpf["hasIce"]:
-            qpf["ice"] = [period["ice"]["in"] for period in qpf["periods"]]
-            qpf["liquidTitle"] = _("precip-table.table-header+legend.water.01")
+            # Process the Quantitative Precipitation Forecast (qpf)
+            qpf = day["qpf"]
+            qpf["times"] = [f"{period['startHour']}-{period['endHour']}" for period in qpf["periods"]]
+            qpf["liquid"] = [period["liquid"]["in"] for period in qpf["periods"]]
+            qpf["snow"] = []
+            qpf["ice"] = []
+            # If other kinds of liquids are available, we process them
+            qpf["liquidTitle"] = _("precip-table.table-header+legend.rain.01")
+            if qpf["hasSnow"]:
+                qpf["snow"] = [period["snow"]["in"] for period in qpf["periods"]]
+                qpf["liquidTitle"] = _("precip-table.table-header+legend.water.01")
+            if qpf["hasIce"]:
+                qpf["ice"] = [period["ice"]["in"] for period in qpf["periods"]]
+                qpf["liquidTitle"] = _("precip-table.table-header+legend.water.01")
+
 
     return data
 
+def _process_hourly_interop_data(day_data):  # noqa: C901
+    """Process hourly list information for the hourly metrics for each day."""
+    hours = day_data["hours"]
+    day_data["hourly"] = {
+        "feelsLike": [],
+        "times": [],
+        "temps": [],
+        "pops": [],
+        "dewpoints": [],
+        "relativeHumidity": [],
+        "windSpeeds": [],
+        "windGusts": [],
+        "windDirections": []
+    }
+    for hour in hours:
+        # apparentTemperature
+        if "apparentTemperature" in hour:
+            day_data["hourly"]["feelsLike"].append(hour["apparentTemperature"]["degF"])
+
+        # times
+        if "time" in hour:
+            day_data["hourly"]["times"].append(hour["time"].strftime("%-I %p"))
+        else:
+            day_data["hourly"]["times"].append(None)
+
+        # temps
+        if "temperature" in hour:
+            day_data["hourly"]["temps"].append(hour["temperature"]["degF"])
+
+        # probability of precipitation
+        if "probabilityOfPrecipitation" in hour:
+            day_data["hourly"]["pops"].append(hour["probabilityOfPrecipitation"]["percent"])
+
+        # dewpoints
+        if "dewpoint" in hour:
+            day_data["hourly"]["dewpoints"].append(hour["dewpoint"]["degF"])
+
+        # relative humidity
+        if "relativeHumidity" in hour:
+            day_data["hourly"]["relativeHumidity"].append(hour["relativeHumidity"]["percent"])
+
+        # wind speeds
+        if "windSpeed" in hour:
+            day_data["hourly"]["windSpeeds"].append(hour["windSpeed"]["mph"])
+
+        # wind gusts
+        if "windGust" in hour:
+            day_data["hourly"]["windGusts"].append(hour["windGust"]["mph"])
+
+        # wind direction
+        if "windDirection" in hour:
+            day_data["hourly"]["windDirections"].append(hour["windDirection"])
+
+    return day_data
 
 def get_point_forecast(lat, lon):
     """
