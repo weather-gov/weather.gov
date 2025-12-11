@@ -228,6 +228,22 @@ class TestViews(TestCase):
         self.assertContains(response, "alerts-tab-button")
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_with_api_500_interop_200(self, mock_get_point_forecast):
+        """Test the point location where no valid API data is returned by the interop."""
+        mock_get_point_forecast.return_value = {
+            "forecast": { "error": True },
+            "satellite": { "error": True },
+            "observations": { "error": True }
+        }
+
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertTemplateUsed(response, "weather/partials/uswds-alert.html")
+
+    @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_marine_point(self, mock_get_point_forecast):
         """Test that a marine point renders the right template."""
         mock_get_point_forecast.return_value = {

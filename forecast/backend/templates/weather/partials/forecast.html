@@ -2,7 +2,11 @@
   {% if forecast.error %}
     {% with base_msg="forecast.errors.daily.01"|t %}
       <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
-        {% include 'weather/partials/uswds-alert.html.twig' with level="error" body=base_msg|add:" "|add:forecast.message %}
+        {% if forecast.message %}
+          {% include 'weather/partials/uswds-alert.html' with level="error" body=base_msg|add:" "|add:forecast.message %}
+        {% else %}
+          {% include 'weather/partials/uswds-alert.html' with level="error" body=base_msg %}
+        {% endif %}
       </div>
     {% endwith %}
   {% else %}
@@ -32,6 +36,6 @@
         {% endfor %}
       </ol>
       {% include "weather/partials/wfo-promo.html" with wfo=point.wfo %}
-    {% endif %}
-  </div>
+    </div>
+  {% endif %}
 </div>
