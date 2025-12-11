@@ -21,6 +21,7 @@ from django.urls import include, path
 from django.utils import timezone
 from django.views.decorators.http import last_modified
 from django.views.i18n import JavaScriptCatalog
+from wagtail import urls as wagtail_urls
 
 from backend.views import index
 
@@ -36,6 +37,8 @@ urlpatterns = [
         last_modified(lambda _, **kw: server_restart_date)(JavaScriptCatalog.as_view()),
         name="translation-strings-for-js",
     ),
+    # If nothing else has matched anywhere, try Wagtail pages
+    path("", include(wagtail_urls)),
 ]
 
 # We need to add local media serving in non-prod
