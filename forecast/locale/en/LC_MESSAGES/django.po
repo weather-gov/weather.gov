@@ -868,3 +868,69 @@ msgstr "404: The requested place, {place}, {state}, was not found."
 
 msgid "error.404.forecast.suggested.01"
 msgstr "Were you looking for {place}?"
+
+msgid "menu.navigation.forecast.01"
+msgstr "Forecast"
+
+msgid "menu.navigation.forecast.find-forecast.01"
+msgstr "Find your Forecast"
+
+msgid "menu.navigation.forecast.county.01"
+msgstr "County"
+
+msgid "menu.navigation.forecast.state.01"
+msgstr "State"
+
+msgid "menu.navigation.observations.01"
+msgstr "Observations"
+
+msgid "menu.navigation.observations.radar.01"
+msgstr "Radar"
+
+msgid "menu.navigation.observations.wind.01"
+msgstr "Wind"
+
+msgid "menu.navigation.observations.flooding.01"
+msgstr "Flooding"
+
+msgid "menu.navigation.observations.other-maps.01"
+msgstr "Other Maps"
+
+msgid "menu.navigation.preparedness.01"
+msgstr "Preparedness"
+
+msgid "menu.navigation.preparedness.weather-hazards-guides.01"
+msgstr "Weather Hazards Guides"
+
+msgid "menu.navigation.resources.01"
+msgstr "Resources"
+
+msgid "menu.navigation.resources.state-weather-overview.01"
+msgstr "State weather overview"
+
+msgid "menu.navigation.resources.storm-recaps.01"
+msgstr "Storm Recaps"
+
+msgid "menu.navigation.resources.historical-weather.01"
+msgstr "Historical weather"
+
+msgid "menu.navigation.resources.glossary.01"
+msgstr "Glossary"
+
+msgid "menu.navigation.about.01"
+msgstr "About"
+
+msgid "menu.navigation.about.mission.01"
+msgstr "Mission"
+
+msgid "menu.navigation.about.offices.01"
+msgstr "Offices"
+
+msgid "menu.navigation.about.centers.01"
+msgstr "Centers"
+
+msgid "menu.navigation.about.news.01"
+msgstr "News"
+
+msgid "menu.navigation.about.history.01"
+msgstr "History"

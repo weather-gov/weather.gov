@@ -28,7 +28,7 @@
 {% endblock %}
 {% block page_content %}
   <div class="layout-container grid-row height-full flex-column flex-no-wrap">
-    {% include 'weather/partials/location-search.html' with place=point.place %}
+    {% include 'weather/partials/location-search.html' with search=False place=point.place %}
     {% if point.alerts.items|length > 0 %}
       <div class="bg-primary-darker padding-bottom-105">
         <div class="grid-container margin-top-0">
@@ -38,7 +38,7 @@
     {% endif %}
     <wx-tabbed-nav class="display-block position-relative">
     <div id="tablist-label" class="usa-sr-only">{{ "forecast.labels.weather-info.01" | t }}</div>
-    <div class="position-sticky top-0 z-500 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
+    <div class="position-sticky top-0 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
       <div class="grid-container padding-x-0">
         <div role="tablist"
              class="tab-buttons display-flex flex-row top-4 grid-col-12"

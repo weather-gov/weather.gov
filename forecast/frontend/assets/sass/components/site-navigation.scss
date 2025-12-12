@@ -1,0 +1,116 @@
+@use "uswds-core" as *;
+
+// NB: this font-size falls outside our usual size tokens
+.site-name {
+  font-size: 1.25rem;
+}
+
+@include at-media(desktop) {
+  .site-name {
+    @include u-font-size("body", "xl");
+  }
+
+  .site-logo {
+    @include u-height(9);
+  }
+}
+
+.usa-menu-btn {
+  background-color: white;
+
+  &:active,
+  &:hover {
+    background-color: white;
+  }
+}
+
+.under-development-tablet {
+  display: none;
+}
+
+.under-development-mobile {
+  display: flex;
+}
+
+@include at-media(tablet) {
+  .under-development-tablet {
+    display: flex;
+  }
+
+  .under-development-mobile {
+    display: none;
+  }
+}
+
+.usa-navbar {
+  border-bottom: none;
+  margin-left: auto;
+}
+
+.usa-header .usa-menu-btn {
+  button {
+    font-weight: unset;
+  }
+}
+
+.usa-nav__primary button {
+  @include u-padding-y(2);
+}
+
+@include at-media(desktop) {
+  // adjust the usa header menubar to be on the left instead of right
+  .usa-header--basic {
+    .usa-navbar {
+      width: 0;
+    }
+
+    .usa-nav {
+      justify-content: flex-start;
+    }
+  }
+
+  .usa-nav__primary {
+    .usa-nav__link {
+      @include u-padding-x(1.5);
+    }
+
+    button:not(.usa-current) {
+      font-weight: unset;
+    }
+
+    button[aria-expanded="true"] {
+      background-color: color("primary-dark");
+    }
+
+    // make the active menu line bar full width
+    .usa-nav__primary-item > .usa-current::after {
+      left: 0;
+      right: 0;
+    }
+
+    .usa-nav__primary-item {
+      &:hover button::after {
+        left: 0;
+        right: 0;
+      }
+    }
+  }
+
+  .usa-nav__submenu {
+    background-color: color("primary-dark");
+
+    .usa-nav__submenu-item {
+      &:hover {
+        background-color: color("primary-darker");
+
+        a {
+          text-decoration: none;
+        }
+      }
+
+      &:active {
+        background-color: color("primary-darkest");
+      }
+    }
+  }
+}

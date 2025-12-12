@@ -53,3 +53,5 @@ SAML_LOCAL_DEV = True
 # Use development secret key
 env = environs.Env()
 SECRET_KEY = env("django_secret_key")
+
+DEBUG_SHOW_ALL_MENU_LINKS = True

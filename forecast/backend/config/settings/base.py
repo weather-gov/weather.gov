@@ -484,3 +484,7 @@ if DEBUG:
         "127.0.0.1",
         "::1",
     ]
+
+# choose whether or not to show menu links that do not go anywhere. this is
+# enabled for default in local environments and disabled for production.
+DEBUG_SHOW_ALL_MENU_LINKS = False

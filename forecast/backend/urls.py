@@ -69,7 +69,7 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     # Point forecast related, etc
     path("point/<float:lat>/<float:lon>/", point.point_location, name="point"),
-    path("place/<state>/<place>/", point.place_forecast, name="place forecast"),
+    path("place/<state>/<place>/", point.place_forecast, name="place_forecast"),
     path("health/", index.health, name="health"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path("csp-report/", include("cspreports.urls")),
