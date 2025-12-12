@@ -1,6 +1,6 @@
 from django.db import models
 from modelcluster.fields import ParentalKey
-from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.fields import RichTextField
 from wagtail.models import Orderable, Page
 
@@ -10,12 +10,38 @@ class RoadmapPage(Page):
 
     body = RichTextField()
 
+    # We need to define our own meta description in order to make it required.
+    # The default search_description provided by the base Page class is allowed
+    # to be empty, which makes it optional. So... make our own that can't be
+    # empty and carry on.
+    meta_description = models.TextField()
+
     content_panels = Page.content_panels + [
+        FieldPanel(
+            "slug",
+            help_text="The name of the page as it will appear in URLs. For example, https://beta.weather.gov/[slug]",
+        ),
         FieldPanel("body"),
         # Add a data attribute that flags this inline panel as one that we
         # want to enforce deletion confirmation on.
         InlinePanel("entries", label="Roadmap entries", attrs={"data-wx-confirm-delete": "true"}),
+        MultiFieldPanel(
+            [
+                FieldPanel(
+                    "meta_description",
+                    heading="Description",
+                    help_text="Your meta description should be 155 characters or "
+                    + "less. It should be a unique description of the page content "
+                    + "and contain action verbs. Example: Learn how to prepare and "
+                    + "stay safe during a hurricane.",
+                ),
+            ],
+            heading="Search engine optimization",
+        ),
     ]
+
+    # Get rid of the separate SEO tab.
+    promote_panels = []
 
     def get_context(self, request, *args, **kwargs):
         """Add additional page context."""

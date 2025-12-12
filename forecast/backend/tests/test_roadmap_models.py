@@ -8,7 +8,9 @@ class TestRoadmapModels(TestCase):
 
     def test_roadmap_entry_str(self):
         """Test that roadmap entries stringify to their names."""
-        page = RoadmapPage.objects.create(title="Roadmap", body="Body", path="/", depth=0)
+        page = RoadmapPage.objects.create(
+            title="Roadmap", body="Body", path="/", depth=0, meta_description="Description"
+        )
         entry = RoadmapEntry.objects.create(
             name="Entry #1",
             description="",
@@ -21,7 +23,9 @@ class TestRoadmapModels(TestCase):
 
     def test_roadmap_entry_mapping(self):
         """Test that roadmap entries map into the correct time periods in the page."""
-        page = RoadmapPage.objects.create(title="Roadmap", body="Body", path="/", depth=0)
+        page = RoadmapPage.objects.create(
+            title="Roadmap", body="Body", path="/", depth=0, meta_description="Description"
+        )
         RoadmapEntry.objects.create(
             name="Entry #1",
             description="",
