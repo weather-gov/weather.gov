@@ -15,7 +15,7 @@ export default async (
   dbConnection,
 ) => {
   const stations = await fetchAPIJson(
-    `/gridpoints/${wfo}/${x},${y}/stations`,
+    `/gridpoints/${wfo}/${x},${y}/stations?limit=3`,
   ).then((out) => {
     if (out.error) {
       return out;

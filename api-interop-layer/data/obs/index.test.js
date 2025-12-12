@@ -43,7 +43,7 @@ describe("observations module", () => {
     });
 
     fetch
-      .withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations`)
+      .withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations?limit=3`)
       .resolves(stations);
 
     // We need to specifically deal with all of these endpoints for every test
@@ -391,7 +391,9 @@ describe("observations module", () => {
     });
 
     it("returns an error if getting the list of stations fails", async () => {
-      fetch.withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations`).rejects();
+      fetch
+        .withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations?limit=3`)
+        .rejects();
 
       const expected = {
         error: true,
