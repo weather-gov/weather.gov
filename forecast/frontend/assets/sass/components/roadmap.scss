@@ -27,12 +27,14 @@ wx-roadmap {
   .wx-roadmap__section__now {
     background-color: rgba(color("primary"), 0.45);
     background-image: url("/public/images/roadmap/wx_roadmap-pattern_down_row1.svg");
-    background-position-x: $row-offset-mobile-x;
 
     @include at-media(tablet) {
       background-image:
         url("/public/images/roadmap/wx_roadmap-pattern_down_row1.svg"),
         url("/public/images/roadmap/wx_roadmap-pattern_down_row2.svg");
+      background-position:
+        $row1-offset-x 0,
+        0 $row2-offset-y;
     }
   }
 
@@ -45,6 +47,9 @@ wx-roadmap {
       background-image:
         url("/public/images/roadmap/wx_roadmap-pattern_right_row1.svg"),
         url("/public/images/roadmap/wx_roadmap-pattern_right_row2.svg");
+      background-position:
+        $row1-offset-x 0,
+        0 $row2-offset-y;
     }
   }
 
