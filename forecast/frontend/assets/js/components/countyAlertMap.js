@@ -1,6 +1,7 @@
 /** Initialize county alert map after Leaflet has loaded. */
 const setupMap = () => {
   const L = window.L;
+  const polylabel = window.polylabel;
   const countyAlertLayers = { 1: [], 2: [], 3: [], 4: [], 5: [], all: [] };
   const iconOffsets = [
     { x: 0, y: 0 },
@@ -108,13 +109,31 @@ const setupMap = () => {
 
   /** Determine the center of a layer, considering only points within the viewport. */
   const visibleCenter = (layer, xybounds) => {
-    const array = layer.getLayers()[0].feature.geometry.coordinates[0];
+    const feature = layer.getLayers()[0].feature;
+
+    // MultiPolygon Logic
+    if (feature.geometry.type === 'MultiPolygon') {
+      const [lng, lat] = polylabel(feature.geometry.coordinates[0], 0.000001);
+      const labelCenter = L.latLng(lat, lng)
+      if (map.getBounds().contains(labelCenter)) {
+        return labelCenter
+      };
+    }
+
+    // Logic for Polygon objects
+    const array = feature.geometry.coordinates[0];
     const coords = array.length > 2 ? array : array[0];
     const points = coords.map(([y, x]) => L.point([x, y]));
     const clippy = L.PolyUtil.clipPolygon(points, xybounds).map((p) =>
       L.latLng([p.x, p.y]),
     );
-    return clippy ? L.PolyUtil.polygonCenter(clippy, map.options.crs) : null;
+
+    // if `clippy` is null return null. `polygonCenter` will error if `clippy` is null
+    if (clippy.length === 0) {
+      return null;
+    } else {
+      return L.PolyUtil.polygonCenter(clippy, map.options.crs);
+    }
   };
 
   /** Open the associated alert accordion and bring it into view. */
@@ -163,7 +182,11 @@ const setupMap = () => {
     } else if (zoomedIn || panned) {
       countyAlertLayers[curDayIndex].forEach((layer) => {
         try {
-          layer.wx_marker.setLatLng(visibleCenter(layer, getXYBounds()));
+          // Fix visible center can be null if the polygon isn't in viewport. if null, skip
+          let center = visibleCenter(layer, getXYBounds())
+          if (center) {
+            layer.wx_marker.setLatLng(center);
+          }
         } catch (error) {
           console.log(error);
         }
@@ -277,7 +300,6 @@ const setupMap = () => {
 
       let layer = L.geoJSON(geometry, { style: styles[alertType] }).addTo(map);
       let alertCenter = visibleCenter(layer, map.wx_county_xybounds);
-
       layer.wx_marker = L.marker(alertCenter, { icon: icons[alertType] }).addTo(
         map,
       );
