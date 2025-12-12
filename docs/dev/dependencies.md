@@ -80,6 +80,14 @@ This is a utility for deeply merging lists and dictionaries. Initially introduce
 to support a default set of hazardous weather metadata while allowing WFOs to
 override specific pieces of it.
 
+#### Shapely
+
+_Added in December 2025_
+
+[Shapely](https://shapely.readthedocs.io/en/stable/) is a Python package for manipulation
+and analysis of planar geometric objects. This is a package used for sorting polygons by size. 
+We can extend functionality of this package if we need to do more geospatial calcuations.
+
 ### Frontend
 
 #### [Chart.js](https://www.chartjs.org/)

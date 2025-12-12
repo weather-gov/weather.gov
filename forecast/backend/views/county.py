@@ -7,13 +7,14 @@ from django.urls import reverse
 from django.views.decorators.cache import cache_control, never_cache
 from django.views.decorators.http import require_POST
 
+# from wx_stories_api.models import SituationReport, WeatherStory
+from shapely import MultiPolygon
+
 from backend import interop
 from backend.models import WFO
 from backend.util import get_counties_combo_box_list, get_ghwo_daily_images, get_states_combo_box_list
 from spatial.models import WeatherCounties, WeatherStates
 from wx_stories_api.models import SituationReport
-
-# from wx_stories_api.models import SituationReport, WeatherStory
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,7 @@ def index(request):
         .order_by("name")
     )
     state_list_items = [
-        { "value": state.state, "text": state.name}
+        {"value": state.state, "text": state.name}
         for state in states
     ]
     return render(request, "weather/county/index.html", {"states": states, "state_list_items": state_list_items})
@@ -68,6 +69,21 @@ def county_overview(request, countyfips):
         day_levels = [levels_per_alert[index] for index in day["alerts"]]
         day_levels.sort(key=lambda level: level_priorities[level], reverse=True)
         level_days.append(" ".join(day_levels))
+
+    # Format GeoJSON, sorting polygons within a Mutlipolygon by size (desc). Ticket #207
+    for i, alert in enumerate(county_data["alerts"]["items"]):
+        # Continue if geometry is missing OR if the type is not "MultiPolygon"
+        if not alert.get("geometry") or alert["geometry"].get("type") != "MultiPolygon":
+            continue
+
+        # Read in coordinates and sort polygons by size from largest to smallest
+        mu_polygon = MultiPolygon(alert["geometry"]["coordinates"])
+        mu_polygon_sorted = MultiPolygon(
+            sorted(list(mu_polygon.geoms), key=lambda a: a.area, reverse=True)
+        ).__geo_interface__
+
+        # Overwrite current alert coordinates
+        county_data["alerts"]["items"][i]["geometry"] = mu_polygon_sorted
 
     localtz = None
     if county.timezone:
