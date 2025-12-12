@@ -89,7 +89,7 @@ class TestUrls(TestCase):
         """Test place forecast."""
         resolver = resolve("/place/State/Of_Mind/")
         back = reverse(
-            "place forecast",
+            "place_forecast",
             kwargs={"state": "Franklin", "place": "Anywhere"},
         )
         self.assertEquals(resolver.func, point.place_forecast)

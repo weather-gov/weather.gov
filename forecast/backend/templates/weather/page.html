@@ -4,17 +4,7 @@
   {% include "weather/partials/beta-banner.html" %}
   <div class="layout-container grid-row height-full flex-column flex-no-wrap">
     <header role="banner">
-      <div class="grid-container">
-        <!-- begin transferred (drupal) sections -->
-        {% if page.header %}<div class="grid-row">{{ page.header }}</div>{% endif %}
-        {% if page.primary_menu %}<div class="grid-row">{{ page.primary_menu }}</div>{% endif %}
-        {% if page.secondary_menu %}<div class="grid-row">{{ page.secondary_menu }}</div>{% endif %}
-        {% if page.breadcrumb %}<div class="grid-row">{{ page.breadcrumb }}</div>{% endif %}
-        {% if page.highlighted %}<div class="grid-row">{{ page.highlighted }}</div>{% endif %}
-        {% if page.help %}<div class="grid-row">{{ page.help }}</div>{% endif %}
-        <!-- end transferred (drupal) sections -->
-        {% include "weather/partials/site-branding.html" %}
-      </div>
+      {% include "weather/partials/site-branding.html" %}
     </header>
     <main role="main" class="flex-1">
       <a id="main-content" tabindex="-1"></a>

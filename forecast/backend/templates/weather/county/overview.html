@@ -96,6 +96,6 @@
     <div class="grid-container padding-top-2 desktop:padding-top-4">
       <h2 class="text-normal text-primary-darker margin-top-0">{{ "county.forecast-link.heading.01" | t }}</h2>
     </div>
-    {% include 'weather/partials/location-search.html' %}
+    {% include 'weather/partials/location-search.html' with search=True %}
   </div>
 {% endblock %}

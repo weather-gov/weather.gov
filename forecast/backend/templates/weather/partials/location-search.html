@@ -1,4 +1,5 @@
 <div class="wx-location-search">
+  {% if search %}
   <div class="grid-container">
     <div class="grid-row">
       <form class="usa-form grid-col-12  maxw-tablet-lg"
@@ -17,7 +18,7 @@
           <div class="tablet:grid-col-6">
             {# djlint:off #}
             <wx-combo-box-location
-              class="z-top margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105"
+              class="margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105"
               id="search-combo-box"
               {% if place %}
                 data-place="{% place_label place%}"
@@ -33,6 +34,7 @@
       </form>
     </div>
   </div>
+  {% endif %}
   {% if place %}
     <div class="bg-primary-darker">
       <div class="grid-container">

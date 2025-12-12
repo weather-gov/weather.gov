@@ -40,7 +40,7 @@ def handle_404(request, exception=None):
 
         # For place forecasts, we might be able to find an alternative to
         # suggest to the user.
-        if view == "place forecast":
+        if view == "place_forecast":
             # Denormalize, just in case.
             place = request.resolver_match.kwargs["place"].replace("_", " ").replace(",", "/")
             state = request.resolver_match.kwargs["state"].upper()
