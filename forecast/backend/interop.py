@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from os import getenv
 
 import requests
@@ -122,8 +123,8 @@ def _process_interop_data(data):
                 qpf["ice"] = [period["ice"]["in"] for period in qpf["periods"]]
                 qpf["liquidTitle"] = _("precip-table.table-header+legend.water.01")
 
-
     return data
+
 
 def _process_hourly_interop_data(day_data):  # noqa: C901
     """Process hourly list information for the hourly metrics for each day."""
@@ -137,7 +138,7 @@ def _process_hourly_interop_data(day_data):  # noqa: C901
         "relativeHumidity": [],
         "windSpeeds": [],
         "windGusts": [],
-        "windDirections": []
+        "windDirections": [],
     }
     for hour in hours:
         # apparentTemperature
@@ -146,7 +147,7 @@ def _process_hourly_interop_data(day_data):  # noqa: C901
 
         # times
         if "time" in hour:
-            day_data["hourly"]["times"].append(hour["time"].strftime("%-I %p"))
+            day_data["hourly"]["times"].append(datetime.fromisoformat(hour["time"]).strftime("%-I %p"))
         else:
             day_data["hourly"]["times"].append(None)
 
@@ -179,6 +180,7 @@ def _process_hourly_interop_data(day_data):  # noqa: C901
             day_data["hourly"]["windDirections"].append(hour["windDirection"])
 
     return day_data
+
 
 def get_point_forecast(lat, lon):
     """
