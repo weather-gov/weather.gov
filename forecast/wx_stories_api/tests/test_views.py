@@ -31,6 +31,7 @@ class TestWxStoryApiViews(TestCase):
         with open(path.join(path.dirname(__file__), "data/sample_sitrep.json")) as f:
             self.sample_sitrep = json.load(f)
 
+    @disable_logging_for_quieter_tests
     def test_pdf(self):
         """Test uploading a PDF."""
         response = self.client.post(
@@ -48,6 +49,7 @@ class TestWxStoryApiViews(TestCase):
         _id = response.json()["data"]["id"]
         self.assertEqual(TemporaryPDF.objects.filter(id=_id).count(), 1)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("wx_stories_api.views.SituationReport.objects.prune")
     def test_situation_report(self, mock_prune):
         """Test a basic situation report creation."""
@@ -81,6 +83,7 @@ class TestWxStoryApiViews(TestCase):
         # deletes temp pdf
         self.assertFalse(TemporaryPDF.objects.filter(id=pid).exists())
 
+    @disable_logging_for_quieter_tests
     def image(self):
         """Test uploading an image."""
         response = self.client.post(
@@ -98,6 +101,7 @@ class TestWxStoryApiViews(TestCase):
         _id = response.json()["data"]["id"]
         self.assertEqual(TemporaryImage.objects.filter(id=_id).count(), 1)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("wx_stories_api.views.WeatherStory.objects.prune")
     def test_weather_story(self, mock_prune):
         """Test a basic weather story creation."""
@@ -165,6 +169,7 @@ class TestWxStoryApiViews(TestCase):
         )
         self.assertEqual(response.status_code, 400)
 
+    @disable_logging_for_quieter_tests
     def test_weather_story_works_without_small_image(self):
         """Test weather story without a small image."""
         full = ContentFile(b"full image for testing", name="full.png")
