@@ -1,0 +1,40 @@
+# beta.weather.gov (Experimental)
+
+> **IMPORTANT:** beta.weather.gov is the experimental, modernized version of the National Weather Service (NWS) website. It's currently in a testing phase. For life-critical decision support, always cross-reference with the operational site at [weather.gov](https://www.weather.gov).
+
+beta.weather.gov represents a complete architectural overhaul designed to be mobile-first and API-driven.
+
+## Core Navigation & Categories
+
+The beta site currently supports three primary navigation structures:
+
+- **Location Forecasts** (`/point/<float:latitude>/<float:longitude>/`):
+  - The primary view for specific point-based forecasts.
+  - Replaces legacy zip-code or city-based routing with precise coordinate routing.
+  - Example: `/point/37.8715/-122.2730/`
+
+- **County/Zone Pages** (`/county/<countyfips>/`):
+  - Aggregated weather information, alerts, and hazards for specific counties.
+  - Uses the 5-digit FIPS code standard.
+  - Example: `/county/06001/` (Alameda County, CA)
+
+- **About Pages** (`/about`):
+  - Organizational information, mission statements, and details regarding the beta rollout.
+
+## Forecast & Data Structure
+
+- **Routing:** weather.gov uses the legacy `/place/{STATE}/{LOCATION}` pattern, and while that pattern is still supported here, the beta site prefers coordinate-based routing (`/point/{lat}/{lon}/`) or FIPS-based routing (`/county/{fips}/`).
+- **Data Source:** The frontend consumes the `api.weather.gov` endpoints through an API interoperability layer.
+- **Mobile Responsive:** The site is fully responsive, serving as a single destination for both desktop and mobile users.
+
+## Developer & API Resources
+
+- [API Documentation](https://www.weather.gov/documentation/services-web-api): The backend source for all forecast data displayed on beta.weather.gov.
+  - **Base URL:** `https://api.weather.gov`
+  - **Key Endpoints:** `/points/{lat},{lon}`, `/gridpoints/{wfo}/{x},{y}`, `/alerts`
+
+## Critical Disclaimers
+
+- **Status:** Experimental / Pre-release.
+- **Uptime:** Not guaranteed 24/7.
+- **Accuracy:** Forecast models match the main site, but the rendering layer is under active development.
