@@ -9,6 +9,7 @@ from django.urls import reverse
 
 import spatial.models as spatial
 from backend import models
+from backend.util import disable_logging_for_quieter_tests
 from wx_stories_api.models import WeatherStory
 
 
@@ -139,6 +140,7 @@ class TestViews(TestCase):
         )
         self.assertEqual(response.context["weather_story"], None)
 
+    @disable_logging_for_quieter_tests
     def test_point_location_with_lat_too_high(self):
         """Test the point location view when the latitude is over 90."""
         response = self.client.get("/point/127/22.2", follow=True)
@@ -146,6 +148,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
 
+    @disable_logging_for_quieter_tests
     def test_point_location_with_lat_too_low(self):
         """Test the point location view when the latitude is below -90."""
         response = self.client.get("/point/-93.623/22.2", follow=True)
@@ -153,6 +156,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
 
+    @disable_logging_for_quieter_tests
     def test_point_location_with_lon_too_high(self):
         """Test the point location view when the longitude is over 180."""
         response = self.client.get("/point/43.342/181", follow=True)
@@ -160,6 +164,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
 
+    @disable_logging_for_quieter_tests
     def test_point_location_with_lon_too_low(self):
         """Test the point location view when the longitude is below -180."""
         response = self.client.get("/point/127/-197", follow=True)
@@ -167,6 +172,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertTemplateUsed(response, "errors/404/point-out-of-bounds.html")
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_point_location_with_out_of_bounds(self, mock_get_point_forecast):
         """Test the point location view when the requested point is out of bounds."""
@@ -255,6 +261,7 @@ class TestViews(TestCase):
 
         self.assertTemplateUsed(response, "weather/marine-point.html")
 
+    @disable_logging_for_quieter_tests
     def test_place_unknown(self):
         """Test the place location view with an unknown place."""
         response = self.client.get("/place/NJ/Not_Hoboken/")
@@ -352,6 +359,7 @@ class TestViews(TestCase):
             fetch_redirect_response=False,
         )
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.partials.interop.get_wx_afd_versions_by_wfo")
     def test_afd_by_office_exception(self, mock_get_wx_afd_versions_by_wfo):
         """Test getting an AFD by office where the office is unknown."""
@@ -370,6 +378,7 @@ class TestViews(TestCase):
             fetch_redirect_response=False,
         )
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.partials.interop.get_wx_afd_by_id")
     def test_afd_by_office_and_id_with_exception(self, mock_get_wx_afd_by_id):
         """Test getting an AFD by office and ID where there is an exception."""
@@ -411,6 +420,7 @@ class TestViews(TestCase):
         self.assertEqual(response.context["afd"], {"issuingOffice": "KBOB"})
         self.assertEqual(response.context["version_list"], ["v1", "v2", "v3"])
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.index.interop.get_health")
     def test_health_not_okay(self, mock_get_health):
         """Test the health endpoint returning not okay."""
@@ -425,6 +435,7 @@ class TestViews(TestCase):
         response = self.client.get("/health/")
         self.assertEqual(response.status_code, 200)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
     @mock.patch("backend.views.county.get_counties_combo_box_list")
     @mock.patch("spatial.models.WeatherCounties.objects.get", autospec=True)
@@ -443,6 +454,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
     @mock.patch("backend.views.county.get_counties_combo_box_list")
     @mock.patch("backend.views.county.get_object_or_404", autospec=True)
@@ -539,6 +551,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/county/ghwo.html")
 
+    @disable_logging_for_quieter_tests
     def test_county_ghwo_index_cannot_get(self):
         """Ensure that we cannot GET request on the county GHWO index page.
 
@@ -550,6 +563,7 @@ class TestViews(TestCase):
         # 405: Method Not Allowed
         self.assertEqual(response.status_code, 405)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("spatial.models.WeatherStates.objects.get")
     def test_county_ghwo_index_invalid_state_fips(self, mock_state_get):
         """Posting to the county ghwo index page with an invalid state fips 404s."""
@@ -566,6 +580,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.county.WeatherCounties.objects.get")
     def test_county_ghwo_index_invalid_selected_county(self, mock_county_get):
         """Posting to the county ghwo index page with an invalid selected county fips 404s."""
@@ -632,6 +647,7 @@ class TestViews(TestCase):
             fetch_redirect_response=False,
         )
 
+    @disable_logging_for_quieter_tests
     def test_wx_select_ghwo_counties_cannot_get(self):
         """Ensure that we cannot GET request on the wx ghwo counties view.
 
@@ -642,6 +658,7 @@ class TestViews(TestCase):
         # 405: Method Not Allowed
         self.assertEqual(response.status_code, 405)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.county.WeatherStates.objects.get")
     def test_wx_select_ghwo_counties_invalid_state_fips(self, mock_state_get):
         """Posting to wx select ghwo counties with an invalid state fips 404s."""
@@ -658,6 +675,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.county.WeatherCounties.objects.get")
     def test_wx_select_ghwo_counties_invalid_selected_county(self, mock_county_get):
         """Posting to wx select ghwo counties with an invalid selected county fips 404s."""
@@ -720,6 +738,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/partials/wx-county-ghwo-selector.html")
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.county.WeatherCounties.objects.get")
     def test_wx_ghwo_counties_invalid_county_fips(self, mock_get_county):
         """Request to wx ghwo counties endpoint with invalid county fips 404s."""
@@ -761,6 +780,7 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "weather/partials/ghwo-details.html")
         self.assertContains(response, "images/weather/wx_error-cloud_error")
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.county.interop.get_ghwo_data_for_county")
     def test_wx_ghwo_counties_failed_interop_request(self, mock_get_ghwo):
         """Request to wx ghwo counties endpoint with failing interop ghwo data request 404s."""
@@ -772,6 +792,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+    @disable_logging_for_quieter_tests
     def test_wx_ghwo_counties_cannot_post(self):
         """Ensure we cannot POST on the wx ghwo counties partial endpoint."""
         response = self.client.post(

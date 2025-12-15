@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 import spatial.models as spatial
+from backend.util import disable_logging_for_quieter_tests
 
 
 class TestStateViews(TestCase):
@@ -52,11 +53,13 @@ class TestStateViews(TestCase):
         self.assertEqual(response.context["state"], self.state_fr)
         self.assertEqual(response.status_code, 200)
 
+    @disable_logging_for_quieter_tests
     def test_overview_404(self):
         """Test the overview view."""
         response = self.client.get(reverse("state_overview", kwargs={"state": "TJ"}))
         self.assertEqual(response.status_code, 404)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.state.get_object_or_404")
     def test_overview_500(self, mock_get_object_or_404):
         """Test state error case."""

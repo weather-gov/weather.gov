@@ -1,11 +1,13 @@
 from django.test import TestCase
 
 from backend.models import RoadmapEntry, RoadmapPage
+from backend.util import disable_logging_for_quieter_tests
 
 
 class TestRoadmapModels(TestCase):
     """Test roadmap-related models."""
 
+    @disable_logging_for_quieter_tests
     def test_roadmap_entry_str(self):
         """Test that roadmap entries stringify to their names."""
         page = RoadmapPage.objects.create(
@@ -21,6 +23,7 @@ class TestRoadmapModels(TestCase):
 
         self.assertEqual("Entry #1", str(entry))
 
+    @disable_logging_for_quieter_tests
     def test_roadmap_entry_mapping(self):
         """Test that roadmap entries map into the correct time periods in the page."""
         page = RoadmapPage.objects.create(

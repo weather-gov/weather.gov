@@ -1,4 +1,5 @@
 import csv
+import logging
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.db import connection
@@ -21,9 +22,8 @@ from spatial.models import (
     WeatherZone,
 )
 
-# We do in fact want print statements in this file, unless/until we have a
-# better logging approach.
-# ruff: noqa: T201
+logger = logging.getLogger(__name__)
+
 
 # There are some places in the cities500 dataset that shouldn't be
 # there, like that one Hardee's in Los Angeles.
@@ -45,7 +45,7 @@ def __load_from_shapefile(  # noqa: PLR0913
     callback_get_unique_query,
     callback_create_model,
 ):
-    print(f"loading {type}")
+    logger.info(f"loading {type}")
 
     table = model._meta.db_table
     shapefile = get_shapefile(url)
@@ -90,17 +90,17 @@ def __load_from_shapefile(  # noqa: PLR0913
         # Update the timestamp for this table in the metadata
         WeatherSpatialMetadata.objects.update_or_create(table=table)
 
-    except Exception as exc:
-        print(f"  !! error when loading {model.__name__}: {exc}")
+    except Exception:
+        logger.exception(f"  !! error when loading {model.__name__}")
         model.objects.all().delete()
 
-    print(f"  :: loaded {str(model.objects.count())} entities")
+    logger.info(f"  :: loaded {str(model.objects.count())} entities")
 
 
 def load_states(force=False):
     """Load state data."""
     if WeatherStates.objects.count() and not force:
-        print("States are already loaded. Pass --force to re-create.")
+        logger.info("States are already loaded. Pass --force to re-create.")
         return
 
     WeatherStates.objects.all().delete()
@@ -132,7 +132,7 @@ def load_states(force=False):
 def load_cwas(force=False):
     """Load county warning area data."""
     if WeatherCountyWarningAreas.objects.count() and not force:
-        print("CWAs are already loaded. Pass --force to re-create.")
+        logger.info("CWAs are already loaded. Pass --force to re-create.")
         return
 
     WeatherCountyWarningAreas.objects.all().delete()
@@ -224,7 +224,7 @@ def __get_countyname(feature):
 def load_counties(force=False):
     """Load county data."""
     if WeatherCounties.objects.count() and not force:
-        print("Counties are already loaded. Pass --force to re-create.")
+        logger.info("Counties are already loaded. Pass --force to re-create.")
         return
 
     WeatherCounties.objects.all().delete()
@@ -290,7 +290,7 @@ def load_counties(force=False):
 def load_zones(force=False):
     """Load zone data."""
     if WeatherZone.objects.count() and not force:
-        print("Zones are already loaded. Pass --force to re-create.")
+        logger.info("Zones are already loaded. Pass --force to re-create.")
         return
 
     WeatherZone.objects.all().delete()
@@ -401,18 +401,18 @@ def __get_county_fips(place):
         return county.countyfips
 
     # We ought not reach this point, but just in case we do, flag it bigly.
-    print("========= NO COUNTY FOUND =========")
-    print(place)
+    logger.error("========= NO COUNTY FOUND =========")
+    logger.error(place)
     return None
 
 
 def load_places(force=False):
     """Load place data."""
     if WeatherPlace.objects.count() and not force:
-        print("Places are already loaded. Pass --force to re-create.")
+        logger.info("Places are already loaded. Pass --force to re-create.")
         return
 
-    print("loading places")
+    logger.info("loading places")
     WeatherPlace.objects.all().delete()
 
     unzip_cache("us.cities500.txt.zip")
@@ -485,7 +485,7 @@ def load_places(force=False):
                 place.statename = county.state.name
                 place.statefips = county.state.fips
             else:
-                print(
+                logger.warning(
                     f"couldn't get county for FIPS {place.countyfips} ({place.state})",
                 )
 
@@ -494,10 +494,10 @@ def load_places(force=False):
         # Update the timestamp for this table in the metadata
         WeatherSpatialMetadata.objects.update_or_create(table=WeatherPlace._meta.db_table)
 
-    except Exception as exc:
+    except Exception:
         model = WeatherPlace
-        print(f"  !! error when loading {model.__name__}: {exc}")
+        logger.exception(f"  !! error when loading {model.__name__}")
         model.objects.all().delete()
 
     csvfile.close()
-    print(f"loaded {str(WeatherPlace.objects.count())} places")
+    logger.info(f"loaded {str(WeatherPlace.objects.count())} places")

@@ -10,6 +10,7 @@ from django.urls import reverse
 import backend.models as backend
 import spatial.models as spatial
 import wx_stories_api.models as wxstory
+from backend.util import disable_logging_for_quieter_tests
 
 
 class TestCountyViews(TestCase):
@@ -245,6 +246,7 @@ class TestCountyViews(TestCase):
             },
         )
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
     def test_overview_with_no_wfo(self, mock_get_radar, mock_get_county_data):
@@ -275,6 +277,7 @@ class TestCountyViews(TestCase):
             },
         )
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
     def test_alert_level_to_day_mapping(self, mock_get_radar, mock_get_county_data):
@@ -327,6 +330,7 @@ class TestCountyViews(TestCase):
         # And also for each day
         self.assertEqual(alert_level_days, ["watch other", "warning other", "warning watch"])
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
     def test_alert_levels_only_present(self, mock_get_radar, mock_get_county_data):
@@ -367,11 +371,13 @@ class TestCountyViews(TestCase):
             ],
         )
 
+    @disable_logging_for_quieter_tests
     def test_overview_404(self):
         """Test the overview view."""
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "99999"}))
         self.assertEqual(response.status_code, 404)
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.interop.get_county_data")
     def test_overview_500(self, mock_get_county_data):
         """Test county error case."""
