@@ -7,6 +7,7 @@ const timings = await fetch("./timings.csv")
     const headings = lines[0].split("\t");
 
     const times = {
+      "single endpoint": [],
       points: [],
       gridpoints: [],
       "daily forecast": [],
@@ -27,6 +28,8 @@ const timings = await fetch("./timings.csv")
 
       if (/^\/points\//.test(obj.url)) {
         times.points.push(obj);
+      } else if (obj.url.startsWith("/forecasts/")) {
+        times["single endpoint"].push(obj);
       } else if (obj.url.endsWith("/forecast/hourly")) {
         times["hourly forecast"].push(obj);
       } else if (obj.url.endsWith("/forecast")) {
