@@ -5,7 +5,7 @@
           src="{% static 'js/county/overview.html.js' %}"
           type="module"></script>
   {% include "weather/scripts/leaflet.html" %}
-  <script src="{% static 'js/cmi-radar.0a93e066.js' %}"
+  <script src="{% static 'js/cmi-radar.54fb0324.js' %}"
           nonce="{{ request.csp_nonce }}"
           data-wx-radar-cmi="true"
           defer></script>
@@ -16,7 +16,7 @@
         href="{% static 'css/leaflet.css' %}" />
   <link rel="stylesheet"
         type="text/css"
-        href="{% static 'css/radar/cmi-radar.0a93e066.css' %}" />
+        href="{% static 'css/radar/cmi-radar.54fb0324.css' %}" />
 {% endblock %}
 {% block page_content %}
   <div class="bg-primary-dark">

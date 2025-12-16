@@ -76,6 +76,11 @@ const setupRadar = () => {
       forecast: "https://forecast.weather.gov",
       gis: "https://opengeo.ncep.noaa.gov/geoserver",
     },
+    // We'll explicitly set the ESRI key here, so it's easier to change if we
+    // need to in the future. Rather than patching the CMI library, we can just
+    // update this.
+    esriKey:
+      "AAPTxy8BH1VEsoebNVZXo8HurNPcJD0FIYgRqKcG6xxTBL9nh-VFBFPksbJUeCAaOBmIl7l_u3FU4qHnugzOvbnCvb7RMvR4FD_D4AhbAn2hMpcV-vKc8Oz6Kb0itTkdvSjaBCv5EHG20BLTk7jV0VSlPq_N9FhOT2bn2z510HsHPTf4N2TkszfZwmZgzRYHS06-OFp40ixlJ2vLLRK8a_L_ojVp3FXtRCXPNFWXFKQzYdiNzx12uaMvJ_riiEvC7vfrAT1_JWn0gzIT",
   };
 
   window.app = window.cmiRadar.createApp("#wx-radar-container", options);
