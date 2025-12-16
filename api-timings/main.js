@@ -1,4 +1,7 @@
-const row = (entry) => `<td>${entry.time}</td><td>${entry.correlation}</td>`;
+const API_BASE = "https://preview-api.weather.gov";
+
+const row = (entry) =>
+  `<td><a href="${API_BASE}${entry.url}" target="_blank">⤴</a></td><td>${entry.time}</td><td>${entry.correlation}</td>`;
 
 const timings = await fetch("./timings.csv")
   .then((response) => response.text())
@@ -67,7 +70,7 @@ Object.entries(timings).forEach(([kind, rows]) => {
   const canvasId = `canvas_${Math.floor(Math.random() * 10_000_000)}`;
 
   const container = document.createElement("div");
-  container.innerHTML = `<h3>${kind} (eg: <a href="https://api.weather.gov${rows[0].url}">${rows[0].url}</a>)</h3>
+  container.innerHTML = `<h3>${kind} (eg: <a href="${API_BASE}${rows[0].url}">${rows[0].url}</a>)</h3>
 
   <pre>
     Average response:  ${avg} ms
@@ -77,7 +80,7 @@ Object.entries(timings).forEach(([kind, rows]) => {
 
   <div class="grid-row">
   <div class="grid-col-6">
-  <div class="border-1px" style="display: inline-block; max-height: 50vh; overflow-y: scroll;"><table class="usa-table usa-table--striped margin-0 font-mono-sm"><thead><tr><th>response (ms)</th><th>correlation ID</th></thead><tbody>${sorted.map((entry) => `<tr>${row(entry)}</tr>`).join("")}</tbody></table></div>
+  <div class="border-1px" style="display: inline-block; max-height: 50vh; overflow-y: scroll;"><table class="usa-table usa-table--striped margin-0 font-mono-sm"><thead><tr><th></th><th>response (ms)</th><th>correlation ID</th></thead><tbody>${sorted.map((entry) => `<tr>${row(entry)}</tr>`).join("")}</tbody></table></div>
   </div>
   <div class="grid-col-6 bg-white">
   <canvas id="${canvasId}"></canvas>
