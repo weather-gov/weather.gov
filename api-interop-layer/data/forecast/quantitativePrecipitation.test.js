@@ -61,31 +61,25 @@ describe("quantitative precipitation forecase (QPF)", () => {
 
     const expected = [
       {
-        start: dayjs("2024-09-09T21:00:00Z"),
-        end: dayjs("2024-09-10T00:00:00Z"),
+        start: dayjs("2024-09-09T21:00:00Z").tz("America/Chicago"),
+        end: dayjs("2024-09-10T00:00:00Z").tz("America/Chicago"),
         liquid: { uom: "wmoUnit:mm", value: 32 },
         ice: { uom: "wmoUnit:mm", value: 5 },
         snow: { uom: "wmoUnit:mm", value: 14 },
-        startHour: "4 PM",
-        endHour: "7 PM",
       },
       {
-        start: dayjs("2024-09-10T00:00:00Z"),
-        end: dayjs("2024-09-10T06:00:00Z"),
+        start: dayjs("2024-09-10T00:00:00Z").tz("America/Chicago"),
+        end: dayjs("2024-09-10T06:00:00Z").tz("America/Chicago"),
         liquid: { uom: "wmoUnit:mm", value: 19 },
         ice: { uom: "wmoUnit:mm", value: 1 },
         snow: { uom: "wmoUnit:mm", value: 85 },
-        startHour: "7 PM",
-        endHour: "1 AM",
       },
       {
-        start: dayjs("2024-09-10T06:00:00Z"),
-        end: dayjs("2024-09-10T08:00:00Z"),
+        start: dayjs("2024-09-10T06:00:00Z").tz("America/Chicago"),
+        end: dayjs("2024-09-10T08:00:00Z").tz("America/Chicago"),
         liquid: { uom: "wmoUnit:mm", value: 4 },
         ice: { uom: "wmoUnit:mm", value: 64 },
         snow: { uom: "wmoUnit:mm", value: 5 },
-        startHour: "1 AM",
-        endHour: "3 AM",
       },
     ];
 
@@ -214,22 +208,18 @@ describe("quantitative precipitation forecase (QPF)", () => {
       hasSnow: true,
       periods: [
         {
-          start: dayjs("2024-08-02T01:00:00Z"),
-          end: dayjs("2024-08-02T09:00:00Z"),
+          start: "2024-08-01T18:00:00-07:00",
+          end: "2024-08-02T02:00:00-07:00",
           liquid: { mm: 9, in: 0.35 },
           ice: { mm: 19, in: 0.75 },
           snow: { mm: 29, in: 1.14 },
-          startHour: "6 PM",
-          endHour: "2 AM",
         },
         {
-          start: dayjs("2024-08-02T09:00:00Z"),
-          end: dayjs("2024-08-02T15:00:00Z"),
+          start: "2024-08-02T02:00:00-07:00",
+          end: "2024-08-02T08:00:00-07:00",
           liquid: { mm: 100, in: 3.94 },
           ice: { mm: 10, in: 0.39 },
           snow: { mm: null, in: null },
-          startHour: "2 AM",
-          endHour: "8 AM",
         },
       ],
     };
@@ -240,22 +230,18 @@ describe("quantitative precipitation forecase (QPF)", () => {
       hasSnow: false,
       periods: [
         {
-          start: dayjs("2024-08-02T09:00:00Z"),
-          end: dayjs("2024-08-02T15:00:00Z"),
+          start: "2024-08-02T02:00:00-07:00",
+          end: "2024-08-02T08:00:00-07:00",
           liquid: { mm: 100, in: 3.94 },
           ice: { mm: 10, in: 0.39 },
           snow: { mm: null, in: null },
-          startHour: "2 AM",
-          endHour: "8 AM",
         },
         {
-          start: dayjs("2024-08-02T15:00:00Z"),
-          end: dayjs("2024-08-02T23:00:00Z"),
+          start: "2024-08-02T08:00:00-07:00",
+          end: "2024-08-02T16:00:00-07:00",
           liquid: { mm: 4, in: 0.16 },
           ice: { mm: null, in: null },
           snow: { mm: null, in: null },
-          startHour: "8 AM",
-          endHour: "4 PM",
         },
       ],
     };

@@ -200,16 +200,12 @@ describe("gridpoint data module", () => {
 
     const expected = [
       {
-        start: dayjs("2020-01-01T12:00:00Z"),
-        end: dayjs("2020-01-01T15:00:00Z"),
+        // Expect our times to already be associated with the correct timezones
+        start: dayjs("2020-01-01T12:00:00Z").tz("America/Los_Angeles"),
+        end: dayjs("2020-01-01T15:00:00Z").tz("America/Los_Angeles"),
         liquid: { uom: "wet", value: 3 },
         ice: { uom: "slippery", value: 30 },
         snow: { uom: "fun", value: 300 },
-
-        // Our time starts at midnight UTC during standard time. America/Los_Angeles
-        // is UTC-8 during standard time, so we expect 4 AM to 7 AM.
-        startHour: "4 AM",
-        endHour: "7 AM",
       },
     ];
 
