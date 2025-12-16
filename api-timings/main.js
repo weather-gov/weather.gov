@@ -58,6 +58,9 @@ Object.entries(timings).forEach(([kind, rows]) => {
       (10 * times.reduce((sum, time) => sum + time, 0)) / times.length,
     ) / 10;
 
+  const sorted = JSON.parse(JSON.stringify(rows));
+  sorted.sort(({ time: a }, { time: b }) => b - a);
+
   const canvasId = `canvas_${Math.floor(Math.random() * 10_000_000)}`;
 
   const container = document.createElement("div");
@@ -71,7 +74,7 @@ Object.entries(timings).forEach(([kind, rows]) => {
 
   <div class="grid-row">
   <div class="grid-col-6">
-  <div class="border-1px" style="display: inline-block; max-height: 50vh; overflow-y: scroll;"><table class="usa-table usa-table--striped margin-0 font-mono-sm"><thead><tr><th>response (ms)</th><th>correlation ID</th></thead><tbody>${rows.map((entry) => `<tr>${row(entry)}</tr>`).join("")}</tbody></table></div>
+  <div class="border-1px" style="display: inline-block; max-height: 50vh; overflow-y: scroll;"><table class="usa-table usa-table--striped margin-0 font-mono-sm"><thead><tr><th>response (ms)</th><th>correlation ID</th></thead><tbody>${sorted.map((entry) => `<tr>${row(entry)}</tr>`).join("")}</tbody></table></div>
   </div>
   <div class="grid-col-6 bg-white">
   <canvas id="${canvasId}"></canvas>
