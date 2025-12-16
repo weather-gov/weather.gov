@@ -8,7 +8,7 @@ from django.views.decorators.cache import cache_control, never_cache
 from django.views.decorators.http import require_POST
 
 # from wx_stories_api.models import SituationReport, WeatherStory
-from shapely import MultiPolygon
+from shapely import MultiPolygon, Polygon
 
 from backend import interop
 from backend.models import WFO
@@ -37,7 +37,7 @@ def index(request):
 
 
 @never_cache
-def county_overview(request, countyfips):
+def county_overview(request, countyfips):  # noqa: C901
     """Render the main page for a particular county."""
     county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=countyfips)
 
@@ -76,11 +76,16 @@ def county_overview(request, countyfips):
         if not alert.get("geometry") or alert["geometry"].get("type") != "MultiPolygon":
             continue
 
-        # Read in coordinates and sort polygons by size from largest to smallest
-        mu_polygon = MultiPolygon(alert["geometry"]["coordinates"])
-        mu_polygon_sorted = MultiPolygon(
-            sorted(list(mu_polygon.geoms), key=lambda a: a.area, reverse=True)
-        ).__geo_interface__
+        polygons = []
+
+        # Loop through nested polygons and format for shapely
+        for polygon in alert["geometry"]["coordinates"]:
+            shapely_polygon = Polygon(shell=polygon[0], holes=polygon[1:])
+            polygons.append(shapely_polygon)
+
+        # Sort and output
+        sorted_polygons = sorted(polygons, key=lambda a: a.area, reverse=True)
+        mu_polygon_sorted = MultiPolygon(polygons=sorted_polygons).__geo_interface__
 
         # Overwrite current alert coordinates
         county_data["alerts"]["items"][i]["geometry"] = mu_polygon_sorted
