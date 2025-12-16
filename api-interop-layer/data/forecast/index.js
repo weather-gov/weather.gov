@@ -157,7 +157,14 @@ export default async ({ grid, place, isMarine }) => {
       const hasSnow = day.qpf.some(({ snow }) => snow !== null && snow.in > 0);
 
       day.qpf = {
-        periods: day.qpf,
+        // Format the start and end dates. Using the .format() method preserves
+        // UTC offset. Otherwise we get the default stringification, which uses
+        // UTC time with no offsets.
+        periods: day.qpf.map(({ start, end, ...rest }) => ({
+          start: start.format(),
+          end: end.format(),
+          ...rest,
+        })),
         hasIce,
         hasSnow,
         hasQPF: hasLiquid || hasIce || hasSnow,
@@ -179,6 +186,10 @@ export default async ({ grid, place, isMarine }) => {
     // the daily periods and the overall day
     updateMaxPop(day);
   }
+
+  // At this point, QPF has been shuffled into the daily forecast object, so
+  // we can remove it from the grid. It's not really a grid property anyway.
+  delete gridpointData.qpf;
 
   // Whatever gridData is returned here gets merged into the top-level grid
   // object that contains other information such as the WFO and grid X and Y

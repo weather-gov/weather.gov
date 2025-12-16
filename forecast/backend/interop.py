@@ -8,6 +8,11 @@ from django.utils.translation import gettext_lazy as _
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
 
 
+def _get_hour_from_iso8601(iso_string):
+    """Get the hour from an ISO8601 string."""
+    return datetime.fromisoformat(iso_string).strftime("%-I%p").lower()
+
+
 def _fetch(url):
     """Fetch a dictionary from the interop layer."""
     base_url = getenv("INTEROP_URL")
@@ -127,7 +132,10 @@ def _process_interop_data(data):
 
         # Process the Quantitative Precipitation Forecast (qpf)
         qpf = day["qpf"]
-        qpf["times"] = [f"{period['startHour']}-{period['endHour']}" for period in qpf["periods"]]
+        qpf["times"] = [
+            f"{_get_hour_from_iso8601(period['start'])}-{_get_hour_from_iso8601(period['end'])}"
+            for period in qpf["periods"]
+        ]
         qpf["liquid"] = [period["liquid"]["in"] for period in qpf["periods"]]
         qpf["snow"] = []
         qpf["ice"] = []

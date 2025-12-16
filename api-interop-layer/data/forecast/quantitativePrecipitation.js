@@ -20,18 +20,16 @@ export default (liquidData, iceData, snowData, { timezone }) => {
       snow.value = snowValues[index].value;
     }
 
-    const start = dayjs(isoTimestamp);
+    const start = dayjs(isoTimestamp).tz(timezone);
     const duration = dayjs.duration(isoDuration);
-    const end = start.add(duration);
+    const end = start.add(duration).tz(timezone);
 
     return {
-      start,
-      end,
+      start: start,
+      end: end,
       liquid,
       ice,
       snow,
-      startHour: start.tz(timezone).format("h A"),
-      endHour: end.tz(timezone).format("h A"),
     };
   });
 };
