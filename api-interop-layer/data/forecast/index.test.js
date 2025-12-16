@@ -99,7 +99,7 @@ describe("Forecast index", () => {
           });
 
           expect(actual).to.eql({
-            gridData: { geometry: "ball", qpf: [] },
+            gridData: { geometry: "ball" },
             daily: {
               days: [
                 {
