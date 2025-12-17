@@ -59,13 +59,31 @@ Object.entries(timings).forEach(([kind, rows]) => {
   const times = rows.map(({ time }) => time);
   const max = Math.max(...times);
   const min = Math.min(...times);
+  const domain = max - min;
+
   const avg =
     Math.round(
       (10 * times.reduce((sum, time) => sum + time, 0)) / times.length,
     ) / 10;
 
-  const sorted = JSON.parse(JSON.stringify(rows));
-  sorted.sort(({ time: a }, { time: b }) => b - a);
+  rows.sort(({ time: a }, { time: b }) => b - a);
+
+  const bucketDomain = domain / 20;
+  const buckets = [...Array(20)].map((_, i) => {
+    const floor = Math.round((min + bucketDomain * i) / 10) / 100;
+    const ceiling = Math.round((min + bucketDomain * (i + 1)) / 10) / 100;
+
+    return {
+      range: `${floor}-${ceiling}`,
+      times: 0,
+    };
+  });
+  rows.forEach(({ time }) => {
+    const bucket = Math.floor((20 * (time - min)) / domain);
+    console.log(time);
+    console.log(bucket);
+    buckets[Math.min(bucket, 19)].times += 1;
+  });
 
   const canvasId = `canvas_${Math.floor(Math.random() * 10_000_000)}`;
 
@@ -80,7 +98,7 @@ Object.entries(timings).forEach(([kind, rows]) => {
 
   <div class="grid-row">
   <div class="grid-col-6">
-  <div class="border-1px" style="display: inline-block; max-height: 50vh; overflow-y: scroll;"><table class="usa-table usa-table--striped margin-0 font-mono-sm"><thead><tr><th></th><th>response (ms)</th><th>correlation ID</th></thead><tbody>${sorted.map((entry) => `<tr>${row(entry)}</tr>`).join("")}</tbody></table></div>
+  <div class="border-1px" style="display: inline-block; max-height: 50vh; overflow-y: scroll;"><table class="usa-table usa-table--striped margin-0 font-mono-sm"><thead><tr><th></th><th>response (ms)</th><th>correlation ID</th></thead><tbody>${rows.map((entry) => `<tr>${row(entry)}</tr>`).join("")}</tbody></table></div>
   </div>
   <div class="grid-col-6 bg-white">
   <canvas id="${canvasId}"></canvas>
@@ -90,11 +108,14 @@ Object.entries(timings).forEach(([kind, rows]) => {
   document.querySelector("main").append(container);
 
   new window.Chart(document.getElementById(canvasId), {
-    type: "line",
+    type: "bar",
     data: {
-      labels: rows.map((_, i) => i),
+      labels: buckets.map((bucket) => `${bucket.range} (${bucket.times})`),
       datasets: [
-        { label: "response times", data: rows.map(({ time }) => time) },
+        {
+          label: "response times (second)",
+          data: buckets.map(({ times }) => times),
+        },
       ],
     },
   });
