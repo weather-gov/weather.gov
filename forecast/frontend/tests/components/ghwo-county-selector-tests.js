@@ -203,7 +203,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
     sandbox.stub(window.FormData.prototype, "append");
 
     // Stub out fetch, so that it does nothing
-    sandbox.stub(global, "fetch").resolves(new Response("", { status: 200 }));
+    global.fetch.resolves(new Response("", { status: 200 }));
 
     // First value in the initialized  selector comboboxes.
     // See top level beforeEach()
@@ -228,7 +228,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
 
   it("if #fetchUpdatedSelectComponent response is ok, history is pushed", async () => {
     // Stub out fetch, so that it returns an OK response
-    sandbox.stub(global, "fetch").resolves(new Response("", { status: 200 }));
+    global.fetch.resolves(new Response("", { status: 200 }));
 
     // Stub the history pushState method
     sandbox.stub(window.history, "pushState");
@@ -249,7 +249,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
 
   it("if #fetchUpdatedSelectComponent response is ok, adds the popstate handler for back button", async () => {
     // Stub out fetch, so that it returns an OK response
-    sandbox.stub(global, "fetch").resolves(new Response("", { status: 200 }));
+    global.fetch.resolves(new Response("", { status: 200 }));
 
     // Stub adding the event listener to the window
     // object
@@ -268,7 +268,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
   it("Appends the loader to the DOM if the request is taking longer than the timeout", async () => {
     // Mock the fetch call so it takes longer than the timeout
     // to respond
-    sandbox.stub(global, "fetch").callsFake(async () => {
+    global.fetch.callsFake(async () => {
       await wait(WX_GHWO_DETAILS_LOADER_TIMEOUT + 500);
       return new Response("", { status: 200 });
     });
@@ -294,7 +294,7 @@ describe("<wx-ghwo-county-selector> component tests", () => {
   it("Does not append the loader to the DOM at all if the request responds _before_ the timeout", async () => {
     // Mock the detch call so it returns in a shorter period than
     // the timeout
-    sandbox.stub(global, "fetch").callsFake(async () => {
+    global.fetch.callsFake(async () => {
       await wait(WX_GHWO_DETAILS_LOADER_TIMEOUT - 300);
       return new Response("", { status: 200 });
     });

@@ -1,0 +1,106 @@
+@use "uswds-core" as *;
+
+/* stylelint-disable scss/at-extend-no-missing-placeholder */
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+:root {
+    --combobox-z-index: 300;
+}
+
+/* Styles for the combobox component(s) */
+wx-combobox {
+    display: block;
+    border: 1px solid #1c1d1f;
+    background-color: transparent;
+    position: relative;
+    z-index: var(--combobox-z-index);
+
+    > input[type="text"] {
+        max-width: 100%;
+        height: auto;
+        border: none;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+
+        /* The z-index on the input should always
+         * be 1 more than the base component's z-index.
+         * This allows the focus border to appear above the
+         * popup
+         **/
+        position: relative;
+        z-index: calc(var(--combobox-z-index) + 1);
+    }
+
+    > button[slot="clear-button"] {
+        @extend .usa-combo-box__clear-input;
+
+        display: block;
+        background-image:
+            linear-gradient(rgba(255 255 255 / 40%), rgba(255 255 255 / 40%)),
+            url("/images/uswds/usa-icons/close.svg");
+        opacity: 1;
+        background-color: white;
+        position: relative;
+        right: unset;
+
+        &.display-none {
+            display: none;
+        }
+
+        z-index: calc(var(--combobox-z-index) + 1);
+    }
+
+    > button[slot="toggle-button"]{
+        @extend .usa-combo-box__toggle-list;
+
+        &::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: url("/images/uswds/usa-icons/expand_more.svg"),
+                              linear-gradient(transparent,transparent);
+            background-repeat: no-repeat;
+            background-size: auto 2rem;
+            background-position: center;
+            opacity: 0.6;
+        }
+
+        background-color: white;
+        background-image: unset;
+        opacity: 1;
+        position: relative;
+        z-index: calc(var(--combobox-z-index) + 1);
+    }
+
+    > [role="listbox"]{
+        border: none;
+        position: absolute;
+        top: 100%;
+        border-right: 1px solid black;
+        border-left: 1px solid black;
+        border-bottom: 1px solid black;
+        box-sizing: border-box;
+        left: -1px;
+        width: calc(100% + 2px);
+        display: none;
+    }
+
+    &[expanded="true"]{
+        border-bottom: 0;
+
+        > button[slot="toggle-button"]{
+            transform: rotate(180deg);
+        }
+
+        > [role="listbox"] {
+            display: block;
+        }
+    }
+
+}

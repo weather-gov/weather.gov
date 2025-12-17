@@ -65,6 +65,7 @@ module.exports = defineConfig([
     "**/uswds*.js",
     "web/sites/default/**/*",
     "**/gulpfile.js",
+    "forecast/frontend/public/*",
   ]),
   {
     files: ["web/themes/new_weather_theme/assets/js/components/**/*.js"],
