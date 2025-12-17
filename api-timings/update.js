@@ -1,12 +1,31 @@
 import fs from "node:fs/promises";
+import { exec } from "node:child_process";
+import { config } from "dotenv";
+
+config();
+
+const API_KEY = process.env.API_KEY;
+
+const commit = async () =>
+  new Promise((resolve) => {
+    exec(`git add timings.csv && git commit -m "update" && git push`, () => {
+      resolve();
+    });
+  });
 
 const testEndpoints = [
+  // single endpoint
+  "/forecasts/{lat},{lon}",
+  "/forecasts/{lat},{lon}",
+  "/forecasts/{lat},{lon}",
+  "/forecasts/{lat},{lon}",
+  "/forecasts/{lat},{lon}",
   // points
-  "/points/36.077,-111.316",
-  "/points/36.077,-112.316",
-  "/points/38.077,-113.316",
-  "/points/41.077,,-115.316",
-  "/points/41.077,-118.316",
+  "/points/{lat},{lon}",
+  "/points/{lat},{lon}",
+  "/points/{lat},{lon}",
+  "/points/{lat},{lon}",
+  "/points/{lat},{lon}",
   // gridpoints
   "/gridpoints/SLC/65,12/",
   "/gridpoints/SLC/29,17",
@@ -39,13 +58,26 @@ const testEndpoints = [
   "/stations/MJBN2/observations?limit=1",
 ];
 
+const minLon = -119.316;
+const maxLon = -80.284;
+const minLat = 35.077;
+const maxLat = 41.264;
+
 const main = async () => {
   console.log("updating...");
   const f = await fs.open("./timings.csv", "a+");
 
-  for await (const url of testEndpoints) {
+  for await (let url of testEndpoints) {
+    const lat =
+      Math.round((Math.random() * (maxLat - minLat) + minLat) * 1_000) / 1_000;
+    const lon =
+      Math.round((Math.random() * (maxLon - minLon) + minLon) * 1_000) / 1_000;
+    url = url.replace("{lat}", lat).replace("{lon}", lon);
+
     const start = process.hrtime.bigint();
-    const correlationId = await fetch(`https://api.weather.gov${url}`)
+    const correlationId = await fetch(`https://preview-api.weather.gov${url}`, {
+      headers: { "API-Key": API_KEY },
+    })
       .then((response) => response.headers.get("x-correlation-id"))
       .catch(() => {});
     const elapsed = (process.hrtime.bigint() - start) / 1_000_000n;
@@ -57,6 +89,8 @@ const main = async () => {
   }
   await f.close();
   console.log("update finished");
+  console.log(new Date());
+  await commit();
 };
 
 if (import.meta.main) {
