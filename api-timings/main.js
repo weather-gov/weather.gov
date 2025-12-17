@@ -79,10 +79,8 @@ Object.entries(timings).forEach(([kind, rows]) => {
     };
   });
   rows.forEach(({ time }) => {
-    const bucket = Math.floor((20 * (time - min)) / domain);
-    console.log(time);
-    console.log(bucket);
-    buckets[Math.min(bucket, 19)].times += 1;
+    const bucket = Math.min(Math.floor((20 * (time - min)) / domain), 19);
+    buckets[bucket].times += 1;
   });
 
   const canvasId = `canvas_${Math.floor(Math.random() * 10_000_000)}`;
