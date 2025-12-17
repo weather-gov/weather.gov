@@ -331,8 +331,7 @@ DIRECTIVES = {
         "blob:",
     ],
     "frame-ancestors": [SELF],
-    "form-action": [SELF],
-    "report-uri": "/csp-report/report/",
+    "form-action": [SELF]
 }
 
 CONTENT_SECURITY_POLICY = {

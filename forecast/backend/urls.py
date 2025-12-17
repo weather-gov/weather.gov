@@ -74,7 +74,6 @@ urlpatterns = [
     path("place/<state>/<place>/", point.place_forecast, name="place forecast"),
     path("health/", index.health, name="health"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
-    path("csp-report/", include("cspreports.urls")),
 ]
 
 if settings.DEBUG is True:
