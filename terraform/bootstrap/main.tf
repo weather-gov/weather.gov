@@ -40,7 +40,7 @@ locals {
 }
 
 module "mgmt_space" {
-  source = "github.com/gsa-tts/terraform-cloudgov//cg_space?ref=v2.1.0"
+  source = "github.com/gsa-tts/terraform-cloudgov//cg_space?ref=v2.4.1"
 
   cf_org_name   = local.org_name
   cf_space_name = var.mgmt_space_name
@@ -48,7 +48,7 @@ module "mgmt_space" {
 }
 
 module "s3" {
-  source = "github.com/gsa-tts/terraform-cloudgov//s3?ref=v2.1.0"
+  source = "github.com/gsa-tts/terraform-cloudgov//s3?ref=v2.4.1"
 
   cf_space_id  = module.mgmt_space.space_id
   name         = "weathergov-terraform-state"

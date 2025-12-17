@@ -11,7 +11,7 @@ locals {
 }
 
 module "app_space" {
-  source = "github.com/gsa-tts/terraform-cloudgov//cg_space?ref=v2.1.0"
+  source = "github.com/gsa-tts/terraform-cloudgov//cg_space?ref=v2.4.1"
 
   cf_org_name          = local.cf_org_name
   cf_space_name        = var.cf_space_name
@@ -22,7 +22,7 @@ module "app_space" {
 }
 
 module "database" {
-  source = "github.com/gsa-tts/terraform-cloudgov//database?ref=v2.1.0"
+  source = "github.com/gsa-tts/terraform-cloudgov//database?ref=v2.4.1"
 
   cf_space_id   = module.app_space.space_id
   name          = "${local.app_name}-rds-${var.env}"
@@ -31,7 +31,7 @@ module "database" {
 }
 
 module "s3" {
-  source = "github.com/gsa-tts/terraform-cloudgov//s3?ref=v2.1.0"
+  source = "github.com/gsa-tts/terraform-cloudgov//s3?ref=v2.4.1"
 
   cf_space_id  = module.app_space.space_id
   name         = "${local.app_name}-s3-${var.env}"
@@ -50,7 +50,7 @@ module "s3" {
 #    https://docs.cloud.gov/platform/services/external-domain-service/#how-to-create-an-instance-of-this-service
 # module "domain" {
 #   count  = (var.custom_domain_name == null ? 0 : 1)
-#   source = "github.com/gsa-tts/terraform-cloudgov//domain?ref=v2.1.0"
+#   source = "github.com/gsa-tts/terraform-cloudgov//domain?ref=v2.4.1"
 
 #   name          = "weathergov-beta-domain"
 #   cf_org_name   = local.cf_org_name
