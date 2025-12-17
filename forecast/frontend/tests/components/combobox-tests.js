@@ -1,447 +1,627 @@
-import { assert, expect } from "chai";
-import { beforeEach } from "mocha";
-import { spy } from "sinon";
+import { expect } from "chai";
+import { before, beforeEach, afterEach } from "mocha";
+import { createSandbox, spy } from "sinon";
 
-describe("generic combo box", () => {
-  before(async () => {
-    await import("../../assets/js/components/combo-box.js");
+const baseMarkup = `
+<!doctype html>
+<html>
+    <head></head>
+    <body>
+        <wx-combobox tabindex="0" id="combobox">
+            <input type="text" slot="input" role="combobox"/>
+            <button type="button" slot="clear-button"></button>
+            <button type="button" slot="toggle-button"></button>
+            <wx-filterable-listbox slot="popup" id="listbox" role="listbox">
+                <div>Permanent Area</div>
+                <div role="group" id="listbox-permagroup" data-filter-ignore="true">
+                    <div role="option" value="permaOne">Permanent Option 1</div>
+                    <div role="option" value="permaTwo">Permanent Option 2</div>
+                </div>
+                <div>Filtered Options Area</div>
+                <div role="group" id="listbox-filtered-options">
+                    <div role="option" value="option1">First option</div>
+                    <div role="option" value="option2">Second option</div>
+                    <div role="option" value="option3">Third option</div>
+                    <div role="option" value="option4">Fourth option</div>
+                    <div role="option" value="option5">Fifth option</div>
+                </div>
+            </wx-filterable-listbox>
+        </wx-combobox>
+    </body>
+</html>
+`;
+
+const wait = (milliseconds) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+};
+
+describe("Combobox component tests", () => {
+  before(async() => {
+    await import("../../assets/js/components/combobox/filterable-listbox.js");
+    await import("../../assets/js/components/combobox/combobox.js");
+
+    // We have to stub scrollIntoView, which JSDom doesn't have
+    // by default
+    window.HTMLElement.prototype.scrollIntoView = () => {};
   });
 
-  beforeEach(() => {
-    document.body.innerHTML = "";
-  });
+  /**
+   * WCAG Functionality Tests
+   * ----------------------------------------------
+   * This group of tests covers the interactive functionality that
+   * is expected based on the WCAG combobox pattern
+   * guidelines.
+   * See (https://www.w3.org/WAI/ARIA/apg/patterns/combobox/#keyboardinteraction)
+   */
+  describe("WCAG Functionality Tests", () => {
+    beforeEach(async() => {
+      document.body.innerHTML = baseMarkup;
 
-  it("has the element", () => {
-    const combobox = document.createElement("wx-combo-box");
-    document.body.append(combobox);
-
-    assert.exists(document.querySelector("wx-combo-box"));
-    assert.exists(window.customElements.get("wx-combo-box"));
-  });
-
-  it("includes a hidden named element if a name is provided", () => {
-    const combobox = document.createElement("wx-combo-box");
-    combobox.setAttribute("name", "special hidden input");
-    document.body.append(combobox);
-
-    assert.exists(
-      document.querySelector(`wx-combo-box input[name="special hidden input"]`),
-    );
-  });
-
-  it("pre-populates the list from the HTML attribute", () => {
-    const combobox = document.createElement("wx-combo-box");
-    combobox.setAttribute(
-      "items",
-      JSON.stringify([
-        { value: "value #1", text: "text #1" },
-        { value: "value #2", text: "text #2" },
-      ]),
-    );
-    document.body.append(combobox);
-
-    assert.exists(
-      document.querySelector(`wx-combo-box li[data-value="value #1"]`),
-    );
-    assert.exists(
-      document.querySelector(`wx-combo-box li[data-value="value #2"]`),
-    );
-  });
-
-  it("pre-populates the list from the HTML attribute and pre-selects one", () => {
-    const combobox = document.createElement("wx-combo-box");
-
-    // While we're here, also check that the value of the named input gets set.
-    combobox.setAttribute("name", "pretty pretty pony");
-
-    combobox.setAttribute(
-      "items",
-      JSON.stringify([
-        { value: "value #1", text: "text #1" },
-        { value: "value #2", text: "text #2" },
-      ]),
-    );
-    combobox.setAttribute("selected", "value #2");
-    document.body.append(combobox);
-
-    assert.exists(
-      document.querySelector(
-        `wx-combo-box li[data-value="value #2"][aria-selected="true"]`,
-      ),
-    );
-
-    expect(
-      document.querySelector(`wx-combo-box input[name="pretty pretty pony"]`)
-        .value,
-    ).to.equal("value #2");
-  });
-
-  it("updates its own 'selected' attribute when an item is chosen", () => {
-    const combobox = document.createElement("wx-combo-box");
-    combobox.setAttribute(
-      "items",
-      JSON.stringify([
-        { value: "value #1", text: "text #1" },
-        { value: "value #2", text: "text #2" },
-        { value: "value #3", text: "text #3" },
-      ]),
-    );
-    document.body.append(combobox);
-
-    // Select the second item in the this
-    combobox.showList();
-    const secondListItem = combobox.listbox.querySelector('li[role="option"]:nth-child(2)');
-    expect(secondListItem).to.exist;
-    secondListItem.click();
-
-    expect(
-      combobox.getAttribute("selected")
-    ).to.equal("value #2");
-    
-  });
-
-  describe("clears the list", () => {
-    let cb;
-    beforeEach(() => {
-      cb = document.createElement("wx-combo-box");
-      cb.setAttribute(
-        "items",
-        JSON.stringify([
-          { value: "value #1", text: "text #1" },
-          { value: "value #2", text: "text #2" },
-          { value: "value #3", text: "text #3" },
-        ]),
-      );
-      document.body.append(cb);
-
-      // Press down to select an element and then choose it.
-      cb.dispatchEvent(
-        new window.KeyboardEvent("keydown", { key: "ArrowDown" }),
-      );
-      cb.chooseOption({});
+      // Let the slotchange and other init events
+      // resolve
+      await wait(50);
     });
 
-    it("by calling the function", () => {
-      expect(cb.value).to.equal("value #1");
+    describe("Down Arrow", () => {
+      it("if popup is available, moves focus [ie pseudo/visual focus] into the popup", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.focus();
+        expect(combobox.popup.pseudoFocus).to.not.exist;
 
-      cb.clear();
-
-      expect(cb.value).to.equal(null);
-    });
-
-    it("by clicking the button", () => {
-      expect(cb.value).to.equal("value #1");
-
-      cb.querySelector(`button[slot="clear-button"]`).click();
-
-      expect(cb.value).to.equal(null);
-    });
-  });
-
-  describe("it handles events", () => {
-    let combobox;
-    beforeEach(() => {
-      combobox = document.createElement("wx-combo-box");
-      document.body.append(combobox);
-    });
-
-    const isExpanded = () => {
-      return (
-        combobox.getAttribute("expanded") === "true" &&
-        combobox
-          .querySelector(`input[slot="input"]`)
-          .getAttribute("aria-expanded") === "true"
-      );
-    };
-
-    describe("toggles", () => {
-      describe("with the toggle button", () => {
-        it("expands the list when the list is collapsed", () => {
-          combobox
-            .querySelector(`input[slot="input"]`)
-            .setAttribute("aria-expanded", "false");
-
-          combobox.querySelector("button.wx-combo-box__toggle-list").click();
-
-          expect(isExpanded()).to.equal(true);
-        });
-
-        it("collapses the list when the list is expanded", () => {
-          combobox
-            .querySelector(`input[slot="input"]`)
-            .setAttribute("aria-expanded", "true");
-
-          combobox.querySelector("button.wx-combo-box__toggle-list").click();
-
-          expect(isExpanded()).to.equal(false);
-        });
-      });
-
-      it("with the toggle function", () => {
-        // Initially not expanded
-        expect(isExpanded()).to.equal(false);
-
-        combobox.toggleList();
-
-        // now expanded
-        expect(isExpanded()).to.equal(true);
-
-        combobox.toggleList();
-
-        // and collapsed again
-        expect(isExpanded()).to.equal(false);
-      });
-    });
-
-    describe("pressing the enter key while the toggle button is focused", () => {
-      it("expands the list when the list is collapsed", () => {
-        combobox
-          .querySelector(`input[slot="input"]`)
-          .setAttribute("aria-expanded", "false");
-
-        combobox
-          .querySelector("button.wx-combo-box__toggle-list")
-          .dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter" }));
-
-        expect(isExpanded()).to.equal(true);
-      });
-
-      it("collapses the list when the list is expanded", () => {
-        combobox
-          .querySelector(`input[slot="input"]`)
-          .setAttribute("aria-expanded", "true");
-
-        combobox
-          .querySelector("button.wx-combo-box__toggle-list")
-          .dispatchEvent(new window.KeyboardEvent("keydown", { key: "Enter" }));
-
-        expect(isExpanded()).to.equal(false);
-      });
-    });
-
-    describe("navigates up and down", () => {
-      beforeEach(() => {
-        combobox.setListItems([
-          { value: "value #1", text: "text #1" },
-          { value: "value #2", text: "text #2" },
-          { value: "value #3", text: "text #3" },
-        ]);
-      });
-
-      describe("pressing the down key", () => {
-        it("expands the list if it is collapsed", () => {
-          combobox.dispatchEvent(
-            new window.KeyboardEvent("keydown", { key: "ArrowDown" }),
-          );
-
-          expect(isExpanded()).to.equal(true);
-
-          expect(
-            combobox
-              .querySelector(`li[role="option"]`)
-              .getAttribute("aria-selected"),
-          ).to.equal("true");
-        });
-
-        it("selects the next item", () => {
-          combobox.dispatchEvent(
-            new window.KeyboardEvent("keydown", { key: "ArrowDown" }),
-          );
-          combobox.dispatchEvent(
-            new window.KeyboardEvent("keydown", { key: "ArrowDown" }),
-          );
-
-          expect(
-            combobox
-              .querySelector(`li[role="option"]:nth-child(2)`)
-              .getAttribute("aria-selected"),
-          ).to.equal("true");
-        });
-      });
-
-      describe("pressing the up key", () => {
-        beforeEach(() => {
-          // Start with the list open. The up key will never open the list.
-          document.querySelector("wx-combo-box").showList();
-        });
-
-        it("closes the list if the first item is selected", () => {
-          document
-            .querySelector("wx-combo-box")
-            .dispatchEvent(
-              new window.KeyboardEvent("keydown", { key: "ArrowUp" }),
-            );
-
-          expect(
-            document.querySelector("wx-combo-box").getAttribute("expanded"),
-          ).to.equal("false");
-          expect(
-            document
-              .querySelector(`wx-combo-box input[slot="input"]`)
-              .getAttribute("aria-expanded"),
-          ).to.equal("false");
-        });
-
-        it("navigates up if a later item is selected", () => {
-          const cb = document.querySelector("wx-combo-box");
-
-          // Arrow down first. This should put us on element #2.
-          cb.dispatchEvent(
-            new window.KeyboardEvent("keydown", { key: "ArrowDown" }),
-          );
-
-          // Then arrow up!
-          cb.dispatchEvent(
-            new window.KeyboardEvent("keydown", { key: "ArrowUp" }),
-          );
-
-          // Expected the selected one to also be the first one.
-          expect(cb.querySelector(`li[aria-selected="true"]`)).to.equal(
-            cb.querySelector(`li[role="option"]`),
-          );
-        });
-      });
-    });
-
-    // I can't quite figure out how to trigger this event properly.
-    /*describe("filters the list on text input", () => {
-      beforeEach(() => {
-        document.innerHTML = "";
-        combobox = document.createElement("wx-combo-box");
-        combobox.setAttribute(
-          "items",
-          JSON.stringify([
-            { value: "value #1", text: "text #1" },
-            { value: "value #2", text: "text #2" },
-          ]),
+        combobox.input.dispatchEvent(
+          new window.KeyboardEvent("keydown", {
+            key: "ArrowDown",
+            bubbles: true
+          })
         );
-        document.body.append(combobox);
-      });
+        await wait(5);
 
-      it("", () => {
-        combobox.dispatchEvent(
-          new window.KeyboardEvent("keydown", { key: "ArrowDown" }),
+        expect(combobox.popup.pseudoFocus).to.exist;
+      });
+    });
+
+    describe("Escape", () => {
+      it("dismisses the popup if it is visible", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.focus();
+        expect(combobox.getAttribute("expanded")).to.equal("true");
+
+        combobox.input.dispatchEvent(
+          new window.KeyboardEvent("keydown", {
+            key: "Escape",
+            bubbles: true
+          })
         );
-        combobox.dispatchEvent(new window.InputEvent("input"));
+        await wait(5);
+
+        expect(combobox.hasAttribute("expanded")).to.be.false;
       });
-    });*/
+    });
 
-    it("it expands when focused", () => {
-      expect(isExpanded()).to.equal(false);
+    describe("aria-activedescendant", () => {
+      it("is set to the current pseudo-focus element when there is one", () => {
+        const combobox = document.getElementById("combobox");
+        const fourthItem = combobox.querySelector(`[data-option-index="3"]`);
+        const thirdItem = combobox.querySelector(`[data-option-index="2"]`);
+        expect(fourthItem).to.exist;
+        expect(thirdItem).to.exist;
+        combobox.focus();
+        expect(combobox.input.hasAttribute("aria-activedescendant")).to.be.false;
+        expect(combobox.isExpanded).to.be.true;
+        
+        combobox.popup.pseudoFocusItem(thirdItem);
+        combobox.popup.moveDown();
 
-      combobox
-        .querySelector("input")
-        .dispatchEvent(new window.FocusEvent("focus"));
+        expect(combobox.input.getAttribute("aria-activedescendant")).to.equal(fourthItem.id);
+      });
 
-      expect(isExpanded()).to.equal(true);
+      it("is removed when the combobox is closed", () => {
+        const combobox = document.getElementById("combobox");
+        combobox.focus();
+        for(let i = 0; i < 2; i++){
+          combobox.popup.moveDown();
+        }
+        expect(combobox.isExpanded).to.be.true;
+        expect(combobox.popup.pseudoFocus).to.exist;
+        expect(combobox.input.hasAttribute("aria-activedescendant")).to.be.true;
+
+        combobox.hidePopup();
+
+        expect(combobox.input.hasAttribute("aria-activedescendant")).to.be.false;
+      });
     });
   });
-});
 
-describe("#resetListAndListboxItems tests", () => {
-  let initialListItems, combobox;
-  beforeEach(() => {
-    initialListItems = [
-      { value: "Item 1 value", text: "Item 1"},
-      { value: "Item 2 value", text: "Item 2"},
-      { value: "Item 3 value", text: "Item 3"}
-    ];
-    combobox = document.createElement("wx-combo-box");
-    combobox.setAttribute("items", JSON.stringify(initialListItems));
-    document.body.innerHTML = "";
-    document.body.append(combobox);
+  describe("Misc aria roles, states, and properties tests", () => {
+    beforeEach(async() => {
+      document.body.innerHTML = baseMarkup;
+
+      // Let the slotchange and other init events
+      // resolve
+      await wait(50);
+    });
+
+    it("aria-controls is set on the combobox input", () => {
+      const combobox = document.getElementById("combobox");
+
+      expect(combobox.input.getAttribute("aria-controls")).to.equal(combobox.popup.id);
+    });
+
+    it("aria-controls is set on the combobox input, when a new popup is swapped in", async () => {
+      const combobox = document.getElementById("combobox");
+      const newListbox = combobox.popup.cloneNode(true);
+      newListbox.id = "new-listbox";
+      combobox.popup.replaceWith(newListbox);
+
+      await wait(5);
+
+      expect(combobox.input.getAttribute("aria-controls")).to.equal(newListbox.id);
+    });
   });
-  
-  it("has the initial list items set", () => {
-    const expectedItems = initialListItems;
-    const actualItems = combobox.listItems;
 
-    expect(expectedItems).to.eql(actualItems);
+  describe("Method tests", () => {
+    beforeEach(async() => {
+      document.body.innerHTML = baseMarkup;
+
+      // Let the slotchange and other init events
+      // resolve
+      await wait(50);
+    });
+
+    describe("#showPopup", () => {
+      it(`sets the input to [aria-expanded="true"]`, () => {
+        const combobox = document.getElementById("combobox");
+        combobox.showPopup();
+        expect(combobox.input.getAttribute("aria-expanded")).to.equal("true");
+      });
+
+      it(`sets the component to [expanded="true"]`, () => {
+        const combobox = document.getElementById("combobox");
+        expect(combobox.hasAttribute("expaneded")).to.be.false;
+        combobox.showPopup();
+        expect(combobox.getAttribute("expanded")).to.equal("true");
+      });
+
+      it("calls scrollIntoView on the current selection, if there is one", () => {
+        const combobox = document.getElementById("combobox");
+        const secondItem = combobox.popup.querySelector(`[role="option"][data-option-index="1"]`);
+        combobox.popup.selectItem(secondItem);
+        combobox.showPopup();
+
+        expect(secondItem.scrollIntoView.called).to.be.true;
+      });
+    });
+
+    describe("#hidePopup", () => {
+      it(`removes [aria-expanded] from the input`, async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.setAttribute("aria-expanded", true);
+        combobox.hidePopup();
+
+        expect(combobox.input.hasAttribute("aria-expanded")).to.be.false;
+      });
+
+      it(`removes [aria-activedescendant] from the input`, () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.setAttribute("aria-activedescendant", "something");
+        combobox.hidePopup();
+
+        expect(combobox.input.hasAttribute("aria-activedescendant")).to.be.false;
+      });
+
+      it(`removes this component's [expanded="true"]`, () => {
+        const combobox = document.getElementById("combobox");
+        combobox.setAttribute("expanded", true);
+        combobox.hidePopup();
+
+        expect(combobox.hasAttribute("expanded")).to.be.false;
+      });
+    });
+
+    describe(`#handleSlotChange`, () => {
+      let sandbox;
+      before(() => {
+        sandbox = createSandbox();
+      });
+
+      let combobox, event;
+      beforeEach(() => {
+        combobox = document.getElementById("combobox");
+        event = {};
+        event.target = {
+          assignedElements: sandbox.stub(),
+          getAttribute: sandbox.stub()
+        };
+      });
+
+      afterEach(() => {
+        sandbox.restore();
+      });
+
+      describe(`where slot[name="popup"]`, () => {
+        it("adds the change event listener to the popup, if there is a popup available", () => {
+          const popupEl = document.createElement("div");
+          const addEventListenerSpy = sandbox.spy(popupEl, "addEventListener");
+          event.target.assignedElements.returns([popupEl]);
+          event.target.getAttribute.withArgs("name").returns("popup");
+
+          combobox.handleSlotChange(event);
+
+          // We add two event listeners (change and mousedown)
+          expect(addEventListenerSpy.callCount).to.equal(2);
+        });
+
+        it("removes any event listeners already attached to the component if a new popup is slotted", () => {
+          const firstPopup = document.createElement("div");
+          const removeEventListenerSpy = sandbox.spy(firstPopup, "removeEventListener");
+          combobox.popup = firstPopup;
+          const secondPopup = document.createElement("div");
+          event.target.assignedElements.returns([secondPopup]);
+          event.target.getAttribute.withArgs("name").returns("popup");
+          expect(removeEventListenerSpy.callCount).to.equal(0);
+
+          combobox.handleSlotChange(event);
+
+          // We expect two event listeners to have been removed
+          // from the first popup
+          expect(removeEventListenerSpy.callCount).to.equal(2);
+
+          // We want to ensure that the first popup is _not_ attached
+          // to the component as a property
+          expect(combobox.popup).to.not.eql(firstPopup);
+        });
+
+        it("adds a custom id to the popup that is based on the component id (popup doesn't have an id yet)", () => {
+          const popup = document.createElement("div");
+          const expectedId = `${combobox.id}-popup`;
+          event.target.assignedElements.returns([popup]);
+          event.target.getAttribute.withArgs("name").returns("popup");
+
+          combobox.handleSlotChange(event);
+
+          expect(popup.id).to.equal(expectedId);
+        });
+
+        it("does not add a custom id if the popup already has an id", () => {
+          const popup = document.createElement("div");
+          popup.id = "test-id";
+          event.target.assignedElements.returns([popup]);
+          event.target.getAttribute.withArgs("name").returns("popup");
+
+          combobox.handleSlotChange(event);
+
+          expect(popup.id).to.equal("test-id");
+        });
+      });
+    });
   });
 
-  it("does not set items when listItems is not an array (early returns)", () => {
-    const nextListItems = "";
-    const clearSpy = spy(combobox, "setListItems");
+  describe("Event handling and behavior tests", () => {
+    let sandbox;
+    beforeEach(() => {
+      document.body.innerHTML = baseMarkup;
+      sandbox = createSandbox();
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
     
-    combobox.resetListAndListboxItems(nextListItems);
+    describe("when adding a new popup to the slot", () => {
+      it("sets aria-controls to the id of the incoming popup", async () => {
+        const combobox = document.getElementById("combobox");
+        const newListbox = document.createElement("wx-filterable-listbox");
+        newListbox.setAttribute("role", "listbox");
+        newListbox.setAttribute("slot", "popup");
+        newListbox.id = "new-listbox";
+        expect(combobox.input.getAttribute("aria-controls")).to.not.equal("new-listbox");
 
-    expect(clearSpy.calledOnce).to.be.false;
-  });
+        combobox.popup.replaceWith(newListbox);
+        await wait(25);
 
-  it("sets list items when the passed items is an array", () => {
-    const nextListItems = [
-      { value: 1, text: "#1"},
-      { value: 2, text: "#2"}
-    ];
+        expect(combobox.input.getAttribute("aria-controls")).to.equal("new-listbox");
+      });
+    });
 
-    combobox.resetListAndListboxItems(nextListItems);
+    describe("when navigating from the combobox", () => {
+      it("hides the popup if the user navigates beyond the top of the listbox", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.showPopup();
+        sandbox.spy(combobox, "hidePopup");
+        combobox.popup.pseudoFocusItem(
+          combobox.popup.querySelector(`[role="option"]:first-of-type`)
+        );
+        expect(combobox.popup.pseudoFocus).to.exist;
+        expect(combobox.hidePopup.callCount).to.equal(0);
+        
+        combobox.input.dispatchEvent(
+          new window.KeyboardEvent("keydown", {
+            key: "ArrowUp",
+            bubbes: true
+          })
+        );
+        await wait(5);
 
-    expect(combobox.listItems).to.eql(nextListItems);
-  });
+        expect(combobox.hidePopup.callCount).to.equal(1);
+        expect(combobox.isExpanded).to.be.false;
+      });
 
-  it("updates the 'selected' attribute to match the first new list item's value (new list)", () => {
-    const nextListItems = [
-      { value: "First Value", text: "#1"},
-      { value: "Second Value", text: "#2"}
-    ];
-    const expectedSelectedValue = nextListItems[0].value;
+      it("hides the popup if it is open and the Escape key is pressed", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.focus();
+        expect(combobox.isExpanded).to.be.true;
+        sandbox.spy(combobox, "hidePopup");
 
-    expect(combobox.getAttribute("selected")).to.not.equal(expectedSelectedValue);
+        combobox.input.dispatchEvent(
+          new window.KeyboardEvent("keydown", {
+            key: "Escape",
+            bubbles: true
+          })
+        );
+        await wait(5);
 
-    combobox.resetListAndListboxItems(nextListItems);
+        expect(combobox.popup.pseudoFocus).to.not.exist;
+        expect(combobox.isExpanded).to.be.false;
+        expect(combobox.hidePopup.callCount).to.equal(1);
+      });
 
-    expect(combobox.getAttribute("selected")).to.equal(expectedSelectedValue);
-  });
+      it("shows the popup if the popup is hidden and the user navigates down", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.focus();
+        sandbox.spy(combobox, "showPopup");
+        combobox.popup.pseudoFocusItem(null); // Clear focus
+        expect(combobox.showPopup.callCount).to.equal(0);
 
-  it("pseudo-focusses the first list item (new list)", () => {
-    const nextListItems = [
-      { value: "First Value", text: "#1"},
-      { value: "Second Value", text: "#2"}
-    ];
-    const pseudoFocusSpy = spy(combobox, "pseudoFocusListItem");
-    combobox.resetListAndListboxItems(nextListItems);
+        combobox.input.dispatchEvent(
+          new window.KeyboardEvent("keydown", {
+            key: "ArrowDown",
+            bubbles: true
+          })
+        );
+        await wait(5);
 
-    const expected = combobox.listbox.querySelector("li:first-child");
-    expect(expected).to.exist;
+        expect(combobox.showPopup.callCount).to.equal(1);
+        expect(combobox.isExpanded).to.be.true;
+      });
 
-    expect(pseudoFocusSpy.calledOnceWithExactly(expected)).to.equal(true);
-  });
+      it("pseudo focuses the first item if the popup is hidden and the user navigates down", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.focus();
+        combobox.hidePopup();
+        combobox.popup.pseudoFocusItem(null);
+        const firstItem = combobox.popup.querySelectorAll(`[role="option"]`)[0];
 
-  it("keeps the 'selected' attribute when updating to a list that contains the same value in it (overlap list)", () => {
-    // See the definition of initialListValues in this
-    // describe block's beforeEach
-    const nextListItems = [
-      { value: "Item 0 value", text: "Item 0"},
-      { value: "Item 1 value", text: "Item 1"}, // Previously the 'selected' item (overlaps)
-      { value: "Item 2 value", text: "Item 2"},
-      { value: "Item 3 value", text: "Item 3"}
-    ];
+        combobox.input.dispatchEvent(
+          new window.KeyboardEvent("keydown", {
+            key: "ArrowDown",
+            bubbles: true
+          })
+        );
+        await wait(5);
 
-    const currentSelectedValue = combobox.getAttribute("selected");
-    expect(currentSelectedValue).to.equal(nextListItems[1].value);
+        expect(combobox.popup.pseudoFocus).to.eql(firstItem);
+      });
+    });
 
-    combobox.resetListAndListboxItems(nextListItems);
-    const nextSelectedValue = combobox.getAttribute("selected");
-    expect(nextSelectedValue).to.not.equal(nextListItems[0].value);
-    expect(nextSelectedValue).to.equal(nextListItems[1].value);
-    expect(nextSelectedValue).to.equal(currentSelectedValue);
-  });
+    describe("when a selection is made in the listbox", () => {
+      it("calls hidePopup, if there is a selection", () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.focus();
+        expect(combobox.isExpanded).to.be.true;
+        sandbox.spy(combobox, "hidePopup");
 
-  it("pseudo-focusses the element of the existing selected value when updating to a list that overlaps", () => {
-    // See the definition of initialListValues in this
-    // describe block's beforeEach
-    const nextListItems = [
-      { value: "Item 0 value", text: "Item 0"},
-      { value: "Item 1 value", text: "Item 1"}, // Previously the 'selected' item (overlaps)
-      { value: "Item 2 value", text: "Item 2"},
-      { value: "Item 3 value", text: "Item 3"}
-    ];
+        const secondItem = combobox.popup.querySelectorAll(`[role="option"]`)[1];
+        combobox.popup.selectItem(secondItem);
 
-    const pseudoFocusSpy = spy(combobox, "pseudoFocusListItem");
-    combobox.resetListAndListboxItems(nextListItems);
+        expect(combobox.hidePopup.callCount).to.equal(1);
+      });
 
-    const expected = combobox.listbox.querySelector("li:nth-child(2)");
+      it("sets the input element's value property to the textContent of the current selection, when there is a selection", () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.focus();
+        expect(combobox.input.value).to.equal("");
+        expect(combobox.popup.selection).to.not.exist;
 
-    expect(pseudoFocusSpy.calledOnceWithExactly(expected)).to.equal(true);
+        const thirdItem = combobox.querySelectorAll(`[role="option"]`)[2];
+        combobox.popup.selectItem(thirdItem);
+
+        expect(combobox.input.value).to.equal(thirdItem.textContent);
+      });
+    });
+
+    describe("when a key is pressed in the combobox but is also handled by the popup", () => {
+      it("calls the handler on the popup (ie forwards the event handler call)", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.showPopup();
+        combobox.input.focus();
+        combobox.popup.pseudoFocusItem(
+          combobox.popup.querySelector(`[role="option"]:nth-of-type(2)`)
+        );
+
+        // We need to set each of the popup's key handlers
+        // to be a spy, for the purposes of this test.
+        const spies = {};
+        Object.keys(combobox.popup.keyMapping).forEach(key => {
+          spies[key] = spy();
+        });
+        combobox.popup.keyMapping = spies;
+
+        // Now go through each key in the mapping and dispatch the
+        // event, but on the combobox input rather than the popup/listbox.
+        // Ensure that the appropriate handlers were triggered on the listbox,
+        // and not just the input.
+        const mappingKeys = Object.keys(spies);
+        for(let i = 0; i < mappingKeys.length; i++){
+          const key = mappingKeys[i];
+          combobox.input.dispatchEvent(
+            new window.KeyboardEvent("keydown", {
+              key: key,
+              bubbles: true
+            })
+          );
+          await wait(5);
+
+          const spy = spies[key];
+          expect(spy.callCount).to.equal(1, key);
+        }
+      });
+    });
+
+    describe("when the toggle button is clicked", () => {
+      it("and the combobox is not expanded, it opens and puts focus on the input", () => {
+        const combobox = document.getElementById("combobox");
+        combobox.toggleButton.click();
+
+        expect(document.activeElement).to.eql(combobox.input);
+        expect(combobox.isExpanded).to.be.true;
+        expect(combobox.getAttribute("expanded")).to.equal("true");
+        expect(combobox.input.getAttribute("aria-expanded")).to.equal("true");
+      });
+
+      it("and the combobox is open, it sets removes the expand properties", () => {
+        const combobox = document.getElementById("combobox");
+        combobox.showPopup();
+        combobox.toggleButton.click();
+
+        expect(combobox.hasAttribute("expanded")).to.be.false;
+        expect(combobox.isExpanded).to.be.false;
+        expect(combobox.input.hasAttribute("aria-expanded")).to.be.false;
+      });
+    });
+
+    describe("when the clear button is clicked", () => {
+      it("it removes pseudofocus from the popup", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.showPopup();
+        await wait(5);
+        combobox.popup.pseudoFocusItem(
+          combobox.popup.querySelector(`[role="option"]:nth-of-type(3)`)
+        );
+        expect(combobox.popup.pseudoFocus).to.exist;
+
+        combobox.clearButton.click();
+        await wait(5);
+
+        expect(combobox.popup.pseudoFocus).to.not.exist;
+      });
+
+      it("it sets the value of the input to a falsy value or empty string", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.showPopup();
+        await wait(5);
+        const thirdItem = combobox.popup.querySelector(`[role="option"]:nth-of-type(3)`);
+        combobox.popup.selectItem(thirdItem);
+        await wait(5);
+        expect(combobox.input.value).to.equal(thirdItem.textContent);
+
+        combobox.clearButton.click();
+        await wait(5);
+
+        // Setting of an input's value to null or undefined
+        // will always result in it being an empty string
+        expect(combobox.input.value).to.equal("");
+      });
+
+      it("put the focus back to the input element", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.focus();
+        combobox.input.value = "S";
+        combobox.input.dispatchEvent(
+          new Event("input", { bubbles: true })
+        );
+
+        await wait(5);
+        combobox.clearButton.click();
+        await wait(5);
+
+        expect(document.activeElement).to.eql(combobox.input);
+      });
+    });
+
+    describe("when text is input into the input field", () => {
+      it("shows the popup if it is not already open", async () => {
+        const combobox = document.getElementById("combobox");
+        expect(combobox.isExpanded).to.be.false;
+
+        combobox.input.dispatchEvent(
+          new Event("input")
+        );
+        await wait(5);;
+
+        expect(combobox.isExpanded).to.be.true;
+      });
+
+      it("calls the popup's filter function", async () => {
+        const combobox = document.getElementById("combobox");
+        const filterSpy = sandbox.spy(combobox.popup, "filterText");
+
+        combobox.input.value = "S";
+        combobox.input.dispatchEvent(
+          new Event("input")
+        );
+        await wait(10);
+
+        expect(filterSpy.callCount).to.equal(1);
+      });
+    });
+
+    describe("when the input gets focus", () => {
+      it("and there are items in the popup, combobox shows the popup", async () => {
+        const combobox = document.getElementById("combobox");
+        expect(combobox.isExpanded).to.be.false;
+        
+        combobox.input.focus();
+        await wait(5);
+
+        expect(combobox.isExpanded).to.be.true;
+      });
+    });
+
+    describe("setting the disabled attribute", () => {
+      let combobox;
+      beforeEach(() => {
+        combobox = document.getElementById("combobox");
+        combobox.setAttribute("disabled", true);
+      });
+      
+      it("sets the input to disabled", () => {
+        expect(combobox.input.hasAttribute("disabled")).to.be.true;
+      });
+
+      it("sets the toggle button to disabled", () => {
+        expect(combobox.toggleButton.hasAttribute("disabled")).to.be.true;
+      });
+
+      it("sets the clear button to disabled", () => {
+        expect(combobox.toggleButton.hasAttribute("disabled")).to.be.true;
+      });
+
+      it("does not take focus", () => {
+        combobox.input.focus();
+
+        expect(document.activeElement).to.not.eql(combobox.input);
+      });
+    });
+
+    describe("Miscellaneous", () => {
+      it("sets the input to the selected items label on blur, if there is a selection", async () => {
+        const combobox = document.getElementById("combobox");
+        combobox.input.focus();
+        const secondOption = combobox.querySelectorAll(`[role="option"]`)[1];
+        combobox.popup.selectItem(secondOption);
+        expect(combobox.popup.selection).to.eql(secondOption);
+
+        combobox.input.value = "S";
+
+        combobox.input.blur();
+
+        expect(document.activeElement).to.not.eql(combobox);
+        expect(document.activeElement).to.not.eql(combobox.input);
+        expect(combobox.input.value).to.equal(secondOption.textContent);
+      });
+    });
   });
 });

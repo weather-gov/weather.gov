@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Combobox Examples</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="filterable-listbox.js" type="module"></script>
+    <script src="location-listbox.js" type="module"></script>
+    <script src="combobox.js" type="module"></script>
+    <style>
+     section:not(:first-of-type){
+         margin-top: 200px;
+     }
+    </style>
+  </head>
+  <body>
+    <main class="margin-top-6">
+      <section class="grid-container" id="filtered-combobox">
+        <div class="grid-row">
+          <div class="grid-col-12">
+            <h2>Default combobox</h2>
+            <p>
+              This is an example listbox with default settings. You can use arrow keys for navigation, as well as the Home and End keys. Clicking will select the corresponding item, as will the Enter key
+            </p>
+          </div>
+          <div class="grid-col-6">
+            <wx-combobox tabindex="0" class="display-block" id="combobox-1">
+              <input type="text" class="usa-input" slot="input" />
+              <button type="button" slot="clear-button"></button>
+              <button type="button" slot="toggle-button"></button>
+              <wx-filterable-listbox slot="popup" id="example-listbox-1" role="listbox">
+                <li role="option" id="1">First item</li>
+                <li role="option" id="2">Second item</li>
+                <li role="option" id="3">Third item</li>
+                <li role="option" id="4">Fourth item</li>
+                <li role="option" id="5">Fifth item</li>
+              </wx-filterable-listbox>
+            </wx-combobox>
+          </div>
+          <div class="grid-col-6 padding-left-4">
+            <div class="component-echo-area" id="component-echo-area-1">
+              <div class="margin-bottom-1">
+                <span>Selection: </span><span class="selection-info"></span>
+              </div>
+              <div>
+                <span>PseudoFocus: </span><span class="pseudo-focus-info"></span>
+              </div>
+            </div>
+            <script type="text/javascript" type="module">
+             document.addEventListener("DOMContentLoaded", () => {
+               const listbox = document.getElementById("example-listbox-1");
+               const echo = document.getElementById("component-echo-area-1");
+               const updateEcho = () => {
+                 const selection = listbox.selection;
+                 if(selection){
+                   echo.querySelector(".selection-info").textContent = selection.textContent;
+                 }
+                 const focus = listbox.pseudoFocus;
+                 if(focus){
+                   echo.querySelector(".pseudo-focus-info").textContent = focus.textContent;
+                 }
+               }
+               listbox.addEventListener("change", (e) => {
+                 updateEcho();
+               });
+               listbox.addEventListener("wx:popup-nav", () => {
+                 updateEcho();
+               })
+               updateEcho();
+             });
+            </script>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-container" id="location-combobox">
+        <div class="grid-row">
+          <div class="grid-col-12">
+            <h2>ArcGIS location search combobox</h2>
+            <p>
+              This is an example listbox with default settings. You can use arrow keys for navigation, as well as the Home and End keys. Clicking will select the corresponding item, as will the Enter key
+            </p>
+          </div>
+          <div class="grid-col-6">
+            <wx-combobox tabindex="0" class="display-block" id="combobox-2">
+              <input type="text" class="usa-input" slot="input" role="combobox" />
+              <button type="button" slot="clear-button"></button>
+              <button type="button" slot="toggle-button"></button>
+              <wx-location-listbox id="example-listbox-2" role="listbox" slot="popup">
+                <div class="listbox-group-label border-bottom-0 margin-bottom-05 font-mono-sm text-gray-50 text-semibold" id="example-listbox-2--saved-label">Saved searches</div>
+                <ul role="group" class="saved-searches" aria-labelledby="example-listbox-2--saved-label">
+                </ul>
+                <div class="listbox-group-label border-bottom-0 margin-bottom-05 font-mono-sm text-gray-50 text-semibold" id="example-listbox-2--results-label">Search results</div>
+                <ul role="group" id="example-listbox-2--results" aria-labelledby="example-listbox-2--results-label"></ul>
+              </wx-location-listbox>
+            </wx-combobox>
+          </div>
+          <div class="grid-col-6 padding-left-4">
+            <div class="component-echo-area" id="component-echo-area-2">
+              <div class="margin-bottom-1">
+                <span>Selection: </span><span class="selection-info"></span>
+              </div>
+              <div class="margin-bottom-1">
+                <span>PseudoFocus: </span><span class="pseudo-focus-info"></span>
+              </div>
+              <div class="margin-bottom-1">
+                <span>magicKey: </span><span class="magic-key-info"</span>
+              </div>
+              <div class="margin-bottom-1">
+                <span>geoData: </span><span class="geo-data-info"</span>
+              </div>
+              <div>
+                <span>Url (from saved): </span><span class="saved-url-info"></span>
+              </div>
+            </div>
+            <script type="text/javascript" type="module">
+             window.localStorage.setItem(
+               "wxgov_recent_locations",
+               JSON.stringify([
+                 {
+                   url: "/404.html",
+                   text: "Example saved search 1"
+                 }
+               ])
+             );
+             document.addEventListener("DOMContentLoaded", () => {
+               const listbox = document.getElementById("example-listbox-2");
+               const echo = document.getElementById("component-echo-area-2");
+               const updateEcho = async () => {
+                 const selection = listbox.selection;
+                 if(selection){
+                   echo.querySelector(".selection-info").textContent = selection.textContent;
+                   echo.querySelector(".magic-key-info").textContent = selection.dataset.magicKey;
+                   echo.querySelector(".geo-data-info").textContent = `Lat[${selection.dataset.lat}] Lon[${selection.dataset.lon}]`;
+                   echo.querySelector(".saved-url-info").textContent = selection.dataset.url;
+                 }
+                 const focus = listbox.pseudoFocus;
+                 if(focus){
+                   echo.querySelector(".pseudo-focus-info").textContent = focus.textContent;
+                 }
+               }
+               listbox.addEventListener("change", (e) => {
+                 updateEcho();
+               });
+               listbox.addEventListener("wx:popup-nav", () => {
+                 updateEcho();
+               })
+               updateEcho();
+             });
+            </script>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

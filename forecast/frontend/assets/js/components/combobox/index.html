@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Listbox Examples</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="listbox.js" type="module"></script>
+    <script src="location-listbox.js" type="module"></script>
+  </head>
+  <body>
+    <main class="margin-top-6">
+      <section class="grid-container" id="page-info">
+        <h1>Listbox Examples</h1>
+        <p>Examples of the listbox and filtered-listbox variants.</p>
+        <p>Other example files:</p>
+        <ul>
+          <li><a href="combobox.html">Combobox</a></li>
+        </ul>
+      </section>
+      <section class="grid-container" id="plain-listbox">
+        <div class="grid-row">
+          <div class="grid-col-12">
+            <h2>Default listbox</h2>
+            <p>
+              This is an example listbox with default settings. You can use arrow keys for navigation, as well as the Home and End keys. Clicking will select the corresponding item, as will the Enter key
+            </p>
+          </div>
+          <div class="grid-col-12">
+            <wx-listbox id="example-listbox-1" tabindex="0">
+              <li role="option" id="1">First item</li>
+              <li role="option" id="2">Second item</li>
+              <li role="option" id="3">Third item</li>
+              <li role="option" id="4">Fourth item</li>
+              <li role="option" id="5">Fifth item</li>
+            </wx-listbox>
+            <div class="component-echo-area margin-top-4" id="component-echo-area-1">
+              <div class="margin-bottom-1">
+                <span>Selection: </span><span class="selection-info"></span>
+              </div>
+              <div>
+                <span>PseudoFocus: </span><span class="pseudo-focus-info"></span>
+              </div>
+            </div>
+            <script type="text/javascript" type="modulle">
+             document.addEventListener("DOMContentLoaded", () => {
+               const listbox = document.getElementById("example-listbox-1");
+               const echo = document.getElementById("component-echo-area-1");
+               const updateEcho = () => {
+                 const selection = listbox.selection;
+                 if(selection){
+                   echo.querySelector(".selection-info").textContent = selection.textContent;
+                 }
+                 const focus = listbox.pseudoFocus;
+                 if(focus){
+                   echo.querySelector(".pseudo-focus-info").textContent = focus.textContent;
+                 }
+               }
+               listbox.addEventListener("change", (e) => {
+                 updateEcho();
+               });
+               listbox.addEventListener("wx:popup-nav", () => {
+                 updateEcho();
+               })
+               updateEcho();
+             });
+            </script>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-container" id="grouped-listbox">
+        <div class="grid-row">
+          <div class="grid-col-12">
+            <h2>Listbox with grouped options</h2>
+            <p>
+              This example has options grouped in separate elements, with headers describing each group
+            </p>
+          </div>
+          <div class="grid-col-12">
+            <wx-listbox id="example-listbox-2" tabindex="0">
+              <div>Group 1</div>
+              <div role="group" id="first-group">
+                <li role="option" id="1">First item</li>
+                <li role="option" id="2">Second item</li>
+              </div>
+              <div>Group 2</div>
+              <div role="group" id="second-group">
+                <li role="option" id="3">Third item</li>
+                <li role="option" id="4">Fourth item</li>
+                <li role="option" id="5">Fifth item</li>
+              </div>
+            </wx-listbox>
+            <div class="component-echo-area margin-top-4" id="component-echo-area-2">
+              <div class="margin-bottom-1">
+                <span>Selection: </span><span class="selection-info"></span>
+              </div>
+              <div>
+                <span>PseudoFocus: </span><span class="pseudo-focus-info"></span>
+              </div>
+            </div>
+            <script type="text/javascript" type="module">
+             document.addEventListener("DOMContentLoaded", () => {
+               const listbox = document.getElementById("example-listbox-2");
+               const echo = document.getElementById("component-echo-area-2");
+               const updateEcho = () => {
+                 const selection = listbox.selection;
+                 if(selection){
+                   echo.querySelector(".selection-info").textContent = selection.textContent;
+                 }
+                 const focus = listbox.pseudoFocus;
+                 if(focus){
+                   echo.querySelector(".pseudo-focus-info").textContent = focus.textContent;
+                 }
+               }
+               listbox.addEventListener("change", (e) => {
+                 updateEcho();
+               });
+               listbox.addEventListener("wx:popup-nav", () => {
+                 updateEcho();
+               })
+               updateEcho();
+             });
+            </script>
+          </div>
+        </div>
+      </section>
+
+      <section id="location-listbox" class="grid-container">
+        <div class="grid-row">
+          <div class="grid-col-12">
+            <h2>Location search enabled listbox</h2>
+            <p>
+              This is an example of an ArcGIS enabled location search listbox, wherein the filtering
+              action actually triggers a call to fetch geolocation search results for the given text.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-col-12">
+          <wx-location-listbox id="example-listbox-3" role="listbox" tabindex="0">
+            <ul role="group" aria-labelledby="example-listbox-3" id="example-listbox-3--results">
+              <li role="option" value="text">
+                Dummy first option
+              </li>
+            </ul>
+          </wx-location-listbox>
+        </div>
+        <div class="component-echo-area margin-top-4" id="component-echo-area-3">
+          <div class="margin-bottom-1">
+            <span>Selection: </span><span class="selection-info"></span>
+          </div>
+          <div>
+            <span>PseudoFocus: </span><span class="pseudo-focus-info"></span>
+          </div>
+        </div>
+        <script type="text/javascript" type="module">
+         document.addEventListener("DOMContentLoaded", () => {
+           const listbox = document.getElementById("example-listbox-3");
+           const echo = document.getElementById("component-echo-area-3");
+           const updateEcho = () => {
+             const selection = listbox.selection;
+             if(selection){
+               echo.querySelector(".selection-info").textContent = selection.textContent;
+             }
+             const focus = listbox.pseudoFocus;
+             if(focus){
+               echo.querySelector(".pseudo-focus-info").textContent = focus.textContent;
+             }
+           }
+           listbox.addEventListener("change", (e) => {
+             updateEcho();
+           });
+           listbox.addEventListener("wx:popup-nav", () => {
+             updateEcho();
+           })
+           updateEcho();
+         });
+        </script>
+      </section>
+    </main>
+  </body>
+</html>

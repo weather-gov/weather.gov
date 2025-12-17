@@ -155,7 +155,7 @@ const SEARCH_RESULT_ITEMS = {
     },
 };
 
-window.fetch = async (url) => {
+const fakeFetch = async (url) => {
   const parsedUrl = new URL(url);
   if (parsedUrl.pathname.includes("suggest")) {
     return window.Promise.resolve(
@@ -199,6 +199,7 @@ describe("Combo box unit tests", () => {
     document.body.innerHTML = "";
     const box = document.createElement("wx-combo-box-location");
     document.body.append(box);
+    global.fetch.callsFake(fakeFetch);
   });
 
   it("Has the element", () => {
@@ -519,19 +520,11 @@ describe("Combo box unit tests", () => {
     const response = { json: sandbox.stub() };
     form.setAttribute("data-location-search", true);
 
-    const { fetch } = global;
-
     before(() => {
       global.localStorage = {
         getItem: sandbox.stub(),
         setItem: sandbox.stub(),
       };
-
-      global.fetch = sandbox.stub();
-    });
-
-    after(() => {
-      global.fetch = fetch;
     });
 
     beforeEach(async () => {
@@ -751,8 +744,6 @@ describe("Combo box unit tests", () => {
   });
 
   describe("ArcGIS integration", () => {
-    // GAGAG
-    const { fetch } = global;
     let sandbox = createSandbox();
     let box;
 
@@ -761,12 +752,6 @@ describe("Combo box unit tests", () => {
         getItem: sandbox.stub(),
         setItem: sandbox.stub(),
       };
-
-      global.fetch = sandbox.stub();
-    });
-
-    after(() => {
-      global.fetch = fetch;
     });
 
     beforeEach(async () => {
