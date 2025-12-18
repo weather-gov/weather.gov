@@ -35,6 +35,7 @@ resource "cloudfoundry_app" "app" {
 
   environment = {
     NEW_RELIC_LICENSE_KEY  = local.newrelic_license
+    NEW_RELIC_APP_NAME     = "weathergov-${var.env}"
     INTEROP_URL            = var.interop_url
     PYTHONUNBUFFERED       = "yup"
     DJANGO_SETTINGS_MODULE = "backend.config.settings.production"
