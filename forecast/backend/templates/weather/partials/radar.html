@@ -2,18 +2,7 @@
   <{{ heading_level }} class="{{ heading_class }}">
   {% trans "radar.labels.radar.01" %}
   </{{ heading_level }}>
-  {% if radar_metadata.start and radar_metadata.end %}
-    <div class="grid-container font-family-mono text-base-dark font-mono-xs margin-bottom-1 padding-left-2 tablet:padding-left-0">
-      <div class="grid-row">
-        <div class="grid-col-auto desktop:grid-col-12 margin-right-1 desktop:margin-right-0 text-uppercase">
-          {% trans "radar.time-shown.label.01" %}<span class="desktop:display-none">:</span>
-        </div>
-        <div class="grid-col-auto">
-          {% time_range radar_metadata.start radar_metadata.end %}
-        </div>
-      </div>
-    </div>
-  {% endif %}
+  {% include "weather/partials/radar-timestamp.html" with radar_metadata=radar_metadata %}
   <div class="grid-container padding-0 bg-white shadow-1">
     <div class="grid-row wx-radar-container position-relative">
       <wx-radar class="grid-col-12" lat="{{ point.latitude }}" lon="{{ point.longitude }}">

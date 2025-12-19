@@ -52,6 +52,15 @@ def point_location(request, lat, lon):
         # weather_story = WeatherStory.objects.current(wfo).first()
         weather_story = None
 
+    if "update" in request.GET:
+        return render(
+            request,
+            "weather/point.update.html",
+            {
+                "point": point,
+            },
+        )
+
     return render(
         request,
         "weather/point.html",
