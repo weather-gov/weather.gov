@@ -27,6 +27,10 @@
     const loader = document.querySelector("wx-loader");
     if (loader) {
       loader.classList.remove("display-none");
+      const text = gettext("js.loader.loading-text.01");
+      window.dispatchEvent(
+        new CustomEvent("wx-announce", { detail: { text } }),
+      );
     }
   };
 
