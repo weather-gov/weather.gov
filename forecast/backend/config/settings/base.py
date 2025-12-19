@@ -71,7 +71,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "csp",
-    "cspreports",
     # Wagtail dependencies
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -331,8 +330,7 @@ DIRECTIVES = {
         "blob:",
     ],
     "frame-ancestors": [SELF],
-    "form-action": [SELF],
-    "report-uri": "/csp-report/report/",
+    "form-action": [SELF]
 }
 
 CONTENT_SECURITY_POLICY = {

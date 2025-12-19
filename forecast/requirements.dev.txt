@@ -258,7 +258,6 @@ django==5.2.9 \
     #   dj-database-url
     #   django-allow-cidr
     #   django-csp
-    #   django-csp-reports
     #   django-debug-toolbar
     #   django-filter
     #   django-modelcluster
@@ -285,10 +284,6 @@ django-cache-url==3.4.5 \
 django-csp==4.0 \
     --hash=sha256:b27010bb702eb20a3dad329178df2b61a2b82d338b70fbdc13c3a3bd28712833 \
     --hash=sha256:d5a0a05463a6b75a4f1fc1828c58c89af8db9364d09fc6e12f122b4d7f3d00dc
-    # via weather-gov
-django-csp-reports==1.10.0 \
-    --hash=sha256:2eaaa70b85f2cc1cfa6780b5359b569af0662db3d41daf9814a01bbd0591e052 \
-    --hash=sha256:9ae4ecce552fdca7f4725b54408df8bbd714089efc0afcdbd469967176185747
     # via weather-gov
 django-debug-toolbar==6.1.0 \
     --hash=sha256:e214dea4494087e7cebdcea84223819c5eb97f9de3110a3665ad673f0ba98413 \
