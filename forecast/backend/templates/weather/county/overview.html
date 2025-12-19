@@ -71,8 +71,8 @@
   <div class="bg-base-lightest">
     <div class="grid-container padding-y-4 padding-x-0 desktop:padding-x-4">
       <div class="grid-col-12 bg-white padding-2 padding-top-1 shadow-1">
-        {% ghwo_daily_summary data.public.hazardOutlook %}
-        {% if not data.public.hazardOutlook.error %}
+        {% ghwo_daily_summary data.public.riskOverview %}
+        {% if not data.public.riskOverview.error %}
           <div class="margin-top-2">
             <a href="{% url 'county_ghwo' county_fips=countyfips %}"
                class="usa-link">{{ "county.overview.link-to-ghwo-analysis.01" | t }}</a>

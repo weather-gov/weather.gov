@@ -83,7 +83,7 @@ services:
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY:-}
       LOG_LEVEL: verbose
-      # TRUNCATE_GHWO: "true"
+      # TRUNCATE_HAZARD_OUTLOOKS: "true"
     networks:
       - weather.gov
     links:

@@ -11,12 +11,12 @@ const internalFetch = async (path) => {
   let url = URL.canParse(path) ? path : new URL(path, BASE_URL).toString();
 
   // If the incoming path matches a request to
-  // the website's GHWO endpoint, let's try to proxy the
+  // the website's risk overview endpoint, let's try to proxy the
   // request if possible
   if (path.endsWith("hazByCounty.json")) {
-    const ghwoUrl = URL.parse(path);
-    logger.verbose(`GHWO Request to: ${ghwoUrl.pathname}`);
-    url = new URL(ghwoUrl.pathname, BASE_GHWO_URL).toString();
+    const hazardOutlookUrl = URL.parse(path);
+    logger.verbose(`hazard outlook request to: ${hazardOutlookUrl.pathname}`);
+    url = new URL(hazardOutlookUrl.pathname, BASE_GHWO_URL).toString();
   }
   logger.verbose(`making request to ${url}`);
 

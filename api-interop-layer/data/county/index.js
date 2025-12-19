@@ -1,6 +1,6 @@
 import openDatabase from "../db.js";
 import { createLogger } from "../../util/monitoring/index.js";
-import { getGHWOData } from "../ghwo/index.js";
+import { getRiskOverview } from "../risk-overview/index.js";
 import { getAlertsForCountyFIPS } from "../alerts/index.js";
 import dayjs from "../../util/day.js";
 
@@ -56,7 +56,7 @@ export const getCountyData = async (fips) => {
       )
       .then(({ rows }) => (rows.length > 0 ? rows[0].wfo : null));
 
-    const ghwo = await getGHWOData(fips);
+    const riskOverview = await getRiskOverview(fips);
 
     const alerts = await getAlertsForCountyFIPS(fips, {
       timezone: county.timezone,
@@ -95,7 +95,7 @@ export const getCountyData = async (fips) => {
       };
     });
 
-    return { county, hazardOutlook: ghwo, alerts, alertDays };
+    return { county, riskOverview, alerts, alertDays };
   } catch (e) {
     logger.error(`Error fetching county data for FIPS ${fips}`);
     logger.error(e);

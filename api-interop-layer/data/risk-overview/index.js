@@ -2,8 +2,8 @@ import path from "node:path";
 import { Worker, isMainThread } from "node:worker_threads";
 import { createLogger } from "../../util/monitoring/index.js";
 import openDatabase from "../db.js";
-const logger = createLogger("ghwo");
-const backgroundLogger = createLogger("ghwo (background)");
+const logger = createLogger("risk overview / ghwo");
+const backgroundLogger = createLogger("risk overview / ghwo (background)");
 
 // Save the returned promise and immediately kick off the database init. The
 // rest of the stuff in here will await the promise, but it'll be basically
@@ -11,10 +11,10 @@ const backgroundLogger = createLogger("ghwo (background)");
 const ensureDatabaseExists = openDatabase().then(async (db) => {
   // Not modeling these tables in Django because they should not be part of the
   // product in the longterm. Maybe. It's possible that we will decide to cache
-  // GHWO data from the API, but we're not caching anything else besides alerts
-  // so that will probably be a whole conversation if it ever comes up. Anyway,
-  // working on the assumption that these tables will eventually go away, I'm
-  // not capturing them in our data models.
+  // risk overview data from the API, but we're not caching anything else besides
+  // alerts so that will probably be a whole conversation if it ever comes up.
+  // Anyway, working on the assumption that these tables will eventually go away,
+  // I'm not capturing them in our data models.
   await db.query(`CREATE TABLE
     IF NOT EXISTS
     weathergov_temp_ghwo
@@ -33,17 +33,19 @@ const ensureDatabaseExists = openDatabase().then(async (db) => {
       primary key(url)
     )`);
 
-  // If the TRUNCATE_GHWO env variable
+  // If the TRUNCATE_HAZARD_OUTLOOKS env variable
   // is set to true, we drop the GHWO metadata
   // from the meta table on each restart.
-  if (process.env.TRUNCATE_GHWO && process.env.TRUNCATE_GHWO === "true") {
-    logger.info("Truncating GHWO meta table...");
+  if (process.env.TRUNCATE_HAZARD_OUTLOOKS === "true") {
+    logger.info(
+      "Truncating weathergov_temp_ghwo_meta, weathergov_temp_ghwo...",
+    );
     await db.query(`TRUNCATE weathergov_temp_ghwo_meta`);
     await db.query(`TRUNCATE weathergov_temp_ghwo`);
   }
 });
 
-export const startGHWOProcessing = async () => {
+export const startRiskOverviewProcessing = async () => {
   if (isMainThread) {
     // Make sure the database is initialized.
     await ensureDatabaseExists;
@@ -84,7 +86,7 @@ export const startGHWOProcessing = async () => {
         clearTimeout(restartTimer);
       }
       restartTimer = setTimeout(() => {
-        startGHWOProcessing();
+        startRiskOverviewProcessing();
       }, 5_000);
     };
 
@@ -101,9 +103,14 @@ export const startGHWOProcessing = async () => {
     });
   }
 };
-startGHWOProcessing();
+startRiskOverviewProcessing();
 
-export const getGHWOData = async (id) => {
+/**
+ *
+ * @param {string} placeId 5-digit FIPS code for a county, or 2-letter state abbreviation
+ * @returns Risk overview information.
+ */
+export const getRiskOverview = async (placeId) => {
   try {
     // Make sure the database is initialized.
     await ensureDatabaseExists;
@@ -111,15 +118,15 @@ export const getGHWOData = async (id) => {
     const db = await openDatabase();
     const data = await db.query(
       "SELECT data FROM weathergov_temp_ghwo WHERE id=$1::text",
-      [id.toUpperCase()],
+      [placeId.toUpperCase()],
     );
 
     if (data.rows.length) {
       return data.rows[0].data;
     }
-    return { error: `No GHWO found for ${id}`, status: 404 };
+    return { error: `No risk overview found for ${placeId}`, status: 404 };
   } catch (e) {
-    logger.error(`Error fetching GHWO for ${id}`, e);
-    return { error: `Error fetching GHWO for ${id}` };
+    logger.error(`Error fetching risk overview for ${placeId}`, e);
+    return { error: `Error fetching risk overview for ${placeId}` };
   }
 };

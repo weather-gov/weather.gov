@@ -124,7 +124,7 @@ class TestCountyViewWeatherStories(TestCase):
     @mock.patch("backend.interop.get_radar")
     def test_overview_with_one_weather_story(self, mock_get_radar, mock_get_county_data):
         """Test the overview view with just one weather story."""
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
+        mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "11111"}))
@@ -138,7 +138,7 @@ class TestCountyViewWeatherStories(TestCase):
     @mock.patch("backend.interop.get_radar")
     def test_overview_with_multiple_weather_stories(self, mock_get_radar, mock_get_county_data):
         """Test the weather stories are properly sorted if there are multiple."""
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
+        mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "22222"}))

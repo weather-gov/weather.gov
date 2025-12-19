@@ -219,7 +219,7 @@ def get_radar(lat, lon):
 
 
 def get_county_data(countyfips):
-    """Get county data. Consolidated hazard outlook and alerts per county.
+    """Get county data. Consolidated risk overview and alerts per county.
 
     To see an example, run:
 
@@ -239,7 +239,7 @@ def get_health():
 
 def get_ghwo_data_for_county(county_fips):
     """Fetch GHWO data for the given county from the interop."""
-    url = f"/ghwo/{county_fips}"
+    url = f"/risk-overview/{county_fips}"
     return _fetch(url)
 
 
