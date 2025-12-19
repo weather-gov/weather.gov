@@ -2,115 +2,239 @@
 
 // NB: this font-size falls outside our usual size tokens
 .site-name {
-  font-size: 1.25rem;
+    font-size: 1.25rem;
+}
+
+/**
+ * Styles for the site navigation search submenu (which is tabs)
+ */
+#site-search-submenu {
+    position: relative;
+    z-index: var(--site-nav-search-popout-z-index);
+    order: 3;
+
+    .tab-buttons {
+        width: 100%;
+
+        > .tab-button {
+            flex: 1;
+            margin: 0;
+            padding: 0;
+            background-color: color("base-lightest");
+            border-bottom-color: color("base-light");
+            border-bottom-width: 2px;
+            color: color("base-dark");
+            font-weight: 700;
+            padding-top: units(1);
+            padding-bottom: units(1);
+
+            @include u-font-family("sans");
+            @include u-font-size("sans", "xs");
+
+            &[aria-expanded="true"],
+            &[data-selected]{
+                background-color: color("accent-cool-lightest");
+                border-bottom-color: color("primary-light");
+                color: color("primary");
+            }
+        }
+    }
+
+    wx-tabbed-nav {
+        display: block;
+    }
+
+    /* In mobile views, we do not display the toggle button */
+    .site-nav-submenu-toggle {
+        display: none;
+    }
+
+    #site-nav-search-options-tab-contents {
+        padding: units(2);
+
+        .wx-combo-box__input {
+            /* Unfortunately, we need to override the height
+             * value here rather than with with a utility, since
+             * the location-search.scss breaks the cascade
+             */
+            height: units(4);
+            box-sizing: border-box;
+        }
+    }
+
+    .site-nav-submenu-label {
+        display: block;
+        margin-bottom: units("105");
+        padding-top: units("105");
+        border-top: 1px solid color("primary-darker");
+    }
 }
 
 @include at-media(desktop) {
-  .site-name {
-    @include u-font-size("body", "xl");
-  }
+    .site-name {
+        @include u-font-size("body", "xl");
+    }
 
-  .site-logo {
-    @include u-height(9);
-  }
+    .site-logo {
+        @include u-height(9);
+    }
+
+    #site-search-submenu {
+        order: unset;
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        
+        > button {
+            border-radius: 0;
+            margin-right: 0;
+
+            > span:first-of-type {
+                display: block;
+            }
+
+            > span:last-of-type {
+                display: none;
+            }
+        }
+
+        wx-tabbed-nav {
+            display: none;
+
+            @include u-shadow(2);
+        }
+        
+        > button[aria-expanded="true"] {
+            background-color: color("base-lighter");
+
+            > span:first-of-type {
+                display: none;
+            }
+
+            > span:last-of-type {
+                display: block;
+            }
+
+            ~ wx-tabbed-nav {
+                display: block;
+                position: absolute;
+                top: 100%;
+                background-color: white;
+            }
+        }
+
+        /* We do not display the label in desktop view */
+        .site-nav-submenu-label {
+            display: none;
+        }
+
+        /* We display the toggle button (instead of label)
+         * on desktop views
+         */
+        .site-nav-submenu-toggle {
+            display: block;
+        }
+    }
 }
 
 .usa-menu-btn {
-  background-color: white;
-
-  &:active,
-  &:hover {
     background-color: white;
-  }
+
+    &:active,
+    &:hover {
+        background-color: white;
+    }
 }
 
 .under-development-tablet {
-  display: none;
+    display: none;
 }
 
 .under-development-mobile {
-  display: flex;
+    display: flex;
 }
 
 @include at-media(tablet) {
-  .under-development-tablet {
-    display: flex;
-  }
+    .under-development-tablet {
+        display: flex;
+    }
 
-  .under-development-mobile {
-    display: none;
-  }
+    .under-development-mobile {
+        display: none;
+    }
 }
 
 .usa-navbar {
-  border-bottom: none;
-  margin-left: auto;
+    border-bottom: none;
+    margin-left: auto;
 }
 
 .usa-header .usa-menu-btn {
-  button {
-    font-weight: unset;
-  }
+    button {
+        font-weight: unset;
+    }
 }
 
 .usa-nav__primary button {
-  @include u-padding-y(2);
+    @include u-padding-y(2);
 }
 
 @include at-media(desktop) {
-  // adjust the usa header menubar to be on the left instead of right
-  .usa-header--basic {
-    .usa-navbar {
-      width: 0;
-    }
-
-    .usa-nav {
-      justify-content: flex-start;
-    }
-  }
-
-  .usa-nav__primary {
-    .usa-nav__link {
-      @include u-padding-x(1.5);
-    }
-
-    button:not(.usa-current) {
-      font-weight: unset;
-    }
-
-    button[aria-expanded="true"] {
-      background-color: color("primary-dark");
-    }
-
-    // make the active menu line bar full width
-    .usa-nav__primary-item > .usa-current::after {
-      left: 0;
-      right: 0;
-    }
-
-    .usa-nav__primary-item {
-      &:hover button::after {
-        left: 0;
-        right: 0;
-      }
-    }
-  }
-
-  .usa-nav__submenu {
-    background-color: color("primary-dark");
-
-    .usa-nav__submenu-item {
-      &:hover {
-        background-color: color("primary-darker");
-
-        a {
-          text-decoration: none;
+    // adjust the usa header menubar to be on the left instead of right
+    .usa-header--basic {
+        .usa-navbar {
+            width: 0;
         }
-      }
 
-      &:active {
-        background-color: color("primary-darkest");
-      }
+        .usa-nav {
+            justify-content: flex-start;
+        }
     }
-  }
+
+    .usa-nav__primary {
+        .usa-nav__link {
+            @include u-padding-x(1.5);
+        }
+
+        button:not(.usa-current) {
+            font-weight: unset;
+        }
+
+        button[aria-expanded="true"] {
+            background-color: color("primary-dark");
+        }
+
+        // make the active menu line bar full width
+        .usa-nav__primary-item > .usa-current::after {
+            left: 0;
+            right: 0;
+        }
+
+        .usa-nav__primary-item {
+            &:hover button::after {
+                left: 0;
+                right: 0;
+            }
+        }
+    }
+
+    .usa-nav__submenu {
+        background-color: color("primary-dark");
+
+        .usa-nav__submenu-item {
+            &:hover {
+                background-color: color("primary-darker");
+
+                a {
+                    text-decoration: none;
+                }
+            }
+
+            &:active {
+                background-color: color("primary-darkest");
+            }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 @forward "uswds-theme";
 @forward "uswds";
 @forward "uswds-theme-custom-styles";
+@use "components/z-index";
 @use "components/afd-table";
 @use "components/alert-details";
 @use "components/alert-link";

@@ -1,0 +1,8 @@
+/**
+ * This file contains CSS custom properties that we use
+ * to set the z-index of the various components across the site,
+ * especially those that might come into conflict with each other.
+ */
+:root {
+    --site-nav-search-popout-z-index: 320;
+}

@@ -934,3 +934,15 @@ msgstr "News"
 
 msgid "menu.navigation.about.history.01"
 msgstr "History"
+
+msgid "menu.navigation.search.search.01"
+msgstr "Search"
+
+msgid "menu.navigation.search.sr-tabs.01"
+msgstr "Site search sections"
+
+msgid "menu.navigation.search.site.01"
+msgstr "Site"
+
+msgid "menu.navigation.labels.enter-term.01"
+msgstr "Enter a search term"
