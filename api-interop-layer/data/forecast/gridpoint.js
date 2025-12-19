@@ -33,7 +33,7 @@ export default (data, hours, place) => {
       // In order to parse the datetime string, we gotta split the duration off
       // first. We'll parse them separately.
       const [isoTimestamp, isoDuration] = value.validTime.split("/");
-      const start = dayjs(isoTimestamp);
+      const start = dayjs(isoTimestamp).tz(place.timezone);
       const duration = dayjs.duration(isoDuration).asHours();
 
       // Starting from the first hour, we'll advance one hour at a time until we
