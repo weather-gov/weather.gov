@@ -114,6 +114,27 @@ class TestViews(TestCase):
         # self.assertEqual(response.context["weather_story"], self.weather_story)
         self.assertEqual(response.context["weather_story"], None)
 
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_update(self, mock_get_point_forecast):
+        """Test the point location view."""
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST"},
+            "isMarine": False,
+        }
+
+        response = self.client.get("/point/11.1/22.2?update", follow=True)
+
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+        self.assertTemplateUsed(response, "weather/point.update.html")
+        self.assertEqual(
+            response.context["point"],
+            {
+                "grid": {"wfo": "TST"},
+                "wfo": self.wfo,
+                "isMarine": False,
+            },
+        )
+
     @skip("Disabled until we turn wx stories back on")
     @mock.patch("wx_stories_api.models.WeatherStory.objects.current")
     @mock.patch("backend.views.point.interop.get_point_forecast")
@@ -237,9 +258,9 @@ class TestViews(TestCase):
     def test_point_location_with_api_500_interop_200(self, mock_get_point_forecast):
         """Test the point location where no valid API data is returned by the interop."""
         mock_get_point_forecast.return_value = {
-            "forecast": { "error": True },
-            "satellite": { "error": True },
-            "observations": { "error": True }
+            "forecast": {"error": True},
+            "satellite": {"error": True},
+            "observations": {"error": True},
         }
 
         response = self.client.get("/point/11.1/22.2", follow=True)
@@ -314,7 +335,7 @@ class TestViews(TestCase):
 
     def test_office_specific(self):
         """Test the specific-office view."""
-        response = self.client.get("/offices/HUN", follow=True) # use a pre-existing WFO so that the image can be found
+        response = self.client.get("/offices/HUN", follow=True)  # use a pre-existing WFO so that the image can be found
         self.assertTemplateUsed(response, "weather/office.html")
         self.assertEqual(response.context["office"], models.WFO.objects.get(code="HUN"))
 
