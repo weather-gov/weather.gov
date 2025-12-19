@@ -2,16 +2,16 @@ import sinon from "sinon";
 import { expect } from "chai";
 import quibble from "quibble";
 
-describe("route: GHWO", () => {
+describe("route: risk overview", () => {
   const sandbox = sinon.createSandbox();
-  const getGHWOData = sandbox.stub();
+  const getRiskOverview = sandbox.stub();
 
-  let ghwo;
+  let riskOverview;
 
   before(async () => {
-    await quibble.esm("../data/ghwo/index.js", { getGHWOData });
+    await quibble.esm("../data/risk-overview/index.js", { getRiskOverview });
 
-    ghwo = await import("./ghwo.js");
+    riskOverview = await import("./risk-overview.js");
   });
 
   beforeEach(() => {
@@ -25,17 +25,17 @@ describe("route: GHWO", () => {
 
   describe("exports required bits", () => {
     it("route method", () => {
-      expect(ghwo.method).to.equal("GET");
+      expect(riskOverview.method).to.equal("GET");
     });
 
     it("route url", () => {
-      expect(ghwo.url).to.equal("/ghwo/:id");
+      expect(riskOverview.url).to.equal("/risk-overview/:placeId");
     });
 
     it("route schema", () => {
-      expect(ghwo.schema.params.id).to.exist;
+      expect(riskOverview.schema.params.placeId).to.exist;
 
-      const idRegex = new RegExp(ghwo.schema.params.id.pattern);
+      const idRegex = new RegExp(riskOverview.schema.params.placeId.pattern);
 
       expect(idRegex.test("AB")).to.be.true;
       expect(idRegex.test("ab")).to.be.true;
@@ -51,20 +51,20 @@ describe("route: GHWO", () => {
     });
 
     it("route handler", () => {
-      expect(ghwo.handler).to.be.instanceOf(Function);
+      expect(riskOverview.handler).to.be.instanceOf(Function);
     });
   });
 
   describe("the route handler", () => {
     it("returns an error, if there's an error", async () => {
-      getGHWOData.resolves({ error: "Too dope", status: 3000 });
+      getRiskOverview.resolves({ error: "Too dope", status: 3000 });
       const request = {
-        params: { id: "Biggie Smalls" },
+        params: { placeId: "Biggie Smalls" },
       };
 
-      const actual = await ghwo.handler(request);
+      const actual = await riskOverview.handler(request);
 
-      expect(getGHWOData.calledWith("Biggie Smalls")).to.be.true;
+      expect(getRiskOverview.calledWith("Biggie Smalls")).to.be.true;
       expect(actual).to.eql({
         status: 3000,
         data: { error: "Too dope" },
@@ -72,16 +72,16 @@ describe("route: GHWO", () => {
       });
     });
 
-    it("returns GHWO data if everything is okay", async () => {
+    it("returns risk overview data if everything is okay", async () => {
       const data = "this is some data here";
-      getGHWOData.resolves(data);
+      getRiskOverview.resolves(data);
       const request = {
-        params: { id: "Tupac Shakur" },
+        params: { placeId: "Tupac Shakur" },
       };
 
-      const actual = await ghwo.handler(request);
+      const actual = await riskOverview.handler(request);
 
-      expect(getGHWOData.calledWith("Tupac Shakur")).to.be.true;
+      expect(getRiskOverview.calledWith("Tupac Shakur")).to.be.true;
       expect(actual).to.eql({ data });
     });
   });

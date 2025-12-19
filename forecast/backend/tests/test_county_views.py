@@ -133,7 +133,7 @@ class TestCountyViews(TestCase):
             response.context["states"],
         )
         self.assertIn(
-            { "value": self.state1.state, "text": self.state1.name },
+            {"value": self.state1.state, "text": self.state1.name},
             response.context["state_list_items"],
         )
         self.assertIn(
@@ -141,7 +141,7 @@ class TestCountyViews(TestCase):
             response.context["states"],
         )
         self.assertIn(
-            { "value": self.state2.state, "text": self.state2.name },
+            {"value": self.state2.state, "text": self.state2.name},
             response.context["state_list_items"],
         )
         self.assertIn(
@@ -149,7 +149,7 @@ class TestCountyViews(TestCase):
             response.context["states"],
         )
         self.assertIn(
-            { "value": self.state3.state, "text": self.state3.name },
+            {"value": self.state3.state, "text": self.state3.name},
             response.context["state_list_items"],
         )
 
@@ -157,7 +157,7 @@ class TestCountyViews(TestCase):
     @mock.patch("backend.interop.get_radar")
     def test_overview_link_to_county_ghwo(self, mock_get_radar, mock_get_county_data):
         """Test that county overview links to detailed risk analysis."""
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
+        mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
@@ -169,7 +169,7 @@ class TestCountyViews(TestCase):
     @mock.patch("backend.interop.get_radar")
     def test_overview_without_timezone(self, mock_get_radar, mock_get_county_data):
         """Test the overview view without timezone."""
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
+        mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
@@ -181,7 +181,7 @@ class TestCountyViews(TestCase):
                 "alert_level_days": [],
                 "county_label": "Anansi County, GH",
                 "primary_wfo": self.wfo,
-                "public": {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []},
+                "public": {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []},
                 "briefings": [
                     {
                         "wfo": self.wfo,
@@ -205,7 +205,7 @@ class TestCountyViews(TestCase):
     @mock.patch("backend.interop.get_radar")
     def test_overview_with_timezone(self, mock_get_radar, mock_get_county_data):
         """Test the overview view with timezone."""
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
+        mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         # Matt Smith, the Eleventh Doctor Who, is born. We change the updated_at
@@ -226,7 +226,7 @@ class TestCountyViews(TestCase):
                 "alert_level_days": [],
                 "county_label": "Keelut Census Area, AK",
                 "primary_wfo": self.wfo,
-                "public": {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []},
+                "public": {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []},
                 "briefings": [
                     {
                         "wfo": self.wfo,
@@ -254,7 +254,7 @@ class TestCountyViews(TestCase):
 
         This is an error condition, but we don't want it to crash the UX.
         """
-        mock_get_county_data.return_value = {"hazardOutlook": self.ghwo, "alerts": {"items": []}, "alertDays": []}
+        mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "33333"}))
@@ -268,7 +268,7 @@ class TestCountyViews(TestCase):
                 "public": {
                     "alerts": {"items": []},
                     "alertDays": [],
-                    "hazardOutlook": self.ghwo,
+                    "riskOverview": self.ghwo,
                 },
                 "briefings": [],
                 "weather_stories": [],
@@ -283,7 +283,7 @@ class TestCountyViews(TestCase):
     def test_alert_level_to_day_mapping(self, mock_get_radar, mock_get_county_data):
         """Tests that the levels for alerts on given days are mapped correctly."""
         mock_get_county_data.return_value = {
-            "hazardOutlook": self.ghwo,
+            "riskOverview": self.ghwo,
             "alerts": {
                 "items": [
                     {"metadata": {"level": {"text": "warning"}}},
@@ -336,7 +336,7 @@ class TestCountyViews(TestCase):
     def test_alert_levels_only_present(self, mock_get_radar, mock_get_county_data):
         """Tests that only present alert levels are returned."""
         mock_get_county_data.return_value = {
-            "hazardOutlook": self.ghwo,
+            "riskOverview": self.ghwo,
             "alerts": {
                 "items": [
                     {"metadata": {"level": {"text": "other"}}},

@@ -2,9 +2,9 @@ import { parentPort } from "node:worker_threads";
 import openDatabase from "../db.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 
-// Generally, GHWO image URLs use the same risk names as the data, but in a few
-// cases, they do not. This is a mapping for those outliers.
-const ghwoHazardToImageNameMap = new Map([
+// Generally, risk overview image URLs use the same risk names as the data, but
+// in a few cases, they do not. This is a mapping for those outliers.
+const riskNameToImageNameMap = new Map([
   ["ConvectiveWind", "ThunderstormWind"],
   ["Frost/Freeze", "FrostFreeze"],
   ["Marine", "MarineHazard"],
@@ -26,8 +26,8 @@ const upsert = async (id, data) =>
     ),
   );
 
-// GHWO data is arranged as an object, some of whose keys are timestamps. This
-// method pulls out the timestamp keys and returns an array of days containing
+// Risk overview data is arranged as an object, some of whose keys are timestamps.
+// This method pulls out the timestamp keys and returns an array of days containing
 // that data instead of an object.
 const processDays = (data) =>
   // Get the keys that are timestamps.
@@ -60,7 +60,7 @@ const processState = async ({ state, data: stateData, wfo }) => {
   parentPort.postMessage({
     action: "log",
     level: "verbose",
-    message: `updated GHWO for state ${state} (${stateName}) from WFO ${wfo.toUpperCase()}`,
+    message: `updated risk overview for state ${state} (${stateName}) from WFO ${wfo.toUpperCase()}`,
   });
 };
 
@@ -82,9 +82,9 @@ const processCounty = async ({ countyFips, data: countyData, wfo }) => {
   };
 
   data.days.forEach((day) => {
-    // For every data element in the GHWO, we want to also provide an image URL.
-    // The list of data elements is not the same for all WFOs at all times, so
-    // we need to build this dynamically.
+    // For every data element in the risk overview, we want to also provide an
+    // image URL. The list of data elements is not the same for all WFOs at all
+    // times, so we need to build this dynamically.
     const elementKeys = Object.keys(day);
     for (const elementKey of elementKeys) {
       // There's no image URL for the daily composite risk, so skip that one.
@@ -93,7 +93,7 @@ const processCounty = async ({ countyFips, data: countyData, wfo }) => {
         // key as used in the URL (in this case, "SevereThunderstorms" - note
         // the s at the end). If we have a URL key mapped to the element key,
         // use it. Otherwise just preserve the element key.
-        const urlKey = ghwoHazardToImageNameMap.get(elementKey) ?? elementKey;
+        const urlKey = riskNameToImageNameMap.get(elementKey) ?? elementKey;
         // Build the image URL from the WFO, element key, and day number.
         day.images[elementKey] =
           `https://www.weather.gov/images/${wfo}/ghwo/${urlKey}Day${day.dayNumber}.jpg`;
@@ -105,7 +105,7 @@ const processCounty = async ({ countyFips, data: countyData, wfo }) => {
   parentPort.postMessage({
     action: "log",
     level: "verbose",
-    message: `updated GHWO for county ${countyFips} from WFO ${wfo.toUpperCase()}`,
+    message: `updated risk overview for county ${countyFips} from WFO ${wfo.toUpperCase()}`,
   });
 };
 
@@ -137,7 +137,7 @@ const processWFO = async (wfo) => {
     return;
   }
 
-  const ghwo = await fetchAPIJson(url);
+  const riskOverview = await fetchAPIJson(url);
 
   // After we fetch, update the database so we know the last time we fetched
   // from this URL.
@@ -151,41 +151,41 @@ const processWFO = async (wfo) => {
     [url],
   );
 
-  if (ghwo.error) {
+  if (riskOverview.error) {
     parentPort.postMessage({
       action: "log",
       level: "warn",
-      message: `failed to get GHWO data for WFO ${wfo.toUpperCase()}`,
+      message: `failed to get risk overview data for WFO ${wfo.toUpperCase()}`,
     });
   } else {
-    if (!ghwo.counties) {
+    if (!riskOverview.counties) {
       parentPort.postMessage({
         action: "log",
         level: "warn",
-        message: `GHWO data for WFO ${wfo.toUpperCase()} does not have any counties`,
+        message: `risk overview data for WFO ${wfo.toUpperCase()} does not have any counties`,
       });
     } else {
-      // Since there are counties, process them. In the GHWO data, the object
-      // keys are county FIPS codes and the values are the GHWO data. So iterate
-      // over the key/value pairs and process accordingly.
+      // Since there are counties, process them. In the risk overview data, the
+      // object keys are county FIPS codes and the values are the risk data. So
+      // iterate over the key/value pairs and process accordingly.
       await Promise.all(
-        Object.entries(ghwo.counties).map(([countyFips, data]) =>
+        Object.entries(riskOverview.counties).map(([countyFips, data]) =>
           processCounty({ countyFips, data, wfo }),
         ),
       );
     }
 
-    if (!ghwo.states) {
+    if (!riskOverview.states) {
       parentPort.postMessage({
         action: "log",
         level: "warn",
-        message: `GHWO data for WFO ${wfo.toUpperCase()} does not have any states`,
+        message: `risk overview data for WFO ${wfo.toUpperCase()} does not have any states`,
       });
     } else {
       // Do the same with states. In this case, the object key is the state two
       // letter abbreviation.
       await Promise.all(
-        Object.entries(ghwo.states).map(([state, data]) =>
+        Object.entries(riskOverview.states).map(([state, data]) =>
           processState({ state, data, wfo }),
         ),
       );
@@ -193,11 +193,11 @@ const processWFO = async (wfo) => {
   }
 };
 
-export const updateGHWO = async () => {
+export const updateRiskOverviews = async () => {
   parentPort.postMessage({
     action: "log",
     level: "info",
-    message: "updating GHWO data",
+    message: "updating risk overview data",
   });
 
   const db = await openDatabase();
@@ -213,13 +213,13 @@ export const updateGHWO = async () => {
   parentPort.postMessage({
     action: "log",
     level: "info",
-    message: "finished updating GHWO data",
+    message: "finished updating risk overview data",
   });
 };
 
 const setTimer = () => {
   setTimeout(async () => {
-    await updateGHWO();
+    await updateRiskOverviews();
     setTimer();
     // Run every 30 minutes and one second. This is to create some buffer around
     // the update timestamp checking that happens later. This timing buffer is a
@@ -238,7 +238,7 @@ export const start = () => {
     level: "verbose",
     message: "starting",
   });
-  updateGHWO().then(setTimer);
+  updateRiskOverviews().then(setTimer);
 };
 
 if (parentPort) {

@@ -11,13 +11,13 @@ describe("county data index", () => {
   openDatabase.resolves(db);
 
   const getAlertsForCountyFIPS = sandbox.stub();
-  const getGHWOData = sandbox.stub();
+  const getRiskOverview = sandbox.stub();
 
   let getCountyData;
   before(async () => {
     await quibble.esm("../db.js", {}, openDatabase);
     await quibble.esm("../alerts/index.js", { getAlertsForCountyFIPS }, {});
-    await quibble.esm("../ghwo/index.js", { getGHWOData }, {});
+    await quibble.esm("../risk-overview/index.js", { getRiskOverview }, {});
 
     const module = await import("./index.js");
     getCountyData = module.getCountyData;
@@ -80,8 +80,8 @@ describe("county data index", () => {
       clock.restore();
     });
 
-    it("returns whatever GHWO data it gets", async () => {
-      getGHWOData.resolves("mercy sakes");
+    it("returns whatever risk overview data it gets", async () => {
+      getRiskOverview.resolves("mercy sakes");
       getAlertsForCountyFIPS.resolves({ items: [] });
 
       const actual = await getCountyData("11223");
@@ -101,13 +101,13 @@ describe("county data index", () => {
           shape: { type: "oblong" },
           primarywfo: "FRA",
         },
-        hazardOutlook: "mercy sakes",
+        riskOverview: "mercy sakes",
         alerts: { items: [] },
       });
     });
 
     it("returns alerts and associated days", async () => {
-      getGHWOData.resolves("howdy");
+      getRiskOverview.resolves("howdy");
 
       const now = dayjs("1987-10-21T19:32:14Z").tz("America/New_York");
       clock.tick(now.valueOf());
