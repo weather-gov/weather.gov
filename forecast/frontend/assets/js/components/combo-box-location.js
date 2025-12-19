@@ -186,6 +186,10 @@ export default class LocationComboBox extends ComboBox {
       // display it
       const loader = document.querySelector("wx-loader");
       if (loader) {
+        const text = gettext("js.loader.loading-text.01");
+        window.dispatchEvent(
+          new CustomEvent("wx-announce", { detail: { text } }),
+        );
         loader.classList.remove("display-none");
       }
 

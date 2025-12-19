@@ -12,6 +12,9 @@ msgstr ""
 msgid "js.alerts.link.see-details.01"
 msgstr "see details"
 
+msgid "js.loader.loading-text.01"
+msgstr "Loading the forecast"
+
 msgid "js.location-combo-box.aria.search-updated.01"
 msgid_plural "js.location-combo-box.aria.search-updated.01-plural"
 msgstr[0] "Search updated. %s result available"
