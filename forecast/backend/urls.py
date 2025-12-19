@@ -73,7 +73,6 @@ urlpatterns = [
     path("health/", index.health, name="health"),
     path("llms.txt", TemplateView.as_view(template_name="llms.txt", content_type="text/plain")),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
-    path("csp-report/", include("cspreports.urls")),
 ]
 
 if settings.DEBUG is True:
