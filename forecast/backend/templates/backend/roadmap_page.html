@@ -8,7 +8,7 @@
   <wx-roadmap>
   <div class="grid-container">
     <div class="grid-row">
-      <h1 class="text-normal">{{ page.title }}</h1>
+      <h1 class="text-normal text-primary-darker">{{ page.title }}</h1>
     </div>
     <time class="font-mono-2xs text-uppercase text-base-dark"
           datetime="{{ page.last_published_at|date:"c" }}"
@@ -16,7 +16,11 @@
           data-date-format="roadmap">
       {{ page.last_published_at|date:"g:i A T, F j, Y" }}
     </time>
-    <div class="roadmap-body grid-row font-sans-md">{{ page.body|safe }}</div>
+    <div class="roadmap-body grid-row font-sans-sm margin-top-1">
+      <div class="desktop:grid-col-8 measure-6">
+        {{ page.body|safe }}
+      </div>
+    </div>
     <div id="nav-link-now"
          class="grid-row text-base text-uppercase font-mono-xs">Jump to</div>
   </div>

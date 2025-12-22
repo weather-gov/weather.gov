@@ -1,5 +1,5 @@
 from django.templatetags.static import static
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from wagtail import hooks
 from wagtail.admin.panels import FieldPanel
 from wagtail.snippets.models import register_snippet
@@ -18,10 +18,7 @@ from .models import (
 @hooks.register("insert_editor_js")
 def editor_js():
     """Inject our Javascript for the CMS into every editor page."""
-    return mark_safe(f"""
-        <script type="module" src="{static("js/cms/editor.html.js")}"></script>
-    """)  # noqa: S308
-    # This is safe. Good flag, but yeah, it's safe in this context.
+    return format_html('<script type="module" src="{}"></script>', static("js/cms/editor.html.js"))
 
 
 class WFOAdminSnippet(SnippetViewSet):
