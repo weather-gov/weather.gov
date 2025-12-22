@@ -9,8 +9,14 @@ $row1-offset-x: 70px;
 $row2-offset-y: 60px;
 
 wx-roadmap {
-  .roadmap-body p:first-child {
-    margin-top: 0;
+  .roadmap-body {
+    p {
+      @include u-line-height("sans", 4);
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
   }
 
   .wx-roadmap__section {
