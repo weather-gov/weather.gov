@@ -24,13 +24,9 @@
     </caption>
     <thead>
       <tr>
-        <td>
-          {% comment %}
-          Empty for alignment, structure, and visual purposes
-          {% endcomment %}
-        </td>
+        <th scope="col" aria-hidden="true"></th>
         {% for day in ghwo_days %}
-          <th scope="col">
+          <th scope="col" class="text-center">
             <div class="font-mono-2xs tablet-lg:font-mono-xs text-normal">
               <span class="display-block">{{ day.timestamp|datetime|date:"D" }}</span>
               <span class="display-block">{{ day.timestamp|datetime|date:"n" }}/{{ day.timestamp|datetime|date:"j" }}</span>
@@ -45,9 +41,9 @@
           <span class="font-mono-xs padding-right-3 text-normal">{{"ghwo.table.row.risk-summary.01"|t}}</span>
         </th>
         {% for day in ghwo_days %}
-          <td>
+          <td class="text-center vertical-align-middle">
             {% if day.highest %}
-              <div class="ghwo-chiclet-wrapper">
+            <div class="ghwo-chiclet-wrapper display-flex flex-justify-center">
                 <div class="ghwo-chiclet"
                      aria-hidden="true"
                      data-risk-level="{{ day.highest.level }}"
