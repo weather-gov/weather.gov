@@ -147,30 +147,24 @@ const processGHWODates = (ghwoData) => {
 };
 
 export default async (request, response) => {
-  // Let's determine if this request is for GHWO data
-  const isGHWORequest = request.path.endsWith("hazByCounty.json");
+  // In the event that the resource being requested already a .json extension,
+  // yoink it out. We don't want to duplicate it.
+  const resourcePath = request.path.replace(/\.json$/, "");
+
   // Put the query string back together.
   const query = Object.entries(request.query)
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
 
   // The file path is the request path plus the query string, if any.
-  let filePath = `${path.join(dataPath, config.play, request.path)}${
+  let filePath = `${path.join(dataPath, config.play, resourcePath)}${
     query.length > 0 ? "__" : ""
   }${query}.json`;
-
-  // That is, unless the incoming request was for a GHWO endpoint
-  if (isGHWORequest) {
-    filePath = `${path.join(dataPath, config.play, request.path)}`;
-  }
 
   const fileExists = await exists(filePath);
   console.log(`NOW_TIME: Set from ${config.nowMethod} as ${config.now}`); // eslint-disable-line no-console
 
   if (!fileExists) {
-    if (isGHWORequest) {
-      console.log(`LOCAL:    ghwo file not found`); // eslint-disable-line no-console
-    }
     console.log(`LOCAL:    local file does not exist; proxying [${filePath}]`); // eslint-disable-line no-console
     await proxy(request, response);
   } else {

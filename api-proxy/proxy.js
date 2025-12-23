@@ -6,12 +6,9 @@ export default (req, res) => {
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
 
-  // Determine if this is a GHWO request.
-  // If so, it needs to be proxied to the weathergov
-  // website instead of the api
-  const isGHWORequest = req.path.endsWith("hazByCounty.json");
-  let proxyRequestSettings = {
-    host: "api.weather.gov",
+  const proxyRequestSettings = {
+    // If there's a wx-host header, use that as our hostname
+    host: req.headers["wx-host"] ?? "api.weather.gov",
     port: 443,
     path: `${req.path}?${qs}`,
     method: "GET",
@@ -19,16 +16,6 @@ export default (req, res) => {
       "user-agent": "weather.gov dev proxy",
     },
   };
-  if (isGHWORequest) {
-    proxyRequestSettings = {
-      host: "www.weather.gov",
-      port: 443,
-      path: req.path,
-      headers: {
-        "user-agent": "weather.gov dev proxy",
-      },
-    };
-  }
 
   const proxy = https
     .request(proxyRequestSettings, (proxyResponse) => {

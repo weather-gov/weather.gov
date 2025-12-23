@@ -1,16 +1,11 @@
 import { parentPort } from "node:worker_threads";
 import openDatabase from "../db.js";
 import { fetchAPIJson } from "../../util/fetch.js";
-
-// Generally, risk overview image URLs use the same risk names as the data, but
-// in a few cases, they do not. This is a mapping for those outliers.
-const riskNameToImageNameMap = new Map([
-  ["ConvectiveWind", "ThunderstormWind"],
-  ["Frost/Freeze", "FrostFreeze"],
-  ["Marine", "MarineHazard"],
-  ["NonConvectiveWind", "Wind"],
-  ["SevereThunderstorm", "SevereThunderstorms"],
-]);
+import {
+  riskNameToImageNameMap,
+  riskNameToKeyMapping,
+  maxLevelPerRisk,
+} from "./mappings.js";
 
 // Update if the key already exists, otherwise insert.
 const upsert = async (id, data) =>
@@ -28,21 +23,61 @@ const upsert = async (id, data) =>
 
 // Risk overview data is arranged as an object, some of whose keys are timestamps.
 // This method pulls out the timestamp keys and returns an array of days containing
-// that data instead of an object.
-const processDays = (data) =>
+// that data instead of an object.c
+const processDays = (data, legend) => {
   // Get the keys that are timestamps.
-  Object.keys(data)
+  const days = Object.keys(data)
     .filter((key) =>
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$/.test(key),
     )
     .map((timestamp, index) => ({
-      ...data[timestamp],
+      risks: Object.entries(data[timestamp])
+        // We don't do anything with the DailyComposite. We'll make our own.
+        .filter(([risk]) => risk !== "DailyComposite")
+        .reduce(
+          (risks, [risk, category]) => ({
+            ...risks,
+            [risk]: {
+              // Grab all the legend information for this risk and category
+              // and stuff it into this risk entry for the day.
+              ...legend[risk]?.category[category],
+              // Also preserve the raw category, as well as the risk name from
+              // the legend.
+              category,
+              name: legend[risk]?.name,
+            },
+          }),
+          {},
+        ),
       dayNumber: index + 1,
       timestamp,
       images: {},
     }));
 
-const processState = async ({ state, data: stateData, wfo }) => {
+  // For each day, compute a composite risk category/level.
+  days.forEach((day) => {
+    // Extract all of the categories for the day, along with the max
+    // for each of those risks.
+    const categories = Object.entries(day.risks).map(([key, { category }]) => ({
+      category,
+      max: maxLevelPerRisk.get(key),
+    }));
+
+    // Now scale the category relative to its max.
+    const scaled = categories.map(({ category, max }) => category / max);
+
+    // Finally, set the composite to the highest category and the
+    // highest scaled value.
+    day.composite = {
+      max: Math.max(...categories.map(({ category }) => category)),
+      scaled: Math.round(Math.max(...scaled) * 100) / 100,
+    };
+  });
+
+  return days;
+};
+
+const processState = async ({ state, data: stateData, wfo, legend }) => {
   const db = await openDatabase();
   const stateName = await db
     .query("SELECT name FROM weathergov_geo_states WHERE state=$1::text", [
@@ -52,7 +87,7 @@ const processState = async ({ state, data: stateData, wfo }) => {
 
   const data = {
     state: stateName,
-    days: processDays(stateData),
+    days: processDays(stateData, legend),
     wfo,
   };
 
@@ -64,7 +99,7 @@ const processState = async ({ state, data: stateData, wfo }) => {
   });
 };
 
-const processCounty = async ({ countyFips, data: countyData, wfo }) => {
+const processCounty = async ({ countyFips, data: countyData, wfo, legend }) => {
   const db = await openDatabase();
   const county = db
     .query(
@@ -77,7 +112,7 @@ const processCounty = async ({ countyFips, data: countyData, wfo }) => {
     state: county.st,
     county: county.countyname,
     fips: countyFips,
-    days: processDays(countyData),
+    days: processDays(countyData, legend),
     wfo,
   };
 
@@ -85,19 +120,16 @@ const processCounty = async ({ countyFips, data: countyData, wfo }) => {
     // For every data element in the risk overview, we want to also provide an
     // image URL. The list of data elements is not the same for all WFOs at all
     // times, so we need to build this dynamically.
-    const elementKeys = Object.keys(day);
+    const elementKeys = Object.keys(day.risks);
     for (const elementKey of elementKeys) {
-      // There's no image URL for the daily composite risk, so skip that one.
-      if (elementKey !== "DailyComposite" && elementKey !== "images") {
-        // Sometimes the element key (like "SevereThunderstorm") is not the same
-        // key as used in the URL (in this case, "SevereThunderstorms" - note
-        // the s at the end). If we have a URL key mapped to the element key,
-        // use it. Otherwise just preserve the element key.
-        const urlKey = riskNameToImageNameMap.get(elementKey) ?? elementKey;
-        // Build the image URL from the WFO, element key, and day number.
-        day.images[elementKey] =
-          `https://www.weather.gov/images/${wfo}/ghwo/${urlKey}Day${day.dayNumber}.jpg`;
-      }
+      // Sometimes the element key (like "SevereThunderstorm") is not the same
+      // key as used in the URL (in this case, "SevereThunderstorms" - note
+      // the s at the end). If we have a URL key mapped to the element key,
+      // use it. Otherwise just preserve the element key.
+      const urlKey = riskNameToImageNameMap.get(elementKey) ?? elementKey;
+      // Build the image URL from the WFO, element key, and day number.
+      day.images[elementKey] =
+        `https://www.weather.gov/images/${wfo}/ghwo/${urlKey}Day${day.dayNumber}.jpg`;
     }
   });
 
@@ -111,11 +143,12 @@ const processCounty = async ({ countyFips, data: countyData, wfo }) => {
 
 const processWFO = async (wfo) => {
   const db = await openDatabase();
-  const url = `https://www.weather.gov/source/${wfo}/ghwo/hazByCounty.json`;
+  const risksUrl = `https://www.weather.gov/source/${wfo}/ghwo/hazByCounty.json`;
+  const legendUrl = `https://www.weather.gov/source/${wfo}/ghwo/legend.json`;
 
   const shouldUpdate = await db
     .query("SELECT updated FROM weathergov_temp_ghwo_meta WHERE url=$1::text", [
-      url,
+      risksUrl,
     ])
     .then((result) => {
       // If we've fetched this URL before, let's check when it was last fetched.
@@ -137,7 +170,10 @@ const processWFO = async (wfo) => {
     return;
   }
 
-  const riskOverview = await fetchAPIJson(url);
+  const [riskOverview, legendData] = await Promise.all([
+    fetchAPIJson(risksUrl),
+    fetchAPIJson(legendUrl),
+  ]);
 
   // After we fetch, update the database so we know the last time we fetched
   // from this URL.
@@ -148,7 +184,7 @@ const processWFO = async (wfo) => {
     VALUES($1::text,NOW())
     ON CONFLICT(url)
     DO UPDATE SET updated=NOW()`,
-    [url],
+    [risksUrl],
   );
 
   if (riskOverview.error) {
@@ -158,6 +194,31 @@ const processWFO = async (wfo) => {
       message: `failed to get risk overview data for WFO ${wfo.toUpperCase()}`,
     });
   } else {
+    // We get legend data, and now we need to manipulate it into a shape that
+    // is more useful for us later on.
+    const legend = legendData.hazards.reduce((all, hazard) => {
+      // We need to map the risk names from the legend into the risk keys in
+      // the actual data. We have a mapping that covers all the risks we know
+      // about right now, but as a stopgap for risks we don't know about, we
+      // will try to convert hazard names into keys based on how it tends to go.
+      //
+      // We have asked GHWO to add this mapping into the legend metadata
+      // for us, so hopefully we can switch over to that before long.
+      const key = riskNameToKeyMapping.has(hazard.name)
+        ? riskNameToKeyMapping.get(hazard.name)
+        : hazard.name.replace(/ Risk$/, "").replace(/[^a-z]/gi, "");
+
+      return {
+        ...all,
+        // Use the risk key as the key here, for faster lookup later. This lets
+        // us quickly find the risk name and category information from the legend.
+        [key]: {
+          name: hazard.name,
+          category: hazard.category,
+        },
+      };
+    }, {});
+
     if (!riskOverview.counties) {
       parentPort.postMessage({
         action: "log",
@@ -170,7 +231,7 @@ const processWFO = async (wfo) => {
       // iterate over the key/value pairs and process accordingly.
       await Promise.all(
         Object.entries(riskOverview.counties).map(([countyFips, data]) =>
-          processCounty({ countyFips, data, wfo }),
+          processCounty({ countyFips, data, wfo, legend }),
         ),
       );
     }
@@ -186,7 +247,7 @@ const processWFO = async (wfo) => {
       // letter abbreviation.
       await Promise.all(
         Object.entries(riskOverview.states).map(([state, data]) =>
-          processState({ state, data, wfo }),
+          processState({ state, data, wfo, legend }),
         ),
       );
     }

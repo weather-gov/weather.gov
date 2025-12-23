@@ -160,7 +160,7 @@ def process_ghwo_daily_summary(ghwo_data):
         # the value at the 'DailyComposite' key.
         # Set the highest to None where the composite
         # is zero
-        highest = {"level": day["DailyComposite"]}
+        highest = {"level": day["composite"]["max"]}
         if highest["level"] == 0:
             highest = None
         day["highest"] = highest
@@ -220,11 +220,11 @@ def _get_metadata_for_ghwo_risk_type(wfo_code, risk_type):
 
 def _get_risk_factor_ids(county_ghwo_data):
     """
-    Return a list of risk factor key names (ids) for the given county ghwo data.
+    Return a list of risk key names (ids) for the given county ghwo data.
 
     GHWO county data is formatted as a set of days, each of which has keys
-    for the different risk factors (and a value for the level that day).
-    We call these keys the risk_id.
+    for the different risks and values that represent metadata about the risk
+    level for that day. We call these keys the risk_id.
 
     For now, we are using a preset mapping of risk_ids to
     risk labels. We consider these the 'canonical' set.
@@ -236,14 +236,9 @@ def _get_risk_factor_ids(county_ghwo_data):
     all_risk_types = HazardousWeatherOutlookMetadata.get_all_types().keys()
 
     for day in county_ghwo_data["days"]:
-        for key, level in day.items():
-            # All risk_id keys begin with a capital letter.
-            # The exception is the 'DailyComposite' key,
-            # which represents the highest level for the day.
-            # Additionally, we only want to consider risk ids
-            # whose value is greater than zero.
-
-            if key in all_risk_types and level > 0:
+        for key, risk in day["risks"].items():
+            # We only want to consider risks whose category is greater than 0.
+            if key in all_risk_types and risk["category"] > 0:
                 risk_ids.add(key)
 
     return list(risk_ids)
@@ -260,10 +255,10 @@ def _get_risk_daily_rows(risk_ids, county_ghwo_data):
         # interactive table
         days = []
         for day in county_ghwo_data["days"]:
-            if risk_id not in day:
+            if risk_id not in day["risks"]:
                 level = 0
             else:
-                level = day[risk_id]
+                level = day["risks"][risk_id]["category"]
 
             # Sometimes there is not an image for
             # a given risk factor. We set to None in
@@ -354,11 +349,11 @@ def get_ghwo_daily_images(county_ghwo_data):
     risk_ids = _get_risk_factor_ids(county_ghwo_data)
     for day in county_ghwo_data["days"]:
         # For each of the keys, which are risk_ids,
-        # determine if the level for the day is > 0.
-        # If so, add the corresponding image url
-        # to the set
+        # add the corresponding image url to the set.
+        # _get_risk_factor_ids already ensures that
+        # risk level is greater than 0.
         for key in risk_ids:
-            if key in day["images"] and day[key] > 0:
+            if key in day["images"]:
                 urls.add(day["images"][key])
 
     return list(urls)
