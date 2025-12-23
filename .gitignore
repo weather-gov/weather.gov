@@ -71,6 +71,9 @@ terraform.tfstate
 terraform.tfstate.backup
 terraform/dist
 
+# Cloud Foundry config files
+/cf-*/
+
 # Django
 **/__cache/
 *.mo

@@ -11,11 +11,24 @@ default:
 # between now and the last versioned tag. And this should just keep on working
 # until we pass version 10,000. Which... should be a while.
 # Get release notes since the last versioned tag
-[group("assorted")]
+[group("release management")]
 [script]
 release-notes:
   git remote update
   curl -s -H "PRIVATE-TOKEN: $GITLAB_API_TOKEN" "https://vlab.noaa.gov/gitlab-licensed/api/v4/projects/186/repository/changelog?version=v10000.0.0" | jq -r .notes | sed 's/^## .*//g' | sed 's/(http.*//g' | sed 's/\[//g' | sed 's/\]//g'
+
+[group("system administration")]
+[script]
+copy-tables-from-beta-to-staging:
+  echo "You'll be asked to login twice."
+  CF_HOME=$(pwd)/cf-env1 cf login -a api.fr.cloud.gov --sso -o nws-weathergov -s prod
+  CF_HOME=$(pwd)/cf-env2 cf login -a api.fr.cloud.gov --sso -o nws-weathergov -s staging
+  echo "⚠︎ Deleting existing data in staging. ⚠︎"
+  CF_HOME=$(pwd)/cf-env2 cf ssh weathergov-staging -c "/tmp/lifecycle/launcher /home/vcap/app \"./manage.py shell -c 'from wagtail.models import Page; Page.objects.all().delete()'\" '{}'"
+  CF_HOME=$(pwd)/cf-env2 cf ssh weathergov-staging -c "/tmp/lifecycle/launcher /home/vcap/app \"./manage.py shell -c 'from django.apps import apps; [ model.objects.all().delete() for model in list(apps.get_app_config(\\\"wagtailcore\\\").get_models()) ]'\" '{}'"
+  echo "⚠︎ Copying data from beta now. ⚠︎"
+  CF_HOME=$(pwd)/cf-env1 cf ssh weathergov-prod -t -c "/tmp/lifecycle/launcher /home/vcap/app './manage.py dumpdata --natural-foreign --natural-primary --exclude=wagtailcore.ModelLogEntry wagtailcore backend taggit' '{}'" | jq -R 'fromjson?' | CF_HOME=$(pwd)/cf-env2 cf ssh weathergov-staging -c "/tmp/lifecycle/launcher /home/vcap/app './manage.py loaddata --format=json -i -' '{}'"
+  rm -r "$(pwd)/cf-env1" "$(pwd)/cf-env2"
 
 # Build USWDS and our styles together
 [group("building")]
