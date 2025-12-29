@@ -36,11 +36,12 @@
         </div>
       </div>
     {% endif %}
-    <wx-tabbed-nav class="display-block position-relative">
+    <wx-tabbed-nav class="display-block position-relative" id="point-page-tabbed-nav">
     <div id="tablist-label" class="usa-sr-only">{{ "forecast.labels.weather-info.01" | t }}</div>
     <div class="position-sticky top-0 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
       <div class="grid-container padding-x-0">
         <div role="tablist"
+             id="point-page-tablist"
              class="tab-buttons display-flex flex-row top-4 grid-col-12"
              aria-labelledby="tablist-label">
           {% if point.alerts.items|length > 0 %}

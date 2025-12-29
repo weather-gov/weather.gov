@@ -17,7 +17,7 @@ alerts - An array of all the alerts that intersect with those hours.
            class="border-bottom-1px border-base-light">
       <tr data-row-name="time">
         <th scope="row"
-            class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase z-400">
+            class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase">
           {{ "hourly-table.labels.time.01" | t }}
         </th>
         {% for period in hours %}
@@ -36,7 +36,7 @@ alerts - An array of all the alerts that intersect with those hours.
     <tbody data-table-section="variables">
       <tr data-row-name="temp" id="temp_{{ itemId }}">
         <th scope="row"
-            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
           {{"hourly-table.labels.temperature.01" | t}}
         </th>
         {% for period in hours %}
@@ -52,7 +52,7 @@ alerts - An array of all the alerts that intersect with those hours.
       </tr>
       <tr data-row-name="apparentTemp" id="apparentTemp_{{ itemId }}">
         <th scope="row"
-            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
           {{"forecast.current.feels-like.01" | t}}
         </th>
         {% for period in hours %}
@@ -66,7 +66,7 @@ alerts - An array of all the alerts that intersect with those hours.
       </tr>
       <tr data-row-name="condition" id="condition_{{ itemId }}">
         <th scope="row"
-            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
           {% trans "hourly-table.labels.condition.01" %}
         </th>
         {% for period in hours %}
@@ -91,7 +91,7 @@ alerts - An array of all the alerts that intersect with those hours.
       <tr data-row-name="chance-precipitation"
           id="chance-precipitation_{{ itemId }}">
         <th scope="row"
-            class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
+            class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase ">
           {{ "hourly-table.table-header.chance-precip.01" | t }}
         </th>
         {% for period in hours %}
@@ -106,7 +106,7 @@ alerts - An array of all the alerts that intersect with those hours.
       </tr>
       <tr data-row-name="wind-speed" id="wind-speed_{{ itemId }}">
         <th scope="row"
-            class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase z-400">
+            class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase ">
           {{"hourly-table.labels.wind-speed.01" | t}}
         </th>
         {% for period in hours %}
@@ -120,7 +120,7 @@ alerts - An array of all the alerts that intersect with those hours.
       </tr>
       <tr data-row-name="humidity">
         <th scope="row"
-            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
           {{"hourly-table.labels.humidity.01" | t}}
         </th>
         {% for period in hours %}
@@ -135,7 +135,7 @@ alerts - An array of all the alerts that intersect with those hours.
       </tr>
       <tr data-row-name="dewpoint" id="dewpoint_{{ itemId }}">
         <th scope="row"
-            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
           {{"hourly-table.labels.dewpoint.01" | t}}
         </th>
         {% for period in hours %}

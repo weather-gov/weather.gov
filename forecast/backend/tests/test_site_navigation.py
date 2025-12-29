@@ -21,7 +21,7 @@ class SiteNavigationAllMenuTests(TestCase):
         response = self.client.get(reverse("about"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("weather/partials/site-navigation.html")
-        self.assertContains(response, "usa-nav__submenu-item", count=17)
+        self.assertContains(response, "usa-nav__submenu-item", count=13)
 
 @override_settings(DEBUG_SHOW_ALL_MENU_LINKS=False)
 class SiteNavigationPartialMenuTests(TestCase):
