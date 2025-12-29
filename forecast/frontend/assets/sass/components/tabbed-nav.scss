@@ -64,3 +64,7 @@ wx-tabbed-nav {
     }
   }
 }
+
+#point-page-tabbed-nav > div.position-sticky {
+    z-index: var(--point-page-tablist-area-z-index);
+}
