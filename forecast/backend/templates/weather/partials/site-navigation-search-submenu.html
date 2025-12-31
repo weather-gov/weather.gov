@@ -59,16 +59,16 @@ Note: there are some exceptions, including toggle buttons, etc.
               </label>
               <div class="margin-x-1 display-none tablet-lg:display-block text-base-light">|</div>
 
-                <button id="weathergov-use-browser-location"
-                        type="button"
-                        class="usa-button usa-button--unstyled font-sans-xs text-link">
-                  <div class="display-flex flex-align-center">
-                    <img src="{% static 'images/uswds/usa-icons/my_location.svg' %}" class="usa-icon height-2 width-2 margin-right-05 text-top" aria-hidden="true" focusable="false" role="img"/>
+              <button
+                type="button"
+                class="weathergov-use-browser-location usa-button usa-button--unstyled font-sans-xs text-link">
+                <div class="display-flex flex-align-center">
+                  <img src="{% static 'images/uswds/usa-icons/my_location.svg' %}" class="usa-icon height-2 width-2 margin-right-05 text-top" aria-hidden="true" focusable="false" role="img"/>
                   <span class="display-block">
                     {{ 'location-search.labels.use-location.01' | t }}
                   </span>
-                  </div>
-                </button>
+                </div>
+              </button>
             </div>
             <wx-combo-box-location
               class="border-base-dark height-4"
@@ -92,8 +92,8 @@ Note: there are some exceptions, including toggle buttons, etc.
             <button class="usa-button usa-input-suffix position-absolute top-0 right-neg-2px height-full width-6 margin-right-0 radius-0 radius-right-md" type="submit">
               <img src="{% static 'images/uswds/usa-icons-bg/search--white.svg' %}" alt="Search">
             </button>
-        </div>
+          </div>
       {% endif %}
-    </div>
+        </div>
   </wx-tabbed-nav>
-</div> 
+    </div> 
