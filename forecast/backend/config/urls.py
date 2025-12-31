@@ -57,8 +57,7 @@ if settings.SETTINGS_TYPE == "dev":
     )
 
     if not settings.TESTING:
-        from debug_toolbar.toolbar import debug_toolbar_urls
 
-        urlpatterns += debug_toolbar_urls()
+        urlpatterns = [path("__debug__/", include("debug_toolbar.urls"))] + urlpatterns
 
 handler404 = "backend.views.errors.handle_404"
