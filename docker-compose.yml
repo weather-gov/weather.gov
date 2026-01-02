@@ -84,6 +84,10 @@ services:
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY:-}
       LOG_LEVEL: verbose
       # TRUNCATE_HAZARD_OUTLOOKS: "true"
+      WX_USE_REDIS: "true"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_CREDS: ixu3N02Xp3uRPDcuZCmKIWZyNb
     networks:
       - weather.gov
     links:
@@ -158,6 +162,18 @@ services:
     ports:
       - 8180:8080
     profiles: ["utility"]
+
+  redis:
+    image: redis:8.4-alpine
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server --save 20 1 --loglevel verbose --requirepass ixu3N02Xp3uRPDcuZCmKIWZyNb
+    volumes:
+      - ./redis-data:/redis-data
+    networks:
+      - weather.gov
+      
 
 networks:
   weather.gov:
