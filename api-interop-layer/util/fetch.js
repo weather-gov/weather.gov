@@ -1,7 +1,9 @@
 import { createLogger } from "./monitoring/index.js";
 import { sleep } from "./sleep.js";
+import { getFromRedis, saveToRedis, getTTLFromResponse, USE_REDIS } from "../redis.js";
 
 const logger = createLogger("fetch wrapper");
+const redisLogger = createLogger("redis");
 
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
 const BASE_GHWO_URL = process.env.GHWO_URL ?? "https://www.weather.gov";
@@ -23,14 +25,37 @@ const internalFetch = async (path) => {
     headers["wx-host"] = url.hostname;
   }
 
-  if (
+  const isGHWO = (
     url.hostname === "www.weather.gov" &&
     url.pathname.startsWith("/source/")
-  ) {
+  );
+
+  if(isGHWO)  {
     // If the incoming path matches a request to the website's risk overview
     // endpoint, switch to the GHWO base URL.
     url = new URL(url.pathname, BASE_GHWO_URL);
   }
+  
+  // Attempt to look up the request in the redis cache.
+  // If present, we simply resolve with that response.
+  // Otherwise, continue making the full network
+  // request.
+  // Note that we explicitly do not cache GHWO requests
+  // for the moment.
+  if(USE_REDIS && !isGHWO){
+    url = new URL(url);
+    const cachedValue = await getFromRedis(url.pathname);
+    if(cachedValue){
+      redisLogger.verbose(`Returning cached value for ${url.pathname}`);
+      return new Promise((resolve) => {
+        resolve(
+          JSON.parse(cachedValue)
+        );
+      });
+    }
+  }
+  
+  
   logger.verbose(`making request to ${url}`);
 
   return fetch(url, { headers }).then(async (r) => {
@@ -44,6 +69,22 @@ const internalFetch = async (path) => {
         message: `success from ${path}`,
         "api-correlation-id": correlationID,
       });
+
+      // Cache the value, and then return the JSON
+      // response if there is a valid cache-control
+      // header value in the response
+      if(USE_REDIS){ 
+        const ttl = getTTLFromResponse(r);
+        if(ttl){
+          const json = await r.json();
+          await saveToRedis(
+            url.pathname,
+            JSON.stringify(json),
+            ttl
+          );
+          return new Promise((resolve) => resolve(json));
+        }
+      }
       return r.json();
     }
 
