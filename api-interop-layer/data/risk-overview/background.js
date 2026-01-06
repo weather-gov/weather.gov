@@ -7,6 +7,14 @@ import {
   maxLevelPerRisk,
 } from "./mappings.js";
 
+// enum to track WFO ghwo processing status
+const wfoStatus = Object.freeze({
+  NO_DATA: "NO_DATA",
+  NO_STATES: "NO_STATES",
+  NO_COUNTIES: "NO_COUNTIES",
+  ALL_DATA: "ALL_DATA",
+});
+
 // Update if the key already exists, otherwise insert.
 const upsert = async (id, data) =>
   openDatabase().then((db) =>
@@ -92,11 +100,6 @@ const processState = async ({ state, data: stateData, wfo, legend }) => {
   };
 
   await upsert(state, data);
-  parentPort.postMessage({
-    action: "log",
-    level: "verbose",
-    message: `updated risk overview for state ${state} (${stateName}) from WFO ${wfo.toUpperCase()}`,
-  });
 };
 
 const processCounty = async ({ countyFips, data: countyData, wfo, legend }) => {
@@ -134,14 +137,9 @@ const processCounty = async ({ countyFips, data: countyData, wfo, legend }) => {
   });
 
   await upsert(countyFips, data);
-  parentPort.postMessage({
-    action: "log",
-    level: "verbose",
-    message: `updated risk overview for county ${countyFips} from WFO ${wfo.toUpperCase()}`,
-  });
 };
 
-const processWFO = async (wfo) => {
+const processWFO = async (wfo, statuses) => {
   const db = await openDatabase();
   const risksUrl = `https://www.weather.gov/source/${wfo}/ghwo/hazByCounty.json`;
   const legendUrl = `https://www.weather.gov/source/${wfo}/ghwo/legend.json`;
@@ -167,7 +165,7 @@ const processWFO = async (wfo) => {
 
   // If we've updated from this URL recently, we can bail out now.
   if (!shouldUpdate) {
-    return;
+    return statuses;
   }
 
   const [riskOverview, legendData] = await Promise.all([
@@ -188,70 +186,72 @@ const processWFO = async (wfo) => {
   );
 
   if (riskOverview.error) {
-    parentPort.postMessage({
-      action: "log",
-      level: "warn",
-      message: `failed to get risk overview data for WFO ${wfo.toUpperCase()}`,
-    });
-  } else {
-    // We get legend data, and now we need to manipulate it into a shape that
-    // is more useful for us later on.
-    const legend = legendData.hazards.reduce((all, hazard) => {
-      // We need to map the risk names from the legend into the risk keys in
-      // the actual data. We have a mapping that covers all the risks we know
-      // about right now, but as a stopgap for risks we don't know about, we
-      // will try to convert hazard names into keys based on how it tends to go.
-      //
-      // We have asked GHWO to add this mapping into the legend metadata
-      // for us, so hopefully we can switch over to that before long.
-      const key = riskNameToKeyMapping.has(hazard.name)
-        ? riskNameToKeyMapping.get(hazard.name)
-        : hazard.name.replace(/ Risk$/, "").replace(/[^a-z]/gi, "");
+    statuses[wfoStatus.NO_DATA].push(wfo);
+    return statuses;
+  }
 
-      return {
-        ...all,
-        // Use the risk key as the key here, for faster lookup later. This lets
-        // us quickly find the risk name and category information from the legend.
-        [key]: {
-          name: hazard.name,
-          category: hazard.category,
-        },
-      };
-    }, {});
+  // We get legend data, and now we need to manipulate it into a shape that
+  // is more useful for us later on.
+  const legend = legendData.hazards.reduce((all, hazard) => {
+    // We need to map the risk names from the legend into the risk keys in
+    // the actual data. We have a mapping that covers all the risks we know
+    // about right now, but as a stopgap for risks we don't know about, we
+    // will try to convert hazard names into keys based on how it tends to go.
+    //
+    // We have asked GHWO to add this mapping into the legend metadata
+    // for us, so hopefully we can switch over to that before long.
+    const key = riskNameToKeyMapping.has(hazard.name)
+      ? riskNameToKeyMapping.get(hazard.name)
+      : hazard.name.replace(/ Risk$/, "").replace(/[^a-z]/gi, "");
 
-    if (!riskOverview.counties) {
-      parentPort.postMessage({
-        action: "log",
-        level: "warn",
-        message: `risk overview data for WFO ${wfo.toUpperCase()} does not have any counties`,
-      });
+    return {
+      ...all,
+      // Use the risk key as the key here, for faster lookup later. This lets
+      // us quickly find the risk name and category information from the legend.
+      [key]: {
+        name: hazard.name,
+        category: hazard.category,
+      },
+    };
+  }, {});
+
+  if (riskOverview.counties) {
+    // Since there are counties, process them. In the risk overview data, the
+    // object keys are county FIPS codes and the values are the risk data. So
+    // iterate over the key/value pairs and process accordingly.
+    await Promise.all(
+      Object.entries(riskOverview.counties).map(([countyFips, data]) =>
+        processCounty({ countyFips, data, wfo, legend }),
+      ),
+    );
+  }
+
+  if (riskOverview.states) {
+    // Do the same with states. In this case, the object key is the state two
+    // letter abbreviation.
+    await Promise.all(
+      Object.entries(riskOverview.states).map(([state, data]) =>
+        processState({ state, data, wfo, legend }),
+      ),
+    );
+  }
+
+  // categorize this WFO ghwo data into one of four status buckets.
+  if (riskOverview.states) {
+    if (riskOverview.counties) {
+      statuses[wfoStatus.ALL_DATA].push(wfo);
     } else {
-      // Since there are counties, process them. In the risk overview data, the
-      // object keys are county FIPS codes and the values are the risk data. So
-      // iterate over the key/value pairs and process accordingly.
-      await Promise.all(
-        Object.entries(riskOverview.counties).map(([countyFips, data]) =>
-          processCounty({ countyFips, data, wfo, legend }),
-        ),
-      );
+      statuses[wfoStatus.NO_COUNTIES].push(wfo);
     }
-
-    if (!riskOverview.states) {
-      parentPort.postMessage({
-        action: "log",
-        level: "warn",
-        message: `risk overview data for WFO ${wfo.toUpperCase()} does not have any states`,
-      });
+  } else {
+    if (riskOverview.counties) {
+      statuses[wfoStatus.NO_STATES].push(wfo);
     } else {
-      // Do the same with states. In this case, the object key is the state two
-      // letter abbreviation.
-      await Promise.all(
-        Object.entries(riskOverview.states).map(([state, data]) =>
-          processState({ state, data, wfo, legend }),
-        ),
-      );
+      statuses[wfoStatus.NO_DATA].push(wfo);
     }
   }
+
+  return statuses;
 };
 
 export const updateRiskOverviews = async () => {
@@ -267,15 +267,34 @@ export const updateRiskOverviews = async () => {
     .query("SELECT wfo FROM weathergov_geo_cwas")
     .then(({ rows }) => rows.map(({ wfo }) => wfo.toLowerCase()));
 
-  for await (const wfo of wfos) {
-    await processWFO(wfo);
+  let statuses = {};
+  for (const key of Object.keys(wfoStatus)) {
+    statuses[key] = [];
   }
 
-  parentPort.postMessage({
-    action: "log",
-    level: "info",
-    message: "finished updating risk overview data",
-  });
+  for await (const wfo of wfos) {
+    statuses = await processWFO(wfo, statuses);
+  }
+
+  for (const key of Object.keys(wfoStatus)) {
+    if (statuses[key].length) {
+      const level = key == wfoStatus.ALL_DATA ? "info" : "warn";
+      const status = {
+        [wfoStatus.ALL_DATA]: "successfully retrieved all data",
+        [wfoStatus.NO_COUNTIES]: "could not get county data",
+        [wfoStatus.NO_STATES]: "could not get state data",
+        [wfoStatus.NO_DATA]: "failed to get any data",
+      }[key];
+      parentPort.postMessage({
+        action: "log",
+        level,
+        message: {
+          status,
+          wfos: statuses[key],
+        },
+      });
+    }
+  }
 };
 
 const setTimer = () => {
@@ -294,11 +313,6 @@ const setTimer = () => {
 };
 
 export const start = () => {
-  parentPort.postMessage({
-    action: "log",
-    level: "verbose",
-    message: "starting",
-  });
   updateRiskOverviews().then(setTimer);
 };
 

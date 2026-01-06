@@ -35,7 +35,7 @@ const internalFetch = async (path) => {
     // endpoint, switch to the GHWO base URL.
     url = new URL(url.pathname, BASE_GHWO_URL);
   }
-  
+
   // Attempt to look up the request in the redis cache.
   // If present, we simply resolve with that response.
   // Otherwise, continue making the full network
@@ -54,8 +54,7 @@ const internalFetch = async (path) => {
       });
     }
   }
-  
-  
+
   logger.verbose(`making request to ${url}`);
 
   return fetch(url, { headers }).then(async (r) => {
@@ -89,10 +88,10 @@ const internalFetch = async (path) => {
     }
 
     const response = await r.json();
-    logger.error(
-      { message: `non-success (HTTP ${r.status}) on ${path}`, correlationID },
-      response,
-    );
+    logger.error({
+      message: `${path} returned HTTP ${r.status}`,
+      correlationID,
+    }, response);
 
     // If there was a server error, retry. These are often temporary.
     if (r.status >= 500) {
