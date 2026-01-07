@@ -17,6 +17,12 @@ data "archive_file" "app_src" {
 locals {
   host_name = coalesce(var.host_name, "${local.app_name}-${var.env}")
   domain    = coalesce(var.custom_domain_name, "app.cloud.gov")
+  base_service_bindings = [
+    { service_instance = "${var.env}-credentials" },
+    { service_instance = "${local.app_name}-s3-${var.env}" },
+    { service_instance = "${local.app_name}-rds-${var.env}" },
+  ]
+  prod_service_bindings = concat(local.base_service_bindings, [{ service_instance = "logdrain" }])
 }
 
 resource "cloudfoundry_app" "app" {
@@ -60,11 +66,7 @@ resource "cloudfoundry_app" "app" {
     }
   ]
 
-  service_bindings = [
-    { service_instance = "${var.env}-credentials" },
-    { service_instance = "${local.app_name}-s3-${var.env}" },
-    { service_instance = "${local.app_name}-rds-${var.env}" }
-  ]
+  service_bindings = (var.env == "prod" ? local.prod_service_bindings : local.base_service_bindings)
 
   depends_on = [
     cloudfoundry_service_instance.credentials,

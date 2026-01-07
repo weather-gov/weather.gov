@@ -12,9 +12,17 @@ class FilterIPMiddleware:
         self.is_enabled = False
 
         if "VCAP_SERVICES" in os.environ:
-            vcap_services = json.loads(os.environ["VCAP_SERVICES"])
             self.is_enabled = True
-            self.allowed_ips = vcap_services["user-provided"][0]["credentials"]["allowed_ips"]
+            vcap_services = json.loads(os.environ["VCAP_SERVICES"])
+            user_provided = vcap_services["user-provided"]
+            # find the appropriate credential service from cloud.gov, since
+            # there might be other services (such as logshipper).
+            service = next(
+                service
+                for service in user_provided
+                if service["name"].endswith("credentials")
+            )
+            self.allowed_ips = service["credentials"]["allowed_ips"]
 
     def __call__(self, request):
         """Invoke the default get_response."""
@@ -22,7 +30,11 @@ class FilterIPMiddleware:
 
     def process_view(self, request, *args):
         """Check to see if this IP matches our IP allowed list."""
-        if self.is_enabled and request.resolver_match and request.resolver_match.route.startswith("jsonapi/"):
+        if (
+            self.is_enabled
+            and request.resolver_match
+            and request.resolver_match.route.startswith("jsonapi/")
+        ):
             forwarded = request.META.get("HTTP_X_FORWARDED_FOR")
             if not forwarded:  # must be present
                 raise PermissionDenied
