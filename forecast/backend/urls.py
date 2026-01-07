@@ -64,7 +64,7 @@ urlpatterns = [
         name="django.contrib.sitemaps.views.sitemap",
     ),
     # Wagtail
-    path("cms/logout/", RedirectView.as_view(url="/saml/logout")),  # override wagtail logout
+    path("cms/logout/", RedirectView.as_view(url="/saml/logout/")),  # override wagtail logout
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     # Point forecast related, etc
