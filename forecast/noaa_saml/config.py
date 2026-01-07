@@ -41,7 +41,11 @@ def get_cloud_gov_settings():
     if not vcap_application or not vcap_services:
         raise SAMLVCAPNotFoundError()
 
-    sp_private_key = vcap_services["user-provided"][0]["credentials"]["sp_private_key"]
+    user_provided = vcap_services["user-provided"]
+    # find the appropriate credential service from cloud.gov, since there might
+    # be other services (such as logshipper).
+    service = next(service for service in user_provided if service["name"].endswith("credentials"))
+    sp_private_key = service["credentials"]["sp_private_key"]
     entity_id = f"https://{vcap_application['application_uris'][0]}"
 
     # Fetch IDP information from the NOAA metadata route

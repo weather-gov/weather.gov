@@ -46,6 +46,10 @@ Configured via `app.tf`. The `forecast/` directory (excluding build artifacts) i
 
 Configured via `api.tf`. Similarly to the app, the `api-interop-layer` directory (excluding build artifacts) is zipped and uploaded as a cloudfoundry app to the configured space. Currently, it is not recommended to set `api_interop_memory` below `256M` as this will likely cause OOM errors.
 
+### Logshipper
+
+Configured via `logshipper.tf` and sets up a log drain to export logs to a S3 bucket for external analysis. For production environments only.
+
 ## cloud.gov specific configurations
 
 In `main.tf` we have modules that are specific to cloud.gov itself. As mentioned before, these use the [`terraform-cloudgov`](github.com/gsa-tts/terraform-cloudgov) Github repository and are used to cleanly define an app space, database, domain, and s3 bucket within cloud.gov, rather than treating these as generic cloud foundry service instances.
