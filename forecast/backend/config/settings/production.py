@@ -156,7 +156,10 @@ s3_image_src = f"https://{s3_credentials['bucket']}.s3.{s3_credentials['region']
 # add this cloud.gov app and s3 bucket to content security policy configuration
 CONTENT_SECURITY_POLICY["DIRECTIVES"]["default-src"] += ALLOWED_HOSTS  # noqa: F405 (imported from base.py)
 CONTENT_SECURITY_POLICY["DIRECTIVES"]["img-src"] += [s3_image_src]  # noqa: F405 (imported from base.py)
-CONTENT_SECURITY_POLICY["DIRECTIVES"]["form-action"] += [f"https://{ALLOWED_HOSTS[0]}/cms/logout/"]  # noqa: F405 (imported from base.py)
+CONTENT_SECURITY_POLICY["DIRECTIVES"]["form-action"] += [  # noqa: F405 (imported from base.py)
+    f"https://{ALLOWED_HOSTS[0]}/cms/logout/",
+    f"https://{ALLOWED_HOSTS[0]}/saml/logout/",
+]
 
 # SAML Settings
 # See noaa_saml/config.py for details
