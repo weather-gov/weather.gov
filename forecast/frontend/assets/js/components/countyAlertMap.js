@@ -202,9 +202,9 @@ const setupMap = () => {
     const html = document.createElement("div");
     html.classList.add("text-center");
     html.innerHTML = `
-      <div>${gettext(alertName)}</div>
+      <div class="font-body-xs margin-bottom-2px">${gettext(alertName)}</div>
       <div>
-        <button class="usa-button usa-button--unstyled" type="button">
+        <button class="usa-button usa-button--unstyled font-body-xs" type="button">
           ${gettext("js.alerts.link.see-details.01")}
         </button>
       </div>
