@@ -58,6 +58,8 @@ def mark_safer(value, transformer=None, **kwargs):
 
     Use this instead of django.utils.safestring.mark_safe.
 
+    Structural tags like meta, title, html will always be removed. Sorry.
+
     Args:
         value: A string to be sanitized and marked safe
             for inclusion in templates
@@ -67,12 +69,21 @@ def mark_safer(value, transformer=None, **kwargs):
 
             Example:
             mark_safer(value, lambda cleaned: re.sub("one", "two", cleaned))
+
+    Keyword args:
+        tag (optional): A set of tags which will replace the defaults;
+            it may cause errors if too restrictive
+        extra_tag (optional): A set of tags which will be added to the defaults
+        attributes (optional): A dictionary of allowed attributes by tag
     """
     tags = (
-        kwargs["tag"]
+        set(kwargs["tag"])
         if "tag" in kwargs
         else {"a", "h1", "h2", "h3", "time", "strong", "em", "p", "ul", "ol", "li", "br", "sub", "sup", "hr", "span"}
     )
+
+    if "extra_tag" in kwargs:
+        tags = tags.union(set(kwargs["extra_tag"]))
 
     attributes = (
         kwargs["attributes"]
