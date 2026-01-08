@@ -249,6 +249,7 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 SITE_LOGO = "logo.svg"
 SITE_NAME = "beta.weather.gov"
 SITE_SLOGAN = "National Weather Service"
+AGENCY_NAME = "National Weather Service"
 
 # 3rd party sites that weather.gov needs to access in order to function
 # don't put tracking or analytics domains in this list, please

@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load get_setting %}
 {% load weather_i18n %}
+{% load weather_title %}
 
 {% comment %}
   Disable server local time for all templates that inherit from base. The name
@@ -15,27 +16,9 @@
 <!DOCTYPE html>
 <html lang="{{ request.LANGUAGE_CODE }}">
   <head>
-    <title>
-      {% if point.place %}
-        {{ point.place.fullName }} |
-      {% elif page.title %}
-        {{ page.title }} |
-      {% else %}
-        beta.weather.gov |
-      {% endif %}
-      {{ "National Weather Service" | t }}
-    </title>
+    {% set_title_and_description %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="origin" />
-    {% if page.seo_title %}
-      <meta name="title" content="{{ page.seo_title }}" />
-    {% else %}
-      <meta name="title" content="{% if point.place %}{{ point.place.fullName }} | {% elif page.title %}{{ page.title }} | {% else %}beta.weather.gov | {% endif %}{{ "National Weather Service" | t }}" />
-    {% endif %}
-    {% if page.meta_description %}
-      <meta name="description" content="{{ page.meta_description }}" />
-    {% endif %}
-    {% block metadata %}{% endblock %}
     <link rel="icon"
           type="image/png"
           href="{% static 'images/weather/favicons/nws-favicon.ico' %}" />
