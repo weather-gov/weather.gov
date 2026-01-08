@@ -76,23 +76,33 @@ describe("AlertsCache tests", () => {
   });
 
   describe("#add with land alert kind", () => {
-    it("has GeoJSON shape)", async () => {
+    it("has GeoJSON shape", async () => {
       const hash = "ten";
       const alert = { some: "json-object" };
       const geometry = { shape: "geojson-object" };
       const kind = "land";
 
-      const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, ST_TRANSFORM(ST_GeomFromGeoJson($5), 4326), $6);`;
+      // The actual query may be formatted differently, so we'll do some
+      // regex-y magic to match it. First, accept whitespace at the start
+      // or end.
+      const query =
+        `\\s*INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, alertKind, shape, shape_simplified) VALUES ($1, $2, $3, $4, $5, ST_TRANSFORM(ST_GeomFromGeoJson($6), 4326), ST_TRANSFORM(ST_GeomFromGeoJson($6), 4326) );\\s*`
+          // Now turn any group of spaces into a whitespace match
+          .replace(/\s+/g, "\\s+")
+          // Escape parens since they are part of the query
+          .replace(/\(/g, "\\(")
+          .replace(/\)/g, "\\)")
+          // And escape dollar signs, for the same reason
+          .replace(/\$/g, "\\$");
 
       global.test.database.query
-        .withArgs(query, [
-          hash,
-          JSON.stringify(alert),
-          "[]",
-          "[]",
-          "geojson-object",
-          kind,
-        ])
+        .withArgs(
+          // Turn it into a regex, with start/end anchors, and make it
+          // multiline in case the input query is defined over several
+          // lines.
+          sinon.match(new RegExp(`^${query}$`, "m")),
+          [hash, JSON.stringify(alert), "[]", "[]", kind, "geojson-object"],
+        )
         .resolves("INSERT WORKED");
 
       const actual = await alertsCache.add({
@@ -111,10 +121,27 @@ describe("AlertsCache tests", () => {
       const geometry = { sql: "magic subquery goes here" };
       const kind = "land";
 
-      const query = `INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, (magic subquery goes here), $5);`;
+      // The actual query may be formatted differently, so we'll do some
+      // regex-y magic to match it. First, accept whitespace at the start
+      // or end.
+      const query =
+        `\\s*INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, alertKind, shape, shape_simplified) VALUES ($1, $2, $3, $4, $5, (magic subquery goes here), ST_TRANSFORM( ST_SIMPLIFY( ST_TRANSFORM( (magic subquery goes here), 3857 ), 200 ), 4326 ) );\\s*`
+          // Now turn any group of spaces into a whitespace match
+          .replace(/ +/g, "\\s+")
+          // Escape parens since they are part of the query
+          .replace(/\(/g, "\\(")
+          .replace(/\)/g, "\\)")
+          // And escape dollar signs, for the same reason
+          .replace(/\$/g, "\\$");
 
       global.test.database.query
-        .withArgs(query, [hash, JSON.stringify(alert), "[]", "[]", kind])
+        .withArgs(
+          // Turn it into a regex, with start/end anchors, and make it
+          // multiline in case the input query is defined over several
+          // lines.
+          sinon.match(new RegExp(`^${query}$`), "m"),
+          [hash, JSON.stringify(alert), "[]", "[]", kind],
+        )
         .resolves("INSERT WORKED");
 
       const actual = await alertsCache.add({
@@ -124,14 +151,12 @@ describe("AlertsCache tests", () => {
         alertKind: "land",
       });
 
-      console.log(global.test.database.query.args.pop);
-
       expect(actual).to.equal("INSERT WORKED");
     });
   });
 
   it("#getIntersectingAlertsForPoint", async () => {
-    const query = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,111), shape);`;
+    const query = `SELECT alertJson, ST_AsGeoJson(shape_simplified) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,111), shape);`;
 
     const output = [
       {
@@ -163,7 +188,7 @@ describe("AlertsCache tests", () => {
   });
 
   it("#getAlertsForCountyFIPS", async () => {
-    const query = `SELECT alertJSON, ST_AsGeoJSON(shape) as geometry FROM ${alertsCache.tableName} WHERE counties::jsonb ? $1`;
+    const query = `SELECT alertJSON, ST_AsGeoJSON(shape_simplified) as geometry FROM ${alertsCache.tableName} WHERE counties::jsonb ? $1`;
 
     const output = [
       {

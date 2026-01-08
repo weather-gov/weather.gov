@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { generateAlertGeometry, SIMPLIFY_TOLERANCE } from "./geometry.js";
+import { generateAlertGeometry } from "./geometry.js";
 
 describe("alert geometries", () => {
   describe("returns an existing geometry as-is", () => {
@@ -63,7 +63,7 @@ describe("alert geometries", () => {
       expect(geometry).to.eql({
         sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
+          ST_Union(shape) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_zones
@@ -95,7 +95,7 @@ describe("alert geometries", () => {
       expect(geometry).to.eql({
         sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
+          ST_Union(shape) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_counties
@@ -133,7 +133,7 @@ describe("alert geometries", () => {
       expect(geometry).to.eql({
         sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
+          ST_Union(shape) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_counties

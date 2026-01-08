@@ -1,7 +1,5 @@
 import { parentPort } from "node:worker_threads";
 
-export const SIMPLIFY_TOLERANCE = 0.003;
-
 const unwindGeometryCollection = (geojson, parentIsCollection = false) => {
   if (geojson.type === "GeometryCollection") {
     const geometries = geojson.geometries.flatMap((geometry) =>
@@ -63,11 +61,11 @@ export const generateAlertGeometry = async (
     } else {
       // Finally, if we got here, then all of the zones are either forecast,
       // marine, or fire zones; and they are all in our database. Huzzah! Build
-      // a query to fetch the union of their shapes and simplify it.
+      // a query to fetch the union of their shapes.
       return {
         sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
+          ST_Union(shape) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_zones
@@ -87,7 +85,7 @@ export const generateAlertGeometry = async (
     return {
       sql: `(
         SELECT
-          ST_Simplify(ST_Union(shape),${SIMPLIFY_TOLERANCE}) AS shape
+          ST_Union(shape) AS shape
         FROM (
           SELECT shape
           FROM weathergov_geo_counties

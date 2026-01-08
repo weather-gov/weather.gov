@@ -215,6 +215,7 @@ class WeatherAlertsCache(models.Model):
     counties = JSONField()
     states = JSONField()
     shape = models.GeometryField(null=True)
+    shape_simplified = models.GeometryField(null=True)
     alertkind = models.TextField(null=True, default=None)
 
     class Meta:  # noqa: D106
