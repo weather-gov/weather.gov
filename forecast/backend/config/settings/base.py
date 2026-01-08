@@ -302,6 +302,7 @@ DIRECTIVES = {
         # analytics
         "dap.digitalgov.gov",
         "www.googletagmanager.com",
+        "client.rum.us-east-1.amazonaws.com",
         # Required for Wagtail
         "'unsafe-inline'",
     ],
@@ -310,6 +311,7 @@ DIRECTIVES = {
         # analytics
         "www.google-analytics.com",
         "dap.digitalgov.gov",
+        "cognito-identity.us-east-1.amazonaws.com",
         *CRITICAL_HOSTS["connect-src"],
     ],
     "font-src": [SELF],
