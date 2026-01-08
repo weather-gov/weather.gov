@@ -1,3 +1,8 @@
+import {
+  SIMPLIFICATION_METERS,
+  SPATIAL_PROJECTION,
+} from "../../util/constants.js";
+
 /**
  * AlertsCache
  * -----------------------------------
@@ -89,22 +94,102 @@ export class AlertsCache {
     // then there's either no shape or it's being provided to us as a GeoJSON
     // object.
     if (geometry == null || geometry.shape) {
-      const sql = `INSERT INTO ${this.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, ST_TRANSFORM(ST_GeomFromGeoJson($5), 4326), $6);`;
+      const sql = `
+      INSERT INTO ${this.tableName}
+        (hash, alertJson, counties, states, alertKind, shape, shape_simplified)
+        VALUES
+          ($1, $2, $3, $4, $5,
+          
+          ST_TRANSFORM(ST_GeomFromGeoJson($6), ${SPATIAL_PROJECTION.WGS84}),
+          ST_TRANSFORM(ST_GeomFromGeoJson($6), ${SPATIAL_PROJECTION.WGS84})
+        );`;
 
       return await this.db.query(sql, [
         hash,
         alertAsString,
         countiesAsString,
         statesAsString,
-        geometry?.shape,
         alertKind,
+        geometry?.shape,
       ]);
     }
 
     // If the geometry has a SQL property, then this alert's shape is determined
-    // by a sub-query, so we'll just insert it right in here.
+    // by a sub-query, so we'll just insert it right in here. We'll also add a
+    // simplified geometry now.
     if (geometry.sql) {
-      const sql = `INSERT INTO ${this.tableName} (hash, alertJson, counties, states, shape, alertKind) VALUES($1, $2, $3, $4, (${geometry.sql}), $5);`;
+      const sql = `
+      INSERT INTO ${this.tableName}
+        (hash, alertJson, counties, states, alertKind, shape, shape_simplified)
+        VALUES
+          ($1, $2, $3, $4, $5,
+
+          ${
+            /*
+          Preserve the original subquery. It needs to be wrapped in
+          parentheses or the database will complain. */ ""
+          }
+          (${geometry.sql}),
+          
+          ${
+            /*
+            We also want to store a simplified version of the original
+            shape. Our shapes are in a geographic coordinate system
+            (WGS84; lat/lon decimal degrees) so we first need to
+            transform it into a meter-based coordinate system. If we
+            try to simplify it from a degree-based system, we will
+            get inconsistent simplification based on latitude, because
+            degrees of longitude cover smaller distances as you
+            approach the poles.
+
+            Once we've transformed to a meter-based projection, we
+            can simplify the polygon by a standard number of meters.
+            Then we transform it back to decimal degrees.
+
+            This query is nested so it works from the inside out.
+            Thus, the lines presented here are in, essentially,
+            reverse order of how they run.
+
+            STEP 3: Transform back to WGS84.
+            */ ""
+          }
+          ST_TRANSFORM(
+            ${
+              /*
+              STEP 2: Simplify the shape.
+              */ ""
+            }
+            ST_SIMPLIFY(
+              ${
+                /*
+                STEP 1: Transform to the web mercator projection.
+                This is a global meter grid.
+
+                [TODO]: Investigate dynamically selecting a more
+                precise projection. UTM would be a better choice
+                than web mercator, but we'd have to figure out
+                which UTM grid to start with because each grid
+                has its own SRID and coordinate system within the
+                grid. That is, UTM is not a single global projection.
+                We would need to do calculations on the input
+                shape to determine the most appropriate UTM
+                grid to use.
+
+                We may also choose to stick with web mercator for
+                any shapes that are entirely below a certain
+                latitude as it's accurate enough. Web mercator
+                loses accuracy as it approaches the poles.
+                */ ""
+              }
+              ST_TRANSFORM(
+                (${geometry.sql}),
+                ${SPATIAL_PROJECTION.WEB_MERCATOR}
+              ),
+              ${SIMPLIFICATION_METERS}
+            ),
+            ${SPATIAL_PROJECTION.WGS84}
+          )
+        );`;
 
       return await this.db.query(sql, [
         hash,
@@ -131,7 +216,7 @@ export class AlertsCache {
       // The ::geography instructs postgis to treat the object as a geographic
       // shape instead of geometric. That way any buffering will be in meters
       // rather than degrees.
-      `ST_GeomFromText('POINT(${lon} ${lat})',4326)::geography`,
+      `ST_GeomFromText('POINT(${lon} ${lat})',${SPATIAL_PROJECTION.WGS84})::geography`,
     ];
     if (options?.buffer) {
       inputGeometry.unshift("ST_Buffer(");
@@ -140,7 +225,7 @@ export class AlertsCache {
 
     const geometry = inputGeometry.join("");
 
-    const sql = `SELECT alertJson, ST_AsGeoJson(shape) as geometry FROM ${this.tableName} WHERE ST_INTERSECTS(${geometry}, shape);`;
+    const sql = `SELECT alertJson, ST_AsGeoJson(shape_simplified) as geometry FROM ${this.tableName} WHERE ST_INTERSECTS(${geometry}, shape);`;
 
     const response = await this.db.query(sql);
     const results = response.rows;
@@ -152,7 +237,7 @@ export class AlertsCache {
   }
 
   async getAlertsForCountyFIPS(fips) {
-    const sql = `SELECT alertJSON, ST_AsGeoJSON(shape) as geometry FROM ${this.tableName} WHERE counties::jsonb ? $1`;
+    const sql = `SELECT alertJSON, ST_AsGeoJSON(shape_simplified) as geometry FROM ${this.tableName} WHERE counties::jsonb ? $1`;
 
     const response = await this.db.query(sql, [fips]);
     const results = response.rows;

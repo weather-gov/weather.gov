@@ -48,9 +48,6 @@ export const startAlertProcessing = async () => {
   // be the main thread, but if something goes haywire and this script somehow
   // gets loaded in the background worker, don't recursively keep loading it.
   if (isMainThread) {
-    // Drop any existing alerts cache table, since that will be repopulated
-    // by the first alerts request
-    logger.info("dropping any existing alerts cache table");
     alertsCache.db = await openDatabase();
 
     logger.info("starting background worker");

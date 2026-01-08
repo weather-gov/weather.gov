@@ -3,6 +3,10 @@ import { createLogger } from "../../util/monitoring/index.js";
 import { getRiskOverview } from "../risk-overview/index.js";
 import { getAlertsForCountyFIPS } from "../alerts/index.js";
 import dayjs from "../../util/day.js";
+import {
+  SIMPLIFICATION_METERS,
+  SPATIAL_PROJECTION,
+} from "../../util/constants.js";
 
 const logger = createLogger("county data");
 
@@ -10,10 +14,7 @@ export const getCountyData = async (fips) => {
   try {
     const db = await openDatabase();
 
-    // Simplify county shapes as we get them. We'll use the same 0.003º
-    // threshold that we use for alerts because that has worked pretty well for
-    // us so far. It's not magic, it was just fiddling with it to get a small
-    // enough number that significantly reduced the vertices.
+    // Simplify county shapes as we get them.
     const county = await db
       .query(
         `
@@ -21,7 +22,18 @@ export const getCountyData = async (fips) => {
           countyname as county,
           primarywfo_id as primarywfo,
           timezone,
-          ST_AsGeoJSON(ST_Simplify(shape,0.003)) AS shape,
+          ST_AsGeoJSON(
+            ST_TRANSFORM(
+              ST_SIMPLIFY(
+                ST_TRANSFORM(
+                  shape,
+                  ${SPATIAL_PROJECTION.WEB_MERCATOR}
+                ),
+                ${SIMPLIFICATION_METERS}
+              ),
+              ${SPATIAL_PROJECTION.WGS84}
+            )
+          ) AS shape,
           (SELECT name FROM weathergov_geo_states a WHERE a.state=b.st) as statename
         FROM weathergov_geo_counties b
         WHERE countyfips=$1::text`,
