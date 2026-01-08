@@ -22,30 +22,6 @@ export const sortAndFilterHours = (hours, earliest) => {
     .filter(({ time }) => time.isSameOrAfter(alignedEarliest));
 };
 
-export const filterHoursForDay = (hours, dayStart) => {
-  // For the purposes of NWS, we consider a day to end at 6am
-  // the following day
-  const dayEnd = dayStart
-    .hour(6)
-    .minute(0)
-    .second(0)
-    .millisecond(0)
-    .add(1, "day");
-  return hours.filter(
-    ({ time }) => time.isSameOrAfter(dayStart) && time.isSameOrBefore(dayEnd),
-  );
-};
-
-export const filterHoursForCurrentDay = (hours, currentTime) => {
-  const limit = currentTime
-    .hour(6)
-    .minute(0)
-    .second(0)
-    .millisecond(0)
-    .add(1, "day");
-  return hours.filter(({ time }) => time.isSameOrBefore(limit));
-};
-
 export default (data, hours, { timezone }) => {
   if (data.error) {
     return;
