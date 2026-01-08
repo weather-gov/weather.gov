@@ -1,14 +1,69 @@
 import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
-import hourly, {
-  sortAndFilterHours,
-  filterHoursForCurrentDay,
-  filterHoursForDay,
-} from "./hourly.js";
+import hourly, { sortAndFilterHours } from "./hourly.js";
 import { convertValue, convertProperties } from "../../util/convert.js";
 import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import { getMarineDays } from "./marine.js";
+
+export const assignHoursToDays = (dayData, hours, dayToStartAndEndMap) => {
+  let dayIndex = 0;
+  let hourIndex = 0;
+
+  // So long as we haven't run out of hours or days, keep going. Sooner or
+  // later we'll have looked at everything or the universe will have
+  // expired, and in either case we can stop.
+  while (hourIndex < hours.length && dayIndex < dayData.days.length) {
+    const day = dayData.days[dayIndex];
+
+    if (dayIndex === 0) {
+      // If we're on the first day, we need to first figure out how many hours
+      // the day consists of. The first day is the current time until 6am the
+      // next day. All subsequent days are 24 hours (6am-6am).
+      //
+      // These times come from the daily forecast. The first day's forecast
+      // start time is updated at the top of each hour.
+      const { start, end } = dayToStartAndEndMap.get(day);
+      const numberOfHoursToday = end.diff(start, "hours");
+
+      // We also want to discard any hours from before the start of the first
+      // day. The hourly forecast can have some previous hours in it, but we
+      // don't want those.
+      //
+      // These hours represent the HOURLY forecast. The daily forecast never
+      // includes the past, but the hourly forecast can.
+      while (hours[hourIndex].time.isBefore(start)) {
+        hourIndex += 1;
+      }
+
+      // The hours for the first day start with the updated index and include
+      // however many hours we determined above, INCLUSIVE, because the 6am hour
+      // should appear as the last hour in one day and the first hour in the
+      // next day. In order to include it, we need the plus one.
+      day.hours = hours.slice(hourIndex, hourIndex + numberOfHoursToday + 1);
+
+      // Now fast foward the hour index by however many hours today is. Not
+      // plus one here because the next day should also include the same 6am
+      // that concludes the current day.
+      hourIndex += numberOfHoursToday;
+    } else {
+      // If we're not on the first day, then we want the next 25 hours - from
+      // current 6am to next 6am, inclusive. That is, 24 + 1. Silly inclusive/
+      // exclusive slicing.
+      day.hours = hours.slice(hourIndex, hourIndex + 25);
+
+      // And fast forward by 24 hours. Not 25, to preserve the 6am hour.
+      hourIndex += 24;
+    }
+
+    // Pull out PoP values from the hourly for
+    // the daily periods and the overall day
+    updateMaxPop(day);
+
+    // Now move on to the next day.
+    dayIndex += 1;
+  }
+};
 
 /**
  * Helper function to set the max PoP
@@ -131,10 +186,17 @@ export default async ({ grid, place, isMarine }) => {
     dailyData.days = await getMarineDays(hours, place.timezone);
   }
 
+  const dayStartAndEnd = new Map();
+
   // Now add the appropriate QPF and hourly data to each day.
   for (const day of dailyData.days ?? []) {
+    // Make sure the day has an hours property. Empty for now, and
+    // we'll fill it up later.
+    day.hours = [];
+
     const start = dayjs.utc(day.start).tz(place.timezone);
     const end = dayjs.utc(day.end).tz(place.timezone);
+    dayStartAndEnd.set(day, { start, end });
 
     if (gridpointData.qpf) {
       day.qpf = gridpointData.qpf.filter(({ start: qpfStart, end: qpfEnd }) => {
@@ -170,22 +232,9 @@ export default async ({ grid, place, isMarine }) => {
         hasQPF: hasLiquid || hasIce || hasSnow,
       };
     }
-
-    if (now.isSameOrAfter(start)) {
-      // Are we in the current day?
-      // (ie, does `now` come after the day start?)
-      // If so, we filter the hours a bit differently
-      day.hours = filterHoursForCurrentDay(orderedHours, now);
-    } else {
-      // Otherwise we filter for a future day,
-      // which maxes out at 6am the _following_ day
-      day.hours = filterHoursForDay(orderedHours, start);
-    }
-
-    // Pull out PoP values from the hourly for
-    // the daily periods and the overall day
-    updateMaxPop(day);
   }
+
+  assignHoursToDays(dailyData, orderedHours, dayStartAndEnd);
 
   // At this point, QPF has been shuffled into the daily forecast object, so
   // we can remove it from the grid. It's not really a grid property anyway.
