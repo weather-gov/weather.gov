@@ -16,6 +16,7 @@ const setupMap = () => {
   const map = L.map(`wx_county_alert_map`, {
     zoomDelta: 1,
     zoomSnap: 0.5,
+    maxZoom: 18,
   }).setView([0, 0], 0);
 
   /** Show alerts for the selected day or for "all". */
@@ -33,14 +34,17 @@ const setupMap = () => {
         }
       });
     }
+    // Remove existing markers
+    markers.clearLayers();
     countyAlertLayers[curDayIndex].forEach((layer) => {
       try {
         layer.resetStyle();
-        layer.wx_marker.addTo(map);
+        markers.addLayer(layer.wx_marker);
       } catch (error) {
         console.log(error);
       }
     });
+    markers.refreshClusters();
   };
 
   /** Handle when a day is selected via the tab component. */
@@ -112,12 +116,12 @@ const setupMap = () => {
     const feature = layer.getLayers()[0].feature;
 
     // MultiPolygon Logic
-    if (feature.geometry.type === 'MultiPolygon') {
+    if (feature.geometry.type === "MultiPolygon") {
       const [lng, lat] = polylabel(feature.geometry.coordinates[0], 0.000001);
-      const labelCenter = L.latLng(lat, lng)
+      const labelCenter = L.latLng(lat, lng);
       if (map.getBounds().contains(labelCenter)) {
-        return labelCenter
-      };
+        return labelCenter;
+      }
     }
 
     // Logic for Polygon objects
@@ -148,21 +152,75 @@ const setupMap = () => {
   };
 
   /** Change the opacity of the selected alert. */
-  const handleMarkerClick = (e, layer) => {
+  const handleMarkerEvent = (e, layer) => {
     switch (e.type) {
       case "click":
         layer.setStyle(styles.active);
         break;
       case "popupclose":
+      case "mouseout":
         layer.resetStyle();
+        break;
+      case "mouseover":
+        layer.setStyle(styles.hover);
         break;
       default:
         break;
     }
   };
 
+  /** Marker Clusters for alert Icons **/
+  const markers = L.markerClusterGroup({
+    showCoverageOnHover: false,
+
+    // Cluster marker Icon rendering function, icon defaults to highest alert clustered
+    iconCreateFunction: function (cluster) {
+      const childMarkers = cluster.getAllChildMarkers();
+      const priorities = ["other", "watch", "warning"];
+
+      // Find the highest priority index
+      let highestIndex = 0;
+      for (let i = 0; i < childMarkers.length; i++) {
+        const typeAttr = childMarkers[i].alert_type;
+        const p = priorities.indexOf(typeAttr);
+        if (p > highestIndex) highestIndex = p;
+        if (highestIndex === 2) break;
+      }
+
+      const type = priorities[highestIndex] || "other";
+
+      // Ensure the icon object actually exists
+      const iconObj = icons[type] || icons["other"];
+      if (!iconObj) {
+        console.error("Critical: 'icons' object is missing keys for:", type);
+        return new L.DivIcon({ html: "<div>!</div>" });
+      }
+
+      const iconUrl = iconObj.options.iconUrl;
+
+      return L.divIcon({
+        html: `
+          <div class="alert-cluster-badge-container" title="${cluster.getChildCount()} ${type} alerts">
+            <img src="${iconUrl}" class="alert-cluster-main-icon" alt="" />
+            <div class="alert-cluster-badge alert-badge-${type}" aria-hidden="true">
+              ${cluster.getChildCount()}
+            </div>
+          </div>
+        `,
+        className: "leaflet-cluster-icon",
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+      });
+    },
+  });
+
   /** Redraw icons on zoom in or pan; reset them on zoom out. */
   const handleMotion = (e) => {
+    // Reset style when moved
+    countyAlertLayers[curDayIndex].forEach((layer) => {
+      layer.resetStyle();
+    });
+
     const zoomedOut =
       e.target.getZoom() <= map.wx_county_zoom &&
       map.wx_latest_zoom > map.wx_county_zoom;
@@ -183,7 +241,7 @@ const setupMap = () => {
       countyAlertLayers[curDayIndex].forEach((layer) => {
         try {
           // Fix visible center can be null if the polygon isn't in viewport. if null, skip
-          let center = visibleCenter(layer, getXYBounds())
+          let center = visibleCenter(layer, getXYBounds());
           if (center) {
             layer.wx_marker.setLatLng(center);
           }
@@ -193,6 +251,11 @@ const setupMap = () => {
       });
     }
     map.wx_latest_zoom = e.target.getZoom();
+
+    // Only refresh if marker cluster is full
+    if (markers && markers.getLayers().length > 0) {
+      markers.refreshClusters();
+    }
   };
   map.on("zoomend", handleMotion);
   map.on("moveend", handleMotion);
@@ -250,6 +313,15 @@ const setupMap = () => {
     }),
   };
 
+  const getLargeIcon = (type) => {
+    return new MapIcon({
+      iconUrl: icons[type].options.iconUrl,
+      iconSize: [40, 40],
+      iconAnchor: [20, 20],
+      popupAnchor: [0, -10],
+    });
+  };
+
   const styles = {
     warning: {
       fillColor: "#D83933",
@@ -277,6 +349,11 @@ const setupMap = () => {
     active: {
       fillOpacity: 0.5,
     },
+    hover: {
+      fillOpacity: 0.7,
+      opacity: 1.0,
+      weight: 7,
+    },
   };
 
   // zoom to the county outline (but do not draw it yet)
@@ -285,6 +362,8 @@ const setupMap = () => {
   map.wx_county_xybounds = getXYBounds();
   map.wx_county_zoom = map.wx_latest_zoom = map.getZoom();
   map.wx_county_center = map.wx_latest_center = map.getCenter();
+
+  const markerList = [];
 
   // create alert layers and sort them
   for (let i = json.alerts.items.length - 1; i >= 0; i--) {
@@ -300,15 +379,57 @@ const setupMap = () => {
 
       let layer = L.geoJSON(geometry, { style: styles[alertType] }).addTo(map);
       let alertCenter = visibleCenter(layer, map.wx_county_xybounds);
-      layer.wx_marker = L.marker(alertCenter, { icon: icons[alertType] }).addTo(
-        map,
-      );
+
+      layer.wx_marker = L.marker(alertCenter, { icon: icons[alertType] });
+      layer.wx_marker.alert_type = alertType;
       layer.wx_marker.bindPopup(getPopupHTML(alertId, alertName), {
         autoPan: false,
       });
       layer.wx_marker.wx_orig_pos = alertCenter;
-      layer.wx_marker.on("click", (e) => handleMarkerClick(e, layer));
-      layer.wx_marker.on("popupclose", (e) => handleMarkerClick(e, layer));
+      layer.wx_marker.on("click", (e) => handleMarkerEvent(e, layer));
+      layer.wx_marker.on("popupclose", (e) => handleMarkerEvent(e, layer));
+
+      layer.wx_marker.on("mouseover", (e) => {
+        e.target.setIcon(getLargeIcon(alertType));
+        e.target.originalZIndex = e.target.options.zIndexOffset || 0;
+        e.target.setZIndexOffset(1000);
+
+        const vectorLayer = layer.getLayers()[0];
+        if (vectorLayer && vectorLayer.getElement) {
+          const el = vectorLayer.getElement();
+          // Bookmark the current stack position
+          layer._originalNextSibling = el.nextSibling;
+          layer.bringToFront();
+        }
+
+        handleMarkerEvent(e, layer);
+      });
+      layer.wx_marker.on("mouseout", (e) => {
+        e.target.setIcon(icons[alertType]);
+        e.target.setZIndexOffset(e.target.originalZIndex);
+
+        const vectorLayer = layer.getLayers()[0];
+        if (vectorLayer && vectorLayer.getElement) {
+          const el = vectorLayer.getElement();
+          const parent = el.parentNode;
+
+          if (
+            parent &&
+            layer._originalNextSibling &&
+            layer._originalNextSibling.parentNode === parent
+          ) {
+            parent.insertBefore(el, layer._originalNextSibling);
+          } else if (parent && !layer._originalNextSibling) {
+            // It was already the last child (on top), so leave it at the end
+            parent.appendChild(el);
+          }
+        }
+
+        handleMarkerEvent(e, layer);
+      });
+
+      // Add marker to list
+      markerList.push(layer.wx_marker);
 
       alertDays.forEach((day) => {
         countyAlertLayers[day].push(layer);
@@ -318,6 +439,10 @@ const setupMap = () => {
       console.log(error);
     }
   }
+
+  // Add cluster markers
+  markers.addLayers(markerList);
+  map.addLayer(markers);
 
   // day selection starts on "all", but the user might have changed it
   const selected = document.querySelector(

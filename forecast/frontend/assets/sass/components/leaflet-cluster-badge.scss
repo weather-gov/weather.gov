@@ -1,0 +1,54 @@
+@use "uswds-core" as *;
+
+.alert-cluster-badge-container {
+  position: relative;
+  display: block;
+
+  @include u-square(4);
+
+  margin: units(0.5);
+  overflow: visible;
+}
+
+.alert-cluster-main-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.alert-cluster-badge {
+  position: absolute;
+
+  // Positioning
+  inset: units(-1) units(-1) auto auto;
+  z-index: 1000;
+
+  // Size & Shape
+  @include u-circle(2.5);
+
+  // Layout
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include u-font("mono", "xs");
+
+  line-height: 0;
+  border: none;
+
+  &.alert-badge-warning {
+    background-color: color("red-80");
+    color: color("red-cool-5v");
+  }
+
+  &.alert-badge-watch {
+    background-color: color("yellow-70v");
+    color: color("yellow-5");
+  }
+
+  &.alert-badge-other {
+    background-color: color("base-darker");
+    color: color("base-lightest");
+  }
+}
