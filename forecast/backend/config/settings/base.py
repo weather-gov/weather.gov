@@ -312,6 +312,7 @@ DIRECTIVES = {
         "www.google-analytics.com",
         "dap.digitalgov.gov",
         "cognito-identity.us-east-1.amazonaws.com",
+        "dataplane.rum.us-east-1.amazonaws.com",
         *CRITICAL_HOSTS["connect-src"],
     ],
     "font-src": [SELF],
