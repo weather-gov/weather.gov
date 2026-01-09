@@ -1,11 +1,7 @@
 import { parentPort } from "node:worker_threads";
 import openDatabase from "../db.js";
 import { fetchAPIJson } from "../../util/fetch.js";
-import {
-  riskNameToImageNameMap,
-  riskNameToKeyMapping,
-  maxLevelPerRisk,
-} from "./mappings.js";
+import { addRisksToResult, processDays, processLegend } from "./processing.js";
 
 // enum to track WFO ghwo processing status
 const wfoStatus = Object.freeze({
@@ -29,62 +25,6 @@ const upsert = async (id, data) =>
     ),
   );
 
-// Risk overview data is arranged as an object, some of whose keys are timestamps.
-// This method pulls out the timestamp keys and returns an array of days containing
-// that data instead of an object.c
-const processDays = (data, legend) => {
-  // Get the keys that are timestamps.
-  const days = Object.keys(data)
-    .filter((key) =>
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$/.test(key),
-    )
-    .map((timestamp, index) => ({
-      risks: Object.entries(data[timestamp])
-        // We don't do anything with the DailyComposite. We'll make our own.
-        .filter(([risk]) => risk !== "DailyComposite")
-        .reduce(
-          (risks, [risk, category]) => ({
-            ...risks,
-            [risk]: {
-              // Grab all the legend information for this risk and category
-              // and stuff it into this risk entry for the day.
-              ...legend[risk]?.category[category],
-              // Also preserve the raw category, as well as the risk name from
-              // the legend.
-              category,
-              name: legend[risk]?.name,
-            },
-          }),
-          {},
-        ),
-      dayNumber: index + 1,
-      timestamp,
-      images: {},
-    }));
-
-  // For each day, compute a composite risk category/level.
-  days.forEach((day) => {
-    // Extract all of the categories for the day, along with the max
-    // for each of those risks.
-    const categories = Object.entries(day.risks).map(([key, { category }]) => ({
-      category,
-      max: maxLevelPerRisk.get(key),
-    }));
-
-    // Now scale the category relative to its max.
-    const scaled = categories.map(({ category, max }) => category / max);
-
-    // Finally, set the composite to the highest category and the
-    // highest scaled value.
-    day.composite = {
-      max: Math.max(...categories.map(({ category }) => category)),
-      scaled: Math.round(Math.max(...scaled) * 100) / 100,
-    };
-  });
-
-  return days;
-};
-
 const processState = async ({ state, data: stateData, wfo, legend }) => {
   const db = await openDatabase();
   const stateName = await db
@@ -93,11 +33,16 @@ const processState = async ({ state, data: stateData, wfo, legend }) => {
     ])
     .then(({ rows }) => rows.pop().name);
 
+  const { days, noRisks } = processDays(stateData, legend);
+
   const data = {
     state: stateName,
-    days: processDays(stateData, legend),
+    days,
     wfo,
+    noRisks,
   };
+
+  addRisksToResult(data, wfo, days, legend);
 
   await upsert(state, data);
 };
@@ -111,30 +56,17 @@ const processCounty = async ({ countyFips, data: countyData, wfo, legend }) => {
     )
     .then(({ rows }) => rows.pop());
 
+  const { days, noRisks } = processDays(countyData, legend);
+
   const data = {
     state: county.st,
     county: county.countyname,
     fips: countyFips,
-    days: processDays(countyData, legend),
     wfo,
+    noRisks,
   };
 
-  data.days.forEach((day) => {
-    // For every data element in the risk overview, we want to also provide an
-    // image URL. The list of data elements is not the same for all WFOs at all
-    // times, so we need to build this dynamically.
-    const elementKeys = Object.keys(day.risks);
-    for (const elementKey of elementKeys) {
-      // Sometimes the element key (like "SevereThunderstorm") is not the same
-      // key as used in the URL (in this case, "SevereThunderstorms" - note
-      // the s at the end). If we have a URL key mapped to the element key,
-      // use it. Otherwise just preserve the element key.
-      const urlKey = riskNameToImageNameMap.get(elementKey) ?? elementKey;
-      // Build the image URL from the WFO, element key, and day number.
-      day.images[elementKey] =
-        `https://www.weather.gov/images/${wfo}/ghwo/${urlKey}Day${day.dayNumber}.jpg`;
-    }
-  });
+  addRisksToResult(data, wfo, days, legend);
 
   await upsert(countyFips, data);
 };
@@ -192,28 +124,7 @@ const processWFO = async (wfo, statuses) => {
 
   // We get legend data, and now we need to manipulate it into a shape that
   // is more useful for us later on.
-  const legend = legendData.hazards.reduce((all, hazard) => {
-    // We need to map the risk names from the legend into the risk keys in
-    // the actual data. We have a mapping that covers all the risks we know
-    // about right now, but as a stopgap for risks we don't know about, we
-    // will try to convert hazard names into keys based on how it tends to go.
-    //
-    // We have asked GHWO to add this mapping into the legend metadata
-    // for us, so hopefully we can switch over to that before long.
-    const key = riskNameToKeyMapping.has(hazard.name)
-      ? riskNameToKeyMapping.get(hazard.name)
-      : hazard.name.replace(/ Risk$/, "").replace(/[^a-z]/gi, "");
-
-    return {
-      ...all,
-      // Use the risk key as the key here, for faster lookup later. This lets
-      // us quickly find the risk name and category information from the legend.
-      [key]: {
-        name: hazard.name,
-        category: hazard.category,
-      },
-    };
-  }, {});
+  const legend = processLegend(legendData);
 
   if (riskOverview.counties) {
     // Since there are counties, process them. In the risk overview data, the

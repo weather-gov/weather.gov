@@ -1,3 +1,34 @@
+{% comment %}
+  This template receives a single top-level object.
+
+  legend:
+    This is the legend for a specific risk type. It has
+    the following properties.
+
+    name:
+      The name of the risk type
+    
+    basis:
+      A description of how the risk level for this type
+      is determined. This value may be falsey if we do
+      not have a basis description.
+
+    levels:
+      A list of risk levels. Each item in the list has
+      these properties:
+
+      number:
+        Numeric risk value. Starts at 0. The maximum
+        value varies with risk type.
+
+      levelName:
+        The name of this risk level. Eg, "moderate",
+        "severe", "extreme", etc.
+
+      definition:
+        An explanation of what this risk level means
+        in practical terms.
+{% endcomment %}
 <table class="ghwo-details-legend-table padding-bottom-2">
   <thead>
     <tr>
@@ -10,19 +41,20 @@
     </tr>
   </thead>
   <tbody>
-    {% for _, level in risk.levels.items %}
-      {% if level.number > 0 %}
+    {{ legend.name }}
+    {% for level in legend.category.values %}
+      {% if level.category > 0 %}
         <tr>
           <td class="text-top font-mono-2xs text-uppercase"
-              aria-label="{{'ghwo.details.table.risk-level.lower.01' | t}} {{ level.number }}">
+              aria-label="{{'ghwo.details.table.risk-level.lower.01' | t}} {{ level.category }}">
             <div class="display-flex flex-align-center">
               <div class="ghwo-risk-legend-square display-block width-2 height-2 margin-right-05"
-                   data-risk-level="{{ level.number }}"></div>
-              <span>{{ level.number }}:</span><span>{{ level.label }}</span>
+                   data-risk-level="{{ level.category }}"></div>
+              <span>{{ level.category }}:</span><span>{{ level.levelName }}</span>
             </div>
           </td>
           <td class="text-top text-left font-sans-xs padding-left-2">
-            <span>{{ level.description|striptags }}</span>
+            <span>{{ level.definition|striptags }}</span>
           </td>
         </tr>
       {% endif %}

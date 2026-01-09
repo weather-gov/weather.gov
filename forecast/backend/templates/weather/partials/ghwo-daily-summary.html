@@ -1,5 +1,29 @@
-{% if error %}
-  {% if error.status == 404 %}
+{% comment %}
+  This template receives one top-level property called ghwo.
+  This is the full risk overview object for the county. The
+  relevant properties of this object are:
+
+  error:
+    An error object, or falsey. If not falsey, it should
+    contain a status property indicating the HTTP code
+    so we can tell the user if the data is missing or if
+    there was some other unknown error.
+
+  composite:
+    A list of composite levels for the forecast days. Each
+    day has three properties:
+
+      timestamp: ISO8601 timestamp with appropriate place-
+        local UTC offset
+
+      max: the highest absolute level of any risk for the day
+
+      scaled: the maximum scaled level of all risks for the day;
+        the scaled level is the absolute level of a given risk
+        divided by its maximum possible level
+{% endcomment %}
+{% if ghwo.error %}
+  {% if ghwo.error.status == 404 %}
     <div>
       <p>{{ "ghwo.summary.error.not-found.01" | t }}</p>
       <img class="height-8"
@@ -25,7 +49,7 @@
     <thead>
       <tr>
         <th scope="col" aria-hidden="true"></th>
-        {% for day in ghwo_days %}
+        {% for day in ghwo.composite.days %}
           <th scope="col" class="text-center">
             <div class="font-mono-2xs tablet-lg:font-mono-xs text-normal">
               <span class="display-block">{{ day.timestamp|datetime|date:"D" }}</span>
@@ -40,17 +64,16 @@
         <th scope="row">
           <span class="font-mono-xs padding-right-3 text-normal">{{"ghwo.table.row.risk-summary.01"|t}}</span>
         </th>
-        {% for day in ghwo_days %}
+        {% for day in ghwo.composite.days %}
           <td class="text-center vertical-align-middle">
-            {% if day.highest %}
-            <div class="ghwo-chiclet-wrapper display-flex flex-justify-center">
+            {% if day.max %}
+              <div class="ghwo-chiclet-wrapper display-flex flex-justify-center">
                 <div class="ghwo-chiclet"
                      aria-hidden="true"
-                     data-risk-level="{{ day.highest.level }}"
-                     data-risk-factor="{{ day.highest.riskFactor }}">
-                  <span class="font-mono-2xs text-medium">{{ day.highest.level }}</span>
+                     data-risk-level="{{ day.max }}">
+                  <span class="font-mono-2xs text-medium">{{ day.max }}</span>
                 </div>
-                {% include 'weather/partials/ghwo-risk-level-sr-only.html' with level_num=day.highest.level %}
+                {% include 'weather/partials/ghwo-risk-level-sr-only.html' with level_num=day.max %}
               </div>
             {% else %}
               <div class="ghwo-chiclet-wrapper">
@@ -65,12 +88,4 @@
     </tbody>
   </table>
   {% include 'weather/partials/ghwo-risk-table-legend.html' %}
-  {% if debug %}
-    <hr class="border-0 height-1px bg-base-light margin-top-4">
-    <div class="overflow-x-auto">
-      <pre>
-        {{ghwo_dump}}
-      </pre>
-    </div>
-  {% endif %}
 {% endif %}
