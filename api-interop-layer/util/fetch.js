@@ -14,14 +14,14 @@ const STANDARD_HEADERS = process.env.API_KEY
 const internalFetch = async (path) => {
   let url = URL.canParse(path)
     ? URL.parse(path)
-    : new URL(path, BASE_URL).toString();
+    : new URL(path, BASE_URL);
 
   const headers = { ...STANDARD_HEADERS };
 
   // If the hostname is specified in the original request, preserve that as
   // a special header. In dev environments, our magic proxy will pick this up
   // to use for routing.
-  if (url.hostname) {
+  if (URL.canParse(path)) {
     headers["wx-host"] = url.hostname;
   }
 
@@ -29,6 +29,8 @@ const internalFetch = async (path) => {
     url.hostname === "www.weather.gov" &&
     url.pathname.startsWith("/source/")
   );
+
+  const isAlert = url.pathname.includes("alerts");
 
   if(isGHWO)  {
     // If the incoming path matches a request to the website's risk overview
@@ -42,7 +44,7 @@ const internalFetch = async (path) => {
   // request.
   // Note that we explicitly do not cache GHWO requests
   // for the moment.
-  if(USE_REDIS && !isGHWO){
+  if(USE_REDIS && !isGHWO && !isAlert){
     url = new URL(url);
     const cachedValue = await getFromRedis(url.pathname);
     if(cachedValue){
@@ -57,7 +59,13 @@ const internalFetch = async (path) => {
 
   logger.verbose(`making request to ${url}`);
 
-  return fetch(url, { headers }).then(async (r) => {
+  /**
+   * Note: We have to force convert the URL object back to a string here,
+   * because many of our tests mock the global fetch call based on specific
+   * url strings being passed in as the first argument. They all fail if an object
+   * gets passed in instead (in this case a URL instance)
+   */
+  return fetch(url.toString(), { headers }).then(async (r) => {
     // If there are headers, get the correlation ID. There may not be one, but
     // that's beside the point. We'll attach the correlation ID to downstream
     // log messages about the success/failure of this response.
@@ -72,7 +80,7 @@ const internalFetch = async (path) => {
       // Cache the value, and then return the JSON
       // response if there is a valid cache-control
       // header value in the response
-      if(USE_REDIS){ 
+      if(USE_REDIS && !isGHWO && !isAlert){ 
         const ttl = getTTLFromResponse(r);
         if(ttl){
           const json = await r.json();
