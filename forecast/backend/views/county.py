@@ -12,7 +12,12 @@ from shapely import MultiPolygon, Polygon
 
 from backend import interop
 from backend.models import WFO
-from backend.util import get_counties_combo_box_list, get_ghwo_daily_images, get_states_combo_box_list
+from backend.util import (
+    get_basis_for_ghwo_risk,
+    get_counties_combo_box_list,
+    get_ghwo_daily_images,
+    get_states_combo_box_list,
+)
 from spatial.models import WeatherCounties, WeatherStates
 from wx_stories_api.models import SituationReport
 
@@ -29,10 +34,7 @@ def index(request):
         .all()
         .order_by("name")
     )
-    state_list_items = [
-        {"value": state.state, "text": state.name}
-        for state in states
-    ]
+    state_list_items = [{"value": state.state, "text": state.name} for state in states]
     return render(request, "weather/county/index.html", {"states": states, "state_list_items": state_list_items})
 
 
@@ -186,8 +188,30 @@ def county_ghwo(request, county_fips):
     # Fetch the GHWO data for the county from the interop layer
     ghwo_data = interop.get_ghwo_data_for_county(county.countyfips)
 
-    # Add any image urls to the list of images to prefetch
     if "error" not in ghwo_data:
+        # Get basis description for each risk, if we have it.
+        for risk_id, risk in ghwo_data["legend"].items():
+            risk["basis"] = get_basis_for_ghwo_risk(ghwo_data["wfo"], risk_id)
+        # Now map those from the global legend into the risk-specific legends
+        for risk_id, risk in ghwo_data["risks"].items():
+            # GHWO legends don't always contain entries for every risk type.
+            # Guard against that.
+            if risk_id in ghwo_data["legend"]:
+                if "basis" in ghwo_data["legend"][risk_id]:
+                    risk["legend"]["basis"] = ghwo_data["legend"][risk_id]["basis"]
+
+        # Pick the first non-zero value and mark it as first. This one
+        # will be highlighted on page load.
+        for risk in ghwo_data["risks"].values():
+            for day in risk["days"]:
+                if day["category"] > 0:
+                    day["is_first"] = True
+                    break
+            else:
+                continue
+            break
+
+        # Add any image urls to the list of images to prefetch
         ghwo_data["prefetch_images"] = get_ghwo_daily_images(ghwo_data)
 
     return render(

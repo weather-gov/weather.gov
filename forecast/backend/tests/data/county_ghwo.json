@@ -1,383 +1,566 @@
 {
   "wfo": "okx",
+  "fips": "51013",
   "days": [
     {
-      "images": {
-        "Fog": "https://www.weather.gov/images/lwx/ghwo/FogDay1.jpg",
-        "Hail": "https://www.weather.gov/images/lwx/ghwo/HailDay1.jpg",
-        "Tornado": "https://www.weather.gov/images/lwx/ghwo/TornadoDay1.jpg",
-        "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay1.jpg",
-        "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay1.jpg",
-        "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay1.jpg",
-        "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay1.jpg",
-        "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay1.jpg",
-        "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay1.jpg",
-        "CoastalFlood": "https://www.weather.gov/images/lwx/ghwo/CoastalFloodDay1.jpg",
-        "ConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/ThunderstormWindDay1.jpg",
-        "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay1.jpg",
-        "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay1.jpg",
-        "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay1.jpg",
-        "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay1.jpg"
-      },
       "dayNumber": 1,
       "timestamp": "2025-10-27T14:00:00-04:00",
       "risks": {
-        "Fog": {
-          "category": 0
-        },
-        "Hail": {
-          "category": 0
-        },
-        "Tornado": {
-          "category": 0
-        },
-        "Lightning": {
-          "category": 0
-        },
-        "SnowSleet": {
-          "category": 0
-        },
-        "ExtremeCold": {
-          "category": 0
-        },
-        "FireWeather": {
-          "category": 0
-        },
-        "CoastalFlood": {
-          "category": 0
-        },
-        "ConvectiveWind": {
-          "category": 0
-        },
-        "IceAccumulation": {
-          "category": 0
-        },
-        "ExcessiveRainfall": {
-          "category": 0
-        },
-        "NonConvectiveWind": {
-          "category": 0
-        },
-        "SevereThunderstorm": {
-          "category": 0
-        }
+        "Fog": { "category": 0 },
+        "Hail": { "category": 0 },
+        "Tornado": { "category": 0 },
+        "Lightning": { "category": 0 },
+        "SnowSleet": { "category": 0 },
+        "ExtremeCold": { "category": 0 },
+        "FireWeather": { "category": 0 },
+        "CoastalFlood": { "category": 0 },
+        "ConvectiveWind": { "category": 0 },
+        "IceAccumulation": { "category": 0 },
+        "ExcessiveRainfall": { "category": 0 },
+        "NonConvectiveWind": { "category": 0 },
+        "SevereThunderstorm": { "category": 0 }
       },
-      "composite": {
-        "max": 0,
-        "scaled": 0
-      }
+      "composite": { "max": 0, "scaled": 0 }
     },
     {
-      "images": {
-        "Fog": "https://www.weather.gov/images/lwx/ghwo/FogDay2.jpg",
-        "Hail": "https://www.weather.gov/images/lwx/ghwo/HailDay2.jpg",
-        "Tornado": "https://www.weather.gov/images/lwx/ghwo/TornadoDay2.jpg",
-        "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay2.jpg",
-        "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay2.jpg",
-        "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay2.jpg",
-        "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay2.jpg",
-        "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay2.jpg",
-        "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay2.jpg",
-        "CoastalFlood": "https://www.weather.gov/images/lwx/ghwo/CoastalFloodDay2.jpg",
-        "ConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/ThunderstormWindDay2.jpg",
-        "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay2.jpg",
-        "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay2.jpg",
-        "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay2.jpg",
-        "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay2.jpg"
-      },
       "dayNumber": 2,
       "timestamp": "2025-10-28T08:00:00-04:00",
       "risks": {
-        "Fog": {
-          "category": 0
-        },
-        "Hail": {
-          "category": 0
-        },
-        "Tornado": {
-          "category": 0
-        },
-        "Lightning": {
-          "category": 0
-        },
-        "SnowSleet": {
-          "category": 0
-        },
-        "ExtremeCold": {
-          "category": 0
-        },
-        "FireWeather": {
-          "category": 0
-        },
-        "CoastalFlood": {
-          "category": 0
-        },
-        "ConvectiveWind": {
-          "category": 0
-        },
-        "IceAccumulation": {
-          "category": 0
-        },
-        "ExcessiveRainfall": {
-          "category": 0
-        },
-        "NonConvectiveWind": {
-          "category": 0
-        },
-        "SevereThunderstorm": {
-          "category": 0
-        }
+        "Fog": { "category": 0 },
+        "Hail": { "category": 0 },
+        "Tornado": { "category": 0 },
+        "Lightning": { "category": 0 },
+        "SnowSleet": { "category": 0 },
+        "ExtremeCold": { "category": 0 },
+        "FireWeather": { "category": 0 },
+        "CoastalFlood": { "category": 0 },
+        "ConvectiveWind": { "category": 0 },
+        "IceAccumulation": { "category": 0 },
+        "ExcessiveRainfall": { "category": 0 },
+        "NonConvectiveWind": { "category": 0 },
+        "SevereThunderstorm": { "category": 0 }
       },
-      "composite": {
-        "max": 0,
-        "scaled": 0
-      }
+      "composite": { "max": 0, "scaled": 0 }
     },
     {
-      "images": {
-        "Fog": "https://www.weather.gov/images/lwx/ghwo/FogDay3.jpg",
-        "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay3.jpg",
-        "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay3.jpg",
-        "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay3.jpg",
-        "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay3.jpg",
-        "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay3.jpg",
-        "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay3.jpg",
-        "CoastalFlood": "https://www.weather.gov/images/lwx/ghwo/CoastalFloodDay3.jpg",
-        "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay3.jpg",
-        "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay3.jpg",
-        "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay3.jpg",
-        "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay3.jpg"
-      },
       "dayNumber": 3,
       "timestamp": "2025-10-29T08:00:00-04:00",
       "risks": {
-        "Fog": {
-          "category": 0
-        },
-        "Lightning": {
-          "category": 0
-        },
-        "SnowSleet": {
-          "category": 0
-        },
-        "ExtremeCold": {
-          "category": 0
-        },
-        "FireWeather": {
-          "category": 0
-        },
-        "CoastalFlood": {
-          "category": 0
-        },
-        "IceAccumulation": {
-          "category": 0
-        },
-        "ExcessiveRainfall": {
-          "category": 0
-        },
-        "NonConvectiveWind": {
-          "category": 0
-        },
-        "SevereThunderstorm": {
-          "category": 0
-        }
+        "Fog": { "category": 0 },
+        "Lightning": { "category": 0 },
+        "SnowSleet": { "category": 0 },
+        "ExtremeCold": { "category": 0 },
+        "FireWeather": { "category": 0 },
+        "CoastalFlood": { "category": 0 },
+        "IceAccumulation": { "category": 0 },
+        "ExcessiveRainfall": { "category": 0 },
+        "NonConvectiveWind": { "category": 0 },
+        "SevereThunderstorm": { "category": 0 }
       },
-      "composite": {
-        "max": 0,
-        "scaled": 0
-      }
+      "composite": { "max": 0, "scaled": 0 }
     },
     {
-      "images": {
-        "Fog": "https://www.weather.gov/images/lwx/ghwo/FogDay4.jpg",
-        "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay4.jpg",
-        "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay4.jpg",
-        "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay4.jpg",
-        "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay4.jpg",
-        "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay4.jpg",
-        "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay4.jpg",
-        "CoastalFlood": "https://www.weather.gov/images/lwx/ghwo/CoastalFloodDay4.jpg",
-        "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay4.jpg",
-        "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay4.jpg",
-        "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay4.jpg",
-        "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay4.jpg"
-      },
       "dayNumber": 4,
       "timestamp": "2025-10-30T08:00:00-04:00",
       "risks": {
-        "Fog": {
-          "category": 0
-        },
-        "Lightning": {
-          "category": 1
-        },
-        "SnowSleet": {
-          "category": 0
-        },
-        "ExtremeCold": {
-          "category": 0
-        },
-        "FireWeather": {
-          "category": 0
-        },
-        "CoastalFlood": {
-          "category": 0
-        },
-        "IceAccumulation": {
-          "category": 0
-        },
-        "ExcessiveRainfall": {
-          "category": 0
-        },
-        "NonConvectiveWind": {
-          "category": 0
-        },
-        "SevereThunderstorm": {
-          "category": 0
-        }
+        "Fog": { "category": 0 },
+        "Lightning": { "category": 1 },
+        "SnowSleet": { "category": 0 },
+        "ExtremeCold": { "category": 0 },
+        "FireWeather": { "category": 0 },
+        "CoastalFlood": { "category": 0 },
+        "IceAccumulation": { "category": 0 },
+        "ExcessiveRainfall": { "category": 0 },
+        "NonConvectiveWind": { "category": 0 },
+        "SevereThunderstorm": { "category": 0 }
       },
-      "composite": {
-        "max": 1,
-        "scaled": 0.2
-      }
+      "composite": { "max": 1, "scaled": 0.2 }
     },
     {
-      "images": {
-        "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay5.jpg",
-        "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay5.jpg",
-        "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay5.jpg",
-        "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay5.jpg",
-        "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay5.jpg",
-        "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay5.jpg",
-        "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay5.jpg",
-        "ExcessiveRainfall": "https://www.weather.gov/images/lwx/ghwo/ExcessiveRainfallDay5.jpg",
-        "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay5.jpg",
-        "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay5.jpg"
-      },
       "dayNumber": 5,
       "timestamp": "2025-10-31T08:00:00-04:00",
       "risks": {
-        "Lightning": {
-          "category": 0
-        },
-        "SnowSleet": {
-          "category": 0
-        },
-        "ExtremeCold": {
-          "category": 0
-        },
-        "FireWeather": {
-          "category": 0
-        },
-        "IceAccumulation": {
-          "category": 0
-        },
-        "ExcessiveRainfall": {
-          "category": 0
-        },
-        "NonConvectiveWind": {
-          "category": 0
-        },
-        "SevereThunderstorm": {
-          "category": 0
-        }
+        "Lightning": { "category": 0 },
+        "SnowSleet": { "category": 0 },
+        "ExtremeCold": { "category": 0 },
+        "FireWeather": { "category": 0 },
+        "IceAccumulation": { "category": 0 },
+        "ExcessiveRainfall": { "category": 0 },
+        "NonConvectiveWind": { "category": 0 },
+        "SevereThunderstorm": { "category": 0 }
       },
-      "composite": {
-        "max": 0,
-        "scaled": 0
-      }
+      "composite": { "max": 0, "scaled": 0 }
     },
     {
-      "images": {
-        "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay6.jpg",
-        "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay6.jpg",
-        "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay6.jpg",
-        "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay6.jpg",
-        "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay6.jpg",
-        "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay6.jpg",
-        "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay6.jpg",
-        "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay6.jpg",
-        "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay6.jpg"
-      },
       "dayNumber": 6,
       "timestamp": "2025-11-01T08:00:00-04:00",
       "risks": {
-        "Lightning": {
-          "category": 0
-        },
-        "SnowSleet": {
-          "category": 0
-        },
-        "ExtremeCold": {
-          "category": 0
-        },
-        "FireWeather": {
-          "category": 0
-        },
-        "IceAccumulation": {
-          "category": 0
-        },
-        "NonConvectiveWind": {
-          "category": 0
-        },
-        "SevereThunderstorm": {
-          "category": 0
-        }
+        "Lightning": { "category": 0 },
+        "SnowSleet": { "category": 0 },
+        "ExtremeCold": { "category": 0 },
+        "FireWeather": { "category": 0 },
+        "IceAccumulation": { "category": 0 },
+        "NonConvectiveWind": { "category": 0 },
+        "SevereThunderstorm": { "category": 0 }
       },
-      "composite": {
-        "max": 0,
-        "scaled": 0
-      }
+      "composite": { "max": 0, "scaled": 0 }
     },
     {
-      "images": {
-        "Lightning": "https://www.weather.gov/images/lwx/ghwo/LightningDay7.jpg",
-        "SnowSleet": "https://www.weather.gov/images/lwx/ghwo/SnowSleetDay7.jpg",
-        "dayNumber": "https://www.weather.gov/images/lwx/ghwo/dayNumberDay7.jpg",
-        "timestamp": "https://www.weather.gov/images/lwx/ghwo/timestampDay7.jpg",
-        "ExtremeCold": "https://www.weather.gov/images/lwx/ghwo/ExtremeColdDay7.jpg",
-        "FireWeather": "https://www.weather.gov/images/lwx/ghwo/FireWeatherDay7.jpg",
-        "IceAccumulation": "https://www.weather.gov/images/lwx/ghwo/IceAccumulationDay7.jpg",
-        "NonConvectiveWind": "https://www.weather.gov/images/lwx/ghwo/WindDay7.jpg",
-        "SevereThunderstorm": "https://www.weather.gov/images/lwx/ghwo/SevereThunderstormsDay7.jpg"
-      },
       "dayNumber": 7,
       "timestamp": "2025-11-02T07:00:00-05:00",
       "risks": {
-        "Lightning": {
-          "category": 0
-        },
-        "SnowSleet": {
-          "category": 0
-        },
-        "ExtremeCold": {
-          "category": 0
-        },
-        "FireWeather": {
-          "category": 0
-        },
-        "IceAccumulation": {
-          "category": 0
-        },
-        "NonConvectiveWind": {
-          "category": 0
-        },
-        "SevereThunderstorm": {
-          "category": 0
-        }
+        "Lightning": { "category": 0 },
+        "SnowSleet": { "category": 0 },
+        "ExtremeCold": { "category": 0 },
+        "FireWeather": { "category": 0 },
+        "IceAccumulation": { "category": 0 },
+        "NonConvectiveWind": { "category": 0 },
+        "SevereThunderstorm": { "category": 0 }
       },
-      "composite": {
-        "max": 0,
-        "scaled": 0
-      }
+      "composite": { "max": 0, "scaled": 0 }
     }
   ],
-  "fips": "51013",
-  "@metadata": {
-    "timing": {
-      "e2e": 68.5159579999745,
-      "api": {}
+  "risks": {
+    "Fog": {
+      "name": "Fog",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FogDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FogDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FogDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FogDay4.jpg",
+          "category": 0,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 }
+      ]
     },
-    "size": 8042
-  }
+    "Hail": {
+      "name": "Hail",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/HailDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/HailDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 }
+      ]
+    },
+    "Tornado": {
+      "name": "Tornado",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/TornadoDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/TornadoDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 }
+      ]
+    },
+    "Lightning": {
+      "name": "Lightning",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/LightningDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/LightningDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/LightningDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/LightningDay4.jpg",
+          "category": 1,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/LightningDay5.jpg",
+          "category": 0,
+          "timestamp": "2025-10-31T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/LightningDay6.jpg",
+          "category": 0,
+          "timestamp": "2025-11-01T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/LightningDay7.jpg",
+          "category": 0,
+          "timestamp": "2025-11-02T07:00:00-05:00"
+        }
+      ]
+    },
+    "SnowSleet": {
+      "name": "SnowSleet",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SnowSleetDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SnowSleetDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SnowSleetDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SnowSleetDay4.jpg",
+          "category": 0,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SnowSleetDay5.jpg",
+          "category": 0,
+          "timestamp": "2025-10-31T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SnowSleetDay6.jpg",
+          "category": 0,
+          "timestamp": "2025-11-01T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SnowSleetDay7.jpg",
+          "category": 0,
+          "timestamp": "2025-11-02T07:00:00-05:00"
+        }
+      ]
+    },
+    "ExtremeCold": {
+      "name": "ExtremeCold",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExtremeColdDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExtremeColdDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExtremeColdDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExtremeColdDay4.jpg",
+          "category": 0,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExtremeColdDay5.jpg",
+          "category": 0,
+          "timestamp": "2025-10-31T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExtremeColdDay6.jpg",
+          "category": 0,
+          "timestamp": "2025-11-01T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExtremeColdDay7.jpg",
+          "category": 0,
+          "timestamp": "2025-11-02T07:00:00-05:00"
+        }
+      ]
+    },
+    "FireWeather": {
+      "name": "FireWeather",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FireWeatherDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FireWeatherDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FireWeatherDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FireWeatherDay4.jpg",
+          "category": 0,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FireWeatherDay5.jpg",
+          "category": 0,
+          "timestamp": "2025-10-31T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FireWeatherDay6.jpg",
+          "category": 0,
+          "timestamp": "2025-11-01T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/FireWeatherDay7.jpg",
+          "category": 0,
+          "timestamp": "2025-11-02T07:00:00-05:00"
+        }
+      ]
+    },
+    "CoastalFlood": {
+      "name": "CoastalFlood",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/CoastalFloodDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/CoastalFloodDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/CoastalFloodDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/CoastalFloodDay4.jpg",
+          "category": 0,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 }
+      ]
+    },
+    "ConvectiveWind": {
+      "name": "ConvectiveWind",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ThunderstormWindDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ThunderstormWindDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 },
+        { "category": 0 }
+      ]
+    },
+    "IceAccumulation": {
+      "name": "IceAccumulation",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/IceAccumulationDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/IceAccumulationDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/IceAccumulationDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/IceAccumulationDay4.jpg",
+          "category": 0,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/IceAccumulationDay5.jpg",
+          "category": 0,
+          "timestamp": "2025-10-31T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/IceAccumulationDay6.jpg",
+          "category": 0,
+          "timestamp": "2025-11-01T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/IceAccumulationDay7.jpg",
+          "category": 0,
+          "timestamp": "2025-11-02T07:00:00-05:00"
+        }
+      ]
+    },
+    "ExcessiveRainfall": {
+      "name": "ExcessiveRainfall",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExcessiveRainfallDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExcessiveRainfallDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExcessiveRainfallDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExcessiveRainfallDay4.jpg",
+          "category": 0,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/ExcessiveRainfallDay5.jpg",
+          "category": 0,
+          "timestamp": "2025-10-31T08:00:00-04:00"
+        },
+        { "category": 0 },
+        { "category": 0 }
+      ]
+    },
+    "NonConvectiveWind": {
+      "name": "NonConvectiveWind",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/WindDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/WindDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/WindDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/WindDay4.jpg",
+          "category": 0,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/WindDay5.jpg",
+          "category": 0,
+          "timestamp": "2025-10-31T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/WindDay6.jpg",
+          "category": 0,
+          "timestamp": "2025-11-01T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/WindDay7.jpg",
+          "category": 0,
+          "timestamp": "2025-11-02T07:00:00-05:00"
+        }
+      ]
+    },
+    "SevereThunderstorm": {
+      "name": "SevereThunderstorm",
+      "days": [
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SevereThunderstormsDay1.jpg",
+          "category": 0,
+          "timestamp": "2025-10-27T14:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SevereThunderstormsDay2.jpg",
+          "category": 0,
+          "timestamp": "2025-10-28T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SevereThunderstormsDay3.jpg",
+          "category": 0,
+          "timestamp": "2025-10-29T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SevereThunderstormsDay4.jpg",
+          "category": 0,
+          "timestamp": "2025-10-30T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SevereThunderstormsDay5.jpg",
+          "category": 0,
+          "timestamp": "2025-10-31T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SevereThunderstormsDay6.jpg",
+          "category": 0,
+          "timestamp": "2025-11-01T08:00:00-04:00"
+        },
+        {
+          "image": "https://www.weather.gov/images/okx/ghwo/SevereThunderstormsDay7.jpg",
+          "category": 0,
+          "timestamp": "2025-11-02T07:00:00-05:00"
+        }
+      ]
+    }
+  },
+  "composite": {
+    "days": [
+      { "max": 0, "scaled": 0, "timestamp": "2025-10-27T14:00:00-04:00" },
+      { "max": 0, "scaled": 0, "timestamp": "2025-10-28T08:00:00-04:00" },
+      { "max": 0, "scaled": 0, "timestamp": "2025-10-29T08:00:00-04:00" },
+      { "max": 1, "scaled": 0.2, "timestamp": "2025-10-30T08:00:00-04:00" },
+      { "max": 0, "scaled": 0, "timestamp": "2025-10-31T08:00:00-04:00" },
+      { "max": 0, "scaled": 0, "timestamp": "2025-11-01T08:00:00-04:00" },
+      { "max": 0, "scaled": 0, "timestamp": "2025-11-02T07:00:00-05:00" }
+    ]
+  },
+  "noRisks": [],
+  "legend": {}
 }

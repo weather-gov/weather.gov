@@ -63,14 +63,6 @@ export const startRiskOverviewProcessing = async () => {
           }
           break;
 
-        case "block":
-          blocked.add(message);
-          break;
-
-        case "unblock":
-          blocked.delete(message);
-          break;
-
         default:
           break;
       }
@@ -93,7 +85,7 @@ export const startRiskOverviewProcessing = async () => {
     // If our background thread stops, restart it.
     worker.on("exit", restart);
     worker.on("error", (e) => {
-      backgroundLogger.error(e);
+      backgroundLogger.error("error", e);
       restart();
     });
 

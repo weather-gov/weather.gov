@@ -1,22 +1,69 @@
+{% comment %}
+
+  This template receives three top-level objects.
+
+  day_number:
+    Numeric representation of the day number, 1-7.
+
+  id:
+    The ID of the risk type. This is the key into the
+    risk overview data, such as "SevereThunderstorm".
+
+  risk:
+    The risk object. For the purposes of this template,
+    it has these two properties:
+
+    name:
+      The name of the risk type.
+
+    legend:
+      The legend object for this risk type. Has these
+      relevant properties:
+
+      basis:
+        A description of how this risk value is derived.
+        This is optional and may be falsey.
+
+  day:
+    The specific risk day for this risk type. Contains these
+    relevant properties:
+
+    category:
+      The numeric representation of the risk level.
+
+    levelName:
+      Name of the risk level. Eg, "extreme", "high", "marginal"
+
+    image:
+      URL to the appropriate image for the risk on this day.
+      Can be falsey if we don't know about an image.
+
+{% endcomment %}
 <div class="ghwo-details-pane padding-x-2 padding-y-4 bg-base-lightest"
      aria-hidden="{% if day.is_first %}false{% else %}true{% endif %}"
-     data-risk-factor="{{ risk.id }}"
-     data-day-number="{{ day.day_number }}">
-  <h3 class="margin-bottom-3 margin-top-0 font-sans-md text-normal">{{ day.timestamp|datetime|date:'l' }}: {{ risk.label }}</h3>
+     data-risk-factor="{{ id }}"
+     data-day-number="{{ day_number }}">
+  <h3 class="margin-bottom-3 margin-top-0 font-sans-md text-normal">
+    {{ day.timestamp|datetime|date:'l' }}: {{ risk.name }}
+  </h3>
   <h4 class="font-sans-sm text-bold">
     <div class="display-flex flex-align-center">
       <div class="ghwo-risk-legend-square risk-square-lg"
-           data-risk-level="{{ day.level.number }}"></div>
-      <span>{{ day.level.number }}: {{ day.level.label }}</span>
+           data-risk-level="{{ day.category }}"></div>
+      <span>{{ day.category }}: {{ day.levelName }}</span>
     </div>
   </h4>
-  <p class="margin-y-0">{{ day.level.description }}</p>
-  <h4 class="font-sans-sm text-bold margin-top-3 margin-bottom-0">{{"ghwo.details.pane.header.based-on.01" | t}}</h4>
-  <p>{{ risk.basis_description|striptags }}</p>
+  <p class="margin-y-0">{{ day.definition }}</p>
+  {% if risk.legend.basis %}
+    <h4 class="font-sans-sm text-bold margin-top-3 margin-bottom-0">{{"ghwo.details.pane.header.based-on.01" | t}}</h4>
+    <p>{{ risk.legend.basis|striptags }}</p>
+  {% endif %}
   {% if day.image %}
     <h4 class="font-sans-sm text-bold margin-y-3">{{"ghwo.details.pane.header.risk-map.01" | t}}</h4>
     <img src="{{ day.image }}" alt="" />
   {% endif %}
-  <h4 class="font-sans-sm text-bold margin-y-3">{{"ghwo.details.pane.header.risk-levels.01" | t}}</h4>
-  {% include 'weather/partials/ghwo-details-legend-table.html' with risk=risk %}
+  {% if risk.legend %}
+    <h4 class="font-sans-sm text-bold margin-y-3">{{"ghwo.details.pane.header.risk-levels.01" | t}}</h4>
+    {% include 'weather/partials/ghwo-details-legend-table.html' with legend=risk.legend %}
+  {% endif %}
 </div>

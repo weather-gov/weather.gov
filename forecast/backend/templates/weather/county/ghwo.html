@@ -25,7 +25,7 @@
   <div class="grid-container">
     <section wx-ghwo-details="{{ county.countyfips }}"
              class="margin-top-4 margin-bottom-8">
-      {% include "weather/partials/ghwo-details.html" %}
+      {% include "weather/partials/ghwo-details.html" with ghwo=ghwo %}
     </section>
   </div>
   <template id="ghwo-wx-loader">
