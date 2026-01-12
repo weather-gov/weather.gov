@@ -6,6 +6,7 @@ from backend.util import mark_safer
 
 register = template.Library()
 
+
 @register.simple_tag(takes_context=True)
 def set_title_and_description(context):
     """Set the title, meta title, and meta description."""
@@ -13,7 +14,19 @@ def set_title_and_description(context):
 
     full_name = context.get("point", {}).get("place", {}).get("fullName", None)
     page = context.get("page", {})
-    page_title = page.get("title", None)
+
+    if isinstance(page, dict):
+        page_title = page.get("title", "")
+        seo_title = page.get("seo_title", "")
+        description = page.get("meta_description", "")
+        if not description:
+            description = page.get("search_description", "")
+    else:
+        page_title = getattr(page, "title", "")
+        seo_title = getattr(page, "seo_title", "")
+        description = getattr(page, "meta_description", "")
+        if not description:
+            description = getattr(page, "search_description", "")
 
     site_name = getattr(settings, "SITE_NAME", None)
     agency_name = getattr(settings, "AGENCY_NAME", "")
@@ -29,17 +42,8 @@ def set_title_and_description(context):
         title_elements.append(agency_name)
 
     title = " | ".join(title_elements)
-    seo_title = title
-
-    if page.get("seo_title", None):
-        seo_title = page["seo_title"]
-
-    if page.get("meta_description", None):
-        description = page["meta_description"]
-    elif page.get("search_description", None):
-        description = page["search_description"]
-    else:
-        description = ""
+    if not seo_title:
+        seo_title = title
 
     # this is needed because lxml will strip the `title` and `meta` tags
     cleaned_title = mark_safer(title)
