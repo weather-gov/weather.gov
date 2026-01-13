@@ -130,7 +130,7 @@ deploy-to-prod:
     - job: bundle-js
       artifacts: true
   script:
-    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip
+    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip zip
     - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
     - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
     - terraform --version
@@ -169,7 +169,7 @@ deploy-to-staging:
     - job: bundle-js
       artifacts: true
   script:
-    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip
+    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip zip
     - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
     - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
     - terraform --version
@@ -208,7 +208,7 @@ deploy-to-test:
     - job: bundle-js
       artifacts: true
   script:
-    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip
+    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip zip
     - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
     - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
     - terraform --version
