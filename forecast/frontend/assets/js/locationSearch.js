@@ -48,13 +48,15 @@
     // For example, one can be hidden away in the nav bar while another is
     // present lower down on the page. Be sure to add the behavior to
     // all buttons
-    const buttons = document.querySelectorAll("button.weathergov-use-browser-location");
+    const buttons = document.querySelectorAll(
+      "button.weathergov-use-browser-location",
+    );
 
     // If the browser does not support the geolocation API, just bail out. Take
     // the "use my location" button away too. Also bop out if we don't have a
     // button for some reason. Just being safe.
     if (!buttons.length || !navigator.geolocation) {
-      Array.from(buttons).forEach(button => {
+      Array.from(buttons).forEach((button) => {
         button?.parentElement?.previousElementSibling.remove();
         button?.parentElement?.remove();
       });
@@ -102,11 +104,11 @@
         // Key important takeaway, though, is that "denied" means all of those
         // things and it is impossible for us to know which.
         if (status.state === "denied") {
-          Array.from(buttons).forEach(button => {
+          Array.from(buttons).forEach((button) => {
             button.parentElement.previousElementSibling.remove();
             button.parentElement.remove();
           });
-          
+
           return;
         }
 
@@ -122,6 +124,11 @@
     }
 
     const buttonHandler = async (e) => {
+      // Stop any other event behavior, in case our button is inside a form
+      // or something.
+      e.preventDefault();
+      e.stopPropagation();
+
       let proceed = true;
 
       // If location is available and we know that the user has neither denied or
@@ -166,7 +173,7 @@
       }
     };
 
-    Array.from(buttons).forEach(button => {
+    Array.from(buttons).forEach((button) => {
       button.addEventListener("click", buttonHandler);
     });
   };
