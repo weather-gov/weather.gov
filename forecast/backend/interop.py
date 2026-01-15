@@ -46,9 +46,13 @@ def _set_high_low_pops(day, is_marine):
         day["pop"] = day["maxPop"] or 0
     else:
         periods = day["periods"]
-        day["temps"] = [period["data"]["temperature"]["degF"] for period in periods]
-        day["low"] = min(day["temps"])
-        day["high"] = max(day["temps"])
+        day["temps"] = [
+            period["data"]["temperature"]["degF"]
+            for period in periods
+        ]
+        valid_temps = [temp for temp in day["temps"] if temp is not None]
+        day["low"] = min(valid_temps)
+        day["high"] = max(valid_temps)
         day["pop"] = day["maxPop"]
 
     if day["pop"] is None:
