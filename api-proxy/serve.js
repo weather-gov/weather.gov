@@ -90,13 +90,13 @@ const processDates = (obj, usingHourly = false) => {
   });
 };
 
-const processGHWODates = (ghwoData) => {
+const processRiskOverviewDates = (riskOverviewData) => {
   const { now } = config;
 
   // The original timestamps are the _keys_ in the
   // result object for each county.
-  Object.keys(ghwoData.counties).forEach((fips) => {
-    const countyData = ghwoData.counties[fips];
+  Object.keys(riskOverviewData.counties).forEach((fips) => {
+    const countyData = riskOverviewData.counties[fips];
 
     Object.keys(countyData)
       .filter((key) => {
@@ -143,7 +143,7 @@ const processGHWODates = (ghwoData) => {
       });
   });
 
-  return ghwoData;
+  return riskOverviewData;
 };
 
 export default async (request, response) => {
@@ -195,8 +195,10 @@ export default async (request, response) => {
         filePath.toString(),
       );
 
-    if (isGHWORequest) {
-      processGHWODates(output);
+    const isRiskOverviewRequest = request.path.endsWith("hazByCounty.json");
+
+    if (isRiskOverviewRequest) {
+      processRiskOverviewDates(output);
     } else {
       processDates(output, isHourlyForecast);
     }
