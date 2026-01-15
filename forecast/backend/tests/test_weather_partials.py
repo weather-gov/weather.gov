@@ -139,6 +139,35 @@ class TestWeatherPartials(TestCase):
 
         self.assertEqual(actual, expected)
 
+    def test_daily_high_low_null_temp_last_period(self):
+        """Test high low if last period has null temp."""
+        expected = { "high": 19, "low": -4, "show_high": True, "show_low": True }
+
+        actual = weather_partials.daily_high_low(
+            periods=[
+                {
+                    "isDaytime": True,
+                    "data": {
+                        "temperature": {"degF": -4},
+                    },
+                },
+                {
+                    "isDaytime": False,
+                    "data": {
+                        "temperature": {"degF": 19},
+                    },
+                },
+                {
+                    "isDaytime": False,
+                    "data": {
+                        "temperature": {"degF": None},
+                    },
+                }
+            ],
+        )
+
+        self.assertEqual(actual, expected)
+
     def test_alert_link(self):
         """Tests the alert_link method."""
         alert = {

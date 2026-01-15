@@ -159,6 +159,21 @@ class TestInteropInterface(TestCase):
         mock_gettext_lazy.assert_called_with("precip-table.table-header+legend.rain.01")
 
     @responses.activate
+    def test_point_forecast_some_null_temps(self):
+        """Test point forecast processing where some temps are None."""
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(
+            responses.GET,
+            "https://interop/point/1/9",
+            json=self.forecast["some_missing_temperatures"],
+            status=200,
+        )
+
+        result = interop.get_point_forecast(1, 9)
+        last_day = result["forecast"]["days"][-1]
+        self.assertEqual(last_day["low"], 19)
+
+    @responses.activate
     def test_point_forecast_day2_nighttime(self):
         """Tests a day being nighttime."""
         os.environ["INTEROP_URL"] = "https://interop"

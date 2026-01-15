@@ -39,7 +39,11 @@ RADAR_INTENSITIES = [
 def daily_high_low(**kwargs):
     """Render the partial for the daily high/low information."""
     periods = kwargs["periods"]
-    temps = [period["data"]["temperature"]["degF"] for period in periods]
+    temps = [
+        period["data"]["temperature"]["degF"]
+        for period in periods
+        if period["data"]["temperature"]["degF"] is not None
+    ]
     low = min(temps)
     high = max(temps)
 
