@@ -35,15 +35,23 @@ describe("route: point", () => {
     });
 
     it("route schema", () => {
-      expect(point.schema.params.latitude).to.exist;
-      expect(point.schema.params.latitude.type).to.equal("number");
-      expect(point.schema.params.latitude.minimum).to.equal(-90);
-      expect(point.schema.params.latitude.maximum).to.equal(90);
-
-      expect(point.schema.params.longitude).to.exist;
-      expect(point.schema.params.longitude.type).to.equal("number");
-      expect(point.schema.params.longitude.minimum).to.equal(-180);
-      expect(point.schema.params.longitude.maximum).to.equal(180);
+      expect(point.schema).to.eql({
+        params: {
+          type: "object",
+          properties: {
+            latitude: {
+              type: "number",
+              minimum: -90,
+              maximum: 90,
+            },
+            longitude: {
+              type: "number",
+              minimum: -180,
+              maximum: 180,
+            },
+          },
+        },
+      });
     });
 
     it("route handler", () => {

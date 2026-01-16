@@ -4,9 +4,12 @@ export const method = "GET";
 export const url = "/risk-overview/:placeId";
 export const schema = {
   params: {
-    placeId: {
-      type: "string",
-      pattern: "^([0-9]{5}|[A-Za-z]{2})$",
+    type: "object",
+    properties: {
+      placeId: {
+        type: "string",
+        pattern: "^([0-9]{5}|[A-Za-z]{2})$",
+      },
     },
   },
 };

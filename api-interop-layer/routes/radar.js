@@ -7,15 +7,18 @@ export const url = "/radar/:latitude/:longitude";
 
 export const schema = {
   params: {
-    latitude: {
-      type: "number",
-      minimum: -90,
-      maximum: 90,
-    },
-    longitude: {
-      type: "number",
-      minimum: -180,
-      maximum: 180,
+    type: "object",
+    properties: {
+      latitude: {
+        type: "number",
+        minimum: -90,
+        maximum: 90,
+      },
+      longitude: {
+        type: "number",
+        minimum: -180,
+        maximum: 180,
+      },
     },
   },
 };

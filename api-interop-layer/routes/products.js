@@ -4,8 +4,11 @@ export const method = "GET";
 export const url = "/products/:id";
 export const schema = {
   params: {
-    id: {
-      type: "string",
+    type: "object",
+    properties: {
+      id: {
+        type: "string",
+      },
     },
   },
 };

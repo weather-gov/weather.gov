@@ -4,9 +4,12 @@ export const method = "GET";
 export const url = "/county/:fips";
 export const schema = {
   params: {
-    fips: {
-      type: "string",
-      pattern: "^[0-9]{5}$",
+    type: "object",
+    properties: {
+      fips: {
+        type: "string",
+        pattern: "^[0-9]{5}$",
+      },
     },
   },
 };

@@ -33,8 +33,16 @@ describe("route: products", () => {
     });
 
     it("route schema", () => {
-      expect(products.schema.params.id).to.exist;
-      expect(products.schema.params.id.type).to.equal("string");
+      expect(products.schema).to.eql({
+        params: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+            },
+          },
+        },
+      });
     });
 
     it("route handler", () => {
