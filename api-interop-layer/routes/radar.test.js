@@ -35,15 +35,23 @@ describe("route: radar", () => {
     });
 
     it("route schema", () => {
-      expect(radar.schema.params.latitude).to.exist;
-      expect(radar.schema.params.latitude.type).to.equal("number");
-      expect(radar.schema.params.latitude.minimum).to.equal(-90);
-      expect(radar.schema.params.latitude.maximum).to.equal(90);
-
-      expect(radar.schema.params.longitude).to.exist;
-      expect(radar.schema.params.longitude.type).to.equal("number");
-      expect(radar.schema.params.longitude.minimum).to.equal(-180);
-      expect(radar.schema.params.longitude.maximum).to.equal(180);
+      expect(radar.schema).to.eql({
+        params: {
+          type: "object",
+          properties: {
+            latitude: {
+              type: "number",
+              minimum: -90,
+              maximum: 90,
+            },
+            longitude: {
+              type: "number",
+              minimum: -180,
+              maximum: 180,
+            },
+          },
+        },
+      });
     });
 
     it("route handler", () => {

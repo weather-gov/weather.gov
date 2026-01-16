@@ -33,9 +33,21 @@ describe("route: risk overview", () => {
     });
 
     it("route schema", () => {
-      expect(riskOverview.schema.params.placeId).to.exist;
+      expect(riskOverview.schema).to.eql({
+        params: {
+          type: "object",
+          properties: {
+            placeId: {
+              type: "string",
+              pattern: "^([0-9]{5}|[A-Za-z]{2})$",
+            },
+          },
+        },
+      });
 
-      const idRegex = new RegExp(riskOverview.schema.params.placeId.pattern);
+      const idRegex = new RegExp(
+        riskOverview.schema.params.properties.placeId.pattern,
+      );
 
       expect(idRegex.test("AB")).to.be.true;
       expect(idRegex.test("ab")).to.be.true;

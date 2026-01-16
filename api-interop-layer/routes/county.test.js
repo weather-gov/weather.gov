@@ -33,9 +33,11 @@ describe("route: county data", () => {
     });
 
     it("route schema", () => {
-      expect(county.schema.params.fips).to.exist;
+      expect(county.schema.params.properties.fips).to.exist;
 
-      const fipsRegex = new RegExp(county.schema.params.fips.pattern);
+      const fipsRegex = new RegExp(
+        county.schema.params.properties.fips.pattern,
+      );
 
       expect(fipsRegex.test("12345")).to.be.true;
       expect(fipsRegex.test("01234")).to.be.true;
