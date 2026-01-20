@@ -4,48 +4,44 @@ import { createLogger } from "./util/monitoring/index.js";
 // For now, let's use a single client instance
 // that we lazily assign once accessed.
 let client;
+export let USE_REDIS = false;
 
 const logger = createLogger("redis");
 
-// To determine whether or not the interop should even
-// attempt to use redis, we look for the WX_USE_REDIS
-// environment variable. If it is present and explicitly set
-// to "true", we will attempt to make real redis connections.
-export const USE_REDIS = (process.env.WX_USE_REDIS === "true");
+export const getRedisConnectionInfo = () => {
+  if (process.env.API_INTEROP_PRODUCTION) {
+    USE_REDIS = true;
+    logger.info("interop is using redis for cache in prod");
+    // we are in a cloud.gov environment and must retrieve credentials from
+    // the VCAP_SERVICES environment variable
+    const vcap = JSON.parse(process.env.VCAP_SERVICES);
+    const db = vcap["aws-elasticache-redis"][0];
+    return {
+      password: db.credentials.password,
+      host: db.credentials.host,
+      port: db.credentials.port,
+    };
+  }
 
-// Log whether or not redis is enabled for the current session
-if(USE_REDIS){
-  logger.warn("interop will attempt to use redis for cache");
-} else {
-  logger.warn("redis is disabled for cache");
-}
-
-// Required environment variables for authentication
-// and connection. These will be validated.
-const REQUIRED_ENV_VARS = [
-  "REDIS_HOST",
-  "REDIS_PORT",
-  "REDIS_CREDS"
-];
-
-/**
- * Check to make sure we are using the correct
- * environment variables for redis.
- * This function should only be called within
- * functions where USE_REDIS is true.
- * See above.
- */
-const ensureEnvironmentVariables = () => {
-  const missing = [];
+  const REQUIRED_ENV_VARS = [
+    "REDIS_HOST",
+    "REDIS_PORT",
+    "REDIS_PASSWORD"
+  ];
   REQUIRED_ENV_VARS.forEach(varName => {
     if(!process.env[varName]){
-      missing.push(varName);
+      logger.warn("redis is disabled for cache");
+      return {};
     }
   });
-  if(missing.length){
-    const msg = `Missing required redis environment variables: ${missing.join(", ")}`;
-    logger.error(msg);
-    throw new Error(msg);
+
+  USE_REDIS = true;
+  logger.info("interop is using redis for cache in dev");
+
+  return {
+    password: process.env["REDIS_PASSWORD"],
+    host: process.env["REDIS_HOST"],
+    port: process.env["REDIS_PORT"],
   }
 };
 
@@ -86,9 +82,8 @@ export const getTTLFromResponse = (response) => {
  * In this module, a top-level client variable exists. If it
  * is already assigned to a redis client, we simply return that.
  * Otherwise, we attempt to connect a live client using the
- * environment variables that we have configured for making
- * the connection (see `ensureEnvironmentVariables()` above).
- * This function will immediately return null if USE_REDIS is false.
+ * environment variables or cloud.gov servace instances that we
+ * have configured for making the connection
  * @returns {Object|null} - A connected redis client instance or, if
  * not available, null
  */
@@ -97,8 +92,8 @@ export const getRedisClient = async () => {
     return client;
   }
   try {
-    ensureEnvironmentVariables();
-    const url = `redis://default:${process.env.REDIS_CREDS}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`;
+    const { password, host, port } = getRedisConnectionInfo();
+    const url = `redis://default:${password}@${host}:${port}`;
     logger.verbose(`Connecting to ${url}`);
     client = await createClient({url})
       .on("error", err => {

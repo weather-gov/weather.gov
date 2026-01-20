@@ -233,7 +233,6 @@ test-interop arg="":
     run --rm \
     -v "{{justfile_directory()}}/reports/interop":"/reports" \
     -e LOG_LEVEL=verbose \
-    -e WX_USE_REDIS=false \
     -p "2992:2992" \
     api-interop-layer \
     npx --no-install c8 --all \

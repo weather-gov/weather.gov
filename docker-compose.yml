@@ -84,10 +84,9 @@ services:
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY:-}
       LOG_LEVEL: verbose
       # TRUNCATE_HAZARD_OUTLOOKS: "true"
-      WX_USE_REDIS: "true"
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      REDIS_CREDS: ixu3N02Xp3uRPDcuZCmKIWZyNb
+      REDIS_PASSWORD: ixu3N02Xp3uRPDcuZCmKIWZyNb
     networks:
       - weather.gov
     links:
@@ -173,7 +172,6 @@ services:
       - ./redis-data:/redis-data
     networks:
       - weather.gov
-      
 
 networks:
   weather.gov:

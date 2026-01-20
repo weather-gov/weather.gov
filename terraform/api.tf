@@ -48,7 +48,8 @@ resource "cloudfoundry_app" "interop" {
   ]
 
   service_bindings = [
-    { service_instance = "${local.app_name}-rds-${var.env}" }
+    { service_instance = "${local.app_name}-rds-${var.env}" },
+    { service_instance = "${local.app_name}-redis-${var.env}" }
   ]
 
   depends_on = [

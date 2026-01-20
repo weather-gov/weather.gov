@@ -30,6 +30,15 @@ module "database" {
   depends_on    = [module.app_space]
 }
 
+module "redis" {
+  source = "github.com/gsa-tts/terraform-cloudgov//redis?ref=v2.4.1"
+
+  cf_space_id     = module.app_space.space_id
+  name            = "${local.app_name}-redis-${var.env}"
+  redis_plan_name = var.redis_plan_name
+  depends_on      = [module.app_space]
+}
+
 module "s3" {
   source = "github.com/gsa-tts/terraform-cloudgov//s3?ref=v2.4.1"
 
