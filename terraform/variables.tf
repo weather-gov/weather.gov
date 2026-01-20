@@ -37,6 +37,12 @@ variable "rds_plan_name" {
   description = "The name of the rds plan to create"
 }
 
+variable "redis_plan_name" {
+  type        = string
+  default     = "redis-dev" # use redis-3node for prod
+  description = "The name of the redis plan to create"
+}
+
 variable "s3_plan_name" {
   type        = string
   default     = "basic-public"
