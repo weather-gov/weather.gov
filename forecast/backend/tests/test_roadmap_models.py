@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from backend.models import RoadmapEntry, RoadmapPage
@@ -75,3 +76,28 @@ class TestRoadmapModels(TestCase):
 
         later = [str(entry) for entry in context["entries"]["later"]]
         self.assertEqual(later, ["Entry #2", "Entry #3"])
+
+    @disable_logging_for_quieter_tests
+    def test_roadmap_entry_validation(self):
+        """Test that roadmap entries do not require a delivery date unless the delivered flag is set."""
+        page = RoadmapPage.objects.create(
+            title="Roadmap", body="Body", path="/", depth=0, meta_description="Description"
+        )
+        entry = RoadmapEntry.objects.create(
+            name="Entry #1",
+            description="",
+            outcome="",
+            period=RoadmapEntry.RoadmapTimePeriod.Now,
+            page=page,
+            delivery_date=None,
+        )
+
+        entry.clean()
+
+        entry.delivered = True
+
+        self.assertRaises(ValidationError, entry.clean)  # noqa: PT027
+
+        entry.delivery_date = "2024-01-01"
+
+        entry.clean()

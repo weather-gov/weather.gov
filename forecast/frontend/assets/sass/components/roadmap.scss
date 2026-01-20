@@ -19,6 +19,20 @@ wx-roadmap {
     }
   }
 
+  .wx-delivered {
+    svg {
+      height: units(3);
+      width: units(3);
+      fill: color("primary-lightest");
+      margin-right: units(0.5);
+    }
+
+    background: color("green-cool-60v");
+    color: color("primary-lightest");
+    padding: units(0.5) units(1.5);
+    border-radius: units(3);
+  }
+
   .wx-roadmap__section {
     background-repeat: repeat;
     background-position-y: $row-offset-mobile-y;
