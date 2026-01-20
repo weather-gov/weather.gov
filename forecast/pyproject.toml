@@ -1,11 +1,12 @@
 [project]
 name = "weather.gov"
 version = "1.21.0-beta"
+requires-python = ">= 3.11, < 3.12"
 dependencies = [
-    "boto3>=1.42.3",
+    "boto3>=1.42.29",
     "cfenv==0.5.3",
     "deepmerge==2.0",
-    "django>=5.0",
+    "django>=5.2.10",
     "django-allow-cidr==0.7.1",
     "django-csp==4.0",
     "django-debug-toolbar>=6.1.0",
