@@ -1,5 +1,9 @@
 @use "uswds-core" as *;
 
+wx-loader[aria-hidden="true"]{
+    visibility: hidden;
+}
+
 .wx-loader-icon {
   background-image: url("../images/weather/wx_loader_animated_cloud.svg");
   background-position: center;

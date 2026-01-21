@@ -190,7 +190,7 @@ export default class LocationComboBox extends ComboBox {
         window.dispatchEvent(
           new CustomEvent("wx-announce", { detail: { text } }),
         );
-        loader.classList.remove("display-none");
+        loader.removeAttribute("aria-hidden");
       }
 
       if (this.url) {

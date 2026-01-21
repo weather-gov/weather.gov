@@ -344,6 +344,39 @@ msgstr "Because it’s a work in progress, this site has a long way to go before
 msgid "frontpage.text.touchpoints-1-graf.01"
 msgstr "<a href='{url}' class='usa-link'>Tell us what you think</a> about how beta.weather.gov looks and functions."
 
+msgid "frontpage.heading.trapezoid-1.01"
+msgstr "Serving you in every community in the U.S. and its territories"
+
+msgid "frontpage.stats.text-1.01"
+msgstr "The National Weather Service provides science-based forecasts and warnings to protect life and property."
+
+msgid "frontpage.stats.text-2.01"
+msgstr "We make sure important weather information reaches the broadest possible audience."
+
+msgid "frontpage.rebuilding.header.01"
+msgstr "We are rebuilding weather.gov to better serve the public"
+
+msgid "frontpage.rebuilding.list-header-1.01"
+msgstr "It's a work in progress"
+
+msgid "frontpage.rebuilding.list-text-1.01"
+msgstr "This website is in development. We are creating a new, contemporary tool for anyone, anywhere in the U.S. to check their forecast and learn about hazardous weather on the way."
+
+msgid "frontpage.rebuilding.list-header-2.01"
+msgstr "Weather.gov is still the authoritative source"
+
+msgid "frontpage.rebuilding.list-text-2.01"
+msgstr "Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href='https://www.weather.gov' class='usa-link'>access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information."
+
+msgid "frontpage.rebuilding.list-header-3.01"
+msgstr "We want to hear from you!"
+
+msgid "frontpage.rebuilding.list-text-3.01"
+msgstr "Tell us what you think about how beta.weather.gov looks and functions."
+
+msgid "frontpage.rebuilding.list-items-03.01"
+msgstr "<li>Did you find the information you were looking for?</li><li>Did you have any challenges in understanding it?</li><li>In what ways have you been using this website?</li><li>What can we do to serve you better?</li>"
+
 msgid "hourly-charts.heading.chance-precip.01"
 msgstr "Chance of precipitation"
 

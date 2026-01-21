@@ -1,123 +1,178 @@
-{% extends "weather/page.html" %}
-{% load i18n %}
-{% load weather_i18n %}
-{% block head_js %}
-  <script type="module" src="{% static 'js/index.html.js' %}" type="module"></script>
+{% extends 'weather/base.html' %}
+{% block head_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/front-page.css' %}">
 {% endblock %}
-{% block page_content %}
-  <div class="bg-primary-darker wx-bg-satellite padding-y-4 tablet:padding-top-7 tablet:padding-bottom-8">
-    <div class="grid-container">
-      <div class="grid-row">
-        <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-          <h1 class="text-normal text-white margin-y-0 font-sans-3xl text-ls-1">
-            {{ "frontpage.heading.find-your-forecast.01" | t }}
-          </h1>
+{% block head_js %}
+  <script src="{% static 'js/front-page.html.js' %}" type="module" defer></script>
+{% endblock %}
+{% block page_top %}
+  {% include "weather/partials/gov-banner.html" %}
+  {% include "weather/partials/beta-banner.html" %}
+  <header role="banner">
+    {% include "weather/partials/site-branding.html" with hide_site_nav=True %}
+  </header>
+{% endblock %}
+{% block page %}
+  <main role="main">
+    <h1 class="display-none" aria-hidden="true">beta.weather.gov</h1>
+    <!-- Find forecast section -->
+    <section id="front-find-forecast-section">
+      <div class="grid-container">
+        <div class="find-block-wrapper">
+          <h2>Find your forecast</h2>
+          <form id="find-forecast" data-location-search="true">
+            <div class="use-location-area">
+              <label class="usa-label"
+                     for="search-combo-box">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
+              <div class="location-area-divider">|</div>
+              <button
+                type="button"
+                class="weathergov-use-browser-location">
+                <svg class="usa-icon height-2 width-2 margin-right-05 text-top"
+                     aria-hidden="true"
+                     focusable="false"
+                     role="img">
+                  <use xlink:href="{% static 'images/uswds/sprite.svg' %}#my_location"></use>
+                </svg>
+                {{ 'location-search.labels.use-location.01' | t }}
+              </button>
+            </div>
+            <wx-combo-box-location
+              id="search-combo-box"
+              {% if place %}
+                data-place="{% place_label place%}"
+              {% endif %}
+            >
+            </wx-combo-box-location> 
+          </form>
+          {% include 'weather/partials/wx-loader.html' %}
         </div>
       </div>
-      <div class="grid-row">
-        <form class="usa-form grid-col maxw-tablet-lg margin-bottom-105 tablet:grid-offset-2"
-              data-location-search
-              method="get">
-          <div class="display-flex flex-align-end text-white flex-wrap margin-top-2">
-            <label class="usa-label margin-top-0 line-height-sans-1"
-                   for="search-combo-box">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
-            <div class="margin-x-105">|</div>
-            <button type="button"
-                    class="weathergov-use-browser-location usa-button--unstyled wx-button--unstyled-light line-height-sans-1 margin-top-1">
-              <svg class="usa-icon height-2 width-2 margin-right-05 text-top"
-                   aria-hidden="true"
-                   focusable="false"
-                   role="img">
-                <use xlink:href="{% static 'images/uswds/sprite.svg' %}#my_location"></use>
-              </svg>
-              {{ 'location-search.labels.use-location.01' | t }}
-            </button>
+    </section>
+
+    <!-- Trapezoid section -->
+    <section id="front-trapezoids">
+      <div class="grid-container trapezoids-container">
+        <div class="trapezoid-wrapper">
+          <h2 id="tagline-trapezoid">
+            <div class="trapezoid-inner">
+              <span>weather.gov</span>
+              <span>{{"frontpage.heading.trapezoid-1.01" | t}}</span>
+            </div>
           </div>
-          <wx-combo-box-location class="margin-top-105" id="search-combo-box">
-          </wx-combo-box-location>
-        </form>
+          <div class="trapezoid-slant"></div>
+        </h2>
+        
+        <div class="trapezoid-wrapper">
+          <div class="trapezoid-slant"></div>
+          <div id="image-trapezoid"></div>
+        </div>
       </div>
-      <div class="grid-row font-sans-md text-white tablet:grid-offset-2">
-        <div class="grid-col">{% include 'weather/partials/wx-loader.html' %}</div>
-      </div>
-    </div>
-  </div>
-  <div class="bg-primary-lightest wx-bg-ray padding-y-4 border-top-05 border-primary-light">
-    <div class="grid-container">
-      <div class="grid-row">
-        <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-          <div class="display-flex flex-align-start mobile-lg__flex-align-center">
-            <img aria-hidden="true"
-                 class="margin-right-2 maxw-8 tablet__wx-maxw10"
-                 src="{% static 'images/weather/spot_illos/wx_illo_announce.svg' %}"
-                 alt="" />
-            <h2 class="text-normal text-primary-darker font-sans-2xl margin-y-0">
-              {{ "frontpage.heading.is-coming.01" | t | safe}}
-            </h2>
+    </section>
+
+    <!-- Stats section -->
+    <section id="front-stats">
+      <!-- First subsection -->
+      <div class="stats-subsection">
+        <div class="grid-container">
+          <div class="stats-content-wrapper">
+            <p class="stats-text">
+              {{"frontpage.stats.text-1.01" | t}}
+            </p>
+            <div class="stats-image-outer">
+              <div class="stats-image-container">
+                <div class="stats-img-wrapper">
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_buoy_xl.jpg' %}"/>
+                </div>
+                <div class="stats-img-wrapper">
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_hurricane_hunter_xl.jpg' %}"/>
+                </div>
+                <div class="stats-img-wrapper">
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_balloon_scientist_xl.jpg' %}"/>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="grid-row">
-        <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-          <p class="font-sans-md">{{ "frontpage.text.is-coming-1-graf.01" | t | safe }}</p>
-          <p>{{ "frontpage.text.is-coming-2-graf.01" | t | safe }}</p>
-          <p class="margin-bottom-0">{% trans_with_args "frontpage.text.is-coming-3-graf.01" url='https://www.weather.gov' %}</p>
+
+      <!-- Second subsection -->
+      <div class="stats-subsection">
+        <div class="grid-container">
+          <div class="stats-content-wrapper">
+            <div class="stats-image-outer">
+              <div class="stats-image-container stats-large-image">
+                <div class="stats-img-wrapper">
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_meteorologist_lg.jpg' %}"/>
+                </div>
+              </div>
+            </div>
+            <p class="stats-text stats-text-right">
+              {{"frontpage.stats.text-2.01" | t}}
+            </p> 
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="grid-container margin-top-4 margin-bottom-10">
-    <div class="grid-row">
-      <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-        <div class="display-flex flex-align-start mobile-lg__flex-align-center">
-          <img aria-hidden="true"
-               class="margin-right-2"
-               src="{% static 'images/weather/spot_illos/wx_illo_user.svg' %}"
-               alt="" />
-          <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
-            {{ "frontpage.heading.in-mind.01" | t | safe }}
-          </h2>
+    </section>
+
+    <!-- Rebuilding section -->
+    <section id="front-rebuilding">
+      <div class="front-rebuilding-list-area">
+        <div class="grid-container">
+          <div class="grid-row">
+            <div class="grid-col-12">
+              <h1 class="front-rebuilding-header">
+                <span>{{"frontpage.rebuilding.header.01"|t}}</span>
+              </h1>
+            </div>
+          </div>
+          <div class="grid-row">
+            <div class="tablet-lg:grid-col-9">
+              <ul class="front-rebuilding-list">
+                <li>
+                  <h2>
+                    <div class="front-list-marker first-list-marker">
+                      <img src="{% static 'images/front-page/circle.svg' %}" />
+                    </div>
+                    {{"frontpage.rebuilding.list-header-1.01"|t}}
+                  </h2>
+                  <p>
+                    {{"frontpage.rebuilding.list-text-1.01"|t}}
+                  </p>
+                </li>
+                <li>
+                  <h2>
+                    <div class="front-list-marker">
+                      <img src="{% static 'images/front-page/square.svg' %}" />
+                    </div>
+                    {{"frontpage.rebuilding.list-header-2.01"|t}}
+                  </h2>
+                  <p>
+                    {{"frontpage.rebuilding.list-text-2.01"|t}}
+                  </p>
+                </li>
+                <li>
+                  <h2>
+                    <div class="front-list-marker">
+                      <img src="{% static 'images/front-page/triangle.svg' %}" />
+                    </div>
+                    {{"frontpage.rebuilding.list-header-3.01"|t}}
+                  </h2>
+                  <p>
+                    <p>{{"frontpage.rebuilding.list-text-3.01"|t}}</p>
+                  </p>
+                  <ul class="usa-list">
+                    {{"frontpage.rebuilding.list-items-03.01"|t}}
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="grid-row">
-      <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-        <p>{{ "frontpage.text.in-mind-1-graf.01" | t | safe }}</p>
-        <p class="margin-bottom-1">{{ "frontpage.list-heading.in-mind-2-graf.01" | t | safe }}</p>
-        <ul class="usa-list margin-y-0">
-          <li>{{ "frontpage.list.in-mind-1-item.01" | t | safe }}</li>
-          <li>{{ "frontpage.list.in-mind-2-item.01" | t | safe }}</li>
-          <li>{{ "frontpage.list.in-mind-3-item.01" | t | safe }}</li>
-          <li>{{ "frontpage.list.in-mind-4-item.01" | t | safe }}</li>
-          <li>{{ "frontpage.list.in-mind-5-item.01" | t | safe }}</li>
-        </ul>
-      </div>
-    </div>
-    <div class="grid-row margin-top-4">
-      <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-        <div class="display-flex flex-align-start mobile-lg__flex-align-center">
-          <img aria-hidden="true"
-               class="margin-right-2"
-               src="{% static 'images/weather/spot_illos/wx_illo_message.svg' %}"
-               alt="" />
-          <h2 class="font-sans-xl text-normal text-primary-darker margin-y-0">
-            {{ "frontpage.heading.touchpoints.01" | t | safe }}
-          </h2>
-        </div>
-      </div>
-    </div>
-    <div class="grid-row">
-      <div class="grid-col tablet:grid-offset-2 tablet:grid-col-8">
-        <p class="margin-bottom-1">
-          {% trans_with_args "frontpage.text.touchpoints-1-graf.01" url='https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit' %}
-        </p>
-        <ul class="usa-list margin-y-0">
-          <li>{{ "frontpage.list.touchpoints-1-item.01" | t }}</li>
-          <li>{{ "frontpage.list.touchpoints-2-item.01" | t }}</li>
-          <li>{{ "frontpage.list.touchpoints-3-item.01" | t }}</li>
-          <li>{{ "frontpage.list.touchpoints-4-item.01" | t }}</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+    </section>
+  </main>
+{% endblock %}
+{% block page_bottom %}
+  {% include "weather/footer.html" %}
 {% endblock %}
