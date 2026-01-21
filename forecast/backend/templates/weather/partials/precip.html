@@ -42,11 +42,7 @@
         </tbody>
       </table>
     </div>
-    {% if hasIce or hasSnow %}
-      <div class="grid-col-12 tablet:grid-col-6 tablet:padding-left-1">
-        <p class="bg-base-lightest padding-105">{% trans "precip-table.text.water-explainer.01" %}</p>
-      </div>
-    {% endif %}
+    {% include "weather/partials/precip-table-explanation.html" with hasIce=hasIce hasSnow=hasSnow %}
   </div>
 {% else %}
   <div class="wx-chart-wrapper">
@@ -80,5 +76,6 @@
       </div>
       {{ liquidTitle }}
     </div>
+    {% include "weather/partials/precip-table-explanation.html" with hasIce=hasIce hasSnow=hasSnow %}
   </div>
 {% endif %}
