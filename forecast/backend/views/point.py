@@ -198,6 +198,9 @@ def afd_by_office(_, wfo):
 
 def afd_by_office_and_id(request, wfo, afd_id):
     """Display the given AFD product by id and populate the list of available AFDs for the provided WFO."""
+    wfo_uppercase = wfo.upper()
+    wfo_lowercase = wfo.lower()
+
     try:
         # Grab the AFD data from the API and determine which
         # WFO it applies to. There might be cases where the user
@@ -205,19 +208,22 @@ def afd_by_office_and_id(request, wfo, afd_id):
         # We will redirect in cases where this happens.
         afd_data = interop.get_wx_afd_by_id(afd_id)
         afd_wfo = get_wfo_from_afd(afd_data)
-        if not afd_wfo or afd_wfo.lower() != wfo.lower():
-            url = reverse("afd_by_office", kwargs={"wfo": wfo.lower()})
+        if not afd_wfo or afd_wfo.lower() != wfo_lowercase:
+            url = reverse("afd_by_office", kwargs={"wfo": wfo_lowercase})
             return redirect(url)
 
         # Otherwise, let's grab all the references for the WFO
         # so we can use them in the select dropdown
-        afd_references = interop.get_wx_afd_versions_by_wfo(wfo.upper())["@graph"]
+        afd_references = interop.get_wx_afd_versions_by_wfo(wfo_uppercase)["@graph"]
         all_wfos = WFO.objects.values("code", "name")
-        wfo_combo_box_data = [{"value": wfo["code"], "text": f"{wfo['name']} ({wfo['code']})"} for wfo in all_wfos]
+        wfo_combo_box_data = [
+            {"value": wfo["code"], "selected": wfo["code"] == wfo_uppercase, "text": f"{wfo['name']} ({wfo['code']})"}
+            for wfo in all_wfos
+        ]
 
         # Compose a dictionary in the format that the templates expect
         to_render = {
-            "wfo": wfo.upper(),
+            "wfo": wfo_uppercase,
             "afd": afd_data,
             "wfo_list": wfo_combo_box_data,
             "version_list": afd_references,
