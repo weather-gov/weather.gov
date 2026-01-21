@@ -1,9 +1,9 @@
 {% extends "weather/page.html" %}
-{% block head_js %}
+{% block page_head_js %}
   <script src="{% static 'js/third-party/chartjs@4.5.1.js' %}"></script>
   <script src="{% static 'js/third-party/chartjs-plugin-datalabels@2.2.0.js' %}"></script>
 {% endblock %}
-{% block end_js %}
+{% block page_end_js %}
   <script type="module" src="{% static 'js/point.html.js' %}" type="module"></script>
   {% if point.alerts.items|length > 0 %}
     {% comment %}
@@ -18,7 +18,8 @@
           data-wx-radar-cmi="true"
           defer></script>
 {% endblock %}
-{% block head_css %}
+{% block page_head_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
   <link rel="stylesheet"
         type="text/css"
         href="{% static 'css/leaflet.css' %}" />

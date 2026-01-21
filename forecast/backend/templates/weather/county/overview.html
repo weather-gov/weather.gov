@@ -1,6 +1,6 @@
 {% extends "weather/page.html" %}
-{% block head_js %}{{ data.public|json_script:"county-data" }}{% endblock %}
-{% block end_js %}
+{% block page_head_js %}{{ data.public|json_script:"county-data" }}{% endblock %}
+{% block page_end_js %}
   <script type="module"
           src="{% static 'js/county/overview.html.js' %}"
           type="module"></script>
@@ -10,7 +10,7 @@
           data-wx-radar-cmi="true"
           defer></script>
 {% endblock %}
-{% block head_css %}
+{% block page_head_css %}
   <link rel="stylesheet"
         type="text/css"
         href="{% static 'css/leaflet.css' %}" />

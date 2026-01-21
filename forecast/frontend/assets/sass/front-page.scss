@@ -1,0 +1,742 @@
+@forward "uswds-theme";
+@forward "uswds";
+@forward "uswds-theme-custom-styles";
+@use "uswds-core" as *;
+@use "sass:math";
+@use "components/frontpage";
+@use "components/beta-banner";
+@use "components/colors";
+@use "components/icons";
+@use "components/location-search";
+@use "components/mono-typography";
+@use "components/usa-identifier";
+@use "components/utilities";
+@use "components/variables";
+@use "components/visual-page-headings";
+@use "components/usa-prose-overrides";
+@use "components/site-navigation";
+@use "components/wx-loader";
+
+:root {
+    --find-forecast-background-rgb: 17, 24, 29;
+    --stats-area-image-max-height: 300px;
+    --trapezoid-triangle-length: 20%;
+    --trapezoid-height-mobile: 160px;
+}
+
+$trapezoid-wrapper-height: 420px;
+/* stylelint-disable */
+#front-find-forecast-section {
+    background-image: url("/public/images/front-page/wx_homepage_glacier_02.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    /* mobile only
+     * remove padding on grid container
+     */
+    > .grid-container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .find-block-wrapper {
+        background-color: rgba(var(--find-forecast-background-rgb), 0.45);
+        display: flex;
+        flex-direction: column; /* desktop value */
+        padding: units(2); /* mobile value */
+        padding-bottom: 0;
+        position: relative;
+
+        > h2 {
+            @include u-font-family("sans");
+            @include u-text("light");
+
+            font-size: 42px;
+            text-align: center;
+            margin: 0;
+            margin-bottom: units("105");
+            color: white;
+        }
+
+        .use-location-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-wrap: wrap;
+
+            @include u-font-family("sans");
+
+            /* mobile only (I think) */
+            font-size: 14px;
+
+            > .location-area-divider {
+                margin-left: units("105");
+                margin-right: units("105");
+            }
+
+            > button {
+                @extend .usa-button--unstyled;
+                @extend .wx-button--unstyled-light;
+            }
+
+            > label.usa-label {
+                margin-top: 0;
+                color: white;
+
+                /* mobile only (I think) */
+                font-size: 14px;
+            }
+        }
+
+        wx-combo-box-location {
+            max-width: unset;
+            margin-top: units("105");
+        }
+
+        wx-loader {
+            margin-top: units(2);
+            color: white;
+        }
+    }
+}
+
+#front-trapezoids {
+    background-color: color("base-lightest");
+    background-image: url("/public/images/front-page/wx_homepage_wind-pattern.svg");
+    background-repeat: repeat;
+    
+    .trapezoids-container {
+        display: block;
+        position: relative;
+        width: 100%;
+
+        /* Modify TODO */
+        padding: units(4) 0 calc(units(4) + calc(var(--trapezoid-height-mobile) / 2));
+
+        /* Override grid-container y-padding
+         */
+
+        /* For mobile, the bottom padding
+         * needs to be whatever the padding we want
+         * is, plus half the --trapezoid-height-mobile.
+         * This is because the image element is absolutely
+         * positioned, so we need to account for it's offset.
+         */
+    }
+
+    .trapezoid-slant {
+        display: none;
+    }
+}
+
+.trapezoid-wrapper {
+    flex: 1;
+    display: block;
+    position: relative;
+}
+
+#tagline-trapezoid {
+    display: flex;
+    position: relative;
+    flex: 1;
+    width: 100%;
+    max-height: var(--trapezoid-height-mobile);
+    background-color: color("primary-darkest");
+    z-index: 1;
+    clip-path: polygon(
+        0% 0%,
+        calc(100% - var(--trapezoid-triangle-length)) 0%,
+        100% 100%,
+        0% 100%
+    );
+
+    .trapezoid-inner {
+        display: block;
+
+        /* Using the padding-right method */
+        padding: units("205");
+        padding-right: var(--trapezoid-triangle-length);
+        color: white;
+    }
+
+    span {
+        display: block;
+        position: relative;
+    }
+
+    span:first-child {
+        color: color("primary-lighter");
+        font-weight: 400;
+        font-size: 32px;
+    }
+
+    span:last-child {
+        @include u-text("light");
+
+        color: color("primary-lightest");
+
+        /* mobile only */
+        font-size: 24px;
+    }    
+}
+
+#image-trapezoid {
+    display: block;
+
+    /* in mobile, we want this to be absolute */
+    position: absolute;
+    transform: translateY(calc(-1 * var(--trapezoid-height-mobile) / 2));
+    width: 100%;
+    height: var(--trapezoid-height-mobile);
+    background-image: url("/public/images/front-page/wx_homepage_lightning.jpg");
+    background-size: cover;
+    background-position: bottom;
+    clip-path: polygon(
+        0% 0%,
+        100% 0%,
+        100% 100%,
+        var(--trapezoid-triangle-length) 100%
+    );
+}
+
+#front-stats {
+    border-top: 4px solid color("primary-light");
+    background-image: url("/public/images/front-page/wx_homepage_fronts.png");
+    position: relative;
+    padding-bottom: units(3);
+
+    .stats-subsection {
+        /* The margin-top should be a function
+         * of the max image size, so that these do not overlap
+         * as the browser shrinks
+         */
+        margin-top: units(3);
+        
+        display: block;
+        width: 100%;
+
+        > .grid-container {
+            padding: 0;
+        }
+    }
+
+    .stats-text {
+        @include u-font-family("sans");
+        @include u-text("thin");
+
+        font-size: 24px;
+        color: color("primary-darker");
+        background-color: color("primary-lightest");
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: units(2);
+        line-height: 1.3;
+
+        .stats-emphasis {
+            @include u-text("bold"); /* desktop */
+            @include u-text("thin"); /* mobile */
+        }
+    }
+
+    .stats-image-container {
+        display: flex;
+        gap: units(1);
+        max-width: 100%;
+        height: auto;
+
+        /* mobile only, to simulate coming down
+         * over the grey band
+         */
+        background: linear-gradient(to bottom, color("primary-lightest") 64px, transparent 64px);
+        padding-left: units(2);
+        padding-right: units(2);
+
+        &.stats-large-image {
+            justify-content: center;
+        }
+    }
+
+    /* mobile only
+     * for the large image container, the
+     * background gradient is reversed
+     */
+    .stats-large-image {
+        background: linear-gradient(to top, color("primary-lightest") 64px, transparent 64px);
+        justify-content: center;
+    }
+    
+    
+}
+
+#front-rebuilding {
+    border-top: units("05") solid color("primary-light");
+    background-image: url("/public/images/front-page/wx_homepage_stylized-radar.png");
+    background-size: cover;
+    background-position: right;
+
+    /* This should dynamically create a reasonable
+     * height for the map image, which is a background,
+     * for the top of the rebuilding section
+     */
+    padding-top: calc(units(8) + 4em);
+
+    .front-rebuilding-header {
+        /* We make the trapezoidal triangle length
+         * a function of the text size for the header
+         */
+        --trapezoid-triangle-length: 2em;
+        
+        position: relative;
+        background-color: color("primary-darker");
+        color: color("primary-lightest");
+
+        @include u-font-family("sans"); /* Desktop */
+
+        font-size: 24px; /* mobile */
+
+        @include u-text("thin");
+
+        padding: 20px;
+        transform: translateY(-50%);
+        margin: 0;
+
+        /* Use 80% top rule to make the
+         * angled side
+         */
+        clip-path: polygon(0% 0%, calc(100% - var(--trapezoid-triangle-length)) 0%, 100% 100%, 0% 100%);
+        padding-right: 10%;
+        
+
+        > span {
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    .front-rebuilding-list-area {
+        display: block;
+        position: relative;
+        width: 100%;
+        background-color: color("primary-lightest");
+
+        --rebuilding-list-padding-left: 32px;
+
+        .front-rebuilding-list {
+            margin-top: units(-4); /* mobile */
+            padding-left: 0;
+
+            > li {
+                list-style: none;
+                position: relative;
+                border-left: 1px dashed color("primary-lighter");
+                padding-left: var(--rebuilding-list-padding-left);
+                padding-bottom: units(4);
+
+                &:last-child {
+                    border-left: 1px solid transparent;
+                }
+                
+                li {
+                    list-style-type: disc;
+                }
+            }
+
+            h2 {
+                margin-top: 0;
+                position: relative;
+
+                @include u-font("sans", "lg");
+                @include u-text("normal");
+
+                color: color("primary-dark");
+            }
+
+            p {
+                @include u-font("sans", "md");
+
+                margin: 0;
+            }
+
+            /* list icons */
+            .front-list-marker {
+                display: flex;
+                position: absolute;
+                width: 16px;
+                height: 100%;
+                align-items: flex-start;
+                left: calc(calc(-1 * var(--rebuilding-list-padding-left)) - 8px);
+                top: 4px; /* hacky, to get alignment looking better */
+            }
+        }
+    }
+}
+
+/** SECTABLET **/
+@include at-media("tablet"){
+    #front-find-forecast-section {
+        padding: units(8);
+        padding-top: 58px;
+        padding-bottom: 58px;
+
+        .find-block-wrapper {
+            padding: units(5);
+            padding-bottom: units(3);
+
+            h2 {
+                font-size: 56px;
+            }
+
+            .use-location-area {
+                justify-content: center;
+            }
+        }
+    }
+
+    #front-stats {
+        // Min padding is 70px, max is 124px, use calc as fallback
+        padding-bottom: calc(22.5vw - 74px);
+        padding-bottom: clamp(70px, 22.5vw - 74px, 124px);
+
+        .stats-subsection {
+            // margin-top: calc(var(--stats-area-image-max-height) / 6);
+
+            // Scale from 64px of margin-top at 640px to 120px at 879px 
+            // the value in the middle of clamp is the linear interpolation between these values
+            margin-top: calc(23.33vw - 85.33px);
+            margin-top: clamp(64px, 23.33vw - 85.33px, 120px);
+            background-color: color("primary-lightest");
+
+            > .grid-container {
+                padding: 0;
+            }
+
+            &:last-of-type {
+              margin-top: calc(48.18vw - 224.35px);
+              margin-top: clamp(84px, 48.18vw - 224.35px, 190px);
+            }
+        }
+
+        .stats-content-wrapper {
+            display: flex;
+            position: relative;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stats-image-outer {
+            flex: 1.5;
+            position: relative;
+        }
+
+        .stats-img-wrapper {
+            img {
+                max-height: var(--stats-area-image-max-height);
+            }
+        }
+
+        .stats-text {
+            font-size: 22px;
+            flex: 1;
+            padding: units(1);
+            padding-left: units(2);
+            margin-top: units(1);
+            margin-bottom: units(1);
+        }
+
+        .stats-text-right {
+            padding-right: units(2);
+        }
+
+        .stats-image-container {
+            /**
+             * The image container and its image need to be positioned
+             * so that each image is vertically centered _over_ the underlying grey
+             * band.
+             *
+             * The "band" is actually a full flexbox across the width.
+             * It's height is set dynamically by the text contents of the first
+             * flex child (the one containg text).
+             * A container for the image(s) is then set to match that height,
+             * and its contents are flexed, but the images themselves are given
+             * absolute positions so that their heights are not bound by their
+             * container. This makes them appear vertically "centered" over
+             * the grey bar.
+             **/
+            position: absolute;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            padding-left: 0;
+            
+            > img {
+                position: relative;
+                top: 0;
+            }
+
+            > img:not(:last-child){
+                margin-right: units("205");
+            }
+        }
+
+        .stats-large-image {
+            background: unset;
+            padding-left: units(2);
+            padding-right: 0;
+            
+        }
+        
+    }
+
+    #front-rebuilding {
+        .front-rebuilding-header {
+            font-size: 28px; /* xl */
+        }
+
+        .front-rebuilding-list-area {
+            .front-rebuilding-list {
+                margin-top: units(-2.5);
+            }
+        }
+    }
+
+    #front-trapezoids {
+        .trapezoids-container {
+            padding: units(6) units(2);
+            display: flex;
+        }
+        
+        #tagline-trapezoid {
+            max-height: unset;
+            min-width: calc(100% + var(--trapezoid-triangle-length));
+
+            .trapezoid-inner {
+              padding: units(4);
+              padding-right: var(--trapezoid-triangle-length);
+                span {
+                    &:first-child {
+                        font-size: 32px;
+                    }
+
+                    &:last-child {
+                        font-size: 28px;
+                    }
+                }
+            }
+
+            flex: 1;
+            transform: translateY(-16px);
+        }
+
+        #image-trapezoid {
+            position: absolute;
+            top: unset;
+            right: 0;
+            transform: translateY(16px);
+            min-width: calc(100% + var(--trapezoid-triangle-length));
+            height: 100%;
+        }
+    }
+}
+
+@include at-media("tablet-lg"){
+    #front-stats {
+        padding-bottom: 112px;
+
+        .stats-subsection {
+            margin-top: calc(14vw - 2px);
+            margin-top: clamp(121px, 14vw - 2px, 141px);
+
+            &:last-of-type {
+              margin-top: calc(4.34vw + 160.63px);
+              margin-top: clamp(187px, 4.34vw + 160.63px, 205px);
+            }
+
+            .stats-image-container {
+                &:not(.stats-large-image){
+                    justify-content: right;
+                }
+
+                .stats-img-wrapper {
+                    margin-right: 0;
+                }
+
+                &.stats-large-image {
+                    .stats-img-wrapper {
+                        img {
+                          --stats-area-image-max-height: 250px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #front-rebuilding {
+        .front-rebuilding-list-area {
+            .front-rebuilding-list {
+                margin-top: units(0);
+            }
+        }
+    }
+}
+
+
+
+@include at-media("desktop"){
+    #front-find-forecast-section {
+        padding-top: 110px;
+        padding-bottom: 110px;
+    }
+    
+    #front-stats {
+      padding-bottom: 72px; 
+
+      .stats-subsection {
+        margin-top: 80px;
+
+        &:last-of-type {
+          margin-top: 104px;
+        }
+      }
+        .stats-text {
+            font-size: 32px;
+        }
+
+        .stats-image-container {
+          gap: units(2);
+        }
+      }
+
+    #front-trapezoids {
+        #tagline-trapezoid {
+            .trapezoid-inner {
+                span {
+                    &:first-child {
+                        font-size: 48px;
+                    }
+
+                    &:last-child {
+                        font-size: 42px;
+                    }
+                }
+            }
+        }
+    }
+
+    #front-rebuilding {
+      .front-rebuilding-header {
+        font-size: 40px;
+      }
+
+      .front-rebuilding-list-area {
+        .front-rebuilding-list {
+          margin-top: units(-4);
+        }
+      }
+    }
+}
+
+/* Represents the new desktop-lg width for the front page */
+@media screen and (min-width: 1440px){
+    .grid-container,
+    .usa-banner__inner {
+        max-width: 1440px;
+        margin-left: auto;
+    }
+
+    #front-find-forecast-section {
+        padding-top: 150px;
+        padding-bottom: 150px;
+
+        .find-block-wrapper {
+            .use-location-area { 
+                font-size: 16px;
+
+                > label.usa-label {
+                  font-size: 16px;
+                }
+            }
+        }
+        
+    }
+
+    #front-stats {
+        /* We give extra margin on the top to
+         * the second stats-subsection when in
+         * ultra desktop
+         */
+        // .stats-subsection:nth-child(2){
+        //     margin-top: calc(calc(var(--stats-area-image-max-height) + 5em));
+        //     margin-bottom: calc(calc(var(--stats-area-image-max-height) + 5em) / 2);
+        // }
+        
+        padding-bottom: 162px;
+
+        .stats-subsection {
+          margin-top: 178px;
+
+          &:last-of-type {
+            margin-top: 276px;
+          }
+        }
+
+        .stats-text {
+            font-size: 44px;
+        }
+
+        .stats-text-right {
+          padding-left: units(4);
+        }
+
+        .stats-img-wrapper {
+            img {
+                max-height: unset;
+            }
+        }
+    }
+
+    #front-trapezoids {
+      .trapezoids-container {
+        padding: units(8) units(2) units(10);
+      }
+
+        #tagline-trapezoid {
+            .trapezoid-inner {
+              padding-top: units(8);
+              padding-left: units(8);
+              padding-bottom: units(8);
+                span {
+                    &:first-child {
+                        font-size: 72px;
+                    }
+
+                    &:last-child {
+                        font-size: 64px;
+                    }
+                }
+            }
+        }
+    }
+
+    #front-rebuilding {
+      .front-rebuilding-header {
+        font-size: 44px;
+      }
+
+      .front-rebuilding-list-area {
+        .front-rebuilding-list {
+          margin-top: units(0);
+        }
+      }
+    }
+}
+/* stylelint-enable */

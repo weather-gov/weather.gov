@@ -2,7 +2,7 @@
   const hideNavigationLoader = () => {
     const loader = document.querySelector("wx-loader");
     if (loader) {
-      loader.classList.add("display-none");
+      loader.setAttribute("aria-hidden", true);
     }
   };
 
@@ -26,7 +26,7 @@
   const displayNavigationLoader = () => {
     const loader = document.querySelector("wx-loader");
     if (loader) {
-      loader.classList.remove("display-none");
+      loader.removeAttribute("aria-hidden");
       const text = gettext("js.loader.loading-text.01");
       window.dispatchEvent(
         new CustomEvent("wx-announce", { detail: { text } }),

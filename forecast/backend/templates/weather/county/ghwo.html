@@ -1,10 +1,10 @@
 {% extends "weather/page.html" %}
-{% block head_css %}
+{% block page_head_css %}
   {% if ghwo.prefetch_images %}
     {% for url in ghwo.prefetch_images %}<link rel="preload" href="{{ url }}" as="image" />{% endfor %}
   {% endif %}
 {% endblock %}
-{% block head_js %}
+{% block page_head_js %}
   <script type="module"
           src="{% static 'js/county/ghwo.html.js' %}"
           type="module"></script>

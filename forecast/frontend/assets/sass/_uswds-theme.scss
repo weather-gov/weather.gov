@@ -41,13 +41,14 @@ $nws-red: #f00;
       "stack": "'Roboto Mono Web', 'Courier New', monospace, serif",
     )
   ),
+  $theme-font-weight-thin: 200,
   $theme-font-sans-custom-src: (
     dir: "nunito-sans",
     // the name of your font family directory
     roman: (
         100: false,
-        200: false,
-        300: false,
+        200: "nunito-sans-latin-200-normal",
+        300: "nunito-sans-latin-300-normal",
         400: "nunito-sans-latin-400-normal",
         500: "nunito-sans-latin-500-normal",
         600: "nunito-sans-latin-600-normal",

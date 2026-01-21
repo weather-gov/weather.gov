@@ -32,11 +32,13 @@
       {% trans "backend.banner.under-development.01" %}
     </span>
     {# this div is part of site-navigation, to ensure the mobile menu icon is next to the branding #}
-    <div class="usa-navbar">
-      <button type="button" class="usa-menu-btn padding-0" id="site-header-hamburger-button">
-        <img src="{% static 'images/weather/wx_nav_hamburger.svg' %}" role="img" alt="Menu" />
-      </button>
-    </div>
+    {% if not hide_site_nav %}
+      <div class="usa-navbar">
+        <button type="button" class="usa-menu-btn padding-0" id="site-header-hamburger-button">
+          <img src="{% static 'images/weather/wx_nav_hamburger.svg' %}" role="img" alt="Menu" />
+        </button>
+      </div>
+    {% endif %}
   </div>
     {# under development banner, for mobile display #}
     <span class="under-development-mobile display-flex flex-align-center bg-gold-10v text-black text-uppercase padding-y-05 padding-left-1 padding-right-105 font-sans-xs radius-md margin-1 margin-top-0 margin-bottom-3 maxw-mobile-lg">
@@ -48,5 +50,7 @@
       </svg>
       {% trans "backend.banner.under-development.01" %}
     </span>
-  {% include "weather/partials/site-navigation.html" %}
+    {% if not hide_site_nav %}
+      {% include "weather/partials/site-navigation.html" %}
+    {% endif %}
 </div>
