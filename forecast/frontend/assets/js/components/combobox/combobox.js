@@ -2,36 +2,10 @@
  * WCAG compliant Combobox component
  */
 const comboTemplate = `
-<style>
-
-#input-area {
-  display: block;
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-#input-area-buttons {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: flex-end;
-  height: calc(100% - 1px);
-  width: 100%;
-  position: absolute;
-  top: 0;
-  opacity: 1;
-}
-
-slot[name="clear-button"].empty {
-  display: none;
-}
-
-</style>
-<div id="input-area">
+<div>
   <slot name="input"></slot>
-  <div id="input-area-buttons">
-    <slot name="clear-button" class="empty"></slot>
+  <div>
+    <slot name="clear-button"></slot>
     <slot name="toggle-button"></slot>
   </div>
 </div>
@@ -198,6 +172,8 @@ export default class Combobox extends HTMLElement {
           this.popup.innerHTML = this.popup.innerHTML;
         }
         this.input.setAttribute("aria-controls", this.popup.id);
+
+        this.handlePopupChange({target: this.popup});
       }
     }
   }
@@ -260,11 +236,26 @@ export default class Combobox extends HTMLElement {
   handlePopupChange(event){
     if(event.target.selection){
       this.hidePopup();
+
+      const option = event.target.selection
+      const value = option.getAttribute?.("data-value");
+
+      // "data-value-for" is the id of a hidden input used to store the "real" value
+      const id = this.input.getAttribute("data-value-for");
+
+      if (value && id) {
+        const element = this.querySelector(`input[name=${id}][type=hidden]`);
+        if (element) element.value = value;
+      }
+
+      this.input.value = event.target.selection.textContent || null;
+    } else {
+      this.input.value = null;
     }
-    this.input.value = event.target.selection?.textContent || null;
+
     if(this.input.value){
-      const clearSlot = this.shadowRoot.querySelector(`slot[name="clear-button"]`);
-      clearSlot.classList.remove("empty");
+      const clearButton = this.querySelector(`[slot="clear-button"]`);
+      clearButton.classList.remove("empty");
     }
   }
 
@@ -349,11 +340,11 @@ export default class Combobox extends HTMLElement {
 
     // Hide or show the clear button's slot
     // based on the input value's presence
-    const clearSlot = this.shadowRoot.querySelector(`slot[name="clear-button"]`);
+    const clearButton = this.querySelector(`[slot="clear-button"]`);
     if(this.input.value && this.input.value !== ""){
-      clearSlot.classList.remove("empty");
+      clearButton.classList.remove("empty");
     } else {
-      clearSlot.classList.add("empty");
+      clearButton.classList.add("empty");
     }
   }
 
@@ -380,8 +371,8 @@ export default class Combobox extends HTMLElement {
       this.hidePopup();
       if(this.popup && this.popup.selection){
         this.input.value = this.popup.selection.textContent;
-        const clearSlot = this.shadowRoot.querySelector(`slot[name="clear-button"]`);
-        clearSlot.classList.remove("empty");
+        const clearButton = this.querySelector(`[slot="clear-button"]`);
+        clearButton.classList.remove("empty");
       }
     }
   }

@@ -5,10 +5,6 @@
 @forward "uswds-theme";
 @forward "uswds";
 
-.weathergov-use-browser-location:hover {
-    cursor: pointer;
-}
-
 .wx-combo-box {
   @extend .usa-combo-box;
 }

@@ -1,1 +1,2 @@
-import "./components/combo-box.js";
+import "./components/combobox/combobox.js";
+import "./components/combobox/filterable-listbox.js";

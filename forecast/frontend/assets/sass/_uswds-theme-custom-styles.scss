@@ -39,3 +39,8 @@ body {
 p {
   @include u-line-height("body", 4);
 }
+
+/** the button for finding a forecast by browser's location */
+.weathergov-use-browser-location:hover {
+  cursor: pointer;
+}

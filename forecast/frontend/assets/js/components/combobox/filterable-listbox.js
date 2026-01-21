@@ -83,14 +83,15 @@ export default class FilterableListbox extends Listbox {
   }
 
   /**
+   * Get the full list of filterable items as HTML from a cache.
+   * 
+   * This also creates the cache if it does not exist. In order to prevent
+   * overwriting the cache with filtered items, we use a hidden input,
+   * added to the root of the cache, as a flag.
+   *
    * Returns a cloned element or document fragment corresponding
-   * to the originally slotted content for the listbox.
-   * At call time, this method will also lazily assign the original
-   * element or document fragment to the cache, so it can be retrieved later.
-   * In order to verify that we are not re-caching filtered items, we add a
-   * hidden input to the cached version when it is first lazily assigned.
-   * The cloned filter source then serves as the basis for any future filtering
-   * of options for display/presence within the listbox.
+   * to the original, unfiltered content of the listbox. Useful for filtering
+   * the options displayed in the listbox.
    */
   getFilterSource(){
     const inputSelector = `input[type="hidden"][name="filtered"][value="true"]`;

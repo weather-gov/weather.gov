@@ -29,8 +29,14 @@ msgstr ""
 msgid "abbreviations.not-applicable.01"
 msgstr "N/A"
 
+msgid "afd.aria.clear-input-box.01"
+msgstr "Clear the input box"
+
 msgid "afd.aria.letterhead.01"
 msgstr "Letterhead and timestamp"
+
+msgid "afd.aria.toggle-dropdown.01"
+msgstr "Toggle the dropdown list"
 
 msgid "afd.button.update-selection.01"
 msgstr "Update selection"

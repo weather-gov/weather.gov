@@ -5,8 +5,7 @@
 {% block page_content %}
   <div class="layout-container grid-row height-full flex-column flex-no-wrap">
     <header role="banner">
-      <div class="grid-container">
-      </div>
+      <div class="grid-container"></div>
     </header>
     <div class="bg-primary-dark width-full">
       <div class="grid-container">
@@ -26,8 +25,28 @@
               method="get"
               action="/afd">
           <label for="wfo-selector" class="usa-label margin-top-0">{{ "afd.label.forecast-office.01" | t }}</label>
-          <wx-combo-box name="wfo" items="{{ wfo_list|json_encode }}" selected="{{ wfo }}">
-          </wx-combo-box>
+          <wx-combobox tabindex="0" id="combobox-afd-wfo">
+          <input id="wfo-selector"
+                 name="wfo-label"
+                 data-value-for="wfo"
+                 type="text"
+                 slot="input" />
+          <input type="hidden" name="wfo" value="{{ wfo }}" />
+          <button type="button" class="empty" aria-label="{{ "afd.aria.clear-input-box.01" | t }}" slot="clear-button">&nbsp;</button>
+          <button type="button"
+                  aria-label="{{ "afd.aria.toggle-dropdown.01" | t }}"
+                  slot="toggle-button">&nbsp;</button>
+          <wx-filterable-listbox slot="popup" id="combobox-afd-wfo--list" role="listbox">
+          {% with wfo_list|length as wfo_count %}
+            {% for wfo in wfo_list %}
+              <div role="option"
+                   id="combobox-afd-wfo--{{ wfo.value }}-{{ forloop.counter0 }}"
+                   data-value="{{ wfo.value }}"
+                   aria-selected="{{ wfo.selected|lower }}">{{ wfo.text }}</div>
+            {% endfor %}
+          {% endwith %}
+          </wx-filterable-listbox>
+          </wx-combobox>
           {% if version_list|length > 0 %}
             <label for="version-selector" class="usa-label">{% trans_with_args "afd.label.versions.01" wfo_name=wfo %}</label>
             <select id="version-selector"
