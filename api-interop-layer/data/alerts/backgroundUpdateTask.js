@@ -144,7 +144,8 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
       continue;
     }
 
-    alert.id = alert.hash; // alerts.length;
+    alert.hash = rawAlert.properties.hash;
+    alert.id = alert.hash;
     if (rawAlert.properties.id.startsWith("urn:oid:2.49.0.1.840")) {
       alert.id = rawAlert.properties.id.split(".").slice(-3).join("_");
     }

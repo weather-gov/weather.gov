@@ -5,6 +5,7 @@ from unittest import TestCase, mock
 import responses
 
 from backend import interop
+from spatial import models
 
 
 class TestInteropInterface(TestCase):
@@ -268,6 +269,25 @@ class TestInteropInterface(TestCase):
 
         day1 = actual["forecast"]["days"][0]
         self.assertEqual(day1["hasAlertIcon"], False)
+
+    @responses.activate
+    def test_point_forecast_get_alerts(self):
+        """Tests that alert IDs are replaced with alert JSON."""
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(
+            responses.GET,
+            "https://interop/point/6/7",
+            json=self.forecast["nosnow_ice_alert"],
+            status=200,
+        )
+
+        models.WeatherAlertsCache.objects.create(hash="alert-id-1", alertjson="alert #1", counties="", states="")
+        models.WeatherAlertsCache.objects.create(hash="alert-id-2", alertjson="alert #2", counties="", states="")
+        models.WeatherAlertsCache.objects.create(hash="alert-id-3", alertjson="alert #3", counties="", states="")
+
+        actual = interop.get_point_forecast(6, 7)
+
+        self.assertEquals(actual["alerts"]["items"], ["alert #1", "alert #2", "alert #3"])
 
     @responses.activate
     def test_point_forecast_alert(self):

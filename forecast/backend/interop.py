@@ -5,6 +5,8 @@ from os import getenv
 import requests
 from django.utils.translation import gettext_lazy as _
 
+from spatial.models import WeatherAlertsCache
+
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
 
 
@@ -87,7 +89,7 @@ def _set_day_period_info(day):
     day["numPeriods"] = len(periods)
 
 
-def _process_interop_data(data):
+def _process_interop_point_forecast(data):
     """
     Make structured lists like temperatures per day, high, low, and other lists for charts and tables.
 
@@ -98,6 +100,12 @@ def _process_interop_data(data):
         The dictionary is modified IN PLACE, but is also returned.
     """
     is_marine = data["isMarine"]
+
+    # Pull full alert data from the database. The interop only returns alert
+    # hashes, in order to save on bandwidth.
+    if "alerts" in data and "items" in data["alerts"] and len(data["alerts"]["items"]):
+        alerts = WeatherAlertsCache.objects.only("alertjson").filter(hash__in=data["alerts"]["items"])
+        data["alerts"]["items"] = [alert.alertjson for alert in alerts]
 
     if "days" in data["forecast"]:
         for day in data["forecast"]["days"]:
@@ -213,7 +221,7 @@ def get_point_forecast(lat, lon):
     if "error" in data and data["error"]:
         return data
 
-    return _process_interop_data(data)
+    return _process_interop_point_forecast(data)
 
 
 def get_radar(lat, lon):
