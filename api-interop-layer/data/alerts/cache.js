@@ -104,7 +104,7 @@ export class AlertsCache {
           ST_TRANSFORM(ST_GeomFromGeoJson($6), ${SPATIAL_PROJECTION.WGS84})
         );`;
 
-      return await this.db.query(sql, [
+      await this.db.query(sql, [
         hash,
         alertAsString,
         countiesAsString,
@@ -117,7 +117,7 @@ export class AlertsCache {
     // If the geometry has a SQL property, then this alert's shape is determined
     // by a sub-query, so we'll just insert it right in here. We'll also add a
     // simplified geometry now.
-    if (geometry.sql) {
+    else if (geometry.sql) {
       const sql = `
       INSERT INTO ${this.tableName}
         (hash, alertJson, counties, states, alertKind, shape, shape_simplified)
@@ -191,13 +191,30 @@ export class AlertsCache {
           )
         );`;
 
-      return await this.db.query(sql, [
+      await this.db.query(sql, [
         hash,
         alertAsString,
         countiesAsString,
         statesAsString,
         alertKind,
       ]);
+    }
+
+    // If there is a geometry, let's also go ahead and update the alertJson
+    // to include the GeoJSON version of the simplified geometry. No reason we
+    // should keep smooshing those together elsewhere.
+    if (geometry) {
+      const sql = `
+        UPDATE ${this.tableName}
+        SET alertjson = jsonb_set(
+          alertjson,
+          '{geometry}',
+          ST_AsGeoJSON(shape_simplified)::jsonb
+        )
+        WHERE hash=$1
+      `;
+
+      await this.db.query(sql, [hash]);
     }
   }
 
@@ -225,26 +242,16 @@ export class AlertsCache {
 
     const geometry = inputGeometry.join("");
 
-    const sql = `SELECT alertJson, ST_AsGeoJson(shape_simplified) as geometry FROM ${this.tableName} WHERE ST_INTERSECTS(${geometry}, shape);`;
+    const sql = `SELECT alertjson FROM ${this.tableName} WHERE ST_INTERSECTS(${geometry}, shape);`;
 
     const response = await this.db.query(sql);
-    const results = response.rows;
-    return results.map((result) =>
-      Object.assign({}, result.alertjson, {
-        geometry: JSON.parse(result.geometry),
-      }),
-    );
+    return response.rows.map(({ alertjson }) => alertjson);
   }
 
   async getAlertsForCountyFIPS(fips) {
-    const sql = `SELECT alertJSON, ST_AsGeoJSON(shape_simplified) as geometry FROM ${this.tableName} WHERE counties::jsonb ? $1`;
+    const sql = `SELECT alertjson FROM ${this.tableName} WHERE counties::jsonb ? $1`;
 
     const response = await this.db.query(sql, [fips]);
-    const results = response.rows;
-    return results.map((result) =>
-      Object.assign({}, result.alertjson, {
-        geometry: JSON.parse(result.geometry),
-      }),
-    );
+    return response.rows.map(({ alertjson }) => alertjson);
   }
 }

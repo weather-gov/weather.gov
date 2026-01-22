@@ -328,6 +328,11 @@
   },
   "nosnow_ice_alert": {
     "isMarine": false,
+    "alerts": {
+      "items": ["alert-id-1", "alert-id-2", "alert-id-3"],
+      "metadata": { "error": false, "lastUpdated": null },
+      "highestLevel": "alert"
+    },
     "forecast": {
       "days": [
         {

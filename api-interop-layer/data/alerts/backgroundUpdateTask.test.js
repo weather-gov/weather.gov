@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import sinon from "sinon";
 import { expect } from "chai";
 import dayjs from "../../util/day.js";
@@ -59,6 +60,47 @@ describe("alert background processing module", () => {
     getHashesStub.restore();
     addAlertStub.restore();
     removeAlertsStub.restore();
+  });
+
+  describe("creates alert hashes", () => {
+    const alert = {
+      geometry: "geo",
+      properties: {
+        id: "nonstandard",
+        event: "Severe Thunderstorm Warning",
+        sent: dayjs().subtract(1, "minute").toISOString(),
+        effective: dayjs().subtract(1, "minute").toISOString(),
+        onset: dayjs().subtract(1, "minute").toISOString(),
+        expires: dayjs().add(1, "minute").toISOString(),
+        ends: dayjs().add(1, "minute").toISOString(),
+      },
+    };
+
+    const hash = createHash("sha256")
+      .update(JSON.stringify(alert.properties))
+      .digest("base64");
+
+    beforeEach(() => {
+      response.json.resolves({
+        features: [alert],
+      });
+    });
+
+    it("derives an alert hash", async () => {
+      await updateAlerts({ parent });
+
+      const [_, expected] = Object.values(storedAlerts)[0];
+
+      expect(expected.hash).to.equal(hash);
+    });
+
+    it("sets the alert ID to the hash, if no ID is present", async () => {
+      await updateAlerts({ parent });
+
+      const [_, expected] = Object.values(storedAlerts)[0];
+
+      expect(expected.id).to.equal(expected.hash);
+    });
   });
 
   describe("Does not save the same alert twice on repeated call", () => {

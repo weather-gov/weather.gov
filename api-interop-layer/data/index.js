@@ -81,6 +81,9 @@ const getDataForPoint = async (lat, lon) => {
     };
   }
 
+  // Only return the hashes.
+  alerts.items = alerts.items.map(({ hash }) => hash);
+
   // If the grid response is that the point is unavailable, then it is within
   // NWS's responsibility but the data isn't in the API. We see this mainly
   // with American Samoa. However, there may still be alerts, so let's put those

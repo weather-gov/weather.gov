@@ -9,6 +9,10 @@ describe("AlertsCache tests", () => {
   beforeEach(() => {
     alertsCache = new AlertsCache();
     alertsCache.db = global.test.database;
+
+    // Throw if there are any un-mocked database calls. We want to catch
+    // those because they aren't being controlled for or tested.
+    global.test.database.query.rejects(new Error("Unexpected query"));
   });
 
   it("#getHashes", async () => {
@@ -103,16 +107,35 @@ describe("AlertsCache tests", () => {
           sinon.match(new RegExp(`^${query}$`, "m")),
           [hash, JSON.stringify(alert), "[]", "[]", kind, "geojson-object"],
         )
-        .resolves("INSERT WORKED");
+        .resolves();
 
-      const actual = await alertsCache.add({
+      // After inserting the alert, which also computes the simplified shape,
+      // we expect the alert JSON to be updated to include the geometry
+      const setGeometryQuery = `\\s*UPDATE ${alertsCache.tableName}
+      SET alertjson = jsonb_set(
+        alertjson,
+        '{geometry}',
+        ST_AsGeoJSON(shape_simplified)::jsonb
+      )
+      WHERE hash=$1\\s*`
+        // Now turn any group of spaces into a whitespace match
+        .replace(/\s+/g, "\\s+")
+        // Escape parens since they are part of the query
+        .replace(/\(/g, "\\(")
+        .replace(/\)/g, "\\)")
+        // And escape dollar signs, for the same reason
+        .replace(/\$/g, "\\$");
+
+      global.test.database.query
+        .withArgs(sinon.match(new RegExp(`^${setGeometryQuery}$`, "m")), [hash])
+        .resolves();
+
+      return await alertsCache.add({
         hash,
         alert,
         geometry,
         alertKind: "land",
       });
-
-      expect(actual).to.equal("INSERT WORKED");
     });
 
     it("has a spatial sub-query", async () => {
@@ -142,30 +165,47 @@ describe("AlertsCache tests", () => {
           sinon.match(new RegExp(`^${query}$`), "m"),
           [hash, JSON.stringify(alert), "[]", "[]", kind],
         )
-        .resolves("INSERT WORKED");
+        .resolves();
 
-      const actual = await alertsCache.add({
+      // After inserting the alert, which also computes the simplified shape,
+      // we expect the alert JSON to be updated to include the geometry
+      const setGeometryQuery = `\\s*UPDATE ${alertsCache.tableName}
+      SET alertjson = jsonb_set(
+        alertjson,
+        '{geometry}',
+        ST_AsGeoJSON(shape_simplified)::jsonb
+      )
+      WHERE hash=$1\\s*`
+        // Now turn any group of spaces into a whitespace match
+        .replace(/\s+/g, "\\s+")
+        // Escape parens since they are part of the query
+        .replace(/\(/g, "\\(")
+        .replace(/\)/g, "\\)")
+        // And escape dollar signs, for the same reason
+        .replace(/\$/g, "\\$");
+
+      global.test.database.query
+        .withArgs(sinon.match(new RegExp(`^${setGeometryQuery}$`, "m")), [hash])
+        .resolves();
+
+      return alertsCache.add({
         hash,
         alert,
         geometry,
         alertKind: "land",
       });
-
-      expect(actual).to.equal("INSERT WORKED");
     });
   });
 
   it("#getIntersectingAlertsForPoint", async () => {
-    const query = `SELECT alertJson, ST_AsGeoJson(shape_simplified) as geometry FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,111), shape);`;
+    const query = `SELECT alertjson FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,111), shape);`;
 
     const output = [
       {
-        alertjson: { name: "alert1" },
-        geometry: JSON.stringify({ name: "geometry1" }),
+        alertjson: { name: "alert1", geometry: { name: "geometry1" } },
       },
       {
-        alertjson: { name: "alert2" },
-        geometry: JSON.stringify({ name: "geometry2" }),
+        alertjson: { name: "alert2", geometry: { name: "geometry2" } },
       },
     ];
     const expected = [
@@ -188,16 +228,14 @@ describe("AlertsCache tests", () => {
   });
 
   it("#getAlertsForCountyFIPS", async () => {
-    const query = `SELECT alertJSON, ST_AsGeoJSON(shape_simplified) as geometry FROM ${alertsCache.tableName} WHERE counties::jsonb ? $1`;
+    const query = `SELECT alertjson FROM ${alertsCache.tableName} WHERE counties::jsonb ? $1`;
 
     const output = [
       {
-        alertjson: { name: "alert1" },
-        geometry: JSON.stringify({ name: "geometry1" }),
+        alertjson: { name: "alert1", geometry: { name: "geometry1" } },
       },
       {
-        alertjson: { name: "alert2" },
-        geometry: JSON.stringify({ name: "geometry2" }),
+        alertjson: { name: "alert2", geometry: { name: "geometry2" } },
       },
     ];
     const expected = [
