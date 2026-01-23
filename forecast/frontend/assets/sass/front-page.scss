@@ -16,6 +16,7 @@
 @use "components/usa-prose-overrides";
 @use "components/site-navigation";
 @use "components/wx-loader";
+@use "components/touchpoints";
 
 :root {
     --find-forecast-background-rgb: 17, 24, 29;
