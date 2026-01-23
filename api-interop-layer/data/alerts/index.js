@@ -44,10 +44,12 @@ export const updateFromBackground = ({ action, level, message }) => {
 };
 
 export const startAlertProcessing = async () => {
-  // If this is the main thread, fire up the background worker. This should always
-  // be the main thread, but if something goes haywire and this script somehow
-  // gets loaded in the background worker, don't recursively keep loading it.
-  if (isMainThread) {
+  // If this is the main thread (and the first instance in production), fire up
+  // the background worker.
+  const enableBackgroundProcessing = process.env.API_INTEROP_PRODUCTION
+    ? process.env.CF_INSTANCE_INDEX == 0 && isMainThread
+    : isMainThread;
+  if (enableBackgroundProcessing) {
     alertsCache.db = await openDatabase();
 
     logger.info("starting background worker");
