@@ -287,6 +287,21 @@ msgstr "Weather information sections"
 msgid "forecast.link.area-forecast-discussion.01"
 msgstr "Area Forecast Discussion"
 
+msgid "frontpage.heading.trapezoid.alt.01"
+msgstr "A lightning bolt strikes the ground as dark blue clouds sit above it. In the background is a pink-tinted horizon."
+
+msgid "frontpage.stats.images.1.alt.01"
+msgstr "Two people are working on top of a buoy that is floating in water."
+
+msgid "frontpage.stats.images.2.alt.01"
+msgstr "A hurricane-hunter aircraft is flying through the sky."
+
+msgid "frontpage.stats.images.3.alt.01"
+msgstr "A person from the National Weather Service is working to ready a weather balloon for launch."
+
+msgid "frontpage.stats.images.4.alt.01"
+msgstr "A National Weather Service meteorologist is briefing a crowd of people outdoors in front of a large map and charts of data."
+
 msgid "frontpage.heading.find-your-forecast.01"
 msgstr "Find your forecast"
 

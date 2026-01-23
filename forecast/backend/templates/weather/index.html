@@ -14,7 +14,7 @@
 {% endblock %}
 {% block page %}
   <main role="main">
-    <h1 class="display-none" aria-hidden="true">beta.weather.gov</h1>
+    <h1 class="usa-sr-only">beta.weather.gov</h1>
     <!-- Find forecast section -->
     <section id="front-find-forecast-section">
       <div class="grid-container">
@@ -59,12 +59,10 @@
               <span>weather.gov</span>
               <span>{{"frontpage.heading.trapezoid-1.01" | t}}</span>
             </div>
-          </div>
-          <div class="trapezoid-slant"></div>
-        </h2>
-        
+          </h2>
+        </div>
+        <div class="trapezoid-slant"></div>
         <div class="trapezoid-wrapper">
-          <div class="trapezoid-slant"></div>
           <div id="image-trapezoid"></div>
         </div>
       </div>
@@ -129,43 +127,43 @@
         <div class="grid-container">
           <div class="grid-row">
             <div class="grid-col-12">
-              <h1 class="front-rebuilding-header">
+              <h2 class="front-rebuilding-header">
                 <span>{{"frontpage.rebuilding.header.01"|t}}</span>
-              </h1>
+              </h2>
             </div>
           </div>
           <div class="grid-row">
             <div class="tablet-lg:grid-col-9">
               <ul class="front-rebuilding-list">
                 <li>
-                  <h2>
+                  <h3>
                     <div class="front-list-marker first-list-marker">
-                      <img src="{% static 'images/front-page/circle.svg' %}" />
+                      <img src="{% static 'images/front-page/circle.svg' %}" alt="" />
                     </div>
                     {{"frontpage.rebuilding.list-header-1.01"|t}}
-                  </h2>
+                  </h3>
                   <p>
                     {{"frontpage.rebuilding.list-text-1.01"|t}}
                   </p>
                 </li>
                 <li>
-                  <h2>
+                  <h3>
                     <div class="front-list-marker">
-                      <img src="{% static 'images/front-page/square.svg' %}" />
+                      <img src="{% static 'images/front-page/square.svg' %}" alt="" />
                     </div>
                     {{"frontpage.rebuilding.list-header-2.01"|t}}
-                  </h2>
+                  </h3>
                   <p>
                     {{"frontpage.rebuilding.list-text-2.01"|t}}
                   </p>
                 </li>
                 <li>
-                  <h2>
+                  <h3>
                     <div class="front-list-marker">
-                      <img src="{% static 'images/front-page/triangle.svg' %}" />
+                      <img src="{% static 'images/front-page/triangle.svg' %}" alt="" />
                     </div>
                     {{"frontpage.rebuilding.list-header-3.01"|t}}
-                  </h2>
+                  </h3>
                   <p>
                     <p>{{"frontpage.rebuilding.list-text-3.01"|t}}</p>
                   </p>
