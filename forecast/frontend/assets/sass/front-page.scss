@@ -18,6 +18,7 @@
 @use "components/wx-loader";
 @use "components/touchpoints";
 
+
 :root {
     --find-forecast-background-rgb: 17, 24, 29;
     --stats-area-image-max-height: 300px;
@@ -28,7 +29,21 @@
 $trapezoid-wrapper-height: 420px;
 /* stylelint-disable */
 #front-find-forecast-section {
-    background-image: url("/public/images/front-page/wx_homepage_glacier_02.jpg");
+    background-image: url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg");
+
+    /* If the browser does not support image-set, try just checking for webp support */
+    @supports(background-image: url("/public/images/front-page/backgrounds/wx_glacier_1440_60_cr.webp")){
+        background-image: url("/public/images/front-page/backgrounds/wx_glacier_1440_60_cr.webp");
+    }
+
+    /* If the browser supports image-set, use that method */
+    @supports(background-image: image-set(url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg") type("image/jpeg"))){
+        background-image: image-set(
+            url("/public/images/front-page/backgrounds/wx_glacier_1440_60_cr.webp") type("image/webp"),
+            url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg") type("image/jpeg")
+        )
+    }
+    
     background-size: cover;
     background-position: center;
     display: flex;
@@ -196,7 +211,22 @@ $trapezoid-wrapper-height: 420px;
     transform: translateY(calc(-1 * var(--trapezoid-height-mobile) / 2));
     width: 100%;
     height: var(--trapezoid-height-mobile);
-    background-image: url("/public/images/front-page/wx_homepage_lightning.jpg");
+    background-image: url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.jpg");
+
+    /* If we do not support image-set, see if we support webp at least */
+    @supports (background-image: url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.webp")){
+        background-image: url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.webp");
+    }
+
+    /* If the browser supports image-set, use that */
+    @supports (background-image: image-set(url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.jpg") type("image/jpeg"))){
+        background-image: image-set(
+            url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.webp") type("image/webp"),
+            url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.avif") type("image/avif"),
+            url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.jpg") type("image/jpeg")
+        )
+    }
+    
     background-size: cover;
     background-position: bottom;
     clip-path: polygon(
@@ -209,7 +239,26 @@ $trapezoid-wrapper-height: 420px;
 
 #front-stats {
     border-top: 4px solid color("primary-light");
-    background-image: url("/public/images/front-page/wx_homepage_fronts.png");
+
+    /* For whatever reason, the PNG fallback is smaller than the JPEG generated from it
+     * at full quality and size. So we will use that in the worse case
+     */
+    background-image: url("/public/images/front-page/backgrounds/wx_homepage_fronts.png");
+
+    /* If we don't support image-set, try avif */
+    @supports (background-image: url("/public/images/front-page/backgrounds/wx_homepage_fronts_full_60.avif")){
+        background-image: url("/public/images/front-page/backgrounds/wx_homepage_fronts_full_60.avif");
+    }
+
+    /* If the browser supports image-set, use that with our preferences */
+    @supports (background-image: image-set(url("/public/images/front-page/backgrounds/wx_homepage_fronts.png") type("image/png"))){
+        background-image: image-set(
+            /* Note that the plain PNG is _smaller_ than the converted/compressed JPEGs and WebPs */
+            url("/public/images/front-page/backgrounds/wx_homepage_fronts_full_60.avif") type("image/avif"),
+            url("/public/images/front-page/backgrounds/wx_homepage_fronts.png") type("image/png")
+        )
+    }
+    
     position: relative;
     padding-bottom: units(3);
 
@@ -278,7 +327,22 @@ $trapezoid-wrapper-height: 420px;
 
 #front-rebuilding {
     border-top: units("05") solid color("primary-light");
-    background-image: url("/public/images/front-page/wx_homepage_stylized-radar.png");
+    background-image: url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_70.jpg");
+
+    /* If we can't use image-set, try using just webp */
+    @supports (background-image: url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.webp")){
+        background-image: url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.webp");
+    }
+
+    /* If we can use image-set, use that for priorities */
+    @supports (background-image: image-set(url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_70.jpg") type("image/jpeg"))){
+        background-image: image-set(
+            url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.webp") type("image/webp"),
+            url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.avif") type("image/avif"),
+            url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_70.jpg") type("image/jpeg")
+        )
+    }
+    
     background-size: cover;
     background-position: right;
 
