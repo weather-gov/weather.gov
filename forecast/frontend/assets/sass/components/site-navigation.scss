@@ -147,10 +147,6 @@
         @include u-height(9);
     }
 
-    button:not(.usa-current) {
-        font-weight: unset;
-    }
-
     #site-search-submenu {
         order: unset;
         flex: 1;
@@ -274,6 +270,10 @@
     .usa-nav__primary {
         .usa-nav__link {
             @include u-padding-x(1.5);
+        }
+
+        button.usa-nav__link {
+            font-weight: unset;
         }
 
         /**
