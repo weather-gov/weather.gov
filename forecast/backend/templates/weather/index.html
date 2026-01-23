@@ -81,15 +81,21 @@
             </p>
             <div class="stats-image-outer">
               <div class="stats-image-container">
-                <div class="stats-img-wrapper">
-                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_buoy_xl.jpg' %}"/>
-                </div>
-                <div class="stats-img-wrapper">
-                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_hurricane_hunter_xl.jpg' %}"/>
-                </div>
-                <div class="stats-img-wrapper">
-                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_balloon_scientist_xl.jpg' %}"/>
-                </div>
+                <picture class="stats-img-wrapper">
+                  <source srcset="{% static 'images/front-page/cropped/wx_buoy_500_100.avif' %}" type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_buoy_500_80.webp' %}" type="image/webp" />
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_buoy_500_80.jpg' %}"/>
+                </picture>
+                <picture class="stats-img-wrapper">
+                  <source srcset="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_100.avif' %}" type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_80.webp' %}" type="image/webp" />
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_80.jpg' %}"/>
+                </picture>
+                <picture class="stats-img-wrapper">
+                  <source srcset="{% static 'images/front-page/cropped/wx_balloon_scientist_500_100.avif' %}" type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_balloon_scientist_500_80.webp' %}" type="image/webp" />
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_balloon_scientist_500_80.jpg' %}"/>
+                </picture>
               </div>
             </div>
           </div>
@@ -102,9 +108,11 @@
           <div class="stats-content-wrapper">
             <div class="stats-image-outer">
               <div class="stats-image-container stats-large-image">
-                <div class="stats-img-wrapper">
-                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_meteorologist_lg.jpg' %}"/>
-                </div>
+                <picture class="stats-img-wrapper">
+                  <source srcset="{% static 'images/front-page/cropped/wx_meteorologist_1200_100.avif' %}" type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_meteorologist_1200_80.webp' %}" type="image/webp" />
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_meteorologist_1200_80.jpg' %}"/>
+                </picture>
               </div>
             </div>
             <p class="stats-text stats-text-right">
