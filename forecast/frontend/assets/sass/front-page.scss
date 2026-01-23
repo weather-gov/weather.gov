@@ -173,6 +173,9 @@ $trapezoid-wrapper-height: 420px;
         0% 100%
     );
 
+    margin-top: 0;
+    margin-bottom: 0;
+
     .trapezoid-inner {
         display: block;
 
@@ -413,7 +416,7 @@ $trapezoid-wrapper-height: 420px;
                 }
             }
 
-            h2 {
+            h3 {
                 margin-top: 0;
                 position: relative;
 
@@ -739,15 +742,11 @@ $trapezoid-wrapper-height: 420px;
          * the second stats-subsection when in
          * ultra desktop
          */
-        // .stats-subsection:nth-child(2){
-        //     margin-top: calc(calc(var(--stats-area-image-max-height) + 5em));
-        //     margin-bottom: calc(calc(var(--stats-area-image-max-height) + 5em) / 2);
-        // }
         
         padding-bottom: 162px;
 
         .stats-subsection {
-          margin-top: 178px;
+          margin-top: 148px;
 
           &:last-of-type {
             margin-top: 276px;
@@ -771,7 +770,7 @@ $trapezoid-wrapper-height: 420px;
 
     #front-trapezoids {
       .trapezoids-container {
-        padding: units(8) units(2) units(10);
+        padding: units(10) units(2);
       }
 
         #tagline-trapezoid {
