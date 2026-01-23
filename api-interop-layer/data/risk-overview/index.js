@@ -46,7 +46,12 @@ const ensureDatabaseExists = openDatabase().then(async (db) => {
 });
 
 export const startRiskOverviewProcessing = async () => {
-  if (isMainThread) {
+  // If this is the main thread (and the first instance in production), fire up
+  // the background worker.
+  const enableBackgroundProcessing = process.env.API_INTEROP_PRODUCTION
+    ? process.env.CF_INSTANCE_INDEX == 0 && isMainThread
+    : isMainThread;
+  if (enableBackgroundProcessing) {
     // Make sure the database is initialized.
     await ensureDatabaseExists;
 
