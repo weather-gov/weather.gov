@@ -4,6 +4,7 @@ from unittest import mock
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 
@@ -152,6 +153,26 @@ class TestCountyViews(TestCase):
             {"value": self.state3.state, "text": self.state3.name},
             response.context["state_list_items"],
         )
+
+    @mock.patch("backend.views.county.render")
+    def test_index_county_name_sorting(self, mock_render):
+        """Test that index page counties are in alphabetical order."""
+        # Hook into the call to render() so that we can
+        # access the queried states objects and their counties
+        mock_render.return_value = HttpResponse()
+        self.client.get(reverse("county_index"))
+        mock_call  = mock_render.call_args
+
+        # We want to pull out the MA State object
+        # and ensure that its constituent counties are in
+        # alphabetical order. It's the 3rd state.
+        # Then get the list of its related counties
+        counties = list(mock_call[0][2]["states"][2].counties.all())
+
+        # Assert that the order is alphabetical
+        self.assertEqual(counties[0], self.county2)
+        self.assertEqual(counties[1], self.county1)
+        self.assertEqual(counties[2], self.county3)
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
