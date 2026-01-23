@@ -1,6 +1,7 @@
 import logging
 from zoneinfo import ZoneInfo
 
+from django.db.models import Prefetch
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -29,7 +30,10 @@ def index(request):
     """Render the county index page."""
     states = (
         WeatherStates.objects.defer("shape")
-        .prefetch_related("counties")
+        .prefetch_related(
+            Prefetch("counties",
+                     queryset=WeatherCounties.objects.order_by("countyname"))
+        )
         .defer("counties__shape")
         .all()
         .order_by("name")
