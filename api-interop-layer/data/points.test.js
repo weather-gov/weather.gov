@@ -73,6 +73,7 @@ describe("point method", () => {
         wfo: null,
         x: null,
         y: null,
+        geometry: undefined,
       },
       isMarine: false,
       place: null,
@@ -81,7 +82,7 @@ describe("point method", () => {
 
   it("fetches a grid from the API, no location", async () => {
     fetchAPIJson.resolves({
-      properties: { gridId: "PPU", gridX: 30, gridY: 40 },
+      properties: { gridId: "PPU", gridX: 30, gridY: 40, geometry: undefined },
     });
     db.query.resolves({ rows: [] });
 
@@ -89,7 +90,7 @@ describe("point method", () => {
 
     expect(actual).to.eql({
       point: { latitude: 4, longitude: 5 },
-      grid: { wfo: "PPU", x: 30, y: 40 },
+      grid: { wfo: "PPU", x: 30, y: 40, geometry: undefined },
       isMarine: false,
       place: null,
     });

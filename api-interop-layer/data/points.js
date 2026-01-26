@@ -84,6 +84,7 @@ export const getPointData = async (latitude, longitude) => {
         wfo: data.properties.gridId,
         x: data.properties.gridX,
         y: data.properties.gridY,
+        geometry: data.geometry,
       };
     },
   );

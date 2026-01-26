@@ -1,3 +1,5 @@
+import { Worker } from "node:worker_threads";
+import path from "node:path";
 import getAlerts from "./alerts/index.js";
 import { alignAlertsToDaily } from "./alerts/utils.js";
 import getForecast from "./forecast/index.js";
@@ -7,13 +9,27 @@ import getSatellite from "./satellite.js";
 import getProductById from "./products/index.js";
 import { createLogger } from "../util/monitoring/index.js";
 import getDbConnection from "./db.js";
+import { ForecastGridCache } from "./forecast/cache.js";
 
 const logger = createLogger("forecast");
+
+logger.info("starting background worker");
+const backgroundWorker = new Worker("/app/data/forecast/backgroundTasks.js");
+
+backgroundWorker.on("message", (msg) => {
+  if (msg.action === "log") {
+    logger[msg.level](msg.message);
+  }
+});
+
+const gridCache = new ForecastGridCache(backgroundWorker);
+backgroundWorker.postMessage({ action: "start" });
 
 const getDataForPoint = async (lat, lon) => {
   logger.verbose(`fetching forecast for ${lat}, ${lon}}`);
   const { point, place, grid, isMarine } = await getPointData(lat, lon);
 
+  logger.verbose(`Satelitte promise`);
   let satellitePromise = Promise.resolve({ error: true });
   let forecast = { daily: { error: true } };
   let observed = { error: true };
@@ -21,6 +37,10 @@ const getDataForPoint = async (lat, lon) => {
   // If we don't have a grid, we can't fetch satellite metadata, forecast, or
   // observations – all of these are based around WFO and WFO grid.
   if (!grid.error) {
+    // Cache grid point information
+    // This is a synchronous push to an array. Fire and Forget
+    gridCache.logGridHit(grid);
+
     satellitePromise = getSatellite({ grid, place });
 
     const dbPool = await getDbConnection();

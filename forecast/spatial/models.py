@@ -220,3 +220,33 @@ class WeatherAlertsCache(models.Model):
 
     class Meta:  # noqa: D106
         db_table = "weathergov_geo_alerts_cache"
+
+
+class ForecastGridPoints(models.Model):
+    """Individual NDFD Forecast Grid Points."""
+
+    x = models.IntegerField()
+    y = models.IntegerField()
+    wfo = models.CharField(max_length=3, null=False)
+    shape = models.GeometryField(null=False)
+
+    class Meta:  # noqa: D106
+        db_table = "weathergov_ndfd_gridpoints"
+        unique_together = ("x", "y", "wfo")
+
+
+class ForecastGridLog(models.Model):
+    """Logs occurrences or counts of specific grid points over time."""
+
+    # Linking to the main table
+    grid_point = models.ForeignKey(
+        "ForecastGridPoints",
+        on_delete=models.PROTECT,  # Prevent deletion of grid record when log is deleted
+        related_name="logs",
+    )
+
+    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:  # noqa: D106
+        db_table = "weathergov_ndfd_grid_logs"
+        ordering = ["-timestamp"]
