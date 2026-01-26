@@ -1,6 +1,19 @@
 import https from "https";
 
 export default (req, res) => {
+  const isStandalone = !!process.env.PROXY_STANDALONE;
+  // if we are standalone then we should not be proxying and we should be
+  // serving static files instead.
+  if (isStandalone) {
+    try {
+      res.writeHead(500);
+      res.write("error: proxy is in standalone mode");
+    } finally {
+      res.end();
+    }
+    return;
+  }
+
   // Reassemble the query string, if any.
   const qs = Object.entries(req.query)
     .map(([key, value]) => `${key}=${value}`)
