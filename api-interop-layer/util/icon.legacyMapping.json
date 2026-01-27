@@ -141,10 +141,10 @@
     "icon": "snow.svg"
   },
   "day/snow_sleet": {
-    "icon": "new_snow_sleet.svg"
+    "icon": "freezing_rain_sleet.svg"
   },
   "night/snow_sleet": {
-    "icon": "new_snow_sleet.svg"
+    "icon": "freezing_rain_sleet.svg"
   },
   "day/tornado": {
     "icon": "tornado.svg"
