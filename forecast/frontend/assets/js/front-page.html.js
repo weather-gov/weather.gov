@@ -1,3 +1,6 @@
+// For site nav
+import "./components/site-nav.js";
+
 // For location search
 import "./locationSearch.js";
 import "./components/combo-box-location.js";

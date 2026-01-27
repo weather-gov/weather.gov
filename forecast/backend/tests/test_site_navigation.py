@@ -8,14 +8,13 @@ class SiteNavigationAllMenuTests(TestCase):
 
     def test_menus(self):
         """Verify that all menu items are present."""
-        # Note: The home page should no longer have the nav menu
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateNotUsed("weather/partials/site-navigation.html")
-        self.assertNotContains(response, 'id="nav-section-forecast"')
-        self.assertNotContains(response, 'id="nav-section-preparedness"')
-        self.assertNotContains(response, 'id="nav-section-resources"')
-        self.assertNotContains(response, 'id="nav-section-about"')
+        self.assertTemplateUsed("weather/partials/site-navigation.html")
+        self.assertContains(response, 'id="nav-section-forecast"')
+        self.assertContains(response, 'id="nav-section-preparedness"')
+        self.assertContains(response, 'id="nav-section-resources"')
+        self.assertContains(response, 'id="nav-section-about"')
 
     def test_submenus(self):
         """Verify that all submenu items are present."""
@@ -30,14 +29,13 @@ class SiteNavigationPartialMenuTests(TestCase):
 
     def test_menus(self):
         """Verify that only menu items with links are present."""
-        # Note: The home page should no longer have the nav menu
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateNotUsed("weather/partials/site-navigation.html")
-        self.assertNotContains(response, 'id="nav-section-forecast"')
+        self.assertTemplateUsed("weather/partials/site-navigation.html")
+        self.assertContains(response, 'id="nav-section-forecast"')
         self.assertNotContains(response, 'id="nav-section-preparedness"')
         self.assertNotContains(response, 'id="nav-section-resources"')
-        self.assertNotContains(response, 'id="nav-section-about"')
+        self.assertContains(response, 'id="nav-section-about"')
 
     def test_submenus(self):
         """Verify that only submenu items with links are present."""

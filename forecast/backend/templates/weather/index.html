@@ -9,7 +9,7 @@
   {% include "weather/partials/gov-banner.html" %}
   {% include "weather/partials/beta-banner.html" %}
   <header role="banner">
-    {% include "weather/partials/site-branding.html" with hide_site_nav=True %}
+    {% include "weather/partials/site-branding.html" %}
   </header>
 {% endblock %}
 {% block page %}
@@ -165,7 +165,7 @@
                     {{"frontpage.rebuilding.list-header-3.01"|t}}
                   </h3>
                   <p>
-                    <p>{{"frontpage.rebuilding.list-text-3.01"|t}}</p>
+                    <p>{% trans_with_args "frontpage.text.touchpoints-1-graf.01" url="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit" %}</p>
                   </p>
                   <ul class="usa-list">
                     {{"frontpage.rebuilding.list-items-03.01"|t}}
