@@ -17,6 +17,9 @@
 @use "components/site-navigation";
 @use "components/wx-loader";
 @use "components/touchpoints";
+@use "components/generic-tabs";
+@use "components/tabbed-nav";
+@use "components/z-index";
 
 
 :root {
@@ -715,6 +718,10 @@ $trapezoid-wrapper-height: 420px;
 
 /* Represents the new desktop-lg width for the front page */
 @media screen and (min-width: 1440px){
+    .usa-nav-container {
+        max-width: 1440px;
+    }
+
     .grid-container,
     .usa-banner__inner {
         max-width: 1440px;

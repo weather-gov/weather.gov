@@ -48,6 +48,15 @@
     @include u-padding-y(2);
 }
 
+.usa-nav-container .usa-nav__link:focus {
+    outline-offset: -0.25rem;
+    outline-color: color("blue-50v");
+}
+
+.usa-nav-container .usa-nav__submenu {
+    margin-top: 0;
+}
+
 /**
  * Styles for the site navigation search submenu (which is tabs)
  */
