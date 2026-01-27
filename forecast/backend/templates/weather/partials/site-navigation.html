@@ -14,7 +14,7 @@
             aria-controls="nav-section-forecast">
             <span class="font-sans-xs">{{ "menu.navigation.forecast.01" | t }}</span>
           </button>
-          <ul id="nav-section-forecast" class="usa-nav__submenu tablet-lg:shadow-2 font-body-xs">
+          <ul id="nav-section-forecast" class="usa-nav__submenu font-body-xs">
             <li class="usa-nav__submenu-item">
               <a href="{% url 'index' %}">
                 <span class="font-sans-xs">
@@ -48,7 +48,7 @@
             aria-controls="nav-section-preparedness">
             <span class="font-sans-xs">{{ "menu.navigation.preparedness.01" | t }}</span>
           </button>
-          <ul id="nav-section-preparedness" class="usa-nav__submenu tablet-lg:shadow-2 font-body-xs">
+          <ul id="nav-section-preparedness" class="usa-nav__submenu font-body-xs">
             <li class="usa-nav__submenu-item">
               <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.preparedness.weather-hazards-guides.01" | t }}</span></a>
             </li>
@@ -64,7 +64,7 @@
             aria-controls="nav-section-resources">
             <span class="font-sans-xs">{{ "menu.navigation.resources.01" | t }}</span>
           </button>
-          <ul id="nav-section-resources" class="usa-nav__submenu tablet-lg:shadow-2 font-body-xs">
+          <ul id="nav-section-resources" class="usa-nav__submenu font-body-xs">
             <li class="usa-nav__submenu-item">
               <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.state-weather-overview.01" | t }}</span></a>
             </li>
@@ -88,9 +88,9 @@
             aria-controls="nav-section-about">
             <span class="font-sans-xs">{{ "menu.navigation.about.01" | t }}</span>
           </button>
-          <ul id="nav-section-about" class="usa-nav__submenu tablet-lg:shadow-2 font-body-xs">
+          <ul id="nav-section-about" class="usa-nav__submenu font-body-xs">
             <li class="usa-nav__submenu-item">
-              <a href="{% url 'about' %}"><span>{{ "menu.navigation.about.mission.01" | t }}</span></a>
+              <a href="{% url 'about' %}"><span class="font-sans-xs">{{ "menu.navigation.about.mission.01" | t }}</span></a>
             </li>
             {% if debug_show_all_menu_links %}
             <li class="usa-nav__submenu-item">
