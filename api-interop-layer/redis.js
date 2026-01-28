@@ -6,9 +6,19 @@ import { createLogger } from "./util/monitoring/index.js";
 let client;
 export let USE_REDIS = false;
 
+// Let's lazy set the connection info, since
+// that will  not change in a single environment
+let CONNECTION_INFO;
+
 const logger = createLogger("redis");
 
 export const getRedisConnectionInfo = () => {
+  // If we have already lazy set the connection info,
+  // just return that.
+  if(CONNECTION_INFO){
+    return CONNECTION_INFO;
+  }
+
   if (process.env.API_INTEROP_PRODUCTION) {
     USE_REDIS = true;
     logger.info("interop is using redis for cache in prod");
@@ -16,11 +26,12 @@ export const getRedisConnectionInfo = () => {
     // the VCAP_SERVICES environment variable
     const vcap = JSON.parse(process.env.VCAP_SERVICES);
     const db = vcap["aws-elasticache-redis"][0];
-    return {
+    CONNECTION_INFO = {
       password: db.credentials.password,
       host: db.credentials.host,
       port: db.credentials.port,
     };
+    return CONNECTION_INFO;
   }
 
   const REQUIRED_ENV_VARS = [
@@ -38,12 +49,18 @@ export const getRedisConnectionInfo = () => {
   USE_REDIS = true;
   logger.info("interop is using redis for cache in dev");
 
-  return {
+  CONNECTION_INFO = {
     password: process.env["REDIS_PASSWORD"],
     host: process.env["REDIS_HOST"],
     port: process.env["REDIS_PORT"],
-  }
+  };
+
+  return CONNECTION_INFO;
 };
+
+// Call it the first time to set the info variable
+// lazily. And I mean as lazy as possible.
+getRedisConnectionInfo();
 
 /**
  * Attempt to retrieve a TTL for caching from the
