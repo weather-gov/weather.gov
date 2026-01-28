@@ -42,7 +42,10 @@ export const main = async () => {
   });
 
   server.get("/", (_, response) => {
-    response.send({ ok: true });
+    response.send({
+      ok: true,
+      index: process.env.CF_INSTANCE_INDEX || "standalone",
+    });
   });
 
   routes.forEach(({ method, url, schema, handler }) => {

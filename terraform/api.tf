@@ -18,7 +18,6 @@ resource "cloudfoundry_app" "interop" {
   name       = "api-${local.app_name}-${var.env}"
   space_name = var.cf_space_name
   org_name   = local.cf_org_name
-  count      = (var.env == "prod" ? 1 : 1)
 
   path             = data.archive_file.api_src.output_path
   source_code_hash = data.archive_file.api_src.output_base64sha256
@@ -42,7 +41,7 @@ resource "cloudfoundry_app" "interop" {
   processes = [
     {
       type              = "web"
-      instances         = 1
+      instances         = (var.env == "prod" ? 2 : 1)
       memory            = var.api_interop_memory
       health_check_type = "process"
     }
