@@ -3,12 +3,9 @@ import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import { parseAPIIcon } from "../../util/icon.js";
-import {
-  sendNewRelicMetric,
-  createLogger,
-} from "../../util/monitoring/index.js";
+import { logger } from "../../util/monitoring/index.js";
 
-const logger = createLogger("observations");
+const observationsLogger = logger.child("observations");
 
 export default async (
   { grid: { wfo, x, y }, point: { latitude, longitude }, place: { timezone } },
@@ -28,7 +25,7 @@ export default async (
   });
 
   if (stations.error) {
-    logger.warn("Failed to get a list of stations");
+    observationsLogger.warn("Failed to get a list of stations");
     return {
       error: true,
       message: "Failed to find an approved observation station",
@@ -41,11 +38,17 @@ export default async (
     fetchAPIJson(`/stations/${stationIdentifier}/observations?limit=1`).then(
       (out) => {
         if (out.error) {
-          logger.warn(`station ${stationIdentifier} returned an error`);
+          observationsLogger.warn(
+            { station: stationIdentifier },
+            "station error",
+          );
           return out;
         }
         if (!Array.isArray(out.features) || out.features.length === 0) {
-          logger.warn(`station ${stationIdentifier} returned, but has no data`);
+          observationsLogger.warn(
+            { station: stationIdentifier },
+            "station has no data",
+          );
           return { error: true, message: "No valid observations found." };
         }
 
@@ -58,14 +61,16 @@ export default async (
     `/stations/${station.properties.stationIdentifier}/observations?limit=1`,
   ).then((out) => {
     if (out.error) {
-      logger.warn(
-        `station ${station.properties.stationIdentifier} returned an error`,
+      observationsLogger.warn(
+        { station: station.properties.stationIdentifier },
+        "station error",
       );
       return out;
     }
     if (!Array.isArray(out.features) || out.features.length === 0) {
-      logger.warn(
-        `station ${station.properties.stationIdentifier} returned, but has no data`,
+      observationsLogger.warn(
+        { station: station.properties.stationIdentifier },
+        "station has no data",
       );
       return { error: true, message: "No valid observations found." };
     }
@@ -74,26 +79,30 @@ export default async (
   });
 
   if (!isObservationValid(observation)) {
-    logger.warn(
-      `observations from ${station.properties.stationIdentifier} (first choice) are invalid`,
+    observationsLogger.warn(
+      { station: station.properties.stationIdentifier, choice: "first" },
+      "station observations are invalid",
     );
 
     const fallbackObs = await Promise.all(others);
     if (isObservationValid(fallbackObs[0])) {
       station = stations[0];
       observation = fallbackObs[0];
-      logger.info(
-        `observations from ${station.properties.stationIdentifier} (second choice) are valid`,
+      observationsLogger.info(
+        { station: station.properties.stationIdentifier, choice: "second" },
+        "station observations are valid",
       );
     } else if (isObservationValid(fallbackObs[1])) {
       station = stations[1];
       observation = fallbackObs[1];
-      logger.info(
-        `observations from ${station.properties.stationIdentifier} (third choice) are valid`,
+      observationsLogger.info(
+        { station: station.properties.stationIdentifier, choice: "third" },
+        "station observations are valid",
       );
     } else {
-      logger.warn(
-        `observations from ${stations.map(({ properties: { stationIdentifier } }) => stationIdentifier).join(", ")} (second and third choice) are invalid`,
+      observationsLogger.warn(
+        { stations, choice: "all" },
+        "station observations are invalid",
       );
 
       station = null;
@@ -102,8 +111,9 @@ export default async (
   }
 
   if (station && observation) {
-    logger.verbose(
-      `using observations from ${station.properties.stationIdentifier}`,
+    observationsLogger.trace(
+      { station: station.properties.stationIdentifier },
+      "using station observation",
     );
 
     const data = Object.keys(observation)
@@ -133,16 +143,6 @@ export default async (
 
     const [{ distance }] = distanceResult.rows;
 
-    sendNewRelicMetric({
-      name: "wx.observation",
-      type: "gauge",
-      value: distance,
-      attributes: {
-        stationIndex: stations.indexOf(station) + 1,
-        obsStation: station.properties.stationIdentifier,
-      },
-    });
-
     return {
       timestamp: dayjs.utc(observation.timestamp).tz(timezone).format(),
       icon: parseAPIIcon(observation.icon),
@@ -160,6 +160,6 @@ export default async (
     };
   }
 
-  logger.warn(`No valid observations found for ${wfo}/${x}/${y}`);
+  observationsLogger.warn({ wfo, x, y }, "no valid observations");
   return { error: true, message: "No valid observations found" };
 };

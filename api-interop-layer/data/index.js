@@ -7,29 +7,25 @@ import getObservations from "./obs/index.js";
 import { getPointData } from "./points.js";
 import getSatellite from "./satellite.js";
 import getProductById from "./products/index.js";
-import { createLogger } from "../util/monitoring/index.js";
+import { logger } from "../util/monitoring/index.js";
 import getDbConnection from "./db.js";
 import { ForecastGridCache } from "./forecast/cache.js";
 
-const logger = createLogger("forecast");
+const forecastLogger = logger.child({ subsystem: "forecast" });
 
-logger.info("starting background worker");
+forecastLogger.info("starting background worker");
+
 const backgroundWorker = new Worker("/app/data/forecast/backgroundTasks.js");
-
-backgroundWorker.on("message", (msg) => {
-  if (msg.action === "log") {
-    logger[msg.level](msg.message);
-  }
-});
+backgroundWorker.on("message", (msg) => {});
 
 const gridCache = new ForecastGridCache(backgroundWorker);
 backgroundWorker.postMessage({ action: "start" });
 
 const getDataForPoint = async (lat, lon) => {
-  logger.verbose(`fetching forecast for ${lat}, ${lon}}`);
+  forecastLogger.trace({ lat, lon }, "fetching forecast");
   const { point, place, grid, isMarine } = await getPointData(lat, lon);
 
-  logger.verbose(`Satelitte promise`);
+  forecastLogger.trace("satellite promise");
   let satellitePromise = Promise.resolve({ error: true });
   let forecast = { daily: { error: true } };
   let observed = { error: true };

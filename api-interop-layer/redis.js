@@ -1,5 +1,5 @@
 import { createClient } from "@redis/client";
-import { createLogger } from "./util/monitoring/index.js";
+import { logger } from "./util/monitoring/index.js";
 
 // For now, let's use a single client instance
 // that we lazily assign once accessed.
@@ -8,24 +8,24 @@ export let USE_REDIS = false;
 
 // We need to know whether to use TLS or not
 // For local dev, we don't
-const protocol  = process.env.API_INTEROP_PRODUCTION ? "rediss" : "redis";
+const protocol = process.env.API_INTEROP_PRODUCTION ? "rediss" : "redis";
 
 // Let's lazy set the connection info, since
 // that will  not change in a single environment
 let CONNECTION_INFO;
 
-const logger = createLogger("redis");
+const redisLogger = logger.child({ subsystem: "redis" });
 
 export const getRedisConnectionInfo = () => {
   // If we have already lazy set the connection info,
   // just return that.
-  if(CONNECTION_INFO){
+  if (CONNECTION_INFO) {
     return CONNECTION_INFO;
   }
 
   if (process.env.API_INTEROP_PRODUCTION) {
     USE_REDIS = true;
-    logger.info("interop is using redis for cache in prod");
+    redisLogger.info("interop is using redis for cache in prod");
     // we are in a cloud.gov environment and must retrieve credentials from
     // the VCAP_SERVICES environment variable
     const vcap = JSON.parse(process.env.VCAP_SERVICES);
@@ -38,20 +38,16 @@ export const getRedisConnectionInfo = () => {
     return CONNECTION_INFO;
   }
 
-  const REQUIRED_ENV_VARS = [
-    "REDIS_HOST",
-    "REDIS_PORT",
-    "REDIS_PASSWORD"
-  ];
-  REQUIRED_ENV_VARS.forEach(varName => {
-    if(!process.env[varName]){
-      logger.warn("redis is disabled for cache");
+  const REQUIRED_ENV_VARS = ["REDIS_HOST", "REDIS_PORT", "REDIS_PASSWORD"];
+  REQUIRED_ENV_VARS.forEach((varName) => {
+    if (!process.env[varName]) {
+      redisLogger.warn("redis is disabled for cache");
       return {};
     }
   });
 
   USE_REDIS = true;
-  logger.info("interop is using redis for cache in dev");
+  redisLogger.info("interop is using redis for cache in dev");
 
   CONNECTION_INFO = {
     password: process.env["REDIS_PASSWORD"],
@@ -78,7 +74,7 @@ getRedisConnectionInfo();
  */
 export const getTTLFromResponse = (response) => {
   const cacheHeader = response.headers.get("Cache-Control");
-  if(!cacheHeader){
+  if (!cacheHeader) {
     return null;
   }
 
@@ -86,8 +82,8 @@ export const getTTLFromResponse = (response) => {
   // if it is present
   const rx = /s-maxage=([0-9]+)/;
   const match = cacheHeader.match(rx);
-  logger.verbose(`Cache-control header match: ${match}`);
-  if(!match){
+  redisLogger.debug({ match }, "cache-control header");
+  if (!match) {
     return null;
   }
 
@@ -109,21 +105,21 @@ export const getTTLFromResponse = (response) => {
  * not available, null
  */
 export const getRedisClient = async () => {
-  if(client){
+  if (client) {
     return client;
   }
   try {
     const { password, host, port } = getRedisConnectionInfo();
     const url = `${protocol}://default:${password}@${host}:${port}`;
-    logger.verbose(`Connecting to ${url}`);
-    client = await createClient({url})
-      .on("error", err => {
-        logger.error(`Client error: ${err}`);
+    redisLogger.info({ url }, "connecting");
+    client = await createClient({ url })
+      .on("error", (err) => {
+        redisLogger.error({ err }, "Client error");
       })
       .connect();
     return client;
-  } catch(e){
-    logger.error(`Could not connect to redis: ${e}`);
+  } catch (e) {
+    redisLogger.error({ err: e }, "Could not connect to redis");
     client = null;
     return null;
   }
@@ -139,16 +135,12 @@ export const getRedisClient = async () => {
  * @returns {Object|null} - A redis client instance or null
  */
 export const saveToRedis = async (key, value, ttl) => {
-  if(!USE_REDIS){
+  if (!USE_REDIS) {
     return null;
   }
   const client = await getRedisClient();
-  return await client.set(
-    key,
-    value,
-    { EX: ttl }
-  ).then(() => {
-    logger.verbose(`Saved cached value for ${key} with TTL ${ttl}`);
+  return await client.set(key, value, { EX: ttl }).then(() => {
+    redisLogger.debug({ key, ttl }, "cached value");
   });
 };
 
@@ -160,7 +152,7 @@ export const saveToRedis = async (key, value, ttl) => {
  * for the given key, or null if there is not (or if USE_REDIS is false).
  */
 export const getFromRedis = async (key) => {
-  if(!USE_REDIS){
+  if (!USE_REDIS) {
     return null;
   }
   const client = await getRedisClient();

@@ -3,6 +3,7 @@ import path from "path";
 
 import config from "./config.js";
 import proxy from "./proxy.js";
+import logger from "./logger.js";
 
 const dataPath = "./data";
 
@@ -162,13 +163,13 @@ export default async (request, response) => {
   }${query}.json`;
 
   const fileExists = await exists(filePath);
-  console.log(`NOW_TIME: Set from ${config.nowMethod} as ${config.now}`); // eslint-disable-line no-console
+  logger.info({ method: config.nowMethod, now: config.now }, "NOW_TIME");
 
   if (!fileExists) {
-    console.log(`LOCAL:    local file does not exist; proxying [${filePath}]`); // eslint-disable-line no-console
+    logger.info({ filePath }, "LOCAL: local file does not exist; proxying");
     await proxy(request, response);
   } else {
-    console.log(`LOCAL:    serving local file: ${filePath}`); // eslint-disable-line no-console
+    logger.info({ filePath }, "LOCAL: serving local file");
     const output = JSON.parse(await fs.readFile(filePath));
 
     // If the bundle contains a `now` key, override any
@@ -179,10 +180,7 @@ export default async (request, response) => {
     }
 
     if (output["@bundle"]?.status) {
-      // eslint-disable-next-line no-console
-      console.log(
-        `LOCAL:    local file has response status ${output["@bundle"].status}`,
-      );
+      logger.info({ status: output["@bundle"].status }, "LOCAL: local file has response status");
       response.writeHead(output["@bundle"].status);
       response.end();
       return;

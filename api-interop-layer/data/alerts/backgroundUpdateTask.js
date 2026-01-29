@@ -9,6 +9,9 @@ import alertKinds from "./kinds.js";
 import { parseDescription, parseLocations } from "./parse/index.js";
 import { generateAlertGeometry } from "./geometry.js";
 import { AlertsCache } from "./cache.js";
+import { logger } from "../../util/monitoring/index.js";
+
+const alertsLogger = logger.child({ subsystem: "alerts" });
 
 // The hashes of all the active alerts we know about. Anything in this list will
 // not be processed in future updates, since we've already captured it.
@@ -16,11 +19,8 @@ const alertsCache = new AlertsCache();
 
 export const updateAlerts = async ({ parent = parentPort } = {}) => {
   const now = dayjs();
-  parent.postMessage({
-    action: "log",
-    level: "verbose",
-    message: `updating alerts`,
-  });
+
+  alertsLogger.trace("updating alerts");
 
   const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
     ({ error, features }) => {
@@ -49,11 +49,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     return;
   }
 
-  parent.postMessage({
-    action: "log",
-    level: "verbose",
-    message: `got ${rawAlerts.length} alerts from the API`,
-  });
+  alertsLogger.trace({ length: rawAlerts.length }, "alerts");
 
   // Determine which alerts to both update and drop
   // based on the incoming hashes and the current cache.
@@ -77,19 +73,13 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   const alertsToUpdate = rawAlerts.filter((alert) =>
     newHashes.includes(alert.properties.hash),
   );
-  parent.postMessage({
-    action: "log",
-    level: "verbose",
-    message: `got ${alertsToUpdate.length} alerts to update`,
-  });
+
+  alertsLogger.trace({ length: alertsToUpdate.length }, "alerts to update");
 
   // Remove the invalid hashes from the cache
   await alertsCache.removeByHashes(invalidHashes);
-  parent.postMessage({
-    action: "log",
-    level: "verbose",
-    message: `Removed ${invalidHashes.length} alerts from the cache that were no longer valid`,
-  });
+
+  alertsLogger.trace({ length: invalidHashes.length }, "alerts removed");
 
   // Now update each of the alerts in the list of alerts
   // to update, then store them into the cache.
@@ -102,11 +92,10 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     // logs. Default to a land alert with the lowest priority so we can at least
     // still show it to users.
     if (!alert.metadata) {
-      parent.postMessage({
-        action: "log",
-        level: "warn",
-        message: `Unknown alert type: "${rawAlert.properties.event}"`,
-      });
+      alertsLogger.warn(
+        { alert: rawAlert.properties.event },
+        "unknown alert type",
+      );
 
       alert.metadata = {
         level: { priority: Number.MAX_SAFE_INTEGER, text: "other" },
@@ -125,11 +114,10 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
     // alerts, we'll revisit this, but since we don't know what the use case
     // will be in the future, we'll just leave them out entirely for now.
     if (!alert.metadata || alert.metadata.kind !== "land") {
-      parent.postMessage({
-        action: "log",
-        level: "verbose",
-        message: `Ignoring "${rawAlert.properties.event}" - not a land alert`,
-      });
+      alertsLogger.trace(
+        { alert: rawAlert.properties.event },
+        "ignoring non-land alert",
+      );
 
       // For caching purposes, we store these alerts with the alertKind and no
       // valid geometry. This prevents us from reprocessing them the next round, but
@@ -162,12 +150,7 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
       alert.description = parseDescription(description);
       alert.instruction = paragraphSquash(rawAlert.properties.instruction);
     } catch (e) {
-      parent.postMessage({
-        type: "log",
-        level: "error",
-        message: `error on alert ${rawAlert.properties.id}`,
-      });
-      parent.postMessage({ type: "log", level: "error", message: e });
+      alertsLogger.error({ err: e, alertId: rawAlert.properties.id });
     }
 
     alert.area = paragraphSquash(rawAlert.properties.areaDesc)
@@ -214,17 +197,12 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
         alertKind: alert.metadata.kind,
       });
 
-      parent.postMessage({
-        action: "log",
-        level: "verbose",
-        message: `adding alert with hash ${rawAlert.properties.hash}`,
-      });
+      alertsLogger.trace({ hash: rawAlert.properties.hash }, "adding alert");
     } else {
-      parent.postMessage({
-        action: "log",
-        level: "error",
-        message: `Could not determine geometry for alert ${rawAlert.id}`,
-      });
+      alertsLogger.error(
+        { alertId: rawAlert.id },
+        "could not determine geometry",
+      );
     }
   }
 };

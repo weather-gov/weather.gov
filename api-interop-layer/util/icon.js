@@ -1,8 +1,8 @@
-import { createLogger } from "./monitoring/index.js";
+import { logger } from "./monitoring/index.js";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const logger = createLogger("icon");
+const iconLogger = logger.child({ subsystem: "icon" });
 const dir = path.dirname(new URL(import.meta.url).pathname);
 const legacyMapping = JSON.parse(
   await fs.readFile(`${dir}/icon.legacyMapping.json`),
@@ -44,7 +44,7 @@ export const parseAPIIcon = (apiIcon) => {
     icon.icon = legacyMapping[iconKey].icon;
     icon.base = icon.icon.slice(0, -4);
   } else {
-    logger.warn(`Icon key ${iconKey} was not found in icon.legacyMapping.json`);
+    iconLogger.warn({ iconKey }, "not found in icon.legacyMapping.json");
   }
 
   return icon;

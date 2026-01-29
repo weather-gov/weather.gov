@@ -2,6 +2,9 @@ import { parentPort } from "node:worker_threads";
 import openDatabase from "../db.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import { addRisksToResult, processDays, processLegend } from "./processing.js";
+import { logger } from "../../util/monitoring/index.js";
+
+const riskOverviewLogger = logger.child({ subsystem: "risk overview" });
 
 // enum to track WFO ghwo processing status
 const wfoStatus = Object.freeze({
@@ -166,11 +169,7 @@ const processWFO = async (wfo, statuses) => {
 };
 
 export const updateRiskOverviews = async () => {
-  parentPort.postMessage({
-    action: "log",
-    level: "info",
-    message: "updating risk overview data",
-  });
+  riskOverviewLogger.info("updating risk overview data");
 
   const db = await openDatabase();
 
@@ -189,21 +188,17 @@ export const updateRiskOverviews = async () => {
 
   for (const key of Object.keys(wfoStatus)) {
     if (statuses[key].length) {
-      const level = key == wfoStatus.ALL_DATA ? "info" : "warn";
       const status = {
         [wfoStatus.ALL_DATA]: "successfully retrieved all data",
         [wfoStatus.NO_COUNTIES]: "could not get county data",
         [wfoStatus.NO_STATES]: "could not get state data",
         [wfoStatus.NO_DATA]: "failed to get any data",
       }[key];
-      parentPort.postMessage({
-        action: "log",
-        level,
-        message: {
-          status,
-          wfos: statuses[key],
-        },
-      });
+      if (key == wfoStatus.ALL_DATA) {
+        riskOverviewLogger.info({ status, wfos: statuses[key] });
+      } else {
+        riskOverviewLogger.warn({ status, wfos: statuses[key] });
+      }
     }
   }
 };

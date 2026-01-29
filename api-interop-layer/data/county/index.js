@@ -1,5 +1,5 @@
 import openDatabase from "../db.js";
-import { createLogger } from "../../util/monitoring/index.js";
+import { logger } from "../../util/monitoring/index.js";
 import { getRiskOverview } from "../risk-overview/index.js";
 import { getAlertsForCountyFIPS } from "../alerts/index.js";
 import dayjs from "../../util/day.js";
@@ -8,7 +8,7 @@ import {
   SPATIAL_PROJECTION,
 } from "../../util/constants.js";
 
-const logger = createLogger("county data");
+const countyDataLogger = logger.child({ subsystem: "county data" });
 
 export const getCountyData = async (fips) => {
   try {
@@ -109,8 +109,7 @@ export const getCountyData = async (fips) => {
 
     return { county, riskOverview, alerts, alertDays };
   } catch (e) {
-    logger.error(`Error fetching county data for FIPS ${fips}`);
-    logger.error(e);
+    countyDataLogger.error({ err: e, fips }, "error fetching county data");
     return { error: `Error fetching county data for FIPS ${fips}` };
   }
 };

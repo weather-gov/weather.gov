@@ -1,9 +1,9 @@
 import openDatabase from "./db.js";
 import { fetchAPIJson } from "../util/fetch.js";
-import { createLogger } from "../util/monitoring/index.js";
+import { logger } from "../util/monitoring/index.js";
 import { SPATIAL_PROJECTION } from "../util/constants.js";
 
-const logger = createLogger("point");
+const pointLogger = logger.child({ subsystem: "point" });
 
 export const getClosestPlace = async (latitude, longitude) => {
   const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',${SPATIAL_PROJECTION.WGS84})`;
@@ -71,7 +71,7 @@ export const getClosestPlace = async (latitude, longitude) => {
 };
 
 export const getPointData = async (latitude, longitude) => {
-  logger.verbose(`getting information for place at ${latitude}, ${longitude}`);
+  pointLogger.trace({ latitude, longitude }, "place");
   const point = { latitude, longitude };
 
   const pointsPromise = fetchAPIJson(`/points/${latitude},${longitude}`).then(

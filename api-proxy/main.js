@@ -7,6 +7,7 @@ import config from "./config.js";
 import serveBundle from "./serve.js";
 import getProductInfo from "./products.js";
 import save from "./save.js";
+import logger from "./logger.js";
 
 const app = express();
 const port = process.env.PORT ?? 8081;
@@ -156,7 +157,7 @@ app.get("*any", async (req, res) => {
   const query = Object.entries(req.query)
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
-  console.log(`REQUEST:  ${req.path}${query.length > 0 ? `?${query}` : ""}`); // eslint-disable-line no-console
+  logger.trace({ path: req.path, query: query || undefined }, "REQUEST");
 
   if (config.play) {
     serveBundle(req, res);
@@ -166,10 +167,7 @@ app.get("*any", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Now listening on ${port}`); // eslint-disable-line no-console
-  // eslint-disable-next-line no-console
-  console.log(
-    `Locally-served files is ${config.localService ? "en" : "dis"}abled`,
-  );
-  console.log(`Recording is ${config.recording ? "en" : "dis"}abled`); // eslint-disable-line no-console
+  logger.info({ port }, "Now listening");
+  logger.info({ localService: config.localService }, "Locally-served files");
+  logger.info({ recording: config.recording }, "Recording");
 });

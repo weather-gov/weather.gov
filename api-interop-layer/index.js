@@ -1,12 +1,12 @@
 import fastify from "fastify";
 import newrelic from "newrelic";
-import { createLogger } from "./util/monitoring/index.js";
+import { logger } from "./util/monitoring/index.js";
 import { startAlertProcessing } from "./data/alerts/index.js";
 import routes from "./routes/index.js";
 
 const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
 
-const ensureEnvironmentVariables = (logger) => {
+const ensureEnvironmentVariables = () => {
   const missing = [];
   logger.info("Checking for required environment variables...");
   REQUIRED_ENV_VARS.forEach((varName) => {
@@ -15,8 +15,7 @@ const ensureEnvironmentVariables = (logger) => {
     }
   });
   if (missing.length) {
-    const msg = `Missing required environment variables: ${missing.join(", ")}`;
-    logger.error(msg);
+    logger.error({ missing }, "required environment variables not found");
     process.exit(-1);
   }
 };
@@ -24,19 +23,18 @@ const ensureEnvironmentVariables = (logger) => {
 export const main = async () => {
   const port = process.env.PORT || 8082;
   const server = fastify();
-  const logger = createLogger("main");
 
   // Check that required environment
   // variables are set
-  ensureEnvironmentVariables(logger);
+  ensureEnvironmentVariables();
 
   server.setErrorHandler((err, _, reply) => {
-    logger.error("Unhandled error", err);
+    logger.error({ err }, "unhandled error");
     reply.status(500).send({ error: true });
   });
 
   process.on("uncaughtException", (err) => {
-    logger.error("Uncaught exception", err);
+    logger.error({ err }, "uncaught exception");
     // explicitly crash.
     process.exit(1);
   });
@@ -54,7 +52,7 @@ export const main = async () => {
       url,
       schema,
       handler: async (request, response) => {
-        logger.verbose(request.url);
+        logger.trace({ url: request.url });
 
         performance.clearResourceTimings();
         const timer = performance.now();
@@ -62,7 +60,7 @@ export const main = async () => {
         const { data, error, status } = await handler(request);
 
         if (error) {
-          logger.error(`error on ${request.url}`, error);
+          logger.error({ err: error });
         }
 
         const apiTimings = performance
@@ -76,7 +74,7 @@ export const main = async () => {
         const end = performance.now() - timer;
 
         if (status) {
-          logger.verbose(`${request.url} status: ${status}`);
+          logger.trace({ url: request.url, status });
           response.code(status);
         }
 
@@ -94,5 +92,5 @@ export const main = async () => {
   startAlertProcessing();
 
   await server.listen({ port, host: "0.0.0.0" });
-  logger.info(`Listening on ${port}`);
+  logger.info({ port }, "listening");
 };

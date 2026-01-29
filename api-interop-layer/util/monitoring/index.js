@@ -1,2 +1,1 @@
-export * from "./logging.js";
-export * from "./newRelic.js";
+export * from "./logger.js";
