@@ -6,6 +6,10 @@ import { createLogger } from "./util/monitoring/index.js";
 let client;
 export let USE_REDIS = false;
 
+// We need to know whether to use TLS or not
+// For local dev, we don't
+const protocol  = process.env.API_INTEROP_PRODUCTION ? "rediss" : "redis";
+
 // Let's lazy set the connection info, since
 // that will  not change in a single environment
 let CONNECTION_INFO;
@@ -110,7 +114,7 @@ export const getRedisClient = async () => {
   }
   try {
     const { password, host, port } = getRedisConnectionInfo();
-    const url = `redis://default:${password}@${host}:${port}`;
+    const url = `${protocol}://default:${password}@${host}:${port}`;
     logger.verbose(`Connecting to ${url}`);
     client = await createClient({url})
       .on("error", err => {
