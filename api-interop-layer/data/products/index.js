@@ -1,8 +1,8 @@
 import { fetchAPIJson } from "../../util/fetch.js";
-import { createLogger } from "../../util/monitoring/index.js";
+import { logger } from "../../util/monitoring/index.js";
 import AFDParser from "./afd/AFDParser.js";
 
-const logger = createLogger("Product");
+const productLogger = logger.child({ subsystem: "product" });
 
 export default async (id) =>
   fetchAPIJson(`/products/${id}`).then((productData) => {
@@ -20,7 +20,7 @@ export default async (id) =>
         productData.parsedProductText = parser.getStructureForTwig();
         return productData;
       } catch (e) {
-        logger.error(e);
+        productLogger.error({ err: e });
         return productData;
       }
     }

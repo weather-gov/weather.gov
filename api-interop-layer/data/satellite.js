@@ -1,8 +1,8 @@
 import dayjs from "../util/day.js";
-import { createLogger } from "../util/monitoring/index.js";
+import { logger } from "../util/monitoring/index.js";
 import { fetchAPIJson } from "../util/fetch.js";
 
-const logger = createLogger("satellite");
+const satelliteLogger = logger.child({ subsystem: "satellite" });
 
 export default async ({ grid: { wfo }, place: { timezone } }) => {
   try {
@@ -40,8 +40,7 @@ export default async ({ grid: { wfo }, place: { timezone } }) => {
       };
     }
   } catch (e) {
-    logger.error(`Error getting satellite metadata for ${wfo}`);
-    logger.error(e.message);
+    satelliteLogger.error({ err: e, wfo }, "Error getting satellite metadata");
   }
 
   return { error: true };

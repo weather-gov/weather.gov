@@ -1,4 +1,5 @@
 import https from "https";
+import logger from "./logger.js";
 
 export default (req, res) => {
   const isStandalone = !!process.env.PROXY_STANDALONE;
@@ -43,7 +44,7 @@ export default (req, res) => {
         // Write out the response.
         if (!res.writableEnded) {
           res.write(output.join(""));
-          console.log("PROXY:    response finished"); // eslint-disable-line no-console
+          logger.trace("PROXY: response finished");
         }
         res.end();
       };
@@ -56,7 +57,7 @@ export default (req, res) => {
       proxyResponse.on("end", finish);
     })
     .on("error", (e) => {
-      console.log(e.message); // eslint-disable-line no-console
+      logger.error({ err: e }, "PROXY: error");
       try {
         res.writeHead(500);
         res.write(e.message);

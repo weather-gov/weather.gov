@@ -1,6 +1,9 @@
 import { parentPort } from "node:worker_threads";
 import { SPATIAL_PROJECTION } from "../../util/constants.js";
 import openDatabase from "../db.js";
+import { logger } from "../../util/monitoring/index.js";
+
+const forecastLogger = logger.child({ subsystem: "forecast" });
 
 const tableName = "weathergov_ndfd_gridpoints";
 const logTableName = "weathergov_ndfd_grid_logs";
@@ -8,11 +11,10 @@ const logTableName = "weathergov_ndfd_grid_logs";
 export const flushForecastGridLogs = async (db, batch) => {
   // Log the number of hits being processed
   if (parentPort) {
-    parentPort.postMessage({
-      action: "log",
-      level: "info",
-      message: `flushing ${batch.length} grid hits to the database`,
-    });
+    forecastLogger.info(
+      { length: batch.length },
+      "flushing grid hits to the database",
+    );
   }
 
   const batchJson = JSON.stringify(batch);
@@ -51,11 +53,7 @@ export const flushForecastGridLogs = async (db, batch) => {
     await db.query(sql, [batchJson]);
   } catch (err) {
     if (parentPort) {
-      parentPort.postMessage({
-        action: "log",
-        level: "error",
-        message: `Grid Batcher failed: ${err.message}`,
-      });
+      forecastLogger.error({ err }, "grid batcher failed");
     }
   }
 };

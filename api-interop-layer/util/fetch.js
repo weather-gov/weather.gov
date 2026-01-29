@@ -1,9 +1,14 @@
-import { createLogger } from "./monitoring/index.js";
+import { logger } from "./monitoring/index.js";
 import { sleep } from "./sleep.js";
-import { getFromRedis, saveToRedis, getTTLFromResponse, USE_REDIS } from "../redis.js";
+import {
+  getFromRedis,
+  saveToRedis,
+  getTTLFromResponse,
+  USE_REDIS,
+} from "../redis.js";
 
-const logger = createLogger("fetch wrapper");
-const redisLogger = createLogger("redis");
+const fetchLogger = logger.child({ subsystem: "fetch wrapper" });
+const redisLogger = logger.child({ subsystem: "redis" });
 
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
 const BASE_GHWO_URL = process.env.GHWO_URL ?? "https://www.weather.gov";
@@ -12,9 +17,7 @@ const STANDARD_HEADERS = process.env.API_KEY
   : {};
 
 const internalFetch = async (path) => {
-  let url = URL.canParse(path)
-    ? URL.parse(path)
-    : new URL(path, BASE_URL);
+  let url = URL.canParse(path) ? URL.parse(path) : new URL(path, BASE_URL);
 
   const headers = { ...STANDARD_HEADERS };
 
@@ -25,14 +28,12 @@ const internalFetch = async (path) => {
     headers["wx-host"] = url.hostname;
   }
 
-  const isGHWO = (
-    url.hostname === "www.weather.gov" &&
-    url.pathname.startsWith("/source/")
-  );
+  const isGHWO =
+    url.hostname === "www.weather.gov" && url.pathname.startsWith("/source/");
 
   const isAlert = url.pathname.includes("alerts");
 
-  if(isGHWO)  {
+  if (isGHWO) {
     // If the incoming path matches a request to the website's risk overview
     // endpoint, switch to the GHWO base URL.
     url = new URL(url.pathname, BASE_GHWO_URL);
@@ -44,20 +45,18 @@ const internalFetch = async (path) => {
   // request.
   // Note that we explicitly do not cache GHWO requests
   // for the moment.
-  if(USE_REDIS && !isGHWO && !isAlert){
+  if (USE_REDIS && !isGHWO && !isAlert) {
     url = new URL(url);
     const cachedValue = await getFromRedis(url.pathname);
-    if(cachedValue){
-      redisLogger.verbose(`Returning cached value for ${url.pathname}`);
+    if (cachedValue) {
+      redisLogger.trace({ pathname: url.pathname }, "returning cached value");
       return new Promise((resolve) => {
-        resolve(
-          JSON.parse(cachedValue)
-        );
+        resolve(JSON.parse(cachedValue));
       });
     }
   }
 
-  logger.verbose(`making request to ${url}`);
+  fetchLogger.trace({ url }, "making request");
 
   /**
    * Note: We have to force convert the URL object back to a string here,
@@ -72,23 +71,16 @@ const internalFetch = async (path) => {
     const correlationID = r.headers?.get("x-correlation-id");
 
     if (r.status >= 200 && r.status < 400) {
-      logger.verbose({
-        message: `success from ${path}`,
-        "api-correlation-id": correlationID,
-      });
+      fetchLogger.trace({ path, correlationID });
 
       // Cache the value, and then return the JSON
       // response if there is a valid cache-control
       // header value in the response
-      if(USE_REDIS && !isGHWO && !isAlert){ 
+      if (USE_REDIS && !isGHWO && !isAlert) {
         const ttl = getTTLFromResponse(r);
-        if(ttl){
+        if (ttl) {
           const json = await r.json();
-          await saveToRedis(
-            url.pathname,
-            JSON.stringify(json),
-            ttl
-          );
+          await saveToRedis(url.pathname, JSON.stringify(json), ttl);
           return new Promise((resolve) => resolve(json));
         }
       }
@@ -96,10 +88,12 @@ const internalFetch = async (path) => {
     }
 
     const response = await r.json();
-    logger.error({
-      message: `${path} returned HTTP ${r.status}`,
+    fetchLogger.error({
+      path,
+      status: r.status,
       correlationID,
-    }, response);
+      response,
+    });
 
     // If there was a server error, retry. These are often temporary.
     if (r.status >= 500) {
@@ -123,9 +117,9 @@ export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
     .catch((e) => {
       if (e instanceof SyntaxError) {
         // this can happen if the API or proxy returns HTML
-        logger.error(`error retrieving ${path} due to invalid JSON`, e);
+        fetchLogger.error({ err: e, path }, "invalid JSON");
       } else {
-        logger.error(`error retrieving ${path}`, e.cause);
+        fetchLogger.error({ err: e });
       }
       return { ...e.cause, error: true };
     });

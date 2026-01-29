@@ -2,15 +2,14 @@ import { Worker, isMainThread } from "node:worker_threads";
 import path from "node:path";
 
 import { modifyTimestampsForAlert } from "./utils.js";
-import { createLogger } from "../../util/monitoring/index.js";
+import { logger } from "../../util/monitoring/index.js";
 import { parseDuration } from "./parse/index.js";
 import sort from "./sort.js";
 import { AlertsCache } from "./cache.js";
 import openDatabase from "../db.js";
 import dayjs from "../../util/day.js";
 
-const logger = createLogger("alerts");
-const backgroundLogger = createLogger("alerts (background)");
+const alertsLogger = logger.child({ subsystem: "alerts" });
 const cachedAlerts = new Map();
 const alertsCache = new AlertsCache();
 
@@ -28,14 +27,6 @@ export const updateFromBackground = ({ action, level, message }) => {
       metadata.error = true;
       break;
 
-    case "log":
-      backgroundLogger[level]?.(message);
-      if (!backgroundLogger[level]) {
-        logger.error(
-          `Attempted to write to invalid log level: '${level}': ${message}`,
-        );
-      }
-      break;
     default:
       metadata.updated = dayjs();
       metadata.error = false;
@@ -75,7 +66,7 @@ export const startAlertProcessing = async () => {
     // If our background thread stops, restart it.
     updater.on("exit", restart);
     updater.on("error", (e) => {
-      backgroundLogger.error(e);
+      alertsLogger.error({ err: e });
       restart();
     });
 
@@ -101,7 +92,7 @@ export const postProcessAlerts = (alerts, { timezone }) => {
       end: alert.finish?.tz(timezone).format("dddd MM/DD h:mm A z"),
     };
 
-    logger.verbose(`has ${alert.event}`);
+    alertsLogger.trace({ event: alert.event });
   });
 
   const highest = alerts
@@ -114,7 +105,10 @@ export const postProcessAlerts = (alerts, { timezone }) => {
     })
     .pop();
 
-  logger.verbose(`got ${alerts.length} alerts; highest is ${highest?.text}`);
+  alertsLogger.trace(
+    { length: alerts.length, highest: highest?.text },
+    "processed alerts",
+  );
 
   // Clone the cached stuff so external entities can't overwrite it. Also so
   // external references aren't modified unexpectedly mid-request.

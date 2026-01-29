@@ -1,9 +1,9 @@
 import path from "node:path";
 import { Worker, isMainThread } from "node:worker_threads";
-import { createLogger } from "../../util/monitoring/index.js";
+import { logger } from "../../util/monitoring/index.js";
 import openDatabase from "../db.js";
-const logger = createLogger("risk overview / ghwo");
-const backgroundLogger = createLogger("risk overview / ghwo (background)");
+
+const riskOverviewLogger = logger.child({ subsystem: "risk overview" });
 
 // Save the returned promise and immediately kick off the database init. The
 // rest of the stuff in here will await the promise, but it'll be basically
@@ -37,7 +37,7 @@ const ensureDatabaseExists = openDatabase().then(async (db) => {
   // is set to true, we drop the GHWO metadata
   // from the meta table on each restart.
   if (process.env.TRUNCATE_HAZARD_OUTLOOKS === "true") {
-    logger.info(
+    riskOverviewLogger.info(
       "Truncating weathergov_temp_ghwo_meta, weathergov_temp_ghwo...",
     );
     await db.query(`TRUNCATE weathergov_temp_ghwo_meta`);
@@ -59,15 +59,6 @@ export const startRiskOverviewProcessing = async () => {
 
     worker.on("message", ({ action, level, message }) => {
       switch (action) {
-        case "log":
-          backgroundLogger[level]?.(message);
-          if (!backgroundLogger[level]) {
-            logger.error(
-              `Attempted to write to invalid log level: '${level}': ${message}`,
-            );
-          }
-          break;
-
         default:
           break;
       }
@@ -90,7 +81,7 @@ export const startRiskOverviewProcessing = async () => {
     // If our background thread stops, restart it.
     worker.on("exit", restart);
     worker.on("error", (e) => {
-      backgroundLogger.error("error", e);
+      riskOverviewLogger.error({ err: e });
       restart();
     });
 
@@ -123,7 +114,7 @@ export const getRiskOverview = async (placeId) => {
     }
     return { error: `No risk overview found for ${placeId}`, status: 404 };
   } catch (e) {
-    logger.error(`Error fetching risk overview for ${placeId}`, e);
+    riskOverviewLogger.error({ err: e, placeId }, "could not fetch");
     return { error: `Error fetching risk overview for ${placeId}` };
   }
 };
