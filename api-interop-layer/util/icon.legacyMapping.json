@@ -42,7 +42,7 @@
     "icon": "cold.svg"
   },
   "day/haze": {
-    "icon": "hazy_smoke-day.svg"
+    "icon": "hazy_smoke_day.svg"
   },
   "night/haze": {
     "icon": "fog.svg"
