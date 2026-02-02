@@ -1,6 +1,6 @@
 import pino from "pino";
 
-const prodConfiguration = pino.transport({
+const prodConfiguration = () => pino.transport({
   targets: [
     {
       target: "pino/file",
@@ -10,8 +10,10 @@ const prodConfiguration = pino.transport({
   ],
 });
 
-// we want nicer looking logs for dev purposes
-const devConfiguration = pino.transport({
+// we want nicer looking logs for dev purposes; make this
+// a function so that the transport() method is ONLY called
+// if we actually want this config
+const devConfiguration = () => pino.transport({
   serializers: {
     req: pino.stdSerializers.req,
     res: pino.stdSerializers.res,
@@ -35,7 +37,7 @@ export const logger = pino(
       process.env.LOG_LEVEL ||
       (process.env.API_INTEROP_PRODUCTION ? "info" : "trace"),
   },
-  process.env.API_INTEROP_PRODUCTION ? prodConfiguration : devConfiguration,
+  process.env.API_INTEROP_PRODUCTION ? prodConfiguration() : devConfiguration(),
 );
 
 export default { logger };
