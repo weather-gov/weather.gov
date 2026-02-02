@@ -7,7 +7,7 @@ const config = {
   enableXRay: false,
   signing: true, // If you have a public resource policy and wish to send unsigned requests please set this to false
 };
-const APPLICATION_ID = "ef7af089-12b8-4735-bf52-97230a845eb8";
+const APPLICATION_ID = "43e31d84-e535-442f-a822-ec499fd2ffc5";
 const APPLICATION_VERSION = "1.0.0";
 const APPLICATION_REGION = "us-east-1";
 (function (n, i, v, r, s, c, x, z) {
