@@ -16,16 +16,14 @@ export async function mochaGlobalSetup() {
       release: sandbox.stub(),
     },
   };
-  sinon.stub(Pool.prototype, "connect");
-  sinon.stub(Client.prototype, "connect");
+  sandbox.stub(Pool.prototype, "connect");
+  sandbox.stub(Client.prototype, "connect");
   Pool.prototype.connect.resolves(global.test.database);
   Client.prototype.connect.resolves(global.test.database);
 }
 
 export async function mochaGlobalTeardown() {
-  global.fetch.restore();
-  Pool.prototype.connect.restore();
-  Client.prototype.connect.restore();
+  sandbox.restore();
 }
 
 export const mochaHooks = {
