@@ -7,7 +7,7 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js";
 // we import a custom implementation. This fixes a substantial
 // performance bug. Fix originally propsed by @ikeyan on GitHub:
 //   https://github.com/iamkun/dayjs/pull/2753
-import tz from "./dayjs.timezone.js";
+import tz from "./timezone.js";
 import utc from "dayjs/plugin/utc.js";
 
 dayjs.extend(advancedFormat);

@@ -7,7 +7,8 @@
   "scripts": {
     "start": "npx --no-install -p pm2 pm2-runtime start ecosystem.prod.config.cjs",
     "start-dev": "npx --no-install -p pm2 pm2-runtime start ecosystem.dev.config.cjs",
-    "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.ts' --exclude 'node_modules/**' --loader=ts-node/esm"
+    "test": "LOG_LEVEL=silent c8 --reporter html --reporter clover mocha '**/*.test.ts' --exclude 'node_modules/**' --loader=ts-node/esm",
+    "test:perf": "npx -y tsx src/util/perf/perf.ts"
   },
   "author": "",
   "license": "CC0-1.0",
