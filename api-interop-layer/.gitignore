@@ -3,3 +3,7 @@ coverage
 
 # Test run reports (versioned with datetime)
 util/tests/test-run-report_*.md
+
+# Performance test output files
+util/perf_go.txt
+util/perf_js.txt
