@@ -1,5 +1,13 @@
 # Alternative Performance Benchmark Report
 
+## Attribution
+
+This alternative benchmark suite was developed by **Claude (claude-3-5-sonnet-20241022)** to replicate and improve upon the original performance tests developed by **Gemini** (see `../perf.md`).
+
+The goal was to provide a more rigorous statistical methodology while maintaining consistency with the original test cases and producing comparable results.
+
+---
+
 ## Overview
 
 This report presents an alternative performance benchmarking methodology with improved statistical rigor and consistency between JavaScript and Go implementations.

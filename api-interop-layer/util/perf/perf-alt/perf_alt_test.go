@@ -1,5 +1,8 @@
 // Alternative Performance Benchmark Suite for Go
 //
+// Developed by: Claude (claude-3-5-sonnet-20241022)
+// Based on: Original performance tests by Gemini (see ../perf.md)
+//
 // Improvements over original approach:
 // 1. Uses Go's standard benchmarking with proper warmup (b.ResetTimer)
 // 2. Memory allocation tracking with b.ReportAllocs()

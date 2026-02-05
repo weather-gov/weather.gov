@@ -1,6 +1,9 @@
 /**
  * Alternative Performance Benchmark Suite
  * 
+ * Developed by: Claude (claude-3-5-sonnet-20241022)
+ * Based on: Original performance tests by Gemini (see ../perf.js)
+ * 
  * Improvements over original approach:
  * 1. Warmup phase to ensure JIT optimization
  * 2. Statistical analysis (min, max, mean, median, p95, stddev)
