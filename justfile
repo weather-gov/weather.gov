@@ -287,7 +287,7 @@ test-perf-go:
 # Starts up all the containers, prepares the databases, and loads initial data
 [group("dev environment management")]
 init: && migrate load-spatial django-restart
-  docker compose up -d
+  docker compose up -d --build
   sleep 15
 
 # Starts a PlantUML server container listening on localhost:8180

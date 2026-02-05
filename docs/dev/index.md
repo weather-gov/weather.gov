@@ -32,7 +32,7 @@ then:
 1. Make sure you have [git commit signing configured](git-signing.md) for this
    repo or globally.
 2. Read up on how we've [structured our Django code](django.md).
-3. Learn about our [API interoperability layer](api-interop-layer.md).
+3. Learn about our [API interoperability layer](api-interop/index.md).
 4. Learn about [setting up debugging](debugging.md).
 5. Learn about [replacing API calls with well-known data](intercepting-the-api.md)
    to see how we reproduce particular weather scenarios without needing to rely

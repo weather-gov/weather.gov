@@ -3,6 +3,7 @@ name: weathergov-django
 volumes:
   postgres_data:
 
+
 services:
   database:
     platform: linux/amd64
@@ -17,6 +18,11 @@ services:
       POSTGRES_DB: weathergov
     ports:
       - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U drupal -d weathergov" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   web:
     build:
@@ -40,9 +46,12 @@ services:
     networks:
       - weather.gov
     depends_on:
-      - database
-      - api-proxy
-      - api-interop-layer
+      database:
+        condition: service_healthy
+      api-proxy:
+        condition: service_started
+      api-interop-layer:
+        condition: service_started
     links:
       - database
 
@@ -69,7 +78,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256MB
+          memory: 512MB
     environment:
       PORT: 8082
       DB_NAME: weathergov
@@ -82,6 +91,7 @@ services:
       API_KEY: ${API_KEY:-}
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY:-}
+      NEW_RELIC_ENABLED: "false"
       LOG_LEVEL: trace
       # TRUNCATE_HAZARD_OUTLOOKS: "true"
       REDIS_HOST: redis
@@ -106,7 +116,7 @@ services:
     volumes:
       - ./forecast/frontend/:/app
       - /app/node_modules
-    profiles: ["utility"]
+    profiles: [ "utility" ]
 
   spatial:
     build:
@@ -142,7 +152,7 @@ services:
       GHWO_URL: http://api-proxy:8081
       WEB_URL: http://web:8080
       INTEROP_URL: http://api-interop-layer:8082
-    profiles: ["utility"]
+    profiles: [ "utility" ]
 
   node:
     build:
@@ -154,13 +164,13 @@ services:
     volumes:
       - ./reports:/reports
       - /app/node_modules
-    profiles: ["utility"]
+    profiles: [ "utility" ]
 
   plantuml:
     image: plantuml/plantuml-server:tomcat
     ports:
       - 8180:8080
-    profiles: ["utility"]
+    profiles: [ "utility" ]
 
   docs:
     image: squidfunk/mkdocs-material
@@ -168,7 +178,7 @@ services:
       - 8000:8000
     volumes:
       - .:/docs
-    profiles: ["utility"]
+    profiles: [ "utility" ]
 
   redis:
     image: redis:8.4-alpine

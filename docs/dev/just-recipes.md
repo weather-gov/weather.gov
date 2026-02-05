@@ -23,7 +23,7 @@ The recipes are also listed here:
 | Recipe      | Description                                                                                                                                                                                                                                                       |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `just init` | This creates and starts our development containers, creates and migrates the database tables, loads initial CMS content, and loads spatial data. Once this finishes, you should have a fully-operational site at [http://localhost:8080/](http://localhost:8080/) |
-| `just zap`  | Sometimes our databases or whatever get into a funky state and we need to just start over. This will destroy the project containers and Docker volumes and then re-run `init`.                                                                                    |
+| `just zap`  | Sometimes our databases or whatever get into a funky state and we need to just start over. This will destroy the project containers and Docker volumes and then re-run `init` (forcing a rebuild of containers). |
 
 > [!NOTE]
 > In the `zap` recipe, the spatial data is dumped to a SQL file before destroying

@@ -15,8 +15,8 @@ const forecastLogger = logger.child({ subsystem: "forecast" });
 
 forecastLogger.info("starting background worker");
 
-const backgroundWorker = new Worker("/app/data/forecast/backgroundTasks.js");
-backgroundWorker.on("message", (msg) => {});
+const backgroundWorker = new Worker("/app/src/data/forecast/backgroundTasks.ts");
+backgroundWorker.on("message", (msg) => { });
 
 const gridCache = new ForecastGridCache(backgroundWorker);
 backgroundWorker.postMessage({ action: "start" });

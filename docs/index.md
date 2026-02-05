@@ -12,7 +12,7 @@ If you are new to the project, start with the [Development Guide](dev/index.md).
 ## Key Sections
 
 - **[Development](dev/index.md)**: Guides for developers, including setup, debugging, and testing.
-- **[API Interop Layer](interop/index.md)**: Documentation for the middleware layer, including technical details and schema definitions.
+- **[API Interop Layer](dev/api-interop/index.md)**: Documentation for the middleware layer, including technical details and schema definitions.
 - **[Architecture](architecture/decisions/index.md)**: Decision records and diagrams.
 - **[Product](product/roadmap.md)**: Roadmaps and release info.
 
