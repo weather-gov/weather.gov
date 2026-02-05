@@ -49,7 +49,7 @@ svg:
 
 # Serve the documentation
 [group("building")]
-serve-docs:
+serve-docs: update-docs
   docker compose --profile utility up docs
 
 # Update documentation (README code org & Performance results)

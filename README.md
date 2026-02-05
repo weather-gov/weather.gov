@@ -3,7 +3,6 @@
 
 After you have cloned the repository, you can run `just zap` to set up the containers. Visit [http://localhost:8080]() to see the application live once the containers are running. Visit [http://localhost:8081]() to see the API proxy's status once the containers are running.
 
-## Documentation
 
 ## Documentation
 
@@ -18,6 +17,8 @@ just serve-docs
 
 Visit [http://127.0.0.1:8000](http://127.0.0.1:8000) to view the docs.
 
+The `serve-docs` command automatically runs a documentation update script (`scripts/update-docs.js`) before starting the server. This script ensures that the "Code organization" section in the README and the "Performance Results" in the Interop documentation are always up-to-date with the codebase.
+
 The documentation covers:
 - **[Getting Started](./docs/dev/index.md)**: Setup, Docker, and Just commands.
 - **[API Interop Layer](./docs/interop/index.md)**: Technical details and schemas.
@@ -26,10 +27,10 @@ The documentation covers:
 
 ## Code organization
 
-> Last updated: 2026-02-05
-> Version: 1.0.0
+> [!NOTE]  
+> This section is automatically updated by running `npm run update-docs` or `just update-docs`.
 
-This overview will likely become outdated, but it may help to orient you to the project.
+We have organized the code into a few directories:
 
 ```
 .
