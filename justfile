@@ -286,7 +286,7 @@ test-perf-go:
 ##### Dev environment management #####
 # Starts up all the containers, prepares the databases, and loads initial data
 [group("dev environment management")]
-init options="": && migrate load-spatial django-restart
+init options="": && migrate compile-translations load-spatial django-restart
   docker compose up -d {{options}}
   sleep 15
 
