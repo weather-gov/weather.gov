@@ -68,14 +68,14 @@ The following benchmarks compare the performance of critical utility functions i
 
 | Function | TS Mean (ns) | TS Ops/Sec | Go Mean (ns) | Go Ops/Sec |
 | :--- | :--- | :--- | :--- | :--- |
-| `ConvertProperties` | 1,401 | 713,857 | 1,473 | 678,887 |
-| `ConvertTimezone` | 1,494 | 669,276 | 12 | 83,963,056 |
-| `FetchAPIJson` | 304,852 | 3,280 | 85,919 | 11,639 |
+| `ConvertProperties` | 1,401 | 713,857 | 1,405 | 711,744 |
+| `ConvertTimezone` | 1,494 | 669,276 | 11 | 89,847,260 |
+| `FetchAPIJson` | 304,852 | 3,280 | 83,665 | 11,952 |
 | `ForecastProcessing` | 571,104 | 1,751 | - | - |
-| `ParagraphSquash` | 292 | 3,428,522 | 127 | 7,855,460 |
+| `ParagraphSquash` | 292 | 3,428,522 | 120 | 8,368,201 |
 | `RiskProcessing` | 10,615 | 94,206 | - | - |
-| `SentenceCase` | 291 | 3,435,703 | 306 | 3,265,839 |
-| `TitleCase` | - | - | 697 | 1,435,544 |
+| `SentenceCase` | 291 | 3,435,703 | 298 | 3,355,705 |
+| `TitleCase` | - | - | 660 | 1,515,152 |
 
 
 ## Definitions

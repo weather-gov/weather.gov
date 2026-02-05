@@ -169,7 +169,7 @@ function updatePerfDocs() {
 	try {
 		if (fs.existsSync(PERF_RESULTS_DIR)) {
 			const files = fs.readdirSync(PERF_RESULTS_DIR)
-				.filter(f => f.startsWith('perf-') && f.endsWith('.json'))
+				.filter(f => f.startsWith('perf-') && !f.startsWith('perf-go-') && f.endsWith('.json'))
 				.sort().reverse();
 
 			if (files.length > 0) {
@@ -187,43 +187,24 @@ function updatePerfDocs() {
 		console.error('Error reading TS perf results:', err);
 	}
 
-	// 2. Run and Parse Go Benchmarks
+	// 2. Get Go Results
 	try {
-		console.log('Running Go benchmarks...');
-		const goOutput = child_process.execSync('go test -bench=.', { cwd: GO_UTIL_DIR, encoding: 'utf8' });
+		if (fs.existsSync(PERF_RESULTS_DIR)) {
+			const files = fs.readdirSync(PERF_RESULTS_DIR)
+				.filter(f => f.startsWith('perf-go-') && f.endsWith('.json'))
+				.sort().reverse();
 
-		// Output format: BenchmarkName-CPUS   Iterations   Ns/Op ...
-		// e.g. BenchmarkConvertProperties-10             847561              1452 ns/op
-
-		const lines = goOutput.split('\n');
-		lines.forEach(line => {
-			if (line.startsWith('Benchmark')) {
-				const parts = line.split(/\s+/);
-				if (parts.length >= 3) {
-					// Name is parts[0], remove 'Benchmark' prefix and '-N' suffix
-					let name = parts[0].replace('Benchmark', '');
-					const suffixIdx = name.lastIndexOf('-');
-					if (suffixIdx !== -1) {
-						name = name.substring(0, suffixIdx);
-					}
-
-					const nsPerOp = parseFloat(parts[2]);
-					// Skip if invalid
-					if (!isNaN(nsPerOp)) {
-						const opsPerSec = 1000000000 / nsPerOp;
-						goResults.push({
-							name: name,
-							mean_ns: nsPerOp,
-							ops_per_sec: opsPerSec
-						});
-					}
-				}
+			if (files.length > 0) {
+				const latestFile = path.join(PERF_RESULTS_DIR, files[0]);
+				const perfData = JSON.parse(fs.readFileSync(latestFile, 'utf8'));
+				goResults = perfData.results;
+				console.log(`Loaded Go perf results from ${path.basename(latestFile)}`);
+			} else {
+				console.log('No cached cached Go perform test results found. (Run `npm run test:perf:go` to generate)');
 			}
-		});
-		console.log(`Parsed ${goResults.length} Go benchmark results.`);
-
+		}
 	} catch (err) {
-		console.warn('Error running/parsing Go benchmarks (Go might not be installed or code invalid):', err.message);
+		console.warn('Error reading Go perf results:', err.message);
 	}
 
 	// 3. Merge and Generate Table

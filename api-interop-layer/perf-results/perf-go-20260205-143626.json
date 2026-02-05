@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "timestamp": "2026-02-05T14:36:26.723Z",
+    "type": "golang"
+  },
+  "results": [
+    {
+      "name": "ConvertProperties",
+      "mean_ns": 1405,
+      "ops_per_sec": 711743.7722419929
+    },
+    {
+      "name": "SentenceCase",
+      "mean_ns": 298,
+      "ops_per_sec": 3355704.697986577
+    },
+    {
+      "name": "TitleCase",
+      "mean_ns": 660,
+      "ops_per_sec": 1515151.5151515151
+    },
+    {
+      "name": "ParagraphSquash",
+      "mean_ns": 119.5,
+      "ops_per_sec": 8368200.836820084
+    },
+    {
+      "name": "FetchAPIJson",
+      "mean_ns": 83665,
+      "ops_per_sec": 11952.42933126158
+    },
+    {
+      "name": "ConvertTimezone",
+      "mean_ns": 11.13,
+      "ops_per_sec": 89847259.65858041
+    }
+  ]
+}

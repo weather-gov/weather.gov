@@ -266,6 +266,22 @@ test-web-components:
     npx --no-install c8 --reporter html --reporter clover -o /reports mocha \
       --require frontend/tests/components/preload.js \
       frontend/tests/components/**/*-tests.js
+  
+# Run typescript performance test
+[group("testing")]
+test-perf:
+  docker compose \
+    run --rm \
+    api-interop-layer \
+    npm run test:perf
+
+# Run golang performance test
+[group("testing")]
+test-perf-go:
+  docker compose \
+    run --rm \
+    api-interop-layer \
+    npm run test:perf:go
 
 ##### Dev environment management #####
 # Starts up all the containers, prepares the databases, and loads initial data
