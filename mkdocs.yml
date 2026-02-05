@@ -40,6 +40,7 @@ nav:
     - 'Spatial Data': dev/spatial-data.md
     - 'Terraform': dev/terraform.md
     - 'Testing': dev/testing.md
+    - 'Changelog': CHANGELOG.md
   - Product:
     - 'Roadmap': product/roadmap.md
     - 'Tagged Releases': product/tagged-releases.md

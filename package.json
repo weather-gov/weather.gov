@@ -30,6 +30,9 @@
     "@types/node": "^22.10.5",
     "axe-core": "^4.10.2",
     "chai": "^5.1.2",
+    "conventional-changelog": "^7.1.1",
+    "conventional-changelog-angular": "^8.1.0",
+    "conventional-changelog-cli": "^5.0.0",
     "dayjs": "^1.11.13",
     "eslint": "^9.35.0",
     "eslint-config-prettier": "^10.0.1",
@@ -54,7 +57,9 @@
     "check-translations": "node ./tests/translations/main.js",
     "docs:serve": "docker compose --profile utility up docs",
     "docs:build": "docker compose --profile utility run --rm docs build",
-    "update-docs": "node scripts/update-docs.js"
+    "update-docs": "node scripts/update-docs.js",
+    "changelog": "conventional-changelog -p angular -i docs/CHANGELOG.md -s",
+    "changelog:branch": "node scripts/generate-branch-changelog.js"
   },
   "prettier": {},
   "dependencies": {

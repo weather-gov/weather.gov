@@ -24,6 +24,15 @@ The documentation covers:
 - **[API Interop Layer](./docs/interop/index.md)**: Technical details and schemas.
 - **[Development](./docs/dev/index.md)**: Standards, testing, and debugging.
 - **[Architecture](./docs/architecture/decisions/)**: Decision records.
+- **[Changelog](./docs/CHANGELOG.md)**: Project history.
+
+## Development
+
+### Conventional Commits & Changelog
+
+We use **[Conventional Commits](https://www.conventionalcommits.org/)** to automate our changelog generation.
+- **Main Changelog**: Run `npm run changelog` to update `docs/CHANGELOG.md` (uses [conventional-changelog-cli](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli)).
+- **Branch Changelog**: Run `npm run changelog:branch` to generate a cumulative changelog for your current working branch.
 
 ## Code organization
 

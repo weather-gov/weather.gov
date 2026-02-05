@@ -82,3 +82,4 @@ terraform/dist
 forecast/media/*.*
 # collectstatic
 forecast/frontend/public/
+docs/CHANGELOG-*.md

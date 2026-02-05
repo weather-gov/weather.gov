@@ -15,6 +15,11 @@ If you are new to the project, start with the [Development Guide](dev/index.md).
 - **[API Interop Layer](dev/api-interop/index.md)**: Documentation for the middleware layer, including technical details and schema definitions.
 - **[Architecture](architecture/decisions/index.md)**: Decision records and diagrams.
 - **[Product](product/roadmap.md)**: Roadmaps and release info.
+- **[Changelog](CHANGELOG.md)**: History of changes to the project.
+
+## Contributing
+
+We use **[Conventional Commits](https://www.conventionalcommits.org/)** for our commit messages. This allows us to automatically generate the changelog. Please follow this convention when making changes.
 
 ## Running this Documentation
 
