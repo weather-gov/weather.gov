@@ -1,2 +1,5 @@
 .nyc_output
 coverage
+
+# Test run reports (versioned with datetime)
+util/tests/test-run-report_*.md
