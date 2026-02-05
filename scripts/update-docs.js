@@ -151,8 +151,85 @@ ${tree}\`\`\`
 
 	} catch (err) {
 		console.error('Error updating README:', err);
-		process.exit(1);
+		// Don't exit process so we can continue to other updates
+	}
+}
+
+function updatePerfDocs() {
+	const PERF_RESULTS_DIR = path.join(ROOT_DIR, 'api-interop-layer/perf-results');
+	const DOCS_INDEX_PATH = path.join(ROOT_DIR, 'docs/interop/index.md');
+
+	try {
+		if (!fs.existsSync(PERF_RESULTS_DIR)) {
+			console.warn('Perf results directory not found, skipping perf docs update.');
+			return;
+		}
+
+		const files = fs.readdirSync(PERF_RESULTS_DIR)
+			.filter(f => f.startsWith('perf-') && f.endsWith('.json'))
+			.sort().reverse();
+
+		if (files.length === 0) {
+			console.warn('No perf results found, skipping perf docs update.');
+			return;
+		}
+
+		const latestFile = path.join(PERF_RESULTS_DIR, files[0]);
+		const perfData = JSON.parse(fs.readFileSync(latestFile, 'utf8'));
+
+		// Format number with commas
+		const fmt = (n) => Math.round(n).toLocaleString();
+
+		let table = '| Function | Mean (ns) | Ops/Sec |\n| :--- | :--- | :--- |\n';
+		perfData.results.forEach(r => {
+			table += `| \`${r.name}\` | ${fmt(r.mean_ns)} | ${fmt(r.ops_per_sec)} |\n`;
+		});
+
+		table += `\n*Data from ${path.basename(latestFile)}*`;
+
+		let content = fs.readFileSync(DOCS_INDEX_PATH, 'utf8');
+
+		// Match section: ### Performance Results ... (table) ... (end of section or file)
+		const sectionHeader = '### Performance Results';
+		const lines = content.split('\n');
+		let startIndex = -1;
+		let endIndex = -1;
+
+		for (let i = 0; i < lines.length; i++) {
+			if (lines[i].trim() === sectionHeader) {
+				startIndex = i;
+			}
+			// Stop at next H3, H2 or H1
+			if (startIndex !== -1 && i > startIndex && (lines[i].startsWith('### ') || lines[i].startsWith('## ') || lines[i].startsWith('# '))) {
+				endIndex = i;
+				break;
+			}
+		}
+
+		if (startIndex === -1) {
+			console.warn('Could not find "### Performance Results" section in docs/interop/index.md');
+			return;
+		}
+
+		const pre = lines.slice(0, startIndex + 1).join('\n'); // Include header
+		const post = endIndex !== -1 ? lines.slice(endIndex).join('\n') : '';
+
+		const newSectionContent = `
+> Last Updated: ${new Date().toISOString().split('T')[0]}
+
+The following benchmarks track the performance of critical utility functions in the API Interop Layer.
+
+${table}
+
+`;
+		const finalOutput = `${pre}${newSectionContent}${post}`;
+		fs.writeFileSync(DOCS_INDEX_PATH, finalOutput);
+		console.log('docs/interop/index.md Performance Results updated successfully.');
+
+	} catch (err) {
+		console.error('Error updating Perf docs:', err);
 	}
 }
 
 updateReadme();
+updatePerfDocs();

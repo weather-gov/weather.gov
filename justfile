@@ -52,9 +52,9 @@ svg:
 serve-docs:
   docker compose --profile utility up docs
 
-# Update README code organization
-readme-code-org:
-  npm run update-code-org
+# Update documentation (README code org & Performance results)
+update-docs:
+  npm run update-docs
 
 ##### Django/django management #####
 # Generate static assets

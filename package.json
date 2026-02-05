@@ -54,7 +54,7 @@
     "check-translations": "node ./tests/translations/main.js",
     "docs:serve": "docker compose --profile utility up docs",
     "docs:build": "docker compose --profile utility run --rm docs build",
-    "update-code-org": "node scripts/update-code-org.js"
+    "update-docs": "node scripts/update-docs.js"
   },
   "prettier": {},
   "dependencies": {

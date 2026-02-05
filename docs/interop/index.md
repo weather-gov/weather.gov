@@ -20,7 +20,7 @@ The interop layer is written in TypeScript to ensure type safety and better deve
 
 ### Regression Testing
 
-Regression testing is critical to ensure that changes do not break existing functionality. We use `mocha` and `chai` for our test suite.
+Regression testing is critical to ensure that changes do not break existing functionality. We use **Mocha** as the test runner and **Chai** for assertions. Tests are written in TypeScript and executed using `ts-node` loader.
 
 **Running Regression Tests:**
 ```bash
@@ -50,17 +50,21 @@ npm run test:perf
 ```
 
 ### Performance Results
+> Last Updated: 2026-02-05
 
-We track performance metrics over time. The results are stored in `api-interop-layer/perf-results`.
+The following benchmarks track the performance of critical utility functions in the API Interop Layer.
 
-| Test Name | Date | Mean Duration (ms) | P95 Duration (ms) |
-| :--- | :--- | :--- | :--- |
-| **Parsing Large JSON** | 2023-10-27 | 150 | 200 |
-| **Gridpoint Caching** | 2023-10-27 | 45 | 60 |
-| *(Example Data - Run `npm run test:perf` for latest)* | | | |
+| Function | Mean (ns) | Ops/Sec |
+| :--- | :--- | :--- |
+| `SentenceCase` | 291 | 3,435,703 |
+| `ParagraphSquash` | 292 | 3,428,522 |
+| `ConvertProperties` | 1,401 | 713,857 |
+| `ConvertTimezone` | 1,494 | 669,276 |
+| `ForecastProcessing` | 571,104 | 1,751 |
+| `RiskProcessing` | 10,615 | 94,206 |
+| `FetchAPIJson` | 304,852 | 3,280 |
 
-> [!NOTE]
-> Detailed performance logs can be found in the `perf-results` directory.
+*Data from perf-20260205-061427.json*
 
 ## Definitions
 
