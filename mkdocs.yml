@@ -9,15 +9,14 @@ theme:
     - mkdocs-material
 
 nav:
-  - Home: index.md
-  - Interop Layer: 
-    - Overview: interop/index.md
-    - Definitions: interop/definitions/index.md
-    - 'Legacy Docs':
-        - 'Multi Counties': interop/multi-counties.md
   - Development:
     - 'Getting Started': dev/index.md
-    - 'API Interop Layer': dev/api-interop-layer.md
+    - 'API Interop Layer': 
+      - 'Overview': dev/api-interop/index.md
+      - 'Definitions': dev/api-interop/definitions/index.md
+      - 'Golang Utilities': dev/api-interop/golang-utilities.md
+      - 'Legacy Docs':
+        - 'Multi Counties': dev/api-interop/multi-counties.md
     - 'Authentication': dev/authentication.md
     - 'Cloudgov Quota': dev/cloudgov-quota.md
     - 'Comment Templates': dev/comment-templates.md
