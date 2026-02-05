@@ -24,7 +24,10 @@ This report compares the performance of utility functions implemented in both Ja
 
 ## Conclusions
 
-1.  **Timezone Conversion Logic**: Go is **massively faster (~4,300x)** at timezone conversion. The JavaScript implementation relies on `Intl.DateTimeFormat`, which is computationally expensive even with caching. Go's native `time` package handles timezone calculations with simple arithmetic and memory lookups, resulting in sub-microsecond performance (11.5 ns vs 49,722 ns).
+1.  **Timezone Conversion Logic**:
+    *   **Original JS**: Relies on `dayjs` and `Intl.DateTimeFormat` with object overhead. (~50,000 ns/op).
+    *   **Optimized JS**: By using a specialized function that caches `Intl.DateTimeFormat` and uses string parsing instead of object allocation, we achieved a **~25x improvement** (~2,000 ns/op).
+    *   **Go**: Still **massively faster** (~11.5 ns). Go's native `time` package handles timezone calculations with simple arithmetic and memory lookups, making it **~180x faster** than even the *optimized* JS version.
 2.  **Complex Logic Favors Go**: For `ConvertProperties`, which involves traversing objects and applying logic, Go was **~2.3x faster**. This suggests Go is better suited for the heavy lifting of data transformation in this pipeline.
 3.  **Network/JSON Handling Favors Go**: For `FetchAPIJson`,Go was **~4.4x faster**. Go's standard library `net/http` and `encoding/json` are highly optimized for this use case compared to Node's `fetch` implementation.
 4.  **Micro-String Operations**: Initially, JavaScript performed better on simple string operations. However, after optimizing `ParagraphSquash` to use `strings.Builder` instead of Regex, Go `ParagraphSquash` is now **~4.4x faster** than the JS version (118 ns/op vs 525 ns/op). This highlights that while V8 is fast, optimized Go code using the right primitives (byte-level processing) can outperform JS significantly.
@@ -69,7 +72,7 @@ The implementation was redesigned (see `paragraph_squash.go`) to use a single-pa
 | .TitleCase | 442 | 675 | ~1.5x Slower |
 | .ParagraphSquash | 525 | 118 | **~4.4x Faster** |
 | **FetchAPIJson** | 375,403 | 85,767 | **~4.4x Faster** |
-| **ConvertTimezone** | 49,722 | 11.5 | **~4,323x Faster** |
+| **ConvertTimezone** | 49,722 (Original)<br>1,999 (Optimized) | 11.5 | **~4,323x Faster (vs Orig)**<br>**~181x Faster (vs Opt)** |
 
 ## Raw Output
 
@@ -92,3 +95,9 @@ BenchmarkParagraphSquash-10              9695871               119.2 ns/op
 BenchmarkFetchAPIJson-10                   13794             85767 ns/op
 BenchmarkConvertTimezone-10             100000000               11.49 ns/op
 ```
+
+### Optimized JavaScript (timezone-new.js)
+```text
+BenchmarkConvertTimezoneNew: 1999.89 ns/op (500027.08 ops/s)
+```
+
