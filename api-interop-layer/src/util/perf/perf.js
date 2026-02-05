@@ -28,7 +28,7 @@ const paragraphSquash = (await import("./paragraphSquash.js")).default;
 const { fetchAPIJson } = await import("./fetch.js");
 
 // Check redis status
-// If redis.js attempts to connect, we might see errors if no redis is running.
+// If `src/lib/redis.js` attempts to connect, we might see errors if no redis is running.
 // But we want to test the 'fetch' wrapper logic mainly.
 
 const RUNS = 10000;

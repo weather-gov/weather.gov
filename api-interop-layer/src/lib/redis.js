@@ -1,5 +1,5 @@
 import { createClient } from "@redis/client";
-import { logger } from "./util/monitoring/index.js";
+import { logger } from "../util/monitoring/index.js";
 
 // For now, let's use a single client instance
 // that we lazily assign once accessed.

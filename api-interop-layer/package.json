@@ -2,7 +2,7 @@
   "name": "wxgov-api-interop-layer",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "start": "npx --no-install -p pm2 pm2-runtime start ecosystem.prod.config.cjs",

@@ -1,0 +1,12 @@
+2026/02/04 18:06:44 json parse error: invalid character '<' looking for beginning of value
+goos: darwin
+goarch: arm64
+pkg: weathergov/util-golang
+cpu: Apple M1 Pro
+BenchmarkConvertProperties-10    	  773552	      1712 ns/op
+BenchmarkSentenceCase-10         	 2985199	       363.4 ns/op
+BenchmarkTitleCase-10            	 1506009	       810.5 ns/op
+BenchmarkParagraphSquash-10      	  658446	      1596 ns/op
+BenchmarkFetchAPIJson-10         	   13645	    105231 ns/op
+PASS
+ok  	weathergov/util-golang	7.988s

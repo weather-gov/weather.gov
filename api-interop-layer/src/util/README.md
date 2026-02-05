@@ -193,7 +193,7 @@ go test -bench=. -benchmem .
 
 ### Redis Connection Bug
 
-A bug was identified in `redis.js` where a `forEach` loop with a `return` statement doesn't properly exit the parent function. This could leave Redis connections open unexpectedly. A fix using `for...of` is demonstrated in `redis-fix.js` at the `api-interop-layer/` root.
+A bug was identified in `redis.js` where a `forEach` loop with a `return` statement doesn't properly exit the parent function. This could leave Redis connections open unexpectedly. A fix using `for...of` is demonstrated in `src/lib/redis-fix.js` relative to the project root.
 
 **Original (buggy):**
 ```javascript

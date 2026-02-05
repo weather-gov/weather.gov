@@ -47,7 +47,7 @@ describe("main bootstrapper", () => {
 
     // Now that we've mocked the dependency imports, we can import the code
     // under test.
-    const index = await import("./index.js");
+    const index = await import("./server.js");
     main = index.main;
   });
 

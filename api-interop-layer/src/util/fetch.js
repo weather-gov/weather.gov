@@ -5,7 +5,7 @@ import {
   saveToRedis,
   getTTLFromResponse,
   USE_REDIS,
-} from "../redis.js";
+} from "../lib/redis.js";
 
 const fetchLogger = logger.child({ subsystem: "fetch wrapper" });
 const redisLogger = logger.child({ subsystem: "redis" });
