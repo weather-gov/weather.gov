@@ -155,38 +155,110 @@ ${tree}\`\`\`
 	}
 }
 
+const child_process = require('child_process');
+
 function updatePerfDocs() {
 	const PERF_RESULTS_DIR = path.join(ROOT_DIR, 'api-interop-layer/perf-results');
+	const GO_UTIL_DIR = path.join(ROOT_DIR, 'api-interop-layer/src/util/util-golang');
 	const DOCS_INDEX_PATH = path.join(ROOT_DIR, 'docs/interop/index.md');
 
+	let tsResults = [];
+	let goResults = [];
+
+	// 1. Get TS Results
 	try {
-		if (!fs.existsSync(PERF_RESULTS_DIR)) {
-			console.warn('Perf results directory not found, skipping perf docs update.');
-			return;
+		if (fs.existsSync(PERF_RESULTS_DIR)) {
+			const files = fs.readdirSync(PERF_RESULTS_DIR)
+				.filter(f => f.startsWith('perf-') && f.endsWith('.json'))
+				.sort().reverse();
+
+			if (files.length > 0) {
+				const latestFile = path.join(PERF_RESULTS_DIR, files[0]);
+				const perfData = JSON.parse(fs.readFileSync(latestFile, 'utf8'));
+				tsResults = perfData.results;
+				console.log(`Loaded TS perf results from ${path.basename(latestFile)}`);
+			} else {
+				console.warn('No TS perf results found.');
+			}
+		} else {
+			console.warn('Perf results directory not found.');
 		}
+	} catch (err) {
+		console.error('Error reading TS perf results:', err);
+	}
 
-		const files = fs.readdirSync(PERF_RESULTS_DIR)
-			.filter(f => f.startsWith('perf-') && f.endsWith('.json'))
-			.sort().reverse();
+	// 2. Run and Parse Go Benchmarks
+	try {
+		console.log('Running Go benchmarks...');
+		const goOutput = child_process.execSync('go test -bench=.', { cwd: GO_UTIL_DIR, encoding: 'utf8' });
 
-		if (files.length === 0) {
-			console.warn('No perf results found, skipping perf docs update.');
-			return;
-		}
+		// Output format: BenchmarkName-CPUS   Iterations   Ns/Op ...
+		// e.g. BenchmarkConvertProperties-10             847561              1452 ns/op
 
-		const latestFile = path.join(PERF_RESULTS_DIR, files[0]);
-		const perfData = JSON.parse(fs.readFileSync(latestFile, 'utf8'));
+		const lines = goOutput.split('\n');
+		lines.forEach(line => {
+			if (line.startsWith('Benchmark')) {
+				const parts = line.split(/\s+/);
+				if (parts.length >= 3) {
+					// Name is parts[0], remove 'Benchmark' prefix and '-N' suffix
+					let name = parts[0].replace('Benchmark', '');
+					const suffixIdx = name.lastIndexOf('-');
+					if (suffixIdx !== -1) {
+						name = name.substring(0, suffixIdx);
+					}
 
-		// Format number with commas
-		const fmt = (n) => Math.round(n).toLocaleString();
-
-		let table = '| Function | Mean (ns) | Ops/Sec |\n| :--- | :--- | :--- |\n';
-		perfData.results.forEach(r => {
-			table += `| \`${r.name}\` | ${fmt(r.mean_ns)} | ${fmt(r.ops_per_sec)} |\n`;
+					const nsPerOp = parseFloat(parts[2]);
+					// Skip if invalid
+					if (!isNaN(nsPerOp)) {
+						const opsPerSec = 1000000000 / nsPerOp;
+						goResults.push({
+							name: name,
+							mean_ns: nsPerOp,
+							ops_per_sec: opsPerSec
+						});
+					}
+				}
+			}
 		});
+		console.log(`Parsed ${goResults.length} Go benchmark results.`);
 
-		table += `\n*Data from ${path.basename(latestFile)}*`;
+	} catch (err) {
+		console.warn('Error running/parsing Go benchmarks (Go might not be installed or code invalid):', err.message);
+	}
 
+	// 3. Merge and Generate Table
+	if (tsResults.length === 0 && goResults.length === 0) {
+		console.warn('No performance data available from TS or Go.');
+		return;
+	}
+
+	// Map by function name for comparison
+	const mergedData = {};
+
+	tsResults.forEach(r => {
+		if (!mergedData[r.name]) mergedData[r.name] = { name: r.name };
+		mergedData[r.name].ts_mean = r.mean_ns;
+		mergedData[r.name].ts_ops = r.ops_per_sec;
+	});
+
+	goResults.forEach(r => {
+		if (!mergedData[r.name]) mergedData[r.name] = { name: r.name };
+		mergedData[r.name].go_mean = r.mean_ns;
+		mergedData[r.name].go_ops = r.ops_per_sec;
+	});
+
+	const fmt = (n) => n ? Math.round(n).toLocaleString() : '-';
+
+	// Header
+	let table = '| Function | TS Mean (ns) | TS Ops/Sec | Go Mean (ns) | Go Ops/Sec |\n';
+	table += '| :--- | :--- | :--- | :--- | :--- |\n';
+
+	// Rows
+	Object.values(mergedData).sort((a, b) => a.name.localeCompare(b.name)).forEach(row => {
+		table += `| \`${row.name}\` | ${fmt(row.ts_mean)} | ${fmt(row.ts_ops)} | ${fmt(row.go_mean)} | ${fmt(row.go_ops)} |\n`;
+	});
+
+	try {
 		let content = fs.readFileSync(DOCS_INDEX_PATH, 'utf8');
 
 		// Match section: ### Performance Results ... (table) ... (end of section or file)
@@ -217,7 +289,7 @@ function updatePerfDocs() {
 		const newSectionContent = `
 > Last Updated: ${new Date().toISOString().split('T')[0]}
 
-The following benchmarks track the performance of critical utility functions in the API Interop Layer.
+The following benchmarks compare the performance of critical utility functions in the TypeScript implementation versus the experimental Golang implementation.
 
 ${table}
 
@@ -227,9 +299,8 @@ ${table}
 		console.log('docs/interop/index.md Performance Results updated successfully.');
 
 	} catch (err) {
-		console.error('Error updating Perf docs:', err);
+		console.error('Error updating Perf docs file:', err);
 	}
 }
 
-updateReadme();
 updatePerfDocs();

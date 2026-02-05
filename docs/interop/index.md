@@ -16,6 +16,18 @@ The interop layer is written in TypeScript to ensure type safety and better deve
 - **Language:** TypeScript
 - **Database:** PostgreSQL (for caching/persistence)
 
+### Experimental Golang Implementation
+
+An experimental port of the utility functions is available in `api-interop-layer/src/util/util-golang`. This implementation aims to provide high-performance, statically typed alternatives suitable for future optimization or WebAssembly compilation.
+
+Key ported utilities include:
+- `ConvertProperties`
+- `SentenceCase` / `TitleCase`
+- `FetchAPIJson` (with Redis caching)
+- `ConvertTimezone` (extremely optimized)
+
+See the [Golang Utilities README](../../api-interop-layer/src/util/util-golang/README-util-golang.md) for more details.
+
 ## Testing
 
 ### Regression Testing
@@ -52,19 +64,19 @@ npm run test:perf
 ### Performance Results
 > Last Updated: 2026-02-05
 
-The following benchmarks track the performance of critical utility functions in the API Interop Layer.
+The following benchmarks compare the performance of critical utility functions in the TypeScript implementation versus the experimental Golang implementation.
 
-| Function | Mean (ns) | Ops/Sec |
-| :--- | :--- | :--- |
-| `SentenceCase` | 291 | 3,435,703 |
-| `ParagraphSquash` | 292 | 3,428,522 |
-| `ConvertProperties` | 1,401 | 713,857 |
-| `ConvertTimezone` | 1,494 | 669,276 |
-| `ForecastProcessing` | 571,104 | 1,751 |
-| `RiskProcessing` | 10,615 | 94,206 |
-| `FetchAPIJson` | 304,852 | 3,280 |
+| Function | TS Mean (ns) | TS Ops/Sec | Go Mean (ns) | Go Ops/Sec |
+| :--- | :--- | :--- | :--- | :--- |
+| `ConvertProperties` | 1,401 | 713,857 | 1,473 | 678,887 |
+| `ConvertTimezone` | 1,494 | 669,276 | 12 | 83,963,056 |
+| `FetchAPIJson` | 304,852 | 3,280 | 85,919 | 11,639 |
+| `ForecastProcessing` | 571,104 | 1,751 | - | - |
+| `ParagraphSquash` | 292 | 3,428,522 | 127 | 7,855,460 |
+| `RiskProcessing` | 10,615 | 94,206 | - | - |
+| `SentenceCase` | 291 | 3,435,703 | 306 | 3,265,839 |
+| `TitleCase` | - | - | 697 | 1,435,544 |
 
-*Data from perf-20260205-061427.json*
 
 ## Definitions
 
