@@ -31,6 +31,9 @@ The following utilities have been ported to Go:
 ## Testing
 
 Tests are written in Go and cover the ported functionality.
+- **Convert**: Comprehensive tests covering all unit mappings (Temperature, Speed, Pressure, Length, Angle) and property recursion.
+- **Icon**: Tests covering standard, multi-condition, and invalid inputs, matching the original JS test cases.
+- **Case/Squash**: Tests covering text manipulation logic.
 
 To run the tests:
 ```bash
