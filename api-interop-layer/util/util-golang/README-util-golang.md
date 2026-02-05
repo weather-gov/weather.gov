@@ -25,14 +25,27 @@ The following utilities have been ported to Go:
 ### Icon (`icon.go`)
 - `ParseAPIIcon(apiIcon string) IconResult`: Parses a NWS API icon URL and maps it to a legacy icon set using the embedded `icon.legacyMapping.json`.
 
-### Paragraph Squash (`paragraph_squash.go`)
-- `ParagraphSquash(str string) string`: Removes single newlines within paragraphs while preserving double newlines.
+### Fetch (`fetch.go`)
+- `FetchAPIJson(path string) (interface{}, error)`: Fetches JSON content from a URL with built-in resilience and caching.
+  - **Retries**: Implements exponential backoff for 5xx server errors (75ms, 124ms, 204ms, 337ms).
+  - **Caching**: Integrates with Redis to cache responses if `s-maxage` is present in the `Cache-Control` header.
+  - **Env Vars**:
+    - `API_URL`: Base URL for API requests (default: `https://api.weather.gov`)
+    - `GHWO_URL`: Base URL for GHWO requests (default: `https://www.weather.gov`)
+    - `API_KEY`: API Key header.
+    - `API_INTEROP_PRODUCTION`: Enables production Redis config (VCAP_SERVICES).
+    - `REDIS_HOST`, `REDIS_PORT`, `REDIS_PASSWORD`: Config for local/dev Redis.
+
+### Redis (`redis.go`)
+- Provides a wrapper around `go-redis` to handle connection initialization and VCAP_SERVICES parsing for Cloud Foundry environments.
+- Helper functions: `GetFromRedis`, `SaveToRedis`, `GetTTLFromResponse`.
 
 ## Testing
 
 Tests are written in Go and cover the ported functionality.
 - **Convert**: Comprehensive tests covering all unit mappings (Temperature, Speed, Pressure, Length, Angle) and property recursion.
-- **Icon**: Tests covering standard, multi-condition, and invalid inputs, matching the original JS test cases.
+- **Icon**: Tests covering standard, multi-condition, and invalid inputs.
+- **Fetch**: Tests using `httptest` and `miniredis` to verify retry logic, delay timing, Redis caching, and error handling.
 - **Case/Squash**: Tests covering text manipulation logic.
 
 To run the tests:
@@ -40,16 +53,9 @@ To run the tests:
 go test -v .
 ```
 
-## Build
-
-To use these utilities in another Go project, simply import the package:
-```go
-import "weathergov/util-golang"
-```
-
 ## Migration Notes
 
-- **Fetch**: The `fetch.js` utility (which includes Redis caching and retry logic) has not yet been ported. It requires a Go Redis client and HTTP client setup.
 - **Dependencies**:
-  - The `icon.legacyMapping.json` file is embedded into the build using Go's `embed` package.
-  - No external Go dependencies are currently required (standard library only).
+  - `github.com/redis/go-redis/v9`: Redis client.
+  - `github.com/alicebob/miniredis/v2`: For testing Redis interactions.
+  - `icon.legacyMapping.json`: Embedded via `go:embed`.
