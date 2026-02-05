@@ -286,8 +286,8 @@ test-perf-go:
 ##### Dev environment management #####
 # Starts up all the containers, prepares the databases, and loads initial data
 [group("dev environment management")]
-init: && migrate load-spatial django-restart
-  docker compose up -d --build
+init options="": && migrate load-spatial django-restart
+  docker compose up -d {{options}}
   sleep 15
 
 # Starts a PlantUML server container listening on localhost:8180
@@ -308,8 +308,14 @@ stop-plantuml:
 
 # Destroys all containers, databases, and volumes and starts over fresh and clean
 [group("dev environment management")]
-zap: && init
+zap options="":
   docker compose down -v
+  just init "{{options}}"
+
+# Zap, but force a rebuild
+[group("dev environment management")]
+buildzap:
+  just zap --build
 
 alias scorched-earth := controlled-burn
 # Does what zap does, plus destroys spatial data and docker images
