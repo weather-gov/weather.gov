@@ -1,0 +1,184 @@
+{% extends 'weather/base.html' %}
+{% block head_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/front-page.css' %}">
+{% endblock %}
+{% block head_js %}
+  <script src="{% static 'js/front-page.html.js' %}" type="module" defer></script>
+{% endblock %}
+{% block page_top %}
+  {% include "weather/partials/gov-banner.html" %}
+  {% include "weather/partials/beta-banner.html" %}
+  <header role="banner">
+    {% include "weather/partials/site-branding.html" %}
+  </header>
+{% endblock %}
+{% block page %}
+  <main role="main">
+    <h1 class="usa-sr-only">beta.weather.gov</h1>
+    <!-- Find forecast section -->
+    <section id="front-find-forecast-section">
+      <div class="grid-container">
+        <div class="find-block-wrapper">
+          <h2>Find your forecast</h2>
+          <form id="find-forecast" data-location-search="true">
+            <div class="use-location-area">
+              <label class="usa-label"
+                     for="search-combo-box">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
+              <div class="location-area-divider">|</div>
+              <button
+                type="button"
+                class="weathergov-use-browser-location">
+                <svg class="usa-icon height-2 width-2 margin-right-05 text-top"
+                     aria-hidden="true"
+                     focusable="false"
+                     role="img">
+                  <use xlink:href="{% static 'images/uswds/sprite.svg' %}#my_location"></use>
+                </svg>
+                {{ 'location-search.labels.use-location.01' | t }}
+              </button>
+            </div>
+            <wx-combo-box-location
+              id="search-combo-box"
+              {% if place %}
+                data-place="{% place_label place%}"
+              {% endif %}
+            >
+            </wx-combo-box-location> 
+          </form>
+          {% include 'weather/partials/wx-loader.html' %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Trapezoid section -->
+    <section id="front-trapezoids">
+      <div class="grid-container trapezoids-container">
+        <div class="trapezoid-wrapper">
+          <h2 id="tagline-trapezoid">
+            <div class="trapezoid-inner">
+              <span>weather.gov</span>
+              <span>{{"frontpage.heading.trapezoid-1.01" | t}}</span>
+            </div>
+          </h2>
+        </div>
+        <div class="trapezoid-slant"></div>
+        <div class="trapezoid-wrapper">
+          <div id="image-trapezoid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats section -->
+    <section id="front-stats">
+      <!-- First subsection -->
+      <div class="stats-subsection">
+        <div class="grid-container">
+          <div class="stats-content-wrapper">
+            <p class="stats-text">
+              {{"frontpage.stats.text-1.01" | t}}
+            </p>
+            <div class="stats-image-outer">
+              <div class="stats-image-container">
+                <picture class="stats-img-wrapper">
+                  <source srcset="{% static 'images/front-page/cropped/wx_buoy_500_100.avif' %}" type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_buoy_500_80.webp' %}" type="image/webp" />
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_buoy_500_80.jpg' %}" alt="{{"frontpage.stats.images.1.alt.01"|t}}" />
+                </picture>
+                <picture class="stats-img-wrapper">
+                  <source srcset="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_100.avif' %}" type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_80.webp' %}" type="image/webp" />
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_80.jpg' %}" alt="{{"frontpage.stats.images.2.alt.01"|t}}" />
+                </picture>
+                <picture class="stats-img-wrapper">
+                  <source srcset="{% static 'images/front-page/cropped/wx_balloon_scientist_500_100.avif' %}" type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_balloon_scientist_500_80.webp' %}" type="image/webp" />
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_balloon_scientist_500_80.jpg' %}" alt="{{"frontpage.stats.images.3.alt.01"|t}}" />
+                </picture>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second subsection -->
+      <div class="stats-subsection">
+        <div class="grid-container">
+          <div class="stats-content-wrapper">
+            <div class="stats-image-outer">
+              <div class="stats-image-container stats-large-image">
+                <picture class="stats-img-wrapper">
+                  <source srcset="{% static 'images/front-page/cropped/wx_meteorologist_1200_100.avif' %}" type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_meteorologist_1200_80.webp' %}" type="image/webp" />
+                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_meteorologist_1200_80.jpg' %}" alt="{{"frontpage.stats.images.4.alt.01"|t}}" />
+                </picture>
+              </div>
+            </div>
+            <p class="stats-text stats-text-right">
+              {{"frontpage.stats.text-2.01" | t}}
+            </p> 
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rebuilding section -->
+    <section id="front-rebuilding">
+      <div class="front-rebuilding-list-area">
+        <div class="grid-container">
+          <div class="grid-row">
+            <div class="grid-col-12">
+              <h2 class="front-rebuilding-header">
+                <span>{{"frontpage.rebuilding.header.01"|t}}</span>
+              </h2>
+            </div>
+          </div>
+          <div class="grid-row">
+            <div class="tablet-lg:grid-col-9">
+              <ul class="front-rebuilding-list">
+                <li>
+                  <h3>
+                    <div class="front-list-marker first-list-marker">
+                      <img src="{% static 'images/front-page/circle.svg' %}" alt="" />
+                    </div>
+                    {{"frontpage.rebuilding.list-header-1.01"|t}}
+                  </h3>
+                  <p>
+                    {{"frontpage.rebuilding.list-text-1.01"|t}}
+                  </p>
+                </li>
+                <li>
+                  <h3>
+                    <div class="front-list-marker">
+                      <img src="{% static 'images/front-page/square.svg' %}" alt="" />
+                    </div>
+                    {{"frontpage.rebuilding.list-header-2.01"|t}}
+                  </h3>
+                  <p>
+                    {{"frontpage.rebuilding.list-text-2.01"|t}}
+                  </p>
+                </li>
+                <li>
+                  <h3>
+                    <div class="front-list-marker">
+                      <img src="{% static 'images/front-page/triangle.svg' %}" alt="" />
+                    </div>
+                    {{"frontpage.rebuilding.list-header-3.01"|t}}
+                  </h3>
+                  <p>
+                    <p>{% trans_with_args "frontpage.text.touchpoints-1-graf.01" url="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit" %}</p>
+                  </p>
+                  <ul class="usa-list">
+                    {{"frontpage.rebuilding.list-items-03.01"|t}}
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}
+{% block page_bottom %}
+  {% include "weather/footer.html" %}
+{% endblock %}

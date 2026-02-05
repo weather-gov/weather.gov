@@ -1,0 +1,11 @@
+@use "uswds-core" as *;
+
+.usa-identifier__required-links-list {
+  @include add-list-reset;
+  @include u-margin-y(0);
+
+  // Overrides the default column count set in @uswds/.../_usa-identifier.scss
+  @include at-media("desktop") {
+    column-count: 2; // default is 4
+  }
+}

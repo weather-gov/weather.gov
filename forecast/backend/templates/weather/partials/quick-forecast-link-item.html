@@ -1,0 +1,93 @@
+{% comment %}
+This template expects two variables available to it:
+- content: The full object created from the daily forecast block
+- dayIndex: The index of the day currently being rendered within
+the content
+{% endcomment %}
+<a class="wx-quick-forecast-item"
+   href="#{{ day.dayId }}"
+   id="{{ day.dayId }}-quick-forcast-button">
+  <div class="wx-quick-forecast-item-top">
+    <time datetime="{{ day.periods.0.start }}">
+      <span>
+        {% if first %}
+          {% trans "daily-forecast.labels.today.01" %},
+        {%else%}
+          {{ day.periods.0.start|datetime|date:"l" }}
+        {%endif%}
+      </span>
+      <span class="display-block">{{ day.periods.0.start|datetime|date:"m/d" }}</span>
+    </time>
+    <div class="wx-quick-forecast-condition">
+      <span class="usa-sr-only">
+        {% trans "hourly-table.labels.condition.01" %}
+        <span>{{ day.periods.0.data.description }}</span>
+      </span>
+      {% if day.alerts.metadata.count %}
+        <span class="usa-sr-only">
+          {% if day.alerts.metadata.count > 1 %}
+            {% trans "alerts.aria.multiple-alert.01" %}
+          {% else %}
+            {% trans "alerts.aria.one-alert.01" %}
+          {% endif %}
+        </span>
+      {% endif %}
+      {% if day.hasAlertIcon %}
+        <svg role="img"
+             aria-hidden="true"
+             class="wx-alert-icon"
+             data-alert-level="{{ day.alerts.metadata.highest }}">
+          <use xlink:href="{% static 'images/uswds/sprite.svg' %}#warning"></use>
+        </svg>
+      {% endif %}
+      {% weather_icon day.periods.0.data.icon.base size="sm" color_mode="light" class="wx-alert-icon condition-icon" aria_hidden="true" %}
+      {% weather_icon day.periods.0.data.icon.base size="sm" color_mode="dark" class="wx-alert-icon condition-icon--on-dark" aria_hidden="true" %}
+    </div>
+    <hr />
+    <div class="wx-quick-forecast-item-high-low">
+      {% if day.isNightPeriod %}
+        <div class="wx-quick-high">
+          <span class="wx-quick-label">{% trans "daily-forecast.labels.high.01" %}</span>
+          <span class="wx-quick-temp">{% trans "abbreviations.not-applicable.01" %}</span>
+        </div>
+      {% else %}
+        <div class="wx-quick-high">
+          <span class="wx-quick-label">{% trans "daily-forecast.labels.high.01" %}</span>
+          <span class="wx-quick-temp">
+            {{ day.high }}
+            <span aria-hidden="true" class="wx-degree">&deg;F</span>
+            <span class="usa-sr-only">℉</span>
+          </span>
+        </div>
+      {% endif %}
+      <div class="wx-quick-low">
+        <span class="wx-quick-label">{% trans "daily-forecast.labels.low.01" %}</span>
+        <span class="wx-quick-temp">
+          {{ day.low }}
+          <span aria-hidden="true" class="wx-degree">&deg;F</span>
+          <span class="usa-sr-only">℉</span>
+        </span>
+      </div>
+    </div>
+    <span class="display-block tablet:display-none">
+      <svg class="usa-icon usa-icon--size-3"
+           aria-hidden="true"
+           focusable="false"
+           role="img">
+        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#add_circle"></use>
+      </svg>
+    </span>
+  </div>
+  <hr />
+  <div class="wx-quick-forecast-item-bottom">
+    <span>{% trans_with_args "daily-forecast.text.chance-precip.02" percent=day.pop %}</span>
+  </div>
+  <span class="display-none tablet:display-block desktop:display-none">
+    <svg class="usa-icon usa-icon--size-3"
+         aria-hidden="true"
+         focusable="false"
+         role="img">
+      <use xlink:href="{% static 'images/uswds/sprite.svg' %}#add_circle"></use>
+    </svg>
+  </span>
+</a>

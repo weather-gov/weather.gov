@@ -1,0 +1,22 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+h5.wx-visual-h4,
+.usa-prose h5.wx-visual-h4 {
+  @include h4;
+}
+
+h4.wx-visual-h3,
+.usa-prose h4.wx-visual-h3 {
+  @include h3;
+}
+
+h3.wx-visual-h2,
+.usa-prose h3.wx-visual-h2 {
+  @include h2;
+
+  &.text-normal {
+    font-weight: 400;
+  }
+}

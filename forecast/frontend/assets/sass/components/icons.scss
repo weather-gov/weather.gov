@@ -1,0 +1,30 @@
+@use "uswds-core" as *;
+
+.icon svg {
+  height: 100%;
+  width: 100%;
+
+  path.st0 {
+    fill: color("black");
+  }
+}
+
+/* Wind direction icon transformations
+------------------------------------- */
+svg[data-wind-direction] {
+  transform-origin: center;
+}
+
+/* Condition icons in quick forecast
+------------------------------------- */
+.wx-quick-forecast-item[aria-selected="false"] {
+  .condition-icon--on-dark {
+    display: none;
+  }
+}
+
+.wx-quick-forecast-item[aria-selected="true"] {
+  .condition-icon {
+    display: none;
+  }
+}

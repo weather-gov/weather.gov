@@ -1,0 +1,20 @@
+<div id="county-daily-alert-container">
+  <div id="county-daily-alert-container">
+    <wx-alerts class="wx-alerts-county-daily">
+    {% if alerts|length > 0 %}
+      {% for alert in alerts %}
+        {% include "weather/partials/alert-accordion.html" with alert=alert icon="true" alert_days=alert.alertDays %}
+      {% endfor %}
+    {% else %}
+      <div data-no-alerts-day="0">{% trans_with_args "county.alert-accordions.no-alerts.01" county=county %}</div>
+    {% endif %}
+    {% for day in alert_days %}
+      {% if day.alerts|length == 0 %}
+        <div data-no-alerts-day="{{ forloop.counter }}" class="display-none">
+          {% trans_with_args "county.alert-accordions.no-alerts-for-day.01" county=county day=day.day %}
+        </div>
+      {% endif %}
+    {% endfor %}
+    </wx-alerts>
+  </div>
+</div>

@@ -1,0 +1,354 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [-93.2925651, 44.9869287],
+        [-93.2929458, 44.9655449],
+        [-93.26273139999999, 44.9652733],
+        [-93.262344, 44.9866571],
+        [-93.2925651, 44.9869287]
+      ]
+    ]
+  },
+  "properties": {
+    "updated": "2024-01-11T17:12:50+00:00",
+    "units": "us",
+    "forecastGenerator": "BaselineForecastGenerator",
+    "generatedAt": "2024-01-11T18:51:58+00:00",
+    "updateTime": "2024-01-11T17:12:50+00:00",
+    "validTimes": "2024-01-11T11:00:00+00:00/P7DT14H",
+    "elevation": { "unitCode": "wmoUnit:m", "value": 259.08 },
+    "periods": [
+      {
+        "number": 1,
+        "name": "This Afternoon",
+        "startTime": "date:today 06:00:-5 +0 days",
+        "endTime": "date:today 18:00:-5 +0 days",
+        "isDaytime": true,
+        "temperature": 21,
+        "temperatureUnit": "F",
+        "temperatureTrend": "falling",
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -12.777777777777779
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 73 },
+        "windSpeed": "10 mph",
+        "windDirection": "WNW",
+        "icon": "https://api.weather.gov/icons/land/day/bkn?size=medium",
+        "shortForecast": "Partly Sunny",
+        "detailedForecast": "Partly sunny. High near 21, with temperatures falling to around 14 in the afternoon. West northwest wind around 10 mph."
+      },
+      {
+        "number": 2,
+        "name": "Tonight",
+        "startTime": "date:today 18:00:-5 +0 days",
+        "endTime": "date:today 06:00:-5 +1 days",
+        "isDaytime": false,
+        "temperature": 11,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 40
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -14.444444444444445
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 80 },
+        "windSpeed": "5 to 10 mph",
+        "windDirection": "NNW",
+        "icon": "https://api.weather.gov/icons/land/night/snow,20/snow,40?size=medium",
+        "shortForecast": "Chance Light Snow",
+        "detailedForecast": "A chance of snow after 11pm. Mostly cloudy, with a low around 11. North northwest wind 5 to 10 mph. Chance of precipitation is 40%. New snow accumulation of less than one inch possible."
+      },
+      {
+        "number": 3,
+        "name": "Friday",
+        "startTime": "date:today 06:00:-5 +1 days",
+        "endTime": "date:today 18:00:-5 +1 days",
+        "isDaytime": true,
+        "temperature": 21,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 90
+        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -8.88888888888889 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 84 },
+        "windSpeed": "10 to 15 mph",
+        "windDirection": "N",
+        "icon": "https://api.weather.gov/icons/land/day/snow,70/blizzard,90?size=medium",
+        "shortForecast": "Light Snow",
+        "detailedForecast": "Snow before 3pm, then snow and patchy blowing snow. Cloudy, with a high near 21. North wind 10 to 15 mph, with gusts as high as 30 mph. Chance of precipitation is 90%. New snow accumulation of 1 to 3 inches possible."
+      },
+      {
+        "number": 4,
+        "name": "Friday Night",
+        "startTime": "date:today 18:00:-5 +1 days",
+        "endTime": "date:today 06:00:-5 +2 days",
+        "isDaytime": false,
+        "temperature": 8,
+        "temperatureUnit": "F",
+        "temperatureTrend": "rising",
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 80
+        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -8.88888888888889 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 92 },
+        "windSpeed": "15 to 20 mph",
+        "windDirection": "NNW",
+        "icon": "https://api.weather.gov/icons/land/night/blizzard,80/blizzard,60?size=medium",
+        "shortForecast": "Light Snow And Areas Of Blowing Snow",
+        "detailedForecast": "Snow and areas of blowing snow. Cloudy. Low around 8, with temperatures rising to around 11 overnight. North northwest wind 15 to 20 mph, with gusts as high as 30 mph. Chance of precipitation is 80%. New snow accumulation of 1 to 2 inches possible."
+      },
+      {
+        "number": 5,
+        "name": "Saturday",
+        "startTime": "date:today 06:00:-5 +2 days",
+        "endTime": "date:today 18:00:-5 +2 days",
+        "isDaytime": true,
+        "temperature": 11,
+        "temperatureUnit": "F",
+        "temperatureTrend": "falling",
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 40
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -14.444444444444445
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 87 },
+        "windSpeed": "15 to 20 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/day/snow,40/blizzard,30?size=medium",
+        "shortForecast": "Chance Light Snow",
+        "detailedForecast": "A chance of snow before 4pm, then a chance of snow and patchy blowing snow. Mostly cloudy. High near 11, with temperatures falling to around 6 in the afternoon. Northwest wind 15 to 20 mph, with gusts as high as 30 mph. Chance of precipitation is 40%. New snow accumulation of less than half an inch possible."
+      },
+      {
+        "number": 6,
+        "name": "Saturday Night",
+        "startTime": "date:today 18:00:-5 +2 days",
+        "endTime": "date:today 06:00:-5 +3 days",
+        "isDaytime": false,
+        "temperature": -8,
+        "temperatureUnit": "F",
+        "temperatureTrend": "rising",
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -18.333333333333332
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 79 },
+        "windSpeed": "20 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/night/blizzard?size=medium",
+        "shortForecast": "Patchy Blowing Snow",
+        "detailedForecast": "Patchy blowing snow. Mostly cloudy. Low around -8, with temperatures rising to around -5 overnight. Northwest wind around 20 mph, with gusts as high as 35 mph. New snow accumulation of less than half an inch possible."
+      },
+      {
+        "number": 7,
+        "name": "Sunday",
+        "startTime": "date:today 06:00:-5 +3 days",
+        "endTime": "date:today 18:00:-5 +3 days",
+        "isDaytime": true,
+        "temperature": -2,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -22.22222222222222 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 83 },
+        "windSpeed": "15 to 20 mph",
+        "windDirection": "WNW",
+        "icon": "https://api.weather.gov/icons/land/day/blizzard/cold?size=medium",
+        "shortForecast": "Patchy Blowing Snow then Mostly Cloudy",
+        "detailedForecast": "Patchy blowing snow before 7am. Mostly cloudy, with a high near -2. West northwest wind 15 to 20 mph, with gusts as high as 30 mph."
+      },
+      {
+        "number": 8,
+        "name": "Sunday Night",
+        "startTime": "date:today 18:00:-5 +3 days",
+        "endTime": "date:today 06:00:-5 +4 days",
+        "isDaytime": false,
+        "temperature": -11,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -22.22222222222222 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 92 },
+        "windSpeed": "15 mph",
+        "windDirection": "WNW",
+        "icon": "https://api.weather.gov/icons/land/night/cold?size=medium",
+        "shortForecast": "Mostly Cloudy",
+        "detailedForecast": "Mostly cloudy, with a low around -11. West northwest wind around 15 mph."
+      },
+      {
+        "number": 9,
+        "name": "M.L. King Jr. Day",
+        "startTime": "date:today 06:00:-5 +4 days",
+        "endTime": "date:today 18:00:-5 +4 days",
+        "isDaytime": true,
+        "temperature": -2,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -21.666666666666668
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 90 },
+        "windSpeed": "15 mph",
+        "windDirection": "WNW",
+        "icon": "https://api.weather.gov/icons/land/day/cold?size=medium",
+        "shortForecast": "Partly Sunny",
+        "detailedForecast": "Partly sunny, with a high near -2. West northwest wind around 15 mph."
+      },
+      {
+        "number": 10,
+        "name": "Monday Night",
+        "startTime": "date:today 18:00:-5 +4 days",
+        "endTime": "date:today 06:00:-5 +5 days",
+        "isDaytime": false,
+        "temperature": -9,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -21.666666666666668
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 94 },
+        "windSpeed": "10 to 15 mph",
+        "windDirection": "W",
+        "icon": "https://api.weather.gov/icons/land/night/cold?size=medium",
+        "shortForecast": "Mostly Cloudy",
+        "detailedForecast": "Mostly cloudy, with a low around -9. West wind 10 to 15 mph."
+      },
+      {
+        "number": 11,
+        "name": "Tuesday",
+        "startTime": "date:today 06:00:-5 +5 days",
+        "endTime": "date:today 18:00:-5 +5 days",
+        "isDaytime": true,
+        "temperature": 7,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -19.444444444444443
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 95 },
+        "windSpeed": "10 to 15 mph",
+        "windDirection": "WSW",
+        "icon": "https://api.weather.gov/icons/land/day/sct?size=medium",
+        "shortForecast": "Mostly Sunny",
+        "detailedForecast": "Mostly sunny, with a high near 7. West southwest wind 10 to 15 mph."
+      },
+      {
+        "number": 12,
+        "name": "Tuesday Night",
+        "startTime": "date:today 18:00:-5 +5 days",
+        "endTime": "date:today 06:00:-5 +6 days",
+        "isDaytime": false,
+        "temperature": -1,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -18.333333333333332
+        },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 83 },
+        "windSpeed": "10 to 15 mph",
+        "windDirection": "WSW",
+        "icon": "https://api.weather.gov/icons/land/night/cold?size=medium",
+        "shortForecast": "Mostly Cloudy",
+        "detailedForecast": "Mostly cloudy, with a low around -1. West southwest wind 10 to 15 mph."
+      },
+      {
+        "number": 13,
+        "name": "Wednesday",
+        "startTime": "date:today 06:00:-5 +6 days",
+        "endTime": "date:today 18:00:-5 +6 days",
+        "isDaytime": true,
+        "temperature": 14,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -15 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 83 },
+        "windSpeed": "10 to 15 mph",
+        "windDirection": "W",
+        "icon": "https://api.weather.gov/icons/land/day/bkn?size=medium",
+        "shortForecast": "Partly Sunny",
+        "detailedForecast": "Partly sunny, with a high near 14. West wind 10 to 15 mph."
+      },
+      {
+        "number": 14,
+        "name": "Wednesday Night",
+        "startTime": "date:today 18:00:-5 +6 days",
+        "endTime": "date:today 06:00:-5 +7 days",
+        "isDaytime": false,
+        "temperature": 1,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": null
+        },
+        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -15 },
+        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 83 },
+        "windSpeed": "10 to 15 mph",
+        "windDirection": "W",
+        "icon": "https://api.weather.gov/icons/land/night/cold?size=medium",
+        "shortForecast": "Mostly Cloudy",
+        "detailedForecast": "Mostly cloudy, with a low around 1. West wind 10 to 15 mph."
+      }
+    ]
+  }
+}

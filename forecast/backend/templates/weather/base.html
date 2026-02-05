@@ -1,0 +1,44 @@
+{% load tz %}
+{% load i18n %}
+{% load get_setting %}
+{% load weather_i18n %}
+{% load weather_title %}
+
+{% comment %}
+  Disable server local time for all templates that inherit from base. The name
+  here is somewhat misleading. If localtime is on, then any datetime objects
+  rendered by templates will use the timezone of the server. We don't want that,
+  pretty much ever. So we turn it off. Doing it this way, templates will render
+  datetime objects in the timezone/offset that they carry with them.
+{% endcomment %}
+{% localtime off %}
+
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}">
+  <head>
+    {% set_title_and_description %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin" />
+    <link rel="icon"
+          type="image/png"
+          href="{% static 'images/weather/favicons/nws-favicon.ico' %}" />
+    {% block head_css %}{% endblock %}
+    <link rel="manifest" href="{% static 'manifest.json' %}" />
+    {% third_party_site_list %}
+    <script src="{% url 'translation-strings-for-js' %}"></script>
+    <script src="{% static 'js/uswds-init.min.js' %}"></script>
+    <script async type="text/javascript" id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety">
+    </script>
+    {% block head_js %}{% endblock %}
+  </head>
+  <body>
+    <div id="sr-only" class="usa-sr-only" aria-live="polite"></div>
+    <a href="#main-content" class="usa-sr-only focusable skip-link">{% translate 'uswds-banner.skip-to-content.01' %}</a>    
+    {% block page_top %}{% endblock %}
+    {% block page %}{% endblock %}
+    {% block page_bottom %}{% endblock %}
+    <script src="{% static 'js/uswds.min.js' %}"></script>
+    {% block end_js %}{% endblock %}
+  </body>
+</html>
+{% endlocaltime %}

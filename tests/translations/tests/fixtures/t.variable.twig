@@ -1,0 +1,10 @@
+{% if content.error %}
+    {% set message = "forecast.errors.current-conditions.01" | t %}
+    {% include '@new_weather_theme/partials/uswds-alert.html.twig' with { 'level': "error", body: message } %}
+{% endif %}
+{%  if period.isOvernight %}
+    {% set label = "daily-forecast.labels.overnight.01" | t %}
+    {% set lineColor = "midnight-indigo" %}
+    {% set tabletCol = 12 %}
+    {% set tabletMarginUnit = 3 %}
+{% endif %}

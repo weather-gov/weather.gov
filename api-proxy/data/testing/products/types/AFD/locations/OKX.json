@@ -1,0 +1,98 @@
+{
+    "@context": {
+        "@version": "1.1",
+        "@vocab": "https://api.weather.gov/ontology#"
+    },
+    "@graph": [
+        {
+            "@id": "https://api.weather.gov/products/5d9c898c-19da-4960-8685-8621135a901a",
+            "id": "5d9c898c-19da-4960-8685-8621135a901a",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T19:57:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        },
+        {
+            "@id": "https://api.weather.gov/products/07330a8f-cd88-4337-902e-24f91ad7371c",
+            "id": "07330a8f-cd88-4337-902e-24f91ad7371c",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T17:48:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        },
+        {
+            "@id": "https://api.weather.gov/products/fb0dae6a-3e5b-4b5b-9b8c-ae3b384bb74f",
+            "id": "fb0dae6a-3e5b-4b5b-9b8c-ae3b384bb74f",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T17:04:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        },
+        {
+            "@id": "https://api.weather.gov/products/2c9cdbc6-f24d-428e-b38b-96a6ddfbf413",
+            "id": "2c9cdbc6-f24d-428e-b38b-96a6ddfbf413",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T15:55:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        },
+        {
+            "@id": "https://api.weather.gov/products/08ca0238-ea1b-4d1a-9cb7-f03c3ccafd0d",
+            "id": "08ca0238-ea1b-4d1a-9cb7-f03c3ccafd0d",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T11:25:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        },
+        {
+            "@id": "https://api.weather.gov/products/31a94bce-3bbf-48a8-a325-f0f41e814232",
+            "id": "31a94bce-3bbf-48a8-a325-f0f41e814232",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T09:53:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        },
+        {
+            "@id": "https://api.weather.gov/products/a94d9697-24a9-4c21-a381-4bfe96b469ab",
+            "id": "a94d9697-24a9-4c21-a381-4bfe96b469ab",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T07:41:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        },
+        {
+            "@id": "https://api.weather.gov/products/f95c6b5a-fa16-43a7-a1b1-c56538f99f45",
+            "id": "f95c6b5a-fa16-43a7-a1b1-c56538f99f45",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T05:45:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        },
+        {
+            "@id": "https://api.weather.gov/products/636e6c8c-b2f4-46f8-9d80-944616f0cf92",
+            "id": "636e6c8c-b2f4-46f8-9d80-944616f0cf92",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T04:44:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        },
+        {
+            "@id": "https://api.weather.gov/products/f0ca57b2-ca10-4ee0-86bf-cf1d24cbc98a",
+            "id": "f0ca57b2-ca10-4ee0-86bf-cf1d24cbc98a",
+            "wmoCollectiveId": "FXUS61",
+            "issuingOffice": "KOKX",
+            "issuanceTime": "2024-08-20T02:21:00+00:00",
+            "productCode": "AFD",
+            "productName": "Area Forecast Discussion"
+        }
+    ]
+}

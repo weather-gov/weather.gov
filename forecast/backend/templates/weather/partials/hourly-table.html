@@ -1,0 +1,156 @@
+{% comment %}
+Available variables:
+hours - An array of all the hours that should be represented in the table.
+alerts - An array of all the alerts that intersect with those hours.
+{% endcomment %}
+<wx-hourly-table class="display-block position-relative margin-top-2 bg-white" id="hourly-table_{{ itemId }}" aria-labelledby="hourly-table-tab_{{ itemId }}" data-tabpanel-selected="true" role="tabpanel">
+<div class="display-flex flex-justify">{% include "weather/partials/scroll-buttons.html" %}</div>
+<div id="hourly-table-container-{{ itemId }}"
+     class="usa-table-container--scrollable">
+  <table class="usa-table usa-table--borderless hourly-table"
+         tabindex="0"
+         {% if alerts|length > 0 %} data-has-alerts="true" {% else %} data-has-alerts="false" {% endif %}>
+    <caption class="usa-sr-only">
+      {% trans_with_args "hourly-table.aria.table-description.01" day=dayNumericString month=monthNumericString %}
+    </caption>
+    <tbody data-table-section="time-alerts"
+           class="border-bottom-1px border-base-light">
+      <tr data-row-name="time">
+        <th scope="row"
+            class="position-sticky left-0 font-family-mono text-base-lightest font-mono-xs text-uppercase">
+          {{ "hourly-table.labels.time.01" | t }}
+        </th>
+        {% for period in hours %}
+          <th scope="col">
+            <time datetime="{{ period.time }}"
+                  class="font-family-mono font-mono-xs text-base-lightest">
+              {{ period.time|datetime|date:"g A" }}
+            </time>
+          </th>
+        {% endfor %}
+      </tr>
+      {% if alerts|length > 0 %}
+        {% include "weather/partials/alerts-in-hourly-table.html" with periods=hours alerts=alerts %}
+      {% endif %}
+    </tbody>
+    <tbody data-table-section="variables">
+      <tr data-row-name="temp" id="temp_{{ itemId }}">
+        <th scope="row"
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
+          {{"hourly-table.labels.temperature.01" | t}}
+        </th>
+        {% for period in hours %}
+          <td>
+            {% if period.temperature != None %}
+              {{ period.temperature.degF }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+              <span class="usa-sr-only">℉</span>
+            {% else %}
+              <span class="text-base font-mono-xs">{{ "abbreviations.not-applicable.01" | t }}</span>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="apparentTemp" id="apparentTemp_{{ itemId }}">
+        <th scope="row"
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
+          {{"forecast.current.feels-like.01" | t}}
+        </th>
+        {% for period in hours %}
+          <td>
+            {% if period.apparentTemperature != None %}
+              {{ period.apparentTemperature.degF }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+              <span class="usa-sr-only">℉</span>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="condition" id="condition_{{ itemId }}">
+        <th scope="row"
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
+          {% trans "hourly-table.labels.condition.01" %}
+        </th>
+        {% for period in hours %}
+          <td>
+            {% if period.icon.icon %}
+              <div class="line-height-sans-3">
+                <div class="icon margin-right-1 width-3 margin-top-05">
+                  {% weather_icon period.icon.base size="sm" color_mode="light" class="maxh-3 maxw-3" aria_hidden="true" %}
+                </div>
+                <div>
+                  {% if period.shortForecast|length %}
+                    <p class="margin-y-0">{{ period.shortForecast }}</p>
+                  {% else %}
+                    <span class="text-base font-mono-xs">{{ "abbreviations.not-applicable.01" | t }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="chance-precipitation"
+          id="chance-precipitation_{{ itemId }}">
+        <th scope="row"
+            class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase ">
+          {{ "hourly-table.table-header.chance-precip.01" | t }}
+        </th>
+        {% for period in hours %}
+          <td>
+            {% if period.probabilityOfPrecipitation != None %}
+              <p class="margin-y-0">{{ period.probabilityOfPrecipitation.percent }}%</p>
+            {% else %}
+              <span class="text-base font-mono-xs">{{ "abbreviations.not-applicable.01" | t }}</span>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="wind-speed" id="wind-speed_{{ itemId }}">
+        <th scope="row"
+            class="position-sticky left-0 font-family-mono text-primary-dark bg-primary-lightest font-mono-xs text-uppercase ">
+          {{"hourly-table.labels.wind-speed.01" | t}}
+        </th>
+        {% for period in hours %}
+          <td>
+            {% wind_speed_direction speed=period.windSpeed direction=period.windDirection %}
+            {% if period.windGust.mph != None %}
+              <div>{% trans_with_args "hourly-table.text.gusting.01" gustSpeed=period.windGust.mph %}</div>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="humidity">
+        <th scope="row"
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
+          {{"hourly-table.labels.humidity.01" | t}}
+        </th>
+        {% for period in hours %}
+          <td>
+            {% if period.relativeHumidity.percent != None %}
+              {{ period.relativeHumidity.percent }}%
+            {% else %}
+              <span class="text-base font-mono-xs">{{ "abbreviations.not-applicable.01" | t }}</span>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      <tr data-row-name="dewpoint" id="dewpoint_{{ itemId }}">
+        <th scope="row"
+            class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase ">
+          {{"hourly-table.labels.dewpoint.01" | t}}
+        </th>
+        {% for period in hours %}
+          <td>
+            {% if period.dewpoint.degF != None %}
+              {{ period.dewpoint.degF }}<span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span>
+              <span class="usa-sr-only">℉</span>
+            {% else %}
+              <span class="text-base font-mono-xs">{{ "abbreviations.not-applicable.01" | t }}</span>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% precip_table qpf=qpf as_table=True %}
+</wx-hourly-table>

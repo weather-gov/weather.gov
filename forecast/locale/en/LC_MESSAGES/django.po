@@ -1,0 +1,1002 @@
+# English translation of beta.weather.gov
+#
+# ⚠️ Strings in English need to be immutable,
+# to prevent translations falling out of sync.
+# Example: Do not change "Forecasters predict rain"
+# to "Rain predicted". Delete "Forecasters predict rain" and
+# add "Rain predicted" with a new `msgid`. This will
+# invalidate the stale translation and ensure the new
+# string gets picked up for fresh translation.
+#
+# Message IDs are versioned, to remind you of this rule. ⚠️
+#
+# The general message ID taxonomy is four parts,
+# separated by dots, but usage is not strictly enforced.
+#   `location.role.name.version`
+#    |        |    |    └─ eg: `02`
+#    |        |    └─ unique label, eg: `areas-impacted`
+#    |        └─ eg: `text`, `heading`, `label`, `label+aria`
+#    └─ feature or filename, eg: `daily-forecast`
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Weather.gov Utility\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "abbreviations.not-applicable.01"
+msgstr "N/A"
+
+msgid "afd.aria.clear-input-box.01"
+msgstr "Clear the input box"
+
+msgid "afd.aria.letterhead.01"
+msgstr "Letterhead and timestamp"
+
+msgid "afd.aria.toggle-dropdown.01"
+msgstr "Toggle the dropdown list"
+
+msgid "afd.button.update-selection.01"
+msgstr "Update selection"
+
+msgid "afd.heading.area-forecast-discussion.01"
+msgstr "Area Forecast Discussion"
+
+msgid "afd.heading.forecast-discussion.01"
+msgstr "Forecast Discussion"
+
+msgid "afd.label.forecast-office.01"
+msgstr "Forecast office:"
+
+msgid "afd.label.versions.01"
+msgstr "Versions for {wfo_name}:"
+
+msgid "afd.table-header.chance-precip.01"
+msgstr "Chance of precipitation"
+
+msgid "afd.table-header.location.01"
+msgstr "Location"
+
+msgid "afd.table-header.next-day.01"
+msgstr "Next day"
+
+msgid "afd.table-header.temperatures.01"
+msgstr "Temperatures"
+
+msgid "afd.table-header.today.01"
+msgstr "Today"
+
+msgid "afd.table-header.tomorrow-night.01"
+msgstr "Tomorrow night"
+
+msgid "afd.table-header.tomorrow.01"
+msgstr "Tomorrow"
+
+msgid "afd.table-header.tonight.01"
+msgstr "Tonight"
+
+msgid "alerts.aria.multiple-alert.01"
+msgstr "Multiple weather alerts"
+
+msgid "alerts.aria.one-alert.01"
+msgstr "Weather alert"
+
+msgid "alerts.heading+aria.alerts.01"
+msgstr "Alerts"
+
+msgid "alerts.labels.areas-impacted.01"
+msgstr "Areas impacted"
+
+msgid "alerts.labels.what-to-do.01"
+msgstr "What to do"
+
+msgid "alerts.legend.impacted-area.01"
+msgstr "Impacted Area"
+
+msgid "alerts.legend.warning-area.01"
+msgstr "Warning Area"
+
+msgid "alerts.legend.watch-area.01"
+msgstr "Watch Area"
+
+msgid "alerts.legend.advisory-area.01"
+msgstr "Advisory Area"
+
+msgid "alerts.legend.county-line.01"
+msgstr "County Line"
+
+msgid "alerts.table-header.alert-name.01"
+msgstr "Alert name"
+
+msgid "alerts.table-header.alert-type.01"
+msgstr "Type"
+
+msgid "alerts.text.counties-in.01"
+msgstr "Counties in {area}"
+
+msgid "alerts.text.in-effect-from.01"
+msgstr "In effect from {start}"
+
+msgid "alerts.text.in-effect-from-until.01"
+msgstr "In effect from {start} – {end}"
+
+msgid "alerts.text.including-cities.01"
+msgstr "Including these cities"
+
+msgid "alerts.text.issued-by.01"
+msgstr "Issued by {sender}"
+
+msgid "backend.banner.under-development.01"
+msgstr "Under development"
+
+msgid "backend.login.cancel-text.01"
+msgstr "Cancel Text"
+
+msgid "backend.login.login-text.01"
+msgstr "Login Text"
+
+msgid "backend.login.sso-cancel-path.01"
+msgstr "SSO Cancel Path"
+
+msgid "backend.login.sso-login-path.01"
+msgstr "SSO Login Path"
+
+msgid "daily-forecast.aria.condition.01"
+msgstr "Condition: {description}"
+
+msgid "daily-forecast.aria.high-not-applicable.01"
+msgstr "High temperature not applicable"
+
+msgid "daily-forecast.aria.high-of.01"
+msgstr "High of {degrees}℉"
+
+msgid "daily-forecast.aria.low-of.01"
+msgstr "Low of {degrees}℉"
+
+msgid "daily-forecast.heading.hourly-forecast.01"
+msgstr "Hourly forecast"
+
+msgid "daily-forecast.labels.alert.01"
+msgstr "Alert"
+
+msgid "daily-forecast.labels.day.01"
+msgstr "Day"
+
+msgid "daily-forecast.labels.high.01"
+msgstr "High"
+
+msgid "daily-forecast.labels.low.01"
+msgstr "Low"
+
+msgid "daily-forecast.labels.multiple-alerts.01"
+msgstr "Multiple alerts"
+
+msgid "daily-forecast.labels.night.01"
+msgstr "Night"
+
+msgid "daily-forecast.labels.overnight.01"
+msgstr "Overnight"
+
+msgid "daily-forecast.labels.overnight-time-span.01"
+msgstr "NOW-6AM"
+
+msgid "daily-forecast.labels.today.01"
+msgstr "Today"
+
+msgid "daily-forecast.labels.today-time-span.01"
+msgstr "6AM-6PM"
+
+msgid "daily-forecast.labels.tonight.01"
+msgstr "Tonight"
+
+msgid "daily-forecast.labels.tonight-time-span.01"
+msgstr "6PM-6AM"
+
+msgid "daily-forecast.table-header.date.01"
+msgstr "Date"
+
+msgid "daily-forecast.table-header.condition.01"
+msgstr "Condition"
+
+msgid "daily-forecast.table-header.high.01"
+msgstr "High"
+
+msgid "daily-forecast.table-header.low.01"
+msgstr "Low"
+
+msgid "daily-forecast.text.chance-precip.02"
+msgstr "{percent}% chance of precipitation"
+
+msgid "daily-forecast.button.details-toggle-charts.01"
+msgstr "Charts"
+
+msgid "daily-forecast.button.details-toggle-table.01"
+msgstr "Table"
+
+msgid "daily-forecast.text.usa-gov-site.01"
+msgstr "Official website of the United States government"
+
+msgid "footer.aria.noaa-logo.01"
+msgstr "National Oceanic and Atmospheric Administration logo"
+
+msgid "footer.noaa-motto.01"
+msgstr "Science. Service. Stewardship"
+
+msgid "footer.link.touchpoints.01"
+msgstr "Help improve this site"
+
+msgid "footer.text.usa-gov-site-alt.01"
+msgstr "An official website of the United States government"
+
+msgid "forecast.aria.current-conditions-feels-like.01"
+msgstr "It feels like {temperature} ℉."
+
+msgid "forecast.aria.current-conditions-narrative.01"
+msgstr "Weather as of {time}. The weather in {place} is {conditions}. Temperature is {temperature} ℉."
+
+msgid "forecast.current.feels-like.01"
+msgstr "Feels like"
+
+msgid "forecast.current.last-updated.01"
+msgstr "Last updated"
+
+msgid "forecast.current.obs-station.01"
+msgstr "Observation station"
+
+msgid "forecast.current.obs-station-distance.01"
+msgstr "Distance to location"
+
+msgid "forecast.current.obs-station-elevation.01"
+msgstr "Elevation"
+
+msgid "forecast.heading.current-conditions.01"
+msgstr "Current conditions"
+
+msgid "forecast.heading.daily-forecast.01"
+msgstr "Daily forecast"
+
+msgid "forecast.heading.today-forecast.01"
+msgstr "Today's forecast"
+
+msgid "forecast.errors.current-conditions.01"
+msgstr "There was an error loading the current conditions."
+
+msgid "forecast.errors.daily.01"
+msgstr "There was an error loading the daily forecast."
+
+msgid "forecast.errors.loading.01"
+msgstr "There was an error loading the forecast."
+
+msgid "forecast.errors.not-found.01"
+msgstr "This area doesn't have forecast data. Please try searching for a different location."
+
+msgid "forecast.errors.point.01"
+msgstr "Something went wrong loading this page. Please try again in a few minutes."
+
+msgid "forecast.labels.alerts.01"
+msgstr "Alerts"
+
+msgid "forecast.labels.seven-days.01"
+msgstr "7 Days"
+
+msgid "forecast.labels.weather-info.01"
+msgstr "Weather information sections"
+
+msgid "forecast.link.area-forecast-discussion.01"
+msgstr "Area Forecast Discussion"
+
+msgid "frontpage.heading.trapezoid.alt.01"
+msgstr "A lightning bolt strikes the ground as dark blue clouds sit above it. In the background is a pink-tinted horizon."
+
+msgid "frontpage.stats.images.1.alt.01"
+msgstr "Two people are working on top of a buoy that is floating in water."
+
+msgid "frontpage.stats.images.2.alt.01"
+msgstr "A hurricane-hunter aircraft is flying through the sky."
+
+msgid "frontpage.stats.images.3.alt.01"
+msgstr "A person from the National Weather Service is working to ready a weather balloon for launch."
+
+msgid "frontpage.stats.images.4.alt.01"
+msgstr "A National Weather Service meteorologist is briefing a crowd of people outdoors in front of a large map and charts of data."
+
+msgid "frontpage.heading.find-your-forecast.01"
+msgstr "Find your forecast"
+
+msgid "frontpage.heading.in-mind.01"
+msgstr "A weather.gov built with you in&nbsp;mind"
+
+msgid "frontpage.heading.is-coming.01"
+msgstr "A new weather.gov is&nbsp;coming"
+
+msgid "frontpage.heading.touchpoints.01"
+msgstr "We want to hear from you!"
+
+msgid "frontpage.list-heading.in-mind-2-graf.01"
+msgstr "Over the next few years, we are working towards a site that will be:"
+
+msgid "frontpage.list.in-mind-1-item.01"
+msgstr "One cohesive experience"
+
+msgid "frontpage.list.in-mind-2-item.01"
+msgstr "Easy to navigate and understand from any device"
+
+msgid "frontpage.list.in-mind-3-item.01"
+msgstr "Accessible to all users, regardless of location, wealth, education, age, or&nbsp;ability"
+
+msgid "frontpage.list.in-mind-4-item.01"
+msgstr "Available in more languages"
+
+msgid "frontpage.list.in-mind-5-item.01"
+msgstr "A valuable resource for the public, as well as partners of the National Weather Service"
+
+msgid "frontpage.list.touchpoints-1-item.01"
+msgstr "Did you find the information you were looking for?"
+
+msgid "frontpage.list.touchpoints-2-item.01"
+msgstr "Did you have any challenges in understanding it?"
+
+msgid "frontpage.list.touchpoints-3-item.01"
+msgstr "In what ways have you been using this website?"
+
+msgid "frontpage.list.touchpoints-4-item.01"
+msgstr "What can we do to serve you better?"
+
+msgid "frontpage.text.in-mind-1-graf.01"
+msgstr "We are working towards a new weather.gov that quickly provides everyone with the critical information they need to protect themselves and their communities."
+
+msgid "frontpage.text.is-coming-1-graf.01"
+msgstr "This website is in development. We are creating a new, contemporary tool for anyone, anywhere in the U.S. to check their forecast and learn about hazardous weather on the way."
+
+msgid "frontpage.text.is-coming-2-graf.01"
+msgstr "As you explore, you may notice that we’re missing features you’re accustomed to seeing on weather.gov. This site is updated every two weeks with new features. Continue to check back to watch the site expand!"
+
+msgid "frontpage.text.is-coming-3-graf.01"
+msgstr "Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href='{url}' class='usa-link'>access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information."
+
+msgid "frontpage.text.touchpoints-1-graf.01"
+msgstr "<a href='{url}' class='usa-link'>Tell us what you think</a> about how beta.weather.gov looks and functions."
+
+msgid "frontpage.heading.trapezoid-1.01"
+msgstr "Serving you in every community in the U.S. and its territories"
+
+msgid "frontpage.stats.text-1.01"
+msgstr "The National Weather Service provides science-based forecasts and warnings to protect life and property."
+
+msgid "frontpage.stats.text-2.01"
+msgstr "We make sure important weather information reaches the broadest possible audience."
+
+msgid "frontpage.rebuilding.header.01"
+msgstr "We are rebuilding weather.gov to better serve the public"
+
+msgid "frontpage.rebuilding.list-header-1.01"
+msgstr "It's a work in progress"
+
+msgid "frontpage.rebuilding.list-text-1.01"
+msgstr "This website is in development. We are creating a new, contemporary tool for anyone, anywhere in the U.S. to check their forecast and learn about hazardous weather on the way."
+
+msgid "frontpage.rebuilding.list-header-2.01"
+msgstr "Weather.gov is still the authoritative source"
+
+msgid "frontpage.rebuilding.list-text-2.01"
+msgstr "Because it’s a work in progress, this site has a long way to go before replacing weather.gov. In the meantime, you can still <a href='https://www.weather.gov' class='usa-link'>access weather.gov</a> and all the tools it offers. You should continue to rely on weather.gov as the authoritative source for weather information."
+
+msgid "frontpage.rebuilding.list-header-3.01"
+msgstr "We want to hear from you!"
+
+msgid "frontpage.rebuilding.list-text-3.01"
+msgstr "Tell us what you think about how beta.weather.gov looks and functions."
+
+msgid "frontpage.rebuilding.list-items-03.01"
+msgstr "<li>Did you find the information you were looking for?</li><li>Did you have any challenges in understanding it?</li><li>In what ways have you been using this website?</li><li>What can we do to serve you better?</li>"
+
+msgid "hourly-charts.heading.chance-precip.01"
+msgstr "Chance of precipitation"
+
+msgid "hourly-charts.heading.dewpoint.01"
+msgstr "Dewpoint"
+
+msgid "hourly-charts.heading.humidity.01"
+msgstr "Humidity"
+
+msgid "hourly-charts.heading.precip-amounts.01"
+msgstr "Precipitation amounts"
+
+msgid "hourly-charts.heading.temperature.01"
+msgstr "Temperature"
+
+msgid "hourly-charts.heading.wind.01"
+msgstr "Wind"
+
+msgid "hourly-charts.legend.feels-like.01"
+msgstr "Feels like"
+
+msgid "hourly-charts.legend.gusts.01"
+msgstr "Gusts"
+
+msgid "hourly-charts.legend.temperature.01"
+msgstr "Temperature"
+
+msgid "hourly-charts.legend.wind-speed.01"
+msgstr "Wind speed"
+
+msgid "hourly-table.aria.scroll-left.01"
+msgstr "scroll left"
+
+msgid "hourly-table.aria.scroll-right.01"
+msgstr "scroll right"
+
+msgid "hourly-table.aria.table-description.01"
+msgstr "Detailed hourly weather data for {month}/{day}. The rows are weather variables, the columns are hours."
+
+msgid "hourly-table.labels.condition.01"
+msgstr "Condition"
+
+msgid "hourly-table.labels.dewpoint.01"
+msgstr "Dewpoint"
+
+msgid "hourly-table.labels.humidity.01"
+msgstr "Humidity"
+
+msgid "hourly-table.labels.temperature.01"
+msgstr "Temperature"
+
+msgid "hourly-table.labels.time.01"
+msgstr "Time"
+
+msgid "hourly-table.labels.wind-speed.01"
+msgstr "Wind speed"
+
+msgid "hourly-table.table-header.chance-precip.01"
+msgstr "Chance of precipitation"
+
+msgid "hourly-table.text.gusting.01"
+msgstr "with gusts up to {gustSpeed} mph"
+
+msgid "loader.loading-text.01"
+msgstr "Loading the forecast"
+
+msgid "location-search.labels.enter-city-zip.01"
+msgstr "Enter city or zip code"
+
+msgid "location-search.labels.use-location.01"
+msgstr "Use my location"
+
+msgid "node.fields.labels.field_address.01"
+msgstr "address"
+
+msgid "node.fields.labels.field_phone_number_opt.01"
+msgstr "phone"
+
+msgid "node.fields.labels.field_wfo_email.01"
+msgstr "email"
+
+msgid "observation-table.labels.dewpoint.01"
+msgstr "Dewpoint"
+
+msgid "observation-table.labels.gusts.01"
+msgstr "Gusts"
+
+msgid "observation-table.labels.humidity.01"
+msgstr "Humidity"
+
+msgid "observation-table.labels.pressure.01"
+msgstr "Pressure"
+
+msgid "observation-table.labels.visibility.01"
+msgstr "Visibility"
+
+msgid "observation-table.labels.wind.01"
+msgstr "Wind"
+
+msgid "offline-banner.text.you-are-offline.01"
+msgstr "Your internet connection is unstable. Please try again in a few moments."
+
+msgid "precip-table.aria.amounts.01"
+msgstr "precipitation amounts for the coming hours"
+
+msgid "precip-table.heading.amounts.01"
+msgstr "Precipitation amounts"
+
+msgid "precip-table.table-header.time-period.01"
+msgstr "Time Period"
+
+msgid "precip-table.table-header+legend.rain.01"
+msgstr "Rain"
+
+msgid "precip-table.table-header+legend.water.01"
+msgstr "Water"
+
+msgid "precip-table.table-header+legend.snow.01"
+msgstr "Snow"
+
+msgid "precip-table.table-header+legend.ice.01"
+msgstr "Ice"
+
+msgid "precip-table.text.water-explainer.01"
+msgstr "\"Water\" refers to the amount of water that is present in the precipitation. The precipitation may actually fall in solid form such as ice or snow, in liquid form as rain, or a mix of both."
+
+msgid "radar.labels.intensity.01"
+msgstr "Intensity"
+
+msgid "radar.labels.legend.01"
+msgstr "Radar Legend"
+
+msgid "radar.labels.radar.01"
+msgstr "Radar"
+
+msgid "radar.time-shown.label.01"
+msgstr "Time shown"
+
+msgid "radar.link.explore-other.01"
+msgstr "Explore other radar views"
+
+msgid "safety.labels.tips.01"
+msgstr "Tips to stay safe"
+
+msgid "satellite.heading.satellite.01"
+msgstr "Satellite"
+
+msgid "satellite.time-shown.label.01"
+msgstr "time shown"
+
+msgid "satellite.link.explore-other.01"
+msgstr "Explore other satellite views"
+
+msgid "theme.text.submitted-by.01"
+msgstr "Submitted by {author_name} on {month}/{day}"
+
+msgid "units.dbz.01"
+msgstr "dBz"
+
+msgid "units.inches.01"
+msgstr "{inches}\""
+
+msgid "units.mercury-inches.01"
+msgstr "{mercury_inches} in ({mbar}&nbsp;mb)"
+
+msgid "units.miles.01"
+msgstr "miles"
+
+msgid "units.feet.01"
+msgstr "feet"
+
+msgid "units.mph.02"
+msgstr "{speed} mph"
+
+msgid "uswds-banner.gov.description_html.01"
+msgstr "A <strong>.gov</strong> website belongs to an official government organization in the United States."
+
+msgid "uswds-banner.gov.description.01"
+msgstr "Official websites use .gov"
+
+msgid "uswds-banner.gov.https.01"
+msgstr "Secure .gov websites use HTTPS"
+
+msgid "uswds-banner.gov.safely-connected_html.01"
+msgstr "or <strong>https://</strong> means you've safely connected to the .gov website. Share sensitive information only on official, secure websites."
+
+msgid "uswds-banner.how-you-know.01"
+msgstr "Here’s how you know"
+
+msgid "uswds-banner.lock_alt.01"
+msgstr "Locked padlock icon"
+
+msgid "uswds-banner.lock_html.01"
+msgstr "A <strong>lock</strong>"
+
+msgid "uswds-banner.lock.01"
+msgstr "Lock"
+
+msgid "uswds-banner.skip-to-content.01"
+msgstr "Skip to main content"
+
+msgid "wfo-info.caption.coverage-area-map.01"
+msgstr "Coverage area for {wfo} WFO"
+
+msgid "wfo-info.caption+aria.coverage-area-map.01"
+msgstr "This includes {counties}"
+
+msgid "wfo-info.heading.contact-us.01"
+msgstr "Contact us"
+
+msgid "wfo-info.heading.forecast-discussion.01"
+msgstr "Forecaster's discussion"
+
+msgid "wfo-info.heading.local-expertise.01"
+msgstr "Local expertise"
+
+msgid "wfo-info.labels.about.01"
+msgstr "About"
+
+msgid "wfo-info.labels.wfo.01"
+msgstr "{wfoName} ({wfoCode}) National Weather Service Office"
+
+msgid "wfo-info.link.area-forecast-discussion"
+msgstr "Current Area Forecast Discussion"
+
+msgid "wfo-info.text.forecast-discussion.01"
+msgstr "The purpose of the area forecast discussion is to provide the meteorological/scientific reasoning behind the forecast"
+
+msgid "wfo.labels.facebook.01"
+msgstr "Facebook"
+
+msgid "wfo.labels.find-us.01"
+msgstr "Find us on"
+
+msgid "wfo.labels.local-office.01"
+msgstr "Your Local Forecast Office"
+
+msgid "wfo.labels.twitter.01"
+msgstr "X (Twitter)"
+
+msgid "wfo.labels.youtube.01"
+msgstr "YouTube"
+
+msgid "weather-story.heading.from-forecaster.01"
+msgstr "From the forecaster"
+
+msgid "weather-story.link.area-forecast-discussion.01"
+msgstr "Area Forecast Discussion"
+
+msgid "weather-story.link.county-overview.01"
+msgstr "County overview"
+
+msgid "weather-story.link.zone-forecast.01"
+msgstr "Zone forecast product"
+
+msgid "weather-story.text.created-by.06"
+msgstr "<strong class='text-base-dark'>Created: {date} at {time}</strong><span class='display-block'>by the <a class='usa-link' href='{wfo_url}'>{wfo_name} WFO</a></span>"
+
+msgid "wind.labels.calm.01"
+msgstr "calm"
+
+msgid "wind.labels.speed-from-north.01"
+msgstr "{speed} mph from the north"
+
+msgid "wind.labels.speed-from-northeast.01"
+msgstr "{speed} mph from the northeast"
+
+msgid "wind.labels.speed-from-east.01"
+msgstr "{speed} mph from the east"
+
+msgid "wind.labels.speed-from-southeast.01"
+msgstr "{speed} mph from the southeast"
+
+msgid "wind.labels.speed-from-south.01"
+msgstr "{speed} mph from the south"
+
+msgid "wind.labels.speed-from-southwest.01"
+msgstr "{speed} mph from the southwest"
+
+msgid "wind.labels.speed-from-west.01"
+msgstr "{speed} mph from the west"
+
+msgid "wind.labels.speed-from-northwest.01"
+msgstr "{speed} mph from the northwest"
+
+msgid "site.meta.titles.about.01"
+msgstr "About the National Weather Service"
+
+msgid "site.meta.titles.disclaimer.01"
+msgstr "Disclaimer"
+
+msgid "site.meta.titles.site-index.01"
+msgstr "Site index"
+
+msgid "site.meta.titles.accessibility.01"
+msgstr "Accessibility"
+
+msgid "site.meta.titles.privacy.01"
+msgstr "Privacy policy"
+
+msgid "site.meta.titles.ghwo.risk.01"
+msgstr "Risk overview"
+
+msgid "ghwo.selector.label.state.01"
+msgstr "Select a state"
+
+msgid "ghwo.selector.label.county.01"
+msgstr "Select a county"
+
+msgid "ghwo.selector.label.county-link.01"
+msgstr "View county page"
+
+msgid "ghwo.heading.error.01"
+msgstr "There was an error loading the data"
+
+msgid "ghwo.heading.error-description.01"
+msgstr "We couldn't load the data for this county. Please try again later."
+
+msgid "ghwo.heading.no-data.01"
+msgstr "We don't have data for this county"
+
+msgid "ghwo.heading.no-data-description.01"
+msgstr "Please use the forecast search to see data for a specific point near this location."
+
+msgid "ghwo.loader.loading-text.01"
+msgstr "Loading the risk data"
+
+msgid "ghwo.details.table.risk-level.lower.01"
+msgstr "risk level"
+
+msgid "ghwo.details.pane.legend.sr.risk-level-name.01"
+msgstr "risk level name"
+
+msgid "ghwo.details.pane.legend.sr.risk-level-description.01"
+msgstr "risk level description"
+
+msgid "ghwo.details.pane.header.risk-map.01"
+msgstr "Risk map"
+
+msgid "ghwo.details.pane.header.based-on.01"
+msgstr "What is this based on?"
+
+msgid "ghwo.details.pane.header.risk-levels.01"
+msgstr "Risk levels"
+
+msgid "ghwo.details.table.no-impact.01"
+msgid_plural "ghwo.details.table.no-impact.01-plural"
+msgstr[0] "No impact in {num} other category"
+msgstr[1] "No impact in {num} other categories"
+
+msgid "ghwo.summary.levels.sr-labels.1.01"
+msgstr "Level 1: low risk"
+
+msgid "ghwo.summary.levels.sr-labels.2.01"
+msgstr "Level 2: slight risk"
+
+msgid "ghwo.summary.levels.sr-labels.3.01"
+msgstr "Level 3: medium risk"
+
+msgid "ghwo.summary.levels.sr-labels.4.01"
+msgstr "Level 4: moderate risk"
+
+msgid "ghwo.summary.levels.sr-labels.5.01"
+msgstr "Level 5: high risk"
+
+msgid "ghwo.summary.levels.sr-labels.0.01"
+msgstr "No risk"
+
+msgid "county.heading.alerts.01"
+msgstr "Alerts"
+
+msgid "county.heading.wfo-promo.01"
+msgstr "Weather forecasting office"
+
+msgid "county.alert-tabs.day.all.01"
+msgstr "All days"
+
+msgid "county.alert-tabs.day.Monday.01"
+msgstr "Monday"
+
+msgid "county.alert-tabs.day.Tuesday.01"
+msgstr "Tuesday"
+
+msgid "county.alert-tabs.day.Wednesday.01"
+msgstr "Wednesday"
+
+msgid "county.alert-tabs.day.Thursday.01"
+msgstr "Thursday"
+
+msgid "county.alert-tabs.day.Friday.01"
+msgstr "Friday"
+
+msgid "county.alert-tabs.day.Saturday.01"
+msgstr "Saturday"
+
+msgid "county.alert-tabs.day.Sunday.01"
+msgstr "Sunday"
+
+msgid "county.alert-accordions.no-alerts.01"
+msgstr "No alerts for {county}, for the next 5 days"
+
+msgid "county.alert-accordions.no-alerts-for-day.01"
+msgstr "No alerts for {county}, on {day}"
+
+msgid "county.overview.link-to-ghwo-analysis.01"
+msgstr "See the detailed risk analysis"
+
+msgid "county.briefing.header.01"
+msgid_plural "county.briefing.header.01-plural"
+msgstr[0] "Briefing"
+msgstr[1] "Briefings"
+
+msgid "county.briefing.created.01"
+msgstr "Published"
+
+msgid "county.briefing.updated.01"
+msgstr "Last updated"
+
+msgid "county.briefing.download-one.01"
+msgstr "Download briefing [pdf]"
+
+msgid "county.briefing.download-multi.01"
+msgstr "Download {office} briefing [pdf]"
+
+msgid "county.briefing.no-briefing.01"
+msgstr "No recent briefing available"
+
+msgid "county.forecast-link.heading.01"
+msgstr "Find a forecast"
+
+msgid "county.wfo-promo.wfo-label.01"
+msgstr "{wfo_name} Forecast Office"
+
+msgid "county.wfo-promo.labels.phone.01"
+msgstr "Phone"
+
+msgid "ghwo.summary.error.not-found.01"
+msgstr "This area doesn't have daily risk summary data. Please try searching for a different location."
+
+msgid "ghwo.summary.error.loading.01"
+msgstr "There was an error loading the daily risk summary data. Please try again in a moment."
+msgid "county-index.labels.state-filter.01"
+msgstr "Select a state or territory"
+
+msgid "county-index.labels.county-filter.01"
+msgstr "Filter by county name"
+
+msgid "county-index.headers.county-view.01"
+msgstr "County view"
+
+msgid "county-index.headers.description.01"
+msgstr "Select your state and county below to see alerts, risk levels, and more for your area"
+
+msgid "ghwo.table.caption.header.01"
+msgstr "7 day risk overview"
+
+msgid "ghwo.table.caption.description.01"
+msgstr "The graphic shows the daily risk summary for 7 days. Daily risk is based on highest risk factor for that day."
+
+msgid "ghwo.table.details.header.01"
+msgstr "What factors are driving the risk?"
+
+msgid "ghwo.table.details.header.no-risk.01"
+msgstr "No expected risks for the next 7 days"
+
+msgid "ghwo.table.details.description.01"
+msgstr "The graphic shows the weather factors that have some risk for the next 7 days. Click on the colored boxes to see what the risk factors is based on and what impact it may have."
+
+msgid "ghwo.table.row.risk-summary.01"
+msgstr "Daily risk summary"
+
+msgid "ghwo.table.legend.low-risk.01"
+msgstr "Low risk"
+
+msgid "ghwo.table.legend.high-risk.01"
+msgstr "High risk"
+
+msgid "ghwo.table.legend.label.01"
+msgstr "table legend"
+
+msgid "spatial.county-like.name.county.01"
+msgstr "County"
+
+msgid "spatial.county-like.name.borough.01"
+msgstr "Borough"
+
+msgid "spatial.county-like.name.parish.01"
+msgstr "Parish"
+
+msgid "spatial.county-like.name.census-area.01"
+msgstr "Census Area"
+
+msgid "spatial.county-like.name.village.01"
+msgstr "Village"
+
+msgid "spatial.county-like.name.municipality.01"
+msgstr "Municipality"
+
+msgid "spatial.county-like.name.island.01"
+msgstr "Island"
+
+msgid "spatial.county-like.with-subdivision.label.01"
+msgstr "{name} {subdivision}, {state}"
+
+msgid "spatial.county-like.with-no-subdivision.label.01"
+msgstr "{name}, {state}"
+
+msgid "error.500.generic.message.01"
+msgstr "500: Something went wrong on our end. Please try again in a few minutes."
+
+msgid "error.404.generic.message.01"
+msgstr "404: The requested page was not found."
+
+msgid "error.404.not-supported.message.01"
+msgstr "The requested location is not available."
+
+msgid "error.404.not-supported.description.01"
+msgstr "The National Weather Service provides forecast information for the requested location but the forecast is not currently available on this website."
+
+msgid "error.404.out-of-bounds.message.01"
+msgstr "404: The requested location is not covered by the National Weather Service."
+
+msgid "error.404.out-of-bounds.description.01"
+msgstr "The National Weather Service only provides weather, forecast, and alert information within the United States."
+
+msgid "error.404.forecast.message.01"
+msgstr "404: The requested place, {place}, {state}, was not found."
+
+msgid "error.404.forecast.suggested.01"
+msgstr "Were you looking for {place}?"
+
+msgid "menu.navigation.forecast.01"
+msgstr "Forecast"
+
+msgid "menu.navigation.forecast.find-forecast.01"
+msgstr "Find your Forecast"
+
+msgid "menu.navigation.forecast.county.01"
+msgstr "County"
+
+msgid "menu.navigation.forecast.state.01"
+msgstr "State"
+
+msgid "menu.navigation.observations.01"
+msgstr "Observations"
+
+msgid "menu.navigation.observations.radar.01"
+msgstr "Radar"
+
+msgid "menu.navigation.observations.wind.01"
+msgstr "Wind"
+
+msgid "menu.navigation.observations.flooding.01"
+msgstr "Flooding"
+
+msgid "menu.navigation.observations.other-maps.01"
+msgstr "Other Maps"
+
+msgid "menu.navigation.preparedness.01"
+msgstr "Preparedness"
+
+msgid "menu.navigation.preparedness.weather-hazards-guides.01"
+msgstr "Weather Hazards Guides"
+
+msgid "menu.navigation.resources.01"
+msgstr "Resources"
+
+msgid "menu.navigation.resources.state-weather-overview.01"
+msgstr "State weather overview"
+
+msgid "menu.navigation.resources.storm-recaps.01"
+msgstr "Storm Recaps"
+
+msgid "menu.navigation.resources.historical-weather.01"
+msgstr "Historical weather"
+
+msgid "menu.navigation.resources.glossary.01"
+msgstr "Glossary"
+
+msgid "menu.navigation.about.01"
+msgstr "About"
+
+msgid "menu.navigation.about.mission.01"
+msgstr "Mission"
+
+msgid "menu.navigation.about.offices.01"
+msgstr "Offices"
+
+msgid "menu.navigation.about.centers.01"
+msgstr "Centers"
+
+msgid "menu.navigation.about.news.01"
+msgstr "News"
+
+msgid "menu.navigation.about.history.01"
+msgstr "History"
+
+msgid "menu.navigation.search.search.01"
+msgstr "Search"
+
+msgid "menu.navigation.search.sr-tabs.01"
+msgstr "Site search sections"
+
+msgid "menu.navigation.search.site.01"
+msgstr "Site"
+
+msgid "menu.navigation.labels.enter-term.01"
+msgstr "Enter a search term"

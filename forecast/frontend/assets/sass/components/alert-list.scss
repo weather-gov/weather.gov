@@ -1,0 +1,126 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+/* AlertList Overrides
+-------------------------------------- */
+.usa-alert__body {
+  & a {
+    color: color("primary");
+
+    &:focus,
+    &:hover {
+      color: color("primary-dark");
+    }
+  }
+}
+
+wx-alerts .usa-accordion {
+  scroll-padding-top: units(6);
+}
+
+.wx-alerts-county-daily .usa-accordion {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+
+  h3 {
+    color: color("black");
+
+    button {
+      border: 1px solid color("base");
+      font-weight: normal;
+      color: color("black");
+
+      &[aria-expanded="false"] {
+        background-image:
+          url("/public/images/uswds/usa-icons/add.svg"),
+          linear-gradient(transparent, transparent);
+      }
+
+      &[aria-expanded="true"] {
+        background-image:
+          url("/public/images/uswds/usa-icons/remove.svg"),
+          linear-gradient(transparent, transparent);
+      }
+    }
+  }
+
+  .usa-accordion__content {
+    border: 1px solid color("base");
+    border-top: 0;
+  }
+
+  &.alert-level__other h3 {
+    svg {
+      fill: color("base-dark");
+    }
+
+    button {
+      background-color: color("base-lightest");
+    }
+  }
+
+  &.alert-level__watch h3 {
+    svg {
+      fill: color("yellow-50v");
+    }
+
+    button {
+      background-color: color("yellow-5");
+    }
+  }
+
+  &.alert-level__warning h3 {
+    svg {
+      fill: color("red-50");
+    }
+
+    button {
+      background-color: color("red-cool-5v");
+    }
+  }
+}
+
+.wx-alert[data-alert-level] .wx-alert-li {
+  background-color: inherit;
+}
+
+.wx-alert {
+  @extend .bg-base-lightest;
+
+  &[data-alert-level="watch"] {
+    border-color: color("yellow-20v");
+    border-left-color: color("yellow-50v");
+    background-color: color("yellow-5");
+
+    .wx-alert-li {
+      &::before {
+        background-color: color("yellow-50v");
+      }
+    }
+  }
+
+  &[data-alert-level="warning"] {
+    border-color: color("red-40v");
+    border-left-color: color("red-50");
+    background-color: color("red-cool-10v");
+
+    .wx-alert-li {
+      &::before {
+        background-color: color("red-50");
+      }
+    }
+  }
+
+  &[data-alert-level="other"] {
+    border-left-color: color("gray-cool-30");
+
+    .wx-alert-li {
+      background-color: color("base-lightest");
+
+      &::before {
+        background-color: color("base-dark");
+      }
+    }
+  }
+}

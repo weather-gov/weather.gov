@@ -1,0 +1,138 @@
+{% comment %}
+  This template receives one top-level property called ghwo.
+  This is the full risk overview object for the county. The
+  relevant properties of this object are:
+
+  error:
+    An error object, or falsey. If not falsey, it should
+    contain a status property indicating the HTTP code
+    so we can tell the user if the data is missing or if
+    there was some other unknown error.
+
+  risks:
+    A dictionary. Each object represents a risk. The keys
+    are risk IDs and the values are:
+
+    days:
+      A list of days. Each day contains a risk level along
+      with the appropriate legend information for that level.
+    
+    legend:
+      level: A dictionary. Keys are risk levels, values are legend.
+
+        number: The risk level, as a number.
+
+        levelName: The name of this level. Eg, "Moderate", "Severe"
+
+        definition: A description fo what this level means.
+
+        color: The office-provided color that represents this
+          risk level.
+
+    noRisks:
+      A list of risk names that were provided by the WFO but whose
+      levels are always zero for the forecast. These names are
+      derived from the legend so they are already complete.
+
+{% endcomment %}
+{% if ghwo.error %}
+  <p>There was an error loading the GHWO detailed data.</p>
+  <p>{{ ghwo.error }}</p>
+{% elif ghwo.risks|length %}
+  <wx-ghwo-details-table target="wx-ghwo-table-details-pane">
+  <div class="grid-row">
+    <div class="tablet-lg:grid-col-7 grid-col-12">
+      <h3 class="wx-visual-h3 text-normal text-primary-dark margin-top-4"
+          id="ghwo-details-table-header">{{ "ghwo.table.details.header.01"| t }}</h3>
+      <p class="text-left font-sans-sm text-normal margin-top-0 margin-bottom-2"
+         id="ghwo-details-table-caption">{{ "ghwo.table.details.description.01" | t}}</p>
+      <div class="display-flex flex-justify tablet-lg:display-none">
+        {% include 'weather/partials/scroll-buttons.html' %}
+      </div>
+      <div class="ghwo-risk-details-table-wrapper">
+        <table role="grid"
+               class="ghwo-risk-details-table"
+               aria-labelledby="ghwo-details-table-header"
+               aria-describedby="ghwo-details-table-caption">
+          <thead role="presentation">
+            <tr>
+              <td class="position-sticky left-0 bg-white"></td>
+              {% for day in ghwo.days %}
+                <th scope="col">
+                  <time datetime="{{ day.timestamp }}"
+                        data-day-number="{{ day.dayNumber }}"
+                        class="font-mono-2x tablet-lg:font-mono-xs text-normal">
+                    <span class="display-block">{{ day.timestamp|datetime|date:"D" }}</span>
+                    <span class="display-block">{{ day.timestamp|datetime|date:"n" }}/{{ day.timestamp|datetime|date:"j" }}</span>
+                  </time>
+                </th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for id,risk in ghwo.risks.items %}
+              <tr>
+                <th scope="row" class="position-sticky left-0 text-left">
+                  <span class="font-mono-xs padding-right-3 text-normal">{{ risk.name }}</span>
+                </th>
+                {% for day in risk.days %}
+                  <td role="gridcell" aria-selected="false">
+                    <div class="ghwo-chiclet-wrapper">
+                      {% if day.category > 0 %}
+                        <button class="ghwo-chiclet chiclet-detail-cell"
+                                role="button"
+                                data-risk-level="{{ day.category }}"
+                                data-risk-factor="{{ id }}"
+                                data-day-number="{{ forloop.counter }}"
+                                data-day-name="{{ day.timestamp|datetime|date:"l" }}"
+                                aria-selected="{% if day.is_first %}true{% else %}false{% endif %}">
+                          <span class="usa-sr-only">{{ risk.name }}: {{ "ghwo.details.table.risk-level.lower.01" | t }} {{ day.category }}</span>
+                          <span class="font-mono-2x text-medium" aria-hidden="true">{{ day.category }}</span>
+                        </button>
+                      {% else %}
+                        <div class="ghwo-chiclet chiclet-detail-cell chiclet-detail-cell-empty"
+                             data-risk-level="0"
+                             data-risk-factor="{{ id }}"
+                             tabindex="0">
+                          <span class="usa-sr-only">{{ risk.name }}: {{ "ghwo.details.table.risk-level.lower.01" | t }} {{ day.category }}</span>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% include 'weather/partials/ghwo-risk-table-legend.html' %}
+      <p class="font-sans-xs margin-top-105">
+        {% with ghwo.noRisks|length as num_no_risks %}
+          <span>{% translate_plural_with_args "ghwo.details.table.no-impact.01" 0 num=num_no_risks %}:</span>
+        {% endwith %}
+        <span>{{ ghwo.noRisks|join:", " }}</span>
+      </p>
+    </div>
+    <div class="grid-col-12 tablet-lg:grid-col-5 tablet-lg:padding-left-4">
+      {% comment %}
+        We render a pane for each day in each row
+        so long as the level for that day is more than 0
+      {% endcomment %}
+      {% for id,risk in ghwo.risks.items %}
+        {% for day in risk.days %}
+          {% if day.category > 0 %}
+            {% include 'weather/partials/ghwo-details-pane.html' with day_number=forloop.counter day=day id=id risk=risk %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+  </wx-ghwo-details-table>
+{% else %}
+  {% comment %}
+  This will be displayed if the GHWO table rows are empty.
+  We get to this state if there are no risk levels above 0
+  for any day for the location
+  {% endcomment %}
+  <p>{{"ghwo.table.details.header.no-risk.01"|t}}</p>
+{% endif %}

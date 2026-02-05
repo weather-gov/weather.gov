@@ -1,0 +1,13 @@
+{% comment %}
+Takes a list called 'options' in which each entry
+is a dictionary of 'label' and 'value' keys.
+Optionally, an 'is_current' key, if present and True,
+tells us that this is the currently selected option.
+Renders a plain collection of <option> elements.
+Designed to be used within a parent <select> element,
+or similar.
+{% endcomment %}
+{% for option in options %}
+  <option value="{{ option.value }}"
+          {% if option.is_current %}selected{% endif %}>{{ option.label }}</option>
+{% endfor %}

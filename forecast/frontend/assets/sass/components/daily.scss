@@ -1,0 +1,128 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+/* Daily Forecast Block Overrides
+------------------------------------- */
+@include at-media("desktop") {
+  .wx-daily-forecast-block ol > li {
+    scroll-margin-top: units(7);
+  }
+}
+
+/* Hourly Forecast Block Overrides
+-------------------------------------- */
+.wx-hourly-forecast-block ol > li {
+  @include u-margin-bottom(3);
+}
+
+table tr:first-child th,
+table tr:nth-child(2) th {
+  border-top: none;
+}
+
+/* Day/Night marker line utility
+------------------------------------- */
+.wx-marker-before {
+  &::before {
+    content: "";
+    width: units(1);
+    height: units(1);
+    border-radius: units(1);
+    position: relative;
+    display: inline-block;
+    top: units("neg-2px");
+    left: 0;
+    margin-right: units("neg-2px");
+  }
+}
+
+.wx-marker-before--yellow {
+  &::before {
+    background-color: color("yellow-20");
+  }
+}
+
+.wx-marker-before--indigo {
+  &::before {
+    background-color: color("secondary-darkest");
+  }
+}
+
+.wx-marker-before--midnight-indigo {
+  &::before {
+    background-color: color("secondary-darker");
+  }
+}
+
+/* Quick Forecast Tab mode styling
+-----------------------------------
+These styles will only apply to the quick forecast
+nav and the sibling daily forecast ol list when both
+items have the appropriate ARIA tab related roles
+set.
+Handles the hiding/showing of tab content based
+on the selected tab.
+*/
+wx-daily-forecast {
+  --wx-media-breakpoint-mobile: #{units("mobile")};
+  --wx-media-breakpoint-desktop: #{units("desktop")};
+}
+
+.wx-daily-forecast-list-item-inner[role="tabpanel"] {
+  display: none;
+}
+
+.wx-daily-forecast-list-item-inner[role="tabpanel"][data-tabpanel-active="true"] {
+  display: revert;
+}
+
+/* Styles for the daily forecast list item
+--------------------------------------------------- */
+.wx-daily-forecast-item-summary-area--other {
+  margin-bottom: units(1);
+
+  > span {
+    @extend .wx-marker-before--indigo;
+  }
+}
+
+.wx-daily-forecast-item-summary-area--overnight {
+  margin-bottom: units(3);
+
+  > span {
+    @extend .wx-marker-before--midnight-indigo;
+  }
+}
+
+.wx-daily-forecast-item-summary-area--daytime {
+  margin-bottom: units(3);
+
+  @include at-media(tablet) {
+    margin-bottom: units(1);
+  }
+
+  > span {
+    @extend .wx-marker-before--yellow;
+  }
+}
+
+@include at-media("tablet") {
+  .wx-daily-forecast-item-summary-area--other {
+    margin-bottom: units(1);
+
+    @include grid-col(6);
+  }
+
+  .wx-daily-forecast-item-summary-area--overnight {
+    margin-bottom: units(3);
+
+    @include grid-col(12);
+  }
+
+  .wx-daily-forecast-item-summary-area--daytime {
+    margin-bottom: units(1);
+
+    @include grid-col(6);
+  }
+}

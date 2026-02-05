@@ -1,0 +1,8 @@
+@use "uswds-core" as *;
+
+// Overrides for preview pages
+main.main--preview {
+  .block-page-title-block {
+    display: none;
+  }
+}

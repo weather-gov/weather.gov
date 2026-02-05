@@ -1,0 +1,56 @@
+@use "uswds-core" as *;
+
+/* Alert Link (table and daily overview)
+-------------------------------------- */
+.wx-alert-link {
+  border: 1px solid;
+  padding: units(1) units(1.5);
+
+  & a {
+    color: color("primary");
+
+    &:visited {
+      color: color("primary");
+    }
+
+    &:focus,
+    &:hover {
+      color: color("primary-dark");
+    }
+
+    &:active {
+      color: color("primary-darker");
+    }
+  }
+
+  svg {
+    fill: color("accent-warm-dark");
+  }
+}
+
+.wx-alert-link--warning {
+  background-color: color("red-cool-5v");
+  border-color: color("red-40v");
+
+  svg {
+    fill: color("red-50");
+  }
+}
+
+.wx-alert-link--watch {
+  background-color: color("yellow-5");
+  border-color: color("yellow-50v");
+
+  svg {
+    fill: color("yellow-50v");
+  }
+}
+
+.wx-alert-link--other {
+  background-color: color("base-lightest");
+  border-color: color("base");
+
+  svg {
+    fill: color("base-dark");
+  }
+}

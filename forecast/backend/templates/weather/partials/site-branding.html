@@ -1,0 +1,56 @@
+{% load i18n %}
+<div id="block-new-weather-theme-sitebranding"
+     class="contextual-region block block-system block-system-branding-block">
+  <div class="grid-container display-flex flex-align-center">
+    <a href="/"
+       class="display-flex flex-align-center text-no-underline margin-y-2"
+       rel="home">
+      {% if site_logo %}
+        <img class="site-logo height-7" src="{% static site_logo %}" alt="" />
+      {% endif %}
+      <div class="site-info padding-x-2 display-flex flex-column flex-align-start">
+        {% if site_name %}
+          <span class="site-name display-block font-heading-lg desktop:font-heading-xl text-secondary-darkest text-bold">
+            {{ site_name }}
+          </span>
+        {% endif %}
+        {% if site_slogan %}
+          <span class="site-slogan display-block font-sans-2xs desktop:font-sans-xs text-base-dark padding-left-05">
+            {{ site_slogan }}
+          </span>
+        {% endif %}
+      </div>
+    </a>
+    {# under development banner, for tablet display #}
+    <span class="under-development-tablet display-flex flex-align-center bg-gold-10v text-black text-uppercase padding-y-05 padding-left-1 padding-right-105 font-sans-xs radius-md margin-left-1 margin-top-0">
+      <svg class="usa-icon height-205 width-205 margin-right-05 text-top margin-bottom-2px"
+           aria-hidden="true"
+           focusable="false"
+           role="img">
+        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#construction_worker"></use>
+      </svg>
+      {% trans "backend.banner.under-development.01" %}
+    </span>
+    {# this div is part of site-navigation, to ensure the mobile menu icon is next to the branding #}
+    {% if not hide_site_nav %}
+      <div class="usa-navbar">
+        <button type="button" class="usa-menu-btn padding-0" id="site-header-hamburger-button">
+          <img src="{% static 'images/weather/wx_nav_hamburger.svg' %}" role="img" alt="Menu" />
+        </button>
+      </div>
+    {% endif %}
+  </div>
+    {# under development banner, for mobile display #}
+    <span class="under-development-mobile display-flex flex-align-center bg-gold-10v text-black text-uppercase padding-y-05 padding-left-1 padding-right-105 font-sans-xs radius-md margin-1 margin-top-0 margin-bottom-3 maxw-mobile-lg">
+      <svg class="usa-icon height-205 width-205 margin-right-05 text-top margin-bottom-2px"
+           aria-hidden="true"
+           focusable="false"
+           role="img">
+        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#construction_worker"></use>
+      </svg>
+      {% trans "backend.banner.under-development.01" %}
+    </span>
+    {% if not hide_site_nav %}
+      {% include "weather/partials/site-navigation.html" %}
+    {% endif %}
+</div>

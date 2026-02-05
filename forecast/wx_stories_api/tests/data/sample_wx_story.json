@@ -1,0 +1,34 @@
+{
+    "data": {
+        "type": "node--wfo_pdf_upload",
+        "attributes": {
+            "title": "sample weather story",
+            "field_description": "a sample weather story for illustrative purposes",
+            "field_office": "QQQ",
+            "field_cwa_center_lat": "39.5709807",
+            "field_cwa_center_lon": "-119.8023437",
+            "field_starttime": "1729710900",
+            "field_endtime": "1729749600",
+            "field_graphicnumber": "5",
+            "field_order": "5",
+            "field_radar": "0",
+            "field_weburl": "/FXC/wxstory.php?wfo=rev",
+            "field_imageloop": null,
+            "field_frontpage": true
+        },
+        "relationships": {
+            "field_fullimage": {
+                "data": {
+                    "type": "file--file",
+                    "id": "aab4348b-08d3-4317-9707-4b1238b2d0d6"
+                }
+            },
+            "field_smallimage": {
+                "data": {
+                    "type": "file--file",
+                    "id": "1831642e-8af7-490e-83c0-a61c7f4a462f"
+                }
+            }
+        }
+    }
+}

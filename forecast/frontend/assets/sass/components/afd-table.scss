@@ -1,0 +1,45 @@
+@use "uswds-core" as *;
+
+.usa-table.afd-table {
+  thead {
+    @include u-font("mono", "sm");
+
+    td {
+      background-color: transparent;
+      border: none;
+    }
+
+    tr {
+      border: none;
+      color: white;
+    }
+
+    th {
+      @include u-text("normal");
+
+      color: white;
+    }
+
+    tr:first-of-type {
+      th {
+        background-color: color("primary-darker");
+        padding-top: units(1);
+        padding-bottom: units(1);
+      }
+    }
+
+    tr:last-of-type {
+      th {
+        background-color: color("primary-dark");
+      }
+
+      th:first-child {
+        background-color: color("primary-darker");
+      }
+    }
+  }
+
+  tbody {
+    @include u-font("mono", "sm");
+  }
+}

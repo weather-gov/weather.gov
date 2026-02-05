@@ -1,0 +1,83 @@
+<article class="afd-content desktop:padding-left-1" data-afd-id="{{ afd.id }}">
+  <div class="afd-preamble">
+    <h2 class="usa-heading usa-sr-only">{{ "afd.aria.letterhead.01" | t }}</h2>
+    {% for key,val in afd.parsedProductText.preamble.items %}
+      <span class="afd-preamble-{{ key }} font-mono-sm text-pre-line">
+        {% for node in val %}{{ node.content }}{% endfor %}
+      </span>
+    {% endfor %}
+  </div>
+  <div class="afd-body">
+    {% for node in afd.parsedProductText.body %}
+      {% if node.type == 'header' %}
+        <h2 class="usa-heading wx-mono-h2 margin-bottom-1 margin-top-4">{{ node.content |safe }}</h2>
+      {% elif node.type == 'subheader' %}
+        <h3 class="wx-mono-h3 margin-top-105">{{ node.content }}</h3>
+      {% elif node.type == 'temps-table' %}
+        <div class="afd-table-wrapper usa-table-container--scrollable">
+          <table class="usa-table usa-table--compact afd-table width-full">
+            <thead>
+              <tr>
+                <td></td>
+                <th colspan="4" scope="colgroup">{{ "afd.table-header.temperatures.01" | t }}</th>
+                <th colspan="4" scope="colgroup">{{ "afd.table-header.chance-precip.01" | t }}</th>
+              </tr>
+              <tr>
+                <th scope="col">{{"afd.table-header.location.01" | t }}</th>
+                {# An unsophisticated check for which period the numbers correspond to#}
+                {% subtract node.row.0.numbers.0 node.rows.0.numbers.1 as row_diff %}
+                {% if row_diff > 0 %}
+                  <th scope="col">{{ "afd.table-header.today.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tonight.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tomorrow.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tomorrow-night.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.today.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tonight.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tomorrow.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tomorrow-night.01" | t }}</th>
+                {% else %}
+                  <th scope="col">{{ "afd.table-header.tonight.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tomorrow.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tomorrow-night.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.next-day.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tonight.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tomorrow.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.tomorrow-night.01" | t }}</th>
+                  <th scope="col">{{ "afd.table-header.next-day.01" | t }}</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in node.rows %}
+                <tr>
+                  <th scope="row">{{ row.name }}</th>
+                  {% for num in row.numbers %}
+                    {% if row.numbers|length == 8 %}
+                      {% if forloop.counter0 < 4 %}
+                        <td>
+                          {{ num }}
+                          <span aria-hidden="true" class="font-sans-3xs text-ttop padding-left-1px">&deg;F</span><span class="usa-sr-only">℉</span>
+                        </td>
+                      {% else %}
+                        <td>{{ num }}%</td>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="usa-text font-mono-sm text-pre-line">{{ node.content }}</p>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% if afd.parsedProductText.epilogue %}
+    <div class="afd-epilogue">
+      {% for node in afd.parsedProductText.epilogue %}
+        <p class="usa-text font-mono-sm text-pre-line">{{ node.content }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+</article>

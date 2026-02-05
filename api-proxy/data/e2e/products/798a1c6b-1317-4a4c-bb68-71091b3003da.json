@@ -1,0 +1,14 @@
+{
+  "@context": {
+    "@version": "1.1",
+    "@vocab": "https://api.weather.gov/ontology#"
+  },
+  "@id": "https://api.weather.gov/products/798a1c6b-1317-4a4c-bb68-71091b3003da",
+  "id": "798a1c6b-1317-4a4c-bb68-71091b3003da",
+  "wmoCollectiveId": "FXUS65",
+  "issuingOffice": "KFGZ",
+  "issuanceTime": "2024-07-30T21:04:00+00:00",
+  "productCode": "AFD",
+  "productName": "Area Forecast Discussion",
+  "productText": "This is short text, just for testing."
+}

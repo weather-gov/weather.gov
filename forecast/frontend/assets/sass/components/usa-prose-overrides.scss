@@ -1,0 +1,19 @@
+@use "uswds-core" as *;
+
+.usa-prose > h2,
+.usa-prose > h3 {
+  @include u-text("normal");
+}
+
+.usa-prose > * + h2 {
+  /* Not using USWDS units here to match the USWDS setting and
+  the approach that is used for usa-prose
+  */
+  margin-top: 1.3em;
+}
+
+.usa-prose > .usa-list {
+  @include u-margin-top(1.5);
+
+  padding-left: 2ch;
+}

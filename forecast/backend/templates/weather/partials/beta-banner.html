@@ -1,0 +1,32 @@
+{% load i18n %}
+<section class="usa-banner bg-accent-cool-lighter beta-banner"
+         aria-label="This is a beta website.">
+  <div>
+    <header class="bg-gold-10v border-left-1 border-gold-20v">
+      <div class="usa-banner__inner flex-row flex-align-start padding-y-1">
+        <div class="grid-col flex-auto margin-right-1">
+          <svg class="usa-icon height-3 width-3"
+               aria-hidden="true"
+               focusable="false"
+               role="img">
+            <use xlink:href="{% static 'images/uswds/sprite.svg' %}#info"></use>
+          </svg>
+        </div>
+        <div class="grid-col">
+          <div class="font-sans-xs line-height-sans-4">
+            <div id="block-new-weather-theme-betabanner"
+                 class="contextual-region block block-block-content block-block-content7faecf5a-0b52-4a91-8c34-83defcf42eba">
+              <!-- TODO: Figure out translation pattern for beta banner -->
+              <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">
+                <p>
+                  <strong>{% trans "This site is under development." %}</strong>
+                  See <a href="https://beta.weather.gov/roadmap">our roadmap</a> for updates. <a href="https://weather.gov/">https://weather.gov/</a>&nbsp;remains the authoritative source of weather information.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+</section>

@@ -1,0 +1,61 @@
+<div aria-hidden="true" class="margin-top-2" wx-outer-radar-container>
+  <{{ heading_level }} class="{{ heading_class }}">
+  {% trans "radar.labels.radar.01" %}
+  </{{ heading_level }}>
+  {% include "weather/partials/radar-timestamp.html" with radar_metadata=radar_metadata %}
+  <div class="grid-container padding-0 bg-white shadow-1">
+    <div class="grid-row wx-radar-container position-relative">
+      <wx-radar class="grid-col-12" lat="{{ point.latitude }}" lon="{{ point.longitude }}">
+      <div id="wx-radar-container"></div>
+      </wx-radar>
+      <div class="position-absolute top-0 right-0 height-full">
+        <div class="position-sticky top-55px">
+          <button type="button"
+                  tabindex="-1"
+                  class="wx-radar-expand padding-0 margin-1">
+            <svg role="img" class="width-full height-full">
+              <use xlink:href="{% static 'images/uswds/sprite.svg' %}#zoom_out_map"></use>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    {# Radar Legend #}
+    <div class="padding-2 wx-radar-legend">
+      <div class="usa-accordion wx-accordion-light">
+        <h4 class="usa-accordion__heading">
+          <button class="usa-accordion__button"
+                  type="button"
+                  tabindex="-1"
+                  aria-expanded="false"
+                  aria-controls="radar-legend">{% trans "radar.labels.legend.01" %}</button>
+        </h4>
+        <table class="usa-accordion__content usa-table usa-table--borderless margin-top-0 wx-radar-legend"
+               tabindex="0"
+               id="radar-legend">
+          <tr>
+            <th class="font-family-mono text-primary-dark font-mono-xs z-400">{% trans "units.dbz.01" %}</th>
+            <th class="font-family-mono text-primary-dark font-mono-xs z-400 text-uppercase">
+              {% trans "radar.labels.intensity.01" %}
+            </th>
+          </tr>
+          {% for intensity in intensities %}
+            <tr class="wx-radar-legend__row">
+              {# Need to inline the styles on the th and td to override stylesheets #}
+              <th class="text-no-wrap font-family-mono">{{ intensity.dbz }}</th>
+              <td>
+                <div class="wx-radar-legend__intensity wx-radar-legend__gradient{{ forloop.counter }} minh-5 height-full">
+                  {{ intensity.description | t }}
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+    <div class="padding-2 padding-top-0">
+      <a href="https://radar.weather.gov/?settings=v1_{{ radar_metadata.settings }}"
+         class="usa-link">{% trans "radar.link.explore-other.01" %}</a>
+    </div>
+  </div>
+</div>

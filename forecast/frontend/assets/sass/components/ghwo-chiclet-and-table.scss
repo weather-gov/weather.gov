@@ -1,0 +1,261 @@
+/* stylelint-disable no-descending-specificity */
+@use "uswds-core" as *;
+@use "colors" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+@for $level from 0 through 5 {
+  .ghwo-chiclet[data-risk-level="#{$level}"] {
+    background-color: hazard-color($level);
+    border-color: hazard-color($level);
+  }
+}
+
+.ghwo-chiclet[data-risk-level="1"] {
+  &:hover {
+    background-color: color("green-20v");
+    border-color: color("green-20v");
+  }
+
+  &[role="button"]:hover {
+    background-color: color("green-20v");
+    border-color: color("green-20v");
+  }
+
+  &[role="button"]:active,
+  &[role="button"][aria-selected="true"] {
+    background-color: color("green-20v");
+    border-color: color("green-50v");
+  }
+}
+
+.ghwo-chiclet[data-risk-level="2"] {
+  &:hover {
+    background-color: color("yellow-30v");
+    border-color: color("yellow-30v");
+  }
+
+  &[role="button"]:hover {
+    background-color: color("yellow-30v");
+    border-color: color("yellow-30v");
+  }
+
+  &[role="button"]:active,
+  &[role="button"][aria-selected="true"] {
+    background-color: color("yellow-30v");
+    border-color: color("yellow-50v");
+  }
+}
+
+.ghwo-chiclet[data-risk-level="3"] {
+  &:hover {
+    background-color: color("orange-40v");
+    border-color: color("orange-40v");
+  }
+
+  &[role="button"]:hover {
+    background-color: color("orange-40v");
+    border-color: color("orange-40v");
+  }
+
+  &[role="button"]:active,
+  &[role="button"][aria-selected="true"] {
+    background-color: color("orange-40v");
+    border-color: color("orange-60v");
+  }
+}
+
+.ghwo-chiclet[data-risk-level="4"] {
+  color: white;
+
+  &[role="button"]:hover {
+    background-color: color("red-60v");
+    border-color: color("red-60v");
+  }
+
+  &[role="button"]:active,
+  &[role="button"][aria-selected="true"] {
+    background-color: color("red-60v");
+    border-color: color("red-80v");
+  }
+}
+
+.ghwo-chiclet[data-risk-level="5"] {
+  color: white;
+
+  &:hover {
+    background-color: color("violet-warm-70v");
+    border-color: color("violet-warm-70v");
+  }
+
+  &[role="button"]:hover {
+    background-color: color("violet-warm-70v");
+    border-color: color("violet-warm-70v");
+  }
+
+  &[role="button"]:active,
+  &[role="button"][aria-selected="true"] {
+    background-color: color("violet-warm-70v");
+    border-color: color("violet-warm-90");
+  }
+}
+
+.ghwo-risk-summary-table {
+  thead > tr > th:first-child,
+  tbody > tr > th:first-child {
+    display: none;
+  }
+
+  .ghwo-chiclet {
+    pointer-events: none;
+  }
+}
+
+.ghwo-risk-details-table-wrapper {
+  display: block;
+  overflow-x: scroll;
+}
+
+$expand-duration: 250ms;
+
+wx-ghwo-details-table {
+  .ghwo-risk-details-table {
+    &.details-table__expand-transition {
+      @include at-media("tablet-lg") {
+        transition:
+          width ease-in $expand-duration,
+          max-width ease-in $expand-duration,
+          margin-left ease-in $expand-duration,
+          margin-right ease-in $expand-duration;
+      }
+
+      @media (prefers-reduced-motion) {
+        transition: none;
+      }
+    }
+  }
+
+  &[data-scrolled="true"].ghwo-risk-details-table th:first-of-type {
+    &::after {
+      display: block;
+      content: "hello";
+      top: 0;
+      right: units(-2);
+      bottom: 0;
+      position: absolute;
+      height: 100%;
+      width: units(2);
+      background-image: linear-gradient(90deg, rgba(0 0 0 / 10%), transparent);
+      background-size: 50%;
+      background-repeat: no-repeat;
+    }
+  }
+
+  th {
+    background-color: white;
+    z-index: 999;
+  }
+
+  .ghwo-details-legend-table tr:first-child th {
+    background-color: transparent;
+  }
+}
+
+.ghwo-risk-details-table {
+  table-layout: fixed;
+}
+
+.ghwo-chiclet {
+  width: units(4);
+  height: units(4);
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 50px;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.chiclet-detail-cell {
+    border-radius: 4px;
+    width: 50px;
+    height: 40px;
+  }
+
+  &[role="button"]:hover {
+    cursor: pointer;
+  }
+
+  &[role="button"] > * {
+    pointer-events: none;
+  }
+
+  &.chiclet-detail-cell-empty:focus {
+    outline: 0.25rem solid #2491ff;
+    outline-offset: 0;
+  }
+}
+
+.ghwo-chiclet-wrapper {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.ghwo-chiclet:focus {
+  outline: 0;
+}
+
+.ghwo-risk-legend-square {
+  width: units(2);
+  height: units(2);
+  margin-right: units(0.5);
+  display: inline-block;
+
+  &.risk-square-lg {
+    width: units(3);
+    height: units(3);
+    margin-right: units(2);
+  }
+
+  &[data-risk-level="1"] {
+    background-color: color("green-10v");
+  }
+
+  @for $level from 0 through 5 {
+    &[data-risk-level="#{$level}"] {
+      background-color: hazard-color($level);
+
+      @if $level == 0 {
+        border: 1px solid color("gray-cool-40");
+      }
+    }
+  }
+}
+
+.ghwo-details-pane {
+  display: none;
+
+  &[aria-hidden="false"] {
+    display: block;
+  }
+}
+
+@include at-media("tablet-lg") {
+  .ghwo-risk-summary-table {
+    thead > tr > th:first-child,
+    tbody > tr > th:first-child {
+      display: table-cell;
+    }
+  }
+
+  .ghwo-chiclet {
+    width: 50px;
+    height: 32px;
+  }
+
+  .ghwo-risk-details-table-wrapper {
+    overflow-x: unset;
+  }
+}

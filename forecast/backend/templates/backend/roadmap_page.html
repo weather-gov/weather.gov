@@ -1,0 +1,88 @@
+{% extends "weather/page.html" %}
+{% load i18n %}
+{% load weather_i18n %}
+{% block page_end_js %}
+  <script src="{% static 'js/roadmap_page.html.js' %}" type="module"></script>
+{% endblock %}
+{% block page_content %}
+  <wx-roadmap>
+  <div class="grid-container">
+    <div class="grid-row">
+      <h1 class="text-normal text-primary-darker">{{ page.title }}</h1>
+    </div>
+    <time class="font-mono-2xs text-uppercase text-base-dark"
+          datetime="{{ page.last_published_at|date:"c" }}"
+          data-wx-local-time
+          data-date-format="roadmap">
+      {{ page.last_published_at|date:"g:i A T, F j, Y" }}
+    </time>
+    <div class="roadmap-body grid-row font-sans-sm margin-top-1">
+      <div class="desktop:grid-col-8 measure-6">
+        {{ page.body|safe }}
+      </div>
+    </div>
+    <div id="nav-link-now"
+         class="grid-row text-base text-uppercase font-mono-xs">Jump to</div>
+  </div>
+  <div class="position-sticky top-0 z-top grid-container margin-bottom-1">
+    <div class="grid-row font-sans-xs bg-white padding-top-1 padding-bottom-1">
+      <div class="padding-right-2 border-right border-base-lighter">
+        <a href="#nav-link-now" class="usa-link text-no-underline">Now</a>
+      </div>
+      <div class="margin-left-2 padding-right-2 border-right border-base-lighter">
+        <a href="#nav-link-next" class="usa-link text-no-underline">Next</a>
+      </div>
+      <div class="margin-left-2">
+        <a href="#nav-link-later" class="usa-link text-no-underline">Later</a>
+      </div>
+    </div>
+  </div>
+  <div class="grid-container margin-bottom-4">
+    {# --------- Now --------- #}
+    <div class="grid-row">
+      <div class="grid-col-12 tablet:grid-col-3 text-white wx-roadmap__section wx-roadmap__section__now">
+        <div class="display-inline tablet:display-block">
+          <h2 class="display-inline-block tablet:display-block bg-primary text-center text-uppercase margin-0 text-normal padding-1">
+            Now
+          </h2>
+        </div>
+      </div>
+      <div class="grid-col-12 tablet:grid-col-9 font-sans-sm tablet:padding-left-2 desktop:padding-left-4">
+        {% for entry in entries.now %}
+          {% include "backend/roadmap/item.html" with target="nav-link-next" %}
+        {% endfor %}
+      </div>
+    </div>
+    {# --------- Next --------- #}
+    <div class="grid-row margin-top-4">
+      <div class=" grid-col-12 tablet:grid-col-3 text-white wx-roadmap__section wx-roadmap__section__next">
+        <div class="display-inline tablet:display-block">
+          <h2 class="display-inline-block bg-primary-dark tablet:display-block text-center text-uppercase margin-0 text-normal padding-1">
+            Next
+          </h2>
+        </div>
+      </div>
+      <div class="grid-col-12 tablet:grid-col-9 font-sans-sm tablet:padding-left-2 desktop:padding-left-4">
+        {% for entry in entries.next %}
+          {% include "backend/roadmap/item.html" with target="nav-link-later" %}
+        {% endfor %}
+      </div>
+    </div>
+    {# --------- Later --------- #}
+    <div class="grid-row margin-top-4">
+      <div class="grid-col-12 tablet:grid-col-3 text-white wx-roadmap__section wx-roadmap__section__later">
+        <div class="display-inline tablet:display-block">
+          <h2 class="display-inline-block bg-primary-darker tablet:display-block text-center text-uppercase margin-0 text-normal padding-1">
+            Later
+          </h2>
+        </div>
+      </div>
+      <div class="grid-col-12 tablet:grid-col-9 font-sans-sm tablet:padding-left-2 desktop:padding-left-4">
+        {% for entry in entries.later %}
+          {% include "backend/roadmap/item.html" %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  </wx-roadmap>
+{% endblock %}

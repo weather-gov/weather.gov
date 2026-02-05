@@ -1,0 +1,56 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/41.212,-96.623",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-96.623, 41.212] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/41.212,-96.623",
+    "@type": "wx:Point",
+    "cwa": "OAX",
+    "forecastOffice": "https://api.weather.gov/offices/OAX",
+    "gridId": "OAX",
+    "gridX": 59,
+    "gridY": 58,
+    "forecast": "https://api.weather.gov/gridpoints/OAX/59,58/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/OAX/59,58/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/OAX/59,58",
+    "observationStations": "https://api.weather.gov/gridpoints/OAX/59,58/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-96.616619, 41.214985] },
+      "properties": {
+        "city": "Wahoo",
+        "state": "NE",
+        "distance": { "unitCode": "wmoUnit:m", "value": 628.54100160597 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 238 }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/NEZ051",
+    "county": "https://api.weather.gov/zones/county/NEC155",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/NEZ051",
+    "timeZone": "America/Chicago",
+    "radarStation": "KOAX"
+  },
+  "@bundle": { "name": "Wahoo, NE (with static time set)", "now": "2024-12-02T21:00:00-05:00" }
+}

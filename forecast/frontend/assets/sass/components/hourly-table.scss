@@ -1,0 +1,120 @@
+@use "uswds-core" as *;
+
+/* Scroll button states
+------------------------------------- */
+.wx-scroll-button {
+  background-color: color("gray-cool-20");
+  color: color("base-darker");
+
+  &:hover {
+    cursor: pointer;
+    background-color: color("base-dark");
+    color: color("white");
+  }
+
+  &:active {
+    background-color: color("base-darkest");
+    color: color("white");
+  }
+}
+
+/* Hourly forecast table overrides
+------------------------------------- */
+$expand-duration: 250ms;
+
+.hourly-table__expand-transition {
+  @include at-media("tablet-lg") {
+    transition:
+      width ease-in $expand-duration,
+      max-width ease-in $expand-duration,
+      margin-left ease-in $expand-duration,
+      margin-right ease-in $expand-duration;
+  }
+
+  @media (prefers-reduced-motion) {
+    transition: none;
+  }
+}
+
+.usa-table.hourly-table {
+  td,
+  th {
+    border: 0;
+    padding-left: units(1);
+    vertical-align: top;
+
+    &[scope="row"].position-sticky {
+        z-index: var(--hourly-table-sticky-header-z-index);
+    }
+  }
+
+  
+
+  td {
+    min-width: units("card");
+    padding-right: units(2);
+    white-space: normal;
+
+    &:first-of-type {
+      padding-left: units(2);
+    }
+  }
+
+  th {
+    padding-right: units(1.5);
+  }
+
+  // Using class to overide usa-table styles
+  tr[data-row-name="alert"] td,
+  tr[data-row-name="alert"] th {
+    border: 0;
+  }
+
+  tr[data-row-name="alert"] td {
+    padding: units(1) 0;
+
+    &:first-of-type {
+      padding-left: units(2);
+    }
+  }
+
+  tr[data-row-name="alert"]:first-of-type td {
+    padding-top: units(2);
+  }
+
+  tr[data-row-name="alert"]:last-of-type td {
+    padding-bottom: units(2);
+  }
+
+  // Fighting specificity
+  tr[data-row-name="time"] th:nth-child(2) {
+    padding-left: units(2);
+  }
+}
+
+// Table shadow only shows on scroll
+wx-hourly-table[data-scrolled="true"] .usa-table.hourly-table th:first-of-type {
+  &::after {
+    content: "";
+    top: 0;
+    right: units(-2);
+    bottom: 0;
+    position: absolute;
+    height: 100%;
+    width: units(2);
+    background-image: linear-gradient(90deg, rgba(0 0 0 / 10%), transparent);
+    background-size: 50%;
+    background-repeat: no-repeat;
+  }
+}
+
+.usa-table.hourly-table tbody {
+  &[data-table-section="time-alerts"] tr:first-child th {
+    background-color: color("accent-cool-dark");
+    vertical-align: text-top;
+  }
+
+  &[data-table-section="variables"] tr:nth-child(even) > * {
+    background-color: color("base-lightest");
+  }
+}

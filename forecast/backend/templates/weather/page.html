@@ -1,0 +1,35 @@
+<!-- page.html  -->
+{% extends "weather/base.html" %}
+{% block head_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+  {% block page_head_css %}{% endblock %}
+{% endblock %}
+
+{% block head_js %}
+  <script type="module" src="{% static 'js/page.html.js' %}" type="module"></script>
+  {% block page_head_js %}{% endblock %}
+{% endblock %}
+
+{% block page_top %}
+  {% include "weather/partials/offline-banner.html" %}
+  {% include "weather/partials/gov-banner.html" %}
+{% endblock %}
+
+{% block page %}
+  {% include "weather/partials/beta-banner.html" %}
+  <div class="layout-container grid-row height-full flex-column flex-no-wrap">
+    <header role="banner">
+      {% include "weather/partials/site-branding.html" %}
+    </header>
+    <main role="main" class="flex-1">
+      <a id="main-content" tabindex="-1"></a>
+      {% block page_content %}{% endblock %}
+    </main>
+    {% include "weather/footer.html" %}
+  </div>
+{% endblock %}
+
+{% block end_js %}
+  {% block page_end_js %}{% endblock %}
+{% endblock %}
+<!-- end page.html -->

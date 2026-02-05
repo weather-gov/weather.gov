@@ -1,0 +1,14 @@
+{% extends "wagtailadmin/login.html" %}
+{#% block fields %#}
+{#% endblock %#}
+{#% block submit_buttons %#}
+<!-- <a href="{% url 'saml_index' %}"><button type="button" class="button">Login with NOAA</button></a> -->
+{#% endblock %#}
+{% block branding_logo %}
+  <div style="width:100%;text-align:center;margin-top:32px;">
+    <img src="{% static "logo.svg" %}"
+         alt="National Weather Service"
+         width="120" />
+  </div>
+{% endblock %}
+{% block branding_login %}beta.weather.gov{% endblock %}

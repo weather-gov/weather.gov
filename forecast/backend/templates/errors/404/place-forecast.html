@@ -1,0 +1,31 @@
+{% extends "weather/page.html" %}
+{% block page_content %}
+  {# djlint:off #}
+  {%comment%}
+
+  This template receives the following variables:
+
+  requested:
+    requested.place - The denormalized place name derived from the URL.
+                      Denormalization means underscores and comms are replaced
+                      with spaces and slashes, respectively. That is, the value
+                      here is the human-readable name, not the computer-readable
+                      one.
+    requested.state - The uppercase 2-character state code from the URL.
+
+  suggested: (optional; may not be provided)
+    suggested.place - The full name (including state) of the nearest match to the
+                      requested place.
+    suggested.url   - The URL to the suggested place forecast.
+
+  {% endcomment %}
+  {# djlint:on #}
+  <div class="grid-container margin-bottom-5">
+    <h1>{% trans_with_args "error.404.forecast.message.01" place=requested.place state=requested.state %}</h1>
+    <p>
+      {% if suggested %}
+        <a href="{{ suggested.url }}">{% trans_with_args "error.404.forecast.suggested.01" place=suggested.place %}</a>
+      {% endif %}
+    </p>
+  </div>
+{% endblock %}

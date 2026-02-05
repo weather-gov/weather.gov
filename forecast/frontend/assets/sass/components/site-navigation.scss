@@ -1,0 +1,379 @@
+@use "uswds-core" as *;
+
+// NB: this font-size falls outside our usual size tokens
+.site-name {
+    font-size: 1.25rem;
+}
+
+/* Custom styles for the mobile nav menu
+ * slide out area
+*/
+#site-navigation {
+    width: calc(units(5) * 7);
+}
+
+#site-header-hamburger-button:hover {
+    cursor: pointer;
+}
+
+.usa-menu-btn {
+    background-color: white;
+
+    &:active,
+    &:hover {
+        background-color: white;
+    }
+}
+
+.under-development-tablet {
+    display: none;
+}
+
+.under-development-mobile {
+    display: flex;
+}
+
+.usa-navbar {
+    border-bottom: none;
+    margin-left: auto;
+}
+
+.usa-header .usa-menu-btn {
+    button {
+        font-weight: unset;
+    }
+}
+
+.usa-nav__primary button {
+    @include u-padding-y(2);
+}
+
+.usa-nav-container .usa-nav__link:focus {
+    outline-offset: -0.25rem;
+    outline-color: color("blue-50v");
+}
+
+.usa-nav-container .usa-nav__submenu {
+    margin-top: 0;
+}
+
+/**
+ * Styles for the site navigation search submenu (which is tabs)
+ */
+#site-search-submenu {
+    position: relative;
+    z-index: var(--site-nav-search-popout-z-index);
+    order: 3;
+
+    .tab-buttons {
+        width: 100%;
+
+        > .tab-button {
+            flex: 1;
+            margin: 0;
+            padding: 0;
+            background-color: color("base-lightest");
+            border-bottom-color: color("base-light");
+            border-bottom-width: 2px;
+            color: color("base-dark");
+            font-weight: 700;
+            padding-top: units(1);
+            padding-bottom: units(1);
+
+            @include u-font-family("sans");
+            @include u-font-size("sans", "xs");
+
+            &[aria-expanded="true"],
+            &[data-selected]{
+                background-color: color("accent-cool-lightest");
+                border-bottom-color: color("primary-light");
+                color: color("primary");
+            }
+
+            &:focus {
+                z-index: calc(var(--site-nav-search-popout-z-index) + 1);
+            }
+        }
+    }
+
+    wx-tabbed-nav {
+        display: block;
+    }
+
+    /* In mobile views, we do not display the toggle button */
+    .site-nav-submenu-toggle {
+        display: none;
+    }
+
+    #site-nav-search-options-tab-contents {
+        padding: 0;
+        padding-top: units(2);
+        padding-bottom: units(2);
+
+        .wx-combo-box__input {
+            /* Unfortunately, we need to override the height
+             * value here rather than with with a utility, since
+             * the location-search.scss breaks the cascade
+             */
+            height: units(4);
+            box-sizing: border-box;
+        }
+    }
+
+    .wx-location-search label {
+        margin-bottom: units(1);
+    }
+
+    .site-nav-submenu-label {
+        display: block;
+        margin-bottom: units("105");
+        padding-top: units("105");
+    }
+}
+
+@include at-media(tablet) {
+    .under-development-tablet {
+        display: flex;
+    }
+
+    .under-development-mobile {
+        display: none;
+    }
+}
+
+@include at-media(tablet-lg) {
+    #site-navigation {
+        width: 100%;
+        display: flex;
+        align-items: stretch;
+    }
+
+    .site-name {
+        @include u-font-size("body", "xl");
+    }
+
+    .site-logo {
+        @include u-height(9);
+    }
+
+    #site-search-submenu {
+        order: unset;
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        
+        > button {
+            border-radius: 0;
+            margin-right: 0;
+            padding: units(1) units("105");
+            height: units(5);
+
+            > span:first-of-type {
+                display: block;
+            }
+
+            > span:last-of-type {
+                display: none;
+            }
+        }
+
+        wx-tabbed-nav {
+            display: none;
+
+            /* Fixed width for the popout area
+             * so toggling is even
+             */
+            width: calc( 2 * units("card"));
+
+            @include u-shadow(2);
+        }
+        
+        > button.site-nav-submenu-toggle[aria-expanded="true"] {
+            background-color: color("base-lighter");
+            height: units(5);
+            width: units(5);
+            padding: units(1);
+            position: relative;
+            z-index: calc(var(--site-nav-search-popout-z-index) + 1);
+
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                width: 100%;
+                top: 100%;
+                left: 0;
+                height: units("05");
+                background-color: color("base-lighter");
+            }
+
+            &:hover {
+                background-color: color("base-light");
+
+                &::after {
+                    background-color: color("base-light");
+                }
+            }
+
+            &:active {
+                background-color: color("base");
+
+                &::after {
+                    background-color: color("base");
+                }
+            }
+
+            > span:first-of-type {
+                display: none;
+            }
+
+            > span:last-of-type {
+                display: block;
+            }
+
+            ~ wx-tabbed-nav {
+                display: block;
+                position: absolute;
+                top: 100%;
+                background-color: white;
+            }
+        }
+
+        /* We do not display the label in desktop view */
+        .site-nav-submenu-label {
+            display: none;
+        }
+
+        /* We display the toggle button (instead of label)
+         * on desktop views
+         */
+        .site-nav-submenu-toggle {
+            display: block;
+        }
+
+        #site-nav-search-options-tab-contents {
+            padding: units(2);
+        }
+
+        .wx-location-search label {
+            margin-bottom: 0;
+        }
+    }
+    
+    // adjust the usa header menubar to be on the left instead of right
+    .usa-header--basic {
+        .usa-navbar {
+            width: 0;
+        }
+
+        .usa-nav {
+            justify-content: flex-start;
+
+            /* undo the padding at the bottom given by USWDS defaults */
+            padding-bottom: 0;
+        }
+    }
+
+    .usa-nav__primary {
+        .usa-nav__link {
+            @include u-padding-x(1.5);
+        }
+
+        button.usa-nav__link {
+            font-weight: unset;
+        }
+
+        /**
+         * Override the existing way USWDS creates
+         * the "bottom border" current highlight. They
+         * use an absolutely positioned :after pseudo
+         * on the inner <span> element, when we should
+         * just use a border
+         **/
+        .usa-nav__primary-item {
+            > .usa-nav__link {
+                border-bottom: units("05") solid transparent;
+
+                &:hover {
+                    border-bottom: units("05") solid color("primary-light");
+
+                    &::after{
+                        display: none;
+                    }
+                }
+
+                &.usa-current {
+                    border-bottom: units("05") solid color("primary-light");
+
+                    &::after {
+                        display: none;
+                        left: 0;
+                        right: 0;
+                    }
+                }
+            }
+
+            &:hover {
+                > usa-nav__link {
+                    &::after {
+                        display: none;
+                    }
+
+                    border-bottom: units("05") solid color("primary");
+                }
+
+                button::after {
+                    left: 0;
+                    right: 0;
+                }
+            }
+        }
+
+        button[aria-expanded="true"] {
+            background-color: color("accent-cool-lighter");
+            color: color("primary-darkest");
+
+            &.usa-nav__link.usa-current {
+              border-bottom: units("05") solid transparent;
+            }
+
+            span::after {
+              background-color: color("primary-darkest");
+            }
+        }
+    }
+
+    .usa-nav__submenu {
+        @include u-shadow(5);
+
+        background-color: color("accent-cool-lightest");
+        border: color("primary-light") 2px solid;
+
+
+        /* offset submenu by 0.5 units to take into account
+         * the active item button's bottom border
+         */
+        margin-top: units("05");
+
+        .usa-nav__submenu-item {
+            a {
+              color: color("primary-darkest");
+            }
+
+            &:hover {
+                background-color: color("accent-cool-lighter");
+
+                a {
+                    color: inherit;
+                    text-decoration: none;
+                }
+            }
+
+            &:active {
+                background-color: color("accent-cool-light");
+            }
+        }
+    }
+}

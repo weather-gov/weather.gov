@@ -1,0 +1,41 @@
+<div class="wx-daily-forecast-block">
+  {% if forecast.error %}
+    {% with base_msg="forecast.errors.daily.01"|t %}
+      <div class="grid-container padding-x-0 padding-y-2 grid-col-12 tablet-lg:grid-offset-2 tablet-lg:grid-col-8">
+        {% if forecast.message %}
+          {% include 'weather/partials/uswds-alert.html' with level="error" body=base_msg|add:" "|add:forecast.message %}
+        {% else %}
+          {% include 'weather/partials/uswds-alert.html' with level="error" body=base_msg %}
+        {% endif %}
+      </div>
+    {% endwith %}
+  {% else %}
+    <div class="grid-container padding-x-0 desktop:padding-x-4 tablet:padding-x-2">
+      {% include 'weather/partials/quick-forecast.html' with days=forecast.days %}
+      <div class="wx-quick-forecast-header desktop:display-none"
+           aria-hidden="true">
+        <div class="wx-quick-forecast-header-top margin-right-3 table:margin-right-0">
+          <div class="flex-1">
+            <span>{{"daily-forecast.table-header.date.01" | t}}</span>
+          </div>
+          <div class="flex-1 text-align-center mobile-lg:display-flex mobile-lg:flex-justify-center">
+            <span>{{"daily-forecast.table-header.condition.01" | t}}</span>
+          </div>
+          <div class="flex-1 display-flex">
+            <span class="flex-1">{{"daily-forecast.table-header.high.01" | t}}</span>
+            <span class="flex-1">{{"daily-forecast.table-header.low.01" | t}}</span>
+          </div>
+        </div>
+        <div class="wx-quick-forecast-header-bottom">
+          <div class="wx-quick-forecast-header-empty"></div>
+        </div>
+      </div>
+      <ol class="wx-forecast-list usa-list--unstyled">
+        {% for data in forecast.days %}
+          {% daily_forecast_list_item day=data first=forloop.first %}
+        {% endfor %}
+      </ol>
+      {% include "weather/partials/wfo-promo.html" with wfo=point.wfo %}
+    </div>
+  {% endif %}
+</div>

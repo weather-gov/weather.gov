@@ -1,0 +1,86 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+// These are magic numbers to help with alignment,
+$row-offset-mobile-y: 5px;
+$row-offset-mobile-x: 30px;
+$row1-offset-x: 70px;
+$row2-offset-y: 60px;
+
+wx-roadmap {
+  .roadmap-body {
+    p {
+      @include u-line-height("sans", 4);
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .wx-delivered {
+    svg {
+      height: units(3);
+      width: units(3);
+      fill: color("primary-lightest");
+      margin-right: units(0.5);
+    }
+
+    background: color("green-cool-60v");
+    color: color("primary-lightest");
+    padding: units(0.5) units(1.5);
+    border-radius: units(3);
+  }
+
+  .wx-roadmap__section {
+    background-repeat: repeat;
+    background-position-y: $row-offset-mobile-y;
+
+    @include at-media(tablet) {
+      background-position:
+        $row1-offset-x 0,
+        0 $row2-offset-y;
+    }
+  }
+
+  .wx-roadmap__section__now {
+    background-color: rgba(color("primary"), 0.45);
+    background-image: url("/public/images/roadmap/wx_roadmap-pattern_down_row1.svg");
+
+    @include at-media(tablet) {
+      background-image:
+        url("/public/images/roadmap/wx_roadmap-pattern_down_row1.svg"),
+        url("/public/images/roadmap/wx_roadmap-pattern_down_row2.svg");
+      background-position:
+        $row1-offset-x 0,
+        0 $row2-offset-y;
+    }
+  }
+
+  .wx-roadmap__section__next {
+    background-color: rgba(color("primary-dark"), 0.65);
+    background-image: url("/public/images/roadmap/wx_roadmap-pattern_right_row1.svg");
+    background-position-x: $row-offset-mobile-x;
+
+    @include at-media(tablet) {
+      background-image:
+        url("/public/images/roadmap/wx_roadmap-pattern_right_row1.svg"),
+        url("/public/images/roadmap/wx_roadmap-pattern_right_row2.svg");
+      background-position:
+        $row1-offset-x 0,
+        0 $row2-offset-y;
+    }
+  }
+
+  .wx-roadmap__section__later {
+    background-color: rgba(color("primary-darker"), 0.7);
+    background-image: url("/public/images/roadmap/wx_roadmap-pattern_diagonal_row1.svg");
+
+    @include at-media(tablet) {
+      background-image:
+        url("/public/images/roadmap/wx_roadmap-pattern_diagonal_row1.svg"),
+        url("/public/images/roadmap/wx_roadmap-pattern_diagonal_row2.svg");
+    }
+  }
+}

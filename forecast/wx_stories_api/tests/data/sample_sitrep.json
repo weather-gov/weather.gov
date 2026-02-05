@@ -1,0 +1,17 @@
+{
+    "data": {
+        "type": "node--wfo_pdf_upload",
+        "attributes": {
+            "title": "test.pdf",
+            "field_wfo_code": "QQQ"
+        },
+        "relationships": {
+            "field_wfo_sitrep": {
+                "data": {
+                    "type": "file--file",
+                    "id": "3fa00cec-3b34-4ddb-ba4a-9b412fc84303"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,2574 @@
+{
+  "Fog": {
+    "standard": {
+      "basis": "We base this risk on local weather office fog and visibility forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No risk of fog."
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Fog with visibilities less than or equal to 1 mile."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Fog with visibilities less than or equal to 1/2 mile."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Fog with visibilities less than or equal to 1/4 mile."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Fog with near zero visibilities."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "MFL": {
+            "description": "No Risk of Fog."
+          },
+          "TAE": {
+            "description": "No Risk of Fog."
+          },
+          "TBW": {
+            "description": "No Risk of Fog."
+          },
+          "PIH": {
+            "description": "Little to no risk of Fog or Freezing Fog."
+          }
+        },
+        "1": {
+          "CLE": {
+            "description": "Patchy Fog."
+          },
+          "BOI": {
+            "description": "Patchy Fog."
+          },
+          "RLX": {
+            "description": "Fog with visibilities less than or equal to 3/4 mile."
+          },
+          "MFL": {
+            "description": "Limited Fog Risk. Isolated areas of low visibility possible. Drive with extra caution."
+          },
+          "TAE": {
+            "description": "Limited Fog Risk. Isolated areas of low visibility possible. Drive with extra caution."
+          },
+          "TBW": {
+            "description": "Limited Fog Risk. Isolated areas of low visibility possible. Drive with extra caution."
+          },
+          "MLB": {
+            "description": "Patchy fog is forecast."
+          },
+          "PIH": {
+            "description": "Patchy Fog or Freezing Fog could lead to lowered visibilities leading to dangerous driving conditions."
+          }
+        },
+        "2": {
+          "CLE": {
+            "description": "Areas of Fog."
+          },
+          "RLX": {
+            "description": "Fog with visibilities less than or equal to 1/4 mile."
+          },
+          "MFL": {
+            "description": "Elevated Fog Risk. Areas of dense fog/low visibility possible. Drive with extra caution."
+          },
+          "TAE": {
+            "description": "Elevated Fog Risk. Areas of dense fog/low visibility possible. Drive with extra caution."
+          },
+          "TBW": {
+            "description": "Elevated Fog Risk. Areas of dense fog/low visibility possible. Drive with extra caution."
+          },
+          "MLB": {
+            "description": "Patchy dense fog (visibility of one quarter mile or less) or areas of fog are forecast."
+          },
+          "PIH": {
+            "description": "Areas of Fog or Freezing Fog will reduce visibilities, creating dangerous driving conditions. If Freezing Fog develops, it could lead to a light glaze of ice, resulting in slippery conditions."
+          },
+          "BOI": {
+            "description": "Areas of Fog with visibilities less than or equal to 1/2 mile."
+          }
+        },
+        "3": {
+          "CLE": {
+            "description": "Widespread Fog."
+          },
+          "RLX": {
+            "description": "Fog with near zero visibilities."
+          },
+          "MFL": {
+            "description": "Significant Fog Risk. Widespread dense fog/low visibility possible. Travel likely to be significantly impacted."
+          },
+          "TAE": {
+            "description": "Significant Fog Risk. Widespread dense fog/low visibility possible. Travel likely to be significantly impacted."
+          },
+          "TBW": {
+            "description": "Significant Fog Risk. Widespread dense fog/low visibility possible. Travel likely to be significantly impacted."
+          },
+          "MLB": {
+            "description": "Areas of dense fog (visibility of one quarter mile or less) are forecast."
+          },
+          "PIH": {
+            "description": "Widespread Fog or Freezing Fog will significantly reduce visibilities, creating dangerous driving conditions. If Freezing Fog develops, a coating of ice will result in slippery conditions."
+          },
+          "BOI": {
+            "description": "Patchy or Areas of Dense Fog with visibilities less than or equal to 1/4 mile."
+          }
+        },
+        "4": {
+          "CLE": {
+            "description": "Patchy, Areas, or Widespread Dense Fog."
+          },
+          "RLX": {
+            "description": "Widespread Fog with near zero visibility"
+          },
+          "MFL": {
+            "description": "Extreme Fog Risk. Near zero visibility possible. Major travel disruptions likely."
+          },
+          "TAE": {
+            "description": "Extreme Fog Risk. Near zero visibility possible. Major travel disruptions likely."
+          },
+          "TBW": {
+            "description": "Extreme Fog Risk. Near zero visibility possible. Major travel disruptions likely."
+          },
+          "MLB": {
+            "description": "Widespread dense fog (visibility of one quarter mile or less) is forecast."
+          },
+          "BOI": {
+            "description": "Widespread Dense Fog less than or equal to 1/4 mile."
+          }
+        }
+      }
+    }
+  },
+  "Hail": {
+    "standard": {
+      "basis": "We base this risk on <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts from the Storm Prediction Center</a>.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "Little to no Hail Risk"
+        },
+        "1": {
+          "label": "Marginal",
+          "description": "Up to 15% chance of 1\" or larger hail within 25 miles of your location."
+        },
+        "2": {
+          "label": "Slight",
+          "description": "15-30% chance of 1\" or larger hail within 25 miles of your location."
+        },
+        "3": {
+          "label": "Enhanced",
+          "description": "30-45% chance of 1\" or larger hail within 25 miles of your location."
+        },
+        "4": {
+          "label": "Moderate",
+          "description": "45% or greater chance of 1\" or larger hail within 25 miles of your location."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "TBW": {
+            "description": "Little to no Hail Risk."
+          }
+        },
+        "1": {
+          "TBW": {
+            "description": "Limited Hail Risk. Hail mainly smaller than the size of quarters (1 inch) possible."
+          }
+        },
+        "2": {
+          "TBW": {
+            "description": "Elevated Hail Risk. Large hail of 1 inch or greater in diameter possible."
+          }
+        },
+        "3": {
+          "TBW": {
+            "description": "Significant Hail Risk. Large hail of 1 inch or greater in diameter likely."
+          }
+        },
+        "4": {
+          "TBW": {
+            "description": "Extreme Hail Risk. Widespread hail, some of extremely large size (3 inches or greater diameter) possible."
+          }
+        }
+      }
+    }
+  },
+  "Marine": {
+    "standard": {
+      "basis": "We base this risk on local weather office wind speed/gust and wave height forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No Marine Hazards Risk."
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Wind or Wind Gusts >= 25 knots and/or Waves >= 6 feet."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 8 feet."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 10 feet."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Wind or Wind Gusts >= 64 knots and/or Waves >= 15 feet."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "SJU": {
+            "description": "No Marine Hazards Risk. <br><b>ESPAÑOL:</b> No existe riesgo de Amenazas Marítimas."
+          },
+          "KEY": {
+            "description": "No Marine Risk."
+          },
+          "MFL": {
+            "description": "No Marine Risk."
+          },
+          "TAE": {
+            "description": "No Marine Risk."
+          },
+          "JAX": {
+            "description": "No Marine Risk."
+          },
+          "MLB": {
+            "description": "No Marine Risk."
+          }
+        },
+        "1": {
+          "MQT": {
+            "description": "Wind or Wind Gusts >= 15 knots and/or Waves >= 2 feet."
+          },
+          "AKQ": {
+            "description": "Wind Gusts >= 20 knots (15 kt bay/rivers) and/or Waves >= 4 feet (2 ft bay/rivers)."
+          },
+          "CAR": {
+            "description": "Wind or Wind Gusts 25-33 knots and/or Waves >= 6 feet."
+          },
+          "BUF": {
+            "description": "Wind >= 17 knots and/or Waves >= 3 feet."
+          },
+          "OKX": {
+            "description": "Wind >= 15 knots and/or Waves >= 2 feet"
+          },
+          "CLE": {
+            "description": "Winds >= 17 knots and/or Waves >= 3 feet."
+          },
+          "LWX": {
+            "description": "Wind or Wind Gusts >= 18 knots and/or Waves >= 2 feet."
+          },
+          "BOX": {
+            "description": "Wind or Wind Gusts >= 25 knots and/or Waves >= 5 feet."
+          },
+          "PHI": {
+            "description": "Wind or Wind Gusts >= 25 knots and/or Waves >= 5 feet."
+          },
+          "SJU": {
+            "description": "Small craft should exercise caution. <br><b>ESPAÑOL:</b> Los operadores de embarcaciones pequeñas deben ejercer precaución."
+          },
+          "KEY": {
+            "description": "Small craft should exercise caution."
+          },
+          "MFL": {
+            "description": "Small craft should exercise caution."
+          },
+          "JAX": {
+            "description": "Small craft should exercise caution."
+          },
+          "MLB": {
+            "description": "Small craft should exercise caution."
+          },
+          "TAE": {
+            "description": "Sustained winds or frequent gusts of 15-20 knots and/or seas around 6 ft possible. Small craft should exercise caution."
+          },
+          "LIX": {
+            "description": "Wind or Wind Gusts >= 15 knots and/or Waves >= 5 feet."
+          },
+          "BRO": {
+            "description": "Wind or Wind Gusts >= 15 knots and/or Waves >= 4 feet."
+          },
+          "HGX": {
+            "description": "Wind >= 15 knots and/or Wind Gusts >= 20 knots and/or Waves >= 7 feet."
+          },
+          "MFR": {
+            "description": "Wind speeds or steep wave heights posing a risk to smaller crafts."
+          },
+          "LOX": {
+            "description": "Sea conditions will be unpleasant to smaller craft"
+          },
+          "SGX": {
+            "description": "Wind or Wind Gusts >= 21 knots and/or Waves >= 8 feet."
+          },
+          "EKA": {
+            "description": "Wind or Wind Gusts >= 20 knots and/or Waves >= 6 feet."
+          },
+          "PQR": {
+            "description": "Wind or Wind Gusts >= 21 knots and/or Waves >= 10 feet."
+          }
+        },
+        "2": {
+          "MQT": {
+            "description": "Wind or Wind Gusts >= 22 knots and/or Waves >= 4 feet."
+          },
+          "AKQ": {
+            "description": "Wind Gusts >= 25 knots (20 kt bay/rivers) and/or Waves >= 5 feet (4 ft bay/rivers)."
+          },
+          "CAR": {
+            "description": "Wind or Wind Gusts 34-47  knots and/or Waves >= 10 feet."
+          },
+          "BUF": {
+            "description": "Wind >= 22 knots and/or Waves >= 4 feet."
+          },
+          "CHS": {
+            "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 10 feet."
+          },
+          "OKX": {
+            "description": "Wind >= 25 knots and/or Waves >= 5 feet"
+          },
+          "CLE": {
+            "description": "Winds >= 22 knots and/or Waves >= 4 feet."
+          },
+          "LWX": {
+            "description": "Wind or Wind Gusts >= 25 knots and/or Waves >= 4 feet."
+          },
+          "SJU": {
+            "description": "Seas equal or greater than 7 feet. Hazardous conditions for small craft. <br><b>ESPAÑOL:</b> Oleaje igual o mayor de 7 pies. Condiciones arriesgadas para operadores de embarcaciones pequeñas."
+          },
+          "KEY": {
+            "description": "Sustained winds of 20-33 knots and/or seas equal or greater than 7 ft. Hazardous conditions for small craft."
+          },
+          "MFL": {
+            "description": "Sustained winds of 20-33 knots and/or seas equal or greater than 7 ft. Hazardous conditions for small craft."
+          },
+          "JAX": {
+            "description": "Sustained winds of 20-33 knots and/or seas equal or greater than 7 ft. Hazardous conditions for small craft."
+          },
+          "MLB": {
+            "description": "Sustained winds of 20-33 knots and/or seas equal or greater than 7 ft. Hazardous conditions for small craft."
+          },
+          "TAE": {
+            "description": "Sustained winds or frequent gusts of 20-33 knots and/or seas greater than 6 ft possible. Hazardous conditions for small craft."
+          },
+          "LIX": {
+            "description": "Wind or Wind Gusts >= 21 knots and/or Waves >= 7 feet."
+          },
+          "BRO": {
+            "description": "Wind or Wind Gusts >= 20 knots and/or Waves >= 7 feet."
+          },
+          "HGX": {
+            "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 9 feet."
+          },
+          "MFR": {
+            "description": "Gale Force Winds or high and very steep seas."
+          },
+          "LOX": {
+            "description": "Sea conditions will be hazardous to smaller craft"
+          },
+          "SGX": {
+            "description": "Wind or Wind Gusts >= 25 knots and/or Waves >= 10feet."
+          },
+          "EKA": {
+            "description": "Wind or Wind Gusts >= 25 knots and/or Waves >= 10 feet."
+          },
+          "PQR": {
+            "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 20 feet."
+          }
+        },
+        "3": {
+          "MQT": {
+            "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 8 feet."
+          },
+          "AKQ": {
+            "description": "Wind Gusts >= 34 knots and/or Waves >= 8 feet (5 ft bay/rivers)."
+          },
+          "CAR": {
+            "description": "Wind or Wind Gusts 48-63 knots and/or Waves >= 18 feet."
+          },
+          "BUF": {
+            "description": "Wind >= 34 knots and/or Waves >= 10 feet."
+          },
+          "CHS": {
+            "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 14 feet."
+          },
+          "OKX": {
+            "description": "Wind >= 34 knots and/or Waves >= 10 feet"
+          },
+          "CLE": {
+            "description": "Winds >= 34 knots and/or Waves >= 10 feet."
+          },
+          "LWX": {
+            "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 5 feet."
+          },
+          "PHI": {
+            "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 12 feet."
+          },
+          "HGX": {
+            "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 12 feet."
+          },
+          "SJU": {
+            "description": "Seas equal or greater than 10 feet. Dangerous conditions for small craft. <br><b>ESPAÑOL:</b> Oleaje igual o mayor de 10 pies. Condiciones peligrosas para los operadores de embarcaciones pequeñas."
+          },
+          "KEY": {
+            "description": "Sustained winds or frequent gusts of 34-49 knots and/or seas equal or greater than 10 ft. Dangerous marine conditions."
+          },
+          "MFL": {
+            "description": "Sustained winds or frequent gusts of 34-49 knots and/or seas equal or greater than 10 ft. Dangerous marine conditions."
+          },
+          "JAX": {
+            "description": "Sustained winds or frequent gusts of 34-49 knots and/or seas equal or greater than 10 ft. Dangerous marine conditions."
+          },
+          "MLB": {
+            "description": "Sustained winds or frequent gusts of 34-49 knots and/or seas equal or greater than 10 ft. Dangerous marine conditions."
+          },
+          "TAE": {
+            "description": "Sustained winds or frequent gusts of 34-49 knots and/or seas greater than 10 ft possible. Dangerous marine conditions."
+          },
+          "LIX": {
+            "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 9 feet."
+          },
+          "BRO": {
+            "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 10 feet."
+          },
+          "MFR": {
+            "description": "Storm Force Winds or very high and very steep seas."
+          },
+          "LOX": {
+            "description": "Sea conditions will be dangerous for most craft"
+          },
+          "SGX": {
+            "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 15 feet."
+          },
+          "EKA": {
+            "description": "Wind or Wind Gusts >= 34 knots and/or Waves >= 15 feet."
+          },
+          "PQR": {
+            "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 25 feet."
+          }
+        },
+        "4": {
+          "MQT": {
+            "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 12 feet."
+          },
+          "LIX": {
+            "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 12 feet."
+          },
+          "AKQ": {
+            "description": "Wind Gusts >= 48 knots and/or Waves >= 12 feet (8 ft bay/rivers)."
+          },
+          "CAR": {
+            "description": "Wind or Wind Gusts >=64 knots and/or Waves >= 25 feet."
+          },
+          "BUF": {
+            "description": "Wind >= 48 knots and/or Waves >= 17 feet."
+          },
+          "CHS": {
+            "description": "Wind or Wind Gusts >= 64 knots and/or Waves >= 16 feet."
+          },
+          "PHI": {
+            "description": "Wind or Wind Gusts >= 64 knots and/or Waves >= 16 feet."
+          },
+          "OKX": {
+            "description": "Wind >= 48 knots and/or Waves >= 14 feet"
+          },
+          "CLE": {
+            "description": "Winds >= 48 knots and/or Waves >= 17 feet."
+          },
+          "LWX": {
+            "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 8 feet."
+          },
+          "SJU": {
+            "description": "Seas equal or greater than 15 feet. Very dangerous conditions for small craft. <br><b>ESPAÑOL:</b> Oleaje igual o mayor de 15 pies. Condiciones muy peligrosas para los operadores de embarcaciones pequeñas."
+          },
+          "KEY": {
+            "description": "Sustained winds or frequent gusts equal or greater than 50 knots and/or seas equal or greater than 12 ft. Very dangerous marine conditions."
+          },
+          "MFL": {
+            "description": "Sustained winds or frequent gusts equal or greater than 50 knots and/or seas equal or greater than 12 ft. Very dangerous marine conditions."
+          },
+          "JAX": {
+            "description": "Sustained winds or frequent gusts equal or greater than 50 knots and/or seas equal or greater than 12 ft. Very dangerous marine conditions."
+          },
+          "TAE": {
+            "description": "Sustained winds or frequent gusts of 50-63 knots and/or seas greater than 12 ft possible. Very dangerous marine conditions."
+          },
+          "MLB": {
+            "description": "Sustained winds or frequent gusts equal or greater than 50 knots and/or seas equal or greater than 15 ft. Very dangerous marine conditions."
+          },
+          "MFR": {
+            "description": "Hurricane Force Winds or historically rare seas."
+          },
+          "LOX": {
+            "description": "Sea conditions will be dangerous for all craft"
+          },
+          "SGX": {
+            "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 18 feet."
+          },
+          "EKA": {
+            "description": "Wind or Wind Gusts >= 48 knots and/or Waves >= 20 feet."
+          },
+          "PQR": {
+            "description": "Wind or Wind Gusts >= 64 knots and/or Waves >= 36 feet."
+          }
+        }
+      }
+    }
+  },
+  "Tornado": {
+    "standard": {
+      "basis": "We base this risk on <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts from the Storm Prediction Center</a>.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "Little to no Tornado Risk"
+        },
+        "1": {
+          "label": "Marginal",
+          "description": "Up to 5% chance of a tornado within 25 miles of your location."
+        },
+        "2": {
+          "label": "Slight",
+          "description": "5-10% chance of a tornado within 25 miles of your location."
+        },
+        "3": {
+          "label": "Enhanced",
+          "description": "10-15% chance of a tornado within 25 miles of your location."
+        },
+        "4": {
+          "label": "Moderate",
+          "description": "15-30% or greater chance of a tornado within 25 miles of your location."
+        },
+        "5": {
+          "label": "High",
+          "description": "30% or greater chance of a tornado within 25 miles of your location."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "OKX": {
+            "description": "Little to no tornado risk,"
+          },
+          "TBW": {
+            "description": "Little to no Tornado Risk."
+          }
+        },
+        "1": {
+          "TBW": {
+            "description": "Limited Tornado Risk. Brief, low-end tornadoes possible."
+          }
+        },
+        "2": {
+          "TBW": {
+            "description": "Elevated Tornado Risk. A few tornadoes likely, with a strong tornado possible. Significant structural damage possible"
+          }
+        },
+        "3": {
+          "TBW": {
+            "description": "Significant Tornado Risk. Tornado outbreak probable, with the possibility of a few strong to violent tornadoes. Major damage possible."
+          }
+        },
+        "4": {
+          "OKX": {
+            "description": "15-30% chance of a tornado within 25 miles of your location."
+          },
+          "TBW": {
+            "description": "Extreme Tornado Risk. Tornado outbreak imminent. Life-threatening situation, with several strong to violent tornadoes possible."
+          }
+        },
+        "5": {}
+      }
+    }
+  },
+  "Lightning": {
+    "standard": {
+      "basis": "We base this risk on local weather office thunderstorm forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No lightning risk"
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Widespread thunderstorms with dangerous cloud-to-ground lightning expected."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "SJU": {
+            "description": "No lightning risk. <br><b>ESPAÑOL:</b> No existe riesgo por rayos"
+          },
+          "MFL": {
+            "description": "Little to no Lightning Risk."
+          },
+          "TAE": {
+            "description": "Little to no Lightning Risk."
+          },
+          "TBW": {
+            "description": "Little to no Lightning Risk."
+          },
+          "JAX": {
+            "description": "Little to no Lightning Risk."
+          }
+        },
+        "1": {
+          "CAR": {
+            "description": "Isolated thunderstorms with dangerous cloud to ground lightning are expected."
+          },
+          "GYX": {
+            "description": "Isolated thunderstorms are expected with dangerous cloud-to-ground lightning expected."
+          },
+          "SJU": {
+            "description": "Isolated thunderstorms. Stay alert and be prepared to take shelter if storms develop. <br><b>ESPAÑOL:</b> Tormentas eléctricas aisladas. Esté alerta y prepárese para buscar refugio."
+          },
+          "MFL": {
+            "description": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          "TAE": {
+            "description": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          "TBW": {
+            "description": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          "JAX": {
+            "description": "Limited Lightning Risk. Isolated to scattered thunderstorms possible. Be aware of thunderstorms in your area and be prepared to take shelter."
+          },
+          "MLB": {
+            "description": "Isolated to low scattered thunderstorm coverage with dangerous cloud-to-ground lightning expected"
+          },
+          "MFR": {
+            "description": "Slight Chance or Isolated thunderstorms with occasional dangerous cloud-to-ground lightning expected."
+          },
+          "PSR": {
+            "description": "Isolated thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "BOI": {
+            "description": "Isolated thunderstorms with dangerous cloud-to-ground lightning expected."
+          }
+        },
+        "2": {
+          "CAR": {
+            "description": "Scattered thunderstorms with dangerous cloud to ground lightning are expected."
+          },
+          "GYX": {
+            "description": "Scattered thunderstorms are expected with dangerous cloud-to-ground lightning expected."
+          },
+          "SJU": {
+            "description": "Isolated to scattered thunderstorms. Be prepared to stop all outdoor activity and seek shelter if storms develop.<br> <b>ESPAÑOL:</b> Tormentas eléctricas de aisladas a dispersas. Esté listo para suspender todas las actividades en el exterior y busque un refugio."
+          },
+          "MFL": {
+            "description": "Elevated Lightning Risk. Numerous thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          },
+          "TAE": {
+            "description": "Elevated Lightning Risk. Numerous thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          },
+          "TBW": {
+            "description": "Elevated Lightning Risk. Numerous thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          },
+          "JAX": {
+            "description": "Elevated Lightning Risk. Numerous thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          },
+          "MLB": {
+            "description": "Scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "PSR": {
+            "description": "Scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "BOI": {
+            "description": "Scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "MFR": {
+            "description": "Chance of or Scattered thunderstorms with dangerous cloud-to-ground lightning expected."
+          }
+        },
+        "3": {
+          "CAR": {
+            "description": "Numerous thunderstorms with dangerous cloud to ground lightning are expected."
+          },
+          "GYX": {
+            "description": "Numerous or widespread thunderstorms are expected with dangerous cloud-to-ground lightning expected."
+          },
+          "SJU": {
+            "description": "Scattered to numerous thunderstorms. Plan to stop all outdoor activity and move to shelters immediately. <br> <b>ESPAÑOL:</b> Tormentas eléctricas de dispersas a numerosas son posibles. Planifique suspender todas las actividades en el exterior y diríjase a un refugio inmediatamente."
+          },
+          "MFL": {
+            "description": "Significant Lightning Risk. Widespread thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          },
+          "TAE": {
+            "description": "Significant Lightning Risk. Widespread thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          },
+          "TBW": {
+            "description": "Significant Lightning Risk. Widespread thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          },
+          "JAX": {
+            "description": "Significant Lightning Risk. Widespread thunderstorms possible. Plan to stop all outdoor activity and move to shelters."
+          },
+          "MLB": {
+            "description": "Numerous to Widespread thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "MFR": {
+            "description": "Numerous to Widespread thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "PSR": {
+            "description": "Likely thunderstorms with dangerous cloud-to-ground lightning expected."
+          },
+          "BOI": {
+            "description": "Numerous to widespread thunderstorms with dangerous cloud-to-ground lightning expected."
+          }
+        }
+      }
+    }
+  },
+  "SnowSleet": {
+    "standard": {
+      "basis": "We base this risk on local weather office snow/sleet accumulation forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No snow or sleet."
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Light snow and/or sleet accumulation will result in locally hazardous travel conditions, especially on bridges, overpasses, and untreated or secondary roads."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Considerable snow and/or sleet accumulation will cause significant travel disruptions."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Heavy snow and/or sleet accumulation will result in widespread travel disruptions."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Extreme snow and/or sleet accumulation will result in widespread, prolonged travel disruptions."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "BUF": {
+            "description": "No snow or sleet accumulation."
+          },
+          "OKX": {
+            "description": "Trace or no snow and/or sleet accumulation."
+          },
+          "FWD": {
+            "description": "No Snow or Sleet Risk."
+          },
+          "PIH": {
+            "description": "Little to no snow or sleet risk."
+          }
+        },
+        "1": {
+          "AKQ": {
+            "description": "Light snow and/or sleet accumulation may result in locally hazardous travel conditions, especially on bridges, overpasses, and untreated or secondary roads."
+          },
+          "FWD": {
+            "description": "Light snow and/or sleet accumulation may result in locally hazardous travel conditions, especially on bridges, overpasses, and untreated or secondary roads."
+          },
+          "BUF": {
+            "description": "Snow and/or sleet with less than 4 inches of accumulation expected. Be aware of locally hazardous travel conditions, especially on bridges, overpasses, and untreated or secondary roads."
+          },
+          "OKX": {
+            "description": "Light snow and/or sleet accumulation will result in locally hazardous travel conditions, especially on bridges, overpasses, and untreated or secondary roads. Total accumulation of 0.1 to less than 3.0 inches."
+          },
+          "PIH": {
+            "description": "Light snow and/or sleet accumulations are likely to result in locally slick travel conditions, especially on bridges, overpasses, and untreated secondary roads."
+          }
+        },
+        "2": {
+          "AKQ": {
+            "description": "Considerable snow and/or sleet accumulation may cause significant travel disruptions."
+          },
+          "BUF": {
+            "description": "Snow and/or sleet with 4 to 6.9 inches of accumulation expected. Be prepared to reduce travel speed for hazardous travel conditions."
+          },
+          "OKX": {
+            "description": "Considerable snow and/or sleet accumulation will cause significant travel disruptions. Total accumulation of 3.0 to less than 6.0 inches."
+          },
+          "FWD": {
+            "description": "Snow and/or sleet accumulation may result in travel disruptions. Travel may be dangerous."
+          },
+          "PIH": {
+            "description": "Moderate snow and/or sleet accumulations are likely to result in slick travel conditions."
+          }
+        },
+        "3": {
+          "BUF": {
+            "description": "Snow and/or sleet with 7 to 17.9 inches of accumulation expected. Plan for hazardous travel conditions. Avoid travel if possible."
+          },
+          "OKX": {
+            "description": "Heavy snow and/or sleet accumulation will result in widespread travel disruptions. Total accumulation of 6.0 to less than 12.0 inches."
+          },
+          "FWD": {
+            "description": "Heavy snow and/or sleet accumulation will result in widespread travel disruptions. Travel may be dangerous or impossible."
+          },
+          "PIH": {
+            "description": "Significant snow and/or sleet accumulations are likely to result in widespread hazardous travel conditions."
+          }
+        },
+        "4": {
+          "BUF": {
+            "description": "Snow and/or sleet accumulations of 18 inches or greater expected. Travel will be dangerous, and may be impossible. Avoid travel unless it is an emergency."
+          },
+          "OKX": {
+            "description": "Extreme snow and/or sleet accumulation will result in widespread, prolonged travel disruptions. Total accumulation of 12.0 inches or more."
+          },
+          "FWD": {
+            "description": "Extreme snow accumulation will result in dangerous travel conditions. Avoid travel unless it is an emergency."
+          },
+          "PIH": {
+            "description": "Extreme snow and/or sleet accumulations are likely to result in widespread, prolonged travel disruptions. Travel may be impossible in some areas The weight of the heavy snowpack may stress some roofs. This is an extremely dangerous situation."
+          }
+        }
+      }
+    }
+  },
+  "ExtremeCold": {
+    "standard": {
+      "basis": "We base this risk on local weather office wind chill forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No Extreme Cold Risk"
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Hypothermia could occur with prolonged exposure and lack of proper clothing."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Hypothermia or frostbite could occur with prolonged exposure and lack of proper clothing."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Hypothermia or frostbite is likely with prolonged exposure and lack of proper clothing."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Hypothermia or frostbite is likely without proper clothing."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "GLD": {
+            "description": "No Excessive Cold Risk"
+          },
+          "HGX": {
+            "description": "No Excessive Cold Risk"
+          },
+          "FWD": {
+            "description": "No Excessive Cold Risk"
+          },
+          "JAN": {
+            "description": "No Excessive Cold Risk"
+          },
+          "CAR": {
+            "description": "No Significant Excessive Cold Risk."
+          },
+          "OKX": {
+            "description": "No Extreme Cold Risk."
+          },
+          "MFL": {
+            "description": "No Extreme Cold Risk."
+          },
+          "TBW": {
+            "description": "No Extreme Cold Risk."
+          },
+          "TAE": {
+            "description": "No Excessive Cold Risk."
+          },
+          "MLB": {
+            "description": "No Excessive Cold Risk."
+          }
+        },
+        "1": {
+          "CAR": {
+            "description": "Prolonged exposure with lack of proper clothing could cause hypothermia or frostbite to exposed skin."
+          },
+          "GYX": {
+            "description": "Minimum apparent temperature 0 to -19 degrees. Prolonged exposure with lack of proper clothing could cause hypothermia or frostbite to exposed skin."
+          },
+          "MFL": {
+            "description": "Apparent temperature 40-50 degrees. Highly-vulnerable population should seek shelter."
+          },
+          "TAE": {
+            "description": "Limited Excessive Cold Risk. Risk of frost across portions of the area. Highly-vulnerable population should seek shelter."
+          },
+          "HGX": {
+            "description": "Frost and freeze conditions can kill unprotected vegetation and possibly damage unprotected outdoor plumbing"
+          },
+          "FWD": {
+            "description": "Hypothermia may occur with prolonged exposure and lack of proper clothing."
+          },
+          "TBW": {
+            "description": "Highly-vulnerable population should seek shelter."
+          },
+          "MLB": {
+            "description": "Limited Excessive Cold Risk. Apparent temperature 36-40 degrees. Highly-vulnerable population should seek shelter."
+          }
+        },
+        "2": {
+          "CAR": {
+            "description": "Prolonged exposure with lack of proper clothing will cause hypothermia or frostbite to exposed skin in less than 1 hour."
+          },
+          "OKX": {
+            "description": "Hypothermia or frostbite could occur with prolonged exposure and lack of proper clothing. Minimum Apparent Temperature 0 to -14."
+          },
+          "GYX": {
+            "description": "Minimum apparent temperature -20 to -29 degrees. Prolonged exposure with lack of proper clothing will cause hypothermia or frostbite to exposed skin in under an hour."
+          },
+          "MFL": {
+            "description": "Apparent temperature 33-39 degrees. Hypothermia possible with prolonged exposure."
+          },
+          "TAE": {
+            "description": "Elevated Excessive Cold risk. Temperatures 24-32 degrees. Hypothermia possible with prolonged exposure."
+          },
+          "HGX": {
+            "description": "Frost and freeze conditions will kill unprotected vegetation and is likely to damage unprotected outdoor plumbing"
+          },
+          "FWD": {
+            "description": "Hypothermia will occur with prolonged exposure and lack of proper clothing."
+          },
+          "TBW": {
+            "description": "Hypothermia possible with prolonged exposure."
+          },
+          "MLB": {
+            "description": "Elevated Excessive Cold Risk. Apparent temperature 31-35 degrees. Hypothermia possible with prolonged exposure."
+          }
+        },
+        "3": {
+          "CAR": {
+            "description": "Prolonged exposure with lack of proper clothing will cause hypothermia or frostbite to exposed skin in less than 30 minutes."
+          },
+          "OKX": {
+            "description": "Frostbite and hypothermia can occur within 30 minutes without proper clothing. Minimum Apparent Temperature -15 to -24."
+          },
+          "GYX": {
+            "description": "Minimum apparent temperature -30 to -39 degrees. Prolonged exposure with lack of proper clothing will cause hypothermia or frostbite to exposed skin in less than half an hour."
+          },
+          "MFL": {
+            "description": "Apparent temperature 26-32 degrees. Frostbite and hypothermia possible with prolonged exposure."
+          },
+          "TAE": {
+            "description": "Significant Excessive Cold Risk. Temperatures 16-24 degrees or wind chill between 1 and 20 degrees. Frostbite and hypothermia possible with prolonged exposure."
+          },
+          "HGX": {
+            "description": "Hypothermia could occur with prolonged exposure and lack of proper clothing."
+          },
+          "FWD": {
+            "description": "Hypothermia or frostbite could occur within a hour without proper clothing."
+          },
+          "TBW": {
+            "description": "Frostbite and hypothermia possible with prolonged exposure."
+          },
+          "MLB": {
+            "description": "Significant Excessive Cold Risk. Apparent temperature below 30 degrees. Frostbite and hypothermia possible with prolonged exposure."
+          }
+        },
+        "4": {
+          "CAR": {
+            "description": "Prolonged exposure with lack of proper clothing will cause hypothermia or frostbite to exposed skin in less than 10 minutes."
+          },
+          "OKX": {
+            "description": "Frostbite and hypothermia can occur in as little as 20 minutes without proper clothing. Minimum Apparent Temperature -25 to -34."
+          },
+          "GYX": {
+            "description": "Minimum apparent temperature less than or equal to -40 degrees. Prolonged exposure with lack of proper clothing will cause hypothermia or frostbit to exposed skin in less than 10 minutes."
+          },
+          "MFL": {
+            "description": "Apparent temperature 25 degrees or lower. Frostbite and hypothermia likely with prolonged exposure."
+          },
+          "TAE": {
+            "description": "Extreme Excessive Cold Risk. Temperature 15 degrees or lower, or wind chill less than or equal to 0 degrees. Frostbite and hypothermia likely with prolonged exposure."
+          },
+          "HGX": {
+            "description": "Hypothermia or frostbite could occur with prolonged exposure and lack of proper clothing."
+          },
+          "FWD": {
+            "description": "Hypothermia or frostbite is likely within 30 minutes without proper clothing."
+          },
+          "TBW": {
+            "description": "Frostbite and hypothermia likely with prolonged exposure."
+          },
+          "MLB": {
+            "description": "Extreme Excessive Cold Risk. Apparent temperature 20 degrees or less. Frostbite and hypothermia likely with prolonged exposure."
+          }
+        }
+      }
+    }
+  },
+  "FireWeather": {
+    "standard": {
+      "basis": "We base this risk on local weather office forecasts of combined relative humidity, winds, and wind gusts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "Low fire danger conditions"
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Low humidity and breezy conditions will result in an increased danger of fires getting out of control."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Low humidity and windy conditions will create dangerous fire conditions. Fires can escape control more easily and be difficult to contain."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "High winds and extended dry periods will produce extreme burning conditions. Open fires can quickly escape and are very difficult to control, even for experienced fire fighters."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Very strong winds, combined with low humidity, will create extremely volatile conditions. Fires will spread very quickly with spot fires common. Fire control will be extremely difficult."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "OUN": {
+            "label": "Low"
+          },
+          "UNR": {
+            "description": "Fire danger is low."
+          },
+          "BUF": {
+            "description": "Low fire danger conditions. Open burning is usually safe with proper containers and precautions."
+          },
+          "KEY": {
+            "description": "No Fire Weather Risk."
+          },
+          "MFL": {
+            "description": "No Fire Weather Risk."
+          },
+          "TAE": {
+            "description": "No Fire Weather Risk."
+          },
+          "TBW": {
+            "description": "No Fire Weather Risk."
+          },
+          "JAX": {
+            "description": "No Fire Weather Risk."
+          },
+          "MLB": {
+            "description": "No Fire Weather Risk."
+          },
+          "HGX": {
+            "description": "Weather conditions likely to support low to moderate fire growth"
+          },
+          "PIH": {
+            "description": "Weather conditions are not expected to lead to fire spread or additional fire starts."
+          },
+          "EKA": {
+            "description": "<b>PLEASE NOTE THAT THE LISTED RISK LEVELS AND CATEGORIES DO NOT INCORPORATE FUEL CONDITIONS</b>"
+          }
+        },
+        "1": {
+          "UNR": {
+            "label": "Elevated",
+            "description": "Low humidity and breezy winds support elevated fire danger."
+          },
+          "OUN": {
+            "label": "Elevated"
+          },
+          "AKQ": {
+            "description": "Dry and/or breezy conditions may enhance the fire danger across the area. *Doesn't take fuel moisture into account*"
+          },
+          "CAR": {
+            "description": "The combination of low humidities and windy conditions can promote the spread of wildfires given appropriate fuel conditions. Wind 10 to 19 mph with relative humidity values of 20 to 35%."
+          },
+          "BUF": {
+            "description": "Open burning is usually safe with the proper precautions. Burning should be done in the early morning and late evening to avoid windier and drier conditions from midday through mid afternoon."
+          },
+          "KEY": {
+            "description": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          "MFL": {
+            "description": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          "TAE": {
+            "description": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          "TBW": {
+            "description": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          "JAX": {
+            "description": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          "MLB": {
+            "description": "Limited Fire Weather Risk. Low relative humidity values possible, which may increase fire danger."
+          },
+          "LOX": {
+            "description": "If fire ignition occurs, conditions are possible for elevated fire behavior."
+          }
+        },
+        "2": {
+          "UNR": {
+            "label": "Near Critical",
+            "description": "Receptive fuels, low humidity, and gusty winds support near critical fire weather conditions."
+          },
+          "OUN": {
+            "label": "Near Critical"
+          },
+          "AKQ": {
+            "description": "Low humidity and breezy conditions will result in an increased fire danger. Fires can escape control more easily and be difficult to contain. *Doesn't take fuel moisture into account*"
+          },
+          "CAR": {
+            "description": "Meteorological conditions approaching critical fire weather values leading to an elevated threat of fire spread with receptive fuel conditions. Wind 20 to 30 mph with relative humidity values of 20 to 35%."
+          },
+          "BUF": {
+            "description": "Any open burning is discouraged due to windy conditions and lower humidity. Fires can escape control more easily and be difficult to contain."
+          },
+          "KEY": {
+            "description": "Elevated Fire Weather Risk. Increasing wind, lower humidity, and/or dry fuels may lead to high fire danger."
+          },
+          "MFL": {
+            "description": "Elevated Fire Weather Risk. Increasing wind, lower humidity, and/or dry fuels may lead to high fire danger."
+          },
+          "TAE": {
+            "description": "Elevated Fire Weather Risk. Increasing wind, lower humidity, and/or dry fuels may lead to high fire danger."
+          },
+          "TBW": {
+            "description": "Elevated Fire Weather Risk. Increasing wind, lower humidity, and/or dry fuels may lead to high fire danger."
+          },
+          "JAX": {
+            "description": "Elevated Fire Weather Risk. Increasing wind, lower humidity, and/or dry fuels may lead to high fire danger."
+          },
+          "MLB": {
+            "description": "Elevated Fire Weather Risk. Increasing wind, lower humidity, and/or dry fuels may lead to high fire danger."
+          },
+          "PIH": {
+            "description": "Low humidity and windy conditions will create dangerous fire weather conditions. Fires could escape containment and be difficult to control. In some cases, this could also signify that additional fire starts are possible with scattered dry thunderstorms."
+          },
+          "LOX": {
+            "description": "If fire ignition occurs, conditions are favorable for elevated fire behavior."
+          }
+        },
+        "3": {
+          "UNR": {
+            "label": "Critical",
+            "description": "Receptive fuels, very low humidity, and strong gusty winds support critical fire weather conditions."
+          },
+          "OUN": {
+            "label": "Critical"
+          },
+          "AKQ": {
+            "description": "High winds and very low humidity will result in critical fire weather conditions. Open fires can quickly escape and are very difficult to control, even for experienced fire fighters. *Doesn't take fuel moisture into account*"
+          },
+          "CAR": {
+            "description": "Critical fire weather conditions expected leading to a significant threat of fire spread with receptive fuel conditions. Wind greater than or equal to 30 mph with relative humidity values of 20 to 35%."
+          },
+          "BUF": {
+            "description": "Open burning should not be attempted. High winds and extended dry periods will produce extreme burning conditions. Open fires can quickly escape and are very difficult to control, even for experienced fire fighters. Conditions will exceed minimum Red Flag Criteria in most cases."
+          },
+          "KEY": {
+            "description": "Significant Fire Weather Risk. Possibility of low humidity, strong wind, and dry fuels leading to dangerous fire behavior."
+          },
+          "MFL": {
+            "description": "Significant Fire Weather Risk. Possibility of low humidity, strong wind, and dry fuels leading to dangerous fire behavior."
+          },
+          "TAE": {
+            "description": "Significant Fire Weather Risk. Possibility of low humidity, strong wind, and dry fuels leading to dangerous fire behavior."
+          },
+          "TBW": {
+            "description": "Significant Fire Weather Risk. Possibility of low humidity, strong wind, and dry fuels leading to dangerous fire behavior."
+          },
+          "JAX": {
+            "description": "Significant Fire Weather Risk. Possibility of low humidity, strong wind, and dry fuels leading to dangerous fire behavior."
+          },
+          "MLB": {
+            "description": "Significant Fire Weather Risk. Possibility of low humidity, strong wind, and dry fuels leading to dangerous fire behavior."
+          },
+          "HGX": {
+            "description": "High winds and low humidity will produce extreme burning conditions. Open fires can quickly escape and are very difficult to control, even for experienced fire fighters."
+          },
+          "PIH": {
+            "description": "Low humidity and high winds will create significant fire weather conditions. Fires could escape containment and be very difficult to control."
+          },
+          "LOX": {
+            "description": "If fire ignition occurs, conditions are favorable for extreme fire behavior which would threaten life and property."
+          }
+        },
+        "4": {
+          "AKQ": {
+            "description": "Very strong winds, combined with low humidity, will create extremely volatile conditions. Fires will spread very quickly with spot fires common. Fire control will be extremely difficult. *Doesn't take fuel moisture into account*"
+          },
+          "CAR": {
+            "description": "Extremely critical fire weather conditions expected leading to an extreme threat of fire spread with receptive fuel conditions. Wind greater than or equal to 30 mph with relative humidity values less than 20%."
+          },
+          "BUF": {
+            "description": "Very strong winds, combined with low humidity, will create extremely volatile conditions well in excess of Red Flag Criteria. Fires will spread very quickly with spot fires common. Fire control will be extremely difficult."
+          },
+          "KEY": {
+            "description": "Extreme Fire Weather Risk. Possibility of low humidity and strong winds leading to red flag warning conditions."
+          },
+          "MFL": {
+            "description": "Extreme Fire Weather Risk. Possibility of low humidity and strong winds leading to red flag warning conditions."
+          },
+          "TAE": {
+            "description": "Extreme Fire Weather Risk. Possibility of low humidity and strong winds leading to red flag warning conditions."
+          },
+          "TBW": {
+            "description": "Extreme Fire Weather Risk. Possibility of low humidity and strong winds leading to red flag warning conditions."
+          },
+          "JAX": {
+            "description": "Extreme Fire Weather Risk. Possibility of low humidity and strong winds leading to red flag warning conditions."
+          },
+          "MLB": {
+            "description": "Extreme Fire Weather Risk. Possibility of low humidity and strong winds leading to red flag warning conditions."
+          },
+          "HGX": {
+            "description": "High winds, combined with very low humidity, will create extremely volatile conditions. Fires will spread very quickly with spot fires common. Fire control will be extremely difficult."
+          },
+          "PIH": {
+            "description": "Very low humidity and high winds will create extremely volatile fire weather conditions Fires could spread very quickly with long-range spot fires common. Fire containment and control efforts may be extremely difficult or impossible. This is an extremely dangerous situation."
+          },
+          "LOX": {
+            "description": "If fire ignition occurs, conditions will be favorable for very rapid fire spread, long range spotting, and very extreme fire behavior which would threaten life and property. The strong winds could also down trees and power lines."
+          }
+        }
+      }
+    }
+  },
+  "FreezingSpray": {
+    "standard": {
+      "basis": "We base this risk on local weather office freezing spray forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No Freezing Spray Risk."
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Light Freezing Spray Expected."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Moderate Freezing Spray Expected."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Heavy Freezing Spray Expected."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {},
+        "1": {},
+        "2": {},
+        "3": {}
+      }
+    }
+  },
+  "ConvectiveWind": {
+    "standard": {
+      "basis": "We base this risk on <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts from the Storm Prediction Center</a>.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "Little to no Severe Thunderstorm Wind Risk"
+        },
+        "1": {
+          "label": "Marginal",
+          "description": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."
+        },
+        "2": {
+          "label": "Slight",
+          "description": "15-30% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."
+        },
+        "3": {
+          "label": "Enhanced",
+          "description": "30-45% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."
+        },
+        "4": {
+          "label": "Moderate",
+          "description": "45-60% chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location."
+        },
+        "5": {
+          "label": "High",
+          "description": "60% or greater chance of severe wind gusts (58 mph or greater) with a 10% or greater chance of extreme wind gusts (74 mph or greater) within 25 miles of your location."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "OKX": {
+            "description": "Little to no Severe Thunderstorm Wind risk."
+          },
+          "TBW": {
+            "description": "Little to no Strong/Severe Thunderstorm Wind Risk."
+          }
+        },
+        "1": {
+          "TBW": {
+            "description": "Limited Thunderstorm Wind Risk. Wind gusts of 40-57 mph possible. Wind damage confined primarily to trees, power lines, and light objects."
+          }
+        },
+        "2": {
+          "TBW": {
+            "description": "Elevated Severe Thunderstorm Wind Risk. Damaging wind gusts of 58 mph or greater possible."
+          }
+        },
+        "3": {
+          "TBW": {
+            "description": "Significant Severe Thunderstorm Wind Risk. Damaging wind gusts of 58 mph or greater likely in some areas, capable of threatening life and property."
+          }
+        },
+        "4": {
+          "OKX": {
+            "description": "45-60% chance of severe wind gusts (58 mph or greater) within 25 miles of your location."
+          },
+          "TBW": {
+            "description": "Extreme Severe Thunderstorm Wind Risk. Widespread damaging winds, with life-threatening hurricane force winds of 74 mph or greater possible."
+          }
+        },
+        "5": {
+          "OKX": {
+            "description": "60% or greater chance of severe wind gusts (58 mph or greater) within 25 miles of your location."
+          }
+        }
+      }
+    }
+  },
+  "LakeshoreFlood": {
+    "standard": {
+      "basis": "We base this risk on local weather office wind speed/direction forecasts and other parameters.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No Lakeshore Flooding risk."
+        },
+        "1": {
+          "label": "Minor",
+          "description": "Minor Lakeshore Flooding expected."
+        },
+        "2": {
+          "label": "Moderate",
+          "description": "Moderate Lakeshore Flooding expected."
+        },
+        "3": {
+          "label": "Major",
+          "description": "Major Lakeshore Flooding expected."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Extreme Lakeshore Flooding expected."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {},
+        "1": {},
+        "2": {},
+        "3": {},
+        "4": {}
+      }
+    }
+  },
+  "IceAccumulation": {
+    "standard": {
+      "basis": "We base this risk on local weather office ice accumulation forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No freezing rain or drizzle."
+        },
+        "1": {
+          "label": "Limited",
+          "description": "A light glaze of ice could cause hazardous travel conditions on bridges, overpasses, and untreated or secondary roads."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Up to one quarter inch of ice accumulation will create dangerous travel conditions and likely result in power outages."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "One-quarter to one inch of ice accumulation will result in numerous power outages and make travel nearly impossible."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "More than one inch of ice accumulation will result in widespread, prolonged power outages and make travel impossible."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "PHI": {
+            "description": "No impacts from freezing rain or drizzle expected."
+          },
+          "EWX": {
+            "description": "No freezing rain or freezing drizzle."
+          },
+          "FWD": {
+            "description": "No icing Risk"
+          },
+          "PIH": {
+            "description": "Little to no freezing rain or drizzle."
+          }
+        },
+        "1": {
+          "OKX": {
+            "description": "Patchy or very light freezing rain or drizzle could cause a light glaze of ice, resulting in hazardous travel conditions on bridges, overpasses, and untreated or secondary roads. Total ice accumulation less than 0.05 inches."
+          },
+          "FWD": {
+            "description": "Very light freezing rain, freezing drizzle or freezing fog with a thin glaze of ice. Be aware of hazardous travel conditions, especially on bridges, overpasses, and untreated or secondary roads."
+          },
+          "PIH": {
+            "description": "A very light glaze of ice may result in slick travel conditions on bridges, overpasses, untreated or secondary roads, and sidewalks/walkways."
+          }
+        },
+        "2": {
+          "AKQ": {
+            "description": "Up to one quarter inch of ice accumulation may create dangerous travel conditions and likely result in power outages."
+          },
+          "CAR": {
+            "description": "Up to one half inch of ice accumulation will create dangerous travel conditions and likely result in power outages."
+          },
+          "BUF": {
+            "description": "Up to one half inch of ice accumulation will create dangerous travel conditions and likely result in power outages."
+          },
+          "GYX": {
+            "description": "Up to one half inch of ice accumulation will create dangerous travel conditions and likely result in power outages."
+          },
+          "OKX": {
+            "description": "Freezing rain or drizzle will create dangerous travel conditions and likely result in power outages. Total ice accumulation of 0.05 to less than 0.5 inches."
+          },
+          "CLE": {
+            "description": "Up to one-quarter inch of ice accumulation will create dangerous travel conditions and likely result in power outages."
+          },
+          "PHI": {
+            "description": "Significant travel disruptions and isolated power outages from ice accumulation are possible."
+          },
+          "EWX": {
+            "description": "Up to a tenth of an inch of ice accumulation will create dangerous travel conditions and likely result in power outages."
+          },
+          "FWD": {
+            "description": "Freezing rain or drizzle with accumulations less than 1/8 of an inch.  Be aware of hazardous travel conditions, especially on bridges, overpasses, and untreated or secondary roads."
+          },
+          "PIH": {
+            "description": "Light ice accumulation may result in hazardous travel conditions and isolated power outages. Bridges, overpasses, untreated or secondary roads, and sidewalks/walkways may be especially dangerous."
+          }
+        },
+        "3": {
+          "AKQ": {
+            "description": "One-quarter to one half inch of ice accumulation will result in numerous power outages and make travel nearly impossible."
+          },
+          "CAR": {
+            "description": "One-half to one inch of ice accumulation will result in numerous power outages and make travel nearly impossible."
+          },
+          "BUF": {
+            "description": "One-half to one inch of ice accumulation will result in numerous power outages and make travel nearly impossible."
+          },
+          "GYX": {
+            "description": "One-half to one inch of ice accumulation will result in numerous power outages and make travel nearly impossible."
+          },
+          "OKX": {
+            "description": "Freezing rain will result in numerous power outages and make travel nearly impossible. Total ice accumulation of 0.5 to less than 1.0 inch."
+          },
+          "PHI": {
+            "description": "Widespread travel disruptions expected with scattered to numerous power outages are possible."
+          },
+          "EWX": {
+            "description": "Up to a half of an inch of ice accumulation will result in numerous power outages and make travel nearly impossible."
+          },
+          "FWD": {
+            "description": "Freezing rain accumulations of up to a half inch. Travel may be dangerous or may be impossible."
+          },
+          "SHV": {
+            "description": "A quarter to half inch of ice accumulation will result in numerous power outages and make travel nearly impossible."
+          },
+          "PIH": {
+            "description": "Ice accumulations of one-quarter inch or more will coat all surfaces and cause damage to trees and powerlines, resulting in widespread dangerous travel conditions and numerous power outages."
+          }
+        },
+        "4": {
+          "AKQ": {
+            "description": "More than one half inch of ice accumulation will result in widespread, prolonged power outages and make travel impossible."
+          },
+          "SHV": {
+            "description": "More than one half inch of ice accumulation will result in widespread, prolonged power outages and make travel impossible."
+          },
+          "OKX": {
+            "description": "Freezing rain will result in widespread, prolonged power outages and make travel impossible. Total ice accumulation of 1.0 inch or more."
+          },
+          "GYX": {
+            "description": "More than one inch of ice accumulation will result in widespread, prolonged power outages and make travel impossible"
+          },
+          "EWX": {
+            "description": "More than one half of an inch of ice accumulation will result in widespread, prolonged power outages and make travel impossible."
+          },
+          "FWD": {
+            "description": "Freezing rain with accumulation greater than or equal to 1/2 inch. Travel will be dangerous or impossible. Tree breakage and power outages are possible."
+          },
+          "PIH": {
+            "description": "Ice accumulations of one-half inch or more will coat all surfaces and cause extensive damage to trees and powerlines, resulting in widespread, prolonged power outages, blocked roads, and impossible travel. This is an extremely dangerous situation."
+          }
+        }
+      }
+    }
+  },
+  "ExcessiveRainfall": {
+    "standard": {
+      "basis": "We base this risk on <a href=\"https://www.wpc.ncep.noaa.gov/qpf/excessive_rainfall_outlook_ero.php\">the excessive rainfall outlook from the Weather Prediction Center</a>. You can <a href=\"https://www.wpc.ncep.noaa.gov/html/fam2.shtml#excessrain\">learn more about excessive rainfall</a> on their website.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No Excessive Rainfall risk"
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Scattered flash floods possible, some potentially significant. Most vulnerable are urban areas, roads, small streams, and washes."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Numerous flash floods including some significant events likely. Many streams may flood, affecting nearby residential and urban areas."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Widespread, severe flash floods expected. Events could occur in areas that don't normally flood. Lives and property in greater danger."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "SJU": {
+            "description": "No Excessive Rainfall risk. <br><b>ESPAÑOL:</b> No existe riesgo de lluvia excesiva."
+          },
+          "TAE": {
+            "description": "No Excessive Rainfall Risk."
+          },
+          "TBW": {
+            "description": "No Excessive Rainfall Risk."
+          },
+          "JAX": {
+            "description": "No Excessive Rainfall Risk."
+          },
+          "MLB": {
+            "description": "No Excessive Rainfall Risk."
+          }
+        },
+        "1": {
+          "SJU": {
+            "description": "Ponding of water in roads and poorly drained areas. There is a low chance of urban and small streams flooding. <br><b>ESPAÑOL:</b> Acumulación de agua en carreteras y en áreas de pobre drenaje. Existe una probabilidad baja de inundaciones urbanas y de riachuelos."
+          },
+          "TAE": {
+            "description": "Limited Excessive Rainfall Risk. Ponding of water in streets, urban, and poorly drained areas is possible."
+          },
+          "TBW": {
+            "description": "Limited Excessive Rainfall Risk. Ponding of water in streets, urban, and poorly drained areas possible."
+          },
+          "JAX": {
+            "description": "Limited Excessive Rainfall Risk. Ponding of water in streets, urban, and poorly drained areas possible."
+          },
+          "MLB": {
+            "description": "Limited Excessive Rainfall Risk. Ponding of water in streets, urban, and poorly drained areas possible."
+          },
+          "EKA": {
+            "description": "Ponding of water on roads and low lying areas."
+          }
+        },
+        "2": {
+          "SJU": {
+            "description": "Flooding in urban areas, roads, small streams, and washes. There is a low chance of isolated flash floods. <br><b>ESPAÑOL:</b> Inundaciones en áreas urbanas, carreteras, riachuelos y badenes. Existe una probabilidad baja de inundaciones repentinas aisladas."
+          },
+          "TAE": {
+            "description": "Elevated Excessive Rainfall Risk. Flooding of streets, urban, and poorly drained areas, potentially isolating or impacting structures."
+          },
+          "TBW": {
+            "description": "Elevated Excessive Rainfall Risk. Considerable flooding of streets, urban, and poorly drained areas, potentially impacting structures."
+          },
+          "JAX": {
+            "description": "Elevated Excessive Rainfall Risk. Considerable flooding of streets, urban, and poorly drained areas, potentially impacting structures."
+          },
+          "MLB": {
+            "description": "Elevated Excessive Rainfall Risk. Considerable flooding of streets, urban, and poorly drained areas, potentially impacting structures."
+          },
+          "EKA": {
+            "description": "Isolated flooding of low lying areas possible, Most vulnerable are urban areas, roads, small streams, and washes."
+          }
+        },
+        "3": {
+          "SJU": {
+            "description": "Life-threatening flash flooding entering structures and cutting off neighborhoods, especially in the flood prone areas. <br><b>ESPAÑOL:</b> Inundaciones repentinas amenazantes a vida posiblemente entrando a estructuras y separando vecindarios, particularmente en zonas propensas a inundaciones."
+          },
+          "TAE": {
+            "description": "Significant Excessive Rainfall Risk. Considerable and life-threatening flash flooding. Numerous flooded roads, some closed, greatly restricting travel or isolating neighborhoods. Flash flooding affecting and entering structures."
+          },
+          "TBW": {
+            "description": "Significant Excessive Rainfall Risk. Life-threatening flash flooding, possibly entering structures and cutting off neighborhoods"
+          },
+          "JAX": {
+            "description": "Significant Excessive Rainfall Risk. Life-threatening flash flooding, possibly entering structures and cutting off neighborhoods"
+          },
+          "MLB": {
+            "description": "Significant Excessive Rainfall Risk. Life-threatening flash flooding, possibly entering structures and cutting off neighborhoods"
+          },
+          "EKA": {
+            "description": "Small streams likely will flood, affecting nearby residential and urban areas. Isolated flash flooding possible in prone areas."
+          }
+        },
+        "4": {
+          "SJU": {
+            "description": "Widespread life-threatening flash flooding, entering structures and affecting many streets and neighborhoods. Catastrophic flooding possible (record flooding) with significant disruption to daily life. <br><b>ESPAÑOL:</b> Inundaciones repentinas amenazantes a la vida entrando a estructuras y afectando calles y vecindarios. Inundaciones catastróficas son posibles (inundación record) con cambios significativos a la vida cotidiana."
+          },
+          "TAE": {
+            "description": "Extreme Excessive Rainfall Risk. Catastrophic, life-threatening flash flooding likely. Flash flooding entering structures. Widespread street closures with many neighborhoods becoming isolated by flood waters."
+          },
+          "TBW": {
+            "description": "Extreme Excessive Rainfall Risk. Widespread, life-threatening flash flooding likely, entering structures and affecting many streets and neighborhoods."
+          },
+          "JAX": {
+            "description": "Extreme Excessive Rainfall Risk. Widespread, life-threatening flash flooding likely, entering structures and affecting many streets and neighborhoods."
+          },
+          "MLB": {
+            "description": "Extreme Excessive Rainfall Risk. Widespread, life-threatening flash flooding likely, entering structures and affecting many streets and neighborhoods."
+          },
+          "EKA": {
+            "description": "Flash floods expected. Events could occur in areas that don't normally flood. Lives and property in danger."
+          }
+        }
+      }
+    }
+  },
+  "NonConvectiveWind": {
+    "standard": {
+      "basis": "We base this risk on local weather office wind speed/gust forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No Wind Risk"
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Breezy conditions could blow around unsecured items and result in hazardous driving conditions for high-profile vehicles."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Windy conditions could damage outdoor items and result in hazardous driving conditions for high-profile vehicles."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Very windy conditions could blow down trees and cause isolated power outages."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Extremely windy conditions will damage numerous trees and cause widespread power outages."
+        }
+      }
+    },
+    "custom": {
+      "basis": {
+        "HGX": "Derived from local office wind forecast"
+      },
+      "levels": {
+        "0": {
+          "BUF": {
+            "description": "Sustained winds < 20 mph and Wind gusts < 30 mph."
+          },
+          "OKX": {
+            "description": "No Non-Thunderstorm Wind Risk."
+          },
+          "KEY": {
+            "description": "No Non-Thunderstorm Wind Risk."
+          },
+          "MFL": {
+            "description": "No Non-Thunderstorm Wind Risk."
+          },
+          "TAE": {
+            "description": "No Non-Thunderstorm Wind Risk."
+          },
+          "JAX": {
+            "description": "No Non-Thunderstorm Wind Risk."
+          },
+          "MLB": {
+            "description": "No Non-Thunderstorm Wind Risk."
+          },
+          "SJU": {
+            "description": "No Wind Risk. <br><b>ESPAÑOL:</b> No existe riesgo por vientos."
+          },
+          "HGX": {
+            "description": "No risk of strong winds."
+          },
+          "FWD": {
+            "description": "Generally light winds expected."
+          },
+          "PIH": {
+            "description": "Little to no wind risk"
+          }
+        },
+        "1": {
+          "AKQ": {
+            "description": "Breezy conditions with 30 to 40 mph wind gusts could blow around unsecured items and result in hazardous driving conditions for high-profile vehicles."
+          },
+          "BUF": {
+            "description": "Sustained winds 20-30 mph or Wind gusts 30-45 mph. Breezy to windy conditions could blow around unsecured items and result in hazardous driving conditions for high profile vehicles."
+          },
+          "OKX": {
+            "description": "Breezy conditions could blow around unsecured items and result in hazardous driving conditions for high-profile vehicles. Sustained winds 20-30 mph or gusts 30-45 mph."
+          },
+          "SJU": {
+            "description": "Breezy conditions (18-22 kts | 21-25 mph). Unsecured items could blow around. <br><b>ESPAÑOL:</b> Brisa Fuerte (18-22 kts | 21-25 mph). Objetos sueltos pudieran ser arrastrados."
+          },
+          "KEY": {
+            "description": "Limited Non-Thunderstorm Wind Risk. Unsecured items could blow around. Hazardous driving conditions for high-profile vehicles."
+          },
+          "MFL": {
+            "description": "Limited Non-Thunderstorm Wind Risk. Unsecured items could blow around. Hazardous driving conditions for high-profile vehicles."
+          },
+          "TAE": {
+            "description": "Limited Non-Thunderstorm Wind Risk. Unsecured items could blow around. Hazardous driving conditions for high-profile vehicles."
+          },
+          "JAX": {
+            "description": "Limited Non-Thunderstorm Wind Risk. Unsecured items could blow around. Hazardous driving conditions for high-profile vehicles."
+          },
+          "MLB": {
+            "description": "Limited Non-Thunderstorm Wind Risk. Unsecured items could blow around. Hazardous driving conditions for high-profile vehicles."
+          },
+          "LIX": {
+            "description": "Breezy conditions could blow around unsecured items and result in hazardous driving conditions on elevated roadways and bridges and for high-profile vehicles. Recreational boaters should exercise caution on inland lakes."
+          },
+          "HGX": {
+            "description": "Wind speeds greater than or equal to 20 knots."
+          },
+          "FWD": {
+            "description": "Breezy winds expected. Be aware that unsecured property may need to be secured."
+          },
+          "PIH": {
+            "description": "Breezy conditions could blow around unsecured outdoor objects and result in difficult driving conditions for some high-profile vehicles. Localized blowing dust or snow is possible."
+          }
+        },
+        "2": {
+          "AKQ": {
+            "description": "Windy conditions with 40 to 50 mph wind gusts could damage outdoor items and result in hazardous driving conditions for high-profile vehicles."
+          },
+          "BUF": {
+            "description": "Sustained winds 31-39 mph or Wind gusts 46-57 mph. Gusty winds could blow around unsecured objects. Tree limbs could be blown down and a few power outages may result. Travel may also be difficult for high profile vehicles."
+          },
+          "OKX": {
+            "description": "Windy conditions could damage outdoor items and result in hazardous driving conditions for high-profile vehicles. Power outages are possible. Sustained winds 31-39 mph or gusts 46-57 mph."
+          },
+          "RAH": {
+            "description": "Windy conditions could damage outdoor items and result in hazardous driving conditions for high-profile vehicles, including school buses."
+          },
+          "BGM": {
+            "description": "Windy conditions could damage outdoor items and result in hazardous driving conditions for high-profile vehicles. Minor tree damage and isolated power outages possible"
+          },
+          "SJU": {
+            "description": "Windy conditions (23-33 kts | 26-38 mph). Outdoor items could blow around or be damaged. <br><b>ESPAÑOL:</b> Condiciones ventosas (23-33 kts | 26-38 mph). Objetos sueltos pudieran ser arrastrados o dañados."
+          },
+          "KEY": {
+            "description": "Elevated Non-Thunderstorm Wind Risk. Scattered power outages possible. Outdoor items could blow around or be damaged. Hazardous driving conditions."
+          },
+          "MFL": {
+            "description": "Elevated Non-Thunderstorm Wind Risk. Scattered power outages possible. Outdoor items could blow around or be damaged. Hazardous driving conditions."
+          },
+          "TAE": {
+            "description": "Elevated Non-Thunderstorm Wind Risk. Scattered power outages possible. Outdoor items could blow around or be damaged. Hazardous driving conditions."
+          },
+          "JAX": {
+            "description": "Elevated Non-Thunderstorm Wind Risk. Scattered power outages possible. Outdoor items could blow around or be damaged. Hazardous driving conditions."
+          },
+          "MLB": {
+            "description": "Elevated Non-Thunderstorm Wind Risk. Scattered power outages possible. Outdoor items could blow around or be damaged. Hazardous driving conditions."
+          },
+          "HGX": {
+            "description": "Wind speeds greater than or equal to 25 knots."
+          },
+          "FWD": {
+            "description": "Windy conditions are expected. Secure property that could be blown about. Hazardous driving conditions are possible for high-profile vehicles."
+          },
+          "PIH": {
+            "description": "Windy conditions could blow around unsecured outdoor objects and result in hazardous driving conditions for high-profile vehicles. Blowing dust or snow will likely reduce visibility, making driving hazardous in some spots."
+          }
+        },
+        "3": {
+          "AKQ": {
+            "description": "Very windy conditions with 50 to 60 mph wind gusts could blow down trees and cause isolated power outages."
+          },
+          "BUF": {
+            "description": "Sustained winds 40-49 mph or Wind gusts 58-64 mph. Strong winds could blow down trees and power lines and cause scattered power outages. Travel could be difficult, especially for high profile vehicles."
+          },
+          "OKX": {
+            "description": "Very windy conditions could blow down trees. Power outages likely. Sustained winds 40-49 mph or gusts 58-64 mph."
+          },
+          "BGM": {
+            "description": "Very windy conditions could blow down trees and cause scattered power outages."
+          },
+          "SJU": {
+            "description": "Very windy conditions (34-50 kts | 39-58 mph). Trees and power lines could blow down and cause extensive power outages. <br><b>ESPAÑOL:</b> Condiciones muy ventosas (34-50 kts | 39-58 mph). Árboles y líneas del tendido eléctrico pudieran ser derribados y causar interrupciones extensas del servicio eléctrico."
+          },
+          "KEY": {
+            "description": "Significant Non-Thunderstorm Wind Risk. Trees and power lines could blow down and cause extensive power outages."
+          },
+          "MFL": {
+            "description": "Significant Non-Thunderstorm Wind Risk. Trees and power lines could blow down and cause extensive power outages."
+          },
+          "JAX": {
+            "description": "Significant Non-Thunderstorm Wind Risk. Trees and power lines could blow down and cause extensive power outages."
+          },
+          "MLB": {
+            "description": "Significant Non-Thunderstorm Wind Risk. Trees and power lines could blow down and cause extensive power outages."
+          },
+          "TAE": {
+            "description": "Significant Non-Thunderstorm Wind Risk. Trees and power lines could blow down and cause numerous power outages."
+          },
+          "HGX": {
+            "description": "Wind speeds greater than or equal to 30 knots."
+          },
+          "FWD": {
+            "description": "Very windy conditions are expected. Secure property and prepare for isolated power outages. Hazardous driving conditions are likely for high-profile vehicles."
+          },
+          "PIH": {
+            "description": "Very windy conditions could result in damage to trees, powerlines, and outbuildings, resulting in power outages and/or blocked roads. Travel could be very dangerous for high-profile vehicles. Blowing dust or snow may result in very low visibilities, making driving very difficult in some spots."
+          },
+          "LOX": {
+            "description": "Very windy conditions may down trees and power lines, causing property damage or power outages. Cross winds can make driving difficult, especially for drivers of high profile vehicles and vehicles towing trailers."
+          },
+          "BOI": {
+            "description": "Very windy conditions could blow down trees in forested areas and cause isolated power outages in populated areas. Travel will be dangerous in high-profile vehicles."
+          }
+        },
+        "4": {
+          "AKQ": {
+            "description": "Extremely windy conditions with wind gusts greater than 60 mph will damage numerous trees and cause widespread power outages."
+          },
+          "BUF": {
+            "description": "Sustained winds >= 50 mph or Wind gusts >= 65 mph. Damaging winds could blow down trees and power lines and cause widespread power outages. Travel could be difficult, especially for high profile vehicles."
+          },
+          "OKX": {
+            "description": "Extremely windy conditions will damage numerous trees and cause widespread power outages. Sustained winds greater than 50 mph or gusts greater than 65 mph."
+          },
+          "SJU": {
+            "description": "Extremely windy conditions (51 kts or more | 59 mph or more). Numerous trees and power lines could blow down and cause widespread power outages. <br><b>ESPAÑOL:</b> Condiciones extremadamente ventosas (51 kts o más | 59 mph o más). Árboles y líneas del tendido eléctrico pudieran ser derribados y causar interrupciones amplias del servicio de electricidad."
+          },
+          "KEY": {
+            "description": "Extreme Non-Thunderstorm Wind Risk. Numerous trees and power lines could blow down and cause widespread power outages."
+          },
+          "MFL": {
+            "description": "Extreme Non-Thunderstorm Wind Risk. Numerous trees and power lines could blow down and cause widespread power outages."
+          },
+          "JAX": {
+            "description": "Extreme Non-Thunderstorm Wind Risk. Numerous trees and power lines could blow down and cause widespread power outages."
+          },
+          "MLB": {
+            "description": "Extreme Non-Thunderstorm Wind Risk. Numerous trees and power lines could blow down and cause widespread power outages."
+          },
+          "TAE": {
+            "description": "Extreme Non-Thunderstorm Wind Risk. Numerous trees and power lines will blow down and cause widespread power outages."
+          },
+          "HGX": {
+            "description": "Wind speeds greater than or equal to 35 knots."
+          },
+          "FWD": {
+            "description": "Extremely windy conditions will result in tree damage, power outages, minor structural damage, and hazardous driving conditions. Secure property and people should seek shelter indoors."
+          },
+          "PIH": {
+            "description": "Extremely windy conditions could result in widespread damage to trees, powerlines, roofs, and outbuildings. Widespread power outages and blocked roads are possible. Blowing dust or snow may result in visibilities near zero. Travel may be extremely difficult. This is an extremely dangerous situation."
+          },
+          "LOX": {
+            "description": "Extremely windy conditions will cause localized property damage, down numerous trees and cause widespread power outages."
+          },
+          "BOI": {
+            "description": "Extremely windy conditions. Will damage numerous trees in forested areas and cause power outages in populated areas. Travel will be dangerous in high-profile vehicles."
+          }
+        }
+      }
+    }
+  },
+  "SevereThunderstorm": {
+    "standard": {
+      "basis": "We base this risk on <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts from the Storm Prediction Center</a>.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No Severe Thunderstorm Risk"
+        },
+        "1": {
+          "label": "Marginal",
+          "description": "Isolated severe thunderstorms possible."
+        },
+        "2": {
+          "label": "Slight",
+          "description": "Scattered severe thunderstorms possible."
+        },
+        "3": {
+          "label": "Enhanced",
+          "description": "Numerous severe thunderstorms possible."
+        },
+        "4": {
+          "label": "Moderate",
+          "description": "Widespread severe thunderstorms likely."
+        },
+        "5": {
+          "label": "High",
+          "description": "Widespread severe thunderstorms expected."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "OKX": {
+            "description": "Little to no severe thunderstorm risk."
+          },
+          "TBW": {
+            "description": "No Severe Thunderstorm Risk."
+          }
+        },
+        "1": {
+          "OKX": {
+            "description": "Isolated severe storms possible, similar to storms your area may experience a few times a year."
+          },
+          "TBW": {
+            "description": "Limited Severe Thunderstorm Risk. Isolated severe thunderstorms possible."
+          }
+        },
+        "2": {
+          "OKX": {
+            "description": "Isolated to scattered severe storms possible, similar to intense storms your area may only experience once or twice a year."
+          },
+          "TBW": {
+            "description": "Elevated Severe Thunderstorm Risk. Scattered to numerous severe thunderstorms possible. A few intense storms possible."
+          }
+        },
+        "3": {
+          "OKX": {
+            "description": "Scattered to numerous severe storms expected, similar to intense storms your area may only experience once per year or less."
+          },
+          "TBW": {
+            "description": "Significant Severe Thunderstorm Risk. Widespread severe thunderstorms likely, some intense."
+          }
+        },
+        "4": {
+          "OKX": {
+            "description": "Widespread severe storms likely. Very intense storms your area may experience once or twice in a lifetime."
+          },
+          "TBW": {
+            "description": "Extreme Severe Thunderstorm Risk. Widespread severe thunderstorms expected, some intense."
+          }
+        },
+        "5": {
+          "OKX": {
+            "description": "Widespread severe storms expected. Very intense storms your area may experience once or twice in a lifetime."
+          }
+        }
+      }
+    }
+  },
+  "BlowingDust": {
+    "standard": {
+      "basis": "We base this risk on local weather offices blowing dust forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No blowing dust expected."
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Patchy blowing dust expected."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Areas of blowing dust expected."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Widespread blowing dust expected."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {},
+        "1": {},
+        "2": {},
+        "3": {}
+      }
+    }
+  },
+  "Frost/Freeze": {
+    "standard": {
+      "basis": "We base this risk on local weather office temperature forecasts and other frost/freeze criteria.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No danger of frost or freeze causing damage to vegetation."
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Frost could cause minor damage to unprotected vegetation."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "A light freeze could damage unprotected vegetation."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "A moderate freeze could cause significant damage to unprotected vegetation."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "A hard freeze could cause catastrophic damage to unprotected vegetation."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "TAE": {
+            "description": "No Excessive Frost/Freeze Risk."
+          },
+          "MFR": {
+            "description": "No danger of frost or freeze causing damage to vegetation, or frost and freezing temperatures are normal this time of year."
+          }
+        },
+        "1": {
+          "LOX": {
+            "description": "Frost can damage sensitive plants and harm pets."
+          }
+        },
+        "2": {
+          "MFL": {
+            "description": "Areas of Frost could cause damage to unprotected vegetation and/or temperatures dropping to near freezing."
+          },
+          "JAX": {
+            "description": "Areas of Frost could cause damage to unprotected vegetation and/or temperatures dropping to near freezing."
+          },
+          "MLB": {
+            "description": "Areas of Frost could cause damage to unprotected vegetation and/or temperatures dropping to near freezing."
+          },
+          "TAE": {
+            "description": "Areas of frost or freezing temperatures could cause damage to unprotected vegetation."
+          },
+          "LOX": {
+            "description": "Freezing temperatures can kill crops and sensitive vegetation, and harm outdoor pets and livestock. Extended exposure to cold can cause hypothermia."
+          }
+        },
+        "3": {
+          "MFL": {
+            "description": "Freezing temperatures could cause significant damage to unprotected vegetation."
+          },
+          "JAX": {
+            "description": "Freezing temperatures could cause significant damage to unprotected vegetation."
+          },
+          "TAE": {
+            "description": "A hard freeze could cause significant damage to unprotected vegetation, and exposed pipes."
+          },
+          "MLB": {
+            "description": "Freezing temperatures (32 degrees or lower) could cause significant damage to unprotected vegetation."
+          },
+          "LOX": {
+            "description": "Temperatures well below freezing can burst exposed pipes and kill crops or sensitive vegetation. Extended exposure to cold can cause hypothermia."
+          }
+        },
+        "4": {
+          "MFL": {
+            "description": "A hard freeze could cause major damage to unprotected vegetation."
+          },
+          "JAX": {
+            "description": "A hard freeze could cause major damage to unprotected vegetation."
+          },
+          "TAE": {
+            "description": "A prolonged hard freeze could cause major/significant damage to unprotected vegetation, and exposed pipes."
+          },
+          "FWD": {
+            "description": "A hard freeze could cause catastrophic damage to unprotected vegetation, pipes, and other infrastructure."
+          },
+          "MLB": {
+            "description": "A hard freeze (temperatures 27 degrees or lower) could cause major damage to unprotected vegetation."
+          },
+          "LOX": {
+            "description": "Extremely sub-freezing temperatures can cause major pipe damage and destroy crops and vegetation. Extended exposure to cold can cause hypothermia."
+          }
+        }
+      }
+    }
+  },
+  "ExtremeHeat": {
+    "standard": {
+      "basis": "We base this risk on local weather office temperature and/or heat index forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No Extreme Heat Risk."
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Heat exhaustion possible with prolonged exposure."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Heat exhaustion likely with prolonged exposure. Heat stroke possible."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Heat exhaustion or heat stroke likely with prolonged exposure."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Dangerously hot conditions could quickly result in heat exhaustion or heat stroke."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "SJU": {
+            "description": "Little to no risk from expected heat. <br><b>ESPAÑOL: </b>Poco o ningún riesgo por el calor esperado."
+          },
+          "FWD": {
+            "description": "No Excessive Heat Risk"
+          },
+          "MLB": {
+            "description": "Little to No Heat Risk."
+          }
+        },
+        "1": {
+          "SJU": {
+            "description": "This level of heat affects primarily those individuals extremely sensitive to heat, especially when outdoors without effective cooling and/or adequate hydration. <br><b>ESPAÑOL:</b> Este nivel de calor afecta principalmente a aquellas personas extremadamente sensibles al calor, especialmente cuando están al aire libre sin enfriamiento efectivo y/o hidratación adecuada"
+          },
+          "KEY": {
+            "description": "Heat index 98-102 degrees. Heat exhaustion possible with prolonged exposure."
+          },
+          "TBW": {
+            "description": "Heat index 98-102 degrees. Heat exhaustion possible with prolonged exposure."
+          },
+          "MLB": {
+            "description": "Limited Heat Risk. Heat index 98-103 degrees. Heat exhaustion possible with prolonged exposure."
+          }
+        },
+        "2": {
+          "SJU": {
+            "description": "This level of heat affects most individuals sensitive to heat, especially those without effective cooling and/or adequate hydration. Impacts possible in some health systems and in heat-sensitive industries. <br><b>ESPAÑOL:</b> Este nivel de calor afecta a la mayoría de las personas sensibles al calor, especialmente aquellas sin enfriamiento efectivo y/o hidratación adecuada. Posibles impactos en algunos sistemas de salud y en industrias sensibles al calor."
+          },
+          "KEY": {
+            "description": "Heat index 103-107 degrees. Heat exhaustion likely with prolonged exposure."
+          },
+          "TBW": {
+            "description": "Heat index 103-107 degrees. Heat exhaustion likely with prolonged exposure."
+          },
+          "FWD": {
+            "description": "Heat exhaustion likely with prolonged exposure. Stay hydrated. Identify and be prepared to move into air conditioned locations if needed."
+          },
+          "MLB": {
+            "description": "Elevated Heat Risk. Heat index 104-107 degrees. Heat exhaustion likely with prolonged exposure."
+          }
+        },
+        "3": {
+          "SJU": {
+            "description": "This level of heat affects anyone without effective cooling and/or adequate hydration. Impacts likely in some health systems, heat-sensitive industries and infrastructure. <br><b>ESPAÑOL:</b> Este nivel de calor afecta a cualquier persona sin un enfriamiento efectivo y/o una hidratación adecuada. Es probable que se produzcan impactos en algunos sistemas de salud, industrias e infraestructuras sensibles al calor."
+          },
+          "KEY": {
+            "description": "Heat index 108-112 degrees. Dangerous and potentially deadly heat stroke likely with prolonged exposure."
+          },
+          "TBW": {
+            "description": "Heat index 108-112 degrees. Dangerous and potentially deadly heat stroke likely with prolonged exposure."
+          },
+          "FWD": {
+            "description": "Heat exhaustion or heat stroke likely with prolonged exposure. Stay hydrated and seek air conditioned locations if needed."
+          },
+          "MLB": {
+            "description": "Significant Extreme Heat Risk. Heat index 108-112 degrees. Dangerous and potentially deadly heat stroke likely with prolonged exposure."
+          }
+        },
+        "4": {
+          "SJU": {
+            "description": "This level of rare and/or long-duration extreme heat with little to no overnight relief affects anyone without effective cooling and/or adequate hydration. Impacts likely in most health systems, heat-sensitive industries and infrastructure. <br><b>ESPAÑOL:</b> Este nivel de calor extremo poco común y/o de larga duración con poco o ningún alivio durante la noche afecta a cualquier persona sin un enfriamiento efectivo y/o una hidratación adecuada. Es probable que se produzcan impactos en la mayoría de los sistemas de salud, industrias e infraestructuras sensibles al calor."
+          },
+          "KEY": {
+            "description": "Heat index 113 degrees or higher. Dangerous and potentially deadly heat stroke likely with limited exposure."
+          },
+          "TBW": {
+            "description": "Heat index 113 degrees or higher. Dangerous and potentially deadly heat stroke likely with limited exposure."
+          },
+          "FWD": {
+            "description": "Dangerously hot conditions could quickly result in heat exhaustion or heat stroke. Stay hydrated and seek air conditioned locations if needed."
+          },
+          "MLB": {
+            "description": "Extreme Level of Heat Risk. Heat index 113 degrees or higher. Dangerous and potentially deadly heat stroke likely with limited exposure."
+          }
+        }
+      }
+    }
+  },
+  "HighSurf": {
+    "standard": {
+      "basis": "We base this risk on local weather office surf height forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No High Surf Risk"
+        },
+        "1": {
+          "label": "Limited",
+          "description": "Large breaking waves will be hazardous to anyone who enters the surf."
+        },
+        "2": {
+          "label": "Elevated",
+          "description": "Large breaking waves will produce dangerous swimming and surfing conditions and localized beach erosion."
+        },
+        "3": {
+          "label": "Significant",
+          "description": "Life-threatening swimming conditions and significant beach erosion can be expected."
+        },
+        "4": {
+          "label": "Extreme",
+          "description": "Life-threatening swimming conditions and major beach erosion can be expected."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "AKQ": {
+            "description": "Low risk of large breaking waves."
+          },
+          "MFL": {
+            "description": "No High Surf Risk."
+          },
+          "TBW": {
+            "description": "No High Surf Risk."
+          },
+          "JAX": {
+            "description": "No High Surf Risk."
+          },
+          "LOX": {
+            "description": "Surf is relatively low, but occasional larger sets are possible."
+          }
+        },
+        "1": {
+          "AKQ": {
+            "description": "Large breaking waves will be hazardous to anyone who enters the surf or near the shoreline"
+          },
+          "MFL": {
+            "description": "Breaking waves that would result in hazardous conditions to anyone who enters the surf possible."
+          },
+          "TBW": {
+            "description": "Breaking waves that would result in hazardous conditions to anyone who enters the surf possible."
+          },
+          "JAX": {
+            "description": "Breaking waves that would result in hazardous conditions to anyone who enters the surf possible."
+          },
+          "LOX": {
+            "description": "Breaking waves can wash people off beaches and rocks."
+          }
+        },
+        "2": {
+          "AKQ": {
+            "description": "Large breaking waves will produce dangerous swimming and surfing conditions and some beach erosion."
+          },
+          "MFL": {
+            "description": "Large breaking waves that would result in dangerous swimming and surfing and/or localized beach erosion possible."
+          },
+          "TBW": {
+            "description": "Large breaking waves that would result in dangerous swimming and surfing and/or localized beach erosion possible."
+          },
+          "JAX": {
+            "description": "Large breaking waves that would result in dangerous swimming and surfing and/or localized beach erosion possible."
+          },
+          "LOX": {
+            "description": "There is an increased risk for ocean drowning. Breaking waves can wash people off beaches and rocks, and capsize small boats near shore."
+          }
+        },
+        "3": {
+          "AKQ": {
+            "description": "Life threatening swimming conditions and significant beach erosion can be expected"
+          },
+          "MFL": {
+            "description": "Large breaking waves that would result in life-threatening swimming and surfing and/or significant beach erosion possible."
+          },
+          "TBW": {
+            "description": "Large breaking waves that would result in life-threatening swimming and surfing and/or significant beach erosion possible."
+          },
+          "JAX": {
+            "description": "Large breaking waves that would result in life-threatening swimming and surfing and/or significant beach erosion possible."
+          },
+          "LOX": {
+            "description": "There is an significant risk for ocean drowning. Large breaking waves can cause injury, wash people off beaches and rocks, and capsize small boats near shore."
+          }
+        },
+        "4": {
+          "AKQ": {
+            "description": "Life threatening swimming conditions and widespread major beach erosion can be expected."
+          },
+          "MFL": {
+            "description": "Large breaking waves that would result in life-threatening swimming and surfing and/or major beach erosion possible."
+          },
+          "TBW": {
+            "description": "Large breaking waves that would result in life-threatening swimming and surfing and/or major beach erosion possible."
+          },
+          "JAX": {
+            "description": "Large breaking waves that would result in life-threatening swimming and surfing and/or major beach erosion possible."
+          },
+          "LOX": {
+            "description": "Powerful waves and  currents will pose an exceptional risk of ocean drowning and damage to coastal structures like piers and other jetties. Large breaking waves can cause injury, wash people off beaches and rocks, and capsize small boats near shore."
+          }
+        }
+      }
+    }
+  },
+  "CoastalFlood": {
+    "standard": {
+      "basis": "We base this risk on local weather office water level forecasts.",
+      "levels": {
+        "0": {
+          "label": "None",
+          "description": "No Coastal Flooding risk."
+        },
+        "1": {
+          "label": "Minor",
+          "description": "Minor Coastal Flooding expected."
+        },
+        "2": {
+          "label": "Moderate",
+          "description": "Moderate Coastal Flooding expected."
+        },
+        "3": {
+          "label": "Major",
+          "description": "Major Coastal Flooding expected."
+        },
+        "4": {
+          "label": "Major",
+          "description": "Major Coastal Flooding expected with 2 to 3 feet or more of inundation expected. Flooding will extend well inland."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {
+          "LWX": {
+            "description": "No coastal flooding risk."
+          },
+          "PHI": {
+            "description": "No coastal flooding risk."
+          },
+          "MFL": {
+            "description": "No Coastal Flood Risk."
+          },
+          "TBW": {
+            "description": "No Coastal Flood Risk."
+          },
+          "JAX": {
+            "description": "No Coastal Flood Risk."
+          },
+          "MLB": {
+            "description": "No Coastal Flood Risk."
+          }
+        },
+        "1": {
+          "AKQ": {
+            "label": "Nuisance",
+            "description": "Nuisance Shallow Flooding only in the most vulnerable locations. Expect around a half foot of inundation."
+          },
+          "OKX": {
+            "description": "Minor Coastal Flooding expected. 1 to 2 feet of inundation in shoreline and vulnerable areas. A few shoreline and vulnerable roadways and adjacent properties will experience shallow flooding. There is a low threat of property damage. There is no direct threat to life."
+          },
+          "LWX": {
+            "description": "Minor coastal flooding possible."
+          },
+          "PHI": {
+            "description": "Minor coastal flooding possible."
+          },
+          "MFL": {
+            "description": "Minor and/or isolated coastal inundation possible, mainly near times of high tide. Minor inundation of most vulnerable locations."
+          },
+          "TBW": {
+            "description": "Minor and/or isolated coastal inundation possible, mainly near times of high tide. Minor inundation of most vulnerable locations."
+          },
+          "JAX": {
+            "description": "Minor and/or isolated coastal inundation possible, mainly near times of high tide. Minor inundation of most vulnerable locations."
+          },
+          "MLB": {
+            "description": "Minor and/or isolated coastal inundation possible, mainly near times of high tide. Minor inundation of most vulnerable locations."
+          }
+        },
+        "2": {
+          "AKQ": {
+            "label": "Minor",
+            "description": "Minor Coastal Flooding expected with up to 1 foot of inundation possible in vulnerable locations."
+          },
+          "OKX": {
+            "description": "Moderate Coastal Flooding expected. 2 to 3 feet of inundation in shoreline and vulnerable areas. There is an elevated threat of property damage, with a risk to life if one places themselves in unnecessary danger. Several shoreline and vulnerable area homes and businesses will experience water inside. Several low-lying coastal and shoreline roads will be closed. A few cars may take on water or even be destroyed."
+          },
+          "LWX": {
+            "description": "Moderate coastal flooding possible."
+          },
+          "PHI": {
+            "description": "Moderate coastal flooding possible."
+          },
+          "MFL": {
+            "description": "Considerable coastal inundation possible, affecting some streets and neighborhoods."
+          },
+          "TBW": {
+            "description": "Considerable coastal inundation possible, affecting some streets and neighborhoods."
+          },
+          "JAX": {
+            "description": "Considerable coastal inundation possible, affecting some streets and neighborhoods."
+          },
+          "MLB": {
+            "description": "Considerable coastal inundation possible, affecting some streets and neighborhoods."
+          }
+        },
+        "3": {
+          "AKQ": {
+            "label": "Moderate",
+            "description": "Moderate Coastal Flooding expected with 1 to 2 feet of inundation expected. Water will extend inland from the waterfront."
+          },
+          "OKX": {
+            "description": "Major Coastal Flooding expected. 3 to 5+ feet of inundation in shoreline and vulnerable areas, with 1 to 3 feet of inundation in surrounding coastal communities that rarely experience coastal flooding. Evacuations will be necessary for shoreline and vulnerable coastal areas due to a life threatening flooding threat. Many coastal communities will experience damage, with some shoreline and flood prone homes and businesses being destroyed. Many cars will likely be submerged or washed away. Several sections of nearshore roads and escape routes will be impassable and a few could be washed out. Flood waters may extend well inland in low lying areas."
+          },
+          "LWX": {
+            "description": "Major coastal flooding possible."
+          },
+          "PHI": {
+            "description": "Major coastal flooding possible."
+          },
+          "MFL": {
+            "description": "Significant to major coastal inundation possible, leading to street closures and flooding of entire neighborhoods."
+          },
+          "TBW": {
+            "description": "Significant to major coastal inundation possible, leading to street closures and flooding of entire neighborhoods."
+          },
+          "JAX": {
+            "description": "Significant to major coastal inundation possible, leading to street closures and flooding of entire neighborhoods."
+          },
+          "MLB": {
+            "description": "Significant to major coastal inundation possible, leading to street closures and flooding of entire neighborhoods."
+          }
+        },
+        "4": {}
+      }
+    }
+  },
+  "RipRisk": {
+    "standard": {
+      "basis": "We base this risk on local weather office rip current risk forecasts. These consider swell height/period, wind speed/direction, and other parameters.",
+      "levels": {
+        "0": {
+          "label": "Low",
+          "description": "The risk for rip currents is low, however, life-threatening rip currents often occur in the vicinity of groins, jetties, and piers."
+        },
+        "1": {
+          "label": "Low",
+          "description": "The risk of rip currents is low, however, life threatening rip currents may still occur especially near groins, jetties, reefs, and piers."
+        },
+        "2": {
+          "label": "Moderate",
+          "description": "Life-threatening rip currents are possible in the surf zone."
+        },
+        "3": {
+          "label": "High",
+          "description": "Life-threatening rip currents are likely in the surf zone."
+        }
+      }
+    },
+    "custom": {
+      "basis": {},
+      "levels": {
+        "0": {},
+        "1": {
+          "SJU": {
+            "description": "The risk of rip currents is low. Isolated stronger rip currents may occur.  <br><b>ESPAÑOL:</b> El riesgo de corrientes marinas es bajo. Corrientes marinas fuertes aisladas pudieran ocurrir."
+          },
+          "TAE": {
+            "description": "The risk for rip currents is low, however, life-threatening rip currents often occur in the vicinity of groins, jetties, and piers."
+          },
+          "BRO": {
+            "description": "The risk for rip currents is low, however, life-threatening rip currents often occur in the vicinity of groins, jetties, and piers."
+          }
+        },
+        "2": {
+          "SJU": {
+            "description": "Life-threatening rip currents are possible in the surf zone. <br><b>ESPAÑOL:</b> Corrientes marinas amenazantes a vida son posibles en las zonas de olas rompientes."
+          },
+          "MFL": {
+            "description": "There is an elevated/moderate risk of hazardous/life threatening rip currents. Always swim near a lifeguard and remember to heed the advice of the local beach patrol and flag warning systems."
+          },
+          "TBW": {
+            "description": "There is an elevated/moderate risk of hazardous/life threatening rip currents. Always swim near a lifeguard and remember to heed the advice of the local beach patrol and flag warning systems."
+          },
+          "JAX": {
+            "description": "There is an elevated/moderate risk of hazardous/life threatening rip currents. Always swim near a lifeguard and remember to heed the advice of the local beach patrol and flag warning systems."
+          },
+          "MLB": {
+            "description": "There is an elevated/moderate risk of hazardous/life threatening rip currents. Always swim near a lifeguard and remember to heed the advice of the local beach patrol and flag warning systems."
+          }
+        },
+        "3": {
+          "SJU": {
+            "description": "Life-threatening rip currents are likely in the surf zone. <br><b>ESPAÑOL:</b> Corrientes marinas amenazantes a vida son probables en las zonas de olas rompientes."
+          },
+          "MFL": {
+            "description": "There is a significant/high risk of hazardous/life threatening rip currents. Swimming is not recommended. Heed the advice of the local beach patrol and flag warning systems."
+          },
+          "TBW": {
+            "description": "There is a significant/high risk of hazardous/life threatening rip currents. Swimming is not recommended. Heed the advice of the local beach patrol and flag warning systems."
+          },
+          "JAX": {
+            "description": "There is a significant/high risk of hazardous/life threatening rip currents. Swimming is not recommended. Heed the advice of the local beach patrol and flag warning systems."
+          },
+          "MLB": {
+            "description": "There is a significant/high risk of hazardous/life threatening rip currents. Swimming is not recommended. Heed the advice of the local beach patrol and flag warning systems."
+          }
+        }
+      }
+    }
+  }
+}

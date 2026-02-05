@@ -1,0 +1,89 @@
+{% comment %}
+This template expects two variables available to it:
+- content: The full object created from the daily forecast block
+- dayIndex: The index of the day currently being rendered within
+the content
+{% endcomment %}
+<button class="wx-quick-toggle-item bg-white flex-align-center display-flex flex-wrap width-full padding-105"
+        id="{{ dayId }}-quick-forcast-button"
+        role="button"
+        aria-controls="daily-content-{{ itemId }}"
+        aria-expanded="false">
+  <div class="wx-quick-toggle-item-top display-flex flex-1 flex-justify flex-align-center text-primary-darker font-mono-sm">
+    <time class="text-align-left flex-1 text-primary-dark"
+          datetime="{{ periods.0.start }}"
+          aria-label="{{ periods.0.dayName }}">
+      <span>
+        {% if first %}
+          {% trans "daily-forecast.labels.today.01" %},
+        {% else %}
+          {{ periods.0.start|datetime|date:"l" }}
+        {% endif %}
+      </span>
+      <span class="display-block">{{ periods.0.start|datetime|date:"m/d" }}</span>
+    </time>
+    <div class="wx-quick-toggle-condition flex-1">
+      <span class="usa-sr-only">
+        {% trans_with_args "daily-forecast.aria.condition.01" description=periods.0.data.description %}
+      </span>
+      {% if alerts.metadata.count %}
+        <span class="usa-sr-only">
+          {% if alerts.metadata.count > 1 %}
+            {% trans "alerts.aria.multiple-alert.01" %}
+          {% else %}
+            {% trans "alerts.aria.one-alert.01" %}
+          {% endif %}
+        </span>
+      {% endif %}
+      {% if hasAlertIcon %}
+        <svg role="img"
+             aria-hidden="true"
+             class="wx-alert-icon"
+             data-alert-level="{{ alerts.metadata.highest }}">
+          <use xlink:href="{% static 'images/uswds/sprite.svg' %}#warning"></use>
+        </svg>
+      {% endif %}
+      {% weather_icon periods.0.data.icon.base size="sm" color_mode="light" class="wx-alert-icon" aria_hidden="true" %}
+    </div>
+    <div class="wx-quick-toggle-item-high-low display-flex flex-1 text-primary-darker">
+      {% if isNightPeriod %}
+        <span class="usa-sr-only">{% trans "daily-forecast.aria.high-not-applicable.01" %}</span>
+        <div aria-hidden="true" class="wx-quick-high">
+          <span class="wx-quick-temp display-block">{% trans "abbreviations.not-applicable.01" %}</span>
+        </div>
+      {% else %}
+        <span class="usa-sr-only">{% trans_with_args "daily-forecast.aria.high-of.01" degrees=high %}</span>
+        <div aria-hidden="true" class="wx-quick-high">
+          <span class="wx-quick-temp display-block">
+            {{ high }}<span class="wx-degree">&deg;F</span>
+          </span>
+        </div>
+      {% endif %}
+      <div class="wx-quick-low width-auto">
+        <span class="usa-sr-only">{% trans_with_args "daily-forecast.aria.low-of.01" degrees=low %}</span>
+        <span aria-hidden="true" class="wx-quick-temp display-block">
+          {{ low }}<span class="wx-degree">&deg;F</span>
+        </span>
+      </div>
+    </div>
+    <span class="wx-toggler-add-icon usa-icon--size-3 display-block tablet:display-none text-primary">
+      <svg class="usa-icon usa-icon--size-3"
+           aria-hidden="true"
+           focusable="false"
+           role="img">
+        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#add_circle"></use>
+      </svg>
+    </span>
+  </div>
+  <div class="wx-quick-toggle-item-bottom wx-flex-basis-100 mobile-lg__wx-flex-basis-auto width-full flex-1 tablet:width-auto text-primary-darker">
+    <span>{% trans_with_args "daily-forecast.text.chance-precip.02" percent=pop %}</span>
+  </div>
+  <span class="wx-toggler-add-icon usa-icon--size-3 display-none tablet:display-block desktop:display-none text-primary">
+    <svg class="usa-icon usa-icon--size-3"
+         aria-hidden="true"
+         focusable="false"
+         role="img">
+      <use xlink:href="{% static 'images/uswds/sprite.svg' %}#add_circle"></use>
+    </svg>
+  </span>
+</button>

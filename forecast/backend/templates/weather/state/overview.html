@@ -1,0 +1,13 @@
+{% extends "weather/page.html" %}
+{% block page_content %}
+  <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+    <h1>{{ state.name }}</h1>
+    <ul>
+      {% for county in state.counties.all %}
+        <li>
+          <a href="{% url 'county_overview' countyfips=county.countyfips %}">{{ county.countyname }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "weather/page.html" %}
+{% block page_content %}
+  {# djlint:off #}
+  {%comment%}
+
+  This template is rendered when a point location is within the bounds of the
+  United States but its forecast data is not available in the API. It receives the
+  following variables:
+
+  alerts:
+    .items    - A list of all alerts that apply to the given location. While
+                      we might not have forecast data, we might still have alerts.
+
+  place:
+    .name       - The name of the nearest place to this point
+    .state      - The 2-letter abbreviation for the territory or state
+    .statename  - The full name of the state or territory
+    .county     - The county name where the place is (or county-equivalent)
+    .timezone   - The timezone of the place
+    .statefips  - 2-digit state FIPS code
+    .countyfips - 5-digit county FIPS code
+    .fullName   - Concatenated place and state, suitable for showing to people
+
+  point:
+    latitude  - Just exactly what you think it is.
+    longitude - Also exactly what you think it is.
+
+  error  - True, if we're here.
+  status - The HTTP status from the API
+  reason - A coded string indicating why we have this error. If we're here, this
+           value is "not-supported"
+
+  TODO: Show alerts if there are any!
+
+  {% endcomment %}
+  {# djlint:on #}
+  <div class="grid-container margin-bottom-5">
+    <h1>{{ "error.404.not-supported.message.01" | t }}</h1>
+    <p>
+      {% if place %}<strong>{{ place.fullName }}</strong>{% endif %}
+      {{ "error.404.not-supported.description.01" | t }}
+    </p>
+  </div>
+{% endblock %}

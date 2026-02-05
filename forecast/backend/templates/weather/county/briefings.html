@@ -1,0 +1,43 @@
+<h2 class="text-normal text-primary-dark">
+  {% translate_plural_with_args "county.briefing.header.01" data.briefings|length %}
+</h2>
+<div class="grid-col-12" id="briefing-container">
+  {% if data.briefings|length %}
+    {% for briefing in data.briefings %}
+      <div class="grid-container padding-x-0">
+        <div class="grid-row">
+          {% if data.briefings|length > 1 %}<h3 class="text-normal text-primary">{{ briefing.wfo.name }}</h3>{% endif %}
+        </div>
+        <div class="grid-row font-family-mono">
+          <div class="grid-col-12 display-inline-block tablet:grid-col-auto text-uppercase margin-right-1">
+            {# djlint:off #}
+                  {# This is ugly, but we don't want any whitespace between the text and the colon #}
+                  {% if briefing.updated %}{{ "county.briefing.updated.01" | t }}{% else %}{{ "county.briefing.created.01" | t}}{% endif %}<span class="display-none tablet:display-inline">:</span>
+            {# djlint:on #}
+          </div>
+          <div class="grid-col-auto display-inline-block">
+            {% if briefing.report.updated %}
+              <time datetime="{{ briefing.updated.timestamp }}">
+                {{ briefing.updated.human }}
+              </time>
+            {% else %}
+              <time datetime="{{ briefing.report.created.timestamp }}">
+                {{ briefing.created.human }}
+              </time>
+            {% endif %}
+          </div>
+        </div>
+        <div class="grid-col-12 margin-top-1">
+          <svg role="img"
+               class="usa-icon width-3 height-3 text-primary"
+               aria-hidden="true">
+            <use xlink:href="{% static 'images/uswds/sprite.svg' %}#file_download"></use>
+          </svg>
+          <a href="{{ briefing.report.pdf.url }}" class="usa-link">{{ "county.briefing.download-one.01" | t }}</a>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    No recent briefing available
+  {% endif %}
+</div>

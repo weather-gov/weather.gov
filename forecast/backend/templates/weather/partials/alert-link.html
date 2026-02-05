@@ -1,0 +1,26 @@
+{% comment %}
+# Expected inputs:
+# - alertID        - the ID used to link to this specific alert, or null to link
+# to the alerts tab
+# - alertType      - the event type, such as "Severe Thunderstorm Warning"
+# - alertLevel - the severity level of the event type, such as "Warning"
+{% endcomment %}
+{% if alertCount > 0 %}
+  <div class="wx-alert-link wx-alert-link--{{ alertLevel|lower }} display-flex flex-align-start">
+    <div class="maxw-3 height-3 margin-right-05">
+      <svg role="img" aria-hidden="true" class="width-full height-full">
+        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#warning"></use>
+      </svg>
+    </div>
+    <a
+      {% comment %}
+        Table cells have a set line height. Set our own line height so that we
+        know what we're working with. The margin nudges the text down a bit so it
+        vertically aligns with the icon.
+      {% endcomment %}
+      class="line-height-sans-2 margin-top-05"
+      href="#{% if alertID == null %}alerts{% else %}alert_{{ alertID }}{% endif %}">
+      {{ alertType }}
+    </a>
+  </div>
+{% endif %}

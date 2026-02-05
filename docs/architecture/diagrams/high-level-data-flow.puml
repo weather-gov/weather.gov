@@ -1,0 +1,26 @@
+@startuml weather.gov system deployment
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+title weather.gov high-level data flow
+skinparam linetype polyline
+HIDE_STEREOTYPE()
+
+AddElementTag("cms-dark", $bgColor="green",$fontColor="white")
+AddElementTag("cms-light", $bgColor="lightgreen",$fontColor="black")
+AddElementTag("code", $bgColor="#A33")
+
+System(api, "API data")
+System(cms, "Content-managed data", $tags="cms-dark")
+
+
+Container(interop, "interop layer")
+Container(django, "Django", $tags="code")
+
+Rel(api, interop, "")
+Rel(interop, django, "")
+Rel(cms, django, "")
+
+Container(templates, "templates", $tags="code")
+Rel(django, templates, "")
+
+@enduml

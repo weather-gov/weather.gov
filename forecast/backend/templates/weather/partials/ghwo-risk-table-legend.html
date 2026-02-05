@@ -1,0 +1,25 @@
+<div class="ghwo-risk-table-legend margin-top-2 font-mono-2xs"
+     aria-label="{{ 'ghwo.table.legend.label.01'|t }}">
+  <div class="display-flex flex-align-center margin-right-2 margin-top-2 margin-bottom-105">
+    <div class="ghwo-risk-legend-square" data-risk-level="0"></div>
+    <span>No risk</span>
+  </div>
+  <div class="display-flex flex-align-center" aria-hidden="true">
+    {% for i in '12345'|make_list %}
+      <div class="display-flex flex-align-center margin-right-2">
+        <div class="ghwo-risk-legend-square" data-risk-level="{{ i }}"></div>
+        {{ i }}
+      </div>
+    {% endfor %}
+  </div>
+  <dl class="margin-top-105 font-body-xs text-normal text-base-darker">
+    <dt class="display-inline">1:</dt>
+    <dd class="display-inline margin-left-0">
+      {{ 'ghwo.table.legend.low-risk.01'|t }} –
+    </dd>
+    <dt class="display-inline">5:</dt>
+    <dd class="display-inline margin-left-0">
+      {{ 'ghwo.table.legend.high-risk.01'|t }}
+    </dd>
+  </dl>
+</div>

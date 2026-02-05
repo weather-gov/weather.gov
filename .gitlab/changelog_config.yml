@@ -1,0 +1,9 @@
+---
+# tell GitLab how to understand our release tags
+tag_regex: '^v(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)-beta$'
+# set our categories to match what we used on GitHub
+categories:
+  major: "Major"
+  minor: "Minor"
+  patch: "Patch"
+  other: "Miscellaneous"

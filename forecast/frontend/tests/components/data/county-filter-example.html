@@ -1,0 +1,51 @@
+<wx-county-index-filter target="results-area">
+  <div id="input-area">
+    <wx-combo-box id="state-filter-combobox" items="[]"></wx-combo-box>
+    <input id="county-filter-input" />
+  </div>
+  <div id="results-area">
+    <!-- Example State: Virginia -->
+    <div data-state-abbrev="VA" data-state-name="Virginia" data-filter-by="state">
+      <li data-county-name="garak" data-filter-by="county">
+        Garak County, VA
+      </li>
+      <li data-county-name="odo" data-filter-by="county">
+        Odo County, VA
+      </li>
+      <li data-county-name="sisko" data-filter-by="county">
+        Sisko County, VA
+      </li>
+    </div>
+    <!-- End Virginia -->
+
+    <!-- Example State: Alaska -->
+    <div data-state-abbrev="AK" data-state-name="Alaska" data-filter-by="state">
+      <li data-county-name="blizzard" data-filter-by="county">
+        Blizzard County, AK
+      </li>
+      <li data-county-name="flurries" data-filter-by="county">
+        Flurries County, AK
+      </li>
+      <li data-county-name="snow" data-filter-by="county">
+        Snow County, AK
+      </li>
+    </div>
+    <!-- End Alaska -->
+
+    <!-- Example State: Texas -->
+    <div data-state-abbrev="TX" data-state-name="Texas" data-filter-by="state">
+      <ul>
+        <li data-county-name="aardvark" data-filter-by="county">
+          Aardvark County, TX
+        </li>
+        <li data-county-name="elephant" data-filter-by="county">
+          Elephant County, TX
+        </li>
+        <li data-county-name="zebra" data-filter-by="county">
+          Zebra County, TX
+        </li>
+      </ul>
+    </div>
+    <!-- End Texas -->
+  </div>
+</wx-county-index-filter>

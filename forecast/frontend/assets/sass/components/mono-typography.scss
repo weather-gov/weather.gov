@@ -1,0 +1,25 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+.wx-mono-h2 {
+  @include u-font-family("mono");
+  @include u-text("bold");
+
+  font-size: 1.375rem;
+  color: color("primary-darker");
+}
+
+.wx-mono-h3 {
+  @include u-font-family("mono");
+  @include u-text("bold");
+
+  font-size: 1.125rem;
+  color: color("primary-dark");
+}
+
+.wx-mono-lg {
+  @include u-font-family("mono");
+
+  font-size: 1.125rem;
+}

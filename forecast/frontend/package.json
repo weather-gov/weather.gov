@@ -1,0 +1,21 @@
+{
+  "name": "new_weather_theme",
+  "version": "1.0.0",
+  "description": "new_weather_theme theme, generated from starterkit_theme. Additional information on generating themes can be found in the [Starterkit documentation](https://www.drupal.org/docs/core-modules-and-themes/core-themes/starterkit-theme).",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@uswds/uswds": "^3.8.1"
+  },
+  "devDependencies": {
+    "@uswds/compile": "^1.1.0",
+    "esbuild": "^0.23.1",
+    "js-yaml": "^4.1.0",
+    "sass": "^1.77.8"
+  }
+}

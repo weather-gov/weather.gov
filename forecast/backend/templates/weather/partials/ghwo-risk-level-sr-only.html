@@ -1,0 +1,22 @@
+{% comment %}
+Render more descriptive risk level text for screenreaders for GHWO
+summary table cells.
+The include statement expects a single variable level_num, which is an int
+corresponding to the level.
+We are using control flow below because it's not possible to dynamically
+create strings for translation keys using the django templates (plus we should
+be explicit)
+{% endcomment %}
+<span class="usa-sr-only">
+  {% if level_num == 1 %}
+    {{ "ghwo.summary.levels.sr-labels.1.01" | t}}
+  {% elif level_num == 2 %}
+    {{ "ghwo.summary.levels.sr-labels.2.01" | t}}
+  {% elif level_num == 3 %}
+    {{ "ghwo.summary.levels.sr-labels.3.01" | t}}
+  {% elif level_num == 4 %}
+    {{ "ghwo.summary.levels.sr-labels.4.01" | t}}
+  {% elif level_num == 5 %}
+    {{ "ghwo.summary.levels.sr-labels.5.01" | t}}
+  {% endif %}
+</span>

@@ -1,0 +1,4 @@
+<svg {% if has_attrs %}{% for key, val in attrs.items %}{{ key }}="{{ val }}"{% endfor %}
+     {% endif %}>
+  <use xlink:href="{% static 'images/spritesheet.svg' %}#{{ icon_name }}"></use>
+</svg>

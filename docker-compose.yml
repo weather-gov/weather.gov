@@ -1,0 +1,177 @@
+name: weathergov-django
+
+volumes:
+  postgres_data:
+
+services:
+  database:
+    platform: linux/amd64
+    image: postgis/postgis:17-3.5
+    networks:
+      - weather.gov
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: drupal
+      POSTGRES_PASSWORD: drupal
+      POSTGRES_DB: weathergov
+    ports:
+      - 5432:5432
+
+  web:
+    build:
+      context: forecast/
+      dockerfile: Dockerfile.dev
+    command: python manage.py runserver 0.0.0.0:8080
+    volumes:
+      - ./forecast:/code
+    ports:
+      - 8080:8080
+      - 34235:34235
+    environment:
+      POSTGRES_DB: weathergov
+      POSTGRES_USER: drupal
+      POSTGRES_PASSWORD: drupal
+      INTEROP_URL: "http://api-interop-layer:8082/"
+      API_URL: "http://api-proxy:8081/"
+      GHWO_URL: "http://api-proxy:8081/"
+      DEBUG_PORT: 34235
+      DJANGO_SETTINGS_MODULE: backend.config.settings.dev
+    networks:
+      - weather.gov
+    depends_on:
+      - database
+      - api-proxy
+      - api-interop-layer
+    links:
+      - database
+
+  api-proxy:
+    build:
+      context: ./api-proxy
+      dockerfile: Dockerfile.dev
+    environment:
+      WX_NOW_TIMESTAMP: ${WX_NOW_TIMESTAMP:-}
+    networks:
+      - weather.gov
+    ports:
+      - 8081:8081
+      - 9230:9230
+    volumes:
+      - ./api-proxy:/app
+      - /app/node_modules
+
+  api-interop-layer:
+    build:
+      context: ./api-interop-layer
+      dockerfile: Dockerfile.dev
+    # Use the same resource limits as deployed
+    deploy:
+      resources:
+        limits:
+          memory: 256MB
+    environment:
+      PORT: 8082
+      DB_NAME: weathergov
+      DB_USERNAME: drupal
+      DB_PASSWORD: drupal
+      DB_HOST: database
+      DB_PORT: 5432
+      API_URL: ${API_URL:-http://api-proxy:8081}
+      GHWO_URL: ${GHWO_URL:-https://www.weather.gov}
+      API_KEY: ${API_KEY:-}
+      API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY:-}
+      LOG_LEVEL: trace
+      # TRUNCATE_HAZARD_OUTLOOKS: "true"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ixu3N02Xp3uRPDcuZCmKIWZyNb
+    networks:
+      - weather.gov
+    links:
+      - database
+      - api-proxy
+    ports:
+      - 8082:8082
+      - 9229:9229
+    volumes:
+      - ./api-interop-layer:/app
+      - /app/node_modules
+
+  uswds:
+    build:
+      context: ./
+      dockerfile: Dockerfile.uswds.dev
+    volumes:
+      - ./forecast/frontend/:/app
+      - /app/node_modules
+    profiles: ["utility"]
+
+  spatial:
+    build:
+      context: ./spatial-data
+      dockerfile: Dockerfile.spatial.dev
+    networks:
+      - weather.gov
+    links:
+      - database
+    environment:
+      DB_HOST: database
+    volumes:
+      - ./spatial-data/:/app
+      - /app/node_modules
+
+  playwright:
+    build:
+      dockerfile: Dockerfile.node
+      target: playwright
+    networks:
+      - weather.gov
+    depends_on:
+      - web
+      - api-proxy
+    links:
+      - web
+    volumes:
+      - ./tests/:/app/tests
+      - ./playwright.config.js:/app/playwright.config.js
+      - ./reports:/reports
+    environment:
+      API_URL: http://api-proxy:8081
+      GHWO_URL: http://api-proxy:8081
+      WEB_URL: http://web:8080
+      INTEROP_URL: http://api-interop-layer:8082
+    profiles: ["utility"]
+
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+      target: node
+    networks:
+      - weather.gov
+    volumes:
+      - ./reports:/reports
+      - /app/node_modules
+    profiles: ["utility"]
+
+  plantuml:
+    image: plantuml/plantuml-server:tomcat
+    ports:
+      - 8180:8080
+    profiles: ["utility"]
+
+  redis:
+    image: redis:8.4-alpine
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server --save 20 1 --loglevel verbose --requirepass ixu3N02Xp3uRPDcuZCmKIWZyNb
+    volumes:
+      - ./redis-data:/redis-data
+    networks:
+      - weather.gov
+
+networks:
+  weather.gov:

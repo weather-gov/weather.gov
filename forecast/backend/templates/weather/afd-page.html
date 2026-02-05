@@ -1,0 +1,71 @@
+{% extends "weather/page.html" %}
+{% block page_head_js %}
+  <script type="module" src="{% static 'js/afd-page.html.js' %}" type="module"></script>
+{% endblock %}
+{% block page_content %}
+  <div class="layout-container grid-row height-full flex-column flex-no-wrap">
+    <header role="banner">
+      <div class="grid-container"></div>
+    </header>
+    <div class="bg-primary-dark width-full">
+      <div class="grid-container">
+        <h1 class="text-white font-heading-xl text-normal tablet:flex-1 margin-y-1">
+          {{ "afd.heading.area-forecast-discussion.01" | t }}
+        </h1>
+      </div>
+    </div>
+    <wx-afd-selector
+    {% if wfo is not None %}wfo="{{ wfo }}"{% endif %}
+    class="grid-container width-full">
+    <div class="grid-row grid-gap">
+      <div class="grid-col-12 desktop:grid-col-4 desktop:margin-top-205">
+        <form id="afd-selection-form"
+              name="afd-selection-form"
+              class="bg-primary-lightest padding-x-2 padding-y-3 border-bottom-2px border-primary desktop__wx-position-sticky margin-x-neg-2"
+              method="get"
+              action="/afd">
+          <label for="wfo-selector" class="usa-label margin-top-0">{{ "afd.label.forecast-office.01" | t }}</label>
+          <wx-combobox tabindex="0" id="combobox-afd-wfo">
+          <input id="wfo-selector"
+                 name="wfo-label"
+                 data-value-for="wfo"
+                 type="text"
+                 slot="input" />
+          <input type="hidden" name="wfo" value="{{ wfo }}" />
+          <button type="button" class="empty" aria-label="{{ "afd.aria.clear-input-box.01" | t }}" slot="clear-button">&nbsp;</button>
+          <button type="button"
+                  aria-label="{{ "afd.aria.toggle-dropdown.01" | t }}"
+                  slot="toggle-button">&nbsp;</button>
+          <wx-filterable-listbox slot="popup" id="combobox-afd-wfo--list" role="listbox">
+          {% with wfo_list|length as wfo_count %}
+            {% for wfo in wfo_list %}
+              <div role="option"
+                   id="combobox-afd-wfo--{{ wfo.value }}-{{ forloop.counter0 }}"
+                   data-value="{{ wfo.value }}"
+                   aria-selected="{{ wfo.selected|lower }}">{{ wfo.text }}</div>
+            {% endfor %}
+          {% endwith %}
+          </wx-filterable-listbox>
+          </wx-combobox>
+          {% if version_list|length > 0 %}
+            <label for="version-selector" class="usa-label">{% trans_with_args "afd.label.versions.01" wfo_name=wfo %}</label>
+            <select id="version-selector"
+                    name="id"
+                    class="usa-select maxw-none tablet:maxw-mobile-lg">
+              {% include "weather/wx/afd-versions-select.html" %}
+            </select>
+          {% endif %}
+          <input type="hidden" name="current-id" value="{{ afd.id }}" />
+          <input type="hidden" name="current-wfo" value="{{ wfo }}" />
+          <button class="usa-button margin-top-3" type="submit">{{ "afd.button.update-selection.01" | t }}</button>
+        </form>
+      </div>
+      <div class="afd-content-section grid-col-12 desktop:grid-col-8">
+        {% if afd is not None %}
+          {% include 'weather/wx/afd.html' %}
+        {% endif %}
+      </div>
+    </div>
+    </wx-afd-selector>
+  </div>
+{% endblock %}

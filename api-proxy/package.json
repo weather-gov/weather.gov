@@ -1,0 +1,19 @@
+{
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "npx --no-install -p pm2 pm2-runtime start ecosystem.config.cjs"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.10",
+    "express": "^5.0.1",
+    "glob": "^11.0.0",
+    "mustache": "^4.2.0",
+    "pino": "^10.3.0",
+    "pm2": "^5.4.3",
+    "prettier": "^3.2.0"
+  },
+  "devDependencies": {
+    "pino-pretty": "^13.1.3"
+  }
+}

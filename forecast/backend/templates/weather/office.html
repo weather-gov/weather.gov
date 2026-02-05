@@ -1,0 +1,190 @@
+{% extends "weather/page.html" %}
+{% block page_content %}
+  <div class="wx-wfo-info margin-bottom-10">
+    {% if content.field_wfo_image is not empty %}
+      <div class="wx-wfo-image grid-container padding-0 tablet:padding-x-2 desktop:padding-x-4">
+        {{ content.field_wfo_image }}
+      </div>
+    {% endif %}
+    <div class="grid-container">
+      <h1 class="text-normal text-primary-darker desktop:margin-bottom-3">
+        {% trans_with_args "wfo-info.labels.wfo.01" wfoName=office.name wfoCode=office.code %}
+      </h1>
+      <div class="grid-row grid-gap">
+        {% if office.about %}
+          <div class="grid-col-12 tablet:grid-col-4">
+            <h2 class="font-sans-xl text-normal text-primary-darker margin-top-0">{{ "wfo-info.labels.about.01" | t }}</h2>
+            {{ office.about | safe }}
+          </div>
+        {% endif %}
+        <div class="grid-col-12{% if office.about %} tablet:grid-col-8{% endif %}">
+          <figure class="margin-0">
+            <img src="{% static 'images/wfos/'|add:office.code|add:'.png' %}" alt="">
+            <figcaption class="font-sans-xs">
+              {% trans_with_args "wfo-info.caption.coverage-area-map.01" wfo=office.name %}
+              <p class="usa-sr-only">{% trans_with_args "wfo-info.caption+aria.coverage-area-map.01" counties=counties %}</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+      {# TODO: This is all placeholder stuff. When it comes out in favor of real stuff, make sure we add things to the translations list appropriately. #}
+      <div class="grid-row">
+        <div class="grid-col-12 tablet:grid-col-6">
+          <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
+            {{ "wfo-info.heading.local-expertise.01" | t }}
+          </h2>
+          <p>{{ "Decision support is description tk tk" | t }}</p>
+          <ul class="margin-bottom-0 padding-left-2">
+            <li class="padding-y-05">
+              <a class="usa-link" href="#">{{ "Briefing tk tk" | t }}</a>
+            </li>
+            <li class="padding-y-05">
+              <a class="usa-link" href="#">{{ "County finder tk tk" | t }}</a>
+            </li>
+            <li class="padding-y-05">
+              <a class="usa-link" href="#">{{ "State page tk tk" | t }}</a>
+            </li>
+            <li class="padding-y-05">
+              <a class="usa-link" href="#">{{ "Resource 1 tk tk" | t }}</a>
+            </li>
+            <li class="padding-y-05">
+              <a class="usa-link" href="#">{{ "Resource 2 tk tk" | t }}</a>
+            </li>
+            <li class="padding-y-05">
+              <a class="usa-link" href="#">{{ "Resource 3 tk tk" | t }}</a>
+            </li>
+          </ul>
+        </div>
+        <div class="grid-col-12 tablet:grid-col-6">
+          <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
+            {{ "wfo-info.heading.forecast-discussion.01" | t }}
+          </h2>
+          <p>{{ "wfo-info.text.forecast-discussion.01" | t }}</p>
+          <a class="usa-link" href="/afd/{{ office.code|lower }}">{{ "wfo-info.link.area-forecast-discussion" | t }}</a>
+        </div>
+      </div>
+      {% if office.has_contact %}
+        <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker margin-bottom-0 padding-top-105 margin-top-4">
+          {{ "wfo-info.heading.contact-us.01" | t }}
+        </h2>
+        <div class="grid-row margin-top-2">
+          {% if office.has_first_pane %}
+            <address class="grid-col-12 tablet:grid-col-4">
+              {% if office.phone %}
+                {% comment %}
+          # Taken from
+          # web/themes/new_weather_theme/templates/field/field--node--field-phone-number-opt.html.twig
+                {% endcomment %}
+                <div class="wfo-phone">
+                  <span class="text-bold text-primary-darker">{{ "node.fields.labels.field_phone_number_opt.01" | t }}:</span>
+                  <a class="usa-link" href="tel:{{ office.phone }}">{{ office.phone }}</a>
+                </div>
+              {% endif %}
+              {% if office.email %}
+                {% comment %}
+          # Taken from
+          # web/themes/new_weather_theme/templates/field/field--node--field-wfo_email.html.twig
+                {% endcomment %}
+                <div class="wfo-email{% if office.phone %} margin-top-105{% endif %}">
+                  <span class="text-bold text-primary-darker">{{ "node.fields.labels.field_wfo_email.01" | t }}:</span>
+                  <a class="usa-link" href="mailto:{{ office.email }}">{{ office.email }}</a>
+                </div>
+              {% endif %}
+              {% if office.address %}
+                {% comment %}
+          # Taken from
+          # web/themes/new_weather_theme/templates/field/field--node--field-address.html.twig
+                {% endcomment %}
+                <div class="wfo-address{% if office.phone or office.address %} margin-top-105{% endif %}">
+                  <span class="text-bold text-primary-darker">{{ "node.fields.labels.field_address.01" | t }}:</span>
+                  <span class="text-pre-line line-height-sans-3">{{ office.address }}</span>
+                </div>
+              {% endif %}
+            </address>
+          {% endif %}
+          <div class="grid-col-12 tablet:grid-col-8 {% if office.has_first_pane %}margin-top-2 tablet:margin-top-0{% endif %}">
+            {% if office.has_social %}
+              <ul class="usa-list usa-list--unstyled">
+                {% if office.facebook %}
+                  {% comment %}
+            # Taken from
+            # web/themes/new_weather_theme/templates/field/field--node--field-facebook-url.html.twig
+                  {% endcomment %}
+                  <li class="li-margin-bottom-2">
+                    <a href="{{ office.facebook }}"
+                       class="usa-link display-flex flex-align-center">
+                      <svg class="usa-icon usa-icon--size-3 text-primary-darker margin-right-1 margin-top-neg-2px"
+                           aria-hidden="true"
+                           focusable="false"
+                           role="img">
+                        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#facebook"></use>
+                      </svg>
+                      <span>{{ "wfo.labels.facebook.01" | t }}</span>
+                      <span class="usa-sr-only">, external link</span>
+                      <svg class="margin-left-05 usa-icon"
+                           aria-hidden="true"
+                           focusable="false"
+                           role="img">
+                        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#launch"></use>
+                      </svg>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if office.twitter %}
+                  {% comment %}
+            # Taken from
+            # web/themes/new_weather_theme/templates/field/field--node--field-twitter-url.html.twig
+                  {% endcomment %}
+                  <li class="li-margin-bottom-2">
+                    <a href="{{ office.twitter }}"
+                       class="usa-link display-flex flex-align-center">
+                      <svg class="usa-icon usa-icon--size-3 text-primary-darker margin-right-1 margin-top-neg-2px"
+                           aria-hidden="true"
+                           focusable="false"
+                           role="img">
+                        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#x"></use>
+                      </svg>
+                      <span>{{ "wfo.labels.twitter.01" | t }}</span>
+                      <span class="usa-sr-only">, external link</span>
+                      <svg class="margin-left-05 usa-icon"
+                           aria-hidden="true"
+                           focusable="false"
+                           role="img">
+                        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#launch"></use>
+                      </svg>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if office.youtube %}
+                  {% comment %}
+            # Taken from
+            # web/themes/new_weather_theme/templates/field/field--node--field-youtube-url.html.twig
+                  {% endcomment %}
+                  <li class="li-margin-bottom-2">
+                    <a href="{{ office.youtube }}"
+                       class="usa-link display-flex flex-align-center">
+                      <svg class="usa-icon usa-icon--size-3 text-primary-darker margin-right-1 margin-top-neg-2px"
+                           aria-hidden="true"
+                           focusable="false"
+                           role="img">
+                        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#youtube"></use>
+                      </svg>
+                      <span>{{ "wfo.labels.youtube.01" | t }}</span>
+                      <span class="usa-sr-only">, external link</span>
+                      <svg class="margin-left-05 usa-icon"
+                           aria-hidden="true"
+                           focusable="false"
+                           role="img">
+                        <use xlink:href="{% static 'images/uswds/sprite.svg' %}#launch"></use>
+                      </svg>
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

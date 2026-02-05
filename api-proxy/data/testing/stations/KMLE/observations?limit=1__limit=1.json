@@ -1,0 +1,127 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/KMLE/observations/2024-12-03T02:55:00+00:00",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-96.11, 41.2] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KMLE/observations/2024-12-03T02:55:00+00:00",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 320 },
+        "station": "https://api.weather.gov/stations/KMLE",
+        "timestamp": "date:now -2804 seconds",
+        "rawMessage": "KMLE 030255Z AUTO 00000KT 10SM CLR M06/M10 A3059 RMK AO2 T10651105",
+        "textDescription": "Clear",
+        "icon": "https://api.weather.gov/icons/land/night/skc?size=medium",
+        "presentWeather": [],
+        "temperature": {
+          "unitCode": "wmoUnit:degC",
+          "value": -6.5,
+          "qualityControl": "V"
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -10.5,
+          "qualityControl": "V"
+        },
+        "windDirection": {
+          "unitCode": "wmoUnit:degree_(angle)",
+          "value": 0,
+          "qualityControl": "V"
+        },
+        "windSpeed": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": 0,
+          "qualityControl": "V"
+        },
+        "windGust": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "barometricPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": 103590,
+          "qualityControl": "V"
+        },
+        "seaLevelPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "visibility": {
+          "unitCode": "wmoUnit:m",
+          "value": 16090,
+          "qualityControl": "C"
+        },
+        "maxTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "minTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "precipitationLastHour": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "precipitationLast3Hours": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "precipitationLast6Hours": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 73.234416364605,
+          "qualityControl": "V"
+        },
+        "windChill": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "V"
+        },
+        "heatIndex": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "V"
+        },
+        "cloudLayers": [
+          {
+            "base": { "unitCode": "wmoUnit:m", "value": null },
+            "amount": "CLR"
+          }
+        ]
+      }
+    }
+  ]
+}

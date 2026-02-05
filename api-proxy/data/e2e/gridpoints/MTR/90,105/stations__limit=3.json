@@ -1,0 +1,711 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" },
+      "observationStations": { "@container": "@list", "@type": "@id" }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/KOAK",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.23294, 37.7177999] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KOAK",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 0.9144 },
+        "stationIdentifier": "KOAK",
+        "name": "Oakland, Metro Oakland International Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ508",
+        "county": "https://api.weather.gov/zones/county/CAC001",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ508"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/D3835",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.155, 37.85111] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/D3835",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 224.9424 },
+        "stationIdentifier": "D3835",
+        "name": "DW3835 Orinda",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ510",
+        "county": "https://api.weather.gov/zones/county/CAC013",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ510"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/SFOC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.42694, 37.77056] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/SFOC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 45.72 },
+        "stationIdentifier": "SFOC1",
+        "name": "SAN FRANCISCO DOWNTOWN",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ006",
+        "county": "https://api.weather.gov/zones/county/CAC075",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ006"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/LTRC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.06694, 37.8338899] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/LTRC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 536.448 },
+        "stationIdentifier": "LTRC1",
+        "name": "LAS TRAMPAS",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ515",
+        "county": "https://api.weather.gov/zones/county/CAC013",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ515"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KHWD",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.11833, 37.66083] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KHWD",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 14.0208 },
+        "stationIdentifier": "KHWD",
+        "name": "Hayward, Hayward Air Terminal",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ508",
+        "county": "https://api.weather.gov/zones/county/CAC001",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ508"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KSFO",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.36558, 37.61961] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KSFO",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 3.048 },
+        "stationIdentifier": "KSFO",
+        "name": "San Francisco, San Francisco International Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ508",
+        "county": "https://api.weather.gov/zones/county/CAC081",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ508"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/D7094",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.54833, 37.91333] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/D7094",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 57.912 },
+        "stationIdentifier": "D7094",
+        "name": "DW7094 Mill Valley",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ506",
+        "county": "https://api.weather.gov/zones/county/CAC041",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ506"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KCCR",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.05194, 37.99167] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KCCR",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 7.0104 },
+        "stationIdentifier": "KCCR",
+        "name": "Concord, Buchanan Field",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ510",
+        "county": "https://api.weather.gov/zones/county/CAC013",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ510"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/CQ062",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.23806, 38.1025] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/CQ062",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 29.8704 },
+        "stationIdentifier": "CQ062",
+        "name": "Vallejo",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ018",
+        "county": "https://api.weather.gov/zones/county/CAC095",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ218"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/PCOC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.0395, 38.056] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PCOC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 0 },
+        "stationIdentifier": "PCOC1",
+        "name": "Port Chicago",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/PZZ530"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KHAF",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.4996, 37.5135999] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KHAF",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 19.812 },
+        "stationIdentifier": "KHAF",
+        "name": "Half Moon Bay Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ509",
+        "county": "https://api.weather.gov/zones/county/CAC081",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ509"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/PIBC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.88444, 37.95] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PIBC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 487.68 },
+        "stationIdentifier": "PIBC1",
+        "name": "BLACK DIAMOND",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ515",
+        "county": "https://api.weather.gov/zones/county/CAC013",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ515"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KLVK",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.81444, 37.69278] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KLVK",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 121.0056 },
+        "stationIdentifier": "KLVK",
+        "name": "Livermore, Livermore Municipal Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ510",
+        "county": "https://api.weather.gov/zones/county/CAC001",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ510"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KDVO",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.55463, 38.14178] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KDVO",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 0.9144 },
+        "stationIdentifier": "KDVO",
+        "name": "Novato / Gnoss Field",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ506",
+        "county": "https://api.weather.gov/zones/county/CAC041",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ506"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KAPC",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.27944, 38.2075] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KAPC",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 10.0584 },
+        "stationIdentifier": "KAPC",
+        "name": "Napa, Napa County Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ506",
+        "county": "https://api.weather.gov/zones/county/CAC055",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ506"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/LOAC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.14167, 37.35472] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/LOAC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 164.2872 },
+        "stationIdentifier": "LOAC1",
+        "name": "LOS ALTOS",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ508",
+        "county": "https://api.weather.gov/zones/county/CAC085",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ508"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/LAHC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.25525, 37.30523] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/LAHC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 245.0592 },
+        "stationIdentifier": "LAHC1",
+        "name": "LA HONDA",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ512",
+        "county": "https://api.weather.gov/zones/county/CAC081",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ512"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KSJC",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.92417, 37.35917] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KSJC",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 17.9832 },
+        "stationIdentifier": "KSJC",
+        "name": "San Jose, San Jose International Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ513",
+        "county": "https://api.weather.gov/zones/county/CAC085",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ513"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KRHV",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.81667, 37.3333299] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KRHV",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 41.148 },
+        "stationIdentifier": "KRHV",
+        "name": "San Jose / Reid / Hillv",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ513",
+        "county": "https://api.weather.gov/zones/county/CAC085",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ513"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/LSGC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.95083, 37.20417] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/LSGC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 561.4416 },
+        "stationIdentifier": "LSGC1",
+        "name": "LOS GATOS",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ512",
+        "county": "https://api.weather.gov/zones/county/CAC085",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ512"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/BNDC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.17261, 37.13094] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/BNDC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 791.8704 },
+        "stationIdentifier": "BNDC1",
+        "name": "BEN LOMOND",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ512",
+        "county": "https://api.weather.gov/zones/county/CAC087",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ512"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/AR323",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.8242, 38.3803] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/AR323",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 70.104 },
+        "stationIdentifier": "AR323",
+        "name": "KF6YUA Sebastopol",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ506",
+        "county": "https://api.weather.gov/zones/county/CAC097",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ506"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KSTS",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.81667, 38.5] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KSTS",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 38.1 },
+        "stationIdentifier": "KSTS",
+        "name": "Santa Rosa, Santa Rosa Sonoma County Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ506",
+        "county": "https://api.weather.gov/zones/county/CAC097",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ506"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/AP803",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.01533, 36.98217] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/AP803",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 27.1272 },
+        "stationIdentifier": "AP803",
+        "name": "KE6AFE Santa Cruz",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ529",
+        "county": "https://api.weather.gov/zones/county/CAC087",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ529"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/C9585",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.96891, 36.97076] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/C9585",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 20.1168 },
+        "stationIdentifier": "C9585",
+        "name": "CW9585 Santa Cruz",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ529",
+        "county": "https://api.weather.gov/zones/county/CAC087",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ529"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/D1970",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-123.06867, 38.38217] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/D1970",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 102.4128 },
+        "stationIdentifier": "D1970",
+        "name": "DW1970 Bodega Bay",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ505",
+        "county": "https://api.weather.gov/zones/county/CAC097",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ505"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/CTOC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.80488, 36.99086] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/CTOC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 99.6696 },
+        "stationIdentifier": "CTOC1",
+        "name": "CORRALITOS",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ529",
+        "county": "https://api.weather.gov/zones/county/CAC087",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ529"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KWVI",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.78889, 36.93944] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KWVI",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 49.0728 },
+        "stationIdentifier": "KWVI",
+        "name": "Watsonville, Watsonville Municipal Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ529",
+        "county": "https://api.weather.gov/zones/county/CAC087",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ529"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KCVH",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.4103, 36.8933] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KCVH",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 69.7992 },
+        "stationIdentifier": "KCVH",
+        "name": "Hollister, CA",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ528",
+        "county": "https://api.weather.gov/zones/county/CAC069",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ528"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/HSEC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.36216, 36.8422] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/HSEC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 123.1392 },
+        "stationIdentifier": "HSEC1",
+        "name": "HOLLISTER",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ528",
+        "county": "https://api.weather.gov/zones/county/CAC069",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ528"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KSNS",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.60806, 36.66361] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KSNS",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 24.9936 },
+        "stationIdentifier": "KSNS",
+        "name": "Salinas, Salinas Municipal Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ528",
+        "county": "https://api.weather.gov/zones/county/CAC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ528"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KMRY",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.84875, 36.59047] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KMRY",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 50.9016 },
+        "stationIdentifier": "KMRY",
+        "name": "Monterey Regional Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ530",
+        "county": "https://api.weather.gov/zones/county/CAC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ530"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/CQ076",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.73333, 36.48194] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/CQ076",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 126.492 },
+        "stationIdentifier": "CQ076",
+        "name": "Carmel Valley-Ford Rd",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ528",
+        "county": "https://api.weather.gov/zones/county/CAC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ528"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/PPSC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.78015, 36.24536] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PPSC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 107.8992 },
+        "stationIdentifier": "PPSC1",
+        "name": "BIG SUR",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ530",
+        "county": "https://api.weather.gov/zones/county/CAC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ530"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/PCLC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.14728, 36.47075] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PCLC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 402.9456 },
+        "stationIdentifier": "PCLC1",
+        "name": "PINNACLES",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ518",
+        "county": "https://api.weather.gov/zones/county/CAC069",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ518"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/CI114",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.29, 36.359] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/CI114",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 71.628 },
+        "stationIdentifier": "CI114",
+        "name": "Arroyo Seco",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ516",
+        "county": "https://api.weather.gov/zones/county/CAC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ516"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/ASRC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.47988, 36.23548] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/ASRC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 267.9192 },
+        "stationIdentifier": "ASRC1",
+        "name": "ARROYO SECO",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ517",
+        "county": "https://api.weather.gov/zones/county/CAC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ517"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/FHLC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-121.24168, 36.01175] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/FHLC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 340.1568 },
+        "stationIdentifier": "FHLC1",
+        "name": "FORT HUNTER LIGGETT",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ517",
+        "county": "https://api.weather.gov/zones/county/CAC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ517"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/RBYC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-120.80298, 35.8644] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/RBYC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 163.6776 },
+        "stationIdentifier": "RBYC1",
+        "name": "BRADLEY",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ516",
+        "county": "https://api.weather.gov/zones/county/CAC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ516"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/PKFC1",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-120.43329, 35.89831] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PKFC1",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 464.82 },
+        "stationIdentifier": "PKFC1",
+        "name": "PARKFIELD",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/CAZ518",
+        "county": "https://api.weather.gov/zones/county/CAC053",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ518"
+      }
+    }
+  ],
+  "observationStations": [
+    "https://api.weather.gov/stations/KOAK",
+    "https://api.weather.gov/stations/D3835",
+    "https://api.weather.gov/stations/SFOC1",
+    "https://api.weather.gov/stations/LTRC1",
+    "https://api.weather.gov/stations/KHWD",
+    "https://api.weather.gov/stations/KSFO",
+    "https://api.weather.gov/stations/D7094",
+    "https://api.weather.gov/stations/KCCR",
+    "https://api.weather.gov/stations/CQ062",
+    "https://api.weather.gov/stations/PCOC1",
+    "https://api.weather.gov/stations/KHAF",
+    "https://api.weather.gov/stations/PIBC1",
+    "https://api.weather.gov/stations/KLVK",
+    "https://api.weather.gov/stations/KDVO",
+    "https://api.weather.gov/stations/KAPC",
+    "https://api.weather.gov/stations/LOAC1",
+    "https://api.weather.gov/stations/LAHC1",
+    "https://api.weather.gov/stations/KSJC",
+    "https://api.weather.gov/stations/KRHV",
+    "https://api.weather.gov/stations/LSGC1",
+    "https://api.weather.gov/stations/BNDC1",
+    "https://api.weather.gov/stations/AR323",
+    "https://api.weather.gov/stations/KSTS",
+    "https://api.weather.gov/stations/AP803",
+    "https://api.weather.gov/stations/C9585",
+    "https://api.weather.gov/stations/D1970",
+    "https://api.weather.gov/stations/CTOC1",
+    "https://api.weather.gov/stations/KWVI",
+    "https://api.weather.gov/stations/KCVH",
+    "https://api.weather.gov/stations/HSEC1",
+    "https://api.weather.gov/stations/KSNS",
+    "https://api.weather.gov/stations/KMRY",
+    "https://api.weather.gov/stations/CQ076",
+    "https://api.weather.gov/stations/PPSC1",
+    "https://api.weather.gov/stations/PCLC1",
+    "https://api.weather.gov/stations/CI114",
+    "https://api.weather.gov/stations/ASRC1",
+    "https://api.weather.gov/stations/FHLC1",
+    "https://api.weather.gov/stations/RBYC1",
+    "https://api.weather.gov/stations/PKFC1"
+  ],
+  "pagination": {
+    "next": "https://api.weather.gov/stations?id%5B0%5D=AP803&id%5B1%5D=AR323&id%5B2%5D=ASRC1&id%5B3%5D=BNDC1&id%5B4%5D=C4787&id%5B5%5D=C9585&id%5B6%5D=CI114&id%5B7%5D=CQ062&id%5B8%5D=CQ076&id%5B9%5D=CTOC1&id%5B10%5D=D1970&id%5B11%5D=D3150&id%5B12%5D=D3835&id%5B13%5D=D4201&id%5B14%5D=D7094&id%5B15%5D=D9961&id%5B16%5D=E0993&id%5B17%5D=FHLC1&id%5B18%5D=HSEC1&id%5B19%5D=KAPC&id%5B20%5D=KCCR&id%5B21%5D=KCVH&id%5B22%5D=KDVO&id%5B23%5D=KHAF&id%5B24%5D=KHWD&id%5B25%5D=KLVK&id%5B26%5D=KMRY&id%5B27%5D=KOAK&id%5B28%5D=KRHV&id%5B29%5D=KSFO&id%5B30%5D=KSJC&id%5B31%5D=KSNS&id%5B32%5D=KSTS&id%5B33%5D=KWVI&id%5B34%5D=LAHC1&id%5B35%5D=LOAC1&id%5B36%5D=LSGC1&id%5B37%5D=LTRC1&id%5B38%5D=PCLC1&id%5B39%5D=PCOC1&id%5B40%5D=PIBC1&id%5B41%5D=PKFC1&id%5B42%5D=PPSC1&id%5B43%5D=RBYC1&id%5B44%5D=SFOC1&id%5B45%5D=TT060&cursor=eyJzIjo1MDB9"
+  }
+}

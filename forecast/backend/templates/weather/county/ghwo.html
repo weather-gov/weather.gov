@@ -1,0 +1,41 @@
+{% extends "weather/page.html" %}
+{% block page_head_css %}
+  {% if ghwo.prefetch_images %}
+    {% for url in ghwo.prefetch_images %}<link rel="preload" href="{{ url }}" as="image" />{% endfor %}
+  {% endif %}
+{% endblock %}
+{% block page_head_js %}
+  <script type="module"
+          src="{% static 'js/county/ghwo.html.js' %}"
+          type="module"></script>
+{% endblock %}
+{% block page_content %}
+  <div class="bg-primary-dark">
+    <div class="grid-container">
+      <h1 class="text-white text-light padding-y-1 margin-y-0">{{ "site.meta.titles.ghwo.risk.01" | t }}</h1>
+    </div>
+  </div>
+  <div class="bg-primary-lightest border-bottom-2px border-primary">
+    <div class="grid-container">
+      <wx-ghwo-selector class="display-block" state-target="#state-select" county-target="#county-select" method="async">
+      {% include "weather/partials/wx-county-ghwo-selector.html" %}
+      </wx-ghwo-selector>
+    </div>
+  </div>
+  <div class="grid-container">
+    <section wx-ghwo-details="{{ county.countyfips }}"
+             class="margin-top-4 margin-bottom-8">
+      {% include "weather/partials/ghwo-details.html" with ghwo=ghwo %}
+    </section>
+  </div>
+  <template id="ghwo-wx-loader">
+    <div class="grid-row">
+      <div class="grid-col-12">
+        <wx-loader class="display-flex flex-row flex-align-center margin-top-3 margin-bottom-5">
+        <div class="wx-loader-icon display-block height-4 width-4 margin-right-05"></div>
+        <p class="wx-loader-text font-sans-lg text-normal text-base-darker">{{ "ghwo.loader.loading-text.01" | t }}...</p>
+        </wx-loader>
+      </div>
+    </div>
+  </template>
+{% endblock %}

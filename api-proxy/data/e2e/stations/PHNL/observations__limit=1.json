@@ -1,0 +1,131 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/PHNL/observations/2024-03-14T12:53:00+00:00",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-157.93, 21.35] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/PHNL/observations/2024-03-14T12:53:00+00:00",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 5 },
+        "station": "https://api.weather.gov/stations/PHNL",
+        "timestamp": "date:now -2051 seconds",
+        "rawMessage": "PHNL 141253Z 32007KT 10SM SCT048 OVC060 22/18 A2998 RMK AO2 SLP152 T02170178 $",
+        "textDescription": "Cloudy",
+        "icon": "https://api.weather.gov/icons/land/night/ovc?size=medium",
+        "presentWeather": [],
+        "temperature": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "windDirection": {
+          "unitCode": "wmoUnit:degree_(angle)",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "windSpeed": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "windGust": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "barometricPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "seaLevelPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "visibility": {
+          "unitCode": "wmoUnit:m",
+          "value": 16090,
+          "qualityControl": "C"
+        },
+        "maxTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "minTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "precipitationLastHour": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "precipitationLast3Hours": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "precipitationLast6Hours": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "windChill": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "heatIndex": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "cloudLayers": [
+          {
+            "base": { "unitCode": "wmoUnit:m", "value": 1460 },
+            "amount": "SCT"
+          },
+          {
+            "base": { "unitCode": "wmoUnit:m", "value": 1830 },
+            "amount": "OVC"
+          }
+        ]
+      }
+    }
+  ]
+}

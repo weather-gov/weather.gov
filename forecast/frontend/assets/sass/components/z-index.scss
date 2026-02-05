@@ -1,0 +1,10 @@
+/**
+ * This file contains CSS custom properties that we use
+ * to set the z-index of the various components across the site,
+ * especially those that might come into conflict with each other.
+ */
+:root {
+    --hourly-table-sticky-header-z-index: 50;
+    --point-page-tablist-area-z-index: 220;
+    --site-nav-search-popout-z-index: 320;
+}

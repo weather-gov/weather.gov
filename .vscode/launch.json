@@ -1,0 +1,67 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Django",
+      "type": "debugpy",
+      "request": "attach",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/forecast",
+          "remoteRoot": "/code"
+        }
+      ],
+      "connect": {
+        "port": 34235,
+        "host": "localhost"
+      }
+    },
+    {
+      "name": "Debug Django tests",
+      "type": "debugpy",
+      "request": "attach",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/forecast",
+          "remoteRoot": "/code"
+        }
+      ],
+      "connect": {
+        "port": 34532,
+        "host": "localhost"
+      },
+      "justMyCode": true
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug interop",
+      "address": "localhost",
+      "port": 9229,
+      "restart": true,
+      "remoteRoot": "/app",
+      "localRoot": "${workspaceFolder}/api-interop-layer"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug interop tests",
+      "address": "localhost",
+      "port": 2992,
+      "remoteRoot": "/app",
+      "localRoot": "${workspaceFolder}/api-interop-layer",
+      "continueOnAttach": true
+    },
+        {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug proxy",
+      "address": "localhost",
+      "port": 9230,
+      "restart": true,
+      "remoteRoot": "/app",
+      "localRoot": "${workspaceFolder}/api-proxy"
+    },
+
+  ]
+}

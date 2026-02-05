@@ -1,0 +1,35 @@
+FROM node:20
+
+RUN mkdir -p /app /app/api-interop-layer /app/api-proxy /app/spatial-data
+
+WORKDIR /app
+
+RUN apt update \
+  && apt install -y \
+  libgtk2.0-0 \
+  libgtk-3-0 \
+  libgbm-dev \
+  libnotify-dev \
+  libnss3 \
+  libxss1 \
+  libasound2 \
+  libxtst6 \
+  xauth \
+  xvfb \
+  && rm -rf /var/lib/apt/lists/*
+
+# set up this docker image so we can run anything node-related in our app
+ADD ./package.json .
+ADD ./package-lock.json .
+ADD ./api-interop-layer/package.json /app/api-interop-layer/
+ADD ./api-interop-layer/package-lock.json /app/api-interop-layer/
+ADD ./api-proxy/package.json /app/api-proxy/
+ADD ./api-proxy/package-lock.json /app/api-proxy/
+ADD ./spatial-data/package.json /app/spatial-data/
+ADD ./spatial-data/package-lock.json /app/spatial-data/
+
+RUN cd /app && npm ci --dev && \
+  cd /app/spatial-data && npm ci --dev && \
+  cd /app/api-interop-layer && npm ci --dev && \
+  cd /app/api-proxy && npm ci --dev
+RUN npx --no-install playwright install chromium --with-deps --only-shell

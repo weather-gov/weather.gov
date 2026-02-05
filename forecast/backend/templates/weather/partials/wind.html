@@ -1,0 +1,40 @@
+{% if has_speed %}
+  <div aria-hidden="true" class="display-flex flex-row flex-align-center">
+    {% if speed.mph == 0 %}
+      <span>{% trans "wind.labels.calm.01" %}</span>
+    {% else %}
+      <span>{% trans_with_args "units.mph.02"  speed=speed.mph %}</span>
+      {% if has_direction %}
+        <span class="padding-x-05">{{ direction.cardinalShort }}</span>
+        <span class="display-flex flex-align-center margin-bottom-2px">
+          {% comment %}
+          The +180 here is to account for the fact that wind direction
+          is reported as a FROM direction, but our arrow points in the
+          TO direction. So we just need to spin it 'round.
+          {% endcomment %}
+          <svg role="img"
+               data-wind-direction
+               class="width-2 height-2"
+               xmlns="http://www.w3.org/2000/svg">
+            <rect width="16" height="16" transform="translate(0.625)" fill="white" />
+            <path fill-rule="evenodd" clip-rule="evenodd" transform="rotate({{ direction.degrees|add:'180' }}, 8, 8)" d="M2.96808 6.46448L4.38229 7.88059L7.625 4.63354L7.625 9.97052H9.625L9.625 4.63372L12.8676 7.88065L14.2818 6.46454L10.0391 2.21618L10.0391 2.21616L8.62493 0.800049L2.96808 6.46448ZM9.625 11.9705H7.625V14.9584H9.625V11.9705Z" fill="#3D4551" />
+          </svg>
+        </span>
+      {% endif %}
+    {% endif %}
+  </div>
+  {% comment %}
+    We have a dedicated block for screen readers to mitigate an issue with
+    VoiceOver treating spans as distinct elements and forcing users to navigate
+    between <th></th>em.
+    By putting all of the content into a single span, we can get VoiceOver to read
+    it in a more natural way.
+  {% endcomment %}
+  {% if speed.mph == 0 %}
+    <span class="usa-sr-only">{% trans "wind.labels.calm.01" %}}</span>
+  {% else %}
+    <span class="usa-sr-only">{{ sr_content }}</span>
+  {% endif %}
+{% else %}
+  <span class="text-base font-mono-xs">{% trans "abbreviations.not-applicable.01" %}</span>
+{% endif %}

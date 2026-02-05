@@ -1,0 +1,52 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_12541_115360)">
+<rect width="24" height="24" fill="#2A646D"/>
+<rect x="25.5469" y="-14.8713" width="70" height="4" transform="rotate(45 25.5469 -14.8713)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="17.5352" y="-10.8713" width="70" height="4" transform="rotate(45 17.5352 -10.8713)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="9.52344" y="-6.87134" width="70" height="4" transform="rotate(45 9.52344 -6.87134)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="1.51172" y="-2.87134" width="70" height="4" transform="rotate(45 1.51172 -2.87134)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="-6.5" y="1.12866" width="70" height="4" transform="rotate(45 -6.5 1.12866)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="-14.5117" y="5.12866" width="70" height="4" transform="rotate(45 -14.5117 5.12866)" fill="#C6CACE" fill-opacity="0.5"/>
+</g>
+<g clip-path="url(#clip1_12541_115360)">
+<rect width="24" height="24" transform="translate(0 24)" fill="#2A646D"/>
+<rect x="25.5469" y="9.12866" width="70" height="4" transform="rotate(45 25.5469 9.12866)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="17.5352" y="13.1287" width="70" height="4" transform="rotate(45 17.5352 13.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="9.52344" y="17.1287" width="70" height="4" transform="rotate(45 9.52344 17.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="1.51172" y="21.1287" width="70" height="4" transform="rotate(45 1.51172 21.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="-6.5" y="25.1287" width="70" height="4" transform="rotate(45 -6.5 25.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="-14.5117" y="29.1287" width="70" height="4" transform="rotate(45 -14.5117 29.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+</g>
+<g clip-path="url(#clip2_12541_115360)">
+<rect width="24" height="24" transform="translate(24 24)" fill="#2A646D"/>
+<rect x="49.5469" y="9.12866" width="70" height="4" transform="rotate(45 49.5469 9.12866)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="41.5352" y="13.1287" width="70" height="4" transform="rotate(45 41.5352 13.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="33.5234" y="17.1287" width="70" height="4" transform="rotate(45 33.5234 17.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="25.5117" y="21.1287" width="70" height="4" transform="rotate(45 25.5117 21.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="17.5" y="25.1287" width="70" height="4" transform="rotate(45 17.5 25.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="9.48828" y="29.1287" width="70" height="4" transform="rotate(45 9.48828 29.1287)" fill="#C6CACE" fill-opacity="0.5"/>
+</g>
+<g clip-path="url(#clip3_12541_115360)">
+<rect width="24" height="24" transform="translate(24)" fill="#2A646D"/>
+<rect x="49.5469" y="-14.8713" width="70" height="4" transform="rotate(45 49.5469 -14.8713)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="41.5352" y="-10.8713" width="70" height="4" transform="rotate(45 41.5352 -10.8713)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="33.5234" y="-6.87134" width="70" height="4" transform="rotate(45 33.5234 -6.87134)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="25.5117" y="-2.87134" width="70" height="4" transform="rotate(45 25.5117 -2.87134)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="17.5" y="1.12866" width="70" height="4" transform="rotate(45 17.5 1.12866)" fill="#C6CACE" fill-opacity="0.5"/>
+<rect x="9.48828" y="5.12866" width="70" height="4" transform="rotate(45 9.48828 5.12866)" fill="#C6CACE" fill-opacity="0.5"/>
+</g>
+<defs>
+<clipPath id="clip0_12541_115360">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+<clipPath id="clip1_12541_115360">
+<rect width="24" height="24" fill="white" transform="translate(0 24)"/>
+</clipPath>
+<clipPath id="clip2_12541_115360">
+<rect width="24" height="24" fill="white" transform="translate(24 24)"/>
+</clipPath>
+<clipPath id="clip3_12541_115360">
+<rect width="24" height="24" fill="white" transform="translate(24)"/>
+</clipPath>
+</defs>
+</svg>

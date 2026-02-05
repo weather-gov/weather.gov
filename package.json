@@ -1,0 +1,65 @@
+{
+  "name": "weather.gov",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "contributors": [
+    "Claire Annan",
+    "Stacy Dion",
+    "Eric Gade",
+    "Shad Keene",
+    "Igor Korenfeld",
+    "Logan McDonald",
+    "Sarah MH",
+    "Colin Murphy",
+    "Corey Pieper",
+    "Katrina Ranjo",
+    "Kari Sheets",
+    "Greg Walker",
+    "Elijah Wright",
+    "Janel Yamashiro",
+    "James Tranovich"
+  ],
+  "license": "CC0-1.0",
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.5",
+    "axe-core": "^4.10.2",
+    "chai": "^5.1.2",
+    "dayjs": "^1.11.13",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-formatter-junit": "^8.40.0",
+    "eslint-plugin-import": "^2.31.0",
+    "glob": "^11.0.1",
+    "jsdom": "^26.0.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^11.0.1",
+    "mocha-cli": "^1.0.1",
+    "mocha-junit-reporter": "^2.2.1",
+    "playwright": "^1.49.1",
+    "prettier": "^3.4.2",
+    "sinon": "^19.0.2",
+    "stylelint": "^16.13.1",
+    "stylelint-config-standard-scss": "^14.0.0",
+    "stylelint-gitlabci-formatter": "^1.0.1",
+    "whatwg-fetch": "^3.6.20",
+    "xml-parse": "^0.4.0"
+  },
+  "scripts": {
+    "check-translations": "node ./tests/translations/main.js"
+  },
+  "prettier": {},
+  "dependencies": {
+    "@prettier/plugin-php": "^0.22.2",
+    "c8": "^10.1.3",
+    "esbuild": "^0.25.12",
+    "pg": "^8.16.3",
+    "shapefile": "^0.6.6",
+    "twing": "^7.0.0"
+  }
+}

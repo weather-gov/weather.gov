@@ -1,0 +1,27 @@
+{% for alert in alerts %}
+  <tr data-row-name="alert">
+    <th scope="row"
+        class="position-sticky left-0 font-family-mono text-primary-dark font-mono-xs text-uppercase z-400">
+      {% comment %}
+        Visually we can display the alert(s) heading just once for the alerts section of
+        the table, however we want the row head to announced for each row of alerts to
+        screen reader users so they know the content of the row. Using "rowspan" would
+        seem to solve for both cases, but unfortunately the row header isn't always
+        announced when testing using VO.
+      {% endcomment %}
+      {% if forloop.first %}
+        <span aria-hidden="true">
+          {% if alerts|length > 1 %}
+            {% trans "forecast.labels.alerts.01" %}
+          {% else %}
+            {% trans "daily-forecast.labels.alert.01" %}
+          {% endif %}
+        </span>
+      {% endif %}
+      <span class="usa-sr-only">{% trans "daily-forecast.labels.alert.01" %}</span>
+    </th>
+    {% if alert.offset > 0 %}<td colspan="{{ alert.offset }}"></td>{% endif %}
+    <td colspan="{{ alert.duration }}">{% alert_link alert=alert %}</td>
+    {% if alert.remainder > 0 %}<td colspan="{{ alert.remainder }}"></td>{% endif %}
+  </tr>
+{% endfor %}

@@ -1,0 +1,407 @@
+spec:
+  # these inputs permit flexible pipeline runs from the GitLab UI
+  inputs:
+    deploy-to-environment:
+      options: ['no deploy', 'test', 'staging', 'prod']
+      default: 'no deploy'
+      description: "Deploy the selected branch or tag to this environment using Terraform. You do not need to build the images or run the tests, although you can if you like. At the time of writing (9/25), 'prod' means beta.weather.gov."
+    confirm-beta-deploy:
+      description: "To deploy to beta, type YES in this box."
+      default: ''
+    build-images:
+      type: boolean
+      default: true
+      description: "Build Docker images containing 3rd party dependencies using the config files on the selected branch. Images are tagged with the branch slug and pushed to the NOAA GitLab container registry."
+    run-django-ci:
+      type: boolean
+      default: true
+      description: "Lint and test Django in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+    run-js-ci:
+      type: boolean
+      default: true
+      description: "Lint and test JS in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+---
+# NB: this file is less confusing to read once you realize that it does
+#     different things, depending on which branch is in the pipeline
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
+stages:
+  - gather   # gather the 3rd party dependencies and push images of them to the registry
+  - lint     # pull the code images and lint
+  - build    # perform any necesary build steps
+  - test     # pull the code images and test
+  - notes    # write the release notes and any other pre-release activities
+  - release  # create a release, which is stored in GitLab (the software, not the code repository)
+  - deploy   # toss the selected branch/tag into the desired live environment
+
+# these are available in all the running containers (images and services)
+variables:
+  API_URL: https://api.weather.gov
+  GHWO_URL: https://www.weather.gov
+  POSTGRES_USER: drupal
+  POSTGRES_PASSWORD: drupal
+  POSTGRES_DB: weathergov
+  DJANGO_SETTINGS_MODULE: backend.config.settings.ci
+  USE_TAG: main  # in a typical pipeline run, use dependency images built on main
+
+# control when pipelines run and override some parameters
+workflow:
+  rules:
+    # when building from the GitLab UI, use dependency images built on the current branch
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
+      variables:
+        USE_TAG: $CI_COMMIT_REF_SLUG
+    # always allow CI pipelines on pushes and from UI -- nb: a merge will cause a push to the target branch
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+# common config for using Docker in later jobs
+.docker-in-docker:
+  image: docker:27
+  services:
+    - name: docker:27-dind
+      command: [ "--tls=false" ]
+      variables:
+        HEALTHCHECK_TCP_PORT: "2375"
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+
+# common config for building images using a specified Dockerfile in the repo
+.build-dependencies-image:
+  extends: .docker-in-docker
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker build -f ${BUILD_CONTEXT}${DOCKERFILE} -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG $BUILD_CONTEXT
+  - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
+
+# common config for building images using a Dockerfile passed inline as a variable
+.build-image:
+  extends: .docker-in-docker
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - |
+      cat > Dockerfile.tmp << EOF
+      $DOCKERFILE
+      EOF
+    - cat Dockerfile.tmp
+    - docker build -f Dockerfile.tmp -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG $BUILD_CONTEXT
+    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
+
+# gather up commits which have a `Changelog: ...` trailer and push them to CHANGELOG.md (via GitLab's API)
+write-release-notes:
+  stage: notes
+  image: alpine:latest
+  script:
+    - apk add curl jq
+    - 'curl -H "PRIVATE-TOKEN: $CI_API_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/changelog?version=$CI_COMMIT_TAG" | jq -r .notes | tee release_notes.md'
+    - 'curl -H "PRIVATE-TOKEN: $CI_API_TOKEN" -X POST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/changelog?branch=changelog&version=$CI_COMMIT_TAG"'
+  artifacts:
+    paths:
+      - release_notes.md
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
+
+# create a release (in GitLab) using the markdown release notes from the pervious job
+make-tagged-release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/cli:latest
+  needs:
+    - job: write-release-notes
+      artifacts: true
+  script:
+    - echo "Making release $CI_COMMIT_TAG from tag $CI_COMMIT_TAG at commit $CI_COMMIT_SHA."
+  release:
+    name: '$CI_COMMIT_TAG'
+    description: release_notes.md
+    tag_name: '$CI_COMMIT_TAG'
+    ref: '$CI_COMMIT_SHA'
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
+
+# deploy to prod/beta automatically on a beta version tag (like `beta-v1.3.5`) or manually from the GitLab New Pipeline page
+deploy-to-prod:
+  stage: deploy
+  image: cloudfoundry/cli:8
+  needs:
+    - job: bundle-js
+      artifacts: true
+  script:
+    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip zip
+    - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
+    - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
+    - terraform --version
+    - cd terraform/
+    - >
+      echo {
+      \"django_secret_key\": \"$CI_PROD_DJANGO_SECRET_KEY\",
+      \"allowed_ips\": \"$CI_PROD_ALLOWED_IPS\",
+      \"newrelic_license\": \"$CI_NEW_RELIC_LICENSE\",
+      \"sp_private_key\": \"$CI_PROD_SP_PRIVATE_KEY\",
+      \"sp_public_key\": \"$CI_PROD_SP_PUBLIC_KEY\"
+      } > credentials-prod.json
+    - |
+      echo -e \
+      cf_user = \"$CI_PROD_CF_USER\"\\n\
+      cf_password = \"$CI_PROD_CF_PASSWORD\" \
+      > secrets.cicd.auto.tfvars
+    - |
+      echo -e \
+      bucket     = \"$CI_TF_STATE_MGMT_BUCKET\"\\n\
+      region     = \"$CI_TF_STATE_MGMT_REGION\"\\n\
+      access_key = \"$CI_TF_STATE_MGMT_ACCESS_KEY\"\\n\
+      secret_key = \"$CI_TF_STATE_MGMT_SECRET_KEY\" \
+      > secrets.backend.tfvars
+    - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-prod" -reconfigure
+    - terraform apply -var-file="weathergov-prod.tfvars" -auto-approve
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "prod" && "$[[ inputs.confirm-beta-deploy ]]" == "YES"
+
+# deploy to staging automatically when main is updated
+deploy-to-staging:
+  stage: deploy
+  image: cloudfoundry/cli:8
+  needs:
+    - job: bundle-js
+      artifacts: true
+  script:
+    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip zip
+    - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
+    - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
+    - terraform --version
+    - cd terraform/
+    - >
+      echo {
+      \"django_secret_key\": \"$CI_STAGING_DJANGO_SECRET_KEY\",
+      \"allowed_ips\": \"$CI_STAGING_ALLOWED_IPS\",
+      \"newrelic_license\": \"$CI_NEW_RELIC_LICENSE\",
+      \"sp_private_key\": \"$CI_STAGING_SP_PRIVATE_KEY\",
+      \"sp_public_key\": \"$CI_STAGING_SP_PUBLIC_KEY\"
+      } > credentials-staging.json
+    - |
+      echo -e \
+      cf_user = \"$CI_CF_USER\"\\n\
+      cf_password = \"$CI_CF_PASSWORD\" \
+      > secrets.cicd.auto.tfvars
+    - |
+      echo -e \
+      bucket     = \"$CI_TF_STATE_MGMT_BUCKET\"\\n\
+      region     = \"$CI_TF_STATE_MGMT_REGION\"\\n\
+      access_key = \"$CI_TF_STATE_MGMT_ACCESS_KEY\"\\n\
+      secret_key = \"$CI_TF_STATE_MGMT_SECRET_KEY\" \
+      > secrets.backend.tfvars
+    - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-staging" -reconfigure
+    - terraform apply -var-file="weathergov-staging.tfvars" -auto-approve
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "staging"
+
+# deploy to test manually from the GitLab New Pipeline page
+deploy-to-test:
+  stage: deploy
+  image: cloudfoundry/cli:8
+  needs:
+    - job: bundle-js
+      artifacts: true
+  script:
+    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip zip
+    - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
+    - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
+    - terraform --version
+    - cd terraform/
+    - >
+      echo {
+      \"django_secret_key\": \"$CI_TEST_DJANGO_SECRET_KEY\",
+      \"allowed_ips\": \"$CI_TEST_ALLOWED_IPS\",
+      \"newrelic_license\": \"$CI_NEW_RELIC_LICENSE\",
+      \"sp_private_key\": \"$CI_TEST_SP_PRIVATE_KEY\",
+      \"sp_public_key\": \"$CI_TEST_SP_PUBLIC_KEY\"
+      } > credentials-test.json
+    - |
+      echo -e \
+      cf_user = \"$CI_CF_USER\"\\n\
+      cf_password = \"$CI_CF_PASSWORD\" \
+      > secrets.cicd.auto.tfvars
+    - |
+      echo -e \
+      bucket     = \"$CI_TF_STATE_MGMT_BUCKET\"\\n\
+      region     = \"$CI_TF_STATE_MGMT_REGION\"\\n\
+      access_key = \"$CI_TF_STATE_MGMT_ACCESS_KEY\"\\n\
+      secret_key = \"$CI_TF_STATE_MGMT_SECRET_KEY\" \
+      > secrets.backend.tfvars
+    - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-test" -reconfigure
+    - terraform apply -var-file="weathergov-test.tfvars" -auto-approve
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "test"
+
+# build a base image with all the current node_modules and other JavaScript dependencies
+gather-forecast-node-dependencies:
+  extends: .build-dependencies-image
+  stage: gather
+  variables:
+    BUILD_CONTEXT: ./
+    DOCKERFILE: Dockerfile.node.ci
+    IMAGE_NAME: node-with-deps
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
+      changes:
+        - Dockerfile.node.ci
+        - package.json
+        - package-lock.json
+        - api-interop-layer/package.json
+        - api-interop-layer/package-lock.json
+        - api-proxy/package.json
+        - api-proxy/package-lock.json
+        - spatial-data/package.json
+        - spatial-data/package-lock.json
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
+
+# build a base image with all the current Python dependencies
+gather-forecast-django-dependencies:
+  extends: .build-dependencies-image
+  stage: gather
+  variables:
+    BUILD_CONTEXT: forecast/
+    DOCKERFILE: Dockerfile.ci
+    IMAGE_NAME: python-with-deps
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
+      changes:
+        - forecast/Dockerfile.ci
+        - forecast/requirements.txt
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
+
+bundle-js:
+  stage: build
+  needs:
+    - job: gather-forecast-node-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  script:
+    # NB: GitLab clones into CI_BUILDS_DIR which defaults to
+    # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
+    # images our WORKDIR is /app. so we symlink the various /app/node_modules to
+    # CI_BUILDS_DIR so we can "npm run" as needed.
+    - ln -s /app/node_modules/ .
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - ln -s /app/api-proxy/node_modules api-proxy
+    - npx --no-install esbuild --bundle --minify --format=esm --sourcemap "forecast/frontend/assets/js/**/*.html.js" --outdir=forecast/frontend/assets/js --allow-overwrite
+  artifacts:
+    paths:
+      - forecast/frontend/assets/js/**/*.html.js
+      - forecast/frontend/assets/js/**/*.html.js.map
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+
+
+# lint all JavaScript in the repo in one job
+js-lint:
+  stage: lint
+  needs:
+    - job: gather-forecast-node-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  script:
+    # NB: GitLab clones into CI_BUILDS_DIR which defaults to
+    # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
+    # images our WORKDIR is /app. so we symlink the various /app/node_modules to
+    # CI_BUILDS_DIR so we can "npm run" as needed.
+    - ln -s /app/node_modules/ .
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - ln -s /app/api-proxy/node_modules api-proxy
+    - npx --no-install eslint
+    - npx --no-install stylelint 'forecast/frontend/**/assets/**/*.scss'
+    - |
+      npx --no-install prettier \
+      'forecast/frontend/**/assets/**/*.js' \
+      'forecast/frontend/**/assets/**/*.scss' \
+      'tests/**/*.js' \
+      '*.js' \
+      'api-interop-layer/**/*.js'
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+
+django-lint:
+  stage: lint
+  needs:
+    - job: gather-forecast-django-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_TAG
+  script:
+    - cd forecast/
+    - python -m ruff check .
+    - python -m djlint backend/templates/ --extension=html
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
+
+django-test:
+  stage: test
+  needs:
+    - job: gather-forecast-django-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/python-with-deps:$USE_TAG
+  services:
+  - name: postgis/postgis:17-3.5
+    alias: database
+    variables:
+      POSTGRES_USER: drupal
+      POSTGRES_PASSWORD: drupal
+      POSTGRES_DB: weathergov
+  script:
+    - cd forecast/
+    - ldconfig -p | grep gdal
+    - python manage.py migrate
+    - python manage.py compilemessages
+    - python manage.py collectstatic --noinput --traceback
+    - coverage run manage.py test
+    - coverage xml -o coverage.xml
+    - coverage report
+  coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: forecast/coverage.xml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
+
+web-component-and-interop-test:
+  stage: test
+  needs:
+    - job: gather-forecast-node-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  script:
+    # NB: GitLab clones into CI_BUILDS_DIR which defaults to
+    # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
+    # images our WORKDIR is /app. so we symlink the various /app/node_modules to
+    # CI_BUILDS_DIR so we can "npm run" as needed.
+    - ln -s /app/node_modules/ .
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - ln -s /app/api-proxy/node_modules api-proxy/
+    - npx --no-install c8 --reporter cobertura -o coverage/wc/ --reporter text-summary  mocha --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
+    # We also do interop layer tests at the same time so we don't have to wait
+    # for another runner to come available.
+    - cd api-interop-layer
+    - npx --no-install c8 --reporter cobertura -o ../coverage/interop/ --reporter text-summary mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
+  coverage:
+    /^Statements\s*:\s*([^%]+)/
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/*/cobertura-coverage.xml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+
+sast:
+  stage: test

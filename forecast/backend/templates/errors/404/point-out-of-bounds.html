@@ -1,0 +1,24 @@
+{% extends "weather/page.html" %}
+{% block page_content %}
+  {# djlint:off #}
+  {%comment%}
+
+  This template is rendered for point locations that are outside of the United
+  States and therefore have no NWS data. It receives the following variables:
+
+  point:
+    latitude  - Just exactly what you think it is.
+    longitude - Also exactly what you think it is.
+
+  error  - True, if we're here.
+  status - The HTTP status from the API
+  reason - A coded string indicating why we have this error. If we're here, this
+           value is "out-of-bands"
+
+  {% endcomment %}
+  {# djlint:on #}
+  <div class="grid-container margin-bottom-5">
+    <h1>{{ "error.404.out-of-bounds.message.01" | t }}</h1>
+    <p>{{ "error.404.out-of-bounds.description.01" | t }}</p>
+  </div>
+{% endblock %}

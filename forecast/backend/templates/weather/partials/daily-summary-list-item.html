@@ -1,0 +1,117 @@
+<li class="display-block bg-white padding-y-205 padding-x-205 shadow-1 grid-col-12 height-full"
+    {% if itemId %}id="{{ itemId }}{% endif %}
+    ">
+  <div class="grid-container padding-0 margin-bottom-2 tablet:margin-bottom-2">
+    <div class="grid-row display-flex flex-align-start border-bottom-1px border-base-lighter padding-bottom-2">
+      <div class="daily-date-and-temp display-flex flex-row flex-justify flex-align-center tablet:grid-col-6 tablet__flex-justify-start">
+        <h3 class="padding-0 margin-0">
+          <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3"
+                datetime="{{ day.periods.0.start }}">
+            <span>
+              {%if day.periods.0.isDaytime %}
+                {% trans "daily-forecast.labels.today.01" %},
+              {% else %}
+                {% trans "daily-forecast.labels.tonight.01" %},
+              {% endif %}
+            </span>
+            <span class="display-block">{{ day.periods.0.start|datetime|date:"M  j" }}</span>
+          </time>
+        </h3>
+        <div class="display-flex">{% daily_high_low periods=day.periods %}</div>
+      </div>
+      {% if alerts.items|length > 0 %}
+        <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 daily-alert-summary">
+          {% summary_alert_link alerts=alerts %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="grid-row grid-gap">
+    {% for period in day.periods %}
+      <div class="wx-daily-forecast-summary-area wx-daily-forecast-summary-area--{% if period.isOvernight %}overnight{% elif period.isDaytime %}daytime{% else %}other{% endif %}">
+        <span class="display-block font-family-mono text-uppercase font-body-xs margin-bottom-1 text-primary-darker wx-marker-before">
+          {{ label }}
+          {% if period.isOvernight %}
+            {% trans "daily-forecast.labels.overnight.01" %}
+            <span class="daily-period-time-label text-gray-50">({% trans "daily-forecast.labels.overnight-time-span.01" %})</span>
+          {% elif period.isDaytime %}
+            {% trans "daily-forecast.labels.day.01" %}
+            <span class="daily-period-time-label text-gray-50">({% trans "daily-forecast.labels.today-time-span.01" %})</span>
+          {% else %}
+            {% trans "daily-forecast.labels.night.01" %}
+            <span class="daily-period-time-label text-gray-50">({% trans "daily-forecast.labels.tonight-time-span.01" %})</span>
+          {% endif %}
+        </span>
+        <div class="display-flex flex-row flex-align-start">
+          {% if period.data.icon.base %}
+            <div class="width-5 height-5 margin-right-105">
+              {% weather_icon period.data.icon.base size="md" color_mode="light" class="width-full height-full" aria_hidden="true" %}
+            </div>
+          {% endif %}
+          <div class="flex-1">
+            <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
+              {{ period.data.description }}
+            </p>
+            {% if period.data.probabilityOfPrecipitation.hourlyMax and period.data.probabilityOfPrecipitation.hourlyMax > 1 %}
+              <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
+                {% trans_with_args "daily-forecast.text.chance-precip.02" percent=period.data.probabilityOfPrecipitation.hourlyMax %}
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% if day.hours|length > 0 %}
+    <div aria-hidden="true">
+      {#  Summary Temperature Chart #}
+      <div class="wx-chart-wrapper margin-top-0 margin-bottom-4">
+        <span class="font-family-mono text-primary-dark usa-sr-only">{{ "hourly-table.labels.temperature.01" | t }}</span>
+        <div class="position-sticky left-0 display-flex flex-justify padding-top-2 padding-bottom-105">
+          {% include "weather/partials/scroll-buttons.html" %}
+        </div>
+        <div class="wx-chart wx-hourly-temp-chart-container margin-bottom-105 position-relative grid-col-12 width-full overflow-x-auto"
+             tabindex="0"
+             data-times="{{ times|json_encode }}"
+             data-temps="{{ temps | json_encode }}"
+             data-feels-like="{{ feelsLike | json_encode }}"
+             data-sync-scrolling="true"
+             data-hide-y-axis="true"
+             data-use-max-y="true">
+          <div class="maxh-card-lg wx-chart-inner">
+            <canvas>
+            </canvas>
+          </div>
+        </div>
+        <div class="display-flex flex-align-center font-mono-xs text-base">
+          <div class="width-3 border-bottom-2px border-primary-dark height-0 margin-right-1">
+            <div class="bg-primary-dark margin-left-1 radius-pill width-1 height-1 wx-margin-top-neg-3px"></div>
+          </div>
+          {{ "hourly-table.labels.temperature.01" | t }}
+          <div class="margin-left-3 width-3 border-bottom-2px border-top-0 border-left-0 border-right-0 border-dotted border-primary-light height-0 margin-right-1">
+            <div class="bg-primary-light margin-left-1 radius-pill width-1 height-1 wx-margin-top-neg-3px"></div>
+          </div>
+          {{  "forecast.current.feels-like.01" | t }}
+        </div>
+      </div>
+    </div>
+    <div class="sr-only">
+      <table>
+        <thead>
+          <tr>
+            <th>time</th>
+            <th>temperature</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for time,temp in times|zip:temps %}
+            <tr>
+              <td>{{ time }}</td>
+              <td>{{ temp }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+</li>

@@ -1,0 +1,88 @@
+{% comment %}
+This partial expects an array of forecast period
+assoc arrays (as formatted by the WeatherDataService),
+usually of size 2 corresponding to both daytime and
+nighttime periods.
+
+In some cases -- like the case of the current day -- there might
+only be a nighttime period.
+{% endcomment %}
+<li class="wx-daily-forecast-list-item display-block desktop:margin-bottom-3 margin-y-0 shadow-1"
+    {% if day.itemId %}id="{{ day.itemId }}{% endif %}
+    ">
+  <div class="wx-daily-forecast-list-item-inner" id="{{ day.itemId }}-inner">
+    <h3 class="wx-daily-forecast-quick-toggle desktop:display-none bg-white"
+        data-expanded="false">{% daily_forecast_quick_toggle day=day itemId=itemId first=first %}</h3>
+    <div role="region"
+         id="daily-content-{{ day.itemId }}"
+         class="wx-daily-forecast-item-content bg-white padding-y-205 padding-x-205 grid-col-12 border-right-1px border-left-1px desktop:border-top-1px border-base-lighter desktop:border-base-lighter">
+      {# outer grid-row stores everything that's visible visible without expansion #}
+      <div class="grid-row border-0 tablet-lg:border-bottom-1px tablet-lg:border-base-lighter tablet-lg:padding-bottom-2">
+        {# start of date, temps, and alert #}
+        <div class="grid-row grid-col-12 tablet-lg:grid-col-4 border-bottom-1px border-base-lighter padding-bottom-2 margin-bottom-2 tablet-lg:border-0 tablet-lg:margin-bottom-05 tablet-lg:margin-right-2 tablet-lg:padding-bottom-0 display-none desktop:display-block">
+          <div class="daily-date-and-temp display-flex flex-row flex-justify tablet:grid-col-6 tablet__wx-flex-justify-start">
+            <h3 class="padding-0 margin-0">
+              <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3"
+                    datetime="{{ day.periods.0.startTime }}">
+                <span>{{ day.periods.0.start|datetime|date:"l" }},</span>
+                <span class="display-block">{{ day.periods.0.start|datetime|date:"M  j" }}</span>
+              </time>
+            </h3>
+            <div class="display-flex margin-top-1px">{% daily_high_low periods=day.periods %}</div>
+          </div>
+          {% if day.alerts|length > 0 %}
+            <div class="grid-col-12 tablet:grid-col-6 tablet:display-flex tablet:flex-justify-end margin-top-2 tablet:margin-top-0 tablet-lg:grid-col-12 tablet-lg:margin-top-2 tablet-lg__wx-flex-justify-start daily-alert-summary">
+              {% summary_alert_link alerts=day.alerts %}
+            </div>
+          {% endif %}
+        </div>
+        {# End of the date, temps alert #}
+        {# Start of conditions #}
+        <div class="grid-row grid-gap grid-col-12 tablet-lg:grid-col-8">
+          {% for period in day.periods %}
+            <div class="grid-col-12 wx-daily-forecast-summary-area wx-daily-forecast-item-summary-area--{% if period.isOvernight %}overnight{% elif period.isDaytime %}daytime{% else %}other{% endif %}">
+              <span class="display-block font-family-mono text-uppercase font-body-xs margin-bottom-1 text-primary-darker wx-marker-before">
+                {{ label }}
+                {% if period.isOvernight %}
+                  {% trans "daily-forecast.labels.overnight.01" %}
+                {% elif period.isDaytime %}
+                  {% trans "daily-forecast.labels.day.01" %}
+                {% else %}
+                  {% trans "daily-forecast.labels.night.01" %}
+                {% endif %}
+                {% if period.timeLabel %}<span class="daily-period-time-label text-gray-50">({{ period.timeLabel }})</span>{% endif %}
+              </span>
+              <div class="display-flex flex-row flex-align-start">
+                {% if period.data.icon.base %}
+                  <div class="width-5 height-5 margin-right-105">
+                    {% weather_icon period.data.icon.base size="md" color_mode="light" class="width-full height-full" aria_hidden="true" %}
+                  </div>
+                {% endif %}
+                <div class="flex-1">
+                  <p class="daily-short-forecast font-body-sm margin-top-2px margin-bottom-0 marker-height-sans-3">
+                    {{ period.data.description }}
+                  </p>
+                  {% if period.data.probabilityOfPrecipitation.hourlyMax and period.data.probabilityOfPrecipitation.hourlyMax > 1 %}
+                    <p class="text-gray-50 font-body-xs margin-top-05 margin-bottom-0">
+                      {% trans_with_args "daily-forecast.text.chance-precip.02" percent=period.data.probabilityOfPrecipitation.hourlyMax %}
+                    </p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% if day.hours|length > 0 %}
+        <div>
+          {% include 'weather/partials/forecast-details-toggle.html' %}
+          <h4 class="font-heading-md text-normal text-primary-darker margin-top-0 margin-bottom-205">
+            {% trans "daily-forecast.heading.hourly-forecast.01" %}
+          </h4>
+          {% hourly_table day=day qpf=day.qpf hours=day.hours itemId=day.itemId %}
+          {% hourly_charts hours=day.hours qpf=day.qpf itemId=day.itemId day=day %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</li>

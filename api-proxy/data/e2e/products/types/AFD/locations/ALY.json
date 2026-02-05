@@ -1,0 +1,17 @@
+{
+  "@context": {
+    "@version": "1.1",
+    "@vocab": "https://api.weather.gov/ontology#"
+  },
+  "@graph": [
+    {
+      "@id": "https://api.weather.gov/products/81724a6c-3b8f-4284-bd62-49d259b39697",
+      "id": "81724a6c-3b8f-4284-bd62-49d259b39697",
+      "wmoCollectiveId": "FXUS61",
+      "issuingOffice": "KALY",
+      "issuanceTime": "2024-09-05T11:29:00+00:00",
+      "productCode": "AFD",
+      "productName": "Area Forecast Discussion"
+    }
+  ]
+}

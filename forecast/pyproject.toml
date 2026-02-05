@@ -1,0 +1,129 @@
+[project]
+name = "weather.gov"
+version = "1.21.0-beta"
+requires-python = ">= 3.11, < 3.12"
+dependencies = [
+    "boto3>=1.42.29",
+    "cfenv==0.5.3",
+    "deepmerge==2.0",
+    "django>=5.2.10",
+    "django-allow-cidr==0.7.1",
+    "django-csp==4.0",
+    "django-debug-toolbar>=6.1.0",
+    "django-silk==5.4.3",
+    "django-storages[s3]==1.14.6",
+    "djangorestframework>=3.16.1",
+    "environs[django]==11.2.1 ; python_full_version >= '3.8'",
+    "gevent==24.11.1 ; python_full_version >= '3.9'",
+    "gunicorn==23.0.0 ; python_full_version >= '3.7'",
+    "html-sanitizer>=2.6.0",
+    "newrelic==11.1.0",
+    "psycopg2-binary==2.9.10 ; python_full_version >= '3.8'",
+    "python-json-logger==4.0.0",
+    "python3-saml>=1.16.0",
+    "requests>=2.32.5",
+    "responses>=0.25.8",
+    "shapely>=2.1.2",
+    "tqdm>=4.67.1",
+    "wagtail>=7.2.1",
+    "whitenoise==6.8.2 ; python_full_version >= '3.9'",
+]
+
+[tool.ruff]
+show-fixes = true
+line-length = 120
+exclude = [".venv", "manage.py"]
+
+[tool.ruff.lint]
+exclude = [
+    "backend/migrations/*",
+    "spatial/migrations/*",
+    "wx_stories_api/migrations/*",
+]
+select = [
+    # PyFlakes
+    "F",
+    # flake8
+    "S",
+    "B",
+    "DJ",
+    "DTZ",
+    "Q",
+    "INT",
+    "RET",
+    "ARG",
+    "ASYNC",
+    "COM",
+    "T20",
+    "PT",
+    # pycodestyle
+    "E",
+    "W",
+    # pydocstyle
+    "D",
+    # Pylint
+    "PL",
+    # pep8-naming
+    "N",
+    # flynt
+    "FLY",
+    # tryceratops
+    "TRY",
+    # isort
+    "I",
+    # Perflint
+    "PERF",
+    # mccabe
+    "C90",
+]
+ignore = [
+    # Whitespace before ':'
+    "E203",
+    # Missing docstring in public module
+    "D100",
+    # Missing docstring in public package
+    "D104",
+    # Missing docstring in magic method
+    "D105",
+    # Missing docstring in `__init__`
+    "D107",
+    # Use a regular `assert` instead of unittest-style `assertEqual`
+    "PT009",
+    # Missing trailing comma, disabled per advice of Ruff
+    "COM812",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = [
+    # Module imported but unused
+    "F401",
+    # 'from module import *' used
+    "F403",
+    # Module level import not at top of file
+    "E402",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.flake8-unused-arguments]
+ignore-variadic-names = true
+
+[tool.djlint]
+# H030 Consider adding a meta description.
+# H031 Consider adding meta keywords.
+# H006 img tag should have height and width attributes.
+# H023 Do not use entity references.
+# H020 Empty tag pair found. Consider removing.
+# H021 Inline styles should be avoided.
+ignore = "H030,H031,H006,H023,H020,H021"
+indent = 2
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+omit = ["manage.py", "backend/migrations/*.py"]
+
+[dependency-groups]
+dev = ["coverage>=7.12.0", "debugpy>=1.8.17", "djlint>=1.36.4", "ruff>=0.14.8"]

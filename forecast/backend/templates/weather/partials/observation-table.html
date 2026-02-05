@@ -1,0 +1,78 @@
+<table class="usa-table usa-table--borderless observation-table border-top-1px border-base-light tablet:margin-bottom-0 width-full">
+  <tbody>
+    {# WIND #}
+    <tr class="wx-wind-speed">
+      <th scope="row"
+          class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+        {% trans "observation-table.labels.wind.01" %}
+      </th>
+      <td>{% wind_speed_direction speed=obs.data.windSpeed direction=obs.data.windDirection %}</td>
+    </tr>
+    {# GUSTS #}
+    {% if obs.data.windGust != None and obs.data.windGust.mph > 0 %}
+      <tr class="wx-gusts">
+        <th scope="row"
+            class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+          {% trans "observation-table.labels.gusts.01" %}
+        </th>
+        <td>{% trans_with_args "units.mph.02" speed=obs.data.windGust.mph %}</td>
+      </tr>
+    {% endif %}
+    {# HUMIDITY #}
+    <tr class="wx-humidity">
+      <th scope="row"
+          class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+        {% trans "observation-table.labels.humidity.01" %}
+      </th>
+      <td>
+        {% if obs.data.relativeHumidity.percent == 0 %}
+          <span class="text-base font-mono-xs">{{  "abbreviations.not-applicable.01" | t}}</span>
+        {% else %}
+          {{ obs.data.relativeHumidity.percent }}%
+        {% endif %}
+      </td>
+    </tr>
+    {# DEWPOINT #}
+    <tr class="wx-dewpoint">
+      <th scope="row"
+          class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+        {% trans "observation-table.labels.dewpoint.01" %}
+      </th>
+      <td>
+        {% if obs.data.dewpoint.degF == None %}
+          <span class="text-base font-mono-xs">{{  "abbreviations.not-applicable.01" | t}}</span>
+        {% else %}
+          {{ obs.data.dewpoint.degF }}<span class="font-body-3xs position-absolute margin-top">&deg;F</span>
+        {% endif %}
+      </td>
+    </tr>
+    {# VISIBILITY #}
+    <tr class="wx-visibility">
+      <th scope="row"
+          class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+        {{ "observation-table.labels.visibility.01"  | t }}
+      </th>
+      <td>
+        {% if obs.data.visibility.mi == None %}
+          <span class="text-base font-mono-xs">{{  "abbreviations.not-applicable.01" | t}}</span>
+        {% else %}
+          {{ obs.data.visibility.mi }} {% trans "units.miles.01" %}
+        {% endif %}
+      </td>
+    </tr>
+    {# PRESSURE #}
+    <tr class="wx-pressure">
+      <th scope="row"
+          class="font-family-mono text-base font-mono-xs text-uppercase z-400">
+        {% trans "observation-table.labels.pressure.01" %}
+      </th>
+      <td>
+        {% if obs.data.barometricPressure.inHg == None %}
+          <span class="text-base font-mono-xs">{{  "abbreviations.not-applicable.01" | t}}</span>
+        {% else %}
+          {% trans_with_args "units.mercury-inches.01" mercury_inches=obs.data.barometricPressure.inHg mbar=obs.data.barometricPressure.mb %}
+        {% endif %}
+      </td>
+    </tr>
+  </tbody>
+</table>

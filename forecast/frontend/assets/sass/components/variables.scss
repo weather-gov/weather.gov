@@ -1,0 +1,21 @@
+@use "uswds-core" as *;
+
+body {
+  --color-base: #{color("base")};
+  --color-base-light: #{color("base-light")};
+  --color-base-lighter: #{color("base-lighter")};
+  --color-base-lightest: #{color("base-lightest")};
+  --color-base-darker: #{color("base-darker")};
+  --color-primary: #{color("primary")};
+  --color-primary-dark: #{color("primary-dark")};
+  --color-primary-light: #{color("primary-light")};
+  --color-secondary: #{color("secondary")};
+  --color-secondary-darker: #{color("secondary-darker")};
+  --color-cyan-50: #{color("cyan-50")};
+  --color-cyan-60: #{color("cyan-60")};
+  --color-cyan-80: #{color("cyan-80")};
+  --color-accent-cool: #{color("accent-cool")};
+  --color-accent-cool-dark: #{color("accent-cool-dark")};
+  --color-white: #{color("white")};
+  --font-family-mono: #{font-family("mono")};
+}

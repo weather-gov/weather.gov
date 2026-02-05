@@ -1,0 +1,35 @@
+@use "uswds-core" as *;
+
+.wx-bg-cyan-60 {
+  background-color: color("cyan-60");
+}
+
+.wx-border-cyan-80 {
+  border-color: color("cyan-80");
+}
+
+@function hazard-color($level) {
+  @if $level == 0 {
+    @return color("gray-cool-4");
+  }
+
+  @if $level == 1 {
+    @return color("green-10v");
+  }
+
+  @if $level == 2 {
+    @return color("yellow-20v");
+  }
+
+  @if $level == 3 {
+    @return color("orange-30v");
+  }
+
+  @if $level == 4 {
+    @return color("red-50v");
+  }
+
+  @if $level == 5 {
+    @return color("violet-warm-50v");
+  }
+}

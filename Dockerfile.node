@@ -1,0 +1,15 @@
+FROM node:22 AS node
+
+RUN mkdir /app
+WORKDIR /app
+
+# set up this docker image so we can run anything node-related in our app
+ADD ./package.json .
+ADD ./package-lock.json .
+
+RUN npm ci
+
+#################################################
+
+FROM node AS playwright
+RUN npx --no-install playwright install --with-deps

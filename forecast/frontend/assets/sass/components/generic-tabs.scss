@@ -1,0 +1,62 @@
+/* stylelint-disable scss/at-extend-no-missing-placeholder */
+/* stylelint-disable no-descending-specificity */
+@use "uswds-core" as *;
+@forward "uswds";
+
+/**
+ * Styling for generic WCAG tab based components / roles
+ * Interation is goverened by the progressively enhanced
+ * Tabs (wx-tabs) custom element
+ */
+[role="tabpanel"][data-tabpanel-selected="false"] {
+  display: none;
+}
+
+/**
+ * Custom styles for table/charts tab toggles
+ * --------------------------------------------------------
+ */
+
+wx-tabs,
+.wx-forecast-details-toggle {
+  button:hover {
+    cursor: pointer;
+  }
+
+  button[aria-selected="false"] {
+    @extend .usa-button--outline;
+  }
+
+  .usa-button-group {
+    display: flex;
+  }
+
+  button.usa-button[role="tab"] {
+    margin: 0;
+    border-radius: 0;
+    margin-right: -2px;
+
+    &:first-child {
+      border-radius: 0.25rem;
+      border-right: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:last-child {
+      border-radius: 0.25rem;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
+
+wx-tabs#county-alerts {
+  button {
+    @extend .text-normal;
+  }
+
+  button[aria-selected="true"] {
+    @extend .text-bold;
+  }
+}

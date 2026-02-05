@@ -1,0 +1,62 @@
+@use "uswds-core" as *;
+
+/* Hourly precipitation table overrides
+------------------------------------- */
+.wx-precip-table {
+  thead {
+    tr {
+      th {
+        // We have to do this here rather than setting utility classes directly
+        // in the HTML because USWDS's selectors for table headings are more
+        // specific than general-purpose utility classes.
+        @include u-font("mono", "sm");
+        @include u-text("normal");
+        @include u-color("primary-darker");
+
+        text-align: left;
+
+        &:first-of-type {
+          @include u-padding-left(0);
+        }
+      }
+    }
+  }
+
+  th[aria-hidden],
+  td[aria-hidden] {
+    padding: 0;
+    border: 1px solid color("base-light");
+  }
+
+  td:first-of-type {
+    padding-left: 0;
+  }
+
+  td:last-child {
+    padding-right: 0;
+  }
+
+  tr:first-of-type td {
+    border-top: 0;
+
+    // visually even out top and bottom table padding, accounting for font bounding box
+    padding-top: units(0.5);
+  }
+
+  tr:last-of-type td {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.wx-bg-snow {
+  background-color: white;
+  opacity: 0.8;
+  background-image: url("/public/images/weather/wx_snow_pattern.svg");
+}
+
+.wx-bg-ice {
+  background-color: #2a646d;
+  opacity: 0.8;
+  background-image: url("/public/images/weather/wx_ice_pattern.svg");
+}

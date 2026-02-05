@@ -1,0 +1,53 @@
+<div class="wx-location-search">
+  {% if search %}
+  <div class="grid-container">
+    <div class="grid-row">
+      <form class="usa-form grid-col-12  maxw-tablet-lg"
+            data-location-search
+            method="get">
+        <div class="display-flex flex-align-end">
+          <label class="usa-label" for="search-combo-box">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
+          <div class="margin-x-1">|</div>
+          <div>
+            <button
+                    type="button"
+                    class="weathergov-use-browser-location usa-button usa-button--unstyled">{{ 'location-search.labels.use-location.01' | t }}</button>
+          </div>
+        </div>
+        <div class="grid-row">
+          <div class="tablet:grid-col-6">
+            {# djlint:off #}
+            <wx-combo-box-location
+              class="margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105"
+              id="search-combo-box"
+              {% if place %}
+                data-place="{% place_label place%}"
+              {% endif %}
+            >
+            </wx-combo-box-location>
+            {# djlint:on #}
+          </div>
+          <div class="font-sans-md text-primary-dark tablet:grid-col-6 margin-top-105 margin-bottom-105">
+            <div class="grid-col">{% include 'weather/partials/wx-loader.html' %}</div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+  {% if place %}
+    <div class="bg-primary-darker">
+      <div class="grid-container">
+        <div class="grid-row flex-no-wrap">
+          <svg class="usa-icon height-4 width-4 margin-top-2 margin-right-05 text-accent-cool"
+               aria-hidden="true"
+               focusable="false"
+               role="img">
+            <use xlink:href="{% static 'images/uswds/sprite.svg' %}#location_on"></use>
+          </svg>
+          <h1 class="text-white font-heading-xl tablet:flex-1">{% place_label place %}</h1>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>

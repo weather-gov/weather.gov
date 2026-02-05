@@ -1,0 +1,40 @@
+# English translation of beta.weather.gov for using in JavaScript
+#
+# See django.po for an explanation of this file.
+msgid ""
+msgstr ""
+"Project-Id-Version: Weather.gov Utility\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "js.alerts.link.see-details.01"
+msgstr "see details"
+
+msgid "js.loader.loading-text.01"
+msgstr "Loading the forecast"
+
+msgid "js.location-combo-box.aria.search-updated.01"
+msgid_plural "js.location-combo-box.aria.search-updated.01-plural"
+msgstr[0] "Search updated. %s result available"
+msgstr[1] "Search updated. %s results available"
+
+msgid "js.offline-banner.aria.you-are-back-online.01"
+msgstr "You are back online."
+
+msgid "js.inline-panel-confirm-delete-prompt.01"
+msgstr "Are you sure you want to delete this item? Click OK to delete, or Cancel to return to the editor."
+
+msgid "js.county-index.results.aria.01"
+msgstr "Filtered results updated"
+
+msgid "js.county-index.results.num-counties.01"
+msgid_plural "js.county-index.results.num-counties.01-plural"
+msgstr[0] "%s county"
+msgstr[1] "%s counties"
+
+msgid "js.county-index.results.num-states.01"
+msgid_plural "js.county-index.results.num-states.01-plural"
+msgstr[0] "%s state"
+msgstr[1] "%s states"

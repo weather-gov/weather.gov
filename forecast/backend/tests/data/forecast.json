@@ -1,0 +1,382 @@
+{
+  "some_missing_temperatures": {
+    "isMarine": false,
+    "forecast": {
+      "days": [
+        {
+          "periods": [
+            {
+              "start": "2009-01-02T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 100
+                }
+              }
+            },
+            {
+              "isDaytime": false,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 30
+                }
+              }
+            }
+          ],
+          "hours": [
+            {
+              "apparentTemperature": { "degF": 45 },
+              "temperature": { "degF": 49 },
+              "probabilityOfPrecipitation": { "percent": 27 },
+              "dewpoint": { "degF": 88 },
+              "relativeHumidity": { "percent": 400 },
+              "windSpeed": { "mph": 3 },
+              "windGust": { "mph": 175 },
+              "windDirection": "yonder"
+            },
+            {
+              "apparentTemperature": { "degF": 48 },
+              "temperature": { "degF": 51 },
+              "probabilityOfPrecipitation": { "percent": 13 },
+              "dewpoint": { "degF": 9 },
+              "relativeHumidity": { "percent": 35 },
+              "windSpeed": { "mph": 9 },
+              "windGust": { "mph": 4 },
+              "windDirection": "north"
+            }
+          ],
+          "maxPop": 3,
+          "alerts": {
+            "metadata": { "count": 0 }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": false,
+            "periods": [
+              {
+                "start": "2025-12-15T02:00:00-06:00",
+                "end": "2025-12-15T04:00:00-06:00",
+                "liquid": { "in": 3 }
+              },
+              {
+                "start": "2025-12-15T04:00:00-06:00",
+                "end": "2025-12-15T07:00:00-06:00",
+                "liquid": { "in": 0.03 }
+              }
+            ]
+          }
+        },
+        {
+          "periods": [
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": false,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": null,
+          "alerts": {
+            "metadata": { "count": 0 }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": false,
+            "periods": []
+          }
+        },
+        {
+          "periods": [
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": false,
+              "isOvernight": true,
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            },
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            },
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": false,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": null
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": 30,
+          "alerts": {
+            "metadata": { "count": 0 }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": false,
+            "periods": []
+          }
+        }
+      ]
+    }
+  },
+  "nosnow_noice_noalerts": {
+    "isMarine": false,
+    "forecast": {
+      "days": [
+        {
+          "periods": [
+            {
+              "start": "2009-01-02T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 100
+                }
+              }
+            },
+            {
+              "isDaytime": false,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 30
+                }
+              }
+            }
+          ],
+          "hours": [
+            {
+              "apparentTemperature": { "degF": 45 },
+              "temperature": { "degF": 49 },
+              "probabilityOfPrecipitation": { "percent": 27 },
+              "dewpoint": { "degF": 88 },
+              "relativeHumidity": { "percent": 400 },
+              "windSpeed": { "mph": 3 },
+              "windGust": { "mph": 175 },
+              "windDirection": "yonder"
+            },
+            {
+              "apparentTemperature": { "degF": 48 },
+              "temperature": { "degF": 51 },
+              "probabilityOfPrecipitation": { "percent": 13 },
+              "dewpoint": { "degF": 9 },
+              "relativeHumidity": { "percent": 35 },
+              "windSpeed": { "mph": 9 },
+              "windGust": { "mph": 4 },
+              "windDirection": "north"
+            }
+          ],
+          "maxPop": 3,
+          "alerts": {
+            "metadata": { "count": 0 }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": false,
+            "periods": [
+              {
+                "start": "2025-12-15T02:00:00-06:00",
+                "end": "2025-12-15T04:00:00-06:00",
+                "liquid": { "in": 3 }
+              },
+              {
+                "start": "2025-12-15T04:00:00-06:00",
+                "end": "2025-12-15T07:00:00-06:00",
+                "liquid": { "in": 0.03 }
+              }
+            ]
+          }
+        },
+        {
+          "periods": [
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": false,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": null,
+          "alerts": {
+            "metadata": { "count": 0 }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": false,
+            "periods": []
+          }
+        },
+        {
+          "periods": [
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": false,
+              "isOvernight": true,
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            },
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            },
+            {
+              "start": "2009-03-04T13:00:00Z",
+              "isDaytime": false,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 19
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": 30,
+          "alerts": {
+            "metadata": { "count": 0 }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": false,
+            "periods": []
+          }
+        }
+      ]
+    }
+  },
+  "snow_noice_alert_noalertlevel": {
+    "isMarine": false,
+    "forecast": {
+      "days": [
+        {
+          "periods": [
+            {
+              "start": "2009-01-02T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 100
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": 3,
+          "alerts": {
+            "metadata": {
+              "count": 1,
+              "highest": ""
+            }
+          },
+          "qpf": {
+            "hasSnow": true,
+            "hasIce": false,
+            "periods": [
+              {
+                "start": "2025-12-15T02:00:00-06:00",
+                "end": "2025-12-15T04:00:00-06:00",
+                "liquid": { "in": 3 },
+                "snow": { "in": 17 }
+              },
+              {
+                "start": "2025-12-15T04:00:00-06:00",
+                "end": "2025-12-15T07:00:00-06:00",
+                "liquid": { "in": 0.03 },
+                "snow": { "in": 4 }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "nosnow_ice_alert": {
+    "isMarine": false,
+    "alerts": {
+      "items": ["alert-id-1", "alert-id-2", "alert-id-3"],
+      "metadata": { "error": false, "lastUpdated": null },
+      "highestLevel": "alert"
+    },
+    "forecast": {
+      "days": [
+        {
+          "periods": [
+            {
+              "start": "2009-01-02T13:00:00Z",
+              "isDaytime": true,
+              "isOvernight": false,
+              "data": {
+                "temperature": {
+                  "degF": 100
+                }
+              }
+            }
+          ],
+          "hours": [],
+          "maxPop": 3,
+          "alerts": {
+            "metadata": {
+              "count": 1,
+              "highest": "warning"
+            }
+          },
+          "qpf": {
+            "hasSnow": false,
+            "hasIce": true,
+            "periods": [
+              {
+                "start": "2025-12-15T02:00:00-06:00",
+                "end": "2025-12-15T04:00:00-06:00",
+
+                "liquid": { "in": 3 },
+                "ice": { "in": 3 }
+              },
+              {
+                "start": "2025-12-15T04:00:00-06:00",
+                "end": "2025-12-15T07:00:00-06:00",
+                "liquid": { "in": 0.03 },
+                "ice": { "in": 6 }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

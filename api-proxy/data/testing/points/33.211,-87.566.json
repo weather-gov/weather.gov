@@ -1,0 +1,91 @@
+{
+  "@bundle": {
+    "name": "wind is null"
+  },
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": {
+        "@id": "s:GeoCoordinates",
+        "@type": "geo:wktLiteral"
+      },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": {
+        "@id": "s:Distance",
+        "@type": "s:QuantitativeValue"
+      },
+      "bearing": {
+        "@type": "s:QuantitativeValue"
+      },
+      "value": {
+        "@id": "s:value"
+      },
+      "unitCode": {
+        "@id": "s:unitCode",
+        "@type": "@id"
+      },
+      "forecastOffice": {
+        "@type": "@id"
+      },
+      "forecastGridData": {
+        "@type": "@id"
+      },
+      "publicZone": {
+        "@type": "@id"
+      },
+      "county": {
+        "@type": "@id"
+      }
+    }
+  ],
+  "id": "https://api.weather.gov/points/33.211,-87.566",
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [-87.566000000000003, 33.210999999999999]
+  },
+  "properties": {
+    "@id": "https://api.weather.gov/points/33.211,-87.566",
+    "@type": "wx:Point",
+    "cwa": "BMX",
+    "forecastOffice": "https://api.weather.gov/offices/BMX",
+    "gridId": "BMX",
+    "gridX": 32,
+    "gridY": 69,
+    "forecast": "https://api.weather.gov/gridpoints/BMX/32,69/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/BMX/32,69/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/BMX/32,69",
+    "observationStations": "https://api.weather.gov/gridpoints/BMX/32,69/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-87.528300000000002, 33.234403999999998]
+      },
+      "properties": {
+        "city": "Tuscaloosa",
+        "state": "AL",
+        "distance": {
+          "unitCode": "wmoUnit:m",
+          "value": 4366.9836965524
+        },
+        "bearing": {
+          "unitCode": "wmoUnit:degree_(angle)",
+          "value": 233
+        }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/ALZ023",
+    "county": "https://api.weather.gov/zones/county/ALC125",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/ALZ023",
+    "timeZone": "America/Chicago",
+    "radarStation": "KBMX"
+  }
+}

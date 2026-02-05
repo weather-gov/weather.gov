@@ -1,0 +1,12 @@
+{
+  "name": "weather.gov-spatial-data",
+  "description": "",
+  "version": "1.0.0",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "pg": "^8.13.3"
+  },
+  "devDependencies": {
+    "playwright": "^1.46.0"
+  }
+}

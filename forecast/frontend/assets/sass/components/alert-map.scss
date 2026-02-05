@@ -1,0 +1,118 @@
+@use "uswds-core" as *;
+
+/* AlertMap Overrides
+-------------------------------------- */
+
+wx-alert-map > .wx_alert_map_legend > div.wx_alert_map_legend--dynamic,
+div.wx_alert_map_legend--advisory {
+  background-color: rgb(180 193 205 / 30%);
+  border: 2px solid rgb(88 94 99 / 85%);
+}
+
+wx-alert-map[data-alert-name$="Warning"]
+  > .wx_alert_map_legend
+  > div.wx_alert_map_legend--dynamic,
+div.wx_alert_map_legend--warning {
+  background-color: rgb(216 57 51 / 30%);
+  border: 2px solid rgb(251 90 71 / 85%);
+}
+
+wx-alert-map[data-alert-name$="Watch"]
+  > .wx_alert_map_legend
+  > div.wx_alert_map_legend--dynamic,
+div.wx_alert_map_legend--watch {
+  background-color: rgb(210 185 59 / 30%);
+  border: 2px solid rgb(148 113 0 / 85%);
+}
+
+div.wx_alert_map_legend--county {
+  border: 2px solid #074b69;
+}
+
+.wx-county-alert-map-container {
+  aspect-ratio: 8/9 !important;
+  height: auto !important;
+  width: auto !important;
+
+  // radar-specific tweaks
+  button.wx-radar-expand svg {
+    // units(0.75) is not understood, so calc it.
+    margin-left: calc(calc(units(4) - units(2.5)) / 2);
+  }
+
+  button.wx-radar-expand,
+  button.wx-map-control,
+  button.wx-map-control__expanded {
+    border: 0;
+    border-radius: radius("md");
+    height: units(4);
+    width: units(4);
+    text-align: center;
+    background: color("white");
+
+    @include u-shadow(1);
+
+    svg {
+      // Inline elements have a default baseline vertical alignment which
+      // adds a bottom gap that cannot be styled away. We can either change the
+      // vertical alignment or the display type to get rid of it. Without this
+      // change, the button is taller than the contents.
+      display: block;
+      fill: color("base");
+      stroke: color("base");
+      height: units(2.5);
+      width: units(2.5);
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      @include u-shadow(2);
+    }
+
+    &:hover,
+    &:focus {
+      background: color("base-lighter");
+
+      svg {
+        stroke: color("base-dark");
+        fill: color("base-dark");
+      }
+    }
+
+    &:active {
+      background: color("base-light");
+
+      svg {
+        stroke: color("base-dark");
+        fill: color("base-dark");
+      }
+    }
+  }
+}
+
+.wx-county-alert-map-container.wx-county-alert-map-container__expanded {
+  aspect-ratio: 3/5 !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+@include at-media("tablet") {
+  .wx-county-alert-map-container {
+    aspect-ratio: 4/3 !important;
+
+    &.wx-county-alert-map-container__expanded {
+      aspect-ratio: 5/6 !important;
+    }
+  }
+}
+
+@include at-media("desktop") {
+  .wx-county-alert-map-container {
+    aspect-ratio: 4/3 !important;
+
+    &.wx-county-alert-map-container__expanded {
+      aspect-ratio: 3/2 !important;
+    }
+  }
+}

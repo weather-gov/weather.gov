@@ -1,0 +1,51 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+@forward "daily";
+
+.wx-daily-forecast-summary-area--other {
+  margin-bottom: units(1);
+
+  @include at-media(tablet) {
+    @include grid-col(6);
+  }
+
+  > span {
+    @extend .wx-marker-before--indigo;
+  }
+}
+
+.wx-daily-forecast-summary-area--overnight {
+  margin-bottom: units(3);
+
+  @include grid-col(12);
+
+  > span {
+    @extend .wx-marker-before--midnight-indigo;
+  }
+}
+
+.wx-daily-forecast-summary-area--daytime {
+  margin-bottom: units(3);
+
+  @include grid-col(12);
+
+  > span {
+    @extend .wx-marker-before--yellow;
+  }
+}
+
+@include at-media("desktop") {
+  .wx-daily-forecast-summary-area--overnight,
+  .wx-daily-forecast-summary-area--other {
+    margin-bottom: units(1);
+
+    @include grid-col(6);
+  }
+
+  .wx-daily-forecast-summary-area--daytime {
+    margin-bottom: units(1);
+
+    @include grid-col(6);
+  }
+}

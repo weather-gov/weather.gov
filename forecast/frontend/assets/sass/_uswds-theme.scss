@@ -1,0 +1,201 @@
+/*
+----------------------------------------
+USWDS with settings overrides
+----------------------------------------
+Uncomment the following lines and add a list of changed settings
+in the form $setting: value,
+----------------------------------------
+*/
+
+//  @use "uswds-core" with (
+//    $setting: value,
+//    $setting: value
+//  );
+
+/* ---------------------------------------
+The following colors are brand colors taken from the NWS and NOAA logos
+and styleguides. The NWS color names are unoffical.
+---------------------------------------- */
+$noaa-water-blue: #0085ca;
+$noaa-sky-blue: #003087;
+$nws-indigo: #0000a4;
+$nws-light-blue: #33b0e1;
+$nws-red: #f00;
+
+@use "uswds-core" with (
+  /* ----------------------------------------
+   Typography settings
+  ---------------------------------------- */
+  $theme-font-path: "../fonts",
+  $theme-font-browser-compatibility: true,
+  $theme-typeface-tokens: (
+    "Nunito Sans": (
+      "display-name": "Nunito Sans",
+      // Cap-height is the px size of a capital "N" at size 500 in Figma
+      "cap-height": 353px,
+      "stack": "'Open Sans', 'Helvetica Neue', sans-serif",
+    ),
+    "DM Mono": (
+      "display-name": "DM Mono",
+      "cap-height": 350px,
+      "stack": "'Roboto Mono Web', 'Courier New', monospace, serif",
+    )
+  ),
+  $theme-font-weight-thin: 200,
+  $theme-font-sans-custom-src: (
+    dir: "nunito-sans",
+    // the name of your font family directory
+    roman: (
+        100: false,
+        200: "nunito-sans-latin-200-normal",
+        300: "nunito-sans-latin-300-normal",
+        400: "nunito-sans-latin-400-normal",
+        500: "nunito-sans-latin-500-normal",
+        600: "nunito-sans-latin-600-normal",
+        700: "nunito-sans-latin-700-normal",
+        800: false,
+        900: false,
+      ),
+    italic: (
+      100: false,
+      200: false,
+      300: false,
+      400: "nunito-sans-latin-400-italic",
+      500: "nunito-sans-latin-500-italic",
+      600: false,
+      700: "nunito-sans-latin-700-italic",
+      800: false,
+      900: false,
+    )
+  ),
+
+  $theme-font-mono-custom-src: (
+    dir: "dm-mono",
+    // the name of your font family directory
+    roman: (
+        100: false,
+        200: false,
+        300: "dm-mono-latin-300-normal",
+        400: false,
+        500: "dm-mono-latin-400-normal",
+        600: false,
+        700: "dm-mono-latin-500-normal",
+        800: false,
+        900: false,
+      ),
+    italic: (
+      100: false,
+      200: false,
+      300: "dm-mono-latin-300-italic",
+      400: false,
+      500: "dm-mono-latin-400-italic",
+      600: "dm-mono-latin-500-italic",
+      700: false,
+      800: false,
+      900: false,
+    )
+  ),
+  $theme-font-type-sans: "Nunito Sans",
+  $theme-font-type-mono: "DM Mono",
+
+  $theme-font-role-heading: "sans",
+  $theme-font-role-body: "sans",
+  $theme-font-role-code: "mono",
+
+  $theme-type-scale-3xs: "micro",
+  $theme-type-scale-2xs: 1,
+  $theme-type-scale-xs: 3,
+  $theme-type-scale-sm: 5,
+  $theme-type-scale-md: 7,
+  $theme-type-scale-lg: 9,
+  $theme-type-scale-xl: 11,
+  $theme-type-scale-2xl: 12,
+  $theme-type-scale-3xl: 14,
+
+  $theme-h1-font-size: "2xl",
+  $theme-h2-font-size: "xl",
+  $theme-h3-font-size: "lg",
+  $theme-h4-font-size: "md",
+  $theme-h5-font-size: "sm",
+
+  $theme-text-measure: 5,
+  $theme-heading-margin-top: 1.2em,
+
+  /* ----------------------------------------
+  COLOR SETTINGS
+  ---------------------------------------- */
+  $theme-color-primary-lightest: "blue-5",
+  $theme-color-primary-lighter: "blue-20",
+  $theme-color-primary-light: $noaa-water-blue,
+  $theme-color-primary: "blue-60v",
+  $theme-color-primary-dark: "blue-70v",
+  $theme-color-primary-darker: "blue-80v",
+  $theme-color-primary-darkest: "blue-90",
+
+  $theme-color-secondary-lightest: "indigo-5v",
+  $theme-color-secondary-lighter: "indigo-20v",
+  $theme-color-secondary-light: "indigo-30v",
+  $theme-color-secondary: "indigo-50v",
+  $theme-color-secondary-dark: "indigo-60v",
+  $theme-color-secondary-darker: $nws-indigo,
+  $theme-color-secondary-darkest: $noaa-sky-blue,
+
+  $theme-color-accent-cool-lightest: "blue-cool-5v",
+  $theme-color-accent-cool-lighter: "blue-cool-20v",
+  $theme-color-accent-cool-light: "blue-cool-30v",
+  $theme-color-accent-cool: $nws-light-blue,
+  $theme-color-accent-cool-dark: "blue-cool-60v",
+  $theme-color-accent-cool-darker: "blue-cool-70v",
+  $theme-color-accent-cool-darkest: "blue-cool-80v",
+
+  $theme-color-accent-warm-lightest: "red-5",
+  $theme-color-accent-warm-lighter: "red-30",
+  $theme-color-accent-warm-light: "red-40",
+  $theme-color-accent-warm: $nws-red,
+  $theme-color-accent-warm-dark: "red-50v",
+  $theme-color-accent-warm-darker: "red-70v",
+  $theme-color-accent-warm-darkest: "red-80v",
+
+  $theme-color-base-lightest: "gray-cool-3",
+  $theme-color-base-lighter: "gray-cool-10",
+  $theme-color-base-light: "gray-cool-20",
+  $theme-color-base: "gray-cool-50",
+  $theme-color-base-dark: "gray-cool-60",
+  $theme-color-base-darker: "gray-cool-70",
+  $theme-color-base-darkest: "gray-cool-90",
+  $theme-color-base-ink: "gray-cool-90",
+
+  $theme-link-color: "primary",
+  $theme-link-hover-color: "primary-dark",
+  $theme-link-active-color: "primary-darker",
+
+  /* ----------------------------------------
+  UTILITIES SETTINGS
+  ---------------------------------------- */
+  $theme-utility-breakpoints: ("tablet-lg": true),
+  // 880px)
+  /* ----------------------------------------
+  COMPONENT SETTINGS
+  ---------------------------------------- */
+  $theme-accordion-border-color: "primary-dark",
+  $theme-accordion-button-background-color: "primary-dark",
+
+  $theme-banner-background-color: "primary-darker",
+
+  $theme-table-border-color: "base-lighter",
+
+  $theme-header-min-width: ("tablet-lg"),
+
+  /* ----------------------------------------
+  META SETTINGS
+  ---------------------------------------- */
+  $theme-show-compile-warnings: true,
+  $theme-show-notifications: false,
+
+  $theme-image-path: "../images/uswds",
+
+  $flex-direction-settings: (responsive: true),
+  $text-align-settings: (responsive: true),
+  $min-height-settings: (responsive: true),
+  $margin-settings: (responsive: true)
+);

@@ -1,0 +1,27 @@
+@startuml weather.gov software stack
+!include  <C4/C4_Component.puml>
+
+LAYOUT_WITH_LEGEND()
+title weather.gov software stack
+skinparam linetype polyline
+
+
+Person_Ext(anon, "Public user")
+
+System_Boundary(web, "weather.gov") {
+  System(django, "Django")
+  ComponentDb(db, "PostGIS")
+  Component(data, "API interop layer")
+}
+
+System_Ext(api, "api.weather.gov")
+
+BiRel(django, db, "Stores content and spatial data")
+Rel(django, data, "Gets weather data")
+
+Rel(anon, django, "visits the site")
+
+Rel(data, api, "Fetches data from api.weather.gov")
+
+
+@enduml

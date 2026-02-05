@@ -1,0 +1,214 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+// Mobile is the default
+// but we hide this component unless
+// we are on desktop
+.wx-quick-forecast {
+  display: none;
+}
+
+/* Desktop styles
+-------------------------------------------- */
+@include at-media("desktop") {
+  .wx-quick-forecast-header {
+    display: none;
+  }
+
+  .wx-quick-forecast {
+    @include grid-row;
+    @include grid-col(12);
+
+    border: 1px solid color("base-lighter");
+    text-decoration: none;
+    background-color: color("white");
+    flex-wrap: nowrap;
+  }
+
+  .wx-quick-forecast-item {
+    @include grid-col;
+    @include grid-row;
+
+    padding: units(1.5);
+    text-decoration: none;
+    border-bottom: 1px solid color("base-lighter");
+    position: relative;
+    border-right: 1px solid color("base-lighter");
+
+    &:hover::after {
+      display: block;
+      content: " ";
+      position: absolute;
+      height: calc(100% + 4px);
+      width: calc(100% + 4px);
+      top: -2px;
+      left: -2px;
+      border: 2px solid color("primary-dark");
+      z-index: 100;
+    }
+
+    &:last-child {
+      border-right: none;
+    }
+
+    hr {
+      display: block;
+      border: none;
+      border-bottom: 1px solid color("base-lighter");
+      width: 100%;
+      margin: 0;
+    }
+
+    time {
+      @include grid-col(12);
+      @include u-font("mono", "xs");
+
+      display: block;
+      color: color("primary-dark");
+      text-align: center;
+
+      span {
+        display: block;
+      }
+
+      span:last-child {
+        text-decoration: underline;
+        margin-top: units(0);
+      }
+    }
+
+    .wx-quick-forecast-item-top {
+      @include grid-row;
+      @include grid-col(12);
+
+      padding-bottom: units(1);
+      align-items: center;
+    }
+
+    .wx-quick-forecast-item-high-low {
+      width: 100%;
+      margin-top: units(1);
+
+      @include grid-col(12);
+      @include grid-row;
+    }
+
+    .wx-quick-forecast-condition {
+      @include grid-col(12);
+
+      display: flex;
+      justify-content: center;
+      margin-top: units(1.5);
+      margin-bottom: units(1);
+    }
+
+    .wx-quick-forecast-item-bottom {
+      @include u-font("body", "sm");
+      @include grid-col(12);
+
+      display: block;
+      padding-top: units(1);
+      text-align: center;
+      margin-top: units(1);
+      color: color("primary-darker");
+    }
+
+    .wx-quick-high,
+    .wx-quick-low {
+      @include u-font("mono", "xs");
+
+      margin-bottom: units(0.5);
+
+      @include grid-row;
+      @include grid-col(12);
+
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .wx-quick-low {
+      margin-bottom: 0;
+    }
+
+    .wx-quick-label {
+      display: block;
+      text-transform: uppercase;
+      color: color("base-dark");
+    }
+
+    .wx-quick-temp {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: flex-start;
+      color: color("primary-darker");
+
+      @include u-font("body", "sm");
+
+      span {
+        @include u-font("body", "3xs");
+      }
+    }
+
+    .wx-alert-icon {
+      width: units(4);
+      height: units(4);
+
+      &:first-child {
+        margin-right: units(0.5);
+      }
+
+      &[data-alert-level] {
+        fill: color("base");
+      }
+
+      &[data-alert-level="watch"] {
+        fill: color("yellow-50v");
+      }
+
+      &[data-alert-level="warning"] {
+        fill: color("red-50");
+      }
+    }
+
+    .wx-degree {
+      @include u-font("body", "3xs");
+
+      padding-left: 1px;
+    }
+
+    &[aria-selected="true"] {
+      background-color: color("primary-darker");
+      color: white;
+
+      .wx-quick-forecast-item-bottom,
+      .wx-quick-temp {
+        color: white;
+      }
+
+      .wx-quick-label {
+        color: color("base-lighter");
+      }
+
+      time {
+        color: color("accent-cool-lighter");
+      }
+
+      .wx-alert-icon {
+        fill: white;
+
+        &[data-alert-level] {
+          fill: color("base-lighter");
+        }
+
+        &[data-alert-level="watch"] {
+          fill: color("yellow-5v");
+        }
+
+        &[data-alert-level="warning"] {
+          fill: color("red-cool-30v");
+        }
+      }
+    }
+  }
+}
