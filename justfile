@@ -91,7 +91,11 @@ django-restart:
 [group("django management")]
 [script]
 load-spatial arg="":
-  if [ "{{arg}}" = "clean" ]; then
+  if [ -f spatial-dump.sql ]; then \
+    echo "Restoring spatial data from dump..."; \
+    docker compose exec -T database psql -U drupal -d weathergov < spatial-dump.sql; \
+    echo "Done."; \
+  elif [ "{{arg}}" = "clean" ]; then
     docker compose exec web python manage.py loadspatial --force
   else
     docker compose exec web python manage.py loadspatial
@@ -309,6 +313,7 @@ stop-plantuml:
 # Destroys all containers, databases, and volumes and starts over fresh and clean
 [group("dev environment management")]
 zap options="":
+  -just dump-spatial
   docker compose down -v
   just init "{{options}}"
 
@@ -343,3 +348,8 @@ load-zones:
 [group("spatial data loading")]
 load-places:
   docker compose exec web python manage.py loadspatial --places
+
+# Dump spatial data to a SQL file on the host
+[group("spatial data loading")]
+dump-spatial:
+  docker compose exec database pg_dump -U drupal -d weathergov --data-only --inserts -t weathergov_geo_states -t weathergov_geo_counties -t weathergov_geo_cwas -t weathergov_geo_zones -t weathergov_geo_places -t weathergov_geo_metadata > spatial-dump.sql
