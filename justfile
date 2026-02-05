@@ -50,7 +50,7 @@ svg:
 # Serve the documentation
 [group("building")]
 serve-docs:
-  npm run docs:serve
+  docker compose --profile utility up docs
 
 # Update README code organization
 readme-code-org:

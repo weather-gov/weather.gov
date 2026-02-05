@@ -52,8 +52,8 @@
   },
   "scripts": {
     "check-translations": "node ./tests/translations/main.js",
-    "docs:serve": "mkdocs serve",
-    "docs:build": "mkdocs build",
+    "docs:serve": "docker compose --profile utility up docs",
+    "docs:build": "docker compose --profile utility run --rm docs build",
     "update-code-org": "node scripts/update-code-org.js"
   },
   "prettier": {},

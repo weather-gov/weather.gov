@@ -162,6 +162,14 @@ services:
       - 8180:8080
     profiles: ["utility"]
 
+  docs:
+    image: squidfunk/mkdocs-material
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/docs
+    profiles: ["utility"]
+
   redis:
     image: redis:8.4-alpine
     restart: always
