@@ -18,6 +18,9 @@ nav:
       - 'Legacy Docs':
         - 'Multi Counties': dev/api-interop/multi-counties.md
     - 'Authentication': dev/authentication.md
+    - 'Changelogs':
+        - 'Main': CHANGELOG.md
+        - 'Local (2468572)': CHANGELOG-2468572.md
     - 'Cloudgov Quota': dev/cloudgov-quota.md
     - 'Comment Templates': dev/comment-templates.md
     - 'Databases': dev/databases.md
@@ -40,7 +43,6 @@ nav:
     - 'Spatial Data': dev/spatial-data.md
     - 'Terraform': dev/terraform.md
     - 'Testing': dev/testing.md
-    - 'Changelog': CHANGELOG.md
   - Product:
     - 'Roadmap': product/roadmap.md
     - 'Tagged Releases': product/tagged-releases.md

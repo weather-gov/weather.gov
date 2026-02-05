@@ -1,7 +1,7 @@
 {
   "name": "weather.gov",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.20.0",
   "main": "index.js",
   "contributors": [
     "Claire Annan",

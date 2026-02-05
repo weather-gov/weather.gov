@@ -1,6 +1,6 @@
 {
   "name": "wxgov-api-interop-layer",
-  "version": "1.0.0",
+  "version": "1.20.0",
   "description": "",
   "main": "src/server.js",
   "type": "module",
