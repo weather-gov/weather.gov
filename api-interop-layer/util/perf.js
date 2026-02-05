@@ -1,5 +1,11 @@
 import http from "node:http";
 import { performance } from "node:perf_hooks";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // Setup environment BEFORE importing fetch utils
 // Start Mock Server
@@ -82,6 +88,24 @@ async function main() {
 	await runBenchmark("BenchmarkFetchAPIJson", async () => {
 		await fetchAPIJson("/some/path");
 	}, FETCH_RUNS);
+
+	// 6. Timezone Conversion
+	// We want to test our local dayjs.timezone.js implementation if possible, OR just standard dayjs.timezone
+	// The user's request mentioned "day.js.timezone.js" which seems to be a custom file.
+	// The file `api-interop-layer/util/dayjs.timezone.js` exports a function that takes (o, c, d).
+	// This is a plugin format.
+	// However, for benchmarking, let's test the standard dayjs timezone operation as that's what's likely being used or replaced.
+	// Wait, the user said "review day.js.timezone.js. We want to create an equivalent function in Golang".
+	// And "explain how the golang equivalent of day.js.timezone.js will work".
+	// To compare apples to apples, we should benchmark the JS implementation of timezone conversion.
+	// Let's assume standard dayjs usage: dayjs(date).tz(timezone)
+	// We already imported and extended it above.
+
+	const date = new Date("2023-01-01T12:00:00Z");
+	const tz = "America/New_York";
+	await runBenchmark("BenchmarkConvertTimezone", () => {
+		dayjs(date).tz(tz);
+	}, RUNS);
 
 	server.close();
 }

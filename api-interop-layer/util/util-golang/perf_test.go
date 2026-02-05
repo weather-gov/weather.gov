@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
 // BenchmarkConvertProperties benchmarks the property conversion logic
@@ -97,6 +98,21 @@ func BenchmarkFetchAPIJson(b *testing.B) {
 		_, err := FetchAPIJson("/some/path")
 		if err != nil {
 			b.Fatalf("Fetch failed: %v", err)
+		}
+	}
+}
+
+// BenchmarkConvertTimezone benchmarks the timezone conversion logic
+func BenchmarkConvertTimezone(b *testing.B) {
+	// 2023-01-01 12:00:00 UTC
+	t := time.Date(2023, 1, 1, 12, 0, 0, 0, time.UTC)
+	tz := "America/New_York"
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, err := ConvertTimezone(t, tz)
+		if err != nil {
+			b.Fatalf("ConvertTimezone failed: %v", err)
 		}
 	}
 }

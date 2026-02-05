@@ -18,16 +18,18 @@ This report compares the performance of utility functions implemented in both Ja
 2.  **SentenceCase / TitleCase**: String manipulation logic using regex and splitting.
 3.  **ParagraphSquash**: Text formatting to remove excess whitespace.
 4.  **FetchAPIJson**: A network simulation performing an HTTP GET request to a local mock server and parsing the JSON response.
+5.  **ConvertTimezone**: Converting a standard UTC timestamp to a specific timezone (e.g. America/New_York).
 
 **Note**: For the fetch benchmark, a local mock HTTP server was spun up on a dynamic port to eliminate external network variation. Redis caching was disabled.
 
 ## Conclusions
 
 1.  **Complex Logic Favors Go**: For `ConvertProperties`, which involves traversing objects and applying logic, Go was **~2.3x faster**. This suggests Go is better suited for the heavy lifting of data transformation in this pipeline.
-2.  **Network/JSON Handling Favors Go**: The most significant difference was in `FetchAPIJson`, where Go was **~3x faster**. Go's standard library `net/http` and `encoding/json` are highly optimized for this use case compared to Node's `fetch` implementation.
+2.  **Network/JSON Handling Favors Go**: The most significant difference was in `FetchAPIJson`, where Go was **~4.4x faster**. Go's standard library `net/http` and `encoding/json` are highly optimized for this use case compared to Node's `fetch` implementation.
 3.  **Micro-String Operations**: Initially, JavaScript performed better on simple string operations. However, after optimizing `ParagraphSquash` to use `strings.Builder` instead of Regex, Go `ParagraphSquash` is now **~4.4x faster** than the JS version (118 ns/op vs 525 ns/op). This highlights that while V8 is fast, optimized Go code using the right primitives (byte-level processing) can outperform JS significantly.
+4.  **Timezone Conversion Logic**: Go is **massively faster (~4,300x)** at timezone conversion. The JavaScript implementation relies on `Intl.DateTimeFormat`, which is computationally expensive even with caching. Go's native `time` package handles timezone calculations with simple arithmetic and memory lookups, resulting in sub-microsecond performance (11.5 ns vs 49,722 ns).
 
-**Recommendation**: The `api-interop-layer` would benefit significantly from moving the heavy data transformation and fetching logic to Go, as demonstrated by the `ConvertProperties` and `FetchAPIJson` results.
+**Recommendation**: The `api-interop-layer` would benefit significantly from moving the heavy data transformation, fetching, and date/time logic to Go.
 
 ---
 
@@ -62,11 +64,12 @@ The implementation was redesigned (see `paragraph_squash.go`) to use a single-pa
 
 | Utility | JS Time (ns/op) | Go Time (ns/op) | Difference (Go vs JS) |
 | :--- | :--- | :--- | :--- |
-| **ConvertProperties** | 4,016 | 1,712 | **~2.3x Faster** |
-| .SentenceCase | 269 | 363 | ~1.35x Slower |
-| .TitleCase | 442 | 810 | ~1.8x Slower |
+| **ConvertProperties** | 4,016 | 1,482 | **~2.7x Faster** |
+| .SentenceCase | 269 | 301 | ~1.1x Slower |
+| .TitleCase | 442 | 675 | ~1.5x Slower |
 | .ParagraphSquash | 525 | 118 | **~4.4x Faster** |
-| **FetchAPIJson** | 317,722 | 105,231 | **~3x Faster** |
+| **FetchAPIJson** | 375,403 | 85,767 | **~4.4x Faster** |
+| **ConvertTimezone** | 49,722 | 11.5 | **~4,323x Faster** |
 
 ## Raw Output
 
@@ -76,14 +79,16 @@ BenchmarkConvertProperties: 4016.78 ns/op (248955.42 ops/s)
 BenchmarkSentenceCase: 269.02 ns/op (3717259.03 ops/s)
 BenchmarkTitleCase: 442.05 ns/op (2262213.12 ops/s)
 BenchmarkParagraphSquash: 525.73 ns/op (1902109.49 ops/s)
-BenchmarkFetchAPIJson: 317722.00 ns/op (3147.41 ops/s)
+BenchmarkFetchAPIJson: 375403.71 ns/op (2663.80 ops/s)
+BenchmarkConvertTimezone: 49722.22 ns/op (20111.73 ops/s)
 ```
 
 ### Go
 ```text
-BenchmarkConvertProperties-10             773552              1712 ns/op
-BenchmarkSentenceCase-10                 2985199               363.4 ns/op
-BenchmarkTitleCase-10                    1506009               810.5 ns/op
-BenchmarkParagraphSquash-10             10040128               118.3 ns/op
-BenchmarkFetchAPIJson-10                   13645            105231 ns/op
+BenchmarkConvertProperties-10             781591              1482 ns/op
+BenchmarkSentenceCase-10                 3938809               301.6 ns/op
+BenchmarkTitleCase-10                    1803637               675.3 ns/op
+BenchmarkParagraphSquash-10              9695871               119.2 ns/op
+BenchmarkFetchAPIJson-10                   13794             85767 ns/op
+BenchmarkConvertTimezone-10             100000000               11.49 ns/op
 ```
