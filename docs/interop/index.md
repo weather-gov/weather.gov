@@ -81,3 +81,21 @@ The following benchmarks compare the performance of critical utility functions i
 ## Definitions
 
 For schema definitions and property details, see the [Definitions](definitions/index.md) section.
+
+## OpenAPI Documentation
+
+The API Interop Layer includes auto-generated OpenAPI documentation served via Swagger UI.
+
+### Viewing Documentation Locally
+
+To view the documentation, start the interop layer in development mode:
+
+```bash
+cd api-interop-layer
+npm run start-dev
+```
+
+Once the server is running, you can access the documentation at:
+
+- **OpenAPI UI:** [http://localhost:8082/documentation](http://localhost:8082/documentation)
+- **OpenAPI JSON Spec:** [http://localhost:8082/documentation/json](http://localhost:8082/documentation/json)

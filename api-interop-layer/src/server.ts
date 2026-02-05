@@ -1,5 +1,7 @@
 import fastify from "fastify";
 import newrelic from "newrelic";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui";
 import { logger } from "./util/monitoring/index.js";
 import { startAlertProcessing } from "./data/alerts/index.js";
 import routes from "./routes/index.js";
@@ -37,6 +39,40 @@ export const main = async () => {
     logger.error({ err }, "uncaught exception");
     // explicitly crash.
     process.exit(1);
+  });
+
+  await server.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: "weather.gov API interoperability layer",
+        description: "API documentation for the weather.gov interoperability layer",
+        version: "1.0.0",
+      },
+      servers: [
+        {
+          url: `http://localhost:${port}`,
+          description: "Local development server",
+        },
+      ],
+    },
+  });
+
+  await server.register(fastifySwaggerUi, {
+    routePrefix: "/documentation",
+    uiConfig: {
+      docExpansion: "list",
+      deepLinking: true,
+    },
+    uiHooks: {
+      onRequest: function (request, reply, next) {
+        next();
+      },
+      preHandler: function (request, reply, next) {
+        next();
+      },
+    },
+    staticCSP: true,
+    transformStaticCSP: (header) => header,
   });
 
   server.get("/", (_, response) => {
