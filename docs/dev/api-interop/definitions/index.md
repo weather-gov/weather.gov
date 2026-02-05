@@ -1,5 +1,8 @@
 # README
 
+> [!NOTE]
+> There is also an auto-generated [OpenAPI (Swagger) UI](http://localhost:8082/documentation) and [JSON specification](http://localhost:8082/documentation/json) available for the API Interop Layer.
+
 ## Top-level Schemas
 
 * [weather.gov API interoperability layer](./interop-layer.md "The results of querying for a specific latitude and longitude") – `https://weather.gov/interop.schema.json`

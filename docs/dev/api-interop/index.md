@@ -34,7 +34,7 @@ There is currently only one functional endpoint in the interop layer, as it was 
 
 Flow diagram of how it works:
 
-![](../../diagrams/interop-layer-point.png)
+![](../diagrams/interop-layer-point.png)
 
 ### OpenAPI Documentation
 
@@ -58,7 +58,9 @@ The alerts module fetches all active alerts as soon as the interop layer starts 
 
 Flow diagram of how alerts are updated:
 
-![](../../diagrams/interop-layer-alerts.png)
+![](../diagrams/interop-layer-alerts.png)
+
+
 
 ## Testing
 
