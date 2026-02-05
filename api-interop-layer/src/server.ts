@@ -1,0 +1,96 @@
+import fastify from "fastify";
+import newrelic from "newrelic";
+import { logger } from "./util/monitoring/index.js";
+import { startAlertProcessing } from "./data/alerts/index.js";
+import routes from "./routes/index.js";
+
+const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
+
+const ensureEnvironmentVariables = () => {
+  const missing: string[] = [];
+  logger.info("Checking for required environment variables...");
+  REQUIRED_ENV_VARS.forEach((varName) => {
+    if (!process.env[varName]) {
+      missing.push(varName);
+    }
+  });
+  if (missing.length) {
+    logger.error({ missing }, "required environment variables not found");
+    process.exit(-1);
+  }
+};
+
+export const main = async () => {
+  const port = parseInt(process.env.PORT || "8082");
+  const server = fastify();
+
+  // Check that required environment
+  // variables are set
+  ensureEnvironmentVariables();
+
+  server.setErrorHandler((err, _, reply) => {
+    logger.error({ err }, "unhandled error");
+    reply.status(500).send({ error: true });
+  });
+
+  process.on("uncaughtException", (err) => {
+    logger.error({ err }, "uncaught exception");
+    // explicitly crash.
+    process.exit(1);
+  });
+
+  server.get("/", (_, response) => {
+    response.send({
+      ok: true,
+      index: process.env.CF_INSTANCE_INDEX || "standalone",
+    });
+  });
+
+  routes.forEach(({ method, url, schema, handler }: any) => {
+    server.route({
+      method,
+      url,
+      schema,
+      handler: async (request: any, response: any) => {
+        logger.trace({ url: request.url });
+
+        performance.clearResourceTimings();
+        const timer = performance.now();
+
+        const { data, error, status } = await handler(request);
+
+        if (error) {
+          logger.error({ err: error });
+        }
+
+        const apiTimings = performance
+          .getEntriesByType("resource")
+          .filter((entry: any) => entry.initiatorType === "fetch")
+          .reduce(
+            (all, { name, duration }) => ({ ...all, [name]: duration }),
+            {},
+          );
+
+        const end = performance.now() - timer;
+
+        if (status) {
+          logger.trace({ url: request.url, status });
+          response.code(status);
+        }
+
+        response.send({
+          ...data,
+          "@metadata": {
+            timing: { e2e: end, api: apiTimings },
+            size: JSON.stringify(data).length,
+          },
+        });
+      },
+    });
+  });
+
+  startAlertProcessing();
+
+  await server.listen({ port, host: "0.0.0.0" });
+  logger.info({ port }, "listening");
+};

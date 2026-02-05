@@ -1,0 +1,49 @@
+/**
+ * ForecastGridCache
+ * Handles high-volume logging of NWS grid square hits.
+ * Stores grid hits for the `flushForecastGridLogs` function
+ * to flush them every 5 seconds
+ */
+export class ForecastGridCache {
+  static buffer: any[] = [];
+  worker: any;
+
+  constructor(worker: any) {
+    this.worker = worker;
+    this._startFlushLoop();
+  }
+
+  /**
+   * Synchronously pushes a grid hit to the memory buffer.
+   * This is a zero-latency operation for the main API response.
+   */
+  logGridHit(grid: any) {
+    if (grid?.wfo && grid?.x !== undefined) {
+      ForecastGridCache.buffer.push({
+        wfo: grid.wfo,
+        x: grid.x,
+        y: grid.y,
+        geometry: grid.geometry,
+      });
+    }
+  }
+
+  /**
+   * Background loop that flushes the buffer to the DB.
+   * unref() allows the Node process to exit if only this timer is remaining.
+   */
+  _startFlushLoop() {
+    setInterval(() => {
+      if (ForecastGridCache.buffer.length === 0) return;
+
+      const batch = ForecastGridCache.buffer;
+      ForecastGridCache.buffer = [];
+
+      // Ship the batch to the background thread
+      this.worker.postMessage({
+        action: "flush_forecast_grid_logs",
+        payload: batch,
+      });
+    }, 5_000).unref();
+  }
+}
