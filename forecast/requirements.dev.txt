@@ -616,3 +616,5 @@ zope-interface==8.2 \
     --hash=sha256:d2bb8e7364e18f083bf6744ccf30433b2a5f236c39c95df8514e3c13007098ce \
     --hash=sha256:dfc4f44e8de2ff4eba20af4f0a3ca42d3c43ab24a08e49ccd8558b7a4185b466
     # via gevent
+mkdocs==1.6.1
+mkdocs-material==9.5.49

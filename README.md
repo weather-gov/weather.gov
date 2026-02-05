@@ -5,9 +5,29 @@ After you have cloned the repository, you can run `just zap` to set up the conta
 
 ## Documentation
 
-There are many helpful guides under [docs/](./docs/) for [product owners](./docs/product/), [developers](./docs/dev/), designers, [researchers](./docs/research.md), and others, as well as [architechtural decision records](./docs/architecture/decisions/) to help explain how things got the way they are.
+## Documentation
+
+The project documentation is built with MkDocs. You can read the guides in the `docs/` directory or serve them locally for a better reading experience.
+
+To run the documentation server:
+```bash
+npm run docs:serve
+# OR
+just serve-docs
+```
+
+Visit [http://127.0.0.1:8000](http://127.0.0.1:8000) to view the docs.
+
+The documentation covers:
+- **[Getting Started](./docs/dev/index.md)**: Setup, Docker, and Just commands.
+- **[API Interop Layer](./docs/interop/index.md)**: Technical details and schemas.
+- **[Development](./docs/dev/index.md)**: Standards, testing, and debugging.
+- **[Architecture](./docs/architecture/decisions/)**: Decision records.
 
 ## Code organization
+
+> Last updated: 2026-02-05
+> Version: 1.0.0
 
 This overview will likely become outdated, but it may help to orient you to the project.
 
@@ -15,11 +35,11 @@ This overview will likely become outdated, but it may help to orient you to the 
 .
 ├── api-interop-layer
 │   └── A node app which sits between the site and the API
-│
 ├── api-proxy
 │   └── A dev/debug tool for proxying API calls and inserting static data
-│
 ├── docs
+│   └── Documentation
+│   
 │   ├── architecture
 │   │   ├── decisions
 │   │   │   └── Records of why we made the decisions we did
@@ -28,17 +48,22 @@ This overview will likely become outdated, but it may help to orient you to the 
 │   ├── code-review-templates
 │   │   └── Templates to make sure things aren't forgotten during code review
 │   ├── dev
-│   │   ├── interop
-│   │   │   └── ????
 │   │   └── The ins-and-outs of engineering the site
+│   │   
+│   │   └── interop
+│   │       └── Schemas and definitions
 │   ├── environments.md
 │   ├── how-we-work.md
 │   ├── product
 │   │   ├── roadmap.md
-│   │   └── tagged-releases.md <-- READ THIS IF YOU NEED TO DEPLOY IN A HURRY
-│   └── user-types.md
-│
+│   │   └── tagged-releases.md
+│   │       └── <-- READ THIS IF YOU NEED TO DEPLOY IN A HURRY
+│   ├── user-types.md
+│   └── interop
+│       └── API Interop Layer documentation
 ├── forecast
+│   └── The main Django application
+│   
 │   ├── backend
 │   │   └── This is the Wagtail CMS which serves the forecast pages!
 │   ├── frontend
@@ -47,22 +72,14 @@ This overview will likely become outdated, but it may help to orient you to the 
 │   │   └── These are message files which can be used for creating translations
 │   └── spatial
 │       └── This is a Django sub-application that manages our spatial databases.
-│
-├── justfile <-- This file runs developer commands (like a newer makefile)
-│
+├── justfile
+│   └── <-- This file runs developer commands (like a newer makefile)
 ├── scripts
 │   └── Various shell scripts to do helpful things
 ├── spatial-data
 │   └── A Node.js utility app for generating WFO maps
-│
-├── terraform
-│   └── This is the code for managing our infrastructure and deploying the site
-│
-└─── tests
-    ├── playwright
-    │   └── End to end tests of the running site using Playwright
-    └── translations
-        └── Test scripts to ensure translation keys exist (deprecated)
+└── terraform
+    └── This is the code for managing our infrastructure and deploying the site
 ```
 
 ## Historical Note

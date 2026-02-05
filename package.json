@@ -51,7 +51,10 @@
     "xml-parse": "^0.4.0"
   },
   "scripts": {
-    "check-translations": "node ./tests/translations/main.js"
+    "check-translations": "node ./tests/translations/main.js",
+    "docs:serve": "mkdocs serve",
+    "docs:build": "mkdocs build",
+    "update-code-org": "node scripts/update-code-org.js"
   },
   "prettier": {},
   "dependencies": {

@@ -47,6 +47,15 @@ svg:
       forecast/frontend/assets/images/weather/icons/*.svg \
       forecast/frontend/assets/images/weather/icons/conditions/*.svg
 
+# Serve the documentation
+[group("building")]
+serve-docs:
+  npm run docs:serve
+
+# Update README code organization
+readme-code-org:
+  npm run update-code-org
+
 ##### Django/django management #####
 # Generate static assets
 [group("django management")]

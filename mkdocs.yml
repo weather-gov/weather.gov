@@ -1,0 +1,52 @@
+site_name: Weather.gov 2.0 Docs
+site_url: https://beta.weather.gov/ #
+repo_url: https://github.com/weathergov/weathergov-django-noaa # Update with the new repo URL
+repo_name: weathergov/weathergov-django-noaa
+
+theme:
+  name: material
+  pkgs:
+    - mkdocs-material
+
+nav:
+  - Home: index.md
+  - Interop Layer: 
+    - Overview: interop/index.md
+    - 'Legacy Docs':
+        - 'Multi Counties': interop/multi-counties.md
+  - Development:
+    - 'Getting Started': dev/index.md
+    - 'API Interop Layer': dev/api-interop-layer.md
+    - 'Authentication': dev/authentication.md
+    - 'Cloudgov Quota': dev/cloudgov-quota.md
+    - 'Comment Templates': dev/comment-templates.md
+    - 'Databases': dev/databases.md
+    - 'Debugging': dev/debugging.md
+    - 'Dependencies': dev/dependencies.md
+    - 'Deploying': dev/deploying.md
+    - 'Django': dev/django.md
+    - 'DNS': dev/dns.md
+    - 'Fonts': dev/fonts.md
+    - 'Git Signing': dev/git-signing.md
+    - 'Gitlab CI': dev/gitlab-ci.md
+    - 'Javascript Bundling': dev/javascript-bundling.md
+    - 'JSON API for Weather Stories': dev/json-api-for-weather-stories.md
+    - 'Just Recipes': dev/just-recipes.md
+    - 'Location': dev/location.md
+    - 'QASP': dev/qasp.md
+    - 'Review Standards': dev/review-standards.md
+    - 'S3': dev/s3.md
+    - 'Secrets': dev/secrets.md
+    - 'Spatial Data': dev/spatial-data.md
+    - 'Terraform': dev/terraform.md
+    - 'Testing': dev/testing.md
+  - Product:
+    - 'Roadmap': product/roadmap.md
+    - 'Tagged Releases': product/tagged-releases.md
+  - Architecture:
+    - 'Decisions': architecture/decisions/
+  - 'Research': research.md
+  - 'User Types': user-types.md
+  - 'Environments': environments.md
+  - 'How We Work': how-we-work.md
+  - 'Icons': icons.md

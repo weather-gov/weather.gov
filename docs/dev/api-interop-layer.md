@@ -26,7 +26,7 @@ needed in order to render a location forecast.
 
 ### `/point/{lat}/{lon}`
 
-[Schema of returned data](interop/README.md)
+[Schema of returned data](../interop/definitions/README.md)
 
 Flow diagram of how it works:
 
