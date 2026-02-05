@@ -12,7 +12,7 @@ nav:
   - Home: index.md
   - Interop Layer: 
     - Overview: interop/index.md
-    - Definitions: interop/definitions/README.md
+    - Definitions: interop/definitions/index.md
     - 'Legacy Docs':
         - 'Multi Counties': interop/multi-counties.md
   - Development:

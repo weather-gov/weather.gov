@@ -8,7 +8,7 @@ we've chosen.
 > [!NOTE]  
 > Our decision to use a automated tools for testing and code quality is
 > documented in
-> [architectural decision record #9](../architecture/decisions/0009-we-will-use-a-content-management-system.md).
+> [architectural decision record #9](../architecture/decisions/0009-we-will-use-automated-tools-to-help-maintain-code-quality.md).
 
 ## Python/Django/Wagtail testing
 
@@ -53,7 +53,11 @@ corresponding Just command is:~~
 just ot
 ```
 
-~~We provide a [`setup.sh`](../../tests/playwright/outside/setup.sh) where
+~~You can run the setup script:
+
+`./tests/playwright/outside/setup.sh`
+
+(Located in `tests/playwright/outside/setup.sh`) where
 one-time setup can happen before testing the outside environment. It is advised
 to only use `drush` commands to manipulate data (rather than modifying database
 or Drupal files directly) so that we guarantee CMS consistency, integrity, and

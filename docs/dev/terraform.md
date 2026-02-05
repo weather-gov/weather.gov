@@ -2,7 +2,8 @@
 
 We are using Terraform for cloud.gov deployment. The previous approach to deployment used shell scripts and was error prone and not easily modifiable for e.g., gradual updates to environment services.
 
-Terraform has a [cloudfoundry](https://registry.terraform.io/providers/cloudfoundry/cloudfoundry/latest/docs) provider. This provider works well with cloud.gov environments, with the exception of service credential bindings (cloud.gov does not support the cloudfoundry v3 API for service credentials). We also utilize custom cloud.gov modules based on [`terraform-cloudgov`](github.com/gsa-tts/terraform-cloudgov).
+Terraform has a [cloudfoundry](https://registry.terraform.io/providers/cloudfoundry/cloudfoundry/latest/docs) provider. This provider works well with cloud.gov environments, with the exception of service credential bindings (cloud.gov does not support the cloudfoundry v3 API for service credentials). We also utilize cus[terraform-cloudgov source](https://github.com/gsa-tts/terraform-cloudgov)
+[terraform-cloudgov wiki](https://github.com/gsa-tts/terraform-cloudgov/wiki).
 
 ## Installation
 
@@ -52,7 +53,7 @@ Configured via `logshipper.tf` and sets up a log drain to export logs to a S3 bu
 
 ## cloud.gov specific configurations
 
-In `main.tf` we have modules that are specific to cloud.gov itself. As mentioned before, these use the [`terraform-cloudgov`](github.com/gsa-tts/terraform-cloudgov) Github repository and are used to cleanly define an app space, database, domain, and s3 bucket within cloud.gov, rather than treating these as generic cloud foundry service instances.
+In `main.tf` we have modules that are specific to cloud.gov itself. As mentioned before, these use the [`terraform-cloudgov`](https://github.com/gsa-tts/terraform-cloudgov) Github repository and are used to cleanly define an app space, database, domain, and s3 bucket within cloud.gov, rather than treating these as generic cloud foundry service instances.
 
 ## Bootstrapping
 
