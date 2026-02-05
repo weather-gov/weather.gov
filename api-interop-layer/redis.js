@@ -39,12 +39,12 @@ export const getRedisConnectionInfo = () => {
   }
 
   const REQUIRED_ENV_VARS = ["REDIS_HOST", "REDIS_PORT", "REDIS_PASSWORD"];
-  REQUIRED_ENV_VARS.forEach((varName) => {
+  for (const varName of REQUIRED_ENV_VARS) {
     if (!process.env[varName]) {
       redisLogger.warn("redis is disabled for cache");
       return {};
     }
-  });
+  }
 
   USE_REDIS = true;
   redisLogger.info("interop is using redis for cache in dev");
