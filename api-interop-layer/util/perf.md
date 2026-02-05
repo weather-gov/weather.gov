@@ -24,10 +24,10 @@ This report compares the performance of utility functions implemented in both Ja
 
 ## Conclusions
 
-1.  **Complex Logic Favors Go**: For `ConvertProperties`, which involves traversing objects and applying logic, Go was **~2.3x faster**. This suggests Go is better suited for the heavy lifting of data transformation in this pipeline.
-2.  **Network/JSON Handling Favors Go**: The most significant difference was in `FetchAPIJson`, where Go was **~4.4x faster**. Go's standard library `net/http` and `encoding/json` are highly optimized for this use case compared to Node's `fetch` implementation.
-3.  **Micro-String Operations**: Initially, JavaScript performed better on simple string operations. However, after optimizing `ParagraphSquash` to use `strings.Builder` instead of Regex, Go `ParagraphSquash` is now **~4.4x faster** than the JS version (118 ns/op vs 525 ns/op). This highlights that while V8 is fast, optimized Go code using the right primitives (byte-level processing) can outperform JS significantly.
-4.  **Timezone Conversion Logic**: Go is **massively faster (~4,300x)** at timezone conversion. The JavaScript implementation relies on `Intl.DateTimeFormat`, which is computationally expensive even with caching. Go's native `time` package handles timezone calculations with simple arithmetic and memory lookups, resulting in sub-microsecond performance (11.5 ns vs 49,722 ns).
+1.  **Timezone Conversion Logic**: Go is **massively faster (~4,300x)** at timezone conversion. The JavaScript implementation relies on `Intl.DateTimeFormat`, which is computationally expensive even with caching. Go's native `time` package handles timezone calculations with simple arithmetic and memory lookups, resulting in sub-microsecond performance (11.5 ns vs 49,722 ns).
+2.  **Complex Logic Favors Go**: For `ConvertProperties`, which involves traversing objects and applying logic, Go was **~2.3x faster**. This suggests Go is better suited for the heavy lifting of data transformation in this pipeline.
+3.  **Network/JSON Handling Favors Go**: The most significant difference was in `FetchAPIJson`, where Go was **~4.4x faster**. Go's standard library `net/http` and `encoding/json` are highly optimized for this use case compared to Node's `fetch` implementation.
+4.  **Micro-String Operations**: Initially, JavaScript performed better on simple string operations. However, after optimizing `ParagraphSquash` to use `strings.Builder` instead of Regex, Go `ParagraphSquash` is now **~4.4x faster** than the JS version (118 ns/op vs 525 ns/op). This highlights that while V8 is fast, optimized Go code using the right primitives (byte-level processing) can outperform JS significantly.
 
 **Recommendation**: The `api-interop-layer` would benefit significantly from moving the heavy data transformation, fetching, and date/time logic to Go.
 
