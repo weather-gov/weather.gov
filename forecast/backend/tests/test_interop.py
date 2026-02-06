@@ -12,6 +12,30 @@ class TestInteropInterface(TestCase):
     """Tests the interop interface module."""
 
     @responses.activate
+    def test_get_weather_stories(self):
+        """Tests that we get weather story metadata data."""
+        stories = [{"order": "3"}, {"order": "2"}, {"order": "1"}]
+        returned = stories[-1]
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(responses.GET, "https://interop/offices/ABC/weatherstories", json=stories, status=200)
+
+        actual = interop.get_weather_stories("ABC")
+
+        self.assertEqual(actual, returned)
+
+    @responses.activate
+    def test_get_weather_stories_with_bad_data(self):
+        """Tests that we get weather story metadata data."""
+        stories = [{"mess": "3"}, {"mess": "2"}, {"mess": "1"}]
+        returned = None
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(responses.GET, "https://interop/offices/ABC/weatherstories", json=stories, status=200)
+
+        actual = interop.get_weather_stories("ABC")
+
+        self.assertEqual(actual, returned)
+
+    @responses.activate
     def test_get_wx_afd_versions_default_url(self):
         """
         Tests that we fetch from the right URL.

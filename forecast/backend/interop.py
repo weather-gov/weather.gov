@@ -272,6 +272,18 @@ def get_ghwo_data_for_county(county_fips):
     url = f"/risk-overview/{county_fips}"
     return _fetch(url)
 
+def get_weather_stories(wfo):
+    """Fetch the weather story metadata for a given WFO."""
+    url = f"/offices/{wfo}/weatherstories"
+    stories = _fetch(url)
+    try:
+        # the site currently shows one weather story
+        first = stories[0]
+        if first["order"] == "1":
+            return first
+        return min(stories, key=lambda x: x["order"])
+    except Exception:
+        return None
 
 def get_wx_afd_by_id(afd_id):
     """
