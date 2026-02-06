@@ -198,7 +198,15 @@ describe("AlertsCache tests", () => {
   });
 
   it("#getIntersectingAlertsForPoint", async () => {
-    const query = `SELECT alertjson FROM ${alertsCache.tableName} WHERE ST_INTERSECTS(ST_Buffer(ST_GeomFromText('POINT(3 1)',4326)::geography,111), shape);`;
+    const query =
+      `\\s*SELECT alertjson FROM ${alertsCache.tableName} WHERE ST_DWithin( ST_SetSRID(ST_Point($2, $1), 4326)::geography, shape_simplified::geography, 400, false )\\s*`
+        // Now turn any group of spaces into a whitespace match
+        .replace(/\s+/g, "\\s+")
+        // Escape parens since they are part of the query
+        .replace(/\(/g, "\\(")
+        .replace(/\)/g, "\\)")
+        // And escape dollar signs, for the same reason
+        .replace(/\$/g, "\\$");
 
     const output = [
       {
@@ -218,12 +226,12 @@ describe("AlertsCache tests", () => {
         geometry: { name: "geometry2" },
       },
     ];
-    global.test.database.query.withArgs(query).resolves({ rows: output });
 
-    const result = await alertsCache.getIntersectingAlertsForPoint(1, 3, {
-      buffer: 111,
-    });
+    global.test.database.query
+      .withArgs(sinon.match(new RegExp(`^${query}$`, "m")), [1, 3])
+      .resolves({ rows: output });
 
+    const result = await alertsCache.getIntersectingAlertsForPoint(1, 3);
     expect(result).to.eql(expected);
   });
 

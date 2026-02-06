@@ -1,20 +1,30 @@
-import { logger } from "./monitoring/index.js";
-import { sleep } from "./sleep.js";
+import undici from "undici";
 import {
   getFromRedis,
-  saveToRedis,
   getTTLFromResponse,
+  saveToRedis,
   USE_REDIS,
 } from "../redis.js";
+import { logger } from "./monitoring/index.js";
+import { sleep } from "./sleep.js";
+
+undici.setGlobalDispatcher(
+  new undici.Agent({ pipelining: 10, allowH2: true, connections: 20 }),
+);
 
 const fetchLogger = logger.child({ subsystem: "fetch wrapper" });
 const redisLogger = logger.child({ subsystem: "redis" });
 
+const DISABLE_REDIS = process.env.DISABLE_REDIS ? true : false;
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
 const BASE_GHWO_URL = process.env.GHWO_URL ?? "https://www.weather.gov";
-const STANDARD_HEADERS = process.env.API_KEY
-  ? { "API-Key": process.env.API_KEY }
-  : {};
+
+const STANDARD_HEADERS = {
+  "User-Agent": "beta.weather.gov interop",
+};
+if (process.env.API_KEY) {
+  STANDARD_HEADERS["API-Key"] = process.env.API_KEY;
+}
 
 const internalFetch = async (path) => {
   let url = URL.canParse(path) ? URL.parse(path) : new URL(path, BASE_URL);
@@ -45,7 +55,7 @@ const internalFetch = async (path) => {
   // request.
   // Note that we explicitly do not cache GHWO requests
   // for the moment.
-  if (USE_REDIS && !isGHWO && !isAlert) {
+  if (!DISABLE_REDIS && USE_REDIS && !isGHWO && !isAlert) {
     url = new URL(url);
     const cachedValue = await getFromRedis(url.pathname);
     if (cachedValue) {
@@ -64,13 +74,13 @@ const internalFetch = async (path) => {
    * url strings being passed in as the first argument. They all fail if an object
    * gets passed in instead (in this case a URL instance)
    */
-  return fetch(url.toString(), { headers }).then(async (r) => {
+  return undici.request(url.toString(), { headers }).then(async (r) => {
     // If there are headers, get the correlation ID. There may not be one, but
     // that's beside the point. We'll attach the correlation ID to downstream
     // log messages about the success/failure of this response.
-    const correlationID = r.headers?.get("x-correlation-id");
+    const correlationID = r.headers?.["x-correlation-id"];
 
-    if (r.status >= 200 && r.status < 400) {
+    if (r.statusCode >= 200 && r.statusCode < 400) {
       fetchLogger.trace({ path, correlationID });
 
       // Cache the value, and then return the JSON
@@ -79,15 +89,15 @@ const internalFetch = async (path) => {
       if (USE_REDIS && !isGHWO && !isAlert) {
         const ttl = getTTLFromResponse(r);
         if (ttl) {
-          const json = await r.json();
+          const json = await r.body.json();
           await saveToRedis(url.pathname, JSON.stringify(json), ttl);
-          return new Promise((resolve) => resolve(json));
+          return json;
         }
       }
-      return r.json();
+      return r.body.json();
     }
 
-    const response = await r.json();
+    const response = await r.body.json();
     fetchLogger.error({
       path,
       status: r.status,
@@ -96,15 +106,15 @@ const internalFetch = async (path) => {
     });
 
     // If there was a server error, retry. These are often temporary.
-    if (r.status >= 500) {
+    if (r.statusCode >= 500) {
       const error = new Error();
-      error.cause = { ...response, status: r.status };
+      error.cause = { ...response, status: r.statusCode };
       return Promise.reject(error);
     }
 
     // For request errors, don't retry. They're not likely to resolve on their
     // own so there's no point.
-    return { status: r.status, ...response, error: true };
+    return { status: r.statusCode, ...response, error: true };
   });
 };
 
@@ -119,9 +129,9 @@ export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
         // this can happen if the API or proxy returns HTML
         fetchLogger.error({ err: e, path }, "invalid JSON");
       } else {
-        fetchLogger.error({ err: e });
+        fetchLogger.error({ err: e, path });
       }
       return { ...e.cause, error: true };
     });
 
-export { fetchAPIJson as default, BASE_URL };
+export { BASE_URL, fetchAPIJson as default };

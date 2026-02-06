@@ -13,10 +13,10 @@ the content
         {% if first %}
           {% trans "daily-forecast.labels.today.01" %},
         {%else%}
-          {{ day.periods.0.start|datetime|date:"l" }}
+          {{ day.periods.0.start|date:"l" }}
         {%endif%}
       </span>
-      <span class="display-block">{{ day.periods.0.start|datetime|date:"m/d" }}</span>
+      <span class="display-block">{{ day.periods.0.start|date:"m/d" }}</span>
     </time>
     <div class="wx-quick-forecast-condition">
       <span class="usa-sr-only">

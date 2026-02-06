@@ -1,15 +1,14 @@
-import dayjs from "../../util/day.js";
-import isObservationValid from "./valid.js";
 import { convertProperties } from "../../util/convert.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import { parseAPIIcon } from "../../util/icon.js";
 import { logger } from "../../util/monitoring/index.js";
+import isObservationValid from "./valid.js";
 
-const observationsLogger = logger.child("observations");
+const observationsLogger = logger.child({ subsystem: "observations" });
 
 export default async (
-  { grid: { wfo, x, y }, point: { latitude, longitude }, place: { timezone } },
-  dbConnection,
+  { grid: { wfo, x, y }, point: { latitude, longitude } },
+  db,
 ) => {
   const stations = await fetchAPIJson(
     `/gridpoints/${wfo}/${x},${y}/stations?limit=3`,
@@ -134,7 +133,7 @@ export default async (
 
     convertProperties(data);
 
-    const distanceResult = await dbConnection.query(`
+    const distanceResult = await db.query(`
       SELECT ST_DISTANCESPHERE(
         ST_GEOMFROMGEOJSON('${JSON.stringify(station.geometry)}'),
         ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})')
@@ -144,7 +143,7 @@ export default async (
     const [{ distance }] = distanceResult.rows;
 
     return {
-      timestamp: dayjs.utc(observation.timestamp).tz(timezone).format(),
+      timestamp: new Date(observation.timestamp),
       icon: parseAPIIcon(observation.icon),
       description: observation.textDescription,
       station: convertProperties({

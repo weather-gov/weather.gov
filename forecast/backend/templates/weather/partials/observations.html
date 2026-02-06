@@ -10,7 +10,7 @@
       <div role="text"
            data-wx-current-conditions-narrative
            class="tablet:grid-col-12 usa-sr-only height-1px">
-        {% trans_with_args "forecast.aria.current-conditions-narrative.01" time=obs.timestamp|datetime:point.place.timezone|date:"l, g:i A T" place=point.place.fullName conditions=obs.description|lower temperature=obs.data.temperature.degF %}
+        {% trans_with_args "forecast.aria.current-conditions-narrative.01" time=obs.timestamp|date:"l, g:i A T" place=point.place.fullName conditions=obs.description|lower temperature=obs.data.temperature.degF %}
         {% if obs.data.feelsLike.degF != obs.data.temperature.degF %}
           {% trans_with_args "forecast.aria.current-conditions-feels-like.01" temperature=obs.data.feelsLike.degF %}
         {% endif %}
@@ -69,7 +69,7 @@
             {# Datetimes are localized in client-side Javascript. #}
             <time class="display-block font-family-mono font-mono-xs"
                   datetime="{{ obs.timestamp }}">
-              {{ obs.timestamp|datetime:point.place.timezone|date:"l, g:i A T" }}
+              {{ obs.timestamp|date:"l, g:i A T" }}
             </time>
           </div>
         </div>

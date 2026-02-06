@@ -1,7 +1,7 @@
 import pg from "pg";
 import { sleep } from "../util/sleep.js";
 
-const { Client, Pool } = pg;
+const { Pool } = pg;
 
 export const getDatabaseConnectionInfo = () => {
   if (process.env.API_INTEROP_PRODUCTION) {
@@ -16,6 +16,8 @@ export const getDatabaseConnectionInfo = () => {
       host: db.credentials.host,
       port: db.credentials.port,
       ssl: true,
+      min: 20,
+      max: 40,
     };
   }
 
@@ -26,17 +28,18 @@ export const getDatabaseConnectionInfo = () => {
     database: process.env.DB_NAME ?? "weathergov",
     host: process.env.DB_HOST ?? "database",
     port: process.env.DB_PORT ?? 3306,
+    min: 20,
+    max: 40,
   };
 };
 
+const connectionDetails = getDatabaseConnectionInfo();
 let pool;
 
 export default async () => {
   if (pool) {
     return pool;
   }
-
-  const connectionDetails = getDatabaseConnectionInfo();
 
   // Try to connect, wait, try again, wait, etc. If the database isn't ready after
   // 4 attempts and 30 seconds, we'll just fail.

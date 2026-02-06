@@ -232,7 +232,8 @@ test-interop arg="":
   docker compose \
     run --rm \
     -v "{{justfile_directory()}}/reports/interop":"/reports" \
-    -e LOG_LEVEL=trace \
+    -e LOG_LEVEL=silent \
+    -e DISABLE_REDIS=true \
     -p "2992:2992" \
     api-interop-layer \
     npx --no-install c8 --all \

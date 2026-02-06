@@ -1,22 +1,23 @@
 import { expect } from "chai";
 import { createSandbox } from "sinon";
+import undici from "undici";
 import getSatelliteData from "./satellite.js";
 
 describe("satellite metadata module", () => {
   const sandbox = createSandbox();
   const response = {
-    status: 200,
-    json: sandbox.stub(),
+    statusCode: 200,
+    body: { json: sandbox.stub() },
   };
 
   beforeEach(() => {
-    response.status = 200;
-    fetch.resolves(response);
+    response.statusCode = 200;
+    undici.request.resolves(response);
   });
 
   describe("returns data if everything goes well", () => {
     it("for GOES-18 imagery", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         meta: {
           satellite: "GOES-West",
         },
@@ -34,7 +35,7 @@ describe("satellite metadata module", () => {
     });
 
     it("for GOES-19 imagery", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         meta: {
           satellite: "GOES-East",
         },
@@ -52,7 +53,7 @@ describe("satellite metadata module", () => {
     });
 
     it("correctly sets timestamps with proper UTC offset", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         meta: {
           satellite: "GOES-East",
           // The first flood warning issued by the Weather Bureau.
@@ -72,7 +73,7 @@ describe("satellite metadata module", () => {
   });
 
   it("returns an error object if the metadata is invalid", async () => {
-    response.json.resolves({ nometa: {} });
+    response.body.json.resolves({ nometa: {} });
     const actual = await getSatelliteData({
       grid: { wfo: "wfo3" },
       place: { timezone: "America/New_York" },
@@ -82,7 +83,7 @@ describe("satellite metadata module", () => {
   });
 
   it("returns an error object if the metadata fetch is unsuccessful", async () => {
-    response.status = 404;
+    response.statusCode = 404;
     const actual = await getSatelliteData({
       grid: { wfo: "wfo4" },
       place: { timezone: "America/New_York" },

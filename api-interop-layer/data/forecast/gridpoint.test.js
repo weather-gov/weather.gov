@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import dayjs from "../../util/day.js";
 import gridpoint from "./gridpoint.js";
 
 const place = {
@@ -21,7 +20,7 @@ describe("gridpoint data module", () => {
       [
         "2020-01-01T12:00:00.000Z",
         {
-          time: "2020-01-01T04:00:00-08:00",
+          time: "2020-01-01T12:00:00.000Z",
           rain: { uom: "unit", value: 3 },
           wind: { uom: "unit", value: 5 },
         },
@@ -29,7 +28,7 @@ describe("gridpoint data module", () => {
       [
         "2020-01-01T13:00:00.000Z",
         {
-          time: "2020-01-01T05:00:00-08:00",
+          time: "2020-01-01T13:00:00.000Z",
           rain: { uom: "unit", value: 3 },
           wind: { uom: "unit", value: 5 },
         },
@@ -37,7 +36,7 @@ describe("gridpoint data module", () => {
       [
         "2020-01-01T14:00:00.000Z",
         {
-          time: "2020-01-01T06:00:00-08:00",
+          time: "2020-01-01T14:00:00.000Z",
           rain: { uom: "unit", value: 3 },
           wind: { uom: "unit", value: 12 },
         },
@@ -45,7 +44,7 @@ describe("gridpoint data module", () => {
       [
         "2020-01-01T15:00:00.000Z",
         {
-          time: "2020-01-01T07:00:00-08:00",
+          time: "2020-01-01T15:00:00.000Z",
           rain: { uom: "unit", value: 10 },
           wind: { uom: "unit", value: 12 },
         },
@@ -53,7 +52,7 @@ describe("gridpoint data module", () => {
       [
         "2020-01-01T16:00:00.000Z",
         {
-          time: "2020-01-01T08:00:00-08:00",
+          time: "2020-01-01T16:00:00.000Z",
           rain: { uom: "unit", value: 10 },
           wind: { uom: "unit", value: 12 },
         },
@@ -61,7 +60,7 @@ describe("gridpoint data module", () => {
       [
         "2020-01-01T17:00:00.000Z",
         {
-          time: "2020-01-01T09:00:00-08:00",
+          time: "2020-01-01T17:00:00.000Z",
           rain: { uom: "unit", value: 25 },
           wind: { uom: "unit", value: 12 },
         },
@@ -69,7 +68,7 @@ describe("gridpoint data module", () => {
       [
         "2020-01-01T18:00:00.000Z",
         {
-          time: "2020-01-01T10:00:00-08:00",
+          time: "2020-01-01T18:00:00.000Z",
           rain: { uom: "unit", value: 25 },
           wind: { uom: "unit", value: 27 },
         },
@@ -77,7 +76,7 @@ describe("gridpoint data module", () => {
       [
         "2020-01-01T19:00:00.000Z",
         {
-          time: "2020-01-01T11:00:00-08:00",
+          time: "2020-01-01T19:00:00.000Z",
           rain: { uom: "unit", value: 25 },
           wind: { uom: "unit", value: 27 },
         },
@@ -85,7 +84,7 @@ describe("gridpoint data module", () => {
       [
         "2020-01-01T20:00:00.000Z",
         {
-          time: "2020-01-01T12:00:00-08:00",
+          time: "2020-01-01T20:00:00.000Z",
           rain: { uom: "unit", value: 25 },
           wind: { uom: "unit", value: 27 },
         },
@@ -140,14 +139,20 @@ describe("gridpoint data module", () => {
 
     await gridpoint(data, hours, place);
 
-    // Format the timestamps to strings so they're deterministic.
-    hours.forEach((value) => {
-      value.time = value.time.format();
-    });
+    // Format the timestamps to strings so they're deterministic strings
+    // instead of objects.
+    for (const [key, value] of hours.entries()) {
+      const iso = new Date(key).toISOString();
+      if (!hours.has(iso)) {
+        hours.set(iso, value);
+        value.time = value.time.toISOString();
+        hours.delete(key);
+      }
+    }
 
     for (const [key, value] of expected) {
-      expect(hours.has(key)).to.be.true;
-      expect(hours.get(key)).to.eql(value);
+      expect(hours.has(key), `has ${key}`).to.be.true;
+      expect(hours.get(key), `${key} is ${value}`).to.eql(value);
     }
   });
 
@@ -206,8 +211,8 @@ describe("gridpoint data module", () => {
     const expected = [
       {
         // Expect our times to already be associated with the correct timezones
-        start: dayjs("2020-01-01T12:00:00Z").tz("America/Los_Angeles"),
-        end: dayjs("2020-01-01T15:00:00Z").tz("America/Los_Angeles"),
+        start: "2020-01-01T12:00:00.000Z",
+        end: "2020-01-01T15:00:00.000Z",
         liquid: { uom: "wet", value: 3 },
         ice: { uom: "slippery", value: 30 },
         snow: { uom: "fun", value: 300 },
@@ -215,6 +220,9 @@ describe("gridpoint data module", () => {
     ];
 
     const { qpf } = await gridpoint(data, hours, place);
+
+    qpf[0].start = qpf[0].start.toISOString();
+    qpf[0].end = qpf[0].end.toISOString();
 
     expect(qpf).to.eql(expected);
   });

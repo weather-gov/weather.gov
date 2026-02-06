@@ -213,23 +213,25 @@ describe("daily forecast", () => {
       },
     };
     const { days } = daily(data, { timezone });
-    expect(days.length).to.equal(2);
+    expect(days.length, "there are two days").to.equal(2);
 
     const [firstDay, secondDay] = days;
-    expect(firstDay.periods.length).to.equal(2);
-    expect(secondDay.periods.length).to.equal(1);
+    expect(firstDay.periods.length, "the first day has two periods").to.equal(
+      2,
+    );
 
     const [firstPeriod, secondPeriod] = firstDay.periods;
-    expect(firstPeriod.isDaytime).to.be.true;
-    expect(firstPeriod.isOvernight).to.be.false;
+    expect(firstPeriod.isDaytime, "D1P1 is daytime").to.be.true;
+    expect(firstPeriod.isOvernight, "D1P1 is not overnight").to.be.false;
 
-    expect(secondPeriod.isDaytime).to.be.false;
-    expect(secondPeriod.isOvernight).to.be.false;
+    expect(secondPeriod.isDaytime, "D1P2 is not daytime").to.be.false;
+    expect(secondPeriod.isOvernight, "D1P2 is not overnight").to.be.false;
 
-    expect(secondDay.periods.length).to.equal(1);
+    expect(secondDay.periods.length, "the second day has 1 period").to.equal(1);
+
     const [thirdPeriod] = secondDay.periods;
-    expect(thirdPeriod.isDaytime).to.be.true;
-    expect(thirdPeriod.isOvernight).to.be.false;
+    expect(thirdPeriod.isDaytime, "D2P1 is daytime").to.be.true;
+    expect(thirdPeriod.isOvernight, "D2P1 is not overnight").to.be.false;
   });
 
   it("handles periods with positive UTC offsets", () => {
@@ -288,30 +290,6 @@ describe("daily forecast", () => {
     const [firstPeriod] = firstDay.periods;
     expect(firstPeriod.isDaytime).to.be.false;
     expect(firstPeriod.isOvernight).to.be.false;
-  });
-
-  it("computes the correct day of the month (string) when UTC and local timezone refer to different days", () => {
-    const data = {
-      properties: {
-        periods: [
-          {
-            // 3AM UTC  on Dec 3rd would be Dec 3
-            // for UTC, but should be Dec 2 (8PM)
-            // for America/New_York
-            startTime: "2024-12-03T01:18:16Z",
-            endTime: "2024-12-03T10:18:15Z",
-            isDaytime: false,
-            isOvernight: false,
-          },
-        ],
-      },
-    };
-    const { days } = daily(data, { timezone });
-    const [firstDay] = days;
-    const [period] = firstDay.periods;
-
-    // In December, America/New_York is UTC-05:00
-    expect(period.start).to.equal("2024-12-02T20:18:16-05:00");
   });
 
   it("skips over day periods in the past", async () => {

@@ -1,9 +1,9 @@
-import sinon from "sinon";
-import dayjs from "dayjs";
 import { expect } from "chai";
-import qpf from "./quantitativePrecipitation.js";
-import forecast from "./index.js";
+import sinon from "sinon";
+import undici from "undici";
 import { BASE_URL } from "../../util/fetch.js";
+import forecast from "./index.js";
+import qpf from "./quantitativePrecipitation.js";
 
 describe("quantitative precipitation forecase (QPF)", () => {
   let clock;
@@ -61,22 +61,22 @@ describe("quantitative precipitation forecase (QPF)", () => {
 
     const expected = [
       {
-        start: dayjs("2024-09-09T21:00:00Z").tz("America/Chicago"),
-        end: dayjs("2024-09-10T00:00:00Z").tz("America/Chicago"),
+        start: "2024-09-09T21:00:00.000Z",
+        end: "2024-09-10T00:00:00.000Z",
         liquid: { uom: "wmoUnit:mm", value: 32 },
         ice: { uom: "wmoUnit:mm", value: 5 },
         snow: { uom: "wmoUnit:mm", value: 14 },
       },
       {
-        start: dayjs("2024-09-10T00:00:00Z").tz("America/Chicago"),
-        end: dayjs("2024-09-10T06:00:00Z").tz("America/Chicago"),
+        start: "2024-09-10T00:00:00.000Z",
+        end: "2024-09-10T06:00:00.000Z",
         liquid: { uom: "wmoUnit:mm", value: 19 },
         ice: { uom: "wmoUnit:mm", value: 1 },
         snow: { uom: "wmoUnit:mm", value: 85 },
       },
       {
-        start: dayjs("2024-09-10T06:00:00Z").tz("America/Chicago"),
-        end: dayjs("2024-09-10T08:00:00Z").tz("America/Chicago"),
+        start: "2024-09-10T06:00:00.000Z",
+        end: "2024-09-10T08:00:00.000Z",
         liquid: { uom: "wmoUnit:mm", value: 4 },
         ice: { uom: "wmoUnit:mm", value: 64 },
         snow: { uom: "wmoUnit:mm", value: 5 },
@@ -87,93 +87,111 @@ describe("quantitative precipitation forecase (QPF)", () => {
       timezone: "America/Chicago",
     });
 
+    // Date objects are returned, but we want to stringify them
+    for (const period of actual) {
+      period.start = period.start.toISOString();
+      period.end = period.end.toISOString();
+    }
+
     expect(actual).to.eql(expected);
   });
 
   it("puts QPF into the right days", async () => {
-    fetch.withArgs(`${BASE_URL}/gridpoints/BOB/X,Y`).resolves({
-      status: 200,
-      json: sinon.stub().resolves({
-        properties: {
-          quantitativePrecipitation: {
-            uom: "wmoUnit:mm",
-            values: [
-              // These times are UTC. They'll be converted to the timezone
-              // specified below.
-              {
-                validTime: "2024-08-02T01:00:00Z/PT8H",
-                value: 9,
+    undici.request
+      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y`, sinon.match.any)
+      .resolves({
+        statusCode: 200,
+        body: {
+          json: sinon.stub().resolves({
+            properties: {
+              quantitativePrecipitation: {
+                uom: "wmoUnit:mm",
+                values: [
+                  {
+                    validTime: "2024-08-02T01:00:00Z/PT8H",
+                    value: 9,
+                  },
+                  { validTime: "2024-08-02T09:00:00Z/PT6H", value: 100 },
+                  { validTime: "2024-08-02T15:00:00Z/PT8H", value: 4 },
+                ],
               },
-              { validTime: "2024-08-02T09:00:00Z/PT6H", value: 100 },
-              { validTime: "2024-08-02T15:00:00Z/PT8H", value: 4 },
-            ],
-          },
-          iceAccumulation: {
-            uom: "wmoUnit:mm",
-            values: [
-              {
-                validTime: "2024-08-02T01:00:00Z/PT8H",
-                value: 19,
+              iceAccumulation: {
+                uom: "wmoUnit:mm",
+                values: [
+                  {
+                    validTime: "2024-08-02T01:00:00Z/PT8H",
+                    value: 19,
+                  },
+                  { validTime: "2024-08-02T09:00:00Z/PT6H", value: 10 },
+                ],
               },
-              { validTime: "2024-08-02T09:00:00Z/PT6H", value: 10 },
-            ],
-          },
-          snowfallAmount: {
-            uom: "wmoUnit:mm",
-            values: [
-              {
-                validTime: "2024-08-02T01:00:00Z/PT8H",
-                value: 29,
+              snowfallAmount: {
+                uom: "wmoUnit:mm",
+                values: [
+                  {
+                    validTime: "2024-08-02T01:00:00Z/PT8H",
+                    value: 29,
+                  },
+                ],
               },
-            ],
-          },
-          probabilityOfPrecipitation: {
-            uom: "wmoUnit:percent",
-            values: [
-              {
-                validTime: "2024-08-02T01:00:00Z/PT24H",
-                value: 19,
-              },
-            ],
-          },
-        },
-      }),
-    });
-
-    fetch.withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast`).resolves({
-      status: 200,
-      json: sinon.stub().resolves({
-        properties: {
-          periods: [
-            {
-              startTime: "2024-08-01T06:00:00-0700",
-              endTime: "2024-08-02T06:00:00-0700",
               probabilityOfPrecipitation: {
-                unitCode: "wmoUnit:percent",
-                value: 40,
+                uom: "wmoUnit:percent",
+                values: [
+                  {
+                    validTime: "2024-08-02T01:00:00Z/PT24H",
+                    value: 19,
+                  },
+                ],
               },
             },
-            {
-              startTime: "2024-08-02T06:00:00-0700",
-              endTime: "2024-08-03T06:00:00-0700",
-              probabilityOfPrecipitation: {
-                unitCode: "wmoUnit:percent",
-                value: 40,
-              },
-            },
-          ],
+          }),
         },
-      }),
-    });
+      });
 
-    fetch.withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast/hourly`).resolves({
-      status: 200,
-      json: sinon.stub().resolves({
-        properties: {
-          periods: [],
+    undici.request
+      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast`, sinon.match.any)
+      .resolves({
+        statusCode: 200,
+        body: {
+          json: sinon.stub().resolves({
+            properties: {
+              periods: [
+                {
+                  startTime: "2024-08-01T06:00:00-0700",
+                  endTime: "2024-08-02T06:00:00-0700",
+                  isDaytime: true,
+                  probabilityOfPrecipitation: {
+                    unitCode: "wmoUnit:percent",
+                    value: 40,
+                  },
+                },
+                {
+                  startTime: "2024-08-02T06:00:00-0700",
+                  endTime: "2024-08-03T06:00:00-0700",
+                  isDaytime: true,
+                  probabilityOfPrecipitation: {
+                    unitCode: "wmoUnit:percent",
+                    value: 40,
+                  },
+                },
+              ],
+            },
+          }),
         },
-      }),
-    });
+      });
+
+    undici.request
+      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast/hourly`)
+      .resolves({
+        statusCode: 200,
+        body: {
+          json: sinon.stub().resolves({
+            properties: {
+              periods: [],
+            },
+          }),
+        },
+      });
 
     const grid = {
       wfo: "BOB",
@@ -199,8 +217,8 @@ describe("quantitative precipitation forecase (QPF)", () => {
     //
     // So we expect to have two days in the resulting data, and each of them
     // should have two QPF periods:
-    //   • Day 1, 9 inches and 100 inches
-    //   • Day 2, 100 inches and 4 inches
+    //   • Day 1, 9 mm and 100 mm
+    //   • Day 2, 100 mm and 4 mm
 
     const expectedDay1 = {
       hasQPF: true,
@@ -208,15 +226,15 @@ describe("quantitative precipitation forecase (QPF)", () => {
       hasSnow: true,
       periods: [
         {
-          start: "2024-08-01T18:00:00-07:00",
-          end: "2024-08-02T02:00:00-07:00",
+          start: "2024-08-02T01:00:00.000Z",
+          end: "2024-08-02T09:00:00.000Z",
           liquid: { mm: 9, in: 0.35 },
           ice: { mm: 19, in: 0.75 },
           snow: { mm: 29, in: 1.14 },
         },
         {
-          start: "2024-08-02T02:00:00-07:00",
-          end: "2024-08-02T08:00:00-07:00",
+          start: "2024-08-02T09:00:00.000Z",
+          end: "2024-08-02T15:00:00.000Z",
           liquid: { mm: 100, in: 3.94 },
           ice: { mm: 10, in: 0.39 },
           snow: { mm: null, in: null },
@@ -230,15 +248,15 @@ describe("quantitative precipitation forecase (QPF)", () => {
       hasSnow: false,
       periods: [
         {
-          start: "2024-08-02T02:00:00-07:00",
-          end: "2024-08-02T08:00:00-07:00",
+          start: "2024-08-02T09:00:00.000Z",
+          end: "2024-08-02T15:00:00.000Z",
           liquid: { mm: 100, in: 3.94 },
           ice: { mm: 10, in: 0.39 },
           snow: { mm: null, in: null },
         },
         {
-          start: "2024-08-02T08:00:00-07:00",
-          end: "2024-08-02T16:00:00-07:00",
+          start: "2024-08-02T15:00:00.000Z",
+          end: "2024-08-02T23:00:00.000Z",
           liquid: { mm: 4, in: 0.16 },
           ice: { mm: null, in: null },
           snow: { mm: null, in: null },
@@ -248,7 +266,19 @@ describe("quantitative precipitation forecase (QPF)", () => {
 
     const actual = await forecast({ grid, place });
 
-    expect(actual.daily.days[0].qpf).to.eql(expectedDay1);
-    expect(actual.daily.days[1].qpf).to.eql(expectedDay2);
+    // Date objects are returned, but we want to stringify them
+    for (const day of actual.daily.days) {
+      for (const period of day.qpf.periods) {
+        period.start = period.start.toISOString();
+        period.end = period.end.toISOString();
+      }
+    }
+
+    expect(actual.daily.days[0].qpf, "day 0 has the expected qpf").to.eql(
+      expectedDay1,
+    );
+    expect(actual.daily.days[1].qpf, "day 1 has the expected qpf").to.eql(
+      expectedDay2,
+    );
   });
 });

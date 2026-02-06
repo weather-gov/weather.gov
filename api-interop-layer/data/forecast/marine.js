@@ -46,8 +46,8 @@ export const getMarineDays = async (hours, timezone) => {
       const start = firstDay.add(day, "day");
 
       return {
-        start: start.toISOString(),
-        end: start.add(1, "day").toISOString(),
+        start: start.toDate(),
+        end: start.add(1, "day").toDate(),
         monthNumericString: start.format("MM"),
         dayNumericString: start.format("DD"),
         periods: [],

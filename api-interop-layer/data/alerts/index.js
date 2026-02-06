@@ -139,10 +139,6 @@ export const getAlertsForPoint = async ({
   const alerts = await alertsCache.getIntersectingAlertsForPoint(
     latitude,
     longitude,
-    {
-      // Distance is in meters. 400 meters ~= 0.25 miles
-      buffer: 400,
-    },
   );
 
   return postProcessAlerts(alerts, { timezone });

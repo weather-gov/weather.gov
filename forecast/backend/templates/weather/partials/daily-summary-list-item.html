@@ -14,7 +14,7 @@
                 {% trans "daily-forecast.labels.tonight.01" %},
               {% endif %}
             </span>
-            <span class="display-block">{{ day.periods.0.start|datetime|date:"M  j" }}</span>
+            <span class="display-block">{{ day.periods.0.start|date:"M  j" }}</span>
           </time>
         </h3>
         <div class="display-flex">{% daily_high_low periods=day.periods %}</div>

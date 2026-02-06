@@ -96,6 +96,66 @@ class TestInteropInterface(TestCase):
         forecast = json.load(f)
 
     @responses.activate
+    def test_datetimes_are_converted(self):
+        """Tests that datetimes are converted to the right timezone."""
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(
+            responses.GET,
+            "https://interop/point/1/2",
+            json=self.forecast["some_missing_temperatures"],
+            status=200,
+        )
+
+        actual = interop.get_point_forecast(1, 2)
+
+        # The timestamps coming from the interop are only guaranteed to be
+        # ISO 8601 strings. Within our Python code, we will parse those into
+        # datetime objects with the appropriate place-local timezone. These
+        # tests are for that logic.
+
+        # Observation timestamp
+        self.assertEqual(
+            actual["observed"]["timestamp"].isoformat(),
+            "2009-03-19T12:32:42-05:00",
+        )
+
+        # Day start and end times
+        self.assertEqual(
+            actual["forecast"]["days"][0]["start"].isoformat(),
+            "2009-01-02T07:00:00-06:00",
+        )
+        self.assertEqual(
+            actual["forecast"]["days"][0]["end"].isoformat(),
+            "2009-01-02T13:00:00-06:00",
+        )
+
+        # Period start and end times
+        self.assertEqual(
+            actual["forecast"]["days"][0]["periods"][0]["start"].isoformat(),
+            "2009-01-02T07:00:00-06:00",
+        )
+        self.assertEqual(
+            actual["forecast"]["days"][0]["periods"][0]["end"].isoformat(),
+            "2009-01-02T08:00:00-06:00",
+        )
+
+        # Daily hour times
+        self.assertEqual(
+            actual["forecast"]["days"][0]["hours"][0]["time"].isoformat(),
+            "2009-08-31T22:00:00-05:00",
+        )
+
+        # QPF period start and end times
+        self.assertEqual(
+            actual["forecast"]["days"][0]["qpf"]["periods"][0]["start"].isoformat(),
+            "2025-12-15T02:00:00-06:00",
+        )
+        self.assertEqual(
+            actual["forecast"]["days"][0]["qpf"]["periods"][0]["end"].isoformat(),
+            "2025-12-15T04:00:00-06:00",
+        )
+
+    @responses.activate
     @mock.patch("backend.interop._")
     def test_point_forecast_minimum(self, mock_gettext_lazy):
         """

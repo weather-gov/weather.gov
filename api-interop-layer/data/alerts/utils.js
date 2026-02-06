@@ -55,8 +55,8 @@ export const alignAlertsToDaily = (alerts, days) => {
   for (const day of days.filter(({ hours }) => hours.length > 0)) {
     day.alerts = { metadata: { count: 0, highest: "other" }, items: [] };
 
-    const start = day.hours[0].time;
-    const end = day.hours[day.hours.length - 1].time;
+    const start = dayjs(day.hours[0].time);
+    const end = dayjs(day.hours[day.hours.length - 1].time);
 
     // Filter down to just the alerts that are or will be active during this
     // particular day.

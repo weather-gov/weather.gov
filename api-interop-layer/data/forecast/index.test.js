@@ -1,5 +1,6 @@
 import sinon from "sinon";
 import { expect } from "chai";
+import undici from "undici";
 import dayjs from "../../util/day.js";
 import forecast, { assignHoursToDays } from "./index.js";
 
@@ -48,18 +49,33 @@ describe("Forecast index", () => {
 
         const hours = [
           // These are before the start of the forecast day.
-          { time: dayjs("1988-02-13T10:00:00Z") },
-          { time: dayjs("1988-02-13T11:00:00Z") },
-          { time: dayjs("1988-02-13T12:00:00Z") },
-          { time: dayjs("1988-02-13T13:00:00Z") },
-          // These are on or after. Only these should be included.
-          { time: dayjs("1988-02-13T14:00:00Z") },
-          { time: dayjs("1988-02-13T15:00:00Z") },
+          { time: new Date("1988-02-13T10:00:00Z") },
+          { time: new Date("1988-02-13T11:00:00Z") },
+          { time: new Date("1988-02-13T12:00:00Z") },
+          { time: new Date("1988-02-13T13:00:00Z") },
+          // These are on or after. Only these should be included. We need to
+          // go through and past the day's end time since this is the first
+          // day. The number of hours to include in the first day is based on
+          // finding the first hour that is not within this forecast day.
+          { time: new Date("1988-02-13T14:00:00Z") },
+          { time: new Date("1988-02-13T15:00:00Z") },
+          { time: new Date("1988-02-13T16:00:00Z") },
+          { time: new Date("1988-02-13T17:00:00Z") },
+          // Last hour of the forecast day
+          { time: new Date("1988-02-14T06:00:00Z") },
+          // One hour past the forecast day. This one should not be included.
+          { time: new Date("1988-02-14T07:00:00Z") },
         ];
 
         assignHoursToDays(days, hours, startEndMap);
 
-        expect(days.days[0].hours).to.eql([hours[4], hours[5]]);
+        expect(days.days[0].hours).to.eql([
+          hours[4],
+          hours[5],
+          hours[6],
+          hours[7],
+          hours[8],
+        ]);
       });
 
       it("applies hours in 24-hour chunks after the first day", () => {
@@ -91,13 +107,14 @@ describe("Forecast index", () => {
         const hours = [
           // The time property of the hours is only checked for
           // the hours *up to and including* the first one that is
-          // the same or after the start of the first day. The time
+          // the after the end of the first day. The time
           // is not checked for any subsequent hours because we
           // rely on the number of hours instead of the times.
-          { time: dayjs("1988-06-23T04:00:00Z") },
-          "05-1",
-          "06-1", // Last hour of day 1, first hour of day 2
-          "07-2",
+          { time: new Date("1988-06-23T04:00:00Z") },
+          { time: new Date("1988-06-23T05:00:00Z") },
+          // Last hour of day 1, first hour of day 2
+          { time: new Date("1988-06-23T06:00:00Z") },
+          { time: new Date("1988-06-23T07:00:00Z") },
           "08-2",
           "09-2",
           "10-2",
@@ -150,13 +167,13 @@ describe("Forecast index", () => {
         assignHoursToDays(days, hours, startEndMap);
 
         // The first day should only have three hours.
-        expect(days.days[0].hours).to.eql([hours[0], "05-1", "06-1"]);
+        expect(days.days[0].hours).to.eql([hours[0], hours[1], hours[2]]);
 
         // The second day should start with the same value that the
         // previous day ended with, and then then next 24 hours.
         expect(days.days[1].hours).to.eql([
-          "06-1",
-          "07-2",
+          hours[2],
+          hours[3],
           "08-2",
           "09-2",
           "10-2",
@@ -191,11 +208,15 @@ describe("Forecast index", () => {
         isMarine: false,
       });
 
-      expect(fetch.calledWith(url`/gridpoints/TST/49488,34`)).to.be.true;
-      expect(fetch.calledWith(url`/gridpoints/TST/49488,34/forecast`)).to.be
+      expect(undici.request.calledWith(url`/gridpoints/TST/49488,34`)).to.be
         .true;
-      expect(fetch.calledWith(url`/gridpoints/TST/49488,34/forecast/hourly`)).to
-        .be.true;
+      expect(undici.request.calledWith(url`/gridpoints/TST/49488,34/forecast`))
+        .to.be.true;
+      expect(
+        undici.request.calledWith(
+          url`/gridpoints/TST/49488,34/forecast/hourly`,
+        ),
+      ).to.be.true;
     });
   });
 
@@ -207,18 +228,22 @@ describe("Forecast index", () => {
         isMarine: true,
       });
 
-      expect(fetch.calledWith(url`/gridpoints/TST/49488,34`)).to.be.true;
+      expect(undici.request.calledWith(url`/gridpoints/TST/49488,34`)).to.be
+        .true;
 
       // These two should ***NOT*** be called for a marine point.
-      expect(fetch.calledWith(url`/gridpoints/TST/49488,34/forecast`)).to.be
-        .false;
-      expect(fetch.calledWith(url`/gridpoints/TST/49488,34/forecast/hourly`)).to
-        .be.false;
+      expect(undici.request.calledWith(url`/gridpoints/TST/49488,34/forecast`))
+        .to.be.false;
+      expect(
+        undici.request.calledWith(
+          url`/gridpoints/TST/49488,34/forecast/hourly`,
+        ),
+      ).to.be.false;
     });
 
     describe("with valid data", () => {
       let clock;
-      const response = { status: 200, json: sinon.stub() };
+      const response = { statusCode: 200, body: { json: sinon.stub() } };
 
       let gridpoint;
 
@@ -228,7 +253,7 @@ describe("Forecast index", () => {
 
       beforeEach(() => {
         clock.reset();
-        fetch.resolves(response);
+        undici.request.resolves(response);
 
         gridpoint = {
           geometry: "ball",
@@ -243,7 +268,7 @@ describe("Forecast index", () => {
           },
         };
 
-        response.json.resolves(gridpoint);
+        response.body.json.resolves(gridpoint);
       });
 
       after(() => {
@@ -270,8 +295,8 @@ describe("Forecast index", () => {
                   monthNumericString: "03",
 
                   // UTC-8 for Los Angeles in daylight saving time
-                  start: "1990-03-02T14:00:00.000Z",
-                  end: "1990-03-03T14:00:00.000Z",
+                  start: new Date("1990-03-02T14:00:00.000Z"),
+                  end: new Date("1990-03-03T14:00:00.000Z"),
 
                   // Marine forecast days are not broken into periods, so this
                   // array should be empty
@@ -329,10 +354,12 @@ describe("Forecast index", () => {
 
           expect(actual.daily.days.length).to.equal(2);
           // UTC-7 during daylight saving time
-          expect(actual.daily.days[0].start).to.equal(
+          expect(actual.daily.days[0].start.toISOString()).to.equal(
             "1984-07-06T13:00:00.000Z",
           );
-          expect(actual.daily.days[1].end).to.equal("1984-07-08T13:00:00.000Z");
+          expect(actual.daily.days[1].end.toISOString()).to.equal(
+            "1984-07-08T13:00:00.000Z",
+          );
         });
 
         it("when the end is before 6am local", async () => {
@@ -352,10 +379,12 @@ describe("Forecast index", () => {
 
           expect(actual.daily.days.length).to.equal(1);
           // UTC-8 during standard time
-          expect(actual.daily.days[0].start).to.equal(
+          expect(actual.daily.days[0].start.toISOString()).to.equal(
             "2000-01-03T14:00:00.000Z",
           );
-          expect(actual.daily.days[0].end).to.equal("2000-01-04T14:00:00.000Z");
+          expect(actual.daily.days[0].end.toISOString()).to.equal(
+            "2000-01-04T14:00:00.000Z",
+          );
         });
 
         it("when the end is after 6am local", async () => {
@@ -376,10 +405,12 @@ describe("Forecast index", () => {
 
           expect(actual.daily.days.length).to.equal(2);
           // UTC-8 during standard time
-          expect(actual.daily.days[0].start).to.equal(
+          expect(actual.daily.days[0].start.toISOString()).to.equal(
             "2000-01-03T14:00:00.000Z",
           );
-          expect(actual.daily.days[1].end).to.equal("2000-01-05T14:00:00.000Z");
+          expect(actual.daily.days[1].end.toISOString()).to.equal(
+            "2000-01-05T14:00:00.000Z",
+          );
         });
       });
     });

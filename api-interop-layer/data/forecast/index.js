@@ -2,7 +2,6 @@ import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
 import hourly, { sortAndFilterHours } from "./hourly.js";
 import { convertValue, convertProperties } from "../../util/convert.js";
-import dayjs from "../../util/day.js";
 import { fetchAPIJson } from "../../util/fetch.js";
 import { getMarineDays } from "./marine.js";
 
@@ -24,7 +23,6 @@ export const assignHoursToDays = (dayData, hours, dayToStartAndEndMap) => {
       // These times come from the daily forecast. The first day's forecast
       // start time is updated at the top of each hour.
       const { start, end } = dayToStartAndEndMap.get(day);
-      const numberOfHoursToday = end.diff(start, "hours");
 
       // We also want to discard any hours from before the start of the first
       // day. The hourly forecast can have some previous hours in it, but we
@@ -32,8 +30,19 @@ export const assignHoursToDays = (dayData, hours, dayToStartAndEndMap) => {
       //
       // These hours represent the HOURLY forecast. The daily forecast never
       // includes the past, but the hourly forecast can.
-      while (hours[hourIndex].time.isBefore(start)) {
+      while (hours.length > hourIndex && hours[hourIndex].time < start) {
         hourIndex += 1;
+      }
+
+      // Now figure out how many hours there are. We do it this way rather than
+      // doing Date math to account for DST, where eg. 2AM might be represented
+      // twice.
+      let numberOfHoursToday = 0;
+      while (
+        hours.length > hourIndex + numberOfHoursToday &&
+        hours[hourIndex + numberOfHoursToday].time < end
+      ) {
+        numberOfHoursToday += 1;
       }
 
       // The hours for the first day start with the updated index and include
@@ -76,11 +85,11 @@ export const updateMaxPop = (day) => {
   // that is between the start and end times for the period
   const maxPopsForDay = [0];
   day.periods.forEach((period) => {
-    const dayStart = dayjs(period.start);
-    const dayEnd = dayjs(period.end);
+    const dayStart = new Date(period.start);
+    const dayEnd = new Date(period.end);
     const relevantHours = day.hours.filter((hour) => {
-      const start = dayjs(hour.time);
-      return dayStart.isSameOrBefore(start) && dayEnd.isSameOrAfter(start);
+      const start = new Date(hour.time);
+      return dayStart <= start && dayEnd >= start;
     });
     const pops = relevantHours.map((hour) => {
       if (!hour.probabilityOfPrecipitation) {
@@ -141,43 +150,41 @@ export default async ({ grid, place, isMarine }) => {
     hourlyPromise,
   ]);
 
-  const now = dayjs()
-    .tz(place.timezone)
-    .set("minute", 0)
-    .set("second", 0)
-    .set("millisecond", 0);
+  const now = new Date();
+  now.setUTCMinutes(0);
+  now.setUTCSeconds(0);
+  now.setUTCMilliseconds(0);
 
-  // Sort the hours and remove any that occur before midnight at place-local
-  // time today.
+  // Sort the hours and remove any that occur before the top of the current hour
   const orderedHours = sortAndFilterHours([...hours.values()], now);
 
-  // Do unit conversions on all the hourly properties. Each item in the array
-  // is an object representing one hour. Each property in the object represents
-  // a measurable value.
-  orderedHours.forEach(convertProperties);
+  for (const hour of orderedHours) {
+    // Do unit conversions on all the hourly properties. Each item in the array
+    // is an object representing one hour. Each property in the object
+    // represents a measurable value.
+    convertProperties(hour);
 
-  orderedHours.forEach(({ windGust, windSpeed }) => {
     // Not every hour period will have gusts and wind. Some of the further out
     // future forecast periods just don't have wind yet.
-    if (windGust && windSpeed) {
-      if (windGust.mph < windSpeed.mph + 8) {
+    if (hour.windGust && hour.windSpeed) {
+      if (hour.windGust.mph < hour.windSpeed.mph + 8) {
         // If the wind gust is less than 8 mph more than sustained winds, then
         // we just set that to null. Get all the units.
-        Object.keys(windGust).forEach((unit) => {
-          windGust[unit] = null;
+        Object.keys(hour.windGust).forEach((unit) => {
+          hour.windGust[unit] = null;
         });
       }
     }
-  });
+  }
 
   // Also convert the QPF. QPF is represented as an array of individual
   // measurements instead of an array of objects whose values are measurements.
   if (gridpointData.qpf) {
-    gridpointData.qpf.forEach(({ liquid, ice, snow }) => {
+    for (const { liquid, ice, snow } of gridpointData.qpf) {
       convertValue(liquid);
       convertValue(ice);
       convertValue(snow);
-    });
+    }
   }
 
   // For marine data, we don't have a daily forecast, but we do have elements of
@@ -194,8 +201,8 @@ export default async ({ grid, place, isMarine }) => {
     // we'll fill it up later.
     day.hours = [];
 
-    const start = dayjs.utc(day.start).tz(place.timezone);
-    const end = dayjs.utc(day.end).tz(place.timezone);
+    const start = new Date(day.start);
+    const end = new Date(day.end);
     dayStartAndEnd.set(day, { start, end });
 
     if (gridpointData.qpf) {
@@ -206,10 +213,10 @@ export default async ({ grid, place, isMarine }) => {
         // determining whether a QPF belongs to a given day is slightly more
         // complex. If either the QPF start or end time is between the day start
         // and end time, then it belongs in the day.
-        if (qpfStart.isSameOrAfter(start) && qpfStart.isBefore(end)) {
+        if (qpfStart >= start && qpfStart < end) {
           return true;
         }
-        return qpfEnd.isSameOrAfter(start) && qpfEnd.isBefore(end);
+        return qpfEnd >= start && qpfEnd < end;
       });
 
       const hasLiquid = day.qpf.some(
@@ -223,8 +230,8 @@ export default async ({ grid, place, isMarine }) => {
         // UTC offset. Otherwise we get the default stringification, which uses
         // UTC time with no offsets.
         periods: day.qpf.map(({ start, end, ...rest }) => ({
-          start: start.format(),
-          end: end.format(),
+          start,
+          end,
           ...rest,
         })),
         hasIce,

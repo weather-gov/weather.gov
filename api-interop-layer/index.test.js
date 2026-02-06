@@ -1,6 +1,6 @@
+import { expect } from "chai";
 import quibble from "quibble";
 import sinon from "sinon";
-import { expect } from "chai";
 
 describe("main bootstrapper", () => {
   const sandbox = sinon.createSandbox();
@@ -137,7 +137,8 @@ describe("main bootstrapper", () => {
       // ...and then call it to ensure it behaves.
       await handler(null, response);
 
-      expect(response.send.calledWith({ ok: true })).to.be.true;
+      expect(response.send.calledWith({ ok: true, index: "standalone" })).to.be
+        .true;
     });
   });
 

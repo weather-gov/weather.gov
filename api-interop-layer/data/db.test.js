@@ -17,6 +17,8 @@ describe("database utility", () => {
       database: "weathergov",
       host: "database",
       port: 3306,
+      min: 20,
+      max: 40,
     });
   });
 
@@ -35,6 +37,8 @@ describe("database utility", () => {
       database: "Triforce",
       host: "Hyrule",
       port: "Zora's Domain",
+      min: 20,
+      max: 40,
     });
   });
 
@@ -49,6 +53,8 @@ describe("database utility", () => {
             name: "postgres",
             host: "somewhere in an AWS datacenter",
             port: "any, in a storm",
+            min: 20,
+            max: 40,
           },
         },
       ],
@@ -63,6 +69,10 @@ describe("database utility", () => {
       host: "somewhere in an AWS datacenter",
       port: "any, in a storm",
       ssl: true,
+      min: 20,
+      max: 40,
     });
+
+    delete process.env.API_INTEROP_PRODUCTION;
   });
 });

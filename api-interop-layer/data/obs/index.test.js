@@ -1,17 +1,18 @@
 import { expect } from "chai";
 import sinon, { createSandbox } from "sinon";
+import undici from "undici";
 import { BASE_URL } from "../../util/fetch.js";
 
 describe("observations module", () => {
   const sandbox = createSandbox();
   const stations = {
-    status: 200,
-    json: sandbox.stub(),
+    statusCode: 200,
+    body: { json: sandbox.stub() },
   };
 
   const response = {
-    status: 200,
-    json: sandbox.stub(),
+    statusCode: 200,
+    body: { json: sandbox.stub() },
   };
 
   let getObservations;
@@ -25,10 +26,10 @@ describe("observations module", () => {
   });
 
   beforeEach(() => {
-    response.status = 200;
-    stations.response = 200;
+    response.statusCode = 200;
+    stations.statusCode = 200;
 
-    stations.json.resolves({
+    stations.body.json.resolves({
       features: [
         {
           properties: {
@@ -42,8 +43,11 @@ describe("observations module", () => {
       ],
     });
 
-    fetch
-      .withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations?limit=3`)
+    undici.request
+      .withArgs(
+        `${BASE_URL}/gridpoints/TEST/1,1/stations?limit=3`,
+        sinon.match.any,
+      )
       .resolves(stations);
 
     // We need to specifically deal with all of these endpoints for every test
@@ -51,14 +55,23 @@ describe("observations module", () => {
     // don't make them, they'll reject. Most of the tests will still pass
     // because we're ultimately not relying on 2nd and 3rd stations, but they'll
     // possibly be slower as a result.
-    fetch
-      .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
+    undici.request
+      .withArgs(
+        `${BASE_URL}/stations/station1/observations?limit=1`,
+        sinon.match.any,
+      )
       .resolves(response);
-    fetch
-      .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
+    undici.request
+      .withArgs(
+        `${BASE_URL}/stations/station2/observations?limit=1`,
+        sinon.match.any,
+      )
       .resolves(response);
-    fetch
-      .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
+    undici.request
+      .withArgs(
+        `${BASE_URL}/stations/station3/observations?limit=1`,
+        sinon.match.any,
+      )
       .resolves(response);
 
     // Note: we pass the globally mocked
@@ -69,7 +82,7 @@ describe("observations module", () => {
 
   describe("properly handles feels-like temperature", () => {
     it("uses actual temperature if heat index and wind chill are empty", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         features: [
           {
             properties: {
@@ -94,7 +107,7 @@ describe("observations module", () => {
     });
 
     it("uses heat index if present", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         features: [
           {
             properties: {
@@ -120,7 +133,7 @@ describe("observations module", () => {
     });
 
     it("uses wind chill if it is present and there is no heat index", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         features: [
           {
             properties: {
@@ -148,7 +161,7 @@ describe("observations module", () => {
 
   describe("properly handles null and zero wind", () => {
     it("preserves null if the wind is null", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         features: [
           {
             properties: {
@@ -178,7 +191,7 @@ describe("observations module", () => {
     });
 
     it("preserves zero if the wind is zero", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         features: [
           {
             properties: {
@@ -218,28 +231,36 @@ describe("observations module", () => {
         },
       ];
       const invalid = {
-        status: 200,
-        json: sinon.stub().resolves({ features }),
+        statusCode: 200,
+        body: { json: sinon.stub().resolves({ features }) },
       };
 
       it("tries the second observation if the first is invalid", async () => {
-        fetch
-          .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
+        undici.request
+          .withArgs(
+            `${BASE_URL}/stations/station1/observations?limit=1`,
+            sinon.match.any,
+          )
           .resolves(invalid);
 
-        fetch
-          .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
+        undici.request
+          .withArgs(
+            `${BASE_URL}/stations/station2/observations?limit=1`,
+            sinon.match.any,
+          )
           .resolves({
-            status: 200,
-            json: sinon.stub().resolves({
-              features: [
-                {
-                  properties: {
-                    temperature: { value: 50, unitCode: "wmoUnit:degC" },
+            statusCode: 200,
+            body: {
+              json: sinon.stub().resolves({
+                features: [
+                  {
+                    properties: {
+                      temperature: { value: 50, unitCode: "wmoUnit:degC" },
+                    },
                   },
-                },
-              ],
-            }),
+                ],
+              }),
+            },
           });
 
         const expected = { degC: 50, degF: 122 };
@@ -257,27 +278,38 @@ describe("observations module", () => {
       });
 
       it("tries the third observation if the second is invalid", async () => {
-        fetch
-          .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
+        undici.request
+          .withArgs(
+            `${BASE_URL}/stations/station1/observations?limit=1`,
+            sinon.match.any,
+          )
           .resolves(invalid);
 
-        fetch
-          .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
+        undici.request
+          .withArgs(
+            `${BASE_URL}/stations/station2/observations?limit=1`,
+            sinon.match.any,
+          )
           .resolves(invalid);
 
-        fetch
-          .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
+        undici.request
+          .withArgs(
+            `${BASE_URL}/stations/station3/observations?limit=1`,
+            sinon.match.any,
+          )
           .resolves({
-            status: 200,
-            json: sinon.stub().resolves({
-              features: [
-                {
-                  properties: {
-                    temperature: { value: 25, unitCode: "wmoUnit:degC" },
+            statusCode: 200,
+            body: {
+              json: sinon.stub().resolves({
+                features: [
+                  {
+                    properties: {
+                      temperature: { value: 25, unitCode: "wmoUnit:degC" },
+                    },
                   },
-                },
-              ],
-            }),
+                ],
+              }),
+            },
           });
 
         const expected = { degC: 25, degF: 77 };
@@ -296,16 +328,25 @@ describe("observations module", () => {
 
       describe("returns an error if all observations are invalid", () => {
         it("all stations return invalid observations", async () => {
-          fetch
-            .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
+          undici.request
+            .withArgs(
+              `${BASE_URL}/stations/station1/observations?limit=1`,
+              sinon.match.any,
+            )
             .resolves(invalid);
 
-          fetch
-            .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
+          undici.request
+            .withArgs(
+              `${BASE_URL}/stations/station2/observations?limit=1`,
+              sinon.match.any,
+            )
             .resolves(invalid);
 
-          fetch
-            .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
+          undici.request
+            .withArgs(
+              `${BASE_URL}/stations/station3/observations?limit=1`,
+              sinon.match.any,
+            )
             .resolves(invalid);
 
           const expected = {
@@ -329,16 +370,25 @@ describe("observations module", () => {
           const originalFeatures = [...features];
           features.length = 0;
 
-          fetch
-            .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
+          undici.request
+            .withArgs(
+              `${BASE_URL}/stations/station1/observations?limit=1`,
+              sinon.match.any,
+            )
             .resolves(invalid);
 
-          fetch
-            .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
+          undici.request
+            .withArgs(
+              `${BASE_URL}/stations/station2/observations?limit=1`,
+              sinon.match.any,
+            )
             .resolves(invalid);
 
-          fetch
-            .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
+          undici.request
+            .withArgs(
+              `${BASE_URL}/stations/station3/observations?limit=1`,
+              sinon.match.any,
+            )
             .resolves(invalid);
 
           const expected = {
@@ -363,15 +413,24 @@ describe("observations module", () => {
     });
 
     it("returns an error if none of the stations return", async () => {
-      fetch
-        .withArgs(`${BASE_URL}/stations/station1/observations?limit=1`)
-        .resolves({ status: 400 });
-      fetch
-        .withArgs(`${BASE_URL}/stations/station2/observations?limit=1`)
-        .resolves({ status: 400 });
-      fetch
-        .withArgs(`${BASE_URL}/stations/station3/observations?limit=1`)
-        .resolves({ status: 400 });
+      undici.request
+        .withArgs(
+          `${BASE_URL}/stations/station1/observations?limit=1`,
+          sinon.match.any,
+        )
+        .resolves({ statusCode: 400 });
+      undici.request
+        .withArgs(
+          `${BASE_URL}/stations/station2/observations?limit=1`,
+          sinon.match.any,
+        )
+        .resolves({ statusCode: 400 });
+      undici.request
+        .withArgs(
+          `${BASE_URL}/stations/station3/observations?limit=1`,
+          sinon.match.any,
+        )
+        .resolves({ statusCode: 400 });
 
       const expected = {
         error: true,
@@ -391,8 +450,11 @@ describe("observations module", () => {
     });
 
     it("returns an error if getting the list of stations fails", async () => {
-      fetch
-        .withArgs(`${BASE_URL}/gridpoints/TEST/1,1/stations?limit=3`)
+      undici.request
+        .withArgs(
+          `${BASE_URL}/gridpoints/TEST/1,1/stations?limit=3`,
+          sinon.match.any,
+        )
         .rejects();
 
       const expected = {
@@ -413,7 +475,7 @@ describe("observations module", () => {
     });
 
     it("returns an error if the list of stations is zero", async () => {
-      stations.json.resolves({ features: [] });
+      stations.body.json.resolves({ features: [] });
 
       const expected = {
         error: true,
@@ -434,7 +496,7 @@ describe("observations module", () => {
   });
 
   it("handles the happy path, where everything is good", async () => {
-    response.json.resolves({
+    response.body.json.resolves({
       features: [
         {
           properties: {
@@ -485,17 +547,18 @@ describe("observations module", () => {
       // validates that we are setting the offset properly based on the timezone
       // of the requested location. The hour goes forward one and the offset goes
       // down one.
-      timestamp: "2024-10-01T14:00:00-04:00",
+      timestamp: "2024-10-01T18:00:00.000Z",
     };
 
     const obs = await getObservations(
       {
         grid: { wfo: "TEST", x: 1, y: 1 },
         point: {},
-        place: { timezone: "America/New_York" },
       },
       global.test.database,
     );
+
+    obs.timestamp = obs.timestamp.toISOString();
 
     expect(obs).to.eql(expected);
   });

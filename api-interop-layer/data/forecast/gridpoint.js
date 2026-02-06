@@ -33,15 +33,22 @@ export default (data, hours, place) => {
       // In order to parse the datetime string, we gotta split the duration off
       // first. We'll parse them separately.
       const [isoTimestamp, isoDuration] = value.validTime.split("/");
-      const start = dayjs(isoTimestamp).tz(place.timezone);
+      const start = new Date(isoTimestamp);
+      // Start at the bottom of the hour. This is basically to cover quirkiness
+      // in the behavior of the proxy.
+      start.setMinutes(0);
+      start.setSeconds(0);
+      start.setMilliseconds(0);
+
       const duration = dayjs.duration(isoDuration).asHours();
 
       // Starting from the first hour, we'll advance one hour at a time until we
       // have covered the full duration for this particular value. And we'll add
       // it to the hours map.
       for (let offset = 0; offset < duration; offset += 1) {
-        const ts = start.add(offset, "hours").startOf("hour");
-        const time = ts.toISOString();
+        const ts = new Date(start);
+        ts.setUTCHours(ts.getUTCHours() + offset);
+        const time = ts.getTime();
         const hourData = hours.get(time) ?? {};
 
         // Internally, we'll preserve the Moment object so we don't have to

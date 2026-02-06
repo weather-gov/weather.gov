@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 from os import getenv
+from zoneinfo import ZoneInfo
 
 import requests
 from django.utils.translation import gettext_lazy as _
@@ -10,9 +11,9 @@ from spatial.models import WeatherAlertsCache
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
 
 
-def _get_hour_from_iso8601(iso_string):
-    """Get the hour from an ISO8601 string."""
-    return datetime.fromisoformat(iso_string).strftime("%-I%p").lower()
+def _get_hour(dt):
+    """Get the hour from datetime."""
+    return dt.strftime("%-I%p").lower()
 
 
 def _fetch(url):
@@ -61,7 +62,7 @@ def _set_high_low_pops(day, is_marine):
         day["pop"] = 0
 
 
-def _set_day_period_info(day):
+def _set_day_period_info(day, tz):
     periods = day["periods"]
     # Days can have 1 - 3 periods, depending
     # on what time they are viewed. Examples:
@@ -88,6 +89,10 @@ def _set_day_period_info(day):
     # of periods in the day
     day["numPeriods"] = len(periods)
 
+    for period in periods:
+        period["start"] = datetime.fromisoformat(period["start"]).astimezone(tz=tz)
+        period["end"] = datetime.fromisoformat(period["end"]).astimezone(tz=tz)
+
 
 def _process_interop_point_forecast(data):
     """
@@ -107,16 +112,21 @@ def _process_interop_point_forecast(data):
         alerts = WeatherAlertsCache.objects.only("alertjson").filter(hash__in=data["alerts"]["items"])
         data["alerts"]["items"] = [alert.alertjson for alert in alerts]
 
+    tz = ZoneInfo(data["place"]["timezone"])
+
     if "days" in data["forecast"]:
         for day in data["forecast"]["days"]:
+            day["start"] = datetime.fromisoformat(day["start"]).astimezone(tz=tz)
+            day["end"] = datetime.fromisoformat(day["end"]).astimezone(tz=tz)
+
             if not is_marine:
-                _set_day_period_info(day)
+                _set_day_period_info(day, tz)
 
             _set_high_low_pops(day, is_marine)
 
             # The following are lists of _hourly_ metrics needed for
             # hourly tables and charts
-            _process_hourly_interop_data(day)
+            _process_hourly_interop_data(day, tz)
 
             # We tell the templates that this day should have an
             # alert icon if there are any relevant alerts attached
@@ -127,10 +137,13 @@ def _process_interop_point_forecast(data):
 
             # Process the Quantitative Precipitation Forecast (qpf)
             qpf = day["qpf"]
-            qpf["times"] = [
-                f"{_get_hour_from_iso8601(period['start'])}-{_get_hour_from_iso8601(period['end'])}"
-                for period in qpf["periods"]
-            ]
+
+            qpf["times"] = []
+            for period in qpf["periods"]:
+                period["start"] = datetime.fromisoformat(period["start"]).astimezone(tz=tz)
+                period["end"] = datetime.fromisoformat(period["end"]).astimezone(tz=tz)
+                qpf["times"].append(f"{_get_hour(period['start'])}-{_get_hour(period['end'])}")
+
             qpf["liquid"] = [period["liquid"]["in"] for period in qpf["periods"]]
             qpf["snow"] = []
             qpf["ice"] = []
@@ -143,10 +156,13 @@ def _process_interop_point_forecast(data):
                 qpf["ice"] = [period["ice"]["in"] for period in qpf["periods"]]
                 qpf["liquidTitle"] = _("precip-table.table-header+legend.water.01")
 
+    if "timestamp" in data["observed"]:
+        data["observed"]["timestamp"] = datetime.fromisoformat(data["observed"]["timestamp"]).astimezone(tz=tz)
+
     return data
 
 
-def _process_hourly_interop_data(day_data):  # noqa: C901
+def _process_hourly_interop_data(day_data, tz):  # noqa: C901
     """Process hourly list information for the hourly metrics for each day."""
     hours = day_data["hours"]
     day_data["hourly"] = {
@@ -162,12 +178,14 @@ def _process_hourly_interop_data(day_data):  # noqa: C901
     }
     for hour in hours:
         # apparentTemperature
+        hour["time"] = datetime.fromisoformat(hour["time"]).astimezone(tz)
+
         if "apparentTemperature" in hour:
             day_data["hourly"]["feelsLike"].append(hour["apparentTemperature"]["degF"])
 
         # times
         if "time" in hour:
-            day_data["hourly"]["times"].append(datetime.fromisoformat(hour["time"]).strftime("%-I %p"))
+            day_data["hourly"]["times"].append(hour["time"].strftime("%-I %p"))
         else:
             day_data["hourly"]["times"].append(None)
 

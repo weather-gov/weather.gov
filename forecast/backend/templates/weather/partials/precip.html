@@ -27,7 +27,7 @@
           {% for hour in periods %}
             <tr>
               <td class="font-family-mono font-mono-xs text-base text-ls-neg-3">
-                {{ hour.start|datetime|date:"g A" }}&emsp13;–&emsp13;{{ hour.end|datetime|date:"g A" }}
+                {{ hour.start|date:"g A" }}&emsp13;–&emsp13;{{ hour.end|date:"g A" }}
               </td>
               {% if hasSnow %}
                 <td class="text-align-left">{% trans_with_args "units.inches.01" inches=hour.snow.in %}</td>
