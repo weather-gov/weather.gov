@@ -215,6 +215,10 @@ def county_ghwo(request, county_fips):
                 continue
             break
 
+        # Update the scaled value for screenreader text
+        for day in ghwo_data["composite"]["days"]:
+            day["scaled_10"] = day["scaled"] * 10
+
         # Add any image urls to the list of images to prefetch
         ghwo_data["prefetch_images"] = get_ghwo_daily_images(ghwo_data)
 
