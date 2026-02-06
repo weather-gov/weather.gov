@@ -105,7 +105,6 @@
           </tbody>
         </table>
       </div>
-      {% include 'weather/partials/ghwo-risk-table-legend.html' %}
       <p class="font-sans-xs margin-top-105">
         {% with ghwo.noRisks|length as num_no_risks %}
           <span>{% translate_plural_with_args "ghwo.details.table.no-impact.01" 0 num=num_no_risks %}:</span>

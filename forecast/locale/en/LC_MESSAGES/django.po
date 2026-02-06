@@ -737,6 +737,9 @@ msgstr "What is this based on?"
 msgid "ghwo.details.pane.header.risk-levels.01"
 msgstr "Risk levels"
 
+msgid "ghwo.summary.scale.label.01"
+msgstr "{scaled} out of 10"
+
 msgid "ghwo.details.table.no-impact.01"
 msgid_plural "ghwo.details.table.no-impact.01-plural"
 msgstr[0] "No impact in {num} other category"
@@ -846,10 +849,10 @@ msgid "county-index.headers.description.01"
 msgstr "Select your state and county below to see alerts, risk levels, and more for your area"
 
 msgid "ghwo.table.caption.header.01"
-msgstr "7 day risk overview"
+msgstr "Seven-day weather risk overview"
 
 msgid "ghwo.table.caption.description.01"
-msgstr "The graphic shows the daily risk summary for 7 days. Daily risk is based on highest risk factor for that day."
+msgstr "Daily weather risk summary"
 
 msgid "ghwo.table.details.header.01"
 msgstr "What factors are driving the risk?"

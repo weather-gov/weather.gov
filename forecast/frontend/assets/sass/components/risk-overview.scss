@@ -1,0 +1,92 @@
+@use "uswds-core" as *;
+@use "colors" as *;
+@use "sass:math";
+@forward "uswds-theme";
+@forward "uswds";
+
+$cell-inner-width: 49px;
+$cell-inner-height: 57px;
+
+:root {
+    --risk-summary-scale: 0;
+    --risk-summary-bar-base-rgb: 7, 100, 141;
+}
+
+.risk-summary-table-wrapper {
+    display: block;
+    overflow-x: auto;
+}
+
+.risk-summary-table {
+    border-collapse: collapse;
+
+    thead {
+        th {
+            padding-bottom: units("105");
+        }
+    }
+
+    tbody {
+        th {
+            padding: 0;
+        }
+    }
+}
+
+.risk-summary-table-data {
+    padding: units(1);
+    padding-top: units("05");
+    padding-bottom: units("05");
+    vertical-align: bottom;
+    border: 1px solid color("base-lighter");
+}
+
+.risk-summary-table-data-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    height: $cell-inner-height;
+    width: $cell-inner-width;
+}
+
+.risk-summary-bar {
+    --risk-summary-percentage: calc(100% * var(--risk-summary-scale));
+
+    display: block;
+    width: 100%;
+    border: 1px solid color("accent-cool-darkest");
+    background-color: rgba(var(--risk-summary-bar-base-rgb), var(--risk-summary-scale));
+    height: var(--risk-summary-percentage);
+
+    // Generate CSS properties based on data attributes
+    // for each possible 0.05 value.
+    // This means values like 0.33 will be rounded
+    // down, due to the cascade order
+    @for $i from 1 through 10 {
+        $scale: math.div($i, 10);
+        $scale-half: $scale + 0.05;
+        &[data-scaled-risk-level^="#{$scale}"]{
+            --risk-summary-scale: #{$scale};
+        }
+        &[data-scaled-risk-level^="#{$scale-half}"]{
+            --risk-summary-scale: #{$scale-half};
+        }
+    };
+}
+
+.risk-summary-table-legend-square {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 20px;
+    height: 20px;
+    border: 1px solid color("base-lighter");
+    margin-right: units("05");
+    padding: 1px 2px;
+}
+
+.risk-legend-arrow {
+    margin-left: units(2);
+    margin-right: units(2);
+}
