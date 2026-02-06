@@ -379,6 +379,8 @@ web-component-and-interop-test:
     - job: gather-forecast-node-dependencies
       optional: true
   image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  variables:
+    DISABLE_REDIS: true
   script:
     # NB: GitLab clones into CI_BUILDS_DIR which defaults to
     # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker

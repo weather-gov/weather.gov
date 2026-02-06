@@ -1,4 +1,4 @@
-import { createClient } from "@redis/client";
+import redis from "@redis/client";
 import { logger } from "./util/monitoring/index.js";
 
 // For now, let's use a single client instance
@@ -73,7 +73,7 @@ getRedisConnectionInfo();
  * for the cache TTL, otherwise null if the header is not present
  */
 export const getTTLFromResponse = (response) => {
-  const cacheHeader = response.headers.get("Cache-Control");
+  const cacheHeader = response?.headers?.["Cache-Control"];
   if (!cacheHeader) {
     return null;
   }
@@ -112,7 +112,8 @@ export const getRedisClient = async () => {
     const { password, host, port } = getRedisConnectionInfo();
     const url = `${protocol}://default:${password}@${host}:${port}`;
     redisLogger.info({ url }, "connecting");
-    client = await createClient({ url })
+    client = await redis
+      .createClient({ url })
       .on("error", (err) => {
         redisLogger.error({ err }, "Client error");
       })

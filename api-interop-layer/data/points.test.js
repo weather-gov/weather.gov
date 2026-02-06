@@ -100,9 +100,11 @@ describe("point method", () => {
     fetchAPIJson.resolves({ error: true });
 
     // Marine zone query. Make this one a marine point to validate that logic.
-    db.query.onCall(2).resolves({ rows: [1] });
+    db.query
+      .withArgs(sinon.match(/FROM weathergov_geo_zones/i))
+      .resolves({ rows: [1] });
 
-    db.query.onCall(0).resolves({
+    db.query.withArgs(sinon.match(/FROM weathergov_geo_places/i)).resolves({
       rows: [
         {
           name: "Townsville",
@@ -114,7 +116,7 @@ describe("point method", () => {
       ],
     });
 
-    db.query.onCall(1).resolves({
+    db.query.withArgs(sinon.match(/FROM weathergov_geo_counties/i)).resolves({
       rows: [
         {
           state: "",
@@ -148,9 +150,11 @@ describe("point method", () => {
     fetchAPIJson.resolves({ error: true });
 
     // Marine zone query
-    db.query.onCall(2).resolves({ rows: [] });
+    db.query
+      .withArgs(sinon.match(/FROM weathergov_geo_zones/i))
+      .resolves({ rows: [] });
 
-    db.query.onCall(0).resolves({
+    db.query.withArgs(sinon.match(/FROM weathergov_geo_places/i)).resolves({
       rows: [
         {
           name: "Townsville",
@@ -159,7 +163,7 @@ describe("point method", () => {
       ],
     });
 
-    db.query.onCall(1).resolves({
+    db.query.withArgs(sinon.match(/FROM weathergov_geo_counties/i)).resolves({
       rows: [
         {
           state: "OT",

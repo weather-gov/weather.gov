@@ -17,7 +17,7 @@ export const getClosestPlace = async (latitude, longitude) => {
       `SELECT
        name,timezone
        FROM weathergov_geo_places
-       ORDER BY ST_DISTANCE(point,${pointGeom})
+       ORDER BY point <-> ${pointGeom}
        LIMIT 1`,
     )
     .then((result) => {
@@ -89,21 +89,20 @@ export const getPointData = async (latitude, longitude) => {
     },
   );
 
-  const db = await openDatabase();
-
-  const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',${SPATIAL_PROJECTION.WGS84})`;
-
-  const placePromise = await getClosestPlace(latitude, longitude);
+  const placePromise = getClosestPlace(latitude, longitude);
 
   // Check if the requested point is inside a marine zone.
-  const isMarinePromise = db.query(
-    `SELECT id
+  const pointGeom = `ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})',${SPATIAL_PROJECTION.WGS84})`;
+  const isMarinePromise = openDatabase().then((db) =>
+    db.query(
+      `SELECT id
     FROM weathergov_geo_zones
     WHERE
-      type LIKE 'marine:%'
+      (type='marine:coastal' OR type='marine:offshore')
       AND
       ST_Intersects(shape,${pointGeom})
     LIMIT 1`,
+    ),
   );
 
   const [grid, place, isMarine] = await Promise.all([

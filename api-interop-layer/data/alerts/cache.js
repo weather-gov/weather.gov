@@ -223,28 +223,18 @@ export class AlertsCache {
    *
    * Given a latitude and longitude, retrieve all alerts that include it.
    * Optionally include a buffer around the point.
-   *
-   * @arg {Object} options
-   * @arg {Number} options.buffer How much buffer to add to the point, in
-   *                              meters. If unset, no buffer will be added.
    */
-  async getIntersectingAlertsForPoint(lat, lon, options) {
-    const inputGeometry = [
-      // The ::geography instructs postgis to treat the object as a geographic
-      // shape instead of geometric. That way any buffering will be in meters
-      // rather than degrees.
-      `ST_GeomFromText('POINT(${lon} ${lat})',${SPATIAL_PROJECTION.WGS84})::geography`,
-    ];
-    if (options?.buffer) {
-      inputGeometry.unshift("ST_Buffer(");
-      inputGeometry.push(`,${options.buffer})`);
-    }
+  async getIntersectingAlertsForPoint(lat, lon) {
+    const sql = `SELECT alertjson
+    FROM weathergov_geo_alerts_cache
+    WHERE ST_DWithin(
+        ST_SetSRID(ST_Point($2, $1), 4326)::geography,
+        shape_simplified::geography,
+        400,
+        false
+    )`;
 
-    const geometry = inputGeometry.join("");
-
-    const sql = `SELECT alertjson FROM ${this.tableName} WHERE ST_INTERSECTS(${geometry}, shape);`;
-
-    const response = await this.db.query(sql);
+    const response = await this.db.query(sql, [lat, lon]);
     return response.rows.map(({ alertjson }) => alertjson);
   }
 

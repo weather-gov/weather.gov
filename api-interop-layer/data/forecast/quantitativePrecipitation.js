@@ -25,8 +25,8 @@ export default (liquidData, iceData, snowData, { timezone }) => {
     const end = start.add(duration).tz(timezone);
 
     return {
-      start: start,
-      end: end,
+      start: start.toDate(),
+      end: end.toDate(),
       liquid,
       ice,
       snow,

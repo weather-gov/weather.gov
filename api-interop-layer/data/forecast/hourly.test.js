@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import dayjs from "../../util/day.js";
 import hourly from "./hourly.js";
 
 const place = {
@@ -11,22 +10,19 @@ const place = {
  * We will create four full days of hourly data
  * starting at 7 minutes past each hour.
  */
-const startTime = dayjs
-  .utc("2024-09-09T05:07:00-07:00")
-  .tz("America/Los_Angeles");
-const endTime = dayjs
-  .utc("2024-09-14T03:07:00-07:00")
-  .tz("America/Los_Angeles");
-const hourDiff = endTime.diff(startTime, "hour");
+const startTime = new Date("2024-09-09T05:07:00-07:00");
 
 const times = [];
 
-for (let i = 0; i < hourDiff; i++) {
-  const newStart = startTime.add(i, "hour");
-  const newEnd = newStart.add(1, "hour");
+for (let i = 0; i < 96; i++) {
+  const newStart = new Date(startTime);
+  newStart.setHours(newStart.getHours() + i);
+  const newEnd = new Date(newStart);
+  newEnd.setHours(newStart.getHours() + 1);
+
   times.push({
-    startTime: newStart.format(),
-    endTime: newEnd.format(),
+    startTime: newStart,
+    endTime: newEnd,
     shortForecast: "Dummy forecast",
     icon: "weather-icon",
   });
@@ -43,16 +39,16 @@ describe("Hourly forecast processing (basic)", () => {
     // Note: we test on just the first five hour slice
     // for brevity
     const expected = [
-      "2024-09-09T05:00:00-07:00",
-      "2024-09-09T06:00:00-07:00",
-      "2024-09-09T07:00:00-07:00",
-      "2024-09-09T08:00:00-07:00",
-      "2024-09-09T09:00:00-07:00",
+      "2024-09-09T12:00:00.000Z",
+      "2024-09-09T13:00:00.000Z",
+      "2024-09-09T14:00:00.000Z",
+      "2024-09-09T15:00:00.000Z",
+      "2024-09-09T16:00:00.000Z",
     ];
     const result = new Map();
     hourly(hourlyData, result, place);
     const actual = Array.from(result)
-      .map((item) => dayjs.utc(item[0]).tz(place.timezone).format())
+      .map((item) => new Date(item[0]).toISOString())
       .slice(0, 5);
 
     expect(expected).to.eql(actual);
@@ -62,16 +58,16 @@ describe("Hourly forecast processing (basic)", () => {
     // Note: we test on just the first five hour slice
     // for brevity
     const expected = [
-      "2024-09-09T05:00:00-07:00",
-      "2024-09-09T06:00:00-07:00",
-      "2024-09-09T07:00:00-07:00",
-      "2024-09-09T08:00:00-07:00",
-      "2024-09-09T09:00:00-07:00",
+      "2024-09-09T12:00:00.000Z",
+      "2024-09-09T13:00:00.000Z",
+      "2024-09-09T14:00:00.000Z",
+      "2024-09-09T15:00:00.000Z",
+      "2024-09-09T16:00:00.000Z",
     ];
     const result = new Map();
     hourly(hourlyData, result, place);
     const actual = [...result.values()]
-      .map((val) => val.time.tz(place.timezone).format())
+      .map((val) => val.time.toISOString())
       .slice(0, 5);
 
     expect(expected).to.eql(actual);

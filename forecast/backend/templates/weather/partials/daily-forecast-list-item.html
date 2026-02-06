@@ -24,8 +24,8 @@ only be a nighttime period.
             <h3 class="padding-0 margin-0">
               <time class="display-block text-bold font-heading-md text-primary-dark minw-15 margin-right-3"
                     datetime="{{ day.periods.0.startTime }}">
-                <span>{{ day.periods.0.start|datetime|date:"l" }},</span>
-                <span class="display-block">{{ day.periods.0.start|datetime|date:"M  j" }}</span>
+                <span>{{ day.periods.0.start|date:"l" }},</span>
+                <span class="display-block">{{ day.periods.0.start|date:"M j" }}</span>
               </time>
             </h3>
             <div class="display-flex margin-top-1px">{% daily_high_low periods=day.periods %}</div>

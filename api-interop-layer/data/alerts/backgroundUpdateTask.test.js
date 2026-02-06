@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import sinon from "sinon";
 import { expect } from "chai";
+import undici from "undici";
 import dayjs from "../../util/day.js";
 import { updateAlerts } from "./backgroundUpdateTask.js";
 import { AlertsCache } from "./cache.js";
@@ -8,7 +9,7 @@ import { AlertsCache } from "./cache.js";
 describe("alert background processing module", () => {
   const sandbox = sinon.createSandbox();
 
-  const response = { status: 200, json: sandbox.stub() };
+  const response = { statusCode: 200, body: { json: sandbox.stub() } };
   const parent = { postMessage: sandbox.stub() };
 
   let getHashesStub;
@@ -18,7 +19,7 @@ describe("alert background processing module", () => {
   let storedAlerts;
 
   beforeEach(() => {
-    response.status = 200;
+    response.statusCode = 200;
 
     storedHashes = [];
     storedAlerts = {};
@@ -49,12 +50,12 @@ describe("alert background processing module", () => {
       });
     });
 
-    fetch.resolves(response);
+    undici.request.resolves(response);
   });
 
   afterEach(() => {
     // Clear out the background processor's internal cache.
-    response.json.resolves({ features: [] });
+    response.body.json.resolves({ features: [] });
     sandbox.resetBehavior();
     sandbox.resetHistory();
     getHashesStub.restore();
@@ -81,7 +82,7 @@ describe("alert background processing module", () => {
       .digest("base64");
 
     beforeEach(() => {
-      response.json.resolves({
+      response.body.json.resolves({
         features: [alert],
       });
     });
@@ -126,14 +127,14 @@ describe("alert background processing module", () => {
           event: "Tornado Warning",
         },
       };
-      response.json.resolves({
+      response.body.json.resolves({
         // Clone the alerts because the updater mutates them.
         features: [JSON.parse(JSON.stringify(alert1))],
       });
 
       await updateAlerts({ parent });
 
-      response.json.resolves({
+      response.body.json.resolves({
         features: [
           // Clone the alerts because the updater mutates them.
           JSON.parse(JSON.stringify(alert1)),
@@ -161,13 +162,13 @@ describe("alert background processing module", () => {
         },
       };
 
-      response.json.resolves({
+      response.body.json.resolves({
         features: [alert1],
       });
 
       await updateAlerts({ parent });
 
-      response.json.resolves({
+      response.body.json.resolves({
         features: [],
       });
 
@@ -191,7 +192,7 @@ describe("alert background processing module", () => {
     };
 
     it("if the alert has an end time in the past", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         features: [
           {
             geometry: "geo",
@@ -212,7 +213,7 @@ describe("alert background processing module", () => {
     });
 
     it("if the alert does not have an end time and the expire time is in the past", async () => {
-      response.json.resolves({
+      response.body.json.resolves({
         features: [
           {
             geometry: "geo",
@@ -242,7 +243,7 @@ describe("alert background processing module", () => {
       ends: dayjs().add(1, "minute").toISOString(),
     };
 
-    response.json.resolves({
+    response.body.json.resolves({
       features: [
         {
           geometry: "geo",
@@ -297,7 +298,7 @@ describe("alert background processing module", () => {
   });
 
   it("derives an alert ID", async () => {
-    response.json.resolves({
+    response.body.json.resolves({
       features: [
         {
           geometry: "geo",
@@ -322,7 +323,7 @@ describe("alert background processing module", () => {
   });
 
   it("stores unknown alert types with appropriate metadata", async () => {
-    response.json.resolves({
+    response.body.json.resolves({
       features: [
         {
           geometry: "geo",
@@ -358,7 +359,7 @@ describe("alert background processing module", () => {
   });
 
   it("prioritizes unknown 'evacuation' alerts correctly", async () => {
-    response.json.resolves({
+    response.body.json.resolves({
       features: [
         {
           geometry: "geo",
@@ -394,7 +395,7 @@ describe("alert background processing module", () => {
   });
 
   it("posts an error if it encounters a problem", async () => {
-    fetch.rejects();
+    undici.request.rejects();
 
     await updateAlerts({ parent });
 
@@ -420,7 +421,7 @@ describe("alert background processing module", () => {
     it("if the alert has an ends property", async () => {
       alertResponse.features[0].properties.ends = "2430-04-03T12:00:00Z";
       alertResponse.features[0].properties.expires = null;
-      response.json.resolves(alertResponse);
+      response.body.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
       const [_, alert] = Object.values(storedAlerts)[0];
@@ -432,7 +433,7 @@ describe("alert background processing module", () => {
     it("if the alert does not have an ends property but does have expires", async () => {
       alertResponse.features[0].properties.ends = null;
       alertResponse.features[0].properties.expires = "2430-04-03T12:00:00Z";
-      response.json.resolves(alertResponse);
+      response.body.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
       const [_, alert] = Object.values(storedAlerts)[0];
@@ -443,7 +444,7 @@ describe("alert background processing module", () => {
     it("if the alert has neither ends nor expires properties", async () => {
       alertResponse.features[0].properties.ends = null;
       alertResponse.features[0].properties.expires = null;
-      response.json.resolves(alertResponse);
+      response.body.json.resolves(alertResponse);
       await updateAlerts({ parent });
 
       const [_, alert] = Object.values(storedAlerts)[0];

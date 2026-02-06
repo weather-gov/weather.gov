@@ -1,12 +1,13 @@
 import sinon from "sinon";
 import { expect } from "chai";
+import undici from "undici";
 import { BASE_URL } from "../../util/fetch.js";
 import AFDParser from "./afd/AFDParser.js";
 import getProduct from "./index.js";
 
 describe("product module index", () => {
   const sandbox = sinon.createSandbox();
-  const response = { status: 200, json: sandbox.stub() };
+  const response = { statusCode: 200, body: { json: sandbox.stub() } };
   const wait = sandbox.stub();
 
   let afdParser_parse;
@@ -21,11 +22,11 @@ describe("product module index", () => {
   });
 
   beforeEach(() => {
-    response.status = 200;
+    response.statusCode = 200;
     sandbox.resetBehavior();
     sandbox.resetHistory();
     wait.resolves();
-    fetch.resolves(response);
+    undici.request.resolves(response);
   });
 
   after(() => {
@@ -35,26 +36,28 @@ describe("product module index", () => {
   });
 
   it("fetches the requested product by ID", async () => {
-    response.json.resolves("success");
+    response.body.json.resolves("success");
 
     const result = await getProduct("and now, the weather");
 
     expect(result).to.equal("success");
     expect(
-      fetch.calledWith(`${BASE_URL}/products/and%20now,%20the%20weather`),
+      undici.request.calledWith(
+        `${BASE_URL}/products/and%20now,%20the%20weather`,
+      ),
     ).to.equal(true);
   });
 
   it("returns the API response if status is not 200", async () => {
-    response.status = 400;
-    response.json.resolves({ message: "oh noes" });
+    response.statusCode = 400;
+    response.body.json.resolves({ message: "oh noes" });
 
     const result = await getProduct("err");
     expect(result).to.eql({ message: "oh noes", status: 400, error: true });
   });
 
   it("returns the API response if product type is not AFD", async () => {
-    response.json.resolves({
+    response.body.json.resolves({
       productCode: "ABC",
       message: "Bob Barker hates pets",
     });
@@ -67,7 +70,7 @@ describe("product module index", () => {
   });
 
   it("returns the API response if there is an error parsing", async () => {
-    response.json.resolves({
+    response.body.json.resolves({
       productCode: "AFD",
       message: "Oh no things will fail!",
     });
@@ -81,7 +84,10 @@ describe("product module index", () => {
   });
 
   it("parses the AFD if a successful fetch", async () => {
-    response.json.resolves({ productCode: "AFD", productText: "howdy doody" });
+    response.body.json.resolves({
+      productCode: "AFD",
+      productText: "howdy doody",
+    });
 
     afdParser_getStructureForTwig.returns("teehee");
 

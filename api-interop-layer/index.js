@@ -1,8 +1,7 @@
 import fastify from "fastify";
-import newrelic from "newrelic";
-import { logger } from "./util/monitoring/index.js";
 import { startAlertProcessing } from "./data/alerts/index.js";
 import routes from "./routes/index.js";
+import { logger } from "./util/monitoring/index.js";
 
 const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
 

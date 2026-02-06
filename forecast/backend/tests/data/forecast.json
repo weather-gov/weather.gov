@@ -1,12 +1,21 @@
 {
   "some_missing_temperatures": {
     "isMarine": false,
+    "place": {
+      "timezone": "America/Chicago"
+    },
+    "observed": {
+      "timestamp": "2009-03-19T17:32:42Z"
+    },
     "forecast": {
       "days": [
         {
+          "start": "2009-01-02T13:00:00:00Z",
+          "end": "2009-01-02T19:00:00:00Z",
           "periods": [
             {
               "start": "2009-01-02T13:00:00Z",
+              "end": "2009-01-02T14:00:00Z",
               "isDaytime": true,
               "isOvernight": false,
               "data": {
@@ -16,6 +25,8 @@
               }
             },
             {
+              "start": "2009-01-02T14:00:00Z",
+              "end": "2009-01-02T15:00:00Z",
               "isDaytime": false,
               "isOvernight": false,
               "data": {
@@ -27,6 +38,7 @@
           ],
           "hours": [
             {
+              "time": "2009-09-01T03:00:00Z",
               "apparentTemperature": { "degF": 45 },
               "temperature": { "degF": 49 },
               "probabilityOfPrecipitation": { "percent": 27 },
@@ -37,6 +49,7 @@
               "windDirection": "yonder"
             },
             {
+              "time": "2009-09-01T04:00:00Z",
               "apparentTemperature": { "degF": 48 },
               "temperature": { "degF": 51 },
               "probabilityOfPrecipitation": { "percent": 13 },
@@ -57,7 +70,7 @@
             "periods": [
               {
                 "start": "2025-12-15T02:00:00-06:00",
-                "end": "2025-12-15T04:00:00-06:00",
+                "end": "2025-12-15T10:00:00Z",
                 "liquid": { "in": 3 }
               },
               {
@@ -69,9 +82,12 @@
           }
         },
         {
+          "start": "2009-01-02T19:00:00:00Z",
+          "end": "2009-01-03T01:00:00:00Z",
           "periods": [
             {
-              "start": "2009-03-04T13:00:00Z",
+              "start": "2009-03-04T14:00:00Z",
+              "end": "2009-03-04T15:00:00Z",
               "isDaytime": false,
               "isOvernight": false,
               "data": {
@@ -93,9 +109,12 @@
           }
         },
         {
+          "start": "2009-01-03T01:00:00:00Z",
+          "end": "2009-01-03T07:00:00:00Z",
           "periods": [
             {
-              "start": "2009-03-04T13:00:00Z",
+              "start": "2009-03-04T15:00:00Z",
+              "end": "2009-03-04T16:00:00Z",
               "isDaytime": false,
               "isOvernight": true,
               "data": {
@@ -105,7 +124,8 @@
               }
             },
             {
-              "start": "2009-03-04T13:00:00Z",
+              "start": "2009-03-04T16:00:00Z",
+              "end": "2009-03-04T17:00:00Z",
               "isDaytime": true,
               "isOvernight": false,
               "data": {
@@ -115,7 +135,8 @@
               }
             },
             {
-              "start": "2009-03-04T13:00:00Z",
+              "start": "2009-03-04T17:00:00Z",
+              "end": "2009-03-04T18:00:00Z",
               "isDaytime": false,
               "isOvernight": false,
               "data": {
@@ -141,12 +162,21 @@
   },
   "nosnow_noice_noalerts": {
     "isMarine": false,
+    "place": {
+      "timezone": "America/Chicago"
+    },
+    "observed": {
+      "timestamp": "2009-04-03T01:32:42Z"
+    },
     "forecast": {
       "days": [
         {
+          "start": "2009-01-02T13:00:00Z",
+          "end": "2009-01-03T13:00:00Z",
           "periods": [
             {
               "start": "2009-01-02T13:00:00Z",
+              "end": "2009-01-02T14:00:00Z",
               "isDaytime": true,
               "isOvernight": false,
               "data": {
@@ -156,6 +186,8 @@
               }
             },
             {
+              "start": "2009-01-02T14:00:00Z",
+              "end": "2009-01-02T15:00:00Z",
               "isDaytime": false,
               "isOvernight": false,
               "data": {
@@ -167,6 +199,7 @@
           ],
           "hours": [
             {
+              "time": "2009-09-10T03:00:00Z",
               "apparentTemperature": { "degF": 45 },
               "temperature": { "degF": 49 },
               "probabilityOfPrecipitation": { "percent": 27 },
@@ -177,6 +210,7 @@
               "windDirection": "yonder"
             },
             {
+              "time": "2009-09-10T04:00:00Z",
               "apparentTemperature": { "degF": 48 },
               "temperature": { "degF": 51 },
               "probabilityOfPrecipitation": { "percent": 13 },
@@ -209,9 +243,12 @@
           }
         },
         {
+          "start": "2009-01-03T13:00:00Z",
+          "end": "2009-01-04T13:00:00Z",
           "periods": [
             {
               "start": "2009-03-04T13:00:00Z",
+              "end": "2009-03-04T14:00:00Z",
               "isDaytime": false,
               "isOvernight": false,
               "data": {
@@ -233,9 +270,12 @@
           }
         },
         {
+          "start": "2009-01-04T13:00:00Z",
+          "end": "2009-01-05T13:00:00Z",
           "periods": [
             {
-              "start": "2009-03-04T13:00:00Z",
+              "start": "2009-03-04T14:00:00Z",
+              "end": "2009-03-04T15:00:00Z",
               "isDaytime": false,
               "isOvernight": true,
               "data": {
@@ -246,6 +286,7 @@
             },
             {
               "start": "2009-03-04T13:00:00Z",
+              "end": "2009-03-04T14:00:00Z",
               "isDaytime": true,
               "isOvernight": false,
               "data": {
@@ -255,7 +296,8 @@
               }
             },
             {
-              "start": "2009-03-04T13:00:00Z",
+              "start": "2009-03-04T19:00:00Z",
+              "end": "2009-03-04T20:00:00Z",
               "isDaytime": false,
               "isOvernight": false,
               "data": {
@@ -281,12 +323,21 @@
   },
   "snow_noice_alert_noalertlevel": {
     "isMarine": false,
+    "place": {
+      "timezone": "America/Chicago"
+    },
+    "observed": {
+      "timestamp": "2009-01-03T01:32:42Z"
+    },
     "forecast": {
       "days": [
         {
+          "start": "2009-01-03T00:00:00:00Z",
+          "end": "2009-01-03T01:00:00:00Z",
           "periods": [
             {
               "start": "2009-01-02T13:00:00Z",
+              "end": "2009-01-02T14:00:00Z",
               "isDaytime": true,
               "isOvernight": false,
               "data": {
@@ -328,6 +379,12 @@
   },
   "nosnow_ice_alert": {
     "isMarine": false,
+    "place": {
+      "timezone": "America/Chicago"
+    },
+    "observed": {
+      "timestamp": "2010-01-03T01:32:42Z"
+    },
     "alerts": {
       "items": ["alert-id-1", "alert-id-2", "alert-id-3"],
       "metadata": { "error": false, "lastUpdated": null },
@@ -336,9 +393,12 @@
     "forecast": {
       "days": [
         {
+          "start": "2009-01-02T13:00:00:00Z",
+          "end": "2009-01-03T13:00:00:00Z",
           "periods": [
             {
               "start": "2009-01-02T13:00:00Z",
+              "end": "2009-01-02T14:00:00Z",
               "isDaytime": true,
               "isOvernight": false,
               "data": {
@@ -363,7 +423,6 @@
               {
                 "start": "2025-12-15T02:00:00-06:00",
                 "end": "2025-12-15T04:00:00-06:00",
-
                 "liquid": { "in": 3 },
                 "ice": { "in": 3 }
               },
