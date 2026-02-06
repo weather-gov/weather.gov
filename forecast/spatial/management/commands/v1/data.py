@@ -422,7 +422,8 @@ def load_places(force=False):
     with open(cache_path + "us.cities500.txt", "rb") as f:
         lines = sum(1 for _ in f)
 
-    csvfile = open(cache_path + "us.cities500.txt", "r")
+    import io
+    csvfile = io.TextIOWrapper(open(cache_path + "us.cities500.txt", "rb"), encoding="utf-8")
     reader = csv.DictReader(
         csvfile,
         # These are the names of the fields in the cities500 dataset. Naming
@@ -454,50 +455,55 @@ def load_places(force=False):
 
     try:
         for csv_place in tqdm(iterable=reader, total=lines, ncols=50, leave=False):
-            # If not a US or populated place, skip it
-            if __is_invalid_place(csv_place):
-                continue
+            try:
+                # If not a US or populated place, skip it
+                if __is_invalid_place(csv_place):
+                    continue
 
-            place = WeatherPlace()
-            place.name = csv_place["name"]
-            place.timezone = csv_place["timezone"]
-            place.countyfips = __get_county_fips(csv_place)
+                place = WeatherPlace()
+                place.name = csv_place["name"]
+                place.timezone = csv_place["timezone"]
+                place.countyfips = __get_county_fips(csv_place)
+                if not place.countyfips:
+                     logger.warning(f"Skipping {place.name}: No county FIPS")
+                     continue
 
-            # For states, the "state" field is the two-letter abbreviation.
-            # For everywhere else, it's a numeric code, but it turns out in
-            # those cases, the country code is the appropriate "state"
-            # abbreviation, so use that.
-            place.state = csv_place["state"] if csv_place["country"] == "US" else csv_place["country"]
+                # For states, the "state" field is the two-letter abbreviation.
+                # For everywhere else, it's a numeric code, but it turns out in
+                # those cases, the country code is the appropriate "state"
+                # abbreviation, so use that.
+                place.state = csv_place["state"] if csv_place["country"] == "US" else csv_place["country"]
 
-            # Create a WKT string in order to create the geometry. We may
-            # also use this WKT string for a county lookup later on.
-            wkt = f"POINT({csv_place['lon']} {csv_place['lat']})"
-            place.point = GEOSGeometry(wkt)
+                # Create a WKT string in order to create the geometry. We may
+                # also use this WKT string for a county lookup later on.
+                wkt = f"POINT({csv_place['lon']} {csv_place['lat']})"
+                place.point = GEOSGeometry(wkt)
 
-            # And finally grab the state and county names
-            county = WeatherCounties.objects.filter(
-                countyfips__endswith=place.countyfips,
-                state__state=place.state,
-            ).first()
-            if county is not None:
-                place.county = county.countyname
-                place.countyfips = county.countyfips
-                place.statename = county.state.name
-                place.statefips = county.state.fips
-            else:
-                logger.warning(
-                    f"couldn't get county for FIPS {place.countyfips} ({place.state})",
-                )
+                # And finally grab the state and county names
+                county = WeatherCounties.objects.filter(
+                    countyfips__endswith=place.countyfips,
+                    state__state=place.state,
+                ).first()
+                if county is not None:
+                    place.county = county.countyname
+                    place.countyfips = county.countyfips
+                    place.statename = county.state.name
+                    place.statefips = county.state.fips
+                else:
+                    logger.warning(
+                        f"couldn't get county for FIPS {place.countyfips} ({place.state})",
+                    )
 
-            place.save()
+                place.save()
+            except Exception:
+                 logger.error(f"Failed to load place: {csv_place.get('name', 'unknown')}", exc_info=True)
+                 continue
 
         # Update the timestamp for this table in the metadata
         WeatherSpatialMetadata.objects.update_or_create(table=WeatherPlace._meta.db_table)
 
     except Exception:
-        model = WeatherPlace
-        logger.exception(f"  !! error when loading {model.__name__}")
-        model.objects.all().delete()
+        logger.exception("  !! error during load process (last batch)")
 
     csvfile.close()
     logger.info(f"loaded {str(WeatherPlace.objects.count())} places")
