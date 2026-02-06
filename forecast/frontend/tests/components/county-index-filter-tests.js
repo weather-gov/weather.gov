@@ -27,7 +27,8 @@ describe("County index filter tests", () => {
     // After all the globals are setup, now we can import the component(s) being
     // tested. The imports will unwind themselves and it'll use the globals we
     // defined above to register itself with our DOM.
-    await import("../../assets/js/components/combo-box.js");
+    await import("../../assets/js/components/combobox/filterable-listbox.js");
+    await import("../../assets/js/components/combobox/combobox.js");
     await import("../../assets/js/components/county-index-filter.js");
 
     // JSDOM does not have the `scrollIntoView` method,
@@ -39,15 +40,6 @@ describe("County index filter tests", () => {
   beforeEach(() => {
     // Set the body innerHTML to the loaded example file
     document.body.innerHTML = exampleHtml;
-
-    // Set up the states in the dropdown
-    const states = [
-      {value: "AK", text: "Alaska"},
-      {value: "TX", text: "Texas"},
-      {value: "VA", text: "Virginia"}
-    ];
-    const combobox = document.getElementById("state-filter-combobox");
-    combobox.setListItems(states);
   });
 
   it("Has component registered for the county index filter", () => {
@@ -58,15 +50,15 @@ describe("County index filter tests", () => {
 
   it("Selecting a state from the list hides the other states from view", async () => {
     // Find Virginia in the states list
-    const combobox = document.getElementById("state-filter-combobox");
-    const virginiaItem = combobox.listbox.querySelector(`[data-value="VA"]`);
+    const listbox = document.getElementById("state-filter-listbox");
+    const virginiaItem = listbox.querySelector("#VA");
     virginiaItem.click();
 
     await wait(100);
 
-    // The value of the combobox should be VA
-    expect(combobox.value).to.equal("VA");
-    
+    // The selected item in the list box is VA
+    expect(listbox.querySelector(`[aria-selected="true"]`).id).to.equal("VA");
+
     // We expect the virginia results to be shown
     const virginia = document.querySelector(`[data-state-abbrev="VA"]`);
     expect(virginia).to.exist;
@@ -184,11 +176,13 @@ describe("County index filter tests", () => {
   });
 
   it("Shows only non-filtered counties when a single state is selected", async () => {
-    const combobox = document.getElementById("state-filter-combobox");
-    const filterInput = document.querySelector(`input[id="county-filter-input"]`);
+    const listbox = document.getElementById("state-filter-listbox");
+    const filterInput = document.querySelector(
+      `input[id="county-filter-input"]`,
+    );
 
     // Select Alaska as the state to show
-    const alaskaItem = combobox.listbox.querySelector(`[data-value="AK"]`);
+    const alaskaItem = listbox.querySelector("#AK");
     alaskaItem.click();
 
     // Add 's' to the county filter

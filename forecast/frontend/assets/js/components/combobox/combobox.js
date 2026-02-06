@@ -317,8 +317,8 @@ export default class Combobox extends HTMLElement {
     this.popup.pseudoFocusItem(null);
     this.input.value = "";
     this.handleInput();
-    this.hidePopup();
     this.input.focus();
+    this.hidePopup();
   }
 
   /**
