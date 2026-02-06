@@ -43,12 +43,10 @@ func (e *FetchError) Error() string {
 func internalFetch(path string) (interface{}, error) {
 	targetURL := path
 	if !strings.HasPrefix(path, "http") {
-		// Handle relative path: join with BaseURL
-		// JS: new URL(path, BASE_URL)
-		// Go simple join
-		u, _ := url.Parse(BaseURL)
-		u.Path, _ = url.JoinPath(u.Path, path)
-		// Note: url.JoinPath added in Go 1.19. user's go.mod says 1.21.
+		// Handle relative path: use ResolveReference
+		base, _ := url.Parse(BaseURL)
+		ref, _ := url.Parse(path)
+		u := base.ResolveReference(ref)
 		targetURL = u.String()
 	}
 

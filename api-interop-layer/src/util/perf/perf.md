@@ -73,6 +73,8 @@ The implementation was redesigned (see `paragraph_squash.go`) to use a single-pa
 | .ParagraphSquash | 525 | 118 | **~4.4x Faster** |
 | **FetchAPIJson** | 375,403 | 85,767 | **~4.4x Faster** |
 | **ConvertTimezone** | 49,722 (Original)<br>1,999 (Optimized) | 11.5 | **~4,323x Faster (vs Orig)**<br>**~181x Faster (vs Opt)** |
+| **PostProcessAlerts** (1k items) | 34,598,791 (34.6ms) | 653,357 (0.65ms) | **~53x Faster** |
+| **AFDParser** | 5,646 (5.6µs) | 15,621 (15.6µs) | ~2.8x Slower (Regex) |
 
 ## Raw Output
 
