@@ -83,6 +83,11 @@ const internalFetch = async (path) => {
     if (r.statusCode >= 200 && r.statusCode < 400) {
       fetchLogger.trace({ path, correlationID });
 
+      // 204 means no content
+      if (r.status === 204) {
+        return new Promise((resolve) => resolve({}));
+      }
+
       // Cache the value, and then return the JSON
       // response if there is a valid cache-control
       // header value in the response
