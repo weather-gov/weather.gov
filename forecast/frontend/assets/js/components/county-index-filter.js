@@ -15,7 +15,7 @@
  */
 
 class CountyIndexFilter extends HTMLElement {
-  constructor(){
+  constructor() {
     super();
 
     // Bound methods
@@ -24,30 +24,40 @@ class CountyIndexFilter extends HTMLElement {
     this.filter = this.filter.bind(this);
   }
 
-  connectedCallback(){
+  connectedCallback() {
     // We stash a copy of the given resultArea DOM
     // internally. This will be used for swapping out
     // filtered trees of results more efficiently.
     this.filterSource = document.createElement("template");
-    if(this.resultArea){
+    if (this.resultArea) {
       this.filterSource.innerHTML = this.resultArea.outerHTML;
     } else {
-      console.error(`No valid result area target found. Did you set a 'target=' attribute?`);
+      console.error(
+        `No valid result area target found. Did you set a 'target=' attribute?`,
+      );
     }
 
     // If we can find the initial combobox, clear it so that it has no
     // current value or display
     const combobox = document.getElementById("state-filter-combobox");
-    if(combobox && combobox.listItems && combobox.listItems.length){
-      combobox.clear();
-    }
+    const listbox = combobox.querySelector("wx-filterable-listbox");
+    const clearButton = combobox.querySelector(`[slot="clear-button"]`);
+
+    clearButton.addEventListener("click", () => {
+      this.handleChange({ target: { selection: false } });
+    });
+
+    // Clear listbox filters
+    listbox.clearFilter();
+    // And clear any text inputs
+    combobox.handleInput();
 
     // Now add the event listeners. We do this here so that the initial
     // `clear()` on the combobox does not result in a change event
     // we capture. We only want to know about change events
     // _after_ that point in time.
     this.addEventListener("input", this.handleInput);
-    this.addEventListener("change", this.handleChange);
+    listbox.addEventListener("change", this.handleChange);
   }
 
   /**
@@ -59,34 +69,28 @@ class CountyIndexFilter extends HTMLElement {
    * If matched, we set the current text value or null,
    * then call the filter method.
    */
-  handleInput(event){
-    if(event.target.id === "county-filter-input"){
+  handleInput(event) {
+    if (event.target.id === "county-filter-input") {
       this.currentInput = event.target.value ? event.target.value : null;
       this.filter();
     }
   }
 
   /**
-   * Handle any change events that bubble up to this
-   * component.
-   * We check to make sure that the target id matches
-   * the id of the state combobox, which should be
-   * `#state-filter-combobox`.
+   * Handle changes on the listbox component.
    * If matched, we set this components "selected-state"
    * attribute to the state abbreviation, if a value is in
-   * the combobox, or remove the attribute if not.
+   * the listboc, or remove the attribute if not.
    * We then call the filter method.
    */
-  handleChange(event){
-    if(event.target.id === "state-filter-combobox"){
-      if(event.target.value){
-        this.setAttribute("selected-state", event.target.value);
-      } else {
-        this.removeAttribute("selected-state");
-      }
-
-      this.filter();
+  handleChange(event) {
+    if (event.target.selection) {
+      this.setAttribute("selected-state", event.target.selection.id);
+    } else {
+      this.removeAttribute("selected-state");
     }
+
+    this.filter();
   }
 
   /**
@@ -104,7 +108,7 @@ class CountyIndexFilter extends HTMLElement {
    * and timeout, so that on slower CPU devices a user can continue to
    * interact with the application even while the results update.
    */
-  filter(){
+  filter() {
     const selectedState = this.getAttribute("selected-state");
     const source = this.filterSource.content.cloneNode(true).children[0];
 
@@ -116,24 +120,36 @@ class CountyIndexFilter extends HTMLElement {
         // will proceed only on that state, after all the others have been hidden.
         // Otherwise, we proceed with the normal filtering on the full
         // list of state elements.
-        if(selectedState){
-          source.querySelectorAll(`[data-filter-by="state"]:not([data-state-abbrev="${selectedState}"])`)
-            .forEach(notSelectedStateEl => {
+        if (selectedState) {
+          source
+            .querySelectorAll(
+              `[data-filter-by="state"]:not([data-state-abbrev="${selectedState}"])`,
+            )
+            .forEach((notSelectedStateEl) => {
               notSelectedStateEl.remove();
             });
         }
 
         // Iterate through each remaining state element.
         // If none of its counties match the filter, remove them.
-        if(this.currentInput){
+        if (this.currentInput) {
           Array.from(
-            source.querySelectorAll(`[data-filter-by="state"]`)
-          ).forEach(stateElement => {
-            const numCounties = stateElement.querySelectorAll(`[data-filter-by="county"]`).length;
-            const hiddenCounties = Array.from(stateElement.querySelectorAll(`[data-filter-by="county"]`))
-                  .filter(countyElement => !countyElement.getAttribute("data-county-name").toLowerCase().includes(this.currentInput.toLowerCase()));
+            source.querySelectorAll(`[data-filter-by="state"]`),
+          ).forEach((stateElement) => {
+            const numCounties = stateElement.querySelectorAll(
+              `[data-filter-by="county"]`,
+            ).length;
+            const hiddenCounties = Array.from(
+              stateElement.querySelectorAll(`[data-filter-by="county"]`),
+            ).filter(
+              (countyElement) =>
+                !countyElement
+                  .getAttribute("data-county-name")
+                  .toLowerCase()
+                  .includes(this.currentInput.toLowerCase()),
+            );
             const numRemainingCounties = numCounties - hiddenCounties.length;
-            if(!numRemainingCounties){
+            if (!numRemainingCounties) {
               // There would be no counties left listed under this state if we removed
               // the ones that are filtered out. Instead of removing them one by one,
               // remove this whole state entirely, which won't be displayed if there
@@ -141,16 +157,16 @@ class CountyIndexFilter extends HTMLElement {
               stateElement.remove();
             } else {
               // Otherwise, remove only the counties that have been filtered out.
-              hiddenCounties.forEach(countyElement => countyElement.remove());
+              hiddenCounties.forEach((countyElement) => countyElement.remove());
 
               // If the number of counties is 8 or more, we add
               // the use-columns class to force the columnar layout
-              if(numRemainingCounties >= 8){
+              if (numRemainingCounties >= 8) {
                 stateElement.classList.add("use-columns");
               }
             }
           });
-        };
+        }
 
         // Now set the resultArea's inner html to the active working template
         // inner html, swapping out the dom tree in one go.
@@ -159,40 +175,48 @@ class CountyIndexFilter extends HTMLElement {
 
         // Announce the result changes to screenreaders using
         // our global SR announce tooling
-        const numCountiesDisplayed = this.resultArea.querySelectorAll(`[data-filter-by="county"]`).length;
-        const numStatesDisplayed = this.resultArea.querySelectorAll(`[data-filter-by="state"]`).length;
-        if(!window.ngettext || !window.interpolate || !window.gettext){
+        const numCountiesDisplayed = this.resultArea.querySelectorAll(
+          `[data-filter-by="county"]`,
+        ).length;
+        const numStatesDisplayed = this.resultArea.querySelectorAll(
+          `[data-filter-by="state"]`,
+        ).length;
+        if (!window.ngettext || !window.interpolate || !window.gettext) {
           return;
         }
 
         const prefix = window.gettext("js.county-index.results.aria.01");
         const counties = window.interpolate(
-          window.ngettext("js.county-index.results.num-counties.01", numCountiesDisplayed),
-          [numCountiesDisplayed]
+          window.ngettext(
+            "js.county-index.results.num-counties.01",
+            numCountiesDisplayed,
+          ),
+          [numCountiesDisplayed],
         );
         const states = window.interpolate(
-          window.ngettext("js.county-index.results.num-states.01", numStatesDisplayed),
-          [numStatesDisplayed]
+          window.ngettext(
+            "js.county-index.results.num-states.01",
+            numStatesDisplayed,
+          ),
+          [numStatesDisplayed],
         );
-        
+
         window.dispatchEvent(
           new CustomEvent("wx-announce", {
             detail: {
-              text: `${prefix}: ${counties}, ${states}`
-            }
-          })
+              text: `${prefix}: ${counties}, ${states}`,
+            },
+          }),
         );
       }, 0);
     });
   }
 
-  get resultArea(){
-    return document.getElementById(
-      this.getAttribute("target")
-    );
+  get resultArea() {
+    return document.getElementById(this.getAttribute("target"));
   }
 }
 
-if(!window.customElements.get("wx-county-index-filter")){
+if (!window.customElements.get("wx-county-index-filter")) {
   window.customElements.define("wx-county-index-filter", CountyIndexFilter);
 }

@@ -1,9 +1,24 @@
-<wx-county-index-filter target="results-area">
-  <div id="input-area">
-    <wx-combo-box id="state-filter-combobox" items="[]"></wx-combo-box>
-    <input id="county-filter-input" />
-  </div>
-  <div id="results-area">
+<!-- Move the combobox out of the filter to mitigate an issue with how
+     jsdom initializes custom components. It appears to do so top-down
+     rather than bottom-up, so if we nest this inside the filter element,
+     the filter will attempt to interact with the combobox and listbox
+     before they are constructed and connected. -->
+<wx-combobox id="state-filter-combobox">
+  <input type="text" class="usa-input" slot="input" />
+  <button type="button" slot="clear-button"></button>
+  <button type="button" slot="toggle-button"></button>
+  <wx-filterable-listbox slot="popup" id="state-filter-listbox" role="listbox">
+    <li role="option" id="AK">Alaska</li>
+    <li role="option" id="TX">Texas</li>
+    <li role="option" id="VA">Virginia</li>
+  </wx-filterable-listbox>
+</wx-combobox>
+
+<wx-county-index-filter target="county-filter-results">
+
+  <input id="county-filter-input" />
+
+  <section id="county-filter-results">
     <!-- Example State: Virginia -->
     <div data-state-abbrev="VA" data-state-name="Virginia" data-filter-by="state">
       <li data-county-name="garak" data-filter-by="county">
@@ -47,5 +62,5 @@
       </ul>
     </div>
     <!-- End Texas -->
-  </div>
+  </section>
 </wx-county-index-filter>

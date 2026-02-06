@@ -1,8 +1,6 @@
 {% extends "weather/page.html" %}
 {% block page_head_js %}
-  <script src="{% static 'js/components/combo-box.js' %}"
-          type="module"></script>
-  <script src="{% static 'js/components/county-index-filter.js' %}"
+  <script src="{% static 'js/county/index.html.js' %}"
           type="module"></script>
 {% endblock %}
 {% block page_content %}
@@ -16,7 +14,16 @@
     <div class="grid-row flex-align-center flex-justify grid-gap-lg margin-top-4">
       <div class="grid-col-12 margin-bottom-3 tablet:grid-col-6 tablet:margin-bottom-0">
         <label for="state-filter-combobox--search-input">{{ "county-index.labels.state-filter.01" | t}}</label>
-        <wx-combo-box class="margin-top-1" aria-controls="county-filter-results" id="state-filter-combobox" items="{{ state_list_items|json_encode }}"></wx-combo-box>
+        <wx-combobox tabindex="0" class="margin-top-1 display-block" id="state-filter-combobox">
+          <input type="text" class="usa-input" slot="input" />
+          <button type="button" slot="clear-button"></button>
+          <button type="button" slot="toggle-button"></button>
+          <wx-filterable-listbox slot="popup" id="state-filter-listbox" role="listbox">
+            {% for item in state_list_items %}
+              <li role="option" id="{{ item.value}}">{{ item.text }}</li>
+            {% endfor %}
+          </wx-filterable-listbox>
+        </wx-combobox>
       </div>
       <div class="grid-col-12 tablet:grid-col-6">
         <label for="county-filter-input">{{"county-index.labels.county-filter.01" | t}}</label>
