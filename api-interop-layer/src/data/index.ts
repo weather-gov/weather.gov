@@ -37,34 +37,43 @@ const getDataForPoint = async (lat: any, lon: any) => {
     // This is a synchronous push to an array. Fire and Forget
     gridCache.logGridHit(grid);
 
-    satellitePromise = getSatellite({ grid, place });
+    if (place) {
+      satellitePromise = getSatellite({ grid, place });
+    }
 
     const dbPool = await getDbConnection();
+    forecastLogger.trace("getting db connection");
     const dbConnection = await dbPool.connect();
-    const { forecast: fct, observed: obs } = await Promise.all([
-      getForecast({ grid, place, isMarine }),
-      getObservations({ grid, point, place, dbConnection }, dbConnection),
-    ]).then(([forecastData, obsData]) => {
-      // The forecast endpoint returns extra information about the grid. Why? I
-      // dunno. But anyway, let's put it with the other grid info and remove it
-      // from the forecast data.
-      Object.assign(grid, forecastData.gridData);
-      delete forecastData.gridData;
+    forecastLogger.trace("got db connection");
 
-      // The daily forecast endpoint includes elevation information, but that
-      // really belongs with the grid, so let's move that, too.
-      if (!forecastData.daily.error && forecastData.daily.elevation) {
-        grid.elevation = forecastData.daily.elevation;
-        delete forecastData.daily.elevation;
-      }
+    try {
+      const { forecast: fct, observed: obs } = await Promise.all([
+        place ? getForecast({ grid, place, isMarine }) : { daily: { error: true }, gridData: {} },
+        place ? getObservations({ grid, point, place }, dbConnection) : { error: true },
+      ]).then(([forecastData, obsData]) => {
+        // The forecast endpoint returns extra information about the grid. Why? I
+        // dunno. But anyway, let's put it with the other grid info and remove it
+        // from the forecast data.
+        Object.assign(grid, forecastData.gridData);
+        delete forecastData.gridData;
 
-      return { forecast: forecastData, observed: obsData };
-    });
+        // The daily forecast endpoint includes elevation information, but that
+        // really belongs with the grid, so let's move that, too.
+        if (!forecastData.daily.error && forecastData.daily.elevation) {
+          grid.elevation = forecastData.daily.elevation;
+          delete forecastData.daily.elevation;
+        }
 
-    await dbConnection.release();
+        return { forecast: forecastData, observed: obsData };
+      });
 
-    forecast = fct;
-    observed = obs;
+      forecast = fct;
+      observed = obs;
+    } finally {
+      forecastLogger.trace("releasing db connection");
+      await dbConnection.release();
+    }
+
   }
 
   // Get alerts regardless. If there's no grid, we can fallback to using the

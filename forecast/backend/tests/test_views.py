@@ -269,6 +269,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point.html")
         self.assertTemplateUsed(response, "weather/partials/uswds-alert.html")
+        self.assertNotContains(response, "wx-radar-wrapper")
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_marine_point(self, mock_get_point_forecast):

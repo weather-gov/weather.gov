@@ -155,9 +155,11 @@
         {% endif %}
         <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
           <div class="grid-row desktop__wx-grid-gap-lg">
-            <div class="desktop:grid-col-6 wx-radar-wrapper">
-              {% radar place=point.place.fullName point=point.point radar_metadata=point.radarMetadata heading_class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2" %}
-            </div>
+            {% if point.point %}
+              <div class="desktop:grid-col-6 wx-radar-wrapper">
+                {% radar place=point.place.fullName point=point.point radar_metadata=point.radarMetadata heading_class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-3 margin-bottom-2" %}
+              </div>
+            {% endif %}
             <div class="desktop:grid-col-6 wx-satellite-wrapper">
               {% include "weather/partials/satellite.html" with point=point %}
             </div>
