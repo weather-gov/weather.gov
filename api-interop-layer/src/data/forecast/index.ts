@@ -120,17 +120,17 @@ export default async ({ grid, place, isMarine }: any) => {
   const dailyPromise = isMarine
     ? Promise.resolve({})
     : fetchAPIJson(`/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`).then((data) => daily(data, place),
-      );
+    );
 
   // Similarly, there is no distinct hourly forecast data. We only have the
   // gridpoint forecast, which is already hourly.
   const hourlyPromise = isMarine
     ? Promise.resolve(false)
     : fetchAPIJson(
-        `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`,
-      ).then((data) => {
-        hourly(data, hours, place);
-      });
+      `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`,
+    ).then((data) => {
+      hourly(data, hours, place);
+    });
 
   // We don't capture the results of the hourly processing function because it
   // doesn't return anything. All of its work gets put into the hours map.

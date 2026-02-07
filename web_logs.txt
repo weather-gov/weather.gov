@@ -1,0 +1,212 @@
+web-1  | 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+web-1  | 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+web-1  | 0.00s - to python to disable frozen modules.
+web-1  | 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+web-1  | [06/Feb/2026 23:08:33] INFO [django.utils.autoreload:667] Watching for file changes with StatReloader
+web-1  | Performing system checks...
+web-1  | 
+web-1  | Exception in thread django-main-thread:
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+web-1  |     self.connect()
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/utils/asyncio.py", line 26, in inner
+web-1  |     return func(*args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/backends/base/base.py", line 256, in connect
+web-1  |     self.connection = self.get_new_connection(conn_params)
+web-1  |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/contrib/gis/db/backends/postgis/base.py", line 126, in get_new_connection
+web-1  |     connection = super().get_new_connection(conn_params)
+web-1  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/utils/asyncio.py", line 26, in inner
+web-1  |     return func(*args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+web-1  |     connection = self.Database.connect(**conn_params)
+web-1  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/psycopg2/__init__.py", line 122, in connect
+web-1  |     conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  | psycopg2.OperationalError: connection to server at "database" (172.20.0.3), port 5432 failed: Connection refused
+web-1  | 	Is the server running on that host and accepting TCP/IP connections?
+web-1  | 
+web-1  | 
+web-1  | The above exception was the direct cause of the following exception:
+web-1  | 
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.11/threading.py", line 1045, in _bootstrap_inner
+web-1  |     self.run()
+web-1  |   File "/usr/local/lib/python3.11/threading.py", line 982, in run
+web-1  |     self._target(*self._args, **self._kwargs)
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/utils/autoreload.py", line 64, in wrapper
+web-1  |     fn(*args, **kwargs)
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/management/commands/runserver.py", line 134, in inner_run
+web-1  |     self.check(**check_kwargs)
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/management/base.py", line 496, in check
+web-1  |     all_issues = checks.run_checks(
+web-1  |                  ^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/checks/registry.py", line 89, in run_checks
+web-1  |     new_errors = check(app_configs=app_configs, databases=databases)
+web-1  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/checks/urls.py", line 16, in check_url_config
+web-1  |     return check_resolver(resolver)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/core/checks/urls.py", line 26, in check_resolver
+web-1  |     return check_method()
+web-1  |            ^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 531, in check
+web-1  |     for pattern in self.url_patterns:
+web-1  |                    ^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 47, in __get__
+web-1  |     res = instance.__dict__[self.name] = self.func(instance)
+web-1  |                                          ^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 718, in url_patterns
+web-1  |     patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+web-1  |                        ^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 47, in __get__
+web-1  |     res = instance.__dict__[self.name] = self.func(instance)
+web-1  |                                          ^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 711, in urlconf_module
+web-1  |     return import_module(self.urlconf_name)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+web-1  |     return _bootstrap._gcd_import(name[level:], package, level)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+web-1  |   File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+web-1  |   File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+web-1  |   File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+web-1  |   File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+web-1  |   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+web-1  |   File "/code/backend/config/urls.py", line 32, in <module>
+web-1  |     path("", include("backend.urls")),
+web-1  |              ^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/urls/conf.py", line 39, in include
+web-1  |     urlconf_module = import_module(urlconf_module)
+web-1  |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+web-1  |     return _bootstrap._gcd_import(name[level:], package, level)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+web-1  |   File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+web-1  |   File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+web-1  |   File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+web-1  |   File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+web-1  |   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+web-1  |   File "/code/backend/urls.py", line 17, in <module>
+web-1  |     from spatial.sitemaps import PlaceSitemap
+web-1  |   File "/code/spatial/sitemaps.py", line 7, in <module>
+web-1  |     class PlaceSitemap(Sitemap):
+web-1  |   File "/code/spatial/sitemaps.py", line 14, in PlaceSitemap
+web-1  |     lastmod = WeatherSpatialMetadata.objects.get(table=WeatherPlace._meta.db_table).last_updated
+web-1  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+web-1  |     return getattr(self.get_queryset(), name)(*args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 631, in get
+web-1  |     num = len(clone)
+web-1  |           ^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 368, in __len__
+web-1  |     self._fetch_all()
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1954, in _fetch_all
+web-1  |     self._result_cache = list(self._iterable_class(self))
+web-1  |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 93, in __iter__
+web-1  |     results = compiler.execute_sql(
+web-1  |               ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+web-1  |     cursor = self.connection.cursor()
+web-1  |              ^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/utils/asyncio.py", line 26, in inner
+web-1  |     return func(*args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/backends/base/base.py", line 320, in cursor
+web-1  |     return self._cursor()
+web-1  |            ^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+web-1  |     self.ensure_connection()
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/utils/asyncio.py", line 26, in inner
+web-1  |     return func(*args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+web-1  |     with self.wrap_database_errors:
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+web-1  |     raise dj_exc_value.with_traceback(traceback) from exc_value
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+web-1  |     self.connect()
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/utils/asyncio.py", line 26, in inner
+web-1  |     return func(*args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/backends/base/base.py", line 256, in connect
+web-1  |     self.connection = self.get_new_connection(conn_params)
+web-1  |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/contrib/gis/db/backends/postgis/base.py", line 126, in get_new_connection
+web-1  |     connection = super().get_new_connection(conn_params)
+web-1  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/utils/asyncio.py", line 26, in inner
+web-1  |     return func(*args, **kwargs)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+web-1  |     connection = self.Database.connect(**conn_params)
+web-1  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  |   File "/usr/local/lib/python3.11/site-packages/psycopg2/__init__.py", line 122, in connect
+web-1  |     conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+web-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web-1  | django.db.utils.OperationalError: connection to server at "database" (172.20.0.3), port 5432 failed: Connection refused
+web-1  | 	Is the server running on that host and accepting TCP/IP connections?
+web-1  | 
+web-1  | 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+web-1  | 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+web-1  | 0.00s - to python to disable frozen modules.
+web-1  | 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+web-1  | [06/Feb/2026 23:09:00] INFO [django.utils.autoreload:667] Watching for file changes with StatReloader
+web-1  | Performing system checks...
+web-1  | 
+web-1  | System check identified no issues (0 silenced).
+web-1  | February 06, 2026 - 23:09:01
+web-1  | Django version 5.2.10, using settings 'backend.config.settings.dev'
+web-1  | Starting development server at http://0.0.0.0:8080/
+web-1  | Quit the server with CONTROL-C.
+web-1  | 
+web-1  | WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+web-1  | For more information on production servers see: https://docs.djangoproject.com/en/5.2/howto/deployment/
+web-1  | [06/Feb/2026 23:09:03] "GET /health/ HTTP/1.1" 200 2
+web-1  | [06/Feb/2026 23:09:05] "GET /point/42.359/-71.059/?update= HTTP/1.1" 200 6
+web-1  | [06/Feb/2026 23:09:06] "GET /__debug__/history_sidebar/?request_id=b0c42f84bf604be6b8e0d9f22afee75f HTTP/1.1" 200 10618
+web-1  | [06/Feb/2026 23:09:46] "GET /point/32.755/-111.671/?update= HTTP/1.1" 200 6
+web-1  | [06/Feb/2026 23:09:47] "GET /__debug__/history_sidebar/?request_id=3d61b3c6ae994f89a42dc53501283889 HTTP/1.1" 200 10619
+web-1  | [06/Feb/2026 23:11:47] "GET /point/42.359/-71.059/?update= HTTP/1.1" 200 6
+web-1  | [06/Feb/2026 23:11:47] "GET /__debug__/history_sidebar/?request_id=329bfa94c38a48cb8858b587857c8ba9 HTTP/1.1" 200 10618
+web-1  | [06/Feb/2026 23:12:02] "GET /point/43.616/-116.202/ HTTP/1.1" 200 41758
+web-1  | [06/Feb/2026 23:12:02] "GET /public/debug_toolbar/js/toolbar.js HTTP/1.1" 304 0
+web-1  | [06/Feb/2026 23:12:02] "GET /public/debug_toolbar/css/toolbar.css HTTP/1.1" 304 0
+web-1  | [06/Feb/2026 23:12:02] "GET /languages/jsi18n/ HTTP/1.1" 200 4277
+web-1  | [06/Feb/2026 23:12:03] "GET /public/debug_toolbar/js/utils.js HTTP/1.1" 304 0
+web-1  | [06/Feb/2026 23:12:03] "GET /public/debug_toolbar/css/print.css HTTP/1.1" 304 0
+web-1  | [06/Feb/2026 23:12:17] "GET / HTTP/1.1" 200 45042
+web-1  | [06/Feb/2026 23:12:21] "GET /point/43.616/-116.202/ HTTP/1.1" 200 41758
+web-1  | [06/Feb/2026 23:12:21] "GET /languages/jsi18n/ HTTP/1.1" 304 0
+web-1  | [06/Feb/2026 23:13:07,262] Not Found: /.well-known/appspecific/com.chrome.devtools.json
+web-1  | [06/Feb/2026 23:13:07] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 26917
+web-1  | [06/Feb/2026 23:13:09] "GET /point/43.616/-116.202/ HTTP/1.1" 200 41758
+web-1  | [06/Feb/2026 23:13:09] "GET /languages/jsi18n/ HTTP/1.1" 304 0
+web-1  | [06/Feb/2026 23:13:09,508] Not Found: /.well-known/appspecific/com.chrome.devtools.json
+web-1  | [06/Feb/2026 23:13:09] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 26917
+web-1  | [06/Feb/2026 23:13:34] "GET /point/42.359/-71.059/?update= HTTP/1.1" 200 6
+web-1  | [06/Feb/2026 23:13:34] "GET /__debug__/history_sidebar/?request_id=c922bc6f6d8648488cf01e02e0681745 HTTP/1.1" 200 10618
+web-1  | [06/Feb/2026 23:14:48] "GET /point/32.755/-111.671/?update= HTTP/1.1" 200 6
+web-1  | [06/Feb/2026 23:14:49] "GET /__debug__/history_sidebar/?request_id=2552716bf8ef4ea98e49a394a215c312 HTTP/1.1" 200 10621
+web-1  | [06/Feb/2026 23:17:41] "GET /point/42.359/-71.059/?update= HTTP/1.1" 200 6
+web-1  | [06/Feb/2026 23:17:42] "GET /__debug__/history_sidebar/?request_id=73a8327206d74a21afdf1589c9c3db73 HTTP/1.1" 200 10618
+web-1  | [06/Feb/2026 23:19:04] "GET /point/43.616/-116.202/?update= HTTP/1.1" 200 6
+web-1  | [06/Feb/2026 23:19:05] "GET /__debug__/history_sidebar/?request_id=d247359842624925a14893337cb256cf HTTP/1.1" 200 10619
+web-1  | [06/Feb/2026 23:19:40] "GET /point/42.359/-71.059/?update= HTTP/1.1" 200 6
+web-1  | [06/Feb/2026 23:19:41] "GET /__debug__/history_sidebar/?request_id=5f319003834d47f0a4b90b1122d79cdc HTTP/1.1" 200 10619
+web-1  | [06/Feb/2026 23:20:49] "GET /point/32.755/-111.671/?update= HTTP/1.1" 200 570
+web-1  | [06/Feb/2026 23:20:50] "GET /__debug__/history_sidebar/?request_id=a6e9e66bcc874f649901bf06414d2393 HTTP/1.1" 200 10623
+web-1  | [06/Feb/2026 23:22:48] "GET /point/42.359/-71.059/?update= HTTP/1.1" 200 570
+web-1  | [06/Feb/2026 23:22:50] "GET /__debug__/history_sidebar/?request_id=41bac61e99e948cf934d50ff983136d2 HTTP/1.1" 200 10622
+web-1  | [06/Feb/2026 23:24:11] "GET /point/43.616/-116.202/?update= HTTP/1.1" 200 570
+web-1  | [06/Feb/2026 23:24:12] "GET /__debug__/history_sidebar/?request_id=b96f016a3a5b45a59f7e6b48c7686e93 HTTP/1.1" 200 10623
+web-1  | [06/Feb/2026 23:24:49] "GET /point/42.359/-71.059/?update= HTTP/1.1" 200 570
+web-1  | [06/Feb/2026 23:24:51] "GET /__debug__/history_sidebar/?request_id=b3ef65cdc27f4a6ebc71c032fed4c8d2 HTTP/1.1" 200 10622

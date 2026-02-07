@@ -1,0 +1,4483 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://beta.weather.gov/CHANGELOG.old/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>CHANGELOG.old - Weather.gov 2.0 Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#beta-v1181-2025-05-29" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Weather.gov 2.0 Docs" class="md-header__button md-logo" aria-label="Weather.gov 2.0 Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Weather.gov 2.0 Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CHANGELOG.old
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/weathergov/weathergov-django-noaa" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    weathergov/weathergov-django-noaa
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Weather.gov 2.0 Docs" class="md-nav__button md-logo" aria-label="Weather.gov 2.0 Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Weather.gov 2.0 Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/weathergov/weathergov-django-noaa" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    weathergov/weathergov-django-noaa
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Interop Layer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Interop Layer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/api-interop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/api-interop/definitions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Definitions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/api-interop/golang-utilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Golang Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/api-interop/benchmarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_2_5" id="__nav_1_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Legacy Docs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Legacy Docs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/api-interop/multi-counties/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi Counties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelogs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Changelogs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Main
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CHANGELOG-2468572.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local (2468572)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/cloudgov-quota/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloudgov Quota
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/comment-templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comment Templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/databases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/dependencies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dependencies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/deploying/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploying
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/django/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Django
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/fonts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fonts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/git-signing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Signing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/gitlab-ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gitlab CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/javascript-bundling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Javascript Bundling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/json-api-for-weather-stories/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JSON API for Weather Stories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/just-recipes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Just Recipes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/location/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Location
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/qasp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QASP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/review-standards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review Standards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/s3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    S3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/secrets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Secrets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/spatial-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/terraform/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Product
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../product/roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../product/tagged-releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tagged Releases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../environments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-we-work/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How We Work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../icons/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Icons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#beta-v1181-2025-05-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.18.1 (2025-05-29)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.18.1 (2025-05-29)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-contributors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New Contributors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beta-v1180-2025-02-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.18.0 (2025-02-27)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.18.0 (2025-02-27)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beta-v1170-2025-02-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.17.0 (2025-02-13)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.17.0 (2025-02-13)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beta-v1160-2025-01-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.16.0 (2025-01-30)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.16.0 (2025-01-30)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beta-v1150-2025-01-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.15.0 (2025-01-16)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.15.0 (2025-01-16)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minor_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beta-v1140-2025-01-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.14.0 (2025-01-07)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.14.0 (2025-01-07)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v1130-2024-12-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.13.0 (2024-12-20)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beta-v1130" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.13.0
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.13.0">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gitlab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gitlab
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v1120-2024-12-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.12.0 (2024-12-05)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.12.0 (2024-12-05)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v1110-2024-11-22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.11.0 (2024-11-22)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.11.0 (2024-11-22)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v1100-2024-11-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.10.0 (2024-11-07)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.10.0 (2024-11-07)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v190-2024-10-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.9.0 (2024-10-24)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.9.0 (2024-10-24)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v181-2024-10-09" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.8.1 (2024-10-09)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.8.1 (2024-10-09)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v180-2024-10-08" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.8.0 (2024-10-08)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.8.0 (2024-10-08)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v170-2024-09-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.7.0 (2024-09-27)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beta-v170" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.7.0
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.7.0">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v160-2024-09-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.6.0 (2024-09-12)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.6.0 (2024-09-12)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v151-2024-08-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.5.1 (2024-08-29)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.5.1 (2024-08-29)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bugfix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bugfix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v150-2024-08-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.5.0 (2024-08-29)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.5.0 (2024-08-29)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v141-2024-08-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.4.1 (2024-08-15)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.4.1 (2024-08-15)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bugfix_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bugfix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v140-2024-08-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.4.0 (2024-08-15)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.4.0 (2024-08-15)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v131-2024-08-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.3.1 (2024-08-05)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.3.1 (2024-08-05)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bugfix_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bugfix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v130-2024-08-01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.3.0 (2024-08-01)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.3.0 (2024-08-01)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v120-2024-07-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.2.0 (2024-07-18)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.2.0 (2024-07-18)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v110-2024-07-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.1.0 (2024-07-05)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v1.1.0 (2024-07-05)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cms-ux-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CMS UX improvements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-101-2024-06-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-1.0.1 (2024-06-21)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-1.0.1 (2024-06-21)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#patch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v100-2024-06-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v1.0.0 (2024-06-20)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#here-ye-here-ye-our-first-major-release-weve-recently-concluded-our-build-of-an-mvp-for-beta-so-this-is-our-way-of-saying-its-time-for-the-next-phase-expanding-the-site-to-meet-initial-operating-capability-our-mvp-was-scoped-as-a-foundation-for-our-architecture-and-user-experience-its-not-ready-for-public-notification-or-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Here ye, here ye our first major release. We’ve recently concluded our build of an MVP for beta, so this is our way of saying it’s time for the next phase – expanding the site to meet initial operating capability. Our MVP was scoped as a foundation for our architecture and user experience, it’s not ready for public notification or use.
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Here ye, here ye our first major release. We’ve recently concluded our build of an MVP for beta, so this is our way of saying it’s time for the next phase – expanding the site to meet initial operating capability. Our MVP was scoped as a foundation for our architecture and user experience, it’s not ready for public notification or use.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0171-2024-06-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.17.1 (2024-06-06)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.17.1 (2024-06-06)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependencies_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0170-2024-05-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.17.0 (2024-05-23)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.17.0 (2024-05-23)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0160-2024-05-09" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.16.0 (2024-05-09)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.16.0 (2024-05-09)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0150-2024-05-01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.15.0 (2024-05-01)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.15.0 (2024-05-01)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0140-2024-04-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.14.0 (2024-04-26)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.14.0 (2024-04-26)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0130-2024-04-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.13.0 (2024-04-25)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.13.0 (2024-04-25)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0120-2024-04-22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.12.0 (2024-04-22)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.12.0 (2024-04-22)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0111-2024-04-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.11.1 (2024-04-11)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.11.1 (2024-04-11)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minor_25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0110-2024-04-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.11.0 (2024-04-11)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.11.0 (2024-04-11)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v0100-2024-03-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.10.0 (2024-03-28)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.10.0 (2024-03-28)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v090-2024-03-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.9.0 (2024-03-15)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#major_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Major">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beta-v080-2024-03-01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.8.0 (2024-03-01)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#major_28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Major">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beta-v070-2024-02-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.7.0 (2024-02-15)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v070" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        V0.7.0
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="V0.7.0">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beta-v060-2024-02-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.6.0 (2024-02-02)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.6.0 (2024-02-02)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v050-2024-01-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.5.0 (2024-01-19)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.5.0 (2024-01-19)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major_30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor_29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v041-2024-01-03" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.4.1 (2024-01-03)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-beta-v041" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release beta-v0.4.1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Release beta-v0.4.1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beta-v040-2023-12-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.4.0 (2023-12-21)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.4.0 (2023-12-21)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#includes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Includes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v030-2023-12-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.3.0 (2023-12-11)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.3.0 (2023-12-11)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#includes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Includes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v020-2023-11-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.2.0 (2023-11-29)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="beta-v0.2.0 (2023-11-29)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#includes-v1-components-for-epic-3-basic-weather" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Includes V1 components for Epic 3 - Basic Weather
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changes_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beta-v010-2023-11-22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        beta-v0.1.0 (2023-11-22)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#this-is-the-first-tagged-release-of-beta-included-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        This is the first tagged release of beta. Included here:
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h2 id="beta-v1181-2025-05-29">beta-v1.18.1 (2025-05-29)</h2>
+<h3 id="whats-changed">What's Changed</h3>
+<ul>
+<li>Update references to cmi-radar assets by <a href="https://github.com/jameshochadel">@jameshochadel</a> in <a href="https://github.com/weather-gov/weather.gov/pull/2301">GitHub PR 2301</a></li>
+<li>Revert to relative path, with new hash by <a href="https://github.com/jameshochadel">@jameshochadel</a> in <a href="https://github.com/weather-gov/weather.gov/pull/2302">GitHub PR 2302</a></li>
+</ul>
+<h3 id="new-contributors">New Contributors</h3>
+<ul>
+<li><a href="https://github.com/jameshochadel">@jameshochadel</a> made their first contribution in <a href="https://github.com/weather-gov/weather.gov/pull/2301">GitHub PR 2301</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/weather-gov/weather.gov/compare/beta-v1.18.0...beta-v1.18.1</p>
+<h2 id="beta-v1180-2025-02-27">beta-v1.18.0 (2025-02-27)</h2>
+<h3 id="dependencies">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/2254">GitHub PR 2254</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2255">GitHub PR 2255</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2256">GitHub PR 2256</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2258">GitHub PR 2258</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2261">GitHub PR 2261</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2262">GitHub PR 2262</a></li>
+</ul>
+<h2 id="beta-v1170-2025-02-13">beta-v1.17.0 (2025-02-13)</h2>
+<h3 id="major">Major</h3>
+<ul>
+<li>add opt out for weather stories during testing period  <a href="https://github.com/weather-gov/weather.gov/pull/2252">GitHub PR 2252</a> </li>
+</ul>
+<h3 id="dependencies_1">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/2232">GitHub PR 2232</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2233">GitHub PR 2233</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2235">GitHub PR 2235</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2238">GitHub PR 2238</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2241">GitHub PR 2241</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2242">GitHub PR 2242</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2245">GitHub PR 2245</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2246">GitHub PR 2246</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2249">GitHub PR 2249</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2250">GitHub PR 2250</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2251">GitHub PR 2251</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2252">GitHub PR 2252</a></li>
+</ul>
+<h2 id="beta-v1160-2025-01-30">beta-v1.16.0 (2025-01-30)</h2>
+<h3 id="major_1">Major</h3>
+<ul>
+<li>Update Drupal to version 10.4.1 <a href="https://github.com/weather-gov/weather.gov/pull/2206">GitHub PR 2206</a></li>
+</ul>
+<h3 id="minor">Minor</h3>
+<ul>
+<li>change filepath setting to remove warning, not used <a href="https://github.com/weather-gov/weather.gov/pull/2230">GitHub PR 2230</a></li>
+</ul>
+<h3 id="dependencies_2">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/2236">GitHub PR 2236</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2211">GitHub PR 2211</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2212">GitHub PR 2212</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2214">GitHub PR 2214</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2227">GitHub PR 2227</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2229">GitHub PR 2229</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2228">GitHub PR 2228</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2227">GitHub PR 2227</a></li>
+</ul>
+<h2 id="beta-v1150-2025-01-16">beta-v1.15.0 (2025-01-16)</h2>
+<h3 id="minor_1">Minor</h3>
+<ul>
+<li>Add construction icon to weather story section and remove timestamp <a href="https://github.com/weather-gov/weather.gov/pull/2208">GitHub PR 2208</a></li>
+<li>Make wfo weather template nicer <a href="https://github.com/weather-gov/weather.gov/pull/2199">GitHub PR 2199</a></li>
+<li>s3 documentation <a href="https://github.com/weather-gov/weather.gov/pull/2207">GitHub PR 2207</a></li>
+<li>Adjust layout and margin under dev badge for weather stories <a href="https://github.com/weather-gov/weather.gov/pull/2209">GitHub PR 2209</a></li>
+<li>gitlab ci: set up api and playwright images <a href="https://github.com/weather-gov/weather.gov/pull/2220">GitHub PR 2220</a></li>
+<li>remove references to sandboxes and add new test env <a href="https://github.com/weather-gov/weather.gov/pull/2222">GitHub PR 2222</a></li>
+<li>fix expired weather stories <a href="https://github.com/weather-gov/weather.gov/pull/2223">GitHub PR 2223</a></li>
+<li>fix weather story timestamps <a href="https://github.com/weather-gov/weather.gov/pull/2224">GitHub PR 2224</a></li>
+<li>documentation: get all weather stories <a href="https://github.com/weather-gov/weather.gov/pull/2225">GitHub PR 2225</a></li>
+</ul>
+<h1 id="dependencies_3">Dependencies</h1>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/2216">GitHub PR 2216</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2217">GitHub PR 2217</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2217">GitHub PR 2217</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2219">GitHub PR 2219</a></li>
+</ul>
+<h2 id="beta-v1140-2025-01-07">beta-v1.14.0 (2025-01-07)</h2>
+<h3 id="major_2">Major</h3>
+<ul>
+<li>Add weather stories to production <a href="https://github.com/weather-gov/weather.gov/pull/2204">GitHub PR 2204</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2203">GitHub PR 2203</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2198">GitHub PR 2198</a></li>
+</ul>
+<h3 id="minor_2">Minor</h3>
+<ul>
+<li>Fix syntax error in translation call <a href="https://github.com/weather-gov/weather.gov/pull/2202">GitHub PR 2202</a> </li>
+</ul>
+<h3 id="dependencies_4">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/2195">GitHub PR 2195</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2197">GitHub PR 2197</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2201">GitHub PR 2201</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2196">GitHub PR 2196</a></li>
+</ul>
+<h2 id="beta-v1130-2024-12-20">beta-v1.13.0 (2024-12-20)</h2>
+<h1 id="beta-v1130">beta-v1.13.0</h1>
+<h3 id="major_3">Major</h3>
+<ul>
+<li>Add Spanish localization <a href="https://github.com/weather-gov/weather.gov/pull/2194">GitHub PR 2194</a></li>
+<li>Add distance and elevation to observation station info <a href="https://github.com/weather-gov/weather.gov/pull/2163">GitHub PR 2163</a></li>
+<li>Interop alert loop optimization <a href="https://github.com/weather-gov/weather.gov/pull/2178">GitHub PR 2178</a></li>
+</ul>
+<h3 id="minor_3">Minor</h3>
+<ul>
+<li>Change to forecast details button to make them more accessible <a href="https://github.com/weather-gov/weather.gov/pull/2158">GitHub PR 2158</a></li>
+<li>Revise onboarding docs and add offboarding docs <a href="https://github.com/weather-gov/weather.gov/pull/2162">GitHub PR 2162</a></li>
+<li>Remove fill from condition icons <a href="https://github.com/weather-gov/weather.gov/pull/2165">GitHub PR 2165</a></li>
+<li>DSS builder WFO code <a href="https://github.com/weather-gov/weather.gov/pull/2175">GitHub PR 2175</a></li>
+<li>Browser test adjustments <a href="https://github.com/weather-gov/weather.gov/pull/2177">GitHub PR 2177</a></li>
+<li>Alerts cache table <a href="https://github.com/weather-gov/weather.gov/pull/2180">GitHub PR 2180</a></li>
+<li>More text is marked for translation <a href="https://github.com/weather-gov/weather.gov/pull/2187">GitHub PR 2187</a></li>
+<li>Consolidate precip data in one file <a href="https://github.com/weather-gov/weather.gov/pull/2191">GitHub PR 2191</a></li>
+</ul>
+<h3 id="gitlab">Gitlab</h3>
+<ul>
+<li>add javascript, php, style linting <a href="https://github.com/weather-gov/weather.gov/pull/2179">GitHub PR 2179</a></li>
+<li>run the test of the js-related tests <a href="https://github.com/weather-gov/weather.gov/pull/2180">GitHub PR 2180</a></li>
+<li>build and push utility image <a href="https://github.com/weather-gov/weather.gov/pull/2186">GitHub PR 2186</a></li>
+</ul>
+<h3 id="dependencies_5">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/2173">GitHub PR 2173</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2174">GitHub PR 2174</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2182">GitHub PR 2182</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2183">GitHub PR 2183</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2184">GitHub PR 2184</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2185">GitHub PR 2185</a></li>
+</ul>
+<h2 id="beta-v1120-2024-12-05">beta-v1.12.0 (2024-12-05)</h2>
+<h3 id="major_4">Major</h3>
+<ul>
+<li>New 7-day forecast layout <a href="https://github.com/weather-gov/weather.gov/pull/2095">GitHub PR 2095</a></li>
+<li>Chinese translations for static content <a href="https://github.com/weather-gov/weather.gov/pull/2096">GitHub PR 2096</a></li>
+<li>Priority given to alerts with “evacuation” in title <a href="https://github.com/weather-gov/weather.gov/pull/2122">GitHub PR 2122</a></li>
+<li>Fix for nighttime period high temp display issue <a href="https://github.com/weather-gov/weather.gov/pull/2140">GitHub PR 2140</a></li>
+</ul>
+<h3 id="minor_4">Minor</h3>
+<ul>
+<li>Overwrite weather story uploads <a href="https://github.com/weather-gov/weather.gov/pull/2091">GitHub PR 2091</a></li>
+<li>DSS builder pdf uploads work <a href="https://github.com/weather-gov/weather.gov/pull/2103">GitHub PR 2103</a></li>
+<li>Adjust alert link color and alerts padding <a href="https://github.com/weather-gov/weather.gov/pull/2105">GitHub PR 2105</a></li>
+<li>Temporary cache fix to address live environment cache retention <a href="https://github.com/weather-gov/weather.gov/pull/2115">GitHub PR 2115</a></li>
+<li>Fix the alert metadata page <a href="https://github.com/weather-gov/weather.gov/pull/2123">GitHub PR 2123</a></li>
+<li>Set up PM2 for interop layer for graceful restarts <a href="https://github.com/weather-gov/weather.gov/pull/2125">GitHub PR 2125</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2136">GitHub PR 2136</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2141">GitHub PR 2141</a></li>
+<li>Some tests removed to test coverage <a href="https://github.com/weather-gov/weather.gov/pull/2142">GitHub PR 2142</a></li>
+<li>Tweak to rename zscaler to let Gitlab know it’s a public certificate <a href="https://github.com/weather-gov/weather.gov/pull/2150">GitHub PR 2150</a></li>
+<li>Beginning Chinese translations for dynamic content <a href="https://github.com/weather-gov/weather.gov/pull/2147">GitHub PR 2147</a></li>
+</ul>
+<h3 id="dependencies_6">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/2119">GitHub PR 2119</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2120">GitHub PR 2120</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2121">GitHub PR 2121</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2124">GitHub PR 2124</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2130">GitHub PR 2130</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2131">GitHub PR 2131</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2132">GitHub PR 2132</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2133">GitHub PR 2133</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2134">GitHub PR 2134</a></li>
+</ul>
+<h2 id="beta-v1110-2024-11-22">beta-v1.11.0 (2024-11-22)</h2>
+<h3 id="major_5">Major</h3>
+<ul>
+<li>PoP refactoring to address daily chance of precipitation inconsistency <a href="https://github.com/weather-gov/weather.gov/pull/2050">GitHub PR 2050</a></li>
+</ul>
+<h3 id="minor_5">Minor</h3>
+<ul>
+<li>Set up new network for dev/test environments <a href="https://github.com/weather-gov/weather.gov/pull/2097">GitHub PR 2097</a></li>
+<li>Remove old weather story content type <a href="https://github.com/weather-gov/weather.gov/pull/2083">GitHub PR 2083</a></li>
+<li>Implemented temporary solution for identifying WFO associated with weather stories <a href="https://github.com/weather-gov/weather.gov/pull/2082">GitHub PR 2082</a></li>
+<li>Browsing to a place URL (e.g. city name) no longer redirects to a lat/lon URL <a href="https://github.com/weather-gov/weather.gov/pull/2061">GitHub PR 2061</a></li>
+<li>Refactor spatial data migration/management code <a href="https://github.com/weather-gov/weather.gov/pull/2059">GitHub PR 2059</a></li>
+<li>Hotfix for mismatch in exported config for new derived field <a href="https://github.com/weather-gov/weather.gov/pull/2109">GitHub PR 2109</a></li>
+</ul>
+<h3 id="dependencies_7">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/2092">GitHub PR 2092</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2069">GitHub PR 2069</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2068">GitHub PR 2068</a></li>
+</ul>
+<h2 id="beta-v1100-2024-11-07">beta-v1.10.0 (2024-11-07)</h2>
+<h3 id="major_6">Major</h3>
+<ul>
+<li>Background alert processing <a href="https://github.com/weather-gov/weather.gov/pull/1984">GitHub PR 1984</a></li>
+<li>Refactor monitoring into components and add tests <a href="https://github.com/weather-gov/weather.gov/pull/1970">GitHub PR 1970</a></li>
+<li>Deploying and switching to Interop layer <a href="https://github.com/weather-gov/weather.gov/pull/2055">GitHub PR 2055</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1590">GitHub PR 1590</a></li>
+</ul>
+<h3 id="minor_6">Minor</h3>
+<ul>
+<li>Interop layer:</li>
+<li>Update interop layer flow diagram <a href="https://github.com/weather-gov/weather.gov/pull/2054">GitHub PR 2054</a></li>
+<li>Enable debugging for the interop layer in local dev <a href="https://github.com/weather-gov/weather.gov/pull/2053">GitHub PR 2053</a></li>
+<li>API interop layer: setup private comms <a href="https://github.com/weather-gov/weather.gov/pull/2052">GitHub PR 2052</a></li>
+<li>Configure environments for api interop layer <a href="https://github.com/weather-gov/weather.gov/pull/2049">GitHub PR 2049</a></li>
+<li>AFD parsing to interop <a href="https://github.com/weather-gov/weather.gov/pull/2030">GitHub PR 2030</a></li>
+<li>Fix interop layer alert tests <a href="https://github.com/weather-gov/weather.gov/pull/2020">GitHub PR 2020</a></li>
+<li>Send log messages to the main process so they are captured by New Relic <a href="https://github.com/weather-gov/weather.gov/pull/2002">GitHub PR 2002</a> </li>
+<li>Weather Story</li>
+<li>Weather Story styling tweaks <a href="https://github.com/weather-gov/weather.gov/pull/2027">GitHub PR 2027</a></li>
+<li>Add in AFD link when there is no weather story <a href="https://github.com/weather-gov/weather.gov/pull/2057">GitHub PR 2057</a></li>
+<li>admin: remove weather story publishing workflow <a href="https://github.com/weather-gov/weather.gov/pull/2017">GitHub PR 2017</a></li>
+<li>remove old weather story block <a href="https://github.com/weather-gov/weather.gov/pull/2004">GitHub PR 2004</a></li>
+<li>Increase dss builder upload limits to 3mb <a href="https://github.com/weather-gov/weather.gov/pull/2058">GitHub PR 2058</a></li>
+<li>Make dump-spatial: fix access denied error <a href="https://github.com/weather-gov/weather.gov/pull/2056">GitHub PR 2056</a></li>
+<li>Fix alert icon color <a href="https://github.com/weather-gov/weather.gov/pull/2051">GitHub PR 2051</a></li>
+<li>Switch database library to mysql2 <a href="https://github.com/weather-gov/weather.gov/pull/2040">GitHub PR 2040</a></li>
+<li>Fix library update script <a href="https://github.com/weather-gov/weather.gov/pull/2029">GitHub PR 2029</a></li>
+<li>Fix up the proxy thingy <a href="https://github.com/weather-gov/weather.gov/pull/2025">GitHub PR 2025</a></li>
+<li>Set a manual node ID on the \"today\" tab forecast summary <a href="https://github.com/weather-gov/weather.gov/pull/2023">GitHub PR 2023</a></li>
+<li>Zoom out radar more at default <a href="https://github.com/weather-gov/weather.gov/pull/2019">GitHub PR 2019</a></li>
+<li>Add county list to WFO pages <a href="https://github.com/weather-gov/weather.gov/pull/2018">GitHub PR 2018</a></li>
+<li>Makefile update (zap-init) <a href="https://github.com/weather-gov/weather.gov/pull/2005">GitHub PR 2005</a></li>
+<li>Fix reference to newrelic.recordLogEvent <a href="https://github.com/weather-gov/weather.gov/pull/2000">GitHub PR 2000</a></li>
+<li>Adds ILM, CHS, PIH, and PPG WFOs/WSOs <a href="https://github.com/weather-gov/weather.gov/pull/1994">GitHub PR 1994</a></li>
+<li>Set charts to disable tooltip by default <a href="https://github.com/weather-gov/weather.gov/pull/1987">GitHub PR 1987</a></li>
+</ul>
+<h3 id="dependencies_8">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/2045">GitHub PR 2045</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2039">GitHub PR 2039</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2038">GitHub PR 2038</a>, <a href="https://github.com/weather-gov/weather.gov/pull/2037">GitHub PR 2037</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1999">GitHub PR 1999</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1998">GitHub PR 1998</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1997">GitHub PR 1997</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1996">GitHub PR 1996</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1995">GitHub PR 1995</a></li>
+</ul>
+<h2 id="beta-v190-2024-10-24">beta-v1.9.0 (2024-10-24)</h2>
+<h3 id="major_7">Major</h3>
+<ul>
+<li>New Today Tab <a href="https://github.com/weather-gov/weather.gov/pull/1929">GitHub PR 1929</a></li>
+<li>New Quick forecast navigation <a href="https://github.com/weather-gov/weather.gov/pull/1938">GitHub PR 1938</a></li>
+<li>New chart / table toggle <a href="https://github.com/weather-gov/weather.gov/pull/1943">GitHub PR 1943</a></li>
+<li>R7 research summary <a href="https://github.com/weather-gov/weather.gov/pull/1889">GitHub PR 1889</a></li>
+<li>R8 research summary <a href="https://github.com/weather-gov/weather.gov/pull/1940">GitHub PR 1940</a></li>
+<li>Weather story upload integration <a href="https://github.com/weather-gov/weather.gov/pull/1946">GitHub PR 1946</a> <a href="https://github.com/weather-gov/weather.gov/pull/1886">GitHub PR 1886</a></li>
+<li>Add icon and name of mobile shortcut <a href="https://github.com/weather-gov/weather.gov/pull/1924">GitHub PR 1924</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1980">GitHub PR 1980</a></li>
+<li>Update to Alert Tab <a href="https://github.com/weather-gov/weather.gov/pull/1933">GitHub PR 1933</a></li>
+</ul>
+<h3 id="minor_7">Minor</h3>
+<ul>
+<li>Round QPF table to two decimals <a href="https://github.com/weather-gov/weather.gov/pull/1919">GitHub PR 1919</a></li>
+<li>Update forecast item layout <a href="https://github.com/weather-gov/weather.gov/pull/1941">GitHub PR 1941</a></li>
+<li>Tooltip fix <a href="https://github.com/weather-gov/weather.gov/pull/1896">GitHub PR 1896</a></li>
+<li>Minor UX fixes <a href="https://github.com/weather-gov/weather.gov/pull/1906">GitHub PR 1906</a></li>
+<li>Don't show timezone on alert duration text <a href="https://github.com/weather-gov/weather.gov/pull/1935">GitHub PR 1935</a></li>
+<li>Enabling s3fs uploads on cloud.gov <a href="https://github.com/weather-gov/weather.gov/pull/1971">GitHub PR 1971</a></li>
+<li>Today summary forecast errors <a href="https://github.com/weather-gov/weather.gov/pull/1962">GitHub PR 1962</a></li>
+<li>Drupal library file fix <a href="https://github.com/weather-gov/weather.gov/pull/1910">GitHub PR 1910</a> </li>
+<li>Remove ADR workflows from github <a href="https://github.com/weather-gov/weather.gov/pull/1922">GitHub PR 1922</a></li>
+<li>Update to proxy service <a href="https://github.com/weather-gov/weather.gov/pull/1930">GitHub PR 1930</a></li>
+<li>Interop updates <a href="https://github.com/weather-gov/weather.gov/pull/1874">GitHub PR 1874</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1965">GitHub PR 1965</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1964">GitHub PR 1964</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1897">GitHub PR 1897</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1898">GitHub PR 1898</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1900">GitHub PR 1900</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1907">GitHub PR 1907</a></li>
+</ul>
+<h3 id="dependencies_9">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1889">GitHub PR 1889</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1893">GitHub PR 1893</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1963">GitHub PR 1963</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1955">GitHub PR 1955</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1954">GitHub PR 1954</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1953">GitHub PR 1953</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1952">GitHub PR 1952</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1911">GitHub PR 1911</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1912">GitHub PR 1912</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1913">GitHub PR 1913</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1914">GitHub PR 1914</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1915">GitHub PR 1915</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1936">GitHub PR 1936</a></li>
+</ul>
+<h2 id="beta-v181-2024-10-09">beta-v1.8.1 (2024-10-09)</h2>
+<h3 id="major_8">Major</h3>
+<ul>
+<li>Bundling javascript to fix bugs and improve page load <a href="https://github.com/weather-gov/weather.gov/pull/1846">GitHub PR 1846</a> <a href="https://github.com/weather-gov/weather.gov/pull/1894">GitHub PR 1894</a></li>
+</ul>
+<h3 id="minor_8">Minor</h3>
+<ul>
+<li>Semantic headers <a href="https://github.com/weather-gov/weather.gov/pull/1888">GitHub PR 1888</a></li>
+<li>Preserve spatial data when doing a zap <a href="https://github.com/weather-gov/weather.gov/pull/1892">GitHub PR 1892</a></li>
+</ul>
+<h2 id="beta-v180-2024-10-08">beta-v1.8.0 (2024-10-08)</h2>
+<h3 id="major_9">Major</h3>
+<ul>
+<li>Improved chart UX: scrolling, improved widths, height, and padding <a href="https://github.com/weather-gov/weather.gov/pull/1858">GitHub PR 1858</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1871">GitHub PR 1871</a></li>
+<li>Backend support for new weather story from DSSBuilder <a href="https://github.com/weather-gov/weather.gov/pull/1853">GitHub PR 1853</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1861">GitHub PR 1861</a></li>
+<li>Added precipitation chart and adds ice and snow to precip table <a href="https://github.com/weather-gov/weather.gov/pull/1851">GitHub PR 1851</a></li>
+<li>Replaced satellite gif with video (for accessibility) <a href="https://github.com/weather-gov/weather.gov/pull/1837">GitHub PR 1837</a></li>
+</ul>
+<h3 id="minor_9">Minor</h3>
+<ul>
+<li>Updated WWA names according to policy changes - <a href="https://github.com/weather-gov/weather.gov/pull/1801">GitHub PR 1801</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1802">GitHub PR 1802</a></li>
+<li>Fixed data and legend cutoff on charts <a href="https://github.com/weather-gov/weather.gov/pull/1868">GitHub PR 1868</a></li>
+<li>Fixed mobile chart tooltip issue <a href="https://github.com/weather-gov/weather.gov/pull/1863">GitHub PR 1863</a> </li>
+<li>Fixed script bundling for alert map module <a href="https://github.com/weather-gov/weather.gov/pull/1843">GitHub PR 1843</a> </li>
+<li>Fixed overlapping overnight QPF <a href="https://github.com/weather-gov/weather.gov/pull/1840">GitHub PR 1840</a> </li>
+<li>Updated sandbox permissions / IP Addresses <a href="https://github.com/weather-gov/weather.gov/pull/1836">GitHub PR 1836</a> </li>
+<li>Continued support for new Interop layer <a href="https://github.com/weather-gov/weather.gov/pull/1825">GitHub PR 1825</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1828">GitHub PR 1828</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1844">GitHub PR 1844</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1850">GitHub PR 1850</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1856">GitHub PR 1856</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1860">GitHub PR 1860</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1872">GitHub PR 1872</a></li>
+<li>ADR - Javacript bundling <a href="https://github.com/weather-gov/weather.gov/pull/1867">GitHub PR 1867</a> </li>
+<li>ADR - Interoperability layer <a href="https://github.com/weather-gov/weather.gov/pull/1849">GitHub PR 1849</a> </li>
+</ul>
+<h3 id="dependencies_10">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1838">GitHub PR 1838</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1840">GitHub PR 1840</a></li>
+</ul>
+<h2 id="beta-v170-2024-09-27">beta-v1.7.0 (2024-09-27)</h2>
+<h1 id="beta-v170">beta-v1.7.0</h1>
+<h3 id="major_10">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1772">GitHub PR 1772</a> Wind Graph!</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1776">GitHub PR 1776</a> Add observation tests</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1804">GitHub PR 1804</a> Fix Anchorage WFO promo links</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1826">GitHub PR 1826</a> add dewpoint hourly chart</li>
+</ul>
+<h3 id="minor_10">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1829">GitHub PR 1829</a> Revert bundling</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1767">GitHub PR 1767</a> add New Relic support for API interop layer </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1768">GitHub PR 1768</a> Fixed bug in observations handler</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1769">GitHub PR 1769</a> Add top-level error handline to Drupal</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1770">GitHub PR 1770</a> Have Drupal get the interop URL from env var</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1771">GitHub PR 1771</a> Fix charts, related to interop layer</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1773">GitHub PR 1773</a> Document chart.js decision</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1774">GitHub PR 1774</a> Deploy bundled script to staging</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1775">GitHub PR 1775</a> Deploy bundled script to prod</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1777">GitHub PR 1777</a> Add interop layer unit tests to CI/CD</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1787">GitHub PR 1787</a> add dependency review action</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1788">GitHub PR 1788</a> minor documentation tweaks for curl and links</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1789">GitHub PR 1789</a> outside testing: content import and documentation</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1797">GitHub PR 1797</a> AFD parsing fixes</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1798">GitHub PR 1798</a> Raw AFD text</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1803">GitHub PR 1803</a> Fix wind direction arrows</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1805">GitHub PR 1805</a> ip address filtering for the /jsonapi endpoint</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1816">GitHub PR 1816</a> fixed warnings from shellcheck</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1817">GitHub PR 1817</a> API interop tests: alert geometries</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1820">GitHub PR 1820</a> AFD 404s</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1821">GitHub PR 1821</a> eslint</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1824">GitHub PR 1824</a> remove fix permissions recipe</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1827">GitHub PR 1827</a> alert description/url parsing tests</li>
+</ul>
+<h3 id="dependencies_11">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1754">GitHub PR 1754</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1780">GitHub PR 1780</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1781">GitHub PR 1781</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1782">GitHub PR 1782</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1783">GitHub PR 1783</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1784">GitHub PR 1784</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1810">GitHub PR 1810</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1812">GitHub PR 1812</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1813">GitHub PR 1813</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1814">GitHub PR 1814</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1822">GitHub PR 1822</a></li>
+</ul>
+<h2 id="beta-v160-2024-09-12">beta-v1.6.0 (2024-09-12)</h2>
+<h3 id="major_11">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1698">GitHub PR 1698</a> - Hourly probability of precipitation chart</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1693">GitHub PR 1693</a> - Hourly temperature chart</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1763">GitHub PR 1763</a> - Hourly humidity chart </li>
+</ul>
+<h3 id="minor_11">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1765">GitHub PR 1765</a> Update WFO promo link</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1717">GitHub PR 1717</a> WFO contact fix</li>
+<li>Testing parity for our future data interop layer between the API and Weather.gov <a href="https://github.com/weather-gov/weather.gov/pull/1700">GitHub PR 1700</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1699">GitHub PR 1699</a> <a href="https://github.com/weather-gov/weather.gov/pull/1704">GitHub PR 1704</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1753">GitHub PR 1753</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1744">GitHub PR 1744</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1742">GitHub PR 1742</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1736">GitHub PR 1736</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1734">GitHub PR 1734</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1730">GitHub PR 1730</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1716">GitHub PR 1716</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1715">GitHub PR 1715</a></li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1695">GitHub PR 1695</a> - Modify Javascript to enable bundling</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1751">GitHub PR 1751</a> - Hotfix, CSS Building / Gulpfile fix</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1680">GitHub PR 1680</a> - Switch AFD WFO dropdown to a combo box</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1743">GitHub PR 1743</a> - Docker fix</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1720">GitHub PR 1720</a> - NewRelic fix</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1679">GitHub PR 1679</a> - Adding more security checks for compliance </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1678">GitHub PR 1678</a> - Fix link to jsonapi integration example</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1671">GitHub PR 1671</a> - proof of concept for running separate and outside tests</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1762">GitHub PR 1762</a> - New sandbox</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1658">GitHub PR 1658</a> - Adding full-width section to obs in current tab</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1650">GitHub PR 1650</a> - Added new content type PDF to WFO uploads in API</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1571">GitHub PR 1571</a> - moves operations to build CSS and sprites into containers</li>
+</ul>
+<h3 id="dependencies_12">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1684">GitHub PR 1684</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1683">GitHub PR 1683</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1748">GitHub PR 1748</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1682">GitHub PR 1682</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1747">GitHub PR 1747</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1746">GitHub PR 1746</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1725">GitHub PR 1725</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1724">GitHub PR 1724</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1722">GitHub PR 1722</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1721">GitHub PR 1721</a></li>
+</ul>
+<h2 id="beta-v151-2024-08-29">beta-v1.5.1 (2024-08-29)</h2>
+<h3 id="bugfix">bugfix</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1673">GitHub PR 1673</a> - Update styles version to bust caches</li>
+</ul>
+<h2 id="beta-v150-2024-08-29">beta-v1.5.0 (2024-08-29)</h2>
+<h3 id="major_12">Major</h3>
+<ul>
+<li>AFDs! <a href="https://github.com/weather-gov/weather.gov/pull/1669">GitHub PR 1669</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1563">GitHub PR 1563</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1657">GitHub PR 1657</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1655">GitHub PR 1655</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1652">GitHub PR 1652</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1621">GitHub PR 1621</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1587">GitHub PR 1587</a></li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1664">GitHub PR 1664</a> - DSS Builder API</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1514">GitHub PR 1514</a> - support redirecting from URLs with place names</li>
+</ul>
+<h3 id="minor_12">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1537">GitHub PR 1537</a> - Remove WFO promo content type</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1583">GitHub PR 1583</a> - Fix internal Docker permissions</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1586">GitHub PR 1586</a> - Update developer documentation</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1588">GitHub PR 1588</a> - Don’t merge test reports on doc-only PRs</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1589">GitHub PR 1589</a> - remove unused php</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1612">GitHub PR 1612</a> - Remove state-based alerts proxy data</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1614">GitHub PR 1614</a> - Set admin favicon to site favicon</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1656">GitHub PR 1656</a> - Fix button alignment</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1646">GitHub PR 1646</a> - API tests</li>
+<li>Github docs <a href="https://github.com/weather-gov/weather.gov/pull/1661">GitHub PR 1661</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1615">GitHub PR 1615</a></li>
+</ul>
+<h3 id="dependencies_13">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1572">GitHub PR 1572</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1573">GitHub PR 1573</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1574">GitHub PR 1574</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1575">GitHub PR 1575</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1576">GitHub PR 1576</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1663">GitHub PR 1663</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1644">GitHub PR 1644</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1643">GitHub PR 1643</a>, </li>
+</ul>
+<h2 id="beta-v141-2024-08-15">beta-v1.4.1 (2024-08-15)</h2>
+<h3 id="bugfix_1">bugfix</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1565">GitHub PR 1565</a> - Restoring latest version of WeatherInfoController</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1564">GitHub PR 1564</a> - Removing duplicate route declaration</li>
+</ul>
+<h2 id="beta-v140-2024-08-15">beta-v1.4.0 (2024-08-15)</h2>
+<h3 id="major_13">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1538">GitHub PR 1538</a> - Initial AFD route, template, and bundle</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1555">GitHub PR 1555</a> - Modify WFO promo block to serve data from the WFO info content type</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1539">GitHub PR 1539</a> - Add styling to the WFO page</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1517">GitHub PR 1517</a> - WFO Info routing and initial template structure</li>
+</ul>
+<h3 id="minor_13">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1537">GitHub PR 1537</a> - Update wind speed behavior</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1519">GitHub PR 1519</a> - Notes on location</li>
+</ul>
+<h3 id="dependencies_14">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1533">GitHub PR 1533</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1532">GitHub PR 1532</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1531">GitHub PR 1531</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1559">GitHub PR 1559</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1558">GitHub PR 1558</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1556">GitHub PR 1556</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1560">GitHub PR 1560</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1557">GitHub PR 1557</a></li>
+</ul>
+<h2 id="beta-v131-2024-08-05">beta-v1.3.1 (2024-08-05)</h2>
+<h3 id="bugfix_2">bugfix</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1534">GitHub PR 1534</a> Simplify how we put polygons together for alerts for improved speed</li>
+</ul>
+<h2 id="beta-v130-2024-08-01">beta-v1.3.0 (2024-08-01)</h2>
+<h3 id="major_14">Major</h3>
+<ul>
+<li>Add satellite prototype <a href="https://github.com/weather-gov/weather.gov/pull/1310">GitHub PR 1310</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1516">GitHub PR 1516</a></li>
+<li>WFO Information content type <a href="https://github.com/weather-gov/weather.gov/pull/1485">GitHub PR 1485</a></li>
+<li>Fetch AFDs <a href="https://github.com/weather-gov/weather.gov/pull/1495">GitHub PR 1495</a></li>
+</ul>
+<h3 id="minor_14">Minor</h3>
+<ul>
+<li>Add wind cardinal direction and update icon <a href="https://github.com/weather-gov/weather.gov/pull/1493">GitHub PR 1493</a></li>
+<li>Update wind gust copy in the hourly forecast table for better translations <a href="https://github.com/weather-gov/weather.gov/pull/1505">GitHub PR 1505</a></li>
+<li>Update the tropical cyclone icon <a href="https://github.com/weather-gov/weather.gov/pull/1504">GitHub PR 1504</a></li>
+<li>Update how spatial schemas are managed; update zone schema to add spatial index <a href="https://github.com/weather-gov/weather.gov/pull/1492">GitHub PR 1492</a></li>
+<li>Rely on Playwright's built-in tools for downloading browsers <a href="https://github.com/weather-gov/weather.gov/pull/1496">GitHub PR 1496</a></li>
+<li>Disable PHP opcode caching in dev <a href="https://github.com/weather-gov/weather.gov/pull/1491">GitHub PR 1491</a></li>
+<li>Refactor alert metadata and add an alert metadata page <a href="https://github.com/weather-gov/weather.gov/pull/1468">GitHub PR 1468</a></li>
+<li>Fix touchpoints button padding <a href="https://github.com/weather-gov/weather.gov/pull/1464">GitHub PR 1464</a></li>
+<li>Disabled Edge from testing until it functions properly in testing <a href="https://github.com/weather-gov/weather.gov/pull/1461">GitHub PR 1461</a></li>
+<li>Support description-embedded locations with multiple states <a href="https://github.com/weather-gov/weather.gov/pull/1465">GitHub PR 1465</a></li>
+<li>Bug fix for forecast and fire zones shapefiles <a href="https://github.com/weather-gov/weather.gov/pull/1463">GitHub PR 1463</a></li>
+<li>Translation consistency checking <a href="https://github.com/weather-gov/weather.gov/pull/1458">GitHub PR 1458</a></li>
+<li>Fix radar configuration <a href="https://github.com/weather-gov/weather.gov/pull/1460">GitHub PR 1460</a></li>
+</ul>
+<h3 id="dependencies_15">Dependencies</h3>
+<ul>
+<li>twing <a href="https://github.com/weather-gov/weather.gov/pull/1480">GitHub PR 1480</a></li>
+<li>cypress <a href="https://github.com/weather-gov/weather.gov/pull/1481">GitHub PR 1481</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1454">GitHub PR 1454</a></li>
+<li>playwright <a href="https://github.com/weather-gov/weather.gov/pull/1483">GitHub PR 1483</a></li>
+<li>stylelint <a href="https://github.com/weather-gov/weather.gov/pull/1482">GitHub PR 1482</a></li>
+<li>axe-core <a href="https://github.com/weather-gov/weather.gov/pull/1484">GitHub PR 1484</a></li>
+<li>jsdom <a href="https://github.com/weather-gov/weather.gov/pull/1456">GitHub PR 1456</a></li>
+<li>dayjs <a href="https://github.com/weather-gov/weather.gov/pull/1455">GitHub PR 1455</a></li>
+<li>mocha <a href="https://github.com/weather-gov/weather.gov/pull/1453">GitHub PR 1453</a></li>
+<li>types/node <a href="https://github.com/weather-gov/weather.gov/pull/1462">GitHub PR 1462</a></li>
+</ul>
+<h2 id="beta-v120-2024-07-18">beta-v1.2.0 (2024-07-18)</h2>
+<h3 id="major_15">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1423">GitHub PR 1423</a> Change hazard map colors to align with “Warning”, “Watch”, “Advisory”</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1428">GitHub PR 1428</a> Set up i18n module to support language translations</li>
+</ul>
+<h3 id="minor_15">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1408">GitHub PR 1408</a> Clean up “suggested placename” artifacts</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1416">GitHub PR 1416</a> Update hourly table library date</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1426">GitHub PR 1426</a> Update to latest CMI library</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1444">GitHub PR 1444</a> CI DB Cleanup</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1343">GitHub PR 1343</a> ADR for basic internationalization</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1443">GitHub PR 1443</a> County alert list formatting</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1442">GitHub PR 1442</a> Github onboarding task edits</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1430">GitHub PR 1430</a> add impacted area square for hazard map legend</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1433">GitHub PR 1433</a> Playwright tests tweaks to speed CI</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1431">GitHub PR 1431</a> Hourly header table change for consistent screen reader display</li>
+</ul>
+<h3 id="dependencies_16">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1417">GitHub PR 1417</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1418">GitHub PR 1418</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1419">GitHub PR 1419</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1421">GitHub PR 1421</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1439">GitHub PR 1439</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1439">GitHub PR 1439</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1436">GitHub PR 1436</a>, </li>
+</ul>
+<h2 id="beta-v110-2024-07-05">beta-v1.1.0 (2024-07-05)</h2>
+<h3 id="major_16">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1405">GitHub PR 1405</a> Set alert colors based on alert level</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1393">GitHub PR 1393</a> Add a button to expand and contract RADAR</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1360">GitHub PR 1360</a> Update drupal 10.3.x and add local setting</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1334">GitHub PR 1334</a> Updated hourly-table colors and sections</li>
+</ul>
+<h3 id="cms-ux-improvements">CMS UX improvements</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1402">GitHub PR 1402</a> Add link to pre-existing content on duplicate safety info</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1392">GitHub PR 1392</a> Weather Story WFO Publish confirmation</li>
+</ul>
+<h3 id="minor_16">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1404">GitHub PR 1404</a> Filter out empty day periods</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1377">GitHub PR 1377</a> add new user admin role, rename system admin to owner </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1366">GitHub PR 1366</a> fix config errors on drupal update</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1365">GitHub PR 1365</a> Only show the hourly forecast table is hourly information exists</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1364">GitHub PR 1364</a> Update all our package-lock.jsons</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1359">GitHub PR 1359</a> Hide navigation loader when page is shown</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1350">GitHub PR 1350</a> Make dev/test content published by default</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1330">GitHub PR 1330</a> Alternate method for getting times in Drupal</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1317">GitHub PR 1317</a> Let’s Control Time</li>
+</ul>
+<h3 id="dependencies_17">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1398">GitHub PR 1398</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1397">GitHub PR 1397</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1358">GitHub PR 1358</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1357">GitHub PR 1357</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1356">GitHub PR 1356</a>, </li>
+</ul>
+<h2 id="beta-101-2024-06-21">beta-1.0.1 (2024-06-21)</h2>
+<h3 id="patch">Patch</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1351">GitHub PR 1351</a> change preview setting for dynamic safety info to optional</li>
+</ul>
+<h2 id="beta-v100-2024-06-20">beta-v1.0.0 (2024-06-20)</h2>
+<h1 id="here-ye-here-ye-our-first-major-release-weve-recently-concluded-our-build-of-an-mvp-for-beta-so-this-is-our-way-of-saying-its-time-for-the-next-phase-expanding-the-site-to-meet-initial-operating-capability-our-mvp-was-scoped-as-a-foundation-for-our-architecture-and-user-experience-its-not-ready-for-public-notification-or-use">Here ye, here ye our first <strong>major</strong> release. We’ve recently concluded our build of an MVP for beta, so this is our way of saying it’s time for the next phase – expanding the site to meet initial operating capability. Our MVP was scoped as a foundation for our architecture and user experience, it’s not ready for public notification or use.</h1>
+<h3 id="major_17">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1288">GitHub PR 1288</a> Updates roadmap and README docs</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1319">GitHub PR 1319</a> Fix high/low temp for 'today' period</li>
+<li>CMS UX improvements</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1314">GitHub PR 1314</a> modified CMS preview/save/publish flows and action buttons</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1312">GitHub PR 1312</a> reorder columns in the content dashboard</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1339">GitHub PR 1339</a> Turned on content moderation for all content </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1324">GitHub PR 1324</a> Implemented prevention measures for duplicates for WFO promo and safety information</li>
+</ul>
+<h3 id="minor_17">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1297">GitHub PR 1297</a> Add a dark color background for search box visibility</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1342">GitHub PR 1342</a> Fixed issue with transforming GeoJSON to WKT for multi-polygon hazards</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1302">GitHub PR 1302</a> Show loading indicator on click of “use my location” button</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1303">GitHub PR 1303</a> Fix alert link styling</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1326">GitHub PR 1326</a> Update daily items styles</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1311">GitHub PR 1311</a> Update location search form on the front page to use GET</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1315">GitHub PR 1315</a> Added wx prefix to custom classes</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1313">GitHub PR 1313</a> Reorganize files and classes</li>
+</ul>
+<h3 id="dependencies_18">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1329">GitHub PR 1329</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1328">GitHub PR 1328</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1327">GitHub PR 1327</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1305">GitHub PR 1305</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1306">GitHub PR 1306</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1307">GitHub PR 1307</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1308">GitHub PR 1308</a></li>
+</ul>
+<h2 id="beta-v0171-2024-06-06">beta-v0.17.1 (2024-06-06)</h2>
+<h3 id="major_18">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1285">GitHub PR 1285</a> Additional observation details </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1281">GitHub PR 1281</a> adds \"loader\" image when the user has selected a new location from the search</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1263">GitHub PR 1263</a> Add alerts to the days in the daily overview</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1262">GitHub PR 1262</a> Add radar legend</li>
+</ul>
+<h3 id="minor_18">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1245">GitHub PR 1245</a> Add update-settings command to makefile</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1253">GitHub PR 1253</a> Fix content moderation permissions</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1284">GitHub PR 1284</a> Remove old LocationSearch from attached libraries </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1254">GitHub PR 1254</a> Remove publish/unpublish bulk action, and update Actions UI</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1264">GitHub PR 1264</a> shorter canonical list of available timezones when creating or editing a user in CMS</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1260">GitHub PR 1260</a> change order of map and safety in alert details</li>
+</ul>
+<h3 id="dependencies_19">Dependencies</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1282">GitHub PR 1282</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1278">GitHub PR 1278</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1280">GitHub PR 1280</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1279">GitHub PR 1279</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1277">GitHub PR 1277</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1265">GitHub PR 1265</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1255">GitHub PR 1255</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1256">GitHub PR 1256</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1258">GitHub PR 1258</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1259">GitHub PR 1259</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1261">GitHub PR 1261</a></li>
+</ul>
+<h2 id="beta-v0170-2024-05-23">beta-v0.17.0 (2024-05-23)</h2>
+<h3 id="major_19">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1241">GitHub PR 1241</a> add content filters to CMS</li>
+</ul>
+<h3 id="minor_19">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1121">GitHub PR 1121</a> Add user types to documentation</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1193">GitHub PR 1193</a> Adjust headings on current tab</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1214">GitHub PR 1214</a> Change size of preview from thumbnail to large</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1225">GitHub PR 1225</a> split tests into composite actions</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1243">GitHub PR 1243</a> update to alt text instructions</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1217">GitHub PR 1217</a> fixed floating issue for map buttons</li>
+<li>Dependencies: </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1208">GitHub PR 1208</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1209">GitHub PR 1209</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1210">GitHub PR 1210</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1211">GitHub PR 1211</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1212">GitHub PR 1212</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1227">GitHub PR 1227</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1228">GitHub PR 1228</a></li>
+</ul>
+<h2 id="beta-v0160-2024-05-09">beta-v0.16.0 (2024-05-09)</h2>
+<h3 id="major_20">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1175">GitHub PR 1175</a> <a href="https://github.com/weather-gov/weather.gov/pull/1173">GitHub PR 1173</a> Add metatag drupal module and link previews for social sharing </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1183">GitHub PR 1183</a> parse urls within hazard products</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1148">GitHub PR 1148</a> switch accessibility test to playwright (first test in playwright!)</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1159">GitHub PR 1159</a> Enable hourly scrolling to scroll full width of table</li>
+</ul>
+<h3 id="minor_20">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1184">GitHub PR 1184</a> improvements to hourly table</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1178">GitHub PR 1178</a> use alert UUID for in-page hash alerts</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1130">GitHub PR 1130</a> Rework heading structure (for accessibility)</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1168">GitHub PR 1168</a> Fix mis-labeling of today in rare case where it is currently after midnight but API data for \"today\" still begins before midnight </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1167">GitHub PR 1167</a> Simplify login page to only use NOAA auth </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1177">GitHub PR 1177</a> Status codes in API proxy (used for dev/testing)</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1185">GitHub PR 1185</a> Update how we ID alerts</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1147">GitHub PR 1147</a> Build CI/CD caches on main</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1180">GitHub PR 1180</a> adding back config split</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1179">GitHub PR 1179</a> add an init command for setting isolation level</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1176">GitHub PR 1176</a> If spatial data zip file is corrupted retry downloading</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1149">GitHub PR 1149</a> Removes conditionals from composite actions</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1150">GitHub PR 1150</a> Switch Twitter to X</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1174">GitHub PR 1174</a> Filter out ended/expired alerts</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1155">GitHub PR 1155</a> Align social media items in WFO promo</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1171">GitHub PR 1171</a> Log errors to stdout</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1158">GitHub PR 1158</a> Anchor regex for identifying alert overviews</li>
+<li>Dependencies: </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1161">GitHub PR 1161</a> Bump axe-core</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1162">GitHub PR 1162</a> Bump stylelint</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1163">GitHub PR 1163</a> Bump eslint-plugin-cypress</li>
+</ul>
+<h2 id="beta-v0150-2024-05-01">beta-v0.15.0 (2024-05-01)</h2>
+<h3 id="major_21">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1142">GitHub PR 1142</a> All alerts open by default </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1105">GitHub PR 1105</a> Daily precipitation tables</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1106">GitHub PR 1106</a> Hazard on a map</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1131">GitHub PR 1131</a> Add landing page for context for what beta.weather.gov is</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1125">GitHub PR 1125</a> Include all locations in recent searches </li>
+</ul>
+<h3 id="minor_21">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1141">GitHub PR 1141</a> Accessibility: Combo box aria description</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1109">GitHub PR 1109</a> Control the system file setting and image setting for weather stories</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1137">GitHub PR 1137</a> e2e test alert onset/duration text</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1133">GitHub PR 1133</a> use GET instead of POST for submitting location search request</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1119">GitHub PR 1119</a> Moves WFO promo into node and field templates</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1110">GitHub PR 1110</a> Update prod/beta syntax issue</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1114">GitHub PR 1114</a> Doc: Disabled Merge Queue</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1062">GitHub PR 1062</a> Add SR-only description to RADAR component </li>
+<li>Dependencies:</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1129">GitHub PR 1129</a> Bump cypress</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1128">GitHub PR 1128</a> Bump eslint</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1127">GitHub PR 1127</a> Bump stylelint</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1126">GitHub PR 1126</a> dayjs</li>
+</ul>
+<h2 id="beta-v0140-2024-04-26">beta-v0.14.0 (2024-04-26)</h2>
+<h3 id="major_22">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1067">GitHub PR 1067</a> - recent search results shown to user</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1103">GitHub PR 1103</a> - Adds forecast and fire weather zones to spatial database</li>
+</ul>
+<h3 id="minor_22">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1113">GitHub PR 1113</a> - Fixes bug that prevents dynamic safety info from rendering</li>
+</ul>
+<h2 id="beta-v0130-2024-04-25">beta-v0.13.0 (2024-04-25)</h2>
+<h3 id="major_23">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1102">GitHub PR 1102</a> - Organizes metadata to data sources in spatial loading script in a way that reduces loading redundancy</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1101">GitHub PR 1101</a> - Increases consistency in loading of radar map across live environments</li>
+</ul>
+<h3 id="minor_23">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1056">GitHub PR 1056</a> - Chai assertion library updated from 4.4.1 to 5.1.0</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1097">GitHub PR 1097</a> - Cypress testing library updated from 13.7.3 to 13.8.0</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1096">GitHub PR 1096</a> - Remove tags taxonomy vocabulary</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1095">GitHub PR 1095</a> - Synchronizes CMS configuration data from beta</li>
+</ul>
+<h2 id="beta-v0120-2024-04-22">beta-v0.12.0 (2024-04-22)</h2>
+<h3 id="major_24">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1090">GitHub PR 1090</a> Fix radar not loading in certain circumstances</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1057">GitHub PR 1057</a> Remove the “today” tab, rename “Daily” tab to “7 days,” and moves weather story and WFO promo content into the “7 days” tab</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1040">GitHub PR 1040</a> Include hourly data for all days in the daily forecast</li>
+</ul>
+<h3 id="minor_24">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1063">GitHub PR 1063</a> Only allow a predefined set of HTML elements in authored content</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1066">GitHub PR 1066</a> Make the daily forecast table wider on wider browser windows</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1041">GitHub PR 1041</a> Remove placeholder links</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1065">GitHub PR 1065</a> Prevent search engines from indexing the site for now</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1073">GitHub PR 1073</a> Create a list of third-party modules we’re using and establish a process for documenting new ones as we go</li>
+<li>
+<p><a href="https://github.com/weather-gov/weather.gov/pull/1088">GitHub PR 1088</a> Make our location page URLs case-insensitive</p>
+</li>
+<li>
+<p>Accessibility</p>
+</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1094">GitHub PR 1094</a> Iterate on the accessibility of the location search combo box</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1029">GitHub PR 1029</a> Fix an issue with how the observation time was presented to screen readers</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1032">GitHub PR 1032</a> Add caption to hourly forecast table for screen reader users</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1089">GitHub PR 1089</a> Adjust primary color settings to enhance contrast</li>
+<li>Bug fixes:</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1042">GitHub PR 1042</a> Use ISO8601 timestamps instead of Unix epoch timestamps</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1044">GitHub PR 1044</a> Fix a bug where Firefox users could not click on list items</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1053">GitHub PR 1053</a> Fix the screen reader reading order of current conditions</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1058">GitHub PR 1058</a> Fix hourly table behavior so that it ends at 6am, matching NWS days</li>
+</ul>
+<h2 id="beta-v0111-2024-04-11">beta-v0.11.1 (2024-04-11)</h2>
+<h3 id="minor_25">Minor</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1035">GitHub PR 1035</a> Updated zoom level and height of RADAR image</li>
+</ul>
+<h2 id="beta-v0110-2024-04-11">beta-v0.11.0 (2024-04-11)</h2>
+<h3 id="major_25">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/977">GitHub PR 977</a> add RADAR to current tab</li>
+<li>CMS:</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1015">GitHub PR 1015</a> Separate save, preview, publish, unpublish</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1026">GitHub PR 1026</a> Schedule publish/unpublish</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1020">GitHub PR 1020</a> Update interface for weather stories and WFO promo</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1013">GitHub PR 1013</a> New taxonomy</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1012">GitHub PR 1012</a> Sync roles, permissions, and workbench settings from beta</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1005">GitHub PR 1005</a> Login and logout flows </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/992">GitHub PR 992</a> New, accessible location search</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1024">GitHub PR 1024</a> Add gusts and apparent temperature to hourly tables</li>
+</ul>
+<h3 id="minor_26">Minor</h3>
+<ul>
+<li>Styling/accessibility tweaks updates:</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/985">GitHub PR 985</a> Add chance of precipitation row to hourly table</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1025">GitHub PR 1025</a> Use wind direction arrows instead of cardinal direction names </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/997">GitHub PR 997</a> Move tips to stay safe inside accordion</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1001">GitHub PR 1001</a> Touchpoints feedback button style fix</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/1002">GitHub PR 1002</a> Change alert ordering based on priority and onset time </li>
+<li>
+<p><a href="https://github.com/weather-gov/weather.gov/pull/983">GitHub PR 983</a> Format degrees for both visual and screen reader use cases</p>
+</li>
+<li>
+<p>Bug fixes: </p>
+</li>
+<li>
+<p><a href="https://github.com/weather-gov/weather.gov/pull/1017">GitHub PR 1017</a> addresses repeating period names during overnight local time hours</p>
+</li>
+<li>
+<p>Update Dependencies: </p>
+</li>
+<li>
+<p><a href="https://github.com/weather-gov/weather.gov/pull/900">GitHub PR 900</a>, <a href="https://github.com/weather-gov/weather.gov/pull/991">GitHub PR 991</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1023">GitHub PR 1023</a>, <a href="https://github.com/weather-gov/weather.gov/pull/1021">GitHub PR 1021</a></p>
+</li>
+<li>
+<p>Miscellaneous </p>
+</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/963">GitHub PR 963</a> Updated geonames data/parsing to include US territories</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/981">GitHub PR 981</a> Cache database dump in CI/CD to speed up build times</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/984">GitHub PR 984</a> Remove NOS links</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/986">GitHub PR 986</a> List out existing block-based e2e tests</li>
+</ul>
+<h2 id="beta-v0100-2024-03-28">beta-v0.10.0 (2024-03-28)</h2>
+<h3 id="major_26">Major</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/911">GitHub PR 911</a> - Refactored our method for end to end testing</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/925">GitHub PR 925</a> - Touchpoints public feedback form added</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/923">GitHub PR 923</a> - dev and cloud databases now the same (mySQL)</li>
+</ul>
+<h3 id="minor_27">Minor</h3>
+<ul>
+<li>Styling/accessibility tweaks updates:</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/924">GitHub PR 924</a> - rounds precip values in table to hundredths </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/947">GitHub PR 947</a> - Fixes arrows on hourly table and spacing in hourly table</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/934">GitHub PR 934</a> - Checks for null values and adds N/A in table if appropriate</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/932">GitHub PR 932</a> - Adjusted heading color, align text/containers, increasing padding consistency</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/929">GitHub PR 929</a> - Added links to alerts in hourly table</li>
+<li>Bug fixes: </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/875">GitHub PR 875</a> - bug in county codes. They’re now treated like forecast/fire zones</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/915">GitHub PR 915</a> - fixes end date before begin date in hazards</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/916">GitHub PR 916</a> - “null” from API now handled properly vs. zero/false</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/927">GitHub PR 927</a> - fixes crashing when API returns unknown or missing weather icon</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/928">GitHub PR 928</a> - tweaks cache key to eliminate php warning and cache not working</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/874">GitHub PR 874</a> - fetch API data concurrently to improve page load</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/926">GitHub PR 926</a> - lat/lon order now the same throughout code </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/922">GitHub PR 922</a> - new datetime token added</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/968">GitHub PR 968</a> - better enables users to report vulnerabilities</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/933">GitHub PR 933</a> - increase sleep duration between drupal rebuild and installation</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/812">GitHub PR 812</a> - php testing efficiencies </li>
+<li>Dependencies: <a href="https://github.com/weather-gov/weather.gov/pull/962">GitHub PR 962</a>, <a href="https://github.com/weather-gov/weather.gov/pull/956">GitHub PR 956</a>, <a href="https://github.com/weather-gov/weather.gov/pull/955">GitHub PR 955</a>, <a href="https://github.com/weather-gov/weather.gov/pull/954">GitHub PR 954</a>, <a href="https://github.com/weather-gov/weather.gov/pull/920">GitHub PR 920</a></li>
+</ul>
+<h2 id="beta-v090-2024-03-15">beta-v0.9.0 (2024-03-15)</h2>
+<h1 id="major_27">Major</h1>
+<ul>
+<li>Get hourly forecast data from gridpoint endpoint <a href="https://github.com/weather-gov/weather.gov/pull/859">GitHub PR 859</a></li>
+<li>Refactor WeatherDataService <a href="https://github.com/weather-gov/weather.gov/pull/870">GitHub PR 870</a>, <a href="https://github.com/weather-gov/weather.gov/pull/845">GitHub PR 845</a>,  (WIP)</li>
+<li>Hourly details in daily forecast days <a href="https://github.com/weather-gov/weather.gov/pull/877">GitHub PR 877</a></li>
+<li>Initial styling: <a href="https://github.com/weather-gov/weather.gov/pull/869">GitHub PR 869</a>, <a href="https://github.com/weather-gov/weather.gov/pull/892">GitHub PR 892</a>, <a href="https://github.com/weather-gov/weather.gov/pull/884">GitHub PR 884</a>, <a href="https://github.com/weather-gov/weather.gov/pull/857">GitHub PR 857</a></li>
+<li>Plain language alert banners <a href="https://github.com/weather-gov/weather.gov/pull/896">GitHub PR 896</a></li>
+</ul>
+<p>Minor
+- Parsing:
+- Debt: 
+- Monitoring/Metrics/Logging:
+- Testing: <a href="https://github.com/weather-gov/weather.gov/pull/861">GitHub PR 861</a>, <a href="https://github.com/weather-gov/weather.gov/pull/894">GitHub PR 894</a>, <a href="https://github.com/weather-gov/weather.gov/pull/889">GitHub PR 889</a>, <a href="https://github.com/weather-gov/weather.gov/pull/890">GitHub PR 890</a>, <a href="https://github.com/weather-gov/weather.gov/pull/891">GitHub PR 891</a>
+- Styling/accessibility tweaks updates:
+    - Alert details 
+    - <a href="https://github.com/weather-gov/weather.gov/pull/867">GitHub PR 867</a>, <a href="https://github.com/weather-gov/weather.gov/pull/882">GitHub PR 882</a>, <a href="https://github.com/weather-gov/weather.gov/pull/895">GitHub PR 895</a> 
+- Documentation: <a href="https://github.com/weather-gov/weather.gov/pull/867">GitHub PR 867</a> </p>
+<h2 id="beta-v080-2024-03-01">beta-v0.8.0 (2024-03-01)</h2>
+<h1 id="major_28">Major</h1>
+<ul>
+<li>Workbench install <a href="https://github.com/weather-gov/weather.gov/pull/805">GitHub PR 805</a></li>
+<li>Show hourly/6-hourly precipitation amounts <a href="https://github.com/weather-gov/weather.gov/pull/808">GitHub PR 808</a> </li>
+<li>Hourly Forecast table component <a href="https://github.com/weather-gov/weather.gov/pull/847">GitHub PR 847</a></li>
+<li>Create new design environment <a href="https://github.com/weather-gov/weather.gov/pull/825">GitHub PR 825</a></li>
+<li>Change our routing so that location page is shown at URLs with lat/lon instead of grid point <a href="https://github.com/weather-gov/weather.gov/pull/769">GitHub PR 769</a></li>
+</ul>
+<p>Minor
+- <a href="https://github.com/weather-gov/weather.gov/pull/788">GitHub PR 788</a>, <a href="https://github.com/weather-gov/weather.gov/pull/811">GitHub PR 811</a>, <a href="https://github.com/weather-gov/weather.gov/pull/820">GitHub PR 820</a>, <a href="https://github.com/weather-gov/weather.gov/pull/828">GitHub PR 828</a>, <a href="https://github.com/weather-gov/weather.gov/pull/845">GitHub PR 845</a>, <a href="https://github.com/weather-gov/weather.gov/pull/850">GitHub PR 850</a>, <a href="https://github.com/weather-gov/weather.gov/pull/854">GitHub PR 854</a>, <a href="https://github.com/weather-gov/weather.gov/pull/855">GitHub PR 855</a>, <a href="https://github.com/weather-gov/weather.gov/pull/715">GitHub PR 715</a>
+- Parsing: <a href="https://github.com/weather-gov/weather.gov/pull/807">GitHub PR 807</a>
+- Monitoring/Metrics/Logging:
+  - Observation distance logging <a href="https://github.com/weather-gov/weather.gov/pull/806">GitHub PR 806</a> <a href="https://github.com/weather-gov/weather.gov/pull/846">GitHub PR 846</a>
+- Testing: <a href="https://github.com/weather-gov/weather.gov/pull/812">GitHub PR 812</a>
+- Styling/accessibility updates:
+  - Move Current Conditions into a tab <a href="https://github.com/weather-gov/weather.gov/pull/801">GitHub PR 801</a>
+  - Combine outlook and hourly into “today” tab <a href="https://github.com/weather-gov/weather.gov/pull/802">GitHub PR 802</a>
+  - Add more USWDS settings and style “current” tab <a href="https://github.com/weather-gov/weather.gov/pull/849">GitHub PR 849</a> <a href="https://github.com/weather-gov/weather.gov/pull/856">GitHub PR 856</a>
+- Dependency updates: <a href="https://github.com/weather-gov/weather.gov/pull/821">GitHub PR 821</a>, <a href="https://github.com/weather-gov/weather.gov/pull/823">GitHub PR 823</a>, <a href="https://github.com/weather-gov/weather.gov/pull/824">GitHub PR 824</a>
+- Spatial: <a href="https://github.com/weather-gov/weather.gov/pull/800">GitHub PR 800</a>, <a href="https://github.com/weather-gov/weather.gov/pull/803">GitHub PR 803</a></p>
+<h2 id="beta-v070-2024-02-15">beta-v0.7.0 (2024-02-15)</h2>
+<h1 id="v070"><strong>V0.7.0</strong></h1>
+<p>Major</p>
+<ul>
+<li>UX refinement: Conditionally render alerts tab and tab area <a href="https://github.com/weather-gov/weather.gov/pull/737">GitHub PR 737</a></li>
+<li>Spatial:</li>
+<li>Load Spatial Data <a href="https://github.com/weather-gov/weather.gov/pull/750">GitHub PR 750</a></li>
+<li>Use local spatial data for place name and alert filtering <a href="https://github.com/weather-gov/weather.gov/pull/751">GitHub PR 751</a></li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/767">GitHub PR 767</a> <a href="https://github.com/weather-gov/weather.gov/pull/770">GitHub PR 770</a></li>
+</ul>
+<p>Minor
+- <a href="https://github.com/weather-gov/weather.gov/pull/762">GitHub PR 762</a>, <a href="https://github.com/weather-gov/weather.gov/pull/783">GitHub PR 783</a>, <a href="https://github.com/weather-gov/weather.gov/pull/784">GitHub PR 784</a>, <a href="https://github.com/weather-gov/weather.gov/pull/788">GitHub PR 788</a>
+- Parsing: <a href="https://github.com/weather-gov/weather.gov/pull/748">GitHub PR 748</a>
+- Monitoring/Metrics: Add DAP/Google Analytics to pages <a href="https://github.com/weather-gov/weather.gov/pull/758">GitHub PR 758</a> <a href="https://github.com/weather-gov/weather.gov/pull/760">GitHub PR 760</a>
+- Testing: <a href="https://github.com/weather-gov/weather.gov/pull/761">GitHub PR 761</a>
+- Styling updates: <a href="https://github.com/weather-gov/weather.gov/pull/753">GitHub PR 753</a>
+- Translations: <a href="https://github.com/weather-gov/weather.gov/pull/759">GitHub PR 759</a>
+- Dependency updates: <a href="https://github.com/weather-gov/weather.gov/pull/745">GitHub PR 745</a>, <a href="https://github.com/weather-gov/weather.gov/pull/746">GitHub PR 746</a>, <a href="https://github.com/weather-gov/weather.gov/pull/747">GitHub PR 747</a>, <a href="https://github.com/weather-gov/weather.gov/pull/778">GitHub PR 778</a>
+- Bump Memory: <a href="https://github.com/weather-gov/weather.gov/pull/736">GitHub PR 736</a>, <a href="https://github.com/weather-gov/weather.gov/pull/755">GitHub PR 755</a></p>
+<h2 id="beta-v060-2024-02-02">beta-v0.6.0 (2024-02-02)</h2>
+<h3 id="major_29">Major</h3>
+<ul>
+<li>Safety Info Component <a href="https://github.com/weather-gov/weather.gov/pull/709">GitHub PR 709</a></li>
+<li>WFO promo component <a href="https://github.com/weather-gov/weather.gov/pull/687">GitHub PR 687</a> </li>
+<li>Updates Current Conditions styling and adds observation station <a href="https://github.com/weather-gov/weather.gov/pull/692">GitHub PR 692</a> </li>
+<li>New tabbed navigation on location page <a href="https://github.com/weather-gov/weather.gov/pull/728">GitHub PR 728</a> </li>
+<li>New UI/Layout for hourly forecast <a href="https://github.com/weather-gov/weather.gov/pull/697">GitHub PR 697</a> </li>
+<li>New UI/layout for daily forecast <a href="https://github.com/weather-gov/weather.gov/pull/704">GitHub PR 704</a> </li>
+<li>Better error handling <a href="https://github.com/weather-gov/weather.gov/pull/718">GitHub PR 718</a> </li>
+<li>Updates to our drupal implementation, giving us control over our how we display content on our location page <a href="https://github.com/weather-gov/weather.gov/pull/660">GitHub PR 660</a> and <a href="https://github.com/weather-gov/weather.gov/pull/717">GitHub PR 717</a></li>
+<li>Added New Relic for monitoring <a href="https://github.com/weather-gov/weather.gov/pull/702">GitHub PR 702</a> </li>
+</ul>
+<h3 id="minor_28">Minor</h3>
+<ul>
+<li>Design tweaks to weather story <a href="https://github.com/weather-gov/weather.gov/pull/710">GitHub PR 710</a> </li>
+<li>Add global template data <a href="https://github.com/weather-gov/weather.gov/pull/720">GitHub PR 720</a> </li>
+<li>ADR for how we store GIS data <a href="https://github.com/weather-gov/weather.gov/pull/735">GitHub PR 735</a> </li>
+<li>We ❤️ our contributors <a href="https://github.com/weather-gov/weather.gov/pull/671">GitHub PR 671</a> (please contribute)</li>
+<li>Link to create weather stories <a href="https://github.com/weather-gov/weather.gov/pull/694">GitHub PR 694</a> </li>
+<li>Tests <a href="https://github.com/weather-gov/weather.gov/pull/691">GitHub PR 691</a> <a href="https://github.com/weather-gov/weather.gov/pull/711">GitHub PR 711</a> </li>
+<li>Dependency and infrastrcutre updates <a href="https://github.com/weather-gov/weather.gov/pull/683">GitHub PR 683</a> <a href="https://github.com/weather-gov/weather.gov/pull/684">GitHub PR 684</a> <a href="https://github.com/weather-gov/weather.gov/pull/685">GitHub PR 685</a> <a href="https://github.com/weather-gov/weather.gov/pull/736">GitHub PR 736</a> </li>
+</ul>
+<h2 id="beta-v050-2024-01-19">beta-v0.5.0 (2024-01-19)</h2>
+<h4 id="major_30">Major</h4>
+<ul>
+<li>Displays hazard product details (what, where, when, etc.) <a href="https://github.com/weather-gov/weather.gov/pull/622">GitHub PR 622</a></li>
+<li>Displays hazard products for a location in a prioritized list of banners <a href="https://github.com/weather-gov/weather.gov/pull/623">GitHub PR 623</a></li>
+<li>Formats hazard products (banner and lists) in USWDS components <a href="https://github.com/weather-gov/weather.gov/pull/661">GitHub PR 661</a></li>
+<li>Text parsing of hazard product for better legibility <a href="https://github.com/weather-gov/weather.gov/pull/654">GitHub PR 654</a>, <a href="https://github.com/weather-gov/weather.gov/pull/589">GitHub PR 589</a></li>
+<li>Listing areas impacted by the hazard. <a href="https://github.com/weather-gov/weather.gov/pull/592">GitHub PR 592</a></li>
+<li>UX refinement: If a user selects a place from the location search, show that place name on the location page <a href="https://github.com/weather-gov/weather.gov/pull/575">GitHub PR 575</a></li>
+<li>Adds API proxy to Dev Environment in order to facilitate testing and deployment <a href="https://github.com/weather-gov/weather.gov/pull/626">GitHub PR 626</a></li>
+</ul>
+<h3 id="minor_29">Minor</h3>
+<ul>
+<li>Debt: Adds route parameter validation to the /points/{lat/{lon and /local/{wfo/{x/{y routes <a href="https://github.com/weather-gov/weather.gov/pull/559">GitHub PR 559</a></li>
+<li>Monitoring: Add Page load time testing for 5 locations. <a href="https://github.com/weather-gov/weather.gov/pull/653">GitHub PR 653</a></li>
+<li>Testing: <a href="https://github.com/weather-gov/weather.gov/pull/621">GitHub PR 621</a>, <a href="https://github.com/weather-gov/weather.gov/pull/652">GitHub PR 652</a>, <a href="https://github.com/weather-gov/weather.gov/pull/621">GitHub PR 621</a></li>
+<li>Styling updates: <a href="https://github.com/weather-gov/weather.gov/pull/600">GitHub PR 600</a>, <a href="https://github.com/weather-gov/weather.gov/pull/645">GitHub PR 645</a></li>
+<li>Dependency updates: <a href="https://github.com/weather-gov/weather.gov/pull/577">GitHub PR 577</a>, <a href="https://github.com/weather-gov/weather.gov/pull/608">GitHub PR 608</a>, <a href="https://github.com/weather-gov/weather.gov/pull/646">GitHub PR 646</a></li>
+</ul>
+<h2 id="beta-v041-2024-01-03">beta-v0.4.1 (2024-01-03)</h2>
+<h1 id="release-beta-v041">Release beta-v0.4.1</h1>
+<p>Includes
+- Bump cypress from 13.6.1 to 13.6.2 (<a href="https://github.com/weather-gov/weather.gov/pull/579">GitHub PR 579</a>)
+- This PR implements the testing pages configuration (<a href="https://github.com/weather-gov/weather.gov/pull/581">GitHub PR 581</a>, <a href="https://github.com/weather-gov/weather.gov/pull/475">GitHub PR 475</a>)
+- Add Medford WFO to available WFOs for demo/weather story (<a href="https://github.com/weather-gov/weather.gov/pull/581">GitHub PR 581</a>)</p>
+<p>Changes
+- Allows weather story to be created for Medford WFO
+- Allows configuration settings that support testing pages</p>
+<h2 id="beta-v040-2023-12-21">beta-v0.4.0 (2023-12-21)</h2>
+<h4 id="includes">Includes</h4>
+<ul>
+<li>Use browser's geolocation instead of manual search (<a href="https://github.com/weather-gov/weather.gov/pull/520">GitHub PR 520</a>)</li>
+<li>NOAA SSO authentication (<a href="https://github.com/weather-gov/weather.gov/pull/541">GitHub PR 541</a>, <a href="https://github.com/weather-gov/weather.gov/pull/555">GitHub PR 555</a>, <a href="https://github.com/weather-gov/weather.gov/pull/563">GitHub PR 563</a>)</li>
+<li>Simplify CMS experience for weather story testing (<a href="https://github.com/weather-gov/weather.gov/pull/542">GitHub PR 542</a>) </li>
+<li>Hazard details prototype</li>
+</ul>
+<h3 id="changes">Changes</h3>
+<ul>
+<li>Improved error handling (<a href="https://github.com/weather-gov/weather.gov/pull/534">GitHub PR 534</a>, <a href="https://github.com/weather-gov/weather.gov/pull/546">GitHub PR 546</a>)</li>
+<li>Accessibility issues/refinements (<a href="https://github.com/weather-gov/weather.gov/pull/535">GitHub PR 535</a>, <a href="https://github.com/weather-gov/weather.gov/pull/536">GitHub PR 536</a>, <a href="https://github.com/weather-gov/weather.gov/pull/537">GitHub PR 537</a>, <a href="https://github.com/weather-gov/weather.gov/pull/552">GitHub PR 552</a>, <a href="https://github.com/weather-gov/weather.gov/pull/557">GitHub PR 557</a>)</li>
+<li>Documentation on how we manage content between environments (<a href="https://github.com/weather-gov/weather.gov/pull/545">GitHub PR 545</a>) </li>
+<li>Centralize unit conversions (<a href="https://github.com/weather-gov/weather.gov/pull/544">GitHub PR 544</a>)</li>
+<li>Added margin to global footer (<a href="https://github.com/weather-gov/weather.gov/pull/528">GitHub PR 528</a>) </li>
+<li>Refactored code to PSR12 standard (<a href="https://github.com/weather-gov/weather.gov/pull/566">GitHub PR 566</a>) </li>
+<li>Updates / bug fixes (<a href="https://github.com/weather-gov/weather.gov/pull/524">GitHub PR 524</a>, <a href="https://github.com/weather-gov/weather.gov/pull/525">GitHub PR 525</a>, <a href="https://github.com/weather-gov/weather.gov/pull/526">GitHub PR 526</a>, <a href="https://github.com/weather-gov/weather.gov/pull/539">GitHub PR 539</a>, <a href="https://github.com/weather-gov/weather.gov/pull/553">GitHub PR 553</a>, <a href="https://github.com/weather-gov/weather.gov/pull/554">GitHub PR 554</a>, <a href="https://github.com/weather-gov/weather.gov/pull/560">GitHub PR 560</a>, <a href="https://github.com/weather-gov/weather.gov/pull/573">GitHub PR 573</a>) </li>
+</ul>
+<h2 id="beta-v030-2023-12-11">beta-v0.3.0 (2023-12-11)</h2>
+<h4 id="includes_1">Includes</h4>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/515">GitHub PR 515</a> - Add image to weather stories (with S3 capability)</li>
+</ul>
+<h3 id="changes_1">Changes</h3>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/473">GitHub PR 473</a> - fixed the beta banner and current conditions components on narrow screens</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/478">GitHub PR 478</a> - fixed a CI/CD bug that prevented our automated accessibility tests from running</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/479">GitHub PR 479</a>, <a href="https://github.com/weather-gov/weather.gov/pull/480">GitHub PR 480</a>, <a href="https://github.com/weather-gov/weather.gov/pull/481">GitHub PR 481</a>, and <a href="https://github.com/weather-gov/weather.gov/pull/482">GitHub PR 482</a> - refactor code to make it simpler and less duplicative</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/500">GitHub PR 500</a> - removed a CI/CD step that reported code coverage on our pull requests; we have a separate CI/CD step that enforces minimum coverage and the reporter was created low-value noise</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/501">GitHub PR 501</a> - fetch place names from the weather API rather than the browser URL</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/412">GitHub PR 412</a> - make the number of hours displayed in the hourly forecast configurable in the CMS</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/504">GitHub PR 504</a> - No longer import content upon deployment</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/511">GitHub PR 511</a> - Retry API calls</li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/519">GitHub PR 519</a> - Issue template updates</li>
+</ul>
+<h2 id="beta-v020-2023-11-29">beta-v0.2.0 (2023-11-29)</h2>
+<h4 id="includes-v1-components-for-epic-3-basic-weather">Includes V1 components for Epic 3 - Basic Weather</h4>
+<ul>
+<li>Location page wireframe <a href="https://github.com/weather-gov/weather.gov/pull/248">GitHub PR 248</a> </li>
+<li>Daily Forecast <a href="https://github.com/weather-gov/weather.gov/pull/178">GitHub PR 178</a> </li>
+<li>Hourly Forecast (up to 12 hours) <a href="https://github.com/weather-gov/weather.gov/pull/177">GitHub PR 177</a> </li>
+<li>Displayed on Nashville location page</li>
+<li>Displays and styles weather stories and time/date published <a href="https://github.com/weather-gov/weather.gov/pull/310">GitHub PR 310</a> <a href="https://github.com/weather-gov/weather.gov/pull/311">GitHub PR 311</a> </li>
+<li>wfo attribution component <a href="https://github.com/weather-gov/weather.gov/pull/181">GitHub PR 181</a> </li>
+<li>Available in Drupal admin interface</li>
+<li>CMS shortcut for creating weather stories</li>
+</ul>
+<h3 id="changes_2">Changes</h3>
+<ul>
+<li>location page is responsive <a href="https://github.com/weather-gov/weather.gov/pull/429">GitHub PR 429</a> </li>
+</ul>
+<h2 id="beta-v010-2023-11-22">beta-v0.1.0 (2023-11-22)</h2>
+<h1 id="this-is-the-first-tagged-release-of-beta-included-here">This is the first tagged release of beta. Included here:</h1>
+<ul>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/428">GitHub PR 428</a> </li>
+<li><a href="https://github.com/weather-gov/weather.gov/pull/422">GitHub PR 422</a>: Hooking up real data for hourly and making it part of search</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -15,6 +15,7 @@ nav:
       - 'Overview': dev/api-interop/index.md
       - 'Definitions': dev/api-interop/definitions/index.md
       - 'Golang Utilities': dev/api-interop/golang-utilities.md
+      - 'Benchmarks': dev/api-interop/benchmarks.md
       - 'Legacy Docs':
         - 'Multi Counties': dev/api-interop/multi-counties.md
     - 'Authentication': dev/authentication.md

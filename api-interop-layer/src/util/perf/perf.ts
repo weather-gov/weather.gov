@@ -30,7 +30,7 @@ import processDailyForecast from "../../data/forecast/daily.js";
 import { processDays, processLegend } from "../../data/risk-overview/processing.js";
 
 // Generators
-import { generateForecastData, generateRiskData, generateRiskLegend } from "./data-generators.js";
+import { generateForecastData, generateHourlyForecastData, generateGridpointData, generateRiskData, generateRiskLegend } from "./data-generators.js";
 import http from "node:http";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -116,7 +116,17 @@ let serverPort: number;
 async function startMockServer() {
 	server = http.createServer((req, res) => {
 		res.writeHead(200, { "Content-Type": "application/json" });
-		res.end(JSON.stringify({ status: "OK", data: "Mock Data" }));
+		let data: any = { status: "OK", data: "Mock Data" };
+
+		if (req.url?.includes("/forecast/hourly")) {
+			data = generateHourlyForecastData();
+		} else if (req.url?.endsWith("/forecast")) {
+			data = generateForecastData();
+		} else if (req.url?.includes("/gridpoints/")) {
+			data = generateGridpointData();
+		}
+
+		res.end(JSON.stringify(data));
 	});
 	return new Promise<void>((resolve) => {
 		server.listen(0, () => {
@@ -179,6 +189,20 @@ async function main() {
 		() => "/mock/endpoint",
 		async (url) => await fetchAPIJson(url),
 		100
+	));
+
+	// 7. Integration: Forecast Orchestrator
+	// Dynamically import getForecast to ensure it picks up the mocked API_URL
+	const { default: getForecast } = await import("../../data/forecast/index.js");
+
+	results.push(await runBenchmark("Integration_Forecast",
+		() => ({
+			grid: { wfo: "TOP", x: 10, y: 20 },
+			place: { timezone: "America/New_York" },
+			isMarine: false
+		}),
+		async (opts) => await getForecast(opts),
+		10
 	));
 
 

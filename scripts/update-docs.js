@@ -160,7 +160,7 @@ const child_process = require('child_process');
 function updatePerfDocs() {
 	const PERF_RESULTS_DIR = path.join(ROOT_DIR, 'api-interop-layer/perf-results');
 	const GO_UTIL_DIR = path.join(ROOT_DIR, 'api-interop-layer/src/util/util-golang');
-	const DOCS_INDEX_PATH = path.join(ROOT_DIR, 'docs/interop/index.md');
+	const DOCS_INDEX_PATH = path.join(ROOT_DIR, 'docs/dev/api-interop/benchmarks.md');
 
 	let tsResults = [];
 	let goResults = [];
@@ -242,8 +242,8 @@ function updatePerfDocs() {
 	try {
 		let content = fs.readFileSync(DOCS_INDEX_PATH, 'utf8');
 
-		// Match section: ### Performance Results ... (table) ... (end of section or file)
-		const sectionHeader = '### Performance Results';
+		// Match section: ## Detailed Results ... (table) ... (end of section or file)
+		const sectionHeader = '## Detailed Results';
 		const lines = content.split('\n');
 		let startIndex = -1;
 		let endIndex = -1;
@@ -260,7 +260,7 @@ function updatePerfDocs() {
 		}
 
 		if (startIndex === -1) {
-			console.warn('Could not find "### Performance Results" section in docs/interop/index.md');
+			console.warn('Could not find "## Detailed Results" section in docs/dev/api-interop/benchmarks.md');
 			return;
 		}
 

@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "timestamp": "2026-02-07T17:52:22.653Z",
+    "type": "golang"
+  },
+  "results": [
+    {
+      "name": "ConvertProperties",
+      "mean_ns": 1388,
+      "ops_per_sec": 720461.0951008645
+    },
+    {
+      "name": "SentenceCase",
+      "mean_ns": 294,
+      "ops_per_sec": 3401360.544217687
+    },
+    {
+      "name": "TitleCase",
+      "mean_ns": 654.2,
+      "ops_per_sec": 1528584.530724549
+    },
+    {
+      "name": "ParagraphSquash",
+      "mean_ns": 117,
+      "ops_per_sec": 8547008.547008548
+    },
+    {
+      "name": "FetchAPIJson",
+      "mean_ns": 81748,
+      "ops_per_sec": 12232.715173459901
+    },
+    {
+      "name": "ConvertTimezone",
+      "mean_ns": 11.05,
+      "ops_per_sec": 90497737.55656108
+    },
+    {
+      "name": "PostProcessAlerts",
+      "mean_ns": 649629,
+      "ops_per_sec": 1539.3401464528215
+    },
+    {
+      "name": "AFDParser",
+      "mean_ns": 15406,
+      "ops_per_sec": 64909.77541217707
+    },
+    {
+      "name": "Integration_Forecast",
+      "mean_ns": 250891,
+      "ops_per_sec": 3985.7946279460007
+    },
+    {
+      "name": "Integration_Alerts",
+      "mean_ns": 74845,
+      "ops_per_sec": 13360.945954973613
+    },
+    {
+      "name": "ForecastProcessing",
+      "mean_ns": 50353,
+      "ops_per_sec": 19859.789883423033
+    },
+    {
+      "name": "RiskProcessing",
+      "mean_ns": 21220,
+      "ops_per_sec": 47125.3534401508
+    }
+  ]
+}

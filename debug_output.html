@@ -1,0 +1,1256 @@
+<!-- page.html  -->
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+        <title>beta.weather.gov | National Weather Service</title>
+        <meta name="title" content="beta.weather.gov | National Weather Service" />
+        <meta name="description" content="" />
+        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin" />
+    <link rel="icon"
+          type="image/png"
+          href="/public/images/weather/favicons/nws-favicon.ico" />
+    
+  <link rel="stylesheet" type="text/css" href="/public/css/styles.css" />
+  
+  <link rel="stylesheet" type="text/css" href="/public/css/styles.css" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="/public/css/leaflet.css" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="/public/css/radar/cmi-radar.54fb0324.css" />
+
+
+    <link rel="manifest" href="/public/manifest.json" />
+    <script id="third-party-site-list" type="application/json">["static.arcgis.com", "basemapstyles-api.arcgis.com", "www.weather.gov", "basemaps-api.arcgis.com", "api.weather.gov", "cdn.star.nesdis.noaa.gov", "geocode.arcgis.com", "opengeo.ncep.noaa.gov", "cdn.arcgis.com"]</script>
+    <script src="/languages/jsi18n/"></script>
+    <script src="/public/js/uswds-init.min.js"></script>
+    <script async type="text/javascript" id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NOAA&subagency=NWS&sitetopic=weather,safety">
+    </script>
+    
+  <script type="module" src="/public/js/page.html.js" type="module"></script>
+  
+  <script src="/public/js/third-party/chartjs@4.5.1.js"></script>
+  <script src="/public/js/third-party/chartjs-plugin-datalabels@2.2.0.js"></script>
+
+
+  </head>
+  <body>
+    <div id="sr-only" class="usa-sr-only" aria-live="polite"></div>
+    <a href="#main-content" class="usa-sr-only focusable skip-link">Skip to main content</a>    
+    
+  
+<div id="wx-offline-banner__container" aria-live="polite"></div>
+<template id="wx-offline-banner__template">
+  <section id="wx-offline-banner__content"
+           class="usa-banner bg-accent-cool-lighter beta-banner">
+    <div>
+      <header class="usa-alert usa-alert--error margin-bottom-2 padding-1">
+        <div class="usa-banner__inner flex-row flex-align-start padding-y-1">
+          <div class="grid-col flex-auto margin-right-1">
+            <svg class="usa-icon height-3 width-3"
+                 aria-hidden="true"
+                 focusable="false"
+                 role="img">
+              <use xlink:href="/public/images/uswds/sprite.svg#error"></use>
+            </svg>
+          </div>
+          <div class="grid-col">
+            <div class="font-sans-xs line-height-sans-4">
+              <div id="block-new-weather-theme-betabanner"
+                   class="contextual-region block block-block-content">
+                <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">
+                  <p>Your internet connection is unstable. Please try again in a few moments.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    </div>
+  </section>
+</template>
+
+  
+<section class="usa-banner"
+         aria-label="Official website of the United States government">
+  <div class="usa-accordion">
+    <header class="usa-banner__header">
+      <div class="usa-banner__inner">
+        <div class="grid-col-auto">
+          <img aria-hidden="true"
+               class="usa-banner__header-flag"
+               src="/public/images/uswds/us_flag_small.png"
+               alt="" />
+        </div>
+        <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+          <p class="usa-banner__header-text">An official website of the United States government</p>
+          <p class="usa-banner__header-action">Here’s how you know</p>
+        </div>
+        <button type="button"
+                class="usa-accordion__button usa-banner__button"
+                aria-expanded="false"
+                aria-controls="gov-banner-default-default">
+          <span class="usa-banner__button-text">Here’s how you know</span>
+        </button>
+      </div>
+    </header>
+    <div class="usa-banner__content usa-accordion__content"
+         id="gov-banner-default-default">
+      <div class="grid-row grid-gap-lg">
+        <div class="usa-banner__guidance tablet:grid-col-6">
+          <img class="usa-banner__icon usa-media-block__img"
+               src="/public/images/uswds/icon-dot-gov.svg"
+               role="img"
+               alt=""
+               aria-hidden="true" />
+          <div class="usa-media-block__body">
+            <p>
+              <strong>Official websites use .gov</strong>
+              <br />
+              A <strong>.gov</strong> website belongs to an official government organization in the United States.
+            </p>
+          </div>
+        </div>
+        <div class="usa-banner__guidance tablet:grid-col-6">
+          <img class="usa-banner__icon usa-media-block__img"
+               src="/public/images/uswds/icon-https.svg"
+               role="img"
+               alt=""
+               aria-hidden="true" />
+          <div class="usa-media-block__body">
+            <p>
+              <strong>Secure .gov websites use HTTPS</strong>
+              <br />
+              A <strong>lock</strong>
+              (
+              <span class="icon-lock">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="52"
+                     height="64"
+                     viewbox="0 0 52 64"
+                     class="usa-banner__lock-image"
+                     role="img"
+                     aria-labelledby="banner-lock-description-default"
+                     focusable="false">
+                  <title id="banner-lock-title-default">Lock</title>
+                  <desc id="banner-lock-description-default">
+                  Locked padlock icon
+                  </desc>
+                  <path fill="#000000" fill-rule="evenodd" d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                </svg>
+              </span>)
+              or <strong>https://</strong> means you've safely connected to the .gov website. Share sensitive information only on official, secure websites.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    
+  
+<section class="usa-banner bg-accent-cool-lighter beta-banner"
+         aria-label="This is a beta website.">
+  <div>
+    <header class="bg-gold-10v border-left-1 border-gold-20v">
+      <div class="usa-banner__inner flex-row flex-align-start padding-y-1">
+        <div class="grid-col flex-auto margin-right-1">
+          <svg class="usa-icon height-3 width-3"
+               aria-hidden="true"
+               focusable="false"
+               role="img">
+            <use xlink:href="/public/images/uswds/sprite.svg#info"></use>
+          </svg>
+        </div>
+        <div class="grid-col">
+          <div class="font-sans-xs line-height-sans-4">
+            <div id="block-new-weather-theme-betabanner"
+                 class="contextual-region block block-block-content block-block-content7faecf5a-0b52-4a91-8c34-83defcf42eba">
+              <!-- TODO: Figure out translation pattern for beta banner -->
+              <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">
+                <p>
+                  <strong>This site is under development.</strong>
+                  See <a href="https://beta.weather.gov/roadmap">our roadmap</a> for updates. <a href="https://weather.gov/">https://weather.gov/</a>&nbsp;remains the authoritative source of weather information.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+</section>
+
+  <div class="layout-container grid-row height-full flex-column flex-no-wrap">
+    <header role="banner">
+      
+<div id="block-new-weather-theme-sitebranding"
+     class="contextual-region block block-system block-system-branding-block">
+  <div class="grid-container display-flex flex-align-center">
+    <a href="/"
+       class="display-flex flex-align-center text-no-underline margin-y-2"
+       rel="home">
+      
+        <img class="site-logo height-7" src="/public/logo.svg" alt="" />
+      
+      <div class="site-info padding-x-2 display-flex flex-column flex-align-start">
+        
+          <span class="site-name display-block font-heading-lg desktop:font-heading-xl text-secondary-darkest text-bold">
+            beta.weather.gov
+          </span>
+        
+        
+          <span class="site-slogan display-block font-sans-2xs desktop:font-sans-xs text-base-dark padding-left-05">
+            National Weather Service
+          </span>
+        
+      </div>
+    </a>
+    
+    <span class="under-development-tablet display-flex flex-align-center bg-gold-10v text-black text-uppercase padding-y-05 padding-left-1 padding-right-105 font-sans-xs radius-md margin-left-1 margin-top-0">
+      <svg class="usa-icon height-205 width-205 margin-right-05 text-top margin-bottom-2px"
+           aria-hidden="true"
+           focusable="false"
+           role="img">
+        <use xlink:href="/public/images/uswds/sprite.svg#construction_worker"></use>
+      </svg>
+      Under development
+    </span>
+    
+    
+      <div class="usa-navbar">
+        <button type="button" class="usa-menu-btn padding-0" id="site-header-hamburger-button">
+          <img src="/public/images/weather/wx_nav_hamburger.svg" role="img" alt="Menu" />
+        </button>
+      </div>
+    
+  </div>
+    
+    <span class="under-development-mobile display-flex flex-align-center bg-gold-10v text-black text-uppercase padding-y-05 padding-left-1 padding-right-105 font-sans-xs radius-md margin-1 margin-top-0 margin-bottom-3 maxw-mobile-lg">
+      <svg class="usa-icon height-205 width-205 margin-right-05 text-top margin-bottom-2px"
+           aria-hidden="true"
+           focusable="false"
+           role="img">
+        <use xlink:href="/public/images/uswds/sprite.svg#construction_worker"></use>
+      </svg>
+      Under development
+    </span>
+    
+      <div class="usa-overlay"></div>
+<header class="usa-header usa-header--basic bg-primary-lightest border-top-1px border-primary-dark">
+  <div class="usa-nav-container">
+    <nav aria-label="Primary navigation" class="usa-nav" id="site-navigation">
+      <button type="button" class="usa-nav__close">
+        <img src="/public/images/uswds/usa-icons/close.svg" role="img" alt="Close" />
+      </button>
+      <ul class="usa-nav__primary usa-accordion margin-top-0 border-bottom-1px tablet-lg:border-bottom-0">
+        <li class="usa-nav__primary-item">
+          <button
+            type="button"
+            class="usa-accordion__button usa-nav__link usa-current"
+            aria-expanded="false"
+            aria-controls="nav-section-forecast">
+            <span class="font-sans-xs">Forecast</span>
+          </button>
+          <ul id="nav-section-forecast" class="usa-nav__submenu font-body-xs">
+            <li class="usa-nav__submenu-item">
+              <a href="/">
+                <span class="font-sans-xs">
+                  Find your Forecast
+                </span>
+              </a>
+            </li>
+            
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">County</span></a>
+            </li>
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">State</span></a>
+            </li>
+            
+          </ul>
+        </li>
+        
+        <li class="usa-nav__primary-item">
+          <a href="javascript:void(0);" class="usa-nav__link">
+            <span class="font-sans-xs text-normal">Observations</span>
+          </a>
+        </li>
+        
+        
+        <li class="usa-nav__primary-item">
+          <button
+            type="button"
+            class="usa-accordion__button usa-nav__link"
+            aria-expanded="false"
+            aria-controls="nav-section-preparedness">
+            <span class="font-sans-xs">Preparedness</span>
+          </button>
+          <ul id="nav-section-preparedness" class="usa-nav__submenu font-body-xs">
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">Weather Hazards Guides</span></a>
+            </li>
+          </ul>
+        </li>
+        
+        
+        <li class="usa-nav__primary-item">
+          <button
+            type="button"
+            class="usa-accordion__button usa-nav__link"
+            aria-expanded="false"
+            aria-controls="nav-section-resources">
+            <span class="font-sans-xs">Resources</span>
+          </button>
+          <ul id="nav-section-resources" class="usa-nav__submenu font-body-xs">
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">State weather overview</span></a>
+            </li>
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">Storm Recaps</span></a>
+            </li>
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">Historical weather</span></a>
+            </li>
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">Glossary</span></a>
+            </li>
+          </ul>
+        </li>
+        
+        <li class="usa-nav__primary-item">
+          <button
+            type="button"
+            class="usa-accordion__button usa-nav__link "
+            aria-expanded="false"
+            aria-controls="nav-section-about">
+            <span class="font-sans-xs">About</span>
+          </button>
+          <ul id="nav-section-about" class="usa-nav__submenu font-body-xs">
+            <li class="usa-nav__submenu-item">
+              <a href="/about/"><span class="font-sans-xs">Mission</span></a>
+            </li>
+            
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">Offices</span></a>
+            </li>
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">Centers</span></a>
+            </li>
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">News</span></a>
+            </li>
+            <li class="usa-nav__submenu-item">
+              <a href="javascript:void(0);"><span class="font-sans-xs">History</span></a>
+            </li>
+            
+          </ul>
+        </li>
+      </ul>
+      
+<div id="site-search-submenu" class="margin-top-205 tablet-lg:margin-top-0">
+  <button class="usa-button site-nav-submenu-toggle border-radius-0 margin-bottom-05 margin-top-05" aria-expanded="false">
+    <span>
+      Search
+    </span>
+    <span>
+      <img src="/public/images/uswds/usa-icons/close.svg" role="img" alt="Close" />
+    </span>
+  </button>
+  <span class="site-nav-submenu-label font-body-xs text-ls-1 padding-top">
+    Search
+  </span>
+  <wx-tabbed-nav class="site-nav-submenu-tabbed-nav">
+    <div id="site-search-tablist-label" class="usa-sr-only sr-only">Site search sections</div>
+    <div role="tablist" class="tab-buttons display-flex flex-row top-4">
+      <button role="tab"
+              id="site-navigation-location-search-button"
+              class="tab-button"
+              data-tab-name="forecast-search-tab"
+              aria-controls="forecast-search-tab">Forecast</button>
+      
+        <button role="tab"
+                id="site-navigation-site-search-button"
+                class="tab-button"
+                data-tab-name="site-search-tab"
+                aria-controls="site-search-tab">Site</button>
+      
+    </div>
+    <div id="site-nav-search-options-tab-contents">
+      <div id="forecast-search-tab"
+           class="wx-tab-container wx-focus-offset-205"
+           aria-labelledby="site-navigation-location-search-button"
+           role="tabpanel"
+           tabindex="0">
+        
+        <div class="wx-location-search">
+          <form class="usa-form maxw-tablet-lg"
+                data-location-search
+                method="get">
+            <div class="display-block tablet-lg:display-flex flex-align-center margin-bottom-1">
+              <label class="usa-label font-sans-xs text-base-darker" for="site-menu-location-search-combobox">
+                Enter city or zip code
+              </label>
+              <div class="margin-x-1 display-none tablet-lg:display-block text-base-light">|</div>
+
+              <button
+                type="button"
+                class="weathergov-use-browser-location usa-button usa-button--unstyled font-sans-xs text-link">
+                <div class="display-flex flex-align-center">
+                  <img src="/public/images/uswds/usa-icons/my_location.svg" class="usa-icon height-2 width-2 margin-right-05 text-top" aria-hidden="true" focusable="false" role="img"/>
+                  <span class="display-block">
+                    Use my location
+                  </span>
+                </div>
+              </button>
+            </div>
+            <wx-combo-box-location
+              class="border-base-dark height-4"
+              id="site-menu-location-search-combobox">
+              <input type="text" slot="input" role="combobox" aria-label="Location search input field" aria-owns="site-menu-location-search-combobox--list" aria-controls="site-menu-location-search-combobox--list" aria-expanded="false" aria-autocomplete="none" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" aria-activedescendant="" placeholder="" id="site-menu-location-search-combobox--search-input" class="wx-combo-box__input">
+            </wx-combo-box-location>
+          </form>
+        </div>
+      </div>
+      
+        <div id="site-search-tab"
+             class="wx-tab-container wx-focus-offset-205 line-height-sans-3"
+             aria-labelledby="site-navigation-site-search-button"
+             role="tabpanel"
+             tabindex="0">
+          <label class="font-sans-xs text-base-darker" for="site-nav-site-search-input">
+            Enter a search term
+          </label>
+          <div class="display-block position-relative width-full height-4 margin-top-1">
+            <input id="site-nav-site-search-input" class="usa-input display-block height-full line-height-sans-3" name="query" type="search" autocomplete="off">
+            <button class="usa-button usa-input-suffix position-absolute top-0 right-neg-2px height-full width-6 margin-right-0 radius-0 radius-right-md" type="submit">
+              <img src="/public/images/uswds/usa-icons-bg/search--white.svg" alt="Search">
+            </button>
+          </div>
+      
+        </div>
+  </wx-tabbed-nav>
+    </div> 
+
+    </nav>
+  </div>
+</header>
+
+    
+</div>
+
+    </header>
+    <main role="main" class="flex-1">
+      <a id="main-content" tabindex="-1"></a>
+      
+  <div class="layout-container grid-row height-full flex-column flex-no-wrap">
+    <div class="wx-location-search">
+  
+  
+</div>
+
+    
+    <wx-tabbed-nav class="display-block position-relative" id="point-page-tabbed-nav">
+    <div id="tablist-label" class="usa-sr-only">Weather information sections</div>
+    <div class="position-sticky top-0 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
+      <div class="grid-container padding-x-0">
+        <div role="tablist"
+             id="point-page-tablist"
+             class="tab-buttons display-flex flex-row top-4 grid-col-12"
+             aria-labelledby="tablist-label">
+          
+          <button role="tab"
+                  id="current-conditions-tab-button"
+                  class="tab-button"
+                  data-tab-name="today"
+                  aria-controls="today">Today</button>
+          
+        </div>
+      </div>
+    </div>
+    <div class="bg-base-lightest padding-top-3 padding-bottom-8">
+      
+      <div class="wx-tab-container wx-focus-offset-205"
+           id="today"
+           role="tabpanel"
+           aria-labelledby="current-conditions-tab-button"
+           tabindex="0">
+        <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
+          <div class="grid-row desktop__wx-grid-gap-lg">
+            
+            
+              
+                <div class="grid-container padding-x-0 padding-y-2 grid-col-12">
+                  <div class="usa-alert usa-alert--error">
+  <div class="usa-alert__body">
+    
+    <div class="usa-alert__text">There was an error loading the forecast.</div>
+  </div>
+</div>
+
+                </div>
+              
+            
+          </div>
+        </div>
+        <!-- Weather Story Image here -->
+        
+          <div class="grid-container margin-top-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
+            <div class="bg-accent-cool-lightest border-1px border-base-light padding-x-2 padding-y-105">
+              
+              
+            </div>
+          </div>
+        
+        <div class="grid-container tablet:padding-x-2 desktop:padding-x-4 padding-x-0">
+          <div class="grid-row desktop__wx-grid-gap-lg">
+            
+            <div class="desktop:grid-col-6 wx-satellite-wrapper">
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      </wx-tabbed-nav>
+    </div>
+  </div>
+
+    </main>
+    
+
+<footer role="contentinfo" class="margin-top-0">
+  <div class="usa-identifier padding-bottom-6">
+    <nav class="usa-identifier__section usa-identifier__section--required-links"
+         aria-label="Important links,">
+      <div class="grid-container">
+        <div class="grid-row">
+          <div class="desktop:grid-col-4 padding-top-1">
+            <a href="/" rel="home" class="site-logo display-block">
+              <img class="height-9"
+                   src="/public/logo-noaa.svg"
+                   alt="National Oceanic and Atmospheric Administration logo" />
+            </a>
+            <span class="text-italic display-block">Science. Service. Stewardship</span>
+          </div>
+          <div class="desktop:grid-col-8">
+            <div class="region region-primary-footer">
+              <nav role="navigation"
+                   aria-labelledby="block-new-weather-theme-footerprimarylinks-menu"
+                   id="block-new-weather-theme-footerprimarylinks"
+                   class="contextual-region block block-menu navigation menu--footer">
+                <nav class="usa-identifier__section usa-identifier__section--required-links">
+                  <div class="usa-identifier__container padding-0">
+                    <ul class="usa-identifier__required-links-list">
+                      <li class="usa-identifier__required-links-item">
+                        <a href="/about/"
+                           class="usa-identifier__required-link usa-link">About Us</a>
+                      </li>
+                      <li class="usa-identifier__required-links-item">
+                        <a href="https://www.noaa.gov/NOAA-Communications"
+                           class="usa-identifier__required-link usa-link">Media inquiries</a>
+                      </li>
+                      <li class="usa-identifier__required-links-item">
+                        <a href="/site-index/"
+                           class="usa-identifier__required-link usa-link">Site Index</a>
+                      </li>
+                      <li class="usa-identifier__required-links-item">
+                        <a href="/disclaimer/"
+                           class="usa-identifier__required-link usa-link">Disclaimer</a>
+                      </li>
+                      <li class="usa-identifier__required-links-item">
+                        <a href="https://www.noaa.gov/information-technology/foia"
+                           class="usa-identifier__required-link usa-link">Freedom of Information Act</a>
+                      </li>
+                      <li class="usa-identifier__required-links-item">
+                        <a href="/accessibility/"
+                           class="usa-identifier__required-link usa-link">Accessibility</a>
+                      </li>
+                      <li class="usa-identifier__required-links-item">
+                        <a href="https://www.noaa.gov/organization/information-technology/policy-oversight/information-quality"
+                           class="usa-identifier__required-link usa-link">Information Quality</a>
+                      </li>
+                      <li class="usa-identifier__required-links-item">
+                        <a href="/privacy/"
+                           class="usa-identifier__required-link usa-link">Privacy policy</a>
+                      </li>
+                      <li class="usa-identifier__required-links-item">
+                        <a href="https://usa.gov" class="usa-identifier__required-link usa-link">USA.gov</a>
+                      </li>
+                    </ul>
+                  </div>
+                </nav>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!--
+             TODO: Make these links configurable.
+             These were taken verbatim from a rendering
+             of the Drupal beta site. In drupal, the links are
+             configured as menu items
+        -->
+    <div class="region region-footer">
+      <nav role="navigation"
+           aria-labelledby="block-new-weather-theme-agencyidentificationlinks-menu"
+           id="block-new-weather-theme-agencyidentificationlinks"
+           class="contextual-region block block-menu navigation menu--agency-identification-links">
+        <section class="usa-identifier__section usa-identifier__section--usagov"
+                 aria-label="U.S. government information and services,">
+          <div class="usa-identifier__container">
+            <ul class="usa-list--unstyled desktop:display-flex flex-row flex-justify">
+              <li>
+                <a class="usa-link text-bold" href="https://www.commerce.gov/">Department of Commerce</a>
+              </li>
+              <li>
+                <a class="usa-link text-bold" href="https://www.noaa.gov/">National Oceanic and Atmospheric Administration (NOAA)</a>
+              </li>
+              <li>
+                <a class="usa-link text-bold" href="/">National Weather Service</a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </nav>
+    </div>
+  </div>
+  <a href="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit"
+     class="touchpoints-button usa-button position-fixed bottom-0 z-top">Help improve this site</a>
+</footer>
+
+  </div>
+
+    
+    <script src="/public/js/uswds.min.js"></script>
+    
+  
+  <script type="module" src="/public/js/point.html.js" type="module"></script>
+  
+  <script src="/public/js/cmi-radar.54fb0324.js"
+          nonce="fZo4pMGDYy5OOgrAU9x6Tw=="
+          data-wx-radar-cmi="true"
+          defer></script>
+
+
+  
+
+<link nonce="fZo4pMGDYy5OOgrAU9x6Tw==" rel="stylesheet" href="/public/debug_toolbar/css/print.css" media="print">
+<link nonce="fZo4pMGDYy5OOgrAU9x6Tw==" rel="stylesheet" href="/public/debug_toolbar/css/toolbar.css">
+
+
+<script nonce="fZo4pMGDYy5OOgrAU9x6Tw==" type="module" src="/public/debug_toolbar/js/toolbar.js" async></script>
+
+<div id="djDebug" class="djdt-hidden" dir="ltr"
+     
+     data-request-id="94e83e78643c4c2581e4c2da371d57c4"
+     data-render-panel-url="/__debug__/render_panel/"
+     
+     
+     
+     data-sidebar-url="/__debug__/history_sidebar/"
+     
+     data-default-show="true"
+       data-update-on-fetch="False">
+  <div class="djdt-hidden" id="djDebugToolbar">
+    <ul id="djDebugPanelList">
+      <li><a id="djHideToolBarButton" href="#" title="Hide toolbar">Hide »</a></li>
+      <li>
+        <a id="djToggleThemeButton" href="#" title="Toggle Theme">
+          Toggle Theme <svg
+  aria-hidden="true"
+  class="djdt-hidden theme-auto"
+  fill="currentColor"
+  viewBox="0 0 32 32"
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M0 16q0 3.264 1.28 6.24t3.392 5.088 5.12 3.424 6.208 1.248q3.264 0 6.24-1.248t5.088-3.424 3.392-5.088 1.28-6.24-1.28-6.208-3.392-5.12-5.088-3.392-6.24-1.28q-3.264 0-6.208 1.28t-5.12 3.392-3.392 5.12-1.28 6.208zM4 16q0-3.264 1.6-6.016t4.384-4.352 6.016-1.632 6.016 1.632 4.384 4.352 1.6 6.016-1.6 6.048-4.384 4.352-6.016 1.6-6.016-1.6-4.384-4.352-1.6-6.048zM16 26.016q2.72 0 5.024-1.344t3.648-3.648 1.344-5.024-1.344-4.992-3.648-3.648-5.024-1.344v20z"
+  ></path>
+</svg>
+<svg
+  aria-hidden="true"
+  class="djdt-hidden theme-light"
+  viewBox="0 0 24 24"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M12 1.25C12.4142 1.25 12.75 1.58579 12.75 2V4C12.75 4.41421 12.4142 4.75 12 4.75C11.5858 4.75 11.25 4.41421 11.25 4V2C11.25 1.58579 11.5858 1.25 12 1.25ZM3.66865 3.71609C3.94815 3.41039 4.42255 3.38915 4.72825 3.66865L6.95026 5.70024C7.25596 5.97974 7.2772 6.45413 6.9977 6.75983C6.7182 7.06553 6.2438 7.08677 5.9381 6.80727L3.71609 4.77569C3.41039 4.49619 3.38915 4.02179 3.66865 3.71609ZM20.3314 3.71609C20.6109 4.02179 20.5896 4.49619 20.2839 4.77569L18.0619 6.80727C17.7562 7.08677 17.2818 7.06553 17.0023 6.75983C16.7228 6.45413 16.744 5.97974 17.0497 5.70024L19.2718 3.66865C19.5775 3.38915 20.0518 3.41039 20.3314 3.71609ZM12 7.75C9.65279 7.75 7.75 9.65279 7.75 12C7.75 14.3472 9.65279 16.25 12 16.25C14.3472 16.25 16.25 14.3472 16.25 12C16.25 9.65279 14.3472 7.75 12 7.75ZM6.25 12C6.25 8.82436 8.82436 6.25 12 6.25C15.1756 6.25 17.75 8.82436 17.75 12C17.75 15.1756 15.1756 17.75 12 17.75C8.82436 17.75 6.25 15.1756 6.25 12ZM1.25 12C1.25 11.5858 1.58579 11.25 2 11.25H4C4.41421 11.25 4.75 11.5858 4.75 12C4.75 12.4142 4.41421 12.75 4 12.75H2C1.58579 12.75 1.25 12.4142 1.25 12ZM19.25 12C19.25 11.5858 19.5858 11.25 20 11.25H22C22.4142 11.25 22.75 11.5858 22.75 12C22.75 12.4142 22.4142 12.75 22 12.75H20C19.5858 12.75 19.25 12.4142 19.25 12ZM17.0255 17.0252C17.3184 16.7323 17.7933 16.7323 18.0862 17.0252L20.3082 19.2475C20.6011 19.5404 20.601 20.0153 20.3081 20.3082C20.0152 20.6011 19.5403 20.601 19.2475 20.3081L17.0255 18.0858C16.7326 17.7929 16.7326 17.3181 17.0255 17.0252ZM6.97467 17.0253C7.26756 17.3182 7.26756 17.7931 6.97467 18.086L4.75244 20.3082C4.45955 20.6011 3.98468 20.6011 3.69178 20.3082C3.39889 20.0153 3.39889 19.5404 3.69178 19.2476L5.91401 17.0253C6.2069 16.7324 6.68177 16.7324 6.97467 17.0253ZM12 19.25C12.4142 19.25 12.75 19.5858 12.75 20V22C12.75 22.4142 12.4142 22.75 12 22.75C11.5858 22.75 11.25 22.4142 11.25 22V20C11.25 19.5858 11.5858 19.25 12 19.25Z"
+    fill="currentColor"
+  />
+</svg>
+<svg
+  aria-hidden="true"
+  class="djdt-hidden theme-dark"
+  viewBox="0 0 24 24"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M3.32031 11.6835C3.32031 16.6541 7.34975 20.6835 12.3203 20.6835C16.1075 20.6835 19.3483 18.3443 20.6768 15.032C19.6402 15.4486 18.5059 15.6834 17.3203 15.6834C12.3497 15.6834 8.32031 11.654 8.32031 6.68342C8.32031 5.50338 8.55165 4.36259 8.96453 3.32996C5.65605 4.66028 3.32031 7.89912 3.32031 11.6835Z"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
+
+        </a>
+      </li>
+      
+        
+
+<li id="djdt-HistoryPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtHistoryPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="History" class="HistoryPanel">
+  
+  History
+  
+    
+      <br><small>/point/32.755/-111.671/</small>
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-VersionsPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtVersionsPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Versions" class="VersionsPanel">
+  
+  Versions
+  
+    
+      <br><small>Django 5.2.10</small>
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-TimerPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtTimerPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Time" class="TimerPanel">
+  
+  Time
+  
+    
+      <br><small>CPU: 321.11ms (502.46ms)</small>
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-SettingsPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtSettingsPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Settings from backend.config.settings.dev" class="SettingsPanel">
+  
+  Settings
+  
+    
+      
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-HeadersPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtHeadersPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Headers" class="HeadersPanel">
+  
+  Headers
+  
+    
+      
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-RequestPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtRequestPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Request" class="RequestPanel">
+  
+  Request
+  
+    
+      <br><small>point_location</small>
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-SQLPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtSQLPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="SQL queries from 1 connection" class="SQLPanel">
+  
+  SQL
+  
+    
+      <br><small>7 queries in 91.91ms</small>
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-StaticFilesPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtStaticFilesPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Static files (0 found, 22 used)" class="StaticFilesPanel">
+  
+  Static files
+  
+    
+      <br><small>22 files used</small>
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-TemplatesPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtTemplatesPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Templates (13 rendered)" class="TemplatesPanel">
+  
+  Templates
+  
+    
+      <br><small>weather/point.html</small>
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-AlertsPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtAlertsPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Alerts" class="AlertsPanel">
+  
+  Alerts
+  
+    
+      
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-CachePanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtCachePanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Cache calls from 1 backend" class="CachePanel">
+  
+  Cache
+  
+    
+      <br><small>0 calls in 0.00ms</small>
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-SignalsPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtSignalsPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Signals" class="SignalsPanel">
+  
+  Signals
+  
+    
+      <br><small>106 receivers of 15 signals</small>
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-CommunityPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtCommunityPanel" checked title="Disable for next and successive requests">
+  
+    <a href="#" title="Community" class="CommunityPanel">
+  
+  Community
+  
+    
+      
+    
+  
+  
+    </a>
+  
+</li>
+
+      
+        
+
+<li id="djdt-RedirectsPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtRedirectsPanel" title="Enable for next and successive requests">
+  
+    <div class="djdt-contentless djdt-disabled">
+  
+  Intercept redirects
+  
+  
+    </div>
+  
+</li>
+
+      
+        
+
+<li id="djdt-ProfilingPanel" class="djDebugPanelButton">
+  <input type="checkbox" data-cookie="djdtProfilingPanel" title="Enable for next and successive requests">
+  
+    <div class="djdt-contentless djdt-disabled">
+  
+  Profiling
+  
+  
+    </div>
+  
+</li>
+
+      
+    </ul>
+  </div>
+  <div class="djdt-hidden" id="djDebugToolbarHandle">
+    <div title="Show toolbar" id="djShowToolBarButton">
+      <span id="djShowToolBarD">D</span><span id="djShowToolBarJ">J</span>DT
+    </div>
+  </div>
+
+  
+    
+
+
+  <div id="HistoryPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>History</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="VersionsPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Versions</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="TimerPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Time</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="SettingsPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Settings from backend.config.settings.dev</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="HeadersPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Headers</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="RequestPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Request</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="SQLPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>SQL queries from 1 connection</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="StaticFilesPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Static files (0 found, 22 used)</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="TemplatesPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Templates (13 rendered)</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="AlertsPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Alerts</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="CachePanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Cache calls from 1 backend</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="SignalsPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Signals</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+  <div id="CommunityPanel" class="djdt-panelContent djdt-hidden">
+    <div class="djDebugPanelTitle">
+      <h3>Community</h3>
+      <button type="button" class="djDebugClose">×</button>
+    </div>
+    <div class="djDebugPanelContent">
+      
+        <div class="djdt-loader"></div>
+        <div class="djdt-scroll"></div>
+      
+    </div>
+  </div>
+
+
+  
+    
+
+
+
+  
+    
+
+
+
+  
+  <div id="djDebugWindow" class="djdt-panelContent djdt-hidden"></div>
+</div>
+</body>
+</html>
+
