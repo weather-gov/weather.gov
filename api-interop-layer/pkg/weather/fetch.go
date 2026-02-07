@@ -88,9 +88,13 @@ func internalFetch(path string) (interface{}, error) {
 	}
 	// wx-host logic from JS
 	originalU, _ := url.Parse(targetURL)
-	if originalU.Host != "" {
+	// Avoid setting wx-host to the proxy itself, as that causes a recursive loop
+	if originalU.Host != "" && !strings.Contains(originalU.Host, "api-proxy") && !strings.Contains(originalU.Host, "localhost") {
 		req.Header.Set("wx-host", originalU.Host)
 	}
+
+	// Add User-Agent header (required by NWS API)
+	req.Header.Set("User-Agent", "(weather.gov, contact@weather.gov)")
 
 	resp, err := HTTPClient.Do(req)
 	if err != nil {

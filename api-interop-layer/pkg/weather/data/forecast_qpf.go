@@ -2,6 +2,7 @@ package data
 
 import (
 	"log"
+	"math"
 	"strings"
 	"time"
 	util_golang "weathergov/api-interop/pkg/weather"
@@ -11,17 +12,6 @@ import (
 func QuantitativePrecipitation(liquidData, iceData, snowData *GridpointProperty, place *Place) []map[string]interface{} {
 	if liquidData == nil {
 		return []map[string]interface{}{}
-	}
-
-	liquidUnits := liquidData.Uom
-	// ice/snow might be nil, use safe defaults
-	iceUnits := ""
-	if iceData != nil {
-		iceUnits = iceData.Uom
-	}
-	snowUnits := ""
-	if snowData != nil {
-		snowUnits = snowData.Uom
 	}
 
 	results := []map[string]interface{}{}
@@ -55,25 +45,24 @@ func QuantitativePrecipitation(liquidData, iceData, snowData *GridpointProperty,
 		end, _ = util_golang.ConvertTimezone(end, place.Timezone)
 
 		// Build Objects
+		// Backend expects "in" (inches). api-interop-layer must convert.
+		liquidIn := convertToInches(liquidVal.Value, liquidData.Uom)
 		liquid := map[string]interface{}{
-			"uom":   liquidUnits,
-			"value": liquidVal.Value,
+			"in": liquidIn,
 		}
 
 		ice := map[string]interface{}{
-			"uom":   iceUnits,
-			"value": nil, // default nil
+			"in": 0.0,
 		}
 		if iceData != nil && i < len(iceData.Values) {
-			ice["value"] = iceData.Values[i].Value
+			ice["in"] = convertToInches(iceData.Values[i].Value, iceData.Uom)
 		}
 
 		snow := map[string]interface{}{
-			"uom":   snowUnits,
-			"value": nil,
+			"in": 0.0,
 		}
 		if snowData != nil && i < len(snowData.Values) {
-			snow["value"] = snowData.Values[i].Value
+			snow["in"] = convertToInches(snowData.Values[i].Value, snowData.Uom)
 		}
 
 		results = append(results, map[string]interface{}{
@@ -86,4 +75,14 @@ func QuantitativePrecipitation(liquidData, iceData, snowData *GridpointProperty,
 	}
 
 	return results
+}
+
+func convertToInches(val float64, uom string) float64 {
+	// Simple conversion based on uom
+	// wmoUnit:mm -> * 0.0393701
+	if strings.Contains(uom, "mm") {
+		val = val * 0.0393701
+	}
+	// Round to 2 decimals
+	return math.Round(val*100) / 100
 }

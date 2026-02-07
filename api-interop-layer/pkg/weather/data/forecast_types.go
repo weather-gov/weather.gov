@@ -6,20 +6,20 @@ import (
 )
 
 type ForecastPeriod struct {
-	StartTime                  string `json:"startTime"`
-	EndTime                    string `json:"endTime"`
-	IsDaytime                  bool   `json:"isDaytime"`
-	Temperature                int    `json:"temperature"`
-	TemperatureUnit            string `json:"temperatureUnit"` // "F", "C"
-	TemperatureTrend           string `json:"temperatureTrend,omitempty"`
-	WindSpeed                  string `json:"windSpeed"` // "10 mph"
-	WindDirection              string `json:"windDirection"`
-	Icon                       string `json:"icon"`
-	ShortForecast              string `json:"shortForecast"`
-	DetailedForecast           string `json:"detailedForecast"`
+	StartTime                  string  `json:"startTime"`
+	EndTime                    string  `json:"endTime"`
+	IsDaytime                  bool    `json:"isDaytime"`
+	Temperature                int     `json:"temperature"`
+	TemperatureUnit            string  `json:"temperatureUnit"` // "F", "C"
+	TemperatureTrend           *string `json:"temperatureTrend,omitempty"`
+	WindSpeed                  string  `json:"windSpeed"` // "10 mph"
+	WindDirection              string  `json:"windDirection"`
+	Icon                       string  `json:"icon"`
+	ShortForecast              string  `json:"shortForecast"`
+	DetailedForecast           string  `json:"detailedForecast"`
 	ProbabilityOfPrecipitation struct {
 		UnitCode string `json:"unitCode"`
-		Value    int    `json:"value"`
+		Value    *int   `json:"value"`
 	} `json:"probabilityOfPrecipitation"`
 }
 
@@ -70,12 +70,23 @@ type GridpointResponse struct {
 
 // Intermediate Structures for internal processing
 type ForecastDay struct {
-	Start   string      `json:"start"`
-	End     string      `json:"end"`
-	Periods []DayPeriod `json:"periods"`
-	Hours   []HourData  `json:"hours,omitempty"`
-	MaxPop  int         `json:"maxPop"`
-	QPF     *DayQPF     `json:"qpf,omitempty"`
+	Start   string             `json:"start"`
+	End     string             `json:"end"`
+	Periods []DayPeriod        `json:"periods"`
+	Hours   []HourData         `json:"hours,omitempty"`
+	MaxPop  int                `json:"maxPop"`
+	QPF     *DayQPF            `json:"qpf,omitempty"`
+	Alerts  *ForecastDayAlerts `json:"alerts,omitempty"`
+}
+
+type ForecastDayAlerts struct {
+	Metadata DayAlertsMetadata `json:"metadata"`
+	Items    []Alert           `json:"items"`
+}
+
+type DayAlertsMetadata struct {
+	Count   int    `json:"count"`
+	Highest string `json:"highest"`
 }
 
 type DayPeriod struct {

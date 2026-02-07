@@ -3,6 +3,7 @@ package data
 import (
 	"fmt"
 	"math"
+	"time"
 	util_golang "weathergov/api-interop/pkg/weather"
 )
 
@@ -201,14 +202,14 @@ func GetPointData(latitude, longitude float64) (*PointData, error) {
 
 	// 4. Parallel Fetches for Aggregrated Data
 	// Channels
-	alertCh := make(chan interface{}, 1)
+	alertCh := make(chan *AlertsResponse, 1)
 	forecastCh := make(chan *ForecastResult, 1)
 	obsCh := make(chan *ObsResult, 1) // Obs needs DB connection?
 	satCh := make(chan *SatelliteResult, 1)
 
 	// Alerts
 	go func() {
-		res, err := GetAlerts(gRes.grid, point, place)
+		res, err := GetAlertsForPoint(db, latitude, longitude, place)
 		if err != nil {
 			alertCh <- nil
 		} else {
@@ -251,6 +252,11 @@ func GetPointData(latitude, longitude float64) (*PointData, error) {
 	obs := <-obsCh
 	satellite := <-satCh
 
+	// Assign Alerts to Forecast Days
+	if forecast != nil && alerts != nil {
+		AssignAlertsToDays(forecast, alerts)
+	}
+
 	return &PointData{
 		Point:     point,
 		Place:     place,
@@ -261,4 +267,45 @@ func GetPointData(latitude, longitude float64) (*PointData, error) {
 		Observed:  obs,
 		Satellite: satellite,
 	}, nil
+}
+
+func AssignAlertsToDays(forecast *ForecastResult, alerts *AlertsResponse) {
+	if forecast.ForecastDailyResult == nil || len(forecast.ForecastDailyResult.Days) == 0 {
+		return
+	}
+
+	for i := range forecast.ForecastDailyResult.Days {
+		day := &forecast.ForecastDailyResult.Days[i]
+		dayStart, _ := time.Parse(time.RFC3339, day.Start)
+		dayEnd, _ := time.Parse(time.RFC3339, day.End)
+
+		count := 0
+		highest := ""
+		minP := 9999999
+		var dayAlerts []Alert
+
+		for _, alert := range alerts.Items {
+			if (alert.Onset.Before(dayEnd) || alert.Onset.Equal(dayEnd)) &&
+				(alert.Finish.After(dayStart) || alert.Finish.Equal(dayStart)) {
+				count++
+				if alert.Metadata.Priority < minP {
+					minP = alert.Metadata.Priority
+					highest = alert.Metadata.Level
+				}
+				dayAlerts = append(dayAlerts, alert)
+			}
+		}
+
+		if dayAlerts == nil {
+			dayAlerts = []Alert{}
+		}
+
+		day.Alerts = &ForecastDayAlerts{
+			Metadata: DayAlertsMetadata{
+				Count:   count,
+				Highest: highest,
+			},
+			Items: dayAlerts,
+		}
+	}
 }

@@ -252,6 +252,9 @@ func PostProcessAlerts(alerts []Alert, timezone string) *AlertsResponse {
 	}
 
 	items := alerts
+	if items == nil {
+		items = []Alert{}
+	}
 
 	metadata := map[string]interface{}{
 		"updated": time.Now().Format(time.RFC3339),

@@ -56,7 +56,8 @@ func generateForecastData(numPeriods int) *ForecastDailyResponse {
 		}
 		// ProbabilityOfPrecipitation structure assignment
 		periods[i].ProbabilityOfPrecipitation.UnitCode = "wmoUnit:percent"
-		periods[i].ProbabilityOfPrecipitation.Value = rand.Intn(30)
+		val := rand.Intn(30)
+		periods[i].ProbabilityOfPrecipitation.Value = &val
 	}
 
 	return &ForecastDailyResponse{

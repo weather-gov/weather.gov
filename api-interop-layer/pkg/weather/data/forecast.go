@@ -54,11 +54,14 @@ func GetForecast(grid *Grid, place *Place, isMarine bool) (*ForecastResult, erro
 		path := fmt.Sprintf("/gridpoints/%s/%d,%d/forecast", grid.WFO, grid.X, grid.Y)
 		res, err := util_golang.FetchAPIJson(path)
 		if err != nil {
+			dailyData = &ForecastDailyResult{Error: true, Days: []ForecastDay{}}
 			return
 		}
 		b, _ := json.Marshal(res)
 		var apiResp ForecastDailyResponse
-		_ = json.Unmarshal(b, &apiResp)
+		if err := json.Unmarshal(b, &apiResp); err != nil {
+			// Log error?
+		}
 
 		dailyData = ForecastDaily(&apiResp, place)
 	}()
@@ -145,6 +148,8 @@ func GetForecast(grid *Grid, place *Place, isMarine bool) (*ForecastResult, erro
 
 	// AssignQPFToDays
 	// Loop over forecast days
+	// AssignQPFToDays
+	// Loop over forecast days
 	if dailyData != nil {
 		for i := range dailyData.Days {
 			day := &dailyData.Days[i]
@@ -178,8 +183,8 @@ func GetForecast(grid *Grid, place *Place, isMarine bool) (*ForecastResult, erro
 	}
 
 	return &ForecastResult{
-		GridData: gridpointData,
-		Daily:    dailyData,
+		GridData:            gridpointData,
+		ForecastDailyResult: dailyData,
 	}, nil
 }
 

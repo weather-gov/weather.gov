@@ -70,7 +70,7 @@ func (s *Server) handlePoint(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
+	writeJSON(w, http.StatusOK, res)
 }
 
 // handleForecast handles /gridpoints/{wfo}/{x}/{y}/forecast
@@ -134,7 +134,7 @@ func (s *Server) handleProduct(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
 		return
 	}
-	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
+	writeJSON(w, http.StatusOK, res)
 }
 
 // handleRiskOverview handles /risk-overview/{placeId}
@@ -156,7 +156,7 @@ func (s *Server) handleRiskOverview(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusNotFound, map[string]interface{}{"error": "No risk overview found", "status": 404})
 		return
 	}
-	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
+	writeJSON(w, http.StatusOK, res)
 }
 
 // handleCounty handles /county/{fips}
@@ -183,7 +183,7 @@ func (s *Server) handleCounty(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
+	writeJSON(w, http.StatusOK, res)
 }
 
 // handleRadar handles /radar/{lat}/{lon}
@@ -226,15 +226,14 @@ func (s *Server) handleRadar(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, map[string]interface{}{
-		"data": map[string]interface{}{
-			"place": place,
-			"point": map[string]float64{
-				"latitude":  lat,
-				"longitude": lon,
-			},
-			"radarMetadata": radarMeta,
+		"place": place,
+		"point": map[string]float64{
+			"latitude":  lat,
+			"longitude": lon,
 		},
+		"radarMetadata": radarMeta,
 	})
+
 }
 
 // Helper to get place from Grid (Used by Forecast)

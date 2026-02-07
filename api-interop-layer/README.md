@@ -1,6 +1,13 @@
 # API Interop Layer (Golang)
 
-This directory contains the source code for the Weather.gov API Interop Layer, now powered by Golang.
+This directory contains the source code for the Weather.gov API Interop Layer, now powered by Golang. This layer is responsible for high-performance data processing, caching, and serving API requests.
+
+## Project Structure
+
+- `cmd/server`: Entry point for the HTTP server.
+- `pkg/weather`: Core logic for weather data processing.
+- `pkg/weather/data`: Data structures and parsing logic for forecasts, observations, alerts, and products (AFD).
+- `internal`: Internal utilities and middleware.
 
 ## Getting Started
 
@@ -21,20 +28,31 @@ The server will start on port `8082` by default.
 Swagger UI is available at:
 http://localhost:8082/swagger/index.html
 
-### Testing
+## Testing
 
-**Unit Tests:**
+### Unit Tests
+Run all unit tests with:
 ```bash
 go test ./...
 ```
 
-**Performance Tests:**
+To see code coverage:
 ```bash
-# Run end-to-end comparison (requires Node.js environment)
+go test -cover ./pkg/weather/...
+```
+
+### Performance Tests
+Performance benchmarks are included in the Go test suite:
+```bash
+go test -bench=. ./pkg/weather/...
+```
+
+End-to-end comparison with the legacy Node.js implementation (requires Node.js environment):
+```bash
 node test/e2e_perf_comparison.js
 ```
 
-## deployment
+## Deployment
 
 CloudFoundry manifest is provided in `manifest.yml`.
 ```bash

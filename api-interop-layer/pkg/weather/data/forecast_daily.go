@@ -8,9 +8,9 @@ import (
 )
 
 type ForecastResult struct {
-	GridData *GridpointResult     `json:"gridData"`
-	Daily    *ForecastDailyResult `json:"daily"`
-	Error    bool                 `json:"error,omitempty"`
+	GridData *GridpointResult `json:"gridData"`
+	*ForecastDailyResult
+	Error bool `json:"error,omitempty"`
 }
 
 type ForecastDailyResult struct {
@@ -24,7 +24,7 @@ type ForecastDailyResult struct {
 
 func ForecastDaily(data *ForecastDailyResponse, place *Place) *ForecastDailyResult {
 	if data.Error {
-		return &ForecastDailyResult{Error: true}
+		return &ForecastDailyResult{Error: true, Days: []ForecastDay{}}
 	}
 
 	days := []ForecastDay{}
@@ -32,11 +32,19 @@ func ForecastDaily(data *ForecastDailyResponse, place *Place) *ForecastDailyResu
 	now := time.Now() // UTC
 
 	for _, period := range data.Properties.Periods {
-		t, _ := time.Parse(time.RFC3339, period.StartTime)
-		start, _ := util_golang.ConvertTimezone(t, place.Timezone)
+		t, err1 := time.Parse(time.RFC3339, period.StartTime)
+		if err1 != nil {
+			continue // Log error?
+		}
+		start, err2 := util_golang.ConvertTimezone(t, place.Timezone)
+		if err2 != nil {
+			continue
+		}
 
-		tEnd, _ := time.Parse(time.RFC3339, period.EndTime)
-		// end, _ := util_golang.ConvertTimezone(tEnd, place.Timezone)
+		tEnd, err3 := time.Parse(time.RFC3339, period.EndTime)
+		if err3 != nil {
+			continue
+		}
 
 		if tEnd.Before(now) {
 			continue
@@ -75,7 +83,7 @@ func ForecastDaily(data *ForecastDailyResponse, place *Place) *ForecastDailyResu
 			},
 			"probabilityOfPrecipitation": map[string]interface{}{
 				"unitCode": period.ProbabilityOfPrecipitation.UnitCode,
-				"value":    float64(period.ProbabilityOfPrecipitation.Value),
+				"value":    float64(valueFromPtr(period.ProbabilityOfPrecipitation.Value)),
 			},
 			"windSpeed": map[string]interface{}{
 				"unitCode": "wxgov:mph",
@@ -148,4 +156,11 @@ func parseInt(s string) int {
 		return val
 	}
 	return 0
+}
+
+func valueFromPtr(i *int) int {
+	if i == nil {
+		return 0
+	}
+	return *i
 }

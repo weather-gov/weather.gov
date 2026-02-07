@@ -83,15 +83,15 @@ func TestGetForecast(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if res.Daily == nil {
+	if res.ForecastDailyResult == nil {
 		t.Fatal("expected daily data")
 	}
-	if len(res.Daily.Days) == 0 {
+	if len(res.ForecastDailyResult.Days) == 0 {
 		t.Fatal("expected days")
 	}
 
 	// Check content
-	day := res.Daily.Days[0]
+	day := res.ForecastDailyResult.Days[0]
 	if len(day.Periods) != 1 {
 		t.Errorf("expected 1 period, got %d", len(day.Periods))
 	}
