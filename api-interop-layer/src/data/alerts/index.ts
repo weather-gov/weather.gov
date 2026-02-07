@@ -129,8 +129,9 @@ export const getAlertsForCountyFIPS = async (fips: any, { timezone }: any) => {
 
 export const getAlertsForPoint = async ({
   point: { latitude, longitude },
-  place: { timezone },
+  place,
 }) => {
+  const timezone = place?.timezone || "UTC";
   // Open a new database connection
   // (or existing pool instance -- see import)
   const db = await openDatabase();
