@@ -131,6 +131,7 @@ services:
     volumes:
       - ./spatial-data/:/app
       - /app/node_modules
+    command: tail -f /dev/null
 
   playwright:
     build:

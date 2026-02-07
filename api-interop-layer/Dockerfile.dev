@@ -16,4 +16,4 @@ RUN go build -o server ./cmd/server
 EXPOSE 8082
 
 # Run (dev mode uses air or just run binary)
-CMD ["./server"]
+CMD ["go", "run", "./cmd/server"]
