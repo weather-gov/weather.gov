@@ -48,4 +48,7 @@ and click the green play button to get connected.
 > [!NOTE]  
 > VSCode can be connected to both debuggers simultaneously. After connecting
 > one, change the dropdown to the other and click the play button again. Super
-> good happy fun time!
+
+## Troubleshooting Archives
+
+We maintain a collection of automated debugging sessions and walkthroughs in the [Auto-Debug Logs](auto-debug/index.md). These logs document complex issues, their root causes, and verification steps.
