@@ -1,0 +1,12 @@
+applications:
+- name: api-interop-layer
+  buildpacks:
+  - go_buildpack
+  env:
+    GOPACKAGE: weathergov/api-interop/cmd/server
+    GOVERSION: go1.23
+  memory: 256M
+  disk_quota: 512M
+  processes:
+  - type: web
+    command: ./server

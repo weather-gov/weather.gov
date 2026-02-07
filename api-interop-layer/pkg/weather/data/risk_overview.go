@@ -17,10 +17,8 @@ func GetRiskOverview(db *sql.DB, placeId string) (RiskOverviewResult, error) {
 	err := db.QueryRow("SELECT data FROM weathergov_temp_ghwo WHERE id=$1::text", placeId).Scan(&dataJson)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			// TS returns { error: "No risk overview found...", status: 404 }
-			// We can return nil and specific error or just nil data with error?
-			// The caller handles error.
-			return nil, fmt.Errorf("no risk overview found for %s", placeId)
+			// Return empty map to indicate not found, let caller handle 404
+			return nil, nil // Return nil, nil for not found
 		}
 		return nil, fmt.Errorf("error fetching risk overview: %v", err)
 	}

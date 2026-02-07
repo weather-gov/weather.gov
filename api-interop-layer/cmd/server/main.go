@@ -8,6 +8,11 @@ import (
 	"weathergov/api-interop/pkg/weather/data"
 )
 
+// @title Weather.gov API Interop Layer
+// @version 1.0.0
+// @description API documentation for the weather.gov interoperability layer
+// @host localhost:8082
+// @BasePath /
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)

@@ -1,11 +1,19 @@
-FROM node:20
+FROM golang:1.23
 
-RUN mkdir /app
 WORKDIR /app
 
-ADD ./package.json .
-ADD ./package-lock.json .
+# Copy modules
+COPY go.mod go.sum ./
+RUN go mod download
 
-RUN npm ci
+# Copy source
+COPY . .
 
-CMD ["npm", "run", "start-dev"]
+# Build
+RUN go build -o server ./cmd/server
+
+# Expose port
+EXPOSE 8082
+
+# Run (dev mode uses air or just run binary)
+CMD ["./server"]

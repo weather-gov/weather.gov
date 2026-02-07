@@ -6,9 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"weathergov/api-interop/pkg/weather/data"
-
 	util_golang "weathergov/api-interop/pkg/weather"
+	"weathergov/api-interop/pkg/weather/data"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -20,35 +19,28 @@ func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
 	json.NewEncoder(w).Encode(payload)
 }
 
-func (s *Server) handleAlertsActive(w http.ResponseWriter, r *http.Request) {
-	// Not implemented in TS routes index?
-	// src/routes/index.ts exports alertMeta but not alerts active list?
-	// Ah, src/routes/index.ts imports `meta/alerts.js`.
-	// Does it import active alerts route?
-	// The user Objective said "Refactoring".
-	// TS `index.ts`: `import * as point from "./point.js"`. `point.js` calls `getDataForPoint`.
-	// `getDataForPoint` calls `alerts.getAlertsForPoint`.
-	// So active alerts are returned as part of `/point/...` response?
-	// OR is there a separate `/alerts/...` route?
-	// `src/routes/index.ts` does NOT seem to export a general alerts route (except meta).
-	// `alertMeta` is mapped to `/meta/alerts`.
-	// If I missed a file, I should check.
-	// But based on `index.ts`, only `/meta/alerts` is exposed.
-
-	writeJSON(w, http.StatusNotImplemented, map[string]string{"error": "route not found in TS index"})
-}
-
+// handleAlertsMeta handles /meta/alerts
+// @Summary Get alerts metadata
+// @Description Get metadata about alert types
+// @Tags Meta
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Router /meta/alerts [get]
 func (s *Server) handleAlertsMeta(w http.ResponseWriter, r *http.Request) {
-	// Return AlertKinds
 	writeJSON(w, http.StatusOK, map[string]interface{}{
 		"data": data.AlertKinds,
 	})
 }
 
-func (s *Server) handleAlertsCount(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusNotImplemented, map[string]string{"error": "not implemented"})
-}
-
+// handlePoint handles /point/{lat}/{lon}
+// @Summary Get point data
+// @Description Get weather data for a specific point including grid, place, alerts, forecast, obs, and radar metadata
+// @Tags Point
+// @Produce json
+// @Param lat path number true "Latitude"
+// @Param lon path number true "Longitude"
+// @Success 200 {object} map[string]interface{}
+// @Router /point/{lat}/{lon} [get]
 func (s *Server) handlePoint(w http.ResponseWriter, r *http.Request) {
 	latStr := chi.URLParam(r, "lat")
 	lonStr := chi.URLParam(r, "lon")
@@ -70,9 +62,27 @@ func (s *Server) handlePoint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Add Radar Metadata if we have a valid place
+	if res.Place != nil {
+		radarMeta, err := data.GetRadarMetadata(res.Place, lat, lon)
+		if err == nil {
+			res.RadarMetadata = radarMeta
+		}
+	}
+
 	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
 }
 
+// handleForecast handles /gridpoints/{wfo}/{x}/{y}/forecast
+// @Summary Get forecast
+// @Description Get daily forecast for a grid point
+// @Tags Forecast
+// @Produce json
+// @Param wfo path string true "WFO"
+// @Param x path int true "Grid X"
+// @Param y path int true "Grid Y"
+// @Success 200 {object} data.ForecastResult
+// @Router /gridpoints/{wfo}/{x}/{y}/forecast [get]
 func (s *Server) handleForecast(w http.ResponseWriter, r *http.Request) {
 	wfo := chi.URLParam(r, "wfo")
 	xStr := chi.URLParam(r, "x")
@@ -93,12 +103,9 @@ func (s *Server) handleForecast(w http.ResponseWriter, r *http.Request) {
 
 	place, err := getPlaceFromGrid(grid)
 	if err != nil {
-		// Log error, rely on UTC fallback inside GetForecast if possible?
-		// But GetForecast panics if place nil?
-		// We'll use UTC fallback here.
+		// Use UTC fallback
 		place = &data.Place{Timezone: "UTC"}
 	}
-
 	if place == nil {
 		place = &data.Place{Timezone: "UTC"}
 	}
@@ -112,18 +119,131 @@ func (s *Server) handleForecast(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, res)
 }
 
-// Helper to get place from Grid
+// handleProduct handles /products/{productId}
+// @Summary Get product
+// @Description Get a specific text product by ID
+// @Tags Products
+// @Produce json
+// @Param productId path string true "Product ID"
+// @Success 200 {object} map[string]interface{}
+// @Router /products/{productId} [get]
+func (s *Server) handleProduct(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "productId")
+	res, err := data.GetProduct(id)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
+}
+
+// handleRiskOverview handles /risk-overview/{placeId}
+// @Summary Get risk overview
+// @Description Get risk overview for a place (FIPS or State)
+// @Tags Risk
+// @Produce json
+// @Param placeId path string true "Place ID (FIPS or State Abbrev)"
+// @Success 200 {object} map[string]interface{}
+// @Router /risk-overview/{placeId} [get]
+func (s *Server) handleRiskOverview(w http.ResponseWriter, r *http.Request) {
+	placeId := chi.URLParam(r, "placeId")
+	res, err := data.GetRiskOverview(s.DB, placeId)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return
+	}
+	if res == nil {
+		writeJSON(w, http.StatusNotFound, map[string]interface{}{"error": "No risk overview found", "status": 404})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
+}
+
+// handleCounty handles /county/{fips}
+// @Summary Get county data
+// @Description Get county details, risk overview, and alerts
+// @Tags County
+// @Produce json
+// @Param fips path string true "County FIPS"
+// @Success 200 {object} map[string]interface{}
+// @Router /county/{fips} [get]
+func (s *Server) handleCounty(w http.ResponseWriter, r *http.Request) {
+	fips := chi.URLParam(r, "fips")
+	res, err := data.GetCountyData(s.DB, fips)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return
+	}
+
+	if res.Status >= 400 {
+		writeJSON(w, res.Status, map[string]interface{}{
+			"data":  map[string]interface{}{"error": res.Error},
+			"error": res.Error,
+		})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
+}
+
+// handleRadar handles /radar/{lat}/{lon}
+// @Summary Get radar metadata
+// @Description Get radar metadata for a point
+// @Tags Radar
+// @Produce json
+// @Param lat path number true "Latitude"
+// @Param lon path number true "Longitude"
+// @Success 200 {object} map[string]interface{}
+// @Router /radar/{lat}/{lon} [get]
+func (s *Server) handleRadar(w http.ResponseWriter, r *http.Request) {
+	latStr := chi.URLParam(r, "lat")
+	lonStr := chi.URLParam(r, "lon")
+
+	lat, err := strconv.ParseFloat(latStr, 64)
+	if err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid latitude"})
+		return
+	}
+	lon, err := strconv.ParseFloat(lonStr, 64)
+	if err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid longitude"})
+		return
+	}
+
+	place, err := data.GetClosestPlace(lat, lon)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return
+	}
+	if place == nil {
+		writeJSON(w, http.StatusOK, map[string]interface{}{"data": map[string]interface{}{"error": true}})
+		return
+	}
+
+	radarMeta, err := data.GetRadarMetadata(place, lat, lon)
+	if err != nil {
+		radarMeta = &data.RadarMetadata{}
+	}
+
+	writeJSON(w, http.StatusOK, map[string]interface{}{
+		"data": map[string]interface{}{
+			"place": place,
+			"point": map[string]float64{
+				"latitude":  lat,
+				"longitude": lon,
+			},
+			"radarMetadata": radarMeta,
+		},
+	})
+}
+
+// Helper to get place from Grid (Used by Forecast)
 func getPlaceFromGrid(grid *data.Grid) (*data.Place, error) {
 	path := fmt.Sprintf("/gridpoints/%s/%d,%d", grid.WFO, grid.X, grid.Y)
 	res, err := util_golang.FetchAPIJson(path)
 	if err != nil {
 		return nil, err
 	}
-
-	// Decode geometry from response
-	// The response is GeoJSON feature or similar.
-	// Structure: { geometry: { coordinates: [ [ [lon, lat], ... ] ] } }
-	// We need to marshal/unmarshal to extract geometry coordinates.
 
 	b, _ := json.Marshal(res)
 	var feature struct {
@@ -145,48 +265,4 @@ func getPlaceFromGrid(grid *data.Grid) (*data.Place, error) {
 	}
 
 	return nil, fmt.Errorf("no geometry found")
-}
-
-func (s *Server) handleForecastHourly(w http.ResponseWriter, r *http.Request) {
-	// Similar to Forecast but calling GetForecastHourly?
-	// data.GetForecast might return hourly too?
-	// In forecast.go: `GetForecast` returns `ForecastResult` which has `GridData` and `Daily`.
-	// Does it have Hourly?
-	// `ForecastResult` struct in `forecast_daily.go`:
-	// GridData, Daily.
-	// Where is Hourly?
-	// `forecast_hourly.go` likely has `GetForecastHourly`.
-	writeJSON(w, http.StatusNotImplemented, map[string]string{"error": "not implemented"})
-}
-
-func (s *Server) handleStations(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusNotImplemented, map[string]string{"error": "not implemented"})
-}
-
-func (s *Server) handleObservations(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusNotImplemented, map[string]string{"error": "not implemented"})
-}
-
-func (s *Server) handleRadarProfiler(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusNotImplemented, map[string]string{"error": "not implemented"})
-}
-
-func (s *Server) handleProduct(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "productId")
-	res, err := data.GetProduct(id)
-	if err != nil {
-		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
-		return
-	}
-	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
-}
-
-func (s *Server) handleRiskOverview(w http.ResponseWriter, r *http.Request) {
-	placeId := chi.URLParam(r, "placeId")
-	res, err := data.GetRiskOverview(s.DB, placeId)
-	if err != nil {
-		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
-		return
-	}
-	writeJSON(w, http.StatusOK, map[string]interface{}{"data": res})
 }

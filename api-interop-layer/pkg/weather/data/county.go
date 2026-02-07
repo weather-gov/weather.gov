@@ -91,29 +91,12 @@ func GetCountyData(db *sql.DB, fips string) (*CountyResult, error) {
 	// 3. Risk Overview
 	riskOverview, err := GetRiskOverview(db, fips)
 	if err != nil {
-		// Log error but continue?
-		// TS: catch (e) loop for entire function.
-		// But `GetRiskOverview` logs internally? No, returns error.
-		// If GetRiskOverview fails, we might want to return Partial result or Error?
-		// TS `getCountyData` fails completely on error. "return { error: ... }".
-		// But `GetRiskOverview` returns object with error if not found.
-		// Our Go implementation returns error on Nil DB or logic error.
-		// If Not Found, we returned error.
-		// TS returns { error: "No risk overview...", status: 404 }.
-		// This is handled as DATA by TS.
-		// In Go `GetRiskOverview` returned `RiskOverviewResult (map), error`.
-		// If error "no risk overview found", we should probably return empty/nil RiskOverview but continue?
-		// TS: `const riskOverview = await getRiskOverview(fips);`
-		// If `GetRiskOverview` returns { error... }, that object is assigned to `riskOverview`.
-		// So `county.RiskOverview` should hold that error object.
-		// My `GetRiskOverview` logic returns Go error.
-		// I should probably change `GetRiskOverview` to return `RiskOverviewResult` which handles "not found" gracefully?
-		// Or handle it here.
-		// If err != nil, I'll set RiskOverview to map with error message.
-		if err != nil {
-			riskOverview = map[string]interface{}{
-				"error": err.Error(),
-			}
+		// Log error?
+		fmt.Printf("Error fetching risk overview for county %s: %v\n", fips, err)
+	} else if riskOverview == nil {
+		// Not found, maybe set error in map like TS?
+		riskOverview = map[string]interface{}{
+			"error": "No risk overview found",
 		}
 	}
 

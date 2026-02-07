@@ -1,0 +1,259 @@
+basePath: /
+definitions:
+  data.DayPeriod:
+    properties:
+      data:
+        additionalProperties: true
+        description: Converted properties
+        type: object
+      end:
+        type: string
+      isDaytime:
+        type: boolean
+      isOvernight:
+        type: boolean
+      start:
+        type: string
+    type: object
+  data.DayQPF:
+    properties:
+      hasIce:
+        type: boolean
+      hasQPF:
+        type: boolean
+      hasSnow:
+        type: boolean
+      periods:
+        items:
+          additionalProperties: true
+          type: object
+        type: array
+    type: object
+  data.ForecastDailyResult:
+    properties:
+      days:
+        items:
+          $ref: '#/definitions/data.ForecastDay'
+        type: array
+      elevation: {}
+      error:
+        type: boolean
+      generatedAt:
+        type: string
+      updateTime:
+        type: string
+      validTimes:
+        type: string
+    type: object
+  data.ForecastDay:
+    properties:
+      end:
+        type: string
+      hours:
+        items:
+          $ref: '#/definitions/data.HourData'
+        type: array
+      maxPop:
+        type: integer
+      periods:
+        items:
+          $ref: '#/definitions/data.DayPeriod'
+        type: array
+      qpf:
+        $ref: '#/definitions/data.DayQPF'
+      start:
+        type: string
+    type: object
+  data.ForecastResult:
+    properties:
+      daily:
+        $ref: '#/definitions/data.ForecastDailyResult'
+      error:
+        type: boolean
+      gridData:
+        $ref: '#/definitions/data.GridpointResult'
+    type: object
+  data.GridpointResult:
+    properties:
+      error:
+        type: boolean
+      geometry: {}
+      qpf:
+        items:
+          additionalProperties: true
+          type: object
+        type: array
+    type: object
+  data.HourData:
+    properties:
+      properties:
+        additionalProperties: true
+        description: |-
+          Properties like 'temperature', 'windSpeed', etc.
+          In TS they put everything on the object.
+        type: object
+      time:
+        type: string
+    type: object
+host: localhost:8082
+info:
+  contact: {}
+  description: API documentation for the weather.gov interoperability layer
+  title: Weather.gov API Interop Layer
+  version: 1.0.0
+paths:
+  /county/{fips}:
+    get:
+      description: Get county details, risk overview, and alerts
+      parameters:
+      - description: County FIPS
+        in: path
+        name: fips
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get county data
+      tags:
+      - County
+  /gridpoints/{wfo}/{x}/{y}/forecast:
+    get:
+      description: Get daily forecast for a grid point
+      parameters:
+      - description: WFO
+        in: path
+        name: wfo
+        required: true
+        type: string
+      - description: Grid X
+        in: path
+        name: x
+        required: true
+        type: integer
+      - description: Grid Y
+        in: path
+        name: "y"
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.ForecastResult'
+      summary: Get forecast
+      tags:
+      - Forecast
+  /meta/alerts:
+    get:
+      description: Get metadata about alert types
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get alerts metadata
+      tags:
+      - Meta
+  /point/{lat}/{lon}:
+    get:
+      description: Get weather data for a specific point including grid, place, alerts,
+        forecast, obs, and radar metadata
+      parameters:
+      - description: Latitude
+        in: path
+        name: lat
+        required: true
+        type: number
+      - description: Longitude
+        in: path
+        name: lon
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get point data
+      tags:
+      - Point
+  /products/{productId}:
+    get:
+      description: Get a specific text product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get product
+      tags:
+      - Products
+  /radar/{lat}/{lon}:
+    get:
+      description: Get radar metadata for a point
+      parameters:
+      - description: Latitude
+        in: path
+        name: lat
+        required: true
+        type: number
+      - description: Longitude
+        in: path
+        name: lon
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get radar metadata
+      tags:
+      - Radar
+  /risk-overview/{placeId}:
+    get:
+      description: Get risk overview for a place (FIPS or State)
+      parameters:
+      - description: Place ID (FIPS or State Abbrev)
+        in: path
+        name: placeId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get risk overview
+      tags:
+      - Risk
+swagger: "2.0"

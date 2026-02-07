@@ -34,14 +34,15 @@ type Grid struct {
 }
 
 type PointData struct {
-	Point     Point            `json:"point"`
-	Place     *Place           `json:"place"`
-	Grid      *Grid            `json:"grid"`
-	IsMarine  bool             `json:"isMarine"`
-	Alerts    interface{}      `json:"alerts,omitempty"`
-	Forecast  *ForecastResult  `json:"forecast,omitempty"`
-	Observed  *ObsResult       `json:"observed,omitempty"`
-	Satellite *SatelliteResult `json:"satellite,omitempty"`
+	Point         Point            `json:"point"`
+	Place         *Place           `json:"place"`
+	Grid          *Grid            `json:"grid"`
+	IsMarine      bool             `json:"isMarine"`
+	Alerts        interface{}      `json:"alerts,omitempty"`
+	Forecast      *ForecastResult  `json:"forecast,omitempty"`
+	Observed      *ObsResult       `json:"observed,omitempty"`
+	Satellite     *SatelliteResult `json:"satellite,omitempty"`
+	RadarMetadata *RadarMetadata   `json:"radarMetadata,omitempty"`
 }
 
 // GetClosestPlace finds the nearest named place and its county/state

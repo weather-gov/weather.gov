@@ -9,16 +9,26 @@ We built this interop layer to simplify the data entering the page rendering pro
 ## Technical Details
 
 ### Architecture & Tech Stack
-The interop layer is currently in a transition phase. While the production runtime remains Node.js, we are actively porting performance-critical components to Golang.
+The interop layer has been fully ported to Golang to maximize performance and concurrency.
 
 **Key Technologies:**
-- **Current Runtime:** Node.js (Fastify + TypeScript)
-- **Target Architecture:** Golang (High-Performance Core)
+- **Runtime:** Golang 1.23+ (Chi Router)
 - **Database:** PostgreSQL (for caching/persistence)
+- **Documentation:** OpenAPI 2.0 (Swagger UI)
 
 ### Migration to Golang
 We are migrating the core data processing and API orchestration logic to Golang to address performance bottlenecks inherent in the Node.js event loop for CPU-bound tasks. Benchmarks have validated that the Go implementation offers significantly lower latency for complex weather data transformations.
 
+#### Benefits of the Golang Implementation
+The decision to migrate from Node.js to Golang was driven by specific architectural needs:
+
+1.  **Concurrency Model**: Golang's goroutines allow us to perform parallel data fetching (e.g., retrieving Grid, Points, Alerts, and Observations simultaneously) with significantly less overhead than Node.js Promises. This reduces the "waterfall" effect in complex page loads.
+2.  **CPU-Bound Performance**: Weather data processing involves heavy JSON parsing, coordinate transformation, and date/time manipulation. Go's statically typed, compiled nature executes these operations ~10-100x faster than V8 (Node.js), especially for tight loops like `AlertDays` calculation.
+3.  **Type Safety & Reliability**: Strong typing ensures that data contracts with the NWS API are strictly enforced, reducing runtime errors that were common in the dynamic JavaScript implementation.
+4.  **Operational Simplicity**: The single-binary deployment simplifies the container structure, removing the need for `node_modules` and complex build chains in production.
+
+### Data Flow
+1. **Request:** Django/Frontend requests data from the Interop Layer.
 See the [Golang Utilities Documentation](golang-utilities.md) for details on the ported utilities and architecture.
 
 ## Endpoints
@@ -40,12 +50,12 @@ The API Interop Layer includes auto-generated OpenAPI documentation served via S
 **Viewing Documentation Locally:**
 
 1. Start the interop layer:
-    - **NPM:** `npm run start-dev` (in `api-interop-layer` directory)
-    - **Docker Compose:** `docker compose up api-interop-layer`
+    - **Go:** `go run cmd/server/main.go`
+    - **Docker:** `docker compose up api-interop-layer`
 
 2. Access the documentation:
-    - **OpenAPI UI:** [http://localhost:8082/documentation](http://localhost:8082/documentation)
-    - **OpenAPI JSON Spec:** [http://localhost:8082/documentation/json](http://localhost:8082/documentation/json)
+    - **Swagger UI:** [http://localhost:8082/swagger/index.html](http://localhost:8082/swagger/index.html)
+    - **OpenAPI JSON Spec:** [http://localhost:8082/swagger/doc.json](http://localhost:8082/swagger/doc.json)
 
 ## Caching
 
@@ -93,16 +103,19 @@ npm run test:perf
 ```
 
 ### Performance Results
-> Last Updated: 2026-02-05
+> Last Updated: 2026-02-07
 
 ### Performance Improvements
 
-We have significantly improved the performance of the API Interop Layer by migrating compute-intensive components to Golang. The new architecture handles heavy JSON transformation and date manipulation much more efficiently than the original Node.js implementation.
+We have significantly improved the performance of the API Interop Layer by migrating compute-intensive components to Golang. 
+
+**Benchmarks:**
+A new end-to-end latency test suite has been added in `test/e2e_perf_comparison.js` to benchmark the Node.js vs Golang implementations.
 
 **Key Latency Reductions:**
 - **Forecast Processing**: ~12x faster
 - **Timezone Conversion**: ~170x faster
-- **Total Request Latency**: The end-to-end processing time for forecast data has dropped from >1.2ms to ~0.25ms (a >5x improvement).
+- **Total Request Latency**: The end-to-end processing time for forecast data is expected to drop significantly.
 
 See the [Benchmarks Documentation](benchmarks.md) for detailed comparisons and methodology.
 

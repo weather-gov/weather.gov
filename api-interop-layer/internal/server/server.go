@@ -6,8 +6,11 @@ import (
 	"os"
 	"time"
 
+	_ "weathergov/api-interop/docs"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
 type Server struct {
@@ -34,6 +37,9 @@ func NewServer(db *sql.DB) *Server {
 }
 
 func (s *Server) routes() {
+	// Swagger
+	s.Router.Get("/swagger/*", httpSwagger.WrapHandler)
+
 	s.Router.Get("/version", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("1.0.0"))
 	})
@@ -48,30 +54,26 @@ func (s *Server) routes() {
 		w.Write([]byte("OK"))
 	})
 
-	// Routes from handlers.go
-	s.Router.Get("/alerts/active", s.handleAlertsActive)
+	// Meta
 	s.Router.Get("/meta/alerts", s.handleAlertsMeta)
-	s.Router.Get("/alerts/active/count", s.handleAlertsCount)
 
-	// Point Logic
-	s.Router.Get("/point/{lat},{lon}", s.handlePoint)
+	// Point
+	s.Router.Get("/point/{lat}/{lon}", s.handlePoint)
 
 	// Gridpoints
-	s.Router.Get("/gridpoints/{wfo}/{x},{y}/forecast", s.handleForecast)
-	s.Router.Get("/gridpoints/{wfo}/{x},{y}/forecast/hourly", s.handleForecastHourly)
-	s.Router.Get("/gridpoints/{wfo}/{x},{y}/stations", s.handleStations)
-
-	// Stations
-	s.Router.Get("/stations/{stationId}/observations", s.handleObservations)
-
-	// Radar
-	s.Router.Get("/radar/profiler", s.handleRadarProfiler)
+	s.Router.Get("/gridpoints/{wfo}/{x}/{y}/forecast", s.handleForecast)
 
 	// Products
 	s.Router.Get("/products/{productId}", s.handleProduct)
 
 	// Risk Overview
 	s.Router.Get("/risk-overview/{placeId}", s.handleRiskOverview)
+
+	// County
+	s.Router.Get("/county/{fips}", s.handleCounty)
+
+	// Radar
+	s.Router.Get("/radar/{lat}/{lon}", s.handleRadar)
 }
 
 func (s *Server) Start() error {
