@@ -7,7 +7,7 @@
   "dependencies": {
     "dayjs": "^1.11.10",
     "express": "^5.0.1",
-    "version": "1.20.0",
+
     "glob": "^11.0.0",
     "mustache": "^4.2.0",
     "pino": "^10.3.0",
