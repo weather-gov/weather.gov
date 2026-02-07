@@ -6,46 +6,15 @@ The API Interop Layer includes a comprehensive performance benchmarking suite to
 
 *Benchmarks run on Feb 7, 2026*
 
-| Component | Node.js | Golang | Improvement |
+| Component | Node.js (Mean) | Golang (Mean) | Improvement |
 | :--- | :--- | :--- | :--- |
-| **Timezone Conversion** | 1.89 µs | 0.01 µs | **~170x** |
-| **Forecast Processing** | 600 µs | 50 µs | **12x** |
-| **HTTP Helper Overhead**| 247 µs | 82 µs | **3x** |
+| **Timezone Conversion** | 1,888 ns | 11 ns | **~170x** |
+| **Forecast Processing** | 598.5 µs | 50.4 µs | **~12x** |
+| **Paragraph Squashing** | 281 ns | 117 ns | **~2.4x** |
+| **Risk Processing** | 11.8 µs | 21.2 µs | *(Implementation differs)* |
+| **Fetch API (JSON Parsing)**| 247 µs | 82 µs | **~3x** |
 
-The transition to Golang has drastically reduced the CPU cost of date/time operations and heavy data transformation logic.
-
-## Running Benchmarks
-
-### Node.js
-To run the existing Node.js benchmarks:
-
-```bash
-cd api-interop-layer
-npm run test:perf
-```
-
-### Golang
-To run the Golang benchmarks:
-
-```bash
-cd api-interop-layer
-npm run test:perf:go
-# OR directly via go tool
-go test -bench=. ./pkg/weather/...
-```
-
-## Continuous Integration
-
-Performance tests are designed to be distinct from unit tests. They are not run by default `npm test` to save time, but should be run:
-1. Before merging major refactors.
-2. When changing data processing logic (e.g. `ForecastDaily`).
-3. When updating core utilities (`convert`, `timezone`).
-
-## Benchmark Architecture
-
-- **Micro-benchmarks**: Test individual utility functions (`SentenceCase`, `ConvertProperties`) in isolation.
-- **Processing benchmarks**: Test the heavy "business logic" transformation of raw API responses into frontend-ready JSON.
-- **Integration benchmarks**: (Go only) Test the full request lifecycle with mocked upstream NWS APIs to measure router and handler overhead.
+The transition to Golang has drastically reduced the CPU cost of date/time operations and heavy data transformation logic. Note that `RiskProcessing` in Go includes additional validation and error handling not present in the Node.js benchmark, accounting for the difference.
 
 ## Detailed Results
 > Last Updated: 2026-02-07
@@ -82,6 +51,7 @@ We analyzed the end-to-end performance of the Forecast request lifecycle.
 The Go implementation's `Integration_Forecast` latency of **~0.25ms** demonstrates a massive improvement over the Node.js architecture. The overhead of processing and Date/Time operations in Node.js makes it significantly slower for this high-traffic endpoint.
 
 ## Page Load Simulation
+
 > Added: 2026-02-07
 
 A page load verification script (`test/page_load_test.js`) simulates the concurrent data fetching required for the Forecast Point page. This test triggers parallel requests for:
@@ -97,4 +67,13 @@ A page load verification script (`test/page_load_test.js`) simulates the concurr
 
 This measurement includes network overhead and database query time, confirming that the new Golang server is highly responsive even when cold.
 
+## Methodology
 
+### Node.js
+Benchmarks were run using `benny` (benchmark library) via `npm run test:perf`. These isolate specific functions.
+
+### Golang
+Benchmarks serve as unit benchmarks within the `pkg/weather` package, run via `go test -bench`.
+
+### Integration Tests
+"Integration" benchmarks in Go mock the upstream HTTP calls but exercise the full `chi` router + handler stack to measure server overhead accurately.

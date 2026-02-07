@@ -2,13 +2,11 @@
 
 ## Overview
 
-## Overview
-
 The API Interop Layer acts as a high-performance middleware between the legacy weather.gov API and the new frontend application. It has been re-architected in **Golang** to ensure low-latency data normalization, caching, and consistent delivery.
 
 We built this interop layer to simplify the data entering the page rendering process. It handles multiple concurrent requests to upstream APIs, retries in the event of errors, and performs unit normalization and conversion.
 
-> **Note:** For a detailed explanation of why we migrated to Golang, see [Benefits of the Golang Implementation](#benefits-of-the-golang-implementation).
+> **Note:** For a detailed explanation of the implementation, see [Golang Implementation Details](implementation.md).
 
 ## Technical Details
 
@@ -33,7 +31,10 @@ The decision to migrate from Node.js to Golang was driven by specific architectu
 
 ### Data Flow
 1. **Request:** Django/Frontend requests data from the Interop Layer.
-See the [Golang Utilities Documentation](golang-utilities.md) for details on the ported utilities and architecture.
+2. **Orchestration:** The Go server (via `chi` router) routes the request to the appropriate handler in `pkg/weather`.
+3. **Data Fetching:** The handler spawns concurrent goroutines to fetch data from upstream APIs (NWS API, etc.) or the internal PostgreSQL cache.
+4. **Processing:** Data is normalized, converted (units, timezones), and aggregated.
+5. **Response:** The aggregated JSON is streamed back to the client.
 
 ## Endpoints
 
@@ -71,65 +72,11 @@ Flow diagram of how alerts are updated:
 
 ![](../diagrams/interop-layer-alerts.png)
 
+## Testing & Performance
 
-
-## Testing
- 
-### Regression Testing
- 
-Regression testing is critical to ensure that changes do not break existing functionality. We use the standard Go testing framework.
- 
-**Running Tests:**
-```bash
-go test ./...
-```
- 
-### Test Coverage
- 
-We aim for high test coverage to maintain code quality.
- 
-**Checking Coverage:**
-```bash
-go test -cover ./...
-```
- 
-## Performance
- 
-Performance is a key metric for the interop layer as it directly impacts user experience.
- 
-### Performance Tests
- 
-Performance benchmarks are located in `api-interop-layer/pkg/weather/` and other packages.
- 
-**Running Performance Tests:**
-```bash
-# Run all benchmarks
-go test -bench=. ./...
- 
-# Run specific component benchmarks
-go test -bench=. ./pkg/weather/data
-```
-
-### Performance Results
-> Last Updated: 2026-02-07
-
-### Performance Improvements
-
-We have significantly improved the performance of the API Interop Layer by migrating compute-intensive components to Golang. 
-
-**Benchmarks:**
-A new end-to-end latency test suite has been added in `test/e2e_perf_comparison.js` to benchmark the Node.js vs Golang implementations.
-
-**Key Latency Reductions:**
-- **Forecast Processing**: ~12x faster
-- **Timezone Conversion**: ~170x faster
-- **Total Request Latency**: The end-to-end processing time for forecast data is expected to drop significantly.
+For detailed instructions on running regression tests and performance benchmarks, see [Testing](testing.md).
 
 See the [Benchmarks Documentation](benchmarks.md) for detailed comparisons and methodology.
-
-### Impact on User Experience
-
-These server-side performance gains directly translate to faster page loads for end users. By minimizing processing time on the server, the Time to First Byte (TTFB) is reduced, allowing the client to begin rendering the forecast sooner. The improved efficiency also reduces CPU load on the infrastructure, allowing the system to handle higher concurrent traffic volumes without service degradation.
 
 ## Production Setup
 
