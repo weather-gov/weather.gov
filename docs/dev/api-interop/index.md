@@ -2,9 +2,13 @@
 
 ## Overview
 
-The API Interop Layer acts as a middleware between the legacy weather.gov API and the new frontend application. It normalizes data structures, handles caching, and ensures consistent data delivery.
+## Overview
 
-We built this interop layer to simplify the data entering the page rendering process. It handles the multiple requests necessary to the API, retrying in the event of errors, unit normalization and conversion, etc.
+The API Interop Layer acts as a high-performance middleware between the legacy weather.gov API and the new frontend application. It has been re-architected in **Golang** to ensure low-latency data normalization, caching, and consistent delivery.
+
+We built this interop layer to simplify the data entering the page rendering process. It handles multiple concurrent requests to upstream APIs, retries in the event of errors, and performs unit normalization and conversion.
+
+> **Note:** For a detailed explanation of why we migrated to Golang, see [Benefits of the Golang Implementation](#benefits-of-the-golang-implementation).
 
 ## Technical Details
 
@@ -16,8 +20,8 @@ The interop layer has been fully ported to Golang to maximize performance and co
 - **Database:** PostgreSQL (for caching/persistence)
 - **Documentation:** OpenAPI 2.0 (Swagger UI)
 
-### Migration to Golang
-We are migrating the core data processing and API orchestration logic to Golang to address performance bottlenecks inherent in the Node.js event loop for CPU-bound tasks. Benchmarks have validated that the Go implementation offers significantly lower latency for complex weather data transformations.
+### Architecture Update: Golang Transition
+We have migrated the core data processing and API orchestration logic from Node.js to Golang. This change addresses performance bottlenecks inherent in the Node.js event loop for CPU-bound tasks. Benchmarks have validated that the Go implementation offers significantly lower latency for complex weather data transformations.
 
 #### Benefits of the Golang Implementation
 The decision to migrate from Node.js to Golang was driven by specific architectural needs:
@@ -70,36 +74,40 @@ Flow diagram of how alerts are updated:
 
 
 ## Testing
-
+ 
 ### Regression Testing
-
-Regression testing is critical to ensure that changes do not break existing functionality. We use **Mocha** as the test runner and **Chai** for assertions.
-
-**Running Regression Tests:**
+ 
+Regression testing is critical to ensure that changes do not break existing functionality. We use the standard Go testing framework.
+ 
+**Running Tests:**
 ```bash
-cd api-interop-layer
-npm test
+go test ./...
 ```
-
+ 
 ### Test Coverage
-
-We aim for high test coverage to maintain code quality. Coverage is measured using `c8`.
-
+ 
+We aim for high test coverage to maintain code quality.
+ 
 **Checking Coverage:**
-Running `npm test` will automatically generate a coverage report. The HTML report can be found in `api-interop-layer/coverage/`.
-
+```bash
+go test -cover ./...
+```
+ 
 ## Performance
-
+ 
 Performance is a key metric for the interop layer as it directly impacts user experience.
-
+ 
 ### Performance Tests
-
-Performance tests are located in `api-interop-layer/src/util/perf/`.
-
+ 
+Performance benchmarks are located in `api-interop-layer/pkg/weather/` and other packages.
+ 
 **Running Performance Tests:**
 ```bash
-cd api-interop-layer
-npm run test:perf
+# Run all benchmarks
+go test -bench=. ./...
+ 
+# Run specific component benchmarks
+go test -bench=. ./pkg/weather/data
 ```
 
 ### Performance Results
