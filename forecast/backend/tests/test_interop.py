@@ -1,3 +1,4 @@
+import copy
 import json
 import os
 from unittest import TestCase, mock
@@ -9,7 +10,12 @@ from spatial import models
 
 
 class TestInteropInterface(TestCase):
+# ... (skipping unchanged lines)
+
     """Tests the interop interface module."""
+
+    def tearDown(self):
+        models.WeatherAlertsCache.objects.all().delete()
 
     @responses.activate
     def test_get_wx_afd_versions_default_url(self):
@@ -238,7 +244,7 @@ class TestInteropInterface(TestCase):
         responses.add(
             responses.GET,
             "https://interop/point/5/6",
-            json=self.forecast["nosnow_ice_alert"],
+            json=copy.deepcopy(self.forecast["nosnow_ice_alert"]),
             status=200,
         )
 
@@ -261,7 +267,7 @@ class TestInteropInterface(TestCase):
         responses.add(
             responses.GET,
             "https://interop/point/6/7",
-            json=self.forecast["snow_noice_alert_noalertlevel"],
+            json=copy.deepcopy(self.forecast["snow_noice_alert_noalertlevel"]),
             status=200,
         )
 
@@ -277,7 +283,7 @@ class TestInteropInterface(TestCase):
         responses.add(
             responses.GET,
             "https://interop/point/6/7",
-            json=self.forecast["nosnow_ice_alert"],
+            json=copy.deepcopy(self.forecast["nosnow_ice_alert"]),
             status=200,
         )
 
@@ -296,7 +302,7 @@ class TestInteropInterface(TestCase):
         responses.add(
             responses.GET,
             "https://interop/point/7/8",
-            json=self.forecast["nosnow_ice_alert"],
+            json=copy.deepcopy(self.forecast["nosnow_ice_alert"]),
             status=200,
         )
 
@@ -338,3 +344,51 @@ class TestInteropInterface(TestCase):
         actual = interop.get_county_data("11223")
 
         self.assertEqual(actual, returned)
+    @responses.activate
+    def test_point_forecast_nested_properties(self):
+        """Tests that we correctly handle nested Properties in hourly data."""
+        params = {
+            "hours": [
+                {
+                    "time": "2026-02-07T20:00:00-06:00",
+                    "Properties": {
+                        "temperature": {"degF": 72},
+                        "probabilityOfPrecipitation": {"percent": 10},
+                    }
+                }
+            ],
+            "maxPop": 10,
+            "alerts": {"metadata": {"count": 0}},
+            "qpf": {"periods": [], "hasSnow": False, "hasIce": False, "hasQPF": False},
+            "periods": [{
+                "start": "2026-02-07T20:00:00-06:00", 
+                "isDaytime": True, 
+                "isOvernight": False,
+                "data": {
+                    "temperature": {"degF": 72},
+                    "probabilityOfPrecipitation": {"percent": 10}
+                }
+            }]
+        }
+        
+        # We need to wrap this in the full response structure
+        response_data = {
+            "isMarine": False,
+            "forecast": {
+                "days": [params]
+            }
+        }
+
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(
+            responses.GET,
+            "https://interop/point/8/9",
+            json=response_data,
+            status=200,
+        )
+
+        actual = interop.get_point_forecast(8, 9)
+        day1 = actual["forecast"]["days"][0]
+        
+        self.assertEqual(day1["hourly"]["temps"], [72])
+        self.assertEqual(day1["hourly"]["pops"], [10])

@@ -161,9 +161,22 @@ def _process_hourly_interop_data(day_data):  # noqa: C901
         "windDirections": [],
     }
     for hour in hours:
+        if "Properties" in hour:
+            # The API returns weather data inside a 'Properties' object, but 'time' is outside.
+            # We flatten this structure so the rest of the code can access everything at the top level.
+            props = hour["Properties"]
+            # We want to keep 'time' if it exists at the top level
+            time_val = hour.get("time")
+            hour.update(props)
+            if time_val:
+                hour["time"] = time_val
+
+
         # apparentTemperature
         if "apparentTemperature" in hour:
             day_data["hourly"]["feelsLike"].append(hour["apparentTemperature"]["degF"])
+        else:
+            day_data["hourly"]["feelsLike"].append(None)
 
         # times
         if "time" in hour:
@@ -174,30 +187,44 @@ def _process_hourly_interop_data(day_data):  # noqa: C901
         # temps
         if "temperature" in hour:
             day_data["hourly"]["temps"].append(hour["temperature"]["degF"])
+        else:
+            day_data["hourly"]["temps"].append(None)
 
         # probability of precipitation
         if "probabilityOfPrecipitation" in hour:
             day_data["hourly"]["pops"].append(hour["probabilityOfPrecipitation"]["percent"])
+        else:
+            day_data["hourly"]["pops"].append(None)
 
         # dewpoints
         if "dewpoint" in hour:
             day_data["hourly"]["dewpoints"].append(hour["dewpoint"]["degF"])
+        else:
+            day_data["hourly"]["dewpoints"].append(None)
 
         # relative humidity
         if "relativeHumidity" in hour:
             day_data["hourly"]["relativeHumidity"].append(hour["relativeHumidity"]["percent"])
+        else:
+            day_data["hourly"]["relativeHumidity"].append(None)
 
         # wind speeds
         if "windSpeed" in hour:
             day_data["hourly"]["windSpeeds"].append(hour["windSpeed"]["mph"])
+        else:
+            day_data["hourly"]["windSpeeds"].append(None)
 
         # wind gusts
         if "windGust" in hour:
             day_data["hourly"]["windGusts"].append(hour["windGust"]["mph"])
+        else:
+            day_data["hourly"]["windGusts"].append(None)
 
         # wind direction
         if "windDirection" in hour:
             day_data["hourly"]["windDirections"].append(hour["windDirection"])
+        else:
+            day_data["hourly"]["windDirections"].append(None)
 
     return day_data
 
