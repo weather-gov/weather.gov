@@ -18,7 +18,7 @@ class TestTemplateTagWeatherTitle(TestCase):
             '\n        <meta name="description" content="" />'
             "\n        "
         )
-        self.assertEquals(actual, expected)
+        self.assertEqual(actual, expected)
 
     def test_set_title_with_cms_page_name_and_seo_title(self):
         """Test with CMS authored page."""
@@ -33,7 +33,7 @@ class TestTemplateTagWeatherTitle(TestCase):
             '\n        <meta name="description" content="About this nice page" />'
             "\n        "
         )
-        self.assertEquals(actual, expected)
+        self.assertEqual(actual, expected)
 
     def test_set_search_description(self):
         """Test with CMS authored page using search description."""
@@ -52,7 +52,7 @@ class TestTemplateTagWeatherTitle(TestCase):
             '\n        <meta name="description" content="Looking for this nice page" />'
             "\n        "
         )
-        self.assertEquals(actual, expected)
+        self.assertEqual(actual, expected)
 
     @override_settings(AGENCY_NAME=None)
     def test_set_title_with_default_site_name(self):
@@ -64,4 +64,4 @@ class TestTemplateTagWeatherTitle(TestCase):
             '\n        <meta name="description" content="" />'
             "\n        "
         )
-        self.assertEquals(actual, expected)
+        self.assertEqual(actual, expected)

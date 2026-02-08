@@ -72,7 +72,7 @@ class RoadmapEntry(Orderable):
     outcome = models.TextField()
     page = ParentalKey(RoadmapPage, on_delete=models.CASCADE, related_name="entries")
     delivered = models.BooleanField(default=False)
-    delivery_date = models.DateField(blank=True)
+    delivery_date = models.DateField(blank=True, null=True)
 
     delivery_date.required_on_save = False
 

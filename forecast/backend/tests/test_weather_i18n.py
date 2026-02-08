@@ -15,7 +15,7 @@ class TestTemplateTagWeatheri18n(TestCase):
         mock_.return_value = "Faker faker"
         actual = weather_i18n.t("this is text")
         mock_.assert_called_with("this is text")
-        self.assertEquals(actual, "Faker faker")
+        self.assertEqual(actual, "Faker faker")
 
     @mock.patch("backend.templatetags.weather_i18n._")
     def test_t_with_args(self, mock_):
@@ -25,7 +25,7 @@ class TestTemplateTagWeatheri18n(TestCase):
 
         actual = weather_i18n.t("this is text", args)
         mock_.assert_called_with("this is text")
-        self.assertEquals(actual, "This is 1 a string or two.")
+        self.assertEqual(actual, "This is 1 a string or two.")
 
     @mock.patch("backend.templatetags.weather_i18n._")
     def test_trans_with_args_but_without_args(self, mock_):
@@ -33,7 +33,7 @@ class TestTemplateTagWeatheri18n(TestCase):
         mock_.return_value = "Yogi Bear"
         actual = weather_i18n.trans_with_args("this is text")
         mock_.assert_called_with("this is text")
-        self.assertEquals(actual, "Yogi Bear")
+        self.assertEqual(actual, "Yogi Bear")
 
     @mock.patch("backend.templatetags.weather_i18n._")
     def test_trans_with_args(self, mock_):
@@ -41,7 +41,7 @@ class TestTemplateTagWeatheri18n(TestCase):
         mock_.return_value = "Yogi Bear and {hey}"
         actual = weather_i18n.trans_with_args("this is text", hey="boo boo")
         mock_.assert_called_with("this is text")
-        self.assertEquals(actual, "Yogi Bear and boo boo")
+        self.assertEqual(actual, "Yogi Bear and boo boo")
 
     # @mock.patch("backend.templatetags.weather_i18n.ngettext")
     def test_translate_plural_with_args_but_without_args(self):
@@ -49,7 +49,7 @@ class TestTemplateTagWeatheri18n(TestCase):
         # mock_ngettext.return_value = "Ranger Smith"
         actual = weather_i18n.translate_plural_with_args("Ranger Smith", 0)
         # mock_ngettext.assert_called_with("this is text")
-        self.assertEquals(actual, "Ranger Smith-plural")
+        self.assertEqual(actual, "Ranger Smith-plural")
 
     def test_translate_plural_with_argss(self):
         """Test translate_plural_with_args method with arguments."""
@@ -58,4 +58,4 @@ class TestTemplateTagWeatheri18n(TestCase):
             1,
             stolen_items="Pick-a-nick Baskets",
         )
-        self.assertEquals(actual, "Ranger Smith and Pick-a-nick Baskets")
+        self.assertEqual(actual, "Ranger Smith and Pick-a-nick Baskets")

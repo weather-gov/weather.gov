@@ -15,8 +15,11 @@ import sys
 from pathlib import Path
 
 import environs
-from csp.constants import NONCE, SELF
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
+
+# CSP Constants
+SELF = "'self'"
+NONCE = "'nonce-{nonce}'"
 
 SETTINGS_TYPE = "base"
 
@@ -69,8 +72,9 @@ INSTALLED_APPS = [
     "django.contrib.sitemaps",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.postgres",
     "rest_framework",
-    "csp",
+    # "csp", # Removed for Django 6.0 native CSP
     # Wagtail dependencies
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -102,7 +106,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-    "csp.middleware.CSPMiddleware",
+    "django.middleware.csp.ContentSecurityPolicyMiddleware",
     # Wagtail related middleware
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
@@ -122,6 +126,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
+                "django.template.context_processors.csp",
                 "backend.context_processors.route_info",
             ],
             "builtins": [
@@ -337,36 +342,32 @@ DIRECTIVES = {
     "form-action": [SELF]
 }
 
-CONTENT_SECURITY_POLICY = {
-    "DIRECTIVES": {
-        **DIRECTIVES,
-        "style-src": [
-            SELF,
-            "'unsafe-inline'",
-        ],
-    },
+SECURE_CSP = {
+    **DIRECTIVES,
+    "style-src": [
+        SELF,
+        "'unsafe-inline'",
+    ],
 }
 
-CONTENT_SECURITY_POLICY_REPORT_ONLY = {
-    "DIRECTIVES": {
-        **DIRECTIVES,
-        # report style-src violations
-        "style-src": [
-            SELF,
-            NONCE,
-            # combo-box.js applies its own CSS styles
-            "'sha256-gRE3bxId7YdBMR/AIWG7jHh2sJ9XAtq1YUxCaFh3hng='",
-            # cmi-radar
-            "'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='",
-            "'sha256-624gmqlO23N0g1Ru4tkjuaPEoL/hXP4w7tUqel4WM98='",
-            "'sha256-5uOIRR03mYcVoiexgzGGALQ0p1Babe2XxbeIl9t1UpA='",
-            "'sha256-lM8P08IzH0mbT5Tvlm1F5BY3h0gPsb0qNpnZW9YHc7A='",
-            # esri-leaflet
-            "'sha256-UykT9B84Ik0dt1VPV3lpHxAikh/bNzWCgLl3XN0PYtw='",
-            "'sha256-RXxNUJG3UfHAeHA4copS/oAu4QHoWavn3IraEQ+XrTk='",
-            "'sha256-PhvAqgz4qsgszcJzzo3ctihcuOyVv4VbFiW+ns+wtJM='",
-        ],
-    },
+SECURE_CSP_REPORT_ONLY = {
+    **DIRECTIVES,
+    # report style-src violations
+    "style-src": [
+        SELF,
+        NONCE,
+        # combo-box.js applies its own CSS styles
+        "'sha256-gRE3bxId7YdBMR/AIWG7jHh2sJ9XAtq1YUxCaFh3hng='",
+        # cmi-radar
+        "'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='",
+        "'sha256-624gmqlO23N0g1Ru4tkjuaPEoL/hXP4w7tUqel4WM98='",
+        "'sha256-5uOIRR03mYcVoiexgzGGALQ0p1Babe2XxbeIl9t1UpA='",
+        "'sha256-lM8P08IzH0mbT5Tvlm1F5BY3h0gPsb0qNpnZW9YHc7A='",
+        # esri-leaflet
+        "'sha256-UykT9B84Ik0dt1VPV3lpHxAikh/bNzWCgLl3XN0PYtw='",
+        "'sha256-RXxNUJG3UfHAeHA4copS/oAu4QHoWavn3IraEQ+XrTk='",
+        "'sha256-PhvAqgz4qsgszcJzzo3ctihcuOyVv4VbFiW+ns+wtJM='",
+    ],
 }
 
 # region: Logging-----------------------------------------------------------###

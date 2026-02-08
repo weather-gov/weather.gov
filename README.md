@@ -1,4 +1,8 @@
 # Weathergov 2.0
+
+![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)
+![Django 6.0](https://img.shields.io/badge/django-6.0-green.svg)
+
 ## Running
 
 After you have cloned the repository, you can run `just zap` to set up the containers. Visit [http://localhost:8080](http://localhost:8080) to see the application live once the containers are running. Visit [http://localhost:8081](http://localhost:8081) to see the API proxy's status.
