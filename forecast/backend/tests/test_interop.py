@@ -392,3 +392,87 @@ class TestInteropInterface(TestCase):
         
         self.assertEqual(day1["hourly"]["temps"], [72])
         self.assertEqual(day1["hourly"]["pops"], [10])
+
+    @responses.activate
+    def test_point_forecast_missing_or_zero_hourly_max(self):
+        """
+        Tests that we populate hourlyMax if it is missing or 0 but percent is present.
+        """
+        params = {
+            "periods": [{
+                "start": "2026-02-07T20:00:00-06:00", 
+                "isDaytime": True, 
+                "isOvernight": False,
+                "data": {
+                    "temperature": {"degF": 72},
+                    "probabilityOfPrecipitation": {"percent": 50, "hourlyMax": 0}
+                }
+            }],
+            "hours": [],
+            "maxPop": 50,
+            "alerts": {"metadata": {"count": 0}},
+            "qpf": {"periods": [], "hasSnow": False, "hasIce": False, "hasQPF": False},
+        }
+        
+        response_data = {
+            "isMarine": False,
+            "forecast": {
+                "days": [params]
+            }
+        }
+
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(
+            responses.GET,
+            "https://interop/point/8/9",
+            json=response_data,
+            status=200,
+        )
+
+        actual = interop.get_point_forecast(8, 9)
+        day1 = actual["forecast"]["days"][0]
+        period = day1["periods"][0]
+        
+        self.assertIn("hourlyMax", period["data"]["probabilityOfPrecipitation"])
+        self.assertEqual(period["data"]["probabilityOfPrecipitation"]["hourlyMax"], 50)
+
+    @responses.activate
+    def test_point_forecast_max_pop_update(self):
+        """
+        Tests that day['pop'] is updated if periods have higher precip probability than maxPop.
+        """
+        params = {
+            "periods": [{
+                "start": "2026-02-07T20:00:00-06:00", 
+                "isDaytime": True, 
+                "isOvernight": False,
+                "data": {
+                    "temperature": {"degF": 72},
+                    "probabilityOfPrecipitation": {"percent": 60, "hourlyMax": 0}
+                }
+            }],
+            "hours": [],
+            "maxPop": 0,
+            "alerts": {"metadata": {"count": 0}},
+            "qpf": {"periods": [], "hasSnow": False, "hasIce": False, "hasQPF": False},
+        }
+        
+        response_data = {
+            "isMarine": False,
+            "forecast": {
+                "days": [params]
+            }
+        }
+
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(
+            responses.GET,
+            "https://interop/point/8/9",
+            json=response_data,
+            status=200,
+        )
+
+        actual = interop.get_point_forecast(8, 9)
+        day1 = actual["forecast"]["days"][0]
+        
+        self.assertEqual(day1["pop"], 60)

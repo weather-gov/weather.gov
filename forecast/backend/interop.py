@@ -89,6 +89,24 @@ def _set_day_period_info(day):
     day["numPeriods"] = len(periods)
 
 
+def _ensure_pop_hourly_max(day):
+    """Ensure probabilityOfPrecipitation has hourlyMax."""
+    for period in day.get("periods", []):
+        data = period.get("data", {})
+        pop = data.get("probabilityOfPrecipitation", {})
+        
+        # If hourlyMax is missing or 0, try to fill it with other available values
+        # We perfer 'percent' if it's there.
+        current_max = pop.get("hourlyMax", 0)
+        
+        val = pop.get("percent")
+        if val is None:
+            val = pop.get("value")
+            
+        if val is not None and (current_max is None or val > current_max):
+            pop["hourlyMax"] = val
+
+
 def _process_interop_point_forecast(data):
     """
     Make structured lists like temperatures per day, high, low, and other lists for charts and tables.
@@ -111,8 +129,24 @@ def _process_interop_point_forecast(data):
         for day in data["forecast"]["days"]:
             if not is_marine:
                 _set_day_period_info(day)
+                _ensure_pop_hourly_max(day)
 
             _set_high_low_pops(day, is_marine)
+
+            # Ensure day['pop'] reflects the max of the periods, if the API gave us 0 or None
+            max_period_pop = 0
+            for period in day.get("periods", []):
+                period_data = period.get("data", {})
+                pop = period_data.get("probabilityOfPrecipitation", {})
+                # We can assume hourlyMax is set now because of _ensure_pop_hourly_max
+                pop_val = pop.get("hourlyMax", 0)
+                if pop_val is not None and pop_val > max_period_pop:
+                    max_period_pop = pop_val
+            
+            if day["pop"] is None or day["pop"] < max_period_pop:
+                day["pop"] = max_period_pop
+
+
 
             # The following are lists of _hourly_ metrics needed for
             # hourly tables and charts
