@@ -53,37 +53,18 @@ export const main = async () => {
       handler: async (request, response) => {
         logger.trace({ url: request.url });
 
-        performance.clearResourceTimings();
-        const timer = performance.now();
-
         const { data, error, status } = await handler(request);
 
         if (error) {
           logger.error({ err: error });
         }
 
-        const apiTimings = performance
-          .getEntriesByType("resource")
-          .filter(({ initiatorType }) => initiatorType === "fetch")
-          .reduce(
-            (all, { name, duration }) => ({ ...all, [name]: duration }),
-            {},
-          );
-
-        const end = performance.now() - timer;
-
         if (status) {
           logger.trace({ url: request.url, status });
           response.code(status);
         }
 
-        response.send({
-          ...data,
-          "@metadata": {
-            timing: { e2e: end, api: apiTimings },
-            size: JSON.stringify(data).length,
-          },
-        });
+        response.send(data);
       },
     });
   });

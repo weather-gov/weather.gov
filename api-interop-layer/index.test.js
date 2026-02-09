@@ -197,15 +197,6 @@ describe("main bootstrapper", () => {
       expect(
         response.send.calledWithMatch({
           timecode: "001100010010011110100001101101110011",
-          "@metadata": {
-            timing: {
-              e2e: sinon.match.number,
-              // Because there aren't any API calls in these mocks, the API
-              // timing section wll just be a blank object.
-              api: {},
-            },
-            size: sinon.match.number,
-          },
         }),
       ).to.be.true;
     });
