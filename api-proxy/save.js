@@ -4,6 +4,8 @@ import path from "node:path";
 import { format } from "prettier";
 import config from "./config.js";
 
+const ISO_REGEX = /T\d{2}:\d{2}:\d{2}([+-]\d{2}):\d{2}/;
+
 const getRelativeTimestamp = (str) => {
   if (!str) {
     return str;
@@ -32,6 +34,19 @@ const getRelativeTimestamp = (str) => {
   }
 
   return str;
+};
+
+const getRelativeDayFixedHourTimestamp = (start, next, dayOffset) => {
+  const startTime = dayjs(start);
+  const nextTime = dayjs(next);
+  const match = next.match(ISO_REGEX);
+  if(!match){
+    throw new Error(`Could not find offset for GHWO timestamp: ${next}`);
+  }
+  const offset = match[1];
+
+  return `date:today 06:00${offset} +${dayOffset} day`;
+  
 };
 
 const replaceTimestamps = (obj) => {
@@ -85,12 +100,21 @@ const replaceGHWOTimestamps = (ghwoData) => {
       // Filter to remove the countyName key, which is the only
       // non-timestamp based key in this object
       return key !== "countyName";
-    }).map(timestampKey => {
+    }).map((timestampKey, idx, arr) => {
       // Map the timestamp keys to arrays which map to
-      // a relative timestamp used by the proxy system
+      // a relative timestamp used by the proxy system.
+      // The first day should be completely relative to <now>,
+      // while subsequent days should all start at 6am that day
+      let timeObject;
+      if(idx === 0){
+        timeObject = getRelativeTimestamp(timestampKey);
+      } else {
+        timeObject = getRelativeDayFixedHourTimestamp(arr[0], timestampKey, idx);
+      }
+      
       return [
         timestampKey,
-        getRelativeTimestamp(timestampKey)
+        timeObject
       ];
     }).forEach(([timestamp, relativeTimestamp]) => {
       // For each of these lookup lists that
