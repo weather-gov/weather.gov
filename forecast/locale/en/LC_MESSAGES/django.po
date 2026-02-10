@@ -230,6 +230,12 @@ msgstr "Help improve this site"
 msgid "footer.text.usa-gov-site-alt.01"
 msgstr "An official website of the United States government"
 
+msgid "footer.identifier.important-links.01"
+msgstr "Important links"
+
+msgid "footer.identifier.agency-links.01"
+msgstr "Agency links"
+
 msgid "forecast.aria.current-conditions-feels-like.01"
 msgstr "It feels like {temperature} ℉."
 
