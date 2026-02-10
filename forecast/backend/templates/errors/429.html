@@ -1,6 +1,9 @@
 {% extends "weather/page.html" %}
 {% block page_content %}
   <div class="grid-container margin-bottom-5">
-    <h1>429: Too Many Requests</h1>
+    <h1>{{"error.429.interop.message.01"|t}}</h1>
+    <p>
+      {{"error.429.interop.descroption.01"|t}}
+    </p>
   </div>
 {% endblock %}

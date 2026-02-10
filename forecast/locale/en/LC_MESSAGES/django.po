@@ -932,6 +932,12 @@ msgstr "404: The requested place, {place}, {state}, was not found."
 msgid "error.404.forecast.suggested.01"
 msgstr "Were you looking for {place}?"
 
+msgid "error.429.interop.message.01"
+msgstr "429: Too Many Requests"
+
+msgid "error.429.interop.descroption.01"
+msgstr "This site is experiencing heavy traffic. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
+
 msgid "menu.navigation.forecast.01"
 msgstr "Forecast"
 
