@@ -5,7 +5,7 @@ from django.db.models import Subquery
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.decorators.cache import never_cache
+from django.views.decorators.cache import cache_control
 
 from backend import interop
 from backend.models import WFO, Region
@@ -16,7 +16,7 @@ from spatial.models import WeatherCounties, WeatherCountyWarningAreas, WeatherPl
 from ._helpers import get_redirect_for_afd_queries
 
 
-@never_cache
+@cache_control(max_age=120, smax_age=120, public=True)
 def point_location(request, lat, lon):
     """Render the forecast for a given latitude & longitude."""
     # If the latitude or longitude are invalid, bail with an out-of-bounds
@@ -71,7 +71,7 @@ def point_location(request, lat, lon):
     )
 
 
-@never_cache
+@cache_control(max_age=120, smax_age=120, public=True)
 def place_forecast(request, state, place):
     """Render the forecast for a given state and place name."""
     # De-normalize the place name. For the purposes of clean URLs, we
