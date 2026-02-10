@@ -9,6 +9,7 @@ from django.urls import reverse
 
 import spatial.models as spatial
 from backend import models
+from backend.exceptions import Http429
 from backend.util import disable_logging_for_quieter_tests
 from wx_stories_api.models import WeatherStory
 
@@ -269,6 +270,14 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "weather/point.html")
         self.assertTemplateUsed(response, "weather/partials/uswds-alert.html")
+
+    @mock.patch("backend.views.point.interop.get_point_forecast", side_effect=Http429())
+    def test_point_location_interop_429(self, mock_interop_get_point_forecast): # noqa: ARG002
+        """Test that the point location renders 429 when interop does."""
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        self.assertEqual(response.status_code, 429)
+        self.assertTemplateUsed(response, "errors/429.html")
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_marine_point(self, mock_get_point_forecast):

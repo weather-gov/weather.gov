@@ -5,6 +5,7 @@ from unittest import TestCase, mock
 import responses
 
 from backend import interop
+from backend.exceptions import Http429
 from spatial import models
 
 
@@ -422,3 +423,21 @@ class TestInteropInterface(TestCase):
         actual = interop.get_county_data("11223")
 
         self.assertEqual(actual, returned)
+
+    @mock.patch("backend.interop.requests.get")
+    def test__fetch_with_429(self, mock_get): # noqa: ARG002
+        """Tests that fetch will raise the 429 exception on 429."""
+        mock_response = mock.Mock()
+        mock_response.status_code = 429
+        mock_get.return_value = mock_response
+
+        with self.assertRaises(Http429): # noqa: PT027
+            interop._fetch("/point/anything")
+
+    @mock.patch("backend.interop._fetch", side_effect=Http429())
+    def test_get_point_forecast_429(self, mock_fetch): # noqa: ARG002
+        """Tests that get_point_forecast will handle the 429 from fetch."""
+        with self.assertRaises(Http429): # noqa: PT027
+            interop.get_point_forecast(11.1, 22.2)
+
+
