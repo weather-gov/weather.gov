@@ -1,6 +1,6 @@
 ###############################################
 # robots.txt for beta.weather.gov
-# Last updated: 2025-12-04
+# Last updated: 2026-02-10
 #
 # Policy: Allow legitimate search engines and
 #         permitted LLM crawlers; block known
@@ -27,41 +27,22 @@ User-agent: ChatGPT-User
 User-agent: ChatGPT-User/2.0
 Allow: /
 
-# Model-training crawler.
-User-agent: GPTBot
-Disallow: /private/          # private folder
-Allow: /                     # everything else
-
 # ——— ANTHROPIC (Claude) ———
-User-agent: anthropic-ai      # bulk model training
-Disallow: /
 User-agent: ClaudeBot         # chat citation fetch
 User-agent: claude-web        # web-focused crawl
 Allow: /
 
 # ——— PERPLEXITY ———
-User-agent: PerplexityBot     # index builder
-Disallow: /
 User-agent: Perplexity-User   # human-triggered visit
 Allow: /
-
-# ——— GOOGLE (Gemini) ———
-User-agent: Google-Extended
-Disallow: /
 
 # ——— MICROSOFT (Bing / Copilot) ———
 User-agent: BingBot
 Allow: /
 
-# ——— AMAZON ———
-User-agent: Amazonbot
-Disallow: /
-
 # ——— APPLE ———
 User-agent: Applebot
 Allow: /
-User-agent: Applebot-Extended
-Disallow: /
 
 # ——— META ———
 User-agent: FacebookBot
@@ -72,25 +53,9 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-# ——— BYTEDANCE ———
-User-agent: Bytespider
-Disallow: /
-
 # ——— DUCKDUCKGO ———
 User-agent: DuckAssistBot
 Allow: /
-
-# ——— COHERE ———
-User-agent: cohere-ai
-Disallow: /
-
-# ——— ALLEN INSTITUTE / COMMON CRAWL / OTHER RESEARCH ———
-User-agent: AI2Bot
-User-agent: Diffbot
-User-agent: omgili
-User-agent: DataForSeo
-User-agent: CCBot
-Disallow: /
 
 # ——— EMERGING SEARCH START-UPS ———
 User-agent: TimpiBot
@@ -101,8 +66,5 @@ Allow: /
 # Default rules – for all other crawlers
 ###############################################
 User-agent: *
-
-###############################################
-# Sitemap
-###############################################
-Sitemap: https://beta.weather.gov/sitemap.xml
+Crawl-delay: 10
+Disallow: /
