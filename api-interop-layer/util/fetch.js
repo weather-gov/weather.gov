@@ -8,10 +8,6 @@ import {
 import { logger } from "./monitoring/index.js";
 import { sleep } from "./sleep.js";
 
-undici.setGlobalDispatcher(
-  new undici.Agent({ pipelining: 10, allowH2: true, connections: 20 }),
-);
-
 const fetchLogger = logger.child({ subsystem: "fetch wrapper" });
 const redisLogger = logger.child({ subsystem: "redis" });
 
@@ -25,6 +21,44 @@ const STANDARD_HEADERS = {
 if (process.env.API_KEY) {
   STANDARD_HEADERS["API-Key"] = process.env.API_KEY;
 }
+
+// Set the maximum number of open connections we will check against
+// before any requests are actually sent out. 
+export const MAX_OPEN_CONNECTIONS = parseInt(process.env.MAX_OPEN_CONNECTIONS) ?? 16_000;
+
+const AGENT = new undici.Agent({ pipelining: 10, allowH2: true, connections: 20 });
+undici.setGlobalDispatcher(
+  AGENT,
+);
+
+/**
+ * Helper function to get all of the current unresolved connections for every
+ * origin that the unidici Agent is tracking
+ */
+export const getNumOpenConnections = () => {
+  const stats = AGENT.stats;
+  return Object.keys(stats).map(key => {
+    const pool = stats[key];
+    return pool.size;
+  }).reduce((a, b) => {
+    return a + b;
+  }, 0);
+};
+
+/**
+ * Helper function that returns true if the  number of
+ * open  unidici connections is at or exceeds
+ * the configured max number.
+ */
+export const atMaxNumConnections = () => {
+  const openConnections = getNumOpenConnections();
+  if(openConnections >= MAX_OPEN_CONNECTIONS){
+    return true;
+  }
+  return false;
+};
+
+fetchLogger.trace({max: MAX_OPEN_CONNECTIONS}, "Initializing max open connections");
 
 const internalFetch = async (path) => {
   let url = URL.canParse(path) ? URL.parse(path) : new URL(path, BASE_URL);
@@ -125,18 +159,24 @@ const internalFetch = async (path) => {
 
 export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
   internalFetch(path)
-    .catch(() => wait(75).then(() => internalFetch(path)))
-    .catch(() => wait(124).then(() => internalFetch(path)))
-    .catch(() => wait(204).then(() => internalFetch(path)))
-    .catch(() => wait(337).then(() => internalFetch(path)))
-    .catch((e) => {
-      if (e instanceof SyntaxError) {
-        // this can happen if the API or proxy returns HTML
-        fetchLogger.error({ err: e, path }, "invalid JSON");
-      } else {
-        fetchLogger.error({ err: e, path });
-      }
-      return { ...e.cause, error: true };
-    });
+  .catch((e) => {
+    if(e.statusCode === 429){
+      return { ...e.cause, error: true, statusCode: e.statusCode };
+    } else {
+      return wait(75).then(() => internalFetch(path));
+    }
+  })
+  .catch(() => wait(124).then(() => internalFetch(path)))
+  .catch(() => wait(204).then(() => internalFetch(path)))
+  .catch(() => wait(337).then(() => internalFetch(path)))
+  .catch((e) => {
+    if (e instanceof SyntaxError) {
+      // this can happen if the API or proxy returns HTML
+      fetchLogger.error({ err: e, path }, "invalid JSON");
+    } else {
+      fetchLogger.error({ err: e, path });
+    }
+    return { ...e.cause, error: true };
+  });
 
 export { BASE_URL, fetchAPIJson as default };

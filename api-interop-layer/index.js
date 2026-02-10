@@ -2,6 +2,7 @@ import fastify from "fastify";
 import { startAlertProcessing } from "./data/alerts/index.js";
 import routes from "./routes/index.js";
 import { logger } from "./util/monitoring/index.js";
+import { atMaxNumConnections, MAX_OPEN_CONNECTIONS } from "./util/fetch.js";
 
 const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
 
@@ -53,7 +54,22 @@ export const main = async () => {
       handler: async (request, response) => {
         logger.trace({ url: request.url });
 
-        const { data, error, status } = await handler(request);
+        /**
+         * Check first to see if we are at the max open
+         * connections threshold. If so, immediately
+         * respond with a 429
+         */
+        let data, error, status;
+        if(atMaxNumConnections()){
+          data = {
+            "message": `Exceeded max connections`,
+            "maxConnections": MAX_OPEN_CONNECTIONS
+          };
+          error = true;
+          status = 429;
+        } else {
+          ({ data, error, status } = await handler(request));
+        }
 
         if (error) {
           logger.error({ err: error });
