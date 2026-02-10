@@ -73,7 +73,7 @@ getRedisConnectionInfo();
  * for the cache TTL, otherwise null if the header is not present
  */
 export const getTTLFromResponse = (response) => {
-  const cacheHeader = response?.headers?.["Cache-Control"];
+  const cacheHeader = response?.headers?.["cache-control"];
   if (!cacheHeader) {
     return null;
   }
