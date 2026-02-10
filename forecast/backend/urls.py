@@ -1,9 +1,7 @@
 from django.conf import settings
-from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path, register_converter
 from django.views.generic.base import RedirectView, TemplateView
 from wagtail.admin import urls as wagtailadmin_urls
-from wagtail.contrib.sitemaps.sitemap_generator import Sitemap as WagtailSitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
 from backend.views import (
@@ -14,7 +12,6 @@ from backend.views import (
     state,
     static,
 )
-from spatial.sitemaps import PlaceSitemap
 
 from .url_converters import FloatConverter
 
@@ -52,17 +49,6 @@ urlpatterns = [
     path("wx/afd/locations/<wfo>/", partials.wx_afd_versions, name="wx_afd_versions"),
     path("wx/select/ghwo/counties/", partials.wx_select_ghwo_counties, name="wx_select_ghwo_counties"),
     path("wx/ghwo/counties/<str:county_fips>/", partials.wx_ghwo_counties, name="wx_ghwo_counties"),
-    path(
-        "sitemap.xml",
-        sitemap,
-        {
-            "sitemaps": {
-                "wagtail": WagtailSitemap,
-                "places": PlaceSitemap,
-            },
-        },
-        name="django.contrib.sitemaps.views.sitemap",
-    ),
     # Wagtail
     path("cms/logout/", RedirectView.as_view(url="/saml/logout/")),  # override wagtail logout
     path("cms/", include(wagtailadmin_urls)),
