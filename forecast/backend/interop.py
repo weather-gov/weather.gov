@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 import requests
 from django.utils.translation import gettext_lazy as _
 
+from backend.exceptions import Http429
 from spatial.models import WeatherAlertsCache
 
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
@@ -22,6 +23,10 @@ def _fetch(url):
     full_url = f"{base_url}{url}"
     # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
     response = requests.get(full_url, timeout=55)  # TODO: try-request block with logging
+
+    if response.status_code == 429: # noqa: PLR2004
+        raise Http429
+
     return response.json()
 
 
