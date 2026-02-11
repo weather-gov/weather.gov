@@ -80,6 +80,7 @@ services:
       API_URL: ${API_URL:-http://api-proxy:8081}
       GHWO_URL: ${GHWO_URL:-https://www.weather.gov}
       API_KEY: ${API_KEY:-}
+      DISABLE_GRID_ANALYSIS: ${DISABLE_GRID_ANALYSIS:-false}
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY:-}
       LOG_LEVEL: trace

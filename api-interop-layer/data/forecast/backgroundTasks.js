@@ -3,19 +3,81 @@ import { SPATIAL_PROJECTION } from "../../util/constants.js";
 import openDatabase from "../db.js";
 import { logger } from "../../util/monitoring/index.js";
 
-const forecastLogger = logger.child({ subsystem: "forecast" });
+const forecastLogger = logger.child({ subsystem: "heatspot-analysis" });
+forecastLogger.info({
+  message: "Worker Thread: backgroundTasks.js has LOADED",
+});
 
 const tableName = "weathergov_ndfd_gridpoints";
 const logTableName = "weathergov_ndfd_grid_logs";
+const heatIndexTable = "weathergov_ndfd_grid_index";
+
+/**
+ * processHeatInterval
+ * 1. Aggregates logs from the last 30 minutes.
+ * 2. Calculates relative heat and cache expansion radius.
+ * 3. Saves to the historical index table.
+ * 4. Truncates the raw log table to maintain high performance.
+ */
+export const processHeatInterval = async (db, port = parentPort) => {
+  const cutoffTime = new Date().toISOString();
+
+  const insertSql = `
+        INSERT INTO ${heatIndexTable} (interval_start, wfo, x, y, hit_count, relative_heat, cache_radius)
+        WITH batch_stats AS (
+            SELECT 
+                COUNT(*)::float / NULLIF(COUNT(DISTINCT grid_point_id), 0) as avg_hits
+            FROM ${logTableName}
+            WHERE timestamp <= $1
+        ),
+        point_scores AS (
+            SELECT 
+                p.wfo, p.x, p.y,
+                COUNT(*) as hits
+            FROM ${logTableName} l
+            JOIN ${tableName} p ON l.grid_point_id = p.id
+            WHERE l.timestamp <= $1
+            GROUP BY p.wfo, p.x, p.y
+        )
+        SELECT 
+            $1::timestamp,
+            ps.wfo, ps.x, ps.y, ps.hits,
+            ROUND((ps.hits / bs.avg_hits)::numeric, 2),
+            CASE 
+                WHEN ps.hits > bs.avg_hits * 15 THEN 3
+                WHEN ps.hits > bs.avg_hits * 7  THEN 2
+                WHEN ps.hits > bs.avg_hits * 2  THEN 1
+            END
+        FROM point_scores ps, batch_stats bs
+        WHERE (ps.hits / bs.avg_hits) >= 2.0
+        ON CONFLICT (interval_start, wfo, x, y) DO NOTHING;
+    `;
+
+  const deleteSql = `DELETE FROM ${logTableName} WHERE timestamp <= $1;`;
+
+  try {
+    const insertResult = await db.query(insertSql, [cutoffTime]);
+    await db.query(deleteSql, [cutoffTime]);
+
+    forecastLogger.info(
+      {
+        hotspots: insertResult.rowCount || 0,
+        cutoffTime,
+      },
+      "Heat Interval Processed and logs purged",
+    );
+  } catch (err) {
+    forecastLogger.error({ err }, "Heat Interval Processing Failed");
+  }
+};
 
 export const flushForecastGridLogs = async (db, batch) => {
-  // Log the number of hits being processed
-  if (parentPort) {
-    forecastLogger.info(
-      { length: batch.length },
-      "flushing grid hits to the database",
-    );
-  }
+  if (!batch?.length) return;
+
+  forecastLogger.info(
+    { length: batch.length },
+    "flushing grid hits to the database",
+  );
 
   const batchJson = JSON.stringify(batch);
 
@@ -52,9 +114,7 @@ export const flushForecastGridLogs = async (db, batch) => {
   try {
     await db.query(sql, [batchJson]);
   } catch (err) {
-    if (parentPort) {
-      forecastLogger.error({ err }, "grid batcher failed");
-    }
+    forecastLogger.error({ err }, "grid batcher failed");
   }
 };
 
@@ -65,7 +125,12 @@ if (parentPort) {
 
     switch (msg.action?.toLowerCase()) {
       case "flush_forecast_grid_logs":
-        await flushForecastGridLogs(db, msg.payload);
+        flushForecastGridLogs(db, msg.payload);
+        break;
+      case "process_heat_interval":
+        processHeatInterval(db).catch(() => {});
+        break;
+      case "start":
         break;
     }
   });

@@ -1,4 +1,5 @@
-import { Worker } from "node:worker_threads";
+import path from "node:path";
+import { Worker, isMainThread } from "node:worker_threads";
 import { logger } from "../util/monitoring/index.js";
 import getAlerts from "./alerts/index.js";
 import { alignAlertsToDaily } from "./alerts/utils.js";
@@ -12,13 +13,64 @@ import getSatellite from "./satellite.js";
 
 const forecastLogger = logger.child({ subsystem: "forecast" });
 
-forecastLogger.info("starting background worker");
+const disableAnalysis = process.env.DISABLE_GRID_ANALYSIS === "true";
+let gridCache;
+let backgroundWorker;
 
-const backgroundWorker = new Worker("/app/data/forecast/backgroundTasks.js");
-backgroundWorker.on("message", (msg) => {});
+if (isMainThread) {
+  const workerPath = path.join(
+    import.meta.dirname,
+    "forecast",
+    "backgroundTasks.js",
+  );
 
-const gridCache = new ForecastGridCache(backgroundWorker);
-backgroundWorker.postMessage({ action: "start" });
+  forecastLogger.info({
+    message: "initializing forecast background worker",
+    workerPath: workerPath,
+  });
+  backgroundWorker = new Worker(workerPath);
+  backgroundWorker.on("error", (err) => {
+    forecastLogger.error({
+      err,
+      message: "GridCache background worker CRASHED",
+    });
+  });
+
+  gridCache = new ForecastGridCache(backgroundWorker);
+  backgroundWorker.postMessage({ action: "start" });
+
+  if (!disableAnalysis) {
+    const scheduleHeatInterval = () => {
+      const now = new Date();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      const msUntilNextMark = ((30 - (minutes % 30)) * 60 - seconds) * 1000;
+
+      forecastLogger.info(
+        {
+          action: "schedule_sync",
+          waitingMinutes: Math.round(msUntilNextMark / 60_000),
+        },
+        "scheduling next grid analysis sync",
+      );
+
+      setTimeout(() => {
+        backgroundWorker.postMessage({ action: "process_heat_interval" });
+
+        setInterval(() => {
+          backgroundWorker.postMessage({ action: "process_heat_interval" });
+        }, 1_800_000).unref();
+      }, msUntilNextMark).unref();
+    };
+
+    scheduleHeatInterval();
+  } else {
+    forecastLogger.info(
+      { status: "disabled" },
+      "Grid analysis scheduler is DISABLED via environment variable",
+    );
+  }
+}
 
 const getDataForPoint = async (lat, lon) => {
   forecastLogger.trace({ lat, lon }, "fetching forecast");
