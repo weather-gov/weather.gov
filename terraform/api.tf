@@ -36,6 +36,7 @@ resource "cloudfoundry_app" "interop" {
     GHWO_URL               = var.ghwo_url
     API_KEY                = var.api_key
     OPTIMIZE_MEMORY        = true
+    DISABLE_GRID_ANALYSIS = true
   }
 
   processes = [

@@ -45,4 +45,26 @@ export class ForecastGridCache {
       });
     }, 5_000).unref();
   }
+
+  /**
+   * 30-minute Heat Interval trigger
+   * Fires the signal to calculate relative heat and truncate logs.
+   */
+  _startHeatIntervalLoop() {
+    const now = new Date();
+
+    // Calculate minutes until the next :00 or :30 mark
+    const msUntilNextTick =
+      (30 - (now.getMinutes() % 30)) * 60000 - now.getSeconds() * 1000;
+
+    setTimeout(() => {
+      // Fire the first one exactly at the :30 mark
+      this.worker.postMessage({ action: "process_heat_interval" });
+
+      // Establish 30m loop
+      setInterval(() => {
+        this.worker.postMessage({ action: "process_heat_interval" });
+      }, 1_800_000).unref();
+    }, msUntilNextTick).unref();
+  }
 }

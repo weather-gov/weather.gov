@@ -250,3 +250,21 @@ class ForecastGridLog(models.Model):
     class Meta:  # noqa: D106
         db_table = "weathergov_ndfd_grid_logs"
         ordering = ["-timestamp"]
+
+
+class ForecastGridHeatIndex(models.Model):
+    """Stores aggregated traffic hotspots for dynamic cache expansion."""
+
+    interval_start = models.DateTimeField(db_index=True)
+    wfo = models.CharField(max_length=3)
+    x = models.IntegerField()
+    y = models.IntegerField()
+
+    hit_count = models.IntegerField()
+    relative_heat = models.FloatField()
+    cache_radius = models.IntegerField()
+
+    class Meta:  # noqa: D106
+        db_table = "weathergov_ndfd_grid_index"
+        unique_together = ("interval_start", "wfo", "x", "y")
+        ordering = ["-interval_start"]
