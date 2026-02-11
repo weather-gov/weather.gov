@@ -10,8 +10,8 @@ space_deployers = [
   "b47f4a63-109f-416d-a56f-17cae1d0a51c"
 ]
 enable_api_proxy   = true
-web_memory         = "768M"
-api_interop_memory = "512M"
+web_memory         = "1024M"
+api_interop_memory = "1024M"
 api_proxy_memory   = "512M"
 interop_url        = "https://api-weathergov-test.app.cloud.gov"
 api_url            = "https://api-proxy-weathergov-test.app.cloud.gov"
