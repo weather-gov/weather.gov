@@ -7,6 +7,7 @@ dayjs.extend(timezone);
 
 let play = null;
 let now = null;
+let delay = 0;
 let nowMethod = null;
 
 const timestampFromEnv = () => {
@@ -48,6 +49,13 @@ export default {
   },
   set play(v) {
     play = v;
+  },
+
+  get delay() {
+    return delay;
+  },
+  set delay(v) {
+    delay = v;
   },
 
   get now() {

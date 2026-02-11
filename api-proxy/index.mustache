@@ -56,6 +56,12 @@
       <div>
         <span class="font-family-mono">now</span> is set to <time>{{ config.now }}</time>
       </div>
+      <div class="margin-top-1">
+        <form method="GET" action="/set-delay">
+          <label>Delay: <input type="text" name="ms" value="{{ delay }}"></label>ms
+          <input role="button" class="usa-button" type="submit" value="Set">
+        </form>
+      </div>
 
       {{#error}}
         <div class="usa-alert usa-alert--error">

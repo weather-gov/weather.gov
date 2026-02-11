@@ -1,13 +1,16 @@
-import fs from "node:fs/promises";
 import express from "express";
-import path from "node:path";
 import mustache from "mustache";
-import proxyToApi from "./proxy.js";
+import fs from "node:fs/promises";
+import path from "node:path";
 import config from "./config.js";
-import serveBundle from "./serve.js";
-import getProductInfo from "./products.js";
-import save from "./save.js";
+import { loadBundle } from "./data.js";
 import logger from "./logger.js";
+import getProductInfo from "./products.js";
+import proxyToApi from "./proxy.js";
+import save from "./save.js";
+import serveBundle from "./serve.js";
+
+const mainLogger = logger.child({ subsystem: "main" });
 
 const app = express();
 const port = process.env.PORT ?? 8081;
@@ -92,6 +95,7 @@ const ui = async ({ error = false } = {}) => {
     error,
     config,
     points,
+    delay: config.delay ?? 0,
     products: bundleProducts,
     bundles,
     isLocal,
@@ -101,6 +105,12 @@ const ui = async ({ error = false } = {}) => {
 app.get("/set-now", async (req, res) => {
   config.now = req.query.t || null;
   res.redirect("/");
+});
+
+app.get("/set-delay", async (req, res) => {
+  config.delay = Number.parseInt(req.query.ms) || 0;
+  res.redirect("/");
+  res.send();
 });
 
 app.get(/\/proxy\/stop\/?/, async (_, res) => {
@@ -115,6 +125,7 @@ app.get("/proxy/play/:bundle", async (req, res) => {
   const bundle = path.basename(req.params.bundle);
   const exists = await fsExists(path.join("./data", bundle));
   if (exists) {
+    await loadBundle(bundle);
     config.play = bundle;
     res.redirect("/");
     res.end();
@@ -154,10 +165,7 @@ app.get("*any", async (req, res) => {
     return;
   }
 
-  const query = Object.entries(req.query)
-    .map(([key, value]) => `${key}=${value}`)
-    .join("&");
-  logger.trace({ path: req.path, query: query || undefined }, "REQUEST");
+  mainLogger.trace({ path: req.originalUrl || undefined }, "incoming request");
 
   if (config.play) {
     serveBundle(req, res);
@@ -167,7 +175,10 @@ app.get("*any", async (req, res) => {
 });
 
 app.listen(port, () => {
-  logger.info({ port }, "Now listening");
-  logger.info({ localService: config.localService }, "Locally-served files");
-  logger.info({ recording: config.recording }, "Recording");
+  mainLogger.info({ port }, "Now listening");
+  mainLogger.info(
+    { localService: config.localService },
+    "Locally-served files",
+  );
+  mainLogger.info({ recording: config.recording }, "Recording");
 });

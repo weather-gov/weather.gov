@@ -1,20 +1,9 @@
-import fs from "fs/promises";
-import path from "path";
-
 import config from "./config.js";
-import proxy from "./proxy.js";
+import { localData } from "./data.js";
 import logger from "./logger.js";
+import proxy from "./proxy.js";
 
-const dataPath = "./data";
-
-const exists = async (file) => {
-  try {
-    await fs.access(file, fs.constants.F_OK);
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
+const serveLogger = logger.child({ subsystem: "file service" });
 
 const adjust = (time, adjustment) => {
   const [amount, unit] = adjustment.trim().split(" ");
@@ -148,29 +137,33 @@ const processRiskOverviewDates = (riskOverviewData) => {
 };
 
 export default async (request, response) => {
-  // In the event that the resource being requested already a .json extension,
-  // yoink it out. We don't want to duplicate it.
-  const resourcePath = request.path.replace(/\.json$/, "");
-
-  // Put the query string back together.
-  const query = Object.entries(request.query)
-    .map(([key, value]) => `${key}=${value}`)
-    .join("&");
-
-  // The file path is the request path plus the query string, if any.
-  let filePath = `${path.join(dataPath, config.play, resourcePath)}${
-    query.length > 0 ? "__" : ""
-  }${query}.json`;
-
-  const fileExists = await exists(filePath);
-  logger.info({ method: config.nowMethod, now: config.now }, "NOW_TIME");
-
-  if (!fileExists) {
-    logger.info({ filePath }, "LOCAL: local file does not exist; proxying");
+  // See if we have data for this URL. If not, proxy it.
+  if (!localData.has(request.originalUrl)) {
+    serveLogger.info(
+      { path: request.originalUrl },
+      "local file does not exist; proxying",
+    );
     await proxy(request, response);
   } else {
-    logger.info({ filePath }, "LOCAL: serving local file");
-    const output = JSON.parse(await fs.readFile(filePath));
+    // Otherwise, serve that sucker.
+    serveLogger.info({ path: request.originalUrl }, "serving local file");
+    const output = localData.get(request.originalUrl);
+
+    const delay = config.delay
+      ? new Promise((resolve) => {
+          serveLogger.trace(
+            { path: request.originalUrl, delay: config.delay },
+            "delaying response",
+          );
+          setTimeout(() => {
+            serveLogger.trace(
+              { path: request.originalUrl, delay: config.delay },
+              "delay has elapsed",
+            );
+            resolve();
+          }, config.delay);
+        })
+      : Promise.resolve();
 
     // If the bundle contains a `now` key, override any
     // configured value for the current time with the timestamp
@@ -180,7 +173,10 @@ export default async (request, response) => {
     }
 
     if (output["@bundle"]?.status) {
-      logger.info({ status: output["@bundle"].status }, "LOCAL: local file has response status");
+      serveLogger.info(
+        { status: output["@bundle"].status },
+        "local file has response status",
+      );
       response.writeHead(output["@bundle"].status);
       response.end();
       return;
@@ -189,9 +185,7 @@ export default async (request, response) => {
     // We know this is hourly forecast data if it's somewhere in the /gridpoints
     // tree and EITHER ends after the WFO grid OR ends with /forecast/hourly.
     const isHourlyForecast =
-      /\/gridpoints\/[A-Z]{3}\/\d+,\d+(\/forecast\/hourly)?\.json/.test(
-        filePath.toString(),
-      );
+      /\/gridpoints\/[A-Z]{3}\/\d+,\d+(\/forecast\/hourly)?/.test(request.path);
 
     const isRiskOverviewRequest = request.path.endsWith("hazByCounty.json");
 
@@ -200,6 +194,8 @@ export default async (request, response) => {
     } else {
       processDates(output, isHourlyForecast);
     }
+
+    await delay;
 
     response.writeHead(200, {
       server: "weather.gov dev proxy",
@@ -210,5 +206,6 @@ export default async (request, response) => {
     });
     response.write(JSON.stringify(output, null, 2));
     response.end();
+    serveLogger.trace({ path: request.originalUrl }, "finished serving");
   }
 };

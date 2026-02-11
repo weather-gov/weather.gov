@@ -1,6 +1,8 @@
 import https from "https";
 import logger from "./logger.js";
 
+const proxyLogger = logger.child({ subsystem: "proxy" });
+
 export default (req, res) => {
   const isStandalone = !!process.env.PROXY_STANDALONE;
   // if we are standalone then we should not be proxying and we should be
@@ -44,7 +46,7 @@ export default (req, res) => {
         // Write out the response.
         if (!res.writableEnded) {
           res.write(output.join(""));
-          logger.trace("PROXY: response finished");
+          proxyLogger.trace({ path: req.originalUrl }, "response finished");
         }
         res.end();
       };
@@ -57,7 +59,7 @@ export default (req, res) => {
       proxyResponse.on("end", finish);
     })
     .on("error", (e) => {
-      logger.error({ err: e }, "PROXY: error");
+      proxyLogger.error({ err: e }, "error");
       try {
         res.writeHead(500);
         res.write(e.message);
