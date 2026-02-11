@@ -28,7 +28,8 @@ resource "cloudfoundry_app" "api-proxy" {
   enable_ssh       = true
 
   environment = {
-    OPTIMIZE_MEMORY = true
+    API_PROXY_PRODUCTION = true
+    OPTIMIZE_MEMORY      = true
   }
 
   processes = [
