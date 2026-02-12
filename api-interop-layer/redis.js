@@ -1,4 +1,4 @@
-import redis from "@redis/client";
+import { createClient } from "redis";
 import { logger } from "./util/monitoring/index.js";
 
 // For now, let's use a single client instance
@@ -82,7 +82,6 @@ export const getTTLFromResponse = (response) => {
   // if it is present
   const rx = /s-maxage=([0-9]+)/;
   const match = cacheHeader.match(rx);
-  redisLogger.debug({ match }, "cache-control header");
   if (!match) {
     return null;
   }
@@ -140,9 +139,18 @@ export const saveToRedis = async (key, value, ttl) => {
     return null;
   }
   const client = await getRedisClient();
-  return await client.set(key, value, { EX: ttl }).then(() => {
-    redisLogger.debug({ key, ttl }, "cached value");
-  });
+
+  try {
+    const result = await client.json.set(
+      key,
+      "$",
+      value,
+      { EX: ttl }
+    );
+    redisLogger.trace({key, ttl }, "Saved cached value");
+  }catch(e){
+    redisLogger.error(e);
+  }
 };
 
 /**
@@ -157,5 +165,5 @@ export const getFromRedis = async (key) => {
     return null;
   }
   const client = await getRedisClient();
-  return await client.get(key);
+  return await client.json.get(key);
 };
