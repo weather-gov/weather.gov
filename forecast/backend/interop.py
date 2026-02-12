@@ -253,6 +253,10 @@ def get_radar(lat, lon):
     url = f"/radar/{lat}/{lon}"
     return _fetch(url)
 
+def get_briefing_data(wfo):
+    """Fetch the briefing metadata for a given WFO."""
+    url = f"/offices/{wfo}/briefings"
+    return _fetch(url)
 
 def get_county_data(countyfips):
     """Get county data. Consolidated risk overview and alerts per county.

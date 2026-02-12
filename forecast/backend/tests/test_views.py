@@ -271,6 +271,7 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "weather/point.html")
         self.assertTemplateUsed(response, "weather/partials/uswds-alert.html")
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.point.interop.get_point_forecast", side_effect=Http429())
     def test_point_location_interop_429(self, mock_interop_get_point_forecast): # noqa: ARG002
         """Test that the point location renders 429 when interop does."""

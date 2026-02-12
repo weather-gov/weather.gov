@@ -13,6 +13,17 @@ class TestInteropInterface(TestCase):
     """Tests the interop interface module."""
 
     @responses.activate
+    def test_get_briefing_data(self):
+        """Tests that we get briefing metadata data."""
+        returned = {"bob": "weatherman"}
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(responses.GET, "https://interop/offices/ABC/briefings", json=returned, status=200)
+
+        actual = interop.get_briefing_data("ABC")
+
+        self.assertEqual(actual, returned)
+
+    @responses.activate
     def test_get_weather_stories(self):
         """Tests that we get weather story metadata data."""
         stories = [{"order": "3"}, {"order": "2"}, {"order": "1"}]
