@@ -95,7 +95,7 @@ const internalFetch = async (path) => {
     if (cachedValue) {
       redisLogger.trace({ pathname: url.pathname }, "returning cached value");
       return new Promise((resolve) => {
-        resolve(JSON.parse(cachedValue));
+        resolve(cachedValue);
       });
     }
   }
