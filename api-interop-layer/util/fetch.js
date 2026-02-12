@@ -129,7 +129,7 @@ const internalFetch = async (path) => {
         const ttl = getTTLFromResponse(r);
         if (ttl) {
           const json = await r.body.json();
-          await saveToRedis(url.pathname, JSON.stringify(json), ttl);
+          await saveToRedis(url.pathname, json, ttl);
           return json;
         }
       }
