@@ -7,6 +7,7 @@ import requests
 from django.utils.translation import gettext_lazy as _
 
 from backend.exceptions import Http429
+from backend.util.alert import set_timing
 from spatial.models import WeatherAlertsCache
 
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
@@ -115,7 +116,7 @@ def _process_interop_point_forecast(data):
     # hashes, in order to save on bandwidth.
     if "alerts" in data and "items" in data["alerts"] and len(data["alerts"]["items"]):
         alerts = WeatherAlertsCache.objects.only("alertjson").filter(hash__in=data["alerts"]["items"])
-        data["alerts"]["items"] = [alert.alertjson for alert in alerts]
+        data["alerts"]["items"] = [set_timing(alert.alertjson) for alert in alerts]
 
     tz = ZoneInfo(data["place"]["timezone"])
 

@@ -366,13 +366,20 @@ class TestInteropInterface(TestCase):
             status=200,
         )
 
-        models.WeatherAlertsCache.objects.create(hash="alert-id-1", alertjson="alert #1", counties="", states="")
-        models.WeatherAlertsCache.objects.create(hash="alert-id-2", alertjson="alert #2", counties="", states="")
-        models.WeatherAlertsCache.objects.create(hash="alert-id-3", alertjson="alert #3", counties="", states="")
+        alert1 = {"id": 1, "onset": "1990-01-01T00:00:00Z"}
+        alert2 = {"id": 2, "onset": "1990-01-01T00:00:00Z"}
+        alert3 = {"id": 3, "onset": "1990-01-01T00:00:00Z"}
+
+        models.WeatherAlertsCache.objects.create(hash="alert-id-1", alertjson=alert1, counties="", states="")
+        models.WeatherAlertsCache.objects.create(hash="alert-id-2", alertjson=alert2, counties="", states="")
+        models.WeatherAlertsCache.objects.create(hash="alert-id-3", alertjson=alert3, counties="", states="")
 
         actual = interop.get_point_forecast(6, 7)
 
-        self.assertEquals(actual["alerts"]["items"], ["alert #1", "alert #2", "alert #3"])
+        self.assertEquals(
+            [alert["id"] for alert in actual["alerts"]["items"]],
+            [alert1["id"], alert2["id"], alert3["id"]],
+        )
 
     @responses.activate
     def test_point_forecast_alert(self):
