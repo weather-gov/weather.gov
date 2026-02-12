@@ -111,8 +111,7 @@ export const getRedisClient = async () => {
     const { password, host, port } = getRedisConnectionInfo();
     const url = `${protocol}://default:${password}@${host}:${port}`;
     redisLogger.info({ url }, "connecting");
-    client = await redis
-      .createClient({ url })
+    client = await createClient({ url })
       .on("error", (err) => {
         redisLogger.error({ err }, "Client error");
       })
@@ -141,14 +140,9 @@ export const saveToRedis = async (key, value, ttl) => {
   const client = await getRedisClient();
 
   try {
-    const result = await client.json.set(
-      key,
-      "$",
-      value,
-      { EX: ttl }
-    );
-    redisLogger.trace({key, ttl }, "Saved cached value");
-  }catch(e){
+    const result = await client.json.set(key, "$", value, { EX: ttl });
+    redisLogger.trace({ key, ttl }, "Saved cached value");
+  } catch (e) {
     redisLogger.error(e);
   }
 };
