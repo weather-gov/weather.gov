@@ -1015,3 +1015,28 @@ msgstr "Site"
 
 msgid "menu.navigation.labels.enter-term.01"
 msgstr "Enter a search term"
+
+# Alert duration messages
+msgid "until {time} today"
+msgstr ""
+
+msgid "until {time}"
+msgstr ""
+
+msgid "has concluded"
+msgstr ""
+
+msgid "is in effect"
+msgstr ""
+
+msgid "{day} morning"
+msgstr ""
+
+msgid "{day} afternoon"
+msgstr ""
+
+msgid "tonight"
+msgstr ""
+
+msgid "tomorrow night"
+msgstr ""

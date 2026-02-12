@@ -126,4 +126,10 @@ ignore_missing_imports = true
 omit = ["manage.py", "backend/migrations/*.py"]
 
 [dependency-groups]
-dev = ["coverage>=7.12.0", "debugpy>=1.8.17", "djlint>=1.36.4", "ruff>=0.14.8"]
+dev = [
+    "coverage>=7.12.0",
+    "debugpy>=1.8.17",
+    "djlint>=1.36.4",
+    "freezegun>=1.5.5",
+    "ruff>=0.14.8",
+]

@@ -16,9 +16,9 @@
           <div id="a{{ alert.id }}" class="usa-accordion__content usa-prose">
             <p class="font-sans-md text-bold text-primary-darker margin-y-0">
               {% if alert.timing.end %}
-                {% trans_with_args "alerts.text.in-effect-from-until.01" with start=alert.timing.start end=alert.timing.end %}
+                {% trans_with_args "alerts.text.in-effect-from-until.01" with start=alert.timing.start|date:"l m/d g:i A T" end=alert.timing.end|date:"l m/d g:i A T" %}
               {% else %}
-                {% trans_with_args "alerts.text.in-effect-from.01" with start=alert.timing.start %}
+                {% trans_with_args "alerts.text.in-effect-from.01" with start=alert.timing.start|date:"l m/d g:i A T" %}
               {% endif %}
             </p>
             <p class="margin-y-05">{% trans_with_args "alerts.text.issued-by.01" with sender=alert.sender %}</p>
