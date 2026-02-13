@@ -25,7 +25,7 @@ def _fetch(url):
     # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
     response = requests.get(full_url, timeout=55)  # TODO: try-request block with logging
 
-    if response.status_code == 429: # noqa: PLR2004
+    if response.status_code == 429:  # noqa: PLR2004
         raise Http429
 
     return response.json()
@@ -55,10 +55,7 @@ def _set_high_low_pops(day, is_marine):
         day["pop"] = day["maxPop"] or 0
     else:
         periods = day["periods"]
-        day["temps"] = [
-            period["data"]["temperature"]["degF"]
-            for period in periods
-        ]
+        day["temps"] = [period["data"]["temperature"]["degF"] for period in periods]
         valid_temps = [temp for temp in day["temps"] if temp is not None]
         day["low"] = min(valid_temps)
         day["high"] = max(valid_temps)
@@ -116,7 +113,13 @@ def _process_interop_point_forecast(data):
     # hashes, in order to save on bandwidth.
     if "alerts" in data and "items" in data["alerts"] and len(data["alerts"]["items"]):
         alerts = WeatherAlertsCache.objects.only("alertjson").filter(hash__in=data["alerts"]["items"])
-        data["alerts"]["items"] = [set_timing(alert.alertjson) for alert in alerts]
+        # Map the hash to the alert object, with timings applied
+        alerts = {alert.hash: set_timing(alert.alertjson) for alert in alerts}
+        # Now replace the alert hashes with actual alerts. If there's no
+        # alert corresponding to a hash, just drop it. There's a small but
+        # non-zero chance that the alert was removed from the cache in the
+        # time between when the interop sent us this and when we queried.
+        data["alerts"]["items"] = [alerts[hash] for hash in data["alerts"]["items"] if hash in alerts]
 
     tz = ZoneInfo(data["place"]["timezone"])
 
@@ -282,6 +285,7 @@ def get_ghwo_data_for_county(county_fips):
     url = f"/risk-overview/{county_fips}"
     return _fetch(url)
 
+
 def get_weather_stories(wfo):
     """Fetch the weather story metadata for a given WFO."""
     url = f"/offices/{wfo}/weatherstories"
@@ -294,6 +298,7 @@ def get_weather_stories(wfo):
         return min(stories, key=lambda x: x["order"])
     except Exception:
         return None
+
 
 def get_wx_afd_by_id(afd_id):
     """
