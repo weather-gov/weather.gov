@@ -107,6 +107,12 @@ variable "api_interop_memory" {
   description = "The amount of memory to assign to the API interop process"
 }
 
+variable "api_interop_instances" {
+  type        = number
+  default     = 1
+  description = "The number of API interop instances"
+}
+
 variable "api_url" {
   type        = string
   default     = "https://api.weather.gov"
@@ -129,15 +135,4 @@ variable "api_key" {
   type        = string
   default     = ""
   description = "The weather API key, if applicable, for the API interop process"
-}
-
-variable "worker_instances" {
-  type        = number
-  default     = 1
-  description = "The number of instances of the worker process"
-}
-variable "worker_memory" {
-  type        = string
-  default     = "256M"
-  description = "The amount of memory to assign to the worker processes"
 }
