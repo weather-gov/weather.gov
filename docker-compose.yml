@@ -34,6 +34,7 @@ services:
       POSTGRES_PASSWORD: drupal
       INTEROP_URL: "http://api-interop-layer:8082/"
       API_URL: "http://api-proxy:8081/"
+      NWSCONNECT_API_URL: "https://preview-api.weather.gov"
       GHWO_URL: "http://api-proxy:8081/"
       DEBUG_PORT: 34235
       DJANGO_SETTINGS_MODULE: backend.config.settings.dev
@@ -78,6 +79,7 @@ services:
       DB_HOST: database
       DB_PORT: 5432
       API_URL: ${API_URL:-http://api-proxy:8081}
+      NWSCONNECT_API_URL: ${NWSCONNECT_API_URL:-http://api-proxy:8081}
       GHWO_URL: ${GHWO_URL:-https://www.weather.gov}
       API_KEY: ${API_KEY:-}
       DISABLE_GRID_ANALYSIS: ${DISABLE_GRID_ANALYSIS:-false}
@@ -141,6 +143,7 @@ services:
       - ./reports:/reports
     environment:
       API_URL: http://api-proxy:8081
+      NWSCONNECT_API_URL: http://api-proxy:8081
       GHWO_URL: http://api-proxy:8081
       WEB_URL: http://web:8080
       INTEROP_URL: http://api-interop-layer:8082

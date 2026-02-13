@@ -21,6 +21,15 @@ const Services = {
     }
   },
 
+  get nwsConnectApiURL() {
+    const found = process.env.NWSCONNECT_API_URL;
+    if (found && found != "") {
+      return found;
+    } else {
+      return "http://localhost:8081";
+    }
+  },
+
   get webURL() {
     const found = process.env.WEB_URL;
     if (found && found != "") {
