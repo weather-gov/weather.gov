@@ -13,6 +13,7 @@ const redisLogger = logger.child({ subsystem: "redis" });
 
 const DISABLE_REDIS = process.env.DISABLE_REDIS ? true : false;
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
+const BASE_NWSCONNECT_URL = process.env.NWSCONNECT_API_URL ?? "https://preview-api.weather.gov";
 const BASE_GHWO_URL = process.env.GHWO_URL ?? "https://www.weather.gov";
 
 const STANDARD_HEADERS = {
@@ -77,10 +78,21 @@ const internalFetch = async (path) => {
 
   const isAlert = url.pathname.includes("alerts");
 
+  const isWxStory = url.hostname === url.pathname.endsWith("/weatherstories");
+
+  const isBriefing = url.hostname === url.pathname.endsWith("/briefings");
+
+
   if (isGHWO) {
     // If the incoming path matches a request to the website's risk overview
     // endpoint, switch to the GHWO base URL.
     url = new URL(url.pathname, BASE_GHWO_URL);
+  }
+
+  if (isWxStory || isBriefing) {
+    // If the incoming path matches a request to the website's weather story
+    // or briefing endpoint, switch to the NWS Connect URL.
+    url = new URL(url.pathname, BASE_NWSCONNECT_URL);
   }
 
   // Attempt to look up the request in the redis cache.
@@ -179,4 +191,4 @@ export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
     return { ...e.cause, error: true };
   });
 
-export { BASE_URL, fetchAPIJson as default };
+export { BASE_URL, BASE_NWSCONNECT_URL, fetchAPIJson as default };
