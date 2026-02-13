@@ -102,7 +102,7 @@
         },
         "relativeHumidity": {
           "unitCode": "wmoUnit:percent",
-          "value": 78.82635534845,
+          "value": null,
           "qualityControl": "S"
         },
         "windChill": {
