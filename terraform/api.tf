@@ -37,13 +37,13 @@ resource "cloudfoundry_app" "interop" {
     GHWO_URL               = var.ghwo_url
     API_KEY                = var.api_key
     OPTIMIZE_MEMORY        = true
-    DISABLE_GRID_ANALYSIS = true
+    DISABLE_GRID_ANALYSIS  = true
   }
 
   processes = [
     {
       type              = "web"
-      instances         = (var.env == "prod" ? 2 : 1)
+      instances         = var.api_interop_instances
       memory            = var.api_interop_memory
       health_check_type = "process"
     }
