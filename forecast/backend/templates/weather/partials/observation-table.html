@@ -25,7 +25,7 @@
         {% trans "observation-table.labels.humidity.01" %}
       </th>
       <td>
-        {% if obs.data.relativeHumidity.percent == 0 %}
+        {% if not obs.data.relativeHumidity.percent %}
           <span class="text-base font-mono-xs">{{  "abbreviations.not-applicable.01" | t}}</span>
         {% else %}
           {{ obs.data.relativeHumidity.percent }}%

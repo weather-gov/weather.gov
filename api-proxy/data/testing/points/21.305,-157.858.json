@@ -3,7 +3,8 @@
     "name": "Honolulu, HI",
     "attributes": [
       "has preceding overnight period for today",
-      "has only day time period for 7th day (no night period)"
+      "has only day time period for 7th day (no night period)",
+      "observed humidity is null"
     ]
   },
   "@context": [
