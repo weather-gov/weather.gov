@@ -421,6 +421,46 @@ class TestInteropInterface(TestCase):
         self.assertEqual(actual, returned)
 
     @responses.activate
+    @mock.patch("spatial.models.WeatherAlertsCache.objects")
+    def test_get_point_alerts_are_sorted(self, filter_mock):
+        """Tests that alerts are hydrated in the same order as returned by interop."""
+        # The mock data has alerts laid out like this:
+        #     alert-id-1, alert-id-2, alert-id-3
+        #
+        # Let's return them in a different order from the
+        # model so we can ensure it is sorted afterwards.
+        alert1 = mock.MagicMock(spec=models.WeatherAlertsCache)
+        alert1.hash = "alert-id-1"
+        alert1.alertjson = {"id": "alert 1", "onset": "1990-01-01T00:00:00Z"}
+
+        alert2 = mock.MagicMock(spec=models.WeatherAlertsCache)
+        alert2.hash = "alert-id-2"
+        alert2.alertjson = {"id": "alert 2", "onset": "1991-01-01T00:00:00Z"}
+
+        alert3 = mock.MagicMock(spec=models.WeatherAlertsCache)
+        alert3.hash = "alert-id-3"
+        alert3.alertjson = {"id": "alert 3", "onset": "1992-01-01T00:00:00Z"}
+
+        # Return them in a wonky order.
+        filter_mock.only.return_value.filter.return_value = [alert2, alert3, alert1]
+
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(
+            responses.GET,
+            "https://interop/point/7/8",
+            json=self.forecast["nosnow_ice_alert"],
+            status=200,
+        )
+
+        actual = interop.get_point_forecast(7, 8)
+
+        alerts = actual["alerts"]["items"]
+        self.assertEqual(len(alerts), 3)
+        self.assertEqual(actual["alerts"]["items"][0]["id"], "alert 1")
+        self.assertEqual(actual["alerts"]["items"][1]["id"], "alert 2")
+        self.assertEqual(actual["alerts"]["items"][2]["id"], "alert 3")
+
+    @responses.activate
     def test_get_radar(self):
         """Tests that we get radar metadata."""
         returned = {"message": "some radar metadata"}
