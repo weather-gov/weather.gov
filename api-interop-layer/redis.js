@@ -39,12 +39,13 @@ export const getRedisConnectionInfo = () => {
   }
 
   const REQUIRED_ENV_VARS = ["REDIS_HOST", "REDIS_PORT", "REDIS_PASSWORD"];
-  REQUIRED_ENV_VARS.forEach((varName) => {
-    if (!process.env[varName]) {
-      redisLogger.warn("redis is disabled for cache");
-      return {};
-    }
-  });
+  const missing = REQUIRED_ENV_VARS.some((varName) => !process.env[varName]);
+
+  if (missing) {
+    redisLogger.warn("redis is disabled for cache");
+    USE_REDIS = false;
+    return null;
+  }
 
   USE_REDIS = true;
   redisLogger.info("interop is using redis for cache in dev");
@@ -108,7 +109,11 @@ export const getRedisClient = async () => {
     return client;
   }
   try {
-    const { password, host, port } = getRedisConnectionInfo();
+    const connectionInfo = getRedisConnectionInfo();
+    if (!connectionInfo) {
+      return null;
+    }
+    const { password, host, port } = connectionInfo;
     const url = `${protocol}://default:${password}@${host}:${port}`;
     redisLogger.info({ url }, "connecting");
     client = await createClient({ url })
