@@ -25,7 +25,7 @@ if (process.env.API_KEY) {
 
 // Set the maximum number of open connections we will check against
 // before any requests are actually sent out. 
-export const MAX_OPEN_CONNECTIONS = parseInt(process.env.MAX_OPEN_CONNECTIONS) ?? 16_000;
+export const MAX_OPEN_CONNECTIONS = parseInt(process.env.MAX_OPEN_CONNECTIONS) || 16_000;
 
 const AGENT = new undici.Agent({ pipelining: 10, allowH2: true, connections: 20 });
 undici.setGlobalDispatcher(
@@ -53,13 +53,13 @@ export const getNumOpenConnections = () => {
  */
 export const atMaxNumConnections = () => {
   const openConnections = getNumOpenConnections();
-  if(openConnections >= MAX_OPEN_CONNECTIONS){
+  if (openConnections >= MAX_OPEN_CONNECTIONS) {
     return true;
   }
   return false;
 };
 
-fetchLogger.trace({max: MAX_OPEN_CONNECTIONS}, "Initializing max open connections");
+fetchLogger.trace({ max: MAX_OPEN_CONNECTIONS }, "Initializing max open connections");
 
 const internalFetch = async (path) => {
   let url = URL.canParse(path) ? URL.parse(path) : new URL(path, BASE_URL);
@@ -171,24 +171,24 @@ const internalFetch = async (path) => {
 
 export const fetchAPIJson = async (path, { wait = sleep } = {}) =>
   internalFetch(path)
-  .catch((e) => {
-    if(e.statusCode === 429){
-      return { ...e.cause, error: true, statusCode: e.statusCode };
-    } else {
-      return wait(75).then(() => internalFetch(path));
-    }
-  })
-  .catch(() => wait(124).then(() => internalFetch(path)))
-  .catch(() => wait(204).then(() => internalFetch(path)))
-  .catch(() => wait(337).then(() => internalFetch(path)))
-  .catch((e) => {
-    if (e instanceof SyntaxError) {
-      // this can happen if the API or proxy returns HTML
-      fetchLogger.error({ err: e, path }, "invalid JSON");
-    } else {
-      fetchLogger.error({ err: e, path });
-    }
-    return { ...e.cause, error: true };
-  });
+    .catch((e) => {
+      if (e.statusCode === 429) {
+        return { ...e.cause, error: true, statusCode: e.statusCode };
+      } else {
+        return wait(75).then(() => internalFetch(path));
+      }
+    })
+    .catch(() => wait(124).then(() => internalFetch(path)))
+    .catch(() => wait(204).then(() => internalFetch(path)))
+    .catch(() => wait(337).then(() => internalFetch(path)))
+    .catch((e) => {
+      if (e instanceof SyntaxError) {
+        // this can happen if the API or proxy returns HTML
+        fetchLogger.error({ err: e, path }, "invalid JSON");
+      } else {
+        fetchLogger.error({ err: e, path });
+      }
+      return { ...e.cause, error: true };
+    });
 
 export { BASE_URL, BASE_NWSCONNECT_URL, fetchAPIJson as default };
