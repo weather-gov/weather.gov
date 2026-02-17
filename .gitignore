@@ -82,3 +82,7 @@ terraform/dist
 forecast/media/*.*
 # collectstatic
 forecast/frontend/public/
+
+# Node profiling
+*.cpuprofile
+*.heapprofile

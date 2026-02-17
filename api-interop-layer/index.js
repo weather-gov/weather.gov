@@ -1,4 +1,6 @@
 import fastify from "fastify";
+import fs from "fs";
+import inspector from "inspector";
 import { startAlertProcessing } from "./data/alerts/index.js";
 import routes from "./routes/index.js";
 import { logger } from "./util/monitoring/index.js";
@@ -19,6 +21,40 @@ const ensureEnvironmentVariables = () => {
     process.exit(-1);
   }
 };
+
+let session = null;
+let profiling = false;
+
+// Start profiling with `kill -USR1 <node process id>`
+process.on('SIGUSR1', async () => {
+  if (profiling) return;
+
+  profiling = true;
+  session = new inspector.Session();
+  session.connect();
+
+  await new Promise(resolve => {
+    session.post('Profiler.enable', () => {
+      session.post('Profiler.start', resolve);
+      logger.info("CPU profiling is now on, send SIGUSR2 to turn off");
+    });
+  });
+});
+
+// Stop profiling with `kill -USR2 <node process id>`
+process.on('SIGUSR2', async () => {
+  if (!profiling) return;
+
+  session.post('Profiler.stop', (err, { profile }) => {
+    const filename = `CPU-${Date.now()}.cpuprofile`;
+    fs.writeFileSync(filename, JSON.stringify(profile));
+
+    session.disconnect();
+    session = null;
+    profiling = false;
+    logger.info("CPU profiling is now off, data written to a .cpuprofile file");
+  });
+});
 
 export const main = async () => {
   const port = process.env.PORT || 8082;
