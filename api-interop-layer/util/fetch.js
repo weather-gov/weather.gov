@@ -53,6 +53,7 @@ export const getNumOpenConnections = () => {
  */
 export const atMaxNumConnections = () => {
   const openConnections = getNumOpenConnections();
+  fetchLogger.trace({ openConnections }, "current open connections");
   if (openConnections >= MAX_OPEN_CONNECTIONS) {
     return true;
   }
