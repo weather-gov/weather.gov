@@ -14,7 +14,6 @@ const redisLogger = logger.child({ subsystem: "redis" });
 const DISABLE_REDIS = process.env.DISABLE_REDIS ? true : false;
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
 const BASE_NWSCONNECT_URL = process.env.NWSCONNECT_API_URL ?? "https://preview-api.weather.gov";
-const BASE_GHWO_URL = process.env.GHWO_URL ?? "https://www.weather.gov";
 
 const STANDARD_HEADERS = {
   "User-Agent": "beta.weather.gov interop",
@@ -74,21 +73,11 @@ const internalFetch = async (path) => {
     headers["wx-host"] = url.hostname;
   }
 
-  const isGHWO =
-    url.hostname === "www.weather.gov" && url.pathname.startsWith("/source/");
-
   const isAlert = url.pathname.includes("alerts");
 
   const isWxStory = url.hostname === url.pathname.endsWith("/weatherstories");
 
   const isBriefing = url.hostname === url.pathname.endsWith("/briefings");
-
-
-  if (isGHWO) {
-    // If the incoming path matches a request to the website's risk overview
-    // endpoint, switch to the GHWO base URL.
-    url = new URL(url.pathname, BASE_GHWO_URL);
-  }
 
   if (isWxStory || isBriefing) {
     // If the incoming path matches a request to the website's weather story
@@ -102,7 +91,7 @@ const internalFetch = async (path) => {
   // request.
   // Note that we explicitly do not cache GHWO requests
   // for the moment.
-  if (!DISABLE_REDIS && USE_REDIS && !isGHWO && !isAlert) {
+  if (!DISABLE_REDIS && USE_REDIS && !isAlert) {
     url = new URL(url);
     const cachedValue = await getFromRedis(url.pathname);
     if (cachedValue) {
@@ -138,7 +127,7 @@ const internalFetch = async (path) => {
       // Cache the value, and then return the JSON
       // response if there is a valid cache-control
       // header value in the response
-      if (USE_REDIS && !isGHWO && !isAlert) {
+      if (USE_REDIS && !isAlert) {
         const ttl = getTTLFromResponse(r);
         if (ttl) {
           const json = await r.body.json();

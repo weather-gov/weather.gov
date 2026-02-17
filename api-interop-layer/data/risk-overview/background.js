@@ -1,10 +1,14 @@
 import { parentPort } from "node:worker_threads";
 import openDatabase from "../db.js";
-import { fetchAPIJson } from "../../util/fetch.js";
 import { addRisksToResult, processDays, processLegend } from "./processing.js";
 import { logger } from "../../util/monitoring/index.js";
+import { requestJSON } from "../../util/request.js";
+import { Client } from "undici";
 
 const riskOverviewLogger = logger.child({ subsystem: "risk overview" });
+
+const BASE_GHWO_URL = process.env.GHWO_URL ?? "https://www.weather.gov";
+const client = new Client(BASE_GHWO_URL, { pipelining: 2, allowH2: true });
 
 // enum to track WFO ghwo processing status
 const wfoStatus = Object.freeze({
@@ -76,12 +80,13 @@ const processCounty = async ({ countyFips, data: countyData, wfo, legend }) => {
 
 const processWFO = async (wfo, statuses) => {
   const db = await openDatabase();
-  const risksUrl = `https://www.weather.gov/source/${wfo}/ghwo/hazByCounty.json`;
-  const legendUrl = `https://www.weather.gov/source/${wfo}/ghwo/legend.json`;
+
+  const risksEndpoint = `/source/${wfo}/ghwo/hazByCounty.json`;
+  const legendEndpoint = `/source/${wfo}/ghwo/legend.json`;
 
   const shouldUpdate = await db
     .query("SELECT updated FROM weathergov_temp_ghwo_meta WHERE url=$1::text", [
-      risksUrl,
+      risksEndpoint,
     ])
     .then((result) => {
       // If we've fetched this URL before, let's check when it was last fetched.
@@ -103,9 +108,14 @@ const processWFO = async (wfo, statuses) => {
     return statuses;
   }
 
+  riskOverviewLogger.trace(
+    { BASE_GHWO_URL, risksEndpoint, legendEndpoint },
+    "making risk overview requests",
+  );
+
   const [riskOverview, legendData] = await Promise.all([
-    fetchAPIJson(risksUrl),
-    fetchAPIJson(legendUrl),
+    requestJSON(client, risksEndpoint),
+    requestJSON(client, legendEndpoint),
   ]);
 
   // After we fetch, update the database so we know the last time we fetched
@@ -117,7 +127,7 @@ const processWFO = async (wfo, statuses) => {
     VALUES($1::text,NOW())
     ON CONFLICT(url)
     DO UPDATE SET updated=NOW()`,
-    [risksUrl],
+    [risksEndpoint],
   );
 
   if (riskOverview.error) {
