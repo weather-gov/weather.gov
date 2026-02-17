@@ -24,8 +24,8 @@ if not TESTING:  # noqa: F405
         "debug_toolbar",
         "silk",
     ]
-    # django debug toolbar needs to be up front
-    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")  # noqa: F405
+    # django debug toolbar needs to be up front (but after gzip)
+    MIDDLEWARE.insert(4, "debug_toolbar.middleware.DebugToolbarMiddleware")  # noqa: F405
     MIDDLEWARE += [  # noqa: F405
         "silk.middleware.SilkyMiddleware",
     ]
