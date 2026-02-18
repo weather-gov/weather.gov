@@ -14,34 +14,44 @@
 */
 #}
 {% block content %}
-<a href="{{ path('<front>') }}" class="display-flex flex-align-center flex-wrap text-no-underline margin-y-2" rel="home">
-  {% if site_logo %}
-  <img class="height-9" src="{{ site_logo }}" alt=""/>
-  {% endif %}
-  <div class="site-info padding-x-2 display-flex flex-column flex-align-start">
-    {% if site_name %}
-    <span class="site-name display-block font-heading-lg desktop:font-heading-xl text-secondary-darkest text-bold">
-      {{ site_name }}
-    </span>
+{# Outer flex container positions the NWS branding on the left and NOAA logo on the right #}
+{# flex-wrap ensures the NOAA logo wraps below the branding on narrow viewports #}
+{# grid-gap adds vertical spacing when the NOAA logo wraps to a new row on narrow screens #}
+<div class="display-flex flex-align-center flex-justify flex-wrap grid-gap margin-y-2">
+  {# NWS branding link: logo, site name/slogan, and development banner #}
+  <a href="{{ path('<front>') }}" class="display-flex flex-align-center flex-wrap text-no-underline" rel="home">
+    {% if site_logo %}
+    {# NWS logo displayed as the primary site identifier #}
+    <img class="height-9" src="{{ site_logo }}" alt=""/>
     {% endif %}
-    {% if site_slogan %}
-    <span class="site-slogan display-block font-sans-2xs desktop:font-sans-xs text-base-dark padding-left-05">
-      {{ site_slogan  }}
+    <div class="site-info padding-x-2 display-flex flex-column flex-align-start">
+      {% if site_name %}
+      <span class="site-name display-block font-heading-lg desktop:font-heading-xl text-secondary-darkest text-bold">
+        {{ site_name }}
+      </span>
+      {% endif %}
+      {% if site_slogan %}
+      <span class="site-slogan display-block font-sans-2xs desktop:font-sans-xs text-base-dark padding-left-05">
+        {{ site_slogan  }}
+      </span>
+      {% endif %}
+    </div>
+    {# Yellow "Under Development" badge shown during beta period #}
+    <span class="display-flex flex-align-center bg-gold-10v text-black text-uppercase padding-y-05 padding-left-1 padding-right-105 font-sans-xs radius-md margin-left-1 margin-top-105 tablet:margin-top-0">
+      <svg
+          class="usa-icon height-205 width-205 margin-right-05 text-top margin-bottom-2px"
+          aria-hidden="true"
+          focusable="false"
+          role="img"
+      >
+        <use
+          xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#construction_worker"
+        ></use>
+      </svg>
+      {{ "backend.banner.under-development.01" | t }}
     </span>
-    {% endif %} 
-  </div>
-  <span class="display-flex flex-align-center bg-gold-10v text-black text-uppercase padding-y-05 padding-left-1 padding-right-105 font-sans-xs radius-md margin-left-1 margin-top-105 tablet:margin-top-0">
-    <svg
-        class="usa-icon height-205 width-205 margin-right-05 text-top margin-bottom-2px"
-        aria-hidden="true"
-        focusable="false"
-        role="img"
-    >
-      <use
-        xlink:href="/{{ directory }}/assets/images/uswds/sprite.svg#construction_worker"
-      ></use>
-    </svg>
-    {{ "backend.banner.under-development.01" | t }}
-  </span>
-</a>
+  </a>
+  {# NOAA logo positioned on the right side of the header, matching the design spec #}
+  <img class="height-9" src="/{{ directory }}/logo-noaa.svg" alt="{{ 'footer.aria.noaa-logo.01'|t }}"/>
+</div>
 {% endblock %}
