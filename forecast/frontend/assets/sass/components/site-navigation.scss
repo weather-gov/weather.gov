@@ -376,4 +376,13 @@
             }
         }
     }
+
+    /* Override default USWDS to right-align the last sub menu
+     * consider adjusting once more menu items get added to production
+     */
+    .usa-nav__primary-item:last-of-type {
+      .usa-nav__submenu:last-of-type {
+            right: auto; 
+      }
+    }
 }
