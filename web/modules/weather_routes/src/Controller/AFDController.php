@@ -46,6 +46,34 @@ final class AFDController extends ControllerBase
         );
     }
 
+    /**
+     * Validate that a WFO code or product ID contains only safe characters.
+     *
+     * Query parameters used in RedirectResponse URLs must be validated to
+     * prevent open redirect and header injection attacks. Without validation,
+     * an attacker could craft a URL like:
+     *
+     *   /afd?wfo=../../evil.com&id=foo
+     *
+     * ...which would redirect to /afd/../../evil.com/foo. While Symfony's
+     * RedirectResponse mitigates most header injection vectors, unvalidated
+     * path segments can still cause unexpected routing behavior, be used in
+     * phishing (the URL starts with the trusted domain), or interact with
+     * reverse proxies and CDNs in unexpected ways.
+     *
+     * WFO codes are always 3-letter uppercase identifiers (e.g., "OKX").
+     * Product IDs are UUID-like alphanumeric strings with hyphens.
+     */
+    private function isValidWfoCode($code): bool
+    {
+        return $code !== null && preg_match('/^[A-Za-z]{3}$/', $code) === 1;
+    }
+
+    private function isValidProductId($id): bool
+    {
+        return $id !== null && preg_match('/^[A-Za-z0-9\-]{8,64}$/', $id) === 1;
+    }
+
     public function afdDefault()
     {
         try {
@@ -59,6 +87,19 @@ final class AFDController extends ControllerBase
             // id, this means we really just want to update the WFO
             if ($current == $id) {
                 $id = null;
+            }
+
+            // Validate query parameters before using them in redirect URLs.
+            // Without this check, arbitrary strings from query parameters would
+            // be concatenated directly into RedirectResponse paths. An attacker
+            // could craft URLs that redirect to unexpected paths or inject path
+            // traversal sequences. These parameters come from the user's browser
+            // and must never be trusted without format validation.
+            if ($id && !$this->isValidProductId($id)) {
+                throw new NotFoundHttpException();
+            }
+            if ($wfo_code && !$this->isValidWfoCode($wfo_code)) {
+                throw new NotFoundHttpException();
             }
 
             if ($id && $wfo_code) {
@@ -124,9 +165,15 @@ final class AFDController extends ControllerBase
     {
         // If a querystring parameter of an AFD id was passed in,
         // we are requesting that specific ID.
-        // Simple redirect in that case
+        // Simple redirect in that case.
+        // Validate the id parameter before using it in a redirect — same
+        // rationale as in afdDefault(): unvalidated query params in redirect
+        // URLs can enable path traversal and phishing attacks.
         $id = $this->request->getCurrentRequest()->query->get("id");
         if ($id) {
+            if (!$this->isValidProductId($id)) {
+                throw new NotFoundHttpException();
+            }
             return new RedirectResponse("/afd/" . $wfo_code . "/" . $id);
         }
 
