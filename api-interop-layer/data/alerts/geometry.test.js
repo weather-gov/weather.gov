@@ -241,9 +241,9 @@ describe("alert geometries", () => {
   });
 
   describe("Zone chunking tests", () => {
-    // Begin with  a total zone size that is just a little above the
-    // zone chunk size, so we have 3.x chunks
-    const numChunks = (ZONE_CHUNK_SIZE * 3) + (ZONE_CHUNK_SIZE - 1);
+    // Set total zone count a bit above 3x the chunk size, so we
+    // end up with 3 full chunks and 1 partial (4 DB calls total)
+    const totalZones = (ZONE_CHUNK_SIZE * 3) + (ZONE_CHUNK_SIZE - 1);
     const shape = {
       type: "GeometryCollection",
       geometries: [
@@ -261,7 +261,8 @@ describe("alert geometries", () => {
         },
       ],
     };
-    const zones = Array(numChunks).map((_, idx) => `zone ${idx + 1}`);
+    // Array.from avoids the sparse-array pitfall of Array(n).map()
+    const zones = Array.from({length: totalZones}, (_, idx) => `zone ${idx + 1}`);
     const alert = {
       geometry: false,
       properties: {
