@@ -88,11 +88,37 @@ const main = async () => {
   });
 
   /**
-   * Product get by id route
+   * Product get by id route.
+   *
+   * Added schema validation for the product ID parameter. Previously, this
+   * route had no input validation at all — unlike the /point route which
+   * validates latitude and longitude with type and range constraints. Without
+   * validation, any string (including those containing path traversal
+   * sequences, URL fragments, or excessively long payloads) would be passed
+   * directly to the fetchAPIJson function, which constructs a URL from it:
+   *
+   *   fetchAPIJson(`/products/${id}`)
+   *
+   * While the SSRF fix in fetch.js prevents absolute URLs from being passed
+   * through, an unvalidated ID could still cause issues: malformed or
+   * excessively long IDs waste server resources on guaranteed-to-fail API
+   * calls, and special characters could interact unexpectedly with URL
+   * parsing or logging. NWS product IDs follow a consistent UUID-like format
+   * (hexadecimal characters and hyphens), so constraining input to that
+   * pattern rejects malicious payloads at the routing layer before they
+   * reach any downstream code.
    */
   server.route({
     method: "GET",
     url: "/products/:id",
+    schema: {
+      params: {
+        id: {
+          type: "string",
+          pattern: "^[A-Za-z0-9\\-]{8,64}$",
+        },
+      },
+    },
     handler: async (request, response) => {
       logger.verbose(request.url);
       const id = request.params.id;
