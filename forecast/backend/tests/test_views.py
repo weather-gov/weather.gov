@@ -115,6 +115,12 @@ class TestViews(TestCase):
         # self.assertEqual(response.context["weather_story"], self.weather_story)
         self.assertEqual(response.context["weather_story"], None)
 
+    def test_point_location_truncate(self):
+        """Test the point location view where lat/lon needs to be truncated."""
+        response = self.client.get("/point/1.234567/9.87654/")
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/point/1.235/9.877/")
+
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_point_location_update(self, mock_get_point_forecast):
         """Test the point location view."""
@@ -273,7 +279,7 @@ class TestViews(TestCase):
 
     @disable_logging_for_quieter_tests
     @mock.patch("backend.views.point.interop.get_point_forecast", side_effect=Http429())
-    def test_point_location_interop_429(self, mock_interop_get_point_forecast): # noqa: ARG002
+    def test_point_location_interop_429(self, mock_interop_get_point_forecast):  # noqa: ARG002
         """Test that the point location renders 429 when interop does."""
         response = self.client.get("/point/11.1/22.2", follow=True)
 

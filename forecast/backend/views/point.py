@@ -15,10 +15,30 @@ from spatial.models import WeatherCounties, WeatherCountyWarningAreas, WeatherPl
 # from wx_stories_api.models import WeatherStory
 from ._helpers import get_redirect_for_afd_queries
 
+MAX_DEGREE_DECIMALS = 3
+
 
 @cache_control(max_age=120, smax_age=120, public=True)
 def point_location(request, lat, lon):
     """Render the forecast for a given latitude & longitude."""
+    # If there are more than 3 decimal places in the latitude, we redirect.
+    # We determine whether to redirect based on the number of decimal points
+    # given to us, rather than rounding and then comparing, to avoid any
+    # weird floating-point math goof-ups.
+    [whole, decimal] = f"{lat}".split(".")
+    decimal_redirect = decimal and len(decimal) > MAX_DEGREE_DECIMALS
+
+    # Or if there are more than 3 decimal places in the longitude
+    if not decimal_redirect:
+        [whole, decimal] = f"{lon}".split(".")
+        decimal_redirect = decimal and len(decimal) > MAX_DEGREE_DECIMALS
+
+    if decimal_redirect:
+        # Round them both to 3 decimal places and carry on
+        lat = float(f"{lat:.3f}")
+        lon = float(f"{lon:.3f}")
+        return redirect(f"/point/{lat}/{lon}/")
+
     # If the latitude or longitude are invalid, bail with an out-of-bounds
     # error. This will result in a 404 page.
     if lat > 90 or lat < -90 or lon < -180 or lon > 180:  # noqa: PLR2004

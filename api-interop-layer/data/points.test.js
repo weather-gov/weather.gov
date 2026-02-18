@@ -1,6 +1,6 @@
-import sinon from "sinon";
 import { expect } from "chai";
 import quibble from "quibble";
+import sinon from "sinon";
 
 describe("point method", () => {
   const sandbox = sinon.createSandbox();
@@ -27,6 +27,15 @@ describe("point method", () => {
 
   after(() => {
     quibble.reset();
+  });
+
+  it("truncates lat/lon to 3 decimal places", async () => {
+    fetchAPIJson.resolves({ error: true });
+    db.query.resolves({ rows: [] });
+
+    await points(1.1234567, 9.876543);
+
+    expect(fetchAPIJson.calledWith(`/points/1.123,9.877`)).to.be.true;
   });
 
   it("passes along errors from the API, no location", async () => {
