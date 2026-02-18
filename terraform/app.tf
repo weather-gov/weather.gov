@@ -59,7 +59,7 @@ resource "cloudfoundry_app" "app" {
       instances                       = var.web_instances
       memory                          = var.web_memory
       disk_quota                      = var.web_disk_quota
-      health_check_invocation_timeout = 300
+      health_check_invocation_timeout = 600
       health_check_http_endpoint      = "/health"
       health_check_type               = "http"
       command                         = "./run.sh"
