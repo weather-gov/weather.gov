@@ -109,6 +109,28 @@ final class LocationAndGridRouteController extends ControllerBase
         $place = str_replace("_", " ", $place);
         $place = str_replace(",", "/", $place);
 
+        // Escape SQL LIKE wildcard characters (% and _) in user input before
+        // passing to the LIKE clause. Without this, an attacker can abuse
+        // wildcard pattern matching to enumerate place names in the database.
+        // For example, a request to /place/TX/D% would match "Dallas",
+        // "Denton", "Del Rio", etc. — returning whichever is first
+        // alphabetically — instead of returning a 404 for a non-existent
+        // place. The _ wildcard matches any single character, so /place/TX/D_
+        // would match "unknown" two-letter place names.
+        //
+        // This is an information disclosure issue: an attacker can use binary
+        // search with wildcards to systematically enumerate every place name
+        // in the database, character by character. While the place list isn't
+        // secret per se, the ability to use pattern matching on a public
+        // endpoint is unintended behavior that could be used for reconnaissance
+        // or denial of service (each wildcard query triggers a full table scan).
+        //
+        // The backslash is the default LIKE escape character in MySQL/MariaDB,
+        // so escaping % as \% and _ as \_ ensures these characters are treated
+        // as literal values rather than pattern wildcards.
+        $state = str_replace(['%', '_'], ['\\%', '\\_'], $state);
+        $place = str_replace(['%', '_'], ['\\%', '\\_'], $place);
+
         return $this->dataLayer->databaseFetch(
             "SELECT
                 ST_X(point) AS lon,
