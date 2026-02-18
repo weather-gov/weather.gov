@@ -26,6 +26,14 @@ function weather_data_template_preprocess_default_variables_alter(&$variables)
         $place = str_replace("_", " ", $place);
         $place = str_replace(",", "/", $place);
 
+        // The query below uses LIKE, which treats % and _ as wildcard
+        // characters. Parameterized queries don't neutralize these —
+        // they only prevent actual SQL injection. Without escaping,
+        // a request to /place/TX/D% would match "Dallas" instead of
+        // returning a 404 for a literal "D%".
+        $state = str_replace(['%', '_'], ['\\%', '\\_'], $state);
+        $place = str_replace(['%', '_'], ['\\%', '\\_'], $place);
+
         $db = $container->get("database");
         $location = $db
             ->query(
