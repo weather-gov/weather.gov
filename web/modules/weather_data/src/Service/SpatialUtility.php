@@ -4,22 +4,47 @@ namespace Drupal\weather_data\Service;
 
 class SpatialUtility
 {
+    /**
+     * Force a coordinate value through floatval() so it can never carry
+     * SQL payload. Coordinates flow in from the NWS API and end up
+     * interpolated into WKT strings like POINT(lon lat) — if one of
+     * those values were ever a crafted string instead of a number,
+     * it could break out of the WKT context and inject SQL. Casting
+     * through floatval() destroys anything that isn't numeric.
+     */
+    private static function safeFloat($value): float
+    {
+        $result = floatval($value);
+        if (!is_finite($result)) {
+            throw new \Exception(
+                "Invalid coordinate value: non-finite number"
+            );
+        }
+        return $result;
+    }
+
     public static function pointArrayToObject($point)
     {
         return (object) [
-            "lat" => floatval($point[1]),
-            "lon" => floatval($point[0]),
+            "lat" => self::safeFloat($point[1]),
+            "lon" => self::safeFloat($point[0]),
         ];
     }
 
     public static function pointObjectToWKT($point)
     {
-        return "ST_GEOMFROMTEXT('POINT($point->lon $point->lat)')";
+        // Run both through safeFloat before they hit the WKT string.
+        $lon = self::safeFloat($point->lon);
+        $lat = self::safeFloat($point->lat);
+        return "ST_GEOMFROMTEXT('POINT($lon $lat)')";
     }
 
     public static function pointArrayToWKT($point)
     {
-        return "ST_GEOMFROMTEXT('POINT($point[0] $point[1])')";
+        // Same idea, array form.
+        $x = self::safeFloat($point[0]);
+        $y = self::safeFloat($point[1]);
+        return "ST_GEOMFROMTEXT('POINT($x $y)')";
     }
 
     public static function geometryArrayToObject($points)
@@ -31,8 +56,13 @@ class SpatialUtility
 
     public static function geometryObjectToWKT($geometry)
     {
+        // Polygons can have hundreds of vertices; each one gets
+        // concatenated into the WKT string, so every pair needs
+        // the safeFloat treatment.
         $wkt = array_map(function ($point) {
-            return $point->lon . " " . $point->lat;
+            $lon = self::safeFloat($point->lon);
+            $lat = self::safeFloat($point->lat);
+            return "$lon $lat";
         }, $geometry);
         $wkt = implode(",", $wkt);
 
@@ -41,6 +71,8 @@ class SpatialUtility
 
     public static function geoJSONtoSQL($geoJSON)
     {
+        // The switch below handles the three geometry types we actually
+        // encounter; anything else falls through to the exception.
         $type = strtoupper($geoJSON->type);
         $points = false;
 
@@ -48,30 +80,36 @@ class SpatialUtility
             case "POINT":
                 $points = $geoJSON->coordinates;
 
-                return "ST_GEOMFROMTEXT('POINT(" .
-                    $points[0] .
-                    " " .
-                    $points[1] .
-                    ")')";
+                // Sanitize before splicing into the WKT literal.
+                $x = self::safeFloat($points[0]);
+                $y = self::safeFloat($points[1]);
+                return "ST_GEOMFROMTEXT('POINT($x $y)')";
 
             case "POLYGON":
                 $points = $geoJSON->coordinates[0];
 
+                // Each vertex needs sanitization.
                 $points = array_map(function ($point) {
-                    return $point[0] . " " . $point[1];
+                    $x = self::safeFloat($point[0]);
+                    $y = self::safeFloat($point[1]);
+                    return "$x $y";
                 }, $points);
                 $wkt = implode(",", $points);
 
-                return "ST_GEOMFROMTEXT('POLYGON((" . $wkt . "))')";
+                return "ST_GEOMFROMTEXT('POLYGON(($wkt))')";
 
             case "MULTIPOLYGON":
                 $points = array_map(function ($polygon) {
                     return $polygon[0];
                 }, $geoJSON->coordinates);
 
+                // Multipolygons have an extra nesting level; still need to
+                // sanitize every single coordinate pair.
                 $polygons = array_map(function ($polygon) {
                     $points = array_map(function ($point) {
-                        return $point[0] . " " . $point[1];
+                        $x = self::safeFloat($point[0]);
+                        $y = self::safeFloat($point[1]);
+                        return "$x $y";
                     }, $polygon);
                     $wkt = implode(",", $points);
 
