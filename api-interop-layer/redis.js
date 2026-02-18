@@ -145,7 +145,8 @@ export const saveToRedis = async (key, value, ttl) => {
   const client = await getRedisClient();
 
   try {
-    const result = await client.json.set(key, "$", value, { EX: ttl });
+    await client.json.set(key, "$", value);
+    await client.expire(key, ttl);
     redisLogger.trace({ key, ttl }, "Saved cached value");
   } catch (e) {
     redisLogger.error(e);
