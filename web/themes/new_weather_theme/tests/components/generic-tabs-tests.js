@@ -1,6 +1,9 @@
 /* eslint no-unused-expressions: off */
 import { expect } from "chai";
 
+// Test fixture matching the structure used in production.
+// Each panel carries data-tabpanel-selected so the component
+// can manage tabindex on initialization.
 const EXAMPLE = `
 <wx-tabs role="tablist">
     <button role="tab" aria-selected="true" aria-controls="tab1" id="button1">
@@ -13,13 +16,13 @@ const EXAMPLE = `
         Tab 3
     </button>
 </wx-tabs>
-<div id="tab1" ""role="tabpanel" aria-labelledby="button1">
+<div id="tab1" role="tabpanel" data-tabpanel-selected="true" aria-labelledby="button1">
     Tab 1 content
 </div>
-<div id="tab2" role="tabpanel" aria-labelledby="button2">
+<div id="tab2" role="tabpanel" data-tabpanel-selected="false" aria-labelledby="button2">
     Tab 2 content
 </div>
-<div id="tab3" role="tabpanel" aria-labelledby="button3">
+<div id="tab3" role="tabpanel" data-tabpanel-selected="false" aria-labelledby="button3">
     Tab 3 content
 </div>
 `;
@@ -94,17 +97,17 @@ describe("Tab web component basic tests", () => {
 
     // First instance, highlights second element
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:nth-child(2)'));
+    expect(document.activeElement.matches('[role="tab"]:nth-child(2)')).to.be.true;
 
     // Second instance, focuses last element
     evt = new window.KeyboardEvent("keydown", {key: "ArrowRight"});
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:last-child'));
+    expect(document.activeElement.matches('[role="tab"]:last-child')).to.be.true;
 
     // Third time should loop around to the beginning of the tabs
     evt = new window.KeyboardEvent("keydown", {key: "ArrowRight"});
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:first-child'));
+    expect(document.activeElement.matches('[role="tab"]:first-child')).to.be.true;
   });
 
   it("left arrow navigation works", () => {
@@ -113,43 +116,43 @@ describe("Tab web component basic tests", () => {
 
     // First instance, loops around to focus on the last tab
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:last-child'));
+    expect(document.activeElement.matches('[role="tab"]:last-child')).to.be.true;
 
     // Second instance, loops around to the second tab
     evt = new window.KeyboardEvent("keydown", {key: "ArrowLeft"});
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:nth-child(2)'));
+    expect(document.activeElement.matches('[role="tab"]:nth-child(2)')).to.be.true;
 
     // Third time, comes back to focus on first element
     evt = new window.KeyboardEvent("keydown", {key: "ArrowLeft"});
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:first-child'));
+    expect(document.activeElement.matches('[role="tab"]:first-child')).to.be.true;
   });
 
   it("Home key focuses on the first tab", () => {
     const tablist = document.querySelector("wx-tabs");
     const evt = new window.KeyboardEvent("keydown", {key: "Home"});
 
-    // Start by focusing the second tab
-    tablist.tabs[0].focus();
-    expect(document.activeElement.matches('[role="tab"]:nth-child(2)'));
+    // Start by focusing the second tab so Home has somewhere to go
+    tablist.tabs[1].focus();
+    expect(document.activeElement.matches('[role="tab"]:nth-child(2)')).to.be.true;
 
     // Now push the Home key to focus first item
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:first-child'));
+    expect(document.activeElement.matches('[role="tab"]:first-child')).to.be.true;
   });
 
-  it("End key focuses on the first tab", () => {
+  it("End key focuses on the last tab", () => {
     const tablist = document.querySelector("wx-tabs");
     const evt = new window.KeyboardEvent("keydown", {key: "End"});
 
-    // Start by focusing the second tab
-    tablist.tabs[0].focus();
-    expect(document.activeElement.matches('[role="tab"]:nth-child(2)'));
+    // Start by focusing the second tab so End has somewhere to go
+    tablist.tabs[1].focus();
+    expect(document.activeElement.matches('[role="tab"]:nth-child(2)')).to.be.true;
 
     // Now push the End key to focus last item
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:last-child'));
+    expect(document.activeElement.matches('[role="tab"]:last-child')).to.be.true;
   });
 
   it("Selecting a tab updates the corresponding tabpanel data selection attribute", () => {
@@ -168,5 +171,45 @@ describe("Tab web component basic tests", () => {
     const actual = tablist.getAttribute("data-selected");
 
     expect(actual).to.eql(expected);
-  })
+  });
+
+  // --- Tabindex management (WCAG roving tabindex) ---
+
+  it("on init, the selected tab has tabindex 0 and others have tabindex -1", () => {
+    const tablist = document.querySelector("wx-tabs");
+    const tabindexValues = tablist.tabs.map(t => t.getAttribute("tabindex"));
+
+    // Only the first tab (aria-selected="true") should be in the Tab order
+    expect(tabindexValues).to.eql(["0", "-1", "-1"]);
+  });
+
+  it("on init, the active tabpanel has tabindex 0 and others have tabindex -1", () => {
+    const tablist = document.querySelector("wx-tabs");
+    const panelTabindexValues = tablist.tabpanels.map(p => p.getAttribute("tabindex"));
+
+    // The first panel (data-tabpanel-selected="true") should be focusable
+    expect(panelTabindexValues).to.eql(["0", "-1", "-1"]);
+  });
+
+  it("clicking a different tab moves tabindex 0 to that tab", () => {
+    const tablist = document.querySelector("wx-tabs");
+
+    // Switch to the third tab
+    tablist.tabs[2].click();
+    const tabindexValues = tablist.tabs.map(t => t.getAttribute("tabindex"));
+
+    // Now only the third tab should carry tabindex="0"
+    expect(tabindexValues).to.eql(["-1", "-1", "0"]);
+  });
+
+  it("clicking a different tab moves tabindex 0 to the corresponding panel", () => {
+    const tablist = document.querySelector("wx-tabs");
+
+    // Switch to the second tab
+    tablist.tabs[1].click();
+    const panelTabindexValues = tablist.tabpanels.map(p => p.getAttribute("tabindex"));
+
+    // Second panel should now be the focusable one
+    expect(panelTabindexValues).to.eql(["-1", "0", "-1"]);
+  });
 });
