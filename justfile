@@ -78,16 +78,6 @@ compile-translations:
 django-restart:
   docker compose restart web
 
-# Load spatial data; pass "clean" for clean load
-[group("django management")]
-[script]
-load-spatial arg="":
-  if [ "{{arg}}" = "clean" ]; then
-    docker compose exec web python manage.py loadspatial --force
-  else
-    docker compose exec web python manage.py loadspatial
-  fi
-
 # Get a Python shell in the Django container
 [group("django management")]
 shell:
@@ -102,7 +92,8 @@ compile-messages:
 # Drop all alerts from the alerts cache table
 [group("cache management")]
 clear-alert-cache:
-  docker compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"DELETE FROM weathergov_geo_alerts_cache;\""
+  docker compose exec database bash -c "psql \"postgresql://\$POSTGRES_USER:\$POSTGRES_PASSWORD@database/\$POSTGRES_DB\" -c \"UPDATE weathergov_geo_alerts_cache SET hash=id,alertjson=jsonb_set(alertjson::jsonb,'{hash}',quote_ident(id::text)::jsonb);\""
+  docker compose restart api-interop-layer
 
 ##### Code quality #####
 # Format Javascript
@@ -293,6 +284,15 @@ alias scorched-earth := controlled-burn
 controlled-burn: && init
   docker compose down -v --rmi all
 
+# Load spatial data; pass "clean" for clean load
+[group("spatial data loading")]
+[script]
+load-spatial arg="": && clear-alert-cache
+  if [ "{{arg}}" = "clean" ]; then
+    docker compose exec web python manage.py loadspatial --force
+  else
+    docker compose exec web python manage.py loadspatial
+  fi
 # Load just states spatial data.
 [group("spatial data loading")]
 load-states:
@@ -303,11 +303,11 @@ load-cwas:
   docker compose exec web python manage.py loadspatial --cwas
 # Load just counties spatial data.
 [group("spatial data loading")]
-load-counties:
+load-counties: && clear-alert-cache
   docker compose exec web python manage.py loadspatial --counties
 # Load just zones spatial data.
 [group("spatial data loading")]
-load-zones:
+load-zones: && clear-alert-cache
   docker compose exec web python manage.py loadspatial --zones
 # Load just place spatial data.
 [group("spatial data loading")]
