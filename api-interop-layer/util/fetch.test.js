@@ -175,6 +175,53 @@ describe("fetch module", () => {
     );
   });
 
+  // Every path must start with exactly one "/" to be accepted. Anything
+  // else — absolute URLs, protocol-relative references, data URIs, bare
+  // hostnames — gets blocked before fetch is ever invoked.
+  it("rejects absolute URLs to prevent SSRF attacks", async () => {
+    response.json.resolves("success");
+    fetch.resolves(response);
+
+    const result = await fetchAPIJson("https://evil.com/steal-data", { wait });
+    expect(result).to.have.property("error", true);
+    expect(fetch.callCount).to.equal(0);
+  });
+
+  // Protocol-relative URLs like "//evil.com" would resolve against the
+  // base URL's scheme and send the request to evil.com instead of the
+  // configured API host. The double-slash must be caught explicitly.
+  it("rejects protocol-relative URLs (//evil.com)", async () => {
+    response.json.resolves("success");
+    fetch.resolves(response);
+
+    const result = await fetchAPIJson("//evil.com/data", { wait });
+    expect(result).to.have.property("error", true);
+    expect(fetch.callCount).to.equal(0);
+  });
+
+  // data: URIs don't contain "://" but Node's fetch still resolves them,
+  // so they need to be blocked as well. The leading-slash requirement
+  // handles this naturally.
+  it("rejects data: URIs", async () => {
+    response.json.resolves("success");
+    fetch.resolves(response);
+
+    const result = await fetchAPIJson("data:text/html,<h1>xss</h1>", { wait });
+    expect(result).to.have.property("error", true);
+    expect(fetch.callCount).to.equal(0);
+  });
+
+  // A bare hostname without a scheme could still be misinterpreted
+  // depending on the URL parser. Paths without a leading "/" are rejected.
+  it("rejects paths that don't start with a slash", async () => {
+    response.json.resolves("success");
+    fetch.resolves(response);
+
+    const result = await fetchAPIJson("evil.com/path", { wait });
+    expect(result).to.have.property("error", true);
+    expect(fetch.callCount).to.equal(0);
+  });
+
   it("specially handles syntax errors (ie, non-JSON data", async () => {
     const error = new SyntaxError();
     error.cause = { message: "not JSON probably" };
