@@ -253,6 +253,12 @@ msgstr "Weather information sections"
 msgid "forecast.link.area-forecast-discussion.01"
 msgstr "Area Forecast Discussion"
 
+msgid "language-selector.aria.select-language.01"
+msgstr "Select a language"
+
+msgid "language-selector.button.languages.01"
+msgstr "Languages"
+
 msgid "frontpage.heading.find-your-forecast.01"
 msgstr "Find your forecast"
 
@@ -450,6 +456,9 @@ msgstr "Satellite"
 
 msgid "theme.text.submitted-by.01"
 msgstr "Submitted by @author_name on @month/@day"
+
+msgid "units-toggle.aria.unit-system.01"
+msgstr "Unit system"
 
 msgid "units.dbz.01"
 msgstr "dBz"

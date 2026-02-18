@@ -85,6 +85,12 @@ msgstr "Ciencia. Servicio. Administración"
 msgid "footer.text.usa-gov-site-alt.01"
 msgstr "Un sitio web oficial del gobierno de Estados Unidos"
 
+msgid "language-selector.aria.select-language.01"
+msgstr "Seleccionar idioma"
+
+msgid "language-selector.button.languages.01"
+msgstr "Idiomas"
+
 msgid "forecast.current.aria.feels-like.01"
 msgstr "Se siente como 77 ℉."
 
@@ -210,6 +216,9 @@ msgstr "Consejos para mantenerse seguro"
 
 msgid "theme.text.submitted-by.01"
 msgstr "Enviado por Colin Murphy el 25 de julio"
+
+msgid "units-toggle.aria.unit-system.01"
+msgstr "Sistema de unidades"
 
 msgid "units.dbz.01"
 msgstr "dBz"

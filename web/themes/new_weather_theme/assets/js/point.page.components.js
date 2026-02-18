@@ -15,3 +15,4 @@ import("./components/Tabs.js");
 import("./components/DailyForecast.js");
 import("./components/combo-box.js");
 import("./components/combo-box-location.js");
+import("./components/LanguageSelector.js");
