@@ -1,7 +1,7 @@
-import openDatabase from "./db.js";
+import { SPATIAL_PROJECTION } from "../util/constants.js";
 import { fetchAPIJson } from "../util/fetch.js";
 import { logger } from "../util/monitoring/index.js";
-import { SPATIAL_PROJECTION } from "../util/constants.js";
+import openDatabase from "./db.js";
 
 const pointLogger = logger.child({ subsystem: "point" });
 
@@ -70,7 +70,13 @@ export const getClosestPlace = async (latitude, longitude) => {
   return place;
 };
 
-export const getPointData = async (latitude, longitude) => {
+export const getPointData = async (lat, lon) => {
+  // Truncate to 3 decimal places
+  const [latitude, longitude] = [
+    Number.parseFloat(lat.toFixed(3)),
+    Number.parseFloat(lon.toFixed(3)),
+  ];
+
   pointLogger.trace({ latitude, longitude }, "place");
   const point = { latitude, longitude };
 
