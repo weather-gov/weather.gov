@@ -78,6 +78,20 @@ describe("AlertsCache tests", () => {
     expect(result).to.be.true;
   });
 
+  // Regression guard: the old code had a separate branch for single-hash
+  // deletes that skipped parameterization. Make sure we don't slide back.
+  it("#removeByHashes (single hash uses parameterized query)", async () => {
+    const toRemove = ["only-one"];
+    const query = `DELETE FROM ${alertsCache.tableName} WHERE hash IN (?);`;
+    global.test.database.query
+      .withArgs(query, toRemove)
+      .resolves(true);
+
+    const result = await alertsCache.removeByHashes(toRemove);
+
+    expect(result).to.be.true;
+  });
+
   it("#add (with land alert kind)", async () => {
     const hash = "ten";
     const alert = { some: "json-object"};

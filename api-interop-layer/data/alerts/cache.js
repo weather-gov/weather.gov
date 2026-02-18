@@ -67,15 +67,17 @@ PRIMARY KEY(id)
    * Remove rows from the cache table by hash.
    * If the argument is a list, we assume a list of hashes.
    */
+  // Previously the single-hash path spliced the value straight into the
+  // query string while the multi-hash path already used placeholders.
+  // Unified both to always go through parameterized IN (?) — no reason
+  // to treat one hash differently from many, and the old shortcut left
+  // the door open if upstream ever fed us a weird hash string.
   async removeByHashes(aHashList){
     if(!aHashList.length){
       return [];
     }
-    let whereClause = `hash='${aHashList[0]}';`;
-    if(aHashList.length > 1){
-      const marks = aHashList.map(() => "?").join(", ");
-      whereClause = `hash IN (${marks});`;
-    }
+    const marks = aHashList.map(() => "?").join(", ");
+    const whereClause = `hash IN (${marks});`;
     const sql = `DELETE FROM ${this.tableName} WHERE ${whereClause}`;
     return this.db.query(sql, aHashList);
   }
