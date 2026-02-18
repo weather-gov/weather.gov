@@ -17,10 +17,19 @@ const setupMap = (alert) => {
   // without the flag then.
   map.attributionControl.setPrefix("");
 
-  L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
-    apiKey:
-      "AAPK1dd93729edc54e84ade1ea5dc0f4f9d3EPexfd5qirlO3QtHGBj5JQL7iUYHQOb4yLjfKEYFLcyN9PlMd87lMjjv8D3DxDsQ",
-  }).addTo(map);
+  // Read the ArcGIS API key from a data attribute rather than hardcoding it.
+  // The key is passed through the Drupal template layer from an environment
+  // variable (ARCGIS_API_KEY). Hardcoding API keys in client-side JavaScript
+  // is a security anti-pattern: the key is visible to anyone who views the page
+  // source, and it cannot be rotated without deploying new code. By sourcing
+  // it from the server-side environment, the key can be managed through
+  // deployment configuration and rotated without touching the codebase.
+  const arcgisApiKey = alert.dataset.arcgisApiKey;
+  if (arcgisApiKey) {
+    L.esri.Vector.vectorBasemapLayer("arcgis/streets", {
+      apiKey: arcgisApiKey,
+    }).addTo(map);
+  }
 
   const alertType = alert.dataset.alertName.split(" ").pop();
   if (alertType === "Warning") {

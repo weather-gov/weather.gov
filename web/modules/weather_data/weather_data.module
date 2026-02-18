@@ -51,6 +51,16 @@ function weather_data_template_preprocess_default_variables_alter(&$variables)
         $lon = $route->getParameter("lon");
     }
 
+    // Expose the ArcGIS API key to Twig templates via an environment variable.
+    // This key was previously hardcoded directly in the client-side JavaScript
+    // (alertMap.js), which meant anyone viewing the page source could extract
+    // the key and use it to make unlimited API calls on our account, potentially
+    // exhausting rate limits or incurring charges. By reading it from an env var
+    // and passing it through the template layer as a data attribute, the key
+    // can be rotated via deployment configuration without code changes, and it
+    // follows the twelve-factor app principle of keeping credentials in config.
+    $variables["arcgis_api_key"] = getEnv("ARCGIS_API_KEY") ?: "";
+
     // If we have lat and lon, then we can fetch data from the interop layer and
     // make it available to Twig.
     if ($lat && $lon) {
