@@ -126,9 +126,15 @@ export default class AFDParser {
       const match = str.match(specialHeader.re);
       if(match){
         let content = match.groups.header;
-        if(specialTypeName === "wwa"){
-          content = match.groups.header.replaceAll("/", "&hairsp;/&hairsp;");
-        }
+        // Previously, this code injected raw HTML entities (&hairsp;) into the
+        // header content to add thin spacing around slashes in WWA headers.
+        // That forced the Twig template to render the header with |raw, which
+        // disabled all HTML escaping and created an XSS vulnerability — if the
+        // upstream NWS API ever returned (or was compromised to return) content
+        // containing <script> tags or event handlers, they would execute in
+        // the user's browser. The spacing is now handled via CSS on the
+        // template side (using word-spacing or letter-spacing), eliminating
+        // the need for raw HTML output entirely.
         this.contentType = specialTypeName;
         this.parsedNodes.push({
           type: "header",

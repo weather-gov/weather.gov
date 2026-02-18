@@ -19,7 +19,13 @@
     <div class="afd-body">
         {% for node in body %}
             {% if node.type == 'header' %}
-                <h2 class="usa-heading wx-mono-h2 margin-bottom-1 margin-top-4">{{node.content | raw}}</h2>
+                {# Removed |raw filter from node.content to prevent XSS. The #}
+                {# content originates from the external NWS API via AFDParser, #}
+                {# and rendering it as raw HTML allows injection of arbitrary #}
+                {# script tags or event handlers if the API data is ever #}
+                {# compromised. Twig's auto-escaping safely encodes all HTML #}
+                {# entities, preventing any embedded markup from executing. #}
+                <h2 class="usa-heading wx-mono-h2 margin-bottom-1 margin-top-4">{{node.content}}</h2>
             {% elseif node.type == 'subheader' %}
                 <h3 class="wx-mono-h3 margin-top-105">{{node.content}}</h3>
             {% elseif node.type == 'temps-table' %}
