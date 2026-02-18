@@ -1,0 +1,49 @@
+/*
+ * Language Selector & Units Toggle
+ * ---------------------------------
+ * Sits in the site header alongside the NOAA branding.
+ * The language dropdown follows the USWDS "3+ languages"
+ * pattern; the units toggle is a segmented button pair
+ * for Fahrenheit vs Celsius.
+ */
+
+@use "uswds-core" as *;
+
+/* Wrapper for the language + units controls.
+   Positioned flush-right in the header grid row. */
+wx-language-selector {
+  display: flex;
+  align-items: center;
+  gap: units(1);
+}
+
+/* Override a bit of USWDS spacing so the language
+   dropdown doesn't push the header height too much */
+.usa-language-container {
+  margin: 0;
+}
+
+/* Highlight the currently active language inside the
+   dropdown so users can see which one they're on */
+.usa-language__submenu-item--active a {
+  background-color: color("primary-lighter");
+  font-weight: bold;
+}
+
+/* ── Units Toggle ──
+   A compact segmented pair of buttons. On small screens
+   the buttons shrink a bit to save horizontal space. */
+.wx-units-toggle {
+  margin: 0;
+  flex-shrink: 0;
+
+  .wx-units-toggle__btn {
+    @include u-font("sans", "2xs");
+    padding: units(0.5) units(1);
+    min-width: auto;
+    /* Remove the default min-height so the pair stays
+       compact inside the header */
+    min-height: auto;
+    line-height: 1.2;
+  }
+}

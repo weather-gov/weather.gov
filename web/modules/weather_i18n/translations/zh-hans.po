@@ -76,6 +76,12 @@ msgstr "科学。 服务。 管理"
 msgid "footer.text.usa-gov-site-alt.01"
 msgstr "美国政府官方网站"
 
+msgid "language-selector.aria.select-language.01"
+msgstr "选择语言"
+
+msgid "language-selector.button.languages.01"
+msgstr "语言"
+
 msgid "forecast.current.feels-like.01"
 msgstr "感觉像"
 
@@ -168,6 +174,9 @@ msgstr "保障安全的提示"
 
 msgid "theme.text.submitted-by.01"
 msgstr "@author_name于@month月@day日提交"
+
+msgid "units-toggle.aria.unit-system.01"
+msgstr "单位制"
 
 msgid "units.dbz.01"
 msgstr "dBz"

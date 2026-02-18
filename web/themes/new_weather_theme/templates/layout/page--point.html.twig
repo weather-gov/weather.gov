@@ -11,7 +11,14 @@
   <header role="banner">
     <div class="grid-container">
       {% if page.header %}
-      <div class="grid-row">{{ page.header }}</div>
+      <div class="grid-row flex-justify flex-align-center">
+        <div class="grid-col">
+          {{ page.header }}
+        </div>
+        <div class="grid-col-auto">
+          {% include '@new_weather_theme/partials/language-selector.html.twig' %}
+        </div>
+      </div>
       {% endif %} {% if page.primary_menu %}
       <div class="grid-row">{{ page.primary_menu }}</div>
       {% endif %} {% if page.secondary_menu %}

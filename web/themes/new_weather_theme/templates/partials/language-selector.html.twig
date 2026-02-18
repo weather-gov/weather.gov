@@ -1,0 +1,86 @@
+{#
+/**
+ * Language and units selector partial.
+ *
+ * Placed in the site header, this provides two controls:
+ *
+ * 1. A USWDS-pattern language dropdown that lets users switch
+ *    between English, Spanish, and Simplified Chinese. Drupal
+ *    handles language negotiation via URL path prefixes
+ *    (/es/, /zh-hans/), so each link just swaps the prefix on
+ *    the current page URL.
+ *
+ * 2. A units toggle (°F / °C) persisted in localStorage so the
+ *    preference carries across page loads. Other components can
+ *    react to changes via the "wx:units-changed" custom event.
+ *
+ * The <wx-language-selector> web component handles the dynamic
+ * bits: computing the correct language URLs on the client side
+ * and wiring up the units toggle state.
+ */
+#}
+<wx-language-selector class="display-flex flex-align-center flex-gap-1">
+
+  {# ── USWDS Language Selector (3+ languages pattern) ──
+     The dropdown accordion behavior is handled by the built-in
+     USWDS JavaScript. Language names are always shown in their
+     native script so speakers can recognize them regardless of
+     the page's current language. #}
+  <div class="usa-language-container">
+    <ul class="usa-language__primary usa-accordion">
+      <li class="usa-language__primary-item">
+        <button
+          type="button"
+          class="usa-accordion__button usa-language__link"
+          aria-expanded="false"
+          aria-controls="wx-language-options"
+          aria-label="{{ 'language-selector.aria.select-language.01' | t }}"
+        >
+          {{ "language-selector.button.languages.01" | t }}
+        </button>
+        <ul id="wx-language-options" class="usa-accordion__content usa-language__submenu" hidden>
+          <li class="usa-language__submenu-item">
+            <a href="/" data-lang="en" title="English">
+              <span lang="en" xml:lang="en"><strong>English</strong></span>
+            </a>
+          </li>
+          <li class="usa-language__submenu-item">
+            <a href="/es/" data-lang="es" title="Español | Spanish">
+              <span lang="es" xml:lang="es"><strong>Español</strong></span>
+            </a>
+          </li>
+          <li class="usa-language__submenu-item">
+            <a href="/zh-hans/" data-lang="zh-hans" title="中文 | Chinese (Simplified)">
+              <span lang="zh-Hans" xml:lang="zh-Hans"><strong>中文</strong></span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  {# ── Units Toggle ──
+     A paired button group for Fahrenheit vs. Celsius. The
+     pressed state is tracked via aria-pressed and a data
+     attribute on the wrapper, while the actual preference is
+     stored in localStorage by the web component. #}
+  <div
+    class="wx-units-toggle usa-button-group usa-button-group--segmented"
+    role="group"
+    aria-label="{{ 'units-toggle.aria.unit-system.01' | t }}"
+  >
+    <button
+      type="button"
+      class="usa-button wx-units-toggle__btn"
+      data-units="us"
+      aria-pressed="true"
+    >°F</button>
+    <button
+      type="button"
+      class="usa-button usa-button--outline wx-units-toggle__btn"
+      data-units="metric"
+      aria-pressed="false"
+    >°C</button>
+  </div>
+
+</wx-language-selector>
