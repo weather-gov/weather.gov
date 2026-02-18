@@ -23,13 +23,18 @@ export default async (latitude, longitude) => {
   );
 
   const db = await openDatabase();
+  // Defense-in-depth: even though Fastify validates lat/lon as numbers,
+  // we still bind them through positional placeholders. If a future route
+  // change loosens the schema or a middleware bug lets through a raw
+  // string, we don't want it landing inside an ST_GEOMFROMTEXT call.
   const placePromise = db
     .query(
       `SELECT
        name,state,stateName,county,timezone,stateFIPS,countyFIPS
        FROM weathergov_geo_places
-       ORDER BY ST_DISTANCE(point,ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})'))
+       ORDER BY ST_DISTANCE(point,ST_GEOMFROMTEXT(CONCAT('POINT(', ?, ' ', ?, ')')))
        LIMIT 1`,
+      [longitude, latitude],
     )
     .then((row) => {
       if (Array.isArray(row) && row.length > 0) {

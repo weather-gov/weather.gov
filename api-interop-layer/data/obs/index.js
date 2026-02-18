@@ -130,12 +130,18 @@ export default async ({
 
     convertProperties(data);
 
+    // The station geometry blob comes straight from the NWS observation
+    // endpoint — it's external data we don't control. Pushing it through
+    // a placeholder instead of splicing it into the query string keeps
+    // the door shut even if that upstream response is ever malformed or
+    // tampered with. Same reasoning for the lat/lon coordinates here.
+    const geometryJson = JSON.stringify(station.geometry);
     const [[{ distance }]] = await db.query(`
       SELECT ST_DISTANCE_SPHERE(
-        ST_GEOMFROMGEOJSON('${JSON.stringify(station.geometry)}'),
-        ST_SRID(ST_GEOMFROMTEXT('POINT(${longitude} ${latitude})'), 4326)
+        ST_GEOMFROMGEOJSON(?),
+        ST_SRID(ST_GEOMFROMTEXT(CONCAT('POINT(', ?, ' ', ?, ')')), 4326)
       ) as distance
-    `);
+    `, [geometryJson, longitude, latitude]);
 
     sendNewRelicMetric({
       name: "wx.observation",
