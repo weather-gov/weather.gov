@@ -13,7 +13,7 @@ const EXAMPLE = `
         Tab 3
     </button>
 </wx-tabs>
-<div id="tab1" ""role="tabpanel" aria-labelledby="button1">
+<div id="tab1" role="tabpanel" aria-labelledby="button1">
     Tab 1 content
 </div>
 <div id="tab2" role="tabpanel" aria-labelledby="button2">
@@ -77,6 +77,19 @@ describe("Tab web component basic tests", () => {
     expect(secondTab.getAttribute("aria-selected")).to.eql("true");
   });
 
+  it("pressing real browser space key (key=' ') on the second tab will select it", () => {
+    // Real browsers send { key: " " } (a literal space character) for
+    // the spacebar, not { key: "Space" }. This test verifies the shared
+    // keyboard utility handles that correctly.
+    const tablist = document.querySelector("wx-tabs");
+    const secondTab = tablist.querySelector('[role="tab"]:nth-child(2)');
+    secondTab.focus();
+    const evt = new window.KeyboardEvent("keydown", { key: " " });
+    tablist.dispatchEvent(evt);
+
+    expect(secondTab.getAttribute("aria-selected")).to.eql("true");
+  });
+
   it("sets the correct aria-selected values on all tabs (when clicking 3rd)", () => {
     document.body.querySelector('[role="tab"]:nth-child(3)').click();
     const actualFirst = document.body.querySelector('[role="tab"]:nth-child(1)');
@@ -94,17 +107,17 @@ describe("Tab web component basic tests", () => {
 
     // First instance, highlights second element
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:nth-child(2)'));
+    expect(document.activeElement.matches('[role="tab"]:nth-child(2)')).to.be.true;
 
     // Second instance, focuses last element
     evt = new window.KeyboardEvent("keydown", {key: "ArrowRight"});
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:last-child'));
+    expect(document.activeElement.matches('[role="tab"]:last-child')).to.be.true;
 
     // Third time should loop around to the beginning of the tabs
     evt = new window.KeyboardEvent("keydown", {key: "ArrowRight"});
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:first-child'));
+    expect(document.activeElement.matches('[role="tab"]:first-child')).to.be.true;
   });
 
   it("left arrow navigation works", () => {
@@ -113,43 +126,43 @@ describe("Tab web component basic tests", () => {
 
     // First instance, loops around to focus on the last tab
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:last-child'));
+    expect(document.activeElement.matches('[role="tab"]:last-child')).to.be.true;
 
     // Second instance, loops around to the second tab
     evt = new window.KeyboardEvent("keydown", {key: "ArrowLeft"});
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:nth-child(2)'));
+    expect(document.activeElement.matches('[role="tab"]:nth-child(2)')).to.be.true;
 
     // Third time, comes back to focus on first element
     evt = new window.KeyboardEvent("keydown", {key: "ArrowLeft"});
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:first-child'));
+    expect(document.activeElement.matches('[role="tab"]:first-child')).to.be.true;
   });
 
   it("Home key focuses on the first tab", () => {
     const tablist = document.querySelector("wx-tabs");
     const evt = new window.KeyboardEvent("keydown", {key: "Home"});
 
-    // Start by focusing the second tab
-    tablist.tabs[0].focus();
-    expect(document.activeElement.matches('[role="tab"]:nth-child(2)'));
+    // Start by focusing the second tab so Home has somewhere to go
+    tablist.tabs[1].focus();
+    expect(document.activeElement.matches('[role="tab"]:nth-child(2)')).to.be.true;
 
     // Now push the Home key to focus first item
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:first-child'));
+    expect(document.activeElement.matches('[role="tab"]:first-child')).to.be.true;
   });
 
-  it("End key focuses on the first tab", () => {
+  it("End key focuses on the last tab", () => {
     const tablist = document.querySelector("wx-tabs");
     const evt = new window.KeyboardEvent("keydown", {key: "End"});
 
-    // Start by focusing the second tab
-    tablist.tabs[0].focus();
-    expect(document.activeElement.matches('[role="tab"]:nth-child(2)'));
+    // Start by focusing the second tab so End has somewhere to go
+    tablist.tabs[1].focus();
+    expect(document.activeElement.matches('[role="tab"]:nth-child(2)')).to.be.true;
 
     // Now push the End key to focus last item
     tablist.dispatchEvent(evt);
-    expect(document.activeElement.matches('[role="tab"]:last-child'));
+    expect(document.activeElement.matches('[role="tab"]:last-child')).to.be.true;
   });
 
   it("Selecting a tab updates the corresponding tabpanel data selection attribute", () => {

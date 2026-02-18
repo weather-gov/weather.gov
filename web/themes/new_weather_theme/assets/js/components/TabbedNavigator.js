@@ -1,8 +1,21 @@
+/**
+ * Tabbed Navigator Component
+ * ------------------------------------------
+ * Manages the multi-tab layout on location pages, handling
+ * tab switching, hash-based deep linking, accordion expansion,
+ * and scroll offset compensation for the sticky button bar.
+ *
+ * Keyboard navigation (arrow keys, Home/End) is handled by
+ * the shared tab-keyboard-nav utility rather than inline here.
+ */
+import { attachTabKeyboardNav } from "./tab-keyboard-nav.js";
+
 class TabbedNavigator extends HTMLElement {
   constructor() {
     super();
 
-    // Bind this context to methods that need it
+    // Bind methods that rely on `this` context when called
+    // as event callbacks
     this.handleAlertAnchorClick = this.handleAlertAnchorClick.bind(this);
     this.handleTabButtonClick = this.handleTabButtonClick.bind(this);
     this.switchToTab = this.switchToTab.bind(this);
@@ -10,7 +23,8 @@ class TabbedNavigator extends HTMLElement {
   }
 
   connectedCallback() {
-    // If no tabs are selected by default, then select the first one
+    // When no tab has the selected attribute on load,
+    // default to activating whichever button comes first
     const selected = Array.from(
       this.querySelectorAll(".tab-button[data-selected]"),
     );
@@ -18,10 +32,8 @@ class TabbedNavigator extends HTMLElement {
       this.switchToTab(this.querySelector("button").dataset.tabName);
     }
 
-    // The initial page load might contain a hash fragment
-    // referring either to content within a given tab
-    // (such as an alert) or a tab itself. We should handle
-    // these two cases.
+    // If the initial URL includes a hash fragment pointing to
+    // a tab or content inside one, navigate there immediately
     this.navigateWithInitialHash();
 
     // Intercept click events on Alert links at the
@@ -32,29 +44,41 @@ class TabbedNavigator extends HTMLElement {
       },
     );
 
-    // Intercept click events on Alert spans in
-    // any hourly detail tables
+    // Same treatment for alert links embedded in hourly
+    // detail tables
     Array.from(this.querySelectorAll(".wx-alert-link a")).forEach(
       (alertSpan) => {
         alertSpan.addEventListener("click", this.handleAlertAnchorClick);
       }
     );
 
-    // Add needed event listeners
+    // Attach click handlers to every tab button
     Array.from(this.querySelectorAll("button.tab-button")).forEach((button) => {
       button.addEventListener("click", this.handleTabButtonClick);
-      button.addEventListener("keydown", this.handleTabListKeydown);
     });
+
+    // Keyboard navigation is provided by the shared utility —
+    // it gives back a cleanup function we store for disconnect
+    this._cleanupKeyNav = attachTabKeyboardNav(this, ".tab-button");
   }
 
   disconnectedCallback() {
-    // Remove any event listeners
+    // Tear down keyboard navigation
+    if(this._cleanupKeyNav){
+      this._cleanupKeyNav();
+    }
+
+    // Remove click listeners from the tab buttons
     Array.from(this.querySelectorAll("button.tab-button")).forEach((button) => {
       button.removeEventListener("click", this.handleTabButtonClick);
-      button.removeEventListener("keydown", this.handleTabListKeydown);
     });
   }
 
+  /**
+   * Checks the current URL hash on first load and, if it
+   * points to a known tab or an element inside one, switches
+   * to that tab (and opens its accordion if applicable).
+   */
   navigateWithInitialHash() {
     const hash = new URL(window.location).hash;
     if (!hash || hash === "") {
@@ -62,6 +86,7 @@ class TabbedNavigator extends HTMLElement {
     }
 
     try {
+      // First check: is the hash the name of a tab itself?
       const matchedTabButton = this.querySelector(
         `[data-tab-name="${hash.replace("#", "")}"]`,
       );
@@ -71,6 +96,8 @@ class TabbedNavigator extends HTMLElement {
         return;
       }
 
+      // Second check: is the hash an element nested inside
+      // one of the tab containers?
       const childElement = this.querySelector(
         `${hash},wx-tab-container, .wx-tab-container ${hash}`,
       );
@@ -85,14 +112,19 @@ class TabbedNavigator extends HTMLElement {
         }
       }
     } catch (e) {
-      // Guard against hashes that are not valid DOM identifiers. We can't
-      // prevent users from typing random stuff in the address bar, but we
-      // prevent our scripts from crashing if they do.
+      // Guard against hashes that are not valid DOM identifiers.
+      // Users can type arbitrary text into the address bar, and
+      // we shouldn't let that crash our scripts.
     }
   }
 
+  /**
+   * Activates the tab identified by tabId while deactivating
+   * all others. Also fires a custom event so external code
+   * can react to the switch.
+   */
   switchToTab(tabId) {
-    // First, deactivate all tabs
+    // Start by clearing every tab and container
     Array.from(this.querySelectorAll(".tab-button, .wx-tab-container")).forEach(
       (element) => {
         element.removeAttribute("data-selected");
@@ -103,18 +135,17 @@ class TabbedNavigator extends HTMLElement {
       },
     );
 
-    // Active the tab button
+    // Mark the target tab button as active
     const tabButton = this.querySelector(`[data-tab-name="${tabId}"]`);
     tabButton.setAttribute("data-selected", "");
     tabButton.setAttribute("aria-expanded", "true");
     tabButton.removeAttribute("tabindex");
 
-    // Activate the corresponding container
+    // Reveal the matching content container
     const tabContainer = this.querySelector(`#${tabId}`);
     tabContainer.setAttribute("data-selected", "");
 
-    // Trigger a custom event for use externally
-    // when tabs switch
+    // Broadcast the switch so other components can respond
     const event = new CustomEvent("wx:tab-switched", {
       detail: {
         tabId,
@@ -126,39 +157,36 @@ class TabbedNavigator extends HTMLElement {
 
   handleTabButtonClick(event) {
     this.switchToTab(event.target.dataset.tabName);
-    // Since this was an actual click, update the hash
-    // of the site to the tab button's id
+    // Persist the active tab in the URL hash so bookmarks
+    // and browser history reflect the current state
     window.history.replaceState(null, null, `#${event.target.dataset.tabName}`);
   }
 
+  /**
+   * Intercepts clicks on alert anchor links and, when the
+   * target lives inside one of our tab containers, switches
+   * to that tab and scrolls the relevant accordion into view.
+   */
   handleAlertAnchorClick(event) {
     const hash = new URL(event.currentTarget.href).hash;
     const accordionEl = this.querySelector(`${hash}.usa-accordion`);
 
     if (accordionEl) {
-      // If we get here, then the element referred
-      // to by the href is a child of this tabbed
-      // navigator.
-      // We need to toggle to the correct tab pane
-      // to properly display and scroll to the element.
+      // The linked element is an accordion inside a tab —
+      // switch to its parent tab and expand it
       const tabContainer = accordionEl.closest(".wx-tab-container");
       this.switchToTab(tabContainer.id);
       this.toggleAccordion(accordionEl, true);
 
-      // Because we use a sticky position on
-      // the tab button area, the normal browser
-      // scrolling will not display the proper position
-      // to the user. Instead, we have to roll our
-      // own scrolling method
+      // The sticky tab-button bar throws off native anchor
+      // scrolling, so we compute the offset manually
       this.scrollToAccordion(accordionEl);
       event.preventDefault();
       window.history.replaceState(null, null, hash);
     } else {
-      // If we're not looking at one of the tab container's inner accordions,
-      // check if we're looking for a tab.
+      // Not an accordion — could still be a direct tab reference
       const tabContainer = this.querySelector(`${hash}.wx-tab-container`);
       if (tabContainer) {
-        // If we are, switch to that tab.
         this.switchToTab(tabContainer.id);
         event.preventDefault();
         this.scrollTo(0, 0);
@@ -167,6 +195,11 @@ class TabbedNavigator extends HTMLElement {
     }
   }
 
+  /**
+   * Expands or collapses a USWDS accordion element by
+   * toggling its button's aria-expanded and the content's
+   * hidden attribute.
+   */
   toggleAccordion(accordionElement, on = true) {
     const button = accordionElement.querySelector(
       "button.usa-accordion__button",
@@ -178,49 +211,15 @@ class TabbedNavigator extends HTMLElement {
       content.removeAttribute("hidden");
     } else {
       button.setAttribute("aria-expanded", "false");
-      content.addAttribute("hidden", "");
+      content.setAttribute("hidden", "");
     }
   }
 
-  handleTabListKeydown(event) {
-    // Per W3C guidelines, arrow keys and other navigation
-    // keys should be used (instead of tab) to navigate the
-    // focus of tab buttons.
-    // See (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/examples/tabs-manual/)
-    const currentElement = event.target;
-    const isFirst = currentElement.matches(":first-child");
-    const isLast = currentElement.matches(":last-child");
-    if (event.key === "ArrowRight") {
-      if (isLast) {
-        event.target.parentElement
-          .querySelector(".tab-button:first-child")
-          .focus();
-      } else {
-        currentElement.nextElementSibling.focus();
-      }
-      event.preventDefault();
-    } else if (event.key === "ArrowLeft") {
-      if (isFirst) {
-        event.target.parentElement
-          .querySelector(".tab-button:last-child")
-          .focus();
-      } else {
-        currentElement.previousElementSibling.focus();
-      }
-      event.preventDefault();
-    } else if (event.key === "Home") {
-      event.target.parentElement
-        .querySelector(".tab-button:first-child")
-        .focus();
-      event.preventDefault();
-    } else if (event.key === "End") {
-      event.target.parentElement
-        .querySelector(".tab-button:last-child")
-        .focus();
-      event.preventDefault();
-    }
-  }
-
+  /**
+   * Scrolls so that the given accordion is visible, accounting
+   * for the height of the sticky tab-button bar that would
+   * otherwise obscure the top of the content.
+   */
   scrollToAccordion(accordionElement) {
     const accordionTop = accordionElement.getBoundingClientRect().top;
     const buttonArea = this.querySelector(".tab-buttons");

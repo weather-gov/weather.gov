@@ -1,32 +1,49 @@
 /**
  * Generic WCAG Tabs component
  * ------------------------------------------
- * This is a progressively enhanced component.
- * tab, tablist, and tabpanel elements are expected
- * to have the correct `role` attributes and other
- * aria references.
- * See
- * https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
+ * Progressively enhanced tab interface that expects the
+ * underlying markup to include proper `role`, `aria-selected`,
+ * and `aria-controls` attributes on tab and panel elements.
+ *
+ * Keyboard navigation (ArrowLeft/Right, Home, End, Space,
+ * Enter) is delegated to the shared tab-keyboard-nav utility
+ * so the same logic doesn't get duplicated across components.
+ *
+ * See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
  */
+import { attachTabKeyboardNav } from "./tab-keyboard-nav.js";
+
 class Tabs extends HTMLElement {
   constructor(){
     super();
 
-    // Bound methods
+    // Keep a bound reference so we can cleanly remove it later
     this.handleTabClick = this.handleTabClick.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   connectedCallback(){
+    // Wire up click handlers on every declared tab
     Array.from(this.querySelectorAll('[role="tab"]'))
       .forEach(tabElement => {
         tabElement.addEventListener("click", this.handleTabClick);
       });
-    this.addEventListener("keydown", this.handleKeyDown);
+
+    // Keyboard navigation comes from the shared utility —
+    // it returns a teardown function we'll invoke on disconnect
+    this._cleanupKeyNav = attachTabKeyboardNav(
+      this,
+      '[role="tab"]',
+      { activateOnSpace: true, activateOnEnter: true },
+    );
   }
 
   disconnectedCallback(){
-    this.removeEventListener("keydown", this.handleKeyDown);
+    // Tear down keyboard navigation first
+    if(this._cleanupKeyNav){
+      this._cleanupKeyNav();
+    }
+
+    // Then remove click listeners from individual tabs
     Array.from(this.querySelectorAll('[role="tab"]'))
     .forEach(tabElement => {
       tabElement.removeEventListener("click", this.handleTabClick);
@@ -34,84 +51,31 @@ class Tabs extends HTMLElement {
   }
 
   /**
-   * The click handler should update the tab's
-   * aria-selected attribute, and also update the
-   * data-tabpanel-selected attribute on its corresponding
-   * tabpanel.
-   * Any hiding/showing of tabpanel content should be
-   * handled by implementor's CSS
+   * When a tab is clicked, flip the aria-selected flags across
+   * the whole set and toggle the matching tabpanel's visibility
+   * attribute. Actual show/hide styling is left to the
+   * implementor's CSS.
    */
   handleTabClick(event){
     const tab = event.target.closest('[role="tab"]');
     const panelId = tab.getAttribute("aria-controls");
     const panel = document.getElementById(panelId);
     if(panel){
+      // Deselect every tab, then mark the clicked one active
       this.tabs.forEach(tabElement => {
         tabElement.setAttribute("aria-selected", false);
       });
       tab.setAttribute("aria-selected", true);
+
+      // Mirror the selection state on tabpanels
       this.tabpanels.forEach(tabpanelElement => {
         tabpanelElement.setAttribute("data-tabpanel-selected", false);
       });
       panel.setAttribute("data-tabpanel-selected", true);
+
+      // Stash the active panel id on the component itself so
+      // external code can read which tab is current
       this.setAttribute("data-selected", panelId);
-    }
-  }
-
-  /**
-   * Binds key handling events as specified in
-   * the WCAG recommendations
-   */
-  handleKeyDown(event){
-    const currentFocus = this.querySelector('[role="tab"]:focus,[role="tab"]:focus-within');
-    const firstItemInFocus = currentFocus.matches('[role="tab"]:first-child:focus, [role="tab"]:first-child:focus-within');
-    const lastItemInFocus = currentFocus.matches('[role="tab"]:last-child:focus, [role="tab"]:last-child:focus-within');
-    let handled = false;
-    if(event.key === "ArrowLeft"){
-      if(firstItemInFocus){
-        this.focusTab(this.querySelector('[role="tab"]:last-child'));
-      } else {
-        this.focusTab(currentFocus.previousElementSibling);
-      }
-      handled = true;
-    } else if(event.key === "ArrowRight"){
-      if(lastItemInFocus){
-        this.focusTab(this.querySelector('[role="tab"]:first-child'));
-      } else {
-        this.focusTab(currentFocus.nextElementSibling);
-      }
-      handled = true;
-    } else if(event.key === "Space" || event.key === "Enter"){
-      currentFocus.click();
-      handled = true;
-    } else if(event.key === "Home") {
-      this.focusTab(this.querySelector('[role="tab"]:first-child'));
-      handled = true;
-    } else if(event.key === "End"){
-      this.focusTab(this.querySelector('[role="tab"]:last-child'));
-      handled = true;
-    }
-
-    if(handled){
-      event.stopPropagation();
-      event.preventDefault();
-    }
-  }
-
-  focusTab(anElement){
-    // It is not required that the element with the role tab
-    // be a focusable element. In such cases, we need to
-    // check its children for elements that can receive focus.
-    // We do this in the simplest possible way, limiting ourselves
-    // to a, button, or any element with a tabindex
-    const matchString = "a, button, [tabindex]";
-    if(anElement.matches(matchString)){
-      anElement.focus();
-    } else {
-      const childFocusElement = anElement.querySelector(matchString);
-      if(childFocusElement){
-        childFocusElement.focus();
-      }
     }
   }
 
