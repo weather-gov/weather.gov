@@ -176,6 +176,12 @@
   "night/tsra_sct": {
     "icon": "thunderstorm.svg"
   },
+  "day/vv": {
+    "icon": "cloudy_overcast.svg"
+  },
+  "night/vv": {
+    "icon": "cloudy_overcast.svg"
+  },
   "day/wind_bkn": {
     "icon": "new_windy_cloudy.svg"
   },

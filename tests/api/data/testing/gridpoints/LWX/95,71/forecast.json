@@ -48,7 +48,7 @@
         "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 35 },
         "windSpeed": "13 mph",
         "windDirection": "W",
-        "icon": "https://api.weather.gov/icons/land/day/vv?size=medium",
+        "icon": "https://api.weather.gov/icons/land/day/zzz_test_unmapped?size=medium",
         "shortForecast": "Haze",
         "detailedForecast": "Partly sunny, with a high near 53. West wind around 13 mph, with gusts as high as 21 mph."
       },
