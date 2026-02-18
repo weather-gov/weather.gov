@@ -109,9 +109,6 @@ msgstr "Including these cities"
 msgid "alerts.text.issued-by.01"
 msgstr "Issued by @sender"
 
-msgid "backend.banner.under-development.01"
-msgstr "Under development"
-
 msgid "backend.login.cancel-text.01"
 msgstr "Cancel Text"
 
