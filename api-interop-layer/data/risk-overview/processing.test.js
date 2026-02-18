@@ -1,5 +1,11 @@
 import { expect } from "chai";
-import { addRisksToResult, processDays, processLegend } from "./processing.js";
+import {
+  addRisksToResult,
+  processDays,
+  processLegend,
+  getMaxScaleFromLegend
+} from "./processing.js";
+import { getFallbackLevelName } from "./levelnames.js";
 
 describe("risk overview: processing utilities", () => {
   // This represents the raw data from GHWO
@@ -66,6 +72,7 @@ describe("risk overview: processing utilities", () => {
           definition: "lots",
         },
       },
+      scale: 2
     },
     Waterspout: {
       // Also real
@@ -102,6 +109,7 @@ describe("risk overview: processing utilities", () => {
           definition: "purple",
         },
       },
+      scale: 4
     },
     Pasta: {
       // This one does not map into a key we know about.
@@ -120,6 +128,7 @@ describe("risk overview: processing utilities", () => {
           definition: "A tomato sauce",
         },
       },
+      scale: 1
     },
   };
 
@@ -405,6 +414,7 @@ describe("risk overview: processing utilities", () => {
                 category: 2,
               },
             },
+            scale: 2
           },
         },
         Meatball: {
@@ -444,5 +454,497 @@ describe("risk overview: processing utilities", () => {
     addRisksToResult(result, "wfo", days, legend);
 
     expect(result).to.eql(expected);
+  });
+});
+
+
+describe("Processing legend scales and fallback levelnames", () => {
+  it("correctly identifies a 3-level scale from processed legend", () => {
+    /**
+     * This test covers a special case where the Rip tide risk
+     * legend only includes 2 non-zero levels, but the numbers are
+     * each one higher than we would expect.
+     * For context: the GHWO team changed the numbers in this scale
+     * to get chicklet colors to match their expected severity.
+     */
+    const legend = {
+      "Scale-2 Risk (Rip)": {
+        name: "Scale-2 Risk (Rip)",
+        category: {
+          0: {
+            color: "#000",
+            definition: "none",
+            levelName: "zero",
+            category: 0,
+          },
+          2: {
+            color: "#111",
+            definition: "some",
+            levelName: "one",
+            category: 2,
+          },
+          3: {
+            color: "#222",
+            definition: "lots",
+            levelName: "two",
+            category: 3,
+          },
+        }
+      }
+    };
+
+    const result = getMaxScaleFromLegend("Scale-2 Risk (Rip)", legend);
+
+    expect(result).to.equal(3);
+  });
+
+  it("correctly identifies a 3-level scale from processed legend", () => {
+    const legend = {
+      "Scale-3 Risk": {
+        name: "Scale-3 Risk",
+        category: {
+          0: {
+            color: "#000",
+            definition: "none",
+            levelName: "zero",
+            category: 0,
+          },
+          1: {
+            color: "#111",
+            definition: "some",
+            levelName: "one",
+            category: 1,
+          },
+          2: {
+            color: "#222",
+            definition: "lots",
+            levelName: "two",
+            category: 2,
+          },
+          3: {
+            color: "#333",
+            definition: "even more",
+            levelName: "three",
+            category: 3
+          }
+        }
+      }
+    };
+
+    const result = getMaxScaleFromLegend("Scale-3 Risk", legend);
+
+    expect(result).to.equal(3);
+  });
+
+  it("correctly identifies a 4-level scale from processed legend", () => {
+    const legend = {
+      "Scale-4 Risk": {
+        name: "Scale-4 Risk",
+        category: {
+          0: {
+            color: "#000",
+            definition: "none",
+            levelName: "zero",
+            category: 0,
+          },
+          1: {
+            color: "#111",
+            definition: "some",
+            levelName: "one",
+            category: 1,
+          },
+          2: {
+            color: "#222",
+            definition: "lots",
+            levelName: "two",
+            category: 2,
+          },
+          3: {
+            color: "#333",
+            definition: "even more",
+            levelName: "three",
+            category: 3
+          },
+          4: {
+            color: "#444",
+            definition: "still more",
+            levelName: "four",
+            category: 4
+          }
+        }
+      }
+    };
+
+    const result = getMaxScaleFromLegend("Scale-4 Risk", legend);
+
+    expect(result).to.equal(4);
+  });
+
+  it("correctly identifies a 5-level scale from processed legend", () => {
+    const legend = {
+      "Scale-5 Risk": {
+        name: "Scale-5 Risk",
+        category: {
+          0: {
+            color: "#000",
+            definition: "none",
+            levelName: "zero",
+            category: 0,
+          },
+          1: {
+            color: "#111",
+            definition: "some",
+            levelName: "one",
+            category: 1,
+          },
+          2: {
+            color: "#222",
+            definition: "lots",
+            levelName: "two",
+            category: 2,
+          },
+          3: {
+            color: "#333",
+            definition: "even more",
+            levelName: "three",
+            category: 3
+          },
+          4: {
+            color: "#444",
+            definition: "still more",
+            levelName: "four",
+            category: 4
+          },
+          5: {
+            color: "#555",
+            definition: "the most",
+            levelName: "five",
+            category: 5
+          }
+        }
+      }
+    };
+
+    const result = getMaxScaleFromLegend("Scale-5 Risk", legend);
+
+    expect(result).to.equal(5);
+  });
+});
+
+describe("Risk levelName fallbacks", () => {
+  /**
+   * These tests cover the fallback mechanism for GHWO legend data.
+   * We anticipate that at some point soon, GHWO legend.json data will
+   * start furnishing data _without_ the `levelName` property in each
+   * category dictionary.
+   * Because of this forthcoming change, we workshopped a set of fallback
+   * labels for each level within each possible risk factor scale.
+   * These tests ensure that example legend data without the levelNames
+   * will result in processed data that has the fallback values.
+   */
+  it("works for legend data with a 2-level scale", () => {
+    const legend = {
+      "genration_time": "time",
+      "generation_time_LT": "time_LT",
+      "ghwo_version": "test",
+      "hazards": [
+        {
+          "name": "Scale-2 Fallback Test",
+          "category": {
+            "0": {
+              "color": "#000",
+              "definition": "scale-2-zero",
+            },
+            "1": {
+              "color": "#111",
+              "definition": "scale-2-one",
+            },
+            "2": {
+              "color": "#222",
+              "definition": "scale-2-two",
+            }
+          }
+        }
+      ]
+    };
+
+    const expected = {
+      ScaleFallbackTest: {
+        category: {
+          "0": {
+            "color": "#000",
+            "definition": "scale-2-zero",
+            "levelName": "None",
+            "category": 0
+          },
+          "1": {
+            "color": "#111",
+            "definition": "scale-2-one",
+            "levelName": "Moderate",
+            "category": 1
+          },
+          "2": {
+            "color": "#222",
+            "definition": "scale-2-two",
+            "levelName": "High",
+            "category": 2
+          }
+        },
+        name: "Scale-2 Fallback Test",
+        scale: 2
+      }
+    };
+
+    const result = processLegend(legend);
+
+    expect(result).to.eql(expected);
+  });
+
+  it("works for legend data with a 3-level scale", () => {
+    const legend = {
+      "genration_time": "time",
+      "generation_time_LT": "time_LT",
+      "ghwo_version": "test",
+      "hazards": [
+        {
+          "name": "Scale-3 Fallback Test",
+          "category": {
+            "0": {
+              "color": "#000",
+              "definition": "scale-3-zero",
+            },
+            "1": {
+              "color": "#111",
+              "definition": "scale-3-one",
+            },
+            "2": {
+              "color": "#222",
+              "definition": "scale-3-two",
+            },
+            "3": {
+              "color": "#333",
+              "definition": "scale-3-three"
+            }
+          }
+        }
+      ]
+    };
+
+    const expected = {
+      ScaleFallbackTest: {
+        category: {
+          "0": {
+            "color": "#000",
+            "definition": "scale-3-zero",
+            "levelName": "None",
+            "category": 0
+          },
+          "1": {
+            "color": "#111",
+            "definition": "scale-3-one",
+            "levelName": "Low",
+            "category": 1
+          },
+          "2": {
+            "color": "#222",
+            "definition": "scale-3-two",
+            "levelName": "Moderate",
+            "category": 2
+          },
+          "3": {
+            "color": "#333",
+            "definition": "scale-3-three",
+            "levelName": "High",
+            "category": 3
+          }
+        },
+        name: "Scale-3 Fallback Test",
+        scale: 3
+      }
+    };
+
+    const result = processLegend(legend);
+
+    expect(result).to.eql(expected);
+  });
+
+  it("works for legend data with a 4-level scale", () => {
+    const legend = {
+      "genration_time": "time",
+      "generation_time_LT": "time_LT",
+      "ghwo_version": "test",
+      "hazards": [
+        {
+          "name": "Scale-4 Fallback Test",
+          "category": {
+            "0": {
+              "color": "#000",
+              "definition": "scale-4-zero",
+            },
+            "1": {
+              "color": "#111",
+              "definition": "scale-4-one",
+            },
+            "2": {
+              "color": "#222",
+              "definition": "scale-4-two",
+            },
+            "3": {
+              "color": "#333",
+              "definition": "scale-4-three"
+            },
+            "4": {
+              "color": "#444",
+              "definition": "scale-4-four"
+            }
+          }
+        }
+      ]
+    };
+
+    const expected = {
+      ScaleFallbackTest: {
+        category: {
+          "0": {
+            "color": "#000",
+            "definition": "scale-4-zero",
+            "levelName": "None",
+            "category": 0
+          },
+          "1": {
+            "color": "#111",
+            "definition": "scale-4-one",
+            "levelName": "Very Low",
+            "category": 1
+          },
+          "2": {
+            "color": "#222",
+            "definition": "scale-4-two",
+            "levelName": "Low",
+            "category": 2
+          },
+          "3": {
+            "color": "#333",
+            "definition": "scale-4-three",
+            "levelName": "High",
+            "category": 3
+          },
+          "4": {
+            "color": "#444",
+            "definition": "scale-4-four",
+            "levelName": "Very High",
+            "category": 4
+          }
+        },
+        name: "Scale-4 Fallback Test",
+        scale: 4
+      }
+    };
+
+    const result = processLegend(legend);
+
+    expect(result).to.eql(expected);
+  });
+
+  it("works for legend data with a 5-level scale", () => {
+    const legend = {
+      "genration_time": "time",
+      "generation_time_LT": "time_LT",
+      "ghwo_version": "test",
+      "hazards": [
+        {
+          "name": "Scale-5 Fallback Test",
+          "category": {
+            "0": {
+              "color": "#000",
+              "definition": "scale-5-zero",
+            },
+            "1": {
+              "color": "#111",
+              "definition": "scale-5-one",
+            },
+            "2": {
+              "color": "#222",
+              "definition": "scale-5-two",
+            },
+            "3": {
+              "color": "#333",
+              "definition": "scale-5-three"
+            },
+            "4": {
+              "color": "#444",
+              "definition": "scale-5-four"
+            },
+            "5": {
+              "color": "#555",
+              "definition": "scale-5-five"
+            }
+          }
+        }
+      ]
+    };
+
+    const expected = {
+      ScaleFallbackTest: {
+        category: {
+          "0": {
+            "color": "#000",
+            "definition": "scale-5-zero",
+            "levelName": "None",
+            "category": 0
+          },
+          "1": {
+            "color": "#111",
+            "definition": "scale-5-one",
+            "levelName": "Very Low",
+            "category": 1
+          },
+          "2": {
+            "color": "#222",
+            "definition": "scale-5-two",
+            "levelName": "Low",
+            "category": 2
+          },
+          "3": {
+            "color": "#333",
+            "definition": "scale-5-three",
+            "levelName": "Moderate",
+            "category": 3
+          },
+          "4": {
+            "color": "#444",
+            "definition": "scale-5-four",
+            "levelName": "High",
+            "category": 4
+          },
+          "5": {
+            "color": "#555",
+            "definition": "scale-5-five",
+            "levelName": "Very High",
+            "category": 5
+          }
+        },
+        name: "Scale-5 Fallback Test",
+        scale: 5
+      }
+    };
+
+    const result = processLegend(legend);
+
+    expect(result).to.eql(expected);
+  });
+
+  it("will provide a descriptive error levelName when the level is beyond the given scale", () => {
+    const expected = "Level 7 of 4";
+    const actual = getFallbackLevelName(7, 4);
+
+    expect(actual).to.equal(expected);
+  });
+
+  it("will provide a descriptive error levelName when the scale is not in our fallback set", () => {
+    const expected = "Level 0 of 100";
+    const actual = getFallbackLevelName(0, 100);
+
+    expect(actual).to.equal(expected);
   });
 });

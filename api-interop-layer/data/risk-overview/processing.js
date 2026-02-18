@@ -1,4 +1,28 @@
 import { riskNameToImageNameMap, riskNameToKeyMapping } from "./mappings.js";
+import { getFallbackLevelName } from "./levelnames.js";
+
+/**
+ * For a given risk factor, peek into the legend and determine
+ * what its "scale" is. The scale is defined as the number of
+ * category/levels that the risk factor can have.
+ * We discount level 0 from this accounting.
+ * So far, we have only seen 2, 3, 4, and 5 level scales.
+ * Note: We have encountered Rip Current Risk, which has categories
+ * 0, 2, and 3 (note that 1 doesn't exist), making it effecively a 2-scale, but we need to treat it as a 3 point scale for procesing purposes
+ */
+export const getMaxScaleFromLegend = (risk, legend) => {
+  if(legend[risk]){
+    // Subtracting 1 removes the addition of a 0 category
+    // return Object.keys(legend[risk].category).length - 1;
+    const levels = Object.keys(legend[risk].category).map(key => {
+      return parseInt(key);
+    }).filter(num => {
+      return !isNaN(num);
+    });
+    return Math.max(...levels, 0);
+  }
+  return null;
+};
 
 export const addRisksToResult = (result, wfo, days, legend) => {
   const dataLegend = {};
@@ -218,8 +242,25 @@ export const processLegend = (legendData) =>
     Object.entries(legend[riskKey].category).forEach(
       ([categoryNumber, categoryValue]) => {
         categoryValue.category = +categoryNumber;
+
+        // If there is not a levelName key in the category dict,
+        // or the levelname is not specified, we should pull from
+        // the fallback set
+        if(!categoryValue.levelName || categoryValue.levelName === ""){
+          const riskScale = getMaxScaleFromLegend(riskKey, legend);
+          categoryValue.levelName = getFallbackLevelName(categoryNumber, riskScale);
+        }
       },
     );
+
+    // Additionally, we need to know on which scale a given risk
+    // type has category levels.
+    // Scales can be 2 leves, 3 levels, 4 levels, or 5 levels.
+    //
+    // Since the keys in the legend are all string version of the numbers,
+    // we can simply count the number of keys and set that as the "max"
+    // for the given scale.
+    legend[riskKey].scale = getMaxScaleFromLegend(riskKey, legend); 
 
     return legend;
   }, {});
