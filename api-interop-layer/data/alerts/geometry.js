@@ -115,42 +115,71 @@ const getUnion = (firstShape, secondShape=null) => {
 };
 
 /**
- * Here a 'zone' can refer to either a forecast zone or
- * a county fips id. Either one will produce a geometry set
- * that is stored in the database.
+ * Splits an array into groups of at most `size` elements.
+ * Avoids the manual index juggling of the old while-loop
+ * approach, and the output is easy to iterate over.
+ */
+const chunkArray = (array, size) => {
+  // Guard against non-positive chunk sizes which would
+  // cause an infinite loop in the for-loop below
+  if (size <= 0) {
+    return [array];
+  }
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+};
+
+/**
+ * Fetches and merges zone/county geometries in bounded
+ * batches to keep memory usage under control.
+ *
+ * The algorithm (per the issue description):
+ * 1. Slice the zone list into chunks of ZONE_CHUNK_SIZE
+ * 2. For each chunk, fetch its geometries from the DB and
+ *    compute the within-chunk union
+ * 3. Collect those per-chunk results into a list
+ * 4. Merge the list into one final geometry
+ *
+ * This avoids holding all raw DB data in memory at once —
+ * each chunk's raw points can be GC'd after its union is
+ * computed, and the final merge operates on the smaller
+ * already-unioned shapes.
  */
 const fetchAndComputeZoneGeometries = async (db, zones, zoneType="forecast") => {
   if(!["forecast", "county"].includes(zoneType)){
     throw new Error(`Invalid geometry zone type: ${zoneType}`);
   }
-  
-  let geometry = null;
-  
-  let chunkCount = 0;
-  let start = chunkCount * ZONE_CHUNK_SIZE;
-  let end = start + ZONE_CHUNK_SIZE;
-  let chunk = zones.slice(start, end);
-  while(chunk && chunk.length){
-    // Update the computed geometry
+
+  const chunks = chunkArray(zones, ZONE_CHUNK_SIZE);
+
+  // Phase 1: fetch each chunk from the DB and compute its
+  // local union. Results stay small relative to the raw data.
+  const chunkResults = [];
+  for (const chunk of chunks) {
+    // Sequential fetches keep DB load predictable under stress.
     // eslint-disable-next-line no-await-in-loop
     const data = await getZoneShapeFromDb(db, chunk, zoneType);
-
-    if(data && geometry){
-      geometry = getUnion(
-        geometry,
-        data
-      );
-    } else if (data) {
-      geometry = getUnion(data);
-    } 
-
-    chunkCount += 1;
-    start = chunkCount * ZONE_CHUNK_SIZE;
-    end = start + ZONE_CHUNK_SIZE;
-    chunk = zones.slice(start, end);
+    if (data) {
+      chunkResults.push(getUnion(data));
+    }
   }
 
-  return geometry;
+  // Nothing came back from the DB
+  if (chunkResults.length === 0) {
+    return null;
+  }
+
+  // Only one chunk — already unioned, just return it
+  if (chunkResults.length === 1) {
+    return chunkResults[0];
+  }
+
+  // Phase 2: merge all chunk results into a single geometry.
+  // A reduce gives us a clean fold without mutating state.
+  return chunkResults.reduce((merged, next) => getUnion(merged, next));
 };
 
 export const generateAlertGeometry = async (db, rawAlert) => {
