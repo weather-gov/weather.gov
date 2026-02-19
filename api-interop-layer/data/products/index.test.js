@@ -1,102 +1,183 @@
+import quibble from "quibble";
 import sinon from "sinon";
 import { expect } from "chai";
-import undici from "undici";
-import { BASE_URL } from "../../util/fetch.js";
+import { parseTTLFromHeaders } from "../../redis.js";
 import AFDParser from "./afd/AFDParser.js";
-import getProduct from "./index.js";
 
-describe("product module index", () => {
+class FakePool {
+  constructor(...args){
+    this.args = args;
+    if(FakePool.callCount){
+      FakePool.callCount += 1;
+    } else {
+      FakePool.callCount = 1;
+    }
+  }
+}
+
+describe("/product data tests", () => {
   const sandbox = sinon.createSandbox();
-  const response = { statusCode: 200, body: { json: sandbox.stub() } };
-  const wait = sandbox.stub();
+  const requestJSON = sandbox.stub();
+  let saveToRedis = sandbox.stub();
+  let getFromRedis = sandbox.stub();
+  let getProduct;
+  const headers = { "cache-control": "s-maxage=120"};
 
-  let afdParser_parse;
-  let afdParser_getStructureForTwig;
-
-  before(async () => {
-    afdParser_parse = sandbox.stub(AFDParser.prototype, "parse");
-    afdParser_getStructureForTwig = sandbox.stub(
-      AFDParser.prototype,
-      "getStructureForTwig",
-    );
+  before(async() => {
+    // Stub out the request export so we can mock it
+    await quibble.esm("undici", { Pool: FakePool }, {});
+    await quibble.esm("./afd/AFDParser.js", {}, AFDParser);
+    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis, parseTTLFromHeaders });
+    await quibble.esm("../../util/request.js", { requestJSONWithHeaders: requestJSON}, {});
+    const imported  = await import("./index.js");
+    getProduct = imported.default;
+    // Stub out the AFD parser
+    sinon.stub(AFDParser.prototype, "parse");
+    sinon.stub(AFDParser.prototype, "getStructureForTwig");
   });
 
   beforeEach(() => {
-    response.statusCode = 200;
     sandbox.resetBehavior();
     sandbox.resetHistory();
-    wait.resolves();
-    undici.request.resolves(response);
+    requestJSON.resolves(
+      [
+        {}, // the json of the response
+        headers
+      ]
+    );
   });
 
   after(() => {
-    afdParser_parse.restore();
-    afdParser_getStructureForTwig.restore();
+    AFDParser.prototype.parse.restore();
+    AFDParser.prototype.getStructureForTwig.restore();
     sandbox.restore();
   });
 
   it("fetches the requested product by ID", async () => {
-    response.body.json.resolves("success");
+    await getProduct("some-id");
+    
+    const call = requestJSON.getCall(0);
+    const path = call.args[1];
+    expect(path).to.equal(`/products/some-id`);
+  });
 
-    const result = await getProduct("and now, the weather");
+  it("returns the original productData object if the type is not AFD", async () => {
+    const data = {
+      productCode: "Something else",
+      productText: "this is the text"
+    };
 
-    expect(result).to.equal("success");
+    const expected = Object.assign({}, data);
+    requestJSON.resolves(
+      [
+        data,
+        headers
+      ]
+    );
+
+    const result = await getProduct("some-id");
+    
+    expect(AFDParser.prototype.parse.callCount).to.equal(0);
+    expect(AFDParser.prototype.getStructureForTwig.callCount).to.equal(0);
+    expect(result).to.eql(expected);
+  });
+
+  it("attempts to parse product text when the type _is_ AFD", async () => {
+    const data = {
+      productCode: "AFD",
+      productText: "this is the text"
+    };
+
+    requestJSON.resolves(
+      [
+        data,
+        headers
+      ]
+    );
+
+    await getProduct("some-id");
+
+    expect(AFDParser.prototype.parse.callCount).to.equal(1);
+    expect(AFDParser.prototype.getStructureForTwig.callCount).to.equal(1);
+  });
+
+  it("adds the parsed text to the output when type is AFD", async () => {
+    const data = {
+      productCode: "AFD",
+      productText: "hello"
+    };
+    const expected = Object.assign({}, data, {
+      parsedProductText: "parsed version!"
+    });
+    AFDParser.prototype.getStructureForTwig.returns("parsed version!");
+    requestJSON.resolves(
+      [
+        data,
+        headers
+      ]
+    );
+
+    const result = await getProduct("some-id");
+
+    expect(result).to.eql(expected);
+  });
+  
+
+  it("returns the data response if there is an error during parsing", async () => {
+    const error = new Error("hello");
+    AFDParser.prototype.parse.throws(new Error("hello"));
+    const data = {
+      productCode: "AFD",
+      productText: "this is the text"
+    };
+    requestJSON.resolves(
+      [
+        data,
+        headers
+      ]
+    );
+
+    const expected = Object.assign({}, data, { error });
+
+    const result = await getProduct("some-id");
+
+    expect(result).to.eql(expected);
+  });
+
+  it("returns a cached object without making a request, if found", async () => {
+    const data = { message: "hello" };
+    getFromRedis.resolves(data);
+
+    requestJSON.resolves(
+      [
+        {},
+        headers
+      ]
+    );
+
+    const result = await getProduct("some-id");
+
+    expect(requestJSON.callCount).to.equal(0);
+    expect(result).to.eql(data);
+  });
+
+  it("makes a request for data and saves to cache if no cache hit found", async () => {
+    const data = { message: "hello" };
+    getFromRedis.resolves(false);
+
+    requestJSON.resolves(
+      [
+        data,
+        headers
+      ]
+    );
+
+    const result = await getProduct("some-id");
+
     expect(
-      undici.request.calledWith(
-        `${BASE_URL}/products/and%20now,%20the%20weather`,
-      ),
+      saveToRedis.calledWith(`/products/some-id`, sinon.match.object, 120)
     ).to.equal(true);
-  });
-
-  it("returns the API response if status is not 200", async () => {
-    response.statusCode = 400;
-    response.body.json.resolves({ message: "oh noes" });
-
-    const result = await getProduct("err");
-    expect(result).to.eql({ message: "oh noes", status: 400, error: true });
-  });
-
-  it("returns the API response if product type is not AFD", async () => {
-    response.body.json.resolves({
-      productCode: "ABC",
-      message: "Bob Barker hates pets",
-    });
-
-    const result = await getProduct("id");
-    expect(result).to.eql({
-      productCode: "ABC",
-      message: "Bob Barker hates pets",
-    });
-  });
-
-  it("returns the API response if there is an error parsing", async () => {
-    response.body.json.resolves({
-      productCode: "AFD",
-      message: "Oh no things will fail!",
-    });
-    afdParser_parse.throws("oh no");
-
-    const result = await getProduct("id");
-    expect(result).to.eql({
-      productCode: "AFD",
-      message: "Oh no things will fail!",
-    });
-  });
-
-  it("parses the AFD if a successful fetch", async () => {
-    response.body.json.resolves({
-      productCode: "AFD",
-      productText: "howdy doody",
-    });
-
-    afdParser_getStructureForTwig.returns("teehee");
-
-    const result = await getProduct("id");
-
-    expect(result).to.eql({
-      productCode: "AFD",
-      productText: "howdy doody",
-      parsedProductText: "teehee",
-    });
+    expect(requestJSON.callCount).to.equal(1);
+    expect(result).to.eql(data);
   });
 });

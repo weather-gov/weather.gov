@@ -29,3 +29,30 @@ export const requestJSON = async (dispatcher, path) => {
   error.error = true;
   return error;
 };
+
+/**
+ * A variant of requestJSON that also returns cache header strings
+ * from the response.
+ */
+export const requestJSONWithHeaders = async (dispatcher, path) => {
+  const { statusText, statusCode, body, headers } = await dispatcher.request({
+    path,
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      ...STANDARD_HEADERS,
+    },
+  });
+  if (statusCode >= 200 && statusCode < 400) {
+    return body.json().then(json => {
+      return [json, headers];
+    });
+  }
+  // we need to consume the response body even in the case of an error.
+  await body.dump();
+  // we have a 4xx or 5xx; it is the caller's responsibility to handle.
+  const error = new Error();
+  error.cause = { statusText, statusCode };
+  error.error = true;
+  return error;
+}
