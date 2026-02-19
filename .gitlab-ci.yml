@@ -374,7 +374,7 @@ django-test:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-django-ci ]]" == "true"
 
-web-component-and-interop-test:
+web-component-test:
   stage: test
   needs:
     - job: gather-forecast-node-dependencies
@@ -391,10 +391,40 @@ web-component-and-interop-test:
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/api-proxy/node_modules api-proxy/
     - npx --no-install c8 --reporter cobertura -o coverage/wc/ --reporter text-summary  mocha --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
-    # We also do interop layer tests at the same time so we don't have to wait
-    # for another runner to come available.
+  coverage:
+    /^Statements\s*:\s*([^%]+)/
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/*/cobertura-coverage.xml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
+
+interop-test:
+  stage: test
+  needs:
+    - job: gather-forecast-node-dependencies
+      optional: true
+  image: $CI_REGISTRY_IMAGE/node-with-deps:$USE_TAG
+  variables:
+    DISABLE_REDIS: true
+  script:
+    # NB: GitLab clones into CI_BUILDS_DIR which defaults to
+    # /builds/gitlab-licensed/NWS/Systems/DIS/Weather.gov-2.0/ whereas in our Docker
+    # images our WORKDIR is /app. so we symlink the various /app/node_modules to
+    # CI_BUILDS_DIR so we can "npm run" as needed.
+    - ln -s /app/node_modules/ .
+    - ln -s /app/api-interop-layer/node_modules api-interop-layer/
+    - ln -s /app/api-proxy/node_modules api-proxy/
     - cd api-interop-layer
-    - npx --no-install c8 --reporter cobertura -o ../coverage/interop/ --reporter text-summary mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
+    # Set the LOG_LEVEL here. The Gitlab CI/CD uses a logger called logrus
+    # that will use our job's LOG_LEVEL environment variable (which feels
+    # like a Gitlab bug), logrus does not know what "silent" is, and logrus
+    # exits with an error if given an unknown log level (which feels like
+    # a logrus bug).
+    - LOG_LEVEL=silent npx --no-install c8 --reporter cobertura -o ../coverage/interop/ --reporter text-summary mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
   coverage:
     /^Statements\s*:\s*([^%]+)/
   artifacts:
