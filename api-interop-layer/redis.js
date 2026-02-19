@@ -64,18 +64,19 @@ export const getRedisConnectionInfo = () => {
 getRedisConnectionInfo();
 
 /**
- * Attempt to retrieve a TTL for caching from the
- * Cache-Control header of a Response object.
- * Typical use is in API communications where the
- * header is present.
- * @param {Response} response - The HTTP response object
- * to check for the Cache-Control header
+ * Attempt retrieve a TTL for caching from a
+ * Cache-Control header of a Headers object.
+ * Typical use is in API communications where the header
+ * is present.
+ * @param {Headers} headers - The HTTP response headers
+ * object to check for the Cache-Control header
  * @returns {Number|null} An integer representing seconds
- * for the cache TTL, otherwise null if the header is not present
+ * for the cache TTL, otherwise null if the header is not
+ * present.
  */
-export const getTTLFromResponse = (response) => {
-  const cacheHeader = response?.headers?.["cache-control"];
-  if (!cacheHeader) {
+export const parseTTLFromHeaders = (headers) => {
+  const cacheHeader = headers?.["cache-control"];
+  if(!cacheHeader){
     return null;
   }
 
@@ -91,6 +92,20 @@ export const getTTLFromResponse = (response) => {
   // captured group of digits. This is the TTL in seconds
   // that we care about, so return it.
   return parseInt(match[1]);
+};
+
+/**
+ * Attempt to retrieve a TTL for caching from the
+ * Cache-Control header of a Response object.
+ * Typical use is in API communications where the
+ * header is present.
+ * @param {Response} response - The HTTP response object
+ * to check for the Cache-Control header
+ * @returns {Number|null} An integer representing seconds
+ * for the cache TTL, otherwise null if the header is not present
+ */
+export const getTTLFromResponse = (response) => {
+  return parseTTLFromHeaders(response?.headers);
 };
 
 /**
@@ -165,5 +180,11 @@ export const getFromRedis = async (key) => {
     return null;
   }
   const client = await getRedisClient();
-  return await client.json.get(key);
+  const result = await client.json.get(key);
+  if(result){
+    return result;
+  } else {
+    redisLogger.info({key}, "CACHE_MISS!!!");
+  }
+  return null;
 };
