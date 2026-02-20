@@ -39,7 +39,7 @@ class TestViews(TestCase):
         spatial.WeatherPlace.objects.create(
             name="Hoboken",
             state="NJ",
-            point=GEOSGeometry("POINT(30 30)"),
+            point=GEOSGeometry("POINT(30.12345 30.54321)"),
         )
         spatial.WeatherPlace.objects.create(
             name="New York",
@@ -418,8 +418,9 @@ class TestViews(TestCase):
         response = self.client.get("/place/NJ/Hoboken/")
         self.assertTemplateUsed(response, "weather/point.html")
 
-        # These values should come from the WeatherPlace model
-        mock_get_point_forecast.assert_called_once_with(30, 30)
+        # These values should come from the WeatherPlace model. The lat/lon
+        # from the place should be truncated to 3 decimal places.
+        mock_get_point_forecast.assert_called_once_with(30.543, 30.123)
         self.assertTemplateUsed(response, "weather/point.html")
         self.assertEqual(
             response.context["point"],
