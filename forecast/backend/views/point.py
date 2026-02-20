@@ -21,7 +21,7 @@ MAX_DEGREE_DECIMALS = 3
 
 
 @cache_control(max_age=120, smax_age=120, public=True)
-def point_location(request, lat, lon): # noqa: C901
+def point_location(request, lat, lon):  # noqa: C901
     """Render the forecast for a given latitude & longitude."""
     # If there are more than 3 decimal places in the latitude, we redirect.
     # We determine whether to redirect based on the number of decimal points
@@ -90,15 +90,9 @@ def point_location(request, lat, lon): # noqa: C901
         if weather_story and "error" not in weather_story:
             weather_story["wfo_name"] = wfo.name
             weather_story["wfo_url"] = wfo.url
-            weather_story["startTime"] = datetime.fromisoformat(
-                    weather_story["startTime"]
-                ).astimezone(localtz)
-            weather_story["updateTime"] = datetime.fromisoformat(
-                    weather_story["updateTime"]
-                ).astimezone(localtz)
-            weather_story["endTime"] = datetime.fromisoformat(
-                    weather_story["endTime"]
-                ).astimezone(localtz)
+            weather_story["startTime"] = datetime.fromisoformat(weather_story["startTime"]).astimezone(localtz)
+            weather_story["updateTime"] = datetime.fromisoformat(weather_story["updateTime"]).astimezone(localtz)
+            weather_story["endTime"] = datetime.fromisoformat(weather_story["endTime"]).astimezone(localtz)
         elif weather_story and "error" in weather_story:
             weather_story["wfo_name"] = wfo.name
             weather_story["wfo_url"] = wfo.url
@@ -106,13 +100,7 @@ def point_location(request, lat, lon): # noqa: C901
             # Then the weather story is empty. We should
             # still provide WFO information in the form of a
             # dict specifying emptiness
-            weather_story = {
-                "is_empty": True,
-                "officeId": wfo.code,
-                "wfo_name": wfo.name,
-                "wfo_url": wfo.url
-            }
-
+            weather_story = {"is_empty": True, "officeId": wfo.code, "wfo_name": wfo.name, "wfo_url": wfo.url}
 
     if "update" in request.GET:
         return render(
@@ -166,8 +154,11 @@ def place_forecast(request, state, place):
             return redirect(f"/place/{known_place.state}/{place}/")
 
         # If we don't need to redirect, then just show them their forecast based
-        # on the location of the place.
-        return point_location(request, known_place.point.y, known_place.point.x)
+        # on the location of the place. Round lat and lon to 3 decimal places first.
+        lat = float(f"{known_place.point.y:.3f}")
+        lon = float(f"{known_place.point.x:.3f}")
+
+        return point_location(request, lat, lon)
 
     # If it's not a place we know, 404.
     raise Http404()
