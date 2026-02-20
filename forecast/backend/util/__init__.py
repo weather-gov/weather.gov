@@ -1,9 +1,11 @@
 import logging
+from datetime import datetime
 
 from django.shortcuts import get_object_or_404
 from django.utils.safestring import mark_safe
 from html_sanitizer import Sanitizer
 
+from backend.interop import get_weather_stories
 from backend.models import WFO, HazardousWeatherOutlookMetadata
 from spatial.models import WeatherCounties, WeatherStates
 
@@ -195,3 +197,47 @@ def get_ghwo_daily_images(county_ghwo_data):
                 urls.add(day["image"])
 
     return list(urls)
+
+
+def get_county_weather_stories(wfos, time_zone_info):
+    """Fetch and process weather story data for a county/timezone."""
+    valid = []
+    errors = []
+    empties = []
+    for wfo in wfos:
+        weather_story_data = get_weather_stories(wfo.code.upper())
+        if weather_story_data and "error" not in weather_story_data:
+            weather_story_data["wfo_url"] = wfo.url
+            weather_story_data["wfo_name"] = wfo.name
+            weather_story_data["startTime"] = datetime.fromisoformat(
+                weather_story_data["startTime"]
+            ).astimezone(tz=time_zone_info)
+            weather_story_data["updateTime"] = datetime.fromisoformat(
+                weather_story_data["updateTime"]
+            ).astimezone(tz=time_zone_info)
+            weather_story_data["endTime"] = datetime.fromisoformat(
+                weather_story_data["endTime"]
+            ).astimezone(tz=time_zone_info)
+            valid.append(weather_story_data)
+        elif weather_story_data:
+            # In this case, there is an error on the dict.
+            # We pass this to the template as-is to handle
+            # the error case
+            weather_story_data["wfo_url"] = wfo.url
+            weather_story_data["wfo_name"] = wfo.name
+            errors.append(weather_story_data)
+        else:
+            # In this case, the interop function returned
+            # None for the given WFO, meaning there are no
+            # current weather stories there.
+            # We still return a dict, but only with an officeId,
+            # so that we can render the AFD links as needed.
+            empties.append({
+                "officeId": wfo.code.upper(),
+                "wfo_url": wfo.url,
+                "wfo_name": wfo.name,
+                "is_empty": True
+            })
+
+    valid = sorted(valid, key=lambda story: story["startTime"], reverse=True)
+    return valid + empties + errors

@@ -1,4 +1,6 @@
+from datetime import datetime
 from http import HTTPStatus
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.db.models import Subquery
@@ -19,7 +21,7 @@ MAX_DEGREE_DECIMALS = 3
 
 
 @cache_control(max_age=120, smax_age=120, public=True)
-def point_location(request, lat, lon):
+def point_location(request, lat, lon): # noqa: C901
     """Render the forecast for a given latitude & longitude."""
     # If there are more than 3 decimal places in the latitude, we redirect.
     # We determine whether to redirect based on the number of decimal points
@@ -63,14 +65,54 @@ def point_location(request, lat, lon):
     if "isMarine" in point and point["isMarine"]:
         return render(request, "weather/marine-point.html", {"point": point})
 
-    weather_story = None
-    if "grid" in point and "wfo" in point["grid"]:
+    # Get the local timezone for the current point place
+    # If there was an error retrieving the place API endpoint,
+    # we set to None
+    # NOTE: If we permanently remove generated timestamps
+    # from the weather stories, we can safely remove this timezone
+    # code, which is only used for that purpose currently
+    if "place" in point and "timezone" in point["place"]:
+        localtz = ZoneInfo(point["place"]["timezone"])
+    else:
+        localtz = None
+
+    weather_story = {}
+    if "grid" in point and "wfo" in point["grid"] and localtz:
         code = point["grid"]["wfo"]
         wfo = WFO.objects.get(code=WFO.normalize_code(code))
         point["wfo"] = wfo
-        # TODO: set this back to the real value when wx stories are ready
-        # weather_story = WeatherStory.objects.current(wfo).first()
-        weather_story = None
+
+        # Fetch the weather story from the interop.
+        # Note that we are making an extra interop request here,
+        # but we could also bundle the weather story fetching as
+        # part of the normal point forecast request.
+        weather_story = interop.get_weather_stories(wfo.code.upper())
+        if weather_story and "error" not in weather_story:
+            weather_story["wfo_name"] = wfo.name
+            weather_story["wfo_url"] = wfo.url
+            weather_story["startTime"] = datetime.fromisoformat(
+                    weather_story["startTime"]
+                ).astimezone(localtz)
+            weather_story["updateTime"] = datetime.fromisoformat(
+                    weather_story["updateTime"]
+                ).astimezone(localtz)
+            weather_story["endTime"] = datetime.fromisoformat(
+                    weather_story["endTime"]
+                ).astimezone(localtz)
+        elif weather_story and "error" in weather_story:
+            weather_story["wfo_name"] = wfo.name
+            weather_story["wfo_url"] = wfo.url
+        else:
+            # Then the weather story is empty. We should
+            # still provide WFO information in the form of a
+            # dict specifying emptiness
+            weather_story = {
+                "is_empty": True,
+                "officeId": wfo.code,
+                "wfo_name": wfo.name,
+                "wfo_url": wfo.url
+            }
+
 
     if "update" in request.GET:
         return render(

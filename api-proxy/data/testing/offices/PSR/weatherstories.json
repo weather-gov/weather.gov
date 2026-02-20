@@ -1,0 +1,20 @@
+{
+  "@context": {
+    "@version": "1.1"
+  },
+  "stories": [
+    {
+      "id": "7ccab810-706b-401c-8757-71f656e56270",
+      "officeId": "PSR",
+      "startTime": "2026-01-01T12:00:00+00:00",
+      "endTime": "2027-01-01T12:00:00+00:00",
+      "updateTime": "2026-01-10T12:00:00+00:00",
+      "title": "Hot",
+      "description": "Pretty much everywhere, it's gonna be hot.",
+      "altText": "Alternative to text? Pictures!",
+      "priority": false,
+      "order": 1,
+      "download": "/public/images/wfos/PSR.png"
+    }
+  ]
+}

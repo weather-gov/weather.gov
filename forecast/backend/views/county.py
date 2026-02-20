@@ -16,6 +16,7 @@ from backend.models import WFO
 from backend.util import (
     get_basis_for_ghwo_risk,
     get_counties_combo_box_list,
+    get_county_weather_stories,
     get_ghwo_daily_images,
     get_states_combo_box_list,
 )
@@ -101,10 +102,23 @@ def county_overview(request, countyfips):  # noqa: C901
         localtz = ZoneInfo(county.timezone)
 
     cwas = county.cwas.defer("shape").all()
+
+    # Get a list of WFO codes that are associated
+    # with the county. This seems to manifest in the data
+    # as multiple CWAS, each corresponding to a different WFO
+    # (in cases where the county has multiple WFOs)
+    wfo_codes = [ cwa.wfo for cwa in cwas ]
+    relevant_wfos = WFO.objects.filter(code__in=wfo_codes)
     briefings = []
-    weather_stories = []
+
+    # For now, we are making a separate request to
+    # the interop for the weather story data. Ideally this would be
+    # handled by the interop itself in the county endpoint.
+    # We use a utility method to do some gentle processing.
+    weather_stories = get_county_weather_stories(relevant_wfos, localtz)
 
     for cwa in cwas:
+        # Start with the primary WFO for the situation report
         wfo = WFO.objects.filter(code=cwa.wfo).first()
         if wfo:
             report = SituationReport.objects.current(wfo)
@@ -143,11 +157,6 @@ def county_overview(request, countyfips):  # noqa: C901
                     }
 
                 briefings.append(briefing)
-
-            # TODO: uncomment this when weather stories are ready to be live
-            # weather_story = WeatherStory.objects.current(wfo).first()
-            # if weather_story:
-            #     weather_stories.append(weather_story)
         else:
             # If this happens, something has gone very wrong. We probably
             # don't want to propagate that to the user, though.
@@ -166,10 +175,11 @@ def county_overview(request, countyfips):  # noqa: C901
                 "alert_level_days": level_days,
                 "public": county_data,
                 "briefings": briefings,
-                "weather_stories": sorted(weather_stories, key=lambda story: story.starttime, reverse=True),
+                "weather_stories": weather_stories,
                 "county_label": county.label,
                 "radar": radar,
                 "primary_wfo": wfo or None,
+                "wfo_codes": wfo_codes,
             },
         },
     )
