@@ -176,7 +176,7 @@ def county_overview(request, countyfips):  # noqa: C901
 
 
 @never_cache
-def county_ghwo(request, county_fips):
+def county_ghwo(request, county_fips): # noqa: C901
     """Load a county GHWO details page by FIPS."""
     county = get_object_or_404(
         WeatherCounties.objects.select_related("state").only("countyname", "st", "countyfips", "state__fips"),
@@ -217,7 +217,8 @@ def county_ghwo(request, county_fips):
 
         # Update the scaled value for screenreader text
         for day in ghwo_data["composite"]["days"]:
-            day["scaled_10"] = day["scaled"] * 10
+            if day["scaled"] is not None:
+                day["scaled_10"] = day["scaled"] * 10
 
         # Add any image urls to the list of images to prefetch
         ghwo_data["prefetch_images"] = get_ghwo_daily_images(ghwo_data)

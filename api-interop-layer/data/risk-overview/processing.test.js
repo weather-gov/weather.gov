@@ -457,7 +457,6 @@ describe("risk overview: processing utilities", () => {
   });
 });
 
-
 describe("Processing legend scales and fallback levelnames", () => {
   it("correctly identifies a 3-level scale from processed legend", () => {
     /**
@@ -946,5 +945,124 @@ describe("Risk levelName fallbacks", () => {
     const actual = getFallbackLevelName(0, 100);
 
     expect(actual).to.equal(expected);
+  });
+});
+
+describe("Days without any non-zero risk levels", () => {
+  // We provide a sample data where there are two
+  // days without any positive risk factors at all
+  const data = {
+    "countyName": "TX_Bexar",
+    "2026-02-20T08:00:00-06:00": {
+      "SevereThunderstorm": 0,
+      "Tornado": 0,
+      "DailyComposite": 0
+    },
+    "2026-02-21T06:00:00-06:00": {
+      "SevereThunderstorm": 0,
+      "Tornado": 0,
+      "DailyComposite": 0
+    }
+  };
+
+  // A truncated legend corresponding only to the
+  // sampled risk factors above
+  const legend = {
+    "hazards": [
+      {
+        "category": {
+          "0": {
+            "color": "#ededed",
+            "definition": "No Severe Thunderstorm Risk",
+            "levelName": "None"
+          },
+          "1": {
+            "color": "#50c986",
+            "definition": "Isolated severe thunderstorms possible.",
+            "levelName": "Marginal"
+          },
+          "2": {
+            "color": "#ffff51",
+            "definition": "Scattered severe thunderstorms possible.",
+            "levelName": "Slight"
+          },
+          "3": {
+            "color": "#ffc06c",
+            "definition": "Numerous severe thunderstorms possible.",
+            "levelName": "Enhanced"
+          },
+          "4": {
+            "color": "#ff5050",
+            "definition": "Widespread severe thunderstorms likely.",
+            "levelName": "Moderate"
+          },
+          "5": {
+            "color": "#ff50ff",
+            "definition": "Widespread severe thunderstorms expected.",
+            "levelName": "High"
+          }
+        },
+        "name": "Severe Thunderstorm Risk",
+        "webTab": "public"
+      },
+      {
+        "category": {
+          "0": {
+            "color": "#ededed",
+            "definition": "Little to no Tornado Risk",
+            "levelName": "None"
+          },
+          "1": {
+            "color": "#50c986",
+            "definition": "Up to 5% chance of a tornado within 25 miles of your location.",
+            "levelName": "Marginal"
+          },
+          "2": {
+            "color": "#ffff51",
+            "definition": "5-10% chance of a tornado within 25 miles of your location.",
+            "levelName": "Slight"
+          },
+          "3": {
+            "color": "#ffc06c",
+            "definition": "10-15% chance of a tornado within 25 miles of your location.",
+            "levelName": "Enhanced"
+          },
+          "4": {
+            "color": "#ff5050",
+            "definition": "15-30% or greater chance of a tornado within 25 miles of your location.",
+            "levelName": "Moderate"
+          },
+          "5": {
+            "color": "#ff50ff",
+            "definition": "30% or greater chance of a tornado within 25 miles of your location.",
+            "levelName": "High"
+          }
+        },
+        "name": "Tornado Risk",
+        "webTab": "public"
+      }
+    ]
+  };
+
+  it("processes valid max values for each category", () => {
+    const processedLegend = processLegend(legend);
+    const result = processDays(data, processedLegend);
+    const composites = result.days.map(day => { return day.composite; });
+
+    expect(composites.length).to.equal(2);
+    composites.forEach(composite => {
+      expect(composite.max).to.equal(0);
+    });
+  });
+
+  it("processes valid scaled values for each category", () => {
+    const processedLegend = processLegend(legend);
+    const result = processDays(data, processedLegend);
+    const composites = result.days.map(day => { return day.composite; });
+
+    expect(composites.length).to.equal(2);
+    composites.forEach(composite => {
+      expect(composite.scaled).to.equal(0);
+    });
   });
 });

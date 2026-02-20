@@ -144,8 +144,11 @@ export const processDays = (data, legend) => {
       // to risks in the data. In that case, assume a maximum risk level
       // of five for now.
       let max = 5;
-      if (legend[key] && legend[key].category) {
-        max = Math.max(...Object.keys(legend[key].category).map((v) => +v));
+      if (legend[key] && legend[key].scale) {
+        // The legend should already be processed such that
+        // each risk type has its scale computed and set.
+        // see processLegend()
+        max = legend[key].scale;
       }
 
       return {
@@ -154,15 +157,26 @@ export const processDays = (data, legend) => {
       };
     });
 
-    // Now scale the category relative to its max.
-    const scaled = categories.map(({ category, max }) => category / max);
+    // We only want to compute these values if there are
+    // _any_ non-zero risk categories to consider
+    if(categories.length){
+      // Now scale the category relative to its max.
+      const scaled = categories.map(({ category, max }) => category / max);
 
-    // Finally, set the composite to the highest category and the
-    // highest scaled value.
-    day.composite = {
-      max: Math.max(...categories.map(({ category }) => category)),
-      scaled: Math.round(Math.max(...scaled) * 100) / 100,
-    };
+      // Finally, set the composite to the highest category and the
+      // highest scaled value.
+      day.composite = {
+        max: Math.max(...categories.map(({ category }) => category)),
+        scaled: Math.round(Math.max(...scaled) * 100) / 100,
+      };
+    } else {
+      // Otherwise we know that the max and scaled values
+      // for the day will both be zero
+      day.composite = {
+        max: 0,
+        scaled: 0
+      };
+    }
   });
 
   return {
