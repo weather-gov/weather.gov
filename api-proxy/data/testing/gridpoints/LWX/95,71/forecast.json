@@ -14,11 +14,26 @@
     "type": "Polygon",
     "coordinates": [
       [
-        [-77.0934052, 38.9066303],
-        [-77.09715220000001, 38.884677100000005],
-        [-77.06893950000001, 38.8817577],
-        [-77.06518670000001, 38.903710600000004],
-        [-77.0934052, 38.9066303]
+        [
+          -77.0934052,
+          38.9066303
+        ],
+        [
+          -77.09715220000001,
+          38.884677100000005
+        ],
+        [
+          -77.06893950000001,
+          38.8817577
+        ],
+        [
+          -77.06518670000001,
+          38.903710600000004
+        ],
+        [
+          -77.0934052,
+          38.9066303
+        ]
       ]
     ]
   },
@@ -29,13 +44,16 @@
     "generatedAt": "date:now -890 seconds",
     "updateTime": "date:now -7879 seconds",
     "validTimes": "date:now -31267 seconds / P7DT17H",
-    "elevation": { "unitCode": "wmoUnit:m", "value": 46.9392 },
+    "elevation": {
+      "unitCode": "wmoUnit:m",
+      "value": 46.9392
+    },
     "periods": [
       {
         "number": 1,
         "name": "This Afternoon",
-        "startTime": "date:today 06:00:-5 +0 days",
-        "endTime": "date:today 18:00:-5 +0 days",
+        "startTime": "date:now:hour -5 hours days",
+        "endTime": "date:now:hour -5 hours days",
         "isDaytime": true,
         "temperature": 53,
         "temperatureUnit": "F",
@@ -44,8 +62,14 @@
           "unitCode": "wmoUnit:percent",
           "value": null
         },
-        "dewpoint": { "unitCode": "wmoUnit:degC", "value": -7.777777777777778 },
-        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 35 },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": -7.777777777777778
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 35
+        },
         "windSpeed": "13 mph",
         "windDirection": "W",
         "icon": "https://api.weather.gov/icons/land/day/vv?size=medium",
@@ -55,8 +79,8 @@
       {
         "number": 2,
         "name": "Tonight",
-        "startTime": "date:today 18:00:-5 +0 days",
-        "endTime": "date:today 06:00:-5 +1 days",
+        "startTime": "date:now:hour -5 hours days",
+        "endTime": "date:now:hour -5 hours days",
         "isDaytime": false,
         "temperature": 40,
         "temperatureUnit": "F",
@@ -69,7 +93,10 @@
           "unitCode": "wmoUnit:degC",
           "value": -3.3333333333333335
         },
-        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 55 },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 55
+        },
         "windSpeed": "6 to 10 mph",
         "windDirection": "SW",
         "icon": "INVALID_ICON_URL",
@@ -79,8 +106,8 @@
       {
         "number": 3,
         "name": "Wednesday",
-        "startTime": "date:today 06:00:-5 +1 days",
-        "endTime": "date:today 18:00:-5 +1 days",
+        "startTime": "date:now:hour -5 hours days",
+        "endTime": "date:now:hour -5 hours days",
         "isDaytime": true,
         "temperature": 62,
         "temperatureUnit": "F",
@@ -93,7 +120,10 @@
           "unitCode": "wmoUnit:degC",
           "value": -1.6666666666666667
         },
-        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 57 },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 57
+        },
         "windSpeed": "7 to 18 mph",
         "windDirection": "W",
         "icon": null,
@@ -103,8 +133,8 @@
       {
         "number": 4,
         "name": "Wednesday Night",
-        "startTime": "date:today 18:00:-5 +1 days",
-        "endTime": "date:today 06:00:-5 +2 days",
+        "startTime": "date:now:hour -5 hours days",
+        "endTime": "date:now:hour -5 hours days",
         "isDaytime": false,
         "temperature": 33,
         "temperatureUnit": "F",
@@ -117,7 +147,10 @@
           "unitCode": "wmoUnit:degC",
           "value": -2.7777777777777777
         },
-        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 49 },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 49
+        },
         "windSpeed": "12 to 18 mph",
         "windDirection": "NW",
         "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
@@ -127,8 +160,8 @@
       {
         "number": 5,
         "name": "Thursday",
-        "startTime": "date:today 06:00:-5 +2 days",
-        "endTime": "date:today 18:00:-5 +2 days",
+        "startTime": "date:now:hour -5 hours days",
+        "endTime": "date:now:hour -5 hours days",
         "isDaytime": false,
         "temperature": 33,
         "temperatureUnit": "F",
@@ -141,7 +174,10 @@
           "unitCode": "wmoUnit:degC",
           "value": -2.7777777777777777
         },
-        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 49 },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 49
+        },
         "windSpeed": "12 to 18 mph",
         "windDirection": "NW",
         "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
@@ -151,8 +187,8 @@
       {
         "number": 6,
         "name": "Thursday Night",
-        "startTime": "date:today 18:00:-5 +2 days",
-        "endTime": "date:today 06:00:-5 +3 days",
+        "startTime": "date:now:hour -5 hours days",
+        "endTime": "date:now:hour -5 hours days",
         "isDaytime": false,
         "temperature": 33,
         "temperatureUnit": "F",
@@ -165,7 +201,10 @@
           "unitCode": "wmoUnit:degC",
           "value": -2.7777777777777777
         },
-        "relativeHumidity": { "unitCode": "wmoUnit:percent", "value": 49 },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 49
+        },
         "windSpeed": "12 to 18 mph",
         "windDirection": "NW",
         "icon": "INVALID_ICON_URL",
