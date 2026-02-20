@@ -287,17 +287,30 @@ def get_ghwo_data_for_county(county_fips):
 
 
 def get_weather_stories(wfo):
-    """Fetch the weather story metadata for a given WFO."""
+    """
+    Fetch the weather story metadata for a given WFO.
+
+    Will return several options based on the scenario:
+    - Reponse was OK: returns the first weather story
+    - Reponse is OK, but list is empty: returns None
+    - Response has error in it: return custom error dict
+    - Other exception: return custom error dict
+    """
     url = f"/offices/{wfo}/weatherstories"
-    stories = _fetch(url)
     try:
+        stories = _fetch(url)
+        if len(stories) == 0:
+            return None
+        if "error" in stories:
+            return { "error": stories["error"], "officeId": wfo.upper() }
         # the site currently shows one weather story
-        first = stories[0]
-        if first["order"] == "1":
-            return first
-        return min(stories, key=lambda x: x["order"])
-    except Exception:
-        return None
+        # It _should_ be the case that the weather stories
+        # come from the API in sorted order. For now, that is what
+        # we will assume.
+        return stories[0]
+    except Exception as e:
+        return { "error": repr(e), "officeId": wfo.upper() }
+
 
 
 def get_wx_afd_by_id(afd_id):

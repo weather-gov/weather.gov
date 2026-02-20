@@ -1,7 +1,6 @@
 import json
-from datetime import datetime, timedelta, timezone
 from os import path
-from unittest import mock, skip
+from unittest import mock
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.test import TestCase
@@ -11,7 +10,6 @@ import spatial.models as spatial
 from backend import models
 from backend.exceptions import Http429
 from backend.util import disable_logging_for_quieter_tests
-from wx_stories_api.models import WeatherStory
 
 
 class TestViews(TestCase):
@@ -78,13 +76,27 @@ class TestViews(TestCase):
         )
 
         # Create example weather story and
-        # situation report
-        self.weather_story = WeatherStory.objects.create(
-            title="Example weather story",
-            wfo=self.wfo,
-            starttime=datetime.now(tz=timezone.utc).isoformat(),
-            endtime=(datetime.now(tz=timezone.utc) + timedelta(days=1)).isoformat(),
-        )
+        # patch calls to retrieve it
+        self.weather_story = {
+            "id": "7ccab810-706b-401c-8757-71f656e56270",
+            "officeId": "LWX",
+            "startTime": "2026-01-01T12:00:00+00:00",
+            "endTime": "2027-01-01T12:00:00+00:00",
+            "updateTime": "2026-01-10T12:00:00+00:00",
+            "title": "Testing the test",
+            "description": "This is a triumph. I'm making a note here: huge success",
+            "altText": "Alternative to text? Pictures!",
+            "priority": False,
+            "order": 1,
+            "image": "/public/images/wfos/LWX.png"
+        }
+        self.patcher = mock.patch("backend.interop.get_weather_stories")
+        self.mock_get_weather_stories = self.patcher.start()
+        self.mock_get_weather_stories.return_value = self.weather_story
+
+    def tearDown(self):
+        """Reset test assumptions."""
+        self.patcher.stop()
 
     def test_index(self):
         """Test the index view."""
@@ -97,6 +109,9 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
+            "place": {
+                "timezone": "America/New_York"
+            }
         }
 
         response = self.client.get("/point/11.1/22.2", follow=True)
@@ -109,11 +124,13 @@ class TestViews(TestCase):
                 "grid": {"wfo": "TST"},
                 "wfo": self.wfo,
                 "isMarine": False,
+                "place": {
+                    "timezone": "America/New_York"
+                }
             },
         )
-        # TODO: restore this test when wx stories are turned on
-        # self.assertEqual(response.context["weather_story"], self.weather_story)
-        self.assertEqual(response.context["weather_story"], None)
+
+        self.assertEqual(response.context["weather_story"], self.weather_story)
 
     def test_point_location_truncate(self):
         """Test the point location view where lat/lon needs to be truncated."""
@@ -127,6 +144,9 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
+            "place": {
+                "timezone": "America/New_York"
+            }
         }
 
         response = self.client.get("/point/11.1/22.2?update", follow=True)
@@ -139,34 +159,89 @@ class TestViews(TestCase):
                 "grid": {"wfo": "TST"},
                 "wfo": self.wfo,
                 "isMarine": False,
+                "place": {
+                    "timezone": "America/New_York"
+                }
             },
         )
 
-    @skip("Disabled until we turn wx stories back on")
-    @mock.patch("wx_stories_api.models.WeatherStory.objects.current")
+    @mock.patch("backend.views.point.interop.get_weather_stories")
     @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_point_location_no_weather_story(self, mock_get_point_forecast, mock_get_current_weather_story):
+    def test_point_location_no_weather_story(self, mock_get_point_forecast, mock_get_weather_stories):
         """Test the point location view where there's no weather story available."""
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
+            "place": {
+                "timezone": "America/New_York"
+            }
         }
-        mock_get_current_weather_story.return_value.first.return_value = None
+        mock_get_weather_stories.return_value = None
 
         response = self.client.get("/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
 
-        mock_get_current_weather_story.assert_called_once_with(self.wfo)
+        mock_get_weather_stories.assert_called_once_with(self.wfo.code.upper())
         self.assertEqual(
             response.context["point"],
             {
                 "grid": {"wfo": "TST"},
                 "wfo": self.wfo,
                 "isMarine": False,
+                "place": {
+                    "timezone": "America/New_York"
+                }
             },
         )
-        self.assertEqual(response.context["weather_story"], None)
+        expected = { "is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/offices/TST/"}
+        self.assertEqual(response.context["weather_story"], expected)
+        self.assertTemplateUsed("weather/partials/point-weather-storys.html")
+
+    @mock.patch("backend.views.point.interop.get_weather_stories")
+    @mock.patch("backend.views.point.interop.get_point_forecast")
+    def test_point_location_ok_weather_story(self, mock_get_point_forecast, mock_get_weather_stories):
+        """Test the point location renders with OK weather story."""
+        weather_story = {
+            "id": "7ccab810-706b-401c-8757-71f656e56270",
+            "officeId": "TST",
+            "startTime": "2026-01-01T12:00:00+00:00",
+            "endTime": "2027-01-01T12:00:00+00:00",
+            "updateTime": "2026-01-10T12:00:00+00:00",
+            "title": "Testing the test",
+            "description": "This is a triumph. I'm making a note here: huge success",
+            "altText": "Alternative to text? Pictures!",
+            "priority": False,
+            "order": 1,
+            "image": "/public/images/wfos/TST.png"
+        }
+        mock_get_point_forecast.return_value = {
+            "grid": {"wfo": "TST"},
+            "isMarine": False,
+            "place": {
+                "timezone": "America/New_York"
+            }
+        }
+        mock_get_weather_stories.return_value = weather_story
+
+        response = self.client.get("/point/11.1/22.2", follow=True)
+
+        mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
+
+        mock_get_weather_stories.assert_called_once_with(self.wfo.code.upper())
+        self.assertEqual(
+            response.context["point"],
+            {
+                "grid": {"wfo": "TST"},
+                "wfo": self.wfo,
+                "isMarine": False,
+                "place": {
+                    "timezone": "America/New_York"
+                }
+            },
+        )
+        self.assertEqual(response.context["weather_story"], weather_story)
+        self.assertTemplateUsed("weather/partials/point-weather-story.html")
 
     @disable_logging_for_quieter_tests
     def test_point_location_with_lat_too_high(self):
@@ -310,6 +385,9 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
+            "place": {
+                "timezone": "America/New_York"
+            }
         }
         response = self.client.get("/place/nj/Hoboken/")
         self.assertRedirects(response, "/place/NJ/Hoboken/")
@@ -320,6 +398,9 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
+            "place": {
+                "timezone": "America/New_York"
+            }
         }
         response = self.client.get("/place/NY/New York/")
         self.assertRedirects(response, "/place/NY/New_York/")
@@ -330,6 +411,9 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
+            "place": {
+                "timezone": "America/New_York"
+            }
         }
         response = self.client.get("/place/NJ/Hoboken/")
         self.assertTemplateUsed(response, "weather/point.html")
@@ -343,11 +427,13 @@ class TestViews(TestCase):
                 "grid": {"wfo": "TST"},
                 "wfo": self.wfo,
                 "isMarine": False,
+                "place": {
+                    "timezone": "America/New_York"
+                }
             },
         )
-        # TODO: restore this test when wx stories are turned on
-        # self.assertEqual(response.context["weather_story"], self.weather_story)
-        self.assertEqual(response.context["weather_story"], None)
+
+        self.assertEqual(response.context["weather_story"], self.weather_story)
 
     def test_office_specific(self):
         """Test the specific-office view."""

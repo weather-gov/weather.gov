@@ -73,7 +73,7 @@
     </div>
     <div class="grid-row border-top-2px border-base-light margin-y-4">{% include "weather/county/briefings.html" %}</div>
   </div>
-  {% include 'weather/partials/weather-story-container.html' with weather_stories=data.weather_stories is_county_page=True %}
+  {% include 'weather/partials/county-weather-stories.html' with weather_stories=data.weather_stories wfo_codes=data.wfo_codes %}
   <div class="bg-base-lightest">
     <div class="grid-container padding-y-4 padding-x-0 desktop:padding-x-4">
       <div class="grid-col-12 bg-white padding-2 padding-top-1 shadow-1">

@@ -29,6 +29,14 @@
   position: relative;
 }
 
+.weatherstory-error-wrapper {
+    > .usa-alert--error {
+        border-top: 1px solid color("base-darker");
+        border-right: 1px solid color("base-darker");
+        border-bottom: 1px solid color("base-darker");
+    }
+}
+
 @include at-media("desktop") {
   .wx-weather-story-wrapper {
     grid-template-areas:

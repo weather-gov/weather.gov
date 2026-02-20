@@ -1,0 +1,115 @@
+{% comment %}
+-- County Overview version of weather stories display
+--
+-- This version is different from the point forecast weather
+-- story template, in that in can show multiple weather stories.
+-- This is due to the (uncommon, but existing) scenario where
+-- a given county is associated with more than 1 WFO
+-- Expected variables:
+--    weather_stories: a list of weather_story objects, which can contain just error data
+--                        or full weather story data
+--    wfo_codes: a list of WFO codes that pertain to this county. This is useful for rendering
+--                  AFD links and other information in the event that there are no available weather
+--                  stories (which usually contain the corresponding WFO information)
+{% endcomment %}
+
+<div class="bg-accent-cool-lightest border-top-1px border-bottom-1px border-base-light margin-top-4 wx-weather-story-block-section">
+  <div class="grid-container">
+    <h2 class="wx-visual-h2 text-normal text-primary-darker margin-top-3 margin-bottom-2 ">
+      {{ "weather-story.heading.from-forecaster.01" | t }}
+    </h2>
+
+    {% for weather_story in weather_stories %}
+      {# begin single story entry #}
+      <div class="margin-top-3 {% if weather_story.error %}weatherstory-error-wrapper{% else %}wx-weather-story-wrapper{% endif %}">
+        {% if weather_story.error %}
+          <div class="usa-alert usa-alert--error">
+            <div class=" usa-alert__body">
+              <div class="usa-alert__text">
+                {% if weather_story.wfo_name %}
+                  {% trans_with_args "weather-story.error.message-with-wfo.01" wfo_name=weather_story.wfo_name %}
+                {% else %}
+                  {{"weather-story.error.message.01"|t}}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {#% include "weather/partials/uswds-alert.html" with level="error" body="weather-story.error.message.01"|t %#}
+
+        {% elif not weather_story.is_empty %}
+          <div class="margin-bottom-3">
+            {% comment %}
+            -- For now, we do _not_ show the title "from the forecaster"
+            -- on the county overview page
+            <h3 class="wx-visual-h2 text-normal text-primary-darker margin-top-3 margin-bottom-2 mobile-lg:display-flex flex-wrap">
+            <span class="margin-right-0 mobile-lg:margin-right-2 desktop:margin-right-0">
+            {{ "weather-story.heading.from-forecaster.01" | t }}
+            </span>
+            </h3>
+            {% endcomment %}
+            <h3 class="wx-visual-h3 text-primary-dark margin-0 margin-bottom-2">{{ weather_story.title }}</h3>
+            <p class="margin-0 margin-bottom-2">
+              {% comment %}
+              -- For now, we are disabling the display of the created datetime text and calculation.
+              -- I am keeping this code in here for easy reactivation, should we decide to keep it.
+              -- The required datetime objects are still available to the template. Should we make
+              -- a permanent "turn off" decision, we will want to rip out the datetime and
+              -- timezone parsing code in both the point and county view handlers
+              {% trans_with_args "weather-story.text.created-by.06" date=weather_story.startTime|date:'l F j, Y' time=weather_story.startTime|date:'g:i A'  wfo_name=weather_story.wfo_name wfo_url=weather_story.wfo_url %}
+              {% endcomment %}
+            </p>
+            <p class="margin-bottom-2">{% trans_with_args "weather-story-text-created-by.07" wfo_name=weather_story.wfo_name wfo_url=weather_story.wfo_url %}</p>
+            <p class="margin-0">{{ weather_story.description }}</p>
+          </div>
+          {# Image area #}
+          <div class="display-block desktop:width-full desktop:padding-bottom-3 margin-right-neg-2 margin-left-neg-2 desktop:margin-right-0 desktop:margin-left-0 {% if show_title %}desktop:margin-top-3{% endif %}">
+            <img src="{{ weather_story.download }}" alt="" aria-hidden="true">
+          </div>
+        {% endif %}
+
+        
+        {% comment %}
+        -- Whether a story object is empty, error, or
+        -- ok, we always render this part of it, which contains
+        -- the AFD link and other WFO information
+        {% endcomment %}
+        <div class="display-flex flex-column flex-justify-end margin-bottom-3">
+          {% if not weather_story.error and not weather_story.is_empty %}
+            <hr class="margin-x-0 border-accent-cool-darker border-top-0 margin-top-2" />
+          {% endif %}
+          {# AFD Link #}
+          <div class="display-flex flex-align-center margin-top-105">
+            <svg width="24"
+                 height="24"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 xmlns="http://www.w3.org/2000/svg"
+                 aria-hidden="true">
+              <rect width="24" height="24" fill="transparent" />
+              <path d="M6 5H18V6H6V5Z" fill="#0085CA" />
+              <path d="M6 10H18V11H6V10Z" fill="#0085CA" />
+              <path d="M18 15H6V16H18V15Z" fill="#0085CA" />
+              <path d="M6 12H16V13H6V12Z" fill="#0085CA" />
+              <path d="M16 17H6V18H16V17Z" fill="#0085CA" />
+              <path d="M6 7H16V8H6V7Z" fill="#0085CA" />
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M4 2H20V22H4V2ZM5 3H19V21H5V3Z" fill="#0085CA" />
+            </svg>
+            <a class="usa-link margin-left-1"
+               href="{% url "afd_by_office" wfo=weather_story.officeId %}">{% trans_with_args "weather-story.link.area-forecast-discussion.02" office_name=weather_story.wfo_name %}</a>
+          </div>
+          {# Zone forecast product - tktk #}
+          {% comment %}
+          <div class="display-flex flex-align-center margin-top-105">
+          <svg width="24" height="24" fill="#005EA2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <use xlink:href="{% static 'images/uswds/sprite.svg' %}#location_city"></use>
+          </svg>
+          <a class="usa-link margin-left-1" href="#">{{ "weather-story.link.zone-forecast.01" | t }}</a>
+          </div>
+          {% endcomment %}
+        </div>
+        
+      </div>{# weather-story-wrapper #}
+      {# end single story entry #}
+    {% endfor %}{# story in weather_stories #}
+  </div>
+</div>

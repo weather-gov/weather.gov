@@ -23,7 +23,7 @@ export default async (wfo) => {
     //           "altText": "Alternative to text? Pictures!",
     //           "priority": false,
     //           "order": 1,
-    //           "image": "http://localhost:8000/offices/MPX/weatherstories/7ccab810-706b-401c-8757-71f656e56270/image"
+    //           "download": "http://localhost:8000/offices/MPX/weatherstories/7ccab810-706b-401c-8757-71f656e56270/image"
     //       },
     //     ...
     //   ]

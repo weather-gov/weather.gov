@@ -186,12 +186,14 @@ class TestCountyViews(TestCase):
         link = reverse("county_ghwo", kwargs={"county_fips": "44444"})
         self.assertContains(response, link)
 
+    @mock.patch("backend.views.county.get_county_weather_stories")
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_overview_without_timezone(self, mock_get_radar, mock_get_county_data):
+    def test_overview_without_timezone(self, mock_get_radar, mock_get_county_data, mock_get_weather_stories):
         """Test the overview view without timezone."""
         mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
+        mock_get_weather_stories.return_value = []
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -219,15 +221,18 @@ class TestCountyViews(TestCase):
                 ],
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
+                "wfo_codes": [self.wfo.code]
             },
         )
 
+    @mock.patch("backend.views.county.get_county_weather_stories")
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_overview_with_timezone(self, mock_get_radar, mock_get_county_data):
+    def test_overview_with_timezone(self, mock_get_radar, mock_get_county_data, mock_get_weather_stories):
         """Test the overview view with timezone."""
         mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
+        mock_get_weather_stories.return_value = []
 
         # Matt Smith, the Eleventh Doctor Who, is born. We change the updated_at
         # here to ensure that when it is after the creation date, we get the
@@ -264,6 +269,7 @@ class TestCountyViews(TestCase):
                 ],
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
+                "wfo_codes": [self.wfo.code]
             },
         )
 
@@ -295,6 +301,7 @@ class TestCountyViews(TestCase):
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
                 "primary_wfo": None,
+                "wfo_codes": ["NOP"]
             },
         )
 

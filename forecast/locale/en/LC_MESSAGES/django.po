@@ -644,8 +644,8 @@ msgstr "YouTube"
 msgid "weather-story.heading.from-forecaster.01"
 msgstr "From the forecaster"
 
-msgid "weather-story.link.area-forecast-discussion.01"
-msgstr "Area Forecast Discussion"
+msgid "weather-story.link.area-forecast-discussion.02"
+msgstr "{office_name} Area Forecast Discussion"
 
 msgid "weather-story.link.county-overview.01"
 msgstr "County overview"
@@ -655,6 +655,15 @@ msgstr "Zone forecast product"
 
 msgid "weather-story.text.created-by.06"
 msgstr "<strong class='text-base-dark'>Created: {date} at {time}</strong><span class='display-block'>by the <a class='usa-link' href='{wfo_url}'>{wfo_name} WFO</a></span>"
+
+msgid "weather-story-text-created-by.07"
+msgstr "<span class='text-base-gray-cool'>Created by the </span><a class='usa-link' href='{wfo_url}'>NWS {wfo_name} WFO</a>"
+
+msgid "weather-story.error.message.01"
+msgstr "There was an error loading weather stories for this location"
+
+msgid "weather-story.error.message-with-wfo.01"
+msgstr "There was an error loading weather stories for the {wfo_name} WFO"
 
 msgid "wind.labels.calm.01"
 msgstr "calm"

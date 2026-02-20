@@ -112,7 +112,7 @@
         </div>
         <!-- Weather Story Image here -->
         {% if weather_story %}
-          {% include 'weather/partials/weather-story-container.html' with county=point.place.countyfips %}
+          {% include 'weather/partials/point-weather-story.html' with weather_story=weather_story county=point.place.countyfips %}
         {% else %}
           <div class="grid-container margin-top-4 padding-x-0 tablet:padding-x-2 desktop:padding-x-4">
             <div class="bg-accent-cool-lightest border-1px border-base-light padding-x-2 padding-y-105">

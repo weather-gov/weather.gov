@@ -9,7 +9,7 @@ describe("route: weatherstories", () => {
   let weatherStories;
 
   before(async () => {
-    await quibble.esm("../data/weatherstory.js", { getDataForWxStory });
+    await quibble.esm("../data/weatherstory.js", { default: getDataForWxStory });
 
     weatherStories = await import("./weatherstories.js");
   });

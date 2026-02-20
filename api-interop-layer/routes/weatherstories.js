@@ -1,4 +1,4 @@
-import { getDataForWxStory } from "../data/weatherstory.js";
+import getDataForWxStory from "../data/weatherstory.js";
 
 export const method = "GET";
 

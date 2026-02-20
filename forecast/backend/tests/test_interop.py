@@ -26,8 +26,8 @@ class TestInteropInterface(TestCase):
     @responses.activate
     def test_get_weather_stories(self):
         """Tests that we get weather story metadata data."""
-        stories = [{"order": "3"}, {"order": "2"}, {"order": "1"}]
-        returned = stories[-1]
+        stories = [{"id": "first"}, {"id": "second"}, {"id": "third"}]
+        returned = stories[0]
         os.environ["INTEROP_URL"] = "https://interop"
         responses.add(responses.GET, "https://interop/offices/ABC/weatherstories", json=stories, status=200)
 
@@ -38,7 +38,30 @@ class TestInteropInterface(TestCase):
     @responses.activate
     def test_get_weather_stories_with_bad_data(self):
         """Tests that we get weather story metadata data."""
-        stories = [{"mess": "3"}, {"mess": "2"}, {"mess": "1"}]
+        stories = {"error": "hello"}
+        returned = {"error": "hello", "officeId": "ABC"}
+        os.environ["INTEROP_URL"] = "https://interop"
+        responses.add(responses.GET, "https://interop/offices/ABC/weatherstories", json=stories, status=200)
+
+        actual = interop.get_weather_stories("ABC")
+
+        self.assertEqual(actual, returned)
+
+    @responses.activate
+    @mock.patch("backend.interop._fetch")
+    def test_get_weather_stories_with_fetch_exception(self, mock__fetch):
+        """Test that we get an error dict when fetch throws exception."""
+        mock__fetch.side_effect = Exception("hello")
+        returned = { "error": "Exception('hello')", "officeId": "ABC"}
+
+        actual = interop.get_weather_stories("ABC")
+
+        self.assertEqual(actual, returned)
+
+    @responses.activate
+    def test_get_weather_stories_empty_data(self):
+        """Tests that we return None for an empty weather story."""
+        stories = []
         returned = None
         os.environ["INTEROP_URL"] = "https://interop"
         responses.add(responses.GET, "https://interop/offices/ABC/weatherstories", json=stories, status=200)
