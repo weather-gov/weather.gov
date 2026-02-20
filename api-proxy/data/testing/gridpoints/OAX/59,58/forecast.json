@@ -14,11 +14,26 @@
     "type": "Polygon",
     "coordinates": [
       [
-        [-96.6442766, 41.2218657],
-        [-96.6439239, 41.1999897],
-        [-96.6148357, 41.2002527],
-        [-96.6151821, 41.2221287],
-        [-96.6442766, 41.2218657]
+        [
+          -96.6442766,
+          41.2218657
+        ],
+        [
+          -96.6439239,
+          41.1999897
+        ],
+        [
+          -96.6148357,
+          41.2002527
+        ],
+        [
+          -96.6151821,
+          41.2221287
+        ],
+        [
+          -96.6442766,
+          41.2218657
+        ]
       ]
     ]
   },
@@ -28,13 +43,16 @@
     "generatedAt": "date:now -1 seconds",
     "updateTime": "date:now -287 seconds",
     "validTimes": "date:now -24104 seconds / P7DT4H",
-    "elevation": { "unitCode": "wmoUnit:m", "value": 367.8936 },
+    "elevation": {
+      "unitCode": "wmoUnit:m",
+      "value": 367.8936
+    },
     "periods": [
       {
         "number": 1,
         "name": "Tonight",
-        "startTime": "date:now -2504 seconds",
-        "endTime": "date:now +29895 seconds",
+        "startTime": "date:now:hour 0 hours",
+        "endTime": "date:now:hour 8 hours",
         "isDaytime": false,
         "temperature": 16,
         "temperatureUnit": "F",
@@ -52,8 +70,8 @@
       {
         "number": 2,
         "name": "Tuesday",
-        "startTime": "date:now +29895 seconds",
-        "endTime": "date:now +73095 seconds",
+        "startTime": "date:now:hour 8 hours",
+        "endTime": "date:now:hour 20 hours",
         "isDaytime": true,
         "temperature": 39,
         "temperatureUnit": "F",
@@ -71,8 +89,8 @@
       {
         "number": 3,
         "name": "Tuesday Night",
-        "startTime": "date:now +73095 seconds",
-        "endTime": "date:now +116295 seconds",
+        "startTime": "date:now:hour 20 hours",
+        "endTime": "date:now:hour 32 hours",
         "isDaytime": false,
         "temperature": 27,
         "temperatureUnit": "F",
@@ -90,8 +108,8 @@
       {
         "number": 4,
         "name": "Wednesday",
-        "startTime": "date:now +116295 seconds",
-        "endTime": "date:now +159495 seconds",
+        "startTime": "date:now:hour 32 hours",
+        "endTime": "date:now:hour 44 hours",
         "isDaytime": true,
         "temperature": 46,
         "temperatureUnit": "F",
@@ -109,8 +127,8 @@
       {
         "number": 5,
         "name": "Wednesday Night",
-        "startTime": "date:now +159495 seconds",
-        "endTime": "date:now +202695 seconds",
+        "startTime": "date:now:hour 44 hours",
+        "endTime": "date:now:hour 56 hours",
         "isDaytime": false,
         "temperature": 12,
         "temperatureUnit": "F",
@@ -128,8 +146,8 @@
       {
         "number": 6,
         "name": "Thursday",
-        "startTime": "date:now +202695 seconds",
-        "endTime": "date:now +245895 seconds",
+        "startTime": "date:now:hour 56 hours",
+        "endTime": "date:now:hour 68 hours",
         "isDaytime": true,
         "temperature": 26,
         "temperatureUnit": "F",
@@ -147,8 +165,8 @@
       {
         "number": 7,
         "name": "Thursday Night",
-        "startTime": "date:now +245895 seconds",
-        "endTime": "date:now +289095 seconds",
+        "startTime": "date:now:hour 68 hours",
+        "endTime": "date:now:hour 80 hours",
         "isDaytime": false,
         "temperature": 15,
         "temperatureUnit": "F",
@@ -166,8 +184,8 @@
       {
         "number": 8,
         "name": "Friday",
-        "startTime": "date:now +289095 seconds",
-        "endTime": "date:now +332295 seconds",
+        "startTime": "date:now:hour 80 hours",
+        "endTime": "date:now:hour 92 hours",
         "isDaytime": true,
         "temperature": 44,
         "temperatureUnit": "F",
@@ -185,8 +203,8 @@
       {
         "number": 9,
         "name": "Friday Night",
-        "startTime": "date:now +332295 seconds",
-        "endTime": "date:now +375495 seconds",
+        "startTime": "date:now:hour 92 hours",
+        "endTime": "date:now:hour 104 hours",
         "isDaytime": false,
         "temperature": 25,
         "temperatureUnit": "F",
@@ -204,8 +222,8 @@
       {
         "number": 10,
         "name": "Saturday",
-        "startTime": "date:now +375495 seconds",
-        "endTime": "date:now +418695 seconds",
+        "startTime": "date:now:hour 104 hours",
+        "endTime": "date:now:hour 116 hours",
         "isDaytime": true,
         "temperature": 50,
         "temperatureUnit": "F",
@@ -223,8 +241,8 @@
       {
         "number": 11,
         "name": "Saturday Night",
-        "startTime": "date:now +418695 seconds",
-        "endTime": "date:now +461895 seconds",
+        "startTime": "date:now:hour 116 hours",
+        "endTime": "date:now:hour 128 hours",
         "isDaytime": false,
         "temperature": 29,
         "temperatureUnit": "F",
@@ -242,8 +260,8 @@
       {
         "number": 12,
         "name": "Sunday",
-        "startTime": "date:now +461895 seconds",
-        "endTime": "date:now +505095 seconds",
+        "startTime": "date:now:hour 128 hours",
+        "endTime": "date:now:hour 140 hours",
         "isDaytime": true,
         "temperature": 53,
         "temperatureUnit": "F",
@@ -261,8 +279,8 @@
       {
         "number": 13,
         "name": "Sunday Night",
-        "startTime": "date:now +505095 seconds",
-        "endTime": "date:now +548295 seconds",
+        "startTime": "date:now:hour 140 hours",
+        "endTime": "date:now:hour 152 hours",
         "isDaytime": false,
         "temperature": 28,
         "temperatureUnit": "F",
@@ -280,8 +298,8 @@
       {
         "number": 14,
         "name": "Monday",
-        "startTime": "date:now +548295 seconds",
-        "endTime": "date:now +591495 seconds",
+        "startTime": "date:now:hour 152 hours",
+        "endTime": "date:now:hour 164 hours",
         "isDaytime": true,
         "temperature": 42,
         "temperatureUnit": "F",

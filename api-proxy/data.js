@@ -1,9 +1,35 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import logger from "./logger.js";
+import RelativeDate from "./RelativeDate.js";
+import SerializableMap from "./SerializableMap.js";
 
 export const localData = new Map();
 const dataLogger = logger.child({ subsystem: "data service" });
+
+const setRelativeDates = (obj) => {
+  if (!obj.entries) {
+    return obj;
+  }
+
+  for (const [key, value] of obj.entries()) {
+    const realKey = /^date:\S+/.test(key) ? new RelativeDate(key) : key;
+    if (realKey !== key) {
+      obj.set(realKey, value);
+      obj.delete(key);
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach(setRelativeDates);
+    } else if (typeof value === "object" && value !== null) {
+      setRelativeDates(value);
+    } else if (/^date:\S+/.test(value)) {
+      obj.set(realKey, new RelativeDate(value));
+    }
+  }
+
+  return obj;
+};
 
 const loadFromDirectory = async (dir, parent) => {
   const contents = await fs.readdir(dir, { withFileTypes: true });
@@ -24,7 +50,9 @@ const loadFromDirectory = async (dir, parent) => {
       );
       const response = await fs
         .readFile(path.join(dir, item.name))
-        .then(JSON.parse);
+        .then(JSON.parse)
+        .then(SerializableMap.fromObj)
+        .then(setRelativeDates);
 
       localData.set(`/${resourcePath}`, response);
     }

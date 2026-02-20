@@ -3,7 +3,7 @@
   "counties": {
     "34003": {
       "countyName": "NJ_Bergen",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -19,7 +19,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -35,7 +35,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -48,7 +48,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -61,7 +61,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -72,7 +72,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -82,7 +82,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -95,7 +95,7 @@
     },
     "34013": {
       "countyName": "NJ_Essex",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -111,7 +111,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -127,7 +127,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -140,7 +140,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -153,7 +153,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -164,7 +164,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -174,7 +174,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -187,7 +187,7 @@
     },
     "34017": {
       "countyName": "NJ_Hudson",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -203,7 +203,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -219,7 +219,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -232,7 +232,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -245,7 +245,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -256,7 +256,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -266,7 +266,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -279,7 +279,7 @@
     },
     "34031": {
       "countyName": "NJ_Passaic",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -295,7 +295,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -311,7 +311,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -324,7 +324,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -337,7 +337,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -348,7 +348,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -358,7 +358,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -371,7 +371,7 @@
     },
     "34039": {
       "countyName": "NJ_Union",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -387,7 +387,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -403,7 +403,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -416,7 +416,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -429,7 +429,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -440,7 +440,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -450,7 +450,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -463,7 +463,7 @@
     },
     "36005": {
       "countyName": "NY_Bronx",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -479,7 +479,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -495,7 +495,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -508,7 +508,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -521,7 +521,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -532,7 +532,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -542,7 +542,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -555,7 +555,7 @@
     },
     "36047": {
       "countyName": "NY_Kings",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 4,
         "ConvectiveWind": 0,
@@ -571,7 +571,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 5
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -587,7 +587,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 4
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -600,7 +600,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 3
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -613,7 +613,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -624,7 +624,7 @@
         "SnowSleet": 1,
         "DailyComposite": 1
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 2,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -634,7 +634,7 @@
         "SnowSleet": 0,
         "DailyComposite": 2
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 1,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -647,7 +647,7 @@
     },
     "36059": {
       "countyName": "NY_Nassau",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -665,7 +665,7 @@
         "FreezingSpray": 0,
         "DailyComposite": 0
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -683,7 +683,7 @@
         "FreezingSpray": 0,
         "DailyComposite": 0
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -698,7 +698,7 @@
         "FreezingSpray": 0,
         "DailyComposite": 0
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -713,7 +713,7 @@
         "FreezingSpray": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -725,7 +725,7 @@
         "Marine": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -736,7 +736,7 @@
         "Marine": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -750,7 +750,7 @@
     },
     "36061": {
       "countyName": "NY_New York",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -766,7 +766,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -782,7 +782,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -795,7 +795,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -808,7 +808,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -819,7 +819,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -829,7 +829,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -842,7 +842,7 @@
     },
     "36071": {
       "countyName": "NY_Orange",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -858,7 +858,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -874,7 +874,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -887,7 +887,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 3
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -900,7 +900,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 2
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -911,7 +911,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -921,7 +921,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -934,7 +934,7 @@
     },
     "36079": {
       "countyName": "NY_Putnam",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -950,7 +950,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -966,7 +966,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -979,7 +979,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -992,7 +992,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1003,7 +1003,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1013,7 +1013,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1026,7 +1026,7 @@
     },
     "36081": {
       "countyName": "NY_Queens",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1042,7 +1042,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1058,7 +1058,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1071,7 +1071,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1084,7 +1084,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1095,7 +1095,7 @@
         "SnowSleet": 0,
         "DailyComposite": 1
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 1,
@@ -1105,7 +1105,7 @@
         "SnowSleet": 0,
         "DailyComposite": 1
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 1,
@@ -1118,7 +1118,7 @@
     },
     "36085": {
       "countyName": "NY_Richmond",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1134,7 +1134,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1150,7 +1150,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1163,7 +1163,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1176,7 +1176,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1187,7 +1187,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1197,7 +1197,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1210,7 +1210,7 @@
     },
     "36087": {
       "countyName": "NY_Rockland",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1226,7 +1226,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1242,7 +1242,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1255,7 +1255,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1268,7 +1268,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1279,7 +1279,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1289,7 +1289,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1302,7 +1302,7 @@
     },
     "36103": {
       "countyName": "NY_Suffolk",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1320,7 +1320,7 @@
         "FreezingSpray": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1338,7 +1338,7 @@
         "FreezingSpray": 0,
         "DailyComposite": 0
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1353,7 +1353,7 @@
         "FreezingSpray": 0,
         "DailyComposite": 0
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1368,7 +1368,7 @@
         "FreezingSpray": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1380,7 +1380,7 @@
         "Marine": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1391,7 +1391,7 @@
         "Marine": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 1,
@@ -1405,7 +1405,7 @@
     },
     "36119": {
       "countyName": "NY_Westchester",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1421,7 +1421,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1437,7 +1437,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1450,7 +1450,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1463,7 +1463,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1474,7 +1474,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1484,7 +1484,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1497,7 +1497,7 @@
     },
     "09001": {
       "countyName": "CT_Fairfield",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1513,7 +1513,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1529,7 +1529,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1542,7 +1542,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1555,7 +1555,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1566,7 +1566,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1576,7 +1576,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1589,7 +1589,7 @@
     },
     "09007": {
       "countyName": "CT_Middlesex",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1605,7 +1605,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1621,7 +1621,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1634,7 +1634,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1647,7 +1647,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1658,7 +1658,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1668,7 +1668,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1681,7 +1681,7 @@
     },
     "09009": {
       "countyName": "CT_New Haven",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1697,7 +1697,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1713,7 +1713,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1726,7 +1726,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1739,7 +1739,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1750,7 +1750,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1760,7 +1760,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1773,7 +1773,7 @@
     },
     "09011": {
       "countyName": "CT_New London",
-      "date:now -1898 seconds": {
+      "date:now:hour": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1789,7 +1789,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +62901 seconds": {
+      "date:today 06:00:-4 +1 days": {
         "SevereThunderstorm": 0,
         "Tornado": 0,
         "ConvectiveWind": 0,
@@ -1805,7 +1805,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +149301 seconds": {
+      "date:today 06:00:-4 +2 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1818,7 +1818,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 1
       },
-      "date:now +235701 seconds": {
+      "date:today 06:00:-4 +3 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1831,7 +1831,7 @@
         "CoastalFlood": 0,
         "DailyComposite": 0
       },
-      "date:now +322101 seconds": {
+      "date:today 06:00:-4 +4 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "ExcessiveRainfall": 0,
@@ -1842,7 +1842,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +408501 seconds": {
+      "date:today 06:00:-4 +5 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
@@ -1852,7 +1852,7 @@
         "SnowSleet": 0,
         "DailyComposite": 0
       },
-      "date:now +494901 seconds": {
+      "date:today 06:00:-4 +6 days": {
         "SevereThunderstorm": 0,
         "Lightning": 0,
         "NonConvectiveWind": 0,
