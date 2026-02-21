@@ -161,7 +161,7 @@ class TestCountyViews(TestCase):
         # access the queried states objects and their counties
         mock_render.return_value = HttpResponse()
         self.client.get(reverse("county_index"))
-        mock_call  = mock_render.call_args
+        mock_call = mock_render.call_args
 
         # We want to pull out the MA State object
         # and ensure that its constituent counties are in
@@ -221,7 +221,7 @@ class TestCountyViews(TestCase):
                 ],
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
-                "wfo_codes": [self.wfo.code]
+                "wfo_codes": [self.wfo.code],
             },
         )
 
@@ -269,7 +269,7 @@ class TestCountyViews(TestCase):
                 ],
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
-                "wfo_codes": [self.wfo.code]
+                "wfo_codes": [self.wfo.code],
             },
         )
 
@@ -301,7 +301,7 @@ class TestCountyViews(TestCase):
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
                 "primary_wfo": None,
-                "wfo_codes": ["NOP"]
+                "wfo_codes": ["NOP"],
             },
         )
 
@@ -314,10 +314,10 @@ class TestCountyViews(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {
                 "items": [
-                    {"metadata": {"level": {"text": "warning"}}},
-                    {"metadata": {"level": {"text": "other"}}},
-                    {"metadata": {"level": {"text": "watch"}}},
-                    {"metadata": {"level": {"text": "watch"}}},
+                    {"event": "Tsunami Warning", "metadata": {"level": {"text": "warning"}}, "hash": "h1"},
+                    {"event": "Tornado Warning", "metadata": {"level": {"text": "other"}}, "hash": "h2"},
+                    {"event": "Extreme Wind Warning", "metadata": {"level": {"text": "watch"}}, "hash": "h3"},
+                    {"event": "Severe Thunderstorm Warning", "metadata": {"level": {"text": "watch"}}, "hash": "h4"},
                 ],
             },
             "alertDays": [
@@ -367,10 +367,8 @@ class TestCountyViews(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {
                 "items": [
-                    {"metadata": {"level": {"text": "other"}}},
-                    {"metadata": {"level": {"text": "other"}}},
-                    {"metadata": {"level": {"text": "warning"}}},
-                    {"metadata": {"level": {"text": "other"}}},
+                    {"event": "Tsunami Warning", "metadata": {"level": {"text": "other"}}, "hash": "h1"},
+                    {"event": "Tornado Warning", "metadata": {"level": {"text": "warning"}}, "hash": "h2"},
                 ],
             },
             "alertDays": [],

@@ -52,3 +52,38 @@
     color: color("base-lightest");
   }
 }
+
+.wx-county-alert-map-container {
+  // Prevent SVG jitter and flicker during zoom animations
+  .leaflet-zoom-animated {
+    will-change: transform;
+  }
+
+  // Improve SVG rendering smoothness
+  .leaflet-overlay-pane {
+    svg {
+      shape-rendering: auto;
+    }
+  }
+
+  // Stop markers from lagging behind the map during pan/zoom
+  .leaflet-marker-icon,
+  .leaflet-marker-shadow {
+    will-change: transform;
+    transition: none !important; // Prevents "shaking" markers
+  }
+
+  // Fix the Cluster Ghost Relic when spiderfying
+  .leaflet-cluster-icon {
+    &.leaflet-marker-cluster-spiderfied {
+      display: none !important;
+    }
+  }
+
+  // Custom styles for your alert highlights
+  .alert-marker-mouseover {
+    filter: drop-shadow(0 0 5px rgb(0 0 0 / 50%));
+    z-index: 1000 !important;
+    pointer-events: auto !important;
+  }
+}

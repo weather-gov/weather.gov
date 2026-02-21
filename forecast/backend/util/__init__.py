@@ -1,8 +1,12 @@
 import logging
+import re
+from collections import defaultdict
 from datetime import datetime
+from typing import Tuple
 
 from django.shortcuts import get_object_or_404
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext as _
 from html_sanitizer import Sanitizer
 
 from backend.interop import get_weather_stories
@@ -17,6 +21,120 @@ OCONUS_4CODE_MAPPINGS = {
     "PAFC": "AFC",  # Anchorage, AK
     "PAFG": "AFG",  # Fairbanks, AK
     "PAJK": "AJK",  # Juneau, AK
+}
+
+ALERT_PRIORITY_MAP = {
+    "tsunami warning": 10,
+    "tornado warning": 20,
+    "extreme wind warning": 30,
+    "severe thunderstorm warning": 40,
+    "flash flood warning": 50,
+    "flash flood statement": 60,
+    "severe weather statement": 70,
+    "shelter in place warning": 80,
+    "evacuation immediate": 90,
+    "civil danger warning": 100,
+    "nuclear power plant warning": 110,
+    "radiological hazard warning": 120,
+    "hazardous materials warning": 130,
+    "fire warning": 140,
+    "civil emergency message": 150,
+    "law enforcement warning": 160,
+    "storm surge warning": 170,
+    "hurricane force wind warning": 180,
+    "hurricane warning": 190,
+    "typhoon warning": 200,
+    "special marine warning": 210,
+    "blizzard warning": 220,
+    "snow squall warning": 230,
+    "ice storm warning": 240,
+    "heavy freezing spray warning": 250,
+    "winter storm warning": 260,
+    "lake effect snow warning": 270,
+    "dust storm warning": 280,
+    "blowing dust warning": 290,
+    "high wind warning": 300,
+    "tropical storm warning": 310,
+    "storm warning": 320,
+    "tsunami advisory": 330,
+    "tsunami watch": 340,
+    "avalanche warning": 350,
+    "earthquake warning": 360,
+    "volcano warning": 370,
+    "ashfall warning": 380,
+    "flood warning": 390,
+    "coastal flood warning": 400,
+    "lakeshore flood warning": 410,
+    "ashfall advisory": 420,
+    "high surf warning": 430,
+    "extreme heat warning": 440,
+    "tornado watch": 450,
+    "severe thunderstorm watch": 460,
+    "flash flood watch": 470,
+    "gale warning": 480,
+    "flood statement": 490,
+    "extreme cold warning": 500,
+    "freeze warning": 510,
+    "red flag warning": 520,
+    "storm surge watch": 530,
+    "hurricane watch": 540,
+    "hurricane force wind watch": 550,
+    "typhoon watch": 560,
+    "tropical storm watch": 570,
+    "storm watch": 580,
+    "tropical cyclone local statement": 590,
+    "winter weather advisory": 600,
+    "avalanche advisory": 610,
+    "cold weather advisory": 620,
+    "heat advisory": 630,
+    "flood advisory": 640,
+    "coastal flood advisory": 650,
+    "lakeshore flood advisory": 660,
+    "high surf advisory": 670,
+    "dense fog advisory": 680,
+    "dense smoke advisory": 690,
+    "small craft advisory": 700,
+    "brisk wind advisory": 710,
+    "hazardous seas warning": 720,
+    "dust advisory": 730,
+    "blowing dust advisory": 740,
+    "lake wind advisory": 750,
+    "wind advisory": 760,
+    "frost advisory": 770,
+    "freezing fog advisory": 780,
+    "freezing spray advisory": 790,
+    "low water advisory": 800,
+    "local area emergency": 810,
+    "winter storm watch": 820,
+    "rip current statement": 830,
+    "beach hazards statement": 840,
+    "gale watch": 850,
+    "avalanche watch": 860,
+    "hazardous seas watch": 870,
+    "heavy freezing spray watch": 880,
+    "flood watch": 890,
+    "coastal flood watch": 900,
+    "lakeshore flood watch": 910,
+    "high wind watch": 920,
+    "extreme heat watch": 930,
+    "extreme cold watch": 940,
+    "freeze watch": 950,
+    "fire weather watch": 960,
+    "extreme fire danger": 970,
+    "911 telephone outage": 980,
+    "coastal flood statement": 990,
+    "lakeshore flood statement": 1000,
+    "special weather statement": 1010,
+    "marine weather statement": 1020,
+    "air quality alert": 1030,
+    "air stagnation advisory": 1040,
+    "hazardous weather outlook": 1050,
+    "hydrologic outlook": 1060,
+    "short term forecast": 1070,
+    "administrative message": 1080,
+    "test": 1090,
+    "child abduction emergency": 1100,
+    "blue alert": 1110,
 }
 
 
@@ -199,6 +317,99 @@ def get_ghwo_daily_images(county_ghwo_data):
     return list(urls)
 
 
+def sort_alert_key(alert: dict) -> Tuple[int, str]:
+    """
+    Return a sorting key based on Priority Map and Onset Time.
+
+    Primary sort uses ALERT_PRIORITY_MAP
+    Secondary sort uses onset time for timebreaking
+    """
+    event_name = alert.get("event", "test").lower()
+    priority = ALERT_PRIORITY_MAP.get(event_name, 9999)
+    # Extract severity text, defaulting to 'other' (lowest priority)
+    onset = alert.get("onset", "9999-12-31T23:59:59Z")
+    return (priority, onset)
+
+
+def process_county_alerts(alert_items: list) -> list:
+    """
+    Sort and enhance alert items with unique display titles.
+
+    This function deduplicates alert objects by:
+    Reordering items based on priority rankings
+    Calculating daily totals per event type to determine if indexing is needed
+    """
+    # Deduplicate by Hash, some alerts are the same
+    unique_map = {}
+    for alert in alert_items:
+        h = alert.get("hash")
+        # Only keep the first time we see this specific hash
+        if h not in unique_map:
+            unique_map[h] = alert
+
+    deduplicated_list = list(unique_map.values())
+
+    # Primary sort, organize by priority, then chronologically
+    sorted_items = sorted(deduplicated_list, key=sort_alert_key)
+
+    # Explicit mapping for Day Translations
+    day_translation_map = {
+        "Monday": _("county.alert-tabs.day.Monday.01"),
+        "Tuesday": _("county.alert-tabs.day.Tuesday.01"),
+        "Wednesday": _("county.alert-tabs.day.Wednesday.01"),
+        "Thursday": _("county.alert-tabs.day.Thursday.01"),
+        "Friday": _("county.alert-tabs.day.Friday.01"),
+        "Saturday": _("county.alert-tabs.day.Saturday.01"),
+        "Sunday": _("county.alert-tabs.day.Sunday.01"),
+        "Today": _("county.alert-tabs.day.all.01"),
+    }
+
+    # Count total occurrences for each event + day combo
+    totals = defaultdict(int)
+    for alert in sorted_items:
+        # Extract day name as the 'key' for counting
+        # Format expected, "Wednesday 02/11 9:00 AM PST" -> "Wednesday"
+        full_start = alert.get("timing", {}).get("start", "")
+        day_raw = full_start.split(" ")[0] if full_start else day_translation_map["Today"]
+        totals[f"{alert.get('event', 'Alert')}-{day_raw}"] += 1
+
+    # Construct the final display strings
+    occurrences = defaultdict(int)
+    for alert in sorted_items:
+        event_type = alert.get("event", "Alert")
+
+        # Sanitize the hash for HTML
+        # Remove non-alphanumeric characters
+        raw_hash = alert.get("hash", "")
+        safe_hash = re.sub(r"[^a-zA-Z0-9]", "", raw_hash)
+        alert["unique_id"] = f"hash_{safe_hash}"
+
+        # Parsing day name, format assumed: "Wednesday 02/11 9:00 AM PST"
+        full_start = alert.get("timing", {}).get("start", "")
+        day_raw = full_start.split(" ")[0] if full_start else day_translation_map["Today"]
+
+        # Construct a unique key that's readable and used in UI code for events
+        lookup_key = f"{event_type}-{day_raw}"
+        occurrences[lookup_key] += 1
+
+        # Use the  map to get the translated day name.
+        day_translated = day_translation_map.get(day_raw, day_raw)
+
+        # Get the translated day name
+        if totals[lookup_key] > 1:
+            format_string = _("alerts.titles.with-index.01")
+            alert["display_title"] = format_string % {
+                "event": event_type,
+                "day": day_translated,
+                "index": occurrences[lookup_key],
+            }
+        else:
+            format_string = _("alerts.titles.without-index.01")
+            alert["display_title"] = format_string % {"event": event_type, "day": day_translated}
+
+    return sorted_items
+
+
 def get_county_weather_stories(wfos, time_zone_info):
     """Fetch and process weather story data for a county/timezone."""
     valid = []
@@ -209,15 +420,15 @@ def get_county_weather_stories(wfos, time_zone_info):
         if weather_story_data and "error" not in weather_story_data:
             weather_story_data["wfo_url"] = wfo.url
             weather_story_data["wfo_name"] = wfo.name
-            weather_story_data["startTime"] = datetime.fromisoformat(
-                weather_story_data["startTime"]
-            ).astimezone(tz=time_zone_info)
-            weather_story_data["updateTime"] = datetime.fromisoformat(
-                weather_story_data["updateTime"]
-            ).astimezone(tz=time_zone_info)
-            weather_story_data["endTime"] = datetime.fromisoformat(
-                weather_story_data["endTime"]
-            ).astimezone(tz=time_zone_info)
+            weather_story_data["startTime"] = datetime.fromisoformat(weather_story_data["startTime"]).astimezone(
+                tz=time_zone_info
+            )
+            weather_story_data["updateTime"] = datetime.fromisoformat(weather_story_data["updateTime"]).astimezone(
+                tz=time_zone_info
+            )
+            weather_story_data["endTime"] = datetime.fromisoformat(weather_story_data["endTime"]).astimezone(
+                tz=time_zone_info
+            )
             valid.append(weather_story_data)
         elif weather_story_data:
             # In this case, there is an error on the dict.
@@ -232,12 +443,7 @@ def get_county_weather_stories(wfos, time_zone_info):
             # current weather stories there.
             # We still return a dict, but only with an officeId,
             # so that we can render the AFD links as needed.
-            empties.append({
-                "officeId": wfo.code.upper(),
-                "wfo_url": wfo.url,
-                "wfo_name": wfo.name,
-                "is_empty": True
-            })
+            empties.append({"officeId": wfo.code.upper(), "wfo_url": wfo.url, "wfo_name": wfo.name, "is_empty": True})
 
     valid = sorted(valid, key=lambda story: story["startTime"], reverse=True)
     return valid + empties + errors
