@@ -19,6 +19,7 @@ from backend.util import (
     get_county_weather_stories,
     get_ghwo_daily_images,
     get_states_combo_box_list,
+    process_county_alerts,
 )
 from spatial.models import WeatherCounties, WeatherStates
 from wx_stories_api.models import SituationReport
@@ -31,10 +32,7 @@ def index(request):
     """Render the county index page."""
     states = (
         WeatherStates.objects.defer("shape")
-        .prefetch_related(
-            Prefetch("counties",
-                     queryset=WeatherCounties.objects.order_by("countyname"))
-        )
+        .prefetch_related(Prefetch("counties", queryset=WeatherCounties.objects.order_by("countyname")))
         .defer("counties__shape")
         .all()
         .order_by("name")
@@ -47,7 +45,6 @@ def index(request):
 def county_overview(request, countyfips):  # noqa: C901
     """Render the main page for a particular county."""
     county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=countyfips)
-
     county_data = interop.get_county_data(countyfips)
 
     level_priorities = {
@@ -56,9 +53,16 @@ def county_overview(request, countyfips):  # noqa: C901
         "other": 0,
     }
 
-    levels = [alert["metadata"]["level"] for alert in county_data["alerts"]["items"]]
-    levels = {level["text"] for level in levels}
-    levels = list(levels)
+    # We use a list so we can look up by the original index provided in alertDays
+    # Because `process_county_alerts` reorders the list and removes duplicates
+    original_levels = [alert["metadata"]["level"]["text"] for alert in county_data["alerts"]["items"]]
+
+    # Process alerts by sorting by timestamp and severity.
+    county_data["alerts"]["items"] = process_county_alerts(county_data["alerts"]["items"])
+
+    # Create a set of alerts
+    levels_seen = {alert["metadata"]["level"]["text"] for alert in county_data["alerts"]["items"]}
+    levels = list(levels_seen)
     levels.sort(key=lambda level: level_priorities[level], reverse=True)
     levels = [
         {
@@ -69,11 +73,13 @@ def county_overview(request, countyfips):  # noqa: C901
         for level in levels
     ]
 
-    levels_per_alert = [alert["metadata"]["level"]["text"] for alert in county_data["alerts"]["items"]]
-
     level_days = []
     for day in county_data["alertDays"]:
-        day_levels = [levels_per_alert[index] for index in day["alerts"]]
+        # day["alerts"] contains indices [0, 1, 2...].
+        # Look them up in original_levels which matches those indices
+        day_levels = [original_levels[index] for index in day["alerts"] if index < len(original_levels)]
+
+        # Apply priority sorting to the string so "warning" appears before "watch"
         day_levels.sort(key=lambda level: level_priorities[level], reverse=True)
         level_days.append(" ".join(day_levels))
 

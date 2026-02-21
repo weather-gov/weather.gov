@@ -114,30 +114,49 @@ const setupMap = () => {
   /** Determine the center of a layer, considering only points within the viewport. */
   const visibleCenter = (layer, xybounds) => {
     const feature = layer.getLayers()[0].feature;
+    const geometry = feature.geometry;
 
-    // MultiPolygon Logic
-    if (feature.geometry.type === "MultiPolygon") {
-      const [lng, lat] = polylabel(feature.geometry.coordinates[0], 0.000001);
+    // If it's a Polygon, we wrap it in an array to treat it like a MultiPolygon with one item
+    const polygonList =
+      geometry.type === "MultiPolygon"
+        ? geometry.coordinates
+        : [geometry.coordinates];
+
+    // Loop through list of polygons
+    // When finding the center, return center
+    for (let i = 0; i < polygonList.length; i++) {
+      const polygonCoords = polygonList[i];
+
+      // Get Center of polygon using polylabel (center of mass)
+      const [lng, lat] = polylabel(polygonCoords, 0.000001);
       const labelCenter = L.latLng(lat, lng);
+
+      // If the natural center of this polygon is visible, return
       if (map.getBounds().contains(labelCenter)) {
         return labelCenter;
       }
+
+      // If natural center isn't visible, the polygon might still be partially on screen
+      const outerRing = polygonCoords[0];
+      const points = outerRing.map(([lng, lat]) => L.point([lat, lng]));
+
+      // Clip polygon within viewport (`xybounds`)
+      const clippedPoints = L.PolyUtil.clipPolygon(points, xybounds);
+
+      if (clippedPoints.length > 0) {
+        // Convert clipped xy points back to LatLngs for polygonCenter
+        const clippedLatLngs = clippedPoints.map((p) => L.latLng([p.x, p.y]));
+        try {
+          return L.PolyUtil.polygonCenter(clippedLatLngs, map.options.crs);
+        } catch (e) {
+          // Fallback if polygonCenter fails on weird clipped shapes
+          continue;
+        }
+      }
     }
 
-    // Logic for Polygon objects
-    const array = feature.geometry.coordinates[0];
-    const coords = array.length > 2 ? array : array[0];
-    const points = coords.map(([y, x]) => L.point([x, y]));
-    const clippy = L.PolyUtil.clipPolygon(points, xybounds).map((p) =>
-      L.latLng([p.x, p.y]),
-    );
-
-    // if `clippy` is null return null. `polygonCenter` will error if `clippy` is null
-    if (clippy.length === 0) {
-      return null;
-    } else {
-      return L.PolyUtil.polygonCenter(clippy, map.options.crs);
-    }
+    // If no part of any polygon is within the viewport
+    return null;
   };
 
   /** Open the associated alert accordion and bring it into view. */
@@ -213,6 +232,40 @@ const setupMap = () => {
       });
     },
   });
+
+  /** Marker Cluster event functions  **/
+  markers.on("spiderfied", function (e) {
+    if (e.cluster._icon) {
+      // When cluster is spiderfied, it needs to be invisible
+      e.cluster._icon.style.opacity = "0";
+      e.cluster._icon.style.pointerEvents = "none";
+    }
+  });
+
+  markers.on("unspiderfied", function (e) {
+    if (e.cluster._icon) {
+      // When cluster is unspiderfied, it needs to be visible
+      e.cluster._icon.style.opacity = "1";
+      e.cluster._icon.style.pointerEvents = "auto";
+    }
+  });
+
+  /** Restacks all active alert polygons reversed, based on their initial render index. */
+  const restackAlerts = () => {
+    const activeLayers = countyAlertLayers[curDayIndex];
+    const sorted = [...activeLayers].sort(
+      (a, b) => b.wx_render_index - a.wx_render_index,
+    );
+
+    sorted.forEach((layer) => {
+      if (map.hasLayer(layer)) {
+        layer.bringToFront();
+      }
+    });
+
+    // Bring County to the front at the end
+    countyOutline.bringToFront();
+  };
 
   /** Redraw icons on zoom in or pan; reset them on zoom out. */
   const handleMotion = (e) => {
@@ -363,7 +416,53 @@ const setupMap = () => {
   map.wx_county_zoom = map.wx_latest_zoom = map.getZoom();
   map.wx_county_center = map.wx_latest_center = map.getCenter();
 
+  // List for storing alert labels
   const markerList = [];
+
+  // Empty map { alertId: layer } for hovering over alert accordian
+  const alertIdToLayer = {};
+
+  // Highlight function for mouseover events
+  const highlightAlert = (alertId) => {
+    const layer = alertIdToLayer[alertId];
+    if (!layer) return;
+
+    const marker = layer.wx_marker;
+    const alertType = marker.alert_type;
+
+    // Update Marker icon and z-index
+    marker.setIcon(getLargeIcon(alertType));
+    if (marker._icon) {
+      marker._icon.classList.add("alert-marker-mouseover");
+    }
+    marker.setZIndexOffset(100000);
+    layer.bringToFront();
+
+    // Set hover style
+    layer.setStyle(styles.hover);
+  };
+
+  // Highlight function for mouseout events
+  const unhighlightAlert = (alertId) => {
+    const layer = alertIdToLayer[alertId];
+    if (!layer) return;
+
+    const marker = layer.wx_marker;
+    const alertType = marker.alert_type;
+
+    // Reset Marker
+    marker.setIcon(icons[alertType]);
+    if (marker._icon) {
+      marker._icon.classList.remove("alert-marker-mouseover");
+    }
+    marker.setZIndexOffset(0);
+
+    // Reset Visual Style
+    layer.resetStyle();
+
+    // Place layer back in it's original order
+    restackAlerts();
+  };
 
   // create alert layers and sort them
   for (let i = json.alerts.items.length - 1; i >= 0; i--) {
@@ -375,10 +474,14 @@ const setupMap = () => {
           level: { text: alertType },
         },
       } = json.alerts.items[i];
-      let { id: alertId, event: alertName } = json.alerts.items[i];
+      let { unique_id: alertId, event: alertName } = json.alerts.items[i];
 
       let layer = L.geoJSON(geometry, { style: styles[alertType] }).addTo(map);
+      alertIdToLayer[alertId] = layer;
       let alertCenter = visibleCenter(layer, map.wx_county_xybounds);
+
+      // Store the render index for sorting during highlight events
+      layer.wx_render_index = i;
 
       layer.wx_marker = L.marker(alertCenter, { icon: icons[alertType] });
       layer.wx_marker.alert_type = alertType;
@@ -389,44 +492,8 @@ const setupMap = () => {
       layer.wx_marker.on("click", (e) => handleMarkerEvent(e, layer));
       layer.wx_marker.on("popupclose", (e) => handleMarkerEvent(e, layer));
 
-      layer.wx_marker.on("mouseover", (e) => {
-        e.target.setIcon(getLargeIcon(alertType));
-        e.target.originalZIndex = e.target.options.zIndexOffset || 0;
-        e.target.setZIndexOffset(1000);
-
-        const vectorLayer = layer.getLayers()[0];
-        if (vectorLayer && vectorLayer.getElement) {
-          const el = vectorLayer.getElement();
-          // Bookmark the current stack position
-          layer._originalNextSibling = el.nextSibling;
-          layer.bringToFront();
-        }
-
-        handleMarkerEvent(e, layer);
-      });
-      layer.wx_marker.on("mouseout", (e) => {
-        e.target.setIcon(icons[alertType]);
-        e.target.setZIndexOffset(e.target.originalZIndex);
-
-        const vectorLayer = layer.getLayers()[0];
-        if (vectorLayer && vectorLayer.getElement) {
-          const el = vectorLayer.getElement();
-          const parent = el.parentNode;
-
-          if (
-            parent &&
-            layer._originalNextSibling &&
-            layer._originalNextSibling.parentNode === parent
-          ) {
-            parent.insertBefore(el, layer._originalNextSibling);
-          } else if (parent && !layer._originalNextSibling) {
-            // It was already the last child (on top), so leave it at the end
-            parent.appendChild(el);
-          }
-        }
-
-        handleMarkerEvent(e, layer);
-      });
+      layer.wx_marker.on("mouseover", () => highlightAlert(alertId));
+      layer.wx_marker.on("mouseout", () => unhighlightAlert(alertId));
 
       // Add marker to list
       markerList.push(layer.wx_marker);
@@ -455,6 +522,15 @@ const setupMap = () => {
 
   // ready to handle day change events
   window.addEventListener("wx-tab-focused", handleDay);
+
+  // Hover alert accordion logic
+  const accordionItems = document.querySelectorAll(".usa-accordion");
+  accordionItems.forEach((item) => {
+    const alertId = item.id.replace("alert_", "");
+
+    item.addEventListener("mouseover", () => highlightAlert(alertId));
+    item.addEventListener("mouseout", () => unhighlightAlert(alertId));
+  });
 
   // add the user's location if they've already agreed to share it
   (async () => {
