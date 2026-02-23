@@ -5,6 +5,9 @@ export default class SerializableMap extends Map {
     }
 
     if (typeof o === "object") {
+      if (Array.isArray(o)) {
+        return o.map(SerializableMap.fromObj);
+      }
       const m = new SerializableMap();
 
       for (const [key, value] of Object.entries(o)) {

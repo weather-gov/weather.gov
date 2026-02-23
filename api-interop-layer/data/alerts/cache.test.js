@@ -90,7 +90,7 @@ describe("AlertsCache tests", () => {
       // regex-y magic to match it. First, accept whitespace at the start
       // or end.
       const query =
-        `\\s*INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, alertKind, shape, shape_simplified) VALUES ($1, $2, $3, $4, $5, ST_TRANSFORM(ST_GeomFromGeoJson($6), 4326), ST_TRANSFORM(ST_GeomFromGeoJson($6), 4326) );\\s*`
+        `\\s*INSERT INTO ${alertsCache.tableName} (hash, alertJson, counties, states, alertKind, shape, shape_simplified) VALUES ($1, $2, $3, $4, $5, ST_SetSRID(ST_GeomFromGeoJson($6), 4326), ST_SetSRID(ST_GeomFromGeoJson($6), 4326) );\\s*`
           // Now turn any group of spaces into a whitespace match
           .replace(/\s+/g, "\\s+")
           // Escape parens since they are part of the query

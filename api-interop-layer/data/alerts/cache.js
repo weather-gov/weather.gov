@@ -2,6 +2,9 @@ import {
   SIMPLIFICATION_METERS,
   SPATIAL_PROJECTION,
 } from "../../util/constants.js";
+import { logger } from "../../util/monitoring/logger.js";
+
+const log = logger.child({ subsystem: "alert cache" });
 
 /**
  * AlertsCache
@@ -100,18 +103,22 @@ export class AlertsCache {
         VALUES
           ($1, $2, $3, $4, $5,
           
-          ST_TRANSFORM(ST_GeomFromGeoJson($6), ${SPATIAL_PROJECTION.WGS84}),
-          ST_TRANSFORM(ST_GeomFromGeoJson($6), ${SPATIAL_PROJECTION.WGS84})
+          ST_SetSRID(ST_GeomFromGeoJson($6), ${SPATIAL_PROJECTION.WGS84}),
+          ST_SetSRID(ST_GeomFromGeoJson($6), ${SPATIAL_PROJECTION.WGS84})
         );`;
 
-      await this.db.query(sql, [
-        hash,
-        alertAsString,
-        countiesAsString,
-        statesAsString,
-        alertKind,
-        geometry?.shape,
-      ]);
+      await this.db
+        .query(sql, [
+          hash,
+          alertAsString,
+          countiesAsString,
+          statesAsString,
+          alertKind,
+          geometry?.shape,
+        ])
+        .catch((e) => {
+          log.error({ error: e, alert }, "error adding alert to cache");
+        });
     }
 
     // If the geometry has a SQL property, then this alert's shape is determined

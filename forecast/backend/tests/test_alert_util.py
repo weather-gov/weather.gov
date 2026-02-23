@@ -80,6 +80,21 @@ class TestAlertUtilities(TestCase):
         self.assertEqual(alert["duration"], "go to bed")
         mock_gettext_lazy.assert_called_with("tonight")
 
+    @freeze_time("2024-09-01T18:00:00-05:00")
+    @mock.patch("backend.util.alert._")
+    def test_pending_alert_later_tomorrow_morning_less_than_24_hours(self, mock_gettext_lazy):
+        """
+        Test an alert that starts tomorrow morning, but less than 24 hours from now.
+
+        This is to capture a specific bug where "tomorrow" was being evaluated
+        as simply 24 hours from "now" rather than midnight of the next day.
+        """
+        mock_gettext_lazy.return_value = "when {day} then"
+        alert = {"onset": "2024-09-02T03:00:00-05:00"}
+        set_timing(alert, ZoneInfo("America/Chicago"))
+        self.assertEqual(alert["duration"], "when tomorrow then")
+        mock_gettext_lazy.assert_called_with("{day} morning")
+
     @freeze_time("2024-09-01T08:00:00-05:00")
     @mock.patch("backend.util.alert._")
     def test_pending_alert_later_tomorrow_morning(self, mock_gettext_lazy):

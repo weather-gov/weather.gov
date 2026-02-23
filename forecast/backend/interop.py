@@ -109,19 +109,19 @@ def _process_interop_point_forecast(data):
     """
     is_marine = data["isMarine"]
 
+    tz = ZoneInfo(data["place"]["timezone"])
+
     # Pull full alert data from the database. The interop only returns alert
     # hashes, in order to save on bandwidth.
     if "alerts" in data and "items" in data["alerts"] and len(data["alerts"]["items"]):
         alerts = WeatherAlertsCache.objects.only("alertjson").filter(hash__in=data["alerts"]["items"])
         # Map the hash to the alert object, with timings applied
-        alerts = {alert.hash: set_timing(alert.alertjson) for alert in alerts}
+        alerts = {alert.hash: set_timing(alert.alertjson, tz) for alert in alerts}
         # Now replace the alert hashes with actual alerts. If there's no
         # alert corresponding to a hash, just drop it. There's a small but
         # non-zero chance that the alert was removed from the cache in the
         # time between when the interop sent us this and when we queried.
         data["alerts"]["items"] = [alerts[hash] for hash in data["alerts"]["items"] if hash in alerts]
-
-    tz = ZoneInfo(data["place"]["timezone"])
 
     if "days" in data["forecast"]:
         for day in data["forecast"]["days"]:
@@ -256,10 +256,12 @@ def get_radar(lat, lon):
     url = f"/radar/{lat}/{lon}"
     return _fetch(url)
 
+
 def get_briefing_data(wfo):
     """Fetch the briefing metadata for a given WFO."""
     url = f"/offices/{wfo}/briefings"
     return _fetch(url)
+
 
 def get_county_data(countyfips):
     """Get county data. Consolidated risk overview and alerts per county.
@@ -302,15 +304,14 @@ def get_weather_stories(wfo):
         if len(stories) == 0:
             return None
         if "error" in stories:
-            return { "error": stories["error"], "officeId": wfo.upper() }
+            return {"error": stories["error"], "officeId": wfo.upper()}
         # the site currently shows one weather story
         # It _should_ be the case that the weather stories
         # come from the API in sorted order. For now, that is what
         # we will assume.
         return stories[0]
     except Exception as e:
-        return { "error": repr(e), "officeId": wfo.upper() }
-
+        return {"error": repr(e), "officeId": wfo.upper()}
 
 
 def get_wx_afd_by_id(afd_id):
