@@ -29,10 +29,8 @@ def _get_active_duration(now, finish, tomorrow):
     return _("is in effect")
 
 
-def set_timing(alert, tz=None):
+def set_timing(alert, tz):
     """Set the alert timing information for an alert dict."""
-    tz = utc if not tz else tz
-
     onset = datetime.fromisoformat(alert["onset"]).astimezone(tz=tz)
     finish = (
         datetime.fromisoformat(alert["finish"]).astimezone(tz=tz) if "finish" in alert and alert["finish"] else None
@@ -42,7 +40,7 @@ def set_timing(alert, tz=None):
 
     now = datetime.now(tz=tz)
     tomorrow = now + one_day
-    tomorrow.replace(hour=0, minute=0, second=0, microsecond=0)
+    tomorrow = tomorrow.replace(hour=0, minute=0, second=0, microsecond=0)
     later = tomorrow + one_day
 
     if onset <= now:

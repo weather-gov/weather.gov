@@ -84,7 +84,7 @@ export default class RelativeDate {
     } else if (this.#from === "today") {
       const time = new Date();
 
-      time.setUTCHours(this.#hour + this.#offset);
+      time.setUTCHours(this.#hour - this.#offset);
       time.setMinutes(this.#minute);
       time.setSeconds(0);
       time.setMilliseconds(0);
