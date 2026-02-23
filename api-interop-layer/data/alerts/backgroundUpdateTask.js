@@ -2,7 +2,8 @@ import { createHash } from "node:crypto";
 import { parentPort } from "node:worker_threads";
 import dayjs from "../../util/day.js";
 import { modifyTimestampsForAlert } from "./utils.js";
-import { fetchAPIJson } from "../../util/fetch.js";
+import { Client } from "undici";
+import { requestJSON } from "../../util/request.js";
 import paragraphSquash from "../../util/paragraphSquash.js";
 import openDatabase from "../db.js";
 import alertKinds from "./kinds.js";
@@ -11,37 +12,74 @@ import { generateAlertGeometry } from "./geometry.js";
 import { AlertsCache } from "./cache.js";
 import { logger } from "../../util/monitoring/index.js";
 
+/**
+ * An alert feature as given by the API
+ * @typedef {Object} AlertFeature
+ */
+
+/**
+ * An error object as returned by the fetchAlertFeatures
+ * function.
+ * @typedef {Object} ErrorLike
+ * @property {boolean} error
+ * @property {Object||String} cause 
+ */
+
+const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
+
 const alertsLogger = logger.child({ subsystem: "alerts" });
 
 // The hashes of all the active alerts we know about. Anything in this list will
 // not be processed in future updates, since we've already captured it.
 const alertsCache = new AlertsCache();
 
+// An undici client that will be used as the dispatcher
+const client = new Client(BASE_URL, { allowH2: true });
+
+/**
+ * Fetch all active alerts from the API endpoint and return
+ * an array of alert features, with a hash added to each
+ * feature.
+ * If there is an error or invalid response, we return
+ * an object with an `error` and `cause` property
+ * @returns {AlertFeature[]||ErrorLike} 
+ */
+export const fetchAlertFeatures = async () => {
+  try {
+    const result = await requestJSON(client, "/alerts/active?status=actual");
+    if(result.error){
+      alertsLogger.error(result);
+      return result;
+    }
+
+    return result.features.map((feature) => {
+      // To uniquely identify alerts, we'll use a hash of the JSON text of the
+      // alert properties. Alert ID URNs don't appear to be globally unique,
+      // so this should get us to uniqueness.
+      const hash = createHash("sha256");
+      hash.update(JSON.stringify(feature.properties));
+      feature.properties.hash = hash.digest("base64");
+
+      modifyTimestampsForAlert(feature);
+
+      return feature;
+    });
+  } catch(e) {
+    const result = {
+      error: true,
+      cause: e
+    };
+    alertsLogger.error(e);
+    return result;
+  }
+};
+
 export const updateAlerts = async ({ parent = parentPort } = {}) => {
   const now = dayjs();
 
   alertsLogger.trace("updating alerts");
 
-  const rawAlerts = await fetchAPIJson("/alerts/active?status=actual").then(
-    ({ error, features }) => {
-      if (error) {
-        return { error: true };
-      }
-      return features.map((feature) => {
-        // To uniquely identify alerts, we'll use a hash of the JSON text of the
-        // alert properties. Alert ID URNs don't appear to be globally unique,
-        // so this should get us to uniqueness.
-        const hash = createHash("sha256");
-        hash.update(JSON.stringify(feature.properties));
-        feature.properties.hash = hash.digest("base64");
-
-        modifyTimestampsForAlert(feature);
-
-        return feature;
-      });
-    },
-  );
-
+  const rawAlerts = await fetchAlertFeatures();
   // If there's an error coming from the API, signal that to the parent thread
   // and stop processing. We'll try again on the next timer tick.
   if (rawAlerts.error) {

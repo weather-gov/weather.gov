@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
 import sinon from "sinon";
 import { expect } from "chai";
-import undici from "undici";
 import dayjs from "../../util/day.js";
-import { updateAlerts } from "./backgroundUpdateTask.js";
+import { Client } from "undici";
+import { updateAlerts, fetchAlertFeatures } from "./backgroundUpdateTask.js";
 import { AlertsCache } from "./cache.js";
 
 describe("alert background processing module", () => {
@@ -17,6 +17,8 @@ describe("alert background processing module", () => {
   let removeAlertsStub;
   let storedHashes;
   let storedAlerts;
+
+  let MockClient = Client;
 
   beforeEach(() => {
     response.statusCode = 200;
@@ -50,7 +52,8 @@ describe("alert background processing module", () => {
       });
     });
 
-    undici.request.resolves(response);
+    sandbox.stub(MockClient.prototype, "request");
+    MockClient.prototype.request.resolves(response);
   });
 
   afterEach(() => {
@@ -61,6 +64,7 @@ describe("alert background processing module", () => {
     getHashesStub.restore();
     addAlertStub.restore();
     removeAlertsStub.restore();
+    MockClient.prototype.request.restore();
   });
 
   describe("creates alert hashes", () => {
@@ -88,6 +92,7 @@ describe("alert background processing module", () => {
     });
 
     it("derives an alert hash", async () => {
+      debugger;
       await updateAlerts({ parent });
 
       const [_, expected] = Object.values(storedAlerts)[0];
@@ -395,11 +400,11 @@ describe("alert background processing module", () => {
   });
 
   it("posts an error if it encounters a problem", async () => {
-    undici.request.rejects();
+    MockClient.prototype.request.rejects();
 
     await updateAlerts({ parent });
 
-    expect(parent.postMessage.calledWith({ action: "error" })).to.be.true;
+    expect(parent.postMessage.calledWith({ action: "error" })).to.equal(true);
   });
 
   describe("computes the alert finish time", () => {
@@ -451,6 +456,66 @@ describe("alert background processing module", () => {
       const { finish } = alert;
 
       expect(finish).to.be.null;
+    });
+  });
+
+  describe("#fetchAlertFeatures", () => {
+    it("returns an error object with a cause when responseJSON returns an object with error", async() => {
+      const mockResponse = {
+        statusCode: 422,
+        statusText: "whoopsie!",
+        body: { json: sandbox.stub(), dump: sandbox.stub() }
+      };
+      mockResponse.body.json.resolves({});
+      MockClient.prototype.request.resolves(
+        mockResponse
+      );
+
+      const expected = new Error();
+      expected.cause = {
+        statusCode: 422,
+        statusText: "whoopsie!"
+      };
+      expected.error = true;
+      const result = await fetchAlertFeatures();
+
+      expect(result).to.exist;
+      expect(result).to.eql(expected);
+    });
+
+    it("returns an error object with a cause when the underlying request throws an error", async() => {
+      const err = new Error("hello");
+      MockClient.prototype.request.throws(new Error("hello"));
+
+      const expected = { error: true, cause: err };
+      const result = await fetchAlertFeatures();
+
+      expect(result).to.exist;
+      expect(result).to.eql(expected);
+    });
+
+    it("returns a list of features (alerts) when successful", async () => {
+      const alert = {
+        geometry: "geo",
+        properties: {
+          id: "nonstandard",
+          event: "Severe Thunderstorm Warning",
+          sent: dayjs().subtract(1, "minute").toISOString(),
+          effective: dayjs().subtract(1, "minute").toISOString(),
+          onset: dayjs().subtract(1, "minute").toISOString(),
+          expires: dayjs().add(1, "minute").toISOString(),
+          ends: dayjs().add(1, "minute").toISOString(),
+        },
+      };
+
+      const mockResponse = { statusCode: 200, body: { json: sandbox.stub(), dump: sandbox.stub() }};
+      mockResponse.body.json.resolves({features: [alert]});
+      MockClient.prototype.request.resolves(mockResponse);
+
+      const result = await fetchAlertFeatures();
+
+      expect(result.length).to.equal(1);
+      expect(result[0]).to.equal(alert);
     });
   });
 });

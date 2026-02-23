@@ -73,8 +73,6 @@ const internalFetch = async (path) => {
     headers["wx-host"] = url.hostname;
   }
 
-  const isAlert = url.pathname.includes("alerts");
-
   const isWxStory = url.hostname === url.pathname.endsWith("/weatherstories");
 
   const isBriefing = url.hostname === url.pathname.endsWith("/briefings");
@@ -91,7 +89,7 @@ const internalFetch = async (path) => {
   // request.
   // Note that we explicitly do not cache GHWO requests
   // for the moment.
-  if (!DISABLE_REDIS && USE_REDIS && !isAlert) {
+  if (!DISABLE_REDIS && USE_REDIS) {
     url = new URL(url);
     const cachedValue = await getFromRedis(url.pathname);
     if (cachedValue) {
@@ -127,7 +125,7 @@ const internalFetch = async (path) => {
       // Cache the value, and then return the JSON
       // response if there is a valid cache-control
       // header value in the response
-      if (USE_REDIS && !isAlert) {
+      if (USE_REDIS) {
         const ttl = getTTLFromResponse(r);
         if (ttl) {
           const json = await r.body.json();
