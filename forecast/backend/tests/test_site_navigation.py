@@ -42,4 +42,4 @@ class SiteNavigationPartialMenuTests(TestCase):
         response = self.client.get(reverse("about"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("weather/partials/site-navigation.html")
-        self.assertContains(response, "usa-nav__submenu-item", count=2)
+        self.assertContains(response, "usa-nav__submenu-item", count=3)
