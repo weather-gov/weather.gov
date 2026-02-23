@@ -55,4 +55,4 @@ export const requestJSONWithHeaders = async (dispatcher, path) => {
   error.cause = { statusText, statusCode };
   error.error = true;
   return error;
-}
+};

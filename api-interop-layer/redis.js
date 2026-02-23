@@ -183,8 +183,6 @@ export const getFromRedis = async (key) => {
   const result = await client.json.get(key);
   if(result){
     return result;
-  } else {
-    redisLogger.info({key}, "CACHE_MISS!!!");
   }
   return null;
 };
