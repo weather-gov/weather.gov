@@ -31,7 +31,6 @@ urlpatterns = [
     path("", index.index, name="index"),
     path("", include("backend.urls")),
     path("saml/", include("noaa_saml.urls")),
-    path("jsonapi/", include("wx_stories_api.urls")),
     path(
         "languages/jsi18n/",
         last_modified(lambda _, **kw: server_restart_date)(JavaScriptCatalog.as_view()),

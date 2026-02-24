@@ -7,8 +7,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import cache_control, never_cache
 from django.views.decorators.http import require_POST
-
-# from wx_stories_api.models import SituationReport, WeatherStory
 from shapely import MultiPolygon, Polygon
 
 from backend import interop
@@ -16,13 +14,12 @@ from backend.models import WFO
 from backend.util import (
     get_basis_for_ghwo_risk,
     get_counties_combo_box_list,
-    get_county_weather_stories,
     get_ghwo_daily_images,
     get_states_combo_box_list,
     process_county_alerts,
 )
+from backend.util.county import get_county_weather_stories
 from spatial.models import WeatherCounties, WeatherStates
-from wx_stories_api.models import SituationReport
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +124,8 @@ def county_overview(request, countyfips):  # noqa: C901
         # Start with the primary WFO for the situation report
         wfo = WFO.objects.filter(code=cwa.wfo).first()
         if wfo:
-            report = SituationReport.objects.current(wfo)
+            # TODO: use interop to fetch briefings from API
+            report = None
             if report:
                 # If the county we found has an associated timezone, switch
                 # the timestamps to use it before we do any formatting.

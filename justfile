@@ -194,13 +194,13 @@ test-django arg="":
       -e DEBUG_PORT=34532 \
       -p "34532:34532" \
       web \
-      bash -c "coverage run manage.py test backend spatial noaa_saml wx_stories_api; coverage html -d /reports"
+      bash -c "coverage run manage.py test backend spatial noaa_saml; coverage html -d /reports"
   else
     docker compose \
       run --rm \
       -v "{{justfile_directory()}}/reports/django":"/reports" \
       web \
-      bash -c "coverage run manage.py test backend spatial noaa_saml wx_stories_api; coverage html -d /reports"
+      bash -c "coverage run manage.py test backend spatial noaa_saml; coverage html -d /reports"
   fi
 
 alias ee := test-e2e
