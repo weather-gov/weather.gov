@@ -67,6 +67,10 @@ describe("alert background processing module", () => {
     MockClient.prototype.request.restore();
   });
 
+  after(() => {
+    sandbox.restore();
+  });
+
   describe("creates alert hashes", () => {
     const alert = {
       geometry: "geo",
@@ -92,7 +96,6 @@ describe("alert background processing module", () => {
     });
 
     it("derives an alert hash", async () => {
-      debugger;
       await updateAlerts({ parent });
 
       const [_, expected] = Object.values(storedAlerts)[0];

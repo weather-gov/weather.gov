@@ -91,7 +91,11 @@ export const parseTTLFromHeaders = (headers) => {
   // The second item in the match response will be the
   // captured group of digits. This is the TTL in seconds
   // that we care about, so return it.
-  return parseInt(match[1]);
+  const parsedNum = parseInt(match[1]);
+  if(isNaN(parsedNum)){
+    return null;
+  }
+  return parsedNum;
 };
 
 /**
