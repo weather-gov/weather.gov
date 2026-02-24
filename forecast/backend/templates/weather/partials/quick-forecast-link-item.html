@@ -11,7 +11,7 @@ the content
     <time datetime="{{ day.periods.0.start }}">
       <span>
         {% if first %}
-          {% trans "daily-forecast.labels.today.01" %},
+          {% trans "daily-forecast.labels.today.01" %}
         {%else%}
           {{ day.periods.0.start|date:"l" }}
         {%endif%}

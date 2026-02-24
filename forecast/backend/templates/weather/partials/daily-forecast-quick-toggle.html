@@ -15,7 +15,7 @@ the content
           aria-label="{{ periods.0.dayName }}">
       <span>
         {% if first %}
-          {% trans "daily-forecast.labels.today.01" %},
+          {% trans "daily-forecast.labels.today.01" %}
         {% else %}
           {{ periods.0.start|date:"l" }}
         {% endif %}
