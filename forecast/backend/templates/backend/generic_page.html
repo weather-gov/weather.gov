@@ -1,8 +1,12 @@
 {% extends "weather/page.html" %}
 {% load wagtailcore_tags %}
 {% block page_content %}
-  <div class="grid-container margin-bottom-5">
-    <h1>{{ page.title }}</h1>
-    <div>{{ page.body | richtext }}</div>
+  <div class="generic-page-container grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+    <div class="grid-row">
+      <div class="grid-col usa-prose">
+        <h1>{{ page.title }}</h1>
+        {{ page.body | richtext }}
+      </div>
+    </div>
   </div>
 {% endblock %}

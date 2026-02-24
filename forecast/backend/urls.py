@@ -10,7 +10,6 @@ from backend.views import (
     partials,
     point,
     state,
-    static,
 )
 
 from .url_converters import FloatConverter
@@ -24,12 +23,6 @@ urlpatterns = [
     # Our URLs should have trailing slashes. Django will automatically add
     # trailing slashes to requests that don't have them, so if our URLs DON'T
     # have trailing slashes, they'll never match.
-    # Static pages for the site
-    path("about/", static.site_page, name="about"),
-    path("site-index/", static.site_page, name="site_index"),
-    path("accessibility/", static.site_page, name="accessibility"),
-    path("disclaimer/", static.site_page, name="disclaimer"),
-    path("privacy/", static.site_page, name="privacy"),
     # Forecast specific URLS
     path("offices/<wfo>/", point.offices_specific, name="office"),
     path("afd/", point.afd_index, name="afd_index"),

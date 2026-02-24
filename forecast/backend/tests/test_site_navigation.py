@@ -18,10 +18,11 @@ class SiteNavigationAllMenuTests(TestCase):
 
     def test_submenus(self):
         """Verify that all submenu items are present."""
-        response = self.client.get(reverse("about"))
+        response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("weather/partials/site-navigation.html")
         self.assertContains(response, "usa-nav__submenu-item", count=13)
+
 
 @override_settings(DEBUG_SHOW_ALL_MENU_LINKS=False)
 class SiteNavigationPartialMenuTests(TestCase):
@@ -36,10 +37,3 @@ class SiteNavigationPartialMenuTests(TestCase):
         self.assertNotContains(response, 'id="nav-section-preparedness"')
         self.assertNotContains(response, 'id="nav-section-resources"')
         self.assertContains(response, 'id="nav-section-about"')
-
-    def test_submenus(self):
-        """Verify that only submenu items with links are present."""
-        response = self.client.get(reverse("about"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed("weather/partials/site-navigation.html")
-        self.assertContains(response, "usa-nav__submenu-item", count=3)
