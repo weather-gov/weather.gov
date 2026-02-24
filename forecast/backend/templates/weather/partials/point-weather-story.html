@@ -14,9 +14,9 @@
 <div class="bg-accent-cool-lightest border-top-1px border-bottom-1px border-base-light margin-top-4 wx-weather-story-block-section">
   <div class="grid-container">
     {% if weather_story %}
-      <div class="{% if weather_story.error %}weatherstory-error-wrapper margin-top-3{% else %}wx-weather-story-wrapper{% endif %}">
+      <div class="{% if weather_story.error %}weatherstory-error-wrapper margin-top-3{% elif not weather_story.is_empty %}wx-weather-story-wrapper{% endif %}">
         {% if weather_story.error %}
-          <div class="usa-alert usa-alert--error">
+          <div class="usa-alert usa-alert--error margin-bottom-2">
             <div class=" usa-alert__body">
               <div class="usa-alert__text">
                 {% if weather_story.wfo_name %}
@@ -61,12 +61,12 @@
         -- ok, we always render this part of it, which contains
         -- the AFD link and other WFO information
         {% endcomment %}
-        <div class="display-flex flex-column flex-justify-end margin-bottom-3" id="eric">
+        <div class="display-flex flex-column flex-justify-end margin-y-3">
           {% if not weather_story.error and not weather_story.is_empty %}
             <hr class="margin-x-0 border-accent-cool-darker border-top-0 margin-top-2" />
           {% endif %}
           {# AFD Link #}
-          <div class="display-flex flex-align-center margin-top-105">
+          <div class="display-flex flex-align-center{% if not weather_story.is_empty %} margin-top-105{% endif %}">
             <svg width="24"
                  height="24"
                  viewBox="0 0 24 24"
