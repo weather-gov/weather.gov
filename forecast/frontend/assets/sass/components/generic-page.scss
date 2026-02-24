@@ -1,0 +1,24 @@
+@forward "uswds";
+
+.generic-page-container {
+  h1 {
+    @extend .text-primary-dark;
+  }
+
+  h2 {
+    @extend .text-primary-darker;
+  }
+
+  ul {
+    @extend .usa-list;
+  }
+
+  a {
+    @extend .usa-link;
+
+    // Links to non-NOAA, non-NWS sites get marked external.
+    &:not([href*="noaa.gov"], [href*="weather.gov"]) {
+      @extend .usa-link--external;
+    }
+  }
+}
