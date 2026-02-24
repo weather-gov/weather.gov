@@ -1,6 +1,6 @@
 # We will use `pino` for logging our node applications
 
-  Date: 2025-01-26
+Date: 2026-01-26
 
 ### Status
 
