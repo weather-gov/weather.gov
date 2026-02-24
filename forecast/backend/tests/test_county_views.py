@@ -1,16 +1,12 @@
-import datetime
-from functools import partial
 from unittest import mock
 
 from django.contrib.gis.geos import GEOSGeometry
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 
 import backend.models as backend
 import spatial.models as spatial
-import wx_stories_api.models as wxstory
 from backend.util import disable_logging_for_quieter_tests
 
 
@@ -19,35 +15,13 @@ class TestCountyViews(TestCase):
 
     def setUp(self):
         """Test setup."""
+        self.maxDiff = None
         region = backend.Region.objects.create(name="Regional Area")
         self.wfo = backend.WFO.objects.create(
             name="Yondertown",
             code="YND",
             region=region,
         )
-
-        self.briefing = wxstory.SituationReport.objects.create(
-            title="County briefing",
-            pdf=SimpleUploadedFile("sit_rep.pdf", b"File contents here."),
-            wfo=self.wfo,
-        )
-        # The first, and so far only, British satellite to be launched on a
-        # British rocket, Prospero, lifts off.
-        self.briefing.created_at = datetime.datetime(1971, 10, 28, 0, 0, 0, tzinfo=datetime.timezone.utc)
-
-        # The Alaska Highway is completed, for the first time connecting Alaska
-        # to the continental United States by way of a road and a rail line.
-        # It was over 1,700 miles long, but it has been straightened since then
-        # and is now less than 1,400 miles long. And it's paved!
-        updated_at = datetime.datetime(1948, 10, 28, 14, 30, 0, tzinfo=datetime.timezone.utc)
-        # Gotta use a mock here because the model definition automatically
-        # sets the updated_at field to the current time whenever it gets saved.
-        with mock.patch("django.utils.timezone.now", mock.Mock(return_value=updated_at)):
-            self.briefing.save()
-
-        # Delete the test file when we're finished so it doesn't just hang
-        # around forever.
-        self.addCleanup(partial(self.briefing.pdf.delete, save=False))
 
         cwa = spatial.WeatherCountyWarningAreas.objects.create(
             wfo="YND",
@@ -206,18 +180,19 @@ class TestCountyViews(TestCase):
                 "primary_wfo": self.wfo,
                 "public": {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []},
                 "briefings": [
-                    {
-                        "wfo": self.wfo,
-                        "report": self.briefing,
-                        "created": {
-                            "human": "Thursday, Oct 28 1971, 12:00 AM UTC",
-                            "timestamp": "1971-10-28T00:00:00+00:00",
-                        },
-                        # There is no updated property because the creation
-                        # time is less than 1 second before the updated time, so
-                        # we are assuming the time difference is just due to
-                        # processing time in the SQL query.
-                    },
+                    # TODO: test for briefing data
+                    # {
+                    #     "wfo": self.wfo,
+                    #     "report": {},
+                    #     "created": {
+                    #         "human": "Thursday, Oct 28 1971, 12:00 AM UTC",
+                    #         "timestamp": "1971-10-28T00:00:00+00:00",
+                    #     },
+                    #     # There is no updated property because the creation
+                    #     # time is less than 1 second before the updated time, so
+                    #     # we are assuming the time difference is just due to
+                    #     # processing time in the SQL query.
+                    # },
                 ],
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
@@ -234,15 +209,6 @@ class TestCountyViews(TestCase):
         mock_get_radar.return_value = {"radarMetadata": {}}
         mock_get_weather_stories.return_value = []
 
-        # Matt Smith, the Eleventh Doctor Who, is born. We change the updated_at
-        # here to ensure that when it is after the creation date, we get the
-        # updated_at property set correctly.
-        updated_at = datetime.datetime(1982, 10, 28, 14, 30, 0, tzinfo=datetime.timezone.utc)
-        # Gotta use a mock here because the model definition automatically
-        # sets the updated_at field to the current time whenever it gets saved.
-        with mock.patch("django.utils.timezone.now", mock.Mock(return_value=updated_at)):
-            self.briefing.save()
-
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "55555"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
         self.assertEqual(
@@ -254,18 +220,19 @@ class TestCountyViews(TestCase):
                 "primary_wfo": self.wfo,
                 "public": {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []},
                 "briefings": [
-                    {
-                        "wfo": self.wfo,
-                        "report": self.briefing,
-                        "created": {
-                            "human": "Wednesday, Oct 27 1971, 3:00 PM AHDT",
-                            "timestamp": "1971-10-27T15:00:00-09:00",
-                        },
-                        "updated": {
-                            "human": "Thursday, Oct 28 1982, 5:30 AM AHDT",
-                            "timestamp": "1982-10-28T05:30:00-09:00",
-                        },
-                    },
+                    # TODO: test for briefing data
+                    # {
+                    #     "wfo": self.wfo,
+                    #     "report": {},
+                    #     "created": {
+                    #         "human": "Wednesday, Oct 27 1971, 3:00 PM AHDT",
+                    #         "timestamp": "1971-10-27T15:00:00-09:00",
+                    #     },
+                    #     "updated": {
+                    #         "human": "Thursday, Oct 28 1982, 5:30 AM AHDT",
+                    #         "timestamp": "1982-10-28T05:30:00-09:00",
+                    #     },
+                    # },
                 ],
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},

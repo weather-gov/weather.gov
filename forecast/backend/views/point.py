@@ -14,7 +14,6 @@ from backend.models import WFO, Region
 from backend.util import get_wfo_from_afd
 from spatial.models import WeatherCounties, WeatherCountyWarningAreas, WeatherPlace
 
-# from wx_stories_api.models import WeatherStory
 from ._helpers import get_redirect_for_afd_queries
 
 MAX_DEGREE_DECIMALS = 3
