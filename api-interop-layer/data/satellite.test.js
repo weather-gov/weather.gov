@@ -1,18 +1,39 @@
 import { expect } from "chai";
 import { createSandbox } from "sinon";
-import undici from "undici";
-import getSatelliteData from "./satellite.js";
+import quibble from "quibble";
+import { Pool } from "undici";
+import { parseTTLFromHeaders } from "../redis.js";
 
 describe("satellite metadata module", () => {
   const sandbox = createSandbox();
   const response = {
     statusCode: 200,
-    body: { json: sandbox.stub() },
+    body: { json: sandbox.stub(), dump: sandbox.stub() },
   };
+
+  let saveToRedis = sandbox.stub();
+  let getFromRedis = sandbox.stub();
+  let getSatelliteData;
+
+  before(async() => {
+    await quibble.esm("../redis.js", { saveToRedis, getFromRedis, parseTTLFromHeaders }, {});
+    const module = await import("./satellite.js");
+    getSatelliteData = module.default;
+  });
 
   beforeEach(() => {
     response.statusCode = 200;
-    undici.request.resolves(response);
+    sandbox.stub(Pool.prototype, "request");
+    Pool.prototype.request.resolves(response);
+  });
+
+  afterEach(() => {
+    Pool.prototype.request.restore();
+  });
+
+  after(async () => {
+    sandbox.restore();
+    await quibble.reset();
   });
 
   describe("returns data if everything goes well", () => {
@@ -36,7 +57,7 @@ describe("satellite metadata module", () => {
 
     it("for GOES-19 imagery", async () => {
       response.body.json.resolves({
-        meta: {
+        meta: { 
           satellite: "GOES-East",
         },
       });
@@ -60,6 +81,7 @@ describe("satellite metadata module", () => {
           observation_time: "1891-01-24T12:00:00Z",
         },
       });
+      debugger;
       const actual = await getSatelliteData({
         grid: { wfo: "wfo2" },
         place: { timezone: "America/Los_Angeles" },

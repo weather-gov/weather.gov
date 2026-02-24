@@ -1,14 +1,36 @@
 import dayjs from "../util/day.js";
 import { logger } from "../util/monitoring/index.js";
-import { fetchAPIJson } from "../util/fetch.js";
+import { getFromRedis, saveToRedis, parseTTLFromHeaders } from "../redis.js";
+import { Pool } from "undici";
+import { requestJSONWithHeaders } from "../util/request.js";
 
 const satelliteLogger = logger.child({ subsystem: "satellite" });
 
+const requestPool = new Pool("https://cdn.star.nesdis.noaa.gov");
+
 export default async ({ grid: { wfo }, place: { timezone } }) => {
   try {
-    const satelliteMetadata = await fetchAPIJson(
-      `https://cdn.star.nesdis.noaa.gov/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`,
+    const url = `/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`;
+
+    // Attempt to pull the value from the cache, if it's there
+    const foundInCache = await getFromRedis(url);
+    if(foundInCache){
+      return foundInCache;
+    }
+
+    // Otherwise, fetch from the NOAA endpoint
+    const response = await requestJSONWithHeaders(
+      requestPool,
+      `/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`,
     );
+
+    // requestJSONWithHeaders will return an Error
+    // object for 400+ status codes.
+    if(response.error){
+      throw response;
+    }
+    
+    const [satelliteMetadata, headers] = response;
 
     const satellite = satelliteMetadata?.meta?.satellite;
     if (satellite) {
@@ -29,7 +51,7 @@ export default async ({ grid: { wfo }, place: { timezone } }) => {
       const startTZ = start.tz(timezone);
       const endTZ = end.tz(timezone);
 
-      return {
+      const result = {
         times: {
           start: startTZ.format(),
           end: endTZ.format(),
@@ -38,6 +60,16 @@ export default async ({ grid: { wfo }, place: { timezone } }) => {
         gif: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.gif`,
         mp4: `https://cdn.star.nesdis.noaa.gov/WFO/${wfo.toLowerCase()}/GEOCOLOR/${goes}-${wfo.toUpperCase()}-GEOCOLOR-600x600.mp4`,
       };
+
+      let ttl = parseTTLFromHeaders(headers);
+      if(!ttl){
+        // In this case, we don't have valid cache-control TTL values
+        // for the endpoint. As a fallback, we will set it to 60 seconds,
+        // which is what the s-maxage is as of the time of this writing
+        ttl = 60;
+      }
+      await saveToRedis(url, result, ttl);
+      return result;
     }
   } catch (e) {
     satelliteLogger.error({ err: e, wfo }, "Error getting satellite metadata");

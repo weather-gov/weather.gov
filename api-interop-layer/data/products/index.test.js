@@ -47,10 +47,11 @@ describe("/product data tests", () => {
     );
   });
 
-  after(() => {
+  after(async () => {
     AFDParser.prototype.parse.restore();
     AFDParser.prototype.getStructureForTwig.restore();
     sandbox.restore();
+    await quibble.reset();
   });
 
   it("fetches the requested product by ID", async () => {
