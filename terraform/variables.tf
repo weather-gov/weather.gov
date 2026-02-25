@@ -119,12 +119,6 @@ variable "api_url" {
   description = "The weather API endpoint for the API interop process"
 }
 
-variable "nwsconnect_api_url" {
-  type        = string
-  default     = "https://preview-api.weather.gov"
-  description = "The preview weather API endpoint for the API interop process"
-}
-
 variable "ghwo_url" {
   type        = string
   default     = "https://www.weather.gov"
