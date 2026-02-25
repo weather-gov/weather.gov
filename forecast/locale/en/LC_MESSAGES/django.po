@@ -1058,3 +1058,12 @@ msgstr ""
 
 msgid "tomorrow night"
 msgstr ""
+
+msgid "There was an error loading briefings for this office."
+msgstr ""
+
+msgid "There was an error loading briefings for the {wfo} WFO"
+msgstr ""
+
+msgid "No active briefing for {wfo} WFO"
+msgstr ""

@@ -65,7 +65,7 @@ class TestCountyViewWeatherStories(TestCase):
                 "altText": "Alternative to text? Pictures!",
                 "priority": False,
                 "order": 1,
-                "download": "/public/images/wfos/YND.png"
+                "download": "/public/images/wfos/YND.png",
             }
         ]
 
@@ -81,7 +81,7 @@ class TestCountyViewWeatherStories(TestCase):
                 "altText": "Alternative to text? Pictures!",
                 "priority": False,
                 "order": 1,
-                "download": "/public/images/wfos/YND.png"
+                "download": "/public/images/wfos/YND.png",
             },
             {
                 "id": "7ccab810-706b-401c-8757-71f656e56271",
@@ -94,8 +94,8 @@ class TestCountyViewWeatherStories(TestCase):
                 "altText": "Alternative to text? Pictures!",
                 "priority": False,
                 "order": 1,
-                "download": "/public/images/wfos/OTV.png"
-            }
+                "download": "/public/images/wfos/OTV.png",
+            },
         ]
 
         self.ghwo = {"days": [], "fips": "12345"}
@@ -121,10 +121,7 @@ class TestCountyViewWeatherStories(TestCase):
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
     def test_overview_with_multiple_weather_stories(
-            self,
-            mock_get_radar,
-            mock_get_county_data,
-            mock_get_weather_stories
+        self, mock_get_radar, mock_get_county_data, mock_get_weather_stories
     ):
         """Test the weather stories are properly sorted if there are multiple."""
         mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
@@ -156,16 +153,10 @@ class TestCountyViewWeatherStories(TestCase):
             [],
         )
 
-
-    @mock.patch("backend.util.county.get_weather_stories")
+    @mock.patch("backend.util.nwsconnect.get_weather_stories")
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_overview_with_error_in_weather_story(
-            self,
-            mock_get_radar,
-            mock_get_county_data,
-            mock_get_weather_stories
-    ):
+    def test_overview_with_error_in_weather_story(self, mock_get_radar, mock_get_county_data, mock_get_weather_stories):
         """Test that error objects propagate from fetching bad weather stories."""
         mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}

@@ -1,0 +1,16 @@
+{
+  "@context": {
+    "@version": "1.1"
+  },
+  "briefing": {
+    "id": "guid",
+    "officeId": "MPX",
+    "startTime": "date:today 06:00:-6",
+    "endTime": "date:today 06:00:-6 +1 day",
+    "updateTime": "date:today 12:38:-6",
+    "title": "Test briefing",
+    "description": "Briefing description",
+    "priority": false,
+    "download": "/public/images/wfos/MPX.png"
+  }
+}

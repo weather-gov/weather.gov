@@ -18,7 +18,7 @@ from backend.util import (
     get_states_combo_box_list,
     process_county_alerts,
 )
-from backend.util.county import get_county_weather_stories
+from backend.util.nwsconnect import get_county_briefings, get_county_weather_stories
 from spatial.models import WeatherCounties, WeatherStates
 
 logger = logging.getLogger(__name__)
@@ -110,9 +110,9 @@ def county_overview(request, countyfips):  # noqa: C901
     # with the county. This seems to manifest in the data
     # as multiple CWAS, each corresponding to a different WFO
     # (in cases where the county has multiple WFOs)
-    wfo_codes = [ cwa.wfo for cwa in cwas ]
+    wfo_codes = [cwa.wfo for cwa in cwas]
     relevant_wfos = WFO.objects.filter(code__in=wfo_codes)
-    briefings = []
+    briefings = get_county_briefings(relevant_wfos, localtz)
 
     # For now, we are making a separate request to
     # the interop for the weather story data. Ideally this would be
@@ -120,51 +120,8 @@ def county_overview(request, countyfips):  # noqa: C901
     # We use a utility method to do some gentle processing.
     weather_stories = get_county_weather_stories(relevant_wfos, localtz)
 
-    for cwa in cwas:
-        # Start with the primary WFO for the situation report
-        wfo = WFO.objects.filter(code=cwa.wfo).first()
-        if wfo:
-            # TODO: use interop to fetch briefings from API
-            report = None
-            if report:
-                # If the county we found has an associated timezone, switch
-                # the timestamps to use it before we do any formatting.
-                if localtz:
-                    report.created_at = report.created_at.astimezone(tz=localtz)
-                    report.updated_at = report.updated_at.astimezone(tz=localtz)
-
-                human_format = "%A, %b %-d %Y, %-I:%M %p %Z"
-
-                briefing = {
-                    "wfo": wfo,
-                    "report": report,
-                    "created": {
-                        # Make some nice human-friendly default strings
-                        "human": report.created_at.strftime(human_format),
-                        # We also want ISO8601 timestamps we can put into
-                        # the HTML time tags for in-browser localization.
-                        "timestamp": report.created_at.isoformat(),
-                    },
-                }
-
-                # When Django creates a report, the created_at and
-                # updated_at are both set to NOW. However, nothing is ever
-                # truly instantaneous, so there will be a time difference
-                # between the two, on the order of a fraction of a second.
-                # If the difference is more than 1 second, assume that the
-                # briefing has been updated and include the update times.
-                time_diff = report.updated_at - report.created_at
-                if time_diff.total_seconds() > 1:
-                    briefing["updated"] = {
-                        "human": report.updated_at.strftime(human_format),
-                        "timestamp": report.updated_at.isoformat(),
-                    }
-
-                briefings.append(briefing)
-        else:
-            # If this happens, something has gone very wrong. We probably
-            # don't want to propagate that to the user, though.
-            logger.error(f"No matching WFO found for {cwa.wfo}")
+    # Assume primary WFO is the first one.
+    wfo = relevant_wfos[0] if relevant_wfos else None
 
     (lon, lat) = county.shape.centroid.coords
     radar = interop.get_radar(lat, lon)
@@ -190,7 +147,7 @@ def county_overview(request, countyfips):  # noqa: C901
 
 
 @never_cache
-def county_ghwo(request, county_fips): # noqa: C901
+def county_ghwo(request, county_fips):  # noqa: C901
     """Load a county GHWO details page by FIPS."""
     county = get_object_or_404(
         WeatherCounties.objects.select_related("state").only("countyname", "st", "countyfips", "state__fips"),

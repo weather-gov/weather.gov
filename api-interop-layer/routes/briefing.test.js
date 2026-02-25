@@ -1,6 +1,6 @@
-import sinon from "sinon";
 import { expect } from "chai";
 import quibble from "quibble";
+import sinon from "sinon";
 
 describe("route: briefings", () => {
   const sandbox = sinon.createSandbox();
@@ -9,9 +9,9 @@ describe("route: briefings", () => {
   let briefing;
 
   before(async () => {
-    await quibble.esm("../data/briefing.js", { getDataForBriefing });
+    await quibble.esm("../data/briefing.js", {}, getDataForBriefing);
 
-    briefing = await import("./briefings.js");
+    briefing = await import("./briefing.js");
   });
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe("route: briefings", () => {
     });
 
     it("route url", () => {
-      expect(briefing.url).to.equal("/offices/:wfo/briefings");
+      expect(briefing.url).to.equal("/offices/:wfo/briefing");
     });
 
     it("route schema", () => {
@@ -45,9 +45,7 @@ describe("route: briefings", () => {
         },
       });
 
-      const idRegex = new RegExp(
-        briefing.schema.params.properties.wfo.pattern,
-      );
+      const idRegex = new RegExp(briefing.schema.params.properties.wfo.pattern);
 
       expect(idRegex.test("ABC")).to.be.true;
       expect(idRegex.test("XYZ")).to.be.true;

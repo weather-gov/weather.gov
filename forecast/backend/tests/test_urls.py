@@ -4,6 +4,7 @@ from django.urls import resolve, reverse
 from backend.views import (
     county,
     index,
+    offices,
     partials,
     point,
     state,
@@ -34,7 +35,7 @@ class TestUrls(TestCase):
         """Test WFO office."""
         resolver = resolve("/offices/WFO/")
         back = reverse("office", kwargs={"wfo": "Howdy"})
-        self.assertEquals(resolver.func, point.offices_specific)
+        self.assertEquals(resolver.func, offices.offices_specific)
         self.assertEquals(resolver.kwargs, {"wfo": "WFO"})
         self.assertEquals(back, "/offices/Howdy/")
 

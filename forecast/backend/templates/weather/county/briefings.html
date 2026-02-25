@@ -6,35 +6,44 @@
     {% for briefing in data.briefings %}
       <div class="grid-container padding-x-0">
         <div class="grid-row">
-          {% if data.briefings|length > 1 %}<h3 class="text-normal text-primary">{{ briefing.wfo.name }}</h3>{% endif %}
+          {% if data.briefings|length > 1 %}<h3 class="text-normal text-primary">{{ briefing.wfo_name }}</h3>{% endif %}
         </div>
-        <div class="grid-row font-family-mono">
-          <div class="grid-col-12 display-inline-block tablet:grid-col-auto text-uppercase margin-right-1">
-            {# djlint:off #}
-                  {# This is ugly, but we don't want any whitespace between the text and the colon #}
-                  {% if briefing.updated %}{{ "county.briefing.updated.01" | t }}{% else %}{{ "county.briefing.created.01" | t}}{% endif %}<span class="display-none tablet:display-inline">:</span>
-            {# djlint:on #}
+
+        {% if briefing.error %}
+          <div class="usa-alert usa-alert--error margin-bottom-2">
+            <div class=" usa-alert__body">
+              <div class="usa-alert__text">
+                {% trans_with_args "There was an error loading briefings for the {wfo} WFO" wfo=briefing.wfo_name %}
+              </div>
+            </div>
           </div>
-          <div class="grid-col-auto display-inline-block">
-            {% if briefing.report.updated %}
-              <time datetime="{{ briefing.updated.timestamp }}">
-                {{ briefing.updated.human }}
-              </time>
-            {% else %}
-              <time datetime="{{ briefing.report.created.timestamp }}">
-                {{ briefing.created.human }}
-              </time>
-            {% endif %}
+        {% elif not briefing.is_empty %}
+          <div class="grid-row font-family-mono">
+            <div class="grid-col-12 display-inline-block tablet:grid-col-auto text-uppercase margin-right-1">
+              {# djlint:off #}
+                    {# This is ugly, but we don't want any whitespace between the text and the colon #}
+                    {% if briefing.updateTime %}{{ "county.briefing.updated.01" | t }}<span class="display-none tablet:display-inline">:</span>{% endif %}
+              {# djlint:on #}
+            </div>
+            <div class="grid-col-auto display-inline-block">
+              {% if briefing.updateTime %}
+                <time datetime="{{ briefing.updateTime }}">
+                  {{ briefing.updateTime|date:"l, M j, Y, g:i A" }}
+                </time>
+              {% endif %}
+            </div>
           </div>
-        </div>
-        <div class="grid-col-12 margin-top-1">
-          <svg role="img"
-               class="usa-icon width-3 height-3 text-primary"
-               aria-hidden="true">
-            <use xlink:href="{% static 'images/uswds/sprite.svg' %}#file_download"></use>
-          </svg>
-          <a href="{{ briefing.report.pdf.url }}" class="usa-link">{{ "county.briefing.download-one.01" | t }}</a>
-        </div>
+          <div class="grid-col-12 margin-top-1">
+            <svg role="img"
+                class="usa-icon width-3 height-3 text-primary"
+                aria-hidden="true">
+              <use xlink:href="{% static 'images/uswds/sprite.svg' %}#file_download"></use>
+            </svg>
+            <a href="{{ briefing.download }}" class="usa-link">{{ "county.briefing.download-one.01" | t }}</a>
+          </div>
+        {% elif briefing.is_empty %}
+        {% trans_with_args "No active briefing for {wfo} WFO" wfo=briefing.wfo_name %}
+        {% endif %}
       </div>
     {% endfor %}
   {% else %}

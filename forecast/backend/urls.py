@@ -7,6 +7,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from backend.views import (
     county,
     index,
+    offices,
     partials,
     point,
     state,
@@ -24,7 +25,7 @@ urlpatterns = [
     # trailing slashes to requests that don't have them, so if our URLs DON'T
     # have trailing slashes, they'll never match.
     # Forecast specific URLS
-    path("offices/<wfo>/", point.offices_specific, name="office"),
+    path("offices/<wfo>/", offices.offices_specific, name="office"),
     path("afd/", point.afd_index, name="afd_index"),
     path("afd/<wfo>/", point.afd_by_office, name="afd_by_office"),
     path("afd/<wfo>/<afd_id>/", point.afd_by_office_and_id, name="afd_by_office_and_id"),
@@ -56,6 +57,6 @@ urlpatterns = [
 
 if settings.DEBUG is True:
     urlpatterns += [
-        path("offices/", point.offices, name="offices"),
+        path("offices/", offices.offices, name="offices"),
         path("silk/", include("silk.urls", namespace="silk")),
     ]

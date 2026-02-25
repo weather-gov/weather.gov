@@ -1,8 +1,8 @@
-import { getDataForBriefing } from "../data/briefing.js";
+import getDataForBriefing from "../data/briefing.js";
 
 export const method = "GET";
 
-export const url = "/offices/:wfo/briefings";
+export const url = "/offices/:wfo/briefing";
 
 export const schema = {
   params: {
