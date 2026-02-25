@@ -17,5 +17,4 @@ api_interop_instances = 1
 api_proxy_memory      = "512M"
 interop_url           = "https://api-weathergov-test.app.cloud.gov"
 api_url               = "https://api-proxy-weathergov-test.app.cloud.gov"
-nwsconnect_api_url    = "https://api-proxy-weathergov-test.app.cloud.gov"
 ghwo_url              = "https://api-proxy-weathergov-test.app.cloud.gov"

@@ -33,7 +33,6 @@ resource "cloudfoundry_app" "interop" {
     API_INTEROP_PRODUCTION = true
     API_INTEROP_NAME       = var.env
     API_URL                = var.api_url
-    NWSCONNECT_API_URL     = var.nwsconnect_api_url
     GHWO_URL               = var.ghwo_url
     API_KEY                = var.api_key
     OPTIMIZE_MEMORY        = true
