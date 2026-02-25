@@ -314,6 +314,28 @@ def get_weather_stories(wfo):
         return {"error": repr(e), "officeId": wfo.upper()}
 
 
+def get_briefing(wfo):
+    """
+    Fetch the current briefing for the given WFO, if any.
+
+    Will return several options based on the scenario:
+    - Response was OK: returns the briefing
+    - Response was OK, but no briefing: returns None
+    - Response has error in it: return custom error dict
+    - Other exception: return custom error dict
+    """
+    url = f"/offices/{wfo.upper()}/briefing"
+    try:
+        briefing = _fetch(url)
+        if "briefing" in briefing:
+            return briefing["briefing"]
+        if "error" in briefing:
+            return {"error": briefing["error"], "officeId": wfo.upper()}
+    except Exception as e:
+        return {"error": repr(e), "officeId": wfo.upper()}
+    return None
+
+
 def get_wx_afd_by_id(afd_id):
     """
     Fetch an Area Forecast Discussion by ID.

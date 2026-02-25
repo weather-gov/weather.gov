@@ -29,30 +29,32 @@
       </div>
       {# TODO: This is all placeholder stuff. When it comes out in favor of real stuff, make sure we add things to the translations list appropriately. #}
       <div class="grid-row">
-        <div class="grid-col-12 tablet:grid-col-6">
+        <div class="grid-col-12 tablet:grid-col-6 tablet:grid-gap">
           <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
             {{ "wfo-info.heading.local-expertise.01" | t }}
           </h2>
-          <p>{{ "Decision support is description tk tk" | t }}</p>
+          <p>{{ "Decision support from" | t }} {{ office.code }}</p>
+
+          {% if briefing.error %}
+            <div class="usa-alert usa-alert--error margin-bottom-2 tablet:margin-right-8">
+              <div class=" usa-alert__body">
+                <div class="usa-alert__text">
+                  {% trans_with_args "There was an error loading briefings for the {wfo} WFO" wfo=office.code %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
           <ul class="margin-bottom-0 padding-left-2">
-            <li class="padding-y-05">
-              <a class="usa-link" href="#">{{ "Briefing tk tk" | t }}</a>
-            </li>
-            <li class="padding-y-05">
-              <a class="usa-link" href="#">{{ "County finder tk tk" | t }}</a>
-            </li>
-            <li class="padding-y-05">
-              <a class="usa-link" href="#">{{ "State page tk tk" | t }}</a>
-            </li>
-            <li class="padding-y-05">
-              <a class="usa-link" href="#">{{ "Resource 1 tk tk" | t }}</a>
-            </li>
-            <li class="padding-y-05">
-              <a class="usa-link" href="#">{{ "Resource 2 tk tk" | t }}</a>
-            </li>
-            <li class="padding-y-05">
-              <a class="usa-link" href="#">{{ "Resource 3 tk tk" | t }}</a>
-            </li>
+            {% if briefing and not briefing.error %}
+              <li class="padding-y-05">
+                <a class="usa-link" href="{{ briefing.download }}">{{ "county.briefing.download-one.01" | t }}</a>
+              </li>
+            {% elif not briefing %}
+              <li class="padding-y-05">
+                {{ "county.briefing.no-briefing.01" | t }}
+              </li>
+            {% endif %}
           </ul>
         </div>
         <div class="grid-col-12 tablet:grid-col-6">

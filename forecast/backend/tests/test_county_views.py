@@ -160,14 +160,18 @@ class TestCountyViews(TestCase):
         link = reverse("county_ghwo", kwargs={"county_fips": "44444"})
         self.assertContains(response, link)
 
+    @mock.patch("backend.views.county.get_county_briefings")
     @mock.patch("backend.views.county.get_county_weather_stories")
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_overview_without_timezone(self, mock_get_radar, mock_get_county_data, mock_get_weather_stories):
+    def test_overview_without_timezone(
+        self, mock_get_radar, mock_get_county_data, mock_get_weather_stories, mock_get_briefings
+    ):
         """Test the overview view without timezone."""
         mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
         mock_get_weather_stories.return_value = []
+        mock_get_briefings.return_value = []
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "44444"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -179,35 +183,25 @@ class TestCountyViews(TestCase):
                 "county_label": "Anansi County, GH",
                 "primary_wfo": self.wfo,
                 "public": {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []},
-                "briefings": [
-                    # TODO: test for briefing data
-                    # {
-                    #     "wfo": self.wfo,
-                    #     "report": {},
-                    #     "created": {
-                    #         "human": "Thursday, Oct 28 1971, 12:00 AM UTC",
-                    #         "timestamp": "1971-10-28T00:00:00+00:00",
-                    #     },
-                    #     # There is no updated property because the creation
-                    #     # time is less than 1 second before the updated time, so
-                    #     # we are assuming the time difference is just due to
-                    #     # processing time in the SQL query.
-                    # },
-                ],
+                "briefings": [],
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
                 "wfo_codes": [self.wfo.code],
             },
         )
 
+    @mock.patch("backend.views.county.get_county_briefings")
     @mock.patch("backend.views.county.get_county_weather_stories")
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_overview_with_timezone(self, mock_get_radar, mock_get_county_data, mock_get_weather_stories):
+    def test_overview_with_timezone(
+        self, mock_get_radar, mock_get_county_data, mock_get_weather_stories, mock_get_briefings
+    ):
         """Test the overview view with timezone."""
         mock_get_county_data.return_value = {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []}
         mock_get_radar.return_value = {"radarMetadata": {}}
         mock_get_weather_stories.return_value = []
+        mock_get_briefings.return_value = []
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "55555"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -219,21 +213,7 @@ class TestCountyViews(TestCase):
                 "county_label": "Keelut Census Area, AK",
                 "primary_wfo": self.wfo,
                 "public": {"riskOverview": self.ghwo, "alerts": {"items": []}, "alertDays": []},
-                "briefings": [
-                    # TODO: test for briefing data
-                    # {
-                    #     "wfo": self.wfo,
-                    #     "report": {},
-                    #     "created": {
-                    #         "human": "Wednesday, Oct 27 1971, 3:00 PM AHDT",
-                    #         "timestamp": "1971-10-27T15:00:00-09:00",
-                    #     },
-                    #     "updated": {
-                    #         "human": "Thursday, Oct 28 1982, 5:30 AM AHDT",
-                    #         "timestamp": "1982-10-28T05:30:00-09:00",
-                    #     },
-                    # },
-                ],
+                "briefings": [],
                 "weather_stories": [],
                 "radar": {"radarMetadata": {}},
                 "wfo_codes": [self.wfo.code],
