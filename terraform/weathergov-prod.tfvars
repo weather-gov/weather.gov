@@ -12,3 +12,4 @@ api_interop_instances = 2
 custom_domain_name    = "beta.weather.gov"
 interop_url           = "https://api-weathergov-prod.app.cloud.gov"
 redis_plan_name       = "redis-3node"
+rds_plan_name         = "medium-psql-redundant"
