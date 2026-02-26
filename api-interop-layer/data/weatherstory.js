@@ -1,5 +1,5 @@
-import { logger } from "../util/monitoring/index.js";
 import { fetchAPIJson } from "../util/fetch.js";
+import { logger } from "../util/monitoring/index.js";
 
 const weatherStoriesLogger = logger.child({ subsystem: "weatherstories" });
 
@@ -28,6 +28,13 @@ export default async (wfo) => {
     //     ...
     //   ]
     // }
+
+    // Temporary measure. While we wait for the prod API to have weather
+    // stories, we will interpret 404s to mean there are no weather
+    // stories for the WFO. All other errors remain errors.
+    if (result.status === 404) {
+      return [];
+    }
 
     const stories = result?.stories;
     if (stories) {
