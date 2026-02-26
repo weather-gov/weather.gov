@@ -18,6 +18,7 @@ resource "cloudfoundry_app" "interop" {
   name       = "api-${local.app_name}-${var.env}"
   space_name = var.cf_space_name
   org_name   = local.cf_org_name
+  count      = 1
 
   path             = data.archive_file.api_src.output_path
   source_code_hash = data.archive_file.api_src.output_base64sha256
