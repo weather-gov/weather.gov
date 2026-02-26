@@ -1,5 +1,6 @@
 import { SPATIAL_PROJECTION } from "../util/constants.js";
-import { fetchAPIJson } from "../util/fetch.js";
+import connectionPool from "./connectionPool.js";
+import { requestJSONWithHeaders } from "../util/request.js";
 import { logger } from "../util/monitoring/index.js";
 import openDatabase from "./db.js";
 
@@ -80,20 +81,29 @@ export const getPointData = async (lat, lon) => {
   pointLogger.trace({ latitude, longitude }, "place");
   const point = { latitude, longitude };
 
-  const pointsPromise = fetchAPIJson(`/points/${latitude},${longitude}`).then(
-    (data) => {
-      if (data.error) {
-        return data;
+  const pointsPromise = requestJSONWithHeaders(connectionPool, `/points/${latitude},${longitude}`).then((data) => {
+    if(data.error){
+      if(data.cause && data.cause.statusCode === 404){
+        // If we get a 404 from the API, then the requested point is not within the
+        // NWS's area of resopnsibility.
+        return {
+          error: true,
+          outOfBounds: true,
+          status: 404
+        };
       }
 
-      return {
-        wfo: data.properties.gridId,
-        x: data.properties.gridX,
-        y: data.properties.gridY,
-        geometry: data.geometry,
-      };
-    },
-  );
+      return { error: true };
+    }
+
+    const [ gridData ] = data;
+    return {
+      wfo: gridData.properties?.gridId,
+      x: gridData.properties?.gridX,
+      y: gridData.properties?.gridY,
+      geometry: gridData.geometry,
+    };
+  });
 
   const placePromise = getClosestPlace(latitude, longitude);
 
@@ -117,12 +127,7 @@ export const getPointData = async (lat, lon) => {
     isMarinePromise,
   ]);
 
-  if (grid.status === 404) {
-    // If we get a 404 from the API, then the requested point is not within the
-    // NWS's area of resopnsibility.
-    grid.error = true;
-    grid.outOfBounds = true;
-  } else if (grid.wfo === null) {
+  if (grid.wfo === null) {
     // If we did not get an error but the WFO is empty, then it's within our
     // responsibility but we don't have the data in the API.
     grid.error = true;

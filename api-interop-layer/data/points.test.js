@@ -9,12 +9,31 @@ describe("point method", () => {
   const db = { query: sandbox.stub() };
   openDatabase.resolves(db);
 
-  const fetchAPIJson = sandbox.stub();
+  // Mock undici Pool instance
+  const connectionPool = {
+    request: sandbox.stub()
+  };
+
+  const response = {
+    statusCode: 200,
+    body: {
+      json: sandbox.stub(),
+      dump: sandbox.stub()
+    }
+  };
+
+  const errorResponse = {
+    statusCode: 400,
+    body: {
+      json: sandbox.stub(),
+      dump: sandbox.stub()
+    }
+  };
 
   let points;
   before(async () => {
     await quibble.esm("./db.js", {}, openDatabase);
-    await quibble.esm("../util/fetch.js", { fetchAPIJson }, {});
+    await quibble.esm("./connectionPool.js", {}, connectionPool);
 
     const module = await import("./points.js");
     points = module.getPointData;
@@ -23,23 +42,28 @@ describe("point method", () => {
   beforeEach(() => {
     sandbox.resetBehavior();
     sandbox.resetHistory();
+    connectionPool.request.resolves(response);
   });
 
   after(() => {
+    sandbox.restore();
     quibble.reset();
   });
 
   it("truncates lat/lon to 3 decimal places", async () => {
-    fetchAPIJson.resolves({ error: true });
+    connectionPool.request.resolves(errorResponse);
     db.query.resolves({ rows: [] });
 
     await points(1.1234567, 9.876543);
 
-    expect(fetchAPIJson.calledWith(`/points/1.123,9.877`)).to.be.true;
+    const call = connectionPool.request.getCall(0);
+    const requestPath = call.args[0].path;
+    
+    expect(requestPath).to.equal(`/points/1.123,9.877`);
   });
 
   it("passes along errors from the API, no location", async () => {
-    fetchAPIJson.resolves({ error: true });
+    connectionPool.request.resolves(errorResponse);
     db.query.resolves({ rows: [] });
 
     const actual = await points(1, 2);
@@ -53,7 +77,7 @@ describe("point method", () => {
   });
 
   it("returns an out-of-bounds grid for points not covered by the API", async () => {
-    fetchAPIJson.resolves({ error: true, status: 404 });
+    connectionPool.request.resolves({statusCode: 404, body: { dump: sandbox.stub() }});
     db.query.resolves({ rows: [] });
 
     const actual = await points(1, 2);
@@ -67,9 +91,12 @@ describe("point method", () => {
   });
 
   it("returns a not-supported grid for points not *supported* by the API", async () => {
-    fetchAPIJson.resolves({
-      properties: { gridId: null, gridX: null, gridY: null },
-    });
+    response.body.json.resolves(
+      {
+        properties: { gridId: null, gridX: null, gridY: null },
+      }
+    );
+
     db.query.resolves({ rows: [] });
 
     const actual = await points(1, 2);
@@ -90,7 +117,7 @@ describe("point method", () => {
   });
 
   it("fetches a grid from the API, no location", async () => {
-    fetchAPIJson.resolves({
+    response.body.json.resolves({
       properties: { gridId: "PPU", gridX: 30, gridY: 40, geometry: undefined },
     });
     db.query.resolves({ rows: [] });
@@ -106,7 +133,7 @@ describe("point method", () => {
   });
 
   it("includes a location without a full name", async () => {
-    fetchAPIJson.resolves({ error: true });
+    connectionPool.request.resolves(errorResponse);
 
     // Marine zone query. Make this one a marine point to validate that logic.
     db.query
@@ -156,7 +183,7 @@ describe("point method", () => {
   });
 
   it("includes a location with a full name", async () => {
-    fetchAPIJson.resolves({ error: true });
+    connectionPool.request.resolves(errorResponse);
 
     // Marine zone query
     db.query
