@@ -52,8 +52,14 @@ export const modifyTimestampsForAlert = (alert, timezone) => {
  * NOTE: We modify the day objects in place
  */
 export const alignAlertsToDaily = (alerts, days) => {
-  for (const day of days.filter(({ hours }) => hours.length > 0)) {
+  for (const day of days) {
+    // Every day object gets an alerts object.
     day.alerts = { metadata: { count: 0, highest: "other" }, items: [] };
+    // But there's nothing to do if the day
+    // doesn't have any hours. So... skip it.
+    if (day.hours.length === 0) {
+      continue;
+    }
 
     const start = dayjs(day.hours[0].time);
     const end = dayjs(day.hours[day.hours.length - 1].time);
