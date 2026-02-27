@@ -2,8 +2,143 @@ import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
 import hourly, { sortAndFilterHours } from "./hourly.js";
 import { convertValue, convertProperties } from "../../util/convert.js";
-import { fetchAPIJson } from "../../util/fetch.js";
+//import { fetchAPIJson } from "../../util/fetch.js";
+import connectionPool from "../connectionPool.js";
+import { saveToRedis, getFromRedis, parseTTLFromHeaders } from "../../redis.js";
+import { requestJSONWithHeaders } from "../../util/request.js";
+import { logger } from "../../util/monitoring/index.js";
 import { getMarineDays } from "./marine.js";
+
+// One hour
+export const DEFAULT_CACHE_TTL = 3600;
+
+const forecastLogger = logger.child({subsystem: "point-forecast"});
+
+const fetchHourlyPromise = async (url, hours) => {
+  // NOTE: hourly data is different, in that the
+  // hourly() function does not return anything.
+  // Instead, it operates on the in-memory Map
+  // instance that is passed into this promise
+  // For that reason, we instead cache the
+  // request return value.
+  // Maps are not JSON serializable, and there is
+  // time processing that occurs anyway that we
+  // would _not_ want to cache.
+  const foundInCache = await getFromRedis(url);
+
+  try {
+    let dataToProcess = foundInCache;
+    if(!dataToProcess){
+      const response = await requestJSONWithHeaders(connectionPool, url);
+      if(response.error){
+        throw response;
+      }
+
+      const [ data, headers ] = response;
+
+      // Here we are caching the data response from
+      // the request (unprocessed), as mentioned above
+      if(!data.error){
+        let ttl = parseTTLFromHeaders(headers);
+        if(!ttl){
+          ttl = DEFAULT_CACHE_TTL;
+        }
+        await saveToRedis(url, data, ttl);
+      }
+
+      dataToProcess = data;
+    }
+
+    if(dataToProcess.error){
+      throw dataToProcess;
+    }
+
+    // Process the cached or fetched hourly data
+    // into the hours Map
+    const hourlyData = hourly(dataToProcess, hours);
+
+    // We return the result of the hourly() call anyway,
+    // which will be undefined
+    return hourlyData;
+  } catch(e){
+    forecastLogger.error(
+      { error: e, url },
+      `Error fetching hourly forecast data`
+    );
+    e.error = true;
+    return e;
+  }
+};
+
+
+const fetchGridpointPromise = async (url, place, hours) => {
+  const foundInCache = await getFromRedis(url);
+  if(foundInCache){
+    return foundInCache;
+  }
+
+  try {
+    const response = await requestJSONWithHeaders(connectionPool, url);
+
+    if(response.error){
+      throw response;
+    }
+
+    const [ data, headers ] = response;
+    const gridpointData = gridpoint(data, hours, place);
+
+    // If processing the data did not return an error,
+    // let's cache the result
+    if(!gridpointData.error){
+      let ttl = parseTTLFromHeaders(headers);
+      if(!ttl){
+        ttl = DEFAULT_CACHE_TTL;
+      }
+      await saveToRedis(url, gridpointData, ttl);
+    }
+    return gridpointData;
+  } catch(e) {
+    forecastLogger.error(
+      {error: e, url },
+      `Error fetching gridpoint data`
+    );
+    e.error = true;
+    return e;
+  }
+};
+
+const fetchDailyPromise = async (url, place) => {
+  const foundInCache = await getFromRedis(url);
+  if(foundInCache){
+    return foundInCache;
+  }
+
+  try {
+    const response = await requestJSONWithHeaders(connectionPool, url);
+
+    if(response.error){
+      throw response;
+    }
+    
+    const [ data, headers ] = response;
+    const dailyData = daily(data, place);
+
+    // If processing the data did not return an error,
+    // let's cache the result
+    if(!dailyData.error){
+      let ttl = parseTTLFromHeaders(headers);
+      if(!ttl){
+        ttl = DEFAULT_CACHE_TTL;
+      }
+      await saveToRedis(url, dailyData, ttl);
+    }
+    return dailyData;
+  } catch(e) {
+    forecastLogger.error({error: e, url }, `Error fetching daily forecast data`);
+    e.error = true;
+    return e;
+  }
+};
 
 export const assignHoursToDays = (dayData, hours, dayToStartAndEndMap) => {
   let dayIndex = 0;
@@ -120,27 +255,23 @@ export default async ({ grid, place, isMarine }) => {
   //
   // We pass the place object along to all of them so they can access the
   // timezone and coerce the times provided to us into forecast-local times.
-  const gridpointPromise = fetchAPIJson(
-    `/gridpoints/${grid.wfo}/${grid.x},${grid.y}`,
-  ).then((data) => gridpoint(data, hours, place));
+  const gridpointUrl = `/gridpoints/${grid.wfo}/${grid.x},${grid.y}`;
+  const gridpointPromise = fetchGridpointPromise(gridpointUrl, place, hours);
 
   // There is not a distinct daily forecast for marine data, so if we're in a
   // marine location, just resolve an empty object. We'll populate it manually.
+  const dailyUrl = `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`;
   const dailyPromise = isMarine
-    ? Promise.resolve({})
-    : fetchAPIJson(`/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast`).then(
-        (data) => daily(data, place),
-      );
+        ? Promise.resolve({})
+        : fetchDailyPromise(dailyUrl, place);
+  
 
   // Similarly, there is no distinct hourly forecast data. We only have the
   // gridpoint forecast, which is already hourly.
+  const hourlyUrl = `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`;
   const hourlyPromise = isMarine
-    ? Promise.resolve(false)
-    : fetchAPIJson(
-        `/gridpoints/${grid.wfo}/${grid.x},${grid.y}/forecast/hourly`,
-      ).then((data) => {
-        hourly(data, hours, place);
-      });
+        ? Promise.resolve(false)
+        : fetchHourlyPromise(hourlyUrl, hours);
 
   // We don't capture the results of the hourly processing function because it
   // doesn't return anything. All of its work gets put into the hours map.

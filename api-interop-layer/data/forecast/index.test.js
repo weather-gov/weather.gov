@@ -1,24 +1,50 @@
 import sinon from "sinon";
 import { expect } from "chai";
-import undici from "undici";
 import dayjs from "../../util/day.js";
-import forecast, { assignHoursToDays } from "./index.js";
+import quibble from "quibble";
+import { assignHoursToDays } from "./index.js";
+import { parseTTLFromHeaders } from "../../redis.js";
 
 const place = {
   timezone: "America/Los_Angeles",
 };
 
-const url = (path) =>
-  new URL(path, process.env.API_URL ?? "https://api.weather.gov").toString();
-
 describe("Forecast index", () => {
   const sandbox = sinon.createSandbox();
 
-  before(async () => {});
+  const saveToRedis = sandbox.stub();
+  const getFromRedis = sandbox.stub();
+
+  const connectionPool = {
+    request: sandbox.stub()
+  };
+  
+  const basicResponse = {
+    statusCode: 200,
+    body: {
+      json: sandbox.stub(),
+      dump: sandbox.stub()
+    }
+  };
+
+  let forecast;
+  before(async () => {
+    await quibble.esm("../connectionPool.js", {}, connectionPool);
+    await quibble.esm("../../redis.js", {saveToRedis, getFromRedis, parseTTLFromHeaders}, {});
+
+    const module = await import("./index.js");
+    forecast = module.default;
+  });
 
   beforeEach(() => {
     sandbox.resetBehavior();
     sandbox.resetHistory();
+    connectionPool.request.resolves(basicResponse);
+  });
+
+  after(async() => {
+    sandbox.restore();
+    await quibble.reset();
   });
 
   describe("for a land point", () => {
@@ -202,19 +228,20 @@ describe("Forecast index", () => {
     });
 
     it("calls the expected endpoints", async () => {
+      basicResponse.body.json.resolves([{}, {}]);
       await forecast({
         grid: { wfo: "TST", x: 49488, y: 34 },
         place,
         isMarine: false,
       });
 
-      expect(undici.request.calledWith(url`/gridpoints/TST/49488,34`)).to.be
+      expect(connectionPool.request.calledWith(sinon.match({path: `/gridpoints/TST/49488,34`}))).to.be
         .true;
-      expect(undici.request.calledWith(url`/gridpoints/TST/49488,34/forecast`))
+      expect(connectionPool.request.calledWith(sinon.match({path: `/gridpoints/TST/49488,34/forecast`})))
         .to.be.true;
       expect(
-        undici.request.calledWith(
-          url`/gridpoints/TST/49488,34/forecast/hourly`,
+        connectionPool.request.calledWith(
+          sinon.match({path: `/gridpoints/TST/49488,34/forecast/hourly`}),
         ),
       ).to.be.true;
     });
@@ -222,21 +249,22 @@ describe("Forecast index", () => {
 
   describe("for a marine point", () => {
     it("calls the expected API endpoints", async () => {
+      basicResponse.body.json.resolves([{}, {}]);
       await forecast({
         grid: { wfo: "TST", x: 49488, y: 34 },
         place,
         isMarine: true,
       });
 
-      expect(undici.request.calledWith(url`/gridpoints/TST/49488,34`)).to.be
+      expect(connectionPool.request.calledWith(sinon.match({path: `/gridpoints/TST/49488,34`}))).to.be
         .true;
 
       // These two should ***NOT*** be called for a marine point.
-      expect(undici.request.calledWith(url`/gridpoints/TST/49488,34/forecast`))
+      expect(connectionPool.request.calledWith(sinon.match({path: `/gridpoints/TST/49488,34/forecast`})))
         .to.be.false;
       expect(
-        undici.request.calledWith(
-          url`/gridpoints/TST/49488,34/forecast/hourly`,
+        connectionPool.request.calledWith(
+          sinon.match({path: `/gridpoints/TST/49488,34/forecast/hourly`}),
         ),
       ).to.be.false;
     });
@@ -253,7 +281,7 @@ describe("Forecast index", () => {
 
       beforeEach(() => {
         clock.reset();
-        undici.request.resolves(response);
+        connectionPool.request.resolves(response);
 
         gridpoint = {
           geometry: "ball",

@@ -97,6 +97,7 @@ export const getPointData = async (lat, lon) => {
     }
 
     const [ gridData ] = data;
+
     return {
       wfo: gridData.properties?.gridId,
       x: gridData.properties?.gridX,

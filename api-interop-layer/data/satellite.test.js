@@ -81,7 +81,7 @@ describe("satellite metadata module", () => {
           observation_time: "1891-01-24T12:00:00Z",
         },
       });
-      debugger;
+
       const actual = await getSatelliteData({
         grid: { wfo: "wfo2" },
         place: { timezone: "America/Los_Angeles" },

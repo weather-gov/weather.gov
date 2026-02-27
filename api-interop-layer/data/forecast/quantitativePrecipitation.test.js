@@ -1,18 +1,41 @@
 import { expect } from "chai";
 import sinon from "sinon";
-import undici from "undici";
-import { BASE_URL } from "../../util/fetch.js";
-import forecast from "./index.js";
+import quibble from "quibble";
 import qpf from "./quantitativePrecipitation.js";
 
 describe("quantitative precipitation forecase (QPF)", () => {
   let clock;
-  before(() => {
+  let forecast;
+  const sandbox = sinon.createSandbox();
+
+  const connectionPool = {
+    request: sandbox.stub()
+  };
+
+  const getFromRedis = sandbox.stub();
+  const saveToRedis = sandbox.stub();
+  const parseTTLFromHeaders = sandbox.stub();
+  
+  before(async() => {
+    await quibble.esm("../connectionPool.js", {}, connectionPool);
+    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis, parseTTLFromHeaders }, {});
+    
+    const module = await import("./index.js");
+    forecast = module.default;
+
     clock = sinon.useFakeTimers({ now: 0 });
   });
 
-  after(() => {
+  beforeEach(() => {
+    sandbox.resetBehavior();
+    sandbox.resetHistory();
+  });
+
+  after(async() => {
+    sandbox.restore();
+    clock.runAll();
     clock.restore();
+    await quibble.reset();
   });
 
   it("parses the raw data", () => {
@@ -97,12 +120,12 @@ describe("quantitative precipitation forecase (QPF)", () => {
   });
 
   it("puts QPF into the right days", async () => {
-    undici.request
-      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y`, sinon.match.any)
+    connectionPool.request
+      .withArgs(sinon.match({path:`/gridpoints/BOB/X,Y`}))
       .resolves({
         statusCode: 200,
         body: {
-          json: sinon.stub().resolves({
+          json: sandbox.stub().resolves({
             properties: {
               quantitativePrecipitation: {
                 uom: "wmoUnit:mm",
@@ -145,15 +168,16 @@ describe("quantitative precipitation forecase (QPF)", () => {
               },
             },
           }),
+          dump: sandbox.stub()
         },
       });
 
-    undici.request
-      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast`, sinon.match.any)
+    connectionPool.request
+      .withArgs(sinon.match({path: `/gridpoints/BOB/X,Y/forecast`}))
       .resolves({
         statusCode: 200,
         body: {
-          json: sinon.stub().resolves({
+          json: sandbox.stub().resolves({
             properties: {
               periods: [
                 {
@@ -177,19 +201,21 @@ describe("quantitative precipitation forecase (QPF)", () => {
               ],
             },
           }),
+          dump: sandbox.stub()
         },
       });
 
-    undici.request
-      .withArgs(`${BASE_URL}/gridpoints/BOB/X,Y/forecast/hourly`)
+    connectionPool.request
+      .withArgs(sinon.match({path: `/gridpoints/BOB/X,Y/forecast/hourly`}))
       .resolves({
         statusCode: 200,
         body: {
-          json: sinon.stub().resolves({
+          json: sandbox.stub().resolves({
             properties: {
               periods: [],
             },
           }),
+          dump: sandbox.stub()
         },
       });
 
