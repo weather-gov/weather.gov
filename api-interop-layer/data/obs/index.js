@@ -1,30 +1,122 @@
 import { convertProperties } from "../../util/convert.js";
-import { fetchAPIJson } from "../../util/fetch.js";
+import { requestJSONWithHeaders } from "../../util/request.js";
+import { getFromRedis, saveToRedis, parseTTLFromHeaders } from "../../redis.js";
+import connectionPool from "../connectionPool.js";
 import { parseAPIIcon } from "../../util/icon.js";
 import { logger } from "../../util/monitoring/index.js";
 import isObservationValid from "./valid.js";
 
 const observationsLogger = logger.child({ subsystem: "observations" });
 
+// 1 day / 24 hours
+export const DEFAULT_STATIONS_CACHE_TTL = 86400;
+// 2 min
+export const DEFAULT_OBSERVATIONS_CACHE_TTL = 120;
+
+const fetchStations = async (wfo, x, y) => {
+  const stationsUrl = `/gridpoints/${wfo}/${x},${y}/stations?limit=3`;
+
+  // Attempt to fetch any existing data from the cache
+  const foundInCache = await getFromRedis(stationsUrl);
+  if(foundInCache){
+    return foundInCache;
+  }
+
+  // Otherwise, we fetch from the API
+  try {
+    const response = await requestJSONWithHeaders(
+      connectionPool,
+      stationsUrl
+    );
+
+    if(response.error){
+      throw response;
+    }
+
+    const [ data, headers ] = response;
+
+    if (!Array.isArray(data.features) || data.features.length === 0) {
+       return { error: true };
+    }
+
+    const result = data.features.slice(0, 3);
+
+    // Attempt to cache the resulting data
+    await saveToRedis(
+      stationsUrl,
+      result,
+      DEFAULT_STATIONS_CACHE_TTL
+    );
+    return result;
+  } catch(e) {
+    return { error: true };
+  }
+};
+
+const fetchObservation = async (station) => {
+  const url = `/stations/${station.properties.stationIdentifier}/observations?limit=1`;
+
+  const foundInCache = await getFromRedis(url);
+  if(foundInCache){
+    return foundInCache;
+  }
+
+  try {
+    const response = await requestJSONWithHeaders(
+      connectionPool,
+      url
+    );
+    
+    if(response.error){
+      throw response;
+    }
+
+    const [ data, headers ] = response;
+
+    if(data.error){
+      return data;
+    }
+
+    if (!Array.isArray(data.features) || data.features.length === 0) {
+      observationsLogger.warn(
+        { station: station.properties.stationIdentifier },
+        "station has no data",
+      );
+      return { error: true, message: "No valid observations found." };
+    }
+
+    // Attempt to cache the result according to the
+    // TTL given by the header
+    let ttl = parseTTLFromHeaders(headers);
+    if(!ttl){
+      ttl = DEFAULT_OBSERVATIONS_CACHE_TTL;
+    }
+    await saveToRedis(
+      url,
+      data.features[0].properties,
+      ttl
+    );
+    
+    return data.features[0].properties;
+    
+  } catch(e) {
+    return { error: true };
+  }
+};
+
 export default async (
   { grid: { wfo, x, y }, point: { latitude, longitude } },
   db,
 ) => {
-  const stations = await fetchAPIJson(
-    `/gridpoints/${wfo}/${x},${y}/stations?limit=3`,
-  ).then((out) => {
-    if (out.error) {
-      return out;
-    }
-    if (!Array.isArray(out.features) || out.features.length === 0) {
-      return { error: true };
-    }
-
-    return out.features.slice(0, 3);
-  });
+  const stations = await fetchStations(wfo, x, y);
 
   if (stations.error) {
-    observationsLogger.warn("Failed to get a list of stations");
+    observationsLogger.warn({
+      error: true,
+      wfo,
+      x,
+      y
+    },"Failed to get a list of stations");
     return {
       error: true,
       message: "Failed to find an approved observation station",
@@ -33,49 +125,9 @@ export default async (
 
   let station = stations.shift();
 
-  const others = stations.map(({ properties: { stationIdentifier } }) =>
-    fetchAPIJson(`/stations/${stationIdentifier}/observations?limit=1`).then(
-      (out) => {
-        if (out.error) {
-          observationsLogger.warn(
-            { station: stationIdentifier },
-            "station error",
-          );
-          return out;
-        }
-        if (!Array.isArray(out.features) || out.features.length === 0) {
-          observationsLogger.warn(
-            { station: stationIdentifier },
-            "station has no data",
-          );
-          return { error: true, message: "No valid observations found." };
-        }
+  const others = stations.map((station) => fetchObservation(station));
 
-        return out.features[0].properties;
-      },
-    ),
-  );
-
-  let observation = await fetchAPIJson(
-    `/stations/${station.properties.stationIdentifier}/observations?limit=1`,
-  ).then((out) => {
-    if (out.error) {
-      observationsLogger.warn(
-        { station: station.properties.stationIdentifier },
-        "station error",
-      );
-      return out;
-    }
-    if (!Array.isArray(out.features) || out.features.length === 0) {
-      observationsLogger.warn(
-        { station: station.properties.stationIdentifier },
-        "station has no data",
-      );
-      return { error: true, message: "No valid observations found." };
-    }
-
-    return out.features[0].properties;
-  });
+  let observation = await fetchObservation(station);
 
   if (!isObservationValid(observation)) {
     observationsLogger.warn(
@@ -116,8 +168,8 @@ export default async (
     );
 
     const data = Object.keys(observation)
-      .filter((key) => observation[key]?.unitCode)
-      .reduce((o, key) => ({ ...o, [key]: observation[key] }), {});
+          .filter((key) => observation[key]?.unitCode)
+          .reduce((o, key) => ({ ...o, [key]: observation[key] }), {});
 
     // Add a "feels like" property, which is coerced from the heat index and
     // wind chill, if provided.

@@ -1,23 +1,36 @@
 import { expect } from "chai";
 import sinon, { createSandbox } from "sinon";
-import undici from "undici";
+import quibble from "quibble";
+//import undici from "undici";
 import { BASE_URL } from "../../util/fetch.js";
+import { parseTTLFromHeaders } from "../../redis.js";
 
 describe("observations module", () => {
   const sandbox = createSandbox();
+
+  // Mock the shared undici Pool instance
+  const connectionPool = {
+    request: sandbox.stub()
+  };
+
+  const saveToRedis = sandbox.stub();
+  const getFromRedis = sandbox.stub();
+  
   const stations = {
     statusCode: 200,
-    body: { json: sandbox.stub() },
+    body: { json: sandbox.stub(), dump: sandbox.stub() },
   };
 
   const response = {
     statusCode: 200,
-    body: { json: sandbox.stub() },
+    body: { json: sandbox.stub(), dump: sandbox.stub() },
   };
 
   let getObservations;
 
   before(async () => {
+    await quibble.esm("../connectionPool.js", {}, connectionPool);
+    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis, parseTTLFromHeaders }, {});
     // Import the module now. Its dependency on the database will cause a hang
     // if we load it before the mocking is all setup. The reason is that the
     // database utility itself blocks until it can establish a connection.
@@ -43,10 +56,9 @@ describe("observations module", () => {
       ],
     });
 
-    undici.request
+    connectionPool.request
       .withArgs(
-        `${BASE_URL}/gridpoints/TEST/1,1/stations?limit=3`,
-        sinon.match.any,
+        sinon.match({path: `/gridpoints/TEST/1,1/stations?limit=3`})
       )
       .resolves(stations);
 
@@ -55,22 +67,19 @@ describe("observations module", () => {
     // don't make them, they'll reject. Most of the tests will still pass
     // because we're ultimately not relying on 2nd and 3rd stations, but they'll
     // possibly be slower as a result.
-    undici.request
+    connectionPool.request
       .withArgs(
-        `${BASE_URL}/stations/station1/observations?limit=1`,
-        sinon.match.any,
+        sinon.match({path: `/stations/station1/observations?limit=1`})
       )
       .resolves(response);
-    undici.request
+    connectionPool.request
       .withArgs(
-        `${BASE_URL}/stations/station2/observations?limit=1`,
-        sinon.match.any,
+        sinon.match({path: `/stations/station2/observations?limit=1`})
       )
       .resolves(response);
-    undici.request
+    connectionPool.request
       .withArgs(
-        `${BASE_URL}/stations/station3/observations?limit=1`,
-        sinon.match.any,
+        sinon.match({path: `/stations/station3/observations?limit=1`})
       )
       .resolves(response);
 
@@ -78,6 +87,11 @@ describe("observations module", () => {
     // database as the second param to the
     // getObservations call
     global.test.database.query.resolves({ rows: [{ distance: 100 }] });
+  });
+
+  after(async() => {
+    sandbox.restore();
+    await quibble.reset();
   });
 
   describe("properly handles feels-like temperature", () => {
@@ -94,6 +108,7 @@ describe("observations module", () => {
 
       const expected = { degC: 100, degF: 212 };
 
+      debugger;
       const obs = await getObservations(
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
@@ -236,17 +251,15 @@ describe("observations module", () => {
       };
 
       it("tries the second observation if the first is invalid", async () => {
-        undici.request
+        connectionPool.request
           .withArgs(
-            `${BASE_URL}/stations/station1/observations?limit=1`,
-            sinon.match.any,
+            sinon.match({path: `/stations/station1/observations?limit=1`})
           )
           .resolves(invalid);
 
-        undici.request
+        connectionPool.request
           .withArgs(
-            `${BASE_URL}/stations/station2/observations?limit=1`,
-            sinon.match.any,
+            sinon.match({path: `/stations/station2/observations?limit=1`})
           )
           .resolves({
             statusCode: 200,
@@ -278,24 +291,21 @@ describe("observations module", () => {
       });
 
       it("tries the third observation if the second is invalid", async () => {
-        undici.request
+        connectionPool.request
           .withArgs(
-            `${BASE_URL}/stations/station1/observations?limit=1`,
-            sinon.match.any,
+            sinon.match({path: `/stations/station1/observations?limit=1`})
           )
           .resolves(invalid);
 
-        undici.request
+        connectionPool.request
           .withArgs(
-            `${BASE_URL}/stations/station2/observations?limit=1`,
-            sinon.match.any,
+            sinon.match({path: `/stations/station2/observations?limit=1`})
           )
           .resolves(invalid);
 
-        undici.request
+        connectionPool.request
           .withArgs(
-            `${BASE_URL}/stations/station3/observations?limit=1`,
-            sinon.match.any,
+            sinon.match({path: `/stations/station3/observations?limit=1`})
           )
           .resolves({
             statusCode: 200,
@@ -328,24 +338,21 @@ describe("observations module", () => {
 
       describe("returns an error if all observations are invalid", () => {
         it("all stations return invalid observations", async () => {
-          undici.request
+          connectionPool.request
             .withArgs(
-              `${BASE_URL}/stations/station1/observations?limit=1`,
-              sinon.match.any,
+              sinon.match({path: `/stations/station1/observations?limit=1`})
             )
             .resolves(invalid);
 
-          undici.request
+          connectionPool.request
             .withArgs(
-              `${BASE_URL}/stations/station2/observations?limit=1`,
-              sinon.match.any,
+              sinon.match({path: `/stations/station2/observations?limit=1`})
             )
             .resolves(invalid);
 
-          undici.request
+          connectionPool.request
             .withArgs(
-              `${BASE_URL}/stations/station3/observations?limit=1`,
-              sinon.match.any,
+              sinon.match({path: `/stations/station3/observations?limit=1`})
             )
             .resolves(invalid);
 
@@ -370,24 +377,21 @@ describe("observations module", () => {
           const originalFeatures = [...features];
           features.length = 0;
 
-          undici.request
+          connectionPool.request
             .withArgs(
-              `${BASE_URL}/stations/station1/observations?limit=1`,
-              sinon.match.any,
+              sinon.match({path: `/stations/station1/observations?limit=1`})
             )
             .resolves(invalid);
 
-          undici.request
+          connectionPool.request
             .withArgs(
-              `${BASE_URL}/stations/station2/observations?limit=1`,
-              sinon.match.any,
+              sinon.match({path: `/stations/station2/observations?limit=1`})
             )
             .resolves(invalid);
 
-          undici.request
+          connectionPool.request
             .withArgs(
-              `${BASE_URL}/stations/station3/observations?limit=1`,
-              sinon.match.any,
+              sinon.match({path: `/stations/station3/observations?limit=1`})
             )
             .resolves(invalid);
 
@@ -413,22 +417,19 @@ describe("observations module", () => {
     });
 
     it("returns an error if none of the stations return", async () => {
-      undici.request
+      connectionPool.request
         .withArgs(
-          `${BASE_URL}/stations/station1/observations?limit=1`,
-          sinon.match.any,
+          sinon.match({path: `/stations/station1/observations?limit=1`})
         )
         .resolves({ statusCode: 400 });
-      undici.request
+      connectionPool.request
         .withArgs(
-          `${BASE_URL}/stations/station2/observations?limit=1`,
-          sinon.match.any,
+          sinon.match({path: `/stations/station2/observations?limit=1`})
         )
         .resolves({ statusCode: 400 });
-      undici.request
+      connectionPool.request
         .withArgs(
-          `${BASE_URL}/stations/station3/observations?limit=1`,
-          sinon.match.any,
+          sinon.match({path: `/stations/station3/observations?limit=1`})
         )
         .resolves({ statusCode: 400 });
 
@@ -450,10 +451,9 @@ describe("observations module", () => {
     });
 
     it("returns an error if getting the list of stations fails", async () => {
-      undici.request
+      connectionPool.request
         .withArgs(
-          `${BASE_URL}/gridpoints/TEST/1,1/stations?limit=3`,
-          sinon.match.any,
+          sinon.match({path: `/gridpoints/TEST/1,1/stations?limit=3`})
         )
         .rejects();
 

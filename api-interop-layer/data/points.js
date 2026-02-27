@@ -95,7 +95,7 @@ export const getPointData = async (lat, lon) => {
 
       return { error: true };
     }
-
+    
     const [ gridData ] = data;
 
     return {
