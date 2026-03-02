@@ -56,7 +56,6 @@ APPEND_SLASH = True
 
 OUR_APPS = [
     "backend",
-    "wx_stories_api",
     "spatial",
     "noaa_saml",
 ]
