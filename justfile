@@ -182,10 +182,15 @@ test-a11y:
     playwright \
     npx --no-install playwright test --output /reports/a11y a11y
 
+# Run collectstatic which is required for Django tests
+[group("testing")]
+test-collectstatic:
+  docker compose run --rm web python manage.py collectstatic
+
 # Run Django tests
 [group("testing")]
 [script]
-test-django arg="":
+test-django arg="": test-collectstatic
   if [ "{{arg}}" == "debug" ]; then
     docker compose \
       run --rm \
