@@ -1,12 +1,40 @@
 import Listbox from "./listbox.js";
+import { getSavedLocations, addSavedLocation } from "../saved-locations.js";
+import Timer from "../timer.js";
 
-const makeListItemFromResultItem = (data, suggestion, idx) => {
+const debouncer = new Timer();
+
+/**
+ * @typedef {Object} Suggestion from geocode.arcgis.com
+ * @property {boolean} isCollection
+ * @property {string} magicKey
+ * @property {string} text the human-readable location name
+ */
+
+/**
+ * @typedef {Object} SavedLocation from local storage
+ * @property {string} url the point forecast url for the location
+ * @property {string} text the human-readable location name
+ */
+
+/**
+ * Helper function. Creates an `li` element for a given choice.
+ * 
+ * @param {number} setSize the number of results in the list
+ * @param {string|undefined} describedby the id of the element which describes the list (optional)
+ * @param {Suggestion|SavedLocation} suggestion the data for this item
+ * @param {number} idx the item's position in the list
+ * */
+const makeListItemFromResultItem = (setSize, describedby, suggestion, idx) => {
   const item = document.createElement("li");
   item.innerText = suggestion.text;
   item.setAttribute("role", "option");
-  item.setAttribute("aria-setsize", data.suggestions.length);
+  item.setAttribute("aria-setsize", setSize);
   item.setAttribute("posinset", idx + 1);
   item.setAttribute("aria-selected", false);
+  if (describedby) {
+    item.setAttribute("aria-describedby", describedby);
+  }
   if(suggestion.magicKey){
     item.setAttribute("data-magic-key", suggestion.magicKey);
   } else if(suggestion.url){
@@ -17,13 +45,31 @@ const makeListItemFromResultItem = (data, suggestion, idx) => {
   return item;
 };
 
+/**
+ * Given a `ul` for location search results, create all the child `li`s.
+ * 
+ * @param {HTMLElement} resultListElement the container for the result list
+ * @param {HTMLElement|undefined} ariaDescEl the element which describes the list (optional)
+ * @param {Array<Suggestion|SavedLocation>} suggestions
+ */
+const makeListFromResult = (resultListElement, ariaDescEl, suggestions) => {
+  resultListElement.innerHTML = "";
+  const setSize = suggestions.length;
+  const describedby = ariaDescEl.id;
+  const newItems = suggestions.map((suggestion, idx) => {
+    return makeListItemFromResultItem(setSize, describedby, suggestion, idx);
+  });
+  resultListElement.append(...newItems);
+}
 
 export default class LocationListbox extends Listbox {
   constructor(){
     super();
-    
+
+    // Private property defaults
+    this.inputDelay = 250;
+
     // Bound component methods
-    this.saveSearchResult = this.saveSearchResult.bind(this);
     this.updateSavedSearches = this.updateSavedSearches.bind(this);
     this.getSearchResults = this.getSearchResults.bind(this);
     this.handlePopupNav = this.handlePopupNav.bind(this);
@@ -37,11 +83,12 @@ export default class LocationListbox extends Listbox {
     // If there is a place set via attribute, we add
     // it to the saved search results
     if(this.dataset.place){
-      this.saveSearchResult({
+      addSavedLocation({
         text: this.dataset.place,
         url: window.location.pathname
       });
     }
+    this.updateSavedSearches();
   }
 
   /**
@@ -62,6 +109,27 @@ export default class LocationListbox extends Listbox {
       return selectItemPromise;
     }
 
+    // Otherwise, if the option's data-url attribute exists, use that.
+    if(element.getAttribute("data-url")){
+      return new Promise((resolve) => {
+        if (this.getAttribute("auto-submit") === "true") {
+          addSavedLocation({
+            text: element.innerText,
+            url: element.getAttribute("data-url")
+          });
+          const form = this.closest("form[data-location-search]");
+          form.setAttribute("action", element.getAttribute("data-url"));
+          form.submit();
+          // Show the loader animation, if available
+          window.dispatchEvent(
+            new CustomEvent("wx-show-navigation-loader"),
+          );
+        }
+
+        resolve(super.selectItem(element));
+      });
+    }
+
     // Otherwise, attempt to get cached/fetched
     // geographic data and add that to the option element
     // dataset/attributes.
@@ -72,23 +140,26 @@ export default class LocationListbox extends Listbox {
           if(geoData){
             element.setAttribute("data-lat", geoData.lat);
             element.setAttribute("data-lon", geoData.lon);
+            if (this.getAttribute("auto-submit") === "true") {
+              const formUrl = `/point/${geoData.lat}/${geoData.lon}`;
+              addSavedLocation({
+                text: element.innerText,
+                url: formUrl
+              });
+              const form = this.closest("form[data-location-search]");
+              form.setAttribute("action", formUrl);
+              form.submit();
+              // Show the loader animation, if available
+              window.dispatchEvent(
+                new CustomEvent("wx-show-navigation-loader"),
+              );
+            }
           }
           super.selectItem(element);
         });
     }
     
     return selectItemPromise;
-  }
-
-  /**
-   * Override the handleItemsChanged slotchange event
-   * handler, so that we can populate search results
-   * if the consumer has added a saved searches slotted
-   * group.
-   */
-  handleItemsChanged(event){
-    this.updateSavedSearches();
-    super.handleItemsChanged(event);
   }
 
   /**
@@ -104,64 +175,38 @@ export default class LocationListbox extends Listbox {
     }
   }
 
-  updateSavedSearches(){
-    const savedSearchesGroup = this.querySelector(`ul[role="group"].saved-searches`);
+  /**
+   * Retrieve saved locations from local storage and
+   * insert them into the popup, filtering first by
+   * `filterTerm` if one is given.
+   */
+  updateSavedSearches(filterTerm){
+    const savedSearchesGroup = this.querySelector('[role="group"].saved-searches');
+    const savedSearchesLabel = this.querySelector('[role="heading"].saved-searches');
     if(savedSearchesGroup){
-      let saved = [];
-      try {
-        saved = JSON.parse(
-          localStorage.getItem("wxgov_recent_locations") ?? "[]"
-        );
-      } catch(e) {
-        // Swallow and work with the list
-      }
+      let saved = getSavedLocations();
 
       // Clear any existing search items in the element.
       // We will regenerate them.
       savedSearchesGroup.innerHTML = "";
 
+      if (filterTerm) {
+        const match = filterTerm.toLowerCase();
+        saved = saved.filter((option) => option.text.toLowerCase().includes(match));
+      }
+
       // If there are no saved searches, we should hide
       // the list and the label together
       if(!saved.length){
-        // Try to find the label for saved elements
-        if(savedSearchesGroup.previousElementSibling){
-          savedSearchesGroup.previousElementSibling.classList.add("hidden");
-        }
+        savedSearchesLabel?.classList?.add?.("hidden");
         savedSearchesGroup.classList.add("hidden");
       } else {
-        if(savedSearchesGroup.previousElementSibling){
-          savedSearchesGroup.previousElementSibling.classList.remove("hidden");
-        }
+        savedSearchesLabel?.classList?.remove?.("hidden");
         savedSearchesGroup.classList.remove("hidden");
+        makeListFromResult(savedSearchesGroup, savedSearchesLabel, saved);
       }
-
-      saved.forEach(savedItem => {
-        const element = document.createElement("li");
-        element.setAttribute("role", "option");
-        element.setAttribute("data-url", savedItem.url);
-        element.textContent = savedItem.text;
-        savedSearchesGroup.append(element);
-      });
     }
   };
-
-  saveSearchResult(obj){
-    // First we need to see if there are any existing
-    // items already saved in the saved searches array
-    const existing = localStorage.getItem("wxgov_recent_locations");
-    let items = [];
-    if(existing){
-      items = JSON.parse(existing);
-    }
-
-    // Now push the new items onto either an empty list
-    // or the existing list, then serialize and save
-    items.push(obj);
-    localStorage.setItem(
-      "wxgov_recent_locations",
-      JSON.stringify(items)
-    );
-  }
 
   async getSearchResults(text){
     const response = await this.searchLocation(text);
@@ -172,16 +217,33 @@ export default class LocationListbox extends Listbox {
     return { suggestions: [] };
   }
 
+  /** Announce updated search results in an Aria live region. */
+  announceResults() {
+    const numResults = this.querySelectorAll("li").length;
+    const translation = ngettext(
+      "js.location-combo-box.aria.search-updated.01",
+      "js.location-combo-box.aria.search-updated.01-plural",
+      numResults,
+    );
+    const transWithCount = interpolate(translation, [numResults]);
+    window.dispatchEvent(
+      new CustomEvent("wx-announce", { detail: { text: transWithCount, delay: 0 } }),
+    );
+  }
+
   async filterText(text){
-    const data = await this.getSearchResults(text);
-    const resultListElement = this.querySelector(`ul[id="${this.id}--results"]`);
-    resultListElement.remove();
-    resultListElement.innerHTML = "";
-    const newItems = data.suggestions.map((suggestion, idx) => {
-      return makeListItemFromResultItem(data, suggestion, idx);      
-    });
-    resultListElement.append(...newItems);
-    this.append(resultListElement);
+    debouncer.start(async () => {
+      const data = await this.getSearchResults(text);
+      const resultListElement = this.querySelector('[role="group"].data-results');
+      const headerElement = this.querySelector('[role="heading"].data-results');
+      if (resultListElement) {
+        resultListElement.remove();
+        makeListFromResult(resultListElement, headerElement, data.suggestions);
+        this.append(resultListElement);
+      }
+      this.updateSavedSearches(text);
+      this.announceResults();
+    }, this.inputDelay);
   }
 
   /**

@@ -293,6 +293,12 @@ msgstr "Weather information sections"
 msgid "forecast.link.area-forecast-discussion.01"
 msgstr "Area Forecast Discussion"
 
+msgid "frontpage.aria.clear-input-box.01"
+msgstr "Clear the input box"
+
+msgid "frontpage.aria.toggle-dropdown.01"
+msgstr "Toggle the dropdown list"
+
 msgid "frontpage.heading.trapezoid.alt.01"
 msgstr "A lightning bolt strikes the ground as dark blue clouds sit above it. In the background is a pink-tinted horizon."
 
@@ -349,6 +355,12 @@ msgstr "In what ways have you been using this website?"
 
 msgid "frontpage.list.touchpoints-4-item.01"
 msgstr "What can we do to serve you better?"
+
+msgid "frontpage.group.saved-searches.01"
+msgstr "recent locations"
+
+msgid "frontpage.group.search-results.01"
+msgstr "search results"
 
 msgid "frontpage.text.in-mind-1-graf.01"
 msgstr "We are working towards a new weather.gov that quickly provides everyone with the critical information they need to protect themselves and their communities."

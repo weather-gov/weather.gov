@@ -160,7 +160,13 @@ export default class Listbox extends HTMLElement {
       // Some listboxes might be inside an overflowed
       // or scrolling container. Be sure to scroll the
       // focused item into view
-      element.scrollIntoView({block: "end", inline: "nearest"});
+      if (element.offsetTop < this.scrollTop) {
+        // user has scrolled past the item, so go back up
+        this.scrollTop = element.offsetTop;
+      } else if (element.offsetTop + element.offsetHeight > this.scrollTop + this.offsetHeight) {
+        // user is above the item, so go down
+        this.scrollTop = element.offsetTop - this.offsetHeight + element.offsetHeight;
+      }
 
       // If this component as the attribute
       // `selection-follows-focus` set to "true",

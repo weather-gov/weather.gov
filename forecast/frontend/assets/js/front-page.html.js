@@ -2,8 +2,10 @@
 import "./components/site-nav.js";
 
 // For location search
+import "./components/wx-loader.js";
 import "./locationSearch.js";
-import "./components/combo-box-location.js";
+import "./components/combobox/combobox.js";
+import "./components/combobox/location-listbox.js";
 
 // RUM
 import "./aws-rum.js";

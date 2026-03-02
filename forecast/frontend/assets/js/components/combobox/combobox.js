@@ -95,10 +95,6 @@ export default class Combobox extends HTMLElement {
       const target = this.popup.selection ?? this.popup.pseudoFocus;
       if(target){
         this.popup.pseudoFocusItem(target);
-        target.scrollIntoView({
-          block: "nearest",
-          inline: "start"
-        });
       }
     }
   }
@@ -300,6 +296,7 @@ export default class Combobox extends HTMLElement {
    * on the state.
    */
   handleToggleClick(event){
+    event.preventDefault();
     if(this.getAttribute("expanded") === "true"){
       this.hidePopup();
     } else {
@@ -314,6 +311,7 @@ export default class Combobox extends HTMLElement {
    * popup.
    */
   handleClearClick(event){
+    event.preventDefault();
     this.popup.pseudoFocusItem(null);
     this.input.value = "";
     this.handleInput();
