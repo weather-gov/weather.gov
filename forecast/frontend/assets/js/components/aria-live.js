@@ -1,6 +1,12 @@
 import Timer from "./timer.js";
 
 const debouncer = new Timer();
+/**
+ * Cache the text here to compare text between calls.
+ * 
+ * This is needed because some screenreaders will not announce "repeat" messages.
+ */
+let text = "";
 
 /**
  * Adds a span of screenreader only text to
@@ -14,14 +20,22 @@ const debouncer = new Timer();
  *   window.dispatchEvent(new CustomEvent("wx-announce", { detail: { text }}));
  */
 const updateAriaLive = (e) => {
-  const text = e.detail?.text;
+  const delay = Number.isFinite(e.detail?.delay) ? e.detail?.delay : 1000;
+  // check if this is a repeat message
+  if (text === e.detail?.text) {
+    // if so, append a non-breaking space
+    text += "\u00A0";
+  } else {
+    // otherwise, use the new text
+    text = e.detail?.text;
+  }
   debouncer.start(() => {
     const span = document.createElement("span");
     span.innerText = text;
     const liveRegion = document.querySelector("#sr-only");
     liveRegion.innerHTML = "";
     liveRegion.append(span);
-  }, 1000);
+  }, delay);
 };
 
 window.addEventListener("wx-announce", updateAriaLive);

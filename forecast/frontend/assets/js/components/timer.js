@@ -13,8 +13,8 @@ export default class Timer {
   start = (callback, delay) => {
     this.stop();
     this.callback = callback;
-    this.delay = delay;
-    this.timer = setTimeout(callback, delay || 2000);
+    this.delay = Number.isFinite(delay) ? delay : 2000;
+    this.timer = setTimeout(callback, this.delay);
   };
 
   reset = () => {

@@ -19,31 +19,59 @@
     <section id="front-find-forecast-section">
       <div class="grid-container">
         <div class="find-block-wrapper">
-          <h2>Find your forecast</h2>
+          <h2 id="fps__header">{{ "frontpage.heading.find-your-forecast.01" | t }}</h2>
           <form id="find-forecast" data-location-search="true">
-            <div class="use-location-area">
+            <div class="use-location-area margin-bottom-105">
               <label class="usa-label"
-                     for="search-combo-box">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
+                     for="fps__input">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
               <div class="location-area-divider">|</div>
               <button
                 type="button"
                 class="weathergov-use-browser-location">
-                <svg class="usa-icon height-2 width-2 margin-right-05 text-top"
-                     aria-hidden="true"
-                     focusable="false"
-                     role="img">
+                <svg class="usa-icon height-2 width-2 margin-right-05 text-top" alt="">
                   <use xlink:href="{% static 'images/uswds/sprite.svg' %}#my_location"></use>
                 </svg>
                 {{ 'location-search.labels.use-location.01' | t }}
               </button>
             </div>
-            <wx-combo-box-location
-              id="search-combo-box"
+            <wx-combobox id="fps"
+              tabindex="0"
+              class="wx-combobox"
               {% if place %}
                 data-place="{% place_label place%}"
               {% endif %}
             >
-            </wx-combo-box-location> 
+              <input id="fps__input"
+                type="text"
+                autocomplete="off"
+                aria-describedby="fps__header"
+                slot="input" />
+              <button
+                type="button"
+                class="empty"
+                aria-label="{{ 'frontpage.aria.clear-input-box.01' | t }}"
+                slot="clear-button">&nbsp;</button>
+              <button
+                type="button"
+                aria-label="{{ 'frontpage.aria.toggle-dropdown.01' | t }}"
+                slot="toggle-button">&nbsp;</button>
+              <wx-location-listbox id="fps__listbox"
+                role="listbox"
+                auto-submit="true"
+                slot="popup"
+              >
+                <div id="fps__listbox__sl"
+                  role="heading" aria-level="3"
+                  class="saved-searches font-mono-sm text-base padding-1"
+                >{{ "frontpage.group.saved-searches.01" | t }}</div>
+                <ul role="group" class="saved-searches"></ul>
+                <div id="fps__listbox__dr"
+                  role="heading" aria-level="3"
+                  class="data-results font-mono-sm text-base padding-1"
+                >{{ "frontpage.group.search-results.01" | t }}</div>
+                <ul role="group" class="data-results"></ul>
+              </wx-location-listbox>
+            </wx-combobox>
           </form>
           {% include 'weather/partials/wx-loader.html' %}
         </div>

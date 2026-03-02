@@ -4,11 +4,11 @@ import { createSandbox, stub } from "sinon";
 
 const exampleMarkup = `
 <wx-location-listbox id="listbox" tabindex="0">
-<span class="listbox-group-label">Saved searches</span>
+<span role="heading" aria-level="3" class="saved-searches">Saved searches</span>
 <ul role="group" class="saved-searches">
 </ul>
-<span class="listbox-group-label">Search results</span>
-<ul role="group">
+<span role="heading" aria-level="3" class="data-results">Search results</span>
+<ul role="group" class="data-results">
   <li role="option" data-value="dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIFRYLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=">
     Arlington, TX, USA
   </li>
@@ -20,6 +20,11 @@ const exampleMarkup = `
   </li>
   <li role="option" data-value="dHA9NCN0dj02NjAzMDhlYyNubT1Bcmxpbmd0b24sIE1BLCBVU0Ejc2M9VVNBOlBSSTpWSVI6R1VNOkFTTSNsbmc9NDAjbG49V29ybGQ=">
     Arlington, MA, USA
+  </li>
+</ul>
+<ul role="group" class="saved-results">
+  <li role="option" id="item" data-url="/lamppost">
+    Narnia, Closet
   </li>
 </ul>
 </wx-location-listbox>
@@ -217,6 +222,10 @@ describe("Location listbox tests", () => {
     let sandbox;
     beforeEach(() => {
       sandbox = createSandbox();
+      global.localStorage = {
+        getItem: sandbox.stub(),
+        setItem: sandbox.stub()
+      };
       window.history.replaceState(null, null, "http://localhost/");
     });
 
@@ -224,29 +233,39 @@ describe("Location listbox tests", () => {
       sandbox.restore();
     });
 
-    it("calls #saveSearchResult if the place data attribute is set on the element", () => {
+    it("calls addSavedLocation if the place data attribute is set on the element", () => {
       const newMarkup = `<wx-location-listbox id="listbox" data-place="Narnia, Closet"></wx-location-listbox>`;
       document.body.innerHTML = newMarkup;
       const listbox = document.getElementById("listbox");
 
-      // Take the element out of the DOM.
-      // We add the spy, then re-add it to the dom.
-      // This way, the connectedCallback will be triggered again
-      // and we can spy on the expected behavior at attachment time
-      listbox.remove();
-      const saveSpy = sandbox.spy(listbox, "saveSearchResult");
-      document.body.append(listbox);
-
       expect(listbox.dataset.place).to.exist;
-      expect(saveSpy.callCount).to.equal(1);
+      expect(global.localStorage.setItem.callCount).to.equal(1);
 
-      const spyCall = saveSpy.getCall(0);
-      expect(spyCall.args[0]).to.eql({
+      const setItemCall = global.localStorage.setItem.getCall(0);
+      expect(setItemCall.args[0]).to.equal("wxgov_recent_locations");
+      expect(setItemCall.args[1]).to.equal(JSON.stringify([{
         text: "Narnia, Closet",
         url: "/"
-      });
+      }]));
+    });
 
-      
+    it("appends the place data to exiting list in localStorage, when there are already saved items", () => {
+      const existingItems = [
+        {text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/"}
+      ];
+      global.localStorage.getItem.returns(JSON.stringify(existingItems));
+
+      const newMarkup = `<wx-location-listbox id="listbox" data-place="Edoras, Rohan"></wx-location-listbox>`;
+      document.body.innerHTML = newMarkup;
+
+      const newItem = { text: "Edoras, Rohan", url: "/"};
+      const expected = JSON.stringify([ newItem, ...existingItems ]);
+
+      expect(global.localStorage.setItem.callCount).to.equal(1);
+
+      const setItemCall = global.localStorage.setItem.getCall(-1);
+      expect(setItemCall.args[0]).to.equal("wxgov_recent_locations");
+      expect(setItemCall.args[1]).to.equal(expected);
     });
   });
 
@@ -278,7 +297,7 @@ describe("Location listbox tests", () => {
         const savedItem = listbox.querySelector(`[data-url="/the/way/to/narnia/"]`);
         expect(global.localStorage.getItem.callCount).to.equal(1);
         expect(savedItem).to.exist;
-        expect(savedItem.textContent).to.equal("Narnia, Closet");
+        expect(savedItem.innerText).to.equal("Narnia, Closet");
       });
 
       it("makes the saved searches list empty if there are no saved items", () => {
@@ -289,56 +308,6 @@ describe("Location listbox tests", () => {
 
         const savedItemElements = listbox.querySelectorAll(`[slot="saved-searches"] > [role="option"]`);
         expect(savedItemElements.length).to.equal(0);
-      });
-    });
-
-    describe("#saveSearchResult", () => {
-      let sandbox;
-      beforeEach(() => {
-        sandbox = createSandbox();
-        global.localStorage = {
-          getItem: sandbox.stub(),
-          setItem: sandbox.stub()
-        };
-      });
-
-      afterEach(() => {
-        sandbox.restore();
-      });
-
-      it("saves the object to localStorage when there are no other saved items", () => {
-        const listbox = document.getElementById("listbox");
-        const example = { text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/"};
-        const expected = JSON.stringify([example]);
-
-        listbox.saveSearchResult(example);
-
-        expect(global.localStorage.setItem.callCount).to.equal(1);
-        const setCall = global.localStorage.setItem.getCall(0);
-        expect(setCall.args[1]).to.equal(expected);
-        expect(setCall.args[0]).to.equal("wxgov_recent_locations");
-      });
-
-      it("appends the object to exiting list in localStorage, when there are already saved items", () => {
-        const listbox = document.getElementById("listbox");
-        const existingItems = [
-          {text: "Hobbiton, The Shire", url: "/middle-earth/shire/hobbiton/"}
-        ];
-        global.localStorage.getItem.returns(JSON.stringify(existingItems));
-        const newItem = { text: "Edoras, Rohan", url: "/middle-earth/rohan/edoras/"};
-        const expected = JSON.stringify(
-          [
-            existingItems[0],
-            newItem
-          ]
-        );
-
-        listbox.saveSearchResult(newItem);
-
-        expect(global.localStorage.setItem.callCount).to.equal(1);
-        const setItemCall = global.localStorage.setItem.getCall(0);
-        expect(setItemCall.args[0]).to.equal("wxgov_recent_locations");
-        expect(setItemCall.args[1]).to.equal(expected);
       });
     });
 

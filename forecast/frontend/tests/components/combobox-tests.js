@@ -41,10 +41,6 @@ describe("Combobox component tests", () => {
   before(async() => {
     await import("../../assets/js/components/combobox/filterable-listbox.js");
     await import("../../assets/js/components/combobox/combobox.js");
-
-    // We have to stub scrollIntoView, which JSDom doesn't have
-    // by default
-    window.HTMLElement.prototype.scrollIntoView = () => {};
   });
 
   /**
@@ -182,15 +178,6 @@ describe("Combobox component tests", () => {
         expect(combobox.hasAttribute("expaneded")).to.be.false;
         combobox.showPopup();
         expect(combobox.getAttribute("expanded")).to.equal("true");
-      });
-
-      it("calls scrollIntoView on the current selection, if there is one", () => {
-        const combobox = document.getElementById("combobox");
-        const secondItem = combobox.popup.querySelector(`[role="option"][data-option-index="1"]`);
-        combobox.popup.selectItem(secondItem);
-        combobox.showPopup();
-
-        expect(secondItem.scrollIntoView.called).to.be.true;
       });
     });
 
