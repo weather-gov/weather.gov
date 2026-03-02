@@ -2,7 +2,6 @@ import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
 import hourly, { sortAndFilterHours } from "./hourly.js";
 import { convertValue, convertProperties } from "../../util/convert.js";
-//import { fetchAPIJson } from "../../util/fetch.js";
 import connectionPool from "../connectionPool.js";
 import { saveToRedis, getFromRedis, parseTTLFromHeaders } from "../../redis.js";
 import { requestJSONWithHeaders } from "../../util/request.js";
