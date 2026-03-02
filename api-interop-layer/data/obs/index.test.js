@@ -1,8 +1,7 @@
 import { expect } from "chai";
 import sinon, { createSandbox } from "sinon";
 import quibble from "quibble";
-//import undici from "undici";
-import { BASE_URL } from "../../util/fetch.js";
+import { BASE_URL } from "../connectionPool.js";
 import { parseTTLFromHeaders } from "../../redis.js";
 
 describe("observations module", () => {

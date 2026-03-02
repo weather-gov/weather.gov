@@ -11,7 +11,7 @@ export default async (wfo) => {
   try {
     // Try to pull from the cache first
     const url = `/offices/${wfo}/weatherstories`;
-    const foundInCache = getFromRedis(url);
+    const foundInCache = await getFromRedis(url);
     if(foundInCache){
       return foundInCache;
     }

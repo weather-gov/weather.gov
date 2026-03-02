@@ -14,7 +14,6 @@ describe("main bootstrapper", () => {
   const fastify = () => server;
 
   const startAlertProcessing = sandbox.spy();
-  const atMaxNumConnections = sandbox.stub();
 
   const handler = sandbox.stub();
 
@@ -43,13 +42,8 @@ describe("main bootstrapper", () => {
     // default argument. The default argument should *ALWAYS* be set, even if
     // it's just an empty argument.
     await quibble.esm("fastify", {}, fastify);
-    await quibble.esm("./util/fetch.js", { atMaxNumConnections, MAX_OPEN_CONNECTIONS: 100 }, {});
     await quibble.esm("./data/alerts/index.js", { startAlertProcessing }, {});
     await quibble.esm("./routes/index.js", {}, urls);
-
-    // Make sure the atMaxNumConnections returns true
-    // by default
-    atMaxNumConnections.returns(false);
 
     // Now that we've mocked the dependency imports, we can import the code
     // under test.
@@ -205,19 +199,6 @@ describe("main bootstrapper", () => {
           timecode: "001100010010011110100001101101110011",
         }),
       ).to.be.true;
-    });
-
-    it("will respond with a 429 status if the open connections are exceeded", async () => {
-      console.log(atMaxNumConnections);
-      atMaxNumConnections.returns(true);
-      handler.resolves({
-        data: {},
-        status: 200
-      });
-      await handlerWrapper(request, response);
-
-      expect(response.code.calledWith(200)).to.be.false;
-      expect(response.code.calledWith(429)).to.be.true;
     });
   });
 });
