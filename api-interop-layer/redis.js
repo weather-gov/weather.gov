@@ -6,6 +6,11 @@ import { logger } from "./util/monitoring/index.js";
 let client;
 export let USE_REDIS = false;
 
+// This is a global "off" switch env variable
+// that will always disable redis operations
+// by immediately setting USE_REDIS to false
+const DISABLE_REDIS = process.env.DISABLE_REDIS ? true : false;
+
 // We need to know whether to use TLS or not
 // For local dev, we don't
 const protocol = process.env.API_INTEROP_PRODUCTION ? "rediss" : "redis";
@@ -17,6 +22,14 @@ let CONNECTION_INFO;
 const redisLogger = logger.child({ subsystem: "redis" });
 
 export const getRedisConnectionInfo = () => {
+  // If DISABLE_REDIS is true, immediately set
+  // USE_REDIS to false and return an empty object
+  // as the connection info data
+  if(DISABLE_REDIS){
+    USE_REDIS = false;
+    redisLogger.warn("redis is DISABLED for cache");
+    return {};
+  }
   // If we have already lazy set the connection info,
   // just return that.
   if (CONNECTION_INFO) {
@@ -42,7 +55,7 @@ export const getRedisConnectionInfo = () => {
   const missing = REQUIRED_ENV_VARS.some((varName) => !process.env[varName]);
 
   if (missing) {
-    redisLogger.warn("redis is disabled for cache");
+    redisLogger.warn("redis is DISABLED for cache");
     USE_REDIS = false;
     return null;
   }
