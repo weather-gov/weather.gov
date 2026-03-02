@@ -21,10 +21,12 @@ describe("redis utilities", () => {
 
   let _API_INTEROP_PRODUCTION;
   let _VCAP_SERVICES;
+  let _DISABLE_REDIS;
 
   before(async () => {
     _API_INTEROP_PRODUCTION = process.env.API_INTEROP_PRODUCTION;
     _VCAP_SERVICES = process.env.VCAP_SERVICES;
+    _DISABLE_REDIS = process.env.DISABLE_REDIS;
 
     // If these environment variables are missing, the redis wrapper
     // will simply not initialize and all the convenience methods
@@ -42,6 +44,7 @@ describe("redis utilities", () => {
         },
       ],
     });
+    process.env.DISABLE_REDIS = "";
 
     await quibble.esm("redis", { createClient });
 
@@ -56,6 +59,7 @@ describe("redis utilities", () => {
     // Whatever it used to be, put it back.
     process.env.API_INTEROP_PRODUCTION = _API_INTEROP_PRODUCTION;
     process.env.VCAP_SERVICES = _VCAP_SERVICES;
+    process.env.DISABLE_REDIS = _DISABLE_REDIS;
   });
 
   it("sets up connection details from env", () => {
