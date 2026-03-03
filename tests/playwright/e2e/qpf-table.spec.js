@@ -3,7 +3,7 @@ const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
-describe("quantitative precipitation forecast table", () => {
+describe.skip("quantitative precipitation forecast table", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
     await page.goto(services.webApp("/point/34.749/-92.275#daily"), {

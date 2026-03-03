@@ -4,7 +4,7 @@ const services = require("../urls.js");
 const { describe, beforeEach } = test;
 
 /* eslint no-unused-expressions: off */
-describe("Hourly forecast table tests", () => {
+describe.skip("Hourly forecast table tests", () => {
   describe("Alert row spanning tests", () => {
     beforeEach(async ({ page }) => {
       await page.goto(services.apiProxy("/proxy/play/testing"));

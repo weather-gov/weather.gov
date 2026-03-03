@@ -3,16 +3,7 @@
  * environment variables or defaults.
  */
 const Services = {
-  get interopURL() {
-    const found = process.env.INTEROP_URL;
-    if (found && found != "") {
-      return found;
-    } else {
-      return "http://localhost:8082";
-    }
-  },
-
-  get apiURL() {
+  get apiProxyURL() {
     const found = process.env.API_URL;
     if (found && found != "") {
       return found;
@@ -30,12 +21,8 @@ const Services = {
     }
   },
 
-  interop(path) {
-    return this.composePath(this.interopURL, path);
-  },
-
   apiProxy(path) {
-    return this.composePath(this.apiURL, path);
+    return this.composePath(this.apiProxyURL, path);
   },
 
   webApp(path) {

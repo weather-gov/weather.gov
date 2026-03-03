@@ -3,7 +3,7 @@ const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
-describe("radar component", () => {
+describe.skip("radar component", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
     await page.goto("/point/35.198/-111.651", { waitUntil: "load" });

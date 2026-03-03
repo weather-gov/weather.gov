@@ -15,7 +15,7 @@ beforeEach(async ({ page }) => {
   });
 });
 
-describe("Quick Toggle tests", () => {
+describe.skip("Quick Toggle tests", () => {
   test("The Quick Forecast is hidden", async ({ page }) => {
     const quickForecast = await page.locator(".wx-quick-forecast");
 

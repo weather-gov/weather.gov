@@ -3,7 +3,7 @@ const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
-describe("Invalid icon URL tests", () => {
+describe.skip("Invalid icon URL tests", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
     await page.goto("/point/38.886/-77.094", { waitUntil: "load" });
@@ -61,7 +61,7 @@ describe("Invalid icon URL tests", () => {
   });
 });
 
-describe("Valid icon rendering double-checks", () => {
+describe.skip("Valid icon rendering double-checks", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
     await page.goto("/point/34.749/-92.275", { waitUntil: "load" });

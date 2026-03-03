@@ -8,7 +8,9 @@ describe("Alerts e2e tests", () => {
     await page.goto(services.apiProxy("/proxy/play/testing"), {
       waitUntil: "load",
     });
-    await page.goto("/point/34.749/-92.275", { waitUntil: "load" });
+    await page.goto(services.webApp("/point/34.749/-92.275"), { 
+      waitUntil: "load"
+    });
   });
 
   test("The correct number of alerts show on the page", async ({ page }) => {

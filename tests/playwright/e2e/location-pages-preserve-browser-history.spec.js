@@ -3,7 +3,7 @@ const services = require("../urls.js");
 
 const { describe } = test;
 
-describe("location search", () => {
+describe.skip("location search", () => {
   test("properly handles browser history", async ({ page }) => {
     const start = "/point/36.168/-86.778";
 

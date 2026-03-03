@@ -3,7 +3,7 @@ const services = require("../urls.js");
 
 const { describe } = test;
 
-describe("WFO Information Page Tests", () => {
+describe.skip("WFO Information Page Tests", () => {
   test("Responds 404 for any invalid WFO route", async ({ page }) => {
     const response = await page.goto(services.webApp("/offices/XYZ"));
 

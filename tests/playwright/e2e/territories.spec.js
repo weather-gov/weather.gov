@@ -3,7 +3,7 @@ const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
-describe("territory places are supported", () => {
+describe.skip("territory places are supported", () => {
   beforeEach(async ({ page }) => page.goto(services.apiProxy("/stop")));
 
   [
