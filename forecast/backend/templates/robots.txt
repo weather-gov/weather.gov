@@ -62,6 +62,11 @@ User-agent: TimpiBot
 User-agent: YouBot
 Allow: /
 
+# ——— ACCESSIBILITY CRAWLER ———
+User-agent: SiteimproveBot
+User-agent: SiteimproveBot-Crawler
+Allow: /
+
 ###############################################
 # Default rules – for all other crawlers
 ###############################################
