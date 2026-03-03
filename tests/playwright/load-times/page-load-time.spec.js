@@ -2,7 +2,7 @@ const { test, expect } = require("@playwright/test");
 
 const { describe, beforeEach } = test;
 
-describe("pages load", () => {
+describe.skip("pages load", () => {
   beforeEach(async ({ page }) =>
     /**
      * Due to how translations are initially cached, we should

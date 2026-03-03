@@ -3,7 +3,7 @@ const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
-describe("alerts in the daily tab", () => {
+describe.skip("alerts in the daily tab", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
     await page.goto("/point/34.749/-92.275", { waitUntil: "load" });

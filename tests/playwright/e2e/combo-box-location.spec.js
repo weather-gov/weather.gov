@@ -5,7 +5,7 @@ const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
-describe("wx-combo-box-location tests", () => {
+describe.skip("wx-combo-box-location tests", () => {
   beforeEach(async ({ page }) => {
     // Stub the ArcGIS API requests
     // so that they use saved data

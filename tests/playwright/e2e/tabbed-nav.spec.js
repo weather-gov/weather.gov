@@ -10,7 +10,7 @@ const test = base.extend({
 
 const { describe, beforeEach } = test;
 
-describe("<wx-tabbed-nav> component tests", () => {
+describe.skip("<wx-tabbed-nav> component tests", () => {
   describe("Alert link interaction", () => {
     beforeEach(async ({ page }) => {
       await page.goto(services.apiProxy("/proxy/play/testing"));

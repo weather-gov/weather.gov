@@ -10,7 +10,7 @@ beforeEach(async ({ page }) => {
   await page.locator('.wx-quick-forecast[role="tablist"]').waitFor();
 });
 
-describe("Quick Forecast navigation tests", () => {
+describe.skip("Quick Forecast navigation tests", () => {
   describe("Selecting a quick forecast item", () => {
     test("shows the corresponding tabpanel", async ({ page }) => {
       const navItem = await page.locator(

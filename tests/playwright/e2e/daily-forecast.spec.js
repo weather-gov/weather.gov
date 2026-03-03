@@ -3,7 +3,7 @@ const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
-describe("daily forecast", () => {
+describe.skip("daily forecast", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
   });

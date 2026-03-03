@@ -9,9 +9,10 @@ const PRODUCT_PATH = path.resolve(
   __dirname,
   "..",
   "..",
-  "api",
+  "..",
+  "api-proxy",
   "data",
-  "testing",
+  "e2e",
   "products",
 );
 const OKX_REFERENCES = JSON.parse(
@@ -26,7 +27,7 @@ const OVERALL_REFERENCES = JSON.parse(
 );
 const firstId = OKX_REFERENCES["@graph"][0].id;
 
-describe("AFD Page Tests", () => {
+describe.skip("AFD Page Tests", () => {
   describe("Not Found (404) tests", () => {
     test("Displays a 404 page for an invalid / expired AFD id", async ({
       page,

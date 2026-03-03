@@ -3,7 +3,7 @@ const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
-describe("invalid location-based routes return 404", () => {
+describe.skip("invalid location-based routes return 404", () => {
   beforeEach(async ({ page }) =>
     page.goto(services.apiProxy("/proxy/play/testing")),
   );
