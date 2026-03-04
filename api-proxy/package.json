@@ -7,10 +7,10 @@
   "dependencies": {
     "dayjs": "^1.11.10",
     "express": "^5.0.1",
-    "glob": "^11.0.0",
+    "glob": "^13.0.6",
     "mustache": "^4.2.0",
     "pino": "^10.3.0",
-    "pm2": "^5.4.3",
+    "pm2": "^6.0.14",
     "prettier": "^3.2.0"
   },
   "devDependencies": {
