@@ -1079,3 +1079,6 @@ msgstr ""
 
 msgid "No active briefing for {wfo} WFO"
 msgstr ""
+
+msgid "Alerts are listed in order of start time and level of severity. Click on the alert title to read details for each alert."
+msgstr ""
