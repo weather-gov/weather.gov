@@ -939,7 +939,7 @@ msgid "spatial.county-like.with-no-subdivision.label.01"
 msgstr "{name}, {state}"
 
 msgid "error.500.generic.message.01"
-msgstr "500: Something went wrong on our end. Please try again in a few minutes."
+msgstr "Something went wrong on our end. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
 
 msgid "error.404.generic.message.01"
 msgstr "404: The requested page was not found."
@@ -965,7 +965,7 @@ msgstr "Were you looking for {place}?"
 msgid "error.429.interop.message.01"
 msgstr "429: Too Many Requests"
 
-msgid "error.429.interop.descroption.01"
+msgid "error.429.interop.description.01"
 msgstr "This site is experiencing heavy traffic. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
 
 msgid "menu.navigation.forecast.01"
