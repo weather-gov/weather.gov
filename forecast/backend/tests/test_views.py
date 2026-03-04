@@ -88,7 +88,7 @@ class TestViews(TestCase):
             "altText": "Alternative to text? Pictures!",
             "priority": False,
             "order": 1,
-            "image": "/public/images/wfos/LWX.png"
+            "image": "/public/images/wfos/LWX.png",
         }
         self.patcher = mock.patch("backend.interop.get_weather_stories")
         self.mock_get_weather_stories = self.patcher.start()
@@ -109,9 +109,7 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
-            "place": {
-                "timezone": "America/New_York"
-            }
+            "place": {"timezone": "America/New_York"},
         }
 
         response = self.client.get("/point/11.1/22.2", follow=True)
@@ -120,14 +118,7 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "weather/point.html")
         self.assertEqual(
             response.context["point"],
-            {
-                "grid": {"wfo": "TST"},
-                "wfo": self.wfo,
-                "isMarine": False,
-                "place": {
-                    "timezone": "America/New_York"
-                }
-            },
+            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
         )
 
         self.assertEqual(response.context["weather_story"], self.weather_story)
@@ -144,9 +135,7 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
-            "place": {
-                "timezone": "America/New_York"
-            }
+            "place": {"timezone": "America/New_York"},
         }
 
         response = self.client.get("/point/11.1/22.2?update", follow=True)
@@ -155,14 +144,7 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "weather/point.update.html")
         self.assertEqual(
             response.context["point"],
-            {
-                "grid": {"wfo": "TST"},
-                "wfo": self.wfo,
-                "isMarine": False,
-                "place": {
-                    "timezone": "America/New_York"
-                }
-            },
+            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
         )
 
     @mock.patch("backend.views.point.interop.get_weather_stories")
@@ -172,9 +154,7 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
-            "place": {
-                "timezone": "America/New_York"
-            }
+            "place": {"timezone": "America/New_York"},
         }
         mock_get_weather_stories.return_value = None
 
@@ -185,16 +165,9 @@ class TestViews(TestCase):
         mock_get_weather_stories.assert_called_once_with(self.wfo.code.upper())
         self.assertEqual(
             response.context["point"],
-            {
-                "grid": {"wfo": "TST"},
-                "wfo": self.wfo,
-                "isMarine": False,
-                "place": {
-                    "timezone": "America/New_York"
-                }
-            },
+            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
         )
-        expected = { "is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/offices/TST/"}
+        expected = {"is_empty": True, "officeId": "TST", "wfo_name": "Test WFO", "wfo_url": "/offices/TST/"}
         self.assertEqual(response.context["weather_story"], expected)
         self.assertTemplateUsed("weather/partials/point-weather-storys.html")
 
@@ -213,14 +186,12 @@ class TestViews(TestCase):
             "altText": "Alternative to text? Pictures!",
             "priority": False,
             "order": 1,
-            "image": "/public/images/wfos/TST.png"
+            "image": "/public/images/wfos/TST.png",
         }
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
-            "place": {
-                "timezone": "America/New_York"
-            }
+            "place": {"timezone": "America/New_York"},
         }
         mock_get_weather_stories.return_value = weather_story
 
@@ -231,14 +202,7 @@ class TestViews(TestCase):
         mock_get_weather_stories.assert_called_once_with(self.wfo.code.upper())
         self.assertEqual(
             response.context["point"],
-            {
-                "grid": {"wfo": "TST"},
-                "wfo": self.wfo,
-                "isMarine": False,
-                "place": {
-                    "timezone": "America/New_York"
-                }
-            },
+            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
         )
         self.assertEqual(response.context["weather_story"], weather_story)
         self.assertTemplateUsed("weather/partials/point-weather-story.html")
@@ -385,9 +349,7 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
-            "place": {
-                "timezone": "America/New_York"
-            }
+            "place": {"timezone": "America/New_York"},
         }
         response = self.client.get("/place/nj/Hoboken/")
         self.assertRedirects(response, "/place/NJ/Hoboken/")
@@ -398,9 +360,7 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
-            "place": {
-                "timezone": "America/New_York"
-            }
+            "place": {"timezone": "America/New_York"},
         }
         response = self.client.get("/place/NY/New York/")
         self.assertRedirects(response, "/place/NY/New_York/")
@@ -411,9 +371,7 @@ class TestViews(TestCase):
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
-            "place": {
-                "timezone": "America/New_York"
-            }
+            "place": {"timezone": "America/New_York"},
         }
         response = self.client.get("/place/NJ/Hoboken/")
         self.assertTemplateUsed(response, "weather/point.html")
@@ -424,14 +382,7 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "weather/point.html")
         self.assertEqual(
             response.context["point"],
-            {
-                "grid": {"wfo": "TST"},
-                "wfo": self.wfo,
-                "isMarine": False,
-                "place": {
-                    "timezone": "America/New_York"
-                }
-            },
+            {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
         )
 
         self.assertEqual(response.context["weather_story"], self.weather_story)
@@ -621,6 +572,7 @@ class TestViews(TestCase):
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
+        mock_county.timezone = "America/Denver"
         mock_get_object_or_404.return_value = mock_county
 
         response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
@@ -646,6 +598,7 @@ class TestViews(TestCase):
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
+        mock_county.timezone = "America/New_York"
         mock_get_object_or_404.return_value = mock_county
 
         response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
@@ -668,6 +621,7 @@ class TestViews(TestCase):
         mock_county = mock.Mock()
         mock_county.state.fips.return_value = "1"
         mock_county.county.countyfips.return_value = "1"
+        mock_county.timezone = "America/Chicago"
         mock_get_object_or_404.return_value = mock_county
 
         response = self.client.get(reverse("county_ghwo", kwargs={"county_fips": "1"}))
@@ -879,7 +833,9 @@ class TestViews(TestCase):
     def test_wx_ghwo_counties_with_no_data_interop_request(self, mock_get_ghwo_data_for_county, mock_get_object_or_404):
         """Request to wx ghwo counties endpoint with 404 interop ghwo data request 200s."""
         mock_get_ghwo_data_for_county.return_value = {"statusCode": 404, "error": "No GHWO found for 51013"}
-        mock_get_object_or_404.return_value = mock.Mock()
+        county = mock.Mock()
+        county.timezone = "America/Los_Angeles"
+        mock_get_object_or_404.return_value = county
 
         response = self.client.get(
             reverse("wx_ghwo_counties", kwargs={"county_fips": "51013"}),

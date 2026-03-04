@@ -268,9 +268,24 @@ class TestCountyViews(TestCase):
                 ],
             },
             "alertDays": [
-                {"day": "Oneday", "alerts": [2, 1]},  # watch, other
-                {"day": "Today", "alerts": [1, 0]},  # other, warning
-                {"day": "3sday", "alerts": [0, 3]},  # warning, watch
+                {
+                    "day": "Oneday",
+                    "start": "1998-04-12T09:00:00Z",
+                    "end": "1998-04-13T06:00:00Z",
+                    "alerts": [2, 1],
+                },  # watch, other
+                {
+                    "day": "Today",
+                    "start": "1983-11-04T09:00:00-06:00",
+                    "end": "1983-11-05T06:00:00-06:00",
+                    "alerts": [1, 0],
+                },  # other, warning
+                {
+                    "day": "3sday",
+                    "start": "2014-12-31T23:59:59+03:00",
+                    "end": "2015-01-01T06:00:00+03:00",
+                    "alerts": [0, 3],
+                },  # warning, watch
             ],
         }
         mock_get_radar.return_value = {"radarMetadata": {}}

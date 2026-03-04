@@ -8,7 +8,7 @@ the content
    href="#{{ day.dayId }}"
    id="{{ day.dayId }}-quick-forcast-button">
   <div class="wx-quick-forecast-item-top">
-    <time datetime="{{ day.periods.0.start }}">
+    <time datetime="{{ day.periods.0.start|date:"c" }}">
       <span>
         {% if first %}
           {% trans "daily-forecast.labels.today.01" %}

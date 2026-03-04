@@ -11,7 +11,7 @@ the content
         aria-expanded="false">
   <div class="wx-quick-toggle-item-top display-flex flex-1 flex-justify flex-align-center text-primary-darker font-mono-sm">
     <time class="text-align-left flex-1 text-primary-dark"
-          datetime="{{ periods.0.start }}"
+          datetime="{{ periods.0.start|date:"c" }}"
           aria-label="{{ periods.0.dayName }}">
       <span>
         {% if first %}
