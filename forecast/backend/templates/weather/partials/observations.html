@@ -68,7 +68,7 @@
             </p>
             {# Datetimes are localized in client-side Javascript. #}
             <time class="display-block font-family-mono font-mono-xs"
-                  datetime="{{ obs.timestamp }}">
+                  datetime="{{ obs.timestamp|date:"c" }}">
               {{ obs.timestamp|date:"l, g:i A T" }}
             </time>
           </div>

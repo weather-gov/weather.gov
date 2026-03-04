@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from django.db.models import Prefetch
@@ -18,6 +19,7 @@ from backend.util import (
     get_states_combo_box_list,
     process_county_alerts,
 )
+from backend.util.county import risk_overview_timestamps_to_dates
 from backend.util.nwsconnect import get_county_briefings, get_county_weather_stories
 from spatial.models import WeatherCounties, WeatherStates
 
@@ -43,6 +45,10 @@ def county_overview(request, countyfips):  # noqa: C901
     """Render the main page for a particular county."""
     county = get_object_or_404(WeatherCounties.objects.defer("shape"), countyfips=countyfips)
     county_data = interop.get_county_data(countyfips)
+
+    localtz = ZoneInfo("UTC")
+    if county.timezone:
+        localtz = ZoneInfo(county.timezone)
 
     level_priorities = {
         "warning": 1024,
@@ -80,6 +86,10 @@ def county_overview(request, countyfips):  # noqa: C901
         day_levels.sort(key=lambda level: level_priorities[level], reverse=True)
         level_days.append(" ".join(day_levels))
 
+        day["start"] = datetime.fromisoformat(day["start"]).astimezone(tz=localtz)
+        day["end"] = datetime.fromisoformat(day["end"]).astimezone(tz=localtz)
+        day["day"] = day["start"].strftime("%A")
+
     # Format GeoJSON, sorting polygons within a Mutlipolygon by size (desc). Ticket #207
     for i, alert in enumerate(county_data["alerts"]["items"]):
         # Continue if geometry is missing OR if the type is not "MultiPolygon"
@@ -100,9 +110,8 @@ def county_overview(request, countyfips):  # noqa: C901
         # Overwrite current alert coordinates
         county_data["alerts"]["items"][i]["geometry"] = mu_polygon_sorted
 
-    localtz = None
-    if county.timezone:
-        localtz = ZoneInfo(county.timezone)
+    # Fixup risk overview timestamps to local
+    risk_overview_timestamps_to_dates(county_data.get("riskOverview", False), localtz)
 
     cwas = county.cwas.defer("shape").all()
 
@@ -154,6 +163,10 @@ def county_ghwo(request, county_fips):  # noqa: C901
         countyfips=county_fips,
     )
 
+    localtz = ZoneInfo("UTC")
+    if county.timezone:
+        localtz = ZoneInfo(county.timezone)
+
     # Get all of the states, for use in the combobox dropdown.
     states = get_states_combo_box_list()
 
@@ -164,6 +177,8 @@ def county_ghwo(request, county_fips):  # noqa: C901
     ghwo_data = interop.get_ghwo_data_for_county(county.countyfips)
 
     if "error" not in ghwo_data:
+        risk_overview_timestamps_to_dates(ghwo_data, localtz)
+
         # Get basis description for each risk, if we have it.
         for risk_id, risk in ghwo_data["legend"].items():
             risk["basis"] = get_basis_for_ghwo_risk(ghwo_data["wfo"], risk_id)

@@ -54,8 +54,10 @@ divided by its maximum possible level
         {% for day in ghwo.composite.days %}
           <th scope="col" class="text-center">
             <div class="font-mono-2xs tablet-lg:font-mono-xs text-normal">
-              <span class="display-block">{{ day.timestamp|datetime|date:"D" }}</span>
-              <span class="display-block">{{ day.timestamp|datetime|date:"n" }}/{{ day.timestamp|datetime|date:"j" }}</span>
+              <time datetime="{{ day.timestamp|date:"c" }}">
+                <span class="display-block">{{ day.timestamp|date:"D" }}</span>
+                <span class="display-block">{{ day.timestamp|date:"n" }}/{{ day.timestamp|date:"j" }}</span>
+              </time>
             </div>
           </th>
         {% endfor %}

@@ -22,7 +22,7 @@ alerts - An array of all the alerts that intersect with those hours.
         </th>
         {% for period in hours %}
           <th scope="col">
-            <time datetime="{{ period.time }}"
+            <time datetime="{{ period.time|date:"c" }}"
                   class="font-family-mono font-mono-xs text-base-lightest">
               {{ period.time|date:"g A" }}
             </time>

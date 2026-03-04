@@ -59,11 +59,11 @@
               <td class="position-sticky left-0 bg-white"></td>
               {% for day in ghwo.days %}
                 <th scope="col">
-                  <time datetime="{{ day.timestamp }}"
+                  <time datetime="{{ day.timestamp|date:"c" }}"
                         data-day-number="{{ day.dayNumber }}"
                         class="font-mono-2x tablet-lg:font-mono-xs text-normal">
-                    <span class="display-block">{{ day.timestamp|datetime|date:"D" }}</span>
-                    <span class="display-block">{{ day.timestamp|datetime|date:"n" }}/{{ day.timestamp|datetime|date:"j" }}</span>
+                    <span class="display-block">{{ day.timestamp|date:"D" }}</span>
+                    <span class="display-block">{{ day.timestamp|date:"n" }}/{{ day.timestamp|date:"j" }}</span>
                   </time>
                 </th>
               {% endfor %}
