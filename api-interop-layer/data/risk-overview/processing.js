@@ -24,7 +24,88 @@ export const getMaxScaleFromLegend = (risk, legend) => {
   return null;
 };
 
-export const addRisksToResult = (result, wfo, days, legend) => {
+/**
+ * Transform the incoming dictionary of raw API
+ * chicklet data into a dictionary keyed by the risk
+ * ids for easier lookup
+ * @param {Object} chickletData - The raw chicklet
+ * data as returned by the API
+ * @returns {Object} - An object whose keys are the
+ * risk ids and values are the chicklet hazard information
+ */
+export const processChickletData = (chickletData) => {
+  const result = {};
+  if(!chickletData.hazards){
+    return result;
+  }
+
+  chickletData.hazards.forEach(hazardEntry => {
+    // Each hazard entry object has a risk "name"
+    // property corresponding to the full name of the risk.
+    // We attempt a lookup in the dictionary that maps
+    // full risk names to their key name equivalents
+    // See mappings.js
+    const riskKey = riskNameToKeyMapping.get(
+      hazardEntry.name
+    );
+
+    // If there is no corresponding key, we do not
+    // add the risk information to the processed
+    // chicklet output
+    if(riskKey){
+      result[riskKey] = hazardEntry;
+    }
+  });
+
+  return result;
+};
+
+/**
+ * Attempt to get an image URL for the given risk factor
+ * on the given day.
+ * There are two ways to attempt to get an image URL:
+ * (1) From the processed chicklet data, which should work
+ * in almost all cases;
+ * (2) By using our risk key to image name lookup mapping
+ * and composing the URL ourselves (see mappings.js)
+ * This function attempts method (1) first, then (2) as
+ * the backup.
+ * @param {String} risk - The risk id to consider
+ * @param {Number} dayNumber - The 0-indexed number of the
+ * day we are considering for that risk
+ * @param {String} wfo - The WFO 3-letter code for the risk
+ * @param {Object} chickletData - A dictionary represending
+ * processed chicklet data, as made by proccessChickletData()
+ * @returns {String} A formatted URL or path to an image file
+ */
+export const getImageUrlForRisk = (risk, dayNumber, wfo, chickletData) => {
+  // Our first strategy is to check the chicklet data for any matching
+  // information about risks. This comes from the
+  // processed version of the chicklet data (see processChickletData)
+  const foundChickletRisk = chickletData[risk];
+  if(foundChickletRisk){
+    // If we get here, we have hazard data from the chicklet
+    // for the given risk key. This means we can attempt to
+    // pull out the image URLs.
+    // Unfortunately, this hazard data comes to us not as a list,
+    // but as an object whose keys are in the form `period<dayNum>`.
+    const periodKey = `period${dayNumber + 1}`;
+    const foundPeriodEntry = foundChickletRisk.periods[periodKey];
+    if(foundPeriodEntry){
+      if(foundPeriodEntry.imagePath?.startsWith("http")){
+        return foundPeriodEntry.imagePath;
+      }
+      return `https://www.weather.gov${foundPeriodEntry.imagePath}`;
+    }
+  }
+
+  // Otherwise, we attempt to construct the image path ourselves
+  // using the existing risk name to image map in our mappings.js
+  const riskKey = riskNameToImageNameMap.get(risk) ?? risk;
+  return `https://www.weather.gov/images/${wfo}/ghwo/${riskKey}Day${dayNumber + 1}.jpg`;
+};
+
+export const addRisksToResult = (result, wfo, days, legend, chicklet) => {
   const dataLegend = {};
   const risks = {};
 
@@ -40,18 +121,8 @@ export const addRisksToResult = (result, wfo, days, legend) => {
           return { category: 0 };
         }
 
-        // For every data element in the risk overview, we want to also provide an
-        // image URL. The list of data elements is not the same for all WFOs at all
-        // times, so we need to build this dynamically.
-        //
-        // Sometimes the element key (like "SevereThunderstorm") is not the same
-        // key as used in the URL (in this case, "SevereThunderstorms" - note
-        // the s at the end). If we have a URL key mapped to the element key,
-        // use it. Otherwise just preserve the element key.
-        const urlKey = riskNameToImageNameMap.get(risk) ?? risk;
-
         return {
-          image: `https://www.weather.gov/images/${wfo}/ghwo/${urlKey}Day${dayNumber + 1}.jpg`,
+          image: getImageUrlForRisk(risk, dayNumber, wfo, chicklet),
           ...risks[risk],
           timestamp,
         };

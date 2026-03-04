@@ -1,6 +1,6 @@
 import { parentPort } from "node:worker_threads";
 import openDatabase from "../db.js";
-import { addRisksToResult, processDays, processLegend } from "./processing.js";
+import { addRisksToResult, processDays, processLegend, processChickletData } from "./processing.js";
 import { logger } from "../../util/monitoring/index.js";
 import { requestJSON } from "../../util/request.js";
 import { Client } from "undici";
@@ -32,7 +32,7 @@ const upsert = async (id, data) =>
     ),
   );
 
-const processState = async ({ state, data: stateData, wfo, legend }) => {
+const processState = async ({ state, data: stateData, wfo, legend, chicklet }) => {
   const db = await openDatabase();
   const stateName = await db
     .query("SELECT name FROM weathergov_geo_states WHERE state=$1::text", [
@@ -49,12 +49,12 @@ const processState = async ({ state, data: stateData, wfo, legend }) => {
     noRisks,
   };
 
-  addRisksToResult(data, wfo, days, legend);
+  addRisksToResult(data, wfo, days, legend, chicklet);
 
   await upsert(state, data);
 };
 
-const processCounty = async ({ countyFips, data: countyData, wfo, legend }) => {
+const processCounty = async ({ countyFips, data: countyData, wfo, legend, chicklet }) => {
   const db = await openDatabase();
   const county = db
     .query(
@@ -73,7 +73,7 @@ const processCounty = async ({ countyFips, data: countyData, wfo, legend }) => {
     noRisks,
   };
 
-  addRisksToResult(data, wfo, days, legend);
+  addRisksToResult(data, wfo, days, legend, chicklet);
 
   await upsert(countyFips, data);
 };
@@ -83,6 +83,7 @@ const processWFO = async (wfo, statuses) => {
 
   const risksEndpoint = `/source/${wfo}/ghwo/hazByCounty.json`;
   const legendEndpoint = `/source/${wfo}/ghwo/legend.json`;
+  const chickletEndpoint = `/source/${wfo}/ghwo/chicklet.json`;
 
   const shouldUpdate = await db
     .query("SELECT updated FROM weathergov_temp_ghwo_meta WHERE url=$1::text", [
@@ -113,9 +114,10 @@ const processWFO = async (wfo, statuses) => {
     "making risk overview requests",
   );
 
-  const [riskOverview, legendData] = await Promise.all([
+  const [riskOverview, legendData, chickletData] = await Promise.all([
     requestJSON(client, risksEndpoint),
     requestJSON(client, legendEndpoint),
+    requestJSON(client, chickletEndpoint)
   ]);
 
   // After we fetch, update the database so we know the last time we fetched
@@ -139,13 +141,17 @@ const processWFO = async (wfo, statuses) => {
   // is more useful for us later on.
   const legend = processLegend(legendData);
 
+  // We process the chicklet data into a dictionary more
+  // amenable to lookups by risk keys
+  const chicklet = processChickletData(chickletData);
+
   if (riskOverview.counties) {
     // Since there are counties, process them. In the risk overview data, the
     // object keys are county FIPS codes and the values are the risk data. So
     // iterate over the key/value pairs and process accordingly.
     await Promise.all(
       Object.entries(riskOverview.counties).map(([countyFips, data]) =>
-        processCounty({ countyFips, data, wfo, legend }),
+        processCounty({ countyFips, data, wfo, legend, chicklet }),
       ),
     );
   }
@@ -155,7 +161,7 @@ const processWFO = async (wfo, statuses) => {
     // letter abbreviation.
     await Promise.all(
       Object.entries(riskOverview.states).map(([state, data]) =>
-        processState({ state, data, wfo, legend }),
+        processState({ state, data, wfo, legend, chicklet }),
       ),
     );
   }

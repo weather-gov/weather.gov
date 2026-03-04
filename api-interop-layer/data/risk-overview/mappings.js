@@ -39,3 +39,10 @@ export const riskNameToKeyMapping = new Map([
   ["Tornado Risk", "Tornado"],
   ["Waterspout Risk", "Waterspout"],
 ]);
+
+// Create the reverse lookup mapping from key
+// names to full risk names
+export const keyToRiskNameMapping = new Map();
+for(const entry of riskNameToKeyMapping.entries()){
+  keyToRiskNameMapping.set(entry[1], entry[0]);
+}
