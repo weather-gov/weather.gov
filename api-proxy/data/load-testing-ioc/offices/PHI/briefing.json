@@ -1,0 +1,15 @@
+{
+  "@context": { "@version": "1.1" },
+  "briefing": {
+    "officeId": "PHI",
+    "startTime": "date:now -1 hour",
+    "updateTime": "date:now",
+    "endTime": "date:now +1 hour",
+    "title": "Test weather story",
+    "description": "This is here for testing purposes",
+    "altText": "numbers",
+    "priority": false,
+    "order": 1,
+    "download": "/public/images/wfos/PHI.png"
+  }
+}

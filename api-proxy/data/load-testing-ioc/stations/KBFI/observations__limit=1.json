@@ -1,0 +1,139 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/KBFI/observations/2026-03-04T22:25:00+00:00",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.3, 47.53] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KBFI/observations/2026-03-04T22:25:00+00:00",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 5 },
+        "station": "https://api.weather.gov/stations/KBFI",
+        "stationId": "KBFI",
+        "stationName": "Boeing Field - King County International Airport",
+        "timestamp": "date:now -825 seconds",
+        "rawMessage": "",
+        "textDescription": "Light Rain and Fog/Mist",
+        "icon": "https://api.weather.gov/icons/land/day/rain?size=medium",
+        "presentWeather": [
+          {
+            "intensity": "light",
+            "modifier": null,
+            "weather": "rain",
+            "rawString": "-RA"
+          },
+          {
+            "intensity": null,
+            "modifier": null,
+            "weather": "fog_mist",
+            "rawString": "BR"
+          }
+        ],
+        "temperature": {
+          "unitCode": "wmoUnit:degC",
+          "value": 9,
+          "qualityControl": "V"
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 8,
+          "qualityControl": "V"
+        },
+        "windDirection": {
+          "unitCode": "wmoUnit:degree_(angle)",
+          "value": 110,
+          "qualityControl": "V"
+        },
+        "windSpeed": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": 9.252,
+          "qualityControl": "V"
+        },
+        "windGust": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "barometricPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": 101354.61,
+          "qualityControl": "V"
+        },
+        "seaLevelPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "visibility": {
+          "unitCode": "wmoUnit:m",
+          "value": 6437.38,
+          "qualityControl": "C"
+        },
+        "maxTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "minTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "precipitationLast3Hours": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 93.453994643448,
+          "qualityControl": "V"
+        },
+        "windChill": {
+          "unitCode": "wmoUnit:degC",
+          "value": 7.589624668772778,
+          "qualityControl": "V"
+        },
+        "heatIndex": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "V"
+        },
+        "cloudLayers": [
+          {
+            "base": { "unitCode": "wmoUnit:m", "value": 548.64 },
+            "amount": "BKN"
+          },
+          {
+            "base": { "unitCode": "wmoUnit:m", "value": 822.96 },
+            "amount": "OVC"
+          }
+        ]
+      }
+    }
+  ],
+  "pagination": {
+    "next": "https://api.weather.gov/stations/KBFI/observations?cursor=eyJzIjoiMjAyNi0wMy0wNFQyMjoyNTowMCswMDowMCJ9"
+  }
+}

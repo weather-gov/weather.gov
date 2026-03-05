@@ -1,0 +1,83 @@
+{
+  "@bundle": {
+    "name": "South St. Paul, MN",
+    "attributes": [
+      "has alerts",
+      "has a weather story",
+      "has a briefing",
+      "has risk overview data",
+      "current temps are HUGE, so you can identify it"
+    ]
+  },
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/45.000,-93.000",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-93.0, 45.0] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/45.000,-93.000",
+    "@type": "wx:Point",
+    "cwa": "MPX",
+    "type": "land",
+    "forecastOffice": "https://api.weather.gov/offices/MPX",
+    "gridId": "MPX",
+    "gridX": 1,
+    "gridY": 1,
+    "forecast": "https://api.weather.gov/gridpoints/MPX/1,1/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/MPX/1,1/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/MPX/1,1",
+    "observationStations": "https://api.weather.gov/gridpoints/MPX/1,1/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-93.0, 45.0] },
+      "properties": {
+        "city": "South St. Paul",
+        "state": "MN",
+        "distance": { "unitCode": "wmoUnit:m", "value": 1200.0 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 52 }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/MNZ062",
+    "county": "https://api.weather.gov/zones/county/MNC123",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/MNZ062",
+    "timeZone": "America/Chicago",
+    "radarStation": "KMPX",
+    "astronomicalData": {
+      "sunrise": "2026-03-04T06:42:59-06:00",
+      "sunset": "2026-03-04T18:05:30-06:00",
+      "transit": "2026-03-04T12:24:15-06:00",
+      "civilTwilightBegin": "2026-03-04T06:15:09-06:00",
+      "civilTwilightEnd": "2026-03-04T18:33:20-06:00",
+      "nauticalTwilightBegin": "2026-03-04T05:41:12-06:00",
+      "nauticalTwilightEnd": "2026-03-04T19:07:17-06:00",
+      "astronomicalTwilightBegin": "2026-03-04T05:07:02-06:00",
+      "astronomicalTwilightEnd": "2026-03-04T19:41:27-06:00"
+    },
+    "nwr": {
+      "transmitter": "KEC65",
+      "sameCode": "027123",
+      "areaBroadcast": "https://api.weather.gov/radio/KEC65/broadcast",
+      "pointBroadcast": "https://api.weather.gov/points/45.000,-93.000/radio"
+    }
+  }
+}

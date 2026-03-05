@@ -1,0 +1,117 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/SEAW1/observations/2026-03-04T21:30:00+00:00",
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.25, 47.69] },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/SEAW1/observations/2026-03-04T21:30:00+00:00",
+        "@type": "wx:ObservationStation",
+        "elevation": { "unitCode": "wmoUnit:m", "value": 8.8 },
+        "station": "https://api.weather.gov/stations/SEAW1",
+        "stationId": "SEAW1",
+        "stationName": "SEATTLE WEATHER FORECAST OFFICE",
+        "timestamp": "date:now -4125 seconds",
+        "rawMessage": "",
+        "textDescription": "",
+        "icon": null,
+        "presentWeather": [],
+        "temperature": {
+          "unitCode": "wmoUnit:degC",
+          "value": 8.89,
+          "qualityControl": "V"
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 7.64,
+          "qualityControl": "V"
+        },
+        "windDirection": {
+          "unitCode": "wmoUnit:degree_(angle)",
+          "value": 58,
+          "qualityControl": "V"
+        },
+        "windSpeed": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": 4.824,
+          "qualityControl": "V"
+        },
+        "windGust": {
+          "unitCode": "wmoUnit:km_h-1",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "barometricPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": 100989.71,
+          "qualityControl": "V"
+        },
+        "seaLevelPressure": {
+          "unitCode": "wmoUnit:Pa",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "visibility": {
+          "unitCode": "wmoUnit:m",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "maxTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "minTemperatureLast24Hours": {
+          "unitCode": "wmoUnit:degC",
+          "value": null
+        },
+        "precipitationLast3Hours": {
+          "unitCode": "wmoUnit:mm",
+          "value": null,
+          "qualityControl": "Z"
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 91.871009103614,
+          "qualityControl": "V"
+        },
+        "windChill": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "V"
+        },
+        "heatIndex": {
+          "unitCode": "wmoUnit:degC",
+          "value": null,
+          "qualityControl": "V"
+        },
+        "cloudLayers": []
+      }
+    }
+  ],
+  "pagination": {
+    "next": "https://api.weather.gov/stations/SEAW1/observations?cursor=eyJzIjoiMjAyNi0wMy0wNFQyMTozMDowMCswMDowMCJ9"
+  }
+}

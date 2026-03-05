@@ -77,6 +77,15 @@
       {{#config.play}}
         <h2>Currently playing bundle <span class="font-family-mono">{{config.play}}</span></h2>
 
+        {{#metadata.description}}
+        <div class="grid-row">
+          <div class="grid-col-12">
+            <h3>About this bundle</h3>
+            {{{ metadata.description }}}
+          </div>
+        </div>
+        {{/metadata.description}}
+
         <div class="grid-row">
           <div class="grid-col-6 padding-right-2">
             <h3>Points in this bundle:</h3>

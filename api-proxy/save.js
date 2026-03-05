@@ -37,15 +37,13 @@ const getRelativeTimestamp = (str) => {
 };
 
 const getRelativeDayFixedHourTimestamp = (start, next, dayOffset) => {
-  const startTime = dayjs(start);
-  const nextTime = dayjs(next);
   const match = next.match(ISO_REGEX);
   if(!match){
     throw new Error(`Could not find offset for GHWO timestamp: ${next}`);
   }
   const offset = match[1];
 
-  return `date:today 06:00${offset} +${dayOffset} day`;
+  return `date:today 06:00:${offset} +${dayOffset} day`;
   
 };
 

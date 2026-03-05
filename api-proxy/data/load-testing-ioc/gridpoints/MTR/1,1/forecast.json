@@ -1,0 +1,301 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [-122.2445, 37.856],
+        [-122.2501, 37.8778],
+        [-122.2777, 37.8734],
+        [-122.2721, 37.8516],
+        [-122.2445, 37.856]
+      ]
+    ]
+  },
+  "properties": {
+    "units": "us",
+    "forecastGenerator": "BaselineForecastGenerator",
+    "generatedAt": "date:now +0 seconds",
+    "updateTime": "date:now -9755 seconds",
+    "validTimes": "date:now -34347 seconds / P7DT16H",
+    "elevation": { "unitCode": "wmoUnit:m", "value": 57.912 },
+    "periods": [
+      {
+        "number": 1,
+        "name": "This Afternoon",
+        "startTime": "date:now -1947 seconds",
+        "endTime": "date:now +16052 seconds",
+        "isDaytime": true,
+        "temperature": 65,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "16 mph",
+        "windDirection": "WNW",
+        "icon": "https://api.weather.gov/icons/land/day/skc?size=medium",
+        "shortForecast": "Sunny",
+        "detailedForecast": "Sunny. High near 65, with temperatures falling to around 60 in the afternoon. West northwest wind around 16 mph, with gusts as high as 26 mph."
+      },
+      {
+        "number": 2,
+        "name": "Tonight",
+        "startTime": "date:now +16052 seconds",
+        "endTime": "date:now +59252 seconds",
+        "isDaytime": false,
+        "temperature": 45,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "9 to 16 mph",
+        "windDirection": "NNW",
+        "icon": "https://api.weather.gov/icons/land/night/skc?size=medium",
+        "shortForecast": "Clear",
+        "detailedForecast": "Clear. Low around 45, with temperatures rising to around 47 overnight. North northwest wind 9 to 16 mph, with gusts as high as 26 mph."
+      },
+      {
+        "number": 3,
+        "name": "Thursday",
+        "startTime": "date:now +59252 seconds",
+        "endTime": "date:now +102452 seconds",
+        "isDaytime": true,
+        "temperature": 67,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "9 to 14 mph",
+        "windDirection": "NNW",
+        "icon": "https://api.weather.gov/icons/land/day/skc?size=medium",
+        "shortForecast": "Sunny",
+        "detailedForecast": "Sunny. High near 67, with temperatures falling to around 64 in the afternoon. North northwest wind 9 to 14 mph, with gusts as high as 22 mph."
+      },
+      {
+        "number": 4,
+        "name": "Thursday Night",
+        "startTime": "date:now +102452 seconds",
+        "endTime": "date:now +145652 seconds",
+        "isDaytime": false,
+        "temperature": 50,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "13 mph",
+        "windDirection": "NNW",
+        "icon": "https://api.weather.gov/icons/land/night/skc?size=medium",
+        "shortForecast": "Clear",
+        "detailedForecast": "Clear, with a low around 50. North northwest wind around 13 mph, with gusts as high as 23 mph."
+      },
+      {
+        "number": 5,
+        "name": "Friday",
+        "startTime": "date:now +145652 seconds",
+        "endTime": "date:now +188852 seconds",
+        "isDaytime": true,
+        "temperature": 71,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "13 mph",
+        "windDirection": "N",
+        "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
+        "shortForecast": "Sunny",
+        "detailedForecast": "Sunny, with a high near 71. North wind around 13 mph, with gusts as high as 23 mph."
+      },
+      {
+        "number": 6,
+        "name": "Friday Night",
+        "startTime": "date:now +188852 seconds",
+        "endTime": "date:now +232052 seconds",
+        "isDaytime": false,
+        "temperature": 53,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "14 mph",
+        "windDirection": "N",
+        "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
+        "shortForecast": "Mostly Clear",
+        "detailedForecast": "Mostly clear, with a low around 53."
+      },
+      {
+        "number": 7,
+        "name": "Saturday",
+        "startTime": "date:now +232052 seconds",
+        "endTime": "date:now +275252 seconds",
+        "isDaytime": true,
+        "temperature": 74,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "9 to 14 mph",
+        "windDirection": "NNE",
+        "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
+        "shortForecast": "Sunny",
+        "detailedForecast": "Sunny, with a high near 74."
+      },
+      {
+        "number": 8,
+        "name": "Saturday Night",
+        "startTime": "date:now +275252 seconds",
+        "endTime": "date:now +314852 seconds",
+        "isDaytime": false,
+        "temperature": 52,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "5 to 9 mph",
+        "windDirection": "NNE",
+        "icon": "https://api.weather.gov/icons/land/night/skc?size=medium",
+        "shortForecast": "Clear",
+        "detailedForecast": "Clear, with a low around 52."
+      },
+      {
+        "number": 9,
+        "name": "Sunday",
+        "startTime": "date:now +314852 seconds",
+        "endTime": "date:now +358052 seconds",
+        "isDaytime": true,
+        "temperature": 75,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "6 mph",
+        "windDirection": "NE",
+        "icon": "https://api.weather.gov/icons/land/day/skc?size=medium",
+        "shortForecast": "Sunny",
+        "detailedForecast": "Sunny, with a high near 75."
+      },
+      {
+        "number": 10,
+        "name": "Sunday Night",
+        "startTime": "date:now +358052 seconds",
+        "endTime": "date:now +401252 seconds",
+        "isDaytime": false,
+        "temperature": 52,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "6 mph",
+        "windDirection": "WSW",
+        "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
+        "shortForecast": "Mostly Clear",
+        "detailedForecast": "Mostly clear, with a low around 52."
+      },
+      {
+        "number": 11,
+        "name": "Monday",
+        "startTime": "date:now +401252 seconds",
+        "endTime": "date:now +444452 seconds",
+        "isDaytime": true,
+        "temperature": 72,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "3 to 10 mph",
+        "windDirection": "WNW",
+        "icon": "https://api.weather.gov/icons/land/day/sct?size=medium",
+        "shortForecast": "Mostly Sunny",
+        "detailedForecast": "Mostly sunny, with a high near 72."
+      },
+      {
+        "number": 12,
+        "name": "Monday Night",
+        "startTime": "date:now +444452 seconds",
+        "endTime": "date:now +487652 seconds",
+        "isDaytime": false,
+        "temperature": 50,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "10 mph",
+        "windDirection": "WSW",
+        "icon": "https://api.weather.gov/icons/land/night/sct?size=medium",
+        "shortForecast": "Partly Cloudy",
+        "detailedForecast": "Partly cloudy, with a low around 50."
+      },
+      {
+        "number": 13,
+        "name": "Tuesday",
+        "startTime": "date:now +487652 seconds",
+        "endTime": "date:now +530852 seconds",
+        "isDaytime": true,
+        "temperature": 70,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "windSpeed": "7 to 10 mph",
+        "windDirection": "WNW",
+        "icon": "https://api.weather.gov/icons/land/day/sct?size=medium",
+        "shortForecast": "Mostly Sunny",
+        "detailedForecast": "Mostly sunny, with a high near 70."
+      },
+      {
+        "number": 14,
+        "name": "Tuesday Night",
+        "startTime": "date:now +530852 seconds",
+        "endTime": "date:now +574052 seconds",
+        "isDaytime": false,
+        "temperature": 50,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 1
+        },
+        "windSpeed": "7 to 10 mph",
+        "windDirection": "WNW",
+        "icon": "https://api.weather.gov/icons/land/night/sct?size=medium",
+        "shortForecast": "Partly Cloudy",
+        "detailedForecast": "Partly cloudy, with a low around 50."
+      }
+    ]
+  }
+}
