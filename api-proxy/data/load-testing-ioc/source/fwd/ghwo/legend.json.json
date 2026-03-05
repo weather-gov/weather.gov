@@ -1,0 +1,473 @@
+{
+  "generation_time": "2026-03-04T21:07:28Z",
+  "generation_time_LT": "2026-03-04T16:07:28",
+  "ghwo_version": "2025.03.18",
+  "hazards": [
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "Little to no severe thunderstorm risk.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "#50c986",
+          "definition": "Isolated severe storms possible, similar to storms your area may experience a few times a year.",
+          "levelName": "Marginal"
+        },
+        "2": {
+          "color": "#ffff51",
+          "definition": "Isolated to scattered severe storms possible, similar to intense storms your area may only experience once or twice a year.",
+          "levelName": "Slight"
+        },
+        "3": {
+          "color": "#ffc06c",
+          "definition": "Scattered to numerous severe storms expected, similar to intense storms your area may only experience once per year or less.",
+          "levelName": "Enhanced"
+        },
+        "4": {
+          "color": "#ff5050",
+          "definition": "Widespread severe storms likely. Very intense storms your area may experience once or twice in a lifetime.",
+          "levelName": "Moderate"
+        },
+        "5": {
+          "color": "#ff50ff",
+          "definition": "Widespread severe storms expected. Very intense storms your area may experience once or twice in a lifetime.",
+          "levelName": "High"
+        }
+      },
+      "name": "Severe Thunderstorm Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "Little to no tornado risk,",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "#50c986",
+          "definition": "Up to 5% chance of a tornado within 25 miles of your location.",
+          "levelName": "Marginal"
+        },
+        "2": {
+          "color": "#ffff51",
+          "definition": "5-10% chance of a tornado within 25 miles of your location.",
+          "levelName": "Slight"
+        },
+        "3": {
+          "color": "#ffc06c",
+          "definition": "10-15% chance of a tornado within 25 miles of your location.",
+          "levelName": "Enhanced"
+        },
+        "4": {
+          "color": "#ff5050",
+          "definition": "15-30% chance of a tornado within 25 miles of your location.",
+          "levelName": "Moderate"
+        },
+        "5": {
+          "color": "#ff50ff",
+          "definition": "30% or greater chance of a tornado within 25 miles of your location.",
+          "levelName": "High"
+        }
+      },
+      "name": "Tornado Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "Little to no Severe Thunderstorm Wind risk.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "#50c986",
+          "definition": "Up to 15% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "levelName": "Marginal"
+        },
+        "2": {
+          "color": "#ffff51",
+          "definition": "15-30% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "levelName": "Slight"
+        },
+        "3": {
+          "color": "#ffc06c",
+          "definition": "30-45% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "levelName": "Enhanced"
+        },
+        "4": {
+          "color": "#ff5050",
+          "definition": "45-60% chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "levelName": "Moderate"
+        },
+        "5": {
+          "color": "#ff50ff",
+          "definition": "60% or greater chance of severe wind gusts (58 mph or greater) within 25 miles of your location.",
+          "levelName": "High"
+        }
+      },
+      "name": "Thunderstorm Wind Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "Little to no Hail Risk",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "#50c986",
+          "definition": "Up to 15% chance of 1\" or larger hail within 25 miles of your location.",
+          "levelName": "Marginal"
+        },
+        "2": {
+          "color": "#ffff51",
+          "definition": "15-30% chance of 1\" or larger hail within 25 miles of your location.",
+          "levelName": "Slight"
+        },
+        "3": {
+          "color": "#ffc06c",
+          "definition": "30-45% chance of 1\" or larger hail within 25 miles of your location.",
+          "levelName": "Enhanced"
+        },
+        "4": {
+          "color": "#ff5050",
+          "definition": "45% or greater chance of 1\" or larger hail within 25 miles of your location.",
+          "levelName": "Moderate"
+        }
+      },
+      "name": "Hail Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "No lightning risk",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Isolated to scattered thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Numerous thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Widespread thunderstorms with dangerous cloud-to-ground lightning expected.",
+          "levelName": "Significant"
+        }
+      },
+      "name": "Lightning Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "No Excessive Rainfall risk",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Isolated flash floods possible. Most flooding will be localized to areas that can experience rapid runoff with heavy rainfall.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Scattered flash floods possible, some potentially significant. Most vulnerable are urban areas, roads, small streams, and washes.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Numerous flash floods including some significant events likely. Many streams may flood, affecting nearby residential and urban areas.",
+          "levelName": "Significant"
+        },
+        "4": {
+          "color": "purple",
+          "definition": "Widespread, severe flash floods expected. Events could occur in areas that don't normally flood. Lives and property in greater danger.",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Excessive Rainfall Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "No Non-Thunderstorm Wind Risk.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Breezy conditions could blow around unsecured items and result in hazardous driving conditions for high-profile vehicles. Sustained winds 20-30 mph or gusts 30-45 mph.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Windy conditions could damage outdoor items and result in hazardous driving conditions for high-profile vehicles. Power outages are possible. Sustained winds 31-39 mph or gusts 46-57 mph.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Very windy conditions could blow down trees. Power outages likely. Sustained winds 40-49 mph or gusts 58-64 mph.",
+          "levelName": "Significant"
+        },
+        "4": {
+          "color": "purple",
+          "definition": "Extremely windy conditions will damage numerous trees and cause widespread power outages. Sustained winds greater than 50 mph or gusts greater than 65 mph.",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Wind Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "No risk of fog.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Fog with visibilities less than or equal to 1 mile.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Fog with visibilities less than or equal to 1/2 mile.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Fog with visibilities less than or equal to 1/4 mile.",
+          "levelName": "Significant"
+        },
+        "4": {
+          "color": "purple",
+          "definition": "Fog with near zero visibilities.",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Fog Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "Low fire danger conditions",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Low humidity and breezy conditions will result in an increased danger of fires getting out of control.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Low humidity and windy conditions will create dangerous fire conditions. Fires can escape control more easily and be difficult to contain.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "High winds and extended dry periods will produce extreme burning conditions. Open fires can quickly escape and are very difficult to control, even for experienced fire fighters.",
+          "levelName": "Significant"
+        },
+        "4": {
+          "color": "purple",
+          "definition": "Very strong winds, combined with low humidity, will create extremely volatile conditions. Fires will spread very quickly with spot fires common. Fire control will be extremely difficult.",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Fire Weather Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "No Extreme Cold Risk.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Hypothermia could occur with prolonged exposure and lack of proper clothing.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Hypothermia or frostbite could occur with prolonged exposure and lack of proper clothing. Minimum Apparent Temperature 0 to -14.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Frostbite and hypothermia can occur within 30 minutes without proper clothing. Minimum Apparent Temperature -15 to -24.",
+          "levelName": "Significant"
+        },
+        "4": {
+          "color": "purple",
+          "definition": "Frostbite and hypothermia can occur in as little as 20 minutes without proper clothing. Minimum Apparent Temperature -25 to -34.",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Extreme Cold Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "No freezing rain or drizzle.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Patchy or very light freezing rain or drizzle could cause a light glaze of ice, resulting in hazardous travel conditions on bridges, overpasses, and untreated or secondary roads. Total ice accumulation less than 0.05 inches.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Freezing rain or drizzle will create dangerous travel conditions and likely result in power outages. Total ice accumulation of 0.05 to less than 0.5 inches.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Freezing rain will result in numerous power outages and make travel nearly impossible. Total ice accumulation of 0.5 to less than 1.0 inch.",
+          "levelName": "Significant"
+        },
+        "4": {
+          "color": "purple",
+          "definition": "Freezing rain will result in widespread, prolonged power outages and make travel impossible. Total ice accumulation of 1.0 inch or more.",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Ice Accumulation Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "Trace or no snow and/or sleet accumulation.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Light snow and/or sleet accumulation will result in locally hazardous travel conditions, especially on bridges, overpasses, and untreated or secondary roads. Total accumulation of 0.1 to less than 3.0 inches.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Considerable snow and/or sleet accumulation will cause significant travel disruptions. Total accumulation of 3.0 to less than 6.0 inches.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Heavy snow and/or sleet accumulation will result in widespread travel disruptions. Total accumulation of 6.0 to less than 12.0 inches.",
+          "levelName": "Significant"
+        },
+        "4": {
+          "color": "purple",
+          "definition": "Extreme snow and/or sleet accumulation will result in widespread, prolonged travel disruptions. Total accumulation of 12.0 inches or more.",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Snow/Sleet Risk",
+      "webTab": "public"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "No Coastal Flooding risk.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Minor Coastal Flooding expected. 1 to 2 feet of inundation in shoreline and vulnerable areas. A few shoreline and vulnerable roadways and adjacent properties will experience shallow flooding. There is a low threat of property damage. There is no direct threat to life.",
+          "levelName": "Minor"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Moderate Coastal Flooding expected. 2 to 3 feet of inundation in shoreline and vulnerable areas. There is an elevated threat of property damage, with a risk to life if one places themselves in unnecessary danger. Several shoreline and vulnerable area homes and businesses will experience water inside. Several low-lying coastal and shoreline roads will be closed. A few cars may take on water or even be destroyed.",
+          "levelName": "Moderate"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Major Coastal Flooding expected. 3 to 5+ feet of inundation in shoreline and vulnerable areas, with 1 to 3 feet of inundation in surrounding coastal communities that rarely experience coastal flooding. Evacuations will be necessary for shoreline and vulnerable coastal areas due to a life threatening flooding threat. Many coastal communities will experience damage, with some shoreline and flood prone homes and businesses being destroyed. Many cars will likely be submerged or washed away. Several sections of nearshore roads and escape routes will be impassable and a few could be washed out. Flood waters may extend well inland in low lying areas.",
+          "levelName": "Major"
+        }
+      },
+      "name": "Coastal Flood Risk",
+      "webTab": "marine"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "No Marine Hazards Risk.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Wind >= 15 knots and/or Waves >= 2 feet",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Wind >= 25 knots and/or Waves >= 5 feet",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Wind >= 34 knots and/or Waves >= 10 feet",
+          "levelName": "Significant"
+        },
+        "4": {
+          "color": "purple",
+          "definition": "Wind >= 48 knots and/or Waves >= 14 feet",
+          "levelName": "Extreme"
+        }
+      },
+      "name": "Marine Hazard Risk",
+      "webTab": "marine"
+    },
+    {
+      "category": {
+        "0": {
+          "color": "#ededed",
+          "definition": "No Freezing Spray Risk.",
+          "levelName": "None"
+        },
+        "1": {
+          "color": "yellow",
+          "definition": "Light Freezing Spray Expected.",
+          "levelName": "Limited"
+        },
+        "2": {
+          "color": "orange",
+          "definition": "Moderate Freezing Spray Expected.",
+          "levelName": "Elevated"
+        },
+        "3": {
+          "color": "red",
+          "definition": "Heavy Freezing Spray Expected.",
+          "levelName": "Significant"
+        }
+      },
+      "name": "Freezing Spray Risk",
+      "webTab": "marine"
+    }
+  ],
+  "switchover_hour": "2"
+}

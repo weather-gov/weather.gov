@@ -1,4 +1,5 @@
 import express from "express";
+import markdownIt from "markdown-it";
 import mustache from "mustache";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -20,6 +21,41 @@ const fsExists = async (filePath) =>
     .access(filePath, fs.constants.F_OK)
     .then(() => true)
     .catch(() => false);
+
+const getPlayingMetadata = async () => {
+  try {
+    const metaPath = path.join("./data", config.play, "@meta.json");
+    const meta = await fsExists(metaPath).then((exists) => {
+      if (exists) {
+        return fs.readFile(metaPath).then(JSON.parse);
+      }
+      return null;
+    });
+
+    const metadata = {};
+
+    if (meta && meta.description) {
+      metadata.description = meta.description;
+    }
+
+    const descPath = path.join("./data", config.play, "@description.md");
+    const md = await fsExists(descPath).then((exists) => {
+      if (exists) {
+        return fs.readFile(descPath, { encoding: "utf-8" });
+      }
+      return null;
+    });
+
+    if (md) {
+      const markdown = markdownIt();
+      metadata.description = markdown.render(md);
+    }
+
+    return metadata;
+  } catch (e) {
+    return {};
+  }
+};
 
 const getPointFileInfo = async () => {
   try {
@@ -90,6 +126,7 @@ const ui = async ({ error = false } = {}) => {
   const bundleProducts = config.play
     ? await getProductInfo("./data", config.play)
     : [];
+  const metadata = config.play ? await getPlayingMetadata() : {};
 
   return mustache.render(template, {
     error,
@@ -97,6 +134,7 @@ const ui = async ({ error = false } = {}) => {
     points,
     delay: config.delay ?? 0,
     products: bundleProducts,
+    metadata,
     bundles,
     isLocal,
   });
@@ -159,7 +197,7 @@ app.get("*any", async (req, res) => {
   // If there are any double-dots in the path, that could result in a path
   // traversal, so just eat it here and go straight to the UI.
   if (req.path === "/" || /\.\./.test(req.path)) {
-    res.setHeader("Content-Type", "text/html");
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.write(await ui());
     res.end();
     return;

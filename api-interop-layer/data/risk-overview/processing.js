@@ -152,7 +152,9 @@ export const processDays = (data, legend) => {
   // Get the keys that are timestamps.
   const days = Object.keys(data)
     .filter((key) =>
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$/.test(key),
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?([-+]\d{2}:\d{2}|[zZ])$/.test(
+        key,
+      ),
     )
     .map((timestamp, index) => ({
       risks: Object.entries(data[timestamp])

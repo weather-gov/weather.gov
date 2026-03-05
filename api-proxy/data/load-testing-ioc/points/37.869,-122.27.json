@@ -1,0 +1,83 @@
+{
+  "@bundle": {
+    "name": "Berkeley, CA",
+    "attributes": [
+      "has alerts",
+      "has a weather story",
+      "DOES NOT have a briefing",
+      "DOES NOT have risk overview",
+      "upcoming temperature makes a spiky pattern so you can identify it"
+    ]
+  },
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": { "@id": "s:GeoCoordinates", "@type": "geo:wktLiteral" },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": { "@id": "s:Distance", "@type": "s:QuantitativeValue" },
+      "bearing": { "@type": "s:QuantitativeValue" },
+      "value": { "@id": "s:value" },
+      "unitCode": { "@id": "s:unitCode", "@type": "@id" },
+      "forecastOffice": { "@type": "@id" },
+      "forecastGridData": { "@type": "@id" },
+      "publicZone": { "@type": "@id" },
+      "county": { "@type": "@id" }
+    }
+  ],
+  "id": "https://api.weather.gov/points/37.869,-122.27",
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [-122.27, 37.869] },
+  "properties": {
+    "@id": "https://api.weather.gov/points/37.869,-122.27",
+    "@type": "wx:Point",
+    "cwa": "MTR",
+    "type": "land",
+    "forecastOffice": "https://api.weather.gov/offices/MTR",
+    "gridId": "MTR",
+    "gridX": 1,
+    "gridY": 1,
+    "forecast": "https://api.weather.gov/gridpoints/MTR/1,1/forecast",
+    "forecastHourly": "https://api.weather.gov/gridpoints/MTR/1,1/forecast/hourly",
+    "forecastGridData": "https://api.weather.gov/gridpoints/MTR/1,1",
+    "observationStations": "https://api.weather.gov/gridpoints/MTR/1,1/stations",
+    "relativeLocation": {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.299147, 37.866972] },
+      "properties": {
+        "city": "Berkeley",
+        "state": "CA",
+        "distance": { "unitCode": "wmoUnit:m", "value": 2568.454441532 },
+        "bearing": { "unitCode": "wmoUnit:degree_(angle)", "value": 84 }
+      }
+    },
+    "forecastZone": "https://api.weather.gov/zones/forecast/CAZ508",
+    "county": "https://api.weather.gov/zones/county/CAC001",
+    "fireWeatherZone": "https://api.weather.gov/zones/fire/CAZ508",
+    "timeZone": "America/Los_Angeles",
+    "radarStation": "KMUX",
+    "astronomicalData": {
+      "sunrise": "2026-03-04T06:34:24-08:00",
+      "sunset": "2026-03-04T18:06:57-08:00",
+      "transit": "2026-03-04T12:20:41-08:00",
+      "civilTwilightBegin": "2026-03-04T06:09:29-08:00",
+      "civilTwilightEnd": "2026-03-04T18:31:53-08:00",
+      "nauticalTwilightBegin": "2026-03-04T05:39:04-08:00",
+      "nauticalTwilightEnd": "2026-03-04T19:02:17-08:00",
+      "astronomicalTwilightBegin": "2026-03-04T05:08:36-08:00",
+      "astronomicalTwilightEnd": "2026-03-04T19:32:46-08:00"
+    },
+    "nwr": {
+      "transmitter": "WNG655",
+      "sameCode": "006001",
+      "areaBroadcast": "https://api.weather.gov/radio/WNG655/broadcast",
+      "pointBroadcast": "https://api.weather.gov/points/37.869,-122.27/radio"
+    }
+  }
+}

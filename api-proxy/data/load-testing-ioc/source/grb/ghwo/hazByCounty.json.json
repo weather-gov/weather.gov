@@ -1,0 +1,95 @@
+{
+  "generation_time": "2026-03-04T12:07:34-06:00",
+  "counties": {
+    "55009": {
+      "countyName": "WI_Brown",
+      "date:now -2335 seconds": {
+        "SevereThunderstorm": 0,
+        "Tornado": 0,
+        "ConvectiveWind": 0,
+        "Hail": 0,
+        "SpotterOutlook": 0,
+        "Lightning": 0,
+        "ExcessiveRainfall": 0,
+        "NonConvectiveWind": 0,
+        "Fog": 0,
+        "FireWeather": 0,
+        "ExtremeCold": 0,
+        "IceAccumulation": 0,
+        "SnowSleet": 0,
+        "DailyComposite": 0
+      },
+      "date:today 06:00:-06 +1 day": {
+        "SevereThunderstorm": 0,
+        "Tornado": 0,
+        "ConvectiveWind": 0,
+        "Hail": 0,
+        "Lightning": 0,
+        "ExcessiveRainfall": 0,
+        "NonConvectiveWind": 0,
+        "Fog": 0,
+        "FireWeather": 0,
+        "ExtremeCold": 0,
+        "IceAccumulation": 0,
+        "SnowSleet": 0,
+        "DailyComposite": 0
+      },
+      "date:today 06:00:-06 +2 day": {
+        "SevereThunderstorm": 0,
+        "Lightning": 1,
+        "ExcessiveRainfall": 0,
+        "NonConvectiveWind": 0,
+        "Fog": 0,
+        "FireWeather": 0,
+        "ExtremeCold": 0,
+        "IceAccumulation": 0,
+        "SnowSleet": 0,
+        "DailyComposite": 1
+      },
+      "date:today 06:00:-06 +3 day": {
+        "SevereThunderstorm": 0,
+        "Lightning": 0,
+        "ExcessiveRainfall": 0,
+        "NonConvectiveWind": 0,
+        "Fog": 0,
+        "FireWeather": 0,
+        "ExtremeCold": 0,
+        "IceAccumulation": 0,
+        "SnowSleet": 0,
+        "DailyComposite": 0
+      },
+      "date:today 06:00:-05 +4 day": {
+        "SevereThunderstorm": 0,
+        "Lightning": 0,
+        "ExcessiveRainfall": 0,
+        "NonConvectiveWind": 0,
+        "FireWeather": 1,
+        "ExtremeCold": 0,
+        "IceAccumulation": 0,
+        "SnowSleet": 0,
+        "DailyComposite": 1
+      },
+      "date:today 06:00:-05 +5 day": {
+        "SevereThunderstorm": 0,
+        "Lightning": 0,
+        "NonConvectiveWind": 0,
+        "FireWeather": 0,
+        "ExtremeCold": 0,
+        "IceAccumulation": 0,
+        "SnowSleet": 0,
+        "DailyComposite": 0
+      },
+      "date:today 06:00:-05 +6 day": {
+        "SevereThunderstorm": 0,
+        "Lightning": 0,
+        "NonConvectiveWind": 0,
+        "FireWeather": 0,
+        "ExtremeCold": 0,
+        "IceAccumulation": 0,
+        "SnowSleet": 0,
+        "DailyComposite": 0
+      }
+    }
+  },
+  "@wfo": "grb"
+}
