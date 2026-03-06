@@ -4,13 +4,18 @@ data "archive_file" "app_src" {
   output_path = "${path.module}/dist/app_src.zip"
   excludes = [
     ".git*",
+    "frontend/node_modules/",
+    "frontend/public/",
     "node_modules/*",
     "tmp/**/*",
     "terraform/*",
     "log/*",
     "doc/*",
     "credentials.json",
-    ".ruff_cache/*"
+    ".ruff_cache/*",
+    "__pycache__/*",
+    "dist/*",
+    "spatial/management/commands/__cache"
   ]
 }
 
@@ -34,7 +39,7 @@ resource "cloudfoundry_app" "app" {
   path             = data.archive_file.app_src.output_path
   source_code_hash = data.archive_file.app_src.output_base64sha256
   buildpacks       = ["https://github.com/cloudfoundry/apt-buildpack.git", "python_buildpack"]
-  strategy         = "rolling"
+  strategy         = "none"
   routes           = (var.custom_domain_name == null ?
     [{ route = "${local.host_name}.${local.domain}" }] :
     [{ route = "${local.host_name}.app.cloud.gov" }, { route = "${local.domain}" }])
@@ -56,14 +61,13 @@ resource "cloudfoundry_app" "app" {
 
   processes = [
     {
-      type                            = "web"
-      instances                       = var.web_instances
-      memory                          = var.web_memory
-      disk_quota                      = var.web_disk_quota
-      health_check_invocation_timeout = 600
-      health_check_http_endpoint      = "/health"
-      health_check_type               = "http"
-      command                         = "./run.sh"
+      type              = "web"
+      instances         = var.web_instances
+      memory            = var.web_memory
+      disk_quota        = var.web_disk_quota
+      health_check_type = "port"
+      command           = "./run.sh"
+      timeout           = 180
     }
   ]
 
@@ -75,4 +79,36 @@ resource "cloudfoundry_app" "app" {
     module.app_space,
     module.database
   ]
+}
+
+# workaround a bug in the cloud foundry provider where a second deploy happens a
+# minute after the first, thereby clobbering the original deploy. the conditions
+# for this bug seem to be:
+# 1. the app takes a long time to setup (more than 5m),
+# 2. `processes.instances` must be more than one, and
+# 3. strategy must be "rolling".
+#
+# NB: the error given is: "timed out after waiting for async process". if you
+# think you are hitting the one minute redeploy issue, you can query the app
+# `created_at` timestamps:
+#
+# > cf curl "/v3/deployments?app_guids=$(cf app weathergov-test --guid)" | jq '.resources[].created_at'
+# "2026-03-05T17:34:15Z"
+# "2026-03-05T17:35:16Z"
+#
+# to get around this, we separate the push of the manifest and the code/env
+# updates (by setting `strategy` to "none") from the actual restart command,
+# which we do here. the triggers for a restart with an explicit rolling strategy
+# depend on if either the app code or env variables have changed.
+resource "null_resource" "rolling_restart" {
+  triggers = {
+    app_hash = data.archive_file.app_src.output_base64sha256
+    env_hash = sha256(jsonencode(cloudfoundry_app.app[0].environment))
+  }
+
+  provisioner "local-exec" {
+    command = "cf restart ${cloudfoundry_app.app[0].name} --strategy rolling"
+  }
+
+  depends_on = [cloudfoundry_app.app]
 }
