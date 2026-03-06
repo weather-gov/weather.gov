@@ -395,9 +395,11 @@ const setupMap = () => {
       fillOpacity: 0.3,
     },
     county: {
-      color: "#074b69",
+      color: "#11181D",
       opacity: 1,
       fillOpacity: 0,
+      weight: 3,
+      dashArray: "1 4",
     },
     active: {
       fillOpacity: 0.5,
