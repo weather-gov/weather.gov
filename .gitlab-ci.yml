@@ -389,7 +389,7 @@ web-component-test:
     - ln -s /app/node_modules/ .
     - ln -s /app/api-interop-layer/node_modules api-interop-layer/
     - ln -s /app/api-proxy/node_modules api-proxy/
-    - npx --no-install c8 --reporter cobertura -o coverage/wc/ --reporter text-summary  mocha --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
+    - npx --no-install c8 --reporter cobertura -o coverage/wc/ --reporter text-summary  mocha --forbid-only --require forecast/frontend/tests/components/preload.js forecast/frontend/tests/components/*-tests.js
   coverage:
     /^Statements\s*:\s*([^%]+)/
   artifacts:
@@ -423,7 +423,7 @@ interop-test:
     # like a Gitlab bug), logrus does not know what "silent" is, and logrus
     # exits with an error if given an unknown log level (which feels like
     # a logrus bug).
-    - LOG_LEVEL=silent npx --no-install c8 --reporter cobertura -o ../coverage/interop/ --reporter text-summary mocha '**/*.test.js' --exclude 'node_modules/**' --require mocha.js
+    - LOG_LEVEL=silent npx --no-install c8 --reporter cobertura -o ../coverage/interop/ --reporter text-summary mocha '**/*.test.js' --forbid-only --exclude 'node_modules/**' --require mocha.js
   coverage:
     /^Statements\s*:\s*([^%]+)/
   artifacts:
