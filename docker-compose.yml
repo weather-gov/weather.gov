@@ -88,7 +88,31 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ixu3N02Xp3uRPDcuZCmKIWZyNb
-      #MAX_OPEN_CONNECTIONS: 0
+      # MAX_OPEN_CONNECTIONS: 0
+      # DISABLE_REDIS: true
+      # The number of Client instances to create.
+      # When set to null, the Pool instance will create
+      # an unlimited amount of Client instances.
+      INTEROP_API_POOL_CONNECTIONS: 20
+      # The amount of time before a Client instance is removed
+      # from the Pool and closed.
+      # When set to null, Client instances will not be
+      # removed or closed based on age.
+      # INTEROP_API_POOL_CLIENT_TTL:
+      # The timeout, in milliseconds, after which a socket without
+      # active requests will time out.
+      # Monitors time between activity on a connected socket.
+      # This value may be overridden by keep-alive hints from the server.
+      # INTEROP_API_POOL_KEEP_ALIVE_TIMEOUT:
+      # The timeout after which a request will time out, in milliseconds.
+      # Monitors time between receiving body data.
+      # Use 0 to disable it entirely. Defaults to 300 seconds.
+      # Please note the timeout will be reset if you keep writing data to the socket everytime. 
+      # INTEROP_API_POOL_BODY_TIMEOUT:
+      # The amount of time, in milliseconds, the parser will wait to
+      # receive the complete HTTP headers while not sending the request.
+      # Defaults to 300 seconds.
+      # INTEROP_API_POOL_HEADERS_TIMEOUT:
     networks:
       - weather.gov
     links:

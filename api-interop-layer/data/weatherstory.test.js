@@ -17,7 +17,7 @@ describe("weatherstory module", () => {
     },
   };
 
-  const weatherStoryPool = {
+  const connectionPool = {
     request: sandbox.stub(),
   };
 
@@ -27,7 +27,7 @@ describe("weatherstory module", () => {
   let getDataForWxStory;
 
   before(async () => {
-    await quibble.esm("./weatherStoryPool.js", {}, weatherStoryPool);
+    await quibble.esm("./connectionPool.js", {}, connectionPool);
     await quibble.esm(
       "../redis.js",
       { getFromRedis, saveToRedis, parseTTLFromHeaders },
@@ -43,7 +43,7 @@ describe("weatherstory module", () => {
     sandbox.resetBehavior();
     response.statusCode = 200;
     response.headers["content-type"] = "application/json";
-    weatherStoryPool.request.resolves(response);
+    connectionPool.request.resolves(response);
     response.body.dump.resolves();
   });
 
@@ -179,7 +179,7 @@ describe("weatherstory module", () => {
       const actual = await getDataForWxStory("ABC");
 
       // It should not have tried to make the request
-      expect(weatherStoryPool.request.called).to.equal(false);
+      expect(connectionPool.request.called).to.equal(false);
 
       // The result should equal the cached value we set
       expect(actual).to.eql(cachedStories);

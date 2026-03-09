@@ -17,7 +17,7 @@ describe("briefing module", () => {
     },
   };
 
-  const weatherStoryPool = {
+  const connectionPool = {
     request: sandbox.stub(),
   };
 
@@ -27,7 +27,7 @@ describe("briefing module", () => {
   let getDataForBriefing;
 
   before(async () => {
-    await quibble.esm("./weatherStoryPool.js", {}, weatherStoryPool);
+    await quibble.esm("./connectionPool.js", {}, connectionPool);
     await quibble.esm(
       "../redis.js",
       { getFromRedis, saveToRedis, parseTTLFromHeaders },
@@ -48,7 +48,7 @@ describe("briefing module", () => {
     sandbox.resetBehavior();
     response.statusCode = 200;
     response.body.dump.resolves();
-    weatherStoryPool.request.resolves(response);
+    connectionPool.request.resolves(response);
     getFromRedis.resolves(null);
   });
 
@@ -147,7 +147,7 @@ describe("briefing module", () => {
       const actual = await getDataForBriefing("ABC");
 
       // The request should never have been made
-      expect(weatherStoryPool.request.called).to.equal(false);
+      expect(connectionPool.request.called).to.equal(false);
 
       // And the response should be the cached value
       expect(actual).to.eql(cachedBriefing);

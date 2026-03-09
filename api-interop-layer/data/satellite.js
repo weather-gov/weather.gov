@@ -3,10 +3,11 @@ import { logger } from "../util/monitoring/index.js";
 import { getFromRedis, saveToRedis, parseTTLFromHeaders } from "../redis.js";
 import { Pool } from "undici";
 import { requestJSONWithHeaders } from "../util/request.js";
+import POOL_SETTINGS from "./poolSettings.js";
 
 const satelliteLogger = logger.child({ subsystem: "satellite" });
 
-const requestPool = new Pool("https://cdn.star.nesdis.noaa.gov");
+const requestPool = new Pool("https://cdn.star.nesdis.noaa.gov", POOL_SETTINGS);
 
 export default async ({ grid: { wfo }, place: { timezone } }) => {
   try {
