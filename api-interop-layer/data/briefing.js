@@ -1,7 +1,7 @@
 import { logger } from "../util/monitoring/index.js";
 import { requestJSONWithHeaders } from "../util/request.js";
 import { getFromRedis, saveToRedis, parseTTLFromHeaders } from "../redis.js";
-import weatherStoryPool from "./weatherStoryPool.js";
+import connectionPool from "./connectionPool.js";
 
 const briefingsLogger = logger.child({ subsystem: "briefings" });
 // 1 hr
@@ -18,7 +18,7 @@ export default async (wfo) => {
     }
 
     const [result, headers] = await requestJSONWithHeaders(
-      weatherStoryPool,
+      connectionPool,
       url,
     );
 

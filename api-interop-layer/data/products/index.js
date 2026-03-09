@@ -43,8 +43,7 @@ export default async (id) => {
     }
 
     // Cache and return the result
-    const ttl = parseTTLFromHeaders(cacheControl);
-
+    let ttl = parseTTLFromHeaders(cacheControl);
     if (!ttl) {
       // The API appears to specify 120s as
       // the ttl for product based endpoints,

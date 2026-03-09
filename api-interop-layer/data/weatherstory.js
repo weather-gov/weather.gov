@@ -1,5 +1,5 @@
 import { logger } from "../util/monitoring/index.js";
-import weatherStoryPool from "./weatherStoryPool.js";
+import connectionPool from "./connectionPool.js";
 import { requestJSONWithHeaders } from "../util/request.js";
 import { getFromRedis, saveToRedis, parseTTLFromHeaders } from "../redis.js";
 
@@ -18,7 +18,7 @@ export default async (wfo) => {
 
     // Request, throws error, if error
     const [result, headers] = await requestJSONWithHeaders(
-      weatherStoryPool,
+      connectionPool,
       url,
     );
 
