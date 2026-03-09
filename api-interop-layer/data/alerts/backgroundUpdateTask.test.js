@@ -9,7 +9,15 @@ import { AlertsCache } from "./cache.js";
 describe("alert background processing module", () => {
   const sandbox = sinon.createSandbox();
 
-  const response = { statusCode: 200, body: { json: sandbox.stub() } };
+  const response = {
+    statusCode: 200,
+    headers: { "content-type": "application/json" },
+    body: {
+      text: sandbox.stub(),
+      dump: sandbox.stub().resolves(),
+    },
+  };
+
   const parent = { postMessage: sandbox.stub() };
 
   let getHashesStub;
@@ -22,6 +30,7 @@ describe("alert background processing module", () => {
 
   beforeEach(() => {
     response.statusCode = 200;
+    response.headers = { "content-type": "application/json" };
 
     storedHashes = [];
     storedAlerts = {};
@@ -57,8 +66,7 @@ describe("alert background processing module", () => {
   });
 
   afterEach(() => {
-    // Clear out the background processor's internal cache.
-    response.body.json.resolves({ features: [] });
+    response.body.text.resolves(JSON.stringify({ features: [] }));
     sandbox.resetBehavior();
     sandbox.resetHistory();
     getHashesStub.restore();
@@ -90,9 +98,11 @@ describe("alert background processing module", () => {
       .digest("base64");
 
     beforeEach(() => {
-      response.body.json.resolves({
-        features: [alert],
-      });
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [alert],
+        }),
+      );
     });
 
     it("derives an alert hash", async () => {
@@ -135,20 +145,24 @@ describe("alert background processing module", () => {
           event: "Tornado Warning",
         },
       };
-      response.body.json.resolves({
-        // Clone the alerts because the updater mutates them.
-        features: [JSON.parse(JSON.stringify(alert1))],
-      });
+      response.body.text.resolves(
+        JSON.stringify({
+          // Clone the alerts because the updater mutates them.
+          features: [JSON.parse(JSON.stringify(alert1))],
+        }),
+      );
 
       await updateAlerts({ parent });
 
-      response.body.json.resolves({
-        features: [
-          // Clone the alerts because the updater mutates them.
-          JSON.parse(JSON.stringify(alert1)),
-          JSON.parse(JSON.stringify(alert2)),
-        ],
-      });
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [
+            // Clone the alerts because the updater mutates them.
+            JSON.parse(JSON.stringify(alert1)),
+            JSON.parse(JSON.stringify(alert2)),
+          ],
+        }),
+      );
 
       await updateAlerts({ parent });
 
@@ -170,15 +184,19 @@ describe("alert background processing module", () => {
         },
       };
 
-      response.body.json.resolves({
-        features: [alert1],
-      });
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [alert1],
+        }),
+      );
 
       await updateAlerts({ parent });
 
-      response.body.json.resolves({
-        features: [],
-      });
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [],
+        }),
+      );
 
       await updateAlerts({ parent });
 
@@ -200,19 +218,21 @@ describe("alert background processing module", () => {
     };
 
     it("if the alert has an end time in the past", async () => {
-      response.body.json.resolves({
-        features: [
-          {
-            geometry: "geo",
-            properties: {
-              id: "one",
-              event: "Severe Thunderstorm Warning",
-              ...times,
-              ends: past,
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [
+            {
+              geometry: "geo",
+              properties: {
+                id: "one",
+                event: "Severe Thunderstorm Warning",
+                ...times,
+                ends: past,
+              },
             },
-          },
-        ],
-      });
+          ],
+        }),
+      );
 
       await updateAlerts({ parent });
 
@@ -221,20 +241,22 @@ describe("alert background processing module", () => {
     });
 
     it("if the alert does not have an end time and the expire time is in the past", async () => {
-      response.body.json.resolves({
-        features: [
-          {
-            geometry: "geo",
-            properties: {
-              id: "one",
-              event: "Severe Thunderstorm Warning",
-              ...times,
-              ends: null,
-              expires: past,
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [
+            {
+              geometry: "geo",
+              properties: {
+                id: "one",
+                event: "Severe Thunderstorm Warning",
+                ...times,
+                ends: null,
+                expires: past,
+              },
             },
-          },
-        ],
-      });
+          ],
+        }),
+      );
       await updateAlerts({ parent });
 
       expect(storedHashes).to.have.length(0);
@@ -251,42 +273,44 @@ describe("alert background processing module", () => {
       ends: dayjs().add(1, "minute").toISOString(),
     };
 
-    response.body.json.resolves({
-      features: [
-        {
-          geometry: "geo",
-          properties: {
-            id: "one",
-            event: "Severe Thunderstorm Warning",
-            ...shared,
+    response.body.text.resolves(
+      JSON.stringify({
+        features: [
+          {
+            geometry: "geo",
+            properties: {
+              id: "one",
+              event: "Severe Thunderstorm Warning",
+              ...shared,
+            },
           },
-        },
-        {
-          geometry: "geo",
-          properties: {
-            id: "two",
-            event: "Special Marine Warning",
-            ...shared,
+          {
+            geometry: "geo",
+            properties: {
+              id: "two",
+              event: "Special Marine Warning",
+              ...shared,
+            },
           },
-        },
-        {
-          geometry: "geo",
-          properties: {
-            id: "three",
-            event: "Typhoon Warning",
-            ...shared,
+          {
+            geometry: "geo",
+            properties: {
+              id: "three",
+              event: "Typhoon Warning",
+              ...shared,
+            },
           },
-        },
-        {
-          geometry: "geo",
-          properties: {
-            id: "four",
-            event: "avalanche warning",
-            ...shared,
+          {
+            geometry: "geo",
+            properties: {
+              id: "four",
+              event: "avalanche warning",
+              ...shared,
+            },
           },
-        },
-      ],
-    });
+        ],
+      }),
+    );
 
     await updateAlerts({ parent });
 
@@ -306,22 +330,24 @@ describe("alert background processing module", () => {
   });
 
   it("derives an alert ID", async () => {
-    response.body.json.resolves({
-      features: [
-        {
-          geometry: "geo",
-          properties: {
-            id: "urn:oid:2.49.0.1.840.part1.part2.part3",
-            event: "Severe Thunderstorm Warning",
-            sent: dayjs().subtract(1, "minute").toISOString(),
-            effective: dayjs().subtract(1, "minute").toISOString(),
-            onset: dayjs().subtract(1, "minute").toISOString(),
-            expires: dayjs().add(1, "minute").toISOString(),
-            ends: dayjs().add(1, "minute").toISOString(),
+    response.body.text.resolves(
+      JSON.stringify({
+        features: [
+          {
+            geometry: "geo",
+            properties: {
+              id: "urn:oid:2.49.0.1.840.part1.part2.part3",
+              event: "Severe Thunderstorm Warning",
+              sent: dayjs().subtract(1, "minute").toISOString(),
+              effective: dayjs().subtract(1, "minute").toISOString(),
+              onset: dayjs().subtract(1, "minute").toISOString(),
+              expires: dayjs().add(1, "minute").toISOString(),
+              ends: dayjs().add(1, "minute").toISOString(),
+            },
           },
-        },
-      ],
-    });
+        ],
+      }),
+    );
 
     await updateAlerts({ parent });
 
@@ -331,22 +357,24 @@ describe("alert background processing module", () => {
   });
 
   it("stores unknown alert types with appropriate metadata", async () => {
-    response.body.json.resolves({
-      features: [
-        {
-          geometry: "geo",
-          properties: {
-            id: "one",
-            event: "Severe Meatballstorm Warning",
-            sent: dayjs().subtract(1, "minute").toISOString(),
-            effective: dayjs().subtract(1, "minute").toISOString(),
-            onset: dayjs().subtract(1, "minute").toISOString(),
-            expires: dayjs().add(1, "minute").toISOString(),
-            ends: dayjs().add(1, "minute").toISOString(),
+    response.body.text.resolves(
+      JSON.stringify({
+        features: [
+          {
+            geometry: "geo",
+            properties: {
+              id: "one",
+              event: "Severe Meatballstorm Warning",
+              sent: dayjs().subtract(1, "minute").toISOString(),
+              effective: dayjs().subtract(1, "minute").toISOString(),
+              onset: dayjs().subtract(1, "minute").toISOString(),
+              expires: dayjs().add(1, "minute").toISOString(),
+              ends: dayjs().add(1, "minute").toISOString(),
+            },
           },
-        },
-      ],
-    });
+        ],
+      }),
+    );
 
     await updateAlerts({ parent });
 
@@ -367,22 +395,24 @@ describe("alert background processing module", () => {
   });
 
   it("prioritizes unknown 'evacuation' alerts correctly", async () => {
-    response.body.json.resolves({
-      features: [
-        {
-          geometry: "geo",
-          properties: {
-            id: "one",
-            event: "Pasta Sauce Evacuation Emergency",
-            sent: dayjs().subtract(1, "minute").toISOString(),
-            effective: dayjs().subtract(1, "minute").toISOString(),
-            onset: dayjs().subtract(1, "minute").toISOString(),
-            expires: dayjs().add(1, "minute").toISOString(),
-            ends: dayjs().add(1, "minute").toISOString(),
+    response.body.text.resolves(
+      JSON.stringify({
+        features: [
+          {
+            geometry: "geo",
+            properties: {
+              id: "one",
+              event: "Pasta Sauce Evacuation Emergency",
+              sent: dayjs().subtract(1, "minute").toISOString(),
+              effective: dayjs().subtract(1, "minute").toISOString(),
+              onset: dayjs().subtract(1, "minute").toISOString(),
+              expires: dayjs().add(1, "minute").toISOString(),
+              ends: dayjs().add(1, "minute").toISOString(),
+            },
           },
-        },
-      ],
-    });
+        ],
+      }),
+    );
 
     await updateAlerts({ parent });
 
@@ -403,7 +433,7 @@ describe("alert background processing module", () => {
   });
 
   it("posts an error if it encounters a problem", async () => {
-    MockClient.prototype.request.rejects();
+    MockClient.prototype.request.rejects(new Error("Net error"));
 
     await updateAlerts({ parent });
 
@@ -429,7 +459,7 @@ describe("alert background processing module", () => {
     it("if the alert has an ends property", async () => {
       alertResponse.features[0].properties.ends = "2430-04-03T12:00:00Z";
       alertResponse.features[0].properties.expires = null;
-      response.body.json.resolves(alertResponse);
+      response.body.text.resolves(JSON.stringify(alertResponse));
       await updateAlerts({ parent });
 
       const [_, alert] = Object.values(storedAlerts)[0];
@@ -441,7 +471,7 @@ describe("alert background processing module", () => {
     it("if the alert does not have an ends property but does have expires", async () => {
       alertResponse.features[0].properties.ends = null;
       alertResponse.features[0].properties.expires = "2430-04-03T12:00:00Z";
-      response.body.json.resolves(alertResponse);
+      response.body.text.resolves(JSON.stringify(alertResponse));
       await updateAlerts({ parent });
 
       const [_, alert] = Object.values(storedAlerts)[0];
@@ -452,7 +482,7 @@ describe("alert background processing module", () => {
     it("if the alert has neither ends nor expires properties", async () => {
       alertResponse.features[0].properties.ends = null;
       alertResponse.features[0].properties.expires = null;
-      response.body.json.resolves(alertResponse);
+      response.body.text.resolves(JSON.stringify(alertResponse));
       await updateAlerts({ parent });
 
       const [_, alert] = Object.values(storedAlerts)[0];
@@ -463,38 +493,33 @@ describe("alert background processing module", () => {
   });
 
   describe("#fetchAlertFeatures", () => {
-    it("returns an error object with a cause when responseJSON returns an object with error", async() => {
+    it("returns an error object with a cause when responseJSON returns an object with error", async () => {
       const mockResponse = {
         statusCode: 422,
         statusText: "whoopsie!",
-        body: { json: sandbox.stub(), dump: sandbox.stub() }
+        headers: { "content-type": "application/json" },
+        body: {
+          text: sandbox.stub().resolves("{}"),
+          dump: sandbox.stub().resolves(),
+        },
       };
-      mockResponse.body.json.resolves({});
-      MockClient.prototype.request.resolves(
-        mockResponse
-      );
 
-      const expected = new Error();
-      expected.cause = {
-        statusCode: 422,
-        statusText: "whoopsie!"
-      };
-      expected.error = true;
+      MockClient.prototype.request.resolves(mockResponse);
+
       const result = await fetchAlertFeatures();
 
-      expect(result).to.exist;
-      expect(result).to.eql(expected);
+      expect(result.error).to.be.true;
+      expect(result.status).to.equal(422);
     });
 
-    it("returns an error object with a cause when the underlying request throws an error", async() => {
+    it("returns an error object with a cause when the underlying request throws an error", async () => {
       const err = new Error("hello");
-      MockClient.prototype.request.throws(new Error("hello"));
+      MockClient.prototype.request.throws(err);
 
-      const expected = { error: true, cause: err };
       const result = await fetchAlertFeatures();
 
-      expect(result).to.exist;
-      expect(result).to.eql(expected);
+      expect(result.error).to.be.true;
+      expect(result.message).to.equal("hello");
     });
 
     it("returns a list of features (alerts) when successful", async () => {
@@ -511,14 +536,24 @@ describe("alert background processing module", () => {
         },
       };
 
-      const mockResponse = { statusCode: 200, body: { json: sandbox.stub(), dump: sandbox.stub() }};
-      mockResponse.body.json.resolves({features: [alert]});
+      const mockResponse = {
+        statusCode: 200,
+        headers: { "content-type": "application/json" },
+        body: {
+          text: sandbox.stub().resolves(JSON.stringify({ features: [alert] })),
+          dump: sandbox.stub().resolves(),
+        },
+      };
       MockClient.prototype.request.resolves(mockResponse);
 
       const result = await fetchAlertFeatures();
 
       expect(result.length).to.equal(1);
-      expect(result[0]).to.equal(alert);
+
+      expect(result[0].geometry).to.equal(alert.geometry);
+      expect(result[0].properties.id).to.equal(alert.properties.id);
+      expect(result[0].properties.event).to.equal(alert.properties.event);
+      expect(dayjs.isDayjs(result[0].properties.sent)).to.be.true;
     });
   });
 });

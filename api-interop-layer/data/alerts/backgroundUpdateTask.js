@@ -22,7 +22,7 @@ import { logger } from "../../util/monitoring/index.js";
  * function.
  * @typedef {Object} ErrorLike
  * @property {boolean} error
- * @property {Object||String} cause 
+ * @property {Object||String} cause
  */
 
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
@@ -42,14 +42,16 @@ const client = new Client(BASE_URL, { allowH2: true });
  * feature.
  * If there is an error or invalid response, we return
  * an object with an `error` and `cause` property
- * @returns {AlertFeature[]||ErrorLike} 
+ * @returns {AlertFeature[]||ErrorLike}
  */
 export const fetchAlertFeatures = async () => {
   try {
+    // This will either return valid data or throw to the catch block
     const result = await requestJSON(client, "/alerts/active?status=actual");
-    if(result.error){
-      alertsLogger.error(result);
-      return result;
+
+    // Defensive check in case API returns successful 200 but empty/null features
+    if (!result?.features) {
+      throw new Error("Malformed API response: missing features array");
     }
 
     return result.features.map((feature) => {
@@ -64,13 +66,13 @@ export const fetchAlertFeatures = async () => {
 
       return feature;
     });
-  } catch(e) {
-    const result = {
+  } catch (e) {
+    alertsLogger.error({ err: e }, "Failed to fetch alert features");
+    return {
       error: true,
-      cause: e
+      status: e.cause?.statusCode || 500,
+      message: e.message,
     };
-    alertsLogger.error(e);
-    return result;
   }
 };
 

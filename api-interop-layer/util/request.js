@@ -1,4 +1,4 @@
-let STANDARD_HEADERS = {
+const STANDARD_HEADERS = {
   "User-Agent": "beta.weather.gov interop",
 };
 
@@ -7,10 +7,10 @@ let STANDARD_HEADERS = {
  *
  * @param {undici.Client|undici.Pool} dispatcher - an undici instance that implements `Dispatcher.request`
  * @param {string} - the URL to request
- * @returns {object|Error} The JSON response or an Error object for 4xx/5xx responses
+ * @returns {object} The JSON response or throws an Error object for 4xx/5xx responses
  */
-export const requestJSON = async (dispatcher, path) => {
-  const { statusText, statusCode, body } = await dispatcher.request({
+const performRequest = async (dispatcher, path) => {
+  const response = await dispatcher.request({
     path,
     method: "GET",
     headers: {
@@ -18,41 +18,54 @@ export const requestJSON = async (dispatcher, path) => {
       ...STANDARD_HEADERS,
     },
   });
-  if (statusCode >= 200 && statusCode < 400) {
-    return body.json();
+
+  const { statusCode, body, headers, statusText } = response;
+
+  try {
+    // Handle HTTP Errors (4xx/5xx)
+    if (statusCode >= 400) {
+      await body.dump(); // Release socket
+      const error = new Error(`Request failed: ${statusCode}`);
+      error.cause = { statusText, statusCode };
+      error.error = true;
+      throw error;
+    }
+
+    // Validate Content-Type (HTML/Non-JSON check)
+    const contentType = headers["content-type"] || "";
+    if (!contentType.includes("json")) {
+      await body.dump();
+      const error = new Error(`Response was not JSON: ${contentType}`);
+      error.error = true;
+      throw error;
+    }
+
+    // Handle Empty or Valid Body
+    const text = await body.text();
+    const data = text && text.trim().length > 0 ? JSON.parse(text) : null;
+
+    return { data, headers };
+  } catch (err) {
+    // Safety cleanup for parsing errors
+    if (body && !body.bodyUsed) {
+      await body.dump().catch(() => {});
+    }
+    throw err;
   }
-  // we need to consume the response body even in the case of an error.
-  await body.dump();
-  // we have a 4xx or 5xx; it is the caller's responsibility to handle.
-  const error = new Error();
-  error.cause = { statusText, statusCode };
-  error.error = true;
-  return error;
 };
 
 /**
- * A variant of requestJSON that also returns cache header strings
- * from the response.
+ * Returns JSON data. Throws on error.
+ */
+export const requestJSON = async (dispatcher, path) => {
+  const { data } = await performRequest(dispatcher, path);
+  return data;
+};
+
+/**
+ * Returns [data, headers]. Throws on error.
  */
 export const requestJSONWithHeaders = async (dispatcher, path) => {
-  const { statusText, statusCode, body, headers } = await dispatcher.request({
-    path,
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      ...STANDARD_HEADERS,
-    },
-  });
-  if (statusCode >= 200 && statusCode < 400) {
-    return body.json().then(json => {
-      return [json, headers];
-    });
-  }
-  // we need to consume the response body even in the case of an error.
-  await body.dump();
-  // we have a 4xx or 5xx; it is the caller's responsibility to handle.
-  const error = new Error();
-  error.cause = { statusText, statusCode };
-  error.error = true;
-  return error;
+  const { data, headers } = await performRequest(dispatcher, path);
+  return [data, headers];
 };

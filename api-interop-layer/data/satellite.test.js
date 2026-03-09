@@ -8,41 +8,55 @@ describe("satellite metadata module", () => {
   const sandbox = createSandbox();
   const response = {
     statusCode: 200,
-    body: { json: sandbox.stub(), dump: sandbox.stub() },
+    headers: { "content-type": "application/json" },
+    body: {
+      text: sandbox.stub(),
+      dump: sandbox.stub().resolves(),
+    },
   };
 
   let saveToRedis = sandbox.stub();
   let getFromRedis = sandbox.stub();
   let getSatelliteData;
 
-  before(async() => {
-    await quibble.esm("../redis.js", { saveToRedis, getFromRedis, parseTTLFromHeaders }, {});
+  before(async () => {
+    await quibble.esm(
+      "../redis.js",
+      { saveToRedis, getFromRedis, parseTTLFromHeaders },
+      {},
+    );
     const module = await import("./satellite.js");
     getSatelliteData = module.default;
   });
 
   beforeEach(() => {
+    sandbox.resetHistory();
+    sandbox.resetBehavior();
+
     response.statusCode = 200;
-    sandbox.stub(Pool.prototype, "request");
-    Pool.prototype.request.resolves(response);
+    response.headers = { "content-type": "application/json" };
+    response.body.dump.resolves();
+
+    sandbox.stub(Pool.prototype, "request").resolves(response);
   });
 
   afterEach(() => {
-    Pool.prototype.request.restore();
+    sandbox.restore();
   });
 
   after(async () => {
-    sandbox.restore();
     await quibble.reset();
   });
 
   describe("returns data if everything goes well", () => {
     it("for GOES-18 imagery", async () => {
-      response.body.json.resolves({
-        meta: {
-          satellite: "GOES-West",
-        },
-      });
+      response.body.text.resolves(
+        JSON.stringify({
+          meta: {
+            satellite: "GOES-West",
+          },
+        }),
+      );
       const actual = await getSatelliteData({
         grid: { wfo: "wfo1" },
         place: { timezone: "America/Los_Angeles" },
@@ -56,11 +70,13 @@ describe("satellite metadata module", () => {
     });
 
     it("for GOES-19 imagery", async () => {
-      response.body.json.resolves({
-        meta: { 
-          satellite: "GOES-East",
-        },
-      });
+      response.body.text.resolves(
+        JSON.stringify({
+          meta: {
+            satellite: "GOES-East",
+          },
+        }),
+      );
       const actual = await getSatelliteData({
         grid: { wfo: "wfo2" },
         place: { timezone: "America/New_York" },
@@ -74,13 +90,15 @@ describe("satellite metadata module", () => {
     });
 
     it("correctly sets timestamps with proper UTC offset", async () => {
-      response.body.json.resolves({
-        meta: {
-          satellite: "GOES-East",
-          // The first flood warning issued by the Weather Bureau.
-          observation_time: "1891-01-24T12:00:00Z",
-        },
-      });
+      response.body.text.resolves(
+        JSON.stringify({
+          meta: {
+            satellite: "GOES-East",
+            // The first flood warning issued by the Weather Bureau.
+            observation_time: "1891-01-24T12:00:00Z",
+          },
+        }),
+      );
 
       const actual = await getSatelliteData({
         grid: { wfo: "wfo2" },
@@ -95,7 +113,7 @@ describe("satellite metadata module", () => {
   });
 
   it("returns an error object if the metadata is invalid", async () => {
-    response.body.json.resolves({ nometa: {} });
+    response.body.text.resolves(JSON.stringify({ nometa: {} }));
     const actual = await getSatelliteData({
       grid: { wfo: "wfo3" },
       place: { timezone: "America/New_York" },

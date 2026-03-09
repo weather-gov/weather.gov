@@ -16,21 +16,26 @@ describe("Forecast index", () => {
   const getFromRedis = sandbox.stub();
 
   const connectionPool = {
-    request: sandbox.stub()
+    request: sandbox.stub(),
   };
-  
+
   const basicResponse = {
     statusCode: 200,
+    headers: { "content-type": "application/json" },
     body: {
-      json: sandbox.stub(),
-      dump: sandbox.stub()
-    }
+      text: sandbox.stub(),
+      dump: sandbox.stub().resolves(),
+    },
   };
 
   let forecast;
   before(async () => {
     await quibble.esm("../connectionPool.js", {}, connectionPool);
-    await quibble.esm("../../redis.js", {saveToRedis, getFromRedis, parseTTLFromHeaders}, {});
+    await quibble.esm(
+      "../../redis.js",
+      { saveToRedis, getFromRedis, parseTTLFromHeaders },
+      {},
+    );
 
     const module = await import("./index.js");
     forecast = module.default;
@@ -42,7 +47,7 @@ describe("Forecast index", () => {
     connectionPool.request.resolves(basicResponse);
   });
 
-  after(async() => {
+  after(async () => {
     sandbox.restore();
     await quibble.reset();
   });
@@ -228,20 +233,26 @@ describe("Forecast index", () => {
     });
 
     it("calls the expected endpoints", async () => {
-      basicResponse.body.json.resolves([{}, {}]);
+      basicResponse.body.text.resolves([{}, {}]);
       await forecast({
         grid: { wfo: "TST", x: 49488, y: 34 },
         place,
         isMarine: false,
       });
 
-      expect(connectionPool.request.calledWith(sinon.match({path: `/gridpoints/TST/49488,34`}))).to.be
-        .true;
-      expect(connectionPool.request.calledWith(sinon.match({path: `/gridpoints/TST/49488,34/forecast`})))
-        .to.be.true;
       expect(
         connectionPool.request.calledWith(
-          sinon.match({path: `/gridpoints/TST/49488,34/forecast/hourly`}),
+          sinon.match({ path: `/gridpoints/TST/49488,34` }),
+        ),
+      ).to.be.true;
+      expect(
+        connectionPool.request.calledWith(
+          sinon.match({ path: `/gridpoints/TST/49488,34/forecast` }),
+        ),
+      ).to.be.true;
+      expect(
+        connectionPool.request.calledWith(
+          sinon.match({ path: `/gridpoints/TST/49488,34/forecast/hourly` }),
         ),
       ).to.be.true;
     });
@@ -249,29 +260,42 @@ describe("Forecast index", () => {
 
   describe("for a marine point", () => {
     it("calls the expected API endpoints", async () => {
-      basicResponse.body.json.resolves([{}, {}]);
+      basicResponse.body.text.resolves([{}, {}]);
       await forecast({
         grid: { wfo: "TST", x: 49488, y: 34 },
         place,
         isMarine: true,
       });
 
-      expect(connectionPool.request.calledWith(sinon.match({path: `/gridpoints/TST/49488,34`}))).to.be
-        .true;
-
-      // These two should ***NOT*** be called for a marine point.
-      expect(connectionPool.request.calledWith(sinon.match({path: `/gridpoints/TST/49488,34/forecast`})))
-        .to.be.false;
       expect(
         connectionPool.request.calledWith(
-          sinon.match({path: `/gridpoints/TST/49488,34/forecast/hourly`}),
+          sinon.match({ path: `/gridpoints/TST/49488,34` }),
+        ),
+      ).to.be.true;
+
+      // These two should ***NOT*** be called for a marine point.
+      expect(
+        connectionPool.request.calledWith(
+          sinon.match({ path: `/gridpoints/TST/49488,34/forecast` }),
+        ),
+      ).to.be.false;
+      expect(
+        connectionPool.request.calledWith(
+          sinon.match({ path: `/gridpoints/TST/49488,34/forecast/hourly` }),
         ),
       ).to.be.false;
     });
 
     describe("with valid data", () => {
       let clock;
-      const response = { statusCode: 200, body: { json: sinon.stub() } };
+      const marineResponse = {
+        statusCode: 200,
+        headers: { "content-type": "application/json" },
+        body: {
+          text: sandbox.stub(),
+          dump: sandbox.stub().resolves(),
+        },
+      };
 
       let gridpoint;
 
@@ -281,7 +305,9 @@ describe("Forecast index", () => {
 
       beforeEach(() => {
         clock.reset();
-        connectionPool.request.resolves(response);
+
+        // Override the default beforeEach behavior for this block
+        connectionPool.request.resolves(marineResponse);
 
         gridpoint = {
           geometry: "ball",
@@ -295,8 +321,6 @@ describe("Forecast index", () => {
             snowfallAmount: { uom: "wmoUnit:mm", values: [] },
           },
         };
-
-        response.body.json.resolves(gridpoint);
       });
 
       after(() => {
@@ -305,6 +329,7 @@ describe("Forecast index", () => {
 
       describe("gets the right set of days", () => {
         it("when the start is after 6am local", async () => {
+          marineResponse.body.text.resolves(JSON.stringify(gridpoint));
           const actual = await forecast({ grid: {}, place, isMarine: true });
 
           // Convert embedded day.js objects into ISO strings
@@ -370,7 +395,7 @@ describe("Forecast index", () => {
           // * 6am on the 7th through 6am on the 8th
           gridpoint.properties.temperature.values[0].validTime =
             "1984-07-07T10:00:00Z/PT12H";
-
+          marineResponse.body.text.resolves(JSON.stringify(gridpoint));
           const actual = await forecast({ grid: {}, place, isMarine: true });
 
           // Convert embedded day.js objects into ISO strings
@@ -395,7 +420,7 @@ describe("Forecast index", () => {
           // * 6am on the 3rd through 6am on the 4th
           gridpoint.properties.temperature.values[0].validTime =
             "2000-01-03T22:00:00Z/PT2H";
-
+          marineResponse.body.text.resolves(JSON.stringify(gridpoint));
           const actual = await forecast({ grid: {}, place, isMarine: true });
 
           // Convert embedded day.js objects into ISO strings
@@ -421,7 +446,7 @@ describe("Forecast index", () => {
           // * 6am on the 4th through 6am on the 5th
           gridpoint.properties.temperature.values[0].validTime =
             "2000-01-03T22:00:00Z/PT18H";
-
+          marineResponse.body.text.resolves(JSON.stringify(gridpoint));
           const actual = await forecast({ grid: {}, place, isMarine: true });
 
           // Convert embedded day.js objects into ISO strings

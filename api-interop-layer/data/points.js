@@ -81,30 +81,31 @@ export const getPointData = async (lat, lon) => {
   pointLogger.trace({ latitude, longitude }, "place");
   const point = { latitude, longitude };
 
-  const pointsPromise = requestJSONWithHeaders(connectionPool, `/points/${latitude},${longitude}`).then((data) => {
-    if(data.error){
-      if(data.cause && data.cause.statusCode === 404){
-        // If we get a 404 from the API, then the requested point is not within the
-        // NWS's area of resopnsibility.
+  const pointsPromise = requestJSONWithHeaders(
+    connectionPool,
+    `/points/${latitude},${longitude}`,
+  )
+    .then(([gridData]) => {
+      // Map the successful response
+      return {
+        wfo: gridData.properties?.gridId,
+        x: gridData.properties?.gridX,
+        y: gridData.properties?.gridY,
+        geometry: gridData.geometry,
+      };
+    })
+    .catch((err) => {
+      // Handle the 404 "Out of Bounds" case specifically
+      if (err.cause?.statusCode === 404 || err.statusCode === 404) {
         return {
           error: true,
           outOfBounds: true,
-          status: 404
+          status: 404,
         };
       }
-
+      // General error fallback
       return { error: true };
-    }
-    
-    const [ gridData ] = data;
-
-    return {
-      wfo: gridData.properties?.gridId,
-      x: gridData.properties?.gridX,
-      y: gridData.properties?.gridY,
-      geometry: gridData.geometry,
-    };
-  });
+    });
 
   const placePromise = getClosestPlace(latitude, longitude);
 

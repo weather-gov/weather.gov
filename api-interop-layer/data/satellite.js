@@ -14,23 +14,15 @@ export default async ({ grid: { wfo }, place: { timezone } }) => {
 
     // Attempt to pull the value from the cache, if it's there
     const foundInCache = await getFromRedis(url);
-    if(foundInCache){
+    if (foundInCache) {
       return foundInCache;
     }
 
-    // Otherwise, fetch from the NOAA endpoint
-    const response = await requestJSONWithHeaders(
+    // Request, throws error, if error
+    const [satelliteMetadata, headers] = await requestJSONWithHeaders(
       requestPool,
-      `/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`,
+      url,
     );
-
-    // requestJSONWithHeaders will return an Error
-    // object for 400+ status codes.
-    if(response.error){
-      throw response;
-    }
-    
-    const [satelliteMetadata, headers] = response;
 
     const satellite = satelliteMetadata?.meta?.satellite;
     if (satellite) {
@@ -62,7 +54,7 @@ export default async ({ grid: { wfo }, place: { timezone } }) => {
       };
 
       let ttl = parseTTLFromHeaders(headers);
-      if(!ttl){
+      if (!ttl) {
         // In this case, we don't have valid cache-control TTL values
         // for the endpoint. As a fallback, we will set it to 60 seconds,
         // which is what the s-maxage is as of the time of this writing

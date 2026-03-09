@@ -12,26 +12,16 @@ export default async (wfo) => {
     // Try to pull from the cache first
     const url = `/offices/${wfo}/weatherstories`;
     const foundInCache = await getFromRedis(url);
-    if(foundInCache){
+    if (foundInCache) {
       return foundInCache;
     }
 
-    // Otherwise, fetch the data from the API
-    const response = await requestJSONWithHeaders(
+    // Request, throws error, if error
+    const [result, headers] = await requestJSONWithHeaders(
       weatherStoryPool,
-      url
+      url,
     );
 
-    if(response.error && response.error.cause?.statusCode === 404){
-      // Temporary measure. While we wait for the prod API to have weather
-      // stories, we will interpret 404s to mean there are no weather
-      // stories for the WFO. All other errors remain errors.
-      return [];
-    } else if(response.error){
-      throw response;
-    }
-
-    const [result, headers] = response;
     // Example return object:
     // {
     //   "@context": {
@@ -58,18 +48,22 @@ export default async (wfo) => {
     if (stories) {
       // Attempt to cache the value
       let ttl = parseTTLFromHeaders(headers);
-      if(!ttl){
+      if (!ttl) {
         ttl = DEFAULT_STORIES_CACHE_TTL;
       }
-      await saveToRedis(
-        url,
-        stories,
-        ttl
-      );
+      await saveToRedis(url, stories, ttl);
       return stories;
     }
   } catch (e) {
-    weatherStoriesLogger.error({ err: e, wfo }, "Error getting weather stories");
+    // We interpret 404s as "no stories" per the ticket/temporary measure
+    if (e.cause?.statusCode === 404 || e.statusCode === 404) {
+      return [];
+    }
+
+    weatherStoriesLogger.error(
+      { err: e, wfo },
+      "Error getting weather stories",
+    );
   }
 
   return { error: true };
