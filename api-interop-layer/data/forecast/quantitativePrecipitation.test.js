@@ -9,17 +9,21 @@ describe("quantitative precipitation forecase (QPF)", () => {
   const sandbox = sinon.createSandbox();
 
   const connectionPool = {
-    request: sandbox.stub()
+    request: sandbox.stub(),
   };
 
   const getFromRedis = sandbox.stub();
   const saveToRedis = sandbox.stub();
   const parseTTLFromHeaders = sandbox.stub();
-  
-  before(async() => {
+
+  before(async () => {
     await quibble.esm("../connectionPool.js", {}, connectionPool);
-    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis, parseTTLFromHeaders }, {});
-    
+    await quibble.esm(
+      "../../redis.js",
+      { saveToRedis, getFromRedis, parseTTLFromHeaders },
+      {},
+    );
+
     const module = await import("./index.js");
     forecast = module.default;
 
@@ -31,7 +35,7 @@ describe("quantitative precipitation forecase (QPF)", () => {
     sandbox.resetHistory();
   });
 
-  after(async() => {
+  after(async () => {
     sandbox.restore();
     clock.runAll();
     clock.restore();
@@ -120,104 +124,78 @@ describe("quantitative precipitation forecase (QPF)", () => {
   });
 
   it("puts QPF into the right days", async () => {
-    connectionPool.request
-      .withArgs(sinon.match({path:`/gridpoints/BOB/X,Y`}))
-      .resolves({
-        statusCode: 200,
-        body: {
-          json: sandbox.stub().resolves({
-            properties: {
-              quantitativePrecipitation: {
-                uom: "wmoUnit:mm",
-                values: [
-                  {
-                    validTime: "2024-08-02T01:00:00Z/PT8H",
-                    value: 9,
-                  },
-                  { validTime: "2024-08-02T09:00:00Z/PT6H", value: 100 },
-                  { validTime: "2024-08-02T15:00:00Z/PT8H", value: 4 },
-                ],
-              },
-              iceAccumulation: {
-                uom: "wmoUnit:mm",
-                values: [
-                  {
-                    validTime: "2024-08-02T01:00:00Z/PT8H",
-                    value: 19,
-                  },
-                  { validTime: "2024-08-02T09:00:00Z/PT6H", value: 10 },
-                ],
-              },
-              snowfallAmount: {
-                uom: "wmoUnit:mm",
-                values: [
-                  {
-                    validTime: "2024-08-02T01:00:00Z/PT8H",
-                    value: 29,
-                  },
-                ],
-              },
-              probabilityOfPrecipitation: {
-                uom: "wmoUnit:percent",
-                values: [
-                  {
-                    validTime: "2024-08-02T01:00:00Z/PT24H",
-                    value: 19,
-                  },
-                ],
-              },
-            },
-          }),
-          dump: sandbox.stub()
-        },
-      });
+    const mockRes = (data) => ({
+      statusCode: 200,
+      headers: { "content-type": "application/json" },
+      body: {
+        text: sandbox.stub().resolves(JSON.stringify(data)),
+        dump: sandbox.stub().resolves(),
+      },
+    });
 
     connectionPool.request
-      .withArgs(sinon.match({path: `/gridpoints/BOB/X,Y/forecast`}))
-      .resolves({
-        statusCode: 200,
-        body: {
-          json: sandbox.stub().resolves({
-            properties: {
-              periods: [
-                {
-                  startTime: "2024-08-01T06:00:00-0700",
-                  endTime: "2024-08-02T06:00:00-0700",
-                  isDaytime: true,
-                  probabilityOfPrecipitation: {
-                    unitCode: "wmoUnit:percent",
-                    value: 40,
-                  },
-                },
-                {
-                  startTime: "2024-08-02T06:00:00-0700",
-                  endTime: "2024-08-03T06:00:00-0700",
-                  isDaytime: true,
-                  probabilityOfPrecipitation: {
-                    unitCode: "wmoUnit:percent",
-                    value: 40,
-                  },
-                },
+      .withArgs(sinon.match({ path: `/gridpoints/BOB/X,Y` }))
+      .resolves(
+        mockRes({
+          properties: {
+            quantitativePrecipitation: {
+              uom: "wmoUnit:mm",
+              values: [
+                { validTime: "2024-08-02T01:00:00Z/PT8H", value: 9 },
+                { validTime: "2024-08-02T09:00:00Z/PT6H", value: 100 },
+                { validTime: "2024-08-02T15:00:00Z/PT8H", value: 4 },
               ],
             },
-          }),
-          dump: sandbox.stub()
-        },
-      });
+            iceAccumulation: {
+              uom: "wmoUnit:mm",
+              values: [
+                { validTime: "2024-08-02T01:00:00Z/PT8H", value: 19 },
+                { validTime: "2024-08-02T09:00:00Z/PT6H", value: 10 },
+              ],
+            },
+            snowfallAmount: {
+              uom: "wmoUnit:mm",
+              values: [{ validTime: "2024-08-02T01:00:00Z/PT8H", value: 29 }],
+            },
+          },
+        }),
+      );
 
     connectionPool.request
-      .withArgs(sinon.match({path: `/gridpoints/BOB/X,Y/forecast/hourly`}))
-      .resolves({
-        statusCode: 200,
-        body: {
-          json: sandbox.stub().resolves({
-            properties: {
-              periods: [],
-            },
-          }),
-          dump: sandbox.stub()
-        },
-      });
+      .withArgs(sinon.match({ path: `/gridpoints/BOB/X,Y/forecast` }))
+      .resolves(
+        mockRes({
+          properties: {
+            periods: [
+              {
+                startTime: "2024-08-01T06:00:00-0700",
+                endTime: "2024-08-02T06:00:00-0700",
+                isDaytime: true,
+                probabilityOfPrecipitation: {
+                  unitCode: "wmoUnit:percent",
+                  value: 40,
+                },
+              },
+              {
+                startTime: "2024-08-02T06:00:00-0700",
+                endTime: "2024-08-03T06:00:00-0700",
+                isDaytime: true,
+                probabilityOfPrecipitation: {
+                  unitCode: "wmoUnit:percent",
+                  value: 40,
+                },
+              },
+            ],
+          },
+        }),
+      );
+    connectionPool.request
+      .withArgs(sinon.match({ path: `/gridpoints/BOB/X,Y/forecast/hourly` }))
+      .resolves(
+        mockRes({
+          properties: { periods: [] },
+        }),
+      );
 
     const grid = {
       wfo: "BOB",
@@ -291,6 +269,8 @@ describe("quantitative precipitation forecase (QPF)", () => {
     };
 
     const actual = await forecast({ grid, place });
+
+    expect(actual.error, "Forecast returned an error").to.be.undefined;
 
     // Date objects are returned, but we want to stringify them
     for (const day of actual.daily.days) {

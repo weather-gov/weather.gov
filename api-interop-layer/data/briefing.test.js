@@ -7,79 +7,83 @@ describe("briefing module", () => {
   const sandbox = createSandbox();
   const response = {
     statusCode: 200,
-    headers: { "cache-control": "s-maxage=42" },
-    body: { json: sandbox.stub(), dump: sandbox.stub() },
+    headers: {
+      "cache-control": "s-maxage=42",
+      "content-type": "application/json",
+    },
+    body: {
+      text: sandbox.stub(),
+      dump: sandbox.stub(),
+    },
   };
 
   const weatherStoryPool = {
-    request: sandbox.stub()
+    request: sandbox.stub(),
   };
 
   const getFromRedis = sandbox.stub();
   const saveToRedis = sandbox.stub();
-  
+
   let getDataForBriefing;
 
-  before(async() => {
+  before(async () => {
     await quibble.esm("./weatherStoryPool.js", {}, weatherStoryPool);
-    await quibble.esm("../redis.js", {getFromRedis, saveToRedis, parseTTLFromHeaders}, {});
+    await quibble.esm(
+      "../redis.js",
+      { getFromRedis, saveToRedis, parseTTLFromHeaders },
+      {},
+    );
 
     const module = await import("./briefing.js");
     getDataForBriefing = module.default;
   });
 
-  after(async() => {
+  after(async () => {
     sandbox.restore();
     await quibble.reset();
   });
-  
+
   beforeEach(() => {
     sandbox.resetHistory();
     sandbox.resetBehavior();
     response.statusCode = 200;
+    response.body.dump.resolves();
     weatherStoryPool.request.resolves(response);
+    getFromRedis.resolves(null);
   });
 
-  describe("returns data if everything goes well", () => {    
+  describe("returns data if everything goes well", () => {
     it("for one briefing", async () => {
-      response.body.json.resolves({
-        "@context": {
-          "@version": "1.1",
-        },
-        briefing: {
-          id: "7ccab810-706b-401c-8757-71f656e56270",
-          startTime: "2026-01-01T12:00:00+00:00",
-          endTime: "2027-01-01T12:00:00+00:00",
-          updateTime: "2026-01-10T12:00:00+00:00",
-          title: "A short tab title",
-          description: "A longer description of the briefing packet contents.",
-          priority: false,
-          officeId: "MPX",
-          download:
+      const mockBriefing = {
+        id: "7ccab810-706b-401c-8757-71f656e56270",
+        startTime: "2026-01-01T12:00:00+00:00",
+        endTime: "2027-01-01T12:00:00+00:00",
+        updateTime: "2026-01-10T12:00:00+00:00",
+        title: "A short tab title",
+        description: "A longer description of the briefing packet contents.",
+        priority: false,
+        officeId: "MPX",
+        download:
           "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270",
-        },
-      });
+      };
+
+      const mockData = {
+        "@context": { "@version": "1.1" },
+        briefing: mockBriefing,
+      };
+
+      response.body.text.resolves(JSON.stringify(mockData));
+
       const actual = await getDataForBriefing("ABC");
 
       expect(actual).to.deep.equal({
-        briefing: {
-          id: "7ccab810-706b-401c-8757-71f656e56270",
-          officeId: "MPX",
-          startTime: "2026-01-01T12:00:00+00:00",
-          endTime: "2027-01-01T12:00:00+00:00",
-          updateTime: "2026-01-10T12:00:00+00:00",
-          title: "A short tab title",
-          description: "A longer description of the briefing packet contents.",
-          priority: false,
-          download:
-          "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270",
-        },
+        briefing: mockData.briefing,
       });
     });
   });
 
   it("returns an error object if the briefing data is invalid", async () => {
-    response.body.json.resolves({ briefing: null });
+    response.body.text.resolves(JSON.stringify({ briefing: null }));
 
     const actual = await getDataForBriefing("ABC");
 
@@ -87,7 +91,9 @@ describe("briefing module", () => {
   });
 
   it("returns an error object if the briefing fetch is unsuccessful", async () => {
+    // briefing.js catch block: logs error and returns { error: true }
     response.statusCode = 500;
+
     const actual = await getDataForBriefing("ABC");
 
     expect(actual).to.eql({ error: true });
@@ -108,26 +114,30 @@ describe("briefing module", () => {
         priority: false,
         officeId: "MPX",
         download:
-        "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270",
+          "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270",
       },
     };
-    
+
     it("attempts to pull a value from the cache first", async () => {
+      response.body.text.resolves(JSON.stringify(exampleBriefing));
+
       await getDataForBriefing("ABC");
 
       expect(getFromRedis.calledWith(`/offices/ABC/briefing`)).to.equal(true);
     });
 
     it("caches the resulting value before returning it", async () => {
-      response.body.json.resolves(exampleBriefing);
+      response.body.text.resolves(JSON.stringify(exampleBriefing));
 
       await getDataForBriefing("ABC");
 
-      expect(saveToRedis.calledWith(
-        `/offices/ABC/briefing`,
-        {briefing: exampleBriefing.briefing},
-        42
-      )).to.equal(true);
+      expect(
+        saveToRedis.calledWith(
+          `/offices/ABC/briefing`,
+          { briefing: exampleBriefing.briefing },
+          42,
+        ),
+      ).to.equal(true);
     });
 
     it("returns the cached value when there is one", async () => {

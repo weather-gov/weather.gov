@@ -9,27 +9,39 @@ describe("observations module", () => {
 
   // Mock the shared undici Pool instance
   const connectionPool = {
-    request: sandbox.stub()
+    request: sandbox.stub(),
   };
 
   const saveToRedis = sandbox.stub();
   const getFromRedis = sandbox.stub();
-  
+
   const stations = {
     statusCode: 200,
-    body: { json: sandbox.stub(), dump: sandbox.stub() },
+    headers: { "content-type": "application/json" },
+    body: {
+      text: sandbox.stub(),
+      dump: sandbox.stub().resolves(),
+    },
   };
 
   const response = {
     statusCode: 200,
-    body: { json: sandbox.stub(), dump: sandbox.stub() },
+    headers: { "content-type": "application/json" },
+    body: {
+      text: sandbox.stub(),
+      dump: sandbox.stub().resolves(),
+    },
   };
 
   let getObservations;
 
   before(async () => {
     await quibble.esm("../connectionPool.js", {}, connectionPool);
-    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis, parseTTLFromHeaders }, {});
+    await quibble.esm(
+      "../../redis.js",
+      { saveToRedis, getFromRedis, parseTTLFromHeaders },
+      {},
+    );
     // Import the module now. Its dependency on the database will cause a hang
     // if we load it before the mocking is all setup. The reason is that the
     // database utility itself blocks until it can establish a connection.
@@ -41,24 +53,24 @@ describe("observations module", () => {
     response.statusCode = 200;
     stations.statusCode = 200;
 
-    stations.body.json.resolves({
-      features: [
-        {
-          properties: {
-            stationIdentifier: "station1",
-            name: "Station #1",
-            elevation: { unitCode: "wmoUnit:m", value: 49 },
+    stations.body.text.resolves(
+      JSON.stringify({
+        features: [
+          {
+            properties: {
+              stationIdentifier: "station1",
+              name: "Station #1",
+              elevation: { unitCode: "wmoUnit:m", value: 49 },
+            },
           },
-        },
-        { properties: { stationIdentifier: "station2" } },
-        { properties: { stationIdentifier: "station3" } },
-      ],
-    });
+          { properties: { stationIdentifier: "station2" } },
+          { properties: { stationIdentifier: "station3" } },
+        ],
+      }),
+    );
 
     connectionPool.request
-      .withArgs(
-        sinon.match({path: `/gridpoints/TEST/1,1/stations?limit=3`})
-      )
+      .withArgs(sinon.match({ path: `/gridpoints/TEST/1,1/stations?limit=3` }))
       .resolves(stations);
 
     // We need to specifically deal with all of these endpoints for every test
@@ -68,17 +80,17 @@ describe("observations module", () => {
     // possibly be slower as a result.
     connectionPool.request
       .withArgs(
-        sinon.match({path: `/stations/station1/observations?limit=1`})
+        sinon.match({ path: `/stations/station1/observations?limit=1` }),
       )
       .resolves(response);
     connectionPool.request
       .withArgs(
-        sinon.match({path: `/stations/station2/observations?limit=1`})
+        sinon.match({ path: `/stations/station2/observations?limit=1` }),
       )
       .resolves(response);
     connectionPool.request
       .withArgs(
-        sinon.match({path: `/stations/station3/observations?limit=1`})
+        sinon.match({ path: `/stations/station3/observations?limit=1` }),
       )
       .resolves(response);
 
@@ -88,22 +100,24 @@ describe("observations module", () => {
     global.test.database.query.resolves({ rows: [{ distance: 100 }] });
   });
 
-  after(async() => {
+  after(async () => {
     sandbox.restore();
     await quibble.reset();
   });
 
   describe("properly handles feels-like temperature", () => {
     it("uses actual temperature if heat index and wind chill are empty", async () => {
-      response.body.json.resolves({
-        features: [
-          {
-            properties: {
-              temperature: { value: 100, unitCode: "wmoUnit:degC" },
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [
+            {
+              properties: {
+                temperature: { value: 100, unitCode: "wmoUnit:degC" },
+              },
             },
-          },
-        ],
-      });
+          ],
+        }),
+      );
 
       const expected = { degC: 100, degF: 212 };
 
@@ -121,16 +135,18 @@ describe("observations module", () => {
     });
 
     it("uses heat index if present", async () => {
-      response.body.json.resolves({
-        features: [
-          {
-            properties: {
-              temperature: { value: 100, unitCode: "wmoUnit:degC" },
-              heatIndex: { value: 100, unitCode: "wmoUnit:degC" },
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [
+            {
+              properties: {
+                temperature: { value: 100, unitCode: "wmoUnit:degC" },
+                heatIndex: { value: 100, unitCode: "wmoUnit:degC" },
+              },
             },
-          },
-        ],
-      });
+          ],
+        }),
+      );
 
       const expected = { degC: 100, degF: 212 };
 
@@ -147,16 +163,18 @@ describe("observations module", () => {
     });
 
     it("uses wind chill if it is present and there is no heat index", async () => {
-      response.body.json.resolves({
-        features: [
-          {
-            properties: {
-              temperature: { value: 100, unitCode: "wmoUnit:degC" },
-              windChill: { value: 100, unitCode: "wmoUnit:degC" },
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [
+            {
+              properties: {
+                temperature: { value: 100, unitCode: "wmoUnit:degC" },
+                windChill: { value: 100, unitCode: "wmoUnit:degC" },
+              },
             },
-          },
-        ],
-      });
+          ],
+        }),
+      );
 
       const expected = { degC: 100, degF: 212 };
 
@@ -175,20 +193,22 @@ describe("observations module", () => {
 
   describe("properly handles null and zero wind", () => {
     it("preserves null if the wind is null", async () => {
-      response.body.json.resolves({
-        features: [
-          {
-            properties: {
-              // Temperature is always required for a valid obs
-              temperature: { value: 100, unitCode: "wmoUnit:degC" },
-              windSpeed: {
-                unitCode: "wmoUnit:km_h-1",
-                value: null,
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [
+            {
+              properties: {
+                // Temperature is always required for a valid obs
+                temperature: { value: 100, unitCode: "wmoUnit:degC" },
+                windSpeed: {
+                  unitCode: "wmoUnit:km_h-1",
+                  value: null,
+                },
               },
             },
-          },
-        ],
-      });
+          ],
+        }),
+      );
 
       const expected = { mph: null, "km/h": null };
 
@@ -205,20 +225,22 @@ describe("observations module", () => {
     });
 
     it("preserves zero if the wind is zero", async () => {
-      response.body.json.resolves({
-        features: [
-          {
-            properties: {
-              // Temperature is always required for a valid obs
-              temperature: { value: 100, unitCode: "wmoUnit:degC" },
-              windSpeed: {
-                unitCode: "wmoUnit:km_h-1",
-                value: 0,
+      response.body.text.resolves(
+        JSON.stringify({
+          features: [
+            {
+              properties: {
+                // Temperature is always required for a valid obs
+                temperature: { value: 100, unitCode: "wmoUnit:degC" },
+                windSpeed: {
+                  unitCode: "wmoUnit:km_h-1",
+                  value: 0,
+                },
               },
             },
-          },
-        ],
-      });
+          ],
+        }),
+      );
 
       const expected = { mph: 0, "km/h": 0 };
 
@@ -246,32 +268,40 @@ describe("observations module", () => {
       ];
       const invalid = {
         statusCode: 200,
-        body: { json: sinon.stub().resolves({ features }) },
+        headers: { "content-type": "application/json" },
+        body: {
+          text: sinon.stub().resolves(JSON.stringify({ features })),
+          dump: sinon.stub().resolves(),
+        },
       };
 
       it("tries the second observation if the first is invalid", async () => {
         connectionPool.request
           .withArgs(
-            sinon.match({path: `/stations/station1/observations?limit=1`})
+            sinon.match({ path: `/stations/station1/observations?limit=1` }),
           )
           .resolves(invalid);
 
         connectionPool.request
           .withArgs(
-            sinon.match({path: `/stations/station2/observations?limit=1`})
+            sinon.match({ path: `/stations/station2/observations?limit=1` }),
           )
           .resolves({
             statusCode: 200,
+            headers: { "content-type": "application/json" },
             body: {
-              json: sinon.stub().resolves({
-                features: [
-                  {
-                    properties: {
-                      temperature: { value: 50, unitCode: "wmoUnit:degC" },
+              text: sinon.stub().resolves(
+                JSON.stringify({
+                  features: [
+                    {
+                      properties: {
+                        temperature: { value: 50, unitCode: "wmoUnit:degC" },
+                      },
                     },
-                  },
-                ],
-              }),
+                  ],
+                }),
+              ),
+              dump: sinon.stub().resolves(),
             },
           });
 
@@ -292,32 +322,36 @@ describe("observations module", () => {
       it("tries the third observation if the second is invalid", async () => {
         connectionPool.request
           .withArgs(
-            sinon.match({path: `/stations/station1/observations?limit=1`})
+            sinon.match({ path: `/stations/station1/observations?limit=1` }),
           )
           .resolves(invalid);
 
         connectionPool.request
           .withArgs(
-            sinon.match({path: `/stations/station2/observations?limit=1`})
+            sinon.match({ path: `/stations/station2/observations?limit=1` }),
           )
           .resolves(invalid);
 
         connectionPool.request
           .withArgs(
-            sinon.match({path: `/stations/station3/observations?limit=1`})
+            sinon.match({ path: `/stations/station3/observations?limit=1` }),
           )
           .resolves({
             statusCode: 200,
+            headers: { "content-type": "application/json" },
             body: {
-              json: sinon.stub().resolves({
-                features: [
-                  {
-                    properties: {
-                      temperature: { value: 25, unitCode: "wmoUnit:degC" },
+              text: sinon.stub().resolves(
+                JSON.stringify({
+                  features: [
+                    {
+                      properties: {
+                        temperature: { value: 25, unitCode: "wmoUnit:degC" },
+                      },
                     },
-                  },
-                ],
-              }),
+                  ],
+                }),
+              ),
+              dump: sinon.stub().resolves(),
             },
           });
 
@@ -339,19 +373,19 @@ describe("observations module", () => {
         it("all stations return invalid observations", async () => {
           connectionPool.request
             .withArgs(
-              sinon.match({path: `/stations/station1/observations?limit=1`})
+              sinon.match({ path: `/stations/station1/observations?limit=1` }),
             )
             .resolves(invalid);
 
           connectionPool.request
             .withArgs(
-              sinon.match({path: `/stations/station2/observations?limit=1`})
+              sinon.match({ path: `/stations/station2/observations?limit=1` }),
             )
             .resolves(invalid);
 
           connectionPool.request
             .withArgs(
-              sinon.match({path: `/stations/station3/observations?limit=1`})
+              sinon.match({ path: `/stations/station3/observations?limit=1` }),
             )
             .resolves(invalid);
 
@@ -378,19 +412,19 @@ describe("observations module", () => {
 
           connectionPool.request
             .withArgs(
-              sinon.match({path: `/stations/station1/observations?limit=1`})
+              sinon.match({ path: `/stations/station1/observations?limit=1` }),
             )
             .resolves(invalid);
 
           connectionPool.request
             .withArgs(
-              sinon.match({path: `/stations/station2/observations?limit=1`})
+              sinon.match({ path: `/stations/station2/observations?limit=1` }),
             )
             .resolves(invalid);
 
           connectionPool.request
             .withArgs(
-              sinon.match({path: `/stations/station3/observations?limit=1`})
+              sinon.match({ path: `/stations/station3/observations?limit=1` }),
             )
             .resolves(invalid);
 
@@ -418,17 +452,17 @@ describe("observations module", () => {
     it("returns an error if none of the stations return", async () => {
       connectionPool.request
         .withArgs(
-          sinon.match({path: `/stations/station1/observations?limit=1`})
+          sinon.match({ path: `/stations/station1/observations?limit=1` }),
         )
         .resolves({ statusCode: 400 });
       connectionPool.request
         .withArgs(
-          sinon.match({path: `/stations/station2/observations?limit=1`})
+          sinon.match({ path: `/stations/station2/observations?limit=1` }),
         )
         .resolves({ statusCode: 400 });
       connectionPool.request
         .withArgs(
-          sinon.match({path: `/stations/station3/observations?limit=1`})
+          sinon.match({ path: `/stations/station3/observations?limit=1` }),
         )
         .resolves({ statusCode: 400 });
 
@@ -452,7 +486,7 @@ describe("observations module", () => {
     it("returns an error if getting the list of stations fails", async () => {
       connectionPool.request
         .withArgs(
-          sinon.match({path: `/gridpoints/TEST/1,1/stations?limit=3`})
+          sinon.match({ path: `/gridpoints/TEST/1,1/stations?limit=3` }),
         )
         .rejects();
 
@@ -474,7 +508,7 @@ describe("observations module", () => {
     });
 
     it("returns an error if the list of stations is zero", async () => {
-      stations.body.json.resolves({ features: [] });
+      stations.body.text.resolves(JSON.stringify({ features: [] }));
 
       const expected = {
         error: true,
@@ -495,21 +529,23 @@ describe("observations module", () => {
   });
 
   it("handles the happy path, where everything is good", async () => {
-    response.body.json.resolves({
-      features: [
-        {
-          properties: {
-            barometricPressure: { unitCode: "wmoUnit:Pa", value: 101800 },
-            icon: `${BASE_URL}/icons/land/night/skc?size=medium`,
-            textDescription: "Weathery",
-            temperature: { value: 100, unitCode: "wmoUnit:degC" },
-            timestamp: "2024-10-01T13:00:00-0500",
-            windDirection: { unitCode: "wmoUnit:degree_(angle)", value: 260 },
-            windSpeed: { unitCode: "wmoUnit:km_h-1", value: 37 },
+    response.body.text.resolves(
+      JSON.stringify({
+        features: [
+          {
+            properties: {
+              barometricPressure: { unitCode: "wmoUnit:Pa", value: 101800 },
+              icon: `${BASE_URL}/icons/land/night/skc?size=medium`,
+              textDescription: "Weathery",
+              temperature: { value: 100, unitCode: "wmoUnit:degC" },
+              timestamp: "2024-10-01T13:00:00-0500",
+              windDirection: { unitCode: "wmoUnit:degree_(angle)", value: 260 },
+              windSpeed: { unitCode: "wmoUnit:km_h-1", value: 37 },
+            },
           },
-        },
-      ],
-    });
+        ],
+      }),
+    );
 
     const expected = {
       description: "Weathery",

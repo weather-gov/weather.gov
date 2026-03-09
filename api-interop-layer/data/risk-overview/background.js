@@ -1,6 +1,11 @@
 import { parentPort } from "node:worker_threads";
 import openDatabase from "../db.js";
-import { addRisksToResult, processDays, processLegend, processChickletData } from "./processing.js";
+import {
+  addRisksToResult,
+  processDays,
+  processLegend,
+  processChickletData,
+} from "./processing.js";
 import { logger } from "../../util/monitoring/index.js";
 import { requestJSON } from "../../util/request.js";
 import { Client } from "undici";
@@ -32,7 +37,13 @@ const upsert = async (id, data) =>
     ),
   );
 
-const processState = async ({ state, data: stateData, wfo, legend, chicklet }) => {
+const processState = async ({
+  state,
+  data: stateData,
+  wfo,
+  legend,
+  chicklet,
+}) => {
   const db = await openDatabase();
   const stateName = await db
     .query("SELECT name FROM weathergov_geo_states WHERE state=$1::text", [
@@ -54,7 +65,13 @@ const processState = async ({ state, data: stateData, wfo, legend, chicklet }) =
   await upsert(state, data);
 };
 
-const processCounty = async ({ countyFips, data: countyData, wfo, legend, chicklet }) => {
+const processCounty = async ({
+  countyFips,
+  data: countyData,
+  wfo,
+  legend,
+  chicklet,
+}) => {
   const db = await openDatabase();
   const county = db
     .query(
@@ -114,25 +131,73 @@ const processWFO = async (wfo, statuses) => {
     "making risk overview requests",
   );
 
-  const [riskOverview, legendData, chickletData] = await Promise.all([
-    requestJSON(client, risksEndpoint),
-    requestJSON(client, legendEndpoint),
-    requestJSON(client, chickletEndpoint)
-  ]);
+  try {
+    const [riskOverview, legendData, chickletData] = await Promise.all([
+      requestJSON(client, risksEndpoint),
+      requestJSON(client, legendEndpoint),
+      requestJSON(client, chickletEndpoint),
+    ]);
 
-  // After we fetch, update the database so we know the last time we fetched
-  // from this URL.
-  db.query(
-    `INSERT INTO
-    weathergov_temp_ghwo_meta
-    (url,updated)
-    VALUES($1::text,NOW())
-    ON CONFLICT(url)
-    DO UPDATE SET updated=NOW()`,
-    [risksEndpoint],
-  );
+    // After we fetch, update the database so we know the last time we fetched
+    // from this URL.
+    await db.query(
+      `INSERT INTO weathergov_temp_ghwo_meta (url, updated)
+       VALUES($1::text, NOW())
+       ON CONFLICT(url) DO UPDATE SET updated=NOW()`,
+      [risksEndpoint],
+    );
 
-  if (riskOverview.error) {
+    // We get legend data, and now we need to manipulate it into a shape that
+    // is more useful for us later on.
+    const legend = processLegend(legendData);
+
+    if (riskOverview.counties) {
+      // Since there are counties, process them. In the risk overview data, the
+      // object keys are county FIPS codes and the values are the risk data. So
+      // iterate over the key/value pairs and process accordingly.
+      await Promise.all(
+        Object.entries(riskOverview.counties).map(([countyFips, data]) =>
+          processCounty({ countyFips, data, wfo, legend }),
+        ),
+      );
+    }
+
+    if (riskOverview.states) {
+      // Do the same with states. In this case, the object key is the state two
+      // letter abbreviation.
+      await Promise.all(
+        Object.entries(riskOverview.states).map(([state, data]) =>
+          processState({ state, data, wfo, legend }),
+        ),
+      );
+    }
+
+    // categorize this WFO ghwo data into one of four status buckets.
+    if (riskOverview.states) {
+      if (riskOverview.counties) {
+        statuses[wfoStatus.ALL_DATA].push(wfo);
+      } else {
+        statuses[wfoStatus.NO_COUNTIES].push(wfo);
+      }
+    } else {
+      if (riskOverview.counties) {
+        statuses[wfoStatus.NO_STATES].push(wfo);
+      } else {
+        statuses[wfoStatus.NO_DATA].push(wfo);
+      }
+    }
+  } catch (err) {
+    // If requestJSON throws, it lands here
+    if (err.cause?.statusCode === 404 || err.statusCode === 404) {
+      riskOverviewLogger.trace(
+        { wfo, endpoint: err.url || risksEndpoint },
+        "GHWO data not available for this office",
+      );
+    } else
+      riskOverviewLogger.error(
+        { err, wfo },
+        "Failed to fetch risk or legend data due to a system error",
+      );
     statuses[wfoStatus.NO_DATA].push(wfo);
     return statuses;
   }

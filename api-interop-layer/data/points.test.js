@@ -11,23 +11,25 @@ describe("point method", () => {
 
   // Mock undici Pool instance
   const connectionPool = {
-    request: sandbox.stub()
+    request: sandbox.stub(),
   };
 
   const response = {
     statusCode: 200,
+    headers: { "content-type": "application/json" },
     body: {
-      json: sandbox.stub(),
-      dump: sandbox.stub()
-    }
+      text: sandbox.stub(),
+      dump: sandbox.stub(),
+    },
   };
 
   const errorResponse = {
     statusCode: 400,
+    headers: { "content-type": "application/json" },
     body: {
-      json: sandbox.stub(),
-      dump: sandbox.stub()
-    }
+      text: sandbox.stub().resolves(JSON.stringify({ error: "bad request" })),
+      dump: sandbox.stub(),
+    },
   };
 
   let points;
@@ -43,6 +45,8 @@ describe("point method", () => {
     sandbox.resetBehavior();
     sandbox.resetHistory();
     connectionPool.request.resolves(response);
+    response.body.dump.resolves();
+    response.headers = { "content-type": "application/json" };
   });
 
   after(() => {
@@ -58,7 +62,7 @@ describe("point method", () => {
 
     const call = connectionPool.request.getCall(0);
     const requestPath = call.args[0].path;
-    
+
     expect(requestPath).to.equal(`/points/1.123,9.877`);
   });
 
@@ -77,7 +81,14 @@ describe("point method", () => {
   });
 
   it("returns an out-of-bounds grid for points not covered by the API", async () => {
-    connectionPool.request.resolves({statusCode: 404, body: { dump: sandbox.stub() }});
+    connectionPool.request.resolves({
+      statusCode: 404,
+      headers: { "content-type": "application/json" },
+      body: {
+        dump: sandbox.stub().resolves(),
+        text: sandbox.stub().resolves(""),
+      },
+    });
     db.query.resolves({ rows: [] });
 
     const actual = await points(1, 2);
@@ -91,10 +102,10 @@ describe("point method", () => {
   });
 
   it("returns a not-supported grid for points not *supported* by the API", async () => {
-    response.body.json.resolves(
-      {
+    response.body.text.resolves(
+      JSON.stringify({
         properties: { gridId: null, gridX: null, gridY: null },
-      }
+      }),
     );
 
     db.query.resolves({ rows: [] });
@@ -117,9 +128,16 @@ describe("point method", () => {
   });
 
   it("fetches a grid from the API, no location", async () => {
-    response.body.json.resolves({
-      properties: { gridId: "PPU", gridX: 30, gridY: 40, geometry: undefined },
-    });
+    response.body.text.resolves(
+      JSON.stringify({
+        properties: {
+          gridId: "PPU",
+          gridX: 30,
+          gridY: 40,
+          geometry: undefined,
+        },
+      }),
+    );
     db.query.resolves({ rows: [] });
 
     const actual = await points(4, 5);

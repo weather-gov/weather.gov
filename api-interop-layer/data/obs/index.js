@@ -18,37 +18,31 @@ const fetchStations = async (wfo, x, y) => {
 
   // Attempt to fetch any existing data from the cache
   const foundInCache = await getFromRedis(stationsUrl);
-  if(foundInCache){
+  if (foundInCache) {
     return foundInCache;
   }
 
   // Otherwise, we fetch from the API
   try {
-    const response = await requestJSONWithHeaders(
+    const [data, headers] = await requestJSONWithHeaders(
       connectionPool,
-      stationsUrl
+      stationsUrl,
     );
 
-    if(response.error){
-      throw response;
-    }
-
-    const [ data, headers ] = response;
-
     if (!Array.isArray(data.features) || data.features.length === 0) {
-       return { error: true };
+      return { error: true };
     }
 
     const result = data.features.slice(0, 3);
 
     // Attempt to cache the resulting data
-    await saveToRedis(
-      stationsUrl,
-      result,
-      DEFAULT_STATIONS_CACHE_TTL
-    );
+    await saveToRedis(stationsUrl, result, DEFAULT_STATIONS_CACHE_TTL);
     return result;
-  } catch(e) {
+  } catch (e) {
+    observationsLogger.error(
+      { err: e, wfo, x, y },
+      "Error fetching stations from API",
+    );
     return { error: true };
   }
 };
@@ -57,25 +51,12 @@ const fetchObservation = async (station) => {
   const url = `/stations/${station.properties.stationIdentifier}/observations?limit=1`;
 
   const foundInCache = await getFromRedis(url);
-  if(foundInCache){
+  if (foundInCache) {
     return foundInCache;
   }
 
   try {
-    const response = await requestJSONWithHeaders(
-      connectionPool,
-      url
-    );
-    
-    if(response.error){
-      throw response;
-    }
-
-    const [ data, headers ] = response;
-
-    if(data.error){
-      return data;
-    }
+    const [data, headers] = await requestJSONWithHeaders(connectionPool, url);
 
     if (!Array.isArray(data.features) || data.features.length === 0) {
       observationsLogger.warn(
@@ -88,18 +69,17 @@ const fetchObservation = async (station) => {
     // Attempt to cache the result according to the
     // TTL given by the header
     let ttl = parseTTLFromHeaders(headers);
-    if(!ttl){
+    if (!ttl) {
       ttl = DEFAULT_OBSERVATIONS_CACHE_TTL;
     }
-    await saveToRedis(
-      url,
-      data.features[0].properties,
-      ttl
-    );
-    
+    await saveToRedis(url, data.features[0].properties, ttl);
+
     return data.features[0].properties;
-    
-  } catch(e) {
+  } catch (e) {
+    observationsLogger.error(
+      { err: e, station: station.properties.stationIdentifier },
+      "Error fetching observation for station",
+    );
     return { error: true };
   }
 };
@@ -111,12 +91,15 @@ export default async (
   const stations = await fetchStations(wfo, x, y);
 
   if (stations.error) {
-    observationsLogger.warn({
-      error: true,
-      wfo,
-      x,
-      y
-    },"Failed to get a list of stations");
+    observationsLogger.warn(
+      {
+        error: true,
+        wfo,
+        x,
+        y,
+      },
+      "Failed to get a list of stations",
+    );
     return {
       error: true,
       message: "Failed to find an approved observation station",
@@ -168,8 +151,8 @@ export default async (
     );
 
     const data = Object.keys(observation)
-          .filter((key) => observation[key]?.unitCode)
-          .reduce((o, key) => ({ ...o, [key]: observation[key] }), {});
+      .filter((key) => observation[key]?.unitCode)
+      .reduce((o, key) => ({ ...o, [key]: observation[key] }), {});
 
     // Add a "feels like" property, which is coerced from the heat index and
     // wind chill, if provided.
