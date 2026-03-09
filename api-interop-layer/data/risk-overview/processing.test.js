@@ -9,7 +9,7 @@ import {
 } from "./processing.js";
 import { getFallbackLevelName } from "./levelnames.js";
 
-describe.only("risk overview: processing utilities", () => {
+describe("risk overview: processing utilities", () => {
   // This represents the raw data from GHWO
   const data = {
     countyName: "FR_Benjamin",

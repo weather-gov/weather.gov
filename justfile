@@ -243,6 +243,7 @@ test-interop arg="":
       --reporter html \
       --reporter clover -o /reports \
       mocha '**/*.test.js' \
+        --forbid-only
         --exclude 'node_modules/**' \
         --require mocha.js \
         $inspect
