@@ -47,6 +47,16 @@ svg:
       forecast/frontend/assets/images/weather/icons/*.svg \
       forecast/frontend/assets/images/weather/icons/conditions/*.svg
 
+# Export packages from pyproject.toml to requirements.txt
+[group("building")]
+uv:
+  docker compose exec web bash -c "pip install uv && uv export --no-dev --format requirements.txt>requirements.txt"
+
+# Export dev packages from pyproject.toml to requirements.txt
+[group("building")]
+uv-dev:
+  docker compose exec web bash -c "pip install uv && uv export --group dev --format requirements.txt>requirements.dev.txt"
+
 ##### Django/django management #####
 # Generate static assets
 [group("django management")]
