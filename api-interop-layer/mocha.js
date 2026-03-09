@@ -28,6 +28,9 @@ export async function mochaGlobalSetup() {
 
 export async function mochaGlobalTeardown() {
   sandbox.restore();
+  global.fetch.restore();
+  Pool.prototype.connect.restore();
+  Client.prototype.connect.restore();
 }
 
 export const mochaHooks = {
