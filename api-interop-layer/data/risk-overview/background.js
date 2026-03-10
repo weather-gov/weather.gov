@@ -151,13 +151,17 @@ const processWFO = async (wfo, statuses) => {
     // is more useful for us later on.
     const legend = processLegend(legendData);
 
+    // We process the chicklet data into a dictionary more
+    // amenable to lookups by risk keys
+    const chicklet = processChickletData(chickletData);
+
     if (riskOverview.counties) {
       // Since there are counties, process them. In the risk overview data, the
       // object keys are county FIPS codes and the values are the risk data. So
       // iterate over the key/value pairs and process accordingly.
       await Promise.all(
         Object.entries(riskOverview.counties).map(([countyFips, data]) =>
-          processCounty({ countyFips, data, wfo, legend }),
+          processCounty({ countyFips, data, wfo, legend, chicklet }),
         ),
       );
     }
@@ -167,7 +171,7 @@ const processWFO = async (wfo, statuses) => {
       // letter abbreviation.
       await Promise.all(
         Object.entries(riskOverview.states).map(([state, data]) =>
-          processState({ state, data, wfo, legend }),
+          processState({ state, data, wfo, legend, chicklet }),
         ),
       );
     }
@@ -201,51 +205,6 @@ const processWFO = async (wfo, statuses) => {
     statuses[wfoStatus.NO_DATA].push(wfo);
     return statuses;
   }
-
-  // We get legend data, and now we need to manipulate it into a shape that
-  // is more useful for us later on.
-  const legend = processLegend(legendData);
-
-  // We process the chicklet data into a dictionary more
-  // amenable to lookups by risk keys
-  const chicklet = processChickletData(chickletData);
-
-  if (riskOverview.counties) {
-    // Since there are counties, process them. In the risk overview data, the
-    // object keys are county FIPS codes and the values are the risk data. So
-    // iterate over the key/value pairs and process accordingly.
-    await Promise.all(
-      Object.entries(riskOverview.counties).map(([countyFips, data]) =>
-        processCounty({ countyFips, data, wfo, legend, chicklet }),
-      ),
-    );
-  }
-
-  if (riskOverview.states) {
-    // Do the same with states. In this case, the object key is the state two
-    // letter abbreviation.
-    await Promise.all(
-      Object.entries(riskOverview.states).map(([state, data]) =>
-        processState({ state, data, wfo, legend, chicklet }),
-      ),
-    );
-  }
-
-  // categorize this WFO ghwo data into one of four status buckets.
-  if (riskOverview.states) {
-    if (riskOverview.counties) {
-      statuses[wfoStatus.ALL_DATA].push(wfo);
-    } else {
-      statuses[wfoStatus.NO_COUNTIES].push(wfo);
-    }
-  } else {
-    if (riskOverview.counties) {
-      statuses[wfoStatus.NO_STATES].push(wfo);
-    } else {
-      statuses[wfoStatus.NO_DATA].push(wfo);
-    }
-  }
-
   return statuses;
 };
 
