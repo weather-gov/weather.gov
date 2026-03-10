@@ -49,9 +49,9 @@ describe("point method", () => {
     response.headers = { "content-type": "application/json" };
   });
 
-  after(() => {
+  after(async () => {
     sandbox.restore();
-    quibble.reset();
+    await quibble.reset();
   });
 
   it("truncates lat/lon to 3 decimal places", async () => {
