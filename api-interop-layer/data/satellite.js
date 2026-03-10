@@ -7,7 +7,7 @@ import POOL_SETTINGS from "./poolSettings.js";
 
 const satelliteLogger = logger.child({ subsystem: "satellite" });
 
-const requestPool = new Pool("https://cdn.star.nesdis.noaa.gov", POOL_SETTINGS);
+export const requestPool = new Pool("https://cdn.star.nesdis.noaa.gov", POOL_SETTINGS);
 
 export default async ({ grid: { wfo }, place: { timezone } }) => {
   try {
