@@ -6,13 +6,6 @@ const place = {
 };
 
 describe("gridpoint data module", () => {
-  it("propagates errors", async () => {
-    const expected = { error: true };
-    const actual = await gridpoint({ error: true }, [], place);
-
-    expect(actual).to.eql(expected);
-  });
-
   it("puts data into the hourly map", async () => {
     const hours = new Map();
 

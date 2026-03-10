@@ -76,28 +76,32 @@ describe("Forecast index cache tests", () => {
       expect(actual.gridData).to.eql({message: "hello"});
     });
 
-    it("returns the cached result as the gridpoint value", async () => {
+    it("processes the cached value", async () => {
       getFromRedis.resolves({cached: true});
       processGridpoint.returns({message: "hello"});
       const actual = await forecast(args);
 
-      expect(actual.gridData).to.eql({cached: true});
+      expect(processGridpoint.calledWith(
+        {cached: true},
+        sinon.match(sinon.match.any),
+        sinon.match(sinon.match.any)
+      )).to.equal(true);
+      expect(actual.gridData).to.eql({message: "hello"});
     });
 
-    it("caches the processed response", async () => {
-      
+    it("caches the raw response (and not the processed data)", async () => {      
       processGridpoint.returns({message: "hello"});
       await forecast(args);
-      
+
       expect(saveToRedis.calledWith(
         `/gridpoints/TST/34,35`,
-        {message: "hello"},
+        defaultResponse[0],
         32
       )).to.equal(true);
     });
 
-    it("does not cache if there is an error", async () => {
-      processGridpoint.returns({error: true});
+    it("does not cache if an error is thrown", async () => {
+      requestJSON.throws(new Error("hi this is an error!"));
       await forecast(args);
 
       expect(saveToRedis.calledWith(

@@ -121,7 +121,6 @@ describe("observations module", () => {
 
       const expected = { degC: 100, degF: 212 };
 
-      debugger;
       const obs = await getObservations(
         {
           grid: { wfo: "TEST", x: 1, y: 1 },
