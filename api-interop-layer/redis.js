@@ -9,7 +9,10 @@ export let USE_REDIS = false;
 // This is a global "off" switch env variable
 // that will always disable redis operations
 // by immediately setting USE_REDIS to false
-const DISABLE_REDIS = process.env.DISABLE_REDIS ? true : false;
+let DISABLE_REDIS = false;
+if(process.env.DISABLE_REDIS && process.env.DISABLE_REDIS === "true"){
+  DISABLE_REDIS = true;
+}
 
 // We need to know whether to use TLS or not
 // For local dev, we don't
