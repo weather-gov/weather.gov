@@ -4,6 +4,7 @@ import inspector from "inspector";
 import { startAlertProcessing } from "./data/alerts/index.js";
 import routes from "./routes/index.js";
 import { logger } from "./util/monitoring/index.js";
+import ConnectionTracker from "./ConnectionTracker.js";
 
 const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
 
@@ -74,6 +75,13 @@ export const main = async () => {
     process.exit(1);
   });
 
+  // Log out the information about our ConnectionTracker
+  logger.warn({
+    maxConnections: ConnectionTracker.maxConnections,
+    currentSize: ConnectionTracker.currentSize,
+    atMax: ConnectionTracker.atMax
+  }, `Starting the ConnectionTracker`);
+
   server.get("/", (_, response) => {
     response.send({
       ok: true,
@@ -90,12 +98,26 @@ export const main = async () => {
         logger.trace({ url: request.url });
 
         /**
-         * 429 checks used to be here.
-         * TODO: re-implement under the new
-         * fetch breakouts, then remove this
-         * comment
+         * Check if we are at our max open
+         * or pending connections for undici Pools,
+         * via the ConnectionTracker object.
+         * If so, immediately return a 429
          */
-        const { data, error, status } = await handler(request);
+        let data, error, status;
+        if(ConnectionTracker.atMax){
+          status = 429;
+          data = {
+            message: "Too many open connections to NWS services",
+            maxConnections: ConnectionTracker.maxConnections
+          };
+          error = true;
+          logger.warn({
+            maxConnections: ConnectionTracker.maxConnections,
+            currentSize: ConnectionTracker.currentSize
+          }, `429: Exceeded maximum number of outbound connections`);
+        } else {
+          ({ data, error, status } = await handler(request));
+        }
         
         if (error) {
           logger.error({ err: error });
