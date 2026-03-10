@@ -60,24 +60,25 @@ const fetchHourlyPromise = async (url, hours) => {
 const fetchGridpointPromise = async (url, place, hours) => {
   const foundInCache = await getFromRedis(url);
   if (foundInCache) {
-    return foundInCache;
+    return gridpoint(foundInCache, hours, place);
   }
 
   try {
     const [data, headers] = await requestJSONWithHeaders(connectionPool, url);
 
-    const gridpointData = gridpoint(data, hours, place);
-
-    // If processing the data did not return an error,
-    // let's cache the result
-    if (!gridpointData.error) {
-      let ttl = parseTTLFromHeaders(headers);
-      if (!ttl) {
-        ttl = DEFAULT_CACHE_TTL;
-      }
-      await saveToRedis(url, gridpointData, ttl);
+    // Let's immediately cache the raw data.
+    // We cannot cache processed gridpoint data for two
+    // important reasons:
+    // (1) It modifies and uses the shared Map for hours
+    // (2) It modifies the quantitative percipitation data
+    // in the raw data object.
+    let ttl = parseTTLFromHeaders(headers);
+    if (!ttl) {
+      ttl = DEFAULT_CACHE_TTL;
     }
-    return gridpointData;
+    await saveToRedis(url, data, ttl);
+
+    return gridpoint(data, hours, place);
   } catch (e) {
     forecastLogger.error({ error: e, url }, `Error fetching gridpoint data`);
     e.error = true;
