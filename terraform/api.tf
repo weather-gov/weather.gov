@@ -20,14 +20,15 @@ resource "cloudfoundry_app" "interop" {
   org_name   = local.cf_org_name
   count      = 1
 
-  path             = data.archive_file.api_src.output_path
-  source_code_hash = data.archive_file.api_src.output_base64sha256
-  buildpacks       = ["nodejs_buildpack"]
-  strategy         = "rolling"
-  routes           = (var.custom_domain_name == null ?
-    [{ route = "api-${local.host_name}.${local.domain}" }]:
-    [{ route = "api-${local.host_name}.app.cloud.gov" }])
-  enable_ssh       = true
+  path              = data.archive_file.api_src.output_path
+  source_code_hash  = data.archive_file.api_src.output_base64sha256
+  buildpacks        = ["nodejs_buildpack"]
+  strategy          = "rolling"
+  routes            = (var.custom_domain_name == null ? [{ route = "api-${local.host_name}.${local.domain}" }] : [{ route = "api-${local.host_name}.app.cloud.gov" }])
+  enable_ssh        = true
+  instances         = var.api_interop_instances
+  memory            = var.api_interop_memory
+  health_check_type = "process"
 
   environment = {
     NEW_RELIC_LICENSE_KEY  = local.newrelic_license
@@ -41,15 +42,6 @@ resource "cloudfoundry_app" "interop" {
     DISABLE_REDIS          = var.cf_space_name == "test"
     PROXY_STANDALONE       = var.cf_space_name == "test"
   }
-
-  processes = [
-    {
-      type              = "web"
-      instances         = var.api_interop_instances
-      memory            = var.api_interop_memory
-      health_check_type = "process"
-    }
-  ]
 
   service_bindings = [
     { service_instance = "${local.app_name}-rds-${var.env}" },
