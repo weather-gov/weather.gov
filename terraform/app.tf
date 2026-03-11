@@ -10,7 +10,8 @@ data "archive_file" "app_src" {
     "log/*",
     "doc/*",
     "credentials.json",
-    ".ruff_cache/*"
+    ".ruff_cache/*",
+    "spatial/management/commands/__cache/*"
   ]
 }
 
@@ -31,14 +32,16 @@ resource "cloudfoundry_app" "app" {
   org_name   = local.cf_org_name
   count      = 1
 
-  path             = data.archive_file.app_src.output_path
-  source_code_hash = data.archive_file.app_src.output_base64sha256
-  buildpacks       = ["https://github.com/cloudfoundry/apt-buildpack.git", "python_buildpack"]
-  strategy         = "rolling"
-  routes           = (var.custom_domain_name == null ?
-    [{ route = "${local.host_name}.${local.domain}" }] :
-    [{ route = "${local.host_name}.app.cloud.gov" }, { route = "${local.domain}" }])
-  enable_ssh       = true
+  path              = data.archive_file.app_src.output_path
+  source_code_hash  = data.archive_file.app_src.output_base64sha256
+  buildpacks        = ["https://github.com/cloudfoundry/apt-buildpack.git", "python_buildpack"]
+  strategy          = "rolling"
+  routes            = (var.custom_domain_name == null ? [{ route = "${local.host_name}.${local.domain}" }] : [{ route = "${local.host_name}.app.cloud.gov" }, { route = "${local.domain}" }])
+  enable_ssh        = true
+  instances         = var.web_instances
+  memory            = var.web_memory
+  disk_quota        = var.web_disk_quota
+  health_check_type = "port"
 
   environment = {
     NEW_RELIC_LICENSE_KEY  = local.newrelic_license
@@ -53,19 +56,6 @@ resource "cloudfoundry_app" "app" {
     CLOUDGOV_SPACE         = var.cf_space_name
     AWS_USE_FIPS_ENDPOINT  = 1 # required for "s3-fips.us-gov-*.amazonaws.com"
   }
-
-  processes = [
-    {
-      type                            = "web"
-      instances                       = var.web_instances
-      memory                          = var.web_memory
-      disk_quota                      = var.web_disk_quota
-      health_check_invocation_timeout = 600
-      health_check_http_endpoint      = "/health"
-      health_check_type               = "http"
-      command                         = "./run.sh"
-    }
-  ]
 
   service_bindings = (var.env == "prod" ? local.prod_service_bindings : local.base_service_bindings)
 

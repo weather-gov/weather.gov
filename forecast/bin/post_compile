@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# first, find where the apt buildpack libraries reside.
+#
+# `python` is the only reliably installed executable due to the python
+# buildpack, so we go ahead and figure out the apt dir based on `which python`.
+# note that, during the build step, the installations are to random /tmp dirs.
+# for example, during one run, `python` was found at
+# /tmp/contents1725757922/deps/1/bin/python
+APT_DIR=$(dirname $(which python) | sed 's|/deps/1/bin|/deps/0|')
+echo "APT_DIR: $APT_DIR"
+
+# find libraries and set library paths accordingly -- this is similar to how we
+# do it in the production settings (see: find_cloudgov_library)
+export LD_LIBRARY_PATH="${APT_DIR}/lib:${LD_LIBRARY_PATH}"
+export GDAL_LIBRARY_PATH=$(ls ${APT_DIR}/lib/libgdal.so.* 2>/dev/null | head -1)
+export GEOS_LIBRARY_PATH=$(ls ${APT_DIR}/lib/libgeos_c.so.* 2>/dev/null | head -1)
+echo "GDAL found at: $GDAL_LIBRARY_PATH"
+echo "GEOS found at: $GEOS_LIBRARY_PATH"
+
+# set custom settings so that the above library path env vars can pass through
+export DJANGO_SETTINGS_MODULE="backend.config.settings.staging"
+
+# note: cloud foundry hooks do not output stderr, for some reason.
+# unfortunately, a top-level `exec 2>&1` does not work, so we redirect manually
+# for each command.
+
+echo "collecting static files"
+python manage.py collectstatic 2>&1
+
+echo "compiling translation files"
+python manage.py compilemessages 2>&1
