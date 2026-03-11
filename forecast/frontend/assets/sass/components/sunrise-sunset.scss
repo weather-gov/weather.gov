@@ -1,0 +1,34 @@
+@use "uswds-core" as *;
+
+.wx-sunrise-sunset-container {
+  img {
+    min-width: units(3);
+  }
+
+  table {
+    @include u-line-height('body', 2);
+
+    th {
+      padding-left: 0;
+    }
+
+    td {
+      padding-right: 0;
+      text-align: right;
+    }
+
+    tr:first-of-type {
+      th,
+      td {
+        border-top: 0;
+      }
+    }
+
+    tr:last-of-type {
+      th,
+      td {
+        border-bottom: 0;
+      }
+    }
+  }
+}

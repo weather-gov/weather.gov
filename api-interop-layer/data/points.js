@@ -1,7 +1,7 @@
 import { SPATIAL_PROJECTION } from "../util/constants.js";
-import connectionPool from "./connectionPool.js";
-import { requestJSONWithHeaders } from "../util/request.js";
 import { logger } from "../util/monitoring/index.js";
+import { requestJSONWithHeaders } from "../util/request.js";
+import connectionPool from "./connectionPool.js";
 import openDatabase from "./db.js";
 
 const pointLogger = logger.child({ subsystem: "point" });
@@ -85,27 +85,28 @@ export const getPointData = async (lat, lon) => {
     connectionPool,
     `/points/${latitude},${longitude}`,
   )
-    .then(([gridData]) => {
-      // Map the successful response
-      return {
-        wfo: gridData.properties?.gridId,
-        x: gridData.properties?.gridX,
-        y: gridData.properties?.gridY,
-        geometry: gridData.geometry,
-      };
-    })
-    .catch((err) => {
-      // Handle the 404 "Out of Bounds" case specifically
-      if (err.cause?.statusCode === 404 || err.statusCode === 404) {
-        return {
-          error: true,
-          outOfBounds: true,
-          status: 404,
-        };
-      }
-      // General error fallback
-      return { error: true };
-    });
+        .then(([gridData]) => {
+          point.astronomicalData = gridData.properties?.astronomicalData;
+
+          return {
+            wfo: gridData.properties?.gridId,
+            x: gridData.properties?.gridX,
+            y: gridData.properties?.gridY,
+            geometry: gridData.geometry,
+          };
+        })
+        .catch((err) => {
+          // Handle the 404 "Out of Bounds" case specifically
+          if (err.cause?.statusCode === 404 || err.statusCode === 404) {
+            return {
+              error: true,
+              outOfBounds: true,
+              status: 404,
+            };
+          }
+          // General error fallback
+          return { error: true };
+        });
 
   const placePromise = getClosestPlace(latitude, longitude);
 

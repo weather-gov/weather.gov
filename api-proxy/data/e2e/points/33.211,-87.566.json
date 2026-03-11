@@ -92,6 +92,17 @@
     "county": "https://api.weather.gov/zones/county/ALC125",
     "fireWeatherZone": "https://api.weather.gov/zones/fire/ALZ023",
     "timeZone": "America/Chicago",
-    "radarStation": "KBMX"
+    "radarStation": "KBMX",
+    "astronomicalData": {
+      "sunrise": "date:today 06:32:-06",
+      "sunset": "date:today 17:44:-06",
+      "transit": "date:today 12:13:-06",
+      "civilTwilightBegin": "date:today 06:22:-06",
+      "civilTwilightEnd": "date:today 18:02:-06",
+      "nauticalTwilightBegin": "date:today 06:01:-06",
+      "nauticalTwilightEnd": "date:today 18:19:-06",
+      "astronomicalTwilightBegin": "date:today 05:48:-06",
+      "astronomicalTwilightEnd": "date:today 18:32:-06"
+    }
   }
 }

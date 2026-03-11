@@ -1,7 +1,7 @@
 <h3 class="wx-visual-h2 text-normal text-primary-darker padding-x-2 tablet:padding-x-0 margin-top-0 margin-bottom-2">
   {% trans "forecast.heading.current-conditions.01" %}
 </h3>
-<div class="bg-white padding-2 shadow-1 grid-col-12 flex-1">
+<div class="bg-white padding-2 shadow-1 grid-col-12 flex-auto">
   <div class="wx-current-conditions grid-row grid-gap">
     {% if obs.error %}
       {% include "weather/partials/uswds-alert.html" with level="error" body="forecast.errors.current-conditions.01"|t %}
@@ -41,11 +41,11 @@
         </div>
       </div>
       <div class="grid-row tablet:margin-top-2 width-full">
-        <div class="mobile:grid-col-12 tablet:grid-col-6 desktop:grid-col-12 margin-bottom-05 tablet:padding-right-4 tablet:margin-bottom-0">
+        <div class="mobile:grid-col-12 tablet:grid-col-6 desktop:grid-col-12 tablet:padding-right-4 desktop:padding-right-0">
           {% include "weather/partials/observation-table.html" %}
         </div>
         <div class="mobile:grid-col-12 tablet:grid-col-6 desktop:grid-col-12">
-          <div class="border-top-1px border-base-light padding-top-1">
+          <div class="border-top-1px border-base-lighter padding-top-1">
             <span class="font-family-mono font-mono-xs text-base text-uppercase margin-bottom-1 display-block">
               {% trans_with_args "forecast.current.obs-station.01" %}
             </span>
