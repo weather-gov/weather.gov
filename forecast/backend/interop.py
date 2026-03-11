@@ -97,6 +97,29 @@ def _set_day_period_info(day, tz):
         period["end"] = datetime.fromisoformat(period["end"]).astimezone(tz=tz)
 
 
+def _process_astronomical_data(data, tz):
+    """Process astronomical data."""
+    astronomical_data = data.get("point", {}).get("astronomicalData", {})
+    for key, value in astronomical_data.items():
+        astronomical_data[key] = datetime.fromisoformat(value).astimezone(tz=tz)
+
+    if "sunrise" in astronomical_data and "sunset" in astronomical_data:
+        day_length = astronomical_data["sunset"] - astronomical_data["sunrise"]
+        total_seconds = day_length.total_seconds()
+        hours = int(total_seconds / 3600)
+        total_seconds -= hours * 3600
+        minutes = round(total_seconds / 60)
+        astronomical_data["dayLength"] = f"{hours}h {minutes}m"
+
+    if "civilTwilightBegin" in astronomical_data and "civilTwilightEnd" in astronomical_data:
+        day_length = astronomical_data["civilTwilightEnd"] - astronomical_data["civilTwilightBegin"]
+        total_seconds = day_length.total_seconds()
+        hours = int(total_seconds / 3600)
+        total_seconds -= hours * 3600
+        minutes = round(total_seconds / 60)
+        astronomical_data["dayLightLength"] = f"{hours}h {minutes}m"
+
+
 def _process_interop_point_forecast(data):
     """
     Make structured lists like temperatures per day, high, low, and other lists for charts and tables.
@@ -167,6 +190,8 @@ def _process_interop_point_forecast(data):
 
     if "timestamp" in data["observed"]:
         data["observed"]["timestamp"] = datetime.fromisoformat(data["observed"]["timestamp"]).astimezone(tz=tz)
+
+    _process_astronomical_data(data, tz)
 
     return data
 

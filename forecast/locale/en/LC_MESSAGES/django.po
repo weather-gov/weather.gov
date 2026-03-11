@@ -1082,3 +1082,32 @@ msgstr ""
 
 msgid "Alerts are listed in order of start time and level of severity. Click on the alert title to read details for each alert."
 msgstr ""
+
+###########################################################
+#
+# These are for astronomical data, like sunrise/sunset, etc.
+#
+msgid "Sunrise"
+msgstr ""
+
+msgid "Sunset"
+msgstr ""
+
+msgid "first light"
+msgstr ""
+
+msgid "last light"
+msgstr ""
+
+msgid "length of visible day"
+msgstr ""
+
+msgid "length of day"
+msgstr ""
+
+msgid "show more"
+msgstr ""
+
+msgid "hide"
+msgstr ""
+###########################################################

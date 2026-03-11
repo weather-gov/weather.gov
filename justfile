@@ -190,7 +190,7 @@ test-a11y:
 # Run collectstatic which is required for Django tests
 [group("testing")]
 test-collectstatic:
-  docker compose run --rm web python manage.py collectstatic
+  docker compose run --rm web python manage.py collectstatic --noinput
 
 # Run Django tests
 [group("testing")]

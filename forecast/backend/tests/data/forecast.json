@@ -437,5 +437,55 @@
         }
       ]
     }
+  },
+  "astronomical_data_missing": {
+    "isMarine": false,
+    "place": {
+      "timezone": "America/Chicago"
+    },
+    "observed": {
+      "timestamp": "2010-01-03T01:32:42Z"
+    },
+    "forecast": {
+      "days": []
+    },
+    "point": {}
+  },
+  "astronomical_data_empty": {
+    "isMarine": false,
+    "place": {
+      "timezone": "America/Chicago"
+    },
+    "observed": {
+      "timestamp": "2010-01-03T01:32:42Z"
+    },
+    "forecast": {
+      "days": []
+    },
+    "point": { "astronomicalData": {} }
+  },
+  "astronomical_data_valid": {
+    "isMarine": false,
+    "place": {
+      "timezone": "America/Chicago"
+    },
+    "observed": {
+      "timestamp": "2010-01-03T01:32:42Z"
+    },
+    "forecast": {
+      "days": []
+    },
+    "point": {
+      "astronomicalData": {
+        "sunrise": "2023-04-19T12:14:32Z",
+        "sunset": "2023-04-19T20:41:03-06:00",
+        "civilTwilightBegin": "2023-01-01T00:00:00Z",
+        "civilTwilightEnd": "2023-01-01T18:18:00-04:00",
+        "nauticalTwilightBegin": "2026-01-01T00:00:00Z",
+        "nauticalTwilightEnd": "2026-01-01T18:00:00Z",
+        "astronomicalTwilightBegin": "2026-03-06T00:00:00Z",
+        "astronomicalTwilightEnd": "2026-03-06T18:00:00Z"
+      }
+    }
   }
 }

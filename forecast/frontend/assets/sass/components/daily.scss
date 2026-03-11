@@ -16,8 +16,8 @@
   @include u-margin-bottom(3);
 }
 
-table tr:first-child th,
-table tr:nth-child(2) th {
+table.hourly-table tr:first-child th,
+table.hourly-table tr:nth-child(2) th {
   border-top: none;
 }
 

@@ -113,7 +113,7 @@ describe("point method", () => {
     const actual = await points(1, 2);
 
     expect(actual).to.eql({
-      point: { latitude: 1, longitude: 2 },
+      point: { latitude: 1, longitude: 2, astronomicalData: undefined },
       grid: {
         error: true,
         notSupported: true,
@@ -143,7 +143,29 @@ describe("point method", () => {
     const actual = await points(4, 5);
 
     expect(actual).to.eql({
-      point: { latitude: 4, longitude: 5 },
+      point: { latitude: 4, longitude: 5, astronomicalData: undefined },
+      grid: { wfo: "PPU", x: 30, y: 40, geometry: undefined },
+      isMarine: false,
+      place: null,
+    });
+  });
+
+  it("includes astronimcal data", async () => {
+    response.body.text.resolves(JSON.stringify({
+      properties: {
+        gridId: "PPU",
+        gridX: 30,
+        gridY: 40,
+        geometry: undefined,
+        astronomicalData: "stars and stuff",
+      },
+    }));
+    db.query.resolves({ rows: [] });
+
+    const actual = await points(4, 5);
+
+    expect(actual).to.eql({
+      point: { latitude: 4, longitude: 5, astronomicalData: "stars and stuff" },
       grid: { wfo: "PPU", x: 30, y: 40, geometry: undefined },
       isMarine: false,
       place: null,

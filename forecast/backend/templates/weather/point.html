@@ -94,7 +94,7 @@
                 {% if point.forecast.days|length == 0 %}
                   {% include 'weather/partials/uswds-alert.html' with level="error" body="forecast.errors.loading.01"|t %}
                 {% else %}
-                  {% include 'weather/partials/today-summary-forecast.html' with forecast=point.forecast %}
+                  {% include 'weather/partials/today-summary-forecast.html' with forecast=point.forecast astronomical_data=point.point.astronomicalData %}
                 {% endif %}
               </div>
             {% else %}
@@ -110,6 +110,7 @@
             {% endif %}
           </div>
         </div>
+
         <!-- Weather Story Image here -->
         {% if weather_story %}
           {% include 'weather/partials/point-weather-story.html' with weather_story=weather_story county=point.place.countyfips %}
