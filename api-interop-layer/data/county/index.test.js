@@ -28,8 +28,8 @@ describe("county data index", () => {
     sandbox.resetHistory();
   });
 
-  after(() => {
-    quibble.reset();
+  after(async () => {
+    await quibble.reset();
   });
 
   it("handles an unexpected error", async () => {

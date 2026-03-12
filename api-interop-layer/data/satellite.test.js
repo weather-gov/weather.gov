@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { createSandbox } from "sinon";
+import sinon, { createSandbox } from "sinon";
 import quibble from "quibble";
 import { Pool } from "undici";
 import { parseTTLFromHeaders } from "../redis.js";
@@ -130,5 +130,16 @@ describe("satellite metadata module", () => {
     });
 
     expect(actual).to.eql({ error: true });
+  });
+
+  it("sets the wx-host header when requesting", async() => {
+    await getSatelliteData({
+      grid: { wfo: "wfo4" },
+      place: { timezone: "America/New_York" },
+    });
+
+    expect(Pool.prototype.request.calledWith(
+      sinon.match({ headers: { "wx-host": sinon.match.any }})
+    )).to.equal(true);
   });
 });

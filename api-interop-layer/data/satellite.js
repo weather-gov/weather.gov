@@ -23,6 +23,7 @@ export default async ({ grid: { wfo }, place: { timezone } }) => {
     const [satelliteMetadata, headers] = await requestJSONWithHeaders(
       requestPool,
       url,
+      { "wx-host": "cdn.star.nesdis.noaa.gov" }
     );
 
     const satellite = satelliteMetadata?.meta?.satellite;

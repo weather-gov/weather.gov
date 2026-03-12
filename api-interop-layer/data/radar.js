@@ -1,10 +1,24 @@
 import dayjs from "../util/day.js";
+import { Pool } from "undici";
+import POOL_SETTINGS from "../data/poolSettings.js";
+import { requestPlainText } from "../util/request.js";
 
-let radarTimestampsLast = 0;
-const radarTimestamps = {
+export const radarTimestamps = {
   start: null,
   end: null,
+  last: 0
 };
+
+const radarHost = process.env.RADAR_URL ?? "https://opengeo.ncep.noaa.gov";
+
+// 10 seconds
+const RADAR_METADATA_TTL = 10;
+
+// A pool for requests for radar metadata
+export const radarPool = new Pool(
+  radarHost,
+  POOL_SETTINGS
+);
 
 export const getRadarMetadata = async ({
   place,
@@ -16,24 +30,26 @@ export const getRadarMetadata = async ({
   const timezone = place.timezone;
 
   // Only update the radar timestamps once a minute
-  if (Date.now() - radarTimestampsLast > 60_000) {
+  if (Date.now() - radarTimestamps.last > 60_000) {
     try {
       // We can query the geoserver's capabilities to get information about
       // layers, which includes time extents.
-      const xml = await fetch(
-        "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=wms&version=1.1.1&request=GetCapabilities",
-      ).then((r) => r.text());
+      const { data } = await requestPlainText(
+        radarPool,
+        "/geoserver/conus/conus_bref_qcd/ows?service=wms&version=1.1.1&request=GetCapabilities",
+        { Accept: "application/xml", "wx-host": "opengeo.ncep.noaa.gov" }
+      );
 
       // It's XML. Yay. Anyway, all of the times are listed as a single long
       // string, separated by commas. The most recent is at the end. CMI only
       // uses 20 frames, so we extract the last 20 timestamps.
-      const [, times] = xml.match(/<Extent name="time".*>(.+)<\/Extent>/);
+      const [, times] = data.match(/<Extent name="time".*>(.+)<\/Extent>/);
       const range = times.split(",").slice(-20);
 
       // Stash those off.
       radarTimestamps.start = range[0];
       radarTimestamps.end = range.pop();
-      radarTimestampsLast = Date.now();
+      radarTimestamps.last = Date.now();
     } catch (e) {
       // For now, just eat any exceptions. They should be short-lived.
     }

@@ -164,16 +164,24 @@ const ghwoFetchAndSave = async (urlPath, savePath) => {
 
   const filePath = `${path.join(savePath, urlPath)}`;
 
-  const fixedTimes = replaceGHWOTimestamps(data);
+  // We only want to modify timestamps in the case
+  // of the hazByCounty data. The legend and chicklet
+  // timestamps should not matter -- they are for
+  // metadata purposes only and can be saved as-is
+  let outputData = data;
+  if(urlPath.endsWith("hazByCounty.json")){
+    outputData = replaceGHWOTimestamps(data);
+  }
+
   await fs.mkdir(path.dirname(filePath), { recursive: true});
 
   fs.writeFile(
     filePath,
-    await format(JSON.stringify(fixedTimes), { parser: "json"})
+    await format(JSON.stringify(outputData), { parser: "json"})
   );
 
-  return fixedTimes;
-}
+  return outputData;
+};
 
 const savePoint = async (lat, lon) => {
   if (!config.play) {
@@ -239,6 +247,8 @@ const saveBundle = async (lat, lon) => {
     // Fetch and save the GHWO data for the point,
     // as given by its WFO
     await ghwoFetchAndSave(`/source/${output.wfo.toLowerCase()}/ghwo/hazByCounty.json`, dataPath);
+    await ghwoFetchAndSave(`/source/${output.wfo.toLowerCase()}/ghwo/legend.json`, dataPath);
+    await ghwoFetchAndSave(`/source/${output.wfo.toLowerCase()}/ghwo/chicklet.json`, dataPath);
   }
 
   await apiFetchAndSave("/alerts/active?status=actual", dataPath);
