@@ -1,5 +1,5 @@
 const config = {
-  sessionSampleRate: 0.2,
+  sessionSampleRate: 1.0,
   identityPoolId: "us-east-1:41d5720b-94ad-45e5-b216-4e8d6c8e28b8",
   endpoint: "https://dataplane.rum.us-east-1.amazonaws.com",
   telemetries: ["performance", "errors", "http"],
