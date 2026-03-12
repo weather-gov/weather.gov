@@ -133,9 +133,9 @@ const processWFO = async (wfo, statuses) => {
 
   try {
     const [riskOverview, legendData, chickletData] = await Promise.all([
-      requestJSON(client, risksEndpoint),
-      requestJSON(client, legendEndpoint),
-      requestJSON(client, chickletEndpoint),
+      requestJSON(client, risksEndpoint, { "wx-host": "www.weather.gov" }),
+      requestJSON(client, legendEndpoint, { "wx-host": "www.weather.gov" }),
+      requestJSON(client, chickletEndpoint, { "wx-host": "www.weather.gov" }),
     ]);
 
     // After we fetch, update the database so we know the last time we fetched

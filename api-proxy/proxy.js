@@ -59,7 +59,7 @@ export default (req, res) => {
       proxyResponse.on("end", finish);
     })
     .on("error", (e) => {
-      proxyLogger.error({ err: e }, "error");
+      proxyLogger.error({ err: e, proxyRequestSettings }, "error");
       try {
         res.writeHead(500);
         res.write(e.message);

@@ -78,7 +78,9 @@ services:
       DB_HOST: database
       DB_PORT: 5432
       API_URL: ${API_URL:-http://api-proxy:8081}
-      GHWO_URL: ${GHWO_URL:-https://www.weather.gov}
+      GHWO_URL: ${GHWO_URL:-http://api-proxy:8081}
+      SATELLITE_URL: ${SATELLITE_URL:-http://api-proxy:8081}
+      RADAR_URL: ${RADAR_URL:-http://api-proxy:8081}
       API_KEY: ${API_KEY:-}
       DISABLE_GRID_ANALYSIS: ${DISABLE_GRID_ANALYSIS:-false}
       API_INTEROP_NAME: ${API_INTEROP_NAME:-local}
