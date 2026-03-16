@@ -12,8 +12,9 @@ space_deployers = [
   "b47f4a63-109f-416d-a56f-17cae1d0a51c"
 ]
 web_memory            = "1024M"
-web_instances         = 2
+web_instances         = 4
 api_interop_memory    = "1024M"
-api_interop_instances = 2
+api_interop_instances = 4
+api_url               = "https://preview-api.weather.gov"
 interop_url           = "https://api-weathergov-staging.app.cloud.gov"
 redis_plan_name       = "redis-3node"
