@@ -1,9 +1,12 @@
 {% comment %}
-# Expected inputs:
-# - alertID        - the ID used to link to this specific alert, or null to link
-# to the alerts tab
-# - alertType      - the event type, such as "Severe Thunderstorm Warning"
-# - alertLevel - the severity level of the event type, such as "Warning"
+-- Template purpose:
+--   Display the alert link in the daily summary.
+-- Used by: backend.templatetags.weather_partials.summary_alert_link
+-- Expected variables:
+--   alertID: the ID used to link to this specific alert, or null to link
+--            to the alerts tab
+--   alertType: the event type, such as "Severe Thunderstorm Warning"
+--   alertLevel: the severity level of the event type, such as "Warning"
 {% endcomment %}
 {% if alertCount > 0 %}
   <div class="wx-alert-link wx-alert-link--{{ alertLevel|lower }} display-flex flex-align-start">

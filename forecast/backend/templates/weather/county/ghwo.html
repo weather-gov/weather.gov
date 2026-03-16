@@ -1,4 +1,9 @@
 {% extends "weather/page.html" %}
+{% comment %}
+-- Template purpose:
+--   Display the 7-day weather risk overview and detailed risk analysis.
+-- URL: https://beta.weather.gov/counties/ghwo/01077
+{% endcomment %}
 {% block page_head_css %}
   {% if ghwo.prefetch_images %}
     {% for url in ghwo.prefetch_images %}<link rel="preload" href="{{ url }}" as="image" />{% endfor %}

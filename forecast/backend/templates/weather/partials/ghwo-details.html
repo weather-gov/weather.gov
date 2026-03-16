@@ -1,8 +1,11 @@
 {% comment %}
-  This template receives 1 top-level object.
-
-  ghwo:
-    This is the full risk overview object for the current county.
+-- Template purpose:
+--   Display the 7-day weather risk overview and detailed risk analysis. 
+-- Expected variables:
+--   This template receives 1 top-level object.
+--   ghwo:
+--     This is the full risk overview object for the current county.
+-- Used by: county/ghwo.html
 {% endcomment %}
 {% if ghwo.error %}
   {% if "Error" in ghwo.error %}

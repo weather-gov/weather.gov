@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Displays a single roadmap item.
+-- Url: https://beta.weather.gov/roadmap/
+{% endcomment %}
 <div class="{% if forloop.first %}tablet:border-top tablet:border-base-lighter margin-top-3 tablet:margin-top-0 tablet:padding-top-2{% else %}border-top border-base-lighter margin-top-2 padding-top-2{% endif %}">
   <h3 class="text-primary-dark font-sans-md text-normal margin-top-0">{{ entry.name }}</h3>
   <p class="margin-0">{{ entry.description }}</p>

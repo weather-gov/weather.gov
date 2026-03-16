@@ -1,39 +1,38 @@
 {% comment %}
-  This template receives one top-level property called ghwo.
-  This is the full risk overview object for the county. The
-  relevant properties of this object are:
-
-  error:
-    An error object, or falsey. If not falsey, it should
-    contain a status property indicating the HTTP code
-    so we can tell the user if the data is missing or if
-    there was some other unknown error.
-
-  risks:
-    A dictionary. Each object represents a risk. The keys
-    are risk IDs and the values are:
-
-    days:
-      A list of days. Each day contains a risk level along
-      with the appropriate legend information for that level.
-    
-    legend:
-      level: A dictionary. Keys are risk levels, values are legend.
-
-        number: The risk level, as a number.
-
-        levelName: The name of this level. Eg, "Moderate", "Severe"
-
-        definition: A description fo what this level means.
-
-        color: The office-provided color that represents this
-          risk level.
-
-    noRisks:
-      A list of risk names that were provided by the WFO but whose
-      levels are always zero for the forecast. These names are
-      derived from the legend so they are already complete.
-
+-- Template purpose:
+--   Display the detailed risk analysis, which is a matrix of weather risks,
+--   such as Lightning or Fog, crossed with the next 7 days, along with pane
+--   explaining each risk/day combination.
+-- Expected variables:
+--  ghwo: This template receives one top-level property called ghwo.
+--        This is the full risk overview object for the county. The
+--        relevant properties of this object are:
+--
+--        error:
+--          An error object, or falsey. If not falsey, it should
+--          contain a status property indicating the HTTP code
+--          so we can tell the user if the data is missing or if
+--          there was some other unknown error.
+--        risks:
+--          A dictionary. Each object represents a risk. The keys
+--          are risk IDs and the values are:
+--          days:
+--            A list of days. Each day contains a risk level along
+--            with the appropriate legend information for that level.
+--          legend:
+--            level: A dictionary. Keys are risk levels, values are legend.
+--              number: The risk level, as a number.
+--              levelName: The name of this level. Eg, "Moderate", "Severe"
+--              definition: A description fo what this level means.
+--              color: The office-provided color that represents this
+--                risk level.
+--          noRisks:
+--            A list of risk names that were provided by the WFO but whose
+--            levels are always zero for the forecast. These names are
+--            derived from the legend so they are already complete.
+-- 
+-- Used by: partials/ghwo-details.html
+--
 {% endcomment %}
 {% if ghwo.error %}
   <p>There was an error loading the GHWO detailed data.</p>

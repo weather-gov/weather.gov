@@ -60,3 +60,4 @@ if settings.SETTINGS_TYPE == "dev":
         urlpatterns = [path("__debug__/", include("debug_toolbar.urls"))] + urlpatterns
 
 handler404 = "backend.views.errors.handle_404"
+handler500 = "backend.views.errors.handle_500"

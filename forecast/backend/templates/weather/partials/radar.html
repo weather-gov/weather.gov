@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display an interactive radar map with legend.
+-- Used by: backend.templatetags.weather_partials.radar
+{% endcomment %}
 <div aria-hidden="true" class="margin-top-2" wx-outer-radar-container>
   <{{ heading_level }} class="{{ heading_class }}">
   {% trans "radar.labels.radar.01" %}

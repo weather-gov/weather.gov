@@ -1,4 +1,9 @@
 {% extends "weather/page.html" %}
+{% comment %}
+-- Template purpose:
+--   Display information about a weather forecast office (WFO).
+-- Url: https://beta.weather.gov/offices/arx/
+{% endcomment %}
 {% block page_content %}
   <div class="wx-wfo-info margin-bottom-10">
     {% if content.field_wfo_image is not empty %}

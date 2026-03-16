@@ -1,7 +1,11 @@
 {% comment %}
-If there are two or more periods, we'll always show both high and low. If
-there is only one period, then which we show depends on whether or not the
-single period is a day time period.
+-- Template purpose:
+--   Display the daily high/low information.
+--
+--   If there are two or more periods, we'll always show both high and low. If
+--   there is only one period, then which we show depends on whether or not the
+--   single period is a day time period.
+-- Used by: backend.templatetags.weather_partials.daily_high_low
 {% endcomment %}
 {% if show_high %}
   <div class="daily-high-low display-flex flex-column flex-align-center padding-x-4px margin-right-2">

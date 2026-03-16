@@ -14,7 +14,7 @@ from spatial.models import WeatherCounties, WeatherStates
 def wx_afd_id(_, afd_id):
     """Return _markup only_ for a single parsed AFD product by id."""
     data = interop.get_wx_afd_by_id(afd_id)
-    markup = render_to_string("weather/wx/afd.html", {"afd": data})
+    markup = render_to_string("weather/afd/afd.html", {"afd": data})
     return HttpResponse(markup, content_type="text/html")
 
 
@@ -22,7 +22,7 @@ def wx_afd_id(_, afd_id):
 def wx_afd_versions(_, wfo):
     """Return _markup only_ for the versions of AFDs for the given forecast office."""
     data = interop.get_wx_afd_versions_by_wfo(wfo)
-    markup = render_to_string("weather/wx/afd-versions-select.html", {"version_list": data["@graph"]})
+    markup = render_to_string("weather/afd/afd_versions_select.html", {"version_list": data["@graph"]})
     return HttpResponse(markup, content_type="text/html")
 
 

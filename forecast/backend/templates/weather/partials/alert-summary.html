@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display a warning banner for each active alert with a link to more details.
+-- Used by: point/overview.html
+{% endcomment %}
 <weathergov-alert-list>
 <div class="margin-top-0 margin-bottom-2">
   {% for alert in alerts %}

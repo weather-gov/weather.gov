@@ -115,7 +115,7 @@ class TestViews(TestCase):
         response = self.client.get("/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
-        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertTemplateUsed(response, "weather/point/overview.html")
         self.assertEqual(
             response.context["point"],
             {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
@@ -141,7 +141,7 @@ class TestViews(TestCase):
         response = self.client.get("/point/11.1/22.2?update", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
-        self.assertTemplateUsed(response, "weather/point.update.html")
+        self.assertTemplateUsed(response, "weather/point/point.update.html")
         self.assertEqual(
             response.context["point"],
             {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
@@ -269,7 +269,7 @@ class TestViews(TestCase):
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertTemplateUsed(response, "weather/point/overview.html")
 
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_point_location_with_minimal_data(self, mock_get_point_forecast):
@@ -296,7 +296,7 @@ class TestViews(TestCase):
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertTemplateUsed(response, "weather/point/overview.html")
         self.assertNotContains(response, "daily-tab-button")
         self.assertContains(response, "alerts-tab-button")
 
@@ -313,7 +313,7 @@ class TestViews(TestCase):
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertTemplateUsed(response, "weather/point/overview.html")
         self.assertTemplateUsed(response, "weather/partials/uswds-alert.html")
 
     @disable_logging_for_quieter_tests
@@ -325,6 +325,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 429)
         self.assertTemplateUsed(response, "errors/429.html")
 
+    @disable_logging_for_quieter_tests
     @mock.patch("backend.views.point.interop.get_point_forecast")
     def test_marine_point(self, mock_get_point_forecast):
         """Test that a marine point renders the right template."""
@@ -335,7 +336,7 @@ class TestViews(TestCase):
 
         response = self.client.get("/point/11.1/22.2", follow=True)
 
-        self.assertTemplateUsed(response, "weather/marine-point.html")
+        self.assertTemplateUsed(response, "errors/404/marine-point.html")
 
     @disable_logging_for_quieter_tests
     def test_place_unknown(self):
@@ -374,12 +375,12 @@ class TestViews(TestCase):
             "place": {"timezone": "America/New_York"},
         }
         response = self.client.get("/place/NJ/Hoboken/")
-        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertTemplateUsed(response, "weather/point/overview.html")
 
         # These values should come from the WeatherPlace model. The lat/lon
         # from the place should be truncated to 3 decimal places.
         mock_get_point_forecast.assert_called_once_with(30.543, 30.123)
-        self.assertTemplateUsed(response, "weather/point.html")
+        self.assertTemplateUsed(response, "weather/point/overview.html")
         self.assertEqual(
             response.context["point"],
             {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
@@ -390,7 +391,7 @@ class TestViews(TestCase):
     def test_office_specific(self):
         """Test the specific-office view."""
         response = self.client.get("/offices/HUN", follow=True)  # use a pre-existing WFO so that the image can be found
-        self.assertTemplateUsed(response, "weather/office.html")
+        self.assertTemplateUsed(response, "weather/office/overview.html")
         self.assertEqual(response.context["office"], models.WFO.objects.get(code="HUN"))
 
     def test_afd_index_with_wfo_changed(self):
@@ -485,7 +486,7 @@ class TestViews(TestCase):
 
         response = self.client.get("/afd/bob/afd_id/")
 
-        self.assertTemplateUsed(response, "weather/afd-page.html")
+        self.assertTemplateUsed(response, "weather/afd/afd_page.html")
 
         # For this view, the context is merged into the larger object instead
         # of creating a unique key, so we'll need to test each piece

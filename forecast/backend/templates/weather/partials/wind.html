@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display a wind speed and direction arrow.
+-- Used by: backend.templatetags.weather_partials.wind_speed_direction
+{% endcomment %}
 {% if has_speed %}
   <div aria-hidden="true" class="display-flex flex-row flex-align-center">
     {% if speed.mph == 0 %}

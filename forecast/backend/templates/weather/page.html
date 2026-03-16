@@ -1,5 +1,9 @@
-<!-- page.html  -->
 {% extends "weather/base.html" %}
+{% comment %}
+-- Template purpose:
+--   Provide the styling and structure for the site.
+--   All templates SHOULD extend this template or one of its children.
+{% endcomment %}
 {% block head_css %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
   {% block page_head_css %}{% endblock %}
@@ -32,4 +36,3 @@
 {% block end_js %}
   {% block page_end_js %}{% endblock %}
 {% endblock %}
-<!-- end page.html -->

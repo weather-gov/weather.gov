@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display "Today's forecast" information on the point forecast page.
+-- Used by: point/overview.html
+{% endcomment %}
 {% if forecast.error %}
   {% include 'weather/partials/uswds-alert.html' with level="error" body="forecast.errors.daily.01"|t %}
 {% elif forecast.days|length > 0 %}

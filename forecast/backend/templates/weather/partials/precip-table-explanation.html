@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display an explanation of what "water" means.
+-- Used by: partials/precip.html
+{% endcomment %}
 {% if hasIce or hasSnow %}
   <div class="grid-col-12 bg-base-lightest">
     <p class="measure-6 padding-105">{% trans "precip-table.text.water-explainer.01" %}</p>

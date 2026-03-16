@@ -1,43 +1,38 @@
 {% comment %}
-
-  This template receives three top-level objects.
-
-  day_number:
-    Numeric representation of the day number, 1-7.
-
-  id:
-    The ID of the risk type. This is the key into the
-    risk overview data, such as "SevereThunderstorm".
-
-  risk:
-    The risk object. For the purposes of this template,
-    it has these two properties:
-
-    name:
-      The name of the risk type.
-
-    legend:
-      The legend object for this risk type. Has these
-      relevant properties:
-
-      basis:
-        A description of how this risk value is derived.
-        This is optional and may be falsey.
-
-  day:
-    The specific risk day for this risk type. Contains these
-    relevant properties:
-
-    category:
-      The numeric representation of the risk level.
-
-    levelName:
-      Name of the risk level. Eg, "extreme", "high", "marginal"
-
-    image:
-      URL to the appropriate image for the risk on this day.
-      Can be falsey if we don't know about an image.
-
+-- Template purpose:
+--   Display information about a risk and how it was determined.
+-- Expected variables:
+--   This template receives three top-level objects.
+--
+--   day_number:
+--    Numeric representation of the day number, 1-7.
+--   id:
+--     The ID of the risk type. This is the key into the
+--     risk overview data, such as "SevereThunderstorm".
+--   risk:
+--     The risk object. For the purposes of this template,
+--     it has these two properties:
+--     name:
+--       The name of the risk type.
+--     legend:
+--       The legend object for this risk type. Has these
+--       relevant properties:
+--       basis:
+--         A description of how this risk value is derived.
+--         This is optional and may be falsey.
+--   day:
+--     The specific risk day for this risk type. Contains these
+--     relevant properties:
+--     category:
+--       The numeric representation of the risk level.
+--     levelName:
+--       Name of the risk level. Eg, "extreme", "high", "marginal"
+--     image:
+--       URL to the appropriate image for the risk on this day.
+--       Can be falsey if we don't know about an image.
+--
+-- Used by: partials/ghwo-daily-details.html
+--
 {% endcomment %}
 <div class="ghwo-details-pane padding-x-2 padding-y-4 bg-base-lightest"
      aria-hidden="{% if day.is_first %}false{% else %}true{% endif %}"

@@ -1,33 +1,32 @@
 {% comment %}
-  This template receives a single top-level object.
-
-  legend:
-    This is the legend for a specific risk type. It has
-    the following properties.
-
-    name:
-      The name of the risk type
-    
-    basis:
-      A description of how the risk level for this type
-      is determined. This value may be falsey if we do
-      not have a basis description.
-
-    levels:
-      A list of risk levels. Each item in the list has
-      these properties:
-
-      number:
-        Numeric risk value. Starts at 0. The maximum
-        value varies with risk type.
-
-      levelName:
-        The name of this risk level. Eg, "moderate",
-        "severe", "extreme", etc.
-
-      definition:
-        An explanation of what this risk level means
-        in practical terms.
+-- Template purpose:
+--   Display a legend showing all the levels for a given risk.
+-- Expected variables:
+--   legend: This template receives a single top-level object.
+--           This is the legend for a specific risk type. It has
+--           the following properties:
+--
+--           name:
+--             The name of the risk type
+--           basis:
+--             A description of how the risk level for this type
+--             is determined. This value may be falsey if we do
+--             not have a basis description.
+--           levels:
+--             A list of risk levels. Each item in the list has
+--             these properties:
+--             number:
+--               Numeric risk value. Starts at 0. The maximum
+--               value varies with risk type.
+--             levelName:
+--               The name of this risk level. Eg, "moderate",
+--               "severe", "extreme", etc.
+--             definition:
+--               An explanation of what this risk level means
+--               in practical terms.
+--
+-- Used by: partials/ghwo-details-pane.html
+--
 {% endcomment %}
 <table class="ghwo-details-legend-table padding-bottom-2">
   <thead>

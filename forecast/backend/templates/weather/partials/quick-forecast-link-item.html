@@ -1,8 +1,12 @@
 {% comment %}
-This template expects two variables available to it:
-- content: The full object created from the daily forecast block
-- dayIndex: The index of the day currently being rendered within
-the content
+-- Template purpose:
+--   Display a day selector link on the "7 Days" tab. The link is styled
+--   as a card with daily high/low and chance of precipitation.
+-- Expected variables:
+--   content: The full object created from the daily forecast block
+--   dayIndex: The index of the day currently being rendered within
+--             the content
+-- Used by: backend.templatetags.weather_partials.quick_forecast_link_item
 {% endcomment %}
 <a class="wx-quick-forecast-item"
    href="#{{ day.dayId }}"

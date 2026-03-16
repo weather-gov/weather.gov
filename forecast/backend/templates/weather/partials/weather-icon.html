@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display a specific weather icon from images/spritesheet.svg.
+-- Used by: backend.templatetags.weather_partials.weather_icon
+{% endcomment %}
 <svg {% if has_attrs %}{% for key, val in attrs.items %}{{ key }}="{{ val }}"{% endfor %}
      {% endif %}>
   <use xlink:href="{% static 'images/spritesheet.svg' %}#{{ icon_name }}"></use>

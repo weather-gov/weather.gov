@@ -1,4 +1,9 @@
 {% comment %}
+-- Template purpose:
+--   Display the radar. This is because the radar updates every N minutes.
+-- Url: https://beta.weather.gov/point/43.156/-77.613/
+{% endcomment %}
+{% comment %}
   Disable server local time for all templates that inherit from base. The name
   here is somewhat misleading. If localtime is on, then any datetime objects
   rendered by templates will use the timezone of the server. We don't want that,

@@ -1,3 +1,9 @@
+{% comment %}
+-- Template purpose:
+--   Display a form to select a county/state combo.
+-- Used by: county/ghwo.html
+--          backend.views.partials.wx_select_ghwo_counties
+{% endcomment %}
 <form method="post" action="/counties/ghwo/" class="grid-row padding-y-2">
   {% csrf_token %}
   <div class="grid-col-12 tablet-lg:grid-col-4 line-height-sans-5 tablet-lg:margin-right-4">

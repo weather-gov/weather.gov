@@ -1,4 +1,9 @@
 {% extends 'weather/base.html' %}
+{% comment %}
+-- Template purpose:
+--   This is the front page of the site. Visitors can search for their forecast.
+-- Url: https://beta.weather.gov/
+{% endcomment %}
 {% block head_css %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/front-page.css' %}">
 {% endblock %}
@@ -6,6 +11,7 @@
   <script src="{% static 'js/front-page.html.js' %}" type="module" defer></script>
 {% endblock %}
 {% block page_top %}
+  {# TODO: include "weather/partials/offline-banner.html" #}
   {% include "weather/partials/gov-banner.html" %}
   {% include "weather/partials/beta-banner.html" %}
   <header role="banner">

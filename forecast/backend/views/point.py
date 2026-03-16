@@ -60,7 +60,7 @@ def point_location(request, lat, lon):  # noqa: C901
 
     # we do not currently support marine.
     if "isMarine" in point and point["isMarine"]:
-        return render(request, "weather/marine-point.html", {"point": point})
+        return render(request, "errors/404/marine-point.html", {"point": point}, status=404)
 
     # Get the local timezone for the current point place
     # If there was an error retrieving the place API endpoint,
@@ -102,7 +102,7 @@ def point_location(request, lat, lon):  # noqa: C901
     if "update" in request.GET:
         return render(
             request,
-            "weather/point.update.html",
+            "weather/point/point.update.html",
             {
                 "point": point,
             },
@@ -110,7 +110,7 @@ def point_location(request, lat, lon):  # noqa: C901
 
     return render(
         request,
-        "weather/point.html",
+        "weather/point/overview.html",
         {
             "point": point,
             "weather_story": weather_story,
@@ -237,4 +237,4 @@ def afd_by_office_and_id(request, wfo, afd_id):
         }
     except Exception as e:
         raise Http404() from e
-    return render(request, "weather/afd-page.html", to_render)
+    return render(request, "weather/afd/afd_page.html", to_render)

@@ -1,23 +1,19 @@
-
 {% comment %}
-
-This partial is used exclusively for the forecast shown on the
-Today tab. It is a managed partial and receives these inputs:
-
-- day: the first day of the forecast
-
-- dayHours: the hours in the day
-
-- itemId: not actually sure
-
-- alerts: any alerts that apply to the day
-
-- times: the X axis of the chart
-
-- temps: temperature series for the chart
-
-- feelsLike: "feels like" series for the chart
-
+-- Template purpose:
+--   Display a box containing the date, the high and low, and the hourly
+--   graph. This partial is used exclusively for the forecast shown on the
+--   Today tab.
+-- Expected variables:
+--   day: the first day of the forecast
+--   dayHours: the hours in the day
+--   itemId: not actually sure
+--   alerts: any alerts that apply to the day
+--   times: the X axis of the chart
+--   temps: temperature series for the chart
+--   feelsLike: "feels like" series for the chart
+--
+-- Used by: backend.templatetags.weather_partials.daily_summary_list_item
+--
 {% endcomment %}
 <li class="display-block bg-white padding-x-205 grid-col-12 height-full"
     {% if itemId %}id="{{ itemId }}{% endif %}
