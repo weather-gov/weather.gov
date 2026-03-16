@@ -23,7 +23,7 @@ def offices(request):  # pragma: no cover
             entry["wfos"].append(wfo_entry)
         regions.append(entry)
 
-    return render(request, "weather/offices.html", {"regions": regions})
+    return render(request, "weather/office/index.html", {"regions": regions})
 
 
 def offices_specific(request, wfo):
@@ -47,6 +47,6 @@ def offices_specific(request, wfo):
 
     return render(
         request,
-        "weather/office.html",
+        "weather/office/overview.html",
         {"office": office, "counties": ", ".join(counties), "briefing": briefing},
     )

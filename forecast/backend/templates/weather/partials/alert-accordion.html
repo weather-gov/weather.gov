@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display an individual collapsible weather alert.
+-- Used by: county/dailyAlertAccordion.html
+{% endcomment %}
 <div class="usa-accordion usa-accordion--bordered margin-bottom-1 alert-level__{{ alert.metadata.level.text }}"
   id="alert_{{ alert.unique_id }}" data-alert
   {# djlint:off #}

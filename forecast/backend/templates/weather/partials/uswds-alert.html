@@ -1,3 +1,12 @@
+{% comment %}
+-- Template purpose:
+--   Display a piece of text with USWDS alert styling.
+-- Used by: partials/county-weather-stories.html
+--          partials/forecast.html
+--          partials/observations.html
+--          partials/today-summary-forecast.html
+--          point/overview.html
+{% endcomment %}
 <div class="usa-alert usa-alert--{{ level | default:'info' }}">
   <div class="usa-alert__body">
     {% if heading %}<h3 class="usa-alert__heading">{{ heading }}</h3>{% endif %}

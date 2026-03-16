@@ -1,3 +1,9 @@
+{% comment %}
+-- Template purpose:
+--   Display the hourly charts for temperature, chance of precipitation, wind,
+--   humidity, dewpoint, precipitation amounts.
+-- Used by: backend.templatetags.weather_partials.hourly_charts
+{% endcomment %}
 <wx-hourly-charts id="hourly-charts_{{ itemId }}" role="tabpanel" data-tabpanel-selected="false" aria-labelledby="hourly-charts-tab_{{ itemId }}" data-tabpanel-selected="false">
 <div class="wx-chart-wrapper">
   <h5 class="wx-mono-lg text-normal text-primary-dark margin-top-3 margin-bottom-05">

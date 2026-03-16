@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display a start and end time. This is to help orient visitors to the radar.
+-- Used by: point/point.update.html, partials/radar.html
+{% endcomment %}
 {% if radar_metadata.start and radar_metadata.end %}
   <div class="grid-container font-family-mono text-base-dark font-mono-xs margin-bottom-1 padding-left-2 tablet:padding-left-0" wx-auto-update="radar">
     <div class="grid-row">

@@ -81,3 +81,12 @@ def handle_404(request, exception=None):
         context=context,
         status=404,
     )
+
+def handle_500(request, _=None):
+    """Handle 500 errors."""
+    return render(
+        request,
+        "errors/500.html",
+        context={},
+        status=500,
+    )

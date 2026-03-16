@@ -1,7 +1,11 @@
 {% comment %}
-Available variables:
-hours - An array of all the hours that should be represented in the table.
-alerts - An array of all the alerts that intersect with those hours.
+-- Template purpose:
+--   Display an hourly forecast table with details like temperature, wind speed,
+--   and chance of precipitation.
+-- Used by: backend.templatetags.weather_partials.hourly_table
+-- Available variables:
+--   hours - An array of all the hours that should be represented in the table.
+--   alerts - An array of all the alerts that intersect with those hours.
 {% endcomment %}
 <wx-hourly-table class="display-block position-relative margin-top-2 bg-white" id="hourly-table_{{ itemId }}" aria-labelledby="hourly-table-tab_{{ itemId }}" data-tabpanel-selected="true" role="tabpanel">
 <div class="display-flex flex-justify">{% include "weather/partials/scroll-buttons.html" %}</div>

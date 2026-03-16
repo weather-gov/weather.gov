@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display additional table rows for alerts in the hourly forecast table.
+-- Used by: partials/hourly-table.html
+{% endcomment %}
 {% for alert in alerts %}
   <tr data-row-name="alert">
     <th scope="row"

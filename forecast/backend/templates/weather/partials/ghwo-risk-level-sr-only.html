@@ -1,11 +1,13 @@
 {% comment %}
-Render more descriptive risk level text for screenreaders for GHWO
-summary table cells.
-The include statement expects a single variable level_num, which is an int
-corresponding to the level.
-We are using control flow below because it's not possible to dynamically
-create strings for translation keys using the django templates (plus we should
-be explicit)
+-- Template purpose:
+--   Display more descriptive risk level text for screenreaders for GHWO
+--   summary table cells.
+--   The include statement expects a single variable level_num, which is an int
+--   corresponding to the level.
+--   We are using control flow below because it's not possible to dynamically
+--   create strings for translation keys using the django templates (plus we
+--   should be explicit)
+-- Used by: NOT USED
 {% endcomment %}
 <span class="usa-sr-only">
   {% if level_num == 1 %}

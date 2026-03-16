@@ -1,26 +1,27 @@
 {% comment %}
-This template receives one top-level property called ghwo.
-This is the full risk overview object for the county. The
-relevant properties of this object are:
-
-error:
-An error object, or falsey. If not falsey, it should
-contain a status property indicating the HTTP code
-so we can tell the user if the data is missing or if
-there was some other unknown error.
-
-composite:
-A list of composite levels for the forecast days. Each
-day has three properties:
-
-timestamp: ISO8601 timestamp with appropriate place-
-local UTC offset
-
-max: the highest absolute level of any risk for the day
-
-scaled: the maximum scaled level of all risks for the day;
-the scaled level is the absolute level of a given risk
-divided by its maximum possible level
+-- Template purpose:
+--   Display a "Daily weather risk summary" widget showing risk level per day. 
+-- Expected variables:
+--   ghwo: This is the full risk overview object for the county. The
+--         relevant properties of this object are:
+--
+--         error:
+--           An error object, or falsey. If not falsey, it should
+--           contain a status property indicating the HTTP code
+--           so we can tell the user if the data is missing or if
+--           there was some other unknown error.
+--         composite:
+--           A list of composite levels for the forecast days. Each
+--           day has three properties:
+--           timestamp: ISO8601 timestamp with appropriate place-
+--             local UTC offset
+--           max: the highest absolute level of any risk for the day
+--           scaled: the maximum scaled level of all risks for the day;
+--             the scaled level is the absolute level of a given risk
+--             divided by its maximum possible level
+--
+-- Used by: county/overview.html, partials/ghwo-details.html
+--
 {% endcomment %}
 {% if ghwo.error %}
   {% if ghwo.error.status == 404 %}

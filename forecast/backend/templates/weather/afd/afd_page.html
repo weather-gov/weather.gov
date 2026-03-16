@@ -1,6 +1,6 @@
 {% extends "weather/page.html" %}
 {% block page_head_js %}
-  <script type="module" src="{% static 'js/afd-page.html.js' %}" type="module"></script>
+  <script type="module" src="{% static 'js/afd_page.html.js' %}" type="module"></script>
 {% endblock %}
 {% block page_content %}
   <div class="layout-container grid-row height-full flex-column flex-no-wrap">
@@ -52,7 +52,7 @@
             <select id="version-selector"
                     name="id"
                     class="usa-select maxw-none tablet:maxw-mobile-lg">
-              {% include "weather/wx/afd-versions-select.html" %}
+              {% include "weather/afd/afd_versions_select.html" %}
             </select>
           {% endif %}
           <input type="hidden" name="current-id" value="{{ afd.id }}" />
@@ -62,7 +62,7 @@
       </div>
       <div class="afd-content-section grid-col-12 desktop:grid-col-8">
         {% if afd is not None %}
-          {% include 'weather/wx/afd.html' %}
+          {% include 'weather/afd/afd.html' %}
         {% endif %}
       </div>
     </div>

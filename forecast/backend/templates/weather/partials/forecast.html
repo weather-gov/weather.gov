@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   Display all of the content on the 7-day forecast tab.
+-- Used by: point/overview.html
+{% endcomment %}
 <div class="wx-daily-forecast-block">
   {% if forecast.error %}
     {% with base_msg="forecast.errors.daily.01"|t %}

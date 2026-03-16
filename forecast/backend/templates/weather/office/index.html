@@ -1,3 +1,8 @@
+{% comment %}
+-- Template purpose:
+--   List all weather forecast offices (WFOs). This is a debugging page.
+-- Url: http://localhost:8080/offices/
+{% endcomment %}
 {% for region in regions %}
   <h1>{{ region.name }}</h1>
   {% for wfo in region.wfos %}
