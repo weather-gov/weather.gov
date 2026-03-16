@@ -124,6 +124,7 @@ TEMPLATES = [
                 "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
                 "backend.context_processors.route_info",
+                "backend.context_processors.git_info",
             ],
             "builtins": [
                 "django.templatetags.i18n",

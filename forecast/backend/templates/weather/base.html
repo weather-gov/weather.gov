@@ -24,6 +24,9 @@
     {% set_title_and_description %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="origin" />
+    {% if git_sha_hash %}
+      <meta data-name="git-hash" content="{{git_sha_hash}}">
+    {% endif %}
     <link rel="icon"
           type="image/png"
           href="{% static 'images/weather/favicons/nws-favicon.ico' %}" />
