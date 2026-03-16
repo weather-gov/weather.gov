@@ -7,9 +7,16 @@ import POOL_SETTINGS from "./poolSettings.js";
 
 const satelliteLogger = logger.child({ subsystem: "satellite" });
 
-export const requestPool = new Pool("https://cdn.star.nesdis.noaa.gov", POOL_SETTINGS);
+export const requestPool = new Pool(
+  "https://cdn.star.nesdis.noaa.gov",
+  POOL_SETTINGS,
+);
+export const disableSatellite = !!process.env.DISABLE_SATELLITE;
 
 export default async ({ grid: { wfo }, place: { timezone } }) => {
+  if (disableSatellite) {
+    return { error: true };
+  }
   try {
     const url = `/WFO/catalogs/WFO_02_${wfo.toLowerCase()}_catalog.json`;
 
@@ -23,7 +30,7 @@ export default async ({ grid: { wfo }, place: { timezone } }) => {
     const [satelliteMetadata, headers] = await requestJSONWithHeaders(
       requestPool,
       url,
-      { "wx-host": "cdn.star.nesdis.noaa.gov" }
+      { "wx-host": "cdn.star.nesdis.noaa.gov" },
     );
 
     const satellite = satelliteMetadata?.meta?.satellite;
