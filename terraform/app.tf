@@ -55,6 +55,7 @@ resource "cloudfoundry_app" "app" {
     DISABLE_COLLECTSTATIC  = 1
     CLOUDGOV_SPACE         = var.cf_space_name
     AWS_USE_FIPS_ENDPOINT  = 1 # required for "s3-fips.us-gov-*.amazonaws.com"
+    GIT_SHA_HASH             = var.git_sha_hash
   }
 
   service_bindings = (var.env == "prod" ? local.prod_service_bindings : local.base_service_bindings)

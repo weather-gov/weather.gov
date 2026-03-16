@@ -130,3 +130,9 @@ variable "api_key" {
   default     = ""
   description = "The weather API key, if applicable, for the API interop process"
 }
+
+variable "git_sha_hash" {
+  type        = string
+  default     = ""
+  description = "The git hash of the commit that is being deployed"
+}

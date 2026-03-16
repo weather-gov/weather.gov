@@ -156,7 +156,7 @@ deploy-to-prod:
       secret_key = \"$CI_TF_STATE_MGMT_SECRET_KEY\" \
       > secrets.backend.tfvars
     - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-prod" -reconfigure
-    - terraform apply -var-file="weathergov-prod.tfvars" -auto-approve
+    - terraform apply -var="git_sha_hash=$(git rev-parse HEAD)" -var-file="weathergov-prod.tfvars" -auto-approve
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+-beta$/'
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "prod" && "$[[ inputs.confirm-beta-deploy ]]" == "YES"
@@ -195,7 +195,7 @@ deploy-to-staging:
       secret_key = \"$CI_TF_STATE_MGMT_SECRET_KEY\" \
       > secrets.backend.tfvars
     - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-staging" -reconfigure
-    - terraform apply -var-file="weathergov-staging.tfvars" -auto-approve
+    - terraform apply -var="git_sha_hash=$(git rev-parse HEAD)" -var-file="weathergov-staging.tfvars" -auto-approve
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "staging"
@@ -234,7 +234,7 @@ deploy-to-test:
       secret_key = \"$CI_TF_STATE_MGMT_SECRET_KEY\" \
       > secrets.backend.tfvars
     - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-test" -reconfigure
-    - terraform apply -var-file="weathergov-test.tfvars" -auto-approve
+    - terraform apply -var="git_sha_hash=$(git rev-parse HEAD)" -var-file="weathergov-test.tfvars" -auto-approve
   rules:
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "test"
 
