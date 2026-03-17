@@ -43,6 +43,49 @@ const toggleMapExpand = (() => {
   };
 })();
 
+const updateRadarTimestamps = async (container) => {
+  const timezone = container.getAttribute("data-timezone") || "UTC";
+
+  try {
+    const response = await fetch(
+      "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=wms&version=1.1.1&request=GetCapabilities",
+    );
+    const text = await response.text();
+
+    // It's XML. Yay. Anyway, all of the times are listed as a single long
+    // string, separated by commas. The most recent is at the end. CMI only
+    // uses 20 frames, so we extract the last 20 timestamps.
+    const match = text.match(/<Extent name="time".*>(.+)<\/Extent>/);
+
+    if (match) {
+      const [, times] = match;
+      const range = times.split(",").slice(-20);
+      const start = new Date(range[0]);
+      const end = new Date(range.pop());
+
+      const formatOptions = {
+        hour: "numeric",
+        minute: "2-digit",
+        timeZone: timezone,
+        timeZoneName: "short",
+      };
+
+      const startFormatter = new Intl.DateTimeFormat("en-US", {
+        ...formatOptions,
+        weekday: "long",
+      });
+      const endFormatter = new Intl.DateTimeFormat("en-US", formatOptions);
+
+      const label = document.getElementById("wx-radar-timestamp-label");
+      if (label) {
+        label.innerText = `${startFormatter.format(start)} - ${endFormatter.format(end)}`;
+      }
+    }
+  } catch (e) {
+    // Fail silently
+  }
+};
+
 const setupRadar = () => {
   // If radar has already been initialized on the container
   // element, return and do nothing else.
@@ -52,6 +95,8 @@ const setupRadar = () => {
   }
 
   const container = document.querySelector("wx-radar");
+
+  updateRadarTimestamps(container);
 
   const lat = Number.parseFloat(container.getAttribute("lat"));
   const lon = Number.parseFloat(container.getAttribute("lon"));
