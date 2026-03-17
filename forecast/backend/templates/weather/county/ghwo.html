@@ -9,7 +9,7 @@
     {% for url in ghwo.prefetch_images %}<link rel="preload" href="{{ url }}" as="image" />{% endfor %}
   {% endif %}
 {% endblock %}
-{% block page_head_js %}
+{% block head_js %}
   <script type="module"
           src="{% static 'js/county/ghwo.html.js' %}"
           type="module"></script>

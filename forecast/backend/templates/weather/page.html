@@ -10,8 +10,11 @@
 {% endblock %}
 
 {% block head_js %}
-  <script type="module" src="{% static 'js/page.html.js' %}" type="module"></script>
-  {% block page_head_js %}{% endblock %}
+  {% comment %}
+    # Please do not put any script tags here.
+    # Use page.html.js or put them in base.html
+    # or put them in the `head_js` block on a child page.
+  {% endcomment %}
 {% endblock %}
 
 {% block page_top %}

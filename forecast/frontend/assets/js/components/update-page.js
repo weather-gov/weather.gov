@@ -1,3 +1,5 @@
+/** @file Utilities to keep the page up-to-date à la Alpine Ajax or htmx. */
+
 export const update = async () => {
   const url = URL.parse(window.location.href);
   url.searchParams.append("update", "");

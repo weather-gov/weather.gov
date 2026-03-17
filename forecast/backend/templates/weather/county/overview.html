@@ -4,7 +4,7 @@
 --   Display the weather for an individual county.
 -- Url: https://beta.weather.gov/county/01077/
 {% endcomment %}
-{% block page_head_js %}{{ data.public|json_script:"county-data" }}{% endblock %}
+{% block head_js %}{{ data.public|json_script:"county-data" }}{% endblock %}
 {% block page_end_js %}
   <script type="module"
           src="{% static 'js/county/overview.html.js' %}"
