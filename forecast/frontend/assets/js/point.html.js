@@ -1,5 +1,12 @@
+/**
+ * @file JavaScript for the point forecast page.
+ * Used by: point/overview.html
+ */
+
+// Nota bene: JS used on every page goes in page.html.js.
+import "./page.html.js";
+
 import "./localizeTimestamps.js";
-import "./locationSearch.js";
 import "./radar.js";
 import "./components/forecastAlertMap.js";
 import "./charts/hourly-temperature.js";
@@ -14,7 +21,8 @@ import "./components/TabbedNavigator.js";
 import "./components/HourlyTable.js";
 import "./components/Tabs.js";
 import "./components/DailyForecast.js";
-import "./components/combo-box.js";
-import "./components/combo-box-location.js";
+
+// For refreshing the radar
 import "./components/update-page.js";
+
 import "./components/expander.js";
