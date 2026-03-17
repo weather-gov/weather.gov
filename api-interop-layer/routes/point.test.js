@@ -5,13 +5,11 @@ import quibble from "quibble";
 describe("route: point", () => {
   const sandbox = sinon.createSandbox();
   const getDataForPoint = sandbox.stub();
-  const getRadarMetadata = sandbox.stub();
 
   let point;
 
   before(async () => {
     await quibble.esm("../data/index.js", { getDataForPoint });
-    await quibble.esm("../data/radar.js", { getRadarMetadata });
 
     point = await import("./point.js");
   });
@@ -87,7 +85,6 @@ describe("route: point", () => {
       };
       const request = { params: { latitude: "down", longitude: "right" } };
       getDataForPoint.resolves(data);
-      getRadarMetadata.resolves("Mr. Radar");
 
       const actual = await point.handler(request);
 
@@ -96,7 +93,6 @@ describe("route: point", () => {
         data: {
           place: "In Princess Peach's castle",
           text: "Mario should just hang out with Toad",
-          radarMetadata: "Mr. Radar",
         },
       });
     });

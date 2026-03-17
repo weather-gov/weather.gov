@@ -3,15 +3,19 @@
 --   Display a start and end time. This is to help orient visitors to the radar.
 -- Used by: point/point.update.html, partials/radar.html
 {% endcomment %}
-{% if radar_metadata.start and radar_metadata.end %}
+
   <div class="grid-container font-family-mono text-base-dark font-mono-xs margin-bottom-1 padding-left-2 tablet:padding-left-0" wx-auto-update="radar">
     <div class="grid-row">
       <div class="grid-col-auto desktop:grid-col-12 margin-right-1 desktop:margin-right-0 text-uppercase">
         {% trans "radar.time-shown.label.01" %}<span class="desktop:display-none">:</span>
       </div>
-      <div class="grid-col-auto">
-        {% time_range radar_metadata.start radar_metadata.end %}
+      <div class="grid-col-auto" id="wx-radar-timestamp-label">
+        {% if radar_metadata.start and radar_metadata.end %}
+          {{ radar_metadata.start }} - {{ radar_metadata.end }}
+        {% else %}
+          {# JS will inject text here #}
+          <span class="usa-sr-only">{% trans "radar.loading.01" %}</span>
+        {% endif %}
       </div>
     </div>
   </div>
-{% endif %}
