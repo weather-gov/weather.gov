@@ -33,7 +33,7 @@ urlpatterns = [
     path("county/", county.index, name="county_index"),
     path("county/<countyfips>/", county.county_overview, name="county_overview"),
     path("counties/ghwo/", county.county_ghwo_index, name="county_ghwo_index"),
-    path("counties/ghwo/<str:county_fips>", county.county_ghwo, name="county_ghwo"),
+    path("counties/ghwo/<str:county_fips>/", county.county_ghwo, name="county_ghwo"),
     # State pages
     path("state/", state.index, name="state_index"),
     path("state/<state>/", state.state_overview, name="state_overview"),
