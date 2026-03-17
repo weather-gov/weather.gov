@@ -277,6 +277,8 @@ CRITICAL_HOSTS = {
         "cdn.arcgis.com",
         # legacy weather.gov images
         "www.weather.gov",
+        # weather stories
+        "api.weather.gov"
     ],
     "media-src": [
         # satellite
