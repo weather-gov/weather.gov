@@ -282,12 +282,6 @@ def get_radar(lat, lon):
     return _fetch(url)
 
 
-def get_briefing_data(wfo):
-    """Fetch the briefing metadata for a given WFO."""
-    url = f"/offices/{wfo}/briefings"
-    return _fetch(url)
-
-
 def get_county_data(countyfips):
     """Get county data. Consolidated risk overview and alerts per county.
 
@@ -323,7 +317,7 @@ def get_weather_stories(wfo):
     - Response has error in it: return custom error dict
     - Other exception: return custom error dict
     """
-    url = f"/offices/{wfo}/weatherstories"
+    url = f"/offices/{wfo.upper()}/weatherstories"
     try:
         stories = _fetch(url)
         if len(stories) == 0:
