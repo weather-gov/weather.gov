@@ -128,15 +128,15 @@ class TestUrls(TestCase):
 
     def test_state_index(self):
         """Test state index."""
-        resolver = resolve("/state/")
+        resolver = resolve("/forecast/state/")
         back = reverse("state_index")
         self.assertEqual(resolver.func, state.index)
-        self.assertEqual(back, "/state/")
+        self.assertEqual(back, "/forecast/state/")
 
     def test_state_overview(self):
         """Test state overview page."""
-        resolver = resolve("/state/AB/")
+        resolver = resolve("/forecast/state/AB/")
         back = reverse("state_overview", kwargs={"state": "ZY"})
-        self.assertEqual(resolver.func, state.state_overview)
+        self.assertEqual(resolver.func, state.state_alerts)
         self.assertEqual(resolver.kwargs, {"state": "AB"})
-        self.assertEqual(back, "/state/ZY/")
+        self.assertEqual(back, "/forecast/state/ZY/")

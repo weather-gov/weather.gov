@@ -938,6 +938,30 @@ msgstr "{name} {subdivision}, {state}"
 msgid "spatial.county-like.with-no-subdivision.label.01"
 msgstr "{name}, {state}"
 
+msgid "state.label.alerts.01"
+msgstr "Alerts"
+
+msgid "state.label.risks.01"
+msgstr "Risks"
+
+msgid "state.label.radar.01"
+msgstr "Radar"
+
+msgid "state.label.analysis.01"
+msgstr "Analysis"
+
+msgid "state.heading.alerts.01"
+msgstr "Alerts"
+
+msgid "state.heading.risks.01"
+msgstr "Risks"
+
+msgid "state.heading.radar.01"
+msgstr "Radar"
+
+msgid "state.heading.analysis.01"
+msgstr "Analysis"
+
 msgid "error.500.generic.message.01"
 msgstr "Something went wrong on our end. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
 

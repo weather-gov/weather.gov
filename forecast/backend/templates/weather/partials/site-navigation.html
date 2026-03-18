@@ -32,7 +32,7 @@
             </li>
             {% if debug_show_all_menu_links %}
             <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.forecast.state.01" | t }}</span></a>
+              <a href="{% url 'state_index' %}"><span class="font-sans-xs">{{ "menu.navigation.forecast.state.01" | t }}</span></a>
             </li>
             {% endif %}
           </ul>

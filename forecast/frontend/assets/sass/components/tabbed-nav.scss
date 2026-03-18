@@ -1,7 +1,12 @@
 @use "uswds-core" as *;
 
 wx-tabbed-nav {
-  button.tab-button {
+  a.tab-button {
+    text-decoration: none;
+    text-align: center;
+  }
+
+  a.tab-button, button.tab-button {
     outline: none;
     background-color: white;
     border: none;
@@ -67,4 +72,8 @@ wx-tabbed-nav {
 
 #point-page-tabbed-nav > div.position-sticky {
     z-index: var(--point-page-tablist-area-z-index);
+}
+
+#state-page-tabbed-nav > div.position-sticky {
+  z-index: var(--point-page-tablist-area-z-index);
 }

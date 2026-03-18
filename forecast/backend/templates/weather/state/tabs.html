@@ -1,0 +1,39 @@
+{% comment %}
+-- Template purpose:
+--   Display the "tab" links to move between sub-pages of the state page.
+-- Used by: state/alerts.html
+            state/risks.html
+            state/radar.html
+            state/analysis.html
+{% endcomment %}
+<div id="tablist-label" class="usa-sr-only">{{ "forecast.labels.weather-info.01" | t }}</div>
+<div class="position-sticky top-0 bg-white border-base-light border-top-0 border-bottom-2px margin-y-0">
+  <div class="grid-container padding-x-0">
+    <div role="nav"
+         id="state-page-tabs"
+         class="tab-buttons display-flex flex-row top-4 grid-col-12"
+         aria-labelledby="tablist-label">
+      <a id="alerts-tab-button"
+         href="{% url 'state_alerts' state.state %}"
+         class="tab-button"
+         {% if url_name == "state_overview" %}data-selected{% endif %}
+         {% if url_name == "state_alerts" %}data-selected{% endif %}
+         data-tab-name="alerts">{{ "state.label.alerts.01" | t }}</a>
+      <a id="risks-tab-button"
+         href="{% url 'state_risks' state.state %}"
+         class="tab-button"
+         {% if url_name == "state_risks" %}data-selected{% endif %}
+         data-tab-name="risks">{{ "state.label.risks.01" | t }}</a>
+      <a id="radar-tab-button"
+         href="{% url 'state_radar' state.state %}"
+         class="tab-button"
+         {% if url_name == "state_radar" %}data-selected{% endif %}
+         data-tab-name="radar">{{ "state.label.radar.01" | t }}</a>
+      <a id="analysis-tab-button"
+         href="{% url 'state_analysis' state.state %}"
+         class="tab-button"
+         {% if url_name == "state_analysis" %}data-selected{% endif %}
+         data-tab-name="analysis">{{ "state.label.analysis.01" | t }}</a>
+    </div>
+  </div>
+</div>
