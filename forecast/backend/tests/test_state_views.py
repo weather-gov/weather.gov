@@ -47,9 +47,37 @@ class TestStateViews(TestCase):
         self.assertEqual(response.context["states"][2], self.state_ln)
 
     def test_overview(self):
-        """Test the overview view."""
+        """Test the default page is alerts."""
         response = self.client.get(reverse("state_overview", kwargs={"state": "FR"}))
-        self.assertTemplateUsed(response, "weather/state/overview.html")
+        self.assertTemplateUsed(response, "weather/state/alerts.html")
+        self.assertEqual(response.context["state"], self.state_fr)
+        self.assertEqual(response.status_code, 200)
+
+    def test_alerts(self):
+        """Test the alerts page."""
+        response = self.client.get(reverse("state_alerts", kwargs={"state": "FR"}))
+        self.assertTemplateUsed(response, "weather/state/alerts.html")
+        self.assertEqual(response.context["state"], self.state_fr)
+        self.assertEqual(response.status_code, 200)
+
+    def test_risks(self):
+        """Test the risks page."""
+        response = self.client.get(reverse("state_risks", kwargs={"state": "FR"}))
+        self.assertTemplateUsed(response, "weather/state/risks.html")
+        self.assertEqual(response.context["state"], self.state_fr)
+        self.assertEqual(response.status_code, 200)
+
+    def test_radar(self):
+        """Test the radar page."""
+        response = self.client.get(reverse("state_radar", kwargs={"state": "FR"}))
+        self.assertTemplateUsed(response, "weather/state/radar.html")
+        self.assertEqual(response.context["state"], self.state_fr)
+        self.assertEqual(response.status_code, 200)
+
+    def test_analysis(self):
+        """Test the analysis page."""
+        response = self.client.get(reverse("state_analysis", kwargs={"state": "FR"}))
+        self.assertTemplateUsed(response, "weather/state/analysis.html")
         self.assertEqual(response.context["state"], self.state_fr)
         self.assertEqual(response.status_code, 200)
 

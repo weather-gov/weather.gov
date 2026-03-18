@@ -35,8 +35,12 @@ urlpatterns = [
     path("counties/ghwo/", county.county_ghwo_index, name="county_ghwo_index"),
     path("counties/ghwo/<str:county_fips>/", county.county_ghwo, name="county_ghwo"),
     # State pages
-    path("state/", state.index, name="state_index"),
-    path("state/<state>/", state.state_overview, name="state_overview"),
+    path("forecast/state/", state.index, name="state_index"),
+    path("forecast/state/<state>/", state.state_alerts, name="state_overview"),
+    path("forecast/state/<state>/alerts/", state.state_alerts, name="state_alerts"),
+    path("forecast/state/<state>/risks/", state.state_risks, name="state_risks"),
+    path("forecast/state/<state>/radar/", state.state_radar, name="state_radar"),
+    path("forecast/state/<state>/analysis/", state.state_analysis, name="state_analysis"),
     # WX routes are those that return partial HTML markup
     # that will be requested from the frontend (htmx style)
     path("wx/afd/<afd_id>/", partials.wx_afd_id, name="wx_afd_id"),

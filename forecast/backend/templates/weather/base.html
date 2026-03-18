@@ -30,6 +30,7 @@
     <link rel="icon"
           type="image/png"
           href="{% static 'images/weather/favicons/nws-favicon.ico' %}" />
+    {% block head_link %}{% endblock %}
     {% block head_css %}{% endblock %}
     <link rel="manifest" href="{% static 'manifest.json' %}" />
     {% third_party_site_list %}

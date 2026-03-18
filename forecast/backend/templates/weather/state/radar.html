@@ -1,0 +1,38 @@
+{% extends "weather/page.html" %}
+{% comment %}
+-- Template purpose:
+--   Display radar for a state.
+-- Url: https://beta.weather.gov/county/MN/radar/
+{% endcomment %}
+{% block head_link %}
+  <link rel="prefetch" href="{% url 'state_alerts' state.state %}" />
+  <link rel="prefetch" href="{% url 'state_risks' state.state %}" />
+  <link rel="prefetch" href="{% url 'state_analysis' state.state %}" />
+{% endblock %}
+{% block head_js %}{{ state.public|json_script:"state-data" }}{% endblock %}
+{% block page_end_js %}
+  <script type="module"
+          src="{% static 'js/state/radar.html.js' %}"
+          type="module"></script>
+{% endblock %}
+{% block page_content %}
+  <div class="layout-container grid-row height-full flex-column flex-no-wrap">
+    {% include "weather/state/name.html" with state_name=state.name %}
+    <wx-tabbed-nav class="display-block position-relative" id="state-page-tabbed-nav">
+    {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
+    <div class="bg-base-lightest padding-top-3 padding-bottom-8">
+      <div class="wx-focus-offset-205"
+           id="radar"
+           aria-labelledby="radar-tab-button"
+           tabindex="0">
+        <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+          <h2 class="text-normal text-primary-darker">{{ "state.heading.radar.01" | t }}</h2>
+          <div class="grid-col-12 desktop:grid-col-12">
+            <p>Radar</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </wx-tabbed-nav>
+  </div>
+{% endblock %}

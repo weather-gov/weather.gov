@@ -1,0 +1,15 @@
+{% comment %}
+-- Template purpose:
+--   Display a banner with the name of a state.
+-- Used by: state/alerts.html
+            state/risks.html
+            state/radar.html
+            state/analysis.html
+{% endcomment %}
+<div class="bg-primary-dark">
+  <div class="grid-container">
+    <div class="grid-row flex-no-wrap">
+      <h1 class="text-white font-heading-xl tablet:flex-1">{{ state_name }}</h1>
+    </div>
+  </div>
+</div>
