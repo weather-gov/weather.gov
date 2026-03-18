@@ -31,10 +31,10 @@ class TestUrlConverters(TestCase):
     def test_to_python(self):
         """Tests that the converter converts a floaty string to a float."""
         actual = self.converter.to_python("3.14159")
-        self.assertEquals(actual, 3.14159)
+        self.assertEqual(actual, 3.14159)
 
     def test_to_url(self):
         """Tests that whatever we pass is also what comes out."""
         in_obj = {}
         actual = self.converter.to_url(in_obj)
-        self.assertEquals(actual, in_obj)
+        self.assertEqual(actual, in_obj)

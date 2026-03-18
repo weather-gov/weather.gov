@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     *OUR_APPS,
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "django.contrib.postgres",
     "django.contrib.sessions",
     "django.contrib.sitemaps",
     "django.contrib.messages",
