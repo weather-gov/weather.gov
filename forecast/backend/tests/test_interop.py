@@ -410,7 +410,7 @@ class TestInteropInterface(TestCase):
 
         actual = interop.get_point_forecast(6, 7)
 
-        self.assertEquals(
+        self.assertEqual(
             [alert["id"] for alert in actual["alerts"]["items"]],
             [alert1["id"], alert2["id"], alert3["id"]],
         )
