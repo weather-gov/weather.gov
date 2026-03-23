@@ -45,6 +45,7 @@ describe("Forecast index", () => {
     sandbox.resetBehavior();
     sandbox.resetHistory();
     connectionPool.request.resolves(basicResponse);
+    basicResponse.statusCode = 200;
   });
 
   after(async () => {
@@ -230,6 +231,90 @@ describe("Forecast index", () => {
           "06-2",
         ]);
       });
+    });
+
+    it("throws an error if the hourly request responds 403", async() => {
+      const badResponse = {
+        statusCode: 403,
+        body: {
+          text: sandbox.stub().resolves(""),
+          dump: sandbox.stub().resolves()
+        }
+      };
+      connectionPool.request.withArgs(
+        sinon.match({ path: `/gridpoints/TST/1,1/forecast/hourly`})
+      ).resolves(badResponse);
+
+      let threwError = false;
+      try {
+        await forecast({
+          grid: { wfo: "TST", x: 1, y: 1},
+          place,
+          isMarine: false
+        });
+      } catch(e){
+        if(e.cause?.statusCode === 403){
+          threwError = true;
+        }
+      }
+
+      expect(threwError).to.equal(true);
+    });
+
+    it("throws an error if the gridpoint request responds with 403", async() => {
+      const badResponse = {
+        statusCode: 403,
+        body: {
+          text: sandbox.stub().resolves(""),
+          dump: sandbox.stub().resolves()
+        }
+      };
+      connectionPool.request.withArgs(
+        sinon.match({ path: `/gridpoints/TST/1,1`})
+      ).resolves(badResponse);
+
+      let threwError = false;
+      try {
+        await forecast({
+          grid: { wfo: "TST", x: 1, y: 1},
+          place,
+          isMarine: false
+        });
+      } catch(e){
+        if(e.cause?.statusCode === 403){
+          threwError = true;
+        }
+      }
+
+      expect(threwError).to.equal(true);
+    });
+
+    it("throws an error if the daily request responds with 403", async() => {
+      const badResponse = {
+        statusCode: 403,
+        body: {
+          text: sandbox.stub().resolves(""),
+          dump: sandbox.stub().resolves()
+        }
+      };
+      connectionPool.request.withArgs(
+        sinon.match({ path: `/gridpoints/TST/1,1/forecast`})
+      ).resolves(badResponse);
+
+      let threwError = false;
+      try {
+        await forecast({
+          grid: { wfo: "TST", x: 1, y: 1},
+          place,
+          isMarine: false
+        });
+      } catch(e){
+        if(e.cause?.statusCode === 403){
+          threwError = true;
+        }
+      }
+
+      expect(threwError).to.equal(true);
     });
 
     it("calls the expected endpoints", async () => {

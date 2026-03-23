@@ -24,10 +24,18 @@ export const schema = {
 
 export const handler = async (request) => {
   const { latitude, longitude } = request.params;
-  const data = await getDataForPoint(latitude, longitude);
 
-  if (data.error) {
-    return { data, status: data.status, error: data.error };
+  try {
+    const data = await getDataForPoint(latitude, longitude);
+
+    if (data.error) {
+      return { data, status: data.status, error: data.error };
+    }
+    return { data };
+  } catch(e){
+    if(e.cause?.statusCode === 403){
+      return { status: 429, error: e };
+    }
+    throw e;
   }
-  return { data };
 };

@@ -257,6 +257,65 @@ describe("observations module", () => {
   });
 
   describe("handles errors", () => {
+    const badResponse = {
+      statusCode: 403,
+      body: {
+        text: sandbox.stub().resolves(""),
+        dump: sandbox.stub().resolves()
+      }
+    };
+    describe("403 responses throw errors", () => {
+      it("for the stations listing endpoint", async() => {
+         connectionPool.request
+          .withArgs(sinon.match({ path: `/gridpoints/TEST/1,1/stations?limit=3` }))
+          .resolves(badResponse);
+
+        let threwError = false;
+        try {
+          await getObservations(
+            {
+              grid: { wfo: "TEST", x: 1, y: 1 },
+              point: {},
+              place: { timezone: "America/New_York" },
+            },
+            global.test.database,
+          );
+        } catch(e) {
+          if(e.cause?.statusCode === 403){
+            threwError = true;
+          }
+        }
+
+        expect(threwError).to.equal(true);
+      });
+
+      it("for an individual observation station endpoint", async() => {
+        connectionPool.request
+          .withArgs(
+            sinon.match({ path: `/stations/station1/observations?limit=1` }),
+          )
+          .resolves(badResponse);
+
+        let threwError = false;
+        try {
+          await getObservations(
+            {
+              grid: { wfo: "TEST", x: 1, y: 1 },
+              point: {},
+              place: { timezone: "America/New_York" },
+            },
+            global.test.database,
+          );
+        } catch(e) {
+          if(e.cause?.statusCode === 403){
+            threwError = true;
+          }
+        }
+
+        expect(threwError).to.equal(true);
+      });
+    });
+    
     describe("all observation stations return invalid data", () => {
       const features = [
         {
