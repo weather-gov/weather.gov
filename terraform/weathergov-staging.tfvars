@@ -18,3 +18,4 @@ api_interop_instances = 4
 api_url               = "https://preview-api.weather.gov"
 interop_url           = "https://api-weathergov-staging.app.cloud.gov"
 redis_plan_name       = "redis-3node"
+rds_plan_name         = "medium-psql-redundant"
