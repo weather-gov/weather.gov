@@ -14,6 +14,7 @@ import getSatellite from "./satellite.js";
 const forecastLogger = logger.child({ subsystem: "forecast" });
 
 const disableAnalysis = process.env.DISABLE_GRID_ANALYSIS === "true";
+
 let gridCache;
 let backgroundWorker;
 
@@ -29,7 +30,7 @@ if (isMainThread) {
     workerPath: workerPath,
   });
   backgroundWorker = new Worker(workerPath);
-  backgroundWorker.on("error", (err) => {
+  backgroundWorker.on("error", async (err) => {
     forecastLogger.error({
       err,
       message: "GridCache background worker CRASHED",
@@ -178,4 +179,4 @@ const getDataForPoint = async (lat, lon) => {
   };
 };
 
-export { getDataForPoint, getProductById };
+export { getDataForPoint, getProductById, backgroundWorker };

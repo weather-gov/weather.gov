@@ -43,6 +43,14 @@ const fetchStations = async (wfo, x, y) => {
       { err: e, wfo, x, y },
       "Error fetching stations from API",
     );
+
+    // Throw errors with statusCode 403,
+    // so they can be handled immediately in
+    // route handlers
+    if(e.cause?.statusCode === 403){
+      throw e;
+    }
+    
     return { error: true };
   }
 };
@@ -80,6 +88,14 @@ const fetchObservation = async (station) => {
       { err: e, station: station.properties.stationIdentifier },
       "Error fetching observation for station",
     );
+
+    // Throw errors with statusCode 403,
+    // so they can be handled immediately in
+    // route handlers
+    if(e.cause?.statusCode === 403){
+      throw e;
+    }
+    
     return { error: true };
   }
 };

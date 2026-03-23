@@ -101,6 +101,29 @@ describe("point method", () => {
     });
   });
 
+  it("throws an error if the request responded with a 403", async () => {
+    connectionPool.request.resolves({
+      statusCode: 403,
+      headers: { "x-nothing": "read-here" },
+      body: {
+        dump: sandbox.stub().resolves(),
+        text: sandbox.stub().resolves("")
+      }
+    });
+    db.query.resolves({ rows: [] });
+
+    let threwError = false;
+    try {
+      await points(1,2);
+    } catch(e){
+      if(e.cause?.statusCode === 403){
+          threwError = true;
+        }
+    }
+
+    expect(threwError).to.be.true;
+  });
+
   it("returns a not-supported grid for points not *supported* by the API", async () => {
     response.body.text.resolves(
       JSON.stringify({

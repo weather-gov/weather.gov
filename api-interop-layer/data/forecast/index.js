@@ -52,6 +52,13 @@ const fetchHourlyPromise = async (url, hours) => {
       `Error fetching hourly forecast data`,
     );
 
+    // Throw errors with statusCode 403,
+    // so they can be handled immediately in
+    // route handlers
+    if(e.cause?.statusCode === 403){
+      throw e;
+    }
+
     e.error = true;
     return e;
   }
@@ -82,6 +89,14 @@ const fetchGridpointPromise = async (url, place, hours) => {
   } catch (e) {
     forecastLogger.error({ error: e, url }, `Error fetching gridpoint data`);
     e.error = true;
+
+    // Throw errors with statusCode 403,
+    // so they can be handled immediately in
+    // route handlers
+    if(e.cause?.statusCode === 403){
+      throw e;
+    }
+    
     return e;
   }
 };
@@ -113,6 +128,14 @@ const fetchDailyPromise = async (url, place) => {
       `Error fetching daily forecast data`,
     );
     e.error = true;
+
+    // Throw errors with statusCode 403,
+    // so they can be handled immediately in
+    // route handlers
+    if(e.cause?.statusCode === 403){
+      throw e;
+    }
+    
     return e;
   }
 };
