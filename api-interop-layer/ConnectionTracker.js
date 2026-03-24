@@ -6,7 +6,6 @@
  * a 429
  */
 import connectionPool from "./data/connectionPool.js";
-import {requestPool as satellitePool } from "./data/satellite.js";
 
 // We assume a hard-coded default of 16k
 // This can (and perhaps should) be speficied
@@ -21,7 +20,7 @@ if(process.env.MAX_OPEN_CONNECTIONS){
 }
 
 export default {
-  pools: [connectionPool, satellitePool],
+  pools: [connectionPool],
   maxConnections: MAX_OPEN_CONNECTIONS,
 
   get currentSize(){

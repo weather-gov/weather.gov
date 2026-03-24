@@ -9,7 +9,6 @@ import getForecast from "./forecast/index.js";
 import getObservations from "./obs/index.js";
 import { getPointData } from "./points.js";
 import getProductById from "./products/index.js";
-import getSatellite from "./satellite.js";
 
 const forecastLogger = logger.child({ subsystem: "forecast" });
 
@@ -77,8 +76,7 @@ const getDataForPoint = async (lat, lon) => {
   forecastLogger.trace({ lat, lon }, "fetching forecast");
   const { point, place, grid, isMarine } = await getPointData(lat, lon);
 
-  forecastLogger.trace("satellite promise");
-  let satellitePromise = Promise.resolve({ error: true });
+  forecastLogger.trace("forecast promise");
   let forecast = { daily: { error: true } };
   let observed = { error: true };
 
@@ -88,8 +86,6 @@ const getDataForPoint = async (lat, lon) => {
     // Cache grid point information
     // This is a synchronous push to an array. Fire and Forget
     gridCache.logGridHit(grid);
-
-    satellitePromise = getSatellite({ grid, place });
 
     const dbConnection = await getDbConnection();
 
@@ -165,8 +161,6 @@ const getDataForPoint = async (lat, lon) => {
     };
   }
 
-  const satellite = await satellitePromise;
-
   return {
     alerts,
     observed,
@@ -175,7 +169,6 @@ const getDataForPoint = async (lat, lon) => {
     grid,
     isMarine,
     forecast: forecast.daily,
-    satellite,
   };
 };
 
