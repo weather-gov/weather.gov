@@ -563,6 +563,12 @@ msgstr "time shown"
 msgid "satellite.link.explore-other.01"
 msgstr "Explore other satellite views"
 
+msgid "satellite.video.loading.01"
+msgstr "Loading the Satellite Video..."
+
+msgid "satellite.video.fail.01"
+msgstr "Failed to load video"
+
 msgid "theme.text.submitted-by.01"
 msgstr "Submitted by {author_name} on {month}/{day}"
 

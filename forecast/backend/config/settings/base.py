@@ -269,6 +269,8 @@ CRITICAL_HOSTS = {
         "basemaps-api.arcgis.com",
         "cdn.arcgis.com",
         "opengeo.ncep.noaa.gov",
+        # satellite
+        "cdn.star.nesdis.noaa.gov"
     ],
     "img-src": [
         # satellite
