@@ -18,7 +18,7 @@ dependencies = [
     "gunicorn==25.1.0 ; python_full_version >= '3.7'",
     "html-sanitizer>=2.6.0",
     "newrelic==11.5.0",
-    "psycopg2-binary==2.9.11 ; python_full_version >= '3.8'",
+    "psycopg[binary]>=3.2.0 ; python_full_version >= '3.8'",
     "python-json-logger==4.0.0",
     "python3-saml>=1.16.0",
     "requests>=2.32.5",
