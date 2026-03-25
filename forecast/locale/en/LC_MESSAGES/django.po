@@ -968,6 +968,15 @@ msgstr "Radar"
 msgid "state.heading.analysis.01"
 msgstr "Analysis"
 
+msgid "state.heading.index.01"
+msgstr "State and Territory Views"
+
+msgid "state.description.index.01"
+msgstr "Select your state or territory from the list below to see alerts, risk levels, and more for the state."
+
+msgid "state.labels.state-filter.01"
+msgstr "Filter by state name"
+
 msgid "error.500.generic.message.01"
 msgstr "Something went wrong on our end. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
 

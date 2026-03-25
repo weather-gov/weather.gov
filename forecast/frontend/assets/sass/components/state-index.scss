@@ -1,0 +1,35 @@
+@use "uswds-core" as *;
+@forward "uswds-theme";
+@forward "uswds";
+
+.state-list {
+    list-style-type: none;
+
+  li {
+    margin-bottom: units(2);
+  }
+}
+
+@include at-media("tablet"){
+    .use-columns {
+        .state-list {
+            columns: 3;
+
+            li {
+                margin-right: units(2);
+            }
+        }
+    }
+}
+
+@include at-media("desktop"){
+    .use-columns {
+        .state-list {
+            columns: 4;
+
+            li {
+                margin-right: units(2);
+            }
+        }
+    }
+}

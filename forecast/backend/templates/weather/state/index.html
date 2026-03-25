@@ -3,14 +3,40 @@
 -- Template purpose:
 --   Display a searchable list of all states.
 {% endcomment %}
+{% block head_js %}
+  <script src="{% static 'js/state/index.html.js' %}"
+          type="module"></script>
+{% endblock %}
 {% block page_content %}
-  <div class="grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
-    <ul>
-      {% for state in states %}
-        <li>
-          <a href="{{ state.state }}/">{{ state.name }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+  <wx-state-index-filter class="display-block grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
+    <div class="grid-row">
+      <div class="grid-col-12">
+        <h1 class="font-sans-2xl text-primary-dark text-normal">{{"state.heading.index.01"|t}}</h1>
+        <p class="font-sans-md margin-bottom-3">
+          {{"state.description.index.01"|t}}
+        </p>
+      </div>
+    </div>
+    <div class="grid-row">
+      <div class="grid-col-12">
+        <label for="state-filter-input">
+          {{"state.labels.state-filter.01"|t}}
+        </label>
+        <input aria-controls="state-filter-results"
+               id="state-filter-input"
+               class="usa-input margin-top-1" />
+      </div>
+    </div>
+    <div class="grid-row">
+      <div class="grid-col-12 use-columns">
+        <ul class="usa-list state-list margin-top-105 padding-left-0 margin-top-4" id="state-index-list">
+          {% for state in states %}
+            <li>
+              <a class="usa-link font-sans-md text-normal" href="{{ state.state }}/">{{ state.name }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </wx-state-index-filter>
 {% endblock %}

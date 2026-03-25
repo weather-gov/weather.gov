@@ -7,3 +7,6 @@
 import "../page.html.js";
 
 import "../components/combobox/filterable-listbox.js";
+
+// For filtering state input
+import "../components/state-index-filter.js";
