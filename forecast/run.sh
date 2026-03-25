@@ -13,5 +13,4 @@ set -o pipefail
 # Ensure that spatial data is loaded.
 ./manage.py loadspatial --cleanup
 
-NEW_RELIC_CONFIG_FILE=newrelic.ini newrelic-admin run-program \
-    gunicorn --workers=3 --worker-class=gevent backend.config.wsgi -t 60
+gunicorn -c gunicorn.conf.py
