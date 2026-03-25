@@ -1,13 +1,5 @@
 # gunicorn configuration for prod
 #
-from gevent import monkey
-
-monkey.patch_all()
-
-import newrelic.agent  # noqa: E402
-
-newrelic.agent.initialize("newrelic.ini")
-
 wsgi_app = "backend.config.wsgi"
 worker_class = "gevent"
 workers = 4  # number of worker processes
