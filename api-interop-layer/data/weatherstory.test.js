@@ -1,36 +1,41 @@
 import { expect } from "chai";
-import { createSandbox } from "sinon";
+import sinon from "sinon";
 import quibble from "quibble";
-import { parseTTLFromHeaders } from "../redis.js";
 
 describe("weatherstory module", () => {
-  const sandbox = createSandbox();
-  const response = {
-    statusCode: 200,
-    headers: {
-      "cache-control": "s-maxage=42",
-      "content-type": "application/json",
-    },
-    body: {
-      text: sandbox.stub(),
-      dump: sandbox.stub(),
-    },
-  };
-
-  const connectionPool = {
-    request: sandbox.stub(),
-  };
-
-  const saveToRedis = sandbox.stub();
-  const getFromRedis = sandbox.stub();
-
-  let getDataForWxStory;
+  let response,
+    saveToRedis,
+    getFromRedis,
+    connectionPool,
+    getDataForWxStory,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+
+    response = {
+      statusCode: 200,
+      headers: {
+        "cache-control": "s-maxage=42",
+        "content-type": "application/json",
+      },
+      body: {
+        text: sandbox.stub(),
+        dump: sandbox.stub(),
+      },
+    };
+
+    saveToRedis = sandbox.stub();
+    getFromRedis = sandbox.stub();
+
+    connectionPool = {
+      request: sandbox.stub(),
+    };
+
     await quibble.esm("./connectionPool.js", {}, connectionPool);
     await quibble.esm(
       "../redis.js",
-      { getFromRedis, saveToRedis, parseTTLFromHeaders },
+      { getFromRedis, saveToRedis },
       {},
     );
 
@@ -152,6 +157,7 @@ describe("weatherstory module", () => {
           "http://localhost:8000/offices/MPX/weatherstories/d9cce8e6-a30e-41e3-b37e-165e1463ba54/image",
       },
     ];
+
     beforeEach(() => {
       response.body.text.resolves(
         JSON.stringify({

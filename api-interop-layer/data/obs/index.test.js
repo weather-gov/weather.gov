@@ -1,45 +1,50 @@
 import { expect } from "chai";
-import sinon, { createSandbox } from "sinon";
+import sinon from "sinon";
 import quibble from "quibble";
 import { BASE_URL } from "../connectionPool.js";
-import { parseTTLFromHeaders } from "../../redis.js";
 
 describe("observations module", () => {
-  const sandbox = createSandbox();
-
-  // Mock the shared undici Pool instance
-  const connectionPool = {
-    request: sandbox.stub(),
-  };
-
-  const saveToRedis = sandbox.stub();
-  const getFromRedis = sandbox.stub();
-
-  const stations = {
-    statusCode: 200,
-    headers: { "content-type": "application/json" },
-    body: {
-      text: sandbox.stub(),
-      dump: sandbox.stub().resolves(),
-    },
-  };
-
-  const response = {
-    statusCode: 200,
-    headers: { "content-type": "application/json" },
-    body: {
-      text: sandbox.stub(),
-      dump: sandbox.stub().resolves(),
-    },
-  };
-
-  let getObservations;
+  let connectionPool,
+    saveToRedis,
+    getFromRedis,
+    stations,
+    response,
+    getObservations,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+    // Mock the shared undici Pool instance
+    connectionPool = {
+      request: sandbox.stub(),
+    };
+
+    saveToRedis = sandbox.stub();
+    getFromRedis = sandbox.stub();
+
+    stations = {
+      statusCode: 200,
+      headers: { "content-type": "application/json" },
+      body: {
+        text: sandbox.stub(),
+        dump: sandbox.stub().resolves(),
+      },
+    };
+
+    response = {
+      statusCode: 200,
+      headers: { "content-type": "application/json" },
+      body: {
+        text: sandbox.stub(),
+        dump: sandbox.stub().resolves(),
+      },
+    };
+
+
     await quibble.esm("../connectionPool.js", {}, connectionPool);
     await quibble.esm(
       "../../redis.js",
-      { saveToRedis, getFromRedis, parseTTLFromHeaders },
+      { saveToRedis, getFromRedis },
       {},
     );
     // Import the module now. Its dependency on the database will cause a hang
@@ -257,13 +262,18 @@ describe("observations module", () => {
   });
 
   describe("handles errors", () => {
-    const badResponse = {
-      statusCode: 403,
-      body: {
-        text: sandbox.stub().resolves(""),
-        dump: sandbox.stub().resolves()
-      }
-    };
+    let badResponse;
+
+    before(() => {
+      badResponse = {
+        statusCode: 403,
+        body: {
+          text: sandbox.stub().resolves(""),
+          dump: sandbox.stub().resolves()
+        }
+      };
+    });
+
     describe("403 responses throw errors", () => {
       it("for the stations listing endpoint", async() => {
          connectionPool.request
@@ -324,14 +334,18 @@ describe("observations module", () => {
           },
         },
       ];
-      const invalid = {
-        statusCode: 200,
-        headers: { "content-type": "application/json" },
-        body: {
-          text: sinon.stub().resolves(JSON.stringify({ features })),
-          dump: sinon.stub().resolves(),
-        },
-      };
+      let invalid;
+
+      before(() => {
+        invalid = {
+          statusCode: 200,
+          headers: { "content-type": "application/json" },
+          body: {
+            text: sandbox.stub().resolves(JSON.stringify({ features })),
+            dump: sandbox.stub().resolves(),
+          },
+        };
+      });
 
       it("tries the second observation if the first is invalid", async () => {
         connectionPool.request
@@ -348,7 +362,7 @@ describe("observations module", () => {
             statusCode: 200,
             headers: { "content-type": "application/json" },
             body: {
-              text: sinon.stub().resolves(
+              text: sandbox.stub().resolves(
                 JSON.stringify({
                   features: [
                     {
@@ -359,7 +373,7 @@ describe("observations module", () => {
                   ],
                 }),
               ),
-              dump: sinon.stub().resolves(),
+              dump: sandbox.stub().resolves(),
             },
           });
 
@@ -398,7 +412,7 @@ describe("observations module", () => {
             statusCode: 200,
             headers: { "content-type": "application/json" },
             body: {
-              text: sinon.stub().resolves(
+              text: sandbox.stub().resolves(
                 JSON.stringify({
                   features: [
                     {
@@ -409,7 +423,7 @@ describe("observations module", () => {
                   ],
                 }),
               ),
-              dump: sinon.stub().resolves(),
+              dump: sandbox.stub().resolves(),
             },
           });
 

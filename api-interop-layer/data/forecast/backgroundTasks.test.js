@@ -10,15 +10,17 @@ describe("Forecast Background Tasks Tests", () => {
   let queryStub;
   let mockDb;
   let mockPort;
+  let sandbox;
 
   beforeEach(() => {
-    queryStub = sinon.stub().resolves({ rowCount: 0, rows: [] });
+    sandbox = sinon.createSandbox();
+    queryStub = sandbox.stub().resolves({ rowCount: 0, rows: [] });
     mockDb = { query: queryStub };
-    mockPort = { postMessage: sinon.spy() };
+    mockPort = { postMessage: sandbox.spy() };
   });
 
   afterEach(() => {
-    sinon.restore();
+    sandbox.restore();
   });
 
   describe("flushForecastGridLogs()", () => {

@@ -32,7 +32,9 @@ export class ForecastGridCache {
    * unref() allows the Node process to exit if only this timer is remaining.
    */
   _startFlushLoop() {
-    setInterval(() => {
+    let interval;
+
+    interval = setInterval(() => {
       if (ForecastGridCache.buffer.length === 0) return;
 
       const batch = ForecastGridCache.buffer;
@@ -44,6 +46,10 @@ export class ForecastGridCache {
         payload: batch,
       });
     }, 5_000).unref();
+
+    process.on("SHUTDOWN", () => {
+      clearInterval(interval);
+    });
   }
 
   /**
@@ -57,14 +63,24 @@ export class ForecastGridCache {
     const msUntilNextTick =
       (30 - (now.getMinutes() % 30)) * 60000 - now.getSeconds() * 1000;
 
-    setTimeout(() => {
-      // Fire the first one exactly at the :30 mark
+    let timer,
+      interval;
+
+    const sendToWorker = () => {
       this.worker.postMessage({ action: "process_heat_interval" });
+    }
+
+    timer = setTimeout(() => {
+      // Fire the first one exactly at the :30 mark
+      sendToWorker();
 
       // Establish 30m loop
-      setInterval(() => {
-        this.worker.postMessage({ action: "process_heat_interval" });
-      }, 1_800_000).unref();
+      interval = setInterval(sendToWorker, 1_800_000).unref();
     }, msUntilNextTick).unref();
+
+    process.on("SHUTDOWN", () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    });
   }
 }

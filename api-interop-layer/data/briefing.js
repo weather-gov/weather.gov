@@ -1,6 +1,7 @@
 import { logger } from "../util/monitoring/index.js";
+import { parseTTLFromHeaders } from "../util/caching.js";
 import { requestJSONWithHeaders } from "../util/request.js";
-import { getFromRedis, saveToRedis, parseTTLFromHeaders } from "../redis.js";
+import { getFromRedis, saveToRedis } from "../redis.js";
 import connectionPool from "./connectionPool.js";
 
 const briefingsLogger = logger.child({ subsystem: "briefings" });

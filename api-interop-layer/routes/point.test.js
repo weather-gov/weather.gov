@@ -3,12 +3,13 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: point", () => {
-  const sandbox = sinon.createSandbox();
-  const getDataForPoint = sandbox.stub();
-
-  let point;
+  let getDataForPoint,
+    point,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+    getDataForPoint = sandbox.stub();
     await quibble.esm("../data/index.js", { getDataForPoint });
 
     point = await import("./point.js");
@@ -20,6 +21,7 @@ describe("route: point", () => {
   });
 
   after(async () => {
+    sandbox.restore();
     await quibble.reset();
   });
 

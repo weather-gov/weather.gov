@@ -2,31 +2,34 @@ import { createHash } from "node:crypto";
 import sinon from "sinon";
 import { expect } from "chai";
 import dayjs from "../../util/day.js";
-import { Client } from "undici";
+import { Client as MockClient } from "undici";
 import { updateAlerts, fetchAlertFeatures } from "./backgroundUpdateTask.js";
 import { AlertsCache } from "./cache.js";
 
 describe("alert background processing module", () => {
-  const sandbox = sinon.createSandbox();
+  let response,
+    parent,
+    getHashesStub,
+    addAlertStub,
+    removeAlertsStub,
+    storedHashes,
+    storedAlerts,
+    sandbox;
 
-  const response = {
-    statusCode: 200,
-    headers: { "content-type": "application/json" },
-    body: {
-      text: sandbox.stub(),
-      dump: sandbox.stub().resolves(),
-    },
-  };
+  before(() => {
+    sandbox = sinon.createSandbox();
 
-  const parent = { postMessage: sandbox.stub() };
+    response = {
+      statusCode: 200,
+      headers: { "content-type": "application/json" },
+      body: {
+        text: sandbox.stub(),
+        dump: sandbox.stub().resolves(),
+      },
+    };
 
-  let getHashesStub;
-  let addAlertStub;
-  let removeAlertsStub;
-  let storedHashes;
-  let storedAlerts;
-
-  let MockClient = Client;
+    parent = { postMessage: sandbox.stub() };
+  });
 
   beforeEach(() => {
     response.statusCode = 200;
@@ -206,16 +209,21 @@ describe("alert background processing module", () => {
   });
 
   describe("does not store alerts that have ended", () => {
-    // 24 hours ago...
-    const past = new Date(Date.now() - 86_400_000).toISOString();
+    let past,
+      times;
 
-    const times = {
-      sent: dayjs().subtract(1, "minute").toISOString(),
-      effective: dayjs().subtract(1, "minute").toISOString(),
-      onset: dayjs().subtract(1, "minute").toISOString(),
-      expires: dayjs().add(1, "minute").toISOString(),
-      ends: dayjs().add(1, "minute").toISOString(),
-    };
+    before(() => {
+      // 24 hours ago...
+      past = new Date(Date.now() - 86_400_000).toISOString();
+  
+      times = {
+        sent: dayjs().subtract(1, "minute").toISOString(),
+        effective: dayjs().subtract(1, "minute").toISOString(),
+        onset: dayjs().subtract(1, "minute").toISOString(),
+        expires: dayjs().add(1, "minute").toISOString(),
+        ends: dayjs().add(1, "minute").toISOString(),
+      };
+    });
 
     it("if the alert has an end time in the past", async () => {
       response.body.text.resolves(
@@ -441,20 +449,24 @@ describe("alert background processing module", () => {
   });
 
   describe("computes the alert finish time", () => {
-    const alertResponse = {
-      features: [
-        {
-          geometry: "geo",
-          properties: {
-            id: "one",
-            event: "Severe Thunderstorm Warning",
-            sent: dayjs().subtract(1, "minute").toISOString(),
-            effective: dayjs().subtract(1, "minute").toISOString(),
-            onset: dayjs().subtract(1, "minute").toISOString(),
+    let alertResponse;
+
+    before(() => {
+      alertResponse = {
+        features: [
+          {
+            geometry: "geo",
+            properties: {
+              id: "one",
+              event: "Severe Thunderstorm Warning",
+              sent: dayjs().subtract(1, "minute").toISOString(),
+              effective: dayjs().subtract(1, "minute").toISOString(),
+              onset: dayjs().subtract(1, "minute").toISOString(),
+            },
           },
-        },
-      ],
-    };
+        ],
+      };
+    });
 
     it("if the alert has an ends property", async () => {
       alertResponse.features[0].properties.ends = "2430-04-03T12:00:00Z";

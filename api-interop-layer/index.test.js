@@ -3,40 +3,48 @@ import quibble from "quibble";
 import sinon from "sinon";
 
 describe("main bootstrapper", () => {
-  const sandbox = sinon.createSandbox();
-
-  const server = {
-    get: sandbox.spy(),
-    listen: sandbox.spy(),
-    route: sandbox.spy(),
-    setErrorHandler: sandbox.spy(),
-  };
-  const fastify = () => server;
-
-  const startAlertProcessing = sandbox.spy();
-
-  const handler = sandbox.stub();
-
-  const urls = [
-    {
-      method: "FIRST",
-      url: "/boo/boo",
-      schema: true,
-      // We'll test using this handler.
-      handler,
-    },
-    {
-      method: "second",
-      url: "/and/yogi",
-      schema: { an: "object" },
-      // We won't use this handler, so it can just be whatever.
-      handler: "a function",
-    },
-  ];
-
-  let main;
+  let server,
+    fastify,
+    startAlertProcessing,
+    handler,
+    urls,
+    main,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+
+    server = {
+      get: sandbox.spy(),
+      listen: sandbox.spy(),
+      route: sandbox.spy(),
+      setErrorHandler: sandbox.spy(),
+      addHook: sandbox.spy(),
+    };
+
+    fastify = () => server;
+
+    startAlertProcessing = sandbox.spy();
+
+    handler = sandbox.stub();
+
+    urls = [
+      {
+        method: "FIRST",
+        url: "/boo/boo",
+        schema: true,
+        // We'll test using this handler.
+        handler,
+      },
+      {
+        method: "second",
+        url: "/and/yogi",
+        schema: { an: "object" },
+        // We won't use this handler, so it can just be whatever.
+        handler: "a function",
+      },
+    ];
+
     // Use quibble to mock out the ESM modules. The first argument is the import
     // path; the second argument are any named exports; the third argume is the
     // default argument. The default argument should *ALWAYS* be set, even if
@@ -57,6 +65,7 @@ describe("main bootstrapper", () => {
   });
 
   after(async () => {
+    sandbox.restore();
     // When we're done, restore all the imports so other tests don't get
     // confused by them.
     await quibble.reset();
@@ -130,7 +139,7 @@ describe("main bootstrapper", () => {
   describe("root route", () => {
     it("just returns ok", async () => {
       await main();
-      const response = { send: sinon.spy() };
+      const response = { send: sandbox.spy() };
 
       // We can get the subscribed route handler from the spy...
       const handler = server.get.args[0][1];
@@ -147,8 +156,8 @@ describe("main bootstrapper", () => {
     const errorHandler = server.setErrorHandler.args[0][0];
 
     const response = {
-      status: sinon.stub(),
-      send: sinon.stub(),
+      status: sandbox.stub(),
+      send: sandbox.stub(),
     };
     // Fastify responses are chained objects, so we should chain ours too
     // in case the code-under-test relies on that (which it does).
@@ -162,17 +171,21 @@ describe("main bootstrapper", () => {
   });
 
   describe("route handlers", () => {
+    let request,
+      response,
+      handlerWrapper;
     // For these teses, we're only testing the utility wrapper behavior, not
     // the individual route handlers. Those should be tested independently.
 
-    const request = {
-      url: "https://test",
-    };
-    const response = {
-      code: sandbox.spy(),
-      send: sandbox.spy(),
-    };
-    let handlerWrapper;
+    before(() => {
+      request = {
+        url: "https://test",
+      };
+      response = {
+        code: sandbox.spy(),
+        send: sandbox.spy(),
+      };
+    });
 
     beforeEach(async () => {
       await main();

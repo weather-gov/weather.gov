@@ -1,7 +1,6 @@
 import quibble from "quibble";
 import sinon from "sinon";
 import { expect } from "chai";
-import { parseTTLFromHeaders } from "../../redis.js";
 import AFDParser from "./afd/AFDParser.js";
 
 class FakePool {
@@ -16,21 +15,25 @@ class FakePool {
 }
 
 describe("/product data tests", () => {
-  const sandbox = sinon.createSandbox();
-  const requestJSON = sandbox.stub();
-  let saveToRedis = sandbox.stub();
-  let getFromRedis = sandbox.stub();
-  let getProduct;
   const headers = { "cache-control": "s-maxage=120" };
-
+  let requestJSON,
+    saveToRedis,
+    getFromRedis,
+    getProduct,
+    sandbox;
+    
   before(async () => {
+    sandbox = sinon.createSandbox();
+    requestJSON = sandbox.stub();
+    saveToRedis = sandbox.stub();
+    getFromRedis = sandbox.stub();
+
     // Stub out the request export so we can mock it
     await quibble.esm("undici", { Pool: FakePool }, {});
     await quibble.esm("./afd/AFDParser.js", {}, AFDParser);
     await quibble.esm("../../redis.js", {
       saveToRedis,
       getFromRedis,
-      parseTTLFromHeaders,
     });
     await quibble.esm(
       "../../util/request.js",
@@ -40,8 +43,8 @@ describe("/product data tests", () => {
     const imported = await import("./index.js");
     getProduct = imported.default;
     // Stub out the AFD parser
-    sinon.stub(AFDParser.prototype, "parse");
-    sinon.stub(AFDParser.prototype, "getStructureForTwig");
+    sandbox.stub(AFDParser.prototype, "parse");
+    sandbox.stub(AFDParser.prototype, "getStructureForTwig");
   });
 
   beforeEach(() => {
@@ -54,8 +57,6 @@ describe("/product data tests", () => {
   });
 
   after(async () => {
-    AFDParser.prototype.parse.restore();
-    AFDParser.prototype.getStructureForTwig.restore();
     sandbox.restore();
     await quibble.reset();
   });

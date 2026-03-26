@@ -1,23 +1,16 @@
 import sinon from "sinon";
 import { expect } from "chai";
 import quibble from "quibble";
-import { parseTTLFromHeaders } from "../../redis.js";
-import { sortAndFilterHours } from "./hourly.js";
 
 describe("Forecast index cache tests", () => {
-  const sandbox = sinon.createSandbox();
-
-  const getFromRedis = sandbox.stub();
-  const saveToRedis = sandbox.stub();
-  const requestJSON = sandbox.stub();
-  const processDaily = sandbox.stub();
-  const processGridpoint = sandbox.stub();
-  const processHourly = sandbox.stub();
-
-
-  const connectionPool = {
-    request: sandbox.stub()
-  };
+  let getFromRedis,
+    saveToRedis,
+    requestJSON,
+    processDaily,
+    processGridpoint,
+    processHourly,
+    connectionPool,
+    sandbox;
   
   const place = {
     timezone: "America/New_York"
@@ -30,10 +23,23 @@ describe("Forecast index cache tests", () => {
 
   let forecast;
   before(async() => {
+    sandbox = sinon.createSandbox();
+
+    getFromRedis = sandbox.stub();
+    saveToRedis = sandbox.stub();
+    requestJSON = sandbox.stub();
+    processDaily = sandbox.stub();
+    processGridpoint = sandbox.stub();
+    processHourly = sandbox.stub();
+
+    connectionPool = {
+      request: sandbox.stub()
+    };
+  
     await quibble.esm("../connectionPool.js", {}, connectionPool);
     await quibble.esm("../../util/request.js", { requestJSONWithHeaders: requestJSON }, {});
-    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis, parseTTLFromHeaders }, {});
-    await quibble.esm("./hourly.js", { sortAndFilterHours }, processHourly);
+    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis }, {});
+    await quibble.esm("./hourly.js", {}, processHourly);
     await quibble.esm("./daily.js", {}, processDaily);
     await quibble.esm("./gridpoint.js", {}, processGridpoint);
 

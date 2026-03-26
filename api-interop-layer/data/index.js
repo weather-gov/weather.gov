@@ -35,6 +35,9 @@ if (isMainThread) {
       message: "GridCache background worker CRASHED",
     });
   });
+  process.on("SHUTDOWN", () => {
+    backgroundWorker.postMessage({ action: "SHUTDOWN" });
+  });
 
   gridCache = new ForecastGridCache(backgroundWorker);
   backgroundWorker.postMessage({ action: "start" });
@@ -54,13 +57,23 @@ if (isMainThread) {
         "scheduling next grid analysis sync",
       );
 
-      setTimeout(() => {
-        backgroundWorker.postMessage({ action: "process_heat_interval" });
+      let timer,
+        interval;
 
-        setInterval(() => {
-          backgroundWorker.postMessage({ action: "process_heat_interval" });
-        }, 1_800_000).unref();
+      const sendToWorker = () => {
+        backgroundWorker.postMessage({ action: "process_heat_interval" });
+      }
+
+      timer = setTimeout(() => {
+        sendToWorker();
+
+        interval = setInterval(sendToWorker, 1_800_000).unref();
       }, msUntilNextMark).unref();
+
+      process.on("SHUTDOWN", () => {
+        clearTimeout(timer);
+        clearInterval(interval);
+      });
     };
 
     scheduleHeatInterval();

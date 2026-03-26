@@ -1,8 +1,9 @@
+import { parseTTLFromHeaders } from "../../util/caching.js";
 import { requestJSONWithHeaders } from "../../util/request.js";
 import { logger } from "../../util/monitoring/index.js";
 import AFDParser from "./afd/AFDParser.js";
 import { Pool } from "undici";
-import { getFromRedis, saveToRedis, parseTTLFromHeaders } from "../../redis.js";
+import { getFromRedis, saveToRedis } from "../../redis.js";
 
 const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
 const pool = new Pool(BASE_URL, { pipelining: 2, allowH2: true });

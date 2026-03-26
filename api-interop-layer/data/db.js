@@ -57,11 +57,14 @@ export default async () => {
   return pool;
 };
 
-const cleanup = async () => {
+let isExiting = false;
+
+export const cleanup = async () => {
+  if (isExiting) return;
   if (pool) {
+    isExiting = true;
     await pool.end();
   }
 };
 
-process.on("SIGINT", cleanup);
-process.on("SIGTERM", cleanup);
+process.on("SHUTDOWN", cleanup);

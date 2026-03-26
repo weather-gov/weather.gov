@@ -32,16 +32,15 @@ const makeDayWithHours = (
 };
 
 describe("alert data module", () => {
-  const sandbox = sinon.createSandbox();
+  let response,
+    getIntersection,
+    getCountyAlerts,
+    sandbox;
 
-  const response = { status: 200, json: sandbox.stub() };
-  let getIntersection;
-  let getCountyAlerts;
+  before(() => {
+    sandbox = sinon.createSandbox();
+    response = { status: 200, json: sandbox.stub() };
 
-  beforeEach(() => {
-    response.status = 200;
-    sandbox.resetBehavior();
-    sandbox.resetHistory();
     getIntersection = sandbox.stub(
       AlertsCache.prototype,
       "getIntersectingAlertsForPoint",
@@ -50,13 +49,18 @@ describe("alert data module", () => {
       AlertsCache.prototype,
       "getAlertsForCountyFIPS",
     );
-
+  
     fetch.resolves(response);
   });
 
-  afterEach(() => {
-    getIntersection.restore();
-    getCountyAlerts.restore();
+  beforeEach(() => {
+    response.status = 200;
+    sandbox.resetBehavior();
+    sandbox.resetHistory();
+  });
+
+  after(() => {
+    sandbox.restore();
   });
 
   describe("after initial setup", () => {
@@ -152,10 +156,10 @@ describe("alert data module", () => {
     });
 
     describe("alert post-processing function", () => {
-      describe("correctly formats alert timing information", async () => {
+      describe("correctly formats alert timing information", () => {
         // Use a fixed date. The timezone here is UTC-600, or Mountain
         // Daylight. Our tests below will be in Central Daylight. Having these
-        // be different assures we're propertly using the user's timezone.
+        // be different assures we're properly using the user's timezone.
         const alertDay = dayjs.utc("2024-09-03T07:13:00-0600");
 
         const start = alertDay;

@@ -1,7 +1,8 @@
+import { parseTTLFromHeaders } from "../util/caching.js";
 import { logger } from "../util/monitoring/index.js";
 import connectionPool from "./connectionPool.js";
 import { requestJSONWithHeaders } from "../util/request.js";
-import { getFromRedis, saveToRedis, parseTTLFromHeaders } from "../redis.js";
+import { getFromRedis, saveToRedis } from "../redis.js";
 
 const weatherStoriesLogger = logger.child({ subsystem: "weatherstories" });
 // 1 hr

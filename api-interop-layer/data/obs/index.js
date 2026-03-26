@@ -1,6 +1,7 @@
+import { parseTTLFromHeaders } from "../../util/caching.js";
 import { convertProperties } from "../../util/convert.js";
 import { requestJSONWithHeaders } from "../../util/request.js";
-import { getFromRedis, saveToRedis, parseTTLFromHeaders } from "../../redis.js";
+import { getFromRedis, saveToRedis } from "../../redis.js";
 import connectionPool from "../connectionPool.js";
 import { parseAPIIcon } from "../../util/icon.js";
 import { logger } from "../../util/monitoring/index.js";

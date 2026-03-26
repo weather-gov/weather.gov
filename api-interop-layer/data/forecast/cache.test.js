@@ -3,25 +3,31 @@ import { expect } from "chai";
 import { ForecastGridCache } from "./cache.js";
 
 describe("ForecastGridCache Tests", () => {
-  let gridCache;
-  let clock;
-  let parent;
+  let gridCache,
+    clock,
+    parent,
+    sandbox;
+
+  before(() => {
+    sandbox = sinon.createSandbox();
+    clock = sinon.useFakeTimers();
+  });
 
   beforeEach(() => {
     ForecastGridCache.buffer = [];
-    clock = sinon.useFakeTimers();
+    clock.reset();
 
     // Mock the worker interface
     parent = {
-      postMessage: sinon.stub(),
+      postMessage: sandbox.stub(),
     };
 
     gridCache = new ForecastGridCache(parent);
   });
 
-  afterEach(() => {
+  after(() => {
     clock.restore();
-    sinon.restore();
+    sandbox.restore();
   });
 
   it("should push hits into the static buffer", () => {

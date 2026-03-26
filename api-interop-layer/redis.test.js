@@ -2,28 +2,33 @@ import { expect } from "chai";
 import quibble from "quibble";
 import sinon from "sinon";
 
+import { getTTLFromResponse } from "./util/caching.js";
+
 describe("redis utilities", () => {
-  const sandbox = sinon.createSandbox();
-
-  const redisClient = {
-    json: {
-      get: sandbox.stub(),
-      set: sandbox.stub(),
-    },
-    expire: sandbox.stub(),
-  };
-
-  const createClient = sinon.stub().returns({
-    on: sinon.stub().returns({ connect: sinon.stub().resolves(redisClient) }),
-  });
-
-  let redis;
+  let redisClient,
+    createClient,
+    redis,
+    sandbox;
 
   let _API_INTEROP_PRODUCTION;
   let _VCAP_SERVICES;
   let _DISABLE_REDIS;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+
+    redisClient = {
+      json: {
+        get: sandbox.stub(),
+        set: sandbox.stub(),
+      },
+      expire: sandbox.stub(),
+    };
+  
+    createClient = sandbox.stub().returns({
+      on: sandbox.stub().returns({ connect: sandbox.stub().resolves(redisClient) }),
+    });
+  
     _API_INTEROP_PRODUCTION = process.env.API_INTEROP_PRODUCTION;
     _VCAP_SERVICES = process.env.VCAP_SERVICES;
     _DISABLE_REDIS = process.env.DISABLE_REDIS;
@@ -52,14 +57,16 @@ describe("redis utilities", () => {
   });
 
   beforeEach(() => {
-    sandbox.reset();
+    sandbox.resetHistory();
   });
 
-  after(() => {
+  after(async () => {
+    sandbox.restore();
     // Whatever it used to be, put it back.
     process.env.API_INTEROP_PRODUCTION = _API_INTEROP_PRODUCTION;
     process.env.VCAP_SERVICES = _VCAP_SERVICES;
     process.env.DISABLE_REDIS = _DISABLE_REDIS;
+    await quibble.reset();
   });
 
   it("sets up connection details from env", () => {
@@ -73,24 +80,24 @@ describe("redis utilities", () => {
 
   describe("parses TTL from cache headers", () => {
     it("with no headers", () => {
-      const actual = redis.getTTLFromResponse({});
+      const actual = getTTLFromResponse({});
       expect(actual).to.equal(null);
     });
 
     it("with no cache-control header", () => {
-      const actual = redis.getTTLFromResponse({ headers: {} });
+      const actual = getTTLFromResponse({ headers: {} });
       expect(actual).to.equal(null);
     });
 
     it("with no smax-age cache-control header", () => {
-      const actual = redis.getTTLFromResponse({
+      const actual = getTTLFromResponse({
         headers: { "cache-control": "max-age:300" },
       });
       expect(actual).to.equal(null);
     });
 
     it("with cache-control header and s-maxage", () => {
-      const actual = redis.getTTLFromResponse({
+      const actual = getTTLFromResponse({
         headers: { "cache-control": "s-maxage=300" },
       });
       expect(actual).to.equal(300);

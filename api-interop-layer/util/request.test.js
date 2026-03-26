@@ -3,9 +3,12 @@ import sinon from "sinon";
 import { requestJSON } from "./request.js";
 
 describe("request helper", () => {
-  const sandbox = sinon.createSandbox();
+  let dispatcher,
+    sandbox;
 
-  let dispatcher;
+  before(() => {
+    sandbox = sinon.createSandbox();
+  });
 
   beforeEach(() => {
     dispatcher = {
@@ -14,6 +17,11 @@ describe("request helper", () => {
   });
 
   afterEach(() => {
+    sandbox.resetBehavior();
+    sandbox.resetHistory();
+  });
+
+  after(() => {
     sandbox.restore();
   });
 

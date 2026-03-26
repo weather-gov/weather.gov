@@ -15,6 +15,10 @@ describe("AlertsCache tests", () => {
     global.test.database.query.rejects(new Error("Unexpected query"));
   });
 
+  after(() => {
+    global.test.database.query.reset();
+  });
+
   it("#getHashes", async () => {
     const query = `SELECT hash FROM ${alertsCache.tableName}`;
     global.test.database.query.withArgs(sinon.match(query)).resolves({

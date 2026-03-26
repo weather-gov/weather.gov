@@ -1,11 +1,13 @@
 import daily from "./daily.js";
 import gridpoint from "./gridpoint.js";
-import hourly, { sortAndFilterHours } from "./hourly.js";
+import hourly from "./hourly.js";
+import { parseTTLFromHeaders } from "../../util/caching.js";
 import { convertValue, convertProperties } from "../../util/convert.js";
 import connectionPool from "../connectionPool.js";
-import { saveToRedis, getFromRedis, parseTTLFromHeaders } from "../../redis.js";
+import { saveToRedis, getFromRedis } from "../../redis.js";
 import { requestJSONWithHeaders } from "../../util/request.js";
 import { logger } from "../../util/monitoring/index.js";
+import { sortAndFilterHours } from "../../util/time.js";
 import { getMarineDays } from "./marine.js";
 
 // One hour
