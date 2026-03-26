@@ -1,13 +1,20 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+
 import os
 import sys
-from django.conf import settings
 
 
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.config.settings")
+
+    # we need to enable telemetry before django even starts.
+    if os.environ.get("ENABLE_OPENTELEMETRY") == "true" and os.environ.get("RUN_MAIN") == "true":
+        from tracing import enable_opentelemetry
+        enable_opentelemetry()
+
+    from django.conf import settings
 
     if settings.DEBUG:
 
