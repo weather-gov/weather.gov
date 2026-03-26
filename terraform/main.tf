@@ -6,7 +6,6 @@ locals {
   django_secret_key = local.credentials.django_secret_key
   sp_public_key     = local.credentials.sp_public_key
   sp_private_key    = local.credentials.sp_private_key
-  allowed_ips       = local.credentials.allowed_ips
   newrelic_license  = local.credentials.newrelic_license
 }
 
@@ -78,7 +77,6 @@ resource "cloudfoundry_service_instance" "credentials" {
     "django_secret_key" = local.django_secret_key
     "sp_public_key"     = local.sp_public_key
     "sp_private_key"    = local.sp_private_key
-    "allowed_ips"       = local.allowed_ips
   })
   tags       = ["terraform-cloudgov-managed"]
   depends_on = [module.app_space]
