@@ -3,12 +3,14 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: meta/alerts", () => {
-  const sandbox = sinon.createSandbox();
-  const rest = sandbox.stub();
-
-  let alerts;
+  let rest,
+    alerts,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+    rest = sandbox.stub();
+
     await quibble.esm("../../data/alerts/kinds.js", { rest });
 
     alerts = await import("./alerts.js");
@@ -20,6 +22,7 @@ describe("route: meta/alerts", () => {
   });
 
   after(async () => {
+    sandbox.restore();
     await quibble.reset();
   });
 

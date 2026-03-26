@@ -25,6 +25,20 @@ const ensureEnvironmentVariables = () => {
 let session = null;
 let profiling = false;
 
+/** Send a signal for any parts of the code that need to do cleanup, then wait 0.3 seconds. */
+const handleExit = () => {
+  process.emit("SHUTDOWN");
+  setTimeout(() => process.exit(0), 300);
+}
+
+// Gracefully shutdown when user presses Ctrl-c
+process.on("SIGINT", handleExit);
+
+// Gracefully shutdown when system sends termination signal
+process.on("SIGTERM", handleExit);
+
+process.on("exit", handleExit);
+
 // Start profiling with `kill -USR1 <node process id>`
 process.on('SIGUSR1', async () => {
   if (profiling) return;
@@ -56,9 +70,15 @@ process.on('SIGUSR2', async () => {
   });
 });
 
+
 export const main = async () => {
   const port = process.env.PORT || 8082;
   const server = fastify();
+  
+  server.addHook("onClose", (_, done) => {
+    process.emit("SHUTDOWN");
+    setTimeout(() => done(), 300);
+  });
 
   // Check that required environment
   // variables are set

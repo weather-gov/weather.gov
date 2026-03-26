@@ -3,12 +3,14 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: weatherstories", () => {
-  const sandbox = sinon.createSandbox();
-  const getDataForWxStory = sandbox.stub();
-
-  let weatherStories;
+  let getDataForWxStory,
+    weatherStories,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+    getDataForWxStory = sandbox.stub();
+
     await quibble.esm("../data/weatherstory.js", { default: getDataForWxStory });
 
     weatherStories = await import("./weatherstories.js");
@@ -20,6 +22,7 @@ describe("route: weatherstories", () => {
   });
 
   after(async () => {
+    sandbox.restore();
     await quibble.reset();
   });
 

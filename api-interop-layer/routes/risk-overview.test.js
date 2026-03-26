@@ -3,12 +3,14 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: risk overview", () => {
-  const sandbox = sinon.createSandbox();
-  const getRiskOverview = sandbox.stub();
-
-  let riskOverview;
+  let getRiskOverview,
+    riskOverview,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+    getRiskOverview = sandbox.stub();
+
     await quibble.esm("../data/risk-overview/index.js", { getRiskOverview });
 
     riskOverview = await import("./risk-overview.js");
@@ -20,6 +22,7 @@ describe("route: risk overview", () => {
   });
 
   after(async () => {
+    sandbox.restore();
     await quibble.reset();
   });
 

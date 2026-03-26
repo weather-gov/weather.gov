@@ -1,22 +1,6 @@
 import { sentenceCase } from "../../util/case.js";
 import { parseAPIIcon } from "../../util/icon.js";
 
-export const sortAndFilterHours = (hours, earliest) => {
-  // Align the passed in time to the start of its
-  // hour
-  return hours
-    .sort(({ time: a }, { time: b }) => {
-      if (a > b) {
-        return 1;
-      }
-      if (a < b) {
-        return -1;
-      }
-      return 0;
-    })
-    .filter(({ time }) => time >= earliest);
-};
-
 export default (data, hours) => {
   if (data.error) {
     return;

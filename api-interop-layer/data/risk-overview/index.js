@@ -64,15 +64,22 @@ export const startRiskOverviewProcessing = async () => {
       }
     });
 
-    let restartTimer = null;
+    let restartTimer = null,
+      isExiting = false;
+
+    process.on("SHUTDOWN", () => {
+      isExiting = true;
+      clearTimeout(restartTimer);
+      worker.postMessage({ action: "SHUTDOWN" });
+    });
 
     const restart = () => {
+      // Don't restart if we're trying to shutdown.
+      if (isExiting) return;
       // We can get the exit event two or more times for the same background
       // process. Wait a few seconds after the last exit/error event before
       // restarting so we don't end up with multiples of our background worker.
-      if (restartTimer) {
-        clearTimeout(restartTimer);
-      }
+      clearTimeout(restartTimer);
       restartTimer = setTimeout(() => {
         startRiskOverviewProcessing();
       }, 5_000);

@@ -4,7 +4,10 @@ import alertSort from "./sort.js";
 
 describe("alert sorting", () => {
   describe("two alerts are currently active", () => {
-    const onset = dayjs().subtract(1, "hour");
+    let onset;
+    before(() => {
+      onset = dayjs().subtract(1, "hour");
+    });
     it("if the first has higher priority, it is sorted above", () => {
       const expected = -1;
       const actual = alertSort(
@@ -65,7 +68,10 @@ describe("alert sorting", () => {
   });
 
   describe("both alerts onset in the future", () => {
-    const onset = dayjs().add(1, "hour");
+    let onset;
+    before(() => {
+      onset = dayjs().add(1, "hour");
+    });
     describe("the alerts onset at different times", () => {
       it("if the first begins first, it is sorted above", () => {
         const expected = -1;

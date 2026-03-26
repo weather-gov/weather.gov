@@ -23,10 +23,12 @@ const devConfiguration = () =>
     targets: [
       {
         target: "pino-pretty",
-        options: { colorize: true },
+        options: {
+          colorize: true,
+          sync: true
+         },
         level: process.env.LOG_LEVEL || "trace",
         minimumLevel: process.env.LOG_LEVEL || "trace",
-        sync: true,
       },
     ],
   });

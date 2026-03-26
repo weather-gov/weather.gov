@@ -3,12 +3,14 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: products", () => {
-  const sandbox = sinon.createSandbox();
-  const getProductById = sandbox.stub();
-
-  let products;
+  let getProductById,
+    products,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+    getProductById = sandbox.stub();
+  
     await quibble.esm("../data/index.js", { getProductById });
 
     products = await import("./products.js");
@@ -20,6 +22,7 @@ describe("route: products", () => {
   });
 
   after(async () => {
+    sandbox.restore();
     await quibble.reset();
   });
 

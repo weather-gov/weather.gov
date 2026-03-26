@@ -3,37 +3,41 @@ import { expect } from "chai";
 import dayjs from "../../util/day.js";
 import quibble from "quibble";
 import { assignHoursToDays } from "./index.js";
-import { parseTTLFromHeaders } from "../../redis.js";
 
 const place = {
   timezone: "America/Los_Angeles",
 };
 
 describe("Forecast index", () => {
-  const sandbox = sinon.createSandbox();
+  let saveToRedis,
+    getFromRedis,
+    connectionPool,
+    basicResponse,
+    forecast,
+    sandbox;
 
-  const saveToRedis = sandbox.stub();
-  const getFromRedis = sandbox.stub();
-
-  const connectionPool = {
-    request: sandbox.stub(),
-  };
-
-  const basicResponse = {
-    statusCode: 200,
-    headers: { "content-type": "application/json" },
-    body: {
-      text: sandbox.stub(),
-      dump: sandbox.stub().resolves(),
-    },
-  };
-
-  let forecast;
   before(async () => {
+    sandbox = sinon.createSandbox();
+    saveToRedis = sandbox.stub();
+    getFromRedis = sandbox.stub();
+    
+    connectionPool = {
+      request: sandbox.stub(),
+    };
+    
+    basicResponse = {
+      statusCode: 200,
+      headers: { "content-type": "application/json" },
+      body: {
+        text: sandbox.stub(),
+        dump: sandbox.stub().resolves(),
+      },
+    };
+    
     await quibble.esm("../connectionPool.js", {}, connectionPool);
     await quibble.esm(
       "../../redis.js",
-      { saveToRedis, getFromRedis, parseTTLFromHeaders },
+      { saveToRedis, getFromRedis },
       {},
     );
 
@@ -372,19 +376,19 @@ describe("Forecast index", () => {
     });
 
     describe("with valid data", () => {
-      let clock;
-      const marineResponse = {
-        statusCode: 200,
-        headers: { "content-type": "application/json" },
-        body: {
-          text: sandbox.stub(),
-          dump: sandbox.stub().resolves(),
-        },
-      };
-
-      let gridpoint;
+      let clock,
+       marineResponse,
+       gridpoint;
 
       before(() => {
+        marineResponse = {
+          statusCode: 200,
+          headers: { "content-type": "application/json" },
+          body: {
+            text: sandbox.stub(),
+            dump: sandbox.stub().resolves(),
+          },
+        };
         clock = sinon.useFakeTimers({ now: 0 });
       });
 

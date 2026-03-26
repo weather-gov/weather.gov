@@ -2,35 +2,41 @@ import sinon from "sinon";
 import { expect } from "chai";
 import quibble from "quibble";
 
-describe("Point forecast route  403 to 429 tests", () => {
-  const sandbox = sinon.createSandbox();
-
-  class MockPool {
-    constructor(...args){
-      this.args = args;
-    }
+class MockPool {
+  constructor(...args){
+    this.args = args;
   }
-  MockPool.prototype.request = sandbox.stub();
+}
 
-  const openDatabase = sinon.stub();
-  const db = {
-    query: sandbox.stub()
-  };
-  openDatabase.resolves(db);
+describe("Point forecast route  403 to 429 tests", () => {
+  let openDatabase,
+    db,
+    apiResponse,
+    handler,
+    worker,
+    sandbox;
 
-  const apiResponse = {
-    statusCode: 200,
-    body: {
-      text: sinon.stub().resolves("hi"),
-      dump: sinon.stub().resolves(
-        sinon.stub().resolves()
-      )
-    }
-  };
-
-  let handler;
-  let worker;
   before(async() => {
+    sandbox = sinon.createSandbox();
+
+    MockPool.prototype.request = sandbox.stub();
+
+    openDatabase = sinon.stub();
+    db = {
+      query: sandbox.stub()
+    };
+    openDatabase.resolves(db);
+
+    apiResponse = {
+      statusCode: 200,
+      body: {
+        text: sinon.stub().resolves("hi"),
+        dump: sinon.stub().resolves(
+          sinon.stub().resolves()
+        )
+      }
+    };
+
     await quibble.esm("../data/db.js", {}, openDatabase);
     await quibble.esm("undici", { Pool: MockPool }, {});
     const module = await import("./point.js");

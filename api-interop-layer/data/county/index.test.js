@@ -4,17 +4,23 @@ import quibble from "quibble";
 import dayjs from "../../util/day.js";
 
 describe("county data index", () => {
-  const sandbox = sinon.createSandbox();
+  let openDatabase,
+    db,
+    getAlertsForCountyFIPS,
+    getRiskOverview,
+    getCountyData,
+    sandbox;
 
-  const openDatabase = sinon.stub();
-  const db = { query: sandbox.stub() };
-  openDatabase.resolves(db);
-
-  const getAlertsForCountyFIPS = sandbox.stub();
-  const getRiskOverview = sandbox.stub();
-
-  let getCountyData;
   before(async () => {
+    sandbox = sinon.createSandbox();
+
+    openDatabase = sandbox.stub();
+    db = { query: sandbox.stub() };
+    openDatabase.resolves(db);
+
+    getAlertsForCountyFIPS = sandbox.stub();
+    getRiskOverview = sandbox.stub();
+
     await quibble.esm("../db.js", {}, openDatabase);
     await quibble.esm("../alerts/index.js", { getAlertsForCountyFIPS }, {});
     await quibble.esm("../risk-overview/index.js", { getRiskOverview }, {});
@@ -24,11 +30,11 @@ describe("county data index", () => {
   });
 
   beforeEach(() => {
-    sandbox.resetBehavior();
     sandbox.resetHistory();
   });
 
   after(async () => {
+    sandbox.restore();
     await quibble.reset();
   });
 

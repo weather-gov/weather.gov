@@ -1,55 +1,63 @@
 import { expect } from "chai";
 import sinon from "sinon";
 import quibble from "quibble";
-import { parseTTLFromHeaders } from "../../redis.js";
 import { DEFAULT_STATIONS_CACHE_TTL } from "./index.js";
 
 describe("Observation fetch caching tests", () => {
-  const sandbox = sinon.createSandbox();
-
-  const getFromRedis = sandbox.stub();
-  const saveToRedis = sandbox.stub();
-
-  const connectionPool = {
-    request: sandbox.stub(),
-  };
-
-  const stationsResponse = {
-    statusCode: 200,
-    headers: {
-      "cache-control": "s-maxage=32",
-      "content-type": "application/json",
-    },
-    body: {
-      text: sandbox.stub(),
-      dump: sandbox.stub().resolves(),
-    },
-  };
-
-  const singleStationResponse = {
-    statusCode: 200,
-    headers: {
-      "cache-control": "s-maxage=32",
-      "content-type": "application/json",
-    },
-    body: {
-      text: sandbox.stub(),
-      dump: sandbox.stub().resolves(),
-    },
-  };
-
-  let getObservations;
+  let getFromRedis,
+    saveToRedis,
+    connectionPool,
+    stationsResponse,
+    singleStationResponse,
+    getObservations,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+    getFromRedis = sandbox.stub();
+    saveToRedis = sandbox.stub();
+  
+    connectionPool = {
+      request: sandbox.stub(),
+    };
+  
+    stationsResponse = {
+      statusCode: 200,
+      headers: {
+        "cache-control": "s-maxage=32",
+        "content-type": "application/json",
+      },
+      body: {
+        text: sandbox.stub(),
+        dump: sandbox.stub().resolves(),
+      },
+    };
+  
+    singleStationResponse = {
+      statusCode: 200,
+      headers: {
+        "cache-control": "s-maxage=32",
+        "content-type": "application/json",
+      },
+      body: {
+        text: sandbox.stub(),
+        dump: sandbox.stub().resolves(),
+      },
+    };
     await quibble.esm("../connectionPool.js", {}, connectionPool);
     await quibble.esm(
       "../../redis.js",
-      { saveToRedis, getFromRedis, parseTTLFromHeaders },
+      { saveToRedis, getFromRedis },
       {},
     );
 
     const module = await import("./index.js");
     getObservations = module.default;
+  });
+
+  after(async () => {
+    sandbox.restore();
+    await quibble.reset();
   });
 
   beforeEach(() => {
@@ -321,10 +329,5 @@ describe("Observation fetch caching tests", () => {
         ),
       ).to.equal(false);
     });
-  });
-
-  after(async () => {
-    sandbox.restore();
-    await quibble.reset();
   });
 });

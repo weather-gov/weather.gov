@@ -1,36 +1,40 @@
 import { expect } from "chai";
-import { createSandbox } from "sinon";
+import sinon from "sinon";
 import quibble from "quibble";
-import { parseTTLFromHeaders } from "../redis.js";
 
 describe("briefing module", () => {
-  const sandbox = createSandbox();
-  const response = {
-    statusCode: 200,
-    headers: {
-      "cache-control": "s-maxage=42",
-      "content-type": "application/json",
-    },
-    body: {
-      text: sandbox.stub(),
-      dump: sandbox.stub(),
-    },
-  };
-
-  const connectionPool = {
-    request: sandbox.stub(),
-  };
-
-  const getFromRedis = sandbox.stub();
-  const saveToRedis = sandbox.stub();
-
-  let getDataForBriefing;
+  let response,
+    getFromRedis,
+    saveToRedis,
+    connectionPool,
+    getDataForBriefing,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+    response = {
+      statusCode: 200,
+      headers: {
+        "cache-control": "s-maxage=42",
+        "content-type": "application/json",
+      },
+      body: {
+        text: sandbox.stub(),
+        dump: sandbox.stub(),
+      },
+    };
+
+    getFromRedis = sandbox.stub();
+    saveToRedis = sandbox.stub();
+  
+    connectionPool = {
+      request: sandbox.stub(),
+    };
+  
     await quibble.esm("./connectionPool.js", {}, connectionPool);
     await quibble.esm(
       "../redis.js",
-      { getFromRedis, saveToRedis, parseTTLFromHeaders },
+      { getFromRedis, saveToRedis },
       {},
     );
 

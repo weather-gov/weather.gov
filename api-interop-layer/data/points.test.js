@@ -3,37 +3,44 @@ import quibble from "quibble";
 import sinon from "sinon";
 
 describe("point method", () => {
-  const sandbox = sinon.createSandbox();
+  let openDatabase,
+    db,
+    connectionPool,
+    response,
+    errorResponse,
+    points,
+    sandbox;
 
-  const openDatabase = sinon.stub();
-  const db = { query: sandbox.stub() };
-  openDatabase.resolves(db);
-
-  // Mock undici Pool instance
-  const connectionPool = {
-    request: sandbox.stub(),
-  };
-
-  const response = {
-    statusCode: 200,
-    headers: { "content-type": "application/json" },
-    body: {
-      text: sandbox.stub(),
-      dump: sandbox.stub(),
-    },
-  };
-
-  const errorResponse = {
-    statusCode: 400,
-    headers: { "content-type": "application/json" },
-    body: {
-      text: sandbox.stub().resolves(JSON.stringify({ error: "bad request" })),
-      dump: sandbox.stub(),
-    },
-  };
-
-  let points;
   before(async () => {
+    sandbox = sinon.createSandbox();
+
+    openDatabase = sandbox.stub();
+    db = { query: sandbox.stub() };
+    openDatabase.resolves(db);
+
+    // Mock undici Pool instance
+    connectionPool = {
+      request: sandbox.stub(),
+    };
+
+    response = {
+      statusCode: 200,
+      headers: { "content-type": "application/json" },
+      body: {
+        text: sandbox.stub(),
+        dump: sandbox.stub(),
+      },
+    };
+
+    errorResponse = {
+      statusCode: 400,
+      headers: { "content-type": "application/json" },
+      body: {
+        text: sandbox.stub().resolves(JSON.stringify({ error: "bad request" })),
+        dump: sandbox.stub(),
+      },
+    };
+
     await quibble.esm("./db.js", {}, openDatabase);
     await quibble.esm("./connectionPool.js", {}, connectionPool);
 
@@ -42,7 +49,6 @@ describe("point method", () => {
   });
 
   beforeEach(() => {
-    sandbox.resetBehavior();
     sandbox.resetHistory();
     connectionPool.request.resolves(response);
     response.body.dump.resolves();

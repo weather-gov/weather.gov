@@ -243,8 +243,10 @@ export const updateRiskOverviews = async () => {
   }
 };
 
+let timer;
+
 const setTimer = () => {
-  setTimeout(async () => {
+  timer = setTimeout(async () => {
     await updateRiskOverviews();
     setTimer();
     // Run every 30 minutes and one second. This is to create some buffer around
@@ -268,7 +270,10 @@ if (parentPort) {
       case "start":
         start();
         break;
-
+      case "shutdown":
+        clearTimeout(timer);
+        process.exit();
+        break;
       default:
         break;
     }

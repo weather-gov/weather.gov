@@ -6,7 +6,7 @@ const { Pool, Client } = pg;
 
 const sandbox = sinon.createSandbox();
 
-export async function mochaGlobalSetup() {
+export function mochaGlobalSetup() {
   sandbox.stub(global, "fetch");
   sandbox.stub(undici, "request");
 
@@ -20,25 +20,24 @@ export async function mochaGlobalSetup() {
     },
   };
 
-  sinon.stub(Pool.prototype, "connect");
-  sinon.stub(Client.prototype, "connect");
+  sandbox.stub(Pool.prototype, "connect");
+  sandbox.stub(Client.prototype, "connect");
   Pool.prototype.connect.resolves(global.test.database);
   Client.prototype.connect.resolves(global.test.database);
 }
 
-export async function mochaGlobalTeardown() {
+export function mochaGlobalTeardown() {
   sandbox.restore();
-  global.fetch.restore();
-  Pool.prototype.connect.restore();
-  Client.prototype.connect.restore();
 }
 
 export const mochaHooks = {
-  beforeEach() {
+   beforeEach() {
     sandbox.resetHistory();
-    sandbox.resetBehavior();
 
     undici.request.rejects(new Error("undici.request is not mocked"));
     global.fetch.rejects(new Error("fetch is not mocked"));
   },
+  afterEach() {
+    process.emit("SHUTDOWN");
+  }
 };

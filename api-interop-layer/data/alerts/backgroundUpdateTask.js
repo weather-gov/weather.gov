@@ -247,8 +247,10 @@ export const updateAlerts = async ({ parent = parentPort } = {}) => {
   }
 };
 
+let timer;
+
 const setTimer = () => {
-  setTimeout(async () => {
+  timer = setTimeout(async () => {
     await updateAlerts();
     setTimer();
   }, 30_000)
@@ -268,6 +270,10 @@ if (parentPort) {
     switch (action.toLowerCase()) {
       case "start":
         start();
+        break;
+      case "shutdown":
+        clearTimeout(timer);
+        process.exit();
         break;
       default:
         break;

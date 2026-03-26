@@ -3,12 +3,13 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: county data", () => {
-  const sandbox = sinon.createSandbox();
-  const getCountyData = sandbox.stub();
-
-  let county;
+  let getCountyData,
+    county,
+    sandbox;
 
   before(async () => {
+    sandbox = sinon.createSandbox();
+    getCountyData = sandbox.stub();
     await quibble.esm("../data/county/index.js", { getCountyData });
 
     county = await import("./county.js");
@@ -20,6 +21,7 @@ describe("route: county data", () => {
   });
 
   after(async () => {
+    sandbox.restore();
     await quibble.reset();
   });
 

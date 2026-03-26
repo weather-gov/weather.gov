@@ -132,6 +132,9 @@ if (parentPort) {
         break;
       case "start":
         break;
+      case "shutdown":
+        process.exit();
+        break;
     }
   });
 }
