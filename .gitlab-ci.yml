@@ -138,7 +138,6 @@ deploy-to-prod:
     - >
       echo {
       \"django_secret_key\": \"$CI_PROD_DJANGO_SECRET_KEY\",
-      \"allowed_ips\": \"$CI_PROD_ALLOWED_IPS\",
       \"newrelic_license\": \"$CI_NEW_RELIC_LICENSE\",
       \"sp_private_key\": \"$CI_PROD_SP_PRIVATE_KEY\",
       \"sp_public_key\": \"$CI_PROD_SP_PUBLIC_KEY\"
@@ -177,7 +176,6 @@ deploy-to-staging:
     - >
       echo {
       \"django_secret_key\": \"$CI_STAGING_DJANGO_SECRET_KEY\",
-      \"allowed_ips\": \"$CI_STAGING_ALLOWED_IPS\",
       \"newrelic_license\": \"$CI_NEW_RELIC_LICENSE\",
       \"sp_private_key\": \"$CI_STAGING_SP_PRIVATE_KEY\",
       \"sp_public_key\": \"$CI_STAGING_SP_PUBLIC_KEY\"
@@ -216,7 +214,6 @@ deploy-to-test:
     - >
       echo {
       \"django_secret_key\": \"$CI_TEST_DJANGO_SECRET_KEY\",
-      \"allowed_ips\": \"$CI_TEST_ALLOWED_IPS\",
       \"newrelic_license\": \"$CI_NEW_RELIC_LICENSE\",
       \"sp_private_key\": \"$CI_TEST_SP_PRIVATE_KEY\",
       \"sp_public_key\": \"$CI_TEST_SP_PUBLIC_KEY\"

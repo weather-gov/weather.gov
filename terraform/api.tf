@@ -39,8 +39,7 @@ resource "cloudfoundry_app" "interop" {
     API_KEY                = var.api_key
     OPTIMIZE_MEMORY        = true
     DISABLE_GRID_ANALYSIS  = true
-    DISABLE_REDIS          = var.cf_space_name == "test"
-    DISABLE_SATELLITE      = var.cf_space_name == "test"
+    DISABLE_REDIS          = var.cf_space_name == "test" || var.cf_space_name == "loadtest"
     PROXY_STANDALONE       = var.cf_space_name == "test"
   }
 

@@ -102,7 +102,6 @@ ensure_environment_variables_are_present(
         "django_secret_key",
         "sp_public_key",
         "sp_private_key",
-        "allowed_ips",
     ],
 )
 
