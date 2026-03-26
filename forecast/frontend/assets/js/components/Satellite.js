@@ -105,9 +105,10 @@ class SatelliteVideo extends HTMLElement {
       this.video.poster = data.latest;
       this.video.src = data.mp4;
 
-      // Fallback for browsers that don't support MP4
-      const imgFallback = this.video.querySelector("img");
-      if (imgFallback) imgFallback.src = data.gif;
+      this.video.innerHTML = `
+           <source src="${data.mp4}" type="video/mp4">
+           <img src=${data.gif}>
+      `;
 
       this.video.addEventListener("play", this.handlePlay);
       this.video.addEventListener("pause", this.handlePause);
@@ -133,11 +134,22 @@ class SatelliteVideo extends HTMLElement {
   }
 
   handlePlay() {
+    // When the video starts playing, we want to capture that state ourselves.
+    // We cannot rely on the video's internal state for our needs.
     this.#state.playing = true;
     this.#state.inLoopPause = false;
   }
 
   handlePause() {
+    // If the video dispatched the ended event prior to dispatching the paused
+    // event, we want to eat the pause event because it was caused by reaching
+    // the end of the video, not a direct user action.
+    //
+    // However, the pause event usually comes before the ended event. So to
+    // handle that, if we have not yet flagged that the pause should be
+    // discarded, we wait a brief moment before changing our internal state.
+    // That way, when the ended event handler runs, it can flag the pause 
+    // to be discarded.
     if (!this.#state.discardPause) {
       setTimeout(() => {
         if (!this.#state.discardPause) {
@@ -147,9 +159,9 @@ class SatelliteVideo extends HTMLElement {
     }
   }
 
-  // When we reach the end of the video, flag that the associated pause
-  // should be discarded and that we are in the loop-pause.
   handleEnded() {
+    // When we reach the end of the video, flag that the associated pause
+    // should be discarded and that we are in the loop-pause.
     this.#state.discardPause = true;
     this.#state.inLoopPause = true;
 
