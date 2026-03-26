@@ -6,7 +6,7 @@ After you have cloned the repository, you can run `just zap` to set up the conta
 
 ## Documentation
 
-There are many helpful guides under [docs/](./docs/) for [product owners](./docs/product/), [developers](./docs/dev/), designers, [researchers](./docs/research.md), and others, as well as [architechtural decision records](./docs/architecture/decisions/) to help explain how things got the way they are.
+There are many helpful guides under [docs/](./docs/) for [product owners](./docs/product/), [developers](./docs/dev/), designers, [researchers](./docs/research.md), and others, as well as [architectural decision records](./docs/architecture/decisions/) to help explain how things got the way they are.
 
 ## AI Policy
 
@@ -42,7 +42,7 @@ This overview will likely become outdated, but it may help to orient you to the 
 │   │   └── Templates to make sure things aren't forgotten during code review
 │   ├── dev
 │   │   ├── interop
-│   │   │   └── ????
+│   │   │   └── JSON schema (incomplete)
 │   │   └── The ins-and-outs of engineering the site
 │   ├── environments.md
 │   ├── how-we-work.md
