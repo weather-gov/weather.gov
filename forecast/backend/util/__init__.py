@@ -1,6 +1,7 @@
 import logging
 import re
 from collections import defaultdict
+from datetime import datetime
 from typing import Tuple
 
 from django.shortcuts import get_object_or_404
@@ -226,6 +227,17 @@ def mark_safer(value, transformer=None, **kwargs):
     return mark_safe(cleaned)  # noqa: S308
 
 
+def timestamps_to_datetime_in_dict(dictionary, keys, timezoneinfo):
+    """
+    Modify a dict containing string ISO timestamps to be datetime objects.
+
+    For a dictionary and a list of keys that map to ISO timestamps in that
+    dictionary, and an object representing timezone information, modify
+    the values at each of the keys to be parsed and zoned datetime objects
+    """
+    for key in keys:
+        dictionary[key] = datetime.fromisoformat(dictionary[key]).astimezone(tz=timezoneinfo)
+
 def get_states_combo_box_list():
     """Get a list of dictionaries of WeatherState 'text' and 'value' keys for use in wx-combo-box."""
     result = []
@@ -406,4 +418,133 @@ def process_county_alerts(alert_items: list) -> list:
             alert["display_title"] = format_string % {"event": event_type, "day": day_translated}
 
     return sorted_items
+
+
+def format_briefing_timestamps(briefing, wfo_instance, time_zone_info):
+    """Format briefing data and timestamps."""
+    if briefing and "error" in briefing:
+        briefing["wfo_url"] = wfo_instance.url
+        briefing["wfo_name"] = wfo_instance.name
+        return briefing
+    if briefing and "briefing" in briefing:
+        briefing_inner = briefing["briefing"]
+        timestamps_to_datetime_in_dict(
+            briefing_inner,
+            ["startTime", "endTime", "updateTime"],
+            time_zone_info
+        )
+        briefing_inner["wfo_url"] = wfo_instance.url
+        briefing_inner["wfi_name"] = wfo_instance.name
+
+        # If the briefing was updated prior to its start time, we don't
+        # care about that update. However, if it was updated after the
+        # briefing went live, then we absolutely do care.
+        briefing_inner["updateTime"] = max(briefing_inner["updateTime"], briefing_inner["startTime"])
+        return briefing_inner
+    return briefing
+
+
+def get_briefings_from_county_data(county_data, wfo_instances, time_zone_info):
+    """Pull out and format briefings from county data as returned from the interop."""
+    # First, make a lookup dictionary of WFOs to briefing information.
+    # Each briefing should have an officeId key.
+    lookup = {}
+    for item in county_data["briefings"]:
+        if "officeId" in item:
+            lookup[item["officeId"]] = item
+
+    # Now using the passed-in WFO instances, perform briefing lookups
+    # on the dictionary and format any valid responses.
+    result = []
+    for wfo in wfo_instances:
+        briefing_data = lookup.get(wfo.code.upper(), None)
+        if briefing_data:
+            result.append(
+                format_briefing_timestamps(briefing_data, wfo, time_zone_info)
+            )
+    return result
+
+def get_weather_stories_from_county_data(county_data, wfo_instances, time_zone_info):
+    """Format weather stories from the county interop data."""
+    valid = []
+    errors = []
+    empties = []
+
+    # First we need to make a small dict that maps the incoming wfo codes
+    # (officeIds) to the underlying weather story data.
+    lookup = {}
+    for story in county_data["weatherstories"]:
+        lookup[story["officeId"]] = story
+
+    # Now iterate through our list of relevant wfo model instances
+    # using the lookup dict to get any possible weather story data
+    for wfo in wfo_instances:
+        story_data = lookup.get(wfo.code.upper(), None)
+        if story_data and "error" not in story_data:
+           story_data["wfo_url"] = wfo.url
+           story_data["wfo_name"] = wfo.name
+           timestamps_to_datetime_in_dict(
+               story_data,
+               ["startTime", "updateTime", "endTime"],
+               time_zone_info
+           )
+           valid.append(story_data)
+        elif story_data:
+            # In this case, there is an error on the response dict.
+            # We pass this to the template as-is to handle
+            # the error case
+            story_data["wfo_url"] = wfo.url
+            story_data["wfo_name"] = wfo.name
+            errors.append(story_data)
+        else:
+            # In this case, there is no weather story data
+            # for the given WFO present, meaning there are
+            # no current weather stories there.
+            # We still return a dict, but only with an officeId,
+            # so that we can render the AFD links as needed
+            # in the templates
+            empties.append({
+                "officeId": wfo.code.upper(),
+                "wfo_url": wfo.url,
+                "wfo_name": wfo.name,
+                "is_empty": True
+            })
+
+    valid = sorted(valid, key=lambda story: story["startTime"], reverse=True)
+    return valid + empties + errors
+
+
+def get_weather_story_from_point_data(point_data, wfo_instance, time_zone_info):
+    """Format and return weather story data from point interop response data."""
+    story_data = point_data.get("weatherstory", [])
+    story = None
+    if len(story_data):
+        # For now, we only care about the first weather story
+        # present in the data.
+        story = story_data[0]
+
+    if story and "error" not in story:
+        story["wfo_name"] = wfo_instance.name
+        story["wfo_url"] = wfo_instance.url
+        timestamps_to_datetime_in_dict(
+            story,
+            ["startTime", "updateTime", "endTime"],
+            time_zone_info
+        )
+    elif story and "error" in story:
+        story["wfo_name"] = wfo_instance.name
+        story["wfo_url"] = wfo_instance.url
+    else:
+        # Then the weather story is empty. We should
+        # still provide WFO information in the form of
+        # a dict specifying emptiness, so the template
+        # can render appropriately
+        story = {
+            "is_empty": True,
+            "officeId": wfo_instance.code,
+            "wfo_name": wfo_instance.name,
+            "wfo_url": wfo_instance.url
+        }
+
+    return story
 

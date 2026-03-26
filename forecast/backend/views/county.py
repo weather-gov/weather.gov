@@ -14,13 +14,14 @@ from backend import interop
 from backend.models import WFO
 from backend.util import (
     get_basis_for_ghwo_risk,
+    get_briefings_from_county_data,
     get_counties_combo_box_list,
     get_ghwo_daily_images,
     get_states_combo_box_list,
+    get_weather_stories_from_county_data,
     process_county_alerts,
 )
 from backend.util.county import risk_overview_timestamps_to_dates
-from backend.util.nwsconnect import get_county_briefings, get_county_weather_stories
 from spatial.models import WeatherCounties, WeatherStates
 
 logger = logging.getLogger(__name__)
@@ -113,21 +114,19 @@ def county_overview(request, countyfips):  # noqa: C901
     # Fixup risk overview timestamps to local
     risk_overview_timestamps_to_dates(county_data.get("riskOverview", False), localtz)
 
-    cwas = county.cwas.defer("shape").all()
-
     # Get a list of WFO codes that are associated
     # with the county. This seems to manifest in the data
     # as multiple CWAS, each corresponding to a different WFO
     # (in cases where the county has multiple WFOs)
-    wfo_codes = [cwa.wfo for cwa in cwas]
+    wfo_codes = [wfo for wfo in county_data["county"]["wfos"]]
     relevant_wfos = WFO.objects.filter(code__in=wfo_codes)
-    briefings = get_county_briefings(relevant_wfos, localtz)
+    briefings = get_briefings_from_county_data(county_data, relevant_wfos, localtz)
 
-    # For now, we are making a separate request to
-    # the interop for the weather story data. Ideally this would be
-    # handled by the interop itself in the county endpoint.
-    # We use a utility method to do some gentle processing.
-    weather_stories = get_county_weather_stories(relevant_wfos, localtz)
+    # Weather story data is pulled from the interop county endpoint
+    # response. We only need to pass the WFO model instances and the
+    # timezone information to get the formatted list ready for the template.
+    # weather_stories = get_county_weather_stories(relevant_wfos, localtz)
+    weather_stories = get_weather_stories_from_county_data(county_data, relevant_wfos, localtz)
 
     # Assume primary WFO is the first one.
     wfo = relevant_wfos[0] if relevant_wfos else None
