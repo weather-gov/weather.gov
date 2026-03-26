@@ -6,6 +6,6 @@ module.exports = {
     args: "--update-env",
     interpreter_args: "--experimental-loader newrelic/esm-loader.mjs -r newrelic",
     watch: ["**/*.js"],
-    node_args: "--inspect=0.0.0.0:9229 --expose-gc"
+    node_args: "--import ./tracing.js --inspect=0.0.0.0:9229 --expose-gc"
   }]
 }

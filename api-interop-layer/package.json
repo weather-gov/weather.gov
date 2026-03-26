@@ -12,6 +12,10 @@
   "author": "",
   "license": "CC0-1.0",
   "dependencies": {
+    "@opentelemetry/auto-instrumentations-node": "^0.71.0",
+    "@opentelemetry/exporter-metrics-otlp-http": "^0.213.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.213.0",
+    "@opentelemetry/sdk-node": "^0.213.0",
     "convert": "^7.0.0",
     "dayjs": "^1.11.12",
     "fastify": "^5.7.0",

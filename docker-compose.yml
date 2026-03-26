@@ -37,6 +37,11 @@ services:
       GHWO_URL: "http://api-proxy:8081/"
       DEBUG_PORT: 34235
       DJANGO_SETTINGS_MODULE: backend.config.settings.dev
+      ENABLE_OPENTELEMETRY: true
+      TRACE_TEMPLATES: true # this can be noisy
+      OTEL_SERVICE_NAME: "weathergov-django"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318"
+      OTEL_PYTHON_DJANGO_TRACED_REQUEST_ATTRS: "path_info,content_type"
     networks:
       - weather.gov
     depends_on:
@@ -109,12 +114,14 @@ services:
       # The timeout after which a request will time out, in milliseconds.
       # Monitors time between receiving body data.
       # Use 0 to disable it entirely. Defaults to 300 seconds.
-      # Please note the timeout will be reset if you keep writing data to the socket everytime. 
+      # Please note the timeout will be reset if you keep writing data to the socket everytime.
       # INTEROP_API_POOL_BODY_TIMEOUT:
       # The amount of time, in milliseconds, the parser will wait to
       # receive the complete HTTP headers while not sending the request.
       # Defaults to 300 seconds.
       # INTEROP_API_POOL_HEADERS_TIMEOUT:
+      OTEL_SERVICE_NAME: "weathergov-api-interop"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318"
     networks:
       - weather.gov
     links:
@@ -199,6 +206,14 @@ services:
     command: redis-server --save 20 1 --loglevel verbose --requirepass ixu3N02Xp3uRPDcuZCmKIWZyNb
     volumes:
       - ./redis-data:/redis-data
+    networks:
+      - weather.gov
+
+  jaeger:
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.16.0
+    ports:
+      - 16686:16686 # UI
+      - 4318:4318 # opentelemetry HTTP receiver
     networks:
       - weather.gov
 
