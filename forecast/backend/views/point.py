@@ -1,4 +1,3 @@
-from datetime import datetime
 from http import HTTPStatus
 from zoneinfo import ZoneInfo
 
@@ -9,7 +8,7 @@ from django.views.decorators.cache import cache_control
 
 from backend import interop
 from backend.models import WFO
-from backend.util import get_wfo_from_afd
+from backend.util import get_weather_story_from_point_data, get_wfo_from_afd
 from spatial.models import WeatherPlace
 
 from ._helpers import get_redirect_for_afd_queries
@@ -79,25 +78,14 @@ def point_location(request, lat, lon):  # noqa: C901
         wfo = WFO.objects.get(code=WFO.normalize_code(code))
         point["wfo"] = wfo
 
-        # Fetch the weather story from the interop.
-        # Note that we are making an extra interop request here,
-        # but we could also bundle the weather story fetching as
-        # part of the normal point forecast request.
-        weather_story = interop.get_weather_stories(wfo.code.upper())
-        if weather_story and "error" not in weather_story:
-            weather_story["wfo_name"] = wfo.name
-            weather_story["wfo_url"] = wfo.url
-            weather_story["startTime"] = datetime.fromisoformat(weather_story["startTime"]).astimezone(localtz)
-            weather_story["updateTime"] = datetime.fromisoformat(weather_story["updateTime"]).astimezone(localtz)
-            weather_story["endTime"] = datetime.fromisoformat(weather_story["endTime"]).astimezone(localtz)
-        elif weather_story and "error" in weather_story:
-            weather_story["wfo_name"] = wfo.name
-            weather_story["wfo_url"] = wfo.url
-        else:
-            # Then the weather story is empty. We should
-            # still provide WFO information in the form of a
-            # dict specifying emptiness
-            weather_story = {"is_empty": True, "officeId": wfo.code, "wfo_name": wfo.name, "wfo_url": wfo.url}
+        # Pull the weather story data out of the point interop response
+        # and format the timestamps / handle errors as needed.
+        weather_story = get_weather_story_from_point_data(point, wfo, localtz)
+
+        # Remove the reference to the raw weatherstory data from
+        # the point dictionary. We will pull this out a level in the render
+        # call below, into its own top level key/variable
+        del point["weatherstory"]
 
     if "update" in request.GET:
         return render(

@@ -90,13 +90,7 @@ class TestViews(TestCase):
             "order": 1,
             "image": "/public/images/wfos/LWX.png",
         }
-        self.patcher = mock.patch("backend.interop.get_weather_stories")
-        self.mock_get_weather_stories = self.patcher.start()
-        self.mock_get_weather_stories.return_value = self.weather_story
 
-    def tearDown(self):
-        """Reset test assumptions."""
-        self.patcher.stop()
 
     def test_index(self):
         """Test the index view."""
@@ -110,6 +104,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
+            "weatherstory": [self.weather_story]
         }
 
         response = self.client.get("/point/11.1/22.2", follow=True)
@@ -136,6 +131,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
+            "weatherstory": [self.weather_story]
         }
 
         response = self.client.get("/point/11.1/22.2?update", follow=True)
@@ -147,22 +143,20 @@ class TestViews(TestCase):
             {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
         )
 
-    @mock.patch("backend.views.point.interop.get_weather_stories")
     @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_point_location_no_weather_story(self, mock_get_point_forecast, mock_get_weather_stories):
+    def test_point_location_no_weather_story(self, mock_get_point_forecast):
         """Test the point location view where there's no weather story available."""
         mock_get_point_forecast.return_value = {
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
+            "weatherstory": []
         }
-        mock_get_weather_stories.return_value = None
 
         response = self.client.get("/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
 
-        mock_get_weather_stories.assert_called_once_with(self.wfo.code.upper())
         self.assertEqual(
             response.context["point"],
             {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
@@ -171,9 +165,8 @@ class TestViews(TestCase):
         self.assertEqual(response.context["weather_story"], expected)
         self.assertTemplateUsed("weather/partials/point-weather-storys.html")
 
-    @mock.patch("backend.views.point.interop.get_weather_stories")
     @mock.patch("backend.views.point.interop.get_point_forecast")
-    def test_point_location_ok_weather_story(self, mock_get_point_forecast, mock_get_weather_stories):
+    def test_point_location_ok_weather_story(self, mock_get_point_forecast):
         """Test the point location renders with OK weather story."""
         weather_story = {
             "id": "7ccab810-706b-401c-8757-71f656e56270",
@@ -192,14 +185,13 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
+            "weatherstory": [weather_story]
         }
-        mock_get_weather_stories.return_value = weather_story
 
         response = self.client.get("/point/11.1/22.2", follow=True)
 
         mock_get_point_forecast.assert_called_once_with(11.1, 22.2)
 
-        mock_get_weather_stories.assert_called_once_with(self.wfo.code.upper())
         self.assertEqual(
             response.context["point"],
             {"grid": {"wfo": "TST"}, "wfo": self.wfo, "isMarine": False, "place": {"timezone": "America/New_York"}},
@@ -351,6 +343,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
+            "weatherstory": []
         }
         response = self.client.get("/place/nj/Hoboken/")
         self.assertRedirects(response, "/place/NJ/Hoboken/")
@@ -362,6 +355,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
+            "weatherstory": []
         }
         response = self.client.get("/place/NY/New York/")
         self.assertRedirects(response, "/place/NY/New_York/")
@@ -373,6 +367,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
+            "weatherstory": [self.weather_story],
         }
         response = self.client.get("/place/NJ/Hoboken/")
         self.assertTemplateUsed(response, "weather/point/overview.html")

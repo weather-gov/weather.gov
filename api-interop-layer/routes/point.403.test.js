@@ -101,9 +101,15 @@ describe("Point forecast route  403 to 429 tests", () => {
     };
     db.query.resolves({ rows: []});
     apiResponse.statusCode = 500;
+
+    const expectedError = {
+      error: true,
+      message: "Could not fetch due to failed grid data request"
+    };
+
     const interopResponse = await handler(request);
 
-    expect(interopResponse.data.forecast).to.eql({error: true});
+    expect(interopResponse.data.forecast).to.eql(expectedError);
     expect(interopResponse.data.grid).to.eql({error: true});
   });
 });

@@ -1,46 +1,5 @@
 from datetime import datetime
 
-from backend.interop import get_weather_stories
-
-
-def get_county_weather_stories(wfos, time_zone_info):
-    """Fetch and process weather story data for a county/timezone."""
-    valid = []
-    errors = []
-    empties = []
-    for wfo in wfos:
-        weather_story_data = get_weather_stories(wfo.code.upper())
-        if weather_story_data and "error" not in weather_story_data:
-            weather_story_data["wfo_url"] = wfo.url
-            weather_story_data["wfo_name"] = wfo.name
-            weather_story_data["startTime"] = datetime.fromisoformat(weather_story_data["startTime"]).astimezone(
-                tz=time_zone_info
-            )
-            weather_story_data["updateTime"] = datetime.fromisoformat(weather_story_data["updateTime"]).astimezone(
-                tz=time_zone_info
-            )
-            weather_story_data["endTime"] = datetime.fromisoformat(weather_story_data["endTime"]).astimezone(
-                tz=time_zone_info
-            )
-            valid.append(weather_story_data)
-        elif weather_story_data:
-            # In this case, there is an error on the dict.
-            # We pass this to the template as-is to handle
-            # the error case
-            weather_story_data["wfo_url"] = wfo.url
-            weather_story_data["wfo_name"] = wfo.name
-            errors.append(weather_story_data)
-        else:
-            # In this case, the interop function returned
-            # None for the given WFO, meaning there are no
-            # current weather stories there.
-            # We still return a dict, but only with an officeId,
-            # so that we can render the AFD links as needed.
-            empties.append({"officeId": wfo.code.upper(), "wfo_url": wfo.url, "wfo_name": wfo.name, "is_empty": True})
-
-    valid = sorted(valid, key=lambda story: story["startTime"], reverse=True)
-    return valid + empties + errors
-
 
 def risk_overview_timestamps_to_dates(risk_overview, tz):
     """Given a risk overview and timezone, replace timestamp strings with datetime objects."""
@@ -54,3 +13,5 @@ def risk_overview_timestamps_to_dates(risk_overview, tz):
             if risk_overview["composite"].get("days", False):
                 for day in risk_overview["composite"]["days"]:
                     day["timestamp"] = datetime.fromisoformat(day["timestamp"]).astimezone(tz=tz)
+
+
