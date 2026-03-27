@@ -62,5 +62,4 @@ urlpatterns = [
 if settings.DEBUG is True:
     urlpatterns += [
         path("offices/", offices.offices, name="offices"),
-        path("silk/", include("silk.urls", namespace="silk")),
     ]
