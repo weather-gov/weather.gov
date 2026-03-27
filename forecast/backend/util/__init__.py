@@ -235,8 +235,9 @@ def timestamps_to_datetime_in_dict(dictionary, keys, timezoneinfo):
     dictionary, and an object representing timezone information, modify
     the values at each of the keys to be parsed and zoned datetime objects
     """
-    for key in keys:
-        dictionary[key] = datetime.fromisoformat(dictionary[key]).astimezone(tz=timezoneinfo)
+    if dictionary:
+        for key in keys:
+            dictionary[key] = datetime.fromisoformat(dictionary[key]).astimezone(tz=timezoneinfo)
 
 def get_states_combo_box_list():
     """Get a list of dictionaries of WeatherState 'text' and 'value' keys for use in wx-combo-box."""
@@ -426,8 +427,12 @@ def format_briefing_timestamps(briefing, wfo_instance, time_zone_info):
         briefing["wfo_url"] = wfo_instance.url
         briefing["wfo_name"] = wfo_instance.name
         return briefing
-    if briefing and "briefing" in briefing:
-        briefing_inner = briefing["briefing"]
+
+    # Briefing objects are returned as a dict with an inner
+    # 'breifing' key. This value can be None if there are no
+    # briefings for the given location
+    briefing_inner = briefing.get("briefing", None)
+    if briefing_inner:
         timestamps_to_datetime_in_dict(
             briefing_inner,
             ["startTime", "endTime", "updateTime"],
