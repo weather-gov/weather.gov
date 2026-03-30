@@ -25,7 +25,7 @@ dependencies = [
     "opentelemetry-instrumentation-django==0.61b0",
     "opentelemetry-instrumentation-psycopg==0.61b0",
     "opentelemetry-instrumentation-requests==0.61b0",
-    "psycopg[binary]>=3.2.0 ; python_full_version >= '3.8'",
+    "psycopg[binary,pool]>=3.2.0 ; python_full_version >= '3.8'",
     "python-json-logger==4.0.0",
     "python3-saml>=1.16.0",
     "requests>=2.33.0",

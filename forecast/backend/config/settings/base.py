@@ -224,6 +224,9 @@ DATABASES = {
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
         "HOST": "database",
         "PORT": 5432,
+        "OPTIONS": {
+            "pool": True
+        }
     },
 }
 
