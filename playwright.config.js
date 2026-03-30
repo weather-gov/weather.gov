@@ -11,7 +11,9 @@ const services = require("./tests/playwright/urls.js");
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
+
 const config = {
+  timeout: 300000,
   testDir: "./tests/playwright",
   /* Run tests in files in parallel */
   //fullyParallel: false,

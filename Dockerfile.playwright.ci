@@ -1,0 +1,12 @@
+FROM mcr.microsoft.com/playwright:v1.55.0-noble
+
+RUN mkdir -p /app
+
+WORKDIR /app
+
+ADD ./package.json .
+ADD ./package-lock.json .
+
+RUN npm ci && \
+  npx playwright install msedge && \
+  npx playwright install chrome

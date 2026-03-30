@@ -32,4 +32,3 @@ RUN cd /app && npm ci --dev && \
   cd /app/spatial-data && npm ci --dev && \
   cd /app/api-interop-layer && npm ci --dev && \
   cd /app/api-proxy && npm ci --dev
-RUN npx --no-install playwright install chromium --with-deps --only-shell

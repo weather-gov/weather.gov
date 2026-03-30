@@ -20,6 +20,10 @@ spec:
       type: boolean
       default: true
       description: "Lint and test JS in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
+    run-playwright-ci:
+      type: boolean
+      default: false
+      description: "Run playwright end-to-end and accessibility tests in the selected branch using config from that branch. Uses dependencies from main, unless `build-images` is true."
 ---
 # NB: this file is less confusing to read once you realize that it does
 #     different things, depending on which branch is in the pipeline
@@ -235,6 +239,31 @@ deploy-to-test:
   rules:
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "test"
 
+.playwright:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/playwright:$USE_TAG
+  variables:
+    DEPLOYED_URL: https://weathergov-test.app.cloud.gov
+    API_URL: https://api-proxy-weathergov-test.app.cloud.gov/
+    WEB_URL: $DEPLOYED_URL
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-playwright-ci ]]" == "true"
+
+# run end-to-end tests against the deployed environment
+playwright-e2e:
+  extends: [.playwright]
+  parallel: 3
+  script:
+    - echo Attempting to run end-to-end tests against $DEPLOYED_URL
+    - npx playwright test e2e_$CI_NODE_INDEX
+
+# run accessibility tests against the deployed environment
+playwright-a11y:
+  extends: [.playwright]
+  script:
+    - echo Attempting to run a11y tests against $DEPLOYED_URL
+    - CI=true npx playwright test --quiet --retries 0 a11y
+
 # build a base image with all the current node_modules and other JavaScript dependencies
 gather-forecast-node-dependencies:
   extends: .build-dependencies-image
@@ -270,6 +299,21 @@ gather-forecast-django-dependencies:
       changes:
         - forecast/Dockerfile.ci
         - forecast/requirements.txt
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
+
+gather-playwright-dependencies:
+  extends: .build-dependencies-image
+  stage: gather
+  variables:
+    BUILD_CONTEXT: ./
+    DOCKERFILE: Dockerfile.playwright.ci
+    IMAGE_NAME: playwright
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_SLUG == "main"
+      changes:
+        - Dockerfile.playwright.ci
+        - package.json
+        - package-lock.json
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.build-images ]]" == "true"
 
 bundle-js:
