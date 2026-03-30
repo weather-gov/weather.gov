@@ -131,6 +131,9 @@ DATABASES = {
         "PASSWORD": db_credentials["password"],
         "HOST": db_credentials["host"],
         "PORT": db_credentials["port"],
+        "OPTIONS": {
+            "pool": True
+        }
     },
 }
 
