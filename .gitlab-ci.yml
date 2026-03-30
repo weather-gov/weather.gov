@@ -2,7 +2,7 @@ spec:
   # these inputs permit flexible pipeline runs from the GitLab UI
   inputs:
     deploy-to-environment:
-      options: ['no deploy', 'test', 'staging', 'prod']
+      options: ['no deploy', 'loadtest', 'test', 'staging', 'prod']
       default: 'no deploy'
       description: "Deploy the selected branch or tag to this environment using Terraform. You do not need to build the images or run the tests, although you can if you like. At the time of writing (9/25), 'prod' means beta.weather.gov."
     confirm-beta-deploy:
@@ -238,6 +238,43 @@ deploy-to-test:
     - terraform apply -var="git_sha_hash=$(git rev-parse HEAD)" -var-file="weathergov-test.tfvars" -auto-approve
   rules:
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "test"
+
+# deploy to loadtest manually from the GitLab New Pipeline page
+deploy-to-loadtest:
+  stage: deploy
+  image: cloudfoundry/cli:8
+  needs:
+    - job: bundle-js
+      artifacts: true
+  script:
+    - apk update && apk upgrade && apk add --no-cache bash jq curl grep git coreutils unzip zip
+    - wget https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_linux_amd64.zip
+    - unzip -d /usr/bin terraform_1.13.3_linux_amd64.zip
+    - terraform --version
+    - cd terraform/
+    - >
+      echo {
+      \"django_secret_key\": \"$CI_LOADTEST_DJANGO_SECRET_KEY\",
+      \"newrelic_license\": \"$CI_NEW_RELIC_LICENSE\",
+      \"sp_private_key\": \"$CI_LOADTEST_SP_PRIVATE_KEY\",
+      \"sp_public_key\": \"$CI_LOADTEST_SP_PUBLIC_KEY\"
+      } > credentials-loadtest.json
+    - |
+      echo -e \
+      cf_user = \"$CI_CF_USER\"\\n\
+      cf_password = \"$CI_CF_PASSWORD\" \
+      > secrets.cicd.auto.tfvars
+    - |
+      echo -e \
+      bucket     = \"$CI_TF_STATE_MGMT_BUCKET\"\\n\
+      region     = \"$CI_TF_STATE_MGMT_REGION\"\\n\
+      access_key = \"$CI_TF_STATE_MGMT_ACCESS_KEY\"\\n\
+      secret_key = \"$CI_TF_STATE_MGMT_SECRET_KEY\" \
+      > secrets.backend.tfvars
+    - terraform init -backend-config=secrets.backend.tfvars -backend-config="key=terraform.tfstate.weathergov-loadtest" -reconfigure
+    - terraform apply -var="git_sha_hash=$(git rev-parse HEAD)" -var-file="weathergov-loadtest.tfvars" -auto-approve
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "loadtest"
 
 .playwright:
   stage: test
