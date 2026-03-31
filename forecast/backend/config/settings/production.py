@@ -132,7 +132,11 @@ DATABASES = {
         "HOST": db_credentials["host"],
         "PORT": db_credentials["port"],
         "OPTIONS": {
-            "pool": True
+            "pool": {
+                # note: configured per gevent worker
+                "min_size": 10,
+                "max_size": 20,
+            }
         }
     },
 }

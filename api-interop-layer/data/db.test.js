@@ -17,8 +17,8 @@ describe("database utility", () => {
       database: "weathergov",
       host: "database",
       port: 3306,
-      min: 20,
-      max: 40,
+      min: 40,
+      max: 80,
     });
   });
 
@@ -37,8 +37,8 @@ describe("database utility", () => {
       database: "Triforce",
       host: "Hyrule",
       port: "Zora's Domain",
-      min: 20,
-      max: 40,
+      min: 40,
+      max: 80,
     });
   });
 
