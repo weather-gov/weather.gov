@@ -28,8 +28,8 @@ export const getDatabaseConnectionInfo = () => {
     database: process.env.DB_NAME ?? "weathergov",
     host: process.env.DB_HOST ?? "database",
     port: process.env.DB_PORT ?? 3306,
-    min: 20,
-    max: 40,
+    min: 40,
+    max: 80,
   };
 };
 
