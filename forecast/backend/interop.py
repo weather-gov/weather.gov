@@ -12,6 +12,9 @@ from spatial.models import WeatherAlertsCache
 
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
 
+# Set up a requests Session instance
+# which allows us to have connection pooling
+REQUESTS_SESSION = requests.Session()
 
 def _get_hour(dt):
     """Get the hour from datetime."""
@@ -23,7 +26,7 @@ def _fetch(url):
     base_url = getenv("INTEROP_URL")
     full_url = f"{base_url}{url}"
     # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
-    response = requests.get(full_url, timeout=55)  # TODO: try-request block with logging
+    response = REQUESTS_SESSION.get(full_url, timeout=55)  # TODO: try-request block with logging
 
     if response.status_code == 429:  # noqa: PLR2004
         raise Http429
@@ -38,7 +41,7 @@ def _api_fetch(url):
         base_url = "https://api.weather.gov"
     full_url = f"{base_url}{url}"
     # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
-    response = requests.get(full_url, timeout=55)  # TODO: try-request block with logging
+    response = REQUESTS_SESSION.get(full_url, timeout=55)  # TODO: try-request block with logging
     return response.json()
 
 
