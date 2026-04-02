@@ -70,7 +70,7 @@ variable "env" {
 variable "interop_url" {
   type        = string
   sensitive   = true
-  description = "URL for the API interop layer"
+  description = "URL for the API interop layer (deprecated)"
 }
 
 variable "enable_api_proxy" {

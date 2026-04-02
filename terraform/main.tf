@@ -52,6 +52,17 @@ module "s3" {
   )
 }
 
+resource "cloudfoundry_network_policy" "app-to-interop-network-policy" {
+  policies = [
+    {
+      source_app      = cloudfoundry_app.app.id
+      destination_app = cloudfoundry_app.interop.id
+      port            = "61443"
+      protocol        = "tcp"
+    }
+  ]
+}
+
 # this module has prerequisites before it can be utilized:
 # 1. create domain manually: `cf create-domain nws-weathergov $var.custom_domain_name`
 # 2. create an ACME challenge record

@@ -14,17 +14,25 @@ data "archive_file" "api_src" {
   ]
 }
 
+module "route" {
+  source = "github.com/gsa-tts/terraform-cloudgov//app_route?ref=v2.4.1"
+
+  cf_org_name   = local.cf_org_name
+  cf_space_name = var.cf_space_name
+  domain        = "apps.internal"
+  hostname      = "api-${local.app_name}-${var.env}"
+  app_ids       = [cloudfoundry_app.interop.id]
+}
+
 resource "cloudfoundry_app" "interop" {
   name       = "api-${local.app_name}-${var.env}"
   space_name = var.cf_space_name
   org_name   = local.cf_org_name
-  count      = 1
 
   path              = data.archive_file.api_src.output_path
   source_code_hash  = data.archive_file.api_src.output_base64sha256
   buildpacks        = ["nodejs_buildpack"]
   strategy          = "rolling"
-  routes            = (var.custom_domain_name == null ? [{ route = "api-${local.host_name}.${local.domain}" }] : [{ route = "api-${local.host_name}.app.cloud.gov" }])
   enable_ssh        = true
   instances         = var.api_interop_instances
   memory            = var.api_interop_memory
