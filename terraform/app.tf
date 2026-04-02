@@ -30,7 +30,6 @@ resource "cloudfoundry_app" "app" {
   name       = "${local.app_name}-${var.env}"
   space_name = var.cf_space_name
   org_name   = local.cf_org_name
-  count      = 1
 
   path              = data.archive_file.app_src.output_path
   source_code_hash  = data.archive_file.app_src.output_base64sha256
@@ -46,7 +45,7 @@ resource "cloudfoundry_app" "app" {
   environment = {
     NEW_RELIC_LICENSE_KEY  = local.newrelic_license
     NEW_RELIC_APP_NAME     = "weathergov-${var.env}"
-    INTEROP_URL            = var.interop_url
+    INTEROP_URL            = "https://api-${local.app_name}-${var.env}.apps.internal:61443"
     PYTHONUNBUFFERED       = "yup"
     DJANGO_SETTINGS_MODULE = "backend.config.settings.production"
     DJANGO_BASE_URL        = coalesce(var.custom_domain_name, "app.cloud.gov")
@@ -55,7 +54,8 @@ resource "cloudfoundry_app" "app" {
     DISABLE_COLLECTSTATIC  = 1
     CLOUDGOV_SPACE         = var.cf_space_name
     AWS_USE_FIPS_ENDPOINT  = 1 # required for "s3-fips.us-gov-*.amazonaws.com"
-    GIT_SHA_HASH             = var.git_sha_hash
+    GIT_SHA_HASH           = var.git_sha_hash
+    REQUESTS_CA_BUNDLE     = "/etc/ssl/certs/ca-certificates.crt" # use cloud.gov ssl certificates for internal routing
   }
 
   service_bindings = (var.env == "prod" ? local.prod_service_bindings : local.base_service_bindings)
