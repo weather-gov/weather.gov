@@ -623,14 +623,17 @@ msgstr "Coverage area for {wfo} WFO"
 msgid "wfo-info.caption+aria.coverage-area-map.01"
 msgstr "This includes {counties}"
 
-msgid "wfo-info.heading.contact-us.01"
-msgstr "Contact us"
-
-msgid "wfo-info.heading.forecast-discussion.01"
-msgstr "Forecaster's discussion"
-
 msgid "wfo-info.heading.local-expertise.01"
 msgstr "Local expertise"
+
+msgid "wfo-info.heading.forecast-discussion.01"
+msgstr "Area Forecast Discussions"
+
+msgid "wfo-info.heading.briefing.01"
+msgstr "Weather Event Briefings"
+
+msgid "wfo-info.heading.contact-us.01"
+msgstr "Contact us"
 
 msgid "wfo-info.labels.about.01"
 msgstr "About"
@@ -638,11 +641,26 @@ msgstr "About"
 msgid "wfo-info.labels.wfo.01"
 msgstr "{wfoName} ({wfoCode}) National Weather Service Office"
 
-msgid "wfo-info.link.area-forecast-discussion"
+msgid "wfo-info.link.area-forecast-discussion.01"
 msgstr "Current Area Forecast Discussion"
 
+msgid "wfo-info.link.briefing.01"
+msgstr "Current Weather Event Briefing [PDF download]"
+
+msgid "wfo-info.text.intro.01"
+msgstr "Weather Forecast Offices (WFOs) are local branches of the National Weather Service in your community. Meteorologists in WFOs track local weather observations and interpret weather model data to create your local forecast."
+
+msgid "wfo-info.text.intro.02"
+msgstr "WFOs also issue watches, warnings, and advisories to keep the public safe during severe weather."
+
+msgid "wfo-info.text.local-expertise.01"
+msgstr "Weather Forecast Offices (WFOs) provide many resources to keep you informed of weather activity in your area. These tools can help you plan your day and protect your family and property in the event of severe weather."
+
 msgid "wfo-info.text.forecast-discussion.01"
-msgstr "The purpose of the area forecast discussion is to provide the meteorological/scientific reasoning behind the forecast"
+msgstr "The area forecast discussion explains the science behind a forecast. In it, local meteorologists outline the key weather events for their area on a given day."
+
+msgid "wfo-info.text.briefing.01"
+msgstr "Briefings contain extra information on top of regular forecasts. Meteorologists often issue them in the event of severe weather. They explain the probability of severe weather and include recommended actions for staying safe."
 
 msgid "wfo.labels.facebook.01"
 msgstr "Facebook"
