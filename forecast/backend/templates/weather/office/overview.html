@@ -4,6 +4,10 @@
 --   Display information about a weather forecast office (WFO).
 -- Url: https://beta.weather.gov/offices/arx/
 {% endcomment %}
+{% block head_js %}
+  <script src="{% static 'js/office.html.js' %}"
+          type="module"></script>
+{% endblock %}
 {% block page_content %}
   <div class="wx-wfo-info margin-bottom-10">
     {% if content.field_wfo_image is not empty %}
@@ -11,10 +15,21 @@
         {{ content.field_wfo_image }}
       </div>
     {% endif %}
+
     <div class="grid-container">
-      <h1 class="text-normal text-primary-darker desktop:margin-bottom-3">
-        {% trans_with_args "wfo-info.labels.wfo.01" wfoName=office.name wfoCode=office.code %}
-      </h1>
+
+      <div class="grid-row margin-bottom-2">
+        <div class="grid-col">
+          <h1 class="text-normal font-heading-2xl line-height-heading-3 text-primary-darker margin-top-3 desktop:margin-bottom-3">
+            {% trans_with_args "wfo-info.labels.wfo.01" wfoName=office.name wfoCode=office.code %}
+          </h1>
+          <div class="font-body-md measure-6">
+            <p class="margin-top-0 margin-bottom-2"> {{"wfo-info.text.intro.01" | t }} </p>
+            <p class="margin-y-2"> {{"wfo-info.text.intro.02" | t }} </p>
+          </div>
+        </div>
+      </div>
+
       <div class="grid-row grid-gap">
         {% if office.about %}
           <div class="grid-col-12 tablet:grid-col-4">
@@ -32,55 +47,67 @@
           </figure>
         </div>
       </div>
-      {# TODO: This is all placeholder stuff. When it comes out in favor of real stuff, make sure we add things to the translations list appropriately. #}
-      <div class="grid-row">
-        <div class="grid-col-12 tablet:grid-col-6 tablet:grid-gap">
-          <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
+
+      <div class="grid-row margin-top-4">
+        <div class="grid-col-12 border-top-1px border-base-light">
+          <h2 class="font-sans-xl text-normal text-primary-darker padding-top-105 margin-top-0 margin-bottom-2">
             {{ "wfo-info.heading.local-expertise.01" | t }}
           </h2>
-          <p>{{ "Decision support from" | t }} {{ office.code }}</p>
+          <p class="font-sans-sm measure-6">{{"wfo-info.text.local-expertise.01"|t}}</p>
 
-          {% if briefing.error %}
-            <div class="usa-alert usa-alert--error margin-bottom-2 tablet:margin-right-8">
-              <div class=" usa-alert__body">
-                <div class="usa-alert__text">
-                  {% trans_with_args "There was an error loading briefings for the {wfo} WFO" wfo=office.code %}
-                </div>
-              </div>
+          <div class="grid-col-12">
+            <h3 class="font-body-lg text-normal text-primary-darker margin-top-3 margin-bottom-2">
+              {{ "wfo-info.heading.forecast-discussion.01" | t }}
+            </h3>
+            <div class="font-body-sm measure-6 line-height-body-4">
+              <p class="measure-6">{{ "wfo-info.text.forecast-discussion.01" | t }}</p>
+              <a class="usa-link" href="/afd/{{ office.code|lower }}">{{ "wfo-info.link.area-forecast-discussion.01" | t }}</a>
             </div>
-          {% endif %}
-
-          <ul class="margin-bottom-0 padding-left-2">
-            {% if briefing and not briefing.error %}
-              <li class="padding-y-05">
-                <a class="usa-link" href="{{ briefing.download }}">{{ "county.briefing.download-one.01" | t }}</a>
-              </li>
-            {% elif not briefing %}
-              <li class="padding-y-05">
-                {{ "county.briefing.no-briefing.01" | t }}
-              </li>
-            {% endif %}
-          </ul>
-        </div>
-        <div class="grid-col-12 tablet:grid-col-6">
-          <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker padding-top-105 margin-top-4">
-            {{ "wfo-info.heading.forecast-discussion.01" | t }}
-          </h2>
-          <p>{{ "wfo-info.text.forecast-discussion.01" | t }}</p>
-          <a class="usa-link" href="/afd/{{ office.code|lower }}">{{ "wfo-info.link.area-forecast-discussion" | t }}</a>
+          </div>
         </div>
       </div>
+
+      <div class="grid-row">
+        <div class="grid-col-12">
+          <h3 class="font-body-lg text-normal text-primary-darker margin-top-3 margin-bottom-2">
+            {{ "wfo-info.heading.briefing.01" | t }}
+            </h3>
+            <div class="font-body-sm measure-6 line-height-body-4">
+              <p class="measure-6">{{ "wfo-info.text.briefing.01" | t }}</p>
+
+              {% if briefing.error %}
+              <div class="usa-alert usa-alert--error margin-bottom-2">
+                <div class=" usa-alert__body">
+                  <div class="usa-alert__text">
+                    {% trans_with_args "There was an error loading briefings for the {wfo} WFO" wfo=office.name %}
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
+              {% if briefing and not briefing.error %}
+              <a class="usa-link" href="{{ briefing.download }}">{{ "wfo-info.link.briefing.01" | t }}</a>
+              {% elif not briefing %}
+                {{ "county.briefing.no-briefing.01" | t }}
+              {% endif%}
+
+            </div>
+        </div>
+      </div>
+
+
+      {# TODO: The contact information is not currently in the CMS #}
       {% if office.has_contact %}
-        <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker margin-bottom-0 padding-top-105 margin-top-4">
-          {{ "wfo-info.heading.contact-us.01" | t }}
-        </h2>
         <div class="grid-row margin-top-2">
+          <h2 class="font-sans-xl border-top-1px border-base-light text-normal text-primary-darker margin-bottom-0 padding-top-105 margin-top-4">
+            {{ "wfo-info.heading.contact-us.01" | t }}
+          </h2>
           {% if office.has_first_pane %}
             <address class="grid-col-12 tablet:grid-col-4">
               {% if office.phone %}
                 {% comment %}
-          # Taken from
-          # web/themes/new_weather_theme/templates/field/field--node--field-phone-number-opt.html.twig
+                # Taken from
+                # web/themes/new_weather_theme/templates/field/field--node--field-phone-number-opt.html.twig
                 {% endcomment %}
                 <div class="wfo-phone">
                   <span class="text-bold text-primary-darker">{{ "node.fields.labels.field_phone_number_opt.01" | t }}:</span>
@@ -89,8 +116,8 @@
               {% endif %}
               {% if office.email %}
                 {% comment %}
-          # Taken from
-          # web/themes/new_weather_theme/templates/field/field--node--field-wfo_email.html.twig
+                # Taken from
+                # web/themes/new_weather_theme/templates/field/field--node--field-wfo_email.html.twig
                 {% endcomment %}
                 <div class="wfo-email{% if office.phone %} margin-top-105{% endif %}">
                   <span class="text-bold text-primary-darker">{{ "node.fields.labels.field_wfo_email.01" | t }}:</span>
@@ -99,8 +126,8 @@
               {% endif %}
               {% if office.address %}
                 {% comment %}
-          # Taken from
-          # web/themes/new_weather_theme/templates/field/field--node--field-address.html.twig
+                # Taken from
+                # web/themes/new_weather_theme/templates/field/field--node--field-address.html.twig
                 {% endcomment %}
                 <div class="wfo-address{% if office.phone or office.address %} margin-top-105{% endif %}">
                   <span class="text-bold text-primary-darker">{{ "node.fields.labels.field_address.01" | t }}:</span>
@@ -109,13 +136,14 @@
               {% endif %}
             </address>
           {% endif %}
+
           <div class="grid-col-12 tablet:grid-col-8 {% if office.has_first_pane %}margin-top-2 tablet:margin-top-0{% endif %}">
             {% if office.has_social %}
               <ul class="usa-list usa-list--unstyled">
                 {% if office.facebook %}
                   {% comment %}
-            # Taken from
-            # web/themes/new_weather_theme/templates/field/field--node--field-facebook-url.html.twig
+                  # Taken from
+                  # web/themes/new_weather_theme/templates/field/field--node--field-facebook-url.html.twig
                   {% endcomment %}
                   <li class="li-margin-bottom-2">
                     <a href="{{ office.facebook }}"
@@ -139,8 +167,8 @@
                 {% endif %}
                 {% if office.twitter %}
                   {% comment %}
-            # Taken from
-            # web/themes/new_weather_theme/templates/field/field--node--field-twitter-url.html.twig
+                  # Taken from
+                  # web/themes/new_weather_theme/templates/field/field--node--field-twitter-url.html.twig
                   {% endcomment %}
                   <li class="li-margin-bottom-2">
                     <a href="{{ office.twitter }}"
@@ -164,8 +192,8 @@
                 {% endif %}
                 {% if office.youtube %}
                   {% comment %}
-            # Taken from
-            # web/themes/new_weather_theme/templates/field/field--node--field-youtube-url.html.twig
+                  # Taken from
+                  # web/themes/new_weather_theme/templates/field/field--node--field-youtube-url.html.twig
                   {% endcomment %}
                   <li class="li-margin-bottom-2">
                     <a href="{{ office.youtube }}"
