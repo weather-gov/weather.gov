@@ -238,6 +238,7 @@ deploy-to-test:
     - terraform apply -var="git_sha_hash=$(git rev-parse HEAD)" -var-file="weathergov-test.tfvars" -auto-approve
   rules:
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.deploy-to-environment ]]" == "test"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && "$[[ inputs.deploy-to-environment ]]" == "test"
 
 # deploy to loadtest manually from the GitLab New Pipeline page
 deploy-to-loadtest:
@@ -285,6 +286,7 @@ deploy-to-loadtest:
     WEB_URL: $DEPLOYED_URL
   rules:
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-playwright-ci ]]" == "true"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && "$[[ inputs.run-playwright-ci ]]" == "true"
 
 # run end-to-end tests against the deployed environment
 playwright-e2e:
@@ -375,7 +377,7 @@ bundle-js:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web" && "$[[ inputs.run-js-ci ]]" == "true"
-
+    - if: $CI_PIPELINE_SOURCE == "schedule" && "$[[ inputs.deploy-to-environment ]]" != "no deploy"
 
 # lint all JavaScript in the repo in one job
 js-lint:
