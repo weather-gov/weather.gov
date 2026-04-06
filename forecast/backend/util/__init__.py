@@ -239,7 +239,7 @@ def timestamps_to_datetime_in_dict(dictionary, keys, timezoneinfo):
         for key in keys:
             dictionary[key] = datetime.fromisoformat(dictionary[key]).astimezone(tz=timezoneinfo)
 
-def get_states_combo_box_list():
+def get_states_combo_box_list(selected_fips = ""):
     """Get a list of dictionaries of WeatherState 'text' and 'value' keys for use in wx-combo-box."""
     result = []
     for state in WeatherStates.objects.order_by("name").only("name", "fips"):
@@ -247,13 +247,14 @@ def get_states_combo_box_list():
             {
                 "text": state.name,
                 "value": state.fips,
+                "selected": selected_fips == state.fips,
             },
         )
 
     return result
 
 
-def get_counties_combo_box_list(state_fips):
+def get_counties_combo_box_list(state_fips, selected_fips = ""):
     """Get a list of dictionaries of WeatherCounties for the given state.
 
     The dicts will have'text' and 'value' keys for use in wx-combo-box.
@@ -269,6 +270,7 @@ def get_counties_combo_box_list(state_fips):
             {
                 "text": f"{county.countyname}, {county.state.state}",
                 "value": county.countyfips,
+                "selected": selected_fips == county.countyfips,
             },
         )
 

@@ -167,10 +167,10 @@ def county_ghwo(request, county_fips):  # noqa: C901
         localtz = ZoneInfo(county.timezone)
 
     # Get all of the states, for use in the combobox dropdown.
-    states = get_states_combo_box_list()
+    states = get_states_combo_box_list(county.state.fips)
 
     # Now get a list of all counties in the same state as the found county.
-    counties = get_counties_combo_box_list(county.state.fips)
+    counties = get_counties_combo_box_list(county.state.fips, county_fips)
 
     # Fetch the GHWO data for the county from the interop layer
     ghwo_data = interop.get_ghwo_data_for_county(county.countyfips)
@@ -229,8 +229,8 @@ def county_ghwo_index(request):
     <wx-county-ghwo-selector>
     """
     current_state = request.POST.get("current-state")
-    selected_state = request.POST.get("state-select")
-    selected_county = request.POST.get("county-select")
+    selected_state = request.POST.get("state")
+    selected_county = request.POST.get("county")
 
     try:
         # If the current state does not match the selected

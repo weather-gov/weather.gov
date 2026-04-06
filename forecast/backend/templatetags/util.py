@@ -55,6 +55,8 @@ def subtract(first, second):
 @register.simple_tag
 def place_label(place: dict):
     """Format a label with a place name and possibly a state."""
+    if isinstance(place, str):
+        return place
     name = place.get("name", "")
     state = place.get("state", None)
     if state:

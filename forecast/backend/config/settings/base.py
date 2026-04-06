@@ -364,8 +364,6 @@ CONTENT_SECURITY_POLICY_REPORT_ONLY = {
         "style-src": [
             SELF,
             NONCE,
-            # combo-box.js applies its own CSS styles
-            "'sha256-gRE3bxId7YdBMR/AIWG7jHh2sJ9XAtq1YUxCaFh3hng='",
             # cmi-radar
             "'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='",
             "'sha256-624gmqlO23N0g1Ru4tkjuaPEoL/hXP4w7tUqel4WM98='",

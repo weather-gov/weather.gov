@@ -704,8 +704,8 @@ class TestViews(TestCase):
         """Posting to the county ghwo index page with a valid selected county redirects to the proper url."""
         post_data = {
             "current-state": "51",
-            "state-select": "51",
-            "county-select": "1",
+            "state": "51",
+            "county": "1",
         }
         mock_county = mock.MagicMock(countyfips="1")
         mock_county_get.return_value = mock_county

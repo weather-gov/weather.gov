@@ -57,8 +57,9 @@ def wx_select_ghwo_counties(request):
     data.
     """
     current_state = request.POST.get("current-state")
-    selected_state = request.POST.get("state-select")
-    selected_county = request.POST.get("county-select")
+    current_county = request.POST.get("current-county")
+    selected_state = request.POST.get("state", current_state)
+    selected_county = request.POST.get("county", current_county)
 
     try:
         # If the current state does not match the selected
@@ -81,10 +82,10 @@ def wx_select_ghwo_counties(request):
             state = county.state
 
         # Get the needed state dropdown data
-        states = get_states_combo_box_list()
+        states = get_states_combo_box_list(state.fips)
 
         # Get the needed county dropdown data
-        counties = get_counties_combo_box_list(state.fips)
+        counties = get_counties_combo_box_list(state.fips, county.countyfips)
     except Exception as e:
         raise Http404() from e
 

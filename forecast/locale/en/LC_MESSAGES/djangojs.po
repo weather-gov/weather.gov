@@ -38,3 +38,9 @@ msgid "js.county-index.results.num-states.01"
 msgid_plural "js.county-index.results.num-states.01-plural"
 msgstr[0] "%s state"
 msgstr[1] "%s states"
+
+msgid "js.location-search.prompt.user-consent.01"
+msgstr "We will now ask your browser to provide your location. If you approve, you will not be asked again. Your location information is only used to find your forecast."
+
+msgid "js.location-search.alert.geolocation-error.01"
+msgstr "There was a problem getting your location. Here's what your browser told us: %s"

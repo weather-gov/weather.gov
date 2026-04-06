@@ -32,6 +32,7 @@
                      for="fps__input">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
               <div class="location-area-divider">|</div>
               <button
+                id="fps__use_location_button"
                 type="button"
                 class="weathergov-use-browser-location">
                 <svg class="usa-icon height-2 width-2 margin-right-05 text-top" alt="">
@@ -43,9 +44,6 @@
             <wx-combobox id="fps"
               tabindex="0"
               class="wx-combobox"
-              {% if place %}
-                data-place="{% place_label place%}"
-              {% endif %}
             >
               <input id="fps__input"
                 type="text"
@@ -55,11 +53,11 @@
               <button
                 type="button"
                 class="empty"
-                aria-label="{{ 'frontpage.aria.clear-input-box.01' | t }}"
+                aria-label="{{ 'location-search.aria.clear-input-box.01' | t }}"
                 slot="clear-button">&nbsp;</button>
               <button
                 type="button"
-                aria-label="{{ 'frontpage.aria.toggle-dropdown.01' | t }}"
+                aria-label="{{ 'location-search.aria.toggle-dropdown.01' | t }}"
                 slot="toggle-button">&nbsp;</button>
               <wx-location-listbox id="fps__listbox"
                 role="listbox"
@@ -69,17 +67,17 @@
                 <div id="fps__listbox__sl"
                   role="heading" aria-level="3"
                   class="saved-searches font-mono-sm text-base padding-1"
-                >{{ "frontpage.group.saved-searches.01" | t }}</div>
+                >{{ "location-search.group.saved-searches.01" | t }}</div>
                 <ul role="group" class="saved-searches"></ul>
                 <div id="fps__listbox__dr"
                   role="heading" aria-level="3"
                   class="data-results font-mono-sm text-base padding-1"
-                >{{ "frontpage.group.search-results.01" | t }}</div>
+                >{{ "location-search.group.search-results.01" | t }}</div>
                 <ul role="group" class="data-results"></ul>
               </wx-location-listbox>
             </wx-combobox>
           </form>
-          {% include 'weather/partials/wx-loader.html' %}
+          {% include 'weather/partials/wx-loader.html' with for_these="fps__listbox fps__use_location_button" %}
         </div>
       </div>
     </section>

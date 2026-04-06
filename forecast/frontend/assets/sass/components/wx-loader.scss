@@ -1,7 +1,11 @@
 @use "uswds-core" as *;
 
-wx-loader[aria-hidden="true"]{
-    visibility: hidden;
+wx-loader:not(.wx-loader-pop-in)[aria-hidden="true"]{
+  visibility: hidden;
+}
+
+wx-loader.wx-loader-pop-in[aria-hidden="true"]{
+  display: none;
 }
 
 .wx-loader-icon {

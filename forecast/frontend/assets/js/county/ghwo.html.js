@@ -6,7 +6,8 @@
 // Nota bene: JS used on every page goes in page.html.js.
 import "../page.html.js";
 
-// TODO: found another use of the old combo-box! Remove this.
-import "../components/combo-box.js";
+// For filtering by state and county
+import "../components/combobox/filterable-listbox.js";
 import "../components/ghwo-county-selector.js";
+
 import "../components/ghwo-details-table.js";
