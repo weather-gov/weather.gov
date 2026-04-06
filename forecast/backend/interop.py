@@ -5,6 +5,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 from django.utils.translation import gettext_lazy as _
+from requests.adapters import HTTPAdapter
 
 from backend.exceptions import Http429
 from backend.util.alert import set_timing
@@ -15,6 +16,12 @@ _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
 # Set up a requests Session instance
 # which allows us to have connection pooling
 REQUESTS_SESSION = requests.Session()
+_adapter = HTTPAdapter(
+    pool_connections=10,
+    pool_maxsize=100,
+)
+REQUESTS_SESSION.mount("http://", _adapter)
+REQUESTS_SESSION.mount("https://", _adapter)
 
 def _get_hour(dt):
     """Get the hour from datetime."""
