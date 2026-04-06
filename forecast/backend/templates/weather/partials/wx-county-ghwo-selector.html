@@ -7,22 +7,60 @@
 <form method="post" action="/counties/ghwo/" class="grid-row padding-y-2">
   {% csrf_token %}
   <div class="grid-col-12 tablet-lg:grid-col-4 line-height-sans-5 tablet-lg:margin-right-4">
-    <label for="state-select" class="text-base-darker">{{ "ghwo.selector.label.state.01" | t }}</label>
-    <wx-combo-box id="state-select" class="wx-combo-box margin-top-05" name="state-select" selected="{{ county.state.fips }}" items="{{ states|json_encode }}">
-    </wx-combo-box>
+    <label for="state-select" class="text-base-darker" >{{ "ghwo.selector.label.state.01" | t }}</label>
+    <wx-combobox id="state-selector"
+      tabindex="0"
+      class="margin-top-05"
+    >
+      <input id="state-select"
+             name="state-select"
+             data-value-for="state"
+             type="text"
+             slot="input" />
+      <input type="hidden" name="state" value="{{ county.state.fips }}" />
+      <button type="button" class="empty" aria-label="{{ "afd.aria.clear-input-box.01" | t }}" slot="clear-button">&nbsp;</button>
+      <button type="button"
+              aria-label="{{ "afd.aria.toggle-dropdown.01" | t }}"
+              slot="toggle-button">&nbsp;</button>
+      <wx-filterable-listbox slot="popup" id="state-select--list" role="listbox">
+      {% with states|length as state_count %}
+        {% for state in states %}
+          <div role="option"
+                id="state-selector--{{ state.value }}-{{ forloop.counter0 }}"
+                data-value="{{ state.value }}"
+                aria-selected="{{ state.selected|lower }}">{{ state.text }}</div>
+        {% endfor %}
+      {% endwith %}
+      </wx-filterable-listbox>
+    </wx-combobox>
   </div>
   <div class="grid-col-12 tablet-lg:grid-col-4 line-height-sans-5 tablet-lg:margin-right-4 desktop:margin-right-5 margin-top-2 tablet-lg:margin-top-0">
     <label for="county-select" class="text-base-darker">{{ "ghwo.selector.label.county.01" | t }}</label>
-    <wx-combo-box id="county-select" class="wx-combo-box margin-top-05" name="county-select" selected="{{ county.countyfips }}" items="{{ counties|json_encode }}">
-    </wx-combo-box>
-    <input type="hidden"
-           id="current-county"
-           name="current-county"
-           value="{{ county.countyfips }}" />
-    <input type="hidden"
-           id="current-state"
-           name="current-state"
-           value="{{ county.state.fips }}" />
+    <wx-combobox id="county-selector"
+      tabindex="0"
+      class="margin-top-05"
+    >
+      <input id="county-select"
+             name="county-select"
+             data-value-for="county"
+             type="text"
+             slot="input" />
+      <input type="hidden" name="county" value="{{ county.countyfips }}" />
+      <button type="button" class="empty" aria-label="{{ "afd.aria.clear-input-box.01" | t }}" slot="clear-button">&nbsp;</button>
+      <button type="button"
+              aria-label="{{ "afd.aria.toggle-dropdown.01" | t }}"
+              slot="toggle-button">&nbsp;</button>
+      <wx-filterable-listbox slot="popup" id="county-select--list" role="listbox">
+      {% for county in counties %}
+        <div role="option"
+              id="county-selector--{{ county.value }}-{{ forloop.counter0 }}"
+              data-value="{{ county.value }}"
+              aria-selected="{{ county.selected|lower }}">{{ county.text }}</div>
+      {% endfor %}
+      </wx-filterable-listbox>
+    </wx-combobox>
+    <input type="hidden" id="current-county" name="current-county" value="{{ county.countyfips }}" />
+    <input type="hidden" id="current-state" name="current-state" value="{{ county.state.fips }}" />
   </div>
   <div class="grid-col-12 tablet-lg:grid-col-3 line-height-sans-5 display-flex flex-column flex-justify-center tablet-lg:border-left-1px border-base-light margin-top-3 tablet-lg:margin-top-0">
     <div class="tablet-lg:margin-top-1 tablet-lg:padding-left-4 desktop:padding-left-5">

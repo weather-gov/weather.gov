@@ -1,11 +1,19 @@
 {% comment %}
 -- Template purpose:
 --   Display a loading indicator with icon and text.
+-- Expected variables:
+--   for_these: space-separated list of IDs which will trigger this loader
+--              as described in wx-loader.js
+--   pop_in(boolean): whether the loader should take up space while hidden
 -- Used by: index.html, partials/location-search.html
 {% endcomment %}
 {% load i18n %}
 {% load weather_i18n %}
-<wx-loader class="display-flex flex-row flex-align-center" aria-hidden="true">
+<wx-loader
+  class="display-flex flex-row flex-align-center {% if pop_in %}wx-loader-pop-in{% endif %}"
+  {% if for_these %}loader-for="{{ for_these }}"{% endif %}
+  aria-hidden="true"
+>
 <div class="wx-loader-icon display-block height-4 width-4 margin-right-05"></div>
 <span class="wx-loader-text">{{ "loader.loading-text.01" | t }}...</span>
 </wx-loader>

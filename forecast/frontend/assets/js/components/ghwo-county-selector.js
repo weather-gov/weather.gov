@@ -2,7 +2,7 @@
  * GHWO County Selector
  * ----------------------------------
  * A minimal custom element that wraps two
- * <wx-combo-box> elements, one each for
+ * <wx-combobox> elements, one each for
  * selecting a state and a county within that state
  *
  * A change event dispatched by either combobox
@@ -66,12 +66,16 @@ class GHWOCountySelector extends HTMLElement {
   }
 
   async handleChange(event) {
+    const combobox = event.target.closest("wx-combobox");
+    const changed = combobox.getAttribute("id");
+    const value = combobox.querySelector("input[type='hidden']").value;
+
     // handle the case when state is cleared.
-    if (!event.target.value) {
+    if (!value) {
       return;
     }
-    const countyOnly = event.target === this.countyCombobox;
-    if (this.useAsync && countyOnly) {
+    const countyOnly = changed === "county-selector";
+    if (countyOnly) {
       // In this case, the existing county dropdown was the
       // source of the change. We do not need to update the
       // comboboxes, but we do need to update any elements
@@ -79,11 +83,11 @@ class GHWOCountySelector extends HTMLElement {
       this.countyCombobox.setAttribute("disabled", true);
       await this.fetchAndUpdateDetailsElements();
       this.countyCombobox.removeAttribute("disabled");
-    } else if (this.useAsync) {
+    } else {
       // In this case, the state combobox triggered the change.
       // We need to dynamically update both comboboxes
       // (ie this components innerHTML), as well as any elements
-      // needcding GHWO detail information.
+      // needing GHWO detail information.
       // We won't know which county to fetch detail information
       // for until the first request comes back.
       this.stateCombobox.setAttribute("disabled", true);
@@ -94,13 +98,6 @@ class GHWOCountySelector extends HTMLElement {
       }
       this.countyCombobox.removeAttribute("disabled");
       this.stateCombobox.removeAttribute("disabled");
-    } else {
-      // In this last case, the async attribute is not set,
-      // so any change events on either combobox trigger
-      // a POST to the underlying <form>, which will redirect
-      // to a page with the updated information.
-      const form = this.querySelector("form");
-      form.submit();
     }
   }
 
@@ -115,18 +112,18 @@ class GHWOCountySelector extends HTMLElement {
     ["current-county", "current-state"].forEach((name) => {
       formData.append(name, this.querySelector(`[name="${name}"]`).value);
     });
-    ["state-select", "county-select"].forEach((name) => {
-      formData.append(
-        name,
-        this.querySelector(`[name="${name}"]`).getAttribute("selected"),
-      );
+    ["state", "county"].forEach((name) => {
+      formData.append(name, this.querySelector(`[name="${name}"]`).value);
     });
     const response = await fetch(WX_COUNTY_GHWO_SELECTOR_URL, {
       method: "POST",
       body: formData,
     });
 
-    if (response.ok) {
+    // In case of 404, it is still better to show something than to
+    // silently fail and leave the user wondering why the site is "unresponsive"
+
+    if (response.ok || response.status === 404) {
       const html = await response.text();
       // Swap out the inner HTML of this component
       this.innerHTML = html;
@@ -134,8 +131,8 @@ class GHWOCountySelector extends HTMLElement {
       // Update the browser history and url
       window.history.pushState(
         {},
-        formData.get("county-select"),
-        `/counties/ghwo/${formData.get("county-select")}`,
+        formData.get("county"),
+        `/counties/ghwo/${formData.get("county")}/`,
       );
       window.addEventListener("popstate", this.handleBackButton);
     } else {
@@ -166,13 +163,10 @@ class GHWOCountySelector extends HTMLElement {
     }
 
     // Fetch the GHWO details partial for the currently selected county fips
-    const selectedCountyFips = this.querySelector(
-      `[name="county-select"]`,
-    ).getAttribute("selected");
-    const url = `${WX_COUNTY_GHWO_DETAILS_URL}${selectedCountyFips}`;
+    const selectedCountyFips = this.querySelector(`[name="county"]`).value;
 
     this.showLoader(elements);
-    const response = await fetch(url);
+    const response = await fetch(`${WX_COUNTY_GHWO_DETAILS_URL}${selectedCountyFips}/`);
     this.hideLoader();
 
     if (response.ok) {
@@ -185,7 +179,7 @@ class GHWOCountySelector extends HTMLElement {
       window.history.pushState(
         {},
         selectedCountyFips,
-        `/counties/ghwo/${selectedCountyFips}`,
+        `/counties/ghwo/${selectedCountyFips}/`,
       );
       window.addEventListener("popstate", this.handleBackButton);
     } else {
@@ -206,7 +200,7 @@ class GHWOCountySelector extends HTMLElement {
    * ensure that the back button does a full page
    * refresh. Otherwise only the URL will change.
    */
-  handleBackButton(event) {
+  handleBackButton() {
     window.removeEventListener("popstate", this.handleBackButton);
     window.location.reload();
   }
@@ -245,11 +239,19 @@ class GHWOCountySelector extends HTMLElement {
   }
 
   get countyCombobox() {
-    return this.querySelector(this.getAttribute("county-target"));
+    return this.querySelector("input#county-select");
+  }
+
+  get countyHiddenValue() {
+    return this.querySelector("input[name='county']");
   }
 
   get stateCombobox() {
-    return this.querySelector(this.getAttribute("state-target"));
+    return this.querySelector("input#state-select");
+  }
+
+  get stateHiddenValue() {
+    return this.querySelector("input[name='state']");
   }
 }
 

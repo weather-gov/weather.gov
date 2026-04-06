@@ -34,7 +34,7 @@
 {% endblock %}
 {% block page_content %}
   <div class="layout-container grid-row height-full flex-column flex-no-wrap">
-    {% include 'weather/partials/location-search.html' with search=False place=point.place %}
+    {% include 'weather/partials/place-banner.html' with place=point.place %}
     {% if point.alerts.items|length > 0 %}
       <div class="bg-primary-darker padding-bottom-105">
         <div class="grid-container margin-top-0">

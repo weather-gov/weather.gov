@@ -102,9 +102,8 @@
       // granted us permission to use it, we will let them know before asking for
       // it. It's kind of a double-opt-in.
       if (shouldPrompt) {
-        proceed = window.confirm(
-          "We will now ask your browser to provide your location. If you approve, you will not be asked again. Your location information is only used to find your forecast.",
-        );
+        const text = gettext("js.location-search.prompt.user-consent.01");
+        proceed = window.confirm(text);
       }
 
       // If we don't know about the permission, we were already approved to use
@@ -112,7 +111,7 @@
       if (proceed) {
         // Show the loader animation, if available
         window.dispatchEvent(
-          new CustomEvent("wx-show-navigation-loader"),
+          new CustomEvent("wx-show-navigation-loader", { detail: { id: e.currentTarget.getAttribute("id") } }),
         );
 
         navigator.geolocation.getCurrentPosition(
@@ -133,9 +132,11 @@
               // (Error code 1 is for when the user denies access to location, so
               // for our purposes, that is not an error.)
 
-              alert(
-                `There was a problem getting your location. Here's what your browser told us: ${message}`,
+              const alertText = interpolate(
+                gettext("js.location-search.alert.geolocation-error.01"),
+                [message],
               );
+              alert(alertText);
             }
           },
         );

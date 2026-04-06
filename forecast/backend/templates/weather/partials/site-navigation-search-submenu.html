@@ -58,12 +58,14 @@
                 data-location-search
                 method="get">
             <div class="display-block tablet-lg:display-flex flex-align-center margin-bottom-1">
-              <label class="usa-label font-sans-xs text-base-darker" for="site-menu-location-search-combobox">
+              <label class="usa-label font-sans-xs text-base-darker" for="smlsc__input">
                 {{ "location-search.labels.enter-city-zip.01" | t }}
+                <span class="usa-sr-only">{{ "menu.navigation.forecast.find-forecast.01" | t }}</span>
               </label>
               <div class="margin-x-1 display-none tablet-lg:display-block text-base-light">|</div>
 
               <button
+                id="smlsc__use_location_button"
                 type="button"
                 class="weathergov-use-browser-location usa-button usa-button--unstyled font-sans-xs text-link">
                 <div class="display-flex flex-align-center">
@@ -74,11 +76,43 @@
                 </div>
               </button>
             </div>
-            <wx-combo-box-location
-              class="border-base-dark height-4"
-              id="site-menu-location-search-combobox">
-              <input type="text" slot="input" role="combobox" aria-label="Location search input field" aria-owns="site-menu-location-search-combobox--list" aria-controls="site-menu-location-search-combobox--list" aria-expanded="false" aria-autocomplete="none" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" aria-activedescendant="" placeholder="" id="site-menu-location-search-combobox--search-input" class="wx-combo-box__input">
-            </wx-combo-box-location>
+            <wx-combobox id="smlsc"
+              tabindex="0"
+            >
+              <input id="smlsc__input"
+                class="wx-combo-box__input border-base-dark height-4"
+                type="text"
+                autocomplete="off"
+                slot="input" />
+              <button
+                type="button"
+                class="empty"
+                aria-label="{{ 'location-search.aria.clear-input-box.01' | t }}"
+                slot="clear-button">&nbsp;</button>
+              <button
+                type="button"
+                aria-label="{{ 'location-search.aria.toggle-dropdown.01' | t }}"
+                slot="toggle-button">&nbsp;</button>
+              <wx-location-listbox id="smlsc__listbox"
+                role="listbox"
+                auto-submit="true"
+                slot="popup"
+              >
+                <div id="smlsc__listbox__sl"
+                  role="heading" aria-level="3"
+                  class="saved-searches font-mono-sm text-base padding-1"
+                >{{ "location-search.group.saved-searches.01" | t }}</div>
+                <ul role="group" class="saved-searches"></ul>
+                <div id="smlsc__listbox__dr"
+                  role="heading" aria-level="3"
+                  class="data-results font-mono-sm text-base padding-1"
+                >{{ "location-search.group.search-results.01" | t }}</div>
+                <ul role="group" class="data-results"></ul>
+              </wx-location-listbox>
+            </wx-combobox>
+            <div class="margin-top-1">
+              {% include 'weather/partials/wx-loader.html' with pop_in=True for_these="smlsc__listbox smlsc__use_location_button" %}
+            </div>
           </form>
         </div>
       </div>

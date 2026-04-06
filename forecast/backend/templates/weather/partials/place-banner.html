@@ -1,0 +1,20 @@
+{% comment %}
+-- Template purpose:
+--   Display a banner with the place name.
+-- Used by: point/overview.html
+{% endcomment %}
+<div class="wx-location-search">
+  <div class="bg-primary-darker">
+    <div class="grid-container">
+      <div class="grid-row flex-no-wrap">
+        <svg class="usa-icon height-4 width-4 margin-top-2 margin-right-05 text-accent-cool"
+              aria-hidden="true"
+              focusable="false"
+              role="img">
+          <use xlink:href="{% static 'images/uswds/sprite.svg' %}#location_on"></use>
+        </svg>
+        <h1 class="text-white font-heading-xl tablet:flex-1">{% place_label place %}</h1>
+      </div>
+    </div>
+  </div>
+</div>

@@ -122,7 +122,7 @@ export default class LocationListbox extends Listbox {
           form.submit();
           // Show the loader animation, if available
           window.dispatchEvent(
-            new CustomEvent("wx-show-navigation-loader"),
+            new CustomEvent("wx-show-navigation-loader", { detail: { id: this.getAttribute("id") } }),
           );
         }
 
@@ -151,7 +151,7 @@ export default class LocationListbox extends Listbox {
               form.submit();
               // Show the loader animation, if available
               window.dispatchEvent(
-                new CustomEvent("wx-show-navigation-loader"),
+                new CustomEvent("wx-show-navigation-loader", { detail: { id: this.getAttribute("id") } }),
               );
             }
           }
