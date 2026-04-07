@@ -57,7 +57,7 @@ const fetchHourlyPromise = async (url, hours) => {
     // Throw errors with statusCode 403,
     // so they can be handled immediately in
     // route handlers
-    if(e.cause?.statusCode === 403){
+    if (e.cause?.statusCode === 403) {
       throw e;
     }
 
@@ -95,10 +95,10 @@ const fetchGridpointPromise = async (url, place, hours) => {
     // Throw errors with statusCode 403,
     // so they can be handled immediately in
     // route handlers
-    if(e.cause?.statusCode === 403){
+    if (e.cause?.statusCode === 403) {
       throw e;
     }
-    
+
     return e;
   }
 };
@@ -134,10 +134,10 @@ const fetchDailyPromise = async (url, place) => {
     // Throw errors with statusCode 403,
     // so they can be handled immediately in
     // route handlers
-    if(e.cause?.statusCode === 403){
+    if (e.cause?.statusCode === 403) {
       throw e;
     }
-    
+
     return e;
   }
 };
@@ -370,6 +370,8 @@ export default async ({ grid, place, isMarine }) => {
         hasSnow,
         hasQPF: hasLiquid || hasIce || hasSnow,
       };
+    } else {
+      day.qpf = { periods: [], hasIce: false, hasSnow: false, hasQPF: false };
     }
   }
 
