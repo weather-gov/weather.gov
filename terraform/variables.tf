@@ -136,3 +136,21 @@ variable "git_sha_hash" {
   default     = ""
   description = "The git hash of the commit that is being deployed"
 }
+
+variable "web_db_max_connections" {
+  type        = number
+  default     = 195
+  description = "The maximum number of database connections for web"
+}
+
+variable "api_db_max_connections" {
+  type        = number
+  default     = 195
+  description = "The maximum number of database connections for interop"
+}
+
+variable "web_gevent_workers" {
+  type        = number
+  default     = 4
+  description = "The number of gevent workers to allocate per web instance"
+}

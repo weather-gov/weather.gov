@@ -214,6 +214,22 @@ STATICFILES_DIRS = [
     BASE_DIR / "frontend" / "assets",
 ]
 
+def get_base_pool_limits():
+    """
+    Get base pool limits.
+
+    Ensure the databse pool allocation is spread evenly across
+    all web instances, taking into accounty gevent workers
+    """
+    max_connections = int(os.environ.get("WEB_DB_MAX_CONNECTIONS", "45"))
+    instances = int(os.environ.get("WEB_INSTANCES", "1")) * int(os.environ.get("WEB_GEVENT_WORKERS", "1"))
+    max_size = max(max_connections // instances, 10)
+    min_size = max(max_size // 2, 5)
+    return {
+        "min_size": min_size,
+        "max_size": max_size
+    }
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
@@ -225,7 +241,7 @@ DATABASES = {
         "HOST": "database",
         "PORT": 5432,
         "OPTIONS": {
-            "pool": True
+            "pool": get_base_pool_limits()
         }
     },
 }

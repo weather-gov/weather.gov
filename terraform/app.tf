@@ -56,6 +56,9 @@ resource "cloudfoundry_app" "app" {
     AWS_USE_FIPS_ENDPOINT  = 1 # required for "s3-fips.us-gov-*.amazonaws.com"
     GIT_SHA_HASH           = var.git_sha_hash
     REQUESTS_CA_BUNDLE     = "/etc/ssl/certs/ca-certificates.crt" # use cloud.gov ssl certificates for internal routing
+    WEB_INSTANCES          = var.web_instances
+    WEB_DB_MAX_CONNECTIONS = var.web_db_max_connections
+    WEB_GEVENT_WORKERS     = var.web_gevent_workers
   }
 
   service_bindings = (var.env == "prod" ? local.prod_service_bindings : local.base_service_bindings)

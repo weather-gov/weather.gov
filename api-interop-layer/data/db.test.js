@@ -8,6 +8,7 @@ describe("database utility", () => {
     delete process.env.DB_NAME;
     delete process.env.DB_HOST;
     delete process.env.DB_PORT;
+    delete process.env.API_DB_MAX_CONNECTIONS;
 
     const actual = getDatabaseConnectionInfo();
 
@@ -17,8 +18,8 @@ describe("database utility", () => {
       database: "weathergov",
       host: "database",
       port: 3306,
-      min: 40,
-      max: 80,
+      min: 22,
+      max: 45,
     });
   });
 
@@ -28,6 +29,7 @@ describe("database utility", () => {
     process.env.DB_NAME = "Triforce";
     process.env.DB_HOST = "Hyrule";
     process.env.DB_PORT = "Zora's Domain";
+    process.env.API_DB_MAX_CONNECTIONS = "100";
 
     const actual = getDatabaseConnectionInfo();
 
@@ -37,12 +39,14 @@ describe("database utility", () => {
       database: "Triforce",
       host: "Hyrule",
       port: "Zora's Domain",
-      min: 40,
-      max: 80,
+      min: 50,
+      max: 100,
     });
   });
 
   it("uses VCAP data if in production", () => {
+    delete process.env.API_DB_MAX_CONNECTIONS;
+
     process.env.API_INTEROP_PRODUCTION = "true";
     process.env.VCAP_SERVICES = JSON.stringify({
       "aws-rds": [
@@ -69,8 +73,8 @@ describe("database utility", () => {
       host: "somewhere in an AWS datacenter",
       port: "any, in a storm",
       ssl: true,
-      min: 20,
-      max: 40,
+      min: 97,
+      max: 195,
     });
 
     delete process.env.API_INTEROP_PRODUCTION;

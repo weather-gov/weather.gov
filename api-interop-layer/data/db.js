@@ -1,7 +1,38 @@
-import pg from "pg";
+import { Pool } from "pg";
 import { sleep } from "../util/sleep.js";
+import { logger } from "../util/monitoring/logger.js";
 
-const { Pool } = pg;
+const dbLogger = logger.child({ subsystem: "database" });
+
+const getProductionPoolLimits = () => {
+  // ensure the database pool allocation is spread evenly across all interop
+  // instances.
+  const dbMaxConnections =
+    Number.parseInt(process.env.API_DB_MAX_CONNECTIONS, 10) || 195;
+  const instances = Number.parseInt(process.env.API_INTEROP_INSTANCES, 10) || 1;
+  const max = Math.max(Math.floor(dbMaxConnections / instances), 40);
+  const min = Math.max(Math.floor(max / 2), 20);
+  dbLogger.warn(
+    { dbMaxConnections, instances, max, min },
+    "set production pool limits",
+  );
+  return { min, max };
+};
+
+const getDevelopmentPoolLimits = () => {
+  // ensure the dtabase pool allocation is spread evenlly across all
+  // interop instances
+  const dbMaxConnections =
+    Number.parseInt(process.env.API_DB_MAX_CONNECTIONS, 10) || 45;
+  const instances = Number.parseInt(process.env.API_INTEROP_INSTANCES, 10) || 1;
+  const max = Math.max(Math.floor(dbMaxConnections / instances), 20);
+  const min = Math.max(Math.floor(max / 2), 10);
+  dbLogger.warn(
+    { dbMaxConnections, instances, max, min },
+    "set development pool limits",
+  );
+  return { min, max };
+};
 
 export const getDatabaseConnectionInfo = () => {
   if (process.env.API_INTEROP_PRODUCTION) {
@@ -9,6 +40,7 @@ export const getDatabaseConnectionInfo = () => {
     // the VCAP_SERVICES environment variable
     const vcap = JSON.parse(process.env.VCAP_SERVICES);
     const db = vcap["aws-rds"][0];
+    const prodPoolLimits = getProductionPoolLimits();
     return {
       user: db.credentials.username,
       password: db.credentials.password,
@@ -16,20 +48,19 @@ export const getDatabaseConnectionInfo = () => {
       host: db.credentials.host,
       port: db.credentials.port,
       ssl: true,
-      min: 20,
-      max: 40,
+      ...prodPoolLimits,
     };
   }
 
   // we are in a local environment: offer defaults for ease of use
+  const devPoolLimits = getDevelopmentPoolLimits();
   return {
     user: process.env.DB_USERNAME ?? "drupal",
     password: process.env.DB_PASSWORD ?? "drupal",
     database: process.env.DB_NAME ?? "weathergov",
     host: process.env.DB_HOST ?? "database",
     port: process.env.DB_PORT ?? 3306,
-    min: 40,
-    max: 80,
+    ...devPoolLimits,
   };
 };
 
