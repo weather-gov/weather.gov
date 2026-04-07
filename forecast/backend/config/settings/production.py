@@ -123,6 +123,22 @@ proj_resource_location = find_cloudgov_proj_resources("proj.db")
 if proj_resource_location:
     os.environ["PROJ_LIB"] = proj_resource_location
 
+def get_production_pool_limits():
+    """
+    Get production pool limits.
+
+    Ensure the database pool allocation is spread evenly across all web
+    instances, taking in account gevent workers.
+    """
+    max_connections = int(os.environ.get("WEB_DB_MAX_CONNECTIONS", "195"))
+    instances = int(os.environ.get("WEB_INSTANCES", "1")) * int(os.environ.get("WEB_GEVENT_WORKERS", "1"))
+    max_size = max(max_connections // instances, 20)
+    min_size = max(max_size // 2, 10)
+    return {
+        "min_size": min_size,
+        "max_size": max_size,
+    }
+
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -132,11 +148,7 @@ DATABASES = {
         "HOST": db_credentials["host"],
         "PORT": db_credentials["port"],
         "OPTIONS": {
-            "pool": {
-                # note: configured per gevent worker
-                "min_size": 10,
-                "max_size": 20,
-            }
+            "pool": get_production_pool_limits()
         }
     },
 }

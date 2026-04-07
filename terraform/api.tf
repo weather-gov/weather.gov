@@ -42,6 +42,8 @@ resource "cloudfoundry_app" "interop" {
     NEW_RELIC_LICENSE_KEY  = local.newrelic_license
     API_INTEROP_PRODUCTION = true
     API_INTEROP_NAME       = var.env
+    API_INTEROP_INSTANCES  = var.api_interop_instances
+    API_DB_MAX_CONNECTIONS = var.api_db_max_connections
     API_URL                = var.api_url
     GHWO_URL               = var.ghwo_url
     API_KEY                = var.api_key

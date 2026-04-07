@@ -1,8 +1,10 @@
 # gunicorn configuration for prod
 #
+import os
+
 wsgi_app = "backend.config.wsgi"
 worker_class = "gevent"
-workers = 4  # number of worker processes
+workers = os.environ.get("WEB_GEVENT_WORKERS", "1")  # number of worker processes
 worker_connections = 1000  # max connections per worker
 max_requests = 1000  # restart workers after processing this many requests
 max_requests_jitter = 50  # add randomness to avoid mass restarts

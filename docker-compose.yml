@@ -22,7 +22,7 @@ services:
     build:
       context: forecast/
       dockerfile: Dockerfile.dev
-    command: python manage.py runserver 0.0.0.0:8080
+    command: gunicorn -c gunicorn.conf.py --bind 0.0.0.0:8080
     volumes:
       - ./forecast:/code
     ports:
@@ -42,6 +42,11 @@ services:
       OTEL_SERVICE_NAME: "weathergov-django"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318"
       OTEL_PYTHON_DJANGO_TRACED_REQUEST_ATTRS: "path_info,content_type"
+      WEB_GEVENT_WORKERS: 4
+      WEB_INSTANCES: 1
+      # the default database has max_connections=100 so we divide this between
+      # web and interop, keeping in mind some connections are reserved.
+      WEB_DB_MAX_CONNECTIONS: 45
     networks:
       - weather.gov
     depends_on:
@@ -122,6 +127,10 @@ services:
       # INTEROP_API_POOL_HEADERS_TIMEOUT:
       OTEL_SERVICE_NAME: "weathergov-api-interop"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318"
+      # the default database has max_connections=100 so we divide this between
+      # interop and web, keeping in mind some connections are reserved.
+      API_DB_MAX_CONNECTIONS: 45
+      API_INTEROP_INSTANCES: 1
     networks:
       - weather.gov
     links:
