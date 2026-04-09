@@ -19,15 +19,16 @@ SETTINGS_TYPE = "dev"
 # Enable Django admin in local dev
 INSTALLED_APPS += ["django.contrib.admin"]  # noqa: F405
 
-if not TESTING:  # noqa: F405
+env = environs.Env()
+
+ENABLE_DJANGO_DEBUG_TOOLBAR = env.bool("ENABLE_DJANGO_DEBUG_TOOLBAR", False)
+if ENABLE_DJANGO_DEBUG_TOOLBAR:
     INSTALLED_APPS += [  # noqa: F405
         "debug_toolbar",
     ]
     # django debug toolbar needs to be up front (but after gzip)
     MIDDLEWARE.insert(4, "debug_toolbar.middleware.DebugToolbarMiddleware")  # noqa: F405
     DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _: True}
-
-env = environs.Env()
 
 SECRET_KEY = env("django_secret_key")
 

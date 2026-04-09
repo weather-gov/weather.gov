@@ -55,8 +55,7 @@ if settings.SETTINGS_TYPE == "dev":
         path("admin/", admin.site.urls),
     )
 
-    if not settings.TESTING:
-
+    if settings.ENABLE_DJANGO_DEBUG_TOOLBAR:
         urlpatterns = [path("__debug__/", include("debug_toolbar.urls"))] + urlpatterns
 
 handler404 = "backend.views.errors.handle_404"
