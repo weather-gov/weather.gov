@@ -7,6 +7,7 @@ services:
   database:
     platform: linux/amd64
     image: postgis/postgis:17-3.5
+    command: -c "max_connections=400"
     networks:
       - weather.gov
     volumes:
@@ -47,7 +48,7 @@ services:
       WEB_INSTANCES: 1
       # the default database has max_connections=100 so we divide this between
       # web and interop, keeping in mind some connections are reserved.
-      WEB_DB_MAX_CONNECTIONS: 45
+      WEB_DB_MAX_CONNECTIONS: 195
     networks:
       - weather.gov
     depends_on:
@@ -80,7 +81,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256MB
+          memory: 1024MB
     environment:
       PORT: 8082
       DB_NAME: weathergov
@@ -130,7 +131,7 @@ services:
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318"
       # the default database has max_connections=100 so we divide this between
       # interop and web, keeping in mind some connections are reserved.
-      API_DB_MAX_CONNECTIONS: 45
+      API_DB_MAX_CONNECTIONS: 195
       API_INTEROP_INSTANCES: 1
     networks:
       - weather.gov
