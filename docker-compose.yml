@@ -29,6 +29,7 @@ services:
       - 8080:8080
       - 34235:34235
     environment:
+      ENABLE_DJANGO_DEBUG_TOOLBAR: false
       POSTGRES_DB: weathergov
       POSTGRES_USER: drupal
       POSTGRES_PASSWORD: drupal
