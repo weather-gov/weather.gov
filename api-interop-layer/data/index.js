@@ -1,5 +1,6 @@
 import path from "node:path";
-import { Worker, isMainThread } from "node:worker_threads";
+import { Worker } from "node:worker_threads";
+import { enableBackgroundProcessing } from "../util/background.js";
 import { logger } from "../util/monitoring/index.js";
 import getAlerts from "./alerts/index.js";
 import { alignAlertsToDaily } from "./alerts/utils.js";
@@ -18,7 +19,7 @@ const disableAnalysis = process.env.DISABLE_GRID_ANALYSIS === "true";
 let gridCache;
 let backgroundWorker;
 
-if (isMainThread) {
+if (enableBackgroundProcessing()) {
   const workerPath = path.join(
     import.meta.dirname,
     "forecast",
