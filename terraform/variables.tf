@@ -67,12 +67,6 @@ variable "env" {
   description = "The environment to set for the app (eg staging or production)"
 }
 
-variable "interop_url" {
-  type        = string
-  sensitive   = true
-  description = "URL for the API interop layer (deprecated)"
-}
-
 variable "enable_api_proxy" {
   type        = bool
   default     = false
