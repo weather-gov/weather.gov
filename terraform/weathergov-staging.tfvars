@@ -16,6 +16,5 @@ web_instances         = 4
 api_interop_memory    = "1024M"
 api_interop_instances = 4
 api_url               = "https://api.weather.gov"
-interop_url           = "https://api-weathergov-staging.app.cloud.gov"
 redis_plan_name       = "redis-3node"
 rds_plan_name         = "medium-psql-redundant"
