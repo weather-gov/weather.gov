@@ -8,12 +8,11 @@ class MockPool {
   }
 }
 
-describe("Point forecast route  403 to 429 tests", () => {
+describe("Point forecast route 403 to 429 tests", () => {
   let openDatabase,
     db,
     apiResponse,
     handler,
-    worker,
     sandbox;
 
   before(async() => {
@@ -41,8 +40,6 @@ describe("Point forecast route  403 to 429 tests", () => {
     await quibble.esm("undici", { Pool: MockPool }, {});
     const module = await import("./point.js");
     handler = module.handler;
-    const indexModule = await import("../data/index.js");
-    worker = indexModule.backgroundWorker;
   });
 
   beforeEach(() => {
@@ -75,7 +72,6 @@ describe("Point forecast route  403 to 429 tests", () => {
   after(async () => {
     await quibble.reset();
     sandbox.restore();
-    await worker.terminate();
   });
 
   it("catches a thrown 403 error and responds 429", async () => {

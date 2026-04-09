@@ -1,7 +1,8 @@
-import { Worker, isMainThread } from "node:worker_threads";
+import { Worker } from "node:worker_threads";
 import path from "node:path";
 
 import { modifyTimestampsForAlert } from "./utils.js";
+import { enableBackgroundProcessing } from "../../util/background.js";
 import { logger } from "../../util/monitoring/index.js";
 import { parseDuration } from "./parse/index.js";
 import sort from "./sort.js";
@@ -35,12 +36,7 @@ export const updateFromBackground = ({ action, level, message }) => {
 };
 
 export const startAlertProcessing = async () => {
-  // If this is the main thread (and the first instance in production), fire up
-  // the background worker.
-  const enableBackgroundProcessing = process.env.API_INTEROP_PRODUCTION
-    ? process.env.CF_INSTANCE_INDEX == 0 && isMainThread
-    : isMainThread;
-  if (enableBackgroundProcessing) {
+  if (enableBackgroundProcessing()) {
     alertsCache.db = await openDatabase();
 
     logger.info("starting background worker");

@@ -1,5 +1,6 @@
 import path from "node:path";
-import { Worker, isMainThread } from "node:worker_threads";
+import { Worker } from "node:worker_threads";
+import { enableBackgroundProcessing } from "../../util/background.js";
 import { logger } from "../../util/monitoring/index.js";
 import openDatabase from "../db.js";
 
@@ -46,12 +47,7 @@ const ensureDatabaseExists = openDatabase().then(async (db) => {
 });
 
 export const startRiskOverviewProcessing = async () => {
-  // If this is the main thread (and the first instance in production), fire up
-  // the background worker.
-  const enableBackgroundProcessing = process.env.API_INTEROP_PRODUCTION
-    ? process.env.CF_INSTANCE_INDEX == 0 && isMainThread
-    : isMainThread;
-  if (enableBackgroundProcessing) {
+  if (enableBackgroundProcessing()) {
     // Make sure the database is initialized.
     await ensureDatabaseExists;
 
