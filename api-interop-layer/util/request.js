@@ -20,6 +20,9 @@ const performRequest = async (dispatcher, path, additionalHeaders={}) => {
     path,
     method: "GET",
     headers: composedHeaders,
+    // Do not block, since we are pipelining.
+    // See https://undici.nodejs.org/#/?id=pipelining
+    blocking: false,
   });
 
   const { statusCode, body, headers, statusText } = response;
