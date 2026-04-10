@@ -51,7 +51,8 @@ wx-tabs,
   }
 }
 
-wx-tabs#county-alerts {
+wx-tabs#county-alerts,
+wx-tabs#state-alerts {
   button {
     @extend .text-normal;
   }

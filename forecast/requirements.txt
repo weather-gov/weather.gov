@@ -60,10 +60,16 @@ charset-normalizer==3.4.4 \
     --hash=sha256:d055ec1e26e441f6187acf818b73564e6e6282709e9bcb5b63f5b23068356a15 \
     --hash=sha256:f1e34719c6ed0b92f418c7c780480b26b5d9c50349e9a9af7d76bf757530350d
     # via requests
+click==8.3.1 \
+    --hash=sha256:12ff4785d337a1bb490bb7e9c2b1ee5da3112e94a8622f26a6c77f5d2fc6842a \
+    --hash=sha256:981153a64e25f12d547d3426c367a4857371575ee7ad18df2a6183ab0545b2a6
+    # via geobuf
 colorama==0.4.6 ; sys_platform == 'win32' \
     --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
     --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
-    # via tqdm
+    # via
+    #   click
+    #   tqdm
 deepmerge==2.0 \
     --hash=sha256:5c3d86081fbebd04dd5de03626a0607b809a98fb6ccba5770b62466fe940ff20 \
     --hash=sha256:6de9ce507115cff0bed95ff0ce9ecc31088ef50cbdf09bc90a09349a318b3d00
@@ -177,6 +183,10 @@ furl==2.1.4 \
     --hash=sha256:877657501266c929269739fb5f5980534a41abd6bbabcb367c136d1d3b2a6015 \
     --hash=sha256:da34d0b34e53ffe2d2e6851a7085a05d96922b5b578620a37377ff1dbeeb11c8
     # via cfenv
+geobuf==2.0.1 \
+    --hash=sha256:73f173e42e50ca546ad81be8ac33511bf09d0fcb58799fa50ef0ee5f01c77561 \
+    --hash=sha256:b8407af71134aa1e2e55e2ae1d2d241b2c2345e2904de7cca48eb441ee6f2e5d
+    # via weather-gov
 gevent==25.9.1 \
     --hash=sha256:323a27192ec4da6b22a9e51c3d9d896ff20bc53fdc9e45e56eaab76d1c39dd74 \
     --hash=sha256:34e01e50c71eaf67e92c186ee0196a039d6e4f4b35670396baed4a2d8f1b347f \
@@ -188,9 +198,9 @@ gevent==25.9.1 \
     --hash=sha256:dc45cd3e1cc07514a419960af932a62eb8515552ed004e56755e4bf20bad30c5 \
     --hash=sha256:f2b54ea3ca6f0c763281cd3f96010ac7e98c2e267feb1221b5a26e2ca0b9a692
     # via weather-gov
-googleapis-common-protos==1.73.0 \
-    --hash=sha256:778d07cd4fbeff84c6f7c72102f0daf98fa2bfd3fa8bea426edc545588da0b5a \
-    --hash=sha256:dfdaaa2e860f242046be561e6d6cb5c5f1541ae02cfbcb034371aadb2942b4e8
+googleapis-common-protos==1.73.1 \
+    --hash=sha256:13114f0e9d2391756a0194c3a8131974ed7bffb06086569ba193364af59163b6 \
+    --hash=sha256:e51f09eb0a43a8602f5a915870972e6b4a394088415c79d79605a46d8e826ee8
     # via
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
@@ -273,9 +283,9 @@ lxml==6.0.2 \
     #   lxml-html-clean
     #   python3-saml
     #   xmlsec
-lxml-html-clean==0.4.4 \
-    --hash=sha256:58f39a9d632711202ed1d6d0b9b47a904e306c85de5761543b90e3e3f736acfb \
-    --hash=sha256:ce2ef506614ecb85ee1c5fe0a2aa45b06a19514ec7949e9c8f34f06925cfabcb
+lxml-html-clean==0.4.3 \
+    --hash=sha256:63fd7b0b9c3a2e4176611c2ca5d61c4c07ffca2de76c14059a81a2825833731e \
+    --hash=sha256:c9df91925b00f836c807beab127aac82575110eacff54d0a75187914f1bd9d8c
     # via html-sanitizer
 marshmallow==4.2.0 \
     --hash=sha256:1dc369bd13a8708a9566d6f73d1db07d50142a7580f04fd81e1c29a4d2e10af4 \
@@ -457,6 +467,7 @@ protobuf==6.33.6 \
     --hash=sha256:e2afbae9b8e1825e3529f88d514754e094278bb95eadc0e199751cdd9a2e82a2 \
     --hash=sha256:e9db7e292e0ab79dd108d7f1a94fe31601ce1ee3f7b79e0692043423020b0593
     # via
+    #   geobuf
     #   googleapis-common-protos
     #   opentelemetry-proto
 psycopg==3.3.3 \
@@ -545,6 +556,7 @@ six==1.17.0 \
     --hash=sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81
     # via
     #   furl
+    #   geobuf
     #   orderedmultidict
     #   python-dateutil
 soupsieve==2.8.1 \

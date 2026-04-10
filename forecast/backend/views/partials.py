@@ -1,13 +1,18 @@
+import json
+
+import geobuf
+from django.contrib.gis.serializers.geojson import Serializer
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
+from shapely import MultiPolygon, Polygon
 
 from backend import interop
-from backend.util import get_counties_combo_box_list, get_states_combo_box_list
-from spatial.models import WeatherCounties, WeatherStates
+from backend.util import get_counties_combo_box_list, get_states_combo_box_list, process_state_alerts
+from spatial.models import WeatherAlertsCache, WeatherCounties, WeatherStates
 
 
 @never_cache
@@ -24,6 +29,82 @@ def wx_afd_versions(_, wfo):
     data = interop.get_wx_afd_versions_by_wfo(wfo)
     markup = render_to_string("weather/afd/afd_versions_select.html", {"version_list": data["@graph"]})
     return HttpResponse(markup, content_type="text/html")
+
+
+@never_cache
+def wx_state_boundaries_pbf(_, state):
+    """Return a script tag containing the GeoJSON for the given state's boundaries."""
+    state_obj = get_object_or_404(WeatherStates, state=state.upper())
+    geojson_dict = json.loads(state_obj.shape.geojson)
+    pbf_data = geobuf.encode(geojson_dict)
+    return HttpResponse(pbf_data, content_type="application/x-protobuf")
+
+
+@never_cache
+def wx_state_alerts_pbf(_, state):
+    """Return Geobuf-encoded alerts for a state with internally sorted geometries."""
+    state_obj = get_object_or_404(WeatherStates, state=state.upper())
+    state_fips = state_obj.fips
+
+    # Get all alerts for the state
+    alerts = WeatherAlertsCache.objects.filter(states__contains=[state_fips]).only(
+        "id", "alertjson", "alertkind", "counties", "states", "shape"
+    )
+
+    state_fips = state_obj.fips
+
+    # Get Weather alerts for state
+    alerts_queryset = WeatherAlertsCache.objects.filter(states__contains=[state_fips]).only(
+        "id", "alertjson", "alertkind", "counties", "states"
+    )
+
+    # Loop through all alerts and create set of counties
+    all_fips = set()
+    for alert in alerts_queryset:
+        if alert.counties:
+            all_fips.update(alert.counties)
+
+    # Query all FIPS and names for each alert county
+    county_map = dict(WeatherCounties.objects.filter(countyfips__in=all_fips).values_list("countyfips", "countyname"))
+
+    # Serialize and load the data for encoding
+    serializer = Serializer()
+    geojson_data = serializer.serialize(
+        alerts, geometry_field="shape", fields=("alertjson", "alertkind", "counties", "states")
+    )
+    geojson_dict = json.loads(geojson_data)
+
+    #  Internal Sorting Logic (Ticket #207)
+    for feature in geojson_dict.get("features", []):
+        # Remove the nested geometry field
+        feature["properties"]["alertjson"].pop("geometry", None)
+
+        geom = feature.get("geometry")
+
+        counties_mapping = {
+            fips: county_map.get(fips, fips)
+            for fips in feature["properties"]["counties"]
+            if str(fips).startswith(str(state_fips))
+        }
+        feature["properties"]["alertjson"]["total_counties_display"] = len(counties_mapping)
+
+        # We only care about MultiPolygons
+        if not geom or geom.get("type") != "MultiPolygon":
+            continue
+
+        # Loop through nested polygons and format for shapely
+        polygons = [Polygon(shell=poly_coords[0], holes=poly_coords[1:]) for poly_coords in geom["coordinates"]]
+
+        # Sort and output
+        sorted_polygons = sorted(polygons, key=lambda a: a.area, reverse=True)
+        feature["geometry"] = MultiPolygon(polygons=sorted_polygons).__geo_interface__
+
+    # Process alerts by sorting by timestamp and severity
+    geojson_dict["features"] = process_state_alerts(geojson_dict["features"])
+
+    # Encode and return
+    pbf_data = geobuf.encode(geojson_dict)
+    return HttpResponse(pbf_data, content_type="application/x-protobuf")
 
 
 def wx_select_state_counties(_request, state_fips):

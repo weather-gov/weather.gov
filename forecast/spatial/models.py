@@ -84,6 +84,35 @@ class WeatherStates(models.Model):
     name = models.TextField(null=True)
     fips = models.CharField(max_length=2, null=True)
     shape = models.GeometryField()
+    county_count = models.IntegerField()
+    timezone = models.TextField(null=True)
+
+    def get_subdivision_label(self, plural=False):
+        """Return the generic subdivision name for this state."""
+        suffix = "02" if plural else "01"
+
+        subdivision_mapping = {
+            "AK": "spatial.county-like.name.census-area",
+            "GU": "spatial.county-like.name.village",
+            "LA": "spatial.county-like.name.parish",
+            "MP": "spatial.county-like.name.municipality",
+            "PR": "spatial.county-like.name.municipality",
+            "VI": "spatial.county-like.name.island",
+        }
+
+        base_key = subdivision_mapping.get(self.state, "spatial.county-like.name.county")
+        full_key = f"{base_key}.{suffix}"
+
+        return _(full_key)
+
+    def get_count_display(self, current_count):
+        """Return a string like '2 of 64 Counties' properly localized."""
+        return format_lazy(
+            _("spatial.status.count-of-total.01"),
+            count=current_count,
+            total=self.county_count,
+            subdivision=self.get_subdivision_label(plural=True),
+        )
 
     def __str__(self):
         return self.state

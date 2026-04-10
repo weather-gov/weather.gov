@@ -8,5 +8,8 @@ import "../page.html.js";
 
 import "../components/combobox/filterable-listbox.js";
 
+import "../components/Tabs.js";
+import "../components/county-alert-daily-alert-handler.js";
+
 // For filtering state input
 import "../components/state-index-filter.js";

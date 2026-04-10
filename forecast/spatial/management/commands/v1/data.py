@@ -3,6 +3,7 @@ import logging
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.db import connection
+from django.db.models import Count, Min
 from tqdm import tqdm
 
 from spatial.management.commands._spatial_util import (
@@ -117,6 +118,7 @@ def load_states(force=False):
             name=feature.get("NAME"),
             fips=feature.get("FIPS"),
             shape=GEOSGeometry(feature.geom.json),
+            county_count=0,
         ).save()
 
     __load_from_shapefile(
@@ -285,6 +287,26 @@ def load_counties(force=False):
         callback_get_unique_query=getquery,
         callback_create_model=create_model,
     )
+
+    # Get the counts grouped by state code
+    counts = WeatherCounties.objects.values("st").annotate(total=Count("id"))
+    count_map = {item["st"]: item["total"] for item in counts if item["st"]}
+
+    # Get the earliest timezone for each state
+    # We use Min() to get the alphabetically first timezone.
+    # In the US, "America/Chicago" < "America/New_York", effectively picking the western zone.
+    tz_agg = WeatherCounties.objects.values("st").annotate(earliest_tz=Min("timezone"))
+    tz_map = {item["st"]: item["earliest_tz"] for item in tz_agg if item["st"]}
+
+    # Update the states
+    states_to_update = WeatherStates.objects.all()
+    for state_obj in states_to_update:
+        # Get count from map, default to 0 if not found
+        state_obj.county_count = count_map.get(state_obj.state, 0)
+        state_obj.timezone = tz_map.get(state_obj.state)
+
+    # Bulk update the database for speed
+    WeatherStates.objects.bulk_update(states_to_update, ["county_count", "timezone"])
 
 
 def load_zones(force=False):

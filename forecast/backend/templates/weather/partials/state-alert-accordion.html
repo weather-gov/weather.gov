@@ -1,0 +1,33 @@
+{% comment %}
+-- Template purpose:
+--    Blueprint for merged state alerts. Populated by state-alerts-handler.js.
+{% endcomment %}
+<template id="state-alert-template">
+  <div class="wx-state-alert padding-x-3 padding-y-2 margin-bottom-2">
+    
+    <h4 class="alert-event-title margin-0 display-flex flex-align-center">
+      <div class="maxw-3 height-3 margin-right-1">
+        <svg role="img" aria-hidden="true" class="width-full height-full" fill="currentColor">
+          <use href="{% static 'images/uswds/sprite.svg' %}#warning" class="js-alert-icon-use"></use>
+        </svg>
+      </div>
+      <span class="js-event-name"></span>
+    </h4>
+
+    <div class="alert-count-subtext js-count-display"></div>
+
+    <div class="county-column-grid">
+      <ul class="js-county-list margin-0"></ul>
+    </div>
+  </div>
+
+  <template id="county-link-template">
+    <li class="margin-bottom-05"> 
+      <a href="" class="usa-link js-county-link">
+        <span class="js-county-name"></span>
+        <span class="js-subdivision-label"></span>, 
+        <span class="js-state-code"></span>
+      </a>
+    </li>
+  </template>
+</template>

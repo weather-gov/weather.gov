@@ -13,6 +13,7 @@ dependencies = [
     "django-storages[s3]==1.14.6",
     "djangorestframework>=3.16.1",
     "environs[django]==14.6.0 ; python_full_version >= '3.8'",
+    "geobuf==2.0.1",
     "gevent==25.9.1 ; python_full_version >= '3.9'",
     "gunicorn==25.1.0 ; python_full_version >= '3.7'",
     "html-sanitizer>=2.6.0",
