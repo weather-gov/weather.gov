@@ -1,0 +1,117 @@
+@use "uswds-core" as *;
+
+.wx-state-alert {
+  background-color: color("white");
+  border: 1px solid color("base");
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: units(1.5) units(2);
+  gap: units(1);
+
+  .alert-icon-box {
+    display: inline-block;
+    width: units(1.5);
+    height: units(1.5);
+    margin-right: units(1);
+    flex-shrink: 0;
+  }
+
+  .alert-event-title {
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    font-size: size("sans", "md");
+    font-weight: font-weight("normal");
+    line-height: 1.2;
+    margin: 0;
+
+    svg {
+      fill: currentcolor;
+      margin-right: units(1);
+      width: units(3);
+      height: units(3);
+      flex-shrink: 0;
+
+      use {
+        fill: currentcolor;
+      }
+    }
+  }
+
+  .alert-count-subtext {
+    color: color("base-dark");
+    font-size: size("sans", "xs");
+    font-weight: font-weight("normal");
+    display: block;
+    width: fit-content;
+  }
+
+  &[data-alert-level="warning"] {
+    border-color: color("red-50");
+
+    .alert-event-title {
+      color: color("red-50");
+      fill: color("red-50");
+    }
+  }
+
+  &[data-alert-level="watch"] {
+    border-color: color("yellow-50v");
+
+    .alert-event-title {
+      color: color("yellow-50v");
+      fill: color("yellow-50v");
+    }
+  }
+
+  &[data-alert-level="advisory"],
+  &[data-alert-level="other"] {
+    border-color: color("base-dark");
+
+    .alert-event-title {
+      color: color("base-dark");
+      fill: color("base-dark");
+    }
+  }
+}
+
+/* County Grid Column Logic */
+.county-column-grid ul {
+  display: block;
+  column-gap: 24px;
+  column-width: 240px;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    break-inside: avoid-column;
+    display: block;
+    margin-bottom: units(0.5);
+
+    .usa-link {
+      display: inline-block;
+      font-size: size("sans", "sm");
+      line-height: line-height("sans", 4);
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* Segmented button blue selection */
+.usa-button-group--segmented .usa-button {
+  font-weight: font-weight("normal");
+  padding: units(1) units(1.5);
+
+  &[aria-selected="true"] {
+    background-color: color("primary") !important;
+    color: color("white") !important;
+  }
+}

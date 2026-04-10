@@ -515,6 +515,20 @@ wheels = [
 ]
 
 [[package]]
+name = "geobuf"
+version = "2.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "protobuf" },
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fd/d4/538d7d6c6524022bf91ed35a411913cef0e00dcb70fd3b9d3776be631f6e/geobuf-2.0.1.tar.gz", hash = "sha256:73f173e42e50ca546ad81be8ac33511bf09d0fcb58799fa50ef0ee5f01c77561", size = 46593, upload-time = "2026-01-20T02:05:35.046Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/41/d6/d02c66ce9dc888f663b127062f43cbdbaa5f4a37dfeaa6937aa5fe67a963/geobuf-2.0.1-py3-none-any.whl", hash = "sha256:b8407af71134aa1e2e55e2ae1d2d241b2c2345e2904de7cca48eb441ee6f2e5d", size = 9773, upload-time = "2026-01-20T02:05:34.262Z" },
+]
+
+[[package]]
 name = "gevent"
 version = "25.9.1"
 source = { registry = "https://pypi.org/simple" }
@@ -538,14 +552,14 @@ wheels = [
 
 [[package]]
 name = "googleapis-common-protos"
-version = "1.73.0"
+version = "1.73.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "protobuf" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/99/96/a0205167fa0154f4a542fd6925bdc63d039d88dab3588b875078107e6f06/googleapis_common_protos-1.73.0.tar.gz", hash = "sha256:778d07cd4fbeff84c6f7c72102f0daf98fa2bfd3fa8bea426edc545588da0b5a", size = 147323, upload-time = "2026-03-06T21:53:09.727Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a1/c0/4a54c386282c13449eca8bbe2ddb518181dc113e78d240458a68856b4d69/googleapis_common_protos-1.73.1.tar.gz", hash = "sha256:13114f0e9d2391756a0194c3a8131974ed7bffb06086569ba193364af59163b6", size = 147506, upload-time = "2026-03-26T22:17:38.451Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/69/28/23eea8acd65972bbfe295ce3666b28ac510dfcb115fac089d3edb0feb00a/googleapis_common_protos-1.73.0-py3-none-any.whl", hash = "sha256:dfdaaa2e860f242046be561e6d6cb5c5f1541ae02cfbcb034371aadb2942b4e8", size = 297578, upload-time = "2026-03-06T21:52:33.933Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/82/fcb6520612bec0c39b973a6c0954b6a0d948aadfe8f7e9487f60ceb8bfa6/googleapis_common_protos-1.73.1-py3-none-any.whl", hash = "sha256:e51f09eb0a43a8602f5a915870972e6b4a394088415c79d79605a46d8e826ee8", size = 297556, upload-time = "2026-03-26T22:15:58.455Z" },
 ]
 
 [[package]]
@@ -712,14 +726,14 @@ wheels = [
 
 [[package]]
 name = "lxml-html-clean"
-version = "0.4.4"
+version = "0.4.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "lxml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9a/a4/5c62acfacd69ff4f5db395100f5cfb9b54e7ac8c69a235e4e939fd13f021/lxml_html_clean-0.4.4.tar.gz", hash = "sha256:58f39a9d632711202ed1d6d0b9b47a904e306c85de5761543b90e3e3f736acfb", size = 23899, upload-time = "2026-02-27T09:35:52.911Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d9/cb/c9c5bb2a9c47292e236a808dd233a03531f53b626f36259dcd32b49c76da/lxml_html_clean-0.4.3.tar.gz", hash = "sha256:c9df91925b00f836c807beab127aac82575110eacff54d0a75187914f1bd9d8c", size = 21498, upload-time = "2025-10-02T20:49:24.895Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d9/76/7ffc1d3005cf7749123bc47cb3ea343cd97b0ac2211bab40f57283577d0e/lxml_html_clean-0.4.4-py3-none-any.whl", hash = "sha256:ce2ef506614ecb85ee1c5fe0a2aa45b06a19514ec7949e9c8f34f06925cfabcb", size = 14565, upload-time = "2026-02-27T09:35:51.86Z" },
+    { url = "https://files.pythonhosted.org/packages/10/4a/63a9540e3ca73709f4200564a737d63a4c8c9c4dd032bab8535f507c190a/lxml_html_clean-0.4.3-py3-none-any.whl", hash = "sha256:63fd7b0b9c3a2e4176611c2ca5d61c4c07ffca2de76c14059a81a2825833731e", size = 14177, upload-time = "2025-10-02T20:49:23.749Z" },
 ]
 
 [[package]]
@@ -1445,6 +1459,7 @@ dependencies = [
     { name = "django-storages", extra = ["s3"] },
     { name = "djangorestframework" },
     { name = "environs", extra = ["django"] },
+    { name = "geobuf" },
     { name = "gevent" },
     { name = "gunicorn" },
     { name = "html-sanitizer" },
@@ -1488,6 +1503,7 @@ requires-dist = [
     { name = "django-storages", extras = ["s3"], specifier = "==1.14.6" },
     { name = "djangorestframework", specifier = ">=3.16.1" },
     { name = "environs", extras = ["django"], marker = "python_full_version >= '3.8'", specifier = "==14.6.0" },
+    { name = "geobuf", specifier = "==2.0.1" },
     { name = "gevent", marker = "python_full_version >= '3.9'", specifier = "==25.9.1" },
     { name = "gunicorn", marker = "python_full_version >= '3.7'", specifier = "==25.1.0" },
     { name = "html-sanitizer", specifier = ">=2.6.0" },

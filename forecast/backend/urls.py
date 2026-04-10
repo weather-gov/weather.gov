@@ -47,6 +47,8 @@ urlpatterns = [
     path("wx/afd/locations/<wfo>/", partials.wx_afd_versions, name="wx_afd_versions"),
     path("wx/select/ghwo/counties/", partials.wx_select_ghwo_counties, name="wx_select_ghwo_counties"),
     path("wx/ghwo/counties/<str:county_fips>/", partials.wx_ghwo_counties, name="wx_ghwo_counties"),
+    path("wx/state/<state>/", partials.wx_state_boundaries_pbf, name="wx_state_boundary"),
+    path("wx/state/<state>/alerts", partials.wx_state_alerts_pbf, name="wx_state_boundary"),
     # Wagtail
     path("cms/logout/", RedirectView.as_view(url="/saml/logout/")),  # override wagtail logout
     path("cms/", include(wagtailadmin_urls)),

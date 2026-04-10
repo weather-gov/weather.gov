@@ -32,21 +32,27 @@ class TestCountyViews(TestCase):
         self.state1 = spatial.WeatherStates.objects.create(
             state="AK",
             name="Alaska",
+            county_count=10,
             fips=90,
+            timezone="America/Anchorage",
             shape=GEOSGeometry("POINT(0 0)"),
         )
 
         self.state2 = spatial.WeatherStates.objects.create(
             state="MA",
             name="Mass",
+            county_count=10,
             fips=90,
+            timezone="America/New_York",
             shape=GEOSGeometry("POINT(0 0)"),
         )
 
         self.state3 = spatial.WeatherStates.objects.create(
             state="GH",
             name="Ghert",
+            county_count=10,
             fips=92,
+            timezone="UTC",
             shape=GEOSGeometry("POINT(0 0)"),
         )
 

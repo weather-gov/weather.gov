@@ -1,8 +1,9 @@
 import logging
 import re
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Tuple
+from zoneinfo import ZoneInfo
 
 from django.shortcuts import get_object_or_404
 from django.utils.safestring import mark_safe
@@ -137,6 +138,18 @@ ALERT_PRIORITY_MAP = {
 }
 
 
+DAY_TRANSLATION_MAP = {
+    "Monday": _("county.alert-tabs.day.Monday.01"),
+    "Tuesday": _("county.alert-tabs.day.Tuesday.01"),
+    "Wednesday": _("county.alert-tabs.day.Wednesday.01"),
+    "Thursday": _("county.alert-tabs.day.Thursday.01"),
+    "Friday": _("county.alert-tabs.day.Friday.01"),
+    "Saturday": _("county.alert-tabs.day.Saturday.01"),
+    "Sunday": _("county.alert-tabs.day.Sunday.01"),
+    "Today": _("county.alert-tabs.day.all.01"),
+}
+
+
 def get_wfo_from_afd(afd):
     """
     Determine the correct WFO code for an AFD.
@@ -239,7 +252,8 @@ def timestamps_to_datetime_in_dict(dictionary, keys, timezoneinfo):
         for key in keys:
             dictionary[key] = datetime.fromisoformat(dictionary[key]).astimezone(tz=timezoneinfo)
 
-def get_states_combo_box_list(selected_fips = ""):
+
+def get_states_combo_box_list(selected_fips=""):
     """Get a list of dictionaries of WeatherState 'text' and 'value' keys for use in wx-combo-box."""
     result = []
     for state in WeatherStates.objects.order_by("name").only("name", "fips"):
@@ -254,7 +268,7 @@ def get_states_combo_box_list(selected_fips = ""):
     return result
 
 
-def get_counties_combo_box_list(state_fips, selected_fips = ""):
+def get_counties_combo_box_list(state_fips, selected_fips=""):
     """Get a list of dictionaries of WeatherCounties for the given state.
 
     The dicts will have'text' and 'value' keys for use in wx-combo-box.
@@ -365,25 +379,13 @@ def process_county_alerts(alert_items: list) -> list:
     # Primary sort, organize by priority, then chronologically
     sorted_items = sorted(deduplicated_list, key=sort_alert_key)
 
-    # Explicit mapping for Day Translations
-    day_translation_map = {
-        "Monday": _("county.alert-tabs.day.Monday.01"),
-        "Tuesday": _("county.alert-tabs.day.Tuesday.01"),
-        "Wednesday": _("county.alert-tabs.day.Wednesday.01"),
-        "Thursday": _("county.alert-tabs.day.Thursday.01"),
-        "Friday": _("county.alert-tabs.day.Friday.01"),
-        "Saturday": _("county.alert-tabs.day.Saturday.01"),
-        "Sunday": _("county.alert-tabs.day.Sunday.01"),
-        "Today": _("county.alert-tabs.day.all.01"),
-    }
-
     # Count total occurrences for each event + day combo
     totals = defaultdict(int)
     for alert in sorted_items:
         # Extract day name as the 'key' for counting
         # Format expected, "Wednesday 02/11 9:00 AM PST" -> "Wednesday"
         full_start = alert.get("timing", {}).get("start", "")
-        day_raw = full_start.split(" ")[0] if full_start else day_translation_map["Today"]
+        day_raw = full_start.split(" ")[0] if full_start else DAY_TRANSLATION_MAP["Today"]
         totals[f"{alert.get('event', 'Alert')}-{day_raw}"] += 1
 
     # Construct the final display strings
@@ -399,14 +401,14 @@ def process_county_alerts(alert_items: list) -> list:
 
         # Parsing day name, format assumed: "Wednesday 02/11 9:00 AM PST"
         full_start = alert.get("timing", {}).get("start", "")
-        day_raw = full_start.split(" ")[0] if full_start else day_translation_map["Today"]
+        day_raw = full_start.split(" ")[0] if full_start else DAY_TRANSLATION_MAP["Today"]
 
         # Construct a unique key that's readable and used in UI code for events
         lookup_key = f"{event_type}-{day_raw}"
         occurrences[lookup_key] += 1
 
         # Use the  map to get the translated day name.
-        day_translated = day_translation_map.get(day_raw, day_raw)
+        day_translated = DAY_TRANSLATION_MAP.get(day_raw, day_raw)
 
         # Get the translated day name
         if totals[lookup_key] > 1:
@@ -423,6 +425,86 @@ def process_county_alerts(alert_items: list) -> list:
     return sorted_items
 
 
+def process_state_alerts(alert_geojsons: list, state_timezone: str = "UTC") -> list:
+    """Process state alerts, sorting and returning valid geojson objects."""
+    tz = ZoneInfo(state_timezone)
+    today_start = datetime.now(tz).replace(hour=0, minute=0, second=0, microsecond=0)
+
+    # Pre-calculate day ranges to avoid doing it inside the feature loop
+    days = [(today_start + timedelta(days=i), today_start + timedelta(days=i + 1)) for i in range(5)]
+
+    unique_map = {}
+    for feature in alert_geojsons:
+        aj = feature["properties"]["alertjson"]
+        h = aj.get("hash")
+        if h not in unique_map:
+            onset_dt = datetime.fromisoformat(aj["onset"].replace("Z", "+00:00")).astimezone(tz)
+            finish_raw = aj.get("finish") or aj.get("ends")
+            finish_dt = datetime.fromisoformat(finish_raw.replace("Z", "+00:00")).astimezone(tz) if finish_raw else None
+
+            # Store these on the dict temporarily for the next steps
+            aj["_onset_dt"] = onset_dt
+            aj["_finish_dt"] = finish_dt
+
+            # Determine day_raw once
+            if onset_dt.date() == today_start.date():
+                aj["_day_raw"] = "Today"
+            else:
+                aj["_day_raw"] = onset_dt.strftime("%A")
+
+            aj["alertDays"] = []
+            unique_map[h] = feature
+
+    sorted_features = sorted(unique_map.values(), key=lambda x: sort_alert_key(x["properties"]["alertjson"]))
+
+    # Timeline Logic (Using pre-parsed dates)
+    for i, (d_start, d_end) in enumerate(days):
+        for feature in sorted_features:
+            aj = feature["properties"]["alertjson"]
+            if aj["_onset_dt"] < d_end and (aj["_finish_dt"] is None or aj["_finish_dt"] >= d_start):
+                aj["alertDays"].append(i + 1)
+
+    # Count totals for indexing (Using pre-determined _day_raw)
+    totals = defaultdict(int)
+    for feature in sorted_features:
+        aj = feature["properties"]["alertjson"]
+        totals[f"{aj.get('event', 'Alert')}-{aj['_day_raw']}"] += 1
+
+    # Final Loop: Unique ID and Display Title
+    occurrences = defaultdict(int)
+    for feature in sorted_features:
+        aj = feature["properties"]["alertjson"]
+        event_type = aj.get("event", "Alert")
+        day_raw = aj["_day_raw"]
+
+        # Set unique_id
+        raw_hash = aj.get("hash", "")
+        aj["unique_id"] = f"hash_{re.sub(r'[^a-zA-Z0-9]', '', raw_hash)}"
+
+        lookup_key = f"{event_type}-{day_raw}"
+        occurrences[lookup_key] += 1
+        day_translated = DAY_TRANSLATION_MAP.get(day_raw, day_raw)
+
+        # Apply display title
+        if totals[lookup_key] > 1:
+            format_string = _("alerts.titles.with-index.01")
+            aj["display_title"] = format_string % {
+                "event": event_type,
+                "day": day_translated,
+                "index": occurrences[lookup_key],
+            }
+        else:
+            format_string = _("alerts.titles.without-index.01")
+            aj["display_title"] = format_string % {"event": event_type, "day": day_translated}
+
+        # Clean up temporary keys so they don't end up in the JSON output
+        del aj["_onset_dt"]
+        del aj["_finish_dt"]
+        del aj["_day_raw"]
+
+    return sorted_features
+
+
 def format_briefing_timestamps(briefing, wfo_instance, time_zone_info):
     """Format briefing data and timestamps."""
     if briefing and "error" in briefing:
@@ -435,11 +517,7 @@ def format_briefing_timestamps(briefing, wfo_instance, time_zone_info):
     # briefings for the given location
     briefing_inner = briefing.get("briefing", None)
     if briefing_inner:
-        timestamps_to_datetime_in_dict(
-            briefing_inner,
-            ["startTime", "endTime", "updateTime"],
-            time_zone_info
-        )
+        timestamps_to_datetime_in_dict(briefing_inner, ["startTime", "endTime", "updateTime"], time_zone_info)
         briefing_inner["wfo_url"] = wfo_instance.url
         briefing_inner["wfi_name"] = wfo_instance.name
 
@@ -466,10 +544,9 @@ def get_briefings_from_county_data(county_data, wfo_instances, time_zone_info):
     for wfo in wfo_instances:
         briefing_data = lookup.get(wfo.code.upper(), None)
         if briefing_data:
-            result.append(
-                format_briefing_timestamps(briefing_data, wfo, time_zone_info)
-            )
+            result.append(format_briefing_timestamps(briefing_data, wfo, time_zone_info))
     return result
+
 
 def get_weather_stories_from_county_data(county_data, wfo_instances, time_zone_info):
     """Format weather stories from the county interop data."""
@@ -488,14 +565,10 @@ def get_weather_stories_from_county_data(county_data, wfo_instances, time_zone_i
     for wfo in wfo_instances:
         story_data = lookup.get(wfo.code.upper(), None)
         if story_data and "error" not in story_data:
-           story_data["wfo_url"] = wfo.url
-           story_data["wfo_name"] = wfo.name
-           timestamps_to_datetime_in_dict(
-               story_data,
-               ["startTime", "updateTime", "endTime"],
-               time_zone_info
-           )
-           valid.append(story_data)
+            story_data["wfo_url"] = wfo.url
+            story_data["wfo_name"] = wfo.name
+            timestamps_to_datetime_in_dict(story_data, ["startTime", "updateTime", "endTime"], time_zone_info)
+            valid.append(story_data)
         elif story_data:
             # In this case, there is an error on the response dict.
             # We pass this to the template as-is to handle
@@ -510,12 +583,7 @@ def get_weather_stories_from_county_data(county_data, wfo_instances, time_zone_i
             # We still return a dict, but only with an officeId,
             # so that we can render the AFD links as needed
             # in the templates
-            empties.append({
-                "officeId": wfo.code.upper(),
-                "wfo_url": wfo.url,
-                "wfo_name": wfo.name,
-                "is_empty": True
-            })
+            empties.append({"officeId": wfo.code.upper(), "wfo_url": wfo.url, "wfo_name": wfo.name, "is_empty": True})
 
     valid = sorted(valid, key=lambda story: story["startTime"], reverse=True)
     return valid + empties + errors
@@ -533,11 +601,7 @@ def get_weather_story_from_point_data(point_data, wfo_instance, time_zone_info):
     if story and "error" not in story:
         story["wfo_name"] = wfo_instance.name
         story["wfo_url"] = wfo_instance.url
-        timestamps_to_datetime_in_dict(
-            story,
-            ["startTime", "updateTime", "endTime"],
-            time_zone_info
-        )
+        timestamps_to_datetime_in_dict(story, ["startTime", "updateTime", "endTime"], time_zone_info)
     elif story and "error" in story:
         story["wfo_name"] = wfo_instance.name
         story["wfo_url"] = wfo_instance.url
@@ -550,8 +614,7 @@ def get_weather_story_from_point_data(point_data, wfo_instance, time_zone_info):
             "is_empty": True,
             "officeId": wfo_instance.code,
             "wfo_name": wfo_instance.name,
-            "wfo_url": wfo_instance.url
+            "wfo_url": wfo_instance.url,
         }
 
     return story
-

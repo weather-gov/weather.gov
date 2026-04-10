@@ -107,6 +107,9 @@ msgstr "Advisory Area"
 msgid "alerts.legend.county-line.01"
 msgstr "County Line"
 
+msgid "alerts.legend.state-line.01"
+msgstr "State Line"
+
 msgid "alerts.table-header.alert-name.01"
 msgstr "Alert name"
 
@@ -938,23 +941,44 @@ msgstr "table legend"
 msgid "spatial.county-like.name.county.01"
 msgstr "County"
 
+msgid "spatial.county-like.name.county.02"
+msgstr "Counties"
+
 msgid "spatial.county-like.name.borough.01"
 msgstr "Borough"
+
+msgid "spatial.county-like.name.borough.02"
+msgstr "Boroughs"
 
 msgid "spatial.county-like.name.parish.01"
 msgstr "Parish"
 
+msgid "spatial.county-like.name.parish.02"
+msgstr "Parishes"
+
 msgid "spatial.county-like.name.census-area.01"
 msgstr "Census Area"
+
+msgid "spatial.county-like.name.census-area.02"
+msgstr "Census Areas"
 
 msgid "spatial.county-like.name.village.01"
 msgstr "Village"
 
+msgid "spatial.county-like.name.village.02"
+msgstr "Villages"
+
 msgid "spatial.county-like.name.municipality.01"
 msgstr "Municipality"
 
+msgid "spatial.county-like.name.municipality.02"
+msgstr "Municipalities"
+
 msgid "spatial.county-like.name.island.01"
 msgstr "Island"
+
+msgid "spatial.county-like.name.island.02"
+msgstr "Islands"
 
 msgid "spatial.county-like.with-subdivision.label.01"
 msgstr "{name} {subdivision}, {state}"
@@ -986,6 +1010,9 @@ msgstr "Radar"
 msgid "state.heading.analysis.01"
 msgstr "Analysis"
 
+msgid "state.heading.alerts-type.01"
+msgstr "Alerts By Type"
+
 msgid "state.heading.index.01"
 msgstr "State and Territory Views"
 
@@ -994,6 +1021,18 @@ msgstr "Select your state or territory from the list below to see alerts, risk l
 
 msgid "state.labels.state-filter.01"
 msgstr "Filter by state name"
+
+msgid "state.alerts.loading-map.01"
+msgstr "Loading the map..."
+
+msgid "state.alerts.none-period"
+msgstr "No active alerts for this period."
+
+msgid "spatial.status.count-of-total.01"
+msgstr "{count} of {total} {subdivision}"
+
+msgid "spatial.status.see-list.01"
+msgstr "See List of {subdivision}"
 
 msgid "error.500.generic.message.01"
 msgstr "Something went wrong on our end. Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
