@@ -177,8 +177,6 @@ services:
     depends_on:
       - web
       - api-proxy
-    links:
-      - web
     volumes:
       - ./api-proxy/:/app/api-proxy
       - ./tests/:/app/tests

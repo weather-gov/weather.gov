@@ -6,7 +6,7 @@ const { describe, beforeEach } = test;
 describe.skip("quantitative precipitation forecast table", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"));
-    await page.goto(services.webApp("/point/34.749/-92.275#daily"), {
+    await page.goto(services.webApp("/point/34.749/-92.275/#daily"), {
       waitUntil: "load",
     });
   });
