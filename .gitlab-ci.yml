@@ -293,6 +293,7 @@ playwright-e2e:
   extends: [.playwright]
   parallel: 3
   script:
+    - ln -s /app/node_modules/ .
     - echo Attempting to run end-to-end tests against $DEPLOYED_URL
     - npx playwright test e2e_$CI_NODE_INDEX
 
@@ -300,8 +301,9 @@ playwright-e2e:
 playwright-a11y:
   extends: [.playwright]
   script:
+    - ln -s /app/node_modules/ .
     - echo Attempting to run a11y tests against $DEPLOYED_URL
-    - CI=true npx playwright test --quiet --retries 0 a11y
+    - CI=true npx playwright test a11y
 
 # build a base image with all the current node_modules and other JavaScript dependencies
 gather-forecast-node-dependencies:

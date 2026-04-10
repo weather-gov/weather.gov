@@ -43,7 +43,7 @@ describe.skip("AFD Page Tests", () => {
     test("Displays a 404 page for a listing of AFDs at an invalid WFO", async ({
       page,
     }) => {
-      const response = await page.goto(services.webApp("/afd/WWW"), {
+      const response = await page.goto(services.webApp("/afd/WWW/"), {
         waitUntil: "load",
       });
 

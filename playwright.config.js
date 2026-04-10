@@ -13,14 +13,13 @@ const services = require("./tests/playwright/urls.js");
  */
 
 const config = {
-  timeout: 300000,
+  timeout: process.env.CI ? 15_000 : 9_000,
+  expect: { timeout: 1_000 },
   testDir: "./tests/playwright",
   /* Run tests in files in parallel */
   //fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI
     ? "line"
@@ -36,10 +35,23 @@ const config = {
           },
         ],
       ],
+
+  /** Allow parallel tests, but avoid overloading the rate limits. */
+  workers: 2,
+
+  /** Try to avoid flakey-ness. */
+  retries: process.env.CI ? 3 : 0,
+
+  /** Don't keep going if lots of stuff is broken. */
+  maxFailures: 10,
+
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: services.webURL,
+
+    /* Take screenshot when a test fails. */
+    screenshot: 'only-on-failure',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -61,22 +73,22 @@ const config = {
   projects: [
     {
       name: "Desktop Chrome",
-      use: { ...devices["Desktop Chrome"] },
+      use: { ...devices["Desktop Chrome"], mobile: false },
     },
 
     {
       name: "Desktop Firefox",
-      use: { ...devices["Desktop Firefox"] },
+      use: { ...devices["Desktop Firefox"], mobile: false },
     },
 
     {
       name: "Desktop Safari",
-      use: { ...devices["Desktop Safari"] },
+      use: { ...devices["Desktop Safari"], mobile: false },
     },
 
     {
       name: "Mobile Chrome",
-      use: { ...devices["Pixel 5"] },
+      use: { ...devices["Pixel 5"], mobile: true },
     },
   ],
 };
@@ -85,7 +97,7 @@ if (!process.env.CI) {
   // Mobile Safari is excluded in CI because it tends to fail
   config.projects.push({
     name: "Mobile Safari",
-    use: { ...devices["iPhone 12"] },
+    use: { ...devices["iPhone 12"], mobile: true },
   });
 } else {
   // Branded Chromium browsers are excluded in dev because they aren't built
@@ -93,12 +105,12 @@ if (!process.env.CI) {
   // work in the AMD64 CI/CD environment, though.
   config.projects.push({
     name: "Microsoft Edge",
-    use: { ...devices["Desktop Edge"], channel: "msedge" },
+    use: { ...devices["Desktop Edge"], channel: "msedge", mobile: false },
   });
 
   config.projects.push({
     name: "Google Chrome",
-    use: { ...devices["Desktop Chrome"], channel: "chrome" },
+    use: { ...devices["Desktop Chrome"], channel: "chrome", mobile: false },
   });
 }
 

@@ -6,23 +6,23 @@ const pages = [
   { name: "front page", path: "/" },
   {
     name: "location page with alerts (alerts tab)",
-    path: "/point/33.521/-86.812#alerts",
+    path: "/point/33.521/-86.812/#alerts",
   },
   {
     name: "location page with alerts (today tab)",
-    path: "/point/33.521/-86.812#today",
+    path: "/point/33.521/-86.812/#today",
   },
   {
     name: "location page with alerts (daily tab)",
-    path: "/point/33.521/-86.812#daily",
+    path: "/point/33.521/-86.812/#daily",
   },
   {
     name: "location page without alerts (today tab)",
-    path: "/point/35.198/-111.651#today",
+    path: "/point/35.198/-111.651/#today",
   },
   {
     name: "location page without alerts (daily tab)",
-    path: "/point/35.198/-111.651#daily",
+    path: "/point/35.198/-111.651/#daily",
   },
   {
     name: "about page",
@@ -55,11 +55,11 @@ for (const { name, path } of pages) {
 
       const accessibilityScanResults = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-        .exclude('#djDebug')
+        .exclude("#djDebug")
         .disableRules([
           // TODO: temporarily disabled in order to get Playwright running in CI
-          'color-contrast',
-          'aria-hidden-focus'
+          "color-contrast",
+          "aria-hidden-focus",
         ])
         .analyze();
 

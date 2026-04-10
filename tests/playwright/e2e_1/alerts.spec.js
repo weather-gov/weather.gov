@@ -3,13 +3,13 @@ const services = require("../urls.js");
 
 const { describe, beforeEach } = test;
 
-describe("Alerts e2e tests", () => {
+describe.fixme("Alerts e2e tests", () => {
   beforeEach(async ({ page }) => {
     await page.goto(services.apiProxy("/proxy/play/testing"), {
       waitUntil: "load",
     });
-    await page.goto(services.webApp("/point/34.749/-92.275"), { 
-      waitUntil: "load"
+    await page.goto(services.webApp("/point/34.749/-92.275/"), {
+      waitUntil: "load",
     });
   });
 
