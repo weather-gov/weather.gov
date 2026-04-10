@@ -16,7 +16,7 @@ const forecastLogger = logger.child({ subsystem: "forecast" });
 
 const disableAnalysis = process.env.DISABLE_GRID_ANALYSIS === "true";
 
-let gridCache;
+let gridCache = null;
 let backgroundWorker;
 
 if (enableBackgroundProcessing()) {
@@ -108,7 +108,9 @@ const getDataForPoint = async (lat, lon) => {
   if (!grid.error) {
     // Cache grid point information
     // This is a synchronous push to an array. Fire and Forget
-    gridCache.logGridHit(grid);
+    if (gridCache) {
+      gridCache.logGridHit(grid);
+    }
 
     const dbConnection = await getDbConnection();
 
