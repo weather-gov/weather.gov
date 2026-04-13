@@ -447,7 +447,7 @@ class TestInteropInterface(TestCase):
 
         self.assertEqual(actual, returned)
 
-    @mock.patch("backend.interop.REQUESTS_SESSION.get")
+    @mock.patch("backend.interop._requests_session.get")
     def test__fetch_with_429(self, mock_get): # noqa: ARG002
         """Tests that fetch will raise the 429 exception on 429."""
         mock_response = mock.Mock()
