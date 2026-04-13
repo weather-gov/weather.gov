@@ -1,10 +1,18 @@
 import { Pool } from "pg";
 import { sleep } from "../util/sleep.js";
+import { isMainThread } from "node:worker_threads";
 import { logger } from "../util/monitoring/logger.js";
 
 const dbLogger = logger.child({ subsystem: "database" });
 
 const getProductionPoolLimits = () => {
+  // worker threads (e.g., alerts background task) only need a small db pool
+  // since they run on a scheduler.
+  if (!isMainThread) {
+    dbLogger.warn({ max: 2, min: 1 }, "set worker thread pool limits");
+    return { min: 1, max: 2 };
+  }
+
   // ensure the database pool allocation is spread evenly across all interop
   // instances.
   const dbMaxConnections =
@@ -23,7 +31,14 @@ const getProductionPoolLimits = () => {
 };
 
 const getDevelopmentPoolLimits = () => {
-  // ensure the dtabase pool allocation is spread evenlly across all
+  // worker threads (e.g., alerts background task) only need a small db pool
+  // since they run on a scheduler.
+  if (!isMainThread) {
+    dbLogger.warn({ max: 2, min: 1 }, "set worker thread pool limits");
+    return { min: 1, max: 2 };
+  }
+
+  // ensure the database pool allocation is spread evenly across all
   // interop instances
   const dbMaxConnections =
     Number.parseInt(process.env.API_DB_MAX_CONNECTIONS, 10) || 45;
