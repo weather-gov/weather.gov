@@ -43,6 +43,7 @@ resource "cloudfoundry_app" "interop" {
     API_INTEROP_PRODUCTION = true
     API_INTEROP_NAME       = var.env
     API_INTEROP_INSTANCES  = var.api_interop_instances
+    API_NODE_APPS          = var.api_node_instances
     API_DB_MAX_CONNECTIONS = var.api_db_max_connections
     API_URL                = var.api_url
     GHWO_URL               = var.ghwo_url

@@ -9,7 +9,10 @@ const getProductionPoolLimits = () => {
   // instances.
   const dbMaxConnections =
     Number.parseInt(process.env.API_DB_MAX_CONNECTIONS, 10) || 195;
-  const instances = Number.parseInt(process.env.API_INTEROP_INSTANCES, 10) || 1;
+  const nodeApps = Number.parseInt(process.env.API_NODE_APPS, 10) || 1;
+  const interopInstances =
+    Number.parseInt(process.env.API_INTEROP_INSTANCES, 10) || 1;
+  const instances = nodeApps * interopInstances;
   const max = Math.max(Math.floor(dbMaxConnections / instances), 40);
   const min = Math.max(Math.floor(max / 2), 20);
   dbLogger.warn(
@@ -24,7 +27,10 @@ const getDevelopmentPoolLimits = () => {
   // interop instances
   const dbMaxConnections =
     Number.parseInt(process.env.API_DB_MAX_CONNECTIONS, 10) || 45;
-  const instances = Number.parseInt(process.env.API_INTEROP_INSTANCES, 10) || 1;
+  const nodeApps = Number.parseInt(process.env.API_NODE_APPS, 10) || 1;
+  const interopInstances =
+    Number.parseInt(process.env.API_INTEROP_INSTANCES, 10) || 1;
+  const instances = nodeApps * interopInstances;
   const max = Math.max(Math.floor(dbMaxConnections / instances), 20);
   const min = Math.max(Math.floor(max / 2), 10);
   dbLogger.warn(

@@ -107,6 +107,12 @@ variable "api_interop_instances" {
   description = "The number of API interop instances"
 }
 
+variable "api_node_apps" {
+  type        = number
+  default     = 2
+  description = "The number of node apps per instance"
+}
+
 variable "api_url" {
   type        = string
   default     = "https://api.weather.gov"
