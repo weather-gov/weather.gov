@@ -132,8 +132,8 @@ def get_production_pool_limits():
     """
     max_connections = int(os.environ.get("WEB_DB_MAX_CONNECTIONS", "195"))
     instances = int(os.environ.get("WEB_INSTANCES", "1")) * int(os.environ.get("WEB_GEVENT_WORKERS", "1"))
-    max_size = max(max_connections // instances, 20)
-    min_size = max(max_size // 2, 10)
+    max_size = max(max_connections // instances, 5)
+    min_size = max(max_size // 2, 2)
     return {
         "min_size": min_size,
         "max_size": max_size,

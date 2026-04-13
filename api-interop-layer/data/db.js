@@ -21,8 +21,8 @@ const getProductionPoolLimits = () => {
   const interopInstances =
     Number.parseInt(process.env.API_INTEROP_INSTANCES, 10) || 1;
   const instances = nodeApps * interopInstances;
-  const max = Math.max(Math.floor(dbMaxConnections / instances), 40);
-  const min = Math.max(Math.floor(max / 2), 20);
+  const max = Math.max(Math.floor(dbMaxConnections / instances), 5);
+  const min = Math.max(Math.floor(max / 2), 2);
   dbLogger.warn(
     { dbMaxConnections, instances, max, min },
     "set production pool limits",
@@ -46,8 +46,8 @@ const getDevelopmentPoolLimits = () => {
   const interopInstances =
     Number.parseInt(process.env.API_INTEROP_INSTANCES, 10) || 1;
   const instances = nodeApps * interopInstances;
-  const max = Math.max(Math.floor(dbMaxConnections / instances), 20);
-  const min = Math.max(Math.floor(max / 2), 10);
+  const max = Math.max(Math.floor(dbMaxConnections / instances), 5);
+  const min = Math.max(Math.floor(max / 2), 2);
   dbLogger.warn(
     { dbMaxConnections, instances, max, min },
     "set development pool limits",
