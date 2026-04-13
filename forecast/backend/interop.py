@@ -12,16 +12,21 @@ from backend.util.alert import set_timing
 from spatial.models import WeatherAlertsCache
 
 _ID_REGEX = re.compile("[^A-Z0-9]", re.IGNORECASE)
+_requests_session = None
 
-# Set up a requests Session instance
-# which allows us to have connection pooling
-REQUESTS_SESSION = requests.Session()
-_adapter = HTTPAdapter(
-    pool_connections=10,
-    pool_maxsize=100,
-)
-REQUESTS_SESSION.mount("http://", _adapter)
-REQUESTS_SESSION.mount("https://", _adapter)
+
+def _get_requests_session():
+    """Get or create the requests session (lazy initialization, needed for open telemetry)."""
+    global _requests_session  # noqa: PLW0603
+    if _requests_session is None:
+        _requests_session = requests.Session()
+        adapter = HTTPAdapter(
+            pool_connections=10,
+            pool_maxsize=100,
+        )
+        _requests_session.mount("http://", adapter)
+        _requests_session.mount("https://", adapter)
+    return _requests_session
 
 def _get_hour(dt):
     """Get the hour from datetime."""
@@ -33,7 +38,7 @@ def _fetch(url):
     base_url = getenv("INTEROP_URL")
     full_url = f"{base_url}{url}"
     # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
-    response = REQUESTS_SESSION.get(full_url, timeout=55)  # TODO: try-request block with logging
+    response = _get_requests_session().get(full_url, timeout=55)  # TODO: try-request block with logging
 
     if response.status_code == 429:  # noqa: PLR2004
         raise Http429
@@ -48,7 +53,7 @@ def _api_fetch(url):
         base_url = "https://api.weather.gov"
     full_url = f"{base_url}{url}"
     # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
-    response = REQUESTS_SESSION.get(full_url, timeout=55)  # TODO: try-request block with logging
+    response = _get_requests_session().get(full_url, timeout=55)  # TODO: try-request block with logging
     return response.json()
 
 
