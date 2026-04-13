@@ -78,17 +78,8 @@ export default async () => {
     return pool;
   }
 
-  // Try to connect, wait, try again, wait, etc. If the database isn't ready after
-  // 4 attempts and 30 seconds, we'll just fail.
   pool = new Pool(connectionDetails);
-  const client = await pool
-    .connect()
-    .catch(() => sleep(5_000))
-    .then(() => pool.connect())
-    .catch(() => sleep(9_000))
-    .then(() => pool.connect())
-    .catch(() => sleep(16_000))
-    .then(() => pool.connect());
+  const client = await pool.connect(); // do not retry: if the pool is not available then abort immediately.
   await client.release();
 
   return pool;
