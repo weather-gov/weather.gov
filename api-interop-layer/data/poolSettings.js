@@ -23,7 +23,8 @@ const getNumberFromEnv = (variableName) => {
 const DEFAULT_SETTINGS = {
   // Attempt to use HTTP2 for connections
   allowH2: true,
-  pipelining: 10
+  pipelining: 10,
+  connections: 500,
 };
 
 /**

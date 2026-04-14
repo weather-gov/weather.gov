@@ -151,6 +151,6 @@ variable "api_db_max_connections" {
 
 variable "web_gevent_workers" {
   type        = number
-  default     = 4
+  default     = 8
   description = "The number of gevent workers to allocate per web instance"
 }

@@ -39,12 +39,12 @@ services:
       GHWO_URL: "http://api-proxy:8081/"
       DEBUG_PORT: 34235
       DJANGO_SETTINGS_MODULE: backend.config.settings.dev
-      ENABLE_OPENTELEMETRY: true
+      ENABLE_OPENTELEMETRY: false
       TRACE_TEMPLATES: true # this can be noisy
       OTEL_SERVICE_NAME: "weathergov-django"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318"
       OTEL_PYTHON_DJANGO_TRACED_REQUEST_ATTRS: "path_info,content_type"
-      WEB_GEVENT_WORKERS: 4
+      WEB_GEVENT_WORKERS: 8
       WEB_INSTANCES: 1
       # the default database has max_connections=100 so we divide this between
       # web and interop, keeping in mind some connections are reserved.
@@ -55,6 +55,10 @@ services:
       - database
       - api-proxy
       - api-interop-layer
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
     links:
       - database
 
@@ -72,6 +76,10 @@ services:
     volumes:
       - ./api-proxy:/app
       - /app/node_modules
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
 
   api-interop-layer:
     build:
@@ -107,7 +115,7 @@ services:
       # The number of Client instances to create.
       # When set to null, the Pool instance will create
       # an unlimited amount of Client instances.
-      INTEROP_API_POOL_CONNECTIONS: 20
+      INTEROP_API_POOL_CONNECTIONS: 500 # note that api-proxy is HTTP 1.1 only
       # The amount of time before a Client instance is removed
       # from the Pool and closed.
       # When set to null, Client instances will not be
@@ -144,6 +152,10 @@ services:
     volumes:
       - ./api-interop-layer:/app
       - /app/node_modules
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
 
   uswds:
     build:

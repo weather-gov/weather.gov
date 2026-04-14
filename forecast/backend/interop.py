@@ -22,7 +22,7 @@ def _get_requests_session():
         _requests_session = requests.Session()
         adapter = HTTPAdapter(
             pool_connections=10,
-            pool_maxsize=100,
+            pool_maxsize=1000,
         )
         _requests_session.mount("http://", adapter)
         _requests_session.mount("https://", adapter)
@@ -152,7 +152,7 @@ def _process_interop_point_forecast(data):
     # Pull full alert data from the database. The interop only returns alert
     # hashes, in order to save on bandwidth.
     if "alerts" in data and "items" in data["alerts"] and len(data["alerts"]["items"]):
-        alerts = WeatherAlertsCache.objects.only("alertjson").filter(hash__in=data["alerts"]["items"])
+        alerts = WeatherAlertsCache.objects.only("hash", "alertjson").filter(hash__in=data["alerts"]["items"])
         # Map the hash to the alert object, with timings applied
         alerts = {alert.hash: set_timing(alert.alertjson, tz) for alert in alerts}
         # Now replace the alert hashes with actual alerts. If there's no
