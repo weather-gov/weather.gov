@@ -419,7 +419,7 @@ CONTENT_SECURITY_POLICY_REPORT_ONLY = {
 LOGGING = {
     "version": 1,
     # Don't import Django's existing loggers
-    "disable_existing_loggers": True,
+    "disable_existing_loggers": False,
     # define how to convert log messages into text;
     # each handler has its choice of format
     "formatters": {
@@ -430,11 +430,6 @@ LOGGING = {
         "simple": {
             "format": "%(levelname)s %(message)s",
         },
-        "django.server": {
-            "()": "django.utils.log.ServerFormatter",
-            "format": "[{server_time}] {message}",
-            "style": "{",
-        },
     },
     # define where log messages will be sent
     # each logger can have one or more handlers
@@ -443,11 +438,6 @@ LOGGING = {
             "level": os.environ.get("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.StreamHandler",
             "formatter": "verbose",
-        },
-        "django.server": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "django.server",
         },
         # No file logger is configured,
         # because containerized apps
@@ -468,15 +458,9 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        # Django's runserver
-        "django.server": {
-            "handlers": ["django.server"],
-            "level": "INFO",
-            "propagate": False,
-        },
-        # Django's runserver requests
+        # Django's requests
         "django.request": {
-            "handlers": ["django.server"],
+            "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
         },
