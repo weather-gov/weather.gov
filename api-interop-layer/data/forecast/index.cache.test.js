@@ -88,7 +88,7 @@ describe("Forecast index cache tests", () => {
       const actual = await forecast(args);
 
       expect(processGridpoint.calledWith(
-        {cached: true},
+        {cached: true, days: []},
         sinon.match(sinon.match.any),
         sinon.match(sinon.match.any)
       )).to.equal(true);
@@ -139,7 +139,7 @@ describe("Forecast index cache tests", () => {
       const actual = await forecast(args);
 
       expect(getFromRedis.calledWith(`/gridpoints/TST/34,35/forecast`)).to.equal(true);
-      expect(actual.daily).to.eql({message: "hello"});
+      expect(actual.daily).to.eql({message: "hello", days: []});
     });
 
     it("returns the cached result as the daily value", async () => {
@@ -147,7 +147,7 @@ describe("Forecast index cache tests", () => {
       processDaily.returns({message: "hello"});
       const actual = await forecast(args);
 
-      expect(actual.daily).to.eql({cached: true});
+      expect(actual.daily).to.eql({cached: true, days: []});
     });
 
     it("caches the processed daily response", async () => {
@@ -156,7 +156,7 @@ describe("Forecast index cache tests", () => {
 
       expect(saveToRedis.calledWith(
         `/gridpoints/TST/34,35/forecast`,
-        {message: "hello"},
+        {message: "hello", days: []},
         32
       )).to.equal(true);
     });

@@ -324,11 +324,15 @@ export default async ({ grid, place, isMarine }) => {
   if (isMarine) {
     dailyData.days = await getMarineDays(hours, place.timezone);
   }
+  // make sure we have days present (the daily data call can fail). TODO: we
+  // really should bail because i'm not sure what other information we can
+  // present to the user. maybe observations?
+  dailyData.days ??= [];
 
   const dayStartAndEnd = new Map();
 
   // Now add the appropriate QPF and hourly data to each day.
-  for (const day of dailyData.days ?? []) {
+  for (const day of dailyData.days) {
     // Make sure the day has an hours property. Empty for now, and
     // we'll fill it up later.
     day.hours = [];
