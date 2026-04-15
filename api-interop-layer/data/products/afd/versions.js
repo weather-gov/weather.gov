@@ -2,12 +2,11 @@
  * Fetch the list of all Area Forecast Discussion
  * versions
  */
-import { parseTTLFromHeaders } from "../../util/caching.js";
-import { requestJSONWithHeaders } from "../../util/request.js";
-import { logger } from "../../util/monitoring/index.js";
+import { parseTTLFromHeaders } from "../../../util/caching.js";
+import { requestJSONWithHeaders } from "../../../util/request.js";
+import { logger } from "../../../util/monitoring/index.js";
 import connectionPool from "../../connectionPool.js";
-import { getFromRedis, saveToRedis } from "../../redis.js";
-import { urlToHttpOptions } from "url";
+import { getFromRedis, saveToRedis } from "../../../redis.js";
 
 const productLogger = logger.child({subsystem: "product:afd"});
 

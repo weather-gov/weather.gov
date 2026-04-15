@@ -360,8 +360,8 @@ def get_wx_afd_versions_by_wfo(wfo):
 
     To see an example, go to: https://api.weather.gov/products/types/AFD/locations/arx
     """
-    url = f"/products/types/AFD/locations/{wfo}"
-    return _api_fetch(url)
+    url = f"/products/afd/versions/{wfo}"
+    return _fetch(url)
 
 
 def get_wx_afd_versions():
@@ -370,5 +370,5 @@ def get_wx_afd_versions():
 
     To see an example, go to https://api.weather.gov/products/types/AFD
     """
-    url = "/products/types/AFD"
-    return _api_fetch(url)
+    url = "/products/afd/versions"
+    return _fetch(url)
