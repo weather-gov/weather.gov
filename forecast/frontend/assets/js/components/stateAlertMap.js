@@ -382,11 +382,11 @@ const setupStateMap = async () => {
   const styles = {
     state: {
       color: "#11181D",
-      weight: 2,
+      weight: 3,
       opacity: 1,
       fillOpacity: 0,
-      dashArray: "6 6",
-      lineCap: "butt",
+      dashArray: "1 4",
+      lineCap: "round",
     },
     warning: {
       fillColor: "#D83933",
