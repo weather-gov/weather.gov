@@ -13,25 +13,6 @@ class TestInteropInterface(TestCase):
     """Tests the interop interface module."""
 
     @responses.activate
-    def test_get_wx_afd_versions_default_url(self):
-        """
-        Tests that we fetch from the right URL.
-
-        This test additionally tests that if the API_URL environment variable
-        is empty, we fallback to the default api.weather.gov.
-        """
-        os.environ["API_URL"] = ""
-        responses.add(
-            responses.GET,
-            "https://api.weather.gov/products/types/AFD",
-            json={"hello": "world"},
-            status=200,
-        )
-        actual = interop.get_wx_afd_versions()
-
-        self.assertEqual(actual, {"hello": "world"})
-
-    @responses.activate
     def test_get_wx_afd_versions_specified_url(self):
         """
         Tests that we fetch from the right URL.
@@ -40,10 +21,10 @@ class TestInteropInterface(TestCase):
         is set, we use it. Note that this pair of tests are effectively doing
         double-duty to validate API_URL handling.
         """
-        os.environ["API_URL"] = "https://gonzo"
+        os.environ["INTEROP_URL"] = "https://interop"
         responses.add(
             responses.GET,
-            "https://gonzo/products/types/AFD",
+            "https://interop/products/afd/versions",
             json={"rizzo": "rat"},
             status=200,
         )
@@ -54,10 +35,10 @@ class TestInteropInterface(TestCase):
     @responses.activate
     def test_get_wx_afd_versions_by_wfo(self):
         """Tests that we get AFD versions using a WFO."""
-        os.environ["API_URL"] = ""
+        os.environ["INTEROP_URL"] = "https://interop"
         responses.add(
             responses.GET,
-            "https://api.weather.gov/products/types/AFD/locations/BOB",
+            "https://interop/products/afd/versions/BOB",
             json={"bob": "weatherman"},
             status=200,
         )
