@@ -151,10 +151,12 @@ WSGI_APPLICATION = "backend.config.wsgi.application"
 # any upload that exceeds this limit will raise a `SuspiciousOperation(RequestDataTooBig)`
 DATA_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024  # 3MB
 
+
 class CustomManifestStaticFilesStorage(ManifestStaticFilesStorage):
     """Override manifest storage to support ESM module imports."""
 
     support_js_module_import_aggregation = True
+
 
 STORAGES = {
     "default": {
@@ -214,6 +216,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "frontend" / "assets",
 ]
 
+
 def get_base_pool_limits():
     """
     Get base pool limits.
@@ -225,10 +228,8 @@ def get_base_pool_limits():
     instances = int(os.environ.get("WEB_INSTANCES", "1")) * int(os.environ.get("WEB_GEVENT_WORKERS", "1"))
     max_size = max(max_connections // instances, 10)
     min_size = max(max_size // 2, 5)
-    return {
-        "min_size": min_size,
-        "max_size": max_size
-    }
+    return {"min_size": min_size, "max_size": max_size}
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -240,9 +241,7 @@ DATABASES = {
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
         "HOST": "database",
         "PORT": 5432,
-        "OPTIONS": {
-            "pool": get_base_pool_limits()
-        }
+        "OPTIONS": {"pool": get_base_pool_limits()},
     },
 }
 
@@ -289,7 +288,7 @@ CRITICAL_HOSTS = {
         "cdn.arcgis.com",
         "opengeo.ncep.noaa.gov",
         # satellite
-        "cdn.star.nesdis.noaa.gov"
+        "cdn.star.nesdis.noaa.gov",
     ],
     "img-src": [
         # satellite
@@ -300,7 +299,7 @@ CRITICAL_HOSTS = {
         # legacy weather.gov images
         "www.weather.gov",
         # weather stories
-        "api.weather.gov"
+        "api.weather.gov",
     ],
     "media-src": [
         # satellite
@@ -360,7 +359,7 @@ DIRECTIVES = {
         "blob:",
     ],
     "frame-ancestors": [SELF],
-    "form-action": [SELF]
+    "form-action": [SELF],
 }
 
 CONTENT_SECURITY_POLICY = {

@@ -14,124 +14,125 @@
 --
 -- Used by: partials/site-navigation.html
 {% endcomment %}
-<div id="site-search-submenu" class="margin-top-205 tablet-lg:margin-top-0">
-  <button class="usa-button site-nav-submenu-toggle border-radius-0 margin-bottom-05 margin-top-05" aria-expanded="false">
+<div id="site-search-submenu"
+     class="margin-top-205 tablet-lg:margin-top-0">
+  <button class="usa-button site-nav-submenu-toggle border-radius-0 margin-bottom-05 margin-top-05"
+          aria-expanded="false">
+    <span>{{ "menu.navigation.search.search.01" | t}}</span>
     <span>
-      {{ "menu.navigation.search.search.01" | t}}
-    </span>
-    <span>
-      <img src="{% static 'images/uswds/usa-icons/close.svg' %}" role="img" alt="Close" />
+      <img src="{% static 'images/uswds/usa-icons/close.svg' %}"
+           role="img"
+           alt="Close" />
     </span>
   </button>
   <span class="site-nav-submenu-label font-body-xs text-ls-1 padding-top">
     {{ "menu.navigation.search.search.01" | t}}
   </span>
   <wx-tabbed-nav class="site-nav-submenu-tabbed-nav">
-    <div id="site-search-tablist-label" class="usa-sr-only sr-only">{{ "menu.navigation.search.sr-tabs.01" | t}}</div>
-    <div role="tablist" class="tab-buttons display-flex flex-row top-4">
+  <div id="site-search-tablist-label" class="usa-sr-only sr-only">{{ "menu.navigation.search.sr-tabs.01" | t}}</div>
+  <div role="tablist" class="tab-buttons display-flex flex-row top-4">
+    <button role="tab"
+            id="site-navigation-location-search-button"
+            class="tab-button"
+            data-tab-name="forecast-search-tab"
+            aria-controls="forecast-search-tab">{{ "menu.navigation.forecast.01" | t}}</button>
+    {% if debug_show_all_menu_links %}
       <button role="tab"
-              id="site-navigation-location-search-button"
+              id="site-navigation-site-search-button"
               class="tab-button"
-              data-tab-name="forecast-search-tab"
-              aria-controls="forecast-search-tab">{{ "menu.navigation.forecast.01" | t}}</button>
-      {% if debug_show_all_menu_links %}
-        <button role="tab"
-                id="site-navigation-site-search-button"
-                class="tab-button"
-                data-tab-name="site-search-tab"
-                aria-controls="site-search-tab">{{ "menu.navigation.search.site.01" | t}}</button>
-      {% endif %}
-    </div>
-    <div id="site-nav-search-options-tab-contents">
-      <div id="forecast-search-tab"
-           class="wx-tab-container wx-focus-offset-205"
-           aria-labelledby="site-navigation-location-search-button"
-           role="tabpanel"
-           tabindex="0">
-        {% comment %}
+              data-tab-name="site-search-tab"
+              aria-controls="site-search-tab">{{ "menu.navigation.search.site.01" | t}}</button>
+    {% endif %}
+  </div>
+  <div id="site-nav-search-options-tab-contents">
+    <div id="forecast-search-tab"
+         class="wx-tab-container wx-focus-offset-205"
+         aria-labelledby="site-navigation-location-search-button"
+         role="tabpanel"
+         tabindex="0">
+      {% comment %}
         Unfortunately we can't include the reusable location-search partial here,
         because it makes use of a specific grid layout that doesn't make sense
         in the context of the popup menu.
-        {% endcomment %}
-        <div class="wx-location-search">
-          <form class="usa-form maxw-tablet-lg"
-                data-location-search
-                method="get">
-            <div class="display-block tablet-lg:display-flex flex-align-center margin-bottom-1">
-              <label class="usa-label font-sans-xs text-base-darker" for="smlsc__input">
-                {{ "location-search.labels.enter-city-zip.01" | t }}
-                <span class="usa-sr-only">{{ "menu.navigation.forecast.find-forecast.01" | t }}</span>
-              </label>
-              <div class="margin-x-1 display-none tablet-lg:display-block text-base-light">|</div>
-
-              <button
-                id="smlsc__use_location_button"
-                type="button"
-                class="weathergov-use-browser-location usa-button usa-button--unstyled font-sans-xs text-link">
-                <div class="display-flex flex-align-center">
-                  <img src="{% static 'images/uswds/usa-icons/my_location.svg' %}" class="usa-icon height-2 width-2 margin-right-05 text-top" alt="" />
-                  <span class="display-block">
-                    {{ 'location-search.labels.use-location.01' | t }}
-                  </span>
-                </div>
-              </button>
-            </div>
-            <wx-combobox id="smlsc"
-              tabindex="0"
-            >
-              <input id="smlsc__input"
-                class="wx-combo-box__input border-base-dark height-4"
-                type="text"
-                autocomplete="off"
-                slot="input" />
-              <button
-                type="button"
-                class="empty"
-                aria-label="{{ 'location-search.aria.clear-input-box.01' | t }}"
-                slot="clear-button">&nbsp;</button>
-              <button
-                type="button"
-                aria-label="{{ 'location-search.aria.toggle-dropdown.01' | t }}"
-                slot="toggle-button">&nbsp;</button>
-              <wx-location-listbox id="smlsc__listbox"
-                role="listbox"
-                auto-submit="true"
-                slot="popup"
-              >
-                <div id="smlsc__listbox__sl"
-                  role="heading" aria-level="3"
-                  class="saved-searches font-mono-sm text-base padding-1"
-                >{{ "location-search.group.saved-searches.01" | t }}</div>
-                <ul role="group" class="saved-searches"></ul>
-                <div id="smlsc__listbox__dr"
-                  role="heading" aria-level="3"
-                  class="data-results font-mono-sm text-base padding-1"
-                >{{ "location-search.group.search-results.01" | t }}</div>
-                <ul role="group" class="data-results"></ul>
-              </wx-location-listbox>
-            </wx-combobox>
-            <div class="margin-top-1">
-              {% include 'weather/partials/wx-loader.html' with pop_in=True for_these="smlsc__listbox smlsc__use_location_button" %}
-            </div>
-          </form>
-        </div>
-      </div>
-      {% if debug_show_all_menu_links %}
-        <div id="site-search-tab"
-             class="wx-tab-container wx-focus-offset-205 line-height-sans-3"
-             aria-labelledby="site-navigation-site-search-button"
-             role="tabpanel"
-             tabindex="0">
-          <label class="font-sans-xs text-base-darker" for="site-nav-site-search-input">
-            {{ "menu.navigation.labels.enter-term.01" | t }}
-          </label>
-          <div class="display-block position-relative width-full height-4 margin-top-1">
-            <input id="site-nav-site-search-input" class="usa-input display-block height-full line-height-sans-3" name="query" type="search" autocomplete="off">
-            <button class="usa-button usa-input-suffix position-absolute top-0 right-neg-2px height-full width-6 margin-right-0 radius-0 radius-right-md" type="submit">
-              <img src="{% static 'images/uswds/usa-icons-bg/search--white.svg' %}" alt="Search">
+      {% endcomment %}
+      <div class="wx-location-search">
+        <form class="usa-form maxw-tablet-lg" data-location-search method="get">
+          <div class="display-block tablet-lg:display-flex flex-align-center margin-bottom-1">
+            <label class="usa-label font-sans-xs text-base-darker" for="smlsc__input">
+              {{ "location-search.labels.enter-city-zip.01" | t }}
+              <span class="usa-sr-only">{{ "menu.navigation.forecast.find-forecast.01" | t }}</span>
+            </label>
+            <div class="margin-x-1 display-none tablet-lg:display-block text-base-light">|</div>
+            <button id="smlsc__use_location_button"
+                    type="button"
+                    class="weathergov-use-browser-location usa-button usa-button--unstyled font-sans-xs text-link">
+              <div class="display-flex flex-align-center">
+                <img src="{% static 'images/uswds/usa-icons/my_location.svg' %}"
+                     class="usa-icon height-2 width-2 margin-right-05 text-top"
+                     alt="" />
+                <span class="display-block">{{ 'location-search.labels.use-location.01' | t }}</span>
+              </div>
             </button>
           </div>
-      {% endif %}
+          <wx-combobox id="smlsc" tabindex="0">
+          <input id="smlsc__input"
+                 class="wx-combo-box__input border-base-dark height-4"
+                 type="text"
+                 autocomplete="off"
+                 slot="input" />
+          <button type="button"
+                  class="empty"
+                  aria-label="{{ 'location-search.aria.clear-input-box.01' | t }}"
+                  slot="clear-button">&nbsp;</button>
+          <button type="button"
+                  aria-label="{{ 'location-search.aria.toggle-dropdown.01' | t }}"
+                  slot="toggle-button">&nbsp;</button>
+          <wx-location-listbox id="smlsc__listbox" role="listbox" auto-submit="true" slot="popup">
+          <div id="smlsc__listbox__sl"
+               role="heading"
+               aria-level="3"
+               class="saved-searches font-mono-sm text-base padding-1">
+            {{ "location-search.group.saved-searches.01" | t }}
+          </div>
+          <ul role="group" class="saved-searches">
+          </ul>
+          <div id="smlsc__listbox__dr"
+               role="heading"
+               aria-level="3"
+               class="data-results font-mono-sm text-base padding-1">
+            {{ "location-search.group.search-results.01" | t }}
+          </div>
+          <ul role="group" class="data-results">
+          </ul>
+          </wx-location-listbox>
+          </wx-combobox>
+          <div class="margin-top-1">
+            {% include 'weather/partials/wx-loader.html' with pop_in=True for_these="smlsc__listbox smlsc__use_location_button" %}
+          </div>
+        </form>
+      </div>
+    </div>
+    {% if debug_show_all_menu_links %}
+      <div id="site-search-tab"
+           class="wx-tab-container wx-focus-offset-205 line-height-sans-3"
+           aria-labelledby="site-navigation-site-search-button"
+           role="tabpanel"
+           tabindex="0">
+        <label class="font-sans-xs text-base-darker"
+               for="site-nav-site-search-input">{{ "menu.navigation.labels.enter-term.01" | t }}</label>
+        <div class="display-block position-relative width-full height-4 margin-top-1">
+          <input id="site-nav-site-search-input"
+                 class="usa-input display-block height-full line-height-sans-3"
+                 name="query"
+                 type="search"
+                 autocomplete="off">
+          <button class="usa-button usa-input-suffix position-absolute top-0 right-neg-2px height-full width-6 margin-right-0 radius-0 radius-right-md"
+                  type="submit">
+            <img src="{% static 'images/uswds/usa-icons-bg/search--white.svg' %}"
+                 alt="Search">
+          </button>
         </div>
-  </wx-tabbed-nav>
-    </div> 
+      {% endif %}
+    </div>
+    </wx-tabbed-nav>
+  </div>

@@ -166,7 +166,9 @@ class GHWOCountySelector extends HTMLElement {
     const selectedCountyFips = this.querySelector(`[name="county"]`).value;
 
     this.showLoader(elements);
-    const response = await fetch(`${WX_COUNTY_GHWO_DETAILS_URL}${selectedCountyFips}/`);
+    const response = await fetch(
+      `${WX_COUNTY_GHWO_DETAILS_URL}${selectedCountyFips}/`,
+    );
     this.hideLoader();
 
     if (response.ok) {

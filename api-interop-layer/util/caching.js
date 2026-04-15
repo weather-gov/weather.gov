@@ -13,7 +13,7 @@
  */
 export const parseTTLFromHeaders = (headers) => {
   const cacheHeader = headers?.["cache-control"];
-  if(!cacheHeader){
+  if (!cacheHeader) {
     return null;
   }
 
@@ -29,7 +29,7 @@ export const parseTTLFromHeaders = (headers) => {
   // captured group of digits. This is the TTL in seconds
   // that we care about, so return it.
   const parsedNum = parseInt(match[1]);
-  if(isNaN(parsedNum)){
+  if (isNaN(parsedNum)) {
     return null;
   }
   return parsedNum;

@@ -1,4 +1,4 @@
-class Http429(Exception): # noqa: N818
+class Http429(Exception):  # noqa: N818
     """Custom exception for 429 interop responses."""
 
     def __init__(self, message="Too many requests"):

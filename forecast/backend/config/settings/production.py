@@ -123,6 +123,7 @@ proj_resource_location = find_cloudgov_proj_resources("proj.db")
 if proj_resource_location:
     os.environ["PROJ_LIB"] = proj_resource_location
 
+
 def get_production_pool_limits():
     """
     Get production pool limits.
@@ -139,6 +140,7 @@ def get_production_pool_limits():
         "max_size": max_size,
     }
 
+
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -147,9 +149,7 @@ DATABASES = {
         "PASSWORD": db_credentials["password"],
         "HOST": db_credentials["host"],
         "PORT": db_credentials["port"],
-        "OPTIONS": {
-            "pool": get_production_pool_limits()
-        }
+        "OPTIONS": {"pool": get_production_pool_limits()},
     },
 }
 
@@ -163,7 +163,7 @@ s3_options = {
     "querystring_auth": False,  # do not send AWSAccessKeyId query params since buckets are public
 }
 
-STORAGES["default"] = { # noqa: F405 (imported from base.py)
+STORAGES["default"] = {  # noqa: F405 (imported from base.py)
     "BACKEND": "storages.backends.s3.S3Storage",
     "OPTIONS": s3_options,
 }

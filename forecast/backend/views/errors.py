@@ -82,6 +82,7 @@ def handle_404(request, exception=None):
         status=404,
     )
 
+
 def handle_500(request, _=None):
     """Handle 500 errors."""
     return render(

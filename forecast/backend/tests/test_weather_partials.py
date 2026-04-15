@@ -141,7 +141,7 @@ class TestWeatherPartials(TestCase):
 
     def test_daily_high_low_null_temp_last_period(self):
         """Test high low if last period has null temp."""
-        expected = { "high": 19, "low": -4, "show_high": True, "show_low": True }
+        expected = {"high": 19, "low": -4, "show_high": True, "show_low": True}
 
         actual = weather_partials.daily_high_low(
             periods=[
@@ -162,7 +162,7 @@ class TestWeatherPartials(TestCase):
                     "data": {
                         "temperature": {"degF": None},
                     },
-                }
+                },
             ],
         )
 

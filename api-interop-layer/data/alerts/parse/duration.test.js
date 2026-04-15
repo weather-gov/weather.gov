@@ -64,7 +64,7 @@ describe("alert parsing > duration", () => {
 
     before(() => {
       now = dayjs("2024-09-01T08:00:00-05:00");
-    })
+    });
 
     beforeEach(() => {
       clock.tick(now.valueOf());

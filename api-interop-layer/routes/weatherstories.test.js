@@ -3,15 +3,15 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: weatherstories", () => {
-  let getDataForWxStory,
-    weatherStories,
-    sandbox;
+  let getDataForWxStory, weatherStories, sandbox;
 
   before(async () => {
     sandbox = sinon.createSandbox();
     getDataForWxStory = sandbox.stub();
 
-    await quibble.esm("../data/weatherstory.js", { default: getDataForWxStory });
+    await quibble.esm("../data/weatherstory.js", {
+      default: getDataForWxStory,
+    });
 
     weatherStories = await import("./weatherstories.js");
   });

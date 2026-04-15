@@ -3,12 +3,10 @@
 from django.db import migrations
 from django.contrib.postgres.operations import CreateExtension
 
+
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('spatial', '0020_alter_weatheralertscache_alertjson'),
+        ("spatial", "0020_alter_weatheralertscache_alertjson"),
     ]
 
-    operations = [
-        CreateExtension("fuzzystrmatch")
-    ]
+    operations = [CreateExtension("fuzzystrmatch")]

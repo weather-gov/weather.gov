@@ -9,7 +9,7 @@ const hideNavigationLoader = () => {
 /**
  * If there is a navigation loader available on the page,
  * make sure that it is being displayed.
- * 
+ *
  * Each loader is supposed to have a `loader-for` attribute
  * with one or more unique identifiers. Pick the desired loader
  * by passing the ID when emitting the event.
@@ -26,9 +26,7 @@ const showNavigationLoader = (event) => {
   });
   if (loaders.length) {
     const text = gettext("js.loader.loading-text.01");
-    window.dispatchEvent(
-      new CustomEvent("wx-announce", { detail: { text } }),
-    );
+    window.dispatchEvent(new CustomEvent("wx-announce", { detail: { text } }));
   }
 };
 

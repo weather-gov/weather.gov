@@ -20,11 +20,11 @@ describe("Forecast index", () => {
     sandbox = sinon.createSandbox();
     saveToRedis = sandbox.stub();
     getFromRedis = sandbox.stub();
-    
+
     connectionPool = {
       request: sandbox.stub(),
     };
-    
+
     basicResponse = {
       statusCode: 200,
       headers: { "content-type": "application/json" },
@@ -33,13 +33,9 @@ describe("Forecast index", () => {
         dump: sandbox.stub().resolves(),
       },
     };
-    
+
     await quibble.esm("../connectionPool.js", {}, connectionPool);
-    await quibble.esm(
-      "../../redis.js",
-      { saveToRedis, getFromRedis },
-      {},
-    );
+    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis }, {});
 
     const module = await import("./index.js");
     forecast = module.default;
@@ -237,27 +233,27 @@ describe("Forecast index", () => {
       });
     });
 
-    it("throws an error if the hourly request responds 403", async() => {
+    it("throws an error if the hourly request responds 403", async () => {
       const badResponse = {
         statusCode: 403,
         body: {
           text: sandbox.stub().resolves(""),
-          dump: sandbox.stub().resolves()
-        }
+          dump: sandbox.stub().resolves(),
+        },
       };
-      connectionPool.request.withArgs(
-        sinon.match({ path: `/gridpoints/TST/1,1/forecast/hourly`})
-      ).resolves(badResponse);
+      connectionPool.request
+        .withArgs(sinon.match({ path: `/gridpoints/TST/1,1/forecast/hourly` }))
+        .resolves(badResponse);
 
       let threwError = false;
       try {
         await forecast({
-          grid: { wfo: "TST", x: 1, y: 1},
+          grid: { wfo: "TST", x: 1, y: 1 },
           place,
-          isMarine: false
+          isMarine: false,
         });
-      } catch(e){
-        if(e.cause?.statusCode === 403){
+      } catch (e) {
+        if (e.cause?.statusCode === 403) {
           threwError = true;
         }
       }
@@ -265,27 +261,27 @@ describe("Forecast index", () => {
       expect(threwError).to.equal(true);
     });
 
-    it("throws an error if the gridpoint request responds with 403", async() => {
+    it("throws an error if the gridpoint request responds with 403", async () => {
       const badResponse = {
         statusCode: 403,
         body: {
           text: sandbox.stub().resolves(""),
-          dump: sandbox.stub().resolves()
-        }
+          dump: sandbox.stub().resolves(),
+        },
       };
-      connectionPool.request.withArgs(
-        sinon.match({ path: `/gridpoints/TST/1,1`})
-      ).resolves(badResponse);
+      connectionPool.request
+        .withArgs(sinon.match({ path: `/gridpoints/TST/1,1` }))
+        .resolves(badResponse);
 
       let threwError = false;
       try {
         await forecast({
-          grid: { wfo: "TST", x: 1, y: 1},
+          grid: { wfo: "TST", x: 1, y: 1 },
           place,
-          isMarine: false
+          isMarine: false,
         });
-      } catch(e){
-        if(e.cause?.statusCode === 403){
+      } catch (e) {
+        if (e.cause?.statusCode === 403) {
           threwError = true;
         }
       }
@@ -293,27 +289,27 @@ describe("Forecast index", () => {
       expect(threwError).to.equal(true);
     });
 
-    it("throws an error if the daily request responds with 403", async() => {
+    it("throws an error if the daily request responds with 403", async () => {
       const badResponse = {
         statusCode: 403,
         body: {
           text: sandbox.stub().resolves(""),
-          dump: sandbox.stub().resolves()
-        }
+          dump: sandbox.stub().resolves(),
+        },
       };
-      connectionPool.request.withArgs(
-        sinon.match({ path: `/gridpoints/TST/1,1/forecast`})
-      ).resolves(badResponse);
+      connectionPool.request
+        .withArgs(sinon.match({ path: `/gridpoints/TST/1,1/forecast` }))
+        .resolves(badResponse);
 
       let threwError = false;
       try {
         await forecast({
-          grid: { wfo: "TST", x: 1, y: 1},
+          grid: { wfo: "TST", x: 1, y: 1 },
           place,
-          isMarine: false
+          isMarine: false,
         });
-      } catch(e){
-        if(e.cause?.statusCode === 403){
+      } catch (e) {
+        if (e.cause?.statusCode === 403) {
           threwError = true;
         }
       }
@@ -376,9 +372,7 @@ describe("Forecast index", () => {
     });
 
     describe("with valid data", () => {
-      let clock,
-       marineResponse,
-       gridpoint;
+      let clock, marineResponse, gridpoint;
 
       before(() => {
         marineResponse = {

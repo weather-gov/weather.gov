@@ -26,17 +26,13 @@ describe("briefing module", () => {
 
     getFromRedis = sandbox.stub();
     saveToRedis = sandbox.stub();
-  
+
     connectionPool = {
       request: sandbox.stub(),
     };
-  
+
     await quibble.esm("./connectionPool.js", {}, connectionPool);
-    await quibble.esm(
-      "../redis.js",
-      { getFromRedis, saveToRedis },
-      {},
-    );
+    await quibble.esm("../redis.js", { getFromRedis, saveToRedis }, {});
 
     const module = await import("./briefing.js");
     getDataForBriefing = module.default;

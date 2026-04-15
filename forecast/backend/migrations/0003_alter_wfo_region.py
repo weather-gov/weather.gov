@@ -6,7 +6,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("backend", "0002_dynamicsafetyinformation_alter_wfo_region"),
     ]
@@ -16,7 +15,9 @@ class Migration(migrations.Migration):
             model_name="wfo",
             name="region",
             field=modelcluster.fields.ParentalKey(
-                on_delete=django.db.models.deletion.CASCADE, related_name="wfos", to="backend.region",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="wfos",
+                to="backend.region",
             ),
         ),
     ]

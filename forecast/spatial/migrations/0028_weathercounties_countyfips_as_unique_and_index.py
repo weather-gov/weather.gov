@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('spatial', '0027_fix_honolulu_timezone'),
+        ("spatial", "0027_fix_honolulu_timezone"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='weathercounties',
-            name='countyfips',
+            model_name="weathercounties",
+            name="countyfips",
             field=models.CharField(db_index=True, max_length=5, unique=True),
         ),
     ]

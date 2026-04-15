@@ -13,9 +13,7 @@
  */
 export function getSavedLocations() {
   try {
-    return JSON.parse(
-      localStorage.getItem("wxgov_recent_locations") ?? "[]"
-    );
+    return JSON.parse(localStorage.getItem("wxgov_recent_locations") ?? "[]");
   } catch (e) {
     return [];
   }
@@ -24,7 +22,7 @@ export function getSavedLocations() {
 /**
  * Insert a saved location into local storage.
  * If the location already exists, move it to the top.
- * 
+ *
  * @param {SavedLocation} obj - the saved location
  */
 export function addSavedLocation(obj) {
@@ -44,5 +42,7 @@ export function addSavedLocation(obj) {
 
     // Now serialize and save
     localStorage.setItem("wxgov_recent_locations", JSON.stringify(sliced));
-  } catch (e) { /* do nothing */ }
+  } catch (e) {
+    /* do nothing */
+  }
 }

@@ -113,18 +113,18 @@ describe("point method", () => {
       headers: { "x-nothing": "read-here" },
       body: {
         dump: sandbox.stub().resolves(),
-        text: sandbox.stub().resolves("")
-      }
+        text: sandbox.stub().resolves(""),
+      },
     });
     db.query.resolves({ rows: [] });
 
     let threwError = false;
     try {
-      await points(1,2);
-    } catch(e){
-      if(e.cause?.statusCode === 403){
-          threwError = true;
-        }
+      await points(1, 2);
+    } catch (e) {
+      if (e.cause?.statusCode === 403) {
+        threwError = true;
+      }
     }
 
     expect(threwError).to.be.true;
@@ -180,15 +180,17 @@ describe("point method", () => {
   });
 
   it("includes astronimcal data", async () => {
-    response.body.text.resolves(JSON.stringify({
-      properties: {
-        gridId: "PPU",
-        gridX: 30,
-        gridY: 40,
-        geometry: undefined,
-        astronomicalData: "stars and stuff",
-      },
-    }));
+    response.body.text.resolves(
+      JSON.stringify({
+        properties: {
+          gridId: "PPU",
+          gridX: 30,
+          gridY: 40,
+          geometry: undefined,
+          astronomicalData: "stars and stuff",
+        },
+      }),
+    );
     db.query.resolves({ rows: [] });
 
     const actual = await points(4, 5);

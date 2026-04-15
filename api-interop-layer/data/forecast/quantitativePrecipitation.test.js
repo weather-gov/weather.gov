@@ -4,28 +4,19 @@ import quibble from "quibble";
 import qpf from "./quantitativePrecipitation.js";
 
 describe("quantitative precipitation forecase (QPF)", () => {
-  let clock,
-    forecast,
-    connectionPool,
-    getFromRedis,
-    saveToRedis,
-    sandbox;
-    
+  let clock, forecast, connectionPool, getFromRedis, saveToRedis, sandbox;
+
   before(async () => {
     sandbox = sinon.createSandbox();
     connectionPool = {
       request: sandbox.stub(),
     };
-  
+
     getFromRedis = sandbox.stub();
     saveToRedis = sandbox.stub();
 
     await quibble.esm("../connectionPool.js", {}, connectionPool);
-    await quibble.esm(
-      "../../redis.js",
-      { saveToRedis, getFromRedis },
-      {},
-    );
+    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis }, {});
 
     const module = await import("./index.js");
     forecast = module.default;

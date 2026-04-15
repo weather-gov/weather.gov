@@ -111,7 +111,9 @@
       if (proceed) {
         // Show the loader animation, if available
         window.dispatchEvent(
-          new CustomEvent("wx-show-navigation-loader", { detail: { id: e.currentTarget.getAttribute("id") } }),
+          new CustomEvent("wx-show-navigation-loader", {
+            detail: { id: e.currentTarget.getAttribute("id") },
+          }),
         );
 
         navigator.geolocation.getCurrentPosition(

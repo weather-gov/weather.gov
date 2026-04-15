@@ -40,13 +40,8 @@ describe("observations module", () => {
       },
     };
 
-
     await quibble.esm("../connectionPool.js", {}, connectionPool);
-    await quibble.esm(
-      "../../redis.js",
-      { saveToRedis, getFromRedis },
-      {},
-    );
+    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis }, {});
     // Import the module now. Its dependency on the database will cause a hang
     // if we load it before the mocking is all setup. The reason is that the
     // database utility itself blocks until it can establish a connection.
@@ -269,15 +264,17 @@ describe("observations module", () => {
         statusCode: 403,
         body: {
           text: sandbox.stub().resolves(""),
-          dump: sandbox.stub().resolves()
-        }
+          dump: sandbox.stub().resolves(),
+        },
       };
     });
 
     describe("403 responses throw errors", () => {
-      it("for the stations listing endpoint", async() => {
-         connectionPool.request
-          .withArgs(sinon.match({ path: `/gridpoints/TEST/1,1/stations?limit=3` }))
+      it("for the stations listing endpoint", async () => {
+        connectionPool.request
+          .withArgs(
+            sinon.match({ path: `/gridpoints/TEST/1,1/stations?limit=3` }),
+          )
           .resolves(badResponse);
 
         let threwError = false;
@@ -290,8 +287,8 @@ describe("observations module", () => {
             },
             global.test.database,
           );
-        } catch(e) {
-          if(e.cause?.statusCode === 403){
+        } catch (e) {
+          if (e.cause?.statusCode === 403) {
             threwError = true;
           }
         }
@@ -299,7 +296,7 @@ describe("observations module", () => {
         expect(threwError).to.equal(true);
       });
 
-      it("for an individual observation station endpoint", async() => {
+      it("for an individual observation station endpoint", async () => {
         connectionPool.request
           .withArgs(
             sinon.match({ path: `/stations/station1/observations?limit=1` }),
@@ -316,8 +313,8 @@ describe("observations module", () => {
             },
             global.test.database,
           );
-        } catch(e) {
-          if(e.cause?.statusCode === 403){
+        } catch (e) {
+          if (e.cause?.statusCode === 403) {
             threwError = true;
           }
         }
@@ -325,7 +322,7 @@ describe("observations module", () => {
         expect(threwError).to.equal(true);
       });
     });
-    
+
     describe("all observation stations return invalid data", () => {
       const features = [
         {

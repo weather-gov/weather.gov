@@ -31,7 +31,7 @@ export function mochaGlobalTeardown() {
 }
 
 export const mochaHooks = {
-   beforeEach() {
+  beforeEach() {
     sandbox.resetHistory();
 
     undici.request.rejects(new Error("undici.request is not mocked"));
@@ -39,5 +39,5 @@ export const mochaHooks = {
   },
   afterEach() {
     process.emit("SHUTDOWN");
-  }
+  },
 };

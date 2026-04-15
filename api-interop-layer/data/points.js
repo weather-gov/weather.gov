@@ -85,36 +85,36 @@ export const getPointData = async (lat, lon) => {
     connectionPool,
     `/points/${latitude},${longitude}`,
   )
-        .then(([gridData]) => {
-          point.astronomicalData = gridData.properties?.astronomicalData;
+    .then(([gridData]) => {
+      point.astronomicalData = gridData.properties?.astronomicalData;
 
-          return {
-            wfo: gridData.properties?.gridId,
-            x: gridData.properties?.gridX,
-            y: gridData.properties?.gridY,
-            geometry: gridData.geometry,
-          };
-        })
-        .catch((err) => {
-          // Handle the 404 "Out of Bounds" case specifically
-          if (err.cause?.statusCode === 404 || err.statusCode === 404) {
-            return {
-              error: true,
-              outOfBounds: true,
-              status: 404,
-            };
-          }
+      return {
+        wfo: gridData.properties?.gridId,
+        x: gridData.properties?.gridX,
+        y: gridData.properties?.gridY,
+        geometry: gridData.geometry,
+      };
+    })
+    .catch((err) => {
+      // Handle the 404 "Out of Bounds" case specifically
+      if (err.cause?.statusCode === 404 || err.statusCode === 404) {
+        return {
+          error: true,
+          outOfBounds: true,
+          status: 404,
+        };
+      }
 
-          // Throw errors with statusCode 403,
-          // so they can be handled immediately in
-          // route handlers
-          if(err.cause?.statusCode === 403){
-            throw err;
-          }
-          
-          // General error fallback
-          return { error: true };
-        });
+      // Throw errors with statusCode 403,
+      // so they can be handled immediately in
+      // route handlers
+      if (err.cause?.statusCode === 403) {
+        throw err;
+      }
+
+      // General error fallback
+      return { error: true };
+    });
 
   const placePromise = getClosestPlace(latitude, longitude);
 

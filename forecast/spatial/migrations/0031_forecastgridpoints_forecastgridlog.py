@@ -6,36 +6,42 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('spatial', '0030_truncate_alert_cache'),
+        ("spatial", "0030_truncate_alert_cache"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ForecastGridPoints',
+            name="ForecastGridPoints",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('x', models.IntegerField()),
-                ('y', models.IntegerField()),
-                ('wfo', models.CharField(max_length=3)),
-                ('shape', django.contrib.gis.db.models.fields.GeometryField(srid=4326)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("x", models.IntegerField()),
+                ("y", models.IntegerField()),
+                ("wfo", models.CharField(max_length=3)),
+                ("shape", django.contrib.gis.db.models.fields.GeometryField(srid=4326)),
             ],
             options={
-                'db_table': 'weathergov_ndfd_gridpoints',
-                'unique_together': {('x', 'y', 'wfo')},
+                "db_table": "weathergov_ndfd_gridpoints",
+                "unique_together": {("x", "y", "wfo")},
             },
         ),
         migrations.CreateModel(
-            name='ForecastGridLog',
+            name="ForecastGridLog",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('timestamp', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('grid_point', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='logs', to='spatial.forecastgridpoints')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("timestamp", models.DateTimeField(auto_now_add=True, db_index=True)),
+                (
+                    "grid_point",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="logs",
+                        to="spatial.forecastgridpoints",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'weathergov_ndfd_grid_logs',
-                'ordering': ['-timestamp'],
+                "db_table": "weathergov_ndfd_grid_logs",
+                "ordering": ["-timestamp"],
             },
         ),
     ]

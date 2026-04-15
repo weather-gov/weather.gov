@@ -150,9 +150,15 @@ export default class StateAlertsHandler {
       // Dynamic Grid Logic: adjust columns based on the density of the county list
       if (entries.length > 8) list.classList.add("county-columns");
 
-      if (entries.length > 24) list.classList.add("desktop__county-column-4", "tablet__county-column-3");
-      else if (entries.length > 16) list.classList.add("tablet__county-column-3");
-      else if (entries.length > 8) list.classList.add("tablet__county-column-2");
+      if (entries.length > 24)
+        list.classList.add(
+          "desktop__county-column-4",
+          "tablet__county-column-3",
+        );
+      else if (entries.length > 16)
+        list.classList.add("tablet__county-column-3");
+      else if (entries.length > 8)
+        list.classList.add("tablet__county-column-2");
 
       /**
        * Populate County Links

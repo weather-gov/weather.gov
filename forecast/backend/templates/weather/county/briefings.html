@@ -8,7 +8,6 @@
         <div class="grid-row">
           {% if data.briefings|length > 1 %}<h3 class="text-normal text-primary">{{ briefing.wfo_name }}</h3>{% endif %}
         </div>
-
         {% if briefing.error %}
           <div class="usa-alert usa-alert--error margin-bottom-2">
             <div class=" usa-alert__body">
@@ -35,14 +34,14 @@
           </div>
           <div class="grid-col-12 margin-top-1">
             <svg role="img"
-                class="usa-icon width-3 height-3 text-primary"
-                aria-hidden="true">
+                 class="usa-icon width-3 height-3 text-primary"
+                 aria-hidden="true">
               <use xlink:href="{% static 'images/uswds/sprite.svg' %}#file_download"></use>
             </svg>
             <a href="{{ briefing.download }}" class="usa-link">{{ "county.briefing.download-one.01" | t }}</a>
           </div>
         {% elif briefing.is_empty %}
-        {% trans_with_args "No active briefing for {wfo} WFO" wfo=briefing.wfo_name %}
+          {% trans_with_args "No active briefing for {wfo} WFO" wfo=briefing.wfo_name %}
         {% endif %}
       </div>
     {% endfor %}

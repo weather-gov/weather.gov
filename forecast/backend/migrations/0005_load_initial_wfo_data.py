@@ -4,17 +4,16 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     def delete_initial_wfo_data(apps, schema_editor):
-        Region = apps.get_model('backend', 'Region')
-        WFO = apps.get_model('backend', 'WFO')
+        Region = apps.get_model("backend", "Region")
+        WFO = apps.get_model("backend", "WFO")
 
         Region.objects.all().delete()
         WFO.objects.all().delete()
 
     def load_initial_wfo_data(apps, schema_editor):
-        Region = apps.get_model('backend', 'Region')
-        WFO = apps.get_model('backend', 'WFO')
+        Region = apps.get_model("backend", "Region")
+        WFO = apps.get_model("backend", "WFO")
 
         # clear out any pre-existing Region/WFO instances.
         Region.objects.all().delete()
@@ -151,9 +150,8 @@ class Migration(migrations.Migration):
         WFO.objects.create(name="Fairbanks", weight=1, code="AFG", region=alaska)
         WFO.objects.create(name="Anchorage", weight=0, code="AFC", region=alaska)
 
-
     dependencies = [
-        ('backend', '0004_wfo_about_wfo_address_wfo_email_wfo_facebook_and_more'),
+        ("backend", "0004_wfo_about_wfo_address_wfo_email_wfo_facebook_and_more"),
     ]
 
     operations = [

@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     replaces = [
         ("spatial", "0001_initial"),
         ("spatial", "0002_weatherplace"),

@@ -8,7 +8,6 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
   {% block page_head_css %}{% endblock %}
 {% endblock %}
-
 {% block head_js %}
   {% comment %}
     # Please do not put any script tags here.
@@ -16,12 +15,10 @@
     # or put them in the `head_js` block on a child page.
   {% endcomment %}
 {% endblock %}
-
 {% block page_top %}
   {% include "weather/partials/offline-banner.html" %}
   {% include "weather/partials/gov-banner.html" %}
 {% endblock %}
-
 {% block page %}
   {% include "weather/partials/beta-banner.html" %}
   <div class="layout-container grid-row height-full flex-column flex-no-wrap">
@@ -35,7 +32,6 @@
     {% include "weather/footer.html" %}
   </div>
 {% endblock %}
-
 {% block end_js %}
   {% block page_end_js %}{% endblock %}
 {% endblock %}

@@ -5,52 +5,51 @@
 @forward "uswds-theme";
 @forward "uswds";
 
-
 /**
  * Styles for the Listbox component
  */
 wx-listbox,
 wx-filterable-listbox,
 wx-location-listbox {
-    display: block;
+  display: block;
 
-    @extend .usa-combo-box__list;
+  @extend .usa-combo-box__list;
 
-    position: initial;
+  position: initial;
 
-    [role="option"] {
-        @extend .usa-combo-box__list-option;
+  [role="option"] {
+    @extend .usa-combo-box__list-option;
 
-        &[data-pseudo-focus="true"]{
-            @extend .usa-combo-box__list-option--focused;
-        }
-
-        &[aria-selected="true"]{
-            @extend .usa-combo-box__list-option--selected;
-        }
-
-        &[data-recent]::after {
-            @include u-text("base");
-            @include u-font("mono", "sm");
-
-            content: "recent";
-            float: right;
-        }
+    &[data-pseudo-focus="true"] {
+      @extend .usa-combo-box__list-option--focused;
     }
 
-    [role="group"]{
-        list-style: none;
-        padding: 0;
-        margin: 0;
+    &[aria-selected="true"] {
+      @extend .usa-combo-box__list-option--selected;
     }
 
-    .hidden {
-        display: none;
-    }
+    &[data-recent]::after {
+      @include u-text("base");
+      @include u-font("mono", "sm");
 
-    .listbox-group-label {
-        @extend .usa-combo-box__list-option;
-
-        border-bottom: 0;
+      content: "recent";
+      float: right;
     }
+  }
+
+  [role="group"] {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .listbox-group-label {
+    @extend .usa-combo-box__list-option;
+
+    border-bottom: 0;
+  }
 }

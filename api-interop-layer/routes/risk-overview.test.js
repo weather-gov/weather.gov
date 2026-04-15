@@ -3,9 +3,7 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: risk overview", () => {
-  let getRiskOverview,
-    riskOverview,
-    sandbox;
+  let getRiskOverview, riskOverview, sandbox;
 
   before(async () => {
     sandbox = sinon.createSandbox();

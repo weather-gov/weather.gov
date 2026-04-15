@@ -5,8 +5,7 @@
 -- Url: https://beta.weather.gov/offices/arx/
 {% endcomment %}
 {% block head_js %}
-  <script src="{% static 'js/office.html.js' %}"
-          type="module"></script>
+  <script src="{% static 'js/office.html.js' %}" type="module"></script>
 {% endblock %}
 {% block page_content %}
   <div class="wx-wfo-info margin-bottom-10">
@@ -15,21 +14,18 @@
         {{ content.field_wfo_image }}
       </div>
     {% endif %}
-
     <div class="grid-container">
-
       <div class="grid-row margin-bottom-2">
         <div class="grid-col">
           <h1 class="text-normal font-heading-2xl line-height-heading-3 text-primary-darker margin-top-3 desktop:margin-bottom-3">
             {% trans_with_args "wfo-info.labels.wfo.01" wfoName=office.name wfoCode=office.code %}
           </h1>
           <div class="font-body-md measure-6">
-            <p class="margin-top-0 margin-bottom-2"> {{"wfo-info.text.intro.01" | t }} </p>
-            <p class="margin-y-2"> {{"wfo-info.text.intro.02" | t }} </p>
+            <p class="margin-top-0 margin-bottom-2">{{"wfo-info.text.intro.01" | t }}</p>
+            <p class="margin-y-2">{{"wfo-info.text.intro.02" | t }}</p>
           </div>
         </div>
       </div>
-
       <div class="grid-row grid-gap">
         {% if office.about %}
           <div class="grid-col-12 tablet:grid-col-4">
@@ -47,14 +43,12 @@
           </figure>
         </div>
       </div>
-
       <div class="grid-row margin-top-4">
         <div class="grid-col-12 border-top-1px border-base-light">
           <h2 class="font-sans-xl text-normal text-primary-darker padding-top-105 margin-top-0 margin-bottom-2">
             {{ "wfo-info.heading.local-expertise.01" | t }}
           </h2>
           <p class="font-sans-sm measure-6">{{"wfo-info.text.local-expertise.01"|t}}</p>
-
           <div class="grid-col-12">
             <h3 class="font-body-lg text-normal text-primary-darker margin-top-3 margin-bottom-2">
               {{ "wfo-info.heading.forecast-discussion.01" | t }}
@@ -66,16 +60,14 @@
           </div>
         </div>
       </div>
-
       <div class="grid-row">
         <div class="grid-col-12">
           <h3 class="font-body-lg text-normal text-primary-darker margin-top-3 margin-bottom-2">
             {{ "wfo-info.heading.briefing.01" | t }}
-            </h3>
-            <div class="font-body-sm measure-6 line-height-body-4">
-              <p class="measure-6">{{ "wfo-info.text.briefing.01" | t }}</p>
-
-              {% if briefing.error %}
+          </h3>
+          <div class="font-body-sm measure-6 line-height-body-4">
+            <p class="measure-6">{{ "wfo-info.text.briefing.01" | t }}</p>
+            {% if briefing.error %}
               <div class="usa-alert usa-alert--error margin-bottom-2">
                 <div class=" usa-alert__body">
                   <div class="usa-alert__text">
@@ -83,19 +75,15 @@
                   </div>
                 </div>
               </div>
-              {% endif %}
-
-              {% if briefing and not briefing.error %}
+            {% endif %}
+            {% if briefing and not briefing.error %}
               <a class="usa-link" href="{{ briefing.download }}">{{ "wfo-info.link.briefing.01" | t }}</a>
-              {% elif not briefing %}
-                {{ "county.briefing.no-briefing.01" | t }}
-              {% endif%}
-
-            </div>
+            {% elif not briefing %}
+              {{ "county.briefing.no-briefing.01" | t }}
+            {% endif %}
+          </div>
         </div>
       </div>
-
-
       {# TODO: The contact information is not currently in the CMS #}
       {% if office.has_contact %}
         <div class="grid-row margin-top-2">
@@ -136,7 +124,6 @@
               {% endif %}
             </address>
           {% endif %}
-
           <div class="grid-col-12 tablet:grid-col-8 {% if office.has_first_pane %}margin-top-2 tablet:margin-top-0{% endif %}">
             {% if office.has_social %}
               <ul class="usa-list usa-list--unstyled">

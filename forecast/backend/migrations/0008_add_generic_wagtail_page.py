@@ -6,22 +6,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('backend', '0007_remove_noaauser_uid_alter_noaauser_email'),
-        ('wagtailcore', '0095_groupsitepermission'),
+        ("backend", "0007_remove_noaauser_uid_alter_noaauser_email"),
+        ("wagtailcore", "0095_groupsitepermission"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='GenericPage',
+            name="GenericPage",
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('body', wagtail.fields.RichTextField()),
+                (
+                    "page_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="wagtailcore.page",
+                    ),
+                ),
+                ("body", wagtail.fields.RichTextField()),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('wagtailcore.page',),
+            bases=("wagtailcore.page",),
         ),
     ]

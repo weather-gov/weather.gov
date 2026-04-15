@@ -5,7 +5,7 @@ import {
   processLegend,
   processChickletData,
   getImageUrlForRisk,
-  getMaxScaleFromLegend
+  getMaxScaleFromLegend,
 } from "./processing.js";
 import { getFallbackLevelName } from "./levelnames.js";
 
@@ -56,13 +56,13 @@ describe("risk overview: processing utilities", () => {
       name: "Severe Thunderstorm Risk",
       periods: {
         period1: {
-          imagePath: "/images/SevereThunderstormFromChicklet1.jpg"
+          imagePath: "/images/SevereThunderstormFromChicklet1.jpg",
         },
         period2: {
-          imagePath: "/images/SevereThunderstormFromChicklet2.jpg"
-        }
-      }
-    }
+          imagePath: "/images/SevereThunderstormFromChicklet2.jpg",
+        },
+      },
+    },
   };
 
   // And the corresponding legend data. This is not the raw data and
@@ -90,7 +90,7 @@ describe("risk overview: processing utilities", () => {
           definition: "lots",
         },
       },
-      scale: 2
+      scale: 2,
     },
     Waterspout: {
       // Also real
@@ -127,7 +127,7 @@ describe("risk overview: processing utilities", () => {
           definition: "purple",
         },
       },
-      scale: 4
+      scale: 4,
     },
     Pasta: {
       // This one does not map into a key we know about.
@@ -146,7 +146,7 @@ describe("risk overview: processing utilities", () => {
           definition: "A tomato sauce",
         },
       },
-      scale: 1
+      scale: 1,
     },
   };
 
@@ -435,7 +435,7 @@ describe("risk overview: processing utilities", () => {
                 category: 2,
               },
             },
-            scale: 2
+            scale: 2,
           },
         },
         Meatball: {
@@ -482,58 +482,59 @@ describe("risk overview: processing utilities", () => {
       const rawChicklet = {
         hazards: [
           {
-            "description": "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
-            "name": "Severe Thunderstorm Risk",
-            "periods": {
-              "period1": {
-                "color": "#ededed",
-                "date": "Tuesday, March 03, 2026",
-                "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay1.jpg",
-                "validStartTime": "02:00PM"
+            description:
+              "Utilizes <a href='https://www.spc.noaa.gov/products/outlook/' target='_blank'>daily forecasts</a> from the Storm Prediction Center (SPC). <a href='https://www.spc.noaa.gov/misc/about.html' target='_blank'>More info</a>",
+            name: "Severe Thunderstorm Risk",
+            periods: {
+              period1: {
+                color: "#ededed",
+                date: "Tuesday, March 03, 2026",
+                imagePath: "/images/lwx/ghwo/SevereThunderstormsDay1.jpg",
+                validStartTime: "02:00PM",
               },
-              "period2": {
-                "color": "#ededed",
-                "date": "Wednesday, March 04, 2026",
-                "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay2.jpg",
-                "validStartTime": "07:00AM"
+              period2: {
+                color: "#ededed",
+                date: "Wednesday, March 04, 2026",
+                imagePath: "/images/lwx/ghwo/SevereThunderstormsDay2.jpg",
+                validStartTime: "07:00AM",
               },
-              "period3": {
-                "color": "#ededed",
-                "date": "Thursday, March 05, 2026",
-                "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay3.jpg",
-                "validStartTime": "07:00AM"
+              period3: {
+                color: "#ededed",
+                date: "Thursday, March 05, 2026",
+                imagePath: "/images/lwx/ghwo/SevereThunderstormsDay3.jpg",
+                validStartTime: "07:00AM",
               },
-              "period4": {
-                "color": "#ededed",
-                "date": "Friday, March 06, 2026",
-                "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay4.jpg",
-                "validStartTime": "07:00AM"
+              period4: {
+                color: "#ededed",
+                date: "Friday, March 06, 2026",
+                imagePath: "/images/lwx/ghwo/SevereThunderstormsDay4.jpg",
+                validStartTime: "07:00AM",
               },
-              "period5": {
-                "color": "#ededed",
-                "date": "Saturday, March 07, 2026",
-                "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay5.jpg",
-                "validStartTime": "07:00AM"
+              period5: {
+                color: "#ededed",
+                date: "Saturday, March 07, 2026",
+                imagePath: "/images/lwx/ghwo/SevereThunderstormsDay5.jpg",
+                validStartTime: "07:00AM",
               },
-              "period6": {
-                "color": "#ededed",
-                "date": "Sunday, March 08, 2026",
-                "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay6.jpg",
-                "validStartTime": "08:00AM"
+              period6: {
+                color: "#ededed",
+                date: "Sunday, March 08, 2026",
+                imagePath: "/images/lwx/ghwo/SevereThunderstormsDay6.jpg",
+                validStartTime: "08:00AM",
               },
-              "period7": {
-                "color": "#ededed",
-                "date": "Monday, March 09, 2026",
-                "imagePath": "/images/lwx/ghwo/SevereThunderstormsDay7.jpg",
-                "validStartTime": "08:00AM"
-              }
+              period7: {
+                color: "#ededed",
+                date: "Monday, March 09, 2026",
+                imagePath: "/images/lwx/ghwo/SevereThunderstormsDay7.jpg",
+                validStartTime: "08:00AM",
+              },
             },
-            "webTab": "public"
-          }
-        ]
+            webTab: "public",
+          },
+        ],
       };
 
-      const expected = { SevereThunderstorm: rawChicklet.hazards[0]};
+      const expected = { SevereThunderstorm: rawChicklet.hazards[0] };
 
       const actual = processChickletData(rawChicklet);
 
@@ -546,13 +547,18 @@ describe("risk overview: processing utilities", () => {
           name: "Severe Thunderstorm Risk",
           periods: {
             period1: {
-              imagePath: "/some/image/path"
-            }
-          }
-        }
+              imagePath: "/some/image/path",
+            },
+          },
+        },
       };
 
-      const actual = getImageUrlForRisk("SevereThunderstorm", 0, "ABC", processedChicklet);
+      const actual = getImageUrlForRisk(
+        "SevereThunderstorm",
+        0,
+        "ABC",
+        processedChicklet,
+      );
 
       expect(actual).to.equal("https://www.weather.gov/some/image/path");
     });
@@ -563,14 +569,19 @@ describe("risk overview: processing utilities", () => {
           name: "Severe Thunderstorm Risk",
           periods: {
             period4: {
-              imagePath: "/some/image/path"
-            }
-          }
-        }
+              imagePath: "/some/image/path",
+            },
+          },
+        },
       };
 
       const expected = `https://www.weather.gov/images/ABC/ghwo/SevereThunderstormsDay2.jpg`;
-      const actual = getImageUrlForRisk("SevereThunderstorm", 1, "ABC", processedChicklet);
+      const actual = getImageUrlForRisk(
+        "SevereThunderstorm",
+        1,
+        "ABC",
+        processedChicklet,
+      );
 
       expect(actual).to.equal(expected);
     });
@@ -608,8 +619,8 @@ describe("Processing legend scales and fallback levelnames", () => {
             levelName: "two",
             category: 3,
           },
-        }
-      }
+        },
+      },
     };
 
     const result = getMaxScaleFromLegend("Scale-2 Risk (Rip)", legend);
@@ -644,10 +655,10 @@ describe("Processing legend scales and fallback levelnames", () => {
             color: "#333",
             definition: "even more",
             levelName: "three",
-            category: 3
-          }
-        }
-      }
+            category: 3,
+          },
+        },
+      },
     };
 
     const result = getMaxScaleFromLegend("Scale-3 Risk", legend);
@@ -682,16 +693,16 @@ describe("Processing legend scales and fallback levelnames", () => {
             color: "#333",
             definition: "even more",
             levelName: "three",
-            category: 3
+            category: 3,
           },
           4: {
             color: "#444",
             definition: "still more",
             levelName: "four",
-            category: 4
-          }
-        }
-      }
+            category: 4,
+          },
+        },
+      },
     };
 
     const result = getMaxScaleFromLegend("Scale-4 Risk", legend);
@@ -726,22 +737,22 @@ describe("Processing legend scales and fallback levelnames", () => {
             color: "#333",
             definition: "even more",
             levelName: "three",
-            category: 3
+            category: 3,
           },
           4: {
             color: "#444",
             definition: "still more",
             levelName: "four",
-            category: 4
+            category: 4,
           },
           5: {
             color: "#555",
             definition: "the most",
             levelName: "five",
-            category: 5
-          }
-        }
-      }
+            category: 5,
+          },
+        },
+      },
     };
 
     const result = getMaxScaleFromLegend("Scale-5 Risk", legend);
@@ -763,55 +774,55 @@ describe("Risk levelName fallbacks", () => {
    */
   it("works for legend data with a 2-level scale", () => {
     const legend = {
-      "genration_time": "time",
-      "generation_time_LT": "time_LT",
-      "ghwo_version": "test",
-      "hazards": [
+      genration_time: "time",
+      generation_time_LT: "time_LT",
+      ghwo_version: "test",
+      hazards: [
         {
-          "name": "Scale-2 Fallback Test",
-          "category": {
-            "0": {
-              "color": "#000",
-              "definition": "scale-2-zero",
+          name: "Scale-2 Fallback Test",
+          category: {
+            0: {
+              color: "#000",
+              definition: "scale-2-zero",
             },
-            "1": {
-              "color": "#111",
-              "definition": "scale-2-one",
+            1: {
+              color: "#111",
+              definition: "scale-2-one",
             },
-            "2": {
-              "color": "#222",
-              "definition": "scale-2-two",
-            }
-          }
-        }
-      ]
+            2: {
+              color: "#222",
+              definition: "scale-2-two",
+            },
+          },
+        },
+      ],
     };
 
     const expected = {
       ScaleFallbackTest: {
         category: {
-          "0": {
-            "color": "#000",
-            "definition": "scale-2-zero",
-            "levelName": "None",
-            "category": 0
+          0: {
+            color: "#000",
+            definition: "scale-2-zero",
+            levelName: "None",
+            category: 0,
           },
-          "1": {
-            "color": "#111",
-            "definition": "scale-2-one",
-            "levelName": "Moderate",
-            "category": 1
+          1: {
+            color: "#111",
+            definition: "scale-2-one",
+            levelName: "Moderate",
+            category: 1,
           },
-          "2": {
-            "color": "#222",
-            "definition": "scale-2-two",
-            "levelName": "High",
-            "category": 2
-          }
+          2: {
+            color: "#222",
+            definition: "scale-2-two",
+            levelName: "High",
+            category: 2,
+          },
         },
         name: "Scale-2 Fallback Test",
-        scale: 2
-      }
+        scale: 2,
+      },
     };
 
     const result = processLegend(legend);
@@ -821,65 +832,65 @@ describe("Risk levelName fallbacks", () => {
 
   it("works for legend data with a 3-level scale", () => {
     const legend = {
-      "genration_time": "time",
-      "generation_time_LT": "time_LT",
-      "ghwo_version": "test",
-      "hazards": [
+      genration_time: "time",
+      generation_time_LT: "time_LT",
+      ghwo_version: "test",
+      hazards: [
         {
-          "name": "Scale-3 Fallback Test",
-          "category": {
-            "0": {
-              "color": "#000",
-              "definition": "scale-3-zero",
+          name: "Scale-3 Fallback Test",
+          category: {
+            0: {
+              color: "#000",
+              definition: "scale-3-zero",
             },
-            "1": {
-              "color": "#111",
-              "definition": "scale-3-one",
+            1: {
+              color: "#111",
+              definition: "scale-3-one",
             },
-            "2": {
-              "color": "#222",
-              "definition": "scale-3-two",
+            2: {
+              color: "#222",
+              definition: "scale-3-two",
             },
-            "3": {
-              "color": "#333",
-              "definition": "scale-3-three"
-            }
-          }
-        }
-      ]
+            3: {
+              color: "#333",
+              definition: "scale-3-three",
+            },
+          },
+        },
+      ],
     };
 
     const expected = {
       ScaleFallbackTest: {
         category: {
-          "0": {
-            "color": "#000",
-            "definition": "scale-3-zero",
-            "levelName": "None",
-            "category": 0
+          0: {
+            color: "#000",
+            definition: "scale-3-zero",
+            levelName: "None",
+            category: 0,
           },
-          "1": {
-            "color": "#111",
-            "definition": "scale-3-one",
-            "levelName": "Low",
-            "category": 1
+          1: {
+            color: "#111",
+            definition: "scale-3-one",
+            levelName: "Low",
+            category: 1,
           },
-          "2": {
-            "color": "#222",
-            "definition": "scale-3-two",
-            "levelName": "Moderate",
-            "category": 2
+          2: {
+            color: "#222",
+            definition: "scale-3-two",
+            levelName: "Moderate",
+            category: 2,
           },
-          "3": {
-            "color": "#333",
-            "definition": "scale-3-three",
-            "levelName": "High",
-            "category": 3
-          }
+          3: {
+            color: "#333",
+            definition: "scale-3-three",
+            levelName: "High",
+            category: 3,
+          },
         },
         name: "Scale-3 Fallback Test",
-        scale: 3
-      }
+        scale: 3,
+      },
     };
 
     const result = processLegend(legend);
@@ -889,75 +900,75 @@ describe("Risk levelName fallbacks", () => {
 
   it("works for legend data with a 4-level scale", () => {
     const legend = {
-      "genration_time": "time",
-      "generation_time_LT": "time_LT",
-      "ghwo_version": "test",
-      "hazards": [
+      genration_time: "time",
+      generation_time_LT: "time_LT",
+      ghwo_version: "test",
+      hazards: [
         {
-          "name": "Scale-4 Fallback Test",
-          "category": {
-            "0": {
-              "color": "#000",
-              "definition": "scale-4-zero",
+          name: "Scale-4 Fallback Test",
+          category: {
+            0: {
+              color: "#000",
+              definition: "scale-4-zero",
             },
-            "1": {
-              "color": "#111",
-              "definition": "scale-4-one",
+            1: {
+              color: "#111",
+              definition: "scale-4-one",
             },
-            "2": {
-              "color": "#222",
-              "definition": "scale-4-two",
+            2: {
+              color: "#222",
+              definition: "scale-4-two",
             },
-            "3": {
-              "color": "#333",
-              "definition": "scale-4-three"
+            3: {
+              color: "#333",
+              definition: "scale-4-three",
             },
-            "4": {
-              "color": "#444",
-              "definition": "scale-4-four"
-            }
-          }
-        }
-      ]
+            4: {
+              color: "#444",
+              definition: "scale-4-four",
+            },
+          },
+        },
+      ],
     };
 
     const expected = {
       ScaleFallbackTest: {
         category: {
-          "0": {
-            "color": "#000",
-            "definition": "scale-4-zero",
-            "levelName": "None",
-            "category": 0
+          0: {
+            color: "#000",
+            definition: "scale-4-zero",
+            levelName: "None",
+            category: 0,
           },
-          "1": {
-            "color": "#111",
-            "definition": "scale-4-one",
-            "levelName": "Very Low",
-            "category": 1
+          1: {
+            color: "#111",
+            definition: "scale-4-one",
+            levelName: "Very Low",
+            category: 1,
           },
-          "2": {
-            "color": "#222",
-            "definition": "scale-4-two",
-            "levelName": "Low",
-            "category": 2
+          2: {
+            color: "#222",
+            definition: "scale-4-two",
+            levelName: "Low",
+            category: 2,
           },
-          "3": {
-            "color": "#333",
-            "definition": "scale-4-three",
-            "levelName": "High",
-            "category": 3
+          3: {
+            color: "#333",
+            definition: "scale-4-three",
+            levelName: "High",
+            category: 3,
           },
-          "4": {
-            "color": "#444",
-            "definition": "scale-4-four",
-            "levelName": "Very High",
-            "category": 4
-          }
+          4: {
+            color: "#444",
+            definition: "scale-4-four",
+            levelName: "Very High",
+            category: 4,
+          },
         },
         name: "Scale-4 Fallback Test",
-        scale: 4
-      }
+        scale: 4,
+      },
     };
 
     const result = processLegend(legend);
@@ -967,85 +978,85 @@ describe("Risk levelName fallbacks", () => {
 
   it("works for legend data with a 5-level scale", () => {
     const legend = {
-      "genration_time": "time",
-      "generation_time_LT": "time_LT",
-      "ghwo_version": "test",
-      "hazards": [
+      genration_time: "time",
+      generation_time_LT: "time_LT",
+      ghwo_version: "test",
+      hazards: [
         {
-          "name": "Scale-5 Fallback Test",
-          "category": {
-            "0": {
-              "color": "#000",
-              "definition": "scale-5-zero",
+          name: "Scale-5 Fallback Test",
+          category: {
+            0: {
+              color: "#000",
+              definition: "scale-5-zero",
             },
-            "1": {
-              "color": "#111",
-              "definition": "scale-5-one",
+            1: {
+              color: "#111",
+              definition: "scale-5-one",
             },
-            "2": {
-              "color": "#222",
-              "definition": "scale-5-two",
+            2: {
+              color: "#222",
+              definition: "scale-5-two",
             },
-            "3": {
-              "color": "#333",
-              "definition": "scale-5-three"
+            3: {
+              color: "#333",
+              definition: "scale-5-three",
             },
-            "4": {
-              "color": "#444",
-              "definition": "scale-5-four"
+            4: {
+              color: "#444",
+              definition: "scale-5-four",
             },
-            "5": {
-              "color": "#555",
-              "definition": "scale-5-five"
-            }
-          }
-        }
-      ]
+            5: {
+              color: "#555",
+              definition: "scale-5-five",
+            },
+          },
+        },
+      ],
     };
 
     const expected = {
       ScaleFallbackTest: {
         category: {
-          "0": {
-            "color": "#000",
-            "definition": "scale-5-zero",
-            "levelName": "None",
-            "category": 0
+          0: {
+            color: "#000",
+            definition: "scale-5-zero",
+            levelName: "None",
+            category: 0,
           },
-          "1": {
-            "color": "#111",
-            "definition": "scale-5-one",
-            "levelName": "Very Low",
-            "category": 1
+          1: {
+            color: "#111",
+            definition: "scale-5-one",
+            levelName: "Very Low",
+            category: 1,
           },
-          "2": {
-            "color": "#222",
-            "definition": "scale-5-two",
-            "levelName": "Low",
-            "category": 2
+          2: {
+            color: "#222",
+            definition: "scale-5-two",
+            levelName: "Low",
+            category: 2,
           },
-          "3": {
-            "color": "#333",
-            "definition": "scale-5-three",
-            "levelName": "Moderate",
-            "category": 3
+          3: {
+            color: "#333",
+            definition: "scale-5-three",
+            levelName: "Moderate",
+            category: 3,
           },
-          "4": {
-            "color": "#444",
-            "definition": "scale-5-four",
-            "levelName": "High",
-            "category": 4
+          4: {
+            color: "#444",
+            definition: "scale-5-four",
+            levelName: "High",
+            category: 4,
           },
-          "5": {
-            "color": "#555",
-            "definition": "scale-5-five",
-            "levelName": "Very High",
-            "category": 5
-          }
+          5: {
+            color: "#555",
+            definition: "scale-5-five",
+            levelName: "Very High",
+            category: 5,
+          },
         },
         name: "Scale-5 Fallback Test",
-        scale: 5
-      }
+        scale: 5,
+      },
     };
 
     const result = processLegend(legend);
@@ -1072,105 +1083,112 @@ describe("Days without any non-zero risk levels", () => {
   // We provide a sample data where there are two
   // days without any positive risk factors at all
   const data = {
-    "countyName": "TX_Bexar",
+    countyName: "TX_Bexar",
     "2026-02-20T08:00:00-06:00": {
-      "SevereThunderstorm": 0,
-      "Tornado": 0,
-      "DailyComposite": 0
+      SevereThunderstorm: 0,
+      Tornado: 0,
+      DailyComposite: 0,
     },
     "2026-02-21T06:00:00-06:00": {
-      "SevereThunderstorm": 0,
-      "Tornado": 0,
-      "DailyComposite": 0
-    }
+      SevereThunderstorm: 0,
+      Tornado: 0,
+      DailyComposite: 0,
+    },
   };
 
   // A truncated legend corresponding only to the
   // sampled risk factors above
   const legend = {
-    "hazards": [
+    hazards: [
       {
-        "category": {
-          "0": {
-            "color": "#ededed",
-            "definition": "No Severe Thunderstorm Risk",
-            "levelName": "None"
+        category: {
+          0: {
+            color: "#ededed",
+            definition: "No Severe Thunderstorm Risk",
+            levelName: "None",
           },
-          "1": {
-            "color": "#50c986",
-            "definition": "Isolated severe thunderstorms possible.",
-            "levelName": "Marginal"
+          1: {
+            color: "#50c986",
+            definition: "Isolated severe thunderstorms possible.",
+            levelName: "Marginal",
           },
-          "2": {
-            "color": "#ffff51",
-            "definition": "Scattered severe thunderstorms possible.",
-            "levelName": "Slight"
+          2: {
+            color: "#ffff51",
+            definition: "Scattered severe thunderstorms possible.",
+            levelName: "Slight",
           },
-          "3": {
-            "color": "#ffc06c",
-            "definition": "Numerous severe thunderstorms possible.",
-            "levelName": "Enhanced"
+          3: {
+            color: "#ffc06c",
+            definition: "Numerous severe thunderstorms possible.",
+            levelName: "Enhanced",
           },
-          "4": {
-            "color": "#ff5050",
-            "definition": "Widespread severe thunderstorms likely.",
-            "levelName": "Moderate"
+          4: {
+            color: "#ff5050",
+            definition: "Widespread severe thunderstorms likely.",
+            levelName: "Moderate",
           },
-          "5": {
-            "color": "#ff50ff",
-            "definition": "Widespread severe thunderstorms expected.",
-            "levelName": "High"
-          }
+          5: {
+            color: "#ff50ff",
+            definition: "Widespread severe thunderstorms expected.",
+            levelName: "High",
+          },
         },
-        "name": "Severe Thunderstorm Risk",
-        "webTab": "public"
+        name: "Severe Thunderstorm Risk",
+        webTab: "public",
       },
       {
-        "category": {
-          "0": {
-            "color": "#ededed",
-            "definition": "Little to no Tornado Risk",
-            "levelName": "None"
+        category: {
+          0: {
+            color: "#ededed",
+            definition: "Little to no Tornado Risk",
+            levelName: "None",
           },
-          "1": {
-            "color": "#50c986",
-            "definition": "Up to 5% chance of a tornado within 25 miles of your location.",
-            "levelName": "Marginal"
+          1: {
+            color: "#50c986",
+            definition:
+              "Up to 5% chance of a tornado within 25 miles of your location.",
+            levelName: "Marginal",
           },
-          "2": {
-            "color": "#ffff51",
-            "definition": "5-10% chance of a tornado within 25 miles of your location.",
-            "levelName": "Slight"
+          2: {
+            color: "#ffff51",
+            definition:
+              "5-10% chance of a tornado within 25 miles of your location.",
+            levelName: "Slight",
           },
-          "3": {
-            "color": "#ffc06c",
-            "definition": "10-15% chance of a tornado within 25 miles of your location.",
-            "levelName": "Enhanced"
+          3: {
+            color: "#ffc06c",
+            definition:
+              "10-15% chance of a tornado within 25 miles of your location.",
+            levelName: "Enhanced",
           },
-          "4": {
-            "color": "#ff5050",
-            "definition": "15-30% or greater chance of a tornado within 25 miles of your location.",
-            "levelName": "Moderate"
+          4: {
+            color: "#ff5050",
+            definition:
+              "15-30% or greater chance of a tornado within 25 miles of your location.",
+            levelName: "Moderate",
           },
-          "5": {
-            "color": "#ff50ff",
-            "definition": "30% or greater chance of a tornado within 25 miles of your location.",
-            "levelName": "High"
-          }
+          5: {
+            color: "#ff50ff",
+            definition:
+              "30% or greater chance of a tornado within 25 miles of your location.",
+            levelName: "High",
+          },
         },
-        "name": "Tornado Risk",
-        "webTab": "public"
-      }
-    ]
+        name: "Tornado Risk",
+        webTab: "public",
+      },
+    ],
   };
 
   it("processes valid max values for each category", () => {
     const processedLegend = processLegend(legend);
     const result = processDays(data, processedLegend);
-    const composites = result.days.map(day => { return day.composite; });
+    const composites = result.days.map((day) => {
+      return day.composite;
+    });
 
     expect(composites.length).to.equal(2);
-    composites.forEach(composite => {
+    composites.forEach((composite) => {
       expect(composite.max).to.equal(0);
     });
   });
@@ -1178,10 +1196,12 @@ describe("Days without any non-zero risk levels", () => {
   it("processes valid scaled values for each category", () => {
     const processedLegend = processLegend(legend);
     const result = processDays(data, processedLegend);
-    const composites = result.days.map(day => { return day.composite; });
+    const composites = result.days.map((day) => {
+      return day.composite;
+    });
 
     expect(composites.length).to.equal(2);
-    composites.forEach(composite => {
+    composites.forEach((composite) => {
       expect(composite.scaled).to.equal(0);
     });
   });

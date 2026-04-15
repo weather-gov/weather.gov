@@ -32,16 +32,19 @@
                  type="text"
                  slot="input" />
           <input type="hidden" name="wfo" value="{{ wfo }}" />
-          <button type="button" class="empty" aria-label="{{ "afd.aria.clear-input-box.01" | t }}" slot="clear-button">&nbsp;</button>
+          <button type="button"
+                  class="empty"
+                  aria-label="{{ "afd.aria.clear-input-box.01" | t }}"
+                  slot="clear-button">&nbsp;</button>
           <button type="button"
                   aria-label="{{ "afd.aria.toggle-dropdown.01" | t }}"
                   slot="toggle-button">&nbsp;</button>
           <wx-filterable-listbox slot="popup" id="combobox-afd-wfo--list" role="listbox">
           {% for wfo in wfo_list %}
             <div role="option"
-                  id="combobox-afd-wfo--{{ wfo.value }}-{{ forloop.counter0 }}"
-                  data-value="{{ wfo.value }}"
-                  aria-selected="{{ wfo.selected|lower }}">{{ wfo.text }}</div>
+                 id="combobox-afd-wfo--{{ wfo.value }}-{{ forloop.counter0 }}"
+                 data-value="{{ wfo.value }}"
+                 aria-selected="{{ wfo.selected|lower }}">{{ wfo.text }}</div>
           {% endfor %}
           </wx-filterable-listbox>
           </wx-combobox>

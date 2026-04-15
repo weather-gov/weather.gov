@@ -11,14 +11,16 @@ import { getFallbackLevelName } from "./levelnames.js";
  * 0, 2, and 3 (note that 1 doesn't exist), making it effecively a 2-scale, but we need to treat it as a 3 point scale for procesing purposes
  */
 export const getMaxScaleFromLegend = (risk, legend) => {
-  if(legend[risk]){
+  if (legend[risk]) {
     // Subtracting 1 removes the addition of a 0 category
     // return Object.keys(legend[risk].category).length - 1;
-    const levels = Object.keys(legend[risk].category).map(key => {
-      return parseInt(key);
-    }).filter(num => {
-      return !isNaN(num);
-    });
+    const levels = Object.keys(legend[risk].category)
+      .map((key) => {
+        return parseInt(key);
+      })
+      .filter((num) => {
+        return !isNaN(num);
+      });
     return Math.max(...levels, 0);
   }
   return null;
@@ -35,24 +37,22 @@ export const getMaxScaleFromLegend = (risk, legend) => {
  */
 export const processChickletData = (chickletData) => {
   const result = {};
-  if(!chickletData.hazards){
+  if (!chickletData.hazards) {
     return result;
   }
 
-  chickletData.hazards.forEach(hazardEntry => {
+  chickletData.hazards.forEach((hazardEntry) => {
     // Each hazard entry object has a risk "name"
     // property corresponding to the full name of the risk.
     // We attempt a lookup in the dictionary that maps
     // full risk names to their key name equivalents
     // See mappings.js
-    const riskKey = riskNameToKeyMapping.get(
-      hazardEntry.name
-    );
+    const riskKey = riskNameToKeyMapping.get(hazardEntry.name);
 
     // If there is no corresponding key, we do not
     // add the risk information to the processed
     // chicklet output
-    if(riskKey){
+    if (riskKey) {
       result[riskKey] = hazardEntry;
     }
   });
@@ -83,7 +83,7 @@ export const getImageUrlForRisk = (risk, dayNumber, wfo, chickletData) => {
   // information about risks. This comes from the
   // processed version of the chicklet data (see processChickletData)
   const foundChickletRisk = chickletData[risk];
-  if(foundChickletRisk){
+  if (foundChickletRisk) {
     // If we get here, we have hazard data from the chicklet
     // for the given risk key. This means we can attempt to
     // pull out the image URLs.
@@ -91,8 +91,8 @@ export const getImageUrlForRisk = (risk, dayNumber, wfo, chickletData) => {
     // but as an object whose keys are in the form `period<dayNum>`.
     const periodKey = `period${dayNumber + 1}`;
     const foundPeriodEntry = foundChickletRisk.periods[periodKey];
-    if(foundPeriodEntry){
-      if(foundPeriodEntry.imagePath?.startsWith("http")){
+    if (foundPeriodEntry) {
+      if (foundPeriodEntry.imagePath?.startsWith("http")) {
         return foundPeriodEntry.imagePath;
       }
       return `https://www.weather.gov${foundPeriodEntry.imagePath}`;
@@ -232,7 +232,7 @@ export const processDays = (data, legend) => {
 
     // We only want to compute these values if there are
     // _any_ non-zero risk categories to consider
-    if(categories.length){
+    if (categories.length) {
       // Now scale the category relative to its max.
       const scaled = categories.map(({ category, max }) => category / max);
 
@@ -247,7 +247,7 @@ export const processDays = (data, legend) => {
       // for the day will both be zero
       day.composite = {
         max: 0,
-        scaled: 0
+        scaled: 0,
       };
     }
   });
@@ -333,9 +333,12 @@ export const processLegend = (legendData) =>
         // If there is not a levelName key in the category dict,
         // or the levelname is not specified, we should pull from
         // the fallback set
-        if(!categoryValue.levelName || categoryValue.levelName === ""){
+        if (!categoryValue.levelName || categoryValue.levelName === "") {
           const riskScale = getMaxScaleFromLegend(riskKey, legend);
-          categoryValue.levelName = getFallbackLevelName(categoryNumber, riskScale);
+          categoryValue.levelName = getFallbackLevelName(
+            categoryNumber,
+            riskScale,
+          );
         }
       },
     );
@@ -347,7 +350,7 @@ export const processLegend = (legendData) =>
     // Since the keys in the legend are all string version of the numbers,
     // we can simply count the number of keys and set that as the "max"
     // for the given scale.
-    legend[riskKey].scale = getMaxScaleFromLegend(riskKey, legend); 
+    legend[riskKey].scale = getMaxScaleFromLegend(riskKey, legend);
 
     return legend;
   }, {});

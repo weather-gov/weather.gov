@@ -3,9 +3,7 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: point", () => {
-  let getDataForPoint,
-    point,
-    sandbox;
+  let getDataForPoint, point, sandbox;
 
   before(async () => {
     sandbox = sinon.createSandbox();

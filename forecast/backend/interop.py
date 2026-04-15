@@ -28,6 +28,7 @@ def _get_requests_session():
         _requests_session.mount("https://", adapter)
     return _requests_session
 
+
 def _get_hour(dt):
     """Get the hour from datetime."""
     return dt.strftime("%-I%p").lower()

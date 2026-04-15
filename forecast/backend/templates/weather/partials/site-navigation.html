@@ -8,89 +8,85 @@
   <div class="usa-nav-container">
     <nav aria-label="Primary navigation" class="usa-nav" id="site-navigation">
       <button type="button" class="usa-nav__close">
-        <img src="{% static 'images/uswds/usa-icons/close.svg' %}" role="img" alt="Close" />
+        <img src="{% static 'images/uswds/usa-icons/close.svg' %}"
+             role="img"
+             alt="Close" />
       </button>
       <ul class="usa-nav__primary usa-accordion margin-top-0 border-bottom-1px tablet-lg:border-bottom-0">
         <li class="usa-nav__primary-item">
-          <button
-            type="button"
-            class="usa-accordion__button usa-nav__link {% if request.path != '/about/' %}usa-current{% endif %}"
-            aria-expanded="false"
-            aria-controls="nav-section-forecast">
+          <button type="button"
+                  class="usa-accordion__button usa-nav__link {% if request.path != '/about/' %}usa-current{% endif %}"
+                  aria-expanded="false"
+                  aria-controls="nav-section-forecast">
             <span class="font-sans-xs">{{ "menu.navigation.forecast.01" | t }}</span>
           </button>
           <ul id="nav-section-forecast" class="usa-nav__submenu font-body-xs">
             <li class="usa-nav__submenu-item">
               <a href="{% url 'index' %}">
-                <span class="font-sans-xs">
-                  {{ "menu.navigation.forecast.find-forecast.01" | t }}
-                </span>
+                <span class="font-sans-xs">{{ "menu.navigation.forecast.find-forecast.01" | t }}</span>
               </a>
             </li>
             <li class="usa-nav__submenu-item">
               <a href="{% url 'county_index' %}"><span class="font-sans-xs">{{ "menu.navigation.forecast.county.01" | t }}</span></a>
             </li>
             {% if debug_show_all_menu_links %}
-            <li class="usa-nav__submenu-item">
-              <a href="{% url 'state_index' %}"><span class="font-sans-xs">{{ "menu.navigation.forecast.state.01" | t }}</span></a>
-            </li>
+              <li class="usa-nav__submenu-item">
+                <a href="{% url 'state_index' %}"><span class="font-sans-xs">{{ "menu.navigation.forecast.state.01" | t }}</span></a>
+              </li>
             {% endif %}
           </ul>
         </li>
         {% if debug_show_all_menu_links %}
-        <li class="usa-nav__primary-item">
-          <a href="javascript:void(0);" class="usa-nav__link">
-            <span class="font-sans-xs text-normal">{{ "menu.navigation.observations.01" | t }}</span>
-          </a>
-        </li>
+          <li class="usa-nav__primary-item">
+            <a href="javascript:void(0);" class="usa-nav__link">
+              <span class="font-sans-xs text-normal">{{ "menu.navigation.observations.01" | t }}</span>
+            </a>
+          </li>
         {% endif %}
         {% if debug_show_all_menu_links %}
-        <li class="usa-nav__primary-item">
-          <button
-            type="button"
-            class="usa-accordion__button usa-nav__link"
-            aria-expanded="false"
-            aria-controls="nav-section-preparedness">
-            <span class="font-sans-xs">{{ "menu.navigation.preparedness.01" | t }}</span>
-          </button>
-          <ul id="nav-section-preparedness" class="usa-nav__submenu font-body-xs">
-            <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.preparedness.weather-hazards-guides.01" | t }}</span></a>
-            </li>
-          </ul>
-        </li>
+          <li class="usa-nav__primary-item">
+            <button type="button"
+                    class="usa-accordion__button usa-nav__link"
+                    aria-expanded="false"
+                    aria-controls="nav-section-preparedness">
+              <span class="font-sans-xs">{{ "menu.navigation.preparedness.01" | t }}</span>
+            </button>
+            <ul id="nav-section-preparedness" class="usa-nav__submenu font-body-xs">
+              <li class="usa-nav__submenu-item">
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.preparedness.weather-hazards-guides.01" | t }}</span></a>
+              </li>
+            </ul>
+          </li>
         {% endif %}
         {% if debug_show_all_menu_links %}
-        <li class="usa-nav__primary-item">
-          <button
-            type="button"
-            class="usa-accordion__button usa-nav__link"
-            aria-expanded="false"
-            aria-controls="nav-section-resources">
-            <span class="font-sans-xs">{{ "menu.navigation.resources.01" | t }}</span>
-          </button>
-          <ul id="nav-section-resources" class="usa-nav__submenu font-body-xs">
-            <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.state-weather-overview.01" | t }}</span></a>
-            </li>
-            <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.storm-recaps.01" | t }}</span></a>
-            </li>
-            <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.historical-weather.01" | t }}</span></a>
-            </li>
-            <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.glossary.01" | t }}</span></a>
-            </li>
-          </ul>
-        </li>
+          <li class="usa-nav__primary-item">
+            <button type="button"
+                    class="usa-accordion__button usa-nav__link"
+                    aria-expanded="false"
+                    aria-controls="nav-section-resources">
+              <span class="font-sans-xs">{{ "menu.navigation.resources.01" | t }}</span>
+            </button>
+            <ul id="nav-section-resources" class="usa-nav__submenu font-body-xs">
+              <li class="usa-nav__submenu-item">
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.state-weather-overview.01" | t }}</span></a>
+              </li>
+              <li class="usa-nav__submenu-item">
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.storm-recaps.01" | t }}</span></a>
+              </li>
+              <li class="usa-nav__submenu-item">
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.historical-weather.01" | t }}</span></a>
+              </li>
+              <li class="usa-nav__submenu-item">
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.glossary.01" | t }}</span></a>
+              </li>
+            </ul>
+          </li>
         {% endif %}
         <li class="usa-nav__primary-item">
-          <button
-            type="button"
-            class="usa-accordion__button usa-nav__link {% if request.path == '/about/' %}usa-current{% endif %}"
-            aria-expanded="false"
-            aria-controls="nav-section-about">
+          <button type="button"
+                  class="usa-accordion__button usa-nav__link {% if request.path == '/about/' %}usa-current{% endif %}"
+                  aria-expanded="false"
+                  aria-controls="nav-section-about">
             <span class="font-sans-xs">{{ "menu.navigation.about.01" | t }}</span>
           </button>
           <ul id="nav-section-about" class="usa-nav__submenu font-body-xs">
@@ -98,18 +94,18 @@
               <a href="/about"><span class="font-sans-xs">{{ "menu.navigation.about.mission.01" | t }}</span></a>
             </li>
             {% if debug_show_all_menu_links %}
-            <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.offices.01" | t }}</span></a>
-            </li>
-            <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.centers.01" | t }}</span></a>
-            </li>
-            <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.news.01" | t }}</span></a>
-            </li>
-            <li class="usa-nav__submenu-item">
-              <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.history.01" | t }}</span></a>
-            </li>
+              <li class="usa-nav__submenu-item">
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.offices.01" | t }}</span></a>
+              </li>
+              <li class="usa-nav__submenu-item">
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.centers.01" | t }}</span></a>
+              </li>
+              <li class="usa-nav__submenu-item">
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.news.01" | t }}</span></a>
+              </li>
+              <li class="usa-nav__submenu-item">
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.history.01" | t }}</span></a>
+              </li>
             {% endif %}
           </ul>
         </li>

@@ -29,7 +29,7 @@ let profiling = false;
 const handleExit = () => {
   process.emit("SHUTDOWN");
   setTimeout(() => process.exit(0), 300);
-}
+};
 
 // Gracefully shutdown when user presses Ctrl-c
 process.on("SIGINT", handleExit);
@@ -40,26 +40,26 @@ process.on("SIGTERM", handleExit);
 process.on("exit", handleExit);
 
 // Start profiling with `kill -USR1 <node process id>`
-process.on('SIGUSR1', async () => {
+process.on("SIGUSR1", async () => {
   if (profiling) return;
 
   profiling = true;
   session = new inspector.Session();
   session.connect();
 
-  await new Promise(resolve => {
-    session.post('Profiler.enable', () => {
-      session.post('Profiler.start', resolve);
+  await new Promise((resolve) => {
+    session.post("Profiler.enable", () => {
+      session.post("Profiler.start", resolve);
       logger.info("CPU profiling is now on, send SIGUSR2 to turn off");
     });
   });
 });
 
 // Stop profiling with `kill -USR2 <node process id>`
-process.on('SIGUSR2', async () => {
+process.on("SIGUSR2", async () => {
   if (!profiling) return;
 
-  session.post('Profiler.stop', (err, { profile }) => {
+  session.post("Profiler.stop", (err, { profile }) => {
     const filename = `CPU-${Date.now()}.cpuprofile`;
     fs.writeFileSync(filename, JSON.stringify(profile));
 
@@ -70,11 +70,10 @@ process.on('SIGUSR2', async () => {
   });
 });
 
-
 export const main = async () => {
   const port = process.env.PORT || 8082;
   const server = fastify();
-  
+
   server.addHook("onClose", (_, done) => {
     process.emit("SHUTDOWN");
     setTimeout(() => done(), 300);
@@ -96,11 +95,14 @@ export const main = async () => {
   });
 
   // Log out the information about our ConnectionTracker
-  logger.warn({
-    maxConnections: ConnectionTracker.maxConnections,
-    currentSize: ConnectionTracker.currentSize,
-    atMax: ConnectionTracker.atMax
-  }, `Starting the ConnectionTracker`);
+  logger.warn(
+    {
+      maxConnections: ConnectionTracker.maxConnections,
+      currentSize: ConnectionTracker.currentSize,
+      atMax: ConnectionTracker.atMax,
+    },
+    `Starting the ConnectionTracker`,
+  );
 
   server.get("/", (_, response) => {
     response.send({
@@ -124,21 +126,24 @@ export const main = async () => {
          * If so, immediately return a 429
          */
         let data, error, status;
-        if(ConnectionTracker.atMax){
+        if (ConnectionTracker.atMax) {
           status = 429;
           data = {
             message: "Too many open connections to NWS services",
-            maxConnections: ConnectionTracker.maxConnections
+            maxConnections: ConnectionTracker.maxConnections,
           };
           error = true;
-          logger.warn({
-            maxConnections: ConnectionTracker.maxConnections,
-            currentSize: ConnectionTracker.currentSize
-          }, `429: Exceeded maximum number of outbound connections`);
+          logger.warn(
+            {
+              maxConnections: ConnectionTracker.maxConnections,
+              currentSize: ConnectionTracker.currentSize,
+            },
+            `429: Exceeded maximum number of outbound connections`,
+          );
         } else {
           ({ data, error, status } = await handler(request));
         }
-        
+
         if (error) {
           logger.error({ err: error });
         }

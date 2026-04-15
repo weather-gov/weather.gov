@@ -12,31 +12,24 @@
       <div class="grid-col-auto desktop:grid-col-12 margin-right-1 desktop:margin-right-0 text-uppercase">
         {% trans "satellite.time-shown.label.01" %}<span class="desktop:display-none">:</span>
       </div>
-      <div class="grid-col-auto" data-wx-satellite-times>
-        {# To be populated by JS #}
-      </div>
+      <div class="grid-col-auto" data-wx-satellite-times>{# To be populated by JS #}</div>
     </div>
   </div>
   <div class="grid-container padding-0 bg-white shadow-1">
     <div class="grid-row wx-satellite-container position-relative">
       <wx-satellite-video class="grid-col-12" wfo="{{ point.wfo.normalized_code | lower }}" timezone="{{ point.place.timezone }}">
-
-        <div data-wx-satellite-loading class="padding-4 width-full text-center">
-          {% trans "satellite.video.loading.01" %}
-        </div>
-
-        <div data-wx-satellite-content class="display-none">
-          <video id="satellite-video-player" controls class="width-full display-block"></video>
-        </div>
-
-        <div data-wx-satellite-error class="display-none padding-4 text-secondary-dark text-center">
-          {% trans "satellite.video.fail.01" %}
-        </div>
+      <div data-wx-satellite-loading class="padding-4 width-full text-center">{% trans "satellite.video.loading.01" %}</div>
+      <div data-wx-satellite-content class="display-none">
+        <video id="satellite-video-player" controls class="width-full display-block">
+        </video>
+      </div>
+      <div data-wx-satellite-error
+           class="display-none padding-4 text-secondary-dark text-center">{% trans "satellite.video.fail.01" %}</div>
       </wx-satellite-video>
     </div>
     <div class="padding-2">
       <a href="https://www.star.nesdis.noaa.gov/GOES/wfo.php?wfo={{ point.wfo.normalized_code | lower }}"
-        class="usa-link">{% trans "satellite.link.explore-other.01" %}</a>
+         class="usa-link">{% trans "satellite.link.explore-other.01" %}</a>
     </div>
   </div>
 </div>

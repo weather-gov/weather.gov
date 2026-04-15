@@ -18,10 +18,7 @@ export default async (wfo) => {
     }
 
     // Request, throws error, if error
-    const [result, headers] = await requestJSONWithHeaders(
-      connectionPool,
-      url,
-    );
+    const [result, headers] = await requestJSONWithHeaders(connectionPool, url);
 
     // Example return object:
     // {

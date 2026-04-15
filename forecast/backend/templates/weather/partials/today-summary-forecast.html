@@ -15,7 +15,6 @@
         {# Attempt to render the period(s) associated with the current day #}
         {% daily_summary_list_item day=forecast.days.0 %}
       </ol>
-
       <div class="wx-sunrise-sunset-container padding-top-3 desktop:padding-top-4 padding-x-2">
         <div class="padding-bottom-1 display-flex flex-align-center">
           <div class="padding-right-1">
@@ -33,23 +32,31 @@
             {{ astronomical_data.sunset|date:"g:i" }}&nbsp;{{ astronomical_data.sunset|date:"A" }}
           </div>
           <div wx-expander="#astronomical-data">
-            <button wx-expand aria-controls="astronomical-data" aria-expanded="false" class="usa-button usa-button--unstyled" type="button">
+            <button wx-expand
+                    aria-controls="astronomical-data"
+                    aria-expanded="false"
+                    class="usa-button usa-button--unstyled"
+                    type="button">
               <span class="usa-icon--size-3 display-block text-primary">
                 <svg class="usa-icon usa-icon--size-3"
-                    aria-hidden="true"
-                    focusable="false"
-                    role="img">
+                     aria-hidden="true"
+                     focusable="false"
+                     role="img">
                   <use xlink:href="{% static 'images/uswds/sprite.svg' %}#add_circle"></use>
                 </svg>
                 <span class="sr-only">{{ "show more "}}</span>
               </span>
             </button>
-            <button wx-collapse aria-controls="astronomical-data" aria-expanded="true" class="usa-button usa-button--unstyled display-none" type="button">
+            <button wx-collapse
+                    aria-controls="astronomical-data"
+                    aria-expanded="true"
+                    class="usa-button usa-button--unstyled display-none"
+                    type="button">
               <span class="usa-icon--size-3 display-block text-primary">
                 <svg class="usa-icon usa-icon--size-3"
-                    aria-hidden="true"
-                    focusable="false"
-                    role="img">
+                     aria-hidden="true"
+                     focusable="false"
+                     role="img">
                   <use xlink:href="{% static 'images/uswds/sprite.svg' %}#remove_circle"></use>
                 </svg>
                 <span class="sr-only">{{ "hide "}}</span>
@@ -57,36 +64,27 @@
             </button>
           </div>
         </div>
-
-        <table id="astronomical-data" class="usa-table usa-table--borderless width-full margin-0 display-none">
+        <table id="astronomical-data"
+               class="usa-table usa-table--borderless width-full margin-0 display-none">
           <tbody>
             <tr>
-              <th class="font-family-mono font-mono-xs text-uppercase text-base border-top-0">
-                {{ "first light" | t }}
-              </th>
+              <th class="font-family-mono font-mono-xs text-uppercase text-base border-top-0">{{ "first light" | t }}</th>
               <td class="border-top-0">{{ astronomical_data.civilTwilightBegin|date:"g:i A" }}</td>
             </tr>
             <tr>
-              <th class="font-family-mono font-mono-xs text-uppercase text-base">
-                {{ "last light" | t }}
-              </th>
+              <th class="font-family-mono font-mono-xs text-uppercase text-base">{{ "last light" | t }}</th>
               <td>{{ astronomical_data.civilTwilightEnd|date:"g:i A" }}</td>
             </tr>
             <tr>
-              <th class="font-family-mono font-mono-xs text-uppercase text-base border-bottom-0">
-                {{ "length of day" | t }}
-              </th>
+              <th class="font-family-mono font-mono-xs text-uppercase text-base border-bottom-0">{{ "length of day" | t }}</th>
               <td class="border-bottom-0">{{ astronomical_data.dayLength }}</td>
             </tr>
             <tr>
-              <th class="font-family-mono font-mono-xs text-uppercase text-base">
-                {{ "length of visible day" | t }}
-              </th>
+              <th class="font-family-mono font-mono-xs text-uppercase text-base">{{ "length of visible day" | t }}</th>
               <td>{{ astronomical_data.dayLightLength }}</td>
             </tr>
           </tbody>
         </table>
-
       </div>
     </div>
   {% endwith %}

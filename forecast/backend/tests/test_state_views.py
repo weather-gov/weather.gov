@@ -14,25 +14,13 @@ class TestStateViews(TestCase):
     def setUp(self):
         """Test setup."""
         self.state_ln = spatial.WeatherStates.objects.create(
-            name="Lightning",
-            state="LN",
-            shape=GEOSGeometry("POINT(0 0)"),
-            county_count=0,
-            timezone="UTC"
+            name="Lightning", state="LN", shape=GEOSGeometry("POINT(0 0)"), county_count=0, timezone="UTC"
         )
         self.state_bn = spatial.WeatherStates.objects.create(
-            name="Benjamin",
-            state="BN",
-            shape=GEOSGeometry("POINT(0 0)"),
-            county_count=0,
-            timezone="UTC"
+            name="Benjamin", state="BN", shape=GEOSGeometry("POINT(0 0)"), county_count=0, timezone="UTC"
         )
         self.state_fr = spatial.WeatherStates.objects.create(
-            name="Franklin",
-            state="FR",
-            shape=GEOSGeometry("POINT(0 0)"),
-            county_count=0,
-            timezone="America/New_York"
+            name="Franklin", state="FR", shape=GEOSGeometry("POINT(0 0)"), county_count=0, timezone="America/New_York"
         )
         cwa = spatial.WeatherCountyWarningAreas.objects.create(
             shape=GEOSGeometry("POINT(0 0)"),

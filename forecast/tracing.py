@@ -34,7 +34,7 @@ def enable_opentelemetry():
     PsycopgInstrumentor().instrument()
     RequestsInstrumentor().instrument()
 
-    print("*** open telemetry is enabled ***") # noqa: T201
+    print("*** open telemetry is enabled ***")  # noqa: T201
 
     # we monkey-patch Template.render to explicitly trace templates. this is
     # quite noisy so it can be turned off independently when needed.

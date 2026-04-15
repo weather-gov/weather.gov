@@ -11,7 +11,6 @@
 --    county: a county fips code, used for generating the county link
 -- Used by: point/overview.html
 {% endcomment %}
-
 <div class="bg-accent-cool-lightest border-top-1px border-bottom-1px border-base-light margin-top-4 wx-weather-story-block-section">
   <div class="grid-container">
     {% if weather_story %}
@@ -46,7 +45,9 @@
               {% trans_with_args "weather-story.text.created-by.06" date=weather_story.startTime|date:'l F j, Y' time=weather_story.startTime|date:'g:i A'  wfo_name=weather_story.wfo_name wfo_url=weather_story.wfo_url %}
               {% endcomment %}
             </p>
-            <p class="margin-bottom-2">{% trans_with_args "weather-story-text-created-by.07" wfo_name=weather_story.wfo_name wfo_url=weather_story.wfo_url %}</p>
+            <p class="margin-bottom-2">
+              {% trans_with_args "weather-story-text-created-by.07" wfo_name=weather_story.wfo_name wfo_url=weather_story.wfo_url %}
+            </p>
             <p class="margin-0">{{ weather_story.description }}</p>
           </div>
           {# Image area #}
@@ -54,9 +55,9 @@
             <div class="display-block desktop:width-full desktop:padding-bottom-3 margin-right-neg-2 margin-left-neg-2 desktop:margin-right-0 desktop:margin-left-0 desktop:margin-top-3">
               <img src="{{ weather_story.download }}" alt="" aria-hidden="true">
             </div>
-          {% endif %}{# if image #}
+          {% endif %}
+          {# if image #}
         {% endif %}
-
         {% comment %}
         -- Whether a story object is empty, error, or
         -- ok, we always render this part of it, which contains

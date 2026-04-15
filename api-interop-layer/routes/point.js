@@ -32,8 +32,8 @@ export const handler = async (request) => {
       return { data, status: data.status, error: data.error };
     }
     return { data };
-  } catch(e){
-    if(e.cause?.statusCode === 403){
+  } catch (e) {
+    if (e.cause?.statusCode === 403) {
       return { status: 429, error: e };
     }
     throw e;

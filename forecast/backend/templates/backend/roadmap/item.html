@@ -10,18 +10,15 @@
     <span class="text-accent-warm-darker text-bold">Outcome</span>: {{ entry.outcome }}
   </p>
   {% if forloop.last %}<div id="{{ target }}"></div>{% endif %}
-
   {% if entry.delivered %}
     <div class="margin-top-105">
       <div class="display-inline-block">
-      <div class="wx-delivered display-flex flex-align-center">
-        <svg role="img" aria-hidden="true">
-          <use xlink:href="{% static 'images/uswds/sprite.svg' %}#check_circle"></use>
-        </svg>
-        <span class="line-height-sans-1">
-          Delivered {{ entry.delivery_date | date:"n/j/y" }}
-        </span>
-      </div>
+        <div class="wx-delivered display-flex flex-align-center">
+          <svg role="img" aria-hidden="true">
+            <use xlink:href="{% static 'images/uswds/sprite.svg' %}#check_circle"></use>
+          </svg>
+          <span class="line-height-sans-1">Delivered {{ entry.delivery_date | date:"n/j/y" }}</span>
+        </div>
       </div>
     </div>
   {% endif %}

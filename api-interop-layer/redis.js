@@ -10,7 +10,7 @@ export let USE_REDIS = false;
 // that will always disable redis operations
 // by immediately setting USE_REDIS to false
 let DISABLE_REDIS = false;
-if(process.env.DISABLE_REDIS && process.env.DISABLE_REDIS === "true"){
+if (process.env.DISABLE_REDIS && process.env.DISABLE_REDIS === "true") {
   DISABLE_REDIS = true;
 }
 
@@ -28,7 +28,7 @@ export const getRedisConnectionInfo = () => {
   // If DISABLE_REDIS is true, immediately set
   // USE_REDIS to false and return an empty object
   // as the connection info data
-  if(DISABLE_REDIS){
+  if (DISABLE_REDIS) {
     USE_REDIS = false;
     redisLogger.warn("redis is DISABLED for cache");
     return {};
@@ -152,7 +152,7 @@ export const getFromRedis = async (key) => {
   }
   const client = await getRedisClient();
   const result = await client.json.get(key);
-  if(result){
+  if (result) {
     return result;
   }
   return null;

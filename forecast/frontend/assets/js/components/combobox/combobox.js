@@ -12,18 +12,18 @@ const comboTemplate = `
 <slot name="popup"></slot>
 `;
 export default class Combobox extends HTMLElement {
-  constructor(){
+  constructor() {
     super();
     this.popup = null;
-    
+
     this.template = document.createElement("template");
     this.template.innerHTML = comboTemplate;
-    this.attachShadow({mode: 'open', delegatesFocus: true});
-    this.shadowRoot.append(
-      this.template.content.cloneNode(true)
+    this.attachShadow({ mode: "open", delegatesFocus: true });
+    this.shadowRoot.append(this.template.content.cloneNode(true));
+    this.shadowRoot.addEventListener(
+      "slotchange",
+      this.handleSlotChange.bind(this),
     );
-    this.shadowRoot
-      .addEventListener("slotchange", this.handleSlotChange.bind(this));
 
     // Bound methods
     this.handleInput = this.handleInput.bind(this);
@@ -33,31 +33,33 @@ export default class Combobox extends HTMLElement {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.showPopup = this.showPopup.bind(this);
     this.hidePopup = this.hidePopup.bind(this);
-    this.submit  = this.submit.bind(this);
+    this.submit = this.submit.bind(this);
     this.handlePopupChange = this.handlePopupChange.bind(this);
     this.handleToggleClick = this.handleToggleClick.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
   }
 
-  connectedCallback(){
+  connectedCallback() {
     // We need to ensure that the component has a unique id.
     // This is used to compute popup option ids, which are necessary
     // for the correct usage of aria-activedescendant and related
     // pseudo-focus capabilites for assistive technologies.
-    if(!this.id){
-      console.error(`${this.tagName.toLowerCase()} requires an 'id' attribute to be set`);
+    if (!this.id) {
+      console.error(
+        `${this.tagName.toLowerCase()} requires an 'id' attribute to be set`,
+      );
     }
 
     // Keyboard and input based events will be listened for on
     // the input element specifically, and handled on this component.
     this.input = this.querySelector(`input[slot="input"]`);
-    if(this.input){
+    if (this.input) {
       this.input.addEventListener("input", this.handleInput);
       this.input.addEventListener("keydown", this.handleKeyDown);
       this.input.addEventListener("focus", this.handleFocus);
       this.input.addEventListener("blur", this.handleBlur);
     }
-    
+
     this.addEventListener("focus", this.handleFocus);
     this.addEventListener("blur", this.handleBlur);
 
@@ -71,11 +73,11 @@ export default class Combobox extends HTMLElement {
     // Set up the appropriate event handlers for the clear button
     // and the toggle button.
     this.toggleButton = this.querySelector(`[slot="toggle-button"]`);
-    if(this.toggleButton){
+    if (this.toggleButton) {
       this.toggleButton.addEventListener("click", this.handleToggleClick);
     }
     this.clearButton = this.querySelector(`[slot="clear-button"]`);
-    if(this.clearButton){
+    if (this.clearButton) {
       this.clearButton.addEventListener("click", this.handleClearClick);
     }
   }
@@ -86,14 +88,14 @@ export default class Combobox extends HTMLElement {
    * the appropriate aria attributes needed for
    * both screenreading and styling.
    */
-  showPopup(){
-    if(this.input){
+  showPopup() {
+    if (this.input) {
       this.input.setAttribute("aria-expanded", true);
       this.setAttribute("expanded", true);
     }
-    if(this.popup){
+    if (this.popup) {
       const target = this.popup.selection ?? this.popup.pseudoFocus;
-      if(target){
+      if (target) {
         this.popup.pseudoFocusItem(target);
       }
     }
@@ -104,7 +106,7 @@ export default class Combobox extends HTMLElement {
    * for the combobox, by setting the appropriate
    * attributes needed for screenreading and styling
    */
-  hidePopup(){
+  hidePopup() {
     this.removeAttribute("expanded");
     this.input.removeAttribute("aria-expanded");
     this.input.removeAttribute("aria-activedescendant");
@@ -117,7 +119,7 @@ export default class Combobox extends HTMLElement {
    * considered part of that form and its data will be
    * used as part of the form action.
    */
-  submit(){
+  submit() {
     this.closest("form")?.submit();
   }
 
@@ -136,23 +138,26 @@ export default class Combobox extends HTMLElement {
    * combobox input aria-controls to map to the
    * incoming popup element.
    */
-  handleSlotChange(event){
+  handleSlotChange(event) {
     const name = event.target.getAttribute("name");
     const assigned = event.target.assignedElements();
 
-    if(name === "popup"){
+    if (name === "popup") {
       // If there is an existing popup that was attached,
       // remove any event listeners from it.
-      if(this.popup){
+      if (this.popup) {
         this.popup.removeEventListener("change", this.handlePopupChange);
-        this.popup.removeEventListener("mousedown", this.handleListboxMouseDown);
+        this.popup.removeEventListener(
+          "mousedown",
+          this.handleListboxMouseDown,
+        );
       }
 
       // Now check if there is a new popup assigned or
       // if the slot is empty. Either way assign the value
       // to the stored popup
       this.popup = assigned.length ? assigned[0] : null;
-      if(this.popup){
+      if (this.popup) {
         this.popup.addEventListener("change", this.handlePopupChange);
         this.popup.addEventListener("mousedown", this.handleListboxMouseDown);
 
@@ -161,7 +166,7 @@ export default class Combobox extends HTMLElement {
         // The listbox options need to have their own unique ids
         // for the use of aria-activedescendant, which handles pseudo
         // focus in assistive technologies
-        if(!this.popup.id){
+        if (!this.popup.id) {
           this.popup.id = `${this.id}-popup`;
 
           // Trigger slotchange event manually
@@ -169,7 +174,7 @@ export default class Combobox extends HTMLElement {
         }
         this.input.setAttribute("aria-controls", this.popup.id);
 
-        this.handlePopupChange({target: this.popup});
+        this.handlePopupChange({ target: this.popup });
       }
     }
   }
@@ -182,7 +187,7 @@ export default class Combobox extends HTMLElement {
    * in the listbox will never be hit because by that time
    * the input has already blurred and lost focus.
    */
-  handleListboxMouseDown(event){
+  handleListboxMouseDown(event) {
     event.preventDefault();
   }
 
@@ -198,13 +203,16 @@ export default class Combobox extends HTMLElement {
    * way of mapping screenreader focus that is separate from
    * browser element focus.
    */
-  handlePopupNav(event){
-    if(event.detail.beyondTop){
+  handlePopupNav(event) {
+    if (event.detail.beyondTop) {
       // If the user has navigated beyond the top option in the list
       // (usually a #moveUp when the first item is already selected),
       // we hide the list
       this.hidePopup();
-    } else if(event.detail.navCommand === "moveDown" && !event.detail.previous){
+    } else if (
+      event.detail.navCommand === "moveDown" &&
+      !event.detail.previous
+    ) {
       // If there was no previous focus element and we are moving down,
       // we should attempt to open the popup. This scenario can occur if:
       // 1. The user has focused the input, revelating the popup, then
@@ -216,8 +224,11 @@ export default class Combobox extends HTMLElement {
     // If there is an item pseudoFocused, we update
     // aria-activedescendant.
     // Otherwise, remove the attribute entirely
-    if(event.target.pseudoFocus){
-      this.input.setAttribute("aria-activedescendant", event.target.pseudoFocus.id);
+    if (event.target.pseudoFocus) {
+      this.input.setAttribute(
+        "aria-activedescendant",
+        event.target.pseudoFocus.id,
+      );
     } else {
       this.input.removeAttribute("aria-activedescendant");
     }
@@ -229,11 +240,11 @@ export default class Combobox extends HTMLElement {
    * of the event can have a selection.
    * Set the value of the combobox input to the provided selection.
    */
-  handlePopupChange(event){
-    if(event.target.selection){
+  handlePopupChange(event) {
+    if (event.target.selection) {
       this.hidePopup();
 
-      const option = event.target.selection
+      const option = event.target.selection;
       const value = option.getAttribute?.("data-value");
 
       // "data-value-for" is the id of a hidden input used to store the "real" value
@@ -249,7 +260,7 @@ export default class Combobox extends HTMLElement {
       this.input.value = null;
     }
 
-    if(this.input.value){
+    if (this.input.value) {
       const clearButton = this.querySelector(`[slot="clear-button"]`);
       clearButton.classList.remove("empty");
     }
@@ -263,25 +274,25 @@ export default class Combobox extends HTMLElement {
    * keys, without needed to implement them all over again
    * in this component.
    */
-  handleKeyDown(event){
+  handleKeyDown(event) {
     const popupIsOpen = this.getAttribute("expanded") === "true";
-    if(this.popup){
-      if(event.key === "Escape"){
+    if (this.popup) {
+      if (event.key === "Escape") {
         this.popup.pseudoFocusItem(null);
         return this.hidePopup();
-      } else if(event.key === "ArrowDown" && !popupIsOpen){
+      } else if (event.key === "ArrowDown" && !popupIsOpen) {
         // We focus the first item
         this.popup.pseudoFocusItem(
-          this.popup.querySelector(`[role="option"][data-option-index="0"]`)
+          this.popup.querySelector(`[role="option"][data-option-index="0"]`),
         );
         return this.showPopup();
       }
 
       // Otherwise, let the listbox handle the event, so long
       // as it has a keymapping defined.
-      if(this.popup.keyMapping){
+      if (this.popup.keyMapping) {
         const handler = this.popup.keyMapping[event.key];
-        if(handler){
+        if (handler) {
           const boundHandler = handler.bind(this.popup);
           boundHandler(event);
           event.preventDefault();
@@ -295,22 +306,22 @@ export default class Combobox extends HTMLElement {
    * Will show or hide the popup depending
    * on the state.
    */
-  handleToggleClick(event){
+  handleToggleClick(event) {
     event.preventDefault();
-    if(this.getAttribute("expanded") === "true"){
+    if (this.getAttribute("expanded") === "true") {
       this.hidePopup();
     } else {
       this.showPopup();
       this.input.focus();
     }
   }
-  
+
   /**
    * Click handler for the clear button.
    * Will clear the input and reset state on the
    * popup.
    */
-  handleClearClick(event){
+  handleClearClick(event) {
     event.preventDefault();
     this.popup.pseudoFocusItem(null);
     this.input.value = "";
@@ -326,12 +337,12 @@ export default class Combobox extends HTMLElement {
    * Will also update the presence of the clear button based
    * on the input's new value.
    */
-  handleInput(event){
-    if(this.popup){
-      if(!this.hasAttribute("expanded")){
+  handleInput(event) {
+    if (this.popup) {
+      if (!this.hasAttribute("expanded")) {
         this.showPopup();
       }
-      if(this.popup.filterText) {
+      if (this.popup.filterText) {
         this.popup.filterText(this.input.value);
       }
     }
@@ -339,7 +350,7 @@ export default class Combobox extends HTMLElement {
     // Hide or show the clear button's slot
     // based on the input value's presence
     const clearButton = this.querySelector(`[slot="clear-button"]`);
-    if(this.input.value && this.input.value !== ""){
+    if (this.input.value && this.input.value !== "") {
       clearButton.classList.remove("empty");
     } else {
       clearButton.classList.add("empty");
@@ -350,9 +361,9 @@ export default class Combobox extends HTMLElement {
    * When gaining focus, show the popup but only
    * if there are actual options available in the popup.
    */
-  handleFocus(event){
+  handleFocus(event) {
     const hasItems = this.popup.querySelectorAll(`[role="option"]`).length;
-    if(hasItems){
+    if (hasItems) {
       this.showPopup();
     }
   }
@@ -360,14 +371,14 @@ export default class Combobox extends HTMLElement {
   /**
    * Hide the popup when this element loses focus.
    */
-  handleBlur(event){
+  handleBlur(event) {
     // Only perform blur operations if the target of the
     // event is outside of the combobox component
     const ancestor = event.relatedTarget?.closest(this.tagName);
     if (ancestor !== this) {
       this.popup.pseudoFocusItem(null);
       this.hidePopup();
-      if(this.popup && this.popup.selection){
+      if (this.popup && this.popup.selection) {
         this.input.value = this.popup.selection.textContent;
         const clearButton = this.querySelector(`[slot="clear-button"]`);
         clearButton.classList.remove("empty");
@@ -381,28 +392,28 @@ export default class Combobox extends HTMLElement {
    * elements that can be disabled. This prevents any key or mouse
    * events from triggering event handlers.
    */
-  attributeChangedCallback(name, oldVal, newVal){
-    if(name === "disabled" && newVal === "true"){
+  attributeChangedCallback(name, oldVal, newVal) {
+    if (name === "disabled" && newVal === "true") {
       this.input.setAttribute("disabled", true);
       this.clearButton.setAttribute("disabled", true);
       this.toggleButton.setAttribute("disabled", true);
       this.hidePopup();
-    } else if(name === "disabled"){
+    } else if (name === "disabled") {
       this.input.removeAttribute("disabled");
       this.clearButton.removeAttribute("disabled");
       this.toggleButton.removeAttribute("disabled");
     }
   }
 
-  get isExpanded(){
+  get isExpanded() {
     return this.getAttribute("expanded") === "true";
   }
 
-  static get observedAttributes(){
+  static get observedAttributes() {
     return ["disabled"];
   }
 }
 
-if(!window.customElements.get("wx-combobox")){
+if (!window.customElements.get("wx-combobox")) {
   window.customElements.define("wx-combobox", Combobox);
 }

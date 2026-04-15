@@ -5,10 +5,7 @@ import sinon from "sinon";
 import { getTTLFromResponse } from "./util/caching.js";
 
 describe("redis utilities", () => {
-  let redisClient,
-    createClient,
-    redis,
-    sandbox;
+  let redisClient, createClient, redis, sandbox;
 
   let _API_INTEROP_PRODUCTION;
   let _VCAP_SERVICES;
@@ -24,11 +21,13 @@ describe("redis utilities", () => {
       },
       expire: sandbox.stub(),
     };
-  
+
     createClient = sandbox.stub().returns({
-      on: sandbox.stub().returns({ connect: sandbox.stub().resolves(redisClient) }),
+      on: sandbox
+        .stub()
+        .returns({ connect: sandbox.stub().resolves(redisClient) }),
     });
-  
+
     _API_INTEROP_PRODUCTION = process.env.API_INTEROP_PRODUCTION;
     _VCAP_SERVICES = process.env.VCAP_SERVICES;
     _DISABLE_REDIS = process.env.DISABLE_REDIS;

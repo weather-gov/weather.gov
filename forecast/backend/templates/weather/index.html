@@ -5,7 +5,9 @@
 -- Url: https://beta.weather.gov/
 {% endcomment %}
 {% block head_css %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/front-page.css' %}">
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/front-page.css' %}">
 {% endblock %}
 {% block head_js %}
   <script src="{% static 'js/front-page.html.js' %}" type="module" defer></script>
@@ -28,60 +30,54 @@
           <h2 id="fps__header">{{ "frontpage.heading.find-your-forecast.01" | t }}</h2>
           <form id="find-forecast" data-location-search="true">
             <div class="use-location-area margin-bottom-105">
-              <label class="usa-label"
-                     for="fps__input">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
+              <label class="usa-label" for="fps__input">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
               <div class="location-area-divider">|</div>
-              <button
-                id="fps__use_location_button"
-                type="button"
-                class="weathergov-use-browser-location">
+              <button id="fps__use_location_button"
+                      type="button"
+                      class="weathergov-use-browser-location">
                 <svg class="usa-icon height-2 width-2 margin-right-05 text-top" alt="">
                   <use xlink:href="{% static 'images/uswds/sprite.svg' %}#my_location"></use>
                 </svg>
                 {{ 'location-search.labels.use-location.01' | t }}
               </button>
             </div>
-            <wx-combobox id="fps"
-              tabindex="0"
-              class="wx-combobox"
-            >
-              <input id="fps__input"
-                type="text"
-                autocomplete="off"
-                aria-describedby="fps__header"
-                slot="input" />
-              <button
-                type="button"
-                class="empty"
-                aria-label="{{ 'location-search.aria.clear-input-box.01' | t }}"
-                slot="clear-button">&nbsp;</button>
-              <button
-                type="button"
-                aria-label="{{ 'location-search.aria.toggle-dropdown.01' | t }}"
-                slot="toggle-button">&nbsp;</button>
-              <wx-location-listbox id="fps__listbox"
-                role="listbox"
-                auto-submit="true"
-                slot="popup"
-              >
-                <div id="fps__listbox__sl"
-                  role="heading" aria-level="3"
-                  class="saved-searches font-mono-sm text-base padding-1"
-                >{{ "location-search.group.saved-searches.01" | t }}</div>
-                <ul role="group" class="saved-searches"></ul>
-                <div id="fps__listbox__dr"
-                  role="heading" aria-level="3"
-                  class="data-results font-mono-sm text-base padding-1"
-                >{{ "location-search.group.search-results.01" | t }}</div>
-                <ul role="group" class="data-results"></ul>
-              </wx-location-listbox>
+            <wx-combobox id="fps" tabindex="0" class="wx-combobox">
+            <input id="fps__input"
+                   type="text"
+                   autocomplete="off"
+                   aria-describedby="fps__header"
+                   slot="input" />
+            <button type="button"
+                    class="empty"
+                    aria-label="{{ 'location-search.aria.clear-input-box.01' | t }}"
+                    slot="clear-button">&nbsp;</button>
+            <button type="button"
+                    aria-label="{{ 'location-search.aria.toggle-dropdown.01' | t }}"
+                    slot="toggle-button">&nbsp;</button>
+            <wx-location-listbox id="fps__listbox" role="listbox" auto-submit="true" slot="popup">
+            <div id="fps__listbox__sl"
+                 role="heading"
+                 aria-level="3"
+                 class="saved-searches font-mono-sm text-base padding-1">
+              {{ "location-search.group.saved-searches.01" | t }}
+            </div>
+            <ul role="group" class="saved-searches">
+            </ul>
+            <div id="fps__listbox__dr"
+                 role="heading"
+                 aria-level="3"
+                 class="data-results font-mono-sm text-base padding-1">
+              {{ "location-search.group.search-results.01" | t }}
+            </div>
+            <ul role="group" class="data-results">
+            </ul>
+            </wx-location-listbox>
             </wx-combobox>
           </form>
           {% include 'weather/partials/wx-loader.html' with for_these="fps__listbox fps__use_location_button" %}
         </div>
       </div>
     </section>
-
     <!-- Trapezoid section -->
     <section id="front-trapezoids">
       <div class="grid-container trapezoids-container">
@@ -99,39 +95,47 @@
         </div>
       </div>
     </section>
-
     <!-- Stats section -->
     <section id="front-stats">
       <!-- First subsection -->
       <div class="stats-subsection">
         <div class="grid-container">
           <div class="stats-content-wrapper">
-            <p class="stats-text">
-              {{"frontpage.stats.text-1.01" | t}}
-            </p>
+            <p class="stats-text">{{"frontpage.stats.text-1.01" | t}}</p>
             <div class="stats-image-outer">
               <div class="stats-image-container">
                 <picture class="stats-img-wrapper">
-                  <source srcset="{% static 'images/front-page/cropped/wx_buoy_500_100.avif' %}" type="image/avif" />
-                  <source srcset="{% static 'images/front-page/cropped/wx_buoy_500_80.webp' %}" type="image/webp" />
-                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_buoy_500_80.jpg' %}" alt="{{"frontpage.stats.images.1.alt.01"|t}}" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_buoy_500_100.avif' %}"
+                          type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_buoy_500_80.webp' %}"
+                          type="image/webp" />
+                  <img class="stats-section-image"
+                       src="{% static 'images/front-page/cropped/wx_buoy_500_80.jpg' %}"
+                       alt="{{"frontpage.stats.images.1.alt.01"|t}}" />
                 </picture>
                 <picture class="stats-img-wrapper">
-                  <source srcset="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_100.avif' %}" type="image/avif" />
-                  <source srcset="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_80.webp' %}" type="image/webp" />
-                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_80.jpg' %}" alt="{{"frontpage.stats.images.2.alt.01"|t}}" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_100.avif' %}"
+                          type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_80.webp' %}"
+                          type="image/webp" />
+                  <img class="stats-section-image"
+                       src="{% static 'images/front-page/cropped/wx_hurricane_hunter_500_80.jpg' %}"
+                       alt="{{"frontpage.stats.images.2.alt.01"|t}}" />
                 </picture>
                 <picture class="stats-img-wrapper">
-                  <source srcset="{% static 'images/front-page/cropped/wx_balloon_scientist_500_100.avif' %}" type="image/avif" />
-                  <source srcset="{% static 'images/front-page/cropped/wx_balloon_scientist_500_80.webp' %}" type="image/webp" />
-                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_balloon_scientist_500_80.jpg' %}" alt="{{"frontpage.stats.images.3.alt.01"|t}}" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_balloon_scientist_500_100.avif' %}"
+                          type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_balloon_scientist_500_80.webp' %}"
+                          type="image/webp" />
+                  <img class="stats-section-image"
+                       src="{% static 'images/front-page/cropped/wx_balloon_scientist_500_80.jpg' %}"
+                       alt="{{"frontpage.stats.images.3.alt.01"|t}}" />
                 </picture>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <!-- Second subsection -->
       <div class="stats-subsection">
         <div class="grid-container">
@@ -139,20 +143,21 @@
             <div class="stats-image-outer">
               <div class="stats-image-container stats-large-image">
                 <picture class="stats-img-wrapper">
-                  <source srcset="{% static 'images/front-page/cropped/wx_meteorologist_1200_100.avif' %}" type="image/avif" />
-                  <source srcset="{% static 'images/front-page/cropped/wx_meteorologist_1200_80.webp' %}" type="image/webp" />
-                  <img class="stats-section-image" src="{% static 'images/front-page/cropped/wx_meteorologist_1200_80.jpg' %}" alt="{{"frontpage.stats.images.4.alt.01"|t}}" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_meteorologist_1200_100.avif' %}"
+                          type="image/avif" />
+                  <source srcset="{% static 'images/front-page/cropped/wx_meteorologist_1200_80.webp' %}"
+                          type="image/webp" />
+                  <img class="stats-section-image"
+                       src="{% static 'images/front-page/cropped/wx_meteorologist_1200_80.jpg' %}"
+                       alt="{{"frontpage.stats.images.4.alt.01"|t}}" />
                 </picture>
               </div>
             </div>
-            <p class="stats-text stats-text-right">
-              {{"frontpage.stats.text-2.01" | t}}
-            </p> 
+            <p class="stats-text stats-text-right">{{"frontpage.stats.text-2.01" | t}}</p>
           </div>
         </div>
       </div>
     </section>
-
     <!-- Rebuilding section -->
     <section id="front-rebuilding">
       <div class="front-rebuilding-list-area">
@@ -174,9 +179,7 @@
                     </div>
                     {{"frontpage.rebuilding.list-header-1.01"|t}}
                   </h3>
-                  <p>
-                    {{"frontpage.rebuilding.list-text-1.01"|t}}
-                  </p>
+                  <p>{{"frontpage.rebuilding.list-text-1.01"|t}}</p>
                 </li>
                 <li>
                   <h3>
@@ -185,9 +188,7 @@
                     </div>
                     {{"frontpage.rebuilding.list-header-2.01"|t}}
                   </h3>
-                  <p>
-                    {{"frontpage.rebuilding.list-text-2.01"|t}}
-                  </p>
+                  <p>{{"frontpage.rebuilding.list-text-2.01"|t}}</p>
                 </li>
                 <li>
                   <h3>
@@ -197,7 +198,9 @@
                     {{"frontpage.rebuilding.list-header-3.01"|t}}
                   </h3>
                   <p>
-                    <p>{% trans_with_args "frontpage.text.touchpoints-1-graf.01" url="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit" %}</p>
+                    <p>
+                      {% trans_with_args "frontpage.text.touchpoints-1-graf.01" url="https://touchpoints.app.cloud.gov/touchpoints/22acf675/submit" %}
+                    </p>
                   </p>
                   <ul class="usa-list">
                     {{"frontpage.rebuilding.list-items-03.01"|t}}
