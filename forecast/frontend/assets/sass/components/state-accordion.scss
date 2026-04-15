@@ -8,7 +8,7 @@
   flex-direction: column;
   width: 100%;
   padding: units(1.5) units(2);
-  gap: units(1);
+  gap: units(1.5);
 
   .alert-icon-box {
     display: inline-block;
@@ -20,7 +20,7 @@
 
   .alert-event-title {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     text-transform: capitalize;
     font-size: size("sans", "md");
     font-weight: font-weight("normal");
@@ -79,10 +79,7 @@
 
 /* County Grid Column Logic */
 .county-column-grid ul {
-  display: block;
-  column-gap: 24px;
-  column-width: 240px;
-  width: 100%;
+  display: inline-block;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -90,7 +87,7 @@
   li {
     break-inside: avoid-column;
     display: block;
-    margin-bottom: units(0.5);
+    margin-bottom: units(1);
 
     .usa-link {
       display: inline-block;
@@ -105,9 +102,39 @@
   }
 }
 
+.county-column-grid .county-columns {
+  @include at-media(tablet) {
+    column-gap: units(4);
+    column-width: auto;
+  }
+
+  @include at-media(tablet-lg) {
+    column-gap: units(8);
+  }
+}
+
+.tablet__county-column-2 {
+  @include at-media(tablet) {
+    column-count: 2;
+  }
+}
+
+.tablet__county-column-3 {
+  @include at-media(tablet) {
+    column-count: 3;
+  }
+}
+
+.desktop__county-column-4 {
+  @include at-media(desktop) {
+    column-count: 4;
+  }
+}
+
 /* Segmented button blue selection */
 .usa-button-group--segmented .usa-button {
-  font-weight: font-weight("normal");
+  @include u-line-height("body", 3);
+
   padding: units(1) units(1.5);
 
   &[aria-selected="true"] {
