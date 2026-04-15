@@ -7,9 +7,14 @@ import { requestJSONWithHeaders } from "../../util/request.js";
 import { logger } from "../../util/monitoring/index.js";
 import connectionPool from "../../connectionPool.js";
 import { getFromRedis, saveToRedis } from "../../redis.js";
+import { urlToHttpOptions } from "url";
 
 const productLogger = logger.child({subsystem: "product:afd"});
 
+/**
+ * Fetches all AFD versions that are currently available
+ * across all WFOs, sorted from most recent to oldest
+ */
 export default async () => {
   const url = "/products/types/AFD";
 
@@ -37,6 +42,44 @@ export default async () => {
     return data;
   } catch(e) {
     productLogger.error({e});
+
+    return {
+      error: true,
+      status: e.cause?.statusCode || e.statusCode || 500
+    };
+  }
+};
+
+/**
+ * Fetches all AFD versions for a specific WFO,
+ * sorted by most recent
+ */
+export const byWFO = async (wfo) => {
+  const url = `/products/types/AFD/locations/${wfo.toUpperCase()}`;
+
+  try {
+    // Check the redis cache for any stored value.
+    // Return that if we find one
+    const foundInCache = await getFromRedis(url);
+    if(foundInCache){
+      return foundInCache;
+    }
+
+    // Fetch from the API
+    const [ data, headers ] = await requestJSONWithHeaders(
+      connectionPool,
+      url
+    );
+
+    // Cache and return the result
+    let ttl = parseTTLFromHeaders(headers);
+    if(!ttl){
+      ttl = 120;
+    }
+    await saveToRedis(url, data, ttl);
+    return data;
+  } catch (e) {
+    productLogger.error({ e , url });
 
     return {
       error: true,
