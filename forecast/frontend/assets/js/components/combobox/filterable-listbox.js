@@ -1,7 +1,7 @@
 import Listbox from "./listbox.js";
 
 export default class FilterableListbox extends Listbox {
-  constructor(){
+  constructor() {
     super();
     this._cachedItems = null;
 
@@ -28,41 +28,45 @@ export default class FilterableListbox extends Listbox {
    * This method fires the custom event wx:popup-filter
    * @param String aString - The term to fuzzy filter on
    */
-  filterText(aString){
+  filterText(aString) {
     // We need to determine if the current inner content of this
     // component represents a "master" list, from which we will filter.
     // If it does, we need to cache it so that it is always what gets
     // filtered against, otherwise we would lose information permanently
     // each filter when swapping out elements.
     const source = this.getFilterSource();
-    if(aString && aString !== ""){
-      const filtered = Array.from(source.querySelectorAll(this.filterOptionsSelector))
-            .filter(option => {
-              return !option.textContent.toLowerCase().includes(aString.toLowerCase());
-            });
+    if (aString && aString !== "") {
+      const filtered = Array.from(
+        source.querySelectorAll(this.filterOptionsSelector),
+      ).filter((option) => {
+        return !option.textContent
+          .toLowerCase()
+          .includes(aString.toLowerCase());
+      });
 
-      filtered.forEach(option => option.remove());
+      filtered.forEach((option) => option.remove());
 
       // Next, determine if there are groups whose
       // options have all been ignored, ie they have none
-      Array.from(source.querySelectorAll(`[role="group"]`))
-        .forEach(groupElement => {
-          if(!groupElement.querySelectorAll(`[role="option"]`).length){
+      Array.from(source.querySelectorAll(`[role="group"]`)).forEach(
+        (groupElement) => {
+          if (!groupElement.querySelectorAll(`[role="option"]`).length) {
             groupElement.remove();
           }
-        });
+        },
+      );
       this.setAttribute("filtered", true);
     } else {
       this.removeAttribute("filtered");
     }
-    
+
     this.innerHTML = source.innerHTML;
 
     this.dispatchEvent(
       new CustomEvent("wx:popup-filter", {
         bubbles: true,
-        cancelable: true
-      })
+        cancelable: true,
+      }),
     );
   }
 
@@ -74,9 +78,9 @@ export default class FilterableListbox extends Listbox {
    * is currently being filtered.
    * If present, then we restore from the cached filter source.
    */
-  clearFilter(){
+  clearFilter() {
     const inputSelector = `input[type="hidden"][name="filtered"][value="true"]`;
-    if(this._cachedItems && this._cachedItems.querySelector(inputSelector)){
+    if (this._cachedItems && this._cachedItems.querySelector(inputSelector)) {
       this.innerHTML = this.getFilterSource().innerHTML;
     }
     this.removeAttribute("filtered");
@@ -84,7 +88,7 @@ export default class FilterableListbox extends Listbox {
 
   /**
    * Get the full list of filterable items as HTML from a cache.
-   * 
+   *
    * This also creates the cache if it does not exist. In order to prevent
    * overwriting the cache with filtered items, we use a hidden input,
    * added to the root of the cache, as a flag.
@@ -93,9 +97,9 @@ export default class FilterableListbox extends Listbox {
    * to the original, unfiltered content of the listbox. Useful for filtering
    * the options displayed in the listbox.
    */
-  getFilterSource(){
+  getFilterSource() {
     const inputSelector = `input[type="hidden"][name="filtered"][value="true"]`;
-    if(this._cachedItems && this._cachedItems.querySelector(inputSelector)){
+    if (this._cachedItems && this._cachedItems.querySelector(inputSelector)) {
       // If we get to this point, that means that the current innerHTML of the
       // listbox already represents filtered data, and that the _cachedItems
       // are the source of truth for further filtering
@@ -121,8 +125,8 @@ export default class FilterableListbox extends Listbox {
    * is currently being filtered (because the options will
    * be newly cloned elements from the filter source)
    */
-  handleItemsChanged(event){
-    if(!this.isFiltered){
+  handleItemsChanged(event) {
+    if (!this.isFiltered) {
       super.handleItemsChanged(event);
     }
   }
@@ -134,32 +138,36 @@ export default class FilterableListbox extends Listbox {
    * selection will disappear on further filtering, even if the
    * aforementioned selected item is not filtered out.
    */
-  selectItem(element){
-    if(!element){
+  selectItem(element) {
+    if (!element) {
       return super.selectItem(element);
     }
-    if(this._cachedItems){
+    if (this._cachedItems) {
       const selectionIndex = element.dataset.optionIndex;
-      Array.from(
-        this._cachedItems.querySelectorAll(`[role="option"]`)
-      ).forEach(option => {
-        if(option.matches(`[role="option"][data-option-index="${selectionIndex}"]`)){
-          option.setAttribute("aria-selected", true);
-        } else {
-          option.removeAttribute("aria-selected");
-        }
-      });
+      Array.from(this._cachedItems.querySelectorAll(`[role="option"]`)).forEach(
+        (option) => {
+          if (
+            option.matches(
+              `[role="option"][data-option-index="${selectionIndex}"]`,
+            )
+          ) {
+            option.setAttribute("aria-selected", true);
+          } else {
+            option.removeAttribute("aria-selected");
+          }
+        },
+      );
     }
 
     super.selectItem(element);
     this.clearFilter();
   }
 
-  get isFiltered(){
+  get isFiltered() {
     return this.getAttribute("filtered") === "true";
   }
 }
 
-if(!window.customElements.get("wx-filterable-listbox")){
+if (!window.customElements.get("wx-filterable-listbox")) {
   window.customElements.define("wx-filterable-listbox", FilterableListbox);
 }

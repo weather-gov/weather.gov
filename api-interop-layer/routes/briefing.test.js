@@ -3,14 +3,12 @@ import quibble from "quibble";
 import sinon from "sinon";
 
 describe("route: briefings", () => {
-  let getDataForBriefing,
-    briefing,
-    sandbox;
-  
+  let getDataForBriefing, briefing, sandbox;
+
   before(async () => {
     sandbox = sinon.createSandbox();
     getDataForBriefing = sandbox.stub();
-  
+
     await quibble.esm("../data/briefing.js", {}, getDataForBriefing);
 
     briefing = await import("./briefing.js");

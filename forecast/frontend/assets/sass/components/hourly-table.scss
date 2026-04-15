@@ -44,11 +44,9 @@ $expand-duration: 250ms;
     vertical-align: top;
 
     &[scope="row"].position-sticky {
-        z-index: var(--hourly-table-sticky-header-z-index);
+      z-index: var(--hourly-table-sticky-header-z-index);
     }
   }
-
-  
 
   td {
     min-width: units("card");

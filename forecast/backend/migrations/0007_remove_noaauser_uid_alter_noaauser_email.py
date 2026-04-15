@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('backend', '0006_load_initial_dynamic_safety_info_data'),
+        ("backend", "0006_load_initial_dynamic_safety_info_data"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='noaauser',
-            name='uid',
+            model_name="noaauser",
+            name="uid",
         ),
         migrations.AlterField(
-            model_name='noaauser',
-            name='email',
-            field=models.EmailField(blank=True, max_length=254, verbose_name='email address'),
+            model_name="noaauser",
+            name="email",
+            field=models.EmailField(blank=True, max_length=254, verbose_name="email address"),
         ),
     ]

@@ -5,15 +5,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('backend', '0012_add_roadmap_page_content_type'),
+        ("backend", "0012_add_roadmap_page_content_type"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='dynamicsafetyinformation',
-            name='body',
+            model_name="dynamicsafetyinformation",
+            name="body",
             field=wagtail.fields.RichTextField(),
         ),
     ]

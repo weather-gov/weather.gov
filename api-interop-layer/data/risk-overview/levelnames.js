@@ -6,32 +6,10 @@
  * and are determined by the processed legend data.
  */
 export const levelnames = {
-  5: [
-    "None",
-    "Very Low",
-    "Low",
-    "Moderate",
-    "High",
-    "Very High"
-  ],
-  4: [
-    "None",
-    "Very Low",
-    "Low",
-    "High",
-    "Very High"
-  ],
-  3: [
-    "None",
-    "Low",
-    "Moderate",
-    "High"
-  ],
-  2: [
-    "None",
-    "Moderate",
-    "High"
-  ]
+  5: ["None", "Very Low", "Low", "Moderate", "High", "Very High"],
+  4: ["None", "Very Low", "Low", "High", "Very High"],
+  3: ["None", "Low", "Moderate", "High"],
+  2: ["None", "Moderate", "High"],
 };
 
 /**
@@ -45,7 +23,7 @@ export const levelnames = {
  * @returns {String} The fallback levelname
  */
 export const getFallbackLevelName = (levelNum, scale) => {
-  if(levelnames[scale] && levelNum < levelnames[scale].length){
+  if (levelnames[scale] && levelNum < levelnames[scale].length) {
     return levelnames[scale][levelNum];
   }
 

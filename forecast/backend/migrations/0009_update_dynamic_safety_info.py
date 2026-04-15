@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
-    def rename_heat_alerts(app,schema):
+    def rename_heat_alerts(app, schema):
         model = app.get_model("backend", "DynamicSafetyInformation")
         try:
             alert = model.objects.get(type="excessive heat warning")
             alert.type = "extreme heat warning"
             alert.label = "Extreme Heat Warning"
-            alert.body = "<p dir=\"ltr\">An Extreme Heat Warning means that extremely dangerous heat conditions are happening now or soon. You must take precautions to protect yourself and others from extreme heat.&nbsp;</p><ul><li dir=\"ltr\">Stay inside in air conditioning if possible. If you don’t have air conditioning, go to a library, mall, or local cooling center.&nbsp;</li><li dir=\"ltr\">Drink plenty of water to stay hydrated, and wear loose, light-colored clothing.&nbsp;</li><li dir=\"ltr\">Check on friends, family, and neighbors, especially those who do not have air conditioning or spend much of their time alone.&nbsp;</li><li dir=\"ltr\">Reschedule outdoor activities for a cooler day.</li><li dir=\"ltr\">If you must be outdoors, take longer and more frequent breaks in the shade or air conditioning, and avoid the hottest parts of the day.</li><li dir=\"ltr\">Bring pets indoors if possible. If pets are left outside, make sure they have shade and plenty of cool water.&nbsp;</li><li dir=\"ltr\">Make sure you know the&nbsp;<a href=\"https://www.ready.gov/heat#illness\">signs of heat-related illness</a> and how to respond.</li></ul>"
+            alert.body = '<p dir="ltr">An Extreme Heat Warning means that extremely dangerous heat conditions are happening now or soon. You must take precautions to protect yourself and others from extreme heat.&nbsp;</p><ul><li dir="ltr">Stay inside in air conditioning if possible. If you don’t have air conditioning, go to a library, mall, or local cooling center.&nbsp;</li><li dir="ltr">Drink plenty of water to stay hydrated, and wear loose, light-colored clothing.&nbsp;</li><li dir="ltr">Check on friends, family, and neighbors, especially those who do not have air conditioning or spend much of their time alone.&nbsp;</li><li dir="ltr">Reschedule outdoor activities for a cooler day.</li><li dir="ltr">If you must be outdoors, take longer and more frequent breaks in the shade or air conditioning, and avoid the hottest parts of the day.</li><li dir="ltr">Bring pets indoors if possible. If pets are left outside, make sure they have shade and plenty of cool water.&nbsp;</li><li dir="ltr">Make sure you know the&nbsp;<a href="https://www.ready.gov/heat#illness">signs of heat-related illness</a> and how to respond.</li></ul>'
             alert.save()
         except model.DoesNotExist:
             ""
@@ -20,15 +19,13 @@ class Migration(migrations.Migration):
             alert = model.objects.get(type="excessive heat watch")
             alert.type = "extreme heat watch"
             alert.label = "Extreme Heat Watch"
-            alert.body = "<p dir=\"ltr\">An Extreme Heat Watch means to expect extremely dangerous heat conditions in the next few days. Take action ahead of time to stay safe during extreme heat.</p><ul><li dir=\"ltr\">Plan to stay in air-conditioned spaces if possible. Find cooling centers or places with AC in your community that you can go to, like libraries or shopping malls.&nbsp;</li><li dir=\"ltr\">Cover windows with curtains or shades, or use window reflectors designed to reflect heat back outside.&nbsp;</li><li dir=\"ltr\">Make sure you know the&nbsp;<a href=\"https://www.ready.gov/heat#illness\">signs of heat-related illness</a> and how to respond.</li><li dir=\"ltr\">Stock up on clean drinking water.&nbsp;</li><li dir=\"ltr\">Check in on neighbors, family, and friends, ensuring they have a plan to keep cool.</li></ul>"
+            alert.body = '<p dir="ltr">An Extreme Heat Watch means to expect extremely dangerous heat conditions in the next few days. Take action ahead of time to stay safe during extreme heat.</p><ul><li dir="ltr">Plan to stay in air-conditioned spaces if possible. Find cooling centers or places with AC in your community that you can go to, like libraries or shopping malls.&nbsp;</li><li dir="ltr">Cover windows with curtains or shades, or use window reflectors designed to reflect heat back outside.&nbsp;</li><li dir="ltr">Make sure you know the&nbsp;<a href="https://www.ready.gov/heat#illness">signs of heat-related illness</a> and how to respond.</li><li dir="ltr">Stock up on clean drinking water.&nbsp;</li><li dir="ltr">Check in on neighbors, family, and friends, ensuring they have a plan to keep cool.</li></ul>'
             alert.save()
         except model.DoesNotExist:
             ""
 
     dependencies = [
-        ('backend', '0008_add_generic_wagtail_page'),
+        ("backend", "0008_add_generic_wagtail_page"),
     ]
 
-    operations = [
-        migrations.RunPython(rename_heat_alerts)
-    ]
+    operations = [migrations.RunPython(rename_heat_alerts)]

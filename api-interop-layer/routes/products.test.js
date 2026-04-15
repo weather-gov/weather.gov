@@ -3,14 +3,12 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: products", () => {
-  let getProductById,
-    products,
-    sandbox;
+  let getProductById, products, sandbox;
 
   before(async () => {
     sandbox = sinon.createSandbox();
     getProductById = sandbox.stub();
-  
+
     await quibble.esm("../data/index.js", { getProductById });
 
     products = await import("./products.js");

@@ -148,7 +148,7 @@ class SatelliteVideo extends HTMLElement {
     // However, the pause event usually comes before the ended event. So to
     // handle that, if we have not yet flagged that the pause should be
     // discarded, we wait a brief moment before changing our internal state.
-    // That way, when the ended event handler runs, it can flag the pause 
+    // That way, when the ended event handler runs, it can flag the pause
     // to be discarded.
     if (!this.#state.discardPause) {
       setTimeout(() => {

@@ -12,9 +12,9 @@ import connectionPool from "./data/connectionPool.js";
 // from the environment variable instead, which
 // we check below
 let MAX_OPEN_CONNECTIONS = 16_000;
-if(process.env.MAX_OPEN_CONNECTIONS){
+if (process.env.MAX_OPEN_CONNECTIONS) {
   const num = parseInt(process.env.MAX_OPEN_CONNECTIONS);
-  if(Number.isInteger(num)){
+  if (Number.isInteger(num)) {
     MAX_OPEN_CONNECTIONS = num;
   }
 }
@@ -23,13 +23,13 @@ export default {
   pools: [connectionPool],
   maxConnections: MAX_OPEN_CONNECTIONS,
 
-  get currentSize(){
+  get currentSize() {
     return this.pools.reduce((total, pool) => {
       return total + pool.stats.size;
     }, 0);
   },
-  
-  get atMax(){
+
+  get atMax() {
     return this.currentSize >= this.maxConnections;
-  }
+  },
 };

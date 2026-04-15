@@ -9,13 +9,17 @@
   <link rel="prefetch" href="{% url 'state_radar' state.state %}" />
   <link rel="prefetch" href="{% url 'state_analysis' state.state %}" />
 {% endblock %}
-
 {% block page_head_css %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/leaflet.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'css/leaflet.markercluster@1.4.1.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'css/MarkerCluster.Default@1.4.1.css' %}" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/leaflet.css' %}" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/leaflet.markercluster@1.4.1.css' %}" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/MarkerCluster.Default@1.4.1.css' %}" />
 {% endblock %}
-
 {% block head_js %}
   {# Data Bridge for JS #}
   {{ alerts|json_script:"alerts-data" }}
@@ -33,92 +37,83 @@
     }
   </script>
 {% endblock %}
-
 {% block page_end_js %}
   <script type="module" src="{% static 'js/state/alerts.html.js' %}"></script>
   {% include "weather/scripts/leaflet.html" %}
 {% endblock %}
-
 {% block page_content %}
   <div class="layout-container grid-row height-full flex-column flex-no-wrap">
     {% include "weather/state/name.html" with state_name=state.name %}
-    
     <wx-tabbed-nav class="display-block position-relative" id="state-page-tabbed-nav">
-      {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
-      
-      <div class="bg-white padding-bottom-8">
-        <div class="wx-focus-offset-205" id="alerts" tabindex="0">
-          <div class="grid-container">
-            
-            <h2 class="text-normal text-primary-dark margin-top-3 font-sans-xl">
-              {{ "county.heading.alerts.01" | t }}
-            </h2>
-
-            <wx-tabs id="state-alerts">
-              <div class="usa-button-group usa-button-group--segmented overflow-x-auto" role="tablist">
-                <button type="button" 
-                        class="usa-button" 
-                        role="tab"
-                        data-alert-day="all" 
-                        aria-selected="true"> {{ "county.alert-tabs.day.all.01" | t }}
-                </button>
-                {% for day in alert_days_timeline %}
-                <button type="button" 
-                        class="usa-button" 
-                        role="tab"
-                        data-alert-day="{{ forloop.counter }}"
-                        aria-selected="false">
-                  {% if forloop.first %}
-                    {{ "county.alert-tabs.day.Today.01" | t }}
-                  {% else %}
-                    {{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}
-                  {% endif %}
-                </button>
-                {% endfor %}
-              </div>
-            </wx-tabs>
-
-            <div id="state-alert-panel">
-              <div class="grid-row margin-top-2">
-                <div class="grid-col-12">
-                  {% include 'weather/partials/state-alerts-map.html' %}
+    {% include "weather/state/tabs.html" with url_name=request.resolver_match.url_name %}
+    <div class="bg-white padding-bottom-8">
+      <div class="wx-focus-offset-205" id="alerts" tabindex="0">
+        <div class="grid-container">
+          <h2 class="text-normal text-primary-dark margin-top-3 font-sans-xl">{{ "county.heading.alerts.01" | t }}</h2>
+          <wx-tabs id="state-alerts">
+          <div class="usa-button-group usa-button-group--segmented overflow-x-auto"
+               role="tablist">
+            <button type="button"
+                    class="usa-button"
+                    role="tab"
+                    data-alert-day="all"
+                    aria-selected="true">{{ "county.alert-tabs.day.all.01" | t }}</button>
+            {% for day in alert_days_timeline %}
+              <button type="button"
+                      class="usa-button"
+                      role="tab"
+                      data-alert-day="{{ forloop.counter }}"
+                      aria-selected="false">
+                {% if forloop.first %}
+                  {{ "county.alert-tabs.day.Today.01" | t }}
+                {% else %}
+                  {{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}
+                {% endif %}
+              </button>
+            {% endfor %}
+          </div>
+          </wx-tabs>
+          <div id="state-alert-panel">
+            <div class="grid-row margin-top-2">
+              <div class="grid-col-12">{% include 'weather/partials/state-alerts-map.html' %}</div>
+            </div>
+            <hr class="border-base-lighter margin-top-3 margin-bottom-2">
+            <div class="grid-row">
+              <div class="grid-col-12">
+                <h3 class="text-normal text-primary-darkest margin-top-0 margin-bottom-2 font-sans-lg">
+                  {{ "state.heading.alerts-type.01" | t }}
+                </h3>
+                <wx-tabs id="state-alerts-secondary" class="margin-bottom-3">
+                <div class="usa-button-group usa-button-group--segmented overflow-x-auto"
+                     role="tablist">
+                  <button type="button"
+                          class="usa-button"
+                          role="tab"
+                          data-alert-day="all"
+                          aria-selected="true">{{ "county.alert-tabs.day.all.01" | t }}</button>
+                  {% for day in alert_days_timeline %}
+                    <button type="button"
+                            class="usa-button"
+                            role="tab"
+                            data-alert-day="{{ forloop.counter }}"
+                            aria-selected="false">
+                      {% if forloop.first %}
+                        {{ "county.alert-tabs.day.Today.01" | t }}
+                      {% else %}
+                        {{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}
+                      {% endif %}
+                    </button>
+                  {% endfor %}
                 </div>
-              </div>
-
-              <hr class="border-base-lighter margin-top-3 margin-bottom-2">
-
-              <div class="grid-row">
-                <div class="grid-col-12">
-                  <h3 class="text-normal text-primary-darker margin-top-0 margin-bottom-2 font-sans-lg">
-                    {{ "state.heading.alerts-type.01" | t }}
-                  </h3>
-
-                  <wx-tabs id="state-alerts-secondary" class="margin-bottom-3">
-                    <div class="usa-button-group usa-button-group--segmented overflow-x-auto" role="tablist">
-                      <button type="button" class="usa-button" role="tab" data-alert-day="all" aria-selected="true">
-                          {{ "county.alert-tabs.day.all.01" | t }}
-                      </button>
-                      {% for day in alert_days_timeline %}
-                        <button type="button" class="usa-button" role="tab" data-alert-day="{{ forloop.counter }}" aria-selected="false">
-                          {% if forloop.first %}
-                            {{ "county.alert-tabs.day.Today.01" | t }}
-                          {% else %}
-                            {{ "county.alert-tabs.day." | add:day.day | add:".01" | t }}
-                          {% endif %}
-                        </button>
-                      {% endfor %}
-                    </div>
-                  </wx-tabs>
-
-                  {% include "weather/partials/state-alert-accordion.html" %}
-
-                  <div id="state-alerts-container" class="margin-top-205"></div>
-                </div>
+                </wx-tabs>
+                {% include "weather/partials/state-alert-accordion.html" %}
+                <div id="state-alerts-container" class="margin-top-205"></div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </wx-tabbed-nav>
   </div>
 {% endblock %}

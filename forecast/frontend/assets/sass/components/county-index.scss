@@ -2,26 +2,26 @@
 @forward "uswds-theme";
 @forward "uswds";
 
-@include at-media("tablet"){
-    .use-columns {
-        .county-list {
-            columns: 3;
+@include at-media("tablet") {
+  .use-columns {
+    .county-list {
+      columns: 3;
 
-            li {
-                margin-right: units(2);
-            }
-        }
+      li {
+        margin-right: units(2);
+      }
     }
+  }
 }
 
-@include at-media("desktop"){
-    .use-columns {
-        .county-list {
-            columns: 4;
+@include at-media("desktop") {
+  .use-columns {
+    .county-list {
+      columns: 4;
 
-            li {
-                margin-right: units(2);
-            }
-        }
+      li {
+        margin-right: units(2);
+      }
     }
+  }
 }

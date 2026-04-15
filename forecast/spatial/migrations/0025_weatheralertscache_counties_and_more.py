@@ -4,22 +4,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('spatial', '0024_alter_weathercounties_state'),
+        ("spatial", "0024_alter_weathercounties_state"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='weatheralertscache',
-            name='counties',
+            model_name="weatheralertscache",
+            name="counties",
             field=models.JSONField(default=[]),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='weatheralertscache',
-            name='states',
-            field=models.JSONField(default='[]'),
+            model_name="weatheralertscache",
+            name="states",
+            field=models.JSONField(default="[]"),
             preserve_default=False,
         ),
     ]

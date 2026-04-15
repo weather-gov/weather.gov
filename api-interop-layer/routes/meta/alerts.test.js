@@ -3,9 +3,7 @@ import { expect } from "chai";
 import quibble from "quibble";
 
 describe("route: meta/alerts", () => {
-  let rest,
-    alerts,
-    sandbox;
+  let rest, alerts, sandbox;
 
   before(async () => {
     sandbox = sinon.createSandbox();

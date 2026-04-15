@@ -209,13 +209,12 @@ describe("alert background processing module", () => {
   });
 
   describe("does not store alerts that have ended", () => {
-    let past,
-      times;
+    let past, times;
 
     before(() => {
       // 24 hours ago...
       past = new Date(Date.now() - 86_400_000).toISOString();
-  
+
       times = {
         sent: dayjs().subtract(1, "minute").toISOString(),
         effective: dayjs().subtract(1, "minute").toISOString(),

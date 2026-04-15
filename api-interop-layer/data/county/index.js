@@ -17,20 +17,22 @@ const countyDataLogger = logger.child({ subsystem: "county data" });
  * briefing from the API.
  * Return a single array of all the briefings.
  */
-const getBriefings = async(wfos) => {
-  if(!wfos.length){
+const getBriefings = async (wfos) => {
+  if (!wfos.length) {
     return [];
   }
 
-  return Promise.all(wfos.map(wfo => {
-    return getBriefing(wfo).then(briefingData => {
-      // Always add the officeId at the top level. This
-      // is so we know on the Django side which briefings
-      // are null or errored.
-      briefingData.officeId = wfo;
-      return briefingData;
-    });
-  }));
+  return Promise.all(
+    wfos.map((wfo) => {
+      return getBriefing(wfo).then((briefingData) => {
+        // Always add the officeId at the top level. This
+        // is so we know on the Django side which briefings
+        // are null or errored.
+        briefingData.officeId = wfo;
+        return briefingData;
+      });
+    }),
+  );
 };
 
 /**
@@ -41,30 +43,32 @@ const getBriefings = async(wfos) => {
  * first weather story for each WFO.
  */
 const getWeatherStories = async (wfos) => {
-  if(!wfos.length){
+  if (!wfos.length) {
     return [];
   }
 
-  return Promise.all(wfos.map(wfo => {
-    return getWeatherStory(wfo).then(storydata => {
-      if(storydata.error){
-        storydata.officeId = wfo;
-        return [storydata];
-      } else if(storydata.length > 0){
-        // For now, we only care about the first
-        // weather story from each WFO
-        return [storydata[0]];
-      } else {
-        return [];
-      }
-    });
-  })).then(resultList => resultList.flat());
+  return Promise.all(
+    wfos.map((wfo) => {
+      return getWeatherStory(wfo).then((storydata) => {
+        if (storydata.error) {
+          storydata.officeId = wfo;
+          return [storydata];
+        } else if (storydata.length > 0) {
+          // For now, we only care about the first
+          // weather story from each WFO
+          return [storydata[0]];
+        } else {
+          return [];
+        }
+      });
+    }),
+  ).then((resultList) => resultList.flat());
 };
 
 export const getCountyData = async (fips) => {
   try {
     const db = await openDatabase();
-    
+
     // Simplify county shapes as we get them.
     const county = await db
       .query(
@@ -112,23 +116,26 @@ export const getCountyData = async (fips) => {
       };
     }
 
-    const primarywfoPromise = db.query(
-      `SELECT wfo
+    const primarywfoPromise = db
+      .query(
+        `SELECT wfo
          FROM weathergov_geo_cwas
         WHERE id=$1
         `,
-      [county.primarywfo],
-    ).then(({ rows }) => (rows.length > 0 ? rows[0].wfo : null));
+        [county.primarywfo],
+      )
+      .then(({ rows }) => (rows.length > 0 ? rows[0].wfo : null));
 
-    const [primarywfo, riskOverview, alerts, weatherstories, briefings ] = await Promise.all([
-      primarywfoPromise,
-      getRiskOverview(fips),
-      getAlertsForCountyFIPS(fips, {
-        timezone: county.timezone,
-      }),
-      getWeatherStories(county.wfos),
-      getBriefings(county.wfos),
-    ]);
+    const [primarywfo, riskOverview, alerts, weatherstories, briefings] =
+      await Promise.all([
+        primarywfoPromise,
+        getRiskOverview(fips),
+        getAlertsForCountyFIPS(fips, {
+          timezone: county.timezone,
+        }),
+        getWeatherStories(county.wfos),
+        getBriefings(county.wfos),
+      ]);
 
     county.primarywfo = primarywfo;
 
@@ -166,7 +173,14 @@ export const getCountyData = async (fips) => {
       };
     });
 
-    return { county, riskOverview, alerts, alertDays, weatherstories, briefings };
+    return {
+      county,
+      riskOverview,
+      alerts,
+      alertDays,
+      weatherstories,
+      briefings,
+    };
   } catch (e) {
     countyDataLogger.error({ err: e, fips }, "error fetching county data");
     return { error: `Error fetching county data for FIPS ${fips}` };

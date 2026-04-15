@@ -7,7 +7,9 @@ def post_worker_init(_):
     """Set up open telemetry after a gevent worker has fully initialized."""
     if os.environ.get("ENABLE_OPENTELEMETRY") == "true":
         from tracing import enable_opentelemetry  # noqa: PLC0415
+
         enable_opentelemetry()
+
 
 wsgi_app = "backend.config.wsgi"
 worker_class = "gevent"

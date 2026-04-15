@@ -23,512 +23,564 @@
 @use "components/tabbed-nav";
 @use "components/z-index";
 
-
 :root {
-    --find-forecast-background-rgb: 17, 24, 29;
-    --stats-area-image-max-height: 300px;
-    --trapezoid-triangle-length: 20%;
-    --trapezoid-height-mobile: 160px;
+  --find-forecast-background-rgb: 17, 24, 29;
+  --stats-area-image-max-height: 300px;
+  --trapezoid-triangle-length: 20%;
+  --trapezoid-height-mobile: 160px;
 }
 
 $trapezoid-wrapper-height: 420px;
 /* stylelint-disable */
 #front-find-forecast-section {
-    background-image: url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg");
+  background-image: url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg");
 
-    /* If the browser does not support image-set, try just checking for webp support */
-    @supports(background-image: url("/public/images/front-page/backgrounds/wx_glacier_1440_60_cr.webp")){
-        background-image: url("/public/images/front-page/backgrounds/wx_glacier_1440_60_cr.webp");
-    }
+  /* If the browser does not support image-set, try just checking for webp support */
+  @supports (
+    background-image:
+      url("/public/images/front-page/backgrounds/wx_glacier_1440_60_cr.webp")
+  ) {
+    background-image: url("/public/images/front-page/backgrounds/wx_glacier_1440_60_cr.webp");
+  }
 
-    /* If the browser supports image-set, use that method */
-    @supports(background-image: image-set(url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg") type("image/jpeg"))){
-        background-image: image-set(
-            url("/public/images/front-page/backgrounds/wx_glacier_1440_60_cr.webp") type("image/webp"),
-            url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg") type("image/jpeg")
-        )
-    }
-    
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
+  /* If the browser supports image-set, use that method */
+  @supports (
+    background-image: image-set(
+        url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg")
+          type("image/jpeg")
+      )
+  ) {
+    background-image: image-set(
+      url("/public/images/front-page/backgrounds/wx_glacier_1440_60_cr.webp")
+        type("image/webp"),
+      url("/public/images/front-page/backgrounds/wx_glacier_1440_70_cr.jpg")
+        type("image/jpeg")
+    );
+  }
 
-    /* mobile only
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+
+  /* mobile only
      * remove padding on grid container
      */
-    > .grid-container {
-        padding-left: 0;
-        padding-right: 0;
+  > .grid-container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .find-block-wrapper {
+    background-color: rgba(var(--find-forecast-background-rgb), 0.45);
+    display: flex;
+    flex-direction: column; /* desktop value */
+    padding: units(2); /* mobile value */
+    padding-bottom: 0;
+    position: relative;
+
+    > h2 {
+      @include u-font-family("sans");
+      @include u-text("light");
+
+      font-size: 42px;
+      text-align: center;
+      margin: 0;
+      margin-bottom: units("105");
+      color: white;
     }
 
-    .find-block-wrapper {
-        background-color: rgba(var(--find-forecast-background-rgb), 0.45);
-        display: flex;
-        flex-direction: column; /* desktop value */
-        padding: units(2); /* mobile value */
-        padding-bottom: 0;
-        position: relative;
+    .use-location-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-wrap: wrap;
 
-        > h2 {
-            @include u-font-family("sans");
-            @include u-text("light");
+      @include u-font-family("sans");
 
-            font-size: 42px;
-            text-align: center;
-            margin: 0;
-            margin-bottom: units("105");
-            color: white;
-        }
+      /* mobile only (I think) */
+      font-size: 14px;
 
-        .use-location-area {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            flex-wrap: wrap;
+      > .location-area-divider {
+        margin-left: units("105");
+        margin-right: units("105");
+      }
 
-            @include u-font-family("sans");
+      > button {
+        @extend .usa-button--unstyled;
+        @extend .wx-button--unstyled-light;
+      }
 
-            /* mobile only (I think) */
-            font-size: 14px;
+      > label.usa-label {
+        margin-top: 0;
+        color: white;
 
-            > .location-area-divider {
-                margin-left: units("105");
-                margin-right: units("105");
-            }
-
-            > button {
-                @extend .usa-button--unstyled;
-                @extend .wx-button--unstyled-light;
-            }
-
-            > label.usa-label {
-                margin-top: 0;
-                color: white;
-
-                /* mobile only (I think) */
-                font-size: 14px;
-            }
-        }
-
-        wx-combo-box-location {
-            max-width: unset;
-            margin-top: units("105");
-        }
-
-        wx-loader {
-            margin-top: units(2);
-            color: white;
-        }
+        /* mobile only (I think) */
+        font-size: 14px;
+      }
     }
+
+    wx-combo-box-location {
+      max-width: unset;
+      margin-top: units("105");
+    }
+
+    wx-loader {
+      margin-top: units(2);
+      color: white;
+    }
+  }
 }
 
 #front-trapezoids {
-    background-color: color("base-lightest");
-    background-image: url("/public/images/front-page/wx_homepage_wind-pattern.svg");
-    background-repeat: repeat;
-    
-    .trapezoids-container {
-        display: block;
-        position: relative;
-        width: 100%;
+  background-color: color("base-lightest");
+  background-image: url("/public/images/front-page/wx_homepage_wind-pattern.svg");
+  background-repeat: repeat;
 
-        /* Modify TODO */
-        padding: units(4) 0 calc(units(4) + calc(var(--trapezoid-height-mobile) / 2));
+  .trapezoids-container {
+    display: block;
+    position: relative;
+    width: 100%;
 
-        /* Override grid-container y-padding
+    /* Modify TODO */
+    padding: units(4) 0
+      calc(units(4) + calc(var(--trapezoid-height-mobile) / 2));
+
+    /* Override grid-container y-padding
          */
 
-        /* For mobile, the bottom padding
+    /* For mobile, the bottom padding
          * needs to be whatever the padding we want
          * is, plus half the --trapezoid-height-mobile.
          * This is because the image element is absolutely
          * positioned, so we need to account for it's offset.
          */
-    }
+  }
 
-    .trapezoid-slant {
-        display: none;
-    }
+  .trapezoid-slant {
+    display: none;
+  }
 }
 
 .trapezoid-wrapper {
-    flex: 1;
-    display: block;
-    position: relative;
+  flex: 1;
+  display: block;
+  position: relative;
 }
 
 #tagline-trapezoid {
-    display: flex;
+  display: flex;
+  position: relative;
+  flex: 1;
+  width: 100%;
+  max-height: var(--trapezoid-height-mobile);
+  background-color: color("primary-darkest");
+  z-index: 1;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--trapezoid-triangle-length)) 0%,
+    100% 100%,
+    0% 100%
+  );
+
+  margin-top: 0;
+  margin-bottom: 0;
+
+  .trapezoid-inner {
+    display: block;
+
+    /* Using the padding-right method */
+    padding: units("205");
+    padding-right: var(--trapezoid-triangle-length);
+    color: white;
+  }
+
+  span {
+    display: block;
     position: relative;
-    flex: 1;
-    width: 100%;
-    max-height: var(--trapezoid-height-mobile);
-    background-color: color("primary-darkest");
-    z-index: 1;
-    clip-path: polygon(
-        0% 0%,
-        calc(100% - var(--trapezoid-triangle-length)) 0%,
-        100% 100%,
-        0% 100%
-    );
+  }
 
-    margin-top: 0;
-    margin-bottom: 0;
+  span:first-child {
+    color: color("primary-lighter");
+    font-weight: 400;
+    font-size: 32px;
+  }
 
-    .trapezoid-inner {
-        display: block;
+  span:last-child {
+    @include u-text("light");
 
-        /* Using the padding-right method */
-        padding: units("205");
-        padding-right: var(--trapezoid-triangle-length);
-        color: white;
-    }
+    color: color("primary-lightest");
 
-    span {
-        display: block;
-        position: relative;
-    }
-
-    span:first-child {
-        color: color("primary-lighter");
-        font-weight: 400;
-        font-size: 32px;
-    }
-
-    span:last-child {
-        @include u-text("light");
-
-        color: color("primary-lightest");
-
-        /* mobile only */
-        font-size: 24px;
-    }    
+    /* mobile only */
+    font-size: 24px;
+  }
 }
 
 #image-trapezoid {
-    display: block;
+  display: block;
 
-    /* in mobile, we want this to be absolute */
-    position: absolute;
-    transform: translateY(calc(-1 * var(--trapezoid-height-mobile) / 2));
-    width: 100%;
-    height: var(--trapezoid-height-mobile);
-    background-image: url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.jpg");
+  /* in mobile, we want this to be absolute */
+  position: absolute;
+  transform: translateY(calc(-1 * var(--trapezoid-height-mobile) / 2));
+  width: 100%;
+  height: var(--trapezoid-height-mobile);
+  background-image: url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.jpg");
 
-    /* If we do not support image-set, see if we support webp at least */
-    @supports (background-image: url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.webp")){
-        background-image: url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.webp");
-    }
+  /* If we do not support image-set, see if we support webp at least */
+  @supports (
+    background-image:
+      url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.webp")
+  ) {
+    background-image: url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.webp");
+  }
 
-    /* If the browser supports image-set, use that */
-    @supports (background-image: image-set(url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.jpg") type("image/jpeg"))){
-        background-image: image-set(
-            url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.webp") type("image/webp"),
-            url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.avif") type("image/avif"),
-            url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.jpg") type("image/jpeg")
-        )
-    }
-    
-    background-size: cover;
-    background-position: bottom;
-    clip-path: polygon(
-        0% 0%,
-        100% 0%,
-        100% 100%,
-        var(--trapezoid-triangle-length) 100%
+  /* If the browser supports image-set, use that */
+  @supports (
+    background-image: image-set(
+        url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.jpg")
+          type("image/jpeg")
+      )
+  ) {
+    background-image: image-set(
+      url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.webp")
+        type("image/webp"),
+      url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.avif")
+        type("image/avif"),
+      url("/public/images/front-page/backgrounds/wx_front_trapezoid_900_90.jpg")
+        type("image/jpeg")
     );
+  }
+
+  background-size: cover;
+  background-position: bottom;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    var(--trapezoid-triangle-length) 100%
+  );
 }
 
 #front-stats {
-    border-top: 4px solid color("primary-light");
+  border-top: 4px solid color("primary-light");
 
-    /* For whatever reason, the PNG fallback is smaller than the JPEG generated from it
+  /* For whatever reason, the PNG fallback is smaller than the JPEG generated from it
      * at full quality and size. So we will use that in the worse case
      */
-    background-image: url("/public/images/front-page/backgrounds/wx_homepage_fronts.png");
+  background-image: url("/public/images/front-page/backgrounds/wx_homepage_fronts.png");
 
-    /* If we don't support image-set, try avif */
-    @supports (background-image: url("/public/images/front-page/backgrounds/wx_homepage_fronts_full_60.avif")){
-        background-image: url("/public/images/front-page/backgrounds/wx_homepage_fronts_full_60.avif");
-    }
+  /* If we don't support image-set, try avif */
+  @supports (
+    background-image:
+      url("/public/images/front-page/backgrounds/wx_homepage_fronts_full_60.avif")
+  ) {
+    background-image: url("/public/images/front-page/backgrounds/wx_homepage_fronts_full_60.avif");
+  }
 
-    /* If the browser supports image-set, use that with our preferences */
-    @supports (background-image: image-set(url("/public/images/front-page/backgrounds/wx_homepage_fronts.png") type("image/png"))){
-        background-image: image-set(
-            /* Note that the plain PNG is _smaller_ than the converted/compressed JPEGs and WebPs */
-            url("/public/images/front-page/backgrounds/wx_homepage_fronts_full_60.avif") type("image/avif"),
-            url("/public/images/front-page/backgrounds/wx_homepage_fronts.png") type("image/png")
-        )
-    }
-    
-    position: relative;
-    padding-bottom: units(3);
+  /* If the browser supports image-set, use that with our preferences */
+  @supports (
+    background-image: image-set(
+        url("/public/images/front-page/backgrounds/wx_homepage_fronts.png")
+          type("image/png")
+      )
+  ) {
+    background-image: image-set(
+      /* Note that the plain PNG is _smaller_ than the converted/compressed JPEGs and WebPs */
+        url("/public/images/front-page/backgrounds/wx_homepage_fronts_full_60.avif")
+        type("image/avif"),
+      url("/public/images/front-page/backgrounds/wx_homepage_fronts.png")
+        type("image/png")
+    );
+  }
 
-    .stats-subsection {
-        /* The margin-top should be a function
+  position: relative;
+  padding-bottom: units(3);
+
+  .stats-subsection {
+    /* The margin-top should be a function
          * of the max image size, so that these do not overlap
          * as the browser shrinks
          */
-        margin-top: units(3);
-        
-        display: block;
-        width: 100%;
+    margin-top: units(3);
 
-        > .grid-container {
-            padding: 0;
-        }
+    display: block;
+    width: 100%;
+
+    > .grid-container {
+      padding: 0;
     }
+  }
 
-    .stats-text {
-        @include u-font-family("sans");
-        @include u-text("thin");
+  .stats-text {
+    @include u-font-family("sans");
+    @include u-text("thin");
 
-        font-size: 24px;
-        color: color("primary-darker");
-        background-color: color("primary-lightest");
-        margin-top: 0;
-        margin-bottom: 0;
-        padding: units(2);
-        line-height: 1.3;
+    font-size: 24px;
+    color: color("primary-darker");
+    background-color: color("primary-lightest");
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: units(2);
+    line-height: 1.3;
 
-        .stats-emphasis {
-            @include u-text("bold"); /* desktop */
-            @include u-text("thin"); /* mobile */
-        }
+    .stats-emphasis {
+      @include u-text("bold"); /* desktop */
+      @include u-text("thin"); /* mobile */
     }
+  }
 
-    .stats-image-container {
-        display: flex;
-        gap: units(1);
-        max-width: 100%;
-        height: auto;
+  .stats-image-container {
+    display: flex;
+    gap: units(1);
+    max-width: 100%;
+    height: auto;
 
-        /* mobile only, to simulate coming down
+    /* mobile only, to simulate coming down
          * over the grey band
          */
-        background: linear-gradient(to bottom, color("primary-lightest") 64px, transparent 64px);
-        padding-left: units(2);
-        padding-right: units(2);
+    background: linear-gradient(
+      to bottom,
+      color("primary-lightest") 64px,
+      transparent 64px
+    );
+    padding-left: units(2);
+    padding-right: units(2);
 
-        &.stats-large-image {
-            justify-content: center;
-        }
+    &.stats-large-image {
+      justify-content: center;
     }
+  }
 
-    /* mobile only
+  /* mobile only
      * for the large image container, the
      * background gradient is reversed
      */
-    .stats-large-image {
-        background: linear-gradient(to top, color("primary-lightest") 64px, transparent 64px);
-        justify-content: center;
-    }
-    
-    
+  .stats-large-image {
+    background: linear-gradient(
+      to top,
+      color("primary-lightest") 64px,
+      transparent 64px
+    );
+    justify-content: center;
+  }
 }
 
 #front-rebuilding {
-    border-top: units("05") solid color("primary-light");
-    background-image: url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_70.jpg");
+  border-top: units("05") solid color("primary-light");
+  background-image: url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_70.jpg");
 
-    /* If we can't use image-set, try using just webp */
-    @supports (background-image: url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.webp")){
-        background-image: url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.webp");
-    }
+  /* If we can't use image-set, try using just webp */
+  @supports (
+    background-image:
+      url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.webp")
+  ) {
+    background-image: url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.webp");
+  }
 
-    /* If we can use image-set, use that for priorities */
-    @supports (background-image: image-set(url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_70.jpg") type("image/jpeg"))){
-        background-image: image-set(
-            url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.webp") type("image/webp"),
-            url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.avif") type("image/avif"),
-            url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_70.jpg") type("image/jpeg")
-        )
-    }
-    
-    background-size: cover;
-    background-position: right;
+  /* If we can use image-set, use that for priorities */
+  @supports (
+    background-image: image-set(
+        url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_70.jpg")
+          type("image/jpeg")
+      )
+  ) {
+    background-image: image-set(
+      url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.webp")
+        type("image/webp"),
+      url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_60.avif")
+        type("image/avif"),
+      url("/public/images/front-page/backgrounds/wx_homepage_stylized_radar_full_70.jpg")
+        type("image/jpeg")
+    );
+  }
 
-    /* This should dynamically create a reasonable
+  background-size: cover;
+  background-position: right;
+
+  /* This should dynamically create a reasonable
      * height for the map image, which is a background,
      * for the top of the rebuilding section
      */
-    padding-top: calc(units(8) + 4em);
+  padding-top: calc(units(8) + 4em);
 
-    .front-rebuilding-header {
-        /* We make the trapezoidal triangle length
+  .front-rebuilding-header {
+    /* We make the trapezoidal triangle length
          * a function of the text size for the header
          */
-        --trapezoid-triangle-length: 2em;
-        
-        position: relative;
-        background-color: color("primary-darker");
-        color: color("primary-lightest");
+    --trapezoid-triangle-length: 2em;
 
-        @include u-font-family("sans"); /* Desktop */
+    position: relative;
+    background-color: color("primary-darker");
+    color: color("primary-lightest");
 
-        font-size: 24px; /* mobile */
+    @include u-font-family("sans"); /* Desktop */
 
-        @include u-text("thin");
+    font-size: 24px; /* mobile */
 
-        padding: 20px;
-        transform: translateY(-50%);
-        margin: 0;
+    @include u-text("thin");
 
-        /* Use 80% top rule to make the
+    padding: 20px;
+    transform: translateY(-50%);
+    margin: 0;
+
+    /* Use 80% top rule to make the
          * angled side
          */
-        clip-path: polygon(0% 0%, calc(100% - var(--trapezoid-triangle-length)) 0%, 100% 100%, 0% 100%);
-        padding-right: 10%;
-        
+    clip-path: polygon(
+      0% 0%,
+      calc(100% - var(--trapezoid-triangle-length)) 0%,
+      100% 100%,
+      0% 100%
+    );
+    padding-right: 10%;
 
-        > span {
-            position: relative;
-            z-index: 1;
-        }
+    > span {
+      position: relative;
+      z-index: 1;
     }
+  }
 
-    .front-rebuilding-list-area {
-        display: block;
+  .front-rebuilding-list-area {
+    display: block;
+    position: relative;
+    width: 100%;
+    background-color: color("primary-lightest");
+
+    --rebuilding-list-padding-left: 32px;
+
+    .front-rebuilding-list {
+      margin-top: units(-4); /* mobile */
+      padding-left: 0;
+
+      > li {
+        list-style: none;
         position: relative;
-        width: 100%;
-        background-color: color("primary-lightest");
+        border-left: 1px dashed color("primary-lighter");
+        padding-left: var(--rebuilding-list-padding-left);
+        padding-bottom: units(4);
 
-        --rebuilding-list-padding-left: 32px;
-
-        .front-rebuilding-list {
-            margin-top: units(-4); /* mobile */
-            padding-left: 0;
-
-            > li {
-                list-style: none;
-                position: relative;
-                border-left: 1px dashed color("primary-lighter");
-                padding-left: var(--rebuilding-list-padding-left);
-                padding-bottom: units(4);
-
-                &:last-child {
-                    border-left: 1px solid transparent;
-                }
-                
-                li {
-                    list-style-type: disc;
-                }
-            }
-
-            h3 {
-                margin-top: 0;
-                position: relative;
-
-                @include u-font("sans", "lg");
-                @include u-text("normal");
-
-                color: color("primary-dark");
-            }
-
-            p {
-                @include u-font("sans", "md");
-
-                margin: 0;
-            }
-
-            /* list icons */
-            .front-list-marker {
-                display: flex;
-                position: absolute;
-                width: 16px;
-                height: 100%;
-                align-items: flex-start;
-                left: calc(calc(-1 * var(--rebuilding-list-padding-left)) - 8px);
-                top: 4px; /* hacky, to get alignment looking better */
-            }
+        &:last-child {
+          border-left: 1px solid transparent;
         }
+
+        li {
+          list-style-type: disc;
+        }
+      }
+
+      h3 {
+        margin-top: 0;
+        position: relative;
+
+        @include u-font("sans", "lg");
+        @include u-text("normal");
+
+        color: color("primary-dark");
+      }
+
+      p {
+        @include u-font("sans", "md");
+
+        margin: 0;
+      }
+
+      /* list icons */
+      .front-list-marker {
+        display: flex;
+        position: absolute;
+        width: 16px;
+        height: 100%;
+        align-items: flex-start;
+        left: calc(calc(-1 * var(--rebuilding-list-padding-left)) - 8px);
+        top: 4px; /* hacky, to get alignment looking better */
+      }
     }
+  }
 }
 
 /** SECTABLET **/
-@include at-media("tablet"){
-    #front-find-forecast-section {
-        padding: units(8);
-        padding-top: 58px;
-        padding-bottom: 58px;
+@include at-media("tablet") {
+  #front-find-forecast-section {
+    padding: units(8);
+    padding-top: 58px;
+    padding-bottom: 58px;
 
-        .find-block-wrapper {
-            padding: units(5);
-            padding-bottom: units(3);
+    .find-block-wrapper {
+      padding: units(5);
+      padding-bottom: units(3);
 
-            h2 {
-                font-size: 56px;
-            }
+      h2 {
+        font-size: 56px;
+      }
 
-            .use-location-area {
-                justify-content: center;
-            }
-        }
+      .use-location-area {
+        justify-content: center;
+      }
+    }
+  }
+
+  #front-stats {
+    // Min padding is 70px, max is 124px, use calc as fallback
+    padding-bottom: calc(22.5vw - 74px);
+    padding-bottom: clamp(70px, 22.5vw - 74px, 124px);
+
+    .stats-subsection {
+      // margin-top: calc(var(--stats-area-image-max-height) / 6);
+
+      // Scale from 64px of margin-top at 640px to 120px at 879px
+      // the value in the middle of clamp is the linear interpolation between these values
+      margin-top: calc(23.33vw - 85.33px);
+      margin-top: clamp(64px, 23.33vw - 85.33px, 120px);
+      background-color: color("primary-lightest");
+
+      > .grid-container {
+        padding: 0;
+      }
+
+      &:last-of-type {
+        margin-top: calc(48.18vw - 224.35px);
+        margin-top: clamp(84px, 48.18vw - 224.35px, 190px);
+      }
     }
 
-    #front-stats {
-        // Min padding is 70px, max is 124px, use calc as fallback
-        padding-bottom: calc(22.5vw - 74px);
-        padding-bottom: clamp(70px, 22.5vw - 74px, 124px);
+    .stats-content-wrapper {
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-        .stats-subsection {
-            // margin-top: calc(var(--stats-area-image-max-height) / 6);
+    .stats-image-outer {
+      flex: 1.5;
+      position: relative;
+    }
 
-            // Scale from 64px of margin-top at 640px to 120px at 879px 
-            // the value in the middle of clamp is the linear interpolation between these values
-            margin-top: calc(23.33vw - 85.33px);
-            margin-top: clamp(64px, 23.33vw - 85.33px, 120px);
-            background-color: color("primary-lightest");
+    .stats-img-wrapper {
+      img {
+        max-height: var(--stats-area-image-max-height);
+      }
+    }
 
-            > .grid-container {
-                padding: 0;
-            }
+    .stats-text {
+      font-size: 22px;
+      flex: 1;
+      padding: units(1);
+      padding-left: units(2);
+      margin-top: units(1);
+      margin-bottom: units(1);
+    }
 
-            &:last-of-type {
-              margin-top: calc(48.18vw - 224.35px);
-              margin-top: clamp(84px, 48.18vw - 224.35px, 190px);
-            }
-        }
+    .stats-text-right {
+      padding-right: units(2);
+    }
 
-        .stats-content-wrapper {
-            display: flex;
-            position: relative;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .stats-image-outer {
-            flex: 1.5;
-            position: relative;
-        }
-
-        .stats-img-wrapper {
-            img {
-                max-height: var(--stats-area-image-max-height);
-            }
-        }
-
-        .stats-text {
-            font-size: 22px;
-            flex: 1;
-            padding: units(1);
-            padding-left: units(2);
-            margin-top: units(1);
-            margin-bottom: units(1);
-        }
-
-        .stats-text-right {
-            padding-right: units(2);
-        }
-
-        .stats-image-container {
-            /**
+    .stats-image-container {
+      /**
              * The image container and its image need to be positioned
              * so that each image is vertically centered _over_ the underlying grey
              * band.
@@ -542,274 +594,269 @@ $trapezoid-wrapper-height: 420px;
              * container. This makes them appear vertically "centered" over
              * the grey bar.
              **/
-            position: absolute;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            padding-left: 0;
-            
-            > img {
-                position: relative;
-                top: 0;
-            }
+      position: absolute;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      padding-left: 0;
 
-            > img:not(:last-child){
-                margin-right: units("205");
-            }
-        }
-
-        .stats-large-image {
-            background: unset;
-            padding-left: units(2);
-            padding-right: 0;
-            
-        }
-        
-    }
-
-    #front-rebuilding {
-        .front-rebuilding-header {
-            font-size: 28px; /* xl */
-        }
-
-        .front-rebuilding-list-area {
-            .front-rebuilding-list {
-                margin-top: units(-2.5);
-            }
-        }
-    }
-
-    #front-trapezoids {
-        .trapezoids-container {
-            padding: units(6) units(2);
-            display: flex;
-        }
-        
-        #tagline-trapezoid {
-            max-height: unset;
-            min-width: calc(100% + var(--trapezoid-triangle-length));
-
-            .trapezoid-inner {
-              padding: units(4);
-              padding-right: var(--trapezoid-triangle-length);
-                span {
-                    &:first-child {
-                        font-size: 32px;
-                    }
-
-                    &:last-child {
-                        font-size: 28px;
-                    }
-                }
-            }
-
-            flex: 1;
-            transform: translateY(-16px);
-        }
-
-        #image-trapezoid {
-            position: absolute;
-            top: unset;
-            right: 0;
-            transform: translateY(16px);
-            min-width: calc(100% + var(--trapezoid-triangle-length));
-            height: 100%;
-        }
-    }
-}
-
-@include at-media("tablet-lg"){
-    #front-stats {
-        padding-bottom: 112px;
-
-        .stats-subsection {
-            margin-top: calc(14vw - 2px);
-            margin-top: clamp(121px, 14vw - 2px, 141px);
-
-            &:last-of-type {
-              margin-top: calc(4.34vw + 160.63px);
-              margin-top: clamp(187px, 4.34vw + 160.63px, 205px);
-            }
-
-            .stats-image-container {
-                &:not(.stats-large-image){
-                    justify-content: right;
-                }
-
-                .stats-img-wrapper {
-                    margin-right: 0;
-                }
-
-                &.stats-large-image {
-                    .stats-img-wrapper {
-                        img {
-                          --stats-area-image-max-height: 250px;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    #front-rebuilding {
-        .front-rebuilding-list-area {
-            .front-rebuilding-list {
-                margin-top: units(0);
-            }
-        }
-    }
-}
-
-
-
-@include at-media("desktop"){
-    #front-find-forecast-section {
-        padding-top: 110px;
-        padding-bottom: 110px;
-    }
-    
-    #front-stats {
-      padding-bottom: 72px; 
-
-      .stats-subsection {
-        margin-top: 80px;
-
-        &:last-of-type {
-          margin-top: 104px;
-        }
+      > img {
+        position: relative;
+        top: 0;
       }
-        .stats-text {
+
+      > img:not(:last-child) {
+        margin-right: units("205");
+      }
+    }
+
+    .stats-large-image {
+      background: unset;
+      padding-left: units(2);
+      padding-right: 0;
+    }
+  }
+
+  #front-rebuilding {
+    .front-rebuilding-header {
+      font-size: 28px; /* xl */
+    }
+
+    .front-rebuilding-list-area {
+      .front-rebuilding-list {
+        margin-top: units(-2.5);
+      }
+    }
+  }
+
+  #front-trapezoids {
+    .trapezoids-container {
+      padding: units(6) units(2);
+      display: flex;
+    }
+
+    #tagline-trapezoid {
+      max-height: unset;
+      min-width: calc(100% + var(--trapezoid-triangle-length));
+
+      .trapezoid-inner {
+        padding: units(4);
+        padding-right: var(--trapezoid-triangle-length);
+        span {
+          &:first-child {
             font-size: 32px;
-        }
+          }
 
-        .stats-image-container {
-          gap: units(2);
-        }
-      }
-
-    #front-trapezoids {
-        #tagline-trapezoid {
-            .trapezoid-inner {
-                span {
-                    &:first-child {
-                        font-size: 48px;
-                    }
-
-                    &:last-child {
-                        font-size: 42px;
-                    }
-                }
-            }
-        }
-    }
-
-    #front-rebuilding {
-      .front-rebuilding-header {
-        font-size: 40px;
-      }
-
-      .front-rebuilding-list-area {
-        .front-rebuilding-list {
-          margin-top: units(-4);
-        }
-      }
-    }
-}
-
-/* Represents the new desktop-lg width for the front page */
-@media screen and (min-width: 1440px){
-    .usa-nav-container {
-        max-width: 1440px;
-    }
-
-    .grid-container,
-    .usa-banner__inner {
-        max-width: 1440px;
-        margin-left: auto;
-    }
-
-    #front-find-forecast-section {
-        padding-top: 150px;
-        padding-bottom: 150px;
-
-        .find-block-wrapper {
-            .use-location-area { 
-                font-size: 16px;
-
-                > label.usa-label {
-                  font-size: 16px;
-                }
-            }
-        }
-        
-    }
-
-    #front-stats {
-        /* We give extra margin on the top to
-         * the second stats-subsection when in
-         * ultra desktop
-         */
-        
-        padding-bottom: 162px;
-
-        .stats-subsection {
-          margin-top: 148px;
-
-          &:last-of-type {
-            margin-top: 276px;
+          &:last-child {
+            font-size: 28px;
           }
         }
+      }
 
-        .stats-text {
-            font-size: 44px;
-        }
+      flex: 1;
+      transform: translateY(-16px);
+    }
 
-        .stats-text-right {
-          padding-left: units(4);
+    #image-trapezoid {
+      position: absolute;
+      top: unset;
+      right: 0;
+      transform: translateY(16px);
+      min-width: calc(100% + var(--trapezoid-triangle-length));
+      height: 100%;
+    }
+  }
+}
+
+@include at-media("tablet-lg") {
+  #front-stats {
+    padding-bottom: 112px;
+
+    .stats-subsection {
+      margin-top: calc(14vw - 2px);
+      margin-top: clamp(121px, 14vw - 2px, 141px);
+
+      &:last-of-type {
+        margin-top: calc(4.34vw + 160.63px);
+        margin-top: clamp(187px, 4.34vw + 160.63px, 205px);
+      }
+
+      .stats-image-container {
+        &:not(.stats-large-image) {
+          justify-content: right;
         }
 
         .stats-img-wrapper {
+          margin-right: 0;
+        }
+
+        &.stats-large-image {
+          .stats-img-wrapper {
             img {
-                max-height: unset;
+              --stats-area-image-max-height: 250px;
             }
-        }
-    }
-
-    #front-trapezoids {
-      .trapezoids-container {
-        padding: units(10) units(2);
-      }
-
-        #tagline-trapezoid {
-            .trapezoid-inner {
-              padding-top: units(8);
-              padding-left: units(8);
-              padding-bottom: units(8);
-                span {
-                    &:first-child {
-                        font-size: 72px;
-                    }
-
-                    &:last-child {
-                        font-size: 64px;
-                    }
-                }
-            }
-        }
-    }
-
-    #front-rebuilding {
-      .front-rebuilding-header {
-        font-size: 44px;
-      }
-
-      .front-rebuilding-list-area {
-        .front-rebuilding-list {
-          margin-top: units(0);
+          }
         }
       }
     }
+  }
+
+  #front-rebuilding {
+    .front-rebuilding-list-area {
+      .front-rebuilding-list {
+        margin-top: units(0);
+      }
+    }
+  }
+}
+
+@include at-media("desktop") {
+  #front-find-forecast-section {
+    padding-top: 110px;
+    padding-bottom: 110px;
+  }
+
+  #front-stats {
+    padding-bottom: 72px;
+
+    .stats-subsection {
+      margin-top: 80px;
+
+      &:last-of-type {
+        margin-top: 104px;
+      }
+    }
+    .stats-text {
+      font-size: 32px;
+    }
+
+    .stats-image-container {
+      gap: units(2);
+    }
+  }
+
+  #front-trapezoids {
+    #tagline-trapezoid {
+      .trapezoid-inner {
+        span {
+          &:first-child {
+            font-size: 48px;
+          }
+
+          &:last-child {
+            font-size: 42px;
+          }
+        }
+      }
+    }
+  }
+
+  #front-rebuilding {
+    .front-rebuilding-header {
+      font-size: 40px;
+    }
+
+    .front-rebuilding-list-area {
+      .front-rebuilding-list {
+        margin-top: units(-4);
+      }
+    }
+  }
+}
+
+/* Represents the new desktop-lg width for the front page */
+@media screen and (min-width: 1440px) {
+  .usa-nav-container {
+    max-width: 1440px;
+  }
+
+  .grid-container,
+  .usa-banner__inner {
+    max-width: 1440px;
+    margin-left: auto;
+  }
+
+  #front-find-forecast-section {
+    padding-top: 150px;
+    padding-bottom: 150px;
+
+    .find-block-wrapper {
+      .use-location-area {
+        font-size: 16px;
+
+        > label.usa-label {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  #front-stats {
+    /* We give extra margin on the top to
+         * the second stats-subsection when in
+         * ultra desktop
+         */
+
+    padding-bottom: 162px;
+
+    .stats-subsection {
+      margin-top: 148px;
+
+      &:last-of-type {
+        margin-top: 276px;
+      }
+    }
+
+    .stats-text {
+      font-size: 44px;
+    }
+
+    .stats-text-right {
+      padding-left: units(4);
+    }
+
+    .stats-img-wrapper {
+      img {
+        max-height: unset;
+      }
+    }
+  }
+
+  #front-trapezoids {
+    .trapezoids-container {
+      padding: units(10) units(2);
+    }
+
+    #tagline-trapezoid {
+      .trapezoid-inner {
+        padding-top: units(8);
+        padding-left: units(8);
+        padding-bottom: units(8);
+        span {
+          &:first-child {
+            font-size: 72px;
+          }
+
+          &:last-child {
+            font-size: 64px;
+          }
+        }
+      }
+    }
+  }
+
+  #front-rebuilding {
+    .front-rebuilding-header {
+      font-size: 44px;
+    }
+
+    .front-rebuilding-list-area {
+      .front-rebuilding-list {
+        margin-top: units(0);
+      }
+    }
+  }
 }
 /* stylelint-enable */

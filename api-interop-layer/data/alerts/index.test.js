@@ -32,10 +32,7 @@ const makeDayWithHours = (
 };
 
 describe("alert data module", () => {
-  let response,
-    getIntersection,
-    getCountyAlerts,
-    sandbox;
+  let response, getIntersection, getCountyAlerts, sandbox;
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -49,7 +46,7 @@ describe("alert data module", () => {
       AlertsCache.prototype,
       "getAlertsForCountyFIPS",
     );
-  
+
     fetch.resolves(response);
   });
 

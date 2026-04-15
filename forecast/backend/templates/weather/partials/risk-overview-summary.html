@@ -42,50 +42,47 @@
 {% else %}
   <h2 class="font-sans-xl text-normal text-primary-dark margin-bottom-2 margin-top-1 desktop:margin-top-0"
       id="risk-summary-table-header">{{ "ghwo.table.caption.header.01"|t }}</h2>
-  <p class="text-left font-sans-md text-normal text-primary-darker margin-bottom-2" id="risk-summary-table-description">
-    {{ "ghwo.table.caption.description.01"|t }}
-  </p>
+  <p class="text-left font-sans-md text-normal text-primary-darker margin-bottom-2"
+     id="risk-summary-table-description">{{ "ghwo.table.caption.description.01"|t }}</p>
   <div class="risk-summary-table-wrapper padding-bottom-2">
-  <table class="risk-summary-table"
-         aria-labelledby="risk-summary-table-header"
-         aria-describedby="risk-summary-table-description">
-    <thead>
-      <tr>
-        <th scope="col" aria-hidden="true"></th>
-        {% for day in ghwo.composite.days %}
-          <th scope="col" class="text-center">
-            <div class="font-mono-2xs tablet-lg:font-mono-xs text-normal">
-              <time datetime="{{ day.timestamp|date:"c" }}">
-                <span class="display-block">{{ day.timestamp|date:"D" }}</span>
-                <span class="display-block">{{ day.timestamp|date:"n" }}/{{ day.timestamp|date:"j" }}</span>
-              </time>
-            </div>
+    <table class="risk-summary-table"
+           aria-labelledby="risk-summary-table-header"
+           aria-describedby="risk-summary-table-description">
+      <thead>
+        <tr>
+          <th scope="col" aria-hidden="true"></th>
+          {% for day in ghwo.composite.days %}
+            <th scope="col" class="text-center">
+              <div class="font-mono-2xs tablet-lg:font-mono-xs text-normal">
+                <time datetime="{{ day.timestamp|date:"c" }}">
+                  <span class="display-block">{{ day.timestamp|date:"D" }}</span>
+                  <span class="display-block">{{ day.timestamp|date:"n" }}/{{ day.timestamp|date:"j" }}</span>
+                </time>
+              </div>
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">
+            <span class="usa-sr-only">{{"ghwo.details.table.risk-level.lower.01"|t}}</span>
           </th>
-        {% endfor %}
-      </tr>
-    </thead>
-    
-    <tbody>
-      <tr>
-        <th scope="row"><span class="usa-sr-only">{{"ghwo.details.table.risk-level.lower.01"|t}}</span></th>
-        {% for day in ghwo.composite.days %}
-          <td class="risk-summary-table-data">
-            <div class="risk-summary-table-data-inner">
-              {% if day.scaled %}
-                <div class="risk-summary-bar" data-scaled-risk-level="{{day.scaled}}">
-                  <span class="usa-sr-only">
-                    {% trans_with_args "ghwo.summary.scale.label.01" scaled=day.scaled_10 %}
-                  </span>
-                </div>
-              {% endif %}
-            </div>
-          </td>
-        {% endfor %}
-      </tr>
-    </tbody>
-  </table>
+          {% for day in ghwo.composite.days %}
+            <td class="risk-summary-table-data">
+              <div class="risk-summary-table-data-inner">
+                {% if day.scaled %}
+                  <div class="risk-summary-bar" data-scaled-risk-level="{{ day.scaled }}">
+                    <span class="usa-sr-only">{% trans_with_args "ghwo.summary.scale.label.01" scaled=day.scaled_10 %}</span>
+                  </div>
+                {% endif %}
+              </div>
+            </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
   </div>
-
   <div class="risk-summary-table-legend display-inline-block font-body-xs text-normal text-base-darker"
        aria-label="{{ 'ghwo.table.legend.label.01'|t }}">
     <div class="display-flex flex-align-center margin-right-2 margin-top-2 tablet:margin-top-05 margin-bottom-105">
@@ -97,11 +94,14 @@
         <div class="risk-summary-bar" data-scaled-risk-level="0.2"></div>
       </div>
       <div class="display-inline">{{"ghwo.table.legend.low-risk.01"|t}}</div>
-
-      <svg class="risk-legend-arrow" width="48" height="6" viewBox="0 0 48 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M48 2.88675L43 -2.14577e-06V5.7735L48 2.88675ZM0 2.88675V3.38675H43.5V2.88675V2.38675H0V2.88675Z" fill="#565C65"/>
+      <svg class="risk-legend-arrow"
+           width="48"
+           height="6"
+           viewBox="0 0 48 6"
+           fill="none"
+           xmlns="http://www.w3.org/2000/svg">
+        <path d="M48 2.88675L43 -2.14577e-06V5.7735L48 2.88675ZM0 2.88675V3.38675H43.5V2.88675V2.38675H0V2.88675Z" fill="#565C65" />
       </svg>
-      
       <div class="risk-summary-table-legend-square">
         <div class="risk-summary-bar" data-scaled-risk-level="1"></div>
       </div>

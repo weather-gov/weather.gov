@@ -448,19 +448,17 @@ class TestInteropInterface(TestCase):
         self.assertEqual(actual, returned)
 
     @mock.patch("backend.interop._requests_session.get")
-    def test__fetch_with_429(self, mock_get): # noqa: ARG002
+    def test__fetch_with_429(self, mock_get):  # noqa: ARG002
         """Tests that fetch will raise the 429 exception on 429."""
         mock_response = mock.Mock()
         mock_response.status_code = 429
         mock_get.return_value = mock_response
 
-        with self.assertRaises(Http429): # noqa: PT027
+        with self.assertRaises(Http429):  # noqa: PT027
             interop._fetch("/point/anything")
 
     @mock.patch("backend.interop._fetch", side_effect=Http429())
-    def test_get_point_forecast_429(self, mock_fetch): # noqa: ARG002
+    def test_get_point_forecast_429(self, mock_fetch):  # noqa: ARG002
         """Tests that get_point_forecast will handle the 429 from fetch."""
-        with self.assertRaises(Http429): # noqa: PT027
+        with self.assertRaises(Http429):  # noqa: PT027
             interop.get_point_forecast(11.1, 22.2)
-
-

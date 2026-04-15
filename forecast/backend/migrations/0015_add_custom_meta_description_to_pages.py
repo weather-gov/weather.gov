@@ -4,22 +4,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('backend', '0014_remove_wfo_ghwo_metadata_and_more'),
+        ("backend", "0014_remove_wfo_ghwo_metadata_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='genericpage',
-            name='meta_description',
-            field=models.TextField(default=''),
+            model_name="genericpage",
+            name="meta_description",
+            field=models.TextField(default=""),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='roadmappage',
-            name='meta_description',
-            field=models.TextField(default=''),
+            model_name="roadmappage",
+            name="meta_description",
+            field=models.TextField(default=""),
             preserve_default=False,
         ),
     ]

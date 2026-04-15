@@ -3,7 +3,7 @@ import Timer from "./timer.js";
 const debouncer = new Timer();
 /**
  * Cache the text here to compare text between calls.
- * 
+ *
  * This is needed because some screenreaders will not announce "repeat" messages.
  */
 let text = "";

@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("spatial", "0001_squashed_0008_alter_weatheralertscache_alertkind_and_more"),
     ]

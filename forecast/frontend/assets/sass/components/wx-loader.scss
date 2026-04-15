@@ -1,10 +1,10 @@
 @use "uswds-core" as *;
 
-wx-loader:not(.wx-loader-pop-in)[aria-hidden="true"]{
+wx-loader:not(.wx-loader-pop-in)[aria-hidden="true"] {
   visibility: hidden;
 }
 
-wx-loader.wx-loader-pop-in[aria-hidden="true"]{
+wx-loader.wx-loader-pop-in[aria-hidden="true"] {
   display: none;
 }
 

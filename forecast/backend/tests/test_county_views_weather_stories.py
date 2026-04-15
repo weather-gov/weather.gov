@@ -108,9 +108,7 @@ class TestCountyViewWeatherStories(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": ["YND"]
-            },
+            "county": {"wfos": ["YND"]},
             "weatherstories": self.basic_story,
             "briefings": [],
         }
@@ -126,19 +124,15 @@ class TestCountyViewWeatherStories(TestCase):
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_overview_with_multiple_weather_stories(
-        self, mock_get_radar, mock_get_county_data
-    ):
+    def test_overview_with_multiple_weather_stories(self, mock_get_radar, mock_get_county_data):
         """Test the weather stories are properly sorted if there are multiple."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": ["YND", "OTV"]
-            },
+            "county": {"wfos": ["YND", "OTV"]},
             "weatherstories": self.multiple_stories,
-            "briefings": []
+            "briefings": [],
         }
         mock_get_radar.return_value = {"radarMetadata": {}}
 
@@ -158,11 +152,9 @@ class TestCountyViewWeatherStories(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": ["YND"]
-            },
+            "county": {"wfos": ["YND"]},
             "weatherstories": [],
-            "briefings": []
+            "briefings": [],
         }
         mock_get_radar.return_value = {"radarMetadata": {}}
 
@@ -171,12 +163,7 @@ class TestCountyViewWeatherStories(TestCase):
         self.assertTemplateUsed(response, "weather/partials/county-weather-stories.html")
         self.assertEqual(
             response.context["data"]["weather_stories"],
-            [{
-                "officeId": "YND",
-                "wfo_url": "/offices/YND/",
-                "wfo_name": "Yondertown",
-                "is_empty": True
-            }],
+            [{"officeId": "YND", "wfo_url": "/offices/YND/", "wfo_name": "Yondertown", "is_empty": True}],
         )
 
     @mock.patch("backend.interop.get_county_data")
@@ -187,11 +174,9 @@ class TestCountyViewWeatherStories(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": ["YND"]
-            },
+            "county": {"wfos": ["YND"]},
             "weatherstories": [{"error": "this", "officeId": "YND"}],
-            "briefings": []
+            "briefings": [],
         }
         mock_get_radar.return_value = {"radarMetadata": {}}
 

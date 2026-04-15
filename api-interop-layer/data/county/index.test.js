@@ -8,9 +8,9 @@ describe("county data index", () => {
     db,
     getAlertsForCountyFIPS,
     getRiskOverview,
-      getCountyData,
-      getWeatherStories,
-      getBriefing,
+    getCountyData,
+    getWeatherStories,
+    getBriefing,
     sandbox;
 
   before(async () => {
@@ -22,7 +22,7 @@ describe("county data index", () => {
 
     getAlertsForCountyFIPS = sandbox.stub();
     getRiskOverview = sandbox.stub();
-    getWeatherStories  = sandbox.stub();
+    getWeatherStories = sandbox.stub();
     getBriefing = sandbox.stub();
 
     await quibble.esm("../db.js", {}, openDatabase);
@@ -73,7 +73,7 @@ describe("county data index", () => {
 
     beforeEach(() => {
       getWeatherStories.resolves([]);
-      getBriefing.resolves({briefing: null});
+      getBriefing.resolves({ briefing: null });
       db.query.onFirstCall().resolves({
         rows: [
           {
@@ -83,9 +83,7 @@ describe("county data index", () => {
             timezone: "America/New_York",
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
-            wfos: [
-              "FRA"
-            ]
+            wfos: ["FRA"],
           },
         ],
       });
@@ -122,9 +120,7 @@ describe("county data index", () => {
         riskOverview: "mercy sakes",
         alerts: { items: [] },
         weatherstories: [],
-        briefings: [
-          {briefing: null, officeId: "FRA"}
-        ]
+        briefings: [{ briefing: null, officeId: "FRA" }],
       });
     });
 
@@ -224,7 +220,7 @@ describe("county data index", () => {
       getRiskOverview.resolves("mercy sakes");
       getAlertsForCountyFIPS.resolves({ items: [] });
       getWeatherStories.resolves([]);
-      getBriefing.resolves({briefing: null});
+      getBriefing.resolves({ briefing: null });
       db.query.onFirstCall().resolves({
         rows: [
           {
@@ -234,9 +230,7 @@ describe("county data index", () => {
             timezone: "America/New_York",
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
-            wfos: [
-              "FRA"
-            ]
+            wfos: ["FRA"],
           },
         ],
       });
@@ -247,24 +241,17 @@ describe("county data index", () => {
     after(() => {
       clock.restore();
     });
-    
-    it("only adds the first weather story available for the WFO", async() => {
-      getWeatherStories.resolves([
-        {id: 1},
-        {id: 2},
-        {id: 3}
-      ]);
 
-      const actual  = await getCountyData("11223");
-      
-      expect(actual.weatherstories).to.eql([{id: 1}]);
+    it("only adds the first weather story available for the WFO", async () => {
+      getWeatherStories.resolves([{ id: 1 }, { id: 2 }, { id: 3 }]);
+
+      const actual = await getCountyData("11223");
+
+      expect(actual.weatherstories).to.eql([{ id: 1 }]);
     });
 
-    it("returns valid weather stories for each WFO (in case of multiple WFOs)", async() => {
-      const wfos = [
-        "FRA",
-        "TST"
-      ];
+    it("returns valid weather stories for each WFO (in case of multiple WFOs)", async () => {
+      const wfos = ["FRA", "TST"];
       db.query.onFirstCall().resolves({
         rows: [
           {
@@ -274,24 +261,16 @@ describe("county data index", () => {
             timezone: "America/New_York",
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
-            wfos: wfos
+            wfos: wfos,
           },
         ],
       });
-      getWeatherStories.withArgs("FRA").resolves([
-        {storyFor: "FRA"}
-      ]);
-      getWeatherStories.withArgs("TST").resolves([
-        {storyFor: "TST"}
-      ]);
+      getWeatherStories.withArgs("FRA").resolves([{ storyFor: "FRA" }]);
+      getWeatherStories.withArgs("TST").resolves([{ storyFor: "TST" }]);
 
-      const expected = [
-        {storyFor: "FRA"},
-        {storyFor: "TST"}
-      ];
+      const expected = [{ storyFor: "FRA" }, { storyFor: "TST" }];
       const actual = await getCountyData("11223");
-      
-   
+
       expect(actual.weatherstories).to.eql(expected);
     });
   });
@@ -306,7 +285,7 @@ describe("county data index", () => {
       getRiskOverview.resolves("mercy sakes");
       getAlertsForCountyFIPS.resolves({ items: [] });
       getWeatherStories.resolves([]);
-      getBriefing.resolves({briefing: null});
+      getBriefing.resolves({ briefing: null });
       db.query.onFirstCall().resolves({
         rows: [
           {
@@ -316,9 +295,7 @@ describe("county data index", () => {
             timezone: "America/New_York",
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
-            wfos: [
-              "FRA"
-            ]
+            wfos: ["FRA"],
           },
         ],
       });
@@ -332,15 +309,15 @@ describe("county data index", () => {
 
     it("returns the requested briefing from a valid single wfo", async () => {
       const briefingData = {
-        briefing: {id: "something", officeId: "FRA"}
+        briefing: { id: "something", officeId: "FRA" },
       };
       getBriefing.resolves(briefingData);
 
       const expected = [
         {
           officeId: "FRA",
-          ...briefingData
-        }
+          ...briefingData,
+        },
       ];
       const actual = await getCountyData("11223");
 
@@ -351,10 +328,12 @@ describe("county data index", () => {
       const briefingData = { error: true };
       getBriefing.resolves(briefingData);
 
-      const expected = [{
-        officeId: "FRA",
-        ...briefingData
-      }];
+      const expected = [
+        {
+          officeId: "FRA",
+          ...briefingData,
+        },
+      ];
 
       const actual = await getCountyData("11223");
 
@@ -362,10 +341,7 @@ describe("county data index", () => {
     });
 
     it("returns multiple briefings from valid wfos", async () => {
-      const wfos = [
-        "FRA",
-        "TST"
-      ];
+      const wfos = ["FRA", "TST"];
       db.query.onFirstCall().resolves({
         rows: [
           {
@@ -375,22 +351,22 @@ describe("county data index", () => {
             timezone: "America/New_York",
             shape: `{ "type": "oblong" }`,
             primarywfo: 37,
-            wfos: wfos
+            wfos: wfos,
           },
         ],
       });
       const briefing1 = {
-        briefing: {id: 1 }
+        briefing: { id: 1 },
       };
       const briefing2 = {
-        briefing: {id: 2}
+        briefing: { id: 2 },
       };
       getBriefing.withArgs("FRA").resolves(briefing1);
       getBriefing.withArgs("TST").resolves(briefing2);
 
       const expected = [
-        {officeId: "FRA", ...briefing1},
-        {officeId: "TST", ...briefing2},
+        { officeId: "FRA", ...briefing1 },
+        { officeId: "TST", ...briefing2 },
       ];
       const actual = await getCountyData("11223");
 

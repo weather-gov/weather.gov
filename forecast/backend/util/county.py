@@ -13,5 +13,3 @@ def risk_overview_timestamps_to_dates(risk_overview, tz):
             if risk_overview["composite"].get("days", False):
                 for day in risk_overview["composite"]["days"]:
                     day["timestamp"] = datetime.fromisoformat(day["timestamp"]).astimezone(tz=tz)
-
-

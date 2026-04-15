@@ -3,10 +3,7 @@ import { expect } from "chai";
 import { ForecastGridCache } from "./cache.js";
 
 describe("ForecastGridCache Tests", () => {
-  let gridCache,
-    clock,
-    parent,
-    sandbox;
+  let gridCache, clock, parent, sandbox;
 
   before(() => {
     sandbox = sinon.createSandbox();

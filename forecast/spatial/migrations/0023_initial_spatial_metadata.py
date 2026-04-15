@@ -5,29 +5,22 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     def initial_insert(apps, schema):
-        Metadata=apps.get_model("spatial","WeatherSpatialMetadata")
-        
-        States=apps.get_model("spatial","WeatherStates")
-        Counties=apps.get_model("spatial","WeatherCounties")
-        CWAs=apps.get_model("spatial","WeatherCountyWarningAreas")
-        Zones=apps.get_model("spatial","WeatherZone")
-        Places=apps.get_model("spatial","WeatherPlace")
+        Metadata = apps.get_model("spatial", "WeatherSpatialMetadata")
 
-        Metadata.objects.update_or_create(
-            table=States._meta.db_table)
-        Metadata.objects.update_or_create(
-            table=Counties._meta.db_table)
-        Metadata.objects.update_or_create(
-            table=CWAs._meta.db_table)
-        Metadata.objects.update_or_create(
-            table=Zones._meta.db_table)
-        Metadata.objects.update_or_create(
-            table=Places._meta.db_table)
+        States = apps.get_model("spatial", "WeatherStates")
+        Counties = apps.get_model("spatial", "WeatherCounties")
+        CWAs = apps.get_model("spatial", "WeatherCountyWarningAreas")
+        Zones = apps.get_model("spatial", "WeatherZone")
+        Places = apps.get_model("spatial", "WeatherPlace")
+
+        Metadata.objects.update_or_create(table=States._meta.db_table)
+        Metadata.objects.update_or_create(table=Counties._meta.db_table)
+        Metadata.objects.update_or_create(table=CWAs._meta.db_table)
+        Metadata.objects.update_or_create(table=Zones._meta.db_table)
+        Metadata.objects.update_or_create(table=Places._meta.db_table)
 
     dependencies = [
-        ('spatial', '0022_weatherspatialmetadata'),
+        ("spatial", "0022_weatherspatialmetadata"),
     ]
 
-    operations = [
-        migrations.RunPython(initial_insert)
-    ]
+    operations = [migrations.RunPython(initial_insert)]

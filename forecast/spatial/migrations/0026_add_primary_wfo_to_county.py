@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import migrations, models
 from spatial.management.commands._spatial_util import COUNTY_FIPS_TO_PRIMARY_WFO_MAP
 
+
 def set_primary_wfo(apps, schema):
     WeatherCountyWarningAreas = apps.get_model("spatial", "WeatherCountyWarningAreas")
     WeatherCounties = apps.get_model("spatial", "WeatherCounties")
@@ -14,28 +15,35 @@ def set_primary_wfo(apps, schema):
     for county in counties:
         # Lookup the primary in our mapping.
         if county.countyfips in COUNTY_FIPS_TO_PRIMARY_WFO_MAP:
-            county.primarywfo = WeatherCountyWarningAreas.objects.get(wfo=COUNTY_FIPS_TO_PRIMARY_WFO_MAP[county.countyfips])
+            county.primarywfo = WeatherCountyWarningAreas.objects.get(
+                wfo=COUNTY_FIPS_TO_PRIMARY_WFO_MAP[county.countyfips]
+            )
             county.save()
         # If we don't have a mapping for it, bail out.
         else:
             raise ValidationError(f"County FIPS {county.countyfips} has no associated CWAs")
 
-class Migration(migrations.Migration):
 
+class Migration(migrations.Migration):
     dependencies = [
-        ('spatial', '0025_weatheralertscache_counties_and_more'),
+        ("spatial", "0025_weatheralertscache_counties_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='weathercounties',
-            name='cwastring',
+            model_name="weathercounties",
+            name="cwastring",
         ),
         # Initially allow the primary WFO to be null
         migrations.AddField(
-            model_name='weathercounties',
-            name='primarywfo',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='primary_counties', to='spatial.weathercountywarningareas',null=True),
+            model_name="weathercounties",
+            name="primarywfo",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="primary_counties",
+                to="spatial.weathercountywarningareas",
+                null=True,
+            ),
             preserve_default=False,
         ),
         # Clear the alert cache. This should have been done in the previous
@@ -43,7 +51,6 @@ class Migration(migrations.Migration):
         # of changes is pushed to beta, it doesn't matter what order it happens
         # in, so we can smoosh it in here.
         migrations.RunSQL("TRUNCATE TABLE weathergov_geo_alerts_cache"),
-
         # For counties that are only associated with a single WFO, we can set
         # their primary WFO directly in a one-shot query.
         migrations.RunSQL(
@@ -62,14 +69,17 @@ class Migration(migrations.Migration):
                 )=1
             """
         ),
-
         # For the 17 counties with multiple WFOs, we have to do something else.
         migrations.RunPython(set_primary_wfo),
-
         # After updating all the fields, make it not null.
         migrations.AlterField(
-            model_name='weathercounties',
-            name='primarywfo',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='primary_counties', to='spatial.weathercountywarningareas',null=False),
+            model_name="weathercounties",
+            name="primarywfo",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="primary_counties",
+                to="spatial.weathercountywarningareas",
+                null=False,
+            ),
         ),
     ]

@@ -48,10 +48,10 @@ const fetchStations = async (wfo, x, y) => {
     // Throw errors with statusCode 403,
     // so they can be handled immediately in
     // route handlers
-    if(e.cause?.statusCode === 403){
+    if (e.cause?.statusCode === 403) {
       throw e;
     }
-    
+
     return { error: true };
   }
 };
@@ -93,10 +93,10 @@ const fetchObservation = async (station) => {
     // Throw errors with statusCode 403,
     // so they can be handled immediately in
     // route handlers
-    if(e.cause?.statusCode === 403){
+    if (e.cause?.statusCode === 403) {
       throw e;
     }
-    
+
     return { error: true };
   }
 };

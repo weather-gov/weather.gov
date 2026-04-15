@@ -5,63 +5,60 @@
 -- Url: https://beta.weather.gov/county/
 {% endcomment %}
 {% block head_js %}
-  <script src="{% static 'js/county/index.html.js' %}"
-          type="module"></script>
+  <script src="{% static 'js/county/index.html.js' %}" type="module"></script>
 {% endblock %}
 {% block page_content %}
   <wx-county-index-filter target="county-filter-results" class="display-block grid-container margin-top-2 margin-bottom-8 desktop:margin-bottom-10">
-    <div class="grid-row">
-      <div class="grid-col-12">
-        <h1 class="font-sans-2xl text-normal text-primary-dark margin-y-0">{{ "county-index.headers.county-view.01" | t}}</h1>
-        <p class="font-sans-md margin-bottom-0 margin-top-2">{{"county-index.headers.description.01" | t}}</p>
-      </div>
+  <div class="grid-row">
+    <div class="grid-col-12">
+      <h1 class="font-sans-2xl text-normal text-primary-dark margin-y-0">{{ "county-index.headers.county-view.01" | t}}</h1>
+      <p class="font-sans-md margin-bottom-0 margin-top-2">{{"county-index.headers.description.01" | t}}</p>
     </div>
-    <div class="grid-row flex-align-center flex-justify grid-gap-lg margin-top-4">
-      <div class="grid-col-12 margin-bottom-3 tablet:grid-col-6 tablet:margin-bottom-0">
-        <label for="state-filter-combobox--search-input">{{ "county-index.labels.state-filter.01" | t}}</label>
-        <wx-combobox tabindex="0" class="margin-top-1 display-block" id="state-filter-combobox">
-          <input type="text" class="usa-input" slot="input" />
-          <button type="button" slot="clear-button"></button>
-          <button type="button" slot="toggle-button"></button>
-          <wx-filterable-listbox slot="popup" id="state-filter-listbox" role="listbox">
-            {% for item in state_list_items %}
-              <li role="option" id="{{ item.value}}">{{ item.text }}</li>
+  </div>
+  <div class="grid-row flex-align-center flex-justify grid-gap-lg margin-top-4">
+    <div class="grid-col-12 margin-bottom-3 tablet:grid-col-6 tablet:margin-bottom-0">
+      <label for="state-filter-combobox--search-input">{{ "county-index.labels.state-filter.01" | t}}</label>
+      <wx-combobox tabindex="0" class="margin-top-1 display-block" id="state-filter-combobox">
+      <input type="text" class="usa-input" slot="input" />
+      <button type="button" slot="clear-button"></button>
+      <button type="button" slot="toggle-button"></button>
+      <wx-filterable-listbox slot="popup" id="state-filter-listbox" role="listbox">
+      {% for item in state_list_items %}<li role="option" id="{{ item.value }}">{{ item.text }}</li>{% endfor %}
+      </wx-filterable-listbox>
+      </wx-combobox>
+    </div>
+    <div class="grid-col-12 tablet:grid-col-6">
+      <label for="county-filter-input">{{"county-index.labels.county-filter.01" | t}}</label>
+      <input aria-controls="county-filter-results"
+             id="county-filter-input"
+             class="usa-input margin-top-1" />
+    </div>
+  </div>
+  <hr class="width-full height-1px bg-base-light border-0 margin-top-4 margin-bottom-4" />
+  <section class="grid-row" id="county-filter-results">
+    <div class="grid-col-12">
+      {% for state in states %}
+        <div data-state-abbrev="{{ state.state }}"
+             data-state-name="{{ state.name }}"
+             data-filter-by="state"
+             class="use-columns margin-bottom-3">
+          <h2 class="font-sans-lg text-normal text-primary-darker margin-y-0">{{ state.name }}</h2>
+          <ul class="usa-list county-list margin-top-105">
+            {% for county in state.counties.all %}
+              <li data-county-fips="{{ county.countyfips }}"
+                  data-county-name="{{ county.countyname | lower }}"
+                  data-filter-by="county"
+                  class="margin-bottom-205">
+                <a class="usa-link font-sans-sm text-normal"
+                   href="{% url "county_overview" countyfips=county.countyfips %}">
+                  {{ county.countyname }}, {{ state.state }}
+                </a>
+              </li>
             {% endfor %}
-          </wx-filterable-listbox>
-        </wx-combobox>
-      </div>
-      <div class="grid-col-12 tablet:grid-col-6">
-        <label for="county-filter-input">{{"county-index.labels.county-filter.01" | t}}</label>
-        <input aria-controls="county-filter-results"
-               id="county-filter-input"
-               class="usa-input margin-top-1" />
-      </div>
+          </ul>
+        </div>
+      {% endfor %}
     </div>
-    <hr class="width-full height-1px bg-base-light border-0 margin-top-4 margin-bottom-4" />
-    <section class="grid-row" id="county-filter-results">
-      <div class="grid-col-12">
-        {% for state in states %}
-          <div data-state-abbrev="{{ state.state }}"
-               data-state-name="{{ state.name }}"
-               data-filter-by="state"
-               class="use-columns margin-bottom-3">
-            <h2 class="font-sans-lg text-normal text-primary-darker margin-y-0">{{ state.name }}</h2>
-            <ul class="usa-list county-list margin-top-105">
-              {% for county in state.counties.all %}
-                <li data-county-fips="{{ county.countyfips }}"
-                    data-county-name="{{ county.countyname | lower }}"
-                    data-filter-by="county"
-                    class="margin-bottom-205">
-                  <a class="usa-link font-sans-sm text-normal"
-                     href="{% url "county_overview" countyfips=county.countyfips %}">
-                    {{ county.countyname }}, {{ state.state }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-        {% endfor %}
-      </div>
-    </section>
+  </section>
   </wx-county-index-filter>
 {% endblock %}

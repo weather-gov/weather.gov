@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('spatial', '0019_alter_weatheralertscache_table_and_more'),
+        ("spatial", "0019_alter_weatheralertscache_table_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='weatheralertscache',
-            name='alertjson',
+            model_name="weatheralertscache",
+            name="alertjson",
             field=models.JSONField(),
         ),
     ]

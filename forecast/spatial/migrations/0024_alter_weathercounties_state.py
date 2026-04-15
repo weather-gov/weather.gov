@@ -5,15 +5,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('spatial', '0023_initial_spatial_metadata'),
+        ("spatial", "0023_initial_spatial_metadata"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='weathercounties',
-            name='state',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='counties', to='spatial.weatherstates'),
+            model_name="weathercounties",
+            name="state",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="counties",
+                to="spatial.weatherstates",
+            ),
         ),
     ]

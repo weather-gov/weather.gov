@@ -15,54 +15,52 @@
           <label class="usa-label" for="scb__input">{{ "location-search.labels.enter-city-zip.01" | t }}</label>
           <div class="margin-x-1">|</div>
           <div>
-            <button
-              type="button"
-              id="scb__use_location_button"
-              class="weathergov-use-browser-location usa-button usa-button--unstyled">
+            <button type="button"
+                    id="scb__use_location_button"
+                    class="weathergov-use-browser-location usa-button usa-button--unstyled">
               {{ 'location-search.labels.use-location.01' | t }}
             </button>
           </div>
         </div>
         <div class="grid-row">
           <div class="tablet:grid-col-6">
-            <wx-combobox id="scb"
-              tabindex="0"
-              class="margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105"
-            >
-              <input id="scb__input"
-                type="text"
-                autocomplete="off"
-                aria-describedby="{{ aria_description_id }}"
-                slot="input" />
-              <button
-                type="button"
-                class="empty"
-                aria-label="{{ 'location-search.aria.clear-input-box.01' | t }}"
-                slot="clear-button">&nbsp;</button>
-              <button
-                type="button"
-                aria-label="{{ 'location-search.aria.toggle-dropdown.01' | t }}"
-                slot="toggle-button">&nbsp;</button>
-              <wx-location-listbox id="scb__listbox"
-                role="listbox"
-                auto-submit="true"
-                slot="popup"
-              >
-                <div id="scb__listbox__sl"
-                  role="heading" aria-level="3"
-                  class="saved-searches font-mono-sm text-base padding-1"
-                >{{ "location-search.group.saved-searches.01" | t }}</div>
-                <ul role="group" class="saved-searches"></ul>
-                <div id="scb__listbox__dr"
-                  role="heading" aria-level="3"
-                  class="data-results font-mono-sm text-base padding-1"
-                >{{ "location-search.group.search-results.01" | t }}</div>
-                <ul role="group" class="data-results"></ul>
-              </wx-location-listbox>
+            <wx-combobox id="scb" tabindex="0" class="margin-top-1 tablet:margin-bottom-3 tablet:margin-right-105">
+            <input id="scb__input"
+                   type="text"
+                   autocomplete="off"
+                   aria-describedby="{{ aria_description_id }}"
+                   slot="input" />
+            <button type="button"
+                    class="empty"
+                    aria-label="{{ 'location-search.aria.clear-input-box.01' | t }}"
+                    slot="clear-button">&nbsp;</button>
+            <button type="button"
+                    aria-label="{{ 'location-search.aria.toggle-dropdown.01' | t }}"
+                    slot="toggle-button">&nbsp;</button>
+            <wx-location-listbox id="scb__listbox" role="listbox" auto-submit="true" slot="popup">
+            <div id="scb__listbox__sl"
+                 role="heading"
+                 aria-level="3"
+                 class="saved-searches font-mono-sm text-base padding-1">
+              {{ "location-search.group.saved-searches.01" | t }}
+            </div>
+            <ul role="group" class="saved-searches">
+            </ul>
+            <div id="scb__listbox__dr"
+                 role="heading"
+                 aria-level="3"
+                 class="data-results font-mono-sm text-base padding-1">
+              {{ "location-search.group.search-results.01" | t }}
+            </div>
+            <ul role="group" class="data-results">
+            </ul>
+            </wx-location-listbox>
             </wx-combobox>
           </div>
           <div class="font-sans-md text-primary-dark tablet:grid-col-6 margin-top-105 margin-bottom-105">
-            <div class="grid-col">{% include 'weather/partials/wx-loader.html' with for_these="scb__listbox scb__use_location_button" %}</div>
+            <div class="grid-col">
+              {% include 'weather/partials/wx-loader.html' with for_these="scb__listbox scb__use_location_button" %}
+            </div>
           </div>
         </div>
       </form>

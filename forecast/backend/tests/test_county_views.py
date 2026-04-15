@@ -162,11 +162,9 @@ class TestCountyViews(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": [ "YND"]
-            },
+            "county": {"wfos": ["YND"]},
             "weatherstories": [],
-            "briefings": []
+            "briefings": [],
         }
         mock_get_radar.return_value = {"radarMetadata": {}}
 
@@ -177,19 +175,15 @@ class TestCountyViews(TestCase):
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_overview_without_timezone(
-        self, mock_get_radar, mock_get_county_data
-    ):
+    def test_overview_without_timezone(self, mock_get_radar, mock_get_county_data):
         """Test the overview view without timezone."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": [ "YND"]
-            },
+            "county": {"wfos": ["YND"]},
             "weatherstories": [],
-            "briefings": []
+            "briefings": [],
         }
         mock_get_radar.return_value = {"radarMetadata": {}}
 
@@ -208,15 +202,12 @@ class TestCountyViews(TestCase):
                     "alertDays": [],
                     "county": {"wfos": ["YND"]},
                     "weatherstories": [],
-                    "briefings": []
+                    "briefings": [],
                 },
                 "briefings": [],
-                "weather_stories": [{
-                    "is_empty": True,
-                    "officeId": "YND",
-                    "wfo_name": "Yondertown",
-                    "wfo_url": "/offices/YND/"
-                }],
+                "weather_stories": [
+                    {"is_empty": True, "officeId": "YND", "wfo_name": "Yondertown", "wfo_url": "/offices/YND/"}
+                ],
                 "radar": {"radarMetadata": {}},
                 "wfo_codes": [self.wfo.code],
             },
@@ -224,19 +215,15 @@ class TestCountyViews(TestCase):
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
-    def test_overview_with_timezone(
-        self, mock_get_radar, mock_get_county_data
-    ):
+    def test_overview_with_timezone(self, mock_get_radar, mock_get_county_data):
         """Test the overview view with timezone."""
         mock_get_county_data.return_value = {
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": [ "YND"]
-            },
+            "county": {"wfos": ["YND"]},
             "weatherstories": [],
-            "briefings": []
+            "briefings": [],
         }
         mock_get_radar.return_value = {"radarMetadata": {}}
 
@@ -255,17 +242,14 @@ class TestCountyViews(TestCase):
                     "alertDays": [],
                     "county": {"wfos": ["YND"]},
                     "weatherstories": [],
-                    "briefings": []
+                    "briefings": [],
                 },
                 "briefings": [],
                 "radar": {"radarMetadata": {}},
                 "wfo_codes": [self.wfo.code],
-                "weather_stories": [{
-                    "is_empty": True,
-                    "officeId": "YND",
-                    "wfo_name": "Yondertown",
-                    "wfo_url": "/offices/YND/"
-                }]
+                "weather_stories": [
+                    {"is_empty": True, "officeId": "YND", "wfo_name": "Yondertown", "wfo_url": "/offices/YND/"}
+                ],
             },
         )
 
@@ -281,11 +265,9 @@ class TestCountyViews(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": []
-            },
+            "county": {"wfos": []},
             "weatherstories": [],
-            "briefings": []
+            "briefings": [],
         }
         mock_get_radar.return_value = {"radarMetadata": {}}
 
@@ -303,7 +285,7 @@ class TestCountyViews(TestCase):
                     "riskOverview": self.ghwo,
                     "county": {"wfos": []},
                     "weatherstories": [],
-                    "briefings": []
+                    "briefings": [],
                 },
                 "briefings": [],
                 "weather_stories": [],
@@ -319,9 +301,7 @@ class TestCountyViews(TestCase):
     def test_alert_level_to_day_mapping(self, mock_get_radar, mock_get_county_data):
         """Tests that the levels for alerts on given days are mapped correctly."""
         mock_get_county_data.return_value = {
-            "county": {
-                "wfos": ["YND"]
-            },
+            "county": {"wfos": ["YND"]},
             "weatherstories": [],
             "briefings": [],
             "riskOverview": self.ghwo,
@@ -392,9 +372,7 @@ class TestCountyViews(TestCase):
     def test_alert_levels_only_present(self, mock_get_radar, mock_get_county_data):
         """Tests that only present alert levels are returned."""
         mock_get_county_data.return_value = {
-            "county": {
-                "wfos": ["YND"]
-            },
+            "county": {"wfos": ["YND"]},
             "weatherstories": [],
             "briefings": [],
             "riskOverview": self.ghwo,

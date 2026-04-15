@@ -91,7 +91,6 @@ class TestViews(TestCase):
             "image": "/public/images/wfos/LWX.png",
         }
 
-
     def test_index(self):
         """Test the index view."""
         response = self.client.get("/")
@@ -104,7 +103,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
-            "weatherstory": [self.weather_story]
+            "weatherstory": [self.weather_story],
         }
 
         response = self.client.get("/point/11.1/22.2", follow=True)
@@ -131,7 +130,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
-            "weatherstory": [self.weather_story]
+            "weatherstory": [self.weather_story],
         }
 
         response = self.client.get("/point/11.1/22.2?update", follow=True)
@@ -150,7 +149,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
-            "weatherstory": []
+            "weatherstory": [],
         }
 
         response = self.client.get("/point/11.1/22.2", follow=True)
@@ -185,7 +184,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
-            "weatherstory": [weather_story]
+            "weatherstory": [weather_story],
         }
 
         response = self.client.get("/point/11.1/22.2", follow=True)
@@ -343,7 +342,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
-            "weatherstory": []
+            "weatherstory": [],
         }
         response = self.client.get("/place/nj/Hoboken/")
         self.assertRedirects(response, "/place/NJ/Hoboken/")
@@ -355,7 +354,7 @@ class TestViews(TestCase):
             "grid": {"wfo": "TST"},
             "isMarine": False,
             "place": {"timezone": "America/New_York"},
-            "weatherstory": []
+            "weatherstory": [],
         }
         response = self.client.get("/place/NY/New York/")
         self.assertRedirects(response, "/place/NY/New_York/")

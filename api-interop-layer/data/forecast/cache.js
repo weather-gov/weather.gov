@@ -63,12 +63,11 @@ export class ForecastGridCache {
     const msUntilNextTick =
       (30 - (now.getMinutes() % 30)) * 60000 - now.getSeconds() * 1000;
 
-    let timer,
-      interval;
+    let timer, interval;
 
     const sendToWorker = () => {
       this.worker.postMessage({ action: "process_heat_interval" });
-    }
+    };
 
     timer = setTimeout(() => {
       // Fire the first one exactly at the :30 mark

@@ -22,9 +22,7 @@
       {{ page.last_published_at|date:"g:i A T, F j, Y" }}
     </time>
     <div class="roadmap-body grid-row font-sans-sm margin-top-1">
-      <div class="desktop:grid-col-8 measure-6">
-        {{ page.body|safe }}
-      </div>
+      <div class="desktop:grid-col-8 measure-6">{{ page.body|safe }}</div>
     </div>
     <div id="nav-link-now"
          class="grid-row text-base text-uppercase font-mono-xs">Jump to</div>

@@ -16,12 +16,8 @@ class FakePool {
 
 describe("/product data tests", () => {
   const headers = { "cache-control": "s-maxage=120" };
-  let requestJSON,
-    saveToRedis,
-    getFromRedis,
-    getProduct,
-    sandbox;
-    
+  let requestJSON, saveToRedis, getFromRedis, getProduct, sandbox;
+
   before(async () => {
     sandbox = sinon.createSandbox();
     requestJSON = sandbox.stub();

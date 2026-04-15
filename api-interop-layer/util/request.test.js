@@ -3,8 +3,7 @@ import sinon from "sinon";
 import { requestJSON } from "./request.js";
 
 describe("request helper", () => {
-  let dispatcher,
-    sandbox;
+  let dispatcher, sandbox;
 
   before(() => {
     sandbox = sinon.createSandbox();

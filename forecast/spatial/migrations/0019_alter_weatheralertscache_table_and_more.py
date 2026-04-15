@@ -4,34 +4,36 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('spatial', '0009_remove_weathercounties_statefips_and_more_squashed_0016_remove_weathergeometa_dataset_squashed_0017_weathercounties_cwastring_weathercounties_st_squashed_0018_delete_weathergeometa'),
+        (
+            "spatial",
+            "0009_remove_weathercounties_statefips_and_more_squashed_0016_remove_weathergeometa_dataset_squashed_0017_weathercounties_cwastring_weathercounties_st_squashed_0018_delete_weathergeometa",
+        ),
     ]
 
     operations = [
         migrations.AlterModelTable(
-            name='weatheralertscache',
-            table='weathergov_geo_alerts_cache',
+            name="weatheralertscache",
+            table="weathergov_geo_alerts_cache",
         ),
         migrations.AlterModelTable(
-            name='weathercounties',
-            table='weathergov_geo_counties',
+            name="weathercounties",
+            table="weathergov_geo_counties",
         ),
         migrations.AlterModelTable(
-            name='weathercountywarningareas',
-            table='weathergov_geo_cwas',
+            name="weathercountywarningareas",
+            table="weathergov_geo_cwas",
         ),
         migrations.AlterModelTable(
-            name='weatherplace',
-            table='weathergov_geo_places',
+            name="weatherplace",
+            table="weathergov_geo_places",
         ),
         migrations.AlterModelTable(
-            name='weatherstates',
-            table='weathergov_geo_states',
+            name="weatherstates",
+            table="weathergov_geo_states",
         ),
         migrations.AlterModelTable(
-            name='weatherzone',
-            table='weathergov_geo_zones',
+            name="weatherzone",
+            table="weathergov_geo_zones",
         ),
     ]

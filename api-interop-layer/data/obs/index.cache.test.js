@@ -16,11 +16,11 @@ describe("Observation fetch caching tests", () => {
     sandbox = sinon.createSandbox();
     getFromRedis = sandbox.stub();
     saveToRedis = sandbox.stub();
-  
+
     connectionPool = {
       request: sandbox.stub(),
     };
-  
+
     stationsResponse = {
       statusCode: 200,
       headers: {
@@ -32,7 +32,7 @@ describe("Observation fetch caching tests", () => {
         dump: sandbox.stub().resolves(),
       },
     };
-  
+
     singleStationResponse = {
       statusCode: 200,
       headers: {
@@ -45,11 +45,7 @@ describe("Observation fetch caching tests", () => {
       },
     };
     await quibble.esm("../connectionPool.js", {}, connectionPool);
-    await quibble.esm(
-      "../../redis.js",
-      { saveToRedis, getFromRedis },
-      {},
-    );
+    await quibble.esm("../../redis.js", { saveToRedis, getFromRedis }, {});
 
     const module = await import("./index.js");
     getObservations = module.default;

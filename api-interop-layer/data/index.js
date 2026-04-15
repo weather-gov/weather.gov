@@ -59,12 +59,11 @@ if (enableBackgroundProcessing()) {
         "scheduling next grid analysis sync",
       );
 
-      let timer,
-        interval;
+      let timer, interval;
 
       const sendToWorker = () => {
         backgroundWorker.postMessage({ action: "process_heat_interval" });
-      }
+      };
 
       timer = setTimeout(() => {
         sendToWorker();
@@ -114,11 +113,15 @@ const getDataForPoint = async (lat, lon) => {
 
     const dbConnection = await getDbConnection();
 
-    const { forecast: fct, observed: obs, weatherstory: ws } = await Promise.all([
+    const {
+      forecast: fct,
+      observed: obs,
+      weatherstory: ws,
+    } = await Promise.all([
       getForecast({ grid, place, isMarine }),
       getObservations({ grid, point }, dbConnection),
       getWeatherStory(grid.wfo),
-    ]).then(([forecastData, obsData, weatherStoryData ]) => {
+    ]).then(([forecastData, obsData, weatherStoryData]) => {
       // The forecast endpoint returns extra information about the grid. Why? I
       // dunno. But anyway, let's put it with the other grid info and remove it
       // from the forecast data.
@@ -135,7 +138,7 @@ const getDataForPoint = async (lat, lon) => {
       return {
         forecast: forecastData,
         observed: obsData,
-        weatherstory: weatherStoryData
+        weatherstory: weatherStoryData,
       };
     });
 

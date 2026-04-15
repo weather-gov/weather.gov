@@ -5,21 +5,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('spatial', '0021_install_fuzzystrmatch_extension_20251007_1919'),
+        ("spatial", "0021_install_fuzzystrmatch_extension_20251007_1919"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='WeatherSpatialMetadata',
+            name="WeatherSpatialMetadata",
             fields=[
-                ('table', models.TextField(primary_key=True, serialize=False)),
-                ('last_updated', models.DateTimeField(auto_now=True)),
+                ("table", models.TextField(primary_key=True, serialize=False)),
+                ("last_updated", models.DateTimeField(auto_now=True)),
             ],
             options={
                 "db_table": "weathergov_geo_metadata",
             },
-
         ),
     ]

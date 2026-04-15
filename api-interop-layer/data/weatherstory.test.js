@@ -33,11 +33,7 @@ describe("weatherstory module", () => {
     };
 
     await quibble.esm("./connectionPool.js", {}, connectionPool);
-    await quibble.esm(
-      "../redis.js",
-      { getFromRedis, saveToRedis },
-      {},
-    );
+    await quibble.esm("../redis.js", { getFromRedis, saveToRedis }, {});
 
     const module = await import("./weatherstory.js");
     getDataForWxStory = module.default;

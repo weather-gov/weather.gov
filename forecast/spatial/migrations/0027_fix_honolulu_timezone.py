@@ -4,9 +4,8 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('spatial', '0026_add_primary_wfo_to_county'),
+        ("spatial", "0026_add_primary_wfo_to_county"),
     ]
 
     operations = [

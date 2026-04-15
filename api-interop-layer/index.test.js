@@ -3,13 +3,7 @@ import quibble from "quibble";
 import sinon from "sinon";
 
 describe("main bootstrapper", () => {
-  let server,
-    fastify,
-    startAlertProcessing,
-    handler,
-    urls,
-    main,
-    sandbox;
+  let server, fastify, startAlertProcessing, handler, urls, main, sandbox;
 
   before(async () => {
     sandbox = sinon.createSandbox();
@@ -171,9 +165,7 @@ describe("main bootstrapper", () => {
   });
 
   describe("route handlers", () => {
-    let request,
-      response,
-      handlerWrapper;
+    let request, response, handlerWrapper;
     // For these teses, we're only testing the utility wrapper behavior, not
     // the individual route handlers. Those should be tested independently.
 

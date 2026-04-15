@@ -1,6 +1,6 @@
 const STANDARD_HEADERS = {
   "User-Agent": "beta.weather.gov interop",
-  "Accept": "application/json",
+  Accept: "application/json",
 };
 
 /**
@@ -10,12 +10,12 @@ const STANDARD_HEADERS = {
  * @param {string} - the URL to request
  * @returns {object} The JSON response or throws an Error object for 4xx/5xx responses
  */
-const performRequest = async (dispatcher, path, additionalHeaders={}) => {
+const performRequest = async (dispatcher, path, additionalHeaders = {}) => {
   const composedHeaders = {
     ...STANDARD_HEADERS,
-    ...additionalHeaders
+    ...additionalHeaders,
   };
-  
+
   const response = await dispatcher.request({
     path,
     method: "GET",
@@ -50,7 +50,7 @@ const performRequest = async (dispatcher, path, additionalHeaders={}) => {
     // Handle Empty or Valid Body
     const text = await body.text();
     let data = text;
-    if(askedForJson){
+    if (askedForJson) {
       data = text && text.trim().length > 0 ? JSON.parse(text) : null;
     }
 
@@ -67,7 +67,7 @@ const performRequest = async (dispatcher, path, additionalHeaders={}) => {
 /**
  * Returns JSON data. Throws on error.
  */
-export const requestJSON = async (dispatcher, path, additionalHeaders={}) => {
+export const requestJSON = async (dispatcher, path, additionalHeaders = {}) => {
   const { data } = await performRequest(dispatcher, path, additionalHeaders);
   return data;
 };
@@ -75,8 +75,16 @@ export const requestJSON = async (dispatcher, path, additionalHeaders={}) => {
 /**
  * Returns [data, headers]. Throws on error.
  */
-export const requestJSONWithHeaders = async (dispatcher, path, additionalHeaders={}) => {
-  const { data, headers } = await performRequest(dispatcher, path, additionalHeaders);
+export const requestJSONWithHeaders = async (
+  dispatcher,
+  path,
+  additionalHeaders = {},
+) => {
+  const { data, headers } = await performRequest(
+    dispatcher,
+    path,
+    additionalHeaders,
+  );
   return [data, headers];
 };
 
@@ -85,6 +93,10 @@ export const requestJSONWithHeaders = async (dispatcher, path, additionalHeaders
  * This is simply to differentiate from requestJSON which implicitly
  * has the expectation of dealing with JSON data.
  */
-export const requestPlainText = async (dispatcher, path, additionalHeaders = {}) => {
+export const requestPlainText = async (
+  dispatcher,
+  path,
+  additionalHeaders = {},
+) => {
   return await performRequest(dispatcher, path, additionalHeaders);
 };

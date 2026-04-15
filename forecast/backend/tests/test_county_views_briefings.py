@@ -64,9 +64,9 @@ class TestCountyViewBriefings(TestCase):
                     "description": "A longer description of the briefing packet contents.",
                     "priority": False,
                     "officeId": "YND",
-                    "download": "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270"
+                    "download": "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270",
                 },
-                "officeId": "YND"
+                "officeId": "YND",
             }
         ]
 
@@ -81,9 +81,9 @@ class TestCountyViewBriefings(TestCase):
                     "description": "A longer description of the briefing packet contents.",
                     "priority": False,
                     "officeId": "YND",
-                    "download": "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270"
+                    "download": "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270",
                 },
-                "officeId": "YND"
+                "officeId": "YND",
             },
             {
                 "briefing": {
@@ -95,18 +95,15 @@ class TestCountyViewBriefings(TestCase):
                     "description": "A longer description of the briefing packet contents.",
                     "priority": False,
                     "officeId": "OTV",
-                    "download": "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270"
+                    "download": "http://localhost:8000/offices/MPX/briefing/download/7ccab810-706b-401c-8757-71f656e56270",
                 },
-                "officeId": "OTV"
+                "officeId": "OTV",
             },
         ]
 
-        self.errored_briefing = [
-            { "error": True, "officeId": "YND" }
-        ]
+        self.errored_briefing = [{"error": True, "officeId": "YND"}]
 
         self.ghwo = {"days": [], "fips": "12345"}
-
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
@@ -116,23 +113,18 @@ class TestCountyViewBriefings(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": ["YND"]
-            },
+            "county": {"wfos": ["YND"]},
             "weatherstories": [],
             "briefings": self.basic_briefing,
         }
-        mock_get_radar.return_value = { "radarMetadata": {}}
+        mock_get_radar.return_value = {"radarMetadata": {}}
 
         expected = [briefing["briefing"] for briefing in self.basic_briefing]
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "11111"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
         self.assertTemplateUsed(response, "weather/partials/county-weather-stories.html")
-        self.assertEqual(
-            response.context["data"]["briefings"],
-            expected
-        )
+        self.assertEqual(response.context["data"]["briefings"], expected)
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
@@ -142,23 +134,18 @@ class TestCountyViewBriefings(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": ["YND", "OTV"]
-            },
+            "county": {"wfos": ["YND", "OTV"]},
             "weatherstories": [],
             "briefings": [briefing["briefing"] for briefing in self.multiple_briefings],
         }
-        mock_get_radar.return_value = { "radarMetadata": {}}
+        mock_get_radar.return_value = {"radarMetadata": {}}
 
         expected = [briefing["briefing"] for briefing in self.multiple_briefings]
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "11111"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
         self.assertTemplateUsed(response, "weather/partials/county-weather-stories.html")
-        self.assertEqual(
-            response.context["data"]["briefings"],
-            expected
-        )
+        self.assertEqual(response.context["data"]["briefings"], expected)
 
     @mock.patch("backend.interop.get_county_data")
     @mock.patch("backend.interop.get_radar")
@@ -168,13 +155,11 @@ class TestCountyViewBriefings(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": ["YND", "OTV"]
-            },
+            "county": {"wfos": ["YND", "OTV"]},
             "weatherstories": [],
             "briefings": [],
         }
-        mock_get_radar.return_value = { "radarMetadata": {}}
+        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "11111"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -197,15 +182,11 @@ class TestCountyViewBriefings(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": ["YND", "OTV"]
-            },
+            "county": {"wfos": ["YND", "OTV"]},
             "weatherstories": [],
-            "briefings": [
-                {"briefing": None }
-            ],
+            "briefings": [{"briefing": None}],
         }
-        mock_get_radar.return_value = { "radarMetadata": {}}
+        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "11111"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
@@ -223,13 +204,11 @@ class TestCountyViewBriefings(TestCase):
             "riskOverview": self.ghwo,
             "alerts": {"items": []},
             "alertDays": [],
-            "county": {
-                "wfos": ["YND", "OTV"]
-            },
+            "county": {"wfos": ["YND", "OTV"]},
             "weatherstories": [],
             "briefings": self.errored_briefing,
         }
-        mock_get_radar.return_value = { "radarMetadata": {}}
+        mock_get_radar.return_value = {"radarMetadata": {}}
 
         response = self.client.get(reverse("county_overview", kwargs={"countyfips": "11111"}))
         self.assertTemplateUsed(response, "weather/county/overview.html")
