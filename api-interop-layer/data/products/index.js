@@ -2,11 +2,8 @@ import { parseTTLFromHeaders } from "../../util/caching.js";
 import { requestJSONWithHeaders } from "../../util/request.js";
 import { logger } from "../../util/monitoring/index.js";
 import AFDParser from "./afd/AFDParser.js";
-import { Pool } from "undici";
+import connectionPool from "../connectionPool.js";
 import { getFromRedis, saveToRedis } from "../../redis.js";
-
-const BASE_URL = process.env.API_URL ?? "https://api.weather.gov";
-const pool = new Pool(BASE_URL, { pipelining: 2, allowH2: true });
 
 const productLogger = logger.child({ subsystem: "product" });
 
@@ -23,7 +20,7 @@ export default async (id) => {
 
     // Fetch from the API
     const [productData, cacheControl] = await requestJSONWithHeaders(
-      pool,
+      connectionPool,
       productKey,
     );
 
