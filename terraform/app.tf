@@ -11,7 +11,6 @@ data "archive_file" "app_src" {
     "doc/*",
     "credentials.json",
     ".ruff_cache/*",
-    "spatial/management/commands/__cache/*"
   ]
 }
 
