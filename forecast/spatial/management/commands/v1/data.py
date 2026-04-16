@@ -121,7 +121,7 @@ def load_states(force=False):
 
     __load_from_shapefile(
         model=WeatherStates,
-        url="https://www.weather.gov/source/gis/Shapefiles/County/s_18mr25.zip",
+        url="https://www.weather.gov/source/gis/Shapefiles/County/s_16ap26.zip",
         type="states",
         callback_get_unique=getid,
         callback_get_unique_query=getquery,
@@ -154,7 +154,7 @@ def load_cwas(force=False):
 
     __load_from_shapefile(
         model=WeatherCountyWarningAreas,
-        url="https://www.weather.gov/source/gis/Shapefiles/WSOM/w_18mr25.zip",
+        url="https://www.weather.gov/source/gis/Shapefiles/WSOM/w_16ap26.zip",
         type="county warning area",
         callback_get_unique=getid,
         callback_get_unique_query=getquery,
@@ -279,7 +279,7 @@ def load_counties(force=False):
 
     __load_from_shapefile(
         model=WeatherCounties,
-        url="https://www.weather.gov/source/gis/Shapefiles/County/c_18mr25.zip",
+        url="https://www.weather.gov/source/gis/Shapefiles/County/c_16ap26.zip",
         type="counties",
         callback_get_unique=getid,
         callback_get_unique_query=getquery,
@@ -296,15 +296,15 @@ def load_zones(force=False):
     WeatherZone.objects.all().delete()
 
     zonetypes = [
-        ["forecast", "https://www.weather.gov/source/gis/Shapefiles/WSOM/z_18mr25.zip"],
-        ["fire", "https://www.weather.gov/source/gis/Shapefiles/WSOM/fz18mr25.zip"],
+        ["forecast", "https://www.weather.gov/source/gis/Shapefiles/WSOM/z_16ap26.zip"],
+        ["fire", "https://www.weather.gov/source/gis/Shapefiles/WSOM/fz16ap26.zip"],
         [
             "marine:coastal",
-            "https://www.weather.gov/source/gis/Shapefiles/WSOM/mz18mr25.zip",
+            "https://www.weather.gov/source/gis/Shapefiles/WSOM/mz16ap26.zip",
         ],
         [
             "marine:offshore",
-            "https://www.weather.gov/source/gis/Shapefiles/WSOM/oz18mr25.zip",
+            "https://www.weather.gov/source/gis/Shapefiles/WSOM/oz16ap26.zip",
         ],
     ]
 
