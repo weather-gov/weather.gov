@@ -5,6 +5,8 @@ import * as point from "./point.js";
 import * as products from "./products.js";
 import * as riskOverview from "./risk-overview.js";
 import * as weatherstories from "./weatherstories.js";
+import * as afdVersions from "./afd-versions.js";
+import * as afdVersionsByWFO from "./afd-versions-by-wfo.js";
 
 export default [
   alertMeta,
@@ -14,4 +16,6 @@ export default [
   products,
   riskOverview,
   weatherstories,
+  afdVersions,
+  afdVersionsByWFO
 ];
