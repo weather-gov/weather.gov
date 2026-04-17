@@ -47,17 +47,6 @@ def _fetch(url):
     return response.json()
 
 
-def _api_fetch(url):
-    """Fetch a dictionary directly from the weather API. Or the proxy, if present."""
-    base_url = getenv("API_URL")
-    if not base_url or base_url == "":
-        base_url = "https://api.weather.gov"
-    full_url = f"{base_url}{url}"
-    # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
-    response = _get_requests_session().get(full_url, timeout=55)  # TODO: try-request block with logging
-    return response.json()
-
-
 def _set_high_low_pops(day, is_marine):
     # The following are lists of readings needed for basic daily
     # forecast templates
@@ -366,8 +355,8 @@ def get_wx_afd_versions_by_wfo(wfo):
 
     To see an example, go to: https://api.weather.gov/products/types/AFD/locations/arx
     """
-    url = f"/products/types/AFD/locations/{wfo}"
-    return _api_fetch(url)
+    url = f"/products/afd/versions/{wfo}"
+    return _fetch(url)
 
 
 def get_wx_afd_versions():
@@ -376,5 +365,5 @@ def get_wx_afd_versions():
 
     To see an example, go to https://api.weather.gov/products/types/AFD
     """
-    url = "/products/types/AFD"
-    return _api_fetch(url)
+    url = "/products/afd/versions"
+    return _fetch(url)
