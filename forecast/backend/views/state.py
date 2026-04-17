@@ -58,7 +58,7 @@ def state_alerts(request, state):
         aj["alertDays"] = []
         alerts_list.append(aj)
 
-    tz = ZoneInfo(state_orm.timezone)
+    tz = ZoneInfo(state_orm.timezone or "UTC")
 
     now_local = datetime.now(tz)
     today_start = now_local.replace(hour=0, minute=0, second=0, microsecond=0)
