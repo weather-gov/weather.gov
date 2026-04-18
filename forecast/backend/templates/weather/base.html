@@ -17,6 +17,7 @@
 {% endcomment %}
 {% localtime off %}
 <!DOCTYPE html>
+<!-- djlint:off H016 -->
 <html lang="{{ request.LANGUAGE_CODE }}">
   <head>
     {% set_title_and_description %}
@@ -46,4 +47,5 @@
     {% block end_js %}{% endblock %}
   </body>
 </html>
+<!-- djlint:on H016 -->
 {% endlocaltime %}

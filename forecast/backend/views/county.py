@@ -154,6 +154,11 @@ def county_overview(request, countyfips):  # noqa: C901
     )
 
 
+def compute_severity(risk_entry):
+    """Compute severity for a GHWO risk entry."""
+    return sum(day["category"] for day in risk_entry["days"])
+
+
 @never_cache
 def county_ghwo(request, county_fips):  # noqa: C901
     """Load a county GHWO details page by FIPS."""
@@ -188,6 +193,10 @@ def county_ghwo(request, county_fips):  # noqa: C901
             if risk_id in ghwo_data["legend"]:
                 if "basis" in ghwo_data["legend"][risk_id]:
                     risk["legend"]["basis"] = ghwo_data["legend"][risk_id]["basis"]
+
+        ghwo_data["risks"] = dict(
+            sorted(ghwo_data["risks"].items(), key=lambda i: compute_severity(i[1]), reverse=True)
+        )
 
         # Pick the first non-zero value and mark it as first. This one
         # will be highlighted on page load.
