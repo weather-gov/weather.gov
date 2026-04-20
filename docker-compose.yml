@@ -23,7 +23,7 @@ services:
     build:
       context: forecast/
       dockerfile: Dockerfile.dev
-    command: gunicorn -c gunicorn.conf.py --bind 0.0.0.0:8080 --access-logfile - --error-logfile -
+    command: gunicorn -c gunicorn.conf.py --bind 0.0.0.0:8080 --access-logfile - --error-logfile - --reload
     volumes:
       - ./forecast:/code
     ports:
