@@ -79,7 +79,7 @@
 
 /* County Grid Column Logic */
 .county-column-grid ul {
-  display: inline-block;
+  display: block;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -115,7 +115,19 @@
 
 .tablet__county-column-2 {
   @include at-media(tablet) {
+    /* When there are fewer than the max number of columns, limit the width of the ul
+    container to (100% * (num cols / total cols)) - ((1 - (num cols/total cols)) * gap size) 
+    to align the width of the container to the right edge of the last used column */
+    width: calc(66.666% - (units(4) / 3));
     column-count: 2;
+  }
+
+  @include at-media(tablet-lg) {
+    width: calc(66.666% - (units(8) / 3));
+  }
+
+  @include at-media(desktop) {
+    width: calc(50% - (units(8) / 2));
   }
 }
 
@@ -123,10 +135,15 @@
   @include at-media(tablet) {
     column-count: 3;
   }
+
+  @include at-media(desktop) {
+    width: calc(75% - (units(8) / 4));
+  }
 }
 
 .desktop__county-column-4 {
   @include at-media(desktop) {
+    width: 100%;
     column-count: 4;
   }
 }
