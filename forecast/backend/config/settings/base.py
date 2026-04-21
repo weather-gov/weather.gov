@@ -105,8 +105,9 @@ MIDDLEWARE = [
     "csp.middleware.CSPMiddleware",
     # Wagtail related middleware
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
-    # Custom middleware for catching interop rate limiting
+    # Custom middleware for catching interop errors
     "backend.middleware.TooManyRequestsMiddleware",
+    "backend.middleware.GatewayTimeoutMiddleware",
 ]
 
 ROOT_URLCONF = "backend.config.urls"

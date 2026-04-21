@@ -1059,12 +1059,21 @@ msgid "error.404.forecast.suggested.01"
 msgstr "Were you looking for {place}?"
 
 msgid "error.429.interop.heading.01"
-msgstr "Site Experiencing Heavy Traffic"
+msgstr "Site Experiencing Heavy Traffic"
 
 msgid "error.429.interop.errorcode.01"
 msgstr "Error code: 429 – Too Many Requests"
 
 msgid "error.429.interop.description.01"
+msgstr "Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
+
+msgid "error.504.interop.heading.01"
+msgstr "Weather Data Failed to Load"
+
+msgid "error.504.interop.errorcode.01"
+msgstr "Error code: 504 – Gateway timeout"
+
+msgid "error.504.interop.description.01"
 msgstr "Please wait a few moments and reload the page or visit <a href='https://www.weather.gov' class='usa-link'>weather.gov</a> for current forecast information."
 
 msgid "menu.navigation.forecast.01"
