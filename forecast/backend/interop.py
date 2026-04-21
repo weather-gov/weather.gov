@@ -108,6 +108,11 @@ def _process_astronomical_data(data, tz):
     """Process astronomical data."""
     astronomical_data = data.get("point", {}).get("astronomicalData", {})
     for key, value in astronomical_data.items():
+        # under certain conditions the API will return null, e.g., parts of
+        # Alaska will not have nautical twilight during summer months.
+        if not value:
+            continue
+
         astronomical_data[key] = datetime.fromisoformat(value).astimezone(tz=tz)
 
     if "sunrise" in astronomical_data and "sunset" in astronomical_data:
