@@ -3,6 +3,8 @@
 --   Display the navigation banner and sub-menus.
 -- Used by: partials/site-branding.html
 {% endcomment %}
+<!-- djlint:off H019 -->
+<!-- We ignore H019 because we use javascript: void(0) instead of # for placeholder links to prevent the page from scrolling to the top when clicked. -->
 <div class="usa-overlay"></div>
 <header class="usa-header usa-header--basic bg-primary-lightest border-top-1px border-primary-dark">
   <div class="usa-nav-container">
@@ -38,7 +40,7 @@
         </li>
         {% if debug_show_all_menu_links %}
           <li class="usa-nav__primary-item">
-            <a href="#" class="usa-nav__link">
+            <a href="javascript:void(0);" class="usa-nav__link">
               <span class="font-sans-xs text-normal">{{ "menu.navigation.observations.01" | t }}</span>
             </a>
           </li>
@@ -53,7 +55,7 @@
             </button>
             <ul id="nav-section-preparedness" class="usa-nav__submenu font-body-xs">
               <li class="usa-nav__submenu-item">
-                <a href="#"><span class="font-sans-xs">{{ "menu.navigation.preparedness.weather-hazards-guides.01" | t }}</span></a>
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.preparedness.weather-hazards-guides.01" | t }}</span></a>
               </li>
             </ul>
           </li>
@@ -68,16 +70,16 @@
             </button>
             <ul id="nav-section-resources" class="usa-nav__submenu font-body-xs">
               <li class="usa-nav__submenu-item">
-                <a href="#"><span class="font-sans-xs">{{ "menu.navigation.resources.state-weather-overview.01" | t }}</span></a>
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.state-weather-overview.01" | t }}</span></a>
               </li>
               <li class="usa-nav__submenu-item">
-                <a href="#"><span class="font-sans-xs">{{ "menu.navigation.resources.storm-recaps.01" | t }}</span></a>
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.storm-recaps.01" | t }}</span></a>
               </li>
               <li class="usa-nav__submenu-item">
-                <a href="#"><span class="font-sans-xs">{{ "menu.navigation.resources.historical-weather.01" | t }}</span></a>
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.historical-weather.01" | t }}</span></a>
               </li>
               <li class="usa-nav__submenu-item">
-                <a href="#"><span class="font-sans-xs">{{ "menu.navigation.resources.glossary.01" | t }}</span></a>
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.resources.glossary.01" | t }}</span></a>
               </li>
             </ul>
           </li>
@@ -95,16 +97,16 @@
             </li>
             {% if debug_show_all_menu_links %}
               <li class="usa-nav__submenu-item">
-                <a href="#"><span class="font-sans-xs">{{ "menu.navigation.about.offices.01" | t }}</span></a>
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.offices.01" | t }}</span></a>
               </li>
               <li class="usa-nav__submenu-item">
-                <a href="#"><span class="font-sans-xs">{{ "menu.navigation.about.centers.01" | t }}</span></a>
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.centers.01" | t }}</span></a>
               </li>
               <li class="usa-nav__submenu-item">
-                <a href="#"><span class="font-sans-xs">{{ "menu.navigation.about.news.01" | t }}</span></a>
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.news.01" | t }}</span></a>
               </li>
               <li class="usa-nav__submenu-item">
-                <a href="#"><span class="font-sans-xs">{{ "menu.navigation.about.history.01" | t }}</span></a>
+                <a href="javascript:void(0);"><span class="font-sans-xs">{{ "menu.navigation.about.history.01" | t }}</span></a>
               </li>
             {% endif %}
           </ul>
