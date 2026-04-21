@@ -110,7 +110,7 @@ func GetCountyData(ctx context.Context, pool *pgxpool.Pool, fips string) (*Count
 		defer wg.Done()
 		rows, err := pool.Query(ctx, "SELECT alertjson FROM weathergov_geo_alerts_cache WHERE counties::jsonb ? $1", fips)
 		if err == nil {
-			var alertItems []interface{}
+			alertItems := []interface{}{}
 			for rows.Next() {
 				var ajson string
 				if err := rows.Scan(&ajson); err == nil {
@@ -135,7 +135,10 @@ func GetCountyData(ctx context.Context, pool *pgxpool.Pool, fips string) (*Count
 	today := time.Now().UTC() // Simulating timezone for structure output
 	for i := 0; i < 5; i++ {
 		start := today.AddDate(0, 0, i)
+		end := start.AddDate(0, 0, 1)
 		alertDays = append(alertDays, map[string]interface{}{
+			"start":  start.Format(time.RFC3339),
+			"end":    end.Format(time.RFC3339),
 			"day":    start.Format("Monday"),
 			"alerts": []int{},
 		})

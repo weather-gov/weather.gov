@@ -150,10 +150,10 @@ func GetPointData(ctx context.Context, pool *pgxpool.Pool, lat, lon float64) (*P
 									"data": map[string]interface{}{
 										"icon":        pMap["icon"],
 										"description": pMap["shortForecast"],
-										"temperature": map[string]interface{}{"value": pMap["temperature"]},
+										"temperature": map[string]interface{}{"value": pMap["temperature"], "degF": pMap["temperature"]},
 										"probabilityOfPrecipitation": pMap["probabilityOfPrecipitation"],
-										"windSpeed": map[string]interface{}{"value": 5}, // Basic mock
-										"windDirection": pMap["windDirection"],
+										"windSpeed": map[string]interface{}{"value": 5, "mph": 5}, // Basic mock
+										"windDirection": map[string]interface{}{"cardinalLong": pMap["windDirection"]},
 									},
 								}
 
@@ -162,6 +162,17 @@ func GetPointData(ctx context.Context, pool *pgxpool.Pool, lat, lon float64) (*P
 										"start":   st,
 										"end":     en,
 										"periods": []interface{}{periodData},
+										"hours":   []interface{}{},
+										"qpf": map[string]interface{}{
+											"periods": []interface{}{},
+											"hasSnow": false,
+											"hasIce": false,
+										},
+										"alerts": map[string]interface{}{
+											"metadata": map[string]interface{}{
+												"count": 0,
+											},
+										},
 									}
 									days = append(days, currentDay)
 								} else {
@@ -200,6 +211,11 @@ func GetPointData(ctx context.Context, pool *pgxpool.Pool, lat, lon float64) (*P
 								if obsFeats, ok := rawObs["features"].([]interface{}); ok && len(obsFeats) > 0 {
 									obsTarget := obsFeats[0].(map[string]interface{})
 									if obsProps, ok := obsTarget["properties"].(map[string]interface{}); ok {
+										if obsProps["windDirection"] != nil {
+											if wd, ok := obsProps["windDirection"].(map[string]interface{}); ok {
+												wd["cardinalLong"] = "South"
+											}
+										}
 										observed = map[string]interface{}{
 											"timestamp": obsProps["timestamp"],
 											"station": map[string]interface{}{

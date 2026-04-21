@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/weathergov/api-interop-golang/data"
 )
@@ -45,6 +46,7 @@ func main() {
 
 	mux.HandleFunc("/county/", func(w http.ResponseWriter, r *http.Request) {
 		fips := r.URL.Path[len("/county/"):]
+		fips = strings.TrimSuffix(fips, "/")
 		if len(fips) != 5 {
 			http.Error(w, `{"error":"Invalid FIPS", "status": 404}`, http.StatusNotFound)
 			return
