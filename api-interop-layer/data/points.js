@@ -105,10 +105,9 @@ export const getPointData = async (lat, lon) => {
         };
       }
 
-      // Throw errors with statusCode 403,
-      // so they can be handled immediately in
-      // route handlers
-      if (err.cause?.statusCode === 403) {
+      // Throw errors with statusCode 403 or 504, so they can be handled
+      // immediately in route handlers
+      if (err.cause?.statusCode === 403 || err.cause?.statusCode === 504) {
         throw err;
       }
 

@@ -33,8 +33,12 @@ export const handler = async (request) => {
     }
     return { data };
   } catch (e) {
+    // Handle rate limiting (403) and gateway timeout (504) errors
     if (e.cause?.statusCode === 403) {
       return { status: 429, error: e };
+    }
+    if (e.cause?.statusCode === 504) {
+      return { status: 504, error: e };
     }
     throw e;
   }

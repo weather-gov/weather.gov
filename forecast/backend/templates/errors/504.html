@@ -1,0 +1,19 @@
+{% extends "weather/page.html" %}
+{% block page_content %}
+  <div class="grid-container margin-bottom-5">
+    <div class="grid-row grid-gap">
+      <div class="grid-col-12 tablet-lg:grid-col-8">
+        <h1 class="font-body-2xl line-height-sans-2 text-accent-warm-darker margin-top-3 margin-bottom-2 ">
+          {{"error.504.interop.heading.01"|t}}
+        </h1>
+        <p class="font-body-md margin-y-2">{{"error.504.interop.description.01"|t}}</p>
+        <p class="font-body-sm text-base margin-y-2">{{"error.504.interop.errorcode.01"|t}}</p>
+      </div>
+      <div class="grid-col-12 tablet-lg:grid-col-4 display-flex flex-justify-center">
+        <img src="{% static "images/weather/wx_error-cloud_error.svg" %}"
+             alt=""
+             class="margin-y-4 tablet:margin-y-8 tablet-lg:margin-y-4" />
+      </div>
+    </div>
+  </div>
+{% endblock %}

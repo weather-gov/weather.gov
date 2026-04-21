@@ -16,14 +16,33 @@ const performRequest = async (dispatcher, path, additionalHeaders = {}) => {
     ...additionalHeaders,
   };
 
-  const response = await dispatcher.request({
-    path,
-    method: "GET",
-    headers: composedHeaders,
-    // Do not block, since we are pipelining.
-    // See https://undici.nodejs.org/#/?id=pipelining
-    blocking: false,
-  });
+  let response;
+  try {
+    response = await dispatcher.request({
+      path,
+      method: "GET",
+      headers: composedHeaders,
+      // Do not block, since we are pipelining.
+      // See https://undici.nodejs.org/#/?id=pipelining
+      blocking: false,
+    });
+  } catch (err) {
+    // Catch undici timeout errors from the request itself
+    if (
+      err.code === "UND_ERR_BODY_TIMEOUT" ||
+      err.code === "UND_ERR_HEADERS_TIMEOUT" ||
+      err.code === "UND_ERR_CONNECT_TIMEOUT"
+    ) {
+      const timeoutError = new Error(`API took too long to respond: ${err.code}`);
+      timeoutError.cause = {
+        statusCode: 504,
+        statusText: "Gateway Timeout",
+      };
+      timeoutError.error = true;
+      throw timeoutError;
+    }
+    throw err;
+  }
 
   const { statusCode, body, headers, statusText } = response;
 

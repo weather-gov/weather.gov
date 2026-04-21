@@ -7,7 +7,7 @@ import requests
 from django.utils.translation import gettext_lazy as _
 from requests.adapters import HTTPAdapter
 
-from backend.exceptions import Http429
+from backend.exceptions import Http429, Http504
 from backend.util.alert import set_timing
 from spatial.models import WeatherAlertsCache
 
@@ -38,9 +38,11 @@ def _fetch(url):
     """Fetch a dictionary from the interop layer."""
     base_url = getenv("INTEROP_URL")
     full_url = f"{base_url}{url}"
-    # 55s is 3x18+1 (as rec'd by requests); gunicorn timeout is 60s (in run.sh)
-    response = _get_requests_session().get(full_url, timeout=55)  # TODO: try-request block with logging
+    # note that interop has a 60s body timeout and gunicorn has a 60s worker timeout
+    response = _get_requests_session().get(full_url, timeout=65)
 
+    if response.status_code == 504:  # noqa: PLR2004
+        raise Http504
     if response.status_code == 429:  # noqa: PLR2004
         raise Http429
 

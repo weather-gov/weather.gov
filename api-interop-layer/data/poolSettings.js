@@ -25,6 +25,8 @@ const DEFAULT_SETTINGS = {
   allowH2: true,
   pipelining: 10,
   connections: 500,
+  bodyTimeout: 60 * 1000,
+  headersTimeout: 60 * 1000,
 };
 
 /**
