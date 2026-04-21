@@ -20,3 +20,4 @@ redis_plan_name       = "redis-3node"
 rds_plan_name         = "large-gp-psql-redundant"
 web_db_max_connections = 395
 api_db_max_connections  = 395
+api_timings_metadata        = true

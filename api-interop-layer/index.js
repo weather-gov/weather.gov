@@ -5,6 +5,8 @@ import { startAlertProcessing } from "./data/alerts/index.js";
 import routes from "./routes/index.js";
 import { logger } from "./util/monitoring/index.js";
 import ConnectionTracker from "./ConnectionTracker.js";
+import asyncStorage from "./async-storage.js";
+import { API_TIMINGS_METADATA } from "./util/performance.js";
 
 const REQUIRED_ENV_VARS = ["API_URL", "GHWO_URL"];
 
@@ -126,6 +128,7 @@ export const main = async () => {
          * If so, immediately return a 429
          */
         let data, error, status;
+        let metadata = [];
         if (ConnectionTracker.atMax) {
           status = 429;
           data = {
@@ -141,7 +144,24 @@ export const main = async () => {
             `429: Exceeded maximum number of outbound connections`,
           );
         } else {
-          ({ data, error, status } = await handler(request));
+          // If the variable to record API timings metadata is true,
+          // we run the handler inside of the async execution context.
+          // Run the handler within the async execution context
+          if(API_TIMINGS_METADATA){
+            ({ data, error, status } = await asyncStorage.run(metadata, async () => {
+              const result = await handler(request);
+              const store = asyncStorage.getStore();
+              if(result.data){
+                result.data["@metadata"] = store;
+              }
+              
+              return result;
+            }));
+          } else {
+            // Otherwise, we run the handler directly and get the result object
+            ({ data, error, status } = await handler(request));
+          }
+          
         }
 
         if (error) {
